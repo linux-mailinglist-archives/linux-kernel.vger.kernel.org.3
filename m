@@ -2,196 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 689C94A6454
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB834A6453
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242094AbiBAS6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:58:44 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:17928 "EHLO
+        id S242067AbiBAS6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:58:43 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:18248 "EHLO
         mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235419AbiBAS6j (ORCPT
+        by vger.kernel.org with ESMTP id S236132AbiBAS6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Feb 2022 13:58:39 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211IEMq7008414;
-        Tue, 1 Feb 2022 18:58:09 GMT
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211IELvW011778;
+        Tue, 1 Feb 2022 18:58:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2021-07-09;
- bh=KpkPmh9Di6U1h6TZjHshni8UL8WARG6AvBWmQduTlpQ=;
- b=KV3685HsobW96U3oN+WYxuJzhJs++sn7n3vvyMSged5kLuHRSiktgGk9OosLkm2CO9IP
- gdIw8fytfx7MqorGIn+dpE8VRO1yKOcPABrACQz/l2H/Qe/0TI7Mm0WUmqAtKpGy3k3j
- GZl0ENaBQMmV8Mksqc4UVxThaZWqmqo8yAMVDwe9vnbYkAsOlai2TwqLvYMuFC7lSB0i
- CmifRr6ZARvsv+A1yNtSz5fDSqV3qyI7vPuG1MiU4aQpVIWKjFT6YMFfCYiz5HFfQ+yb
- VYNB7Yoyh1NWaygztzeH0GvqJYb/ZX7X/VPsQFWo7mL15BQCXpCynckGKXT8qmCFq9CJ hg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9vby7m-1
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2021-07-09; bh=PknLJi8F0aGObEhYbgnGyUAARitikSD/ZkuzqEDaSMY=;
+ b=BjeOATtSTtz8Dsvd7DiJ2FpG4H3ywudDYzDaequP3niplAkmiELYRCofGo+NJ/ynLn1T
+ s0dn5UvbiMx7lUpm75gLqZnsannlsq0q+qRo1Myg7EXQRUzZ8Dc6FBN+8xZRbEwsV9Jv
+ mz7PRVrPl8icbe1lTSnE4fX51D0y0aj6f7WABHxdYauINH18yeHPNf/MovU7ZGfGEAwY
+ OxmyI2nSb8Rbcyxg+pvQDMTMiSmMeW41glP2vNC0atfXelWHCXqar7ohPfR7oNpovgd8
+ wvvSli7XlTwcHeWzuKN00VC+03nIOQgqubeSIzM9N36EUWwKRdJxi0msKLuwv3Fov3oT iQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9wbttt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 18:58:09 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 211IpZHG012399;
-        Tue, 1 Feb 2022 18:58:08 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2048.outbound.protection.outlook.com [104.47.51.48])
-        by userp3020.oracle.com with ESMTP id 3dvy1qjm1h-1
+        Tue, 01 Feb 2022 18:58:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 211IpgaN040413;
+        Tue, 1 Feb 2022 18:58:11 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2044.outbound.protection.outlook.com [104.47.66.44])
+        by aserp3030.oracle.com with ESMTP id 3dvumfxus5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 18:58:07 +0000
+        Tue, 01 Feb 2022 18:58:11 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZPNPJ/WlNY75P15Vflsriync9CSv0opGYO70FI35rEKiK+qTXRwR76oDPFX3NzFBP9q3X0XX8sLqz1bL/SfwOpuW9FdbtZWRgsUbGvif9CTlMJV9vFGxFvs/tlyhd5IC0fjpc4hVL7fpCJslZe3FlTOkro4fH0Id5x2or4f48LBhUiUVxk9yvTlJSWEKz7RKNCHXVQ5t0ZbvYC94z7rQgJ5dU/qdVOb0cJDSqiI5kL0m1k9v5MIwDBmrzpYgLAAMlwo4191xF8ueLdz1AC4lEXM81KeGashbRt5KwuIGAwjS8S5oLb/KRPjDC071rX1AED0yOWRX+VtNXx2iMAF0KA==
+ b=h7fKrkK6QRWYeWvGVnDjdvw9i8OxYEY6rxY0UPt5q80jXxfSfLbK+fq0idTAZ96riH2A7aAxPPWabYAKMTTpwwcT+Y3aLr/5HNrLAjuSjEGY//cAEVAiK4mKeVvIITG9AuuOxDodY6pbPGfJ67GfR4wfAwfgVSWG/k2DIz3UMxGXJ4qe00CeI/k4ohQsmi2cn0PNlJ4v35qS/MmmonR5tYXji0mzXRIaFiVBo7jJwsiOa1PZAkBT3DuwpkxDPEavoCEWgv3NQLEdSSHo/N7LjkKJFBDYQoVKVyy9EYjj6wq4tXeE11pO19i+/en6cZBcpzuhCL/cE/Grc9cOiB3kEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KpkPmh9Di6U1h6TZjHshni8UL8WARG6AvBWmQduTlpQ=;
- b=Anp4SEUAeMgWOnRivmV/KMpJOUvjaZjZ2K8N50UTjsaOYcGXVkG88vmF7hwZLvAsAh8wqVpnF9O7Y4eQYpGeNkMXti/ETBZeIMARkZC9jnT3P5WPVlF/39KPOHCfcXRvnjaxtjvaXxKOzg9QVP32st1KHuhk8olO/DmZ3rOThr6YZ730/twV3vGlQNdiC8KiiuuGpZk+T6Aek8rf7Mx/JKscOoxtYzzCqgckPOT2ZjklST5ffbl7539FqwQYXGkdMIDLNfJaBrTSa+nZWEZE2M6bT1moSDOha9Vsc8ZMKwEWCLv9dRJ1QTLWRQaXj0nfCh/2p8YJCwhbJBBCMVYBvw==
+ bh=PknLJi8F0aGObEhYbgnGyUAARitikSD/ZkuzqEDaSMY=;
+ b=gVS35I8jYjRlSRVsSbEQ2zS4Q4FuQMyoK4WwV2+M6tgnFMTpZ6E2Lqa8sRGLxhNhO/IqMMZvhJr2G8u3mIq418ddtSZAwLGbRxrPzIEJR5220UBMTnaALsBS0N51YLTdQ96rpodDzatC/Qy7kJwF1g4mM9fovH1SYO/k2SJvSXx2WwmuEHcGd5RvyJGykayg8CFA6GU2ZMmqHambmMSNPIxy1A668LMpbOwUlOS4Jy9vwbVWijHIXQEfsgFx3COIbnJAXhx7ohICN9Rh0713f1jisFYbEzvrZHRcvlcpu4fu9F+eYufHERC6ug2UQk3+DKgoEhlHmXjHSsEqGUj5pw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KpkPmh9Di6U1h6TZjHshni8UL8WARG6AvBWmQduTlpQ=;
- b=jrCjhFiSvJkTrTDA/PN6OVrt85DnNKqcr6ShnvRDDv5/4QOBC22KGt8gEah6RkS9SjDOzZJsypeJGuGUVvLxNl1UxvWY5t3tBHI6YQGKP+0Q26n5zPRUM+jomFORQ+LKOjIkFP6c2y9p34ZgIECmqO8cMzC3t4o0buuocUt5EWg=
+ bh=PknLJi8F0aGObEhYbgnGyUAARitikSD/ZkuzqEDaSMY=;
+ b=IVyax0WnEZ9WJg6gs/j0tdUXNCJTU0tGfQ2+MuwjOvrEsrlGb2WFleTazW09Vroxos/MLHx/ZqtALDnJvEXNAEt7ixFz9dShvBc/QmYmPArF3OT22FDUZ5tZ1vz2/aHAnb1LMfL5LZVQJwMqOFQEf6X2dqV/BAQ6K0excYlaeBw=
 Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
  by BLAPR10MB5156.namprd10.prod.outlook.com (2603:10b6:208:321::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Tue, 1 Feb
- 2022 18:58:06 +0000
+ 2022 18:58:09 +0000
 Received: from CH2PR10MB4166.namprd10.prod.outlook.com
  ([fe80::f4d7:8817:4bf5:8f2a]) by CH2PR10MB4166.namprd10.prod.outlook.com
  ([fe80::f4d7:8817:4bf5:8f2a%4]) with mapi id 15.20.4951.012; Tue, 1 Feb 2022
- 18:58:05 +0000
+ 18:58:09 +0000
 From:   Stephen Brennan <stephen.s.brennan@oracle.com>
 To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Petr Mladek <pmladek@suse.com>
 Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-        John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH v3 0/4] printk: reduce deadlocks during panic
-Date:   Tue,  1 Feb 2022 10:57:58 -0800
-Message-Id: <20220201185802.98345-1-stephen.s.brennan@oracle.com>
+        John Ogness <john.ogness@linutronix.de>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>
+Subject: [PATCH v3 1/4] printk: Add panic_in_progress helper
+Date:   Tue,  1 Feb 2022 10:57:59 -0800
+Message-Id: <20220201185802.98345-2-stephen.s.brennan@oracle.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220201185802.98345-1-stephen.s.brennan@oracle.com>
+References: <20220201185802.98345-1-stephen.s.brennan@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BYAPR21CA0020.namprd21.prod.outlook.com
- (2603:10b6:a03:114::30) To CH2PR10MB4166.namprd10.prod.outlook.com
- (2603:10b6:610:78::20)
+X-ClientProxiedBy: BYAPR01CA0051.prod.exchangelabs.com (2603:10b6:a03:94::28)
+ To CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4431498e-09f0-4d9c-fabf-08d9e5b4c7a5
+X-MS-Office365-Filtering-Correlation-Id: 1142c20b-5222-4df7-ea0d-08d9e5b4c9a1
 X-MS-TrafficTypeDiagnostic: BLAPR10MB5156:EE_
-X-Microsoft-Antispam-PRVS: <BLAPR10MB5156B0C8020CB1551A38232FDB269@BLAPR10MB5156.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <BLAPR10MB515653065AA3CFBBD1006D68DB269@BLAPR10MB5156.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vZ/jXNrVN6awKvflk8XvkeHs9/Onysn1q31CDuiPOPgklMBdW5CSvRqznea3kKf+VquLkbEGGh61fsKAn9OP7ASjtS+KUjj7AkEr/U1uChFvqgFFEctaL7dJJ7pRATuYfCvIwMetyA7V5fECVnnS5IpWcF4Ofp7V8oFMuNgDqFd1U3nOOv9Yevx9je2rgEmrTQXlrdqwZetMgd8Uv9FGACr5lDDJdlVzPqSLdaOjW0IZdCHzSVmHGrgi4zM9DCwdmqJtMVoIRWtFhNzXnqX2frGMKxZ1BGC9bxegEKGFt+KZYQV9aBGrxVkx/8Te0y5tAKHZ4iRS6OuR/+6l/hJPmxym3QVuqSJg/d4gPSfOlUxVpxNTKWzUtAVUJN1GoIhxXyrntsy+evmvcS1Z/px6wQD0DKSTqoq2pAf12Loc4ksLMtAqKaFV808o5HsxM169DHJEtSIx+kM47IYLs8iOhvMLYH8B/fHjmJpilATBuXocZo1qgcazD+rKg3FWa/w4xTBOyAAC00eakFExeZncR3v+jLj6x60y4KBdFoAe/wnNAil/sslSMBuPVB8lteWCjtqzpZwDOGzA0CujmTzdjJx1NsJEY7PA8hXoOJZ0GebrfAhH6fDve+JJJggN8ILlz0iPrgYBwMpIpCGGc984bkXGinJM+Gs+A86yZrULrgOozf+Evzybl9cRukrXTqXlgNVqqz6Ms8aGJNqLulJejw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(103116003)(6512007)(6506007)(6666004)(508600001)(66946007)(4326008)(66556008)(8676002)(8936002)(54906003)(110136005)(26005)(186003)(316002)(66476007)(6486002)(83380400001)(1076003)(38100700002)(38350700002)(2906002)(2616005)(86362001)(36756003)(5660300002)(52116002)(20210929001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5K87zco3k4P0CtZ1pMnJKTmHzYMATFDCTUoimVkLbt/e5rUUBSRcywOyQrfBX0pzfXjFUMwCrNMTmmxHWYWaqKaqF7Avvduy5lcGuMPLR/u5/8/S3JnS2igeRnigNI6v2RpXLn1zdb1oXB147LhCPlA1QC7MUB69IdcyZVMwazvVWlhaicd+kTevEu8TJE19hDDo3xwbcUNmTtidvctAvRXGr7I3mzEU4PinVu6erAVqnvySiwVZLNAQoONwtD79NI8xoC1H9onwYqvw2eCKt8eQhOM8Y3TMv1OUQ3pns4kbFDK7DiLouSDlv8joxTk+pe2X/nXrlIpPe0IshUWm+JJHeseWIoorXB5k5K9P8yx6H/r7mm/Tzpuk18YVOXm55UZJwB/hjmuov+QBV1unQKFIrsAjEeckx9jYmUGOJ3ppUfQPhO4TiZFR/1uyvicqlHGHadnr/xcpkiE118nuEAnHB184tKbGIXjTNGgLHB7kUq6Xuxp4uRLu9Jd6Dwxgg8iciadLyuK+OzP4E6MvyEveTSX9PeojLk53CWhILGMZYet96cScyHKavPgitcc7clUGdlVYs7E6buHx9XOkJHZqxXHXTVF8ixc4cjX4Bdu+zhjJftQXsZHAEGqQzhQ8ccRPEOzDlZPCZlzWw/q/+bbT5NUsG//1S42i6i48NrvHXsQKyg8cEWsXqOq+rw15KvkIbOYkHV7qZCvjBQcbdQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(103116003)(6512007)(6506007)(6666004)(508600001)(66946007)(4326008)(66556008)(8676002)(8936002)(54906003)(110136005)(26005)(186003)(316002)(66476007)(6486002)(83380400001)(1076003)(38100700002)(38350700002)(2906002)(2616005)(86362001)(36756003)(107886003)(5660300002)(52116002)(20210929001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hkDS4cpFgOXnwpkUUhcj86CtPk45uATB0fsIGP/PUQpqinJEWby3O7GBK+eo?=
- =?us-ascii?Q?eEzYNiGhl4RwkH4e7M2PoLGcyWEC4pnZOGnePk4ZzrF5+1bvIsK1//l63OSA?=
- =?us-ascii?Q?2ieKGbYQXA+uBHKHQK6xh2avuo5ntUKjJzA70zrp/eciATYFZXS+KS2DVl/R?=
- =?us-ascii?Q?axA5LlAh/P95PkfhxteLA7q4jANWz+3D4THuBrK9jgxrNdui2olKrVarEpo6?=
- =?us-ascii?Q?p9Ysf0lBqEncaXKWv5J/wrW9D8zICXGFnpzkzIm8CJ8oH8px+lBcpYiZUrwY?=
- =?us-ascii?Q?UP9BtFovF3LP4Q+Dla/uNVq9xZDipWIyWS6Ilc9nSHnmOj1j7YmE6Q6ey34y?=
- =?us-ascii?Q?X+fjf14SNqU3u6o3/LVhEpPUzkWPlA9sHOx8a6JkmT8dGnoRfbp4kijHNOFg?=
- =?us-ascii?Q?PkPww6SGWplFRiY2eAd0cRRuUp+WTjYiWDW48moPNYNkCunI5AS7JSWCa13V?=
- =?us-ascii?Q?hol/7ckl3oAHnVF78pkNOdf3vw+dNV1bJYFqDALCNpMHGgUQdqEsIKKmwFZl?=
- =?us-ascii?Q?oP32jiQAYSo6adBr+SRlJKEiKolSjtW+C/Vj/tJI27q6dLUQIhKqjUeRx9Tm?=
- =?us-ascii?Q?kLRw9Stebge2eztm2Ome+8mkMzFDPCBdBwR4GHIrrmhweBJL3iK7X5PRTTIl?=
- =?us-ascii?Q?cP17qcqVeora9AZDLjeRoOwtTSUDjRZLHtuN0GxUf52zB96G5apE27XMQxQx?=
- =?us-ascii?Q?8BeBBB3FnhZJ52iy3k9AuOgLXJY6BQWC3fKMcBKJryLCkrxe4ekesS7Xxiem?=
- =?us-ascii?Q?Yov1+kjbOmdWQIhojmnmrSxqve5L8ix9BKfh/kZ7ddlZQypA8oyTvXI/lxFx?=
- =?us-ascii?Q?Kl7v/UkLXAltr5g3Yj8+JJg1fqirkn6c1FAvl1UvFXHCdtqQSNi2yOrVY4F1?=
- =?us-ascii?Q?rcCjN2GT+oCvpDuSNtwQxSpe4l4c8UgVghvqp7XBqKOyIXQVwJ3I97qEk1Wo?=
- =?us-ascii?Q?Z4Lsbk3Va/mAkYYw5dAd096qck5WRsxpCFjUZDFyamJj0SkhWlFQKG572OfE?=
- =?us-ascii?Q?hibGExL7KPLouGxE8tpv0ra6rXk+v7Q3GtpZBrzXw+hZiUqN5nBNQ+1Hs4xD?=
- =?us-ascii?Q?XPj6jh0fRc5/r8ptNjClt7hqZxV7mkYNdXkvuXGjeO80Bfpe2LxU+RMFnYcl?=
- =?us-ascii?Q?rqKE42RQRf40i5rEspOqZD8UdIYiV1fvPcm8KnrwLQm2LdU2RYIyjfNBrM5O?=
- =?us-ascii?Q?dOTv2tHeIWdrA4aUixr35aU0fglqqFL/7zAzQO751NwSoe9wuRKzJ/Pii4es?=
- =?us-ascii?Q?/2WmYvh2p79i/bi+Bm+wge9acllAmM8FT+LcvplkcxbPFMJ+DuRxPEYLcuXT?=
- =?us-ascii?Q?uy6YfEu4abuXO8GByjRJxVaqTtzUPEeLwiIy28OvWtz0R2/gBi9QmhYIPHby?=
- =?us-ascii?Q?GEFNY85HDDkLCT/9xJCYn67Vl/nK7yCtX5mnGBi6C/QTf9FQuXFdw2AWm9Ek?=
- =?us-ascii?Q?atcpe2ZEV+VYn5J4X5okkuVCYAcgbwRCErbyXB4O0Ql0EoNH/qlu4NbzF9zU?=
- =?us-ascii?Q?keMpBJXWvme3KsubmVZjIiHCjJUcZahOHRVMJ7Ktl8AFYNvWetDcBUg8OZkQ?=
- =?us-ascii?Q?f5/4EKEuz81k04N+ROezBN/sYa7PELJyXqnD7eA+gKOtBGFSbYUrsNl8udQj?=
- =?us-ascii?Q?G3PwxPxfVxxSEEQLn2L4F+wTk8h7KhmyDomM4hs8p8iBa3FvrFs2o8X2j+f9?=
- =?us-ascii?Q?lbt2VA00/ZZCwsBR3ejRrBGBQ/Y=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?isaWgyD2nR4XBAHfAxZ8R0dN+zL0K0bewVSKv9kT+6CRFKj6OlaaJUojNP2C?=
+ =?us-ascii?Q?YLavyHNnzpeVc5UyITrHPAWx51x2KZKx1NB3KO5qrkk46HDtk7eOW0JBYIPK?=
+ =?us-ascii?Q?QrFECl2hmU7xBMPgteHh6B2NPAjakRSDcYWChSQA6TTbQ2M0GSBEDCONehB/?=
+ =?us-ascii?Q?8gXvd1DdwggdG79CJ2QDqAU9kzdz/tFE1HSVytckWJ4M08nKAHdyf/BaPgzS?=
+ =?us-ascii?Q?gOXymtb8uFwohYHfjgo8tJR4PT3gz3QrJE+wk9d0baA8GeDK6/V7F91zxNuv?=
+ =?us-ascii?Q?xMC/Lu/s1c5mClL74XMvMi3Q0E0Ud+x/qdnrR9T8QzEAGYjxcrr8T0YjlDMP?=
+ =?us-ascii?Q?QJdF/ZD9AZ5rr/HQqgza9VI0OXWM/ym/ukdWuOZzyx468YLoOsAATnePEO2e?=
+ =?us-ascii?Q?i5vIzaPiyNoyxIReEIu6BJAWJ+vNxKqGzyrNzFyJG4417DUNnCgoGOHS3VgC?=
+ =?us-ascii?Q?N/ehvsREgEpcIl8zmDhuut00ggYSxixbFYxopgBIUD3kQcHUWh3d8Nr4dyrK?=
+ =?us-ascii?Q?z1+n/jZTeGqlps79cJq8QyUESJzHFoDXcigHXfuty4ptLNAjemYhs7XUpQZt?=
+ =?us-ascii?Q?/IRIuBgkZOeATQlYENWUOXNWISAf14MHHLc0blBD0evIin8WEK1HOtV0yThm?=
+ =?us-ascii?Q?h0tExXYoELzLxAKCSDcduHgDVQ0aR+j0bah2Iikw6mUCAXDrHYqAk8TK/12U?=
+ =?us-ascii?Q?tDuBNDqv4fZMYy5pnHKWrGEyHRs1Ba6qONYV61kKQjAWzBTwaw6l1UDzEeRC?=
+ =?us-ascii?Q?a26hSILFi0zAeJAanYNF9fDtdX8RXpbfvXj79Oedb+SzrhAyQKLWwPX+tysN?=
+ =?us-ascii?Q?7hOAUypEqt0kJyjyOUTTUIeO9NGqwPaCRzUBPDaawO/if8sNKry46PYl7Ky7?=
+ =?us-ascii?Q?RnDs3OhMg26qWQjDNiON5ISoNVHKw5o5+INhZ3LieAW5B2sYQ8w5oxZ7uxsl?=
+ =?us-ascii?Q?xMd2aqxU4Sh1rDCAwDdwvaE3e8Xt0WvNDULY5yEECDSvh39o8OdWPrdD0HRe?=
+ =?us-ascii?Q?42UE61/XOt7bnuK3QGM4Yn97jEoSaS6SbGP6tEKzC7eruTCxV+7FmR6awooV?=
+ =?us-ascii?Q?1uUfAwnXp8EY7aCEwASumHoCkivPPwylEAoo85s32n77+XacC9IG8EC/mF7J?=
+ =?us-ascii?Q?/AWU6CG3zl34JgeU7sdr+gPXEHoUt8kqpxALZPs3+vX0I7KLO/Vy89GCD/uY?=
+ =?us-ascii?Q?VIYboFcwAHnU/2gGt2eHO6Ta7pSf8P777iocnSItiHFutpT7nsJ/tCaZ/qgT?=
+ =?us-ascii?Q?qWQ8J+umVakhT7VdNd0BMAB2/DQCRU0nUSStp8XTMh/Vdt22gzcZTu8k5UJy?=
+ =?us-ascii?Q?6pTqAbxxxDCMQe+k6EkuXB21oniYrcrDEHFow+/wrGc0lCnaOydWXppS1494?=
+ =?us-ascii?Q?tPJdEdz4dJrL4YpD6iKdck/3D1ahI3P5Zjmb7XurAdiPODwvt8lvu+MpSdNn?=
+ =?us-ascii?Q?S43tqhDG0H1iuR+8sdNekrfwUsHOrxCrzne3C3JWwuAjjw3lcsqS8y/aTydp?=
+ =?us-ascii?Q?UXYr8mnKB8e5RtN4MUWv7GqUi4iJFJlJTYkFklFojRu2DI5lorYjvI9uQPh3?=
+ =?us-ascii?Q?w/cgVZI7mBRsO0SQr51JyJ9ASNxendUjE55wxMWKrP7vSnVXeAPAHzZZh6Hj?=
+ =?us-ascii?Q?duQ1jDyUAqMMo4pk4ClYq8objlR9tXN/JqvqQ8Pb7QRBXlu/CXHvFVNgdW2p?=
+ =?us-ascii?Q?xMk2oQ=3D=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4431498e-09f0-4d9c-fabf-08d9e5b4c7a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1142c20b-5222-4df7-ea0d-08d9e5b4c9a1
 X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 18:58:05.8240
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 18:58:09.1038
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZZH4dGHGgJ8sBvQJ+T+s/Z3Zy9JcgmVSWYrcYoPb5K+Fk54/jfOUXOwl4AalwRdA8+UM2EtPWvWtX1rSEe3yWHgawlnibsCDhH+mQ820a1o=
+X-MS-Exchange-CrossTenant-UserPrincipalName: uX095P6JD0/w2CBeCnJXqP4Ye1SkNThGt9ozk+7NaTXIdv6VT/4plOydgu8XQ9v4M/Y8MN5ZNMg+KOvThGlGtHd/xqd8xZUNWaTDBY+2Q5w=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5156
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10245 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
  definitions=main-2202010106
-X-Proofpoint-ORIG-GUID: zQA7NN0G9szhfBokyyRr6md30gGKQktN
-X-Proofpoint-GUID: zQA7NN0G9szhfBokyyRr6md30gGKQktN
+X-Proofpoint-ORIG-GUID: qWgNtR2oZ5Ppda_VLf8qgsn1AtUGvuuv
+X-Proofpoint-GUID: qWgNtR2oZ5Ppda_VLf8qgsn1AtUGvuuv
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a caller writes heavily to the kernel log (e.g. writing to
-/dev/kmsg in a loop) while another panics, there's currently a high
-likelihood of a deadlock (see patch 2 for the full description of this
-deadlock).
+This will be used help avoid deadlocks during panics. Although it would
+be better to include this in linux/panic.h, it would require that header
+to include linux/atomic.h as well. On some architectures, this results
+in a circular dependency. So instead add the helper directly to
+printk.c.
 
-The principle fix is to disable the optimistic spin once panic_cpu is
-set, so the panic CPU doesn't spin waiting for a halted CPU to hand over
-the console_sem.
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+---
 
-However, this exposed us to a livelock situation, where the panic CPU
-holds the console_sem, and another CPU could fill up the log buffer
-faster than the consoles could drain it, preventing the panic from
-progressing and halting the other CPUs. To avoid this, patch 3 adds a
-mechanism to suppress printk (from non-panic-CPU) during panic, if we
-reach a threshold of dropped messages.
+Notes:
+    v3: Move the helper into printk.c due to circular include
+    v2: Switch from macro to static inline function
 
-A major goal with all of these patches is to try to decrease the
-likelihood that another CPU is holding the console_sem when we halt it
-in panic(). This reduces the odds of needing to break locks and
-potentially encountering further deadlocks with the console drivers.
+ kernel/printk/printk.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-To test, I use the following script, kmsg_panic.sh:
-
-    #!/bin/bash
-    date
-    # 991 chars (based on log buffer size):
-    chars="$(printf 'a%.0s' {1..991})"
-    while :; do
-        echo $chars > /dev/kmsg
-    done &
-    echo c > /proc/sysrq-trigger &
-    date
-    exit
-
-I defined a hang as any time the system did not reboot to a login prompt
-on the serial console within 60 seconds. Here are the statistics on
-hangs using this script, before and after the patch.
-
-before:  776 hangs / 1484 trials - 52.3%
-after :    0 hangs /  15k trials -  0.0%
-
-v3:
-    Some mild style changes, none of which affect testing (which has run
-    continuously and is now over 15 thousand trials without a hang!)
-v2:
-    Each patch has minor updates from code reviews. I've re-done testing and
-    updated the above statistics. Exact changes are in each patch.
-
-Stephen Brennan (4):
-  printk: Add panic_in_progress helper
-  printk: disable optimistic spin during panic
-  printk: Avoid livelock with heavy printk during panic
-  printk: Drop console_sem during panic
-
- kernel/printk/printk.c | 55 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 54 insertions(+), 1 deletion(-)
-
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 57b132b658e1..b33c2861a8fc 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -1762,6 +1762,11 @@ static DEFINE_RAW_SPINLOCK(console_owner_lock);
+ static struct task_struct *console_owner;
+ static bool console_waiter;
+ 
++static bool panic_in_progress(void)
++{
++	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
++}
++
+ /**
+  * console_lock_spinning_enable - mark beginning of code where another
+  *	thread might safely busy wait
 -- 
 2.30.2
 

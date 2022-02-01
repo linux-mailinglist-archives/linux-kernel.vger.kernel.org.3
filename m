@@ -2,160 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C557D4A5B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD1E4A5B3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237243AbiBALcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 06:32:02 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:56529 "EHLO pegase2.c-s.fr"
+        id S237286AbiBALdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:33:39 -0500
+Received: from mga14.intel.com ([192.55.52.115]:13326 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237268AbiBALb7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 06:31:59 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Jp2p50jzKz9sSn;
-        Tue,  1 Feb 2022 12:31:57 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D3CPxDswQAuy; Tue,  1 Feb 2022 12:31:57 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jp2p46txLz9sSg;
-        Tue,  1 Feb 2022 12:31:56 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D9D6B8B840;
-        Tue,  1 Feb 2022 12:31:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ryWDZpz1U5iu; Tue,  1 Feb 2022 12:31:56 +0100 (CET)
-Received: from [192.168.5.118] (unknown [192.168.5.118])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 341EF8B839;
-        Tue,  1 Feb 2022 12:31:56 +0100 (CET)
-Message-ID: <1ea13a2a-90fd-07d3-2031-19e81ea349b4@csgroup.eu>
-Date:   Tue, 1 Feb 2022 12:31:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] powerpc/xive: Add some error handling code to
- 'xive_spapr_init()'
-Content-Language: fr-FR
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
-        allison@lohutok.net, tglx@linutronix.de, clg@kaod.org,
-        groug@kaod.org
-Cc:     kernel-janitors@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        id S233560AbiBALdj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 06:33:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643715219; x=1675251219;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WzjwqsEXrJgeo+koXSG78hIKP9gKAf+pvPzb74oxbqg=;
+  b=IhIUpdJk68SyJPvSdzJoqkkQariv2UoRSNWfyqZhjwqsYPtWqc4WxrVg
+   aekIT8aTqt2vfaJ+7d4yVyf9W9VjGeX/K9Gc8DUiXRQ6QWYtqLn1UvviZ
+   k2891eMJeQWa1umE801XLWNmwUBTrSiqsOm/hMOV/PplDSxHkF74tSLun
+   E2H6GVusPW6NymQECNn5xdK7yW3gYZCX/GxgJsnDX+AzdxmNHy+Qu46aY
+   /GcO0qEVFyTXDK/L10mGlPYUTnDqjupR8LHraBLLyqfn4LiMaybtMb3Vy
+   GC4dGNGq2A2lDmtSlyLiNQukF2GL0NYS/Gz6sDWJEG2BOuYJAQCFmEur7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247889831"
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="247889831"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 03:33:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="583003092"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Feb 2022 03:33:37 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nErPg-000TCR-RE; Tue, 01 Feb 2022 11:33:32 +0000
+Date:   Tue, 1 Feb 2022 19:33:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tri Vo <trong@google.com>
+Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
         linux-kernel@vger.kernel.org
-References: <20190801110956.8517-1-christophe.jaillet@wanadoo.fr>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20190801110956.8517-1-christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-trusty-5.10
+ 5870/5871] aarch64-linux-ld: trusty-ipc.c:undefined reference to
+ `trusty_dma_buf_get_shared_mem_id'
+Message-ID: <202202011931.flPRO9aB-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-trusty-5.10
+head:   b60d55f33484d855a546f7cfc59a28a5771e8bee
+commit: 629a4d3318cc1234675f62b69fba8791592e8a83 [5870/5871] ANDROID: trusty: Support setting trusty_shared_mem_id_t
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220201/202202011931.flPRO9aB-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/629a4d3318cc1234675f62b69fba8791592e8a83
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-trusty-5.10
+        git checkout 629a4d3318cc1234675f62b69fba8791592e8a83
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Le 01/08/2019 à 13:09, Christophe JAILLET a écrit :
-> 'xive_irq_bitmap_add()' can return -ENOMEM.
-> In this case, we should free the memory already allocated and return
-> 'false' to the caller.
-> 
-> Also add an error path which undoes the 'tima = ioremap(...)'
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This old patch doesn't apply, if it is still relevant can you please 
-rebase ?
+All errors (new ones prefixed by >>):
 
-Thanks
-Christophe
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: drivers/trusty/trusty-ipc.o: in function `dn_share_fd':
+   trusty-ipc.c:(.text+0x337c): undefined reference to `trusty_dma_buf_get_ffa_tag'
+>> aarch64-linux-ld: trusty-ipc.c:(.text+0x3398): undefined reference to `trusty_dma_buf_get_shared_mem_id'
 
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> NOT compile tested (I don't have a cross compiler and won't install one).
-> So if some correction or improvement are needed, feel free to propose and
-> commit it directly.
-> ---
->   arch/powerpc/sysdev/xive/spapr.c | 36 +++++++++++++++++++++++++-------
->   1 file changed, 28 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/powerpc/sysdev/xive/spapr.c b/arch/powerpc/sysdev/xive/spapr.c
-> index 52198131c75e..b3ae0b76c433 100644
-> --- a/arch/powerpc/sysdev/xive/spapr.c
-> +++ b/arch/powerpc/sysdev/xive/spapr.c
-> @@ -64,6 +64,17 @@ static int xive_irq_bitmap_add(int base, int count)
->   	return 0;
->   }
->   
-> +static void xive_irq_bitmap_remove_all(void)
-> +{
-> +	struct xive_irq_bitmap *xibm, *tmp;
-> +
-> +	list_for_each_entry_safe(xibm, tmp, &xive_irq_bitmaps, list) {
-> +		list_del(&xibm->list);
-> +		kfree(xibm->bitmap);
-> +		kfree(xibm);
-> +	}
-> +}
-> +
->   static int __xive_irq_bitmap_alloc(struct xive_irq_bitmap *xibm)
->   {
->   	int irq;
-> @@ -723,7 +734,7 @@ bool __init xive_spapr_init(void)
->   	u32 val;
->   	u32 len;
->   	const __be32 *reg;
-> -	int i;
-> +	int i, err;
->   
->   	if (xive_spapr_disabled())
->   		return false;
-> @@ -748,23 +759,26 @@ bool __init xive_spapr_init(void)
->   	}
->   
->   	if (!xive_get_max_prio(&max_prio))
-> -		return false;
-> +		goto err_unmap;
->   
->   	/* Feed the IRQ number allocator with the ranges given in the DT */
->   	reg = of_get_property(np, "ibm,xive-lisn-ranges", &len);
->   	if (!reg) {
->   		pr_err("Failed to read 'ibm,xive-lisn-ranges' property\n");
-> -		return false;
-> +		goto err_unmap;
->   	}
->   
->   	if (len % (2 * sizeof(u32)) != 0) {
->   		pr_err("invalid 'ibm,xive-lisn-ranges' property\n");
-> -		return false;
-> +		goto err_unmap;
->   	}
->   
-> -	for (i = 0; i < len / (2 * sizeof(u32)); i++, reg += 2)
-> -		xive_irq_bitmap_add(be32_to_cpu(reg[0]),
-> -				    be32_to_cpu(reg[1]));
-> +	for (i = 0; i < len / (2 * sizeof(u32)); i++, reg += 2) {
-> +		err = xive_irq_bitmap_add(be32_to_cpu(reg[0]),
-> +					  be32_to_cpu(reg[1]));
-> +		if (err < 0)
-> +			goto err_mem_free;
-> +	}
->   
->   	/* Iterate the EQ sizes and pick one */
->   	of_property_for_each_u32(np, "ibm,xive-eq-sizes", prop, reg, val) {
-> @@ -775,8 +789,14 @@ bool __init xive_spapr_init(void)
->   
->   	/* Initialize XIVE core with our backend */
->   	if (!xive_core_init(&xive_spapr_ops, tima, TM_QW1_OS, max_prio))
-> -		return false;
-> +		goto err_mem_free;
->   
->   	pr_info("Using %dkB queues\n", 1 << (xive_queue_shift - 10));
->   	return true;
-> +
-> +err_mem_free:
-> +	xive_irq_bitmap_remove_all();
-> +err_unmap:
-> +	iounmap(tima);
-> +	return false;
->   }
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

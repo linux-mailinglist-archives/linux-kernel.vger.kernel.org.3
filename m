@@ -2,117 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 827D54A61CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D574A61F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241333AbiBARC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiBARCZ (ORCPT
+        id S239820AbiBARKc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 12:10:32 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24264 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229753AbiBARK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:02:25 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA11AC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:02:25 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so4239573oov.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:02:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SmNulzN3mmZQBCDB7sQ8CSdfD8G2urW4bUypyx2Sf+U=;
-        b=d+5cIITflXarmSYidQYqGy/SPlpwJFPzUwzgnzx7YR24olDgujJq7qHiWnlN+fcRjp
-         RmfyDMRjnZa+nNfcr3P4npSe9RXP+06rXO/fW8PoG09XRA1YqP8nxpkt4MzDwjpsicV7
-         ZyFcVV7wa1gfKWy64DDrp7h3j9EB30ErvuCRY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SmNulzN3mmZQBCDB7sQ8CSdfD8G2urW4bUypyx2Sf+U=;
-        b=Ei0o0gbbUJNGEZ1fH3ZmVKrVJEZqHYsokxeBsuud9BcQutiQhY1yG6y15r7buAubAo
-         0tKlvR0F0bHJ+NlPpihRp+6gTUEvFuBcRJL3O4xG06+xR0aQzxSiKTIqhVxr0FQdFzEh
-         OSFFGkqdy9kDbSaXNxITYCT1xIa4Wvkw7yAp+bRuWXtz5eUfuM7UsCts+fi14N/g3mjX
-         LW768r8bN6hxm+7Xp6YT+EHUd35dMP24TxJ7E/SVwYr33uaVAtg010ZpGddxg4T9hPKC
-         RRyVxgeFlOorMviRojwXboZ3xVuPkgr2rimVk5gQ4K37t4F/icfPUtAZVPZRS4FZzgZx
-         MQ8Q==
-X-Gm-Message-State: AOAM532WxRpGwUr4fbYxXFNcQNPsQT9SysS+f7p0ehfgL7KVpuYqZLyA
-        ktJaesMyJ6NdbyGI0drkSUmhpXo8MSRVZmb5cO/q1w==
-X-Google-Smtp-Source: ABdhPJwWXljKvKuGvpSaNGrCDpGDZgSOOvLzRo52D5dqbZIgiKxNCAjoHk0BJnO9f2e73wAgllo3zYa4Ve3UnhJBSrA=
-X-Received: by 2002:a4a:8891:: with SMTP id j17mr13060858ooa.12.1643734945153;
- Tue, 01 Feb 2022 09:02:25 -0800 (PST)
+        Tue, 1 Feb 2022 12:10:29 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 211GAVEo029611
+        for <linux-kernel@vger.kernel.org>; Tue, 1 Feb 2022 09:10:28 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dy6n9s54e-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:10:28 -0800
+Received: from twshared9880.08.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 1 Feb 2022 09:10:27 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 3F3602914E08C; Tue,  1 Feb 2022 09:07:30 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        <iii@linux.ibm.com>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH v8 bpf-next 8/9] bpf: introduce bpf_jit_binary_pack_[alloc|finalize|free]
+Date:   Mon, 31 Jan 2022 22:28:02 -0800
+Message-ID: <20220201062803.2675204-9-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
+References: <20220201062803.2675204-1-song@kernel.org>
 MIME-Version: 1.0
-References: <20220125135406.1.I62322abf81dbc1a1b72392a093be0c767da9bf51@changeid>
- <e89dbc7b-b3ae-c334-b704-f5633725c29f@redhat.com> <CAD=FV=U8VGnRXv8MgofKzZF22_x0_X3M+AMfyPQ1u=yTXnFBQA@mail.gmail.com>
- <6fdcfbcf-0546-6b4f-b50f-cf2382ad746f@redhat.com> <CAD=FV=U3YHt=+cr8c39zMxFWMeo4Pr=R3BBPMKanpySPhsYh9w@mail.gmail.com>
-In-Reply-To: <CAD=FV=U3YHt=+cr8c39zMxFWMeo4Pr=R3BBPMKanpySPhsYh9w@mail.gmail.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 1 Feb 2022 18:02:13 +0100
-Message-ID: <CAKMK7uEiUxPJ7F+F33YVdq6d9WxzxTKzoxTyiZnvceM2CHEkVw@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: Allow querying the detected panel via sysfs
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>, jjsu@chromium.org,
-        lschyi@chromium.org, Sam Ravnborg <sam@ravnborg.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: qY7rbMkRe2pAkmsX5Kdo7PSqu1c36OfH
+X-Proofpoint-GUID: qY7rbMkRe2pAkmsX5Kdo7PSqu1c36OfH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202010096
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 5:42 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, Jan 26, 2022 at 12:25 AM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
-> >
-> > On 1/26/22 00:25, Doug Anderson wrote:
-> > > On Tue, Jan 25, 2022 at 2:55 PM Javier Martinez Canillas
-> > > <javierm@redhat.com> wrote:
-> >
-> > [snip]
-> >
-> > >> Should this new sysfs entry be documented in Documentation/ABI/ ?
-> > >
-> > > I'm not sure what the policy is here. I actually don't know that I'm
-> > > too worried about this being an ABI. For the purposes of our tests
-> > > then if something about this file changed (path changed or something
-> > > like that) it wouldn't be a huge deal. Presumably the test itself
-> > > would just "fail" in this case and that would clue us in that the ABI
-> > > changed and we could adapt to whatever new way was needed to discover
-> > > this.
-> > >
-> > > That being said, if the policy is that everything in sysfs is supposed
-> > > to be ABI then I can add documentation for this...
-> > >
-> >
-> > I also don't know the policy, hence the question. But in any case, I
-> > think that it could even be done as a follow-up if is needed.
->
-> Sounds good. Since it's been pretty silent and I had your review I
-> pushed this to drm-misc-next. If there are comments or someone has an
-> opinion documenting this as a stable ABI then please yell.
->
-> 363c4c3811db drm/panel-edp: Allow querying the detected panel via sysfs
+From: Song Liu <songliubraving@fb.com>
 
-Generally stuff for tests should be put into debugfs. We print
-everything there in various files.
+This is the jit binary allocator built on top of bpf_prog_pack.
 
-sysfs is uapi, and so come with the full baggage of you need open
-userspace (which for some sysfs stuff might just be a script), and
-explicitly not for tests (because that just opens the door to merge
-anything binary blobs might want and just slide it all in). So please
-retcon at least some plausible deniability here :-)
+bpf_prog_pack allocates RO memory, which cannot be used directly by the
+JIT engine. Therefore, a temporary rw buffer is allocated for the JIT
+engine. Once JIT is done, bpf_jit_binary_pack_finalize is used to copy
+the program to the RO memory.
 
-But if it's really only for a test then maybe dumping this into a
-debugfs file (we do have connector directories already) would be much
-better. That doable?
--Daniel
+bpf_jit_binary_pack_alloc reserves 16 bytes of extra space for illegal
+instructions, which is small than the 128 bytes space reserved by
+bpf_jit_binary_alloc. This change is necessary for bpf_jit_binary_hdr
+to find the correct header. Also, flag use_bpf_prog_pack is added to
+differentiate a program allocated by bpf_jit_binary_pack_alloc.
+
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ include/linux/bpf.h    |   1 +
+ include/linux/filter.h |  21 ++++----
+ kernel/bpf/core.c      | 108 ++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 120 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ea0d7fd4a410..2fc7e5c5ef41 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -953,6 +953,7 @@ struct bpf_prog_aux {
+ 	bool sleepable;
+ 	bool tail_call_reachable;
+ 	bool xdp_has_frags;
++	bool use_bpf_prog_pack;
+ 	struct hlist_node tramp_hlist;
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5855eb474c62..1cb1af917617 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -890,15 +890,6 @@ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+ 	set_memory_x((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
+ }
+ 
+-static inline struct bpf_binary_header *
+-bpf_jit_binary_hdr(const struct bpf_prog *fp)
+-{
+-	unsigned long real_start = (unsigned long)fp->bpf_func;
+-	unsigned long addr = real_start & PAGE_MASK;
+-
+-	return (void *)addr;
+-}
+-
+ int sk_filter_trim_cap(struct sock *sk, struct sk_buff *skb, unsigned int cap);
+ static inline int sk_filter(struct sock *sk, struct sk_buff *skb)
+ {
+@@ -1068,6 +1059,18 @@ void *bpf_jit_alloc_exec(unsigned long size);
+ void bpf_jit_free_exec(void *addr);
+ void bpf_jit_free(struct bpf_prog *fp);
+ 
++struct bpf_binary_header *
++bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **ro_image,
++			  unsigned int alignment,
++			  struct bpf_binary_header **rw_hdr,
++			  u8 **rw_image,
++			  bpf_jit_fill_hole_t bpf_fill_ill_insns);
++int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
++				 struct bpf_binary_header *ro_header,
++				 struct bpf_binary_header *rw_header);
++void bpf_jit_binary_pack_free(struct bpf_binary_header *ro_header,
++			      struct bpf_binary_header *rw_header);
++
+ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+ 				struct bpf_jit_poke_descriptor *poke);
+ 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7ae590897b73..306aa63fa58e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1031,6 +1031,109 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
+ 	bpf_jit_uncharge_modmem(size);
+ }
+ 
++/* Allocate jit binary from bpf_prog_pack allocator.
++ * Since the allocated memory is RO+X, the JIT engine cannot write directly
++ * to the memory. To solve this problem, a RW buffer is also allocated at
++ * as the same time. The JIT engine should calculate offsets based on the
++ * RO memory address, but write JITed program to the RW buffer. Once the
++ * JIT engine finishes, it calls bpf_jit_binary_pack_finalize, which copies
++ * the JITed program to the RO memory.
++ */
++struct bpf_binary_header *
++bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
++			  unsigned int alignment,
++			  struct bpf_binary_header **rw_header,
++			  u8 **rw_image,
++			  bpf_jit_fill_hole_t bpf_fill_ill_insns)
++{
++	struct bpf_binary_header *ro_header;
++	u32 size, hole, start;
++
++	WARN_ON_ONCE(!is_power_of_2(alignment) ||
++		     alignment > BPF_IMAGE_ALIGNMENT);
++
++	/* add 16 bytes for a random section of illegal instructions */
++	size = round_up(proglen + sizeof(*ro_header) + 16, BPF_PROG_CHUNK_SIZE);
++
++	if (bpf_jit_charge_modmem(size))
++		return NULL;
++	ro_header = bpf_prog_pack_alloc(size);
++	if (!ro_header) {
++		bpf_jit_uncharge_modmem(size);
++		return NULL;
++	}
++
++	*rw_header = kvmalloc(size, GFP_KERNEL);
++	if (!*rw_header) {
++		bpf_prog_pack_free(ro_header);
++		bpf_jit_uncharge_modmem(size);
++		return NULL;
++	}
++
++	/* Fill space with illegal/arch-dep instructions. */
++	bpf_fill_ill_insns(*rw_header, size);
++	(*rw_header)->size = size;
++
++	hole = min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
++		     BPF_PROG_CHUNK_SIZE - sizeof(*ro_header));
++	start = (get_random_int() % hole) & ~(alignment - 1);
++
++	*image_ptr = &ro_header->image[start];
++	*rw_image = &(*rw_header)->image[start];
++
++	return ro_header;
++}
++
++/* Copy JITed text from rw_header to its final location, the ro_header. */
++int bpf_jit_binary_pack_finalize(struct bpf_prog *prog,
++				 struct bpf_binary_header *ro_header,
++				 struct bpf_binary_header *rw_header)
++{
++	void *ptr;
++
++	ptr = bpf_arch_text_copy(ro_header, rw_header, rw_header->size);
++
++	kvfree(rw_header);
++
++	if (IS_ERR(ptr)) {
++		bpf_prog_pack_free(ro_header);
++		return PTR_ERR(ptr);
++	}
++	prog->aux->use_bpf_prog_pack = true;
++	return 0;
++}
++
++/* bpf_jit_binary_pack_free is called in two different scenarios:
++ *   1) when the program is freed after;
++ *   2) when the JIT engine fails (before bpf_jit_binary_pack_finalize).
++ * For case 2), we need to free both the RO memory and the RW buffer.
++ * Also, ro_header->size in 2) is not properly set yet, so rw_header->size
++ * is used for uncharge.
++ */
++void bpf_jit_binary_pack_free(struct bpf_binary_header *ro_header,
++			      struct bpf_binary_header *rw_header)
++{
++	u32 size = rw_header ? rw_header->size : ro_header->size;
++
++	bpf_prog_pack_free(ro_header);
++	kvfree(rw_header);
++	bpf_jit_uncharge_modmem(size);
++}
++
++static inline struct bpf_binary_header *
++bpf_jit_binary_hdr(const struct bpf_prog *fp)
++{
++	unsigned long real_start = (unsigned long)fp->bpf_func;
++	unsigned long addr;
++
++	if (fp->aux->use_bpf_prog_pack)
++		addr = real_start & BPF_PROG_CHUNK_MASK;
++	else
++		addr = real_start & PAGE_MASK;
++
++	return (void *)addr;
++}
++
+ /* This symbol is only overridden by archs that have different
+  * requirements than the usual eBPF JITs, f.e. when they only
+  * implement cBPF JIT, do not set images read-only, etc.
+@@ -1040,7 +1143,10 @@ void __weak bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
+ 
+-		bpf_jit_binary_free(hdr);
++		if (fp->aux->use_bpf_prog_pack)
++			bpf_jit_binary_pack_free(hdr, NULL /* rw_buffer */);
++		else
++			bpf_jit_binary_free(hdr);
+ 
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.30.2
+

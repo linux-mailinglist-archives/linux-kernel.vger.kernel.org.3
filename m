@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ABA4A68D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7C44A68DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243021AbiBAX7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S243031AbiBAX7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241096AbiBAX7F (ORCPT
+        with ESMTP id S241096AbiBAX7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:59:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4D6C061714;
-        Tue,  1 Feb 2022 15:59:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF42CB8241E;
-        Tue,  1 Feb 2022 23:59:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB34C340EB;
-        Tue,  1 Feb 2022 23:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643759942;
-        bh=kwMD6uL4mpXj+hHjcC0KOQ6sWJ+8UYucGmBNS0v9jVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HB12T3jVTRAXVVG9hnDLtKDX4/6eVw5FM5EZfiRhELWxKxygc6leUhYUqmQ0sb6e1
-         4Qi1BPxfBB2Vcwn1ET4N3wRaUQvSvvtd5t8zfHvJoOecBzta2xyz1ewL1LVIYCUs/O
-         oLfpdjfIrpI9VzTRp6Z5tWM1Wu2Zofvx54mIR6HF7jXjC4d2w7Yfp3aU4ygLvuZRNx
-         9brcMKbOlJA5S2WBWK8ik0DC7VxVezo5fFMTjZUVmlUy0JPdSFq52IdGHygy3Yhmtt
-         WmUwIpFvO7cgcNY933oVWI2rHUB4872b85ncdbhfItSImyEYmxZV2fOP3JbqW7DOH8
-         56c718LEUosCA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B60C140466; Tue,  1 Feb 2022 20:58:59 -0300 (-03)
-Date:   Tue, 1 Feb 2022 20:58:59 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] libperf: Fix 32-bit build for tests uint64_t printf
-Message-ID: <YfnJQ44BgtyIIBDw@kernel.org>
-References: <20220201213903.699656-1-robh@kernel.org>
+        Tue, 1 Feb 2022 18:59:41 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F121C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 15:59:41 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n32so17282935pfv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 15:59:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pTZ3bVNwyGr0I6KCecwpk4q7omHPmVlpoXWo92UK+BQ=;
+        b=VJDrPKs3JJ3JyjEdFMptkHnkiQgE8DFx0U7leGypaLH1eZ+CL/VQtlNrRhEWfDVc/+
+         3hnv7eK4e3NE6E4JYLWfgXTRKU7XY9yzMcU4MTjp9RNhnsKEA0p0xG6qDbXVLdnhnmQc
+         w/ik5Co1PH1C2oqQZokC4GeJf93llNRGLpBh4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pTZ3bVNwyGr0I6KCecwpk4q7omHPmVlpoXWo92UK+BQ=;
+        b=XTJ6IqVDH9AZEdTO137AXk6tFw4vGlavNRO2mkF0wLTJuDM8jTQF8eLTAsHmHs4M7q
+         DVvQk+ZBUfH8M8b47q+SNfS2jUhLxX0w+R9HXhBAiBEjHuMGpH82NQQkyv26iURyMSp6
+         H4Rgur/LiaLckm6bcBci67QpR9ucN+68eA6BpBqlFNyM0PdRd0oQF35PnkjRQVFgK3Sg
+         KJJPbDxSiBe7rznqyFhlL0yzVO7DL7kMP1l1njaCE6z5t7sTCWxsY/2+gyADn4epZL81
+         VAghrnqUA0slaUAY8FfsXGwFEkPezSqtak7lAdtM1C3pW07kqGEnZgzZGVAPS9c7P0lR
+         K05A==
+X-Gm-Message-State: AOAM5318sALc4dOf6mQGKdeLrL/sEre3FcDBhXw4PetgaZZtn0hRzPmZ
+        kPx6QwxqPBBilP0fwkoZBHQ4wA==
+X-Google-Smtp-Source: ABdhPJzYYnjku+oiOCGhXn3CrFssKCulCgN1NlnldRS31rM9bTCTung6/ijkx2nM9qCDv1hYCJqljA==
+X-Received: by 2002:a63:9149:: with SMTP id l70mr22479215pge.555.1643759980611;
+        Tue, 01 Feb 2022 15:59:40 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f12sm18007181pfj.37.2022.02.01.15.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 15:59:40 -0800 (PST)
+Date:   Tue, 1 Feb 2022 15:59:39 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Alexander Popov <alex.popov@linux.com>
+Subject: Re: Stackleak vs noinstr (Was: [GIT pull] objtool/core for v5.16-rc1)
+Message-ID: <202202011558.DAAF17D@keescook>
+References: <163572864256.3357115.931779940195622047.tglx@xen13>
+ <163572864563.3357115.8793939214537874196.tglx@xen13>
+ <CAHk-=wgNzL3AaVNruwLv=kcGXi1EbJN9CZC6GoRY66t6WFcfGg@mail.gmail.com>
+ <YYDwJORywW2FjprP@hirez.programming.kicks-ass.net>
+ <YYD/bpLabfumrvL+@hirez.programming.kicks-ass.net>
+ <YYENAKB0igNFnFmK@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220201213903.699656-1-robh@kernel.org>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <YYENAKB0igNFnFmK@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Feb 01, 2022 at 03:39:03PM -0600, Rob Herring escreveu:
-> Commit a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
-> added printf's of 64-bit ints using %lu which doesn't work on 32-bit
-> builds:
+On Tue, Nov 02, 2021 at 11:03:44AM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 02, 2021 at 10:05:50AM +0100, Peter Zijlstra wrote:
+> > On Tue, Nov 02, 2021 at 09:00:36AM +0100, Peter Zijlstra wrote:
+> > > On Mon, Nov 01, 2021 at 01:44:39PM -0700, Linus Torvalds wrote:
+> > 
+> > > >     do_machine_check()+0x27: call to stackleak_track_stack ...
+> > > >     do_syscall_64()+0x9: call to stackleak_track_stack ...
+> > > >     do_int80_syscall_32()+0x9: call to stackleak_track_stack ...
+> > > >     exc_general_protection()+0x22: call to stackleak_track_stack ...
+> > > >     fixup_bad_iret()+0x20: call to stackleak_track_stack ...
+> > > >     .entry.text+0x10e6: call to stackleak_erase ...
+> > > >     .entry.text+0x143: call to stackleak_erase ...
+> > > >     .entry.text+0x17d9: call to stackleak_erase ...
+> > > > 
+> > > > most seem to be about the stackleak thing,
+> > > 
+> > > Right, I recently ran into this and hacen't yet had time to look into
+> > > it. I suspect my normal build box doesn't have the GCC plugin crud
+> > > enabled or somesuch.
+> > > 
+> > > I think the GCC stackleak plugin needs fixing, specifically it needs a
+> > > function attribute such that it will not emit instrumentation in noinstr
+> > > functions. I'll go chase down the developer of that thing.
+> > 
+> > Alexander, is there any way to make this plugin grow a function
+> > attribute which we can add to noinstr ? There's a strict requirement the
+> > compiler doesn't add extra code to noinstr functions these days.
+> > 
+> > We'll 'soon' be running noinstr C code before switching to kernel page
+> > tables even.
 > 
-> tests/test-evlist.c:529:29: error: format ‘%lu’ expects argument of type \
->   ‘long unsigned int’, but argument 4 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Werror=format=]
+> Using my pre-release GCC-12 compiler (the only one I have with plugin
+> crud enabled apparently), the below seems to work.
 > 
-> Use PRIu64 instead which works on both 32-bit and 64-bit systems.
-
-I´ll apply this tomorrow and as well will check why the existing tests
-aren't catching this :-\
-
-Thanks!
-
-- Arnaldo
- 
-> Fixes: a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
-> Cc: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Having the plugin gate on section name seems a lot hacky, but given it's
+> already doing that, one more doesn't hurt.
+> 
 > ---
->  tools/lib/perf/tests/test-evlist.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-> index b3479dfa9a1c..fa854c83b7e7 100644
-> --- a/tools/lib/perf/tests/test-evlist.c
-> +++ b/tools/lib/perf/tests/test-evlist.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define _GNU_SOURCE // needed for sched.h to get sched_[gs]etaffinity and CPU_(ZERO,SET)
-> +#include <inttypes.h>
->  #include <sched.h>
->  #include <stdio.h>
->  #include <stdarg.h>
-> @@ -526,12 +527,12 @@ static int test_stat_multiplexing(void)
+> diff --git a/kernel/stackleak.c b/kernel/stackleak.c
+> index ce161a8e8d97..135866ca8878 100644
+> --- a/kernel/stackleak.c
+> +++ b/kernel/stackleak.c
+> @@ -48,7 +48,7 @@ int stack_erasing_sysctl(struct ctl_table *table, int write,
+>  #define skip_erasing()	false
+>  #endif /* CONFIG_STACKLEAK_RUNTIME_DISABLE */
 >  
->  	min = counts[0].val;
->  	for (i = 0; i < EVENT_NUM; i++) {
-> -		__T_VERBOSE("Event %2d -- Raw count = %lu, run = %lu, enable = %lu\n",
-> +		__T_VERBOSE("Event %2d -- Raw count = %" PRIu64 ", run = %" PRIu64 ", enable = %" PRIu64 "\n",
->  			    i, counts[i].val, counts[i].run, counts[i].ena);
+> -asmlinkage void notrace stackleak_erase(void)
+> +asmlinkage noinstr void stackleak_erase(void)
+>  {
+>  	/* It would be nice not to have 'kstack_ptr' and 'boundary' on stack */
+>  	unsigned long kstack_ptr = current->lowest_stack;
+> @@ -102,7 +102,6 @@ asmlinkage void notrace stackleak_erase(void)
+>  	/* Reset the 'lowest_stack' value for the next syscall */
+>  	current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
+>  }
+> -NOKPROBE_SYMBOL(stackleak_erase);
 >  
->  		perf_counts_values__scale(&counts[i], true, &scaled);
->  		if (scaled == 1) {
-> -			__T_VERBOSE("\t Scaled count = %lu (%.2lf%%, %lu/%lu)\n",
-> +			__T_VERBOSE("\t Scaled count = %" PRIu64 " (%.2lf%%, %" PRIu64 "/%" PRIu64 ")\n",
->  				    counts[i].val,
->  				    (double)counts[i].run / (double)counts[i].ena * 100.0,
->  				    counts[i].run, counts[i].ena);
-> -- 
-> 2.32.0
+>  void __used __no_caller_saved_registers notrace stackleak_track_stack(void)
+>  {
+> diff --git a/scripts/gcc-plugins/stackleak_plugin.c b/scripts/gcc-plugins/stackleak_plugin.c
+> index e9db7dcb3e5f..07688a1c686b 100644
+> --- a/scripts/gcc-plugins/stackleak_plugin.c
+> +++ b/scripts/gcc-plugins/stackleak_plugin.c
+> @@ -446,6 +446,8 @@ static bool stackleak_gate(void)
+>  			return false;
+>  		if (!strncmp(TREE_STRING_POINTER(section), ".meminit.text", 13))
+>  			return false;
+> +		if (!strncmp(TREE_STRING_POINTER(section), ".noinstr.text", 13))
+> +			return false;
+>  	}
+>  
+>  	return track_frame_size >= 0;
+
+Did this ever turn into a real patch? I don't see anything in -next for
+it, so I assume it's still needed.
 
 -- 
-
-- Arnaldo
+Kees Cook

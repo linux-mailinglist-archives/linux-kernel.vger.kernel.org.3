@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719E74A5EAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7E64A5EB3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239564AbiBAOyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:54:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36704 "EHLO
+        id S239583AbiBAOz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:55:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40697 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239557AbiBAOya (ORCPT
+        by vger.kernel.org with ESMTP id S236688AbiBAOzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:54:30 -0500
+        Tue, 1 Feb 2022 09:55:54 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643727270;
+        s=mimecast20190719; t=1643727353;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XFwpy9fOZO6ssV96jv+obSGnqOS+dofnT9+Jw0dBzFY=;
-        b=MWBynpe/XU3JsqA1CQHOk4PwnNILOm6bRsqxfMnl/GW9nrU77qPETouFETJwFflaVQhuon
-        1ln+4sbfvg/Efa1rubxTYaMJlnWuh098gJu25QsvVGS2RPrTWFrB7VzwqqZmTFj4PrhMwW
-        vjMPtnNIyDa7h0KmWBIDxHowwMROtyw=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tYh+QaAtf8lTpXUCd9OATCvMzzj1cElaALeswGwuCzo=;
+        b=OMmfMGbDVXEygKEZVoBRVBsaRoh2VqN6tIW0SalA1DGg7/cthCZ/iOg+eNOgbRCfotJe4K
+        wR5SmTK01s/Ypc5Gx5aFBIZawtr+jPcjHN6T/85wQT901T50gxrfGWMcpd/U1+7C8n4qoQ
+        WFzGoRfRmfVkZrJ53fohuVLIO/UoZLI=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-zkf9H0ZJPhiNZ6g4oRr5lQ-1; Tue, 01 Feb 2022 09:54:29 -0500
-X-MC-Unique: zkf9H0ZJPhiNZ6g4oRr5lQ-1
-Received: by mail-ej1-f71.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso6672064ejj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:54:28 -0800 (PST)
+ us-mta-640-lAuKkxekN0-pRHs7lo7oGA-1; Tue, 01 Feb 2022 09:55:50 -0500
+X-MC-Unique: lAuKkxekN0-pRHs7lo7oGA-1
+Received: by mail-ed1-f72.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so8822339edb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:55:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=XFwpy9fOZO6ssV96jv+obSGnqOS+dofnT9+Jw0dBzFY=;
-        b=LqGZv7JV3ZgvDPM8vDjz2Jomnx3Wn+8JP43hhU0mZ3EibXdLzp6dBLC6MnETN36mnC
-         pVvDdDgKR1F027zwD7Shosa5Xplq6zwbsvrznuhdGfX6EXjvEX7UpVv7xUwSP7XWX7WY
-         UhIJvyBcatdWpshD/2S5zWqaCGZD/+XcSlZwNaDuBJtlEPBZZGuvb75HJ/efESkWq3rr
-         Plo3bmyPiFCgdNTOIAWbw9gGP1xU0RTTUBXCqsNOzSGD6VX1Y8/PejlCs+7H5J4zqbQG
-         1S7Pvq6ZecBpu9cB9BUpHhrltMju9sHyp1JknKQdnPfVbgd2HsE9ZLGmjhbZ4zjYcEGh
-         Araw==
-X-Gm-Message-State: AOAM530JKcJmPN/6+UV2ofR/Aze4QBhCe/CTgSXzbfQwGcKYnwmt+J2c
-        ccGL8EOwTy5EcNp1XqyJZNavohILzf2qvFPGmkIiE8uYD4UAf54YW3kOAlBkCYrL2eg+mnJ8PUh
-        m1sfacy1Hw4GSwnIHVBVyiTq3
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr21186656ejc.365.1643727267221;
-        Tue, 01 Feb 2022 06:54:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwEkNSH5vVbDhhRxtI2/WVmnkgqtbEUGR0iAiSf9moRNqfjGp9ibnT3pF8ifw/vhLJcbPc/cw==
-X-Received: by 2002:a17:907:97cd:: with SMTP id js13mr21186615ejc.365.1643727266772;
-        Tue, 01 Feb 2022 06:54:26 -0800 (PST)
+        bh=tYh+QaAtf8lTpXUCd9OATCvMzzj1cElaALeswGwuCzo=;
+        b=pdOqDY4XrqNmSuonOXNQdKDOVlQOeyPPjjbChAduEmyRD1WaXV5GZP9sDfqYATnl4K
+         YV8QM67zjVEh8640lVIU3vlT7Vzrp1tOWzOBCFig3eK/6rHK1gt/zpm/5XLJObdA90BH
+         TrssW85PjnQhewyGRclW061/UBirDCcQwp5R0vSYaSV+pD9XKTDWsAKS1e+/nWgCBX1P
+         OWOm9wXaPglhPj3QknwUzYlcqxrcGSJN+fXKzO9/KMumHuh0Ojty9IDeU1HA96GsDe5V
+         Ppw6Dp7a5dbd7boJm5oXqxeLwm3B+j53sBdyvitl5vw4ZB86PE0lKeOqwMd4yQftRmCw
+         hDAw==
+X-Gm-Message-State: AOAM532Tt36dj/XtvuQsJdNubAoSAKLwcF6Hif1DDI6cr8EgYpqJKKgj
+        sea+IOU3mr9K1zlTYQdVjVSEEDO6fwzl0+N3XFDSVaA0y6FiNaldxZ42+yK2j0R4D4AmVpnOWq7
+        uFh/LuF/s6eeKODxm4YmazONu
+X-Received: by 2002:a17:906:2a91:: with SMTP id l17mr20665855eje.245.1643727349458;
+        Tue, 01 Feb 2022 06:55:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxOfd9zKq15m/IjdSYVRVNsuh8qaYCmOtysVEldK1wLQHYHJExGsH3L6G+WF5GF+vfl2Ufimg==
+X-Received: by 2002:a17:906:2a91:: with SMTP id l17mr20665819eje.245.1643727349121;
+        Tue, 01 Feb 2022 06:55:49 -0800 (PST)
 Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id a25sm4283157ejs.149.2022.02.01.06.54.26
+        by smtp.gmail.com with ESMTPSA id kq16sm14581782ejb.163.2022.02.01.06.55.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 06:54:26 -0800 (PST)
-Message-ID: <f9b67b36-4b33-2557-0f0d-2819cc616cff@redhat.com>
-Date:   Tue, 1 Feb 2022 15:54:25 +0100
+        Tue, 01 Feb 2022 06:55:48 -0800 (PST)
+Message-ID: <f8e3502a-6e01-8df6-be66-ef0c3e1b7446@redhat.com>
+Date:   Tue, 1 Feb 2022 15:55:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
-Subject: Re: [PATCH v6 1/9] spi: Make spi_alloc_device and spi_add_device
- public again
+Subject: Re: [PATCH v6 5/9] platform/x86: i2c-multi-instantiate: Rename it for
+ a generic serial driver name
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        patches@opensource.cirrus.com
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
 References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
- <20220121172431.6876-2-sbinding@opensource.cirrus.com>
- <c821953a-6572-d60d-6a00-fccd541268c5@redhat.com>
- <CAJZ5v0jGqUvZS113VewgsGm8cMJc2B=M5KyqmOHTPNy+R8KeEQ@mail.gmail.com>
+ <20220121172431.6876-6-sbinding@opensource.cirrus.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAJZ5v0jGqUvZS113VewgsGm8cMJc2B=M5KyqmOHTPNy+R8KeEQ@mail.gmail.com>
+In-Reply-To: <20220121172431.6876-6-sbinding@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -88,109 +82,322 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 2/1/22 15:52, Rafael J. Wysocki wrote:
-> On Tue, Feb 1, 2022 at 3:26 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 1/21/22 18:24, Stefan Binding wrote:
->>> This functions were previously made private since they
->>> were not used. However, these functions will be needed
->>> again.
->>>
->>> Partial revert of commit da21fde0fdb3
->>> ("spi: Make several public functions private to spi.c")
->>>
->>> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
->>
->> Thanks, patch looks good to me:
->>
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+On 1/21/22 18:24, Stefan Binding wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
 > 
-> The series also looks good to me from the ACPI side, so what tree
-> should it go into?
+> Rename I2C multi instantiate driver to serial-multi-instantiate for
+> upcoming addition of SPI support
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Minus the ALSA patch from 8/9 which should go through the sound
-tree AFAIK, I would be happy to pick up the entire series in the
-pdx86 tree.
+Thanks, patch looks good to me:
 
-This requires an ack from Mark though for me merging the spi bits,
-Mark ?
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
 
 Hans
 
 
+> ---
+>  MAINTAINERS                                   |  4 +-
+>  drivers/acpi/scan.c                           | 13 +--
+>  drivers/platform/x86/Kconfig                  | 10 +-
+>  drivers/platform/x86/Makefile                 |  2 +-
+>  ...stantiate.c => serial-multi-instantiate.c} | 91 +++++++++----------
+>  5 files changed, 60 insertions(+), 60 deletions(-)
+>  rename drivers/platform/x86/{i2c-multi-instantiate.c => serial-multi-instantiate.c} (51%)
 > 
->>> ---
->>>  drivers/spi/spi.c       |  6 ++++--
->>>  include/linux/spi/spi.h | 12 ++++++++++++
->>>  2 files changed, 16 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
->>> index 4599b121d744..1eb84101c4ad 100644
->>> --- a/drivers/spi/spi.c
->>> +++ b/drivers/spi/spi.c
->>> @@ -532,7 +532,7 @@ static DEFINE_MUTEX(board_lock);
->>>   *
->>>   * Return: a pointer to the new device, or NULL.
->>>   */
->>> -static struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
->>> +struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
->>>  {
->>>       struct spi_device       *spi;
->>>
->>> @@ -557,6 +557,7 @@ static struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
->>>       device_initialize(&spi->dev);
->>>       return spi;
->>>  }
->>> +EXPORT_SYMBOL_GPL(spi_alloc_device);
->>>
->>>  static void spi_dev_set_name(struct spi_device *spi)
->>>  {
->>> @@ -652,7 +653,7 @@ static int __spi_add_device(struct spi_device *spi)
->>>   *
->>>   * Return: 0 on success; negative errno on failure
->>>   */
->>> -static int spi_add_device(struct spi_device *spi)
->>> +int spi_add_device(struct spi_device *spi)
->>>  {
->>>       struct spi_controller *ctlr = spi->controller;
->>>       struct device *dev = ctlr->dev.parent;
->>> @@ -673,6 +674,7 @@ static int spi_add_device(struct spi_device *spi)
->>>       mutex_unlock(&ctlr->add_lock);
->>>       return status;
->>>  }
->>> +EXPORT_SYMBOL_GPL(spi_add_device);
->>>
->>>  static int spi_add_device_locked(struct spi_device *spi)
->>>  {
->>> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
->>> index 7ab3fed7b804..0346a3ff27fd 100644
->>> --- a/include/linux/spi/spi.h
->>> +++ b/include/linux/spi/spi.h
->>> @@ -1452,7 +1452,19 @@ spi_register_board_info(struct spi_board_info const *info, unsigned n)
->>>   * use spi_new_device() to describe each device.  You can also call
->>>   * spi_unregister_device() to start making that device vanish, but
->>>   * normally that would be handled by spi_unregister_controller().
->>> + *
->>> + * You can also use spi_alloc_device() and spi_add_device() to use a two
->>> + * stage registration sequence for each spi_device. This gives the caller
->>> + * some more control over the spi_device structure before it is registered,
->>> + * but requires that caller to initialize fields that would otherwise
->>> + * be defined using the board info.
->>>   */
->>> +extern struct spi_device *
->>> +spi_alloc_device(struct spi_controller *ctlr);
->>> +
->>> +extern int
->>> +spi_add_device(struct spi_device *spi);
->>> +
->>>  extern struct spi_device *
->>>  spi_new_device(struct spi_controller *, struct spi_board_info *);
->>>
->>>
->>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4e828542b089..be50537ea6bd 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -388,11 +388,11 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  F:	drivers/acpi/arm64
+>  
+> -ACPI I2C MULTI INSTANTIATE DRIVER
+> +ACPI SERIAL MULTI INSTANTIATE DRIVER
+>  M:	Hans de Goede <hdegoede@redhat.com>
+>  L:	platform-driver-x86@vger.kernel.org
+>  S:	Maintained
+> -F:	drivers/platform/x86/i2c-multi-instantiate.c
+> +F:	drivers/platform/x86/serial-multi-instantiate.c
+>  
+>  ACPI PCC(Platform Communication Channel) MAILBOX DRIVER
+>  M:	Sudeep Holla <sudeep.holla@arm.com>
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 1331756d4cfc..48db5e80c2dc 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1734,12 +1734,13 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>  	bool is_serial_bus_slave = false;
+>  	static const struct acpi_device_id ignore_serial_bus_ids[] = {
+>  	/*
+> -	 * These devices have multiple I2cSerialBus resources and an i2c-client
+> -	 * must be instantiated for each, each with its own i2c_device_id.
+> -	 * Normally we only instantiate an i2c-client for the first resource,
+> -	 * using the ACPI HID as id. These special cases are handled by the
+> -	 * drivers/platform/x86/i2c-multi-instantiate.c driver, which knows
+> -	 * which i2c_device_id to use for each resource.
+> +	 * These devices have multiple SerialBus resources and a client
+> +	 * device must be instantiated for each of them, each with
+> +	 * its own device id.
+> +	 * Normally we only instantiate one client device for the first
+> +	 * resource, using the ACPI HID as id. These special cases are handled
+> +	 * by the drivers/platform/x86/serial-multi-instantiate.c driver, which
+> +	 * knows which client device id to use for each resource.
+>  	 */
+>  		{"BSG1160", },
+>  		{"BSG2150", },
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 24deeeb29af2..2e656909a866 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -990,16 +990,16 @@ config TOPSTAR_LAPTOP
+>  
+>  	  If you have a Topstar laptop, say Y or M here.
+>  
+> -config I2C_MULTI_INSTANTIATE
+> -	tristate "I2C multi instantiate pseudo device driver"
+> +config SERIAL_MULTI_INSTANTIATE
+> +	tristate "Serial bus multi instantiate pseudo device driver"
+>  	depends on I2C && ACPI
+>  	help
+> -	  Some ACPI-based systems list multiple i2c-devices in a single ACPI
+> -	  firmware-node. This driver will instantiate separate i2c-clients
+> +	  Some ACPI-based systems list multiple devices in a single ACPI
+> +	  firmware-node. This driver will instantiate separate clients
+>  	  for each device in the firmware-node.
+>  
+>  	  To compile this driver as a module, choose M here: the module
+> -	  will be called i2c-multi-instantiate.
+> +	  will be called serial-multi-instantiate.
+>  
+>  config MLX_PLATFORM
+>  	tristate "Mellanox Technologies platform support"
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index c12a9b044fd8..9527088bba7f 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -110,7 +110,7 @@ obj-$(CONFIG_TOPSTAR_LAPTOP)	+= topstar-laptop.o
+>  
+>  # Platform drivers
+>  obj-$(CONFIG_FW_ATTR_CLASS)		+= firmware_attributes_class.o
+> -obj-$(CONFIG_I2C_MULTI_INSTANTIATE)	+= i2c-multi-instantiate.o
+> +obj-$(CONFIG_SERIAL_MULTI_INSTANTIATE)	+= serial-multi-instantiate.o
+>  obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
+>  obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
+>  obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
+> diff --git a/drivers/platform/x86/i2c-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
+> similarity index 51%
+> rename from drivers/platform/x86/i2c-multi-instantiate.c
+> rename to drivers/platform/x86/serial-multi-instantiate.c
+> index 4956a1df5b90..33cbb0caed33 100644
+> --- a/drivers/platform/x86/i2c-multi-instantiate.c
+> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * I2C multi-instantiate driver, pseudo driver to instantiate multiple
+> - * i2c-clients from a single fwnode.
+> + * Serial multi-instantiate driver, pseudo driver to instantiate multiple
+> + * client devices from a single fwnode.
+>   *
+>   * Copyright 2018 Hans de Goede <hdegoede@redhat.com>
+>   */
+> @@ -21,29 +21,29 @@
+>  #define IRQ_RESOURCE_GPIO	1
+>  #define IRQ_RESOURCE_APIC	2
+>  
+> -struct i2c_inst_data {
+> +struct smi_instance {
+>  	const char *type;
+>  	unsigned int flags;
+>  	int irq_idx;
+>  };
+>  
+> -struct i2c_multi_inst_data {
+> -	int num_clients;
+> -	struct i2c_client *clients[];
+> +struct smi {
+> +	int i2c_num;
+> +	struct i2c_client *i2c_devs[];
+>  };
+>  
+> -static int i2c_multi_inst_probe(struct platform_device *pdev)
+> +static int smi_probe(struct platform_device *pdev)
+>  {
+> -	struct i2c_multi_inst_data *multi;
+> -	const struct i2c_inst_data *inst_data;
+>  	struct i2c_board_info board_info = {};
+> +	const struct smi_instance *inst;
+>  	struct device *dev = &pdev->dev;
+>  	struct acpi_device *adev;
+> +	struct smi *smi;
+>  	char name[32];
+>  	int i, ret;
+>  
+> -	inst_data = device_get_match_data(dev);
+> -	if (!inst_data) {
+> +	inst = device_get_match_data(dev);
+> +	if (!inst) {
+>  		dev_err(dev, "Error ACPI match data is missing\n");
+>  		return -ENODEV;
+>  	}
+> @@ -55,33 +55,32 @@ static int i2c_multi_inst_probe(struct platform_device *pdev)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	multi = devm_kmalloc(dev, struct_size(multi, clients, ret), GFP_KERNEL);
+> -	if (!multi)
+> +	smi = devm_kmalloc(dev, struct_size(smi, i2c_devs, ret), GFP_KERNEL);
+> +	if (!smi)
+>  		return -ENOMEM;
+>  
+> -	multi->num_clients = ret;
+> +	smi->i2c_num = ret;
+>  
+> -	for (i = 0; i < multi->num_clients && inst_data[i].type; i++) {
+> +	for (i = 0; i < smi->i2c_num && inst[i].type; i++) {
+>  		memset(&board_info, 0, sizeof(board_info));
+> -		strlcpy(board_info.type, inst_data[i].type, I2C_NAME_SIZE);
+> -		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev),
+> -			 inst_data[i].type, i);
+> +		strlcpy(board_info.type, inst[i].type, I2C_NAME_SIZE);
+> +		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst[i].type, i);
+>  		board_info.dev_name = name;
+> -		switch (inst_data[i].flags & IRQ_RESOURCE_TYPE) {
+> +		switch (inst[i].flags & IRQ_RESOURCE_TYPE) {
+>  		case IRQ_RESOURCE_GPIO:
+> -			ret = acpi_dev_gpio_irq_get(adev, inst_data[i].irq_idx);
+> +			ret = acpi_dev_gpio_irq_get(adev, inst[i].irq_idx);
+>  			if (ret < 0) {
+>  				dev_err(dev, "Error requesting irq at index %d: %d\n",
+> -					inst_data[i].irq_idx, ret);
+> +						inst[i].irq_idx, ret);
+>  				goto error;
+>  			}
+>  			board_info.irq = ret;
+>  			break;
+>  		case IRQ_RESOURCE_APIC:
+> -			ret = platform_get_irq(pdev, inst_data[i].irq_idx);
+> +			ret = platform_get_irq(pdev, inst[i].irq_idx);
+>  			if (ret < 0) {
+>  				dev_dbg(dev, "Error requesting irq at index %d: %d\n",
+> -					inst_data[i].irq_idx, ret);
+> +					inst[i].irq_idx, ret);
+>  				goto error;
+>  			}
+>  			board_info.irq = ret;
+> @@ -90,48 +89,48 @@ static int i2c_multi_inst_probe(struct platform_device *pdev)
+>  			board_info.irq = 0;
+>  			break;
+>  		}
+> -		multi->clients[i] = i2c_acpi_new_device(dev, i, &board_info);
+> -		if (IS_ERR(multi->clients[i])) {
+> -			ret = dev_err_probe(dev, PTR_ERR(multi->clients[i]),
+> +		smi->i2c_devs[i] = i2c_acpi_new_device(dev, i, &board_info);
+> +		if (IS_ERR(smi->i2c_devs[i])) {
+> +			ret = dev_err_probe(dev, PTR_ERR(smi->i2c_devs[i]),
+>  					    "Error creating i2c-client, idx %d\n", i);
+>  			goto error;
+>  		}
+>  	}
+> -	if (i < multi->num_clients) {
+> +	if (i < smi->i2c_num) {
+>  		dev_err(dev, "Error finding driver, idx %d\n", i);
+>  		ret = -ENODEV;
+>  		goto error;
+>  	}
+>  
+> -	platform_set_drvdata(pdev, multi);
+> +	platform_set_drvdata(pdev, smi);
+>  	return 0;
+>  
+>  error:
+>  	while (--i >= 0)
+> -		i2c_unregister_device(multi->clients[i]);
+> +		i2c_unregister_device(smi->i2c_devs[i]);
+>  
+>  	return ret;
+>  }
+>  
+> -static int i2c_multi_inst_remove(struct platform_device *pdev)
+> +static int smi_remove(struct platform_device *pdev)
+>  {
+> -	struct i2c_multi_inst_data *multi = platform_get_drvdata(pdev);
+> +	struct smi *smi = platform_get_drvdata(pdev);
+>  	int i;
+>  
+> -	for (i = 0; i < multi->num_clients; i++)
+> -		i2c_unregister_device(multi->clients[i]);
+> +	for (i = 0; i < smi->i2c_num; i++)
+> +		i2c_unregister_device(smi->i2c_devs[i]);
+>  
+>  	return 0;
+>  }
+>  
+> -static const struct i2c_inst_data bsg1160_data[]  = {
+> +static const struct smi_instance bsg1160_data[]  = {
+>  	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+>  	{ "bmc150_magn" },
+>  	{ "bmg160" },
+>  	{}
+>  };
+>  
+> -static const struct i2c_inst_data bsg2150_data[]  = {
+> +static const struct smi_instance bsg2150_data[]  = {
+>  	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+>  	{ "bmc150_magn" },
+>  	/* The resources describe a 3th client, but it is not really there. */
+> @@ -139,7 +138,7 @@ static const struct i2c_inst_data bsg2150_data[]  = {
+>  	{}
+>  };
+>  
+> -static const struct i2c_inst_data int3515_data[]  = {
+> +static const struct smi_instance int3515_data[]  = {
+>  	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
+>  	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
+>  	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
+> @@ -148,27 +147,27 @@ static const struct i2c_inst_data int3515_data[]  = {
+>  };
+>  
+>  /*
+> - * Note new device-ids must also be added to i2c_multi_instantiate_ids in
+> + * Note new device-ids must also be added to serial_multi_instantiate_ids in
+>   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
+>   */
+> -static const struct acpi_device_id i2c_multi_inst_acpi_ids[] = {
+> +static const struct acpi_device_id smi_acpi_ids[] = {
+>  	{ "BSG1160", (unsigned long)bsg1160_data },
+>  	{ "BSG2150", (unsigned long)bsg2150_data },
+>  	{ "INT3515", (unsigned long)int3515_data },
+>  	{ }
+>  };
+> -MODULE_DEVICE_TABLE(acpi, i2c_multi_inst_acpi_ids);
+> +MODULE_DEVICE_TABLE(acpi, smi_acpi_ids);
+>  
+> -static struct platform_driver i2c_multi_inst_driver = {
+> +static struct platform_driver smi_driver = {
+>  	.driver	= {
+> -		.name = "I2C multi instantiate pseudo device driver",
+> -		.acpi_match_table = i2c_multi_inst_acpi_ids,
+> +		.name = "Serial bus multi instantiate pseudo device driver",
+> +		.acpi_match_table = smi_acpi_ids,
+>  	},
+> -	.probe = i2c_multi_inst_probe,
+> -	.remove = i2c_multi_inst_remove,
+> +	.probe = smi_probe,
+> +	.remove = smi_remove,
+>  };
+> -module_platform_driver(i2c_multi_inst_driver);
+> +module_platform_driver(smi_driver);
+>  
+> -MODULE_DESCRIPTION("I2C multi instantiate pseudo device driver");
+> +MODULE_DESCRIPTION("Serial multi instantiate pseudo device driver");
+>  MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
+>  MODULE_LICENSE("GPL");
 > 
 

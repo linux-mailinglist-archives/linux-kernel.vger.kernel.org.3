@@ -2,182 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DA84A59C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DA64A59C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiBAKQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:16:38 -0500
-Received: from mout.gmx.net ([212.227.17.20]:44839 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235682AbiBAKQf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:16:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643710568;
-        bh=rhMjI8y3jysXslMLlHfAxQLeYg7orlmWhVUeBoVQ60g=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=fxdLTg4rTUaOYA/wUN46weV7NRYt+FMsIS8hlM+rRjs7sfFTPQ6CF4+sSnX47osqd
-         MeTa+cKEXTf2+oqBdlu6xTKcDvfFJ248igtd8piO6BlCQbcv9GXoIW2bTdxdOJhJPD
-         eU6I8whctwzlZ6HShytcRNMCELtsZfabYIeEuIZ8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mof9F-1mQ9RW4Ayf-00p4Jh; Tue, 01
- Feb 2022 11:16:08 +0100
-Message-ID: <9c22b709-cbcf-6a29-a45e-5a57ba0b9c14@gmx.de>
-Date:   Tue, 1 Feb 2022 11:16:04 +0100
+        id S236464AbiBAKRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:17:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20840 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236455AbiBAKRG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 05:17:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643710626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1rSMPibeU2/x9y1HGJmwIBX0MF6r0zdDZVn4ZSeYeqM=;
+        b=BTJtMh/m9wI877MoJHJo8Ss1XH0a7PwVHOmxVkpkHjrxvMdSxPzz8ZscqYEXV3uEF4h7Nq
+        JAbfc3pvCb0vO5IAiObiWenIWaQN7vCjMmb1ZSrYmeQUVRkIqULicGCQjO5sN+tCZd7zD+
+        9kExqb8KeIhBd1T5B10BbJPp9h+gTdo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-387-rMqAFGMVOByj6IlDyHX5Bg-1; Tue, 01 Feb 2022 05:17:05 -0500
+X-MC-Unique: rMqAFGMVOByj6IlDyHX5Bg-1
+Received: by mail-wr1-f71.google.com with SMTP id c10-20020adfa30a000000b001d79c73b64bso5848567wrb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 02:17:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=1rSMPibeU2/x9y1HGJmwIBX0MF6r0zdDZVn4ZSeYeqM=;
+        b=1pzDdc8O3LgjWiX288zkMCER0+V3GFRX2K6HkM48xtwPoPGgtAsvMpcvm8553sOs+9
+         kvrErsQNK5f+UKz5IOd6p91abNBKK0pd1RhkJQZKPzozMMZ+wwW6jLyp3ungKhtERaUm
+         rvcJZstPDTAY33UE0D8D4bDeAk+VcUW2/MI1IQwwnislrcRvHu1TPJnB/h0g+W6VPpjH
+         T//ELWkehtf87YBX5fZBzkYCdXgu3owTZLypb71qWUoXU4Jo7ONNI7t5izBWRneR/D25
+         MVlLVRHl9w2AFKIe+Ky15m9m2mG2Jwm0O8s95gW/EbcLYtTX8uB8QNNVgBe4Wh28mhYf
+         5/pQ==
+X-Gm-Message-State: AOAM531SYMgwKHlrxTYz3RNTTUyDQ3qoIEl/nq0wd3yKXbT0fPCusa1v
+        HMNporo2vpTHA0qDygM4mOaZOHethVgPrex5Zy0thicMOoRy7UoH5VeLL1Egs/INwPkQwzQlWfo
+        sfr6mM5FUz6+8TMdJFJ8SD5+l
+X-Received: by 2002:adf:f54d:: with SMTP id j13mr20271536wrp.596.1643710624126;
+        Tue, 01 Feb 2022 02:17:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwW9cnbVOET7eNHaJPpg1tW+PwHgA1p1BZnH/wRYWshALkMr1QDZjc+KGZLPaL4fKlWIFXhpA==
+X-Received: by 2002:adf:f54d:: with SMTP id j13mr20271503wrp.596.1643710623856;
+        Tue, 01 Feb 2022 02:17:03 -0800 (PST)
+Received: from ?IPV6:2003:cb:c711:ba00:67b6:a3ab:b0a8:9517? (p200300cbc711ba0067b6a3abb0a89517.dip0.t-ipconnect.de. [2003:cb:c711:ba00:67b6:a3ab:b0a8:9517])
+        by smtp.gmail.com with ESMTPSA id p2sm1600619wmc.33.2022.02.01.02.17.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 02:17:03 -0800 (PST)
+Message-ID: <19907f0c-4d83-4d85-4233-f4ee727574a0@redhat.com>
+Date:   Tue, 1 Feb 2022 11:17:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 03/21] fbcon: Restore fbcon scrolling acceleration
+ Thunderbird/91.4.0
+Subject: Re: [PATCH RFC v1] drivers/base/node: consolidate node device
+ subsystem initialization in node_dev_init()
 Content-Language: en-US
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Claudio Suarez <cssk@net-c.es>,
-        Dave Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sven Schnelle <svens@stackframe.org>,
-        Gerd Hoffmann <kraxel@redhat.com>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-4-daniel.vetter@ffwll.ch>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220131210552.482606-4-daniel.vetter@ffwll.ch>
+        Michal Hocko <mhocko@suse.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+References: <20220128151540.164759-1-david@redhat.com>
+ <YfeARpenqPii1WQH@localhost.localdomain>
+ <3be2e20c-f0b9-c080-adf4-b0e17c046eb0@redhat.com>
+ <20220131094041.GA15392@linux>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220131094041.GA15392@linux>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jflhoCckVNnaLnLLGcsVr23sboAIiW9Oegx+vqwH4cE9RiJn0so
- xERIAfckdKuldjuruwmA2wOLubXdgZ3NtxcE+TMECbSWiMLqDLTTbt3bRgJwxZc5Z9rPY4z
- sZNAgJgYGcwPZx+Do1gWwD2BpeKgoQIPwNq514BedbfSk7eNeKR3F0rCRCiM6qYjXB1hP1c
- hJUm8fT1IUjX8yDqBslZg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jC93FT332v4=:mbjrryMElmMicajewnajtW
- A3wryM+Me6j2PI1I+7uO1Z5cpsnDemcqgEN2IbYK9DhEI8pDMtzb8enz6LihWxw2p0J4mBXND
- OJ7pVTyPuHI26/dBFyIP27XwWy69yYSaG4TAjTmtcW2HdJGA68+alSPS74IvO7SKem+zl9gnw
- neZbU66sZzz4sioEMB0bTvAf8MbkvX66RGK/S19bva1LMZTyVICJCzM9nV5Ij2qbTeWRi9+VT
- B6DQviWW45GMtlUgwKLj42RexUtC98KFKPNOlCF8bOYZf3qqrsTApvlmxlyeCMdANbAy/IiW6
- 0NkxJaBKWkAWGhWrypoNBUjlW/wik1EqNa7k13ifgIgC/wqWElu8L3c+8FOxHonnx7KJBO6sY
- T5kVAoKz2gYqXmnoiTJ63iBgMcgAqozXVLpv2EAROU2ADB7LtkoyMX4o8zxVtaJtqbR2XDly/
- fo4+DEuIYYLkwdkn3VFCFXOaEBamMQnbVXqibG14F0dZ8kk5rumE8S7pgXuDGvjoZgrOlhXkL
- r6nwhXhLTDb2qAgG8u5WL9+YY9Jkc12XQPEeU9XCHvPwyOtRvNtPzz60KBPwluX+Cq+hFmAzz
- iuDiPBbD05tgb64cNps+2szctWnRbBuvEwgVoaIzIwkdUu2nL/ITycCO8YfAb+Zbl3ih1mna9
- PsJBb9K/cumdiqj/8NtwK1KCnsf1xtRoE/ex1v47TSTO89XWeHQXAv7eNjhBnr0Qma6ynDePn
- N3nsEGwKf49LFefQ+9eL/SzZKJkS+gCnzSxQ4hyuw08n6swf3wQKl0wawQhaCjJgnbizji73W
- TKMd8iutPgm1tFD5HJ2WHxu+DQp+zAuVrYV5y6lRNb2bB/ipPW4QC0448R2d1hobm07cjR/uw
- qlDDpda547Nm+E8HalzgExRKyBA1I+3oweC+CUVgaRj7aj90T1pKxjcp2S2bPCn7zXqrAr7Pc
- NT5IvWjaOpPl5yhVIpT0G7Db+m1KOnlauqWRQxvhryECTTZoc0OL8yyG6FF1pdwSfD2cDC/92
- jMinnuZMxhUB9StFM3xfmt4t648XGYu3BdqlQDzOs6oczwlT6Dmoh5PWWAEBE8c8Me9cdzAbr
- KkwYp/3WxzhUYk=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 22:05, Daniel Vetter wrote:
-> This functionally undoes 39aead8373b3 ("fbcon: Disable accelerated
-> scrolling"), but behind the FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-> option.
+On 31.01.22 10:40, Oscar Salvador wrote:
+> On Mon, Jan 31, 2022 at 08:48:54AM +0100, David Hildenbrand wrote:
+>> Hi Oscar,
+> 
+> Hi David :-),
+> 
+>> Right, and the idea is that the online state of nodes (+ node/zone
+>> ranges) already has to be known at that point in time, because
+>> otherwise, we'd be in bigger trouble.
+> 
+> Yeah, I wanted to check where exactly did we mark the nodes online,
+> and for the few architectures I checked it happens in setup_arch(),
+> which is called very early in start_kernel(), while driver_init()
+> gets called through arch_call_rest_init(), which happens at the end
+> of the function.
+> 
+> I am not sure whether we want to remark that somehow in the changelog,
+> so it is crystal clear that by the time the node_dev_init() gets called,
+> we already set the nodes online.
+> 
+> Anyway, just saying, but is fine as is.
 
-you have two trivial copy-n-paste errors in this patch which still prevent=
- the
-console acceleration.
+I'll adjust the first paragraph to:
 
-> diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core=
-/fbcon.c
-> index 2ff90061c7f3..39dc18a5de86 100644
-> --- a/drivers/video/fbdev/core/fbcon.c
-> +++ b/drivers/video/fbdev/core/fbcon.c
-> @@ -1125,13 +1125,15 @@ static void fbcon_init(struct vc_data *vc, int i=
-nit)
->
->  	ops->graphics =3D 0;
->
-> -	/*
-> -	 * No more hw acceleration for fbcon.
-> -	 *
-> -	 * FIXME: Garbage collect all the now dead code after sufficient time
-> -	 * has passed.
-> -	 */
-> +#ifdef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
+    ... and call node_dev_init() after memory_dev_init() from driver_init(),
+    so before any of the existing arch/subsys calls. All online nodes should
+    be known at that point: early during boot, arch code determines node and
+    zone ranges and sets the relevant nodes online; usually this happens in
+    setup_arch().
 
-should be:
-#ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
+Thanks!
 
+-- 
+Thanks,
 
-> +	if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
-> +	    !(info->flags & FBINFO_HWACCEL_DISABLED))
-> +		p->scrollmode =3D SCROLL_MOVE;
-> +	else /* default to something safe */
-> +		p->scrollmode =3D SCROLL_REDRAW;
-> +#else
->  	p->scrollmode =3D SCROLL_REDRAW;
-> +#endif
->
->  	/*
->  	 *  ++guenther: console.c:vc_allocate() relies on initializing
-> @@ -1971,15 +1973,49 @@ static void updatescrollmode(struct fbcon_displa=
-y *p,
->  {
->  	struct fbcon_ops *ops =3D info->fbcon_par;
->  	int fh =3D vc->vc_font.height;
-> +	int cap =3D info->flags;
-> +	u16 t =3D 0;
-> +	int ypan =3D FBCON_SWAP(ops->rotate, info->fix.ypanstep,
-> +			      info->fix.xpanstep);
-> +	int ywrap =3D FBCON_SWAP(ops->rotate, info->fix.ywrapstep, t);
->  	int yres =3D FBCON_SWAP(ops->rotate, info->var.yres, info->var.xres);
->  	int vyres =3D FBCON_SWAP(ops->rotate, info->var.yres_virtual,
->  				   info->var.xres_virtual);
-> +	int good_pan =3D (cap & FBINFO_HWACCEL_YPAN) &&
-> +		divides(ypan, vc->vc_font.height) && vyres > yres;
-> +	int good_wrap =3D (cap & FBINFO_HWACCEL_YWRAP) &&
-> +		divides(ywrap, vc->vc_font.height) &&
-> +		divides(vc->vc_font.height, vyres) &&
-> +		divides(vc->vc_font.height, yres);
-> +	int reading_fast =3D cap & FBINFO_READS_FAST;
-> +	int fast_copyarea =3D (cap & FBINFO_HWACCEL_COPYAREA) &&
-> +		!(cap & FBINFO_HWACCEL_DISABLED);
-> +	int fast_imageblit =3D (cap & FBINFO_HWACCEL_IMAGEBLIT) &&
-> +		!(cap & FBINFO_HWACCEL_DISABLED);
->
->  	p->vrows =3D vyres/fh;
->  	if (yres > (fh * (vc->vc_rows + 1)))
->  		p->vrows -=3D (yres - (fh * vc->vc_rows)) / fh;
->  	if ((yres % fh) && (vyres % fh < yres % fh))
->  		p->vrows--;
-> +
-> +	if (good_wrap || good_pan) {
-> +		if (reading_fast || fast_copyarea)
-> +			p->scrollmode =3D good_wrap ?
-> +				SCROLL_WRAP_MOVE : SCROLL_PAN_MOVE;
-> +		else
-> +			p->scrollmode =3D good_wrap ? SCROLL_REDRAW :
-> +				SCROLL_PAN_REDRAW;
-> +	} else {
-> +		if (reading_fast || (fast_copyarea && !fast_imageblit))
-> +			p->scrollmode =3D SCROLL_MOVE;
-> +		else
-> +			p->scrollmode =3D SCROLL_REDRAW;
-> +	}
-> +
-> +#ifndef CONFIG_FRAMEBUFFER_CONSOLE_ROTATION
+David / dhildenb
 
-same here... it needs to be:
-#ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-
-
-> +	p->scrollmode =3D SCROLL_REDRAW;
-> +#endif
->  }
->
->  #define PITCH(w) (((w) + 7) >> 3)
->
-
-still reviewing the other patches...
-
-Helge

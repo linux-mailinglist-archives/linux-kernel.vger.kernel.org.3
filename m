@@ -2,118 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 621224A575D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079C54A575F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiBAGvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:51:25 -0500
-Received: from mga06.intel.com ([134.134.136.31]:29618 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233800AbiBAGvY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:51:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643698284; x=1675234284;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TtE+PZc+j+Iz2bV8AGmpAKEOz9pdg8QEJ0yuPv7zzKg=;
-  b=AlZwZ6JgcLn+un3nCfDUVfE91QPK9IVSar9LLLzE+nUxh+hO8w5U59q2
-   FNi+6+ReCr0wQQVFkkpKlkRBP1g7mNdiqAVVjRgRx4iZDavxAJj8RrIpc
-   dwqzGWBXg5LzoPNTIHEwKoreOUPBiJpKpslxjwR0xyF4LRhgvYklLFKTB
-   revFUyLMDmvzEQIVFbh6z43hC15kP1VmxLzFtz+hW7j8yBCwDRnW2bFqP
-   yR8arhhZtJiN7+ETcPJO1kC61C8kre09cKoPyFR1FZCnvtpQTKI0X2Xy5
-   FSdl5ylRfGV2P9qFKleQivAl6iiUJcmPdfnANhI2Kb3mInAcPMAXho6hH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308364058"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="308364058"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 22:51:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="565502927"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2022 22:51:22 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEn0c-000Su3-5z; Tue, 01 Feb 2022 06:51:22 +0000
-Date:   Tue, 1 Feb 2022 14:50:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Pratyush Yadav <p.yadav@ti.com>
-Subject: [mtd:spi-mem-ecc 17/30] nios2-linux-ld: core.c:undefined reference
- to `nand_ecc_get_on_die_hw_engine'
-Message-ID: <202202011416.yZ7MuZxH-lkp@intel.com>
+        id S234479AbiBAGv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233800AbiBAGv0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:51:26 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EC0C061714;
+        Mon, 31 Jan 2022 22:51:26 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id f17so29978383wrx.1;
+        Mon, 31 Jan 2022 22:51:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=S05DVhqTbT+RB8o3R8uA/qBzUeAzOrmXjeGdK13aL5M=;
+        b=pY+DZqlkix3Hh7KLGHZ5P2UHhaSPBQYNmENarMRBgqL2biDOtWQSDSSf2QRXqqHlqK
+         DSGEdQIxuwNFFHU20+e39VMKU4Gosvw+R2CaF8NB2FUbgiBfwZAhKuXBihLDbGpcGd8M
+         PTJ6AeCxz9QFr41hWgCdpyNSCywA6XmBh9ANKi1BvBUXm5iCDdoojOf1Y3CwlNIf2QKq
+         ZV+WSyaDibJwTvan310JiI2sk+oHUCVNL9nCE0+bI/yZQ2SCVw0A3UPFUjJzwdfasbt+
+         i7NeiQQdsOsgLGxtkIm22/AfajQNzrS9F2Z013MptzwOa5SsCdE9kiNMgl8MSh8polT6
+         Kagg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=S05DVhqTbT+RB8o3R8uA/qBzUeAzOrmXjeGdK13aL5M=;
+        b=1YV9IuCqUlUdbJi9U1Fs2iD9HtaXyRbYfFh0O61H6sURBODKFm+16yq3Cr+YFp5x1c
+         1OgpJSP5T84+/kM6zvwQS25KOfq/Ue94waD+5xgMIEqnEc2PPVckv9g3MT8lQKjL4BBM
+         GWuowRf5ogJkc48qAUiWyWWiZrU5j3TBCB3X4Ju3gKt8CkM1WeflSwq0fG4d/YUCLQrY
+         Qe/h8JUBd57FIjtvgBoziY2EsdpNycuGdjnEGf8lXiKUkYIfH6SFSaX45mqKShuUgPAD
+         xXbDWlhmLiambZDGF2WzgYla/mI7Tzm4gKqiFlggYUX1EK/sl0PDZXDMelFk/ezZAkuP
+         xBsg==
+X-Gm-Message-State: AOAM530IhpkrcsMweMYVvBMxiesIF8igqytFDO2xMTr6ojOknavXVhx+
+        GQ/nLVfyW1T/H5TSi3nsaXmvncxHZdw=
+X-Google-Smtp-Source: ABdhPJxLGPjz01812V0ogRMuAlkgcOqgFWL13OeAHt6/+fHJqtPANawDYJy5IAOZPslwyZZ4zXMLVg==
+X-Received: by 2002:a05:6000:2c5:: with SMTP id o5mr20240075wry.225.1643698284851;
+        Mon, 31 Jan 2022 22:51:24 -0800 (PST)
+Received: from [10.152.0.6] ([85.203.46.180])
+        by smtp.gmail.com with ESMTPSA id f13sm14557268wri.44.2022.01.31.22.51.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 22:51:24 -0800 (PST)
+Subject: Re: [BUG] tty: serial: possible deadlock in uart_remove_one_port()
+ and uart_hangup()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <ab5d9322-6bea-9845-c61b-fb68e3bb3a87@gmail.com>
+ <YfUPlYwoWpMjhvpR@kroah.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <027e2ecd-ccb3-d772-dc31-951039fdeedf@gmail.com>
+Date:   Tue, 1 Feb 2022 14:51:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YfUPlYwoWpMjhvpR@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-mem-ecc
-head:   6d0fadec1de4434fce145b374ef25c665357fa60
-commit: 319169b2a767b293984ae2c5e22268fecfb91864 [17/30] mtd: nand: ecc: Rework Kconfig dependencies
-config: nios2-randconfig-c004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011416.yZ7MuZxH-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?id=319169b2a767b293984ae2c5e22268fecfb91864
-        git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
-        git fetch --no-tags mtd spi-mem-ecc
-        git checkout 319169b2a767b293984ae2c5e22268fecfb91864
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+On 2022/1/29 17:57, Greg KH wrote:
+> On Sat, Jan 29, 2022 at 05:34:05PM +0800, Jia-Ju Bai wrote:
+>> Hello,
+>>
+>> My static analysis tool reports a possible deadlock in the tty driver in
+>> Linux 5.10:
+> 5.10 was released over a year ago and over 100 thousand changes ago.
+> Please redo your check on 5.16 at the oldest.
 
-   nios2-linux-ld: drivers/mtd/nand/core.o: in function `nanddev_ecc_engine_init':
-   core.c:(.text+0x88c): undefined reference to `of_get_nand_ecc_user_config'
-   core.c:(.text+0x88c): relocation truncated to fit: R_NIOS2_CALL26 against `of_get_nand_ecc_user_config'
->> nios2-linux-ld: core.c:(.text+0x8cc): undefined reference to `nand_ecc_get_on_die_hw_engine'
-   core.c:(.text+0x8cc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_on_die_hw_engine'
->> nios2-linux-ld: core.c:(.text+0x8dc): undefined reference to `nand_ecc_init_ctx'
-   core.c:(.text+0x8dc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_init_ctx'
->> nios2-linux-ld: core.c:(.text+0x904): undefined reference to `nand_ecc_put_on_host_hw_engine'
-   core.c:(.text+0x904): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_put_on_host_hw_engine'
->> nios2-linux-ld: core.c:(.text+0x918): undefined reference to `nand_ecc_get_sw_engine'
-   core.c:(.text+0x918): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_sw_engine'
->> nios2-linux-ld: core.c:(.text+0x928): undefined reference to `nand_ecc_is_strong_enough'
-   core.c:(.text+0x928): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_is_strong_enough'
->> nios2-linux-ld: core.c:(.text+0x960): undefined reference to `nand_ecc_get_on_host_hw_engine'
-   core.c:(.text+0x960): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_on_host_hw_engine'
-   nios2-linux-ld: drivers/mtd/nand/core.o: in function `nanddev_ecc_engine_cleanup':
-   core.c:(.text+0x9cc): undefined reference to `nand_ecc_cleanup_ctx'
-   core.c:(.text+0x9cc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_cleanup_ctx'
-   nios2-linux-ld: core.c:(.text+0x9f8): undefined reference to `nand_ecc_put_on_host_hw_engine'
-   core.c:(.text+0x9f8): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_put_on_host_hw_engine'
-   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_cleanup_ctx':
-   ecc-sw-hamming.c:(.text+0x18): undefined reference to `nand_ecc_cleanup_req_tweaking'
-   ecc-sw-hamming.c:(.text+0x18): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_cleanup_req_tweaking'
-   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_init_ctx':
-   ecc-sw-hamming.c:(.text+0xbc): undefined reference to `nand_ecc_init_req_tweaking'
-   ecc-sw-hamming.c:(.text+0xbc): additional relocation overflows omitted from the output
->> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x178): undefined reference to `nand_get_small_page_ooblayout'
->> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x194): undefined reference to `nand_get_large_page_hamming_ooblayout'
->> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x1a4): undefined reference to `nand_ecc_cleanup_req_tweaking'
-   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_prepare_io_req':
-   ecc-sw-hamming.c:(.text+0x7a8): undefined reference to `nand_ecc_tweak_req'
-   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_finish_io_req':
-   ecc-sw-hamming.c:(.text+0xb7c): undefined reference to `nand_ecc_restore_req'
->> nios2-linux-ld: ecc-sw-hamming.c:(.text+0xc78): undefined reference to `nand_ecc_restore_req'
+My static analysis tool checks the tty driver in Linux 5.16, and also 
+finds this possible deadlock:
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for MTD_NAND_ECC_SW_HAMMING
-   Depends on MTD && MTD_NAND_ECC
-   Selected by
-   - SM_FTL && MTD && BLOCK
+uart_remove_one_port()
+   mutex_lock(&port->mutex); --> Line 3032 (Lock A)
+   wait_event(state->remove_wait, ...); --> Line 3034 (Wait X)
+   mutex_unlock(&port->mutex); --> Line 3036 (Unlock A)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+uart_hangup()
+   mutex_lock(&port->mutex); --> Line 1669 (Lock A)
+   uart_flush_buffer()
+     uart_port_unlock()
+       uart_port_deref()
+         wake_up(&uport->state->remove_wait); --> Line 68 (Wake X)
+   mutex_unlock(&port->mutex); --> Line 1686 (Unlock A)
+
+When uart_remove_one_port() is executed, "Wait X" is performed by 
+holding "Lock A". If uart_hangup() is executed at this time, "Wake X" 
+cannot be performed to wake up "Wait X" in uart_remove_one_port(), 
+because "Lock A" has been already hold by uart_remove_one_port(), 
+causing a possible deadlock.
+
+I am not quite sure whether this possible problem is real and how to fix 
+it if it is real.
+Maybe we can call wait_event() before mutex_lock() in 
+uart_remove_one_port().
+Any feedback would be appreciated, thanks :)
+
+
+Best wishes,
+Jia-Ju Bai
+

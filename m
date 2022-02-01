@@ -2,282 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AECE74A595C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E2B4A595B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236115AbiBAJjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 04:39:54 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40290 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236102AbiBAJjw (ORCPT
+        id S236097AbiBAJjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 04:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234230AbiBAJjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 04:39:52 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2117WbSZ030900;
-        Tue, 1 Feb 2022 09:39:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=+e2uuf8TQa9/DY/3jtTEDwnTERJqovJ5+ArTt9eKl6k=;
- b=Fcfl3v07ciJFI7ORVGqGdxhF79I0YM5YZhLqIocIMB7kE+MCCaVB56YQX+be2rwww8OP
- w6P16414hokQV6bCb+wagXL+U/+3RWLozfQgWB1SK3Z/qwMkHV8nWVhbXANIJtpSxaGZ
- 7rca50ViURYs5KE/f0w1dy9Bmo4AVXJ6SfVwKkm4nMCJAcI0mnyn05ZSdNhb6+dyhwed
- JqI3nhuz0g4w5rxynkiANQc3bdw0Dh0DZ89OMXg2RRvz3pfMqSp3+zn7K1VOnhPiaLXh
- dcr8UtjTrELjueIAE8uXaPD77OOKaqd7cPPr6RlFrT/tuv4fgjquB028rkizhtRTvgic eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxw1q5qq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 09:39:09 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2118pc5P006249;
-        Tue, 1 Feb 2022 09:39:08 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxw1q5qpe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 09:39:08 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2119cSNh030776;
-        Tue, 1 Feb 2022 09:39:06 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3dvw79hnac-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 09:39:06 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2119d3BE41025834
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 09:39:03 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9691E11C050;
-        Tue,  1 Feb 2022 09:39:03 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ED64E11C06E;
-        Tue,  1 Feb 2022 09:38:59 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue,  1 Feb 2022 09:38:59 +0000 (GMT)
-Date:   Tue, 1 Feb 2022 15:08:59 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com, Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>
-Subject: Re: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-Message-ID: <20220201093859.GE618915@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220126080947.4529-1-yangyicong@hisilicon.com>
- <20220126080947.4529-3-yangyicong@hisilicon.com>
- <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com>
- <CAGsJ_4xL3tynB9P=rKMoX2otW4bMMU5Z-P9zSudMV3+fr2hpXw@mail.gmail.com>
- <20220128071337.GC618915@linux.vnet.ibm.com>
- <CAGsJ_4yoUONACY-j+9XxSNC0VgmdyRdHC=z87dWvZvVSASzXRQ@mail.gmail.com>
+        Tue, 1 Feb 2022 04:39:39 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D8FC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 01:39:38 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso1397035wmh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 01:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jC+MMKqg2pjTS0g7yCPjEZpzdCcj2hULqGjeeMav5N4=;
+        b=XHPgnnMfc6EQLMJTYv4xh/2PMPoT1+JK1YWqHrkkT0saPPIjLrYtnLmUIkWirZS5UR
+         8/aaSn5l6OsSfcWE62e1PK5ALV6aTMgh/GJDJGSDZrNy9VkOWevCtBApsMiXiEitCItF
+         jjwVKq/En/DHQIG3oikiHW2JpBveYtIahIdiJVKBZADFsXME1H3ZGd+s/es6oYPhTf+Z
+         yXY0i/D+I43c/poLzwP1j+BHvcwWSxyOLZJFMcC0Of3Lg4Z7bJk3rnRBVxv5PFPF0Zhx
+         QzqTj5EtBp6b6lfzjq/V8X0D/Eyp2JTfjJ3qd9LIfhfhp07WmQ7HZA1S6G2/JOT6JBLj
+         7skw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jC+MMKqg2pjTS0g7yCPjEZpzdCcj2hULqGjeeMav5N4=;
+        b=FUzGssWYMdAClHZ0vY+gQosGkLj6RwIbipdZvJ0SBYdZFMTSn3N2JeVgxjze6tSIC/
+         7ScIrfGOQvB7BrJo7aiNm5R/+C48Sgfq3fglmIhNdU1QccPwYoetZ3y8Wm6GZtoME02V
+         EdxcPaam/tf1cQYS3SLWLJA88fMH3yJBlAWHFskeUCkTOGhUotc8KdsysLtupoC78LcB
+         cZUQWteyD1/B2iJksV6iVqTgN5p4l0rEnfCavdAkT+M6ssTUqhVPaywPYY/uLlAUmwPb
+         xGJoCGOj2YzMoXM6QELZM3ETmN47AEmnHWGJ1j8NwndBuiKhEP1044QSmmh/9i5yMZv2
+         nlSg==
+X-Gm-Message-State: AOAM532LWs7ov5FW+MNJnG/waAZdhotPsdFKHB3maKW+yt5bmvfqdaUQ
+        gUJKeIiDhdVNaoHq2xuXRIxfIxvP2WNFwXitYsL2nUNXrHg=
+X-Google-Smtp-Source: ABdhPJxe6lLgLigaGGbHJEEOG8R00MtC7UJhR7Y6y/porcr2PE7blzHZfBzaXmCAqcNZDH1fSw/E+jKBD6Gd2uec3b8=
+X-Received: by 2002:a7b:cb9a:: with SMTP id m26mr1025713wmi.18.1643708377205;
+ Tue, 01 Feb 2022 01:39:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <CAGsJ_4yoUONACY-j+9XxSNC0VgmdyRdHC=z87dWvZvVSASzXRQ@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oGkZVNQxbjVj6_UnurNyuffyd2NqWRUZ
-X-Proofpoint-ORIG-GUID: xRRLGZDZwoOvDadlrI-29qGoEhSoFpV4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_03,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- phishscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202010051
+References: <20220130144430.453221-1-xiehuan09@gmail.com> <20220131200247.4c49cc9a6056cc28afa1cd13@kernel.org>
+In-Reply-To: <20220131200247.4c49cc9a6056cc28afa1cd13@kernel.org>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 1 Feb 2022 17:39:26 +0800
+Message-ID: <CAEr6+EDBoCPwVEmAW8fqyZPp_VjAgfLXKOVvVNUOdJh+-X84QA@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Barry Song <21cnbao@gmail.com> [2022-01-28 07:40:15]:
+Hi Masami,
 
-> On Fri, Jan 28, 2022 at 8:13 PM Srikar Dronamraju
-> <srikar@linux.vnet.ibm.com> wrote:
+On Mon, Jan 31, 2022 at 7:02 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Jeff,
+>
+> Thank you for updating the series, I'm testing the series and found some
+> issues. See below;
+>
+> On Sun, 30 Jan 2022 22:44:26 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> > Introduce a method based on function tracer to trace any object and get
+> > the value of the object dynamically. the object can be obtained from the
+> > dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
 > >
-> > * Barry Song <21cnbao@gmail.com> [2022-01-28 09:21:08]:
+> > Usage:
+> > When using the kprobe event, only need to set the objtrace(a new trigger),
+> > we can get the value of the object. The object is from the setting of the
+> > kprobe event.
 > >
-> > > On Fri, Jan 28, 2022 at 4:41 AM Gautham R. Shenoy
-> > > <gautham.shenoy@amd.com> wrote:
-> > > >
-> > > > On Wed, Jan 26, 2022 at 04:09:47PM +0800, Yicong Yang wrote:
-> > > > > From: Barry Song <song.bao.hua@hisilicon.com>
-> > > > >
-> > > > > For platforms having clusters like Kunpeng920, CPUs within the same
-> > > > > cluster have lower latency when synchronizing and accessing shared
-> > > > > resources like cache. Thus, this patch tries to find an idle cpu
-> > > > > within the cluster of the target CPU before scanning the whole LLC
-> > > > > to gain lower latency.
-> > > > >
-> > > > > Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so this
-> > > > > patch doesn't consider SMT for this moment.
-> > > > >
-> > > > > Testing has been done on Kunpeng920 by pinning tasks to one numa
-> > > > > and two numa. On Kunpeng920, Each numa has 8 clusters and each
-> > > > > cluster has 4 CPUs.
-> > > > >
-> > > > > With this patch, We noticed enhancement on tbench within one
-> > > > > numa or cross two numa.
-> > > > >
-> > > > > On numa 0:
-> > > > >                             5.17-rc1                patched
-> > > > > Hmean     1        324.73 (   0.00%)      378.01 *  16.41%*
-> > > > > Hmean     2        645.36 (   0.00%)      754.63 *  16.93%*
-> > > > > Hmean     4       1302.09 (   0.00%)     1507.54 *  15.78%*
-> > > > > Hmean     8       2612.03 (   0.00%)     2982.57 *  14.19%*
-> > > > > Hmean     16      5307.12 (   0.00%)     5886.66 *  10.92%*
-> > > > > Hmean     32      9354.22 (   0.00%)     9908.13 *   5.92%*
-> > > > > Hmean     64      7240.35 (   0.00%)     7278.78 *   0.53%*
-> > > > > Hmean     128     6186.40 (   0.00%)     6187.85 (   0.02%)
-> > > > >
-> > > > > On numa 0-1:
-> > > > >                             5.17-rc1                patched
-> > > > > Hmean     1        320.01 (   0.00%)      378.44 *  18.26%*
-> > > > > Hmean     2        643.85 (   0.00%)      752.52 *  16.88%*
-> > > > > Hmean     4       1287.36 (   0.00%)     1505.62 *  16.95%*
-> > > > > Hmean     8       2564.60 (   0.00%)     2955.29 *  15.23%*
-> > > > > Hmean     16      5195.69 (   0.00%)     5814.74 *  11.91%*
-> > > > > Hmean     32      9769.16 (   0.00%)    10872.63 *  11.30%*
-> > > > > Hmean     64     15952.50 (   0.00%)    17281.98 *   8.33%*
-> > > > > Hmean     128    13113.77 (   0.00%)    13895.20 *   5.96%*
-> > > > > Hmean     256    10997.59 (   0.00%)    11244.69 *   2.25%*
-> > > > > Hmean     512    14623.60 (   0.00%)    15526.25 *   6.17%*
-> > > > >
-> > > > > This will also help to improve the MySQL. With MySQL server
-> > > > > running on numa 0 and client running on numa 1, both QPS and
-> > > > > latency is imporved on read-write case:
-> > > > >                         5.17-rc1        patched
-> > > > > QPS-16threads        143333.2633    145077.4033(+1.22%)
-> > > > > QPS-24threads        195085.9367    202719.6133(+3.91%)
-> > > > > QPS-32threads        241165.6867      249020.74(+3.26%)
-> > > > > QPS-64threads        244586.8433    253387.7567(+3.60%)
-> > > > > avg-lat-16threads           2.23           2.19(+1.19%)
-> > > > > avg-lat-24threads           2.46           2.36(+3.79%)
-> > > > > avg-lat-36threads           2.66           2.57(+3.26%)
-> > > > > avg-lat-64threads           5.23           5.05(+3.44%)
-> > > > >
-> > > > > Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-> > > > > Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-> > > > > Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> > > > > ---
-> > > > >  kernel/sched/fair.c | 46 +++++++++++++++++++++++++++++++++++++++++----
-> > > > >  1 file changed, 42 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > > > index 5146163bfabb..2f84a933aedd 100644
-> > > > > --- a/kernel/sched/fair.c
-> > > > > +++ b/kernel/sched/fair.c
-> > > > > @@ -6262,12 +6262,46 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
-> > > > >
-> > > > >  #endif /* CONFIG_SCHED_SMT */
-> > > > >
-> > > > > +#ifdef CONFIG_SCHED_CLUSTER
-> > > > > +/*
-> > > > > + * Scan the cluster domain for idle CPUs and clear cluster cpumask after scanning
-> > > > > + */
-> > > > > +static inline int scan_cluster(struct task_struct *p, int prev_cpu, int target)
-> > > > > +{
-> > > > > +     struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
-> > > > > +     struct sched_domain *sd = rcu_dereference(per_cpu(sd_cluster, target));
-> > > > > +     int cpu, idle_cpu;
-> > > > > +
-> > > > > +     /* TODO: Support SMT case while a machine with both cluster and SMT born */
-> > > > > +     if (!sched_smt_active() && sd) {
-> > > > > +             for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
-> > > > > +                     idle_cpu = __select_idle_cpu(cpu, p);
-> > > > > +                     if ((unsigned int)idle_cpu < nr_cpumask_bits)
-> > > > > +                             return idle_cpu;
-> > > > > +             }
-> > > > > +
-> > > > > +             /* Don't ping-pong tasks in and out cluster frequently */
-> > > > > +             if (cpus_share_resources(target, prev_cpu))
-> > > > > +                     return target;
-> > > >
-> > > > We reach here when there aren't any idle CPUs within the
-> > > > cluster. However there might be idle CPUs in the MC domain. Is a busy
-> > > > @target preferable to a potentially idle CPU within the larger domain
-> > > > ?
-> > >
-> > > Hi Gautham,
-> > >
+> > For example:
+> > For the function bio_add_page():
 > >
-> > Hi Barry,
+> > int bio_add_page(struct bio *bio, struct page *page,
+> >       unsigned int len, unsigned int offset)
+> >
+> > Firstly, we can set the base of the object, thus the first string "arg1"
+> > stands for the value of the first parameter of this function bio_add_gage(),
+> >
+> > # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> >
+> > Secondly, we can get the value dynamically based on above object.
+> >
+> > find the offset of the bi_size in struct bio:
+> > $ gdb vmlinux
+> > (gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+> > $1 = (unsigned int *) 0x28
+> >
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+> >       p_bio_add_page_0/trigger
+> >
+> > # cd /sys/kernel/debug/tracing/
+> > # echo 'p bio_add_page arg1=$arg1' > ./kprobe_events
+> > # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+>
+> So doing after this command, I dumped the trigger file.
+>
+> # cat events/kprobes/p_bio_add_page_0/trigger
+> objtrace:count=1 if comm == "cat"
+>
+> This is not correct. All the parameters are dropped. Thus I can not
+> remove the trigger without knowing the original command.
+>
+> # echo '!objtrace:count=1 if comm == "cat"' >> ./events/kprobes/p_bio_add_page_0/trigger
+> sh: write error: Invalid argument
+>
+> And there are another minor issue is here;
+>
+>  # cd /sys/kernel/debug/tracing/
+>  # echo 'p bio_add_page $arg1 $arg2' > ./kprobe_events
+>  # echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
+>  # echo '!objtrace:add:arg2' >> events/kprobes/p_bio_add_page_0/trigger
+>
+> Here, if I passed the "!objtrace:add:<a-field-exists-on-event>" then the objtrace
+> trigger was removed. But as you can see, the parameter is different.
+> Anyway, this is a minor issue, since we don't support multiple objtrace trigger
+> on the same event.
+>
+> Could you fix these issues (and update the test case to check this?)
+
+Thanks for finding these issues, I will fix them.
+
+> Thank you,
+>
+> >
+> > # du -sh /test.txt
+> > 12.0K   /test.txt
+> >
+> > # cat  /test.txt > /dev/null
+> > # cat ./trace
+> > # tracer: nop
+> > #
+> > # entries-in-buffer/entries-written: 128/128   #P:4
+> > #
+> > #                                _-----=> irqs-off/BH-disabled
+> > #                               / _----=> need-resched
+> > #                              | / _---=> hardirq/softirq
+> > #                              || / _--=> preempt-depth
+> > #                              ||| / _-=> migrate-disable
+> > #                              |||| /     delay
+> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> > #              | |         |   |||||     |         |
+> >              cat-117     [002] ...1.     1.602243: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> >              cat-117     [002] ...1.     1.602244: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x0
+> >              cat-117     [002] ...2.     1.602244: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x1000
+> >              cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> >              cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x1000
+> >              cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000
+> >              cat-117     [002] ...1.     1.602245: __bio_try_merge_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> >              cat-117     [002] ...1.     1.602245: __bio_add_page <-bio_add_page object:0xffff88811bee4000 value:0x2000
+> >              cat-117     [002] ...1.     1.602245: submit_bio <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602245: submit_bio_noacct <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: __submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: submit_bio_checks <-__submit_bio object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: __cond_resched <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: should_fail_bio <-submit_bio_checks object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: blk_mq_submit_bio <-submit_bio_noacct object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602246: blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602247: __rcu_read_lock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602247: __rcu_read_unlock <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> >              cat-117     [002] ...1.     1.602247: __blk_mq_alloc_requests <-blk_mq_submit_bio object:0xffff88811bee4000 value:0x3000
+> >           <idle>-0       [002] d..3.     1.602298: bio_endio <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602298: mpage_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602298: __read_end_io <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602300: bio_put <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602300: bio_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602300: mempool_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602300: mempool_free_slab <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >           <idle>-0       [002] d..3.     1.602300: kmem_cache_free <-blk_update_request object:0xffff88811bee4000 value:0x0
+> >         ...
+> >
+> > Almost all changelogs were suggested by Masami(mhiramat@kernel.org)
+> > and steve(rostedt@goodmis.org), thank you all so much.
+> >
+> > v8:
+> > - revert to use per-cpu recursion for the function trace_object_events_call
+> > - recover the filter when getting the value of the object
+> > - simplify the implementation for the function get_object_value
+> > - fix the build error
+> >
+> > v7:
+> > - use fixed-size array for object pool instead of list structure
+> > - use ftrace_test_recursion_trylock for function trace hook function
+> > - fix trace_object_ref reference count in the init_trace_object
+> > - invoke exit_trace_object no matter whether data->ops->free is null
+> >   in the unregister_object_trigger
+> > - release private_data of event_trigger_data in the trace_object_trigger_free
+> > - remove [RFC] tag
+> >
+> > v6:
+> > - change the objtrace trigger syntax.
+> > - add patchset description
+> > - add <tracefs>/README
+> >
+> > v5:
+> > - add testcasts
+> > - add check the field->size
+> > - add lockless to search object
+> > - describe the object trace more clearly in Kconfig
+> >
+> > v4:
+> > - please ignore the v4 which is the same as v3
+> >
+> > v3:
+> > - change the objfilter to objtrace
+> > - add a command to the objfilter syntax
+> > - change to get the value of the object
+> > - use trace_find_event_field to find the field instead of using argN
+> > - get data from @rec in the event trigger callback funciton
+> >
+> > v2:
+> > - adding a "objfilter" trigger to update object
 > >
 > >
-> > > My benchmark showed some performance regression while load was medium or above
-> > > if we grabbed idle cpu in and out the cluster. it turned out the
-> > > regression disappeared if
-> > > we blocked the ping-pong. so the logic here is that if we have scanned
-> > > and found an
-> > > idle cpu within the cluster before, we don't let the task jumping back
-> > > and forth frequently
-> > > as cache synchronization is higher cost. but the code still allows
-> > > scanning out of the cluster
-> > > if we haven't packed waker and wakee together yet.
-> > >
+> > Jeff Xie (4):
+> >   trace: Add trace any kernel object
+> >   trace/objtrace: get the value of the object
+> >   trace/objtrace: Add testcases for objtrace
+> >   trace/objtrace: Add documentation for objtrace
 > >
-> > Like what Gautham said, should we choose the same cluster if we find that
-> > there are no idle-cpus in the LLC? This way we avoid ping-pong if there are
-> > no idle-cpus but we still pick an idle-cpu to a busy cpu?
-> 
-> Hi Srikar,
-> I am sorry I didn't get your question. Currently the code works as below:
-> if task A wakes up task B, and task A is in LLC0 and task B is in LLC1.
-> we will scan the cluster of A before scanning the whole LLC0, in this case,
-> cluster of A is the closest sibling, so it is the better choice than other CPUs
-> which are in LLC0 but not in the cluster of A. 
-
-Yes, this is right.
-
-> But we do scan all cpus of LLC0
-> afterwards if we fail to find an idle CPU in the cluster.
-
-However my reading of the patch, before we can scan other clusters within
-the LLC (aka LLC0), we have a check in scan cluster which says 
-
-	/* Don't ping-pong tasks in and out cluster frequently */
-	if (cpus_share_resources(target, prev_cpu))
-	   return target;
-
-My reading of this is, ignore other clusters (at this point, we know there
-are no idle CPUs in this cluster. We don't know if there are idle cpus in
-them or not) if the previous CPU and target CPU happen to be from the same
-cluster. This effectively means we are given preference to cache over idle
-CPU.
-
-Or Am I still missing something?
-
-> 
-> After a while, if the cluster of A gets an idle CPU and pulls B into the
-> cluster, we prefer not pushing B out of the cluster of A again though
-> there might be an idle CPU outside. as benchmark shows getting an
-> idle CPU out of the cluster of A doesn't bring performance improvement
-> but performance decreases as B might be getting in and getting out
-> the cluster of A very frequently, then cache coherence ping-pong.
-> 
-
-The counter argument can be that Task A and Task B are related and were
-running on the same cluster. But Load balancer moved Task B to a different
-cluster. Now this check may cause them to continue to run on two different
-clusters, even though the underlying load balance issues may have changed.
-
-No?
-
-
--- 
-Thanks and Regards
-Srikar Dronamraju
+> >  Documentation/trace/events.rst                |  83 +++
+> >  include/linux/trace_events.h                  |   1 +
+> >  kernel/trace/Kconfig                          |  10 +
+> >  kernel/trace/Makefile                         |   1 +
+> >  kernel/trace/trace.c                          |   3 +
+> >  kernel/trace/trace.h                          |   8 +
+> >  kernel/trace/trace_entries.h                  |  18 +
+> >  kernel/trace/trace_events_trigger.c           |   1 +
+> >  kernel/trace/trace_object.c                   | 631 ++++++++++++++++++
+> >  kernel/trace/trace_output.c                   |  40 ++
+> >  .../ftrace/test.d/trigger/trigger-objtrace.tc |  39 ++
+> >  11 files changed, 835 insertions(+)
+> >  create mode 100644 kernel/trace/trace_object.c
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
+> >
+> > --
+> > 2.25.1
+> >
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
+---
+JeffXie

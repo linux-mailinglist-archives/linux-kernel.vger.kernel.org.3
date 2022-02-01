@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4285E4A63C3
+	by mail.lfdr.de (Postfix) with ESMTP id EA29C4A63C5
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiBAS01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:26:27 -0500
+        id S234270AbiBAS03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:26:29 -0500
 Received: from mga09.intel.com ([134.134.136.24]:60474 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230476AbiBAS00 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:26:26 -0500
+        id S236079AbiBAS01 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 13:26:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643739986; x=1675275986;
-  h=from:to:cc:subject:date:message-id;
-  bh=IoVOK8NbvIMcBLVOOCUAyvtTa2FpyVUrNVwk0g0DRj8=;
-  b=FKcoRSuepuoun4W6uliFPVCre6R+sqAP0e8t4MOCzopNNqKcNFWd1MtA
-   KFjYo2qNiw8tVIK9x7mfahXqqZSpwR00JpOUa1rDZZGKBFKv4XI3IoWDm
-   6EMnMdcENzInbcBBBHEQYRTroEBWNjH9JaFXWx8L0dlzAf3Ov5960OdT6
-   +1YqZ57tj7vPGxVrttrKGB5esiAmNxIqNNaZ/wuVuKgy7tUuE7Dl+qP5f
-   x2/S0JeGpEso3lcqKSilYMJ4iS3WEYHyNaZlKwwtGtssoEboK0nA4ifnu
-   CoHn1q45r5UWwk0J6rZsdexzei8d8AMWmw7JHfZ8hQy2xNfdc2UA96CSd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247527581"
+  t=1643739987; x=1675275987;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=dV2iXUGHBYz0+bDQ60uKmH98uz1po4B9Da1wpjks3iM=;
+  b=H9g6s8jMnEeSNpIPHpKlt/eANydYZakhT8/CLX2JmlGCcISU3y1etcef
+   l1cQhFUJxRFnX2pRsJJxRC+0irUq4A7Ucr874dy8LukX1QEdGmTaoGz6Z
+   WuhvomZHqJFJ+eN6pgsPNaHqSQjgEnDle36xs88j5DksSLrWpkC2flqDD
+   hzZQXl1Q3NEwAEw39RifCt5YHXgurJK1mdAT9HL9zekdpLNlGdki0wc7x
+   AjP8PqMgHkxKBjei747FAHydyUme4o4p02ts/aRRAmec9qFQJ41BUdYaG
+   veQuCV/Wa34OhvmuFaUZ2ldRitXZ5Q42K65jO0nB1mmwMBdcGtg2U6dw+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247527586"
 X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="247527581"
+   d="scan'208";a="247527586"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:26:09 -0800
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:26:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="565681616"
+   d="scan'208";a="565681651"
 Received: from otc-lr-04.jf.intel.com ([10.54.39.41])
-  by orsmga001.jf.intel.com with ESMTP; 01 Feb 2022 10:26:09 -0800
+  by orsmga001.jf.intel.com with ESMTP; 01 Feb 2022 10:26:12 -0800
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 1/3] perf/x86/intel: Enable PEBS format 5
-Date:   Tue,  1 Feb 2022 13:23:21 -0800
-Message-Id: <1643750603-100733-1-git-send-email-kan.liang@linux.intel.com>
+Cc:     ak@linux.intel.com, Wei Wang <wei.w.wang@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: [PATCH 2/3] KVM: x86: use the KVM side max supported fixed counter
+Date:   Tue,  1 Feb 2022 13:23:22 -0800
+Message-Id: <1643750603-100733-2-git-send-email-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1643750603-100733-1-git-send-email-kan.liang@linux.intel.com>
+References: <1643750603-100733-1-git-send-email-kan.liang@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+From: Wei Wang <wei.w.wang@intel.com>
 
-The new PEBS Record Format 5 is similar to the PEBS Record Format 4. The
-only difference is the layout of the Counter Reset fields of the PEBS
-Config Buffer in the DS area. For the PEBS format 4, the Counter Reset
-fields allocation is for 8 general-purpose counters followed by 4
-fixed-function counters. For the PEBS format 5, the Counter Reset fields
-allocation is for 32 general-purpose counters followed by 16
-fixed-function counters.
+KVM vPMU doesn't support to emulate all the fixed counters that the
+host PMU driver has supported, e.g. the fixed counter 3 used by
+Topdown metrics hasn't been supported by KVM so far.
 
-Extend the MAX_PEBS_EVENTS to 32. Add MAX_PEBS_EVENTS_FMT4 for the
-previous platform. Except for the DS auto-reload code, other places
-already assume 32 counters. Only check the PEBS_FMT in the DS
-auto-reload code.
+Rename MAX_FIXED_COUNTERS to KVM_PMC_MAX_FIXED to have a more
+straightforward naming convention as INTEL_PMC_MAX_FIXED used by the
+host PMU driver, and fix vPMU to use the KVM side KVM_PMC_MAX_FIXED
+for the virtual fixed counter emulation, instead of the host side
+INTEL_PMC_MAX_FIXED.
 
-Extend the MAX_FIXED_PEBS_EVENTS to 16, which only impacts the size of
-struct debug_store and some local temporary variables. The size of
-struct debug_store increases 288B, which is small and should be
-acceptable.
-
+Signed-off-by: Wei Wang <wei.w.wang@intel.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org
 ---
- arch/x86/events/intel/ds.c      | 14 +++++++++++---
- arch/x86/include/asm/intel_ds.h |  5 +++--
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 3 ++-
+ arch/x86/kvm/cpuid.c            | 3 ++-
+ arch/x86/kvm/pmu.h              | 2 --
+ arch/x86/kvm/vmx/pmu_intel.c    | 4 ++--
+ arch/x86/kvm/x86.c              | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 2e21536..376cc3d 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1203,7 +1203,10 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
- 	if (hwc->idx >= INTEL_PMC_IDX_FIXED) {
- 		base = MSR_RELOAD_FIXED_CTR0;
- 		idx = hwc->idx - INTEL_PMC_IDX_FIXED;
--		value = ds->pebs_event_reset[MAX_PEBS_EVENTS + idx];
-+		if (x86_pmu.intel_cap.pebs_format < 5)
-+			value = ds->pebs_event_reset[MAX_PEBS_EVENTS_FMT4 + idx];
-+		else
-+			value = ds->pebs_event_reset[MAX_PEBS_EVENTS + idx];
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 1384517..2ce8456 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -498,6 +498,7 @@ struct kvm_pmc {
+ 	bool intr;
+ };
+ 
++#define KVM_PMC_MAX_FIXED	3
+ struct kvm_pmu {
+ 	unsigned nr_arch_gp_counters;
+ 	unsigned nr_arch_fixed_counters;
+@@ -511,7 +512,7 @@ struct kvm_pmu {
+ 	u64 reserved_bits;
+ 	u8 version;
+ 	struct kvm_pmc gp_counters[INTEL_PMC_MAX_GENERIC];
+-	struct kvm_pmc fixed_counters[INTEL_PMC_MAX_FIXED];
++	struct kvm_pmc fixed_counters[KVM_PMC_MAX_FIXED];
+ 	struct irq_work irq_work;
+ 	DECLARE_BITMAP(reprogram_pmi, X86_PMC_IDX_MAX);
+ 	DECLARE_BITMAP(all_valid_pmc_idx, X86_PMC_IDX_MAX);
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 3902c28..28205ce 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -856,7 +856,8 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 		eax.split.bit_width = cap.bit_width_gp;
+ 		eax.split.mask_length = cap.events_mask_len;
+ 
+-		edx.split.num_counters_fixed = min(cap.num_counters_fixed, MAX_FIXED_COUNTERS);
++		edx.split.num_counters_fixed =
++			min(cap.num_counters_fixed, KVM_PMC_MAX_FIXED);
+ 		edx.split.bit_width_fixed = cap.bit_width_fixed;
+ 		if (cap.version)
+ 			edx.split.anythread_deprecated = 1;
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 7a7b8d5..9e66fba 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -15,8 +15,6 @@
+ #define VMWARE_BACKDOOR_PMC_REAL_TIME		0x10001
+ #define VMWARE_BACKDOOR_PMC_APPARENT_TIME	0x10002
+ 
+-#define MAX_FIXED_COUNTERS	3
+-
+ struct kvm_event_hw_type_mapping {
+ 	u8 eventsel;
+ 	u8 unit_mask;
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 466d18f..9b26596 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -565,7 +565,7 @@ static void intel_pmu_init(struct kvm_vcpu *vcpu)
+ 		pmu->gp_counters[i].current_config = 0;
  	}
- 	wrmsrl(base + idx, value);
- }
-@@ -1232,8 +1235,12 @@ void intel_pmu_pebs_enable(struct perf_event *event)
- 		}
+ 
+-	for (i = 0; i < INTEL_PMC_MAX_FIXED; i++) {
++	for (i = 0; i < KVM_PMC_MAX_FIXED; i++) {
+ 		pmu->fixed_counters[i].type = KVM_PMC_FIXED;
+ 		pmu->fixed_counters[i].vcpu = vcpu;
+ 		pmu->fixed_counters[i].idx = i + INTEL_PMC_IDX_FIXED;
+@@ -591,7 +591,7 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
+ 		pmc->counter = pmc->eventsel = 0;
  	}
  
--	if (idx >= INTEL_PMC_IDX_FIXED)
--		idx = MAX_PEBS_EVENTS + (idx - INTEL_PMC_IDX_FIXED);
-+	if (idx >= INTEL_PMC_IDX_FIXED) {
-+		if (x86_pmu.intel_cap.pebs_format < 5)
-+			idx = MAX_PEBS_EVENTS_FMT4 + (idx - INTEL_PMC_IDX_FIXED);
-+		else
-+			idx = MAX_PEBS_EVENTS + (idx - INTEL_PMC_IDX_FIXED);
-+	}
+-	for (i = 0; i < INTEL_PMC_MAX_FIXED; i++) {
++	for (i = 0; i < KVM_PMC_MAX_FIXED; i++) {
+ 		pmc = &pmu->fixed_counters[i];
  
- 	/*
- 	 * Use auto-reload if possible to save a MSR write in the PMI.
-@@ -2204,6 +2211,7 @@ void __init intel_ds_init(void)
- 			break;
+ 		pmc_stop_counter(pmc);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 9e43d75..b541a13 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -6452,7 +6452,7 @@ static void kvm_init_msr_list(void)
+ 	u32 dummy[2];
+ 	unsigned i;
  
- 		case 4:
-+		case 5:
- 			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
- 			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
- 			if (x86_pmu.intel_cap.pebs_baseline) {
-diff --git a/arch/x86/include/asm/intel_ds.h b/arch/x86/include/asm/intel_ds.h
-index 8380c3dd..2f9eeb5 100644
---- a/arch/x86/include/asm/intel_ds.h
-+++ b/arch/x86/include/asm/intel_ds.h
-@@ -7,8 +7,9 @@
- #define PEBS_BUFFER_SIZE	(PAGE_SIZE << 4)
+-	BUILD_BUG_ON_MSG(INTEL_PMC_MAX_FIXED != 4,
++	BUILD_BUG_ON_MSG(KVM_PMC_MAX_FIXED != 3,
+ 			 "Please update the fixed PMCs in msrs_to_saved_all[]");
  
- /* The maximal number of PEBS events: */
--#define MAX_PEBS_EVENTS		8
--#define MAX_FIXED_PEBS_EVENTS	4
-+#define MAX_PEBS_EVENTS_FMT4	8
-+#define MAX_PEBS_EVENTS		32
-+#define MAX_FIXED_PEBS_EVENTS	16
- 
- /*
-  * A debug store configuration.
+ 	perf_get_x86_pmu_capability(&x86_pmu);
 -- 
 2.7.4
 

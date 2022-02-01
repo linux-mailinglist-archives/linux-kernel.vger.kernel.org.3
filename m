@@ -2,124 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBBA4A5F7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18D24A5FA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240093AbiBAPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S239820AbiBAPJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240075AbiBAPHm (ORCPT
+        with ESMTP id S233653AbiBAPJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:07:42 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDB6C06173E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 07:07:42 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id y84so21640100iof.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:07:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H8yp3rbd8JbpM9xzvbWKhE1rf763E53ItSWDuTa2i+Y=;
-        b=MmeG2tNbMlUnA5lOOaIe7zg8BrI5FxJPb1n08t1d/6I6N/JTZfEtvt7uzND0fV8aJT
-         s89B+6NbWLoWGLKn0QDsNkhAtbtovM8zsXHt66n6N5u/UkBRbzazu8UD+8p7mMEU/LGP
-         mBdvE/vdZdC1pL6HTjngXfZvZjbRKNt+lBSeY23MANJmCk2egiwjgKpH0bjORXt0oshl
-         asiTFN4HpSVjg8Dftfii4i7d0XLV7vNeBcY4ciaqxANujVS4svJWmmzrBnb6oY6V5ExZ
-         URsHBrFy+EB09vUzuYDHRR3FSXUP+HN8bq4FjGr4dlslk0cyZ4cx8QplONSyBbULCF6J
-         VYzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H8yp3rbd8JbpM9xzvbWKhE1rf763E53ItSWDuTa2i+Y=;
-        b=S9wa+0yb9THdHu3qoGSaR5yv/VPJNWsoEFnxKXrXRjgnB5ko564X88hSPz/7FTTTSR
-         OtQ3//E+CvMEJRd19pm57qtsUPTS/j5rv48ynZr4Ykt5VWsR2AyiIC5k23csttUVwinh
-         7KupsNDBWZgmknCp9EIUVz9rpm9wWEx1nkXTurpika2BTYcLfxoLtWZE4R5Zca/mImv7
-         wh/rKsO0R4x/D79NyjSKtbxG0atUaA9HStWkI1xjt/d7Lh2C4Vgueo6HhFkVhDKrrLYF
-         yju/QpoHvMHqLCPF3I5+JFuxZR6XLMUxHl03yNPiteh/8HuxV82EUuRuy72UsPdZvSTp
-         Vlvw==
-X-Gm-Message-State: AOAM531JpEhJMYdOwF6czVGywOwA6/uFxTfUTHVIbfbA1WWHAyX4VuLP
-        06OzYTCW/7dZ9iVXurbCXuJCXg==
-X-Google-Smtp-Source: ABdhPJw2M1reXF4OuOYCJz65xgdJtTZhb67TTQV7E4ATO7cLleMoJ3tGMo/5T+Z4SslG2TJi4FdWQw==
-X-Received: by 2002:a02:85c7:: with SMTP id d65mr13610539jai.60.1643728062245;
-        Tue, 01 Feb 2022 07:07:42 -0800 (PST)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id w17sm3517641ilj.1.2022.02.01.07.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 07:07:41 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     bjorn.andersson@linaro.org, agross@kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: qcom: add IPA qcom,qmp property
-Date:   Tue,  1 Feb 2022 09:07:38 -0600
-Message-Id: <20220201150738.468684-1-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 1 Feb 2022 10:09:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A325C061714;
+        Tue,  1 Feb 2022 07:09:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AN/jspz2JoBPtJ1HTGOsT/p4u4etOkVQMVBmx8Uzn50=; b=WZ5e8OwGjvIoFUlKOzpq5r3JBZ
+        FNMjL8sIW2SyI5neFlh6We62xXvGsLHHSQGOCSHhXHiil6prF36INPc9/M/30qCMpULBBpjNcwlIk
+        zbxzOOFt8hFGA1lr6V/RfHtRleV/Ttq+QYj5noyMiCeI6Ps7WRZQZGtmxptqMWOfyWchzSdu4bL0o
+        GKXjdYpFFbB7IqWLtgQXfvOAASjQnbAje4SMi7GutaLWLk6ax1JuUCGUuUU6y+z3iwQj2rwjGJHga
+        yfh95Fu66JdHlHGFGUvwOp3bEplThJuI5WFa5L+Wb5Hx6EAnG1Zbb5oZjGFKdwFYz1G38BxqilLZH
+        YflpeprA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEumr-00CSpr-Nm; Tue, 01 Feb 2022 15:09:41 +0000
+Date:   Tue, 1 Feb 2022 15:09:41 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] linux/const.h: Explain how __is_constexpr() works
+Message-ID: <YflNNRCibwcy7F3Q@casper.infradead.org>
+References: <20220131204357.1133674-1-keescook@chromium.org>
+ <dc86fdf7-3202-e836-6f71-af1e2458b105@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dc86fdf7-3202-e836-6f71-af1e2458b105@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least three platforms require the "qcom,qmp" property to be
-specified, so the IPA driver can request register retention across
-power collapse.  Update DTS files accordingly.
+On Tue, Feb 01, 2022 at 02:05:53PM +0100, Rasmus Villemoes wrote:
+> I don't think adding slightly inaccurate comments would help a future
+> reader at all. Then it's better to just stick to Linus' "it's art, and
+> art should not be explained".
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
-v2:  Add devicetree@vger.kernel.org to addressee list.
-
-Dave, Jakub, please let Bjorn take this through the Qualcomm tree.
-
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 ++
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 ++
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 ++
- 3 files changed, 6 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 2151cd8c8c7ab..e1c46b80f14a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -1459,6 +1459,8 @@ ipa: ipa@1e40000 {
- 					     "imem",
- 					     "config";
- 
-+			qcom,qmp = <&aoss_qmp>;
-+
- 			qcom,smem-states = <&ipa_smp2p_out 0>,
- 					   <&ipa_smp2p_out 1>;
- 			qcom,smem-state-names = "ipa-clock-enabled-valid",
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 937c2e0e93eb9..fe5792e7e8d7a 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1714,6 +1714,8 @@ ipa: ipa@1e40000 {
- 			interconnect-names = "memory",
- 					     "config";
- 
-+			qcom,qmp = <&aoss_qmp>;
-+
- 			qcom,smem-states = <&ipa_smp2p_out 0>,
- 					   <&ipa_smp2p_out 1>;
- 			qcom,smem-state-names = "ipa-clock-enabled-valid",
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 53b39e718fb66..5c2866355e352 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1425,6 +1425,8 @@ ipa: ipa@1e40000 {
- 			interconnect-names = "memory",
- 					     "config";
- 
-+			qcom,qmp = <&aoss_qmp>;
-+
- 			qcom,smem-states = <&ipa_smp2p_out 0>,
- 					   <&ipa_smp2p_out 1>;
- 			qcom,smem-state-names = "ipa-clock-enabled-valid",
--- 
-2.32.0
-
+/* You are not expected to understand this */

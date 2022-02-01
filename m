@@ -2,213 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9CF4A6723
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7520B4A6725
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiBAViW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiBAViU (ORCPT
+        id S234202AbiBAVjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:39:21 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:46935 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232965AbiBAVjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:38:20 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74353C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:38:20 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p27so36644448lfa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X5lH9MhEDI/fH4JO2AjNw4VWZe37YGfztlIPMSyNebw=;
-        b=hi+suNUqO4leQ1HIfCbFWcnJcoxAWW/Q+zn3N1VjRKX8gYJgw/DUxBq2iz/Lip64Bt
-         oMOezjHarT6TBjJ6URjYNtH9izgGAn3LG6kJ2J4Q5bvEJyITWpQmyuYBwS502rldmZPj
-         jhPq3xQEPhTC7aiHs4UA3iYi1M6nnKFy4K4xiOvTrHnrUTv/5nez5+kV1QGgYwETAPvd
-         PjeLUPNeufRy0jF6TTaDv45iULXgAxWnSSxNYR2mzfoRh2hRpiMpJ4vfJSy6UqZGk0EL
-         hvjsdTAkJ+mG0HqLDp+Zj74IOZkAZ6PyO5u4sqtOdM4SLxchHjhftQnEZfwsxOjUVSTl
-         x4TA==
+        Tue, 1 Feb 2022 16:39:20 -0500
+Received: by mail-ot1-f50.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso9445613otv.13;
+        Tue, 01 Feb 2022 13:39:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X5lH9MhEDI/fH4JO2AjNw4VWZe37YGfztlIPMSyNebw=;
-        b=F2qYTz6LIGOBHmkhI4uu0RH79D6YNoKVBkPvk4VdL92dHbv/y6w/cnw1TCHjsnFf1p
-         +RqmP5SI1lX9eOw7oHgCATxL05ZOppyV4ShLPdndeiLq1ZiMbMsIIMAxEdQ7+tEUnC8t
-         80Wxs89Wus5rPKBcp79P2Fihj1yN6eiaxs+PYfqeUgu01357fT3DcWDEvv44rljqzlhj
-         1wHsMg1jY4qkRzHIZXrv2L/OEC6CUJSE3LKr67b7ZrxNiBtUGFLmI4iTJoJI6WW4+Un6
-         dqbzrhSdA4tc/6hh46XUSKdq3Hym1QT/VOG4ZL1W3mCxXISMCVf9yfulmWAzitzgcHK/
-         Z9zw==
-X-Gm-Message-State: AOAM533X//bSU7+x47PPzsnjcghNZn2EbzicYO821SkWLoLFsx+BejAb
-        XcSCVHLzzSraIUOYqfOIaqWb08pYtuJi7zg0wvREbnQqN48=
-X-Google-Smtp-Source: ABdhPJwly2lJ/2zpKteE8pXdSU5bn85KC+cPZ7btIf6V2eq3JYZQc63MVP1KKxWGQdEtLyvGBNbdj2GmKir4kuNI52c=
-X-Received: by 2002:a19:6449:: with SMTP id b9mr20775601lfj.82.1643751498528;
- Tue, 01 Feb 2022 13:38:18 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6CeauCX3KKYXQgJfgtEO1x40f/OGRoNcTeAllHgSNFA=;
+        b=ohwaP4t94vdm2WD7azEQ9ht3i2Dcn9ixzaihoetlgpB/9hJZL+dSOcakqSqdhtJj+9
+         P6Da0/t5SxIIhm01JLUmauw3z788D3gWOYUEfMHXZuRwxXyLFDCn9/CywAK0iR4+zMGy
+         e1mQDwff9VQKAOzhQvrmpw9kW/GBKL84IZKwghnRDH0atIIWTQ5PHxvoZ6otA0SYSCvh
+         yuMldMcUGCbeV/r1UpeDwbKQY9m7Ky+KBDkRTc3W46esAy9Rt5iVH1pmLmpGdKcdFoiG
+         A9N391a67Eiu/y6FLuwAiIRmxHXUbkKG9KbZtWQIeFJxXYKB1yh0FvqwVEZCuNd73CJm
+         MFzA==
+X-Gm-Message-State: AOAM530lGfoeeWW8FI0E+CWrgHzR3OTndTY0RYDmLAIfZTV3fPy5kyzL
+        ukEdxAwTO17kxxkkSWr74g==
+X-Google-Smtp-Source: ABdhPJw5svoe0oy61D+R6mAPdcxjyth+fO1q8ohAhwUUNfmHTxBFlzp+pxqN/TparTAnbB1u3lLUeQ==
+X-Received: by 2002:a9d:450c:: with SMTP id w12mr13037609ote.217.1643751559613;
+        Tue, 01 Feb 2022 13:39:19 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id p5sm11258872oou.39.2022.02.01.13.39.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 13:39:18 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] libperf: Fix 32-bit build for tests uint64_t printf
+Date:   Tue,  1 Feb 2022 15:39:03 -0600
+Message-Id: <20220201213903.699656-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220112224342.958358-1-quic_eberman@quicinc.com> <20220201213542.2808035-1-quic_eberman@quicinc.com>
-In-Reply-To: <20220201213542.2808035-1-quic_eberman@quicinc.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 1 Feb 2022 13:38:06 -0800
-Message-ID: <CAKwvOdmZHmihbf_mLyi=Ncf7FZjjSxxTsHZeaqxk4LKhMHs_iA@mail.gmail.com>
-Subject: Re: [PATCH v3] kbuild: Add environment variables for userprogs flags
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Matthias Maennich <maennich@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 1:36 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->
-> Allow additional arguments be passed to userprogs compilation.
-> Reproducible clang builds need to provide a sysroot and gcc path to
-> ensure same toolchain is used across hosts. KCFLAGS is not currently
+Commit a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
+added printf's of 64-bit ints using %lu which doesn't work on 32-bit
+builds:
 
-^ ensure the same (maybe Masahiro can fix that up locally when applying)
+tests/test-evlist.c:529:29: error: format ‘%lu’ expects argument of type \
+  ‘long unsigned int’, but argument 4 has type ‘uint64_t’ {aka ‘long long unsigned int’} [-Werror=format=]
 
-> used for any user programs compilation, so add new USERCFLAGS and
-> USERLDFLAGS which serves similar purpose as HOSTCFLAGS/HOSTLDFLAGS.
->
-> Clang 13+ might detect GCC installation on hosts which have it installed
-> to a default location in /. With addition of these environment
-> variables, you can specify flags such as:
->
-> $ make USERCFLAGS=--sysroot=/path/to/sysroot
->
-> This can also be used to specify different sysroots such as musl or
-> bionic which may be installed on the host in paths that the compiler
-> may not search by default.
->
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Use PRIu64 instead which works on both 32-bit and 64-bit systems.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: a7f3713f6bf2 ("libperf tests: Add test_stat_multiplexing test")
+Cc: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ tools/lib/perf/tests/test-evlist.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> ---
->
-> Changes since v2:
->  - Incorporated Nick's suggestions:
->    - Addressed docs and commit text comments
->    - Introduced KBUILD_USERHOSTCFLAGS as suggested
->
->  Documentation/kbuild/kbuild.rst    | 11 +++++++++++
->  Documentation/kbuild/makefiles.rst |  2 ++
->  Makefile                           | 10 ++++++----
->  init/Kconfig                       |  8 ++++----
->  usr/include/Makefile               |  3 +++
->  5 files changed, 26 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-> index 2d1fc03d346e..ef19b9c13523 100644
-> --- a/Documentation/kbuild/kbuild.rst
-> +++ b/Documentation/kbuild/kbuild.rst
-> @@ -77,6 +77,17 @@ HOSTLDLIBS
->  ----------
->  Additional libraries to link against when building host programs.
->
-> +.. _userkbuildflags:
-> +
-> +USERCFLAGS
-> +----------
-> +Additional options used for $(CC) when compiling userprogs.
-> +
-> +USERLDFLAGS
-> +-----------
-> +Additional options used for $(LD) when linking userprogs. userprogs are linked
-> +with CC, so $(USERLDFLAGS) should include "-Wl," prefix as applicable.
-> +
->  KBUILD_KCONFIG
->  --------------
->  Set the top-level Kconfig file to the value of this environment
-> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-> index b008b90b92c9..11a296e52d68 100644
-> --- a/Documentation/kbuild/makefiles.rst
-> +++ b/Documentation/kbuild/makefiles.rst
-> @@ -982,6 +982,8 @@ The syntax is quite similar. The difference is to use "userprogs" instead of
->
->         When linking bpfilter_umh, it will be passed the extra option -static.
->
-> +       From command line, :ref:`USERCFLAGS and USERLDFLAGS <userkbuildflags>` will also be used.
-> +
->  5.4 When userspace programs are actually built
->  ----------------------------------------------
->
-> diff --git a/Makefile b/Makefile
-> index 45278d508d81..1d0172449355 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -431,11 +431,12 @@ HOSTCC    = gcc
->  HOSTCXX        = g++
->  endif
->
-> -export KBUILD_USERCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> -                             -O2 -fomit-frame-pointer -std=gnu89
-> -export KBUILD_USERLDFLAGS :=
-> +KBUILD_USERHOSTCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
-> +                        -O2 -fomit-frame-pointer -std=gnu89
-> +KBUILD_USERCFLAGS  := $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
-> +KBUILD_USERLDFLAGS := $(USERLDFLAGS)
->
-> -KBUILD_HOSTCFLAGS   := $(KBUILD_USERCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
-> +KBUILD_HOSTCFLAGS   := $(KBUILD_USERHOSTCFLAGS) $(HOST_LFS_CFLAGS) $(HOSTCFLAGS)
->  KBUILD_HOSTCXXFLAGS := -Wall -O2 $(HOST_LFS_CFLAGS) $(HOSTCXXFLAGS)
->  KBUILD_HOSTLDFLAGS  := $(HOST_LFS_LDFLAGS) $(HOSTLDFLAGS)
->  KBUILD_HOSTLDLIBS   := $(HOST_LFS_LIBS) $(HOSTLDLIBS)
-> @@ -530,6 +531,7 @@ export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AW
->  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
->  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
->  export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS LDFLAGS_MODULE
-> +export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
->
->  export KBUILD_CPPFLAGS NOSTDINC_FLAGS LINUXINCLUDE OBJCOPYFLAGS KBUILD_LDFLAGS
->  export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
-> diff --git a/init/Kconfig b/init/Kconfig
-> index f2ae41e6717f..164706c38e8b 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -62,13 +62,13 @@ config LLD_VERSION
->
->  config CC_CAN_LINK
->         bool
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag)) if 64BIT
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag))
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
->
->  config CC_CAN_LINK_STATIC
->         bool
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m64-flag) -static) if 64BIT
-> -       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(m32-flag) -static)
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag) -static) if 64BIT
-> +       default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag) -static)
->
->  config CC_HAS_ASM_GOTO
->         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
-> diff --git a/usr/include/Makefile b/usr/include/Makefile
-> index 1c2ae1368079..0322e567dc1e 100644
-> --- a/usr/include/Makefile
-> +++ b/usr/include/Makefile
-> @@ -12,6 +12,9 @@ UAPI_CFLAGS := -std=c90 -Wall -Werror=implicit-function-declaration
->  # It is here just because CONFIG_CC_CAN_LINK is tested with -m32 or -m64.
->  UAPI_CFLAGS += $(filter -m32 -m64, $(KBUILD_CFLAGS))
->
-> +# USERCFLAGS might contain sysroot location for CC.
-> +UAPI_CFLAGS += $(USERCFLAGS)
-> +
->  override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
->
->  # The following are excluded for now because they fail to build.
-> --
-> 2.25.1
->
-
-
+diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
+index b3479dfa9a1c..fa854c83b7e7 100644
+--- a/tools/lib/perf/tests/test-evlist.c
++++ b/tools/lib/perf/tests/test-evlist.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #define _GNU_SOURCE // needed for sched.h to get sched_[gs]etaffinity and CPU_(ZERO,SET)
++#include <inttypes.h>
+ #include <sched.h>
+ #include <stdio.h>
+ #include <stdarg.h>
+@@ -526,12 +527,12 @@ static int test_stat_multiplexing(void)
+ 
+ 	min = counts[0].val;
+ 	for (i = 0; i < EVENT_NUM; i++) {
+-		__T_VERBOSE("Event %2d -- Raw count = %lu, run = %lu, enable = %lu\n",
++		__T_VERBOSE("Event %2d -- Raw count = %" PRIu64 ", run = %" PRIu64 ", enable = %" PRIu64 "\n",
+ 			    i, counts[i].val, counts[i].run, counts[i].ena);
+ 
+ 		perf_counts_values__scale(&counts[i], true, &scaled);
+ 		if (scaled == 1) {
+-			__T_VERBOSE("\t Scaled count = %lu (%.2lf%%, %lu/%lu)\n",
++			__T_VERBOSE("\t Scaled count = %" PRIu64 " (%.2lf%%, %" PRIu64 "/%" PRIu64 ")\n",
+ 				    counts[i].val,
+ 				    (double)counts[i].run / (double)counts[i].ena * 100.0,
+ 				    counts[i].run, counts[i].ena);
 -- 
-Thanks,
-~Nick Desaulniers
+2.32.0
+

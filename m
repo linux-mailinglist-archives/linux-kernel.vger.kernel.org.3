@@ -2,114 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079C54A575F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E664A5769
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbiBAGv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S233870AbiBAHAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbiBAGv0 (ORCPT
+        with ESMTP id S231231AbiBAHAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:51:26 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EC0C061714;
-        Mon, 31 Jan 2022 22:51:26 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id f17so29978383wrx.1;
-        Mon, 31 Jan 2022 22:51:26 -0800 (PST)
+        Tue, 1 Feb 2022 02:00:47 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17832C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:00:47 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id s5so50786800ejx.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:00:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=S05DVhqTbT+RB8o3R8uA/qBzUeAzOrmXjeGdK13aL5M=;
-        b=pY+DZqlkix3Hh7KLGHZ5P2UHhaSPBQYNmENarMRBgqL2biDOtWQSDSSf2QRXqqHlqK
-         DSGEdQIxuwNFFHU20+e39VMKU4Gosvw+R2CaF8NB2FUbgiBfwZAhKuXBihLDbGpcGd8M
-         PTJ6AeCxz9QFr41hWgCdpyNSCywA6XmBh9ANKi1BvBUXm5iCDdoojOf1Y3CwlNIf2QKq
-         ZV+WSyaDibJwTvan310JiI2sk+oHUCVNL9nCE0+bI/yZQ2SCVw0A3UPFUjJzwdfasbt+
-         i7NeiQQdsOsgLGxtkIm22/AfajQNzrS9F2Z013MptzwOa5SsCdE9kiNMgl8MSh8polT6
-         Kagg==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kYBByq3Zzj+Iaw3bMHZH5j2OnG+wKZuSP9VniKuuN0M=;
+        b=GggLvrlsjF9yszwZd+41yT8BpCPmBuOA8YQqQjjhB02p/bwEeQa0rXfqszR7fD/AfL
+         0e/LaDAXm6ykU/uZFRCwT8U9GOwPUAfTghf9a+vGJzqAYi8vKPNe2iqDxXogdMnLGLhi
+         W8iiAyMkY+tuUnAzG4v0kS6fzzanli6F+ymd6cW3544A8CNXKs0My596iH9cbg/MghhB
+         Wv7Y4wVuH6QuSxDFLnPfADo/zUATBBGvx9IUoJLsaPW00R7hInHqZfoFG3Q7Eqz8PEJd
+         IbmTuqOgEiN1/9kRWIm/OmKT39yebpAS89RUSFXEywyjcv3HoXnx4EO3uKVQTm4RvOdZ
+         sEXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=S05DVhqTbT+RB8o3R8uA/qBzUeAzOrmXjeGdK13aL5M=;
-        b=1YV9IuCqUlUdbJi9U1Fs2iD9HtaXyRbYfFh0O61H6sURBODKFm+16yq3Cr+YFp5x1c
-         1OgpJSP5T84+/kM6zvwQS25KOfq/Ue94waD+5xgMIEqnEc2PPVckv9g3MT8lQKjL4BBM
-         GWuowRf5ogJkc48qAUiWyWWiZrU5j3TBCB3X4Ju3gKt8CkM1WeflSwq0fG4d/YUCLQrY
-         Qe/h8JUBd57FIjtvgBoziY2EsdpNycuGdjnEGf8lXiKUkYIfH6SFSaX45mqKShuUgPAD
-         xXbDWlhmLiambZDGF2WzgYla/mI7Tzm4gKqiFlggYUX1EK/sl0PDZXDMelFk/ezZAkuP
-         xBsg==
-X-Gm-Message-State: AOAM530IhpkrcsMweMYVvBMxiesIF8igqytFDO2xMTr6ojOknavXVhx+
-        GQ/nLVfyW1T/H5TSi3nsaXmvncxHZdw=
-X-Google-Smtp-Source: ABdhPJxLGPjz01812V0ogRMuAlkgcOqgFWL13OeAHt6/+fHJqtPANawDYJy5IAOZPslwyZZ4zXMLVg==
-X-Received: by 2002:a05:6000:2c5:: with SMTP id o5mr20240075wry.225.1643698284851;
-        Mon, 31 Jan 2022 22:51:24 -0800 (PST)
-Received: from [10.152.0.6] ([85.203.46.180])
-        by smtp.gmail.com with ESMTPSA id f13sm14557268wri.44.2022.01.31.22.51.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 22:51:24 -0800 (PST)
-Subject: Re: [BUG] tty: serial: possible deadlock in uart_remove_one_port()
- and uart_hangup()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <ab5d9322-6bea-9845-c61b-fb68e3bb3a87@gmail.com>
- <YfUPlYwoWpMjhvpR@kroah.com>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <027e2ecd-ccb3-d772-dc31-951039fdeedf@gmail.com>
-Date:   Tue, 1 Feb 2022 14:51:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kYBByq3Zzj+Iaw3bMHZH5j2OnG+wKZuSP9VniKuuN0M=;
+        b=7w73FTUI2eGqCh953izdjeNLrBrp8nNnLLPbK/tbt8DnVCqaKyKUr/FpDdpqYRwlD/
+         5U+bf+dawgJJLyO1+pUyUIx5zsdIeuZWhcfRtwI+1s2c+Qe1WJOQzEEEWJ+v59UkL6w4
+         Qjp7k8HbrS/nXzEraU76F3d0s8ovrj+QA6jgFQLVPhz6hCxHyJ59CwvTxjQjyFL1YMx7
+         hGcU/uh7MtEYmKWiXQ2xDLVBag2wK+PhCMUkQX8QrsypAgfePe2PQ5Z324osDgby/LKI
+         nmBTJnZV6aDTjfuYz3KhL2H6GpWY5J9BEGn+3Fyx3TJDJ/Z1bl3wNOlHTco0Ft5ASQfe
+         bwLw==
+X-Gm-Message-State: AOAM532wTErHSl94O0Q3Zqq+p1PG+xTH26MUXg24wuMsHFwaZfHoFXdh
+        SiQ9hh5S9Btk3ZXwD0RUZtw=
+X-Google-Smtp-Source: ABdhPJzcVUNVqP+ebuiVF2wCV/dZPnvf7j4L3m9+AM1uf03hk765Ney8aulwI7NSVDglN9Vrj/eRCA==
+X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr11057655ejc.13.1643698845447;
+        Mon, 31 Jan 2022 23:00:45 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id z19sm14311826eji.87.2022.01.31.23.00.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 31 Jan 2022 23:00:44 -0800 (PST)
+Date:   Tue, 1 Feb 2022 07:00:44 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+        mgorman@techsingularity.net, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
+Message-ID: <20220201070044.zbm3obsoimhz3xd3@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220127012023.18095-1-richard.weiyang@gmail.com>
+ <f23028db-a351-e6b0-6c17-f14191ab3985@redhat.com>
+ <20220129002738.ofoewhgb4mwfwqfj@master>
+ <cd03f758-6b0e-13d7-504d-4c889e14c39e@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YfUPlYwoWpMjhvpR@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd03f758-6b0e-13d7-504d-4c889e14c39e@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 31, 2022 at 11:53:36AM +0100, David Hildenbrand wrote:
+>On 29.01.22 01:27, Wei Yang wrote:
+>> On Thu, Jan 27, 2022 at 09:39:56AM +0100, David Hildenbrand wrote:
+>>> On 27.01.22 02:20, Wei Yang wrote:
+>>>> During memory hotplug, when online/offline a zone, we need to rebuild
+>>>> the zonelist for all node. There are two checks to decide whether a zone
+>>>> would be added to zonelist:
+>>>>
+>>>>   * one in online_pages/offline_pages to decide necessity
+>>>>   * one in build_zonerefs_node to do real add
+>>>>
+>>>> Currently we use different criteria at these two places, which is
+>>>> different from the original behavior.
+>>>>
+>>>> Originally during memory hotplug, zonelist is re-built when zone hasn't
+>>>> been populated. This in introduced in 'commit 6811378e7d8b ("[PATCH]
+>>>> wait_table and zonelist initializing for memory hotadd: update zonelists")'.
+>>>> And at that moment, build_zonelists_node() also use populated_zone() to
+>>>> decide whether the zone should be added to zonelist.
+>>>>
+>>>> While in 'commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim
+>>>> from zones with pages managed by the buddy allocator")',
+>>>> build_zonelists_node() changed to use managed_zone() to add zonelist.
+>>>> But we still use populated_zone() to decide the necessity.
+>>>>
+>>>> This patch restore the original behavior by using the same criteria to
+>>>> add a zone in zonelist during memory hotplug.
+>>>>
+>>>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>>>> Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
+>>>> CC: Mel Gorman <mgorman@techsingularity.net>
+>>>> ---
+>>>>  mm/memory_hotplug.c | 6 +++---
+>>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+>>>> index 2a9627dc784c..8f1906b33937 100644
+>>>> --- a/mm/memory_hotplug.c
+>>>> +++ b/mm/memory_hotplug.c
+>>>> @@ -1102,11 +1102,11 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
+>>>>  	spin_unlock_irqrestore(&zone->lock, flags);
+>>>>  
+>>>>  	/*
+>>>> -	 * If this zone is not populated, then it is not in zonelist.
+>>>> +	 * If this zone is not managed, then it is not in zonelist.
+>>>>  	 * This means the page allocator ignores this zone.
+>>>>  	 * So, zonelist must be updated after online.
+>>>>  	 */
+>>>> -	if (!populated_zone(zone)) {
+>>>> +	if (!managed_zone(zone)) {
+>>>>  		need_zonelists_rebuild = 1;
+>>>>  		setup_zone_pageset(zone);
+>>>>  	}
+>>>> @@ -1985,7 +1985,7 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>>>>  	/* reinitialise watermarks and update pcp limits */
+>>>>  	init_per_zone_wmark_min();
+>>>>  
+>>>> -	if (!populated_zone(zone)) {
+>>>> +	if (!managed_zone(zone)) {
+>>>>  		zone_pcp_reset(zone);
+>>>>  		build_all_zonelists(NULL);
+>>>>  	}
+>>>
+>>> A note that managed_zone() is a moving target w.r.t. memory ballooning.
+>>> In extreme cases, we can have whole zones (temporarily) be completely
+>>> !managed for that reason.
+>>>
+>>> IMHO memory hot(un)plug is usually the wrong place to check for
+>>> managed_zone(), it cares about populated_zone().
+>>>
+>> 
+>> So we need to check populated_zone when building zonelist?
+>
+>I think the issue is that
+>
+>a) We can have zones without any managed pages put present page during
+>boot, for example, if all pages in the zone were allocated via memblock.
+>
+>b) We can have zones without any managed pages temporarily -- extreme
+>cases of memory ballooning / virtio-mem.
+>
+>
+>I tend to think that populated_zone() might actually be the right check
+>whenever building a zonelist. Because even in case of a) we might end up
+>freeing a memblock allocation later, suddenly having free pages in such
+>a zone, but the zone not in any zonelist.
 
+I agree with you for this point.
 
-On 2022/1/29 17:57, Greg KH wrote:
-> On Sat, Jan 29, 2022 at 05:34:05PM +0800, Jia-Ju Bai wrote:
->> Hello,
->>
->> My static analysis tool reports a possible deadlock in the tty driver in
->> Linux 5.10:
-> 5.10 was released over a year ago and over 100 thousand changes ago.
-> Please redo your check on 5.16 at the oldest.
+>
+>-- 
+>Thanks,
+>
+>David / dhildenb
 
-My static analysis tool checks the tty driver in Linux 5.16, and also 
-finds this possible deadlock:
-
-uart_remove_one_port()
-   mutex_lock(&port->mutex); --> Line 3032 (Lock A)
-   wait_event(state->remove_wait, ...); --> Line 3034 (Wait X)
-   mutex_unlock(&port->mutex); --> Line 3036 (Unlock A)
-
-uart_hangup()
-   mutex_lock(&port->mutex); --> Line 1669 (Lock A)
-   uart_flush_buffer()
-     uart_port_unlock()
-       uart_port_deref()
-         wake_up(&uport->state->remove_wait); --> Line 68 (Wake X)
-   mutex_unlock(&port->mutex); --> Line 1686 (Unlock A)
-
-When uart_remove_one_port() is executed, "Wait X" is performed by 
-holding "Lock A". If uart_hangup() is executed at this time, "Wake X" 
-cannot be performed to wake up "Wait X" in uart_remove_one_port(), 
-because "Lock A" has been already hold by uart_remove_one_port(), 
-causing a possible deadlock.
-
-I am not quite sure whether this possible problem is real and how to fix 
-it if it is real.
-Maybe we can call wait_event() before mutex_lock() in 
-uart_remove_one_port().
-Any feedback would be appreciated, thanks :)
-
-
-Best wishes,
-Jia-Ju Bai
-
+-- 
+Wei Yang
+Help you, Help me

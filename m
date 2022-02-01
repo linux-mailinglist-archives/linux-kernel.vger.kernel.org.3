@@ -2,187 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34304A6810
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0790E4A6812
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241479AbiBAWgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:36:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbiBAWgg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:36:36 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1A8C061714;
-        Tue,  1 Feb 2022 14:36:36 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id p3-20020a0568301d4300b005a7a702f921so860918oth.9;
-        Tue, 01 Feb 2022 14:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rruHlI71IVnsctxkm2K7muRq26h/I63Aku9v7y+wB9g=;
-        b=exG7uRmuhfLG+HfBxgkjQKxj9Whwoo0jGYSJNOPlwLoqW06rlw+/AIJ/BignzAgisD
-         w0QG/zfPWPtstuTN+VeYjIgYmdIHl2F3Bh5k85g2HwYgV/Fe6RJfJWxUIEsIOlsk9vOv
-         LjO+BnsZmxg3njmD9POrPK/CUxJ0Rir9cUIRnQD22thBvxXkd5t2oBHJGlQ3Gp86wjZa
-         88ipWvSsKo3Hwbvye33ziSvcMP/XMQ5dUiCgfvthFigsSHH7uG3Zxood5cik5roZrvoS
-         rmE5P/T+ZActsSto06DebnTEz/73CejMeeZPiPiyqS9B88akQRpUXf6IgRoYWofBZ4yh
-         kMUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rruHlI71IVnsctxkm2K7muRq26h/I63Aku9v7y+wB9g=;
-        b=JyXGcXunuhcwcVmXx34E23xtkPMoAYL7Byb6+n1B7k+78LuL2PElSeHxIQywONGwsx
-         wO4VevlX2w0ER1UtS7kKm8L/bEfQKTKbtkXPoR6iraKPuiMHLlfmlcIZJ1PXv3JqKzwB
-         n0evWue0zXsSyio0ONBGupfrz7eZMynFUxOKJlJ3OdRGiNPWcqW8AiPOYSjhZTJa3hiu
-         Xr0Oyw8jvuSGw1kMWCG8ks25wRvqgT5G6+asi+lnbNqkY5ffYMZlaz7nHy1j+qqMA2ZD
-         9qsIKwwlFxKAnkCoHukSsCxQZWIysyuVaRjLwojOUHKFBQijYRdc2GhVxmKPVSwi3hMf
-         pYgg==
-X-Gm-Message-State: AOAM531ZtY4ZDzNyZ38mEM21a4h/CItIhq4xwp6ir3m+Mq7hZE8Frpr0
-        aeBRncbfrY4B+tHMk6dx7Y4=
-X-Google-Smtp-Source: ABdhPJxGHFy795BCE8KSMO7OBHotDW6Kv5GCdCVADyu8cl1VVAoFNVib7VN0Gm1meOjzY3WPqTMduA==
-X-Received: by 2002:a9d:62da:: with SMTP id z26mr14687051otk.26.1643754995390;
-        Tue, 01 Feb 2022 14:36:35 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k3sm17406361otl.41.2022.02.01.14.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 14:36:34 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9e330860-e225-6e69-f2ed-0bf11372c3ce@roeck-us.net>
-Date:   Tue, 1 Feb 2022 14:36:31 -0800
+        id S241719AbiBAWhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:37:19 -0500
+Received: from mga05.intel.com ([192.55.52.43]:26581 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235380AbiBAWhS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:37:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643755038; x=1675291038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3bJXWMpijyxnuSq4wqUM7+ER5kCt79vqJYQBft68eDA=;
+  b=NE7kI8iWjwQUjptmrXeOQO/RHRh2u+eF7w+CpCaWGnK9js2A5WeBuy9m
+   1bAMdCPCh04hhIWMRqQt7cgcsjRbQTZM0MBa/CJJFzGq34ypkIgR77O3m
+   1gxFIn7vGM7Ny0NGtsTEWtiixJZLWDzYq9mCQ0ADPQf5fn6DPXK2KaBgB
+   5gLjaCfVpjTcKQxcX4iH6l3jkz0LHtAGWmq2HodFpp0odFqJv/Wc2x7u0
+   Lzhqf24+HGM9DSEotTLmozfWO5NjG/FF63oaK//DeGAJ0yGXgcB3OrSaD
+   AHcuXF7nnYyjJbFPwy/2HB+gI0htVRW5TV5GZ3X/pBG75XYo6uLEzQJdw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="334168599"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="334168599"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:37:18 -0800
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="538015351"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:37:17 -0800
+Date:   Tue, 1 Feb 2022 14:37:17 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ben Widawsky <ben.widawsky@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 10/10] cxl/cdat: Parse out DSMAS data from CDAT table
+Message-ID: <20220201223717.GR785175@iweiny-DESK2.sc.intel.com>
+Mail-Followup-To: Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+ <20220201071952.900068-11-ira.weiny@intel.com>
+ <20220201190532.ynwr73ninobqx7bm@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/4] Watchdog: sp5100_tco: Refactor MMIO base address
- initialization
-Content-Language: en-US
-To:     Terry Bowman <Terry.Bowman@amd.com>,
-        linux-watchdog@vger.kernel.org, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com
-Cc:     linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-References: <20220130191225.303115-1-terry.bowman@amd.com>
- <20220130191225.303115-3-terry.bowman@amd.com>
- <ecf12beb-a03b-2aec-1dc4-8183a8b6daa6@roeck-us.net>
- <c1d121f7-f482-7913-eced-4fbef962656d@amd.com>
- <e7112674-05e2-93cd-b8f9-3e31f173238d@amd.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <e7112674-05e2-93cd-b8f9-3e31f173238d@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201190532.ynwr73ninobqx7bm@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 12:32, Terry Bowman wrote:
+On Tue, Feb 01, 2022 at 11:05:32AM -0800, Widawsky, Ben wrote:
+> On 22-01-31 23:19:52, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > CXL memory devices need the information in the Device Scoped Memory
+> > Affinity Structure (DSMAS).  This information is contained within the
+> > CDAT table buffer which is already read and cached.
+> > 
+> > Parse and cache DSMAS data from the CDAT table.  Store this data in
+> > unmarshaled struct dsmas data structures for ease of use.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > ---
+> > Changes from V5
+> > 	Fix up sparse warnings
+> > 	Split out cdat_hdr_valid()
+> > 	Update cdat_hdr_valid()
+> > 		Remove revision and cs field parsing
+> > 			There is no point in these
+> > 		Add seq check and debug print.
+> > 	From Jonathan
+> > 		Add spaces around '+' and '/'
+> > 		use devm_krealloc() for dmas_ary
+> > 
+> > Changes from V4
+> > 	New patch
+> > ---
+> >  drivers/cxl/cdat.h        | 21 ++++++++++++
+> >  drivers/cxl/core/memdev.c | 70 +++++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 91 insertions(+)
+> > 
+> > diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
+> > index a7725d26f2d2..f8c126190d18 100644
+> > --- a/drivers/cxl/cdat.h
+> > +++ b/drivers/cxl/cdat.h
+> > @@ -83,17 +83,38 @@
+> >  #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
+> >  #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
+> >  
+> > +/**
+> > + * struct cxl_dsmas - host unmarshaled version of DSMAS data
+> > + *
+> > + * As defined in the Coherent Device Attribute Table (CDAT) specification this
+> > + * represents a single DSMAS entry in that table.
+> > + *
+> > + * @dpa_base: The lowest DPA address associated with this DSMAD
+> > + * @dpa_length: Length in bytes of this DSMAD
+> > + * @non_volatile: If set, the memory region represents Non-Volatile memory
+> > + */
+> > +struct cxl_dsmas {
+> > +	u64 dpa_base;
+> > +	u64 dpa_length;
+> > +	/* Flags */
+> > +	u8 non_volatile:1;
+> > +};
+> > +
+> >  /**
+> >   * struct cxl_cdat - CXL CDAT data
+> >   *
+> >   * @table: cache of CDAT table
+> >   * @length: length of cached CDAT table
+> >   * @seq: Last read Sequence number of the CDAT table
+> > + * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
+> > + * @nr_dsmas: Number of entries in dsmas_ary
+> >   */
+> >  struct cxl_cdat {
+> >  	void *table;
+> >  	size_t length;
+> >  	u32 seq;
+> > +	struct cxl_dsmas *dsmas_ary;
+> > +	int nr_dsmas;
+> >  };
+> >  
+> >  #endif /* !__CXL_CDAT_H__ */
+> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> > index 11d721c56f08..32342a15e991 100644
+> > --- a/drivers/cxl/core/memdev.c
+> > +++ b/drivers/cxl/core/memdev.c
+> > @@ -6,6 +6,7 @@
+> >  #include <linux/idr.h>
+> >  #include <linux/pci.h>
+> >  #include <cxlmem.h>
+> > +#include "cdat.h"
+> >  #include "core.h"
+> >  
+> >  static DECLARE_RWSEM(cxl_memdev_rwsem);
+> > @@ -386,6 +387,71 @@ static int read_cdat_data(struct cxl_memdev *cxlmd,
+> >  	return rc;
+> >  }
+> >  
+> > +static int parse_dsmas(struct cxl_memdev *cxlmd)
+> > +{
+> > +	struct cxl_dsmas *dsmas_ary = NULL;
+> > +	u32 *data = cxlmd->cdat.table;
+> > +	int bytes_left = cxlmd->cdat.length;
+> > +	int nr_dsmas = 0;
+> > +
+> > +	if (!data)
+> > +		return -ENXIO;
+> > +
+> > +	/* Skip header */
+> > +	data += CDAT_HEADER_LENGTH_DW;
+> > +	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
+> > +
+> > +	while (bytes_left > 0) {
+> > +		u32 *cur_rec = data;
+> > +		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
+> > +		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
+> > +
+> > +		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
+> > +			struct cxl_dsmas *new_ary;
+> > +			u8 flags;
+> > +
+> > +			new_ary = devm_krealloc(&cxlmd->dev, dsmas_ary,
+> > +					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
+> > +					   GFP_KERNEL);
+> > +			if (!new_ary) {
+> > +				dev_err(&cxlmd->dev,
+> > +					"Failed to allocate memory for DSMAS data\n");
+> > +				return -ENOMEM;
+> > +			}
 > 
+> One thought here - it looks like there are at most 256 DSMAS entries. You could
+> allocate the full 256 up front, and then realloc *down* to the actual number.
 > 
-> On 2/1/22 10:46, Terry Bowman wrote:
->>
->>
->> On 2/1/22 09:31, Guenter Roeck wrote:
->>> On 1/30/22 11:12, Terry Bowman wrote:
->>>> Combine MMIO base address and alternate base address detection. Combine
->>>> based on layout type. This will simplify the function by eliminating
->>>> a switch case.
->>>>
->>>> Move existing request/release code into functions. This currently only
->>>> supports port I/O request/release. The move into a separate function
->>>> will make it ready for adding MMIO region support.
->>>>
->>>> Co-developed-by: Robert Richter <rrichter@amd.com>
->>>> Signed-off-by: Robert Richter <rrichter@amd.com>
->>>> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
->>>> Tested-by: Jean Delvare <jdelvare@suse.de>
->>>> Reviewed-by: Jean Delvare <jdelvare@suse.de>
->>>> ---
->>>>    drivers/watchdog/sp5100_tco.c | 155 ++++++++++++++++++----------------
->>>>    drivers/watchdog/sp5100_tco.h |   1 +
->>>>    2 files changed, 82 insertions(+), 74 deletions(-)
->>>>
->>>> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
->>>> index b365bbc9ac36..16e122d5045e 100644
->>>> --- a/drivers/watchdog/sp5100_tco.c
->>>> +++ b/drivers/watchdog/sp5100_tco.c
->>>> @@ -223,6 +223,55 @@ static u32 sp5100_tco_read_pm_reg32(u8 index)
->>>>        return val;
->>>>    }
->>>>    +static u32 sp5100_tco_request_region(struct device *dev,
->>>> +                     u32 mmio_addr,
->>>> +                     const char *dev_name)
->>>> +{
->>>> +    if (!devm_request_mem_region(dev, mmio_addr, SP5100_WDT_MEM_MAP_SIZE,
->>>> +                     dev_name)) {
->>>> +        dev_dbg(dev, "MMIO address 0x%08x already in use\n", mmio_addr);
->>>> +        return 0;
->>>> +    }
->>>> +
->>>> +    return mmio_addr;
->>>> +}
->>>> +
->>>> +static u32 sp5100_tco_prepare_base(struct sp5100_tco *tco,
->>>> +                   u32 mmio_addr,
->>>> +                   u32 alt_mmio_addr,
->>>> +                   const char *dev_name)
->>>> +{
->>>> +    struct device *dev = tco->wdd.parent;
->>>> +
->>>> +    dev_dbg(dev, "Got 0x%08x from SBResource_MMIO register\n", mmio_addr);
->>>> +
->>>> +    if (!mmio_addr && !alt_mmio_addr)
->>>> +        return -ENODEV;
->>>> +
->>>> +    /* Check for MMIO address and alternate MMIO address conflicts */
->>>> +    if (mmio_addr)
->>>> +        mmio_addr = sp5100_tco_request_region(dev, mmio_addr, dev_name);
->>>> +
->>>> +    if (!mmio_addr && alt_mmio_addr)
->>>> +        mmio_addr = sp5100_tco_request_region(dev, alt_mmio_addr, dev_name);
->>>> +
->>>> +    if (!mmio_addr) {
->>>> +        dev_err(dev, "Failed to reserve MMIO or alternate MMIO region\n");
->>>> +        return -EBUSY;
->>>> +    }
->>>> +
->>>> +    tco->tcobase = devm_ioremap(dev, mmio_addr, SP5100_WDT_MEM_MAP_SIZE);
->>>> +    if (!tco->tcobase) {
->>>> +        dev_err(dev, "MMIO address 0x%08x failed mapping\n", mmio_addr);
->>>> +        devm_release_mem_region(dev, mmio_addr, SP5100_WDT_MEM_MAP_SIZE);
->>>> +        return -ENOMEM;
->>>> +    }
->>>> +
->>>> +    dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", tco->tcobase);
->>>> +
->>>
->>> I know this is the same as the old code, but I think it would make sense to change
->>> this as suggested by 0-day and use %px instead.
->>>
->>> Thanks,
->>> Guenter
->>
->>
-> Hi Guenter,
+> > +			dsmas_ary = new_ary;
+> > +
+> > +			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
+> > +
+> > +			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
+> > +			dsmas_ary[nr_dsmas].dpa_length = CDAT_DSMAS_DPA_LEN(cur_rec);
+> > +			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
+> > +
+> > +			dev_dbg(&cxlmd->dev, "DSMAS %d: %llx:%llx %s\n",
+> > +				nr_dsmas,
+> > +				dsmas_ary[nr_dsmas].dpa_base,
+> > +				dsmas_ary[nr_dsmas].dpa_base +
+> > +					dsmas_ary[nr_dsmas].dpa_length,
+> > +				(dsmas_ary[nr_dsmas].non_volatile ?
+> > +					"Persistent" : "Volatile")
+> > +				);
+> > +
+> > +			nr_dsmas++;
+> > +		}
+> > +
+> > +		data += (length / sizeof(u32));
+> > +		bytes_left -= length;
+> > +	}
+> > +
+> > +	if (nr_dsmas == 0)
+> > +		return -ENXIO;
 > 
-> This line was changed in v4 and should be reverted. It should be using the mmio_addr
-> physical address with '0x%08x' formatting instead of tco->tcobase. This would be:
-> 
-> dev_info(dev, "Using 0x%08x for watchdog MMIO address\n", mmio_addr);
-> 
-> The dmesg then provides:
-> 
-> [    5.972921] sp5100_tco: SP5100/SB800 TCO WatchDog Timer Driver
-> [    5.978238] sp5100-tco sp5100-tco: Using 0xfeb00000 for watchdog MMIO address
-> [    5.978252] sp5100-tco sp5100-tco: Watchdog hardware is disabled
-> 
-> Do your agree?
-> 
+> Hmm is there documentation that suggests a DSMAS must be implemented? Could this
+> just return 0? I'd put maybe dev_dbg here if it's unexpected but not a failure
+> and return success.
 
-Yes. Displaying the mapped address has zero if any value.
+For this call I was not envisioning this as an error.  I wanted to leave it up
+to the caller.
 
-Guenter
+I think it would make more sense to return the number of DSMAS' found or
+negative errno on failure...
+
+I'll clean it up.  Including below...
+
+> 
+> > +
+> > +	dev_dbg(&cxlmd->dev, "Found %d DSMAS entries\n", nr_dsmas);
+> > +	cxlmd->cdat.dsmas_ary = dsmas_ary;
+> > +	cxlmd->cdat.nr_dsmas = nr_dsmas;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
+> >  {
+> >  	struct cxl_memdev *cxlmd;
+> > @@ -407,6 +473,10 @@ struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
+> >  	if (rc)
+> >  		goto err;
+> >  
+> > +	rc = parse_dsmas(cxlmd);
+> > +	if (rc)
+> > +		dev_warn(dev, "No DSMAS data found: %d\n", rc);
+> > +
+
+This was changed to dev_warn() because I think here we do expect dsmas data?
+Don't we?
+
+Thanks,
+Ira
+
+> >  	/*
+> >  	 * Activate ioctl operations, no cxl_memdev_rwsem manipulation
+> >  	 * needed as this is ordered with cdev_add() publishing the device.
+> > -- 
+> > 2.31.1
+> > 

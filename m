@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A28E84A5D70
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7BB4A5D72
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238678AbiBAN2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238612AbiBAN2x (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:28:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC5FC061714;
-        Tue,  1 Feb 2022 05:28:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 244D86154A;
-        Tue,  1 Feb 2022 13:28:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 252C4C340EB;
-        Tue,  1 Feb 2022 13:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643722132;
-        bh=cXcPTewqmwfdy6WLzBYTm7mmiY7gQapV5gLUnxXuBJM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X8GRn9j/6VclNn2LaMi7ILPvNbU/WrXIIlXxEKwimOnwbWX9YeOOUylmsw61ESpXu
-         pEVDMCNaVgxh1uZbW3sYgofCcZ2zIcSuq2GCl7lrU4fM65WJSONbV1PrFBn+L+eA3i
-         fpXLXbrc0mbqhQfGIEW6Srqrnm8jYUtziPsBBRzZyMGCA90aFlUuQapvjqOvy2NT0k
-         9zYOwH6mwPO0EmOoUshgBFDcbaFg1mzurh6+EbcVw9lebGwFoakXr9DhdhRlZVvz4q
-         x5MdzJGoCrl6HODSKJy9w0vrWhV8dk4ID11sxcfecfX2Xweb/rjQFiStiIfBD7ly0X
-         yg9DwCidSsRIw==
-Date:   Tue, 1 Feb 2022 14:28:46 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        0day robot <lkp@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
-Message-ID: <20220201132846.7rrkosqyeidij47w@wittgenstein>
-References: <20220127000724.15106-1-ariadne@dereferenced.org>
- <20220131144352.GE16385@xsang-OptiPlex-9020>
- <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
- <Yff9+tIDAvYM5EO/@casper.infradead.org>
- <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
- <YfgFeWbZPl+gAUYE@casper.infradead.org>
- <20220131161415.wlvtsd4ecehyg3x5@wittgenstein>
- <20220131171344.77iifun5wdilbqdz@wittgenstein>
- <20220131135940.20790cff1747e79dd855aaf4@linux-foundation.org>
- <202201311447.4A1CCAF@keescook>
+        id S238682AbiBAN3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:29:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:40082 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233257AbiBAN3i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 08:29:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D9D0113E;
+        Tue,  1 Feb 2022 05:29:38 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1DB5E3F73B;
+        Tue,  1 Feb 2022 05:29:34 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
+        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, frederic@kernel.org,
+        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
+        joro@8bytes.org, mark.rutland@arm.com, maz@kernel.org,
+        mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com,
+        palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org,
+        paul.walmsley@sifive.com, pbonzini@redhat.com, seanjc@google.com,
+        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
+Date:   Tue,  1 Feb 2022 13:29:21 +0000
+Message-Id: <20220201132926.3301912-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202201311447.4A1CCAF@keescook>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 02:49:36PM -0800, Kees Cook wrote:
-> On Mon, Jan 31, 2022 at 01:59:40PM -0800, Andrew Morton wrote:
-> > On Mon, 31 Jan 2022 18:13:44 +0100 Christian Brauner <brauner@kernel.org> wrote:
-> > 
-> > > > in other words, the changes that you see CMD_ARGS[0] == NULL for
-> > > > execveat() seem higher than for path-based exec.
-> > > > 
-> > > > To counter that we should probably at least update the execveat()
-> > > > manpage with a recommendation what CMD_ARGS[0] should be set to if it
-> > > > isn't allowed to be set to NULL anymore. This is why was asking what
-> > > > argv[0] is supposed to be if the binary doesn't take any arguments.
-> > > 
-> > > Sent a fix to our fstests now replacing the argv[0] as NULL with "".
-> > 
-> > As we hit this check so quickly, I'm thinking that Ariadne's patch
-> > "fs/exec: require argv[0] presence in do_execveat_common()" (which
-> > added the check) isn't something we'll be able to merge into mainline?
-> 
-> I think the next best would be to mutate an NULL argv into { "", NULL }.
-> However, I still think we should do the pr_warn().
-> 
-> Thoughts?
+Several architectures have latent bugs around guest entry/exit,
+including:
 
-+1
+1) Enabling interrupts during an RCU EQS, allowing interrupt handlers to
+   run without RCU watching.
+
+2) Using (potentially) instrumented code between guest_enter() and
+   guest_exit(), allowing instrumentation handlers to run without RCU
+   watching.
+
+3) Not informing lockdep and tracing about interrupt masking, or
+   informing in an incorrect order (e.g. relative to entering/exiting an
+   RCU EQS).
+
+4) Unbalanced entry/exit accounting in some cases (which may or may not
+   result in functional problems).
+
+Overall, the architectures affected are:
+
+  arm64, mips, powerpc, riscv, s390, x86
+
+This series reworks the common code to make handling these issues
+earier, and for the following architectures fixes those issues by
+conversion to new helper functions:
+
+  arm64, mips, riscv, x86
+
+The core, arm64, and x86 patches have reviews from the relevant
+maintainers, and I think those are good-to-go. I have not yet had
+acks/reviews for the mips and riscv patches. I'm fairly certain the
+riscv patch is correct by virtue of it being so simple, and I'm
+relatively confident that the mips patch is correct (though I may have
+missed additional issues), but I have no way of testing either so I've
+placed them at the end of the series where they can easily be dropped if
+necessary.
+
+This series does NOT fix the following architectures, which will need
+more substantial changes to architecture-specific entry logic and/or
+sequencing:
+
+  powerpc, s390
+
+... and I assume it would be preferable to fix the common code and
+simple cases now, such that those can be addressed in subsequent
+follow-ups.
+
+Since v1 [1]:
+* Add arch_in_rcu_eqs()
+* Convert s390
+* Rename exit_to_guest_mode() -> guest_state_enter_irqoff()
+* Rename enter_from_guest_mode() -> guest_state_exit_irqoff()
+* Various commit message cleanups
+
+Since v2 [2]:
+* Rebase to v5.17-rc2
+* Fixup mips exit handling
+* Drop arch_in_rcu_eqs() & s390 patches
+
+I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
+  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+
+This version of the series is tagged as kvm-entry-rework-20220201.
+
+[1] https://lore.kernel.org/r/20220111153539.2532246-1-mark.rutland@arm.com/
+[2] https://lore.kernel.org/r/20220119105854.3160683-1-mark.rutland@arm.com/
+
+Thanks,
+
+
+Mark Rutland (5):
+  kvm: add guest_state_{enter,exit}_irqoff()
+  kvm/arm64: rework guest entry logic
+  kvm/x86: rework guest entry logic
+  kvm/riscv: rework guest entry logic
+  kvm/mips: rework guest entry logic
+
+ arch/arm64/kvm/arm.c     |  51 +++++++++++-------
+ arch/mips/kvm/mips.c     |  50 +++++++++++++++--
+ arch/riscv/kvm/vcpu.c    |  44 +++++++++------
+ arch/x86/kvm/svm/svm.c   |   4 +-
+ arch/x86/kvm/vmx/vmx.c   |   4 +-
+ arch/x86/kvm/x86.c       |   4 +-
+ arch/x86/kvm/x86.h       |  45 ----------------
+ include/linux/kvm_host.h | 112 +++++++++++++++++++++++++++++++++++++--
+ 8 files changed, 222 insertions(+), 92 deletions(-)
+
+-- 
+2.30.2
+

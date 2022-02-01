@@ -2,411 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2814A5CB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668464A5CBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238131AbiBANCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:02:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30027 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237600AbiBANCA (ORCPT
+        id S238264AbiBANCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238187AbiBANCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:02:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643720519;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rk5pSndda/+fZUusLWBT7zpDvxTDuUVELXuYZMoKsZI=;
-        b=d7G5h/EmxRR6GW2s2vFSd0RQsv07bdYQhtIbPmjz5tM+V9PVXjwMj6DTiY/zeFftu1A29P
-        BudUwHx50Ha50rQ4feYLTNshvc+hDL4RnPnIWyg9XoxE/RSxRNDg2Too7Temb4oE553q4C
-        /xXzPYm7Tf1bUItPooubZ1qvTzQ+LZ0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-GqxbslbmMFOWfi1Pg8DXEQ-1; Tue, 01 Feb 2022 08:01:58 -0500
-X-MC-Unique: GqxbslbmMFOWfi1Pg8DXEQ-1
-Received: by mail-wr1-f70.google.com with SMTP id j21-20020adfa555000000b001db55dd5a1dso6000637wrb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:01:58 -0800 (PST)
+        Tue, 1 Feb 2022 08:02:37 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DE2C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:02:37 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id i186so13340178pfe.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:02:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eQ75oOsrQQpZ/sBCi0Hueijj/QjsAuG7qkYPeQXVNlc=;
+        b=p4rh8auqqhz7W98VDVqUil43a7r7Agb6SuFGqda1CkG1SPjjeGCiDemHlsztV4SaWa
+         rpnILIqRmwQyG5Gnj6VP/HZMCNMCk2G1QwC9ymHjoy7Q5r/sV9gd7Xg/mGxJCCUL0t8D
+         L4epWy632RtGq/YiPXwU5o7nTLdx8oUOoFnjlWUB9ucQsh11RwI4ne5dRNzHTm+vGBJz
+         jBV/iCamC/sMPKX+zhIBnUtHhZrrt9ZSyoeNE1GU04dAVuiBm8myHQDXTmSqh4EEM/8u
+         F43mHeD3li5yiRqj8fQgjDd/ttxGsP00INkDFrJtaBXLLne96n+Cqd4pMvMLNhJv6sf8
+         HeKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rk5pSndda/+fZUusLWBT7zpDvxTDuUVELXuYZMoKsZI=;
-        b=kmB8406EP0aRilkxGppp9o8+BJ3z/RPXiShuLY4QXggN7nybMECS+wdn44JGZjxHzV
-         M4q3CU6jAT6Yu/i8FSCjnLdTE7pbtZytXQL4Qx7COG0BjQhS7hgtD8YQIrknpIIyJ4aI
-         nmJS2C3xmdWDP/E8Fx7C9YC8OadHyv6HIHrZ8Vek18TY8zsCOOOeytZum3Gd/vjGV8Vz
-         Pp97ssmpU4Zs13OTc8cP5D8goZ87mDaitlfDgzzbs40iutKIlIQoB3vusOV5Zhtg4kCl
-         wsZ4BDQLQgQI1CBMEFJ+BzRa6+AyBhO215kNkxqjRuLKPhw04RuVnl0bG+wAEkKPVloa
-         edeg==
-X-Gm-Message-State: AOAM532Thz66tUn919Vi06hyqTr6hiBFKbD67C6ztxeNjuAfUdRReKvm
-        ibzrCsH81m6TYJr/HSd1o6YFmJbNI6xMumlAdvjYDXlFH+j+y23eXpTa6EJ92G6/SCq7lpls27E
-        4NKe46rRDM7g4osqJCpGJ1wf4
-X-Received: by 2002:a05:600c:5118:: with SMTP id o24mr1733325wms.153.1643720517474;
-        Tue, 01 Feb 2022 05:01:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjUjpKyZFdDwkR0534UGvhD3J00uObcn9sowFdLXJ6+4tj7xOYbW6/WxePpdJiDrislSPqjg==
-X-Received: by 2002:a05:600c:5118:: with SMTP id o24mr1733302wms.153.1643720517130;
-        Tue, 01 Feb 2022 05:01:57 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u17sm2204104wmq.41.2022.02.01.05.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 05:01:56 -0800 (PST)
-Message-ID: <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
-Date:   Tue, 1 Feb 2022 14:01:55 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eQ75oOsrQQpZ/sBCi0Hueijj/QjsAuG7qkYPeQXVNlc=;
+        b=vmpUQ0cZwIVcNFTGpj38lmCVOF5RXEJDpqAOX+IO4iRmi873mAjdYYe1O4N/Ox4v+t
+         Cysg3/qpPLZRFhtazcdcjvzTu2OByaesIUscuVgcMYq/Gbc5LVJ/tqemzvbRII5zu0/z
+         ST5cMfWFuI+tBq404gnWiVHPqWXywTwkNOX/Nzi4mrzCSaifh8A37uat/x9zy6LeyP3E
+         lGVUIpKlXTfPFpf8K81ifgcaDaJIJsjDIgWogwKgnnqp3zAOFazgtmpo2Hfd65bkpfCx
+         bSa6hG4BcmjCTCMM3Ec2AH/ZPqMIHeDEfy2NKNLbptZiyiiW12sYHri/lgdRdjM9EW/a
+         g/SQ==
+X-Gm-Message-State: AOAM531oBNUqvSMcV7R4GkrTmg3P2gSs7KngLEP92KIOeyStLMKda/mS
+        9Eh5K85+zkU1XXpSvjimliIJYA==
+X-Google-Smtp-Source: ABdhPJwm4p2R5zXvzEwShX4rUJL5nm9Egsi5+XvFspYf0ETiYgHqIVOxFZIc2M0wYC4KJQDDJJ5Hjw==
+X-Received: by 2002:a05:6a00:841:: with SMTP id q1mr3452865pfk.21.1643720556426;
+        Tue, 01 Feb 2022 05:02:36 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([204.124.180.250])
+        by smtp.gmail.com with ESMTPSA id lr7sm3301766pjb.42.2022.02.01.05.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 05:02:35 -0800 (PST)
+Date:   Tue, 1 Feb 2022 21:02:28 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        James Morse <james.morse@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        James Clark <james.clark@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFCv1 4/4] perf: arm_spe: Dynamically switch PID tracing to
+ contextidr
+Message-ID: <20220201130228.GA1939745@leoy-ThinkPad-X240s>
+References: <20211021134530.206216-5-leo.yan@linaro.org>
+ <202110210848.35971643C6@keescook>
+ <20211101152835.GB375622@leoy-ThinkPad-X240s>
+ <YapEUlcyDZ6TuE6n@arm.com>
+ <20211205135103.GA42658@leoy-ThinkPad-X240s>
+ <Ya9J8HnMWxBy3MJv@arm.com>
+ <20211207123118.GA255238@leoy-ThinkPad-X240s>
+ <YbDrhQLeBdn0wqKT@arm.com>
+ <20211210075918.GD622826@leoy-ThinkPad-X240s>
+ <YeW56uyxJ42oEn8L@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YeW56uyxJ42oEn8L@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 10:33, Thomas Zimmermann wrote:
-> Hi Javier,
+Hi Catalin,
+
+On Mon, Jan 17, 2022 at 06:48:10PM +0000, Catalin Marinas wrote:
+> Hi Leo,
 > 
-> please see comments and questions below.
->
+> (sorry for the delay, holidays, merging window)
 
-Thanks again for your comments.
+I am sorry too for the delay.  I read your email but have no sufficient
+time to reply it in the past two weeks.
 
-[snip] 
+[...]
 
->>   
->> +config TINYDRM_SSD1307
+> > > I don't think your approach fully works. Let's say you are tracing two
+> > > processes, one in the root PID namespace, the other not. Since the
+> > > former enables PID in CONTEXTIDR, you automatically get some PID in
+> > > CONTEXTIDR for the latter whether you requested it explicitly or not.
+> > 
+> > The key point is kernel always sets a PID number from the root PID
+> > namespace into the system register CONTEXTIDR.
 > 
-> TINYDRM is so 2010's. Just call it DRM.
->
+> So earlier you mentioned that CONFIG_PID_IN_CONTEXTIDR=y is not always
+> right since a profiled task may run in a non-root PID namespace. But
+> this series introduces a single knob to turn on PID in CONTEXTIDR for
+> all CPUs, irrespective of whether they run a task in the root PID
+> namespace or not. The CPU running a task in the root ns may call
+> contextidr_enable() but the other CPUs may run tasks in non-root ns.
 
-Haha, Ok. I just followed what other drivers did and thought was a convention.
- 
-> Some of the drivers use TINY for historical reasons. Simple pipe and 
-> mipi helpers originated from here IIRC. And now it's just regular DRM 
-> drivers.
+Sorry I introduced confusion.  Let me to clarify:
+
+CONTEXTIDR should be always used to trace root ns PIDs, this can give us
+a consistent semantics.  Especially, when we record trace data with
+system wide mode (e.g. use perf command with option "-a" for tracing all
+CPUs), CONTEXTIDR always contains root ns PIDs for all tasks.
+
+On the flip side when perf and profiled program run in non-root PID
+namespace, it must not rely on CONTEXTIDR anymore for PID tracing.  In
+some implementations (E.g. Arm SPE, x86 Intel-PT), perf tool can use
+the software trace events to retrieve PID numbers, and heavily based on
+the timestamp correlation between software trace events and hardware
+trace events.
+
+> IIUC, with this patch, to avoid the root ns PID for a non-root ns task,
+> the SPE driver only sets the SYS_PMSCR_EL1_CX_SHIFT bit for the root ns
+> tasks. So, in this case, for a non-root ns task, does it matter that
+> CONTEXTIDR always contain the root ns PID? If it matters, see above why
+> a single knob is already doing this.
+
+You are right, even CONTEXTIDR always contains the root ns PID, we
+still can control the bit SYS_PMSCR_EL1_CX_SHIFT in SPE driver:
+when the profiled program runs in non-root ns, Arm SPE driver clears
+SYS_PMSCR_EL1_CX_SHIFT bit; and if the profiled program runs in root
+ns, ARM SPE driver sets SYS_PMSCR_EL1_CX_SHIFT bit alternatively.
+
+  Diagram 1: Perf/profiled program run in root namespace
+  +------------+    +---------+    +-----------------+
+  | CONTEXTIDR | -> | Arm SPE | -> | Perf Trace Data |
+  +------------+    +---------+    +-----------------+
+                         ^                 ^
+                         |                 ` Contains context packet
+                         ` Set SYS_PMSCR_EL1_CX_SHIFT bit
+
+  Diagram 2: Perf/profiled program run in non-root namespace
+  +------------+    +---------+    +-----------------+
+  | CONTEXTIDR | -> | Arm SPE | -> | Perf Trace Data |
+  +------------+    +---------+    +-----------------+
+                         ^                 ^
+                         |                 ` Doesn't contain any context packet
+                         ` Clear SYS_PMSCR_EL1_CX_SHIFT bit
+
+As shown in diagram 2, when Arm SPE driver detects if the session runs
+in non-root PID namespace, it clears SYS_PMSCR_EL1_CX_SHIFT bit.  As a
+result, the SPE tracing data in perf file doesn't contain any context
+packets, thus perf tool will rollback to use software events to retrieve
+PID numbers and assign them to samples.
+
+> > Let's see a case:
+> > 
+> >   # unshare --fork --pid perf record -e cs_etm// -m 64K,64K -a -o perf_test.data -- ./multi_threads_test
+> > 
+> > In this case, with command "unshare --fork --pid", perf tool and the
+> > profiled program multi_threads_test run in the created PID namespace.
+> > We can see the dumped PID values:
+> > 
+> >    <idle>-0       [000] d..2.   331.751681: __switch_to: contextidr_thread_switch: task perf-exec pid 840 ns_pid 2
+> >    <idle>-0       [002] d..2.   331.755930: __switch_to: contextidr_thread_switch: task multi_threads_t pid 842 ns_pid 4
+> >    <idle>-0       [003] d..2.   331.755993: __switch_to: contextidr_thread_switch: task multi_threads_t pid 843 ns_pid 5
+> >   sugov:0-129     [005] d..2.   332.323469: __switch_to: contextidr_thread_switch: task perf pid 841 ns_pid 3
+> > 
+> > We can see processes have two different PIDs values, say task
+> > 'perf-exec', 840 is its PID number from the root PID namespace, and 2
+> > is its PID from the active namespace the task is belonging to.
+> > 
+> > But the register CONTEXTIDR is _only_ used to trace PIDs from the root
+> > PID namespace and ignores PID values from any other PID namespace.
 > 
->> +	tristate "DRM support for Solomon SSD1307 OLED displays"
->> +	depends on DRM && I2C
->> +	select DRM_KMS_HELPER
->> +	select DRM_GEM_SHMEM_HELPER
->> +	select BACKLIGHT_CLASS_DEVICE
+> Would it help if we used task_pid_nr_ns() instead for setting
+> CONTEXTIDR?
+
+No, I don't think using task_pid_nr_ns() is a good idea for setting
+CONTEXTIDR; this will introduce mess for the system wide mode in the
+perf docoding phase.
+
+E.g. for below perf command:
+
+  # perf record -e arm_spe_0// -a -- sleep 1
+
+In this case, perf tool gathers all processes info from the root
+PID namespace via proc FS in the recording phase.
+
+If we store task_pid_nr_ns() into CONTEXTIDR, it will lead to confusion
+for perf tool, since the PID numbers come from different namespaces,
+during the decoding phase perf tool will wrongly match PIDs (from
+different PID namespace) with the recorded PIDs from root namespace.
+
+> > Come back to your question, if there have two tracing sessions, one
+> > session runs in the root PID namespace, and another runs in the
+> > non-root PID namespace.  Since we can gather the PIDs in the root namespace,
+> > the session in the root PID namespace can work perfectly, and we can
+> > ensure the PID infos matching well between kernel's PID tracing and user
+> > space tool (note: perf needs gather process info with process' pid/tid for
+> > post parsing).
+> > 
+> > For the later session in non-root PID name space, we doesn't capture
+> > any PID tracing data.  This results in the profiled result doesn't
+> > contain any PID info, although it's painful that the PID info is
+> > incomplete but we don't deliver any wrong info for users studying
+> > profiling result and PID is always '-1'.
 > 
-> Alphabetical order please.
->
+> So what's actually disabling the capture of PID tracing data? Is it the
+> PMSCR_EL1.CX bit being 0?
 
-Ok.
+Yes.  I agree it does make sense to clear PMSCR_EL1.CX bit for session
+in non-root ns.
 
-[snip]
+Sorry before I didn't make clear for this.
 
->>   obj-$(CONFIG_TINYDRM_REPAPER)		+= repaper.o
->> +obj-$(CONFIG_TINYDRM_SSD1307)		+= ssd1307.o
+> > I think the purpose for this patchset is to allow us to dynamically
+> > enable PID tracing when the tracing session runs in root namespace.
 > 
-> Maybe call it ssd130x
->
+> But it doesn't do this with a single global knob for all CPUs. You only
+> need the SPE patch together with the CONTEXTIDR config set to y.
 
-Yes, that's what I had in my RFC posted yesterday but then Andy asked if it
-could use the old driver name. But now it seems he also agrees with us that
-ssd130x would be better. I'll change it again.
- 
-[snip]
+Yeah.
 
->> +};
->> +
->> +struct ssd1307_array {
->> +	u8	type;
+> > Alternatively, if you accept to always set PID to CONTEXTIDR in
+> > contextidr_thread_switch(), it would be fine for me and we can only
+> > need to control PID packets in SPE and CoreSight drivers.
 > 
-> 'cmd'?
->
-
-Sure.
- 
->> +	u8	data[];
->> +};
+> Well, we have the config option and infrastructure already, it's up to
+> Linux distros to turn it on. It doesn't necessarily need to be in
+> defconfig.
 > 
-> The name 'array' is misleading. At first I thought that it's a C array 
-> type. But it's actually an element of the adapter's i2c protocol. Is 
-> there a better name that makes this more obvious? ssd130x_i2c_cmd?
->
+> Now, if we removed the CONTEXTIDR setting altogether, is there a way for
+> perf tools to coordinate the traces with the scheduling events? This
+> would be a simpler approach from the kernel perspective (i.e. no work).
 
-Indeed. I took the name from the old driver but I agree with you that's
-confusing. It's called array because ssd1307_update_display() writes an
-array of SSD1307_DATA commands to update all the needed screen pages.
+Indeed, we can correlate between software scheduling events and
+hardware tracing events, which can be sorted with timestamps.  Arm SPE
+has supported this mode, please refer to the patch [1] for understanding
+the implementation in perf tool.
 
-> If this common enough that it could be part of some kind of i2c helper 
-> library?
->
+But using the software scheduling events might introduce inaccuracy
+for the statistics, the reason is there have gap between scheduling
+events and task context switching, so this is why we still want to
+support context packets (by using CONTEXTIDR) for root PID namespace.
+this can give us more accurate results.
 
-That's a good question. There are some other DRM drivers doing I2C read/writes
-so there may be some room for consolidation in helper functions. But I would
-do it as a follow-up since it seems out of scope for this series.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/tools/perf/util/arm-spe.c?id=9dc9855f18ba25d2bc536ea5ba6682855e385d66
 
->> +
->> +static inline struct ssd1307_device *drm_to_ssd1307(struct drm_device *drm)
->> +{
->> +	return container_of(drm, struct ssd1307_device, drm);
->> +}
->> +
->> +static struct ssd1307_array *ssd1307_alloc_array(u32 len, u8 type)
->> +{
->> +	struct ssd1307_array *array;
->> +
->> +	array = kzalloc(sizeof(struct ssd1307_array) + len, GFP_KERNEL);
-> 
-> sizeof(*array) is slighly more reliable. But wasn't there even a macro 
-> for such allocations (struct + length)?
->
+> Alternatively, could we move the CONTEXTIDR setting to a perf driver.
+> I'm not too familiar with perf but I guess we could add some scheduling
+> event hooks.
 
-Agree on the sizeof(*foo) and will change to use that instead.
+It would introduce trouble if we move the CONTEXTIDR setting to a perf
+driver, I can think out two reasons:
 
-Thanks, I leared now about the struct_size() and flex_array_size() macros.
+- The first reason is we might have not only one perf driver to use
+  CONTEXTIDR, e.g. Arm SPE and Arm CoreSight both need to use
+  CONTEXTIDR for PID tracing.  This means we either need to set
+  CONTEXTIDR in both drivers so we will introduce redundant codes.
+- Furthermore, for the perf system wide mode, perf only enables
+  hardware event when start the session and disables hardware event
+  when stop the session.  In this mode, perf driver is not notified
+  by any scheduling event during the session.
 
->> +	if (!array)
->> +		return NULL;
-> 
-> Personally I prefer pointer-encoded errors instead of NULL. But I don't 
-> thing there's a strict rule about it.
->
+Seems to me, so far we need to come back to apply below change:
 
-Usually my rule of thumb is whether is necessary to encode different errno
-codes. But in this particular case the only possible error is in kzalloc()
-so I thought that is safe to assume in the caller that NULL is -ENOMEM.
+diff --git a/drivers/perf/Kconfig b/drivers/perf/Kconfig
+index e1a0c44bc686..a678562253dc 100644
+--- a/drivers/perf/Kconfig
++++ b/drivers/perf/Kconfig
+@@ -127,6 +127,7 @@ config XGENE_PMU
+ config ARM_SPE_PMU
+        tristate "Enable support for the ARMv8.2 Statistical Profiling Extension"
+        depends on ARM64
++       select PID_IN_CONTEXTIDR
+        help
+          Enable perf support for the ARMv8.2 Statistical Profiling
+          Extension, which provides periodic sampling of operations in
 
->> +
->> +	array->type = type;
->> +
->> +	return array;
->> +}
->> +
->> +static int ssd1307_write_array(struct i2c_client *client,
->> +			       struct ssd1307_array *array, u32 len)
->> +{
->> +	int ret;
->> +
->> +	len += sizeof(struct ssd1307_array);
-> 
-> Same thing about sizeof: sizeof(var) is better than sizeof(type);
->
-
-Agreed.
- 
-> Since you're using a separate array structure anyway, wouldn't it make 
-> sense to store
->
-
-Indeed.
-
-[snip]
-
->> +{
->> +	u8 col_end = col_start + cols - 1;
->> +	int ret;
->> +
->> +	if (col_start == ssd1307->col_start && col_end == ssd1307->col_end)
->> +		return 0;
->> +
->> +	ret = ssd1307_write_cmd(ssd1307->client, SSD1307_SET_COL_RANGE);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	ret = ssd1307_write_cmd(ssd1307->client, col_start);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	ret = ssd1307_write_cmd(ssd1307->client, col_end);
->> +	if (ret < 0)
->> +		return ret;
-> 
-> Can you write these cmds in one step, such as setting up an array and 
-> sending it with ssd1307_write_array?
->
-
-I don't think so because the commands are different. But I'll check the
-ssd1306 datasheet again to confirma that's the case.
-
-[snip]
- 
->> +
->> +	buf = kmalloc_array(width, height, GFP_KERNEL);
-> 
-> There's kcalloc().
->
-
-Indeed, forgot about it. Will use it instead...
- 
->> +	if (!buf)
->> +		return;
->> +
->> +	/* Clear screen to black if disabled */
->> +	memset(buf, 0, width * height);
->> +
-
-and then could drop this memset() call.
-
-[snip]
-
->> +
->> +static int ssd1307_fb_blit_rect(struct drm_framebuffer *fb, const struct dma_buf_map *map,
->> +				struct drm_rect *rect)
->> +{
->> +	struct ssd1307_device *ssd1307 = drm_to_ssd1307(fb->dev);
->> +	void *vmap = map->vaddr; /* TODO: Use mapping abstraction properly */
->> +	int ret = 0;
->> +	u8 *buf = NULL;
->> +
->> +	buf = kmalloc_array(fb->width, fb->height, GFP_KERNEL);
-> 
-> Maybe leave a short comment that these arrays will be consumed by 
-> i2c_master_send().
->
-
-Ok.
- 
->> +	if (!buf) {
->> +		ret = -ENOMEM;
->> +		goto out_exit;
-> 
-> It's the first error. Just return directly.
->
-
-Right, reworked a little bit the function and forgot to adapt this error path.
-
-[snip]
-
->> +
->> +	if (drm_atomic_helper_damage_merged(old_plane_state, plane_state, &rect))
->> +		ssd1307_fb_blit_rect(plane_state->fb, &shadow_plane_state->data[0], &rect);
-> 
-> Shadow-plane helpers have recently gotten the ability to use virtual 
-> screens with sizes much larger than the display.
-> 
-> If you want to get fancy, you could add this here. It'll give you large 
-> display sizes for easy scrolling and fbcon panning.
-> 
-> Example code is at
-> 
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/drivers/gpu/drm/tiny/simpledrm.c#L652
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/drivers/gpu/drm/tiny/simpledrm.c#L703
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/drivers/gpu/drm/tiny/simpledrm.c#L785
->
-
-Thanks for these pointers, very helpful!
-
-[snip] 
-
->> +
->> +	connector->display_info.width_mm = mode->width_mm;
->> +	connector->display_info.height_mm = mode->height_mm;
->> +	connector->display_info.bpc = 32;
-> 
-> Not just 1 bit?
->
-
-No because we always expose a fake DRM_FORMAT_XRGB8888 to user-space.
-
-It will have to be adapted once we advertise greyscale and monochrome
-formats to user-space.
-
->> +
->> +	drm_mode_set_name(mode);
->> +	mode->type |= DRM_MODE_TYPE_PREFERRED;
-> 
-> There's drm_set_preferred_mode().
->
-
-Ok.
- 
-[snip]
-
->> +}
->> +
->> +static int ssd1307_probe(struct i2c_client *client)
-> 
-> This function is fairly confusing. device init, modeconfig init, OF 
-> functions are all mixed up. Please bring some structure to this.
->
-
-Yeah, I already tried to give it more structure. The original fbdev driver
-just has a huge probe function and I tried to at least split it in many
-functions that take care of only one thing. But I'll add more levels of
-indirection to keep the probe function simpler.
-
-[snip]
-
->> +
->> +	bl->props.brightness = ssd1307->contrast;
->> +	bl->props.max_brightness = MAX_CONTRAST;
->> +	ssd1307->bl_dev = bl;
->> +
-> 
-> drmm_mode_config_init here, then connector init
->
-
-Ok.
- 
->> +	ret = drm_simple_display_pipe_init(drm, &ssd1307->pipe, &ssd1307_pipe_funcs,
->> +					   ssd1307_formats, ARRAY_SIZE(ssd1307_formats),
->> +					   NULL, &ssd1307->connector);
->> +	if (ret)
->> +		goto pwm_disable;
->> +
->> +	drm_plane_enable_fb_damage_clips(&ssd1307->pipe.plane);
->> +
->> +	drm_mode_config_reset(drm);
-> 
-> Moving anything related to mode-config into a function would improve 
-> readability.
->
-
-Ok.
- 
-[snip]
-
->> +regulator_disable:
->> +	if (ssd1307->vbat_reg)
->> +		regulator_disable(ssd1307->vbat_reg);
->> +	return ret;
-> 
-> Can this be handled by managed clean-up helpers?
->
-
-I believe so, I'll use the devm_* when possible.
-
->> +}
->> +
->> +static int ssd1307_remove(struct i2c_client *client)
->> +{
->> +	struct ssd1307_device *ssd1307 = i2c_get_clientdata(client);
->> +
->> +	drm_dev_unplug(&ssd1307->drm);
->> +
->> +	ssd1307_write_cmd(ssd1307->client, SSD1307_DISPLAY_OFF);
-> 
-> There's drm_atomic_helper_shutdown for switching of the device.
-> 
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/drivers/gpu/drm/drm_atomic_helper.c#L3136
->
-
-I'll use that then, thanks.
-
-Best regards, -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Thanks,
+Leo

@@ -2,106 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F814A576E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5004A5774
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbiBAHB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S234531AbiBAHEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiBAHBz (ORCPT
+        with ESMTP id S229987AbiBAHEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:01:55 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF19C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:01:54 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id h8so7616695qtk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:01:54 -0800 (PST)
+        Tue, 1 Feb 2022 02:04:11 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF55C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:04:10 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id k31so48043371ybj.4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:04:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ofUNs4jZW+VJID8NdJTfJEAl1tXnq8A5FUYSEBgME9I=;
-        b=eH3LIHHNXyCf9RgmKlCVQNG1NZjleLL6UXaZM2DzFFaIcOXUZmwDm73n6ljHAV2mBN
-         1rEqBBpUdZtVpujfifb5v0L+7HoayDiguh5nRlAlvs9e4SkmENBsLeiq+E0LHfaAHtvT
-         cLRCPOoC5oHL87jpqlMxqVK+RPOdCDuqGFA5A=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xKTZjq0rYBRX7jLEx/my6WSeAz3d0OUlj7PP/EtNSi8=;
+        b=kNsKpABc32DrxgKMkS01XDkfcSQEYa0LpCiFxaG55cgMkEp3QdTWH+cirFEFKFYRuq
+         eB81JAvp5LrPKbio5eG2B/jK0IaGSF+lmxrxre/8ccsZrKNnKqipyIJmXiCM3IzP5ebi
+         E9x3ikj9aR3Ot3vDlCMmtJotJTolEboFD0tEcK/G5DgkOZlyU2TqI5IyvXPCrcaH4RWm
+         xk3HyN/eS5MQr/I/ldWUkQmybe67WfyRD9MLfbbk5tLzKakZ7EqDQuAQBhJLPFxTAt1B
+         BjsTEkztTo8vt2qzWVfXYAEgy3SRLszA7quyRkyDXt5I0pQHmUTLzRzoWGHBBzDB8SJx
+         S02Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ofUNs4jZW+VJID8NdJTfJEAl1tXnq8A5FUYSEBgME9I=;
-        b=Q1fw4XrXAkS0RtlBXL5A8f+fr15wf/LW05Usn61xBHFzZMSJw9iqctNm52pPlxENkT
-         2BwjxRNzqM2KhvyTNMREyVLD/l5RT6aMFp3svIeez9e9N2Pze3k+Un/x+0ATN0SnFnWn
-         oWQ1xz1Omh+jdFV9SGCwtutkShcl1JjNKgX48JAvE5WUHUTF/YaxdNIZ4ULqyBdCHlGN
-         J9+ZbjPFjklfZk+dCE8HKgCUp/Fn9UXa8kH5lmUlERHMxOPh3r/qmBCFndZnDZVnLW/E
-         H7YjBdJ1vn6K6AeNHjV25ZBuz0cHV4XRhGTWL4yyM+7TB3hM1bISyA5erBngj3HAC8cq
-         LRfg==
-X-Gm-Message-State: AOAM533BHma+TlWlHh3aeXgIap2nSgheQBdTY3IEtvYW6fAhbjXaI+sw
-        RtLqz7b3JLaYBv4pUjvsdnfGpHk960QcV9+uV3w=
-X-Google-Smtp-Source: ABdhPJzex+T5jB7qh9KAiV5zVNlmmATGRAqu8eaMn8IYJzIjb+7Kt6wQrTHUZuYMeznBLseY5I8oIHuiuQNef/XZOa0=
-X-Received: by 2002:ac8:5a93:: with SMTP id c19mr18181843qtc.58.1643698913805;
- Mon, 31 Jan 2022 23:01:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xKTZjq0rYBRX7jLEx/my6WSeAz3d0OUlj7PP/EtNSi8=;
+        b=RdnMFC9PHu88wxIx7BqnVteD1YDGCnWFRy1ptwUU7p/BrxKJe3Y0EeZ7kFtVf7JYSs
+         opgVNiwAAMarHAUtJGgutxM+I1L48zSpClQW2hBgS8w2NO+FUGuVxRz0XWmzwK/CjXS2
+         dh1fbs7XE6qQz/NfAtnrurtnTQMO2A7HXQB3OCQlARl4NSWbLWAAwP27WZiiBm2r4sNb
+         1D7W0O6IwVoqixua7vU3odp/0BcFt7gJOzMPqKhRn/1y3MOOO1hdaYjKXDo6ssyVD5lS
+         JxUHKDYGyzw/8/MXzzNDXGwaR3rjqx9wt9uc1qwRwwwHcvirARCpmN6Zcs3tbiXqPLKg
+         T9Kw==
+X-Gm-Message-State: AOAM5305j8erzSzHbJV9j3vm1IjXXj+WocBIDLTstUX97pCAWdyAJ+pI
+        M56lCmZSDjUMseq0I/izZgfr+doVOyU1DPxM788=
+X-Google-Smtp-Source: ABdhPJxhnvwf9yNUBvtsldKaWn7QC4J4wDckaFSwI0KpPhL6MBzOWWOqiuUG8EuUetjAaLJOSatz8ovTLIhaWWox3fc=
+X-Received: by 2002:a25:9004:: with SMTP id s4mr35039671ybl.648.1643699049974;
+ Mon, 31 Jan 2022 23:04:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220124014351.9121-1-chiawei_wang@aspeedtech.com>
-In-Reply-To: <20220124014351.9121-1-chiawei_wang@aspeedtech.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 1 Feb 2022 07:01:42 +0000
-Message-ID: <CACPK8XfzBT3YiMYqH5cKX5jWSSYx45vNzubdUpXOTnE1xy2TXQ@mail.gmail.com>
-Subject: Re: [PATCH next] docs/ABI: testing: aspeed-uart-routing: Escape asterisk
-To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:7010:480c:b0:202:bad6:9888 with HTTP; Mon, 31 Jan 2022
+ 23:04:09 -0800 (PST)
+Reply-To: sulemansolomonkante@gmail.com
+From:   "Mr, solomon sulaman Kante" <mr.aminuaruna565@gmail.com>
+Date:   Tue, 1 Feb 2022 07:04:09 +0000
+Message-ID: <CAJndhsdztcxtLA9Ua=S0DiD6Qp4+bPJgLVgTJTMbaDrpmK_4Vw@mail.gmail.com>
+Subject: Good Day To You
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 at 01:44, Chia-Wei Wang <chiawei_wang@aspeedtech.com> wrote:
->
-> Escape asterisk symbols to fix the following warning:
->
-> "WARNING: Inline emphasis start-string without end-string"
->
-> Fixes: c6807970c3bc ("soc: aspeed: Add UART routing support")
-> Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+-- 
+Good Day To You
 
-Thanks Chai-Wei, I've sent this to the soc maintainers to apply as a fix.
-
-> ---
->  Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> index b363827da437..910df0e5815a 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> +++ b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> @@ -1,4 +1,4 @@
-> -What:          /sys/bus/platform/drivers/aspeed-uart-routing/*/uart*
-> +What:          /sys/bus/platform/drivers/aspeed-uart-routing/\*/uart\*
->  Date:          September 2021
->  Contact:       Oskar Senft <osk@google.com>
->                 Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> @@ -9,7 +9,7 @@ Description:    Selects the RX source of the UARTx device.
->                 depends on the selected file.
->
->                 e.g.
-> -               cat /sys/bus/platform/drivers/aspeed-uart-routing/*.uart_routing/uart1
-> +               cat /sys/bus/platform/drivers/aspeed-uart-routing/\*.uart_routing/uart1
->                 [io1] io2 io3 io4 uart2 uart3 uart4 io6
->
->                 In this case, UART1 gets its input from IO1 (physical serial port 1).
-> @@ -17,7 +17,7 @@ Description:  Selects the RX source of the UARTx device.
->  Users:         OpenBMC.  Proposed changes should be mailed to
->                 openbmc@lists.ozlabs.org
->
-> -What:          /sys/bus/platform/drivers/aspeed-uart-routing/*/io*
-> +What:          /sys/bus/platform/drivers/aspeed-uart-routing/\*/io\*
->  Date:          September 2021
->  Contact:       Oskar Senft <osk@google.com>
->                 Chia-Wei Wang <chiawei_wang@aspeedtech.com>
-> --
-> 2.25.1
->
+Please i need your kind Assistance. I will be very glad if you can
+assist me to receive this sum of ( $22. Million US dollars.) into your
+bank account for the benefit of our both families, reply me if you are
+ready to receive this fund.
+sulaman Kante

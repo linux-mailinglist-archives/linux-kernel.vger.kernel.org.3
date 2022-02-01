@@ -2,179 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817FC4A65C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E674A65BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiBAUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiBAUfC (ORCPT
+        id S232955AbiBAUeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:34:15 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62386 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231571AbiBAUeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:35:02 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E52EC061714;
-        Tue,  1 Feb 2022 12:35:02 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id j2so57177384ejk.6;
-        Tue, 01 Feb 2022 12:35:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=rBAEWe0d14lBWb+Vsl5lHaaZyxn6U2i2/rJRhaGu09I=;
-        b=K8Pg/SnYwiqGGwMKYRi5PWI7KLAJ3jN1eZ5+vwsnh1UO4bWxNmB5imh7fFIpaUKfwq
-         ah4QJkBlyc59xahuWEaJjIj2sup3HeSXodD+LPjrt8Mrx+6PxY+7REFds+5mLu5NK+nx
-         1j5ZNTCgmW24YmAwBibZFbEg1k8wXbe669LEePnxMY1EZRYlneCymJzt7xe4zFyc+jgt
-         wbogeHzmaz9RdzjzIPRQibpyBJp0s5dNyoyTLD7xCOPMbcWG4a8FsUoMuWOKdWjiuQx4
-         LFhBDZywoxbQjJW1ov+yXNEb+mT00+v9wBJKdzE/15a3z1/oNXSANK4Xj9XgqvPKgi5v
-         vFhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rBAEWe0d14lBWb+Vsl5lHaaZyxn6U2i2/rJRhaGu09I=;
-        b=4plIUDScXmYxfpXqg/muWfIiZ2nQ3CDyOVVEItrEPU0GpFyCXhn60Oz1JtyctqHJ06
-         MBPxSEJYICQw2UK7NqSxwNpfAMOdv6ubTEQ/y1s9IsKW9ybQn5AD73x0Q+hViVogL2Zl
-         ELNBZFk7vFRjY5r3MrM7tIHQjcReGopbCL2N67l7EA8yNZ7qOMaJO4Ucqd9RuaqgpUDi
-         /6Cre5srierTboxyRtRLScbQJ1nJOzWT4n2QSEKa/67uL8VUDLVWYPwh8pry+b9VAUfo
-         BxoHDVtGjjtMUpwOckVK2U9gUoWNk9J+36BxgR0qZ90aw9A9BaGPnzpBslp3f88/z7vk
-         328w==
-X-Gm-Message-State: AOAM531yaZWEQXdm60IyZJgPJ61oL651lnY1SxI2IbikZmmoi3Yl2K92
-        nINxka5mBeURUgsa5sMsb3ALQgVJ8A1n8S6Wyws=
-X-Google-Smtp-Source: ABdhPJzuDSTKXphKmJDAwfCq0ryG/LXHHz5dzsibxHRC4MLM6QTN54Dse2l0wUBT2izRRfob3hXcOvXXhFZ5BdDu/IA=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr22030548ejo.636.1643747700531;
- Tue, 01 Feb 2022 12:35:00 -0800 (PST)
+        Tue, 1 Feb 2022 15:34:12 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211IP47A002332;
+        Tue, 1 Feb 2022 20:34:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=CwFsW2ri/mvjy0B2QvLA7o77HnoLp7B5KW2hO7Z2Pws=;
+ b=cvtmwBZEvEtmM+HLoVNVhdqmB5MQt8lRhw9FeQgB3tiB9prgm+54EWveFcyAW//vpXkF
+ BGxN65JeDGr8GVHdl54mtUJaGn1XV3cn2ikaA3rDfW5u/SughYZDxKFIbLi/qiOf0PzW
+ HHXyiYWlzd+PvxPXHssXk9MwA79VItjIFTc/BLdYm8b3m2OKZ3HhP7uMMWfRawjWalcW
+ ZRZYF9M/bj3QVbWQqCAr7I0AWizDewl9QepLUBWKHmDznjY0O0kvsIS3pYTf82N8RqVV
+ uuF/6c5tSB6uRF7SfnNes0nQAlMUfgPau0ByU06AgcJ2kg/0fN4TAlXXZBdxKW7iM25g PA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dya47a646-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 20:34:07 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 211KJe78010622;
+        Tue, 1 Feb 2022 20:34:06 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dya47a63q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 20:34:06 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211KWLcA016858;
+        Tue, 1 Feb 2022 20:34:04 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3dvw79epy2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 20:34:04 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211KY1gM24576310
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Feb 2022 20:34:01 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9718352063;
+        Tue,  1 Feb 2022 20:34:01 +0000 (GMT)
+Received: from localhost (unknown [9.43.35.18])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EA64352050;
+        Tue,  1 Feb 2022 20:34:00 +0000 (GMT)
+Date:   Wed, 2 Feb 2022 02:03:59 +0530
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     Xin Yin <yinxin.x@bytedance.com>
+Cc:     harshadshirwadkar@gmail.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ext4: use ext4_ext_remove_space() for fast commit
+ replay delete range
+Message-ID: <20220201203359.owrnrfqydjloy7oq@riteshh-domain>
+References: <20211223032337.5198-1-yinxin.x@bytedance.com>
+ <20211223032337.5198-2-yinxin.x@bytedance.com>
 MIME-Version: 1.0
-References: <6a62a531227cd4f20d77d50cdde60c7a18b9f052.1643625325.git.geert+renesas@glider.be>
-In-Reply-To: <6a62a531227cd4f20d77d50cdde60c7a18b9f052.1643625325.git.geert+renesas@glider.be>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Feb 2022 22:33:25 +0200
-Message-ID: <CAHp75Vd68gsU-NWTGv4Y7Mo4-Vq7DBePa_yVxpDq=DAN5GLEBA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: aggregator: Fix calling into sleeping GPIO controllers
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        =?UTF-8?Q?Mikko_Salom=C3=A4ki?= <ms@datarespons.se>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223032337.5198-2-yinxin.x@bytedance.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: elR4ZXcgA9CjqbndA3W0kBSkvDdpIn_R
+X-Proofpoint-ORIG-GUID: pSvyokNSDB2fgqESvRW446i1ztkiWVdJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_09,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
+ clxscore=1015 mlxscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202010114
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 10:09 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> If the parent GPIO controller is a sleeping controller (e.g. a GPIO
-> controller connected to I2C), getting or setting a GPIO triggers a
-> might_sleep() warning.  This happens because the GPIO Aggregator takes
-> the can_sleep flag into account only for its internal locking, not for
-> calling into the parent GPIO controller.
->
-> Fix this by using the gpiod_[gs]et*_cansleep() APIs when calling into a
-> sleeping GPIO controller.
+Hello Xin,
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-One nit-pick below, though.
+Sorry about revisiting this thread so late :(
+Recently when I was working on one of the fast_commit issue, I got interested
+in looking into some of those recent fast_commit fixes.
 
-> Reported-by: Mikko Salom=C3=A4ki <ms@datarespons.se>
-> Fixes: 828546e24280f721 ("gpio: Add GPIO Aggregator")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hence some of these queries.
+
+On 21/12/23 11:23AM, Xin Yin wrote:
+> For now ,we use ext4_punch_hole() during fast commit replay delete range
+> procedure. But it will be affected by inode->i_size, which may not
+> correct during fast commit replay procedure. The following test will
+> failed.
+>
+> -create & write foo (len 1000K)
+> -falloc FALLOC_FL_ZERO_RANGE foo (range 400K - 600K)
+> -create & fsync bar
+^^^^ do you mean "fsync foo" or is this actually a new file create and fsync
+bar?
+
+
+> -falloc FALLOC_FL_PUNCH_HOLE foo (range 300K-500K)
+> -fsync foo
+> -crash before a full commit
+>
+> After the fast_commit reply procedure, the range 400K-500K will not be
+> removed. Because in this case, when calling ext4_punch_hole() the
+> inode->i_size is 0, and it just retruns with doing nothing.
+
+I tried looking into this, but I am not able to put my head around that when
+will the inode->i_size will be 0?
+
+So, what I think should happen is when you are doing falocate/fsync foo in your
+above list of operations then, anyways the inode i_disksize will be updated
+using ext4_mark_inode_dirty() and during replay phase inode->i_size will hold
+the right value no?
+
+Could you please help understand when, where and how will inode->i_size will be
+0?
+
+Also - it would be helpful if you have some easy reproducer of this issue you
+mentioned.
+
+-ritesh
+
+>
+> Change to use ext4_ext_remove_space() instead of ext4_punch_hole()
+> to remove blocks of inode directly.
+>
+> Signed-off-by: Xin Yin <yinxin.x@bytedance.com>
 > ---
-> I considered splitting the .[gs]et{_multiple}() callbacks for the
-> sleeping vs. nonsleeping cases, but the code size increase (measured on
-> ARM) would be substantial:
->   +64 bytes for gpio_fwd_[gs]et_cansleep(),
->   +296 bytes for gpio_fwd_[gs]et_multiple_cansleep().
-> ---
->  drivers/gpio/gpio-aggregator.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+>  fs/ext4/fast_commit.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 >
-> diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregato=
-r.c
-> index 869dc952cf45218b..0cb2664085cf8314 100644
-> --- a/drivers/gpio/gpio-aggregator.c
-> +++ b/drivers/gpio/gpio-aggregator.c
-> @@ -278,7 +278,8 @@ static int gpio_fwd_get(struct gpio_chip *chip, unsig=
-ned int offset)
->  {
->         struct gpiochip_fwd *fwd =3D gpiochip_get_data(chip);
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index aa05b23f9c14..3deb97b22ca4 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -1708,11 +1708,14 @@ ext4_fc_replay_del_range(struct super_block *sb, struct ext4_fc_tl *tl,
+>  		}
+>  	}
 >
-> -       return gpiod_get_value(fwd->descs[offset]);
-
-> +       return chip->can_sleep ? gpiod_get_value_cansleep(fwd->descs[offs=
-et])
-> +                              : gpiod_get_value(fwd->descs[offset]);
-
-This indentation kills the perfectionist in me :-)
-What about:
-
-       return chip->can_sleep ?
-               gpiod_get_value_cansleep(fwd->descs[offset]) :
-gpiod_get_value(fwd->descs[offset]);
-
-?
-
-Or as variant
-
-       struct gpio_desc *desc =3D fwd->descs[offset];
-
-       return chip->can_sleep ? gpiod_get_value_cansleep(desc) :
-gpiod_get_value(desc);
-
-?
-
->  }
->
->  static int gpio_fwd_get_multiple(struct gpiochip_fwd *fwd, unsigned long=
- *mask,
-> @@ -293,7 +294,10 @@ static int gpio_fwd_get_multiple(struct gpiochip_fwd=
- *fwd, unsigned long *mask,
->         for_each_set_bit(i, mask, fwd->chip.ngpio)
->                 descs[j++] =3D fwd->descs[i];
->
-> -       error =3D gpiod_get_array_value(j, descs, NULL, values);
-> +       if (fwd->chip.can_sleep)
-> +               error =3D gpiod_get_array_value_cansleep(j, descs, NULL, =
-values);
-> +       else
-> +               error =3D gpiod_get_array_value(j, descs, NULL, values);
->         if (error)
->                 return error;
->
-> @@ -328,7 +332,10 @@ static void gpio_fwd_set(struct gpio_chip *chip, uns=
-igned int offset, int value)
->  {
->         struct gpiochip_fwd *fwd =3D gpiochip_get_data(chip);
->
-> -       gpiod_set_value(fwd->descs[offset], value);
-> +       if (chip->can_sleep)
-> +               gpiod_set_value_cansleep(fwd->descs[offset], value);
-> +       else
-> +               gpiod_set_value(fwd->descs[offset], value);
->  }
->
->  static void gpio_fwd_set_multiple(struct gpiochip_fwd *fwd, unsigned lon=
-g *mask,
-> @@ -343,7 +350,10 @@ static void gpio_fwd_set_multiple(struct gpiochip_fw=
-d *fwd, unsigned long *mask,
->                 descs[j++] =3D fwd->descs[i];
->         }
->
-> -       gpiod_set_array_value(j, descs, NULL, values);
-> +       if (fwd->chip.can_sleep)
-> +               gpiod_set_array_value_cansleep(j, descs, NULL, values);
-> +       else
-> +               gpiod_set_array_value(j, descs, NULL, values);
->  }
->
->  static void gpio_fwd_set_multiple_locked(struct gpio_chip *chip,
+> -	ret = ext4_punch_hole(inode,
+> -		le32_to_cpu(lrange.fc_lblk) << sb->s_blocksize_bits,
+> -		le32_to_cpu(lrange.fc_len) <<  sb->s_blocksize_bits);
+> -	if (ret)
+> -		jbd_debug(1, "ext4_punch_hole returned %d", ret);
+> +	down_write(&EXT4_I(inode)->i_data_sem);
+> +	ret = ext4_ext_remove_space(inode, lrange.fc_lblk,
+> +				lrange.fc_lblk + lrange.fc_len - 1);
+> +	up_write(&EXT4_I(inode)->i_data_sem);
+> +	if (ret) {
+> +		iput(inode);
+> +		return 0;
+> +	}
+>  	ext4_ext_replay_shrink_inode(inode,
+>  		i_size_read(inode) >> sb->s_blocksize_bits);
+>  	ext4_mark_inode_dirty(NULL, inode);
 > --
-> 2.25.1
+> 2.20.1
 >
-
-
---=20
-With Best Regards,
-Andy Shevchenko

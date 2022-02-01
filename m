@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3F14A681D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D80A4A6828
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242006AbiBAWjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S237763AbiBAWqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241916AbiBAWjw (ORCPT
+        with ESMTP id S232447AbiBAWqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:39:52 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B29C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:39:52 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id g20so16655181pgn.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:39:52 -0800 (PST)
+        Tue, 1 Feb 2022 17:46:45 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBB7C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:46:45 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bu18so36867321lfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:46:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GZoUXjQnTH22StSBxliyAhVCzFd+c4Sty+J+gttCT4=;
-        b=GvbP91DmhMLjdYOUoegWBpQqb/miyMjy6YYVevT1ZRxaED+A56kRX4KU+JTXwP6nzG
-         ERAXGZiwKlE837KdlWrR3j55RfUGKEULV1iLqzKQLpG6nxVXyWhzYAIq8MPXax5d2Xio
-         poQqIuMGBCsIYgx28ObzcK9TtItpQK1EoG0/8=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZB6sZygULvONH287KY9xbyCmvq2QLSmoH4jTsAJE8qE=;
+        b=ZKDJtql7NA05u1FVTY6GG02i9d03ssYSRIpXA9b3B5C9OaC9xCd/dcIKWRSql+EipR
+         IR2nMqELtUlil4mXNXDdKLO2VSyXGQTEK+n9xXAgBUuxLFdCf4WJ930LM+wRo2Jf9NZa
+         P4HGHdFGTF9MI3S8d7vTnsBfrdNUl87gpx/6PR8iwTGS0I9LI+dTOrhTNHsU2gEUNaJd
+         XZNAJGoGJ+BsiHgtKr2qPKog0Iqd3o9GgLQ11rrjtVfZMZRlEosXi0RAKz0ZAbz0ByMF
+         5YNp2082rPQaR98wRBm8986U3UFSx9zTolozdHkESH66ezgSZ4Rjv+VZ/CMwtm3lvJQl
+         3oJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0GZoUXjQnTH22StSBxliyAhVCzFd+c4Sty+J+gttCT4=;
-        b=32pbnckkkhvbLk6k/M/r4jkalG0gmJetS2KMOwWRJnFyFv6tNdyVfwLTDiFP3MUCOF
-         YxjegGSNWmhZdP+L0/nAd6eJWtanvDZEQmUAD5DHYoig4r2eo6OL137cheSS1gQ4sRDj
-         hBZrQ6GpLukhg26PH61Tl0H2VIYJxhg5sdaLiOpBBNcP1VjT0U6mClDX05GN8fy+rnEL
-         4VFY6H12kdr9gBKDiQu1fZtDzzx1TD/q/+wwt64uk+fs4r47Hs6+rk777uXaLu8MgfrW
-         2PEL1KB4Zpp9FGIVB2BUSWJmOteh3ZyG4RLg9g0ueCcmsFNFE8bHiyyxufT4rlE2qo5T
-         QOqA==
-X-Gm-Message-State: AOAM533ShzQCxCAbxDvQjOmxaJJZnLJAA8OBKgBg3IPABph7gRPVFnYb
-        UqgJhot2E/tW3BwAlCryfrYA6w==
-X-Google-Smtp-Source: ABdhPJwuZ7k6dF/cFiU0qBjgvXbZaVrRvy9/zQsrbVOZdmskpEQFO8XlB1vdoE8SkKsHrEqK9IqH5g==
-X-Received: by 2002:a63:8a44:: with SMTP id y65mr22413576pgd.590.1643755191827;
-        Tue, 01 Feb 2022 14:39:51 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id pf4sm4305329pjb.35.2022.02.01.14.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 14:39:51 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Sathya Prakash <sathya.prakash@broadcom.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] scsi: mpt3sas: Convert to flexible arrays
-Date:   Tue,  1 Feb 2022 14:39:48 -0800
-Message-Id: <20220201223948.1455637-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZB6sZygULvONH287KY9xbyCmvq2QLSmoH4jTsAJE8qE=;
+        b=1Jslze7FSVyq8ZZCbfLASVIblNtv9dBd3kOlRmRLKrnk7/lzFujVRZS3S+xpNl1kXd
+         tByt9QrQcovciGJmoecs7+zJq9CULCcIjUzN48Zo1AgFg1dOBEIkJb7eR1CJwaSX9Sh0
+         GTnIsDqQTW8U2+kV1gV3ayFAUUEM+GKUhaO71oiYmW4y0jLihyPwJxTlgXSwYyquagRC
+         i173vyTqwig4aBDQRBAqulWKjuJauZ8X8brVZ+7wVBYfLQRiWlOSJKEIAJYsOP/YyYy/
+         lw9bAMHdVkq7kR5PtebZHQ/GjgDrpcAkDhKqQrA3sNMbJSM5OWVmt0UQ8z4SVPaoxgGi
+         0NPg==
+X-Gm-Message-State: AOAM530fFeR2K6RSwgYc+ldjrMDFMsWtBM6rMw7J+cNyIYxySrE0SBA6
+        P5FbkQYWnjTGDhBpcBdtwxFgER1v3GpHdjdbo4+/mw==
+X-Google-Smtp-Source: ABdhPJy8vDwNzwEaIeOFhfQo+M8s8+6OPdW3QljaSF0UIWy3xrqGjbVn3CVyx1pcLUx2R3waVBl9XZcgeNt+vnxOlUA=
+X-Received: by 2002:a05:6512:3e07:: with SMTP id i7mr18315112lfv.283.1643755603060;
+ Tue, 01 Feb 2022 14:46:43 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1736; h=from:subject; bh=WqE1lLvEytA82FqSOgu42SZnb+3Opfv2XchLrZmpS1k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+bazzkhdbXAOBFEqdvWi5RQJjP+g3X6lm+CMEChk LUFBymGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfm2swAKCRCJcvTf3G3AJh13D/ 4zDXtef2HFvEMpK1XRUO77eefGFDwyQKy/IKFT26AwFqQWYu3UQ1rRlVJwcQns/FulB5VU6uXlpDPN ts1X7nJ7LfIy6MPBVtd0wyC3GiT7EcC/fdTZ6upbLbJVjqGwmXfyWRX7uoT0TALJufM/ZEPl5Wy5Sh RGc8a0y/stuk0zpZSfDXqUIFwlGp22Zy85ezBi5ir47s2/inLQoAKtO/zkPPm+d6eyWUQGjkFk0N/u 15fqGj++EYdaPTEuNGTc//q25ADfAtc9Bl/vnynVpBcX1fkVHxPC8W0+7iTW/LtpeunT3UvIZ559pE kOgp6YMot7REfvQa+pU+W53BKbxifbaCQVXj6TbXm6pheVWpNTlzxtnS9WVbdW63166IaEiw05z1Ky jBkhLwWiMJJu1aYKJztca0fp3fgVxn/6IFqhQwaAaylcDyPhvdU4CLwbujPr+KpnYGqjFwegbBlgRt VjGSnIceEsGoQu+TDBzliWwl/8uuwaR5QzJ+UtU9qaVm6wAjcS2bgZ8KRojiLeW1AhsHFkKNVvseZP 3SXI96wuHB9R2eG//G/au2PVD+SPa3KsrMybqBYCBcJwmraphe3gmrIQUlG9vC3LQ7/DyUD3ddtF5O CVe6inKjAL6KYQ0GZuaob/S3tBDC65ygNoxEvp8arfJ1OoadNOwD8P1qdLIA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com>
+ <20220127181930.355c8c82@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220127181930.355c8c82@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 1 Feb 2022 23:46:16 +0100
+Message-ID: <CAG48ez0sa2+eEAnS3UMLmLbDRfM6iC4K3vRcUdA9LpDbSJF0XA@mail.gmail.com>
+Subject: Re: [BUG] net_device UAF: linkwatch_fire_event() calls dev_hold()
+ after netdev_wait_allrefs() is done
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Network Development <netdev@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts to a flexible array instead of the old-style 1-element
-arrays. The existing code already did the correct math for finding the
-size of the resulting flexible array structure, so there is no binary
-difference.
+On Fri, Jan 28, 2022 at 3:19 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> Interesting..
+>
+> I don't know what link_reset does, but since it turns the carrier on it
+> seems like something that should be flushed/canceled when the device
+> goes down. unregister brings the device down under rtnl_lock.
+>
+> On Fri, 28 Jan 2022 02:51:24 +0100 Jann Horn wrote:
+> > Is the bug that usbnet_disconnect() should be stopping &dev->kevent
+> > before calling unregister_netdev()?
+>
+> I'd say not this one, I think the generally agreed on semantics are that
+> the netdev is under users control between register and unregister, we
+> should not cripple it before unregister.
+>
+> > Or is the bug that ax88179_link_reset() doesn't take some kind of lock
+> > and re-check that the netdev is still alive?
+>
+> That'd not be an uncommon way to fix this.. taking rtnl_lock, not even
+> a driver lock in similar.
 
-The other two structures converted to use flexible arrays appear to
-have no users at all.
+Ah, I found a comment with a bit of explanation on how this is
+supposed to work... usbnet_stop() explains:
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/scsi/mpt3sas/mpi/mpi2_ioc.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+    /* deferred work (task, timer, softirq) must also stop.
+     * can't flush_scheduled_work() until we drop rtnl (later),
+     * else workers could deadlock; so make workers a NOP.
+     */
 
-diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_ioc.h b/drivers/scsi/mpt3sas/mpi/mpi2_ioc.h
-index e83c7c529dc9..2c57115172cf 100644
---- a/drivers/scsi/mpt3sas/mpi/mpi2_ioc.h
-+++ b/drivers/scsi/mpt3sas/mpi/mpi2_ioc.h
-@@ -537,7 +537,7 @@ typedef struct _MPI2_EVENT_NOTIFICATION_REPLY {
- 	U16 Event;		/*0x14 */
- 	U16 Reserved4;		/*0x16 */
- 	U32 EventContext;	/*0x18 */
--	U32 EventData[1];	/*0x1C */
-+	U32 EventData[];	/*0x1C */
- } MPI2_EVENT_NOTIFICATION_REPLY, *PTR_MPI2_EVENT_NOTIFICATION_REPLY,
- 	Mpi2EventNotificationReply_t,
- 	*pMpi2EventNotificationReply_t;
-@@ -639,7 +639,7 @@ typedef struct _MPI2_EVENT_DATA_HOST_MESSAGE {
- 	U8 Reserved1;		/*0x01 */
- 	U16 Reserved2;		/*0x02 */
- 	U32 Reserved3;		/*0x04 */
--	U32 HostData[1];	/*0x08 */
-+	U32 HostData[];		/*0x08 */
- } MPI2_EVENT_DATA_HOST_MESSAGE, *PTR_MPI2_EVENT_DATA_HOST_MESSAGE,
- 	Mpi2EventDataHostMessage_t, *pMpi2EventDataHostMessage_t;
- 
-@@ -1397,7 +1397,7 @@ typedef struct _MPI2_SEND_HOST_MESSAGE_REQUEST {
- 	U32 Reserved8;		/*0x18 */
- 	U32 Reserved9;		/*0x1C */
- 	U32 Reserved10;		/*0x20 */
--	U32 HostData[1];	/*0x24 */
-+	U32 HostData[];		/*0x24 */
- } MPI2_SEND_HOST_MESSAGE_REQUEST,
- 	*PTR_MPI2_SEND_HOST_MESSAGE_REQUEST,
- 	Mpi2SendHostMessageRequest_t,
--- 
-2.30.2
+And usbnet_stop() is ->ndo_stop(), which indeed runs under RTNL.
 
+I wonder what the work items can do that'd conflict with RTNL... or is
+the comment just talking about potential issues if a bunch of *other*
+work items need RTNL and clog up the system_wq so that
+flush_scheduled_work() blocks forever?
+
+If it's the latter case, I guess we could instead do cancel_work_sync() and
+then maybe re-run the work function's handler one more time
+synchronously?

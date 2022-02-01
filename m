@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B574A58B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F5C4A58BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbiBAInk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 03:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235647AbiBAInT (ORCPT
+        id S235741AbiBAIoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 03:44:20 -0500
+Received: from mail-vs1-f49.google.com ([209.85.217.49]:40806 "EHLO
+        mail-vs1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235792AbiBAIoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 03:43:19 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9738EC061401
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 00:43:18 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id u18so32326160edt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gDq463DNVx/yVKZ/LadmFf4Y3fkl66W4uW7inBK8Rkc=;
-        b=E+2wTffkrVC/iGBhzKfuD7TRLzeyBo7Xdig565Z4e3Zc58OqmVaQN7Z8Nb4re9HpYu
-         2hg6kOFds4juLeqHaMO9uxNidkj80QvtgfskqsA8bqEdWO2cWLHViGidVL+VATjEWRr6
-         oLr9zPrZ10cz9kPGHKceXqdg/qNSdlKs+XdwBJljPLF3IvsbiAULYCkjDal5iEk7Cbgm
-         mqoGSufeZK4MgpN+5OAiUgQ6z5xtIqaidNcpuV9n/+DPUiTUmH2O5wCFkiiZuXgYciJz
-         QOnpAMcOLYL9Az2O+Q8qzZlGfoljAwBLbCTwk7Adi2/+xl//GgFD7Udu13+S3T4LdlNQ
-         +jhw==
+        Tue, 1 Feb 2022 03:44:04 -0500
+Received: by mail-vs1-f49.google.com with SMTP id g23so15132528vsf.7;
+        Tue, 01 Feb 2022 00:44:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gDq463DNVx/yVKZ/LadmFf4Y3fkl66W4uW7inBK8Rkc=;
-        b=mIuDG8fZMwI2YovrQobw7Pqnu6QHGju5QjICnLdLC53ZcicwqN3+dxc2UfsOqExPBf
-         RGsMF7cTJfZ4bvhAw5eV30FWwpJL+vk1l1P3nhTCR/xk4hVsU3Ci+HLOQNG5oJKXbvVH
-         a6is02+lsGa2Wj4KXUQW9/GbhPGd+fciWa8+Fsg45lN3t1YZi/aUF22yywhEESXa5z5p
-         n2cInzlvKA1TUgzohAgCD2isdt2SZmQ7TFqz/dQYPECnkmHcpZ5vt2ELi4NRofc14ske
-         pYfCzaj2q3rTuJd/Qgxpv8El40Ns6WmpaPCsK1MJ91hz7L6y49is/b3puDNEpIGJ/ul0
-         GEXA==
-X-Gm-Message-State: AOAM531Fp0MrPUXjczQ/5fRT6+3y8TlVp8IyuNSGTTejJklBZhrr7ha1
-        bvEQ2zAFtxBOP7SopbK5Ciw=
-X-Google-Smtp-Source: ABdhPJyqQzkb4f6lJvMfhPBHYgRQmt22p5Q8jsB++VkSFjjhRJkQ2YANIp5uaatl/xXwABi0guHb1A==
-X-Received: by 2002:a50:9fc6:: with SMTP id c64mr24255079edf.5.1643704997273;
-        Tue, 01 Feb 2022 00:43:17 -0800 (PST)
-Received: from localhost.localdomain (ip5f5abb5a.dynamic.kabel-deutschland.de. [95.90.187.90])
-        by smtp.gmail.com with ESMTPSA id c14sm19123431edy.66.2022.02.01.00.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 00:43:16 -0800 (PST)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 9/9] staging: r8188eu: remove UsbRxAggPage* from struct hal_data_8188e
-Date:   Tue,  1 Feb 2022 09:42:59 +0100
-Message-Id: <20220201084259.7497-10-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220201084259.7497-1-straube.linux@gmail.com>
-References: <20220201084259.7497-1-straube.linux@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=raT8Y/Y+3uKWPsdtZjNjvpSo+gn1Wm+Os229uVdckR0=;
+        b=7qkMOrBhM3geLvg4FRhArosAP6YdRd1YeKT3qFFsYC1kjlsLa6rFgUUt+Vqwou7YQb
+         CzwdMbhEcRMv9XVM+DC6O2tTuW970AU0HYb0yyOhkAaRglWJTWFxxeyr2waPLDg4knh7
+         9yQh2oU0MNIcYtAz5F2mksY2/91OHEAUaOMYVVk4/VcOc/i0gPPoTwXMvtAULU48UcFs
+         zH0PukTwE859SZSSEqBxVfEinNeh2c8opqyErVLMlVb0W9AoJjyS5iCxgC7enwIkx2vE
+         4vb2yYGQfgZ1vDLi7x93PIFKoHazk8P+AgpPZK0aO/bM1gyWH91kXmLkHCjwH5yzYspr
+         zo6Q==
+X-Gm-Message-State: AOAM530xUnZ4/RuJu3Il0qIPdVim8D5AKSL6eIXhKP/o/pqlHFwJvrhP
+        o7ZCD69ARq3qubyPjBAZStvjmSi9hocfSw==
+X-Google-Smtp-Source: ABdhPJxNV8EM4hWf7/DxTFP/+xk0PZwkvwJMEZlme2nAg38dwxCggIhiaok8d2c0oL0XWBNQokmtgw==
+X-Received: by 2002:a67:ec4c:: with SMTP id z12mr9987220vso.41.1643705043184;
+        Tue, 01 Feb 2022 00:44:03 -0800 (PST)
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
+        by smtp.gmail.com with ESMTPSA id q69sm4570447vka.21.2022.02.01.00.44.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 00:44:02 -0800 (PST)
+Received: by mail-vk1-f173.google.com with SMTP id v192so9960248vkv.4;
+        Tue, 01 Feb 2022 00:44:01 -0800 (PST)
+X-Received: by 2002:a1f:5d84:: with SMTP id r126mr9423475vkb.33.1643705041310;
+ Tue, 01 Feb 2022 00:44:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220131201225.2324984-1-javierm@redhat.com>
+In-Reply-To: <20220131201225.2324984-1-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Feb 2022 09:43:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXMayLLRavAJJujmPqT+Vd11dPfycqXie3w_pOkS8i9eA@mail.gmail.com>
+Message-ID: <CAMuHMdXMayLLRavAJJujmPqT+Vd11dPfycqXie3w_pOkS8i9eA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED displays
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux PWM List <linux-pwm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UsbRxAggPageCount and UsbRxAggPageTimeout in struct hal_data_8188e
-are set and never changed. Define these constants and remove the
-variables from the hal_data_8188e structure.
+Hi Javier,
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/hal/usb_halinit.c      | 10 +++-------
- drivers/staging/r8188eu/include/rtl8188e_hal.h |  6 +++---
- 2 files changed, 6 insertions(+), 10 deletions(-)
+On Mon, Jan 31, 2022 at 9:12 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
+> SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 1d0d58204c68..f21b910bd88d 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -53,9 +53,6 @@ void rtl8188eu_interface_configure(struct adapter *adapt)
- 	else
- 		haldata->UsbBulkOutSize = USB_FULL_SPEED_BULK_SIZE;/* 64 bytes */
- 
--	haldata->UsbRxAggPageCount	= 48; /* uint :128 b 0x0A;	10 = MAX_RX_DMA_BUFFER_SIZE/2/haldata->UsbBulkOutSize */
--	haldata->UsbRxAggPageTimeout	= 0x4; /* 6, absolute time = 34ms/(2^6) */
--
- 	HalUsbSetQueuePipeMapping8188EUsb(adapt, pdvobjpriv->RtNumOutPipes);
- }
- 
-@@ -433,7 +430,6 @@ usb_AggSettingRxUpdate(
- 		struct adapter *Adapter
- 	)
- {
--	struct hal_data_8188e *haldata = &Adapter->haldata;
- 	u8 valueDMA;
- 	u8 valueUSB;
- 
-@@ -446,8 +442,8 @@ usb_AggSettingRxUpdate(
- 	rtw_write8(Adapter, REG_TRXDMA_CTRL, valueDMA);
- 	rtw_write8(Adapter, REG_USB_SPECIAL_OPTION, valueUSB);
- 
--	rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, haldata->UsbRxAggPageCount);
--	rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH + 1, haldata->UsbRxAggPageTimeout);
-+	rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, USB_RXAGG_PAGE_COUNT);
-+	rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH + 1, USB_RXAGG_PAGE_TIMEOUT);
- }
- 
- static void InitUsbAggregationSetting(struct adapter *Adapter)
-@@ -1314,7 +1310,7 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 		{
- 			u8 threshold = *((u8 *)val);
- 			if (threshold == 0)
--				threshold = haldata->UsbRxAggPageCount;
-+				threshold = USB_RXAGG_PAGE_COUNT;
- 			rtw_write8(Adapter, REG_RXDMA_AGG_PG_TH, threshold);
- 		}
- 		break;
-diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-index 94678dad37ce..e3c028ff20c7 100644
---- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
-+++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
-@@ -141,6 +141,9 @@ struct txpowerinfo24g {
- 
- #define EFUSE_PROTECT_BYTES_BANK	16
- 
-+#define USB_RXAGG_PAGE_COUNT	48
-+#define USB_RXAGG_PAGE_TIMEOUT	0x4
-+
- struct hal_data_8188e {
- 	struct HAL_VERSION	VersionID;
- 	/* current WIFI_PHY values */
-@@ -205,9 +208,6 @@ struct hal_data_8188e {
- 	u8	bMacPwrCtrlOn;
- 
- 	u32	UsbBulkOutSize;
--
--	u8	UsbRxAggPageCount;	/*  8192C DMA page count */
--	u8	UsbRxAggPageTimeout;
- };
- 
- s32 InitLLTTable(struct adapter *padapter, u8 txpktbuf_bndy);
--- 
-2.34.1
+Thanks for your series!
 
+I'll give it a try on an Adafruit FeatherWing 128x32 OLED, connected
+to an OrangeCrab ECP5 FPGA board running a 64 MHz VexRiscv RISC-V
+softcore.
+
+> Using the DRM fb emulation, all the tests from Geert Uytterhoeven's fbtest
+> (https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git) passes:
+>
+>      ./fbtest -f /dev/fb1
+>     Using drawops cfb32 (32 bpp packed pixels)
+>     Available visuals:
+>       Monochrome
+>       Grayscale 256
+>       Truecolor 8:8:8:0
+
+Oh, fake 32-bpp truecolor ;-)
+
+Does it run modetest, too?
+
+I'm trying to get modetest working on my atari DRM driver.
+Comparing to the cirrus driver doesn't help much, as modetest doesn't
+seem to work with the cirrus driver (modified to not do hardware
+access, as I don't have cirrus hardware):
+
+    # modetest -M cirrus -s 31:1024x768-60Hz
+    setting mode 1024x768-60.00Hz on connectors 31, crtc 34
+    failed to set gamma: Function not implemented
+
+Does there exist another simple test program for showing something
+using the DRM API?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

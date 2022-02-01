@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1534A5BCC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4594A5BBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237688AbiBAMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:04:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52694 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237690AbiBAMEQ (ORCPT
+        id S237616AbiBAMDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237545AbiBAMDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:04:16 -0500
+        Tue, 1 Feb 2022 07:03:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117D9C06173B;
+        Tue,  1 Feb 2022 04:03:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC4946151F;
-        Tue,  1 Feb 2022 12:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DD8C340ED;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1982B82D91;
+        Tue,  1 Feb 2022 12:03:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5548C340EF;
         Tue,  1 Feb 2022 12:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643717012;
-        bh=QTDSEgjqP7luf2gRYl6YaKV1lykiDQuMO/rtSnXfIBQ=;
+        bh=CfmjmYw5XzvPnzCve4rcfKvXvJFCfoKFdwf7VlQImFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pzn11U8lQ1sbaHCow3r6eDwYc2MZzV4EVDyNLziribjv2My7HV33Ol7cUiYEezoK0
-         2CwmjT7tFW6lvCgaKsavTR0fs+5RY0crIroGHo/FDBzKkWXb2Tk5VFCFoH0ePPX8bU
-         Zmt4UXLJLHgRJOzqN9u6iI6ZpOvyGY5lvVo9RchKWPmCRfauEVTEbJvZjP03x3nuFj
-         zLmqMuok3fZDYAyg8RCGklZihz4kNBbGOTtU+cFWM2vODOtlz5QiIS2kvAuUitjffx
-         /1AisSz+WYe9g/h2+aV/0WQ0aFWVshkLJRhrzoulJ6YemrwLQlyxODBXrNeHYv3QIr
-         lhBCCz5/kyx9g==
+        b=bHqhUoIKbM6ivfR9/ud7wD+8gBQE6Kus1wyXyTUml1eZNAivgGLlXLYAzmkajryZx
+         jlWCFSKRsV4BGoCOOX4Y8R5qWB849RtEc4L94GIpjEf2jO6YhmupTvVRpYzbE0pQDJ
+         edywvEfVcoTP/RpJHIuvZWs8g4+gr+vZm9tmW5QJT/0OTVYQUUGNIpzH8TUFvIZKk2
+         DkMtCJvw699Ednr5SBuFEbUh2gzveeaqnJNQNzu3xg3pcV686ng0gZlJtJsjr4SfzY
+         /U2sOEQTNN8r7rKSI9N0ZWj0SnNOP+QegaSvG2bxWBuHsuNUQaz5TrHd+8OeTJ7xE5
+         Ye6hApizgQn7Q==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nErsg-004d46-CE; Tue, 01 Feb 2022 12:03:30 +0000
+        id 1nErsg-004d46-R9; Tue, 01 Feb 2022 12:03:30 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -51,9 +54,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>
-Subject: [PATCH 04/12] irqchip/renesas-irqc: Move PM device over to irq domain
-Date:   Tue,  1 Feb 2022 12:03:02 +0000
-Message-Id: <20220201120310.878267-5-maz@kernel.org>
+Subject: [PATCH 05/12] irqchip/imx-intmux: Move PM device over to irq domain
+Date:   Tue,  1 Feb 2022 12:03:03 +0000
+Message-Id: <20220201120310.878267-6-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201120310.878267-1-maz@kernel.org>
 References: <20220201120310.878267-1-maz@kernel.org>
@@ -68,32 +71,61 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Move the reference to the device over to the irq domain.
+This allows the irq_chip structure to be directly used instead
+of taking a copy for each instance.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/irqchip/irq-renesas-irqc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-imx-intmux.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/irqchip/irq-renesas-irqc.c b/drivers/irqchip/irq-renesas-irqc.c
-index 909325f88239..1ee5e9941f67 100644
---- a/drivers/irqchip/irq-renesas-irqc.c
-+++ b/drivers/irqchip/irq-renesas-irqc.c
-@@ -188,13 +188,14 @@ static int irqc_probe(struct platform_device *pdev)
- 	p->gc->reg_base = p->cpu_int_base;
- 	p->gc->chip_types[0].regs.enable = IRQC_EN_SET;
- 	p->gc->chip_types[0].regs.disable = IRQC_EN_STS;
--	p->gc->chip_types[0].chip.parent_device = dev;
- 	p->gc->chip_types[0].chip.irq_mask = irq_gc_mask_disable_reg;
- 	p->gc->chip_types[0].chip.irq_unmask = irq_gc_unmask_enable_reg;
- 	p->gc->chip_types[0].chip.irq_set_type	= irqc_irq_set_type;
- 	p->gc->chip_types[0].chip.irq_set_wake	= irqc_irq_set_wake;
- 	p->gc->chip_types[0].chip.flags	= IRQCHIP_MASK_ON_SUSPEND;
+diff --git a/drivers/irqchip/irq-imx-intmux.c b/drivers/irqchip/irq-imx-intmux.c
+index e86ff743e98c..80aaea82468a 100644
+--- a/drivers/irqchip/irq-imx-intmux.c
++++ b/drivers/irqchip/irq-imx-intmux.c
+@@ -61,7 +61,6 @@
+ #define CHAN_MAX_NUM		0x8
  
-+	irq_domain_set_pm_device(p->irq_domain, dev);
-+
- 	/* request interrupts one by one */
- 	for (k = 0; k < p->number_of_irqs; k++) {
- 		if (devm_request_irq(dev, p->irq[k].requested_irq,
+ struct intmux_irqchip_data {
+-	struct irq_chip		chip;
+ 	u32			saved_reg;
+ 	int			chanidx;
+ 	int			irq;
+@@ -114,7 +113,7 @@ static void imx_intmux_irq_unmask(struct irq_data *d)
+ 	raw_spin_unlock_irqrestore(&data->lock, flags);
+ }
+ 
+-static struct irq_chip imx_intmux_irq_chip = {
++static struct irq_chip imx_intmux_irq_chip __ro_after_init = {
+ 	.name		= "intmux",
+ 	.irq_mask	= imx_intmux_irq_mask,
+ 	.irq_unmask	= imx_intmux_irq_unmask,
+@@ -126,7 +125,7 @@ static int imx_intmux_irq_map(struct irq_domain *h, unsigned int irq,
+ 	struct intmux_irqchip_data *data = h->host_data;
+ 
+ 	irq_set_chip_data(irq, data);
+-	irq_set_chip_and_handler(irq, &data->chip, handle_level_irq);
++	irq_set_chip_and_handler(irq, &imx_intmux_irq_chip, handle_level_irq);
+ 
+ 	return 0;
+ }
+@@ -241,8 +240,6 @@ static int imx_intmux_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	for (i = 0; i < channum; i++) {
+-		data->irqchip_data[i].chip = imx_intmux_irq_chip;
+-		data->irqchip_data[i].chip.parent_device = &pdev->dev;
+ 		data->irqchip_data[i].chanidx = i;
+ 
+ 		data->irqchip_data[i].irq = irq_of_parse_and_map(np, i);
+@@ -260,6 +257,7 @@ static int imx_intmux_probe(struct platform_device *pdev)
+ 			goto out;
+ 		}
+ 		data->irqchip_data[i].domain = domain;
++		irq_domain_set_pm_device(domain, &pdev->dev);
+ 
+ 		/* disable all interrupt sources of this channel firstly */
+ 		writel_relaxed(0, data->regs + CHANIER(i));
 -- 
 2.30.2
 

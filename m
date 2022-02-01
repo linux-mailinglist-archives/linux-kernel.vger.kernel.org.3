@@ -2,151 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B974A61DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5694A61E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241397AbiBARFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:05:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26728 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241390AbiBARFB (ORCPT
+        id S241413AbiBARGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:06:23 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63012 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231877AbiBARGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:05:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643735100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TY77IUnmcjlPl9SuFqRvGDrAyTyCZ/Kegm3l73B1jHg=;
-        b=YpnbUJqwMH2OtRzX7GVCtI3eYEuHKtqdn2XKgrsWzSifdTHmZPrT54JX+dNEuEo4mMDvOz
-        4qxnXkkEgYUPIUXKbWwf+NpI8keLxBrlzP4Tr6NDaTUsc/77efMj8vZCj14JDFenpvx9QZ
-        Pfn65AjSaOw/iDGVtPnoMsuIbmeUaA0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-S5ylN3w3NlmVkr_Icycf9A-1; Tue, 01 Feb 2022 12:04:57 -0500
-X-MC-Unique: S5ylN3w3NlmVkr_Icycf9A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B1DA68143EA;
-        Tue,  1 Feb 2022 17:04:54 +0000 (UTC)
-Received: from [10.22.19.61] (unknown [10.22.19.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7634B78AB0;
-        Tue,  1 Feb 2022 17:04:38 +0000 (UTC)
-Message-ID: <33be132c-874d-1061-9003-50942275b221@redhat.com>
-Date:   Tue, 1 Feb 2022 12:04:37 -0500
+        Tue, 1 Feb 2022 12:06:21 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211H0Ybq016152;
+        Tue, 1 Feb 2022 17:06:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=onrqYIOKUr4RNTR6BCf3mCF2S16T7nddg5AP40Dp79A=;
+ b=YLMWhhuQIxEJwuegzaz1nfJaXranP7f6aHyrOA8ZQ65v6TMLjlXuNOgkyi4xL8Gxesuy
+ oZ9SrQ6UATj3vM99z3hhXU8cWNobev2MF6X2INhmaxlYR9On9afD9dYy6xHPxarFQELd
+ Yyfqk49+YHvRdWlE4dZqFkiIqZ+Pd0GQigjqHk1vNtCn5PNnb+A9PujY3pbNVxoMaw8s
+ cevaQ6psMWy9DbMEEqPJsuzu2AhoPbqxlEm3BuDYjQQ28qlZihDKL3aWNRAg1HNTh7Jp
+ E4Rma38RiAggfaVy/XygAFCaixpBzY1Ze7GgWneE3Jd23Qc0xVGEuyiHCjwTA9aB1nFf NQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dy6q4kght-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 17:06:17 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 211G0jIi028915;
+        Tue, 1 Feb 2022 17:06:17 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dy6q4kgha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 17:06:16 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211Gl9KU025334;
+        Tue, 1 Feb 2022 17:06:15 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dvvujer20-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 17:06:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211H6Dpb47579530
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Feb 2022 17:06:13 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECC8A42047;
+        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E88942045;
+        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
+Received: from [9.145.64.14] (unknown [9.145.64.14])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
+Message-ID: <0936d5f3-aef2-0553-408b-07b3bb47e36b@linux.ibm.com>
+Date:   Tue, 1 Feb 2022 18:06:12 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 3/4] mm/page_owner: Print memcg information
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [BUG] net: smc: possible deadlock in smc_lgr_free() and
+ smc_link_down_work()
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-References: <20220131192308.608837-1-longman@redhat.com>
- <20220131192308.608837-4-longman@redhat.com>
- <YfkRS75D3xcqLT85@dhcp22.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YfkRS75D3xcqLT85@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pea68IG5Bj1ccet02yEexdujcsm8MwYP
+X-Proofpoint-ORIG-GUID: wR9E2Ty2RNbiLvkCityV-vItCyHpBkeq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202010095
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 05:54, Michal Hocko wrote:
-> On Mon 31-01-22 14:23:07, Waiman Long wrote:
->> It was found that a number of offlined memcgs were not freed because
->> they were pinned by some charged pages that were present. Even "echo
->> 1 > /proc/sys/vm/drop_caches" wasn't able to free those pages. These
->> offlined but not freed memcgs tend to increase in number over time with
->> the side effect that percpu memory consumption as shown in /proc/meminfo
->> also increases over time.
->>
->> In order to find out more information about those pages that pin
->> offlined memcgs, the page_owner feature is extended to print memory
->> cgroup information especially whether the cgroup is offlined or not.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> Acked-by: David Rientjes <rientjes@google.com>
->> ---
->>   mm/page_owner.c | 39 +++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 39 insertions(+)
->>
->> diff --git a/mm/page_owner.c b/mm/page_owner.c
->> index 28dac73e0542..a471c74c7fe0 100644
->> --- a/mm/page_owner.c
->> +++ b/mm/page_owner.c
->> @@ -10,6 +10,7 @@
->>   #include <linux/migrate.h>
->>   #include <linux/stackdepot.h>
->>   #include <linux/seq_file.h>
->> +#include <linux/memcontrol.h>
->>   #include <linux/sched/clock.h>
->>   
->>   #include "internal.h"
->> @@ -325,6 +326,42 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
->>   	seq_putc(m, '\n');
->>   }
->>   
->> +#ifdef CONFIG_MEMCG
->> +/*
->> + * Looking for memcg information and print it out
->> + */
->> +static inline void print_page_owner_memcg(char *kbuf, size_t count, int *pret,
->> +					  struct page *page)
->> +{
->> +	unsigned long memcg_data = READ_ONCE(page->memcg_data);
->> +	struct mem_cgroup *memcg;
->> +	bool onlined;
->> +	char name[80];
->> +
->> +	if (!memcg_data)
->> +		return;
->> +
->> +	if (memcg_data & MEMCG_DATA_OBJCGS)
->> +		*pret += scnprintf(kbuf + *pret, count - *pret,
->> +				"Slab cache page\n");
->> +
->> +	memcg = page_memcg_check(page);
->> +	if (!memcg)
->> +		return;
->> +
->> +	onlined = (memcg->css.flags & CSS_ONLINE);
->> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
->> +	*pret += scnprintf(kbuf + *pret, count - *pret,
->> +			"Charged %sto %smemcg %s\n",
->> +			PageMemcgKmem(page) ? "(via objcg) " : "",
->> +			onlined ? "" : "offlined ",
->> +			name);
-> I have asked in the previous version already but what makes the memcg
-> stable (why it cannot go away and be reallocated for something else)
-> while you are trying to get its name?
+On 01/02/2022 08:51, Jia-Ju Bai wrote:
+> Hello,
+> 
+> My static analysis tool reports a possible deadlock in the smc module in Linux 5.16:
+> 
+> smc_lgr_free()
+>   mutex_lock(&lgr->llc_conf_mutex); --> Line 1289 (Lock A)
+>   smcr_link_clear()
+>     smc_wr_free_link()
+>       wait_event(lnk->wr_tx_wait, ...); --> Line 648 (Wait X)
+> 
+> smc_link_down_work()
+>   mutex_lock(&lgr->llc_conf_mutex); --> Line 1683 (Lock A)
+>   smcr_link_down()
+>     smcr_link_clear()
+>       smc_wr_free_link()
+>         smc_wr_wakeup_tx_wait()
+>           wake_up_all(&lnk->wr_tx_wait); --> Line 78 (Wake X)
+> 
+> When smc_lgr_free() is executed, "Wait X" is performed by holding "Lock A". If smc_link_down_work() is executed at this time, "Wake X" cannot be performed to wake up "Wait X" in smc_lgr_free(), because "Lock A" has been already hold by smc_lgr_free(), causing a possible deadlock.
+> 
+> I am not quite sure whether this possible problem is real and how to fix it if it is real.
+> Any feedback would be appreciated, thanks :)
 
-The memcg is not going away as long as the page isn't freed unless if it 
-is indirectly connected via objcg. Of course, there can be a race 
-between the page is going to be freed while the page_owner information 
-is being displayed. One solution is to add a simple bit lock to each of 
-the page_owner structure and acquire the lock when it is being written 
-to or read from. Anyway a lot of these debugging aids or tools don't 
-eliminate all the race conditions that affect the accuracy of the 
-displayed information. I can add a patch to eliminate this direct memcg 
-race if you think this is necessary.
+A deeper analysis showed up that this reported possible deadlock is actually not a problem.
 
-Cheers,
-Longman
+The wait on line 648 in smc_wr.c
+	wait_event(lnk->wr_tx_wait, (!atomic_read(&lnk->wr_tx_refcnt)));
+waits as long as the refcount wr_tx_refcnt is not zero.
+
+Every time when a caller stops using a link wr_tx_refcnt is decreased, and when it reaches 
+zero the wr_tx_wait is woken up in smc_wr_tx_link_put() in smc_wr.h, line 70:
+		if (atomic_dec_and_test(&link->wr_tx_refcnt))
+			wake_up_all(&link->wr_tx_wait);
+
+Multiple callers of smc_wr_tx_link_put() do not run under the llc_conf_mutex lock, and those
+who run under this mutex are saved against the wait_event() in smc_wr_free_link().
+
+
+Thank you for reporting this finding! Which tool did you use for this analysis?
 

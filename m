@@ -2,106 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94534A5AB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6939C4A5ABD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237033AbiBAK4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237019AbiBAK4R (ORCPT
+        id S237032AbiBAK5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:57:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:37975 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237023AbiBAK5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:56:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AEDC061714;
-        Tue,  1 Feb 2022 02:56:17 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EB4FE1EC04AD;
-        Tue,  1 Feb 2022 11:56:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643712972;
+        Tue, 1 Feb 2022 05:57:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643713043;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=46aTMocMoAPOjkzOyW549Rg/pu0OxKnDcuckgk6b6E0=;
-        b=KX/7ShJt2YcMVtPaBZxAu52wRHUwNWk17MoeOKO7euO4o8CkggePNJzOO556ySLF708u6Q
-        ek2Kk9Kla3IO2X/9qJMSEn8YNcOw9E3qBggMCKUULGsqesAxEslwNFmLExPajRAnYksDsr
-        wW31SFVfgnyYqCxCpopoHnWWK+gaHfU=
-Date:   Tue, 1 Feb 2022 11:56:08 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "mimoja@mimoja.de" <mimoja@mimoja.de>,
-        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
-        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
-        "luolongjun@huawei.com" <luolongjun@huawei.com>,
-        "hejingxian@huawei.com" <hejingxian@huawei.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
- secondary CPUs
-Message-ID: <YfkRyLV/auNzczfF@zn.tnic>
-References: <20211215145633.5238-1-dwmw2@infradead.org>
- <20211215145633.5238-7-dwmw2@infradead.org>
- <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
- <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
- <3d8e2d0d-1830-48fb-bc2d-995099f39ef0@amd.com>
- <e742473935bf81be84adea6fa8061ce0846cc630.camel@infradead.org>
- <330bedfee12022c1180d8752fb4abe908dac08d1.camel@infradead.org>
- <YffrVMiO/NalRZjL@zn.tnic>
- <3bc401a9f110a24a429316371c767507b493025a.camel@infradead.org>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AvlNVXABWeHw4gpYnmoaoySXybSLgHqyGniZWPgVn1s=;
+        b=YG9gJ+7ZAVMj4Dc/zqcInq0S1JwMZGzqj4B3RboEJkVGx0NaCDRePdusaNkmzTIajfVGI/
+        TmEZeHNatIcuv8bk3+6IqU0nF/Qa4+Iqn2/VKkhqSF2xr3zDqMlJ4BugxurI16Goi2O8xJ
+        JdVby/38wHtvy3/BEECd5TkWsEifOiM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-151-fmW_sSuiNbKhu1UwIW3LOw-1; Tue, 01 Feb 2022 05:57:21 -0500
+X-MC-Unique: fmW_sSuiNbKhu1UwIW3LOw-1
+Received: by mail-ej1-f69.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso6349864ejc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 02:57:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=AvlNVXABWeHw4gpYnmoaoySXybSLgHqyGniZWPgVn1s=;
+        b=Fupkk57Io7aE9UTZGkd8vTLmkNX/gK4xVp/3V2CDU1llAh8tcix9K4cfFRZ+Ruq5XZ
+         9xUsK9sUWQkeLpf2Af2QTJ/KU81h5uVk2RnIOciENj+gihXxfaikwWtMDnuMWetU4mby
+         059AgUe+33E/H1yFYrjr7JTpHce3ftJ2qFP1h0J54Ml/kOGZK3nPfY4gn4WxFcZOk6on
+         Lv+yhXepgDt4AgxSLFAszeOhPMjVWY/zzsVEoJysf5jMBg0cRY24m/sWGY6zkfjp57hb
+         5TOwSoDspOOS5AdvnHvh1NTSJKKL+URlWih92Qunqcv4cIT/q7TfIFSqVEgVLmDw8Qmb
+         MHoQ==
+X-Gm-Message-State: AOAM533s7pLDsutXcX3WNWLk/y/NHRYQVeEkLV1iEd5dc+nHxdyVK5FQ
+        ItpKfuXOTgGP2i1yB3VtCjOM6qdAM+L/ORPXgQtcrbEdbrZGvX1ty5WxIauZNQBve3ALPN7lm04
+        K4/ez4P/4N+sHHNdSGbav7m4j
+X-Received: by 2002:aa7:da8c:: with SMTP id q12mr24834144eds.81.1643713040795;
+        Tue, 01 Feb 2022 02:57:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwUrP62z4YI3xIllj+ZnBGCvXCO+D81q7RQ5ccoK4hgtp0NvEFZbCTfVey66a0Izz8vG22M8g==
+X-Received: by 2002:aa7:da8c:: with SMTP id q12mr24834131eds.81.1643713040486;
+        Tue, 01 Feb 2022 02:57:20 -0800 (PST)
+Received: from ?IPV6:2003:cb:c711:ba00:67b6:a3ab:b0a8:9517? (p200300cbc711ba0067b6a3abb0a89517.dip0.t-ipconnect.de. [2003:cb:c711:ba00:67b6:a3ab:b0a8:9517])
+        by smtp.gmail.com with ESMTPSA id f18sm14390425ejh.97.2022.02.01.02.57.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 02:57:19 -0800 (PST)
+Message-ID: <9c979e5a-91ae-413d-f2a9-168c9c37e5ab@redhat.com>
+Date:   Tue, 1 Feb 2022 11:57:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3bc401a9f110a24a429316371c767507b493025a.camel@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        rppt@kernel.org, ak@linux.intel.com, akpm@linux-foundation.org,
+        ardb@kernel.org, bp@alien8.de, brijesh.singh@amd.com,
+        dave.hansen@intel.com, dfaggioli@suse.com, jroedel@suse.de,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rientjes@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        varad.gautam@suse.com, vbabka@suse.cz, x86@kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <YfZJQedck2YxZcWA@kernel.org>
+ <20220130164548.40417-1-kirill.shutemov@linux.intel.com>
+ <acc12d73-a7d1-014c-9c07-33251d7d07ee@redhat.com>
+ <20220131193041.xuagyispia77ak2g@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCHv3.1 1/7] mm: Add support for unaccepted memory
+In-Reply-To: <20220131193041.xuagyispia77ak2g@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 10:25:01AM +0000, David Woodhouse wrote:
-> Thanks. It looks like that is only invoked after boot, with a write to
-> /sys/devices/system/cpu/microcode/reload.
->
-> My series is only parallelising the initial bringup at boot time, so it
-> shouldn't make any difference.
+On 31.01.22 20:30, Kirill A. Shutemov wrote:
+> On Mon, Jan 31, 2022 at 01:13:49PM +0100, David Hildenbrand wrote:
+>> On 30.01.22 17:45, Kirill A. Shutemov wrote:
+>>> UEFI Specification version 2.9 introduces the concept of memory
+>>> acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+>>> SEV-SNP, requiring memory to be accepted before it can be used by the
+>>> guest. Accepting happens via a protocol specific for the Virtual Machine
+>>> platform.
+>>>
+>>> Accepting memory is costly and it makes VMM allocate memory for the
+>>> accepted guest physical address range. It's better to postpone memory
+>>> acceptance until memory is needed. It lowers boot time and reduces
+>>> memory overhead.
+>>>
+>>> Support of such memory requires a few changes in core-mm code:
+>>>
+>>>   - memblock has to accept memory on allocation;
+>>>
+>>>   - page allocator has to accept memory on the first allocation of the
+>>>     page;
+>>>
+>>> Memblock change is trivial.
+>>>
+>>> The page allocator is modified to accept pages on the first allocation.
+>>> PageBuddyUnaccepted() is used to indicate that the page requires acceptance.
+>>>
+>>> Kernel only need to accept memory once after boot, so during the boot
+>>> and warm up phase there will be a lot of memory acceptance. After things
+>>> are settled down the only price of the feature if couple of checks for
+>>> PageBuddyUnaccepted() in alloc and free paths. The check refers a hot
+>>> variable (that also encodes PageBuddy()), so it is cheap and not visible
+>>> on profiles.
+>>>
+>>> Architecture has to provide three helpers if it wants to support
+>>> unaccepted memory:
+>>>
+>>>  - accept_memory() makes a range of physical addresses accepted.
+>>>
+>>>  - maybe_mark_page_unaccepted() marks a page PageBuddyUnaccepted() if it
+>>>    requires acceptance. Used during boot to put pages on free lists.
+>>>
+>>>  - accept_page() makes a page accepted and clears PageBuddyUnaccepted().
+>>>
+>>> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>>> Acked-by: Mike Rapoport <rppt@linux.ibm.com>	# memblock
+>>
+>>
+>> You should somehow document+check+enforce that page poisoning cannot be
+>> enabled concurrently, because it cannot possibly work IIUC.
+> 
+> Looking at code again, I now think that sharing the bit with PageOffline()
+> is wrong. Previously I convinced myself that there's no conflict on the
+> bit. In the initial version of the patchset, the page acceptance happened
+> inside del_page_from_free_list() so any removal from the free list lead to
+> clearing the bit. It is not the case now when acceptance moved to
+> post_alloc_hook(). __isolate_free_page() and __offline_isolated_pages()
+> look problematic now.
 
-No, I don't mean __reload_late() - I pointed you at that function to
-show the dance we must do when updating microcode late.
+Both grab the zone lock. So as long as you'd perform the update of both
+bits (PageOffline+PageBuddy) in one go under the zone lock, you could
+handle it accordingly. But IIRC we don't want to accept memory while
+holding the zone lock ...
 
-The load_ucode_{ap,bsp}() routines are what is called when loading ucode
-early.
+Of course, you could clear the flag under the zone lock and forward the
+requirement to prep_new_page(). For example, using alloc_flags.
 
-So the question is, does the parallelizing change the order in which APs
-are brought up and can it happen that a SMT sibling of a two-SMT core
-executes *something* while the other SMT sibling is updating microcode.
+We could have a new ALLOC_UNACCEPTED that will result in
+prep_new_page()->post_alloc_hook() calling accept_page().
 
-If so, that would be bad.
+Relevant functions (e.g., rmqueue()) would consume *alloc_flags instead
+of alloc_flags and simply clear+set the bit while updating *alloc_flags.
 
-> However... it does look like there's nothing preventing a sibling being
-> brought online *while* the dance you mention above is occurring.
+* __alloc_pages_bulk()->__rmqueue_pcplist() shouldn't need care because
+  unaccepted pages shouldn't be on a pcp list (iow, previously
+  allocated)
+* Not sure if we'd have to touch try_to_compact_pages(), because we can
+  only stumble over unnaccepted pages if these pages were never
+  allocated, would require some thought.
 
-Bottom line is: of the two SMT siblings, one needs to be updating
-microcode while the other is idle. I.e., what __reload_late() does.
+So maybe it would boil down to rmqueue() only.
 
-> Shouldn't __reload_late() take the device_hotplug_lock to prevent that?
+> 
+> I will use brand new bit for the flag and rename BuddyUnaccepted to just
+> Unaccepted, since it can be set with Buddy cleared.
+> 
+> Sounds okay?
 
-See reload_store().
+Fine with me, having something restricted to PageBuddy() might be
+conceptually nicer, though.
+
+[...]
+
+>>
+>> You'll be setting the page as unaccepted even before it's actually
+>> PageBuddy(). While that works, I wonder why we call
+>> maybe_mark_page_unaccepted() at these points.
+>>
+>> Why are we not moving that deeper into the buddy? __free_pages_core() is
+>> used for any fresh pages that enter the buddy, used outside of
+>> page_alloc.c only for memory hot(un)plug, so I'd suggest moving it at
+>> least into there.
+>>
+>> But maybe we'd even move it further down, to the place where we actually
+>> establish PageBuddy().
+>>
+>> One idea would be adding a new FPI_UNACCEPTED flag, passing it from
+>> __free_pages_core() only, and calling maybe_mark_page_unaccepted() from
+>> __free_one_page() after set_buddy_order().
+>>
+>> If in-lining would do its job properly, we'd be left with the
+>> FPI_UNACCEPTED checks only when called via __free_pages_core(), and we'd
+>> have that call at a single place right where we mess with PageBuddy().
+> 
+> Okay, this approach looks neat. See fixup below.
+> 
+> But there's down side: maybe_mark_page_unaccepted() cannot be __init
+> anymore, since it is called from __free_one_page().
+
+Good point, do we care?
+
+> 
+> Any comments?
+
+LGTM
 
 -- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+David / dhildenb
+

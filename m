@@ -2,118 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9E64A5EDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A9E4A5EE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:03:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239697AbiBAPC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:02:58 -0500
-Received: from mail-bn1nam07on2050.outbound.protection.outlook.com ([40.107.212.50]:8608
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239679AbiBAPC4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:02:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fJx5FZ2TyE5d3oXqyRaeCWhHKyS+JU/ADFpYLoUTnf50ZLZP8X7YIQdiQfzp8DlDukfF+TEURlvoYZzooVIzRRIf4N5zCn5ACsvak57FI82ss9dHEov8XSjiIm9rgoag2eWGREyPoD+4CqbKysIlyZ2rjJPdFZ6tTRUY/EKbBNKm6/DeB364gtDW/1+FCbHEDgS5FzqbRGJIgYSeuXjG5oIb8ysb20sxj4mtOIngS3QayuBqMQ2C+5HTOu35m+UPP//9Oy2b5s/6YJqLrFDXvWkSgkqkJfGi0Tzqpsq9P9QTfddrzB9F1ECcjKbfFbFd1QCqD9mhnzZLzRS+0DeOlA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bwg4VMIN76rbTXHRgYGSTnmO1hOR/dBzbKAM9LGv5YQ=;
- b=OmQyt/9+ocYN53jfl+sRxcLH9oUq8i0VZTsAsqanGJTqM4ibxRCgv9GC3KiPRxVpQwARQ43gTqcjB/tCtaG4pLem8Viuy7Q4l0t35zuTav36v3xbhwbPRKh3kEw0LTt5Ntn1fpb8F9+CDAjqwANAX0AcXBNxHEgJpK1TdPn2rp7V38iwQMRdkwqhb0UN/JWORorbvWjJnITeihogbjDqSR1HpQmwzf70SNlfEC/m0JuaeezTF1NO7/taYTXh0xH+K9nh3VkZhvbGyncInV0G05H8v+D6chPys+XTMWZT902oM+BnsZSnrRB/PzsWubxi5LOADs+i9w2KiNuKgzpeHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bwg4VMIN76rbTXHRgYGSTnmO1hOR/dBzbKAM9LGv5YQ=;
- b=btmoEnzM4Xyf1cpNzqjZUQ/7GLH+L7q3yDdZfrc0I+r6tN1zvXxdtWADUQ1VgGL2W+NINhCnE28cBEbk4thxMxik/kEzX3EJChLKsOXn18cOjgb8EksSSwotsKyAFoI987A75a6eww40rUvUEuGFnMYn5hBNeoIIJGXwh4xHX9zikVY6PhEF18Ffpy5GGR+g5GxY81nVNrDTQ7GTwzU3A9RQc5zZQpeSnMHavLso+1bvXXN0YzetZeMozX1Cporn+K1Wt/MigrMsaKhX7ly2KY+rSxBe5WPo3C9jKBSpaTEURsSGUM4b39elJrMzhSQH0jXGJTqTYT/vGXYk3sPj9g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN1PR12MB2512.namprd12.prod.outlook.com (2603:10b6:802:31::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
- 2022 15:02:54 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
- 15:02:54 +0000
-Date:   Tue, 1 Feb 2022 11:02:52 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Yishai Hadas <yishaih@nvidia.com>, linux-rdma@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/mlx4: remove redundant assignment to variable nreq
-Message-ID: <20220201150252.GA2434511@nvidia.com>
-References: <20220130225747.8114-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130225747.8114-1-colin.i.king@gmail.com>
-X-ClientProxiedBy: MN2PR19CA0025.namprd19.prod.outlook.com
- (2603:10b6:208:178::38) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        id S239709AbiBAPDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:03:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28993 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239692AbiBAPDS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:03:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643727798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rtI+17/g93ZHkydx3wVerkIz2lCilB6XCltFF3RHwWE=;
+        b=WbW9al9M8LrDDkvxSlLxQbDLsAm1AtGuZRe8GEUjkAIJbwRE91YAwEmtt241Ivk4VTWGCT
+        9O/oNIxHIGI6ZfujcEVmff1zaFijPaZ+P4HVPafLfgfk97nd4oYdPcrAIkkTQSGt6rk7tS
+        334LCPNuyOr+3xVENW5VkuDz1FGR9Po=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-jd34lhPtOpugnN1ceTA6Og-1; Tue, 01 Feb 2022 10:03:17 -0500
+X-MC-Unique: jd34lhPtOpugnN1ceTA6Og-1
+Received: by mail-ed1-f69.google.com with SMTP id b26-20020a056402139a00b004094fddbbdfso8857012edv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:03:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rtI+17/g93ZHkydx3wVerkIz2lCilB6XCltFF3RHwWE=;
+        b=7pVKM2eueEKgN1edjdOjfYMOX55aEEo7hzwKgfb+98ECrch/tvwEQg63EybKOd8pND
+         gBAxuwetFHmnSTnybNqzI8gcELIHZDKf827v2iRCr5pNvnwYJTJAe57Bav04BFqTNZNp
+         esVwC/1redvmn5892xj41axXKiayPuw7oNBTwEIiOKTgob3EM+VVKlKjXLBlsaDHGZOA
+         YlY8MiTxW16UoaPJRsa7oub3aItvyzCDbp2fQS8OfqYSqZK/DhUdzM9IK7oS2/tNeSLH
+         3XMBZyUsAG4JiT67O3X8DO8KfjnGXFWF1aZqUtJ9zDKMtgbG+pYSxrtUzWDyUL4P9FSl
+         NmaQ==
+X-Gm-Message-State: AOAM531Y+5H7CYFmye8W8pOy99R7HTJaTwJSjY00KDGL9dHS7XX3QH57
+        P5FkTZ39bfvhhN9MAE2Ap4nbFRBj+9FJ6t/NvLV6E2zkMhHWK/JX8cB8Yn0O/3pMu91dFtDzZ8O
+        z70b9pMA+tfZGqqtiex42ejro
+X-Received: by 2002:a17:906:ae8a:: with SMTP id md10mr21791570ejb.726.1643727795754;
+        Tue, 01 Feb 2022 07:03:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyGrVV48N+FUq374nh8LyAIR4m925bx4g5hSDNAlEqbx1WtR+fT4wQbdk5cvNtKgnuH0jDmyw==
+X-Received: by 2002:a17:906:ae8a:: with SMTP id md10mr21791538ejb.726.1643727795475;
+        Tue, 01 Feb 2022 07:03:15 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id gz12sm14715067ejc.124.2022.02.01.07.03.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 07:03:15 -0800 (PST)
+Message-ID: <c66b7faa-f289-ff93-0d73-d2955f9c5bf0@redhat.com>
+Date:   Tue, 1 Feb 2022 16:03:14 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cc4bd74b-60f2-4e84-fe7b-08d9e593ec62
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2512:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB25123402B3E84C71D41A0F28C2269@SN1PR12MB2512.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: it6kWVUYgRUgxYsVUuAGgv6J1Il1sQX46QHrG9N6y9hpUS17ghnEAQfwcihWjD+5c6QZCviMsPLWGzwvxi/59WzLjNSR5lLrBy6GbCD/H8+CvYa6glDLUPQF1VRY8ZPeA/gfTIjY4fDG8/7xMv33uMyJ6Vo2cIBVDrxQCO/2mFJ+BvBs3s7WIBnN4E9OvprswlMn9YjEB8qzNmNLqGCMXLyRcCTCSiA6ifeUaEnXu4StSsjECSNmUZBMIGTYGXDfSKct0mzDgiK62fGSSY7mCCm10Xrb2Lj1wE6NQGT1TCGEaoo/k57jJrTF0i5j0d4/Yeu5rlqQoPkD9JDpePUbisXHm8m4Jw/fXe726wc/ekYVLTU4eaW1/28ciGBR7GvVXIRgGAcDSn0sfctPl3ddQDaYOzv56oesepRZ33LbwDA8oN2PQPSNzT9MkokdxEsRkJVHWMt5U3G9QIyA13UAJ2XHY70ShLsrrkclJ96ZlhGfbpfh3ouhE1re+th74ayCEd33hn6qDQofdtVIwOFu9dSeHNOhOQLsSIxZyjZ2GmFBWsii8z56EpiitKmFoRwDX3S+C3zpYhn0styAmJXjixdYzjWOS7etCGpmRJKNW2gxZITLOrUbxU+bUHaYCVTT3fTxMpWnIGkPaAfm9r9OJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(1076003)(6506007)(6512007)(26005)(186003)(5660300002)(2616005)(316002)(33656002)(6486002)(508600001)(4744005)(36756003)(4326008)(86362001)(66556008)(8676002)(2906002)(8936002)(38100700002)(66476007)(83380400001)(66946007)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kbFOPfZUCeHNOVU6p/SNssbq898zJQRMLx8x6k5/GovHb9EIN/C/nG95Bkvn?=
- =?us-ascii?Q?wRz0R5amTbNwxGYQ92X/Q5Nj3GvmpuLuk6+kzJfnasUDqXjWDtoHZBECea7K?=
- =?us-ascii?Q?/mAQG1zqhCxh9NlvKCyQDNqQjlT2pmYXCY1AqB2oyspXIexmOZa8tOi6UAt6?=
- =?us-ascii?Q?53Z4NtrghQK/YJrM1AoM+9yku6BKmHu5LaDeCvblrUnmqxjpMJdR9hELvYK9?=
- =?us-ascii?Q?WnC7JNMn+KsfznnGEOqSD8Rl//UxmKQVdD7e02BFgFC+5+i/Hq4dVSDiR79W?=
- =?us-ascii?Q?B1i0an5Nwd8W7b4w/W+ICRhIXkViT2sQJHqcD/ixRiofmeNP5nesbsZJUbfU?=
- =?us-ascii?Q?4ZBhEoeBS1b1UlJXpSDaFyuyD7xC8eiUskLkX6Na6jGZCKLeUt+Yp1Txj5f1?=
- =?us-ascii?Q?UyQ15gZiGUa5FKDQs+WCG991L+wx/f3SGH5+/UY8MX4S7PcY3tRIHZKxulfs?=
- =?us-ascii?Q?DD+AkvgGuZmVIAsy3Ln/qv6v3goRRhN8j+zyuPpWqXJQwGQ+U75vCiBzNSPm?=
- =?us-ascii?Q?8Ell6CCBjAsd/AXBgo00J8bex9pSB5yba38S5v2T4cN6ZYcDgvYpvPCEhtsG?=
- =?us-ascii?Q?PzbwFlTh3jbOQCeoPQfOmlNQxKnD06r2sRiFaUEvOyAEa3TYeuTfjK/N2lkC?=
- =?us-ascii?Q?LSnuInsJqtI1BPXio3ILI2zGqVfcqEFciduEASKzbYc08+feUAMrdwn//zbI?=
- =?us-ascii?Q?XTmtrJnBixLQUBJ9hlxf+Y7S+833geqJ+MaW2/WU+WgZ/MD+ztYfqoR+2oJe?=
- =?us-ascii?Q?97R86tHh86Vo33P6CK7AGI4ayk7pcPS1txVNnpLgCZaDQRElXrIQrC4r3bk6?=
- =?us-ascii?Q?ZeHkmYVaFFoCN4+KGjAzImWMqRUsz5hEgpOPNtnKrDnmpQ6qKA9TCHlJJkvf?=
- =?us-ascii?Q?JChpRdmUQ7zetMwhFiac98xSCvfFy0ZziqJMdzdT5Mmjm4JrNzv80y1wvNg3?=
- =?us-ascii?Q?r7kuc5s7VojacYPoNL3RmkLT4y93CtB2uTZ4V4To+ToXKbCUEs5NIq8wG8th?=
- =?us-ascii?Q?QWpY8RoJv+nkMCNOQ5fTr+eZ3Xtjm9J+ixL3k81azre18cVyGHMvbRFTQZa9?=
- =?us-ascii?Q?eaEv5NPZUhaFSWPdGpTrrNyIouNJRCdgacQ9PTWGs8tU2mPsFMC7XPSo3ZCX?=
- =?us-ascii?Q?kJwZMrQSsuywQbczyf3q6Yc+dJK9NZI1hgninQ9B+hz7Oxiw4Gh6ndOc5Rkx?=
- =?us-ascii?Q?ShqJG7hDj/wol+w/hLgs1xZrFsc/W5chBWnk6TLYK0BbTNmvyuVz/1hs1i9K?=
- =?us-ascii?Q?ZDvQTfj/jarZYAvGjpfqyAM+CHLexTt3xhdTxIyHBgBk3CFA9JqaPVclHlhp?=
- =?us-ascii?Q?XrI5iX1eDcbD28WjDcCWHqL6tjXW1YmXXRxzye2sQAMWUlmxqT9U3KM/787v?=
- =?us-ascii?Q?/rbRTe5yMORfg6gwSeGGxgnWSCoEWEdvYCc9UpSt1AHovAcYmgrrNsHZEzQy?=
- =?us-ascii?Q?6Q6EDuIEnpqNhllak2NnvIIMhGEbfLgyCR68AJMCnSVtzPxfoFu2g92YQxoZ?=
- =?us-ascii?Q?9QbQ7kn1Uz5w9cxUec2kkPsRNCsxD6Dat0eyiLpe7bd5knqteppJ9rtIFdiZ?=
- =?us-ascii?Q?joZ61VlojUxf7IlFO94=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc4bd74b-60f2-4e84-fe7b-08d9e593ec62
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 15:02:54.2405
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kRYSQtLhzKv4ilqJ0wr5jcWqqih7tFyTk57nlsSeaD7YdVODWhNqUvuEv/6sNpo9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2512
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6 9/9] ACPI / scan: Create platform device for CS35L41
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        Lucas Tanure <tanureal@opensource.cirrus.com>
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+ <20220121172431.6876-10-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220121172431.6876-10-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:57:47PM +0000, Colin Ian King wrote:
-> Variable nreq is being assigned a value that is never read. The
-> assignment is redundant and can be removed.
+Hi,
+
+On 1/21/22 18:24, Stefan Binding wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> The ACPI device with CSC3551 or CLSA0100 are sound cards
+> with multiple instances of CS35L41 connected by I2C or SPI
+> to the main CPU.
+> 
+> We add an ID to the ignore_serial_bus_ids list to enumerate
+> all I2C or SPI devices correctly.
+> 
+> The same IDs are also added into serial-multi-instantiate
+> so that the driver can correctly enumerate the ACPI.
+> 
+> Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
 > ---
->  drivers/infiniband/hw/mlx4/srq.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/acpi/scan.c                             |  3 +++
+>  drivers/platform/x86/serial-multi-instantiate.c | 14 ++++++++++++++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 48db5e80c2dc..ebd10af3ff7f 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -1744,8 +1744,11 @@ static bool acpi_device_enumeration_by_parent(struct acpi_device *device)
+>  	 */
+>  		{"BSG1160", },
+>  		{"BSG2150", },
+> +		{"CSC3551", },
+>  		{"INT33FE", },
+>  		{"INT3515", },
+> +	/* Non-conforming _HID for Cirrus Logic already released */
+> +		{"CLSA0100", },
+>  	/*
+>  	 * HIDs of device with an UartSerialBusV2 resource for which userspace
+>  	 * expects a regular tty cdev to be created (instead of the in kernel
+> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
+> index 3f05385ca2cf..d09f11eac4f8 100644
+> --- a/drivers/platform/x86/serial-multi-instantiate.c
+> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+> @@ -308,6 +308,17 @@ static const struct smi_node int3515_data = {
+>  	.bus_type = SMI_I2C,
+>  };
+>  
+> +static const struct smi_node cs35l41_hda = {
+> +	.instances = {
+> +		{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +		{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +		{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +		{ "cs35l41-hda", IRQ_RESOURCE_GPIO, 0 },
+> +		{}
+> +	},
+> +	.bus_type = SMI_AUTO_DETECT,
+> +};
+> +
+>  /*
+>   * Note new device-ids must also be added to serial_multi_instantiate_ids in
+>   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
+> @@ -316,6 +327,9 @@ static const struct acpi_device_id smi_acpi_ids[] = {
+>  	{ "BSG1160", (unsigned long)&bsg1160_data },
+>  	{ "BSG2150", (unsigned long)&bsg2150_data },
+>  	{ "INT3515", (unsigned long)&int3515_data },
+> +	{ "CSC3551", (unsigned long)&cs35l41_hda },
+> +	/* Non-conforming _HID for Cirrus Logic already released */
+> +	{ "CLSA0100", (unsigned long)&cs35l41_hda },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, smi_acpi_ids);
+> 
 
-Applied to for-next, thanks
-
-Jason

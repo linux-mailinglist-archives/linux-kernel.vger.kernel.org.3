@@ -2,268 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2874A64DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B574A6487
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242370AbiBATTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:19:08 -0500
-Received: from 7.mo550.mail-out.ovh.net ([87.98.158.110]:34015 "EHLO
-        7.mo550.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242348AbiBATTG (ORCPT
+        id S239113AbiBATCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:02:01 -0500
+Received: from mail-yb1-f176.google.com ([209.85.219.176]:45828 "EHLO
+        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238769AbiBATB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:19:06 -0500
-X-Greylist: delayed 8966 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Feb 2022 14:19:06 EST
-Received: from player687.ha.ovh.net (unknown [10.110.115.188])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 6966621F5C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:49:37 +0000 (UTC)
-Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player687.ha.ovh.net (Postfix) with ESMTPSA id 9168F26E9FF01;
-        Tue,  1 Feb 2022 16:49:14 +0000 (UTC)
+        Tue, 1 Feb 2022 14:01:58 -0500
+Received: by mail-yb1-f176.google.com with SMTP id w81so31576023ybg.12;
+        Tue, 01 Feb 2022 11:01:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zetz1EMRrtQpNFO0fDTM+0U4I0bqCUCVVP0e+KHk8hI=;
+        b=Qb8dH8+aQjMFf4E1QX/QpWoiUGWgaZNOFPwHLfCh3lJAhoSk2OxN9+RT/XKBANQWVv
+         0rxKD3Pp1ilFdTRfHmLCBn7aq88A5BkT+qHdoJNkdDs407G/OooKaqSFddT8txjXpgxl
+         cOwo6z1T1BjgAFxJdqHDCf5M6QbeTPEyc9iwr6zJW6H5tdcvUiJ3iZP8OgtBEYSR0LiL
+         ELRzTagHbCOZKbsg+D76uy/J5apKuRaERvI6wt3n5cb/GqhJHZltbzhbbqEJPD2oNrvj
+         zAJ5W7rFg+cO/GZylroWDa8xeqja7BsP+eckeZ2f3vMxtuQI/yLKaLkBu7fpxv3TpyjK
+         3bDQ==
+X-Gm-Message-State: AOAM532NLd5s837fP8Bx61cBLBQiY1mkEyFy7sFKlIimvSNpSYXEGW7F
+        TprnAo2QHQZrChOcfbM47BHDr8pQ9ZTFBk+ElCI=
+X-Google-Smtp-Source: ABdhPJyaXQdSdAWuhV1rlFp79N6oWZd9upRROHfEAt6roN+Zhtqn2P5Znv6SN86pFRBbzM23rHXbjKXdGd56ucOffrU=
+X-Received: by 2002:a25:cc97:: with SMTP id l145mr357412ybf.272.1643742117289;
+ Tue, 01 Feb 2022 11:01:57 -0800 (PST)
 MIME-Version: 1.0
-Date:   Tue, 01 Feb 2022 17:49:14 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Rob Herring <robh@kernel.org>, Michael Walle <michael@walle.cc>
-Cc:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-Subject: Re: [PATCH REBASED 2/2] dt-bindings: nvmem: cells: add MAC address
- cell
-In-Reply-To: <YflX6kxWTD6qMnhJ@robh.at.kernel.org>
-References: <20220125180114.12286-1-zajec5@gmail.com>
- <20220126070745.32305-1-zajec5@gmail.com>
- <20220126070745.32305-2-zajec5@gmail.com>
- <YflX6kxWTD6qMnhJ@robh.at.kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <1dd3522d9c7cfcb40f4f8198d4d35118@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 7251076875513539502
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgdelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvffujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpedugeeluefgffekfeehieehvdfgffehtdettefffeekieeijeelhfelvedvgfevtdenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheikeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+References: <4374434.LvFx2qVVIh@kreacher> <Yfl/Sneg9/HPOjBe@smile.fi.intel.com>
+In-Reply-To: <Yfl/Sneg9/HPOjBe@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Feb 2022 20:01:46 +0100
+Message-ID: <CAJZ5v0jFBFKMcjYieYCL1LTvRPuM7b8_5nBx0_wnPtobzg==fw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: ACPI: Replace acpi_bus_get_device()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c <linux-i2c@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-01 16:55, Rob Herring wrote:
-> On Wed, Jan 26, 2022 at 08:07:45AM +0100, Rafał Miłecki wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->> 
->> This adds support for describing details of NVMEM cell containing MAC
->> address. Those are often device specific and could be nicely stored in
->> DT.
->> 
->> Initial documentation includes support for describing:
->> 1. Cell data format (e.g. Broadcom's NVRAM uses ASCII to store MAC)
->> 2. Reversed bytes flash (required for i.MX6/i.MX7 OCOTP support)
->> 3. Source for multiple addresses (very common in home routers)
->> 
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> ---
->>  .../bindings/nvmem/cells/mac-address.yaml     | 94 
->> +++++++++++++++++++
->>  1 file changed, 94 insertions(+)
->>  create mode 100644 
->> Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
->> 
->> diff --git 
->> a/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml 
->> b/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
->> new file mode 100644
->> index 000000000000..f8d19e87cdf0
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
->> @@ -0,0 +1,94 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/nvmem/cells/mac-address.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: NVMEM cell containing a MAC address
->> +
->> +maintainers:
->> +  - Rafał Miłecki <rafal@milecki.pl>
->> +
->> +properties:
->> +  compatible:
->> +    const: mac-address
->> +
->> +  format:
->> +    description: |
->> +      Some NVMEM cells contain MAC in a non-binary format.
->> +
->> +      ASCII should be specified if MAC is string formatted like:
->> +      - "01:23:45:67:89:AB" (30 31 3a 32 33 3a 34 35 3a 36 37 3a 38 
->> 39 3a 41 42)
->> +      - "01-23-45-67-89-AB"
->> +      - "0123456789AB"
->> +    enum:
->> +      - ascii
->> +
->> +  reversed-bytes:
->> +    type: boolean
->> +    description: |
->> +      MAC is stored in reversed bytes order. Example:
->> +      Stored value: AB 89 67 45 23 01
->> +      Actual MAC: 01 23 45 67 89 AB
->> +
->> +  base-address:
->> +    type: boolean
->> +    description: |
->> +      Marks NVMEM cell as provider of multiple addresses that are 
->> relative to
->> +      the one actually stored physically. Respective addresses can be 
->> requested
->> +      by specifying cell index of NVMEM cell.
-> 
-> While a base address is common, aren't there different ways the base is
-> modified.
-> 
-> The problem with these properties is every new variation results in a
-> new property and the end result is something not well designed. A 
-> unique
-> compatible string, "#nvmem-cell-cells" and code to interpret the data 
-> is
-> more flexible.
-> 
-> For something like this to fly, I need some level of confidence this is
-> enough for everyone for some time (IOW, find all the previous attempts
-> and get those people's buy-in). You have found at least 3 cases, but I
-> seem to recall more.
+On Tue, Feb 1, 2022 at 7:44 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Feb 01, 2022 at 07:00:42PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Replace acpi_bus_get_device() that is going to be dropped with
+> > acpi_fetch_acpi_dev().
+> >
+> > No intentional functional impact.
+>
+> ...
+>
+> > +     if (!adev || i2c_acpi_get_info(adev, &info, adapter, NULL))
+>
+> AFAICS the !adev check is redundant since acpi_device_enumerated() does it.
 
-For base address I thought of dealing with base + offset only. I'm not
-sure what are other cases.
+No.
 
-I read few old threads:
-https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/T/
-https://lore.kernel.org/linux-devicetree/20211123134425.3875656-1-michael@walle.cc/
-https://lore.kernel.org/all/20210414152657.12097-2-michael@walle.cc/
-https://lore.kernel.org/linux-devicetree/362f1c6a8b0ec191b285ac6a604500da@walle.cc/
+acpi_device_enumerated() returns false if adev is NULL, so without
+this extra check i2c_acpi_get_info() will end up passing NULL to
+i2c_acpi_do_lookup().
 
-but didn't find other required /transformations/ except for offset and
-format. Even "reversed-bytes" wasn't widely discussed (or I missed that)
-and I just came with it on my own.
+> >               return AE_OK;
+>
+> ...
+>
+> > +     struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+> >
+> > -     if (i2c_acpi_do_lookup(adev, lookup))
+> > +     if (!adev || i2c_acpi_do_lookup(adev, lookup))
+> >               return AE_OK;
+>
+> Here we need it indeed.
+> Dunno, if acpi_dev_ready_for_enumeration() can gain the check itself.
 
-If anyone knows other cases: please share so we have a complete view.
-
-
-I tried to Cc all previously invovled people but it seems only me and
-Michael remained active in this subject. If anyone knows other
-interested please Cc them and let us know.
-
-
-Rob: instead of me and Michael sending patch after patch let me try to
-gather solutions I can think of / I recall. Please kindly review them
-and let us know what do you find the cleanest.
-
-
-1. NVMEM specific "compatible" string
-
-Example:
-
-partition@f00000 {
-     compatible = "brcm,foo-cells", "nvmem-cells";
-     label = "calibration";
-     reg = <0xf00000 0x100000>;
-     ranges = <0 0xf00000 0x100000>;
-     #address-cells = <1>;
-     #size-cells = <1>;
-
-     mac@100 {
-         reg = <0x100 0x6>;
-         [optional: #nvmem-cell-cells = <1>;]
-     };
-};
-
-A minimalistic binding proposed by Michael. DT doesn't carry any
-information on NVMEM cell format. Specific drivers (e.g. one handling
-"brcm,foo-cells") have to know how to handle specific cell.
-
-Cell handling conditional code can depend on cell node name ("mac" in
-above case) OR on value of "nvmem-cell-names" in cell consumer (e.g.
-nvmem-cell-names = "mac-address").
-
-
-2. NVMEM specific "compatible" string + cells "compatible"s
-
-Example:
-
-partition@f00000 {
-     compatible = "brcm,foo-cells", "nvmem-cells";
-     label = "calibration";
-     reg = <0xf00000 0x100000>;
-     ranges = <0 0xf00000 0x100000>;
-     #address-cells = <1>;
-     #size-cells = <1>;
-
-     mac@100 {
-         compatible = "mac-address";
-         reg = <0x100 0x6>;
-         [optional: #nvmem-cell-cells = <1>;]
-     };
-};
-
-Similar to the first case but cells that require special handling are
-marked with NVMEM device specific "compatible" values. Details of 
-handling
-cells are still hardcoded in NVMEM driver. Different cells with
-compatible = "mac-address";
-may be handled differencly - depending on parent NVMEM device.
-
-
-3. Flexible properties in NVMEM cells
-
-Example:
-
-partition@f00000 {
-     compatible = "brcm,foo-cells", "nvmem-cells";
-     label = "calibration";
-     reg = <0xf00000 0x100000>;
-     ranges = <0 0xf00000 0x100000>;
-     #address-cells = <1>;
-     #size-cells = <1>;
-
-     mac@100 {
-         compatible = "mac-address";
-         reg = <0x100 0x6>;
-         [optional: #nvmem-cell-cells = <1>;]
-     };
-
-     mac@200 {
-         compatible = "mac-address";
-         reg = <0x200 0x6>;
-         reversed-bytes;
-         [optional: #nvmem-cell-cells = <1>;]
-     };
-
-     mac@300 {
-         compatible = "mac-address";
-         reg = <0x300 0x11>;
-         format = "ascii";
-         [optional: #nvmem-cell-cells = <1>;]
-     };
-};
-
-This moves details into DT and requires more shared properties. It helps
-avoiding duplicated code for common cases (like base MAC address).
-
-It's what I proposed in the
-[PATCH 0/2] dt-bindings: nvmem: support describing cells
+Well, acpi_bus_get_status() would need it too.

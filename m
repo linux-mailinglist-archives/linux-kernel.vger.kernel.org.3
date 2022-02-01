@@ -2,108 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6D44A54AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ED14A54A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiBAB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S231792AbiBAB3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiBAB3y (ORCPT
+        with ESMTP id S229898AbiBAB3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:29:54 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8554DC061714;
-        Mon, 31 Jan 2022 17:29:54 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id i1so13030121ils.5;
-        Mon, 31 Jan 2022 17:29:54 -0800 (PST)
+        Mon, 31 Jan 2022 20:29:47 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3B6C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:29:47 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id i19so14606313qvx.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:29:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XqG+5fzWY0U/afJ1BOIAM3pbp3MnppszbdOcfZ9XLtI=;
-        b=eT2WsnR1FbC9brGF7W8Vk+2VvwRznIY7/OT1DBCaXlkXWT5CErIBQYnrko4m6aUHpB
-         3EwaWXW2Ro5EwSP84rvJhBFjlrim3RxiB0fPdAISf7x32lWX1PiV0IERjh0T1I53muxI
-         ozmuuMjZ5IwZCUUBZRDQeZyJywS8mId6mt1GympL0FHCYqy7ROo/2zzxIqJZ9t5k/EyW
-         KRBRj975mgUledpaue1zFz1KY072gGM96y0gxZqAKvLSZCac0lag0xrBG32VVNz9jyLj
-         58b6VD0bVR6CeUHzzcAK4WyZdHuStG5rxXgYiqEHuFtfg0s7HuRGtoVNr5lNJNSC4DVF
-         SxDQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=kQuccy7FnCtJX5MB7yaPpu1oNV3YcWIjIr8ZrSHjtmA=;
+        b=BTeA/lR/iEK32sJuMMzp5Wo+LFFRdhDscMk6UzMCXGLmOS2t0nAyWsZSyO769oupkC
+         mAqc4GDuqtxepgQbu+o5esjjbwO0IJ6U7DDAobY+K5ZFMkIJv1Ur7nFtS/PnplTCdTDn
+         SwNeLCkPmA/H3jF2TSk/Cbgn5pbI5i5C6dmDjKHk87Dv+eVsaYoPIvMROs9m3S+jh0jj
+         KC6Vp9U1UCcPKuZSGCbN+eXaoCxoCzI3mKnHzZpzMcKsILpam/qvTfFT6PQQ/NF2/YJo
+         jaPALBRF5pjv1xtz9GmEWhFV2PPz++7gl+Ydp9V3NuurW4qefjKnZu4gNcSSMLyg3nU6
+         yLXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XqG+5fzWY0U/afJ1BOIAM3pbp3MnppszbdOcfZ9XLtI=;
-        b=rdEZL6SJOwUBuoDPzsfL4Zc2n/7NNWVFDnd2c/M3TgPT0b22uexbR6M0cIdiGMPlal
-         CXKRrx/LmANEWPuMrAvqyjInMrrqfIgW6NmG7Ec72PYGFhHBdTGzR54tx8IO1dvmNKSZ
-         wGLaZ+nkKs3K9z3lhQBnKyvlNnAOtQAmhO8nXh2+I1zY2XXr3IbrZWM4Vzb5K/CJVgqG
-         yXzpytfh+E0obNjgKDei8ZErRVh9UoLxy+dzPB5OiguPhtWtnnnLMOxCW4kagX08MwWl
-         UFciV32zdOpO6WwmFohtVEcpPRwZK+5YTssVwVSkMLNJD05F+BJzdynH1wf7S6kKX6A+
-         8oLw==
-X-Gm-Message-State: AOAM533X2UFrbxzATe91Uy/eUuL42XH3B0cJMn0iZKsYC/cxhJV9GSRb
-        LkCz37xz57cUxOvsLdVfJ0FY0tmAEkI/ngljGFg=
-X-Google-Smtp-Source: ABdhPJycYZQaQXEpbkKL1+jfKuIawVfU7apQcaQUm9HHQzIFTwYqhllQUkV2zogf0BOGtvghjEJDVcZtEj64Hv7xtAk=
-X-Received: by 2002:a05:6e02:20cd:: with SMTP id 13mr13460574ilq.225.1643678993918;
- Mon, 31 Jan 2022 17:29:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=kQuccy7FnCtJX5MB7yaPpu1oNV3YcWIjIr8ZrSHjtmA=;
+        b=5cjrm6XLdNRFnkqjLFwLLUf0hoobiv03oTDhVMvu4dkbONyu83oCkVz5V5v1YI83/c
+         pS2/rCk7paCsO3IQ6yz67pE7J2SvwuvC7blIwyfpiT61fgQjE7Steo7W2T3dAkmw4dUo
+         fVDtV0q5EatxSUXKsRvxzST32+P6p+6zg6G50OowNepFqMXfrOaOsS4KD5LGZe3bK38b
+         Rp7JfROIvllwexX6jFDm/31OYPqB6bYDfjQN+NwgQjG3w61B2O0SrSMVUqJn4ixQ+Fq/
+         I5MNDI+1AAFkgCJPOSheAU84TQyHoGfvRTssl4o1ysQX/AQfmg7UoMcK2vIUUkHsl4Ur
+         /DQw==
+X-Gm-Message-State: AOAM531TI2IoDCdr00CL4o/LV0WeLJxD+pN1AD4cr41Y3AceCjwTLC/6
+        UnsLO8IC/Qa8QVRzFvHRm4aololwrHUiLx/p7Ms=
+X-Google-Smtp-Source: ABdhPJyg8GUdxA5zhiDtsgCSd/n2Ngu1dJJljMEZQt3NbYYXyzyHQLls1gXsHzunmmfNXqmPHPLm7I2NwViUDo6rvGw=
+X-Received: by 2002:a05:6214:20a2:: with SMTP id 2mr20250580qvd.63.1643678986816;
+ Mon, 31 Jan 2022 17:29:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131105233.561926043@linuxfoundation.org>
-In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Mon, 31 Jan 2022 18:29:43 -0700
-Message-ID: <CAFU3qoarf16tYk6JxRn=R07pp4G4ZjU1RDTO+xwgLyAzsVU_Ag@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/200] 5.16.5-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
+Received: by 2002:a05:6214:e61:0:0:0:0 with HTTP; Mon, 31 Jan 2022 17:29:46
+ -0800 (PST)
+Reply-To: mohammedghassen486@gmail.com
+From:   Mohammed Ghassen <westernuniontransferofficer5@gmail.com>
+Date:   Tue, 1 Feb 2022 02:29:46 +0100
+Message-ID: <CAKGeHrhE239qEck-cEwcUfneOvv4kBgvYnfFE6SkakBX9+DW4w@mail.gmail.com>
+Subject: TRACK YOUR COMPENSATION FUND AND CONTACT WESTERN UNION OFFICE.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 8:38 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.5 release.
-> There are 200 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.5-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+My Greetings to you,
 
-Hi Greg,
+Compliments of the day with your entire family, I'm happy to inform
+you about my success in getting the fund transferred under the
+co-operation of a new partner from Egypt Presently i am in Egypt for
+investment projects with my own share of the total sum.Meanwhile, I
+didn't forget your past efforts and attempts to assist me in
+transferring those funds despite that it failed us some how.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
+Now contact western union agent through their email address, her name
+is Ms. Konditamde Faridatou,
+Email(westernunionheadoffice079@gmail.com) ask her to send you the
+total sum of($4.500.000.00usd) which I kept for your compensation for
+all the past efforts in attempts to assist me in this matter. I
+appreciated your efforts at that time very much, so feel free and get
+in touched with Ms Konditamde  Faridatou and instruct her where to
+send the amount to you.
 
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
+Please do let me know immediately when you receive it so that we can
+share the joy after all the sufferings that time, in the moment I am
+very busy here because of the investment projects which I and the new
+partner are having at hand, finally remember that I had forwarded
+instruction to the western union on your behalf to receive that money,
+so feel free to get in touch with her at above email address and she
+will send the amount to you without any delay.
 
-     Total time: 0.436 [sec]
+Click here to track the payment.
+{https://www.westernunion.com/us/en/self-service/app/tracktransfer}
+PAYMENT N=C2=B01
+MTCN:189-615-2163
 
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
+Best regards,
 
-     Total time: 7.170 [sec]
-
-       7.170326 usecs/op
-         139463 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+Mr. Mohammed Ghassen.

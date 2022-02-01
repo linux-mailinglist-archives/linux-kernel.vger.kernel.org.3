@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9DC4A657B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125624A6589
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238212AbiBAUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
+        id S239145AbiBAURJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiBAUMm (ORCPT
+        with ESMTP id S233574AbiBAURH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:12:42 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D95C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:12:41 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n12-20020a05600c3b8c00b0034eb13edb8eso1887314wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:12:41 -0800 (PST)
+        Tue, 1 Feb 2022 15:17:07 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12059C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:17:06 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id z20so25751665ljo.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:17:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pfoJSqUJqsGCmKEC9ZJtPKmunb6j3CTpdimjTdrcI9o=;
-        b=gN7la6WhB9fX25f5iMq/3MKNU4VegMYZ39NVSVxDhCib2Un+Bwdv/sgWFQ5KZTbYmy
-         Fmxwsft1nMA0qcdwtdcmJGb9Ott5WRCUl5koJ6DbfmbuXRSW769LYS4vu7UJMy1J+Ke3
-         dmFVBB4Vz9uYo3o+KYgF3YwHtXdHAVK0Dhwgebyng1UHIEf4NE4QW5TSwrDiCFfpGkCZ
-         hihBFzjNyfMPXIUsOfyKD47gmrngwdqW9w4SS9xbrUw8sYX7iISLbvwBhvtoewP3F0Kj
-         F+mNxgBXa8ZQGBRIvH1ybKiD73/1cdqhBnqqVWd/UM8J75OX93XtqNmeDEerPdMFYWEf
-         colw==
+         :cc;
+        bh=f3bcsAklugUA8X5S8eqHouC9oaHAaVuRIrrTe+rJW24=;
+        b=Kyj6Bc9QCO+JV2e2BYCdvw63ME+XVX7mD1L0xBJ/nJR7GpK9LZTXleDRaKPB68Hxqf
+         NF3WNVeqUx6R8F54VtcOKlozz9fWtsQTPFA/AD1Pn0jyl7Lj1dKaXDHiOb1YWkjeoGoJ
+         MtGMRnHvg7Z5dGCMlqb/pWt0QVDxwvRARjEk0xuXalkpvBZpFsZDM3SWTGZT17z6jwOS
+         lh3I5vIbaqNcWcZoxrH1NQILkUplY21IAs+EM9cLeg2p5s25+9obBeljDVfK+Hws4w3J
+         hK5/clJiK6Qu5YhvtVndyA1SEURtS0GIwvwz9ztDT22zdvvM/9IxjtIRXHGgvTG8fflo
+         UsOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pfoJSqUJqsGCmKEC9ZJtPKmunb6j3CTpdimjTdrcI9o=;
-        b=h3L2qGJUAvmArCxivIMyK4XAbswr+iSykr+0D0pZL/mzD/pSTBlubOTemnx+9W0uW7
-         NwMt7K3kuw2Qcr0q8cm/VaBO3yhf1SLbWyUvl1VWVlE3CDHrpupdrbXFWr/s8nzdBbZS
-         bFbd++ioy/MPlW5qEFbA2GMUHOe76GDbehDwOiesJDRze5WdpSPCxCODyxgt3puCQR5z
-         VMDC5xRDNUU7xDWLktqIvxyxwYi99+hDet7wGY4Rpk+zPT3qz+6n0RfE5mhES+HnJrpq
-         QcfSrHenOydZ7s1uTlyqiHE6Z5h59K33zjuS7BzSZaWdXM2/FyOspslV3vLnLpYyDVyB
-         zmnQ==
-X-Gm-Message-State: AOAM53358S6qJhcS8cgqmbteFOYI4e4+FSqHUKYiMgZlht1jMJaoKinT
-        ipIKVhx2irjDallDMPW1HW/1W6a7y88M6NqaIPKNug==
-X-Google-Smtp-Source: ABdhPJwsX1hsMHtqAEpTGOi5lnfcq0WkcArcwt29wPYYWJEgU9sEACiPWvPCksdPKfCIWLUkXL18m2Soth++TljycTU=
-X-Received: by 2002:a7b:c759:: with SMTP id w25mr3175443wmk.10.1643746360413;
- Tue, 01 Feb 2022 12:12:40 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=f3bcsAklugUA8X5S8eqHouC9oaHAaVuRIrrTe+rJW24=;
+        b=X62/yzg/O845jgo56d9P6czUT9S1Ls5WLV8JfNMA7RErMbQwjP1u53lQ9BPwvAOTfo
+         FrHkq4h2kyNcg0lDGOJlza8+IibIWCXcQLgKU/5ipyrY0o+2wPpwitU8DUQOhW1Uyp64
+         6fMNFAKjYbgo9NJiYkKbzKaT2EVzgAi4+eaGKVvdyY0Uh4aeXyT6N6/k+OnZYGN1nsAm
+         BucccL4tdxz2FI04+asSUwpgHw5beKvIquGTJLsstdNX3yc0+tosj71MpRelQXb9ezap
+         KFhkSchKeWSjON6A8B+9+991Rr/Q2HKpcvNaND+6NccNTWinpQvEqAL40DfqjgTLjzUr
+         J5Cg==
+X-Gm-Message-State: AOAM53195MmvwZfo9awkJabkJIkcNha7uZeBOeSzlKnJWj52/eqlcSR6
+        +uSovnDRtCyUEkJxqU/KrzDc6dMsIKjB1QYzMQRQuQ==
+X-Google-Smtp-Source: ABdhPJyjkIdvcR7h9sTh/jFdfLCfqLgmMdmefPijoRUk1ZPBatDBaznmuG2+rrSk2e+yl8Dtm+jGInhyLkuUyY9YRjA=
+X-Received: by 2002:a2e:954:: with SMTP id 81mr8682225ljj.198.1643746624322;
+ Tue, 01 Feb 2022 12:17:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201200353.1331443-1-rad@semihalf.ocm>
-In-Reply-To: <20220201200353.1331443-1-rad@semihalf.ocm>
-From:   =?UTF-8?Q?Rados=C5=82aw_Biernacki?= <rad@semihalf.com>
-Date:   Tue, 1 Feb 2022 21:12:32 +0100
-Message-ID: <CAOs-w0LmVOS-UMSmebeB9XzU_WVCortUrvJVA4Ek3jk18_7WVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Bluetooth: Fix skb handling in net/bluetooth/mgmt.c
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Miao-chen Chou <mcchou@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        upstream@semihalf.com, Angela Czubak <acz@semihalf.com>,
-        Marek Maslanka <mm@semihalf.com>,
-        Radoslaw Biernacki <rad@semihalf.ocm>
+References: <20220201010838.1494405-1-seanjc@google.com> <20220201010838.1494405-2-seanjc@google.com>
+In-Reply-To: <20220201010838.1494405-2-seanjc@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 1 Feb 2022 12:16:52 -0800
+Message-ID: <CAKwvOd=9nwR7z7wn50SU=mf5AywFLd95ZMH-EbYdHfbeHVvq1A@mail.gmail.com>
+Subject: Re: [PATCH 1/5] Kconfig: Add option for asm goto w/ tied outputs to
+ workaround clang-13 bug
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey, please ignore this one as I made a typo in the domain name :|
+On Mon, Jan 31, 2022 at 5:08 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Add a config option to guard (future) usage of asm_volatile_goto() that
+> includes "tied outputs", i.e. "+" constraints that specify both an input
+> and output parameter.  clang-13 has a bug[1] that causes compilation of
+> such inline asm to fail, and KVM wants to use a "+m" constraint to
+> implement a uaccess form of CMPXCHG[2].  E.g. the test code fails with
+>
+>   <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+>   int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+>                             ^
+>   <stdin>:1:29: error: unknown token in expression
+>   <inline asm>:1:9: note: instantiated into assembly here
+>           .long () - .
+>                  ^
+>   2 errors generated.
+>
+> on clang-13, but passes on gcc (with appropriate asm goto support).  The
+> bug is fixed in clang-14, but won't be backported to clang-13 as the
+> changes are too invasive/risky.
 
-wt., 1 lut 2022 o 21:03 Radoslaw Biernacki <rad@semihalf.com> napisa=C5=82(=
-a):
+LGTM.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+If you're going to respin the series, consider adding a comment in the
+source along the lines of:
+```
+clang-14 and gcc-11 fixed this.
+```
+or w/e. This helps us find (via grep) and remove cruft when the
+minimum supported compiler versions are updated.
+
+Note: gcc-10 had a bug with the symbolic references to labels when
+using tied constraints.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096
+
+Both compilers had bugs here, and it may be worth mentioning that in
+the commit message.
+
 >
-> Here is second version of the fix for skb handling in net/bluetooth/mgmt.=
-c
-> First patch is fixing the skb allocation which theoretically might push s=
-kb
-> tail beyond its end.
-> Second patch simplifies operations on eir while using skb.
-> Patches adds two helper functions to eir.h to align to the goal of
-> eliminating the necessity of intermediary buffers, which can be achieved
-> with additional changes done in this spirit.
+> [1] https://github.com/ClangBuiltLinux/linux/issues/1512
+> [2] https://lore.kernel.org/all/YfMruK8%2F1izZ2VHS@google.com
 >
-> v1->v2:
->  - fix mgmt_device_connected()
->  - add eir_skb_put_data() - function for skb handing with eir
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  init/Kconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> Radoslaw Biernacki (2):
->   Bluetooth: Fix skb allocation in mgmt_remote_name() &
->     mgmt_device_connected()
->   Bluetooth: Improve skb handling in mgmt_device_connected()
+> diff --git a/init/Kconfig b/init/Kconfig
+> index e9119bf54b1f..a206b21703be 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -77,6 +77,10 @@ config CC_HAS_ASM_GOTO_OUTPUT
+>         depends on CC_HAS_ASM_GOTO
+>         def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
 >
->  net/bluetooth/eir.h  | 20 ++++++++++++++++++++
->  net/bluetooth/mgmt.c | 43 ++++++++++++++++---------------------------
->  2 files changed, 36 insertions(+), 27 deletions(-)
+> +config CC_HAS_ASM_GOTO_TIED_OUTPUT
+> +       depends on CC_HAS_ASM_GOTO_OUTPUT
+> +       def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
+> +
+>  config TOOLS_SUPPORT_RELR
+>         def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
 >
 > --
 > 2.35.0.rc2.247.g8bbb082509-goog
 >
+
+
+-- 
+Thanks,
+~Nick Desaulniers

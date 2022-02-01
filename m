@@ -2,172 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C5E4A5754
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78904A5756
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiBAGok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:44:40 -0500
-Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:21886
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233800AbiBAGoj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:44:39 -0500
+        id S234378AbiBAGpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:45:35 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:13666 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233800AbiBAGpd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:45:33 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2114xN6x001185;
+        Tue, 1 Feb 2022 06:44:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
+ b=mcIvSmiuKbCdwao1GvQg3eSC4NfIabOncLk6m4lO2fto5CI4QVCBE9F5hmh0BHR26kEm
+ LlLbtTdnQ4uDRrffsbE2ouHETocgqA482jTX9aLOr+KkjXaxzKb1XH9YhSjVg5OkWKcD
+ dWOz5RIiSMIZZt0d7UAH3KSDoV/U3A2+I3pOrMo/QLtQ9CxNAo4A2Oz5c6XUm12FcmdB
+ GevqCqDzuHoqvgvl7ALZ3tJJCQEoKsE2e/3s3EfJiJI5+9XGk7Tb6xypnAavzj21+Pc4
+ b3KXPcsykG4mctR5vPOTnBqeLuPaWcMqGeUD0sfZNoW1kGbalZeLw6PBvc6QlwmjVGkW qw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxnk2h8s5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Feb 2022 06:44:53 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2116VeW5022226;
+        Tue, 1 Feb 2022 06:44:52 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
+        by aserp3030.oracle.com with ESMTP id 3dvumettff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Feb 2022 06:44:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C2QsBHiA/4szjhQ4i3WhIgPav6X5tcRHkMdp2L9CzoVUmlblpWMLkW03iooD1aMQLKlEFhVaUuMU12tNjbBck0pG5Xbyd5rl5svNkN9rPv+MOZskQ9bU0MBRGVb8qRw2b5xg2a3Pv9B4vOaUrD5oNkJc2mvZanjvMK94SjQATyDqGKpyHN+VY+0wy2S/rI/mmzyIM2TgkFETiXOtN6ZaaYM360YVAU/LvU6egmYNc4TvrNxYw3zRF5T4S29/k1pFnLOciLzE5IFQwcAkussi8RKem2Ob2PcP1f117n8pokd9ul4dUs8yQGkdL2S7fMtb1k3uVy+D3akH2YoEnRkbYA==
+ b=UELBln/vXKNS1jISQX1czASY4TDx1zsiPwSzokQX9cvMr/p/+lTudrqFEJ1r2lcA39Y8SqPF1hkUBlhVileFRGxsMFCczT6wAc7MOGnHFsLBXUDVH5CKbtk6apstuhjQTSYNMu4Y6YIvmNATOQ/mhd7D1yLxqm965tE9Bk+Go97y1z5ImH5Kb4VXEC7mBI+k3FZ6jo6whhrLGWIZFT+uRoXqwmdcSMv/ST2b4puybf4psvumWxducKgpBnf2hRjMoBmbaCHrxQWlY3WDKvO0NjawnOxO7+L1zG9isdQwf64hMb60+Kcp/duqbR+Rr65hCTUIoYrNEzssmAFHP/McCg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
- b=OuODX7VrGGUOgDNQ8qMHgrYpznmJoVxV+lf91RE7kcKI9l/tMiezHPqd/+3q2nbvHn9yNOdUY2+yS/Ztv3OGQjDx+7AQxl6D5HrG+CbhNX0q1eXN0GHwknoP6Rz23J2a+3k+/ZZ/tlfBDd3eqsOUmlI2ozIY1F7Z/HxVnvBOAqeVqJnR0zOjbrVtE6aWbV1+yep9zHnBWT1iW3uBXVimoxcgZxwdmdspg/277HVxmE1gOpty5iktE5SE1eJsU8NM8qrpeXvjeQHeQkXzQe0l+NBrB7qa5hKw1bLVLhlmqExjmKqeHrtSLD/W80u4ihwjDQP6puH99X/uP1y7r3IJbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.73) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
+ b=bvy49lC5jASYJDOAjIKrjs7S6HIy7J5es+/m20hOxIrc3pSB60plYgAG4v6RMs+AMDLxDKw59qQHviZzRmtyOApXF+QWSr69lJQThn4hV1HnwBDnzHnazRJluQX/hwN35qQ3HI7nRpwtmn+XM4zzQx8N5hksuaqTKBId/SFhij/DZhJtc8CLEq8av5aWb/OAu5eXaRlT2n3lQE7wtSiin98s62CMKqticCGXiFlbJ/kLVVYCwEAQYw2kpGs4gHUyEZtBwBE5xzx+YaLvKVu/NOZzq0Hb9MmiJS7/F7EOvZX/z4kZ4bfo/XxNMQtim1/1BsuFafjwg8312pGo9zgx3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oq2IMpF61QUGcxy1dJBPW9IH9fgJCW3fc+auXUwcE10=;
- b=UjteLeZpXKTAcRKz0Y6TUMjE+RGmP1rhHiyR0Ns2SoI7DhFz5icTfVuw0IvymGPUAdLXJu8Khk8xGGMr9vHmzq8vhCN3fHfq7ovlhVpbNAS2Erg61kFddhuCnGoR2J+yLCspdKFVZpBJ1Dbc6IVFFJLEoDk0vaNeewKah0vNhW4Tb8h4QSB4nBMK4CjekUZHAUoLF6+8cG9eOBoQyfoQokNqdhb28zczZFWH2viVMLUSQzaceKI/yYtHqHURUpq/CgXb5C+ArF+Z5u7+9wTwkiFWB6M1Nb6MzF/k+/Ndy/YqBXCB3uxDlWIPz+wanwNKNBVyjs39F+4tYoLQV3o/vQ==
-Received: from SV0P279CA0050.NORP279.PROD.OUTLOOK.COM (2603:10a6:f10:13::19)
- by AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:d6::22) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
+ b=PrOTh6rrd9ciwKyHFq9UWyq/vDd94uUGF78NxYDqd2ZFOoPbnc8G5ritYQwj7HFWx1gM2y4/XrgT6Atc/ENtf3VD9kYEIT0jsIjzX8ijQLvI5LEQqWc/ywU/dx2PbGu2OZ+2NjIoXOr3faLCudfPzzu1KhUadr+VOtPQ4PBsP44=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CH0PR10MB4922.namprd10.prod.outlook.com
+ (2603:10b6:610:c6::13) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
- 2022 06:44:36 +0000
-Received: from HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:f10:13:cafe::1e) by SV0P279CA0050.outlook.office365.com
- (2603:10a6:f10:13::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15 via Frontend
- Transport; Tue, 1 Feb 2022 06:44:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.73)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.73 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.73; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.73) by
- HE1EUR01FT064.mail.protection.outlook.com (10.152.1.31) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4930.15 via Frontend Transport; Tue, 1 Feb 2022 06:44:36 +0000
-Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
- DEMCHDC9SNA.ad011.siemens.net (194.138.21.73) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Tue, 1 Feb 2022 07:44:35 +0100
-Received: from [167.87.1.21] (167.87.1.21) by DEMCHDC8A0A.ad011.siemens.net
- (139.25.226.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 1 Feb
- 2022 07:44:35 +0100
-Message-ID: <21e7c87a-7680-bdf0-5290-90126741935f@siemens.com>
-Date:   Tue, 1 Feb 2022 07:44:33 +0100
+ 2022 06:44:49 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4930.021; Tue, 1 Feb 2022
+ 06:44:49 +0000
+Date:   Tue, 1 Feb 2022 09:44:37 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Anatolij Gustschin <agust@denx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Grant Likely <grant.likely@secretlab.ca>,
+        John Bonesio <bones@secretlab.ca>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc: platforms: 52xx: Fix a resource leak in an
+ error handling path
+Message-ID: <20220201064437.GP1951@kadam>
+References: <dec1496d46ccd5311d0f6e9f9ca4238be11bf6a6.1643440531.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dec1496d46ccd5311d0f6e9f9ca4238be11bf6a6.1643440531.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR2P264CA0029.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500::17)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Georgi Valkov <gvalkov@abv.bg>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux Netdev List <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <2f001839-2628-cf80-f5e3-415e7492e206@siemens.com>
- <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <20220131211428.07cc4aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.87.1.21]
-X-ClientProxiedBy: DEMCHDC89YA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
-X-MS-TrafficTypeDiagnostic: AM6PR10MB3400:EE_
-X-Microsoft-Antispam-PRVS: <AM6PR10MB3400B773192D1DB190821DEC95269@AM6PR10MB3400.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: 9a2bbd31-476b-4f29-ab72-08d9e54e57c5
+X-MS-TrafficTypeDiagnostic: CH0PR10MB4922:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR10MB492253DA568A4FCF7728C7D78E269@CH0PR10MB4922.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tYGW3ePxKu4ovIQAw077zqhfBgpEvxZiiY19xQhRXRgPUrJqaOJe79Xf+ajM1Pw2gD4lv93S9WeiHBBhlGIlL0evRyjhJ66w8Jhutfa81EEugYEsBcov8DB9VwAqrhdz8CZkMhCO8ffkZti86iXAf0ApRHhJSdGdJ1fZcsZ2hPsvDqKepGRYLtKOq+6TRA1/iVbTCHmIlAGWYBIsKjNTWf0X7cJ/i21Pby4giODnVoQn7A7qcCg1JBKapOYmT3OZJeVE0q12wuryzpeChH/kZIqk2TEONBLil9qD2DnYgBNIxCwD3W8rXmh3IWF8X3M1johit5jVbopAQnLg+V94LsOZ/lNV4Q7g7eiAT7LURIWt+SUtaHFy6Fa0FoiS9Zxv5G6xy/F0n90N8/YVEbuuzIgQxrqj/LohQyxppfDwkUxcOI3aONDuCpLY28ur8YeQeYh3Yfz8Du1Fzm+MbdjhfmSz1vcaiUmhqHgaEs4EhFxbKxNcGWVLseuNATZKF15aTSPUY9wzgHI8k8GnGwUiMomnd7NFlcPdcTXJDiQJ0XA3fDmpr2sZcK4TijVFtkr23+hBmXHQakW5Hbe3OMrch+PbWRs1dAlUI3FVVwZa4kYoDw+hm+JYRB7yJn/oQEktqEjx5aLmNKidVnyztSVAM1gVzUttzs05xnoMep503OUO3YNu0X8+MexdKTpVmU+S6T5l5kwnm+TkgBhNxuZ3kj0wNJzusf15VpUhMmQjvovuS+xMqthLLvD0BoLoRZtd8JMIbEEQBRtrRXXjZ6PaRw==
-X-Forefront-Antispam-Report: CIP:194.138.21.73;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(53546011)(5660300002)(26005)(16526019)(186003)(83380400001)(336012)(36860700001)(82310400004)(44832011)(956004)(2616005)(2906002)(8936002)(47076005)(31696002)(86362001)(16576012)(316002)(40460700003)(31686004)(6916009)(6706004)(54906003)(508600001)(82960400001)(356005)(4326008)(8676002)(70206006)(70586007)(81166007)(36756003)(3940600001)(43740500002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 06:44:36.3619
+X-Microsoft-Antispam-Message-Info: xfdz6/rQB+1DYiezRlI2o3xv0foYqStkuo2TzDDGIT24Hmi2V5tXOmmtVMN1UMq4Mcv+5JKljvLgvmpdS7T8xpvbuyi+H4ocPA0bMexfY8w+oDbR1cfup3zNuTYADOCad7FG+Srxg/6R36A4KO4ArPWugb9Ez4/z9BIluAq4XWfK4sEN/f7ttyiaRz/wqDWIVgHToV7Ym1k+J0vjkT0RRolJhYWoQLTIuemeGUQvct/eIbW1tyX7POwxxqoKUjfezwqF3aWkKnSEfIQQLHBD/dRJMQteASRRQQVMcegGD5o5LUFJRXsGBLMn0W9HK8RFr0/mu9qhQI0WoVN2HgnZOtEKBEJ9z35X5iyWEMD2wp6y9yOq70MoJ3cI2Cz+yPjnj0tajbjYizjeNBNRtp8Hz0lL4pzDF/uFG3dVOL/G1qLRZtPSrYpMzc8mmDWxRDqJHUzc3Xp6/HxSdKz9SNSJWZthpSRbfuf+8g8LYcJvVs+MhJMZLrBHy0MpLf6EkSNGnyPiQbTmqnI3UVlBre7UOZxobsCrfHh48WC2UeYVBFgYeWvSUqycGu7IUqxVCx4K2xLeuWxMbhAM+5E7S4GAKaxnSMiXWnNnRVeu2aE5m0EKV41mzK3m1xa3LptbjpSfeYkqr2JKkldqba0PNvO9/VEREiPzGEaeMP6xKfJ9Kv3XX4RpiXezd18FoI30P4djUWhfiQ2lgJz1FFvpDWGYYA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6512007)(6486002)(9686003)(66556008)(4326008)(66946007)(66476007)(8676002)(33716001)(83380400001)(44832011)(4744005)(5660300002)(8936002)(6666004)(33656002)(2906002)(7416002)(508600001)(52116002)(26005)(1076003)(6916009)(54906003)(186003)(316002)(38100700002)(38350700002)(86362001)(6506007)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zrZjc7wR2/Fq48NV0xxoLjH30x0aRI+OfeQwlQSzTaP0ZZfX6lAQvZ9Iljvy?=
+ =?us-ascii?Q?8BoEEmzrAykJ9xL+wmNODwaCPS87TVohf0AzyAVMrU9pe0vAkKr7PaxqF8fp?=
+ =?us-ascii?Q?IXvdcRGQ6VTmkNKe8d8zSNiBcBtAamQ2KtOwDWqRKgKN9jy31Bz2is6CMqpj?=
+ =?us-ascii?Q?QbprlvppPdYtbF4dSrj282/XIEEFWsK5OsI++3n2qYaLIPuWTKrBVuWg0XyW?=
+ =?us-ascii?Q?Bj5rKqBJks+b8x3hsWO0D58b2VJha8ZtUXV+S6qpBRO3oR4iwoIudCk64sXM?=
+ =?us-ascii?Q?1qt3vJykJtFNpPBntJgIs5s/OL5Uy/66m3z5k+U0foxP1SwF+/zeDkay3tUP?=
+ =?us-ascii?Q?GxGYY8GIgUfvox4GhbmKaUuGabITAXGOT61z9lQyX/+bx2htCcEAiqZVc6zV?=
+ =?us-ascii?Q?bPTNdty1eUIYPtKLN3Png7D96Pbh16jNHKAcH1VkTunkBamO4WBwL1+W9a88?=
+ =?us-ascii?Q?D48P2JEEuQoI7X5pJgtUdsMwiQDEBHQmTIq26wdUnvI6clB/mjwZODn7Zsqg?=
+ =?us-ascii?Q?nNVMMYY9z8QSEI66iQIHtN8CMNCW4j/BtCcIxgaWGg8PHx6ciIQ8rb0UUs5l?=
+ =?us-ascii?Q?UfHl3f1dj96xlQvKgDzCc0SrOtc2H5L9w0EGmUAD5sEJ9zoXm/f5o2d1cp2P?=
+ =?us-ascii?Q?Q8ePozmrCSCOjnZtdp5dLERXjwlFhJ00R6oo5pon/AcZCkcPrO6x7gx+Faaf?=
+ =?us-ascii?Q?vjjG7TEJYIkKm9zh0WDVjFqgYLfX7odxaAY/83A4+Cr2axggxKgcmntG/Su9?=
+ =?us-ascii?Q?WOYgenvLpEJhYzG9WGyECqYJkMU5uHuUQzDjSifnFTtfLNGFZbE/yStqkvMU?=
+ =?us-ascii?Q?WIF4veBnsrxTY5tOoGiMvBKYY2vlSHlIorAViSEJ2dSv05Pcj0axTuUEHf7u?=
+ =?us-ascii?Q?vgnVc4UTwCftyST9t+CNrtxtQdF9KR7rcrKpMk9nL6/h3n9a4RsreDOM4TZx?=
+ =?us-ascii?Q?AHhZ/IHg/uDsDeNe1EjSGpZbQ9XaeN/msOlVJF8EBM9CiE0K8YI9gWOEpv9i?=
+ =?us-ascii?Q?wkg1twE7ltlOfWoz3XyEAww/EH81qgcLjRRIAX8rGxILjcBuL2i4/URirFWi?=
+ =?us-ascii?Q?juL2LNcrqSQzC7hAIKH4rdnaE0nIOzrOqnv7V4aLCJskDl4YKCRLeiVwRfpo?=
+ =?us-ascii?Q?59kzyz+E8yTSNlCx2gO+AM7bnjHLjIlZnpjdICm+GRQONEkb8XGGJDlagxst?=
+ =?us-ascii?Q?BbTtlanj8mdSD106ujbLzWUYFQMuFGw2mdp887nqD25nQNCPJyQsxjMIIw2H?=
+ =?us-ascii?Q?tNRV3KHKODCkwt1hl99yCFqJOlwfX8DJbliYpCkcb/Ai/gnl5v5OqjtyYY1P?=
+ =?us-ascii?Q?LYVGQvi+Ud7cmt9Fawp+tA1J7hWHbSUdCVmBWptoxjQv7gq3rnw2RI4rZq95?=
+ =?us-ascii?Q?MfJc6p0yi7F8QppBYLW2RhQE2cxMn180+Tb015l3G0xtJsQJD0ZOb/gU1I+3?=
+ =?us-ascii?Q?vwFesoNU2Xq+zfWs+LiWm02alu0p0+wX064KLvCgetJpPS05Y+ShHQkwmLku?=
+ =?us-ascii?Q?7/Kxz/fratazBlos5J0804zQtcjN5srnFKiz4NjjiqZ7vOlKNM/mLWMHUb3L?=
+ =?us-ascii?Q?HZCK7Ly9uEbKypQBED8wpGMSYkedg5Eyyt+Ba4VP4R6qpAEp+SXRr+GrRfo4?=
+ =?us-ascii?Q?kY+RhyI4QtzeJzSv43QFtETmzHkACmmxIJ8zBTDL/HRlapJZJmxbUjNy9iK/?=
+ =?us-ascii?Q?1H2/P+qxBGwL00UwSZ+8ExOGqDw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2bbd31-476b-4f29-ab72-08d9e54e57c5
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 06:44:49.6011
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 814f2bd9-e325-4175-65c4-08d9e54e5024
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.73];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT064.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB3400
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UeZytTrfB/Lnv38iSZldV+5dr4SIU9PsGgyh9olPfAN/kGqVVMfS/QvY55PP6TQepHj1IfRyYXPpdO71rnpsKe0UzIWLP35Cd9ySBn+j6JI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4922
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10244 signatures=673430
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=600 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202010033
+X-Proofpoint-GUID: 7UkjdGNDPis8no-a5K0G0mCfidI9RzC1
+X-Proofpoint-ORIG-GUID: 7UkjdGNDPis8no-a5K0G0mCfidI9RzC1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.02.22 06:14, Jakub Kicinski wrote:
-> On Mon, 31 Jan 2022 19:58:14 +0100 Jan Kiszka wrote:
->> From: Georgi Valkov <gvalkov@abv.bg>
->>
->> When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
->> which reduces the usable size by 2 bytes. Otherwise we have 1512
->> bytes usable instead of 1514, and if we receive more than 1512
->> bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
->> after which the driver malfunctiones and all communication stops.
->>
->> Resolves ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
->>
->> Fixes: f33d9e2b48a3 ("usbnet: ipheth: fix connectivity with iOS 14")
->> Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
->> Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
+On Sat, Jan 29, 2022 at 08:16:04AM +0100, Christophe JAILLET wrote:
+> The error handling path of mpc52xx_lpbfifo_probe() and a request_irq() is
+> not balanced by a corresponding free_irq().
 > 
-> Hm, I'm starting to suspect this patch is cursed..
+> Add the missing call, as already done in the remove function.
 > 
->> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
->> index cd33955df0b6..6a769df0b421 100644
->> --- a/drivers/net/usb/ipheth.c
->> +++ b/drivers/net/usb/ipheth.c
->> @@ -121,7 +121,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
->>    	if (tx_buf == NULL)
+> Fixes: 3c9059d79f5e ("powerpc/5200: add LocalPlus bus FIFO device driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Another strange thing is that the remove function has:
+> 	/* Release the bestcomm transmit task */
+> 	free_irq(bcom_get_task_irq(lpbfifo.bcom_tx_task), &lpbfifo);
+> but I've not been able to find a corresponding request_irq().
 > 
-> There is an extra space character at the start of each line of context.
-> 
->>    		goto free_rx_urb;
->>    
->> -	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-> 
-> But not on the changed lines.
-> 
->> +	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
->>    				    GFP_KERNEL, &rx_urb->transfer_dma);
->>    	if (rx_buf == NULL)
->>    		goto free_tx_buf;
->> @@ -146,7 +146,7 @@ static int ipheth_alloc_urbs(struct ipheth_device *iphone)
->>    
->>    static void ipheth_free_urbs(struct ipheth_device *iphone)
->>    {
->> -	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-> 
-> Pretty clear here in how the opening bracket does not align after the -.
-> 
->> +	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
->>    			  iphone->rx_urb->transfer_dma);
->>    	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
->>    			  iphone->tx_urb->transfer_dma);
->> @@ -317,7 +317,7 @@ static int ipheth_rx_submit(struct ipheth_device *dev, gfp_t mem_flags)
->>    
->>    	usb_fill_bulk_urb(dev->rx_urb, udev,
->>    			  usb_rcvbulkpipe(udev, dev->bulk_in),
->> -			  dev->rx_buf, IPHETH_BUF_SIZE,
->> +			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
->>    			  ipheth_rcvbulk_callback,
->>    			  dev);
->>    	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-> 
+> Is it dead code? Is there something missing in the probe?
+> (...Is it working?...)
 
-Sorry, a submission tool regressed here unnoticed (grrrr!). Will resend.
+I think you're right that the tx_task IRQ is never allocated.
 
-Jan
+I'm pretty sure that if you free a zero IRQ then it's a no-op.  It won't
+find the 0 in the radix tree so irq_to_desc() returns NULL and free_irq()
+returns early.
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+regards,
+dan carpenter
+

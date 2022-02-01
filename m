@@ -2,249 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F0F4A5864
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5ACD4A5867
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 09:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiBAISI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 03:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235369AbiBAISG (ORCPT
+        id S235409AbiBAISd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 03:18:33 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47788
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235369AbiBAISc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 03:18:06 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD0C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 00:18:06 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id 23so48387871ybf.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:18:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wt8jiZyIXTJbpOxSu6w4uaEC9Ik5r4n/TDKnlHuv+jk=;
-        b=NxNQLnagXFaBwNNxLCcb99CO57GG6ah69ujpeprpHDec4gT9Y/8ZiML0XkRjsUHGt4
-         nF7XbJp8jk/sk9Tz+uIXrKt4r23ml4TfSkQtB/U410Gl9wjicQDl4zDeDa33l7HHMbVJ
-         tUY5K3ep8nbtpcD2QeajcVxb1WFU9v0Gcmg74PeU3A297oH7j7SB08bBaoDWjO5CKFVA
-         GnEOaO3FjfR8Rxo3RG3OQw93FgMxZDnSDEM+r6oUyTB8D16ZnmGXunblFU5AM8FOzB38
-         ap0IGjUbyxTPs7EayadDDYgViXhZ6lfkH3IQ6yiGurPwYYYk2SRdFc4eiccSo24B/9mA
-         GUwA==
+        Tue, 1 Feb 2022 03:18:32 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2FB5B3F1BE
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643703511;
+        bh=4OMJ5aSVw9egu+KfVN6MouMq2XmyI041S1HUizk8CCg=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Type;
+        b=QeJWjHOs/TDyxxegU58iKapFRF0SpMTyDqhr9fyHhcS1hIhXhDpfrSAcNAMnVbdlG
+         i8QzN0hGObFje/MwGyuENHxe4Hn4a51kayL8tVqaD5GS3HEyVmTKpTE7Kqbek8jmx2
+         yD3B3e/A3PBo8k13rnq48GU65DbKStdGJ+SNy+VbSAdpFWbwGe9tUXoyR4wUGyF1RU
+         GCXCPIn7ZbuQpoSiVsyJ7TAzLJWL+ccauWcZooHnh8ilwPsoYDRubBxcy3EdPzYzxj
+         rMqnuAORQEvfLrs/JXkRio3O28mNaJBJhtWlRc5bupj7PLPRiJGEG2IP/+yTMxfvmA
+         yP5qJfJa3A/1A==
+Received: by mail-ed1-f69.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso8253460edt.20
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 00:18:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wt8jiZyIXTJbpOxSu6w4uaEC9Ik5r4n/TDKnlHuv+jk=;
-        b=t+LVURJasPuyexlHptPjVeg0OUU2M5TyIEAQX3sUsrr5BmFqiRom0t7Cs1ED0XXVzD
-         PV/YM76zE+NgUE1YcyOkuOygkiVIbyFy9MaPEaKJG1GfG8fjhiKqCd3+VBSJ2tVygYc8
-         WUpPnaeqruKNgJ8bo4LLVjZoU2/o0Ono4DKDAogv2naKWKGRhRisPM3QIcO8cG5gYEJI
-         Cx4rSGi1Ax6jz1mBN3jRNSuo6qEmsuWxupPAA8vbftw6H8Dwh9OjB/P/Rja/B6pq5lNQ
-         1RmobFBnUJrcfIIM9eAKcWdiAhUbrT0poINXUwt8CGVx9GXUPM5F5ClRkuwU87h9rIx2
-         VVxw==
-X-Gm-Message-State: AOAM5333SLozogDS+i17SOPUPfxNGG9XqNB3NTzxaHVB7YNLrcI7rupm
-        ZiTO2A+10MWmGySPMv/0v4TuoESrwtqm3GBaSrBXoA==
-X-Google-Smtp-Source: ABdhPJx7bd8dx/WXe4rl7f4P0ubRYmxQthZHe5kLvw1tydiVONW43HcQ96sFs3AMYfD0hY7QMeWVdtQKwZKn9Jksh1M=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr36098404ybo.108.1643703484663;
- Tue, 01 Feb 2022 00:18:04 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4OMJ5aSVw9egu+KfVN6MouMq2XmyI041S1HUizk8CCg=;
+        b=74fFBn+TI5FIHdXcFtYNa5z0cwi/wmbtWlDKA96I7ewcGK0SxZvz3UrIVPnjCJuEEz
+         z3TdwGZQgRR1up5XKryWzpXzAUKWd5trpWnLKcCJ1TygClJyjZcTWl3c3cODcJXH3jeI
+         yHfQIiVkFbyc0srfq3CMZNSx96A1EFA7m9yDtz8O2ku43hQHIwiJpwBBh2CwcGdzu+E8
+         /7Iym8RwsQskVDnlQR+PzqvuPTGq2w3bhHWXY/o4gn+cEQth7JGW6YbAwJwe5qqs1Jfo
+         CpXQoxVK+y7QBFAvv5BqT4vng8kDa8nE9i9qVikJt2GVjAiJv7Un/TFTOIr+en49qWBQ
+         qBKA==
+X-Gm-Message-State: AOAM532maOG5+LNJVBiO4FkoQ7zf2p7sjfTTBebLvn0o1KzHj6DB2Ez9
+        9yT/jnwd6RmOzzy+wrql+PcFdhTQ7UQ88/CwFakuDWe59xBjrLp5/E2O2pyc/GS38rCPYrizWIz
+        ylbPoaZ612W1NGel/kHRWX+POeAxkNss6MnjTnnAJxQ==
+X-Received: by 2002:a17:906:19ce:: with SMTP id h14mr20919926ejd.407.1643703510614;
+        Tue, 01 Feb 2022 00:18:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwi9GBsiIiYtp42mt15Psk7ObFdzcgWoYjLwVXsinm40dgxMTPh5vnURxVxv53FfpPvG7hEKQ==
+X-Received: by 2002:a17:906:19ce:: with SMTP id h14mr20919913ejd.407.1643703510486;
+        Tue, 01 Feb 2022 00:18:30 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r3sm14368372ejd.129.2022.02.01.00.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 00:18:30 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     linux-phy@lists.infradead.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: (subset) [PATCH 1/8] arm64: dts: exynos: adjust USB DRD clocks with dtschema in Exynos7
+Date:   Tue,  1 Feb 2022 09:17:55 +0100
+Message-Id: <164370347107.13100.9120518363426119036.b4-ty@canonical.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
+References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <20220131105215.644174521@linuxfoundation.org>
-In-Reply-To: <20220131105215.644174521@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Feb 2022 13:47:53 +0530
-Message-ID: <CA+G9fYsKNUkX8Jc3cyj5VXh9VTrunLSovKwvDJ6gaxSTdWkT+Q@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/64] 5.4.176-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 at 16:30, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.176 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.176-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, 29 Jan 2022 20:36:39 +0100, Krzysztof Kozlowski wrote:
+> Use the same order of USB 3.0 DRD controller clocks as in Exynos5433.
+> 
+> 
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Applied, thanks!
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+[1/8] arm64: dts: exynos: adjust USB DRD clocks with dtschema in Exynos7
+      commit: a0d5455330ece6f50ddf9e71d530f91c302803e9
 
-## Build
-* kernel: 5.4.176-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 67819ded87b7d993487007bb528aa90c522a5671
-* git describe: v5.4.175-65-g67819ded87b7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-75-65-g67819ded87b7
-
-## Test Regressions (compared to v5.4.175)
-No test regressions found.
-
-## Metric Regressions (compared to v5.4.175)
-No metric regressions found.
-
-## Test Fixes (compared to v5.4.175)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.175)
-No metric fixes found.
-
-## Test result summary
-total: 93844, pass: 78468, fail: 772, skip: 13562, xfail: 1042
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 258 passed, 0 failed
-* arm64: 36 total, 31 passed, 5 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>

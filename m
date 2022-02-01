@@ -2,113 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A29E4A5994
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F094A5999
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbiBAKDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48728 "EHLO
+        id S234247AbiBAKEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234247AbiBAKDA (ORCPT
+        with ESMTP id S236272AbiBAKEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:03:00 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC79C061714;
-        Tue,  1 Feb 2022 02:03:00 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s5so52213096ejx.2;
-        Tue, 01 Feb 2022 02:03:00 -0800 (PST)
+        Tue, 1 Feb 2022 05:04:12 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFABC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 02:04:12 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id b186so26040920oif.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 02:04:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mClIZuGiU90N8/wVEGuz0kPrT8HDVsO1SF0mMBp9TKA=;
-        b=m8l3iizy6m+bL/jBYQ1WY3ATqWzlyg2KTCyNULM3eVNvkC5wqKTucOmaIxZWFKKHKC
-         O4vEtqtNwuq399PL5WPFG5Z7vCu6zPPjoimtCnr8vb/5lojlVqjvZJwxMJzVd0Vk35+r
-         ZVAR+4L1KqtGJhgkD+zr3U76KGUGG1P7/BPweFRor+Y6JBV2yCS0CX+UFmYJA0lC10As
-         KSMXOwfQMpM5C1cOo7NxFB454lv8KZ0AWzZzM/pxNJiKv31JpTcyWfsVCUPzCl573dFS
-         WOqZrDF8DuO60afmvVeUg1FCdgzqdmHYIJrUyRb6laaV9nlyKLCU0X2qcosie45x9Rgc
-         yezw==
+        bh=ImE3jvqtwAV+LD3LBZrBAooPJ/AXfRcf5iFSgOr0w6o=;
+        b=WtlpDy3xnPS4Ow6+vQ4dBxrn6Vz3PPESADC0fgiQsxxozS48nxXZGUrTLaoT1rGuW0
+         f1AA+qmsaA6J3V47p3Ap2I32/7f/Ij1JGb1OV0o20eYeA//GenP6FIGbFwNtFGdtpxsE
+         DVk7qaMSLatybP6lNOubpT29dRe7zM41Z18Y0SGVIV5GnOiuymNfInEZkSFfh4lqk7Tk
+         S1hq///EMoqDNPmR21bsqRR5p/pNLmhJmKYOMdBg+lqSsFv8gK0pqOSJJJrEeIRWsapZ
+         qbb+y6tnVCaDnFD97p3YOIsTWOYTsPcS5nZEoUTjDHbpyZcH1SjG4VM9OJHjy3Jr3lE3
+         q0kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mClIZuGiU90N8/wVEGuz0kPrT8HDVsO1SF0mMBp9TKA=;
-        b=AjJnTwOTz4vQWsalBUistg/e6KCqcUfSw6yBKo6WhEm4kjQkqSqmSfYN4bRDCIoUmJ
-         nazF20oNS3SSaIGS6zyx00FESNliOYJiXb2yMkyDCIAy3GNDuHqm7i2qYM/h15YhvFq9
-         NlFxQq6uEGixCPYsbXru822uL536p1G19p6X2sKqSb+/72o/SDIba0WLU+07dMW55gSP
-         Dx4Vxvnu2Fk4Ps2vJT+shObijSRHz7a92x1T9G5qqq/YYnXYa3OqW1uQ5iCLVHzZADz6
-         /CpJkCDPdrZiD+BpzcgoscbJsSKll6M7a8VrgssNyf07zzwW1p6H3BwNt+T7ecye0V2z
-         luHg==
-X-Gm-Message-State: AOAM530Yxswqg3PeicJhuNMg8ZwE75fDf/cd+2pDttVOqlXoGDSsWccA
-        ax2IsivtFZ0XbBS6NubsjIb3QENKQWVEd2PGoKU=
-X-Google-Smtp-Source: ABdhPJyfD5PfJ3o2DgbfikfmuisQ6IDuSCV1txCGADlAID79HMnZ8k2HT/445aAlBSn/3Hrxj9wDnw0NxNHNH60hLfE=
-X-Received: by 2002:a17:907:1c1c:: with SMTP id nc28mr20280513ejc.651.1643709778741;
- Tue, 01 Feb 2022 02:02:58 -0800 (PST)
+        bh=ImE3jvqtwAV+LD3LBZrBAooPJ/AXfRcf5iFSgOr0w6o=;
+        b=UIFyrpneRP6GVmZ7hP+JpZaLZ4eUmIbLJVtZ2OHeAh+ypkR8O++8/MY51QW6neig6J
+         eRWbBEWXi8ZEhEokNCXsxR1Yuj77v0zsN/W/10h9dz8ZQV9xjbKj7VIQBwqnF2KeiVI7
+         aLTahIOWSOjKGMSmkkguW2dJtjNVXk6Wx9IO5tWEku3+sd53k3EXxX2l0/jFjKi6Ag8r
+         S4pQDsr1fLQg93KXov91mNz0zE6dVpceo1xCnk2yzHW1M3oLSB6R+9VaFGwKSlYQC46D
+         Yfki8VQ49XUzUv3cailO/ZZDWn1eaj14HccwaUgtSNN5F9gGfj8qv8ALa7UCLB59YitK
+         3f5g==
+X-Gm-Message-State: AOAM531hpRqC35W6frAw2bLS5VK0c2Qhc/qCbuhIDnFIsMlvlrGIDvo6
+        +L36yvsSPNZLIEHoXfe7OZLFpzfei5l4uKjqjl1YHg==
+X-Google-Smtp-Source: ABdhPJw5zMzYhl7/GpfkUsz0+xaN8Oq2G9kzMaTDdieWF+Ulwd9qnLTG2T47AyHbQ67Tglw2fH6iOhP1w6+O8DpSego=
+X-Received: by 2002:a05:6808:b10:: with SMTP id s16mr637994oij.307.1643709851162;
+ Tue, 01 Feb 2022 02:04:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128151540.164759-1-david@redhat.com>
-In-Reply-To: <20220128151540.164759-1-david@redhat.com>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Tue, 1 Feb 2022 13:02:45 +0300
-Message-ID: <CADxRZqx_rAkwFVwSc1ohm-RqKD=-pcBsR+rBrRaw9KazQncANQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1] drivers/base/node: consolidate node device
- subsystem initialization in node_dev_init()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-sh@vger.kernel.org,
-        Sparc kernel list <sparclinux@vger.kernel.org>
+References: <bfa0af18-04ac-857d-d3d8-ad9290f912c8@huawei.com> <20220131175526.1777801-1-dvyukov@google.com>
+In-Reply-To: <20220131175526.1777801-1-dvyukov@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 1 Feb 2022 11:03:59 +0100
+Message-ID: <CACT4Y+YVyJcqbR5j2fsSQ+C5hy78X+aobrUHaZKghFf0_NMv=A@mail.gmail.com>
+Subject: Re: Test 73 Sig_trap fails on arm64
+To:     john.garry@huawei.com, will@kernel.org
+Cc:     acme@kernel.org, elver@google.com, gor@linux.ibm.com,
+        hca@linux.ibm.com, leo.yan@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        sumanthk@linux.ibm.com, svens@linux.ibm.com, tmricht@linux.ibm.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 2:11 PM David Hildenbrand <david@redhat.com> wrote:
+On Mon, 31 Jan 2022 at 18:55, Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> ... and call node_dev_init() after memory_dev_init() from driver_init(),
-> so before any of the existing arch/subsys calls. All online nodes should
-> be known at that point.
+> > On 18/01/2022 12:43, Leo Yan wrote:
+> >
+> > Hi Will,
+> >
+> > Can you kindly check below the question from Leo on this issue?
+> >
+> > You were cc'ed earlier in this thread so should be able to find more
+> > context, if needed.
 >
-> This is in line with memory_dev_init(), which initializes the memory
-> device subsystem and creates all memory block devices.
+> Hi Will, John,
 >
-> Similar to memory_dev_init(), panic() if anything goes wrong, we don't
-> want to continue with such basic initialization errors.
+> I wonder if PSTATE.D flag can be used to resolve this
+> (similar to x86's use of EFLAGS.RF)?
+> I naively tried to do:
 >
-> The important part is that node_dev_init() gets called after
-> memory_dev_init() and after cpu_dev_init(), but before any of the
-> relevant archs call register_cpu() to register the new cpu device under
-> the node device. The latter should be the case for the current users
-> of topology_init().
+> void OnSigtrap(int sig, siginfo_t* info, void* uctx) {
+>   auto& mctx = static_cast<ucontext_t*>(uctx)->uc_mcontext;
+>   mctx.pstate |= PSR_D_BIT;
+> }
 >
-> RFC because I tested only on x86-64 and s390x, I think I cross-compiled all
-> applicable architectures except riscv and sparc.
+> But then I got a SIGSEGV from kernel.
+> But I wasn't able to track yet what part of the kernel did
+> not like setting of D bit.
 
-Compiled and boot tested on sparc.
+I did a naive attempt of moving enabling of single-stepping from
+watchpoint_handler() to rt_sigreturn(), so that we step over the
+intended trapping instruction rather than first instruction of the
+signal handler:
+https://github.com/dvyukov/linux/commit/dfd6903d9c6538e3ad792c1df6ffbcce2072b12b
+(the patch is just a prototype, wrong in lots of ways)
 
-Tested-by: Anatoly Pugachev <matorola@gmail.com> (sparc64)
+This almost worked:
+ - we correctly did not enable single-stepping for the signal handler
+ - rt_sigreturn correctly detected this case and enabled
+single-stepping after restoring the original pr_regs
+
+However, after re_sigreturn I got a call to single_step_handler() with
+pt_regs pointing to the first instruction of the signal handler again.
+I can't explain this, I am not sure how/where the signal handler PC
+got into the picture again... we should have got single_step_handler()
+with pt_regs pointing to the original trapping instruction (the next
+instruction to be precise).
+
+
+
+
+
+> > > On Tue, Jan 18, 2022 at 12:40:04PM +0100, Marco Elver wrote:
+> > >
+> > > [...]
+> > >
+> > >>> Both Arm and Arm64 platforms cannot support signal handler with
+> > >>> breakpoint, please see the details in [1].  So I think we need
+> > >>> something like below:
+> > >>>
+> > >>> static int test__sigtrap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+> > >>> {
+> > >>>          ...
+> > >>>
+> > >>>          if (!BP_SIGNAL_IS_SUPPORTED) {
+> > >>>                  pr_debug("Test not supported on this architecture");
+> > >>>                  return TEST_SKIP;
+> > >>>          }
+> > >>>
+> > >>>          ...
+> > >>> }
+> > >>>
+> > >>> Since we have defined BP_SIGNAL_IS_SUPPORTED, I think we can reuse it at
+> > >>> here.
+> > >>>
+> > >>> [1]https://lore.kernel.org/lkml/157169993406.29376.12473771029179755767.tip-bot2@tip-bot2/
+> > >> Does this limitation also exist for address watchpoints? The sigtrap
+> > >> test does not make use of instruction breakpoints, but instead just
+> > >> sets up a watchpoint on access to a data address.
+> > > Yes, after reading the code, the flow for either instrution breakpoint
+> > > or watchpoint both use the single step [1], thus the signal handler will
+> > > take the single step execution and lead to the infinite loop.
+> > >
+> > > I am not the best person to answer this question; @Will, could you
+> > > confirm for this?  Thanks!
+> > >
+> > > Leo
+> > >
+> > > [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/hw_breakpoint.c

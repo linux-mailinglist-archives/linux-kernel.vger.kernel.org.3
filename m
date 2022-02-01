@@ -2,38 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7264A5BC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BC24A5BBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237617AbiBAMEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:04:00 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52568 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbiBAMD4 (ORCPT
+        id S237569AbiBAMDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237485AbiBAMDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:03:56 -0500
+        Tue, 1 Feb 2022 07:03:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63610C061714;
+        Tue,  1 Feb 2022 04:03:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2569614EA;
-        Tue,  1 Feb 2022 12:03:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC1DC340EB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD113B82D90;
+        Tue,  1 Feb 2022 12:03:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DBFC340EE;
         Tue,  1 Feb 2022 12:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643717010;
-        bh=9Vi/dbHpmTpkL5NZYzRvz2xVSV/Pl1bMaDSOJ1lpwzM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NAt8A4exqO2aK1xkPhHTTUnlqYyTFwAK+Tzvkc9oond8tRZ899vciTg9EDrzQiskk
-         V08V+CeCYgRR99iFh8xLU8UflT88l8mOMSrtY8BY0BDtDRCCm9yq0wXGltZIB7Yrwe
-         bTNvW4jpX2mdcj3kF/H18xkmgpXppRKQZpnFfgk50u30NiInsAiaMDewgw11LrkJ/I
-         G9pIYXfZ7bWpYaAo2n1q0y3ByDjnRs0OTD8mx5VOoFlGwcfZqCPZTZ1AsfgbeqqLaA
-         rvm6vr/NHu8wjosLdOCXsydHQUXOpwzteOFRh2JL74vfUo0Sh5sMdc772iwyu5Qo4K
-         LZhf0rV38x5vg==
+        bh=G+5KjErBUoA0VuKd1uOcKIKve23dzp6jS3teZfj++fA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DMy53Qwmrcncf5BHGzL250502XwXPLmtxMRd1aahJ0T8SqL5+NxKeHlffqkIkDWMQ
+         1FiqZopp55JVNFSJ2uE5eTmPn0gmnsZC6cHLet/wWitIVNuvJf93Eg+r3Epu7X9LqO
+         M9jDPqCMrLXKCyIDkFC9DTJAsAvF3yRAjMXkddgX2nyaHeQV3mwAXWvIGu/Pl9JuRs
+         QbeD18EcYsFfuFotJEbw+YLhmlhpVGAJB7C4bBlAuOL/4psKBufAW6hEbKrd739Hoz
+         BFrCczw+rT+OP4QJfT0s0pQX94JOuJ2LZ1qkMihp0LPCIW7wGK/MbVYjhvqxUGxaHg
+         sdqxp/NQeK1rw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nErse-004d46-Es; Tue, 01 Feb 2022 12:03:28 +0000
+        id 1nErse-004d46-UF; Tue, 01 Feb 2022 12:03:28 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -51,10 +54,12 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>
-Subject: [PATCH 00/12] genirq: Move irqchip runtime PM over to irq domain
-Date:   Tue,  1 Feb 2022 12:02:58 +0000
-Message-Id: <20220201120310.878267-1-maz@kernel.org>
+Subject: [PATCH 01/12] genirq: Allow the PM device to originate from irq domain
+Date:   Tue,  1 Feb 2022 12:02:59 +0000
+Message-Id: <20220201120310.878267-2-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220201120310.878267-1-maz@kernel.org>
+References: <20220201120310.878267-1-maz@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
@@ -65,66 +70,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our irq_chip data structure currently suffers from two problems:
+As a preparation to moving the reference to the device used for
+runtime power management, add a new 'dev' field to the irqdomain
+structure for that exact purpose.
 
-(1) the 'name' field is often dynamically populated with a reference
-    to the underlying HW (DT node dame, for example)
+The irq_chip_pm_{get,put}() helpers are made aware of the dual
+location via a new private helper.
 
-(2) the 'parent_device' which is used to implement runtime PM is also
-    dynamically populated
+No functional change intended.
 
-(3) there is at least one instance of a subsystem messing with the
-    internals of irq_chip structures (gpiochip_set_irq_hooks is
-    what I know about)
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ include/linux/irqdomain.h | 10 ++++++++++
+ kernel/irq/chip.c         | 23 ++++++++++++++++++-----
+ 2 files changed, 28 insertions(+), 5 deletions(-)
 
-These things mean that although the primary use of irq_chip is to only
-contain function pointers and other *static* information, the above
-two fields result in these structures being copied in a number of
-drivers. Eventually, it would be much better if the various drivers
-would use irq_chip as an 'ops' data structure (potentially made
-read-only), and keep the dynamic information somewhere more suitable.
-
-For (2) we already have the irqdomain structure that is designed to
-deal with the context in which interrupts are used, and it makes sense
-to move the 'parent_device' field over to this structure. This is what
-this small series is doing, with some minor cleanup on the way.
-
-(1) and (3) will be dealt in separate series (and I don't have a good
-solution for (3) yet).
-
-Thanks,
-
-	M.
-
-Marc Zyngier (12):
-  genirq: Allow the PM device to originate from irq domain
-  irqchip/gic: Move PM device over to irq domain
-  irqchip/renesas-intc-gpio: Move PM device over to irq domain
-  irqchip/renesas-irqc: Move PM device over to irq domain
-  irqchip/imx-intmux: Move PM device over to irq domain
-  gpio: mt7621: Kill parent_device usage
-  gpio: omap: Move PM device over to irq domain
-  gpio: rcar: Move PM device over to irq domain
-  gpio: tpmx86: Move PM device over to irq domain
-  pinctrl: npcm: Fix broken references to chip->parent_device
-  pinctrl: starfive: Move PM device over to irq domain
-  genirq: Kill irq_chip::parent_device
-
- drivers/gpio/gpio-mt7621.c                |  1 -
- drivers/gpio/gpio-omap.c                  |  7 ++++---
- drivers/gpio/gpio-rcar.c                  |  2 +-
- drivers/gpio/gpio-tqmx86.c                |  3 ++-
- drivers/irqchip/irq-gic.c                 | 12 +++++------
- drivers/irqchip/irq-imx-intmux.c          |  8 +++-----
- drivers/irqchip/irq-renesas-intc-irqpin.c |  3 ++-
- drivers/irqchip/irq-renesas-irqc.c        |  3 ++-
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 25 +++++++++++------------
- drivers/pinctrl/pinctrl-starfive.c        |  3 ++-
- include/linux/irq.h                       |  2 --
- include/linux/irqdomain.h                 | 10 +++++++++
- kernel/irq/chip.c                         | 20 +++++++++++++-----
- 13 files changed, 59 insertions(+), 40 deletions(-)
-
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index d476405802e9..be25a33293e5 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -151,6 +151,8 @@ struct irq_domain_chip_generic;
+  * @gc: Pointer to a list of generic chips. There is a helper function for
+  *      setting up one or more generic chips for interrupt controllers
+  *      drivers using the generic chip library which uses this pointer.
++ * @dev: Pointer to a device that the domain represent, and that will be
++ *       used for power management purposes.
+  * @parent: Pointer to parent irq_domain to support hierarchy irq_domains
+  *
+  * Revmap data, used internally by irq_domain
+@@ -171,6 +173,7 @@ struct irq_domain {
+ 	struct fwnode_handle *fwnode;
+ 	enum irq_domain_bus_token bus_token;
+ 	struct irq_domain_chip_generic *gc;
++	struct device *dev;
+ #ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
+ 	struct irq_domain *parent;
+ #endif
+@@ -226,6 +229,13 @@ static inline struct device_node *irq_domain_get_of_node(struct irq_domain *d)
+ 	return to_of_node(d->fwnode);
+ }
+ 
++static inline void irq_domain_set_pm_device(struct irq_domain *d,
++					    struct device *dev)
++{
++	if (d)
++		d->dev = dev;
++}
++
+ #ifdef CONFIG_IRQ_DOMAIN
+ struct fwnode_handle *__irq_domain_alloc_fwnode(unsigned int type, int id,
+ 						const char *name, phys_addr_t *pa);
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index c09324663088..a2a12cdbe872 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -1558,6 +1558,17 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+ 	return 0;
+ }
+ 
++static struct device *irq_get_parent_device(struct irq_data *data)
++{
++	if (data->chip->parent_device)
++		return data->chip->parent_device;
++
++	if (data->domain)
++		return data->domain->dev;
++
++	return NULL;
++}
++
+ /**
+  * irq_chip_pm_get - Enable power for an IRQ chip
+  * @data:	Pointer to interrupt specific data
+@@ -1567,12 +1578,13 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+  */
+ int irq_chip_pm_get(struct irq_data *data)
+ {
++	struct device *dev = irq_get_parent_device(data);
+ 	int retval;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device) {
+-		retval = pm_runtime_get_sync(data->chip->parent_device);
++	if (IS_ENABLED(CONFIG_PM) && dev) {
++		retval = pm_runtime_get_sync(dev);
+ 		if (retval < 0) {
+-			pm_runtime_put_noidle(data->chip->parent_device);
++			pm_runtime_put_noidle(dev);
+ 			return retval;
+ 		}
+ 	}
+@@ -1590,10 +1602,11 @@ int irq_chip_pm_get(struct irq_data *data)
+  */
+ int irq_chip_pm_put(struct irq_data *data)
+ {
++	struct device *dev = irq_get_parent_device(data);
+ 	int retval = 0;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device)
+-		retval = pm_runtime_put(data->chip->parent_device);
++	if (IS_ENABLED(CONFIG_PM) && dev)
++		retval = pm_runtime_put(dev);
+ 
+ 	return (retval < 0) ? retval : 0;
+ }
 -- 
 2.30.2
 

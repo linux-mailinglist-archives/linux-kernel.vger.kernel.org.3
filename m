@@ -2,449 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165DC4A6788
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450654A678F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237184AbiBAWIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:08:48 -0500
-Received: from mga06.intel.com ([134.134.136.31]:64703 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231178AbiBAWIq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:08:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643753326; x=1675289326;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fkaetyVO8iO1u83Q8FYzd7x9Y1NS9dL3LkWYVXa+5qo=;
-  b=W9Zoc5QhsFU41wr0I8M6AVTFZOwOVcR0bH6Ipxs6B9ZWnxl9cg/UHceN
-   VZMtZR0JfQ2OUyR8R4CEDlRMntrWWAoUSa6ZosG2aWJJAyi9IcvvrggVx
-   Rnso8A+s4SHa6YP2adIwdGXgr+Ejm1PDoT0zzTSsoNn4qFKyn5TfRM1Fe
-   JshCulodxYFENjqqmvGB6eLOaUYoYmqlrym/6M6Io8MuqjGVqtgiPJnBU
-   H2XGiQ8VOe8WBICigNUsfTjc4i8U2QIvaIScdNzrPgAsvq+60XjIXrfvU
-   t5ZYHDEQXfHhkOjMceGPVDNi1nehO5cTxBrED57iIn99PZbrN0i21DTvJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="308537185"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="308537185"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:08:45 -0800
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="534671583"
-Received: from manojbab-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.43.7])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:08:45 -0800
-Date:   Tue, 1 Feb 2022 14:08:44 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     airlied@linux.ie, daniel.vetter@ffwll.ch,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        srinivas.kandagatla@linaro.org, tzimmermann@suse.de,
-        gregkh@linuxfoundation.org, nouveau@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 00/14] Rename dma-buf-map
-Message-ID: <20220201220844.qznncx2wxepny3q3@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220128083626.3012259-1-lucas.demarchi@intel.com>
- <a45a8cef-f5e7-604c-64f1-e893ec9ba8af@amd.com>
- <20220128091213.qaq6v4vbeerzvd3f@ldmartin-desk2>
- <27870484-6d16-5bd4-aa06-0ec513111d99@amd.com>
- <20220128094018.m7pixeznedoa47gb@ldmartin-desk2>
- <36a08a90-3614-27b4-166b-9d113b644af3@amd.com>
- <20220201003647.djakrmdebqigpz3j@ldmartin-desk2>
- <7a6533ae-9a42-06aa-3da6-0986a72c3392@amd.com>
+        id S237396AbiBAWK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231178AbiBAWKz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:10:55 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B08C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:10:55 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id u130so17120189pfc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:10:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2xHEO6/IBGHMAC/QWKgy3q9RlJbp71AlC0JvRvEV/DE=;
+        b=AMBjtxpi2+m2v8BOBUBBFm6evgAA7q21Mi7YpqNmsTNr+KPLlkkvJbAZRkeuTS2E27
+         e70+E6dfkmznoSqepcK4TGSZt7l3+P5pQduy7QwipHihcNH+zA670k59ivCOBH8H6ApS
+         +bwhjb2dRevjYyZRsKEdHDLv8yED/2cviLvH2/0cz9YWK362fLAZcEwKiLVgqR/5lLPI
+         Lh2fd3Y6m4g7lh6072LVTfFRZWVYM3JSZv4tN5L5K+JYVRc60iP0nkmmrW6OBaKhH97d
+         leiGTK39Evv2EbTMtjdkGXvoolqhhax44LaZHCXQS7aoaV/+uqPQKqKlzk/6jgcsoXjo
+         u9uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2xHEO6/IBGHMAC/QWKgy3q9RlJbp71AlC0JvRvEV/DE=;
+        b=3B6fIed0WJ4j4V41sjbpcyjC/poOK8462tpI0ftGPTAWp3rYLnW72AQLkI37b66r+f
+         MdmkpBHbhIYI3sNJzA/Fn6KfQe3rYROO0tVLYrSKEHE5LSSzs8sVDp8QHd4nocPb8y/w
+         FTonw0aHPUzl+CP/UzJph46Cmw5OPD3vhpol6ceorKjX16omnddqz9Je4+8lp/Vupsh3
+         vyfkdWLF7dIoj/i3x0xuIjDxbMWGZjoUXV5HW6rJuIwpR1GPOZXBmhKDpbW5QbVl3Ao4
+         lN08FmWPChX6+qwHGoURRVteCs2klyx6B8dCOkInDCtcxFRUjTDh0U4kPszFeqABymuo
+         cTdQ==
+X-Gm-Message-State: AOAM533bQ1oDmWUUvLjUWfjd0lO97SwT1t5A13Wzhdey4/L1KpWCvD+a
+        x/FgTryyotnGVGC/gcBwTdWu0Qbvsjg6dLJoKpswywQk8e8ZfPGQ
+X-Google-Smtp-Source: ABdhPJw95Z6BIWNIq4Ux1U5dRo6t0UlChSg6ajpZgF1yoghZAg6I52WPcd0fWNRigZqtiTqKl/OufKTdCeDrFiD3WDY=
+X-Received: by 2002:a62:8183:: with SMTP id t125mr26780654pfd.41.1643753454908;
+ Tue, 01 Feb 2022 14:10:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a6533ae-9a42-06aa-3da6-0986a72c3392@amd.com>
+References: <20220201200823.3283171-1-yosryahmed@google.com> <YfmffkUfDGg4g+xt@cmpxchg.org>
+In-Reply-To: <YfmffkUfDGg4g+xt@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 1 Feb 2022 14:10:18 -0800
+Message-ID: <CAJD7tkYQReWVG5f-xX8Lr7Yj0ewz4TFkN7uTe6Kkn8LDmp1zXQ@mail.gmail.com>
+Subject: Re: [PATCH] memcg: add per-memcg total kernel memory stat
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 08:46:15AM +0100, Christian König wrote:
->Am 01.02.22 um 01:36 schrieb Lucas De Marchi:
->>On Fri, Jan 28, 2022 at 10:48:42AM +0100, Christian König wrote:
->>>Am 28.01.22 um 10:40 schrieb Lucas De Marchi:
->>>>On Fri, Jan 28, 2022 at 10:22:00AM +0100, Christian König wrote:
->>>>>Am 28.01.22 um 10:12 schrieb Lucas De Marchi:
->>>>>>On Fri, Jan 28, 2022 at 09:41:14AM +0100, Christian König wrote:
->>>>>>>Rule #1 is to never ever break the build.
->>>>>>>
->>>>>>>Because of this all those patches needs to be squashed 
->>>>>>>into a single one as far as I can see.
->>>>>>
->>>>>>what config are you building on?
->>>>>
->>>>>Well I'm not building at all, I'm just looking at the patches 
->>>>>as an engineer with 25 years of experience with Linux patches.
->>>>>
->>>>>Just take a look at patch number 2:
->>>>>
->>>>>-static int fastrpc_vmap(struct dma_buf *dmabuf, struct 
->>>>>dma_buf_map *map)
->>>>>+static int fastrpc_vmap(struct dma_buf *dmabuf, struct 
->>>>>iosys_map *map)
->>>>>
->>>>>You are changing the functions signature without changing any 
->>>>>of the callers.
->>>>>
->>>>>At bare minimum that causes a warning and on runtime this only 
->>>>>works by coincident now because the structure pointers just 
->>>>>happen to have the same layout. This is not something we 
->>>>>usually do.
->>>>
->>>>you missed the magic/hack on patch 1:
->>>>
->>>>1) dma-buf-map.h includes iosys-map.h _at the end_
->>>>2) iosys-map.h includes dma-buf-map.h at the beginning
->>>>   and initially does a "define iosys_map dma_buf_map".
->>>>
->>>>So, it doesn't work by coincidence, It's because it was done to allow
->>>>converting it piecemeal.
->>>
->>>Oh, my. Please never do stuff like that again.
->>
->>It's not uncommon approach to be required by other subsystems. Even
->>drm-intel already used similar approach for macro conversions crossing
->>drm-intel-next and drm-intel-gt-next branches recently.  As I said, I
->>don't mind one way or the other.
+Hello Johannes,
+
+Thanks so much for your review.
+
+On Tue, Feb 1, 2022 at 1:00 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
 >
->The key point is that you seemed to have a misunderstanding why we 
->separate changes into functional independent patches.
+> Hello Yosry,
 >
->The goal of that is *not* to reduce the number of lines in a patch, 
->but rather to reduce the complexity of the review.
+> On Tue, Feb 01, 2022 at 08:08:23PM +0000, Yosry Ahmed wrote:
+> > Currently memcg stats show several types of kernel memory:
+> > kernel stack, page tables, sock, vmalloc, and slab.
+> > However, there are other allocations with __GFP_ACCOUNT
+> > (or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
+> > in any of those stats, a few examples are:
+> > - various kvm allocations (e.g. allocated pages to create vcpus)
+> > - io_uring
+> > - tmp_page in pipes during pipe_write()
+> > - bpf ringbuffers
+> > - unix sockets
+> >
+> > Keeping track of the total kernel memory is essential for the ease of
+> > migration from cgroup v1 to v2 as there are large discrepancies between
+> > v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
+> > in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
+> > allocations is an impractical maintenance burden as there a lot of those
+> > all over the kernel code, with more use cases likely to show up in the
+> > future.
 >
->When you do an automated renamed with a cocci or sed script you can 
->have a 100k line patch as result, which is perfectly fine to send out 
->like this as long as you include the script/commands used to 
->autogenerate the patch.
+> No objection, I'm just curious how it makes migration to v2 easier in
+> particular. Or is it just that you've used the v1 stat to track
+> application regressions and would like to continue doing that in v2?
 >
->The background is that everybody on the planet can generate the patch 
->with those commands himself and see if the results matches your patch 
 
-no, as I said in the cover letter there were tweaks needed.
+We are using "memory.kmem.usage_in_bytes" in v1 to get the total
+kernel memory accounted to a memcg to maintain historical data of jobs
+memory (anon, file, kernel), and for debugging purposes. In v2 there
+is no equivalent.
 
->or not. The maintainer of the component can then just puts an Acked-by 
->on the patch and move on, but separating the patch causes additional 
->work for both you as well as the reviewers.
+We found that the total of other existing v2 kernel memory stats
+(vmalloc, slab, stack, ..) is very different for some workloads
+compared to v1's "memory.kmem.usage_in_bytes". We need a v2 indicator
+of the total kernel memory accounted to a memcg."
+
+> > Therefore, add a "kernel" memcg stat that is analogous to kmem
+> > page counter, with added benefits such as using rstat infrastructure
+> > which aggregates stats more efficiently. Additionally, this provides a
+> > lighter alternative in case the legacy kmem is deprecated in the future
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  Documentation/admin-guide/cgroup-v2.rst |  5 +++++
+> >  include/linux/memcontrol.h              |  1 +
+> >  mm/memcontrol.c                         | 24 ++++++++++++++++++------
+> >  3 files changed, 24 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> > index 5aa368d165da..a0027d570a7f 100644
+> > --- a/Documentation/admin-guide/cgroup-v2.rst
+> > +++ b/Documentation/admin-guide/cgroup-v2.rst
+> > @@ -1317,6 +1317,11 @@ PAGE_SIZE multiple when read back.
+> >         vmalloc (npn)
+> >               Amount of memory used for vmap backed memory.
+> >
+> > +       kernel (npn)
+> > +             Amount of total kernel memory, including
+> > +             (kernel_stack, pagetables, percpu, vmalloc, slab) in
+> > +             addition to other kernel memory use cases.
+> > +
+> >         shmem
+> >               Amount of cached filesystem data that is swap-backed,
+> >               such as tmpfs, shm segments, shared anonymous mmap()s
+> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > index b72d75141e12..fa51986365a4 100644
+> > --- a/include/linux/memcontrol.h
+> > +++ b/include/linux/memcontrol.h
+> > @@ -34,6 +34,7 @@ enum memcg_stat_item {
+> >       MEMCG_SOCK,
+> >       MEMCG_PERCPU_B,
+> >       MEMCG_VMALLOC,
+> > +     MEMCG_KMEM,
+> >       MEMCG_NR_STAT,
+> >  };
+> >
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 09d342c7cbd0..c55d7056ac98 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -1376,6 +1376,7 @@ static const struct memory_stat memory_stats[] = {
+> >       { "percpu",                     MEMCG_PERCPU_B                  },
+> >       { "sock",                       MEMCG_SOCK                      },
+> >       { "vmalloc",                    MEMCG_VMALLOC                   },
+> > +     { "kernel",                     MEMCG_KMEM                      },
 >
->Separating the change into individual patches as much as possible is 
->nice to have when you do a functional change and want or need a review 
->from each individual driver maintainer. This is usually the default 
->case, so sticking with separated changes as much as possible is 
->usually still the best practice.
-
-Not sure if I should continue replying on why I split these specific
-patches.  I even mentioned in this cover letter about squashing
-everything in a single patch, and I'm fine with that.
-
-Anyway, there are other reasons to split the patches when it crosses
-branches you don't seem to acknowledge. It's harder for maintainers of
-the specific branches to review/ack only the changes on their part. It's
-harder to find the best timing to merge it. The mega patch doesn't apply
-to *any* specific branch, potentially leaving silent conflicts behind.
-You may notice the patch was split by branch boundary for these very
-reasons.
-
-If maintainers prefer to have a single patch, I'm fine, I had already
-said that.
-
-
+> It's a superset of percpu, sock, vmalloc etc., so please move it ahead
+> of them.
 >
->>
->>Before I go and respin this into a single mega patch, I'd like to gather
->>some feedback on the following topics:
->>
->>1) Daniel Vetter and Thomas Zimmermann seemed to be ok with staying with
->>the current name, dma_buf_map, while you prefer it renamed. Or at
->>least not make the rename a pre-requisite for the API additions in
->>https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20220126203702.1784589-1-lucas.demarchi%40intel.com%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C01142fa3ce484040ade008d9e51aef5d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637792726123940514%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=ieMZ9Jiwo%2FQpT5kyyQgHNlepiusN%2Fkfff1Op6TVQ%2BaA%3D&amp;reserved=0
->>
->>
->>One thing I like about the rename is that it makes clear the separation
->>between this small shim and dma-buf. There are also some APIs
->>that are really dma-buf API (e.g. dma_buf_map_attachment()), but if you
->>don't look carefully you may think it's from dma_buf_map.
+>         anon
+>         file
+>         kernel
+>         kernel_stack
+>         pagetables
+>         ...
 >
->Exactly that's the reason why I see this rename as mandatory.
+> and in the doc as well.
 >
->Adding the functionality goes beyond the inter driver interface 
->DMA-buf provides into driver internal territory and I want to make 
->sure that people understand just from the name alone that this is not 
->part of DMA-buf but rather an independent functionality.
 
-yep, agreed.
+Done in v2.
 
+> >       { "shmem",                      NR_SHMEM                        },
+> >       { "file_mapped",                NR_FILE_MAPPED                  },
+> >       { "file_dirty",                 NR_FILE_DIRTY                   },
+> > @@ -2979,6 +2980,19 @@ static void memcg_free_cache_id(int id)
+> >       ida_simple_remove(&memcg_cache_ida, id);
+> >  }
+> >
+> > +static void mem_cgroup_kmem_record(struct mem_cgroup *memcg,
+> > +                                int nr_pages)
 >
->>
->>2) If renaming, would it still keep the same entry in
->>MAINTAINERS? Thomas suggested drivers core, but this all seem to be used
->>mainly on drm/, with just one exception.
->
->I would just add a complete new entry for this and use Thomas as 
->maintainer (with his permission of course) and dri as mailing list.
+> No real need for the namespace prefix since it's a static
+> function. How about account_kmem()? Avoids the line wrap, too.
 
-ack. I will do that since he acked on doing this in his reply.
+Does memcg_account_kmem() sound good? It avoids the line wrap too and
+is more consistent with most static functions in the file that have
+either a "memcg_" or "mem_cgroup_" prefix.
 
-thanks
-Lucas De Marchi
+Thanks!
 
 >
->>
->>3) If renaming, do we have another preferred name?
+> Otherwise, looks good to me, so with those changes:
 >
->Nope, as Daniel said the name itself is only bikesheed. What is 
->important is that we see this as functionality separated from the 
->inter driver interface.
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 >
->Regards,
->Christian.
->
->>
->>
->>thanks
->>Lucas De Marchi
->>
->>>
->>>>
->>>>But as I said, I don't really have a preference. When crossing
->>>>subsystems one thing that is hard is that different people have 
->>>>different
->>>>preferences on these things. At least squashing now is much easier than
->>>>if I had to split it
->>>>
->>>>Try to imagine how much complain I received on going the other way in
->>>>25985edcedea6396277003854657b5f3cb31a628 with
->>>>2463 files changed, 4252 insertions(+), 4252 deletions(-)
->>>
->>>Well exactly that is perfectly fine.
->>>
->>>What you do here is applying your personal hack which is 
->>>absolutely not welcomed.
->>>
->>>Regards,
->>>Christian.
->>>
->>>>:)
->>>>
->>>>
->>>>Lucas De Marchi
->>>>
->>>>>
->>>>>Regards,
->>>>>Christian.
->>>>>
->>>>>>I built this series, full config with
->>>>>>CONFIG_COMPILE_TEST and doing:
->>>>>>
->>>>>>    git rebase -i <base> -x "make -j$(nproc)"
->>>>>>
->>>>>>I split these patches in a way that wouldn't break the build 
->>>>>>on purpose.
->>>>>>There were a couple that I couldn't build without cross 
->>>>>>compiling: tegra
->>>>>>and rockchip. The others were ok.
->>>>>>
->>>>>>I'm not really against squashing everything in one to merge, though.
->>>>>>It will be hard on the conflicts later, but should get the 
->>>>>>job done much
->>>>>>quicker.
->>>>>>
->>>>>>Lucas De Marchi
->>>>>>
->>>>>>>
->>>>>>>Regards,
->>>>>>>Christian.
->>>>>>>
->>>>>>>Am 28.01.22 um 09:36 schrieb Lucas De Marchi:
->>>>>>>>Motivation for this started in
->>>>>>>>https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20220126203702.1784589-1-lucas.demarchi%40intel.com%2F&amp;data=04%7C01%7Cchristian.koenig%40amd.com%7C01142fa3ce484040ade008d9e51aef5d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637792726123940514%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=p8rR28Hn0yMTbwy%2F7bpiGyG9fAu9kG1VUzX2MF44mcs%3D&amp;reserved=0
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>>when trying to extend the dma-buf-map API to cover new 
->>>>>>>>use cases: help a
->>>>>>>>single driver with allocations and sharing code paths 
->>>>>>>>for IO and system
->>>>>>>>memory. I'm leaving the API additions aside and first renaming the
->>>>>>>>interface as requested.
->>>>>>>>
->>>>>>>>There are already some users in tree outside the context of dma-buf
->>>>>>>>importer/exporter. So before extending the API, let's 
->>>>>>>>dissociate it from
->>>>>>>>dma-buf.
->>>>>>>>
->>>>>>>>The iosys-map.h is introduced in the first patch in a 
->>>>>>>>way that allows
->>>>>>>>the conversion of each driver to happen separately. After all the
->>>>>>>>conversions are done we can remove the old one, which is 
->>>>>>>>the last patch.
->>>>>>>>Another possible way is to squash everything and merge together,
->>>>>>>>but I believe this would make much harder for review.
->>>>>>>>
->>>>>>>>The conversion was done with the following semantic patch:
->>>>>>>>
->>>>>>>>    @r1@
->>>>>>>>    @@
->>>>>>>>    - struct dma_buf_map
->>>>>>>>    + struct iosys_map
->>>>>>>>
->>>>>>>>    @r2@
->>>>>>>>    @@
->>>>>>>>    (
->>>>>>>>    - DMA_BUF_MAP_INIT_VADDR
->>>>>>>>    + IOSYS_MAP_INIT_VADDR
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_set_vaddr
->>>>>>>>    + iosys_map_set_vaddr
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_set_vaddr_iomem
->>>>>>>>    + iosys_map_set_vaddr_iomem
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_is_equal
->>>>>>>>    + iosys_map_is_equal
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_is_null
->>>>>>>>    + iosys_map_is_null
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_is_set
->>>>>>>>    + iosys_map_is_set
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_clear
->>>>>>>>    + iosys_map_clear
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_memcpy_to
->>>>>>>>    + iosys_map_memcpy_to
->>>>>>>>    |
->>>>>>>>    - dma_buf_map_incr
->>>>>>>>    + iosys_map_incr
->>>>>>>>    )
->>>>>>>>
->>>>>>>>    @@
->>>>>>>>    @@
->>>>>>>>    - #include <linux/dma-buf-map.h>
->>>>>>>>    + #include <linux/iosys-map.h>
->>>>>>>>
->>>>>>>>and then some files had their includes adjusted so we can build
->>>>>>>>everything on each commit in this series. Also some 
->>>>>>>>comments were update
->>>>>>>>to remove mentions to dma-buf-map. Simply doing a sed to 
->>>>>>>>rename didn't
->>>>>>>>work as dma-buf has some APIs using the dma_buf_map prefix.
->>>>>>>>
->>>>>>>>Once finalized, I think most of this, if not all, could 
->>>>>>>>go through the
->>>>>>>>drm-misc-next branch. I split i915, msm, nouveau, and 
->>>>>>>>radeon in their
->>>>>>>>own patches in case it's preferred to take those through their own
->>>>>>>>trees.
->>>>>>>>
->>>>>>>>Lucas De Marchi
->>>>>>>>
->>>>>>>>Lucas De Marchi (14):
->>>>>>>>  iosys-map: Introduce renamed dma-buf-map
->>>>>>>>  misc: fastrpc: Replace dma-buf-map with iosys-map
->>>>>>>>  dma-buf: Replace dma-buf-map with iosys-map
->>>>>>>>  media: Replace dma-buf-map with iosys-map
->>>>>>>>  drm/ttm: Replace dma-buf-map with iosys-map
->>>>>>>>  drm: Replace dma-buf-map with iosys-map in drivers
->>>>>>>>  drm/i915: Replace dma-buf-map with iosys-map
->>>>>>>>  drm/msm: Replace dma-buf-map with iosys-map
->>>>>>>>  drm/nouveau: Replace dma-buf-map with iosys-map
->>>>>>>>  drm/tegra: Replace dma-buf-map with iosys-map
->>>>>>>>  drm/radeon: Replace dma-buf-map with iosys-map
->>>>>>>>  drm: Replace dma-buf-map with iosys-map in common code
->>>>>>>>  Documentation: Refer to iosys-map instead of dma-buf-map
->>>>>>>>  dma-buf-map: Remove API in favor of iosys-map
->>>>>>>>
->>>>>>>> Documentation/driver-api/dma-buf.rst          |   4 +-
->>>>>>>> Documentation/gpu/todo.rst                    |  20 +-
->>>>>>>> MAINTAINERS                                   |   2 +-
->>>>>>>> drivers/dma-buf/dma-buf.c                     |  22 +-
->>>>>>>> drivers/dma-buf/heaps/cma_heap.c              |  10 +-
->>>>>>>> drivers/dma-buf/heaps/system_heap.c           |  10 +-
->>>>>>>> drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
->>>>>>>> drivers/gpu/drm/ast/ast_mode.c                |   8 +-
->>>>>>>> drivers/gpu/drm/drm_cache.c                   |  18 +-
->>>>>>>> drivers/gpu/drm/drm_client.c                  |   9 +-
->>>>>>>> drivers/gpu/drm/drm_fb_helper.c               |  12 +-
->>>>>>>> drivers/gpu/drm/drm_gem.c                     |  12 +-
->>>>>>>> drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
->>>>>>>> drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
->>>>>>>> drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
->>>>>>>> drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
->>>>>>>> drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
->>>>>>>> drivers/gpu/drm/drm_internal.h                |   6 +-
->>>>>>>> drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
->>>>>>>> drivers/gpu/drm/drm_prime.c                   |   4 +-
->>>>>>>> drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
->>>>>>>> drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
->>>>>>>> drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
->>>>>>>> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
->>>>>>>> drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
->>>>>>>> .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
->>>>>>>> .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
->>>>>>>> drivers/gpu/drm/lima/lima_gem.c               |   3 +-
->>>>>>>> drivers/gpu/drm/lima/lima_sched.c             |   4 +-
->>>>>>>> drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
->>>>>>>> drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
->>>>>>>> drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
->>>>>>>> drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
->>>>>>>> drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
->>>>>>>> drivers/gpu/drm/nouveau/nouveau_gem.c         |   2 +
->>>>>>>> drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
->>>>>>>> drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
->>>>>>>> drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
->>>>>>>> drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
->>>>>>>> drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
->>>>>>>> drivers/gpu/drm/tegra/gem.c                   |  10 +-
->>>>>>>> drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
->>>>>>>> drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
->>>>>>>> drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
->>>>>>>> drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
->>>>>>>> drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
->>>>>>>> drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
->>>>>>>> drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
->>>>>>>> drivers/gpu/drm/virtio/virtgpu_prime.c        |   1 +
->>>>>>>> drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
->>>>>>>> drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
->>>>>>>> drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
->>>>>>>> drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
->>>>>>>> drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
->>>>>>>> drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
->>>>>>>> .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
->>>>>>>> .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
->>>>>>>> .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
->>>>>>>> drivers/misc/fastrpc.c                        |   4 +-
->>>>>>>> include/drm/drm_cache.h                       |   6 +-
->>>>>>>> include/drm/drm_client.h                      |   7 +-
->>>>>>>> include/drm/drm_gem.h                         |   6 +-
->>>>>>>> include/drm/drm_gem_atomic_helper.h           |   6 +-
->>>>>>>> include/drm/drm_gem_cma_helper.h              |   6 +-
->>>>>>>> include/drm/drm_gem_framebuffer_helper.h      |   8 +-
->>>>>>>> include/drm/drm_gem_shmem_helper.h            |  12 +-
->>>>>>>> include/drm/drm_gem_ttm_helper.h              |   6 +-
->>>>>>>> include/drm/drm_gem_vram_helper.h             |   9 +-
->>>>>>>> include/drm/drm_prime.h                       |   6 +-
->>>>>>>> include/drm/ttm/ttm_bo_api.h                  |  10 +-
->>>>>>>> include/drm/ttm/ttm_kmap_iter.h               |  10 +-
->>>>>>>> include/drm/ttm/ttm_resource.h                |   6 +-
->>>>>>>> include/linux/dma-buf-map.h                   | 266 
->>>>>>>>------------------
->>>>>>>> include/linux/dma-buf.h                       |  12 +-
->>>>>>>> include/linux/iosys-map.h                     | 257 
->>>>>>>>+++++++++++++++++
->>>>>>>> 80 files changed, 579 insertions(+), 552 deletions(-)
->>>>>>>> delete mode 100644 include/linux/dma-buf-map.h
->>>>>>>> create mode 100644 include/linux/iosys-map.h
->>>>>>>>
->>>>>>>
->>>>>
->>>
->
+> Thanks!

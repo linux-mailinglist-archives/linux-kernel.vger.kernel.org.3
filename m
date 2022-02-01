@@ -2,136 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FAF4A5DBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A33B4A5DC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbiBANzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:55:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22927 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231549AbiBANzx (ORCPT
+        id S238761AbiBAN4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231549AbiBAN4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:55:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643723752;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fiDgurBW1NwAiqY2GLiQR5aJEIehzQmgOw53j3Z2hSA=;
-        b=EKGUZtDSrQ5uDy7Ds7FTLb9ZRY5FpT9aBjk1yygwYkROtI8n2iATiKY9p5EFY2rKBCbhtH
-        4eLsRhBJVQU3cGMHLT7HQHG97/obydURx1rUvDa+9JgdQ5r08dst020ttoponhjSQCbfaQ
-        +Iow6dN3/VeDGBPtpwWE7yUGlOPu7m4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-306-RHJd-T42N-uw0S_Aza4aSA-1; Tue, 01 Feb 2022 08:55:51 -0500
-X-MC-Unique: RHJd-T42N-uw0S_Aza4aSA-1
-Received: by mail-wr1-f71.google.com with SMTP id m17-20020adfa3d1000000b001dd66c10c0cso6034031wrb.19
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:55:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fiDgurBW1NwAiqY2GLiQR5aJEIehzQmgOw53j3Z2hSA=;
-        b=O7O2VPR4VXKL0RrkWa05qymW5j6Zl7rVwESsJWrNwNj1hp0P0DClYci7xexi0a9Syr
-         swE0ujzxJQJ6X5NmCKybVmgh0osYrjBLzjomXcDCZi8aYV6B8uRPSEEhCi+rLW7gkl0R
-         GjmhkfpaphpQK/cZgHChMbGWT2Tk0Jh2O0C4TIwRgIs8q/Om+cXZRHzt+n5nYLBWHCZs
-         ZH8ernPLSPGohAN8fUufVv+oUFG6hM8kaBlp96dJWyOO22npyOU+MITHq95DZ7FQroO8
-         kIqDAucvQ2nLqxY9LU79c9FWyIUqRj9IPRt5y9O8Grly7MDCFohIMTdyZWSoxAHQBlJ7
-         ryxg==
-X-Gm-Message-State: AOAM531s3kyUn9BGReTbZGIlc1AcsltKlYzyNUnUqBqmrFU/gjIVJOCs
-        jwRJmaadib8VCVyJPsid0/QFwJRF0HKn66HiRJjQOg5cFvclXck+b5l4bSJbhxOI5Oa6W8WD/Xi
-        Rdc+PYAMBC1FC6s0MRNZQuIFu
-X-Received: by 2002:a05:600c:308:: with SMTP id q8mr1920545wmd.118.1643723750414;
-        Tue, 01 Feb 2022 05:55:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwiMcaMwXhPvSvseRwur0kl1vzm4WxKS+ITQZ4fi35QJL+D2oLFM2CJItTZMN0+Csgh1HP6Iw==
-X-Received: by 2002:a05:600c:308:: with SMTP id q8mr1920525wmd.118.1643723750213;
-        Tue, 01 Feb 2022 05:55:50 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id y14sm16638445wrd.91.2022.02.01.05.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 05:55:49 -0800 (PST)
-Message-ID: <f1c3557a-a24b-9764-ff3f-9df352e37188@redhat.com>
-Date:   Tue, 1 Feb 2022 14:55:48 +0100
+        Tue, 1 Feb 2022 08:56:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38859C061714;
+        Tue,  1 Feb 2022 05:56:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA127615A4;
+        Tue,  1 Feb 2022 13:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3740BC340F1;
+        Tue,  1 Feb 2022 13:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643723789;
+        bh=LR7K+KdhE8ua4Hf11bODf1Ipe6bgjP3NN3+/HtimckQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nULUMuvXkvrb2wx3h/E78ZWoev9tF1+n30y0uhd+VeL4suK4h/7PaBEhJdpbFimhZ
+         eHq0ecvW4j9hpvDyoZLt082QO0YUiD4dzL5ypbtytbtJmn7imennsvXbabeHBBV/vB
+         3HyaukGCDLsTs1HAwDF19bw+hwSBPkKz7r7PU1bCJuZxl9sFSOqZpTujWPyNpJr7z4
+         SFGJYyGAlUcLKGJpL5WZ8M8ewKFW2/+hdSvUvDhleXoVNOU8+wdKNUvmjZ2EJo/7jc
+         bNeohXIAvk6tn7PJhPBZ216d3Y87XjTjr7gYe/BUWcPiFfGHoxZ/8lWDlggv7ZX8Fr
+         9cFvpFMp+gkng==
+Received: by mail-vs1-f44.google.com with SMTP id b2so16136939vso.9;
+        Tue, 01 Feb 2022 05:56:29 -0800 (PST)
+X-Gm-Message-State: AOAM5320OuW4erpetgXY7I38Qp4zTYSVAbhpt+sR2xYAgcyg4qU+ClLG
+        McfiarT8+gsCVQBnD02mClp+zngJ/0zFGlwRFkw=
+X-Google-Smtp-Source: ABdhPJySe8D0nEEAYvBRzFy6LwfvSeR3L3Y/oGIyxpX/nRoUeaoc3ecWWnv60QtmaYC3C4Lb9VuYZme6+tyqFZXZr7A=
+X-Received: by 2002:a67:f94e:: with SMTP id u14mr10667024vsq.2.1643723788142;
+ Tue, 01 Feb 2022 05:56:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-Content-Language: en-US
-To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
- <4322f58b-dbeb-b90f-2770-d6881f8005b4@redhat.com>
- <a6f267ea-7617-7d0e-06cd-7ec9c88576c3@tronnes.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <a6f267ea-7617-7d0e-06cd-7ec9c88576c3@tronnes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
+ <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
+ <20220201074457.GC29119@lst.de> <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
+ <CAK8P3a2C7nDGQvopYzi1fe_LWyosp8t9dcBsduYK5k_s_OrCaA@mail.gmail.com>
+ <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com> <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 1 Feb 2022 21:56:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTtCboaEdC1MXkONUr1Nc6BcM4xM5tdE9t6_PiSdiGHLg@mail.gmail.com>
+Message-ID: <CAJF2gTTtCboaEdC1MXkONUr1Nc6BcM4xM5tdE9t6_PiSdiGHLg@mail.gmail.com>
+Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 14:20, Noralf Trønnes wrote:
-> 
-> 
-> Den 01.02.2022 14.06, skrev Javier Martinez Canillas:
->> Hello Noralf,
->>
->> On 2/1/22 13:58, Noralf Trønnes wrote:
->>>
->>>
->>> Den 31.01.2022 21.52, skrev Sam Ravnborg:
->>>> On Mon, Jan 31, 2022 at 09:12:21PM +0100, Javier Martinez Canillas wrote:
->>>>> There isn't a connector type for display controllers accesed through I2C,
->>>>> most drivers use DRM_MODE_CONNECTOR_Unknown or DRM_MODE_CONNECTOR_VIRTUAL.
->>>>>
->>>>> Add an I2C connector type to match the actual connector.
->>>>>
->>>>> As Noralf Trønnes mentions in commit fc06bf1d76d6 ("drm: Add SPI connector
->>>>> type"), user-space should be able to cope with a connector type that does
->>>>> not yet understand.
->>>>>
->>>
->>> It turned out that I wasn't entirely correct here, mpv didn't cope with
->>> unknown types. In the PR to add support Emil Velikov wondered if libdrm
->>> should handle these connector names:
->>> https://github.com/mpv-player/mpv/pull/8989#issuecomment-879187711
->>>
->>
->> I see, thanks for the information. What should we do then, just use the type
->> DRM_MODE_CONNECTOR_Unknown then ?
->>
-> 
-> Not really, I just wanted to point out that it could be that not all
-> userspace will handle an unknown connector type (I just checked the DE's
-> at the time). I haven't seen any issues after adding the SPI type so it
-> can't be that many apps that has problems. Adding to that a tiny
-> monochrome display is limited in which applications it will encounter I
-> guess :) It was after adding the USB type that I discovered that mpv
-> didn't work.
-> 
+On Tue, Feb 1, 2022 at 7:48 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Feb 1, 2022 at 11:26 AM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > Hi Arnd & Christoph,
+> >
+> > The UXL field controls the value of XLEN for U-mode, termed UXLEN,
+> > which may differ from the
+> > value of XLEN for S-mode, termed SXLEN. The encoding of UXL is the
+> > same as that of the MXL
+> > field of misa, shown in Table 3.1.
+> >
+> > Here is the patch. (We needn't exception helper, because we are in
+> > S-mode and UXL wouldn't affect.)
+>
+> Looks good to me, just a few details that could be improved
+>
+> > -#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+> > +#ifdef CONFIG_COMPAT
+> > +#define compat_elf_check_arch compat_elf_check_arch
+> > +extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
+> > +#endif
+>
+> No need for the #ifdef
+Okay
 
-Anything we do for this rather obscure hardware certainly won't be an
-issue for most applications :)
+> > +}
+>
+> > +void compat_mode_detect(void)
+>
+> __init
+Okay
 
-But I wasn't sure if your previous comment meant that you were nacking
-$subject. Glad that we can go ahead and describe the correct type then.
+>
+> > +{
+> > + unsigned long tmp = csr_read(CSR_STATUS);
+> > + csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
+> > +
+> > + if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
+> > + csr_write(CSR_STATUS, tmp);
+> > + return;
+> > + }
+> > +
+> > + csr_write(CSR_STATUS, tmp);
+> > + compat_mode_support = true;
+> > +
+> > + pr_info("riscv: compat: 32bit U-mode applications support\n");
+> > +}
+>
+> I think an entry in /proc/cpuinfo would be more helpful than the pr_info at
+> boot time. Maybe a follow-up patch though, as there is no obvious place
+> to put it. On other architectures, you typically have a set of space
+> separated feature names, but riscv has a single string that describes
+> the ISA, and this feature is technically the support for a second ISA.
+Yes, it should be another patch after discussion.
 
-Best regards,
+>
+>          Arnd
+
+
+
 -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

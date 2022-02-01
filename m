@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0254A5530
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BB04A5534
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiBACQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 21:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
+        id S232457AbiBACUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 21:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbiBACQQ (ORCPT
+        with ESMTP id S231473AbiBACUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:16:16 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3246EC061714;
-        Mon, 31 Jan 2022 18:16:16 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id 7C3881F43523
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643681774;
-        bh=nnCU5kmokcyqChMI03TfA0GFSnCfcPdwhMJd5kTg4QU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XNdrjiJeSnw3Uk2Dgg39I06+R+jsKcbHoEiMDk3sf3/Lc9dS/QxocW/S1+C3q81J7
-         ic/mEVKN4C+zhI0DGLD8s7dsAhVZr9EXWdg2j1dpqmfnWLug2D5DfarVwBordywJ5d
-         pojShSHYHU0lmysuaXsZJqrZ9d51GxF0oy2HOll7dLqBjtAKvbJd3Xc5qoFjCOAyQi
-         a0XIblMyi7c8x5nJxM4oDOq66ArBBt/Lh/Lt8NTf/plbyPeSDvaqaZ8fsugBv1jDk2
-         Yv1RfYdB18ndzDgyJftAR6onTvXjswYBdZngBLwIy6m/rm4YqJ2BZv44gBbvsaAJ1+
-         Jc1KqKrzeP68A==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     hch@lst.de, chao@kernel.org, tytso@mit.edu,
-        linux-kernel@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Subject: [GIT PULL] unicode patches for 5.17-rc3
-Organization: Collabora
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 31 Jan 2022 21:16:11 -0500
-Message-ID: <87czk7qql0.fsf@collabora.com>
+        Mon, 31 Jan 2022 21:20:50 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2FDC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:20:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VaPv9in0Q0d5pY9Lnm4deq3TesKVG1iF4M3HxW9oxdw=; b=WYtch715pZRcNyhxCmmdPdqfVb
+        ZvvzOSmL6yGAJhSSWvAdGVvVB1OriraaS+j9USYyk+pMBM+YqSWlBoiBtyeG7WBNz4Z5Nw5lCtATu
+        QoZAjplgw10FePVkMNpbtvXDsPRt2KuJBeVx5dPhmaRF4Q//CcDaNdOzYoSbuPp+lNDcRahqY0zC5
+        NtPxbajxz6VZpkKhnhDnWIrsXMs+16AMG4Aq2IOPyB6n8smHjhS9qEoeHNV9ybp8QM0b4/FvjFoQE
+        cEWpvX8JQabphnnZ1rQU3z3xTgKsuSCiUcDOAz590YawBuzwJLiZ2ZkkBC4M4HZblty6nPWAy4CAx
+        gnVGx/2A==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nEimd-00BCwX-CU; Tue, 01 Feb 2022 02:20:39 +0000
+Date:   Tue, 1 Feb 2022 02:20:39 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michel Lespinasse <michel@lespinasse.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, Laurent Dufour <ldufour@linux.ibm.com>,
+        Jerome Glisse <jglisse@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Rik van Riel <riel@surriel.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2 00/35] Speculative page faults
+Message-ID: <YfiY9zRm8BhSp7eA@casper.infradead.org>
+References: <20220128131006.67712-1-michel@lespinasse.org>
+ <20220131171434.89870a8f1ae294912e7ff19e@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131171434.89870a8f1ae294912e7ff19e@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6661224e66f03706daea8e27714436851cf01731:
+On Mon, Jan 31, 2022 at 05:14:34PM -0800, Andrew Morton wrote:
+> On Fri, 28 Jan 2022 05:09:31 -0800 Michel Lespinasse <michel@lespinasse.org> wrote:
+> > The first step of a speculative page fault is to look up the vma and
+> > read its contents (currently by making a copy of the vma, though in
+> > principle it would be sufficient to only read the vma attributes that
+> > are used in page faults). The mmap sequence count is used to verify
+> > that there were no mmap writers concurrent to the lookup and copy steps.
+> > Note that walking rbtrees while there may potentially be concurrent
+> > writers is not an entirely new idea in linux, as latched rbtrees
+> > are already doing this. This is safe as long as the lookup is
+> > followed by a sequence check to verify that concurrency did not
+> > actually occur (and abort the speculative fault if it did).
+> 
+> I'm surprised that descending the rbtree locklessly doesn't flat-out
+> oops the kernel.  How are we assured that every pointer which is
+> encountered actually points at the right thing?  Against things
+> which tear that tree down?
 
-  Merge tag 'unicode-for-next-5.17' of git://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode (2022-01-17 05:40:02 +0200)
+It doesn't necessarily point at the _right_ thing.  You may get
+entirely the wrong node in the tree if you race with a modification,
+but, as Michel says, you check the seqcount before you even look at
+the VMA (and if the seqcount indicates a modification, you throw away
+the result and fall back to the locked version).  The rbtree always
+points to other rbtree nodes, so you aren't going to walk into some
+completely wrong data structure.
 
-are available in the Git repository at:
+> > The next step is to walk down the existing page table tree to find the
+> > current pte entry. This is done with interrupts disabled to avoid
+> > races with munmap().
+> 
+> Sebastian, could you please comment on this from the CONFIG_PREEMPT_RT
+> point of view?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krisman/unicode.git tags/unicode-for-next-5.17-rc3
-
-for you to fetch changes up to 5298d4bfe80f6ae6ae2777bcd1357b0022d98573:
-
-  unicode: clean up the Kconfig symbol confusion (2022-01-20 19:57:24 -0500)
-
-----------------------------------------------------------------
-Fix from Christoph Hellwig merging the CONFIG_UNICODE_UTF8_DATA into the
-previous CONFIG_UNICODE.  It is -rc material since we don't want to
-expose the former symbol on 5.17.
-
-This has been living on linux-next for the past week.
-
-----------------------------------------------------------------
-Christoph Hellwig (1):
-      unicode: clean up the Kconfig symbol confusion
-
- fs/Makefile         |  2 +-
- fs/ext4/ext4.h      | 14 +++++++-------
- fs/ext4/hash.c      |  2 +-
- fs/ext4/namei.c     | 12 ++++++------
- fs/ext4/super.c     | 10 +++++-----
- fs/ext4/sysfs.c     |  8 ++++----
- fs/f2fs/dir.c       | 10 +++++-----
- fs/f2fs/f2fs.h      |  2 +-
- fs/f2fs/hash.c      |  2 +-
- fs/f2fs/namei.c     |  4 ++--
- fs/f2fs/recovery.c  |  4 ++--
- fs/f2fs/super.c     | 10 +++++-----
- fs/f2fs/sysfs.c     | 10 +++++-----
- fs/libfs.c          | 10 +++++-----
- fs/unicode/Kconfig  | 18 +++++-------------
- fs/unicode/Makefile |  6 ++++--
- include/linux/fs.h  |  2 +-
- 17 files changed, 60 insertions(+), 66 deletions(-)
-
-
--- 
-Gabriel Krisman Bertazi
+I am not a fan of this approach.  For other reasons, I think we want to
+switch to RCU-freed page tables, and then we can walk the page tables
+with the RCU lock held.  Some architectures already RCU-free the page
+tables, so I think it's just a matter of converting the rest.

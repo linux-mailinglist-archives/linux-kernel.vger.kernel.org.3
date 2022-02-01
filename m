@@ -2,98 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 156BB4A65A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDFB4A65A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbiBAU01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S236217AbiBAU2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiBAU0Y (ORCPT
+        with ESMTP id S234508AbiBAU2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:26:24 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FF0C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:26:23 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id a28so36223970lfl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:26:23 -0800 (PST)
+        Tue, 1 Feb 2022 15:28:43 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAD4C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:28:43 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id e9so16447296pgb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:28:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ltsemEE7HoLIKHkXcNlB0CpyePLR2S+8XYoTKvHdxwY=;
-        b=ILkxG8/cjLZ6qIh6DnpralN/7qPYJkgLY+jsRisfd/5RIxS+tiPGowEFvFcFCmoom2
-         rOFOao7QsK1hqJb/iBbG5OlCnuwCLIOXNte8Uzmfp4w1C5NiHSQj18qKISohu3dzkpgG
-         zFyaeh67n/77ciUQerZgJrjWe4ZAC/VOSE8tHPji7NH4YcGU9yMg6fMbgjT2T7l8JIwH
-         XNdimVFcCkjEYZcw2BWwPWhbBAeOUju8ARI30snW8sNsQOH0uHWWDwwtbTZ8TvlLOp+a
-         Z9FoLYNJfFXuRGf4TR5GhbG7zriw5+Ioi3cmcZjVwQzAFsEpYEJI/8bCmnL0p4vVc6JV
-         K7pQ==
+        bh=lZCavQiLxcQ3MFz6ypEi3cjAjHA5JuYNVJ64uURs1W8=;
+        b=X8ZLOaGsq7z/Mak67fZaRCM1jO2c7xJ9XxPz+xdtSeAd7UkfetIlD9oeQlrOpSwyJd
+         vqCV+wjQVIsJ9R2Img8Yj6I8JCZtTDz568kaDeGi9iiio1IbeamUvj9wz1dpHGvxrm6T
+         viAJs8qQ+NnTbLMJrUepEXoNsqwIWYr2XnoStbTCB61kXyNsxoZyMrgejErntPZnlWpn
+         xUS7CBVD0L/EFV/isG9PnJtoBbDgb9zDInYKQmDxPL943jrFEmb2yEBYIWpk4XuXaAsM
+         2vZUSy7aEwEJGuKjruMGchoL5uIN9hdZxyc8u0h/LuH3xDMVJttYkNEoeYsesf5aEAHu
+         b6Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ltsemEE7HoLIKHkXcNlB0CpyePLR2S+8XYoTKvHdxwY=;
-        b=EdlPd656+AOWeI3f8VlzyqQKeJL0mhFvEErhyHNCdkhp5fk+ELZ/9sXsSw+2BaVlmp
-         nhm4STLqx5g7MlMrisdKeNmhq7rKqA28gpue/PJUuDrxJ0uadVoEYNHHp9Wz13hBdbw9
-         zBpTlE4thtoyu1/YfX219NnI+VQAxuwIgsDuSTEiRYxhodaPIiG/ss3r1cRlas2or8IH
-         bAM91OGR7hkJMccx98sfDY/v5lmf2SyuJUwu3oroz953FieiKJx0d9peBi2y458n+p5H
-         Kf+W1WchBF1J8m643JjI8K7n9nw6w8evdFCQw/0UdY/EfNW7N2e5Q5EpaByr6aufPjVR
-         MlcA==
-X-Gm-Message-State: AOAM532C31YgsyCIw9ua2PE3L3JoH/HcqV70UJ9G/M5KqDJfGvy0efP0
-        8qNX7cxP4K/0xXvNeZWrU1j+vO2kPNgyS7tmIRDQC5nKIS0=
-X-Google-Smtp-Source: ABdhPJw22635Ta+Khv9rQ+AvtU1mFH5u0oayx/EL5nr72sUDUyiFwIzrAqFLdDvtpHDR9Iedp4BlfRx3TN537PHx6bM=
-X-Received: by 2002:ac2:43ad:: with SMTP id t13mr20760851lfl.8.1643747181742;
- Tue, 01 Feb 2022 12:26:21 -0800 (PST)
+        bh=lZCavQiLxcQ3MFz6ypEi3cjAjHA5JuYNVJ64uURs1W8=;
+        b=jafVs7E3zh6E/T1kroy/Xu2gYbXUA0YIvV7M/AwnivIlvpgyMH5ZJ7WMrxvNqcs6V1
+         oP+Gd6Hq49QkMpGqH5cCjPeR5OwaPRp9Xtcs2dcf7Fist2L+YBPFkD/pldu7dZJr5lPR
+         W54B5K1q+QfdtcZ3YHjf8R1g0GBwRefqFtAJUEmNVTRgtm6hN+vXeL4V0q8PnCjpxa26
+         C1079khbyht770JaFznxHhydl6jl3rCgRcyV+FqwLOKNeottJTbBGs11zX9IkCxvZ+4i
+         jLpmn3I9zg9giWNelN/1BGSu8LcJFO2vfKockFVTL2d7G/u+JmEMntx9hQw33l1DSDEY
+         kRyA==
+X-Gm-Message-State: AOAM5338KfHYVhhQ3fpkqjib+dW6OlkUq0P3T4CVmbUp7JaXHxn1Dv6g
+        NfdkrSsUB0O/A3ycERU0gJit5rICcCur/a3/aIycaA==
+X-Google-Smtp-Source: ABdhPJwzXjWJU3xLJEav1LZ4qFQQzgqDWfrW9IO58fRCskMADbzQL/mgR+osZF+ff7Ju+0gU1kwd1YvqJ7kTZ4oTTY0=
+X-Received: by 2002:a05:6a00:728:: with SMTP id 8mr26552400pfm.27.1643747322379;
+ Tue, 01 Feb 2022 12:28:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201200823.3283171-1-yosryahmed@google.com>
-In-Reply-To: <20220201200823.3283171-1-yosryahmed@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Tue, 1 Feb 2022 12:26:10 -0800
-Message-ID: <CALvZod5GrC9jgiLUBf9WVwmjPaRx-pKFTrnpZHswqpqKgT5BuQ@mail.gmail.com>
-Subject: Re: [PATCH] memcg: add per-memcg total kernel memory stat
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>
+References: <20210719082756.15733-1-ms@dev.tdt.de> <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
+ <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de> <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
+ <Yd7bsbvLyIquY5jn@shell.armlinux.org.uk> <CAJ+vNU1R8fGssHjfoz-jN1zjBLPz4Kg8XEUsy4z4bByKS1PqQA@mail.gmail.com>
+ <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
+In-Reply-To: <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 1 Feb 2022 12:28:31 -0800
+Message-ID: <CAJ+vNU3NXAgfJ4t3c8RBsZVLLY_OXkZLFDhro8X84x0DAuNEdw@mail.gmail.com>
+Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
+ delay configuration
+To:     Martin Schiller <ms@dev.tdt.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 12:08 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+On Wed, Jan 12, 2022 at 10:32 PM Martin Schiller <ms@dev.tdt.de> wrote:
 >
-> Currently memcg stats show several types of kernel memory:
-> kernel stack, page tables, sock, vmalloc, and slab.
-> However, there are other allocations with __GFP_ACCOUNT
-> (or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
-> in any of those stats, a few examples are:
-> - various kvm allocations (e.g. allocated pages to create vcpus)
-> - io_uring
-> - tmp_page in pipes during pipe_write()
-> - bpf ringbuffers
-> - unix sockets
+> On 2022-01-12 19:25, Tim Harvey wrote:
+> > On Wed, Jan 12, 2022 at 5:46 AM Russell King (Oracle)
+> > <linux@armlinux.org.uk> wrote:
+> >>
+> >> On Tue, Jan 11, 2022 at 11:12:33AM -0800, Tim Harvey wrote:
+> >> > I added a debug statement in xway_gphy_rgmii_init and here you can see
+> >> > it gets called 'before' the link comes up from the NIC on a board that
+> >> > has a cable plugged in at power-on. I can tell from testing that the
+> >> > rx_delay/tx_delay set in xway_gphy_rgmii_init does not actually take
+> >> > effect unless I then bring the link down and up again manually as you
+> >> > indicate.
+> >> >
+> >> > # dmesg | egrep "xway|nicvf"
+> >> > [    6.855971] xway_gphy_rgmii_init mdio_thunder MDI_MIICTRL:0xb100
+> >> > rx_delay=1500 tx_delay=500
+> >> > [    6.999651] nicvf, ver 1.0
+> >> > [    7.002478] nicvf 0000:05:00.1: Adding to iommu group 7
+> >> > [    7.007785] nicvf 0000:05:00.1: enabling device (0004 -> 0006)
+> >> > [    7.053189] nicvf 0000:05:00.2: Adding to iommu group 8
+> >> > [    7.058511] nicvf 0000:05:00.2: enabling device (0004 -> 0006)
+> >> > [   11.044616] nicvf 0000:05:00.2 eth1: Link is Up 1000 Mbps Full duplex
+> >>
+> >> Does the kernel message about the link coming up reflect what is going
+> >> on physically with the link though?
+> >>
+> >> If a network interface is down, it's entirely possible that the link
+> >> is
+> >> already established at the hardware level, buit the "Link is Up"
+> >> message
+> >> gets reported when the network interface is later brought up. So,
+> >> debugging this by looking at the kernel messages is unreliable.
+> >>
+> >
+> > Russell,
+> >
+> > You are correct... the link doesn't come up at that point its already
+> > linked. So we need to force a reset or an auto negotiation reset after
+> > modifying the delays.
+> >
+> > Tim
 >
-> Keeping track of the total kernel memory is essential for the ease of
-> migration from cgroup v1 to v2 as there are large discrepancies between
-> v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
-> in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
-> allocations is an impractical maintenance burden as there a lot of those
-> all over the kernel code, with more use cases likely to show up in the
-> future.
+> Setting BMCR_ANRESTART would work, but only if BMCR_ANENABLE is also or
+> already set. Otherwise BMCR_ANRESTART has no effect (see the note in the
+> datasheet).
 >
-> Therefore, add a "kernel" memcg stat that is analogous to kmem
-> page counter, with added benefits such as using rstat infrastructure
-> which aggregates stats more efficiently. Additionally, this provides a
-> lighter alternative in case the legacy kmem is deprecated in the future
+> This is the reason why I came up with the idea of BMCR_PDOWN.
 >
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> Personally I would have no problem with setting BMCR_ANRESTART and
+> BMCR_ANENABLE, but it would possibly change the existing configuration
+> if (e.g. by the bootloader) aneg should be disabled.
+>
 
-Thanks Yosry. Just to emphasize further, in our gradual migration to
-v2 (exposing v2 interfaces in v1 and removing v1-only interfaces), the
-difference between kernel memory from v1 and v2 is very prominent for
-some workloads. This patch will definitely ease the v2 migration.
+Martin,
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+Sorry for the silence - I've been trying to figure out if and how I
+can deal with some very nasty errata on this particular PHY that can
+cause the link to not be stable and/or excessive errors in packets
+sent to the MAC.
+
+I do like the idea of BMCR_PDOWN. With my board its pretty obvious if
+the pin-strapped rx/tx delays are being used rather than the ones
+configured in the phy driver, so I'll have to do some testing when I
+find some time. However, I don't at all like the fact that this
+particular patch defaults the delays to 2ns if 'rx-internal-delay-ps'
+and 'tx-internal-delay-ps' is missing from the dt.
+
+These properties were added via Dan Murphy's series 'RGMII Internal
+delay common property' which was merged into v5.9:
+8095295292b5 ("net: phy: DP83822: Add setting the fixed internal delay")
+736b25afe284 ("net: dp83869: Add RGMII internal delay configuration")
+2fb305c37d5b ("dt-bindings: net: Add RGMII internal delay for DP83869")
+92252eec913b ("net: phy: Add a helper to return the index for of the
+internal delay")
+9150069bf5fc dt-bindings: net: Add tx and rx internal delays
+
+The issue I have here is that if dt's have not been updated to add the
+common delay properties this code will override what the boot firmware
+may have configured them to. I feel that if these common delay
+properties are not found in the device tree, then no changes to the
+delays should be made at all.
+
+Best Regards,
+
+Tim

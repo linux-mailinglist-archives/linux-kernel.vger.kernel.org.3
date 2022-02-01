@@ -2,204 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8374A6800
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFDC4A67FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbiBAW33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237935AbiBAW31 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:29:27 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C8FC061714;
-        Tue,  1 Feb 2022 14:29:27 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so4862642pju.2;
-        Tue, 01 Feb 2022 14:29:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nfh9neXAUEzcShXHBoAZTFYIWM5MQnmj1xRT6suzivE=;
-        b=HQj0tnz3VHrnn5pC/MIU8NCa/Sb5qfbS7hvjpIgQv7lyFVsTieWCrbhrmGVViqJ0XC
-         38BlVG8MZDWXDEACzsTphnACxUe+Rs6B20tGzCtQtzjmPVRQjTKmtVBrc/QUNfIesyUa
-         SfvgWsv6s92KVd3DwwVVTh5v7n5Db4Iql8EYio6Bd4bubpNCJWqbZGWg2MGlmfeHTHth
-         30eLmFZuckUF2J8L0/JppFrbOz74B+lzTVVrsc6SglgamDmoXrx4xzetMM2ieI6qwpPK
-         lkQf1cKc5UGdQ8eFzt8tzYwA659hpyN7g/eOi/pOgpXu3yTLSseQK/pTGtG5UNYiVr1i
-         nQGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nfh9neXAUEzcShXHBoAZTFYIWM5MQnmj1xRT6suzivE=;
-        b=GJDIy+66pHl8Mfdg5DgNGBqAsHRTzaGWsMyhipgTqTJlfIV1yaRNqSHnAKawXnij+H
-         GwFMmS5/3vzSxFQEm4Q2S4KiyVJulWvWuzFZrlcCIVihfsa+FqoIO/tgoN1TwqlSk5/A
-         KOqsr2P2dJrPTR1Zwr2wFyIcOTnyvy7TlM4FCWcKjBgAl7dMzleke7S0jRLwpDujFt58
-         KPrnmAT9GtobAMoxLINYS6h1WP3jR3j/WM0wELzziqBO2Fv6YHKgJJBb+hPRVy1+j/hj
-         OUSqzmf/NXXfQTU/8Cc3jU5VZBs724v8RU5WJ2ISMC/Qm4aeZV0eaHVgzIBWjZzUTBEj
-         c60A==
-X-Gm-Message-State: AOAM531rDRaAs7WI6KgFmxdeLF+5eiqHC0NTdna/0omKve6XQVUYRiuC
-        zUQ1ecgj5CDmD6r+HrApfhY=
-X-Google-Smtp-Source: ABdhPJzb+5yQKUrK8g6dncCc1Be8kOufnjj7MEBAUO522MrakPqpJXzf2ELqGyrBi+x5NJpdYYQEcA==
-X-Received: by 2002:a17:90a:a503:: with SMTP id a3mr4786119pjq.88.1643754566986;
-        Tue, 01 Feb 2022 14:29:26 -0800 (PST)
-Received: from jeffreyji1.c.googlers.com.com (173.84.105.34.bc.googleusercontent.com. [34.105.84.173])
-        by smtp.gmail.com with ESMTPSA id ck21sm3576018pjb.51.2022.02.01.14.29.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 14:29:26 -0800 (PST)
-From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
-X-Google-Original-From: Jeffrey Ji <jeffreyji@google.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, netdev@vger.kernel.org, jeffreyjilinux@gmail.com,
-        jeffreyji <jeffreyji@google.com>
-Subject: [PATCH v6 net-next] net-core: add InMacErrors counter
-Date:   Tue,  1 Feb 2022 22:28:45 +0000
-Message-Id: <20220201222845.3640041-1-jeffreyji@google.com>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+        id S229778AbiBAW3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:29:05 -0500
+Received: from mga09.intel.com ([134.134.136.24]:17428 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229507AbiBAW3E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:29:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643754544; x=1675290544;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hWelFRaRQ7/ifzeKtrsd2aKeA0zG9j4o7nLfnsd5tso=;
+  b=Q8BqqIJUSiZTKLZpuqGzYMZiAdJsQtjmZrghEeniyOo7NkJCRy9tq+J2
+   5m8vSb2tPlI/36OvojlzP89wYw1ObvucxUULfvwLs2mFqsjXavOjKyMgJ
+   ubjmJV6kPl3pZqJStRtQeNoCEPFPatdYGUmPHnTor+tH+QNfxJasUU08v
+   RlEfP6exUTz1py2V5Pg6vfKmslq6uvZl4tbk+F6+1IJSoHOQUKHZm8Eqz
+   5ZXh5oUCLwXb3f05mrPLIo+zHRyFCtWr+hwvHL01CWUbRKDOCl8ZhkG49
+   4a93qFFSRdvEE+zbtXJZ+LuOCh/e0G6S+XAN75kVrA02hGnzZiHYqJvl7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247579761"
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="247579761"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:29:03 -0800
+X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
+   d="scan'208";a="523232760"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:29:03 -0800
+Date:   Tue, 1 Feb 2022 14:29:03 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ben Widawsky <ben.widawsky@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 08/10] cxl/cdat: Introduce cdat_hdr_valid()
+Message-ID: <20220201222903.GP785175@iweiny-DESK2.sc.intel.com>
+Mail-Followup-To: Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+ <20220201071952.900068-9-ira.weiny@intel.com>
+ <20220201185640.4kc5v66vsxd3cial@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201185640.4kc5v66vsxd3cial@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jeffreyji <jeffreyji@google.com>
+On Tue, Feb 01, 2022 at 10:56:40AM -0800, Widawsky, Ben wrote:
+> On 22-01-31 23:19:50, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > The CDAT data is protected by a checksum which should be checked when
+> > the CDAT is read to ensure it is valid.  In addition the lengths
+> > specified should be checked.
+> > 
+> > Introduce cdat_hdr_valid() to check the checksum.  While at it check and
+> > store the sequence number.
+> > 
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > ---
+> > Changes from V5
+> > 	New patch, split out
+> > 	Update cdat_hdr_valid()
+> > 		Remove revision and cs field parsing
+> > 			There is no point in these
+> > 		Add seq check and debug print.
+> > ---
+> >  drivers/cxl/cdat.h |  2 ++
+> >  drivers/cxl/pci.c  | 32 ++++++++++++++++++++++++++++++++
+> >  2 files changed, 34 insertions(+)
+> > 
+> > diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
+> > index 4722b6bbbaf0..a7725d26f2d2 100644
+> > --- a/drivers/cxl/cdat.h
+> > +++ b/drivers/cxl/cdat.h
+> > @@ -88,10 +88,12 @@
+> >   *
+> >   * @table: cache of CDAT table
+> >   * @length: length of cached CDAT table
+> > + * @seq: Last read Sequence number of the CDAT table
+> >   */
+> >  struct cxl_cdat {
+> >  	void *table;
+> >  	size_t length;
+> > +	u32 seq;
+> >  };
+> >  
+> >  #endif /* !__CXL_CDAT_H__ */
+> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > index 28b973a9e29e..c362c75feed2 100644
+> > --- a/drivers/cxl/pci.c
+> > +++ b/drivers/cxl/pci.c
+> > @@ -586,6 +586,35 @@ static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
+> >  	return 0;
+> >  }
+> >  
+> > +static bool cxl_cdat_hdr_valid(struct device *dev, struct cxl_cdat *cdat)
+> > +{
+> > +	u32 *table = cdat->table;
+> > +	u8 *data8 = cdat->table;
+> > +	u32 length, seq;
+> > +	u8 check;
+> > +	int i;
+> > +
+> > +	length = FIELD_GET(CDAT_HEADER_DW0_LENGTH, table[0]);
+> > +	if (length < CDAT_HEADER_LENGTH_BYTES)
+> > +		return false;
+> > +
+> > +	if (length > cdat->length)
+> > +		return false;
+> > +
+> > +	seq = FIELD_GET(CDAT_HEADER_DW3_SEQUENCE, table[3]);
+> > +
+> > +	/* Store the sequence for now. */
+> > +	if (cdat->seq != seq) {
+> > +		dev_info(dev, "CDAT seq change %x -> %x\n", cdat->seq, seq);
+> > +		cdat->seq = seq;
+> > +	}
+> 
+> If sequence hasn't changed you could short-circuit the checksum.
 
-Increment InMacErrors counter when packet dropped due to incorrect dest
-MAC addr.
+I'm not sure.  Jonathan mentioned that reading may race with updates and that
+the correct thing to do is re-read.[1]
 
-An example when this drop can occur is when manually crafting raw
-packets that will be consumed by a user space application via a tap
-device. For testing purposes local traffic was generated using trafgen
-for the client and netcat to start a server
+But I should probably check the CS first...
 
-example output from nstat:
-\~# nstat -a | grep InMac
-Ip6InMacErrors                  0                  0.0
-IpExtInMacErrors                1                  0.0
+Ira
 
-Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
-with "{eth(daddr=$INCORRECT_MAC...}", verified that nstat showed the
-counter was incremented.
+[1] https://lore.kernel.org/linux-cxl/20211108145239.000010a5@Huawei.com/
 
-changelog:
-v6: rebase onto net-next
-
-v5:
-Change from SKB_DROP_REASON_BAD_DEST_MAC to SKB_DROP_REASON_OTHERHOST
-
-v3-4:
-Remove Change-Id
-
-v2:
-Use skb_free_reason() for tracing
-Add real-life example in patch msg
-
-Signed-off-by: jeffreyji <jeffreyji@google.com>
----
- include/linux/skbuff.h    |  1 +
- include/uapi/linux/snmp.h |  1 +
- net/ipv4/ip_input.c       |  7 +++++--
- net/ipv4/proc.c           |  1 +
- net/ipv6/ip6_input.c      | 12 +++++++-----
- net/ipv6/proc.c           |  1 +
- 6 files changed, 16 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index a27bcc4f7e9a..1b1114f5c68e 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -320,6 +320,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_TCP_CSUM,
- 	SKB_DROP_REASON_SOCKET_FILTER,
- 	SKB_DROP_REASON_UDP_CSUM,
-+	SKB_DROP_REASON_OTHERHOST,
- 	SKB_DROP_REASON_MAX,
- };
- 
-diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
-index 904909d020e2..ac2fac12dd7d 100644
---- a/include/uapi/linux/snmp.h
-+++ b/include/uapi/linux/snmp.h
-@@ -57,6 +57,7 @@ enum
- 	IPSTATS_MIB_ECT0PKTS,			/* InECT0Pkts */
- 	IPSTATS_MIB_CEPKTS,			/* InCEPkts */
- 	IPSTATS_MIB_REASM_OVERLAPS,		/* ReasmOverlaps */
-+	IPSTATS_MIB_INMACERRORS,		/* InMacErrors */
- 	__IPSTATS_MIB_MAX
- };
- 
-diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-index 3a025c011971..780892526166 100644
---- a/net/ipv4/ip_input.c
-+++ b/net/ipv4/ip_input.c
-@@ -441,8 +441,11 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
- 	/* When the interface is in promisc. mode, drop all the crap
- 	 * that it receives, do not try to analyse it.
- 	 */
--	if (skb->pkt_type == PACKET_OTHERHOST)
--		goto drop;
-+	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		__IP_INC_STATS(net, IPSTATS_MIB_INMACERRORS);
-+		kfree_skb_reason(skb, SKB_DROP_REASON_OTHERHOST);
-+		return NULL;
-+	}
- 
- 	__IP_UPD_PO_STATS(net, IPSTATS_MIB_IN, skb->len);
- 
-diff --git a/net/ipv4/proc.c b/net/ipv4/proc.c
-index 28836071f0a6..2be4189197f3 100644
---- a/net/ipv4/proc.c
-+++ b/net/ipv4/proc.c
-@@ -117,6 +117,7 @@ static const struct snmp_mib snmp4_ipextstats_list[] = {
- 	SNMP_MIB_ITEM("InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
- 	SNMP_MIB_ITEM("InCEPkts", IPSTATS_MIB_CEPKTS),
- 	SNMP_MIB_ITEM("ReasmOverlaps", IPSTATS_MIB_REASM_OVERLAPS),
-+	SNMP_MIB_ITEM("InMacErrors", IPSTATS_MIB_INMACERRORS),
- 	SNMP_MIB_SENTINEL
- };
- 
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
-index 80256717868e..da18d9159647 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -149,15 +149,17 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
- 	u32 pkt_len;
- 	struct inet6_dev *idev;
- 
--	if (skb->pkt_type == PACKET_OTHERHOST) {
--		kfree_skb(skb);
--		return NULL;
--	}
--
- 	rcu_read_lock();
- 
- 	idev = __in6_dev_get(skb->dev);
- 
-+	if (skb->pkt_type == PACKET_OTHERHOST) {
-+		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
-+		rcu_read_unlock();
-+		kfree_skb_reason(skb, SKB_DROP_REASON_OTHERHOST);
-+		return NULL;
-+	}
-+
- 	__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
- 
- 	if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
-diff --git a/net/ipv6/proc.c b/net/ipv6/proc.c
-index d6306aa46bb1..76e6119ba558 100644
---- a/net/ipv6/proc.c
-+++ b/net/ipv6/proc.c
-@@ -84,6 +84,7 @@ static const struct snmp_mib snmp6_ipstats_list[] = {
- 	SNMP_MIB_ITEM("Ip6InECT1Pkts", IPSTATS_MIB_ECT1PKTS),
- 	SNMP_MIB_ITEM("Ip6InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
- 	SNMP_MIB_ITEM("Ip6InCEPkts", IPSTATS_MIB_CEPKTS),
-+	SNMP_MIB_ITEM("Ip6InMacErrors", IPSTATS_MIB_INMACERRORS),
- 	SNMP_MIB_SENTINEL
- };
- 
--- 
-2.35.0.rc2.247.g8bbb082509-goog
-
+> 
+> > +
+> > +	for (check = 0, i = 0; i < length; i++)
+> > +		check += data8[i];
+> > +
+> > +	return check == 0;
+> > +}
+> > +
+> >  #define CDAT_DOE_REQ(entry_handle)					\
+> >  	(FIELD_PREP(CXL_DOE_TABLE_ACCESS_REQ_CODE,			\
+> >  		    CXL_DOE_TABLE_ACCESS_REQ_CODE_READ) |		\
+> > @@ -658,6 +687,9 @@ static int cxl_cdat_read_table(struct cxl_dev_state *cxlds,
+> >  
+> >  	} while (entry_handle != 0xFFFF);
+> >  
+> > +	if (!cxl_cdat_hdr_valid(cxlds->dev, cdat))
+> > +		return -EIO;
+> > +
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.31.1
+> > 

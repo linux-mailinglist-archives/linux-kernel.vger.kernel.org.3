@@ -2,73 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A144A650E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649D64A6511
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236740AbiBATbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiBATbR (ORCPT
+        id S229779AbiBATeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:34:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26905 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229568AbiBATeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:31:17 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92591C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:31:17 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643743876;
+        Tue, 1 Feb 2022 14:34:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643744048;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7Y/ekKx7CJbzOSRaYt7+hWzCBFyjxOeNdwQMqGnqAqE=;
-        b=IhM3+XjYX1kJQfOubKofcK0GxCzGx4aWPQAXyv2tyTlJQ0y5BU/AKPQGFwMWTXXNBef3pK
-        FIukCel09gTeDg1B3NUBrtopVzmONfJU7lW3YcuodaPATodDDYoe1qodLSlgdAPel/Cr9Y
-        5Wg4jE0uwzNpmc49q42SMOQe9gT+2xXw4IDiRoLZBF7JKyGGI97Kz+dx3vjOuRhXopOCCk
-        AC2tczeteIk8GA5CDcQ2fM8KzdD8l/1cLmLw9SmwA6H3lN/WmO7QVAUzE6ToBOnTqIrMXI
-        9dIo7ZEjV0CKzBD123lG41RgCxn5kQDNJqdMsS5QElnWTy7vki1fe+EgJQxj0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643743876;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Y/ekKx7CJbzOSRaYt7+hWzCBFyjxOeNdwQMqGnqAqE=;
-        b=CpLkh25j1CyRbED6oZx21axuSTv3ecUvO0rCf5uPyk5QeKSEP4X4LNgLp0yjb/kDQteyW1
-        N1ymqpUjJw6MR9Dg==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCHv2 02/29] x86/tdx: Extend the cc_platform_has() API to
- support TDX guests
-In-Reply-To: <20220124150215.36893-3-kirill.shutemov@linux.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-3-kirill.shutemov@linux.intel.com>
-Date:   Tue, 01 Feb 2022 20:31:15 +0100
-Message-ID: <87czk6z8n0.ffs@tglx>
+        bh=rP6p3c7eWRXO/WZG4n84i5dELoNm3qpE2agZPlJmCIQ=;
+        b=gKkQ7EC59Y6PWtmzLn5E68tjdk5/ICq6pcIdHyaK6lwHz/om7bROsyhe+VDdOr2U0bzMCx
+        n7fgvsnNYmaAWpPIc5d7crNQyFyNDM8WfGFrbOVO+Z1OdttRkkzn5xynIVrDBAGsThYMFL
+        qKTw9tdrWynU4AdTZetgCM/L9i9AhZI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-508-MU1fY_yiMcaPbl8FKvQ0Rg-1; Tue, 01 Feb 2022 14:34:05 -0500
+X-MC-Unique: MU1fY_yiMcaPbl8FKvQ0Rg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DA3F8A0C0A;
+        Tue,  1 Feb 2022 19:34:03 +0000 (UTC)
+Received: from [10.22.19.61] (unknown [10.22.19.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0ECE419C59;
+        Tue,  1 Feb 2022 19:34:02 +0000 (UTC)
+Message-ID: <79022c90-674a-04d1-0de8-5738df5882b5@redhat.com>
+Date:   Tue, 1 Feb 2022 14:34:02 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12
+ warning
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Justin Forbes <jforbes@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220201192924.672675-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220201192924.672675-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
-> Since is_tdx_guest() function (through cc_platform_has() API) is used in
-> the early boot code, disable the instrumentation flags and function
-> tracer. This is similar to AMD SEV and cc_platform.c.
+On 2/1/22 14:29, Waiman Long wrote:
+> The gcc 12 compiler reports a warning on the following code:
 >
-> Since intel_cc_platform_has() function only gets called when
-> is_tdx_guest() is true (valid CONFIG_INTEL_TDX_GUEST case), remove the
-> redundant #ifdef in intel_cc_platform_has().
+>      static inline struct mem_section *__nr_to_section(unsigned long nr)
+>      {
+>      #ifdef CONFIG_SPARSEMEM_EXTREME
+>          if (!mem_section)
+>                  return NULL;
+>      #endif
+>         :
 >
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> With CONFIG_SPARSEMEM_EXTREME on, the mem_section definition is
+>
+>      extern struct mem_section **mem_section;
+>
+> Obviously, mem_section cannot be NULL, but *mem_section can be if memory
+> hasn't been allocated for the dynamic mem_section[] array yet. Fix this
+> warning by checking for "!*mem_section" instead.
+>
+> Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Sorry, I forgot to add the line
+
+Reported-by: Justin Forbes <jforbes@redhat.com>
+
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>   include/linux/mmzone.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index aed44e9b5d89..bd1b19925f3b 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -1390,7 +1390,7 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
+>   static inline struct mem_section *__nr_to_section(unsigned long nr)
+>   {
+>   #ifdef CONFIG_SPARSEMEM_EXTREME
+> -	if (!mem_section)
+> +	if (!*mem_section)
+>   		return NULL;
+>   #endif
+>   	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+

@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0594A57B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3C34A57BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbiBAHW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:22:29 -0500
-Received: from mga07.intel.com ([134.134.136.100]:26917 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231442AbiBAHW2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:22:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643700148; x=1675236148;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=345Ki+DkLB68FVkiQKL21duYaEtgTMo8sK+Jj3ijCWQ=;
-  b=nBgXGO8sshWyJzPWvQEKVun17A/zTVjpjjPPj4Lmu3W0BmMNmkQVJ1bX
-   6A9mMyfB5S5/6duD6aKMNGdMNYaaVycL9pDMccG0mccoTqeMjbuX/wJBc
-   2+CjWenEylAJiZ1gowIVjIkc8nuuFD5PBFrVIHxDWBt7QZSoSBOJyAdqs
-   g2+becFYul4/mLGwAyAL6DuKZwB3VbUTs/iNOk7yd16ursnatynz9B9Mj
-   puyA8QvKPiHUOw1+VJXFA2H0d9DK5U4L2/l1qko9Dg8/mrZWZV90MA5BH
-   i5XaO53lGjVA6tKgIXAUgxBKg44pgcrX5NU40YAgXudTt6uWTHNcVEtJ1
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="310942462"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="310942462"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 23:22:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="497260156"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2022 23:22:26 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEnUf-000SxV-Dt; Tue, 01 Feb 2022 07:22:25 +0000
-Date:   Tue, 1 Feb 2022 15:21:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for
- 'kasan_hw_tags_enable'
-Message-ID: <202202011512.JpvyKwtH-lkp@intel.com>
+        id S234901AbiBAH16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:27:58 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:46447 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233720AbiBAH1z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 02:27:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643700475; x=1675236475;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=W7GHtGGiLvtTayhJ4mO2oK96L/0WqB+0ryNcDPdY2zM=;
+  b=xA9cDU4ntnSjCKBgkFlYXmnxh0cu6AbIyGLVpE8kBC1oFM56bbciIkRT
+   WrquuprK3NiOEp57qW3UuQ6vlnZf6sS70I6x1wah4XBa6EZrvlhKgljpi
+   Lc53b+wRhE571Y1q+30S+sL2BudTbTDIzCBNJVmzRkURjJXSAIiYF5ecz
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 31 Jan 2022 23:27:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 23:27:39 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 31 Jan 2022 23:27:38 -0800
+Received: from [10.216.11.50] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 31 Jan
+ 2022 23:27:34 -0800
+Message-ID: <01aac7b1-88e9-32e3-9b3c-625a2b03bdce@quicinc.com>
+Date:   Tue, 1 Feb 2022 12:57:30 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 1/5] arm64: dts: qcom: sc7280: Fix gmu unit address
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <konrad.dybcio@somainline.org>, <swboyd@chromium.org>,
+        <kgodara@codeaurora.org>, <mka@chromium.org>,
+        <sibis@codeaurora.org>, <pmaliset@codeaurora.org>,
+        <quic_rjendra@quicinc.com>, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220125224422.544381-1-dianders@chromium.org>
+ <20220125144316.v2.1.I19f60014e9be4b9dda4d66b5d56ef3d9600b6e10@changeid>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220125144316.v2.1.I19f60014e9be4b9dda4d66b5d56ef3d9600b6e10@changeid>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On 1/26/2022 4:14 AM, Douglas Anderson wrote:
+> When processing sc7280 device trees, I can see:
+>
+>    Warning (simple_bus_reg): /soc@0/gmu@3d69000:
+>      simple-bus unit address format error, expected "3d6a000"
+>
+> There's a clear typo in the node name. Fix it.
+>
+> Fixes: 96c471970b7b ("arm64: dts: qcom: sc7280: Add gpu support")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>
+> (no changes since v1)
+>
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 937c2e0e93eb..eab7a8505053 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -1790,7 +1790,7 @@ opp-550000000 {
+>   			};
+>   		};
+>   
+> -		gmu: gmu@3d69000 {
+> +		gmu: gmu@3d6a000 {
+>   			compatible="qcom,adreno-gmu-635.0", "qcom,adreno-gmu";
+>   			reg = <0 0x03d6a000 0 0x34000>,
+>   				<0 0x3de0000 0 0x10000>,
 
-FYI, the error/warning still remains.
+My bad! Thanks for the fix.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-commit: e5af50a5df571c1d0268b02f924de49b742c990f arm64: kasan: mte: move GCR_EL1 switch to task switch when KASAN disabled
-date:   4 months ago
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220201/202202011512.JpvyKwtH-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e5af50a5df571c1d0268b02f924de49b742c990f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e5af50a5df571c1d0268b02f924de49b742c990f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+fwiw, Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-Akhil.
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/mte.c:197:13: warning: no previous prototype for 'kasan_hw_tags_enable' [-Wmissing-prototypes]
-     197 | void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
-         |             ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/kasan_hw_tags_enable +197 arch/arm64/kernel/mte.c
-
-   196	
- > 197	void __init kasan_hw_tags_enable(struct alt_instr *alt, __le32 *origptr,
-   198					 __le32 *updptr, int nr_inst)
-   199	{
-   200		BUG_ON(nr_inst != 1); /* Branch -> NOP */
-   201	
-   202		if (kasan_hw_tags_enabled())
-   203			*updptr = cpu_to_le32(aarch64_insn_gen_nop());
-   204	}
-   205	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

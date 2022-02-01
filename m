@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C1D4A5604
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B554A5606
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiBAFFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 00:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
+        id S231714AbiBAFFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 00:05:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiBAFFL (ORCPT
+        with ESMTP id S231557AbiBAFFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 00:05:11 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEA1C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:05:10 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id q63so16023224pja.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:05:10 -0800 (PST)
+        Tue, 1 Feb 2022 00:05:14 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A22AC06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:05:14 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id l13so5785233plg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:05:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p0Mf1pHgKLt44R6XPdoONMmYbFvFAfcUL2WgqQxrsAY=;
-        b=aT+IUQJ6Tt/CjegESk7cg0DT2FeroIJIIxaAFM5G4s8Rg9QaxwObqyxMkHrOpDqdLg
-         3AIN1rDqnk2AOG46cY+qPoNfxx/06EvO6ynGhfs84jy2PYJAWzMDw+UISt2bkTSvSxOg
-         /+G4lOkLLapdAReBuzi3cR8vuqmK2XjKgnnwRioZGKPZeSfdMltm//5XBQxQJL39xykk
-         AqhWCw6dJ4HN7dUWK3SIP+32xm28SMwV4fCY1RJXKqp3YFsZpPJwoIh5onfsUsZ4i5mo
-         k0BWmQmFFFEbEjtq/sO7VzmDefsPYUPw/gFvfy9tkp45tri0qyO27vXYdQpZSHrwj19H
-         tZkw==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8HhN0Mo5AAEuJ7GLyfzVMfqoylDTPvGZrezMx4WuD1Y=;
+        b=pQcqzwBzTMUt9lhcStTT9fwKTd+uM9KFGW/Xynp4UnrxScTW2VG33Teyi7PCL+v98j
+         6POqQnKQFswISlLtU1hDylQGsrJ0qYsaq8Fp6JhEs66Of+MKNRPSZneIImArPfuYgUn+
+         zdaF5/zKLPBZ77KtJF6uiTeUHGew/VLxlM3EFtTaz4Z926PX9SiXhaXButFkPqlVyWng
+         3eNlSiowJnArQTA46mnNNUkJtYWdXFQmJmkDIVTUrr7omZAivB/M4amoSlDdUx1iVUPa
+         yAv9WWxSRi3tnMczSWHJyHkwcEhuIRWpBwSaoSDhBHx8pXgsfZK97aGdfPRMhVKs1Ect
+         RQuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=p0Mf1pHgKLt44R6XPdoONMmYbFvFAfcUL2WgqQxrsAY=;
-        b=z9W+nv6TsXP7B7IpNVcBTvLy5u0JXy0jLZ06X7oqFVdDYRm8xzlwFqJt49WmcIFvhI
-         TwGhnoxauQ8cARLL37LRn1UTNQS1Bq8V/tQxHnoUHKJPKOD5cvTON/XqFMI94Er1CL3J
-         5kjEcsBVrru5w4i7atg/y9OaBXu3g2wlsQNej9faIS0JNRwNQxZ65hazeBIA8TqTH6RX
-         qGK72mE8m43HNbvhfrU8JkGgTafI5T/2DTKiLaGBKV93L5RiUIqEjITD0ulkRiHlkIzq
-         WkM2wVk2h2HEkq6mLZdSsdyOx+oqXrk0lfYAFs/+Az6n2GrQGCIShHKkhQYfIvT6zrhh
-         b7Vw==
-X-Gm-Message-State: AOAM5326zgosPNOhTnMnei28tzzxMN7w43cBrfwaxwm6rdAF6gfNtvhX
-        ElxiIZo0qiQSSTc2qxW+hjw=
-X-Google-Smtp-Source: ABdhPJx1OxZZ3RKrxjSrKQtiVOjcEKe2hZLtXa+SV4AiPF06dGcRfVxGwqlxXacD5FNY1dgeGx+M6g==
-X-Received: by 2002:a17:902:d4ca:: with SMTP id o10mr24427520plg.28.1643691910056;
-        Mon, 31 Jan 2022 21:05:10 -0800 (PST)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=8HhN0Mo5AAEuJ7GLyfzVMfqoylDTPvGZrezMx4WuD1Y=;
+        b=0giSZGWZfDv3EWxKae8gS4us0Bk/JvvPE1OLnKEy8tABVDfm0kXfbnogUHd2rUDFbS
+         4sYK99clW1GEfHxF48xRvL62C88ylCzGD5uumgZqj/bPnIbTtaTeY1TXmwH/PV4b0PH/
+         dmPxG68bOh1HXbJnI1AGiyVB2wLx6dMXmUIoChAqHTRAU5CtHpBfMk4wljS2LAK5OFT7
+         6U8mSlrW3oL7y36BnfqzolmjAirtY6whTcy+CnbQtmX11Fscv6TSHRq7JrKPHGu8ex74
+         iIf5cCbmQPLlKsnVDdWrSTNUl8HGYB3YHdvPYfB4h7AaEB1z50+bQx4uat+DnqW4XqWO
+         s3Uw==
+X-Gm-Message-State: AOAM532S14LHXN34uCaJs+T7oax5X/14ANh3c6WRT4xaM1BLuongQbwm
+        RSToN27f2ujYnMITvy0+qKU=
+X-Google-Smtp-Source: ABdhPJz5avUIU4+X4vd3nMCzoEWBcmSaRvczxUqWfR52EfwhLQGqxyCpeHdGLQIZDWK9NzHJ6jgwxQ==
+X-Received: by 2002:a17:90a:f298:: with SMTP id fs24mr350977pjb.75.1643691913680;
+        Mon, 31 Jan 2022 21:05:13 -0800 (PST)
 Received: from voyager.lan ([45.124.203.14])
-        by smtp.gmail.com with ESMTPSA id u37sm6181991pga.2.2022.01.31.21.05.06
+        by smtp.gmail.com with ESMTPSA id u37sm6181991pga.2.2022.01.31.21.05.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 21:05:09 -0800 (PST)
+        Mon, 31 Jan 2022 21:05:13 -0800 (PST)
 Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From:   Joel Stanley <joel@jms.id.au>
 To:     Arnd Bergmann <arnd@arndb.de>, Andrew Jeffery <andrew@aj.id.au>,
@@ -55,49 +55,127 @@ To:     Arnd Bergmann <arnd@arndb.de>, Andrew Jeffery <andrew@aj.id.au>,
         "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org
-Subject: [PATCH 0/2] firmware: Add boot information to sysfs
-Date:   Tue,  1 Feb 2022 15:34:59 +1030
-Message-Id: <20220201050501.182961-1-joel@jms.id.au>
+Subject: [PATCH 1/2] firmware: Add boot information sysfs
+Date:   Tue,  1 Feb 2022 15:35:00 +1030
+Message-Id: <20220201050501.182961-2-joel@jms.id.au>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220201050501.182961-1-joel@jms.id.au>
+References: <20220201050501.182961-1-joel@jms.id.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the second iteration of this idea. The first used socinfo
-custom attribute groups, but Arnd suggested we make this something
-standardised under /sys/firmware instead:
+Machines often have firmware that perform some action before Linux is
+loaded. It's useful to know how this firmware is configured, so create a
+sysfs directory and some example properties that a system can choose to
+expose to describe how the system was started.
 
- http://lore.kernel.org/all/CAK8P3a3MRf0aGt1drkgsuZyBbeoy+S7Ha18SBM01q+3f33oL+Q@mail.gmail.com
+Currently the intended use describes five files, relating to hardware
+root of trust configuration.
 
-Some ARM systems have a firmware that provides a hardware root of
-trust. It's useful for the system to know how this root of trust has
-been configured, so provide a standardised interface that expose this
-information to userspace.
-
-This is implemented as a sysfs attribute group registration to be called
-at boot, with the properties described in the ABI document.
-
-Alternatively we could put the properties in the driver core, and have
-platforms register callbacks for each supported property. This would
-make it harder to insert non-standard properties, with the trade off of
-more code to selectively show supported properties.
-
-An user of the properties is provided in the second patch.
-
-Joel Stanley (2):
-  firmware: Add boot information sysfs
-  ARM: aspeed: Add secure boot controller support
-
- .../ABI/testing/sysfs-firmware-bootinfo       | 43 ++++++++++
- drivers/base/firmware.c                       | 14 ++++
- drivers/soc/aspeed/aspeed-socinfo.c           | 84 ++++++++++++++++++-
- include/linux/firmware_bootinfo.h             |  8 ++
- 4 files changed, 148 insertions(+), 1 deletion(-)
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ .../ABI/testing/sysfs-firmware-bootinfo       | 43 +++++++++++++++++++
+ drivers/base/firmware.c                       | 14 ++++++
+ include/linux/firmware_bootinfo.h             |  8 ++++
+ 3 files changed, 65 insertions(+)
  create mode 100644 Documentation/ABI/testing/sysfs-firmware-bootinfo
  create mode 100644 include/linux/firmware_bootinfo.h
 
+diff --git a/Documentation/ABI/testing/sysfs-firmware-bootinfo b/Documentation/ABI/testing/sysfs-firmware-bootinfo
+new file mode 100644
+index 000000000000..cd6c42316345
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-firmware-bootinfo
+@@ -0,0 +1,43 @@
++What:		/sys/firmware/bootinfo/*
++Date:		Jan 2022
++Description:
++		A system can expose information about how it was started in
++		this directory.
++
++		This information is agnostic as to the firmware implementation.
++
++		A system may expose a subset of these properties as applicable.
++
++
++What:		/sys/firmware/bootinfo/secure_boot
++Date:		Jan 2022
++Description:
++		Indicates the system was started with secure boot enabled in
++		the firmware.
++
++
++What:		/sys/firmware/bootinfo/abr_image
++Date:		Jan 2022
++Description:
++		Indicates the system was started from the alternate image
++		loaded from an Alternate Boot Region. Often this is a result of
++		the primary firmware image failing to start the system.
++
++
++What:		/sys/firmware/bootinfo/low_security_key
++Date:		Jan 2022
++Description:
++		Indicates the system's secure boot was verified with a low
++		security or development key.
++
++What:		/sys/firmware/bootinfo/otp_protected
++Date:		Jan 2022
++Description:
++		Indicates the system's boot configuration region is write
++		protected and cannot be modified.
++
++What:		/sys/firmware/bootinfo/uart_boot
++Date:		Jan 2022
++Description:
++		Indicates the system firmware was loaded from a UART instead of
++		an internal boot device.
+diff --git a/drivers/base/firmware.c b/drivers/base/firmware.c
+index 8dff940e0db9..2a6478aa178d 100644
+--- a/drivers/base/firmware.c
++++ b/drivers/base/firmware.c
+@@ -11,6 +11,7 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/device.h>
++#include <linux/firmware_bootinfo.h>
+ 
+ #include "base.h"
+ 
+@@ -24,3 +25,16 @@ int __init firmware_init(void)
+ 		return -ENOMEM;
+ 	return 0;
+ }
++
++/*
++ * Exposes attributes documented in Documentation/ABI/testing/sysfs-firmware-bootinfo
++ */
++int __init firmware_bootinfo_init(const struct attribute_group *attr_group)
++{
++	struct kobject *kobj= kobject_create_and_add("bootinfo", firmware_kobj);
++	if (!kobj)
++		return -ENOMEM;
++
++	return sysfs_create_group(kobj, attr_group);
++}
++EXPORT_SYMBOL_GPL(firmware_bootinfo_init);
+diff --git a/include/linux/firmware_bootinfo.h b/include/linux/firmware_bootinfo.h
+new file mode 100644
+index 000000000000..581b68508ec8
+--- /dev/null
++++ b/include/linux/firmware_bootinfo.h
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright 2022 IBM Corp
++
++#include <linux/sysfs.h>
++#include <linux/init.h>
++
++int __init firmware_bootinfo_init(const struct attribute_group *attr_group);
++
 -- 
 2.34.1
 

@@ -2,93 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0B74A5E58
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0474A4A5E53
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239349AbiBAOcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:32:31 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:22637 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239245AbiBAOc3 (ORCPT
+        id S239317AbiBAObs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:31:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27753 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230237AbiBAObq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:32:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643725949; x=1675261949;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cvx6rDpgo2S07AWukGYA/bvd35FN6fHtN9yNaCsXVc8=;
-  b=w1Guz+k/IM8XWLOL6Z1QsilDovJIXZrwxH3vAdWSkdKl+lrH0VWeZS8x
-   47wjs3NOgoWFtVlnEeMYTuSR4mZL45Bso7mtgpZ3VGbX2jIcQxGXpOPYT
-   pSQ5JG73cC9FwC97Vc+NXFbbReTiQDsmJDedjHHDjoZhGL2wcTY4M8+9F
-   dak1+KpeTfrzrQxrNVW4BqWvhu1LCYwRaRHaagMSQZQT+UJ8geeaGtlyF
-   Ddvny7zxXfaae7IxzynutVxj8Ut+aNFji/r1nMDYztBTGy3SakryByF58
-   W7Q0CEvki6hq1spPZD+GAE+XDkMAr7Y1YpT94NXsb3eV7px3uwORIOGwT
-   A==;
-IronPort-SDR: ssFcxKs/aaimKr6x/JkrDr27s2loVvXUIBxzJ23jxGWgIIDRR+wWus+W8sEMpOy9UMGhrqf4PH
- HbfxvALRKhmSDpWKKFG/KEAlWSIiGX78SimCUtAK9Zlq+FXVeOAgSGpM3kDUDLnPL9aTMi/Iht
- S5u8vh9GI1jr160eW1wngmqv4vjFwsGVlOW9nfmutOk6k/iMPWrXyXzB3q7a9CdFEIA8V/tg55
- qKZp6Op9MjNTNrZzuVKxJqaF2Imz05iItn289zCxBSsGFCVnikdKtUBvxIKspJvxj9VKMvUM7D
- OUncKledePvanQI/DloNdLA5
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="152105173"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Feb 2022 07:32:28 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 1 Feb 2022 07:32:28 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 1 Feb 2022 07:32:26 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Dan Carpenter" <dan.carpenter@oracle.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH net] net: sparx5: do not refer to skb after passing it on
-Date:   Tue, 1 Feb 2022 15:30:57 +0100
-Message-ID: <20220201143057.3533830-1-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 1 Feb 2022 09:31:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643725906;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uMK8/jcOZdjpD/nh6+MuQsZsF0YOGLGqcOfutTCzX3o=;
+        b=XUoHWHkxOza6hcagNfrxxFmiLdjEancgSxz/9W3N4E7D/4DLeoHXgWAIPXbZ5YofYfvLH7
+        5keHE0ht3esak5Fc6kb+NpvIutZ/rCgz4ATvY2rOSSlJ+kZSb798R/dS/dol0uAcLsada4
+        4cwrFFRyN7rTwLRIv9mkKL1+xMlxBZc=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-623-RHVipqQINb20QaNy-t1vhA-1; Tue, 01 Feb 2022 09:31:45 -0500
+X-MC-Unique: RHVipqQINb20QaNy-t1vhA-1
+Received: by mail-ed1-f72.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so8782127eds.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:31:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uMK8/jcOZdjpD/nh6+MuQsZsF0YOGLGqcOfutTCzX3o=;
+        b=Emq2foWzeFnnPk6go9akpQJZvoz6zLNNlU0fZwsYxGqKAqNF3Wa+RFBc0nUHYgXHlc
+         PBQwvP5myAXswuhg59Ekyy6TtvCb9Do6zVplVOSFZdeC4R23LVqSMroGw4n3rL8+Lt5/
+         WvZD3GpWuPOuFJNU+w4NplaToi4czRMfgjEbYpp0g+yhc7w47r7z1u3S3E8PpeAxX3Mc
+         dZZcDm8ZD+J+h2at3LwfzI8tyZHpKdXRnl1MLMpfTz3P/O0jJFDyzLsjcwpsZhc6yqyz
+         iOAjvR6EcI0yrpQbKhM/V1qR0t4VpytxkGc048eXIcd/J0A77NV4gESmBvdPW1Y5djUc
+         8avw==
+X-Gm-Message-State: AOAM531OnBaEhZr+Yao3J2mLa4KUB+2LjrImkQ6n4dUpIShr4G932xPE
+        1Qz0ztzhnG7/EFVLRVasbo3PgJCzrPEYf9A+uopO8yrPDVYDinzCUlNjd77ApPCUgJfsaQGyhLy
+        N/GIQFgDP15Oi+d/fl1Ql1PYmQBRYafj2rU5x/oBdexZrqZ9P2dgKxTUZDCR7yerS+hkJaGL6Pn
+        Ff
+X-Received: by 2002:a17:907:7b8d:: with SMTP id ne13mr6469281ejc.136.1643725904405;
+        Tue, 01 Feb 2022 06:31:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxaMlxQDg5uPVclG2SA1eg5ZnllWOcMasdnd7IS7AQ5IUKTYNl5m4fiRpbpgX/p7pKN5sDPOA==
+X-Received: by 2002:a17:907:7b8d:: with SMTP id ne13mr6469254ejc.136.1643725904126;
+        Tue, 01 Feb 2022 06:31:44 -0800 (PST)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id gh14sm14554716ejb.38.2022.02.01.06.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 06:31:43 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap
+ for Hyper-V-on-KVM and fix it for KVM-on-Hyper-V
+In-Reply-To: <35f06589-d300-c356-dc17-2c021ac97281@redhat.com>
+References: <20211220152139.418372-1-vkuznets@redhat.com>
+ <35f06589-d300-c356-dc17-2c021ac97281@redhat.com>
+Date:   Tue, 01 Feb 2022 15:31:42 +0100
+Message-ID: <87sft2bqup.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not try to use any SKB fields after the packet has been passed up in the
-receive stack.
+Paolo Bonzini <pbonzini@redhat.com> writes:
 
-This error was reported as shown below:
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> On 12/20/21 16:21, Vitaly Kuznetsov wrote:
+>> Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
+>> hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
+>> KVM implements the feature for KVM-on-Hyper-V but it seems there was
+>> a flaw in the implementation and the feature may not be fully functional.
+>> PATCHes 1-2 fix the problem. The rest of the series implements the same
+>> feature for Hyper-V-on-KVM.
+>> 
+>> Vitaly Kuznetsov (5):
+>>    KVM: SVM: Drop stale comment from
+>>      svm_hv_vmcb_dirty_nested_enlightenments()
+>>    KVM: SVM: hyper-v: Enable Enlightened MSR-Bitmap support for real
+>>    KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
+>>      rebuilt
+>>    KVM: x86: Make kvm_hv_hypercall_enabled() static inline
+>>    KVM: nSVM: Implement Enlightened MSR-Bitmap feature
+>> 
+>>   arch/x86/kvm/hyperv.c           | 12 +--------
+>>   arch/x86/kvm/hyperv.h           |  6 ++++-
+>>   arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
+>>   arch/x86/kvm/svm/svm.c          |  3 ++-
+>>   arch/x86/kvm/svm/svm.h          | 16 +++++++----
+>>   arch/x86/kvm/svm/svm_onhyperv.h | 12 +++------
+>>   6 files changed, 63 insertions(+), 33 deletions(-)
+>> 
+>
+> Queued 3-5 now, but it would be nice to have some testcases.
+>
 
-Fixes: f3cad2611a77 (net: sparx5: add hostmode with phylink support)
+Thanks, indeed, I'll try to draft something up, both for nVMX and nSVM.
 
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-index dc7e5ea6ec15..ebdce4b35686 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-@@ -145,8 +145,8 @@ static void sparx5_xtr_grp(struct sparx5 *sparx5, u8 grp, bool byte_swap)
- 	skb_put(skb, byte_cnt - ETH_FCS_LEN);
- 	eth_skb_pad(skb);
- 	skb->protocol = eth_type_trans(skb, netdev);
--	netif_rx(skb);
- 	netdev->stats.rx_bytes += skb->len;
-+	netif_rx(skb);
- 	netdev->stats.rx_packets++;
- }
-
---
-2.35.1
+-- 
+Vitaly
 

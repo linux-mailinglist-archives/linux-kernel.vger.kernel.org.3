@@ -2,132 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C244A5E71
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B27F4A5E76
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbiBAOjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
+        id S239417AbiBAOlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbiBAOjW (ORCPT
+        with ESMTP id S239290AbiBAOlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:39:22 -0500
-X-Greylist: delayed 79 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Feb 2022 06:39:22 PST
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FEBC061714;
-        Tue,  1 Feb 2022 06:39:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=WfiEQcqWlqA2wHWIL9U4U6jinXG6ycg3gZ8RU4/D1pU=; b=Gq0+VGG+c4NNDBhX4wkPfnHZgQ
-        p+5W4IRJn2OzjtPj/3/0RNZZF+/WbOChgrWbwH9/FH3swn0txTohUqTJCQkAPxx/+gaqJP6sPdNjB
-        L+0m6EoXmdOrQUfbDR0ZK8F5uhnE+tw4Wfeh/2lIgtzAtKI6iDxKKE/Wg6zIM1kGZ8WmQJ2FfQZG9
-        8jkFSlPrC6U3EMQCEDwXxP/rYQbj8afcFyA7VquXxOK6McfhFZ+Dtv7BGsCcWJFSS4Bzbo27k/8Yi
-        11/58rgZ8PApcifYMi/KIIEVvON7dCV4tC1gi5/NFWSEfGqa6Mp7uMFPeua7h9bRPpe3mUt72PG4V
-        ZzpokFSA==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1nEuJU-00C7OI-0z; Tue, 01 Feb 2022 14:39:20 +0000
-Date:   Tue, 1 Feb 2022 14:39:20 +0000
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/17] ARM: dts: qcom: add missing rpm regulators and
- cells for ipq8064
-Message-ID: <YflGGM45F3TqERNj@earth.li>
-References: <20220118012051.21691-1-ansuelsmth@gmail.com>
- <20220118012051.21691-4-ansuelsmth@gmail.com>
- <Yfhmum8BnB1JIALP@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfhmum8BnB1JIALP@builder.lan>
+        Tue, 1 Feb 2022 09:41:15 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F819C061714;
+        Tue,  1 Feb 2022 06:41:15 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id c24so35113904edy.4;
+        Tue, 01 Feb 2022 06:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=YlB7zlFSI5Xx6Oi94mB0ruJo7k87kHZWZYG/IWCl5Ks=;
+        b=Yuy5wtvem1qXqHw9nz9JVB7iXu5lPoechBtxKDxX9eLg+kcWDHViatYhvSWyDBh7b/
+         D4OpR6hITF3cFsgzQrpR/uHXD7upaIDmjd3ZTagqYjPcK/n1He5gX8N1WkIR6f1WltoA
+         sqS3o/fMwPSfHUTr6LcoWrD1FpRdL5prNyvAbOxR1FgZvl/2vKGpgwLaWsZUyf05QMc5
+         PC+0SPcA6tvMHGZVE9XVlfYalJDk/ppXymjEL+3/6KYEjZ105fu0TVLRxeigpjmqZs8z
+         IDrBvrWHMVdjsxF6gb2fZkrub8/yweSMW2l9+KLUBwdMd80DICCWGiLZcRl2lm8lhW6x
+         a5gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YlB7zlFSI5Xx6Oi94mB0ruJo7k87kHZWZYG/IWCl5Ks=;
+        b=d51hLsYPH7yb0VwAK/Ow4UHSRVXuJQfyHWsqQ7di+d9axnsfCjYTg+6SRWcVi9eg87
+         mmRyiHDGoJMmZPIwc41SiCqcCurLAS0ndOpOgY2Q5OG414qtbbF63xKB/Xrg+L1IIZuB
+         UcZdXiQ4ntHaZ2Hd5/uG6npFuhE9LWjHgd/QveRBBduyD3zuRP65Fsd48/mcZV5CwUu1
+         0xwsOoWHv0FFc3a2pkpfOdROpu1VrfLp6LoRUaIayz4y/WEpLdGk8BJDQNxWfxSgQxPz
+         hX1QaOoSOlDCWxMjWDK93F8cL9JTmf7IUW9bVmk5h2eDVClySHR1k+QX6MHTr7CNwbCB
+         TV1w==
+X-Gm-Message-State: AOAM530Vtdqg4D3AH7NcBCLWmU2Gm60geh5fMSUd50ppaapNeNa4yaKX
+        uNOyTvMSfogym3B5MVUDsXs=
+X-Google-Smtp-Source: ABdhPJyLYo0653RXI4dgoqe3YEiD7SYUQYHlbnKGRU+NA/rPEWI+vQ8HOG8ZuMQbxjaY3Oira1bCTg==
+X-Received: by 2002:a05:6402:1d56:: with SMTP id dz22mr26491813edb.82.1643726473570;
+        Tue, 01 Feb 2022 06:41:13 -0800 (PST)
+Received: from felia.fritz.box (200116b8264e13002de5049704703386.dip.versatel-1u1.de. [2001:16b8:264e:1300:2de5:497:470:3386])
+        by smtp.gmail.com with ESMTPSA id re16sm3160079ejb.29.2022.02.01.06.41.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 06:41:13 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] x86/fault: cast instr to __user locally in prefetch()
+Date:   Tue,  1 Feb 2022 15:40:55 +0100
+Message-Id: <20220201144055.5670-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:46:18PM -0600, Bjorn Andersson wrote:
-> On Mon 17 Jan 19:20 CST 2022, Ansuel Smith wrote:
-> 
-> > Add cells definition for rpm node and add missing regulators for the 4
-> > regulator present on ipq8064. There regulators are controlled by rpm and
-> > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
-> > reject any regulator change request.
-> > 
-> 
-> Is the SMB208 mandatory on all ipq8064 designs, or should this be pushed
-> out to the device dts?
+Commit 35f1c89b0cce ("x86/fault: Fix AMD erratum #91 errata fixup for user
+code") uses accessors based on the access mode, i.e., it distinguishes its
+access if instr carries a user address or a kernel address.
 
-It's not; the RB3011 uses a different regulator (a TPS563900).
+Since that commit, sparse complains about passing an argument without
+__user annotation to get_user(), which expects a pointer with __user:
 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 35 +++++++++++++++++++++++++++++
-> >  1 file changed, 35 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > index 094125605bea..824cf13dd037 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > @@ -829,10 +829,45 @@ rpm: rpm@108000 {
-> >  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
-> >  			clock-names = "ram";
-> >  
-> > +			#address-cells = <1>;
-> > +			#size-cells = <0>;
-> > +
-> >  			rpmcc: clock-controller {
-> >  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
-> >  				#clock-cells = <1>;
-> >  			};
-> > +
-> > +			regulators {
-> > +				compatible = "qcom,rpm-smb208-regulators";
-> > +
-> > +				smb208_s1a: s1a {
-> > +					regulator-min-microvolt = <1050000>;
-> > +					regulator-max-microvolt = <1150000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s1b: s1b {
-> > +					regulator-min-microvolt = <1050000>;
-> > +					regulator-max-microvolt = <1150000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s2a: s2a {
-> > +					regulator-min-microvolt = < 800000>;
-> > +					regulator-max-microvolt = <1250000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +
-> > +				smb208_s2b: s2b {
-> > +					regulator-min-microvolt = < 800000>;
-> > +					regulator-max-microvolt = <1250000>;
-> > +
-> > +					qcom,switch-mode-frequency = <1200000>;
-> > +				};
-> > +			};
-> >  		};
-> >  
-> >  		tcsr: syscon@1a400000 {
-> > -- 
-> > 2.33.1
-> > 
+  arch/x86/mm/fault.c:152:29: warning: incorrect type in argument 1 (different address spaces)
+  arch/x86/mm/fault.c:152:29:    expected void const volatile [noderef] __user *ptr
+  arch/x86/mm/fault.c:152:29:    got unsigned char *[assigned] instr
 
-J.
+instr is a user-space pointer in this branch of prefetch(), though:
 
+If user_mode, then instr is from user space. And if not user_mode, then
+instr is from kernel space. So, in this user_mode branch, confidently
+annotate instr with __user before passing it to get_user().
+
+This annotation does no harm and just reminds everyone of the reasoning
+above and convinces sparse that the address spaces are handled correctly
+here.
+
+There is no need for others to check the situation of different address
+spaces on this specific branch due to this warning from sparse again.
+
+No functional change. No change in the generated object code.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/x86/mm/fault.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index d0074c6ed31a..fad8faa29d04 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -149,7 +149,7 @@ is_prefetch(struct pt_regs *regs, unsigned long error_code, unsigned long addr)
+ 		unsigned char opcode;
+ 
+ 		if (user_mode(regs)) {
+-			if (get_user(opcode, instr))
++			if (get_user(opcode, (unsigned char __user *) instr))
+ 				break;
+ 		} else {
+ 			if (get_kernel_nofault(opcode, instr))
 -- 
-... "There's no money, there's no weed. It's all been replaced by a fucking
-    big pile of corpses."  -- Lock, Stock and Two Smoking Barrels
+2.17.1
+

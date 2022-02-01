@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603C74A5441
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F2D4A5447
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiBAArD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S231303AbiBAAtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiBAArC (ORCPT
+        with ESMTP id S231274AbiBAAti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:47:02 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CD4C06173B;
-        Mon, 31 Jan 2022 16:47:01 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r10so30751718edt.1;
-        Mon, 31 Jan 2022 16:47:01 -0800 (PST)
+        Mon, 31 Jan 2022 19:49:38 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6729EC061714;
+        Mon, 31 Jan 2022 16:49:38 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id p12so30549648edq.9;
+        Mon, 31 Jan 2022 16:49:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GYfi12SpmN0g9NqCoQ6tYL22xFi8Uo1iR/vTcnK9fck=;
-        b=M8JyDPdDdfrEs1luJVidkqPn7+qgD4TNYcQAXFMm0RPY0nfJUSyFdHSYKBx3dzqcfJ
-         wjDKrCKhJEa/VH4upcSnRwzq43GqdetPEPK02terNMKeobZISvpFpg+OLMKkXJIiRohZ
-         RKqi01JwhYCy97rwRMiRDbzaxzb7rFt6NuXoaObwhZSU6MTauJT/320Lbr2K3otV2rLo
-         Nuw4NPg3mzoRAe6gyu1kt9BqCIoF+9Xk5c/wWEfuPFviHOP6UP8XDExpwUO22re57moT
-         9zqp6p8fUCanOl1R2fgrr3/wsQNlHOg0JwBcUVs2xoTaxLS7VIuHmzQwu7gj1gXlEdkW
-         cIVg==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=RARgbp3ziHgqJwdAQ5KpgTd/M+ZUGVAZa9+lSQVJ96k=;
+        b=HtT6XDBMjS1UuNBFkJ0yT2Z3RDXoeYjbKE84Mjn1d6JDMP84LvoPeOGdhOsKk85xFI
+         1wspImMxqaTwTg3c7o1WTfzbhxyR9S4XTt7KNWOEOtAJX4ztbQzq0QYW8cU1MLyj2SR9
+         F/elTYQQpvw+xs+xIQ8XN7Aqk37qsj255jXuToupQ1YPhvUSLsQe0swqkPlLJj/GyO6B
+         4GZAC7Rj6oD4Cx8nIRB+AMR0dauBA/Lbbm5S9Latn7oHcGc2JRzpt5oCQmOJvALujY4L
+         ROTEGTpdUHKqcg/wIMHt0KgSptaomcEuCw1yXe34m0hBgCijVd4hAWzC17shN34NUTVf
+         LLHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=GYfi12SpmN0g9NqCoQ6tYL22xFi8Uo1iR/vTcnK9fck=;
-        b=lWCj96RU7ErJ0JWpqWoH+W1KB5RLRs5sdHqADQNlR36KWqbc6UBvDajoiw+vrmJCud
-         mBAkG0vn0QAsh1zXNPqH5ZMk+cJ5jhIpGgt8UuiRHLSRGEqa75UZhsyHxpyem6FLoCTS
-         C6Rnzph0hWLEXTS0k4NkgJFzdb0DaHVkUxP0enj15l630QPqFfex7oF38c/QB9j+39l0
-         sshHPTKr9W3/48aTyrCvXwf4TDzKy7ezYrIAZ/e8sruTRU3kPTO+9TWMmL4MNwRpdgre
-         GyRMiR143vGH3p0nCmbjVOkHfWOPeoxY72gAEuPE4PJWyYcQrPa4iRsUpGH0GjAw0S2J
-         zyOA==
-X-Gm-Message-State: AOAM530I9sSfE5a5astSOYeBLa3LmbCdwg2wEcLPOLTNwRTnA8N7SEDU
-        vmUpr1UgmBfUqo9A6sjggmmQYTD6agY=
-X-Google-Smtp-Source: ABdhPJxlpF/0P8RQcRZyxNk3LwNbmTSQP+mAUSu26uEJPUvLBUp70MI2dhcbvJ2xJt+TjQ5nHnrtPw==
-X-Received: by 2002:a05:6402:228e:: with SMTP id cw14mr23041894edb.378.1643676420231;
-        Mon, 31 Jan 2022 16:47:00 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id gv34sm13977377ejc.125.2022.01.31.16.46.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 31 Jan 2022 16:46:59 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     hannes@cmpxchg.org, mhocko@kernel.org, vdavydov.dev@gmail.com,
-        akpm@linux-foundation.org, shakeelb@google.com, guro@fb.com,
-        willy@infradead.org, songmuchun@bytedance.com, shy828301@gmail.com,
-        surenb@google.com
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, vbabka@suse.cz,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: [PATCH 2/2] mm/memcg: retrieve parent memcg from css.parent
-Date:   Tue,  1 Feb 2022 00:46:43 +0000
-Message-Id: <20220201004643.8391-2-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220201004643.8391-1-richard.weiyang@gmail.com>
-References: <20220201004643.8391-1-richard.weiyang@gmail.com>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=RARgbp3ziHgqJwdAQ5KpgTd/M+ZUGVAZa9+lSQVJ96k=;
+        b=k7sbRrM87B1cOfzX2WO7OJ6Xx8Jp2GtoKcCLREcBitvsutXQFr+WK8t1hpgIk67P/j
+         xKZV7Qx0ASxc/0OB0fNKXTP0V+2lYNsJcNWTCqHiEwUHKXS/imHIPyoHQJGAn5gTC4wA
+         p3xbY50IhR9SHEE4fjYkNRVN5KrOFF1NweJAgaNvt9lyqI4GngwRfLJmqH+PR0Q7GFwu
+         QcRTSrgKJRaTfA8dAFlybyB0IRLMEdGql3fTg8+axuLQc+ul4FaGBJVgaSSq/tzfnEn9
+         m30LMo9Jz8JP0au5zHyBcu29/x1q3dyJaRsPPPB0A7u69bqkRprGK6bJuRshm+50UuwP
+         Garw==
+X-Gm-Message-State: AOAM531lphOsR+lJYmsj5SCqjAJdrv+15h/8FGKZH75ci1VyBfTSlo1q
+        eeKozVXEZcEwPDweByiucx0=
+X-Google-Smtp-Source: ABdhPJyXKIGyslT2Qo6ReOdkNzk+C59P6xyAbbDYfL2TOdwpxgU8+m/yIHNBwxH75J1z3CVchti63g==
+X-Received: by 2002:aa7:d312:: with SMTP id p18mr22152047edq.49.1643676576936;
+        Mon, 31 Jan 2022 16:49:36 -0800 (PST)
+Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
+        by smtp.gmail.com with ESMTPSA id lt12sm13858809ejb.166.2022.01.31.16.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jan 2022 16:49:36 -0800 (PST)
+Message-ID: <5e6a3b378f08a809a05933b3c978a6a320ffe3f2.camel@gmail.com>
+Subject: Re: [PATCH v4 7/7] arm64: dts: exynos: Add initial device tree
+ support for Exynos7885 SoC
+From:   David Virag <virag.david003@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Date:   Tue, 01 Feb 2022 01:47:56 +0100
+In-Reply-To: <7941a6b8-4bca-797e-2fa9-ebd82bed70fa@canonical.com>
+References: <20211206153124.427102-1-virag.david003@gmail.com>
+         <20211206153124.427102-8-virag.david003@gmail.com>
+         <7941a6b8-4bca-797e-2fa9-ebd82bed70fa@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parent we get from page_counter is correct, while this is two
-different hierarchy.
+On Mon, 2022-01-31 at 16:35 +0100, Krzysztof Kozlowski wrote:
+> Hi David,
+> 
+> I hope you are well and did not get discouraged with this patchset.
+> The
+> clock changes got merged, so if you fix the comments pointed here, I
+> could merge it.
+> 
+> One more change will be needed - use "-gpio-bank" suffix, like here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/commit/?h=for-v5.18/dt-pinctrl&id=71b8d1253b7fe0be0ecf79a7249389c8711f0f94
+> 
+> 
+> Best regards,
+> Krzysztof
 
-Let's retrieve the parent memcg from css.parent just like parent_cs(),
-blkcg_parent(), etc.
+Hi Krzysztof, thanks for reaching out!
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Reviewed-by: Roman Gushchin <guro@fb.com>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
----
- include/linux/memcontrol.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+I did not get discouraged, in fact I'm excited to be able to do this.
+I will send the dts for sure, I just haven't had the time right now for
+personal reasons. I expect to be able to send it in a few days!
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 0c5c403f4be6..12bf443f7b14 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -886,9 +886,7 @@ static inline struct mem_cgroup *lruvec_memcg(struct lruvec *lruvec)
-  */
- static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
- {
--	if (!memcg->memory.parent)
--		return NULL;
--	return mem_cgroup_from_counter(memcg->memory.parent, memory);
-+	return mem_cgroup_from_css(memcg->css.parent);
- }
- 
- static inline bool mem_cgroup_is_descendant(struct mem_cgroup *memcg,
--- 
-2.33.1
-
+Thanks, and best regards,
+David

@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6382C4A62EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6052B4A62E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241731AbiBARsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241727AbiBARsa (ORCPT
+        id S241702AbiBARsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:48:06 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:39442 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241711AbiBARsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:48:30 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CF4C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:48:30 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id k17so53285675ybk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:48:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KUi+nyQ98XGPvsoh/nXI9ROC1RlK2J8IMVZHix6S6I8=;
-        b=oj1nP/VMvZJ18fjUDHYWg5KIzNZDFd7qdwmEszdYvsKaahcKwft524NJCR3ebsK54a
-         Gd291yhoqnusU7Vk2wEGKgCvBWOH3vh+dAwaEHDXd8YFEmxq2fVjP5E5e5SR7X5w3Kvh
-         bjrqAceBhVaZ9o3lpLyJixOxGTnvEwT2vAXazHBTlUS8eDYD+LdhjDVnZ11SxNAOvtG2
-         bBrkcagdyt0ZGgHtYDs8TNgHMrAoDFobEb0QspM7zGQ5T+gAx1dIcogXpxDA7doiHpvN
-         7jD6u/gOpxQwGqDfQQau4MEZOkABFFpOP8mRA2/pepRkUP+rTGS4sddKz5r71jAJ5gyN
-         tKJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KUi+nyQ98XGPvsoh/nXI9ROC1RlK2J8IMVZHix6S6I8=;
-        b=BIN25kk/yw1XWx2Iag8gckqdwfMISMrzOCfKs2XEG3loJfXqAOKXI+V/1Hl4Wzl+HK
-         6I7zsqEv8cFok4pkAxwDHJeMAZA1Hwmp7B9+kiDm8Rm18RniUIUgYqldoqbisE3ZhjWi
-         0TLz+o2fA7byG2WIxALbcOeWSTsfVuGZvYplU5TnWy0CutgQ6K98kdnkrXXkoyG6EDZW
-         9m6x1nrkLm7BVxx3zmSruld8O2D0q1vVUyNKDpzEX31Le4MeNidm1vZtWrFJ9OvVFA07
-         bBnJKzczpLi2vTbThMM1z2oRGq/rKW32IR0Z1nYEjgiWm/95nr9BGK27C6t4BFCa3/Cn
-         DFpA==
-X-Gm-Message-State: AOAM532pe3g3fmW0J475TV0jLEL4HxxSjLgi/s6IrWBjCFlMW5JB9FMr
-        4APuNRYR4Rtzrl5AHKj+FWceGNy6nIGRMaiWLO42GQ==
-X-Google-Smtp-Source: ABdhPJzp1qkTNWJKDvkUpiun/JM1SuEgwJwZ96bcbe66ExSE3flxDMlv9c4h76Yq05Ng1i8hpSOE0QC2lz7rfjwPK44=
-X-Received: by 2002:a25:d682:: with SMTP id n124mr704394ybg.140.1643737709200;
- Tue, 01 Feb 2022 09:48:29 -0800 (PST)
-MIME-Version: 1.0
-References: <CAGETcx_4ATDk3nNfu6kBwUVN4nfxcHHUMnCKYsLTDoA1TFLmrw@mail.gmail.com>
- <CAPDyKFqUiydk3hHiKZ92e-W2tC4yv-XhGSz20KYYsTuZu0rWuQ@mail.gmail.com>
- <CAGETcx9fz31x20ZAcwtvmnBcfswv2O=5UNCQhZngT2BEzm6ShQ@mail.gmail.com> <CAPDyKFr1OhTCsgu64_3sBPdOaCk0HLHrhj+PJH_NB-ZY8srkNg@mail.gmail.com>
-In-Reply-To: <CAPDyKFr1OhTCsgu64_3sBPdOaCk0HLHrhj+PJH_NB-ZY8srkNg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 1 Feb 2022 09:47:53 -0800
-Message-ID: <CAGETcx8UEqxtkA3-hSws463ekaXvGznvEa32GXtCkbLa3GL7ag@mail.gmail.com>
-Subject: Re: Relation between MMC_CAP_WAIT_WHILE_BUSY and card_busy()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 1 Feb 2022 12:48:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4E4461348
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 17:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0F9C340EB;
+        Tue,  1 Feb 2022 17:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643737684;
+        bh=nk8f/RSRJKhKmKK0/NCNxsE6dgNrPNi9rG2tUzLAhys=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FHC87mn5z2aKErqIwWdABGMgrUJTQ11Ez46+Pxjw+rGr/+Y6hBSocQ22TmhJWQIh8
+         g0t8Kdb9y4lEDy30oB4WeFSz22ZjpeOLxvjSBfrnRpxgvNLOo5IQyid8LFZFMCHUq6
+         j0aGFLjSh3SpBBpv7VzjE1/Qb+y9+LwX+xn4uOumdpK9iXy6dVg/r4TdZyKGz/fP4H
+         mKam9a3Ai84gbmWahp82u71xBooVdyglUyhB+Rg6yYQQTQjnwO4TThRm7keAKfA/Oa
+         pecou5h9qzIU87dV9g2CyUZxrjQbKB0nEKczio4f2nmZrMsX1Am2rzTOARLDcTa95E
+         NW+zL0Wx/79FA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nExG6-004hw8-5S; Tue, 01 Feb 2022 17:48:02 +0000
+Date:   Tue, 01 Feb 2022 17:48:01 +0000
+Message-ID: <87czk65vhq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
+        anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
+        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
+        catalin.marinas@arm.com, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, frederic@kernel.org,
+        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
+        joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au,
+        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
+        paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com,
+        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org
+Subject: Re: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
+In-Reply-To: <c1371392-70ff-0a14-68cd-aa253998d271@redhat.com>
+References: <20220201132926.3301912-1-mark.rutland@arm.com>
+        <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
+        <YfleTYWIW1sBbMNn@FVFF77S0Q05N>
+        <c1371392-70ff-0a14-68cd-aa253998d271@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com, anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org, benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org, dave.hansen@linux.intel.com, frederic@kernel.org, hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com, joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com, wanpengli@tencent.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 12:24 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Mon, 31 Jan 2022 at 21:15, Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Mon, Jan 31, 2022 at 7:46 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Wed, 26 Jan 2022 at 04:46, Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > I'm trying to understand the MMC suspend path a bit.
-> > > >
-> > > > I looked at the commit message of 6fa79651cc808f68db6f6f297be5a950ccd5dffb.
-> > > >
-> > > > IIUC, if MMC_CAP_WAIT_WHILE_BUSY is set then the mmc framework is
-> > > > going to depend on the card_busy() op to ensure correctness instead of
-> > > > using the S_A_TIMEOUT value from the card.
-> > >
-> > > MMC_CAP_WAIT_WHILE_BUSY indicates whether the mmc controller supports
-> > > IRQ based busy detection completion. In other words, the mmc host
-> > > driver can receive an IRQ when busy signaling is completed on DAT0 by
-> > > the eMMC card.
-> > >
-> > > However, to avoid waiting for the IRQ forever, there is a maximum
-> > > timeout that is specified by the mmc core, for the particular command
-> > > in question. For eMMC sleep, the S_A_TIMEOUT.
-> >
-> > Ah ok, thanks for the explanation.
-> >
-> > >
-> > > >
-> > > > But I see a lot of mmc host drivers that implement card_busy() but
-> > > > don't set the MMC_CAP_WAIT_WHILE_BUSY flag. That doesn't seem right to
-> > > > me if my understanding is correct.
-> > >
-> > > That's perfectly okay. MMC_CAP_WAIT_WHILE_BUSY is IRQ based, while the
-> > > ->card_busy() ops is used to poll for busy completion.
-> >
-> > Yeah, it makes sense now.
-> >
-> > One thing I noticed when playing with some hardware is that during
-> > suspend, when MMC_CAP_WAIT_WHILE_BUSY isn't set and we have a
-> > card_busy() implementation, we don't seem to be using card_busy() op
-> > and just always using the timeout from S_A_TIMEOUT. To be more
-> > specific, I'm talking about this code path:
-> > _mmc_suspend() -> mmc_sleep() -> mmc_delay() -> msleep()
-> >
-> > I'd think card_busy() could be used here if it's implemented. Is there
-> > a reason for not using it in this path?
->
-> That was exactly what commit 6fa79651cc80 ("mmc: core: Enable eMMC
-> sleep commands to use HW busy polling") implemented. The commit was
-> introduced in v5.14.
->
-> If it doesn't work, there is a bug somewhere.
+On Tue, 01 Feb 2022 17:10:35 +0000,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
+> 
+> On 2/1/22 17:22, Mark Rutland wrote:
+> > On Tue, Feb 01, 2022 at 04:59:47PM +0100, Paolo Bonzini wrote:
+> >> On 2/1/22 14:29, Mark Rutland wrote:
+> >>> I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
+> >>> 
+> >>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
+> >>>     git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+> >> 
+> >> Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's master
+> >> branch (I did not use your branch in order to leave arm64 and riscv to the
+> >> respective maintainers).
+> > 
+> > Since everything's dependent upon that core patch, IIUC that's going to make it
+> > a pain for them to queue things.
+> > 
+> > How are you expecting the arm64 and riscv maintainers to queue things? Queue
+> > their own copies of that core patch?
+> 
+> The kvm.git master branch has a stable commit id, so the KVM/ARM and
+> KVM/RISCV maintainers can just base their pull request to me on
+> it. Alternatively, if they prefer it that way, I can get it quickly to
+> Linus.
 
-Ah I was checking an older kernel and meant to check the latest
-mainline before I sent this email, but then forgot to do it. Thanks
-for the pointer! Let me backport and see if it helps.
+In which case, please add the arm64 patch to the mix. I'm not rebasing
+my current queue.
 
--Saravana
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

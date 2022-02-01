@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 546CD4A566A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE5E4A566E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbiBAFVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 00:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S231414AbiBAFVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 00:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiBAFU3 (ORCPT
+        with ESMTP id S232648AbiBAFUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 00:20:29 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E13BC061762
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:29 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id t199so14579036oie.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:29 -0800 (PST)
+        Tue, 1 Feb 2022 00:20:34 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C5C061768
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:30 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso15144922ott.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:20:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=G0aG669PsgXP9P6gAr8/xW6JA5lRIN3Hof/IGZioAg8=;
-        b=dbMfihBAn0HEDh2PDmqD9IynUfx4A7IL8vjxANjNdUWzWz5mpZ2h1dPE1YewNISwap
-         MNuSNYjGUAn+bOuT+Sj8BRLYayU94F8AjPvE+OS6RW8uFElpvj9L1/OHCLGkrGX+SMx2
-         d34XdeF1HpRIvTWRvuLE/ujyBkQ79ASnPj8P8AT1CCj0mlAYeUfjJ4grUb9okB3udclR
-         /vpBEwwl014m+NjRWoKSInxpJP1LfrL5YTHbbW8TBcrl+GtKJg8OAJK1/R9328VByIFn
-         m7at8W80VEDDqG4NVhycfvY5/1WRqlHkTbV4VvpIQE/0mm3oDO6x946u77Saz5hRUuHZ
-         /z8g==
+        bh=0yBtLLWa5mrm4LGhJbqKUqqcUlgQS+sDpNdx9y4ZhSY=;
+        b=ByBIKpcKz+rn8gphlDcwUv8DwWzv0Y9sND1rn/kbUFzTXyRaRzDmYfMrCmzfiRUNcB
+         Od8erNwm1IrKb2SvUOIwz7/BYaF5Dx9HVeM7a/Akjks6a4FaddN//kvAVlUFGQaNs78X
+         Zo43I968CaAkrWxgA3q2AMNpN1421WvWml/0jAWhiMQGshmJ9XQvd3DJYpMhhXwIJKja
+         Up0nEVkYORogYXbkADqQkeNM1jQWBe2c+jRcxZcWApbmsM18ysPNzo3qzEx09qViY+OC
+         gkVDQF0HEflOKeRkGuqJ0R0Ou+PMpfx1TZfiPLDJQTRzlbWeUMYrD3SdlbMJ2beZ4yEg
+         nNUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G0aG669PsgXP9P6gAr8/xW6JA5lRIN3Hof/IGZioAg8=;
-        b=48Ith4U0ZYuROMlcvwuZle2MymFq8oOetDn+5aIAz9RZQ4pqfDf9MMT55J9TrNATD9
-         fjgLKEvsSNK+7UmO2nDnAo954QxOZpqdnRjCCBZ9pYzT8jm/VfLT4PyrQQZVqJItBcgL
-         f7a4p2S09ci1OuPa+Tduwnj60is1HcQzqwxCo9V1khciiiyq+jz6LQBU7ooLiQF5GU8J
-         qrdGeVjwrn+Z1006iLrDl3GkHtmS5+2nlTBdnSTAzEOj0mSZlEDdjSI5TyZZmBOaoXAE
-         U9g8804TkTEtRcNqF6F2teLZAJx6a17+mFTvnql6f9S3WwLft7UEve1JjH3n0sYMpBlf
-         9iGA==
-X-Gm-Message-State: AOAM5325nhte0rGDQJYD81Dk/lHsa5P+qI2U5/fjfvGzJE6t+Io6EBTQ
-        ESaGgWPl2dpeWVmQVZsRKIBNGA==
-X-Google-Smtp-Source: ABdhPJziV9DY8HYVCofXNLnbC1w6PFFADzFCMBRVwdftsOUyCsC5d+olIAlWi8pR4ZQjpAgsYMeTNw==
-X-Received: by 2002:a05:6808:bd0:: with SMTP id o16mr228863oik.26.1643692828557;
-        Mon, 31 Jan 2022 21:20:28 -0800 (PST)
+        bh=0yBtLLWa5mrm4LGhJbqKUqqcUlgQS+sDpNdx9y4ZhSY=;
+        b=TwmnKEzhGwjhBnNC42Ar0u5IyP+gtBSqoh+7kYVs8kontor4IRoVmbAEzdAxHQliRa
+         b8KykgFYt63e8iHD9rbQ8C6/40PTmRUdBy2vCDMRrNIgKTF6wg4z8r649xBFwvfTht+5
+         irHT8OLuhBL14yOqOZ0Aab2azhMEToTQd1bUmUhBS40flcfiTBeslB1tFjYhoBlXVc/B
+         99O+zvhGug+zq2B+yohjd/rXYwSB6tguOKsEf41CFEUf3aSM+qXwAXMyOAZqdNxgNzn8
+         1L5ouJv55FotzqgNBocp3EcfiyDrG5BxRRYOiswA/lof1XkPRmpOyVvXuKjqW/97x1BV
+         lJFw==
+X-Gm-Message-State: AOAM530mDdqXbloSO3CRocHAl+xh+g2t7meYByXsjPT57YsSAEOSYRNb
+        hx8h5BNN8zCgpDGRfr2dK6I/Uw==
+X-Google-Smtp-Source: ABdhPJxUcYwnE1r5smQGyfTQfkxRvxda/wLrUse7NNmge+LQzkuVtcbFlAa+IJz5rRbAZkw2Adz6fA==
+X-Received: by 2002:a05:6830:244c:: with SMTP id x12mr2774174otr.49.1643692829441;
+        Mon, 31 Jan 2022 21:20:29 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id u3sm8193107ooh.19.2022.01.31.21.20.27
+        by smtp.gmail.com with ESMTPSA id u3sm8193107ooh.19.2022.01.31.21.20.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 21:20:28 -0800 (PST)
+        Mon, 31 Jan 2022 21:20:29 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         David Heidelberg <david@ixit.cz>
 Cc:     devicetree@vger.kernel.org, ~okias/devicetree@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH] ARM: dts: apq8064: make pci regs property dt-schema compliant
-Date:   Mon, 31 Jan 2022 23:19:36 -0600
-Message-Id: <164369277343.3095904.5100675113829735729.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH] ARM: dts: msm8960: move vsdcc regulator out of simple-bus
+Date:   Mon, 31 Jan 2022 23:19:37 -0600
+Message-Id: <164369277345.3095904.9795105313735314610.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211225003502.115502-1-david@ixit.cz>
-References: <20211225003502.115502-1-david@ixit.cz>
+In-Reply-To: <20220108202558.82044-1-david@ixit.cz>
+References: <20220108202558.82044-1-david@ixit.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,18 +66,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Dec 2021 01:35:02 +0100, David Heidelberg wrote:
-> Correctly format register pairs.
-> 
-> Fixes warning generated by `make qcom-apq8064-asus-nexus7-flo.dtb` as:
-> arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dt.yaml: soc: pci@1b500000:reg:0: [458227712, 4096, 458235904, 128, 459276288, 256, 267386880, 1048576] is too long
+On Sat, 8 Jan 2022 21:25:58 +0100, David Heidelberg wrote:
+> It is not recommended to place regulator nodes inside simple-bus,
+> so move it out in order to fix the warnings generated by
+> dtschema/schemas/simple-bus.yaml schema.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] ARM: dts: apq8064: make pci regs property dt-schema compliant
-      commit: 019b7f93bf0dd6de82810f3cb0897ebdd5fd9285
+[1/1] ARM: dts: msm8960: move vsdcc regulator out of simple-bus
+      commit: 96b2f11780d550e68dc1a5276861eb6eb3378b0c
 
 Best regards,
 -- 

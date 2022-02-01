@@ -2,106 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 354724A617F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 292034A6187
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbiBAQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S241204AbiBAQog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241161AbiBAQmM (ORCPT
+        with ESMTP id S241161AbiBAQof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:42:12 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42647C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:42:12 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id i19so16490209qvx.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:42:12 -0800 (PST)
+        Tue, 1 Feb 2022 11:44:35 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD88C061714;
+        Tue,  1 Feb 2022 08:44:35 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id s9so33136906wrb.6;
+        Tue, 01 Feb 2022 08:44:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=otyEMvVogZiC/qLnQYtuKjXRtrkndEx9vzMbrLjZjDE=;
-        b=dj13jx2a1MprLlYA1kB5O4aC7dmPTtNC2m9oAj0hEzL5g88I3AgHJKZvwGSvQ9UlPq
-         mVttKA/nLeBtVoFjgpVG+TOJ/et/3WIez8o/W1sYKBuWfUbAMWgHnQmN0ZsVlASNY60O
-         qvTpr126c84fdzOSOJUgfbEp8s1K7AAbqrdKg=
+        bh=4NqVfXxx+h1TNezmQlgpsbCyzSWdpfX1NQsAjeLv8n8=;
+        b=fczcmtf81RjPpNM/tTu+gn1dwpWgq3a63+K7X52ysenA8W3pxOdl3DV/Sw+VRvCwMr
+         0vxFp+72yF3RIL45oom+Qf0AJ4id4FUawVRtlK6P1+WI0F55Q6V6qCzNFfiz6k4k+8zk
+         4Aot5IOHCVf243anPC/vZAxkry0eI7dXFubiHKVmssBPmJRkBsatWKHryDkB7aIrudhD
+         iI++/Z6yhT/He1l/yGvWmzYLeYjKGh7kDcpGntTn95kSSHlZRsr5OnetfWIkEouY2nNk
+         H+D6GL8G9ABkP0aOhfLC5vd/2t+SEZcNe9QvJMyN2ANqT3zFUuLN/Ah9nQCjdqh0jx7A
+         EfXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=otyEMvVogZiC/qLnQYtuKjXRtrkndEx9vzMbrLjZjDE=;
-        b=rpj66Suxp0LJpsvBj0EEk7VvI/PCmFGr+gG7dK10C7ea1qtBqx8bzYiYBmEqc87/Dj
-         1xAC6AogC3vtwTfr8ReuqCC7GFt+B3tInD4em20HPJC6JNgIQX4hV2OnD7kxV2hkdfT8
-         O6JJ6UeFFFGpdKy6RO4l+3/hHxVmJFzrymZRjhi2vF+rdaRpqf2xZLGZgGPGZ7f7/kek
-         6CEWiWE2HecvWJs30YGde2HX2HsaffTHWZ2ReHKCRYo8FiwgQ9u0rR6auh+Rp75r+2Qj
-         CZERVkIU8oRTJxqYwlcrYSvWLa38W86mgkyk0HWEmrwJV7lJA1Q/bU1rWhZnRGEqblR4
-         7rkA==
-X-Gm-Message-State: AOAM531D1WFxb5lPW1THxcYMBgB6zFjRSWyVC1yrB4eJiZAkH2JoKFVD
-        zBMczAWvvUMFQ6KeTkiKo9rNq5bOvk+2Hg==
-X-Google-Smtp-Source: ABdhPJxGFZ91cf3hIofpn+tTr8utUv0q8+uof1aUv0y5ZBzXiyCGafwauxL0sv1hUdVs3c+eYMrssg==
-X-Received: by 2002:ad4:5969:: with SMTP id eq9mr23536306qvb.73.1643733731141;
-        Tue, 01 Feb 2022 08:42:11 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id l12sm8623162qtk.25.2022.02.01.08.42.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 08:42:10 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id i62so52651323ybg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:42:10 -0800 (PST)
-X-Received: by 2002:a25:c58f:: with SMTP id v137mr37662763ybe.609.1643733730084;
- Tue, 01 Feb 2022 08:42:10 -0800 (PST)
+        bh=4NqVfXxx+h1TNezmQlgpsbCyzSWdpfX1NQsAjeLv8n8=;
+        b=VqS1a6QwRq2AyTRVuOvqe8J2j1TSUbk67wW0mQa36E23yr1s6BOTlQ2Rx0MT2URaSz
+         5775482iHolKwoN0qaWcEGnYVy485bCI0Th8DhN/JblsXitFF4INMahtTORDdjgr5vnu
+         sLa+/OzGhNZT5o8fYyRtP9gbYLyeSyTf59rTxg9XcJFeu9NehcpO0IXif/jwwES3lCvX
+         OAm2dfUVldiMkWej7ijQXhX6SfV+GrYciH8i26Xfiol3NJj2kVMh9o7eiMouq0xlmnVJ
+         yGBBXaiQq7JHO81LYvQFSBjqzhWGmejiaTjTQA24vF37dhxd7zG66oVtA8f2/YrQ5OzR
+         h6oQ==
+X-Gm-Message-State: AOAM533DRFQjdNROKtK1WZ8vUOyT0U9nbfKr5lJRsUc6jGC6+oXSJrzO
+        5Pki/a4PPMfNKJHkdNTVfNX+QrMiwV3pyaTq00c=
+X-Google-Smtp-Source: ABdhPJw3stZCjqZ4Fj7gt98l5hnC3yQ5On1z/N1orlP47YPs96+Jd0iCWjg9Yr02w6W8Itx9zjB3uCaPxG7CH8EQGaE=
+X-Received: by 2002:adf:f302:: with SMTP id i2mr22235649wro.114.1643733873538;
+ Tue, 01 Feb 2022 08:44:33 -0800 (PST)
 MIME-Version: 1.0
-References: <20220125135406.1.I62322abf81dbc1a1b72392a093be0c767da9bf51@changeid>
- <e89dbc7b-b3ae-c334-b704-f5633725c29f@redhat.com> <CAD=FV=U8VGnRXv8MgofKzZF22_x0_X3M+AMfyPQ1u=yTXnFBQA@mail.gmail.com>
- <6fdcfbcf-0546-6b4f-b50f-cf2382ad746f@redhat.com>
-In-Reply-To: <6fdcfbcf-0546-6b4f-b50f-cf2382ad746f@redhat.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 1 Feb 2022 08:41:58 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=U3YHt=+cr8c39zMxFWMeo4Pr=R3BBPMKanpySPhsYh9w@mail.gmail.com>
-Message-ID: <CAD=FV=U3YHt=+cr8c39zMxFWMeo4Pr=R3BBPMKanpySPhsYh9w@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel-edp: Allow querying the detected panel via sysfs
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>, jjsu@chromium.org,
-        lschyi@chromium.org, Sam Ravnborg <sam@ravnborg.org>
+References: <20220130213214.1042497-1-atomlin@redhat.com>
+In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
+From:   Allen <allen.lkml@gmail.com>
+Date:   Tue, 1 Feb 2022 08:44:21 -0800
+Message-ID: <CAOMdWS+PDCNO3mpGOU-521mWcMwQW0R4iacsWPkgGZL0aYbxrw@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
+To:     Aaron Tomlin <atomlin@redhat.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        atomlin@atomlin.com, ghalat@redhat.com, void@manifault.com,
+        Joe Perches <joe@perches.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Thanks Aaron for V4.
 
-On Wed, Jan 26, 2022 at 12:25 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> On 1/26/22 00:25, Doug Anderson wrote:
-> > On Tue, Jan 25, 2022 at 2:55 PM Javier Martinez Canillas
-> > <javierm@redhat.com> wrote:
->
-> [snip]
->
-> >> Should this new sysfs entry be documented in Documentation/ABI/ ?
-> >
-> > I'm not sure what the policy is here. I actually don't know that I'm
-> > too worried about this being an ABI. For the purposes of our tests
-> > then if something about this file changed (path changed or something
-> > like that) it wouldn't be a huge deal. Presumably the test itself
-> > would just "fail" in this case and that would clue us in that the ABI
-> > changed and we could adapt to whatever new way was needed to discover
-> > this.
-> >
-> > That being said, if the policy is that everything in sysfs is supposed
-> > to be ABI then I can add documentation for this...
-> >
->
-> I also don't know the policy, hence the question. But in any case, I
-> think that it could even be done as a follow-up if is needed.
+Build/boot test on qemu. Running more tests on BM.
 
-Sounds good. Since it's been pretty silent and I had your review I
-pushed this to drm-misc-next. If there are comments or someone has an
-opinion documenting this as a stable ABI then please yell.
+Thanks.
 
-363c4c3811db drm/panel-edp: Allow querying the detected panel via sysfs
+On Sun, Jan 30, 2022 at 1:32 PM Aaron Tomlin <atomlin@redhat.com> wrote:
+>
+> Hi Luis,
+>
+> As per your suggestion [1], this is an attempt to refactor and split
+> optional code out of core module support code into separate components.
+> This version is based on branch mcgrof/modules-next since a97ac8cb24a3/or
+> modules-5.17-rc1. Please let me know your thoughts.
+>
+> Changes since v1 [2]:
+>
+>   - Moved module version support code into a new file
+>
+> Changes since v2 [3]:
+>
+>  - Moved module decompress support to a separate file
+>  - Made check_modinfo_livepatch() generic (Petr Mladek)
+>  - Removed filename from each newly created file (Luis Chamberlain)
+>  - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+>    minor scripts/checkpatch.pl concerns e.g., use strscpy over
+>    strlcpy and missing a blank line after declarations (Allen)
+>
+> Changes since v3 [4]:
+>
+>  - Refactored both is_livepatch_module() and set_livepatch_module(),
+>    respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+>  - Addressed various compiler warnings e.g., no previous prototype (0-day)
+>
+> [1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+> [2]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+> [3]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+> [4]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+>
+> Aaron Tomlin (13):
+>   module: Move all into module/
+>   module: Simple refactor in preparation for split
+>   module: Move livepatch support to a separate file
+>   module: Move latched RB-tree support to a separate file
+>   module: Move arch strict rwx support to a separate file
+>   module: Move strict rwx support to a separate file
+>   module: Move extra signature support out of core code
+>   module: Move kmemleak support to a separate file
+>   module: Move kallsyms support into a separate file
+>   module: Move procfs support into a separate file
+>   module: Move sysfs support into a separate file
+>   module: Move kdb_modules list out of core code
+>   module: Move version support into a separate file
+>
+>  MAINTAINERS                                   |    2 +-
+>  include/linux/module.h                        |   64 +-
+>  kernel/Makefile                               |    5 +-
+>  kernel/debug/kdb/kdb_main.c                   |    5 +
+>  kernel/module-internal.h                      |   50 -
+>  kernel/module/Makefile                        |   20 +
+>  kernel/module/arch_strict_rwx.c               |   44 +
+>  kernel/module/debug_kmemleak.c                |   30 +
+>  .../decompress.c}                             |    2 +-
+>  kernel/module/internal.h                      |  236 +++
+>  kernel/module/kallsyms.c                      |  502 +++++
+>  kernel/module/livepatch.c                     |   74 +
+>  kernel/{module.c => module/main.c}            | 1874 +----------------
+>  kernel/module/procfs.c                        |  142 ++
+>  .../signature.c}                              |    0
+>  kernel/module/signing.c                       |  120 ++
+>  kernel/module/strict_rwx.c                    |   83 +
+>  kernel/module/sysfs.c                         |  425 ++++
+>  kernel/module/tree_lookup.c                   |  109 +
+>  kernel/module/version.c                       |  110 +
+>  kernel/module_signing.c                       |   45 -
+>  21 files changed, 2038 insertions(+), 1904 deletions(-)
+>  delete mode 100644 kernel/module-internal.h
+>  create mode 100644 kernel/module/Makefile
+>  create mode 100644 kernel/module/arch_strict_rwx.c
+>  create mode 100644 kernel/module/debug_kmemleak.c
+>  rename kernel/{module_decompress.c => module/decompress.c} (99%)
+>  create mode 100644 kernel/module/internal.h
+>  create mode 100644 kernel/module/kallsyms.c
+>  create mode 100644 kernel/module/livepatch.c
+>  rename kernel/{module.c => module/main.c} (63%)
+>  create mode 100644 kernel/module/procfs.c
+>  rename kernel/{module_signature.c => module/signature.c} (100%)
+>  create mode 100644 kernel/module/signing.c
+>  create mode 100644 kernel/module/strict_rwx.c
+>  create mode 100644 kernel/module/sysfs.c
+>  create mode 100644 kernel/module/tree_lookup.c
+>  create mode 100644 kernel/module/version.c
+>  delete mode 100644 kernel/module_signing.c
+>
+>
+> base-commit: a97ac8cb24a3c3ad74794adb83717ef1605d1b47
+> --
+> 2.34.1
+>
+
+
+-- 
+       - Allen

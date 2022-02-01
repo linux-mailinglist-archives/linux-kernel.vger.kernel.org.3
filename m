@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE104A647D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A75D4A647F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242261AbiBATBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:01:40 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40942 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242236AbiBATBh (ORCPT
+        id S242267AbiBATBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242240AbiBATBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:01:37 -0500
+        Tue, 1 Feb 2022 14:01:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25CBC061714;
+        Tue,  1 Feb 2022 11:01:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A5C5B82F74;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69229B82F6E;
         Tue,  1 Feb 2022 19:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDE6C340ED;
-        Tue,  1 Feb 2022 19:01:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CEEDC340EB;
+        Tue,  1 Feb 2022 19:01:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643742095;
-        bh=cwL3Yb4NVpj+ob2OmpLnPEK7lctKEkyo+6WsvIqLm5s=;
+        s=k20201202; t=1643742096;
+        bh=v/Q8ZZo7quyOd6plKn0NPo653Dll/VicuADDW6MUnw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hlE6jUFXela4nAgKZuQVJve3sMcSgy6npH2+MSEYxrOtxTjEW+utcSCOEcrnnzq/r
-         7KUUUNWSNqaPMF9qFCmtay/jZINrNbLQtsaqqx7/r13h1nl1sA0JnDxos3WLfs99bX
-         v8/Wsse/9U+hsLTfUZQt0WVZSdFzIV6AdXHMc6Y2HkyjsAmf9+mDSz8KMs+MBYYCB7
-         Kuo768495Rp1NO1l39QSAJv8MAQwvoAXUCfZHqNxs+rePcRDACMpE6MPF2wAxX9aZF
-         mxA2iW+a/jOuzJOMbXdVgcoNRuIjxWrxYjzh4u51RDkAgJiNlebfXULalhS/Ip7Ehe
-         aWKyYT7duIX7g==
+        b=TkQ63Gj6FV7VVaG9hwNnctBUpCi+9O5MuiKVANM2KUj682vyIg9LN0wyh3BKQ5zpB
+         Bm6uF8lKJq1BEuSKeCPPTwX1ifJYnjsG0thJG2rldMCUsjL2XQevp09Fr0fZvxLKjN
+         6Omg4I8Qe6do+WVg4i3e1iWDSTy1Sr9RcMgDUOZFFs3iVJ3kCRoxlTJcQIjveNwMdY
+         D/CoHj1CgZrnDB/Ea91es8x2aPkAxts7vMgw0Zi0U45vxGxf+TxgNLjF7fRSGhI8ZC
+         QnnCYGy/59XDLFjH2izw4NpIj4nWlUG8H5ODsFOPb0t/183wgqnQ//3hRt9AL4gnxv
+         AKQyRL5ghu17g==
 From:   Keith Busch <kbusch@kernel.org>
 To:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org
 Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        colyli@suse.de, Keith Busch <kbusch@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCHv2 3/7] lib: add rocksoft model crc64
-Date:   Tue,  1 Feb 2022 11:01:24 -0800
-Message-Id: <20220201190128.3075065-4-kbusch@kernel.org>
+        colyli@suse.de, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv2 4/7] lib: add crc64 tests
+Date:   Tue,  1 Feb 2022 11:01:25 -0800
+Message-Id: <20220201190128.3075065-5-kbusch@kernel.org>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20220201190128.3075065-1-kbusch@kernel.org>
 References: <20220201190128.3075065-1-kbusch@kernel.org>
@@ -47,177 +49,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NVM Express specification extended data integrity fields to 64 bits
-using the Rocksoft^TM parameters. Add the poly to the crc64 table
-generation, and provide a library routine implementing the algorithm.
+Provide a module to test the rocksoft crc64 calculations with well known
+inputs and exepected values.
 
-The Rocksoft 64-bit CRC model parameters are as follows:
-    Poly: 0xAD93D23594C93659
-    Initial value: 0xFFFFFFFFFFFFFFFF
-    Reflected Input: True
-    Reflected Output: True
-    Xor Final: 0xFFFFFFFFFFFFFFFF
-
-Since this model used reflected bits, the implementation generates the
-reflected table so the result is ordered consistently.
-
-Cc: Eric Biggers <ebiggers@kernel.org>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
 v1->v2:
 
-  Generate a reflected table for the polynomial so that the inputs and
-  outputs don't need to be reflected during calculating the CRC
+  Fixed Kconfig dependency
 
- include/linux/crc64.h |  2 ++
- lib/crc64.c           | 26 ++++++++++++++++++++++
- lib/gen_crc64table.c  | 51 +++++++++++++++++++++++++++++++++----------
- 3 files changed, 68 insertions(+), 11 deletions(-)
+ lib/Kconfig.debug |  4 +++
+ lib/Makefile      |  1 +
+ lib/test_crc64.c  | 68 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 73 insertions(+)
+ create mode 100644 lib/test_crc64.c
 
-diff --git a/include/linux/crc64.h b/include/linux/crc64.h
-index c756e65a1b58..9f2f20216503 100644
---- a/include/linux/crc64.h
-+++ b/include/linux/crc64.h
-@@ -8,4 +8,6 @@
- #include <linux/types.h>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14b89aa37c5c..149de11ae903 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2214,6 +2214,10 @@ config TEST_UUID
+ config TEST_XARRAY
+ 	tristate "Test the XArray code at runtime"
  
- u64 __pure crc64_be(u64 crc, const void *p, size_t len);
-+u64 __pure crc64_rocksoft(u64 crc, const void *p, size_t len);
++config TEST_CRC64
++	depends on CRC64
++	tristate "Test the crc64 code at runtime"
 +
- #endif /* _LINUX_CRC64_H */
-diff --git a/lib/crc64.c b/lib/crc64.c
-index 9f852a89ee2a..e223e72be44d 100644
---- a/lib/crc64.c
-+++ b/lib/crc64.c
-@@ -22,6 +22,13 @@
-  * x^24 + x^23 + x^22 + x^21 + x^19 + x^17 + x^13 + x^12 + x^10 + x^9 +
-  * x^7 + x^4 + x + 1
-  *
-+ * crc64rocksoft[256] table is from the Rocksoft specification polynomial
-+ * defined as,
+ config TEST_OVERFLOW
+ 	tristate "Test check_*_overflow() functions at runtime"
+ 
+diff --git a/lib/Makefile b/lib/Makefile
+index 300f569c626b..e100a4d6a950 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -103,6 +103,7 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+ obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
++obj-$(CONFIG_TEST_CRC64) += test_crc64.o
+ #
+ # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
+ # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
+diff --git a/lib/test_crc64.c b/lib/test_crc64.c
+new file mode 100644
+index 000000000000..283fef8f110e
+--- /dev/null
++++ b/lib/test_crc64.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Tests were selected from NVM Express NVM Command Set Specification 1.0a,
++ * section 5.2.1.3.5 "64b CRC Test Cases" available here:
 + *
-+ * x^64 + x^63 + x^61 + x^59 + x^58 + x^56 + x^55 + x^52 + x^49 + x^48 + x^47 +
-+ * x^46 + x^44 + x^41 + x^37 + x^36 + x^34 + x^32 + x^31 + x^28 + x^26 + x^23 +
-+ * x^22 + x^19 + x^16 + x^13 + x^12 + x^10 + x^9 + x^6 + x^4 + x^3 + 1
++ *   https://nvmexpress.org/wp-content/uploads/NVMe-NVM-Command-Set-Specification-1.0a-2021.07.26-Ratified.pdf
 + *
-  * Copyright 2018 SUSE Linux.
-  *   Author: Coly Li <colyli@suse.de>
-  */
-@@ -55,3 +62,22 @@ u64 __pure crc64_be(u64 crc, const void *p, size_t len)
- 	return crc;
- }
- EXPORT_SYMBOL_GPL(crc64_be);
-+
-+/**
-+ * crc64_rocksoft - Calculate bitwise Rocksoft CRC64
-+ * @crc: seed value for computation. (u64)~0 for a new CRC calculation, or the
-+ * 	 previous crc64 value if computing incrementally.
-+ * @p: pointer to buffer over which CRC64 is run
-+ * @len: length of buffer @p
++ * Copyright 2022 Keith Busch <kbusch@kernel.org>
 + */
-+u64 __pure crc64_rocksoft(u64 crc, const void *p, size_t len)
++
++#include <linux/crc64.h>
++#include <linux/module.h>
++
++static unsigned int tests_passed;
++static unsigned int tests_run;
++
++#define ALL_ZEROS 0x6482D367EB22B64EULL
++#define ALL_FFS 0xC0DDBA7302ECA3ACULL
++#define INC 0x3E729F5F6750449CULL
++#define DEC 0x9A2DF64B8E9E517EULL
++
++static u8 buffer[4096];
++
++#define CRC_CHECK(c, v) do {					\
++	tests_run++;						\
++	if (c != v)						\
++		printk("BUG at %s:%d expected:%llx got:%llx\n", \
++			__func__, __LINE__, v, c);		\
++	else							\
++		tests_passed++;					\
++} while (0)
++
++
++static int crc_tests(void)
 +{
-+	const unsigned char *_p = p;
-+	size_t i;
++	__u64 crc;
++	int i;
 +
-+	for (i = 0; i < len; i++)
-+		crc = (crc >> 8) ^ crc64rocksofttable[(crc & 0xff) ^ *_p++];
++	memset(buffer, 0, sizeof(buffer));
++	crc = crc64_rocksoft(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, ALL_ZEROS);
 +
-+	return crc ^ (u64)~0;
-+}
-+EXPORT_SYMBOL_GPL(crc64_rocksoft);
-diff --git a/lib/gen_crc64table.c b/lib/gen_crc64table.c
-index 094b43aef8db..55e222acd0b8 100644
---- a/lib/gen_crc64table.c
-+++ b/lib/gen_crc64table.c
-@@ -17,10 +17,30 @@
- #include <stdio.h>
- 
- #define CRC64_ECMA182_POLY 0x42F0E1EBA9EA3693ULL
-+#define CRC64_ROCKSOFT_POLY 0x9A6C9329AC4BC9B5ULL
- 
- static uint64_t crc64_table[256] = {0};
-+static uint64_t crc64_rocksoft_table[256] = {0};
- 
--static void generate_crc64_table(void)
-+static void generate_reflected_crc64_table(uint64_t table[256], uint64_t poly)
-+{
-+	uint64_t i, j, c, crc;
++	memset(buffer, 0xff, sizeof(buffer));
++	crc = crc64_rocksoft(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, ALL_FFS);
 +
-+	for (i = 0; i < 256; i++) {
-+		crc = 0ULL;
-+		c = i;
++	for (i = 0; i < 4096; i++)
++		buffer[i] = i & 0xff;
++	crc = crc64_rocksoft(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, INC);
 +
-+		for (j = 0; j < 8; j++) {
-+			if ((crc ^ (c >> j)) & 1)
-+				crc = (crc >> 1) ^ poly;
-+			else
-+				crc >>= 1;
-+		}
-+		table[i] = crc;
-+	}
-+}
++	for (i = 0; i < 4096; i++)
++		buffer[i] = 0xff - (i & 0xff);
++	crc = crc64_rocksoft(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, DEC);
 +
-+static void generate_crc64_table(uint64_t table[256], uint64_t poly)
- {
- 	uint64_t i, j, c, crc;
- 
-@@ -30,26 +50,22 @@ static void generate_crc64_table(void)
- 
- 		for (j = 0; j < 8; j++) {
- 			if ((crc ^ c) & 0x8000000000000000ULL)
--				crc = (crc << 1) ^ CRC64_ECMA182_POLY;
-+				crc = (crc << 1) ^ poly;
- 			else
- 				crc <<= 1;
- 			c <<= 1;
- 		}
- 
--		crc64_table[i] = crc;
-+		table[i] = crc;
- 	}
- }
- 
--static void print_crc64_table(void)
-+static void output_table(uint64_t table[256])
- {
- 	int i;
- 
--	printf("/* this file is generated - do not edit */\n\n");
--	printf("#include <linux/types.h>\n");
--	printf("#include <linux/cache.h>\n\n");
--	printf("static const u64 ____cacheline_aligned crc64table[256] = {\n");
- 	for (i = 0; i < 256; i++) {
--		printf("\t0x%016" PRIx64 "ULL", crc64_table[i]);
-+		printf("\t0x%016" PRIx64 "ULL", table[i]);
- 		if (i & 0x1)
- 			printf(",\n");
- 		else
-@@ -58,9 +74,22 @@ static void print_crc64_table(void)
- 	printf("};\n");
- }
- 
-+static void print_crc64_tables(void)
-+{
-+	printf("/* this file is generated - do not edit */\n\n");
-+	printf("#include <linux/types.h>\n");
-+	printf("#include <linux/cache.h>\n\n");
-+	printf("static const u64 ____cacheline_aligned crc64table[256] = {\n");
-+	output_table(crc64_table);
-+
-+	printf("\nstatic const u64 ____cacheline_aligned crc64rocksofttable[256] = {\n");
-+	output_table(crc64_rocksoft_table);
++	printk("CRC64: %u of %u tests passed\n", tests_passed, tests_run);
++	return (tests_run == tests_passed) ? 0 : -EINVAL;
 +}
 +
- int main(int argc, char *argv[])
- {
--	generate_crc64_table();
--	print_crc64_table();
-+	generate_crc64_table(crc64_table, CRC64_ECMA182_POLY);
-+	generate_reflected_crc64_table(crc64_rocksoft_table, CRC64_ROCKSOFT_POLY);
-+	print_crc64_tables();
- 	return 0;
- }
++static void crc_exit(void)
++{
++}
++
++module_init(crc_tests);
++module_exit(crc_exit);
++MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
++MODULE_LICENSE("GPL");
 -- 
 2.25.4
 

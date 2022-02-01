@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5694A61E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFED4A61E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241413AbiBARGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:06:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:63012 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231877AbiBARGV (ORCPT
+        id S241438AbiBARGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:06:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241434AbiBARGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:06:21 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211H0Ybq016152;
-        Tue, 1 Feb 2022 17:06:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=onrqYIOKUr4RNTR6BCf3mCF2S16T7nddg5AP40Dp79A=;
- b=YLMWhhuQIxEJwuegzaz1nfJaXranP7f6aHyrOA8ZQ65v6TMLjlXuNOgkyi4xL8Gxesuy
- oZ9SrQ6UATj3vM99z3hhXU8cWNobev2MF6X2INhmaxlYR9On9afD9dYy6xHPxarFQELd
- Yyfqk49+YHvRdWlE4dZqFkiIqZ+Pd0GQigjqHk1vNtCn5PNnb+A9PujY3pbNVxoMaw8s
- cevaQ6psMWy9DbMEEqPJsuzu2AhoPbqxlEm3BuDYjQQ28qlZihDKL3aWNRAg1HNTh7Jp
- E4Rma38RiAggfaVy/XygAFCaixpBzY1Ze7GgWneE3Jd23Qc0xVGEuyiHCjwTA9aB1nFf NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dy6q4kght-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:06:17 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 211G0jIi028915;
-        Tue, 1 Feb 2022 17:06:17 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dy6q4kgha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:06:16 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211Gl9KU025334;
-        Tue, 1 Feb 2022 17:06:15 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dvvujer20-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 17:06:15 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211H6Dpb47579530
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 17:06:13 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ECC8A42047;
-        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E88942045;
-        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
-Received: from [9.145.64.14] (unknown [9.145.64.14])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Feb 2022 17:06:12 +0000 (GMT)
-Message-ID: <0936d5f3-aef2-0553-408b-07b3bb47e36b@linux.ibm.com>
-Date:   Tue, 1 Feb 2022 18:06:12 +0100
+        Tue, 1 Feb 2022 12:06:46 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC2EC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:06:45 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id m9so34493567oia.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RdQTcqQ9Qr4h0L2NlLlM99qGIKmmmXyVpgAfVQlyXvw=;
+        b=aBXJGsBy39GcwPGw1gQwRkkKV6thDHpcyarDrmkoubQM6M8m7KheFYLmVcR/iba2MT
+         ++t5VYXBHifuxfZgt0rPdm2eEQIi4to/6t4QII6YDcjxIphQkcY9ydqlzF1HGNKaSs9V
+         IvfM1MNQmBgOqUNJRefzdJIahGbbWzxTo2tEE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RdQTcqQ9Qr4h0L2NlLlM99qGIKmmmXyVpgAfVQlyXvw=;
+        b=u2CbEYxl9ZpNbGvYMaDDR20aicM8TQ2kGNAemwuNcdNLs+UyVgvrKYilmyogogRdP7
+         xQ9xhLNmYzZCV9OgDKkTQZm3ieS41ZkLvuRZcwjYNIB8V4XwVVRjdM+vvFmP4OmOiJMa
+         XQ39oP5kxf5Eu5xb1XLpVnsnHMAozAbiVwIzFyFTFZfS0M4KMJ+pRFPevgjQ8re8N1jH
+         yuARQlLsLnsvwTQi5E1Aj2Bab8FLd2DT/DiTRoq1Vupkv+4Vbi4Sw/uBqhoCGqca7umm
+         bFRpyF//fvP4TbTdmy+e5CWN2ugFxu7GACTJDptgI4A+qzNuN36VJKv6HiqEgBWiinfr
+         8KYw==
+X-Gm-Message-State: AOAM531SIcKmeeKZk6S3AA/T6oJV7ZqT6fmdCozwYmsX8DXJMen1w9cS
+        qYIh9xLXq6E14c7EeU/qN2Xe+ZFqPlnnpyyhH0k5pQ==
+X-Google-Smtp-Source: ABdhPJxmJTT10BhmESxaD9wSsaXi2TyqjKpx8TF/TQp9so++NA/uk65aK3wvzaI2XbQCX3/1SL7QYNE/AkpMguwVMkA=
+X-Received: by 2002:a05:6808:1641:: with SMTP id az1mr1928959oib.278.1643735204982;
+ Tue, 01 Feb 2022 09:06:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [BUG] net: smc: possible deadlock in smc_lgr_free() and
- smc_link_down_work()
-Content-Language: en-US
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
-From:   Karsten Graul <kgraul@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pea68IG5Bj1ccet02yEexdujcsm8MwYP
-X-Proofpoint-ORIG-GUID: wR9E2Ty2RNbiLvkCityV-vItCyHpBkeq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
- clxscore=1015 suspectscore=0 mlxscore=0 adultscore=0 malwarescore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202010095
+References: <20220125202118.63362-1-andriy.shevchenko@linux.intel.com>
+ <20220125202118.63362-2-andriy.shevchenko@linux.intel.com>
+ <YfEG2qVO9K9G+g1d@kroah.com> <CAKMK7uGoRC9a4cMCADTipV67oivfWvTw=6RYm2kOthB_bhWnXQ@mail.gmail.com>
+ <f671a112-880d-1526-a395-360947b40c5a@gmx.de> <YfEv7OQs98O9wJdJ@kroah.com>
+ <YfFIpBb7lL4ukWjm@smile.fi.intel.com> <b8eb7111-43aa-cc8a-a1bc-f08e0f2987ed@redhat.com>
+ <YfFV4EJosayH+e6C@smile.fi.intel.com> <YfFWPmG2D093gz4N@smile.fi.intel.com>
+ <6e74d4cc-655a-e38e-0856-a59e4e6deb36@redhat.com> <c423a2f0-e7be-3884-3568-7629c7e9104e@redhat.com>
+ <ddb0f354-be19-92fe-20b3-56b00c9304ab@suse.de> <840ec74d-60c6-9480-709c-8cd597c6f5b0@redhat.com>
+ <e7fbef3c-2f87-15f9-b24d-34ffaa5a2853@suse.de> <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
+In-Reply-To: <CAMuHMdXnn+JcyMAV_Vbb4Yj8hJmae=Snc2R2fLviq67UYXg7Ew@mail.gmail.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 1 Feb 2022 18:06:33 +0100
+Message-ID: <CAKMK7uEPuw1+-=h7gvSyCxW4zNuTK3UNZP6yjpP6MPV17sAasQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/4] fbtft: Unorphan the driver
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>, linux-staging@lists.linux.dev,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Carlis <zhangxuezhi1@yulong.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2022 08:51, Jia-Ju Bai wrote:
-> Hello,
-> 
-> My static analysis tool reports a possible deadlock in the smc module in Linux 5.16:
-> 
-> smc_lgr_free()
->   mutex_lock(&lgr->llc_conf_mutex); --> Line 1289 (Lock A)
->   smcr_link_clear()
->     smc_wr_free_link()
->       wait_event(lnk->wr_tx_wait, ...); --> Line 648 (Wait X)
-> 
-> smc_link_down_work()
->   mutex_lock(&lgr->llc_conf_mutex); --> Line 1683 (Lock A)
->   smcr_link_down()
->     smcr_link_clear()
->       smc_wr_free_link()
->         smc_wr_wakeup_tx_wait()
->           wake_up_all(&lnk->wr_tx_wait); --> Line 78 (Wake X)
-> 
-> When smc_lgr_free() is executed, "Wait X" is performed by holding "Lock A". If smc_link_down_work() is executed at this time, "Wake X" cannot be performed to wake up "Wait X" in smc_lgr_free(), because "Lock A" has been already hold by smc_lgr_free(), causing a possible deadlock.
-> 
-> I am not quite sure whether this possible problem is real and how to fix it if it is real.
-> Any feedback would be appreciated, thanks :)
+On Tue, Feb 1, 2022 at 6:01 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Thomas,
+>
+> On Tue, Feb 1, 2022 at 5:16 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> > Am 31.01.22 um 11:18 schrieb Javier Martinez Canillas:
+> > > Another thing that's missing is a DRM_MODE_CONNECTOR_I2C, because I used for
+> > > now a DRM_MODE_CONNECTOR_Unknown.
+> >
+> > That might have implications on userspace. Maybe ask around. (Not that
+> > we actually run userspace on the device).
+>
+> Looking at the list of connector types (and wondering if we're gonna
+> need more when converting existing fbdev drivers to drm drivers),
+> there seem to be two different families of connector types, for
+>   1. transports between CRTC and display (e.g. VGA, DVID, HDMI),
+>   2. transports between CPU and CRTC (e.g. SPI, possibly USB, and
+>      the proposed I2C)?
 
-A deeper analysis showed up that this reported possible deadlock is actually not a problem.
+I was trying to argue for a panel connector type and stop doing all
+these internal things because like you point out, it kinda doesn't,
+only the external connectors are relevant to users. But it didn't
+stick anywhere yet, we keep adding more connector types and then
+having to update userspace, which should map these all to "it's the
+panel" or something like that. But also since various technicolor
+abbreviations are about as useful to end-users as "unknown" it really
+doesn't matter, so I'm happy to let this bikeshed get a tad fancier
+every year :-)
+-Daniel
 
-The wait on line 648 in smc_wr.c
-	wait_event(lnk->wr_tx_wait, (!atomic_read(&lnk->wr_tx_refcnt)));
-waits as long as the refcount wr_tx_refcnt is not zero.
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-Every time when a caller stops using a link wr_tx_refcnt is decreased, and when it reaches 
-zero the wr_tx_wait is woken up in smc_wr_tx_link_put() in smc_wr.h, line 70:
-		if (atomic_dec_and_test(&link->wr_tx_refcnt))
-			wake_up_all(&link->wr_tx_wait);
-
-Multiple callers of smc_wr_tx_link_put() do not run under the llc_conf_mutex lock, and those
-who run under this mutex are saved against the wait_event() in smc_wr_free_link().
 
 
-Thank you for reporting this finding! Which tool did you use for this analysis?
-
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

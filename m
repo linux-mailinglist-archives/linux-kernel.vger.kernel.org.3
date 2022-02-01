@@ -2,153 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7F4A63C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2874A64DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiBAS0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:26:24 -0500
-Received: from mga09.intel.com ([134.134.136.24]:60474 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230476AbiBAS0W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:26:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643739982; x=1675275982;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=vp2eV6YupVRo21s7LFcoDcoJ6iwIdXT9XTTytuTk23M=;
-  b=Tep9xvkBpXhC+qDRcS5o0ycTkEio0GSflZH3O3jRXf4FRkOYnnaWLZN/
-   G5W/zxnNVlWUHcvjjyRhSRF36U8wzhW4EwtQvJcn88Um+Y7iE2MPR6QUk
-   VgyJJxQbitsYZBvipzvy9XUlm+sLK7aezZsEbII9OGV/pZj/TbYN1ehzt
-   0BEV0CKL7m+d9jT2Joa19mi2ByyHbJP9M7faMaNvw3mGqqgjGyDb7M0t1
-   dhArRR1dsIhgUuIVqxxJLk89aO1UqqBJUaBDv0zKyzbebM5Oz8IzBWGvv
-   9c2SrsuVEgIK+fwnFQ3yHGNXHxQKXZaAeddHE7iHwAUMLKdFS394QsUB6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247527596"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="247527596"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 10:26:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="565681655"
-Received: from otc-lr-04.jf.intel.com ([10.54.39.41])
-  by orsmga001.jf.intel.com with ESMTP; 01 Feb 2022 10:26:13 -0800
-From:   kan.liang@linux.intel.com
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ak@linux.intel.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH 3/3] perf/x86/intel: Increase max number of the fixed counters
-Date:   Tue,  1 Feb 2022 13:23:23 -0800
-Message-Id: <1643750603-100733-3-git-send-email-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643750603-100733-1-git-send-email-kan.liang@linux.intel.com>
-References: <1643750603-100733-1-git-send-email-kan.liang@linux.intel.com>
+        id S242370AbiBATTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:19:08 -0500
+Received: from 7.mo550.mail-out.ovh.net ([87.98.158.110]:34015 "EHLO
+        7.mo550.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242348AbiBATTG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 14:19:06 -0500
+X-Greylist: delayed 8966 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Feb 2022 14:19:06 EST
+Received: from player687.ha.ovh.net (unknown [10.110.115.188])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 6966621F5C
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:49:37 +0000 (UTC)
+Received: from RCM-web6.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player687.ha.ovh.net (Postfix) with ESMTPSA id 9168F26E9FF01;
+        Tue,  1 Feb 2022 16:49:14 +0000 (UTC)
+MIME-Version: 1.0
+Date:   Tue, 01 Feb 2022 17:49:14 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Rob Herring <robh@kernel.org>, Michael Walle <michael@walle.cc>
+Cc:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>
+Subject: Re: [PATCH REBASED 2/2] dt-bindings: nvmem: cells: add MAC address
+ cell
+In-Reply-To: <YflX6kxWTD6qMnhJ@robh.at.kernel.org>
+References: <20220125180114.12286-1-zajec5@gmail.com>
+ <20220126070745.32305-1-zajec5@gmail.com>
+ <20220126070745.32305-2-zajec5@gmail.com>
+ <YflX6kxWTD6qMnhJ@robh.at.kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1dd3522d9c7cfcb40f4f8198d4d35118@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 7251076875513539502
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgdelvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvffujghffgfkgihitgfgsehtkehjtddtreejnecuhfhrohhmpeftrghfrghlpgfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpedugeeluefgffekfeehieehvdfgffehtdettefffeekieeijeelhfelvedvgfevtdenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheikeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On 2022-02-01 16:55, Rob Herring wrote:
+> On Wed, Jan 26, 2022 at 08:07:45AM +0100, Rafał Miłecki wrote:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>> 
+>> This adds support for describing details of NVMEM cell containing MAC
+>> address. Those are often device specific and could be nicely stored in
+>> DT.
+>> 
+>> Initial documentation includes support for describing:
+>> 1. Cell data format (e.g. Broadcom's NVRAM uses ASCII to store MAC)
+>> 2. Reversed bytes flash (required for i.MX6/i.MX7 OCOTP support)
+>> 3. Source for multiple addresses (very common in home routers)
+>> 
+>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>> ---
+>>  .../bindings/nvmem/cells/mac-address.yaml     | 94 
+>> +++++++++++++++++++
+>>  1 file changed, 94 insertions(+)
+>>  create mode 100644 
+>> Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
+>> 
+>> diff --git 
+>> a/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml 
+>> b/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
+>> new file mode 100644
+>> index 000000000000..f8d19e87cdf0
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/nvmem/cells/mac-address.yaml
+>> @@ -0,0 +1,94 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/nvmem/cells/mac-address.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: NVMEM cell containing a MAC address
+>> +
+>> +maintainers:
+>> +  - Rafał Miłecki <rafal@milecki.pl>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mac-address
+>> +
+>> +  format:
+>> +    description: |
+>> +      Some NVMEM cells contain MAC in a non-binary format.
+>> +
+>> +      ASCII should be specified if MAC is string formatted like:
+>> +      - "01:23:45:67:89:AB" (30 31 3a 32 33 3a 34 35 3a 36 37 3a 38 
+>> 39 3a 41 42)
+>> +      - "01-23-45-67-89-AB"
+>> +      - "0123456789AB"
+>> +    enum:
+>> +      - ascii
+>> +
+>> +  reversed-bytes:
+>> +    type: boolean
+>> +    description: |
+>> +      MAC is stored in reversed bytes order. Example:
+>> +      Stored value: AB 89 67 45 23 01
+>> +      Actual MAC: 01 23 45 67 89 AB
+>> +
+>> +  base-address:
+>> +    type: boolean
+>> +    description: |
+>> +      Marks NVMEM cell as provider of multiple addresses that are 
+>> relative to
+>> +      the one actually stored physically. Respective addresses can be 
+>> requested
+>> +      by specifying cell index of NVMEM cell.
+> 
+> While a base address is common, aren't there different ways the base is
+> modified.
+> 
+> The problem with these properties is every new variation results in a
+> new property and the end result is something not well designed. A 
+> unique
+> compatible string, "#nvmem-cell-cells" and code to interpret the data 
+> is
+> more flexible.
+> 
+> For something like this to fly, I need some level of confidence this is
+> enough for everyone for some time (IOW, find all the previous attempts
+> and get those people's buy-in). You have found at least 3 cases, but I
+> seem to recall more.
 
-The new PEBS format 5 implies that the number of the fixed counters can
-be up to 16. The current INTEL_PMC_MAX_FIXED is still 4. If the current
-kernel runs on a future platform which has more than 4 fixed counters,
-a warning will be triggered. The number of the fixed counters will be
-clipped to 4. Users have to upgrade the kernel to access the new fixed
-counters.
+For base address I thought of dealing with base + offset only. I'm not
+sure what are other cases.
 
-Add a new default constraint for PerfMon v5 and up, which can support
-up to 16 fixed counters. The pseudo-encoding is applied for the fixed
-counters 4 and later. The user can have generic support for the new
-fixed counters on the future platfroms without updating the kernel.
+I read few old threads:
+https://lore.kernel.org/lkml/20211228142549.1275412-1-michael@walle.cc/T/
+https://lore.kernel.org/linux-devicetree/20211123134425.3875656-1-michael@walle.cc/
+https://lore.kernel.org/all/20210414152657.12097-2-michael@walle.cc/
+https://lore.kernel.org/linux-devicetree/362f1c6a8b0ec191b285ac6a604500da@walle.cc/
 
-Increase the INTEL_PMC_MAX_FIXED to 16.
+but didn't find other required /transformations/ except for offset and
+format. Even "reversed-bytes" wasn't widely discussed (or I missed that)
+and I just came with it on my own.
 
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
----
- arch/x86/events/intel/core.c      | 40 ++++++++++++++++++++++++++++++++++++++-
- arch/x86/include/asm/perf_event.h |  2 +-
- 2 files changed, 40 insertions(+), 2 deletions(-)
+If anyone knows other cases: please share so we have a complete view.
 
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index 46ac451..24a4a75 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -181,6 +181,27 @@ static struct event_constraint intel_gen_event_constraints[] __read_mostly =
- 	EVENT_CONSTRAINT_END
- };
- 
-+static struct event_constraint intel_v5_gen_event_constraints[] __read_mostly =
-+{
-+	FIXED_EVENT_CONSTRAINT(0x00c0, 0), /* INST_RETIRED.ANY */
-+	FIXED_EVENT_CONSTRAINT(0x003c, 1), /* CPU_CLK_UNHALTED.CORE */
-+	FIXED_EVENT_CONSTRAINT(0x0300, 2), /* CPU_CLK_UNHALTED.REF */
-+	FIXED_EVENT_CONSTRAINT(0x0400, 3), /* SLOTS */
-+	FIXED_EVENT_CONSTRAINT(0x0500, 4),
-+	FIXED_EVENT_CONSTRAINT(0x0600, 5),
-+	FIXED_EVENT_CONSTRAINT(0x0700, 6),
-+	FIXED_EVENT_CONSTRAINT(0x0800, 7),
-+	FIXED_EVENT_CONSTRAINT(0x0900, 8),
-+	FIXED_EVENT_CONSTRAINT(0x0a00, 9),
-+	FIXED_EVENT_CONSTRAINT(0x0b00, 10),
-+	FIXED_EVENT_CONSTRAINT(0x0c00, 11),
-+	FIXED_EVENT_CONSTRAINT(0x0d00, 12),
-+	FIXED_EVENT_CONSTRAINT(0x0e00, 13),
-+	FIXED_EVENT_CONSTRAINT(0x0f00, 14),
-+	FIXED_EVENT_CONSTRAINT(0x1000, 15),
-+	EVENT_CONSTRAINT_END
-+};
-+
- static struct event_constraint intel_slm_event_constraints[] __read_mostly =
- {
- 	FIXED_EVENT_CONSTRAINT(0x00c0, 0), /* INST_RETIRED.ANY */
-@@ -6296,7 +6317,9 @@ __init int intel_pmu_init(void)
- 			pr_cont("generic architected perfmon v1, ");
- 			name = "generic_arch_v1";
- 			break;
--		default:
-+		case 2:
-+		case 3:
-+		case 4:
- 			/*
- 			 * default constraints for v2 and up
- 			 */
-@@ -6304,6 +6327,21 @@ __init int intel_pmu_init(void)
- 			pr_cont("generic architected perfmon, ");
- 			name = "generic_arch_v2+";
- 			break;
-+		default:
-+			/*
-+			 * The default constraints for v5 and up can support up to
-+			 * 16 fixed counters. For the fixed counters 4 and later,
-+			 * the pseudo-encoding is applied.
-+			 * The constraints may be cut according to the CPUID enumeration
-+			 * by inserting the EVENT_CONSTRAINT_END.
-+			 */
-+			if (x86_pmu.num_counters_fixed > INTEL_PMC_MAX_FIXED)
-+				x86_pmu.num_counters_fixed = INTEL_PMC_MAX_FIXED;
-+			intel_v5_gen_event_constraints[x86_pmu.num_counters_fixed].weight = -1;
-+			x86_pmu.event_constraints = intel_v5_gen_event_constraints;
-+			pr_cont("generic architected perfmon, ");
-+			name = "generic_arch_v5+";
-+			break;
- 		}
- 	}
- 
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 8fc1b50..58d9e4b 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -7,7 +7,7 @@
-  */
- 
- #define INTEL_PMC_MAX_GENERIC				       32
--#define INTEL_PMC_MAX_FIXED					4
-+#define INTEL_PMC_MAX_FIXED				       16
- #define INTEL_PMC_IDX_FIXED				       32
- 
- #define X86_PMC_IDX_MAX					       64
--- 
-2.7.4
 
+I tried to Cc all previously invovled people but it seems only me and
+Michael remained active in this subject. If anyone knows other
+interested please Cc them and let us know.
+
+
+Rob: instead of me and Michael sending patch after patch let me try to
+gather solutions I can think of / I recall. Please kindly review them
+and let us know what do you find the cleanest.
+
+
+1. NVMEM specific "compatible" string
+
+Example:
+
+partition@f00000 {
+     compatible = "brcm,foo-cells", "nvmem-cells";
+     label = "calibration";
+     reg = <0xf00000 0x100000>;
+     ranges = <0 0xf00000 0x100000>;
+     #address-cells = <1>;
+     #size-cells = <1>;
+
+     mac@100 {
+         reg = <0x100 0x6>;
+         [optional: #nvmem-cell-cells = <1>;]
+     };
+};
+
+A minimalistic binding proposed by Michael. DT doesn't carry any
+information on NVMEM cell format. Specific drivers (e.g. one handling
+"brcm,foo-cells") have to know how to handle specific cell.
+
+Cell handling conditional code can depend on cell node name ("mac" in
+above case) OR on value of "nvmem-cell-names" in cell consumer (e.g.
+nvmem-cell-names = "mac-address").
+
+
+2. NVMEM specific "compatible" string + cells "compatible"s
+
+Example:
+
+partition@f00000 {
+     compatible = "brcm,foo-cells", "nvmem-cells";
+     label = "calibration";
+     reg = <0xf00000 0x100000>;
+     ranges = <0 0xf00000 0x100000>;
+     #address-cells = <1>;
+     #size-cells = <1>;
+
+     mac@100 {
+         compatible = "mac-address";
+         reg = <0x100 0x6>;
+         [optional: #nvmem-cell-cells = <1>;]
+     };
+};
+
+Similar to the first case but cells that require special handling are
+marked with NVMEM device specific "compatible" values. Details of 
+handling
+cells are still hardcoded in NVMEM driver. Different cells with
+compatible = "mac-address";
+may be handled differencly - depending on parent NVMEM device.
+
+
+3. Flexible properties in NVMEM cells
+
+Example:
+
+partition@f00000 {
+     compatible = "brcm,foo-cells", "nvmem-cells";
+     label = "calibration";
+     reg = <0xf00000 0x100000>;
+     ranges = <0 0xf00000 0x100000>;
+     #address-cells = <1>;
+     #size-cells = <1>;
+
+     mac@100 {
+         compatible = "mac-address";
+         reg = <0x100 0x6>;
+         [optional: #nvmem-cell-cells = <1>;]
+     };
+
+     mac@200 {
+         compatible = "mac-address";
+         reg = <0x200 0x6>;
+         reversed-bytes;
+         [optional: #nvmem-cell-cells = <1>;]
+     };
+
+     mac@300 {
+         compatible = "mac-address";
+         reg = <0x300 0x11>;
+         format = "ascii";
+         [optional: #nvmem-cell-cells = <1>;]
+     };
+};
+
+This moves details into DT and requires more shared properties. It helps
+avoiding duplicated code for common cases (like base MAC address).
+
+It's what I proposed in the
+[PATCH 0/2] dt-bindings: nvmem: support describing cells

@@ -2,210 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8173B4A5DD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2734A5DD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbiBAN7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:59:54 -0500
-Received: from mga17.intel.com ([192.55.52.151]:14988 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238944AbiBAN7x (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:59:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643723993; x=1675259993;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=lOH1XfKZ3/HZZy0a2x4qqcf+ZDoW+Ouz7bP0BLy5q9s=;
-  b=l4jziWWyxaE0IyQqN4w+7mTOl5KaYpRqG0LQQ3nKX20nGgSbFhPJYKbL
-   khVOA2MAKeFQm5fPVdRfde/IISbzNJhhc+FLNrywZ5paMa3OhS7VSGy+W
-   jstDqBpFv/xo3pK+O6+WWA3VRnM+fNuJuXu5nVj8DMn3DJO+DdpdNtlR9
-   YYxYUUexoBnSUCV8F3HmIuwb+y+mcRl6+m2EUtBz156r+PngSLt1/2eul
-   J2tEMDRIsx3P63inBoaahgEU+VKUUap1giH7G2JGaNAQSCAus1WVmCmLd
-   I1SVZCb420z+Ajt7medgLrAJJi9Pt1myTp+Yidm7gDWQy6ty9wjky3yiw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="228352499"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="228352499"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 05:59:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="523057009"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2022 05:59:48 -0800
-Subject: Re: [PATCH V3 2/4] mmc: debugfs: Add debug fs entry for mmc driver
-To:     "Sajida Bhanu (Temp) (QUIC)" <quic_c_sbhanu@quicinc.com>,
-        "Asutosh Das (QUIC)" <quic_asutoshd@quicinc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "stummala@codeaurora.org" <stummala@codeaurora.org>,
-        "vbadigan@codeaurora.org" <vbadigan@codeaurora.org>,
-        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
-        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
-        "sartgarg@codeaurora.org" <sartgarg@codeaurora.org>,
-        "nitirawa@codeaurora.org" <nitirawa@codeaurora.org>,
-        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
-        Liangliang Lu <luliang@codeaurora.org>,
-        "Bao D . Nguyen" <nguyenb@codeaurora.org>
-References: <1642699582-14785-1-git-send-email-quic_c_sbhanu@quicinc.com>
- <1642699582-14785-3-git-send-email-quic_c_sbhanu@quicinc.com>
- <0886f705-562f-6c8d-f396-60c2244b6375@intel.com>
- <SJ0PR02MB84494706E4515CFBEDB55898CD5F9@SJ0PR02MB8449.namprd02.prod.outlook.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <dfac146e-bce6-574f-4760-c0d35b046a9f@intel.com>
-Date:   Tue, 1 Feb 2022 15:59:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S239002AbiBAOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:01:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31146 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238944AbiBAOBu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 09:01:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643724109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t0xhLey8NZwZfvq1aWQDBdLCgJjMsiCxuS9yKl0tV4E=;
+        b=htPBBToLdzW2ECHBe8RKXN7vCK24k9NMaaQHwfYi1iYzpYljKlKUYjreA0TB6ZUTDMUPXj
+        VlRiqxEs8N/rKetWB4kcOuNlbjWMFn3THF2DK25PpMr6SVC7xRmfg7ILSssIk7bIYymUjL
+        CetMVlWoKsuiCyUwT7YHt6/b6pyJ2iA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-pqGdKLyIMcSky05r0D0XUQ-1; Tue, 01 Feb 2022 09:01:46 -0500
+X-MC-Unique: pqGdKLyIMcSky05r0D0XUQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 7-20020a1c1907000000b003471d9bbe8dso666036wmz.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:01:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t0xhLey8NZwZfvq1aWQDBdLCgJjMsiCxuS9yKl0tV4E=;
+        b=jisfhyU0SaFv0SZhg6+QijLvp3H0XH8rpqSwS15ph+kjx6ameTvi93xnG4e6ssktud
+         qcF2n7N0uhf1/83u8x45S75IJGxnTZ4L94PaULDJAw2v2o4tSNRUFd/Jo3S6ZnyW/7HE
+         B0IRVTl7G9/XSCrednrI9K6s7hZi/z3vYvYwUKOIZG/9VOg2FBMCiemvfohY5N8eV023
+         YE+NFkgRWGXvlJiG0SiCczmV6sx+koz9Z03UfBqw+p3C99LuwJN7DGrn5QmKw4Zjup30
+         Ayocw/PCbajfRagDYIXa7Hpo7qAqZny8a6u3zBeqg5Hhm+HA0kfgtm/r5FGxxc4NdLBS
+         /SDA==
+X-Gm-Message-State: AOAM532yCPs9poAqLi2esR/sel/EvwQwMuuQnw1MpnDxvxkxBW381/X9
+        AZbViq7VHABrZ/juEpn/+ncLuj3vBIw0iL+cWXzww3cMZFakfy5o1o0AwWk0xaVUylHwdRXAEq6
+        vhV1VEyd+C4RxoAIZDeOvagvr
+X-Received: by 2002:a1c:6a14:: with SMTP id f20mr1907013wmc.177.1643724105443;
+        Tue, 01 Feb 2022 06:01:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxiXh7XT/y9EhbXaaYFMW+Z8FLorkbaMP6N2gEv45FSVWMJcQUX+XJyy9OHO0UQo8Hz5UgkJg==
+X-Received: by 2002:a1c:6a14:: with SMTP id f20mr1906977wmc.177.1643724105240;
+        Tue, 01 Feb 2022 06:01:45 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id v5sm2032210wmh.19.2022.02.01.06.01.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 06:01:44 -0800 (PST)
+Message-ID: <3ebc8a81-a27f-9ab7-d247-5203f286eeb2@redhat.com>
+Date:   Tue, 1 Feb 2022 15:01:43 +0100
 MIME-Version: 1.0
-In-Reply-To: <SJ0PR02MB84494706E4515CFBEDB55898CD5F9@SJ0PR02MB8449.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 01/21] MAINTAINERS: Add entry for fbdev core
 Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Suarez <cssk@net-c.es>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/01/2022 20:19, Sajida Bhanu (Temp) (QUIC) wrote:
-> Hi,
+On 1/31/22 22:05, Daniel Vetter wrote:
+> Ever since Tomi extracted the core code in 2014 it's been defacto me
+> maintaining this, with help from others from dri-devel and sometimes
+> Linus (but those are mostly merge conflicts):
 > 
-> Thanks for the review.
+> $ git shortlog -ns  drivers/video/fbdev/core/ | head -n5
+>     35  Daniel Vetter
+>     23  Linus Torvalds
+>     10  Hans de Goede
+>      9  Dave Airlie
+>      6  Peter Rosin
 > 
-> Please find the inline comments.
+> I think ideally we'd also record that the various firmware fb drivers
+> (efifb, vesafb, ...) are also maintained in drm-misc because for the
+> past few years the patches have either been to fix handover issues
+> with drm drivers, or caused handover issues with drm drivers. So any
+> other tree just doesn't make sense. But also, there's plenty of
+> outdated MAINTAINER entries for these with people and git trees that
+> haven't been active in years, so maybe let's just leave them alone.
+> And furthermore distros are now adopting simpledrm as the firmware fb
+> driver, so hopefully the need to care about the fbdev firmware drivers
+> will go down going forward.
 > 
-> Thanks,
-> Sajida
+> Note that drm-misc is group maintained, I expect that to continue like
+> we've done before, so no new expectations that patches all go through
+> my hands. That would be silly. This also means I'm happy to put any
+> other volunteer's name in the M: line, but otherwise git log says I'm
+> the one who's stuck with this.
 > 
-> -----Original Message-----
-> From: Adrian Hunter <adrian.hunter@intel.com> 
-> Sent: Friday, January 21, 2022 12:40 PM
-> To: Sajida Bhanu (Temp) (QUIC) <quic_c_sbhanu@quicinc.com>; Asutosh Das (QUIC) <quic_asutoshd@quicinc.com>; ulf.hansson@linaro.org; agross@kernel.org; bjorn.andersson@linaro.org; linux-mmc@vger.kernel.org; linux-arm-msm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Cc: stummala@codeaurora.org; vbadigan@codeaurora.org; Ram Prakash Gupta (QUIC) <quic_rampraka@quicinc.com>; Pradeep Pragallapati (QUIC) <quic_pragalla@quicinc.com>; sartgarg@codeaurora.org; nitirawa@codeaurora.org; sayalil@codeaurora.org; Liangliang Lu <luliang@codeaurora.org>; Bao D . Nguyen <nguyenb@codeaurora.org>
-> Subject: Re: [PATCH V3 2/4] mmc: debugfs: Add debug fs entry for mmc driver
-> 
-> On 20/01/2022 19:26, Shaik Sajida Bhanu wrote:
->> Add debug fs entry to query eMMC and SD card errors statistics
->>
->> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
->> Signed-off-by: Liangliang Lu <luliang@codeaurora.org>
->> Signed-off-by: Sayali Lokhande <sayalil@codeaurora.org>
->> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
->> ---
->>  drivers/mmc/core/debugfs.c | 81 
->> ++++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 81 insertions(+)
->>
->> diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c 
->> index 3fdbc80..f4cb594 100644
->> --- a/drivers/mmc/core/debugfs.c
->> +++ b/drivers/mmc/core/debugfs.c
->> @@ -223,6 +223,82 @@ static int mmc_clock_opt_set(void *data, u64 val)  
->> DEFINE_DEBUGFS_ATTRIBUTE(mmc_clock_fops, mmc_clock_opt_get, mmc_clock_opt_set,
->>  	"%llu\n");
->>  
->> +static int mmc_err_state_get(void *data, u64 *val) {
->> +	struct mmc_host *host = data;
->> +
->> +	if (!host)
->> +		return -EINVAL;
->> +
->> +	*val = host->err_state ? 1 : 0;
->> +
->> +	return 0;
->> +}
->> +
->> +DEFINE_SIMPLE_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, 
->> +"%llu\n");
->> +
->> +static int mmc_err_stats_show(struct seq_file *file, void *data) {
->> +	struct mmc_host *host = (struct mmc_host *)file->private;
->> +	const char *desc[MMC_ERR_MAX] = {
->> +		[MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
->> +		[MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
->> +		[MMC_ERR_DAT_TIMEOUT] = "Data Timeout Occurred",
->> +		[MMC_ERR_DAT_CRC] = "Data CRC Errors Occurred",
->> +		[MMC_ERR_AUTO_CMD] = "Auto-Cmd Error Occurred",
->> +		[MMC_ERR_ADMA] = "ADMA Error Occurred",
->> +		[MMC_ERR_TUNING] = "Tuning Error Occurred",
->> +		[MMC_ERR_CMDQ_RED] = "CMDQ RED Errors",
->> +		[MMC_ERR_CMDQ_GCE] = "CMDQ GCE Errors",
->> +		[MMC_ERR_CMDQ_ICCE] = "CMDQ ICCE Errors",
->> +		[MMC_ERR_REQ_TIMEOUT] = "Request Timedout",
->> +		[MMC_ERR_CMDQ_REQ_TIMEOUT] = "CMDQ Request Timedout",
->> +		[MMC_ERR_ICE_CFG] = "ICE Config Errors",
->> +	};
->> +	int i;
->> +
->> +	if (!host)
->> +		return -EINVAL;
->> +
->> +	if (!host->err_stats_enabled) {
->> +		seq_printf(file, "Not supported by driver\n");
->> +		return 0;
->> +	}
->> +
->> +	for (i = 0; i < MMC_ERR_MAX; i++) {
->> +		if (desc[i])
->> +			seq_printf(file, "# %s:\t %d\n",
->> +					desc[i], host->err_stats[i]);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int mmc_err_stats_open(struct inode *inode, struct file *file) 
->> +{
->> +	return single_open(file, mmc_err_stats_show, inode->i_private); }
->> +
->> +static ssize_t mmc_err_stats_write(struct file *filp, const char __user *ubuf,
->> +				   size_t cnt, loff_t *ppos)
->> +{
->> +	struct mmc_host *host = filp->f_mapping->host->i_private;
->> +
->> +	if (!host)
->> +		return -EINVAL;
->> +
->> +	pr_debug("%s: Resetting MMC error statistics\n", __func__);
->> +	memset(host->err_stats, 0, sizeof(host->err_stats));
->> +
->> +	return cnt;
->> +}
->> +
->> +static const struct file_operations mmc_err_stats_fops = {
->> +	.open	= mmc_err_stats_open,
->> +	.read	= seq_read,
->> +	.write	= mmc_err_stats_write,
->> +};
->> +
->>  void mmc_add_host_debugfs(struct mmc_host *host)  {
->>  	struct dentry *root;
->> @@ -236,6 +312,11 @@ void mmc_add_host_debugfs(struct mmc_host *host)
->>  	debugfs_create_file_unsafe("clock", S_IRUSR | S_IWUSR, root, host,
->>  				   &mmc_clock_fops);
->>  
->> +	debugfs_create_file("err_state", 0600, root, host,
->> +		&mmc_err_state);
-> 
-> Please, let's drop err_state for now
-> 
->>>>>> first we can check this right,  if it is set then we can go and check err_stats[] to know more on type of error (data /cmd timeout or CRC errors etc.).
-> Please let me know your opinion on this.( Same as patch set (V3 1/4).
+> Cc: Dave Airlie <airlied@gmail.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: DRI Development <dri-devel@lists.freedesktop.org>
+> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+> Cc: Claudio Suarez <cssk@net-c.es>
+> Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Sven Schnelle <svens@stackframe.org>
+> Cc: Gerd Hoffmann <kraxel@redhat.com>
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> ---
 
-Please see my comments for patch 1
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-> 
->> +	debugfs_create_file("err_stats", 0600, root, host,
->> +		&mmc_err_stats_fops);
->> +
->>  #ifdef CONFIG_FAIL_MMC_REQUEST
->>  	if (fail_request)
->>  		setup_fault_attr(&fail_default_attr, fail_request);
->>
-> 
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

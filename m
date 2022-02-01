@@ -2,243 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 963134A5ED4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E34B4A5EED
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239656AbiBAPCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239648AbiBAPCM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:02:12 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4586C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 07:02:12 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id q204so21504677iod.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Psa2zXq9CIoesnxGhdNYAKpIpdpvJqYiAj5N20pw5fs=;
-        b=TobaHrqBNR77g0qOCWpypBwg6HIQxMn5bYtPxAZU+bHbGruKW9uW52W9KgiWE8kIcP
-         d2IUU8goU9kJ732v1Ii8+DCWuMxBXow5I/R+EN5jDHKpYpXf9wZfdfkWSPTlpFFweFkD
-         ClqPnk8MaECrlDi00jonB1myC0RsRdRcGdIf9IzT+lfxwvmfUX929HX8ayazCiQQffKe
-         vWgJtjxZJG1XZfVUGxSBpaRFYIr+LXiKlF0icAQO7Nhr5k8K+YNM7IlgTYOenc7A8m1o
-         StNvSYBDjHY5k3qhrSopYtzmO1pgmqChluk4mY3iuYOQrce8998Zqj8d3CvzhpyVRO5Z
-         3aZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Psa2zXq9CIoesnxGhdNYAKpIpdpvJqYiAj5N20pw5fs=;
-        b=XDUkzTj9rCwpFSEpHvIfcfjS6gYpp+cQ2arENeoIUT1ksltSKBu12hGAtseWMiPrNt
-         bs2ZlRXrWt+SQvthoBncfXlSGEOquj0MQzJ7zRU6noiFlO711zkjkCQNrC5dbi0/IzbF
-         OZtu+x6mdB/hZnKv2MJbLNAqcz79PIjjosGc82qmdRFdXt1sf2rmsUrguJZeajOMVxpM
-         6HiKGW8HY2Bp+R8s9SDWGrpV1Q6FBTLEz+Lp/GqTjBrUgB7Oura/bbVfC/tdLYJci27z
-         x+Vt8FnGYp8I6yzwLZdmjOny/FSCZf5YEYuoYDzIHcAI/AzArn0Hubvk01pb4vkxXv0v
-         Uhbg==
-X-Gm-Message-State: AOAM532nTbu9I+90f/Aa25EB31RLeaMh2ZdKmXSMttr3E9F9ul+IvIU6
-        ut8ZWTajYzppKCCOUCurRZxYzw==
-X-Google-Smtp-Source: ABdhPJxnl2G6CdXw3UYQ2ueHlyZJNFOqm5B7PDylM0/r8g3VNPQFCfDE6WqyJy9+yyOOXXw+cnJRKQ==
-X-Received: by 2002:a05:6638:3591:: with SMTP id v17mr11788085jal.277.1643727732147;
-        Tue, 01 Feb 2022 07:02:12 -0800 (PST)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id e17sm19141307ilm.67.2022.02.01.07.02.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 07:02:11 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] net: ipa: request IPA register values be retained
-Date:   Tue,  1 Feb 2022 09:02:05 -0600
-Message-Id: <20220201150205.468403-3-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220201150205.468403-1-elder@linaro.org>
-References: <20220201150205.468403-1-elder@linaro.org>
+        id S239743AbiBAPDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:03:38 -0500
+Received: from mout.gmx.net ([212.227.17.22]:43617 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239685AbiBAPDe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:03:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643727768;
+        bh=nvs4NamF8w3PSAtLVFdwadPiUvfzFg613upYNZ/yXSg=;
+        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=Ig2IPZ5zKlouxpflVVmYYGrUePr/LI8+qLrp7aZA4uucD+2hXbYwRZLq855afcj7/
+         1C1nsPz7s9e8i+8N7F1wnisBRN0mfKm2sAbMpx8DRuRWuiFg04oBnMytrkdwEQpEIQ
+         DQTyXsVmllotv/hXvaZbbuOUiJ+3eYZuhKq4mj3U=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwQXN-1mP0sn1g4j-00sNis; Tue, 01
+ Feb 2022 16:02:48 +0100
+Message-ID: <b1c1f68d-4620-2429-66bd-33d806d31457@gmx.de>
+Date:   Tue, 1 Feb 2022 16:02:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Content-Language: en-US
+To:     Yizhuo Zhai <yzhai003@ucr.edu>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220131065719.1552958-1-yzhai003@ucr.edu>
+From:   Helge Deller <deller@gmx.de>
+Subject: Re: [PATCH] fbdev: fbmem: Fix the implicit type casting
+In-Reply-To: <20220131065719.1552958-1-yzhai003@ucr.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8rcnp3IDWKRjEYPQV485Zi+kFbcxjfN0d1QI0X2MU7OVul75bod
+ eQuXX8jdrKjMIB2fbFNnodmCyPeknr4i/kfQBcukaVrSA3NwBE0B1kXD4gZR7qZqfK6SHW+
+ P5Z3tyGBWi0S9W4OBNjklGZGQ+uS0XMCezCx8oxze65ATS7BFRkOph2vBGq3QOogmBUJFqh
+ HohuYWpL/6NFwDvUyuDtA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8Rn0yXCvoSI=:wCSp2dm5E03DqfVW0te626
+ y3QbpDpBUuTKWhC/2BhKHIV114JvdTj7FO7RgQjiIh0KVHFyDX7evBCCP7F7QZ1ym7TRzJ9Zd
+ n0RjjMB5hei2NBwh1vXhjC7GF+gyG1PwKcEiNrYRjEgeDHRQ3HYYmyJK03F0F6HzWx7tmBnyL
+ B6cNR7yC4WT0uB/OkuthjxwrEOL2HALsrdV74B6i4dvAfRLdet1ddKocbBqLpW0o6LQG1k3AD
+ SQyeaSEztHEG2F9zKvC0uEaJjKPaiSTZuMyXeXiOIOW9jDiLM56Q2vKR0WnnRDH659abnY4o9
+ nE+nlgTcCp78zrEd8D3r+tG1yBMKLhid/cVKvlQM4s+xZ9PIbZX0yAxyj6HVQYyGKtCaOmpu0
+ Np4Jw35NnT7pfFo7vih+wmRc+D6K7Q2O0DxWgT60fwt1ia7v40fq40xZJXAO6XyWHPyCw9v2g
+ Zb4rs/ro/DKlt4r/+Zk0470cy5Hj+wiuAXftlxMUp3E4naFS8ah1YPILH7JfRn3XI5/QXz3hn
+ Uo6mWMn///bBb6RBSCUawnYKSuFTvUqztCr8NUuW0+vt0kO7OM/L9HpoGijp5Q14kpISNLVbr
+ 4F8o9A5rGgdNMHHiLwZmxst6Ir+m9e7X6xyjdEUcbhe7fma3wWzba54WQwIbRk33qAHWeFFyK
+ h++uWp0yaOiYo05cMbaoIUdpcKB41YSD5638kF6NQtSuYHu9wGHHRnsI36i1JzJ17XZ9tLDaJ
+ wnxL2qRxBLK5bLLioFBPKq0l17iOm+T47NgBa9+RGUmRM6a6iUf+OoTcMRATCSnMkG1F2Swi6
+ Qj9e+XDFcZi1I1Iew5pDjzvtJxsdKTIdUArCPaUpEJ3i8vIhRLoEU3YQDKVxPIbdzndhvxM95
+ nQ/6MMGob1zcMXn7AOZ4Cfj5u5zbl6h0IIYogZeAs73GQeVem2p1FdITwZYy4085v2MfB4pjl
+ yvF1AdneaI+JZcr9OjM31zQrRW9vIB77/i+g4VHydbDZewVNxBqXlAmw6mac2FmS0IgQ65bxc
+ Y4CO9SIvE/gKzU627zJIG1jMzE7BxSwIfLv4kDuxuQ6tR7KfNZSn+3EBl6f1LBos4J2aWdf4M
+ /gNvQFfC3+A13s=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, the IPA hardware needs to request the always-on
-subsystem (AOSS) to coordinate with the IPA microcontroller to
-retain IPA register values at power collapse.  This is done by
-issuing a QMP request to the AOSS microcontroller.  A similar
-request ondoes that request.
+On 1/31/22 07:57, Yizhuo Zhai wrote:
+> In function do_fb_ioctl(), the "arg" is the type of unsigned long,
 
-We must get and hold the "QMP" handle early, because we might get
-back EPROBE_DEFER for that.  But the actual request should be sent
-while we know the IPA clock is active, and when we know the
-microcontroller is operational.
+yes, because it comes from the ioctl framework...
 
-Fixes: 2775cbc5afeb6 ("net: ipa: rename "ipa_clock.c"")
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_power.c | 52 +++++++++++++++++++++++++++++++++++++
- drivers/net/ipa/ipa_power.h |  7 +++++
- drivers/net/ipa/ipa_uc.c    |  5 ++++
- 3 files changed, 64 insertions(+)
+> and in "case FBIOBLANK:" this argument is casted into an int before
+> passig to fb_blank().
 
-diff --git a/drivers/net/ipa/ipa_power.c b/drivers/net/ipa/ipa_power.c
-index b1c6c0fcb654f..f2989aac47a62 100644
---- a/drivers/net/ipa/ipa_power.c
-+++ b/drivers/net/ipa/ipa_power.c
-@@ -11,6 +11,8 @@
- #include <linux/pm_runtime.h>
- #include <linux/bitops.h>
- 
-+#include "linux/soc/qcom/qcom_aoss.h"
-+
- #include "ipa.h"
- #include "ipa_power.h"
- #include "ipa_endpoint.h"
-@@ -64,6 +66,7 @@ enum ipa_power_flag {
-  * struct ipa_power - IPA power management information
-  * @dev:		IPA device pointer
-  * @core:		IPA core clock
-+ * @qmp:		QMP handle for AOSS communication
-  * @spinlock:		Protects modem TX queue enable/disable
-  * @flags:		Boolean state flags
-  * @interconnect_count:	Number of elements in interconnect[]
-@@ -72,6 +75,7 @@ enum ipa_power_flag {
- struct ipa_power {
- 	struct device *dev;
- 	struct clk *core;
-+	struct qmp *qmp;
- 	spinlock_t spinlock;	/* used with STOPPED/STARTED power flags */
- 	DECLARE_BITMAP(flags, IPA_POWER_FLAG_COUNT);
- 	u32 interconnect_count;
-@@ -382,6 +386,47 @@ void ipa_power_modem_queue_active(struct ipa *ipa)
- 	clear_bit(IPA_POWER_FLAG_STARTED, ipa->power->flags);
- }
- 
-+static int ipa_power_retention_init(struct ipa_power *power)
-+{
-+	struct qmp *qmp = qmp_get(power->dev);
-+
-+	if (IS_ERR(qmp)) {
-+		if (PTR_ERR(qmp) == -EPROBE_DEFER)
-+			return -EPROBE_DEFER;
-+
-+		/* We assume any other error means it's not defined/needed */
-+		qmp = NULL;
-+	}
-+	power->qmp = qmp;
-+
-+	return 0;
-+}
-+
-+static void ipa_power_retention_exit(struct ipa_power *power)
-+{
-+	qmp_put(power->qmp);
-+	power->qmp = NULL;
-+}
-+
-+/* Control register retention on power collapse */
-+void ipa_power_retention(struct ipa *ipa, bool enable)
-+{
-+	static const char fmt[] = "{ class: bcm, res: ipa_pc, val: %c }";
-+	struct ipa_power *power = ipa->power;
-+	char buf[36];	/* Exactly enough for fmt[]; size a multiple of 4 */
-+	int ret;
-+
-+	if (!power->qmp)
-+		return;		/* Not needed on this platform */
-+
-+	(void)snprintf(buf, sizeof(buf), fmt, enable ? '1' : '0');
-+
-+	ret = qmp_send(power->qmp, buf, sizeof(buf));
-+	if (ret)
-+		dev_err(power->dev, "error %d sending QMP %sable request\n",
-+			ret, enable ? "en" : "dis");
-+}
-+
- int ipa_power_setup(struct ipa *ipa)
- {
- 	int ret;
-@@ -438,12 +483,18 @@ ipa_power_init(struct device *dev, const struct ipa_power_data *data)
- 	if (ret)
- 		goto err_kfree;
- 
-+	ret = ipa_power_retention_init(power);
-+	if (ret)
-+		goto err_interconnect_exit;
-+
- 	pm_runtime_set_autosuspend_delay(dev, IPA_AUTOSUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_enable(dev);
- 
- 	return power;
- 
-+err_interconnect_exit:
-+	ipa_interconnect_exit(power);
- err_kfree:
- 	kfree(power);
- err_clk_put:
-@@ -460,6 +511,7 @@ void ipa_power_exit(struct ipa_power *power)
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_dont_use_autosuspend(dev);
-+	ipa_power_retention_exit(power);
- 	ipa_interconnect_exit(power);
- 	kfree(power);
- 	clk_put(clk);
-diff --git a/drivers/net/ipa/ipa_power.h b/drivers/net/ipa/ipa_power.h
-index 2151805d7fbb0..6f84f057a2095 100644
---- a/drivers/net/ipa/ipa_power.h
-+++ b/drivers/net/ipa/ipa_power.h
-@@ -40,6 +40,13 @@ void ipa_power_modem_queue_wake(struct ipa *ipa);
-  */
- void ipa_power_modem_queue_active(struct ipa *ipa);
- 
-+/**
-+ * ipa_power_retention() - Control register retention on power collapse
-+ * @ipa:	IPA pointer
-+ * @enable:	Whether retention should be enabled or disabled
-+ */
-+void ipa_power_retention(struct ipa *ipa, bool enable);
-+
- /**
-  * ipa_power_setup() - Set up IPA power management
-  * @ipa:	IPA pointer
-diff --git a/drivers/net/ipa/ipa_uc.c b/drivers/net/ipa/ipa_uc.c
-index 856e55a080a7f..fe11910518d95 100644
---- a/drivers/net/ipa/ipa_uc.c
-+++ b/drivers/net/ipa/ipa_uc.c
-@@ -11,6 +11,7 @@
- 
- #include "ipa.h"
- #include "ipa_uc.h"
-+#include "ipa_power.h"
- 
- /**
-  * DOC:  The IPA embedded microcontroller
-@@ -154,6 +155,7 @@ static void ipa_uc_response_hdlr(struct ipa *ipa, enum ipa_irq_id irq_id)
- 	case IPA_UC_RESPONSE_INIT_COMPLETED:
- 		if (ipa->uc_powered) {
- 			ipa->uc_loaded = true;
-+			ipa_power_retention(ipa, true);
- 			pm_runtime_mark_last_busy(dev);
- 			(void)pm_runtime_put_autosuspend(dev);
- 			ipa->uc_powered = false;
-@@ -184,6 +186,9 @@ void ipa_uc_deconfig(struct ipa *ipa)
- 
- 	ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_UC_1);
- 	ipa_interrupt_remove(ipa->interrupt, IPA_IRQ_UC_0);
-+	if (ipa->uc_loaded)
-+		ipa_power_retention(ipa, false);
-+
- 	if (!ipa->uc_powered)
- 		return;
- 
--- 
-2.32.0
+which makes sense IMHO.
 
+> In fb_blank(), the comparision if (blank > FB_BLANK_POWERDOWN) would
+> be bypass if the original "arg" is a large number, which is possible
+> because it comes from the user input.
+
+The main problem I see with your patch is that you change the behaviour.
+Let's assume someone passes in -1UL.
+With your patch applied, this means the -1 (which is e.g. 0xffffffff on 32=
+bit)
+is converted to a positive integer and will be capped to FB_BLANK_POWERDOW=
+N.
+Since most blank functions just check and react on specific values, you ch=
+anged
+the behaviour that the screen now gets blanked at -1, while it wasn't befo=
+re.
+
+One could now argue, that it's undefined behaviour if people
+pass in wrong values, but anyway, it's different now.
+
+So, your patch isn't wrong. I'm just not sure if this is what we want...
+
+Helge
+
+
+> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+> ---
+>  drivers/video/fbdev/core/fbmem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core=
+/fbmem.c
+> index 0fa7ede94fa6..a5f71c191122 100644
+> --- a/drivers/video/fbdev/core/fbmem.c
+> +++ b/drivers/video/fbdev/core/fbmem.c
+> @@ -1064,7 +1064,7 @@ fb_set_var(struct fb_info *info, struct fb_var_scr=
+eeninfo *var)
+>  EXPORT_SYMBOL(fb_set_var);
+>
+>  int
+> -fb_blank(struct fb_info *info, int blank)
+> +fb_blank(struct fb_info *info, unsigned long blank)
+>  {

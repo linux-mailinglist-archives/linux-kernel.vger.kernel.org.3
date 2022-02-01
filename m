@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1760E4A64E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D424A64E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238641AbiBATUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:20:41 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65502 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231995AbiBATUk (ORCPT
+        id S242141AbiBATWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231995AbiBATWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:20:40 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211HSebI030188;
-        Tue, 1 Feb 2022 19:20:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=mmmrdFnRzQRQfT2NKuNtQBEU3jTRR0poIgzM27mY82U=;
- b=DQ32H/5vYs7QQT2CN7FnchW4233osBzbyaGAJjg8Oim2hA9sEbk1U+ac/09CKBdavy4D
- QsADw1ADnktfqkWMbuoYdMNzKNN/3ZXQprF2ASWZmviz1sx/CQdX3Kop8G17CYvkRoow
- 8ziRbAp7d4sWynH435Y8SJxq0qS74V/T1zCMu/MUdOCZ0SFVpWbURWl7jxuoslPpQjuK
- kGcZVz221/Vmflb+9mf+a59gi3WTVIobfRZaNm80EaWfKqSmgsYZvCVBFZbatDxOh8t5
- 07iLDig8HZsTfLfa5EAu6x2ITFJ96SWN6o4L2CnEZcK/QlNG6WwnscQbEQMz2WDhiHgC Qw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3dy9a0t2d1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 19:20:37 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211JEkDn020382;
-        Tue, 1 Feb 2022 19:20:36 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3dvw79qj1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Feb 2022 19:20:35 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211JKXpo26411428
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Feb 2022 19:20:33 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4E3BAE05A;
-        Tue,  1 Feb 2022 19:20:33 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B5DFFAE055;
-        Tue,  1 Feb 2022 19:20:32 +0000 (GMT)
-Received: from sig-9-65-85-8.ibm.com (unknown [9.65.85.8])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Feb 2022 19:20:32 +0000 (GMT)
-Message-ID: <927aff512bfa28ed77126f97d4a3fea2734c7690.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 0/8] ima: support fs-verity digests and signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 01 Feb 2022 14:20:32 -0500
-In-Reply-To: <YfiAoKiFdkXte7PW@sol.localdomain>
-References: <20220126000658.138345-1-zohar@linux.ibm.com>
-         <YfiAoKiFdkXte7PW@sol.localdomain>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: OtC-8Xs0-6tgAtT5hfuEVze09vMb3Vem
-X-Proofpoint-ORIG-GUID: OtC-8Xs0-6tgAtT5hfuEVze09vMb3Vem
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_09,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- impostorscore=0 mlxlogscore=947 adultscore=0 phishscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202010108
+        Tue, 1 Feb 2022 14:22:13 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87674C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:22:13 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id p7so36434408edc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:22:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tE/R9yvWA3Atyfb/JucqCUJU8G/DgubFOZDhk5Lo/ew=;
+        b=XId/LPiTasBZmFrfoW21pxoJPIg+5+IY4ExAd2xTeXcpnBZedpcqKEDIvB/hHwHc0I
+         WbSayqRMIlMgSbTwqIHUwMDXFCHiDwOZDP6ZtanGpRE63HQcOiOU53CK8pWHwGUOOk6g
+         rAbF/CKE/TzqH+hhEUF0iZR61axOWuOj/9EvE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tE/R9yvWA3Atyfb/JucqCUJU8G/DgubFOZDhk5Lo/ew=;
+        b=d5cERSvs4M2tREDRffCsj4I/xVmsTtWXEKFn0WGC4pkxaQVxzjDlFYFk7SlyFqvPO/
+         FDBv79EREEafGH1AsRmcajfaF4KommOt+aK+4t4mmyru6Kq7lqG74k07YiC+JiOKlU+N
+         VHubQV+SREjJA0xNgcRLdNsh9Xuclvir4ajIl0x3uw5Z/Wx2rzfb0G0H0VMSAe1j0+fR
+         jBje6Gv6iINsN7TqAg9f51B0jEWH3MJmVzKfEdYvOzagNLrNBa4+RALRZjHKt77OF2Wc
+         f0dCWOwdGwdF7tTktOaBRcovv46i0rRzrnWFZPKwaGVJIRBCOFdGCPBqXlZ/wERyCbkl
+         IMcg==
+X-Gm-Message-State: AOAM533UiYPZf1XSjMThO1LvyInOTfCIlndpDYwF89TLaaFVJoi26QWu
+        3gSNb/gapaMB+WzgNmcFIaWHpsxPhmKR/KCP
+X-Google-Smtp-Source: ABdhPJyXH1kRkU+S6n6pzleHX8aWxUlQqqrBIDZz1V4lFdvjGViMIX6Ls0GyiUVNdr98ZzYGnbqXDA==
+X-Received: by 2002:aa7:ca46:: with SMTP id j6mr26219161edt.198.1643743331860;
+        Tue, 01 Feb 2022 11:22:11 -0800 (PST)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id g9sm14723809ejf.33.2022.02.01.11.22.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 11:22:11 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id m14so33738161wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:22:11 -0800 (PST)
+X-Received: by 2002:adf:d1c8:: with SMTP id b8mr472549wrd.442.1643743329676;
+ Tue, 01 Feb 2022 11:22:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20220131144854.2771101-1-brauner@kernel.org>
+In-Reply-To: <20220131144854.2771101-1-brauner@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 1 Feb 2022 11:21:53 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjpA4T2-Z8Dg2HYP=3LSbT99kLjhJ1g1nPMObihrHpnjg@mail.gmail.com>
+Message-ID: <CAHk-=wjpA4T2-Z8Dg2HYP=3LSbT99kLjhJ1g1nPMObihrHpnjg@mail.gmail.com>
+Subject: Re: [PATCH] mailmap: update Christian Brauner's email address
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-01-31 at 16:36 -0800, Eric Biggers wrote:
-> On Tue, Jan 25, 2022 at 07:06:50PM -0500, Mimi Zohar wrote:
->  
-> > Support including fs-verity file digests in the 'd-ng' template field
-> > based on a new policy rule option named 'digest_type=hash|verity'.
-> 
-> Perhaps it should be full_hash or verity?  verity is a type of hash.
+On Mon, Jan 31, 2022 at 6:49 AM Christian Brauner <brauner@kernel.org> wrote:
+>
+> I need to update my mail addresses. A pull-request doesn't seem
+> warranted for this. Would you please apply this directly? It doesn't
+> contain any functional changes.
 
-Ok, but instead of "full_hash", let's rename it to "ima" or "verity".
+Applied,
 
-thanks,
-
-Mimi
-
+                Linus

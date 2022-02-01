@@ -2,41 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793184A5BC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABCA4A5BD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiBAMDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbiBAMDg (ORCPT
+        id S237737AbiBAMEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:04:46 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:52780 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237705AbiBAMEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:03:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A973C061714;
-        Tue,  1 Feb 2022 04:03:35 -0800 (PST)
+        Tue, 1 Feb 2022 07:04:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59653B82D92;
-        Tue,  1 Feb 2022 12:03:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E677C340F5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C643E61528;
+        Tue,  1 Feb 2022 12:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D16C340F6;
         Tue,  1 Feb 2022 12:03:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643717014;
-        bh=wG45B5pIUdPxc66Mzl2k13RuNaVCBTKDrywJDg8MT6Q=;
+        bh=ilwI/e1ttHjdl7xv7YPOr3xUTctN1SCSeqI4kAUKElM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n3xzXv7QVq1zZ7/T5aoskRgqetRcvLh4UcovCRS9OJoZa3qVKcTZZl+6bESHxkWoj
-         badMAjP4jOV0KGXRgpqLCirm2Fkj0lblGqs7X/bC7xuzedlCLY05qP7WrFJUzLOSU4
-         g9XCuBdzJXpkCzH0UAFEVxcX1xRU2XpYco49uRJl9kMHzU3eaS43QfVR+3m3WgRWiI
-         GnXO+VNyLiL/Sxj4PubfYN2dWnbyNVuse7FnehtTpRBQgmVRCPXhc/6b4R3poVBFZt
-         p3iaP7OUyAbPog7oK5+gVG2l49/4uLXFq+vyKB0LA7085mqQpr2Bt6ow7vRP96SC6Y
-         dNjOQis9jzbwg==
+        b=uxffx4+hJrtA2LBp/3HCvF7Chr3pzY2PaAh9Rf/14mXpPqlHS4xR1e4wW4t1jBEt4
+         4P027AejzUZwke716bMW26OvM6EE3W4CkZol6c+Pk2oWIqwuXuER+yHw7GeRxChRmj
+         qIFXfzD2tZWRB7SyZ4XFM6vupJQf5zDminaKH+LpITDS9rm9Spwl+sPPfvSB63xQkN
+         gN+G08wUArGZsNWbAnCJKrkntfp89yg+rnoLatfDtBOBnkG2bpc4JLdaHRUQgbwATs
+         VwApeLfCBiMhT1KglPM7YD46TsoCJHe9V4P61cd3zmRgRh9tLpGJsgprlxVgP2Jifg
+         LWlBGER8Lp3yg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nErsi-004d46-47; Tue, 01 Feb 2022 12:03:32 +0000
+        id 1nErsi-004d46-GH; Tue, 01 Feb 2022 12:03:32 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -54,9 +51,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>
-Subject: [PATCH 08/12] gpio: rcar: Move PM device over to irq domain
-Date:   Tue,  1 Feb 2022 12:03:06 +0000
-Message-Id: <20220201120310.878267-9-maz@kernel.org>
+Subject: [PATCH 09/12] gpio: tpmx86: Move PM device over to irq domain
+Date:   Tue,  1 Feb 2022 12:03:07 +0000
+Message-Id: <20220201120310.878267-10-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201120310.878267-1-maz@kernel.org>
 References: <20220201120310.878267-1-maz@kernel.org>
@@ -74,29 +71,30 @@ Move the reference to the device over to the irq domain.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/gpio/gpio-rcar.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-tqmx86.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-rcar.c b/drivers/gpio/gpio-rcar.c
-index bd2e16d6e21c..3a76538f27fa 100644
---- a/drivers/gpio/gpio-rcar.c
-+++ b/drivers/gpio/gpio-rcar.c
-@@ -530,7 +530,6 @@ static int gpio_rcar_probe(struct platform_device *pdev)
+diff --git a/drivers/gpio/gpio-tqmx86.c b/drivers/gpio/gpio-tqmx86.c
+index 5b103221b58d..fa4bc7481f9a 100644
+--- a/drivers/gpio/gpio-tqmx86.c
++++ b/drivers/gpio/gpio-tqmx86.c
+@@ -281,7 +281,6 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
+ 		u8 irq_status;
  
- 	irq_chip = &p->irq_chip;
- 	irq_chip->name = "gpio-rcar";
--	irq_chip->parent_device = dev;
- 	irq_chip->irq_mask = gpio_rcar_irq_disable;
- 	irq_chip->irq_unmask = gpio_rcar_irq_enable;
- 	irq_chip->irq_set_type = gpio_rcar_irq_set_type;
-@@ -552,6 +551,7 @@ static int gpio_rcar_probe(struct platform_device *pdev)
- 		goto err0;
+ 		irq_chip->name = chip->label;
+-		irq_chip->parent_device = &pdev->dev;
+ 		irq_chip->irq_mask = tqmx86_gpio_irq_mask;
+ 		irq_chip->irq_unmask = tqmx86_gpio_irq_unmask;
+ 		irq_chip->irq_set_type = tqmx86_gpio_irq_set_type;
+@@ -316,6 +315,8 @@ static int tqmx86_gpio_probe(struct platform_device *pdev)
+ 		goto out_pm_dis;
  	}
  
-+	irq_domain_set_pm_device(gpio_chip->irq.domain, dev);
- 	ret = devm_request_irq(dev, p->irq_parent, gpio_rcar_irq_handler,
- 			       IRQF_SHARED, name, p);
- 	if (ret) {
++	irq_domain_set_pm_device(girq->domain, dev);
++
+ 	dev_info(dev, "GPIO functionality initialized with %d pins\n",
+ 		 chip->ngpio);
+ 
 -- 
 2.30.2
 

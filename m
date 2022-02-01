@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C62E94A64DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3674A64CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242382AbiBATTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:19:10 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51580 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242347AbiBATTH (ORCPT
+        id S242339AbiBATSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:18:36 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:55528 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242332AbiBATSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:19:07 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id d7371b2c453d3712; Tue, 1 Feb 2022 20:19:04 +0100
-Received: from kreacher.localnet (unknown [213.134.162.64])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 4957F66B3BC;
-        Tue,  1 Feb 2022 20:19:04 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH 1/2] ACPI: PM: Print additional debug message in acpi_s2idle_wake()
-Date:   Tue, 01 Feb 2022 20:18:10 +0100
-Message-ID: <5794467.lOV4Wx5bFT@kreacher>
-In-Reply-To: <11917820.O9o76ZdvQC@kreacher>
-References: <11917820.O9o76ZdvQC@kreacher>
+        Tue, 1 Feb 2022 14:18:34 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id E747A1C0B87; Tue,  1 Feb 2022 20:18:32 +0100 (CET)
+Date:   Tue, 1 Feb 2022 20:18:32 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Pavel Machek <pavel@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [PATCH 4.19 026/239] f2fs: fix to do sanity check in is_alive()
+Message-ID: <20220201191832.GA31656@duo.ucw.cz>
+References: <20220124183943.102762895@linuxfoundation.org>
+ <20220124183943.957395248@linuxfoundation.org>
+ <20220124203637.GA19321@duo.ucw.cz>
+ <3c56cf70-2557-2e9c-4694-588ddaa91220@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.162.64
-X-CLIENT-HOSTNAME: 213.134.162.64
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgdduvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="HcAYCG3uE/tztfnV"
+Content-Disposition: inline
+In-Reply-To: <3c56cf70-2557-2e9c-4694-588ddaa91220@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Make acpi_s2idle_wake() print an additional debug message when the
-SCI is going to be rearmed for system wakeup to help diagnose
-wakeup-related issues.
+--HcAYCG3uE/tztfnV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/sleep.c |    2 ++
- 1 file changed, 2 insertions(+)
+Hi!
 
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -764,6 +764,8 @@ bool acpi_s2idle_wake(void)
- 			return true;
- 		}
- 
-+		pm_pr_dbg("Rearming ACPI SCI for wakeup\n");
-+
- 		rearm_wake_irq(acpi_sci_irq);
- 	}
- 
+> Oops, you're right, my bad.
+>=20
+> >=20
+> > > +++ b/fs/f2fs/gc.c
+> > > @@ -589,6 +589,9 @@ static bool is_alive(struct f2fs_sb_info
+> > >   		set_sbi_flag(sbi, SBI_NEED_FSCK);
+> > >   	}
+> > > +	if (f2fs_check_nid_range(sbi, dni->ino))
+> > > +		return false;
+> > > +
+> > >   	*nofs =3D ofs_of_node(node_page);
+> > >   	source_blkaddr =3D datablock_addr(NULL, node_page, ofs_in_node);
+> > >   	f2fs_put_page(node_page, 1);
+> >=20
+> > AFAICT f2fs_put_page() needs to be done in the error path, too.
+> >=20
+> > (Problem seems to exist in mainline, too).
+> >=20
+> > Something like this?
+>=20
+> Could you please send a formal patch to f2fs mailing list for better revi=
+ew?
+>=20
+> Anyway, thanks a lot for the report and the patch!
 
+I'm quite busy with other reviews at the moment. If you could submit a
+patch, it would be great, otherwise I'll get to it .. sometime.
 
+Best regards,
+									Pavel
+								=09
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
+--HcAYCG3uE/tztfnV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYfmHiAAKCRAw5/Bqldv6
+8gqBAKCzx9+iaqnam0vtEa5jjogELrBkrACfTwbdMHwN/ug6LYXW4jTOVvhcWbo=
+=a5iK
+-----END PGP SIGNATURE-----
+
+--HcAYCG3uE/tztfnV--

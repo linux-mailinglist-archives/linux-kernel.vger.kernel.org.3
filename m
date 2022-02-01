@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91DF4A5A8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B341B4A5A8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbiBAKuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:50:52 -0500
-Received: from angie.orcam.me.uk ([78.133.224.34]:44326 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236805AbiBAKuv (ORCPT
+        id S236837AbiBAKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:51:07 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41370 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236830AbiBAKvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:50:51 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 23CAD92009C; Tue,  1 Feb 2022 11:50:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2139F92009B;
-        Tue,  1 Feb 2022 10:50:50 +0000 (GMT)
-Date:   Tue, 1 Feb 2022 10:50:50 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Nikolai Zhubr <zhubr.2@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     Arnd Bergmann <arnd@kernel.org>,
-        Michal Necasek <mnecasek@yahoo.com>, x86@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PING][PATCH v3 0/4] x86/PCI: Improve $PIR and add $IRT PIRQ routing
- support
-In-Reply-To: <alpine.DEB.2.21.2201021821480.56863@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2202010143280.58572@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201021821480.56863@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 1 Feb 2022 05:51:04 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9AB1CCE17E0;
+        Tue,  1 Feb 2022 10:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D749C340EB;
+        Tue,  1 Feb 2022 10:51:00 +0000 (UTC)
+Date:   Tue, 1 Feb 2022 11:50:57 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "Russell, Scott" <Scott.Russell2@ncr.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] USB: serial: cp210x: add device ids for NCR products
+Message-ID: <YfkQkVuT9w93llrf@kroah.com>
+References: <20220201104253.10345-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201104253.10345-1-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Jan 2022, Maciej W. Rozycki wrote:
+On Tue, Feb 01, 2022 at 11:42:51AM +0100, Johan Hovold wrote:
+> This series adds a couple of new ids to the cp210x driver for devices
+> found in various NCR products.
+> 
+> Johan
+> 
+> 
+> Johan Hovold (2):
+>   USB: serial: cp210x: add NCR Retail IO box id
+>   USB: serial: cp210x: add CPI Bulk Coin Recycler id
+> 
+>  drivers/usb/serial/cp210x.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
->  This is a new patch series made around a discrete patch submitted earlier 
-> on that has gone nowhere, which is now 1/4.  That change handles $PIR PIRQ 
-> routing tables that lack router device information, fixing the inability 
-> to route interrupts with a system using the SiS85C497 ISA bridge.  It has 
-> been minimally updated from v1 by including router device information 
-> reported with the change description, and by adding Nikolai's Tested-by 
-> annotation.
-
- Ping for:
-
-<https://lore.kernel.org/lkml/alpine.DEB.2.21.2201021821480.56863@angie.orcam.me.uk/>.
-
- Series re-verified against 5.17-rc2.
-
-  Maciej
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>

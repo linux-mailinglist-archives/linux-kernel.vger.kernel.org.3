@@ -2,179 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FCD4A67A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246F84A67A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238163AbiBAWSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:18:43 -0500
-Received: from mga14.intel.com ([192.55.52.115]:9058 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229971AbiBAWSm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:18:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643753922; x=1675289922;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N1pYMtoifGkvk1GZdHfarNxiC8SwrZB1coh6JHcccJ8=;
-  b=egsyWGMhSvIaqxjejdNiZJeyRzqTxDFviczJg0eBexq5VLhRV6A3A732
-   /fNuTP50QycvT8mMQoBxX7Qze4sV2TUcQFIfpy6y0NmE0j0yMp8WKUAO8
-   Og18DC4x/aLkSmzlSYjVkWvInt6ioZCYgVX3nfhg93YOEUrXjPX/u1Aeq
-   PPJv2o4P41IqYAaxBec34nYyoSWpP3TPbQBoLzVenqSTtgSRu+gt1fcOC
-   xduHVs78IKQbN/+itU/ibpui3EbFOxDMA0we3zHdZ9Fp/sERX5MHvfamO
-   3xAXgwRM6qrYwMCgPJtWA0z/8YRjOoxQKA/COx9oMpup8284jgporrtW8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248028749"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="248028749"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:18:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="482557745"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:18:41 -0800
-Date:   Tue, 1 Feb 2022 14:18:41 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Ben Widawsky <ben.widawsky@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V6 06/10] cxl/pci: Find the DOE mailbox which supports
- CDAT
-Message-ID: <20220201221841.GO785175@iweiny-DESK2.sc.intel.com>
-Mail-Followup-To: Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20220201071952.900068-1-ira.weiny@intel.com>
- <20220201071952.900068-7-ira.weiny@intel.com>
- <20220201184947.5yx4l74nruyoapvr@intel.com>
+        id S238398AbiBAWUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233600AbiBAWUM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:20:12 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23397C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:20:10 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1nF1VK-0004B3-6t; Tue, 01 Feb 2022 23:20:02 +0100
+Date:   Tue, 1 Feb 2022 22:19:59 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     justinkb@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: BUG: [PATCH v2] isoc: mediatek: Check for error clk pointer
+Message-ID: <YfmyD7bmJS9f+e+m@makrotopia.org>
+References: <20220130024335.114461-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220201184947.5yx4l74nruyoapvr@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <20220130024335.114461-1-jiasheng@iscas.ac.cn>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 10:49:47AM -0800, Widawsky, Ben wrote:
-> On 22-01-31 23:19:48, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > Memory devices need the CDAT data from the device.  This data is read
-> > from a DOE mailbox which supports the CDAT protocol.
-> > 
-> > Search the DOE auxiliary devices for the one which supports the CDAT
-> > protocol.  Cache that device to be used for future queries.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
-[snip]
-
-> >  
-> > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > index d4ae79b62a14..dcc55c4efd85 100644
-> > --- a/drivers/cxl/pci.c
-> > +++ b/drivers/cxl/pci.c
-> > @@ -536,12 +536,53 @@ static int cxl_dvsec_ranges(struct cxl_dev_state *cxlds)
-> >  	return rc;
-> >  }
-> >  
-> > +static int cxl_match_cdat_doe_device(struct device *dev, const void *data)
-> > +{
-> > +	const struct cxl_dev_state *cxlds = data;
-> > +	struct auxiliary_device *adev;
-> > +	struct pci_doe_dev *doe_dev;
-> > +
-> > +	/* First determine if this auxiliary device belongs to the cxlds */
-> > +	if (cxlds->dev != dev->parent)
-> > +		return 0;
+On Sun, Jan 30, 2022 at 10:43:35AM +0800, Jiasheng Jiang wrote:
+> On Fri, Jan 28, 2022 at 10:26:51PM +0800, Paul Mulders wrote:
+> > I guess this breaks all MT7622 SoCs since it'll prematurely exit
+> > init_clks (and subsequently init_scp) completely once devm_clk_get
+> > fails to get a reference to the mm clock producer (which happens to be
+> > the first one tried). This is because MT7623 has a GPU (so no mm
+> > clock) and MT7622 doesn't, and as a result the other clock producer
+> > pointers never get initialized (and other stuff in init_scp after
+> > returning from the error never happens).
+> >
+> > The patch seems fundamentally flawed, I guess it was either not tested
+> > at all, or only tested on a MT7623. The initialization functions seem
+> > designed with the idea that it's ok if some clocks aren't present, so
+> > stopping the initialization when one of them isn't present seems
+> > wrong. (For example, there is also a MT7622B variant of the MT7622
+> > which probably also lacks some clocks MT7622(A) does have).
 > 
-> I don't understand auxiliary bus but I'm wondering why it's checking the parent
-> of the device?
+> I don't think the patch for init_clks() is flawed.
+> At most it is incompleted.
+> What it did is like fixing a potential error in the tool platform
+> providing service for the upper application, like what you said,
+> MT7623 and MT7622.
+> We should not keep the error in the platform because of the upper
+> application.
+> And it seems like it is MT7622 that is flawed.
+> The better way is to fix both the bug in init_clks() and its caller,
+> MT7622.
 
-auxiliary_find_device() iterates all the auxiliary devices in the system.  This
-check was a way for the match function to know if the auxiliary device belongs
-to the cxlds we are interested in...
+I agree that further cleaning is needed here.
+Yet the commit in it's current form very obviously breaks at least the
+MT7622 platform if no further fixes are applied.
 
-But now that I think about it we could have other auxiliary devices attached
-which are not DOE...  :-/  So this check is not complete.
+Imho the whole approach of this driver to hard-code the names of all
+clocks it could try to grab in a string-array accompanied by an enum
+is flawed.
 
-FWIW I'm not thrilled with the way auxiliary_find_device() is defined.  And now
-that I look at it I think the only user of it currently is wrong.  They too
-have a check like this but it is after another check...  :-/
+The correct approach would likely be to add the clocks actually present
+to the device tree of each SoC and then grab only those.
 
-I was hoping to avoid having a list of DOE devices in the cxlds and simply let
-the auxiliary bus infrastructure do that somehow.  IIRC Jonathan was thinking
-along the same lines.  I think he actually suggested auxiliary_find_device()...
-
-It would be nice if I could have an aux_find_child() or something which
-iterated the auxiliary devices attached to a particular parent device.  I've
-just not figured out exactly how to implement that better than what I did here.
-
-> 
-> > +
-> > +	adev = to_auxiliary_dev(dev);
-> > +	doe_dev = container_of(adev, struct pci_doe_dev, adev);
-> > +
-> > +	/* If it is one of ours check for the CDAT protocol */
-> > +	if (pci_doe_supports_prot(doe_dev, PCI_DVSEC_VENDOR_ID_CXL,
-> > +				  CXL_DOE_PROTOCOL_TABLE_ACCESS))
-> > +		return 1;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
-> >  {
-> >  	struct device *dev = cxlds->dev;
-> >  	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	struct auxiliary_device *adev;
-> > +	int rc;
-> >  
-> > -	return pci_doe_create_doe_devices(pdev);
-> > +	rc = pci_doe_create_doe_devices(pdev);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	adev = auxiliary_find_device(NULL, cxlds, &cxl_match_cdat_doe_device);
-> > +
-> > +	if (adev) {
-> > +		struct pci_doe_dev *doe_dev = container_of(adev,
-> > +							   struct pci_doe_dev,
-> > +							   adev);
-> > +
-> > +		/*
-> > +		 * No reference need be taken.  The DOE device lifetime is
-> > +		 * longer that the CXL device state lifetime
-> > +		 */
-> 
-> You're holding a reference to the adev here. Did you mean to drop it?
-
-Does find device get a reference? ...  Ah shoot I did not see that.
-
-Yea the reference should be dropped somewhere.
-
-Thanks,
-Ira
-
-> 
-> > +		cxlds->cdat_doe = doe_dev;
-> > +	}
-> > +
-> > +	return 0;
-> >  }
-> >  
-> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> > -- 
-> > 2.31.1
-> > 
+I can see that mt2701.dtsi and mt7623.dtsi both have some clocks
+defined for scpsys, mt7622.dtsi however lacks them.
+I didn't check other MediaTek SoCs which also use scpsys.

@@ -2,80 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329D94A5A7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F94D4A5A7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbiBAKtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:49:14 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46652 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiBAKtN (ORCPT
+        id S236772AbiBAKtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:49:19 -0500
+Received: from angie.orcam.me.uk ([78.133.224.34]:44268 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236762AbiBAKtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:49:13 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 320331F397;
-        Tue,  1 Feb 2022 10:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643712552; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6Bn0nz2rnpcXkXYw/gRthu/0RqSHCGbN5yIH2/zMno=;
-        b=LsrFLxhXhW9MQ5itj+U/rbYQQCU2+RZgxSgqRPFPCH62iHD/1uuU1u+XTeTmuwRN7c3vBl
-        7xp0WzHh84RoSxn0EONv306e8MJ1H89YhCsuKp+FnGzVoE92rGb1n/4pI20rWUQi1J/SmO
-        giL7UgDUxBg/dDgNhnO46MAaplPB8qo=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C1067A3B84;
-        Tue,  1 Feb 2022 10:49:11 +0000 (UTC)
-Date:   Tue, 1 Feb 2022 11:49:11 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Roman Gushchin <guro@fb.com>, Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
-Message-ID: <YfkQJ4QhfY0dICB9@dhcp22.suse.cz>
-References: <20220129205315.478628-1-longman@redhat.com>
- <20220129205315.478628-4-longman@redhat.com>
- <YfeuK5j7cbgM+Oo+@dhcp22.suse.cz>
- <YfgT/9tEREQNiiAN@cmpxchg.org>
- <YfgnUZQBRkqhrEIb@carbon.dhcp.thefacebook.com>
- <Yfgpknwr1tMnPkqh@dhcp22.suse.cz>
- <12686956-612d-d89b-5641-470d5e913090@redhat.com>
+        Tue, 1 Feb 2022 05:49:18 -0500
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id D246092009C; Tue,  1 Feb 2022 11:49:16 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id CC47B92009B;
+        Tue,  1 Feb 2022 10:49:16 +0000 (GMT)
+Date:   Tue, 1 Feb 2022 10:49:16 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jean Delvare <jdelvare@suse.com>
+cc:     linux-kernel@vger.kernel.org
+Subject: [PING][PATCH 0/2] firmware: dmi: Avoid (some) empty names in kernel
+ log
+In-Reply-To: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2202010103240.58572@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12686956-612d-d89b-5641-470d5e913090@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 31-01-22 13:38:28, Waiman Long wrote:
-[...]
-> Of course, it is also possible to have a debugfs interface to list those
-> dead memcg information, displaying more information about the page that pins
-> the memcg will be hard without using the page owner tool.
+On Sun, 2 Jan 2022, Maciej W. Rozycki wrote:
 
-Yes, you will need page owner or hook into the kernel by other means
-(like already mentioned drgn). The question is whether scanning all
-existing pages to get that information is the best we can offer.
+>  Resending as this has gone into void.  Original patches still apply in 
+> their original form at the same respective lines.
 
-> Keeping track of
-> the list of dead memcg's may also have some runtime overhead.
+ Ping for:
+<https://lore.kernel.org/lkml/alpine.DEB.2.21.2201020127140.56863@angie.orcam.me.uk/>.
 
-Could you be more specific? Offlined memcgs are still part of the
-hierarchy IIRC. So it shouldn't be much more than iterating the whole
-cgroup tree and collect interesting data about dead cgroups.
+ Series re-verified against 5.17-rc2.
 
--- 
-Michal Hocko
-SUSE Labs
+  Maciej

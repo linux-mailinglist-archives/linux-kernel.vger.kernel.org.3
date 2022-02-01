@@ -2,80 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A64AF4A68B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817B04A68B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242960AbiBAXqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:46:51 -0500
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:45857 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiBAXqu (ORCPT
+        id S242964AbiBAXrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:47:32 -0500
+Received: from mail-4316.protonmail.ch ([185.70.43.16]:17559 "EHLO
+        mail-4316.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbiBAXrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:46:50 -0500
-Received: by mail-oo1-f43.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so4519106oor.12;
-        Tue, 01 Feb 2022 15:46:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LTyiwabigKmsdYC9HQNink5x9LNkFsxuP0xeUKbF8uk=;
-        b=2FM/36FNprbbqMvYdV/Sg3fk1ROBnPl3qmGMchcoOSWzt6dI2xfRDuFeF+C2/FD8wV
-         RzB+EmCgfqOPpsWPvDQ11ngAmELwoPEUQVukodXl+FdQ8lGXprde8Yo660a288yMP8ii
-         hZmZ9XVyBg2gEk2TvL7A5oSUmyvwcCQi5e6VFZBEKpTGKagaCZlH0C++HCqlF/CdRMLg
-         vBf8pA/JA5I45ZPbzLcSKDfGPI8aqjDNShZh+J1GPzMXy0XL5lTNIp7lAKKDjHLHFES/
-         sjMP/WRmkdZSK9hsD82yLdscF3P401j+UTNrTwCiPFyfUw5+riMdXj+bEydGZb5/43oe
-         anHg==
-X-Gm-Message-State: AOAM532dV5rDMgTRa38DazPN7dfu2HqtKIEN3E9nrFriwEWCeZbXf8If
-        O7y0l6iEMcu4/waIBTtI+g==
-X-Google-Smtp-Source: ABdhPJx++uYA6DaX9YvhRINV+3ono/nKlgW1aE+hQqL8GMCoLzjLZVKOGkfwu6S8OcKabeYIdJGwqg==
-X-Received: by 2002:a4a:b401:: with SMTP id y1mr13925543oon.95.1643759209668;
-        Tue, 01 Feb 2022 15:46:49 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bg10sm7141928oib.33.2022.02.01.15.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 15:46:48 -0800 (PST)
-Received: (nullmailer pid 993179 invoked by uid 1000);
-        Tue, 01 Feb 2022 23:46:47 -0000
-Date:   Tue, 1 Feb 2022 17:46:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Fengping Yu <fengping.yu@mediatek.com>,
-        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v20 1/3] dt-bindings: input: Add bindings for Mediatek
- matrix keypad
-Message-ID: <YfnGZxD5jJxB+GXY@robh.at.kernel.org>
-References: <20220127111526.3716689-1-mkorpershoek@baylibre.com>
- <20220127111526.3716689-2-mkorpershoek@baylibre.com>
+        Tue, 1 Feb 2022 18:47:31 -0500
+Date:   Tue, 01 Feb 2022 23:47:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail2; t=1643759249;
+        bh=SzxGyHc0MaRHChzTCdfR+eLaUqpReD6n1FCyEvsk43k=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
+        b=tmAslqzDF4OjbdvUsLuPf4FNXsaYYBeeKrW/n1jjNzCxJEqFN0JH9hV8Nt35vwvpv
+         yH5X7JsSkISNXfQNC6ErlJgbMS41nhEjfpJ4T1DB2N9JZKE4LJRj4z/hWVVWs6gwxq
+         +MrMf2Zxf3Ip2CO8INk5EqTumceCNGXIn8dLSvelDcwDb+VfDUezocMYEVka/z+H3P
+         T4TrGdV3ah18cG3w7rduXmaEj5T4yg/t9PI+XLU8rSJHR18Za5J18vzlCg2nhwPLnL
+         f53dx+py7Awk6OZu69NQUzYGGGfN1yTNZqbCWlJ7UWihdZjEySJvP8G1OHwzx9l5Uw
+         tJpj38djD++kg==
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Ye Bin <yebin10@huawei.com>,
+        Frank Shi <shifu0704@thundersoft.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
+Reply-To: =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@protonmail.com>
+Subject: [PATCH] ASoC: tas2770: Insert post reset delay
+Message-ID: <20220201234612.74401-1-povik+lin@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127111526.3716689-2-mkorpershoek@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        T_SCC_BODY_TEXT_LINE shortcircuit=no autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 12:15:24 +0100, Mattijs Korpershoek wrote:
-> From: "fengping.yu" <fengping.yu@mediatek.com>
-> 
-> This patch add devicetree bindings for Mediatek matrix keypad driver.
-> 
-> Signed-off-by: fengping.yu <fengping.yu@mediatek.com>
-> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> ---
->  .../input/mediatek,mt6779-keypad.yaml         | 77 +++++++++++++++++++
->  1 file changed, 77 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/mediatek,mt6779-keypad.yaml
-> 
+Per TAS2770 datasheet there must be a 1 ms delay from reset to first
+command. So insert delays into the driver where appropriate.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 1a476abc723e ("tas2770: add tas2770 smart PA kernel driver")
+Signed-off-by: Martin Povi=C5=A1er <povik+lin@protonmail.com>
+---
+ sound/soc/codecs/tas2770.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/tas2770.c b/sound/soc/codecs/tas2770.c
+index b52c0861edc8..b397a2122dd4 100644
+--- a/sound/soc/codecs/tas2770.c
++++ b/sound/soc/codecs/tas2770.c
+@@ -38,10 +38,12 @@ static void tas2770_reset(struct tas2770_priv *tas2770)
+ =09=09gpiod_set_value_cansleep(tas2770->reset_gpio, 0);
+ =09=09msleep(20);
+ =09=09gpiod_set_value_cansleep(tas2770->reset_gpio, 1);
++=09=09usleep_range(1000, 2000);
+ =09}
+
+ =09snd_soc_component_write(tas2770->component, TAS2770_SW_RST,
+ =09=09TAS2770_RST);
++=09usleep_range(1000, 2000);
+ }
+
+ static int tas2770_set_bias_level(struct snd_soc_component *component,
+@@ -110,6 +112,7 @@ static int tas2770_codec_resume(struct snd_soc_componen=
+t *component)
+
+ =09if (tas2770->sdz_gpio) {
+ =09=09gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
++=09=09usleep_range(1000, 2000);
+ =09} else {
+ =09=09ret =3D snd_soc_component_update_bits(component, TAS2770_PWR_CTRL,
+ =09=09=09=09=09=09    TAS2770_PWR_CTRL_MASK,
+@@ -529,8 +532,10 @@ static int tas2770_codec_probe(struct snd_soc_componen=
+t *component)
+
+ =09tas2770->component =3D component;
+
+-=09if (tas2770->sdz_gpio)
++=09if (tas2770->sdz_gpio) {
+ =09=09gpiod_set_value_cansleep(tas2770->sdz_gpio, 1);
++=09=09usleep_range(1000, 2000);
++=09}
+
+ =09tas2770_reset(tas2770);
+
+--
+2.33.0
+
+

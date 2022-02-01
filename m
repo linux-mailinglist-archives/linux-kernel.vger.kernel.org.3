@@ -2,152 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A50C4A6021
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DE84A6027
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240317AbiBAP3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:29:05 -0500
-Received: from mga07.intel.com ([134.134.136.100]:35658 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240294AbiBAP3E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:29:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643729344; x=1675265344;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O9qf2U0x7o4A/jcao6X2JJyNTrNpGEOOemrb2qph0vo=;
-  b=EAEad/C1F1Swty4pCWlEhLVN1zswxDh7jb/vzbp5yPYH0gSG0p2NqcRu
-   8u9yZscwimOdHeiZ41EB+fn2o7k5Coz8+5jbJbrWBP1hxZs4GJKfvGNEC
-   mh86TNQZO0sSkrhcFuufnfdnyR9X9tCU16+YcyYAWtPtlWo1HiOqrg7Pb
-   Nvu8Aw0KAv2oDhZBecuWcZzR4yXmmfyy7uj4WUeKqddVkhDZv5PXIdJVd
-   P14SIJi57LR/8iynm2Bc6YGRnJhdFsF4PwQ/YfCVCPIsrKc+6R6suBRkt
-   1SkKi19LTygCl4a5HGsbYbp8ylcr0F4G7YJLv7PGf6AjDCuVYe56AM+oK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="311022304"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="311022304"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 07:28:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="698437069"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2022 07:28:50 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEv5O-000TPg-6S; Tue, 01 Feb 2022 15:28:50 +0000
-Date:   Tue, 1 Feb 2022 23:28:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Will McVicker <willmcvicker@google.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 343/9999] drivers/nvmem/core.c:347:5: warning: no previous prototype for
- function 'nvmem_add_cells'
-Message-ID: <202202012338.LedWi6I7-lkp@intel.com>
+        id S240347AbiBAPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:30:16 -0500
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:39566 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232988AbiBAPaO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:30:14 -0500
+Received: by mail-pg1-f177.google.com with SMTP id j10so15634622pgc.6;
+        Tue, 01 Feb 2022 07:30:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/NI5/5cwcQQunIPAZVQCMWs9N9hH37FdlDTNKGxYQ7E=;
+        b=czGicOYjyzjexnLsimliwumlykAb8e3USmaeRjoflReW4k2qDZxjNz9d0obk2Gnebv
+         Z4Iozt/EKNnVANnHAH8+omAl2gKzzvIboQZOEBdm9ro1Uz4g8LP1uiwH4s6a8wqzkWlK
+         oTr8h8HfKb+5SpR9vUKYqx3j48Jpya0H4IEgQEDms2Mrf+2Gux2s7b75RZaveHT4vVtk
+         0lKxT2i1AfKi2Knz6hgREMcP04qc4AOf+OAt6vB9h2U0oSk+Uks9k8iwK3m7Xxg1bcmL
+         hy+baL52Pv4GsJ8udwg/PzCOlD1VFE6oVu8IJLeuuhFuvcEx0q3nVj6ErfaSBhhXZBWM
+         Zb9w==
+X-Gm-Message-State: AOAM530HbJSb0t6JFgsMiKeCYwKc9kVw1tosQr/aygy23Zkx1IzGG1h2
+        1F0OaBeDnSgksn2xnMmxcIU8LDCOSUwqbG6KhQM=
+X-Google-Smtp-Source: ABdhPJwZNq0IinMera7zRuVK7Muwvrp92NYs2qCGjwudmM11k2zeBJdEaahQlwH16dsk6UqlFGc0aAuF4CaTORjd4vE=
+X-Received: by 2002:a63:904c:: with SMTP id a73mr21118692pge.449.1643729414082;
+ Tue, 01 Feb 2022 07:30:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220201120310.878267-1-maz@kernel.org> <20220201120310.878267-12-maz@kernel.org>
+ <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
+In-Reply-To: <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Tue, 1 Feb 2022 16:30:02 +0100
+Message-ID: <CANBLGcy_zEY7qkMe96v+tpsxbp9CDJh14utug5wseCfBhOSvdA@mail.gmail.com>
+Subject: Re: [PATCH 11/12] pinctrl: starfive: Move PM device over to irq domain
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-omap@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   b45c5eeda8dea785e3d411380b486a209768f6b2
-commit: e96a10625581a499e8a4218ef504f3f53918408b [343/9999] UPSTREAM: nvmem: add support for cell info
-config: x86_64-randconfig-r026-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012338.LedWi6I7-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e96a10625581a499e8a4218ef504f3f53918408b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout e96a10625581a499e8a4218ef504f3f53918408b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvmem/
+On Tue, 1 Feb 2022 at 16:16, Emil Renner Berthing <kernel@esmil.dk> wrote:
+> On Tue, 1 Feb 2022 at 13:19, Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > Move the reference to the device over to the irq domain.
+> >
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/pinctrl/pinctrl-starfive.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
+> > index 0b912152a405..5be9866c2b3c 100644
+> > --- a/drivers/pinctrl/pinctrl-starfive.c
+> > +++ b/drivers/pinctrl/pinctrl-starfive.c
+> > @@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
+> >         sfp->gc.base = -1;
+> >         sfp->gc.ngpio = NR_GPIOS;
+> >
+> > -       starfive_irq_chip.parent_device = dev;
+> >         starfive_irq_chip.name = sfp->gc.label;
+> >
+> >         sfp->gc.irq.chip = &starfive_irq_chip;
+> > @@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
+> >         if (ret)
+> >                 return dev_err_probe(dev, ret, "could not register gpiochip\n");
+> >
+> > +       irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
+> > +
+>
+> The gpio framework uses the irq_domain at sfp->gc.irq.domain, so
+> shouldn't this be set before registering the gpio_chip with
+> devm_gpiochip_add_data above?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ah, no. sfp->gc.irq.domain is a pointer to an irq_domain that is
+initialised when adding the gpio_chip.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/nvmem/core.c:347:5: warning: no previous prototype for function 'nvmem_add_cells' [-Wmissing-prototypes]
-   int nvmem_add_cells(struct nvmem_device *nvmem,
-       ^
-   drivers/nvmem/core.c:347:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int nvmem_add_cells(struct nvmem_device *nvmem,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/nvmem_add_cells +347 drivers/nvmem/core.c
-
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  337  
-b3db17e4b864e4 Andrew Lunn         2018-05-11  338  /**
-b3db17e4b864e4 Andrew Lunn         2018-05-11  339   * nvmem_add_cells() - Add cell information to an nvmem device
-b3db17e4b864e4 Andrew Lunn         2018-05-11  340   *
-b3db17e4b864e4 Andrew Lunn         2018-05-11  341   * @nvmem: nvmem device to add cells to.
-b3db17e4b864e4 Andrew Lunn         2018-05-11  342   * @info: nvmem cell info to add to the device
-b3db17e4b864e4 Andrew Lunn         2018-05-11  343   * @ncells: number of cells in info
-b3db17e4b864e4 Andrew Lunn         2018-05-11  344   *
-b3db17e4b864e4 Andrew Lunn         2018-05-11  345   * Return: 0 or negative error code on failure.
-b3db17e4b864e4 Andrew Lunn         2018-05-11  346   */
-b3db17e4b864e4 Andrew Lunn         2018-05-11 @347  int nvmem_add_cells(struct nvmem_device *nvmem,
-b3db17e4b864e4 Andrew Lunn         2018-05-11  348  		    const struct nvmem_cell_info *info,
-b3db17e4b864e4 Andrew Lunn         2018-05-11  349  		    int ncells)
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  350  {
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  351  	struct nvmem_cell **cells;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  352  	int i, rval;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  353  
-b3db17e4b864e4 Andrew Lunn         2018-05-11  354  	cells = kcalloc(ncells, sizeof(*cells), GFP_KERNEL);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  355  	if (!cells)
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  356  		return -ENOMEM;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  357  
-b3db17e4b864e4 Andrew Lunn         2018-05-11  358  	for (i = 0; i < ncells; i++) {
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  359  		cells[i] = kzalloc(sizeof(**cells), GFP_KERNEL);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  360  		if (!cells[i]) {
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  361  			rval = -ENOMEM;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  362  			goto err;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  363  		}
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  364  
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  365  		rval = nvmem_cell_info_to_nvmem_cell(nvmem, &info[i], cells[i]);
-287980e49ffc0f Arnd Bergmann       2016-05-27  366  		if (rval) {
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  367  			kfree(cells[i]);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  368  			goto err;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  369  		}
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  370  
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  371  		nvmem_cell_add(cells[i]);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  372  	}
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  373  
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  374  	/* remove tmp array */
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  375  	kfree(cells);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  376  
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  377  	return 0;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  378  err:
-dfdf141429f089 Rasmus Villemoes    2016-02-08  379  	while (i--)
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  380  		nvmem_cell_drop(cells[i]);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  381  
-dfdf141429f089 Rasmus Villemoes    2016-02-08  382  	kfree(cells);
-dfdf141429f089 Rasmus Villemoes    2016-02-08  383  
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  384  	return rval;
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  385  }
-b3db17e4b864e4 Andrew Lunn         2018-05-11  386  EXPORT_SYMBOL_GPL(nvmem_add_cells);
-eace75cfdcf7d9 Srinivas Kandagatla 2015-07-27  387  
-
-:::::: The code at line 347 was first introduced by commit
-:::::: b3db17e4b864e46ad150ebef69c0e0130a1c5fca drivers: nvmem: Export nvmem_add_cells()
-
-:::::: TO: Andrew Lunn <andrew@lunn.ch>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Emil Renner Berthing <kernel@esmil.dk>

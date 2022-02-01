@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A08C44A683D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318E94A6840
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242197AbiBAWxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:53:31 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42454 "EHLO
+        id S242340AbiBAWzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:55:13 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42490 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241098AbiBAWx3 (ORCPT
+        with ESMTP id S241098AbiBAWzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:53:29 -0500
+        Tue, 1 Feb 2022 17:55:11 -0500
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643756008;
+        s=2020; t=1643756110;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5UKpogTyMTQbCLa6Swh1U7pKphU59nS9oRkx0NlHefU=;
-        b=S/0ORMRsIWkKxl0Ghor8KuZ1NXHlgqE52MUjHSJTGQHLHA7rVAm1n5/KTEm52XhJBgEJUY
-        6Cu8OOzCb/98gWR/O9s/dPKk1Ten1x3EO58mG2TeMwX5M6EQ5X+ZA3BO77lfoEcPu62d81
-        o+xfH6ao+Brrn3pRcsLS2v90fjwHUeTkSV2FnnkXyb6CxnFaeN/lddufqBsBjf/RlyvrYc
-        im5h6wprKv2ATghMgzM/YZaB6PkU+YtawyUtxo7M0hwLVmXdSmqFY3PtKymHaC9ZraGt3Y
-        rlzAl7d3QCOM+8eWDWnL3Mk/my2VWVMKKZfcV1Oxy5KQmD5QmYzRVFn86X2Oew==
+        bh=loFJofZ0upYIa6MaCH4FG5SzbgXsqGe4yUUK/6ip4ys=;
+        b=YQ3Fu2n4ujeRr37+Cp6epxQJfQbvKLhUkoBsi6/yVre2ZeWh5hsZugPjzQPRaCwmOhCffL
+        IOv7mjn2IkYpSuCS0XYnXpMerGLtCSURMR/UT/RMXr2FUfRvkK6J/EU97H/7zX+H7/tAS+
+        h89HnQNRavWZhRFGdhX8xF08QXk6KiB2W/YLubMI+3g43tYRn3CMit2MbWkJ61khP9ec43
+        uX3MfA6Ieqca0whWb+ugUs/QXDk8stVlklwFe0yWeP5jxhCGL4g5b6aY5qqMGh0xO/BkbA
+        JF+G+yKzu9JC5wjF4AgY4qKqbLf/US2iuWgRbbUs7da92ErtLubUnVEm5V5jpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643756008;
+        s=2020e; t=1643756110;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5UKpogTyMTQbCLa6Swh1U7pKphU59nS9oRkx0NlHefU=;
-        b=bfo83/Ft3MVKuFcbcFO7gnJ6kA3SCbemDb47fYAKh2NsiaDbEf2bCdT7l91Z2oYYBrrpfB
-        du58gvdX8yKp78Ag==
+        bh=loFJofZ0upYIa6MaCH4FG5SzbgXsqGe4yUUK/6ip4ys=;
+        b=cnmIh8hZRPZSkfgD/9hCeLCOpOAWtZlltsRY2zk3cg+Hp8NdbOo42CPkWTIM4Zmgv60XJZ
+        eq7fJVU3IfRX/qCg==
 To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
         luto@kernel.org, peterz@infradead.org
@@ -43,61 +43,69 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCHv2 11/29] x86/boot: Allow to hook up alternative port I/O
- helpers
-In-Reply-To: <87k0eexlde.ffs@tglx>
+Subject: Re: [PATCHv2 12/29] x86/boot/compressed: Support TDX guest port I/O
+ at decompression time
+In-Reply-To: <20220124150215.36893-13-kirill.shutemov@linux.intel.com>
 References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-12-kirill.shutemov@linux.intel.com>
- <87k0eexlde.ffs@tglx>
-Date:   Tue, 01 Feb 2022 23:53:28 +0100
-Message-ID: <87ee4mxkpj.ffs@tglx>
+ <20220124150215.36893-13-kirill.shutemov@linux.intel.com>
+Date:   Tue, 01 Feb 2022 23:55:10 +0100
+Message-ID: <87bkzqxkmp.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01 2022 at 23:39, Thomas Gleixner wrote:
-
-> On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
->
->> Port I/O instructions trigger #VE in the TDX environment. In response to
->> the exception, kernel emulates these instructions using hypercalls.
->>
->> But during early boot, on the decompression stage, it is cumbersome to
->> deal with #VE. It is cleaner to go to hypercalls directly, bypassing #VE
->> handling.
->>
->> Add a way to hook up alternative port I/O helpers in the boot stub.
->> All port I/O operations are routed via 'pio_ops'. By default 'pio_ops'
->> initialized with native port I/O implementations.
->>
->> This is a preparation patch. The next patch will override 'pio_ops' if
->> the kernel booted in the TDX environment.
->>
->> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->
-> Aside of Borislav's comments:
->
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-
-Second thoughts.
-
-> +#include <asm/shared/io.h>
+On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> +static inline unsigned int tdx_io_in(int size, int port)
+> +{
+> +	struct tdx_hypercall_output out;
 > +
-> +struct port_io_ops {
-> +	unsigned char (*inb)(int port);
-> +	unsigned short (*inw)(int port);
-> +	unsigned int (*inl)(int port);
-> +	void (*outb)(unsigned char v, int port);
-> +	void (*outw)(unsigned short v, int port);
-> +	void (*outl)(unsigned int v, int port);
-> +};
+> +	__tdx_hypercall(TDX_HYPERCALL_STANDARD, EXIT_REASON_IO_INSTRUCTION,
+> +			size, 0, port, 0, &out);
+> +
+> +	return out.r10 ? UINT_MAX : out.r11;
+> +}
+> +
+> +static inline void tdx_io_out(int size, int port, u64 value)
+> +{
+> +	struct tdx_hypercall_output out;
+> +
+> +	__tdx_hypercall(TDX_HYPERCALL_STANDARD, EXIT_REASON_IO_INSTRUCTION,
+> +			size, 1, port, value, &out);
+> +}
+> +
+> +static inline unsigned char tdx_inb(int port)
+> +{
+> +	return tdx_io_in(1, port);
+> +}
+> +
+> +static inline unsigned short tdx_inw(int port)
+> +{
+> +	return tdx_io_in(2, port);
+> +}
+> +
+> +static inline unsigned int tdx_inl(int port)
+> +{
+> +	return tdx_io_in(4, port);
+> +}
+> +
+> +static inline void tdx_outb(unsigned char value, int port)
+> +{
+> +	tdx_io_out(1, port, value);
+> +}
+> +
+> +static inline void tdx_outw(unsigned short value, int port)
+> +{
+> +	tdx_io_out(2, port, value);
+> +}
+> +
+> +static inline void tdx_outl(unsigned int value, int port)
+> +{
+> +	tdx_io_out(4, port, value);
+> +}
 
-Can we please make that u8, u16, u32 instead of unsigned char,short,int?
-
-That's the kernel convention for hardware related functions for many
-years now.
+Looks good but the u8, u16, u32 comment applies here as well obviously.
 
 Thanks,
 

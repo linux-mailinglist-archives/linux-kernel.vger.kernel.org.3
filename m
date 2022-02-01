@@ -2,181 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB904A5CA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A24A4A5CA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238239AbiBAM4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:56:11 -0500
-Received: from mga06.intel.com ([134.134.136.31]:12032 "EHLO mga06.intel.com"
+        id S238255AbiBAM4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:56:14 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:41570 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229725AbiBAM4I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:56:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643720168; x=1675256168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F/PNLCQjl3adnb0moLdl49HjekyThZribRW7PYNGG6M=;
-  b=jTxpjFJZfV21oD9kmWI/ClV026VsYsE7Az51CqH6SR/wCg26m646PNDn
-   wHsSjMYY9bvA11r/coZ3cTFZK+uAcT2xyiBWE6Tp0C9TlxdDI1JjNBTRA
-   H+5yQcpcQI/HypWHrzvkyruE7zLt4jB8zupadDq/JvrPiOST4jl8MkLlP
-   z8waRVuhzliiV5m2i1cRYS+tDR7hF/JWzc2zbUI79eCGBllW+OzxQmOHq
-   CIGjXyF7VNAUIbIRnsgh9IRtJAl/VPc4rTtZerIG61DPizir0QqNkNsCA
-   ePVrEQBvTA+XlNNC+0XV428esXigzUUF9Jqt1cageNSPd/0O555PtjuJ/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308414872"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="308414872"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 04:55:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="771097518"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2022 04:55:40 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEsh9-000THa-NR; Tue, 01 Feb 2022 12:55:39 +0000
-Date:   Tue, 1 Feb 2022 20:54:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        john.stultz@linaro.org, sboyd@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
-Message-ID: <202202012006.823BFJHa-lkp@intel.com>
-References: <20220131102214.2284-1-tangmeng@uniontech.com>
+        id S238238AbiBAM4M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 07:56:12 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 552CB1EC0441;
+        Tue,  1 Feb 2022 13:56:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643720166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=nGtniP/ZuSvnwnPoaU4PQX/0piWBb9dVWe0n763a2eI=;
+        b=W1yRP06VZIG2iZVXxUMtaGrrFhFQiW9wFWg8S4RXC5N+aRmQIUqZiNxIFGkx6dKsMT0jfG
+        aF5AULNAcU9t7T7RhPGRrkoz3FAd9/2uMMNiKZdw3STZssNex4aZxo6UjNAJHN0qoW0B3F
+        nYJF+mbZ+9U/S97CTSfM8kwokK9Um58=
+Date:   Tue, 1 Feb 2022 13:56:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "mimoja@mimoja.de" <mimoja@mimoja.de>,
+        "hewenliang4@huawei.com" <hewenliang4@huawei.com>,
+        "hushiyuan@huawei.com" <hushiyuan@huawei.com>,
+        "luolongjun@huawei.com" <luolongjun@huawei.com>,
+        "hejingxian@huawei.com" <hejingxian@huawei.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [PATCH v3 6/9] x86/smpboot: Support parallel startup of
+ secondary CPUs
+Message-ID: <Yfkt4sX094so/Kub@zn.tnic>
+References: <20211215145633.5238-7-dwmw2@infradead.org>
+ <d10f529e-b1ee-6220-c6fc-80435f0061ee@amd.com>
+ <f25c6ad00689fee6ce3e294393c13f3dcdd5985f.camel@infradead.org>
+ <3d8e2d0d-1830-48fb-bc2d-995099f39ef0@amd.com>
+ <e742473935bf81be84adea6fa8061ce0846cc630.camel@infradead.org>
+ <330bedfee12022c1180d8752fb4abe908dac08d1.camel@infradead.org>
+ <YffrVMiO/NalRZjL@zn.tnic>
+ <3bc401a9f110a24a429316371c767507b493025a.camel@infradead.org>
+ <YfkRyLV/auNzczfF@zn.tnic>
+ <c83673d74bc161b8e5bfcc3049ccfecf5c9e96f5.camel@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220131102214.2284-1-tangmeng@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <c83673d74bc161b8e5bfcc3049ccfecf5c9e96f5.camel@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi tangmeng,
+On Tue, Feb 01, 2022 at 12:39:17PM +0000, David Woodhouse wrote:
+> In the top of my git tree, you can see a half-baked 'parallel part 2'
+> commit which introduces a new x86/cpu:wait-init cpuhp state that would
+> invoke do_wait_cpu_initialized() for each CPU in turn, which *would*
+> release them all into load_ucode_bsp() at the same time and have
+> precisely the problem you're describing.
 
-Thank you for the patch! Yet something to improve:
+The load_ucode_bsp() is the variant that runs on the boot CPU but
+yeah...
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> I'll commit a FIXME comment now so that it doesn't slip my mind.
 
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: s390-randconfig-r044-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012006.823BFJHa-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://github.com/0day-ci/linux/commit/c54967d83b26ebacf4a1b686c6b659150b73306c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-        git checkout c54967d83b26ebacf4a1b686c6b659150b73306c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/time/
+Yap, thank Cooper for pointing out that whole thing about how microcode
+loading is special and can't always handle parallelism. :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Hm, not sure I see how that's protecting itself from someone
+> simultaneously echoing 1 > /sys/devices/system/cpu/cpu${SIBLING}/online
 
-All errors (new ones prefixed by >>):
+So
 
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from kernel/time/timer.c:37:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> kernel/time/timer.c:284:2: error: implicit declaration of function 'register_sysctl_init' [-Werror,-Wimplicit-function-declaration]
-           register_sysctl_init("kernel", timer_sysctl);
-           ^
-   12 warnings and 1 error generated.
+echo 1 > ../online
 
+means onlining the sibling.
 
-vim +/register_sysctl_init +284 kernel/time/timer.c
+But reload_store() grabs the CPU hotplug lock *first* and *then* runs
+check_online_cpus() to see if all CPUs are online. It doesn't do the
+update if even one CPU is missing. You can't offline any CPU for the
+duration of the update...
 
-   281	
-   282	static int __init timer_sysctl_init(void)
-   283	{
- > 284		register_sysctl_init("kernel", timer_sysctl);
-   285		return 0;
-   286	}
-   287	__initcall(timer_sysctl_init);
-   288	#endif
-   289	static inline bool is_timers_nohz_active(void)
-   290	{
-   291		return static_branch_unlikely(&timers_nohz_active);
-   292	}
-   293	#else
-   294	static inline bool is_timers_nohz_active(void) { return false; }
-   295	#endif /* NO_HZ_COMMON */
-   296	
+So I guess you'd need to explain in more detail what protection hole
+you're seeing because I might be missing something here.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

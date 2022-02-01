@@ -2,357 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071F24A6507
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E994A650A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242421AbiBAT2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S242428AbiBAT2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240686AbiBAT2E (ORCPT
+        with ESMTP id S239984AbiBAT2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:28:04 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7973AC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:28:04 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id bi36so7943825vkb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:28:04 -0800 (PST)
+        Tue, 1 Feb 2022 14:28:32 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF74C061714;
+        Tue,  1 Feb 2022 11:28:31 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id o3so15331056qtm.12;
+        Tue, 01 Feb 2022 11:28:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=posk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sJL5UhCYMJmx1pFTGrnqwQ1k/3weq8fpqF3eWI9gm3A=;
-        b=GnT98Hmbt7HXksyxzW5qrAfPVlHa8MKInVY0Gz45quwHa3oj8rga9oACpe0khKj0ek
-         H1X1X1G4IOAHnGkHSxxLK9Nen6IBD+ONi3stPCinwzTTI2biQnlPfZ/FBCH4wu1mXuZE
-         ulZ8klImGRe26RIKc9PrCv+QbvUli/AfL+EzgDnJNd5U5KQfTcZmKIuTKErtlja8qwql
-         uJVTwlOeKzk7ZhmRF/lEN+UeaOgAAXpU4XYsXlJGllWCXggdtfCD2A7zzzIaVrUFNryf
-         2CjydciXlP08uZoI6Nxk3T+j33T+nJ5neQsKnbZhjxzrF/ROl6tffn/tSjQZkH9ZrZHs
-         e/Fw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wfNVHzUrSGp9Izp/rjKgwRGY4ULVX+ptcgspuR8RAos=;
+        b=eSLhycsLdKkmlFRZQgt9InJ8BrrQJcYxgDKnXZKLS0S5MXfKM9U0KpWWzef+0cfkaz
+         JaVtzuPCP5IxGK5q9H+b/MUYT1V389dOphIMCEFrftTkcJghzFo9a5pKDIblV8+bHdpR
+         fzSd6FBx6AK1D/m/0Zel12WxuNsLZ6oTQocU+kgUzv/AXHd6uhL9oazGPnhEPBBhj6aH
+         iEMlQAHqJy8GTiLPEe1JqNAo2NTQ8ccD3BUkMwUjgnaSMC9uN9JE/GBLfSB7UFm30Jq9
+         pk5e7BvEIsg4lGqlQHoGk4qFpNy/DxOVJajLFCfXXI+/q8CYYDwSTVJnzG9uNrdr8vPw
+         oSVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sJL5UhCYMJmx1pFTGrnqwQ1k/3weq8fpqF3eWI9gm3A=;
-        b=t4eoyP+DAfRn+v416pu6HMcCTUpMkyTCh97fdztm2hPLCQ39VUvahFENKlm4YqOU4b
-         Q6rnZUjD0p1zx6BeSariOZraWKVM39pWiJN1Vi7NZr48oW01t9ExR7kvcqVikZ32JQxP
-         EfOGmkNRyErtsy2D6idrss4KEEc9OKCHhu1R/qVzWcdeaucSpgd6jg+aM8+k9ye9UoRb
-         eRgPUjfATmucDLPtTbJK8INLzSEMzhGUK6ngbZg/ZZsnOEG/6KEiiNN4S22KOVNzE9Xl
-         8U11ViyIoGFmSF+CMQiMIG7fe+J7PrKjCBU0YSYA5cQKbXFH/OQ2ZHJlHkfT+Kf8ieIe
-         Ryug==
-X-Gm-Message-State: AOAM531YnkZs4ylr579DF2YXyPKpxjGsbUM6izwk6IuRi7iGJIFfB80b
-        wP/s20fj/YTIFEO88q+N4aNma4Z+qmkB2oxbbkexiQ==
-X-Google-Smtp-Source: ABdhPJzdcuAFf229DNhyi7CxKph53ikMqzcCkUMKf+esjt65Hdw6kp5bQQk08yDDY9qm176rzmEfV8RRp8cKHRojOgg=
-X-Received: by 2002:a05:6122:4f3:: with SMTP id s19mr10764299vkf.32.1643743683569;
- Tue, 01 Feb 2022 11:28:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wfNVHzUrSGp9Izp/rjKgwRGY4ULVX+ptcgspuR8RAos=;
+        b=nXiu0wquDLgTFn/Dsa2FwczqxHCilqPYcXpGs9x6RHT2J8gHj6O4ajguLwb6Hh3uv9
+         S+F62kph8/scun/mBGW73mFyjAICbmAxBbxCVxLcGu7cbFMDSzq80mj2/tx1ULq2QK7y
+         eKUy76EDvNfW9U2+tjJ7a5nK8OJwllQ+Fgbh509MDo0Of8sFhzrJPKV+FdwoCsSpyoND
+         Wdb0TG2J6lp4IBTVqf319JR8PpxYTeNrq8ci+qMHF1ExfCqmoawDwibCwahFRS6AhZjA
+         ZXiEQUwsXd/cy7lc1IHcnxcxzN39MUr7HBH+Vqmkb7kW/e3qAmsGC+h+jd53+6P9vwNX
+         qZ4Q==
+X-Gm-Message-State: AOAM530+Y/KhqZdpK/JWArMyzTIOvMzXJsaJuBbxvnrJ8/EeM0mcJhpA
+        2ZnKTBGeaqqHUSjyEJkOEw4=
+X-Google-Smtp-Source: ABdhPJwX3vtZ/C8icdzI9zDuVIaRg3fm1oGcYxQ2tehZhojyWZvdBmuAyU9CEP58U3beTAVsSakOIA==
+X-Received: by 2002:a05:622a:1351:: with SMTP id w17mr14927389qtk.447.1643743710937;
+        Tue, 01 Feb 2022 11:28:30 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id u63sm10672638qkh.43.2022.02.01.11.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 11:28:30 -0800 (PST)
+Date:   Tue, 1 Feb 2022 14:28:28 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     jic23@kernel.org, andy.shevchenko@gmail.com, lars@metafoo.de,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v13 06/11] iio: afe: rescale: make use of units.h
+Message-ID: <YfmJ3P1gYaEkVjlY@shaak>
+References: <20220130161101.1067691-1-liambeguin@gmail.com>
+ <20220130161101.1067691-7-liambeguin@gmail.com>
+ <5da96dc7-696b-1bc0-a111-f6108ecfa54c@axentia.se>
 MIME-Version: 1.0
-References: <20220201143425.19907-1-mathieu.desnoyers@efficios.com>
-In-Reply-To: <20220201143425.19907-1-mathieu.desnoyers@efficios.com>
-From:   Peter Oskolkov <posk@posk.io>
-Date:   Tue, 1 Feb 2022 11:28:01 -0800
-Message-ID: <CAFTs51XUwhPJ9BzygJPD0pWFEEwu6hSnO7r=-i8B8R6x0oK6CA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/2] rseq: extend struct rseq with numa node id
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5da96dc7-696b-1bc0-a111-f6108ecfa54c@axentia.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathieu,
+Hi Peter,
 
-On Tue, Feb 1, 2022 at 6:34 AM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> Adding the NUMA node id to struct rseq is a straightforward thing to do,
-> and a good way to figure out if anything in the user-space ecosystem
-> prevents extending struct rseq.
->
-> This NUMA node id field allows memory allocators such as tcmalloc to
-> take advantage of fast access to the current NUMA node id to perform
-> NUMA-aware memory allocation.
->
-> It can also be useful for implementing fast-paths for NUMA-aware
-> user-space mutexes.
->
-> It also allows implementing getcpu(2) purely in user-space.
->
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  include/linux/sched.h       |  4 ++
->  include/trace/events/rseq.h |  4 +-
->  include/uapi/linux/rseq.h   | 24 +++++++++++
->  kernel/ptrace.c             |  2 +-
->  kernel/rseq.c               | 82 ++++++++++++++++++++++++++-----------
->  5 files changed, 89 insertions(+), 27 deletions(-)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 508b91d57470..838c9e0b4cae 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1291,6 +1291,7 @@ struct task_struct {
->
->  #ifdef CONFIG_RSEQ
->         struct rseq __user *rseq;
-> +       u32 rseq_len;
->         u32 rseq_sig;
->         /*
->          * RmW on rseq_event_mask must be performed atomically
-> @@ -2260,10 +2261,12 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
->  {
->         if (clone_flags & CLONE_VM) {
->                 t->rseq = NULL;
-> +               t->rseq_len = 0;
->                 t->rseq_sig = 0;
->                 t->rseq_event_mask = 0;
->         } else {
->                 t->rseq = current->rseq;
-> +               t->rseq_len = current->rseq_len;
->                 t->rseq_sig = current->rseq_sig;
->                 t->rseq_event_mask = current->rseq_event_mask;
->         }
-> @@ -2272,6 +2275,7 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
->  static inline void rseq_execve(struct task_struct *t)
->  {
->         t->rseq = NULL;
-> +       t->rseq_len = 0;
->         t->rseq_sig = 0;
->         t->rseq_event_mask = 0;
->  }
-> diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
-> index a04a64bc1a00..6bd442697354 100644
-> --- a/include/trace/events/rseq.h
-> +++ b/include/trace/events/rseq.h
-> @@ -16,13 +16,15 @@ TRACE_EVENT(rseq_update,
->
->         TP_STRUCT__entry(
->                 __field(s32, cpu_id)
-> +               __field(s32, node_id)
->         ),
->
->         TP_fast_assign(
->                 __entry->cpu_id = raw_smp_processor_id();
-> +               __entry->node_id = cpu_to_node(raw_smp_processor_id());
->         ),
->
-> -       TP_printk("cpu_id=%d", __entry->cpu_id)
-> +       TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
->  );
->
->  TRACE_EVENT(rseq_ip_fixup,
-> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-> index 77ee207623a9..386c25b5bbdb 100644
-> --- a/include/uapi/linux/rseq.h
-> +++ b/include/uapi/linux/rseq.h
-> @@ -130,6 +130,30 @@ struct rseq {
->          *     this thread.
->          */
->         __u32 flags;
-> +
-> +       __u32 padding1[3];
+On Mon, Jan 31, 2022 at 03:50:22PM +0100, Peter Rosin wrote:
+> Hi!
+> 
+> I noticed that I have not reviewed this patch. Sorry for my low
+> bandwidth.
+> 
+> On 2022-01-30 17:10, Liam Beguin wrote:
+> > Make use of well-defined SI metric prefixes to improve code readability.
+> > 
+> > Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+> > ---
+> >  drivers/iio/afe/iio-rescale.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
+> > index 67273de46843..27c6664915ff 100644
+> > --- a/drivers/iio/afe/iio-rescale.c
+> > +++ b/drivers/iio/afe/iio-rescale.c
+> > @@ -51,11 +51,11 @@ int rescale_process_scale(struct rescale *rescale, int scale_type,
+> >  		}
+> >  		fallthrough;
+> >  	case IIO_VAL_FRACTIONAL_LOG2:
+> > -		tmp = (s64)*val * 1000000000LL;
+> > +		tmp = (s64)*val * GIGA;
+> >  		tmp = div_s64(tmp, rescale->denominator);
+> >  		tmp *= rescale->numerator;
+> >  
+> > -		tmp = div_s64_rem(tmp, 1000000000LL, &rem);
+> > +		tmp = div_s64_rem(tmp, GIGA, &rem);
+> 
+> It is NOT easy for me to say which of GIGA/NANO is most fitting.
+> There are a couple of considerations:
 
-I don't fully understand why this padding is needed here. The comment
-below sounds like there was something in "the original rseq API", but
-was later removed, as this patch clearly adds padding after flags, but
-even the first rseq patch had 'flags' as the last field in struct
-rseq...
+I agree with you that the choice behind GIGA/NANO can be a bit
+confusing.
 
-Also have you considered adding an explicit 'version' field, or
-something more sophisticated than 'len'? I remember about a year ago
-you had an rfc patch(set) addressing rseq versioning, but I don't
-think it got merged? You had some concerns about using 'len' then...
+In my opinion, these defines makes the code easier to read if you
+consider them as multipliers with no physical meaning, basically a
+pretty name for a power of 10.
 
-> +
-> +       /*
-> +        * This is the end of the original rseq ABI.
-> +        * This is a valid end of rseq ABI for the purpose of rseq registration
-> +        * rseq_len.
-> +        * The original rseq ABI use "sizeof(struct rseq)" on registration,
-> +        * thus requiring the padding above.
-> +        */
-> +
-> +       /*
-> +        * Restartable sequences node_id field. Updated by the kernel. Read by
-> +        * user-space with single-copy atomicity semantics. This field should
-> +        * only be read by the thread which registered this data structure.
-> +        * Aligned on 32-bit. Contains the current NUMA node ID.
-> +        */
-> +       __u32 node_id;
-> +
-> +       /*
-> +        * This is a valid end of rseq ABI for the purpose of rseq registration
-> +        * rseq_len. Use the offset immediately after the node_id field as
-> +        * rseq_len.
-> +        */
->  } __attribute__((aligned(4 * sizeof(__u64))));
->
->  #endif /* _UAPI_LINUX_RSEQ_H */
-> diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-> index eea265082e97..f5edde5b7805 100644
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -800,7 +800,7 @@ static long ptrace_get_rseq_configuration(struct task_struct *task,
->  {
->         struct ptrace_rseq_configuration conf = {
->                 .rseq_abi_pointer = (u64)(uintptr_t)task->rseq,
-> -               .rseq_abi_size = sizeof(*task->rseq),
-> +               .rseq_abi_size = task->rseq_len,
->                 .signature = task->rseq_sig,
->                 .flags = 0,
->         };
-> diff --git a/kernel/rseq.c b/kernel/rseq.c
-> index 97ac20b4f738..13f6d0419f31 100644
-> --- a/kernel/rseq.c
-> +++ b/kernel/rseq.c
-> @@ -81,15 +81,25 @@
->   *   F1. <failure>
->   */
->
-> -static int rseq_update_cpu_id(struct task_struct *t)
-> +static int rseq_update_cpu_node_id(struct task_struct *t)
->  {
-> -       u32 cpu_id = raw_smp_processor_id();
->         struct rseq __user *rseq = t->rseq;
-> +       u32 cpu_id = raw_smp_processor_id();
-> +       u32 node_id = cpu_to_node(cpu_id);
->
-> -       if (!user_write_access_begin(rseq, sizeof(*rseq)))
-> +       if (!user_write_access_begin(rseq, t->rseq_len))
->                 goto efault;
-> -       unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
-> -       unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
-> +       switch (t->rseq_len) {
-> +       case offsetofend(struct rseq, node_id):
-> +               unsafe_put_user(node_id, &rseq->node_id, efault_end);
-> +               fallthrough;
-> +       case offsetofend(struct rseq, padding1):
-> +               unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
-> +               unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
-> +               break;
-> +       default:
-> +               goto efault_end;
-> +       }
->         user_write_access_end();
->         trace_rseq_update(t);
->         return 0;
-> @@ -100,22 +110,35 @@ static int rseq_update_cpu_id(struct task_struct *t)
->         return -EFAULT;
->  }
->
-> -static int rseq_reset_rseq_cpu_id(struct task_struct *t)
-> +static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
->  {
-> -       u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED;
-> +       u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
->
-> -       /*
-> -        * Reset cpu_id_start to its initial state (0).
-> -        */
-> -       if (put_user(cpu_id_start, &t->rseq->cpu_id_start))
-> -               return -EFAULT;
-> -       /*
-> -        * Reset cpu_id to RSEQ_CPU_ID_UNINITIALIZED, so any user coming
-> -        * in after unregistration can figure out that rseq needs to be
-> -        * registered again.
-> -        */
-> -       if (put_user(cpu_id, &t->rseq->cpu_id))
-> -               return -EFAULT;
-> +       switch (t->rseq_len) {
-> +       case offsetofend(struct rseq, node_id):
-> +               /*
-> +                * Reset node_id to its initial state (0).
-> +                */
-> +               if (put_user(node_id, &t->rseq->node_id))
-> +                       return -EFAULT;
-> +               fallthrough;
-> +       case offsetofend(struct rseq, padding1):
-> +               /*
-> +                * Reset cpu_id_start to its initial state (0).
-> +                */
-> +               if (put_user(cpu_id_start, &t->rseq->cpu_id_start))
-> +                       return -EFAULT;
-> +               /*
-> +                * Reset cpu_id to RSEQ_CPU_ID_UNINITIALIZED, so any user
-> +                * coming in after unregistration can figure out that rseq
-> +                * needs to be registered again.
-> +                */
-> +               if (put_user(cpu_id, &t->rseq->cpu_id))
-> +                       return -EFAULT;
-> +               break;
-> +       default:
-> +               return -EINVAL;
-> +       }
->         return 0;
->  }
->
-> @@ -293,7 +316,7 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
->                 if (unlikely(ret < 0))
->                         goto error;
->         }
-> -       if (unlikely(rseq_update_cpu_id(t)))
-> +       if (unlikely(rseq_update_cpu_node_id(t)))
->                 goto error;
->         return;
->
-> @@ -336,15 +359,16 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
->                 /* Unregister rseq for current thread. */
->                 if (current->rseq != rseq || !current->rseq)
->                         return -EINVAL;
-> -               if (rseq_len != sizeof(*rseq))
-> +               if (rseq_len != current->rseq_len)
->                         return -EINVAL;
->                 if (current->rseq_sig != sig)
->                         return -EPERM;
-> -               ret = rseq_reset_rseq_cpu_id(current);
-> +               ret = rseq_reset_rseq_cpu_node_id(current);
->                 if (ret)
->                         return ret;
->                 current->rseq = NULL;
->                 current->rseq_sig = 0;
-> +               current->rseq_len = 0;
->                 return 0;
->         }
->
-> @@ -357,7 +381,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
->                  * the provided address differs from the prior
->                  * one.
->                  */
-> -               if (current->rseq != rseq || rseq_len != sizeof(*rseq))
-> +               if (current->rseq != rseq || rseq_len != current->rseq_len)
->                         return -EINVAL;
->                 if (current->rseq_sig != sig)
->                         return -EPERM;
-> @@ -369,12 +393,20 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
->          * If there was no rseq previously registered,
->          * ensure the provided rseq is properly aligned and valid.
->          */
-> -       if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)) ||
-> -           rseq_len != sizeof(*rseq))
-> +       if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)))
->                 return -EINVAL;
-> +       switch (rseq_len) {
-> +       case offsetofend(struct rseq, node_id):
-> +               fallthrough;
-> +       case offsetofend(struct rseq, padding1):
-> +               break;
-> +       default:
-> +               return -EINVAL;
-> +       }
->         if (!access_ok(rseq, rseq_len))
->                 return -EFAULT;
->         current->rseq = rseq;
-> +       current->rseq_len = rseq_len;
->         current->rseq_sig = sig;
->         /*
->          * If rseq was previously inactive, and has just been
-> --
-> 2.17.1
->
+By this logic, we wouldn't ever use FEMTO to DECI.
+
+Cheers,
+Liam
+
+> A) 1000000000 is just a big value (GIGA fits). Something big is
+>    needed to not lose too much precision.
+> B) 1000000000 is what the IIO core uses to print fractional-log
+>    values with nano precision (NANO fits). This is not really
+>    relevant in this context.
+> C) 1000000000 makes the int-plus-nano and fractional-log cases
+>    align (NANO fits). This last consideration is introduced with
+>    patch 4/11.
+> 
+> There is simply no correct define to use. And whichever define is
+> chosen makes the other interpretation less obvious. Which is not
+> desirable, obscures things and make both GIGA and NANO bad
+> options.
+> 
+> So, I stepped back to the description provided by Andy in the
+> comments of v11:
+> 
+> On 2021-12-22 19:59, Andy Shevchenko wrote:
+> | You should get the proper power after the operation.
+> | Write a formula (mathematically speaking) and check each of them for this.
+> | 
+> | 10^-5/10^-9 == 1*10^4 (Used NANO)
+> | 10^-5/10^9 == 1/10^-14 (Used GIGA)
+> | 
+> | See the difference?
+> 
+> No, I don't really see the difference, that just makes me totally
+> confused. Dividing by 10^-9 or multiplying by 10^9 is as we all
+> know exactly the same, and the kernel cannot deal directly with
+> 10^-9 so both will look the same in code (multiplying by 10^9). So,
+> you must be referring to the "real formula" behind the code. But
+> in that case, if the "real formula" behind the (then equivalent)
+> code had instead been
+> 
+> 	10^-5*10^9 == 1*10^4 (Used GIGA)
+> 	10^-5*10^-9 == 1/10^-14 (Used NANO)
+> 
+> the outcome is the opposite. NANO turns GIGA and vice versa.
+> 
+> Since you can express the same thing differently in math too, it
+> all crumbles for me. Because of this duality, it will be a matter
+> of taste if GIGA or NANO fits best in any given instance. Sometimes
+> (perhaps commonly) it will be decidedly easy to pick one of them,
+> but in other cases (see above) we will end up with a conflict.
+> 
+> What to do then? Or, what am I missing?
+> 
+> My taste says NANO in this case, since A) is just some big number
+> and not really about units and B) is as stated not really relevant.
+> Which makes C) win the argument for me.
+> 
+> >  		*val = tmp;
+> >  
+> >  		if (!rem)
+> > @@ -71,7 +71,7 @@ int rescale_process_scale(struct rescale *rescale, int scale_type,
+> >  
+> >  		*val2 = rem / (int)tmp;
+> >  		if (rem2)
+> > -			*val2 += div_s64((s64)rem2 * 1000000000LL, tmp);
+> > +			*val2 += div_s64((s64)rem2 * GIGA, tmp);
+> 
+> Here, 1000000000 matches the above use. If we go with NANO above,
+> we should go with NANO here as well.
+> 
+> >  		return IIO_VAL_INT_PLUS_NANO;
+> >  	case IIO_VAL_INT_PLUS_NANO:
+> > @@ -332,8 +332,8 @@ static int rescale_current_sense_amplifier_props(struct device *dev,
+> >  	 * gain_div / (gain_mult * sense), while trying to keep the
+> >  	 * numerator/denominator from overflowing.
+> >  	 */
+> > -	factor = gcd(sense, 1000000);
+> > -	rescale->numerator = 1000000 / factor;
+> > +	factor = gcd(sense, MEGA);
+> > +	rescale->numerator = MEGA / factor;
+> 
+> Here, the 1000000 number comes from the unit of the sense resistor
+> (micro-ohms), so I would have preferred MICRO. But who can tell
+> if we -mathematically speaking- have divided the given resistance
+> integer by 10^6 (MEGA) or multiplied it with 10^-6 (MICRO) to
+> account for the unit? Or if we divided the other values with
+> 10^6 (MEGA) (or multiplied by 10^-6, MICRO) to make them fit the
+> unit of the shunt resistance?
+> 
+> All of the above is of course equivalent so both MEGA and MICRO
+> are correct. But as stated, MICRO makes to most sense as that is
+> what connects the code to reality and hints at where the value
+> is coming from. For me anyway.
+> 
+> >  	rescale->denominator = sense / factor;
+> >  
+> >  	factor = gcd(rescale->numerator, gain_mult);
+> > @@ -361,8 +361,8 @@ static int rescale_current_sense_shunt_props(struct device *dev,
+> >  		return ret;
+> >  	}
+> >  
+> > -	factor = gcd(shunt, 1000000);
+> > -	rescale->numerator = 1000000 / factor;
+> > +	factor = gcd(shunt, MEGA);
+> > +	rescale->numerator = MEGA / factor;
+> 
+> Same here, 1000000 comes from the micro-ohms unit of the shunt
+> resistor, so I would have preferred MICRO.
+> 
+> 
+> 
+> Sorry for the long mail. I blame the duality of these ambiguous
+> SI-defines that are a bit confusing to me.
+> 
+> Cheers,
+> Peter
+> 
+> >  	rescale->denominator = shunt / factor;
+> >  
+> >  	return 0;

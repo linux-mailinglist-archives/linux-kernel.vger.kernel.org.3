@@ -2,279 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D154A688A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568324A688D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242892AbiBAXcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:32:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47439 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230022AbiBAXb7 (ORCPT
+        id S242897AbiBAXdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:33:13 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:22734 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230022AbiBAXdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:31:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643758318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q4nXqGkSOBhfpqUihr9Nmqi8YqjX2zF+f6WealGvq4g=;
-        b=JAB9k6h2yNaUG6mNSg8WVuza6O7b5cjRk5X/U7I85BoHbBPqR7re1FrJKBRCxTnj5XFXjj
-        ZN8cAWOO07n3NaICth7VJ0GSDn9bxq1ik6BHHHSV3wLGfyG0axYFS0H+cu6fcVKX/Ozz5A
-        4q0q2RTekqimf/gCgw0yanYr/xHolZk=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-y1tRH6WGM7aB87PxJw_YFg-1; Tue, 01 Feb 2022 18:31:57 -0500
-X-MC-Unique: y1tRH6WGM7aB87PxJw_YFg-1
-Received: by mail-oi1-f199.google.com with SMTP id a9-20020a056808128900b002cf97f0658dso7852309oiw.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 15:31:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=q4nXqGkSOBhfpqUihr9Nmqi8YqjX2zF+f6WealGvq4g=;
-        b=vap+1Fe2zGuzw+sAd1Zj4n54dkdx+hR2ZE+fMwtpWL0pVjlGibm35/LBaRZmlGMPKG
-         5b3PWRtmkxGDQBipPPhX3SbhO10k3BHEHAKR8V1Ayh92QTHLJGTzD6icpsEgeViXgzBP
-         qHjQUCBXmlUWjVSJD9t2vrpksl/Wqm03QtMVtVRNHz5H1ZP1sSx03ILz+9xEHSd2037w
-         pLOJ17J7SkwBSESA9+pexMqnXxM48UHtbCEd5Wjl0I8rYCxLYNsFZeq5q0IyPo+3yq8b
-         mFzxqP5j8ML7wyiwzxtY/N7KmcmDtoh6a8JRm7qyD2l/t+A9l0JPOuRTN5899uYYd+se
-         8/ug==
-X-Gm-Message-State: AOAM531I1qTd7WylpD5jUl5yME1CRYaIS8zXxn0zVLEEKCJ5Jns0zgdw
-        h7kJxLYQvguWqMkX2oe0nRkCg0uccSjdmRSI8TdjIGJn1XvYSMoZXq+WycEere9V1xc4Mx6SLW8
-        yB8ktNj75kCQkmVR3oyCY0CFU
-X-Received: by 2002:a05:6830:4081:: with SMTP id x1mr15380068ott.272.1643758316825;
-        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz7xbNBp424qduMgZNlEc7ffNGRkTuF/WEghc+E6iYgQoKm1sGpOUPXXnci61cs8iln5CdbTQ==
-X-Received: by 2002:a05:6830:4081:: with SMTP id x1mr15380056ott.272.1643758316507;
-        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id l1sm13638894otd.18.2022.02.01.15.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
-Date:   Tue, 1 Feb 2022 16:31:54 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vfio/pci: fix memory leak during D3hot to D0
- transition
-Message-ID: <20220201163155.0529edc1.alex.williamson@redhat.com>
-In-Reply-To: <948e7798-7337-d093-6296-cedd09c733f5@nvidia.com>
-References: <20220131112450.3550-1-abhsahu@nvidia.com>
-        <20220131131151.4f113557.alex.williamson@redhat.com>
-        <948e7798-7337-d093-6296-cedd09c733f5@nvidia.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 1 Feb 2022 18:33:11 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211KT7r1015797;
+        Tue, 1 Feb 2022 23:33:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=7C+E91YttALqOLsAFCpQ1MeyQdp10/ptnDzaWkqgfPc=;
+ b=VR1yr8tho2jDmJrPSkVpUvJtVO/wzvkDSxh33p330FjRICpE1/6VdVq6rPEPMSxO1Hyz
+ FKBFjaCSsuCeyw79lFfwT/5f3szennHb0UkGToM4Xg/QuKeFQQn9zgOHK5SEyMRnMEiU
+ YsD4O0B6QDSuMngG5F89av3WmsRjxOZ1HFx7XQcYI2eZ6Khxzy531Tswjp2+Cxy/JRcc
+ fQjP0WfPiQtXM2WRZiKKhzI5RN0w27rpXgDSSm9BibwDnFr2jaeod7wrNJ6BhTcxZ6DA
+ SGYizbV379IdCRU7lSo9httUofYPOAcx2JRnVlXRlulZquEt+0EY9YAuHemp3I3osXBR +w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9wcdhj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Feb 2022 23:33:00 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 211NFPqc133645;
+        Tue, 1 Feb 2022 23:32:59 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2177.outbound.protection.outlook.com [104.47.73.177])
+        by userp3030.oracle.com with ESMTP id 3dvtq1cg6w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Feb 2022 23:32:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hyhzkmcd3b6u4ubfs8v8RiPucaozYgs4YoASZ3ExgG+zzqbFpEXomwHG+ALP5SIDYkTu+bhvAQQXZI5XE726ywDmV4ABSU8YQfQGymqgT6DhpOBeyOJ7hjEGTTJ9qcnozHj0FKtV2JWMJwnMnj+3tqxXYh0rEhQebvhTDIJKc1MqvWvSKA+Nt7UN/HuGoAxfs7MV/NIJpg0NZIYz94wFlobwXiX+KbPVVDMP7zQkSMHJRKcfc7JulWz6GPgZHfg3linJZh7PiDzyG8zrmIwRFCUrRnun4qwaA4yXNCpf8ydmAfadPpk0USrluqT6lMjY6FwO7crx40oEIrh1Z2lzYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7C+E91YttALqOLsAFCpQ1MeyQdp10/ptnDzaWkqgfPc=;
+ b=XC3DM2NJiDihl+yAkCT6U+HoSNXNNkmjGs6KdLkQHVP5ZNJeHIw4LdvKj3ZKcjt2JrwiXiuQtEtnDaOwWn0XzkQS3iW/wA6PgeYkWJqjR25Qi6d+/Ec4mqkjXDivk4xcnmOpsBhUGYDO2PycBpY2emBUcL5fmbP+0/Whdp1Vrd6zYc5sTKs+6ALkby8ag637AtQb/DkZZ7UWAsYfcLhGpYiUFDS2Cvhyl2SUKCFfax/oAnV5kxY5kGeVGKU5W16bI3eCfcQgiYwAl6opXExzSznKq8tRuiL0Mst2XGXmFbUiRWVHC4lI28eiYw8e0FZFlLdKvALcV5hhQ1BO3ktfgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7C+E91YttALqOLsAFCpQ1MeyQdp10/ptnDzaWkqgfPc=;
+ b=Ph9QQ3PvI88jJ1jg4mB3QUAPzt9tvYUSri5bCYMh7oO+uRHDRyRM4vjU0zu1BILspGuGnp7mwoMHoQBLuRdCEExELAra3BfADUdlHoNUT8B2K9opKD/vAH4H/jdJVbLOzedXS7g47hYQph0KKoK+9lPl66C2SJ3jNUPoywPAwZY=
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com (2603:10b6:5:216::10)
+ by SN6PR10MB2592.namprd10.prod.outlook.com (2603:10b6:805:4b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Tue, 1 Feb
+ 2022 23:32:57 +0000
+Received: from DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::1057:d8d1:8372:c8b4]) by DM6PR10MB4201.namprd10.prod.outlook.com
+ ([fe80::1057:d8d1:8372:c8b4%8]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
+ 23:32:56 +0000
+Message-ID: <9fa0211a-aee2-22fb-d076-0464a4d8524c@oracle.com>
+Date:   Tue, 1 Feb 2022 15:32:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/5] mm: fix missing cache flush for all tail pages of
+ compound page
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, akpm@linux-foundation.org,
+        zi.yan@cs.rutgers.edu, kirill.shutemov@linux.intel.com,
+        rientjes@google.com, lars.persson@axis.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, Zi Yan <ziy@nvidia.com>
+References: <20220131160254.43211-1-songmuchun@bytedance.com>
+ <20220131160254.43211-3-songmuchun@bytedance.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <20220131160254.43211-3-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0051.namprd03.prod.outlook.com
+ (2603:10b6:303:8e::26) To DM6PR10MB4201.namprd10.prod.outlook.com
+ (2603:10b6:5:216::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4ce248dd-696f-47d3-d08f-08d9e5db2d0c
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2592:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2592ED6079576CF57DF6AB09E2269@SN6PR10MB2592.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a0E/9cHFREwF62xIqwWm9wvbSkfsmQE2HiD2lxqb2/raRydEsM6ANuzNKipReG3YLsJp6eehjhaHuy5abkuQhQwJVgOiN9ltAcLzypNmZ4fb4DlNLqPdsF2A8/K2AihIULx/6SKBnlVfSB0BKCnkANs+gEJ5WAutd7xYjRQXBa7BKOpTaTWhdxAdUewOVHOxmpTaytetWepCFUQKR/WMERRZgJgxIsZtvY0LoOdK0cJUjxlwkl3dPVxbrwM8JOu0ufBHmyzpJFjYhfYvhu/45n0HzSzrYoAV9Mt9jVaAk7GhSGAXumzjApF5/WV3FbmUwwloSvaCUyzlGU7TsJu0nyIDnP/ArQefh+mYXJEGwReTb3frAebUurWzjbebc3Y+KM1CjCB41FaDABI4nT5mU+u3kcwnkAOfJQD5sm44/zX2r6OJc2JLzs85/qHfhlUn1/YKL4uaz8RDVWzdWKTJUQffk1mqMnUWJZlckyNqZz4pSNI/ltPLml0phW+M2yeSqJLy7JJT4P57skS+ltLC0fX1kTq64TsvEDC8Ju7HYRYYlFUbwPPj719yBME6e1uJav+t5A4yLr1lYRIKCE3hMZPOrftAQLnx///6tPoqkXPysju4mDOaRHcY6BbUiE5n6Ze7yS7vmELqCSm+IJJ5nxJeMcvAB7foLU7HiZXsnlLERaLKwZxr6mmm+QXibFtyXJswJr2QIasv+eBZWaanVEFkATAflZjOybPqAVE5wvJsx3WrtMjW9aNMZC025wjB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4201.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31696002)(38350700002)(186003)(508600001)(26005)(38100700002)(6486002)(2616005)(6506007)(86362001)(5660300002)(52116002)(6512007)(53546011)(83380400001)(316002)(44832011)(66946007)(4326008)(8676002)(8936002)(66476007)(66556008)(2906002)(36756003)(31686004)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2dxdVJBNklTZHdTTzB1bmRXM0tjSHVJNmlidlIrNldUTWlGWW9DSEM5b2tC?=
+ =?utf-8?B?d2I1QzN5T3FwTUkyQlFxdXBYdTJGYlRHM2dES1NiZEdnL2w5NG5XM1AyVzBJ?=
+ =?utf-8?B?dStYVVRNMXlaYUs4Q01vd2V5bGNOaVFGZjRXa3JvUnR4QldBczl2WlBFeE1x?=
+ =?utf-8?B?cEJEK2lzckFhanFGNkpzY0cvV1Rnemo4ajVFVWRFWGtpTGtqRWh1cnZDVUxl?=
+ =?utf-8?B?UWZoc1hHV2dkZDhuMXh1RnV1ZWd1NFdaQmszVkRESFlkYnR3eGZSckIwU0w0?=
+ =?utf-8?B?UCthQ2M3L0ErWWJlVXdPWlh0UTkzczZodTJTUXNNTEM1S3hLbmpyZ01hV0s3?=
+ =?utf-8?B?cHdlM0padkR1U1NXQ2ptS041QzJMWGhOZ3B6OFVmc09NdjJBNkZMVjJCN21Q?=
+ =?utf-8?B?NTN5ckhEQmRteEFjK2JBUURIOVNiSjZXN2lMU0N2MHZzRXcxdkJNeFZFYzVo?=
+ =?utf-8?B?bU9Ca3FoUXZnc1dhbUJiMUdSd3pkMEtNSW1reTE3ekhKMDVKaWZSVjRRQmlF?=
+ =?utf-8?B?UTQxZDJnM0hkbURNaUozcG1QbEdHRDBCQ216ZGhUUExuQ2xBekM4NzAvVmpP?=
+ =?utf-8?B?V25UeE42dGw5ZXcwSERGTEM0VmRITUN5SFBhdCtZZnJpSU1SNjdpQjhZQUVu?=
+ =?utf-8?B?SmdtU1dwbFFhZzF5aTArVFB2TVMvNXR6dWVKR2xuVGhMZ2s5TzhrMTdIY0NB?=
+ =?utf-8?B?Wm5QWXNTcHI3Q3VmQS9GaHFaNUxNeFJSZTBpa2xMOXM1NDhKQVBSbGNrc3Fr?=
+ =?utf-8?B?SzZKY29DRmZEd210RVVBVEJFNnBQN0hBbXgvUmNLM1AwcU9BNy9zVnc3bXVP?=
+ =?utf-8?B?bXRnR3pBVWNJdGdMMlpQOEh4RzJpbFZEbVB4Y2Q0UkxPNytqWE5WS1BCOWg4?=
+ =?utf-8?B?a24wdkRoZTRsaUpkaUhjd21nVytEaVhlcHJTeWorcWtWYkE1ZXBhVmlxK3lM?=
+ =?utf-8?B?dDFXVVpOdWxEa3JXOHJDNTVVUm9BbHhBSEZRSy9xUkJVYU9zWVhhUmZLNTRh?=
+ =?utf-8?B?anRJcG5sWGRVQXEzQ3NGeUsxWXorMlF6VnBFcitCak9GVS9zRTE3amNJTm9a?=
+ =?utf-8?B?aWtaR0RUSi9UcDhCdFhDcjlSOHp4d0tVbVN2UllTN1A1MVRRcEpCNUp0Ymdp?=
+ =?utf-8?B?OERqcGVNNmg1cXFGc1p0VVNVRXpZZW1BblhBNVVjbGJYRUZzZDlkcUhmdkJn?=
+ =?utf-8?B?Q3ErTEt3Wm92bHhWUzlibjUzY0hFa3A1dUYvU0NBbUVTWW5mWmRpOHlWNUNI?=
+ =?utf-8?B?cEtCV1ZSSVFvL1dwL3R5cmNSMVo4ejBpc1psL2pUUUF1c0pXNHlyRDRRRWNV?=
+ =?utf-8?B?WDdadVA1RGdibzhmWTZ6WlpUM242NXdHM21ZOTgwdHZ3OUppRnQzU01YU2xt?=
+ =?utf-8?B?a01wYjFyeG56eWhqUkd0bmkzS25aWlVYbXhXWisyNnBVNkhOVkJDUGtHK2Zl?=
+ =?utf-8?B?TzlqSUlpSlFhRWlUOEltUEpXSjZxS1lKQjN3S1d2YkRiVVpYV1ZWNERlemhS?=
+ =?utf-8?B?azZXYkg2WmdPaUVvQnUrU3lncW9oc1RiQUFGdUQ1Y3hwT0NUNnhZTUpDU0R2?=
+ =?utf-8?B?VGl1MktlcVB2Rms3UlJxZHVGOVVaR0pCazRFL0hEZmNWeitIcWdKZW94Vm5L?=
+ =?utf-8?B?YmZhUmtwOU43eFN4aG82UmpJQ0dtcWNMdlRnaXBzTml6WFhPV2dmK1IrMkFz?=
+ =?utf-8?B?Y3JqeldoOHUzbllHclErbFZPYXhkR1VPY1NaaDZxVVltaGUzRXdYeFNFRXhK?=
+ =?utf-8?B?Z1VnNkRjUUFFYXY5MDA0S0tCaWR2WUxqdVpiRkNSejRWMjNaSyswTFl5eGhC?=
+ =?utf-8?B?eElLclRId3hzQU51c0RyVERwdG1sV2lrRjdaZVJwVUVpTGhZUEg2QXd6elBm?=
+ =?utf-8?B?TTRuKzBjaVE4cWpOdGcyS3dmcFpnZGRTd241OThvMi9lZWFaYU11bDlSQWdv?=
+ =?utf-8?B?OFV3TUx1K2M0WFJaNURPV1JkTFVzSjJvdml2U2M3ZGpIMTJSZDh4eEE5VUxX?=
+ =?utf-8?B?ZXdUQXlEdjl0V0hGWmV5RWxaR3RYMVQwR1ZJbkFtVFYya3hhRHA4dEhmbldT?=
+ =?utf-8?B?MU82Mi9Jb0dodkllMlRPZXlDMy9oKytQRmdZZW5JcHFLQmx2RDhQQTY4VVA5?=
+ =?utf-8?B?bFBybS9Oc3BUb0syV2xaaXkvWWxYSjZTN21aZW0wczMxczBzRHNmQTFzMDlF?=
+ =?utf-8?Q?0YzGA6hf5Z9AlAXSPTVu7dI=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ce248dd-696f-47d3-d08f-08d9e5db2d0c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4201.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 23:32:56.8079
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XqPzjPCCsP0qDyEa/DNYZrwyXLcLy+uObxQRwQP3pw3F4PuMQBkKxe6x8YgzaDQmgEDfarGM9OqPOpkBFrhZcA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2592
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10245 signatures=673430
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202010129
+X-Proofpoint-ORIG-GUID: uFwKoUYs4mY2nRZLEehr565Ysx2d98aV
+X-Proofpoint-GUID: uFwKoUYs4mY2nRZLEehr565Ysx2d98aV
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 17:06:43 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
-
-> On 2/1/2022 1:41 AM, Alex Williamson wrote:
-> > On Mon, 31 Jan 2022 16:54:50 +0530
-> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
-> >   
-> >> If needs_pm_restore is set (PCI device does not have support for no
-> >> soft reset), then the current PCI state will be saved during D0->D3hot
-> >> transition and same will be restored back during D3hot->D0 transition.
-> >> For saving the PCI state locally, pci_store_saved_state() is being
-> >> used and the pci_load_and_free_saved_state() will free the allocated
-> >> memory.
-> >>
-> >> But for reset related IOCTLs, vfio driver calls PCI reset related
-> >> API's which will internally change the PCI power state back to D0. So,
-> >> when the guest resumes, then it will get the current state as D0 and it
-> >> will skip the call to vfio_pci_set_power_state() for changing the
-> >> power state to D0 explicitly. In this case, the memory pointed by
-> >> pm_save will never be freed. In a malicious sequence, the state changing
-> >> to D3hot followed by VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be
-> >> run in a loop and it can cause an OOM situation.
-> >>
-> >> Also, pci_pm_reset() returns -EINVAL if we try to reset a device that
-> >> isn't currently in D0. Therefore any path where we're triggering a
-> >> function reset that could use a PM reset and we don't know if the device
-> >> is in D0, should wake up the device before we try that reset.
-> >>
-> >> This patch changes the device power state to D0 by invoking
-> >> vfio_pci_set_power_state() before calling reset related API's.
-> >> It will help in fixing the mentioned memory leak and making sure
-> >> that the device is in D0 during reset. Also, to prevent any similar
-> >> memory leak for future development, this patch frees memory first
-> >> before overwriting 'pm_save'.
-> >>
-> >> Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
-> >> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >> ---
-> >>
-> >> * Changes in v2
-> >>
-> >> - Add the Fixes tag and sent this patch independently.
-> >> - Invoke vfio_pci_set_power_state() before invoking reset related API's.
-> >> - Removed saving of power state locally.
-> >> - Removed warning before 'kfree(vdev->pm_save)'.
-> >> - Updated comments and commit message according to updated changes.
-> >>
-> >> * v1 of this patch was sent in
-> >> https://lore.kernel.org/lkml/20220124181726.19174-4-abhsahu@nvidia.com/
-> >>
-> >>  drivers/vfio/pci/vfio_pci_core.c | 27 +++++++++++++++++++++++++++
-> >>  1 file changed, 27 insertions(+)
-> >>
-> >> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> >> index f948e6cd2993..d6dd4f7c4b2c 100644
-> >> --- a/drivers/vfio/pci/vfio_pci_core.c
-> >> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> >> @@ -228,6 +228,13 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
-> >>       if (!ret) {
-> >>               /* D3 might be unsupported via quirk, skip unless in D3 */
-> >>               if (needs_save && pdev->current_state >= PCI_D3hot) {
-> >> +                     /*
-> >> +                      * If somehow, the vfio driver was not able to free the
-> >> +                      * memory allocated in pm_save, then free the earlier
-> >> +                      * memory first before overwriting pm_save to prevent
-> >> +                      * memory leak.
-> >> +                      */
-> >> +                     kfree(vdev->pm_save);
-> >>                       vdev->pm_save = pci_store_saved_state(pdev);
-> >>               } else if (needs_restore) {
-> >>                       pci_load_and_free_saved_state(pdev, &vdev->pm_save);
-> >> @@ -322,6 +329,12 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
-> >>       /* For needs_reset */
-> >>       lockdep_assert_held(&vdev->vdev.dev_set->lock);
-> >>
-> >> +     /*
-> >> +      * This function can be invoked while the power state is non-D0,
-> >> +      * Change the device power state to D0 first.  
-> > 
-> > I think we need to describe more why we're doing this than what we're
-> > doing.  We need to make sure the device is in D0 in case we have a
-> > reset method that depends on that directly, ex. pci_pm_reset(), or
-> > possibly device specific resets that may access device BAR resources.
-> > I think it's placed here in the function so that the config space
-> > changes below aren't overwritten by restoring the saved state and maybe
-> > also because the set_irqs_ioctl() call might access device MMIO space.
-> >   
+On 1/31/22 08:02, Muchun Song wrote:
+> The D-cache maintenance inside move_to_new_page() only consider one page,
+> there is still D-cache maintenance issue for tail pages of compound page
+> (e.g. THP or HugeTLB).  THP migration is only enabled on x86_64, ARM64
+> and powerpc, while powerpc and arm64 need to maintain the consistency
+> between I-Cache and D-Cache, which depends on flush_dcache_page() to
+> maintain the consistency between I-Cache and D-Cache.  In theory, the
+> issue can be found on arm64 and powerpc.  HugeTLB migration is enabled
+> on arm, arm64, mips, parisc, powerpc, riscv, s390 and sh, while arm
+> has handled the compound page cache flush in flush_dcache_page(), but
+> most others do not.  In theory, the issue exists on many architectures.
+> Fix this by not using flush_dcache_folio() since it is not backportable.
+> 
+> Fixes: 616b8371539a ("mm: thp: enable thp migration in generic path")
+> Fixes: 290408d4a250 ("hugetlb: hugepage migration core")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> ---
+>  mm/migrate.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index c9296d63878d..c418e8d92b9c 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -933,9 +933,12 @@ static int move_to_new_page(struct page *newpage, struct page *page,
+>  		if (!PageMappingFlags(page))
+>  			page->mapping = NULL;
 >  
->  Thanks Alex.
->  I will add more details here in the comment.
-> 
-> >> +      */
-> >> +     vfio_pci_set_power_state(vdev, PCI_D0);
-> >> +
-> >>       /* Stop the device from further DMA */
-> >>       pci_clear_master(pdev);
-> >>
-> >> @@ -921,6 +934,13 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-> >>                       return -EINVAL;
-> >>
-> >>               vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >> +
-> >> +             /*
-> >> +              * This function can be invoked while the power state is non-D0,
-> >> +              * Change the device power state to D0 before doing reset.
-> >> +              */  
-> > 
-> > See below, reconsidering this...
-> >   
-> >> +             vfio_pci_set_power_state(vdev, PCI_D0);
-> >> +
-> >>               ret = pci_try_reset_function(vdev->pdev);
-> >>               up_write(&vdev->memory_lock);
-> >>
-> >> @@ -2055,6 +2075,13 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
-> >>       }
-> >>       cur_mem = NULL;
-> >>
-> >> +     /*
-> >> +      * This function can be invoked while the power state is non-D0.
-> >> +      * Change power state of all devices to D0 before doing reset.
-> >> +      */  
-> > 
-> > Here I have trouble convincing myself exactly what we're doing.  As you
-> > note in patch 1/ of the RFC series, pci_reset_bus(), or more precisely
-> > pci_dev_save_and_disable(), wakes the device to D0 before reset, so we
-> > can't be doing this only to get the device into D0.  The function level
-> > resets do the same.
-> > 
-> > Actually, now I'm remembering and debugging where I got myself confused
-> > previously with pci_pm_reset().  The scenario was a Windows guest with
-> > an assigned Intel 82574L NIC.  When doing a shutdown from the guest the
-> > device is placed in D3hot and we enter vfio_pci_core_disable() in that
-> > state.  That function however uses __pci_reset_function_locked(), which
-> > skips the pci_dev_save_and_disable() since much of it is redundant for
-> > that call path (I think I generalized this to all flavors of
-> > pci_reset_function() in my head).  
-> 
->  Thanks for providing the background related with the original issue.
-> 
-> > 
-> > The standard call to pci_try_reset_function(), as in the previous
-> > chunk, will make use of pci_dev_save_and_disable(), so for either of
-> > these latter cases the concern cannot be simply having the device in D0,
-> > we need a reason that we want the previously saved state restored on the
-> > device before the reset, and thus restored to the device after the
-> > reset as the rationale for the change.
-> >   
-> 
->  I will add this as a comment.
-> 
-> >> +     list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list)
-> >> +             vfio_pci_set_power_state(cur, PCI_D0);
-> >> +
-> >>       ret = pci_reset_bus(pdev);
-> >>
-> >>  err_undo:  
-> > 
-> > 
-> > We also call pci_reset_bus() in vfio_pci_dev_set_try_reset().  In that
-> > case, none of the other devices can be in use by the user, but they can
-> > certainly be in D3hot with previous device state saved off into our
-> > pm_save cache.  If we don't have a good reason to restore in that case,
-> > I'm wondering if we really have a good reason to restore in the above
-> > two cases.
-> > 
-> > Perhaps we just need the first chunk above to resolve the memory leak,  
-> 
->  First chunk means only the changes done in vfio_pci_set_power_state()
->  which is calling kfree() before calling pci_store_saved_state().
->  Or I need to include more things in the first patch ?
+> -		if (likely(!is_zone_device_page(newpage)))
+> -			flush_dcache_page(newpage);
+> +		if (likely(!is_zone_device_page(newpage))) {
+> +			int i, nr = compound_nr(newpage);
+>  
+> +			for (i = 0; i < nr; i++)
+> +				flush_dcache_page(newpage + i);
+> +		}
 
-Correct, first chunk as is the first change in the patch.  Patch chunks
-are delineated by the @@ offset lines.
+As you have already noted elsewhere, the arm64 version of flush_dcache_page
+seems to handle this and flush the entire compound_page.  Is this going to
+flush the entire compound page compound_nr times?
 
-> 
->  With the kfree(), the original memory leak issue should be solved.
-> 
-> > and the second chunk as a separate patch to resolve the issue with
-> > devices entering vfio_pci_core_disable() in non-D0 state.  Sorry if I  
-> 
->  And this second patch will contain rest of the things where
->  we will call vfio_pci_set_power_state() explicitly for moving to
->  D0 state ?
+-- 
+Mike Kravetz
 
-At least the first one in vfio_pci_core_disable(), the others need
-justification.
-
->  Also, We need to explore if setting to D0 state is really required at
->  all these places and If it is not required, then we don't need second
->  patch ?
-
-We need a second patch, I'm convinced that we don't otherwise wake the
-device to D0 before we potentially get to pci_pm_reset() in
-vfio_pci_core_disable().  It's the remaining cases of setting D0 that
-I'm less clear on.  If it's the case that we need to restore config
-space any time a NoSoftRst- device is woken from D3hot and the state
-saved and restored around the reset is meaningless otherwise, that's a
-valid justification, but is it accurate?  If so, we should recheck the
-other case of calling pci_reset_bus() too.  Thanks,
-
-Alex
-
+>  	}
+>  out:
+>  	return rc;

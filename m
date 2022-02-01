@@ -2,129 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657624A5C26
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480634A5C2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237105AbiBAMYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:24:40 -0500
-Received: from mga01.intel.com ([192.55.52.88]:7560 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232944AbiBAMYj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:24:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643718279; x=1675254279;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Qy/S5Wg+GNTNM50gTtSk1KLN3h4xh4PZO5YQLecJvYk=;
-  b=l1q6Ltaw68192TLkcmDvXvRZRcGtQZvsyD9t/ROFIBRjcc72J6/htPHt
-   xTZcFj5mzydfat3tbVmY+KkM4YyS17Bpjzu3iXUrzlJTjL1w7dE0YKHko
-   lh0gEq1gbuGYNfm0JdCWxxzPBhZ3OvNg2To/TV0SGCHJQK41CN60PLG0n
-   aFSnO1H2iySkgLBtfCZxK1AuMt9TsXIc5XvtYf0m25s6qi0PAcrjkTAjC
-   3RRWM1hVNg2sUMsXqpSIG8de3VfsZjuWZk6Lta3KcWRYzjHyl6eUqjnXx
-   5Xpgk1+wdU1as0A8xfF68pNA0d70+YuKKC45Yh4ssPjOH4579vqkuXoAW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="272156525"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="272156525"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 04:24:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="583014028"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Feb 2022 04:24:37 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEsD6-000TFr-JD; Tue, 01 Feb 2022 12:24:36 +0000
-Date:   Tue, 1 Feb 2022 20:24:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tangmeng <tangmeng@uniontech.com>, tglx@linutronix.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        john.stultz@linaro.org, sboyd@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, tangmeng <tangmeng@uniontech.com>
-Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
-Message-ID: <202202012049.OHxc9ybu-lkp@intel.com>
-References: <20220131102214.2284-1-tangmeng@uniontech.com>
+        id S237975AbiBAMY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:24:58 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57698 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231359AbiBAMY4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 07:24:56 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08177614F1;
+        Tue,  1 Feb 2022 12:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3C7C340EB;
+        Tue,  1 Feb 2022 12:24:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643718293;
+        bh=ooC0NvRuprHdmJZFzg4LMCCX2H+CyKZoohO2KL8HGD4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=VRz6QowMJZkaY7Dy9wn0nzAhOqiptpxHv/1QEcA9ff+rglRHtOftfgG9P7vxGSld+
+         Os2H7/cGbci9v6Gl0ZmP0lPElPXP+XQhN9DbTyJAwfM5UbQOkDoDcGODOgK3Cl1Lqb
+         h4ZVHBVK4PRGEGJgtVUSaSuMmkNzi5sXulh81z3XVMWxy0mBQUX85skMxs/jVVaq9e
+         T3pnJ8gckBW4KpXnNGX7L5SZnfnFDy/QgeLpExU0ly1A5+HIiGdnSD+F4JQYhS7R/M
+         yZug1YGuoCrcNfzs/6F9b4bXelx0J7rD446DWxWY2tAWINP3TjTx60uPBNFYiA9RFO
+         ytI6ClQD/znbA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131102214.2284-1-tangmeng@uniontech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+Subject: Re: ray_cs: Check ioremap return value
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20211230022926.1846757-1-jiasheng@iscas.ac.cn>
+References: <20211230022926.1846757-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164371828600.16633.15192450644077513815.kvalo@kernel.org>
+Date:   Tue,  1 Feb 2022 12:24:51 +0000 (UTC)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi tangmeng,
+Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
 
-Thank you for the patch! Yet something to improve:
+> As the possible failure of the ioremap(), the 'local->sram' and other
+> two could be NULL.
+> Therefore it should be better to check it in order to avoid the later
+> dev_dbg.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[auto build test ERROR on tip/timers/core]
-[also build test ERROR on linus/master kees/for-next/pstore v5.17-rc2 next-20220131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Patch applied to wireless-next.git, thanks.
 
-url:    https://github.com/0day-ci/linux/commits/tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
-config: arc-randconfig-r043-20220131 (https://download.01.org/0day-ci/archive/20220201/202202012049.OHxc9ybu-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c54967d83b26ebacf4a1b686c6b659150b73306c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review tangmeng/kernel-time-move-timer-sysctls-to-its-own-file/20220131-182433
-        git checkout c54967d83b26ebacf4a1b686c6b659150b73306c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/time/
+7e4760713391 ray_cs: Check ioremap return value
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20211230022926.1846757-1-jiasheng@iscas.ac.cn/
 
-All errors (new ones prefixed by >>):
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-   kernel/time/timer.c: In function 'timer_sysctl_init':
->> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
-     284 |         register_sysctl_init("kernel", timer_sysctl);
-         |         ^~~~~~~~~~~~~~~~~~~~
-         |         timer_sysctl_init
-   In file included from include/linux/perf_event.h:25,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:88,
-                    from kernel/time/timer.c:35:
-   At top level:
-   arch/arc/include/asm/perf_event.h:126:27: warning: 'arc_pmu_cache_map' defined but not used [-Wunused-const-variable=]
-     126 | static const unsigned int arc_pmu_cache_map[C(MAX)][C(OP_MAX)][C(RESULT_MAX)] = {
-         |                           ^~~~~~~~~~~~~~~~~
-   arch/arc/include/asm/perf_event.h:91:27: warning: 'arc_pmu_ev_hw_map' defined but not used [-Wunused-const-variable=]
-      91 | static const char * const arc_pmu_ev_hw_map[] = {
-         |                           ^~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +284 kernel/time/timer.c
-
-   281	
-   282	static int __init timer_sysctl_init(void)
-   283	{
- > 284		register_sysctl_init("kernel", timer_sysctl);
-   285		return 0;
-   286	}
-   287	__initcall(timer_sysctl_init);
-   288	#endif
-   289	static inline bool is_timers_nohz_active(void)
-   290	{
-   291		return static_branch_unlikely(&timers_nohz_active);
-   292	}
-   293	#else
-   294	static inline bool is_timers_nohz_active(void) { return false; }
-   295	#endif /* NO_HZ_COMMON */
-   296	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

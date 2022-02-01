@@ -2,125 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6993D4A545A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03EB4A545D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbiBABA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
+        id S231415AbiBABBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiBABAz (ORCPT
+        with ESMTP id S231404AbiBABBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:00:55 -0500
-Received: from mx1.mailbun.net (unknown [IPv6:2602:fd37:1::100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A70BC061714;
-        Mon, 31 Jan 2022 17:00:55 -0800 (PST)
-Received: from [2607:fb90:d98b:8818:11f7:a587:ba64:9b06] (unknown [172.58.104.31])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ariadne@dereferenced.org)
-        by mx1.mailbun.net (Postfix) with ESMTPSA id 6562B11B603;
-        Tue,  1 Feb 2022 01:00:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dereferenced.org;
-        s=mailbun; t=1643677254;
-        bh=vofBEbGEYkBffGz+fe8oMsX9AmKbLrhXNYF6gYB9zA4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References;
-        b=LzXawNxn5sShsRjZW+L97R2qySoeFoZ1c/gI9uSjQh8Xhol10J66MwRGSZ14EYYIs
-         4Y6ftMOPBA7SJBTjzig0zQgHRwSa2HhAOpc0pituNUDGLz5mtUKFMGKlYivFfv9p2/
-         KoNaS7i6azgh9CRmUsj/hEHMoWkVuX8cPeF9Z/+A0LmVhwN6kFu6VcheLZBsczn5PF
-         FsVm+9GMNlYm/FJO50IA09buR4sSZ0U20yF5MCHqKvvyHvD6wbl+3N6pfYsfQNBeol
-         0QNGHIIPfYo4uEYWw0zRa6xNiA/BEMFp0lTr2IeDEYwTb/HObU8drbCwuggQ96YEEv
-         w+jVuOlhjNJtQ==
-Date:   Mon, 31 Jan 2022 19:00:46 -0600 (CST)
-From:   Ariadne Conill <ariadne@dereferenced.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exec: Force single empty string when argv is empty
-In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
-Message-ID: <a4dba31f-b96-6220-58cd-16f05c65d113@dereferenced.org>
-References: <20220201000947.2453721-1-keescook@chromium.org>
+        Mon, 31 Jan 2022 20:01:17 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F33C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:01:17 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id y17so13003702ilm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SlA+CRxN1+l3Q6yf6tu5cYnYlmBs1/fByPS12U2oI0k=;
+        b=fo/VVwycn1Uqn6OK+5mbn/4uxSczpI91VNZPf/j2vArqlSDljsgEI1EHHuyfyjSt/s
+         S6vfcVpHHnEWCAeJf91hsMXp3U2kbHwBdlt8f65Kyb+ggvAbeNoCRxDxhxzEB7JLJH4L
+         qeoRVkH3OOnE/wXc4ErYDPQnrrubvAd1YRU8M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SlA+CRxN1+l3Q6yf6tu5cYnYlmBs1/fByPS12U2oI0k=;
+        b=mKOd6dydfI/z3NHz/G6k2HaQU25ffWodK0z9KAH5Vyrp7LgWx7OOY9ReoLeM51CCaB
+         sgDay0kecGYsqcFMTlkKKbOLUSRmJz69nndorI3RcVAMCNuAmo9hA519tNovh3hrLi+g
+         9pvnDlJuILnelYoAjIUJlhRhw+Vap4n204fQ+xj+mI3DR2CSvzw46CoSWxVHCB3gvnFs
+         DCms0LHwdWELzbqFM5T1MwCykV4yunqPSctyuRgr9WeNPMjZjH0meQhrMksjLcjh35sp
+         8U5/giB7c6VTwThEf0BGYFHVed9KfmsqIc1E3YHvQphgCsV2ZAvKOXAT5DxwAQOpfyfz
+         UwMg==
+X-Gm-Message-State: AOAM5306tBszjBGP2ZJ4nDEcswxWKOKrI0c7uQeZmTFvzYpvz6nWd8Qp
+        8sJ5Vi7ALroEjtE/BsK96G9BE2O7vXAuvA==
+X-Google-Smtp-Source: ABdhPJzCEfUicY80rZZFotCfAjgYfBA/queKijnVgekDfuQzPef6oqK4b6JvhMscd3KeQ3CpnLK/Vg==
+X-Received: by 2002:a05:6e02:1949:: with SMTP id x9mr2601061ilu.269.1643677276803;
+        Mon, 31 Jan 2022 17:01:16 -0800 (PST)
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com. [209.85.166.42])
+        by smtp.gmail.com with ESMTPSA id e5sm18497663ilq.9.2022.01.31.17.01.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 17:01:15 -0800 (PST)
+Received: by mail-io1-f42.google.com with SMTP id z199so19236664iof.10
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:01:14 -0800 (PST)
+X-Received: by 2002:a05:6602:140c:: with SMTP id t12mr12178540iov.177.1643677273820;
+ Mon, 31 Jan 2022 17:01:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+References: <20220125224422.544381-1-dianders@chromium.org>
+ <20220125144316.v2.5.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
+ <CAE-0n528Bxdj+DKhi2Lan4qR_=4KHD7A1Zkr15tmu+MchryJ1A@mail.gmail.com>
+ <CAD=FV=UcpKaLQ31CGKUnaNnZcYnM4N_t8VC43FPGktoYDiMfsw@mail.gmail.com>
+ <YfC5i2jR5N+pmHoZ@ripper> <CAE-0n50sX9-0MxcpF+3Rwqm75jSw5=aNwdsitLwE2sEA69jLJw@mail.gmail.com>
+ <YfgRS/UtRn6Ewwhj@builder.lan> <CAD=FV=V=pbmP-wKhAOVRBC0M=YjYm3Ym-022g8uBEZOxKW-8BQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=V=pbmP-wKhAOVRBC0M=YjYm3Ym-022g8uBEZOxKW-8BQ@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 31 Jan 2022 17:01:02 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WQ0gR18x9rhioLtYGO3oWtny1c52YaiZHUG=PG03d+OQ@mail.gmail.com>
+Message-ID: <CAD=FV=WQ0gR18x9rhioLtYGO3oWtny1c52YaiZHUG=PG03d+OQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: sc7280: Add herobrine-r1
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        kgodara@codeaurora.org, Matthias Kaehlcke <mka@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Prasad Malisetty <pmaliset@codeaurora.org>,
+        quic_rjendra@quicinc.com, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Mon, 31 Jan 2022, Kees Cook wrote:
+On Mon, Jan 31, 2022 at 8:50 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> > Either we leave it as is - which follows my interpretation of what the DT
+> > spec says - or we (and the DT maitainers) agree that it shouldn't be
+> > there (because this dtb won't run on any random qcom,sc7180 anyways) at
+> > all.
+>
+> I'm curious what part of the DT spec says that we should have the SoC
+> in there? I know I've always done it, but it's always just been
+> following the examples of what was done before. When talking about the
+> root node, I see this in the `devicetree-specification-v0.4-rc1` spec:
+>
+> ---
+>
+> Specifies a list of platform architectures with which this platform is
+> compatible. This property can be used by operating systems in
+> selecting platform specific code. The recommended form of the property
+> value is: "manufacturer,model"
+>
+> For example:
+> compatible = "fsl,mpc8572ds"
+>
+> ---
+>
+> That doesn't say anything about putting the SoC there.
+>
+>
+> I would also note that I'd be at least moderately inclined to land
+> things as-is and deal with this in a follow-up patch, though I'm happy
+> to spin if that's what people agree upon too. This is not a new
+> problem and so it doesn't seem like it makes sense to glom dealing
+> with it into this patch series...
 
-> Quoting[1] Ariadne Conill:
->
-> "In several other operating systems, it is a hard requirement that the
-> second argument to execve(2) be the name of a program, thus prohibiting
-> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-> but it is not an explicit requirement[2]:
->
->    The argument arg0 should point to a filename string that is
->    associated with the process being started by one of the exec
->    functions.
-> ...
-> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
-> but there was no consensus to support fixing this issue then.
-> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
-> of this bug in a shellcode, we can reconsider.
->
-> This issue is being tracked in the KSPP issue tracker[5]."
->
-> While the initial code searches[6][7] turned up what appeared to be
-> mostly corner case tests, trying to that just reject argv == NULL
-> (or an immediately terminated pointer list) quickly started tripping[8]
-> existing userspace programs.
+I noticed that you applied the first 4 patches in the series (thanks!)
+but not this one. Are we waiting to get agreement on this before
+landing? As per above, I think it'd be OK to land as-is and then I'm
+happy to do a follow-up patch to clean this up since this isn't a new
+issue. Having this patch outstanding makes it a little confusing with
+the other cleanup patches that I'm posting... ;-)
 
-Yes, it's a shame this is the case, but we do what we have to do, I guess 
-:)
+Thanks!
 
->
-> The next best approach is forcing a single empty string into argv and
-> adjusting argc to match. The number of programs depending on argc == 0
-> seems a smaller set than those calling execve with a NULL argv.
->
-> Account for the additional stack space in bprm_stack_limits(). Inject an
-> empty string when argc == 0 (and set argc = 1). Warn about the case so
-> userspace has some notice about the change:
->
->    process './argc0' launched './argc0' with NULL argv: empty string added
->
-> Additionally WARN() and reject NULL argv usage for kernel threads.
->
-> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
-> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-> [5] https://github.com/KSPP/linux/issues/176
-> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
-> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
-> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
->
-> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-
-In terms of going with this approach as an alternative verses my original 
-patch,
-
-Acked-by: Ariadne Conill <ariadne@dereferenced.org>
-
-Ariadne
+-Doug

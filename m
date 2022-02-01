@@ -2,173 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5A24A649A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D744A649E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 20:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242285AbiBATG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 14:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S242308AbiBATHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 14:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiBATG0 (ORCPT
+        with ESMTP id S242298AbiBATHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:06:26 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F18C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:06:26 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id m90so14981583uam.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:06:26 -0800 (PST)
+        Tue, 1 Feb 2022 14:07:03 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C91CC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:07:03 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id v3so16237515pgc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 11:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qUbQ0b8ZRd0AkjeyzEsyBCt3tnTOzbqx/Ys5mz3HL90=;
-        b=iy3UNgBrq5QIwft+G9BGA9Y0FZyDvqHq7QcVj2quS7jbiXUvsx8BZfCHJrbVaWNEZW
-         dOGUSjaJpOAn3f8bxEnzmYZAgTD0BtXi1VVyp9IkpdXdrx0qIBRB76CNUOxZ7Eunin36
-         q4umGQKhdKU0A/ygq1g4FUBc611k+BqG4skbOpIifPih6MijOW4e4NTfnKxqp/iLvcIi
-         18jgnsguAdT1nm9/C4XcvT/LJgnmE0rFyGA1IOvn99NQ4SvbGHzvyK4Uq2ysj0DlO7eA
-         AnXhEZ9/1c5cqw0Ek/jPeQo/UhEu1VLgQQsYso1ipCv9td44o7vDnRtddPLeRqgBDqW4
-         5vNQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vWJtc/jz3NoYF9uCthXFk67SqjsIB7RJSbGEFvTN/iM=;
+        b=iSJDkJ5OdDeFbxyOzdLekrR3/0rd6TUS2SxZz0WxjzfyJ94UgxhHoPvQJpGVCTtcdH
+         s4biQFpPJRStBBHkAjwh/5vF6XXyRe8YFOtvSRhYOwfsQLjsntoTM4O+MnVZSkzSnVWt
+         UKB2j9qLI0kmTsN3HaBBD0AO7GEeyk79bF/ko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qUbQ0b8ZRd0AkjeyzEsyBCt3tnTOzbqx/Ys5mz3HL90=;
-        b=dnc/KlbOFsQZFYPs529+l7NTvAqgD//Rpyi3Y45SJjQ0AhnIUM4YAyZSDqz/1fIFke
-         iWITZiduQR7ewVZpP93QrGrz6YX7YiGtJ3tPhGMuJBWRBiVvxwxwDYeX7I7iEIWRkCFt
-         3SHvymJJOugwq463XGd7h0mdCeTtLLqA7MJV4loEHJkDI9xl1255pURwkCzJWq+PHbge
-         nEk1KYGZjBpEYavVK1HU2mr/PUvMbNBWlxsgPVILgknXIj7MtOYsqHLeqOxAq4zPu1WI
-         xq/us56946DVQ521LDhuvoKDGbxsU05qttcifwZyFVOkz4bQpUAdqfFGrh0FlEEKnWUN
-         kbvw==
-X-Gm-Message-State: AOAM533DUXRlQRz8Y6DJKeQShDM5e4zTunk1ISaoDlL+v0Xq4IQQkwcD
-        iWZkcVb1jDzLvw94wSZgkKyOuGnxAhDNK9xhI82eSq7oaJQ=
-X-Google-Smtp-Source: ABdhPJzOe1y3RAp2TcJlvoR6jIriXoQif+8Cx2+nvtnlFymktSZCJUs/LJjWSYP0MW73mpCRBbHbzLqHAnuwo9CI+gQ=
-X-Received: by 2002:ab0:2092:: with SMTP id r18mr10365251uak.66.1643742385158;
- Tue, 01 Feb 2022 11:06:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vWJtc/jz3NoYF9uCthXFk67SqjsIB7RJSbGEFvTN/iM=;
+        b=5alNRbXcIv8Hm6p+pxtCMRKRHL06eLb/Ke/VuxkbkI61N2NCKFgw9IA/TUmHkhyqcR
+         kBgAfrS3XjGjcT4DBZgk0rQi4X5DpIPRjtTBZQdvgajc+Swe4sCGQ5NoUB1uoPgWDoME
+         5Tuo3I0vA+VYparOIlC90pdzPd7pEEr/1p3xaqPVVGcXTekV/lVqGcom0GHvNXP0PM2V
+         mXhKeaANc3h+tQjLsR5NqqW+fcAJQrm3+3hr8gfG1WoYznQs6Sp7HFerDbBPGW4c3zOW
+         H9AnUVYIem62RkB44BzXwK3koImmH0nxDP5/+Y3QQKO8reHVlZGwGpoJbiCX1YWKyQQW
+         7kbA==
+X-Gm-Message-State: AOAM5333ykr/h/2srO7LKA3E6nITAEaRR64Y8rThI8YG+73wQ7ZDDX9b
+        X93ntTgcSuZGy/n6cvcErV6vpn3Yx5IP7A==
+X-Google-Smtp-Source: ABdhPJzi1szkx68ooZCj+rN//sH6e7I3nmqujxk9Bk4xfgJGsNuh6IWI1ON2C8vwZ1OHES4iTJHhoA==
+X-Received: by 2002:a63:496:: with SMTP id 144mr22280682pge.380.1643742422709;
+        Tue, 01 Feb 2022 11:07:02 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 30sm393263pgq.39.2022.02.01.11.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 11:07:02 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] exec: Fix min/max typo in stack space calculation
+Date:   Tue,  1 Feb 2022 11:07:00 -0800
+Message-Id: <20220201190700.3147041-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220201033459.156944-1-mike.kravetz@oracle.com>
-In-Reply-To: <20220201033459.156944-1-mike.kravetz@oracle.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Tue, 1 Feb 2022 11:06:13 -0800
-Message-ID: <CAHS8izPpwNLWyebB7OxBMA4ufkS3SAwm9Qz63Yo2-t9wGF6_pg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/vm: cleanup hugetlb file after mremap test
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=893; h=from:subject; bh=AyfN0zm5xZ0Db6oIPqup3ab4ouMbc0RRClkxyP2qBeg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+YTTKrxw/Oaf72PaFCDQWBpcuw+xIFQ/0i2ikcAr 2xFRrmCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfmE0wAKCRCJcvTf3G3AJhseD/ 9zYuF7jyAPi2L0v81MP3RDf7VIrJ4xgGyoaLiTYxpwk+qOAW9CkBkCV9WopgBo1vMsSCOfN+W2RLnO Pimv6mvRjgSDzwChg9PLzh42NrShTKqoPtkkdjHvVDJ2wOzwcIGcv6qP1KuvRw4ay3slqiVYTt4zPv Mt6H4rml8ElelCkMo1WiqbAugm2gcwOuLxXfEAPCQxTCSz5ajAUH7n/Iqgolu5wzKQP6uRDx/j4y/r rXLERVtMJBcmAVab+49RBXKRmpwcAIv5yYXZQaqEzlt872qcf3UijCEse7hN08365czgY4gpoX5+7P mEjRbZRG+HIU4oupbKJoPgrSIILQxJCID9/7L4L/KtDCs7ENGw27QFtuCI2X6ArtGhFPNvaIbYsU8P CkLa0JmjY1MPJulCQWS8Y6MhrPAc7Sk+VNH/tTrIoSDY+5DwKFczRXckh6jERSLUdAX5aaHTyX/nFk Tb2kLrgqwus7rdlx62zYCGPdJ+nyhGb5W01UVRY9VsrorM/mkOQDqoClWlfmDKirHE4lyEdoHHO4z4 Pz1H4fLS9psYmGX4VjQE0gUJfRTt1qogXkvsTO5TnuhCP91I6jGXl4JFJPRxBA/Gkgh8dpOTpfMgoT fn5FGSVh2Zq+SDEVeK0URl2AKzSH5vsa8I7fi4SspI/OLR0oxOYaAwnGqHFA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 7:35 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> The hugepage-mremap test will create a file in a hugetlb filesystem.
-> In a default 'run_vmtests' run, the file will contain all the hugetlb
-> pages.  After the test, the file remains and there are no free hugetlb
-> pages for subsequent tests. This causes those hugetlb tests to fail.
->
-> Change hugepage-mremap to take the name of the hugetlb file as an
-> argument.  Unlink the file within the test, and just to be sure remove
-> the file in the run_vmtests script.
->
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+When handling the argc == 0 case, the stack space calculation should be
+using max() not min().
 
-Thanks Mike!
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+This is a fix for exec-force-single-empty-string-when-argv-is-empty.patch
+https://lore.kernel.org/mm-commits/20220201004100.BF6D6C340E8@smtp.kernel.org/
+---
+ fs/exec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Mina Almasry <almasrymina@google.com>
+diff --git a/fs/exec.c b/fs/exec.c
+index bbf3aadf7ce1..40b1008fb0f7 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -502,7 +502,7 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+ 	 * argc can never be 0, to keep them from walking envp by accident.
+ 	 * See do_execveat_common().
+ 	 */
+-	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
++	ptr_size = (max(bprm->argc, 1) + bprm->envc) * sizeof(void *);
+ 	if (limit <= ptr_size)
+ 		return -E2BIG;
+ 	limit -= ptr_size;
+-- 
+2.30.2
 
-> ---
->  tools/testing/selftests/vm/hugepage-mremap.c | 26 ++++++++++++++------
->  tools/testing/selftests/vm/run_vmtests.sh    |  3 ++-
->  2 files changed, 21 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/hugepage-mremap.c b/tools/testing/selftests/vm/hugepage-mremap.c
-> index 2a7c33631a29..1d689084a54b 100644
-> --- a/tools/testing/selftests/vm/hugepage-mremap.c
-> +++ b/tools/testing/selftests/vm/hugepage-mremap.c
-> @@ -3,9 +3,10 @@
->   * hugepage-mremap:
->   *
->   * Example of remapping huge page memory in a user application using the
-> - * mremap system call.  Code assumes a hugetlbfs filesystem is mounted
-> - * at './huge'.  The amount of memory used by this test is decided by a command
-> - * line argument in MBs. If missing, the default amount is 10MB.
-> + * mremap system call.  The path to a file in a hugetlbfs filesystem must
-> + * be passed as the last argument to this test.  The amount of memory used
-> + * by this test in MBs can optionally be passed as an argument.  If no memory
-> + * amount is passed, the default amount is 10MB.
->   *
->   * To make sure the test triggers pmd sharing and goes through the 'unshare'
->   * path in the mremap code use 1GB (1024) or more.
-> @@ -25,7 +26,6 @@
->  #define DEFAULT_LENGTH_MB 10UL
->  #define MB_TO_BYTES(x) (x * 1024 * 1024)
->
-> -#define FILE_NAME "huge/hugepagefile"
->  #define PROTECTION (PROT_READ | PROT_WRITE | PROT_EXEC)
->  #define FLAGS (MAP_SHARED | MAP_ANONYMOUS)
->
-> @@ -107,17 +107,26 @@ static void register_region_with_uffd(char *addr, size_t len)
->
->  int main(int argc, char *argv[])
->  {
-> +       size_t length;
-> +
-> +       if (argc != 2 && argc != 3) {
-> +               printf("Usage: %s [length_in_MB] <hugetlb_file>\n", argv[0]);
-> +               exit(1);
-> +       }
-> +
->         /* Read memory length as the first arg if valid, otherwise fallback to
-> -        * the default length. Any additional args are ignored.
-> +        * the default length.
->          */
-> -       size_t length = argc > 1 ? (size_t)atoi(argv[1]) : 0UL;
-> +       if (argc == 3)
-> +               length = argc > 2 ? (size_t)atoi(argv[1]) : 0UL;
->
->         length = length > 0 ? length : DEFAULT_LENGTH_MB;
->         length = MB_TO_BYTES(length);
->
->         int ret = 0;
->
-> -       int fd = open(FILE_NAME, O_CREAT | O_RDWR, 0755);
-> +       /* last arg is the hugetlb file name */
-> +       int fd = open(argv[argc-1], O_CREAT | O_RDWR, 0755);
->
->         if (fd < 0) {
->                 perror("Open failed");
-> @@ -169,5 +178,8 @@ int main(int argc, char *argv[])
->
->         munmap(addr, length);
->
-> +       close(fd);
-> +       unlink(argv[argc-1]);
-> +
->         return ret;
->  }
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index e09040a3dc08..e10d50e0b8e8 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -111,13 +111,14 @@ fi
->  echo "-----------------------"
->  echo "running hugepage-mremap"
->  echo "-----------------------"
-> -./hugepage-mremap 256
-> +./hugepage-mremap $mnt/huge_mremap
->  if [ $? -ne 0 ]; then
->         echo "[FAIL]"
->         exitcode=1
->  else
->         echo "[PASS]"
->  fi
-> +rm -f $mnt/huge_mremap
->
->  echo "------------------------"
->  echo "running hugepage-vmemmap"
-> --
-> 2.34.1
->

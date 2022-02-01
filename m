@@ -2,60 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED9E4A5905
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017FD4A590C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiBAJPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 04:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiBAJPh (ORCPT
+        id S235894AbiBAJR4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 04:17:56 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:41744 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234633AbiBAJRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 04:15:37 -0500
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C0C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 01:15:37 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:58b3:216b:d287:833])
-        by andre.telenet-ops.be with bizsmtp
-        id plFZ2600U2lsq0X01lFZYH; Tue, 01 Feb 2022 10:15:34 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nEpG9-00Ch77-GK; Tue, 01 Feb 2022 10:15:33 +0100
-Date:   Tue, 1 Feb 2022 10:15:33 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linuxppc-dev@lists.ozlabs.org
-Subject: Re: Build regressions/improvements in v5.17-rc2
-In-Reply-To: <20220131093835.3146981-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2202011014260.3025644@ramsan.of.borg>
-References: <20220131093835.3146981-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 1 Feb 2022 04:17:54 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-140-GeVL98cmMJWo6_nFsA2gAQ-1; Tue, 01 Feb 2022 09:17:48 +0000
+X-MC-Unique: GeVL98cmMJWo6_nFsA2gAQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 1 Feb 2022 09:17:47 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 1 Feb 2022 09:17:47 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kees Cook' <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Christian Brauner" <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: RE: [PATCH] exec: Force single empty string when argv is empty
+Thread-Topic: [PATCH] exec: Force single empty string when argv is empty
+Thread-Index: AQHYFwALh17Nc4lWIEewOStTbNpbHKx+aiLA
+Date:   Tue, 1 Feb 2022 09:17:47 +0000
+Message-ID: <78959c88715049a4be00fc75bb333d3a@AcuMS.aculab.com>
+References: <20220201000947.2453721-1-keescook@chromium.org>
+In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022, Geert Uytterhoeven wrote:
-> JFYI, when comparing v5.17-rc2[1] to v5.17-rc1[3], the summaries are:
->  - build errors: +1/-3
+From: Kees Cook
+> Sent: 01 February 2022 00:10
+...
+> While the initial code searches[6][7] turned up what appeared to be
+> mostly corner case tests, trying to that just reject argv == NULL
+> (or an immediately terminated pointer list) quickly started tripping[8]
+> existing userspace programs.
+> 
+> The next best approach is forcing a single empty string into argv and
+> adjusting argc to match. The number of programs depending on argc == 0
+> seems a smaller set than those calling execve with a NULL argv.
 
-   + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to fit: R_PPC64_REL14 (stub) against symbol `system_reset_common' defined in .text section in arch/powerpc/kernel/head_64.o:  => (.text+0x3ec)
+Has anyone considered using the pathname for argv[0]?
+So converting:
+	execl(path, NULL);
+into:
+	execl(path, path, NULL);
 
-powerpc-gcc5/powerpc-allyesconfig
+I've not spotted any such suggestion.
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/26291c54e111ff6ba87a164d85d4a4e134b7315c/ (all 99 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
+	David
 
-Gr{oetje,eeting}s,
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds

@@ -2,157 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E544A63B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 415914A63C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbiBASYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
+        id S234674AbiBAS13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234859AbiBASYp (ORCPT
+        with ESMTP id S234755AbiBAS11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:24:45 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C79C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:24:45 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: bbeckett)
-        with ESMTPSA id 977C61F42EBA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643739884;
-        bh=7xQvHqE5JkxFe/B6GU5XOuYuw6gmCUNHi1lLN9/W+eo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cWLBVvLvz7F3DTluAwHv2J0e088LXGdJyggbPFHZlSLY3r0ML4Y457PgbRc72jBCO
-         1Ysge5sVWV/e7iSVD4YHXiHFiaZbVhjBhlCD9mriUk5U0787fTtzEJK0SsGrT2aTHn
-         YieTj097gV0o7dJoDJaxR1dxO2xQz8HHWEBh5FE3/e3kRQkGBR2RKd0nhKDGMBkdst
-         9NBIbZNWPNQ9INCpxsv0sll/EEILjENbgJT8CZKP/AQfL7Imj4gaBrE3NwQxJylf1x
-         zw1GdfWLV7rysQ3kxXEXR57tfg9T1WSQ5dkEJEGLGHGQgh5RjIZ2Jem5TQWKBBRD9w
-         WBRjbmesA3y6Q==
-From:   Robert Beckett <bob.beckett@collabora.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        Ramalingam C <ramalingam.c@intel.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Jordan Justen <jordan.l.justen@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Simon Ser <contact@emersion.fr>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Kenneth Graunke <kenneth@whitecape.org>,
-        mesa-dev@lists.freedesktop.org, Tony Ye <tony.ye@intel.com>,
-        Slawomir Milczarek <slawomir.milczarek@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v7 5/5] drm/i915/uapi: document behaviour for DG2 64K support
-Date:   Tue,  1 Feb 2022 18:24:21 +0000
-Message-Id: <20220201182422.1548863-6-bob.beckett@collabora.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220201182422.1548863-1-bob.beckett@collabora.com>
-References: <20220201182422.1548863-1-bob.beckett@collabora.com>
+        Tue, 1 Feb 2022 13:27:27 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08D2C06173B;
+        Tue,  1 Feb 2022 10:27:26 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id k25so10203469qtp.4;
+        Tue, 01 Feb 2022 10:27:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4fU16CwaNXSv04OsiOZ3YMb430l73X6vlu4kJVwG20k=;
+        b=KYJNmKkb4p91XXQbFqsjbRL25/Mko2MtELbhOCsWZPoJbAPJXXoBWGymf5u49D7bzD
+         opUZyhYoE+d1dYl9LyUf6N91v6sid6FJRpcSIxBzuS0zCu/0TRa11IAyTKSKodN+lKdy
+         5ooQJfxuXAk52C2060I+Bbmc+5K0y4+FHWoSuTqr4mTMl8p7oH+HF6wlaD54KMWnCmVE
+         jzHkloOW5SPIpxHurKn8cnzwLZIGX5/uOXzmGJk60qaTIZeQKHXaElGKpTMvTDh9ZbRK
+         3eHllDv/IoaaVAWtHNvyjX/OzMVJzUolXDIl1AGsnLfklHGbftnrekFmlKBmUtdJmQGK
+         VfGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4fU16CwaNXSv04OsiOZ3YMb430l73X6vlu4kJVwG20k=;
+        b=S0CFwpDUeMnuNrxu0tnbFx87eEnWDW3UdFuIf3e79LsUUkaGNHabYmEuXPS2DW7j4C
+         lpIBCWjaWJAAJYL7L81Y7g4rNqTCdkniP+dyTf8o7rI08Jm1RI4+a4zL8o9gVafLWhLs
+         XiKI02RpDEgxXna19SZGJRPzfF2dwwJANRQ4OvrWPSxqcvUby37hjT/4E6QDsskbtSOL
+         OJGVjIfHptgNP3HaYeTvF2zLml+TjgzXtgqqQrtyHnhbxhlT8DyhZnypRHK1BoU4bw+I
+         ujQ6UTJyhQT9H8s6Z8FopxI5T4kc9AyJu2uYdMWr5zWY7IEhUV0k9X38Hee0+6Kn/Qey
+         f25A==
+X-Gm-Message-State: AOAM531DegDFliwww1eoRzoRoLN57M4Y8758+zTZBKTYLw5ab42jh6VR
+        VExy+FaqPP/4M0K0nZK6dU4=
+X-Google-Smtp-Source: ABdhPJw2N7U22+7/5sOSlB4KcU3zAXRTpYadOqzWHPeG7KXP4+sTogcCLvRoJthCH/Opo9aHr/BeHg==
+X-Received: by 2002:a05:622a:40e:: with SMTP id n14mr3047058qtx.189.1643740046137;
+        Tue, 01 Feb 2022 10:27:26 -0800 (PST)
+Received: from [192.168.1.49] (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id ay12sm3492549qkb.127.2022.02.01.10.27.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 10:27:25 -0800 (PST)
+Subject: Re: [PATCH 1/1] of: unittest: add program to process EXPECT messages
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220201181413.2719955-1-frowand.list@gmail.com>
+Message-ID: <3b1b29eb-5c8e-497a-1688-fa9df80dfd6e@gmail.com>
+Date:   Tue, 1 Feb 2022 12:27:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220201181413.2719955-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Auld <matthew.auld@intel.com>
+On 2/1/22 12:14 PM, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
+> 
 
-On discrete platforms like DG2, we need to support a minimum page size
-of 64K when dealing with device local-memory. This is quite tricky for
-various reasons, so try to document the new implicit uapi for this.
+< snip >
 
-v3: fix typos and less emphasis
-v2: Fixed suggestions on formatting [Daniel]
+> I will reply to this message with the usage message from
+> 'scripts/dtc/of_unittest_expect --help'.
 
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
-Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-Acked-by: Jordan Justen <jordan.l.justen@intel.com>
-Reviewed-by: Ramalingam C <ramalingam.c@intel.com>
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-cc: Simon Ser <contact@emersion.fr>
-cc: Pekka Paalanen <ppaalanen@gmail.com>
-Cc: Jordan Justen <jordan.l.justen@intel.com>
-Cc: Kenneth Graunke <kenneth@whitecape.org>
-Cc: mesa-dev@lists.freedesktop.org
-Cc: Tony Ye <tony.ye@intel.com>
-Cc: Slawomir Milczarek <slawomir.milczarek@intel.com>
----
- include/uapi/drm/i915_drm.h | 44 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 39 insertions(+), 5 deletions(-)
+< snip >
 
-diff --git a/include/uapi/drm/i915_drm.h b/include/uapi/drm/i915_drm.h
-index 5e678917da70..77e5e74c32c1 100644
---- a/include/uapi/drm/i915_drm.h
-+++ b/include/uapi/drm/i915_drm.h
-@@ -1118,10 +1118,16 @@ struct drm_i915_gem_exec_object2 {
- 	/**
- 	 * When the EXEC_OBJECT_PINNED flag is specified this is populated by
- 	 * the user with the GTT offset at which this object will be pinned.
-+	 *
- 	 * When the I915_EXEC_NO_RELOC flag is specified this must contain the
- 	 * presumed_offset of the object.
-+	 *
- 	 * During execbuffer2 the kernel populates it with the value of the
- 	 * current GTT offset of the object, for future presumed_offset writes.
-+	 *
-+	 * See struct drm_i915_gem_create_ext for the rules when dealing with
-+	 * alignment restrictions with I915_MEMORY_CLASS_DEVICE, on devices with
-+	 * minimum page sizes, like DG2.
- 	 */
- 	__u64 offset;
- 
-@@ -3145,11 +3151,39 @@ struct drm_i915_gem_create_ext {
- 	 *
- 	 * The (page-aligned) allocated size for the object will be returned.
- 	 *
--	 * Note that for some devices we have might have further minimum
--	 * page-size restrictions(larger than 4K), like for device local-memory.
--	 * However in general the final size here should always reflect any
--	 * rounding up, if for example using the I915_GEM_CREATE_EXT_MEMORY_REGIONS
--	 * extension to place the object in device local-memory.
-+	 *
-+	 * DG2 64K min page size implications:
-+	 *
-+	 * On discrete platforms, starting from DG2, we have to contend with GTT
-+	 * page size restrictions when dealing with I915_MEMORY_CLASS_DEVICE
-+	 * objects.  Specifically the hardware only supports 64K or larger GTT
-+	 * page sizes for such memory. The kernel will already ensure that all
-+	 * I915_MEMORY_CLASS_DEVICE memory is allocated using 64K or larger page
-+	 * sizes underneath.
-+	 *
-+	 * Note that the returned size here will always reflect any required
-+	 * rounding up done by the kernel, i.e 4K will now become 64K on devices
-+	 * such as DG2.
-+	 *
-+	 * Special DG2 GTT address alignment requirement:
-+	 *
-+	 * The GTT alignment will also need to be at least 2M for such objects.
-+	 *
-+	 * Note that due to how the hardware implements 64K GTT page support, we
-+	 * have some further complications:
-+	 *
-+	 *   1) The entire PDE (which covers a 2MB virtual address range), must
-+	 *   contain only 64K PTEs, i.e mixing 4K and 64K PTEs in the same
-+	 *   PDE is forbidden by the hardware.
-+	 *
-+	 *   2) We still need to support 4K PTEs for I915_MEMORY_CLASS_SYSTEM
-+	 *   objects.
-+	 *
-+	 * To keep things simple for userland, we mandate that any GTT mappings
-+	 * must be aligned to and rounded up to 2MB. As this only wastes virtual
-+	 * address space and avoids userland having to copy any needlessly
-+	 * complicated PDE sharing scheme (coloring) and only affects DG2, this
-+	 * is deemed to be a good compromise.
- 	 */
- 	__u64 size;
- 	/**
--- 
-2.25.1
+$ scripts/dtc/of_unittest_expect --help
 
+usage:
+
+  of_unittest_expect CONSOLE_LOG
+
+     -h                print program usage
+    --help             print program usage
+    --hide-expect      suppress output of EXPECTed lines
+    --line-num         report line number of CONSOLE_LOG
+    --no-expect-stats  do not report EXPECT statistics
+    --no-strip-ts      do not strip leading console timestamps
+    --verbose          do not suppress EXPECT begin and end lines
+    --version          print program version and exit
+
+
+  Process a console log for EXPECTed test related messages to either
+  highlight expected devicetree unittest related messages or suppress
+  the messages.  Leading console timestamps will be stripped.
+
+  Various unittests may trigger kernel messages from outside the
+  unittest code.  The unittest annotates that it expects the message
+  to occur with an 'EXPECT \ : text' (begin) before triggering the
+  message, and an 'EXPECT / : text' (end) after triggering the message.
+
+  If an expected message does not occur, that will be reported.
+
+  For each expected message, the 'EXPECT \ : text' (begin) and
+  'EXPECT / : text' (end), 'text' will contain the message text.
+
+  If 'EXPECT \' (begin) and 'EXPECT /' (end) lines do not contain
+  matching 'text', that will be reported.
+
+  If EXPECT lines are nested, 'EXPECT /' (end) lines must be in the
+  reverse order of the corresponding 'EXPECT \' (begin) lines.
+
+  'EXPECT \ : text' (begin) and 'EXPECT / : text' (end) lines can
+  contain special patterns in 'text':
+
+     <<int>> matches: [+-]*[0-9]+
+     <<hex>> matches: (0x)*[0-9a-f]+
+
+  'EXPECT \' (begin) and 'EXPECT /' (end) lines are suppressed.
+
+  A prefix is added to every line of output:
+
+    'ok ' Line matches an enclosing EXPECT begin/end pair
+
+    '** ' Line reports of_unittest_expect warning or error
+
+    '-> ' Line reports start or end of the unittests
+
+    '>> ' Line reports a unittest test FAIL
+
+    '   ' Lines that are not otherwise prefixed
+
+  Issues detected in CONSOLE_LOG are reported to STDOUT, not to STDERR.
+
+  Known Issues:
+
+    --line-num causes the CONSOLE_LOG line number to be printed in 4 columns.
+       If CONSOLE_LOG contains more than 9999 lines then more columns will be
+       used to report the line number for lines greater than 9999 (eg for
+       lines 10000 - 99999, 5 columns will be used).

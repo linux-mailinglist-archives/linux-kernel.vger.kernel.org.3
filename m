@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CACA74A6011
+	by mail.lfdr.de (Postfix) with ESMTP id 803E94A6010
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240340AbiBAP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:28:12 -0500
-Received: from mga07.intel.com ([134.134.136.100]:35546 "EHLO mga07.intel.com"
+        id S240315AbiBAP2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:28:09 -0500
+Received: from mga17.intel.com ([192.55.52.151]:22946 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240295AbiBAP2H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:28:07 -0500
+        id S240292AbiBAP2G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:28:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643729287; x=1675265287;
+  t=1643729286; x=1675265286;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=53v0SZToCLIARppBG37WEJCY4si1DtBhWyxSdKKHSVM=;
-  b=aX1AdOTr2/oQFpDR2CLL5As2J8cMsEHB8Twq2N4qTDfWjn8+vM3xy+yV
-   OsUvGT8rOOAnGfhsKayhRgpGibgocStyQ7yirEjP9bbjtxruNxsYTFAIH
-   yCYl0Gt/yl9YHnXIZ9hlQyo9jo5U+xlodgfSASNsCpvQphAgfqb0CuI7a
-   I3+6F8k7KhK5eEvC8466e/7TviX3r/la2SLPDfpHd+LAZNUBTQ7zwl78J
-   J97/Puf2eB9y/K7I55N2yDj+SGgS830M+uN1SOTZtnG5FITKwu0fJ9R/c
-   1b+EMLXheiVvdtCmlmjc0w5se25P5kmHq8SDhXeAOaZtLnWhO6hs0fFEq
+  bh=CwGMEFXpkbxu+zKpe5/jEY5E4cN6695jvssvr02AQcA=;
+  b=lZ1PiSXX4WdxOa2mrWkQFJsnH9u3iq34w+2BEwM33NUYLnSl51PB/65I
+   8Psao8OTTXwTZswK3ppZwwQYahuxnEUc28Xew8ia/sYHDEoKaY+HwR0yV
+   mNhTnqUw5yD/Ha9xv0jSwV+IDrnBbfvsL3RWxUO3ar8bydLXtCSh/dVH6
+   oduu/ggqEvJ6JxFAYn28aGnB0Gybaslh5ux/1HAIgqixE/qT/gcukufWa
+   0raY11ejtNIQpS2WdMIO2ZQ6jZbkUS3S8xcnUhGlFU9SYsJEHJn2s34LK
+   wJGsNxxpt1NXHtERdQliFauxfejru49fjExbobAuGK/6GJKvL4HlVsFV8
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="311021856"
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="228372283"
 X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="311021856"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 07:28:05 -0800
+   d="scan'208";a="228372283"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 07:28:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="626763018"
+   d="scan'208";a="698436658"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Feb 2022 07:28:03 -0800
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2022 07:28:03 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D7C4710E; Tue,  1 Feb 2022 17:28:17 +0200 (EET)
+        id E022A40C; Tue,  1 Feb 2022 17:28:17 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Suresh Balakrishnan <suresh.balakrishnan@intel.com>
-Subject: [PATCH v3 1/4] gpiolib: Never return internal error codes to user space
-Date:   Tue,  1 Feb 2022 17:27:55 +0200
-Message-Id: <20220201152758.40391-2-andriy.shevchenko@linux.intel.com>
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH v3 2/4] gpiolib: Introduce for_each_gpio_desc_with_flag() macro
+Date:   Tue,  1 Feb 2022 17:27:56 +0200
+Message-Id: <20220201152758.40391-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220201152758.40391-1-andriy.shevchenko@linux.intel.com>
 References: <20220201152758.40391-1-andriy.shevchenko@linux.intel.com>
@@ -55,96 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently it's possible that character device interface may return
-the error codes which are not supposed to be seen by user space.
-In this case it's EPROBE_DEFER.
+In a few places we are using a loop against all GPIO descriptors
+with a given flag for a given device. Replace it with a consolidated
+for_each type of macro.
 
-Wrap it to return -ENODEV instead as sysfs does.
-
-Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-Fixes: 61f922db7221 ("gpio: userspace ABI for reading GPIO line events")
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Reported-by: Suresh Balakrishnan <suresh.balakrishnan@intel.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/gpio/gpiolib-cdev.c  |  6 +++---
+ drivers/gpio/gpiolib-of.c    | 10 ++++------
  drivers/gpio/gpiolib-sysfs.c |  7 ++-----
- drivers/gpio/gpiolib.h       | 12 ++++++++++++
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ drivers/gpio/gpiolib.c       |  7 +++----
+ drivers/gpio/gpiolib.h       |  7 +++++++
+ 4 files changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index c7b5446d01fd..ffa0256cad5a 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -330,7 +330,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_lh;
- 		}
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 91dcf2c6cdd8..ae1ce319cd78 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -711,14 +711,12 @@ static int of_gpiochip_scan_gpios(struct gpio_chip *chip)
+ static void of_gpiochip_remove_hog(struct gpio_chip *chip,
+ 				   struct device_node *hog)
+ {
+-	struct gpio_desc *descs = chip->gpiodev->descs;
++	struct gpio_desc *desc;
+ 	unsigned int i;
  
--		ret = gpiod_request(desc, lh->label);
-+		ret = gpiod_request_user(desc, lh->label);
- 		if (ret)
- 			goto out_free_lh;
- 		lh->descs[i] = desc;
-@@ -1378,7 +1378,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_linereq;
- 		}
+-	for (i = 0; i < chip->ngpio; i++) {
+-		if (test_bit(FLAG_IS_HOGGED, &descs[i].flags) &&
+-		    descs[i].hog == hog)
+-			gpiochip_free_own_desc(&descs[i]);
+-	}
++	for_each_gpio_desc_with_flag(i, chip, desc, FLAG_IS_HOGGED)
++		if (desc->hog == hog)
++			gpiochip_free_own_desc(desc);
+ }
  
--		ret = gpiod_request(desc, lr->label);
-+		ret = gpiod_request_user(desc, lr->label);
- 		if (ret)
- 			goto out_free_linereq;
- 
-@@ -1764,7 +1764,7 @@ static int lineevent_create(struct gpio_device *gdev, void __user *ip)
- 		}
- 	}
- 
--	ret = gpiod_request(desc, le->label);
-+	ret = gpiod_request_user(desc, le->label);
- 	if (ret)
- 		goto out_free_le;
- 	le->desc = desc;
+ static int of_gpiochip_match_node(struct gpio_chip *chip, void *data)
 diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-index 4098bc7f88b7..44c1ad51b3fe 100644
+index 44c1ad51b3fe..78ca7dee8b64 100644
 --- a/drivers/gpio/gpiolib-sysfs.c
 +++ b/drivers/gpio/gpiolib-sysfs.c
-@@ -475,12 +475,9 @@ static ssize_t export_store(struct class *class,
- 	 * they may be undone on its behalf too.
- 	 */
+@@ -790,11 +790,8 @@ void gpiochip_sysfs_unregister(struct gpio_device *gdev)
+ 	mutex_unlock(&sysfs_lock);
  
--	status = gpiod_request(desc, "sysfs");
--	if (status) {
--		if (status == -EPROBE_DEFER)
--			status = -ENODEV;
-+	status = gpiod_request_user(desc, "sysfs");
-+	if (status)
- 		goto done;
+ 	/* unregister gpiod class devices owned by sysfs */
+-	for (i = 0; i < chip->ngpio; i++) {
+-		desc = &gdev->descs[i];
+-		if (test_and_clear_bit(FLAG_SYSFS, &desc->flags))
+-			gpiod_free(desc);
 -	}
++	for_each_gpio_desc_with_flag(i, chip, desc, FLAG_SYSFS)
++		gpiod_free(desc);
+ }
  
- 	status = gpiod_set_transitory(desc, false);
- 	if (!status) {
+ static int __init gpiolib_sysfs_init(void)
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 3859911b61e9..e3702bc1b533 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -4102,12 +4102,11 @@ int gpiod_hog(struct gpio_desc *desc, const char *name,
+  */
+ static void gpiochip_free_hogs(struct gpio_chip *gc)
+ {
++	struct gpio_desc *desc;
+ 	int id;
+ 
+-	for (id = 0; id < gc->ngpio; id++) {
+-		if (test_bit(FLAG_IS_HOGGED, &gc->gpiodev->descs[id].flags))
+-			gpiochip_free_own_desc(&gc->gpiodev->descs[id]);
+-	}
++	for_each_gpio_desc_with_flag(id, gc, desc, FLAG_IS_HOGGED)
++		gpiochip_free_own_desc(desc);
+ }
+ 
+ /**
 diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 30bc3f80f83e..c31f4626915d 100644
+index c31f4626915d..dbbad15607e3 100644
 --- a/drivers/gpio/gpiolib.h
 +++ b/drivers/gpio/gpiolib.h
-@@ -135,6 +135,18 @@ struct gpio_desc {
+@@ -82,6 +82,13 @@ struct gpio_array {
+ };
  
- int gpiod_request(struct gpio_desc *desc, const char *label);
- void gpiod_free(struct gpio_desc *desc);
+ struct gpio_desc *gpiochip_get_desc(struct gpio_chip *gc, unsigned int hwnum);
 +
-+static inline int gpiod_request_user(struct gpio_desc *desc, const char *label)
-+{
-+	int ret;
++#define for_each_gpio_desc_with_flag(i, gc, desc, flag)		\
++	for (i = 0, desc = gpiochip_get_desc(gc, i);		\
++	     i < gc->ngpio;					\
++	     i++, desc = gpiochip_get_desc(gc, i))		\
++		if (!test_bit(flag, &desc->flags)) {} else
 +
-+	ret = gpiod_request(desc, label);
-+	if (ret == -EPROBE_DEFER)
-+		ret = -ENODEV;
-+
-+	return ret;
-+}
-+
- int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
- 		unsigned long lflags, enum gpiod_flags dflags);
- int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
+ int gpiod_get_array_value_complex(bool raw, bool can_sleep,
+ 				  unsigned int array_size,
+ 				  struct gpio_desc **desc_array,
 -- 
 2.34.1
 

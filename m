@@ -2,226 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5B04A626E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAF54A6276
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:29:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241510AbiBAR3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:29:07 -0500
-Received: from mail-oo1-f46.google.com ([209.85.161.46]:42708 "EHLO
-        mail-oo1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiBAR3G (ORCPT
+        id S241529AbiBAR3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:29:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241524AbiBAR3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:29:06 -0500
-Received: by mail-oo1-f46.google.com with SMTP id w5-20020a4a9785000000b0030956914befso114372ooi.9;
-        Tue, 01 Feb 2022 09:29:06 -0800 (PST)
+        Tue, 1 Feb 2022 12:29:47 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD14C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:29:46 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o1-20020a1c4d01000000b0034d95625e1fso2546487wmh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:29:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
+        b=QWs0wLi0831HmP/LvqHWVwVANAT7rANQll4UtSe0l1qRMJfkYwUAlKC3MvzM9LY59m
+         jmirGQcKXR2hKtxGaZX6Az0HBlznNCAt81xhDClcfIpnqSk13VYqNycCy0XzFjBCU8y+
+         9+lem5hhoqyNL3tQXojrP7IHE2wBlqnqwYaFh9k63vA91VEWklbrE2Do21974PHp3HPL
+         r1uDWYNx165mRiOBob23AYLyRCknUOLHWb/R//K6lz4j+1aU/xNrgpfEx0Qs2nGmuKGl
+         yqRWPDr3oPvupXdGUcXBR1+8kd3f2tUAhIzklDg7pSJuKT6T45EHtBwQEq15U83al5Tf
+         5pwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=iMYzAJDNaV/gptZ3or49lK9EJLg7H9JXnTy+JftInwE=;
-        b=V2XxgBmKCXqn4L7X20maCj1r/2OKIFYwgv3Sve0WVc5IRfXqWaIjxn2jgakqP5BsiF
-         MEWT2yIBqJZPZOPvDJ+k616tUkQ/pvqecx18FlnuTHVYosA+pGN0COpY13sIiql5Yi5B
-         EouKG9+/QcirgKCh2yU0uf4x/dFV7rgKBcOiuaMYlQXCtjonULe3pLxyv/qj8EodqdGI
-         q50LbDq6aYw5PqmgKhRvdHPU1arq50Ac6p5eNRPNpJa58BwtlFySZvfyGl0O4pDNJ+9u
-         sErghFLqfNllrKE89nFSv+PwrGNUq7FiWfXG/M3E0lxmknxNsEihKuEvc2qy7ipj9vAi
-         /0xg==
-X-Gm-Message-State: AOAM530ETtj1UubVdVS5tm5vJ/PkW6VkrIgmeSo5BufH+sFw7UlsXl3i
-        0P9X3Qca35jtIDOTQltJxneBpNjXzA==
-X-Google-Smtp-Source: ABdhPJxaDofsHCoDc63WiBgkP6sKeiud4f2oJ4Ih7vvph+GKzrueFLxq7DJxC6JjxnQAG3WR7HrTHw==
-X-Received: by 2002:a4a:ddc1:: with SMTP id i1mr13006229oov.96.1643736545500;
-        Tue, 01 Feb 2022 09:29:05 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d22sm14160141otp.79.2022.02.01.09.29.04
+        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
+        b=1glulh9K1lsUwRM0Qrfj3D1KOqOj0B9HgXXKQ7VSPR+CxW61Cs4CZNEEoqztC9xKtg
+         t/riQV9yLcc7/QezcSl01QOddH/ieKjdlbvDMd2ItZ9xOzmBLaeUbKIi71/r2kiiT8Eo
+         iJKjH3UdVbsy7ZW6AqT2Ug1KmOOg1CN3uVxHmKSldjGpQ9e8FkWeFFYuJh4CQ/tygLgL
+         +VGcDFaq0x4Evfh5qlAX85Hmmgrf9NteL63Tmc8G8Xlb/EYRFq0KYXadxnbIrPVj98OD
+         jHKCCGtww0/7WuHV7QHzmbK0ilSPCeJwdZlkgO8DwtwNk3PrTsUYkRV3oEDME/slm6Ct
+         5IcA==
+X-Gm-Message-State: AOAM53334aq25RQDVAQmuH7lkBUyz9bXpt5fmCZ3WaZmQac/NxTrgKf6
+        0vrDyUjSiloCLq7CEwoqy4iVsA==
+X-Google-Smtp-Source: ABdhPJy5hC8TD6/VJePvsLep/Uc4MjPl96ghWdUNl7PHJFXrPu8m3WGr6PFKiyFJDLT/ez1xu4zycQ==
+X-Received: by 2002:a05:600c:5c1:: with SMTP id p1mr2710329wmd.31.1643736585242;
+        Tue, 01 Feb 2022 09:29:45 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id l29sm3800651wms.1.2022.02.01.09.29.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:29:04 -0800 (PST)
-Received: (nullmailer pid 243935 invoked by uid 1000);
-        Tue, 01 Feb 2022 17:29:03 -0000
-Date:   Tue, 1 Feb 2022 11:29:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, devicetree@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: hwmon: gpio-fan: convert to YAML
-Message-ID: <Yflt302QEqs5gabI@robh.at.kernel.org>
-References: <20220126200350.3633576-1-clabbe@baylibre.com>
+        Tue, 01 Feb 2022 09:29:44 -0800 (PST)
+Date:   Tue, 1 Feb 2022 17:29:42 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Message-ID: <20220201172942.nxop6cjr3xfa4237@maple.lan>
+References: <20210726141141.2839385-1-arnd@kernel.org>
+ <20210726141141.2839385-9-arnd@kernel.org>
+ <Yd8P37V/N9EkwmYq@wychelm>
+ <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
+ <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
+ <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220126200350.3633576-1-clabbe@baylibre.com>
+In-Reply-To: <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 08:03:50PM +0000, Corentin Labbe wrote:
-> Converts hwmon/gpio-fan.txt to YAML
+On Thu, Jan 13, 2022 at 12:14:50PM +0100, Arnd Bergmann wrote:
+> On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
+> <daniel.thompson@linaro.org> wrote:
+> > On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
+> >
+> > > The kernel attempted to access an address that is in the userspace
+> > > domain (NULL pointer) and took an exception.
+> > >
+> > > I suppose we should handle a domain fault more gracefully - what are
+> > > the required semantics if the kernel attempts a userspace access
+> > > using one of the _nofault() accessors?
+> >
+> > I think the best answer might well be that, if the arch provides
+> > implementations of hooks such as copy_from_kernel_nofault_allowed()
+> > then the kernel should never attempt a userspace access using the
+> > _nofault() accessors. That means they can do whatever they like!
+> >
+> > In other words something like the patch below looks like a promising
+> > approach.
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> 
-> I didnt found any clear maintainer and since DT yaml mandates a
-> maintainer section, I set devicetree@vger.kernel.org.
-> 
->  .../devicetree/bindings/hwmon/gpio-fan.txt    | 41 --------
->  .../devicetree/bindings/hwmon/gpio-fan.yaml   | 96 +++++++++++++++++++
->  2 files changed, 96 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.txt
->  create mode 100644 Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt b/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> deleted file mode 100644
-> index f4cfa350f6a1..000000000000
-> --- a/Documentation/devicetree/bindings/hwmon/gpio-fan.txt
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -Bindings for fan connected to GPIO lines
-> -
-> -Required properties:
-> -- compatible : "gpio-fan"
-> -
-> -Optional properties:
-> -- gpios: Specifies the pins that map to bits in the control value,
-> -  ordered MSB-->LSB.
-> -- gpio-fan,speed-map: A mapping of possible fan RPM speeds and the
-> -  control value that should be set to achieve them. This array
-> -  must have the RPM values in ascending order.
-> -- alarm-gpios: This pin going active indicates something is wrong with
-> -  the fan, and a udev event will be fired.
-> -- #cooling-cells: If used as a cooling device, must be <2>
-> -  Also see:
-> -  Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> -  min and max states are derived from the speed-map of the fan.
-> -
-> -Note: At least one the "gpios" or "alarm-gpios" properties must be set.
-> -
-> -Examples:
-> -
-> -	gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio1 14 1
-> -			 &gpio1 13 1>;
-> -		gpio-fan,speed-map = <0    0
-> -				      3000 1
-> -				      6000 2>;
-> -		alarm-gpios = <&gpio1 15 1>;
-> -	};
-> -	gpio_fan_cool: gpio_fan {
-> -		compatible = "gpio-fan";
-> -		gpios = <&gpio2 14 1
-> -			 &gpio2 13 1>;
-> -		gpio-fan,speed-map =	<0    0>,
-> -					<3000 1>,
-> -					<6000 2>;
-> -		alarm-gpios = <&gpio2 15 1>;
-> -		#cooling-cells = <2>; /* min followed by max */
-> -	};
-> diff --git a/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> new file mode 100644
-> index 000000000000..15bb5efd3cb4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/gpio-fan.yaml
-> @@ -0,0 +1,96 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/gpio-fan.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for fan connected to GPIO lines
-> +
-> +maintainers:
-> +  - OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS <devicetree@vger.kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: gpio-fan
-> +
-> +  gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: Specifies the pins that map to bits in the control value,
-> +      ordered MSB-->LSB.
-> +
-> +  gpio-fan,speed-map:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    description: A mapping of possible fan RPM speeds and the
-> +      control value that should be set to achieve them. This array
-> +      must have the RPM values in ascending order.
-> +
-> +  alarm-gpios:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: This pin going active indicates something is wrong with
-> +      the fan, and a udev event will be fired.
-> +
-> +  "#cooling-cells":
-> +    const: 2
-> +    description: If used as a cooling device, must be <2>
-> +      Also see Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
-> +      min and max states are derived from the speed-map of the fan.
-> +
-> +anyOf:
-> +  - required:
-> +      - gpios
-> +  - required:
-> +      - alarm-gpios
-> +
-> +additionalProperties: False
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio1: gpio@4d000000 {
-> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg = <0x4d000000 0x100>;
-> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets = <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks = <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +    };
+> Right, it seems this is the same as on x86.
 
-No need to show providers in examples.
+Hmnn...
 
-And one example is probably sufficient here.
+Looking a bit deeper into copy_from_kernel_nofault() there is an odd
+asymmetry between copy_to_kernel_nofault(). Basically there is
+copy_from_kernel_nofault_allowed() but no corresponding
+copy_to_kernel_nofault_allowed() which means we cannot defend memory
+pokes using a helper function.
 
-> +    gpio_fan {
-> +      compatible = "gpio-fan";
-> +        gpios = <&gpio1 8 GPIO_ACTIVE_HIGH>;
-> +        gpio-fan,speed-map = <0    0>,
-> +                             <3000 1>,
-> +                             <6000 2>;
-> +        alarm-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
-> +    };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/clock/cortina,gemini-clock.h>
-> +    #include <dt-bindings/reset/cortina,gemini-reset.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    gpio2: gpio@4d000000 {
-> +      compatible = "cortina,gemini-gpio", "faraday,ftgpio010";
-> +      reg = <0x4d000000 0x100>;
-> +      interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-> +      resets = <&syscon GEMINI_RESET_GPIO0>;
-> +      clocks = <&syscon GEMINI_CLK_APB>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +    };
-> +    gpio_fan_cool: gpio_fan {
-> +      compatible = "gpio-fan";
-> +      gpios = <&gpio2 8 GPIO_ACTIVE_HIGH
-> +               &gpio2 1 GPIO_ACTIVE_HIGH>;
-> +      gpio-fan,speed-map = <0    0
-> +                           3000 1
-> +                           6000 2>;
-> +      alarm-gpios = <&gpio2 15 GPIO_ACTIVE_HIGH>;
-> +      #cooling-cells = <2>; /* min followed by max */
-> +    };
-> -- 
-> 2.34.1
+I checked the behaviour of copy_to_kernel_nofault() on arm, arm64, mips,
+powerpc, riscv, x86 kernels (which is pretty much everything where I
+know how to fire up qemu). All except arm gracefully handle an
+attempt to write to userspace (well, NULL actually) with
+copy_to_kernel_nofault() so I think there still a few more changes
+to fully fix this.
+
+Looks like we would need a slightly more assertive change, either adding
+a copy_to_kernel_nofault_allowed() or modifying the arm dabt handlers to
+avoid faults on userspace access.
+
+Any views on which is better?
+
+
+Daniel.
+
 > 
+> > From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
+> > From: Daniel Thompson <daniel.thompson@linaro.org>
+> > Date: Thu, 13 Jan 2022 09:34:45 +0000
+> > Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
+> >
+> > Currently copy_from_kernel_nofault() can actually fault (due to software
+> > PAN) if we attempt userspace access. In any case, the documented
+> > behaviour for this function is to return -ERANGE if we attempt an access
+> > outside of kernel space.
+> >
+> > Implementing copy_from_kernel_nofault_allowed() solves both these
+> > problems.
+> >
+> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
 > 
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>

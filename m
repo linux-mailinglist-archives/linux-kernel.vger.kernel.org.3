@@ -2,144 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3ED94A5C3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6050C4A5C44
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbiBAM2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:28:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:36506 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237630AbiBAM15 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:27:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04E2D113E;
-        Tue,  1 Feb 2022 04:27:57 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.45.192])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1A8373F73B;
-        Tue,  1 Feb 2022 04:27:52 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/hugetlb: Generalize ARCH_WANT_GENERAL_HUGETLB
-Date:   Tue,  1 Feb 2022 17:57:45 +0530
-Message-Id: <1643718465-4324-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S238083AbiBAM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:28:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22979 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237630AbiBAM2W (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 07:28:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643718502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gYsMOanhgag9FX9U5PUDWc3Rn4Habp49ag3te6WP1O0=;
+        b=OsQlSFnA6Pccor2foPJpl/OlbAXZmhQIEhqg8j92DCF/+jRAA7pM8qO168jgIknQUhYEIU
+        okTYtQxKp/Dw6ZRHK2rLYK0OEHPSSLomURZA3g6OzduFL00wmdp8WcPD2qPP/5XOf8sm41
+        rciEMl8vgGOPbR67PbskJRwjXu5V5Js=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-576-gYjaq2YeOfennkLyOcPGPg-1; Tue, 01 Feb 2022 07:28:21 -0500
+X-MC-Unique: gYjaq2YeOfennkLyOcPGPg-1
+Received: by mail-ed1-f72.google.com with SMTP id v15-20020a50a44f000000b004094f4a8f3bso8636658edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 04:28:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gYsMOanhgag9FX9U5PUDWc3Rn4Habp49ag3te6WP1O0=;
+        b=iYUhXnLae3q7eJC2tff0T52KZqF9FZOsNONh86tQCUensZtnVc7e2vEFaKwdRKH9Rw
+         yRr1dzMw7KRzGBf/6nA5rkzuAz/DYh74E2jIg/e7lZZXjZ/5sXqRzi+ZJK4TMxY+wK1k
+         bAxsRig19vZHoC+Id8/H8cPcha6Od8mMISi549VFaEvXAszhfw0do40jg2PYtz/x0RY9
+         G0RfjHrLLkyHEUjjvBpdwetqJha18mpp93xzNz1FG2l2JR9EaLIzrJPXcp56mtdY7Ad8
+         vBZyz8tm+OGn30S/nqyRm6mDzmoRCi7K9ZHWnYvgUlY2u1Bh9W01qbyjpZ9mk2qSvx8m
+         sDTw==
+X-Gm-Message-State: AOAM531R1nKzotLmeaY/s0j7mxx4n/nBwJsXlzeKlKsZeYbpDBW/yEax
+        ERnrwYS0VlzoINQ/9RmRdi0KTjGViBCO/eGJ0NkXXpJxQoBTw0sRmLrDypTf48Lk4lG5opAKIq1
+        KRIb3IqxbWcQC3KAezzGkoW0U
+X-Received: by 2002:a17:907:6091:: with SMTP id ht17mr20947054ejc.626.1643718500195;
+        Tue, 01 Feb 2022 04:28:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyRMhTfm6g/0pB4jH/vP9Y4MT+TpgfSycD16pvewkJM7tuG9Ae3/hbl+ctjuIB/GNDnbjbmrQ==
+X-Received: by 2002:a17:907:6091:: with SMTP id ht17mr20947035ejc.626.1643718500029;
+        Tue, 01 Feb 2022 04:28:20 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id s1sm19400809edt.49.2022.02.01.04.28.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 04:28:19 -0800 (PST)
+Message-ID: <13de6271-61bc-7138-15b3-9241508d94fa@redhat.com>
+Date:   Tue, 1 Feb 2022 13:28:18 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH kvm/queue v2 3/3] KVM: x86/pmu: Setup the
+ {inte|amd}_event_mapping[] when hardware_setup
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-4-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220117085307.93030-4-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARCH_WANT_GENERAL_HUGETLB config has duplicate definitions on platforms
-that subscribe it. Instead make it a generic config option which can be
-selected on applicable platforms when required.
+On 1/17/22 09:53, Like Xu wrote:
+> +
+> +	for (i = 0; i < PERF_COUNT_HW_MAX; i++) {
+> +		config = perf_get_hw_event_config(i) & 0xFFFFULL;
+> +
+> +		kernel_hw_events[i] = (struct kvm_event_hw_type_mapping){
+> +			.eventsel = config & ARCH_PERFMON_EVENTSEL_EVENT,
+> +			.unit_mask = (config & ARCH_PERFMON_EVENTSEL_UMASK) >> 8,
+> +			.event_type = i,
+> +		};
 
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.17-rc2
+Should event_type be PERF_COUNT_HW_MAX if config is zero?
 
- arch/arm/Kconfig   | 4 +---
- arch/riscv/Kconfig | 4 +---
- arch/x86/Kconfig   | 4 +---
- mm/Kconfig         | 3 +++
- 4 files changed, 6 insertions(+), 9 deletions(-)
+Thanks,
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 4c97cb40eebb..ba6ba78a9cb6 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -37,6 +37,7 @@ config ARM
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-+	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select BINFMT_FLAT_ARGVP_ENVP_ON_STACK
-@@ -1508,9 +1509,6 @@ config HW_PERF_EVENTS
- 	def_bool y
- 	depends on ARM_PMU
- 
--config ARCH_WANT_GENERAL_HUGETLB
--	def_bool y
--
- config ARM_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..0804b9a11934 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -40,6 +40,7 @@ config RISCV
- 	select ARCH_USE_MEMTEST
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
- 	select ARCH_WANT_FRAME_POINTERS
-+	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
- 	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
- 	select BUILDTIME_TABLE_SORT if MMU
-@@ -171,9 +172,6 @@ config ARCH_SPARSEMEM_ENABLE
- config ARCH_SELECT_MEMORY_MODEL
- 	def_bool ARCH_SPARSEMEM_ENABLE
- 
--config ARCH_WANT_GENERAL_HUGETLB
--	def_bool y
--
- config ARCH_SUPPORTS_UPROBES
- 	def_bool y
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9f5bd41bf660..37372cd5c9a7 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -118,6 +118,7 @@ config X86
- 	select ARCH_WANT_DEFAULT_BPF_JIT	if X86_64
- 	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
- 	select ARCH_WANTS_NO_INSTR
-+	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_HUGE_PMD_SHARE
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_THP_SWAP		if X86_64
-@@ -347,9 +348,6 @@ config ARCH_NR_GPIO
- config ARCH_SUSPEND_POSSIBLE
- 	def_bool y
- 
--config ARCH_WANT_GENERAL_HUGETLB
--	def_bool y
--
- config AUDIT_ARCH
- 	def_bool y if X86_64
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 3326ee3903f3..46e460164d91 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -411,6 +411,9 @@ choice
- 	  benefit.
- endchoice
- 
-+config ARCH_WANT_GENERAL_HUGETLB
-+	bool
-+
- config ARCH_WANTS_THP_SWAP
- 	def_bool n
- 
--- 
-2.25.1
+Paolo
 

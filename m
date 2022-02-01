@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C094A5553
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAF34A5557
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiBACml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 21:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S232713AbiBACnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 21:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiBACmk (ORCPT
+        with ESMTP id S232663AbiBACnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:42:40 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891D2C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:42:40 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id m4so49381810ejb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:42:40 -0800 (PST)
+        Mon, 31 Jan 2022 21:43:21 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF30C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:43:21 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id p12so31029446edq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:43:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=LSd1fDrOzA4Dpcv+XNORtddH3JxeWWMsppEtjfZhhrw=;
-        b=BYaxG+0tXuPpIfa6C23ZIGmte2gD6VJFdpAmSvBZ3N0s/kODdzYUEF8RUj1vuSLPTo
-         h/+AfGAsiL2Q0Oj/pY3+lN8kmgeBvSK0wxB9jvIxnOmJkqP9r1dJnjY6HQgQZeUsLMhq
-         gUKoXIgsK9MxqgVhoGt1YfH1yj5mIID8NoXrE4fxz/rTFbw4Cvo4Rze23vokUbW2PB0W
-         3gcDO1ebPicdTyzmCPzFHE07oSancb+5aQADB47a0PRoziULZAsbBc/o1hgJt36GBKds
-         CXoOwb6+BLlInbqx0/ylFWpY3FIUFxusx1PCJr6eU5cLUdxPIcuXdv+9xbaiYy9OX0Wy
-         jOIA==
+        bh=XqF1rJaFoyxOeMUVfeClBKFbeB8Ygd43YBU7XBvjBqU=;
+        b=ZOLvp2d/7YIAQYAdX3NspDgY3X82A39Fk4642eFRdULLvuVPHUSHzmup3Y2V8jwNOQ
+         EnrYZ0RxDiSVao8f6U2iDV2+HkLqjlDOJRLuqogudscUQJAR8datn8x1bWKzqp79V86x
+         xkwVl3mL9ElZLsvtQVGbPHkDQfvFMwLlFwcDDP5w4jXfp71m2Gi5Up1MWGhgtz0EgmhA
+         CQmxiEjWe18fE2c/VZacJyWar/NySfCQG8GbxMBv1Sj6yoC547i0KZQWEZpTOZx8S6y2
+         CvXOiNf2LKQcvLgZqO1aWMBivO0Rh8ioVKANaqCApQeObYFs+aC/V7YBxjrL9VEZhUkt
+         VO3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LSd1fDrOzA4Dpcv+XNORtddH3JxeWWMsppEtjfZhhrw=;
-        b=MwVzNU+jsk2XqwHKJBM97qEStdBU32BDS/bbmBz9SgeE7Eq0/qbcdel33iqRU18S0W
-         RjpE77oRYyZLoi39LKvTpm0oFn3N073iiEljO2NAS+tqGAFRNeZpX+DhMgcHT0t0iVbv
-         NoNDKsMeKovHd3rMghhgP0VXI8WO/LCmfPhwTgIEvCwv6BCQAHM1KwCbVDsi/wdr8q7M
-         JAv0JXTyxsV0ZqpXTutperM4OkUesM5/OSl27/HwT7iOUy4kl7Z9dy3uJADuK/fbU9n0
-         8/ivYwJDmM269pfIpfxMWiqcXyHP/f10XQPmMPbJbczxssRoheJhhQbNaW4B0tc1zo/Z
-         unNw==
-X-Gm-Message-State: AOAM530unPh1BlqkT2EsxAO6AwSlyIuxsKk35yFekZozr1lbxX6xSFVe
-        g2g9rXR5OWI/rVANWzUbUBE=
-X-Google-Smtp-Source: ABdhPJyuN1wfBF6igMEAFuxiSZEGqTTJ6jx591QRlEMlgkDxs4u+SaRp29ssmVnlRUCdqfOPxPRtQQ==
-X-Received: by 2002:a17:907:1c0b:: with SMTP id nc11mr19037817ejc.665.1643683359160;
-        Mon, 31 Jan 2022 18:42:39 -0800 (PST)
+        bh=XqF1rJaFoyxOeMUVfeClBKFbeB8Ygd43YBU7XBvjBqU=;
+        b=YVAElFWr4LlgWhsMiDb2zuIStvGEYh7z29EbX/XPeOJstb9wliug6qKLgDnbuUMQN1
+         WwmjLD/4BhvWV2Di5bvX1Ipy9aR+mT9SswYwhdbccdX0Pga7D68jLQXeqQwXjPfaiPxL
+         WRzLMqsGJ9pdowPbXgdxRlVHpcjar1B/k1dlO4hDVkMP02Y5Swq/8+5pNMa+cweRTDxh
+         Nzo4zvP3q3LcstTZcTzhBmi/olf4CUOW3/vEYXC0GnQ0VKqE1uA48/65KXoA3oCgXDtU
+         L5F4+lyNYE7moaqKfEpzFCoeEsBUjtMSuv/yQ9RXMaR0cl+nxcCJf7GfojepTuuG4Tk3
+         3LNg==
+X-Gm-Message-State: AOAM532nuNeHGtQFQGfTEWZ0FBFzHcXQwrTqtYRBI+4tA6sjJWISWd0x
+        HPNjNn/9r8ENpiv20t8puxY=
+X-Google-Smtp-Source: ABdhPJyI/L7A8l+kLye8rlYfaD5skghTVAICvHtFbxbJj9C+ZhJPvXZkzKLSVcEcvHjTM15c5gkuCQ==
+X-Received: by 2002:aa7:d1d4:: with SMTP id g20mr23404764edp.296.1643683399795;
+        Mon, 31 Jan 2022 18:43:19 -0800 (PST)
 Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a7sm18823701edr.34.2022.01.31.18.42.38
+        by smtp.gmail.com with ESMTPSA id k23sm14053747ejr.65.2022.01.31.18.43.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 31 Jan 2022 18:42:38 -0800 (PST)
-Date:   Tue, 1 Feb 2022 02:42:38 +0000
+        Mon, 31 Jan 2022 18:43:19 -0800 (PST)
+Date:   Tue, 1 Feb 2022 02:43:19 +0000
 From:   Wei Yang <richard.weiyang@gmail.com>
 To:     Michal Hocko <mhocko@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
@@ -63,38 +63,31 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
         Wei Yang <richard.weiyang@gmail.com>,
         Rafael Aquini <raquini@redhat.com>,
         Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH 4/6] mm, memory_hotplug: reorganize new pgdat
- initialization
-Message-ID: <20220201024238.ihq477dgayy6oxeg@master>
+Subject: Re: [PATCH 5/6] mm: make free_area_init_node aware of memory less
+ nodes
+Message-ID: <20220201024319.5p3dhud5x3efs4f7@master>
 Reply-To: Wei Yang <richard.weiyang@gmail.com>
 References: <20220127085305.20890-1-mhocko@kernel.org>
- <20220127085305.20890-5-mhocko@kernel.org>
+ <20220127085305.20890-6-mhocko@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127085305.20890-5-mhocko@kernel.org>
+In-Reply-To: <20220127085305.20890-6-mhocko@kernel.org>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 09:53:03AM +0100, Michal Hocko wrote:
+On Thu, Jan 27, 2022 at 09:53:04AM +0100, Michal Hocko wrote:
 >From: Michal Hocko <mhocko@suse.com>
 >
->When a !node_online node is brought up it needs a hotplug specific
->initialization because the node could be either uninitialized yet or it
->could have been recycled after previous hotremove. hotadd_init_pgdat is
->responsible for that.
+>free_area_init_node is also called from memory less node initialization
+>path (free_area_init_memoryless_node). It doesn't really make much sense
+>to display the physical memory range for those nodes:
+>Initmem setup node XX [mem 0x0000000000000000-0x0000000000000000]
 >
->Internal pgdat state is initialized at two places currently
->	- hotadd_init_pgdat
->	- free_area_init_core_hotplug
->There is no real clear cut what should go where but this patch's chosen to
->move the whole internal state initialization into free_area_init_core_hotplug.
->hotadd_init_pgdat is still responsible to pull all the parts together -
->most notably to initialize zonelists because those depend on the overall topology.
->
->This patch doesn't introduce any functional change.
+>Instead be explicit that the node is memoryless:
+>Initmem setup node XX as memoryless
 >
 >Acked-by: Rafael Aquini <raquini@redhat.com>
 >Signed-off-by: Michal Hocko <mhocko@suse.com>

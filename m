@@ -2,149 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F316C4A5E94
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843E84A5E9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237823AbiBAOwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:52:51 -0500
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:44629 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236688AbiBAOwu (ORCPT
+        id S239507AbiBAOxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:53:32 -0500
+Received: from brightrain.aerifal.cx ([216.12.86.13]:58246 "EHLO
+        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239511AbiBAOx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:52:50 -0500
-Received: by mail-yb1-f181.google.com with SMTP id r65so51605829ybc.11;
-        Tue, 01 Feb 2022 06:52:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yriV3jrREEgzkPR54dv4q5A+98LvC0ePS/Zx7NSyEBA=;
-        b=4Z4UcrrVlRSgtlY90JBin8w2ceUpKwnPmfgpq6dd5utdBDO2JKv4XG58fjk+6UYDmC
-         ewzcEYj7ap0rEECId92qrzkAROwPxEkyp8TG8qBAiwSOEQhqodgcyVika6k1p2qZ87oy
-         Z/SYaD1KJUBvyA6nxbbULPuM9hzDLsHWU14BcZjtCdUCptAcFm5D5ub0FvVp6zpbzOzy
-         O2iwuGvhPpdA9z5FwakwMmEDQfAzR6TtBB+dy3F9uo5pnIlNFWCiUN1aVBoABASh7k01
-         4GjCS4bIBO5yznRnPt5DUzaFgAqAGWBO9SxBCSIboLJUgjwKOs7uVUHhUk3zckzIaNNU
-         AFnw==
-X-Gm-Message-State: AOAM532yoWyrtHIR6YmX9qdt8L3PfRgVUy+clnu3VcnLNTKlIR52sLZA
-        +0uf5s4haR21L08euLKFTyqgvBnfk73LdahRhR6O1kI0
-X-Google-Smtp-Source: ABdhPJwaJImvyobUjfAmbGN6jDMtgtsvo6mZe7/B6yfYsZC0x9D8AMv6LnK9U7CnT98B2f8aS4FAxVzsxPw5ZySwc+U=
-X-Received: by 2002:a05:6902:1507:: with SMTP id q7mr38572163ybu.343.1643727169529;
- Tue, 01 Feb 2022 06:52:49 -0800 (PST)
+        Tue, 1 Feb 2022 09:53:28 -0500
+Date:   Tue, 1 Feb 2022 09:53:25 -0500
+From:   Rich Felker <dalias@libc.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] exec: Force single empty string when argv is empty
+Message-ID: <20220201145324.GA29634@brightrain.aerifal.cx>
+References: <20220201000947.2453721-1-keescook@chromium.org>
 MIME-Version: 1.0
-References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
- <20220121172431.6876-2-sbinding@opensource.cirrus.com> <c821953a-6572-d60d-6a00-fccd541268c5@redhat.com>
-In-Reply-To: <c821953a-6572-d60d-6a00-fccd541268c5@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Feb 2022 15:52:38 +0100
-Message-ID: <CAJZ5v0jGqUvZS113VewgsGm8cMJc2B=M5KyqmOHTPNy+R8KeEQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/9] spi: Make spi_alloc_device and spi_add_device
- public again
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 3:26 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 1/21/22 18:24, Stefan Binding wrote:
-> > This functions were previously made private since they
-> > were not used. However, these functions will be needed
-> > again.
-> >
-> > Partial revert of commit da21fde0fdb3
-> > ("spi: Make several public functions private to spi.c")
-> >
-> > Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
->
-> Thanks, patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
+> Quoting[1] Ariadne Conill:
+> 
+> "In several other operating systems, it is a hard requirement that the
+> second argument to execve(2) be the name of a program, thus prohibiting
+> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+> but it is not an explicit requirement[2]:
+> 
+>     The argument arg0 should point to a filename string that is
+>     associated with the process being started by one of the exec
+>     functions.
+> ....
+> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
+> but there was no consensus to support fixing this issue then.
+> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
+> of this bug in a shellcode, we can reconsider.
+> 
+> This issue is being tracked in the KSPP issue tracker[5]."
+> 
+> While the initial code searches[6][7] turned up what appeared to be
+> mostly corner case tests, trying to that just reject argv == NULL
+> (or an immediately terminated pointer list) quickly started tripping[8]
+> existing userspace programs.
+> 
+> The next best approach is forcing a single empty string into argv and
+> adjusting argc to match. The number of programs depending on argc == 0
+> seems a smaller set than those calling execve with a NULL argv.
+> 
+> Account for the additional stack space in bprm_stack_limits(). Inject an
+> empty string when argc == 0 (and set argc = 1). Warn about the case so
+> userspace has some notice about the change:
+> 
+>     process './argc0' launched './argc0' with NULL argv: empty string added
+> 
+> Additionally WARN() and reject NULL argv usage for kernel threads.
+> 
+> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
+> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+> [5] https://github.com/KSPP/linux/issues/176
+> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
+> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
+> 
+> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  fs/exec.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/exec.c b/fs/exec.c
+> index 79f2c9483302..bbf3aadf7ce1 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -495,8 +495,14 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
+>  	 * the stack. They aren't stored until much later when we can't
+>  	 * signal to the parent that the child has run out of stack space.
+>  	 * Instead, calculate it here so it's possible to fail gracefully.
+> +	 *
+> +	 * In the case of argc = 0, make sure there is space for adding a
+> +	 * empty string (which will bump argc to 1), to ensure confused
+> +	 * userspace programs don't start processing from argv[1], thinking
+> +	 * argc can never be 0, to keep them from walking envp by accident.
+> +	 * See do_execveat_common().
+>  	 */
+> -	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
+> +	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
 
-The series also looks good to me from the ACPI side, so what tree
-should it go into?
+From #musl:
 
-> > ---
-> >  drivers/spi/spi.c       |  6 ++++--
-> >  include/linux/spi/spi.h | 12 ++++++++++++
-> >  2 files changed, 16 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 4599b121d744..1eb84101c4ad 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -532,7 +532,7 @@ static DEFINE_MUTEX(board_lock);
-> >   *
-> >   * Return: a pointer to the new device, or NULL.
-> >   */
-> > -static struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
-> > +struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
-> >  {
-> >       struct spi_device       *spi;
-> >
-> > @@ -557,6 +557,7 @@ static struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
-> >       device_initialize(&spi->dev);
-> >       return spi;
-> >  }
-> > +EXPORT_SYMBOL_GPL(spi_alloc_device);
-> >
-> >  static void spi_dev_set_name(struct spi_device *spi)
-> >  {
-> > @@ -652,7 +653,7 @@ static int __spi_add_device(struct spi_device *spi)
-> >   *
-> >   * Return: 0 on success; negative errno on failure
-> >   */
-> > -static int spi_add_device(struct spi_device *spi)
-> > +int spi_add_device(struct spi_device *spi)
-> >  {
-> >       struct spi_controller *ctlr = spi->controller;
-> >       struct device *dev = ctlr->dev.parent;
-> > @@ -673,6 +674,7 @@ static int spi_add_device(struct spi_device *spi)
-> >       mutex_unlock(&ctlr->add_lock);
-> >       return status;
-> >  }
-> > +EXPORT_SYMBOL_GPL(spi_add_device);
-> >
-> >  static int spi_add_device_locked(struct spi_device *spi)
-> >  {
-> > diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> > index 7ab3fed7b804..0346a3ff27fd 100644
-> > --- a/include/linux/spi/spi.h
-> > +++ b/include/linux/spi/spi.h
-> > @@ -1452,7 +1452,19 @@ spi_register_board_info(struct spi_board_info const *info, unsigned n)
-> >   * use spi_new_device() to describe each device.  You can also call
-> >   * spi_unregister_device() to start making that device vanish, but
-> >   * normally that would be handled by spi_unregister_controller().
-> > + *
-> > + * You can also use spi_alloc_device() and spi_add_device() to use a two
-> > + * stage registration sequence for each spi_device. This gives the caller
-> > + * some more control over the spi_device structure before it is registered,
-> > + * but requires that caller to initialize fields that would otherwise
-> > + * be defined using the board info.
-> >   */
-> > +extern struct spi_device *
-> > +spi_alloc_device(struct spi_controller *ctlr);
-> > +
-> > +extern int
-> > +spi_add_device(struct spi_device *spi);
-> > +
-> >  extern struct spi_device *
-> >  spi_new_device(struct spi_controller *, struct spi_board_info *);
-> >
-> >
->
+<mixi> kees: shouldn't the min(bprm->argc, 1) be max(...) in your patch?
+
+I'm pretty sure without fixing that, you're introducing a giant vuln
+here. I believe this is the second time a patch attempting to fix this
+non-vuln has proposed adding a new vuln...
+
+Rich

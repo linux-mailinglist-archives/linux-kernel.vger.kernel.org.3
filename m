@@ -2,109 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590834A555D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B556C4A5566
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 04:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiBAC4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 21:56:14 -0500
-Received: from mga02.intel.com ([134.134.136.20]:28241 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229519AbiBAC4N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:56:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643684173; x=1675220173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/j4MttSatOc0Tx7VFvWr6LM+70zW2UZKPfizy8rvSjg=;
-  b=kv29FfkrvC526TMZ9cYH7PnjikiLlrqNT5QjPkwC/3/1DQiGH7fuZIo/
-   8hbJiKrykfWHA97Sdtzkfefuk06DhMa1/IXlvJhdjZCuQZ/K299RVLLY5
-   SuPmGk5VYBxLIdKJEVmlgR5C55N3DkEw9URwoe8yUSRUnv9vNIzLX4QjI
-   LSHebuEKDqWwgGEu8mq7eLE/r5GVOZFownED6vxzNoLpwWD9rZqc7iGa3
-   Qa3+OBCwO7e+qAId9dta8eKwmUcwTl2LVHUq1EL2hUZ0+sBglxfFxSOrI
-   u/NYCkR1vuarRqH5cuPgb/8ABIKP20Wv9kWh1E5rsm8GYPUUu2zl9w0UA
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="235003623"
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="235003623"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 18:56:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,332,1635231600"; 
-   d="scan'208";a="698254737"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 31 Jan 2022 18:56:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEjL0-000SfV-0G; Tue, 01 Feb 2022 02:56:10 +0000
-Date:   Tue, 1 Feb 2022 10:55:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tomohito Esaki <etom@igel.co.jp>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [drm-misc:drm-misc-next 3/4] drivers/gpu/drm/sprd/sprd_drm.c:46:19:
- error: no member named 'allow_fb_modifiers' in 'struct drm_mode_config'
-Message-ID: <202202011014.rBztJFU3-lkp@intel.com>
+        id S232791AbiBADDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 22:03:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55230 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbiBADDM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 31 Jan 2022 22:03:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B24F6137A;
+        Tue,  1 Feb 2022 03:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0256BC36AE2;
+        Tue,  1 Feb 2022 03:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643684591;
+        bh=XVG1nkFm0M1TCidUznP2TjJ4k7rtxluAMuLqFYECopI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZQzE690KnsPNVYlRelHHw4EeFA4Jh/r5vKcvtuiOydieiU8Liq2oqgCNk7gtUcHV4
+         EilIbP1NDsAjYPZGEFwo/FmmGbNq/GujzXKx4pPCZdj7FDTccE1/8SrT4/BX+oSV+Z
+         vm5X+RlBGs/dXhEliSU20eYIh4CgbHKLXjuX6FiHaW6GrG80PDOHU9XpO1i1jmAvQ9
+         LptLGGrVzo2TsFbzuPH6Y+9iql+3HsAO/6AIZa2qeUW2iO+CST1ze0OCiRP9iV7dMc
+         Ml0Xt6aCQpcPnot6fpI+lu4SestIj4cUA6n68/KfrC+JgKMTPuRh24dFzsAq+hMG6z
+         gXhJhGK+x+wVg==
+Received: by mail-vk1-f174.google.com with SMTP id b77so9581189vka.11;
+        Mon, 31 Jan 2022 19:03:10 -0800 (PST)
+X-Gm-Message-State: AOAM533yqYbLPDRCKyx50McByivSeYKBpG//ZS/tRMf+8mpEttXFXvjH
+        8ou9qnTUv222yJmVZs2qBInlBAVxSRTlpMvBQfE=
+X-Google-Smtp-Source: ABdhPJyTwJmAqC5mahTByendT7OWLMOo9DeE/UbaKoq5G8/wz8pyIXc4EKka2k1cOl+QuJDHOAJtlYKIILY9yL9r3E4=
+X-Received: by 2002:a1f:640e:: with SMTP id y14mr9686384vkb.2.1643684589884;
+ Mon, 31 Jan 2022 19:03:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-5-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-5-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 1 Feb 2022 11:02:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
+Message-ID: <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   d80976d9ffd9d7f89a26134a299b236910477f3b
-commit: 3d082157a24216ca084082ce421a37d14ecfcfad [3/4] drm: remove allow_fb_modifiers
-config: arm-buildonly-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011014.rBztJFU3-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout 3d082157a24216ca084082ce421a37d14ecfcfad
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/sprd/
+On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> The F_GETLK64/F_SETLK64/F_SETLKW64 fcntl opcodes are only implemented
+> for the 32-bit syscall APIs, but are also needed for compat handling
+> on 64-bit kernels.
+>
+> Consolidate them in unistd.h instead of definining the internal compat
+> definitions in compat.h, which is rather errror prone (e.g. parisc
+> gets the values wrong currently).
+>
+> Note that before this change they were never visible to userspace due
+> to the fact that CONFIG_64BIT is only set for kernel builds.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/arm64/include/asm/compat.h        | 4 ----
+>  arch/mips/include/asm/compat.h         | 4 ----
+>  arch/mips/include/uapi/asm/fcntl.h     | 4 ++--
+>  arch/powerpc/include/asm/compat.h      | 4 ----
+>  arch/s390/include/asm/compat.h         | 4 ----
+>  arch/sparc/include/asm/compat.h        | 4 ----
+>  arch/x86/include/asm/compat.h          | 4 ----
+>  include/uapi/asm-generic/fcntl.h       | 4 ++--
+>  tools/include/uapi/asm-generic/fcntl.h | 2 --
+>  9 files changed, 4 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
+> index eaa6ca062d89b..2763287654081 100644
+> --- a/arch/arm64/include/asm/compat.h
+> +++ b/arch/arm64/include/asm/compat.h
+> @@ -73,10 +73,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
+> index bbb3bc5a42fd8..6a350c1f70d7e 100644
+> --- a/arch/mips/include/asm/compat.h
+> +++ b/arch/mips/include/asm/compat.h
+> @@ -65,10 +65,6 @@ struct compat_flock {
+>         s32             pad[4];
+>  };
+>
+> -#define F_GETLK64      33
+> -#define F_SETLK64      34
+> -#define F_SETLKW64     35
+Oops we can't remove above, right?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
+> index 9e44ac810db94..0369a38e3d4f2 100644
+> --- a/arch/mips/include/uapi/asm/fcntl.h
+> +++ b/arch/mips/include/uapi/asm/fcntl.h
+> @@ -44,11 +44,11 @@
+>  #define F_SETOWN       24      /*  for sockets. */
+>  #define F_GETOWN       23      /*  for sockets. */
+>
+> -#ifndef __mips64
+> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+>  #define F_GETLK64      33      /*  using 'struct flock64' */
+>  #define F_SETLK64      34
+>  #define F_SETLKW64     35
+> -#endif
+> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+>
+>  #if _MIPS_SIM != _MIPS_SIM_ABI64
+>  #define __ARCH_FLOCK_EXTRA_SYSID       long l_sysid;
+> diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
+> index 7afc96fb6524b..83d8f70779cbc 100644
+> --- a/arch/powerpc/include/asm/compat.h
+> +++ b/arch/powerpc/include/asm/compat.h
+> @@ -52,10 +52,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
+> index cdc7ae72529d8..0f14b3188b1bb 100644
+> --- a/arch/s390/include/asm/compat.h
+> +++ b/arch/s390/include/asm/compat.h
+> @@ -110,10 +110,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64       12
+> -#define F_SETLK64       13
+> -#define F_SETLKW64      14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
+> index bd949fcf9d63b..108078751bb5a 100644
+> --- a/arch/sparc/include/asm/compat.h
+> +++ b/arch/sparc/include/asm/compat.h
+> @@ -84,10 +84,6 @@ struct compat_flock {
+>         short           __unused;
+>  };
+>
+> -#define F_GETLK64      12
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+> index 7516e4199b3c6..8d19a212f4f26 100644
+> --- a/arch/x86/include/asm/compat.h
+> +++ b/arch/x86/include/asm/compat.h
+> @@ -58,10 +58,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  /*
+>   * IA32 uses 4 byte alignment for 64 bit quantities,
+>   * so we need to pack this structure.
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index 98f4ff165b776..8c05d3d89ff18 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -116,13 +116,13 @@
+>  #define F_GETSIG       11      /* for sockets. */
+>  #endif
+>
+> -#ifndef CONFIG_64BIT
+> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+>  #ifndef F_GETLK64
+>  #define F_GETLK64      12      /*  using 'struct flock64' */
+>  #define F_SETLK64      13
+>  #define F_SETLKW64     14
+>  #endif
+> -#endif
+> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+>
+>  #ifndef F_SETOWN_EX
+>  #define F_SETOWN_EX    15
+> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+> index bf961a71802e0..6e16722026f39 100644
+> --- a/tools/include/uapi/asm-generic/fcntl.h
+> +++ b/tools/include/uapi/asm-generic/fcntl.h
+> @@ -115,13 +115,11 @@
+>  #define F_GETSIG       11      /* for sockets. */
+>  #endif
+>
+> -#ifndef CONFIG_64BIT
+>  #ifndef F_GETLK64
+>  #define F_GETLK64      12      /*  using 'struct flock64' */
+>  #define F_SETLK64      13
+>  #define F_SETLKW64     14
+>  #endif
+> -#endif
+>
+>  #ifndef F_SETOWN_EX
+>  #define F_SETOWN_EX    15
+> --
+> 2.30.2
+>
 
-All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/sprd/sprd_drm.c:46:19: error: no member named 'allow_fb_modifiers' in 'struct drm_mode_config'
-           drm->mode_config.allow_fb_modifiers = true;
-           ~~~~~~~~~~~~~~~~ ^
-   1 error generated.
+-- 
+Best Regards
+ Guo Ren
 
-
-vim +46 drivers/gpu/drm/sprd/sprd_drm.c
-
-43531edd53f07c Kevin Tang 2021-12-07  39  
-43531edd53f07c Kevin Tang 2021-12-07  40  static void sprd_drm_mode_config_init(struct drm_device *drm)
-43531edd53f07c Kevin Tang 2021-12-07  41  {
-43531edd53f07c Kevin Tang 2021-12-07  42  	drm->mode_config.min_width = 0;
-43531edd53f07c Kevin Tang 2021-12-07  43  	drm->mode_config.min_height = 0;
-43531edd53f07c Kevin Tang 2021-12-07  44  	drm->mode_config.max_width = 8192;
-43531edd53f07c Kevin Tang 2021-12-07  45  	drm->mode_config.max_height = 8192;
-43531edd53f07c Kevin Tang 2021-12-07 @46  	drm->mode_config.allow_fb_modifiers = true;
-43531edd53f07c Kevin Tang 2021-12-07  47  
-43531edd53f07c Kevin Tang 2021-12-07  48  	drm->mode_config.funcs = &sprd_drm_mode_config_funcs;
-43531edd53f07c Kevin Tang 2021-12-07  49  	drm->mode_config.helper_private = &sprd_drm_mode_config_helper;
-43531edd53f07c Kevin Tang 2021-12-07  50  }
-43531edd53f07c Kevin Tang 2021-12-07  51  
-
-:::::: The code at line 46 was first introduced by commit
-:::::: 43531edd53f07cbe977a0b33dea6dd6c29b21fea drm/sprd: add Unisoc's drm kms master
-
-:::::: TO: Kevin Tang <kevin3.tang@gmail.com>
-:::::: CC: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ML: https://lore.kernel.org/linux-csky/

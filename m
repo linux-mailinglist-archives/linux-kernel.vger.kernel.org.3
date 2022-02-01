@@ -2,143 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 415914A63C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB60D4A63CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234674AbiBAS13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbiBAS11 (ORCPT
+        id S236388AbiBAS14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:27:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48748 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241009AbiBAS1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:27:27 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08D2C06173B;
-        Tue,  1 Feb 2022 10:27:26 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id k25so10203469qtp.4;
-        Tue, 01 Feb 2022 10:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4fU16CwaNXSv04OsiOZ3YMb430l73X6vlu4kJVwG20k=;
-        b=KYJNmKkb4p91XXQbFqsjbRL25/Mko2MtELbhOCsWZPoJbAPJXXoBWGymf5u49D7bzD
-         opUZyhYoE+d1dYl9LyUf6N91v6sid6FJRpcSIxBzuS0zCu/0TRa11IAyTKSKodN+lKdy
-         5ooQJfxuXAk52C2060I+Bbmc+5K0y4+FHWoSuTqr4mTMl8p7oH+HF6wlaD54KMWnCmVE
-         jzHkloOW5SPIpxHurKn8cnzwLZIGX5/uOXzmGJk60qaTIZeQKHXaElGKpTMvTDh9ZbRK
-         3eHllDv/IoaaVAWtHNvyjX/OzMVJzUolXDIl1AGsnLfklHGbftnrekFmlKBmUtdJmQGK
-         VfGQ==
+        Tue, 1 Feb 2022 13:27:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643740067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CZNaYTZmYX8SAV2IvxTXhkNs0jj6KRq86m7Q14LMjvE=;
+        b=cfcgZZ5QoWr3ERX6OXl2YACg4rQZ8b6eGByzSe+csNMLay5EDmd2oqfhxVuX7Vh6SmMyeb
+        0QSYIDFc67jSTNQWQD2PyOeAoo4RdOFyzebx6zhQddJeY0/l4zojaf5lu8wPmx3vDjj06T
+        uKQQbCc8aGC3Cm5SiDwPSjD1XnENaVQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-gXB-erqKMt2uT9F7rA_BWg-1; Tue, 01 Feb 2022 13:27:46 -0500
+X-MC-Unique: gXB-erqKMt2uT9F7rA_BWg-1
+Received: by mail-wm1-f69.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so2081021wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:27:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4fU16CwaNXSv04OsiOZ3YMb430l73X6vlu4kJVwG20k=;
-        b=S0CFwpDUeMnuNrxu0tnbFx87eEnWDW3UdFuIf3e79LsUUkaGNHabYmEuXPS2DW7j4C
-         lpIBCWjaWJAAJYL7L81Y7g4rNqTCdkniP+dyTf8o7rI08Jm1RI4+a4zL8o9gVafLWhLs
-         XiKI02RpDEgxXna19SZGJRPzfF2dwwJANRQ4OvrWPSxqcvUby37hjT/4E6QDsskbtSOL
-         OJGVjIfHptgNP3HaYeTvF2zLml+TjgzXtgqqQrtyHnhbxhlT8DyhZnypRHK1BoU4bw+I
-         ujQ6UTJyhQT9H8s6Z8FopxI5T4kc9AyJu2uYdMWr5zWY7IEhUV0k9X38Hee0+6Kn/Qey
-         f25A==
-X-Gm-Message-State: AOAM531DegDFliwww1eoRzoRoLN57M4Y8758+zTZBKTYLw5ab42jh6VR
-        VExy+FaqPP/4M0K0nZK6dU4=
-X-Google-Smtp-Source: ABdhPJw2N7U22+7/5sOSlB4KcU3zAXRTpYadOqzWHPeG7KXP4+sTogcCLvRoJthCH/Opo9aHr/BeHg==
-X-Received: by 2002:a05:622a:40e:: with SMTP id n14mr3047058qtx.189.1643740046137;
-        Tue, 01 Feb 2022 10:27:26 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id ay12sm3492549qkb.127.2022.02.01.10.27.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 10:27:25 -0800 (PST)
-Subject: Re: [PATCH 1/1] of: unittest: add program to process EXPECT messages
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201181413.2719955-1-frowand.list@gmail.com>
-Message-ID: <3b1b29eb-5c8e-497a-1688-fa9df80dfd6e@gmail.com>
-Date:   Tue, 1 Feb 2022 12:27:24 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CZNaYTZmYX8SAV2IvxTXhkNs0jj6KRq86m7Q14LMjvE=;
+        b=rI3uelo6p61mv5n7Z3VPpnOm7PjRo4TTkMcDEUgSriiphpEKMKtiJ7aV5OISsaoRf+
+         MWUYcMCL6fu52zW8ZRBiZz4Qq1LiDVSDGFy8d57KAHxtn33CjRfKMlteTm/DeZDI9KS2
+         cJlVmq2Kv581ub6zR1L/BZN60xbbnJ5q4xTgmZBZ8N3so8Znr30oGuf7Q9Smx62Vl+t5
+         v3x1HBQm6UR9Xm9nt85hEzluQBpVhneWF/L9VLWrpBt03n/MtnU8ltw8D7rMAXBaSuqd
+         CFD2BYEK5DOeCHhkXKBqg9bZ3/rMdUqA35xiRokBDjcilWAaqzd/7I+wZu0ONoq76zcI
+         lYWA==
+X-Gm-Message-State: AOAM531yTOWyECKX5cw/WulxiLJO5j0lfvmjxpAUXv/T8zSiadliKs2W
+        vipyHgfB90RNUZSqk2wO3N4aVBHCfs84I6y5hKZ+v8erboZdCC0wfy9RoWqmbMzYaOo6h5v+USE
+        NykIlLeWcrjsbHzrCe7d34qfK
+X-Received: by 2002:a5d:5443:: with SMTP id w3mr22607761wrv.188.1643740065030;
+        Tue, 01 Feb 2022 10:27:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzoRnz9FX5T4stkcbEepAQH0Vaob3Ap3Q0yHX7Zr0nuN2RMKU9RMxJWLUqZMqXyQ2okix3BMQ==
+X-Received: by 2002:a5d:5443:: with SMTP id w3mr22607734wrv.188.1643740064752;
+        Tue, 01 Feb 2022 10:27:44 -0800 (PST)
+Received: from redhat.com ([2.55.147.35])
+        by smtp.gmail.com with ESMTPSA id m64sm2760020wmm.31.2022.02.01.10.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 10:27:44 -0800 (PST)
+Date:   Tue, 1 Feb 2022 13:27:38 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 3/9] [RFC] virtio_ring: Embed a wrap counter in opaque
+ poll index value
+Message-ID: <20220201131434-mutt-send-email-mst@kernel.org>
+References: <20220201171601.53316-1-cristian.marussi@arm.com>
+ <20220201171601.53316-4-cristian.marussi@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20220201181413.2719955-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201171601.53316-4-cristian.marussi@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 12:14 PM, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
+Looks correct, thanks. Some minor comments below:
+
+On Tue, Feb 01, 2022 at 05:15:55PM +0000, Cristian Marussi wrote:
+> Exported API virtqueue_poll() can be used to support polling mode operation
+> on top of virtio layer if needed; currently the parameter last_used_idx is
+> the opaque value that needs to be passed to the virtqueue_poll() function
+> to check if there are new pending used buffers in the queue: such opaque
+> value would have been previously obtained by a call to the API function
+> virtqueue_enable_cb_prepare().
 > 
+> Since such opaque value is indeed containing simply a snapshot in time of
+> the internal
 
-< snip >
+to add: 16 bit
 
-> I will reply to this message with the usage message from
-> 'scripts/dtc/of_unittest_expect --help'.
+> last_used_index (roughly), it is possible that,
 
-< snip >
+to add here: 
 
-$ scripts/dtc/of_unittest_expect --help
+if another thread calls virtqueue_add_*()
+at the same time (which existing drivers don't do,
+but does not seem to be documented as prohibited anywhere), and
 
-usage:
+> if exactly
+> 2**16 buffers are marked as used between two successive calls to
+> virtqueue_poll(), the caller is fooled into thinking that nothing is
+> pending (ABA problem).
+> Keep a full fledged internal wraps counter
 
-  of_unittest_expect CONSOLE_LOG
+s/full fledged/a 16 bit/
 
-     -h                print program usage
-    --help             print program usage
-    --hide-expect      suppress output of EXPECTed lines
-    --line-num         report line number of CONSOLE_LOG
-    --no-expect-stats  do not report EXPECT statistics
-    --no-strip-ts      do not strip leading console timestamps
-    --verbose          do not suppress EXPECT begin and end lines
-    --version          print program version and exit
+since I don't see why is a 16 bit counter full but not e.g. a 32 bit one
+
+> per virtqueue and embed it into
+> the upper 16bits of the returned opaque value, so that the above scenario
+> can be detected transparently by virtqueue_poll(): this way each single
+> possible last_used_idx value is really belonging to a different wrap.
+
+Just to add here: the ABA problem can in theory still happen but
+now that's after 2^32 requests, which seems sufficient in practice.
+
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Igor Skalkin <igor.skalkin@opensynergy.com>
+> Cc: Peter Hilber <peter.hilber@opensynergy.com>
+> Cc: virtualization@lists.linux-foundation.org
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> ---
+> Still no perf data on this, I was wondering what exactly to measure in
+> term of perf metrics to evaluate the impact of the rolling vq->wraps
+> counter.
+> ---
+>  drivers/virtio/virtio_ring.c | 51 +++++++++++++++++++++++++++++++++---
+>  1 file changed, 47 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 00f64f2f8b72..613ec0503509 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -12,6 +12,8 @@
+>  #include <linux/hrtimer.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/bits.h>
+> +#include <linux/bitfield.h>
+>  #include <xen/xen.h>
+>  
+>  static bool force_used_validation = false;
+> @@ -69,6 +71,17 @@ module_param(force_used_validation, bool, 0444);
+>  #define LAST_ADD_TIME_INVALID(vq)
+>  #endif
+>  
+> +#define VRING_IDX_MASK					GENMASK(15, 0)
+> +#define VRING_GET_IDX(opaque)				\
+> +	((u16)FIELD_GET(VRING_IDX_MASK, (opaque)))
+> +
+> +#define VRING_WRAPS_MASK				GENMASK(31, 16)
+> +#define VRING_GET_WRAPS(opaque)				\
+> +	((u16)FIELD_GET(VRING_WRAPS_MASK, (opaque)))
+> +
+> +#define VRING_BUILD_OPAQUE(idx, wraps)			\
+> +	(FIELD_PREP(VRING_WRAPS_MASK, (wraps)) | ((idx) & VRING_IDX_MASK))
+> +
+
+Maybe prefix with VRING_POLL_  since that is the only user.
 
 
-  Process a console log for EXPECTed test related messages to either
-  highlight expected devicetree unittest related messages or suppress
-  the messages.  Leading console timestamps will be stripped.
+>  struct vring_desc_state_split {
+>  	void *data;			/* Data for callback. */
+>  	struct vring_desc *indir_desc;	/* Indirect descriptor, if any. */
+> @@ -117,6 +130,8 @@ struct vring_virtqueue {
+>  	/* Last used index we've seen. */
+>  	u16 last_used_idx;
+>  
+> +	u16 wraps;
+> +
+>  	/* Hint for event idx: already triggered no need to disable. */
+>  	bool event_triggered;
+>  
+> @@ -806,6 +821,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+>  	ret = vq->split.desc_state[i].data;
+>  	detach_buf_split(vq, i, ctx);
+>  	vq->last_used_idx++;
+> +	if (unlikely(!vq->last_used_idx))
+> +		vq->wraps++;
+>  	/* If we expect an interrupt for the next entry, tell host
+>  	 * by writing event index and flush out the write before
+>  	 * the read in the next get_buf call. */
 
-  Various unittests may trigger kernel messages from outside the
-  unittest code.  The unittest annotates that it expects the message
-  to occur with an 'EXPECT \ : text' (begin) before triggering the
-  message, and an 'EXPECT / : text' (end) after triggering the message.
+So most drivers don't call virtqueue_poll.
+Concerned about the overhead here: another option is
+with a flag that will have to be set whenever a driver
+wants to use virtqueue_poll.
+Could you pls do a quick perf test e.g. using tools/virtio/
+to see what's faster?
 
-  If an expected message does not occur, that will be reported.
 
-  For each expected message, the 'EXPECT \ : text' (begin) and
-  'EXPECT / : text' (end), 'text' will contain the message text.
 
-  If 'EXPECT \' (begin) and 'EXPECT /' (end) lines do not contain
-  matching 'text', that will be reported.
+> @@ -1508,6 +1525,7 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+>  	if (unlikely(vq->last_used_idx >= vq->packed.vring.num)) {
+>  		vq->last_used_idx -= vq->packed.vring.num;
+>  		vq->packed.used_wrap_counter ^= 1;
+> +		vq->wraps++;
+>  	}
+>  
+>  	/*
+> @@ -1744,6 +1762,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+>  	vq->weak_barriers = weak_barriers;
+>  	vq->broken = false;
+>  	vq->last_used_idx = 0;
+> +	vq->wraps = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+>  	vq->packed_ring = true;
+> @@ -2092,13 +2111,17 @@ EXPORT_SYMBOL_GPL(virtqueue_disable_cb);
+>   */
+>  unsigned virtqueue_enable_cb_prepare(struct virtqueue *_vq)
+>  {
+> +	unsigned int last_used_idx;
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
+>  
+>  	if (vq->event_triggered)
+>  		vq->event_triggered = false;
+>  
+> -	return vq->packed_ring ? virtqueue_enable_cb_prepare_packed(_vq) :
+> -				 virtqueue_enable_cb_prepare_split(_vq);
+> +	last_used_idx = vq->packed_ring ?
+> +			virtqueue_enable_cb_prepare_packed(_vq) :
+> +			virtqueue_enable_cb_prepare_split(_vq);
+> +
+> +	return VRING_BUILD_OPAQUE(last_used_idx, vq->wraps);
+>  }
+>  EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+>  
+> @@ -2107,6 +2130,21 @@ EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+>   * @_vq: the struct virtqueue we're talking about.
+>   * @last_used_idx: virtqueue state (from call to virtqueue_enable_cb_prepare).
+>   *
+> + * The provided last_used_idx, as returned by virtqueue_enable_cb_prepare(),
+> + * is an opaque value representing the queue state and it is built as follows:
+> + *
+> + *	---------------------------------------------------------
+> + *	|	vq->wraps	|	vq->last_used_idx	|
+> + *	31------------------------------------------------------0
+> + *
+> + * The MSB 16bits embedding the wraps counter for the underlying virtqueue
+> + * is stripped out here before reaching into the lower layer helpers.
+> + *
+> + * This structure of the opaque value mitigates the scenario in which, when
+> + * exactly 2**16 messages are marked as used between two successive calls to
+> + * virtqueue_poll(), the caller is fooled into thinking nothing new has arrived
+> + * since the pure last_used_idx is exactly the same.
+> + *
 
-  If EXPECT lines are nested, 'EXPECT /' (end) lines must be in the
-  reverse order of the corresponding 'EXPECT \' (begin) lines.
+Do you want to move this comment to where the macros implementing it
+are?
 
-  'EXPECT \ : text' (begin) and 'EXPECT / : text' (end) lines can
-  contain special patterns in 'text':
+>   * Returns "true" if there are pending used buffers in the queue.
+>   *
+>   * This does not need to be serialized.
+> @@ -2118,9 +2156,13 @@ bool virtqueue_poll(struct virtqueue *_vq, unsigned last_used_idx)
+>  	if (unlikely(vq->broken))
+>  		return false;
+>  
+> +	if (unlikely(vq->wraps != VRING_GET_WRAPS(last_used_idx)))
+> +		return true;
+> +
+>  	virtio_mb(vq->weak_barriers);
+> -	return vq->packed_ring ? virtqueue_poll_packed(_vq, last_used_idx) :
+> -				 virtqueue_poll_split(_vq, last_used_idx);
+> +	return vq->packed_ring ?
+> +		virtqueue_poll_packed(_vq, VRING_GET_IDX(last_used_idx)) :
+> +			virtqueue_poll_split(_vq, VRING_GET_IDX(last_used_idx));
+>  }
+>  EXPORT_SYMBOL_GPL(virtqueue_poll);
+>  
+> @@ -2245,6 +2287,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+>  	vq->weak_barriers = weak_barriers;
+>  	vq->broken = false;
+>  	vq->last_used_idx = 0;
+> +	vq->wraps = 0;
+>  	vq->event_triggered = false;
+>  	vq->num_added = 0;
+>  	vq->use_dma_api = vring_use_dma_api(vdev);
+> -- 
+> 2.17.1
 
-     <<int>> matches: [+-]*[0-9]+
-     <<hex>> matches: (0x)*[0-9a-f]+
-
-  'EXPECT \' (begin) and 'EXPECT /' (end) lines are suppressed.
-
-  A prefix is added to every line of output:
-
-    'ok ' Line matches an enclosing EXPECT begin/end pair
-
-    '** ' Line reports of_unittest_expect warning or error
-
-    '-> ' Line reports start or end of the unittests
-
-    '>> ' Line reports a unittest test FAIL
-
-    '   ' Lines that are not otherwise prefixed
-
-  Issues detected in CONSOLE_LOG are reported to STDOUT, not to STDERR.
-
-  Known Issues:
-
-    --line-num causes the CONSOLE_LOG line number to be printed in 4 columns.
-       If CONSOLE_LOG contains more than 9999 lines then more columns will be
-       used to report the line number for lines greater than 9999 (eg for
-       lines 10000 - 99999, 5 columns will be used).

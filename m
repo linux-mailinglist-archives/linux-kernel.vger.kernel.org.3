@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 170C64A547F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4674D4A5483
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiBABJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S231833AbiBABJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiBABJA (ORCPT
+        with ESMTP id S231680AbiBABJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:09:00 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD245C06173B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:00 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id 62-20020a17090a09c400b001b80b0742b0so1223724pjo.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:00 -0800 (PST)
+        Mon, 31 Jan 2022 20:09:02 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C951C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:02 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id u133-20020a63798b000000b0034c0630b044so9490841pgc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=4kaP3FlUpQFdehq8pWYdxVNwRbxH7i/N3SsKaNgWUGc=;
-        b=h3EL5uywFEwrVZHjm51EZtEEJMlwQaV1z88Z7DeuzixINWb3XSD5/WyLhozYxe4LMx
-         sct2ZuwT0YBcjticdqdu3PPzXlEma6RygOCKDK1odDKv0cVT7Kis7SLSnACsVuUx6mcc
-         wMBnqr1/FPewELU4IkhgvXGP6E4JeniG02IJsQxq4HBwo4rLuxDQBwTqNvODxXDo4P6G
-         yMiN3bsXYAj6ENO8uK9KZ5Q78slE35XhaFJN7NofJ1MP/uY8Q2tfFFOck9Ry8ukeDDIz
-         EvY53YPpv4Es1Xf+/BzOl7qEEv6kREOkqoaY8CZ5m0M6ocDkqkBTe2+GFe4lXgtjRjHf
-         Sesw==
+        bh=LcukT3aVWQNuFlO5tp4KbgwXT1VI3YuMTdLXdDHGgw4=;
+        b=L5WVkpDBAaqAGX7sBQ9aM3BYEJZZItsnHILJyVw9anPCW9GBY6gMrJI/qsNxUDKi/b
+         tVx/WXxQ8dpcYEP1PyI5F3A0LkrX7NlEchmWKjxbmmhItMO1VPhqL3SXKPc2GKJT7gHF
+         +MueL52xjMxeZDZ79vz8mCrvikzwKG6i6rncgx3/3NWKPEWXvRLJd3F8+AI8TD093WC3
+         fy1eBEB50+5Spbs0Z7cyviGeT2+7SixtFXWSLNt7/xq8TG68bsmbOSjVWmBBXVRLRpNF
+         uqsM9E1016Ul0cWQQ93GlHN5rp3UH5pyOer1I+J5viYD6/BjVDbSiG6usGovwNBRvfZJ
+         zkBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=4kaP3FlUpQFdehq8pWYdxVNwRbxH7i/N3SsKaNgWUGc=;
-        b=cmOFgIRr6jUevU32OCph26VbC+8f9Mp00tin2RK7ZS1bGKgyZAhoN0R9hYDEsb4PUI
-         lPCH6+iJTsE9Zuvf+KKthqmNTYvpRW5w4Yom3HgYCM+uT9IILOgWfn0is5EG3H8mHbw2
-         EEfM8ZpO0MKSekZ8ATqOTsYHilbDFBnW+W2oQvm5ZC0oYquiabB0binblIZ3kpQfsqj5
-         2Xsx8GrNAlNj3BHjwLyPUCXtZ5xGB86TFY5Fh2WPiBhknFdv8E/F7/VN32SpmshlBmol
-         WVqFQgMtBOskKi38zfyVWxhqL+TgQDal5U5z1d1Xg8Kjph0kU3Ui0AhBOtpyvMe4Ijtz
-         C0cA==
-X-Gm-Message-State: AOAM532A155MwacpghXlVwZJKVWWh463oxFEOko7/0zGOiBwMgCU5kTL
-        wcYl3SbLfJXWbIJ0aGyAIKGf8vmcR4M=
-X-Google-Smtp-Source: ABdhPJylCV3aOjYEjhVRX1NvX5dqLtIPXCTzy0xsVbRBa2f5cIttpJ71kIFQFrbLJbe3ibfEaVbQypjJEnU=
+        bh=LcukT3aVWQNuFlO5tp4KbgwXT1VI3YuMTdLXdDHGgw4=;
+        b=OQAowKsOPBDpZLufF9+3dMoH5p6PyTDxCq1qzsR4pEqm9xz8++iNr7PJMj62cjm6u7
+         okhiyX7mdTv9Pq9GQthugvhNDocANaryE/G/XkPNWAdNFiDgL7bMUXaM4RjkhvHr+GXA
+         BGsGo3hEZ2l2ahC9LjLTU6uftOUZp4erThe23DRo593Epk6aRHd0NIVzuXXK5vm7M0eX
+         eq4aHVksOhrMnl73oBTNHTJwH5BrCJ7OhkZaG2supdmt6V7H8++hgFejfEwgOCKdr+Vo
+         3La+J+UOlm7TO/P5erFGrcuqMtd6b8RGtzD7Sv4hx27OU+x7pvjKJ2Zs2fXuz+q6QXQ+
+         yvZg==
+X-Gm-Message-State: AOAM531vGJ4dr2XQj8t5c5YJFs0pqvc2iJBXc0FcctUlDQ/7LBfoS6LQ
+        QeNfs0xm8XieczfE4ZaMTfBa/9TZlhA=
+X-Google-Smtp-Source: ABdhPJxukxPNZ3VcpmMc2eg8v3Edq+8quTgFxnPmvAUmlOB6In41l4WjFVxqrNN/Oh2K/QwpEJn1488nuA8=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:c24d:: with SMTP id
- 13mr20607003plg.24.1643677740209; Mon, 31 Jan 2022 17:09:00 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:f198:: with SMTP id
+ bv24mr25807269pjb.32.1643677741876; Mon, 31 Jan 2022 17:09:01 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  1 Feb 2022 01:08:36 +0000
+Date:   Tue,  1 Feb 2022 01:08:37 +0000
 In-Reply-To: <20220201010838.1494405-1-seanjc@google.com>
-Message-Id: <20220201010838.1494405-4-seanjc@google.com>
+Message-Id: <20220201010838.1494405-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220201010838.1494405-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH 3/5] KVM: x86: Use __try_cmpxchg_user() to update guest PTE
- A/D bits
+Subject: [PATCH 4/5] KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -71,86 +70,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the recently introduced __try_cmpxchg_user() to update guest PTE A/D
-bits instead of mapping the PTE into kernel address space.  The VM_PFNMAP
-path is broken as it assumes that vm_pgoff is the base pfn of the mapped
-VMA range, which is conceptually wrong as vm_pgoff is the offset relative
-to the file and has nothing to do with the pfn.  The horrific hack worked
-for the original use case (backing guest memory with /dev/mem), but leads
-to accessing "random" pfns for pretty much any other VM_PFNMAP case.
+Use the recently introduce __try_cmpxchg_user() to emulate atomic guest
+accesses via the associated userspace address instead of mapping the
+backing pfn into kernel address space.  Using kvm_vcpu_map() is unsafe as
+it does not coordinate with KVM's mmu_notifier to ensure the hva=>pfn
+translation isn't changed/unmapped in the memremap() path, i.e. when
+there's no struct page and thus no elevated refcount.
 
-Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
-Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Fixes: 42e35f8072c3 ("KVM/X86: Use kvm_vcpu_map in emulator_cmpxchg_emulated")
 Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/paging_tmpl.h | 45 +---------------------------------
- 1 file changed, 1 insertion(+), 44 deletions(-)
+ arch/x86/kvm/x86.c | 35 ++++++++++++++---------------------
+ 1 file changed, 14 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index 5b5bdac97c7b..551de15f342f 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -143,49 +143,6 @@ static bool FNAME(is_rsvd_bits_set)(struct kvm_mmu *mmu, u64 gpte, int level)
- 	       FNAME(is_bad_mt_xwr)(&mmu->guest_rsvd_check, gpte);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 74b53a16f38a..37064d565bbc 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7155,15 +7155,8 @@ static int emulator_write_emulated(struct x86_emulate_ctxt *ctxt,
+ 				   exception, &write_emultor);
  }
  
--static int FNAME(cmpxchg_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
--			       pt_element_t __user *ptep_user, unsigned index,
--			       pt_element_t orig_pte, pt_element_t new_pte)
--{
--	int npages;
--	pt_element_t ret;
--	pt_element_t *table;
--	struct page *page;
+-#define CMPXCHG_TYPE(t, ptr, old, new) \
+-	(cmpxchg((t *)(ptr), *(t *)(old), *(t *)(new)) == *(t *)(old))
 -
--	npages = get_user_pages_fast((unsigned long)ptep_user, 1, FOLL_WRITE, &page);
--	if (likely(npages == 1)) {
--		table = kmap_atomic(page);
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		kunmap_atomic(table);
--
--		kvm_release_page_dirty(page);
--	} else {
--		struct vm_area_struct *vma;
--		unsigned long vaddr = (unsigned long)ptep_user & PAGE_MASK;
--		unsigned long pfn;
--		unsigned long paddr;
--
--		mmap_read_lock(current->mm);
--		vma = find_vma_intersection(current->mm, vaddr, vaddr + PAGE_SIZE);
--		if (!vma || !(vma->vm_flags & VM_PFNMAP)) {
--			mmap_read_unlock(current->mm);
--			return -EFAULT;
--		}
--		pfn = ((vaddr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
--		paddr = pfn << PAGE_SHIFT;
--		table = memremap(paddr, PAGE_SIZE, MEMREMAP_WB);
--		if (!table) {
--			mmap_read_unlock(current->mm);
--			return -EFAULT;
--		}
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		memunmap(table);
--		mmap_read_unlock(current->mm);
--	}
--
--	return (ret != orig_pte);
--}
--
- static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
- 				  struct kvm_mmu_page *sp, u64 *spte,
- 				  u64 gpte)
-@@ -284,7 +241,7 @@ static int FNAME(update_accessed_dirty_bits)(struct kvm_vcpu *vcpu,
- 		if (unlikely(!walker->pte_writable[level - 1]))
- 			continue;
+-#ifdef CONFIG_X86_64
+-#  define CMPXCHG64(ptr, old, new) CMPXCHG_TYPE(u64, ptr, old, new)
+-#else
+-#  define CMPXCHG64(ptr, old, new) \
+-	(cmpxchg64((u64 *)(ptr), *(u64 *)(old), *(u64 *)(new)) == *(u64 *)(old))
+-#endif
++#define emulator_try_cmpxchg_user(t, ptr, old, new) \
++	(__try_cmpxchg_user((t *)(ptr), (t *)(old), *(t *)(new), efault ## t))
  
--		ret = FNAME(cmpxchg_gpte)(vcpu, mmu, ptep_user, index, orig_pte, pte);
-+		ret = __try_cmpxchg_user(ptep_user, &orig_pte, pte, fault);
- 		if (ret)
- 			return ret;
+ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
+ 				     unsigned long addr,
+@@ -7172,12 +7165,11 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
+ 				     unsigned int bytes,
+ 				     struct x86_exception *exception)
+ {
+-	struct kvm_host_map map;
+ 	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+ 	u64 page_line_mask;
++	unsigned long hva;
+ 	gpa_t gpa;
+-	char *kaddr;
+-	bool exchanged;
++	int r;
  
+ 	/* guests cmpxchg8b have to be emulated atomically */
+ 	if (bytes > 8 || (bytes & (bytes - 1)))
+@@ -7201,31 +7193,32 @@ static int emulator_cmpxchg_emulated(struct x86_emulate_ctxt *ctxt,
+ 	if (((gpa + bytes - 1) & page_line_mask) != (gpa & page_line_mask))
+ 		goto emul_write;
+ 
+-	if (kvm_vcpu_map(vcpu, gpa_to_gfn(gpa), &map))
++	hva = kvm_vcpu_gfn_to_hva(vcpu, gpa_to_gfn(gpa));
++	if (kvm_is_error_hva(addr))
+ 		goto emul_write;
+ 
+-	kaddr = map.hva + offset_in_page(gpa);
++	hva += offset_in_page(gpa);
+ 
+ 	switch (bytes) {
+ 	case 1:
+-		exchanged = CMPXCHG_TYPE(u8, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u8, hva, old, new);
+ 		break;
+ 	case 2:
+-		exchanged = CMPXCHG_TYPE(u16, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u16, hva, old, new);
+ 		break;
+ 	case 4:
+-		exchanged = CMPXCHG_TYPE(u32, kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u32, hva, old, new);
+ 		break;
+ 	case 8:
+-		exchanged = CMPXCHG64(kaddr, old, new);
++		r = emulator_try_cmpxchg_user(u64, hva, old, new);
+ 		break;
+ 	default:
+ 		BUG();
+ 	}
+ 
+-	kvm_vcpu_unmap(vcpu, &map, true);
+-
+-	if (!exchanged)
++	if (r < 0)
++		goto emul_write;
++	if (r)
+ 		return X86EMUL_CMPXCHG_FAILED;
+ 
+ 	kvm_page_track_write(vcpu, gpa, new, bytes);
 -- 
 2.35.0.rc2.247.g8bbb082509-goog
 

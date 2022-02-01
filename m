@@ -2,123 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E34B4A5EED
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD7A4A5EDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbiBAPDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:03:38 -0500
-Received: from mout.gmx.net ([212.227.17.22]:43617 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239685AbiBAPDe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:03:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643727768;
-        bh=nvs4NamF8w3PSAtLVFdwadPiUvfzFg613upYNZ/yXSg=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=Ig2IPZ5zKlouxpflVVmYYGrUePr/LI8+qLrp7aZA4uucD+2hXbYwRZLq855afcj7/
-         1C1nsPz7s9e8i+8N7F1wnisBRN0mfKm2sAbMpx8DRuRWuiFg04oBnMytrkdwEQpEIQ
-         DQTyXsVmllotv/hXvaZbbuOUiJ+3eYZuhKq4mj3U=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.146.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwQXN-1mP0sn1g4j-00sNis; Tue, 01
- Feb 2022 16:02:48 +0100
-Message-ID: <b1c1f68d-4620-2429-66bd-33d806d31457@gmx.de>
+        id S239681AbiBAPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:02:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44331 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239648AbiBAPCp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:02:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643727765;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oZXW4ikWwqlgBCRGnwXxFczGKcuCYa2j1IpHwO1T0Pw=;
+        b=M+0wwcGElErVlbJduQ4LZhuo9/FY5vdijoEdWKyefkp2zM0+4NvBGFUGPjolg7bR01pmnL
+        2wjEZn3najrPuLSZIm+2T3psnF7yyPsmWghYLiyPnP2sYuXUr+IuWtdPAZ031iBgBVTQcm
+        pWuntAnlhIYjsUr3rVYVRI0C0a66WrI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-652-Xw47Py86OdifK4N_jTtyKw-1; Tue, 01 Feb 2022 10:02:44 -0500
+X-MC-Unique: Xw47Py86OdifK4N_jTtyKw-1
+Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so8835357edb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:02:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oZXW4ikWwqlgBCRGnwXxFczGKcuCYa2j1IpHwO1T0Pw=;
+        b=GhdlpCJ4lhX7qEMh0rOSTYN00YBUkH388Za1AbfNnrO6YtIiYdU2GvoAX+EGL8QNp/
+         Wm5c8X1LXs8GLAzyaO/ovGxtnXWBIo1hmMqvqrggFnLxt7rYEBvnJIUdZ1ap/ft8I9PY
+         kgxoQzU8T+7kuU1QTS3LtmKJeCCrYRGJ5pS/ROJSHygtiNb2a1spjBMR97Fu15tfMau8
+         6LY+qC4XkGWNEgq2H0NinZXricHZLcz61Ok6IelviyyVcEvCCuPvk2Bq1rk1aofC7XP4
+         5HGedHve++xvzLho7eMcdiDQleiFM35NjSH9oIb2FEd5lKr4HQG6hxymGHSnhWWjDx5j
+         1YJg==
+X-Gm-Message-State: AOAM531m0TTPYsEiZwhAknP7lI/tFZxZFmmaecgaTTOg+sPD1uzXtxg2
+        /grS/sylJlhpEHrbBA+HFFXZZsMvy/oMp1zm22M7lgA8j/cZDp1p934ZtrpioNA9/PGNy2HdTwO
+        Q8fpecJ8dw0/zeEb/NwctR6/x
+X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr25756611edx.406.1643727762667;
+        Tue, 01 Feb 2022 07:02:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyvCpVCBTZrtA2YZxbuCtFtMF8gZFN+tTu4VLRzWngSgADBV/xCYwrHYjRoBuJPzr957Nv0tA==
+X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr25756583edx.406.1643727762415;
+        Tue, 01 Feb 2022 07:02:42 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id pg25sm14900182ejb.174.2022.02.01.07.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 07:02:41 -0800 (PST)
+Message-ID: <71094091-56ca-0f75-a9c7-fa1cabf2af22@redhat.com>
 Date:   Tue, 1 Feb 2022 16:02:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.3.0
+Subject: Re: [PATCH v6 7/9] platform/x86: serial-multi-instantiate: Add SPI
+ support
 Content-Language: en-US
-To:     Yizhuo Zhai <yzhai003@ucr.edu>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220131065719.1552958-1-yzhai003@ucr.edu>
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH] fbdev: fbmem: Fix the implicit type casting
-In-Reply-To: <20220131065719.1552958-1-yzhai003@ucr.edu>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+ <20220121172431.6876-8-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220121172431.6876-8-sbinding@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8rcnp3IDWKRjEYPQV485Zi+kFbcxjfN0d1QI0X2MU7OVul75bod
- eQuXX8jdrKjMIB2fbFNnodmCyPeknr4i/kfQBcukaVrSA3NwBE0B1kXD4gZR7qZqfK6SHW+
- P5Z3tyGBWi0S9W4OBNjklGZGQ+uS0XMCezCx8oxze65ATS7BFRkOph2vBGq3QOogmBUJFqh
- HohuYWpL/6NFwDvUyuDtA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8Rn0yXCvoSI=:wCSp2dm5E03DqfVW0te626
- y3QbpDpBUuTKWhC/2BhKHIV114JvdTj7FO7RgQjiIh0KVHFyDX7evBCCP7F7QZ1ym7TRzJ9Zd
- n0RjjMB5hei2NBwh1vXhjC7GF+gyG1PwKcEiNrYRjEgeDHRQ3HYYmyJK03F0F6HzWx7tmBnyL
- B6cNR7yC4WT0uB/OkuthjxwrEOL2HALsrdV74B6i4dvAfRLdet1ddKocbBqLpW0o6LQG1k3AD
- SQyeaSEztHEG2F9zKvC0uEaJjKPaiSTZuMyXeXiOIOW9jDiLM56Q2vKR0WnnRDH659abnY4o9
- nE+nlgTcCp78zrEd8D3r+tG1yBMKLhid/cVKvlQM4s+xZ9PIbZX0yAxyj6HVQYyGKtCaOmpu0
- Np4Jw35NnT7pfFo7vih+wmRc+D6K7Q2O0DxWgT60fwt1ia7v40fq40xZJXAO6XyWHPyCw9v2g
- Zb4rs/ro/DKlt4r/+Zk0470cy5Hj+wiuAXftlxMUp3E4naFS8ah1YPILH7JfRn3XI5/QXz3hn
- Uo6mWMn///bBb6RBSCUawnYKSuFTvUqztCr8NUuW0+vt0kO7OM/L9HpoGijp5Q14kpISNLVbr
- 4F8o9A5rGgdNMHHiLwZmxst6Ir+m9e7X6xyjdEUcbhe7fma3wWzba54WQwIbRk33qAHWeFFyK
- h++uWp0yaOiYo05cMbaoIUdpcKB41YSD5638kF6NQtSuYHu9wGHHRnsI36i1JzJ17XZ9tLDaJ
- wnxL2qRxBLK5bLLioFBPKq0l17iOm+T47NgBa9+RGUmRM6a6iUf+OoTcMRATCSnMkG1F2Swi6
- Qj9e+XDFcZi1I1Iew5pDjzvtJxsdKTIdUArCPaUpEJ3i8vIhRLoEU3YQDKVxPIbdzndhvxM95
- nQ/6MMGob1zcMXn7AOZ4Cfj5u5zbl6h0IIYogZeAs73GQeVem2p1FdITwZYy4085v2MfB4pjl
- yvF1AdneaI+JZcr9OjM31zQrRW9vIB77/i+g4VHydbDZewVNxBqXlAmw6mac2FmS0IgQ65bxc
- Y4CO9SIvE/gKzU627zJIG1jMzE7BxSwIfLv4kDuxuQ6tR7KfNZSn+3EBl6f1LBos4J2aWdf4M
- /gNvQFfC3+A13s=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 07:57, Yizhuo Zhai wrote:
-> In function do_fb_ioctl(), the "arg" is the type of unsigned long,
+Hi,
 
-yes, because it comes from the ioctl framework...
-
-> and in "case FBIOBLANK:" this argument is casted into an int before
-> passig to fb_blank().
-
-which makes sense IMHO.
-
-> In fb_blank(), the comparision if (blank > FB_BLANK_POWERDOWN) would
-> be bypass if the original "arg" is a large number, which is possible
-> because it comes from the user input.
-
-The main problem I see with your patch is that you change the behaviour.
-Let's assume someone passes in -1UL.
-With your patch applied, this means the -1 (which is e.g. 0xffffffff on 32=
-bit)
-is converted to a positive integer and will be capped to FB_BLANK_POWERDOW=
-N.
-Since most blank functions just check and react on specific values, you ch=
-anged
-the behaviour that the screen now gets blanked at -1, while it wasn't befo=
-re.
-
-One could now argue, that it's undefined behaviour if people
-pass in wrong values, but anyway, it's different now.
-
-So, your patch isn't wrong. I'm just not sure if this is what we want...
-
-Helge
-
-
-> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+On 1/21/22 18:24, Stefan Binding wrote:
+> Add support for spi bus in serial-multi-instantiate driver
+> 
+> Some peripherals can have either a I2C or a SPI connection
+> to the host (but not both) but use the same HID for both
+> types. So it is not possible to use the HID to determine
+> whether it is I2C or SPI. The driver must check the node
+> to see if it contains I2cSerialBus or SpiSerialBus entries.
+> 
+> For backwards-compatibility with the existing nodes I2C is
+> checked first and if such entries are found ONLY I2C devices
+> are created. Since some existing nodes that were already
+> handled by this driver could also contain unrelated
+> SpiSerialBus nodes that were previously ignored, and this
+> preserves that behavior. If there is ever a need to handle
+> a node where both I2C and SPI devices must be instantiated
+> this can be added in future.
+> 
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 > ---
->  drivers/video/fbdev/core/fbmem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core=
-/fbmem.c
-> index 0fa7ede94fa6..a5f71c191122 100644
-> --- a/drivers/video/fbdev/core/fbmem.c
-> +++ b/drivers/video/fbdev/core/fbmem.c
-> @@ -1064,7 +1064,7 @@ fb_set_var(struct fb_info *info, struct fb_var_scr=
-eeninfo *var)
->  EXPORT_SYMBOL(fb_set_var);
->
->  int
-> -fb_blank(struct fb_info *info, int blank)
-> +fb_blank(struct fb_info *info, unsigned long blank)
+>  drivers/platform/x86/Kconfig                  |   2 +-
+>  .../platform/x86/serial-multi-instantiate.c   | 174 +++++++++++++++---
+>  2 files changed, 151 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 2e656909a866..8d1eec208854 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -992,7 +992,7 @@ config TOPSTAR_LAPTOP
+>  
+>  config SERIAL_MULTI_INSTANTIATE
+>  	tristate "Serial bus multi instantiate pseudo device driver"
+> -	depends on I2C && ACPI
+> +	depends on I2C && SPI && ACPI
+>  	help
+>  	  Some ACPI-based systems list multiple devices in a single ACPI
+>  	  firmware-node. This driver will instantiate separate clients
+> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
+> index 4cd6d72a0741..3f05385ca2cf 100644
+> --- a/drivers/platform/x86/serial-multi-instantiate.c
+> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+> +#include <linux/spi/spi.h>
+>  #include <linux/types.h>
+>  
+>  #define IRQ_RESOURCE_TYPE	GENMASK(1, 0)
+> @@ -21,15 +22,28 @@
+>  #define IRQ_RESOURCE_GPIO	1
+>  #define IRQ_RESOURCE_APIC	2
+>  
+> +enum smi_bus_type {
+> +	SMI_I2C,
+> +	SMI_SPI,
+> +	SMI_AUTO_DETECT,
+> +};
+> +
+>  struct smi_instance {
+>  	const char *type;
+>  	unsigned int flags;
+>  	int irq_idx;
+>  };
+>  
+> +struct smi_node {
+> +	enum smi_bus_type bus_type;
+> +	struct smi_instance instances[];
+> +};
+> +
+>  struct smi {
+>  	int i2c_num;
+> +	int spi_num;
+>  	struct i2c_client **i2c_devs;
+> +	struct spi_device **spi_devs;
+>  };
+>  
+>  static int smi_get_irq(struct platform_device *pdev, struct acpi_device *adev,
+> @@ -59,6 +73,95 @@ static void smi_devs_unregister(struct smi *smi)
 >  {
+>  	while (smi->i2c_num > 0)
+>  		i2c_unregister_device(smi->i2c_devs[--smi->i2c_num]);
+> +
+> +	while (smi->spi_num > 0)
+> +		spi_unregister_device(smi->spi_devs[--smi->spi_num]);
+> +}
+> +
+> +/**
+> + * smi_spi_probe - Instantiate multiple SPI devices from inst array
+> + * @pdev:	Platform device
+> + * @adev:	ACPI device
+> + * @smi:	Internal struct for Serial multi instantiate driver
+> + * @inst_array:	Array of instances to probe
+> + *
+> + * Returns the number of SPI devices instantiate, Zero if none is found or a negative error code.
+> + */
+> +static int smi_spi_probe(struct platform_device *pdev, struct acpi_device *adev, struct smi *smi,
+> +			 const struct smi_instance *inst_array)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct spi_controller *ctlr;
+> +	struct spi_device *spi_dev;
+> +	char name[50];
+> +	int i, ret, count;
+> +
+> +	ret = acpi_spi_count_resources(adev);
+> +	if (ret < 0)
+> +		return ret;
+> +	else if (!ret)
+> +		return -ENODEV;
+> +
+> +	count = ret;
+> +
+> +	smi->spi_devs = devm_kcalloc(dev, count, sizeof(*smi->spi_devs), GFP_KERNEL);
+> +	if (!smi->spi_devs)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < count && inst_array[i].type; i++) {
+> +
+> +		spi_dev = acpi_spi_device_alloc(NULL, adev, i);
+> +		if (IS_ERR(spi_dev)) {
+> +			ret = PTR_ERR(spi_dev);
+> +			dev_err_probe(dev, ret, "failed to allocate SPI device %s from ACPI: %d\n",
+> +				      dev_name(&adev->dev), ret);
+> +			goto error;
+> +		}
+> +
+> +		ctlr = spi_dev->controller;
+> +
+> +		strscpy(spi_dev->modalias, inst_array[i].type, sizeof(spi_dev->modalias));
+> +
+> +		ret = smi_get_irq(pdev, adev, &inst_array[i]);
+> +		if (ret < 0) {
+> +			spi_dev_put(spi_dev);
+> +			goto error;
+> +		}
+> +		spi_dev->irq = ret;
+> +
+> +		snprintf(name, sizeof(name), "%s-%s-%s.%d", dev_name(&ctlr->dev), dev_name(dev),
+> +			 inst_array[i].type, i);
+> +		spi_dev->dev.init_name = name;
+> +
+> +		ret = spi_add_device(spi_dev);
+> +		if (ret) {
+> +			dev_err_probe(&ctlr->dev, ret,
+> +				      "failed to add SPI device %s from ACPI: %d\n",
+> +				      dev_name(&adev->dev), ret);
+> +			spi_dev_put(spi_dev);
+> +			goto error;
+> +		}
+> +
+> +		dev_dbg(dev, "SPI device %s using chip select %u", name, spi_dev->chip_select);
+> +
+> +		smi->spi_devs[i] = spi_dev;
+> +		smi->spi_num++;
+> +	}
+> +
+> +	if (smi->spi_num < count) {
+> +		dev_dbg(dev, "Error finding driver, idx %d\n", i);
+> +		ret = -ENODEV;
+> +		goto error;
+> +	}
+> +
+> +	dev_info(dev, "Instantiated %d SPI devices.\n", smi->spi_num);
+> +
+> +	return 0;
+> +error:
+> +	smi_devs_unregister(smi);
+> +
+> +	return ret;
+> +
+>  }
+>  
+>  /**
+> @@ -126,8 +229,8 @@ static int smi_i2c_probe(struct platform_device *pdev, struct acpi_device *adev,
+>  
+>  static int smi_probe(struct platform_device *pdev)
+>  {
+> -	const struct smi_instance *inst_array;
+>  	struct device *dev = &pdev->dev;
+> +	const struct smi_node *node;
+>  	struct acpi_device *adev;
+>  	struct smi *smi;
+>  
+> @@ -135,8 +238,8 @@ static int smi_probe(struct platform_device *pdev)
+>  	if (!adev)
+>  		return -ENODEV;
+>  
+> -	inst_array = device_get_match_data(dev);
+> -	if (!inst_array) {
+> +	node = device_get_match_data(dev);
+> +	if (!node) {
+>  		dev_dbg(dev, "Error ACPI match data is missing\n");
+>  		return -ENODEV;
+>  	}
+> @@ -147,7 +250,21 @@ static int smi_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, smi);
+>  
+> -	return smi_i2c_probe(pdev, adev, smi, inst_array);
+> +	switch (node->bus_type) {
+> +	case SMI_I2C:
+> +		return smi_i2c_probe(pdev, adev, smi, node->instances);
+> +	case SMI_SPI:
+> +		return smi_spi_probe(pdev, adev, smi, node->instances);
+> +	case SMI_AUTO_DETECT:
+> +		if (i2c_acpi_client_count(adev) > 0)
+> +			return smi_i2c_probe(pdev, adev, smi, node->instances);
+> +		else
+> +			return smi_spi_probe(pdev, adev, smi, node->instances);
+> +	default:
+> +		break;
+
+Please replace this break with : "return -EINVAL" (since we really
+should never hit this default case).
+
+With that fixed, please add my R-b to the next version:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> +	}
+> +
+> +	return 0; /* never reached */
+>  }
+>  
+>  static int smi_remove(struct platform_device *pdev)
+> @@ -159,27 +276,36 @@ static int smi_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static const struct smi_instance bsg1160_data[]  = {
+> -	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+> -	{ "bmc150_magn" },
+> -	{ "bmg160" },
+> -	{}
+> +static const struct smi_node bsg1160_data = {
+> +	.instances = {
+> +		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+> +		{ "bmc150_magn" },
+> +		{ "bmg160" },
+> +		{}
+> +	},
+> +	.bus_type = SMI_I2C,
+>  };
+>  
+> -static const struct smi_instance bsg2150_data[]  = {
+> -	{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+> -	{ "bmc150_magn" },
+> -	/* The resources describe a 3th client, but it is not really there. */
+> -	{ "bsg2150_dummy_dev" },
+> -	{}
+> +static const struct smi_node bsg2150_data = {
+> +	.instances = {
+> +		{ "bmc150_accel", IRQ_RESOURCE_GPIO, 0 },
+> +		{ "bmc150_magn" },
+> +		/* The resources describe a 3th client, but it is not really there. */
+> +		{ "bsg2150_dummy_dev" },
+> +		{}
+> +	},
+> +	.bus_type = SMI_I2C,
+>  };
+>  
+> -static const struct smi_instance int3515_data[]  = {
+> -	{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
+> -	{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
+> -	{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
+> -	{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
+> -	{}
+> +static const struct smi_node int3515_data = {
+> +	.instances = {
+> +		{ "tps6598x", IRQ_RESOURCE_APIC, 0 },
+> +		{ "tps6598x", IRQ_RESOURCE_APIC, 1 },
+> +		{ "tps6598x", IRQ_RESOURCE_APIC, 2 },
+> +		{ "tps6598x", IRQ_RESOURCE_APIC, 3 },
+> +		{}
+> +	},
+> +	.bus_type = SMI_I2C,
+>  };
+>  
+>  /*
+> @@ -187,9 +313,9 @@ static const struct smi_instance int3515_data[]  = {
+>   * drivers/acpi/scan.c: acpi_device_enumeration_by_parent().
+>   */
+>  static const struct acpi_device_id smi_acpi_ids[] = {
+> -	{ "BSG1160", (unsigned long)bsg1160_data },
+> -	{ "BSG2150", (unsigned long)bsg2150_data },
+> -	{ "INT3515", (unsigned long)int3515_data },
+> +	{ "BSG1160", (unsigned long)&bsg1160_data },
+> +	{ "BSG2150", (unsigned long)&bsg2150_data },
+> +	{ "INT3515", (unsigned long)&int3515_data },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(acpi, smi_acpi_ids);
+> 
+

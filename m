@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4864A551E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC614A5529
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 03:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiBACDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 21:03:46 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:5782 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232255AbiBACDh (ORCPT
+        id S232253AbiBACNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 21:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232077AbiBACNg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 21:03:37 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 20VMWrRx008746;
-        Tue, 1 Feb 2022 02:03:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=pOGMqJJpokNe23I9w0DAGD5uDNxb9lYmNYzFb2yZcGw=;
- b=VwwNzDEh8R2WjxBxW2U1ZqXQXbEp27d1d8nOz1DoAC3xc5JVgF41J5VTyGpDAsE3PYv4
- zXFuO4InCy2J+GO+ve1bX5FPabPtvGlGcPho4yb6yPmckXVS7jV3A7+WHm+Vwb5mmAM/
- 1u1ijnRFPNjIUGKEtVCiIvZpQvfVuYT9YWMTYW89a0LNbCXviDiKu8csqZp5trHHFqw1
- VWMJwlfYjtoBoYCuYzPvcUI6bmp9lHVdem0Z7OOVEu8DEAwfvXXe0AVap6xphQ6cD6SY
- qRo45xnZnzasfJZBCA2eqtdh5iUv/bt9GeU+ysqwxz39yqIGHR8h0p1QuTfuEp148DBw sQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxnk2gs7x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 02:03:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2111tKeN079022;
-        Tue, 1 Feb 2022 02:03:29 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w8a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 02:03:29 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21123EPh096319;
-        Tue, 1 Feb 2022 02:03:29 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by userp3030.oracle.com with ESMTP id 3dvtpy6w3w-4;
-        Tue, 01 Feb 2022 02:03:28 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linuxarm@huawei.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: hisi_sas: Fix setting of hisi_sas_slot.is_internal
-Date:   Mon, 31 Jan 2022 21:03:22 -0500
-Message-Id: <164368097302.23346.15184270668603623540.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1643627607-138785-1-git-send-email-john.garry@huawei.com>
-References: <1643627607-138785-1-git-send-email-john.garry@huawei.com>
+        Mon, 31 Jan 2022 21:13:36 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC68C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:13:36 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id j2so30645018edj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 18:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z5a1UA3AmbqOXaqFeyJhuFNz4swNgX216lj5ZDFGhKs=;
+        b=golD3uou61gyyuK2ClpPfQPeMByIwIfGy+a7BC6fFu9rrj/T68DWSrynlXOEWwUtX+
+         5dN3KFTradKVC9DShueDJciw/xAndf4MaR2jxNfJpz0RRaYkEmZyQLpB7va6Jls1ipEv
+         XVyggpJaVrEYUCoffC6KcQg2evhZdKFHt35YjbGvTpUwoo4sOHQKy7XHnOvp0bqmKKRE
+         xFokZaJXFcOQIDPvUJ2C/OGdlTSOC8JJoBm/0AA8mZJdLVEWMVrtgdJo1QwQzllKQ6oE
+         mU4K/0SPD/tn2xVKtPv24/3MtQ9s883pGnZll+50x6ZlN5bmtKkZRyf5VI/oXw564NCa
+         2qTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z5a1UA3AmbqOXaqFeyJhuFNz4swNgX216lj5ZDFGhKs=;
+        b=PU7CLQVceDy3yFNrzJ/I95fH9stUCLukBy74LUx/QFaqEg8i47JUyoycT42NtkKrc6
+         A9+yuCA1ZX+fP+b1TkrMONxD/vt80nkAThwHfAFfoJkNMF2Sot32slasBK6KgqG3Tu8+
+         gUoNmECWvmbEPSPaFEHI618wCpPbePDGXWsvtyxXmw3+wBqVKuHKoJ4EVCrZuCmha73e
+         wbBHZmUoXaPiPGupHMCn1OwnqwmGC+Wp1f2MGdi4FJJge6MMehtQ2SUOTb6AQ22w6Et5
+         lcCma/oYbX/BDtiBUMa6NVGT995XmY4N3p3v7zXVK8jjWJY3CkihY3LZAdd8e3n3r+G8
+         3TlQ==
+X-Gm-Message-State: AOAM5312221PjUpMlpP+0oTiFKKCcZy3GY0qNceYA9haX1ChZWrtn5fT
+        rtprduV+icPhDVS8Zyjfok8=
+X-Google-Smtp-Source: ABdhPJyBB5jGiaCXsb4tSAGZp9HZi3+G9kvqf9xVjsmhxEdAvhQWT2R8Xl4sPkuB05u88Wz4K8dPyw==
+X-Received: by 2002:a50:fd14:: with SMTP id i20mr23453496eds.122.1643681614916;
+        Mon, 31 Jan 2022 18:13:34 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id w25sm18618783edv.68.2022.01.31.18.13.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 31 Jan 2022 18:13:34 -0800 (PST)
+Date:   Tue, 1 Feb 2022 02:13:33 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Rafael Aquini <raquini@redhat.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 1/6] mm, memory_hotplug: make arch_alloc_nodedata
+ independent on CONFIG_MEMORY_HOTPLUG
+Message-ID: <20220201021333.tyw5fxsvymqxudsp@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220127085305.20890-1-mhocko@kernel.org>
+ <20220127085305.20890-2-mhocko@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: G-8oQKFLQxGxaDiehhlTBKPdy2wXNbjr
-X-Proofpoint-ORIG-GUID: G-8oQKFLQxGxaDiehhlTBKPdy2wXNbjr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127085305.20890-2-mhocko@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 19:13:27 +0800, John Garry wrote:
+On Thu, Jan 27, 2022 at 09:53:00AM +0100, Michal Hocko wrote:
+>From: Michal Hocko <mhocko@suse.com>
+>
+>This is a preparatory patch and it doesn't introduce any functional
+>change. It merely pulls out arch_alloc_nodedata (and co) outside of
+>CONFIG_MEMORY_HOTPLUG because the following patch will need to call this
+>from the generic MM code.
+>
+>Acked-by: Rafael Aquini <raquini@redhat.com>
+>Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-> The hisi_sas_slot.is_internal member is not set properly for ATA commands
-> which the driver sends directly. A TMF struct pointer is normally used as
-> a test to set this, but it is NULL for those commands. It's not ideal, but
-> pass an empty TMF struct to set that member properly.
-> 
-> 
-
-Applied to 5.17/scsi-fixes, thanks!
-
-[1/1] scsi: hisi_sas: Fix setting of hisi_sas_slot.is_internal
-      https://git.kernel.org/mkp/scsi/c/c763ec4c10f7
-
+Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Wei Yang
+Help you, Help me

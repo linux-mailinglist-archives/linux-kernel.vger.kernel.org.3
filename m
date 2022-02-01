@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 398A74A57C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D104C4A57C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiBAHc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S234948AbiBAHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234435AbiBAHc5 (ORCPT
+        with ESMTP id S234008AbiBAHdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:32:57 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14FDC061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:32:57 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id j38-20020a9d1926000000b0059fa6de6c71so15378506ota.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:32:57 -0800 (PST)
+        Tue, 1 Feb 2022 02:33:22 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69195C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:33:22 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id z7so13544299ilb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:33:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IJSDBj0HvFrkS4TLKuPLvlZS13YusH/7w8kLNZ4wxGA=;
-        b=LJlQ0q/uL3MKzgZ4tIKPUGf5ZdjHG3YbTGagkGQxErLE4GBrP3pwtVAXcfI5DOb35r
-         f00BWzfnnUUT5iYd+03lUSTl8kRq88RhbO3jYBPd3Zl0Rn+QqgfJEX+CJ19AacVQfGr4
-         N6v3W/E44lcWKD5oUwsRX7FY7jU2eSQJYPKuqSOpOkb6FF7wfgRi2y/IExRaHHs5vxPx
-         AMVhxMzRPnQm+APmaNOSn18Hz/In7wZXJNkgJovDhIHBLZKI0AprlnlqXWHeZQuHl8fr
-         h3yLsL1/c2RO1yrytOTE/VRejXuJW4wqW3kzfgcVVfYHwesKQc56G3gjThWJIu9DPj9r
-         +GBw==
+        bh=BIdNhi2/wGNy2B+fCo9w5bfywyakFJRFI4mxzMFaGNI=;
+        b=gLyTG/GCZt1AfbBHRqQhlP90Gt1rlSLXTySgMzrQ0CHApygwv6J5YrLQTKz9p5jyk7
+         lrrs0IG7jM2uvVhryW0VwU06UROgs9JmbHTWfs5uEzAwvSwCRbFx2c8aZrFoholr6D/w
+         eK7nfmhw6eD6Zmhkc3wlXq7aOeYN33qCXywk5jkZuSZ9noYuFQ5VHgYudes6HpMv8S9n
+         QfM0U+EFu3e+2upWnDOKh6HYOaetkbKigh00UWd4NKfH3UAkfOX066zGnRrx08A/c+9V
+         PKQoBOIGaBix7qoJ1xRy9tJhVZMBqHHRrEgtkK3ORQBPuXjXPzRfuGuQnzrK4zlNZyKU
+         X8Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IJSDBj0HvFrkS4TLKuPLvlZS13YusH/7w8kLNZ4wxGA=;
-        b=zwbWeihWr7pG82UlEByq25rpJzFf6MA2KxquRnZyPGxfiTuTm6YMXxTkmiPHEF9C1L
-         1uqAYwXw0kNRLAr3ZzEt6SF9SHttqWFjg6gpAhRAOMdrWY4JGF8HjMx5XAWJHXR1ZMLe
-         R0J+73D0S0maUu/a3t19qoiSl8pXwplUZU3uOSZpIHOirnXb4Wj7eKl6cvQLPzuVlCWS
-         9chIekBBKZmzlaFY1TL1uPDRGUCF4VlMgZk2ldgJoa1R0Iun1Aw6KO2r4qrmLQJogMTh
-         jFoZbSCr9QXJiEJ9NdC/Tip6w3H6Ii8+Sx14is1cycvQcwEdx0ZRaYDGo5sFF1eZSv4v
-         XnlA==
-X-Gm-Message-State: AOAM531CinrS1Mgp6rnDylYLhE5aISsSAbM6vC4DzGSzYo/rctVRkYJC
-        Pf+WwrtlTwSbYfcQdtBQUcnGWGK2wqDmVWCmTUG0uChupDVBTA==
-X-Google-Smtp-Source: ABdhPJyT9m4eJrn2NJRLqyik1zmslChCJeZLrGkukJT+0lnFfwqo/WvDQUXQ8MvtVpST6dcT6SNask0BDMM/CbbmysQ=
-X-Received: by 2002:a9d:356:: with SMTP id 80mr13762561otv.335.1643700776891;
- Mon, 31 Jan 2022 23:32:56 -0800 (PST)
+        bh=BIdNhi2/wGNy2B+fCo9w5bfywyakFJRFI4mxzMFaGNI=;
+        b=HUz4pYb+xIK7ZWSNjXLVoDDkpscCmW9QlE4yq6CaPd9+lzj+6i8Uzqt7wEe0f+Kk0y
+         QKR/IkXI7eXqNtouTLV8uR/5qAsgYOSP2ys5Mui3D95ei0vbPhqPE0sEopbpAsZj86Ph
+         DiPNAdFqtbsa7ONg1vagiyr8zNjwa4Ogei2CSvulCp6jPj/LY+y4c4mQrZbe+FsBFD3D
+         IC+ajCd4RsHZi8MoI9mFs1msoACVJRWAXTfqj1DutELJzb8X7thNdwNZFlCjFdz7OjM1
+         RrHpbGpEsb+ZpDlDm5wlD2B81CqZ49Ba9y9n39VKO3tN68UjysqKSTCGr9Y/RbRNawK6
+         VUBg==
+X-Gm-Message-State: AOAM533I1Z9Yase4C3P99Wf1lt/VklxT3cCDvfBzieb3vr0KhV8tm+MA
+        54TD04GR112HJtcMKBh86udP7vdIUNZsSJ2zZtZNoQ==
+X-Google-Smtp-Source: ABdhPJyTBfJZ+D9BniDzOWNhJfMNPqr6eDX92AwebnnPMqWvsVCMxWshk6ivXLtZwqM9pIDrkVI8yCduxjizop/oTrI=
+X-Received: by 2002:a92:c5c8:: with SMTP id s8mr4153649ilt.295.1643700801640;
+ Mon, 31 Jan 2022 23:33:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131103407.1971678-1-elver@google.com>
-In-Reply-To: <20220131103407.1971678-1-elver@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 1 Feb 2022 08:32:45 +0100
-Message-ID: <CACT4Y+Zcg9Jf9p+RHWwKNDoCpfH-SBTzPpuQBBryyeopMONmEw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] perf: Copy perf_event_attr::sig_data on modification
-To:     Marco Elver <elver@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+References: <20220126233454.3362047-1-eranian@google.com> <20220126233454.3362047-9-eranian@google.com>
+ <YfKY4k+ZO9of3Ipd@hirez.programming.kicks-ass.net>
+In-Reply-To: <YfKY4k+ZO9of3Ipd@hirez.programming.kicks-ass.net>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Mon, 31 Jan 2022 23:33:10 -0800
+Message-ID: <CABPqkBQoLh+v0ANLb=U-JTjT0yjBacVLTh6f=0q4J4XhVQeeuQ@mail.gmail.com>
+Subject: Re: [PATCH v5 08/13] ACPI: add perf low power callback
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
+        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-acpi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 at 11:34, Marco Elver <elver@google.com> wrote:
+On Thu, Jan 27, 2022 at 5:06 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> The intent has always been that perf_event_attr::sig_data should also be
-> modifiable along with PERF_EVENT_IOC_MODIFY_ATTRIBUTES, because it is
-> observable by user space if SIGTRAP on events is requested.
+> On Wed, Jan 26, 2022 at 03:34:49PM -0800, Stephane Eranian wrote:
+> > This patch add an optional callback needed by some PMU features, e.g., AMD
 >
-> Currently only PERF_TYPE_BREAKPOINT is modifiable, and explicitly copies
-> relevant breakpoint-related attributes in hw_breakpoint_copy_attr().
-> This misses copying perf_event_attr::sig_data.
+> "This patch" is a documented fail.
 >
-> Since sig_data is not specific to PERF_TYPE_BREAKPOINT, introduce a
-> helper to copy generic event-type-independent attributes on
-> modification.
->
-> Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
-> Reported-by: Dmitry Vyukov <dvyukov@google.com>
-> Signed-off-by: Marco Elver <elver@google.com>
+I understand this is not ideal. But the BRS feature must be disabled
+before going low-power.
+Do you have a better proposal? Been trying to find the simplest way to
+support this with no
+impact when not needed.
 
-Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
-
-Thanks for the quick fix.
-
-> ---
->  kernel/events/core.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> > BRS, to give a chance to the perf_events code to change its state before
+> > going to low power and after coming back.
+> >
+> > The callback is void when the PERF_NEEDS_LOPWR_CB flag is not set.
+> > This flag must be set in arch specific perf_event.h header whenever needed.
+> > When not set, there is no impact of the ACPI code.
+> >
+> > Signed-off-by: Stephane Eranian <eranian@google.com>
+> > ---
+> >  drivers/acpi/acpi_pad.c       | 6 ++++++
+> >  drivers/acpi/processor_idle.c | 5 +++++
+> >  include/linux/perf_event.h    | 6 ++++++
+> >  3 files changed, 17 insertions(+)
+> >
+> > diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
+> > index f45979aa2d64..a306a07a60b5 100644
+> > --- a/drivers/acpi/acpi_pad.c
+> > +++ b/drivers/acpi/acpi_pad.c
+> > @@ -164,6 +164,9 @@ static int power_saving_thread(void *data)
+> >                               tsc_marked_unstable = 1;
+> >                       }
+> >                       local_irq_disable();
+> > +
+> > +                     perf_lopwr_cb(true);
+> > +
+> >                       tick_broadcast_enable();
+> >                       tick_broadcast_enter();
+> >                       stop_critical_timings();
+> > @@ -172,6 +175,9 @@ static int power_saving_thread(void *data)
+> >
+> >                       start_critical_timings();
+> >                       tick_broadcast_exit();
+> > +
+> > +                     perf_lopwr_cb(false);
+> > +
+> >                       local_irq_enable();
+> >
+> >                       if (time_before(expire_time, jiffies)) {
 >
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index fc18664f49b0..db0d85a85f1b 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -3197,6 +3197,15 @@ static int perf_event_modify_breakpoint(struct perf_event *bp,
->         return err;
->  }
->
-> +/*
-> + * Copy event-type-independent attributes that may be modified.
-> + */
-> +static void perf_event_modify_copy_attr(struct perf_event_attr *to,
-> +                                       const struct perf_event_attr *from)
-> +{
-> +       to->sig_data = from->sig_data;
-> +}
-> +
->  static int perf_event_modify_attr(struct perf_event *event,
->                                   struct perf_event_attr *attr)
->  {
-> @@ -3219,10 +3228,17 @@ static int perf_event_modify_attr(struct perf_event *event,
->         WARN_ON_ONCE(event->ctx->parent_ctx);
->
->         mutex_lock(&event->child_mutex);
-> +       /*
-> +        * Event-type-independent attributes must be copied before event-type
-> +        * modification, which will validate that final attributes match the
-> +        * source attributes after all relevant attributes have been copied.
-> +        */
-> +       perf_event_modify_copy_attr(&event->attr, attr);
->         err = func(event, attr);
->         if (err)
->                 goto out;
->         list_for_each_entry(child, &event->child_list, child_list) {
-> +               perf_event_modify_copy_attr(&child->attr, attr);
->                 err = func(child, attr);
->                 if (err)
->                         goto out;
-> --
-> 2.35.0.rc2.247.g8bbb082509-goog
->
+> You forgot to Cc the maintainers of this stinking pile of poo. Can we
+> please delete it instead?

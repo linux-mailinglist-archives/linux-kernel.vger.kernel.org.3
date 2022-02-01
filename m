@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFE04A573F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF7B4A574D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbiBAGdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiBAGdl (ORCPT
+        id S234337AbiBAGfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:35:40 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com ([173.254.64.10]:34710 "EHLO
+        qproxy1-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234248AbiBAGfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:33:41 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF27C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:33:41 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id j23so31929325edp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 22:33:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JrzOIwB/15hXdxo9+BD6kYpDhXtGeAQrIT7/EdNyUC8=;
-        b=KiOB8OZmozPHe204e845yU6DhE2s2Wii7ARJYDMRtL14WMcLChXIhgUC8V7Sc6qv3c
-         ygZAa9odMWs+SHECpaMYcYiFX2RKQgy2gueKBEfcNJ2YNd06zKBuVOk2+wzrG2OV99vd
-         4sLfTzxmDxzPh4V6Wq2X0aTg65IbvVqX02+Ez5Ubeld3riS+YfNItXkYYbyoFQQRp4tO
-         dNJSQ0LVj5ZatkwM46bWaMzeU3p9gwsJVctEqK2BJvWb2IIzwTsTNzmGniU3pC1eR8hP
-         3aQWB6BGEjSe11DSbIpQAn7imGk3yayzkeSqRzjHIs5hxqewKmSPM4FEPgPLBrc2wHZy
-         rOhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JrzOIwB/15hXdxo9+BD6kYpDhXtGeAQrIT7/EdNyUC8=;
-        b=YhAkelgNO0J2aso88eyW14OJXWVgo0ji/dt3VInqfcI2lwOgAx3IJ9CuiSMqbKix2p
-         E93FCnIcZ20WBmWAo42B36oAn8+2LQ1GH4fw/VxQNBHU1qaIece9FuVM7eDEOyNsKmcp
-         vqqK0eD3tA4Dr9zpO4saB3o6DKZT2wKc75qE7OVQ+03+aekqTjxQKpp8vCrItfIP0N2t
-         dEvUgBhG0ZjsWKQcf1TchN/t8xyBfZm7uytGMW5D8GSgDlunEv9JiNPMHqG4I+jTNUTR
-         EsvIm27wdyeFIj/RXZQ5HyJ8caGQa1QH8u3Hj5gkZRR7630lO9ZKEhq5h2ZWR5NTNi1s
-         Q7QQ==
-X-Gm-Message-State: AOAM532J2PL8KCH2S3S0qWkQDzKM4wFfUEAPJlwaiSjYE6GrlrgLCEk/
-        KZnJVV+UAXYVB0PWIwm3pCY=
-X-Google-Smtp-Source: ABdhPJz0L77NhTpN2CaRbV3UMUQngiAZFds2CfrdJ3MxZAJnDbRhUE2zdRKHZYmco5hzlmHATJSNsw==
-X-Received: by 2002:a50:eb82:: with SMTP id y2mr23327756edr.133.1643697219722;
-        Mon, 31 Jan 2022 22:33:39 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id fh23sm14300698ejc.176.2022.01.31.22.33.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 31 Jan 2022 22:33:39 -0800 (PST)
-Date:   Tue, 1 Feb 2022 06:33:38 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
-        mgorman@techsingularity.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memory_hotplug: build zonelist for managed_zone
-Message-ID: <20220201063338.u4ux2jsgctuo7tex@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220127012023.18095-1-richard.weiyang@gmail.com>
- <YfJXoSVkQ3X5u44F@dhcp22.suse.cz>
- <20220129002628.2cwr35glahq5f5md@master>
- <Yfe48O7eBWSe0LjK@dhcp22.suse.cz>
+        Tue, 1 Feb 2022 01:35:38 -0500
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 1E16C8029AD4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 06:35:37 +0000 (UTC)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id D635C10042A93
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 06:35:06 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id Emksnp9l22s5dEmksnUby0; Tue, 01 Feb 2022 06:35:06 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=BOh2EHcG c=1 sm=1 tr=0 ts=61f8d49a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=DghFqjY3_ZEA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=UupU1YHbf5NBbBAYFb3ldml5kuHdAQyQHnkHeLNQrCw=; b=AFO06xvShKOgBLNEaLOXtwMWFh
+        DgLwmprylKJBO3SP2B3AhRdI2CcKCmhxSrQdFxx2lVqwLINyx7mUA0N/RQJrfoxd4RIB2ASGY11/L
+        LKgnMz2JZfJ9uAm2FGVGRvGYi;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:33724 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nEmks-001VXb-1h; Mon, 31 Jan 2022 23:35:06 -0700
+Message-ID: <70bb3dc0-c54b-d617-a5ed-5ff31e2ac126@w6rz.net>
+Date:   Mon, 31 Jan 2022 22:35:04 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfe48O7eBWSe0LjK@dhcp22.suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 000/200] 5.16.5-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com
+References: <20220131105233.561926043@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nEmks-001VXb-1h
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:33724
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 12
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:24:48AM +0100, Michal Hocko wrote:
->> >> This patch restore the original behavior by using the same criteria to
->> >> add a zone in zonelist during memory hotplug.
->> >
->> >Why?
->> >
->> 
->> In case we online a populated zone, but not managed. Then this zone will not
->> be in zonelist. Right?
+On 1/31/22 02:54, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.5 release.
+> There are 200 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->yeah. We can theoretically end up with a zone without any managed menory
->on the zonelists. But my primary question is why do we need this change?
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Currently I don't see a real case for this.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
->Does it fix any existing problem? Does it make the code easier to
->read/understand? Does it improve performance? Every patch should have a
->justification. Your changelog merely lists the history and then states
->the new behavior without any explanation of why that is needed or
->desired. See?
+Tested-by: Ron Economos <re@w6rz.net>
 
-I don't have such reason now.
-
->-- 
->Michal Hocko
->SUSE Labs
-
--- 
-Wei Yang
-Help you, Help me

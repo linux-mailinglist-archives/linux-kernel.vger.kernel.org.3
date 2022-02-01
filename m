@@ -2,245 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0F44A6637
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400784A663B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242394AbiBAUl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S242567AbiBAUmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238860AbiBAUll (ORCPT
+        with ESMTP id S241160AbiBAUlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:41:41 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C4C061397
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:39:41 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id t9so25798317lji.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:39:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CCHRlnNYeF95Z0E47QMIOcWFuVuKdPbhrfyvVDY/gqE=;
-        b=MXDhzlA/b4G0ig7K6rclUU3oFoycV4wfrA/3QQrZCzuP+ttoHw4Bxm4G81iw1INDFN
-         r7R2Kcga3uKko9XYj8F7TDykqLDIgMiSLy25AeE7UFgHfozMn8YLGuIaxYD0pCjDiQNb
-         hWYMvvj15zyQnU5NcJZipSrluZeUR82fdDnZ7f6TV3eRq1XG1vGwIec59TGu+zDsQ/0C
-         CgtsZC5Derge+uNFYv0nHex+jsnb3KLMo6BNaf16VRHehk68wbW1JL8pZ3DzVJWSf4xI
-         k5whar2GAfdItMDRQZfNjsClnweO6EXT7aAe2oZrHe2Suspg6kt+SogsQ825Ps6iSRWx
-         zEkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CCHRlnNYeF95Z0E47QMIOcWFuVuKdPbhrfyvVDY/gqE=;
-        b=hZz+Lb1RtbbmoSdgnZBA2h4ztG2YGOWWX7pTZWX0aWRuq8DTBvFE9k/1WTIFRJ2H8n
-         sWbMmJXL+oWs4p50WguNknu542BOSWxOowzG/ulOyfPpb2RWy+RNSgWJ2LXZcASBBIZc
-         gVGzdAGDxj6syqBNVxWGtUb0Iqjj/hQk6RB3cf85shl3yxmwOcGHIlVTw/7vcTv6FOhD
-         SXCUIcGJFfkvaylYvDee2Co0f44rbpJF/2WUIlZtHFhZJXJbTv3Ob/XreomS/EUOLnBt
-         UtBQWGgyhUwdYcOVxNr7haQSG4ftrl/iBDB2tVEm6XDQByQDWN3qJq3m7NioZFiGPvbo
-         fuuA==
-X-Gm-Message-State: AOAM531BVarYMp18I4xaaROuEKdhhTvz+OysHQ2BVSocxSIgO9yS5Vjh
-        q7TuZMFv/9j+8su20doXzH2DtCk1i3STDFJxznCcAA==
-X-Google-Smtp-Source: ABdhPJz3tdzw9oSrD2hKDXB+1mXZIyEnyffVNF8qPwJHccVAns3fQrSH2hPsPAIgwyf+fex4mAbmF0sJBtpDyR1gxY8=
-X-Received: by 2002:a2e:a4a9:: with SMTP id g9mr17830908ljm.369.1643747979115;
- Tue, 01 Feb 2022 12:39:39 -0800 (PST)
+        Tue, 1 Feb 2022 15:41:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2DEC061741;
+        Tue,  1 Feb 2022 12:41:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D12B616FB;
+        Tue,  1 Feb 2022 20:41:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD3BC340EB;
+        Tue,  1 Feb 2022 20:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643748101;
+        bh=+Aams9bKVTkm04jO+/5wKAEgKwPe4NmYBIC6lLhUMWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PrvtbhH2dez7QfYf4YU1FmvDmFXkjtl4Y08DiWZw4DFrQxQGiGdMmuwvJPLqhsshS
+         eOGMjt5Y3WFBORzlCGX9mCwxKX5+UZInet3K/i8tM6BZFIuXUly9QKQ1anM+p/9a7u
+         /P3YyhfrrWCpayyLG+jickDdS+xOS0OfpO485bADtSPcbs2A9Puewq/lxnxXJQBK4D
+         3HNI0pVrUexFFvnG3Gnl/ZPvq8pWpNmG55NUegVYAIKYUN8Z4FkVXdh/7V8ymU/4Xg
+         btjKd6pCIdGLbipVgcWyVfLi5DZKWqwrHElVl9UyQFOqWSqzdhgko5aiJxl98Rd+GZ
+         Ejr7Oci1ugIvQ==
+Date:   Tue, 1 Feb 2022 12:41:40 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, hch@infradead.org, jane.chu@oracle.com
+Subject: Re: [PATCH v10 8/9] xfs: Implement ->notify_failure() for XFS
+Message-ID: <20220201204140.GC8338@magnolia>
+References: <20220127124058.1172422-1-ruansy.fnst@fujitsu.com>
+ <20220127124058.1172422-9-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-References: <20220128171804.569796-1-brijesh.singh@amd.com> <20220128171804.569796-43-brijesh.singh@amd.com>
-In-Reply-To: <20220128171804.569796-43-brijesh.singh@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Tue, 1 Feb 2022 13:39:27 -0700
-Message-ID: <CAMkAt6p-kEJXJxHcqay+eoMnTDCGj7tZXVDYwrovB3VkXCbYRg@mail.gmail.com>
-Subject: Re: [PATCH v9 42/43] virt: sevguest: Add support to derive key
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
-        Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Liam Merwick <liam.merwick@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127124058.1172422-9-ruansy.fnst@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 10:19 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
->
-> The SNP_GET_DERIVED_KEY ioctl interface can be used by the SNP guest to
-> ask the firmware to provide a key derived from a root key. The derived
-> key may be used by the guest for any purposes it chooses, such as a
-> sealing key or communicating with the external entities.
->
-> See SEV-SNP firmware spec for more information.
->
-> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-
-Reviewed-by: Peter Gonda <pgonda@google.com>
-
+On Thu, Jan 27, 2022 at 08:40:57PM +0800, Shiyang Ruan wrote:
+> Introduce xfs_notify_failure.c to handle failure related works, such as
+> implement ->notify_failure(), register/unregister dax holder in xfs, and
+> so on.
+> 
+> If the rmap feature of XFS enabled, we can query it to find files and
+> metadata which are associated with the corrupt data.  For now all we do
+> is kill processes with that file mapped into their address spaces, but
+> future patches could actually do something about corrupt metadata.
+> 
+> After that, the memory failure needs to notify the processes who are
+> using those files.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
 > ---
->  Documentation/virt/coco/sevguest.rst  | 17 ++++++++++
->  drivers/virt/coco/sevguest/sevguest.c | 45 +++++++++++++++++++++++++++
->  include/uapi/linux/sev-guest.h        | 17 ++++++++++
->  3 files changed, 79 insertions(+)
->
-> diff --git a/Documentation/virt/coco/sevguest.rst b/Documentation/virt/coco/sevguest.rst
-> index 47ef3b0821d5..aafc9bce9aef 100644
-> --- a/Documentation/virt/coco/sevguest.rst
-> +++ b/Documentation/virt/coco/sevguest.rst
-> @@ -72,6 +72,23 @@ On success, the snp_report_resp.data will contains the report. The report
->  contain the format described in the SEV-SNP specification. See the SEV-SNP
->  specification for further details.
->
-> +2.2 SNP_GET_DERIVED_KEY
-> +-----------------------
-> +:Technology: sev-snp
-> +:Type: guest ioctl
-> +:Parameters (in): struct snp_derived_key_req
-> +:Returns (out): struct snp_derived_key_resp on success, -negative on error
+>  fs/xfs/Makefile             |   1 +
+>  fs/xfs/xfs_buf.c            |  12 ++
+>  fs/xfs/xfs_fsops.c          |   3 +
+>  fs/xfs/xfs_mount.h          |   1 +
+>  fs/xfs/xfs_notify_failure.c | 222 ++++++++++++++++++++++++++++++++++++
+>  fs/xfs/xfs_notify_failure.h |  10 ++
+>  6 files changed, 249 insertions(+)
+>  create mode 100644 fs/xfs/xfs_notify_failure.c
+>  create mode 100644 fs/xfs/xfs_notify_failure.h
+> 
+> diff --git a/fs/xfs/Makefile b/fs/xfs/Makefile
+> index 04611a1068b4..389970b3e13b 100644
+> --- a/fs/xfs/Makefile
+> +++ b/fs/xfs/Makefile
+> @@ -84,6 +84,7 @@ xfs-y				+= xfs_aops.o \
+>  				   xfs_message.o \
+>  				   xfs_mount.o \
+>  				   xfs_mru_cache.o \
+> +				   xfs_notify_failure.o \
+>  				   xfs_pwork.o \
+>  				   xfs_reflink.o \
+>  				   xfs_stats.o \
+> diff --git a/fs/xfs/xfs_buf.c b/fs/xfs/xfs_buf.c
+> index b45e0d50a405..017010b3d601 100644
+> --- a/fs/xfs/xfs_buf.c
+> +++ b/fs/xfs/xfs_buf.c
+> @@ -19,6 +19,7 @@
+>  #include "xfs_errortag.h"
+>  #include "xfs_error.h"
+>  #include "xfs_ag.h"
+> +#include "xfs_notify_failure.h"
+>  
+>  static struct kmem_cache *xfs_buf_cache;
+>  
+> @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
+>  	list_lru_destroy(&btp->bt_lru);
+>  
+>  	blkdev_issue_flush(btp->bt_bdev);
+> +	if (btp->bt_daxdev)
+> +		dax_unregister_holder(btp->bt_daxdev);
+>  	fs_put_dax(btp->bt_daxdev);
+>  
+>  	kmem_free(btp);
+> @@ -1946,6 +1949,15 @@ xfs_alloc_buftarg(
+>  	btp->bt_dev =  bdev->bd_dev;
+>  	btp->bt_bdev = bdev;
+>  	btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
+> +	if (btp->bt_daxdev) {
+> +		if (dax_get_holder(btp->bt_daxdev)) {
+> +			xfs_err(mp, "DAX device already in use?!");
+> +			goto error_free;
+> +		}
 > +
-> +The SNP_GET_DERIVED_KEY ioctl can be used to get a key derive from a root key.
+> +		dax_register_holder(btp->bt_daxdev, mp,
+> +				&xfs_dax_holder_operations);
 
-derived from ...
+Um... is XFS required to take a lock here?  How do we prevent parallel
+mounts of filesystems on two partitions from breaking each other?
 
-> +The derived key can be used by the guest for any purpose, such as sealing keys
-> +or communicating with external entities.
+> +	}
+>  
+>  	/*
+>  	 * Buffer IO error rate limiting. Limit it to no more than 10 messages
+> diff --git a/fs/xfs/xfs_fsops.c b/fs/xfs/xfs_fsops.c
+> index 33e26690a8c4..d4d36c5bef11 100644
+> --- a/fs/xfs/xfs_fsops.c
+> +++ b/fs/xfs/xfs_fsops.c
+> @@ -542,6 +542,9 @@ xfs_do_force_shutdown(
+>  	} else if (flags & SHUTDOWN_CORRUPT_INCORE) {
+>  		tag = XFS_PTAG_SHUTDOWN_CORRUPT;
+>  		why = "Corruption of in-memory data";
+> +	} else if (flags & SHUTDOWN_CORRUPT_ONDISK) {
+> +		tag = XFS_PTAG_SHUTDOWN_CORRUPT;
+> +		why = "Corruption of on-disk metadata";
+>  	} else {
+>  		tag = XFS_PTAG_SHUTDOWN_IOERROR;
+>  		why = "Metadata I/O Error";
+> diff --git a/fs/xfs/xfs_mount.h b/fs/xfs/xfs_mount.h
+> index 00720a02e761..47ff4ac53c4c 100644
+> --- a/fs/xfs/xfs_mount.h
+> +++ b/fs/xfs/xfs_mount.h
+> @@ -435,6 +435,7 @@ void xfs_do_force_shutdown(struct xfs_mount *mp, int flags, char *fname,
+>  #define SHUTDOWN_LOG_IO_ERROR	0x0002	/* write attempt to the log failed */
+>  #define SHUTDOWN_FORCE_UMOUNT	0x0004	/* shutdown from a forced unmount */
+>  #define SHUTDOWN_CORRUPT_INCORE	0x0008	/* corrupt in-memory data structures */
+> +#define SHUTDOWN_CORRUPT_ONDISK	0x0010  /* corrupt metadata on device */
+>  
+>  #define XFS_SHUTDOWN_STRINGS \
+>  	{ SHUTDOWN_META_IO_ERROR,	"metadata_io" }, \
+> diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+> new file mode 100644
+> index 000000000000..6abaa043f4bc
+> --- /dev/null
+> +++ b/fs/xfs/xfs_notify_failure.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 Fujitsu.  All Rights Reserved.
 
-Question: How would this be used to communicate with external
-entities? Reading Section 7.2 it seems like we could pick the VCEK and
-have no guest specific inputs and we'd get the same derived key as we
-would on another guest on the same platform with, is that correct?
+2022?
 
+> + */
 > +
-> +The ioctl uses the SNP_GUEST_REQUEST (MSG_KEY_REQ) command provided by the
-> +SEV-SNP firmware to derive the key. See SEV-SNP specification for further details
-> +on the various fields passed in the key derivation request.
+> +#include "xfs.h"
+> +#include "xfs_shared.h"
+> +#include "xfs_format.h"
+> +#include "xfs_log_format.h"
+> +#include "xfs_trans_resv.h"
+> +#include "xfs_mount.h"
+> +#include "xfs_alloc.h"
+> +#include "xfs_bit.h"
+> +#include "xfs_btree.h"
+> +#include "xfs_inode.h"
+> +#include "xfs_icache.h"
+> +#include "xfs_rmap.h"
+> +#include "xfs_rmap_btree.h"
+> +#include "xfs_rtalloc.h"
+> +#include "xfs_trans.h"
 > +
-> +On success, the snp_derived_key_resp.data contains the derived key value. See
-> +the SEV-SNP specification for further details.
->
->  Reference
->  ---------
-> diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
-> index 6dc0785ddd4b..4369e55df9a6 100644
-> --- a/drivers/virt/coco/sevguest/sevguest.c
-> +++ b/drivers/virt/coco/sevguest/sevguest.c
-> @@ -392,6 +392,48 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
->         return rc;
->  }
->
-> +static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+> +#include <linux/mm.h>
+> +#include <linux/dax.h>
+> +
+> +struct failure_info {
+> +	xfs_agblock_t		startblock;
+> +	xfs_extlen_t		blockcount;
+> +	int			mf_flags;
+> +};
+> +
+> +#if IS_ENABLED(CONFIG_MEMORY_FAILURE) && IS_ENABLED(CONFIG_FS_DAX)
+> +static pgoff_t
+> +xfs_failure_pgoff(
+> +	struct xfs_mount		*mp,
+> +	const struct xfs_rmap_irec	*rec,
+> +	const struct failure_info	*notify)
 > +{
-> +       struct snp_guest_crypto *crypto = snp_dev->crypto;
-> +       struct snp_derived_key_resp resp = {0};
-> +       struct snp_derived_key_req req = {0};
-> +       int rc, resp_len;
-> +       u8 buf[64+16]; /* Response data is 64 bytes and max authsize for GCM is 16 bytes */
+> +	uint64_t			pos = rec->rm_offset;
 > +
-> +       if (!arg->req_data || !arg->resp_data)
-> +               return -EINVAL;
-> +
-> +       /* Copy the request payload from userspace */
-> +       if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
-> +               return -EFAULT;
-> +
-> +       /*
-> +        * The intermediate response buffer is used while decrypting the
-> +        * response payload. Make sure that it has enough space to cover the
-> +        * authtag.
-> +        */
-> +       resp_len = sizeof(resp.data) + crypto->a_len;
-> +       if (sizeof(buf) < resp_len)
-> +               return -ENOMEM;
-> +
-> +       /* Issue the command to get the attestation report */
-> +       rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
-> +                                 SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
-> +                                 &arg->fw_err);
-> +       if (rc)
-> +               goto e_free;
-> +
-> +       /* Copy the response payload to userspace */
-> +       memcpy(resp.data, buf, sizeof(resp.data));
-> +       if (copy_to_user((void __user *)arg->resp_data, &resp, sizeof(resp)))
-> +               rc = -EFAULT;
-> +
-> +e_free:
-> +       memzero_explicit(buf, sizeof(buf));
-> +       memzero_explicit(&resp, sizeof(resp));
-> +       return rc;
+> +	if (notify->startblock > rec->rm_startblock)
+> +		pos += XFS_FSB_TO_B(mp,
+> +				notify->startblock - rec->rm_startblock);
+> +	return pos >> PAGE_SHIFT;
 > +}
 > +
->  static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long arg)
->  {
->         struct snp_guest_dev *snp_dev = to_snp_dev(file);
-> @@ -421,6 +463,9 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
->         case SNP_GET_REPORT:
->                 ret = get_report(snp_dev, &input);
->                 break;
-> +       case SNP_GET_DERIVED_KEY:
-> +               ret = get_derived_key(snp_dev, &input);
-> +               break;
->         default:
->                 break;
->         }
-> diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
-> index 081d314a6279..bcd00a6d4501 100644
-> --- a/include/uapi/linux/sev-guest.h
-> +++ b/include/uapi/linux/sev-guest.h
-> @@ -30,6 +30,20 @@ struct snp_report_resp {
->         __u8 data[4000];
->  };
->
-> +struct snp_derived_key_req {
-> +       __u32 root_key_select;
-> +       __u32 rsvd;
-> +       __u64 guest_field_select;
-> +       __u32 vmpl;
-> +       __u32 guest_svn;
-> +       __u64 tcb_version;
+> +static unsigned long
+> +xfs_failure_pgcnt(
+> +	struct xfs_mount		*mp,
+> +	const struct xfs_rmap_irec	*rec,
+> +	const struct failure_info	*notify)
+> +{
+> +	xfs_agblock_t			end_rec;
+> +	xfs_agblock_t			end_notify;
+> +	xfs_agblock_t			start_cross;
+> +	xfs_agblock_t			end_cross;
+> +
+> +	start_cross = max(rec->rm_startblock, notify->startblock);
+> +
+> +	end_rec = rec->rm_startblock + rec->rm_blockcount;
+> +	end_notify = notify->startblock + notify->blockcount;
+> +	end_cross = min(end_rec, end_notify);
+> +
+> +	return XFS_FSB_TO_B(mp, end_cross - start_cross) >> PAGE_SHIFT;
+> +}
+> +
+> +static int
+> +xfs_dax_failure_fn(
+> +	struct xfs_btree_cur		*cur,
+> +	const struct xfs_rmap_irec	*rec,
+> +	void				*data)
+> +{
+> +	struct xfs_mount		*mp = cur->bc_mp;
+> +	struct xfs_inode		*ip;
+> +	struct failure_info		*notify = data;
+> +	int				error = 0;
+> +
+> +	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+> +	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+> +		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+> +		return -EFSCORRUPTED;
+> +	}
+> +
+> +	/* Get files that incore, filter out others that are not in use. */
+> +	error = xfs_iget(mp, cur->bc_tp, rec->rm_owner, XFS_IGET_INCORE,
+> +			 0, &ip);
+> +	/* Continue the rmap query if the inode isn't incore */
+> +	if (error == -ENODATA)
+> +		return 0;
+> +	if (error)
+> +		return error;
+> +
+> +	error = mf_dax_kill_procs(VFS_I(ip)->i_mapping,
+> +				  xfs_failure_pgoff(mp, rec, notify),
+> +				  xfs_failure_pgcnt(mp, rec, notify),
+> +				  notify->mf_flags);
+> +	xfs_irele(ip);
+> +	return error;
+> +}
+> +#else
+> +static int
+> +xfs_dax_failure_fn(
+> +	struct xfs_btree_cur		*cur,
+> +	const struct xfs_rmap_irec	*rec,
+> +	void				*data)
+> +{
+> +	struct xfs_mount		*mp = cur->bc_mp;
+> +
+> +	/* No other option besides shutting down the fs. */
+> +	xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+> +	return -EFSCORRUPTED;
+> +}
+> +#endif /* CONFIG_MEMORY_FAILURE && CONFIG_FS_DAX */
+> +
+> +static int
+> +xfs_dax_notify_ddev_failure(
+> +	struct xfs_mount	*mp,
+> +	xfs_daddr_t		daddr,
+> +	xfs_daddr_t		bblen,
+> +	int			mf_flags)
+> +{
+> +	struct xfs_trans	*tp = NULL;
+> +	struct xfs_btree_cur	*cur = NULL;
+> +	struct xfs_buf		*agf_bp = NULL;
+> +	struct failure_info	notify;
+> +	int			error = 0;
+> +	xfs_fsblock_t		fsbno = XFS_DADDR_TO_FSB(mp, daddr);
+> +	xfs_agnumber_t		agno = XFS_FSB_TO_AGNO(mp, fsbno);
+> +	xfs_fsblock_t		end_fsbno = XFS_DADDR_TO_FSB(mp, daddr + bblen);
+> +	xfs_agnumber_t		end_agno = XFS_FSB_TO_AGNO(mp, end_fsbno);
+> +
+> +	/*
+> +	 * Once a file is found by rmap, we take the intersection of two ranges:
+> +	 * notification range and file extent range, to make sure we won't go
+> +	 * out of scope.
+> +	 */
+> +	notify.mf_flags = mf_flags;
+> +	notify.startblock = XFS_FSB_TO_AGBNO(mp, fsbno);
+> +	notify.blockcount = XFS_BB_TO_FSB(mp, bblen);
+
+This looks even more incorrect than what V9 did, because the notify
+structure helps the per-AG rmap record iterator pick the records (within
+that AG) that overlap the failed area, but we haven't selected any AGs
+yet.
+
+> +
+> +	error = xfs_trans_alloc_empty(mp, &tp);
+> +	if (error)
+> +		return error;
+> +
+> +	for (; agno <= end_agno; agno++) {
+> +		struct xfs_rmap_irec	ri_low = { };
+> +		struct xfs_rmap_irec	ri_high;
+
+So declare @notify here:
+
+		struct failure_info	notify;
+
+> +
+> +		error = xfs_alloc_read_agf(mp, tp, agno, 0, &agf_bp);
+> +		if (error)
+> +			break;
+> +
+> +		cur = xfs_rmapbt_init_cursor(mp, tp, agf_bp, agf_bp->b_pag);
+> +
+> +		/*
+> +		 * Set the rmap range from ri_low to ri_high, which represents
+> +		 * a [start, end] where we looking for the files or metadata.
+> +		 * The part of range out of a AG will be ignored.  So, it's fine
+> +		 * to set ri_low to "startblock" in all loops.  When it reaches
+> +		 * the last AG, set the ri_high to "endblock" to make sure we
+> +		 * actually end at the end.
+> +		 */
+> +		memset(&ri_high, 0xFF, sizeof(ri_high));
+> +		ri_low.rm_startblock = XFS_FSB_TO_AGBNO(mp, fsbno);
+> +		if (agno == end_agno)
+> +			ri_high.rm_startblock = XFS_FSB_TO_AGBNO(mp, end_fsbno);
+
+And initialize it here:
+
+		struct xfs_agf		*agf = agf_bp->b_addr;
+		xfs_agblock_t		agend;
+
+		agend = min(be32_to_cpu(agf->agf_length),
+				ri_high.rm_startblock);
+		notify.startblock = ri_low.rm_startblock;
+		notify.blockcount = agend - ri_low.rm_startblock;
+
+Before passing @notify to the rmap iteration.
+
+> +
+> +		error = xfs_rmap_query_range(cur, &ri_low, &ri_high,
+> +				xfs_dax_failure_fn, &notify);
+> +		xfs_btree_del_cursor(cur, error);
+> +		xfs_trans_brelse(tp, agf_bp);
+> +		if (error)
+> +			break;
+> +
+> +		fsbno = XFS_AGB_TO_FSB(mp, agno + 1, 0);
+> +	}
+> +
+> +	xfs_trans_cancel(tp);
+> +	return error;
+> +}
+> +
+> +static int
+> +xfs_dax_notify_failure(
+> +	struct dax_device	*dax_dev,
+> +	u64			offset,
+> +	u64			len,
+> +	int			mf_flags)
+> +{
+> +	struct xfs_mount	*mp = dax_get_holder(dax_dev);
+> +
+> +	if (mp->m_rtdev_targp && mp->m_rtdev_targp->bt_daxdev == dax_dev) {
+> +		xfs_warn(mp,
+> +			 "notify_failure() not supported on realtime device!");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+> +	    mp->m_logdev_targp != mp->m_ddev_targp) {
+> +		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+> +		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+> +		return -EFSCORRUPTED;
+> +	}
+> +
+> +	if (!xfs_has_rmapbt(mp)) {
+> +		xfs_warn(mp, "notify_failure() needs rmapbt enabled!");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	if (offset < mp->m_ddev_targp->bt_dax_part_off ||
+> +	    ((offset + len) > mp->m_ddev_targp->bt_bdev->bd_nr_sectors <<
+> +				SECTOR_SHIFT)) {
+
+I think this logic is wrong?
+
+If the failed region overlaps the entire fs, offset will be less than
+bt_dax_part_off.
+
+We're looking for reasons to ignore the failure event, right?
+
+So if the failed area is before the start of the fs then we can ignore
+it:
+
+	if (offset + len < mp->m_ddev_targp->bt_dax_part_off)
+		return -ENXIO;
+
+and if the failed area starts after the fs then we can ignore that too:
+
+	bdev_end = mp->m_ddev_targp->bt_dax_part_off +
+		   mp->m_ddev_targp->bt_bdev->bd_nr_sectors;
+	if (offset > bdev_end)
+		return -ENXIO;
+
+Right?
+
+--D
+
+> +		xfs_warn(mp, "notify_failure() goes out of the scope.");
+> +		return -ENXIO;
+> +	}
+> +
+> +	offset -= mp->m_ddev_targp->bt_dax_part_off;
+> +	return xfs_dax_notify_ddev_failure(mp, BTOBB(offset), BTOBB(len),
+> +			mf_flags);
+> +}
+> +
+> +const struct dax_holder_operations xfs_dax_holder_operations = {
+> +	.notify_failure		= xfs_dax_notify_failure,
 > +};
+> diff --git a/fs/xfs/xfs_notify_failure.h b/fs/xfs/xfs_notify_failure.h
+> new file mode 100644
+> index 000000000000..f40cb315e7ce
+> --- /dev/null
+> +++ b/fs/xfs/xfs_notify_failure.h
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 Fujitsu.  All Rights Reserved.
+> + */
+> +#ifndef __XFS_NOTIFY_FAILURE_H__
+> +#define __XFS_NOTIFY_FAILURE_H__
 > +
-> +struct snp_derived_key_resp {
-> +       /* response data, see SEV-SNP spec for the format */
-> +       __u8 data[64];
-> +};
+> +extern const struct dax_holder_operations xfs_dax_holder_operations;
 > +
->  struct snp_guest_request_ioctl {
->         /* message version number (must be non-zero) */
->         __u8 msg_version;
-> @@ -47,4 +61,7 @@ struct snp_guest_request_ioctl {
->  /* Get SNP attestation report */
->  #define SNP_GET_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x0, struct snp_guest_request_ioctl)
->
-> +/* Get a derived key from the root */
-> +#define SNP_GET_DERIVED_KEY _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x1, struct snp_guest_request_ioctl)
-> +
->  #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
-> --
-> 2.25.1
->
+> +#endif  /* __XFS_NOTIFY_FAILURE_H__ */
+> -- 
+> 2.34.1
+> 
+> 
+> 

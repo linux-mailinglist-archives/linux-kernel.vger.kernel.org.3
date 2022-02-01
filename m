@@ -2,191 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD884A663D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078E04A6644
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiBAUmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:42:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:36098 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241386AbiBAUmT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:42:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C31631FB;
-        Tue,  1 Feb 2022 12:42:18 -0800 (PST)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 041273F718;
-        Tue,  1 Feb 2022 12:42:16 -0800 (PST)
-Message-ID: <1ed6d576-63cb-fdd5-eaee-cc4154d25e0d@arm.com>
-Date:   Tue, 1 Feb 2022 14:42:08 -0600
+        id S240615AbiBAUoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240353AbiBAUoM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:44:12 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1492C061401
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:44:11 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id a28so36305310lfl.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5ziGDzhe4hiIJbW+habtGmGnhoT35aHsGESQviCaQ+w=;
+        b=ULRhHEwfC7PGE+4k1GDiGsO/d2FjnY+Oi4trs0eFA5DaXt/oV+RNNnSbpgrhC6aKbZ
+         XJ6govUz89erjGyfE7+7SVOskPe5PMFEu/tDTSBXkiTwqX3Zic6jNWZWMbOeawCw2SYc
+         3NKbkGph8POLHTfNE0Y0Zmdw1M0ofWjVr3GPyNPUu1T7FgK+hyJmjRNzjDWi0kuY3VCi
+         zobUuDbb3xQKyd9QYUUaM62NkosplK0FoeqV5eeE1wW0dN+fOJVn2J2VozPi6apyaCqZ
+         uZBBb+B+pvdCOU/34ZCAt49cKTUpwt4YM3jOVBzXb6mr3YgQnqRUeQyhAPyv849wVQ/i
+         NJ7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5ziGDzhe4hiIJbW+habtGmGnhoT35aHsGESQviCaQ+w=;
+        b=o6ZWRcQWyx0Xae+yk67FJeME1QQsu2pEAz3V3Li7X8qQUJHqUdchUdAzcZOu0yncV5
+         vXf4p1P6T+rZg4Cuppqdsb5JiZkdiarvuMzvve52E5IQFMZRGwHAbifHZTCrzWg3nSOe
+         cmamiFzX0dYOYozkNS8ETEUlYh9a7UJaVFTkfkHgSeZO1MmXrO8YhousX2AY1XCoIu2S
+         vMNOPP40lPiY9gz3FXZ9Fk4gNGqIADStnPBQekalypoWbLWqaBLWWSoxi0RtXPSdwdO6
+         kzsUmItpgXiVrxhRyhFMgW3QiYIHqxRidcBppBDHQZFKgAL6ENJCN+K27VN5TpwBpoma
+         Cg2Q==
+X-Gm-Message-State: AOAM530rdS6uDJer21/InwziHAqyYEQHwjCtnev76azE4LiAePRu8fjh
+        gta0tdisD+lqCR1YtUOroQeWGnq5siVaW9BpZE3qTgWQklcYBTVP
+X-Google-Smtp-Source: ABdhPJwu5e/9vy9h+TUoxFYmOE/ShH6BFV+jT8/RYV64qcflT/MzViz3MDcjtuZdgZhQPiMmVonl0lLHMhxVwRqnNjU=
+X-Received: by 2002:a05:6512:1520:: with SMTP id bq32mr19454952lfb.644.1643748249618;
+ Tue, 01 Feb 2022 12:44:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] serial: 8250_bcm2835aux: Add ACPI support
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Adrien Thierry <athierry@redhat.com>,
-        linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220201185001.926338-1-athierry@redhat.com>
- <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220128171804.569796-1-brijesh.singh@amd.com> <20220128171804.569796-44-brijesh.singh@amd.com>
+In-Reply-To: <20220128171804.569796-44-brijesh.singh@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 1 Feb 2022 13:43:57 -0700
+Message-ID: <CAMkAt6r_AupKbpmO7twMBtADrMPtWrRJ6kjAT4c1xGrZmUQ7sw@mail.gmail.com>
+Subject: Re: [PATCH v9 43/43] virt: sevguest: Add support to get extended report
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jan 28, 2022 at 10:19 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
+>
+> Version 2 of GHCB specification defines Non-Automatic-Exit(NAE) to get
+> the extended guest report. It is similar to the SNP_GET_REPORT ioctl.
+> The main difference is related to the additional data that will be
+> returned. The additional data returned is a certificate blob that can
+> be used by the SNP guest user. The certificate blob layout is defined
+> in the GHCB specification. The driver simply treats the blob as a opaque
+> data and copies it to userspace.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  Documentation/virt/coco/sevguest.rst  | 23 +++++++
+>  drivers/virt/coco/sevguest/sevguest.c | 89 +++++++++++++++++++++++++++
+>  include/uapi/linux/sev-guest.h        | 13 ++++
+>  3 files changed, 125 insertions(+)
+>
+> diff --git a/Documentation/virt/coco/sevguest.rst b/Documentation/virt/coco/sevguest.rst
+> index aafc9bce9aef..b9fe20e92d06 100644
+> --- a/Documentation/virt/coco/sevguest.rst
+> +++ b/Documentation/virt/coco/sevguest.rst
+> @@ -90,6 +90,29 @@ on the various fields passed in the key derivation request.
+>  On success, the snp_derived_key_resp.data contains the derived key value. See
+>  the SEV-SNP specification for further details.
+>
+> +
+> +2.3 SNP_GET_EXT_REPORT
+> +----------------------
+> +:Technology: sev-snp
+> +:Type: guest ioctl
+> +:Parameters (in/out): struct snp_ext_report_req
+> +:Returns (out): struct snp_report_resp on success, -negative on error
+> +
+> +The SNP_GET_EXT_REPORT ioctl is similar to the SNP_GET_REPORT. The difference is
+> +related to the additional certificate data that is returned with the report.
+> +The certificate data returned is being provided by the hypervisor through the
+> +SNP_SET_EXT_CONFIG.
+> +
+> +The ioctl uses the SNP_GUEST_REQUEST (MSG_REPORT_REQ) command provided by the SEV-SNP
+> +firmware to get the attestation report.
+> +
+> +On success, the snp_ext_report_resp.data will contain the attestation report
+> +and snp_ext_report_req.certs_address will contain the certificate blob. If the
+> +length of the blob is smaller than expected then snp_ext_report_req.certs_len will
+> +be updated with the expected value.
+> +
+> +See GHCB specification for further detail on how to parse the certificate blob.
+> +
+>  Reference
+>  ---------
+>
+> diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
+> index 4369e55df9a6..a53854353944 100644
+> --- a/drivers/virt/coco/sevguest/sevguest.c
+> +++ b/drivers/virt/coco/sevguest/sevguest.c
+> @@ -41,6 +41,7 @@ struct snp_guest_dev {
+>         struct device *dev;
+>         struct miscdevice misc;
+>
+> +       void *certs_data;
+>         struct snp_guest_crypto *crypto;
+>         struct snp_guest_msg *request, *response;
+>         struct snp_secrets_page_layout *layout;
+> @@ -434,6 +435,84 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
+>         return rc;
+>  }
+>
+> +static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+> +{
+> +       struct snp_guest_crypto *crypto = snp_dev->crypto;
+> +       struct snp_ext_report_req req = {0};
+> +       struct snp_report_resp *resp;
+> +       int ret, npages = 0, resp_len;
+> +
+> +       if (!arg->req_data || !arg->resp_data)
+> +               return -EINVAL;
+> +
+> +       /* Copy the request payload from userspace */
+> +       if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
+> +               return -EFAULT;
+> +
+> +       if (req.certs_len) {
+> +               if (req.certs_len > SEV_FW_BLOB_MAX_SIZE ||
+> +                   !IS_ALIGNED(req.certs_len, PAGE_SIZE))
+> +                       return -EINVAL;
+> +       }
+> +
+> +       if (req.certs_address && req.certs_len) {
+> +               if (!access_ok(req.certs_address, req.certs_len))
+> +                       return -EFAULT;
+> +
+> +               /*
+> +                * Initialize the intermediate buffer with all zero's. This buffer
 
-On 2/1/22 13:24, Florian Fainelli wrote:
-> 
-> 
-> On 2/1/2022 10:50 AM, Adrien Thierry wrote:
->> Add ACPI support to 8250_bcm2835aux driver. This makes it possible to
->> use the miniuart on the Raspberry Pi with the tianocore/edk2 UEFI
->> firmware.
->>
->> Signed-off-by: Adrien Thierry <athierry@redhat.com>
->> ---
->>   drivers/tty/serial/8250/8250_bcm2835aux.c | 103 +++++++++++++++++-----
->>   1 file changed, 83 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/tty/serial/8250/8250_bcm2835aux.c 
->> b/drivers/tty/serial/8250/8250_bcm2835aux.c
->> index fd95860cd..b904b321e 100644
->> --- a/drivers/tty/serial/8250/8250_bcm2835aux.c
->> +++ b/drivers/tty/serial/8250/8250_bcm2835aux.c
->> @@ -12,6 +12,7 @@
->>    * simultaneously to rs485.
->>    */
->> +#include <linux/acpi.h>
->>   #include <linux/clk.h>
->>   #include <linux/io.h>
->>   #include <linux/module.h>
->> @@ -44,6 +45,10 @@ struct bcm2835aux_data {
->>       u32 cntl;
->>   };
->> +struct bcm2835_aux_serial_acpi_driver_data {
->> +    resource_size_t offset;
->> +};
->> +
->>   static void bcm2835aux_rs485_start_tx(struct uart_8250_port *up)
->>   {
->>       if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX)) {
->> @@ -82,8 +87,12 @@ static int bcm2835aux_serial_probe(struct 
->> platform_device *pdev)
->>   {
->>       struct uart_8250_port up = { };
->>       struct bcm2835aux_data *data;
->> +    struct bcm2835_aux_serial_acpi_driver_data *acpi_data;
->>       struct resource *res;
->>       int ret;
->> +    resource_size_t mapbase;
->> +    resource_size_t mapsize;
->> +    unsigned int uartclk;
->>       /* allocate the custom structure */
->>       data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
->> @@ -108,10 +117,12 @@ static int bcm2835aux_serial_probe(struct 
->> platform_device *pdev)
->>       platform_set_drvdata(pdev, data);
->> -    /* get the clock - this also enables the HW */
->> -    data->clk = devm_clk_get(&pdev->dev, NULL);
->> -    if (IS_ERR(data->clk))
->> -        return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), "could 
->> not get clk\n");
->> +    if (dev_of_node(&pdev->dev)) {
->> +        /* get the clock - this also enables the HW */
->> +        data->clk = devm_clk_get(&pdev->dev, NULL);
->> +        if (IS_ERR(data->clk))
->> +            return dev_err_probe(&pdev->dev, PTR_ERR(data->clk), 
->> "could not get clk\n");
->> +    }
-> 
-> This does not seem necessary, if the clk is NULL when probed via ACPI, 
-> all of the clk_* APIs will deal with that gracefully. If you need not to 
-> treat -ENOENT as a hard error here, consider switching to 
-> devm_clk_get_optional(). Given that you look at the 'clock-frequency' 
-> property, you can still have some generic code, something like:
-> 
->      if (IS_ERR(data->clk)) {
->          ret = device_property_read_u32(&pdev->dev, "clock-frequency", 
-> &uartclk);
->          if (ret)
->              return dev_err_probe(&pdev->dev, ret, "could not get clk\n");
->      }
-> 
->>       /* get the interrupt */
->>       ret = platform_get_irq(pdev, 0);
->> @@ -125,20 +136,59 @@ static int bcm2835aux_serial_probe(struct 
->> platform_device *pdev)
->>           dev_err(&pdev->dev, "memory resource not found");
->>           return -EINVAL;
->>       }
->> -    up.port.mapbase = res->start;
->> -    up.port.mapsize = resource_size(res);
->> -
->> -    /* Check for a fixed line number */
->> -    ret = of_alias_get_id(pdev->dev.of_node, "serial");
->> -    if (ret >= 0)
->> -        up.port.line = ret;
->> -
->> -    /* enable the clock as a last step */
->> -    ret = clk_prepare_enable(data->clk);
->> -    if (ret) {
->> -        dev_err(&pdev->dev, "unable to enable uart clock - %d\n",
->> -            ret);
->> -        return ret;
-> 
-> All of that path can be common, and you can just define an offset to 
-> apply to the resource at the top after you fetched the memory resource. 
-> The offset will be non-0 for ACPI and 0 for non-ACPI. That is, no need 
-> for the intermediate variables and conditional paths whether this is 
-> ACPI apply this offset, or not.
-> 
->> +
->> +    mapbase = res->start;
->> +    mapsize = resource_size(res);
->> +
->> +    if (has_acpi_companion(&pdev->dev)) {
->> +        const struct acpi_device_id *match;
->> +
->> +        match = acpi_match_device(pdev->dev.driver->acpi_match_table, 
->> &pdev->dev);
->> +        if (!match)
->> +            return -ENODEV;
->> +
->> +        acpi_data = (struct bcm2835_aux_serial_acpi_driver_data 
->> *)match->driver_data;
->> +
->> +        /* Some UEFI implementations (e.g. tianocore/edk2 for the 
->> Raspberry Pi)
->> +         * describe the miniuart with a base address that encompasses 
->> the auxiliary
->> +         * registers shared between the miniuart and spi.
->> +         *
->> +         * This is due to historical reasons, see discussion here :
->> +         * https://edk2.groups.io/g/devel/topic/87501357#84349
->> +         *
->> +         * We need to add the offset between the miniuart and auxiliary
->> +         * registers to get the real miniuart base address.
-> 
-> And ACPI on the Pi4 is so widely deployed that fixing the miniuart 
-> resources is not an option at all? This really really continues to 
-> contribute to my impression that ACPI on the Pi4 is a fad more than a 
-> real thing, sorry.
+zeros
 
-The problem again, is that this resource is legacy and used by 
-windows/vmware/etc on both the rpi3 and rpi4. So, unfortunately it 
-cannot really be changed without breaking existing OSs.
+> +                * is used in the guest request message to get the certs blob from
+> +                * the host. If host does not supply any certs in it, then copy
+> +                * zeros to indicate that certificate data was not provided.
+> +                */
+> +               memset(snp_dev->certs_data, 0, req.certs_len);
+> +
+> +               npages = req.certs_len >> PAGE_SHIFT;
+> +       }
+> +
+> +       /*
+> +        * The intermediate response buffer is used while decrypting the
+> +        * response payload. Make sure that it has enough space to cover the
+> +        * authtag.
+> +        */
+> +       resp_len = sizeof(resp->data) + crypto->a_len;
+> +       resp = kzalloc(resp_len, GFP_KERNEL_ACCOUNT);
+> +       if (!resp)
+> +               return -ENOMEM;
 
+Can we pull this duplicated code from get_report() into a helper?
 
-Thanks,
-
+> +
+> +       snp_dev->input.data_npages = npages;
+> +       ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
+> +                                  SNP_MSG_REPORT_REQ, &req.data,
+> +                                  sizeof(req.data), resp->data, resp_len, &arg->fw_err);
+> +
+> +       /* If certs length is invalid then copy the returned length */
+> +       if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
+> +               req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
+> +
+> +               if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
+> +                       ret = -EFAULT;
+> +       }
+> +
+> +       if (ret)
+> +               goto e_free;
+> +
+> +       /* Copy the certificate data blob to userspace */
+> +       if (req.certs_address && req.certs_len &&
+> +           copy_to_user((void __user *)req.certs_address, snp_dev->certs_data,
+> +                        req.certs_len)) {
+> +               ret = -EFAULT;
+> +               goto e_free;
+> +       }
+> +
+> +       /* Copy the response payload to userspace */
+> +       if (copy_to_user((void __user *)arg->resp_data, resp, sizeof(*resp)))
+> +               ret = -EFAULT;
+> +
+> +e_free:
+> +       kfree(resp);
+> +       return ret;
+> +}
+> +
+>  static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long arg)
+>  {
+>         struct snp_guest_dev *snp_dev = to_snp_dev(file);
+> @@ -466,6 +545,9 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
+>         case SNP_GET_DERIVED_KEY:
+>                 ret = get_derived_key(snp_dev, &input);
+>                 break;
+> +       case SNP_GET_EXT_REPORT:
+> +               ret = get_ext_report(snp_dev, &input);
+> +               break;
+>         default:
+>                 break;
+>         }
+> @@ -594,6 +676,10 @@ static int __init snp_guest_probe(struct platform_device *pdev)
+>         if (!snp_dev->response)
+>                 goto e_fail;
+>
+> +       snp_dev->certs_data = alloc_shared_pages(SEV_FW_BLOB_MAX_SIZE);
+> +       if (!snp_dev->certs_data)
+> +               goto e_fail;
+> +
+>         ret = -EIO;
+>         snp_dev->crypto = init_crypto(snp_dev, snp_dev->vmpck, VMPCK_KEY_LEN);
+>         if (!snp_dev->crypto)
+> @@ -607,6 +693,7 @@ static int __init snp_guest_probe(struct platform_device *pdev)
+>         /* initial the input address for guest request */
+>         snp_dev->input.req_gpa = __pa(snp_dev->request);
+>         snp_dev->input.resp_gpa = __pa(snp_dev->response);
+> +       snp_dev->input.data_gpa = __pa(snp_dev->certs_data);
+>
+>         ret =  misc_register(misc);
+>         if (ret)
+> @@ -617,6 +704,7 @@ static int __init snp_guest_probe(struct platform_device *pdev)
+>
+>  e_fail:
+>         iounmap(layout);
+> +       free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
+>         free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+>         free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+>
+> @@ -629,6 +717,7 @@ static int __exit snp_guest_remove(struct platform_device *pdev)
+>
+>         free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+>         free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+> +       free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
+>         deinit_crypto(snp_dev->crypto);
+>         misc_deregister(&snp_dev->misc);
+>
+> diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
+> index bcd00a6d4501..0a47b6627c78 100644
+> --- a/include/uapi/linux/sev-guest.h
+> +++ b/include/uapi/linux/sev-guest.h
+> @@ -56,6 +56,16 @@ struct snp_guest_request_ioctl {
+>         __u64 fw_err;
+>  };
+>
+> +struct snp_ext_report_req {
+> +       struct snp_report_req data;
+> +
+> +       /* where to copy the certificate blob */
+> +       __u64 certs_address;
+> +
+> +       /* length of the certificate blob */
+> +       __u32 certs_len;
+> +};
+> +
+>  #define SNP_GUEST_REQ_IOC_TYPE 'S'
+>
+>  /* Get SNP attestation report */
+> @@ -64,4 +74,7 @@ struct snp_guest_request_ioctl {
+>  /* Get a derived key from the root */
+>  #define SNP_GET_DERIVED_KEY _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x1, struct snp_guest_request_ioctl)
+>
+> +/* Get SNP extended report as defined in the GHCB specification version 2. */
+> +#define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
+> +
+>  #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
+> --
+> 2.25.1
+>

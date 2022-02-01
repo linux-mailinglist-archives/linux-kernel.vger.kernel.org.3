@@ -2,94 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F634A63AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871044A63AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbiBASXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:23:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiBASXw (ORCPT
+        id S235892AbiBASYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:24:42 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47930 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235783AbiBASYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:23:52 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0F0C061714;
-        Tue,  1 Feb 2022 10:23:52 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id a7so16816192qvl.1;
-        Tue, 01 Feb 2022 10:23:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RE7G6HWBplku2+vK7AkTfekQdPqvsoGPNP8lPj8UG8A=;
-        b=C4/bdY54tA7woecKdYjn/Fd4jSyJs6g6Rj9bPihHkJ8Gv8hCcx5NiiahNi3EkChPXb
-         pMq7x7LbgtiUqqBnrSxggwyFnBLU74m6t1w8biFMTVNyaGsbymUFtr1Z5KVWw/g3sgC4
-         Gc9kSzGMzvOOZV8adUEIs2l4mF0oHdRhEA9KkhCTkJTK3CMSbTr4FOVYMwHXtkERgsEW
-         7drfa28HCkwpE9wDsjEte/vVxGiw9ulDcWJDbSckaozxZwnow2jq1DJGucNz1lxNurfy
-         ERssRXDim9jWVxz6n4F6sg/gawIkkKHcUVGxE5m357K+WvdWDBq8rpO8iZJVsHkQjxg7
-         IDxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RE7G6HWBplku2+vK7AkTfekQdPqvsoGPNP8lPj8UG8A=;
-        b=yS/PmoxO0VCjj+tSU3CfCSCpzIfgfg28aV4pVX9TWlCj4wczf8x1xL+YYxtr0qsPyr
-         70S+wlL2ji2Zu1hB4wZ9ys175UMfHNxxDmIeX86IkvykoJJxqEK/yd/sqOkB2RV3pgaR
-         kLQ6qhHGV47Nk9c83MZa7pY/r5HxXe8yDV/3QB2kQiizXodQw5s+yEnv+7eTI8D24duh
-         Y7tZbjxSmjZqJlvRrhosKBnsOmwtGOlEdK0f8BtsBATJ65QbOjGPf6UXK8cPMslYYwDW
-         Kmbp8azG1FrlZlpctssSry4bRSaDjhoo2UCoIyMylVDNSmpkIlF6OQJSF7bDDntAFOXX
-         OXDg==
-X-Gm-Message-State: AOAM533M9vokhyou9l5rYNVNgdiAZPPHCSKWluSPgHbJNDNYi1rj8r0E
-        nTJMgFS0eJt21ON+6INDig8=
-X-Google-Smtp-Source: ABdhPJyz24WaXYwJehVlFOjiOu5IYBKdLTOVrLVYVHU4x8xMIGuN+nse9AfCRG7QPpmo5Rou7bpUGg==
-X-Received: by 2002:ad4:5dcf:: with SMTP id m15mr23680408qvh.26.1643739831787;
-        Tue, 01 Feb 2022 10:23:51 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id u17sm4956827qkp.23.2022.02.01.10.23.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 10:23:51 -0800 (PST)
-Subject: Re: [PATCH 1/1] of: unittest: update text of expected warnings
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220127192643.2534941-1-frowand.list@gmail.com>
- <CAL_JsqLSsHJMKqOcLYR6uegghy8acLmu7iOX40gp__XVaShBUg@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <fb292c87-ea49-3837-40e7-a5d9031cdeb7@gmail.com>
-Date:   Tue, 1 Feb 2022 12:23:50 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 1 Feb 2022 13:24:41 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id EB0AB1F42EBA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643739880;
+        bh=wakhSFcVMZevZPcycdryY+hpEED54NWm/zeUvW6H0hU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Yg6gQ7FRyxRGZmcy4Md1ayTNrznAdxBSClNHjdWfPNwAaFnK0sD+DFVWQesjXgHqy
+         OKwuoTw6kQHeCVy+qmFzowNJFFgixoYlJkhF0gjjj7Efy9cXxyaaiCB7S3gutXrswh
+         5W8cQY/iNM/PB/8o2cWRllUHYbLJv5nXiUb2ibb8Q2PxmFhmNUg8fpI714R+TBKt8H
+         xfEIHPevbWR9D6F/wsjuPAdYNB5Od0VJ4UORX9y2K9r3BlSePL3v/t08+KrKoXDAbh
+         8VjEcYsg5luyOMUvbF1yuj0yVH66x6H9vKG+3WC64jM9O7H8qJod7JVIRFH1eAwAnC
+         ZY6ebwlnBAfKg==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Ramalingam C <ramalingam.c@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 1/5] drm/i915: add needs_compact_pt flag
+Date:   Tue,  1 Feb 2022 18:24:17 +0000
+Message-Id: <20220201182422.1548863-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220201182422.1548863-1-bob.beckett@collabora.com>
+References: <20220201182422.1548863-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLSsHJMKqOcLYR6uegghy8acLmu7iOX40gp__XVaShBUg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/22 9:04 AM, Rob Herring wrote:
-> On Thu, Jan 27, 2022 at 1:26 PM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> The text of various warning messages triggered by unittest has
->> changed.  Update the text of expected warnings to match.
->>
->> The expected vs actual warnings are most easily seen by filtering
->> the boot console messages with the of_unittest_expect program at
->> https://github.com/frowand/dt_tools.git.  The filter prefixes
-> 
-> News to me there's such a tool. Normally, I just give up staring at
-> the wall of text spewed out and check failures. Can we add this tool
-> to the kernel tree? Then there might be some hope that I'll run it.
+From: Ramalingam C <ramalingam.c@intel.com>
 
-I cleaned it up and submitted a patch.
+Add a new platform flag, needs_compact_pt, to mark the requirement of
+compact pt layout support for the ppGTT when using 64K GTT pages.
 
--Frank
+With this flag has_64k_pages will only indicate requirement of 64K
+GTT page sizes or larger for device local memory access.
 
-> 
-> Rob
-> 
+v6:
+	* minor doc formatting
+
+Suggested-by: Matthew Auld <matthew.auld@intel.com>
+Signed-off-by: Ramalingam C <ramalingam.c@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+---
+ drivers/gpu/drm/i915/i915_drv.h          | 11 ++++++++---
+ drivers/gpu/drm/i915/i915_pci.c          |  2 ++
+ drivers/gpu/drm/i915/intel_device_info.h |  1 +
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 00e7594b59c9..4afdfa5fd3b3 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -1512,12 +1512,17 @@ IS_SUBPLATFORM(const struct drm_i915_private *i915,
+ 
+ /*
+  * Set this flag, when platform requires 64K GTT page sizes or larger for
+- * device local memory access. Also this flag implies that we require or
+- * at least support the compact PT layout for the ppGTT when using the 64K
+- * GTT pages.
++ * device local memory access.
+  */
+ #define HAS_64K_PAGES(dev_priv) (INTEL_INFO(dev_priv)->has_64k_pages)
+ 
++/*
++ * Set this flag when platform doesn't allow both 64k pages and 4k pages in
++ * the same PT. this flag means we need to support compact PT layout for the
++ * ppGTT when using the 64K GTT pages.
++ */
++#define NEEDS_COMPACT_PT(dev_priv) (INTEL_INFO(dev_priv)->needs_compact_pt)
++
+ #define HAS_IPC(dev_priv)		 (INTEL_INFO(dev_priv)->display.has_ipc)
+ 
+ #define HAS_REGION(i915, i) (INTEL_INFO(i915)->memory_regions & (i))
+diff --git a/drivers/gpu/drm/i915/i915_pci.c b/drivers/gpu/drm/i915/i915_pci.c
+index 2df2db0a5d70..ce6ae6a3cbdf 100644
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@ -1028,6 +1028,7 @@ static const struct intel_device_info xehpsdv_info = {
+ 	PLATFORM(INTEL_XEHPSDV),
+ 	.display = { },
+ 	.has_64k_pages = 1,
++	.needs_compact_pt = 1,
+ 	.platform_engine_mask =
+ 		BIT(RCS0) | BIT(BCS0) |
+ 		BIT(VECS0) | BIT(VECS1) | BIT(VECS2) | BIT(VECS3) |
+@@ -1046,6 +1047,7 @@ static const struct intel_device_info dg2_info = {
+ 	PLATFORM(INTEL_DG2),
+ 	.has_guc_deprivilege = 1,
+ 	.has_64k_pages = 1,
++	.needs_compact_pt = 1,
+ 	.platform_engine_mask =
+ 		BIT(RCS0) | BIT(BCS0) |
+ 		BIT(VECS0) | BIT(VECS1) |
+diff --git a/drivers/gpu/drm/i915/intel_device_info.h b/drivers/gpu/drm/i915/intel_device_info.h
+index abf1e103c558..d8da40d01dca 100644
+--- a/drivers/gpu/drm/i915/intel_device_info.h
++++ b/drivers/gpu/drm/i915/intel_device_info.h
+@@ -130,6 +130,7 @@ enum intel_ppgtt_type {
+ 	/* Keep has_* in alphabetical order */ \
+ 	func(has_64bit_reloc); \
+ 	func(has_64k_pages); \
++	func(needs_compact_pt); \
+ 	func(gpu_reset_clobbers_display); \
+ 	func(has_reset_engine); \
+ 	func(has_global_mocs); \
+-- 
+2.25.1
 

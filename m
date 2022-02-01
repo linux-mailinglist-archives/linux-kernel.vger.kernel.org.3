@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC534A5E10
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9E84A5E15
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239140AbiBAOPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:15:25 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45268 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiBAOPZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:15:25 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 12C20210FB;
-        Tue,  1 Feb 2022 14:15:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643724924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xV7svizP3OfMYOgwKWIVNwCgg62pzpKys1nXAAzkk0Y=;
-        b=Jamssw3SvWmrNtmIlOjQHTDIuWJ/zqmGM3tooV00B2rIrwgQekL6zxoljkSd7X9N6OSX86
-        WND1VLJ8x3yeu9GMpF/PCmya7jrvu7M3OZlzpV/gmSZ9IAHKe971tIpq4btffuXkEnp9zb
-        2qg4pKHE/Icl7gLCaRkUzpyMPjG2RhQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643724924;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xV7svizP3OfMYOgwKWIVNwCgg62pzpKys1nXAAzkk0Y=;
-        b=1M3uLSehUJl3TfRqs61sMbV9+jPcG8d4LfXaHM9EgWlvSrIIPQeO+/NdgC9F5miMEtvRbz
-        5Yuleo6c0o2LJFCA==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 17173A3B89;
-        Tue,  1 Feb 2022 14:15:23 +0000 (UTC)
-Date:   Tue, 1 Feb 2022 14:15:20 +0000
-From:   Mel Gorman <mgorman@suse.de>
-To:     Bharata B Rao <bharata@amd.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        dishaa.talreja@amd.com, Wei Huang <wei.huang2@amd.com>
-Subject: Re: [RFC PATCH v0 1/3] sched/numa: Process based autonuma scan
- period framework
-Message-ID: <20220201141520.GB3301@suse.de>
-References: <20220128052851.17162-1-bharata@amd.com>
- <20220128052851.17162-2-bharata@amd.com>
- <20220131121714.GX3301@suse.de>
- <9f95a85f-5396-b8bd-50cf-c4eeeac2a013@amd.com>
+        id S239156AbiBAORv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:17:51 -0500
+Received: from mga02.intel.com ([134.134.136.20]:53610 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239002AbiBAORt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 09:17:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643725069; x=1675261069;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OZ7gGebmf52cWRB9ws2v3wm4kqouWj3t7yNEm336X+E=;
+  b=d8oEaPkC4eTjvGJe7P3hW36SAlRr9Qin1kEXyvCNwDvuro2qtupL6keb
+   1xAx83w3rx9Svjr6j0UEy5HQRSJfBys9jH7AGiaHu7Okjy9z+NHRa2ysc
+   AUDl9tUgafFGHFiaMpKZ7GrXHLCsPtvIrkMWAbeXsGOYHCpM0YSzBGlFK
+   ddqBPgL3maRtuknVntCuMYX9ajNZtxOwa62/6U1svapgs9BhhClgEycOr
+   jTU7ZtxBwsVtQw66uFgsb+3YuctjmZY8PLvIgtQk7sF4pcsS8sj2QAYM5
+   rl4tNyLpVfxvYX1NQ/IJwjP5ENGdiD/a7Lo3TviUz2BbClAphubvRGRHv
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="235091232"
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="235091232"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 06:17:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
+   d="scan'208";a="482398232"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 Feb 2022 06:17:45 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEtya-000TLq-DQ; Tue, 01 Feb 2022 14:17:44 +0000
+Date:   Tue, 1 Feb 2022 22:17:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [csky-linux:riscv_compat_v5 6/20]
+ arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'struct
+ compat_statfs'
+Message-ID: <202202012248.krtLYM9t-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9f95a85f-5396-b8bd-50cf-c4eeeac2a013@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:52:55PM +0530, Bharata B Rao wrote:
-> On 1/31/2022 5:47 PM, Mel Gorman wrote:
-> > On Fri, Jan 28, 2022 at 10:58:49AM +0530, Bharata B Rao wrote:
-> >> From: Disha Talreja <dishaa.talreja@amd.com>
-> >>
-> >> Add a new framework that calculates autonuma scan period
-> >> based on per-process NUMA fault stats.
-> >>
-> >> NUMA faults can be classified into different categories, such
-> >> as local vs. remote, or private vs. shared. It is also important
-> >> to understand such behavior from the perspective of a process.
-> >> The per-process fault stats added here will be used for
-> >> calculating the scan period in the adaptive NUMA algorithm.
-> >>
-> > 
-> > Be more specific no how the local vs remote, private vs shared states
-> > are reflections of per-task activity of the same.
-> 
-> Sure, will document the algorithm better. However the overall thinking
-> here is that the address-space scanning is a per-process activity and
-> hence the scan period value derived from the accumulated per-process
-> faults is more appropriate than calculating per-task (per-thread) scan
-> periods. Participating threads may have their local/shared and private/shared
-> behaviors, but when aggregated at the process level, it gives a better
-> input for eventual scan period variation. The understanding is that individual
-> thread fault rates will start altering the overall process metrics in
-> such a manner that we respond by changing the scan rate to do more aggressive
-> or less aggressive scanning.  
-> 
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v5
+head:   aa4c02d74aabad67e00439d2cec2e296ab6d451d
+commit: ec2542a61a8a75165df0c14f215f6b4f3821ee36 [6/20] asm-generic: compat: Cleanup duplicate definitions
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220201/202202012248.krtLYM9t-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/c-sky/csky-linux/commit/ec2542a61a8a75165df0c14f215f6b4f3821ee36
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v5
+        git checkout ec2542a61a8a75165df0c14f215f6b4f3821ee36
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
 
-I don't have anything to add on your other responses as it would mostly
-be an acknowledgment of your response.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-However, the major concern I have is that address-space wide decisions
-on scan rates has no sensible means of adapting to thread-specific
-requirements. I completely agree that it will result in more stable scan
-rates, particularly the adjustments. It also side-steps a problem where
-new threads may start with a scan rate that is completely inappropriate.
+All errors (new ones prefixed by >>):
 
-However, I worry that it would be limited overall because each thread
-potentially has unique behaviour which is not obvious in a workload like
-NAS where threads are all executing similar instructions on different
-data. For other applications, threads may operate on thread-local areas
-only (low scan rate), others could operate on shared only regresions (high
-scan rate until back off and interleave), threads can has phase behaviour
-(manager thread collecting data from worker threads) and threads can have
-different lifetimes and phase behaviour. Each thread would have a different
-optimal scan rate to decide if memory needs to be migrated to a local node
-or not. I don't see how address-space wide statistics could every be mapped
-back to threads to adapt scan rates based on thread-specific behaviour.
+   In file included from arch/arm64/include/asm/stat.h:13,
+                    from include/linux/stat.h:6,
+                    from include/linux/sysfs.h:22,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/irqdomain.h:35,
+                    from include/linux/acpi.h:13,
+                    from include/acpi/apei.h:9,
+                    from include/acpi/ghes.h:5,
+                    from include/linux/arm_sdei.h:8,
+                    from arch/arm64/kernel/asm-offsets.c:10:
+>> arch/arm64/include/asm/compat.h:69:8: error: redefinition of 'struct compat_statfs'
+      69 | struct compat_statfs {
+         |        ^~~~~~~~~~~~~
+   In file included from arch/arm64/include/asm/compat.h:18,
+                    from arch/arm64/include/asm/stat.h:13,
+                    from include/linux/stat.h:6,
+                    from include/linux/sysfs.h:22,
+                    from include/linux/kobject.h:20,
+                    from include/linux/of.h:17,
+                    from include/linux/irqdomain.h:35,
+                    from include/linux/acpi.h:13,
+                    from include/acpi/apei.h:9,
+                    from include/acpi/ghes.h:5,
+                    from include/linux/arm_sdei.h:8,
+                    from arch/arm64/kernel/asm-offsets.c:10:
+   include/asm-generic/compat.h:80:8: note: originally defined here
+      80 | struct compat_statfs {
+         |        ^~~~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:121: arch/arm64/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Thread scanning on the other hand can be improved in multiple ways. If
-nothing else, they can do redundant scanning of regions that are
-not relveant to a task which gets increasingly problematic when VSZ
-increases. The obvious problems are
 
-1. Scan based on page table updates, not address ranges to mitigate
-   problems with THP vs base page updates
+vim +69 arch/arm64/include/asm/compat.h
 
-2. Move scan delay to be a per-vma structure that is kmalloced if
-   necessary instead of being address space wide.
+3dd681d944f6d8 Will Deacon 2012-03-05  68  
+3dd681d944f6d8 Will Deacon 2012-03-05 @69  struct compat_statfs {
+3dd681d944f6d8 Will Deacon 2012-03-05  70  	int		f_type;
+3dd681d944f6d8 Will Deacon 2012-03-05  71  	int		f_bsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  72  	int		f_blocks;
+3dd681d944f6d8 Will Deacon 2012-03-05  73  	int		f_bfree;
+3dd681d944f6d8 Will Deacon 2012-03-05  74  	int		f_bavail;
+3dd681d944f6d8 Will Deacon 2012-03-05  75  	int		f_files;
+3dd681d944f6d8 Will Deacon 2012-03-05  76  	int		f_ffree;
+3dd681d944f6d8 Will Deacon 2012-03-05  77  	compat_fsid_t	f_fsid;
+3dd681d944f6d8 Will Deacon 2012-03-05  78  	int		f_namelen;	/* SunOS ignores this field. */
+3dd681d944f6d8 Will Deacon 2012-03-05  79  	int		f_frsize;
+3dd681d944f6d8 Will Deacon 2012-03-05  80  	int		f_flags;
+3dd681d944f6d8 Will Deacon 2012-03-05  81  	int		f_spare[4];
+3dd681d944f6d8 Will Deacon 2012-03-05  82  };
+3dd681d944f6d8 Will Deacon 2012-03-05  83  
 
-3. Track what threads access a VMA. The suggestion was to use a unsigned
-   long pid_mask and use the lower bits to tag approximately what
-   threads access a VMA. Skip VMAs that did not trap a fault. This would
-   be approximate because of PID collisions but would reduce scanning
-   of areas the thread is not interested in
+:::::: The code at line 69 was first introduced by commit
+:::::: 3dd681d944f6d861f12ee03aff17a14342963330 arm64: 32-bit (compat) applications support
 
-4. Track active regions within VMAs. Very coarse tracking, use unsigned
-   long to trap what ranges are active
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
 
-In different ways, this would reduce the amount of scanning work threads
-do and focuses them on regions of relevance to reduce overhead overall
-without losing thread-specific details.
-
-Unfortunately, I have not had the time yet to prototype anything.
-
--- 
-Mel Gorman
-SUSE Labs
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

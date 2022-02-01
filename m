@@ -2,122 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBC84A5B01
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CB54A5B05
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237189AbiBALRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 06:17:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58613 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236928AbiBALRj (ORCPT
+        id S237216AbiBALSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236928AbiBALSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 06:17:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643714258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vjw//fLkAQ84TIDAJkx8fTRjA3gXymjff0vArIKpGDA=;
-        b=Fc/236WIZ8n4hanzHODpUCgwI96ge9VdO0NUAEtJmdG3CLS2nBwY/4cHlr4gA/9KEA57cB
-        CCyeuwSTBKjND10Jk5iuEbxVY0MB6xCgDMnbFwbsJt0oeGhTZoazjnrlZGkPrtkkYsWy0a
-        NoDOwaTzzbwvxR5IGIjV4cxNE9mnzLU=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-196-xIN3zCs6Mde8dlwwzTLYbg-1; Tue, 01 Feb 2022 06:17:37 -0500
-X-MC-Unique: xIN3zCs6Mde8dlwwzTLYbg-1
-Received: by mail-wr1-f71.google.com with SMTP id t14-20020adfa2ce000000b001e1ad2deb3dso746651wra.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 03:17:37 -0800 (PST)
+        Tue, 1 Feb 2022 06:18:32 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7027BC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 03:18:32 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id t199so15926985oie.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 03:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
+        b=hKzVGBGbfsCPYJ7HefyXr6bWuywoKmYQ1742/PdhXYVL1PPYWI/07d9VBKqIDjQKlG
+         AnjyTkWXbTrOui9wEp9Ws/Obt6FXRwK3bogt36ZFKq/2FesmgQhkOtU0Dwdm6g5NExQz
+         evPsi84gy9SKtMvgVLeUNRdk5zTgXWxKul8/dDs/VuNoEfqgf+h9cyHuQPsO54btyTyF
+         DeqENVu1pV0fem6L4ajx7cvL9IcVau2AH7EWFNtQniJxePcfsA3yBYGT3T/LDabMKlgw
+         MFJv8z5GPDcZTCIRSz6oijDhwbdCdy8wRWf1SE7atFeRCLswZe7ZLh5VHO//32pFY91U
+         PWjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vjw//fLkAQ84TIDAJkx8fTRjA3gXymjff0vArIKpGDA=;
-        b=FALtMUnyPgGONCJ0X2gWf6/d7r49JeFmrAXR3LbEkbpwQ2hiy1p8DTMspAy8n/bAlK
-         VgTi/2f9Iz3GBZvz+PfSV0BqVqMGsuyI6kYwUZSEBoGCVAxeG8UeTqpuxBeQkSXe5AQh
-         una3ehb5HOAoISqXKDSVGe0ua/y2saV+cScen6pg4khRb+Kll94UE49FEQ57WpXpHD5m
-         zVIcWBYv2dwk6fieEmAiSj8AjuO9y/GgbF812dMj7ZWHJlafRBvEvv6tkjOINmCTkUaG
-         Zs5idLZMM5Z6b4FDAzUf03doRowazIKKL8rajblQOYFEV2yBvytQb6LyBiM9g1GBdeOk
-         cc9Q==
-X-Gm-Message-State: AOAM531N3+2uo4Z78X8K7W3L41b+Wy7eUTqXCOi9ceLoGikUpYPBehXy
-        lvwB2wIgC2DxNvRIboa9juHwVaGajRt2w2NMYrqzmpAYusqaeQ3FuGPlQampH4aV9Dkb3RIq/Tt
-        F4bhbXPaL058C+daV+7ykqge2
-X-Received: by 2002:adf:f045:: with SMTP id t5mr21095372wro.385.1643714256622;
-        Tue, 01 Feb 2022 03:17:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxbcg9U2rYIsyfcakZ9zSjonoBgrdJ/oOcSUdMbVuNhLqDn/9NnvNfRqe0QXRW90Ej8ByOWhg==
-X-Received: by 2002:adf:f045:: with SMTP id t5mr21095354wro.385.1643714256365;
-        Tue, 01 Feb 2022 03:17:36 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p7sm1824109wmq.20.2022.02.01.03.17.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 03:17:36 -0800 (PST)
-Message-ID: <273132fb-cf11-93a6-6bfd-3cc8b19f8fa9@redhat.com>
-Date:   Tue, 1 Feb 2022 12:17:35 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pcT8Frn0n3Hw9SbN/loP8iSe8IeaLdSI0AOmRzA0azM=;
+        b=0JBkqAD0Xd9QNxfkGA0kjOAlTPhycoa7UHK9t/QP9YWrGM8R+QCdp3ikZIUFvh/gfm
+         lBUsn7KAfvHooZxlSL02w0DqhfIM2CrqlpuG8MgH8reY/7IHM0ier9v2FF8oucJce3FH
+         Y7t+N0biGbII1x94bbTrBD358FWB8gO7BfCLgmMo5ToAuV3SwB6lOOVKxoxef+apovU0
+         sDyhuqbCMXyC95mpEalvWFP/L30xM7FIA4cZA/8fLazDIjbtvcxcui19kiEJivPVtMXf
+         lEIYUFV/UjPYnUXUcx+z+qfBlvPnQF+LmqU1l+xh6ciTWmnjvf4xY4V33j2B1dvzFZ7L
+         sZCg==
+X-Gm-Message-State: AOAM532hHj41tScYTg7TxUniCniG3FbABoiSXhxdR8E/5QlF79pZP0Wg
+        N22isbLyoH5KXBVL/PyHaT/ZZXfI0rIbaG9LEUpipg==
+X-Google-Smtp-Source: ABdhPJwO7fHptuSvmIaQ+/J/5b/+/5PLyjAttUp0EoMB/ZtjFn1J7KrgHwXlEdQXrBtYWjyOG1ilR7VtBLKEvdzrEvU=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr746926oik.128.1643714311558;
+ Tue, 01 Feb 2022 03:18:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] MAINTAINERS: Add entry for Solomon SSD1307 OLED
- displays DRM driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-References: <20220131201537.2325487-1-javierm@redhat.com>
- <Yfj+FOELlbtdhvRa@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Yfj+FOELlbtdhvRa@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220131090521.1947110-1-elver@google.com> <20220131090521.1947110-2-elver@google.com>
+ <202201311315.B9FDD0A@keescook>
+In-Reply-To: <202201311315.B9FDD0A@keescook>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 1 Feb 2022 12:18:19 +0100
+Message-ID: <CANpmjNPvyKF2LiZAzTOz0mvbxPvJW_a7ysJ3n_kcHYvHXxpw+g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] stack: Constrain and fix stack offset
+ randomization with Clang builds
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alexander Potapenko <glider@google.com>, llvm@lists.linux.dev,
+        kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
-
-On 2/1/22 10:32, Andy Shevchenko wrote:
-> On Mon, Jan 31, 2022 at 09:15:37PM +0100, Javier Martinez Canillas wrote:
->> To make sure that tools like the get_maintainer.pl script will suggest
->> to Cc me if patches are posted for this driver.
->>
->> Also include the Device Tree binding for the old ssd1307fb fbdev driver
->> since the new DRM driver was made compatible with the existing binding.
-> 
-> Dunno why you have patches 3 and 4 missed references (in terms of email
-> thread).
+On Mon, 31 Jan 2022 at 22:15, Kees Cook <keescook@chromium.org> wrote:
+> On Mon, Jan 31, 2022 at 10:05:21AM +0100, Marco Elver wrote:
+> > All supported versions of Clang perform auto-init of __builtin_alloca()
+> > when stack auto-init is on (CONFIG_INIT_STACK_ALL_{ZERO,PATTERN}).
+> >
+> > add_random_kstack_offset() uses __builtin_alloca() to add a stack
+> > offset. This means, when CONFIG_INIT_STACK_ALL_{ZERO,PATTERN} is
+> > enabled, add_random_kstack_offset() will auto-init that unused portion
+> > of the stack used to add an offset.
+> >
+> > There are several problems with this:
+> >
+> >       1. These offsets can be as large as 1023 bytes. Performing
+> >          memset() on them isn't exactly cheap, and this is done on
+> >          every syscall entry.
+> >
+> >       2. Architectures adding add_random_kstack_offset() to syscall
+> >          entry implemented in C require them to be 'noinstr' (e.g. see
+> >          x86 and s390). The potential problem here is that a call to
+> >          memset may occur, which is not noinstr.
+> >
+> > A x86_64 defconfig kernel with Clang 11 and CONFIG_VMLINUX_VALIDATION shows:
+> >
+> >  | vmlinux.o: warning: objtool: do_syscall_64()+0x9d: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: do_int80_syscall_32()+0xab: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: __do_fast_syscall_32()+0xe2: call to memset() leaves .noinstr.text section
+> >  | vmlinux.o: warning: objtool: fixup_bad_iret()+0x2f: call to memset() leaves .noinstr.text section
+> >
+> > Clang 14 (unreleased) will introduce a way to skip alloca initialization
+> > via __builtin_alloca_uninitialized() (https://reviews.llvm.org/D115440).
+> >
+> > Constrain RANDOMIZE_KSTACK_OFFSET to only be enabled if no stack
+> > auto-init is enabled, the compiler is GCC, or Clang is version 14+. Use
+> > __builtin_alloca_uninitialized() if the compiler provides it, as is done
+> > by Clang 14.
+> >
+> > Link: https://lkml.kernel.org/r/YbHTKUjEejZCLyhX@elver.google.com
+> > Fixes: 39218ff4c625 ("stack: Optionally randomize kernel stack offset each syscall")
+> > Signed-off-by: Marco Elver <elver@google.com>
 >
+> Thanks for the tweaks; this looks good to me now.
+>
+> Acked-by: Kees Cook <keescook@chromium.org>
 
-Yeah, I use the patman tool [0] to post patches and something went wrong
-after sending the first patch and I had to manually post the others with
-git-send-email. I could had used --in-reply-to, but didn't feel like it.
+Kees, which tree do randomize_kstack changes go through these days?
+I've seen previous patches went through -tip via Thomas.
 
-[0]: https://gitlab.com/u-boot/u-boot/tree/master/tools/patman
- 
->> +DRM DRIVER FOR SOLOMON SSD1307 OLED DISPLAYS
->> +M:	Javier Martinez Canillas <javierm@redhat.com>
->> +S:	Maintained
->> +T:	git git://anongit.freedesktop.org/drm/drm-misc
->> +F:	Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
->> +F:	drivers/gpu/drm/tiny/ssd1307.c
-> 
-> I think it makes sense to add ssd1307fb as well. At least you may point out
-> people patching old driver about new one until it's gone completely.
-> 
-
-That's a good idea. I also found some issues in the ssd1307fb driver when
-doing the port, so I could dig more to fix them and propose myself as a
-co-maintainer for the fbdev driver.
-
-But I'll do that as a separate patch-set.
-
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Thanks,
+-- Marco

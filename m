@@ -2,278 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B97C4A5EF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9E64A5EDE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbiBAPED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:04:03 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60532 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239671AbiBAPEB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:04:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDF7E6166B;
-        Tue,  1 Feb 2022 15:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B26C340EB;
-        Tue,  1 Feb 2022 15:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643727840;
-        bh=P3ELywhSVBmEVQdQn/ljrCLDXNS7QWSSiXRIpiKVzrM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uvFQFCgibmuX/fIG2xX+NEXNJ7Z4dEdzdev+g4oesoxXQxV1yFBhA7CCWGRR8KeeI
-         3NgTATMUqfi2SzOfjhrKeSowI0wyQmke7BJxl5145xUB+Ml8WzzKch8UdLYjfqaIw+
-         NSlL//GVLCknNYoepVBHXq5imq3/gDU2ftf2xhlWAqgQT3gdFtqMSvhbhV49NJg/PJ
-         17MyfD3xZqKSeOwUV44Jb1EwrOGUFs39i8fPeuOeYweA+hyYx5KTTW/jg+bLYMhlHo
-         6v55/jsq1Bv6mkc+vzLSjzcq2NUHpnuNfYMnq2CMmE9kdNWx90aBcCR54awhr7p5l2
-         QYs6tFKaTT0Ew==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
-Date:   Tue,  1 Feb 2022 16:02:48 +0100
-Message-Id: <20220201150339.1028032-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S239697AbiBAPC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:02:58 -0500
+Received: from mail-bn1nam07on2050.outbound.protection.outlook.com ([40.107.212.50]:8608
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239679AbiBAPC4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:02:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fJx5FZ2TyE5d3oXqyRaeCWhHKyS+JU/ADFpYLoUTnf50ZLZP8X7YIQdiQfzp8DlDukfF+TEURlvoYZzooVIzRRIf4N5zCn5ACsvak57FI82ss9dHEov8XSjiIm9rgoag2eWGREyPoD+4CqbKysIlyZ2rjJPdFZ6tTRUY/EKbBNKm6/DeB364gtDW/1+FCbHEDgS5FzqbRGJIgYSeuXjG5oIb8ysb20sxj4mtOIngS3QayuBqMQ2C+5HTOu35m+UPP//9Oy2b5s/6YJqLrFDXvWkSgkqkJfGi0Tzqpsq9P9QTfddrzB9F1ECcjKbfFbFd1QCqD9mhnzZLzRS+0DeOlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Bwg4VMIN76rbTXHRgYGSTnmO1hOR/dBzbKAM9LGv5YQ=;
+ b=OmQyt/9+ocYN53jfl+sRxcLH9oUq8i0VZTsAsqanGJTqM4ibxRCgv9GC3KiPRxVpQwARQ43gTqcjB/tCtaG4pLem8Viuy7Q4l0t35zuTav36v3xbhwbPRKh3kEw0LTt5Ntn1fpb8F9+CDAjqwANAX0AcXBNxHEgJpK1TdPn2rp7V38iwQMRdkwqhb0UN/JWORorbvWjJnITeihogbjDqSR1HpQmwzf70SNlfEC/m0JuaeezTF1NO7/taYTXh0xH+K9nh3VkZhvbGyncInV0G05H8v+D6chPys+XTMWZT902oM+BnsZSnrRB/PzsWubxi5LOADs+i9w2KiNuKgzpeHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Bwg4VMIN76rbTXHRgYGSTnmO1hOR/dBzbKAM9LGv5YQ=;
+ b=btmoEnzM4Xyf1cpNzqjZUQ/7GLH+L7q3yDdZfrc0I+r6tN1zvXxdtWADUQ1VgGL2W+NINhCnE28cBEbk4thxMxik/kEzX3EJChLKsOXn18cOjgb8EksSSwotsKyAFoI987A75a6eww40rUvUEuGFnMYn5hBNeoIIJGXwh4xHX9zikVY6PhEF18Ffpy5GGR+g5GxY81nVNrDTQ7GTwzU3A9RQc5zZQpeSnMHavLso+1bvXXN0YzetZeMozX1Cporn+K1Wt/MigrMsaKhX7ly2KY+rSxBe5WPo3C9jKBSpaTEURsSGUM4b39elJrMzhSQH0jXGJTqTYT/vGXYk3sPj9g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SN1PR12MB2512.namprd12.prod.outlook.com (2603:10b6:802:31::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
+ 2022 15:02:54 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
+ 15:02:54 +0000
+Date:   Tue, 1 Feb 2022 11:02:52 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Yishai Hadas <yishaih@nvidia.com>, linux-rdma@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/mlx4: remove redundant assignment to variable nreq
+Message-ID: <20220201150252.GA2434511@nvidia.com>
+References: <20220130225747.8114-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130225747.8114-1-colin.i.king@gmail.com>
+X-ClientProxiedBy: MN2PR19CA0025.namprd19.prod.outlook.com
+ (2603:10b6:208:178::38) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cc4bd74b-60f2-4e84-fe7b-08d9e593ec62
+X-MS-TrafficTypeDiagnostic: SN1PR12MB2512:EE_
+X-Microsoft-Antispam-PRVS: <SN1PR12MB25123402B3E84C71D41A0F28C2269@SN1PR12MB2512.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: it6kWVUYgRUgxYsVUuAGgv6J1Il1sQX46QHrG9N6y9hpUS17ghnEAQfwcihWjD+5c6QZCviMsPLWGzwvxi/59WzLjNSR5lLrBy6GbCD/H8+CvYa6glDLUPQF1VRY8ZPeA/gfTIjY4fDG8/7xMv33uMyJ6Vo2cIBVDrxQCO/2mFJ+BvBs3s7WIBnN4E9OvprswlMn9YjEB8qzNmNLqGCMXLyRcCTCSiA6ifeUaEnXu4StSsjECSNmUZBMIGTYGXDfSKct0mzDgiK62fGSSY7mCCm10Xrb2Lj1wE6NQGT1TCGEaoo/k57jJrTF0i5j0d4/Yeu5rlqQoPkD9JDpePUbisXHm8m4Jw/fXe726wc/ekYVLTU4eaW1/28ciGBR7GvVXIRgGAcDSn0sfctPl3ddQDaYOzv56oesepRZ33LbwDA8oN2PQPSNzT9MkokdxEsRkJVHWMt5U3G9QIyA13UAJ2XHY70ShLsrrkclJ96ZlhGfbpfh3ouhE1re+th74ayCEd33hn6qDQofdtVIwOFu9dSeHNOhOQLsSIxZyjZ2GmFBWsii8z56EpiitKmFoRwDX3S+C3zpYhn0styAmJXjixdYzjWOS7etCGpmRJKNW2gxZITLOrUbxU+bUHaYCVTT3fTxMpWnIGkPaAfm9r9OJA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(1076003)(6506007)(6512007)(26005)(186003)(5660300002)(2616005)(316002)(33656002)(6486002)(508600001)(4744005)(36756003)(4326008)(86362001)(66556008)(8676002)(2906002)(8936002)(38100700002)(66476007)(83380400001)(66946007)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kbFOPfZUCeHNOVU6p/SNssbq898zJQRMLx8x6k5/GovHb9EIN/C/nG95Bkvn?=
+ =?us-ascii?Q?wRz0R5amTbNwxGYQ92X/Q5Nj3GvmpuLuk6+kzJfnasUDqXjWDtoHZBECea7K?=
+ =?us-ascii?Q?/mAQG1zqhCxh9NlvKCyQDNqQjlT2pmYXCY1AqB2oyspXIexmOZa8tOi6UAt6?=
+ =?us-ascii?Q?53Z4NtrghQK/YJrM1AoM+9yku6BKmHu5LaDeCvblrUnmqxjpMJdR9hELvYK9?=
+ =?us-ascii?Q?WnC7JNMn+KsfznnGEOqSD8Rl//UxmKQVdD7e02BFgFC+5+i/Hq4dVSDiR79W?=
+ =?us-ascii?Q?B1i0an5Nwd8W7b4w/W+ICRhIXkViT2sQJHqcD/ixRiofmeNP5nesbsZJUbfU?=
+ =?us-ascii?Q?4ZBhEoeBS1b1UlJXpSDaFyuyD7xC8eiUskLkX6Na6jGZCKLeUt+Yp1Txj5f1?=
+ =?us-ascii?Q?UyQ15gZiGUa5FKDQs+WCG991L+wx/f3SGH5+/UY8MX4S7PcY3tRIHZKxulfs?=
+ =?us-ascii?Q?DD+AkvgGuZmVIAsy3Ln/qv6v3goRRhN8j+zyuPpWqXJQwGQ+U75vCiBzNSPm?=
+ =?us-ascii?Q?8Ell6CCBjAsd/AXBgo00J8bex9pSB5yba38S5v2T4cN6ZYcDgvYpvPCEhtsG?=
+ =?us-ascii?Q?PzbwFlTh3jbOQCeoPQfOmlNQxKnD06r2sRiFaUEvOyAEa3TYeuTfjK/N2lkC?=
+ =?us-ascii?Q?LSnuInsJqtI1BPXio3ILI2zGqVfcqEFciduEASKzbYc08+feUAMrdwn//zbI?=
+ =?us-ascii?Q?XTmtrJnBixLQUBJ9hlxf+Y7S+833geqJ+MaW2/WU+WgZ/MD+ztYfqoR+2oJe?=
+ =?us-ascii?Q?97R86tHh86Vo33P6CK7AGI4ayk7pcPS1txVNnpLgCZaDQRElXrIQrC4r3bk6?=
+ =?us-ascii?Q?ZeHkmYVaFFoCN4+KGjAzImWMqRUsz5hEgpOPNtnKrDnmpQ6qKA9TCHlJJkvf?=
+ =?us-ascii?Q?JChpRdmUQ7zetMwhFiac98xSCvfFy0ZziqJMdzdT5Mmjm4JrNzv80y1wvNg3?=
+ =?us-ascii?Q?r7kuc5s7VojacYPoNL3RmkLT4y93CtB2uTZ4V4To+ToXKbCUEs5NIq8wG8th?=
+ =?us-ascii?Q?QWpY8RoJv+nkMCNOQ5fTr+eZ3Xtjm9J+ixL3k81azre18cVyGHMvbRFTQZa9?=
+ =?us-ascii?Q?eaEv5NPZUhaFSWPdGpTrrNyIouNJRCdgacQ9PTWGs8tU2mPsFMC7XPSo3ZCX?=
+ =?us-ascii?Q?kJwZMrQSsuywQbczyf3q6Yc+dJK9NZI1hgninQ9B+hz7Oxiw4Gh6ndOc5Rkx?=
+ =?us-ascii?Q?ShqJG7hDj/wol+w/hLgs1xZrFsc/W5chBWnk6TLYK0BbTNmvyuVz/1hs1i9K?=
+ =?us-ascii?Q?ZDvQTfj/jarZYAvGjpfqyAM+CHLexTt3xhdTxIyHBgBk3CFA9JqaPVclHlhp?=
+ =?us-ascii?Q?XrI5iX1eDcbD28WjDcCWHqL6tjXW1YmXXRxzye2sQAMWUlmxqT9U3KM/787v?=
+ =?us-ascii?Q?/rbRTe5yMORfg6gwSeGGxgnWSCoEWEdvYCc9UpSt1AHovAcYmgrrNsHZEzQy?=
+ =?us-ascii?Q?6Q6EDuIEnpqNhllak2NnvIIMhGEbfLgyCR68AJMCnSVtzPxfoFu2g92YQxoZ?=
+ =?us-ascii?Q?9QbQ7kn1Uz5w9cxUec2kkPsRNCsxD6Dat0eyiLpe7bd5knqteppJ9rtIFdiZ?=
+ =?us-ascii?Q?joZ61VlojUxf7IlFO94=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc4bd74b-60f2-4e84-fe7b-08d9e593ec62
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 15:02:54.2405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kRYSQtLhzKv4ilqJ0wr5jcWqqih7tFyTk57nlsSeaD7YdVODWhNqUvuEv/6sNpo9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2512
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sun, Jan 30, 2022 at 10:57:47PM +0000, Colin Ian King wrote:
+> Variable nreq is being assigned a value that is never read. The
+> assignment is redundant and can be removed.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/infiniband/hw/mlx4/srq.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-The sa1111 platform is one of the two remaining users of the old Arm
-specific "dmabounce" code, which is an earlier implementation of the
-generic swiotlb.
+Applied to for-next, thanks
 
-Linus Walleij submitted a patch that removes dmabounce support from
-the ixp4xx, and I had a look at the other user, which is the sa1111
-companion chip.
-
-Looking at how dmabounce is used, I could narrow it down to one driver
-one one machine:
-
- - dmabounce is only initialized on assabet and pfs168, but not on
-   any other sa1100 or pxa platform using sa1111.
-
- - pfs168 is not supported in mainline Linux.
-
- - only the OHCI and audio devices on sa1111 support DMA
-
- - There is no audio driver for this hardware
-
-In the OHCI code, I noticed that two other platforms already have
-a local bounce buffer support in the form of the "local_mem"
-allocator. Specifically, TMIO and SM501 use this on a few other ARM
-boards with 16KB or 128KB of local SRAM that can be accessed from the
-OHCI and from the CPU.
-
-While this is not the same problem as on sa1111, I could not find a
-reason why we can't re-use the existing implementation but replace the
-physical SRAM address mapping with a locally allocated DMA buffer.
-
-There are two main downsides:
-
- - rather than using a dynamically sized pool, this buffer needs
-   to be allocated at probe time using a fixed size. Without
-   having any idea of what it should be, I picked a size of
-   64KB, which is between what the other two OHCI front-ends use
-   in their SRAM. If anyone has a better idea what that size
-   is reasonable, this can be trivially changed.
-
- - Previously, only USB transfers to the second memory bank
-   on Assabet needed to go through the bounce buffer, now all
-   of them do, which may impact runtime performance, depending
-   on what type of device is attached.
-
-On the upside, the local_mem support uses write-combining
-buffers, which should be a bit faster for transfers to the device
-compared to normal uncached coherent memory as used in dmabounce.
-
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I don't have this hardware, so the patch is not tested at all.
----
- arch/arm/common/Kconfig        |  1 -
- arch/arm/common/sa1111.c       | 64 ----------------------------------
- drivers/usb/core/hcd.c         | 17 +++++++--
- drivers/usb/host/ohci-sa1111.c | 16 +++++++++
- 4 files changed, 30 insertions(+), 68 deletions(-)
-
-diff --git a/arch/arm/common/Kconfig b/arch/arm/common/Kconfig
-index c8e198631d41..286ea014c015 100644
---- a/arch/arm/common/Kconfig
-+++ b/arch/arm/common/Kconfig
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- config SA1111
- 	bool
--	select DMABOUNCE if !ARCH_PXA
- 
- config DMABOUNCE
- 	bool
-diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
-index 7df003b149c6..a00915883f78 100644
---- a/arch/arm/common/sa1111.c
-+++ b/arch/arm/common/sa1111.c
-@@ -1391,70 +1391,9 @@ void sa1111_driver_unregister(struct sa1111_driver *driver)
- }
- EXPORT_SYMBOL(sa1111_driver_unregister);
- 
--#ifdef CONFIG_DMABOUNCE
--/*
-- * According to the "Intel StrongARM SA-1111 Microprocessor Companion
-- * Chip Specification Update" (June 2000), erratum #7, there is a
-- * significant bug in the SA1111 SDRAM shared memory controller.  If
-- * an access to a region of memory above 1MB relative to the bank base,
-- * it is important that address bit 10 _NOT_ be asserted. Depending
-- * on the configuration of the RAM, bit 10 may correspond to one
-- * of several different (processor-relative) address bits.
-- *
-- * This routine only identifies whether or not a given DMA address
-- * is susceptible to the bug.
-- *
-- * This should only get called for sa1111_device types due to the
-- * way we configure our device dma_masks.
-- */
--static int sa1111_needs_bounce(struct device *dev, dma_addr_t addr, size_t size)
--{
--	/*
--	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
--	 * User's Guide" mentions that jumpers R51 and R52 control the
--	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
--	 * SDRAM bank 1 on Neponset). The default configuration selects
--	 * Assabet, so any address in bank 1 is necessarily invalid.
--	 */
--	return (machine_is_assabet() || machine_is_pfs168()) &&
--		(addr >= 0xc8000000 || (addr + size) >= 0xc8000000);
--}
--
--static int sa1111_notifier_call(struct notifier_block *n, unsigned long action,
--	void *data)
--{
--	struct sa1111_dev *dev = to_sa1111_device(data);
--
--	switch (action) {
--	case BUS_NOTIFY_ADD_DEVICE:
--		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL) {
--			int ret = dmabounce_register_dev(&dev->dev, 1024, 4096,
--					sa1111_needs_bounce);
--			if (ret)
--				dev_err(&dev->dev, "failed to register with dmabounce: %d\n", ret);
--		}
--		break;
--
--	case BUS_NOTIFY_DEL_DEVICE:
--		if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL)
--			dmabounce_unregister_dev(&dev->dev);
--		break;
--	}
--	return NOTIFY_OK;
--}
--
--static struct notifier_block sa1111_bus_notifier = {
--	.notifier_call = sa1111_notifier_call,
--};
--#endif
--
- static int __init sa1111_init(void)
- {
- 	int ret = bus_register(&sa1111_bus_type);
--#ifdef CONFIG_DMABOUNCE
--	if (ret == 0)
--		bus_register_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
--#endif
- 	if (ret == 0)
- 		platform_driver_register(&sa1111_device_driver);
- 	return ret;
-@@ -1463,9 +1402,6 @@ static int __init sa1111_init(void)
- static void __exit sa1111_exit(void)
- {
- 	platform_driver_unregister(&sa1111_device_driver);
--#ifdef CONFIG_DMABOUNCE
--	bus_unregister_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
--#endif
- 	bus_unregister(&sa1111_bus_type);
- }
- 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 3c7c64ff3c0a..5f2fa46c7958 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
- EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
- 
- /*
-- * Some usb host controllers can only perform dma using a small SRAM area.
-+ * Some usb host controllers can only perform dma using a small SRAM area,
-+ * or that have restrictions in addressable DRAM.
-  * The usb core itself is however optimized for host controllers that can dma
-  * using regular system memory - like pci devices doing bus mastering.
-  *
-@@ -3095,8 +3096,18 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 	if (IS_ERR(hcd->localmem_pool))
- 		return PTR_ERR(hcd->localmem_pool);
- 
--	local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
--				  size, MEMREMAP_WC);
-+	/*
-+	 * if a physical SRAM address was passed, map it, otherwise
-+	 * allocate system memory as a buffer.
-+	 */
-+	if (phys_addr)
-+		local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
-+					  size, MEMREMAP_WC);
-+	else
-+		local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
-+					     GFP_KERNEL,
-+					     DMA_ATTR_WRITE_COMBINE);
-+
- 	if (IS_ERR(local_mem))
- 		return PTR_ERR(local_mem);
- 
-diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
-index 137f66f6977f..488033f2e144 100644
---- a/drivers/usb/host/ohci-sa1111.c
-+++ b/drivers/usb/host/ohci-sa1111.c
-@@ -206,6 +206,22 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
- 		goto err1;
- 	}
- 
-+	/*
-+	 * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
-+	 * User's Guide" mentions that jumpers R51 and R52 control the
-+	 * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
-+	 * SDRAM bank 1 on Neponset). The default configuration selects
-+	 * Assabet, so any address in bank 1 is necessarily invalid.
-+	 *
-+	 * As a workaround, use a bounce buffer in addressable memory
-+	 * as local_mem.
-+	 */
-+	if (machine_is_assabet()) {
-+		ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
-+		if (ret)
-+			goto out_err1;
-+	}
-+
- 	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
- 		dev_dbg(&dev->dev, "request_mem_region failed\n");
- 		ret = -EBUSY;
--- 
-2.29.2
-
+Jason

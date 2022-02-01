@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B5E4A6143
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2664A614C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241021AbiBAQTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240919AbiBAQTu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:19:50 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634ABC06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:19:50 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id j2so55125608ejk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H/EA0AhkWiFaOwwty7mH2hCCiTOvQntxOFT+Uv9r6mI=;
-        b=lmzPqOHdxn0hc7dFBLY3SQkUuN8/E5zgkhWuFYNNCZY80fRqKvZZiHLjCZFSELf5wt
-         fBfAaoq3b5L6sfZamRJ4r9as5w9m2yn2x5kjVQH91u5qzkU4B0X3l8pb4YSIgvY2YQoU
-         hLYOHsig6gFhE8uLZXKQjCQGUZdYl3Z4dWDXS94KelY+TVFaf6ZQT+FTU8h0b8OgyVSF
-         +vMc/E1jLaqNPkoLezOjgnDMC9VeuCZPuSrCLTTlT2tOaNLt4ZbNIDH7tRFJJF+KWag/
-         wG5J3E4/omZOqv7+krqB1k+rt7bzjHGeCvrcOEBpozUkZsDcRNHQwrGH26s3VqMOjExc
-         cGoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H/EA0AhkWiFaOwwty7mH2hCCiTOvQntxOFT+Uv9r6mI=;
-        b=feFi/3GlsMyzy1xXS7XC1FK+P2UrxrrAJ4Jllg23grLXPmfd11PgoH87+aDTck6tiU
-         ajkoaK7Af5fZZTCJy+Zt7vZW1E0I+qTk0wjd+xlBMof1IrYLnyFAoIQK4tBgYUhp4/xp
-         M+uCUPvulfz+N5vMnZlNruuhGQZs4ASa785hk2tXGM0e/iA5tJNXhdQBUBjSqmPki0a6
-         RR2rmynqww99m635KOyVRcHv3SN9h18xS2ZWCM3/ewSKil3YqDwN8k7lar0nykBja7eo
-         p40ynt4TDje6yPjjz6n1Yeg/kBOQBebX+q1f5VbjbynESrBegaAxnB2TWDbZl9UXB+yh
-         qpsw==
-X-Gm-Message-State: AOAM533PeMG5SFcNZGkq176akLjn4a7c6uO3XvK22T6a6KFYyqaIh80x
-        dfHYc7sSWNxYmBJSZp3/PQEhSilF+5I0/JUD6iHk
-X-Google-Smtp-Source: ABdhPJyY2QWbw9iTiEYwXUoRKlv8CqDxjUmVAK+5MN19fpdlGU198KTmUcBPwAV5FDqPW4wyhtc7GkW+of0Vio0Kkrg=
-X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr21589608eji.327.1643732388897;
- Tue, 01 Feb 2022 08:19:48 -0800 (PST)
+        id S241039AbiBAQWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:22:48 -0500
+Received: from mail-bn8nam08on2073.outbound.protection.outlook.com ([40.107.100.73]:4008
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241055AbiBAQWk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 11:22:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NPE+YlqrWkhxVfoXJ0kEtQYcxba8lor/fPo86GSoOGJTiX7+aCIlD1htPUhzNgj0dDJGMu/QrwQ5MujgJKt7StIDaLNWci0Y7sFPJF0V17h+uNwknnPRoepm5piYmRSFLdurzLg6kGp6SXoTug9ByQyYgRdA6xB/y6Yjxg7C9tSn50JdAvMxkMwiQCkoWY5FGtsENZoWRNacBWdTdcVgMnNeDGB44RePwSt/+odowfp0eZal9r7hT/PoCPjoyTLRhOfIawBVtXUdFWYeomPdXB8XUBt0Hp1w/Wfdwt7tT8orfsIPoHJXZbgdrHtX5CQAU6OgFaeg9zZY0Jss/9SnBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CgC72qfrt1nXX/kqFvwgjw+vaD3+yk6/B8fqBiuZD5c=;
+ b=Z5E+n54CARs5xwXipdXaaWX3CLVWO8qa8PhXre58VghnGpGPJ0sr8SDpOTEdU3hV0F4wDtwHWdJmBcnAEDN8hKZe4sQLULvlthZ4e/hWnx59bdX2fmStT9ooB+91lfSAVLJgfNJy6PocQEGfwM4i0VZ0MjRURNLqqm9vyWYPUGgh0z8cg4T2cW8BdfnMey/eIatjUuWYHOGwsvTtW80ILs6HUGkLTZr6s3agJcGXalaJWM5Pnw/w4PDBJnt+dwzWhA9kl1lZmbzyzFb8Y5dbUQ19rw2H52H9uYaCm5AxxpynwETz+tqfcSGx5oXBkj0b285NEZJuW1wrF+JUsfGT4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CgC72qfrt1nXX/kqFvwgjw+vaD3+yk6/B8fqBiuZD5c=;
+ b=LYms60hNQJc7YK39d26EePIsL1x8ezcCVhRmnuig2ngSlj6gM7sEPRVbnfQMzvYR/TvcJLQyuvrGeSOWLKWWaM4T+/Jj1PxCxBTFq9VARCxF1b1N/rpZsitZoa3inwqGsthWI+qFP80zmcbzhSERIcGGUuBrAO4hHTv3SZKU0+ups+kG1e4HOseENqWUBj9FIQw2YLU98tnmbTFCNcLhC6K+7DBNPI9U/Qx2lpTJj0a4PG7TbKKcfgWZIyHx2vPd4d+mFBjfPfmvUQbUxGOlnsEyD0HG7p8Az8lqXWpKgEI54oGSnOcdX4bqszIESgonRHwt25p2rsKLjWWLeGRNUQ==
+Received: from DS7PR06CA0029.namprd06.prod.outlook.com (2603:10b6:8:54::29) by
+ MN2PR12MB2957.namprd12.prod.outlook.com (2603:10b6:208:100::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Tue, 1 Feb
+ 2022 16:22:35 +0000
+Received: from DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::6) by DS7PR06CA0029.outlook.office365.com
+ (2603:10b6:8:54::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17 via Frontend
+ Transport; Tue, 1 Feb 2022 16:22:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ DM6NAM11FT051.mail.protection.outlook.com (10.13.172.243) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4951.12 via Frontend Transport; Tue, 1 Feb 2022 16:22:34 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 1 Feb
+ 2022 16:22:33 +0000
+Received: from [10.25.79.72] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 1 Feb 2022
+ 08:22:30 -0800
+Message-ID: <65b836cd-8d5d-b9c2-eb8f-2ee3ef46112b@nvidia.com>
+Date:   Tue, 1 Feb 2022 21:52:28 +0530
 MIME-Version: 1.0
-References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
- <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com>
- <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com>
- <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
- <CAHC9VhQE4JPhTjkKwV3ovRSuPceiHDrP3MDW4RPDcNtLkb7tAQ@mail.gmail.com> <CAFqZXNs7P+p0B-uZ2owMH1qa04unbq870tMqQ4Kwup7dXJ9z=g@mail.gmail.com>
-In-Reply-To: <CAFqZXNs7P+p0B-uZ2owMH1qa04unbq870tMqQ4Kwup7dXJ9z=g@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 1 Feb 2022 11:19:37 -0500
-Message-ID: <CAHC9VhRAPb8PV08fYd-GOY+ZeKX6r+rmGw_Okrwwj6ESTVDYmA@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Scott Mayhew <smayhew@redhat.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+From:   Vidya Sagar <vidyas@nvidia.com>
+To:     <rafael.j.wysocki@intel.com>, <keith.busch@intel.com>, <hch@lst.de>
+CC:     <bhelgaas@google.com>, <mmaddireddy@nvidia.com>,
+        <kthota@nvidia.com>, <sagar.tv@gmail.com>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Query related to shutting down NVMe during system suspend
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c7603ec4-202e-4f91-cdab-08d9e59f0e2e
+X-MS-TrafficTypeDiagnostic: MN2PR12MB2957:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB2957F0076A7AB055FFFD1E16B8269@MN2PR12MB2957.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Oto60ErCpPyceERfc4J7YacbTX6HzYuSkY8hrX65y/01gZWk1ohjSUSGRzo+/eoOUUiD20NIueI5j+hrMoyCOk/JJrvylUf2wCnszNyfse6Uw5IwjkzMQR2y9Le+3/dcUtgWV19/CguTIuREv2Oba01chgn/LpOKyvVH8GiUXvrMMsIaegwhIV3MzTMtgRAe6hfTgVJiyMVq4oh+hPQPyou3+01XQa+E9d9IABtjTGJuIifFaDNdO9oDZCDI8GkuvnpDKcKbZpRZbI7eA2VnrmUAMqT8QD0nBCbU2F2qVzpEjiwFswvcgNiUY+ycod4G1pPc2wp/lLCOuFJ+XK/NQdJxsEgumu+wDZc5/AGQCEcO/+Nn8ct7lfEd+JkWwRCY+rZJIEzOZmVMEv4ZOWqnJ7fAOy3nlrq8NRok3CT1pPtqOp6AMzGYskJFo5Zx/vs31V76iN7hjl1yBPxG5U9uU4PCtmBZuBko9hZzvwQVPL15sXhSQxvnm6PL2GfC99z7zaZG8gyjpOhoXAf2srzI8t5KLANgOD0wmXbNes0oLFy/FUCAICVMp/PT4THeTa21SRqGVdAE2yJN5f/Sm4xva409lPcVBKB7E5Jl7VMg5oocSPTeyhYS5ZvWJQcK8k0JcIaqXp1jxOD3QMirol/g/R3ZvEc4ftHbolvuGkmNGnK8ReaRNqc8ZDo96Jo7nQcR8thT94Uh/NwRRHFmdBK9q1GWukzElpt3ETGzYRcV9lf/Ou3Q6KaZmshggi8fulGzIcb7761p51mA5fRDiz+f1mt0rlgSZqCGU75yd3ebeNMQbYtIIX3nmX6Ri081xnO7CIKBSIF4ED+sPch/j7sikg==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(356005)(8936002)(4744005)(70586007)(81166007)(4326008)(70206006)(8676002)(2906002)(31696002)(82310400004)(86362001)(15650500001)(5660300002)(16576012)(110136005)(54906003)(316002)(83380400001)(36860700001)(47076005)(31686004)(26005)(16526019)(2616005)(426003)(186003)(36756003)(336012)(40460700003)(508600001)(966005)(43740500002)(36900700001)(20210929001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 16:22:34.8895
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7603ec4-202e-4f91-cdab-08d9e59f0e2e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2957
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 9:38 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> On Mon, Jan 31, 2022 at 5:16 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Mon, Jan 31, 2022 at 7:46 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> > > On Fri, Jan 28, 2022 at 3:28 AM Paul Moore <paul@paul-moore.com> wrote:
-> > > > On Thu, Jan 27, 2022 at 4:54 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> > > > > I wonder if we could make this all much simpler by *always* doing the
-> > > > > label parsing in selinux_add_opt() and just returning an error when
-> > > > > !selinux_initialized(&selinux_state). Before the new mount API, mount
-> > > > > options were always passed directly to the mount(2) syscall, so it
-> > > > > wasn't possible to pass any SELinux mount options before the SELinux
-> > > > > policy was loaded. I don't see why we need to jump through hoops here
-> > > > > just to support this pseudo-feature of stashing an unparsed label into
-> > > > > an fs_context before policy is loaded... Userspace should never need
-> > > > > to do that.
-> > > >
-> > > > I could agree with that, although part of my mind is a little nervous
-> > > > about the "userspace should *never* ..." because that always seems to
-> > > > bite us.  Although I'm struggling to think of a case where userspace
-> > > > would need to set explicit SELinux mount options without having a
-> > > > policy loaded.
-> > >
-> > > I get that, but IMO this is enough of an odd "use case" that I
-> > > wouldn't worry too much ...
-> >
-> > I understand, but seeing as I'm the only one that defends these things
-> > with Linus and others lets do this:
->
-> It's not all black and white:
-> https://lore.kernel.org/lkml/Pine.LNX.4.64.0512291322560.3298@g5.osdl.org/
+Hi Rafael & Christoph,
+My query is regarding the comment and the code that follows after it at
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c?h=v5.17-rc2#n3243
+What I understood from it is that, there is an underlying assumption
+that the power to the devices is not removed during the suspend call.
+In the case of device-tree based platforms like Tegra194, power is
+indeed removed to the devices during suspend-resume process. Hence, the
+NVMe devices need to be taken through the shutdown path irrespective of
+whether the ASPM states are enabled or not.
+I would like to hear from you the best method to follow to achieve this.
 
-I made my statement above not to ask your opinion, but rather to make a point.
-
--- 
-paul-moore.com
+Thanks & Regards,
+Vidya Sagar

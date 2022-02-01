@@ -2,111 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F2D4A5902
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED9E4A5905
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235822AbiBAJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 04:13:53 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53872 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiBAJNw (ORCPT
+        id S235874AbiBAJPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 04:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230264AbiBAJPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 04:13:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F288B82D23;
-        Tue,  1 Feb 2022 09:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E1CC340F3;
-        Tue,  1 Feb 2022 09:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643706829;
-        bh=hnac9oX2VXGbCvTtbNqKOCdN7oRwr6SWdV4YiEu9kyM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=C3jBCI/ixEWgjooyWZg0Pf2gLBAsWdYC5KQtZyJSy1bZaxpdqnqmZV2mLvS2b1IFc
-         ynbOpC5QIxeUjflPA3k50UNxGFgTQoueb8H6IcVSH4QOMcFXtHnzhO6sX44zxCdvIN
-         HwR1s0XWWFi+/c6gZbeyxVhey/XzQMNLmct/O0fM3zr53GHtf+E/aqGlthTlcrsyo5
-         083sI15A7w/gOmRl6iM3BFpIS67oz9XP33+endaam6lx52zO3Vy08Ow2PDfM/R/KDT
-         0hJa2m3h6TyU8/xhk/Ehpn6Ldkyugyv7t3+o+ZgnGtUgC+abBE49frlN5zhRV2SQUk
-         1J5pf/YToKspA==
-Received: by mail-vk1-f176.google.com with SMTP id y192so9993943vkc.8;
-        Tue, 01 Feb 2022 01:13:48 -0800 (PST)
-X-Gm-Message-State: AOAM532LncX1C+HJY/gE+ew+hpSD2cyvyEZ3wv7Pm3tEXru0ZyWq3T16
-        vRwWxgA+zWT1SiR9vlICd+0ode4PYGpaJiNQ0xw=
-X-Google-Smtp-Source: ABdhPJz8fzguZPbFnae5j7V9pl/dv5oQGM4hOb4aA5V9NpHM4cr9OW86mUtht2VbhtSN0zWJb+F+yH9GTu4P2KsI3X0=
-X-Received: by 2002:a05:6122:1c5:: with SMTP id h5mr9895590vko.2.1643706827991;
- Tue, 01 Feb 2022 01:13:47 -0800 (PST)
+        Tue, 1 Feb 2022 04:15:37 -0500
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640C0C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 01:15:37 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:58b3:216b:d287:833])
+        by andre.telenet-ops.be with bizsmtp
+        id plFZ2600U2lsq0X01lFZYH; Tue, 01 Feb 2022 10:15:34 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nEpG9-00Ch77-GK; Tue, 01 Feb 2022 10:15:33 +0100
+Date:   Tue, 1 Feb 2022 10:15:33 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     linuxppc-dev@lists.ozlabs.org
+Subject: Re: Build regressions/improvements in v5.17-rc2
+In-Reply-To: <20220131093835.3146981-1-geert@linux-m68k.org>
+Message-ID: <alpine.DEB.2.22.394.2202011014260.3025644@ramsan.of.borg>
+References: <20220131093835.3146981-1-geert@linux-m68k.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
- <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
- <20220201074457.GC29119@lst.de>
-In-Reply-To: <20220201074457.GC29119@lst.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 1 Feb 2022 17:13:37 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
-Message-ID: <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
-Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 3:45 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Mon, Jan 31, 2022 at 09:50:58PM +0800, Guo Ren wrote:
-> > On Mon, Jan 31, 2022 at 8:26 PM Christoph Hellwig <hch@infradead.org> wrote:
-> > >
-> > > Given that most rv64 implementations can't run in rv32 mode, what is the
-> > > failure mode if someone tries it with the compat mode enabled?
-> > A static linked simple hello_world could still run on a non-compat
-> > support hardware. But most rv32 apps would meet different userspace
-> > segment faults.
-> >
-> > Current code would let the machine try the rv32 apps without detecting
-> > whether hw support or not.
->
-> Hmm, we probably want some kind of check for not even offer running
-> rv32 binaries.  I guess trying to write UXL some time during early
-> boot and catching the resulting exception would be the way to go?
+On Mon, 31 Jan 2022, Geert Uytterhoeven wrote:
+> JFYI, when comparing v5.17-rc2[1] to v5.17-rc1[3], the summaries are:
+>  - build errors: +1/-3
 
-Emm... I think it's unnecessary. Free rv32 app running won't cause
-system problem, just as a wrong elf running. They are U-mode
-privileged.
->
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
-> ---end quoted text---
+   + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to fit: R_PPC64_REL14 (stub) against symbol `system_reset_common' defined in .text section in arch/powerpc/kernel/head_64.o:  => (.text+0x3ec)
 
+powerpc-gcc5/powerpc-allyesconfig
 
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/26291c54e111ff6ba87a164d85d4a4e134b7315c/ (all 99 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
 
--- 
-Best Regards
- Guo Ren
+Gr{oetje,eeting}s,
 
-ML: https://lore.kernel.org/linux-csky/
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds

@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0474A4A5E53
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1054A5E56
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbiBAObs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:31:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27753 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230237AbiBAObq (ORCPT
+        id S239323AbiBAOca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:32:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44680 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234833AbiBAOc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:31:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643725906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uMK8/jcOZdjpD/nh6+MuQsZsF0YOGLGqcOfutTCzX3o=;
-        b=XUoHWHkxOza6hcagNfrxxFmiLdjEancgSxz/9W3N4E7D/4DLeoHXgWAIPXbZ5YofYfvLH7
-        5keHE0ht3esak5Fc6kb+NpvIutZ/rCgz4ATvY2rOSSlJ+kZSb798R/dS/dol0uAcLsada4
-        4cwrFFRyN7rTwLRIv9mkKL1+xMlxBZc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-RHVipqQINb20QaNy-t1vhA-1; Tue, 01 Feb 2022 09:31:45 -0500
-X-MC-Unique: RHVipqQINb20QaNy-t1vhA-1
-Received: by mail-ed1-f72.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so8782127eds.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:31:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=uMK8/jcOZdjpD/nh6+MuQsZsF0YOGLGqcOfutTCzX3o=;
-        b=Emq2foWzeFnnPk6go9akpQJZvoz6zLNNlU0fZwsYxGqKAqNF3Wa+RFBc0nUHYgXHlc
-         PBQwvP5myAXswuhg59Ekyy6TtvCb9Do6zVplVOSFZdeC4R23LVqSMroGw4n3rL8+Lt5/
-         WvZD3GpWuPOuFJNU+w4NplaToi4czRMfgjEbYpp0g+yhc7w47r7z1u3S3E8PpeAxX3Mc
-         dZZcDm8ZD+J+h2at3LwfzI8tyZHpKdXRnl1MLMpfTz3P/O0jJFDyzLsjcwpsZhc6yqyz
-         iOAjvR6EcI0yrpQbKhM/V1qR0t4VpytxkGc048eXIcd/J0A77NV4gESmBvdPW1Y5djUc
-         8avw==
-X-Gm-Message-State: AOAM531OnBaEhZr+Yao3J2mLa4KUB+2LjrImkQ6n4dUpIShr4G932xPE
-        1Qz0ztzhnG7/EFVLRVasbo3PgJCzrPEYf9A+uopO8yrPDVYDinzCUlNjd77ApPCUgJfsaQGyhLy
-        N/GIQFgDP15Oi+d/fl1Ql1PYmQBRYafj2rU5x/oBdexZrqZ9P2dgKxTUZDCR7yerS+hkJaGL6Pn
-        Ff
-X-Received: by 2002:a17:907:7b8d:: with SMTP id ne13mr6469281ejc.136.1643725904405;
-        Tue, 01 Feb 2022 06:31:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxaMlxQDg5uPVclG2SA1eg5ZnllWOcMasdnd7IS7AQ5IUKTYNl5m4fiRpbpgX/p7pKN5sDPOA==
-X-Received: by 2002:a17:907:7b8d:: with SMTP id ne13mr6469254ejc.136.1643725904126;
-        Tue, 01 Feb 2022 06:31:44 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id gh14sm14554716ejb.38.2022.02.01.06.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 06:31:43 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap
- for Hyper-V-on-KVM and fix it for KVM-on-Hyper-V
-In-Reply-To: <35f06589-d300-c356-dc17-2c021ac97281@redhat.com>
-References: <20211220152139.418372-1-vkuznets@redhat.com>
- <35f06589-d300-c356-dc17-2c021ac97281@redhat.com>
-Date:   Tue, 01 Feb 2022 15:31:42 +0100
-Message-ID: <87sft2bqup.fsf@redhat.com>
+        Tue, 1 Feb 2022 09:32:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FE7BB82E40;
+        Tue,  1 Feb 2022 14:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384B6C340EB;
+        Tue,  1 Feb 2022 14:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643725945;
+        bh=SzL6/uvmByac7kgNmmnjoJZkWV6BXp/MpjW3ybQpzdI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AoE0UsWdeRY0arwk4DA4FD2UKfkeG5PwlGyJLj3RqWSw/3CiZnIq9Ni9yyHJTu0H+
+         N50Y3O4B/nUgVWpH3BgP4kiptq6J2lFUJkZHdo91Z1jHbRdepnQolYMoi41aVlkOoo
+         i+L9puv9/Xc9hpx/CFRIXDd2WQZYHpt24hAzoOaQ=
+Date:   Tue, 1 Feb 2022 15:32:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: Re: [PATCH 5.16 138/200] mptcp: keep track of local endpoint still
+ available for each msk
+Message-ID: <YflEd6+5rdsfKojI@kroah.com>
+References: <20220131105233.561926043@linuxfoundation.org>
+ <20220131105238.198209212@linuxfoundation.org>
+ <26d216d1-355-e132-a868-529f15c9b660@linux.intel.com>
+ <YflD6pbqi/EGPG3f@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YflD6pbqi/EGPG3f@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+On Tue, Feb 01, 2022 at 03:30:02PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Jan 31, 2022 at 11:36:32AM -0800, Mat Martineau wrote:
+> > On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
+> > 
+> > > From: Paolo Abeni <pabeni@redhat.com>
+> > > 
+> > > [ Upstream commit 86e39e04482b0aadf3ee3ed5fcf2d63816559d36 ]
+> > 
+> > Hi Greg -
+> > 
+> > Please drop this from the stable queue for both 5.16 and 5.15. It wasn't
+> > intended for backporting and we haven't checked for dependencies with other
+> > changes in this part of MPTCP subsystem.
+> > 
+> > In the mptcp tree we make sure to add Fixes: tags on every patch we think is
+> > eligible for the -stable tree. I know you're sifting through a lot of
+> > patches from subsystems that end up with important fixes arriving from the
+> > "-next" branches, and it seems like the scripts scooped up several MPTCP
+> > patches this time around that don't meet the -stable rules.
+> 
+> I think these were needed due to 8e9eacad7ec7 ("mptcp: fix msk traversal
+> in mptcp_nl_cmd_set_flags()") which you did tag with a "Fixes:" tag,
+> right?  Without these other commits, that one does not apply and it
+> looks like it should go into 5.15.y and 5.16.y.
+> 
+> Note, just putting a "Fixes:" tag does not guarantee if a commit will go
+> into a stable tree.  Please use the correct "Cc: stable@vger.kernel.org"
+> tag as the documentation asks for.
+> 
+> I'll go drop all of these mptcp patches, including 8e9eacad7ec7 ("mptcp:
+> fix msk traversal in mptcp_nl_cmd_set_flags()") for now.  If you want
+> them added back in, please let us know.
 
-> On 12/20/21 16:21, Vitaly Kuznetsov wrote:
->> Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
->> hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
->> KVM implements the feature for KVM-on-Hyper-V but it seems there was
->> a flaw in the implementation and the feature may not be fully functional.
->> PATCHes 1-2 fix the problem. The rest of the series implements the same
->> feature for Hyper-V-on-KVM.
->> 
->> Vitaly Kuznetsov (5):
->>    KVM: SVM: Drop stale comment from
->>      svm_hv_vmcb_dirty_nested_enlightenments()
->>    KVM: SVM: hyper-v: Enable Enlightened MSR-Bitmap support for real
->>    KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
->>      rebuilt
->>    KVM: x86: Make kvm_hv_hypercall_enabled() static inline
->>    KVM: nSVM: Implement Enlightened MSR-Bitmap feature
->> 
->>   arch/x86/kvm/hyperv.c           | 12 +--------
->>   arch/x86/kvm/hyperv.h           |  6 ++++-
->>   arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
->>   arch/x86/kvm/svm/svm.c          |  3 ++-
->>   arch/x86/kvm/svm/svm.h          | 16 +++++++----
->>   arch/x86/kvm/svm/svm_onhyperv.h | 12 +++------
->>   6 files changed, 63 insertions(+), 33 deletions(-)
->> 
->
-> Queued 3-5 now, but it would be nice to have some testcases.
->
+To be specific, I have dropped the following commits from the queues
+now, which was more than just these three that you asked:
 
-Thanks, indeed, I'll try to draft something up, both for nVMX and nSVM.
+602837e8479d ("mptcp: allow changing the "backup" bit by endpoint id")
+59060a47ca50 ("mptcp: clean up harmless false expressions")
+86e39e04482b ("mptcp: keep track of local endpoint still available for each msk")
+8e9eacad7ec7 ("mptcp: fix msk traversal in mptcp_nl_cmd_set_flags()")
+a4c0214fbee9 ("mptcp: fix removing ids bitmap setting")
+9846921dba49 ("selftests: mptcp: fix ipv6 routing setup")
 
--- 
-Vitaly
+If you want them back, please let us know.
 
+thanks,
+
+greg k-h

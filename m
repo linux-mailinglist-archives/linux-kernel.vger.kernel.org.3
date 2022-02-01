@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD7F4A7664
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2555A4A7826
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344609AbiBBRB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:01:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36587 "EHLO
+        id S1346713AbiBBSl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:41:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24175 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230295AbiBBRB5 (ORCPT
+        by vger.kernel.org with ESMTP id S232367AbiBBSl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:01:57 -0500
+        Wed, 2 Feb 2022 13:41:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643821317;
+        s=mimecast20190719; t=1643827318;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D25YjSr7KJ4sxl/Zh1uNR8s2aJGVWxQUiTzrhOO5QZM=;
-        b=PAVhHaIeZOhKBB05nYseW9KX8s4Xcttj3rIYWtkFPk4LbEo02+fAIusZ0Dj/HpEl35oDJ0
-        fVa2cPPrGsrAiEJDv80OOPm1PR6cEC98P5Iq4b1W/ssIOnA9gYW5vVmK8X7OYIRpLJOwx/
-        /OrA/zDc3HPjJFDfLCVCqMPFuzcpODA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=DvlTL8SOIBEnoLADrPhexPMo06dhYqvvFf7mqlCkN+M=;
+        b=XlUn8cewMm7JlfBGJ1BSPPNy7b1ZeVa4/i9DgXAyZ3t1CmTjPTqdxMwSWPQupt1vv/R7Vy
+        fg+V6aW34viA7CxiHlxQB+6BS5cLqldbYT9FDE4vCNh0zZkXW8ZM+K7c0jMshXNSsaC+74
+        Aqm1gnu+GVCeHLkIaJy5XSR9SVa32g4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-265-vWDjpXF1P2yKIPeBdGL-ag-1; Wed, 02 Feb 2022 12:01:56 -0500
-X-MC-Unique: vWDjpXF1P2yKIPeBdGL-ag-1
-Received: by mail-wm1-f70.google.com with SMTP id ay8-20020a05600c1e0800b00350de81da56so4670303wmb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 09:01:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=D25YjSr7KJ4sxl/Zh1uNR8s2aJGVWxQUiTzrhOO5QZM=;
-        b=vlBI02PjLYd7eiftWSqIceUgWpruAVxS+tUxOHlPYcz//PMtjdbvBq5WwCV+ziI+au
-         iv6fidNfEIOCcjRKY/gs4mOkIr/UvLBoTc3ngI8OjLckzPw5IhLDPCm9AyQcJZPovCmj
-         4yYflyuZqq69XdtkQ7wLZ9O1rv99s5WjfW5v/V8aACgS9PV3De2HIU+M7LgbhqVh/Scn
-         BkFhRCE145bhEDMNgWluA8FK2W/h81nFSv+u13H7C5nfHunB/8M9HwQPofeM43k89Ghu
-         nuP7blLAQjMMOa9nZ8R1CJFnd1Iuy2GlQboL95itEo3iRxvujnu2bJvtDh0HwW8AZjK0
-         EZGQ==
-X-Gm-Message-State: AOAM5309g+tgSZn/wzCjq2FidMoHdSHh9T3M3vZOeq1vE2YjTSAvxPHt
-        GxkSloMtYLk4b1IXLonKjeNrAzWqoznjN2pd7BVzTWxslSINc4HxOu5x5DD2ikNIzgLn+HHtWsC
-        Gud65ibEqnCPwt22DIRmAPaet
-X-Received: by 2002:adf:f8c6:: with SMTP id f6mr26089500wrq.290.1643821315074;
-        Wed, 02 Feb 2022 09:01:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyBUnBUSnsyQiXftcnch1RhXBPr4CAoPeFm5KDXx4DpxbNsCZ64xkm+qIkPtlCiPBMMG4kedw==
-X-Received: by 2002:adf:f8c6:: with SMTP id f6mr26089483wrq.290.1643821314779;
-        Wed, 02 Feb 2022 09:01:54 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f11:9700:838c:3860:6500:5284? (p200300d82f119700838c386065005284.dip0.t-ipconnect.de. [2003:d8:2f11:9700:838c:3860:6500:5284])
-        by smtp.gmail.com with ESMTPSA id n5sm5957602wmq.43.2022.02.02.09.01.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 09:01:54 -0800 (PST)
-Message-ID: <a7d787c7-d29a-e6af-5ed4-c43b198c2b27@redhat.com>
-Date:   Wed, 2 Feb 2022 18:01:51 +0100
+ us-mta-496-rb38Fz9TNbO11eU0S6GB5A-1; Wed, 02 Feb 2022 13:41:55 -0500
+X-MC-Unique: rb38Fz9TNbO11eU0S6GB5A-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8373110626E1;
+        Wed,  2 Feb 2022 18:41:12 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19D3084D19;
+        Wed,  2 Feb 2022 18:41:11 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 1BF03416CD79; Tue,  1 Feb 2022 15:31:59 -0300 (-03)
+Date:   Tue, 1 Feb 2022 15:31:59 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     =?utf-8?B?5ZCRIOaZr+S6mA==?= <oscar0225@livemail.tw>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH v10 1/10] add basic task isolation prctl interface
+Message-ID: <Yfl8nwIOM0ZSiXZY@fuller.cnet>
+References: <20220127173037.318440631@fedora.localdomain>
+ <20220127173206.358254456@fedora.localdomain>
+ <F94506EB-DA71-43F1-9126-8FBB134F6104@livemail.tw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 7/9] mm/swapfile: remove stale reuse_swap_page()
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>, linux-mm@kvack.org
-References: <20220131162940.210846-1-david@redhat.com>
- <20220131162940.210846-8-david@redhat.com> <20220202143549.GA24789@lst.de>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220202143549.GA24789@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F94506EB-DA71-43F1-9126-8FBB134F6104@livemail.tw>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.02.22 15:35, Christoph Hellwig wrote:
-> On Mon, Jan 31, 2022 at 05:29:37PM +0100, David Hildenbrand wrote:
->> All users are gone, let's remove it. We'll let SWP_STABLE_WRITES stick
->> around for now, as it might come in handy in the near future.
+On Sat, Jan 29, 2022 at 04:22:07AM +0000, 向 景亘 wrote:
+> Hi,
 > 
-> I don't think leaving a flag that has no user an a completely trivial
-> place to set it around is a good idea.  This is a classic case of
-> bitrot.
+> On Jan 28, 2022, at 1:30 AM, Marcelo Tosatti <mtosatti@redhat.com> wrote:
+> > 
+> > Index: linux-2.6/include/linux/task_isolation.h
+> > ===================================================================
+> > --- /dev/null
+> > +++ linux-2.6/include/linux/task_isolation.h
+> > @@ -0,0 +1,91 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef __LINUX_TASK_ISOL_H
+> > +#define __LINUX_TASK_ISOL_H
+> > +
+> > +#ifdef CONFIG_TASK_ISOLATION
+> > +
+> > +struct task_isol_info {
+> > +	/* Which features have been configured */
+> > +	u64 conf_mask;
+> > +	/* Which features are active */
+> > +	u64 active_mask;
+> > +	/* Quiesce mask */
+> > +	u64 quiesce_mask;
+> > +
+> > +	/* Oneshot mask */
+> > +	u64 oneshot_mask;
+> > +
+> > +	u8 inherit_mask;
+> > +};
+> > +
+> > +extern void __task_isol_free(struct task_struct *tsk);
+> > +
+> > +static inline void task_isol_free(struct task_struct *tsk)
+> > +{
+> > +	if (tsk->task_isol_info)
+> > +		__task_isol_free(tsk);
+> > +}
+> > +
+> > +int prctl_task_isol_feat_get(unsigned long arg2, unsigned long arg3,
+> > +			     unsigned long arg4, unsigned long arg5);
+> > +int prctl_task_isol_cfg_get(unsigned long arg2, unsigned long arg3,
+> > +			    unsigned long arg4, unsigned long arg5);
+> > +int prctl_task_isol_cfg_set(unsigned long arg2, unsigned long arg3,
+> > +			    unsigned long arg4, unsigned long arg5);
+> > +int prctl_task_isol_activate_get(unsigned long arg2, unsigned long arg3,
+> > +				 unsigned long arg4, unsigned long arg5);
+> > +int prctl_task_isol_activate_set(unsigned long arg2, unsigned long arg3,
+> > +				 unsigned long arg4, unsigned long arg5);
+> > +
+> > +int __copy_task_isol(struct task_struct *tsk);
+> > +
+> > +#else
+> > +
+> > +static inline void task_isol_free(struct task_struct *tsk)
+> > +{
+> > +}
+> > +
+> > +static inline int prctl_task_isol_feat_get(unsigned long arg2,
+> > +					   unsigned long arg3,
+> > +					   unsigned long arg4,
+> > +					   unsigned long arg5)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static inline int prctl_task_isoln_cfg_get(unsigned long arg2,
+> 
+> I think this line should be "prctl_task_isol_cfg_get". 
 
-Right now I'm planning on using it in part 2 -- on which I'm currently
-working on. If I don't end up reusing it, I'll remember to remove it.
-
--- 
-Thanks,
-
-David / dhildenb
+Yes, fixed, thanks!
 

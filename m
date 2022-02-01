@@ -2,98 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1054A5E56
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF494A5E5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbiBAOca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:32:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44680 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234833AbiBAOc2 (ORCPT
+        id S239364AbiBAOeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:34:31 -0500
+Received: from mail.efficios.com ([167.114.26.124]:42234 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230237AbiBAOea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:32:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FE7BB82E40;
-        Tue,  1 Feb 2022 14:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384B6C340EB;
-        Tue,  1 Feb 2022 14:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643725945;
-        bh=SzL6/uvmByac7kgNmmnjoJZkWV6BXp/MpjW3ybQpzdI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AoE0UsWdeRY0arwk4DA4FD2UKfkeG5PwlGyJLj3RqWSw/3CiZnIq9Ni9yyHJTu0H+
-         N50Y3O4B/nUgVWpH3BgP4kiptq6J2lFUJkZHdo91Z1jHbRdepnQolYMoi41aVlkOoo
-         i+L9puv9/Xc9hpx/CFRIXDd2WQZYHpt24hAzoOaQ=
-Date:   Tue, 1 Feb 2022 15:32:23 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Subject: Re: [PATCH 5.16 138/200] mptcp: keep track of local endpoint still
- available for each msk
-Message-ID: <YflEd6+5rdsfKojI@kroah.com>
-References: <20220131105233.561926043@linuxfoundation.org>
- <20220131105238.198209212@linuxfoundation.org>
- <26d216d1-355-e132-a868-529f15c9b660@linux.intel.com>
- <YflD6pbqi/EGPG3f@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YflD6pbqi/EGPG3f@kroah.com>
+        Tue, 1 Feb 2022 09:34:30 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 6E26833DE80;
+        Tue,  1 Feb 2022 09:34:29 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id dYR6_Yjr4udI; Tue,  1 Feb 2022 09:34:28 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 7B5D033DB4A;
+        Tue,  1 Feb 2022 09:34:28 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 7B5D033DB4A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643726068;
+        bh=HolMuCdDVhBlIOxeLlp6H2mJoEcrIA0JFlAwQ5aaCJU=;
+        h=From:To:Date:Message-Id;
+        b=cSW53qK6H+b8Kod6ll4vQq5fz9eaQySJj5+BpvHB/k/vWSDkQCDzGEZi0bJTdNcy8
+         uDLUA769TpHYpDSF4zzNVobPCf0aWaFltuoBZkWlCyZWgVlXbJbIBb4FWHwDqltkHK
+         3pWWpjM1/5qvzl4SwYCtChUlJ3veAuOWv9/bcnfypDDz50ICKE1Bvs8dNNouUXrkeJ
+         OL8C9Cilg/5F5lYmDDwfhEeV5JqPEYoo2Iimloz99i+Kg3IUerpOR9+HIQPd6qM/B3
+         9Ak5sevl0h/YJT5t0cJO9ARQRVFsHFlxRDWBDcVKhzbaGky4i2mqGycx3Y/vouRYgG
+         Bg2Ky49oUPR2Q==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id YpphZWqOMWSV; Tue,  1 Feb 2022 09:34:28 -0500 (EST)
+Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by mail.efficios.com (Postfix) with ESMTPSA id 070EE33DE00;
+        Tue,  1 Feb 2022 09:34:28 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH v2 1/2] rseq: extend struct rseq with numa node id
+Date:   Tue,  1 Feb 2022 09:34:24 -0500
+Message-Id: <20220201143425.19907-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 03:30:02PM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Jan 31, 2022 at 11:36:32AM -0800, Mat Martineau wrote:
-> > On Mon, 31 Jan 2022, Greg Kroah-Hartman wrote:
-> > 
-> > > From: Paolo Abeni <pabeni@redhat.com>
-> > > 
-> > > [ Upstream commit 86e39e04482b0aadf3ee3ed5fcf2d63816559d36 ]
-> > 
-> > Hi Greg -
-> > 
-> > Please drop this from the stable queue for both 5.16 and 5.15. It wasn't
-> > intended for backporting and we haven't checked for dependencies with other
-> > changes in this part of MPTCP subsystem.
-> > 
-> > In the mptcp tree we make sure to add Fixes: tags on every patch we think is
-> > eligible for the -stable tree. I know you're sifting through a lot of
-> > patches from subsystems that end up with important fixes arriving from the
-> > "-next" branches, and it seems like the scripts scooped up several MPTCP
-> > patches this time around that don't meet the -stable rules.
-> 
-> I think these were needed due to 8e9eacad7ec7 ("mptcp: fix msk traversal
-> in mptcp_nl_cmd_set_flags()") which you did tag with a "Fixes:" tag,
-> right?  Without these other commits, that one does not apply and it
-> looks like it should go into 5.15.y and 5.16.y.
-> 
-> Note, just putting a "Fixes:" tag does not guarantee if a commit will go
-> into a stable tree.  Please use the correct "Cc: stable@vger.kernel.org"
-> tag as the documentation asks for.
-> 
-> I'll go drop all of these mptcp patches, including 8e9eacad7ec7 ("mptcp:
-> fix msk traversal in mptcp_nl_cmd_set_flags()") for now.  If you want
-> them added back in, please let us know.
+Adding the NUMA node id to struct rseq is a straightforward thing to do,
+and a good way to figure out if anything in the user-space ecosystem
+prevents extending struct rseq.
 
-To be specific, I have dropped the following commits from the queues
-now, which was more than just these three that you asked:
+This NUMA node id field allows memory allocators such as tcmalloc to
+take advantage of fast access to the current NUMA node id to perform
+NUMA-aware memory allocation.
 
-602837e8479d ("mptcp: allow changing the "backup" bit by endpoint id")
-59060a47ca50 ("mptcp: clean up harmless false expressions")
-86e39e04482b ("mptcp: keep track of local endpoint still available for each msk")
-8e9eacad7ec7 ("mptcp: fix msk traversal in mptcp_nl_cmd_set_flags()")
-a4c0214fbee9 ("mptcp: fix removing ids bitmap setting")
-9846921dba49 ("selftests: mptcp: fix ipv6 routing setup")
+It can also be useful for implementing fast-paths for NUMA-aware
+user-space mutexes.
 
-If you want them back, please let us know.
+It also allows implementing getcpu(2) purely in user-space.
 
-thanks,
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ include/linux/sched.h       |  4 ++
+ include/trace/events/rseq.h |  4 +-
+ include/uapi/linux/rseq.h   | 24 +++++++++++
+ kernel/ptrace.c             |  2 +-
+ kernel/rseq.c               | 82 ++++++++++++++++++++++++++-----------
+ 5 files changed, 89 insertions(+), 27 deletions(-)
 
-greg k-h
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 508b91d57470..838c9e0b4cae 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1291,6 +1291,7 @@ struct task_struct {
+ 
+ #ifdef CONFIG_RSEQ
+ 	struct rseq __user *rseq;
++	u32 rseq_len;
+ 	u32 rseq_sig;
+ 	/*
+ 	 * RmW on rseq_event_mask must be performed atomically
+@@ -2260,10 +2261,12 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
+ {
+ 	if (clone_flags & CLONE_VM) {
+ 		t->rseq = NULL;
++		t->rseq_len = 0;
+ 		t->rseq_sig = 0;
+ 		t->rseq_event_mask = 0;
+ 	} else {
+ 		t->rseq = current->rseq;
++		t->rseq_len = current->rseq_len;
+ 		t->rseq_sig = current->rseq_sig;
+ 		t->rseq_event_mask = current->rseq_event_mask;
+ 	}
+@@ -2272,6 +2275,7 @@ static inline void rseq_fork(struct task_struct *t, unsigned long clone_flags)
+ static inline void rseq_execve(struct task_struct *t)
+ {
+ 	t->rseq = NULL;
++	t->rseq_len = 0;
+ 	t->rseq_sig = 0;
+ 	t->rseq_event_mask = 0;
+ }
+diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
+index a04a64bc1a00..6bd442697354 100644
+--- a/include/trace/events/rseq.h
++++ b/include/trace/events/rseq.h
+@@ -16,13 +16,15 @@ TRACE_EVENT(rseq_update,
+ 
+ 	TP_STRUCT__entry(
+ 		__field(s32, cpu_id)
++		__field(s32, node_id)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->cpu_id = raw_smp_processor_id();
++		__entry->node_id = cpu_to_node(raw_smp_processor_id());
+ 	),
+ 
+-	TP_printk("cpu_id=%d", __entry->cpu_id)
++	TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
+ );
+ 
+ TRACE_EVENT(rseq_ip_fixup,
+diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+index 77ee207623a9..386c25b5bbdb 100644
+--- a/include/uapi/linux/rseq.h
++++ b/include/uapi/linux/rseq.h
+@@ -130,6 +130,30 @@ struct rseq {
+ 	 *     this thread.
+ 	 */
+ 	__u32 flags;
++
++	__u32 padding1[3];
++
++	/*
++	 * This is the end of the original rseq ABI.
++	 * This is a valid end of rseq ABI for the purpose of rseq registration
++	 * rseq_len.
++	 * The original rseq ABI use "sizeof(struct rseq)" on registration,
++	 * thus requiring the padding above.
++	 */
++
++	/*
++	 * Restartable sequences node_id field. Updated by the kernel. Read by
++	 * user-space with single-copy atomicity semantics. This field should
++	 * only be read by the thread which registered this data structure.
++	 * Aligned on 32-bit. Contains the current NUMA node ID.
++	 */
++	__u32 node_id;
++
++	/*
++	 * This is a valid end of rseq ABI for the purpose of rseq registration
++	 * rseq_len. Use the offset immediately after the node_id field as
++	 * rseq_len.
++	 */
+ } __attribute__((aligned(4 * sizeof(__u64))));
+ 
+ #endif /* _UAPI_LINUX_RSEQ_H */
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index eea265082e97..f5edde5b7805 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -800,7 +800,7 @@ static long ptrace_get_rseq_configuration(struct task_struct *task,
+ {
+ 	struct ptrace_rseq_configuration conf = {
+ 		.rseq_abi_pointer = (u64)(uintptr_t)task->rseq,
+-		.rseq_abi_size = sizeof(*task->rseq),
++		.rseq_abi_size = task->rseq_len,
+ 		.signature = task->rseq_sig,
+ 		.flags = 0,
+ 	};
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index 97ac20b4f738..13f6d0419f31 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -81,15 +81,25 @@
+  *   F1. <failure>
+  */
+ 
+-static int rseq_update_cpu_id(struct task_struct *t)
++static int rseq_update_cpu_node_id(struct task_struct *t)
+ {
+-	u32 cpu_id = raw_smp_processor_id();
+ 	struct rseq __user *rseq = t->rseq;
++	u32 cpu_id = raw_smp_processor_id();
++	u32 node_id = cpu_to_node(cpu_id);
+ 
+-	if (!user_write_access_begin(rseq, sizeof(*rseq)))
++	if (!user_write_access_begin(rseq, t->rseq_len))
+ 		goto efault;
+-	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
+-	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
++	switch (t->rseq_len) {
++	case offsetofend(struct rseq, node_id):
++		unsafe_put_user(node_id, &rseq->node_id, efault_end);
++		fallthrough;
++	case offsetofend(struct rseq, padding1):
++		unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
++		unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
++		break;
++	default:
++		goto efault_end;
++	}
+ 	user_write_access_end();
+ 	trace_rseq_update(t);
+ 	return 0;
+@@ -100,22 +110,35 @@ static int rseq_update_cpu_id(struct task_struct *t)
+ 	return -EFAULT;
+ }
+ 
+-static int rseq_reset_rseq_cpu_id(struct task_struct *t)
++static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
+ {
+-	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED;
++	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
+ 
+-	/*
+-	 * Reset cpu_id_start to its initial state (0).
+-	 */
+-	if (put_user(cpu_id_start, &t->rseq->cpu_id_start))
+-		return -EFAULT;
+-	/*
+-	 * Reset cpu_id to RSEQ_CPU_ID_UNINITIALIZED, so any user coming
+-	 * in after unregistration can figure out that rseq needs to be
+-	 * registered again.
+-	 */
+-	if (put_user(cpu_id, &t->rseq->cpu_id))
+-		return -EFAULT;
++	switch (t->rseq_len) {
++	case offsetofend(struct rseq, node_id):
++		/*
++		 * Reset node_id to its initial state (0).
++		 */
++		if (put_user(node_id, &t->rseq->node_id))
++			return -EFAULT;
++		fallthrough;
++	case offsetofend(struct rseq, padding1):
++		/*
++		 * Reset cpu_id_start to its initial state (0).
++		 */
++		if (put_user(cpu_id_start, &t->rseq->cpu_id_start))
++			return -EFAULT;
++		/*
++		 * Reset cpu_id to RSEQ_CPU_ID_UNINITIALIZED, so any user
++		 * coming in after unregistration can figure out that rseq
++		 * needs to be registered again.
++		 */
++		if (put_user(cpu_id, &t->rseq->cpu_id))
++			return -EFAULT;
++		break;
++	default:
++		return -EINVAL;
++	}
+ 	return 0;
+ }
+ 
+@@ -293,7 +316,7 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
+ 		if (unlikely(ret < 0))
+ 			goto error;
+ 	}
+-	if (unlikely(rseq_update_cpu_id(t)))
++	if (unlikely(rseq_update_cpu_node_id(t)))
+ 		goto error;
+ 	return;
+ 
+@@ -336,15 +359,16 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 		/* Unregister rseq for current thread. */
+ 		if (current->rseq != rseq || !current->rseq)
+ 			return -EINVAL;
+-		if (rseq_len != sizeof(*rseq))
++		if (rseq_len != current->rseq_len)
+ 			return -EINVAL;
+ 		if (current->rseq_sig != sig)
+ 			return -EPERM;
+-		ret = rseq_reset_rseq_cpu_id(current);
++		ret = rseq_reset_rseq_cpu_node_id(current);
+ 		if (ret)
+ 			return ret;
+ 		current->rseq = NULL;
+ 		current->rseq_sig = 0;
++		current->rseq_len = 0;
+ 		return 0;
+ 	}
+ 
+@@ -357,7 +381,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 		 * the provided address differs from the prior
+ 		 * one.
+ 		 */
+-		if (current->rseq != rseq || rseq_len != sizeof(*rseq))
++		if (current->rseq != rseq || rseq_len != current->rseq_len)
+ 			return -EINVAL;
+ 		if (current->rseq_sig != sig)
+ 			return -EPERM;
+@@ -369,12 +393,20 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
+ 	 * If there was no rseq previously registered,
+ 	 * ensure the provided rseq is properly aligned and valid.
+ 	 */
+-	if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)) ||
+-	    rseq_len != sizeof(*rseq))
++	if (!IS_ALIGNED((unsigned long)rseq, __alignof__(*rseq)))
+ 		return -EINVAL;
++	switch (rseq_len) {
++	case offsetofend(struct rseq, node_id):
++		fallthrough;
++	case offsetofend(struct rseq, padding1):
++		break;
++	default:
++		return -EINVAL;
++	}
+ 	if (!access_ok(rseq, rseq_len))
+ 		return -EFAULT;
+ 	current->rseq = rseq;
++	current->rseq_len = rseq_len;
+ 	current->rseq_sig = sig;
+ 	/*
+ 	 * If rseq was previously inactive, and has just been
+-- 
+2.17.1
+

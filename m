@@ -2,177 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 609354A6321
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC2A4A6324
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241738AbiBASCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:02:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47722 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbiBASCm (ORCPT
+        id S241758AbiBASEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233813AbiBASEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:02:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C51DB82F45;
-        Tue,  1 Feb 2022 18:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB62C340EC;
-        Tue,  1 Feb 2022 18:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643738559;
-        bh=RgTrOkLtWsYqhbH1QGUsruLsxp4i3lng0IFmNIyILIA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=WbvjgAOKq1FdAloutmsFJGq4lawYZwKp9qs9UBoOXLsZ9mbNVJMw7xtakNCb/q9cU
-         0reqDdMiq1UO/sByG9insFKBqd2aJuhKlzD8PNPscX96G4AHYKpEKO5BekRnVnkBnk
-         ExjxkhLJRyg/vmDIJxzxIkvzMJTChHl2PbYAnWumNRTURGlurTZ2NPbY8RAGE0UwZC
-         E3A283h+eWrrtTk3oiav2Gg3E5mBIKmEk+BhvlXqeISWIQMrKyOyzGTimOBdMkcbu2
-         m88r2HNwDpsT+lH6h+yoEn/q9yzPV1yA5QHCHRBHhNtLpUKC67GFK/u0dtz9uhYOIA
-         /etjLJZCiNj/w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7505B5C0326; Tue,  1 Feb 2022 10:02:39 -0800 (PST)
-Date:   Tue, 1 Feb 2022 10:02:39 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Explain syntactic and semantic
- dependencies
-Message-ID: <20220201180239.GZ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
- <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
- <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
- <YfMKlLInsK0Qr77f@rowland.harvard.edu>
+        Tue, 1 Feb 2022 13:04:44 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21671C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:04:44 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id z131so15989485pgz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=PA0fRujC3w3wngjo09wHj38K9eI3YOrwyDmfNHXPKOQ=;
+        b=nKB/AG5qcMntUPf1Mn9uYxFmMwQX6d57f2HvaAn0gZlmYpvqiAnazvzQiMYytrUBfl
+         s9Sf2kefF7ATZVi8d0eqm7Ut8KT+ugjXNMjef6HJhMUbMzdT2woUMlVIf6fHgSlwqQuT
+         aSmDPfSzTkYLiFDkTDtpjjYnlvjwjHhcbbG8p+jg9OHacAAbeVkCHiJzyFKPsqGKFxtW
+         V4XcDt2WjHsJhIMx+VqtTj9MmP7Ln9ZNONp7+2F/Jdb+JlcXT6RlOkNw3Mv8TaizhKRy
+         3XZovhHOsKBdhpDW5jQ/E4elnG3dk9M/fj8amBMq6W5oaZ229+HbHE7UnNFeZxYRwvTA
+         UrVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=PA0fRujC3w3wngjo09wHj38K9eI3YOrwyDmfNHXPKOQ=;
+        b=Q+Vi983DjItJvQGbpcarcO3xCZ9aqDjP9eMikHZz4jBaYtnjYX7PRKAL8e8a0TGCZE
+         kX94JLr0DCy+z9VGoZqwHLo9fscxcEzMUWAk9iVDzsQmEtm9gkK0lkpQDTRJm7lMhSLy
+         uVRiP3p/L7PbAURuXW7NbD9r2L2V9m/aa5nmCJ/p3ECx3idl7WCxdFM3Oz51OLQghYo8
+         IIllp7dCDrfg7lEjx2Zo+/p8n2uNPKwgAwE67xOh+SUtKtpb4KG15CscE5ooIVdUtzHI
+         04AWk+KekS9TLjfFBotXrHHVmFD5F1rZzs3f7C7jFjv6popwws/jl5e+rjdnjDQvUorp
+         U4TQ==
+X-Gm-Message-State: AOAM532f6GmcFYuKrz0OqctDEDJRBxFXi+BdxIrrZK9LiK/APxeCU9nt
+        hv4BZHI4Fii2tG8gbfwTWMqL6j7XGOLfzQ==
+X-Google-Smtp-Source: ABdhPJzOdP7aj6KeGNtqEk4gsmUeRNia4ntW1vOKb7tjOfisVZZ+cio4a1eVaqD84m56qdPcJDGHuQ==
+X-Received: by 2002:a63:3285:: with SMTP id y127mr21758025pgy.32.1643738682861;
+        Tue, 01 Feb 2022 10:04:42 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:ca6:9749:7316:531a])
+        by smtp.gmail.com with ESMTPSA id l26sm31878255pgm.73.2022.02.01.10.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 10:04:41 -0800 (PST)
+Date:   Tue, 1 Feb 2022 10:04:35 -0800
+From:   Benson Leung <bleung@google.com>
+To:     linux-kernel@vger.kernel.org,
+        Prashant Malani <pmalani@chromium.org>,
+        chrome-platform@lists.linux.dev
+Cc:     Guenter Roeck <groeck@chromium.org>, Alyssa Ross <hi@alyssa.is>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, bleung@chromium.org
+Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: Check for EC device
+Message-ID: <164373850836.3544522.16027166265181689567.b4-ty@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oODRVVzWBO06e+4n"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
+In-Reply-To: <20220126190219.3095419-1-pmalani@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 04:11:48PM -0500, Alan Stern wrote:
-> Paul Heidekrüger pointed out that the Linux Kernel Memory Model
-> documentation doesn't mention the distinction between syntactic and
-> semantic dependencies.  This is an important difference, because the
-> compiler can easily break dependencies that are only syntactic, not
-> semantic.
-> 
-> This patch adds a few paragraphs to the LKMM documentation explaining
-> these issues and illustrating how they can matter.
-> 
-> Suggested-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> ---
-> 
-> 
-> [as1970]
-> 
-> 
->  tools/memory-model/Documentation/explanation.txt |   47 +++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
-> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-> ===================================================================
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -485,6 +485,53 @@ have R ->po X.  It wouldn't make sense f
->  somehow on a value that doesn't get loaded from shared memory until
->  later in the code!
->  
-> +Here's a trick question: When is a dependency not a dependency?  Answer:
-> +When it is purely syntactic rather than semantic.  We say a dependency
-> +between two accesses is purely syntactic if the second access doesn't
-> +actually depend on the result of the first.  Here is a trivial example:
-> +
-> +	r1 = READ_ONCE(x);
-> +	WRITE_ONCE(y, r1 * 0);
-> +
-> +There appears to be a data dependency from the load of x to the store of
-> +y, since the value to be stored is computed from the value that was
-> +loaded.  But in fact, the value stored does not really depend on
-> +anything since it will always be 0.  Thus the data dependency is only
-> +syntactic (it appears to exist in the code) but not semantic (the second
-> +access will always be the same, regardless of the value of the first
-> +access).  Given code like this, a compiler could simply eliminate the
-> +load from x, which would certainly destroy any dependency.
 
-Are you OK with that last sentence reading as follows?
+--oODRVVzWBO06e+4n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	Given code like this, a compiler could simply discard the value
-	return by the load from x, which would certainly destroy any
-	dependency.
+On Wed, 26 Jan 2022 19:02:20 +0000, Prashant Malani wrote:
+> The Type C ACPI device on older Chromebooks is not generated correctly
+> (since their EC firmware doesn't support the new commands required). In
+> such cases, the crafted ACPI device doesn't have an EC parent, and it is
+> therefore not useful (it shouldn't be generated in the first place since
+> the EC firmware doesn't support any of the Type C commands).
+>=20
+> To handle devices which use these older firmware revisions, check for
+> the parent EC device handle, and fail the probe if it's not found.
 
-My concern with the original is that it might mislead people into thinking
-that compilers can omit volatile loads.
+Applied, thanks!
 
-> +
-> +(It's natural to object that no one in their right mind would write code
-> +like the above.  However, macro expansions can easily give rise to this
-> +sort of thing, in ways that generally are not apparent to the
-> +programmer.)
-> +
-> +Another mechanism that can give rise to purely syntactic dependencies is
-> +related to the notion of "undefined behavior".  Certain program behaviors
-> +are called "undefined" in the C language specification, which means that
-> +when they occur there are no guarantees at all about the outcome.
-> +Consider the following example:
-> +
-> +	int a[1];
-> +	int i;
-> +
-> +	r1 = READ_ONCE(i);
-> +	r2 = READ_ONCE(a[r1]);
-> +
-> +Access beyond the end or before the beginning of an array is one kind of
-> +undefined behavior.  Therefore the compiler doesn't have to worry about
-> +what will happen if r1 is nonzero, and it can assume that r1 will always
-> +be zero without actually loading anything from i.
+[1/1] platform/chrome: cros_ec_typec: Check for EC device
+      commit: ffebd90532728086007038986900426544e3df4e
 
-And similarly here:
+Best regards,
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
 
-	... and it can assume that r1 will always be zero regardless of
-	the value actually loaded from i.
+--oODRVVzWBO06e+4n
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +                                                   (If the assumption
-> +turns out to be wrong, the resulting behavior will be undefined anyway
-> +so the compiler doesn't care!)  Thus the load from i can be eliminated,
-> +breaking the address dependency.
-> +
-> +The LKMM is unaware that purely syntactic dependencies are different
-> +from semantic dependencies and therefore mistakenly predicts that the
-> +accesses in the two examples above will be ordered.  This is another
-> +example of how the compiler can undermine the memory model.  Be warned.
-> +
->  
->  THE READS-FROM RELATION: rf, rfi, and rfe
->  -----------------------------------------
+-----BEGIN PGP SIGNATURE-----
 
-Looks great otherwise, and thank you all for your work on this!
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCYfl2MwAKCRBzbaomhzOw
+wrOZAP4gPkKd5dYI30xkDbEsgdlYovSEQfOhfSdEitv1g6mM1wD+LH5SF6np/5n3
+LjSaW7b5/D+95IWhz557i94GvzlycAI=
+=J6JR
+-----END PGP SIGNATURE-----
 
-Alan, would you like me to pull this in making those two changes and
-applying Akira's Reviewed-by, or would you prefer to send another version?
-
-For that matter, am I off base in my suggested changes.
-
-							Thanx, Paul
+--oODRVVzWBO06e+4n--

@@ -2,251 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 855B24A5A8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FFF4A5A92
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbiBAKvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:51:14 -0500
-Received: from angie.orcam.me.uk ([78.133.224.34]:44344 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236857AbiBAKvN (ORCPT
+        id S236875AbiBAKwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:52:37 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:13007 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230506AbiBAKwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:51:13 -0500
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 4927192009D; Tue,  1 Feb 2022 11:51:11 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 4220292009C;
-        Tue,  1 Feb 2022 10:51:11 +0000 (GMT)
-Date:   Tue, 1 Feb 2022 10:51:11 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [RESEND][PATCH v2] PCI: Sanitise firmware BAR assignments behind a
- PCI-PCI bridge
-Message-ID: <alpine.DEB.2.21.2202010150100.58572@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 1 Feb 2022 05:52:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643712755; x=1675248755;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=Cpo8UZI1wG2GAE6up4u4Iw0Ycz/5sgQ0G828pkyJAXE=;
+  b=Ezk/Vn7cWGyEtJyuFSlxM2lVUuf74G67PzjWQ1pdTM1o0VXASVDukeEY
+   DiSEA8/592xV+N6XhEm+T4Mn0dKQ/LPpsZa4/bbD1IWXWVG9gR/GUMxPc
+   SwXO3AB9DQ6E0Li8c5Zl3aHK59XNoU645nbnfHiGK75opNsYl9hHy8/vd
+   k=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 01 Feb 2022 02:52:34 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:52:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 1 Feb 2022 02:52:33 -0800
+Received: from mpubbise-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Tue, 1 Feb 2022 02:52:28 -0800
+From:   Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <ohad@wizery.com>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>
+CC:     <linux-remoteproc@vger.kernel.org>, <swboyd@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_sibis@quicinc.com>,
+        <kuabhs@chromium.org>, <quic_pillair@quicinc.com>,
+        Manikanta Pubbisetty <quic_mpubbise@quicinc.com>
+Subject: [PATCH v10 0/3] Add support for sc7280 WPSS PIL loading
+Date:   Tue, 1 Feb 2022 16:22:01 +0530
+Message-ID: <1643712724-12436-1-git-send-email-quic_mpubbise@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix an issue with the Tyan Tomcat IV S1564D system, the BIOS of which 
-does not assign PCI buses beyond #2, where our resource reallocation 
-code preserves the reset default of an I/O BAR assignment outside its 
-upstream PCI-to-PCI bridge's I/O forwarding range for device 06:08.0 in 
-this log:
+Add support for PIL loading of WPSS co-processor for SC7280 SOCs.
 
-pci_bus 0000:00: max bus depth: 4 pci_try_num: 5
-[...]
-pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: failed to assign [io  size 0x0020]
-pci 0000:05:00.0: PCI bridge to [bus 06]
-pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
-[...]
-pci 0000:00:11.0: PCI bridge to [bus 01-06]
-pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
-pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
-pci_bus 0000:00: No. 2 try to assign unassigned res
-[...]
-pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: failed to assign [io  size 0x0020]
-pci 0000:05:00.0: PCI bridge to [bus 06]
-pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
-[...]
-pci 0000:00:11.0: PCI bridge to [bus 01-06]
-pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
-pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
-pci_bus 0000:00: No. 3 try to assign unassigned res
-pci 0000:00:11.0: resource 7 [io  0xe000-0xefff] released
-[...]
-pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
-pci 0000:05:00.0: PCI bridge to [bus 06]
-pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]
-pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
-[...]
-pci 0000:00:11.0: PCI bridge to [bus 01-06]
-pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]
-pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
-pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
-pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
-pci_bus 0000:00: resource 5 [mem 0x00000000-0xffffffff]
-pci_bus 0000:01: resource 0 [io  0x1000-0x2fff]
-pci_bus 0000:01: resource 1 [mem 0xd8000000-0xdfffffff]
-pci_bus 0000:01: resource 2 [mem 0xa8000000-0xafffffff 64bit pref]
-pci_bus 0000:02: resource 0 [io  0x1000-0x2fff]
-pci_bus 0000:02: resource 1 [mem 0xd8000000-0xd8bfffff]
-pci_bus 0000:04: resource 0 [io  0x1000-0x1fff]
-pci_bus 0000:04: resource 1 [mem 0xd8600000-0xd8afffff]
-pci_bus 0000:05: resource 0 [io  0x2000-0x2fff]
-pci_bus 0000:05: resource 1 [mem 0xd8000000-0xd85fffff]
-pci_bus 0000:06: resource 0 [io  0x2000-0x2fff]
-pci_bus 0000:06: resource 1 [mem 0xd8000000-0xd85fffff]
+Changes from v9:
+- Minor cosmetic changes
 
--- note that the assignment of 0xfce0-0xfcff is outside the range of 
-0x2000-0x2fff assigned to bus #6:
+Changes from v8:
+- Disallow num_proxy_pds to be more than the max allowed
+- Add "additionalProperties: false" for glink-edge property in wpss dt-bindings.
 
-05:00.0 PCI bridge: Texas Instruments XIO2000(A)/XIO2200A PCI Express-to-PCI Bridge (rev 03) (prog-if 00 [Normal decode])
-        Flags: bus master, fast devsel, latency 0
-        Bus: primary=05, secondary=06, subordinate=06, sec-latency=0
-        I/O behind bridge: 00002000-00002fff
-        Memory behind bridge: d8000000-d85fffff
-        Capabilities: [50] Power Management version 2
-        Capabilities: [60] Message Signalled Interrupts: 64bit+ Queue=0/4 Enable-
-        Capabilities: [80] #0d [0000]
-        Capabilities: [90] Express PCI/PCI-X Bridge IRQ 0
+Changes from v7:
+- Use "interrupts" instead of "interrupts-extended" in DT bindings.
+- Add glink-edge properties in DT bindings.
+- Use size_t for "proxy_pd_count" in wpss remoteproc driver
 
-06:08.0 USB controller: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller (rev 61) (prog-if 00 [UHCI])
-	Subsystem: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller
-        Flags: bus master, medium devsel, latency 22, IRQ 5
-        I/O ports at fce0 [size=32]
-        Capabilities: [80] Power Management version 2
+Changes from v6:
+- Fixed the dt-bindings check in qcom,sc7280-wpss-pil.yaml
+- Fixed CDSP dt-bindings example node (compatible, glink-edge)
+- Fixed the clock-names used in wpss driver
+- Add support to get firmware-name from DTSI entry for wpss.
 
-06:08.1 USB controller: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller (rev 61) (prog-if 00 [UHCI])
-	Subsystem: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller
-        Flags: bus master, medium devsel, latency 22, IRQ 5
-        I/O ports at 2000 [size=32]
-        Capabilities: [80] Power Management version 2
+Changes from v4/v5:
+- Add yaml conversion for adsp/cdsp dt-bindings
+- Change clock names in wpss dt-bindings
+- Correct mistake in signed-off email ID
 
-Since both 06:08.0 and 06:08.1 have the same reset defaults the latter 
-device escapes its fate and gets a good assignment owing to an address 
-conflict with the former device.
+Rakesh Pillai (3):
+  dt-bindings: remoteproc: qcom: adsp: Convert binding to YAML
+  dt-bindings: remoteproc: qcom: Add SC7280 WPSS support
+  remoteproc: qcom: q6v5_wpss: Add support for sc7280 WPSS
 
-Consequently when the device driver tries to access 06:08.0 according to 
-its designated address range it pokes at an unassigned I/O location, 
-likely subtractively decoded by the southbridge and forwarded to ISA, 
-causing the driver to become confused and bail out:
+ .../bindings/remoteproc/qcom,hexagon-v56.txt       | 140 -------------
+ .../bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml  | 161 +++++++++++++++
+ .../bindings/remoteproc/qcom,sc7280-wpss-pil.yaml  | 219 ++++++++++++++++++++
+ .../bindings/remoteproc/qcom,sdm845-adsp-pil.yaml  | 160 +++++++++++++++
+ drivers/remoteproc/qcom_q6v5_adsp.c                | 227 +++++++++++++++++++--
+ 5 files changed, 751 insertions(+), 156 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qcs404-cdsp-pil.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-wpss-pil.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
 
-uhci_hcd 0000:06:08.0: host system error, PCI problems?
-uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-uhci_hcd 0000:06:08.0: host controller halted, very bad!
-uhci_hcd 0000:06:08.0: HCRESET not completed yet!
-uhci_hcd 0000:06:08.0: HC died; cleaning up
+-- 
+2.7.4
 
-if good luck happens or if bad luck does, an infinite flood of messages:
-
-uhci_hcd 0000:06:08.0: host system error, PCI problems?
-uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-uhci_hcd 0000:06:08.0: host system error, PCI problems?
-uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-uhci_hcd 0000:06:08.0: host system error, PCI problems?
-uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-[...]
-
-making the system virtually unusuable.
-
-This is because we have code to deal with a situation from PR #16263, 
-where broken ACPI firmware reports the wrong address range for the host 
-bridge's decoding window and trying to adjust to the window causes more 
-breakage than leaving the BIOS assignments intact.
-
-This may work for a device directly on the root bus decoded by the host 
-bridge only, but for a device behind one or more PCI-to-PCI (or CardBus) 
-bridges those bridges' forwarding windows have been standardised and 
-need to be respected, or leaving whatever has been there in a downstream 
-device's BAR will have no effect as cycles for the addresses recorded 
-there will have no chance to appear on the bus the device has been 
-immediately attached to.
-
-Make sure then for a device behind a PCI-to-PCI bridge that any firmware 
-assignment is within the bridge's relevant forwarding window or do not 
-restore the assignment, fixing the system concerned as follows:
-
-pci_bus 0000:00: max bus depth: 4 pci_try_num: 5
-[...]
-pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.0: BAR 4: failed to assign [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.1: BAR 4: failed to assign [io  0xfce0-0xfcff]
-[...]
-pci_bus 0000:00: No. 2 try to assign unassigned res
-[...]
-pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.0: BAR 4: failed to assign [io  0xfce0-0xfcff]
-pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-pci 0000:06:08.1: BAR 4: failed to assign [io  0xfce0-0xfcff]
-[...]
-pci_bus 0000:00: No. 3 try to assign unassigned res
-[...]
-pci 0000:06:08.0: BAR 4: assigned [io  0x2000-0x201f]
-pci 0000:06:08.1: BAR 4: assigned [io  0x2020-0x203f]
-
-and making device 06:08.0 work correctly.
-
-Cf. <https://bugzilla.kernel.org/show_bug.cgi?id=16263>
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
-Cc: stable@vger.kernel.org # v2.6.35+
----
-Hi,
-
- Resending this patch as it has gone into void.  Patch re-verified against 
-5.17-rc2.
-
- For the record the system's bus topology is as follows:
-
--[0000:00]-+-00.0
-           +-07.0
-           +-07.1
-           +-07.2
-           +-11.0-[0000:01-06]----00.0-[0000:02-06]--+-00.0-[0000:03]--
-           |                                         +-01.0-[0000:04]--+-00.0
-           |                                         |                 \-00.3
-           |                                         \-02.0-[0000:05-06]----00.0-[0000:06]--+-05.0
-           |                                                                                +-08.0
-           |                                                                                +-08.1
-           |                                                                                \-08.2
-           +-12.0
-           +-13.0
-           \-14.0
-
-  Maciej
-
-Changes from v1:
-
-- Do restore firmware BAR assignments behind a PCI-PCI bridge, but only if 
-  within the bridge's forwarding window.
-
-- Update the change description and heading accordingly (was: PCI: Do not 
-  restore firmware BAR assignments behind a PCI-PCI bridge).
----
- drivers/pci/setup-res.c |   12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-linux-pci-setup-res-fw-address-nobridge.diff
-Index: linux-macro/drivers/pci/setup-res.c
-===================================================================
---- linux-macro.orig/drivers/pci/setup-res.c
-+++ linux-macro/drivers/pci/setup-res.c
-@@ -212,9 +212,19 @@ static int pci_revert_fw_address(struct
- 	res->end = res->start + size - 1;
- 	res->flags &= ~IORESOURCE_UNSET;
- 
-+	/*
-+	 * If we're behind a P2P or CardBus bridge, make sure we're
-+	 * inside the relevant forwarding window, or otherwise the
-+	 * assignment must have been bogus and accesses intended for
-+	 * the range assigned would not reach the device anyway.
-+	 * On the root bus accept anything under the assumption the
-+	 * host bridge will let it through.
-+	 */
- 	root = pci_find_parent_resource(dev, res);
- 	if (!root) {
--		if (res->flags & IORESOURCE_IO)
-+		if (dev->bus->parent)
-+			return -ENXIO;
-+		else if (res->flags & IORESOURCE_IO)
- 			root = &ioport_resource;
- 		else
- 			root = &iomem_resource;

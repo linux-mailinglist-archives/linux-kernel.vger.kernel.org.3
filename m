@@ -2,200 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FF54A66F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB43C4A66F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiBAVWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S230146AbiBAVWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiBAVWR (ORCPT
+        with ESMTP id S229513AbiBAVWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:22:17 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC50FC06173E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:22:16 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id e17so26000878ljk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:22:16 -0800 (PST)
+        Tue, 1 Feb 2022 16:22:36 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA23C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:22:36 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id z18so6607271ilp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:22:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Oex2OjPBU+g23gPxYBdZdkU42gjulLum1J0L/GI9cY4=;
-        b=6JdyE30eEKA6UHiPWDRKnjIzt/wtfLfJRqA2WjKgBix9sry7OHqv9SxQedYjfhFQBx
-         KnqnmBQ4UUKSZl/dMHPWb6+bnTW35k6v5VJ+9zzzMw4S/NbmpRbiKPmCriF7j7zVovxw
-         9dtJ1OojCMuER8iKJOsHCvX1kFLtAsW+qmXytGWWhHQRDlMDI/VUDOWQNHIrTTiUDV1D
-         CFrO+/9CVl4hzSbdeX0Zw5H7KfYmeeircXkMZ3+QWbZWW3uoa2PzNgkizD5bPSTN2AA8
-         i+IN9Sf6WoQmx8OTt+R9TIRii1C/KqvblK13+jsOW7uCPyDeIYhGHq0izSSbb6HJpSUG
-         uYyQ==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=0aXtKIckOn4Zcx2oBeMc9tD8O36p2eaWx4lB71IeDwA=;
+        b=eippPACVM0VPVVuT8bMJf0jrBaBjagKL3vjYaUY/KW9aHj/v7mN4t7R1moqYAOc2sP
+         utOc2AYR38grB7m/v7FxlaqL41eBf60HA91Q6bOcq6rBTsYiv6v/5qFfm+KrEcY67Co9
+         x0cZ6QYh7/OzbjQgjEGN0I4Ns9zG+87ZQL9aU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Oex2OjPBU+g23gPxYBdZdkU42gjulLum1J0L/GI9cY4=;
-        b=lS0h4AYFDmot4lg9RxSxrrUlb6EQ5VTq8ifxgy+f5j3W4O2CluTivvL+W9okr+hFEl
-         GYMo9vG7yJcxIUKu0jmZQpf5kqa02u8b2XpN6cJ7P6/9IizYu93BR1h13tKYSD88HLIQ
-         Ede/WYv0LhkGkaeGosN/ReXg2FnGQfEogqB0+6SUTcGoCv8dJcG2ldKBg38U+CdxXKdb
-         vvN7f3/p7bWKGzyFRv4Vp2S4ZvXP8j7uD0THTXk2PrhuruSbw4gHjlUyB8CIWL6MKsnj
-         oC8Jau6urvpd6tkN1YkeJMqfvf20ztV+kJkqko6ZP4xdUFY4viXgkVVmbTWoY9bUm6ia
-         Xikg==
-X-Gm-Message-State: AOAM531T3zhIPseQFPEbK/c97acLTRjjFGKR6HfPBgMshUbMItmNhcPo
-        zH4J5wvXQxIioAZ/H5k2CTSeHBRSlwDJlw==
-X-Google-Smtp-Source: ABdhPJyG6jq7qJyaC+wEFwkYxWs0qiy+j0QgMe8Cvr/4LBdwGfSGOvUJhDKsXpFtt2Xl0k1XzEHbDw==
-X-Received: by 2002:a2e:bc26:: with SMTP id b38mr17733313ljf.54.1643750534794;
-        Tue, 01 Feb 2022 13:22:14 -0800 (PST)
-Received: from wkz-x280 (h-212-85-90-115.A259.priv.bahnhof.se. [212.85.90.115])
-        by smtp.gmail.com with ESMTPSA id v3sm2960507lfi.114.2022.02.01.13.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:22:14 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=0aXtKIckOn4Zcx2oBeMc9tD8O36p2eaWx4lB71IeDwA=;
+        b=qVDR+C8jBT1xVkDEcgp0HL2gMv+Zc5/K9OE4VHg7jVu05DzhegGbVMcosy14w4Tpoj
+         EQy2iQLzzONzSDwS2O3UhH3dbhu3x0I/hrGYveEGcV9YsG7AcO/OfKZ94HMpvdi0i6Gv
+         KVhpRhHEgNWJ5L+xUufIv8+f9IO860Qi29DkjEDjycrhEV6sv6jrhZPemjhURxsS8EKD
+         N8furyzBfehc0lelWB5tOzz2CNk4NWwaT38M4qWoM/hbm7zutBt8ydYyhygJ9HEGY1dr
+         2rDq+X8mBZLsUmPqVAkDa3ggFN7BxZUpBzHzX3wG904VAddvHPyRc9VfVnKUe0KHS4zF
+         AXbQ==
+X-Gm-Message-State: AOAM531B4nPid1txspd1rMqpPwYtk9+AWKa05+3p1yEwlN5sHUTu5h97
+        Wh4OZSYtocsT+D3TtdUelyeP6Hdbw7nwgA==
+X-Google-Smtp-Source: ABdhPJz5/xTeH260aF3zWim+WnacdS87Ni5BcqpF3KUVGtY4cPc7PMB21axZD8yYH4Y8+dzwRYBSqA==
+X-Received: by 2002:a92:a053:: with SMTP id b19mr16808207ilm.234.1643750555223;
+        Tue, 01 Feb 2022 13:22:35 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id o4sm16034866iou.42.2022.02.01.13.22.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 13:22:34 -0800 (PST)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of
- standalone ports
-In-Reply-To: <20220201201141.u3qhhq75bo3xmpiq@skbuf>
-References: <20220131154655.1614770-1-tobias@waldekranz.com>
- <20220131154655.1614770-2-tobias@waldekranz.com>
- <20220201170634.wnxy3s7f6jnmt737@skbuf> <87a6fabbtb.fsf@waldekranz.com>
- <20220201201141.u3qhhq75bo3xmpiq@skbuf>
-Date:   Tue, 01 Feb 2022 22:22:13 +0100
-Message-ID: <8735l2b7ui.fsf@waldekranz.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 5.17-rc4
+Message-ID: <1fbd35ba-4921-9dcc-959d-ff8f7270d3a7@linuxfoundation.org>
+Date:   Tue, 1 Feb 2022 14:22:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/mixed;
+ boundary="------------98142272BA9C13B1786CF14A"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 22:11, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Tue, Feb 01, 2022 at 08:56:32PM +0100, Tobias Waldekranz wrote:
->> >> - sw0p1 and sw1p1 are bridged
->> >
->> > Do sw0p1 and sw1p1 even matter?
->> 
->> Strictly speaking, no - it was just to illustrate...
->> 
->> >> - sw0p2 and sw1p2 are in standalone mode
->> >> - Learning must be enabled on sw0p3 in order for hardware forwarding
->> >>   to work properly between bridged ports
->> 
->> ... this point, i.e. a clear example of why learning can't be disabled
->> on DSA ports.
->
-> Ok, I understand now. It wasn't too clear.
->
->> >> 1. A packet with SA :aa comes in on sw1p2
->> >>    1a. Egresses sw1p0
->> >>    1b. Ingresses sw0p3, ATU adds an entry for :aa towards port 3
->> >>    1c. Egresses sw0p0
->> >> 
->> >> 2. A packet with DA :aa comes in on sw0p2
->> >>    2a. If an ATU lookup is done at this point, the packet will be
->> >>        incorrectly forwarded towards sw0p3. With this change in place,
->> >>        the ATU is pypassed and the packet is forwarded in accordance
->> >
->> > s/pypassed/bypassed/
->> >
->> >>        whith the PVT, which only contains the CPU port.
->> >
->> > s/whith/with/
->> >
->> > What you describe is a bit convoluted, so let me try to rephrase it.
->> > The mv88e6xxx driver configures all standalone ports to use the same
->> > DefaultVID(0)/FID(0), and configures standalone user ports with no
->> > learning via the Port Association Vector. Shared (cascade + CPU) ports
->> > have learning enabled so that cross-chip bridging works without floods.
->> > But since learning is per port and not per FID, it means that we enable
->> > learning in FID 0, the one where the ATU was supposed to be always empty.
->> > So we may end up taking wrong forwarding decisions for standalone ports,
->> > notably when we should do software forwarding between ports of different
->> > switches. By clearing MapDA, we force standalone ports to bypass any ATU
->> > entries that might exist.
->> 
->> Are you saying you want me to replace the initial paragraph with your
->> version, or are you saying the the example is convoluted and should be
->> replaced by this text? Or is it only for the benefit of other readers?
->
-> Just for the sake of discussion, I wanted to make sure I understand what
-> you describe.
->
->> > Question: can we disable learning per FID? I searched for this in the
->> > limited documentation that I have, but I didn't see such option.
->> > Doing this would be advantageous because we'd end up with a bit more
->> > space in the ATU. With your solution we're just doing damage control.
->> 
->> As you discovered, and as I tried to lay out in the cover, this is only
->> one part of the whole solution.
->
-> I'm not copied to the cover letter :) and I have some issues with my
-> email client / vger, where emails that I receive through the mailing list
-> sometimes take days to reach my inbox, whereas emails sent directly to
-> me reach my inbox instantaneously. So don't assume I read email that
-> wasn't targeted directly to me, sorry.
+This is a multi-part message in MIME format.
+--------------98142272BA9C13B1786CF14A
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-No worries. I have recently started using get_maintainers.pl to auto
-generate the recipient list, with the result that the cover is only sent
-to the list. Ideally I would like send-email to use the union of all
-recipients for the cover letter, but I haven't figured that one out yet.
+Hi Rafael,
 
-I actually gave up on getting my mailinglists from my email provider,
-now I just download it directly from lore. I hacked together a script
-that will scrape a public-inbox repo and convert it to a Maildir:
+Please pull the following cpupower update for Linux 5.17-rc4 or to be
+included in your next pull request to Linus.
 
-https://github.com/wkz/notmuch-lore
+This cpupower update for Linux 5.17-rc4 consists of minor typo fix
+and renaming of file TODO to match the kernel naming convention.
 
-As you can tell from the name, it is tailored for plugging into notmuch,
-but the guts are pretty generic.
+diff is attached.
 
->> >> diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
->> >> index 03382b66f800..5c347cc58baf 100644
->> >> --- a/drivers/net/dsa/mv88e6xxx/port.h
->> >> +++ b/drivers/net/dsa/mv88e6xxx/port.h
->> >> @@ -425,7 +425,7 @@ int mv88e6185_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
->> >>  int mv88e6352_port_get_cmode(struct mv88e6xxx_chip *chip, int port, u8 *cmode);
->> >>  int mv88e6xxx_port_drop_untagged(struct mv88e6xxx_chip *chip, int port,
->> >>  				 bool drop_untagged);
->> >> -int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port);
->> >> +int mv88e6xxx_port_set_map_da(struct mv88e6xxx_chip *chip, int port, bool map);
->> >>  int mv88e6095_port_set_upstream_port(struct mv88e6xxx_chip *chip, int port,
->> >>  				     int upstream_port);
->> >>  int mv88e6xxx_port_set_mirror(struct mv88e6xxx_chip *chip, int port,
->> >> diff --git a/include/net/dsa.h b/include/net/dsa.h
->> >> index 57b3e4e7413b..30f3192616e5 100644
->> >> --- a/include/net/dsa.h
->> >> +++ b/include/net/dsa.h
->> >> @@ -581,6 +581,18 @@ static inline bool dsa_is_upstream_port(struct dsa_switch *ds, int port)
->> >>  	return port == dsa_upstream_port(ds, port);
->> >>  }
->> >>  
->> >> +/* Return the local port used to reach the CPU port */
->> >> +static inline unsigned int dsa_switch_upstream_port(struct dsa_switch *ds)
->> >> +{
->> >> +	int p;
->> >> +
->> >> +	for (p = 0; p < ds->num_ports; p++)
->> >> +		if (!dsa_is_unused_port(ds, p))
->> >> +			return dsa_upstream_port(ds, p);
->> >
->> > dsa_switch_for_each_available_port
->> >
->> > Although to be honest, the caller already has a dp, I wonder why you
->> > need to complicate things and don't just call dsa_upstream_port(ds,
->> > dp->index) directly.
->> 
->> Because dp refers to the port we are determining the permissions _for_,
->> and ds refers to the chip we are configuring the PVT _on_.
->> 
->> I think other_dp and dp should swap names with each other. Because it is
->> very easy to get confused. Or maybe s/dp/remote_dp/ and s/other_dp/dp/?
->
-> Sorry, my mistake, I was looking at the patch in the email client and
-> didn't recognize from the context that this is mv88e6xxx_port_vlan(),
-> and that the port is remote. So I retract the part about calling
-> dsa_upstream_port() directly, but please still consider using a more
-> appropriate port iterator for the implementation of dsa_switch_upstream_port().
+thanks,
+-- Shuah
 
-Will do!
+----------------------------------------------------------------
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-5.17-rc4
+
+for you to fetch changes up to 101025ff8e47d3c938ad2ae646a1794b9a8aa730:
+
+   tools/power/cpupower/{ToDo => TODO}: Rename the todo file (2022-01-24 09:07:11 -0700)
+
+----------------------------------------------------------------
+linux-cpupower-5.17-rc4
+
+This cpupower update for Linux 5.17-rc4 consists of minor typo fix
+and renaming of file TODO to match the kernel naming convention.
+
+----------------------------------------------------------------
+Andreas Rammhold (1):
+       tools: cpupower: fix typo in cpupower-idle-set(1) manpage
+
+ozkanonur (1):
+       tools/power/cpupower/{ToDo => TODO}: Rename the todo file
+
+  tools/power/cpupower/{ToDo => TODO}          | 0
+  tools/power/cpupower/man/cpupower-idle-set.1 | 2 +-
+  2 files changed, 1 insertion(+), 1 deletion(-)
+  rename tools/power/cpupower/{ToDo => TODO} (100%)
+----------------------------------------------------------------
+
+--------------98142272BA9C13B1786CF14A
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-cpupower-5.17-rc4.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-cpupower-5.17-rc4.diff"
+
+diff --git a/tools/power/cpupower/ToDo b/tools/power/cpupower/TODO
+similarity index 100%
+rename from tools/power/cpupower/ToDo
+rename to tools/power/cpupower/TODO
+diff --git a/tools/power/cpupower/man/cpupower-idle-set.1 b/tools/power/cpupower/man/cpupower-idle-set.1
+index 21916cff7516..8cef3c71e19e 100644
+--- a/tools/power/cpupower/man/cpupower-idle-set.1
++++ b/tools/power/cpupower/man/cpupower-idle-set.1
+@@ -4,7 +4,7 @@
+ cpupower\-idle\-set \- Utility to set cpu idle state specific kernel options
+ .SH "SYNTAX"
+ .LP
+-cpupower [ \-c cpulist ] idle\-info [\fIoptions\fP]
++cpupower [ \-c cpulist ] idle\-set [\fIoptions\fP]
+ .SH "DESCRIPTION"
+ .LP
+ The cpupower idle\-set subcommand allows to set cpu idle, also called cpu
+
+--------------98142272BA9C13B1786CF14A--

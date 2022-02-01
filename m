@@ -2,175 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E524A66C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382394A66C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239442AbiBAVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:00:55 -0500
-Received: from mail.efficios.com ([167.114.26.124]:56718 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242667AbiBAVAx (ORCPT
+        id S237248AbiBAVDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242725AbiBAVCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:00:53 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4AF50348674;
-        Tue,  1 Feb 2022 16:00:53 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id NDJj4GGdF_09; Tue,  1 Feb 2022 16:00:52 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id D2E3B348AA3;
-        Tue,  1 Feb 2022 16:00:52 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D2E3B348AA3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643749252;
-        bh=D6F7I14e09DLJ7OBXCoOb2aDWOL6Vpkl8xCgOrXzLZI=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=TOcOopo+zfIkJM1NpeSeho3ukIFoN0UcRhzMIbE4NvvWutErZvd76IW4HkG4bUZP8
-         Byksk4cy6M+6xk21dCLF3UspToZcfzLAxJJn5rTcShRA+xRNuqN5WJiPnwbBh2WE6g
-         +sIBKJHQ6ls80uRC1XCH5dHT69KL1DeTk8T7QVXacZm7l4r8l1CY1s6okmlAjQwLsh
-         i1KIaNUsgCt9LUxSkNdAy/5VLzKkbYiIgnctTk6qkrrWSRvlLpP4yqqVpT6LnogFH4
-         tP5GJWNjCvnU3dR+Xy2ZKsovVtaz5fcnBY/DdRTrbTpx3+xvSTA2JB8jdkqoppmd2q
-         Tr3e8sLzfir5w==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QS4bqrwocbFV; Tue,  1 Feb 2022 16:00:52 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id BDAF7348766;
-        Tue,  1 Feb 2022 16:00:52 -0500 (EST)
-Date:   Tue, 1 Feb 2022 16:00:52 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Oskolkov <posk@posk.io>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@aculab.com>,
-        carlos <carlos@redhat.com>, Chris Kennelly <ckennelly@google.com>
-Message-ID: <2083444900.25808.1643749252639.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAFTs51XYWqN6bPbVYh8a9ta+VxS4iBbiWWNO7n1t-4_VLpKGXQ@mail.gmail.com>
-References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com> <CAFTs51XYWqN6bPbVYh8a9ta+VxS4iBbiWWNO7n1t-4_VLpKGXQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/3] Introduce per thread group current virtual cpu
- id
+        Tue, 1 Feb 2022 16:02:45 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9987C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:02:44 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643749362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XBIro1WYlSD1gdQJnUKgX5Gh9EUyB2GskeGsqM61Tik=;
+        b=BkFLOjstTT7vGtvaNZo5nLL40O1xziil8jvg6X/KbHGbPGcaTdLF3NHuwk/SAm2M6XmhwD
+        0DaorCmQpTsgeNQ1OTkYXt0+hToP5l4DNSQY9DhsgM+lfG6x9280up3I9ORkWHvn1eM0Ic
+        pwRIZ3BLoQ1oL/rCCMiRM2qlJZ3E79/2lwUch+K2B5WV+CJl8YbBE0KlU0VOLyLzu0GdH6
+        Z/Nncxma7LyZuPbSWnnahXhsyBBoYhEV9eo83LHsHnZv3kBGnLyI3C81QCGfk6vQ2pDt8q
+        CUwxJ2THeAHLwAbUAzJQ/9sTKHQPJtOAWjzZF6FsM5B5kQEKRS53B5RxoxDNTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643749362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XBIro1WYlSD1gdQJnUKgX5Gh9EUyB2GskeGsqM61Tik=;
+        b=mFcTKPuJSjhxA7UIK0Z8geptjnC9FmUR0JXYackV12qCS6vLm3m8NX6x4XBFjCmWiKsB2v
+        j7psXw2cW7MUrrCg==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCHv2 04/29] x86/traps: Add #VE support for TDX guest
+In-Reply-To: <20220124150215.36893-5-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-5-kirill.shutemov@linux.intel.com>
+Date:   Tue, 01 Feb 2022 22:02:41 +0100
+Message-ID: <877daez4em.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
-Thread-Topic: Introduce per thread group current virtual cpu id
-Thread-Index: WUJXhv7+C6tZP3wo1UvlQkFhhpClMA==
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Feb 1, 2022, at 2:49 PM, Peter Oskolkov posk@posk.io wrote:
+On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> index df0fa695bb09..1da074123c16 100644
+> --- a/arch/x86/kernel/idt.c
+> +++ b/arch/x86/kernel/idt.c
+> @@ -68,6 +68,9 @@ static const __initconst struct idt_data early_idts[] = {
+>  	 */
+>  	INTG(X86_TRAP_PF,		asm_exc_page_fault),
+>  #endif
+> +#ifdef CONFIG_INTEL_TDX_GUEST
+> +	INTG(X86_TRAP_VE,		asm_exc_virtualization_exception),
+> +#endif
+>  
+> +bool tdx_get_ve_info(struct ve_info *ve)
+> +{
+> +	struct tdx_module_output out;
+> +
+> +	/*
+> +	 * NMIs and machine checks are suppressed. Before this point any
+> +	 * #VE is fatal. After this point (TDGETVEINFO call), NMIs and
+> +	 * additional #VEs are permitted (but it is expected not to
+> +	 * happen unless kernel panics).
 
-> On Tue, Feb 1, 2022 at 11:26 AM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> This feature allows the scheduler to expose a current virtual cpu id
->> to user-space. This virtual cpu id is within the possible cpus range,
->> and is temporarily (and uniquely) assigned while threads are actively
->> running within a thread group. If a thread group has fewer threads than
->> cores, or is limited to run on few cores concurrently through sched
->> affinity or cgroup cpusets, the virtual cpu ids will be values close
->> to 0, thus allowing efficient use of user-space memory for per-cpu
->> data structures.
-> 
-> Why per thread group and not per mm? The main use case is for
-> per-(v)cpu memory allocation logic, so it seems having this feature
-> per mm is more appropriate?
+I really do not understand that comment. #NMI and #MC are suppressed
+according to the above. How long are they suppressed and what's the
+mechanism? Are they unblocked on return from __tdx_module_call() ?
 
-Good point, yes, per-mm would be more appropriate.
+What prevents a nested #VE? If it happens what makes it fatal? Is it
+converted to a #DF or detected by software?
 
-So I guess that from a userspace perspective, the rseq field could become
-"__u32 vm_vcpu; /* Current vcpu within memory space. */"
+Also I do not understand that the last sentence tries to tell me. If the
+suppression of #NMI and #MC is lifted on return from tdcall then both
+can be delivered immediately afterwards, right?
 
-[...]
+I assume the additional #VE is triggered by software or a bug in the
+kernel.
 
->> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
->> index b6ecb9fc4cd2..c87e7ad5a1ea 100644
->> --- a/include/linux/sched/signal.h
->> +++ b/include/linux/sched/signal.h
->> @@ -244,6 +244,12 @@ struct signal_struct {
->>                                                  * and may have inconsistent
->>                                                  * permissions.
->>                                                  */
->> +#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
->> +       /*
->> +        * Mask of allocated vcpu ids within the thread group.
->> +        */
->> +       cpumask_t                       vcpu_mask;
-> 
-> We use a pointer for the mask (in struct mm). Adds complexity around
-> alloc/free, though. Just FYI.
+Confused.
 
-It does make sense if this is opt-in.
+> +	 */
+> +	if (__tdx_module_call(TDX_GET_VEINFO, 0, 0, 0, 0, &out))
+> +		return false;
+> +
+> +	ve->exit_reason = out.rcx;
+> +	ve->exit_qual   = out.rdx;
+> +	ve->gla         = out.r8;
+> +	ve->gpa         = out.r9;
+> +	ve->instr_len   = lower_32_bits(out.r10);
+> +	ve->instr_info  = upper_32_bits(out.r10);
+> +
+> +	return true;
+> +}
+> +
+> +/*
+> + * Handle the user initiated #VE.
+> + *
+> + * For example, executing the CPUID instruction from user space
+> + * is a valid case and hence the resulting #VE has to be handled.
+> + *
+> + * For dis-allowed or invalid #VE just return failure.
+> + */
+> +static bool tdx_virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> +	return false;
+> +}
+> +
+> +/* Handle the kernel #VE */
+> +static bool tdx_virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
+> +	return false;
+> +}
+> +
+> +bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
+> +{
+> +	bool ret;
+> +
+> +	if (user_mode(regs))
+> +		ret = tdx_virt_exception_user(regs, ve);
+> +	else
+> +		ret = tdx_virt_exception_kernel(regs, ve);
+> +
+> +	/* After successful #VE handling, move the IP */
+> +	if (ret)
+> +		regs->ip += ve->instr_len;
+> +
+> +	return ret;
+> +}
+> +
+>  bool is_tdx_guest(void)
+>  {
+>  	return tdx_guest_detected;
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index c9d566dcf89a..428504535912 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -61,6 +61,7 @@
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <asm/vdso.h>
+> +#include <asm/tdx.h>
+>  
+>  #ifdef CONFIG_X86_64
+>  #include <asm/x86_init.h>
+> @@ -1212,6 +1213,115 @@ DEFINE_IDTENTRY(exc_device_not_available)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_INTEL_TDX_GUEST
+> +
+> +#define VE_FAULT_STR "VE fault"
+> +
+> +static void ve_raise_fault(struct pt_regs *regs, long error_code)
+> +{
+> +	struct task_struct *tsk = current;
+> +
+> +	if (user_mode(regs)) {
+> +		tsk->thread.error_code = error_code;
+> +		tsk->thread.trap_nr = X86_TRAP_VE;
+> +		show_signal(tsk, SIGSEGV, "", VE_FAULT_STR, regs, error_code);
+> +		force_sig(SIGSEGV);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Attempt to recover from #VE exception failure without
+> +	 * triggering OOPS (useful for MSR read/write failures)
+> +	 */
+> +	if (fixup_exception(regs, X86_TRAP_VE, error_code, 0))
+> +		return;
+> +
+> +	tsk->thread.error_code = error_code;
+> +	tsk->thread.trap_nr = X86_TRAP_VE;
+> +
+> +	/*
+> +	 * To be potentially processing a kprobe fault and to trust the result
+> +	 * from kprobe_running(), it should be non-preemptible.
+> +	 */
+> +	if (!preemptible() && kprobe_running() &&
+> +	    kprobe_fault_handler(regs, X86_TRAP_VE))
+> +		return;
+> +
+> +	/* Notify about #VE handling failure, useful for debugger hooks */
+> +	if (notify_die(DIE_GPF, VE_FAULT_STR, regs, error_code,
+> +		       X86_TRAP_VE, SIGSEGV) == NOTIFY_STOP)
+> +		return;
+> +
+> +	/* Trigger OOPS and panic */
+> +	die_addr(VE_FAULT_STR, regs, error_code, 0);
 
-[...]
+This is pretty much a copy of the #GP handling. So why not consolidating
+this properly?
 
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 2e4ae00e52d1..2690e80977b1 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct
->> *prev,
->>         sched_info_switch(rq, prev, next);
->>         perf_event_task_sched_out(prev, next);
->>         rseq_preempt(prev);
->> +       tg_vcpu_put(prev);
->> +       tg_vcpu_get(next);
-> 
-> Doing this for all tasks on all context switches will most likely be
-> too expensive. We do it only for tasks that explicitly asked for this
-> feature during their rseq registration, and still the tight loop in
-> our equivalent of tg_vcpu_get() is occasionally noticeable (lots of
-> short wakeups can lead to the loop thrashing around).
-> 
-> Again, our approach is more complicated as a result.
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -559,6 +559,36 @@ static bool fixup_iopl_exception(struct
+ 	return true;
+ }
+ 
++static bool gp_try_fixup_and_notify(struct pt_regs *regs, int trapnr, long error_code,
++				    const char *str)
++{
++	if (fixup_exception(regs, trapnr, error_code, 0))
++		return true;
++
++	current->thread.error_code = error_code;
++	current->thread.trap_nr = trapnr;
++
++	/*
++	 * To be potentially processing a kprobe fault and to trust the result
++	 * from kprobe_running(), we have to be non-preemptible.
++	 */
++	if (!preemptible() && kprobe_running() &&
++	    kprobe_fault_handler(regs, trapnr))
++		return true;
++
++	ret = notify_die(DIE_GPF, str, regs, error_code, trapnr, SIGSEGV);
++	return ret == NOTIFY_STOP;
++}
++
++static void gp_user_force_sig_segv(struct pt_regs *regs, int trapnr, long error_code,
++				   const char *str)
++{
++	current->thread.error_code = error_code;
++	current->thread.trap_nr = trapnr;
++	show_signal(current, SIGSEGV, "", str, regs, error_code);
++	force_sig(SIGSEGV);
++}
++
+ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+ {
+ 	char desc[sizeof(GPFSTR) + 50 + 2*sizeof(unsigned long) + 1] = GPFSTR;
+@@ -587,34 +617,14 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_pr
+ 		if (fixup_iopl_exception(regs))
+ 			goto exit;
+ 
+-		tsk->thread.error_code = error_code;
+-		tsk->thread.trap_nr = X86_TRAP_GP;
+-
+ 		if (fixup_vdso_exception(regs, X86_TRAP_GP, error_code, 0))
+ 			goto exit;
+ 
+-		show_signal(tsk, SIGSEGV, "", desc, regs, error_code);
+-		force_sig(SIGSEGV);
++		gp_user_force_sig_segv(regs, X86_TRAP_GP, error_code, desc);
+ 		goto exit;
+ 	}
+ 
+-	if (fixup_exception(regs, X86_TRAP_GP, error_code, 0))
+-		goto exit;
+-
+-	tsk->thread.error_code = error_code;
+-	tsk->thread.trap_nr = X86_TRAP_GP;
+-
+-	/*
+-	 * To be potentially processing a kprobe fault and to trust the result
+-	 * from kprobe_running(), we have to be non-preemptible.
+-	 */
+-	if (!preemptible() &&
+-	    kprobe_running() &&
+-	    kprobe_fault_handler(regs, X86_TRAP_GP))
+-		goto exit;
+-
+-	ret = notify_die(DIE_GPF, desc, regs, error_code, X86_TRAP_GP, SIGSEGV);
+-	if (ret == NOTIFY_STOP)
++	if (gp_try_fixup_and_notify(regs, X86_TRAP_GP, error_code, desc))
+ 		goto exit;
+ 
+ 	if (error_code)
 
-I suspect that the overhead of tg_vcpu_get is quite small for processes
-which work on only few cores, but becomes noticeable when processes have
-many threads and are massively parallel (not affined to only a few cores).
+which makes this:
 
-When the feature is disabled, we can always fall-back on the value returned
-by raw_smp_processor_id() and use that as a "vm-vcpu-id" value.
+static void ve_raise_fault(struct pt_regs *regs, long error_code)
+{
+	if (user_mode(regs)) {
+		gp_user_force_sig_segv(regs, X86_TRAP_VE, error_code, VE_FAULT_STR);
+		return;
+	}
 
-Whether the vm-vcpu-id or the processor id is used needs to be a consensus
-across all threads from all processes using a mm at a given time.
+	if (gp_try_fixup_and_notify(regs, X86_TRAP_VE, error_code, VE_FAULT_STR)
+        	return;
 
-There appears to be a tradeoff here, and I wonder how this should be presented
-to users. A few possible options:
+	die_addr(VE_FAULT_STR, regs, error_code, 0);
+}
 
-- vm-vcpu feature is opt-in (default off) or opt-out (default on),
-- whether vm-vcpu is enabled for a process could be selected at runtime by the
-  process, either at process initialization (single thread, single mm user)
-  and/or while the process is multi-threaded (requires more synchronization),
-- if we find a way to move automatically between vm-vcpu-id and processor id as
-  information source for all threads tied to a mm when we reach a number of parallel
-  threads threshold, then I suspect we could have best of both worlds. But it's not
-  clear to me how to achieve this.
+Hmm?
 
-Thoughts ?
+> +/*
+> + * Virtualization Exceptions (#VE) are delivered to TDX guests due to
+> + * specific guest actions which may happen in either user space or the
+> + * kernel:
+> + *
+> + *  * Specific instructions (WBINVD, for example)
+> + *  * Specific MSR accesses
+> + *  * Specific CPUID leaf accesses
+> + *  * Access to unmapped pages (EPT violation)
+> + *
+> + * In the settings that Linux will run in, virtualization exceptions are
+> + * never generated on accesses to normal, TD-private memory that has been
+> + * accepted.
+> + *
+> + * Syscall entry code has a critical window where the kernel stack is not
+> + * yet set up. Any exception in this window leads to hard to debug issues
+> + * and can be exploited for privilege escalation. Exceptions in the NMI
+> + * entry code also cause issues. Returning from the exception handler with
+> + * IRET will re-enable NMIs and nested NMI will corrupt the NMI stack.
+> + *
+> + * For these reasons, the kernel avoids #VEs during the syscall gap and
+> + * the NMI entry code. Entry code paths do not access TD-shared memory,
+> + * MMIO regions, use #VE triggering MSRs, instructions, or CPUID leaves
+> + * that might generate #VE.
+
+How is that enforced or validated? What checks for a violation of that
+assumption?
 
 Thanks,
 
-Mathieu
-
-
-> 
->>         fire_sched_out_preempt_notifiers(prev, next);
->>         kmap_local_sched_out();
->>         prepare_task(next);
->> --
->> 2.17.1
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+        tglx

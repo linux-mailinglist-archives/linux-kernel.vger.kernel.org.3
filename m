@@ -2,128 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135F74A5D6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E3D4A5D6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238606AbiBAN2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:28:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237996AbiBAN2N (ORCPT
+        id S238643AbiBAN2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:28:35 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59008 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238612AbiBAN2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:28:13 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802BAC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:28:13 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id e9so24150654ljq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:28:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wy+jKI0ot+SWb8kO9biUJ6kV3sow7KY6Pggtc/YtNIE=;
-        b=KEbERv05nwtglax7mpJ0JKWCn/qyFmnE17ipkIYkJo9/3pcNtrulivMua72RZB05/d
-         EgRBrfT/t0xJJRXHA93negnCqWLze0Twe4SOdk6E7NlaO+Eipqb7qbMMcJb7EXQqeCjW
-         Hco80kQNtRSgTJYbwZn3VBIYNkclyNqWhVWJJ+RwyIzR6Ld/Xit8lKkD1fkHiQqc8w8K
-         a4LIzMHLRK8k49UuqXman8KyCQvXD7ge1/MrUpk3qHUXFW89y494KPx2qOk/JlUc/r6J
-         dbJujgOMKAiSEA+eDYfIZwHNuqoFz7leKuN0DHuxY3/3ay7zI20blglmpoFbDJaWX4k+
-         KO1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wy+jKI0ot+SWb8kO9biUJ6kV3sow7KY6Pggtc/YtNIE=;
-        b=76OcOMubT7Yz0jniFuh6TRq0G1G69tLPwUkrkbFjHtnmSuF9GYZOyg2PcOy9vioEvX
-         PW53413o+QQ53lJz/c0d7MdpfMazZX01aNHZGjLj9E1MB0KRLOTFo82XoUrqg+Ujx4ri
-         52uI3FGn9jlHTuFTF56khchBuNkb0queSz8OcPNCHNOu47vci/URXn5JkB03aojWQJEx
-         2OLx/WDDlrK0jTHLt2TMwj8qQbgFyOEU6DZNjzpXa3OefQcinoReRkoWoMr/OgDl2yRO
-         wCk4NhKl5d9Tdl8swnEOVnt38lRa5vbjoQXbYOC0Tz1K9GPa8EgrcZytOB0E7lc3UHbM
-         9AfA==
-X-Gm-Message-State: AOAM53133ezyIYez3MEVut+R2vkMy7ShiMiqUKN86YhA73Q6H5BCDeRA
-        grBAbRh0nXqgPbD0MTJ7ZQo=
-X-Google-Smtp-Source: ABdhPJzI0YSB3hUbBpZOPJUsNmtn2/VNCYO+ywQMITApODNdWFOCJFIFD0hNbMeiY5ZcILjbYRc0Jw==
-X-Received: by 2002:a05:651c:897:: with SMTP id d23mr16778052ljq.522.1643722091179;
-        Tue, 01 Feb 2022 05:28:11 -0800 (PST)
-Received: from localhost ([146.66.199.134])
-        by smtp.gmail.com with ESMTPSA id g26sm4075210lfj.176.2022.02.01.05.28.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 05:28:10 -0800 (PST)
-Date:   Tue, 1 Feb 2022 16:28:07 +0300
-From:   Azat Khuzhin <a3at.mail@gmail.com>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with
- INTERP) binaries
-Message-ID: <20220201132807.m7xtogotjlg54pzl@carbon.azat>
-References: <20220131201716.5198-1-a3at.mail@gmail.com>
- <CAMe9rOqoPy6jsWrodnc41M4+b2onwkfbfr=pZ9qRWzOU2Uisgg@mail.gmail.com>
- <20220201061832.yatgwglxvi7ho4yr@carbon.azat>
- <CAMe9rOptn2vpY90yY3HuGmmMdj4Hpaba2PRhp4d033XBDgL_5w@mail.gmail.com>
+        Tue, 1 Feb 2022 08:28:32 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96D8161550;
+        Tue,  1 Feb 2022 13:28:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DFFAC340EB;
+        Tue,  1 Feb 2022 13:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643722112;
+        bh=SIqq9crD10sgnkKKMFFcJOxkf1QKasn6QR3NIP9XRHc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICn0cMvLVZK2SakKeULzNMwWIdXdNq/5aKuMcpBGA4X6aJF7QLNnM5KFiK9mIqYY8
+         NnLMG0rJOy7M4k6eXEccc5PRP3P91zggBq/nB193GuQWAh65YjUx2AsugxbMeeQ1QO
+         p1w0OcLjH6WoSqytzRFUYhIhi4J1tK1GKlzbPqMFGu23dSVhguke6uAl5gF+H9SuIu
+         zOmRYRXAwt2wmf62l77l8hENhS/nDS93RCb0y64/PtkZzlrCn/SPvP97haLN+KjYU+
+         QTx2TeoBBWSedKJTAMMK85Ykxgh4tlVPtELmBkxj5cFay0k5AlUESIq7zvV+uMpvPz
+         MSEIScwOYScew==
+Date:   Tue, 1 Feb 2022 14:28:25 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        0day robot <lkp@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org
+Subject: Re: [fs/exec]  80bd5afdd8: xfstests.generic.633.fail
+Message-ID: <20220201132825.zgl3fhnmhex5hcaw@wittgenstein>
+References: <20220127000724.15106-1-ariadne@dereferenced.org>
+ <20220131144352.GE16385@xsang-OptiPlex-9020>
+ <20220131150819.iuqlz3rz6q7cheap@wittgenstein>
+ <Yff9+tIDAvYM5EO/@casper.infradead.org>
+ <20220131153707.oe45h7tuci2cbfuv@wittgenstein>
+ <YfgFeWbZPl+gAUYE@casper.infradead.org>
+ <20220131161415.wlvtsd4ecehyg3x5@wittgenstein>
+ <20220131171344.77iifun5wdilbqdz@wittgenstein>
+ <20220131135940.20790cff1747e79dd855aaf4@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMe9rOptn2vpY90yY3HuGmmMdj4Hpaba2PRhp4d033XBDgL_5w@mail.gmail.com>
+In-Reply-To: <20220131135940.20790cff1747e79dd855aaf4@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:15:38AM -0800, H.J. Lu wrote:
-> On Mon, Jan 31, 2022 at 10:18 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
-> >
-> > On Mon, Jan 31, 2022 at 01:30:38PM -0800, H.J. Lu wrote:
-> > > On Mon, Jan 31, 2022 at 12:17 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
-> > > >
-> > > > Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
-> > > > and this breaks PIE binaries, since after this change data segment
-> > > > became too nearby the stack:
-> > > >
-> > > > Before 9630f0d60fec:
-> > > >
-> > > >     $ strace -febrk /tmp/test-stack |& head
-> > > >     brk(NULL)                               = 0x555555559000
-> > > >     $ /tmp/test-stack
-> > > >     bottom_of_stack = 0x7fffffffc5c0
-> > > >     recursion depth: 1 (stack diff: 32)
-> > > >     ...
-> > > >     recursion depth: 7690 (stack diff: 8365664)
-> > > >     Segmentation fault (core dumped)
-> > > >
-> > > > After 9630f0d60fec:
-> > > >
-> > > >     $ strace -ebrk /tmp/test-stack  |& head
-> > > >     brk(NULL)                               = 0x7ffff7fff000
-> > > >
-> > > >     $ /tmp/test-stack
-> > > >     bottom_of_stack = 0x7fffffffc640
-> > > >     recursion depth: 1 (stack diff: 32)
-> > > >     ...
-> > > >     recursion depth: 146 (stack diff: 157792)
-> > > >     Segmentation fault (core dumped)
-> > > >
-> > > > Found this during compiling with clang, that started to randomly
-> > > > SIGSEGV when it eats some heap.
-> > >
-> > > How do I reproduce it on x86-64?
-> >
-> > It fails for me for pretty big C++ unit, so I don't have a simple
-> > reproducer with clang, but the attached reproducer below should show the
-> > problem.
+On Mon, Jan 31, 2022 at 01:59:40PM -0800, Andrew Morton wrote:
+> On Mon, 31 Jan 2022 18:13:44 +0100 Christian Brauner <brauner@kernel.org> wrote:
 > 
-> The reproducer doesn't fail for me under 5.17-rc2 on Fedora 35/x86-64
-> with 32GB RAM.  Did you turn off PF_RANDOMIZE?
+> > > in other words, the changes that you see CMD_ARGS[0] == NULL for
+> > > execveat() seem higher than for path-based exec.
+> > > 
+> > > To counter that we should probably at least update the execveat()
+> > > manpage with a recommendation what CMD_ARGS[0] should be set to if it
+> > > isn't allowed to be set to NULL anymore. This is why was asking what
+> > > argv[0] is supposed to be if the binary doesn't take any arguments.
+> > 
+> > Sent a fix to our fstests now replacing the argv[0] as NULL with "".
+> 
+> As we hit this check so quickly, I'm thinking that Ariadne's patch
+> "fs/exec: require argv[0] presence in do_execveat_common()" (which
+> added the check) isn't something we'll be able to merge into mainline?
 
-Oh, yep, forgot to mention that I have kernel.randomize_va_space=0.
+Not in the originally envisioned form. But I think Kees patch to make a
+argv[0] the empty string when it's NULL has a better chance of
+surviving.

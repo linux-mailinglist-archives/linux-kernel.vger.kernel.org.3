@@ -2,77 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A32764A5A68
+	by mail.lfdr.de (Postfix) with ESMTP id ECED14A5A69
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbiBAKoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:44:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58298 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235227AbiBAKoM (ORCPT
+        id S236790AbiBAKo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:44:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26750 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235262AbiBAKoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:44:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 1 Feb 2022 05:44:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643712253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/n5cQ10kX6yUM4KJqsTSlZEk3f8XfCq+Cr4yb+yBvQ0=;
+        b=IOC8pvqGhtRz+Z/XQ9vuV7ZQonuHnQuPxMrOIUosWvCFXwrUQHi8hitslAFs8v6yL9ybSP
+        9RBa8JeQQn6r9BXctAMODfOLvONO0xoe3NvwT3Z9NcTmAtFZPONFmQZEItqnyQbEOJuLKT
+        fvWot5XUktJnx4/Cnolgdq9SME4+gas=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-180-dPZ66ZSgPqm9uQMVeCnm8A-1; Tue, 01 Feb 2022 05:44:12 -0500
+X-MC-Unique: dPZ66ZSgPqm9uQMVeCnm8A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42A0D614DC;
-        Tue,  1 Feb 2022 10:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB2BC340ED;
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 51C938519E3;
+        Tue,  1 Feb 2022 10:44:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 629534F840;
         Tue,  1 Feb 2022 10:44:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643712247;
-        bh=Sr/xJ/zkGk830k1xHWi1d7aXDQK5hf8tSKnBh/dmt2I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f8J9bAwf+8m3h7StnLUBrtZhlnXi9Y875sfPp4CbGxj6+oLEqO+bWI8p1h/h1C4Z6
-         7uvj+cGA49uB1irkIkvI9YH/xQndKzFvtznewqW+J+0kRx9bxgm5c8x3GpxP/PGrv3
-         UolN2wTjfHPQ2YWAV379XohlFX4SMHKc4bA1uToX7d9Khl9osqXXiy1nKyfFsK2Slv
-         qTuTW4BnRaEYIbJi028nH5iywJI9h70tZ5Oo+DWBnlOYfZUKxZOM91BoaMQqzGY8s5
-         aAYxVCs0xcVBdVyV+HQ3GJy2edwTkT/MjjWOalPQwxSrB9QI8rcKVyYEaBzsudHeGA
-         sIiBmO9xVyGDg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nEqdb-0002hU-Mn; Tue, 01 Feb 2022 11:43:51 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "Russell, Scott" <Scott.Russell2@ncr.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] USB: serial: cp210x: add CPI Bulk Coin Recycler id
-Date:   Tue,  1 Feb 2022 11:42:53 +0100
-Message-Id: <20220201104253.10345-3-johan@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220201104253.10345-1-johan@kernel.org>
-References: <20220201104253.10345-1-johan@kernel.org>
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <164364202369.1476539.452557132083658522.stgit@warthog.procyon.org.uk>
+References: <164364202369.1476539.452557132083658522.stgit@warthog.procyon.org.uk> <164364196407.1476539.8450117784231043601.stgit@warthog.procyon.org.uk>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     dhowells@redhat.com, Miklos Szeredi <miklos@szeredi.hu>,
+        linux-unionfs@vger.kernel.org, linux-cachefs@redhat.com,
+        Christoph Hellwig <hch@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        torvalds@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] vfs: Add tracepoints for inode_excl_inuse_trylock/unlock
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <738170.1643712246.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 01 Feb 2022 10:44:06 +0000
+Message-ID: <738171.1643712246@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the device id for the Crane Payment Innovation / Money Controls Bulk
-Coin Recycler:
+I forgot to add the tracepoint header to the commit.
 
-	https://www.cranepi.com/en/system/files/Support/OM_BCR_EN_V1-04_0.pdf
-
-Reported-by: Scott Russell <Scott.Russell2@ncr.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+David
 ---
- drivers/usb/serial/cp210x.c | 1 +
- 1 file changed, 1 insertion(+)
+commit c8cefa2ac359254ecebfb20dcd0676bf9a167277
+Author: David Howells <dhowells@redhat.com>
+Date:   Mon Jan 31 11:52:44 2022 +0000
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 5172e7ac16fd..a27f7efcec6a 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -69,6 +69,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x0FCF, 0x1004) }, /* Dynastream ANT2USB */
- 	{ USB_DEVICE(0x0FCF, 0x1006) }, /* Dynastream ANT development board */
- 	{ USB_DEVICE(0x0FDE, 0xCA05) }, /* OWL Wireless Electricity Monitor CM-160 */
-+	{ USB_DEVICE(0x106F, 0x0003) },	/* CPI / Money Controls Bulk Coin Recycler */
- 	{ USB_DEVICE(0x10A6, 0xAA26) }, /* Knock-off DCU-11 cable */
- 	{ USB_DEVICE(0x10AB, 0x10C5) }, /* Siemens MC60 Cable */
- 	{ USB_DEVICE(0x10B5, 0xAC70) }, /* Nokia CA-42 USB */
--- 
-2.34.1
+    vfs: Add tracepoints for inode_excl_inuse_trylock/unlock
+    =
+
+    Add tracepoints for inode_excl_inuse_trylock/unlock() to record succes=
+sful
+    and lock, failed lock, successful unlock and unlock when it wasn't loc=
+ked.
+    =
+
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: Amir Goldstein <amir73il@gmail.com>
+    cc: Miklos Szeredi <miklos@szeredi.hu>
+    cc: linux-unionfs@vger.kernel.org
+    cc: linux-cachefs@redhat.com
+
+diff --git a/fs/inode.c b/fs/inode.c
+index 954719f66113..61b93a89853f 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -22,6 +22,8 @@
+ #include <linux/iversion.h>
+ #include <trace/events/writeback.h>
+ #include "internal.h"
++#define CREATE_TRACE_POINTS
++#include <trace/events/vfs.h>
+ =
+
+ /*
+  * Inode locking rules:
+@@ -2409,11 +2411,14 @@ EXPORT_SYMBOL(current_time);
+ /**
+  * inode_excl_inuse_trylock - Try to exclusively lock an inode for kernel=
+ access
+  * @dentry: Reference to the inode to be locked
++ * @o: Private reference for the kernel service
++ * @who: Which kernel service is trying to gain the lock
+  *
+  * Try to gain exclusive access to an inode for a kernel service, returni=
+ng
+  * true if successful.
+  */
+-bool inode_excl_inuse_trylock(struct dentry *dentry)
++bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
++			      enum inode_excl_inuse_by who)
+ {
+ 	struct inode *inode =3D d_inode(dentry);
+ 	bool locked =3D false;
+@@ -2421,7 +2426,10 @@ bool inode_excl_inuse_trylock(struct dentry *dentry=
+)
+ 	spin_lock(&inode->i_lock);
+ 	if (!(inode->i_state & I_EXCL_INUSE)) {
+ 		inode->i_state |=3D I_EXCL_INUSE;
++		trace_inode_excl_inuse_lock(inode, o, who);
+ 		locked =3D true;
++	} else {
++		trace_inode_excl_inuse_lock_failed(inode, o, who);
+ 	}
+ 	spin_unlock(&inode->i_lock);
+ =
+
+@@ -2432,18 +2440,23 @@ EXPORT_SYMBOL(inode_excl_inuse_trylock);
+ /**
+  * inode_excl_inuse_unlock - Unlock exclusive kernel access to an inode
+  * @dentry: Reference to the inode to be unlocked
++ * @o: Private reference for the kernel service
+  *
+  * Drop exclusive access to an inode for a kernel service.  A warning is =
+given
+  * if the inode was not marked for exclusive access.
+  */
+-void inode_excl_inuse_unlock(struct dentry *dentry)
++void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o)
+ {
+ 	if (dentry) {
+ 		struct inode *inode =3D d_inode(dentry);
+ =
+
+ 		spin_lock(&inode->i_lock);
+-		WARN_ON(!(inode->i_state & I_EXCL_INUSE));
+-		inode->i_state &=3D ~I_EXCL_INUSE;
++		if (WARN_ON(!(inode->i_state & I_EXCL_INUSE))) {
++			trace_inode_excl_inuse_unlock_bad(inode, o);
++		} else {
++			inode->i_state &=3D ~I_EXCL_INUSE;
++			trace_inode_excl_inuse_unlock(inode, o);
++		}
+ 		spin_unlock(&inode->i_lock);
+ 	}
+ }
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index 5c3361a2dc7c..6434ae11496d 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -224,10 +224,10 @@ static void ovl_free_fs(struct ovl_fs *ofs)
+ 	dput(ofs->indexdir);
+ 	dput(ofs->workdir);
+ 	if (ofs->workdir_locked)
+-		inode_excl_inuse_unlock(ofs->workbasedir);
++		inode_excl_inuse_unlock(ofs->workbasedir, 0);
+ 	dput(ofs->workbasedir);
+ 	if (ofs->upperdir_locked)
+-		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root);
++		inode_excl_inuse_unlock(ovl_upper_mnt(ofs)->mnt_root, 0);
+ =
+
+ 	/* Hack!  Reuse ofs->layers as a vfsmount array before freeing it */
+ 	mounts =3D (struct vfsmount **) ofs->layers;
+@@ -1239,7 +1239,8 @@ static int ovl_get_upper(struct super_block *sb, str=
+uct ovl_fs *ofs,
+ 	if (upper_mnt->mnt_sb->s_flags & SB_NOSEC)
+ 		sb->s_flags |=3D SB_NOSEC;
+ =
+
+-	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root)) {
++	if (inode_excl_inuse_trylock(ovl_upper_mnt(ofs)->mnt_root, 0,
++				     inode_excl_inuse_by_overlayfs)) {
+ 		ofs->upperdir_locked =3D true;
+ 	} else {
+ 		err =3D ovl_report_in_use(ofs, "upperdir");
+@@ -1499,7 +1500,8 @@ static int ovl_get_workdir(struct super_block *sb, s=
+truct ovl_fs *ofs,
+ =
+
+ 	ofs->workbasedir =3D dget(workpath.dentry);
+ =
+
+-	if (inode_excl_inuse_trylock(ofs->workbasedir)) {
++	if (inode_excl_inuse_trylock(ofs->workbasedir, 0,
++				     inode_excl_inuse_by_overlayfs)) {
+ 		ofs->workdir_locked =3D true;
+ 	} else {
+ 		err =3D ovl_report_in_use(ofs, "workdir");
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 4c15e270f1ac..f461883d66a8 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2389,8 +2389,13 @@ static inline bool inode_is_dirtytime_only(struct i=
+node *inode)
+ 				  I_FREEING | I_WILL_FREE)) =3D=3D I_DIRTY_TIME;
+ }
+ =
+
+-bool inode_excl_inuse_trylock(struct dentry *dentry);
+-void inode_excl_inuse_unlock(struct dentry *dentry);
++enum inode_excl_inuse_by {
++	inode_excl_inuse_by_overlayfs,
++};
++
++bool inode_excl_inuse_trylock(struct dentry *dentry, unsigned int o,
++			      enum inode_excl_inuse_by who);
++void inode_excl_inuse_unlock(struct dentry *dentry, unsigned int o);
+ =
+
+ static inline bool inode_is_excl_inuse(struct dentry *dentry)
+ {
+diff --git a/include/trace/events/vfs.h b/include/trace/events/vfs.h
+new file mode 100644
+index 000000000000..f053752109dd
+--- /dev/null
++++ b/include/trace/events/vfs.h
+@@ -0,0 +1,134 @@
++/* VFS tracepoints
++ *
++ * Copyright (C) 2022 Red Hat, Inc. All Rights Reserved.
++ * Written by David Howells (dhowells@redhat.com)
++ */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM vfs
++
++#if !defined(_TRACE_VFS_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_VFS_H
++
++#include <linux/tracepoint.h>
++#include <linux/fs.h>
++
++/*
++ * Define enum -> string mappings for display.
++ */
++#define inode_excl_inuse_by_traces				\
++	EM(inode_excl_inuse_by_cachefiles,	"cachefiles")	\
++	E_(inode_excl_inuse_by_overlayfs,	"overlayfs")
++
++
++/*
++ * Export enum symbols via userspace.
++ */
++#undef EM
++#undef E_
++#define EM(a, b) TRACE_DEFINE_ENUM(a);
++#define E_(a, b) TRACE_DEFINE_ENUM(a);
++
++inode_excl_inuse_by_traces;
++
++/*
++ * Now redefine the EM() and E_() macros to map the enums to the strings =
+that
++ * will be printed in the output.
++ */
++#undef EM
++#undef E_
++#define EM(a, b)	{ a, b },
++#define E_(a, b)	{ a, b }
++
++
++TRACE_EVENT(inode_excl_inuse_lock,
++	    TP_PROTO(struct inode *inode, unsigned int o,
++		     enum inode_excl_inuse_by who),
++
++	    TP_ARGS(inode, o, who),
++
++	    TP_STRUCT__entry(
++		    __field(ino_t,			inode		)
++		    __field(unsigned int,		o		)
++		    __field(enum inode_excl_inuse_by,	who		)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->inode	=3D inode->i_ino;
++		    __entry->o		=3D o;
++		    __entry->who	=3D who;
++			   ),
++
++	    TP_printk("B=3D%lx %s o=3D%08x",
++		      __entry->inode,
++		      __print_symbolic(__entry->who, inode_excl_inuse_by_traces),
++		      __entry->o)
++	    );
++
++TRACE_EVENT(inode_excl_inuse_lock_failed,
++	    TP_PROTO(struct inode *inode, unsigned int o,
++		     enum inode_excl_inuse_by who),
++
++	    TP_ARGS(inode, o, who),
++
++	    TP_STRUCT__entry(
++		    __field(ino_t,			inode		)
++		    __field(unsigned int,		o		)
++		    __field(enum inode_excl_inuse_by,	who		)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->inode	=3D inode->i_ino;
++		    __entry->o		=3D o;
++		    __entry->who	=3D who;
++			   ),
++
++	    TP_printk("B=3D%lx %s o=3D%08x",
++		      __entry->inode,
++		      __print_symbolic(__entry->who, inode_excl_inuse_by_traces),
++		      __entry->o)
++	    );
++
++TRACE_EVENT(inode_excl_inuse_unlock,
++	    TP_PROTO(struct inode *inode, unsigned int o),
++
++	    TP_ARGS(inode, o),
++
++	    TP_STRUCT__entry(
++		    __field(ino_t,			inode		)
++		    __field(unsigned int,		o		)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->inode	=3D inode->i_ino;
++		    __entry->o		=3D o;
++			   ),
++
++	    TP_printk("B=3D%lx o=3D%08x",
++		      __entry->inode,
++		      __entry->o)
++	    );
++
++TRACE_EVENT(inode_excl_inuse_unlock_bad,
++	    TP_PROTO(struct inode *inode, unsigned int o),
++
++	    TP_ARGS(inode, o),
++
++	    TP_STRUCT__entry(
++		    __field(ino_t,			inode		)
++		    __field(unsigned int,		o		)
++			     ),
++
++	    TP_fast_assign(
++		    __entry->inode	=3D inode->i_ino;
++		    __entry->o		=3D o;
++			   ),
++
++	    TP_printk("B=3D%lx o=3D%08x",
++		      __entry->inode,
++		      __entry->o)
++	    );
++
++#endif /* _TRACE_VFS_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
 

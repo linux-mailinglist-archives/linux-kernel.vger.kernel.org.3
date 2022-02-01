@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECE04A6171
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D47F4A617D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241153AbiBAQdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241123AbiBAQdu (ORCPT
+        id S241174AbiBAQlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:41:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27672 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241161AbiBAQl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:33:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C217C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:33:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 1 Feb 2022 11:41:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643733687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PC8NZ8lG/hbKxyQngU3kWuHlJ5Tl5ht+lJl5+tMvXcM=;
+        b=B7hNIJLRf1rknpzQE3GYo2p6w/JVO5Gl7gLZ355ox5uncd+RTUsnfsqQsWhXMVx6gUlYQ8
+        LTGaiG5+tufi9/5kYjuSgTGAS9Kq/2/Vw6gAMXKAyQ85dtabgs6Y76sGjRcd3VdKzXaBbu
+        qvsU9Jr/tlMahM7HCVb3E1Q3SwH4o04=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-XeNOkZiYNrC9gA6ixD_JFQ-1; Tue, 01 Feb 2022 11:41:24 -0500
+X-MC-Unique: XeNOkZiYNrC9gA6ixD_JFQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBE5BB82EF0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:33:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 620EFC340EB;
-        Tue,  1 Feb 2022 16:33:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643733227;
-        bh=Arb/BWLua2YlFsMeKijCGl7aXZyD3XcJWl8aMJ/fCGA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rwNVGsaezjiDoPndaeYAKZLw+SBLpc15zCQwh5u0NUK9/UhllQpERXi5FdRjcr/fZ
-         5DTM5DUPZAxX49dkyt9xlyL0OhLbH/TY1XIRauJfYN8SwjpoOafocGp5AlafmHF8n6
-         hmFFlOtRoVenPbnobV8qNQIqcD1/CNb8GzKUhPzuHUFg7UnKCr++AhL4L2aJd0DqZG
-         0QqTT9UrN7HHlLzmyGia47qOxZ0QDUse7FvX/rWfVbthFw8p2EOoCh7YbVojrUb6xS
-         aXpJtZk4CKy9sAAfGnO7OTE8GsW3I5YffMLpJwYsjdAenuVQ3HSo75vfpIsYWCtNft
-         5lLHaFo7LIZoA==
-Date:   Tue, 1 Feb 2022 09:33:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
-Message-ID: <Yflg560OtUrCNt7F@dev-arch.archlinux-ax161>
-References: <20220201013257.17926-1-changbin.du@gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E95D41898292;
+        Tue,  1 Feb 2022 16:41:21 +0000 (UTC)
+Received: from [10.22.19.61] (unknown [10.22.19.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F14C410A4B53;
+        Tue,  1 Feb 2022 16:41:19 +0000 (UTC)
+Message-ID: <268a8bdf-4c70-b967-f34c-2293b54186f0@redhat.com>
+Date:   Tue, 1 Feb 2022 11:41:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201013257.17926-1-changbin.du@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Roman Gushchin <guro@fb.com>, Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Rafael Aquini <aquini@redhat.com>
+References: <20220129205315.478628-1-longman@redhat.com>
+ <20220129205315.478628-4-longman@redhat.com>
+ <YfeuK5j7cbgM+Oo+@dhcp22.suse.cz> <YfgT/9tEREQNiiAN@cmpxchg.org>
+ <YfgnUZQBRkqhrEIb@carbon.dhcp.thefacebook.com>
+ <Yfgpknwr1tMnPkqh@dhcp22.suse.cz>
+ <12686956-612d-d89b-5641-470d5e913090@redhat.com>
+ <YfkQJ4QhfY0dICB9@dhcp22.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YfkQJ4QhfY0dICB9@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
-> The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
-> '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
-> And they might overlap with handwritten symbols.
-> 
-> Before this change, a dumpstack shows a local symbol for epc:
-> [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
-> [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
-> [    0.040452][    T0]  ra : restore_all+0x12/0x6e
-> 
-> The simple solution is that we can ignore all local labels prefixed by '.L'.
-> For handwritten symbols which need to be preserved should drop the '.L'
-> prefix.
-> 
-> After this change, the C defined symbol is shown so we can locate the
-> problematical code immediately:
-> [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
-> [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
-> [    0.036567][    T0]  ra : restore_all+0x12/0x6e
-> 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
-Does not seem too unreasonable to me.
+On 2/1/22 05:49, Michal Hocko wrote:
+> On Mon 31-01-22 13:38:28, Waiman Long wrote:
+> [...]
+>> Of course, it is also possible to have a debugfs interface to list those
+>> dead memcg information, displaying more information about the page that pins
+>> the memcg will be hard without using the page owner tool.
+> Yes, you will need page owner or hook into the kernel by other means
+> (like already mentioned drgn). The question is whether scanning all
+> existing pages to get that information is the best we can offer.
+The page_owner tool records the page information at allocation time. 
+There are some slight performance overhead, but it is the memory 
+overhead that is the major drawback of this approach as we need one 
+page_owner structure for each physical page. Page scanning is only done 
+when users read the page_owner debugfs file. Yes, I agree that scanning 
+all the pages is not the most efficient way to get these dead memcg 
+information, but it is what the page_owner tool does. I would argue that 
+this is the most efficient coding-wise to get this information.
+>> Keeping track of
+>> the list of dead memcg's may also have some runtime overhead.
+> Could you be more specific? Offlined memcgs are still part of the
+> hierarchy IIRC. So it shouldn't be much more than iterating the whole
+> cgroup tree and collect interesting data about dead cgroups.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+What I mean is that without piggybacking on top of page_owner, we will 
+to add a lot more code to collect and display those information which 
+may have some overhead of its own.
 
-> ---
->  scripts/kallsyms.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 54ad86d13784..8caabddf817c 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
->  	/* Symbol names that begin with the following are ignored.*/
->  	static const char * const ignored_prefixes[] = {
->  		"$",			/* local symbols for ARM, MIPS, etc. */
-> -		".LASANPC",		/* s390 kasan local symbols */
-> +		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
->  		"__crc_",		/* modversions */
->  		"__efistub_",		/* arm64 EFI stub namespace */
->  		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
-> -- 
-> 2.32.0
-> 
-> 
+Cheers,
+Longman
+

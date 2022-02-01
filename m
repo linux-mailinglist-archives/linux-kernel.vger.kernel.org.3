@@ -2,115 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EEB4A5D5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FB94A5D61
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbiBANWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
+        id S238540AbiBANYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238453AbiBANWo (ORCPT
+        with ESMTP id S238435AbiBANYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:22:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6924FC061714;
-        Tue,  1 Feb 2022 05:22:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D69BB82DE3;
-        Tue,  1 Feb 2022 13:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F364C340EB;
-        Tue,  1 Feb 2022 13:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643721760;
-        bh=GBHBnprdZykprL9bYedIbto9NFGIskkFqjHe8SWv3Q4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oly/voj/i5cunpQSgrBjwHxTPjdu/Ry1YmPmDQQilRTI/jae0x2lkjDzXth7y3Cth
-         GiWYi3DlnRivMWntEqMmQ6/8G5Yg/7q8Wo9M34wfLPmyYU144voTytNLmaAnHc8U6o
-         LOX3rLghu9HAIemc879REFufbxxaLmqqgJuW2T5xuRjZ+EA6LGNcYeXaoNhZpfrowO
-         ptKvtOQkNy6p+Uz5Pfrw+OqVuPINZRpf9VNJ9GEEKicBxcxODRsqPtQIJQdP/7dixQ
-         iqLBYfbPyzwreG8Ysz/Yivwfwuz4Jq5yhMXrW4nXsJtSlS8/9RkfIyG5xOEUlC5fz3
-         TkjlRq4zqqVTQ==
-Date:   Tue, 1 Feb 2022 14:22:35 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exec: Force single empty string when argv is empty
-Message-ID: <20220201132235.c7yk7rpngpvcw5z3@wittgenstein>
-References: <20220201000947.2453721-1-keescook@chromium.org>
+        Tue, 1 Feb 2022 08:24:52 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA253C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:24:51 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id w81so28603411ybg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hqpudM9UJz8DhfMHsGDhXcBoDji6CUdX20qRejGuIlI=;
+        b=3x9gy11Oeox0rcgJsM027ayhwHe7JM9DmcdtbSgpNwctG0CV7VJyKhto4UfcyPJX1Q
+         hLykpQ2Od4xZdy4o7VTXQW7r+bY9MIU4B8uwiBKM2Yj6ZMw+ROIucztbwR555VbGpauu
+         XJXsgXG+Tdd3SEhlBUQVuDfl6BqtMJ529XLHCUrjUXfTPImzR0NYB5ZqNPxDcEKFeByk
+         EMl5l+0rzYqQBN4WuMxjVTUqhBxldEWR0nunRJkJKkzrx8cT46GMDSdZBxpkJjF80AyP
+         G/NVfODh5PHSS2vb8vGTlvtw34uY0OBPKkU+umpr3xrAdV3gxHeuoHju5ZLYBGObJ9NR
+         c34w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hqpudM9UJz8DhfMHsGDhXcBoDji6CUdX20qRejGuIlI=;
+        b=1fKW1a50Y4M3rNSI1WIh860BF4NcdYXiMej95aE45B0FdBCPV2kXfEmTLK0uiDLC08
+         3QNkVxAgf8MXmudEZgzXjhbhjdZYvfSMczm7hyn+zd8wSsG+R7VtHJn0i5/KWCnuaMvR
+         gM27CA8zvL6iJPEsPkGtd2fWZ3szJhGsoqg0aTTZHgMRHRCtql/2uWdVUaLh/HrrvzWx
+         7V6gRmYEDMBy1QIBAW7dRM506bb0nPREu9IZeX6OtfV2JlTwOgJRaJSBgLgurttyE3uI
+         RDlEUMt4Ucn4qgKpFlCqxhDCfDi7Lw6EvjlCN7kI43a8hXMpAU1te/CioBwrHXNShvWM
+         qQVg==
+X-Gm-Message-State: AOAM532hqUN0MhBtMcsaAW5yyiGBp3wcYVKY2IDrNfGSesN71xA3jJ7T
+        SBJ/s4EljHhuYjDMaEWf+2MgPeK+ejGu5m24sui1EA==
+X-Google-Smtp-Source: ABdhPJw1pxurtd45w8gTXxi1nf+fzoGVxQGLkvmNzbsa0qcm/oXG9p/hnUkszP0F97RXEMg8phd27jogNWmncmXBHMY=
+X-Received: by 2002:a25:c983:: with SMTP id z125mr37208695ybf.132.1643721890972;
+ Tue, 01 Feb 2022 05:24:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
+References: <20220131160254.43211-1-songmuchun@bytedance.com> <20220131160254.43211-3-songmuchun@bytedance.com>
+In-Reply-To: <20220131160254.43211-3-songmuchun@bytedance.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 1 Feb 2022 21:24:12 +0800
+Message-ID: <CAMZfGtVWZ0toBGFrPqLkx9aGdZW1bWfQxTgBMzM=pRweqE_FHw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] mm: fix missing cache flush for all tail pages of
+ compound page
+To:     Andrew Morton <akpm@linux-foundation.org>, zi.yan@cs.rutgers.edu,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Zi Yan <ziy@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
-> Quoting[1] Ariadne Conill:
-> 
-> "In several other operating systems, it is a hard requirement that the
-> second argument to execve(2) be the name of a program, thus prohibiting
-> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-> but it is not an explicit requirement[2]:
-> 
->     The argument arg0 should point to a filename string that is
->     associated with the process being started by one of the exec
->     functions.
-> ...
-> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
-> but there was no consensus to support fixing this issue then.
-> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
-> of this bug in a shellcode, we can reconsider.
-> 
-> This issue is being tracked in the KSPP issue tracker[5]."
-> 
-> While the initial code searches[6][7] turned up what appeared to be
-> mostly corner case tests, trying to that just reject argv == NULL
-> (or an immediately terminated pointer list) quickly started tripping[8]
-> existing userspace programs.
-> 
-> The next best approach is forcing a single empty string into argv and
-> adjusting argc to match. The number of programs depending on argc == 0
-> seems a smaller set than those calling execve with a NULL argv.
-> 
-> Account for the additional stack space in bprm_stack_limits(). Inject an
-> empty string when argc == 0 (and set argc = 1). Warn about the case so
-> userspace has some notice about the change:
-> 
->     process './argc0' launched './argc0' with NULL argv: empty string added
-> 
-> Additionally WARN() and reject NULL argv usage for kernel threads.
-> 
-> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
-> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-> [5] https://github.com/KSPP/linux/issues/176
-> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
-> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
-> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
-> 
-> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
+On Tue, Feb 1, 2022 at 12:04 AM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> The D-cache maintenance inside move_to_new_page() only consider one page,
+> there is still D-cache maintenance issue for tail pages of compound page
+> (e.g. THP or HugeTLB).  THP migration is only enabled on x86_64, ARM64
+> and powerpc, while powerpc and arm64 need to maintain the consistency
+> between I-Cache and D-Cache, which depends on flush_dcache_page() to
+> maintain the consistency between I-Cache and D-Cache.  In theory, the
+> issue can be found on arm64 and powerpc.
 
-Looks good,
-Acked-by: Christian Brauner <brauner@kernel.org>
+My bad. I have looked at the code closely on arm64 and powerpc.  There
+should be no issues since their icache flushing function already considers
+the compound pages.  I'll update the commit log in the next version.
+
+> HugeTLB migration is enabled
+> on arm, arm64, mips, parisc, powerpc, riscv, s390 and sh, while arm
+> has handled the compound page cache flush in flush_dcache_page(), but
+> most others do not.  In theory, the issue exists on many architectures.
+> Fix this by not using flush_dcache_folio() since it is not backportable.
+>
+> Fixes: 616b8371539a ("mm: thp: enable thp migration in generic path")
+
+This Fixes tag will be removed in the next version.
+
+> Fixes: 290408d4a250 ("hugetlb: hugepage migration core")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>

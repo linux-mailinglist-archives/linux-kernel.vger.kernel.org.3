@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C46BF4A5E24
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC534A5E10
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239199AbiBAOU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:20:26 -0500
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:36725 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbiBAOUW (ORCPT
+        id S239140AbiBAOPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:15:25 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45268 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239129AbiBAOPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:20:22 -0500
-Received: by mail-pf1-f180.google.com with SMTP id 192so16021188pfz.3;
-        Tue, 01 Feb 2022 06:20:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6JTo8Sy9jsMuY9se9GPF3GJU4ezrpNEbpV0Rieuvz5M=;
-        b=3A+egGLO2Hj12855kPGUmSOtyLxq2qLtaLB1MJ6mLMxkyoJwgmuvzB6Wo0FW548KZ6
-         HNhgBaO92dCips+3WdwTcqAla6WvtJpcQTUu78+uqD924J2OCudfA4azV7mYEN3fZjlD
-         bgB86i8uItUThbxL1T52Zfol/Wy9BIrcGITfThXHIm5Mh+IuHQVb3bpzPMzpZoxCvWyE
-         g0JQ8oZayD6EQ/4w8Tq/ZGsUrbeWefrNkYJ78Iu5QfZuZk1cHxcqB4/Sfp5rvTT2rnL2
-         cpBzb/pbfntOHHQqyy3yiBqeZ6BJNfil27FbN09MpNZ3WrghCRUeTD4KnpZ327uLe4V8
-         Dmmw==
-X-Gm-Message-State: AOAM530n+L8qrn1PnyFuPfX22ssupwFuzDIjGu9dX4Hfwtv+KI8plqyo
-        Pfk7RdgJt2xy3dAkc2v2kIKvkf9YebCMBFJw
-X-Google-Smtp-Source: ABdhPJywTWEkHeB/ezAPrPHuasVqZp1UUdqA+Lida8AD9HD01NAPu8IVT3VSdza4ZHv2UJWpI6mxpg==
-X-Received: by 2002:a63:9d84:: with SMTP id i126mr20757638pgd.617.1643725221235;
-        Tue, 01 Feb 2022 06:20:21 -0800 (PST)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com. [209.85.214.182])
-        by smtp.gmail.com with ESMTPSA id m7sm9762881pfb.80.2022.02.01.06.20.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 06:20:21 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id x11so15508197plg.6;
-        Tue, 01 Feb 2022 06:20:20 -0800 (PST)
-X-Received: by 2002:a67:5f83:: with SMTP id t125mr9456510vsb.68.1643724868281;
- Tue, 01 Feb 2022 06:14:28 -0800 (PST)
+        Tue, 1 Feb 2022 09:15:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 12C20210FB;
+        Tue,  1 Feb 2022 14:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643724924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xV7svizP3OfMYOgwKWIVNwCgg62pzpKys1nXAAzkk0Y=;
+        b=Jamssw3SvWmrNtmIlOjQHTDIuWJ/zqmGM3tooV00B2rIrwgQekL6zxoljkSd7X9N6OSX86
+        WND1VLJ8x3yeu9GMpF/PCmya7jrvu7M3OZlzpV/gmSZ9IAHKe971tIpq4btffuXkEnp9zb
+        2qg4pKHE/Icl7gLCaRkUzpyMPjG2RhQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643724924;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xV7svizP3OfMYOgwKWIVNwCgg62pzpKys1nXAAzkk0Y=;
+        b=1M3uLSehUJl3TfRqs61sMbV9+jPcG8d4LfXaHM9EgWlvSrIIPQeO+/NdgC9F5miMEtvRbz
+        5Yuleo6c0o2LJFCA==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 17173A3B89;
+        Tue,  1 Feb 2022 14:15:23 +0000 (UTC)
+Date:   Tue, 1 Feb 2022 14:15:20 +0000
+From:   Mel Gorman <mgorman@suse.de>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        dishaa.talreja@amd.com, Wei Huang <wei.huang2@amd.com>
+Subject: Re: [RFC PATCH v0 1/3] sched/numa: Process based autonuma scan
+ period framework
+Message-ID: <20220201141520.GB3301@suse.de>
+References: <20220128052851.17162-1-bharata@amd.com>
+ <20220128052851.17162-2-bharata@amd.com>
+ <20220131121714.GX3301@suse.de>
+ <9f95a85f-5396-b8bd-50cf-c4eeeac2a013@amd.com>
 MIME-Version: 1.0
-References: <20220131201225.2324984-1-javierm@redhat.com> <YfhM97cVH3+lJKg0@ravnborg.org>
- <Yfj/XGRRDNABsLPm@smile.fi.intel.com> <f8d71acb-5c8b-ac4e-0c32-38eb66af04c3@redhat.com>
- <CAMuHMdVP6ER119r2KAegjZes1a=KWZ47z6j=kgQ0oNx1oeUJ+w@mail.gmail.com> <51f54519-bb8b-f108-1c1e-4fed101ca5ef@redhat.com>
-In-Reply-To: <51f54519-bb8b-f108-1c1e-4fed101ca5ef@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 1 Feb 2022 15:14:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVwUfv7pXhPazsgG6t=X=aVtDQkFUk_=mUuFH8Fscx8wg@mail.gmail.com>
-Message-ID: <CAMuHMdVwUfv7pXhPazsgG6t=X=aVtDQkFUk_=mUuFH8Fscx8wg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED displays
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <9f95a85f-5396-b8bd-50cf-c4eeeac2a013@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+On Tue, Feb 01, 2022 at 05:52:55PM +0530, Bharata B Rao wrote:
+> On 1/31/2022 5:47 PM, Mel Gorman wrote:
+> > On Fri, Jan 28, 2022 at 10:58:49AM +0530, Bharata B Rao wrote:
+> >> From: Disha Talreja <dishaa.talreja@amd.com>
+> >>
+> >> Add a new framework that calculates autonuma scan period
+> >> based on per-process NUMA fault stats.
+> >>
+> >> NUMA faults can be classified into different categories, such
+> >> as local vs. remote, or private vs. shared. It is also important
+> >> to understand such behavior from the perspective of a process.
+> >> The per-process fault stats added here will be used for
+> >> calculating the scan period in the adaptive NUMA algorithm.
+> >>
+> > 
+> > Be more specific no how the local vs remote, private vs shared states
+> > are reflections of per-task activity of the same.
+> 
+> Sure, will document the algorithm better. However the overall thinking
+> here is that the address-space scanning is a per-process activity and
+> hence the scan period value derived from the accumulated per-process
+> faults is more appropriate than calculating per-task (per-thread) scan
+> periods. Participating threads may have their local/shared and private/shared
+> behaviors, but when aggregated at the process level, it gives a better
+> input for eventual scan period variation. The understanding is that individual
+> thread fault rates will start altering the overall process metrics in
+> such a manner that we respond by changing the scan rate to do more aggressive
+> or less aggressive scanning.  
+> 
 
-On Tue, Feb 1, 2022 at 2:09 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> On 2/1/22 12:38, Geert Uytterhoeven wrote:
-> >> Since the current binding has a compatible "ssd1305fb-i2c", we could make the
-> >> new one "ssd1305drm-i2c" or better, just "ssd1305-i2c".
-> >
-> > DT describes hardware, not software policy.
-> > If the hardware is the same, the DT bindings should stay the same.
-> >
->
-> Yes I know that but the thing is that the current binding don't describe
-> the hardware correctly. For instance, don't use a backlight DT node as a
-> property of the panel and have this "fb" suffix in the compatible strings.
->
-> Having said that, my opinion is that we should just keep with the existing
-> bindings and make compatible to that even if isn't completely correct.
->
-> Since that will ease adoption of the new DRM driver and allow users to use
-> it without the need to update their DTBs.
+I don't have anything to add on your other responses as it would mostly
+be an acknowledgment of your response.
 
-To me it looks like the pwms property is not related to the backlight
-at all, and only needed for some variants?
+However, the major concern I have is that address-space wide decisions
+on scan rates has no sensible means of adapting to thread-specific
+requirements. I completely agree that it will result in more stable scan
+rates, particularly the adjustments. It also side-steps a problem where
+new threads may start with a scan rate that is completely inappropriate.
 
-And the actual backlight code seems to be about internal contrast
-adjustment?
+However, I worry that it would be limited overall because each thread
+potentially has unique behaviour which is not obvious in a workload like
+NAS where threads are all executing similar instructions on different
+data. For other applications, threads may operate on thread-local areas
+only (low scan rate), others could operate on shared only regresions (high
+scan rate until back off and interleave), threads can has phase behaviour
+(manager thread collecting data from worker threads) and threads can have
+different lifetimes and phase behaviour. Each thread would have a different
+optimal scan rate to decide if memory needs to be migrated to a local node
+or not. I don't see how address-space wide statistics could every be mapped
+back to threads to adapt scan rates based on thread-specific behaviour.
 
-So if the pwms usage is OK, what other reasons are there to break
-DT compatibility? IMHO just the "fb" suffix is not a good reason.
+Thread scanning on the other hand can be improved in multiple ways. If
+nothing else, they can do redundant scanning of regions that are
+not relveant to a task which gets increasingly problematic when VSZ
+increases. The obvious problems are
 
-Gr{oetje,eeting}s,
+1. Scan based on page table updates, not address ranges to mitigate
+   problems with THP vs base page updates
 
-                        Geert
+2. Move scan delay to be a per-vma structure that is kmalloced if
+   necessary instead of being address space wide.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+3. Track what threads access a VMA. The suggestion was to use a unsigned
+   long pid_mask and use the lower bits to tag approximately what
+   threads access a VMA. Skip VMAs that did not trap a fault. This would
+   be approximate because of PID collisions but would reduce scanning
+   of areas the thread is not interested in
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+4. Track active regions within VMAs. Very coarse tracking, use unsigned
+   long to trap what ranges are active
+
+In different ways, this would reduce the amount of scanning work threads
+do and focuses them on regions of relevance to reduce overhead overall
+without losing thread-specific details.
+
+Unfortunately, I have not had the time yet to prototype anything.
+
+-- 
+Mel Gorman
+SUSE Labs

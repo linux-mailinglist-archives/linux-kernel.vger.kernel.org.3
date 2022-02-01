@@ -2,127 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D53A34A680B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0574A680D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241312AbiBAWdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235380AbiBAWdq (ORCPT
+        id S241365AbiBAWgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:36:18 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42344 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235380AbiBAWgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:33:46 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342E1C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 14:33:46 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id e28so17157308pfj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 14:33:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PgSqn/ODuYhw3oBb7FQ1z3UvPoM3gm20EXCy4PGXA6c=;
-        b=XOW3TJJFZ72W2QAKV7//T3KK8i5/1kgPMVQsiP2e9IJV6j7gy3+iHugCVvZX49621S
-         pEE1rviUsjkSnaUjyEgPDQGXRu+37knzkf/NkUdUODcQTp2WDmGm7aYmkfibBXmIr7li
-         ma3JUfn+VVWLBV5l7Q+YiyD/A8EHQq7cmbAhZyR8ljbbUmM6VOQbfBl7sG5MBzJNR2vl
-         q2BpeGNsI884E+Ih1MqMwOfhbDlIrv6/WAP9JnaUQ4wNc35m04i166lcwW5q4vJpLog4
-         3djMUsArDvYA784Yv4HwaZ21YtK6SOWetlk99OXo8SC7YMRYFARLP9UH/XFLgj6Jcye+
-         gyAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=PgSqn/ODuYhw3oBb7FQ1z3UvPoM3gm20EXCy4PGXA6c=;
-        b=6B80vMfDQyr7NIIdUfJE/W2+sj6Tsh775N7Tplzn0dpy+Hqb+WFoOjLA7FPD5SJAMe
-         t5RzG6GBrULJl/4fcPfTsDhQnaRxwG4PqOo6GIB7r5SGCeWajvEPMJt+hgZkRMLJLky7
-         Q+mJHQ1T7q2M26wRQRXD1woP0ApdJsj54V5WtwkJvupHq2X3zwMRlkq5l5QhpyAtx7bS
-         MT1iiTJP6NSr8Zdv2Ry6Z6eTwk2Gec/R9n0q1xSh9hYEPCtL4nhjEU+MKkIBImJcWA5J
-         vU7gzHW3SRmA875YsoLFLYpWbBhlrnQYeYfcclvgv+4JnSrUyXFFIDYKbGGfQcppc24Y
-         IDlw==
-X-Gm-Message-State: AOAM533dEVAOFG6QzlbD5UvVX3HawZAyVsj/S5hbXBlhsJsssVuKIRNF
-        FL/CKXU9yYDw2GNSX97rBl/qzgjmnEI=
-X-Google-Smtp-Source: ABdhPJwG2Xjh6eU/kgfTQBuD/iswCBzuAMIAfR+u5l3AW+P6Rk1hC67HbCvCXvQ/RaSBr9LTV7T/Eg==
-X-Received: by 2002:a05:6a00:7ce:: with SMTP id n14mr27489212pfu.11.1643754825297;
-        Tue, 01 Feb 2022 14:33:45 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:1b1a:cadc:e9c0:fbd5])
-        by smtp.gmail.com with ESMTPSA id g19sm19581574pfv.164.2022.02.01.14.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 14:33:44 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 1 Feb 2022 14:33:43 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>
-Cc:     Tim Murray <timmurray@google.com>
-Subject: Re: [PATCH] locking: add missing __sched attributes
-Message-ID: <Yfm1R6BDmlca7LJO@google.com>
-References: <20220115231657.84828-1-minchan@kernel.org>
+        Tue, 1 Feb 2022 17:36:17 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643754976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n2F/y8aSW2wR6OApW4m06nsn/aEgXYMJhkB+lhkwfTY=;
+        b=TJ/yzs0uyiC4KQnSgCdCaCoXwPJ4CQ17pfrxAf1HKTBRWnMVdIx5XuRnLfVWb6R2fwQ8ea
+        YzobF6RMS/zXXC/g/pYEYfGnAVx42gFXPlwzDcQOtbGvFCvSRysaB3+0o996rINHBHPCub
+        2vnmGnKSAeJgsATSf0UJTdbvHVQZCFcGcervq+H5yDFMBM/hgzpYXziBlYii8koKCYdYwo
+        8jX6DWvnV8jmtUoxfuCnX5ucsQBbMGUaRA/Y8gHzBrgX8CxIwGiWSdhxm0hhhpkiy6/Iwj
+        GW3Mytvs75QyFwJ8q/XKS7jf/bBKj2Vwg/mwFH9BN0Zx6VVlbwth5NsBsvhz3w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643754976;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n2F/y8aSW2wR6OApW4m06nsn/aEgXYMJhkB+lhkwfTY=;
+        b=L7mN7BW1ZHVuMMoeu1DdxtfJFrgbLg65AbWM1ts1ZpeO9sJIJUNf0QAAE+qhPRCv0dUdk3
+        Miuov1aZ9SsnarAA==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCHv2 10/29] x86: Consolidate port I/O helpers
+In-Reply-To: <20220124150215.36893-11-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-11-kirill.shutemov@linux.intel.com>
+Date:   Tue, 01 Feb 2022 23:36:15 +0100
+Message-ID: <87mtjaxli8.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220115231657.84828-1-minchan@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 15, 2022 at 03:16:57PM -0800, Minchan Kim wrote:
+On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> There are two implementations of port I/O helpers: one in the kernel and
+> one in the boot stub.
+>
+> Move the helpers required for both to <asm/shared/io.h> and use the one
+> implementation everywhere.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Bumping up.
-
-> This patch adds __sched attributes to a few missing places
-> to show blocked function rather than locking function
-> in get_wchan.
-> 
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
-> ---
->  kernel/locking/percpu-rwsem.c | 5 +++--
->  kernel/locking/rwsem.c        | 2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-> index 70a32a576f3f..c9fdae94e098 100644
-> --- a/kernel/locking/percpu-rwsem.c
-> +++ b/kernel/locking/percpu-rwsem.c
-> @@ -7,6 +7,7 @@
->  #include <linux/rcupdate.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task.h>
-> +#include <linux/sched/debug.h>
->  #include <linux/errno.h>
->  
->  int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
-> @@ -162,7 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
->  	__set_current_state(TASK_RUNNING);
->  }
->  
-> -bool __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
-> +bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
->  {
->  	if (__percpu_down_read_trylock(sem))
->  		return true;
-> @@ -211,7 +212,7 @@ static bool readers_active_check(struct percpu_rw_semaphore *sem)
->  	return true;
->  }
->  
-> -void percpu_down_write(struct percpu_rw_semaphore *sem)
-> +void __sched percpu_down_write(struct percpu_rw_semaphore *sem)
->  {
->  	might_sleep();
->  	rwsem_acquire(&sem->dep_map, 0, 0, _RET_IP_);
-> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-> index 69aba4abe104..acde5d6f1254 100644
-> --- a/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -1048,7 +1048,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->  /*
->   * Wait until we successfully acquire the write lock
->   */
-> -static struct rw_semaphore *
-> +static struct rw_semaphore __sched *
->  rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->  {
->  	long count;
-> -- 
-> 2.34.1.703.g22d0c6ccf7-goog
-> 
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>

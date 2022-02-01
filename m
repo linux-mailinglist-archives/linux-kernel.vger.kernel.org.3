@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27D04A6344
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85084A634D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241807AbiBASId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:08:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240279AbiBASIc (ORCPT
+        id S241859AbiBASNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:13:43 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:62358 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232360AbiBASLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:08:32 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B7AC061714;
-        Tue,  1 Feb 2022 10:08:32 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 1 Feb 2022 13:11:42 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
+ id 67adb7ded8a5fe1d; Tue, 1 Feb 2022 19:11:41 +0100
+Received: from kreacher.localnet (unknown [213.134.162.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 516CF1EC0513;
-        Tue,  1 Feb 2022 19:08:25 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643738905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HcxfykENH1gJphgVT/KA5LzM4HTc3s8TrkMJadPsK0o=;
-        b=KXbXzL/iB0jKOsbk9qpYGF6/22Lz5a/yb/4wRPItKGq08Nf9mtYk6z8AxfiRU+3tIkIfEG
-        FoO2WzE7cON07bDcMWOi4HfjZrFU5nNqFueDJlN3mRccAQLFfYx5q0RsEhan2J+KoAC6il
-        ptqdQQQZkYvoCP+d82KprLCa/WIl2XQ=
-Date:   Tue, 1 Feb 2022 19:08:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 05/43] x86/compressed/64: Detect/setup SEV/SME
- features earlier in boot
-Message-ID: <Yfl3FaTGPxE7qMCq@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-6-brijesh.singh@amd.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id CD86966B390;
+        Tue,  1 Feb 2022 19:11:40 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org
+Subject: [PATCH] IOMMU: Intel: DMAR: Replace acpi_bus_get_device()
+Date:   Tue, 01 Feb 2022 19:11:40 +0100
+Message-ID: <1807113.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-6-brijesh.singh@amd.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.162.64
+X-CLIENT-HOSTNAME: 213.134.162.64
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeefgddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudeivddrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeivddrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepugifmhifvdesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegsrgholhhurdhluheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhr
+ oheskegshihtvghsrdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehiohhmmhhusehlihhsthhsrdhlihhnuhigqdhfohhunhgurghtihhonhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:26AM -0600, Brijesh Singh wrote:
-> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> index fd9441f40457..49064a9f96e2 100644
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -191,9 +191,8 @@ SYM_FUNC_START(startup_32)
->  	/*
->  	 * Mark SEV as active in sev_status so that startup32_check_sev_cbit()
->  	 * will do a check. The sev_status memory will be fully initialized
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-That "sev_status memory" formulation is just weird. Pls fix it while
-you're touching that comment.
+Replace acpi_bus_get_device() that is going to be dropped with
+acpi_fetch_acpi_dev().
 
-> +static inline u64 rd_sev_status_msr(void)
-> +{
-> +	unsigned long low, high;
-> +
-> +	asm volatile("rdmsr" : "=a" (low), "=d" (high) :
-> +			"c" (MSR_AMD64_SEV));
-> +
-> +	return ((high << 32) | low);
-> +}
+No intentional functional impact.
 
-Don't you see sev_es_rd_ghcb_msr() in that same file above? Do a common
-rdmsr() helper and call it where needed, pls, instead of duplicating
-code.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/iommu/intel/dmar.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-misc.h looks like a good place.
+Index: linux-pm/drivers/iommu/intel/dmar.c
+===================================================================
+--- linux-pm.orig/drivers/iommu/intel/dmar.c
++++ linux-pm/drivers/iommu/intel/dmar.c
+@@ -789,7 +789,8 @@ static int __init dmar_acpi_dev_scope_in
+ 				       andd->device_name);
+ 				continue;
+ 			}
+-			if (acpi_bus_get_device(h, &adev)) {
++			adev = acpi_fetch_acpi_dev(h);
++			if (!adev) {
+ 				pr_err("Failed to get device for ACPI object %s\n",
+ 				       andd->device_name);
+ 				continue;
 
-Extra bonus points will be given if you unify callers in
-arch/x86/boot/cpucheck.c too but you don't have to - I can do that
-ontop.
 
-Thx.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

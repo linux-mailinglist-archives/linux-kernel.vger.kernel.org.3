@@ -2,128 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 657E34A5AA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217464A5AA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbiBAKxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:53:39 -0500
-Received: from mga09.intel.com ([134.134.136.24]:21862 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236879AbiBAKxj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 05:53:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643712819; x=1675248819;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Rc2R13X+A0ZPea4Zk2j4TFu+lNn7nqVaeohaqOLnM8=;
-  b=gK4U29KBWCceNK8FP32sd1c4l7dwiCu2xk/GHeJhPNE/82Z2sXfawhfi
-   FqdA7LjhcDjH8ESB0eR2jj0drubVFvi7v0tjZYOq8FtzgUtrhA7sV+baH
-   mSDSeSDo3kcIMKckS4rz2zqAmGqwfQsMwc1Sv/O2yBWFFopWZSKhUm49A
-   j6/c94R3SdkBURRx5H0wCHNwaVZ7W0oCAXJyL8h6xhWZMEE3wKkmTpyYZ
-   0vZSt1F3QKkC9bmrnPOwd6biX9YyMIjkrZkCHCxv1WCYsIpstL9UHjVol
-   PLKDALceUAsjJxOfmXka0xrn2HdswDDvnA9FjB932b/G+13bWcOfI0jQ7
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="247436326"
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="247436326"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 02:53:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
-   d="scan'208";a="768894443"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Feb 2022 02:53:32 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nEqmx-000TAB-Gz; Tue, 01 Feb 2022 10:53:31 +0000
-Date:   Tue, 1 Feb 2022 18:52:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        David Collins <collinsd@codeaurora.org>,
-        David Dai <daidavid1@codeaurora.org>,
-        Deepak Katragadda <dkatraga@codeaurora.org>,
-        Shefali Jain <shefjain@codeaurora.org>,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android-4.19-stable
- 61/9999] drivers/clk/clk.c:3145:5: warning: no previous prototype for
- function 'clk_set_flags'
-Message-ID: <202202011809.jx2dKFgs-lkp@intel.com>
+        id S236958AbiBAKyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:54:03 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14612 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236943AbiBAKyB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 05:54:01 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 211AcBDo032200;
+        Tue, 1 Feb 2022 10:53:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=f4UZimUTkkgLdlh/G4lKs3faewimH5Z7C7FGlSi7BkA=;
+ b=npTkYgPL6g42qCHwl8o2HGCXEHj0Pl8qE1PKXhcIV3FYMyGmNJTeAHmYrdMsK8kWA4TR
+ 6srP55BIsSUTPkO2wufDM/9Z/mpFsROR71miGmX0bqkVmixfbI+KQSOlbPB+0FNsuLxu
+ Vg+1SuQI9lm+6PdR+oON1+Z15rKeahMrGSv8oM+nhmY0iU9F2pDY9xEhOecki2Dz+g0k
+ fophS6tr735R50NSzkUj1H5PXqHu11PzfTiqeq13quyVZx3dPH0g2AoIRuFuF1Y5DzAa
+ 6wCNLfCWsA+rmCIyVHz2we4R+eaHib75i53BVFe/nIjpXeccFW1VrL8mtah7P7Lpfc/F iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxrbkuu1b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 10:53:59 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 211AfWKU007683;
+        Tue, 1 Feb 2022 10:53:58 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dxrbkutyy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 10:53:58 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 211AmSFQ006323;
+        Tue, 1 Feb 2022 10:53:56 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3dvw79j9bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Feb 2022 10:53:56 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 211ArrIt40567172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Feb 2022 10:53:53 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE57542042;
+        Tue,  1 Feb 2022 10:53:53 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66E2942045;
+        Tue,  1 Feb 2022 10:53:53 +0000 (GMT)
+Received: from [9.145.64.14] (unknown [9.145.64.14])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Feb 2022 10:53:53 +0000 (GMT)
+Message-ID: <fc2d73bb-a614-eb84-e635-31f8836f612a@linux.ibm.com>
+Date:   Tue, 1 Feb 2022 11:53:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [BUG] net: smc: possible deadlock in smc_lgr_free() and
+ smc_link_down_work()
+Content-Language: en-US
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>
+References: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
+From:   Karsten Graul <kgraul@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <11fe65b8-eda4-121e-ec32-378b918d0909@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WmMxtRy01sKQrw90KW1v_vmF6sxDSxFv
+X-Proofpoint-ORIG-GUID: WVLJbhOYn4TYKz_86L8z8bAqeJGdcORD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_03,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 phishscore=0 mlxlogscore=999
+ clxscore=1015 bulkscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202010058
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-4.19-stable
-head:   b45c5eeda8dea785e3d411380b486a209768f6b2
-commit: 3179a1a38d96f565a2229b9244285c6abf62b10a [61/9999] ANDROID: GKI: clk: Add support for voltage voting
-config: x86_64-randconfig-r026-20220131 (https://download.01.org/0day-ci/archive/20220201/202202011809.jx2dKFgs-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3179a1a38d96f565a2229b9244285c6abf62b10a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-4.19-stable
-        git checkout 3179a1a38d96f565a2229b9244285c6abf62b10a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/clk/ drivers/nvmem/ kernel/sched/
+On 01/02/2022 08:51, Jia-Ju Bai wrote:
+> Hello,
+> 
+> My static analysis tool reports a possible deadlock in the smc module in Linux 5.16:
+> 
+> smc_lgr_free()
+>   mutex_lock(&lgr->llc_conf_mutex); --> Line 1289 (Lock A)
+>   smcr_link_clear()
+>     smc_wr_free_link()
+>       wait_event(lnk->wr_tx_wait, ...); --> Line 648 (Wait X)
+> 
+> smc_link_down_work()
+>   mutex_lock(&lgr->llc_conf_mutex); --> Line 1683 (Lock A)
+>   smcr_link_down()
+>     smcr_link_clear()
+>       smc_wr_free_link()
+>         smc_wr_wakeup_tx_wait()
+>           wake_up_all(&lnk->wr_tx_wait); --> Line 78 (Wake X)
+> 
+> When smc_lgr_free() is executed, "Wait X" is performed by holding "Lock A". If smc_link_down_work() is executed at this time, "Wake X" cannot be performed to wake up "Wait X" in smc_lgr_free(), because "Lock A" has been already hold by smc_lgr_free(), causing a possible deadlock.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thank you for your reporting and the good description!
 
-All warnings (new ones prefixed by >>):
+We will look into this issue and get back to you in a few days.
 
-   drivers/clk/clk.c:624:24: warning: variable 'ignore' set but not used [-Wunused-but-set-variable]
-           int level, rc = 0, i, ignore;
-                                 ^
->> drivers/clk/clk.c:3145:5: warning: no previous prototype for function 'clk_set_flags' [-Wmissing-prototypes]
-   int clk_set_flags(struct clk *clk, unsigned long flags)
-       ^
-   drivers/clk/clk.c:3145:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int clk_set_flags(struct clk *clk, unsigned long flags)
-   ^
-   static 
->> drivers/clk/clk.c:3157:6: warning: no previous prototype for function 'clk_debug_print_hw' [-Wmissing-prototypes]
-   void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-        ^
-   drivers/clk/clk.c:3157:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-   ^
-   static 
-   3 warnings generated.
-   drivers/clk/clk.c:4257: warning: Function parameter or member 'dev' not described in 'devm_clk_unregister'
-   drivers/clk/clk.c:4455: warning: Function parameter or member 'get_hw' not described in 'of_clk_provider'
-
-
-vim +/clk_set_flags +3145 drivers/clk/clk.c
-
-  3144	
-> 3145	int clk_set_flags(struct clk *clk, unsigned long flags)
-  3146	{
-  3147		if (!clk)
-  3148			return 0;
-  3149	
-  3150		if (!clk->core->ops->set_flags)
-  3151			return -EINVAL;
-  3152	
-  3153		return clk->core->ops->set_flags(clk->core->hw, flags);
-  3154	}
-  3155	EXPORT_SYMBOL_GPL(clk_set_flags);
-  3156	
-> 3157	void clk_debug_print_hw(struct clk_core *clk, struct seq_file *f)
-  3158	{
-  3159	}
-  3160	EXPORT_SYMBOL(clk_debug_print_hw);
-  3161	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

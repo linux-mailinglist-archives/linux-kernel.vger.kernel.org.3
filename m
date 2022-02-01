@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 978414A59F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:26:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB6A4A59F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 11:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbiBAK0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 05:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S236515AbiBAK0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 05:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiBAK0n (ORCPT
+        with ESMTP id S235817AbiBAK0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Feb 2022 05:26:43 -0500
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C3EC06173B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547F4C06173E;
         Tue,  1 Feb 2022 02:26:43 -0800 (PST)
 Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=truhe.fritz.box); authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1nEqMy-0002pB-RA; Tue, 01 Feb 2022 11:26:40 +0100
+        id 1nEqMz-0002pB-51; Tue, 01 Feb 2022 11:26:41 +0100
 From:   Thorsten Leemhuis <linux@leemhuis.info>
 To:     linux-doc@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>
@@ -28,235 +28,124 @@ Cc:     workflows@vger.kernel.org,
         regressions@lists.linux.dev,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v4 2/3] docs: regressions*rst: rules of thumb for handling regressions
-Date:   Tue,  1 Feb 2022 11:26:38 +0100
-Message-Id: <e655527632dc4324cc7584cb3a73880d9c733df5.1643710947.git.linux@leemhuis.info>
+Subject: [PATCH v4 3/3] docs: reporting-issues.rst: link new document about regressions
+Date:   Tue,  1 Feb 2022 11:26:39 +0100
+Message-Id: <978ad91647e93b20b7fe12c3f237f6de8f9eaca1.1643710947.git.linux@leemhuis.info>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1643710947.git.linux@leemhuis.info>
 References: <cover.1643710947.git.linux@leemhuis.info>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643711203;661d3094;
-X-HE-SMSGID: 1nEqMy-0002pB-RA
+X-HE-SMSGID: 1nEqMz-0002pB-51
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a section with a few rules of thumb about how
-quickly developers should address regressions to
-Documentation/process/regressions-devs.rst; additionally,
-add a short paragraph about this to the companion document
-Documentation/admin-guide/regressions-users.rst as well.
+Make Documentation/admin-guide/reporting-issues.rst point to the newly
+created document about regressions
+(Documentation/admin-guide/regressions-users.rst). This allows to
+shorten a few explanations the new document describes better and in more
+detail.
 
-The rules of thumb were written after studying the quotes from Linus
-found in regressions-devs.rst and especially influenced by statements
-like "Users are literally the _only_ thing that matters" and "without
-users, your program is not a program, it's a pointless piece of code
-that you might as well throw away". The author interpreted those in
-perspective to how the various Linux kernel series are maintained
-currently and what those practices might mean for users running into a
-regression on a small or big kernel update.
-
-That for example lead to the paragraph starting with "Aim to get fixes
-for regressions mainlined within one week after identifying the culprit,
-if the regression was introduced in a stable/longterm release or the
-devel cycle for the latest mainline release". Some might see this as
-pretty high bar, but on the other hand something like that is needed to
-not leave users out in the cold for too long -- which can quickly happen
-when updating to the latest stable series, as the previous one is
-normally stamped "End of Life" about three or four weeks after a new
-mainline release. This makes a lot of users switch during this
-timeframe. Any of them thus risk running into regressions not promptly
-fixed; even worse, once the previous stable series is EOLed for real,
-users that face a regression might be left with only three options:
-
- (1) continue running an outdated and thus potentially insecure kernel
-     version from an abandoned stable series
-
- (2) run the kernel with the regression
-
- (3) downgrade to an earlier longterm series still supported
-
-This is better avoided, as (1) puts users and their data in danger, (2)
-will only be possible if it's a minor regression that doesn't interfere
-with booting or serious usage, and (3) might be regression itself or
-impossible on the particular machine, as the users might require drivers
-or features only introduced after the latest longterm series branched
-of.
-
-In the end this lead to the aforementioned "Aim to fix regression within
-one week" part. It's also the reason for the "Try to resolve any
-regressions introduced in the current development cycle before its
-end.".
+While at it move the copyright hint to the end of the file, as suggested
+during review of the new documents about regressions.
 
 Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-CC: Linus Torvalds <torvalds@linux-foundation.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
-Hi! A lot of developers are doing a good job in fixing regressions in a
-reasonable time span, but I noticed it sometimes takes many weeks to get
-even simple fixes for regressions merged. Most of the time this is due
-to one of these factors:
+ .../admin-guide/reporting-issues.rst          | 60 +++++++++----------
+ 1 file changed, 29 insertions(+), 31 deletions(-)
 
- * it takes a long time to get the fix ready, as some developers
-   apparently don't prioritize work on fixing regressions
-
- * fully developed fixes linger in git trees of maintainers for weeks,
-   sometimes even without the fix being in linux-next
-
-This afaics is especially a problem for regressions introduced in
-mainline, but only found after a new versions was released and a new
-stable kernel series derived from it. Sometimes fixes for these
-regressions are even left lying around for weeks until the next merge
-window, which contributes to a huge pile of fixes getting backported to
-stable and longterm releases after a merge window ended.  Asking
-developers to speed things up rarely helped, as people have different
-opinions on how fast regression fixes need to be developed and merged
-upstream.
-
-That's why it would be a great help to my work as regression tracker if
-we had some rough written down guidelines for handling regressions, as
-proposed by the patch below. I'm well aware that the text sets a pretty
-high bar. That's because I approached the problem primarily from the
-point of a user, as can be seen by the patch description.
-
-The text added by this patch likely will lead to some discussions,
-that's why I submit it separately from the rest of the new documents on
-regressions, which are found in patch 1/3; I also CCed Linus on this
-patch and hope he states his opinion or even ACKs is. In the end I can
-easily tone this down or write something totally different: that's
-totally fine for me, I'm mainly interested in having some expectations
-roughly documented to get everyone on the same page.
-
-Ciao, Thorsten
----
- .../admin-guide/regressions-users.rst         | 12 +++
- Documentation/process/regressions-devs.rst    | 81 +++++++++++++++++++
- 2 files changed, 93 insertions(+)
-
-diff --git a/Documentation/admin-guide/regressions-users.rst b/Documentation/admin-guide/regressions-users.rst
-index d32f446e9651..78df16f113b0 100644
---- a/Documentation/admin-guide/regressions-users.rst
-+++ b/Documentation/admin-guide/regressions-users.rst
-@@ -214,6 +214,18 @@ your report on the radar of these people by CCing or forwarding each report to
- the regressions mailing list, ideally with a "regzbot command" in your mail to
- get it tracked.
+diff --git a/Documentation/admin-guide/reporting-issues.rst b/Documentation/admin-guide/reporting-issues.rst
+index d7ac13f789cc..3122c5a2fb66 100644
+--- a/Documentation/admin-guide/reporting-issues.rst
++++ b/Documentation/admin-guide/reporting-issues.rst
+@@ -1,14 +1,5 @@
+ .. SPDX-License-Identifier: (GPL-2.0+ OR CC-BY-4.0)
+-..
+-   If you want to distribute this text under CC-BY-4.0 only, please use 'The
+-   Linux kernel developers' for author attribution and link this as source:
+-   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/Documentation/admin-guide/reporting-issues.rst
+-..
+-   Note: Only the content of this RST file as found in the Linux kernel sources
+-   is available under CC-BY-4.0, as versions of this text that were processed
+-   (for example by the kernel's build system) might contain content taken from
+-   files which use a more restrictive license.
+-
++.. See the bottom of this file for additional redistribution information.
  
-+How quickly are regressions normally fixed?
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Developers should fix any reported regression as quickly as possible, to provide
-+affected users with a solution in a timely manner and prevent more users from
-+running into the issue; nevertheless developers need to take enough time and
-+care to ensure regression fixes do not cause additional damage.
-+
-+The answer thus depends on various factors like the impact of a regression, its
-+age, or the Linux series in which it occurs. In the end though, most regressions
-+should be fixed within two weeks.
-+
- Is it a regression, if the issue can be avoided by updating some software?
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Reporting issues
+ ++++++++++++++++
+@@ -395,19 +386,13 @@ fixed as soon as possible, hence there are 'issues of high priority' that get
+ handled slightly differently in the reporting process. Three type of cases
+ qualify: regressions, security issues, and really severe problems.
  
-diff --git a/Documentation/process/regressions-devs.rst b/Documentation/process/regressions-devs.rst
-index 7eb66304a694..d59aa2c38d1f 100644
---- a/Documentation/process/regressions-devs.rst
-+++ b/Documentation/process/regressions-devs.rst
-@@ -45,6 +45,10 @@ The important bits (aka "The TL;DR")
-    mandated by Documentation/process/submitting-patches.rst and
-    :ref:`Documentation/process/5.Posting.rst <development_posting>`.
+-You deal with a 'regression' if something that worked with an older version of
+-the Linux kernel does not work with a newer one or somehow works worse with it.
+-It thus is a regression when a WiFi driver that did a fine job with Linux 5.7
+-somehow misbehaves with 5.8 or doesn't work at all. It's also a regression if
+-an application shows erratic behavior with a newer kernel, which might happen
+-due to incompatible changes in the interface between the kernel and the
+-userland (like procfs and sysfs). Significantly reduced performance or
+-increased power consumption also qualify as regression. But keep in mind: the
+-new kernel needs to be built with a configuration that is similar to the one
+-from the old kernel (see below how to achieve that). That's because the kernel
+-developers sometimes can not avoid incompatibilities when implementing new
+-features; but to avoid regressions such features have to be enabled explicitly
+-during build time configuration.
++You deal with a regression if some application or practical use case running
++fine with one Linux kernel works worse or not at all with a newer version
++compiled using a similar configuration. The document
++'Documentation/admin-guide/regressions-users.rst' explains this in more detail.
++It also provides a good deal of other information about regressions you might
++want to be aware of; it for example explains how to add your issue to the list
++of tracked regressions, to ensure it won't fall through the cracks.
  
-+#. Try to fix regressions quickly once the culprit has been identified; fixes
-+   for most regressions should be merged within two weeks, but some need to be
-+   resolved within two or three days.
-+
+ What qualifies as security issue is left to your judgment. Consider reading
+ 'Documentation/admin-guide/security-bugs.rst' before proceeding, as it
+@@ -1073,10 +1058,10 @@ When dealing with regressions make sure the issue you face is really caused by
+ the kernel and not by something else, as outlined above already.
  
- All the details on Linux kernel regressions relevant for developers
- ===================================================================
-@@ -117,6 +121,83 @@ or others might need to look into the fix months or years later; these links are
- also crucial for tools and scripts like regzbot, as it allows them to associate
- changes with reports that were mailed or submitted to bug trackers.
+ In the whole process keep in mind: an issue only qualifies as regression if the
+-older and the newer kernel got built with a similar configuration. The best way
+-to archive this: copy the configuration file (``.config``) from the old working
+-kernel freshly to each newer kernel version you try. Afterwards run ``make
+-olddefconfig`` to adjust it for the needs of the new version.
++older and the newer kernel got built with a similar configuration. This can be
++achieved by using ``make olddefconfig``, as explained in more detail by
++Documentation/admin-guide/regressions-users.rst; that document also provides a
++good deal of other information about regressions you might want to be aware of.
  
-+Prioritize work on fixing regressions
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+You should fix any reported regression as quickly as possible, to provide
-+affected users with a solution in a timely manner and prevent more users from
-+running into the issue; nevertheless developers need to take enough time and
-+care to ensure regression fixes do not cause additional damage.
-+
-+In the end though, developers should give their best to prevent users from
-+running into situations where a regression leaves them only three options: "run
-+a kernel with a regression that seriously impacts usage", "continue running an
-+outdated and thus potentially insecure kernel version for more than two weeks
-+after a regression's culprit was identified", and "downgrade to a still
-+supported kernel series that lack required features".
-+
-+How to realize this depends a lot on the situation. Here are a few rules of
-+thumb for developers, in order or importance:
-+
-+ * Prioritize work on handling regression reports and fixing regression over all
-+   other Linux kernel work, unless the latter concerns acute security issues or
-+   bugs causing data loss or damage.
-+
-+ * Always consider reverting the culprit commits and reapplying them later
-+   together with necessary fixes, as this might be the least dangerous and
-+   quickest way to fix a regression.
-+
-+ * Try to resolve any regressions introduced in the current development before
-+   its end. If you fear a fix might be too risky to apply only days before a new
-+   mainline release, let Linus decide: submit the fix separately to him as soon
-+   as possible with the explanation of the situation. He then can make a call
-+   and postpone the release if necessary, for example if multiple such changes
-+   show up in his inbox.
-+
-+ * Address regressions in stable, longterm, or proper mainline releases with
-+   more urgency than regressions in mainline pre-releases. That changes after
-+   the release of the fifth pre-release, aka "-rc5": mainline then becomes as
-+   important, to ensure all the improvements and fixes are ideally tested
-+   together for at least one week before Linus releases a new mainline version.
-+
-+ * Fix regressions within two or three days, if they are critical for some
-+   reason -- for example, if the issue is likely to affect many users of the
-+   kernel series in question on all or certain architectures. Note, this
-+   includes mainline, as issues like compile errors otherwise might prevent many
-+   testers or continuous integration systems from testing the series.
-+
-+ * Aim to merge regression fixes into mainline within one week after the culprit
-+   was identified, if the regression was introduced in a stable/longterm release
-+   or the development cycle for the latest mainline release (say v5.14). If
-+   possible, try to address the issue even quicker, if the previous stable
-+   series (v5.13.y) will be abandoned soon or already was stamped "End-of-Life"
-+   (EOL) -- this usually happens about three to four weeks after a new mainline
-+   release.
-+
-+ * Try to fix all other regressions within two weeks after the culprit was
-+   found. Two or three additional weeks are acceptable for performance
-+   regressions and other issues which are annoying, but don't prevent anyone
-+   from running Linux (unless it's an issue in the current development cycle,
-+   as those should ideally be addressed before the release). A few weeks in
-+   total are acceptable if a regression can only be fixed with a risky change
-+   and at the same time is affecting only a few users; as much time is
-+   also okay if the regression is already present in the second newest longterm
-+   kernel series.
-+
-+Note: The aforementioned time frames for resolving regressions are meant to
-+include getting the fix tested, reviewed, and merged into mainline, ideally with
-+the fix being in linux-next for two days.
-+
-+Developers need to account for this.
-+
-+Subsystem maintainers are expected to assist in reaching those periods by doing
-+timely reviews and quick handling of accepted patches. They thus might have to
-+send git-pull requests earlier or more often than usual; depending on the fix,
-+it might even be acceptable to skip testing in linux-next. Especially fixes for
-+regressions in stable and longterm kernels need to be handled quickly, as fixes
-+need to be merged in mainline before they can be backported to older series.
-+
-+
- More aspects regarding regressions developers should be aware of
- ----------------------------------------------------------------
  
+ Write and send the report
+@@ -1756,10 +1741,23 @@ art will lay some groundwork to improve the situation over time.
+ 
+ 
+ ..
+-   This text is maintained by Thorsten Leemhuis <linux@leemhuis.info>. If you
+-   spot a typo or small mistake, feel free to let him know directly and he'll
+-   fix it. You are free to do the same in a mostly informal way if you want
+-   to contribute changes to the text, but for copyright reasons please CC
++   end-of-content
++..
++   This document is maintained by Thorsten Leemhuis <linux@leemhuis.info>. If
++   you spot a typo or small mistake, feel free to let him know directly and
++   he'll fix it. You are free to do the same in a mostly informal way if you
++   want to contribute changes to the text, but for copyright reasons please CC
+    linux-doc@vger.kernel.org and "sign-off" your contribution as
+    Documentation/process/submitting-patches.rst outlines in the section "Sign
+    your work - the Developer's Certificate of Origin".
++..
++   This text is available under GPL-2.0+ or CC-BY-4.0, as stated at the top
++   of the file. If you want to distribute this text under CC-BY-4.0 only,
++   please use "The Linux kernel developers" for author attribution and link
++   this as source:
++   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/Documentation/admin-guide/reporting-issues.rst
++..
++   Note: Only the content of this RST file as found in the Linux kernel sources
++   is available under CC-BY-4.0, as versions of this text that were processed
++   (for example by the kernel's build system) might contain content taken from
++   files which use a more restrictive license.
 -- 
 2.31.1
 

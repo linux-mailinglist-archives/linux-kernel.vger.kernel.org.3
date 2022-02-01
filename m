@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4BE4A5D58
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EEB4A5D5E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiBANUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S238523AbiBANWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiBANUP (ORCPT
+        with ESMTP id S238453AbiBANWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:20:15 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354FEC061714;
-        Tue,  1 Feb 2022 05:20:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HSc0TyLrN1Wvj1rxHVmacBdO1opBBuzEEVi910cNl0c=; b=Qdi0QzQywpTYVIggQulpTS3p7v
-        GXlQs1bB+hZmyCaVmSsqKP7jxjh1Qv6P0KOyM/TWZ3Z6QtIonylvPmQam4E5G68UjawvjIn3UTYjk
-        1ZbeH2Fe3vrIHKtKOlAf5WdebFVYuNqO54OBq7h7GAYibWUBXV/XLERqPOytKRl29N8T/7oCewIwI
-        YaWfWfXF1cI34QIWRjw9gfDnUU08q/rR+G/zz2MnKO6sS2vcBZ8qohfnlgqylGghHg945NW7OQ57W
-        G1fuYZmBG6x3waAACYq+HFp2xhsQkW7sU4k2CrLbCt4Om4es9oAAw7Nwb8z/raCyWOeMFtdoqLRxq
-        2ls/xu8Q==;
-Received: from [2a01:799:95e:a400:5d05:6ef3:cded:ad3] (port=54256)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1nEt4v-0005ID-2B; Tue, 01 Feb 2022 14:20:13 +0100
-Message-ID: <a6f267ea-7617-7d0e-06cd-7ec9c88576c3@tronnes.org>
-Date:   Tue, 1 Feb 2022 14:20:10 +0100
+        Tue, 1 Feb 2022 08:22:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6924FC061714;
+        Tue,  1 Feb 2022 05:22:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D69BB82DE3;
+        Tue,  1 Feb 2022 13:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F364C340EB;
+        Tue,  1 Feb 2022 13:22:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643721760;
+        bh=GBHBnprdZykprL9bYedIbto9NFGIskkFqjHe8SWv3Q4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oly/voj/i5cunpQSgrBjwHxTPjdu/Ry1YmPmDQQilRTI/jae0x2lkjDzXth7y3Cth
+         GiWYi3DlnRivMWntEqMmQ6/8G5Yg/7q8Wo9M34wfLPmyYU144voTytNLmaAnHc8U6o
+         LOX3rLghu9HAIemc879REFufbxxaLmqqgJuW2T5xuRjZ+EA6LGNcYeXaoNhZpfrowO
+         ptKvtOQkNy6p+Uz5Pfrw+OqVuPINZRpf9VNJ9GEEKicBxcxODRsqPtQIJQdP/7dixQ
+         iqLBYfbPyzwreG8Ysz/Yivwfwuz4Jq5yhMXrW4nXsJtSlS8/9RkfIyG5xOEUlC5fz3
+         TkjlRq4zqqVTQ==
+Date:   Tue, 1 Feb 2022 14:22:35 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] exec: Force single empty string when argv is empty
+Message-ID: <20220201132235.c7yk7rpngpvcw5z3@wittgenstein>
+References: <20220201000947.2453721-1-keescook@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
- <4322f58b-dbeb-b90f-2770-d6881f8005b4@redhat.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <4322f58b-dbeb-b90f-2770-d6881f8005b4@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 01.02.2022 14.06, skrev Javier Martinez Canillas:
-> Hello Noralf,
+On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
+> Quoting[1] Ariadne Conill:
 > 
-> On 2/1/22 13:58, Noralf Trønnes wrote:
->>
->>
->> Den 31.01.2022 21.52, skrev Sam Ravnborg:
->>> On Mon, Jan 31, 2022 at 09:12:21PM +0100, Javier Martinez Canillas wrote:
->>>> There isn't a connector type for display controllers accesed through I2C,
->>>> most drivers use DRM_MODE_CONNECTOR_Unknown or DRM_MODE_CONNECTOR_VIRTUAL.
->>>>
->>>> Add an I2C connector type to match the actual connector.
->>>>
->>>> As Noralf Trønnes mentions in commit fc06bf1d76d6 ("drm: Add SPI connector
->>>> type"), user-space should be able to cope with a connector type that does
->>>> not yet understand.
->>>>
->>
->> It turned out that I wasn't entirely correct here, mpv didn't cope with
->> unknown types. In the PR to add support Emil Velikov wondered if libdrm
->> should handle these connector names:
->> https://github.com/mpv-player/mpv/pull/8989#issuecomment-879187711
->>
+> "In several other operating systems, it is a hard requirement that the
+> second argument to execve(2) be the name of a program, thus prohibiting
+> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
+> but it is not an explicit requirement[2]:
 > 
-> I see, thanks for the information. What should we do then, just use the type
-> DRM_MODE_CONNECTOR_Unknown then ?
+>     The argument arg0 should point to a filename string that is
+>     associated with the process being started by one of the exec
+>     functions.
+> ...
+> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
+> but there was no consensus to support fixing this issue then.
+> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
+> of this bug in a shellcode, we can reconsider.
 > 
+> This issue is being tracked in the KSPP issue tracker[5]."
+> 
+> While the initial code searches[6][7] turned up what appeared to be
+> mostly corner case tests, trying to that just reject argv == NULL
+> (or an immediately terminated pointer list) quickly started tripping[8]
+> existing userspace programs.
+> 
+> The next best approach is forcing a single empty string into argv and
+> adjusting argc to match. The number of programs depending on argc == 0
+> seems a smaller set than those calling execve with a NULL argv.
+> 
+> Account for the additional stack space in bprm_stack_limits(). Inject an
+> empty string when argc == 0 (and set argc = 1). Warn about the case so
+> userspace has some notice about the change:
+> 
+>     process './argc0' launched './argc0' with NULL argv: empty string added
+> 
+> Additionally WARN() and reject NULL argv usage for kernel threads.
+> 
+> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
+> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
+> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
+> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
+> [5] https://github.com/KSPP/linux/issues/176
+> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
+> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
+> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
+> 
+> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
+> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: linux-fsdevel@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
 
-Not really, I just wanted to point out that it could be that not all
-userspace will handle an unknown connector type (I just checked the DE's
-at the time). I haven't seen any issues after adding the SPI type so it
-can't be that many apps that has problems. Adding to that a tiny
-monochrome display is limited in which applications it will encounter I
-guess :) It was after adding the USB type that I discovered that mpv
-didn't work.
-
-Noralf.
+Looks good,
+Acked-by: Christian Brauner <brauner@kernel.org>

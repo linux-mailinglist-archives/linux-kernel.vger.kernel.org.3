@@ -2,117 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F9A4A65CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47534A65C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbiBAUg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiBAUgy (ORCPT
+        id S239365AbiBAUgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:36:50 -0500
+Received: from mail.efficios.com ([167.114.26.124]:49074 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229702AbiBAUgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:36:54 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACC2C061714;
-        Tue,  1 Feb 2022 12:36:54 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id m6so54537987ybc.9;
-        Tue, 01 Feb 2022 12:36:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rZxEgavNJow8Wx0FFzJL3BlfXa9k3Uaoz0LEpPT/Na8=;
-        b=W9m3HNwIynnZZuxdZJrhkpLAffoabuD+cuHhvdadf1SwtuL77onC69MyYQy796bar0
-         jU3Bv+9nxwMtNkVIr5bqLwFshq64m12LXIyrjgzeG3Zqa0QxnaUwHtOzYZkLmEpZNCzl
-         0or7HwUhawHHRvrYnUf2GQrqe95a/XHnh1sApPrUAUIhVlayB7YTGxKPhoTbDvoS7OAZ
-         M73YEVxYQ+KQlRZ2rUD5+vrSOfB4RUXDs9EMXi4poMoAPp3imExY+sNvD+jFlZLq62uq
-         HaFbcGZ16HbzopdgYglvZXj6w9KBmFH7Q26IyNkXQD18/47o4ms1p7tCFtxmcCuPv5VZ
-         z9GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rZxEgavNJow8Wx0FFzJL3BlfXa9k3Uaoz0LEpPT/Na8=;
-        b=leT28kk34LRBLV0UyVvYw04CWKtOL2jnikPPE09DdJl36K/RHzZQO1dM4ZEBAnU2QZ
-         RyUJdYER7GAZE1RFv3Q4ztl1r+HKRdVm1Vyk57Yev23ZRWP6qSA0TQhgtKpX0eDWrf2I
-         eS+0Wpbw1a8Bh2a4Y/ju7Cg+FIWv8WW4mUnJrAXfgGwUvN6T/ZrE3DlvNy9nBXLRbTMC
-         FzwWrM9T18SaeMPnvknLKVen8cu4GMKsYARWU8qVYmga99GmZG6x2Rcl7o3B5GiuZf+P
-         BbG8Bm35/vxLNp42NdTN/F9Lqf4d9t3XApI2NKZtdxfdaHdA7R9hbLpXec2vVqn1waml
-         rM6g==
-X-Gm-Message-State: AOAM531lNqJBZJU2g6Hmdn8y9hxJIKMhrU9gdfTbdacRMCY5J7VSm9/o
-        N3VsY3ji0aHnptXyHn8MQg1YqX5RuIBqIcr/dq8=
-X-Google-Smtp-Source: ABdhPJwpJcz7TCycL5dQTokUujprw8bBkzQUm61YUsFx7YYCZYK3oX3Sr+XLfQO/W39IuT6ugFxe7azVa8JS0WET0LE=
-X-Received: by 2002:a05:6902:725:: with SMTP id l5mr38545588ybt.351.1643747813529;
- Tue, 01 Feb 2022 12:36:53 -0800 (PST)
+        Tue, 1 Feb 2022 15:36:49 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 343D6348722;
+        Tue,  1 Feb 2022 15:36:49 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Dd51x-zVMZyC; Tue,  1 Feb 2022 15:36:48 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id BA11B348721;
+        Tue,  1 Feb 2022 15:36:48 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BA11B348721
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643747808;
+        bh=9iBSk44Ww+muw9nnfZnzpoja3Pj6yjk4ZeskuFm7F7Q=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=A87I8jVYpF2TdPAX7fzuTrU30Q0rn7bneNleKyftKIJIxgDEt1AV02AuQJmgokz8g
+         v9rsOePjQwqOAsfQ5Fwjq+PbqT0+d/cjs+Vukp1dH6KQCZcOPE64hn1PqY8WE8dRZw
+         ZuCzpDXyD27Ke5UjRqFa20qVjUH9NSUsaSV7oD/vWMWliwWZNl63ceLG5/YzOC7jtU
+         V91+t8UygBl23w1QjkHoa3B+LACG8d+5jrVqoMddm+AcdGL6QifitKcLp1Zk+CZ6/B
+         /h0YpLOHIlcMwm+ieieXoHt6Ac8mGeiSVmDsFMAotsg5tT03qDEBo+6OgqkFS8nn3l
+         s00h/VP7XZAVg==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id j3uo8KmGS4Pz; Tue,  1 Feb 2022 15:36:48 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id A67A9348695;
+        Tue,  1 Feb 2022 15:36:48 -0500 (EST)
+Date:   Tue, 1 Feb 2022 15:36:48 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@aculab.com>,
+        carlos <carlos@redhat.com>
+Message-ID: <1606681746.25743.1643747808563.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAFTs51XUwhPJ9BzygJPD0pWFEEwu6hSnO7r=-i8B8R6x0oK6CA@mail.gmail.com>
+References: <20220201143425.19907-1-mathieu.desnoyers@efficios.com> <CAFTs51XUwhPJ9BzygJPD0pWFEEwu6hSnO7r=-i8B8R6x0oK6CA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] rseq: extend struct rseq with numa node id
 MIME-Version: 1.0
-References: <20220118075033.925388-1-chi.minghao@zte.com.cn> <91565226-5134-45FC-A68F-0E98854227AC@holtmann.org>
-In-Reply-To: <91565226-5134-45FC-A68F-0E98854227AC@holtmann.org>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 1 Feb 2022 12:36:43 -0800
-Message-ID: <CABBYNZJh4yx+VAhU+KpeTid+4Reojp2OfDRQYjKXsoPmnKeZLg@mail.gmail.com>
-Subject: Re: [PATCH] net/bluetooth: remove unneeded err variable
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     cgel.zte@gmail.com, Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: rseq: extend struct rseq with numa node id
+Thread-Index: qnHsMEmyHzPgx8IXv5sGUbO6RLx+vg==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+----- On Feb 1, 2022, at 2:28 PM, Peter Oskolkov posk@posk.io wrote:
 
-On Wed, Jan 19, 2022 at 11:34 AM Marcel Holtmann <marcel@holtmann.org> wrote:
->
-> Hi Minghao,
->
-> > Return value from mgmt_cmd_complete() directly instead
-> > of taking this in another redundant variable.
->
-> the Bluetooth subsystem uses Bluetooth: as subject prefix.
->
-> > Reported-by: Zeal Robot <zealci@zte.com.cn>
-> > Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> > Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> > ---
-> > net/bluetooth/mgmt.c | 5 +----
-> > 1 file changed, 1 insertion(+), 4 deletions(-)
-> >
-> > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-> > index 37087cf7dc5a..d0804648da32 100644
-> > --- a/net/bluetooth/mgmt.c
-> > +++ b/net/bluetooth/mgmt.c
-> > @@ -8601,7 +8601,6 @@ static int get_adv_size_info(struct sock *sk, struct hci_dev *hdev,
-> >       struct mgmt_cp_get_adv_size_info *cp = data;
-> >       struct mgmt_rp_get_adv_size_info rp;
-> >       u32 flags, supported_flags;
-> > -     int err;
-> >
-> >       bt_dev_dbg(hdev, "sock %p", sk);
-> >
-> > @@ -8628,10 +8627,8 @@ static int get_adv_size_info(struct sock *sk, struct hci_dev *hdev,
-> >       rp.max_adv_data_len = tlv_data_max_len(hdev, flags, true);
-> >       rp.max_scan_rsp_len = tlv_data_max_len(hdev, flags, false);
-> >
-> > -     err = mgmt_cmd_complete(sk, hdev->id, MGMT_OP_GET_ADV_SIZE_INFO,
-> > +     return mgmt_cmd_complete(sk, hdev->id, MGMT_OP_GET_ADV_SIZE_INFO,
-> >                               MGMT_STATUS_SUCCESS, &rp, sizeof(rp));
-> > -
-> > -     return err;
-> > }
->
-> You also have a coding style error here in your indentation.
->
-> Regards
->
-> Marcel
+Hi Peter,
 
-Applied, after fixing the coding style and commit message, thanks.
+[...]
+
+>>  TRACE_EVENT(rseq_ip_fixup,
+>> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+>> index 77ee207623a9..386c25b5bbdb 100644
+>> --- a/include/uapi/linux/rseq.h
+>> +++ b/include/uapi/linux/rseq.h
+>> @@ -130,6 +130,30 @@ struct rseq {
+>>          *     this thread.
+>>          */
+>>         __u32 flags;
+>> +
+>> +       __u32 padding1[3];
+> 
+> I don't fully understand why this padding is needed here. The comment
+> below sounds like there was something in "the original rseq API", but
+> was later removed, as this patch clearly adds padding after flags, but
+> even the first rseq patch had 'flags' as the last field in struct
+> rseq...
+
+The struct rseq has an explicit alignment attribute of 32 bytes, which means
+that even though we populate 20 bytes up to (including) the flags field, there is
+implicitly 12 bytes or padding at the end of that structure. The size of the rseq_len
+argument expected by the rseq system call since 4.18 is sizeof(struct rseq), which is
+32 bytes (including the implicit padding).
+
+So if we want to use the structure size as a way to indicate available features,
+we need to explicitly express the padding field (12 bytes), and start using offsetofend()
+on the following fields to allow per-field feature granularity without requiring
+additional padding in the future.
+
+If in the original rseq implementation we would have expected offsetofend() of the
+flags fields as rseq_len, then we would not need those silly 12 bytes of padding,
+but here we are.
+
+> 
+> Also have you considered adding an explicit 'version' field, or
+> something more sophisticated than 'len'? I remember about a year ago
+> you had an rfc patch(set) addressing rseq versioning, but I don't
+> think it got merged? You had some concerns about using 'len' then...
+
+It's vague in my memory, but I slightly recall aiming at using those 12-bytes of
+padding for new feature extensions, in which case a version field would have helped.
+But it appears we will very soon run out of space there and need to extend the
+structure size anyway, so trying to re-purpose those 12 bytes might not be worth
+the complexity.
+
+Considering the userspace ABI exposed by glibc 2.35 (__rseq_offset, __rseq_size,
+__rseq_flags), the "size" of the rseq structure becomes a really good fit for
+available feature description across the entire ecosystem consisting of the kernel,
+libc, and user applications. If we add a "version" field in there, then applications
+would have to check yet one more thing in addition to the __rseq_size, which I
+don't think is worthwhile.
+
+> 
+>> +
+>> +       /*
+>> +        * This is the end of the original rseq ABI.
+>> +        * This is a valid end of rseq ABI for the purpose of rseq registration
+>> +        * rseq_len.
+>> +        * The original rseq ABI use "sizeof(struct rseq)" on registration,
+>> +        * thus requiring the padding above.
+>> +        */
+>> +
+>> +       /*
+>> +        * Restartable sequences node_id field. Updated by the kernel. Read by
+>> +        * user-space with single-copy atomicity semantics. This field should
+>> +        * only be read by the thread which registered this data structure.
+>> +        * Aligned on 32-bit. Contains the current NUMA node ID.
+>> +        */
+>> +       __u32 node_id;
+>> +
+>> +       /*
+>> +        * This is a valid end of rseq ABI for the purpose of rseq registration
+>> +        * rseq_len. Use the offset immediately after the node_id field as
+>> +        * rseq_len.
+>> +        */
+>>  } __attribute__((aligned(4 * sizeof(__u64))));
+
+Thanks!
+
+Mathieu
 
 -- 
-Luiz Augusto von Dentz
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

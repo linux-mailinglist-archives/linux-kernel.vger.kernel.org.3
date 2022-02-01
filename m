@@ -2,158 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01FC4A6622
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0F44A6637
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242581AbiBAUjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:39:55 -0500
-Received: from mail-bn8nam12on2083.outbound.protection.outlook.com ([40.107.237.83]:20192
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240671AbiBAUiU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:38:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jfzwer21CtyyPWHr0E9u6lHBA2mkSTcgW+E4HPYOiPSGKkoKsKPktKcYjR1dpzeYSN2PTDATRz/iAVgVGAL0d4rcrfi2+p+8NTrEISSNDTmoSUWVhk4EbHXRM6aDI8tYEnhsRvZX6KQn8ZMTR54G7/S1/XD9f34VIX0ZUi2fREZC1ZpfZwmxsRt4AetoF62728kN7YMft+WmdCOwqGTfqIhbAoqf0wy0vaZ5MBiV2ehHeIA8NXWGm+XAzIZ/cBtlhAPFMfunlvLd5Xp3DWYQk3LDUOTrFF0DIFD+UmEVBC43731Krf8SJnLBxvlMG2HbNBQnHqKn7PTxLNjH5pYz4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OjwP/cNGeeIMZZxCIvXiwbVBBNOZDvVUB86/Qo1hkJM=;
- b=T7dei4raPV4/KFDShog1w4smUopeqaLwy18aKHNSGaZ8Fd+ijGBa06gYGux2Fdy5EcXzyHJFdSNycRkFoOn7MgV9VyP/a1RLYJ1GyRqJGNYJfO3tbK/EWxNA6fRBs6IHmpqp7+8AMxJyJNGPnbVAGun4HdYUU66yqTQyuocKl4pxwloKrJ+fF5GsAXmaLAbT7P7W016EhUbzrZpyzzWTss9MnDI0xP1anofz3HXObC2gnj5zdoTmNB4ZKngFaPA7955Fsfgn5aePh5YOif+SUZ+s5eAnDfmq3UTMlg8UDsFaWs5Lntxsam30T4VqLNDU5CGe2FSbJdwhge/SsH2Zkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OjwP/cNGeeIMZZxCIvXiwbVBBNOZDvVUB86/Qo1hkJM=;
- b=tW0101LNMFzU9ncwgxSxVVPZD4qhcg2B5CNr7HTqCHnsHHmqSIScLVxpfZYGvrsCSjTokeI0xjMd+NHPAfI8UiP1PaoTL7eWje6Sk9+uMQX6Hvy+5ziLSEZlTrSiglbOLQwdwFsYSjgIOR5yQIC0YoG2o4+3cv9yOOj+eskSOM1SnvHjQHHtsd/vVeY+A38gzoA9FNHwhUQF/fmJzXXbn2kmghz3FI20FD2IoEfCGkfWY1FTtLp2cQl+hU+FRemOVhhH9Xk0IS9TTgXJ5u/fZOaOJWxJhVdtZx5yfC5GkkhV0j7D9JgaOQUZGMfc43EZ11VYS6pPdi6qLMfokPY7Bg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by PH0PR12MB5403.namprd12.prod.outlook.com (2603:10b6:510:eb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Tue, 1 Feb
- 2022 20:38:18 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2d75:a464:eaed:5f99]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2d75:a464:eaed:5f99%6]) with mapi id 15.20.4951.012; Tue, 1 Feb 2022
- 20:38:18 +0000
-Message-ID: <f0f5db0e-dec9-7291-3a6f-645a8b3df90a@nvidia.com>
-Date:   Tue, 1 Feb 2022 12:38:15 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] Revert mm/gup: small refactoring: simplify
- try_grab_page()
-Content-Language: en-US
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Minchan Kim <minchan@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable <stable@vger.kernel.org>
-References: <20220201092927.242254-1-jhubbard@nvidia.com>
- <CABYd82biLQ7x1zD0MibXMrMHD9Y-cejitbNo=M2=tPNfUMTePA@mail.gmail.com>
- <CABYd82Y3rFUpCpoudxuYHL6YfuXM19hO1g1FWFCQpSZWMo9p8w@mail.gmail.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CABYd82Y3rFUpCpoudxuYHL6YfuXM19hO1g1FWFCQpSZWMo9p8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0282.namprd03.prod.outlook.com
- (2603:10b6:a03:39e::17) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        id S242394AbiBAUl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238860AbiBAUll (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:41:41 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C4C061397
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:39:41 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id t9so25798317lji.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CCHRlnNYeF95Z0E47QMIOcWFuVuKdPbhrfyvVDY/gqE=;
+        b=MXDhzlA/b4G0ig7K6rclUU3oFoycV4wfrA/3QQrZCzuP+ttoHw4Bxm4G81iw1INDFN
+         r7R2Kcga3uKko9XYj8F7TDykqLDIgMiSLy25AeE7UFgHfozMn8YLGuIaxYD0pCjDiQNb
+         hWYMvvj15zyQnU5NcJZipSrluZeUR82fdDnZ7f6TV3eRq1XG1vGwIec59TGu+zDsQ/0C
+         CgtsZC5Derge+uNFYv0nHex+jsnb3KLMo6BNaf16VRHehk68wbW1JL8pZ3DzVJWSf4xI
+         k5whar2GAfdItMDRQZfNjsClnweO6EXT7aAe2oZrHe2Suspg6kt+SogsQ825Ps6iSRWx
+         zEkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CCHRlnNYeF95Z0E47QMIOcWFuVuKdPbhrfyvVDY/gqE=;
+        b=hZz+Lb1RtbbmoSdgnZBA2h4ztG2YGOWWX7pTZWX0aWRuq8DTBvFE9k/1WTIFRJ2H8n
+         sWbMmJXL+oWs4p50WguNknu542BOSWxOowzG/ulOyfPpb2RWy+RNSgWJ2LXZcASBBIZc
+         gVGzdAGDxj6syqBNVxWGtUb0Iqjj/hQk6RB3cf85shl3yxmwOcGHIlVTw/7vcTv6FOhD
+         SXCUIcGJFfkvaylYvDee2Co0f44rbpJF/2WUIlZtHFhZJXJbTv3Ob/XreomS/EUOLnBt
+         UtBQWGgyhUwdYcOVxNr7haQSG4ftrl/iBDB2tVEm6XDQByQDWN3qJq3m7NioZFiGPvbo
+         fuuA==
+X-Gm-Message-State: AOAM531BVarYMp18I4xaaROuEKdhhTvz+OysHQ2BVSocxSIgO9yS5Vjh
+        q7TuZMFv/9j+8su20doXzH2DtCk1i3STDFJxznCcAA==
+X-Google-Smtp-Source: ABdhPJz3tdzw9oSrD2hKDXB+1mXZIyEnyffVNF8qPwJHccVAns3fQrSH2hPsPAIgwyf+fex4mAbmF0sJBtpDyR1gxY8=
+X-Received: by 2002:a2e:a4a9:: with SMTP id g9mr17830908ljm.369.1643747979115;
+ Tue, 01 Feb 2022 12:39:39 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 26994833-0b9d-4736-715d-08d9e5c2c733
-X-MS-TrafficTypeDiagnostic: PH0PR12MB5403:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR12MB5403452A9438F51DB999AECBA8269@PH0PR12MB5403.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Gnrhvt1ifRan6Vte8tSj9ozBRLj4j5TZbOs+CzJAirX9YbnMNn0yX3M5a0SkEejhzcfdRoGkdhmvcH8i2vx9/Di8eW9QZuPR6wIjZu6KzfQajDSl2bsR5iywPL1MhWROyi5TIdqqgwYOEbHtbYRryhQ0mB0DmPee7uPxHiOmk1GDc3n1F6xWoeqgwCtZ7XnFO/OwGCIBfmQ3/PK75oLz5qbFqLeDeGd65F8VMgbaezELFTWZC+cxWpJD5xxjNyLTNJD8lvcfRERro5sHwsYioF53tnKiNyTWfwDzhI1Rg166Oospf97nxzhw5jnQVYgzLtZTfAZeXULGQId/PfPcPj+NgkmPNI+B4WUY0rVeYc4P0XREAscQEW/nuwfBcTzCKttAzkQgMaei3qikP7HtgEpm4uiX4FZHEftI64ylYic56uD1F5fkWA7SXlJaJIj5VVXQUdlHayYMu7A8PRSoyQUi6JkdavbrL1vvqmPTT45x9SWHe5cvewGJiz7bPqsBtKtDQULbrl61HpS3qzfN0jfxsW61rhU/w5cHE+W7zLvSm+c9t0z8nQ4Dsp05f5IKzN3AAYwdd08KOXpPIE2E+rDOZuY+DS5H+o1CFE8fqxWnHNGl3G7IWjXsQg83CnLOLQRAF283FlpDa9hRnS5C/j8oGN7WA9giYBGumC5+tYYPvGa6lCQqowfnv3vhgP4ahDh/MKhtr+AWtnEIs5uiCBPPYbvA+IiMBb5B+D3EkT3vUblEDNi5O9dVVEhctWf8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31686004)(36756003)(31696002)(83380400001)(54906003)(86362001)(6916009)(6486002)(508600001)(316002)(8936002)(8676002)(4326008)(6506007)(4744005)(66946007)(66556008)(66476007)(38100700002)(186003)(2906002)(2616005)(6666004)(53546011)(6512007)(26005)(7416002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NUVBWTR0QXRIVkROVndMeEUwbCtaN0xWRHBQbXc5aVRBZE82NXUvWXhNZGVK?=
- =?utf-8?B?VUJoUEpmZ0hBYi9UeXpXUXBpWlBFdG5yMTNFeXFBbHFTNHdkQjQ0R21ST0o2?=
- =?utf-8?B?UlZDc25zK0xjYzJsRUlraXJGemFiMmNjWVZ6SlJGVld3SmNuY2ZNTkFrMVVJ?=
- =?utf-8?B?NXRTWUJOZk9lMmlEN2tzTytFczRrdDBQK3gyUkNQQW5IK1hIWHlHUUtZdXl1?=
- =?utf-8?B?b3R6N3kwODR4SmxEeHo4SFhFaWJPZ3oxV0ZKNzlaOUhQM3dLZzM2SGl6eDBK?=
- =?utf-8?B?b1RORWR3S0ZjWXp2YVZGakV5VTVRMm5OSzVpd3lnTXhKWmRDdWt2ZVNpdVhq?=
- =?utf-8?B?L0VRS2g0N3d2b1BlUEV1SVoybWRHalUrNGhLdGVLWEtnN3ZMZHJXU05sQ1RW?=
- =?utf-8?B?MGdsclJHUENBaVd4dDBMZWQzemVHRUtHVGc4dEQyc3UvWExycjU2REhidUY4?=
- =?utf-8?B?TnBiZ1JEdE1XOGJTVUFKM0NZTnVCeWE3UWdQdnJNMmdLRU1peDJVc3Fya2pY?=
- =?utf-8?B?Sm9iSTA1SnMzKytLL0I5WEJZNUlLMFlhQkhSODE2aU9KQW5ISE9LUUl2cEl4?=
- =?utf-8?B?eDg0WkV0SjdKM0hwZjBlaENvSEloeFBHdnI2dkJleUJLeTJLUG5CSmpncEl5?=
- =?utf-8?B?eWJsK0hsT1pZYjFtcEFYVENYUUZOSkFqNldsbWFHT0VHZENKVWZGc3NYdVVp?=
- =?utf-8?B?cFVlTVNCVHYwdlpDRDlLWFY5L2llSlZES2N5ckZDYWNkQXZCL1RCVEhuOUt5?=
- =?utf-8?B?RXpyNm1UcXZ1R1dkc01KdFFFaUlMZWtWUkFXQU8vekE0MC9jVVNDN2JuYkta?=
- =?utf-8?B?UTBYbjhUS0JDQW1BWnhDcS9uMnovL3dBT1Y3L0xLdUtxRGVMNWFzbmYzVC9T?=
- =?utf-8?B?R0ZyOEY2dnBjTUFmOWlLbHJoZXRDOEFjekFxN21oVmF5Q0h4bGVqVTUzWGlM?=
- =?utf-8?B?NUFmS25RMkJDbCtaRlpWTEx0aCtrWGlJNVAyeFVoeDVSSEJUZG83ZXBWYzFz?=
- =?utf-8?B?dzhJNW5yT2xOUFhDU0xuV2xkVDdHS29pN3lmOHZSQkp6aFRGVFEvaUx3dzA1?=
- =?utf-8?B?MUpxcFQwc3hWY0pTUDg2U3BKZEZPNWZCeXpGMm1vM0JPZ1o4Ry9ZWm84cEZp?=
- =?utf-8?B?eENHbVlaSDZXU0k5ZE5RQU8yTkJYVmdVcGtoRTh6N3N6dVB1TEg4Zk1Qa2Zt?=
- =?utf-8?B?OHk2ekxKcG8xK2R0UXpDMHdMam5lWktQQ0l5RlhNNlpXS1VTaHBoaUVOSkJ1?=
- =?utf-8?B?VUoxK1Z2d1ZhdTJSSWxKdzdESS9JZnZYYnZvZWJPRDNFMGhpMlRRNWhkTnJM?=
- =?utf-8?B?NUV5TS9FeVdJMGJTVVpocTZSRi9LQ242YnpWZGpKK3RqUEswdUdObGlHWHVD?=
- =?utf-8?B?NTNtMmt0akdoT2ZvMlVSZmVnZlhCaVVGOTVVRXg2ejJrWVR1c3V1bE96cVZq?=
- =?utf-8?B?YkpxVUJYY05FcmxnVEw3T00rKyt5TWxXL2RORHdwcTJQVVlpQ2M5MmQ2d3Jw?=
- =?utf-8?B?cUNNcERBdkJrRDU1bzh1aU1aSG5EU1U4d0dzQzFZYThtcW1YcTFURFA0UTFI?=
- =?utf-8?B?d0JPUlVKdG9wZ2JnZm5ZZkY2bVU5Z1VVRitHTVZORzRwN2o3T0NYOHFtN2NO?=
- =?utf-8?B?Y1Y5OTZnZ1ZWVTFWV0xWSy9FRFMyRlZSSEJZVEZLQ1Bielo1U2NlQ2IxTS9Q?=
- =?utf-8?B?K0czMDJleHNDcmR2MTZsWnJTU0RHOXFUVkVjemo4TktHNG9MZG5tbjBGR0h4?=
- =?utf-8?B?dy9tQkpFZG9TNzJENk5yNlZkc2FZeHFpVGJxTjZuZmlXSUlkWGd5OENVbFkz?=
- =?utf-8?B?M1p0SU9LS0VuUEpSOFIzQUZWaVQyRjlYcEllbjhlVFVzaklvT2xBb1IxdHI2?=
- =?utf-8?B?UEpsQ2gyU1VFaUVCMi80aVZtRm9BRjVjSU81TnNQekR1QXE5NGNNVnBOSWJj?=
- =?utf-8?B?RkVzUXRKY0RwZjlIUXYyYnBLVm12QVJNRnA4QUg0a21WVjdscVpFdjRZRWd2?=
- =?utf-8?B?eTJQTE00cmJ0Z1l4MTRYZmdVWXMvVVI2K3lGdDZteEVOQmc3MzRWUitUb2kr?=
- =?utf-8?B?SXZlejJDZGkya0dWMFExSUlEVHg5WmcvNW1jUURDVndYTkpvQnZMNkF4dXlk?=
- =?utf-8?B?VUlvWGZudWtRc0dpaGtRUjJvcDZnMDc5THBSWnoyZzBNSWZpMFUxbnRPK1NN?=
- =?utf-8?Q?GRr4ddLODxqrQbKpTeIMZBI=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26994833-0b9d-4736-715d-08d9e5c2c733
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 20:38:18.0588
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: k+Mp44XUHk6Aq9YxY4Xy/HUuty9rE7zwMVPdV0a6u86fSRCbLydJDXB9YffVL/CjlER6M9W1CRULENg6ldCrDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5403
+References: <20220128171804.569796-1-brijesh.singh@amd.com> <20220128171804.569796-43-brijesh.singh@amd.com>
+In-Reply-To: <20220128171804.569796-43-brijesh.singh@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 1 Feb 2022 13:39:27 -0700
+Message-ID: <CAMkAt6p-kEJXJxHcqay+eoMnTDCGj7tZXVDYwrovB3VkXCbYRg@mail.gmail.com>
+Subject: Re: [PATCH v9 42/43] virt: sevguest: Add support to derive key
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 10:32, Will McVicker wrote:
-...
->> Thanks John! I verified this works on the Pixel 6 with the 5.15 kernel
->> for my camera use-case. Free free to include:
->>
->> Tested-by: Will McVicker <willmcvicker@google.com>
->>
->> Thanks,
->> Will
-> 
-> And just so we don't miss this, I'd also like to request this be
-> pulled into the 5.15 stable branch please.
-> 
-> Cc: stable@vger.kernel.org # 5.15
-> 
-> Thanks,
-> Will
-> 
+On Fri, Jan 28, 2022 at 10:19 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
+>
+> The SNP_GET_DERIVED_KEY ioctl interface can be used by the SNP guest to
+> ask the firmware to provide a key derived from a root key. The derived
+> key may be used by the guest for any purposes it chooses, such as a
+> sealing key or communicating with the external entities.
+>
+> See SEV-SNP firmware spec for more information.
+>
+> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 
-Yes. Let's see if any feedback shows up about the approach, otherwise
-I'll post a v2 in a day or so, that adds your tested-by, as well as the
-Cc: stable.
+Reviewed-by: Peter Gonda <pgonda@google.com>
 
+> ---
+>  Documentation/virt/coco/sevguest.rst  | 17 ++++++++++
+>  drivers/virt/coco/sevguest/sevguest.c | 45 +++++++++++++++++++++++++++
+>  include/uapi/linux/sev-guest.h        | 17 ++++++++++
+>  3 files changed, 79 insertions(+)
+>
+> diff --git a/Documentation/virt/coco/sevguest.rst b/Documentation/virt/coco/sevguest.rst
+> index 47ef3b0821d5..aafc9bce9aef 100644
+> --- a/Documentation/virt/coco/sevguest.rst
+> +++ b/Documentation/virt/coco/sevguest.rst
+> @@ -72,6 +72,23 @@ On success, the snp_report_resp.data will contains the report. The report
+>  contain the format described in the SEV-SNP specification. See the SEV-SNP
+>  specification for further details.
+>
+> +2.2 SNP_GET_DERIVED_KEY
+> +-----------------------
+> +:Technology: sev-snp
+> +:Type: guest ioctl
+> +:Parameters (in): struct snp_derived_key_req
+> +:Returns (out): struct snp_derived_key_resp on success, -negative on error
+> +
+> +The SNP_GET_DERIVED_KEY ioctl can be used to get a key derive from a root key.
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+derived from ...
+
+> +The derived key can be used by the guest for any purpose, such as sealing keys
+> +or communicating with external entities.
+
+Question: How would this be used to communicate with external
+entities? Reading Section 7.2 it seems like we could pick the VCEK and
+have no guest specific inputs and we'd get the same derived key as we
+would on another guest on the same platform with, is that correct?
+
+> +
+> +The ioctl uses the SNP_GUEST_REQUEST (MSG_KEY_REQ) command provided by the
+> +SEV-SNP firmware to derive the key. See SEV-SNP specification for further details
+> +on the various fields passed in the key derivation request.
+> +
+> +On success, the snp_derived_key_resp.data contains the derived key value. See
+> +the SEV-SNP specification for further details.
+>
+>  Reference
+>  ---------
+> diff --git a/drivers/virt/coco/sevguest/sevguest.c b/drivers/virt/coco/sevguest/sevguest.c
+> index 6dc0785ddd4b..4369e55df9a6 100644
+> --- a/drivers/virt/coco/sevguest/sevguest.c
+> +++ b/drivers/virt/coco/sevguest/sevguest.c
+> @@ -392,6 +392,48 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
+>         return rc;
+>  }
+>
+> +static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
+> +{
+> +       struct snp_guest_crypto *crypto = snp_dev->crypto;
+> +       struct snp_derived_key_resp resp = {0};
+> +       struct snp_derived_key_req req = {0};
+> +       int rc, resp_len;
+> +       u8 buf[64+16]; /* Response data is 64 bytes and max authsize for GCM is 16 bytes */
+> +
+> +       if (!arg->req_data || !arg->resp_data)
+> +               return -EINVAL;
+> +
+> +       /* Copy the request payload from userspace */
+> +       if (copy_from_user(&req, (void __user *)arg->req_data, sizeof(req)))
+> +               return -EFAULT;
+> +
+> +       /*
+> +        * The intermediate response buffer is used while decrypting the
+> +        * response payload. Make sure that it has enough space to cover the
+> +        * authtag.
+> +        */
+> +       resp_len = sizeof(resp.data) + crypto->a_len;
+> +       if (sizeof(buf) < resp_len)
+> +               return -ENOMEM;
+> +
+> +       /* Issue the command to get the attestation report */
+> +       rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
+> +                                 SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
+> +                                 &arg->fw_err);
+> +       if (rc)
+> +               goto e_free;
+> +
+> +       /* Copy the response payload to userspace */
+> +       memcpy(resp.data, buf, sizeof(resp.data));
+> +       if (copy_to_user((void __user *)arg->resp_data, &resp, sizeof(resp)))
+> +               rc = -EFAULT;
+> +
+> +e_free:
+> +       memzero_explicit(buf, sizeof(buf));
+> +       memzero_explicit(&resp, sizeof(resp));
+> +       return rc;
+> +}
+> +
+>  static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long arg)
+>  {
+>         struct snp_guest_dev *snp_dev = to_snp_dev(file);
+> @@ -421,6 +463,9 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
+>         case SNP_GET_REPORT:
+>                 ret = get_report(snp_dev, &input);
+>                 break;
+> +       case SNP_GET_DERIVED_KEY:
+> +               ret = get_derived_key(snp_dev, &input);
+> +               break;
+>         default:
+>                 break;
+>         }
+> diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
+> index 081d314a6279..bcd00a6d4501 100644
+> --- a/include/uapi/linux/sev-guest.h
+> +++ b/include/uapi/linux/sev-guest.h
+> @@ -30,6 +30,20 @@ struct snp_report_resp {
+>         __u8 data[4000];
+>  };
+>
+> +struct snp_derived_key_req {
+> +       __u32 root_key_select;
+> +       __u32 rsvd;
+> +       __u64 guest_field_select;
+> +       __u32 vmpl;
+> +       __u32 guest_svn;
+> +       __u64 tcb_version;
+> +};
+> +
+> +struct snp_derived_key_resp {
+> +       /* response data, see SEV-SNP spec for the format */
+> +       __u8 data[64];
+> +};
+> +
+>  struct snp_guest_request_ioctl {
+>         /* message version number (must be non-zero) */
+>         __u8 msg_version;
+> @@ -47,4 +61,7 @@ struct snp_guest_request_ioctl {
+>  /* Get SNP attestation report */
+>  #define SNP_GET_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x0, struct snp_guest_request_ioctl)
+>
+> +/* Get a derived key from the root */
+> +#define SNP_GET_DERIVED_KEY _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x1, struct snp_guest_request_ioctl)
+> +
+>  #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
+> --
+> 2.25.1
+>

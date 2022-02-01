@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C7F4A5DDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CB54A5DE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbiBAODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:03:47 -0500
-Received: from mga06.intel.com ([134.134.136.31]:17214 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237314AbiBAODp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:03:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643724225; x=1675260225;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4cD8Nnk/cAjxUMAyT4wL7Ctq8gRWHUD/fFe2hLfCcRo=;
-  b=i96t03R/IL1EH6NCn1Y7bVfQLQKNs4EY3/nUUCawULiR/y63T0KTJBEv
-   Jm++tIATGmms8AwIZkBBaDbTvfb12hBC13sOty60vLXkwWupmN9ndZuBe
-   HXC/fTqlOqSqlNgm9VlFfWNF92qwcaqUEj47pktW3pGId9Os+/kmsSPUG
-   Zqj04FNssXNTrrzubOKYhvmqAf/+3F5xQtJB+o2ibKZJ7KoHXjpqCTbIc
-   ST6gveDM/DmMQVwqv6IwHeQbIHCsjRWqxPq9PHNyFV2AswEcOOtlZjqHo
-   Yp5ELzrIyQ5gxclwfzl+I+IKrwHVgIEEduR9hELikB927zxaTk6EwmN8k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308426417"
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="308426417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 06:03:44 -0800
-X-IronPort-AV: E=Sophos;i="5.88,334,1635231600"; 
-   d="scan'208";a="626738935"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 06:03:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nEtjz-00HKFy-02;
-        Tue, 01 Feb 2022 16:02:39 +0200
-Date:   Tue, 1 Feb 2022 16:02:38 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
-        linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Message-ID: <Yfk9fuazUSgI6C9n@smile.fi.intel.com>
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <YfhVBtv1UIA7bJja@ravnborg.org>
- <3aac291a-b30e-2775-336f-66dd08d634e2@redhat.com>
- <YfkA4ER/52I2v1JP@smile.fi.intel.com>
- <9ddd8a8c-4aa9-bc4a-5637-66197a7342d1@redhat.com>
+        id S239047AbiBAOEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239021AbiBAOER (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 09:04:17 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE52C06173D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 06:04:16 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id q204so21271524iod.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:04:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AzLZKV9Ds06mRDyzKwbvSXYdln8SESWlfflardvbdLo=;
+        b=r0Ib1qzf8MAoYX939A2mETg17xgzERVvSWeacR4lftRZTuaoZTgO2Y5hBM4suOab5L
+         HREt+sclADHW4WP9AJmWT6To1BkAPgLmuGEqa37lujM65346jFh46umEiVBEzX//CvG3
+         5OTFYMT4f+mJdYwlfYsXcD1Z5mGAQyZO5ldWKHB7BpxsFHuAWj/K4MTmQB3qZcFNN+tQ
+         vpAeMF8Zf7A6y2KHVHcLxXkMJlqI83RXqb3fOHh0+suwjDCZkUznrA1jpHp9VPc8GKW3
+         fR0y1jenRTAI8jfu+A3vqDKzUAhGmYW24DhXeJ4lU4iIn+ViM/4gbG7XcO4ZsmIyW/Ev
+         oXGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AzLZKV9Ds06mRDyzKwbvSXYdln8SESWlfflardvbdLo=;
+        b=pcQOKnf+Tk/vkvHlTWua2lgo5LYyQ+/ss6FqMQKrZ1QA5yUBxgt4PhmdeWKvQ87mH8
+         rMDoFbC9UUrltrkEK9tg+W578Bi/0znny9t3iK1jIgSC+TNDH3cY6HoEdTBuw8TEDrgg
+         +wbHbUdvTdoBFkDP7IDM/eI5ntYbb1tntQnOrALXztreWatWk+AkPrRl4bmf8eVdKGDK
+         VqJlZoAqHhaIWSZ6D23kOe13sPP+Ks/zNypf2Jnw+z+8vsfp3dVB1iZUAUwcCqzFzAbn
+         BIqu3peZivEiKqU2pdiDcl8puz4otRnyHHjn8f9KUlux1Zu8kuxns9wRo/RrZduIt4bv
+         T06A==
+X-Gm-Message-State: AOAM532ZrACmiyv2rw9MDLX0ndw0LwGbYyy3dnPgqpZs3uYkD3bs4+2d
+        +5pw7XltRXrTg6KYkFVLoGSMfw==
+X-Google-Smtp-Source: ABdhPJxJME5UGFSD89Qi+f+0oVbNYJBXd3IMSnnfV5LimCSknIFC89IGx0ia6974LGMc4mWws0lQ3w==
+X-Received: by 2002:a5d:9d9f:: with SMTP id ay31mr13828580iob.140.1643724256231;
+        Tue, 01 Feb 2022 06:04:16 -0800 (PST)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id o7sm189267ilo.17.2022.02.01.06.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 06:04:15 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     robh+dt@kernel.org, davem@davemloft.net, kuba@kernel.org
+Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
+        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net 0/2] net: ipa: enable register retention
+Date:   Tue,  1 Feb 2022 08:04:10 -0600
+Message-Id: <20220201140412.467233-1-elder@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ddd8a8c-4aa9-bc4a-5637-66197a7342d1@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 12:45:53PM +0100, Javier Martinez Canillas wrote:
-> On 2/1/22 10:44, Andy Shevchenko wrote:
-> > On Tue, Feb 01, 2022 at 01:14:22AM +0100, Javier Martinez Canillas wrote:
+With runtime power management in place, we sometimes need to issue
+a command to enable retention of IPA register values before power
+collapse.  This requires a new Device Tree property, whose presence
+will also be used to signal that the command is required.
 
-...
+					-Alex
 
-> > The problem with no backward compatibility means that removal of old driver
-> > makes users unhappy since DT is kinda ABI and we do not break it.
-> > 
-> 
-> I think that's the crux of the issue. Do we want people to update their
-> kernel but using their existing Device Tree and be able to switch to the
-> DRM driver ?
-> 
-> My take is that we should and that's why I kept the backward compatibility.
-> 
-> Maybe we could do that in the meantime and at some point introduce new DT
-> bindings (with a different compatible string) that would use the latest
-> and greatest conventions in DT ? That seems to be a good compromise.
+Alex Elder (2):
+  dt-bindings: net: qcom,ipa: add optional qcom,qmp property
+  net: ipa: request IPA register values be retained
 
-I have over-read in this discussion that current binding is not fully
-correct from hw perspective. If it's indeed the case (and I believe it's),
-then probably we should come with brand new driver with ssd130x name and
-incompatible bindingas (*).
-
-Otherwise in this driver we continue to be incorrect in them.
-
-*) But even though I think it would be good if you take the old one under your
-   maintainership.
+ .../devicetree/bindings/net/qcom,ipa.yaml     |  6 +++
+ drivers/net/ipa/ipa_power.c                   | 52 +++++++++++++++++++
+ drivers/net/ipa/ipa_power.h                   |  7 +++
+ drivers/net/ipa/ipa_uc.c                      |  5 ++
+ 4 files changed, 70 insertions(+)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.32.0
 

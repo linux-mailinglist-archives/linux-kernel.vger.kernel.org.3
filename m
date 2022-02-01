@@ -2,83 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3741B4A6887
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D154A688A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 00:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242883AbiBAX3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 18:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiBAX3h (ORCPT
+        id S242892AbiBAXcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 18:32:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47439 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230022AbiBAXb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 18:29:37 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31002C061714;
-        Tue,  1 Feb 2022 15:29:37 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id BBE886110;
-        Tue,  1 Feb 2022 23:29:36 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BBE886110
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1643758176; bh=KnpV4g9gN0KTh6HOrvOccnplvDHyNUQe8yueWZH6+8c=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=i5gCpFY+oFCr8JAwXxHVvgh0aj6T/z4zb4L/hZ4fGASQOxIut1A6ShPiGUH6COHx9
-         iW5c+XUiHdizAatlziIZqgC0e0fq5/ySqdLUSIgJp08C9ha81gDBd3tLP7EtknUPh4
-         6kIyqlQwtKqVmcm0FMCUW/6krCJkZjtG1P7k2r/qfKul+z2mqmAO6Q0As434mqpxpO
-         Q79I1p2KfcQwfH66W2TfK0SxDijyHlhBsuHlRfBDUxT7giiGZErd9CEB8QR2UbQa1G
-         CxhZuQRnjf5AJ1eWasARkdqMAndFPVcBJrr4ebDKuCh2bGYP0TSy+sciGi8S0CrTLR
-         wMACK4YFXkkfg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Tang Yizhou <tangyizhou@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        zhengbin13@huawei.com, tangyeechou@gmail.com,
-        Tang Yizhou <tangyizhou@huawei.com>
-Subject: Re: [PATCH] docs: scheduler: Fix outdated parameter of
- rebalance_domains
-In-Reply-To: <20211221031818.23186-1-tangyizhou@huawei.com>
-References: <20211221031818.23186-1-tangyizhou@huawei.com>
-Date:   Tue, 01 Feb 2022 16:30:09 -0700
-Message-ID: <8735l25fni.fsf@meer.lwn.net>
+        Tue, 1 Feb 2022 18:31:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643758318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4nXqGkSOBhfpqUihr9Nmqi8YqjX2zF+f6WealGvq4g=;
+        b=JAB9k6h2yNaUG6mNSg8WVuza6O7b5cjRk5X/U7I85BoHbBPqR7re1FrJKBRCxTnj5XFXjj
+        ZN8cAWOO07n3NaICth7VJ0GSDn9bxq1ik6BHHHSV3wLGfyG0axYFS0H+cu6fcVKX/Ozz5A
+        4q0q2RTekqimf/gCgw0yanYr/xHolZk=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-y1tRH6WGM7aB87PxJw_YFg-1; Tue, 01 Feb 2022 18:31:57 -0500
+X-MC-Unique: y1tRH6WGM7aB87PxJw_YFg-1
+Received: by mail-oi1-f199.google.com with SMTP id a9-20020a056808128900b002cf97f0658dso7852309oiw.13
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 15:31:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=q4nXqGkSOBhfpqUihr9Nmqi8YqjX2zF+f6WealGvq4g=;
+        b=vap+1Fe2zGuzw+sAd1Zj4n54dkdx+hR2ZE+fMwtpWL0pVjlGibm35/LBaRZmlGMPKG
+         5b3PWRtmkxGDQBipPPhX3SbhO10k3BHEHAKR8V1Ayh92QTHLJGTzD6icpsEgeViXgzBP
+         qHjQUCBXmlUWjVSJD9t2vrpksl/Wqm03QtMVtVRNHz5H1ZP1sSx03ILz+9xEHSd2037w
+         pLOJ17J7SkwBSESA9+pexMqnXxM48UHtbCEd5Wjl0I8rYCxLYNsFZeq5q0IyPo+3yq8b
+         mFzxqP5j8ML7wyiwzxtY/N7KmcmDtoh6a8JRm7qyD2l/t+A9l0JPOuRTN5899uYYd+se
+         8/ug==
+X-Gm-Message-State: AOAM531I1qTd7WylpD5jUl5yME1CRYaIS8zXxn0zVLEEKCJ5Jns0zgdw
+        h7kJxLYQvguWqMkX2oe0nRkCg0uccSjdmRSI8TdjIGJn1XvYSMoZXq+WycEere9V1xc4Mx6SLW8
+        yB8ktNj75kCQkmVR3oyCY0CFU
+X-Received: by 2002:a05:6830:4081:: with SMTP id x1mr15380068ott.272.1643758316825;
+        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz7xbNBp424qduMgZNlEc7ffNGRkTuF/WEghc+E6iYgQoKm1sGpOUPXXnci61cs8iln5CdbTQ==
+X-Received: by 2002:a05:6830:4081:: with SMTP id x1mr15380056ott.272.1643758316507;
+        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id l1sm13638894otd.18.2022.02.01.15.31.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 15:31:56 -0800 (PST)
+Date:   Tue, 1 Feb 2022 16:31:54 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vfio/pci: fix memory leak during D3hot to D0
+ transition
+Message-ID: <20220201163155.0529edc1.alex.williamson@redhat.com>
+In-Reply-To: <948e7798-7337-d093-6296-cedd09c733f5@nvidia.com>
+References: <20220131112450.3550-1-abhsahu@nvidia.com>
+        <20220131131151.4f113557.alex.williamson@redhat.com>
+        <948e7798-7337-d093-6296-cedd09c733f5@nvidia.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tang Yizhou <tangyizhou@huawei.com> writes:
+On Tue, 1 Feb 2022 17:06:43 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-> According to the function prototype of rebalance_domains(), its first
-> parameter is *rq* and the document need to be updated.
->
-> Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
-> ---
->  Documentation/scheduler/sched-domains.rst | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/scheduler/sched-domains.rst b/Documentation/scheduler/sched-domains.rst
-> index 84dcdcd2911c..e57ad28301bd 100644
-> --- a/Documentation/scheduler/sched-domains.rst
-> +++ b/Documentation/scheduler/sched-domains.rst
-> @@ -37,10 +37,10 @@ rebalancing event for the current runqueue has arrived. The actual load
->  balancing workhorse, run_rebalance_domains()->rebalance_domains(), is then run
->  in softirq context (SCHED_SOFTIRQ).
+> On 2/1/2022 1:41 AM, Alex Williamson wrote:
+> > On Mon, 31 Jan 2022 16:54:50 +0530
+> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> >   
+> >> If needs_pm_restore is set (PCI device does not have support for no
+> >> soft reset), then the current PCI state will be saved during D0->D3hot
+> >> transition and same will be restored back during D3hot->D0 transition.
+> >> For saving the PCI state locally, pci_store_saved_state() is being
+> >> used and the pci_load_and_free_saved_state() will free the allocated
+> >> memory.
+> >>
+> >> But for reset related IOCTLs, vfio driver calls PCI reset related
+> >> API's which will internally change the PCI power state back to D0. So,
+> >> when the guest resumes, then it will get the current state as D0 and it
+> >> will skip the call to vfio_pci_set_power_state() for changing the
+> >> power state to D0 explicitly. In this case, the memory pointed by
+> >> pm_save will never be freed. In a malicious sequence, the state changing
+> >> to D3hot followed by VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be
+> >> run in a loop and it can cause an OOM situation.
+> >>
+> >> Also, pci_pm_reset() returns -EINVAL if we try to reset a device that
+> >> isn't currently in D0. Therefore any path where we're triggering a
+> >> function reset that could use a PM reset and we don't know if the device
+> >> is in D0, should wake up the device before we try that reset.
+> >>
+> >> This patch changes the device power state to D0 by invoking
+> >> vfio_pci_set_power_state() before calling reset related API's.
+> >> It will help in fixing the mentioned memory leak and making sure
+> >> that the device is in D0 during reset. Also, to prevent any similar
+> >> memory leak for future development, this patch frees memory first
+> >> before overwriting 'pm_save'.
+> >>
+> >> Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
+> >> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> >> ---
+> >>
+> >> * Changes in v2
+> >>
+> >> - Add the Fixes tag and sent this patch independently.
+> >> - Invoke vfio_pci_set_power_state() before invoking reset related API's.
+> >> - Removed saving of power state locally.
+> >> - Removed warning before 'kfree(vdev->pm_save)'.
+> >> - Updated comments and commit message according to updated changes.
+> >>
+> >> * v1 of this patch was sent in
+> >> https://lore.kernel.org/lkml/20220124181726.19174-4-abhsahu@nvidia.com/
+> >>
+> >>  drivers/vfio/pci/vfio_pci_core.c | 27 +++++++++++++++++++++++++++
+> >>  1 file changed, 27 insertions(+)
+> >>
+> >> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> >> index f948e6cd2993..d6dd4f7c4b2c 100644
+> >> --- a/drivers/vfio/pci/vfio_pci_core.c
+> >> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> >> @@ -228,6 +228,13 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
+> >>       if (!ret) {
+> >>               /* D3 might be unsupported via quirk, skip unless in D3 */
+> >>               if (needs_save && pdev->current_state >= PCI_D3hot) {
+> >> +                     /*
+> >> +                      * If somehow, the vfio driver was not able to free the
+> >> +                      * memory allocated in pm_save, then free the earlier
+> >> +                      * memory first before overwriting pm_save to prevent
+> >> +                      * memory leak.
+> >> +                      */
+> >> +                     kfree(vdev->pm_save);
+> >>                       vdev->pm_save = pci_store_saved_state(pdev);
+> >>               } else if (needs_restore) {
+> >>                       pci_load_and_free_saved_state(pdev, &vdev->pm_save);
+> >> @@ -322,6 +329,12 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
+> >>       /* For needs_reset */
+> >>       lockdep_assert_held(&vdev->vdev.dev_set->lock);
+> >>
+> >> +     /*
+> >> +      * This function can be invoked while the power state is non-D0,
+> >> +      * Change the device power state to D0 first.  
+> > 
+> > I think we need to describe more why we're doing this than what we're
+> > doing.  We need to make sure the device is in D0 in case we have a
+> > reset method that depends on that directly, ex. pci_pm_reset(), or
+> > possibly device specific resets that may access device BAR resources.
+> > I think it's placed here in the function so that the config space
+> > changes below aren't overwritten by restoring the saved state and maybe
+> > also because the set_irqs_ioctl() call might access device MMIO space.
+> >   
 >  
-> -The latter function takes two arguments: the current CPU and whether it was idle
-> -at the time the scheduler_tick() happened and iterates over all sched domains
-> -our CPU is on, starting from its base domain and going up the ->parent chain.
-> -While doing that, it checks to see if the current domain has exhausted its
-> +The latter function takes two arguments: the runqueue of current CPU and whether
-> +the CPU was idle at the time the scheduler_tick() happened and iterates over all
-> +sched domains our CPU is on, starting from its base domain and going up the ->parent
-> +chain. While doing that, it checks to see if the current domain has exhausted its
->  rebalance interval. If so, it runs load_balance() on that domain. It then checks
->  the parent sched_domain (if it exists), and the parent of the parent and so
->  forth.
+>  Thanks Alex.
+>  I will add more details here in the comment.
+> 
+> >> +      */
+> >> +     vfio_pci_set_power_state(vdev, PCI_D0);
+> >> +
+> >>       /* Stop the device from further DMA */
+> >>       pci_clear_master(pdev);
+> >>
+> >> @@ -921,6 +934,13 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
+> >>                       return -EINVAL;
+> >>
+> >>               vfio_pci_zap_and_down_write_memory_lock(vdev);
+> >> +
+> >> +             /*
+> >> +              * This function can be invoked while the power state is non-D0,
+> >> +              * Change the device power state to D0 before doing reset.
+> >> +              */  
+> > 
+> > See below, reconsidering this...
+> >   
+> >> +             vfio_pci_set_power_state(vdev, PCI_D0);
+> >> +
+> >>               ret = pci_try_reset_function(vdev->pdev);
+> >>               up_write(&vdev->memory_lock);
+> >>
+> >> @@ -2055,6 +2075,13 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
+> >>       }
+> >>       cur_mem = NULL;
+> >>
+> >> +     /*
+> >> +      * This function can be invoked while the power state is non-D0.
+> >> +      * Change power state of all devices to D0 before doing reset.
+> >> +      */  
+> > 
+> > Here I have trouble convincing myself exactly what we're doing.  As you
+> > note in patch 1/ of the RFC series, pci_reset_bus(), or more precisely
+> > pci_dev_save_and_disable(), wakes the device to D0 before reset, so we
+> > can't be doing this only to get the device into D0.  The function level
+> > resets do the same.
+> > 
+> > Actually, now I'm remembering and debugging where I got myself confused
+> > previously with pci_pm_reset().  The scenario was a Windows guest with
+> > an assigned Intel 82574L NIC.  When doing a shutdown from the guest the
+> > device is placed in D3hot and we enter vfio_pci_core_disable() in that
+> > state.  That function however uses __pci_reset_function_locked(), which
+> > skips the pci_dev_save_and_disable() since much of it is redundant for
+> > that call path (I think I generalized this to all flavors of
+> > pci_reset_function() in my head).  
+> 
+>  Thanks for providing the background related with the original issue.
+> 
+> > 
+> > The standard call to pci_try_reset_function(), as in the previous
+> > chunk, will make use of pci_dev_save_and_disable(), so for either of
+> > these latter cases the concern cannot be simply having the device in D0,
+> > we need a reason that we want the previously saved state restored on the
+> > device before the reset, and thus restored to the device after the
+> > reset as the rationale for the change.
+> >   
+> 
+>  I will add this as a comment.
+> 
+> >> +     list_for_each_entry(cur, &dev_set->device_list, vdev.dev_set_list)
+> >> +             vfio_pci_set_power_state(cur, PCI_D0);
+> >> +
+> >>       ret = pci_reset_bus(pdev);
+> >>
+> >>  err_undo:  
+> > 
+> > 
+> > We also call pci_reset_bus() in vfio_pci_dev_set_try_reset().  In that
+> > case, none of the other devices can be in use by the user, but they can
+> > certainly be in D3hot with previous device state saved off into our
+> > pm_save cache.  If we don't have a good reason to restore in that case,
+> > I'm wondering if we really have a good reason to restore in the above
+> > two cases.
+> > 
+> > Perhaps we just need the first chunk above to resolve the memory leak,  
+> 
+>  First chunk means only the changes done in vfio_pci_set_power_state()
+>  which is calling kfree() before calling pci_store_saved_state().
+>  Or I need to include more things in the first patch ?
 
-This seems to make sense.  Applied, thanks.
+Correct, first chunk as is the first change in the patch.  Patch chunks
+are delineated by the @@ offset lines.
 
-jon
+> 
+>  With the kfree(), the original memory leak issue should be solved.
+> 
+> > and the second chunk as a separate patch to resolve the issue with
+> > devices entering vfio_pci_core_disable() in non-D0 state.  Sorry if I  
+> 
+>  And this second patch will contain rest of the things where
+>  we will call vfio_pci_set_power_state() explicitly for moving to
+>  D0 state ?
+
+At least the first one in vfio_pci_core_disable(), the others need
+justification.
+
+>  Also, We need to explore if setting to D0 state is really required at
+>  all these places and If it is not required, then we don't need second
+>  patch ?
+
+We need a second patch, I'm convinced that we don't otherwise wake the
+device to D0 before we potentially get to pci_pm_reset() in
+vfio_pci_core_disable().  It's the remaining cases of setting D0 that
+I'm less clear on.  If it's the case that we need to restore config
+space any time a NoSoftRst- device is woken from D3hot and the state
+saved and restored around the reset is meaningless otherwise, that's a
+valid justification, but is it accurate?  If so, we should recheck the
+other case of calling pci_reset_bus() too.  Thanks,
+
+Alex
+

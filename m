@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F154A5FD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7514A5FDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240020AbiBAPQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:16:53 -0500
-Received: from mail-pg1-f176.google.com ([209.85.215.176]:33470 "EHLO
-        mail-pg1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiBAPQv (ORCPT
+        id S240134AbiBAPSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:18:04 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40654 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233666AbiBAPSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:16:51 -0500
-Received: by mail-pg1-f176.google.com with SMTP id 133so15620240pgb.0;
-        Tue, 01 Feb 2022 07:16:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LY0Jv14zZsje7/vHQSOHToHuOdksSPX4R2A4AD12wOM=;
-        b=BkP98Agy5ZJZBktiv84tDvBVxNYaPkwvfYwRiStrvqTIRGCb5PM78XThYVDFK3vKnK
-         WN1W7YtPru9qzRM6ObYs5Jq36RD2jrk4jOTIPnTNXNlYJGUacDVOzhy7Jo1wPbfitHnQ
-         +HQH49pcp5d0uhWsmwoqre+2JRWxf3Yg9A0PvEHNdrEXbmp1ull4YKL4cHVtYWoB78bE
-         bB4HCULXSsXXFkTT+EB4Hxj+/0pWIx4OCxUW7vYAvlhVCsa/y0r71pkuH7AyVGoECLmw
-         T116EjQhiicRKvR8wLGK65Od90SZnahdXZ+NyyXnNNIYsscHCBYuJQzHEck0noGS2sGM
-         ZoIw==
-X-Gm-Message-State: AOAM532y01bPiZl0z8QiGi43/HI6fHqrChXTk0DjozvrC8aPfKP6EoCW
-        yFl+dM6pUNaOfj0Y1PNGfZVcp/FWetYXgKiQfA4=
-X-Google-Smtp-Source: ABdhPJzMM6DKe2TD1hOG7K71ff+PLE71AdlCmcIrtDVMD21uR4nKDkEtbCJu7CJ3qll0XUJJEoo2PbmWHDla8a7YMKI=
-X-Received: by 2002:a62:2982:: with SMTP id p124mr25626587pfp.53.1643728610762;
- Tue, 01 Feb 2022 07:16:50 -0800 (PST)
+        Tue, 1 Feb 2022 10:18:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C0C9616A8
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 15:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56745C340EB;
+        Tue,  1 Feb 2022 15:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643728682;
+        bh=FS3nj3RPiryu2Qxy1cXn9BJQGnfR2R0Sx1u4wlU0je0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JkkZRc8rEQaQeQo3vcSeU3p0cHllVEQxRTHVLAz64EXiEP6pHWlvbxSGtdgQmDDtf
+         FILuVVTDf7fHZhdPxbtlIfla334WClDkcR6q/G6AhnFyResIj+CRtsHO5vtfaW+LQN
+         4UTsJtdDWHi3cNDSCU0jmeQp2UnQZ8pv00eTeIM/Pb36d9EeOCJ+d/LinaVMHc6xkj
+         GnD1PVeG1oQ8EDMByIlhHiQfH2GWYmpij/CSziGCVX/ql5TRoaMzx1agbDaLNfNLrO
+         Ai198rmlFgIkrVhWT7A97m+0aaUuAjn6Y2tIwR2940slXxP2cv6MQ9FwE/51nrvbpi
+         prltpoFZOsoQg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7D8BA40466; Tue,  1 Feb 2022 12:18:00 -0300 (-03)
+Date:   Tue, 1 Feb 2022 12:18:00 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync linux/perf_event.h with the
+ kernel sources
+Message-ID: <YflPKLhu2AtHmPov@kernel.org>
 MIME-Version: 1.0
-References: <20220201120310.878267-1-maz@kernel.org> <20220201120310.878267-12-maz@kernel.org>
-In-Reply-To: <20220201120310.878267-12-maz@kernel.org>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Tue, 1 Feb 2022 16:16:39 +0100
-Message-ID: <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
-Subject: Re: [PATCH 11/12] pinctrl: starfive: Move PM device over to irq domain
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 at 13:19, Marc Zyngier <maz@kernel.org> wrote:
->
-> Move the reference to the device over to the irq domain.
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> ---
->  drivers/pinctrl/pinctrl-starfive.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
-> index 0b912152a405..5be9866c2b3c 100644
-> --- a/drivers/pinctrl/pinctrl-starfive.c
-> +++ b/drivers/pinctrl/pinctrl-starfive.c
-> @@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
->         sfp->gc.base = -1;
->         sfp->gc.ngpio = NR_GPIOS;
->
-> -       starfive_irq_chip.parent_device = dev;
->         starfive_irq_chip.name = sfp->gc.label;
->
->         sfp->gc.irq.chip = &starfive_irq_chip;
-> @@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
->         if (ret)
->                 return dev_err_probe(dev, ret, "could not register gpiochip\n");
->
-> +       irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
-> +
+To pick the trivial change in:
 
-The gpio framework uses the irq_domain at sfp->gc.irq.domain, so
-shouldn't this be set before registering the gpio_chip with
-devm_gpiochip_add_data above?
+  cb1c4aba055f928f ("perf: Add new macros for mem_hops field")
 
->  out_pinctrl_enable:
->         return pinctrl_enable(sfp->pctl);
->  }
-> --
-> 2.30.2
->
+Just comment source code alignment.
+
+This silences this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/include/uapi/linux/perf_event.h' differs from latest version at 'include/uapi/linux/perf_event.h'
+  diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
+
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/uapi/linux/perf_event.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index 4cd39aaccbe7b904..1b65042ab1db8df4 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -1332,9 +1332,9 @@ union perf_mem_data_src {
+ 
+ /* hop level */
+ #define PERF_MEM_HOPS_0		0x01 /* remote core, same node */
+-#define PERF_MEM_HOPS_1         0x02 /* remote node, same socket */
+-#define PERF_MEM_HOPS_2         0x03 /* remote socket, same board */
+-#define PERF_MEM_HOPS_3         0x04 /* remote board */
++#define PERF_MEM_HOPS_1		0x02 /* remote node, same socket */
++#define PERF_MEM_HOPS_2		0x03 /* remote socket, same board */
++#define PERF_MEM_HOPS_3		0x04 /* remote board */
+ /* 5-7 available */
+ #define PERF_MEM_HOPS_SHIFT	43
+ 
+-- 
+2.34.1
+

@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B324A53C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24C14A53C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 01:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiBAAHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 19:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S230140AbiBAAIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 19:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiBAAHK (ORCPT
+        with ESMTP id S230117AbiBAAIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 19:07:10 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45F7C06173E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:07:09 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id y23so29976570oia.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:07:09 -0800 (PST)
+        Mon, 31 Jan 2022 19:08:10 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A41C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:08:10 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id z5so13940117plg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 16:08:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=etN/F/33nyG7XjKahm9y0BQjMlDg0tr31SIo/26P8fo=;
-        b=YhTr5miT/Oj2D1T11IjOg1Ck8aQM7Lpldcb+wAsy24c8e6GhVURiho/gjVEeM1MPR4
-         WdFR/o6SOmUR+vn+xMYSfUfOmACpDF0JQCXn+aL72bMYRxBkUMkiXUkCBB6zlbpO5h5o
-         rBeIyjbo/mEcKVQd/onmO1Emuv+9oSshAD70gNT37e5nD7rtHTXKy0zFdxTm1cMK0AEB
-         tp89L4s7zeVY2s8/hu3VdH/twhbsWX9Yl7y013dg15tEKa0TASRLxCfpI4lT2xouRaxw
-         HMSDOVisOE9uEfpECxWTeVWacgp9+75OSUs9yC6vUXaqEt4HJmOv6Oa3Xl4Zw6TwV+3B
-         9LtQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3ZZiAySqbprwvaDG1hs3CTP647cwZT0Jm9kr093E2Q=;
+        b=SxiR2jAqx0RJdUj6gsKJ1LebXy+pOqEh08q6cYfYiO702h1SKnnV1x0ynw3JMlZecC
+         JolizYnsCAPRLPwes8Bf7aXuxRI8Oz9bxryv1w5pzifcOfAbOy5YVqqeKNtXJVna3lL9
+         srnpX4jhy0Goq+9glObT1FL7WDSNCNQcVwzaI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=etN/F/33nyG7XjKahm9y0BQjMlDg0tr31SIo/26P8fo=;
-        b=4P/nEulDEj8XymaR0+s48LYuJCt8pCl4vCbdf+1C5Q3+RJGRJScnsrmKXk/WvZVvDT
-         Wt2HZupgFw30N53Gl1NGyqBwUU0ifnZDB1dXvq4O+SxbIoDCW/IBRVgGRq9k0Coc4dpz
-         8dbesdnmu3FxeyxIMiQ5SOob7Yq/zhiRd+RGJn87/Hd8ncDvwBusuXdKUnrrf+9ZGjZf
-         gtmXKNP2YrTL7TnJBKuODFfSWmuG5GRPx9esp+izgSgjMaDYFFhOmYlrtpPEgGeJPFny
-         3oLGABHGjq+kBRohETfGb+gKFuAgEClfpC1SZ78MD64wQOp8GSR3509B5OtKG8PSBFNq
-         GpXw==
-X-Gm-Message-State: AOAM533wg29nofdBaYFDxYcxKiCWacuTxlOp1cdP6owR35dlWk2F+GJ/
-        IhTz2hEnnJSdQ8TDt+JvRFo5Aw==
-X-Google-Smtp-Source: ABdhPJw+RXbE69BLQesPDpbW6Gf9TBeWq/C1I/hrqxma9k+U23KJoH5J2P3RSmgEQOUjO1xaK8gZmg==
-X-Received: by 2002:a05:6808:1481:: with SMTP id e1mr19871361oiw.217.1643674029182;
-        Mon, 31 Jan 2022 16:07:09 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id v78sm7103115oie.18.2022.01.31.16.07.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e3ZZiAySqbprwvaDG1hs3CTP647cwZT0Jm9kr093E2Q=;
+        b=EGimnKFLlz62MdjSsa+Mb9E0J45ob+jX2pydJ55zSgHKSFqfDhxY0MDLnPz0cJxxp/
+         EutsQ414Jn1Rv4bR/vXI7g+4GMRWrDGMTDh2IjuX+83gkY1TcaiOefXd4WY/uSaNMZUI
+         X8i4R3MRmpcdTTObWe1kb0NJhdPI0rzIjZuUXnhZHOyUJA4IBVgRAVLCz6ghPr5SWy0v
+         VTQJLltUD2fbTgsX7m2BIft2UTOoKaoK0vQdyh2O4wNIzShOFTJpxca5qh2yNe34AKdV
+         YSI7ci5Tj5xA001utg7Mp8Y0vgsaePj+Yh4Ucmua94U07ykIJQUpADA2lnHM/8Iy+kKL
+         uZdA==
+X-Gm-Message-State: AOAM531xjYfm/R72vUCrAc75+4yGJz52DdTFTQ3scxCcK3xGwwqlSHuH
+        0Az2Jj2pcYFbo6kko0Tkn9GrDLciOOfJbw==
+X-Google-Smtp-Source: ABdhPJxwYE9PC8R37lm+lBDVeiw1SZtmTs7c4tULNsg43zULgWEpHvM+K7Xyew2GTFG/Lxvgrwak3w==
+X-Received: by 2002:a17:90a:17a5:: with SMTP id q34mr37012466pja.1.1643674089650;
+        Mon, 31 Jan 2022 16:08:09 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c8sm13008520pfv.57.2022.01.31.16.08.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 16:07:08 -0800 (PST)
-Date:   Mon, 31 Jan 2022 18:07:06 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, agross@kernel.org, sboyd@kernel.org,
-        tdas@codeaurora.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH 2/8] net: stmmac: Add support for SM8150
-Message-ID: <Yfh5qrT2dAMpFk2s@builder.lan>
-References: <20220126221725.710167-1-bhupesh.sharma@linaro.org>
- <20220126221725.710167-3-bhupesh.sharma@linaro.org>
+        Mon, 31 Jan 2022 16:08:09 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Eric Biederman <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] selftests/exec: Avoid future NULL argv execve warning
+Date:   Mon, 31 Jan 2022 16:08:07 -0800
+Message-Id: <20220201000807.2453486-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126221725.710167-3-bhupesh.sharma@linaro.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1671; h=from:subject; bh=kZ/95lJt1ZckoQR1fzytjDeCsJ6t+JUzBzL4AXqKzBw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+HnnrFbzy50opMtbIN5Zhx1Vt1/4BuI9rimKtphI EOflI3KJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfh55wAKCRCJcvTf3G3AJuNmD/ 4zEKZlGO0q21CWKrd8Pgq07v+XlK2pgyM5OURLUmezdnK6c52l5MOfne0FQzmVI82VAe3pbH9Xs3t+ onxh8VaeE98j6Piha+gWfzLdJbl9nfyEk31eFVmEc16LszHaZX17HTQOJp6YfGEZHKJ2TDf44yFm3h 91kFGjWCcukncS7qU1JGXMaAySbnBHIQoo0RU1yFybRmf7Py9K87qhnQpheBsNYSCnJxIytKdFq+4I 44DUOYLKG5GgCIr6pL5lRfgUVL61S4zyShmygXC7+1TIaCKbfJ4rFU3pBlildZzNCLgIh8Bbmu49Qz ZWZHwBR41kxe7yu28/UnISs/LFah8xlvgONHasmUfN5aXlhOhWxPmAaiyykEhskthNLTOcGnrBrquJ ID+KFH9vViv1dWu08C9L+vUhqicXSceHridIW1uaN9zw4eLE/3TJNiC5brlBzZD73TKLkbee3YGjSZ V1pzxgmT+k74qnautdNFJXCbZe3BK8U5+OAFD5xKKjLnz4MYCXIrLyS/x4xSp1LaPCkCTcyMGxmTVU BM5WCrB711+JxunG621R8KaVhugjS8yUA6XlZIB2yPbavj41Yo+n2rS5JbdkvwqHr48aLSS7f756bm MbQkSKWqGGGjIlt64oicdOWRocPvU+SlSkO36NXJcPgBfYhLAvOIas0uatFA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26 Jan 16:17 CST 2022, Bhupesh Sharma wrote:
+Build actual argv for launching recursion test to avoid future warning
+about using an empty argv in execve().
 
-> From: Vinod Koul <vkoul@kernel.org>
-> 
-> This adds compatible, POR config & driver data for ethernet controller
-> found in SM8150 SoC.
-> 
-> Cc: David S. Miller <davem@davemloft.net>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> [bhsharma: Massage the commit log and other cosmetic changes]
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ tools/testing/selftests/exec/recursion-depth.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-The series can be picked up by 3 different maintainers and e.g. the
-network patches seems ready to be merged.
+diff --git a/tools/testing/selftests/exec/recursion-depth.c b/tools/testing/selftests/exec/recursion-depth.c
+index 2dbd5bc45b3e..35348db00c52 100644
+--- a/tools/testing/selftests/exec/recursion-depth.c
++++ b/tools/testing/selftests/exec/recursion-depth.c
+@@ -24,8 +24,14 @@
+ #include <sys/mount.h>
+ #include <unistd.h>
+ 
++#define FILENAME "/tmp/1"
++#define HASHBANG "#!" FILENAME "\n"
++
+ int main(void)
+ {
++	char * const argv[] = { FILENAME, NULL };
++	int rv;
++
+ 	if (unshare(CLONE_NEWNS) == -1) {
+ 		if (errno == ENOSYS || errno == EPERM) {
+ 			fprintf(stderr, "error: unshare, errno %d\n", errno);
+@@ -44,21 +50,19 @@ int main(void)
+ 		return 1;
+ 	}
+ 
+-#define FILENAME "/tmp/1"
+ 
+ 	int fd = creat(FILENAME, 0700);
+ 	if (fd == -1) {
+ 		fprintf(stderr, "error: creat, errno %d\n", errno);
+ 		return 1;
+ 	}
+-#define S "#!" FILENAME "\n"
+-	if (write(fd, S, strlen(S)) != strlen(S)) {
++	if (write(fd, HASHBANG, strlen(HASHBANG)) != strlen(HASHBANG)) {
+ 		fprintf(stderr, "error: write, errno %d\n", errno);
+ 		return 1;
+ 	}
+ 	close(fd);
+ 
+-	int rv = execve(FILENAME, NULL, NULL);
++	rv = execve(FILENAME, argv, NULL);
+ 	if (rv == -1 && errno == ELOOP) {
+ 		return 0;
+ 	}
+-- 
+2.30.2
 
-Please facilitate this by sending it in 3 different series (you may
-combine clock and dts in one series, as I merge both).
-
-Regards,
-Bjorn
-
-> ---
->  .../ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c   | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 2ffa0a11eea5..8cdba9d521ec 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -183,6 +183,20 @@ static const struct ethqos_emac_driver_data emac_v2_3_0_data = {
->  	.num_por = ARRAY_SIZE(emac_v2_3_0_por),
->  };
->  
-> +static const struct ethqos_emac_por emac_v2_1_0_por[] = {
-> +	{ .offset = RGMII_IO_MACRO_CONFIG,	.value = 0x40C01343 },
-> +	{ .offset = SDCC_HC_REG_DLL_CONFIG,	.value = 0x2004642C },
-> +	{ .offset = SDCC_HC_REG_DDR_CONFIG,	.value = 0x00000000 },
-> +	{ .offset = SDCC_HC_REG_DLL_CONFIG2,	.value = 0x00200000 },
-> +	{ .offset = SDCC_USR_CTL,		.value = 0x00010800 },
-> +	{ .offset = RGMII_IO_MACRO_CONFIG2,	.value = 0x00002060 },
-> +};
-> +
-> +static const struct ethqos_emac_driver_data emac_v2_1_0_data = {
-> +	.por = emac_v2_1_0_por,
-> +	.num_por = ARRAY_SIZE(emac_v2_1_0_por),
-> +};
-> +
->  static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
->  {
->  	unsigned int val;
-> @@ -558,6 +572,7 @@ static int qcom_ethqos_remove(struct platform_device *pdev)
->  
->  static const struct of_device_id qcom_ethqos_match[] = {
->  	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_v2_3_0_data},
-> +	{ .compatible = "qcom,sm8150-ethqos", .data = &emac_v2_1_0_data},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, qcom_ethqos_match);
-> -- 
-> 2.34.1
-> 

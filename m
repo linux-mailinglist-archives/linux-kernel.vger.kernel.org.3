@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DE84A6027
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0913F4A6029
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240347AbiBAPaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:30:16 -0500
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:39566 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiBAPaO (ORCPT
+        id S240377AbiBAPbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 10:31:04 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:40309 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240354AbiBAPbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:30:14 -0500
-Received: by mail-pg1-f177.google.com with SMTP id j10so15634622pgc.6;
-        Tue, 01 Feb 2022 07:30:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/NI5/5cwcQQunIPAZVQCMWs9N9hH37FdlDTNKGxYQ7E=;
-        b=czGicOYjyzjexnLsimliwumlykAb8e3USmaeRjoflReW4k2qDZxjNz9d0obk2Gnebv
-         Z4Iozt/EKNnVANnHAH8+omAl2gKzzvIboQZOEBdm9ro1Uz4g8LP1uiwH4s6a8wqzkWlK
-         oTr8h8HfKb+5SpR9vUKYqx3j48Jpya0H4IEgQEDms2Mrf+2Gux2s7b75RZaveHT4vVtk
-         0lKxT2i1AfKi2Knz6hgREMcP04qc4AOf+OAt6vB9h2U0oSk+Uks9k8iwK3m7Xxg1bcmL
-         hy+baL52Pv4GsJ8udwg/PzCOlD1VFE6oVu8IJLeuuhFuvcEx0q3nVj6ErfaSBhhXZBWM
-         Zb9w==
-X-Gm-Message-State: AOAM530HbJSb0t6JFgsMiKeCYwKc9kVw1tosQr/aygy23Zkx1IzGG1h2
-        1F0OaBeDnSgksn2xnMmxcIU8LDCOSUwqbG6KhQM=
-X-Google-Smtp-Source: ABdhPJwZNq0IinMera7zRuVK7Muwvrp92NYs2qCGjwudmM11k2zeBJdEaahQlwH16dsk6UqlFGc0aAuF4CaTORjd4vE=
-X-Received: by 2002:a63:904c:: with SMTP id a73mr21118692pge.449.1643729414082;
- Tue, 01 Feb 2022 07:30:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20220201120310.878267-1-maz@kernel.org> <20220201120310.878267-12-maz@kernel.org>
- <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
-In-Reply-To: <CANBLGcxCmeaXXFWi6GFSHN=RhjUp5BVRYTMXHQihsLJCocD1xg@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Tue, 1 Feb 2022 16:30:02 +0100
-Message-ID: <CANBLGcy_zEY7qkMe96v+tpsxbp9CDJh14utug5wseCfBhOSvdA@mail.gmail.com>
-Subject: Re: [PATCH 11/12] pinctrl: starfive: Move PM device over to irq domain
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org,
+        Tue, 1 Feb 2022 10:31:01 -0500
+Received: (qmail 308126 invoked by uid 1000); 1 Feb 2022 10:31:01 -0500
+Date:   Tue, 1 Feb 2022 10:31:01 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+Message-ID: <YflSNQQvignxL4PA@rowland.harvard.edu>
+References: <20220201150339.1028032-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201150339.1028032-1-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 at 16:16, Emil Renner Berthing <kernel@esmil.dk> wrote:
-> On Tue, 1 Feb 2022 at 13:19, Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > Move the reference to the device over to the irq domain.
-> >
-> > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > ---
-> >  drivers/pinctrl/pinctrl-starfive.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
-> > index 0b912152a405..5be9866c2b3c 100644
-> > --- a/drivers/pinctrl/pinctrl-starfive.c
-> > +++ b/drivers/pinctrl/pinctrl-starfive.c
-> > @@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
-> >         sfp->gc.base = -1;
-> >         sfp->gc.ngpio = NR_GPIOS;
-> >
-> > -       starfive_irq_chip.parent_device = dev;
-> >         starfive_irq_chip.name = sfp->gc.label;
-> >
-> >         sfp->gc.irq.chip = &starfive_irq_chip;
-> > @@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
-> >         if (ret)
-> >                 return dev_err_probe(dev, ret, "could not register gpiochip\n");
-> >
-> > +       irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
-> > +
->
-> The gpio framework uses the irq_domain at sfp->gc.irq.domain, so
-> shouldn't this be set before registering the gpio_chip with
-> devm_gpiochip_add_data above?
+On Tue, Feb 01, 2022 at 04:02:48PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The sa1111 platform is one of the two remaining users of the old Arm
+> specific "dmabounce" code, which is an earlier implementation of the
+> generic swiotlb.
+> 
+> Linus Walleij submitted a patch that removes dmabounce support from
+> the ixp4xx, and I had a look at the other user, which is the sa1111
+> companion chip.
+> 
+> Looking at how dmabounce is used, I could narrow it down to one driver
+> one one machine:
+> 
+>  - dmabounce is only initialized on assabet and pfs168, but not on
+>    any other sa1100 or pxa platform using sa1111.
+> 
+>  - pfs168 is not supported in mainline Linux.
+> 
+>  - only the OHCI and audio devices on sa1111 support DMA
+> 
+>  - There is no audio driver for this hardware
+> 
+> In the OHCI code, I noticed that two other platforms already have
+> a local bounce buffer support in the form of the "local_mem"
+> allocator. Specifically, TMIO and SM501 use this on a few other ARM
+> boards with 16KB or 128KB of local SRAM that can be accessed from the
+> OHCI and from the CPU.
+> 
+> While this is not the same problem as on sa1111, I could not find a
+> reason why we can't re-use the existing implementation but replace the
+> physical SRAM address mapping with a locally allocated DMA buffer.
+> 
+> There are two main downsides:
+> 
+>  - rather than using a dynamically sized pool, this buffer needs
+>    to be allocated at probe time using a fixed size. Without
+>    having any idea of what it should be, I picked a size of
+>    64KB, which is between what the other two OHCI front-ends use
+>    in their SRAM. If anyone has a better idea what that size
+>    is reasonable, this can be trivially changed.
+> 
+>  - Previously, only USB transfers to the second memory bank
+>    on Assabet needed to go through the bounce buffer, now all
+>    of them do, which may impact runtime performance, depending
+>    on what type of device is attached.
+> 
+> On the upside, the local_mem support uses write-combining
+> buffers, which should be a bit faster for transfers to the device
+> compared to normal uncached coherent memory as used in dmabounce.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I don't have this hardware, so the patch is not tested at all.
 
-Ah, no. sfp->gc.irq.domain is a pointer to an irq_domain that is
-initialised when adding the gpio_chip.
 
-Reviewed-by: Emil Renner Berthing <kernel@esmil.dk>
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 3c7c64ff3c0a..5f2fa46c7958 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
+>  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
+>  
+>  /*
+> - * Some usb host controllers can only perform dma using a small SRAM area.
+> + * Some usb host controllers can only perform dma using a small SRAM area,
+> + * or that have restrictions in addressable DRAM.
+
+s/that //
+s/in/on/
+
+Otherwise the USB parts of this look okay to me.  I don't have suitable 
+hardware to test either.  (I wonder if anyone is still using this 
+platform...)
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern

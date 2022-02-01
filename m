@@ -2,157 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDFB4A65A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C5E4A65AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236217AbiBAU2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:28:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S236972AbiBAUbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiBAU2n (ORCPT
+        with ESMTP id S234508AbiBAUbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:28:43 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAD4C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 12:28:43 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id e9so16447296pgb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 12:28:43 -0800 (PST)
+        Tue, 1 Feb 2022 15:31:09 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74515C061714;
+        Tue,  1 Feb 2022 12:31:09 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ah7so57646663ejc.4;
+        Tue, 01 Feb 2022 12:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lZCavQiLxcQ3MFz6ypEi3cjAjHA5JuYNVJ64uURs1W8=;
-        b=X8ZLOaGsq7z/Mak67fZaRCM1jO2c7xJ9XxPz+xdtSeAd7UkfetIlD9oeQlrOpSwyJd
-         vqCV+wjQVIsJ9R2Img8Yj6I8JCZtTDz568kaDeGi9iiio1IbeamUvj9wz1dpHGvxrm6T
-         viAJs8qQ+NnTbLMJrUepEXoNsqwIWYr2XnoStbTCB61kXyNsxoZyMrgejErntPZnlWpn
-         xUS7CBVD0L/EFV/isG9PnJtoBbDgb9zDInYKQmDxPL943jrFEmb2yEBYIWpk4XuXaAsM
-         2vZUSy7aEwEJGuKjruMGchoL5uIN9hdZxyc8u0h/LuH3xDMVJttYkNEoeYsesf5aEAHu
-         b6Ag==
+         :cc:content-transfer-encoding;
+        bh=871htcl5Y6GDsL/12E1mDAY6z1Cjye967VwgYm9q+Gg=;
+        b=hvlVn+CVcEnV+tlmPHp78A14rGo2OGfM2X0oCX7frzFrhbwbvUT4M7Dyq3fYezi/aZ
+         hQrJXfo/LL7uwEIF/G2UWjjeOSmQk9g/CX+qc/oq7KOqiZY+Q725ENqrUq8YDOD+Udia
+         4XgQgOqyVWv3w/QlWp/S9Afui0CuUPZu3en+9BrEXn1+ikqrWOSFiudaFmNLcOWi9TwN
+         Ka6ymt53BBUJl0zhiemfQQED/2Wy5aq+fweFEruWk0YkzJ3rQbE3CfOCfauJjhSa08QX
+         smgFEHiXMSrtlRiziaW6bNwHOEOvB+lq4ak4OFt4MYzx1bkT7jqvKwNodj1jZwQADeb8
+         3JIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lZCavQiLxcQ3MFz6ypEi3cjAjHA5JuYNVJ64uURs1W8=;
-        b=jafVs7E3zh6E/T1kroy/Xu2gYbXUA0YIvV7M/AwnivIlvpgyMH5ZJ7WMrxvNqcs6V1
-         oP+Gd6Hq49QkMpGqH5cCjPeR5OwaPRp9Xtcs2dcf7Fist2L+YBPFkD/pldu7dZJr5lPR
-         W54B5K1q+QfdtcZ3YHjf8R1g0GBwRefqFtAJUEmNVTRgtm6hN+vXeL4V0q8PnCjpxa26
-         C1079khbyht770JaFznxHhydl6jl3rCgRcyV+FqwLOKNeottJTbBGs11zX9IkCxvZ+4i
-         jLpmn3I9zg9giWNelN/1BGSu8LcJFO2vfKockFVTL2d7G/u+JmEMntx9hQw33l1DSDEY
-         kRyA==
-X-Gm-Message-State: AOAM5338KfHYVhhQ3fpkqjib+dW6OlkUq0P3T4CVmbUp7JaXHxn1Dv6g
-        NfdkrSsUB0O/A3ycERU0gJit5rICcCur/a3/aIycaA==
-X-Google-Smtp-Source: ABdhPJwzXjWJU3xLJEav1LZ4qFQQzgqDWfrW9IO58fRCskMADbzQL/mgR+osZF+ff7Ju+0gU1kwd1YvqJ7kTZ4oTTY0=
-X-Received: by 2002:a05:6a00:728:: with SMTP id 8mr26552400pfm.27.1643747322379;
- Tue, 01 Feb 2022 12:28:42 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=871htcl5Y6GDsL/12E1mDAY6z1Cjye967VwgYm9q+Gg=;
+        b=d3tV/EO4W1ZS9weoIo1cTe5SkQ5A2awVu9azIoouqD4mBY+QkE4IAUoYtd2NhAvkcr
+         vDnUYJ7So8VRyL2QR6nDvyxw6QmHsPT8dNNc5mEOJyP0rq9/fmGW228RMJccX8xegJpx
+         3558vvP1Xh1d3iTT1BxnJt07ccz6Z4oUXPClrILTFIRt+rlInKNSwDdu9rUFZ97De8WT
+         VhpPqQSzvdgeEl/qTb28/8PMCacKu6sAhhobo8NBV/7qGqJwem+mNGYthxVlYMJ6gOq6
+         klHuPtLIQcdNuSGLgw822voaGuYeW+O/UIgBEvlKpZVnhgLAaOkCUH4S1+YBzbhV939+
+         fN7g==
+X-Gm-Message-State: AOAM530HHRFv8KQ0Lys5pEJ12ddfTBOGMAJeegg0WESvUpz5PeidC2eT
+        KxBgzy9czsiIEA/R1bBIsE5/gndPJlvcQlCUpyA=
+X-Google-Smtp-Source: ABdhPJxkt038fDi0CxsQYm22/dTA7Yyk8WXF4gwZgsFk7C6/L85VmkSfCoJ3PfkU6B3/uMwgE0DALb5sA11SzLIxvto=
+X-Received: by 2002:a17:907:a40a:: with SMTP id sg10mr23120532ejc.44.1643747467808;
+ Tue, 01 Feb 2022 12:31:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20210719082756.15733-1-ms@dev.tdt.de> <CAJ+vNU3_8Gk8Mj_uCudMz0=MdN3B9T9pUOvYtP7H_B0fnTfZmg@mail.gmail.com>
- <94120968908a8ab073fa2fc0dd56b17d@dev.tdt.de> <CAJ+vNU2Bn_eks03g191KKLx5uuuekdqovx000aqcT5=f_6Zq=w@mail.gmail.com>
- <Yd7bsbvLyIquY5jn@shell.armlinux.org.uk> <CAJ+vNU1R8fGssHjfoz-jN1zjBLPz4Kg8XEUsy4z4bByKS1PqQA@mail.gmail.com>
- <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
-In-Reply-To: <81cce37d4222bbbd941fcc78ff9cacca@dev.tdt.de>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Tue, 1 Feb 2022 12:28:31 -0800
-Message-ID: <CAJ+vNU3NXAgfJ4t3c8RBsZVLLY_OXkZLFDhro8X84x0DAuNEdw@mail.gmail.com>
-Subject: Re: [PATCH net-next v6] net: phy: intel-xway: Add RGMII internal
- delay configuration
-To:     Martin Schiller <ms@dev.tdt.de>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
+References: <20220130232122.GA119248@adroid>
+In-Reply-To: <20220130232122.GA119248@adroid>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 1 Feb 2022 22:29:32 +0200
+Message-ID: <CAHp75VdAo9BzQ+PnH5v1P2GZTjbYPqiEhp+j6H5+fbX+2o=76g@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: samsung: improve wake irq info on console
+To:     =?UTF-8?Q?Martin_J=C3=BCcker?= <martin.juecker@gmail.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 10:32 PM Martin Schiller <ms@dev.tdt.de> wrote:
+On Tue, Feb 1, 2022 at 5:11 PM Martin J=C3=BCcker <martin.juecker@gmail.com=
+> wrote:
 >
-> On 2022-01-12 19:25, Tim Harvey wrote:
-> > On Wed, Jan 12, 2022 at 5:46 AM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> >>
-> >> On Tue, Jan 11, 2022 at 11:12:33AM -0800, Tim Harvey wrote:
-> >> > I added a debug statement in xway_gphy_rgmii_init and here you can see
-> >> > it gets called 'before' the link comes up from the NIC on a board that
-> >> > has a cable plugged in at power-on. I can tell from testing that the
-> >> > rx_delay/tx_delay set in xway_gphy_rgmii_init does not actually take
-> >> > effect unless I then bring the link down and up again manually as you
-> >> > indicate.
-> >> >
-> >> > # dmesg | egrep "xway|nicvf"
-> >> > [    6.855971] xway_gphy_rgmii_init mdio_thunder MDI_MIICTRL:0xb100
-> >> > rx_delay=1500 tx_delay=500
-> >> > [    6.999651] nicvf, ver 1.0
-> >> > [    7.002478] nicvf 0000:05:00.1: Adding to iommu group 7
-> >> > [    7.007785] nicvf 0000:05:00.1: enabling device (0004 -> 0006)
-> >> > [    7.053189] nicvf 0000:05:00.2: Adding to iommu group 8
-> >> > [    7.058511] nicvf 0000:05:00.2: enabling device (0004 -> 0006)
-> >> > [   11.044616] nicvf 0000:05:00.2 eth1: Link is Up 1000 Mbps Full duplex
-> >>
-> >> Does the kernel message about the link coming up reflect what is going
-> >> on physically with the link though?
-> >>
-> >> If a network interface is down, it's entirely possible that the link
-> >> is
-> >> already established at the hardware level, buit the "Link is Up"
-> >> message
-> >> gets reported when the network interface is later brought up. So,
-> >> debugging this by looking at the kernel messages is unreliable.
-> >>
-> >
-> > Russell,
-> >
-> > You are correct... the link doesn't come up at that point its already
-> > linked. So we need to force a reset or an auto negotiation reset after
-> > modifying the delays.
-> >
-> > Tim
->
-> Setting BMCR_ANRESTART would work, but only if BMCR_ANENABLE is also or
-> already set. Otherwise BMCR_ANRESTART has no effect (see the note in the
-> datasheet).
->
-> This is the reason why I came up with the idea of BMCR_PDOWN.
->
-> Personally I would have no problem with setting BMCR_ANRESTART and
-> BMCR_ANENABLE, but it would possibly change the existing configuration
-> if (e.g. by the bootloader) aneg should be disabled.
->
+> Improve the wake irq message by also printing the bank name and hwirq
+> number that matches this irq number.
 
-Martin,
+Perhaps wait a bit and replace the first argument with str_enabled_disabled=
+()?
 
-Sorry for the silence - I've been trying to figure out if and how I
-can deal with some very nasty errata on this particular PHY that can
-cause the link to not be stable and/or excessive errors in packets
-sent to the MAC.
-
-I do like the idea of BMCR_PDOWN. With my board its pretty obvious if
-the pin-strapped rx/tx delays are being used rather than the ones
-configured in the phy driver, so I'll have to do some testing when I
-find some time. However, I don't at all like the fact that this
-particular patch defaults the delays to 2ns if 'rx-internal-delay-ps'
-and 'tx-internal-delay-ps' is missing from the dt.
-
-These properties were added via Dan Murphy's series 'RGMII Internal
-delay common property' which was merged into v5.9:
-8095295292b5 ("net: phy: DP83822: Add setting the fixed internal delay")
-736b25afe284 ("net: dp83869: Add RGMII internal delay configuration")
-2fb305c37d5b ("dt-bindings: net: Add RGMII internal delay for DP83869")
-92252eec913b ("net: phy: Add a helper to return the index for of the
-internal delay")
-9150069bf5fc dt-bindings: net: Add tx and rx internal delays
-
-The issue I have here is that if dt's have not been updated to add the
-common delay properties this code will override what the boot firmware
-may have configured them to. I feel that if these common delay
-properties are not found in the device tree, then no changes to the
-delays should be made at all.
-
-Best Regards,
-
-Tim
+--=20
+With Best Regards,
+Andy Shevchenko

@@ -2,220 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F604A6730
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB27F4A6732
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiBAVnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:43:13 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:35581 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiBAVnM (ORCPT
+        id S235058AbiBAVnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234840AbiBAVnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:43:12 -0500
-Received: by mail-oi1-f176.google.com with SMTP id m10so11032050oie.2;
-        Tue, 01 Feb 2022 13:43:12 -0800 (PST)
+        Tue, 1 Feb 2022 16:43:20 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC69C061714;
+        Tue,  1 Feb 2022 13:43:20 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id r59so18365489pjg.4;
+        Tue, 01 Feb 2022 13:43:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nfh9neXAUEzcShXHBoAZTFYIWM5MQnmj1xRT6suzivE=;
+        b=U/7U1q0tpU/izUCEpHLz4Nd42PkDysmqhgeb4HH/pI75muzBPK2FFvqC22W4WfzKiT
+         VXa/h8Oaozae8Z/zzE3cPLxiMKYd4AIDS3SX8bvgtP8ZBcgv6SB3bXGTRlcDOvCraXnO
+         M17J+l8f3g9sVAA3n2Bc/fTfxs/Qk/R2QeLhYHF+yGwnIkRR0GEtbBUvhDU9SBBWsIpH
+         Opvuhsyf/obr1YykmR2C0OdBBL1htITX7URu4sUJ1URLPAfYlFIhU7C8QOGCpYeVMZWW
+         sLn0Q6rR/M3TRCqugFSDuhDEP0vp1+Zox3hwt5GZwwxUepOAnuIvbCAoCWByFO2c9h4z
+         8aPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=s+E27EXTTgktf299ScAp3x5Rb53v7EfG4eCaVZgclQY=;
-        b=wJ7Odr7d99X9Cjg6l7SiihUK56LBTBoCvKHb3Bfxy0Hc5vOS84yR4qk+YqtLvV7yX5
-         7Iz+CZ6yzeVjCnph2pAQFHzmeU04XqffEt+Qn7uRKuRkB1t4Xw+rYEg6jwsTTZuNowpB
-         aPeqZG91l8BkI4EB8Y6KmQQH48J2OKHmnFu5xFW9rr2/WYCFpWmUlA/BoFeOESH9QiWP
-         Oa6S+f7ljooqArl0uwDVvci7TkBSwL3nWNUzoBzxjuBhpsJhMRWOCxDxO9ZvyzN7EjFr
-         ENaQYIs+4djUuoSwyVGI8iJLPo6KRli57v3Cl9R8mJn/yvk+EAnPwwfBjYRnvJL4BS2c
-         u2Pg==
-X-Gm-Message-State: AOAM530biwtmkkiYGRo4Le5FN1CVXO0jNhVv8NowwLiDTmyqrPkHCgkF
-        T9OYHKGNn9qinUsQuoqIb5ZPDxNqKA==
-X-Google-Smtp-Source: ABdhPJzONhbJMZnzezCjdmlFD/6EmtMXHHLErOcXMtBezeJ9nFTawvE1o28JhWSP7ePppy3YsccwhA==
-X-Received: by 2002:a05:6808:d48:: with SMTP id w8mr2876352oik.204.1643751792109;
-        Tue, 01 Feb 2022 13:43:12 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id a10sm12418165oof.32.2022.02.01.13.43.10
+        bh=nfh9neXAUEzcShXHBoAZTFYIWM5MQnmj1xRT6suzivE=;
+        b=7u72iVyr+/MwrcSFkrqBnR/0VrtkCLX4ZFWTUYPPsHsjqI90na8a/CcaM6oReJDY1Y
+         78BZdYuJyjoLcB8v4YFugqODOz8/AGFPL6zJxCYON6aBAdkSsp5czZXmxIGtOGK9YV3e
+         RTy99ZUoe2rAivx5FFoMb2+HuhDvp5SunjNg8SV6b5/mtXF9vb+lMsI2Za9mpwDqvgQ0
+         9CtQ2XaDWxUrachmOuAzumWL9t6FY0Rc6pVVgFYaLEpjl6uM1hNCCAjS6WY0JPf6uGFO
+         3V5f81qh53QhrBdnNJGOlVMPDEo9OtSdBq64zwCrsClPhpS+kYmivV1EaeKInwe5ilgz
+         GceA==
+X-Gm-Message-State: AOAM533MHg41i2OQ3AcWV7J8xS46ZQT0vVvOBlXaDudmhznsZsI15XdF
+        j/UGyeJ4GOLwOseiP+QGYFXCXUfdOQQ=
+X-Google-Smtp-Source: ABdhPJx2mNPSJowxUs+A14JZEqlEXjoy+1sUt8VO9q3zaUbCfD6ttenNylq2HrrKmEcd168YG9s6hA==
+X-Received: by 2002:a17:902:f541:: with SMTP id h1mr27912716plf.64.1643751799630;
+        Tue, 01 Feb 2022 13:43:19 -0800 (PST)
+Received: from jeffreyji1.c.googlers.com.com (173.84.105.34.bc.googleusercontent.com. [34.105.84.173])
+        by smtp.gmail.com with ESMTPSA id mq15sm4284894pjb.8.2022.02.01.13.43.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:43:11 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v9] libperf: Add arm64 support to perf_mmap__read_self()
-Date:   Tue,  1 Feb 2022 15:40:56 -0600
-Message-Id: <20220201214056.702854-1-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 01 Feb 2022 13:43:18 -0800 (PST)
+From:   Jeffrey Ji <jeffreyjilinux@gmail.com>
+X-Google-Original-From: Jeffrey Ji <jeffreyji@google.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Brian Vazquez <brianvv@google.com>, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        jeffreyji <jeffreyji@google.com>
+Subject: [PATCH v6 net-core] net-core
+Date:   Tue,  1 Feb 2022 21:43:14 +0000
+Message-Id: <20220201214314.3630748-1-jeffreyji@google.com>
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the arm64 variants for read_perf_counter() and read_timestamp().
-Unfortunately the counter number is encoded into the instruction, so the
-code is a bit verbose to enumerate all possible counters.
+From: jeffreyji <jeffreyji@google.com>
 
-Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
+Increment InMacErrors counter when packet dropped due to incorrect dest
+MAC addr.
+
+An example when this drop can occur is when manually crafting raw
+packets that will be consumed by a user space application via a tap
+device. For testing purposes local traffic was generated using trafgen
+for the client and netcat to start a server
+
+example output from nstat:
+\~# nstat -a | grep InMac
+Ip6InMacErrors                  0                  0.0
+IpExtInMacErrors                1                  0.0
+
+Tested: Created 2 netns, sent 1 packet using trafgen from 1 to the other
+with "{eth(daddr=$INCORRECT_MAC...}", verified that nstat showed the
+counter was incremented.
+
+changelog:
+v6: rebase onto net-next
+
+v5:
+Change from SKB_DROP_REASON_BAD_DEST_MAC to SKB_DROP_REASON_OTHERHOST
+
+v3-4:
+Remove Change-Id
+
+v2:
+Use skb_free_reason() for tracing
+Add real-life example in patch msg
+
+Signed-off-by: jeffreyji <jeffreyji@google.com>
 ---
-Arm64 kernel support landed in 5.17, but the corresponding libperf 
-support didn't get picked up.
+ include/linux/skbuff.h    |  1 +
+ include/uapi/linux/snmp.h |  1 +
+ net/ipv4/ip_input.c       |  7 +++++--
+ net/ipv4/proc.c           |  1 +
+ net/ipv6/ip6_input.c      | 12 +++++++-----
+ net/ipv6/proc.c           |  1 +
+ 6 files changed, 16 insertions(+), 7 deletions(-)
 
-v9:
- - Rebase on v5.17-rc
- - Add Tested-by
-v8:
- - Set attr.config1 to request user access on arm64
-v7:
- - Move enabling of libperf user read test for arm64 to this patch
----
- tools/lib/perf/mmap.c             | 98 +++++++++++++++++++++++++++++++
- tools/lib/perf/tests/test-evsel.c |  5 +-
- 2 files changed, 102 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
-index f7ee07cb5818..0d1634cedf44 100644
---- a/tools/lib/perf/mmap.c
-+++ b/tools/lib/perf/mmap.c
-@@ -13,6 +13,7 @@
- #include <internal/lib.h>
- #include <linux/kernel.h>
- #include <linux/math64.h>
-+#include <linux/stringify.h>
- #include "internal.h"
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index a27bcc4f7e9a..1b1114f5c68e 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -320,6 +320,7 @@ enum skb_drop_reason {
+ 	SKB_DROP_REASON_TCP_CSUM,
+ 	SKB_DROP_REASON_SOCKET_FILTER,
+ 	SKB_DROP_REASON_UDP_CSUM,
++	SKB_DROP_REASON_OTHERHOST,
+ 	SKB_DROP_REASON_MAX,
+ };
  
- void perf_mmap__init(struct perf_mmap *map, struct perf_mmap *prev,
-@@ -294,6 +295,103 @@ static u64 read_timestamp(void)
+diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
+index 904909d020e2..ac2fac12dd7d 100644
+--- a/include/uapi/linux/snmp.h
++++ b/include/uapi/linux/snmp.h
+@@ -57,6 +57,7 @@ enum
+ 	IPSTATS_MIB_ECT0PKTS,			/* InECT0Pkts */
+ 	IPSTATS_MIB_CEPKTS,			/* InCEPkts */
+ 	IPSTATS_MIB_REASM_OVERLAPS,		/* ReasmOverlaps */
++	IPSTATS_MIB_INMACERRORS,		/* InMacErrors */
+ 	__IPSTATS_MIB_MAX
+ };
  
- 	return low | ((u64)high) << 32;
- }
-+#elif defined(__aarch64__)
-+#define read_sysreg(r) ({						\
-+	u64 __val;							\
-+	asm volatile("mrs %0, " __stringify(r) : "=r" (__val));		\
-+	__val;								\
-+})
-+
-+static u64 read_pmccntr(void)
-+{
-+	return read_sysreg(pmccntr_el0);
-+}
-+
-+#define PMEVCNTR_READ(idx)					\
-+	static u64 read_pmevcntr_##idx(void) {			\
-+		return read_sysreg(pmevcntr##idx##_el0);	\
+diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
+index 3a025c011971..780892526166 100644
+--- a/net/ipv4/ip_input.c
++++ b/net/ipv4/ip_input.c
+@@ -441,8 +441,11 @@ static struct sk_buff *ip_rcv_core(struct sk_buff *skb, struct net *net)
+ 	/* When the interface is in promisc. mode, drop all the crap
+ 	 * that it receives, do not try to analyse it.
+ 	 */
+-	if (skb->pkt_type == PACKET_OTHERHOST)
+-		goto drop;
++	if (skb->pkt_type == PACKET_OTHERHOST) {
++		__IP_INC_STATS(net, IPSTATS_MIB_INMACERRORS);
++		kfree_skb_reason(skb, SKB_DROP_REASON_OTHERHOST);
++		return NULL;
++	}
+ 
+ 	__IP_UPD_PO_STATS(net, IPSTATS_MIB_IN, skb->len);
+ 
+diff --git a/net/ipv4/proc.c b/net/ipv4/proc.c
+index 28836071f0a6..2be4189197f3 100644
+--- a/net/ipv4/proc.c
++++ b/net/ipv4/proc.c
+@@ -117,6 +117,7 @@ static const struct snmp_mib snmp4_ipextstats_list[] = {
+ 	SNMP_MIB_ITEM("InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
+ 	SNMP_MIB_ITEM("InCEPkts", IPSTATS_MIB_CEPKTS),
+ 	SNMP_MIB_ITEM("ReasmOverlaps", IPSTATS_MIB_REASM_OVERLAPS),
++	SNMP_MIB_ITEM("InMacErrors", IPSTATS_MIB_INMACERRORS),
+ 	SNMP_MIB_SENTINEL
+ };
+ 
+diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
+index 80256717868e..da18d9159647 100644
+--- a/net/ipv6/ip6_input.c
++++ b/net/ipv6/ip6_input.c
+@@ -149,15 +149,17 @@ static struct sk_buff *ip6_rcv_core(struct sk_buff *skb, struct net_device *dev,
+ 	u32 pkt_len;
+ 	struct inet6_dev *idev;
+ 
+-	if (skb->pkt_type == PACKET_OTHERHOST) {
+-		kfree_skb(skb);
+-		return NULL;
+-	}
+-
+ 	rcu_read_lock();
+ 
+ 	idev = __in6_dev_get(skb->dev);
+ 
++	if (skb->pkt_type == PACKET_OTHERHOST) {
++		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INMACERRORS);
++		rcu_read_unlock();
++		kfree_skb_reason(skb, SKB_DROP_REASON_OTHERHOST);
++		return NULL;
 +	}
 +
-+PMEVCNTR_READ(0);
-+PMEVCNTR_READ(1);
-+PMEVCNTR_READ(2);
-+PMEVCNTR_READ(3);
-+PMEVCNTR_READ(4);
-+PMEVCNTR_READ(5);
-+PMEVCNTR_READ(6);
-+PMEVCNTR_READ(7);
-+PMEVCNTR_READ(8);
-+PMEVCNTR_READ(9);
-+PMEVCNTR_READ(10);
-+PMEVCNTR_READ(11);
-+PMEVCNTR_READ(12);
-+PMEVCNTR_READ(13);
-+PMEVCNTR_READ(14);
-+PMEVCNTR_READ(15);
-+PMEVCNTR_READ(16);
-+PMEVCNTR_READ(17);
-+PMEVCNTR_READ(18);
-+PMEVCNTR_READ(19);
-+PMEVCNTR_READ(20);
-+PMEVCNTR_READ(21);
-+PMEVCNTR_READ(22);
-+PMEVCNTR_READ(23);
-+PMEVCNTR_READ(24);
-+PMEVCNTR_READ(25);
-+PMEVCNTR_READ(26);
-+PMEVCNTR_READ(27);
-+PMEVCNTR_READ(28);
-+PMEVCNTR_READ(29);
-+PMEVCNTR_READ(30);
-+
-+/*
-+ * Read a value direct from PMEVCNTR<idx>
-+ */
-+static u64 read_perf_counter(unsigned int counter)
-+{
-+	static u64 (* const read_f[])(void) = {
-+		read_pmevcntr_0,
-+		read_pmevcntr_1,
-+		read_pmevcntr_2,
-+		read_pmevcntr_3,
-+		read_pmevcntr_4,
-+		read_pmevcntr_5,
-+		read_pmevcntr_6,
-+		read_pmevcntr_7,
-+		read_pmevcntr_8,
-+		read_pmevcntr_9,
-+		read_pmevcntr_10,
-+		read_pmevcntr_11,
-+		read_pmevcntr_13,
-+		read_pmevcntr_12,
-+		read_pmevcntr_14,
-+		read_pmevcntr_15,
-+		read_pmevcntr_16,
-+		read_pmevcntr_17,
-+		read_pmevcntr_18,
-+		read_pmevcntr_19,
-+		read_pmevcntr_20,
-+		read_pmevcntr_21,
-+		read_pmevcntr_22,
-+		read_pmevcntr_23,
-+		read_pmevcntr_24,
-+		read_pmevcntr_25,
-+		read_pmevcntr_26,
-+		read_pmevcntr_27,
-+		read_pmevcntr_28,
-+		read_pmevcntr_29,
-+		read_pmevcntr_30,
-+		read_pmccntr
-+	};
-+
-+	if (counter < ARRAY_SIZE(read_f))
-+		return (read_f[counter])();
-+
-+	return 0;
-+}
-+
-+static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
-+
- #else
- static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
- static u64 read_timestamp(void) { return 0; }
-diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-index 33ae9334861a..89be89afb24d 100644
---- a/tools/lib/perf/tests/test-evsel.c
-+++ b/tools/lib/perf/tests/test-evsel.c
-@@ -130,6 +130,9 @@ static int test_stat_user_read(int event)
- 	struct perf_event_attr attr = {
- 		.type	= PERF_TYPE_HARDWARE,
- 		.config	= event,
-+#ifdef __aarch64__
-+		.config1 = 0x2,		/* Request user access */
-+#endif
- 	};
- 	int err, i;
+ 	__IP6_UPD_PO_STATS(net, idev, IPSTATS_MIB_IN, skb->len);
  
-@@ -150,7 +153,7 @@ static int test_stat_user_read(int event)
- 	pc = perf_evsel__mmap_base(evsel, 0, 0);
- 	__T("failed to get mmapped address", pc);
+ 	if ((skb = skb_share_check(skb, GFP_ATOMIC)) == NULL ||
+diff --git a/net/ipv6/proc.c b/net/ipv6/proc.c
+index d6306aa46bb1..76e6119ba558 100644
+--- a/net/ipv6/proc.c
++++ b/net/ipv6/proc.c
+@@ -84,6 +84,7 @@ static const struct snmp_mib snmp6_ipstats_list[] = {
+ 	SNMP_MIB_ITEM("Ip6InECT1Pkts", IPSTATS_MIB_ECT1PKTS),
+ 	SNMP_MIB_ITEM("Ip6InECT0Pkts", IPSTATS_MIB_ECT0PKTS),
+ 	SNMP_MIB_ITEM("Ip6InCEPkts", IPSTATS_MIB_CEPKTS),
++	SNMP_MIB_ITEM("Ip6InMacErrors", IPSTATS_MIB_INMACERRORS),
+ 	SNMP_MIB_SENTINEL
+ };
  
--#if defined(__i386__) || defined(__x86_64__)
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
- 	__T("userspace counter access not supported", pc->cap_user_rdpmc);
- 	__T("userspace counter access not enabled", pc->index);
- 	__T("userspace counter width not set", pc->pmc_width >= 32);
 -- 
-2.32.0
+2.35.0.rc2.247.g8bbb082509-goog
 

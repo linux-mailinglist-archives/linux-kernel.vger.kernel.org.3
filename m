@@ -2,98 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB7B4A57E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3414A57E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 08:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbiBAHiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 02:38:11 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:43801 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbiBAHiJ (ORCPT
+        id S235095AbiBAHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 02:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235003AbiBAHk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:38:09 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mk0a0-1mURRH1SY4-00kRXu; Tue, 01 Feb 2022 08:38:07 +0100
-Received: by mail-oi1-f169.google.com with SMTP id v67so31649622oie.9;
-        Mon, 31 Jan 2022 23:38:06 -0800 (PST)
-X-Gm-Message-State: AOAM532N9ip1dCa9ckyzxDsUhmIm9KBYNMWYqmjOas1B3C5kzDKGHmlg
-        wZ+HI7LjqzoRur71jfwoBAlpDLF4c46yYImO2W4=
-X-Google-Smtp-Source: ABdhPJwoAJXauxOlZ1TxRJZjpbgTXhT/BjZ6VY3RAg/96c46TCKIEYOphf3tKWPRy+ZIq5Ssv3EeqyOOpFvjD7WxsWE=
-X-Received: by 2002:aca:2b16:: with SMTP id i22mr389475oik.128.1643701085749;
- Mon, 31 Jan 2022 23:38:05 -0800 (PST)
+        Tue, 1 Feb 2022 02:40:29 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A20C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:40:28 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u11so14666884plh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 23:40:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=SGj9JOZOXXgNtUDRvOLvflNgqKK7vcnNbFrla5kWCKY=;
+        b=HIlMLw6Bavjhij3LFseBLkQcqZ3YtaepttclOGF5d4rpm/iy3NiHIqZRvP/ZM9Xns1
+         gjJmmp3nwlO5oS9+klLmAy3SxtRMjANEhwrGORm6tYLKVqJx1Fz9M+6a3Dqm8swFZ8Nw
+         WQiSbqhvJNXa0dio3ZYUF4Ke09jAII/JFLLuOZ9XGjpuNAgnUpaV49XluTt++n7/Yu7Z
+         EXsZKtEOUa8wItpMU9NLOZBGJk/dF0uCmK67txg9A58OF7rTRbYlhBphNO2pwjwb4ovH
+         CIQVWAg9eLBopT3Rn51YpZ732Jn9LgpBRi+2HQXF3WxGwHracYFOM7BJx+jTrW+zK+mb
+         tGRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=SGj9JOZOXXgNtUDRvOLvflNgqKK7vcnNbFrla5kWCKY=;
+        b=ERFh8htkrlx0Kw1yIKzG/QgvgWG8krjbvxXZRse5zhR1R/iWEBT6FtH5+4cEK11O8Y
+         dAGWd33qaSF6kGA+fS9/3Ko+G7uh6nyONRixB09ZbpItZM0GiksA6v1drqDkaX8PaitI
+         dniwvufkLYLjfI2NbAmthXrSAZZetffGL68cSW/rvnH1vQAx4Wtc9CNFCOFhKnaR6jRC
+         7U74SZ+E2+SvD9n02XwJY8Ec1/uNAk7nTupuHCq7UNBTIYh9IWjx9Pk2rSLIVrMTNgqW
+         1/2IWHUyWi2oQLASPo9E4OGuywsp85v0ks5D4cqvpl0GoDt2qUZvGhz+gcFBCVouJrIh
+         oPOg==
+X-Gm-Message-State: AOAM532rPvTP/9TimzIwEuTUixYC7u3oW9vGp9sKCVXt02fC5IOkfxj6
+        KOvU0PwPzN6eq4aLTVtJg2/UwFyu3Wg=
+X-Google-Smtp-Source: ABdhPJx4vjRVsORMbUQucnv6qLo4yewajUBEplHgzuVDiDorxS65zYYg9m0Qgb54QqAI+xvCwvtKqw==
+X-Received: by 2002:a17:90a:d203:: with SMTP id o3mr884699pju.122.1643701228233;
+        Mon, 31 Jan 2022 23:40:28 -0800 (PST)
+Received: from [10.59.0.6] ([85.203.23.80])
+        by smtp.gmail.com with ESMTPSA id e14sm21254160pfv.219.2022.01.31.23.40.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jan 2022 23:40:27 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [BUG] gpu: drm: radeon: two possible deadlocks involving locking and
+ waiting
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <d5e4460f-7e26-81d2-2efe-6f47760b78d2@gmail.com>
+Date:   Tue, 1 Feb 2022 15:40:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20220131225250.409564-1-ndesaulniers@google.com> <202201311550.31EF589B2@keescook>
-In-Reply-To: <202201311550.31EF589B2@keescook>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 1 Feb 2022 08:37:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3-WqWUCps131vS1W9T6sN8yQ3GAaja8JP0GYCQjP68Qg@mail.gmail.com>
-Message-ID: <CAK8P3a3-WqWUCps131vS1W9T6sN8yQ3GAaja8JP0GYCQjP68Qg@mail.gmail.com>
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Baker <len.baker@gmx.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Gmy/OLhhRhW8zXgYaS+K13GMv7b02GK61cdOOM+6a0V9RpMTBRD
- 9AZf23HLzhtQNorolU+10ZvdPFllQLfhoASYc+LIDhid4oeCN8ZtIlX/Y/sDVK1ntnzBVOB
- DklZH71DY5yvshzSPsPgmh6p9SsaBupSLM52BdsClj6SFiuFYJWAIGgdh6vaAsr91guMuxK
- gPCJ6vD1ntRemqEbfnLFA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DLjwZiIMbCI=:o7mkkKsFobMnUtaepxHD+S
- gaPs5kUQoIw4JQR7okiaEspEjxPX38TflIee5BdHC7wA0yP5ys131QpZJ4vX93uFP8ZAzDWah
- N03ZNmUpv4mewOe7vAr+ClRbmalcgK99hY5tf4M31dJkjmsD2MUq79r6TySUQnHkrOU1ZeZWu
- gzNSGVj2RBc66X8VkbjRNYAAmWsrUjzSZtUywWprwz0fxgeYowt6YyKct4rD/29Pu3Vnyb7ws
- sz3TYaCBtRMGictyhP9+BSsSJlJSdVU4xsOpT9WnHgWYABaTeoqXFG4+bLNbN7RUS25JuvTrb
- Dazubzl/dWUTJzNhL5uyy0thxc6Zs8Il2GrSGKe3F52pGViEE3duJj9UARByGWCpQe5plcZcS
- SN4ruQlGeT62iBvIMI8K6lK5BzgBmMqoo40Ms3v44X/1bnPOJ9W6QkQ97jSM0kkKqlpU3xMPY
- aqSzZ1Oqw2rd68Oev01F3A6mKndzwWGC0oJ/ve6wT09nsmuxku68s4/as/QWOGO1hHvGGEBln
- tz5kPQX0bCn6DPkWc4QLUZ7OMlaMHkWVGZwXvVP5SEnMk2bFgJLehlQC35zqUXEwn9+BQs4FR
- 6XNaOW/AAAz3IyYCBQbPsmjaRtm6PZDb5wYDeKL/E6vNOBw7S9pg1gNdmTPJhIdjjNCeL9g+n
- qGgzu0vzN1PkFUlLksoeCnlmnkq8+6OgRYGqD0rSMZYlH99vJZCcHDgM0yASH2njET1/BHSRJ
- QQjdm1f5dpbptxjUkwKHOaA9B58tJRPJ22xqjC38NhgcWPWOFCWhmqP30pBuVXNQ7ySaQtHdZ
- LZvN2iF9OUTbb9yIHNUpcf6LfQwZACUQrpOVj1WYoo0mjArkfA=
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 12:53 AM Kees Cook <keescook@chromium.org> wrote:
+Hello,
 
-> > +
-> > +According to `the GCC docs on inline asm
-> > +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
-> > +
-> > +  asm statements that have no output operands and asm goto statements,
-> > +  are implicitly volatile.
->
-> Does this mean "volatile" _is_ needed when there are operands, etc?
+My static analysis tool reports a possible deadlock in the radeon driver 
+in Linux 5.16:
 
-It depends on what you want to express. The idea here is to give a way to
-gcc for optimizing out anything with an output, like x86 rdtsc() when the
-result is not used, which is sensible. If there is no output, such as in
-writel(), you don't need 'volatile' because gcc can assume that an
-inline asm without outputs has side-effects already.
+#BUG 1
+radeon_dpm_change_power_state_locked()
+   mutex_lock(&rdev->ring_lock); --> Line 1133 (Lock A)
+   radeon_fence_wait_empty()
+     radeon_fence_wait_seq_timeout()
+       wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
 
-A case where you need to add volatile is for (void)readl(ADDR),
-which is an operation that has an output as well as a side-effect.
+radeon_ring_backup()
+   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
+   radeon_fence_count_emitted()
+     radeon_fence_process()
+       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
 
-          Arnd
+When radeon_dpm_change_power_state_locked() is executed, "Wait X" is 
+performed by holding "Lock A". If radeon_ring_backup() is executed at 
+this time, "Wake X" cannot be performed to wake up "Wait X" in 
+radeon_dpm_change_power_state_locked(), because "Lock A" has been 
+already hold by radeon_dpm_change_power_state_locked(), causing a 
+possible deadlock.
+I find that "Wait X" is performed with a timeout MAX_SCHEDULE_TIMEOUT, 
+to relieve the possible deadlock; but I think this timeout can cause 
+inefficient execution.
+
+#BUG 2
+radeon_ring_lock()
+   mutex_lock(&rdev->ring_lock); --> Line 147 (Lock A)
+   radeon_ring_alloc()
+     radeon_fence_wait_next()
+       radeon_fence_wait_seq_timeout()
+         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
+
+radeon_ring_backup()
+   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
+   radeon_fence_count_emitted()
+     radeon_fence_process()
+       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
+
+When radeon_ring_lock() is executed, "Wait X" is performed by holding 
+"Lock A". If radeon_ring_backup() is executed at this time, "Wake X" 
+cannot be performed to wake up "Wait X" in radeon_ring_lock(), because 
+"Lock A" has been already hold by radeon_ring_lock(), causing a possible 
+deadlock.
+I find that "Wait X" is performed with a timeout MAX_SCHEDULE_TIMEOUT, 
+to relieve the possible deadlock; but I think this timeout can cause 
+inefficient execution.
+
+I am not quite sure whether these possible problems are real and how to 
+fix them if they are real.
+Any feedback would be appreciated, thanks :)
+
+
+Best wishes,
+Jia-Ju Bai
+

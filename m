@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD454A5EA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9FE4A5EA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbiBAOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:54:02 -0500
-Received: from mail.zju.edu.cn ([61.164.42.155]:32874 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239520AbiBAOyA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:54:00 -0500
-Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 1 Feb 2022 22:53:45
- +0800 (GMT+08:00)
-X-Originating-IP: [10.190.72.55]
-Date:   Tue, 1 Feb 2022 22:53:45 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5ZGo5aSa5piO?= <22021233@zju.edu.cn>
-To:     "Dan Carpenter" <dan.carpenter@oracle.com>
-Cc:     linux-hams@vger.kernel.org, jreuter@yaina.de, ralf@linux-mips.org,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH 2/2] ax25: add refcount in ax25_dev to avoid UAF
- bugs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20220131132241.GK1951@kadam>
-References: <cover.1643343397.git.duoming@zju.edu.cn>
- <855641b37699b6ff501c4bae8370d26f59da9c81.1643343397.git.duoming@zju.edu.cn>
- <20220131132241.GK1951@kadam>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S239554AbiBAOyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:54:24 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:40890 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239536AbiBAOyY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 09:54:24 -0500
+Received: by mail-ua1-f44.google.com with SMTP id w21so13977390uan.7;
+        Tue, 01 Feb 2022 06:54:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kzlQhpMq4Ctc2cxxIgF+2UWQv9yJB23c2S2KJFtJK5I=;
+        b=45yp7NFXNwmKIOiLsyRll/NNZOxk4C+TmfeoLBB5oudMYOpfRAkqlR3qFYm0yH644W
+         fja5KYoJGLfIk8KZ9O1mi7i0BUpaNdMe4X/kAdKEuv6isyl1gPq6SiRokz/tV8CR+nga
+         YELgNY9mK///FGIRcDGiCIExw5tXzjlShqgbVYJ7Tq7fuvi32WhF7X0Cbfu1bUH6lwu9
+         pEkp7x08F6ssqETSxF/NSeDGY4/BC6fVSCtsj6qZQuGUg0ZVwGaIv52bHmIPekAi99uk
+         pLgLLdBpLtewf8cd+/XaXZWHLCY+RZ0ZRx8q3yguk/Zc0r/+q5E2K6p7XlZzbMlbNBdP
+         Wrog==
+X-Gm-Message-State: AOAM532nWNh4q2jKur9xraS8zVcotvcN1b6Nmjl9iUWhWGS81pLZCS7y
+        JS+d2l49dmcE25jkUjizRVOo9nEg10MN+gQH
+X-Google-Smtp-Source: ABdhPJwXKkRxVjNJEd5j1UGzhpYT9mh5Ph2kMcYOaqssL83fo4/KNkwui1fitOtYbUlV3kh1g+Fcfw==
+X-Received: by 2002:ab0:b3:: with SMTP id 48mr9612857uaj.85.1643727263177;
+        Tue, 01 Feb 2022 06:54:23 -0800 (PST)
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
+        by smtp.gmail.com with ESMTPSA id w188sm4298830vsb.32.2022.02.01.06.54.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 06:54:22 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id a19so16373344vsi.2;
+        Tue, 01 Feb 2022 06:54:21 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr9369281vse.38.1643727260868;
+ Tue, 01 Feb 2022 06:54:20 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <387eb6ac.8e2c7.17eb5c703d1.Coremail.22021233@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgDnX_N5Sflh41WHDA--.61194W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgUIAVZdtYB9BgABsK
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch> <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+In-Reply-To: <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Feb 2022 15:54:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWxFFMJ6W70SJzJynfAuqF=NjHbx64-=vgo=FQL_fqNVA@mail.gmail.com>
+Message-ID: <CAMuHMdWxFFMJ6W70SJzJynfAuqF=NjHbx64-=vgo=FQL_fqNVA@mail.gmail.com>
+Subject: Re: [PATCH 01/21] MAINTAINERS: Add entry for fbdev core
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91ciB0aW1lIGFuZCBwb2ludGluZyBvdXQgcHJvYmxl
-bXMgaW4gbXkgcGF0Y2guCkFub3RoZXIgdHdvIHF1ZXN0aW9ucyB5b3UgYXNrZWQgaXMgc2hvd24g
-YmVsb3c6Cgo+IEBAIC0xMTIsMjAgKzExNSwyMiBAQCB2b2lkIGF4MjVfZGV2X2RldmljZV9kb3du
-KHN0cnVjdCBuZXRfZGV2aWNlICpkZXYpCj4gIAo+ICAJaWYgKChzID0gYXgyNV9kZXZfbGlzdCkg
-PT0gYXgyNV9kZXYpIHsKPiAgCQlheDI1X2Rldl9saXN0ID0gcy0+bmV4dDsKPiArCQlheDI1X2Rl
-dl9wdXQoYXgyNV9kZXYpOwoKRG8gd2Ugbm90IGhhdmUgdG8gY2FsbCBheDI1X2Rldl9ob2xkKHMt
-Pm5leHQpPwoKPiAgCQlzcGluX3VubG9ja19iaCgmYXgyNV9kZXZfbG9jayk7Cj4gIAkJZGV2LT5h
-eDI1X3B0ciA9IE5VTEw7Cj4gIAkJZGV2X3B1dF90cmFjayhkZXYsICZheDI1X2Rldi0+ZGV2X3Ry
-YWNrZXIpOwo+IC0JCWtmcmVlKGF4MjVfZGV2KTsKPiArCQlheDI1X2Rldl9wdXQoYXgyNV9kZXYp
-Owo+ICAJCXJldHVybjsKPiAgCX0KPiAgCj4gIAl3aGlsZSAocyAhPSBOVUxMICYmIHMtPm5leHQg
-IT0gTlVMTCkgewo+ICAJCWlmIChzLT5uZXh0ID09IGF4MjVfZGV2KSB7Cj4gIAkJCXMtPm5leHQg
-PSBheDI1X2Rldi0+bmV4dDsKPiArCQkJYXgyNV9kZXZfcHV0KGF4MjVfZGV2KTsKCmF4MjVfZGV2
-X2hvbGQoYXgyNV9kZXYtPm5leHQpPwoKQW5zd2VyOgpXZSBkb24ndCBoYXZlIHRvIGNhbGwgYXgy
-NV9kZXZfaG9sZChzLT5uZXh0KSBvciBheDI1X2Rldl9ob2xkKGF4MjVfZGV2LT5uZXh0KQppbiBh
-eDI1X2Rldl9kZXZpY2VfZG93bigpIGJlY2F1c2Ugd2UgaGF2ZSBhbHJlYWR5IGluY3JlYXNlZCB0
-aGUgcmVmY291bnQgd2hlbiAKd2UgaW5zZXJ0IGF4MjVfZGV2IGludG8gdGhlIGxpbmtlZCBsaXN0
-IGluIGF4MjVfZGV2X2RldmljZV91cCgpLgoKPiBAQCAtODMsNiArODUsNyBAQCB2b2lkIGF4MjVf
-ZGV2X2RldmljZV91cChzdHJ1Y3QgbmV0X2RldmljZSAqZGV2KQo+ICAJc3Bpbl9sb2NrX2JoKCZh
-eDI1X2Rldl9sb2NrKTsKPiAgCWF4MjVfZGV2LT5uZXh0ID0gYXgyNV9kZXZfbGlzdDsKPiAgCWF4
-MjVfZGV2X2xpc3QgID0gYXgyNV9kZXY7Cj4gKwlheDI1X2Rldl9ob2xkKGF4MjVfZGV2KTsKPiAg
-CXNwaW5fdW5sb2NrX2JoKCZheDI1X2Rldl9sb2NrKTsKCkJlc3Qgd2lzaGVzLApEdW9taW5nIFpo
-b3UK
+On Mon, Jan 31, 2022 at 10:06 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+> Ever since Tomi extracted the core code in 2014 it's been defacto me
+> maintaining this, with help from others from dri-devel and sometimes
+> Linus (but those are mostly merge conflicts):
+>
+> $ git shortlog -ns  drivers/video/fbdev/core/ | head -n5
+>     35  Daniel Vetter
+>     23  Linus Torvalds
+>     10  Hans de Goede
+>      9  Dave Airlie
+>      6  Peter Rosin
+>
+> I think ideally we'd also record that the various firmware fb drivers
+> (efifb, vesafb, ...) are also maintained in drm-misc because for the
+> past few years the patches have either been to fix handover issues
+> with drm drivers, or caused handover issues with drm drivers. So any
+> other tree just doesn't make sense. But also, there's plenty of
+> outdated MAINTAINER entries for these with people and git trees that
+> haven't been active in years, so maybe let's just leave them alone.
+> And furthermore distros are now adopting simpledrm as the firmware fb
+> driver, so hopefully the need to care about the fbdev firmware drivers
+> will go down going forward.
+>
+> Note that drm-misc is group maintained, I expect that to continue like
+> we've done before, so no new expectations that patches all go through
+> my hands. That would be silly. This also means I'm happy to put any
+> other volunteer's name in the M: line, but otherwise git log says I'm
+> the one who's stuck with this.
+
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

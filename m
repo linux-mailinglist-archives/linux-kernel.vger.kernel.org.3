@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3998B4A6213
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E714A6215
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 18:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiBARPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 12:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiBARPo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 12:15:44 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EBAC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 09:15:44 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id l25so33251248wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 09:15:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vuODL4R8sWx9OfFHsJcQsIGcRHDIKVpO9qvvFMatGKg=;
-        b=dzb0z2VsksG6lwrjCZriyd0Ja/8hxqDsV7pWCrRKJ2lzm4ZNcCH2zYBWXPu4oMNTXK
-         fWHT6ruiWLPHzc0UouY0EVebGMyse6bZDq0xiTCG4agdGIHkrvh1J3eSuEhS4ZMPOjNg
-         xmjbYlffWpMKw4SbOQVyVSlVwrfVvR7Ipd9AnSKKGs+pOqg72vFFDxq9hkcGErODDf30
-         fAHKvq5UkyqXRQ8NIXgWJk5AbQakp/ZftEWCxINS9FrTRRZ42DhYjpWUXD8sVathJFpI
-         veG8pZocDz42nVGM9OaE8kllg/CGALMaC/JBBo3+ppUR2TdVtg1zNd2GDkDsSYR7+owh
-         XzMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vuODL4R8sWx9OfFHsJcQsIGcRHDIKVpO9qvvFMatGKg=;
-        b=ZKByxn0ebJ1behUU7r3GpIBycN08QLsIUvWkwIy47rN1qHnunSYKfIY121wto8nmew
-         ggP937mNXAorU6FNNmFKgoq3ehwEQqLa7wNTtb8w7Yw6TrWeZFU5zoHa0Gqh2wEcSZfh
-         SyOlib0Fnv1pRJSktHUMsCK11leFRztV8oKzbis8VHWizb9gwLXsPvVLbpGZ9dpJx9x/
-         RTz8OSuzftvRMtNrpAhK1nPrH/IW+w0CgeBjiH8Y/CYESWnpe2SRKU/Aul8WYdLa312+
-         ZvVMrs2lEw1q0XO2Ct5+xKQX6ScO0/qWuDmEdcHgr4JbRHGz7LwUQ+0QJC+bdkPBKj2O
-         6N4Q==
-X-Gm-Message-State: AOAM5337Na5tG9UfDEkKIXQK+UZjUzXpu42BN3W2y044jpodN1Niz41j
-        C/DWBqziDtZIun0xb9XwiGK7og==
-X-Google-Smtp-Source: ABdhPJz0lwKeu7K9RB3IzmSFYBp7AIF6ASq5a+5Q0YeRnhGQt197OSVsxY4iOSxejWmBynjYYdGerA==
-X-Received: by 2002:a5d:6f0e:: with SMTP id ay14mr22305793wrb.60.1643735743021;
-        Tue, 01 Feb 2022 09:15:43 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id d7sm20665428wri.117.2022.02.01.09.15.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:15:42 -0800 (PST)
-Date:   Tue, 1 Feb 2022 17:15:40 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     mani@kernel.org, hemantk@codeaurora.org, bbhatt@codeaurora.org,
-        loic.poulain@linaro.org, jhugo@codeaurora.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] bus: mhi: possible deadlock in mhi_pm_disable_transition()
- and mhi_async_power_up()
-Message-ID: <20220201171540.2udq3x6r2swctzau@maple.lan>
-References: <d3a94b53-0d77-dafe-ce45-f9ab23278616@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d3a94b53-0d77-dafe-ce45-f9ab23278616@gmail.com>
+        id S240559AbiBARQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 12:16:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:53018 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230471AbiBARQP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 12:16:15 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0958A11B3;
+        Tue,  1 Feb 2022 09:16:15 -0800 (PST)
+Received: from e120937-lin.home (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 692013F40C;
+        Tue,  1 Feb 2022 09:16:13 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        souvik.chakravarty@arm.com, peter.hilber@opensynergy.com,
+        igor.skalkin@opensynergy.com, cristian.marussi@arm.com
+Subject: [PATCH 0/9] Add SCMI Virtio & Clock atomic support
+Date:   Tue,  1 Feb 2022 17:15:52 +0000
+Message-Id: <20220201171601.53316-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 10:56:30AM +0800, Jia-Ju Bai wrote:
-> Hello,
-> 
-> My static analysis tool reports a possible deadlock in the mhi driver in
-> Linux 5.10:
-> 
-> mhi_async_power_up()
->   mutex_lock(&mhi_cntrl->pm_mutex); --> Line 933 (Lock A)
->   wait_event_timeout(mhi_cntrl->state_event, ...) --> Line 985 (Wait X)
->   mutex_unlock(&mhi_cntrl->pm_mutex); --> Line 1040 (Unlock A)
-> 
-> mhi_pm_disable_transition()
->   mutex_lock(&mhi_cntrl->pm_mutex); --> Line 463 (Lock A)
->   wake_up_all(&mhi_cntrl->state_event); --> Line 474 (Wake X)
->   mutex_unlock(&mhi_cntrl->pm_mutex); --> Line 524 (Unlock A)
->   wake_up_all(&mhi_cntrl->state_event); --> Line 526 (Wake X)
-> 
-> When mhi_async_power_up() is executed, "Wait X" is performed by holding
-> "Lock A". If mhi_pm_disable_transition() is concurrently executed at this
-> time, "Wake X" cannot be performed to wake up "Wait X" in
-> mhi_async_power_up(), because "Lock A" is already hold by
-> mhi_async_power_up(), causing a possible deadlock.
-> I find that "Wait X" is performed with a timeout, to relieve the possible
-> deadlock; but I think this timeout can cause inefficient execution.
-> 
-> I am not quite sure whether this possible problem is real and how to fix it
-> if it is real.
-> Any feedback would be appreciated, thanks :)
+Hi,
 
-Interesting find but I think it would be better to run your tool
-against more recent kernels to confirm any problem reports. In this
-case the code you mention looks like it was removed in v5.17-rc1
-(and should eventually make its way to the stable kernels too).
+This small series is the tail-subset of the previous V8 series about atomic
+support in SCMI [1], whose 8-patches head-subset has now been queued on
+[2]; as such, it is based on [2] on top of tag scmi-updates-5.17:
 
+commit 94d0cd1da14a ("firmware: arm_scmi: Add new parameter to
+		     mark_txdone")
 
-Daniel.
+Patch [1/9] substitute virtio-scmi ready flag and lock with a reference
+counter to keep track of vio channels lifetime while removing the need of
+a wide spinlocked section (that would cause issues with introduction of
+virtio polling support)
+
+Patch [2/9] adds a few helpers to handle the TX free_list and a dedicated
+spinlock to reduce the reliance on the main one.
+
+Patch [3/9] is an RFC patch to the virtio core around virtqueue_poll() API:
+the aim is to solve a possible ABA problem while polling on a very busy
+virtqueue.
+
+Patch [4/9] adds polling mode to SCMI VirtIO transport in order to support
+atomic operations on such transport.
+
+Patches [5,6/9] introduce a new optional SCMI binding, atomic_threshold, to
+configure a platform specific time threshold used in the following patches
+to select with a finer grain which SCMI resources should be eligible for
+atomic operations when requested.
+
+Patch [7/9] exposes new SCMI Clock protocol operations to allow an SCMI
+user to request atomic mode on clock enable commands.
+
+Patch [8/9] adds support to SCMI Clock protocol for a new clock attributes
+field which advertises typical enable latency for a specific resource.
+It is marked as RFC since the SCMI spec including such addition is still
+to be finalized.
+
+Finally patch [9/9] add support for atomic operations to the SCMI clock
+driver; the underlying logic here is that we register with the Clock
+framework atomic-capable clock resources if and only if the backing SCMI
+transport is capable of atomic operations AND the specific clock resource
+has been advertised by the SCMI platform as having:
+
+	clock_enable_latency <= atomic_threshold
+
+The idea is to avoid costly atomic busy-waiting for resources that have
+been advertised as 'slow' to operate upon. (i.e. a PLL vs a gating clock)
+This last patch is marked as RFC too since it is dependent on the previous
+one (that is RFC-tagged too)
+
+To ease testing the whole series can be find at [3].
+
+Any feedback/testing welcome as usual.
+
+Thanks,
+Cristian
+
+[1]: https://lore.kernel.org/linux-arm-kernel/20211220195646.44498-1-cristian.marussi@arm.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git/tag/?h=scmi-updates-5.17
+[3]: https://gitlab.arm.com/linux-arm/linux-cm/-/commits/scmi_atomic_clk_virtio_V2/
+
+---
+V1 --> V2
+ - added vio channel refcount support patch
+ - reviewed free_list support and usage
+ - added virtio_ring RFC patch
+ - shrinked spinlocked section within virtio_poll_done to exclude
+   virtqueue_poll call
+ - removed poll_lock
+ - use vio channel refcount acquire/release logic when polling
+ - using new free_list accessors
+ - added new dedicated pending_lock to access pending_cmds_list
+ - fixed a few comments
+
+Cristian Marussi (9):
+  firmware: arm_scmi: Add a virtio channel refcount
+  firmware: arm_scmi: Review virtio free_list handling
+  [RFC] virtio_ring: Embed a wrap counter in opaque poll index value
+  firmware: arm_scmi: Add atomic mode support to virtio transport
+  dt-bindings: firmware: arm,scmi: Add atomic_threshold optional
+    property
+  firmware: arm_scmi: Support optional system wide atomic_threshold
+  firmware: arm_scmi: Add atomic support to clock protocol
+  [RFC] firmware: arm_scmi: Add support for clock_enable_latency
+  [RFC] clk: scmi: Support atomic clock enable/disable API
+
+ .../bindings/firmware/arm,scmi.yaml           |  11 +
+ drivers/clk/clk-scmi.c                        |  71 ++-
+ drivers/firmware/arm_scmi/Kconfig             |  15 +
+ drivers/firmware/arm_scmi/clock.c             |  34 +-
+ drivers/firmware/arm_scmi/driver.c            |  36 +-
+ drivers/firmware/arm_scmi/virtio.c            | 504 +++++++++++++++---
+ drivers/virtio/virtio_ring.c                  |  51 +-
+ include/linux/scmi_protocol.h                 |   9 +-
+ 8 files changed, 622 insertions(+), 109 deletions(-)
+
+-- 
+2.17.1
+

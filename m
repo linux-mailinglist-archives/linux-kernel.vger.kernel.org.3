@@ -2,158 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCF14A6408
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A174A640E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236426AbiBASgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S241968AbiBAShB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:37:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241903AbiBASgQ (ORCPT
+        with ESMTP id S241928AbiBAShA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:36:16 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162B7C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:36:16 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i17so16608405pfq.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:36:16 -0800 (PST)
+        Tue, 1 Feb 2022 13:37:00 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29369C06173D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:37:00 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h7so1976584wrc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=au2QIv+E5efC5CXFBVtN3Dhp88XfEH66mYp3WFA4dy4=;
-        b=OzqPatId9hYU/kdkYqwdo5N/t94vb8Ym5n0MeDAweVjIrNJGKqFDYpfOoGn4KTTXF8
-         noDYko8zN7lX1ZB7fGgPTZkr0TSwJu/mew/BoFxZBhqE2IbOvlHEtl3wmg1k37OT3Fqj
-         AhAVEXOhTkOr8jQOqokKKuob/1cSiiPXF8Zzc5WMDwW2veUtNn9NSPNhTqmkRlgXjV+w
-         nm1z4SHN8UBQ/Knm+oWMOq6z+3ch9FiDl02rAKZIz3Jp+1VaexPZh7k8uJbeMfGVbA7B
-         57nJhQELFRgndRbftgkPLN9gCUqzFhUHQmQ4UBNpu7+GNBCVo1vmiPsg8UJGU6RObBVa
-         n0KQ==
+        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DI1x5+Wihj4SQ70P5LSVw+8H1DmmobNWAEhS7drOCTA=;
+        b=FODfQEB3+VrZ5tKcYc+CWcrD2hHYrFmADtl0dJMx5xXMl9RKo6eBF3lT/Sow792Z+Q
+         f8ZlSAACHtERHUoXHY1d2ecJjnB8wS/Q87qex3WylrZWuf1L4j5yHLHcNxaZVAyB4VVm
+         P6FiTB21uMDQPGS7O92SNJ6SXBTeFUVskTYpP0zcPV0blQxwnVptj7/dNOH+EaoFnNyr
+         79N8tEK+nSLcBIrjROxswMd5MknwJm5re8cehiZwo0Cio2Ty4Q3RhaQEMfGuLH5IXJQ/
+         riAlhibal7ZCvPd9Yc+vYrN969ElkfpTQPUZNpDBsSUk+pVx4QIFxvJsMjxH9C2pVKn5
+         FY9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=au2QIv+E5efC5CXFBVtN3Dhp88XfEH66mYp3WFA4dy4=;
-        b=bm7SvNH8PGURI4EPE1efMemSG/T5LgRhe3y7q49ODrVdV/H7HLRXxIwqKwEDJ1O8i2
-         RSCNs2g0O7Pku633HqjMtjmhg30qgEQg+tPF/KsOjoQDVHcK69sW/7l4RmQ1UIUYV/wh
-         viqqLAnUC1Ts1Q+q9y/WcY34kl18o4ZZQ8/boaoRCCMkRZmwYDkgMWLyTTMlUGYPMR3c
-         mqs/4SlmTobxV2Bs8bzKQzlytT54amcRC/k2Y2pK4co3GuTXwStTr3qrG67TGfoEnEWH
-         aTayfwiZZHXanNyI7Xz9OVWAITJVYo9+wjv2VWMeecqV+G7pImWB1AHoFDkOlvXhtsw1
-         MR7A==
-X-Gm-Message-State: AOAM531X4AGrTwY50HBHOF9MlSd6ikdxvdT1Xt81Mpdcr/YM0xdaJLMP
-        nGoDbLvPKVelmDr7PSLb5eRY5w==
-X-Google-Smtp-Source: ABdhPJyXfaqwD+jsdqC62UNTBL+nVsylPRncm6pguROBuW/H6mEZXGhxRAt2QA3tJqSx++YfbZqvtg==
-X-Received: by 2002:a63:6885:: with SMTP id d127mr12149556pgc.470.1643740575558;
-        Tue, 01 Feb 2022 10:36:15 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id k21sm22861321pff.33.2022.02.01.10.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 10:36:14 -0800 (PST)
-Date:   Tue, 1 Feb 2022 11:36:12 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 3/3] remoteproc: mtk_scp: Use dev_err_probe() where
- possible
-Message-ID: <20220201183612.GC2490199@p14s>
-References: <20220124120915.41292-1-angelogioacchino.delregno@collabora.com>
- <20220124120915.41292-3-angelogioacchino.delregno@collabora.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DI1x5+Wihj4SQ70P5LSVw+8H1DmmobNWAEhS7drOCTA=;
+        b=Jc5gct4QvbMDXwnPBEio/YxWlW/PKPwWhKXqIr45qXHAMhAEmhZnMUoyxcWQWOymxF
+         EJMv4T2DgRr3X6OffQBY3j5xU/u9O9ZmcvuxlkRQKg6UfN8FonNUPVolaoX8uQ1UY4zX
+         4WfTQWcyKJ/3a+qh8q1ff3tnaVDVgVxC6Ex0M5/6irKzrJ6HnXym3+paPY8IvR1CjdCH
+         CyoA5CqLa1nQeREStSepOboBXVutwP4FYjwx/Vi9dafMm1m5JGPmh3g3GRDuGDtbbn/v
+         qLmYTokH4rAbscPyNNJLT7q/7AsRGYQ5SUljwPFtt8uQK3LG6IdvftCz0JDkhvgpZMnf
+         t3PA==
+X-Gm-Message-State: AOAM533x4KaqP4nSXVzmfrT0Gs7IYqOrD9lMEB2BZYjNKzMLS7j7NJtQ
+        U6XCOAlPIoNIkflZW4GQQAs4hZXc/xNXdANYnRzXt5wKb+U=
+X-Google-Smtp-Source: ABdhPJykR69e7xynNf/2GwFt8xXKISZXw11Lu8sKsZOzgS4SZNut8V2WY0EwKSIQS5tWWaFjpg+UUAKzXkbQfOnBvCs=
+X-Received: by 2002:adf:f1c7:: with SMTP id z7mr13384515wro.198.1643740618703;
+ Tue, 01 Feb 2022 10:36:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124120915.41292-3-angelogioacchino.delregno@collabora.com>
+References: <20220113150846.1570738-1-rad@semihalf.ocm> <CABBYNZJn1ej18ERtgnF_wvbvBEm0N=cBRHHtr8bu+nfAotjg2Q@mail.gmail.com>
+ <CAOs-w0+W_BHTdZkOnu-EPme2dpoO_6bQi_2LRH7Xw0Ge=i9TOA@mail.gmail.com>
+ <CABBYNZLinzOxJWgHwVbeEWe2zkz_y4BrXVYX4e0op580YO1OeA@mail.gmail.com> <CABBYNZL3ozczAK2mWXVd+x2NtZhaAbfnUFoA3ot1AQLNHSeL5w@mail.gmail.com>
+In-Reply-To: <CABBYNZL3ozczAK2mWXVd+x2NtZhaAbfnUFoA3ot1AQLNHSeL5w@mail.gmail.com>
+From:   =?UTF-8?Q?Rados=C5=82aw_Biernacki?= <rad@semihalf.com>
+Date:   Tue, 1 Feb 2022 19:36:50 +0100
+Message-ID: <CAOs-w0+T1Dcwsx-dy28v_6RxyQZidFoxOBts4++j8h5N5sY6mA@mail.gmail.com>
+Subject: Re: [PATCH] Bluetooth: Fix skb allocation in mgmt_remote_name()
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Miao-chen Chou <mcchou@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        upstream@semihalf.com, Angela Czubak <acz@semihalf.com>,
+        Marek Maslanka <mm@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+Hey Luiz.
+Sorry for keeping you waiting. I will send it today.
 
-On Mon, Jan 24, 2022 at 01:09:15PM +0100, AngeloGioacchino Del Regno wrote:
-> Simplify the probe function, where possible, by using dev_err_probe().
-> While at it, as to increase human readability, also remove some
-> unnecessary forced void pointer casts that were previously used in
-> error checking.
-
-I am in favour of all 3 patches (please add a cover letter next time) but weary
-about testing - do you have access to a Mediatek platform to try this on or
-is it purely theoretical?
-
-I would definitely feel better to see a "Tested-by" tag by someone out there
-with access to the HW.
-
-Thanks,
-Mathieu
-
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/remoteproc/mtk_scp.c | 28 ++++++++++++----------------
->  1 file changed, 12 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index e40706b0e015..dcddb33e9997 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -757,10 +757,8 @@ static int scp_probe(struct platform_device *pdev)
->  	int ret, i;
->  
->  	rproc = devm_rproc_alloc(dev, np->name, &scp_ops, fw_name, sizeof(*scp));
-> -	if (!rproc) {
-> -		dev_err(dev, "unable to allocate remoteproc\n");
-> -		return -ENOMEM;
-> -	}
-> +	if (!rproc)
-> +		return dev_err_probe(dev, -ENOMEM, "unable to allocate remoteproc\n");
->  
->  	scp = (struct mtk_scp *)rproc->priv;
->  	scp->rproc = rproc;
-> @@ -770,21 +768,20 @@ static int scp_probe(struct platform_device *pdev)
->  
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
->  	scp->sram_base = devm_ioremap_resource(dev, res);
-> -	if (IS_ERR((__force void *)scp->sram_base)) {
-> -		dev_err(dev, "Failed to parse and map sram memory\n");
-> -		return PTR_ERR((__force void *)scp->sram_base);
-> -	}
-> +	if (IS_ERR(scp->sram_base))
-> +		return dev_err_probe(dev, PTR_ERR(scp->sram_base),
-> +				     "Failed to parse and map sram memory\n");
-> +
->  	scp->sram_size = resource_size(res);
->  	scp->sram_phys = res->start;
->  
->  	/* l1tcm is an optional memory region */
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
->  	scp->l1tcm_base = devm_ioremap_resource(dev, res);
-> -	if (IS_ERR((__force void *)scp->l1tcm_base)) {
-> -		ret = PTR_ERR((__force void *)scp->l1tcm_base);
-> +	if (IS_ERR(scp->l1tcm_base)) {
-> +		ret = PTR_ERR(scp->l1tcm_base);
->  		if (ret != -EINVAL) {
-> -			dev_err(dev, "Failed to map l1tcm memory\n");
-> -			return ret;
-> +			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
->  		}
->  	} else {
->  		scp->l1tcm_size = resource_size(res);
-> @@ -792,10 +789,9 @@ static int scp_probe(struct platform_device *pdev)
->  	}
->  
->  	scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
-> -	if (IS_ERR((__force void *)scp->reg_base)) {
-> -		dev_err(dev, "Failed to parse and map cfg memory\n");
-> -		return PTR_ERR((__force void *)scp->reg_base);
-> -	}
-> +	if (IS_ERR(scp->reg_base))
-> +		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
-> +				     "Failed to parse and map cfg memory\n");
->  
->  	ret = scp->data->scp_clk_get(scp);
->  	if (ret)
-> -- 
-> 2.33.1
-> 
+pon., 31 sty 2022 o 19:47 Luiz Augusto von Dentz
+<luiz.dentz@gmail.com> napisa=C5=82(a):
+>
+> Hi Rados=C5=82aw,
+>
+> On Thu, Jan 13, 2022 at 2:23 PM Luiz Augusto von Dentz
+> <luiz.dentz@gmail.com> wrote:
+> >
+> > Hi Rados=C5=82aw,
+> >
+> > On Thu, Jan 13, 2022 at 2:07 PM Rados=C5=82aw Biernacki <rad@semihalf.c=
+om> wrote:
+> > >
+> > > Hi Luiz,
+> > >
+> > > czw., 13 sty 2022 o 17:17 Luiz Augusto von Dentz
+> > > <luiz.dentz@gmail.com> napisa=C5=82(a):
+> > > >
+> > > > Hi Radoslaw,
+> > > >
+> > > > On Thu, Jan 13, 2022 at 7:09 AM Radoslaw Biernacki <rad@semihalf.co=
+m> wrote:
+> > > > >
+> > > > > From: Radoslaw Biernacki <rad@semihalf.com>
+> > > > >
+> > > > > This patch fixes skb allocation, as lack of space for ev might pu=
+sh skb
+> > > > > tail beyond its end.
+> > > > > Also introduce eir_precalc_len() that can be used instead of magi=
+c
+> > > > > numbers for similar eir operations on skb.
+> > > > >
+> > > > > Fixes: cf1bce1de7eeb ("Bluetooth: mgmt: Make use of mgmt_send_eve=
+nt_skb in MGMT_EV_DEVICE_FOUND")
+> > > > > Signed-off-by: Angela Czubak <acz@semihalf.com>
+> > > > > Signed-off-by: Marek Maslanka <mm@semihalf.com>
+> > > > > Signed-off-by: Radoslaw Biernacki <rad@semihalf.com>
+> > > > > ---
+> > > > >  net/bluetooth/eir.h  |  5 +++++
+> > > > >  net/bluetooth/mgmt.c | 12 ++++--------
+> > > > >  2 files changed, 9 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/net/bluetooth/eir.h b/net/bluetooth/eir.h
+> > > > > index 05e2e917fc25..e5876751f07e 100644
+> > > > > --- a/net/bluetooth/eir.h
+> > > > > +++ b/net/bluetooth/eir.h
+> > > > > @@ -15,6 +15,11 @@ u8 eir_create_scan_rsp(struct hci_dev *hdev, u=
+8 instance, u8 *ptr);
+> > > > >  u8 eir_append_local_name(struct hci_dev *hdev, u8 *eir, u8 ad_le=
+n);
+> > > > >  u8 eir_append_appearance(struct hci_dev *hdev, u8 *ptr, u8 ad_le=
+n);
+> > > > >
+> > > > > +static inline u16 eir_precalc_len(u8 data_len)
+> > > > > +{
+> > > > > +       return sizeof(u8) * 2 + data_len;
+> > > > > +}
+> > > > > +
+> > > > >  static inline u16 eir_append_data(u8 *eir, u16 eir_len, u8 type,
+> > > > >                                   u8 *data, u8 data_len)
+> > > > >  {
+> > > > > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> > > > > index 37087cf7dc5a..d517fd847730 100644
+> > > > > --- a/net/bluetooth/mgmt.c
+> > > > > +++ b/net/bluetooth/mgmt.c
+> > > > > @@ -9680,13 +9680,11 @@ void mgmt_remote_name(struct hci_dev *hde=
+v, bdaddr_t *bdaddr, u8 link_type,
+> > > > >  {
+> > > > >         struct sk_buff *skb;
+> > > > >         struct mgmt_ev_device_found *ev;
+> > > > > -       u16 eir_len;
+> > > > > -       u32 flags;
+> > > > > +       u16 eir_len =3D 0;
+> > > > > +       u32 flags =3D 0;
+> > > > >
+> > > > > -       if (name_len)
+> > > > > -               skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND=
+, 2 + name_len);
+> > > > > -       else
+> > > > > -               skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND=
+, 0);
+> > > > > +       skb =3D mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
+> > > > > +                            sizeof(*ev) + (name ? eir_precalc_le=
+n(name_len) : 0));
+> > > >
+> > > > Looks like mgmt_device_connected also has a similar problem.
+> > >
+> > > Yes, I was planning to send a patch to this one though it will not be=
+ as slick.
+> > > It would be nice to have a helper which will call skb_put() and add
+> > > eir data at once.
+> > > Basically skb operation in pair to, what eir_append_data() does with
+> > > help of eir_len but without awkwardness when passing return value to
+> > > skb_put() (as it returns offset not size).
+> >
+> > Hmm, that might be a good idea indeed something like eir_append_skb,
+> > if only we could grow the skb with skb_put directly that would
+> > eliminate the problem with having to reserve enough space for the
+> > worse case.
+> >
+> > > I will send V2 with two patches. I hope they will align with your
+> > > original goal of eliminating the necessity of intermediary buffers at
+> > > some point in future.
+>
+> Are you still planning to send the v2?
+>
+> > > >
+> > > > >         ev =3D skb_put(skb, sizeof(*ev));
+> > > > >         bacpy(&ev->addr.bdaddr, bdaddr);
+> > > > > @@ -9696,10 +9694,8 @@ void mgmt_remote_name(struct hci_dev *hdev=
+, bdaddr_t *bdaddr, u8 link_type,
+> > > > >         if (name) {
+> > > > >                 eir_len =3D eir_append_data(ev->eir, 0, EIR_NAME_=
+COMPLETE, name,
+> > > > >                                           name_len);
+> > > > > -               flags =3D 0;
+> > > > >                 skb_put(skb, eir_len);
+> > > > >         } else {
+> > > > > -               eir_len =3D 0;
+> > > > >                 flags =3D MGMT_DEV_FOUND_NAME_REQUEST_FAILED;
+> > > > >         }
+> > > >
+> > > > These changes would leave flags and eir_len uninitialized.
+> > >
+> > > Both are initialized to 0 by this patch.
+> >
+> > Sorry, I must be blind that I didn't see you had changed that to be
+> > initialized in their declaration.
+> >
+> > > >
+> > > > > --
+> > > > > 2.34.1.703.g22d0c6ccf7-goog
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > Luiz Augusto von Dentz
+> >
+> >
+> >
+> > --
+> > Luiz Augusto von Dentz
+>
+>
+>
+> --
+> Luiz Augusto von Dentz

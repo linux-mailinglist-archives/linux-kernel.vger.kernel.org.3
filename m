@@ -2,85 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0394A66A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EE64A66AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 21:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242768AbiBAU5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 15:57:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:58506 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbiBAU5L (ORCPT
+        id S242655AbiBAU5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 15:57:40 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:57830 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230415AbiBAU5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:57:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C1561756;
-        Tue,  1 Feb 2022 20:57:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03855C340ED;
-        Tue,  1 Feb 2022 20:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643749030;
-        bh=QXd5q+7zbc3jx1Mm3Y3j3sEp6a7kDTxU4zMgI1M/2kk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PRveCCTFfiTH8rbyrskvMn7zEKvijdY2AWxXS8Oa0tcVHJl7jkEh4CftPLCtfL33H
-         509+ho2uYbQttMIcdNcZ8pWKHdnBQc5NC+E1XXTcG3m1z+aQemyE7WRJ+4Y21LEeAh
-         yJx3YcLpcmS+k+sHDkazhBTz80lCJ02l0a/eQ84VsRdVXzMtkblhyOVaNJG+EUaA+g
-         Q8567O1/cFJVLH5kCu6alN86VTReQ2XCscOuy64FJR4I2tdUPiyOzjXea6JK4vQQ8T
-         6RWZWTXDGkPQY2CP3EZ91XxgusRAwc8SQm0BHyemWHkrx+ChCTXnw0FuR+YEzeT9xe
-         pNliHc4SyE9vw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH bpf-next 5/5] lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
-Date:   Tue,  1 Feb 2022 13:56:24 -0700
-Message-Id: <20220201205624.652313-6-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
-References: <20220201205624.652313-1-nathan@kernel.org>
+        Tue, 1 Feb 2022 15:57:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=cJSKxOJIzFWJNB/4kEdPj9SAYSFCsRpghMAEka+ai04=; b=inRrrLF05DauLsozmFhswOyT+U
+        WPSDQkzNTcNkRZ8czrnUNGLopNg88HLX9pdCK4UlXF1bzYf1BKgtsKpvGypPta7CHlcUOku9K9vge
+        +NAO35wcF3CTICM/mBTLmVIVzczzqTvX+VVkIJTevRDS2LfYWgy1a6+2EUp3AAiQR5ChqflV0MWso
+        oxckJk6HwJ98oVn/PvRLw3x09cOhCMFDyStF8NnTcjdXZ77YjfG+lzhwmhLo1H71ALY2CJFwigpj+
+        UdeGbDqFGDIIDyWwb0VsLflcq8qGQM/ErCZ1YgjT6Xi6D86QbJbPGca8MIAn8BpFKQVINH97Ks3w6
+        NHJute4A==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1nF0D7-009dre-2I; Tue, 01 Feb 2022 13:57:10 -0700
+To:     Jonathan Derrick <jonathan.derrick@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+Cc:     Stephen Bates <sbates@raithlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jakowski Andrzej <andrzej.jakowski@intel.com>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>
+References: <20220128002614.6136-1-logang@deltatee.com>
+ <20220128002614.6136-9-logang@deltatee.com>
+ <6c939012-8d68-fbb5-50c6-3fe757a31b48@linux.dev>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <bd83b26d-2f35-cd0a-bb20-a4626d8d48a7@deltatee.com>
+Date:   Tue, 1 Feb 2022 13:57:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <6c939012-8d68-fbb5-50c6-3fe757a31b48@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: rcampbell@nvidia.com, ckulkarnilinux@gmail.com, martin.oliveira@eideticom.com, robin.murphy@arm.com, ira.weiny@intel.com, helgaas@kernel.org, jianxin.xiong@intel.com, dave.hansen@linux.intel.com, jason@jlekstrand.net, dave.b.minturn@intel.com, andrzej.jakowski@intel.com, daniel.vetter@ffwll.ch, willy@infradead.org, ddutile@redhat.com, jhubbard@nvidia.com, christian.koenig@amd.com, jgg@ziepe.ca, dan.j.williams@intel.com, hch@lst.de, sbates@raithlin.com, iommu@lists.linux-foundation.org, linux-mm@kvack.org, linux-pci@vger.kernel.org, linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, jonathan.derrick@linux.dev
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v5 08/24] dma-direct: support PCI P2PDMA pages in
+ dma-direct map_sg
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 98cd6f521f10 ("Kconfig: allow explicit opt in to DWARF v5")
-prevented CONFIG_DEBUG_INFO_DWARF5 from being selected when
-CONFIG_DEBUG_INFO_BTF is enabled because pahole had issues with clang's
-DWARF5 info. This was resolved by [1], which is in pahole v1.21.
 
-Allow DEBUG_INFO_DWARF5 to be selected with DEBUG_INFO_BTF when using
-pahole v1.21 or newer.
 
-[1]: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=7d8e829f636f47aba2e1b6eda57e74d8e31f733c
+On 2022-02-01 1:53 p.m., Jonathan Derrick wrote:
+> 
+> 
+> On 1/27/2022 5:25 PM, Logan Gunthorpe wrote:
+>> Add PCI P2PDMA support for dma_direct_map_sg() so that it can map
+>> PCI P2PDMA pages directly without a hack in the callers. This allows
+>> for heterogeneous SGLs that contain both P2PDMA and regular pages.
+>>
+>> A P2PDMA page may have three possible outcomes when being mapped:
+>>    1) If the data path between the two devices doesn't go through the
+>>       root port, then it should be mapped with a PCI bus address
+>>    2) If the data path goes through the host bridge, it should be mapped
+>>       normally, as though it were a CPU physical address
+>>    3) It is not possible for the two devices to communicate and thus
+>>       the mapping operation should fail (and it will return -EREMOTEIO).
+>>
+>> SGL segments that contain PCI bus addresses are marked with
+>> sg_dma_mark_pci_p2pdma() and are ignored when unmapped.
+>>
+>> P2PDMA mappings are also failed if swiotlb needs to be used on the
+>> mapping.
+>>
+>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+>> ---
+>>   kernel/dma/direct.c | 43 +++++++++++++++++++++++++++++++++++++------
+>>   kernel/dma/direct.h |  7 ++++++-
+>>   2 files changed, 43 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+>> index 50f48e9e4598..975df5f3aaf9 100644
+>> --- a/kernel/dma/direct.c
+>> +++ b/kernel/dma/direct.c
+>> @@ -461,29 +461,60 @@ void dma_direct_sync_sg_for_cpu(struct device *dev,
+>>   		arch_sync_dma_for_cpu_all();
+>>   }
+>>   
+>> +/*
+>> + * Unmaps segments, except for ones marked as pci_p2pdma which do not
+>> + * require any further action as they contain a bus address.
+>> + */
+>>   void dma_direct_unmap_sg(struct device *dev, struct scatterlist *sgl,
+>>   		int nents, enum dma_data_direction dir, unsigned long attrs)
+>>   {
+>>   	struct scatterlist *sg;
+>>   	int i;
+>>   
+>> -	for_each_sg(sgl, sg, nents, i)
+>> -		dma_direct_unmap_page(dev, sg->dma_address, sg_dma_len(sg), dir,
+>> -			     attrs);
+>> +	for_each_sg(sgl,  sg, nents, i) {
+>> +		if (sg_is_dma_bus_address(sg))
+>> +			sg_dma_unmark_bus_address(sg);
+>> +		else
+>> +			dma_direct_unmap_page(dev, sg->dma_address,
+>> +					      sg_dma_len(sg), dir, attrs);
+>> +	}
+>>   }
+>>   #endif
+>>   
+>>   int dma_direct_map_sg(struct device *dev, struct scatterlist *sgl, int nents,
+>>   		enum dma_data_direction dir, unsigned long attrs)
+>>   {
+>> -	int i;
+>> +	struct pci_p2pdma_map_state p2pdma_state = {};
+>> +	enum pci_p2pdma_map_type map;
+>>   	struct scatterlist *sg;
+>> +	int i, ret;
+>>   
+>>   	for_each_sg(sgl, sg, nents, i) {
+>> +		if (is_pci_p2pdma_page(sg_page(sg))) {
+>> +			map = pci_p2pdma_map_segment(&p2pdma_state, dev, sg);
+>> +			switch (map) {
+>> +			case PCI_P2PDMA_MAP_BUS_ADDR:
+>> +				continue;
+>> +			case PCI_P2PDMA_MAP_THRU_HOST_BRIDGE:
+>> +				/*
+>> +				 * Any P2P mapping that traverses the PCI
+>> +				 * host bridge must be mapped with CPU physical
+>> +				 * address and not PCI bus addresses. This is
+>> +				 * done with dma_direct_map_page() below.
+>> +				 */
+>> +				break;
+>> +			default:
+>> +				ret = -EREMOTEIO;
+>> +				goto out_unmap;
+>> +			}
+>> +		}
+> I'm a little confused about this code. Would there be a case where the mapping needs
+> to be checked for each sg in the list? And if some sg in the sgl can be mapped
+> differently, would we want to continue checking the rest of the sg in the sgl instead
+> of breaking out of the loop completely?
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- lib/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, the code supports heterogeneous SGLs with P2PDMA and regular
+memory; it's also theoretically possible to mix P2PDMA memory for
+different devices. So yes, the mapping must be checked for every SG in
+the list. It can't just see one SG that points to P2PDMA memory and
+assume the rest are all good.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index bd487d480902..1555da672275 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -296,7 +296,7 @@ config DEBUG_INFO_DWARF4
- config DEBUG_INFO_DWARF5
- 	bool "Generate DWARF Version 5 debuginfo"
- 	depends on !CC_IS_CLANG || (CC_IS_CLANG && (AS_IS_LLVM || (AS_IS_GNU && AS_VERSION >= 23502)))
--	depends on !DEBUG_INFO_BTF
-+	depends on !DEBUG_INFO_BTF || PAHOLE_VERSION >= 121
- 	help
- 	  Generate DWARF v5 debug info. Requires binutils 2.35.2, gcc 5.0+ (gcc
- 	  5.0+ accepts the -gdwarf-5 flag but only had partial support for some
--- 
-2.35.1
-
+Logan

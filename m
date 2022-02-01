@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1E24A54C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A726F4A54C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 02:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbiBABul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Jan 2022 20:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S232012AbiBABwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Jan 2022 20:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbiBABuk (ORCPT
+        with ESMTP id S231996AbiBABwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Jan 2022 20:50:40 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC34C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:50:40 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id b13so30988917edn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:50:40 -0800 (PST)
+        Mon, 31 Jan 2022 20:52:15 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E99C06173B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:52:14 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id p15so48894940ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 17:52:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=vX8lJ/5irFUbrQshrGKk6fkPcADVUFCEGVOJFcb+mTI=;
-        b=sYD2zyJEoz0fDTJJIZbrppOA1xMwCQB+cNxzVXb0h0dPlrFD2LpXKpDRj358NqIgs/
-         JuMsxJwMPp8B8HhxfF/8kwyUcO8RyzmLD030ShqTwwqNY0GpX8qXMgt1zCTcuTFj1ihS
-         e29TjT/vZDa4m4LeO/SMK1rf84treEcYkZfjY+OK2EA+EZkRl9oE9bySFXp9Ik0HcucE
-         kBxLN+4Kalhl61HFQDYl06QpgBYHQFvWZ7jajs0OXwgaCdQtar340Q2nx/LbsV6vX4pn
-         g0QBXumC3e0/tnYlDoOFHrraZkjq4DaoDyQ7lhEK29xJkrKTuPzk9W7k+7LkP8tPRfpe
-         V1Rg==
+        bh=hrJDBg/8ZupD03UAWDJ1FQcLsBcQHd+dnocM/bsmtPk=;
+        b=L6haaFknzdXxVkSZfEk/lVyuWR5+w5n8a++shoBSlzXkdwgEHQk1EhPqbKKxYEpZUC
+         g0RNqHujp6JlBC8Q5q85tzbxPFFUMf5xsfquNZapQRxRT8iiHcaA75L0bey3tcRINdPn
+         1eLpk7oahcOHYqWWD4gu6LzEwIpCMr20+zXI73QRhfQ9+9IQV6nIA2nhS9/1RSEg8Aux
+         Hs9CjxYUEoXeR8Ah1QKHJotjRCgMqqopdjJUmDah/36MkNIWMV+Op3NVOp0biwJbIuY2
+         y5CvUh/Uli6jx94RzNMRBBYxY7YJmNSKZaITNmLE3GEJMo1QFIZcFS5pZc89+yhOHl9y
+         jw/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vX8lJ/5irFUbrQshrGKk6fkPcADVUFCEGVOJFcb+mTI=;
-        b=1oaiN/VgNS+Zlbby1vRipbYYXxwSQ6BVGEDB4Dje2CTPUCu0SPtAMwbRUUdTI3MHLm
-         z9sFzWtM2ge0opNRPujHRLNDkfGMXyf9X83mWYf1oEytJhCh5+PhM2y1Cc8auG1loTCJ
-         +KS1UD5A+iETL/5sC0zeumpIt+XqKnbw/xmM1WRP3SzHOPT4pYJ9agccCqe+cMEW8VXA
-         zUNVWEHAoDYpbFK2LeYWBnDkGVqzep8uLIS+3lqh8NbTWeXz71JfI6SSgHWpV4Hc2H0m
-         nXP+Y/NBXnRRx539ntHoSaNTxPX2vUzvLXUbl/aLlfBdw+u2sM63myXJNTBOUCa34MNP
-         wmoA==
-X-Gm-Message-State: AOAM531ms1kiFnQQC0bERQQsu2sAq8qxoBle7gU2i1wUYeHDH+oFO/SV
-        jaa6AYujkfwnggHNWRMre3fsZxtlg9+pDYrOaCnR26PxyUI=
-X-Google-Smtp-Source: ABdhPJxCouayNuZTUdGVvLMO4egBm+KCI0nU5UkqGu9ZqFrhV5ilFNDk2UeMv9el1IUTl78Lhw2qeVqpRNreWTsC9Wk=
-X-Received: by 2002:aa7:c906:: with SMTP id b6mr23294970edt.8.1643680238544;
- Mon, 31 Jan 2022 17:50:38 -0800 (PST)
+        bh=hrJDBg/8ZupD03UAWDJ1FQcLsBcQHd+dnocM/bsmtPk=;
+        b=ApJIzUL1JsuhQnI+tJWiNgrL4BGZPDhYxbXwfHH7a+tAEqL/GLI+eVMbX5jh76lD4J
+         unO198+urv0jUue5Ax17nX1AjykFswtdyQ0bS3Lq2QnKrTIMOOAEKnys+NTuwbWfgXN8
+         31QODUdrfUs3xWkfVG5uzbj2V3Q7UIOrIPzXcGYVDqVJRTyQ/u5MY+tbd6zRl8FIZe/I
+         xOHcLFmm4TA7pKM8/ARK937ZRMeGSOZWRSCkMW4AD1BD56tgx7icKUVJfLrac0HZ97z+
+         vceTyLQ0OuRn1MegINNXcTdBBNi4de0rvgNWvah7GlkKgxSU/hoBKaaN61CgaM1NFACY
+         Qjow==
+X-Gm-Message-State: AOAM5308EIuRCebNEsPolK2uxBTfCN9zebyu4zU2moDqpLRGjVBWXTrl
+        jlJzpzAfxY+ERzC7yM95YGIlZFCxS5vFFaU0OC+pCQ==
+X-Google-Smtp-Source: ABdhPJxzb/0RkjwXhRv5BhYk8nqCAweFbPC4NDUM/fR7INJ88O696fqRVlvlZKVQrBnM8uSLICB5GRD+aD6hzIE+fEg=
+X-Received: by 2002:a17:907:968f:: with SMTP id hd15mr10995087ejc.208.1643680333258;
+ Mon, 31 Jan 2022 17:52:13 -0800 (PST)
 MIME-Version: 1.0
 References: <20220128180832.2329149-1-wonchung@google.com> <YfeQxYNzWltRQ7mq@kuha.fi.intel.com>
 In-Reply-To: <YfeQxYNzWltRQ7mq@kuha.fi.intel.com>
 From:   Won Chung <wonchung@google.com>
-Date:   Mon, 31 Jan 2022 17:50:27 -0800
-Message-ID: <CAOvb9yiUUcyXx=_EgzFU6EqGHrnUWkKwRLPTEVM6SXyO0hXP6w@mail.gmail.com>
+Date:   Mon, 31 Jan 2022 17:52:02 -0800
+Message-ID: <CAOvb9yif2b1rGNGz4qbxnP6j-mUajSxTu2uXhhGc9TKKFd-VFQ@mail.gmail.com>
 Subject: Re: [PATCH v3] ACPI: device_sysfs: Add sysfs support for _PLD
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -62,16 +62,6 @@ Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-
-Hi Heikki,
-
-Thank you for the review. It seems to be the convention to have a
-separate attribute file for each field, as you pointed out. I have
-made the change and sent v4.
-
-Thanks,
-Won
-
 
 On Sun, Jan 30, 2022 at 11:33 PM Heikki Krogerus
 <heikki.krogerus@linux.intel.com> wrote:
@@ -217,3 +207,12 @@ ld);
 >
 > --
 > heikki
+
+Hi Heikki,
+
+Thank you for the review. It seems to be the convention to have a
+separate attribute file for each field, as you pointed out. I have
+made the change and sent v4.
+
+Thanks,
+Won

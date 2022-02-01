@@ -2,163 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D004A5D4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4BE4A5D58
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238435AbiBANQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36686 "EHLO
+        id S238353AbiBANUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbiBANQP (ORCPT
+        with ESMTP id S231549AbiBANUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:16:15 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C03C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:16:15 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso2863218pjv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:16:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ksCYgL+3G+j9avSh44FJZlckNASik0bTPJz1BLZJ1iY=;
-        b=WrLORAozns9nqKfWJE0RmkGcRAJ4bsY/NR7hTUmc9ksd0oFpyHwC8eO/J2XFksSXxz
-         ejTpMykgL1Qq2UHt6zSujHFnHl64tNURmaaHWASNoVqHQGWgtSppjWNnenU608rbLcJB
-         KPIN+yO51crgFI+xSfFWvrGS3reoRpiDOWl1J4bCA/vT/xrbZ6FsGGUYx6aGFCi8RtGS
-         5hlDyFyK+NZe3UxNuqrrZbQTgGo5lHhjojEC5k+ISgeJ9xRonHwLlMoKv+IZBaxawDHZ
-         xHEDYZJsowsJTq/WzvvOMzGIF2OJfCsLW25rxGyHlIYOsVZ8CzPD7uSkBp/iIrkkze4r
-         E2hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ksCYgL+3G+j9avSh44FJZlckNASik0bTPJz1BLZJ1iY=;
-        b=1wqA+MtO21qGpSgMF+Lm6nucpmyJndWPIu9Sj7MQhCiMThkAHGohdqJ55S812uSL61
-         yCkKqDgmPiiixYSBuPXqHaAgJkylGVygZAU7lWfjRjMFE7/pKSbgyf1Oaeq5G51evIpO
-         5nmIWSlAyum8pj+D1Q6hR3E0sBKgQeQkhrsiK6u8nuF81p5O/UtXOPnKRhEN2lVIKe3t
-         A5mYQ6nI3mcPhH0JhgdjooyuypIB5xwtO2+2FYUa+54M/LGCKY1U5MxNOFKa0HX6Z0YU
-         LIG8a3U6hxGShjVQ70Di+jkTJcimth/HbQ3jF454u2dixHej3/bzOPWQtzpUdmtHvFXw
-         cv9g==
-X-Gm-Message-State: AOAM531ytgE789AX6za3dPiJhQOZ09Dj4lZf8GFb4TKid5h4PPP5jKzZ
-        iKk7PPi9X+E8cWywEkojFC8y5lTqj84fwh1AjHs=
-X-Google-Smtp-Source: ABdhPJwsY8mtBHjCmBE/yRt5+S2wRtdew6P6z1ARY/1yxyczDhaoO6mfSMlLElJD7u08Nt2EXO7/59a6dKJkBsRCE3Q=
-X-Received: by 2002:a17:90b:4f83:: with SMTP id qe3mr2264212pjb.120.1643721374784;
- Tue, 01 Feb 2022 05:16:14 -0800 (PST)
+        Tue, 1 Feb 2022 08:20:15 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354FEC061714;
+        Tue,  1 Feb 2022 05:20:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HSc0TyLrN1Wvj1rxHVmacBdO1opBBuzEEVi910cNl0c=; b=Qdi0QzQywpTYVIggQulpTS3p7v
+        GXlQs1bB+hZmyCaVmSsqKP7jxjh1Qv6P0KOyM/TWZ3Z6QtIonylvPmQam4E5G68UjawvjIn3UTYjk
+        1ZbeH2Fe3vrIHKtKOlAf5WdebFVYuNqO54OBq7h7GAYibWUBXV/XLERqPOytKRl29N8T/7oCewIwI
+        YaWfWfXF1cI34QIWRjw9gfDnUU08q/rR+G/zz2MnKO6sS2vcBZ8qohfnlgqylGghHg945NW7OQ57W
+        G1fuYZmBG6x3waAACYq+HFp2xhsQkW7sU4k2CrLbCt4Om4es9oAAw7Nwb8z/raCyWOeMFtdoqLRxq
+        2ls/xu8Q==;
+Received: from [2a01:799:95e:a400:5d05:6ef3:cded:ad3] (port=54256)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1nEt4v-0005ID-2B; Tue, 01 Feb 2022 14:20:13 +0100
+Message-ID: <a6f267ea-7617-7d0e-06cd-7ec9c88576c3@tronnes.org>
+Date:   Tue, 1 Feb 2022 14:20:10 +0100
 MIME-Version: 1.0
-References: <20220131201716.5198-1-a3at.mail@gmail.com> <CAMe9rOqoPy6jsWrodnc41M4+b2onwkfbfr=pZ9qRWzOU2Uisgg@mail.gmail.com>
- <20220201061832.yatgwglxvi7ho4yr@carbon.azat>
-In-Reply-To: <20220201061832.yatgwglxvi7ho4yr@carbon.azat>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Tue, 1 Feb 2022 05:15:38 -0800
-Message-ID: <CAMe9rOptn2vpY90yY3HuGmmMdj4Hpaba2PRhp4d033XBDgL_5w@mail.gmail.com>
-Subject: Re: [PATCH] fs/binfmt_elf: use ELF_ET_DYN_BASE for PIE (ET_DYN with
- INTERP) binaries
-To:     Azat Khuzhin <a3at.mail@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/4] drm: Add I2C connector type
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220131201225.2324984-1-javierm@redhat.com>
+ <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
+ <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
+ <4322f58b-dbeb-b90f-2770-d6881f8005b4@redhat.com>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <4322f58b-dbeb-b90f-2770-d6881f8005b4@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:18 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
->
-> On Mon, Jan 31, 2022 at 01:30:38PM -0800, H.J. Lu wrote:
-> > On Mon, Jan 31, 2022 at 12:17 PM Azat Khuzhin <a3at.mail@gmail.com> wrote:
-> > >
-> > > Since 9630f0d60fec ELF_ET_DYN_BASE is not used as a load_bias anymore
-> > > and this breaks PIE binaries, since after this change data segment
-> > > became too nearby the stack:
-> > >
-> > > Before 9630f0d60fec:
-> > >
-> > >     $ strace -febrk /tmp/test-stack |& head
-> > >     brk(NULL)                               = 0x555555559000
-> > >     $ /tmp/test-stack
-> > >     bottom_of_stack = 0x7fffffffc5c0
-> > >     recursion depth: 1 (stack diff: 32)
-> > >     ...
-> > >     recursion depth: 7690 (stack diff: 8365664)
-> > >     Segmentation fault (core dumped)
-> > >
-> > > After 9630f0d60fec:
-> > >
-> > >     $ strace -ebrk /tmp/test-stack  |& head
-> > >     brk(NULL)                               = 0x7ffff7fff000
-> > >
-> > >     $ /tmp/test-stack
-> > >     bottom_of_stack = 0x7fffffffc640
-> > >     recursion depth: 1 (stack diff: 32)
-> > >     ...
-> > >     recursion depth: 146 (stack diff: 157792)
-> > >     Segmentation fault (core dumped)
-> > >
-> > > Found this during compiling with clang, that started to randomly
-> > > SIGSEGV when it eats some heap.
-> >
-> > How do I reproduce it on x86-64?
->
-> It fails for me for pretty big C++ unit, so I don't have a simple
-> reproducer with clang, but the attached reproducer below should show the
-> problem.
-
-The reproducer doesn't fail for me under 5.17-rc2 on Fedora 35/x86-64
-with 32GB RAM.  Did you turn off PF_RANDOMIZE?
-
-> > > Reproducer:
-> > >
-> > >     #include <stdio.h>
-> > >     #include <stddef.h>
-> > >     #include <stdlib.h>
-> > >
-> > >     static int depth = 0;
-> > >     static void* bottom_of_stack;
-> > >
-> > >     int inner()
-> > >     {
-> > >         char buffer[1024];
-> > >         ptrdiff_t diff;
-> > >         int ret;
-> > >
-> > >         ++depth;
-> > >         diff = bottom_of_stack - __builtin_frame_address(0);
-> > >
-> > >         fprintf(stderr,
-> > >                 "recursion depth: %i (stack diff: %zu)\n",
-> > >                 depth, (size_t)diff);
-> > >
-> > >         for (size_t i = 0; i < 1024; ++i)
-> > >                 ret += buffer[i];
-> > >
-> > >         ret += inner();
-> > >
-> > >         return ret;
-> > >     }
-> > >
-> > >     int main()
-> > >     {
-> > >         for (size_t size = 0; size < 128<<20; size += 16<<10)
-> > >                 malloc(16<<10);
-> > >
-> > >         bottom_of_stack = __builtin_frame_address(0);
-> > >         fprintf(stderr, "bottom_of_stack = %p\n", bottom_of_stack);
-> > >         inner();
-> > >     }
 
 
+Den 01.02.2022 14.06, skrev Javier Martinez Canillas:
+> Hello Noralf,
+> 
+> On 2/1/22 13:58, Noralf Trønnes wrote:
+>>
+>>
+>> Den 31.01.2022 21.52, skrev Sam Ravnborg:
+>>> On Mon, Jan 31, 2022 at 09:12:21PM +0100, Javier Martinez Canillas wrote:
+>>>> There isn't a connector type for display controllers accesed through I2C,
+>>>> most drivers use DRM_MODE_CONNECTOR_Unknown or DRM_MODE_CONNECTOR_VIRTUAL.
+>>>>
+>>>> Add an I2C connector type to match the actual connector.
+>>>>
+>>>> As Noralf Trønnes mentions in commit fc06bf1d76d6 ("drm: Add SPI connector
+>>>> type"), user-space should be able to cope with a connector type that does
+>>>> not yet understand.
+>>>>
+>>
+>> It turned out that I wasn't entirely correct here, mpv didn't cope with
+>> unknown types. In the PR to add support Emil Velikov wondered if libdrm
+>> should handle these connector names:
+>> https://github.com/mpv-player/mpv/pull/8989#issuecomment-879187711
+>>
+> 
+> I see, thanks for the information. What should we do then, just use the type
+> DRM_MODE_CONNECTOR_Unknown then ?
+> 
 
--- 
-H.J.
+Not really, I just wanted to point out that it could be that not all
+userspace will handle an unknown connector type (I just checked the DE's
+at the time). I haven't seen any issues after adding the SPI type so it
+can't be that many apps that has problems. Adding to that a tiny
+monochrome display is limited in which applications it will encounter I
+guess :) It was after adding the USB type that I discovered that mpv
+didn't work.
+
+Noralf.

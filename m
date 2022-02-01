@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191C44A60DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 16:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30224A60E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbiBAP7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 10:59:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49994 "EHLO
+        id S240772AbiBAQBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:01:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:27281 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237158AbiBAP7x (ORCPT
+        by vger.kernel.org with ESMTP id S240755AbiBAQBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:59:53 -0500
+        Tue, 1 Feb 2022 11:01:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643731192;
+        s=mimecast20190719; t=1643731260;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D20gs22S9rabd0+fMNoXvcTEn8NgDJog1qZfUCh12Vc=;
-        b=JtoAawRgH0x+5DTpiYqSzAcblOE1YgK1uFlEtWaaCIZGyl1rToxFEKtt6wCPuE7Sd4j7g4
-        hQne1BSDTZeDKCMJbFtCZEHm22oOVJjjsqxcRIi8NfY8IVEwyWsy+BkZheyjkXO8k0/onq
-        l5PB/+tqmTPjgk1aO7S19duUt5OAXng=
+        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
+        b=DXSklULSxOGUrGHaoR8WfDOrGoeJv3PujW5GzQowRLju8Xsefu/JKXgUv8Ox7FJiMY/zoV
+        5BdYDmUL5ZhGsljrPZfTNEsv65cjVOhoVKNs8CdIhgpg8GxUsNvLwadSjMGFbASmGEDE/F
+        MeIUNTbMh4aSphpCmx8pCfFKsz3bkJU=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-hbFAVL4_OL2yB2EBNeqU_Q-1; Tue, 01 Feb 2022 10:59:51 -0500
-X-MC-Unique: hbFAVL4_OL2yB2EBNeqU_Q-1
-Received: by mail-ed1-f72.google.com with SMTP id w15-20020a056402268f00b00408234dc1dfso8907948edd.16
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 07:59:51 -0800 (PST)
+ us-mta-467-qDA4APOaN8OnafwsywEBWQ-1; Tue, 01 Feb 2022 11:00:58 -0500
+X-MC-Unique: qDA4APOaN8OnafwsywEBWQ-1
+Received: by mail-ed1-f72.google.com with SMTP id i22-20020a50fd16000000b00405039f2c59so8923134eds.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:00:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=D20gs22S9rabd0+fMNoXvcTEn8NgDJog1qZfUCh12Vc=;
-        b=7CY8wo7D70dliY7sApKhvKR4YbJ9plHw1/xc1l/NL2E1OIUDYV1XWuobiohWNYdYza
-         uMN1gPmqEY9xSVISNUE6RLtTLjJFMANTwOTEkjHqqXWFExAo+ODzcmH8mmrdsWoePiRD
-         if6G9FbaWQBFWxv3NhZroFw8H8YAS5+2kpMT3+0As23xb9AvELEoyTC2238gVoWcUvLC
-         FnMsfo226kfUOx64+vsyTRtP1XdY6nO2IBjZHrE04kXXnp0Pr/vhC5i0bQepzS/PGe6s
-         XjGEaYO/zKzXtptPF+UG3j8DP83xRLW8MVxveW/f+X4c2I7UPqCs/lA0mDWN+6v4NaSC
-         4vAA==
-X-Gm-Message-State: AOAM531gIdqwznegWOXChk0Mabmy2XuzxWD4B0a3VY84R7c25xx5zx47
-        Y9D9SIOYfBLgrrYW+NFW+j/yv/KFSVyla7CeZpsGSvfDeBPGgRz+95t91SOeyLHS3iGkvwxyNhx
-        LLwta3lVHCnWeOKiuwerJuJLg
-X-Received: by 2002:a05:6402:2688:: with SMTP id w8mr25585350edd.393.1643731190151;
-        Tue, 01 Feb 2022 07:59:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvqhrX+wYMro3W0vh+iiLLi2W1gZHf+O52TX6b2unIGiAUG6Gz6xXfZZLNlv+/XNj7r7o9JQ==
-X-Received: by 2002:a05:6402:2688:: with SMTP id w8mr25585309edd.393.1643731189875;
-        Tue, 01 Feb 2022 07:59:49 -0800 (PST)
+        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
+        b=7402EseYRra/i0fynMRwES2Ba8Wel2VGmB8gn1WjNjxkrWT7uYP6630VFzFpB1rHaa
+         JQfW6/JULq2vwWc2qKO7yN+GGz0BIEI0c0sYGV9waLBDvs3Jnln924f6QVDtz3EgVbIF
+         xF3xDUX7E9l9QHKTbi8HFXNKkUVfChZsVMKS+YNLW5taq1bStIw1RsSJl9dsoUOut1hD
+         d67Xk+yzYxwiWtsZhjWxLqITrK0RFIWNvMKNTEUhjlxJ3UYlDbnEm2ji1Qam1g4Lh10z
+         55I/D5L3XVsyDQ/DaCR4cxzqDjV48H1pNYkJd0CvK86MEJTXiYQIGMInb/N0mLHlMWLt
+         8F3Q==
+X-Gm-Message-State: AOAM533BJu6RwtuN6VpMyQv3knaKji1avs0EESt15FPA+AveN0gyvWSG
+        UoL3hKLmhULNZgKpAZsEmpFuCKR85ZKuthR+IidDTqbZW2bHtV7iwmcLnroHeCZWtgon/Zymj0K
+        AhliV6b5ZRPI1myK24fHr8H9Z
+X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767230ejc.179.1643731257022;
+        Tue, 01 Feb 2022 08:00:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyi6gqf6sTZV2adqJ/EwU8K0kh4yabr0HjJDqz0uGv4IXAxFUKBb//nn4tH0Br/W6v0yRG1zw==
+X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767209ejc.179.1643731256826;
+        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id c25sm19764227edt.0.2022.02.01.07.59.47
+        by smtp.googlemail.com with ESMTPSA id gh33sm14883510ejc.17.2022.02.01.08.00.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 07:59:49 -0800 (PST)
-Message-ID: <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
-Date:   Tue, 1 Feb 2022 16:59:47 +0100
+        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
+Message-ID: <f8359e15-412a-03d6-1b0c-a9f253816497@redhat.com>
+Date:   Tue, 1 Feb 2022 17:00:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
+Subject: Re: [PATCH V5 21/21] KVM: compat: riscv: Prevent KVM_COMPAT from
+ being selected
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org
-Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
-        catalin.marinas@arm.com, chenhuacai@kernel.org,
-        dave.hansen@linux.intel.com, frederic@kernel.org,
-        hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, maz@kernel.org, mingo@redhat.com,
-        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
-        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
-        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
-        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
-        wanpengli@tencent.com, will@kernel.org
-References: <20220201132926.3301912-1-mark.rutland@arm.com>
+To:     Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
+References: <20220201150545.1512822-1-guoren@kernel.org>
+ <20220201150545.1512822-22-guoren@kernel.org>
+ <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220201132926.3301912-1-mark.rutland@arm.com>
+In-Reply-To: <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 14:29, Mark Rutland wrote:
-> I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
+On 2/1/22 16:44, Anup Patel wrote:
+> +Paolo
 > 
->    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
->    git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
+> On Tue, Feb 1, 2022 at 8:38 PM <guoren@kernel.org> wrote:
+>>
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> Current riscv doesn't support the 32bit KVM API. Let's make it
+>> clear by not selecting KVM_COMPAT.
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Anup Patel <anup@brainfault.org>
+> 
+> This looks good to me.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 
-Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's 
-master branch (I did not use your branch in order to leave arm64 and 
-riscv to the respective maintainers).
+Hi Anup,
+
+feel free to send this via a pull request (perhaps together with Mark 
+Rutland's entry/exit rework).
 
 Paolo
-
-> This version of the series is tagged as kvm-entry-rework-20220201.
-> 
-> [1] https://lore.kernel.org/r/20220111153539.2532246-1-mark.rutland@arm.com/
-> [2] https://lore.kernel.org/r/20220119105854.3160683-1-mark.rutland@arm.com/
-> 
-> Thanks,
-> 
-> 
-> Mark Rutland (5):
->    kvm: add guest_state_{enter,exit}_irqoff()
->    kvm/arm64: rework guest entry logic
->    kvm/x86: rework guest entry logic
->    kvm/riscv: rework guest entry logic
->    kvm/mips: rework guest entry logic
-> 
->   arch/arm64/kvm/arm.c     |  51 +++++++++++-------
->   arch/mips/kvm/mips.c     |  50 +++++++++++++++--
->   arch/riscv/kvm/vcpu.c    |  44 +++++++++------
->   arch/x86/kvm/svm/svm.c   |   4 +-
->   arch/x86/kvm/vmx/vmx.c   |   4 +-
->   arch/x86/kvm/x86.c       |   4 +-
->   arch/x86/kvm/x86.h       |  45 ----------------
->   include/linux/kvm_host.h | 112 +++++++++++++++++++++++++++++++++++++--
->   8 files changed, 222 insertions(+), 92 deletions(-)
-> 
 

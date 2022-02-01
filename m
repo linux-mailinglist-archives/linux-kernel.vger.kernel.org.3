@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 296694A5C19
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144674A5C1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 13:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbiBAMUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 07:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236263AbiBAMUE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 07:20:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5456CC061714;
-        Tue,  1 Feb 2022 04:20:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C8D84CE1854;
-        Tue,  1 Feb 2022 12:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B17C340ED;
-        Tue,  1 Feb 2022 12:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643718001;
-        bh=hRvqAaJafSB7JM7vkxQW5UN6K4O0gDJkhTpA26IZPwE=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=DgD9gHF4dbe5av/ULrVQc7az4gwaMXHibzLukCPxYdgq6Yv9l/uG+ubulAUmPtd3g
-         cB5cpQePFCGYiTn38QO4fKBYGX/wRvudP3llwz4IeuoRhsfbereF/VsVGDW3mljesc
-         iXGV5P6HSp/NwXSa5pMEwkhghe00S08HBjA8Y9PHF2hJcsnjUym6OPgs/eUqh/O+BV
-         NqTnoQzPRi961xotMsevar0wVZsLy8bk50biiC1M+3b/QnUwBraERIDhi3rZiYFMKE
-         /lAd819+mYQZNozd1a1BHj/DiECRcnKLt3V84IMUDEnvlTJ2D1tByt1cz+yTNb3qT3
-         7ZBJZPRcvAFxg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     davem@davemloft.net, kuba@kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] drivers/net/wireless: remove redundant ret variable
-References: <20220112080715.667254-1-chi.minghao@zte.com.cn>
-Date:   Tue, 01 Feb 2022 14:19:57 +0200
-In-Reply-To: <20220112080715.667254-1-chi.minghao@zte.com.cn> (cgel zte's
-        message of "Wed, 12 Jan 2022 08:07:15 +0000")
-Message-ID: <87tudidbiq.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S237955AbiBAMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 07:22:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:36126 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229892AbiBAMWT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 07:22:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F814113E;
+        Tue,  1 Feb 2022 04:22:19 -0800 (PST)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CCDC53F73B;
+        Tue,  1 Feb 2022 04:22:17 -0800 (PST)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        coresight@lists.linaro.org
+Subject: [PATCH] coresight: trbe: Move check for kernelspace unmapped at EL0 to probe
+Date:   Tue,  1 Feb 2022 12:22:12 +0000
+Message-Id: <20220201122212.3009461-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cgel.zte@gmail.com writes:
+Currently with the check present in the module initialisation, it shouts
+on all the systems irrespective of presence of coresight trace buffer
+extensions.
 
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Return value directly instead of taking this in another redundant
-> variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> ---
->  drivers/net/wireless/marvell/libertas/cfg.c | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/wireless/marvell/libertas/cfg.c b/drivers/net/wireless/marvell/libertas/cfg.c
-> index 4e3de684928b..f160c258805e 100644
-> --- a/drivers/net/wireless/marvell/libertas/cfg.c
-> +++ b/drivers/net/wireless/marvell/libertas/cfg.c
-> @@ -854,16 +854,13 @@ void lbs_send_mic_failureevent(struct lbs_private *priv, u32 event)
->  static int lbs_remove_wep_keys(struct lbs_private *priv)
->  {
->  	struct cmd_ds_802_11_set_wep cmd;
-> -	int ret;
->  
->  	memset(&cmd, 0, sizeof(cmd));
->  	cmd.hdr.size = cpu_to_le16(sizeof(cmd));
->  	cmd.keyindex = cpu_to_le16(priv->wep_tx_key);
->  	cmd.action = cpu_to_le16(CMD_ACT_REMOVE);
->  
-> -	ret = lbs_cmd_with_response(priv, CMD_802_11_SET_WEP, &cmd);
-> -
-> -	return ret;
-> +	return lbs_cmd_with_response(priv, CMD_802_11_SET_WEP, &cmd);
->  }
->  
->  /*
-> @@ -949,9 +946,7 @@ static int lbs_enable_rsn(struct lbs_private *priv, int enable)
->  	cmd.action = cpu_to_le16(CMD_ACT_SET);
->  	cmd.enable = cpu_to_le16(enable);
->  
-> -	ret = lbs_cmd_with_response(priv, CMD_802_11_ENABLE_RSN, &cmd);
-> -
-> -	return ret;
-> +	return lbs_cmd_with_response(priv, CMD_802_11_ENABLE_RSN, &cmd);
->  }
+Similar to Arm SPE perf driver, move the check for kernelspace unmapping
+when running at EL0 to the device probe instead of module initialisation.
 
-In lbs_enable_rsn() ret variable is now unused.
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: coresight@lists.linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/hwtracing/coresight/coresight-trbe.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+index 276862c07e32..3fe2ce1ba5bf 100644
+--- a/drivers/hwtracing/coresight/coresight-trbe.c
++++ b/drivers/hwtracing/coresight/coresight-trbe.c
+@@ -1423,6 +1423,11 @@ static int arm_trbe_device_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	int ret;
+ 
++	if (arm64_kernel_unmapped_at_el0()) {
++		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
++		return -EOPNOTSUPP;
++	}
++
+ 	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+ 	if (!drvdata)
+ 		return -ENOMEM;
+@@ -1484,11 +1489,6 @@ static int __init arm_trbe_init(void)
+ {
+ 	int ret;
+ 
+-	if (arm64_kernel_unmapped_at_el0()) {
+-		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
+-		return -EOPNOTSUPP;
+-	}
+-
+ 	ret = platform_driver_register(&arm_trbe_driver);
+ 	if (!ret)
+ 		return 0;
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

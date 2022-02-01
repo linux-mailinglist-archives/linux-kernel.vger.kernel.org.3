@@ -2,136 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA0F4A5DAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71EB4A5DAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238892AbiBANt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:49:59 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42810 "EHLO
+        id S238902AbiBANu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:50:57 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43292 "EHLO
         dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiBANt6 (ORCPT
+        with ESMTP id S230073AbiBANuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:49:58 -0500
+        Tue, 1 Feb 2022 08:50:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 583F561583
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306EDC340ED;
-        Tue,  1 Feb 2022 13:49:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41A3B6159D;
+        Tue,  1 Feb 2022 13:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01212C340EB;
+        Tue,  1 Feb 2022 13:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643723397;
-        bh=/Hg8E9Pk4hej0EhFBXxNBNhhet6Vx2vqNwjmgDpTRT4=;
+        s=korg; t=1643723454;
+        bh=ldq7bhd25XbE5kFzQtjZQM2k7oQhrQBRZZi85C+Hwts=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IED3C+BcZFpGUJ6n5jyXgyP7/J2rum9VuGPj0zhpf00AMfFEFgDm0qqNj6jNinT0i
-         ACxR7aryfmVWeWnN2QwtkFUap/gzab7t1c/Elv0ElIe7+adv7yHEBQhwbCGAsIMFJk
-         zJW0ih3DwBlb5Q20OSCQhW4UYvDUoUbi4obnqG+M=
-Date:   Tue, 1 Feb 2022 14:49:54 +0100
+        b=tyE+zUDJSrEZ9Q9Ye/QchpMFVu3J7iYkahV+mZ0c7QZkEIvj2dBruxSK+UOLi5C/k
+         ag0aaGZJOEII5ShkiuXppByTUhWhl6dz2R1JtCzomHDB+99o2Z3tUlJ7I/OJXNOTQ/
+         YvTkN25TEpK6wGiq/MTQsMCRWlaNzHUKKXixfLD8=
+Date:   Tue, 1 Feb 2022 14:50:52 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Daniel Axtens <dja@axtens.net>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>, gjoyce@ibm.com,
-        linux-kernel@vger.kernel.org, mjg59@srcf.ucam.org
-Subject: Re: [RFC PATCH 0/2] powerpc/pseries: add support for local secure
- storage called Platform Keystore(PKS)
-Message-ID: <Yfk6gucNmJuR/egi@kroah.com>
-References: <20220122005637.28199-1-nayna@linux.ibm.com>
- <YeuyUVVdFADCuDr4@kroah.com>
- <87sftec74i.fsf@dja-thinkpad.axtens.net>
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <Yfk6vEuZFtgtA+G+@kroah.com>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sftec74i.fsf@dja-thinkpad.axtens.net>
+In-Reply-To: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:25:17AM +1100, Daniel Axtens wrote:
-> Hi Greg,
+On Tue, Feb 01, 2022 at 12:44:08PM +0000, Dov Murik wrote:
+> Confidential computing (coco) hardware such as AMD SEV (Secure Encrypted
+> Virtualization) allows guest owners to inject secrets into the VMs
+> memory without the host/hypervisor being able to read them.  In SEV,
+> secret injection is performed early in the VM launch process, before the
+> guest starts running.
 > 
-> > Ok, this is like the 3rd or 4th different platform-specific proposal for
-> > this type of functionality.  I think we need to give up on
-> > platform-specific user/kernel apis on this (random sysfs/securityfs
-> > files scattered around the tree), and come up with a standard place for
-> > all of this.
+> OVMF already reserves designated area for secret injection (in its
+> AmdSev package; see edk2 commit 01726b6d23d4 "OvmfPkg/AmdSev: Expose the
+> Sev Secret area using a configuration table" [1]), but the secrets were
+> not available in the guest kernel.
 > 
-> I agree that we do have a number of platforms exposing superficially
-> similar functionality. Indeed, back in 2019 I had a crack at a unified
-> approach: [1] [2].
+> The patch series keeps the address of the EFI-provided memory for
+> injected secrets, and exposes the secrets to userspace via securityfs
+> using a new efi_secret kernel module.  The module is autoloaded (by the
+> EFI driver) if the secret area is populated.
 > 
-> Looking back at it now, I am not sure it ever would have worked because
-> the semantics of the underlying firmware stores are quite
-> different. Here are the ones I know about:
+> The first patch in EFI keeps the address of the secret area as passed in
+> the EFI configuration table.  The second patch is a quirk fix for older
+> firmwares didn't mark the secrets page as EFI_RESERVED_TYPE.  The third
+> patch introduces the new efi_secret module that exposes the content of
+> the secret entries as securityfs files, and allows clearing out secrets
+> with a file unlink interface.  The fourth patch auto-loads the
+> efi_secret module during startup if the injected secrets area is
+> populated.  The last patch documents the data flow of confidential
+> computing secret injection.
 > 
->  - OpenPower/PowerNV Secure Variables:
->  
->    * Firmware semantics:
->      - flat variable space
->      - variables are fixed in firmware, can neither be created nor
->         destroyed
->      - variable names are ASCII
->      - no concept of policy/attributes
->      
->    * Current kernel interface semantics:
->      - names are case sensitive
->      - directory per variable     
+> As a usage example, consider a guest performing computations on
+> encrypted files.  The Guest Owner provides the decryption key (= secret)
+> using the secret injection mechanism.  The guest application reads the
+> secret from the efi_secret filesystem and proceeds to decrypt the files
+> into memory and then performs the needed computations on the content.
 > 
+> In this example, the host can't read the files from the disk image
+> because they are encrypted.  Host can't read the decryption key because
+> it is passed using the secret injection mechanism (= secure channel).
+> Host can't read the decrypted content from memory because it's a
+> confidential (memory-encrypted) guest.
 > 
->  - (U)EFI variables:
->  
->    * Firmware semantics:
->      - flat variable space
->      - variables can be created/destroyed but the semantics are fiddly
->         [3]
->      - variable names are UTF-16 + UUID
->      - variables have 32-bit attributes
+> This has been tested with AMD SEV and SEV-ES guests, but the kernel side
+> of handling the secret area has no SEV-specific dependencies, and
+> therefore might be usable (perhaps with minor changes) for any
+> confidential computing hardware that can publish the secret area via the
+> standard EFI config table entry.
 > 
->    * efivarfs interface semantics:
->      - file per variable
->      - attributes are the first 4 bytes of the file
->      - names are partially case-insensitive (UUID part) and partially
->         case-sensitive ('name' part)
+> To enable this functionality, set CONFIG_EFI_SECRET=m when building the
+> guest kernel.
 > 
->    * sysfs interface semantics (as used by CONFIG_GOOGLE_SMI)
->      - directory per variable
->      - attributes are a separate sysfs file
->      - to create a variable you write a serialised structure to
->         `/sys/firmware/efi/vars/new_var`, to delete a var you write
->         to `.../del_var`
->      - names are case-sensitive including the UUID
+> Here is a simple example for usage of the efi_secret module in a guest
+> to which an EFI secret area with 4 secrets was injected during launch:
 > 
+> # ls -la /sys/kernel/security/coco/efi_secret
+> total 0
+> drwxr-xr-x 2 root root 0 Jun 28 11:54 .
+> drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
+> -r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
+> -r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
+> -r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
+> -r--r----- 1 root root 0 Jun 28 11:54 e6f5a162-d67f-4750-a67c-5d065f2a9910
 > 
->  - PowerVM Partition Key Store Variables:
->  
->    * Firmware semantics:
->      - _not_ a flat space, there are 3 domains ("consumers"): firmware,
->         bootloader and OS (not yet supported by the patch set)
->      - variables can be created and destroyed but the semantics are
->         fiddly and fiddly in different ways to UEFI [4]
->      - variable names are arbitrary byte strings: the hypervisor permits
->         names to contain nul and /.
->      - variables have 32-bit attributes ("policy") that don't align with
->         UEFI attributes
+> # xxd /sys/kernel/security/coco/efi_secret/e6f5a162-d67f-4750-a67c-5d065f2a9910
+> 00000000: 7468 6573 652d 6172 652d 7468 652d 6b61  these-are-the-ka
+> 00000010: 7461 2d73 6563 7265 7473 0001 0203 0405  ta-secrets......
+> 00000020: 0607                                     ..
 > 
->    * No stable kernel interface yet
+> # rm /sys/kernel/security/coco/efi_secret/e6f5a162-d67f-4750-a67c-5d065f2a9910
 > 
-> Even if we could come up with some stable kernel interface features
-> (e.g. decide if we want file per variable vs directory per variable), I
-> don't know how easy it would be to deal with the underlying semantic
-> differences - I think userspace would still need substantial
-> per-platform knowledge.
-> 
-> Or have I misunderstood what you're asking for? (If you want them all to
-> live under /sys/firmware, these ones all already do...)
+> # ls -la /sys/kernel/security/coco/efi_secret
+> total 0
+> drwxr-xr-x 2 root root 0 Jun 28 11:55 .
+> drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
+> -r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-06879ce3da0b
+> -r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-d3a0b54312c6
+> -r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-ff17f78864d2
 
-I want them to be unified in some way, right now there are lots of
-proposals for the same type of thing, but in different places (sysfs,
-securityfs, somewhere else), and with different names.
+Please see my comments on the powerpc version of this type of thing:
+	https://lore.kernel.org/r/20220122005637.28199-1-nayna@linux.ibm.com
 
-Please work together.
 
-thanks,
+You all need to work together to come up with a unified place for this
+and stop making it platform-specific.
+
+Until then, we can't take this.
+
+sorry,
 
 greg k-h

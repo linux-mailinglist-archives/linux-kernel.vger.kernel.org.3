@@ -2,269 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6D84A63E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC134A63F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238778AbiBASdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:33:06 -0500
-Received: from foss.arm.com ([217.140.110.172]:57678 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238536AbiBASdF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:33:05 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2AA311B3;
-        Tue,  1 Feb 2022 10:33:04 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.8.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D8E8B3F40C;
-        Tue,  1 Feb 2022 10:33:03 -0800 (PST)
-Date:   Tue, 1 Feb 2022 18:33:02 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     lostway@zju.edu.cn
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        bp@alien8.de, tony.luck@intel.com
-Subject: Re: [PATCH v2] RAS: Report ARM processor information to userspace
-Message-ID: <Yfl83r+gPOe9vzed@FVFF77S0Q05N>
-References: <20220126030906.56765-1-lostway@zju.edu.cn>
+        id S235253AbiBASeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233694AbiBASeO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 13:34:14 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9900C061714;
+        Tue,  1 Feb 2022 10:34:13 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id u15so33769189wrt.3;
+        Tue, 01 Feb 2022 10:34:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sCvk2JEkTN7cJ4ViA/+Q1mWtijvqc6HlgVsE2fUttPE=;
+        b=f9KQw0SsHC3XwbxZLFi5HTOVXULq8GAA1T7SheswJwe3Uh7T4s0oHTCBJ20O/+5/c0
+         FENox8mAvJOm99Z1qV/+bR2axUNOfR68w/KjC7ClaWJIkwjtsW5vq71YHkz8AIsFzr+T
+         cnzHsdUIwLH2eoQeln95eAHirPnE1Q9gbvOZG6DVwusrD38a47+n8RBqroFuywu59U9u
+         iw/ME37+LwcIGcWpEBQnXM8PMGhX9exRPQYtq/32fa93yKENBWWy8h+JT4ATH0Hjtk8v
+         19aIdSj/wpyMXDWZVr9FoyhtpxfPo6g6sIbNVklpmsQyXuQZV4IIQgKxOVVNp3iP810H
+         W4nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sCvk2JEkTN7cJ4ViA/+Q1mWtijvqc6HlgVsE2fUttPE=;
+        b=sIauA3kl8RUNihqT9TaM4PYCMsI6lmASZPZgU+ICrU9KvKNB7IWVCUSSSSrFRwvb0s
+         u67ONImFi3FNcITCBuLuOVoIKuxJpTP9jaNfYLhDvvtOclGYeH0rikGOfmudJ/+kgF1w
+         Y8V2lU3b0hGHUIk0piqDFE6eU+VoO2+0DFAaZWqr50WMeRnllOgROlJyhHqCQrzdqqQ0
+         hCPdtxVpe3OYMDKeVCoXbV5DxVZVwEk2+uvofTJcyFr0QaLeZQBuiPgbYK0no0DKjYiZ
+         M69D+zAvc1pqEw6bjrS88GSicvz4nKytw2QTKEh/YM0x+sT0Yg9sJoZjlQ76T3BqJeLZ
+         oebQ==
+X-Gm-Message-State: AOAM533X4C1o91BxPWf+zySNqtLkHckHAB0YK2PtgtH3mkjZcnKIHSnz
+        oEANCT0i1pfc59PS2dogEB4=
+X-Google-Smtp-Source: ABdhPJxBKiYspzokfHzLalKSOyfp5oCM2yFNJiRRUv2fby6NHl0LPyRTYyGimtWMvaAdY7iHePaqKw==
+X-Received: by 2002:adf:ef88:: with SMTP id d8mr21442184wro.419.1643740452368;
+        Tue, 01 Feb 2022 10:34:12 -0800 (PST)
+Received: from kista.localdomain (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id x13sm15307236wru.28.2022.02.01.10.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 10:34:11 -0800 (PST)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, wens@csie.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH] media: cedrus: Add watchdog for job completion
+Date:   Tue,  1 Feb 2022 19:33:24 +0100
+Message-Id: <20220201183324.493542-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220126030906.56765-1-lostway@zju.edu.cn>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 11:09:06AM +0800, lostway@zju.edu.cn wrote:
-> From: Shengwei Luo <luoshengwei@huawei.com>
-> 
-> The ARM processor error section includes several ARM processor error
-> information, several ARM processor context information and several
-> vendor specific error information structures. In addition to these
-> info, there are error severity and cpu logical index about the event.
-> Report all of these information to userspace via perf i/f.
-> 
-> Original-Author: Jason Tian <jason@os.amperecomputing.com>
-> Signed-off-by: Shengwei Luo <luoshengwei@huawei.com>
+Currently, if job is not completed for whatever reason, userspace
+application can hang on ioctl and thus become unkillable.
 
-In addition to Boris's comments, "Original-Author" is not a proper tag, and so
-this patch cannot be accepted as-is.
+In order to prevent that, implement watchdog, which will complete job
+after 2 seconds with error state.
 
-Please see:
+Concept is borrowed from hantro driver.
 
-  https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  2 ++
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  3 +++
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  4 +++
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    | 25 +++++++++++++++++++
+ .../staging/media/sunxi/cedrus/cedrus_hw.h    |  2 ++
+ 5 files changed, 36 insertions(+)
 
-Either:
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 4a4b714b0f26..68b3dcdb5df3 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -439,6 +439,8 @@ static int cedrus_probe(struct platform_device *pdev)
+ 
+ 	mutex_init(&dev->dev_mutex);
+ 
++	INIT_DELAYED_WORK(&dev->watchdog_work, cedrus_watchdog);
++
+ 	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register V4L2 device\n");
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
+index c345f2984041..3bc094eb497f 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+@@ -24,6 +24,7 @@
+ 
+ #include <linux/iopoll.h>
+ #include <linux/platform_device.h>
++#include <linux/workqueue.h>
+ 
+ #define CEDRUS_NAME			"cedrus"
+ 
+@@ -194,6 +195,8 @@ struct cedrus_dev {
+ 	struct reset_control	*rstc;
+ 
+ 	unsigned int		capabilities;
++
++	struct delayed_work	watchdog_work;
+ };
+ 
+ extern struct cedrus_dec_ops cedrus_dec_ops_mpeg2;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+index a16c1422558f..9c7200299465 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+@@ -97,4 +97,8 @@ void cedrus_device_run(void *priv)
+ 		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
+ 
+ 	dev->dec_ops[ctx->current_codec]->trigger(ctx);
++
++	/* Start the watchdog timer. */
++	schedule_delayed_work(&dev->watchdog_work,
++			      msecs_to_jiffies(2000));
+ }
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+index 2d7663726467..a6470a89851e 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -118,6 +118,13 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+ 	enum vb2_buffer_state state;
+ 	enum cedrus_irq_status status;
+ 
++	/*
++	 * If cancel_delayed_work returns false it means watchdog already
++	 * executed and finished the job.
++	 */
++	if (!cancel_delayed_work(&dev->watchdog_work))
++		return IRQ_HANDLED;
++
+ 	ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
+ 	if (!ctx) {
+ 		v4l2_err(&dev->v4l2_dev,
+@@ -143,6 +150,24 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
++void cedrus_watchdog(struct work_struct *work)
++{
++	struct cedrus_dev *dev;
++	struct cedrus_ctx *ctx;
++
++	dev = container_of(to_delayed_work(work),
++			   struct cedrus_dev, watchdog_work);
++
++	ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
++	if (!ctx)
++		return;
++
++	v4l2_err(&dev->v4l2_dev, "frame processing timed out!\n");
++	reset_control_reset(dev->rstc);
++	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
++					 VB2_BUF_STATE_ERROR);
++}
++
+ int cedrus_hw_suspend(struct device *device)
+ {
+ 	struct cedrus_dev *dev = dev_get_drvdata(device);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+index 45f641f0bfa2..7c92f00e36da 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+@@ -28,4 +28,6 @@ int cedrus_hw_resume(struct device *device);
+ int cedrus_hw_probe(struct cedrus_dev *dev);
+ void cedrus_hw_remove(struct cedrus_dev *dev);
+ 
++void cedrus_watchdog(struct work_struct *work);
++
+ #endif
+-- 
+2.35.1
 
-* The original patch had a "Signed-off-by" tag, which you should have kept
-  as-is, and added your own.
-
-* The original patch did not have a "Signed-off-by" tag, and we cannot accept
-  the patch.
-
-It would be good to provide a link to the prior patch, ideally via
-lore.kernel.org. For reference, this patch is:
-
-  https://lore.kernel.org/lkml/20220126030906.56765-1-lostway@zju.edu.cn/
-
-It would also be good to Cc the relevant arm maintainers here (e.g James
-Morse), since they're more likely to know about the arm side of things...
-
-Thanks,
-Mark.
-
-> ---
-> v1->v2: Cleaned up ci warnings
-> ---
->  drivers/acpi/apei/ghes.c |  3 +--
->  drivers/ras/ras.c        | 46 ++++++++++++++++++++++++++++++++++++--
->  include/linux/ras.h      | 15 +++++++++++--
->  include/ras/ras_event.h  | 48 +++++++++++++++++++++++++++++++++++-----
->  4 files changed, 101 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 0c5c9acc6254..f824c26057b1 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -490,9 +490,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->  	int sec_sev, i;
->  	char *p;
->  
-> -	log_arm_hw_error(err);
-> -
->  	sec_sev = ghes_severity(gdata->error_severity);
-> +	log_arm_hw_error(err, sec_sev);
->  	if (sev != GHES_SEV_RECOVERABLE || sec_sev != GHES_SEV_RECOVERABLE)
->  		return false;
->  
-> diff --git a/drivers/ras/ras.c b/drivers/ras/ras.c
-> index 95540ea8dd9d..2a7f424d59b9 100644
-> --- a/drivers/ras/ras.c
-> +++ b/drivers/ras/ras.c
-> @@ -21,9 +21,51 @@ void log_non_standard_event(const guid_t *sec_type, const guid_t *fru_id,
->  	trace_non_standard_event(sec_type, fru_id, fru_text, sev, err, len);
->  }
->  
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err)
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev)
->  {
-> -	trace_arm_event(err);
-> +	u32 pei_len;
-> +	u32 ctx_len = 0;
-> +	s32 vsei_len;
-> +	u8 *pei_err;
-> +	u8 *ctx_err;
-> +	u8 *ven_err_data;
-> +	struct cper_arm_err_info *err_info;
-> +	struct cper_arm_ctx_info *ctx_info;
-> +	int n, sz;
-> +	int cpu;
-> +
-> +	pei_len = sizeof(struct cper_arm_err_info) * err->err_info_num;
-> +	pei_err = (u8 *)err + sizeof(struct cper_sec_proc_arm);
-> +
-> +	err_info = (struct cper_arm_err_info *)(err + 1);
-> +	ctx_info = (struct cper_arm_ctx_info *)(err_info + err->err_info_num);
-> +	ctx_err = (u8 *)ctx_info;
-> +	for (n = 0; n < err->context_info_num; n++) {
-> +		sz = sizeof(struct cper_arm_ctx_info) + ctx_info->size;
-> +		ctx_info = (struct cper_arm_ctx_info *)((long)ctx_info + sz);
-> +		ctx_len += sz;
-> +	}
-> +
-> +	vsei_len = err->section_length - (sizeof(struct cper_sec_proc_arm) +
-> +						pei_len + ctx_len);
-> +	if (vsei_len < 0) {
-> +		pr_warn(FW_BUG
-> +			"section length: %d\n", err->section_length);
-> +		pr_warn(FW_BUG
-> +			"section length is too small\n");
-> +		pr_warn(FW_BUG
-> +			"firmware-generated error record is incorrect\n");
-> +		vsei_len = 0;
-> +	}
-> +	ven_err_data = (u8 *)ctx_info;
-> +
-> +	cpu = GET_LOGICAL_INDEX(err->mpidr);
-> +	/* when return value is invalid, set cpu index to -1 */
-> +	if (cpu < 0)
-> +		cpu = -1;
-> +
-> +	trace_arm_event(err, pei_err, pei_len, ctx_err, ctx_len,
-> +			ven_err_data, (u32)vsei_len, sev, cpu);
->  }
->  
->  static int __init ras_init(void)
-> diff --git a/include/linux/ras.h b/include/linux/ras.h
-> index 1f4048bf2674..4529775374d0 100644
-> --- a/include/linux/ras.h
-> +++ b/include/linux/ras.h
-> @@ -24,7 +24,7 @@ int __init parse_cec_param(char *str);
->  void log_non_standard_event(const guid_t *sec_type,
->  			    const guid_t *fru_id, const char *fru_text,
->  			    const u8 sev, const u8 *err, const u32 len);
-> -void log_arm_hw_error(struct cper_sec_proc_arm *err);
-> +void log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev);
->  #else
->  static inline void
->  log_non_standard_event(const guid_t *sec_type,
-> @@ -32,7 +32,18 @@ log_non_standard_event(const guid_t *sec_type,
->  		       const u8 sev, const u8 *err, const u32 len)
->  { return; }
->  static inline void
-> -log_arm_hw_error(struct cper_sec_proc_arm *err) { return; }
-> +log_arm_hw_error(struct cper_sec_proc_arm *err, const u8 sev) { return; }
->  #endif
->  
-> +#if defined(CONFIG_ARM) || defined(CONFIG_ARM64)
-> +#include <asm/smp_plat.h>
-> +/*
-> + * Include ARM specific SMP header which provides a function mapping mpidr to
-> + * cpu logical index.
-> + */
-> +#define GET_LOGICAL_INDEX(mpidr) get_logical_index(mpidr & MPIDR_HWID_BITMASK)
-> +#else
-> +#define GET_LOGICAL_INDEX(mpidr) -EINVAL
-> +#endif /* CONFIG_ARM || CONFIG_ARM64 */
-> +
->  #endif /* __RAS_H__ */
-> diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-> index d0337a41141c..92cfb61bdb20 100644
-> --- a/include/ras/ras_event.h
-> +++ b/include/ras/ras_event.h
-> @@ -168,11 +168,24 @@ TRACE_EVENT(mc_event,
->   * This event is generated when hardware detects an ARM processor error
->   * has occurred. UEFI 2.6 spec section N.2.4.4.
->   */
-> +#define APEIL "ARM Processor Err Info data len"
-> +#define APEID "ARM Processor Err Info raw data"
-> +#define APECIL "ARM Processor Err Context Info data len"
-> +#define APECID "ARM Processor Err Context Info raw data"
-> +#define VSEIL "Vendor Specific Err Info data len"
-> +#define VSEID "Vendor Specific Err Info raw data"
->  TRACE_EVENT(arm_event,
->  
-> -	TP_PROTO(const struct cper_sec_proc_arm *proc),
-> +	TP_PROTO(const struct cper_sec_proc_arm *proc, const u8 *pei_err,
-> +			const u32 pei_len,
-> +			const u8 *ctx_err,
-> +			const u32 ctx_len,
-> +			const u8 *oem,
-> +			const u32 oem_len,
-> +			u8 sev,
-> +			int cpu),
->  
-> -	TP_ARGS(proc),
-> +	TP_ARGS(proc, pei_err, pei_len, ctx_err, ctx_len, oem, oem_len, sev, cpu),
->  
->  	TP_STRUCT__entry(
->  		__field(u64, mpidr)
-> @@ -180,6 +193,14 @@ TRACE_EVENT(arm_event,
->  		__field(u32, running_state)
->  		__field(u32, psci_state)
->  		__field(u8, affinity)
-> +		__field(u32, pei_len)
-> +		__dynamic_array(u8, buf, pei_len)
-> +		__field(u32, ctx_len)
-> +		__dynamic_array(u8, buf1, ctx_len)
-> +		__field(u32, oem_len)
-> +		__dynamic_array(u8, buf2, oem_len)
-> +		__field(u8, sev)
-> +		__field(int, cpu)
->  	),
->  
->  	TP_fast_assign(
-> @@ -199,12 +220,29 @@ TRACE_EVENT(arm_event,
->  			__entry->running_state = ~0;
->  			__entry->psci_state = ~0;
->  		}
-> +		__entry->pei_len = pei_len;
-> +		memcpy(__get_dynamic_array(buf), pei_err, pei_len);
-> +		__entry->ctx_len = ctx_len;
-> +		memcpy(__get_dynamic_array(buf1), ctx_err, ctx_len);
-> +		__entry->oem_len = oem_len;
-> +		memcpy(__get_dynamic_array(buf2), oem, oem_len);
-> +		__entry->sev = sev;
-> +		__entry->cpu = cpu;
->  	),
->  
-> -	TP_printk("affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> -		  "running state: %d; PSCI state: %d",
-> +	TP_printk("cpu: %d; error: %d; affinity level: %d; MPIDR: %016llx; MIDR: %016llx; "
-> +		  "running state: %d; PSCI state: %d; "
-> +		  "%s: %d; %s: %s; %s: %d; %s: %s; %s: %d; %s: %s",
-> +		  __entry->cpu,
-> +		  __entry->sev,
->  		  __entry->affinity, __entry->mpidr, __entry->midr,
-> -		  __entry->running_state, __entry->psci_state)
-> +		  __entry->running_state, __entry->psci_state,
-> +		  APEIL, __entry->pei_len, APEID,
-> +		  __print_hex(__get_dynamic_array(buf), __entry->pei_len),
-> +		  APECIL, __entry->ctx_len, APECID,
-> +		  __print_hex(__get_dynamic_array(buf1), __entry->ctx_len),
-> +		  VSEIL, __entry->oem_len, VSEID,
-> +		  __print_hex(__get_dynamic_array(buf2), __entry->oem_len))
->  );
->  
->  /*
-> -- 
-> 2.27.0
-> 

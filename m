@@ -2,129 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279F44A5E78
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224264A5E7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 15:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239384AbiBAOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 09:41:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48250 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239333AbiBAOlZ (ORCPT
+        id S232540AbiBAOmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 09:42:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22400 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232042AbiBAOmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 09:41:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2672FB82CCC;
-        Tue,  1 Feb 2022 14:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19819C340EB;
-        Tue,  1 Feb 2022 14:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643726482;
-        bh=4sxxBUCUngbxSjMsWZ+Vhdr/PDT3NXWPXmrp4T/JV24=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JsViJyuTsNcR7cmH3MW9ScowqbBG6PK76wdZIFQnQv/jFd4F1DUATML5W8uxrUP3D
-         5qYQ7V+/ybnm/5F4GYw4GOwAUmj8oytNQM/UihGDvZbzQ0y1pD0N191mvZ4c6ocQmx
-         trc8KkrOshzAwcnNgbOVhAMTqSuMRq/4nODL2GzY=
-Date:   Tue, 1 Feb 2022 15:41:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Dov Murik <dovmurik@linux.ibm.com>, linux-efi@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>,
-        dougmill@linux.vnet.ibm.com, gcwilson@linux.ibm.com,
-        gjoyce@ibm.com, linuxppc-dev@lists.ozlabs.org, mjg59@srcf.ucam.org,
-        mpe@ellerman.id.au, dja@axtens.net
-Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <YflGkNwyI6LUSVVk@kroah.com>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
- <Yfk6vEuZFtgtA+G+@kroah.com>
- <37779659ca96ac9c1f11bcc0ac0665895c795b54.camel@linux.ibm.com>
+        Tue, 1 Feb 2022 09:42:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643726535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NjzDEqkfJ2N8210XIx7ybjZjd9nnlt1goBZyP/z8PRo=;
+        b=M9kfGpytJMsEyi2WstNS0uy+0n5ay7kLPLOHkC5zvPtt8jRpKmbLzavibsuA/Si6S1NndE
+        qxHeq+m3P9TSxU4lu9ZWpWH9CM3O+b2FWSyHNqs5K9fyfQ1LLvtqbqjrtveSFqynOFQtUA
+        QOzGTlTpzUXUO+it1QOH/NlO9ys57+o=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-mKe3hDwaOh-ie9wmstWT-w-1; Tue, 01 Feb 2022 09:42:11 -0500
+X-MC-Unique: mKe3hDwaOh-ie9wmstWT-w-1
+Received: by mail-ej1-f72.google.com with SMTP id o4-20020a170906768400b006a981625756so6683563ejm.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 06:42:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NjzDEqkfJ2N8210XIx7ybjZjd9nnlt1goBZyP/z8PRo=;
+        b=LkPxVtzHGGW6hRqfVnAS69cmMXnD0qjR2NkVnXMEKW4+pc1uwaFuYgnY1TWct82Dny
+         J0Kn3SiL0oYIzb3ChDsjiOa85GqJisSjuPc97TTjFWhXwt4k3a0dte4PCsWBF7NygEE4
+         nTD2aISqt2oBfn/cqB4UjJIgHKUZA24mXoISj+3L9h2YnqgWDvTjh86hT2kdlZABhBIb
+         M1Gu4FS3BqcQYs/AjYG146F8Q40cJn3Z1+LkCdDAyNqEZpk1bbVXt8FEBAYI3jsDVyMt
+         CdHHdgFWiHc/2cfOMo3k5KOrKUwKYahs9ZAdd1T4P8XCUQ/3q3wKL8Qa7sRxp/okmBP3
+         m/yg==
+X-Gm-Message-State: AOAM532DBPcAvanF1SFLbN7CaROlK4w4UdBVoRwanVPvDQfv2R4uiZX2
+        tcS+kSG6qfA2LfR1nc31gRhufw3hBGB8ED1aaWORFoliQ5pErnthABYX+cfdEzkZShilAhR+bZ/
+        A+2BnWdqgG54j8CsiU1yk9iMi
+X-Received: by 2002:a17:906:974c:: with SMTP id o12mr12816424ejy.340.1643726530727;
+        Tue, 01 Feb 2022 06:42:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwNDyANDY0zMYuTljWq11CTgp0bQzqb3WikdoyniZiPHEGU+6ua6ezX3gvJIdSHcNSeP5gfIQ==
+X-Received: by 2002:a17:906:974c:: with SMTP id o12mr12816408ejy.340.1643726530531;
+        Tue, 01 Feb 2022 06:42:10 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id h16sm3616306ejj.56.2022.02.01.06.42.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 06:42:09 -0800 (PST)
+Message-ID: <8cc4190e-f6ec-dc23-c487-4f0c4c7126e8@redhat.com>
+Date:   Tue, 1 Feb 2022 15:42:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37779659ca96ac9c1f11bcc0ac0665895c795b54.camel@linux.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6 4/9] spi: Add API to count spi acpi resources
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20220121172431.6876-1-sbinding@opensource.cirrus.com>
+ <20220121172431.6876-5-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220121172431.6876-5-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 09:24:50AM -0500, James Bottomley wrote:
-> [cc's added]
-> On Tue, 2022-02-01 at 14:50 +0100, Greg KH wrote:
-> > On Tue, Feb 01, 2022 at 12:44:08PM +0000, Dov Murik wrote:
-> [...]
-> > > # ls -la /sys/kernel/security/coco/efi_secret
-> > > total 0
-> > > drwxr-xr-x 2 root root 0 Jun 28 11:55 .
-> > > drwxr-xr-x 3 root root 0 Jun 28 11:54 ..
-> > > -r--r----- 1 root root 0 Jun 28 11:54 736870e5-84f0-4973-92ec-
-> > > 06879ce3da0b
-> > > -r--r----- 1 root root 0 Jun 28 11:54 83c83f7f-1356-4975-8b7e-
-> > > d3a0b54312c6
-> > > -r--r----- 1 root root 0 Jun 28 11:54 9553f55d-3da2-43ee-ab5d-
-> > > ff17f78864d2
-> > 
-> > Please see my comments on the powerpc version of this type of thing:
-> > 	
-> > https://lore.kernel.org/r/20220122005637.28199-1-nayna@linux.ibm.com
-> 
-> If you want a debate, actually cc'ing the people on the other thread
-> would have been a good start ...
-> 
-> For those added, this patch series is at:
-> 
-> https://lore.kernel.org/all/20220201124413.1093099-1-dovmurik@linux.ibm.com/
+Hi,
 
-Thanks for adding everyone.
+On 1/21/22 18:24, Stefan Binding wrote:
+> Some ACPI nodes may have more than one Spi Resource.
+> To be able to handle these case, its necessary to have
+> a way of counting these resources.
+> 
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 
-> > You all need to work together to come up with a unified place for
-> > this and stop making it platform-specific.
-> 
-> I'm not entirely sure of that.  If you look at the differences between
-> EFI variables and the COCO proposal: the former has an update API
-> which, in the case of signed variables, is rather complex and a UC16
-> content requirement.  The latter is binary data with read only/delete. 
-> Plus each variable in EFI is described by a GUID, so having a directory
-> of random guids, some of which behave like COCO secrets and some of
-> which are EFI variables is going to be incredibly confusing (and also
-> break all our current listing tools which seems somewhat undesirable).
-> 
-> So we could end up with 
-> 
-> <common path prefix>/efivar
-> <common path prefix>/coco
+Thanks, patch looks good to me:
 
-The powerpc stuff is not efi.  But yes, that is messy here.  But why
-doesn't the powerpc follow the coco standard?
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-> To achieve the separation, but I really don't see what this buys us. 
-> Both filesystems would likely end up with different backends because of
-> the semantic differences and we can easily start now in different
-> places (effectively we've already done this for efi variables) and
-> unify later if that is the chosen direction, so it doesn't look like a
-> blocker.
-> 
-> > Until then, we can't take this.
-> 
-> I don't believe anyone was asking you to take it.
+Regards,
 
-I was on the review list...
+Hans
+
+
+> ---
+>  drivers/spi/spi.c       | 40 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/spi/spi.h |  1 +
+>  2 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 06c0a308b38b..ec9f2ed579e3 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -2324,6 +2324,46 @@ struct acpi_spi_lookup {
+>  	int			index;
+>  };
+>  
+> +static int acpi_spi_count(struct acpi_resource *ares, void *data)
+> +{
+> +	struct acpi_resource_spi_serialbus *sb;
+> +	int *count = data;
+> +
+> +	if (ares->type != ACPI_RESOURCE_TYPE_SERIAL_BUS)
+> +		return 1;
+> +
+> +	sb = &ares->data.spi_serial_bus;
+> +	if (sb->type != ACPI_RESOURCE_SERIAL_TYPE_SPI)
+> +		return 1;
+> +
+> +	*count = *count + 1;
+> +
+> +	return 1;
+> +}
+> +
+> +/**
+> + * acpi_spi_count_resources - Count the number of SpiSerialBus resources
+> + * @adev:	ACPI device
+> + *
+> + * Returns the number of SpiSerialBus resources in the ACPI-device's
+> + * resource-list; or a negative error code.
+> + */
+> +int acpi_spi_count_resources(struct acpi_device *adev)
+> +{
+> +	LIST_HEAD(r);
+> +	int count = 0;
+> +	int ret;
+> +
+> +	ret = acpi_dev_get_resources(adev, &r, acpi_spi_count, &count);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	acpi_dev_free_resource_list(&r);
+> +
+> +	return count;
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_spi_count_resources);
+> +
+>  static void acpi_spi_parse_apple_properties(struct acpi_device *dev,
+>  					    struct acpi_spi_lookup *lookup)
+>  {
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index e5bbb9cbd3d7..394b4241d989 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -764,6 +764,7 @@ extern void spi_unregister_controller(struct spi_controller *ctlr);
+>  extern struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
+>  						struct acpi_device *adev,
+>  						int index);
+> +int acpi_spi_count_resources(struct acpi_device *adev);
+>  #endif
+>  
+>  /*
+> 
 

@@ -2,160 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448534A5AF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D294A5ACF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 12:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbiBALN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 06:13:27 -0500
-Received: from mailout3.samsung.com ([203.254.224.33]:45222 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbiBALN0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 06:13:26 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220201111323epoutp03a816168c346af5c940b8a9a21bc2bebb~PpS2GkSqg1132111321epoutp030
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 11:13:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220201111323epoutp03a816168c346af5c940b8a9a21bc2bebb~PpS2GkSqg1132111321epoutp030
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643714004;
-        bh=ChhcF1NoORvS1k+xf7ga/YjFUmM2ShmAbsLkCpu8fL4=;
-        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
-        b=srhfqMY1mATVRdHSLvSvTUWaqJXhC5A6O93ECZpAhxz6cOGpYcg/D7A4zV9ERAIu6
-         Qub/V9vbSuUbBUQN9Ftqgg+6R4eoGD0hFb8Q5QwLJNMNQy2NZb9W30ObiUILjHCq/5
-         8ETnA9n18t4zbo5v1RsoU9juAs1s1FnwvQz2x6Iw=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220201111322epcas5p3d59eb6cb20c16c227f96996f76eefde1~PpS0ymN7b0747107471epcas5p3T;
-        Tue,  1 Feb 2022 11:13:22 +0000 (GMT)
-X-AuditID: b6c32a4a-de5ff7000000b6e6-d8-61f915968964
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E6.F0.46822.69519F16; Tue,  1 Feb 2022 20:12:22 +0900 (KST)
-Date:   Tue, 01 Feb 2022 15:54:23 +0530
-Message-ID: <483084104.1497479.1643711063683@mail-kr5-2>
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH 1/1] kallsyms: print module name in %ps/S case when
- KALLSYMS is disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     "pmladek@suse.com" <pmladek@suse.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Vaneet Narang <v.narang@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YfkBQNBEPrAJ9jKw@smile.fi.intel.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-X-CMS-MailID: 20220201102423epcms5p7e0fec070047e3134bcb698511aa55761
-Content-Type: multipart/mixed;
-        boundary="----=_Part_1497478_934560393.1643711063682"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTZxjG951bS2fJacHtlToIVYeggLI5jtFdTJw5LiTTbIpxTHYCJ2CE
-        0rRcxM2EkU4mgsxxtSJ2SBRKQwGBNly6gcyBsFB1LgVlFAqazDBRdCiMMMpps/33+573ea/5
-        xLhcRwWIj6rSeY2KS1FSEqLtemhIeNnql9yWlmIFU2k2UUxhbjnGPL5SgJg77ZUU49JXUcxo
-        rQNj6i5dRcyS6znJ2L51YkxHUzXF/HJ/CmN6+i8i5uvZMcTo7m/7wJc1VZkQeyHnFsHqbCMi
-        Vtc7TbLNxtMU21exQLBV/ftZe/4x9myLEbHmlrsEO2joFbGzzYH7Vh2W7EzkU45m8prI976Q
-        JI+ey0XqooDjA0s38RzUAPnIRwz02/DIMUTkI4lYTncgKHPNkO4AQW+AjuEJys1SmgH75NAy
-        i5dZBotWP7fsR3PQV/4cd7OcDgZ7hQm5LX70Fphv3eiWKToCjO2dhJv96Who+L56pSJO55LQ
-        ajwpjCCFirwpQmAFWK62Ijf70FFQ1t+NC/pqGK6fFnn58Y1LSGB/+OaPXz0eGThfdnj0tVB/
-        rXBlLaDPIDD/1eV5VCAomCjzZESDucboqbob9H29ImG6g1DS/g8l6G9A6c0GTNB9oXBhEvNO
-        ba3y8gbQDTeS3g1mnzzxbMPCuYILSDhuA4KnN34WfYeC9P/dUf+/dgIHgWW6EndbcDoUzO2R
-        gvwmlBQ981jegZy8UkLgYCg5My4yIJERreHV2tQkXrtNHaXisyK0XKo2Q5UUkZCW2oxWPmfY
-        R1Y07pyJ6EGYGPWg9cvpE431dhRAqNJUvNJf2vXDHCeXJnLZJ3hNWrwmI4XX9iCFmFC+Lh1I
-        auTkdBKXzh/jeTWv8UYxsU9ADvaVpWYJxo6Qc4lQuxht+3LXaG/Wkc8OZKgkMQrJjk33ih0/
-        kavW0U4yMm3vg3e7T55tJhcv4yd8+qZDnMWNd9KZnbNrP33rofH9y0Wb9bJ1meW2kvnND0qt
-        tzcN1WafEm2cC4oOjH9U3cSfittlMPsalG3Be7NTR9IP6e3K0dNkzZo4NIFd/PHDBMWLqYTO
-        OmyfQy1Ptjhm4ibnR8rx2E+u/M23FOHXMv+UfR6bH2IMH/x9R6zllRfbZQtLW3fHqH/rct3u
-        /FhV6bd+PCZ8//Ww1x6ed7j6Xz18qw43xRY8ywgNVFm5Q922se1PoyazDMcHQ+L3tA0Quf55
-        dfforqa7oCS0ydzWMFyj5f4FrdjEVhcEAAA=
-X-CMS-RootMailID: 20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc
-References: <YfkBQNBEPrAJ9jKw@smile.fi.intel.com>
-        <20220201040044.1528568-1-maninder1.s@samsung.com>
-        <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcms5p7>
+        id S236807AbiBALC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 06:02:58 -0500
+Received: from mail-dm6nam12on2061.outbound.protection.outlook.com ([40.107.243.61]:51238
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237053AbiBALC4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 06:02:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j5Sg3m8EGfK8NyuqKc5lbWiKr8wrIzSOmiXRt3WvVYUgGED4tnCmyoTyUe7kPe68oR2aohB/CHCdjd7JoKZz9TD1S9gnz3el1L8iaCO3fyzE1Y97usv49l/rbSWoYVHOMIZ0go0kNkeMHKp2wOMEwH43DzPXf39fHC5kaG3+LbCO34W/bW0mRhd5v0gWngrMOtyqqzJmS2HCAsKBOF22bw568gRJMrkV9UNeWs5Ys3e0/FgDki/GILxxRuNdj/f+NQnTVwK799o2ll+bSbljDcxWgQu4w5zfHn48QQaP3N+EgQDVvmlXlTikMrGCaVH+HgcRYFpyDEqaC0bcCWobew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yi/uKTI7qLEgRJe+q8J7TT/zNZSBc3IPysaSIh1qwCk=;
+ b=T/jEOwyA8uwNAy9pyNlVeFxWEYqFnrbatDXFWntDDnwhKnu3dNVKIihhkV27Vk6VwaFBc6nhX3edZ4GRbjR6e4iaUL6GvxsDzs2A2akQrE2KCYwRF9DPQP9sOTbuVohDZuGD8ubJuzt1axO2w5ReXVVwnbrOeUUhqdH+8NXZ7+Vv5e6qcHpPyh0QvYcIv9dTs+TpMW4BS0yLrsJSnrEwvx/jToZR6GK4oJN9IvmLenQ8/Rz5L8BxZLo4TIpjK3sTiDcM8WogEUee6pQOUdn5j/VIwv8wc7oLPEYx1R/lBA0Ps82ezB8kz1o60CadwvRikKwXIsAumQ1y2OiKl41BCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yi/uKTI7qLEgRJe+q8J7TT/zNZSBc3IPysaSIh1qwCk=;
+ b=oc02fW9losCSeTbzdSLyIfVDSg6mm5Mh8xuEHulk1WE6xifYS/YX0zr92RGUJSHIZVifHUdB68URU2sgjEQRDdIlN2k1r6vVxLdKY0nMgvNkNai/UpFtOuI6P5pT4V0iOEp1grePhwhnCNgQyfv09QcFB3KBpp/fRigt18ZMKmo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ DM5PR12MB1449.namprd12.prod.outlook.com (2603:10b6:4:10::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.20; Tue, 1 Feb 2022 11:02:54 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::389b:4009:8efc:8643]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::389b:4009:8efc:8643%5]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
+ 11:02:54 +0000
+Message-ID: <7ccec879-ae8d-a0c9-708e-c72abc82b7b1@amd.com>
+Date:   Tue, 1 Feb 2022 18:02:42 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 1/3] KVM: SVM: Refactor AVIC hardware setup logic into
+ helper function
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        pbonzini@redhat.com, joro@8bytes.org, mlevitsk@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
+        jon.grimm@amd.com
+References: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
+ <20211213113110.12143-2-suravee.suthikulpanit@amd.com>
+ <Yc3r1U6WFVDtJCZn@google.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <Yc3r1U6WFVDtJCZn@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR06CA0228.apcprd06.prod.outlook.com
+ (2603:1096:4:68::36) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 609c0048-cc72-4ad0-b540-08d9e5726516
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1449:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1449338FB04374E47F342621F3269@DM5PR12MB1449.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5O1MKB7YCx9wsL8O2cM49nTTQCblchU5FU4cG5uX6m25j97tdm/6gux1vcawSK8AmATLgM3tuclxBqZVnDAhTrIxIt6J7ErsXKEoO2cx6RaNUC91VU/wU6juYlmSgBqTa7T5VKegRHagFhsXVxSn37Zwo5VP1qawcjooSa/aYnFbGbf+WBdkBpMcWfbAbLFliEEBGzDSHsJS8/tpg5jUnz17O+VxQrdRqLLXyZsHUw9f1Y2bsm1ZJ6DymdYHT7kw6wtKMqxvQrBz4NYe6zq6UhbQL+FBkwZmvJJFBUKno4bcRR+m962OBUrm2gKwC3Uh/HpVgPxizw686YjAD4nxxsE6lbTu4k5/NjJQH8yJTM1ok7ipjiM33UtuAPUWTDQw7hzknXY6Q3RYTZ5dO+QLz2Aa659ng3q2pD8qThVwuT5YKwgv0wYP+bCyEFPpE2q+Buz9ar3XZym+z2GUIPgcm0OEED1v0mROm0nY2EGHFawy9/KqUxqR0aQvkEfDgBLBZsycS91+ROkrxGs+w6UfspSKCekgTEt1/onGyCgt55twwSehmGbLBgzFgoMQtdUiDZRnlWTGJ8vV96ov6jPZTL3FM6pBNMHAFOE8uP7JsTFz28DCS9IVDPMEV109hitkDuuHzvmM+TfMsQhKQ7OoxLAZNPPPWlfEvJM9STF++vqmRzxt8EfzW7tVXLKnWfeBS9xrQAMOEeN7GL00+KCGPv9iwSMzUiP2pkR5FERIy4U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(4326008)(86362001)(5660300002)(38100700002)(66556008)(53546011)(6486002)(7416002)(31696002)(316002)(6916009)(6512007)(508600001)(6506007)(66946007)(8936002)(8676002)(66476007)(6666004)(31686004)(2616005)(83380400001)(2906002)(186003)(26005)(43740500002)(45980500001)(20210929001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekEzb0dkSEZPaFI5Q2FnV1kvUTd5OFBpWndNMUNiY3Zud0IwQVQyeWhlQmNu?=
+ =?utf-8?B?VEEzRmVzeDhaaEVwTmZjVGhrYVF2SFk0NlJRcFFqN0NiaHkwSDRYbXErU3hh?=
+ =?utf-8?B?YVFsNlByMFErd2xrUjJaUnNPUlRnY1c3ajNLRXJ5MVBKemlBVUV5YjdMMEx0?=
+ =?utf-8?B?L292VnFPNlNHV3BnUVRkWUFuNjhicloxSUQ2UnJXTHFaOTZVamxqN1JNVE1L?=
+ =?utf-8?B?ZmdMMW9taEt2a3M3WkNBNSt4RktsS3RJNjRJWEU2Z1UrMVRqUUZqMnVadjZG?=
+ =?utf-8?B?M1JiN2lzSlJLcFlsdURCZXM4UUpoL3JPRVVZK3dCOVpVQXhxUlVjeFpqTG9H?=
+ =?utf-8?B?QTkxWFNvWXZBbkUwOE9sUy9ZOFBhaHlNU0J0ZGx5UlA4Mkd4UGdZV2E3K2NE?=
+ =?utf-8?B?K3F0VnF2Z3BJUXZZcDlkTHFxMldiSGNlc05zKzJxcGMvdkJyR081dFJHWG5i?=
+ =?utf-8?B?ZU5odXFmMDNPNndRUTNCU09VU2xyQnhzcG5ONGhDQzVJMGp4cW9CUm9UaHV3?=
+ =?utf-8?B?bElUNTFBbmh3a1hKL1lXOElBQnNWTTRxdEFDc0VENXdDRG83SW9DYUpkTTUz?=
+ =?utf-8?B?MWtFSEx0TkFYNS9mMElEU3lBRGxtZlJnRXdFeE41RUg0UkJWRnFMRUtPaU5v?=
+ =?utf-8?B?OUhxdkpGOUlMZThlVG9JUnhPeXJKZWhPUkRuaWpQWXpkZ2kvWWNCM2gwcnFj?=
+ =?utf-8?B?eFFzdVZETkJUbm9Jbit6M0twL3FBaWxEeWtPSmZmN2J2V3JPL0hwSDkwT2lO?=
+ =?utf-8?B?SDhBakl2ZVltL0RaM3NWS3NaQWNJYXhCcjhWZG55VGRFclZRdnZaSWNCS0RY?=
+ =?utf-8?B?SXM2R25EYm1PWkdmREoyYTc3QTg0RHBvRFJOaU83akhJY2QvWlErMEdwUnRj?=
+ =?utf-8?B?K3d3TFRNS25zTXpPN04yNGx0ZU5tanV4QmU1ZDFnTnhYNlhpK21RL21DeWVo?=
+ =?utf-8?B?TThCenVpVUM2QXlpTTB0Wm5SMU5ndzZwKzgwczJ3d2dyYmFiN1puUFJEeXlI?=
+ =?utf-8?B?SU5ZTHRmTGgvYmc5aFFOVHZKVXFzWlU2OFhkS1FTRm9Icm5UcTZ1TDVEcnhL?=
+ =?utf-8?B?UzhWQ1BQRmw5cDlEbDlNZHR6SnFhV2xmcCs3bzR0am80clRDQTVNYjNRODVX?=
+ =?utf-8?B?Z09CekJvUW1TTStIWVRmUFdGemRwc2FQVGtneWZqUkVNNFB1ek9oNVZBMXpN?=
+ =?utf-8?B?ZWdyWFQ1VHJ1M2g4UFFYb3BubHQyZDgrMkxCTVFOQU01TUlpcERqMnZHcUdU?=
+ =?utf-8?B?TGlDWHRuY3ZacWQvSjhLaHkwU3JrakpiK1NHWDFEcjV3NjlwM1lRRExqODZH?=
+ =?utf-8?B?MnhjZHp1eXRoM2l2ZEs2RWZJc2x0TG9STUYxakcwZDFtMFhVdmpFQjZXL1Vx?=
+ =?utf-8?B?cUJ6TklaMHY4aWNSMysyM0dzVnVycjhoYkE3OFllTHNQYVlVdXZhQ1pndmp4?=
+ =?utf-8?B?ZUQ1VnJaNThnRHJsT09uVTBaQndXSk1hVVphM1JZNVhJQllsSmNzcVB5UEMw?=
+ =?utf-8?B?WHZYN2xwZTdENkdMdnl5T3hyOVVoaDhMUXdacnVsVE1ZbldndTJJTVY4SFJk?=
+ =?utf-8?B?V2UrZFZXaEJhWHBhSjZIeFhFMXhCZUdVWGZ1MUh3aFgvMWxENC8wNFQrTy9j?=
+ =?utf-8?B?YzZUbXFBN3lFVzJ3N0FRWjVKeTJVVVFxV09ZUHYvemdZR3JJaDYzcXdReWZO?=
+ =?utf-8?B?dVpZa1RVa3BMZmloVHhqZXVpUWFaWTFQODYyZmE4U3hxSnZST1hNZkhVUkZm?=
+ =?utf-8?B?Y3BLL2tZR0ZWOHFzTUZSVGkxZ0pzekg2YnVBZUpEQ0FEQk50SWs0Ly9tOGFO?=
+ =?utf-8?B?RE9kY2tMaVUySjhPM1hjY2VsblkvbzZjbWNTM0NNWXRzc1FyeGxJcUZCeGkx?=
+ =?utf-8?B?d0tFV3dwYlI4TTAyRTh4SkJQaW9CRkZpY3Btdll4ek52eWxnaWs5ZFJkakhE?=
+ =?utf-8?B?L1dSRWE5Z00xcGpRRnMxOGxpU3EyYTNPa2twdlVwK3VUMjN4M3VyZUw2VHYw?=
+ =?utf-8?B?K0tNbXgzVVlVUisrMW02VEtSRWIxZnRiMEZtOUxORGxISFVUcU9RT1ZOWmN2?=
+ =?utf-8?B?VWtNU0NGbCtrKzJqSSt0eTRKd2psY0EvWkFkZkRGWHJUcHZyWWxOa2pSMFZM?=
+ =?utf-8?B?V01tYytSbnk3Z1ZSanhkZTBXbm9wYlI0MWEwdzlsNWNsdHgzdUpsdkJkSXNN?=
+ =?utf-8?Q?gtqO/JCLZhiVCM5qTepR8AI=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 609c0048-cc72-4ad0-b540-08d9e5726516
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 11:02:53.9185
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LOVq7z1ZZjkCrChJVk1txs8uys+wUIQBlaFh94co2bQghawvyUxMGGXoyTiWqg52RkKXMsM6XVKmKf2GJVqx4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1449
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_Part_1497478_934560393.1643711063682
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
+Hi Sean,
 
-Hi,
+Thanks for the suggestion. I'll update this in v4.
 
+Regards,
+Suravee
 
->> ..
->> 
->> [   19.276023] Call trace:
->> [   19.276277]  0xffff800000ec0000+0x28 [crash]
->> [   19.276567]  0xffff800000ec0000+0x58 [crash]
->> [   19.276727]  0xffff800000ec0000+0x74 [crash]
->> [   19.276866]  0xffff8000080127d0
->> [   19.276978]  0xffff80000812d95c
->> [   19.277085]  0xffff80000812f554
- 
->> Signed-off-by: Vaneet Narang <v.narang@samsung.com>
->> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
- 
-> Who is (are) the author(s)?
-
-Both are authors (Maninder and Vaneet).
-
-Sorry, forgot to use below signature.
-
-Co-developed-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Vaneet Narang <v.narang@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
-
-Thanks,
-Maninder Singh
-------=_Part_1497478_934560393.1643711063682
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="rcptInfo.txt"
-Content-Transfer-Encoding: base64
-
-DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIDEvMV0g
-a2FsbHN5bXM6IHByaW50IG1vZHVsZSBuYW1lIGluICVwcy9TIGNhc2Ugd2hlbiBLQUxMU1lNUyBp
-cyBkaXNhYmxlZA0KICAgICAgRnJvbSAgICAgICA6IG51bGwNCiAgICAgIFNlbnQgRGF0ZSAgOiAy
-MDIyLTAyLTAxIDE1OjE2ICBHTVQrNTozMA0KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQogICAgICAgICAg
-ICAgICAgICBOYW1lICAgICAgICAgICAgICAgIFR5cGUgICAgICAgICAgSm9iIFRpdGxlICAgICAg
-ICAgICAgICAgICAgICAgICBEZXB0LiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDb21w
-YW55ICAgICAgICAgICAgICAgIA0KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQogICAgICBNYW5pbmRlciBT
-aW5naCAgICAgICAgICAgICAgICAgVE8gICAgICAgICBTdGFmZiBFbmdpbmVlciAgICAgICAgICAg
-ICBTeXN0ZW0gUy9XIEdyb3VwIC9TUkktRGVsaGkgICAgICAgICAgICAgICBTYW1zdW5nwqBFbGVj
-dHJvbmljc8KgDQogICAgICBwbWxhZGVrQHN1c2UuY29tICAgICAgICAgICAgICAgQ0MNCiAgICAg
-IHJvc3RlZHRAZ29vZG1pcy5vcmcgICAgICAgICAgICBDQw0KICAgICAgc2Vub3poYXRza3lAY2hy
-b21pdW0ub3JnICAgICAgIENDDQogICAgICBsaW51eEByYXNtdXN2aWxsZW1vZXMuZGsgICAgICAg
-Q0MNCiAgICAgIGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmcgICAgICBDQw0KICAgICAgd2FuZ2tl
-ZmVuZy53YW5nQGh1YXdlaS5jb20gICAgIENDDQogICAgICBtYmVuZXNAc3VzZS5jeiAgICAgICAg
-ICAgICAgICAgQ0MNCiAgICAgIHN3Ym95ZEBjaHJvbWl1bS5vcmcgICAgICAgICAgICBDQw0KICAg
-ICAgb2plZGFAa2VybmVsLm9yZyAgICAgICAgICAgICAgIENDDQogICAgICBsaW51eC1rZXJuZWxA
-dmdlci5rZXJuZWwub3JnICAgQ0MNCiAgICAgIHdpbGxAa2VybmVsLm9yZyAgICAgICAgICAgICAg
-ICBDQw0KICAgICAgY2F0YWxpbi5tYXJpbmFzQGFybS5jb20gICAgICAgIENDDQogICAgICBWYW5l
-ZXQgTmFyYW5nICAgICAgICAgICAgICAgICAgQ0MgICAgICAgICBBc3NvY2lhdGUgQXJjaGl0ZWN0
-ICAgICAgICBTeXN0ZW0gUy9XIEdyb3VwIC9TUkktRGVsaGkgICAgICAgICAgICAgICBTYW1zdW5n
-IEVsZWN0cm9uaWNzDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
-
-------=_Part_1497478_934560393.1643711063682--
+On 12/31/2021 12:26 AM, Sean Christopherson wrote:
+> On Mon, Dec 13, 2021, Suravee Suthikulpanit wrote:
+>> To prepare for upcoming AVIC changes. There is no functional change.
+>>
+>> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+>> ---
+>>   arch/x86/kvm/svm/avic.c | 10 ++++++++++
+>>   arch/x86/kvm/svm/svm.c  |  8 +-------
+>>   arch/x86/kvm/svm/svm.h  |  1 +
+>>   3 files changed, 12 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+>> index 8052d92069e0..63c3801d1829 100644
+>> --- a/arch/x86/kvm/svm/avic.c
+>> +++ b/arch/x86/kvm/svm/avic.c
+>> @@ -1011,3 +1011,13 @@ void svm_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>>   		kvm_vcpu_update_apicv(vcpu);
+>>   	avic_set_running(vcpu, true);
+>>   }
+>> +
+>> +bool avic_hardware_setup(bool avic)
+>> +{
+>> +	if (!avic || !npt_enabled || !boot_cpu_has(X86_FEATURE_AVIC))
+>> +		return false;
+>> +
+>> +	pr_info("AVIC enabled\n");
+>> +	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+>> +	return true;
+>> +}
+>> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+>> index 989685098b3e..e59f663ab8cb 100644
+>> --- a/arch/x86/kvm/svm/svm.c
+>> +++ b/arch/x86/kvm/svm/svm.c
+>> @@ -1031,13 +1031,7 @@ static __init int svm_hardware_setup(void)
+>>   			nrips = false;
+>>   	}
+>>   
+>> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
+>> -
+>> -	if (enable_apicv) {
+>> -		pr_info("AVIC enabled\n");
+>> -
+>> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+>> -	}
+>> +	enable_apicv = avic = avic_hardware_setup(avic);
+> 
+> Rather than pass in "avic", just do
+> 
+> 	enable_apicv = avic == avic && avic_hardware_setup();
+> 
+> This also conflicts with changes sitting in kvm/queue to nullify vcpu_(un)blocking
+> when AVIC is disabled.  But moving AVIC setup to avic.c provides an opportunity for
+> further cleanup, as it means vcpu_(un)blocking can be NULL by default and set to
+> the AVIC helpers if and only if AVIC is enable.  That will allow making the helpers
+> static in avic.c.  E.g.
+> 
+> ---
+>   arch/x86/kvm/svm/avic.c | 17 +++++++++++++++--
+>   arch/x86/kvm/svm/svm.c  | 13 +------------
+>   arch/x86/kvm/svm/svm.h  |  3 +--
+>   3 files changed, 17 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 90364d02f22a..f5c6cab42d74 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -1027,7 +1027,7 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+>   	WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
+>   }
+> 
+> -void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
+> +static void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
+>   {
+>   	if (!kvm_vcpu_apicv_active(vcpu))
+>   		return;
+> @@ -1052,7 +1052,7 @@ void avic_vcpu_blocking(struct kvm_vcpu *vcpu)
+>   	preempt_enable();
+>   }
+> 
+> -void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+> +static void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>   {
+>   	int cpu;
+> 
+> @@ -1066,3 +1066,16 @@ void avic_vcpu_unblocking(struct kvm_vcpu *vcpu)
+> 
+>   	put_cpu();
+>   }
+> +
+> +bool avic_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +	if (!npt_enabled || !boot_cpu_has(X86_FEATURE_AVIC))
+> +		return false;
+> +
+> +	x86_ops->vcpu_blocking = avic_vcpu_blocking,
+> +	x86_ops->vcpu_unblocking = avic_vcpu_unblocking,
+> +
+> +	pr_info("AVIC enabled\n");
+> +	amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+> +	return true;
+> +}
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 6cb38044a860..6cb0f58238cd 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4390,8 +4390,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.prepare_guest_switch = svm_prepare_guest_switch,
+>   	.vcpu_load = svm_vcpu_load,
+>   	.vcpu_put = svm_vcpu_put,
+> -	.vcpu_blocking = avic_vcpu_blocking,
+> -	.vcpu_unblocking = avic_vcpu_unblocking,
+> 
+>   	.update_exception_bitmap = svm_update_exception_bitmap,
+>   	.get_msr_feature = svm_get_msr_feature,
+> @@ -4674,16 +4672,7 @@ static __init int svm_hardware_setup(void)
+>   			nrips = false;
+>   	}
+> 
+> -	enable_apicv = avic = avic && npt_enabled && boot_cpu_has(X86_FEATURE_AVIC);
+> -
+> -	if (enable_apicv) {
+> -		pr_info("AVIC enabled\n");
+> -
+> -		amd_iommu_register_ga_log_notifier(&avic_ga_log_notifier);
+> -	} else {
+> -		svm_x86_ops.vcpu_blocking = NULL;
+> -		svm_x86_ops.vcpu_unblocking = NULL;
+> -	}
+> +	enable_apicv = avic = avic && avic_hardware_setup(&svm_x86_ops);
+> 
+>   	if (vls) {
+>   		if (!npt_enabled ||
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index daa8ca84afcc..59d91b969bd7 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -573,6 +573,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+> 
+>   #define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
+> 
+> +bool avic_hardware_setup(struct kvm_x86_ops *ops);
+>   int avic_ga_log_notifier(u32 ga_tag);
+>   void avic_vm_destroy(struct kvm *kvm);
+>   int avic_vm_init(struct kvm *kvm);
+> @@ -593,8 +594,6 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec);
+>   bool svm_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu);
+>   int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+>   		       uint32_t guest_irq, bool set);
+> -void avic_vcpu_blocking(struct kvm_vcpu *vcpu);
+> -void avic_vcpu_unblocking(struct kvm_vcpu *vcpu);
+> 
+>   /* sev.c */
+> 
+> --
+> 
+> 

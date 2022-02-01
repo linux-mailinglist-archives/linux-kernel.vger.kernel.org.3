@@ -2,88 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 017FD4A590C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497454A5922
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 10:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbiBAJR4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Feb 2022 04:17:56 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:41744 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234633AbiBAJRy (ORCPT
+        id S235923AbiBAJWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 04:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235902AbiBAJWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 04:17:54 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-140-GeVL98cmMJWo6_nFsA2gAQ-1; Tue, 01 Feb 2022 09:17:48 +0000
-X-MC-Unique: GeVL98cmMJWo6_nFsA2gAQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 1 Feb 2022 09:17:47 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 1 Feb 2022 09:17:47 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Christian Brauner" <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH] exec: Force single empty string when argv is empty
-Thread-Topic: [PATCH] exec: Force single empty string when argv is empty
-Thread-Index: AQHYFwALh17Nc4lWIEewOStTbNpbHKx+aiLA
-Date:   Tue, 1 Feb 2022 09:17:47 +0000
-Message-ID: <78959c88715049a4be00fc75bb333d3a@AcuMS.aculab.com>
-References: <20220201000947.2453721-1-keescook@chromium.org>
-In-Reply-To: <20220201000947.2453721-1-keescook@chromium.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Feb 2022 04:22:13 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74EC061714;
+        Tue,  1 Feb 2022 01:22:12 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id jx6so52502706ejb.0;
+        Tue, 01 Feb 2022 01:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zc0YUBbP4nO5xY/HXkwm2TEbGRUwzysYtK0Wp/4IoWE=;
+        b=e7qSjd/0adrVrIIWN9p3EskCqHxGkJbwEIdTPOfRwrTlIc7VjHD1tc9nhYQNhbjaDL
+         734EopB6UFXritQodtoOvtiP6KNtM0qHwnYOzQuFnhJlYtpmRXBzPMXC2mKN3wA5luj2
+         VEPM1v47mucgLRp258bkjvaWtGo7eji9twznQncL5at5xnEUJ981gPsI0IZkVXHTaFxx
+         LmAcAYA08Srh4owUN1WUl6LkVUNliUHlPzaZlmZFUGOUqpdmM5JsHCcCo1j/LsJIW7cO
+         27syUfF3hjPpaIfvdWsScGdJ6Albm57lUtRA9DZhjjI4KbWdeWfVCFMCpsb9YQg69wbP
+         fdSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zc0YUBbP4nO5xY/HXkwm2TEbGRUwzysYtK0Wp/4IoWE=;
+        b=6XbEyRJAGB1xhFbCoHdj2Vzv7OAc71vPN9jbmZwXpQNc0Ktcv4fxDlrxRjgTErXVJs
+         zE1scN/3dAWwogcyoP9CKQsWPzm1NUUCFaYAIdYLqfPD4ODe+TfUCfuPri2BNACFFGCY
+         zznY+V5sF0/B3vWNhcEKZHMsOWUsxzhOaT0ZgwvSNmG5Lb6A0QEbBNmkoI0lFEWUm7H3
+         GU7U40Ym06JkmTexvBoVIJeSA00YjP/aFj4wEdwnmse88OcSjxlK7TdueV27TCrJ0sfy
+         Bvwaj06dj7zdFBUnrxMywntDw4s0OsFYlGzIzmXdcbigNMey7KWFzpNAI5GmgRRSq3Sr
+         99YQ==
+X-Gm-Message-State: AOAM530+SVO3PfaiQympfDoZQokB40vG2ctNMidKJYtkzFPK5n2TGMnk
+        RW3EyUnE+4Ky5YdTB+ToK91yp0QpQeIhsP1BK1i7QyhhKbY=
+X-Google-Smtp-Source: ABdhPJyu5EUjHz+2RHbDEm3rZ1PYg19nT0J6+DbOVH4w0wgXGtwZxUwVQJH7+9NtCPS6zvJw6g3D4b2CRlVLsDwPwqc=
+X-Received: by 2002:a17:907:a40a:: with SMTP id sg10mr20861269ejc.44.1643707331063;
+ Tue, 01 Feb 2022 01:22:11 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20220130161101.1067691-1-liambeguin@gmail.com>
+ <20220130161101.1067691-7-liambeguin@gmail.com> <5da96dc7-696b-1bc0-a111-f6108ecfa54c@axentia.se>
+ <CAHp75VcDMfnkRvh5Rmxqc_R0ML5Eq4GCFL_QAkess7OLAQkg7w@mail.gmail.com> <d9f3032c-539e-800f-289c-14971b7e3b15@axentia.se>
+In-Reply-To: <d9f3032c-539e-800f-289c-14971b7e3b15@axentia.se>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 1 Feb 2022 11:20:35 +0200
+Message-ID: <CAHp75VdQyRrzYdTe5ak0Fyj2xDT2UVTwDMf+u9Y_6Hv-qMaPJw@mail.gmail.com>
+Subject: Re: [PATCH v13 06/11] iio: afe: rescale: make use of units.h
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Liam Beguin <liambeguin@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook
-> Sent: 01 February 2022 00:10
-...
-> While the initial code searches[6][7] turned up what appeared to be
-> mostly corner case tests, trying to that just reject argv == NULL
-> (or an immediately terminated pointer list) quickly started tripping[8]
-> existing userspace programs.
-> 
-> The next best approach is forcing a single empty string into argv and
-> adjusting argc to match. The number of programs depending on argc == 0
-> seems a smaller set than those calling execve with a NULL argv.
+On Tue, Feb 1, 2022 at 3:59 AM Peter Rosin <peda@axentia.se> wrote:
+> On 2022-01-31 16:23, Andy Shevchenko wrote:
+> > On Mon, Jan 31, 2022 at 4:50 PM Peter Rosin <peda@axentia.se> wrote:
+> >> On 2022-01-30 17:10, Liam Beguin wrote:
+> >
+> > ...
+> >
+> >>> -             tmp = div_s64_rem(tmp, 1000000000LL, &rem);
+> >>> +             tmp = div_s64_rem(tmp, GIGA, &rem);
+> >>
+> >> It is NOT easy for me to say which of GIGA/NANO is most fitting.
+> >
+> > What do you mean? The idea behind is the use of the macro depending on
+> > the actual power of 10 in use (taking into account the sign of the
+> > exponent part).
+> >
+> >> There are a couple of considerations:
+> >>
+> >> A) 1000000000 is just a big value (GIGA fits). Something big is
+> >>    needed to not lose too much precision.
+> >
+> > Does it have a physical meaning?
+>
+> No, this is just a scaling factor which is moments later
+> eliminted by a matching inverse operation. It's math purely
+> about attempting to preserve precision and has nothing to do
+> with the units of the values that are involved.
 
-Has anyone considered using the pathname for argv[0]?
-So converting:
-	execl(path, NULL);
-into:
-	execl(path, path, NULL);
+I see your point now, shame on me.
 
-I've not spotted any such suggestion.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+With Best Regards,
+Andy Shevchenko

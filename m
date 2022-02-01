@@ -2,181 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 923C94A63EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575EB4A63F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 19:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbiBASdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 13:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54040 "EHLO
+        id S240487AbiBASd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 13:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238646AbiBASdP (ORCPT
+        with ESMTP id S231693AbiBASd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 13:33:15 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317E2C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:33:15 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id k25so56529000ejp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:33:15 -0800 (PST)
+        Tue, 1 Feb 2022 13:33:27 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCADC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 10:33:26 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id q127so25417206ljq.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 10:33:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+g6PLOYAprOC0tmznRa4CnfNMzJ64s7o3yrfJR0yNSo=;
-        b=HS44/SRDY7S67H6RxAurzppCSFvIh0Osj71xUDW2a5zZUyI5Hcu08OsL0ROVxDaIB3
-         Sfqt9b5AE5h9hppkg5CmuzzEkx+Wf2grMT6XsKliabH+p53VeF6sVdYNS0JOPBLQ26G/
-         wWv2S3lsXFtbMYZ2ZFM4w85Q59DHtNkZZxKMBQtfEcrn0SWNTugEqY0TXt9/dnYTwcuR
-         z8vxI34y9D5oTEiEKfata5fIFYH77RnP02mG0y0UXWvZnbuWDbfy2rFVIFrp97Wj4hGa
-         wcXICDS6MN4vWR54c+Ebj1a7awVUnC9FJp8mZlV4Foyv0oCqSnSsY2mGvFUDX7i9gbc5
-         2yBA==
+        bh=kgthoaOBpcV2t6u9HPTZYJsO7n2oWLRBDWbitx5G3AU=;
+        b=O5IsEazrKevTZ+9eZBugHhs7ANQJxEM8AUW6YFDoeE2PNudszA/uxrffxfInnedLwI
+         M0UYfOTaH0oP80QTrzssS+zDXKuxOGwqpLHqlOfTFGU5sjaCvhgXJhqx0uDWKgH2iKrw
+         mn+TRgMOk+XrE9G1CN8kRjwddOmI/NcUrRooFj1gJ2Av8d+FGmYzEomveQinCIp7uPqx
+         3HOdDc0h10+h1SFIhcQkC4K1jWitUM3/uP2r102mwhnTcILRh12UakJ2MwoSPiuqFFe/
+         WqpHdBLgTLN0lfGrzF0RNRr6kblhKA46qTZkvBSVV2HBaxk4XoxifoUTJyKLaS/BrlzW
+         w9rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+g6PLOYAprOC0tmznRa4CnfNMzJ64s7o3yrfJR0yNSo=;
-        b=veMKhCpGi2hLCN6dARCuteGQiHNtiwHl6hmf+CLee+a3jWKGpqpz8VvZ70303SoPBP
-         6KWNnLCM1HERrC7dZ1+CcHFVR0C7Uyw49g1dZ5wKv/TMCk1Yj0e8T09GZ2U91AC695Gj
-         rCok3Sv90j71r1sbJL4YESe1TM06z8jSrOJlTrrypKzA31mBQdGK5+7dpPBhztykEQ44
-         K8r8Gf1IoGxsgj2x4tLd0pcYpcxQV2peL59+0dR3CMFExT1sMidHtk37+OPwNRAXKSGl
-         QPSUl+SCMTJxoGXhNG6zVJH8U4cBQXPpQ8EGna9LEk2Q058Y374kFpFWJFf+oBGuX3kg
-         rP8w==
-X-Gm-Message-State: AOAM530h/2WR4tsoh6EMNKgn+6TdV2g9YjjDTvmnKeHAfTKfsGJf1a9V
-        FY9s5tiK/BTyjJ4EwEAk+azVFy6n3XANgDXJy/qtdw==
-X-Google-Smtp-Source: ABdhPJx+rHqFGXeIOt8FzMC764v1w59ZK9SMShq4PJIyAXqvaJPsA/e6WPlsIzYqkh1l4VHGFdMUShMVBihsVo6Z5og=
-X-Received: by 2002:a17:907:9689:: with SMTP id hd9mr13302667ejc.240.1643740393524;
- Tue, 01 Feb 2022 10:33:13 -0800 (PST)
+        bh=kgthoaOBpcV2t6u9HPTZYJsO7n2oWLRBDWbitx5G3AU=;
+        b=Krh3saQju+AnP1/hI2SJuleFnrvz/yIoqnBWLaAWsiMKLbcf1vTsfVNyFDyoWbXv+F
+         /9jg9BqWR5/WzxvLuN4VPfsIHTXC1BPP5VQwh4N4siKwsUY1UEmJnYAEyqr0YZ+cK4Ce
+         mET7L47ot10JK5RNMTaFTyKjUrrhbIvcnWj+aJuXYeE1NHN7+urk2NJgzBfiWbgvpa2O
+         DBubL4J9HsuJSnUst914aeuGwM6dLB9MnZJnfniBpQPg3vbB8bwP7N9xItQG+seruoHJ
+         joeVxVv9u8RQEbUtBYFjc6+UEUbtxoQg0iKtFOkwCkSQ8lG2fRm2hqT3EZr9RvF9RnSl
+         S3LA==
+X-Gm-Message-State: AOAM5323RiP4swyX4LTl8VTeDxYi06h6FptuH/vsCPctQLfTUwtPHp5L
+        DhM1o92razsz8gCSu9tY9EJpL5I5Ya8YOlptx5XRdg==
+X-Google-Smtp-Source: ABdhPJwvNpDFaASwpByfs886vMuUV37gkdaOVyA+sDmL3QJYH+2+Z/geU9fjEP0A3mS9mLE5VLeCWsSCnXX0Bk6cshs=
+X-Received: by 2002:a05:651c:19ac:: with SMTP id bx44mr13432207ljb.459.1643740405002;
+ Tue, 01 Feb 2022 10:33:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201092927.242254-1-jhubbard@nvidia.com> <CABYd82biLQ7x1zD0MibXMrMHD9Y-cejitbNo=M2=tPNfUMTePA@mail.gmail.com>
-In-Reply-To: <CABYd82biLQ7x1zD0MibXMrMHD9Y-cejitbNo=M2=tPNfUMTePA@mail.gmail.com>
-From:   Will McVicker <willmcvicker@google.com>
-Date:   Tue, 1 Feb 2022 10:32:57 -0800
-Message-ID: <CABYd82Y3rFUpCpoudxuYHL6YfuXM19hO1g1FWFCQpSZWMo9p8w@mail.gmail.com>
-Subject: Re: [PATCH] Revert mm/gup: small refactoring: simplify try_grab_page()
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Minchan Kim <minchan@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable <stable@vger.kernel.org>
+References: <20220131153740.2396974-1-willy@infradead.org> <871r0nriy4.fsf@email.froward.int.ebiederm.org>
+ <YfgKw5z2uswzMVRQ@casper.infradead.org> <877dafq3bw.fsf@email.froward.int.ebiederm.org>
+ <YfgPwPvopO1aqcVC@casper.infradead.org> <CAG48ez3MCs8d8hjBfRSQxwUTW3o64iaSwxF=UEVtk+SEme0chQ@mail.gmail.com>
+ <87bkzroica.fsf_-_@email.froward.int.ebiederm.org> <87zgnbn3pd.fsf_-_@email.froward.int.ebiederm.org>
+In-Reply-To: <87zgnbn3pd.fsf_-_@email.froward.int.ebiederm.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 1 Feb 2022 19:32:58 +0100
+Message-ID: <CAG48ez0uV87=myLX1X1KjQ_8q_Sgg1QZBG6vpdkGLWj==EAUBw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] coredump: Snapshot the vmas in do_coredump
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <liam.howlett@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 10:00 AM Will McVicker <willmcvicker@google.com> wrote:
+On Mon, Jan 31, 2022 at 7:46 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Move the call of dump_vma_snapshot and kvfree(vma_meta) out of the
+> individual coredump routines into do_coredump itself.  This makes
+> the code less error prone and easier to maintain.
 >
-> On Tue, Feb 1, 2022 at 1:29 AM John Hubbard <jhubbard@nvidia.com> wrote:
-> >
-> > This reverts commit 54d516b1d62ff8f17cee2da06e5e4706a0d00b8a
-> >
-> > That commit did a refactoring that effectively combined fast and slow
-> > gup paths (again). And that was again incorrect, for two reasons:
-> >
-> > a) Fast gup and slow gup get reference counts on pages in different ways
-> > and with different goals: see Linus' writeup in commit cd1adf1b63a1
-> > ("Revert "mm/gup: remove try_get_page(), call try_get_compound_head()
-> > directly""), and
-> >
-> > b) try_grab_compound_head() also has a specific check for "FOLL_LONGTERM
-> > && !is_pinned(page)", that assumes that the caller can fall back to slow
-> > gup. This resulted in new failures, as recently report by Will McVicker
-> > [1].
-> >
-> > But (a) has problems too, even though they may not have been reported
-> > yet. So just revert this.
-> >
-> > [1] https://lore.kernel.org/r/20220131203504.3458775-1-willmcvicker@google.com
-> >
-> > Fixes: 54d516b1d62f ("mm/gup: small refactoring: simplify try_grab_page()")
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Will McVicker <willmcvicker@google.com>
-> > Cc: Minchan Kim <minchan@google.com>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-> > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > Cc: Vasily Gorbik <gor@linux.ibm.com>
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> > ---
-> >  mm/gup.c | 35 ++++++++++++++++++++++++++++++-----
-> >  1 file changed, 30 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index f0af462ac1e2..a9d4d724aef7 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -124,8 +124,8 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
-> >   * considered failure, and furthermore, a likely bug in the caller, so a warning
-> >   * is also emitted.
-> >   */
-> > -struct page *try_grab_compound_head(struct page *page,
-> > -                                   int refs, unsigned int flags)
-> > +__maybe_unused struct page *try_grab_compound_head(struct page *page,
-> > +                                                  int refs, unsigned int flags)
-> >  {
-> >         if (flags & FOLL_GET)
-> >                 return try_get_compound_head(page, refs);
-> > @@ -208,10 +208,35 @@ static void put_compound_head(struct page *page, int refs, unsigned int flags)
-> >   */
-> >  bool __must_check try_grab_page(struct page *page, unsigned int flags)
-> >  {
-> > -       if (!(flags & (FOLL_GET | FOLL_PIN)))
-> > -               return true;
-> > +       WARN_ON_ONCE((flags & (FOLL_GET | FOLL_PIN)) == (FOLL_GET | FOLL_PIN));
-> >
-> > -       return try_grab_compound_head(page, 1, flags);
-> > +       if (flags & FOLL_GET)
-> > +               return try_get_page(page);
-> > +       else if (flags & FOLL_PIN) {
-> > +               int refs = 1;
-> > +
-> > +               page = compound_head(page);
-> > +
-> > +               if (WARN_ON_ONCE(page_ref_count(page) <= 0))
-> > +                       return false;
-> > +
-> > +               if (hpage_pincount_available(page))
-> > +                       hpage_pincount_add(page, 1);
-> > +               else
-> > +                       refs = GUP_PIN_COUNTING_BIAS;
-> > +
-> > +               /*
-> > +                * Similar to try_grab_compound_head(): even if using the
-> > +                * hpage_pincount_add/_sub() routines, be sure to
-> > +                * *also* increment the normal page refcount field at least
-> > +                * once, so that the page really is pinned.
-> > +                */
-> > +               page_ref_add(page, refs);
-> > +
-> > +               mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED, 1);
-> > +       }
-> > +
-> > +       return true;
-> >  }
-> >
-> >  /**
-> >
-> > base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
-> > --
-> > 2.35.1
-> >
+> Make the vma snapshot available to the coredump routines
+> in struct coredump_params.  This makes it easier to
+> change and update what is captures in the vma snapshot
+> and will be needed for fixing fill_file_notes.
 >
-> Thanks John! I verified this works on the Pixel 6 with the 5.15 kernel
-> for my camera use-case. Free free to include:
->
-> Tested-by: Will McVicker <willmcvicker@google.com>
->
-> Thanks,
-> Will
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-And just so we don't miss this, I'd also like to request this be
-pulled into the 5.15 stable branch please.
+Reviewed-by: Jann Horn <jannh@google.com>
 
-Cc: stable@vger.kernel.org # 5.15
+>         for (i = 0, vma = first_vma(current, gate_vma); vma != NULL;
+>                         vma = next_vma(vma, gate_vma), i++) {
+> -               struct core_vma_metadata *m = (*vma_meta) + i;
+> +               struct core_vma_metadata *m = cprm->vma_meta + i;
+>
+>                 m->start = vma->vm_start;
+>                 m->end = vma->vm_end;
+>                 m->flags = vma->vm_flags;
+>                 m->dump_size = vma_dump_size(vma, cprm->mm_flags);
+>
+> -               vma_data_size += m->dump_size;
+> +               cprm->vma_data_size += m->dump_size;
 
-Thanks,
-Will
+FYI, this part is probably going to cause a merge conflict with the
+fix https://www.ozlabs.org/~akpm/mmotm/broken-out/coredump-also-dump-first-pages-of-non-executable-elf-libraries.patch
+in akpm's tree. I don't know what the right way to handle that is,
+just thought I'd point it out.

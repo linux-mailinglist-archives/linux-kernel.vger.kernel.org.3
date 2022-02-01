@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803434A5D74
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D874A5D75
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238741AbiBAN3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:29:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:40178 "EHLO foss.arm.com"
+        id S238730AbiBAN34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:29:56 -0500
+Received: from foss.arm.com ([217.140.110.172]:40234 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233257AbiBAN3s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:29:48 -0500
+        id S238689AbiBAN3z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 08:29:55 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DAAB11FB;
-        Tue,  1 Feb 2022 05:29:48 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 15FAD12FC;
+        Tue,  1 Feb 2022 05:29:55 -0800 (PST)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3DECB3F73B;
-        Tue,  1 Feb 2022 05:29:44 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 062293F73B;
+        Tue,  1 Feb 2022 05:29:50 -0800 (PST)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
@@ -32,9 +32,9 @@ Cc:     aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
         suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
         tsbogend@alpha.franken.de, vkuznets@redhat.com,
         wanpengli@tencent.com, will@kernel.org
-Subject: [PATCH v3 2/5] kvm/arm64: rework guest entry logic
-Date:   Tue,  1 Feb 2022 13:29:23 +0000
-Message-Id: <20220201132926.3301912-3-mark.rutland@arm.com>
+Subject: [PATCH v3 3/5] kvm/x86: rework guest entry logic
+Date:   Tue,  1 Feb 2022 13:29:24 +0000
+Message-Id: <20220201132926.3301912-4-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201132926.3301912-1-mark.rutland@arm.com>
 References: <20220201132926.3301912-1-mark.rutland@arm.com>
@@ -44,133 +44,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kvm_arch_vcpu_ioctl_run() we enter an RCU extended quiescent state
-(EQS) by calling guest_enter_irqoff(), and unmasked IRQs prior to
-exiting the EQS by calling guest_exit(). As the IRQ entry code will not
-wake RCU in this case, we may run the core IRQ code and IRQ handler
-without RCU watching, leading to various potential problems.
+For consistency and clarity, migrate x86 over to the generic helpers for
+guest timing and lockdep/RCU/tracing management, and remove the
+x86-specific helpers.
 
-Additionally, we do not inform lockdep or tracing that interrupts will
-be enabled during guest execution, which caan lead to misleading traces
-and warnings that interrupts have been enabled for overly-long periods.
+Prior to this patch, the guest timing was entered in
+kvm_guest_enter_irqoff() (called by svm_vcpu_enter_exit() and
+svm_vcpu_enter_exit()), and was exited by the call to
+vtime_account_guest_exit() within vcpu_enter_guest().
 
-This patch fixes these issues by using the new timing and context
-entry/exit helpers to ensure that interrupts are handled during guest
-vtime but with RCU watching, with a sequence:
+To minimize duplication and to more clearly balance entry and exit, both
+entry and exit of guest timing are placed in vcpu_enter_guest(), using
+the new guest_timing_{enter,exit}_irqoff() helpers. When context
+tracking is used a small amount of additional time will be accounted
+towards guests; tick-based accounting is unnaffected as IRQs are
+disabled at this point and not enabled until after the return from the
+guest.
 
-	guest_timing_enter_irqoff();
+This also corrects (benign) mis-balanced context tracking accounting
+introduced in commits:
 
-	guest_state_enter_irqoff();
-	< run the vcpu >
-	guest_state_exit_irqoff();
+  ae95f566b3d22ade ("KVM: X86: TSCDEADLINE MSR emulation fastpath")
+  26efe2fd92e50822 ("KVM: VMX: Handle preemption timer fastpath")
 
-	< take any pending IRQs >
+Where KVM can enter a guest multiple times, calling vtime_guest_enter()
+without a corresponding call to vtime_account_guest_exit(), and with
+vtime_account_system() called when vtime_account_guest() should be used.
+As account_system_time() checks PF_VCPU and calls account_guest_time(),
+this doesn't result in any functional problem, but is unnecessarily
+confusing.
 
-	guest_timing_exit_irqoff();
-
-Since instrumentation may make use of RCU, we must also ensure that no
-instrumented code is run during the EQS. I've split out the critical
-section into a new kvm_arm_enter_exit_vcpu() helper which is marked
-noinstr.
-
-Fixes: 1b3d546daf85ed2b ("arm/arm64: KVM: Properly account for guest CPU time")
-Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc: Alexandru Elisei <alexandru.elisei@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: James Morse <james.morse@arm.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc: Will Deacon <will@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Wanpeng Li <wanpengli@tencent.com>
 ---
- arch/arm64/kvm/arm.c | 51 ++++++++++++++++++++++++++++----------------
- 1 file changed, 33 insertions(+), 18 deletions(-)
+ arch/x86/kvm/svm/svm.c |  4 ++--
+ arch/x86/kvm/vmx/vmx.c |  4 ++--
+ arch/x86/kvm/x86.c     |  4 +++-
+ arch/x86/kvm/x86.h     | 45 ------------------------------------------
+ 4 files changed, 7 insertions(+), 50 deletions(-)
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index a4a0063df456c..ecc5958e27fe2 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -797,6 +797,24 @@ static bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu, int *ret)
- 			xfer_to_guest_mode_work_pending();
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 6d97629655e3d..d988fddd143f8 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3615,7 +3615,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 	unsigned long vmcb_pa = svm->current_vmcb->pa;
+ 
+-	kvm_guest_enter_irqoff();
++	guest_state_enter_irqoff();
+ 
+ 	if (sev_es_guest(vcpu->kvm)) {
+ 		__svm_sev_es_vcpu_run(vmcb_pa);
+@@ -3635,7 +3635,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 		vmload(__sme_page_pa(sd->save_area));
+ 	}
+ 
+-	kvm_guest_exit_irqoff();
++	guest_state_exit_irqoff();
  }
  
-+/*
-+ * Actually run the vCPU, entering an RCU extended quiescent state (EQS) while
-+ * the vCPU is running.
-+ *
-+ * This must be noinstr as instrumentation may make use of RCU, and this is not
-+ * safe during the EQS.
-+ */
-+static int noinstr kvm_arm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
-+{
-+	int ret;
-+
+ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index aca3ae2a02f34..950ef25ec8a50 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6754,7 +6754,7 @@ static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 					struct vcpu_vmx *vmx)
+ {
+-	kvm_guest_enter_irqoff();
 +	guest_state_enter_irqoff();
-+	ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
+ 
+ 	/* L1D Flush includes CPU buffer clear to mitigate MDS */
+ 	if (static_branch_unlikely(&vmx_l1d_should_flush))
+@@ -6770,7 +6770,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+ 
+ 	vcpu->arch.cr2 = native_read_cr2();
+ 
+-	kvm_guest_exit_irqoff();
 +	guest_state_exit_irqoff();
+ }
+ 
+ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 74b53a16f38a7..8e8c8e53880c0 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10041,6 +10041,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 		set_debugreg(0, 7);
+ 	}
+ 
++	guest_timing_enter_irqoff();
 +
-+	return ret;
-+}
-+
- /**
-  * kvm_arch_vcpu_ioctl_run - the main VCPU run function to execute guest code
-  * @vcpu:	The VCPU pointer
-@@ -881,9 +899,9 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
- 		 * Enter the guest
- 		 */
- 		trace_kvm_entry(*vcpu_pc(vcpu));
--		guest_enter_irqoff();
-+		guest_timing_enter_irqoff();
- 
--		ret = kvm_call_hyp_ret(__kvm_vcpu_run, vcpu);
-+		ret = kvm_arm_vcpu_enter_exit(vcpu);
- 
- 		vcpu->mode = OUTSIDE_GUEST_MODE;
- 		vcpu->stat.exits++;
-@@ -918,26 +936,23 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
- 		kvm_arch_vcpu_ctxsync_fp(vcpu);
- 
+ 	for (;;) {
  		/*
--		 * We may have taken a host interrupt in HYP mode (ie
--		 * while executing the guest). This interrupt is still
--		 * pending, as we haven't serviced it yet!
-+		 * We must ensure that any pending interrupts are taken before
-+		 * we exit guest timing so that timer ticks are accounted as
-+		 * guest time. Transiently unmask interrupts so that any
-+		 * pending interrupts are taken.
- 		 *
--		 * We're now back in SVC mode, with interrupts
--		 * disabled.  Enabling the interrupts now will have
--		 * the effect of taking the interrupt again, in SVC
--		 * mode this time.
-+		 * Per ARM DDI 0487G.b section D1.13.4, an ISB (or other
-+		 * context synchronization event) is necessary to ensure that
-+		 * pending interrupts are taken.
- 		 */
- 		local_irq_enable();
-+		isb();
-+		local_irq_disable();
-+
-+		guest_timing_exit_irqoff();
-+
-+		local_irq_enable();
+ 		 * Assert that vCPU vs. VM APICv state is consistent.  An APICv
+@@ -10125,7 +10127,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+ 	 * of accounting via context tracking, but the loss of accuracy is
+ 	 * acceptable for all known use cases.
+ 	 */
+-	vtime_account_guest_exit();
++	guest_timing_exit_irqoff();
  
--		/*
--		 * We do local_irq_enable() before calling guest_exit() so
--		 * that if a timer interrupt hits while running the guest we
--		 * account that tick as being spent in the guest.  We enable
--		 * preemption after calling guest_exit() so that if we get
--		 * preempted we make sure ticks after that is not counted as
--		 * guest time.
--		 */
--		guest_exit();
- 		trace_kvm_exit(ret, kvm_vcpu_trap_get_class(vcpu), *vcpu_pc(vcpu));
+ 	if (lapic_in_kernel(vcpu)) {
+ 		s64 delta = vcpu->arch.apic->lapic_timer.advance_expire_delta;
+diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+index 635b75f9e1454..767ec7f995160 100644
+--- a/arch/x86/kvm/x86.h
++++ b/arch/x86/kvm/x86.h
+@@ -10,51 +10,6 @@
  
- 		/* Exit types that need handling before we can be preempted */
+ void kvm_spurious_fault(void);
+ 
+-static __always_inline void kvm_guest_enter_irqoff(void)
+-{
+-	/*
+-	 * VMENTER enables interrupts (host state), but the kernel state is
+-	 * interrupts disabled when this is invoked. Also tell RCU about
+-	 * it. This is the same logic as for exit_to_user_mode().
+-	 *
+-	 * This ensures that e.g. latency analysis on the host observes
+-	 * guest mode as interrupt enabled.
+-	 *
+-	 * guest_enter_irqoff() informs context tracking about the
+-	 * transition to guest mode and if enabled adjusts RCU state
+-	 * accordingly.
+-	 */
+-	instrumentation_begin();
+-	trace_hardirqs_on_prepare();
+-	lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+-	instrumentation_end();
+-
+-	guest_enter_irqoff();
+-	lockdep_hardirqs_on(CALLER_ADDR0);
+-}
+-
+-static __always_inline void kvm_guest_exit_irqoff(void)
+-{
+-	/*
+-	 * VMEXIT disables interrupts (host state), but tracing and lockdep
+-	 * have them in state 'on' as recorded before entering guest mode.
+-	 * Same as enter_from_user_mode().
+-	 *
+-	 * context_tracking_guest_exit() restores host context and reinstates
+-	 * RCU if enabled and required.
+-	 *
+-	 * This needs to be done immediately after VM-Exit, before any code
+-	 * that might contain tracepoints or call out to the greater world,
+-	 * e.g. before x86_spec_ctrl_restore_host().
+-	 */
+-	lockdep_hardirqs_off(CALLER_ADDR0);
+-	context_tracking_guest_exit();
+-
+-	instrumentation_begin();
+-	trace_hardirqs_off_finish();
+-	instrumentation_end();
+-}
+-
+ #define KVM_NESTED_VMENTER_CONSISTENCY_CHECK(consistency_check)		\
+ ({									\
+ 	bool failed = (consistency_check);				\
 -- 
 2.30.2
 

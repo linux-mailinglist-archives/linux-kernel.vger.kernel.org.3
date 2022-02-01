@@ -2,94 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624A74A670B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3044A670E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiBAV0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:26:05 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45992 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiBAV0D (ORCPT
+        id S232244AbiBAV06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229513AbiBAV05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:26:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86B096178A;
-        Tue,  1 Feb 2022 21:26:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AFEC340EB;
-        Tue,  1 Feb 2022 21:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643750762;
-        bh=6rnbOLJWBXVcGSJXTpu5MBi3+thi4vJ8d5VSjUdberY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Dhhd/MEA9V36isB/2df/xB+n7aVMViQshGcJ809iMiNksJYNOM25MGq1Rjcvea6hS
-         MDnGkplsw4bHHiimDBeTaK8F1iQLAx400U9OWtG1iggxrwBu6hEKKlLvIMFu5PPcPH
-         HxNzWTOeR8kR98kFxKzxdLm1Gi3snkwL5ySOEhyLIeeiZQM3anwFcfopWk/CfDiloL
-         GlW5F4qHDt8x4xAlQDs1EselJlOjS+gzEX8YAiJXYaTXkEQ2iEDxAcppHH7m/bR5vN
-         tTIIaq/mJC4jkTYfi+CoDXt4EAAT3K+IqsPcJkyFc19cfEFQhQ87+yJMFO/U0GXXzD
-         6gzs5j2h1aGPg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] tools/resolve_btfids: Do not print any commands when building silently
-Date:   Tue,  1 Feb 2022 14:25:04 -0700
-Message-Id: <20220201212503.731732-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 1 Feb 2022 16:26:57 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D8FC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:26:57 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id v74so17044247pfc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:26:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bfms6OERIF6gyLtv4E3Fdr6nSEeZPjmkZ1JmHeeuQzo=;
+        b=qoUR44HEV0B7dtMLN+eucmdkyZqotSw6EyKeN5nxJ/lTXwnOfkyLjEFD/HN9tqGu8a
+         g9pLmmC9sECjrUTWjds+0gbWZ+uK00keHd6EhGnEAkgAG0Anj3wihmuEAUbmkureQbV1
+         ZD4mMHotw+GAfMCAwCsXgyfz1wS7wso2XKBDuV62O4c6JfDCilbmWQiyGkgxwrnK1o9Q
+         qV/g0aCNxq2Ge6fOc/UbCkbdTv4zYTF4RHjQEN/AbOcHuXyJk0wo1xYFXLytxKDZ6IKz
+         b9JACr+L3ASoY+CqAX0+WYq7Oa7ELY2O9FQCLfqkCs+kAHJf8qexLgicBKlo/RN1Di8D
+         4m6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bfms6OERIF6gyLtv4E3Fdr6nSEeZPjmkZ1JmHeeuQzo=;
+        b=iiYhNJWU6wfmCDUey14KAc15VrN831O7adSb3sTZvfYPx4d5Io9xr2oSGSzYUxbYMm
+         +qvMEgZxWmSIVlqDkcQko48FHizVmUP6pVzmsC8n/fY+hSdnzd4XE21v3F2GWfUPxPLi
+         4mS9Ilfb3eQnfJrcRTshyN2NPCOxsBPKwyJ8X1OINaufQcFFBDGcYHpEh+ZTAQ99MzGF
+         VnPhtVQDlZTYqdjTqfCY/LXiCFv9xZy3gY331VEd29srokeyw0+TTTguc2AWY0ybTaoc
+         3GSHF06fSsMnjyU59eXCu3FiWRzOTYRRFuOmyX+uWglTEs7vjvibhku/smPx/p8lk/Rb
+         y+Mg==
+X-Gm-Message-State: AOAM5327kA8vtU4KSKP0lQIz0GcfvjCieimB0BZmVkdEYK59kHiFvk0c
+        +6LwgxIwQyoeD62xgfyC/7QXfQ==
+X-Google-Smtp-Source: ABdhPJw5umHLrk7zL2ZcpH812CHZTNxeGlROBo3bACLT6RYYQcuMRVraXPb4dagTZtsPS+n9us2bRw==
+X-Received: by 2002:a05:6a00:190a:: with SMTP id y10mr26588265pfi.52.1643750816410;
+        Tue, 01 Feb 2022 13:26:56 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id mj23sm3793213pjb.54.2022.02.01.13.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 13:26:55 -0800 (PST)
+Date:   Tue, 1 Feb 2022 21:26:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCHv2 04/29] x86/traps: Add #VE support for TDX guest
+Message-ID: <YfmlnJ6LS935AMS4@google.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-5-kirill.shutemov@linux.intel.com>
+ <877daez4em.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877daez4em.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with 'make -s', there is some output from resolve_btfids:
+On Tue, Feb 01, 2022, Thomas Gleixner wrote:
+> On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> > index df0fa695bb09..1da074123c16 100644
+> > --- a/arch/x86/kernel/idt.c
+> > +++ b/arch/x86/kernel/idt.c
+> > @@ -68,6 +68,9 @@ static const __initconst struct idt_data early_idts[] = {
+> >  	 */
+> >  	INTG(X86_TRAP_PF,		asm_exc_page_fault),
+> >  #endif
+> > +#ifdef CONFIG_INTEL_TDX_GUEST
+> > +	INTG(X86_TRAP_VE,		asm_exc_virtualization_exception),
+> > +#endif
+> >  
+> > +bool tdx_get_ve_info(struct ve_info *ve)
+> > +{
+> > +	struct tdx_module_output out;
+> > +
+> > +	/*
+> > +	 * NMIs and machine checks are suppressed. Before this point any
+> > +	 * #VE is fatal. After this point (TDGETVEINFO call), NMIs and
+> > +	 * additional #VEs are permitted (but it is expected not to
+> > +	 * happen unless kernel panics).
+> 
+> I really do not understand that comment. #NMI and #MC are suppressed
+> according to the above. How long are they suppressed and what's the
+> mechanism? Are they unblocked on return from __tdx_module_call() ?
 
-$ make -sj"$(nproc)" oldconfig prepare
-  MKDIR     .../tools/bpf/resolve_btfids/libbpf/
-  MKDIR     .../tools/bpf/resolve_btfids//libsubcmd
-  LINK     resolve_btfids
+TDX_GET_VEINFO is a call into the TDX module to get the data from #VE info struct
+pointed at by the VMCS.  Doing TDX_GET_VEINFO also clears that "valid" flag in
+the struct.  It's basically a CMPXCHG on the #VE info struct, except that it routes
+through the TDX module.
 
-Silent mode means that no information should be emitted about what is
-currently being done. Use the $(silent) variable from Makefile.include
-to avoid defining the msg macro so that there is no information printed.
+The TDX module treats virtual NMIs as blocked if the #VE valid flag is set, i.e.
+refuses to inject NMI until the guest does TDX_GET_VEINFO to retrieve the info for
+the last #VE.
 
-Fixes: fbbb68de80a4 ("bpf: Add resolve_btfids tool to resolve BTF IDs in ELF object")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
+I don't understand the blurb about #MC.  Unless things have changed, the TDX module
+doesn't support injecting #MC into the guest.
 
-This should apply to either bpf or bpf-next so no subject prefix. I
-would prefer it goes in sooner rather than later but I'll leave that up
-to you all.
+> What prevents a nested #VE? If it happens what makes it fatal? Is it
+> converted to a #DF or detected by software?
 
- tools/bpf/resolve_btfids/Makefile | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+A #VE that would occur is morphed to a #DF by the TDX module if the #VE info valid
+flag is already set.  But nested #VE should work, so long as the nested #VE happens
+after TDX_GET_VEINFO.
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 9ddeca947635..320a88ac28c9 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -9,7 +9,11 @@ ifeq ($(V),1)
-   msg =
- else
-   Q = @
--  msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+  ifeq ($(silent),1)
-+    msg =
-+  else
-+    msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
-+  endif
-   MAKEFLAGS=--no-print-directory
- endif
+> Also I do not understand that the last sentence tries to tell me. If the
+> suppression of #NMI and #MC is lifted on return from tdcall then both
+> can be delivered immediately afterwards, right?
+
+Yep, NMI can be injected on the instruction following the TDCALL.  
+
+Something like this?
+	
+	/*
+	 * Retrieve the #VE info from the TDX module, which also clears the "#VE
+	 * valid" flag.  This must be done before anything else as any #VE that
+	 * occurs while the valid flag is set, i.e. before the previous #VE info
+	 * was consumed, is morphed to a #DF by the TDX module.  Note, the TDX
+	 * module also treats virtual NMIs as inhibited if the #VE valid flag is
+	 * set, e.g. so that NMI=>#VE will not result in a #DF.
+	 */
  
+> I assume the additional #VE is triggered by software or a bug in the
+> kernel.
 
-base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
--- 
-2.35.1
-
+I'm curious if that will even hold true, there's sooo much stuff that can happen
+from NMI context.  I don't see much value in speculating what will/won't happen
+after retrieving the #VE info.

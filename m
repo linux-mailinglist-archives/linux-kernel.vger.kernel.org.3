@@ -2,264 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0790E4A6812
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78EE4A6818
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 23:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241719AbiBAWhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 17:37:19 -0500
-Received: from mga05.intel.com ([192.55.52.43]:26581 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235380AbiBAWhS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 17:37:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643755038; x=1675291038;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3bJXWMpijyxnuSq4wqUM7+ER5kCt79vqJYQBft68eDA=;
-  b=NE7kI8iWjwQUjptmrXeOQO/RHRh2u+eF7w+CpCaWGnK9js2A5WeBuy9m
-   1bAMdCPCh04hhIWMRqQt7cgcsjRbQTZM0MBa/CJJFzGq34ypkIgR77O3m
-   1gxFIn7vGM7Ny0NGtsTEWtiixJZLWDzYq9mCQ0ADPQf5fn6DPXK2KaBgB
-   5gLjaCfVpjTcKQxcX4iH6l3jkz0LHtAGWmq2HodFpp0odFqJv/Wc2x7u0
-   Lzhqf24+HGM9DSEotTLmozfWO5NjG/FF63oaK//DeGAJ0yGXgcB3OrSaD
-   AHcuXF7nnYyjJbFPwy/2HB+gI0htVRW5TV5GZ3X/pBG75XYo6uLEzQJdw
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="334168599"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="334168599"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:37:18 -0800
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="538015351"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 14:37:17 -0800
-Date:   Tue, 1 Feb 2022 14:37:17 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Ben Widawsky <ben.widawsky@intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V6 10/10] cxl/cdat: Parse out DSMAS data from CDAT table
-Message-ID: <20220201223717.GR785175@iweiny-DESK2.sc.intel.com>
-Mail-Followup-To: Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20220201071952.900068-1-ira.weiny@intel.com>
- <20220201071952.900068-11-ira.weiny@intel.com>
- <20220201190532.ynwr73ninobqx7bm@intel.com>
+        id S241772AbiBAWim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 17:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235380AbiBAWil (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 17:38:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FF6C061714;
+        Tue,  1 Feb 2022 14:38:40 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cq9-20020a17090af98900b001b8262fe2d5so767794pjb.0;
+        Tue, 01 Feb 2022 14:38:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+MkstnjYb1bc7YaKgEHhAEBDCZBOZy1EThsYrB4ysek=;
+        b=Hu+Rk9yLcOQfFgi67h20usTJ3i2bPTaP7p6rZq5OvtozMR0EaGQcRRUwVSmKoopWEa
+         mLfLyOKRp+OuFnBkC8rRiyRR6hgI1u8ISQTySIzfhLMhWyeNypWulQvXYmrBn8LmpKZM
+         AKPGYd9zADTvAQO+RoH91IfVuRb1eCmNO7beAVUQnxETo7nzoxFYQh+WClNBdRDc+hdX
+         48mu9U9OH8xb4jAcVGooj6eFONYESEWY6b5xppFUiUZIvAEm/LnNyRa0JTncz9lgeXb+
+         C3lwhiWdG7zFc5us6ECFsRf7Qm/8uNhvIp4QMwpIQo3qkBbZDrm9jbi2Cinp5xUK+9kV
+         FaXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+MkstnjYb1bc7YaKgEHhAEBDCZBOZy1EThsYrB4ysek=;
+        b=eSnGy/neV6F4SQHh2xBtEzb1oW5w4x/MltDSBJINJchig8i0GOgKL0Rs7NQggckDKn
+         Rn4wi+TxNng/JaZ7aLWLGplzya58LMzxu47NhG4jQeJi8x6ztSRNQ04umoEReayFa/jC
+         5VzSvD/6tGpaa1dJRT5XuJqvmtAhQvJgWfFdPTsBNuMcTuvvDND1hHoWfytFhabeCLB7
+         KUVltY1UKnnlMc2am31crO8SR829XaXbv/Y0Frb6ImETLImwqW90bEj5/H825hRWAu3v
+         sKksqy2w7fbfhvByfXqV5kYBxqGJF3xxMQs7pdOTp8tcOqB1pBF7CUJym6YcD9lRyYVe
+         r1KQ==
+X-Gm-Message-State: AOAM5313uwXvFycMGNSEYSefPpXnPREaPL407AZCOoGGdeyq2OSsc9o8
+        1b0g5QF2wCPZgWX+tYVtn2I=
+X-Google-Smtp-Source: ABdhPJzyPTsMYFSGTfN7UwsIbtgn9s5eCY7+v7ZMFgzzJ8/8eUPa4xob9K9UXpbTWhMpmwf/bLHDJw==
+X-Received: by 2002:a17:90a:648f:: with SMTP id h15mr4867222pjj.122.1643755120393;
+        Tue, 01 Feb 2022 14:38:40 -0800 (PST)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id om8sm3643206pjb.51.2022.02.01.14.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 14:38:39 -0800 (PST)
+From:   Yang Shi <shy828301@gmail.com>
+To:     kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, david@redhat.com, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [v3 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+Date:   Tue,  1 Feb 2022 14:38:37 -0800
+Message-Id: <20220201223837.790617-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201190532.ynwr73ninobqx7bm@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 11:05:32AM -0800, Widawsky, Ben wrote:
-> On 22-01-31 23:19:52, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > CXL memory devices need the information in the Device Scoped Memory
-> > Affinity Structure (DSMAS).  This information is contained within the
-> > CDAT table buffer which is already read and cached.
-> > 
-> > Parse and cache DSMAS data from the CDAT table.  Store this data in
-> > unmarshaled struct dsmas data structures for ease of use.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> > Changes from V5
-> > 	Fix up sparse warnings
-> > 	Split out cdat_hdr_valid()
-> > 	Update cdat_hdr_valid()
-> > 		Remove revision and cs field parsing
-> > 			There is no point in these
-> > 		Add seq check and debug print.
-> > 	From Jonathan
-> > 		Add spaces around '+' and '/'
-> > 		use devm_krealloc() for dmas_ary
-> > 
-> > Changes from V4
-> > 	New patch
-> > ---
-> >  drivers/cxl/cdat.h        | 21 ++++++++++++
-> >  drivers/cxl/core/memdev.c | 70 +++++++++++++++++++++++++++++++++++++++
-> >  2 files changed, 91 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-> > index a7725d26f2d2..f8c126190d18 100644
-> > --- a/drivers/cxl/cdat.h
-> > +++ b/drivers/cxl/cdat.h
-> > @@ -83,17 +83,38 @@
-> >  #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
-> >  #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
-> >  
-> > +/**
-> > + * struct cxl_dsmas - host unmarshaled version of DSMAS data
-> > + *
-> > + * As defined in the Coherent Device Attribute Table (CDAT) specification this
-> > + * represents a single DSMAS entry in that table.
-> > + *
-> > + * @dpa_base: The lowest DPA address associated with this DSMAD
-> > + * @dpa_length: Length in bytes of this DSMAD
-> > + * @non_volatile: If set, the memory region represents Non-Volatile memory
-> > + */
-> > +struct cxl_dsmas {
-> > +	u64 dpa_base;
-> > +	u64 dpa_length;
-> > +	/* Flags */
-> > +	u8 non_volatile:1;
-> > +};
-> > +
-> >  /**
-> >   * struct cxl_cdat - CXL CDAT data
-> >   *
-> >   * @table: cache of CDAT table
-> >   * @length: length of cached CDAT table
-> >   * @seq: Last read Sequence number of the CDAT table
-> > + * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-> > + * @nr_dsmas: Number of entries in dsmas_ary
-> >   */
-> >  struct cxl_cdat {
-> >  	void *table;
-> >  	size_t length;
-> >  	u32 seq;
-> > +	struct cxl_dsmas *dsmas_ary;
-> > +	int nr_dsmas;
-> >  };
-> >  
-> >  #endif /* !__CXL_CDAT_H__ */
-> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> > index 11d721c56f08..32342a15e991 100644
-> > --- a/drivers/cxl/core/memdev.c
-> > +++ b/drivers/cxl/core/memdev.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/idr.h>
-> >  #include <linux/pci.h>
-> >  #include <cxlmem.h>
-> > +#include "cdat.h"
-> >  #include "core.h"
-> >  
-> >  static DECLARE_RWSEM(cxl_memdev_rwsem);
-> > @@ -386,6 +387,71 @@ static int read_cdat_data(struct cxl_memdev *cxlmd,
-> >  	return rc;
-> >  }
-> >  
-> > +static int parse_dsmas(struct cxl_memdev *cxlmd)
-> > +{
-> > +	struct cxl_dsmas *dsmas_ary = NULL;
-> > +	u32 *data = cxlmd->cdat.table;
-> > +	int bytes_left = cxlmd->cdat.length;
-> > +	int nr_dsmas = 0;
-> > +
-> > +	if (!data)
-> > +		return -ENXIO;
-> > +
-> > +	/* Skip header */
-> > +	data += CDAT_HEADER_LENGTH_DW;
-> > +	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
-> > +
-> > +	while (bytes_left > 0) {
-> > +		u32 *cur_rec = data;
-> > +		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-> > +		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
-> > +
-> > +		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-> > +			struct cxl_dsmas *new_ary;
-> > +			u8 flags;
-> > +
-> > +			new_ary = devm_krealloc(&cxlmd->dev, dsmas_ary,
-> > +					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-> > +					   GFP_KERNEL);
-> > +			if (!new_ary) {
-> > +				dev_err(&cxlmd->dev,
-> > +					"Failed to allocate memory for DSMAS data\n");
-> > +				return -ENOMEM;
-> > +			}
-> 
-> One thought here - it looks like there are at most 256 DSMAS entries. You could
-> allocate the full 256 up front, and then realloc *down* to the actual number.
-> 
-> > +			dsmas_ary = new_ary;
-> > +
-> > +			flags = FIELD_GET(CDAT_DSMAS_DW1_FLAGS, cur_rec[1]);
-> > +
-> > +			dsmas_ary[nr_dsmas].dpa_base = CDAT_DSMAS_DPA_OFFSET(cur_rec);
-> > +			dsmas_ary[nr_dsmas].dpa_length = CDAT_DSMAS_DPA_LEN(cur_rec);
-> > +			dsmas_ary[nr_dsmas].non_volatile = CDAT_DSMAS_NON_VOLATILE(flags);
-> > +
-> > +			dev_dbg(&cxlmd->dev, "DSMAS %d: %llx:%llx %s\n",
-> > +				nr_dsmas,
-> > +				dsmas_ary[nr_dsmas].dpa_base,
-> > +				dsmas_ary[nr_dsmas].dpa_base +
-> > +					dsmas_ary[nr_dsmas].dpa_length,
-> > +				(dsmas_ary[nr_dsmas].non_volatile ?
-> > +					"Persistent" : "Volatile")
-> > +				);
-> > +
-> > +			nr_dsmas++;
-> > +		}
-> > +
-> > +		data += (length / sizeof(u32));
-> > +		bytes_left -= length;
-> > +	}
-> > +
-> > +	if (nr_dsmas == 0)
-> > +		return -ENXIO;
-> 
-> Hmm is there documentation that suggests a DSMAS must be implemented? Could this
-> just return 0? I'd put maybe dev_dbg here if it's unexpected but not a failure
-> and return success.
+The syzbot reported the below BUG:
 
-For this call I was not envisioning this as an error.  I wanted to leave it up
-to the caller.
+kernel BUG at include/linux/page-flags.h:785!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ page_mapcount include/linux/mm.h:837 [inline]
+ smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+ smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+ smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+ walk_pmd_range mm/pagewalk.c:128 [inline]
+ walk_pud_range mm/pagewalk.c:205 [inline]
+ walk_p4d_range mm/pagewalk.c:240 [inline]
+ walk_pgd_range mm/pagewalk.c:277 [inline]
+ __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+ walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+ smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+ smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+ show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+ seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+ seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+ vfs_read+0x1b5/0x600 fs/read_write.c:479
+ ksys_read+0x12d/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faa2af6c969
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 24ec93ff95e4ac3d ]---
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-I think it would make more sense to return the number of DSMAS' found or
-negative errno on failure...
+The reproducer was trying to reading /proc/$PID/smaps when calling
+MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+for partial THP.  It may trigger the below race:
 
-I'll clean it up.  Including below...
+         CPU A                         CPU B
+         -----                         -----
+smaps walk:                      MADV_FREE:
+page_mapcount()
+  PageCompound()
+                                 split_huge_page()
+  page = compound_head(page)
+  PageDoubleMap(page)
 
-> 
-> > +
-> > +	dev_dbg(&cxlmd->dev, "Found %d DSMAS entries\n", nr_dsmas);
-> > +	cxlmd->cdat.dsmas_ary = dsmas_ary;
-> > +	cxlmd->cdat.nr_dsmas = nr_dsmas;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
-> >  {
-> >  	struct cxl_memdev *cxlmd;
-> > @@ -407,6 +473,10 @@ struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds)
-> >  	if (rc)
-> >  		goto err;
-> >  
-> > +	rc = parse_dsmas(cxlmd);
-> > +	if (rc)
-> > +		dev_warn(dev, "No DSMAS data found: %d\n", rc);
-> > +
+When calling PageDoubleMap() this page is not a tail page of THP anymore
+so the BUG is triggered.
 
-This was changed to dev_warn() because I think here we do expect dsmas data?
-Don't we?
+This could be fixed by elevated refcount of the page before calling
+mapcount, but it prevents from counting migration entries, and it seems
+overkilling because the race just could happen when PMD is split so all
+PTE entries of tail pages are actually migration entries, and
+smaps_account() does treat migration entries as mapcount == 1 as Kirill
+pointed out.
 
-Thanks,
-Ira
+Add a new parameter for smaps_account() to tell this entry is migration
+entry then skip calling page_mapcount().  Don't skip getting mapcount for
+device private entries since they do track references with mapcount.
 
-> >  	/*
-> >  	 * Activate ioctl operations, no cxl_memdev_rwsem manipulation
-> >  	 * needed as this is ordered with cdev_add() publishing the device.
-> > -- 
-> > 2.31.1
-> > 
+Pagemap also has the similar issue although it was not reported.  Fixed
+it as well.
+
+Fixes: e9b61f19858a ("thp: reintroduce split_huge_page()")
+Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+v3: * Fixed the fix tag, the one used by v2 was not accurate
+    * Added comment about the risk calling page_mapcount() per David
+    * Fix pagemap
+
+v2: * Added proper fix tag per Jann Horn
+    * Rebased to the latest linus's tree
+
+ fs/proc/task_mmu.c | 38 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 18f8c3acbb85..d753eda6020c 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
+ }
+ 
+ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+-		bool compound, bool young, bool dirty, bool locked)
++		bool compound, bool young, bool dirty, bool locked,
++		bool migration)
+ {
+ 	int i, nr = compound ? compound_nr(page) : 1;
+ 	unsigned long size = nr * PAGE_SIZE;
+@@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+ 	 * page_count(page) == 1 guarantees the page is mapped exactly once.
+ 	 * If any subpage of the compound page mapped with PTE it would elevate
+ 	 * page_count().
++	 *
++	 * The page_mapcount() is called to get a snapshot of the mapcount.
++	 * Without holding the page lock this snapshot can be slightly wrong as
++	 * we cannot always read the mapcount atomically.  It is not safe to
++	 * call page_mapcount() even with PTL held if the page is not mapped,
++	 * especially for migration entries.  Treated regular migration entries
++	 * as mapcount == 1.
+ 	 */
+-	if (page_count(page) == 1) {
++	if ((page_count(page) == 1) || migration) {
+ 		smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
+ 			locked, true);
+ 		return;
+@@ -517,6 +525,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(vma, addr, *pte);
+@@ -536,8 +545,11 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 			} else {
+ 				mss->swap_pss += (u64)PAGE_SIZE << PSS_SHIFT;
+ 			}
+-		} else if (is_pfn_swap_entry(swpent))
++		} else if (is_pfn_swap_entry(swpent)) {
++			if (is_migration_entry(swpent))
++				migration = true;
+ 			page = pfn_swap_entry_to_page(swpent);
++		}
+ 	} else {
+ 		smaps_pte_hole_lookup(addr, walk);
+ 		return;
+@@ -546,7 +558,8 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	if (!page)
+ 		return;
+ 
+-	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte), locked);
++	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
++		      locked, migration);
+ }
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -557,6 +570,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pmd_present(*pmd)) {
+ 		/* FOLL_DUMP will return -EFAULT on huge zero page */
+@@ -564,8 +578,10 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	} else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
+ 		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+ 
+-		if (is_migration_entry(entry))
++		if (is_migration_entry(entry)) {
++			migration = true;
+ 			page = pfn_swap_entry_to_page(entry);
++		}
+ 	}
+ 	if (IS_ERR_OR_NULL(page))
+ 		return;
+@@ -577,7 +593,9 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		/* pass */;
+ 	else
+ 		mss->file_thp += HPAGE_PMD_SIZE;
+-	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd), locked);
++
++	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
++		      locked, migration);
+ }
+ #else
+ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+@@ -1378,6 +1396,7 @@ static pagemap_entry_t pte_to_pagemap_entry(struct pagemapread *pm,
+ {
+ 	u64 frame = 0, flags = 0;
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pte_present(pte)) {
+ 		if (pm->show_pfn)
+@@ -1399,13 +1418,14 @@ static pagemap_entry_t pte_to_pagemap_entry(struct pagemapread *pm,
+ 			frame = swp_type(entry) |
+ 				(swp_offset(entry) << MAX_SWAPFILES_SHIFT);
+ 		flags |= PM_SWAP;
++		migration = is_migration_entry(entry);
+ 		if (is_pfn_swap_entry(entry))
+ 			page = pfn_swap_entry_to_page(entry);
+ 	}
+ 
+ 	if (page && !PageAnon(page))
+ 		flags |= PM_FILE;
+-	if (page && page_mapcount(page) == 1)
++	if (page && !migration && page_mapcount(page) == 1)
+ 		flags |= PM_MMAP_EXCLUSIVE;
+ 	if (vma->vm_flags & VM_SOFTDIRTY)
+ 		flags |= PM_SOFT_DIRTY;
+@@ -1421,6 +1441,7 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 	spinlock_t *ptl;
+ 	pte_t *pte, *orig_pte;
+ 	int err = 0;
++	bool migration = false;
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 	ptl = pmd_trans_huge_lock(pmdp, vma);
+@@ -1461,11 +1482,12 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 			if (pmd_swp_uffd_wp(pmd))
+ 				flags |= PM_UFFD_WP;
+ 			VM_BUG_ON(!is_pmd_migration_entry(pmd));
++			migration = is_migration_entry(entry);
+ 			page = pfn_swap_entry_to_page(entry);
+ 		}
+ #endif
+ 
+-		if (page && page_mapcount(page) == 1)
++		if (page && !migration && page_mapcount(page) == 1)
+ 			flags |= PM_MMAP_EXCLUSIVE;
+ 
+ 		for (; addr != end; addr += PAGE_SIZE) {
+-- 
+2.26.3
+

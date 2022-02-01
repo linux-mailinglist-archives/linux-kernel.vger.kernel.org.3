@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B714A614B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E550D4A614D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbiBAQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240905AbiBAQWg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:22:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C01C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:22:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED13AB82ED8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971A5C340ED;
-        Tue,  1 Feb 2022 16:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643732553;
-        bh=RLXLJwgXlElngjkkBBo3AdNFQk/wGbjBwubLlqaO00g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BpJfVopQY0H4WZpvUIOrJ/Hgq4U3SwkXl96qKN7qKw8WvY1K/kBR44J6Z+2vljeaw
-         bwl4SUjCkUiPgrRIZ2yH195eHF59jrxWHYFUs1iBEaGDmQ5nVnNHX1YKYWNWEaHYfJ
-         YlUD2h76xu7apLKK0d0MWpga0YEbIHbZ42vtEoZ3nW0U8iSRL2BZ9A3ySbsmqL3v+X
-         rIv7yQ8NeG010sdwx+GcESZGMoH3O14XPhEr6Y+o11dBZho8A5wFqyM6IBRh45ggHN
-         QYMDkc/2TXIgDcyNzIAn4AH/QzA3UYYWMtWuYbO/LNSpx9O0a/3v2z3xKPqh8Vw1NG
-         RlWmf3Q20RG2Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nEvvL-004gpF-H2; Tue, 01 Feb 2022 16:22:31 +0000
-Date:   Tue, 01 Feb 2022 16:22:30 +0000
-Message-ID: <87ee4m5zg9.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
+        id S241061AbiBAQWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:22:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:50024 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241080AbiBAQWo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 11:22:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83D4D113E;
+        Tue,  1 Feb 2022 08:22:44 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.8.51])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AA4F3F40C;
+        Tue,  1 Feb 2022 08:22:39 -0800 (PST)
+Date:   Tue, 1 Feb 2022 16:22:37 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com,
-        anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
+Cc:     linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com,
+        alexandru.elisei@arm.com, anup@brainfault.org,
+        aou@eecs.berkeley.edu, atishp@atishpatra.org,
         benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de,
         catalin.marinas@arm.com, chenhuacai@kernel.org,
         dave.hansen@linux.intel.com, frederic@kernel.org,
         hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com,
-        joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au,
-        nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com,
-        suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        tsbogend@alpha.franken.de, vkuznets@redhat.com,
+        joro@8bytes.org, maz@kernel.org, mingo@redhat.com,
+        mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com,
+        paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com,
+        seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com,
+        tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com,
         wanpengli@tencent.com, will@kernel.org
 Subject: Re: [PATCH v3 0/5] kvm: fix latent guest entry/exit bugs
-In-Reply-To: <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
+Message-ID: <YfleTYWIW1sBbMNn@FVFF77S0Q05N>
 References: <20220201132926.3301912-1-mark.rutland@arm.com>
-        <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, aleksandar.qemu.devel@gmail.com, alexandru.elisei@arm.com, anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org, benh@kernel.crashing.org, borntraeger@linux.ibm.com, bp@alien8.de, catalin.marinas@arm.com, chenhuacai@kernel.org, dave.hansen@linux.intel.com, frederic@kernel.org, hca@linux.ibm.com, james.morse@arm.com, jmattson@google.com, joro@8bytes.org, mingo@redhat.com, mpe@ellerman.id.au, nsaenzju@redhat.com, palmer@dabbelt.com, paulmck@kernel.org, paulus@samba.org, paul.walmsley@sifive.com, seanjc@google.com, suzuki.poulose@arm.com, svens@linux.ibm.com, tglx@linutronix.de, tsbogend@alpha.franken.de, vkuznets@redhat.com, wanpengli@tencent.com, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87aa8af0-c262-ad04-58f8-da6c7882e23c@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Feb 2022 15:59:47 +0000,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
+On Tue, Feb 01, 2022 at 04:59:47PM +0100, Paolo Bonzini wrote:
 > On 2/1/22 14:29, Mark Rutland wrote:
 > > I've pushed the series (based on v5.17-rc2) to my kvm/entry-rework branch:
 > > 
 > >    https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=kvm/entry-rework
 > >    git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git kvm/entry-rework
 > 
-> Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's
-> master branch (I did not use your branch in order to leave arm64 and
-> riscv to the respective maintainers).
+> Thanks!  I cherry-picked the basic, x86 and mips patches to kvm.git's master
+> branch (I did not use your branch in order to leave arm64 and riscv to the
+> respective maintainers).
 
-How do you want to play this one? I was expecting a stable base
-(containing only the initial patch) on top of a common tag (like
--rc1).
+Since everything's dependent upon that core patch, IIUC that's going to make it
+a pain for them to queue things.
 
-Or do you expect arm64 and riscv to have their own copy of patch #1?
+How are you expecting the arm64 and riscv maintainers to queue things? Queue
+their own copies of that core patch?
 
-	M.
+Thanks,
+Mark.
 
--- 
-Without deviation from the norm, progress is not possible.
+> Paolo
+> 
+> > This version of the series is tagged as kvm-entry-rework-20220201.
+> > 
+> > [1] https://lore.kernel.org/r/20220111153539.2532246-1-mark.rutland@arm.com/
+> > [2] https://lore.kernel.org/r/20220119105854.3160683-1-mark.rutland@arm.com/
+> > 
+> > Thanks,
+> > 
+> > 
+> > Mark Rutland (5):
+> >    kvm: add guest_state_{enter,exit}_irqoff()
+> >    kvm/arm64: rework guest entry logic
+> >    kvm/x86: rework guest entry logic
+> >    kvm/riscv: rework guest entry logic
+> >    kvm/mips: rework guest entry logic
+> > 
+> >   arch/arm64/kvm/arm.c     |  51 +++++++++++-------
+> >   arch/mips/kvm/mips.c     |  50 +++++++++++++++--
+> >   arch/riscv/kvm/vcpu.c    |  44 +++++++++------
+> >   arch/x86/kvm/svm/svm.c   |   4 +-
+> >   arch/x86/kvm/vmx/vmx.c   |   4 +-
+> >   arch/x86/kvm/x86.c       |   4 +-
+> >   arch/x86/kvm/x86.h       |  45 ----------------
+> >   include/linux/kvm_host.h | 112 +++++++++++++++++++++++++++++++++++++--
+> >   8 files changed, 222 insertions(+), 92 deletions(-)
+> > 
+> 

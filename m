@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0764A613D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B5E4A6143
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 17:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbiBAQRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 11:17:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60902 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238531AbiBAQRM (ORCPT
+        id S241021AbiBAQTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 11:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240919AbiBAQTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 11:17:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DEC57B82EDA;
-        Tue,  1 Feb 2022 16:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE9EC340FA;
-        Tue,  1 Feb 2022 16:17:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643732229;
-        bh=tXC6QnhULfDX3AZU8FS9vMXtAGqHkE62Trq7DiDQG+g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WJwwKHQP2bQp4H+CbO5qOL36XV8TdcUQG/3UyMIqqA9B0Hwm4ETCJEY3lHVClFDXF
-         TLDjmG25OjAf2nWbeEIBc7t8N6VE6PYypR1RiqaNALAFRjmNGja8nlfdih+bKRqoXa
-         6iwO5cLgem5/buaDb/tp+Lpy7o2qEqI1/UGsUQSKfz+TMPo3z+mSnz3cG8BYoXAAbi
-         +TGuHLaymkpv5tyOnUYoe58IArN1k0mbH+FEHC5NNnewgR/sbHx2qa2lZX/kI6lLTq
-         KC7FQoHP9N2fB3arkAzwfzPk2f0PAVZIsC9IjuCJdCCr1g3uteH/QlaN158hB2ZU0/
-         Ol0fY9iB4pcnw==
-Received: by mail-lj1-f176.google.com with SMTP id e9so24888821ljq.1;
-        Tue, 01 Feb 2022 08:17:09 -0800 (PST)
-X-Gm-Message-State: AOAM531LUfggg7lGTuuWP5QLpOiCFxi3VVslhGV08HcMSa2rScks7I6v
-        bwBglKQuqWrAr/mBEaycxyBZtJZ2iY/d/vYXvdk=
-X-Google-Smtp-Source: ABdhPJxXcBxe7hc9p5AvEq+x7+VhWiTcTDw0Bpv+4IzlGIScnrvZJUOiEvnRa3Lc9ryY4B1x/+EnE7mJkMbtxGuSWBE=
-X-Received: by 2002:a2e:bd82:: with SMTP id o2mr1407770ljq.454.1643732227579;
- Tue, 01 Feb 2022 08:17:07 -0800 (PST)
+        Tue, 1 Feb 2022 11:19:50 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634ABC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 08:19:50 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id j2so55125608ejk.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 08:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H/EA0AhkWiFaOwwty7mH2hCCiTOvQntxOFT+Uv9r6mI=;
+        b=lmzPqOHdxn0hc7dFBLY3SQkUuN8/E5zgkhWuFYNNCZY80fRqKvZZiHLjCZFSELf5wt
+         fBfAaoq3b5L6sfZamRJ4r9as5w9m2yn2x5kjVQH91u5qzkU4B0X3l8pb4YSIgvY2YQoU
+         hLYOHsig6gFhE8uLZXKQjCQGUZdYl3Z4dWDXS94KelY+TVFaf6ZQT+FTU8h0b8OgyVSF
+         +vMc/E1jLaqNPkoLezOjgnDMC9VeuCZPuSrCLTTlT2tOaNLt4ZbNIDH7tRFJJF+KWag/
+         wG5J3E4/omZOqv7+krqB1k+rt7bzjHGeCvrcOEBpozUkZsDcRNHQwrGH26s3VqMOjExc
+         cGoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H/EA0AhkWiFaOwwty7mH2hCCiTOvQntxOFT+Uv9r6mI=;
+        b=feFi/3GlsMyzy1xXS7XC1FK+P2UrxrrAJ4Jllg23grLXPmfd11PgoH87+aDTck6tiU
+         ajkoaK7Af5fZZTCJy+Zt7vZW1E0I+qTk0wjd+xlBMof1IrYLnyFAoIQK4tBgYUhp4/xp
+         M+uCUPvulfz+N5vMnZlNruuhGQZs4ASa785hk2tXGM0e/iA5tJNXhdQBUBjSqmPki0a6
+         RR2rmynqww99m635KOyVRcHv3SN9h18xS2ZWCM3/ewSKil3YqDwN8k7lar0nykBja7eo
+         p40ynt4TDje6yPjjz6n1Yeg/kBOQBebX+q1f5VbjbynESrBegaAxnB2TWDbZl9UXB+yh
+         qpsw==
+X-Gm-Message-State: AOAM533PeMG5SFcNZGkq176akLjn4a7c6uO3XvK22T6a6KFYyqaIh80x
+        dfHYc7sSWNxYmBJSZp3/PQEhSilF+5I0/JUD6iHk
+X-Google-Smtp-Source: ABdhPJyY2QWbw9iTiEYwXUoRKlv8CqDxjUmVAK+5MN19fpdlGU198KTmUcBPwAV5FDqPW4wyhtc7GkW+of0Vio0Kkrg=
+X-Received: by 2002:a17:906:2ed0:: with SMTP id s16mr21589608eji.327.1643732388897;
+ Tue, 01 Feb 2022 08:19:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-22-guoren@kernel.org>
- <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
- <f8359e15-412a-03d6-1b0c-a9f253816497@redhat.com> <CAAhSdy0U+41OWG_0C=820U+07accLsHxNYENtp=ZZsy6K4mJ0g@mail.gmail.com>
-In-Reply-To: <CAAhSdy0U+41OWG_0C=820U+07accLsHxNYENtp=ZZsy6K4mJ0g@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 2 Feb 2022 00:16:55 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQj2vE-1LC5iUa594zSqBt1yMFjiw8pBPTbWVYp7YoitA@mail.gmail.com>
-Message-ID: <CAJF2gTQj2vE-1LC5iUa594zSqBt1yMFjiw8pBPTbWVYp7YoitA@mail.gmail.com>
-Subject: Re: [PATCH V5 21/21] KVM: compat: riscv: Prevent KVM_COMPAT from
- being selected
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
+References: <20220120214948.3637895-1-smayhew@redhat.com> <20220120214948.3637895-2-smayhew@redhat.com>
+ <CAFqZXNv7=ROfyzZGojy2DQvY0xp4Dd5oHW_0KG6BLiD7A8zeKQ@mail.gmail.com>
+ <CAHC9VhQKVdbLNn=eOqebWaktDVeq5bjTjXea68MmcAhKoSa09w@mail.gmail.com>
+ <CAFqZXNvny0zJmEMzFeMFuy0DzjAAaB5uqRpQoSMbZwVcUxTDAQ@mail.gmail.com>
+ <CAHC9VhQE4JPhTjkKwV3ovRSuPceiHDrP3MDW4RPDcNtLkb7tAQ@mail.gmail.com> <CAFqZXNs7P+p0B-uZ2owMH1qa04unbq870tMqQ4Kwup7dXJ9z=g@mail.gmail.com>
+In-Reply-To: <CAFqZXNs7P+p0B-uZ2owMH1qa04unbq870tMqQ4Kwup7dXJ9z=g@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 1 Feb 2022 11:19:37 -0500
+Message-ID: <CAHC9VhRAPb8PV08fYd-GOY+ZeKX6r+rmGw_Okrwwj6ESTVDYmA@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 1/2] selinux: Fix selinux_sb_mnt_opts_compat()
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Scott Mayhew <smayhew@redhat.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 12:11 AM Anup Patel <anup@brainfault.org> wrote:
->
-> On Tue, Feb 1, 2022 at 9:31 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > On 2/1/22 16:44, Anup Patel wrote:
-> > > +Paolo
+On Tue, Feb 1, 2022 at 9:38 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> On Mon, Jan 31, 2022 at 5:16 PM Paul Moore <paul@paul-moore.com> wrote:
+> > On Mon, Jan 31, 2022 at 7:46 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > > On Fri, Jan 28, 2022 at 3:28 AM Paul Moore <paul@paul-moore.com> wrote:
+> > > > On Thu, Jan 27, 2022 at 4:54 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > > > > I wonder if we could make this all much simpler by *always* doing the
+> > > > > label parsing in selinux_add_opt() and just returning an error when
+> > > > > !selinux_initialized(&selinux_state). Before the new mount API, mount
+> > > > > options were always passed directly to the mount(2) syscall, so it
+> > > > > wasn't possible to pass any SELinux mount options before the SELinux
+> > > > > policy was loaded. I don't see why we need to jump through hoops here
+> > > > > just to support this pseudo-feature of stashing an unparsed label into
+> > > > > an fs_context before policy is loaded... Userspace should never need
+> > > > > to do that.
+> > > >
+> > > > I could agree with that, although part of my mind is a little nervous
+> > > > about the "userspace should *never* ..." because that always seems to
+> > > > bite us.  Although I'm struggling to think of a case where userspace
+> > > > would need to set explicit SELinux mount options without having a
+> > > > policy loaded.
 > > >
-> > > On Tue, Feb 1, 2022 at 8:38 PM <guoren@kernel.org> wrote:
-> > >>
-> > >> From: Guo Ren <guoren@linux.alibaba.com>
-> > >>
-> > >> Current riscv doesn't support the 32bit KVM API. Let's make it
-> > >> clear by not selecting KVM_COMPAT.
-> > >>
-> > >> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > >> Signed-off-by: Guo Ren <guoren@kernel.org>
-> > >> Cc: Arnd Bergmann <arnd@arndb.de>
-> > >> Cc: Anup Patel <anup@brainfault.org>
-> > >
-> > > This looks good to me.
-> > >
-> > > Reviewed-by: Anup Patel <anup@brainfault.org>
+> > > I get that, but IMO this is enough of an odd "use case" that I
+> > > wouldn't worry too much ...
 > >
-> > Hi Anup,
-> >
-> > feel free to send this via a pull request (perhaps together with Mark
-> > Rutland's entry/exit rework).
+> > I understand, but seeing as I'm the only one that defends these things
+> > with Linus and others lets do this:
 >
-> Sure, I will do like you suggested.
-Great, thx.
+> It's not all black and white:
+> https://lore.kernel.org/lkml/Pine.LNX.4.64.0512291322560.3298@g5.osdl.org/
 
->
-> Regards,
-> Anup
->
-> >
-> > Paolo
-> >
-
-
+I made my statement above not to ask your opinion, but rather to make a point.
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+paul-moore.com

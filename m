@@ -2,174 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746824A66BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E524A66C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 22:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242647AbiBAVAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 16:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiBAVAs (ORCPT
+        id S239442AbiBAVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 16:00:55 -0500
+Received: from mail.efficios.com ([167.114.26.124]:56718 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242667AbiBAVAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 16:00:48 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E09C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 13:00:48 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id j24so14035017qkk.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 13:00:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zh2HRwuNKx7PT7oWtqov40bxLvcOISQVIPi4Cb5Lh+c=;
-        b=tnSgEux4dZPsnVaqxHway29AhA57bv5PLRRygiXqKVibwwdjETk6IvbnE3QMijL9y5
-         shQga544etO5GTxQGwwQFliOrXPSARwDVLa3wEwR8Q46QKUO/wCRuprHOA9d+5ISACFz
-         RmlugelKIMuCQEQjKWD2vI8qrOM02DxA4KlvEv+kbn/dpycAbP1Vm9HkHgF6RoOh0rWk
-         J73VzG03L2JPTw+oW13GzI+9DpYqkOiCEN5hVWzITf+vY8Rv6Gx8vdWH2E99qFR96xoW
-         dmn7PjPuHmLU/AibAkA+jJ6GcRj1IfphoPcpedD1QcBc0gHE4MgIrvf03CkfPFv9e6ZM
-         uMxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zh2HRwuNKx7PT7oWtqov40bxLvcOISQVIPi4Cb5Lh+c=;
-        b=jPT1aN9CRzzC7jvAIIKrLvyzhvFnyzLePWNf1dQYFcGjQHxgpTqP2jZnDOve7OVhE2
-         XlXEgeil0rlUYigkm06ore5ZrZKQ88Vv3V2lRA+szAhsPF0V4QnT9NQ4WQmUrdLjgBF8
-         wVkkC+VtUBkvJCcB7fldtUUvIiaAKzX3tifzQCA3Mtk2Atucyu55Awo2Xtst3kLHsLFg
-         Oe9mD7FhThRhe6wlT+xRNPqGKGnZ1P9bzSYmwcvgvCWybgWmnEB1WLLmrCkORlgENKdw
-         COanWMMh3al2blcKTAkVY/ZhRifyPqaZ365e6lRF4X1lzXlNHb9+I8nwLhWBAiKyMhZp
-         +CaA==
-X-Gm-Message-State: AOAM530EQTp8I9k6uMSGa9PR8CK3P1JXLn1iEuaEl6iaqlXvaTXAhjgz
-        8fnV7FOU+hlJLFAgLQUxP2RwqplL5+L3cg==
-X-Google-Smtp-Source: ABdhPJyEBFUvfWptUDHA9K+9o0hQjKPVc1wTo5h0vSVMJNGBl7AeDmnGhrh9plQ4kEkKXifPZmZelA==
-X-Received: by 2002:a05:620a:103c:: with SMTP id a28mr18143036qkk.417.1643749247140;
-        Tue, 01 Feb 2022 13:00:47 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id q8sm11532990qkl.65.2022.02.01.13.00.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 13:00:46 -0800 (PST)
-Date:   Tue, 1 Feb 2022 16:00:46 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] memcg: add per-memcg total kernel memory stat
-Message-ID: <YfmffkUfDGg4g+xt@cmpxchg.org>
-References: <20220201200823.3283171-1-yosryahmed@google.com>
+        Tue, 1 Feb 2022 16:00:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 4AF50348674;
+        Tue,  1 Feb 2022 16:00:53 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id NDJj4GGdF_09; Tue,  1 Feb 2022 16:00:52 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id D2E3B348AA3;
+        Tue,  1 Feb 2022 16:00:52 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com D2E3B348AA3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643749252;
+        bh=D6F7I14e09DLJ7OBXCoOb2aDWOL6Vpkl8xCgOrXzLZI=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=TOcOopo+zfIkJM1NpeSeho3ukIFoN0UcRhzMIbE4NvvWutErZvd76IW4HkG4bUZP8
+         Byksk4cy6M+6xk21dCLF3UspToZcfzLAxJJn5rTcShRA+xRNuqN5WJiPnwbBh2WE6g
+         +sIBKJHQ6ls80uRC1XCH5dHT69KL1DeTk8T7QVXacZm7l4r8l1CY1s6okmlAjQwLsh
+         i1KIaNUsgCt9LUxSkNdAy/5VLzKkbYiIgnctTk6qkrrWSRvlLpP4yqqVpT6LnogFH4
+         tP5GJWNjCvnU3dR+Xy2ZKsovVtaz5fcnBY/DdRTrbTpx3+xvSTA2JB8jdkqoppmd2q
+         Tr3e8sLzfir5w==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id QS4bqrwocbFV; Tue,  1 Feb 2022 16:00:52 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id BDAF7348766;
+        Tue,  1 Feb 2022 16:00:52 -0500 (EST)
+Date:   Tue, 1 Feb 2022 16:00:52 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        David Laight <David.Laight@aculab.com>,
+        carlos <carlos@redhat.com>, Chris Kennelly <ckennelly@google.com>
+Message-ID: <2083444900.25808.1643749252639.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAFTs51XYWqN6bPbVYh8a9ta+VxS4iBbiWWNO7n1t-4_VLpKGXQ@mail.gmail.com>
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com> <CAFTs51XYWqN6bPbVYh8a9ta+VxS4iBbiWWNO7n1t-4_VLpKGXQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] Introduce per thread group current virtual cpu
+ id
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201200823.3283171-1-yosryahmed@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: Introduce per thread group current virtual cpu id
+Thread-Index: WUJXhv7+C6tZP3wo1UvlQkFhhpClMA==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yosry,
+----- On Feb 1, 2022, at 2:49 PM, Peter Oskolkov posk@posk.io wrote:
 
-On Tue, Feb 01, 2022 at 08:08:23PM +0000, Yosry Ahmed wrote:
-> Currently memcg stats show several types of kernel memory:
-> kernel stack, page tables, sock, vmalloc, and slab.
-> However, there are other allocations with __GFP_ACCOUNT
-> (or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
-> in any of those stats, a few examples are:
-> - various kvm allocations (e.g. allocated pages to create vcpus)
-> - io_uring
-> - tmp_page in pipes during pipe_write()
-> - bpf ringbuffers
-> - unix sockets
+> On Tue, Feb 1, 2022 at 11:26 AM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> This feature allows the scheduler to expose a current virtual cpu id
+>> to user-space. This virtual cpu id is within the possible cpus range,
+>> and is temporarily (and uniquely) assigned while threads are actively
+>> running within a thread group. If a thread group has fewer threads than
+>> cores, or is limited to run on few cores concurrently through sched
+>> affinity or cgroup cpusets, the virtual cpu ids will be values close
+>> to 0, thus allowing efficient use of user-space memory for per-cpu
+>> data structures.
 > 
-> Keeping track of the total kernel memory is essential for the ease of
-> migration from cgroup v1 to v2 as there are large discrepancies between
-> v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
-> in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
-> allocations is an impractical maintenance burden as there a lot of those
-> all over the kernel code, with more use cases likely to show up in the
-> future.
+> Why per thread group and not per mm? The main use case is for
+> per-(v)cpu memory allocation logic, so it seems having this feature
+> per mm is more appropriate?
 
-No objection, I'm just curious how it makes migration to v2 easier in
-particular. Or is it just that you've used the v1 stat to track
-application regressions and would like to continue doing that in v2?
+Good point, yes, per-mm would be more appropriate.
 
-> Therefore, add a "kernel" memcg stat that is analogous to kmem
-> page counter, with added benefits such as using rstat infrastructure
-> which aggregates stats more efficiently. Additionally, this provides a
-> lighter alternative in case the legacy kmem is deprecated in the future
+So I guess that from a userspace perspective, the rseq field could become
+"__u32 vm_vcpu; /* Current vcpu within memory space. */"
+
+[...]
+
+>> diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+>> index b6ecb9fc4cd2..c87e7ad5a1ea 100644
+>> --- a/include/linux/sched/signal.h
+>> +++ b/include/linux/sched/signal.h
+>> @@ -244,6 +244,12 @@ struct signal_struct {
+>>                                                  * and may have inconsistent
+>>                                                  * permissions.
+>>                                                  */
+>> +#ifdef CONFIG_SCHED_THREAD_GROUP_VCPU
+>> +       /*
+>> +        * Mask of allocated vcpu ids within the thread group.
+>> +        */
+>> +       cpumask_t                       vcpu_mask;
 > 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst |  5 +++++
->  include/linux/memcontrol.h              |  1 +
->  mm/memcontrol.c                         | 24 ++++++++++++++++++------
->  3 files changed, 24 insertions(+), 6 deletions(-)
+> We use a pointer for the mask (in struct mm). Adds complexity around
+> alloc/free, though. Just FYI.
+
+It does make sense if this is opt-in.
+
+[...]
+
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 2e4ae00e52d1..2690e80977b1 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct
+>> *prev,
+>>         sched_info_switch(rq, prev, next);
+>>         perf_event_task_sched_out(prev, next);
+>>         rseq_preempt(prev);
+>> +       tg_vcpu_put(prev);
+>> +       tg_vcpu_get(next);
 > 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 5aa368d165da..a0027d570a7f 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1317,6 +1317,11 @@ PAGE_SIZE multiple when read back.
->  	  vmalloc (npn)
->  		Amount of memory used for vmap backed memory.
->  
-> +	  kernel (npn)
-> +		Amount of total kernel memory, including
-> +		(kernel_stack, pagetables, percpu, vmalloc, slab) in
-> +		addition to other kernel memory use cases.
-> +
->  	  shmem
->  		Amount of cached filesystem data that is swap-backed,
->  		such as tmpfs, shm segments, shared anonymous mmap()s
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index b72d75141e12..fa51986365a4 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -34,6 +34,7 @@ enum memcg_stat_item {
->  	MEMCG_SOCK,
->  	MEMCG_PERCPU_B,
->  	MEMCG_VMALLOC,
-> +	MEMCG_KMEM,
->  	MEMCG_NR_STAT,
->  };
->  
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 09d342c7cbd0..c55d7056ac98 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -1376,6 +1376,7 @@ static const struct memory_stat memory_stats[] = {
->  	{ "percpu",			MEMCG_PERCPU_B			},
->  	{ "sock",			MEMCG_SOCK			},
->  	{ "vmalloc",			MEMCG_VMALLOC			},
-> +	{ "kernel",			MEMCG_KMEM			},
+> Doing this for all tasks on all context switches will most likely be
+> too expensive. We do it only for tasks that explicitly asked for this
+> feature during their rseq registration, and still the tight loop in
+> our equivalent of tg_vcpu_get() is occasionally noticeable (lots of
+> short wakeups can lead to the loop thrashing around).
+> 
+> Again, our approach is more complicated as a result.
 
-It's a superset of percpu, sock, vmalloc etc., so please move it ahead
-of them.
+I suspect that the overhead of tg_vcpu_get is quite small for processes
+which work on only few cores, but becomes noticeable when processes have
+many threads and are massively parallel (not affined to only a few cores).
 
-	anon
-	file
-	kernel
-	kernel_stack
-	pagetables
-	...
+When the feature is disabled, we can always fall-back on the value returned
+by raw_smp_processor_id() and use that as a "vm-vcpu-id" value.
 
-and in the doc as well.
+Whether the vm-vcpu-id or the processor id is used needs to be a consensus
+across all threads from all processes using a mm at a given time.
 
->  	{ "shmem",			NR_SHMEM			},
->  	{ "file_mapped",		NR_FILE_MAPPED			},
->  	{ "file_dirty",			NR_FILE_DIRTY			},
-> @@ -2979,6 +2980,19 @@ static void memcg_free_cache_id(int id)
->  	ida_simple_remove(&memcg_cache_ida, id);
->  }
->  
-> +static void mem_cgroup_kmem_record(struct mem_cgroup *memcg,
-> +				   int nr_pages)
+There appears to be a tradeoff here, and I wonder how this should be presented
+to users. A few possible options:
 
-No real need for the namespace prefix since it's a static
-function. How about account_kmem()? Avoids the line wrap, too.
+- vm-vcpu feature is opt-in (default off) or opt-out (default on),
+- whether vm-vcpu is enabled for a process could be selected at runtime by the
+  process, either at process initialization (single thread, single mm user)
+  and/or while the process is multi-threaded (requires more synchronization),
+- if we find a way to move automatically between vm-vcpu-id and processor id as
+  information source for all threads tied to a mm when we reach a number of parallel
+  threads threshold, then I suspect we could have best of both worlds. But it's not
+  clear to me how to achieve this.
 
-Otherwise, looks good to me, so with those changes:
+Thoughts ?
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Thanks,
 
-Thanks!
+Mathieu
+
+
+> 
+>>         fire_sched_out_preempt_notifiers(prev, next);
+>>         kmap_local_sched_out();
+>>         prepare_task(next);
+>> --
+>> 2.17.1
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

@@ -2,127 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A7D4A5CCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE504A5CD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbiBANGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237005AbiBANGV (ORCPT
+        id S238363AbiBANHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:07:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32564 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232608AbiBANHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:06:21 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC33C06173B;
-        Tue,  1 Feb 2022 05:06:20 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id b9so33706068lfq.6;
-        Tue, 01 Feb 2022 05:06:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=4zDZjUZzO0/LtwU7i9Sbk8gH9GLW2GWv2DNfc2cOlK8=;
-        b=JNAn9CjthSQNVzc8E9MvXEfIRED/5Pzbf2PSwdXbtYWxzebxjpuAEdSbwVR21MPhXV
-         GMOMYnR66hRxWJrFrvyxpwSivNaMAnWwH1bsUqFGgu+2g0CSZ6bennm5eoKV5/7obg/W
-         HLObfWN3gn9Pm7nWbFd9N3yHAl1IHxe6JQQD+M8vc17wnU2TYTuKwjHEs2c1Ykjv1gA/
-         igK5KCDPxVpzfSKsN4frwEogrZbMfnDep0GnnvhZldrioZu3jMnVWEDZRKyfwytuY+lB
-         KKH/pQ7U76q83LZbOjpDl1UPLTfLSatRLWXOuWXwHzDb4DIbvCMUrCN/XLFLLj3PNvWe
-         j6ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4zDZjUZzO0/LtwU7i9Sbk8gH9GLW2GWv2DNfc2cOlK8=;
-        b=C0+DzV/1WwV6lvpeGIcUdrIW2UtqkaYsXCfq7RhEI0xw/kWg+YlQnN9xIRovJ97aIY
-         /jQ6GZp9Vd6xB67JlwWD03q80XTUA9EN7v8boobG9Nl5tBiPQIIo72DhTj7EDiicwmnY
-         jpoYjar9Rx9N00BUzRxisOWkgxiMtqY7nqGtoy8kATNMQJ35CVveEvCz2z0F8dSk/4/b
-         P7Mu6BIw0hAlyjQvNQwNGlQ6U7Jf7RO3jyPGH5QHcRVJK+N+uFL6MlcF23xGhOanL3ve
-         cuV9O2Tgd4w4cz19GNRJKkzA9XB5J6L85alIgbDYgjS+3/E0u1UCszmVg/6my2u4kRrf
-         4V5w==
-X-Gm-Message-State: AOAM533Uxt45Xy8eGB8idu1iKRfSjvYK4ip9XnMilnN+v+SUQa5QOw8R
-        ZAwcPoUZfE/caIV33iXv86BXTSapV6E=
-X-Google-Smtp-Source: ABdhPJzQlKfW0CtWm4bXhyHTG7O7g1qPpYXDtoKXdkxclUHQ+RGjI+UtK3exNdt/OH4p05IWMjFUrw==
-X-Received: by 2002:ac2:55ad:: with SMTP id y13mr19034028lfg.38.1643720778908;
-        Tue, 01 Feb 2022 05:06:18 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-136.dynamic.spd-mgts.ru. [109.252.138.136])
-        by smtp.googlemail.com with ESMTPSA id n15sm3344584ljh.36.2022.02.01.05.06.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Feb 2022 05:06:18 -0800 (PST)
-Message-ID: <9900cecc-8e00-5b34-a8b2-95d8e1c1ad77@gmail.com>
-Date:   Tue, 1 Feb 2022 16:06:17 +0300
+        Tue, 1 Feb 2022 08:07:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643720863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oWlhB4x+XjLX1LmA7f8ij3o4BcAO8F5q0C5T/ifno7Y=;
+        b=cjUT3COcCVyXIndy73KPWO5IztFhL92CfAcSSBlFuVNvovxuKqGYId4/s4G7piD6Kj2N7A
+        xNGnS8R7wAUXRbpE3dEg3h32XpE4MGDOj2O8RiCz+WfdaFJHxTwHXDCkrnLsr9OpLFvlvT
+        fQU5QOzAWIqQE+H79jo74wDOn6oI9Mk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-B6U_Id-kPGuFXi33aoCmYQ-1; Tue, 01 Feb 2022 08:07:38 -0500
+X-MC-Unique: B6U_Id-kPGuFXi33aoCmYQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 50BCA1006AC5;
+        Tue,  1 Feb 2022 13:07:35 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.194.196])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 286657DE26;
+        Tue,  1 Feb 2022 13:07:06 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, Yauhen Kharuzhy <jekhor@gmail.com>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: [PATCH v5 00/20] power-suppy/i2c/extcon: Fix charger setup on Xiaomi Mi Pad 2 and Lenovo Yogabook
+Date:   Tue,  1 Feb 2022 14:06:46 +0100
+Message-Id: <20220201130706.46685-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v17 2/4] dmaengine: tegra: Add tegra gpcdma driver
-Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1643474453-32619-1-git-send-email-akhilrajeev@nvidia.com>
- <1643474453-32619-3-git-send-email-akhilrajeev@nvidia.com>
- <ba109465-d7ee-09cb-775b-9b702a3910b0@gmail.com>
- <DM5PR12MB1850D836ACDF95008EF74CC7C0249@DM5PR12MB1850.namprd12.prod.outlook.com>
- <08f6571e-af75-b6b3-443e-e86e3bdb365b@gmail.com>
- <DM5PR12MB1850FD5F3EF5CBFEA97B3611C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
- <20220131094205.73f5f8c3@dimatab>
- <DM5PR12MB1850D677140466EC74C621A4C0259@DM5PR12MB1850.namprd12.prod.outlook.com>
- <8abf2da8-9a11-8f16-b495-d8ef2d00ab51@gmail.com>
- <DM5PR12MB18505C4CB4A34F96E74BF28FC0259@DM5PR12MB1850.namprd12.prod.outlook.com>
- <6dfdfd02-bfc3-1626-f819-7ddcc8bf9c1c@gmail.com>
- <DM5PR12MB1850689286F20C18B12ADF1DC0269@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB1850689286F20C18B12ADF1DC0269@DM5PR12MB1850.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-01.02.2022 15:05, Akhil R пишет:
->> 31.01.2022 18:38, Akhil R пишет:
->>> Does the below method look good? bytes_xfer is updated on every ISR and in
->>> tx_status(), the wcount is read to calculate the intermittent value. If the
->> transfer
->>> get complete in between, use wcount as 0 to add sg_req.len to bytes_xfer
->>>
->>> static int tegra_dma_get_residual(struct tegra_dma_channel *tdc)
->>> {
->>>       unsigned long wcount = 0, status;
->>>       unsigned int bytes_xfer, residual;
->>>       struct tegra_dma_desc *dma_desc = tdc->dma_desc;
->>>       struct tegra_dma_sg_req *sg_req = dma_desc->sg_req;
->>>
->>>       /*
->>>        * Do not read from CHAN_XFER_COUNT if EOC bit is set
->>>        * as the transfer would have already completed and
->>>        * the register could have updated for next transfer
->>>        * in case of cyclic transfers.
->>>        */
->>>       status = tdc_read(tdc, TEGRA_GPCDMA_CHAN_STATUS);
->>>       if (!(status & TEGRA_GPCDMA_STATUS_ISE_EOC))
->>>               wcount = tdc_read(tdc, TEGRA_GPCDMA_CHAN_XFER_COUNT);
->>
->> You can't read WCOUNT after the STATUS without racing with the STATUS
->> updates made by h/w. You should read the WCOUNT first and only then
->> check the STATUS.
->>
->> You should also check whether T20 tegra_dma_sg_bytes_xferred()
->> workarounds apply to newer h/w. I see that the h/w base hasn't changed
->> much since T20.
-> The calculation in T20 driver is not applicable here. The register shows the
-> actual number of words remaining to be transferred as far as I understand.
+Hi Sebastian,
 
-If downstream kernel DMA driver doesn't have any special quirks, then
-likely that they are indeed unneeded.
+Here is v5 of my patch series to fix the charger setup on Xiaomi Mi Pad 2
+and Lenovo Yogabook devices, as well as fix host/device mode switching.
+
+v5 contains a few small tweaks suggested by Andy + adds his Reviewed-by
+to a bunch of patches, otherwise this is completely unchanged from v4.
+
+I believe that this series is ready for merging now.
+
+Since patches 14-20 rely on the power-supply changes from patch 1-13 and
+since they all touch files which generally do not see much changes, the
+intention is for this entire series to be merged through your (Sebastian's)
+linux-power-supply tree. Patches 14-20 all have acks from the relevant
+subsystem maintainers for merging them through the linux-power-supply tree.
+
+###
+
+For more details on this series, here is some info from the v2
+cover-letter:
+
+So far almost all the kernel code surrounding the Cherry Trail Whiskey Cove
+PMIC has been developed on the GPD win / pocket devices and it has various
+assumption based on that. In the mean time I've learned (and gotten access
+to) about 2 more designs and none of the 3 now known designs use a single
+standard setup for the charger, fuel-gauge and other chips surrounding the
+PMIC / charging+data USB port:
+
+1. The GPD Win and GPD Pocket mini-laptops, these are really 2 models
+but the Pocket re-uses the GPD Win's design in a different housing:
+
+The WC PMIC is connected to a TI BQ24292i charger, paired with
+a Maxim MAX17047 fuelgauge + a FUSB302 USB Type-C Controller +
+a PI3USB30532 USB switch, for a fully functional Type-C port.
+
+2. The Xiaomi Mi Pad 2:
+
+The WC PMIC is connected to a TI BQ25890 charger, paired with
+a TI BQ27520 fuelgauge, using the TI BQ25890 for BC1.2 charger type
+detection, for a USB-2 only Type-C port without PD.
+
+3. The Lenovo Yoga Book YB1-X90 / Lenovo Yoga Book YB1-X91 series:
+
+The WC PMIC is connected to a TI BQ25892 charger, paired with
+a TI BQ27542 fuelgauge, using the WC PMIC for BC1.2 charger type
+detection and using the BQ25892's Mediatek Pump Express+ (1.0)
+
+
+Unlike what is normal on X86 this diversity in designs is not handled /
+abstracted away by the ACPI tables.
+
+This series takes care of making sure that charging and device/host mode
+switching also works on the Xiaomi Mi Pad 2 and the Lenovo Yogabook.
+
+Patches  1-13: Prepare the bq25890 power_supply driver to fully support
+               the Mi Pad 2 and the Yogabook. Note this includes a new
+               version of 2 bq25890 patches send earlier by Yauhen Kharuzhy
+Patch 14:      Adds the intel_cht_wc_get_model() helper
+Patch 15:      Uses this intel_cht_wc_get_model() value to instantiate an
+               i2c-client with the right type and properties for the charger
+               IC used on the board (instead of harcoding the GPD values)
+Patches 16-20: Modify the extcon code to provide charger-detection results
+               to the charger driver and to take care of the Vbus boost
+               regulator control (for host-mode) and device/host mode
+               switching
+
+I've tried to keep the power_supply patches as generic as possible while
+focussing some of the special handling these boards need in the
+WC PMIC MFD and cell drivers, which will only get loaded on these boards.
+
+Regards,
+
+Hans
+
+p.s.
+
+Sebastian, I also have another power-supply series pending
+for merging into -next:
+https://lore.kernel.org/linux-pm/20220106110608.66231-1-hdegoede@redhat.com/
+
+
+Hans de Goede (17):
+  power: supply: core: Refactor
+    power_supply_set_input_current_limit_from_supplier()
+  power: supply: bq25890: Add a bq25890_rw_init_data() helper
+  power: supply: bq25890: Add support to skip reset at probe() /
+    remove()
+  power: supply: bq25890: Add support to read back the settings from the
+    chip
+  power: supply: bq25890: Enable charging on boards where we skip reset
+  power: supply: bq25890: Drop dev->platform_data == NULL check
+  power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+  power: supply: bq25890: Add support for registering the Vbus boost
+    converter as a regulator
+  power: supply: bq25890: On the bq25892 set the IINLIM based on
+    external charger detection
+  power: supply: bq25890: Use the devm_regmap_field_bulk_alloc() helper
+  mfd: intel_soc_pmic_chtwc: Add cht_wc_model data to struct
+    intel_soc_pmic
+  i2c: cht-wc: Make charger i2c-client instantiation board/device-model
+    specific
+  extcon: intel-cht-wc: Use new cht_wc_model intel_soc_pmic field
+  extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C
+    connectors
+  extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
+  extcon: intel-cht-wc: Add support for registering a power_supply
+    class-device
+  extcon: intel-cht-wc: Report RID_A for ACA adapters
+
+Yauhen Kharuzhy (3):
+  power: supply: bq25890: Rename IILIM field to IINLIM
+  power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX
+    for low temperatures
+  power: supply: bq25890: Support higher charging voltages through Pump
+    Express+ protocol
+
+ drivers/extcon/Kconfig                   |   2 +
+ drivers/extcon/extcon-intel-cht-wc.c     | 240 ++++++++++++--
+ drivers/i2c/busses/i2c-cht-wc.c          | 120 +++++--
+ drivers/mfd/intel_soc_pmic_chtwc.c       |  40 +++
+ drivers/power/supply/bq24190_charger.c   |  12 +-
+ drivers/power/supply/bq25890_charger.c   | 396 ++++++++++++++++++-----
+ drivers/power/supply/power_supply_core.c |  57 ++--
+ include/linux/mfd/intel_soc_pmic.h       |   8 +
+ include/linux/power/bq25890_charger.h    |  15 +
+ include/linux/power_supply.h             |   5 +-
+ 10 files changed, 744 insertions(+), 151 deletions(-)
+ create mode 100644 include/linux/power/bq25890_charger.h
+
+-- 
+2.33.1
+

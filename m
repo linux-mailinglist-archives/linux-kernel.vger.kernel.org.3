@@ -2,169 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78904A5756
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621224A575D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 07:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbiBAGpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 01:45:35 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:13666 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233800AbiBAGpd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 01:45:33 -0500
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2114xN6x001185;
-        Tue, 1 Feb 2022 06:44:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
- b=mcIvSmiuKbCdwao1GvQg3eSC4NfIabOncLk6m4lO2fto5CI4QVCBE9F5hmh0BHR26kEm
- LlLbtTdnQ4uDRrffsbE2ouHETocgqA482jTX9aLOr+KkjXaxzKb1XH9YhSjVg5OkWKcD
- dWOz5RIiSMIZZt0d7UAH3KSDoV/U3A2+I3pOrMo/QLtQ9CxNAo4A2Oz5c6XUm12FcmdB
- GevqCqDzuHoqvgvl7ALZ3tJJCQEoKsE2e/3s3EfJiJI5+9XGk7Tb6xypnAavzj21+Pc4
- b3KXPcsykG4mctR5vPOTnBqeLuPaWcMqGeUD0sfZNoW1kGbalZeLw6PBvc6QlwmjVGkW qw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxnk2h8s5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 06:44:53 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 2116VeW5022226;
-        Tue, 1 Feb 2022 06:44:52 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by aserp3030.oracle.com with ESMTP id 3dvumettff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Feb 2022 06:44:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UELBln/vXKNS1jISQX1czASY4TDx1zsiPwSzokQX9cvMr/p/+lTudrqFEJ1r2lcA39Y8SqPF1hkUBlhVileFRGxsMFCczT6wAc7MOGnHFsLBXUDVH5CKbtk6apstuhjQTSYNMu4Y6YIvmNATOQ/mhd7D1yLxqm965tE9Bk+Go97y1z5ImH5Kb4VXEC7mBI+k3FZ6jo6whhrLGWIZFT+uRoXqwmdcSMv/ST2b4puybf4psvumWxducKgpBnf2hRjMoBmbaCHrxQWlY3WDKvO0NjawnOxO7+L1zG9isdQwf64hMb60+Kcp/duqbR+Rr65hCTUIoYrNEzssmAFHP/McCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
- b=bvy49lC5jASYJDOAjIKrjs7S6HIy7J5es+/m20hOxIrc3pSB60plYgAG4v6RMs+AMDLxDKw59qQHviZzRmtyOApXF+QWSr69lJQThn4hV1HnwBDnzHnazRJluQX/hwN35qQ3HI7nRpwtmn+XM4zzQx8N5hksuaqTKBId/SFhij/DZhJtc8CLEq8av5aWb/OAu5eXaRlT2n3lQE7wtSiin98s62CMKqticCGXiFlbJ/kLVVYCwEAQYw2kpGs4gHUyEZtBwBE5xzx+YaLvKVu/NOZzq0Hb9MmiJS7/F7EOvZX/z4kZ4bfo/XxNMQtim1/1BsuFafjwg8312pGo9zgx3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FVniKTnuRETSiQn4DFkddxSx7h8DfCVcb0Vw1ZPchEc=;
- b=PrOTh6rrd9ciwKyHFq9UWyq/vDd94uUGF78NxYDqd2ZFOoPbnc8G5ritYQwj7HFWx1gM2y4/XrgT6Atc/ENtf3VD9kYEIT0jsIjzX8ijQLvI5LEQqWc/ywU/dx2PbGu2OZ+2NjIoXOr3faLCudfPzzu1KhUadr+VOtPQ4PBsP44=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CH0PR10MB4922.namprd10.prod.outlook.com
- (2603:10b6:610:c6::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Tue, 1 Feb
- 2022 06:44:49 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4930.021; Tue, 1 Feb 2022
- 06:44:49 +0000
-Date:   Tue, 1 Feb 2022 09:44:37 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Anatolij Gustschin <agust@denx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        John Bonesio <bones@secretlab.ca>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc: platforms: 52xx: Fix a resource leak in an
- error handling path
-Message-ID: <20220201064437.GP1951@kadam>
-References: <dec1496d46ccd5311d0f6e9f9ca4238be11bf6a6.1643440531.git.christophe.jaillet@wanadoo.fr>
+        id S234435AbiBAGvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 01:51:25 -0500
+Received: from mga06.intel.com ([134.134.136.31]:29618 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233800AbiBAGvY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:51:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643698284; x=1675234284;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=TtE+PZc+j+Iz2bV8AGmpAKEOz9pdg8QEJ0yuPv7zzKg=;
+  b=AlZwZ6JgcLn+un3nCfDUVfE91QPK9IVSar9LLLzE+nUxh+hO8w5U59q2
+   FNi+6+ReCr0wQQVFkkpKlkRBP1g7mNdiqAVVjRgRx4iZDavxAJj8RrIpc
+   dwqzGWBXg5LzoPNTIHEwKoreOUPBiJpKpslxjwR0xyF4LRhgvYklLFKTB
+   revFUyLMDmvzEQIVFbh6z43hC15kP1VmxLzFtz+hW7j8yBCwDRnW2bFqP
+   yR8arhhZtJiN7+ETcPJO1kC61C8kre09cKoPyFR1FZCnvtpQTKI0X2Xy5
+   FSdl5ylRfGV2P9qFKleQivAl6iiUJcmPdfnANhI2Kb3mInAcPMAXho6hH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10244"; a="308364058"
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="308364058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2022 22:51:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,333,1635231600"; 
+   d="scan'208";a="565502927"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2022 22:51:22 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nEn0c-000Su3-5z; Tue, 01 Feb 2022 06:51:22 +0000
+Date:   Tue, 1 Feb 2022 14:50:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Pratyush Yadav <p.yadav@ti.com>
+Subject: [mtd:spi-mem-ecc 17/30] nios2-linux-ld: core.c:undefined reference
+ to `nand_ecc_get_on_die_hw_engine'
+Message-ID: <202202011416.yZ7MuZxH-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dec1496d46ccd5311d0f6e9f9ca4238be11bf6a6.1643440531.git.christophe.jaillet@wanadoo.fr>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR2P264CA0029.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500::17)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a2bbd31-476b-4f29-ab72-08d9e54e57c5
-X-MS-TrafficTypeDiagnostic: CH0PR10MB4922:EE_
-X-Microsoft-Antispam-PRVS: <CH0PR10MB492253DA568A4FCF7728C7D78E269@CH0PR10MB4922.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xfdz6/rQB+1DYiezRlI2o3xv0foYqStkuo2TzDDGIT24Hmi2V5tXOmmtVMN1UMq4Mcv+5JKljvLgvmpdS7T8xpvbuyi+H4ocPA0bMexfY8w+oDbR1cfup3zNuTYADOCad7FG+Srxg/6R36A4KO4ArPWugb9Ez4/z9BIluAq4XWfK4sEN/f7ttyiaRz/wqDWIVgHToV7Ym1k+J0vjkT0RRolJhYWoQLTIuemeGUQvct/eIbW1tyX7POwxxqoKUjfezwqF3aWkKnSEfIQQLHBD/dRJMQteASRRQQVMcegGD5o5LUFJRXsGBLMn0W9HK8RFr0/mu9qhQI0WoVN2HgnZOtEKBEJ9z35X5iyWEMD2wp6y9yOq70MoJ3cI2Cz+yPjnj0tajbjYizjeNBNRtp8Hz0lL4pzDF/uFG3dVOL/G1qLRZtPSrYpMzc8mmDWxRDqJHUzc3Xp6/HxSdKz9SNSJWZthpSRbfuf+8g8LYcJvVs+MhJMZLrBHy0MpLf6EkSNGnyPiQbTmqnI3UVlBre7UOZxobsCrfHh48WC2UeYVBFgYeWvSUqycGu7IUqxVCx4K2xLeuWxMbhAM+5E7S4GAKaxnSMiXWnNnRVeu2aE5m0EKV41mzK3m1xa3LptbjpSfeYkqr2JKkldqba0PNvO9/VEREiPzGEaeMP6xKfJ9Kv3XX4RpiXezd18FoI30P4djUWhfiQ2lgJz1FFvpDWGYYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6512007)(6486002)(9686003)(66556008)(4326008)(66946007)(66476007)(8676002)(33716001)(83380400001)(44832011)(4744005)(5660300002)(8936002)(6666004)(33656002)(2906002)(7416002)(508600001)(52116002)(26005)(1076003)(6916009)(54906003)(186003)(316002)(38100700002)(38350700002)(86362001)(6506007)(20210929001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zrZjc7wR2/Fq48NV0xxoLjH30x0aRI+OfeQwlQSzTaP0ZZfX6lAQvZ9Iljvy?=
- =?us-ascii?Q?8BoEEmzrAykJ9xL+wmNODwaCPS87TVohf0AzyAVMrU9pe0vAkKr7PaxqF8fp?=
- =?us-ascii?Q?IXvdcRGQ6VTmkNKe8d8zSNiBcBtAamQ2KtOwDWqRKgKN9jy31Bz2is6CMqpj?=
- =?us-ascii?Q?QbprlvppPdYtbF4dSrj282/XIEEFWsK5OsI++3n2qYaLIPuWTKrBVuWg0XyW?=
- =?us-ascii?Q?Bj5rKqBJks+b8x3hsWO0D58b2VJha8ZtUXV+S6qpBRO3oR4iwoIudCk64sXM?=
- =?us-ascii?Q?1qt3vJykJtFNpPBntJgIs5s/OL5Uy/66m3z5k+U0foxP1SwF+/zeDkay3tUP?=
- =?us-ascii?Q?GxGYY8GIgUfvox4GhbmKaUuGabITAXGOT61z9lQyX/+bx2htCcEAiqZVc6zV?=
- =?us-ascii?Q?bPTNdty1eUIYPtKLN3Png7D96Pbh16jNHKAcH1VkTunkBamO4WBwL1+W9a88?=
- =?us-ascii?Q?D48P2JEEuQoI7X5pJgtUdsMwiQDEBHQmTIq26wdUnvI6clB/mjwZODn7Zsqg?=
- =?us-ascii?Q?nNVMMYY9z8QSEI66iQIHtN8CMNCW4j/BtCcIxgaWGg8PHx6ciIQ8rb0UUs5l?=
- =?us-ascii?Q?UfHl3f1dj96xlQvKgDzCc0SrOtc2H5L9w0EGmUAD5sEJ9zoXm/f5o2d1cp2P?=
- =?us-ascii?Q?Q8ePozmrCSCOjnZtdp5dLERXjwlFhJ00R6oo5pon/AcZCkcPrO6x7gx+Faaf?=
- =?us-ascii?Q?vjjG7TEJYIkKm9zh0WDVjFqgYLfX7odxaAY/83A4+Cr2axggxKgcmntG/Su9?=
- =?us-ascii?Q?WOYgenvLpEJhYzG9WGyECqYJkMU5uHuUQzDjSifnFTtfLNGFZbE/yStqkvMU?=
- =?us-ascii?Q?WIF4veBnsrxTY5tOoGiMvBKYY2vlSHlIorAViSEJ2dSv05Pcj0axTuUEHf7u?=
- =?us-ascii?Q?vgnVc4UTwCftyST9t+CNrtxtQdF9KR7rcrKpMk9nL6/h3n9a4RsreDOM4TZx?=
- =?us-ascii?Q?AHhZ/IHg/uDsDeNe1EjSGpZbQ9XaeN/msOlVJF8EBM9CiE0K8YI9gWOEpv9i?=
- =?us-ascii?Q?wkg1twE7ltlOfWoz3XyEAww/EH81qgcLjRRIAX8rGxILjcBuL2i4/URirFWi?=
- =?us-ascii?Q?juL2LNcrqSQzC7hAIKH4rdnaE0nIOzrOqnv7V4aLCJskDl4YKCRLeiVwRfpo?=
- =?us-ascii?Q?59kzyz+E8yTSNlCx2gO+AM7bnjHLjIlZnpjdICm+GRQONEkb8XGGJDlagxst?=
- =?us-ascii?Q?BbTtlanj8mdSD106ujbLzWUYFQMuFGw2mdp887nqD25nQNCPJyQsxjMIIw2H?=
- =?us-ascii?Q?tNRV3KHKODCkwt1hl99yCFqJOlwfX8DJbliYpCkcb/Ai/gnl5v5OqjtyYY1P?=
- =?us-ascii?Q?LYVGQvi+Ud7cmt9Fawp+tA1J7hWHbSUdCVmBWptoxjQv7gq3rnw2RI4rZq95?=
- =?us-ascii?Q?MfJc6p0yi7F8QppBYLW2RhQE2cxMn180+Tb015l3G0xtJsQJD0ZOb/gU1I+3?=
- =?us-ascii?Q?vwFesoNU2Xq+zfWs+LiWm02alu0p0+wX064KLvCgetJpPS05Y+ShHQkwmLku?=
- =?us-ascii?Q?7/Kxz/fratazBlos5J0804zQtcjN5srnFKiz4NjjiqZ7vOlKNM/mLWMHUb3L?=
- =?us-ascii?Q?HZCK7Ly9uEbKypQBED8wpGMSYkedg5Eyyt+Ba4VP4R6qpAEp+SXRr+GrRfo4?=
- =?us-ascii?Q?kY+RhyI4QtzeJzSv43QFtETmzHkACmmxIJ8zBTDL/HRlapJZJmxbUjNy9iK/?=
- =?us-ascii?Q?1H2/P+qxBGwL00UwSZ+8ExOGqDw=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a2bbd31-476b-4f29-ab72-08d9e54e57c5
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2022 06:44:49.6011
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UeZytTrfB/Lnv38iSZldV+5dr4SIU9PsGgyh9olPfAN/kGqVVMfS/QvY55PP6TQepHj1IfRyYXPpdO71rnpsKe0UzIWLP35Cd9ySBn+j6JI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4922
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10244 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
- mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=600 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202010033
-X-Proofpoint-GUID: 7UkjdGNDPis8no-a5K0G0mCfidI9RzC1
-X-Proofpoint-ORIG-GUID: 7UkjdGNDPis8no-a5K0G0mCfidI9RzC1
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 08:16:04AM +0100, Christophe JAILLET wrote:
-> The error handling path of mpc52xx_lpbfifo_probe() and a request_irq() is
-> not balanced by a corresponding free_irq().
-> 
-> Add the missing call, as already done in the remove function.
-> 
-> Fixes: 3c9059d79f5e ("powerpc/5200: add LocalPlus bus FIFO device driver")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Another strange thing is that the remove function has:
-> 	/* Release the bestcomm transmit task */
-> 	free_irq(bcom_get_task_irq(lpbfifo.bcom_tx_task), &lpbfifo);
-> but I've not been able to find a corresponding request_irq().
-> 
-> Is it dead code? Is there something missing in the probe?
-> (...Is it working?...)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-mem-ecc
+head:   6d0fadec1de4434fce145b374ef25c665357fa60
+commit: 319169b2a767b293984ae2c5e22268fecfb91864 [17/30] mtd: nand: ecc: Rework Kconfig dependencies
+config: nios2-randconfig-c004-20220130 (https://download.01.org/0day-ci/archive/20220201/202202011416.yZ7MuZxH-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/commit/?id=319169b2a767b293984ae2c5e22268fecfb91864
+        git remote add mtd https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
+        git fetch --no-tags mtd spi-mem-ecc
+        git checkout 319169b2a767b293984ae2c5e22268fecfb91864
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-I think you're right that the tx_task IRQ is never allocated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm pretty sure that if you free a zero IRQ then it's a no-op.  It won't
-find the 0 in the radix tree so irq_to_desc() returns NULL and free_irq()
-returns early.
+All errors (new ones prefixed by >>):
 
-regards,
-dan carpenter
+   nios2-linux-ld: drivers/mtd/nand/core.o: in function `nanddev_ecc_engine_init':
+   core.c:(.text+0x88c): undefined reference to `of_get_nand_ecc_user_config'
+   core.c:(.text+0x88c): relocation truncated to fit: R_NIOS2_CALL26 against `of_get_nand_ecc_user_config'
+>> nios2-linux-ld: core.c:(.text+0x8cc): undefined reference to `nand_ecc_get_on_die_hw_engine'
+   core.c:(.text+0x8cc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_on_die_hw_engine'
+>> nios2-linux-ld: core.c:(.text+0x8dc): undefined reference to `nand_ecc_init_ctx'
+   core.c:(.text+0x8dc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_init_ctx'
+>> nios2-linux-ld: core.c:(.text+0x904): undefined reference to `nand_ecc_put_on_host_hw_engine'
+   core.c:(.text+0x904): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_put_on_host_hw_engine'
+>> nios2-linux-ld: core.c:(.text+0x918): undefined reference to `nand_ecc_get_sw_engine'
+   core.c:(.text+0x918): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_sw_engine'
+>> nios2-linux-ld: core.c:(.text+0x928): undefined reference to `nand_ecc_is_strong_enough'
+   core.c:(.text+0x928): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_is_strong_enough'
+>> nios2-linux-ld: core.c:(.text+0x960): undefined reference to `nand_ecc_get_on_host_hw_engine'
+   core.c:(.text+0x960): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_get_on_host_hw_engine'
+   nios2-linux-ld: drivers/mtd/nand/core.o: in function `nanddev_ecc_engine_cleanup':
+   core.c:(.text+0x9cc): undefined reference to `nand_ecc_cleanup_ctx'
+   core.c:(.text+0x9cc): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_cleanup_ctx'
+   nios2-linux-ld: core.c:(.text+0x9f8): undefined reference to `nand_ecc_put_on_host_hw_engine'
+   core.c:(.text+0x9f8): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_put_on_host_hw_engine'
+   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_cleanup_ctx':
+   ecc-sw-hamming.c:(.text+0x18): undefined reference to `nand_ecc_cleanup_req_tweaking'
+   ecc-sw-hamming.c:(.text+0x18): relocation truncated to fit: R_NIOS2_CALL26 against `nand_ecc_cleanup_req_tweaking'
+   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_init_ctx':
+   ecc-sw-hamming.c:(.text+0xbc): undefined reference to `nand_ecc_init_req_tweaking'
+   ecc-sw-hamming.c:(.text+0xbc): additional relocation overflows omitted from the output
+>> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x178): undefined reference to `nand_get_small_page_ooblayout'
+>> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x194): undefined reference to `nand_get_large_page_hamming_ooblayout'
+>> nios2-linux-ld: ecc-sw-hamming.c:(.text+0x1a4): undefined reference to `nand_ecc_cleanup_req_tweaking'
+   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_prepare_io_req':
+   ecc-sw-hamming.c:(.text+0x7a8): undefined reference to `nand_ecc_tweak_req'
+   nios2-linux-ld: drivers/mtd/nand/ecc-sw-hamming.o: in function `nand_ecc_sw_hamming_finish_io_req':
+   ecc-sw-hamming.c:(.text+0xb7c): undefined reference to `nand_ecc_restore_req'
+>> nios2-linux-ld: ecc-sw-hamming.c:(.text+0xc78): undefined reference to `nand_ecc_restore_req'
 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MTD_NAND_ECC_SW_HAMMING
+   Depends on MTD && MTD_NAND_ECC
+   Selected by
+   - SM_FTL && MTD && BLOCK
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

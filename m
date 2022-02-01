@@ -2,76 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB2E4A5704
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DF54A5707
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 06:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232640AbiBAFkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 00:40:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45016 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiBAFkL (ORCPT
+        id S232547AbiBAFkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 00:40:20 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:41697 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233452AbiBAFkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 00:40:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AE98B82D01;
-        Tue,  1 Feb 2022 05:40:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 17163C340ED;
-        Tue,  1 Feb 2022 05:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643694009;
-        bh=cKgANmfRqUVDRsLCwiVgrvW3MMj+qISr3GTtMm+Kms8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=dSrQK3Ubsl0KWeRTSj3Vex7eXRTMNziQtmI1TTuOBZ/0A6KKdhIFhjzm5X1EyU5nA
-         lYwbAQ4qsEBUhgtEAOBpGgMK8wo81RvhrVRfzsu4S+c9Iob7arqs3IxgqaVZ5ujiUt
-         p3LRTsMlucUcjSVkOSNS8faoDu+jdHGEH9HJ1UTNU5wM7u3ZF4+hZPFlJnF2uFOw/J
-         kRo9xt0fcY8rAZ8XTsnmaIYHWlsvqy4P3mK7PwA99TDInh7E7kttfX15hlv97iYEXb
-         xBTT7E3m3GpgiTm4R0Ezdf0zzroQjTxoMn3vxr/fQpWsfyEPFyyNWOv/unNBMOIuEf
-         g/nXhBqA0x8Wg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F16C6E6BAC6;
-        Tue,  1 Feb 2022 05:40:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 1 Feb 2022 00:40:18 -0500
+Received: by mail-il1-f200.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso4163784ilk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Jan 2022 21:40:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=1m+jI4c4S9z+N6mXChlR9RZT6vvZARLaqK6ttNYGkXk=;
+        b=onDWgrqm8mXzwaltlinZrayzqFRjDtqbH/oDsIa5oIHJRigzqX1izr0fkE8QRxPD5q
+         6qNq02CHa0gXgUDXbOH7pPzeQcE/xCLZAWZv0j2zP9AISMar5J+JBIImA4KDpSj5hTrU
+         uwQAEVgT1YGJ46PNiLVga7bZBbYRTJuAcLZwbs5AMGRpI1x06IsCId3TZobAch72Jwi0
+         fO3E9p8MYrghgEDjiW+9oRKb5TLmxShD1HOn6I/pzWbYXdg2luftT5AEVSvAPTY+urJL
+         RzsYrJOQXuuoVx+Ij/PeNdoQNmjq8TkY+B5etD+A6l9Ih73A0S4SqKXroF88GnsdK5wH
+         d+Pw==
+X-Gm-Message-State: AOAM533ifcwONIwEoMFdWtEnx95T2NGrNTupVptk8bW2Y8QgtK4yr/4q
+        FzJbAFP+Zq4oIuYWmcLSTY8NDCbFsbCBd8gEiJHmtWDFQJ/A
+X-Google-Smtp-Source: ABdhPJzaaoz19EjlZxMINeCMVpTSZ+wpBF77leShEXgm3xpaNWQBj3ypv0S22DYdchPyZsjbmN0o/mCYxEHnpsZYrpCeVlsU03iB
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: macsec: Fix offload support for NETDEV_UNREGISTER
- event
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164369400898.8547.951399722195264606.git-patchwork-notify@kernel.org>
-Date:   Tue, 01 Feb 2022 05:40:08 +0000
-References: <1643542141-28956-1-git-send-email-raeds@nvidia.com>
-In-Reply-To: <1643542141-28956-1-git-send-email-raeds@nvidia.com>
-To:     Raed Salem <raeds@nvidia.com>
-Cc:     atenart@kernel.org, kuba@kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liorna@nvidia.com
+X-Received: by 2002:a02:2420:: with SMTP id f32mr11735192jaa.305.1643694017647;
+ Mon, 31 Jan 2022 21:40:17 -0800 (PST)
+Date:   Mon, 31 Jan 2022 21:40:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000a9b7d05d6ee565f@google.com>
+Subject: [syzbot] KASAN: vmalloc-out-of-bounds Write in ringbuf_map_alloc
+From:   syzbot <syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+syzbot found the following issue on:
 
-On Sun, 30 Jan 2022 13:29:01 +0200 you wrote:
-> From: Lior Nahmanson <liorna@nvidia.com>
-> 
-> Current macsec netdev notify handler handles NETDEV_UNREGISTER event by
-> releasing relevant SW resources only, this causes resources leak in case
-> of macsec HW offload, as the underlay driver was not notified to clean
-> it's macsec offload resources.
-> 
-> [...]
+HEAD commit:    887a333c44eb Add linux-next specific files for 20220131
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=106ea200700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9a7db1ff785d5c0
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ad567a418794b9b5983
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Here is the summary with links:
-  - [net] net: macsec: Fix offload support for NETDEV_UNREGISTER event
-    https://git.kernel.org/netdev/net/c/9cef24c8b76c
+Unfortunately, I don't have any reproducer for this issue yet.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in bpf_ringbuf_area_alloc kernel/bpf/ringbuf.c:110 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in bpf_ringbuf_alloc kernel/bpf/ringbuf.c:133 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in ringbuf_map_alloc kernel/bpf/ringbuf.c:172 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in ringbuf_map_alloc+0x725/0x7b0 kernel/bpf/ringbuf.c:148
+Write of size 8 at addr ffffc9001653a078 by task syz-executor.2/9141
+
+CPU: 0 PID: 9141 Comm: syz-executor.2 Not tainted 5.17.0-rc2-next-20220131-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xf/0x3e0 mm/kasan/report.c:255
+ __kasan_report mm/kasan/report.c:442 [inline]
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+ bpf_ringbuf_area_alloc kernel/bpf/ringbuf.c:110 [inline]
+ bpf_ringbuf_alloc kernel/bpf/ringbuf.c:133 [inline]
+ ringbuf_map_alloc kernel/bpf/ringbuf.c:172 [inline]
+ ringbuf_map_alloc+0x725/0x7b0 kernel/bpf/ringbuf.c:148
+ find_and_alloc_map kernel/bpf/syscall.c:128 [inline]
+ map_create kernel/bpf/syscall.c:863 [inline]
+ __sys_bpf+0xc0f/0x5f10 kernel/bpf/syscall.c:4622
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fab8b037059
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fab89fac168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fab8b149f60 RCX: 00007fab8b037059
+RDX: 0000000000000048 RSI: 0000000020000440 RDI: 0000000000000000
+RBP: 00007fab8b09108d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff1a45415f R14: 00007fab89fac300 R15: 0000000000022000
+ </TASK>
 
 
+Memory state around the buggy address:
+ ffffc90016539f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90016539f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc9001653a000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                                                ^
+ ffffc9001653a080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc9001653a100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

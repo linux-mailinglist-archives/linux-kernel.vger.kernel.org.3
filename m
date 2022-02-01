@@ -2,136 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB284A5D9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAEF4A5DA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Feb 2022 14:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238837AbiBANpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 08:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiBANp2 (ORCPT
+        id S238875AbiBANsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 08:48:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39016 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230213AbiBANsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 08:45:28 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE414C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 05:45:28 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id w27-20020a9d5a9b000000b005a17d68ae89so16236347oth.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:45:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2/6KNv9/sT6GkrKOK9WEHCnafWs+1/uASbFZJ68bfvw=;
-        b=g5/k9Xnyqr4hCFjiKV9VdFUS0An5UbQmLXEd7/TNbrj3V41u9lCYKOgsPddlPSzOpE
-         5eqbEqANjmcVoZeGc/sV7FiuBIFY1wnxkZxKtGkWuM2niUacHpSeS+rYvK+OTJxP7yfd
-         /DTGhTzkjZ+3FIkC1a5uMQ1BeznnJ9geArMzY=
+        Tue, 1 Feb 2022 08:48:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643723280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jvjdmFpP+aywoc255+AEdYPS7LfT6vlQYF3LS6kxF8U=;
+        b=gkX2T1W7hHe1wJhAUR0+2nUAc69mh/EW3B1lYwNjyglH1H1G66kbdkfetldqMvXTxnwIIX
+        Glv73Jxke8ATb53Hm7Kd/wyzL/WfF3Ll1gTdmw55WVSR3myiOZsSqe/wKHT5nNxNLCEyup
+        d+HQsEhaO2hhxa0r5V29LRFwfcHhllA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-C4K_n8LMMtW1fgwDF6w_0A-1; Tue, 01 Feb 2022 08:48:00 -0500
+X-MC-Unique: C4K_n8LMMtW1fgwDF6w_0A-1
+Received: by mail-ed1-f69.google.com with SMTP id f21-20020a50d555000000b00407a8d03b5fso8639980edj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 05:47:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2/6KNv9/sT6GkrKOK9WEHCnafWs+1/uASbFZJ68bfvw=;
-        b=dQsWz35Lhr15a7QLln8eYpy+FVo/VYSTDSW4VpOQ7u82Mym5eHzKfKx3uwAqKO3aSi
-         rRYWwLNf5L7D608ndBXUktuiYWaa755H1FytBbeNsJakOl3eDM6trKYcy1JGL25jhavh
-         IZfou3UDO0RIpKVHF1R3QwjEKQkjXERhX6IeKU/xEimQ6Tse3PTMtN2KSY9orB8JC4/l
-         nqoFpROqq+M+3C6ggzf+leNwqKr4o4OjBJKg0hdD78F9IGrFNxEgN/lSpwue+bLWxVu8
-         aVBD3JTb6qaLJpdVVOrZDGdSrdfcU6X+47cwoXttG9ZnQsCBfFOcbrugZvpyRGyvb8kH
-         +EUw==
-X-Gm-Message-State: AOAM533ZtM/p4nYJDty6YpdcAJ/o8AntfW0u0Xb8DGRzNOt2bL2AFJw8
-        QZU4kGDZIvzrqk5oq54trJw5VyA+Lg3M/4XeGfo98A==
-X-Google-Smtp-Source: ABdhPJyiUj0c4GiekrFNbqyjKRt2R7hyjIozmCDshxUT1STqLVwWfIk54gQfCldA3xLyzL/9RMHmTB93woo3MVX5US8=
-X-Received: by 2002:a05:6830:1153:: with SMTP id x19mr13573050otq.321.1643723128054;
- Tue, 01 Feb 2022 05:45:28 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jvjdmFpP+aywoc255+AEdYPS7LfT6vlQYF3LS6kxF8U=;
+        b=Ht/zRirlvENX3Aw4W2dWQ0lg/DvLMt/3BIMybZqCYjmgruyB9cOxNW4gq6LYczBTFB
+         PFSEsNQyT2pCVjWJn+Iei6CUjK38JLmEYR4uB+ij5XEzBex8vJkNPjbkMaom37Pv5KAC
+         0sXLGCdMbmVB3OdaTF/BjqbvAWYCZ/P6EHw8JXlgFlZ5SzOduuly2W93SvpmLvgzuKV9
+         Y7qPSfwH2YanA17HlpsPdo+6xR8foNWKHF9GBDpTudLigq2LFtXvnAs4DG/7yA0yOPm/
+         bBzyE8XVnJIy0I/UDicw6i/PJ0ss9fWnli9tfdp9m//Rke9v15TZ/lbnjhDIuKjgLhJN
+         TMUA==
+X-Gm-Message-State: AOAM531ervckCUuIuHCGBUX5YjtXFv/YwqKoz9uzsK5HF6r+o+Mm6u5e
+        XsmaF2DsHgDtCjVgoZUYoYn5lzxqbDHgzi4WfIifxvQvow0YzZ4z5/9qKWkFOcfXMNiI/IGygTg
+        A/Ksz71jVy00eaB2MU6LENccv
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr24890195edd.203.1643723278785;
+        Tue, 01 Feb 2022 05:47:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxrAn6f7jQ1xsfRbMafBTd7spTEbJU55+LKoGfzGdlknXLbTTVI9SS+8IKsUIyGryLogcl9+w==
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr24890170edd.203.1643723278466;
+        Tue, 01 Feb 2022 05:47:58 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id z6sm14841091ejd.35.2022.02.01.05.47.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 05:47:57 -0800 (PST)
+Message-ID: <e509c138-941e-fa9c-d832-e447ce62a4b2@redhat.com>
+Date:   Tue, 1 Feb 2022 14:47:55 +0100
 MIME-Version: 1.0
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-4-daniel.vetter@ffwll.ch> <9c22b709-cbcf-6a29-a45e-5a57ba0b9c14@gmx.de>
- <CAKMK7uGvOVe8kkJCTkQBEFw+3i2iAMANsyG9vGqZkcROZ9he4A@mail.gmail.com> <63018892-68e8-01b6-1e8f-853892e15c97@gmx.de>
-In-Reply-To: <63018892-68e8-01b6-1e8f-853892e15c97@gmx.de>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Tue, 1 Feb 2022 14:45:16 +0100
-Message-ID: <CAKMK7uHPn77GA12fFjmvkRUDQXSBkbYK5X=rJp8sfO_xarys_g@mail.gmail.com>
-Subject: Re: [PATCH 03/21] fbcon: Restore fbcon scrolling acceleration
-To:     Helge Deller <deller@gmx.de>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Claudio Suarez <cssk@net-c.es>,
-        Dave Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Sam Ravnborg <sam@ravnborg.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Sven Schnelle <svens@stackframe.org>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 0/8] KVM: x86: Hyper-V hypercall fix and cleanups
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
+References: <20211207220926.718794-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211207220926.718794-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 12:01 PM Helge Deller <deller@gmx.de> wrote:
-> On 2/1/22 11:36, Daniel Vetter wrote:
-> > On Tue, Feb 1, 2022 at 11:16 AM Helge Deller <deller@gmx.de> wrote:
-> >>
-> >> On 1/31/22 22:05, Daniel Vetter wrote:
-> >>> This functionally undoes 39aead8373b3 ("fbcon: Disable accelerated
-> >>> scrolling"), but behind the FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-> >>> option.
-> >>
-> >> you have two trivial copy-n-paste errors in this patch which still prevent the
-> >> console acceleration.
-> >
-> > Duh :-(
-> >
-> > But before we dig into details I think the big picture would be
-> > better. I honestly don't like the #ifdef pile here that much.
->
-> Me neither.
-> The ifdefs give a better separation, but prevents that the compiler
-> checks the various paths when building.
->
-> > I wonder whether your approach, also with GETVX/YRES adjusted
-> > somehow, wouldn't look cleaner?
-> I think so.
-> You wouldn't even need to touch GETVX/YRES because the compiler
-> will optimize/reduce it from
->
-> #define GETVYRES(s,i) ({                           \
->         (s == SCROLL_REDRAW || s == SCROLL_MOVE) ? \
->         (i)->var.yres : (i)->var.yres_virtual; })
->
-> to just become:
->
-> #define GETVYRES(s,i) ((i)->var.yres)
+On 12/7/21 23:09, Sean Christopherson wrote:
+> Fix a bug where KVM incorrectly skips an "all_cpus" IPI request, and misc
+> cleanups and enhancements for KVM handling of Hyper-V hypercalls.
+> 
+> Based on kvm/queue, commit 1cf84614b04a ("KVM: x86: Exit to ...").
+> 
+> v3:
+>    - Collect reviews. [Vitaly]
+>    - Add BUILD_BUG_ON() to protect KVM_HV_MAX_SPARSE_VCPU_SET_BITS. [Vitaly]
+>    - Fix misc typos. [Vitaly]
+>    - Opportunistically rename "cnt" to "rep_cnt" in tracepoint. [Vitaly]
+>    - Drop var_cnt checks for debug hypercalls due to lack of documentation
+>      as to their expected behavior. [Vitaly]
+>    - Tweak the changelog regarding the TLFS spec issue to reference the
+>      bug filed by Vitaly.
+> 
+> v2: https://lore.kernel.org/all/20211030000800.3065132-1-seanjc@google.com/
+> 
+> Sean Christopherson (8):
+>    KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI
+>      req
+>    KVM: x86: Get the number of Hyper-V sparse banks from the VARHEAD
+>      field
+>    KVM: x86: Refactor kvm_hv_flush_tlb() to reduce indentation
+>    KVM: x86: Add a helper to get the sparse VP_SET for IPIs and TLB
+>      flushes
+>    KVM: x86: Don't bother reading sparse banks that end up being ignored
+>    KVM: x86: Shove vp_bitmap handling down into sparse_set_to_vcpu_mask()
+>    KVM: x86: Reject fixeds-size Hyper-V hypercalls with non-zero
+>      "var_cnt"
+>    KVM: x86: Add checks for reserved-to-zero Hyper-V hypercall fields
+> 
+>   arch/x86/kvm/hyperv.c             | 175 ++++++++++++++++++------------
+>   arch/x86/kvm/trace.h              |  14 ++-
+>   include/asm-generic/hyperv-tlfs.h |   7 ++
+>   3 files changed, 123 insertions(+), 73 deletions(-)
+> 
 
-Yeah, but you need to roll out your helper to all the callsites. But
-since you #ifdef out info->scrollmode we should catch them all I
-guess.
+Queued 2-8, thanks.
 
-> > Like I said in the cover letter I got mostly distracted with fbcon
-> > locking last week, not really with this one here at all, so maybe
-> > going with your 4 (or 2 if we squash them like I did here) patches is
-> > neater?
->
-> The benefit of my patch series was, that it could be easily backported first,
-> and then cleaned up afterwards. Even a small additional backport patch to disable
-> the fbcon acceleration for DRM in the old releases would be easy.
-> But I'm not insisting on backporting the patches, if we find good way forward.
->
-> So, either with the 4 (or 2) patches would be OK for me (or even your approach).
+Paolo
 
-The idea behind the squash was that it's then impossible to backport
-without the Kconfig, and so we'll only enable this code when people
-intentionally want it. Maybe I'm too paranoid?
-
-Anyway, you feel like finishing off your approach? Or should I send
-out v2 of this with the issues fixed you spotted? Like I said either
-is fine with me.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch

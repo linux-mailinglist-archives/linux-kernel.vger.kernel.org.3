@@ -2,246 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999E44A6BC2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397264A6BC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244698AbiBBGwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 01:52:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S244722AbiBBGwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 01:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244781AbiBBGwj (ORCPT
+        with ESMTP id S234589AbiBBGwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 01:52:39 -0500
+        Wed, 2 Feb 2022 01:52:37 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520DEC061759
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 22:12:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928A8C06175D;
+        Tue,  1 Feb 2022 22:18:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB002B83013
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:12:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C0AC340EC;
-        Wed,  2 Feb 2022 06:12:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2554AB820B3;
+        Wed,  2 Feb 2022 06:18:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469CBC004E1;
+        Wed,  2 Feb 2022 06:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643782325;
-        bh=6Z1LUyHDGqpVzlaGZNpCJgZiHw2AD96G0aoaSJiw7bs=;
+        s=k20201202; t=1643782710;
+        bh=fyAh/Tr2vBYttRq/UCJ3W5krrQh0GFSRmsyVq06/+GE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SOJgsm/hkyTLZh5unQDpcOq2QZaxgqLwywMfNdSyyZeQbY6bPzFn1DF7iA0xob2ZU
-         d5rJ0Vua6VoBalmLZ/sJJho7Pp02ft0s5N2SibV/SYLIvgFLtSWi/8TOphDplGDBei
-         vkeumGhpF+de9+87SB+/eQBMknJdXGt6K85exYa5EgyfpZoiQ2XEcGBP6GQZZ9hSXP
-         DbvJ6xN58DRKO9adAamfWignpgf2+37JN1otiTiABAdl3CMOyeKFs8TyvBzu8XDEax
-         Cj5sQRugkv0YtKA3Hd/rrnwZcNmKiZxxrsLffG3rQII5s+9dWOOQ19d1RjUTLnzKE+
-         SD32Vo7+2miEw==
-Date:   Wed, 2 Feb 2022 08:11:56 +0200
+        b=ss+pnyK4k44OeYCpVJ06NQqNBMvi2TOZjv3jly77ZFHvQ7ye5c4RvZ+8/1d3rLWPU
+         1x7reSL74jYawegH+02waosLcgTaYqBQEfTkL6Z3t4eVBlmzKukcJEPGENb0AmJEAK
+         iHc6KJ9gXQlvUEWk3PzYesdmUMcEKg+BAnW1P8bv2nFOwHK4v0tjP6BvjZnV8Xd2je
+         mvSxOkRksMS4NG7HS2NkAgy5rWZDgj6VQjERSUnKecTaumH9zQczBCeMsexit0CPo7
+         OCYetr9Iko+LAUJTMo5C/mHq6NPh+mCCAKd7EmqO0Q9A8fw5/9WLiP68SA4QuJFOiY
+         gW4gQp3irsFgA==
+Date:   Wed, 2 Feb 2022 08:18:21 +0200
 From:   Mike Rapoport <rppt@kernel.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 3/3] userfaultfd/selftests: enable huegtlb remap and
- remove event testing
-Message-ID: <YfogrMM7eiHSFhav@kernel.org>
-References: <20220202014034.182008-1-mike.kravetz@oracle.com>
- <20220202014034.182008-4-mike.kravetz@oracle.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: Merge pte_mkhuge() call into arch_make_huge_pte()
+Message-ID: <YfoiLdboxJAxKi6Y@kernel.org>
+References: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202014034.182008-4-mike.kravetz@oracle.com>
+In-Reply-To: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 05:40:34PM -0800, Mike Kravetz wrote:
-> Subject: [PATCH v2 3/3] userfaultfd/selftests: enable huegtlb remap and remove event testing
+On Wed, Feb 02, 2022 at 11:08:06AM +0530, Anshuman Khandual wrote:
+> Each call into pte_mkhuge() is invariably followed by arch_make_huge_pte().
+> Instead arch_make_huge_pte() can accommodate pte_mkhuge() at the beginning.
+> This updates generic fallback stub for arch_make_huge_pte() and available
+> platforms definitions. This makes huge pte creation much cleaner and easier
+> to follow.
 
-Nit:                                                  ^ hugetlb
-
-> With MADV_DONTNEED support added to hugetlb mappings, mremap testing
-> can also be enabled for hugetlb.
-> 
-> Modify the tests to use madvise MADV_DONTNEED and MADV_REMOVE instead of
-> fallocate hole puch for releasing hugetlb pages.
-> 
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+Won't it break architectures that don't define arch_make_huge_pte()?
+ 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  tools/testing/selftests/vm/run_vmtests.sh |  3 +-
->  tools/testing/selftests/vm/userfaultfd.c  | 69 ++++++++++++-----------
->  2 files changed, 36 insertions(+), 36 deletions(-)
+>  arch/arm64/mm/hugetlbpage.c                      | 1 +
+>  arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h | 1 +
+>  arch/sparc/mm/hugetlbpage.c                      | 1 +
+>  include/linux/hugetlb.h                          | 2 +-
+>  mm/hugetlb.c                                     | 3 +--
+>  mm/vmalloc.c                                     | 1 -
+>  6 files changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-> index ff901ee66838..7178d6fa8c92 100755
-> --- a/tools/testing/selftests/vm/run_vmtests.sh
-> +++ b/tools/testing/selftests/vm/run_vmtests.sh
-> @@ -207,14 +207,13 @@ echo "running userfaultfd_hugetlb"
->  echo "---------------------------"
->  # Test requires source and destination huge pages.  Size of source
->  # (half_ufd_size_MB) is passed as argument to test.
-> -./userfaultfd hugetlb $half_ufd_size_MB 32 $mnt/ufd_test_file
-> +./userfaultfd hugetlb $half_ufd_size_MB 32
->  if [ $? -ne 0 ]; then
->  	echo "[FAIL]"
->  	exitcode=1
->  else
->  	echo "[PASS]"
->  fi
-> -rm -f $mnt/ufd_test_file
->  
->  echo "-------------------------"
->  echo "running userfaultfd_shmem"
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index d2480ab93037..c18beebc0dd6 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -88,7 +88,6 @@ static bool test_uffdio_minor = false;
->  static bool map_shared;
->  static int shm_fd;
->  static int huge_fd;
-> -static char *huge_fd_off0;
->  static unsigned long long *count_verify;
->  static int uffd = -1;
->  static int uffd_flags, finished, *pipefd;
-> @@ -127,9 +126,9 @@ const char *examples =
->      "./userfaultfd anon 100 99999\n\n"
->      "# Run share memory test on 1GiB region with 99 bounces:\n"
->      "./userfaultfd shmem 1000 99\n\n"
-> -    "# Run hugetlb memory test on 256MiB region with 50 bounces (using /dev/hugepages/hugefile):\n"
-> -    "./userfaultfd hugetlb 256 50 /dev/hugepages/hugefile\n\n"
-> -    "# Run the same hugetlb test but using shmem:\n"
-> +    "# Run hugetlb memory test on 256MiB region with 50 bounces:\n"
-> +    "./userfaultfd hugetlb 256 50\n\n"
-> +    "# Run the same hugetlb test but using shared file:\n"
->      "./userfaultfd hugetlb_shared 256 50 /dev/hugepages/hugefile\n\n"
->      "# 10MiB-~6GiB 999 bounces anonymous test, "
->      "continue forever unless an error triggers\n"
-> @@ -226,10 +225,13 @@ static void noop_alias_mapping(__u64 *start, size_t len, unsigned long offset)
->  
->  static void hugetlb_release_pages(char *rel_area)
+> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+> index ffb9c229610a..228226c5fa80 100644
+> --- a/arch/arm64/mm/hugetlbpage.c
+> +++ b/arch/arm64/mm/hugetlbpage.c
+> @@ -347,6 +347,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
 >  {
-> -	if (fallocate(huge_fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-> -		      rel_area == huge_fd_off0 ? 0 : nr_pages * page_size,
-> -		      nr_pages * page_size))
-> -		err("fallocate() failed");
-> +	if (!map_shared) {
-> +		if (madvise(rel_area, nr_pages * page_size, MADV_DONTNEED))
-> +			err("madvise(MADV_DONTNEED) failed");
-> +	} else {
-> +		if (madvise(rel_area, nr_pages * page_size, MADV_REMOVE))
-> +			err("madvise(MADV_REMOVE) failed");
-> +	}
->  }
+>  	size_t pagesize = 1UL << shift;
 >  
->  static void hugetlb_allocate_area(void **alloc_area)
-> @@ -237,26 +239,37 @@ static void hugetlb_allocate_area(void **alloc_area)
->  	void *area_alias = NULL;
->  	char **alloc_area_alias;
->  
-> -	*alloc_area = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
-> -			   (map_shared ? MAP_SHARED : MAP_PRIVATE) |
-> -			   MAP_HUGETLB |
-> -			   (*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> -			   huge_fd, *alloc_area == area_src ? 0 :
-> -			   nr_pages * page_size);
-> +	if (!map_shared)
-> +		*alloc_area = mmap(NULL,
-> +			nr_pages * page_size,
-> +			PROT_READ | PROT_WRITE,
-> +			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB |
-> +				(*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> +			-1,
-> +			0);
-> +	else
-> +		*alloc_area = mmap(NULL,
-> +			nr_pages * page_size,
-> +			PROT_READ | PROT_WRITE,
-> +			MAP_SHARED |
-> +				(*alloc_area == area_src ? 0 : MAP_NORESERVE),
-> +			huge_fd,
-> +			*alloc_area == area_src ? 0 : nr_pages * page_size);
->  	if (*alloc_area == MAP_FAILED)
->  		err("mmap of hugetlbfs file failed");
->  
->  	if (map_shared) {
-> -		area_alias = mmap(NULL, nr_pages * page_size, PROT_READ | PROT_WRITE,
-> -				  MAP_SHARED | MAP_HUGETLB,
-> -				  huge_fd, *alloc_area == area_src ? 0 :
-> -				  nr_pages * page_size);
-> +		area_alias = mmap(NULL,
-> +			nr_pages * page_size,
-> +			PROT_READ | PROT_WRITE,
-> +			MAP_SHARED,
-> +			huge_fd,
-> +			*alloc_area == area_src ? 0 : nr_pages * page_size);
->  		if (area_alias == MAP_FAILED)
->  			err("mmap of hugetlb file alias failed");
->  	}
->  
->  	if (*alloc_area == area_src) {
-> -		huge_fd_off0 = *alloc_area;
->  		alloc_area_alias = &area_src_alias;
->  	} else {
->  		alloc_area_alias = &area_dst_alias;
-> @@ -269,12 +282,7 @@ static void hugetlb_alias_mapping(__u64 *start, size_t len, unsigned long offset
+> +	entry = pte_mkhuge(entry);
+>  	if (pagesize == CONT_PTE_SIZE) {
+>  		entry = pte_mkcont(entry);
+>  	} else if (pagesize == CONT_PMD_SIZE) {
+> diff --git a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+> index 64b6c608eca4..e41e095158c7 100644
+> --- a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+> +++ b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+> @@ -70,6 +70,7 @@ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags
 >  {
->  	if (!map_shared)
->  		return;
-> -	/*
-> -	 * We can't zap just the pagetable with hugetlbfs because
-> -	 * MADV_DONTEED won't work. So exercise -EEXIST on a alias
-> -	 * mapping where the pagetables are not established initially,
-> -	 * this way we'll exercise the -EEXEC at the fs level.
-> -	 */
-> +
->  	*start = (unsigned long) area_dst_alias + offset;
+>  	size_t size = 1UL << shift;
+>  
+> +	entry = pte_mkhuge(entry);
+>  	if (size == SZ_16K)
+>  		return __pte(pte_val(entry) & ~_PAGE_HUGE);
+>  	else
+> diff --git a/arch/sparc/mm/hugetlbpage.c b/arch/sparc/mm/hugetlbpage.c
+> index 0f49fada2093..d8e0e3c7038d 100644
+> --- a/arch/sparc/mm/hugetlbpage.c
+> +++ b/arch/sparc/mm/hugetlbpage.c
+> @@ -181,6 +181,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
+>  {
+>  	pte_t pte;
+>  
+> +	entry = pte_mkhuge(entry);
+>  	pte = hugepage_shift_to_tte(entry, shift);
+>  
+>  #ifdef CONFIG_SPARC64
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index d1897a69c540..52c462390aee 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -754,7 +754,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
+>  static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
+>  				       vm_flags_t flags)
+>  {
+> -	return entry;
+> +	return pte_mkhuge(entry);
 >  }
+>  #endif
 >  
-> @@ -427,7 +435,6 @@ static void uffd_test_ctx_clear(void)
->  		uffd = -1;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 61895cc01d09..5ca253c1b4e4 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4637,7 +4637,6 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
+>  					   vma->vm_page_prot));
 >  	}
+>  	entry = pte_mkyoung(entry);
+> -	entry = pte_mkhuge(entry);
+>  	entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
 >  
-> -	huge_fd_off0 = NULL;
->  	munmap_area((void **)&area_src);
->  	munmap_area((void **)&area_src_alias);
->  	munmap_area((void **)&area_dst);
-> @@ -925,10 +932,7 @@ static int faulting_process(int signal_test)
->  	struct sigaction act;
->  	unsigned long signalled = 0;
+>  	return entry;
+> @@ -6172,7 +6171,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+>  			unsigned int shift = huge_page_shift(hstate_vma(vma));
 >  
-> -	if (test_type != TEST_HUGETLB)
-> -		split_nr_pages = (nr_pages + 1) / 2;
-> -	else
-> -		split_nr_pages = nr_pages;
-> +	split_nr_pages = (nr_pages + 1) / 2;
+>  			old_pte = huge_ptep_modify_prot_start(vma, address, ptep);
+> -			pte = pte_mkhuge(huge_pte_modify(old_pte, newprot));
+> +			pte = huge_pte_modify(old_pte, newprot);
+>  			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
+>  			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
+>  			pages++;
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 4165304d3547..d0b14dd73adc 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -118,7 +118,6 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+>  		if (size != PAGE_SIZE) {
+>  			pte_t entry = pfn_pte(pfn, prot);
 >  
->  	if (signal_test) {
->  		sigbuf = &jbuf;
-> @@ -985,9 +989,6 @@ static int faulting_process(int signal_test)
->  	if (signal_test)
->  		return signalled != split_nr_pages;
->  
-> -	if (test_type == TEST_HUGETLB)
-> -		return 0;
-> -
->  	area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
->  			  MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
->  	if (area_dst == MAP_FAILED)
-> @@ -1670,7 +1671,7 @@ int main(int argc, char **argv)
->  	}
->  	nr_pages = nr_pages_per_cpu * nr_cpus;
->  
-> -	if (test_type == TEST_HUGETLB) {
-> +	if (test_type == TEST_HUGETLB && map_shared) {
->  		if (argc < 5)
->  			usage();
->  		huge_fd = open(argv[4], O_CREAT | O_RDWR, 0755);
+> -			entry = pte_mkhuge(entry);
+>  			entry = arch_make_huge_pte(entry, ilog2(size), 0);
+>  			set_huge_pte_at(&init_mm, addr, pte, entry);
+>  			pfn += PFN_DOWN(size);
 > -- 
-> 2.34.1
+> 2.25.1
 > 
 > 
 

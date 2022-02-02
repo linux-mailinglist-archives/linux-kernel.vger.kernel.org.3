@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3A04A6A93
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44A64A6A96
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244040AbiBBDkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 22:40:36 -0500
-Received: from mga02.intel.com ([134.134.136.20]:20128 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243770AbiBBDke (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 22:40:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643773234; x=1675309234;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/AOZiYMRcQHDplSb2i423RjeeSpU2AuNH0+XF/KNnbQ=;
-  b=nA78botkCblLR54ZXniXTX8Z9/ORUIaDL8jPD8Jtyhsyt0bBDMcEFtQS
-   DTWtNxMKzPtGLDZCjw6OO7aBY9SpjfDRkRvlYQDgwnIAcoiIMtdewtj8Q
-   N8Tv1ulGY+BGED9BBLrdwz140I68WnLUMLlAiO2c+vtjj396BRMNW9ykz
-   fSYyXkt9De3Lzr77CqwtPuR+zZBdKCy3BNWjGQN3crXLuUltidF+g7VP4
-   g2b+DZGZPUVlilzWa12qasJKz5Uo4oWcyK20H4LdDWrUIr6xecafu+Kfz
-   SNUCowBFxinRIbZXDHG2pHJrTiJCTksFcuIO4DsuCBh9EZnh8jJ3itLy5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235240177"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="235240177"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 19:40:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="534734360"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2022 19:40:31 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nF6VT-000U66-AQ; Wed, 02 Feb 2022 03:40:31 +0000
-Date:   Wed, 2 Feb 2022 11:39:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
-Subject: [ebiggers:crypto-pending 11/11] arch/arm64/crypto/aes-glue.c:479:20:
- error: use of undeclared identifier 'STRIDE'
-Message-ID: <202202021149.MKVbgnkg-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S244062AbiBBDko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 22:40:44 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:46048 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243770AbiBBDkm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 22:40:42 -0500
+Received: by mail-oi1-f169.google.com with SMTP id m9so37350911oia.12;
+        Tue, 01 Feb 2022 19:40:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=6M/HoWEUP68v359RfQJWkPc7thFvVcT0dU0JkzkDdHE=;
+        b=mGA8ZiiUCt/DzKQl6X8vJbpeFALKKYrrdUjwUyNdgfWVMb6FvobDiFLrQzoK9LshP0
+         R7WYyQZlv0QYF8DJylxEKKf20TkJJYd3zXQYYVFnF0qMxotdnbu5QWyjnoweDPnfeWGM
+         KhGiVBcb9gSlKhfD5nsiHL2m1eaV7E7X8Yhm6n09kU5QiyAs0pq6IIhItMcYlxsKkNWf
+         PO4yeC/HkcD/D3gx4B7CXVoyoLiJRIpB+uVPGtmYlJZgPn8fRCdzFhG/SWZLstiGP0QA
+         KPwa1+jwmDByDRQulSbpCSJ5znOUCGXpQWcVnFV/eUq5OZNhqtm2rT6ATRVvF+9C+JHQ
+         stgg==
+X-Gm-Message-State: AOAM53075SsIn76jMO2WlNfu1T4MSgDu5JhRO5ALd7CkvDIobfEH6uln
+        gx2cWVqQKKcpldtm4j/xNw==
+X-Google-Smtp-Source: ABdhPJxZJ5hzAwugv6TPI/S5uWds3EorF/S9+nvGDzjtLgkzhIj2pDzP4wI2Mlw8TmD8orNaV5ZusQ==
+X-Received: by 2002:a05:6808:14c1:: with SMTP id f1mr3424374oiw.129.1643773242362;
+        Tue, 01 Feb 2022 19:40:42 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l19sm10925400ooa.7.2022.02.01.19.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 19:40:41 -0800 (PST)
+Received: (nullmailer pid 1397926 invoked by uid 1000);
+        Wed, 02 Feb 2022 03:40:40 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Cristian Pop <cristian.pop@analog.com>
+Cc:     devicetree@vger.kernel.org, jic23@kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        robh+dt@kernel.org
+In-Reply-To: <20220201162351.53520-1-cristian.pop@analog.com>
+References: <20220201162351.53520-1-cristian.pop@analog.com>
+Subject: Re: [PATCH v2 1/2] dt:bindings:iio:frequency: Add ADMV4420 doc
+Date:   Tue, 01 Feb 2022 21:40:40 -0600
+Message-Id: <1643773240.843870.1397925.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
-head:   33ee40d3677bee91888ba1a6ee5a37bd6d2292fe
-commit: 33ee40d3677bee91888ba1a6ee5a37bd6d2292fe [11/11] crypto: arm64/aes-neon-ctr - improve handling of single tail block
-config: arm64-buildonly-randconfig-r004-20220130 (https://download.01.org/0day-ci/archive/20220202/202202021149.MKVbgnkg-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=33ee40d3677bee91888ba1a6ee5a37bd6d2292fe
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers crypto-pending
-        git checkout 33ee40d3677bee91888ba1a6ee5a37bd6d2292fe
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+On Tue, 01 Feb 2022 18:23:50 +0200, Cristian Pop wrote:
+> Add device tree bindings for the ADMV4420 K band downconverter.
+> 
+> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
+> ---
+> changes in v2:
+>  - Fix indentation
+>  - Remove '|', there is no formatting to persevere
+>  - Add plank line before 'properties:'
+>  - replace '_' with '-' in property names
+>  .../bindings/iio/frequency/adi,admv4420.yaml  | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-All errors (new ones prefixed by >>):
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml:13:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
 
->> arch/arm64/crypto/aes-glue.c:479:20: error: use of undeclared identifier 'STRIDE'
-                   tail = nbytes % (STRIDE * AES_BLOCK_SIZE);
-                                    ^
-   1 error generated.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.example.dt.yaml: admv4420@0: adi,lo-freq-hz: 'anyOf' conditional failed, one must be fixed:
+	16743700000 is greater than the maximum of 4294967295
+	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/property-units.yaml
 
+doc reference errors (make refcheckdocs):
 
-vim +/STRIDE +479 arch/arm64/crypto/aes-glue.c
+See https://patchwork.ozlabs.org/patch/1587310
 
-735177ca148af5 Ard Biesheuvel     2019-08-19  451  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  452  static int __maybe_unused xctr_encrypt(struct skcipher_request *req)
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  453  {
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  454  	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  455  	struct crypto_aes_ctx *ctx = crypto_skcipher_ctx(tfm);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  456  	int err, rounds = 6 + ctx->key_length / 4;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  457  	struct skcipher_walk walk;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  458  	unsigned int byte_ctr = 0;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  459  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  460  	err = skcipher_walk_virt(&walk, req, false);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  461  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  462  	while (walk.nbytes > 0) {
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  463  		const u8 *src = walk.src.virt.addr;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  464  		unsigned int nbytes = walk.nbytes;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  465  		u8 *dst = walk.dst.virt.addr;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  466  		u8 buf[AES_BLOCK_SIZE];
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  467  		unsigned int tail;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  468  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  469  		if (unlikely(nbytes < AES_BLOCK_SIZE))
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  470  			src = memcpy(buf, src, nbytes);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  471  		else if (nbytes < walk.total)
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  472  			nbytes &= ~(AES_BLOCK_SIZE - 1);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  473  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  474  		kernel_neon_begin();
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  475  		aes_xctr_encrypt(dst, src, ctx->key_enc, rounds, nbytes,
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  476  						 walk.iv, buf, byte_ctr);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  477  		kernel_neon_end();
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  478  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24 @479  		tail = nbytes % (STRIDE * AES_BLOCK_SIZE);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  480  		if (tail > 0 && tail < AES_BLOCK_SIZE)
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  481  			/*
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  482  			 * The final partial block could not be returned using
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  483  			 * an overlapping store, so it was passed via buf[]
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  484  			 * instead.
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  485  			 */
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  486  			memcpy(dst + nbytes - tail, buf, tail);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  487  		byte_ctr += nbytes;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  488  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  489  		err = skcipher_walk_done(&walk, walk.nbytes - nbytes);
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  490  	}
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  491  
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  492  	return err;
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  493  }
-9d5a9509b91221 Nathan Huckleberry 2022-01-24  494  
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-:::::: The code at line 479 was first introduced by commit
-:::::: 9d5a9509b912217aa41fd8ca8c5d3c125ecc3ca2 crypto: arm64/aes-xctr: Add accelerated implementation of XCTR
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-:::::: TO: Nathan Huckleberry <nhuck@google.com>
-:::::: CC: Eric Biggers <ebiggers@google.com>
+pip3 install dtschema --upgrade
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Please check and re-submit.
+

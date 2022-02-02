@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809AD4A77AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3FE4A77BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346551AbiBBSQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:16:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44206 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237657AbiBBSQm (ORCPT
+        id S1346412AbiBBSST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:18:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33023 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233501AbiBBSSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:16:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Feb 2022 13:18:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643825897;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KZ6cXjJk9Pdh7+gNJjwwBF/cTV5ERwqcH25JkZ6mTHU=;
+        b=Flu1gXIAPj63iiBbVMFaEj1IpH0qeey/KhoAGtZmZBo8oPsDbjE5pAxt0CIvttuTUK5QP4
+        dqsyEL7/KpbRT/45YD3Gi03mHv4Uo5vkJ3KlVBK1lDmDa0CPjPDFo2AlofTUGvHD2Ao5up
+        wuVNpEAPwY7Ft8rBtZKmGnAP+OPonH8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-bSOKndtiMlG64t8tVpQHQw-1; Wed, 02 Feb 2022 13:18:15 -0500
+X-MC-Unique: bSOKndtiMlG64t8tVpQHQw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFA5F618BC;
-        Wed,  2 Feb 2022 18:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A0AC340EC;
-        Wed,  2 Feb 2022 18:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643825801;
-        bh=fh9fVTskiyEHoa27YSivtOQn6L49xcyj1O7qRCi8oYQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Xo4M7HFJhcA0wZ9F1A5+6kJ/pj0KuWIWeKkIeAYemG355yz5p4+EHeasL2WyB0mTX
-         fcSLSOhvtkCZve191LpledYeTBDXQRYwOLlu94wQ4VIhgjc/KxB89fuUuce5dy+37u
-         PieGvTcFLsm1gdaggflYBB8As+WDNBUvaU9KXXHJ5bApDqrwQ2eg+NeArb69mknP6r
-         mtUmow+0M6gAUaoHH3X/BA10MHNuuPKbq8GOI+44VlOZtQzEZ2DtQi9iCY7qV3Q+BB
-         Rosakpihod8RINV+IXpyepxot8Arrv8Rf+yow2MOBBxPRDwkNQbkmghuCCRrBi4Vv5
-         Y7FGzZWwsXCiA==
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-spi@vger.kernel.org,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-In-Reply-To: <2231987.ElGaqSPkdT@kreacher>
-References: <2231987.ElGaqSPkdT@kreacher>
-Subject: Re: [PATCH] spi: Replace acpi_bus_get_device()
-Message-Id: <164382580003.3628373.14125155104405192519.b4-ty@kernel.org>
-Date:   Wed, 02 Feb 2022 18:16:40 +0000
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A3DAE343CA;
+        Wed,  2 Feb 2022 18:18:14 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4736877466;
+        Wed,  2 Feb 2022 18:18:14 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Subject: [PATCH 0/5] kvm: x86: better handling of NULL-able kvm_x86_ops
+Date:   Wed,  2 Feb 2022 13:18:08 -0500
+Message-Id: <20220202181813.1103496-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Feb 2022 21:05:59 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> [...]
+This series is really two changes:
 
-Applied to
+- patch 1 to 4 clean up NULLable kvm_x86_ops so that they are marked
+  in kvm-x86-ops.h and the non-NULLable ones WARN if used incorrectly.
+  As an additional outcome of the review, a few more uses of
+  static_call_cond are introduced.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+- patch 5 allows to NULL a few kvm_x86_ops that return a value, by
+  using __static_call_ret0.
 
-Thanks!
+Paolo Bonzini (5):
+  KVM: x86: use static_call_cond for optional callbacks
+  KVM: x86: mark NULL-able kvm_x86_ops
+  KVM: x86: warn on incorrectly NULL static calls
+  KVM: x86: change hwapic_{irr,isr}_update to NULLable calls
+  KVM: x86: allow defining return-0 static calls
 
-[1/1] spi: Replace acpi_bus_get_device()
-      commit: 7030c428fae100c339436f5cb6f9e7c0574097ad
+ arch/x86/include/asm/kvm-x86-ops.h | 45 +++++++++++++++---------------
+ arch/x86/include/asm/kvm_host.h    |  9 ++++--
+ arch/x86/kvm/lapic.c               | 22 ++++++---------
+ arch/x86/kvm/svm/avic.c            | 13 ---------
+ arch/x86/kvm/svm/svm.c             | 28 -------------------
+ arch/x86/kvm/x86.c                 | 10 ++-----
+ 6 files changed, 41 insertions(+), 86 deletions(-)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+2.31.1
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

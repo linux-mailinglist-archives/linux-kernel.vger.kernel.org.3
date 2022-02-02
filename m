@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CC74A7521
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997034A7536
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345611AbiBBQAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbiBBQAL (ORCPT
+        id S1345626AbiBBQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:01:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45124 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232735AbiBBQBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:00:11 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DA4C061714;
-        Wed,  2 Feb 2022 08:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HjIuj8tK/i3bU/jTctNAzn1hnRcxPQQLduo2krywtkU=; b=EH3rg7kdaPqsCQ5aP0CO20CfG5
-        Nr+UWWGO7Y6S66ksZxEMOoGILOR1bK+G9d42uuu6ambVde60Hc7LD81TgLh2TObm2TVCRfUkG7ihu
-        YXdwsmMZ5CDcWrkl3HdRzDoHqm5JK0pmNBJz+NdYnExIGn3Jd4U3louPhjPJ6NhC4bZc6ZFgOnC1P
-        U8F/sqnpOAZ0jum9Po/llG943XMqWBeUDicmOiKZn64jsReQh71GwLPdSJqHFTsK/Kbnhr2bI2MrL
-        /lLlAFOowI7vH218ri6Bsr7CpotdaR6QA5afJF6O/fHegYBvp6wFJ/Dcu9rfrlOO9na7n3Ilb54oL
-        cHC6hYSw==;
-Received: from [2a01:799:95e:a400:cca0:57ac:c55d:a485] (port=60100)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1nFI3E-0000np-3N; Wed, 02 Feb 2022 17:00:08 +0100
-Message-ID: <7eb83dae-7dd9-1ffc-93ce-b47429ec510b@tronnes.org>
-Date:   Wed, 2 Feb 2022 17:00:05 +0100
+        Wed, 2 Feb 2022 11:01:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 257C6B831A5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 16:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D5CC004E1;
+        Wed,  2 Feb 2022 16:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643817671;
+        bh=xY/tyDM9TE7fNi/TXqAUlya0knvSWbYnTKhzfBHBIVI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sNITSCmtm/ADY+hgozLM2hXfWFkZcoF7SgqxxI4HVjNlHu5DwB2y+FAd0P2qA18qA
+         a1B0LuHWgucoSpbWrMgmRXsP7bZZV5ABgFiQDW38s36AGMABdxLKF6nBCE8yad1WpN
+         mV5Q635B/rx1kdbKdK+Adi/nOaKOCJ0wnqwIZ9ycrAmt9g/0gBsmq/10CnIdNDkHyz
+         uApS+di1tbca//X8kns8p016xWr7vR8Kuu3zm3VWeF0g1fPAzN0fodo0EmMWysLX5s
+         qGIWj13Lihu1KPy6d0hb7l061mC9sQB+RVQMByYBnEZetczZ5XGQvsPk60sW0xarFi
+         Iavw5uQV6Qo2A==
+Date:   Wed, 2 Feb 2022 09:01:07 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] include: drop pointless __compiler_offsetof indirection
+Message-ID: <YfqqwxKCP+qJCyYg@dev-arch.archlinux-ax161>
+References: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
- <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
- <c6100ec3-b511-17cf-c542-e124c14fb334@tronnes.org>
- <20220202170455.3eece5a3@eldfell>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220202170455.3eece5a3@eldfell>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 02, 2022 at 11:21:47AM +0100, Rasmus Villemoes wrote:
+> (1) compiler_types.h is unconditionally included via an -include
+> flag (see scripts/Makefile.lib), and it defines __compiler_offsetof
+> unconditionally. So testing for definedness of __compiler_offsetof is
+> mostly pointless.
+> 
+> (2) Every relevant compiler provides __builtin_offsetof (even sparse
+> has had that for 14 years), and if for whatever reason one would end
+> up picking up the poor man's fallback definition (C file compiler with
+> completely custom CFLAGS?), newer clang versions won't treat the
+> result as an Integer Constant Expression, so if used in place where
+> such is required (static initializer or static_assert), one would
+> get errors like
+> 
+> t.c:11:16: error: static_assert expression is not an integral constant expression
+> t.c:11:16: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression
+> t.c:4:33: note: expanded from macro 'offsetof'
+> #define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
+> 
+> So just define offsetof unconditionally and directly in terms of
+> __builtin_offsetof.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Den 02.02.2022 16.04, skrev Pekka Paalanen:
-> On Wed, 2 Feb 2022 10:45:42 +0100
-> Noralf Trønnes <noralf@tronnes.org> wrote:
+> ---
+>  include/linux/compiler_types.h | 2 --
+>  include/linux/stddef.h         | 6 +-----
+>  2 files changed, 1 insertion(+), 7 deletions(-)
 > 
->> Den 02.02.2022 10.14, skrev Thomas Zimmermann:
->>> Hi Noralf,
->>>
->>> since you're here, I'll just hijack the discussion to ask something only
->>> semi-related.
->>>
->>> IIRC the gud driver doesn't update the display immediately during atomic
->>> commits. Instead, it instructs a helper thread to do the update. What's
->>> the rational behind this design? Is that something we should adopt for
->>> other drivers that operate over slow buses (USB, I2C, etc)? Would this
->>> be relevant for the ssd1307 driver?
->>>   
->>
->> Async flushing is only necessary on multi display setups where there's
->> only one rendering loop for all the displays. I saw what tiny/gm12u320.c
->> did and Hans gave me the rationale. The SPI drivers run flushing inline.
->> Info on the gud wiki:
->> https://github.com/notro/gud/wiki/Linux-Host-Driver#asynchronous-flushing
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 3c1795fdb568..83ee7f7ada5d 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -137,8 +137,6 @@ struct ftrace_likely_data {
+>   */
+>  #define __naked			__attribute__((__naked__)) notrace
+>  
+> -#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
+> -
+>  /*
+>   * Prefer gnu_inline, so that extern inline functions do not emit an
+>   * externally visible function. This makes extern inline behave as per gnu89
+> diff --git a/include/linux/stddef.h b/include/linux/stddef.h
+> index ca507bd5f808..929d67710cc5 100644
+> --- a/include/linux/stddef.h
+> +++ b/include/linux/stddef.h
+> @@ -13,11 +13,7 @@ enum {
+>  };
+>  
+>  #undef offsetof
+> -#ifdef __compiler_offsetof
+> -#define offsetof(TYPE, MEMBER)	__compiler_offsetof(TYPE, MEMBER)
+> -#else
+> -#define offsetof(TYPE, MEMBER)	((size_t)&((TYPE *)0)->MEMBER)
+> -#endif
+> +#define offsetof(TYPE, MEMBER)	__builtin_offsetof(TYPE, MEMBER)
+>  
+>  /**
+>   * sizeof_field() - Report the size of a struct field in bytes
+> -- 
+> 2.31.1
 > 
-> Hi,
-> 
-> please also consider that userspace may throttle to the KMS pageflip
-> events. If the pageflip event is immediate from submitting a flip, that
-> could mean userspace will be repainting in a busy-loop, like 1 kHz.
-> However, I remember something about virtual KMS drivers doing exactly
-> this, and there being something that tells userspace to throttle itself
-> instead of depending on pageflip completions. I just forget how that is
-> supposed to work, and I'm fairly sure that e.g. Weston does not behave
-> well there.
-> 
-> Unfortunately, the pageflip event is also what synchronises FB usage.
-> Once flipping in a new FB completed, the old FB is free for re-use.
-> But, if the kernel is still copying out from the old FB, userspace may
-> partially overwrite the contents, temporarily leading to an incomplete
-> or too new image on screen. Do you have anything to prevent that?
-> 
-
-Unfortunately not. One solution would be to make a buffer copy during
-the flip and do the USB transfer async but I haven't looked into that.
-My plan is to wait and see what problems users report back before trying
-to fix anything.
-
-Noralf.

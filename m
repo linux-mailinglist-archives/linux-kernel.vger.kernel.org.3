@@ -2,107 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580804A6EBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182E04A6EBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiBBKb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:31:27 -0500
-Received: from cable.insite.cz ([84.242.75.189]:54289 "EHLO cable.insite.cz"
+        id S1343531AbiBBKcY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 05:32:24 -0500
+Received: from aposti.net ([89.234.176.197]:46030 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232194AbiBBKb0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:31:26 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 7CDEBA1A3D402;
-        Wed,  2 Feb 2022 11:31:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1643797884; bh=m57sKCZLcTtk6SauTtGjeo9rjfaMH2ssP+2/C7sdvVY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qCtgBYxPM8ft2kwxbuXXs+31U2UGhoKWaWYydzgmpFH+SMepg5UEFtCYj5uBu1bPd
-         IzgZMSQByfDngmXufo6qFC6PCE7vrqJUDyv90k2GO5tIAnqwcw1Yrh5SVM1SAM694i
-         j+kdK/mjQYP06OqEwrEMBalPkLLsG9wPyZ3J8Ic4=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id i4YarFuNZVz5; Wed,  2 Feb 2022 11:31:19 +0100 (CET)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 21A85A1A3D400;
-        Wed,  2 Feb 2022 11:31:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1643797879; bh=m57sKCZLcTtk6SauTtGjeo9rjfaMH2ssP+2/C7sdvVY=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Pps74gPCpVJFjZa9EDBad20Vh2yQVkBR8cWqPq7ylJNulWdZjBMGzEYlfmJZT/uZX
-         gY4T9LWlOcRoMhdQonfnCMNDC91nd6JovUUG5X2FSH9b46PMo1l3FHbspW69l7sPtW
-         NwdygXmivZg54lxKE5qTGJHvh77UITxSfRv80CM0=
-Subject: Re: [PATCH][next] usb: gadget: f_uac2: Fix spelling mistake
- "maxpctksize" -> "maxpcktsize"
-To:     Joe Perches <joe@perches.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220202091933.580713-1-colin.i.king@gmail.com>
- <358563808e6cad1b003e4c5488cf65ff1267f1d8.camel@perches.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <efcb90c2-cfbb-3264-bd6d-bca33b03fa48@ivitera.com>
-Date:   Wed, 2 Feb 2022 11:31:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232194AbiBBKcV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:32:21 -0500
+Date:   Wed, 02 Feb 2022 10:32:01 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v12 7/9] drm/bridge: display-connector: add ddc-en gpio
+ support
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Message-Id: <DLAO6R.7AAJRIJFJSDD3@crapouillou.net>
+In-Reply-To: <77a7a1daaf381e1651be38adb62f9af9dd6c8fc5.1643632014.git.hns@goldelico.com>
+References: <cover.1643632014.git.hns@goldelico.com>
+        <77a7a1daaf381e1651be38adb62f9af9dd6c8fc5.1643632014.git.hns@goldelico.com>
 MIME-Version: 1.0
-In-Reply-To: <358563808e6cad1b003e4c5488cf65ff1267f1d8.camel@perches.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nikolaus,
 
-
-Dne 02. 02. 22 v 10:57 Joe Perches napsal(a):
-> On Wed, 2022-02-02 at 09:19 +0000, Colin Ian King wrote:
->> There is a spelling mistake in a deb_dbg message. Fix it.
-> []
->> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> []
->> @@ -755,7 +755,7 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
->>   
->>   	if (max_size_bw <= max_size_ep)
->>   		dev_dbg(dev,
->> -			"%s %s: Would use maxpctksize %d and bInterval %d\n",
->> +			"%s %s: Would use maxpcktsize %d and bInterval %d\n",
+Le lun., janv. 31 2022 at 13:26:53 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> "hdmi-connector.yaml" bindings defines an optional property
+> "ddc-en-gpios" for a single gpio to enable DDC operation.
 > 
-> why not just spell it out? or use wMaxPacketSize from the uapi include?
-
-My reason for the ugly abbreviation (prone to misspelling for which I 
-apologize) was to keep the line length limit. I would be happy to see 
-wMaxPacketSize instead :-)
-
-Pavel.
-
+> Usually this controls +5V power on the HDMI connector.
+> This +5V may also be needed for HPD.
+> 
+> This was not reflected in code.
+> 
+> Now, the driver activates the ddc gpio after probe and
+> deactivates after remove so it is "almost on".
+> 
+> But only if this driver is loaded (and not e.g. blacklisted
+> as module).
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->   drivers/usb/gadget/function/f_uac2.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/gpu/drm/bridge/display-connector.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index f2237bcdba7c0..13b59128121a2 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -755,12 +755,12 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
->   
->   	if (max_size_bw <= max_size_ep)
->   		dev_dbg(dev,
-> -			"%s %s: Would use maxpctksize %d and bInterval %d\n",
-> +			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
->   			speed_names[speed], dir, max_size_bw, bint);
->   	else {
->   		dev_warn(dev,
-> -			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
-> -			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
-> +			 "%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
-> +			 speed_names[speed], dir, max_size_bw, bint, max_size_ep);
->   		max_size_bw = max_size_ep;
->   	}
->   
+> diff --git a/drivers/gpu/drm/bridge/display-connector.c 
+> b/drivers/gpu/drm/bridge/display-connector.c
+> index d24f5b90feabf..555395e301096 100644
+> --- a/drivers/gpu/drm/bridge/display-connector.c
+> +++ b/drivers/gpu/drm/bridge/display-connector.c
+> @@ -24,6 +24,7 @@ struct display_connector {
+>  	int			hpd_irq;
 > 
+>  	struct regulator	*dp_pwr;
+> +	struct gpio_desc	*ddc_en;
+>  };
 > 
+>  static inline struct display_connector *
+> @@ -345,6 +346,19 @@ static int display_connector_probe(struct 
+> platform_device *pdev)
+>  		}
+>  	}
+> 
+> +	/* enable DDC */
+> +	if (type == DRM_MODE_CONNECTOR_HDMIA) {
+> +		conn->ddc_en = devm_gpiod_get_optional(&pdev->dev, "ddc-en",
+> +						       GPIOD_OUT_HIGH);
+> +
+> +		if (IS_ERR(conn->ddc_en)) {
+> +			dev_err(&pdev->dev, "Couldn't get ddc-en gpio\n");
+> +			return PTR_ERR(conn->ddc_en);
+> +		}
+> +
+> +		gpiod_set_value(conn->ddc_en, 1);
+
+You already requested the gpio with the GPIOD_OUT_HIGH flag, so this 
+can be removed.
+
+
+> +	}
+> +
+>  	conn->bridge.funcs = &display_connector_bridge_funcs;
+>  	conn->bridge.of_node = pdev->dev.of_node;
+> 
+> @@ -373,6 +387,9 @@ static int display_connector_remove(struct 
+> platform_device *pdev)
+>  {
+>  	struct display_connector *conn = platform_get_drvdata(pdev);
+> 
+> +	if (conn->ddc_en)
+> +		gpiod_set_value(conn->ddc_en, 0);
+
+Note that gpiod_set_value() already does the null-check internally. I 
+actually do prefer your solution, so this is fine with me, but 
+maintainers may have a different opinion.
+
+Cheers,
+-Paul
+
+> +
+>  	if (conn->dp_pwr)
+>  		regulator_disable(conn->dp_pwr);
+> 
+> --
+> 2.33.0
+> 
+
+

@@ -2,160 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED244A7545
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CC34A7548
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345642AbiBBQCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:02:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:39676 "EHLO foss.arm.com"
+        id S1345652AbiBBQCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:02:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:39692 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232626AbiBBQCj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:02:39 -0500
+        id S1343957AbiBBQCm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:02:42 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E7FA11D4;
-        Wed,  2 Feb 2022 08:02:39 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69ED611FB;
+        Wed,  2 Feb 2022 08:02:42 -0800 (PST)
 Received: from e121896.Emea.Arm.com (e121896.Emea.Arm.com [10.32.36.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A6E5C3F73B;
-        Wed,  2 Feb 2022 08:02:36 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5A6C53F73B;
+        Wed,  2 Feb 2022 08:02:40 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     mathieu.poirier@linaro.org, coresight@lists.linaro.org
 Cc:     suzuki.poulose@arm.com, leo.yan@linaro.com, mike.leach@linaro.org,
         James Clark <james.clark@arm.com>,
         Leo Yan <leo.yan@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 00/15] Make ETM register accesses consistent with sysreg.h
-Date:   Wed,  2 Feb 2022 16:02:10 +0000
-Message-Id: <20220202160226.37858-1-james.clark@arm.com>
+Subject: [PATCH 01/15] coresight: Make ETM4x TRCIDR0 register accesses consistent with sysreg.h
+Date:   Wed,  2 Feb 2022 16:02:11 +0000
+Message-Id: <20220202160226.37858-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20220202160226.37858-1-james.clark@arm.com>
+References: <20220202160226.37858-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While working on the branch broadcast change I found it difficult to search
-for usages of registers and fields because of the magic numbers. I also
-found it difficult to decide which style to make new code in because of the
-varying ones used.
+This is a no-op change for style and consistency and has no effect on the
+binary produced by gcc-11.
 
-There was also a code review comment from Suzuki about replacing a magic
-number so I'm proposing to refactor as many as possible into the style used
-in sysreg.h which seems to be the new and most consistently used method.
-For example it was used in the SPE and TRBE drivers.
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ .../coresight/coresight-etm4x-core.c          | 37 +++++--------------
+ drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
+ drivers/hwtracing/coresight/coresight-priv.h  |  1 +
+ 3 files changed, 27 insertions(+), 28 deletions(-)
 
-This isn't an exhaustive refactor, but it does get all the basic accesses.
-There are a couple of odd other cases remaining, mainly in the ETM3x code.
-These can be found by searching for BMVAL.
-
-There is one compromise to ensure this is a complete no-op and has
-binary equivalence with the old version. I needed to keep two register
-accesses here, where something like etmidr0 & TRCIDR0_INSTP0_LOAD_STORE
-would be better:
-
-  -	if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
-  -		drvdata->instrp0 = true;
-  -	else
-  -		drvdata->instrp0 = false;
-  -
-  +	drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
-  +			      (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
-
-I think this change fixes quite a few issues like:
-
- * Some registers aren't referred to by name but a different variable name.
-   For example eventctrl1 in mode_store() where TRCEVENTCTL1R isn't
-   mentioned in that function.
-
- * Some bits aren't referred to by the name in the manual, even in the
-   comments. For example TRCCONFIGR.RS only occurs as /* bit[12], Return
-   stack enable bit */.
-
- * Some bits in the same register are referred to either as magic numbers
-   or the publicly exported config macros, neiher of which are consistent
-   with any other register accesses. For example
-
-   config->cfg |= BIT(11);
-   config->cfg |= BIT(ETM4_CFG_BIT_CTXTID);
-   
- * Some fields are already partially referred to in the sysfs.h style way:
-   TRCVICTLR_EXLEVEL_... etc. But other fields in the same register are not
-   
- * Some fields are magic numbers that are repeated many times in different
-   functions. For example vinst_ctrl |= BIT(9)
-
- * Some fields were referred to by magic numbers, even when there were
-   already existing #defines. For example ETMTECR1_INC_EXC
-
- * Another benefit is that the #defines could be automatically checked
-   against the reference manual because the style is uniform.
-
-Testing
-=======
-
-To test this I used gcc-11 which doesn't have a quirk about changing
-register widths in some cases (as in w -> x). I also used elf_diff which
-showed me exactly where I'd made a mistake when I did
-(https://github.com/noseglasses/elf_diff). But now that there is no
-difference, objdump and diff also work for validation.
-
-  make CC=gcc-11 modules
-  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm4x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko)
-  diff <(objdump -d drivers/hwtracing/coresight/coresight.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight.ko)
-
-And for ETM3x (doesn't need gcc 11):
-
-  make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  modules
-  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm3x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm3x.ko)
-
-When there are no differences, the diff output looks like this with only
-the filename listed:
-
-  < drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
-  ---
-  > ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
-
-Applies to coresight/next 30d1f1c71b
-
-James Clark (15):
-  coresight: Make ETM4x TRCIDR0 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCIDR2 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCIDR3 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCIDR4 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCIDR5 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCCONFIGR register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCEVENTCTL1R register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCSTALLCTLR register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCVICTLR register accesses consistent with
-    sysreg.h
-  coresight: Make ETM3x ETMTECR1 register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCACATRn register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCSSCCRn and TRCSSCSRn register accesses
-    consistent with sysreg.h
-  coresight: Make ETM4x TRCSSPCICRn register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCBBCTLR register accesses consistent with
-    sysreg.h
-  coresight: Make ETM4x TRCRSCTLRn register accesses consistent with
-    sysreg.h
-
- .../coresight/coresight-etm3x-core.c          |   2 +-
- .../coresight/coresight-etm3x-sysfs.c         |   2 +-
- .../coresight/coresight-etm4x-core.c          | 135 +++++--------
- .../coresight/coresight-etm4x-sysfs.c         | 178 +++++++++---------
- drivers/hwtracing/coresight/coresight-etm4x.h | 159 ++++++++++++++--
- drivers/hwtracing/coresight/coresight-priv.h  |   1 +
- 6 files changed, 283 insertions(+), 194 deletions(-)
-
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index bf18128cf5de..8aefee4e72fd 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -1091,41 +1091,22 @@ static void etm4_init_arch_data(void *info)
+ 	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+ 
+ 	/* INSTP0, bits[2:1] P0 tracing support field */
+-	if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
+-		drvdata->instrp0 = true;
+-	else
+-		drvdata->instrp0 = false;
+-
++	drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
++			      (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
+ 	/* TRCBB, bit[5] Branch broadcast tracing support bit */
+-	if (BMVAL(etmidr0, 5, 5))
+-		drvdata->trcbb = true;
+-	else
+-		drvdata->trcbb = false;
+-
++	drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
+ 	/* TRCCOND, bit[6] Conditional instruction tracing support bit */
+-	if (BMVAL(etmidr0, 6, 6))
+-		drvdata->trccond = true;
+-	else
+-		drvdata->trccond = false;
+-
++	drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
+ 	/* TRCCCI, bit[7] Cycle counting instruction bit */
+-	if (BMVAL(etmidr0, 7, 7))
+-		drvdata->trccci = true;
+-	else
+-		drvdata->trccci = false;
+-
++	drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
+ 	/* RETSTACK, bit[9] Return stack bit */
+-	if (BMVAL(etmidr0, 9, 9))
+-		drvdata->retstack = true;
+-	else
+-		drvdata->retstack = false;
+-
++	drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
+ 	/* NUMEVENT, bits[11:10] Number of events field */
+-	drvdata->nr_event = BMVAL(etmidr0, 10, 11);
++	drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
+ 	/* QSUPP, bits[16:15] Q element support field */
+-	drvdata->q_support = BMVAL(etmidr0, 15, 16);
++	drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
+ 	/* TSSIZE, bits[28:24] Global timestamp size field */
+-	drvdata->ts_size = BMVAL(etmidr0, 24, 28);
++	drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
+ 
+ 	/* maximum size of resources */
+ 	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+index 3c4d69b096ca..2bd8ad953b8e 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x.h
++++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+@@ -130,6 +130,23 @@
+ 
+ #define TRCRSR_TA			BIT(12)
+ 
++/*
++ * Bit positions of registers that are defined above, in the sysreg.h style
++ * of _MASK, _SHIFT and BIT().
++ */
++#define TRCIDR0_INSTP0_SHIFT			1
++#define TRCIDR0_INSTP0_MASK			GENMASK(1, 0)
++#define TRCIDR0_TRCBB				BIT(5)
++#define TRCIDR0_TRCCOND				BIT(6)
++#define TRCIDR0_TRCCCI				BIT(7)
++#define TRCIDR0_RETSTACK			BIT(9)
++#define TRCIDR0_NUMEVENT_SHIFT			10
++#define TRCIDR0_NUMEVENT_MASK			GENMASK(1, 0)
++#define TRCIDR0_QSUPP_SHIFT			15
++#define TRCIDR0_QSUPP_MASK			GENMASK(1, 0)
++#define TRCIDR0_TSSIZE_SHIFT			24
++#define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
++
+ /*
+  * System instructions to access ETM registers.
+  * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
+diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+index ff1dd2092ac5..e22fa6184c6d 100644
+--- a/drivers/hwtracing/coresight/coresight-priv.h
++++ b/drivers/hwtracing/coresight/coresight-priv.h
+@@ -36,6 +36,7 @@
+ 
+ #define TIMEOUT_US		100
+ #define BMVAL(val, lsb, msb)	((val & GENMASK(msb, lsb)) >> lsb)
++#define REG_VAL(val, name)	((val & (name##_MASK << name##_SHIFT)) >> name##_SHIFT)
+ 
+ #define ETM_MODE_EXCL_KERN	BIT(30)
+ #define ETM_MODE_EXCL_USER	BIT(31)
 -- 
 2.28.0
 

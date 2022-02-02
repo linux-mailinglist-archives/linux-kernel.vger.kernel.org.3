@@ -2,85 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF8A4A708A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0535C4A708F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245602AbiBBMOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 07:14:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:36552 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbiBBMOm (ORCPT
+        id S243347AbiBBMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:17:34 -0500
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.101]:45347 "EHLO
+        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229457AbiBBMRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:14:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D14876175A;
-        Wed,  2 Feb 2022 12:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E59DC004E1;
-        Wed,  2 Feb 2022 12:14:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643804081;
-        bh=VamCilcq6wjRLI++9tndqd2QWBVCTYmYLwnJvqufanM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AxKPNTcuOPsH/976c+Hz4inrrO5DYWTjo1ZEKLBpv79Y3+3u/8SKLdftiiLP6NBQh
-         mo4uVe8H87/2ZIs9EZ/CiQkNV6SVgIOEWsRzAajm3zyWGCERVGsu+Gh93l7508nebM
-         fPDNRIg4n7X1Cd5R/r+VdhXzJ9EggykWxk1aGEZJMpXlSEhtOvl06YwQF4AhEsvLYo
-         fzL1gh1ctKrANsobFSnHfotqElk68RUZstxA2L/5q15YxY2Kaq3GcfDHTbeynftoTi
-         BVoio3t3Yk3zlHdmxhqC7aED/xDjEtuMir/Gtr4qx+39jfd8ci6NlCeHI8j6hhINSg
-         yVVpweu9wY1AQ==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] fs/binfmt_elf: fix PT_LOAD p_align values for loaders
-Date:   Wed,  2 Feb 2022 14:14:33 +0200
-Message-Id: <20220202121433.3697146-1-rppt@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 2 Feb 2022 07:17:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643804235;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=WWwsGqi+NRGxnCYP532R+aZUVKmZ56mL3SC+CquYdxA=;
+    b=oS0Ye5SsysbA2dkMwlc985ZOhg25qvwTvi0/RvnmDVMqM+S/MjjNPDdXDNQGD4EmKs
+    P1JHCLFDWG1eu2tGrKHfLDN7M29OWV1ckxYFsscoXfN0CInnQGC79lyv0PMxlWKdnfS+
+    xrVUgVVckIpbW+W+XEgkXlOOVSttMA3e60qNivYfGiVuFcdT0tBldY9pqbyqvrOikDu6
+    D59XIImz3wAj3icZ1RE5TKuAwHxllNZsq9+PgQg/Dlj4oivdpMPDc5G4zjNdkIhrt7di
+    aUfU0itAj+RHUFLZxBjdpMgPZ3KyUQqjmN+2KbHB8CfGP9B2qkHoXHZ3RZfBugF8muWd
+    8/qQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDCocQ=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id L29417y12CHE9xV
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 2 Feb 2022 13:17:14 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v12 2/9] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <CYEO6R.2QDXEFO5G1WQ3@crapouillou.net>
+Date:   Wed, 2 Feb 2022 13:17:14 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <37CB6D86-4295-4281-BF3E-3E4B40E74196@goldelico.com>
+References: <cover.1643632014.git.hns@goldelico.com>
+ <6a7b188769a7ad477bf8cb71e1b9bc086b92388d.1643632014.git.hns@goldelico.com>
+ <N7AO6R.7I6FABF106MT1@crapouillou.net>
+ <1F27171F-DFCA-4707-8F50-D1A343F6D78E@goldelico.com>
+ <CYEO6R.2QDXEFO5G1WQ3@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Hi Paul,
 
-Rui Salvaterra reported that Aisleroit solitaire crashes with "Wrong
-__data_start/_end pair" assertion from libgc after update to v5.17-rc1.
+> Am 02.02.2022 um 13:06 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+>>>> @@ -446,6 +454,9 @@ static int =
+ingenic_drm_plane_atomic_check(struct drm_plane *plane,
+>>>> 	if (!crtc)
+>>>> 		return 0;
+>>>> +	if (plane =3D=3D &priv->f0)
+>>>> +		return -EINVAL;
+>>> This will break JZ4725B -> JZ4770 SoCs, the f0 plane is perfectly =
+usable there.
+>> Hm. I think it was your request/proposal to add this [1]?
+>=20
+> Because otherwise with your current patchset the f0 plane does not =
+work *on JZ4780*.
 
-Bisection pointed to commit 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD
-p_align values for static PIE") that fixed handling of static PIEs, but
-made the condition that guards load_bias calculation to exclude loader
-binaries.
+Not that I am eager to fix that, but...
+maybe it could be better to fix than having the check and -EINVAL depend =
+on SoC compatible string
+(or some new flag in soc_info. plane_f0_not_working)?
 
-Restoring the check for presence of interpreter fixes the problem.
+> It does work on older SoCs.
+>=20
+>> What I have forgotten is why the f0 plane should not be usable for =
+jz4780.
+>=20
+> We return an error here to prevent userspace from using the f0 plane =
+until it's effectively working on the JZ4780.
 
-Fixes: 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD p_align values for static PIE")
-Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
----
- fs/binfmt_elf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Well, what would be not working with that plane if user-space would try =
+to use it?
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 605017eb9349..9e11e6f13e83 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1117,7 +1117,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			 * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
- 			 */
- 			alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
--			if (alignment > ELF_MIN_ALIGN) {
-+			if (interpreter || alignment > ELF_MIN_ALIGN) {
- 				load_bias = ELF_ET_DYN_BASE;
- 				if (current->flags & PF_RANDOMIZE)
- 					load_bias += arch_mmap_rnd();
--- 
-2.34.1
+>=20
+> Cheers,
+> -Paul
 
+BR and thanks,
+Nikolaus=

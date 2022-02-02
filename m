@@ -2,290 +2,943 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956A54A768A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B6A4A768E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346118AbiBBRKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:10:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31315 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231775AbiBBRKL (ORCPT
+        id S1346148AbiBBRLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:11:15 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47140 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230361AbiBBRLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:10:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643821810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQrFc/tljsu3ZrKQATk6JL8FHWmCu2K3++RzA5AzzFw=;
-        b=OnRUPTx3TwMmKmx917P0TSyR8lAhTLqWsFaTMpN8cDCQEVmCKE3XNjN3qnFcAmvDNk4upL
-        OzglvxpaWpUvobbVhtCv3Z6oBKYEZGvQ8dHk3QeDneezBGSqBajist6eMBiJkMRDaati+N
-        g9v2+czORe2mS4STMh4Xa6xtakz5+kw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-145-t4bMrF5ZMaKPq-hhOIUrTQ-1; Wed, 02 Feb 2022 12:10:09 -0500
-X-MC-Unique: t4bMrF5ZMaKPq-hhOIUrTQ-1
-Received: by mail-wr1-f70.google.com with SMTP id k7-20020adfb347000000b001dd761d46c7so5310398wrd.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 09:10:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bQrFc/tljsu3ZrKQATk6JL8FHWmCu2K3++RzA5AzzFw=;
-        b=Q+2kv5TKW7VSjkarcVYo9QF1eRgdCfXMdsai1w/3UzGg4k4Kh/p1OLtSrEi9gdFIyU
-         mJGoYGL86VYHKJ7fk201iFbqiEr8w3fibg+D6mVED7CsDRJtOeGMNTQcg6HBTJcLuhop
-         fS+YOCSW6aEWYZt/VgRePTrx/gi60MyT56lSgQ+zjRNYhjrLRPQRvx0o1pxc722DrKBE
-         nywpICBmH1fDc8aq/YE1ViWFueojSM+HILNpGvHzqMBsSygpTYIrA25FwMHqbl9aLa4F
-         J0geCXRSYP5+uUIqe6LnwtwnMkzjD70xUZAEucL/vXXLKaWAflP+q7ULo/dS6kHlQG/U
-         KEOw==
-X-Gm-Message-State: AOAM5304xnAc6e382h4/fUxSBYzYhyRRFKGF6QmvBD9eXSQ/HOklZYZi
-        Ey5MI6GPRZOnoUWWcSg0omOjnEWNHAdOtxBIe+pzcb6hin6FFKnMg/oHmLxXFrjPPXyWE+0rE4j
-        8MJrjEHK4qhFRzQ3uJunmiB9X
-X-Received: by 2002:a05:6000:18a4:: with SMTP id b4mr26360296wri.228.1643821807472;
-        Wed, 02 Feb 2022 09:10:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx8jYNURoSvFveggumu7P0AEu1vMllVhy7z0K0ZRduKnGmJ1dMpueUyUBTN238MVE7RdZMnQw==
-X-Received: by 2002:a05:6000:18a4:: with SMTP id b4mr26360267wri.228.1643821807182;
-        Wed, 02 Feb 2022 09:10:07 -0800 (PST)
-Received: from localhost (net-37-182-17-113.cust.vodafonedsl.it. [37.182.17.113])
-        by smtp.gmail.com with ESMTPSA id y8sm5322264wrd.32.2022.02.02.09.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 09:10:06 -0800 (PST)
-Date:   Wed, 2 Feb 2022 18:10:04 +0100
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     syzbot <syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in bpf_prog_test_run_xdp
-Message-ID: <Yfq67E+zuaRdZ34G@lore-desk>
-References: <000000000000df66a505d68df8d1@google.com>
- <000000000000d4b6fd05d708ab03@google.com>
- <CAADnVQLjvX54EXbiWC2yXAomypwYoc3MmEdp7fHxG+Zse+83Pw@mail.gmail.com>
+        Wed, 2 Feb 2022 12:11:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 637DAB81CA6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 17:11:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4A0C004E1;
+        Wed,  2 Feb 2022 17:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643821872;
+        bh=pu3bx4iXnMAjQRXJKN+VhqeBmhS6zV6w+q9P2aNnVP8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qsvPyjbVXgfyXONj3oXnunt2FfqRRS6FENdTjoRKMV35IWqFULFYH9FTztkJU6ehl
+         2f6/gkQolrLE2Z3CILQk/XCEY2+X+NjC4+WxNPLZ1KGY/L4ZM3jnZp/lmme6/50py0
+         TT67712jzMjT6leF1gldhSQ2eesvM9niPzkBjCdIVdMCP+8y6z1VVUzCquamGKlwov
+         OBB9jA1u7r8FV3mIJIm4sE1YFThE9hZGdL6SCpvMdHbW+B3KjR4KhT5VoJk3ed8oUJ
+         PTHqFavO0rJrHZYmOm/HQtpr6eThKnheuJvQFY+VqO7iofp6Ehv7ZPYL9dJ7ohH5+W
+         eb7xbY57hwdAw==
+Date:   Wed, 2 Feb 2022 19:11:03 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v5 07/70] Maple Tree: Add new data structure
+Message-ID: <Yfq7J9LU58FqNFVW@kernel.org>
+References: <20220202024137.2516438-1-Liam.Howlett@oracle.com>
+ <20220202024137.2516438-8-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="OafZu05RkoIjRHa2"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAADnVQLjvX54EXbiWC2yXAomypwYoc3MmEdp7fHxG+Zse+83Pw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220202024137.2516438-8-Liam.Howlett@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Liam,
 
---OafZu05RkoIjRHa2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 02, 2022 at 02:41:56AM +0000, Liam Howlett wrote:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+> 
+> The maple tree is an RCU-safe range based B-tree designed to use modern
+> processor cache efficiently.  There are a number of places in the kernel
+> that a non-overlapping range-based tree would be beneficial, especially
+> one with a simple interface.  The first user that is covered in this
+> patch set is the vm_area_struct, where three data structures are
+> replaced by the maple tree: the augmented rbtree, the vma cache, and the
+> linked list of VMAs in the mm_struct.  The long term goal is to reduce
+> or remove the mmap_sem contention.
+> 
+> The tree has a branching factor of 10 for non-leaf nodes and 16 for leaf
+> nodes.  With the increased branching factor, it is significantly shorter than
+> the rbtree so it has fewer cache misses.  The removal of the linked list
+> between subsequent entries also reduces the cache misses and the need to pull
+> in the previous and next VMA during many tree alterations.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>  Documentation/core-api/index.rst              |    1 +
+>  Documentation/core-api/maple_tree.rst         |  196 +
+>  MAINTAINERS                                   |   12 +
+>  include/linux/maple_tree.h                    |  673 ++
+>  include/trace/events/maple_tree.h             |  123 +
+>  lib/Kconfig.debug                             |    9 +
+>  lib/Makefile                                  |    3 +-
+>  lib/maple_tree.c                              | 6943 +++++++++++++++++
+>  tools/testing/radix-tree/.gitignore           |    2 +
+>  tools/testing/radix-tree/Makefile             |   13 +-
+>  tools/testing/radix-tree/generated/autoconf.h |    1 +
+>  tools/testing/radix-tree/linux/maple_tree.h   |    7 +
+>  tools/testing/radix-tree/maple.c              |   59 +
+>  .../radix-tree/trace/events/maple_tree.h      |    3 +
+>  14 files changed, 8042 insertions(+), 3 deletions(-)
+>  create mode 100644 Documentation/core-api/maple_tree.rst
+>  create mode 100644 include/linux/maple_tree.h
+>  create mode 100644 include/trace/events/maple_tree.h
+>  create mode 100644 lib/maple_tree.c
+>  create mode 100644 tools/testing/radix-tree/linux/maple_tree.h
+>  create mode 100644 tools/testing/radix-tree/maple.c
+>  create mode 100644 tools/testing/radix-tree/trace/events/maple_tree.h
+> 
+> diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
+> index 5de2c7a4b1b3..c669e0abcfd6 100644
+> --- a/Documentation/core-api/index.rst
+> +++ b/Documentation/core-api/index.rst
+> @@ -34,6 +34,7 @@ Library functionality that is used throughout the kernel.
+>     kref
+>     assoc_array
+>     xarray
+> +   maple_tree
+>     idr
+>     circular-buffers
+>     rbtree
+> diff --git a/Documentation/core-api/maple_tree.rst b/Documentation/core-api/maple_tree.rst
+> new file mode 100644
+> index 000000000000..06c54230d985
+> --- /dev/null
+> +++ b/Documentation/core-api/maple_tree.rst
+> @@ -0,0 +1,196 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +
+> +==========
+> +Maple Tree
+> +==========
+> +
+> +:Author: Liam R. Howlett
+> +
+> +Overview
+> +========
+> +
+> +The Maple Tree is a B-Tree data type which is optimized for storing
+> +non-overlapping ranges, including ranges of size 1.  The tree was designed to
+> +be simple to use and does not require a user written search method.  It
+> +supports iterating over a range of entries and going to the previous or next in
 
-> Lorenzo, please take a look. I suspect it's xdp frags related.
+                                                                         entry ^
 
-Hi Alexei,
+> +a cache-efficient manner.  The tree can also be put into an RCU-safe mode of
+> +operation which allows reading and writing concurrently.  Writers must
+> +synchronize on a lock, which can be the default spinlock, or the user can set
+> +the lock to an external lock of a different type.
+> +
+> +The Maple Tree maintains a small memory footprint and was designed to use
+> +modern processor cache efficiently.  The most important user of the Maple Tree
+> +is the virtual memory area.
 
-ack, I am looking into it.
+For me it sounds like VMA *is* the maple tree user. Maybe
 
-Regards,
-Lorenzo
+  The most important usage of the Maple Tree is tracking of the virtual
+  memory areas.
 
->=20
-> On Wed, Feb 2, 2022 at 5:05 AM syzbot
-> <syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com> wrote:
-> >
-> > syzbot has found a reproducer for the following issue on:
-> >
-> > HEAD commit:    dd5152ab338c Merge branch 'bpf-btf-dwarf5'
-> > git tree:       bpf-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15b770dbb00=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Db210f94c3ec=
-14b22
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D6d70ca7438345=
-077c549
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D10044d987=
-00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1613fa8fb00=
-000
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > BUG: KASAN: slab-out-of-bounds in __skb_frag_set_page include/linux/skb=
-uff.h:3242 [inline]
-> > BUG: KASAN: slab-out-of-bounds in bpf_prog_test_run_xdp+0x10ac/0x1150 n=
-et/bpf/test_run.c:972
-> > Write of size 8 at addr ffff88801dc53000 by task syz-executor098/3592
-> >
-> > CPU: 1 PID: 3592 Comm: syz-executor098 Not tainted 5.16.0-syzkaller-115=
-87-gdd5152ab338c #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 01/01/2011
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >  print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.=
-c:255
-> >  __kasan_report mm/kasan/report.c:442 [inline]
-> >  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
-> >  __skb_frag_set_page include/linux/skbuff.h:3242 [inline]
-> >  bpf_prog_test_run_xdp+0x10ac/0x1150 net/bpf/test_run.c:972
-> >  bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
-> >  __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
-> >  __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
-> >  __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
-> >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7fada7c9e229
-> > Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89=
- f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 =
-ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007fff58406588 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fada7c9e229
-> > RDX: 0000000000000048 RSI: 0000000020000000 RDI: 000000000000000a
-> > RBP: 00007fada7c62210 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fada7c622a0
-> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> >  </TASK>
-> >
-> > Allocated by task 3592:
-> >  kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
-> >  kasan_set_track mm/kasan/common.c:46 [inline]
-> >  set_alloc_info mm/kasan/common.c:437 [inline]
-> >  ____kasan_kmalloc mm/kasan/common.c:516 [inline]
-> >  ____kasan_kmalloc mm/kasan/common.c:475 [inline]
-> >  __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
-> >  kmalloc include/linux/slab.h:586 [inline]
-> >  kzalloc include/linux/slab.h:715 [inline]
-> >  bpf_test_init.isra.0+0x9f/0x150 net/bpf/test_run.c:411
-> >  bpf_prog_test_run_xdp+0x2f8/0x1150 net/bpf/test_run.c:941
-> >  bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
-> >  __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
-> >  __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
-> >  __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
-> >  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > The buggy address belongs to the object at ffff88801dc52000
-> >  which belongs to the cache kmalloc-4k of size 4096
-> > The buggy address is located 0 bytes to the right of
-> >  4096-byte region [ffff88801dc52000, ffff88801dc53000)
-> > The buggy address belongs to the page:
-> > page:ffffea0000771400 refcount:1 mapcount:0 mapping:0000000000000000 in=
-dex:0x0 pfn:0x1dc50
-> > head:ffffea0000771400 order:3 compound_mapcount:0 compound_pincount:0
-> > flags: 0xfff00000010200(slab|head|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
-> > raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888010c42140
-> > raw: 0000000000000000 0000000080040004 00000001ffffffff 0000000000000000
-> > page dumped because: kasan: bad access detected
-> > page_owner tracks the page as allocated
-> > page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c=
-0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC)=
-, pid 3592, ts 49734537716, free_ts 49716400399
-> >  prep_new_page mm/page_alloc.c:2434 [inline]
-> >  get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
-> >  __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
-> >  alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
-> >  alloc_slab_page mm/slub.c:1799 [inline]
-> >  allocate_slab mm/slub.c:1944 [inline]
-> >  new_slab+0x28a/0x3b0 mm/slub.c:2004
-> >  ___slab_alloc+0x87c/0xe90 mm/slub.c:3018
-> >  __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
-> >  slab_alloc_node mm/slub.c:3196 [inline]
-> >  slab_alloc mm/slub.c:3238 [inline]
-> >  kmem_cache_alloc_trace+0x289/0x2c0 mm/slub.c:3255
-> >  kmalloc include/linux/slab.h:581 [inline]
-> >  kzalloc include/linux/slab.h:715 [inline]
-> >  ima_calc_file_hash_tfm+0x282/0x3b0 security/integrity/ima/ima_crypto.c=
-:477
-> >  ima_calc_file_shash security/integrity/ima/ima_crypto.c:515 [inline]
-> >  ima_calc_file_hash+0x19d/0x4b0 security/integrity/ima/ima_crypto.c:572
-> >  ima_collect_measurement+0x4c9/0x570 security/integrity/ima/ima_api.c:2=
-54
-> >  process_measurement+0xd37/0x1920 security/integrity/ima/ima_main.c:337
-> >  ima_bprm_check+0xd0/0x220 security/integrity/ima/ima_main.c:491
-> >  security_bprm_check+0x7d/0xa0 security/security.c:869
-> >  search_binary_handler fs/exec.c:1714 [inline]
-> >  exec_binprm fs/exec.c:1767 [inline]
-> >  bprm_execve fs/exec.c:1836 [inline]
-> >  bprm_execve+0x732/0x19b0 fs/exec.c:1798
-> >  do_execveat_common+0x5e3/0x780 fs/exec.c:1925
-> >  do_execve fs/exec.c:1993 [inline]
-> >  __do_sys_execve fs/exec.c:2069 [inline]
-> >  __se_sys_execve fs/exec.c:2064 [inline]
-> >  __x64_sys_execve+0x8f/0xc0 fs/exec.c:2064
-> > page last free stack trace:
-> >  reset_page_owner include/linux/page_owner.h:24 [inline]
-> >  free_pages_prepare mm/page_alloc.c:1352 [inline]
-> >  free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
-> >  free_unref_page_prepare mm/page_alloc.c:3325 [inline]
-> >  free_unref_page+0x19/0x690 mm/page_alloc.c:3404
-> >  __unfreeze_partials+0x320/0x340 mm/slub.c:2536
-> >  qlink_free mm/kasan/quarantine.c:157 [inline]
-> >  qlist_free_all+0x6d/0x160 mm/kasan/quarantine.c:176
-> >  kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
-> >  __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
-> >  kasan_slab_alloc include/linux/kasan.h:260 [inline]
-> >  slab_post_alloc_hook mm/slab.h:732 [inline]
-> >  slab_alloc_node mm/slub.c:3230 [inline]
-> >  slab_alloc mm/slub.c:3238 [inline]
-> >  kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3243
-> >  getname_flags.part.0+0x50/0x4f0 fs/namei.c:138
-> >  getname_flags+0x9a/0xe0 include/linux/audit.h:323
-> >  user_path_at_empty+0x2b/0x60 fs/namei.c:2800
-> >  user_path_at include/linux/namei.h:57 [inline]
-> >  vfs_statx+0x142/0x390 fs/stat.c:221
-> >  vfs_fstatat fs/stat.c:243 [inline]
-> >  __do_sys_newfstatat+0x96/0x120 fs/stat.c:412
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> >
-> > Memory state around the buggy address:
-> >  ffff88801dc52f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> >  ffff88801dc52f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >ffff88801dc53000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >                    ^
-> >  ffff88801dc53080: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >  ffff88801dc53100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
->=20
+> +
+> +The Maple Tree can store between 0 and ``ULONG_MAX``.  The Maple Tree reserves
 
---OafZu05RkoIjRHa2
-Content-Type: application/pgp-signature; name="signature.asc"
+                          ^ values
 
------BEGIN PGP SIGNATURE-----
+> +values with the bottom two bits set to '10' which are below 4096 (ie 2, 6, 10
+> +.. 4094) for internal use.  If the entries may use reserved entries then the
+> +users can convert the entries using xa_mk_value() and convert them back by
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYfq67AAKCRA6cBh0uS2t
-rLhXAQCV3sBnKpTKA6xuVMYcgW/4vQ+cYDC4JO3Ghbb7y7EP0AEAu3Y+n6IbChZf
-hM2ln06M9zaB+yh4r/qG/X8er8Cn2Qs=
-=LL9J
------END PGP SIGNATURE-----
+Maybe
 
---OafZu05RkoIjRHa2--
+  If an entry needs to use a reserved value then the user can convert the
+  value using ...
 
+> +calling xa_to_value().  The reserved values can be used by the advanced API,
+> +but are blocked by the normal API.
+
+I'd add a sentence about existence of "normal" and "advanced" API to the
+first two paragraphs.
+
+> +
+> +The Maple Tree can also be configured to support searching for a gap of a given
+> +size (or larger).  The tree must be initialized as an allocation tree to
+> +support this feature.
+
+I afraid it's not clear at this point what "an allocation tree" means. I
+think the first sentence alone would be enough for the overview section.
+
+> +
+> +Pre-allocating of nodes is also supported using the advanced API.  This is
+> +useful for users who must guarantee a successful store operation within a given
+> +code segment when allocating cannot be done.  Allocations of nodes are
+> +relatively small at 256 bytes.
+
+I doubt the size here will get timely updates when the node size will
+change in the code, maybe use "around" or "roughly" to be future proof? :)
+
+> +
+> +Normal API
+> +==========
+> +
+> +Start by initialising a maple tree, either with DEFINE_MTREE() for statically
+> +allocated maple trees or mt_init() for dynamically allocated ones.  A
+> +freshly-initialised maple tree contains a ``NULL`` pointer for the range 0 -
+> +``ULONG_MAX``.  There are currently two types of maple trees supported: the
+> +allocation tree and the regular tree.  The regular tree has a higher branching
+> +factor for internal nodes.  The allocation tree has a lower branching factor
+> +but allows the user to search for a gap of a given size or larger from either 0
+> +upwards or ``ULONG_MAX`` down.  An allocation tree can be used by passing in
+> +the ``MAPLE_ALLOC_RANGE`` flag when initialising the tree.
+> +
+> +You can then set entries using mtree_store() or mtree_store_range().
+> +mtree_store will overwrite any entry with the new entry and return the previous
+
+             ^ Did you intentionally drop brackets here?
+
+> +entry stored at that index.  mtree_store_range works in the same way but only
+> +returns the first entry that is overwritten.  mtree_load() is used to retrieve
+
+kernel-doc of these functions says that they return 0 or errno. What did I
+miss?
+
+> +the entry stored at a given index.  You can use mtree_erase() to erase an
+> +entire range by only knowing one value within that range, or mtree_store() call
+> +with an entry of NULL may be used to partially erase a range.
+> +
+> +If you want to only store a new entry to a range (or index) if that range is
+> +currently ``NULL``, you can use mtree_insert_range() or mtree_insert() which
+> +return -EEXIST if the range is not empty.
+> +
+> +You can search for an entry from an index upwards by using mt_find().
+> +
+> +You can walk each entry within a range by calling mt_for_each().  You must
+> +provide a temporary variable to store a cursor.  If you want to walk each
+> +element of the tree then 0 and ``ULONG_MAX`` may be used as the range.  If the
+
+Why 0 and ULONG_MAX have different markup?
+
+> +caller is going to hold the lock for the duration of the walk then it is worth
+
+Do you refer to the maple tree internal lock or any lock here?
+
+> +looking at the mas_for_each() API in the Advanced API section.
+
+Maybe make "Advanced API" a hyperlink.
+
+> +
+> +Sometimes it is necessary to ensure the next call to store to a maple tree does
+> +not allocate memory, please see the advanced API for this use case.
+> +
+> +Finally, you can remove all entries from a maple tree by calling
+> +mtree_destroy().  If the maple tree entries are pointers, you may wish to free
+> +the entries first.
+> +
+> +Allocating Nodes
+> +----------------
+> +
+> +When using the normal API, the allocations are handled by the internal
+> +tree code.
+
+Since this is a part of "Normal API" description the "When using normal
+API" seems redundant.
+
+> +
+> +Locking
+> +-------
+> +
+> +When using the Normal API, you do not have to worry about locking.
+
+Ditto
+
+> +The Maple Tree uses RCU and an internal spinlock to synchronise access:
+> +
+> +Takes RCU read lock:
+> + * mtree_load()
+> + * mt_find()
+> + * mt_for_each()
+> + * mt_next()
+> + * mt_prev()
+> +
+> +Takes ma_lock internally:
+> + * mtree_store()
+> + * mtree_store_range()
+> + * mtree_insert()
+> + * mtree_insert_range()
+> + * mtree_erase()
+> + * mtree_destroy()
+> + * mt_set_in_rcu()
+> + * mt_clear_in_rcu()
+> +
+> +If you want to take advantage of the lock to protect the data structures
+
+I believe this is about the internal lock, it would be nice to spell this
+out.
+
+> +that you are storing in the Maple Tree, you can call mtree_lock() before
+> +calling mtree_load(), then take a reference count on the object you have
+> +found before calling mtree_unlock().  This will prevent stores from
+> +removing the object from the tree between looking up the object and
+> +incrementing the refcount.  You can also use RCU to avoid dereferencing
+> +freed memory, but an explanation of that is beyond the scope of this
+> +document.
+> +
+> +Advanced API
+> +============
+> +
+> +The advanced API offers more flexibility and better performance at the
+> +cost of an interface which can be harder to use and has fewer safeguards.
+> +You must take care of your own locking while using the advanced API.
+> +You can use the ma_lock, RCU or an external lock for protection.
+> +You can mix advanced and normal operations on the same array, as long
+> +as the locking is compatible.  The normal API is implemented in terms
+> +of the advanced API.
+> +
+> +The advanced API is based around the ma_state, this is where the 'mas'
+> +prefix originates.  The ma_state struct keeps track of tree operations to make
+> +life easier for both internal and external tree users.
+> +
+> +Initialising the maple tree is the same as in the normal API.  Please see
+> +above.
+> +
+> +The maple state keeps track of the range start and end in mas->index and
+> +mas->last, respectively.
+> +
+> +mas_walk() will walk the tree to the location of index and set the index
+> +and last according to the range for the entry.
+
+           ^ fields? or maybe even mas->index and mas->last?
+> +
+> +You can set entries using mas_store().  mas_store() will overwrite any entry
+> +with the new entry and return the first existing entry that is overwritten.
+> +The range is passed in as members of the maple state: index and last.
+> +
+> +You can use mas_erase() to erase an entire range by setting index and
+> +last of the maple state to the desired range to erase.  This will erase
+> +the first range that is found in that range, set the maple state index
+> +and last as the range that was erased and return the entry that existed
+> +at that location.
+> +
+> +You can walk each entry within a range by using mas_for_each().  If you want to
+> +walk each element of the tree then 0 and ``ULONG_MAX`` may be used as the
+> +range.  If the lock needs to be periodically dropped, see the locking section
+> +mas_pause().
+> +
+> +Using a maple state allows mas_next() and mas_prev() to function as if the
+> +tree was a linked list.  With such a high branching factor the amortized
+> +performance penalty is outweighed by cache optimization.  mas_next() will
+> +return the next entry which occurs after the entry at index.  mas_prev()
+> +will return the previous entry which occurs before the entry at index.
+> +
+> +mas_find() will find the first entry which exists at or above index on
+> +the first call, and the next entry from every subsequent calls.
+> +
+> +mas_find_rev() will find the fist entry which exists at or below the last on
+> +the first call, and the previous entry from every subsequent calls.
+> +
+> +If the user needs to yield the lock during an operation, then the maple state
+> +must be paused using mas_pause().
+> +
+> +There are a few extra interfaces provided when using an allocation tree.
+> +If you wish to search for a gap within a range, then mas_empty_area()
+> +or mas_empty_area_rev() can be used.  mas_empty_area searches for a
+
+                                                      ^ brackets?
+
+> +gap starting at the lowest index given up to the maximum of the range.
+> +mas_empty_area_rev searches for a gap starting at the highest index
+
+                    ^ and here?
+
+> +given and continues downward to the lower bound of the range.
+> +
+> +Allocating Nodes
+> +----------------
+> +
+> +Allocations are usually handled internally to the tree, however if allocations
+> +need to occur before a write occurs then calling mas_entry_count() will
+> +allocate the worst-case number of needed nodes to insert the provided number of
+> +ranges.  This also causes the tree to enter mass insertion mode.  Once
+> +insertions are complete calling mas_destroy() on the maple state will free the
+> +unused allocations.
+> +
+> +Functions and structures
+> +========================
+> +
+> +.. kernel-doc:: include/linux/maple_tree.h
+> +.. kernel-doc:: lib/maple_tree.c
+> +
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f41088418aae..a35478a3dee3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11415,6 +11415,18 @@ L:	linux-man@vger.kernel.org
+>  S:	Maintained
+>  W:	http://www.kernel.org/doc/man-pages
+>  
+> +MAPLE TREE
+> +M:	Liam R. Howlett <Liam.Howlett@oracle.com>
+> +L:	linux-mm@kvack.org
+> +S:	Supported
+> +F:	Documentation/core-api/maple_tree.rst
+> +F:	include/linux/maple_tree.h
+> +F:	include/trace/events/maple_tree.h
+> +F:	lib/maple_tree.c
+> +F:	lib/test_maple_tree.c
+> +F:	tools/testing/_adix-tree/linux/maple_tree.h
+> +F:	tools/testing/radix-tree/maple.c
+> +
+>  MARDUK (CREATOR CI40) DEVICE TREE SUPPORT
+>  M:	Rahul Bedarkar <rahulbedarkar89@gmail.com>
+>  L:	linux-mips@vger.kernel.org
+> diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
+> new file mode 100644
+> index 000000000000..14ddeaa8f3e7
+> --- /dev/null
+> +++ b/include/linux/maple_tree.h
+> @@ -0,0 +1,673 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +#ifndef _LINUX_MAPLE_TREE_H
+> +#define _LINUX_MAPLE_TREE_H
+> +/*
+> + * Maple Tree - An RCU-safe adaptive tree for storing ranges
+> + * Copyright (c) 2018 Oracle
+
+2018 - 2022?
+
+> + * Authors:     Liam R. Howlett <Liam.Howlett@Oracle.com>
+> + *              Matthew Wilcox <willy@infradead.org>
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/spinlock.h>
+> +/* #define CONFIG_MAPLE_RCU_DISABLED */
+> +/* #define CONFIG_DEBUG_MAPLE_TREE_VERBOSE */
+> +
+> +/*
+> + * Allocated nodes are mutable until they have been inserted into the tree,
+> + * at which time they cannot change their type until they have been removed
+> + * from the tree and an RCU grace period has passed.
+> + *
+> + * Removed nodes have their ->parent set to point to themselves.  RCU readers
+> + * check ->parent before relying on the value that they loaded from the
+> + * slots array.  This lets us reuse the slots array for the RCU head.
+> + *
+> + * Nodes in the tree point to their parent unless bit 0 is set.
+
+There are a lots of comments describing the maple tree internals here and
+below. Did yaou consider adding a section "Implementation details" or
+something like that to the maple_tree.rst and linking these comments there
+with DOC: and some glue text?
+
+> + */
+> +#if defined(CONFIG_64BIT) || defined(BUILD_VDSO32_64)
+> +/* 64bit sizes */
+> +#define MAPLE_NODE_SLOTS	31	/* 256 bytes including ->parent */
+> +#define MAPLE_RANGE64_SLOTS	16	/* 256 bytes */
+> +#define MAPLE_ARANGE64_SLOTS	10	/* 240 bytes */
+> +#define MAPLE_ARANGE64_META_MAX	15	/* Out of range for metadata */
+> +#define MAPLE_ALLOC_SLOTS	(MAPLE_NODE_SLOTS - 1)
+> +#else
+> +/* 32bit sizes */
+> +#define MAPLE_NODE_SLOTS	63	/* 256 bytes including ->parent */
+> +#define MAPLE_RANGE64_SLOTS	32	/* 256 bytes */
+> +#define MAPLE_ARANGE64_SLOTS	21	/* 240 bytes */
+> +#define MAPLE_ARANGE64_META_MAX	22	/* Out of range for metadata */
+> +#define MAPLE_ALLOC_SLOTS	(MAPLE_NODE_SLOTS - 2)
+> +#endif /* defined(CONFIG_64BIT) || defined(BUILD_VDSO32_64) */
+> +
+> +#define MAPLE_NODE_MASK		255UL
+
+...
+
+> +/**
+> + * DOC: Maple tree flags
+
+I don't see this referenced in the Documentation/ changes
+
+> + *
+> + * * MT_FLAGS_ALLOC_RANGE	- Track gaps in this tree
+> + * * MT_FLAGS_USE_RCU		- Operate in RCU mode
+> + * * MT_FLAGS_HEIGHT_OFFSET	- The position of the tree height in the flags
+> + * * MT_FLAGS_HEIGHT_MASK	- The mask for the maple tree height value
+> + * * MT_FLAGS_LOCK_MASK		- How the mt_lock is used
+> + * * MT_FLAGS_LOCK_IRQ		- Acquired irq-safe
+> + * * MT_FLAGS_LOCK_BH		- Acquired bh-safe
+> + * * MT_FLAGS_LOCK_EXTERN	- mt_lock is not used
+> + *
+> + * MAPLE_HEIGHT_MAX	The largest height that can be stored
+> + */
+> +#define MT_FLAGS_ALLOC_RANGE	0x01
+> +#define MT_FLAGS_USE_RCU	0x02
+> +#define	MT_FLAGS_HEIGHT_OFFSET	0x02
+> +#define	MT_FLAGS_HEIGHT_MASK	0x7C
+
+Is extra alignment here intentional?
+
+> +#define MT_FLAGS_LOCK_MASK	0x300
+> +#define MT_FLAGS_LOCK_IRQ	0x100
+> +#define MT_FLAGS_LOCK_BH	0x200
+> +#define MT_FLAGS_LOCK_EXTERN	0x300
+
+...
+
+> +/*
+> + * More complicated stores can cause two nodes to become one or tree and
+
+                                                                  ^ three?
+
+> + * potentially alter the height of the tree.  Either half of the tree may need
+> + * to be rebalanced against the other.  The ma_topiary struct is used to track
+> + * which nodes have been 'cut' from the tree so that the change can be done
+> + * safely at a later date.  This is done to support RCU.
+> + */
+> +struct ma_topiary {
+> +	struct maple_enode *head;
+> +	struct maple_enode *tail;
+> +	struct maple_tree *mtree;
+> +};
+
+...
+
+> +/* Advanced API */
+> +
+> +/*
+> + * The maple state is defined in the struct ma_state and is used to keep track
+> + * of information during operations, and even between operations when using the
+> + * advanced API.
+> + *
+> + * If state->node has bit 0 set then it references a tree location which is not
+> + * a node (eg the root).  If bit 1 is set, the rest of the bits are a negative
+> + * errno.  Bit 2 (the 'unallocated slots' bit) is clear.  Bits 3-6 indicate the
+> + * node type.
+> + *
+> + * state->alloc either has a request number of nodes or an allocated node.  If
+> + * stat->alloc has a requested number of nodes, the first bit will be set (0x1)
+> + * and the remaining bits are the value.  If state->alloc is a node, then the
+> + * node will be of type maple_alloc.  maple_alloc has MAPLE_NODE_SLOTS - 1 for
+> + * storing more allocated nodes, a total, and the node_count in this node.
+> + * total is the number of nodes allocated.  node_count is the number of
+
+Maybe merge "total is the number of nodes allocated" with "a total":
+
+... allocated nodes, total number of nodes allocated, and the node_count...
+
+> + * allocated nodes in this node.  The scaling beyond MAPLE_NODE_SLOTS - 1 is
+> + * handled by storing further nodes into state->alloc->slot[0]'s node.  Nodes
+> + * are taken from state->alloc by removing a node from the state->alloc node
+> + * until state->alloc->node_count is 1, when state->alloc is returned and the
+> + * state->alloc->slot[0] is promoted to state->alloc.  Nodes are pushed onto
+> + * state->alloc by putting the current state->alloc into the pushed node's
+> + * slot[0].
+> + *
+> + * The state also contains the implied min/max of the state->node, the depth of
+> + * this search, and the offset. The implied min/max are either from the parent
+> + * node or are 0-oo for the root node.  The depth is incremented or decremented
+> + * every time a node is walked down or up.  The offset is the slot/pivot of
+> + * interest in the node - either for reading or writing.
+> + *
+> + * When returning a value the maple state index and last respectively contain
+> + * the start and end of the range for the entry.  Ranges are inclusive in the
+> + * Maple Tree.
+> + */
+> +struct ma_state {
+> +	struct maple_tree *tree;	/* The tree we're operating in */
+> +	unsigned long index;		/* The index we're operating on - range start */
+> +	unsigned long last;		/* The last index we're operating on - range end */
+> +	struct maple_enode *node;	/* The node containing this entry */
+> +	unsigned long min;		/* The minimum index of this node - implied pivot min */
+> +	unsigned long max;		/* The maximum index of this node - implied pivot max */
+> +	struct maple_alloc *alloc;	/* Allocated nodes for this operation */
+> +	unsigned char depth;		/* depth of tree descent during write */
+> +	unsigned char offset;
+> +	unsigned char mas_flags;
+> +};
+
+...
+
+> +/**
+> + * mt_for_each - Searches for an entry starting at index until max.
+
+Isn't it an iterator?
+
+> + * @tree: The Maple Tree
+> + * @entry: The current entry
+> + * @index: The index to update to track the location in the tree
+> + * @max: The maximum limit for @index
+> + *
+> + * Note: Will not return the zero entry.
+> + */
+> +#define mt_for_each(tree, entry, index, max) \
+> +	for (entry = mt_find(tree, &index, max); \
+> +		entry; entry = mt_find_after(tree, &index, max))
+> +
+> +
+
+...
+
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> new file mode 100644
+> index 000000000000..6a57745319ba
+> --- /dev/null
+> +++ b/lib/maple_tree.c
+> @@ -0,0 +1,6943 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Maple Tree implementation
+> + * Copyright (c) 2018 Oracle Corporation
+> + * Authors: Liam R. Howlett <Liam.Howlett@oracle.com>
+> + *	    Matthew Wilcox <willy@infradead.org>
+> + */
+> +
+> +/*
+> + * Interesting implementation details of the Maple Tree
+
+DOC:? 
+
+> + *
+> + * Each node type has a number of slots for entries and a number of slots for
+> + * pivots.  In the case of dense nodes, the pivots are implied by the position
+> + * and are simply the slot index + the minimum of the node.
+> + *
+> + * In regular B-Tree terms, pivots are called keys.  The term pivot is used to
+> + * indicate that the tree is specifying ranges,  Pivots may appear in the
+> + * subtree with an entry attached to the value where as keys are unique to a
+> + * specific position of a B-tree.  Pivot values are inclusive of the slot with
+> + * the same index.
+> + *
+> + *
+> + * The following illustrates the layout of a range64 nodes slots and pivots.
+> + *
+> + *
+> + *  Slots -> | 0 | 1 | 2 | ... | 12 | 13 | 14 | 15 |
+> + *           ┬   ┬   ┬   ┬     ┬    ┬    ┬    ┬    ┬
+> + *           │   │   │   │     │    │    │    │    └─ Implied maximum
+> + *           │   │   │   │     │    │    │    └─ Pivot 14
+> + *           │   │   │   │     │    │    └─ Pivot 13
+> + *           │   │   │   │     │    └─ Pivot 12
+> + *           │   │   │   │     └─ Pivot 11
+> + *           │   │   │   └─ Pivot 2
+> + *           │   │   └─ Pivot 1
+> + *           │   └─ Pivot 0
+> + *           └─  Implied minimum
+> + *
+> + * Slot contents:
+> + *  Internal (non-leaf) nodes contain pointers to other nodes.
+> + *  Leaf nodes contain entries.
+> + *
+> + * The location of interest is often referred to as an offset.  All offsets have
+> + * a slot, but the last offset has an implied pivot from the node above (or
+> + * UINT_MAX for the root node.
+> + *
+> + * Ranges complicate certain write activities.  When modifying any of
+> + * the B-tree variants, it is known that one entry will either be added or
+> + * deleted.  When modifying the Maple Tree, one store operation may overwrite
+> + * the entire data set, or one half of the tree, or the middle half of the tree.
+> + *
+> + */
+
+...
+
+> +/* Interface */
+> +
+> +/**
+> + * mas_store() - Store an @entry.
+> + * @mas: The maple state.
+> + * @entry: The entry to store.
+> + *
+> + * The @mas->index and @mas->last is used to set the range for the @entry.
+> + * Note: The @mas should have pre-allocated entries to ensure there is memory to
+> + * store the entry.  Please see mas_expected_entries()/mas_destroy() for more details.
+
+Return: ?
+
+> + */
+> +void *mas_store(struct ma_state *mas, void *entry)
+> +{
+> +	MA_WR_STATE(wr_mas, mas, entry);
+> +
+> +	trace_ma_write(__func__, mas, 0, entry);
+> +#ifdef CONFIG_DEBUG_MAPLE_TREE
+> +	if (mas->index > mas->last)
+> +		printk("Error %lu > %lu %p\n", mas->index, mas->last, entry);
+> +	MT_BUG_ON(mas->tree, mas->index > mas->last);
+> +	if (mas->index > mas->last) {
+> +		mas_set_err(mas, -EINVAL);
+> +		return NULL;
+> +	}
+> +
+> +#endif
+> +
+> +/*
+> + * Storing is the same operation as insert with the added caveat that it can
+> + * overwrite entries.  Although this seems simple enough, one may want to
+> + * examine what happens if a single store operation was to overwrite multiple
+> + * entries within a self-balancing B-Tree.
+> + */
+> +	mas_wr_store_setup(&wr_mas);
+> +	mas_wr_store_entry(&wr_mas);
+> +	return wr_mas.content;
+> +}
+
+...
+
+> +/**
+> + * mt_next() - get the next value in the maple tree
+> + * @mt: The maple tree
+> + * @index: The start index
+> + * @max: The maximum index to check
+> + *
+> + * Returns: The entry at @index or higher, or %NULL if nothing is found.
+
+Please s/Returns/Return/
+
+> + */
+> +void *mt_next(struct maple_tree *mt, unsigned long index, unsigned long max)
+> +{
+> +	void *entry = NULL;
+> +	MA_STATE(mas, mt, index, index);
+> +
+> +	rcu_read_lock();
+> +	entry = mas_next(&mas, max);
+> +	rcu_read_unlock();
+> +	return entry;
+> +}
+> +EXPORT_SYMBOL_GPL(mt_next);
+
+...
+
+> +/*
+
+kernel-doc?
+
+> + * mas_find: If mas->node == MAS_START, find the first
+> + * non-NULL entry >= mas->index.
+> + * Otherwise, find the first non-NULL entry > mas->index
+
+although this might render not nicely in html...
+
+> + * @mas: The maple state
+> + * @max: The maximum value to check.
+> + *
+> + * Must hold rcu_read_lock or the write lock.
+> + * If an entry exists, last and index are updated accordingly.
+> + * May set @mas->node to MAS_NONE.
+> + *
+> + * Return: The entry or %NULL.
+> + */
+> +void *mas_find(struct ma_state *mas, unsigned long max)
+> +{
+> +	if (unlikely(mas_is_paused(mas))) {
+> +		if (unlikely(mas->last == ULONG_MAX)) {
+> +			mas->node = MAS_NONE;
+> +			return NULL;
+> +		}
+> +		mas->node = MAS_START;
+> +		mas->index = ++mas->last;
+> +	}
+> +
+> +	if (unlikely(mas_is_start(mas))) {
+> +		/* First run or continue */
+> +		void *entry;
+> +
+> +		if (mas->index > max)
+> +			return NULL;
+> +
+> +		entry = mas_walk(mas);
+> +		if (entry)
+> +			return entry;
+> +	}
+> +
+> +	if (unlikely(!mas_searchable(mas)))
+> +		return NULL;
+> +
+> +	/* Retries on dead nodes handled by mas_next_entry */
+> +	return mas_next_entry(mas, max);
+> +}
+> +
+> +/**
+> + * mas_find: If mas->node == MAS_START, find the first
+
+mas_find_rev
+
+> + * non-NULL entry <= mas->last.
+> + * Otherwise, find the first non-NULL entry < mas->index
+
+So does this look Ok in html? ;-)
+
+> + * @mas: The maple state
+> + * @min: The minimum value to check.
+> + *
+> + * Must hold rcu_read_lock or the write lock.
+> + * If an entry exists, last and index are updated accordingly.
+> + * May set @mas->node to MAS_NONE.
+> + *
+> + * Return: The entry or %NULL.
+> + */void *mas_find_rev(struct ma_state *mas, unsigned long min)
+> +{
+> +	if (unlikely(mas_is_paused(mas))) {
+> +		if (unlikely(mas->last == ULONG_MAX)) {
+> +			mas->node = MAS_NONE;
+> +			return NULL;
+> +		}
+> +		mas->node = MAS_START;
+> +		mas->last = --mas->index;
+> +	}
+> +
+> +	if (unlikely(mas_is_start(mas))) {
+> +		/* First run or continue */
+> +		void *entry;
+> +
+> +		if (mas->index < min)
+> +			return NULL;
+> +
+> +		entry = mas_walk(mas);
+> +		if (entry)
+> +			return entry;
+> +	}
+> +
+> +	if (unlikely(!mas_searchable(mas)))
+> +		return NULL;
+> +
+> +	/* Retries on dead nodes handled by mas_next_entry */
+> +	return mas_prev_entry(mas, min);
+> +}
+> +EXPORT_SYMBOL_GPL(mas_find);
+> +
+> +/**
+> + * mas_erase() - Find the range in which index resides and erase the entire
+> + * range.
+> + * @mas: The maple state
+> + *
+> + * Must hold the write lock.
+> + * Searches for @mas->index, sets @mas->index and @mas->last to the range and
+> + * erases that range.
+> + *
+> + * Return: the entry that was erased, @mas->index and @mas->last are updated.
+
+the entry that was erased or %NULL?
+
+> + */
+> +void *mas_erase(struct ma_state *mas)
+> +{
+> +	void *entry;
+> +	MA_WR_STATE(wr_mas, mas, NULL);
+> +
+> +	if (mas_is_none(mas) || mas_is_paused(mas))
+> +		mas->node = MAS_START;
+> +
+> +	/* Retry unnecessary when holding the write lock. */
+> +	entry = mas_state_walk(mas);
+> +	if (!entry)
+> +		return NULL;
+> +
+> +write_retry:
+> +	/* Must reset to ensure spanning writes of last slot are detected */
+> +	mas_reset(mas);
+> +	mas_wr_store_setup(&wr_mas);
+> +	mas_wr_store_entry(&wr_mas);
+> +	if (mas_nomem(mas, GFP_KERNEL))
+> +		goto write_retry;
+> +
+> +	return entry;
+> +}
+> +EXPORT_SYMBOL_GPL(mas_erase);
+> +
+> +/*
+
+kernel-doc?
+
+> + * mas_nomem() - * Check if there was an error allocating and do the allocation
+
+                   ^ not needed.
+> + * if necessary If there are allocations, then free them.
+
+                 ^ period?
+
+> + * @mas: The maple state
+> + * @gfp: The GFP_FALGS to use for allocations
+
+Return:?
+
+> + */
+> +bool mas_nomem(struct ma_state *mas, gfp_t gfp)
+> +	__must_hold(mas->tree->lock)
+> +{
+> +	if (likely(mas->node != MA_ERROR(-ENOMEM))) {
+> +		mas_destroy(mas);
+> +		return false;
+> +	}
+> +
+> +	if (gfpflags_allow_blocking(gfp) && !mt_external_lock(mas->tree)) {
+> +		mtree_unlock(mas->tree);
+> +		mas_alloc_nodes(mas, gfp);
+> +		mtree_lock(mas->tree);
+> +	} else {
+> +		mas_alloc_nodes(mas, gfp);
+> +	}
+> +
+> +	if (!mas_allocated(mas))
+> +		return false;
+> +
+> +	mas->node = MAS_START;
+> +	return true;
+> +}
+> +
+> +void __init maple_tree_init(void)
+> +{
+> +	maple_node_cache = kmem_cache_create("maple_node",
+> +			sizeof(struct maple_node), sizeof(struct maple_node),
+> +			SLAB_PANIC, NULL);
+> +}
+> +
+> +/**
+> + * mtree_load() - Load a value stored in a maple tree
+> + * @mt: The maple tree
+> + * @index: The index to load
+> + *
+> + * Return: the entry of %NULL
+
+                       ^ or?
+> + */
+> +void *mtree_load(struct maple_tree *mt, unsigned long index)
+> +{
+> +	MA_STATE(mas, mt, index, index);
+> +	void *entry;
+> +
+> +	trace_ma_read(__func__, &mas);
+> +	rcu_read_lock();
+> +retry:
+> +	entry = mas_start(&mas);
+> +	if (unlikely(mas_is_none(&mas)))
+> +		goto unlock;
+> +
+> +	if (unlikely(mas_is_ptr(&mas))) {
+> +		if (index)
+> +			entry = NULL;
+> +
+> +		goto unlock;
+> +	}
+> +
+> +	entry = mtree_lookup_walk(&mas);
+> +	if (!entry && unlikely(mas_is_start(&mas)))
+> +		goto retry;
+> +unlock:
+> +	rcu_read_unlock();
+> +	if (xa_is_zero(entry))
+> +		return NULL;
+> +
+> +	return entry;
+> +}
+> +EXPORT_SYMBOL(mtree_load);
+
+-- 
+Sincerely yours,
+Mike.

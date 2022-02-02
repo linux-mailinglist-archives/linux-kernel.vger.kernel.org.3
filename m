@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D3B4A763F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649F14A7658
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346042AbiBBQzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:55:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34178 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiBBQzB (ORCPT
+        id S1346050AbiBBQzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:55:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:52293 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234941AbiBBQzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:55:01 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D83161776
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 16:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E46C004E1;
-        Wed,  2 Feb 2022 16:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643820900;
-        bh=+Mw3UqSA9RW9lVv7cMeO4kcmAotMs1Y2FfPXU4FBX0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MLDcYJAZvsv0XjxsuicWh3967mYmwunkokbmM+LwLId1hMsSp9rl1N3omNdCRHynH
-         BXyvlTGymC3VchPCaetwp6qPoimzewJphziaYPKVoMe7RBiYK7aBEwXg79ysMnq1by
-         4YIxFZe1wIiKqNoQvUoR+Lea7Qga6Ai4DA7mAkmFJkafEfDSvyXEflnnfVunelFB8M
-         W8UnHi+FVqr2zmpCDBRw1TJkIwsiRYJXog7IVacvNlpd0zDWp/ctF/3gRU+/maemd7
-         kEmmGNuEx7RUhG2h0KO2KEeV4FC6natUldJrgVB9m5DQj8W9NPGFCLTFy3Tr4s1KDy
-         YkX+82ZIKJoxA==
-Date:   Wed, 2 Feb 2022 09:54:55 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>
-Cc:     Philippe Cornu <philippe.cornu@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] drm/stm: ltdc: add support of ycbcr pixel formats
-Message-ID: <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
-References: <20211215214843.20703-1-yannick.fertre@foss.st.com>
+        Wed, 2 Feb 2022 11:55:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643820949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=egv0e1QXLdMDJLzDlEfd+9hjoDteiVw0Tc45PLBPnRk=;
+        b=Ra3qjMx7W3ZbG2y4gbElmfdvStd5Ymy/uXLEwHoB2zZMH+VMNi/oKwEpyWp8UDeXglbRnt
+        d0HZO03ePd1is+kcRxr7bGggTF4UwQ9uwKrz5uIhP0Jp2HmYOeaGRtRuv637ZVIkHuaUJp
+        j7+KxZDC1+XGdxImDS58MlfjeUY/wrA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-26kMDZ8dMq28ctd6ecNwVw-1; Wed, 02 Feb 2022 11:55:48 -0500
+X-MC-Unique: 26kMDZ8dMq28ctd6ecNwVw-1
+Received: by mail-wm1-f72.google.com with SMTP id n22-20020a05600c3b9600b00352d3f6a850so2568149wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:55:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=egv0e1QXLdMDJLzDlEfd+9hjoDteiVw0Tc45PLBPnRk=;
+        b=jU0bj5HvEeOCqcPxPsobxE7K/cRDcwu6/MZ052yyAgyuxdMr23ybL5WEaqPlmhwQel
+         iG3N0kfBiDzG+Gv7yjwrKUcL2mR+gBsx9Nry9S5yDUCCPb76jzjwcmCQeaJyfRYz19Eh
+         z/bW9YzzOCjH2mMtaFXBNWd4JB4Xq5SZcVs2ozPCBsWNkaKI0/DXAB3NJqPnVvm9UAMX
+         EGkAxR5N4kkNeBqlMyktIfDS7JHeFGxGze9ReVulxhS7YD7klUqqggsXTziijxW3yLU8
+         4DoA8i9kdXKxd4sR8K+RylHvwF46r/+Z8zBQkiR6nl2yNTXuAV5irw7/kSJNE+Tn83n+
+         71sw==
+X-Gm-Message-State: AOAM530UeuP5uTCGtlecoDfBQbes8ma6tutlG02bR9GLM2/uHEfg2i5T
+        h7OkQ/C4xEnCojDWQd22l5dUH/W7e/69yXKxiLbTVPeeLvapN+BM0Jol+B4Da1rhwL6xTHrWc/3
+        jvSb1Y7NXMZyyK2FSWUwhw5r3
+X-Received: by 2002:a1c:7918:: with SMTP id l24mr6820138wme.91.1643820947604;
+        Wed, 02 Feb 2022 08:55:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQXlXZtcqdt29L6NXh+2CEo4waI2F0RmzscSS7g2ToiBc7dCyJBZZRaKKDnsqyRi7YXDtCLA==
+X-Received: by 2002:a1c:7918:: with SMTP id l24mr6820128wme.91.1643820947458;
+        Wed, 02 Feb 2022 08:55:47 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id m187sm5109446wme.25.2022.02.02.08.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 08:55:47 -0800 (PST)
+Date:   Wed, 2 Feb 2022 17:55:45 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, james.clark@arm.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf: tools: Add missing branch_sample_type
+Message-ID: <Yfq3kTb7E1cELF0L@krava>
+References: <1643799443-15109-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215214843.20703-1-yannick.fertre@foss.st.com>
+In-Reply-To: <1643799443-15109-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yannick,
-
-On Wed, Dec 15, 2021 at 10:48:43PM +0100, Yannick Fertre wrote:
-> This patch adds the following YCbCr input pixel formats on the latest
-> LTDC hardware version:
+On Wed, Feb 02, 2022 at 04:27:23PM +0530, Anshuman Khandual wrote:
+> This updates branch sample type with missing PERF_SAMPLE_BRANCH_TYPE_SAVE.
 > 
-> 1 plane  (co-planar)  : YUYV, YVYU, UYVY, VYUY
-> 2 planes (semi-planar): NV12, NV21
-> 3 planes (full-planar): YU12=I420=DRM YUV420, YV12=DRM YVU420
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Suggested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+Acked-by: Jiri Olsa <jolsa@redhat.com>
+
+thanks,
+jirka
+
+> ---
+>  tools/perf/util/perf_event_attr_fprintf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
+> index 47b7531f51da..98af3fa4ea35 100644
+> --- a/tools/perf/util/perf_event_attr_fprintf.c
+> +++ b/tools/perf/util/perf_event_attr_fprintf.c
+> @@ -52,7 +52,7 @@ static void __p_branch_sample_type(char *buf, size_t size, u64 value)
+>  		bit_name(ABORT_TX), bit_name(IN_TX), bit_name(NO_TX),
+>  		bit_name(COND), bit_name(CALL_STACK), bit_name(IND_JUMP),
+>  		bit_name(CALL), bit_name(NO_FLAGS), bit_name(NO_CYCLES),
+> -		bit_name(HW_INDEX),
+> +		bit_name(TYPE_SAVE), bit_name(HW_INDEX),
+>  		{ .name = NULL, }
+>  	};
+>  #undef bit_name
+> -- 
+> 2.20.1
+> 
 
-<snip>
-
-> +static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fmt)
-> +{
-> +	struct ltdc_device *ldev = plane_to_ltdc(plane);
-> +	struct drm_plane_state *state = plane->state;
-> +	u32 lofs = plane->index * LAY_OFS;
-> +	u32 val;
-> +
-> +	switch (drm_pix_fmt) {
-> +	case DRM_FORMAT_YUYV:
-> +		val = (YCM_I << 4) | LxPCR_YF | LxPCR_CBF;
-> +		break;
-> +	case DRM_FORMAT_YVYU:
-> +		val = (YCM_I << 4) | LxPCR_YF;
-> +		break;
-> +	case DRM_FORMAT_UYVY:
-> +		val = (YCM_I << 4) | LxPCR_CBF;
-> +		break;
-> +	case DRM_FORMAT_VYUY:
-> +		val = (YCM_I << 4);
-> +		break;
-> +	case DRM_FORMAT_NV12:
-> +		val = (YCM_SP << 4) | LxPCR_CBF;
-> +		break;
-> +	case DRM_FORMAT_NV21:
-> +		val = (YCM_SP << 4);
-> +		break;
-> +	case DRM_FORMAT_YUV420:
-> +	case DRM_FORMAT_YVU420:
-> +		val = (YCM_FP << 4);
-> +		break;
-> +	default:
-> +		/* RGB or not a YCbCr supported format */
-> +		break;
-> +	}
-> +
-> +	/* Enable limited range */
-> +	if (state->color_range == DRM_COLOR_YCBCR_LIMITED_RANGE)
-> +		val |= LxPCR_YREN;
-> +
-> +	/* enable ycbcr conversion */
-> +	val |= LxPCR_YCEN;
-> +
-> +	regmap_write(ldev->regmap, LTDC_L1PCR + lofs, val);
-> +}
-
-This patch as commit 484e72d3146b ("drm/stm: ltdc: add support of ycbcr
-pixel formats") in -next introduced the following clang warning:
-
-drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-        default:
-        ^~~~~~~
-drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
-        val |= LxPCR_YCEN;
-        ^~~
-drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
-        u32 val;
-               ^
-                = 0
-1 warning generated.
-
-Would it be okay to just return in the default case (maybe with a
-message about an unsupported format?) or should there be another fix?
-
-Cheers,

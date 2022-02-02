@@ -2,242 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BC64A6905
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5394A690D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243065AbiBBAFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:05:03 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42960 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243103AbiBBAEg (ORCPT
+        id S243320AbiBBAGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243245AbiBBAF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:04:36 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643760274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=neBd7VsOMbUMFR6PMS7C+obWvPyp6JMYXI1ks/Y8WS4=;
-        b=dcCV8sMFSZH7L7FQNrYo1AUakKq5AbOQmnfxqUvU9on3uX6bp40g5kQN7hF8NhCsAzQH+h
-        GsxTb2ZmWCWDQFMUOcdskrq9c21B8SIFDFp0aq8samN3F5tyaAuqBxegEyN49F3m0OaQPo
-        1rgnXSqOqaCjJJyQaAL+u8+8xE+5Hag01TrP1/J+OTOXrWDC3F46eSMeAD2Bete7LztCSv
-        zRwRA0ihlA1Ngq77EuKOa0Pgw2lN3+MW3mqzjQGQcLA8cWbpDVA7ycWAzN2nIHoLn0SVim
-        jtKXfqYe54wvxNQ+7rmuegljYQHa2cvbZYLKltz3MrREiOm3Gw+Ad4x9chHIZw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643760274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=neBd7VsOMbUMFR6PMS7C+obWvPyp6JMYXI1ks/Y8WS4=;
-        b=MpsRx+4r4+E3ehAA+L0k0ph8Kk7tgPP0iLJ6RzLPZazdxY1UzlZ0Tf90dcn3VG9YvR2+y5
-        byN9vTij0kJX6IAg==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCHv2 18/29] x86/boot: Avoid #VE during boot for TDX platforms
-In-Reply-To: <20220124150215.36893-19-kirill.shutemov@linux.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-19-kirill.shutemov@linux.intel.com>
-Date:   Wed, 02 Feb 2022 01:04:34 +0100
-Message-ID: <87sft2w2ul.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Tue, 1 Feb 2022 19:05:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6748C061751;
+        Tue,  1 Feb 2022 16:05:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5206AB82FB7;
+        Wed,  2 Feb 2022 00:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3834C340EB;
+        Wed,  2 Feb 2022 00:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643760324;
+        bh=k+4gymw4nBnG24/LUGE2XUMEwws/9D5/At5pUwBdShs=;
+        h=Date:To:From:Subject:From;
+        b=taZg6Irbu0FJPLQIUCIQ+ilD7bEm5HkLsFOXsZ3SBlFhgxT9MWzdwZd0aKb07bHdt
+         BTGkBPP2fZnM/m6nVMyV/0COgd7Sy0jCaZWCngYYhWGkTkPdWo+15llyIxsTsirTiF
+         /3wYHaWKO/kDxI3kmyWOpH3LFc6+avRJNJ7dz+/8=
+Received: by hp1 (sSMTP sendmail emulation); Tue, 01 Feb 2022 16:05:22 -0800
+Date:   Tue, 01 Feb 2022 16:05:22 -0800
+To:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, akpm@linux-foundation.org
+From:   Andrew Morton <akpm@linux-foundation.org>
+Subject: mmotm 2022-02-01-16-04 uploaded
+Message-Id: <20220202000522.A3834C340EB@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
->
-> Change the common boot code to work on TDX and non-TDX systems.
-> This should have no functional effect on non-TDX systems.
+The mm-of-the-moment snapshot 2022-02-01-16-04 has been uploaded to
 
-Emphasis on should? :)
+   https://www.ozlabs.org/~akpm/mmotm/
 
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -643,12 +643,25 @@ SYM_CODE_START(trampoline_32bit_src)
->  	movl	$MSR_EFER, %ecx
->  	rdmsr
->  	btsl	$_EFER_LME, %eax
-> +	/* Avoid writing EFER if no change was made (for TDX guest) */
-> +	jc	1f
->  	wrmsr
-> -	popl	%edx
-> +1:	popl	%edx
->  	popl	%ecx
->  
->  	/* Enable PAE and LA57 (if required) paging modes */
+mmotm-readme.txt says
 
-This comment should move after the #endif below and here it wants a
-comment which explains why reading cr4 and the following code sequence
-is correct. If you write up that comment then you'll figure out that it
-is incorrect.
+README for mm-of-the-moment:
 
-> -	movl	$X86_CR4_PAE, %eax
-> +	movl	%cr4, %eax
+https://www.ozlabs.org/~akpm/mmotm/
 
-Assume CR4 has X86_CR4_MCE set then how is the below correct when
-CONFIG_X86_MCE=n? Not to talk about any other bits which might be set in
-CR4 and are only cleared by the CONFIG_X86_MCE dependent 'andl'.
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-> +#ifdef CONFIG_X86_MCE
-> +	/*
-> +	 * Preserve CR4.MCE if the kernel will enable #MC support.  Clearing
-> +	 * MCE may fault in some environments (that also force #MC support).
-> +	 * Any machine check that occurs before #MC support is fully configured
-> +	 * will crash the system regardless of the CR4.MCE value set here.
-> +	 */
-> +	andl	$X86_CR4_MCE, %eax
-> +#endif
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+https://ozlabs.org/~akpm/mmotm/series
 
-So this wants to be
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-#ifdef CONFIG_X86_MCE
-	movl	%cr4, %eax
-	andl	$X86_CR4_MCE, %eax
-#else
-	movl	$0, %eax
-#endif
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-No?
 
-> +	orl	$X86_CR4_PAE, %eax
->  	testl	%edx, %edx
->  	jz	1f
->  	orl	$X86_CR4_LA57, %eax
-> @@ -662,8 +675,12 @@ SYM_CODE_START(trampoline_32bit_src)
->  	pushl	$__KERNEL_CS
->  	pushl	%eax
->  
-> -	/* Enable paging again */
-> -	movl	$(X86_CR0_PG | X86_CR0_PE), %eax
-> +	/*
-> +	 * Enable paging again.  Keep CR0.NE set, FERR# is no longer used
-> +	 * to handle x87 FPU errors and clearing NE may fault in some
-> +	 * environments.
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
-FERR# is no longer used is really not informative here. The point is
-that any x86 CPU which is supported by the kernel requires CR0_NE to be
-set. This code was wrong from the very beginning because 64bit CPUs
-never supported #FERR. The reason why it exists is Copy&Pasta without
-brain applied and the sad fact that the hardware does not enforce it in
-native mode for whatever reason. So this want's to be a seperate patch
-with a coherent comment and changelong.
+	https://github.com/hnaz/linux-mm
 
-> +	 */
-> +	movl	$(X86_CR0_PG | X86_CR0_NE | X86_CR0_PE), %eax
->  	movl	%eax, %cr0
->  
->  	/* Enable PAE mode, PGE and LA57 */
-> -	movl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
-> +	movq	%cr4, %rcx
+The directory https://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
-See above...
+A git copy of this tree is also available at
 
-> +#ifdef CONFIG_X86_MCE
-> +	/*
-> +	 * Preserve CR4.MCE if the kernel will enable #MC support.  Clearing
-> +	 * MCE may fault in some environments (that also force #MC support).
-> +	 * Any machine check that occurs before #MC support is fully configured
-> +	 * will crash the system regardless of the CR4.MCE value set here.
-> +	 */
-> +	andl	$X86_CR4_MCE, %ecx
-> +#endif
-> +	orl	$(X86_CR4_PAE | X86_CR4_PGE), %ecx
->  #ifdef CONFIG_X86_5LEVEL
->  	testl	$1, __pgtable_l5_enabled(%rip)
->  	jz	1f
-> @@ -246,13 +256,23 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
->  	/* Setup EFER (Extended Feature Enable Register) */
->  	movl	$MSR_EFER, %ecx
->  	rdmsr
-> +	/*
-> +	 * Preserve current value of EFER for comparison and to skip
-> +	 * EFER writes if no change was made (for TDX guest)
-> +	 */
-> +	movl    %eax, %edx
->  	btsl	$_EFER_SCE, %eax	/* Enable System Call */
->  	btl	$20,%edi		/* No Execute supported? */
->  	jnc     1f
->  	btsl	$_EFER_NX, %eax
->  	btsq	$_PAGE_BIT_NX,early_pmd_flags(%rip)
-> -1:	wrmsr				/* Make changes effective */
->  
-> +	/* Avoid writing EFER if no change was made (for TDX guest) */
-> +1:	cmpl	%edx, %eax
-> +	je	1f
-> +	xor	%edx, %edx
-> +	wrmsr				/* Make changes effective */
-> +1:
->  	/* Setup cr0 */
->  	movl	$CR0_STATE, %eax
->  	/* Make changes effective */
-> diff --git a/arch/x86/realmode/rm/trampoline_64.S b/arch/x86/realmode/rm/trampoline_64.S
-> index ae112a91592f..170f248d5769 100644
-> --- a/arch/x86/realmode/rm/trampoline_64.S
-> +++ b/arch/x86/realmode/rm/trampoline_64.S
-> @@ -143,13 +143,28 @@ SYM_CODE_START(startup_32)
->  	movl	%eax, %cr3
->  
->  	# Set up EFER
-> +	movl	$MSR_EFER, %ecx
-> +	rdmsr
-> +	/*
-> +	 * Skip writing to EFER if the register already has desired
-> +	 * value (to avoid #VE for the TDX guest).
-> +	 */
-> +	cmp	pa_tr_efer, %eax
-> +	jne	.Lwrite_efer
-> +	cmp	pa_tr_efer + 4, %edx
-> +	je	.Ldone_efer
-> +.Lwrite_efer:
->  	movl	pa_tr_efer, %eax
->  	movl	pa_tr_efer + 4, %edx
-> -	movl	$MSR_EFER, %ecx
->  	wrmsr
->  
-> -	# Enable paging and in turn activate Long Mode
-> -	movl	$(X86_CR0_PG | X86_CR0_WP | X86_CR0_PE), %eax
-> +.Ldone_efer:
-> +	/*
-> +	 * Enable paging and in turn activate Long Mode. Keep CR0.NE set, FERR#
-> +	 * is no longer used to handle x87 FPU errors and clearing NE may fault
-> +	 * in some environments.
-> +	 */
-> +	movl	$(X86_CR0_PG | X86_CR0_WP | X86_CR0_NE | X86_CR0_PE),
-> %eax
+	https://github.com/hnaz/linux-mm
 
-See above.
 
->  	movl	%eax, %cr0
->  
->  	/*
-> @@ -169,7 +184,11 @@ SYM_CODE_START(pa_trampoline_compat)
->  	movl	$rm_stack_end, %esp
->  	movw	$__KERNEL_DS, %dx
->  
-> -	movl	$X86_CR0_PE, %eax
-> +	/*
-> +	 * Keep CR0.NE set, FERR# is no longer used to handle x87 FPU errors
-> +	 * and clearing NE may fault in some environments.
-> +	 */
-> +	movl	$(X86_CR0_NE | X86_CR0_PE), %eax
 
-Ditto.
+This mmotm tree contains the following patches against 5.17-rc2:
+(patches marked "*" will be included in linux-next)
 
->  	movl	%eax, %cr0
->  	ljmpl   $__KERNEL32_CS, $pa_startup_32
->  SYM_CODE_END(pa_trampoline_compat)
-
-Thanks,
-
-        tglx
+* revert-mm-page_isolation-unset-migratetype-directly-for-non-buddy-page.patch
+* mm-debug_vm_pgtable-remove-pte-entry-from-the-page-table.patch
+* mm-page_table_check-use-unsigned-long-for-page-counters-and-cleanup.patch
+* mm-khugepaged-unify-collapse-pmd-clear-flush-and-free.patch
+* mm-page_table_check-check-entries-at-pmd-levels.patch
+* coredump-also-dump-first-pages-of-non-executable-elf-libraries.patch
+* mm-pgtable-define-pte_index-so-that-preprocessor-could-recognize-it.patch
+* ipc-sem-do-not-sleep-with-a-spin-lock-held.patch
+* mm-fix-panic-in-__alloc_pages.patch
+* fs-proc-task_mmuc-dont-read-mapcount-for-migration-entry.patch
+* mm-kmemleak-avoid-scanning-potential-huge-holes.patch
+* selftests-vm-cleanup-hugetlb-file-after-mremap-test.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* procfs-prevent-unpriveleged-processes-accessing-fdinfo-dir.patch
+* ntfs-add-sanity-check-on-allocation-size.patch
+* ocfs2-cleanup-some-return-variables.patch
+* ocfs2-reflink-deadlock-when-clone-file-to-the-same-directory-simultaneously.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* remove-inode_congested.patch
+* remove-bdi_congested-and-wb_congested-and-related-functions.patch
+* remove-bdi_congested-and-wb_congested-and-related-functions-fix.patch
+* f2fs-change-retry-waiting-for-f2fs_write_single_data_page.patch
+* f2f2-replace-some-congestion_wait-calls-with-io_schedule_timeout.patch
+* cephfs-dont-set-clear-bdi_congestion.patch
+* fuse-dont-set-clear-bdi_congested.patch
+* nfs-remove-congestion-control.patch
+* block-bfq-ioschedc-use-false-rather-than-blk_rw_async.patch
+* remove-congestion-tracking-framework.patch
+* mount-warn-only-once-about-timestamp-range-expiration.patch
+  mm.patch
+* kasan-page_alloc-deduplicate-should_skip_kasan_poison.patch
+* kasan-page_alloc-move-tag_clear_highpage-out-of-kernel_init_free_pages.patch
+* kasan-page_alloc-merge-kasan_free_pages-into-free_pages_prepare.patch
+* kasan-page_alloc-simplify-kasan_poison_pages-call-site.patch
+* kasan-page_alloc-init-memory-of-skipped-pages-on-free.patch
+* kasan-drop-skip_kasan_poison-variable-in-free_pages_prepare.patch
+* mm-clarify-__gfp_zerotags-comment.patch
+* kasan-only-apply-__gfp_zerotags-when-memory-is-zeroed.patch
+* kasan-page_alloc-refactor-init-checks-in-post_alloc_hook.patch
+* kasan-page_alloc-merge-kasan_alloc_pages-into-post_alloc_hook.patch
+* kasan-page_alloc-combine-tag_clear_highpage-calls-in-post_alloc_hook.patch
+* kasan-page_alloc-move-setpageskipkasanpoison-in-post_alloc_hook.patch
+* kasan-page_alloc-move-kernel_init_free_pages-in-post_alloc_hook.patch
+* kasan-page_alloc-rework-kasan_unpoison_pages-call-site.patch
+* kasan-clean-up-metadata-byte-definitions.patch
+* kasan-define-kasan_vmalloc_invalid-for-sw_tags.patch
+* kasan-x86-arm64-s390-rename-functions-for-modules-shadow.patch
+* kasan-vmalloc-drop-outdated-vm_kasan-comment.patch
+* kasan-reorder-vmalloc-hooks.patch
+* kasan-add-wrappers-for-vmalloc-hooks.patch
+* kasan-vmalloc-reset-tags-in-vmalloc-functions.patch
+* kasan-fork-reset-pointer-tags-of-vmapped-stacks.patch
+* kasan-arm64-reset-pointer-tags-of-vmapped-stacks.patch
+* kasan-vmalloc-add-vmalloc-tagging-for-sw_tags.patch
+* kasan-vmalloc-arm64-mark-vmalloc-mappings-as-pgprot_tagged.patch
+* kasan-vmalloc-unpoison-vm_alloc-pages-after-mapping.patch
+* kasan-mm-only-define-___gfp_skip_kasan_poison-with-hw_tags.patch
+* kasan-page_alloc-allow-skipping-unpoisoning-for-hw_tags.patch
+* kasan-page_alloc-allow-skipping-memory-init-for-hw_tags.patch
+* kasan-vmalloc-add-vmalloc-tagging-for-hw_tags.patch
+* kasan-vmalloc-only-tag-normal-vmalloc-allocations.patch
+* kasan-arm64-dont-tag-executable-vmalloc-allocations.patch
+* kasan-mark-kasan_arg_stacktrace-as-__initdata.patch
+* kasan-clean-up-feature-flags-for-hw_tags-mode.patch
+* kasan-add-kasanvmalloc-command-line-flag.patch
+* kasan-allow-enabling-kasan_vmalloc-and-sw-hw_tags.patch
+* arm64-select-kasan_vmalloc-for-sw-hw_tags-modes.patch
+* kasan-documentation-updates.patch
+* kasan-improve-vmalloc-tests.patch
+* kasan-improve-vmalloc-tests-fix.patch
+* mm-memremap-avoid-calling-kasan_remove_zero_shadow-for-device-private-memory.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling.patch
+* tools-vm-page_owner_sortc-sort-by-stacktrace-before-culling-fix.patch
+* tools-vm-page_owner_sortc-support-sorting-by-stack-trace.patch
+* tools-vm-page_owner_sortc-add-switch-between-culling-by-stacktrace-and-txt.patch
+* tools-vm-page_owner_sortc-support-sorting-pid-and-time.patch
+* tools-vm-page_owner_sortc-two-trivial-fixes.patch
+* tools-vm-page_owner_sortc-delete-invalid-duplicate-code.patch
+* documentation-vm-page_ownerrst-update-the-documentation.patch
+* documentation-vm-page_ownerrst-update-the-documentation-fix.patch
+* docs-vm-fix-unexpected-indentation-warns-in-page_owner.patch
+* mm-move-page-writeback-sysctls-to-is-own-file.patch
+* mm-move-page-writeback-sysctls-to-is-own-file-checkpatch-fixes.patch
+* mm-move-page-writeback-sysctls-to-is-own-file-fix.patch
+* mm-fix-invalid-page-pointer-returned-with-foll_pin-gups.patch
+* mm-gup-clean-up-follow_pfn_pte-slightly.patch
+* mm-gup-remove-unused-pin_user_pages_locked.patch
+* mm-gup-remove-get_user_pages_locked.patch
+* memcg-replace-in_interrupt-with-in_task.patch
+* memcg-add-per-memcg-total-kernel-memory-stat.patch
+* mm-memcg-mem_cgroup_per_node-is-already-set-to-0-on-allocation.patch
+* mm-memcg-retrieve-parent-memcg-from-cssparent.patch
+* mm-generalize-arch_has_filter_pgprot.patch
+* mm-optimize-do_wp_page-for-exclusive-pages-in-the-swapcache.patch
+* mm-optimize-do_wp_page-for-fresh-pages-in-local-lru-pagevecs.patch
+* mm-slightly-clarify-ksm-logic-in-do_swap_page.patch
+* mm-streamline-cow-logic-in-do_swap_page.patch
+* mm-huge_memory-streamline-cow-logic-in-do_huge_pmd_wp_page.patch
+* mm-khugepaged-remove-reuse_swap_page-usage.patch
+* mm-swapfile-remove-stale-reuse_swap_page.patch
+* mm-huge_memory-remove-stale-page_trans_huge_mapcount.patch
+* mm-huge_memory-remove-stale-locking-logic-from-__split_huge_pmd.patch
+* mm-thp-fix-wrong-cache-flush-in-remove_migration_pmd.patch
+* mm-fix-missing-cache-flush-for-all-tail-pages-of-compound-page.patch
+* mm-hugetlb-fix-missing-cache-flush-in-copy_huge_page_from_user.patch
+* mm-hugetlb-fix-missing-cache-flush-in-hugetlb_mcopy_atomic_pte.patch
+* mm-replace-multiple-dcache-flush-with-flush_dcache_folio.patch
+* mm-sparse-make-mminit_validate_memmodel_limits-static.patch
+* mm-sparsemem-fix-mem_section-will-never-be-null-gcc-12-warning.patch
+* mm-vmalloc-remove-unneeded-function-forward-declaration.patch
+* mm-vmalloc-move-draining-areas-out-of-caller-context.patch
+* mm-vmallocc-fix-unused-function-warning.patch
+* vmap-dont-allow-invalid-pages.patch
+* mm-page_alloc-avoid-merging-non-fallbackable-pageblocks-with-others.patch
+* mm-page_alloc-add-same-penalty-is-enough-to-get-round-robin-order.patch
+* mm-page_alloc-add-penalty-to-local_node.patch
+* mm-mmzonec-use-try_cmpxchg-in-page_cpupid_xchg_last.patch
+* mm-discard-__gfp_atomic.patch
+* mm-mmzoneh-remove-unused-macros.patch
+* mm-hwpoison-remove-obsolete-comment.patch
+* mm-hwpoison-fix-error-page-recovered-but-reported-not-recovered.patch
+* mm-hugetlb-free-the-2nd-vmemmap-page-associated-with-each-hugetlb-page.patch
+* mm-hugetlb-replace-hugetlb_free_vmemmap_enabled-with-a-static_key.patch
+* mm-sparsemem-use-page-table-lock-to-protect-kernel-pmd-operations.patch
+* selftests-vm-add-a-hugetlb-test-case.patch
+* mm-sparsemem-move-vmemmap-related-to-hugetlb-to-config_hugetlb_page_free_vmemmap.patch
+* mm-hugetlb-generalize-arch_want_general_hugetlb.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt.patch
+* mm-mempolicy-convert-from-atomic_t-to-refcount_t-on-mempolicy-refcnt-fix.patch
+* mm-migration-add-trace-events-for-thp-migrations.patch
+* mm-migration-add-trace-events-for-base-page-and-hugetlb-migrations.patch
+* mmmigrate-fix-establishing-demotion-target.patch
+* mm-cma-provide-option-to-opt-out-from-exposing-pages-on-activation-failure.patch
+* powerpc-fadump-opt-out-from-freeing-pages-on-cma-activation-failure.patch
+* numa-balancing-add-page-promotion-counter.patch
+* numa-balancing-optimize-page-placement-for-memory-tiering-system.patch
+* memory-tiering-skip-to-scan-fast-memory.patch
+* mm-vmstat-add-event-for-ksm-swapping-in-copy.patch
+* mm-hwpoison-check-the-subpage-not-the-head-page.patch
+* mm-balloon_compaction-make-balloon-page-compaction-callbacks-static.patch
+* mm-fix-race-between-madv_free-reclaim-and-blkdev-direct-io-read.patch
+* mm-memory_hotplug-make-arch_alloc_nodedata-independent-on-config_memory_hotplug.patch
+* mm-handle-uninitialized-numa-nodes-gracefully.patch
+* mm-memory_hotplug-drop-arch_free_nodedata.patch
+* mm-memory_hotplug-reorganize-new-pgdat-initialization.patch
+* mm-make-free_area_init_node-aware-of-memory-less-nodes.patch
+* memcg-do-not-tweak-node-in-alloc_mem_cgroup_per_node_info.patch
+* drivers-base-memory-add-memory-block-to-memory-group-after-registration-succeeded.patch
+* mm-rmap-convert-from-atomic_t-to-refcount_t-on-anon_vma-refcount.patch
+* mm-zswapc-allow-handling-just-same-value-filled-pages.patch
+* highmem-document-kunmap_local.patch
+* highmem-document-kunmap_local-v2.patch
+* mm-highmem-remove-unnecessary-done-label.patch
+* mm-hmmc-remove-unneeded-local-variable-ret.patch
+* mm-add-zone-device-coherent-type-memory-support.patch
+* mm-add-device-coherent-vma-selection-for-memory-migration.patch
+* mm-gup-fail-get_user_pages-for-longterm-dev-coherent-type.patch
+* drm-amdkfd-add-spm-support-for-svm.patch
+* drm-amdkfd-coherent-type-as-sys-mem-on-migration-to-ram.patch
+* lib-test_hmm-add-ioctl-to-get-zone-device-type.patch
+* lib-test_hmm-add-module-param-for-zone-device-type.patch
+* lib-add-support-for-device-coherent-type-in-test_hmm.patch
+* tools-update-hmm-test-to-support-device-coherent-type.patch
+* tools-update-test_hmm-script-to-support-sp-config.patch
+* mm-damon-dbgfs-init_regions-use-target-index-instead-of-target-id.patch
+* docs-admin-guide-mm-damon-usage-update-for-changed-initail_regions-file-input.patch
+* mm-damon-core-move-damon_set_targets-into-dbgfs.patch
+* mm-damon-remove-the-target-id-concept.patch
+* mm-damon-remove-redundant-page-validation.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* proc-alloc-path_max-bytes-for-proc-pid-fd-symlinks.patch
+* proc-alloc-path_max-bytes-for-proc-pid-fd-symlinks-fix.patch
+* proc-vmcore-fix-possible-deadlock-on-concurrent-mmap-and-read.patch
+* proc-vmcore-fix-vmcore_alloc_buf-kernel-doc-comment.patch
+* proc-sysctl-make-protected_-world-readable.patch
+* kconfigdebug-make-debug_info-selectable-from-a-choice.patch
+* kconfigdebug-make-debug_info-selectable-from-a-choice-fix.patch
+* lz4-fix-lz4_decompress_safe_partial-read-out-of-bound.patch
+* checkpatch-prefer-module_licensegpl-over-module_licensegpl-v2.patch
+* checkpatch-add-fix-option-for-some-trailing_statements.patch
+* fs-binfmt_elf-fix-at_phdr-for-unusual-elf-files.patch
+* fs-binfmt_elf-fix-at_phdr-for-unusual-elf-files-v5.patch
+* fs-binfmt_elf-refactor-load_elf_binary-function.patch
+* elf-fix-overflow-in-total-mapping-size-calculation.patch
+* kallsyms-print-module-name-in-%ps-s-case-when-kallsyms-is-disabled.patch
+* init-mainc-silence-some-wunused-parameter-warnings.patch
+* fs-pipe-use-kvcalloc-to-allocate-a-pipe_buffer-array.patch
+* fs-pipe-local-vars-has-to-match-types-of-proper-pipe_inode_info-fields.patch
+* minix-fix-bug-when-opening-a-file-with-o_direct.patch
+* exec-force-single-empty-string-when-argv-is-empty.patch
+* exec-force-single-empty-string-when-argv-is-empty-fix.patch
+* selftests-exec-test-for-empty-string-on-null-argv.patch
+* kexec-make-crashk_res-crashk_low_res-and-crash_notes-symbols-always-visible.patch
+* riscv-mm-init-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* x86-setup-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* arm64-mm-use-is_enabledconfig_kexec_core-instead-of-ifdef.patch
+* docs-sysctl-kernel-add-missing-bit-to-panic_print.patch
+* docs-sysctl-kernel-add-missing-bit-to-panic_print-fix.patch
+* panic-add-option-to-dump-all-cpus-backtraces-in-panic_print.patch
+* panic-allow-printing-extra-panic-information-on-kdump.patch
+* kcov-split-ioctl-handling-into-locked-and-unlocked-parts.patch
+* kcov-properly-handle-subsequent-mmap-calls.patch
+* selftests-set-the-build-variable-to-absolute-path.patch
+* selftests-add-and-export-a-kernel-uapi-headers-path.patch
+* selftests-correct-the-headers-install-path.patch
+* selftests-futex-add-the-uapi-headers-include-variable.patch
+* selftests-kvm-add-the-uapi-headers-include-variable.patch
+* selftests-landlock-add-the-uapi-headers-include-variable.patch
+* selftests-net-add-the-uapi-headers-include-variable.patch
+* selftests-mptcp-add-the-uapi-headers-include-variable.patch
+* selftests-vm-add-the-uapi-headers-include-variable.patch
+* selftests-vm-remove-dependecy-from-internal-kernel-macros.patch
+* selftests-kselftest-framework-provide-finished-helper.patch
+* revert-ubsan-kcsan-dont-combine-sanitizer-with-kcov-on-clang.patch
+* ipc-mqueue-use-get_tree_nodev-in-mqueue_get_tree.patch
+  linux-next.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  mutex-subsystem-synchro-test-module-fix.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

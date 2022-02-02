@@ -2,186 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8577D4A7066
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A854A7067
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344044AbiBBL6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:58:10 -0500
-Received: from foss.arm.com ([217.140.110.172]:54042 "EHLO foss.arm.com"
+        id S1344046AbiBBL65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:58:57 -0500
+Received: from mga04.intel.com ([192.55.52.120]:26729 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232566AbiBBL6J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:58:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50FF71FB;
-        Wed,  2 Feb 2022 03:58:09 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.87.240])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75BD93F718;
-        Wed,  2 Feb 2022 03:58:07 -0800 (PST)
-Date:   Wed, 2 Feb 2022 11:58:04 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 1/2] perf: Add more generic branch types
-Message-ID: <YfpxzKa7JSlimA1i@FVFF77S0Q05N>
-References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
- <1643348653-24367-2-git-send-email-anshuman.khandual@arm.com>
+        id S232566AbiBBL64 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 06:58:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643803136; x=1675339136;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=X6sulG0VhU3EPk+1QVkZUD/dBkSL2RmLEFhar6KZX0s=;
+  b=F2etJLl++o7xPSzN2b3EVZjkYN2moWAl6b342P8qK/0uXk7BswSxaQ2L
+   Hk6SnOErpVPgfkj7lz75KYjdXThCN6v7CyYK+pAl6TxBcsv5lnyyrdXjT
+   WFUpZbdbI6rzSQhnooI8XqA94/OhsNuryA4aAh2BNgbW6v6+hnRQ8uc1K
+   hXofSFKsy0FLWDmkVi6KrxvIoAlp3vJD3fdgapD7sZH8Y7WCzU5ENYWUF
+   Kg8LrzZ+Jf7uoXftc2z22AMuaVuXu0Hly27qpJUd6aHdm6FX32xYNBq+e
+   Pd0GnfE0gqyq9PQAbzKlvaJ1N0xhA2nFGuQX7UqjvvTTEpcFbjOfjwJdD
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="246730109"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="246730109"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 03:58:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="482803594"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 03:58:54 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFEHl-000UX7-Sb; Wed, 02 Feb 2022 11:58:53 +0000
+Date:   Wed, 2 Feb 2022 19:58:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kees:for-next/memcpy 15/15]
+ drivers/gpu/drm/gma500/intel_bios.c:547:42: sparse: sparse: incorrect type
+ in argument 1 (different address spaces)
+Message-ID: <202202021936.6v5Ix9KS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643348653-24367-2-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anshuman,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/memcpy
+head:   0b27a15c23f17d6ca9a01505f38b477178fabb52
+commit: 0b27a15c23f17d6ca9a01505f38b477178fabb52 [15/15] fortify: Add Clang support
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220202/202202021936.6v5Ix9KS-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=0b27a15c23f17d6ca9a01505f38b477178fabb52
+        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+        git fetch --no-tags kees for-next/memcpy
+        git checkout 0b27a15c23f17d6ca9a01505f38b477178fabb52
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/gma500/
 
-On Fri, Jan 28, 2022 at 11:14:12AM +0530, Anshuman Khandual wrote:
-> This expands generic branch type classification by adding some more entries
-> , that can still be represented with the existing 4 bit 'type' field. While
-> here this also updates the x86 implementation with these new branch types.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It looks like there's some whitespace damage here.
 
-From a quick scan of the below, I think the "exception return" and "IRQ
-exception" types are somewhat generic, and could be added now (aside from any
-bikeshedding over names), but:
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/gma500/intel_bios.c:547:42: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got unsigned char [noderef] [usertype] __iomem * @@
+   drivers/gpu/drm/gma500/intel_bios.c:547:42: sparse:     expected void const *const p
+   drivers/gpu/drm/gma500/intel_bios.c:547:42: sparse:     got unsigned char [noderef] [usertype] __iomem *
+   drivers/gpu/drm/gma500/intel_bios.c:548:40: sparse: sparse: cast removes address space '__iomem' of expression
+   drivers/gpu/drm/gma500/intel_bios.c:558:24: sparse: sparse: cast removes address space '__iomem' of expression
+--
+   drivers/gpu/drm/gma500/opregion.c:297:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct opregion_header *header @@
+   drivers/gpu/drm/gma500/opregion.c:297:25: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/gpu/drm/gma500/opregion.c:297:25: sparse:     got struct opregion_header *header
+>> drivers/gpu/drm/gma500/opregion.c:327:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *const p @@     got void [noderef] __iomem *[assigned] base @@
+   drivers/gpu/drm/gma500/opregion.c:327:20: sparse:     expected void const *const p
+   drivers/gpu/drm/gma500/opregion.c:327:20: sparse:     got void [noderef] __iomem *[assigned] base
+   drivers/gpu/drm/gma500/opregion.c:333:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct opregion_header *header @@     got void [noderef] __iomem *[assigned] base @@
+   drivers/gpu/drm/gma500/opregion.c:333:26: sparse:     expected struct opregion_header *header
+   drivers/gpu/drm/gma500/opregion.c:333:26: sparse:     got void [noderef] __iomem *[assigned] base
+   drivers/gpu/drm/gma500/opregion.c:334:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *vbt @@     got void [noderef] __iomem * @@
+   drivers/gpu/drm/gma500/opregion.c:334:23: sparse:     expected void *vbt
+   drivers/gpu/drm/gma500/opregion.c:334:23: sparse:     got void [noderef] __iomem *
+   drivers/gpu/drm/gma500/opregion.c:341:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct opregion_acpi *acpi @@     got void [noderef] __iomem * @@
+   drivers/gpu/drm/gma500/opregion.c:341:32: sparse:     expected struct opregion_acpi *acpi
+   drivers/gpu/drm/gma500/opregion.c:341:32: sparse:     got void [noderef] __iomem *
+   drivers/gpu/drm/gma500/opregion.c:346:32: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct opregion_asle *asle @@     got void [noderef] __iomem * @@
+   drivers/gpu/drm/gma500/opregion.c:346:32: sparse:     expected struct opregion_asle *asle
+   drivers/gpu/drm/gma500/opregion.c:346:32: sparse:     got void [noderef] __iomem *
 
-* For IRQ vs FIQ, we might just want to have a top-level "asynchronous
-  exception" type, and then further divide that with a separate field. That way
-  it's easier to extend in future if new exceptions are added.
+vim +547 drivers/gpu/drm/gma500/intel_bios.c
 
-* I don't think the debug state entry/exits make sense as generic branch types,
-  since those are somewhat specific to the ARM architecutre, and it might make
-  sense to define generic PERF_BR_ARCH* definitions instead.
+1fb28e9e737e26 Alan Cox          2012-04-25  500  
+1fb28e9e737e26 Alan Cox          2012-04-25  501  
+f910b411053f04 Alan Cox          2011-11-03  502  /**
+f910b411053f04 Alan Cox          2011-11-03  503   * psb_intel_init_bios - initialize VBIOS settings & find VBT
+f910b411053f04 Alan Cox          2011-11-03  504   * @dev: DRM device
+f910b411053f04 Alan Cox          2011-11-03  505   *
+f910b411053f04 Alan Cox          2011-11-03  506   * Loads the Video BIOS and checks that the VBT exists.  Sets scratch registers
+f910b411053f04 Alan Cox          2011-11-03  507   * to appropriate values.
+f910b411053f04 Alan Cox          2011-11-03  508   *
+f910b411053f04 Alan Cox          2011-11-03  509   * VBT existence is a sanity check that is relied on by other i830_bios.c code.
+f910b411053f04 Alan Cox          2011-11-03  510   * Note that it would be better to use a BIOS call to get the VBT, as BIOSes may
+f910b411053f04 Alan Cox          2011-11-03  511   * feed an updated VBT back through that, compared to what we'll fetch using
+f910b411053f04 Alan Cox          2011-11-03  512   * this method of groping around in the BIOS data.
+f910b411053f04 Alan Cox          2011-11-03  513   *
+f910b411053f04 Alan Cox          2011-11-03  514   * Returns 0 on success, nonzero on failure.
+f910b411053f04 Alan Cox          2011-11-03  515   */
+0317c6cecd3d6c Dan Carpenter     2012-06-27  516  int psb_intel_init_bios(struct drm_device *dev)
+f910b411053f04 Alan Cox          2011-11-03  517  {
+f71635e893c383 Thomas Zimmermann 2021-09-20  518  	struct drm_psb_private *dev_priv = to_drm_psb_private(dev);
+a2c68495b57986 Thomas Zimmermann 2020-12-01  519  	struct pci_dev *pdev = to_pci_dev(dev->dev);
+f910b411053f04 Alan Cox          2011-11-03  520  	struct vbt_header *vbt = NULL;
+1fb28e9e737e26 Alan Cox          2012-04-25  521  	struct bdb_header *bdb = NULL;
+1fb28e9e737e26 Alan Cox          2012-04-25  522  	u8 __iomem *bios = NULL;
+f910b411053f04 Alan Cox          2011-11-03  523  	size_t size;
+f910b411053f04 Alan Cox          2011-11-03  524  	int i;
+f910b411053f04 Alan Cox          2011-11-03  525  
+d112a8163f8375 Zhao Yakui        2012-08-08  526  
+d112a8163f8375 Zhao Yakui        2012-08-08  527  	dev_priv->panel_type = 0xff;
+d112a8163f8375 Zhao Yakui        2012-08-08  528  
+1fb28e9e737e26 Alan Cox          2012-04-25  529  	/* XXX Should this validation be moved to intel_opregion.c? */
+1fb28e9e737e26 Alan Cox          2012-04-25  530  	if (dev_priv->opregion.vbt) {
+1fb28e9e737e26 Alan Cox          2012-04-25  531  		struct vbt_header *vbt = dev_priv->opregion.vbt;
+1fb28e9e737e26 Alan Cox          2012-04-25  532  		if (memcmp(vbt->signature, "$VBT", 4) == 0) {
+1fb28e9e737e26 Alan Cox          2012-04-25  533  			DRM_DEBUG_KMS("Using VBT from OpRegion: %20s\n",
+1fb28e9e737e26 Alan Cox          2012-04-25  534  					 vbt->signature);
+1fb28e9e737e26 Alan Cox          2012-04-25  535  			bdb = (struct bdb_header *)((char *)vbt + vbt->bdb_offset);
+1fb28e9e737e26 Alan Cox          2012-04-25  536  		} else
+1fb28e9e737e26 Alan Cox          2012-04-25  537  			dev_priv->opregion.vbt = NULL;
+1fb28e9e737e26 Alan Cox          2012-04-25  538  	}
+1fb28e9e737e26 Alan Cox          2012-04-25  539  
+1fb28e9e737e26 Alan Cox          2012-04-25  540  	if (bdb == NULL) {
+f910b411053f04 Alan Cox          2011-11-03  541  		bios = pci_map_rom(pdev, &size);
+f910b411053f04 Alan Cox          2011-11-03  542  		if (!bios)
+f910b411053f04 Alan Cox          2011-11-03  543  			return -1;
+f910b411053f04 Alan Cox          2011-11-03  544  
+f910b411053f04 Alan Cox          2011-11-03  545  		/* Scour memory looking for the VBT signature */
+f910b411053f04 Alan Cox          2011-11-03  546  		for (i = 0; i + 4 < size; i++) {
+f910b411053f04 Alan Cox          2011-11-03 @547  			if (!memcmp(bios + i, "$VBT", 4)) {
+f910b411053f04 Alan Cox          2011-11-03  548  				vbt = (struct vbt_header *)(bios + i);
+f910b411053f04 Alan Cox          2011-11-03  549  				break;
+f910b411053f04 Alan Cox          2011-11-03  550  			}
+f910b411053f04 Alan Cox          2011-11-03  551  		}
+f910b411053f04 Alan Cox          2011-11-03  552  
+f910b411053f04 Alan Cox          2011-11-03  553  		if (!vbt) {
+f910b411053f04 Alan Cox          2011-11-03  554  			dev_err(dev->dev, "VBT signature missing\n");
+f910b411053f04 Alan Cox          2011-11-03  555  			pci_unmap_rom(pdev, bios);
+f910b411053f04 Alan Cox          2011-11-03  556  			return -1;
+f910b411053f04 Alan Cox          2011-11-03  557  		}
+f910b411053f04 Alan Cox          2011-11-03  558  		bdb = (struct bdb_header *)(bios + i + vbt->bdb_offset);
+1fb28e9e737e26 Alan Cox          2012-04-25  559  	}
+f910b411053f04 Alan Cox          2011-11-03  560  
+1fb28e9e737e26 Alan Cox          2012-04-25  561  	/* Grab useful general dxefinitions */
+f910b411053f04 Alan Cox          2011-11-03  562  	parse_general_features(dev_priv, bdb);
+642c52fcc98aa4 Alan Cox          2012-04-25  563  	parse_driver_features(dev_priv, bdb);
+f910b411053f04 Alan Cox          2011-11-03  564  	parse_lfp_panel_data(dev_priv, bdb);
+f910b411053f04 Alan Cox          2011-11-03  565  	parse_sdvo_panel_data(dev_priv, bdb);
+1fb28e9e737e26 Alan Cox          2012-04-25  566  	parse_sdvo_device_mapping(dev_priv, bdb);
+1fb28e9e737e26 Alan Cox          2012-04-25  567  	parse_device_mapping(dev_priv, bdb);
+f910b411053f04 Alan Cox          2011-11-03  568  	parse_backlight_data(dev_priv, bdb);
+d112a8163f8375 Zhao Yakui        2012-08-08  569  	parse_edp(dev_priv, bdb);
+f910b411053f04 Alan Cox          2011-11-03  570  
+1fb28e9e737e26 Alan Cox          2012-04-25  571  	if (bios)
+f910b411053f04 Alan Cox          2011-11-03  572  		pci_unmap_rom(pdev, bios);
+f910b411053f04 Alan Cox          2011-11-03  573  
+f910b411053f04 Alan Cox          2011-11-03  574  	return 0;
+f910b411053f04 Alan Cox          2011-11-03  575  }
+f910b411053f04 Alan Cox          2011-11-03  576  
 
-* Given the next patch extends the field, and therei are potential ABI problems
-  with that, we might need to reserve a value for ABI extensibility purposes,
-  and I suspect we need to do that *first*. More comments on the subsequent
-  patch.
- 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@redhat.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/x86/events/intel/lbr.c           | 4 ++--
->  include/uapi/linux/perf_event.h       | 5 +++++
->  tools/include/uapi/linux/perf_event.h | 5 +++++
->  tools/perf/util/branch.c              | 7 ++++++-
->  4 files changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 8043213b75a5..9f86fac8c6a5 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -1336,10 +1336,10 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
->  	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
->  	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
->  	PERF_BR_UNKNOWN,	/* X86_BR_INT */
-> -	PERF_BR_UNKNOWN,	/* X86_BR_IRET */
-> +	PERF_BR_EXPT_RET,	/* X86_BR_IRET */
->  	PERF_BR_COND,		/* X86_BR_JCC */
->  	PERF_BR_UNCOND,		/* X86_BR_JMP */
-> -	PERF_BR_UNKNOWN,	/* X86_BR_IRQ */
-> +	PERF_BR_IRQ,		/* X86_BR_IRQ */
->  	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
->  	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
->  	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
+:::::: The code at line 547 was first introduced by commit
+:::::: f910b411053f04d5ccd6219a912eaea2b6f5ea6e gma500: Add the glue to the various BIOS and firmware interfaces
 
-This presumably changes the values reported to userspace, so the commit message
-should mention that and explain why that is not a problem.
+:::::: TO: Alan Cox <alan@linux.intel.com>
+:::::: CC: Dave Airlie <airlied@redhat.com>
 
-> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-> index 1b65042ab1db..b91d0f575d0c 100644
-> --- a/include/uapi/linux/perf_event.h
-> +++ b/include/uapi/linux/perf_event.h
-> @@ -251,6 +251,11 @@ enum {
->  	PERF_BR_SYSRET		= 8,	/* syscall return */
->  	PERF_BR_COND_CALL	= 9,	/* conditional function call */
->  	PERF_BR_COND_RET	= 10,	/* conditional function return */
-> +	PERF_BR_EXPT_RET	= 11,	/* exception return */
-
-We don't use 'EXPT' anywhere else, so it might be better to just use 'ERET'.
-IIUC that's the naming the x86 FRED stuff is going to use anyhow.
-
-> +	PERF_BR_IRQ		= 12,	/* irq */
-
-This looks somewhat generic, so adding it now makes sense to me, but ...
-
-> +	PERF_BR_FIQ		= 13,	/* fiq */
-
-... this is arguably just a idfferent class of interrupt from the PoV of Linux,
-and the naming is ARM-specific, so I don't think this makes sense to add *now*.
-As above, maybe it would be better to have a generic "aynchronous exception" or
-"interrupt" type, and a separate field to distinguish specific types of those.
-
-> +	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
-> +	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-
-For the benefit of those not familiar with the ARM architecture, "debug halt"
-and "debug exit" usually refer to "debug state", which is what an external
-(e.g. JTAG) debugger uses rather than the usual self-hosted debug stuff that
-Linux uses.
-
-Given that, I'm not sure these are very generic, and I suspect it would be
-better to have more generic PERF_BR_ARCH_* entries for things like this.
-
-Thanks,
-Mark.
-
->  	PERF_BR_MAX,
->  };
->  
-> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-> index 4cd39aaccbe7..1882054e8684 100644
-> --- a/tools/include/uapi/linux/perf_event.h
-> +++ b/tools/include/uapi/linux/perf_event.h
-> @@ -251,6 +251,11 @@ enum {
->  	PERF_BR_SYSRET		= 8,	/* syscall return */
->  	PERF_BR_COND_CALL	= 9,	/* conditional function call */
->  	PERF_BR_COND_RET	= 10,	/* conditional function return */
-> +	PERF_BR_EXPT_RET	= 11,	/* exception return */
-> +	PERF_BR_IRQ		= 12,	/* irq */
-> +	PERF_BR_FIQ		= 13,	/* fiq */
-> +	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
-> +	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
->  	PERF_BR_MAX,
->  };
->  
-> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-> index 2285b1eb3128..74e5e67b1779 100644
-> --- a/tools/perf/util/branch.c
-> +++ b/tools/perf/util/branch.c
-> @@ -49,7 +49,12 @@ const char *branch_type_name(int type)
->  		"SYSCALL",
->  		"SYSRET",
->  		"COND_CALL",
-> -		"COND_RET"
-> +		"COND_RET",
-> +		"EXPT_RET",
-> +		"IRQ",
-> +		"FIQ",
-> +		"DEBUG_HALT",
-> +		"DEBUG_EXIT"
->  	};
->  
->  	if (type >= 0 && type < PERF_BR_MAX)
-> -- 
-> 2.25.1
-> 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,95 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4964A692E
+	by mail.lfdr.de (Postfix) with ESMTP id D12C54A6930
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243319AbiBBAZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S243329AbiBBA0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiBBAZc (ORCPT
+        with ESMTP id S230330AbiBBA0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:25:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07B1C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:25:31 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643761529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w74ZJOaVt6Kmg8KSjRCPSyIsO9g1OFfRIBkrQ0IgAA8=;
-        b=41y4R91CcSHQGOlDT3iuOWqB+NNVwY0JKiz89+Kn833qdRCKCeeldfT+iSq95IOiFHoaIx
-        0u88tQ8mfiku13myi5DprMYZZnznOdzR74FtZ2LbdNWkmUzE5N0dM4NmNt1NgVn09lH2cc
-        r5+Hq/6rW1m16ETgNR8cboEKKkq1FYPDyuPp8gb1yAtZUOfrl5zw7LCDhPmDzGMTIxSal0
-        Tiow3R1nnFBhghTDxDJBtL2xZH+DertGwAID/8uYbvYdSCn7mdxyeh5HJ1t1HJHNV9UoEA
-        cp2MSPmR888g4snsuya97LGnyigDKjwh40rd6TatzI2VIRPNNYmbMxJ0Rcj5lw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643761529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=w74ZJOaVt6Kmg8KSjRCPSyIsO9g1OFfRIBkrQ0IgAA8=;
-        b=prX4tNmrK84+dA89yFUx0nz+y9YBx+7Pn+2k+86c8GwYaX+d0n4bIkV0qpFRLw0DuIVvyx
-        /5HGp9mUSZgyyfDQ==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
-In-Reply-To: <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
-Date:   Wed, 02 Feb 2022 01:25:28 +0100
-Message-ID: <87bkzqw1vr.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Tue, 1 Feb 2022 19:26:45 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C38FC061714;
+        Tue,  1 Feb 2022 16:26:45 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h12so18680772pjq.3;
+        Tue, 01 Feb 2022 16:26:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=7VOcx1z2LQk1UVKN1GshLFL3aoPwBOYAHUTpT33dawQ=;
+        b=g3xgkZyLby77vQpeK/xLBaf60/4qM/xPAt0hur2nFw7UTOwt2mrv1uCyKISqPPptGF
+         NxfUTkUEXc2tMJOd051Jm1cO84TQQ7ybRU7d5dJ9z5fkF/7xsnFRin4yxbny/zulcElO
+         5K4XhXlC7lqbHtvMAsSQqB833l01R1T50BRH0qdI37FTCx+lvEyScDafkkG5hBnSF52j
+         vaPN07F0GFE1z72uORg7Pf5JGxGjN/jZv2t18u0iNHhKddLlgib1dgzeX8D3SGLhTKev
+         Vf8yr6YDWzlGnwl44PLal4xXToTOxQJbJzLOMMLklUsVAyGpMxG1CT4x2pcqcbIzO8Y+
+         WTIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=7VOcx1z2LQk1UVKN1GshLFL3aoPwBOYAHUTpT33dawQ=;
+        b=SINDnIYzDtwXD5P2am4kynTH9LFE/wNTzI3uqDOMXxLJGgwLnuFtczsMI1CdTBIs2i
+         1HlMziSC4GxrpjlbAgdMFIqIQMtmX04PLht+PH3k/1VWKMlexa0x8TMQsxHxyzz/nyut
+         VvODxCWn+YTR7G/XobO5Zy4uhT7qBR+unroWOUuYMhyCXzwGnv8mEk2G/2zYhcvW26wS
+         R2YCLO9N4WrfNeu8T10du00oYOovshSZXJLGrxFcBO37844mFGN9zhq7Njpkh61DMXtf
+         k4LWvhgYL3uKyWJT7v5+wZr/+aYPkA0nCrT0zE5PiBgQDpFRb+uRMs1l1z0/WLHPXKsY
+         GKKw==
+X-Gm-Message-State: AOAM530U3ooAL9YqK6DT2iSWLxE8LfJNkVlU/hS7xogWJTSbvYzqTmso
+        S++9q6682SVMpbn9Ea3VxV8BLTg7/JPZx4EyB8s=
+X-Google-Smtp-Source: ABdhPJxQyEYbdz6uT7LBgYyBdxnyeBGMoJKKdxsZmccXRFVAqdje1uJIZo8aWlg/iR4JMHMdhH9x8Q==
+X-Received: by 2002:a17:90b:4d82:: with SMTP id oj2mr5315169pjb.170.1643761604074;
+        Tue, 01 Feb 2022 16:26:44 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id l17sm23360760pfu.61.2022.02.01.16.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 16:26:43 -0800 (PST)
+Message-ID: <61f9cfc3.1c69fb81.a4390.e1fa@mx.google.com>
+Date:   Tue, 01 Feb 2022 16:26:43 -0800 (PST)
+X-Google-Original-Date: Wed, 02 Feb 2022 00:26:36 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220131105229.959216821@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 000/171] 5.15.19-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
+On Mon, 31 Jan 2022 11:54:25 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.19 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> In TDX guests, guest memory is protected from host access. If a guest
-> performs I/O, it needs to explicitly share the I/O memory with the host.
->
-> Make all ioremap()ed pages that are not backed by normal memory
-> (IORES_DESC_NONE or IORES_DESC_RESERVED) mapped as shared.
->
-> Since TDX memory encryption support is similar to AMD SEV architecture,
-> reuse the infrastructure from AMD SEV code.
->
-> Add tdx_shared_mask() interface to get the TDX guest shared bitmask.
->
-> pgprot_decrypted() is used by drivers (i915, virtio_gpu, vfio). Export
-> both pgprot_encrypted() and pgprot_decrypted().
+5.15.19-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-How so?
-
-# git grep pgprot_encrypted
-arch/x86/include/asm/pgtable.h:#define pgprot_encrypted(prot)   __pgprot(__sme_set(pgprot_val(prot)))
-arch/x86/mm/ioremap.c:          prot = pgprot_encrypted(prot);
-arch/x86/mm/ioremap.c:  return encrypted_prot ? pgprot_encrypted(prot)
-arch/x86/mm/mem_encrypt_amd.c:          protection_map[i] = pgprot_encrypted(protection_map[i]);
-arch/x86/mm/pat/set_memory.c:           cpa.mask_clr = pgprot_encrypted(cpa.mask_clr);
-arch/x86/platform/efi/quirks.c:                           pgprot_val(pgprot_encrypted(FIXMAP_PAGE_NORMAL)));
-fs/proc/vmcore.c:       prot = pgprot_encrypted(prot);
-include/linux/pgtable.h:#ifndef pgprot_encrypted
-include/linux/pgtable.h:#define pgprot_encrypted(prot)  (prot)
-
-I cannot find any of the above mentioned subsystems in this grep
-output. Neither does this patch add any users which require those
-exports.
-
-Thanks,
-
-        tglx

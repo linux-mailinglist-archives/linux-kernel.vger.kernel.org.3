@@ -2,330 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E3F4A736B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1302C4A7375
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345089AbiBBOnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:43:33 -0500
-Received: from mail-bn8nam11on2088.outbound.protection.outlook.com ([40.107.236.88]:63578
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233004AbiBBOn0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:43:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B4YoZ3D0ViIvB+r0PE8ewRaX699uJenb4d+FCYsjzpInsZuahaT9cxDRYbM9Tzl/+AWRBxvBmJDtzGe6XEIdg7r088WatHN37RwLTD7+N0+9ZTgRoMmC9+hUwGxFu4Qp7/Lee3Q8sVlGmwgX2DuUsZiqI4fDsPvzegdzcNghfHJHrgBfiOi5d+PrQpRo304p6zgAyMM05fdQ8ULl6DOsCuhtMslKk3W7Fxk0Pv5D/VA/oA8ewhWbfJkR7B2P6IcxhFP/y6QcLQDWrlgYswX9OpPEU0cpX63HoS5wilF5fc9Xqk8YwG0aRpDrubzwuF3TkOpuayIe0kFQHmOA7d5GqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0FrpNN21TIduNnqpXTFezn7hOidoh1hKe1Jyzd49Qk4=;
- b=Wvx/jmBFM/lM9pOYjT4QTCuVQI1eQPIcbuExvCRWoikKpMNe6E8tPlBZa/yUJ2CqGnUmhE+6ofYYDLO4DoWM1YgdmAm2Pwzf6HNFd+IC+wCvTrdV1EllYKpbuFu/7iki0DynxS/LEgicB8dXU/Yrjf33E1c5fjN6JKTRFGmYFtCKz8nPop7oQR63/yiCZk1p50V3ehsMz/hWkwA13RBmLod/5TvjRWvQxmCBZ7uYO/w/HuT44L2ZmHbL8D6Ge1InpXs+hJhZdQ3bW/WITm5908pCHWOtlhsnBavvtFy3UTEBMujWVeQFEdvmdpyNtKfNe663jeuCJSMBDFSwWoMFKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0FrpNN21TIduNnqpXTFezn7hOidoh1hKe1Jyzd49Qk4=;
- b=xDxdFsvMCY7xukeDHDxH/FV52kTUw+abNdVxBuq0OMMB6skhc2t9wm5uCTKcuMVjYeBNNVAo1ZQ0C+mABamqsiRikB3zPWi12zLjTh169kS7FrBLyeNLSbLpoRCkZrDuHrJrs760UEK7B3Bid14LaolTVL2N3RFmXNi+4fdug00=
-Received: from DM5PR19CA0059.namprd19.prod.outlook.com (2603:10b6:3:116::21)
- by BYAPR12MB2599.namprd12.prod.outlook.com (2603:10b6:a03:6b::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Wed, 2 Feb
- 2022 14:43:24 +0000
-Received: from DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:116:cafe::5a) by DM5PR19CA0059.outlook.office365.com
- (2603:10b6:3:116::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Wed, 2 Feb 2022 14:43:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT047.mail.protection.outlook.com (10.13.172.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Wed, 2 Feb 2022 14:43:23 +0000
-Received: from yaz-ethanolx.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 2 Feb
- 2022 08:43:22 -0600
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-edac@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>,
-        <mchehab@kernel.org>, <tony.luck@intel.com>, <james.morse@arm.com>,
-        <rric@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
-        <william.roche@oracle.com>, "Yazen Ghannam" <yazen.ghannam@amd.com>
-Subject: [PATCH v4 2/2] EDAC/amd64: Add new register offset support and related changes
-Date:   Wed, 2 Feb 2022 14:43:07 +0000
-Message-ID: <20220202144307.2678405-3-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220202144307.2678405-1-yazen.ghannam@amd.com>
-References: <20220202144307.2678405-1-yazen.ghannam@amd.com>
+        id S1345115AbiBBOni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345074AbiBBOna (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:43:30 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E725C061714;
+        Wed,  2 Feb 2022 06:43:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xufQ1Q9+1ygsCDJZkQhhHAWRleHJVLLr4QMMU3vcj5Y=; b=oOIEYjuILakE8XqGmGL6SEPV+T
+        k3Z1T7J1Ni4TDwlzj9JH+w9eKYjh7JvxasFf6ZJvIa1yph2ueVL7S4jDGsdYSN9mZ3IcgWkHFaLYg
+        5NgkC7K5e+UqFO0+2x1Gwk8mNXl9ip5gkrlIxJ1PbFckCa8t2JQJE4Hu5IgScl4LFXPizKTY00Fgd
+        K2eEWXOMF6GJyrBZPoZPeNdjl1ITT+Z0Wu8qEw3CwTR0OPepSXztO4T1QFIA/FlvBlj8n6JjwZSic
+        PKN89hiqv0IjCAfwi3Y2kZrGCfE8XR3WGmv/BEIG9EnNWxYkZyB/nqi8XkLqJbnQsJxT8N80DSrny
+        ehaJ2xrQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFGqk-006Dr6-1S; Wed, 02 Feb 2022 14:43:10 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A2626984C61; Wed,  2 Feb 2022 15:43:08 +0100 (CET)
+Date:   Wed, 2 Feb 2022 15:43:08 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+Message-ID: <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 683b6c86-91a2-4f1b-e926-08d9e65a5d77
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2599:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB259967D4955544823E3CEE9CF8279@BYAPR12MB2599.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1186;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fjf6M66n6lohrAClv0d78ITztVeV5/dTJnhPQo+9WIfwbBVpYQ8tWJJVNJwjgWWQ/QYk9pgh/ByPxlCa6M11wXaXuT8184MfsJKr43e7FL/QpCh0wLR4ZuXCsAmEf6bEPrDbn72P0exCGBTVV8KXlpw+CUIVtgKL7qaPIn/FRQNqXpTBCVy0FoFPdfAbovGElAGOwChpkh/AjoqPbYHvdKcplmkA9F2Sg+r+QLsFnwLfE1MtOtxJPuKNqmSoElcs9mn4Iif7kn289g17DbaWOAVqUr6VKdLdAnD2QA7eo03QDbIp29jAxuSmwCXf1yEJfUHHn9xO2uW8VZv93EnYysgiAWFKwxu79ZzjCA1p8tNIKV3O4StZiOtz7i9+WnyAlu/H4BuCe9I19jvMEqdfI3IlTzjqiT8r3egYAfPhqjQFcZ1GBJpWI3QpQ5I/SpWVbtghcnN2JY1D3roRQpA4Rc0AOyVDzjfNcjclWE4W8n9bTtxCBRntDQkkw6BB9/koF8wjt/3FQB3SKBodYakNzheYaGF0A2KD1eiqLJEeyjYL2r8miolTCQWWttDLJqJ/DRqg3atBFJbHaeUEI8+CVCzzVyNRsJyHsYB6Wkd531H5lc0QKqBl2ygdpPFEzkafxOGVauMVH4w4qSwdHFbNxL10i7N1SVNuL7E/5+NrS7UFhW4YJ84FywIJie1ODu+KayE/F4fX/vyjc/VhRSswsc/Bdjn5ul3xd5lkRrComWbzNuXl0xt6pMfEBL5Q+Ohxx+eJbnWAoDNPqK8xqkNh6XgC8XiKhYMbvnmqlw1zsI8=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(86362001)(8936002)(356005)(47076005)(81166007)(336012)(966005)(8676002)(70206006)(40460700003)(36756003)(70586007)(4326008)(54906003)(6666004)(6916009)(508600001)(316002)(16526019)(2616005)(5660300002)(1076003)(186003)(26005)(7696005)(426003)(36860700001)(82310400004)(44832011)(83380400001)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 14:43:23.8126
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 683b6c86-91a2-4f1b-e926-08d9e65a5d77
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2599
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117085307.93030-3-likexu@tencent.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a "family flags" bitmask that can be used to indicate any
-special behavior needed on a per-family basis.
+On Mon, Jan 17, 2022 at 04:53:06PM +0800, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> Currently, we have [intel|knc|p4|p6]_perfmon_event_map on the Intel
+> platforms and amd_[f17h]_perfmon_event_map on the AMD platforms.
+> 
+> Early clumsy KVM code or other potential perf_event users may have
+> hard-coded these perfmon_maps (e.g., arch/x86/kvm/svm/pmu.c), so
+> it would not make sense to program a common hardware event based
+> on the generic "enum perf_hw_id" once the two tables do not match.
+> 
+> Let's provide an interface for callers outside the perf subsystem to get
+> the counter config based on the perfmon_event_map currently in use,
+> and it also helps to save bytes.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/events/core.c            | 9 +++++++++
+>  arch/x86/include/asm/perf_event.h | 2 ++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 38b2c779146f..751048f4cc97 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -693,6 +693,15 @@ void x86_pmu_disable_all(void)
+>  	}
+>  }
+>  
+> +u64 perf_get_hw_event_config(int perf_hw_id)
+> +{
+> +	if (perf_hw_id < x86_pmu.max_events)
+> +		return x86_pmu.event_map(perf_hw_id);
+> +
+> +	return 0;
+> +}
 
-Add a flag to indicate a system uses the new register offsets introduced
-with Family 19h Model 10h.
+Where does perf_hw_id come from? Does this need to be
+array_index_nospec() ?
 
-Use this flag to account for register offset changes, a new bitfield
-indicating DDR5 use on a memory controller, and to set the proper number
-of chip select masks.
+> +EXPORT_SYMBOL_GPL(perf_get_hw_event_config);
 
-Rework f17_addr_mask_to_cs_size() to properly handle the change in chip
-select masks. And update code comments to reflect the updated Chip
-Select, DIMM, and Mask relationships.
+Urgh... hate on kvm being a module again. We really need something like
+EXPORT_SYMBOL_KVM() or something.
 
-[uninitiliazed variable warning]
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
----
-Link:
-https://lore.kernel.org/r/20211228200615.412999-3-yazen.ghannam@amd.com
 
-v3->v4:
-* Use a single helper function for new register offsets.
-* Fix an uninitialized variable warning.
+>  struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
+>  {
+>  	return static_call(x86_pmu_guest_get_msrs)(nr);
+> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> index 8fc1b5003713..d1e325517b74 100644
+> --- a/arch/x86/include/asm/perf_event.h
+> +++ b/arch/x86/include/asm/perf_event.h
+> @@ -492,9 +492,11 @@ static inline void perf_check_microcode(void) { }
+>  
+>  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
+>  extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
+> +extern u64 perf_get_hw_event_config(int perf_hw_id);
+>  extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
+>  #else
+>  struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
+> +u64 perf_get_hw_event_config(int perf_hw_id);
 
-v2->v3:
-* Adjust variable names to explicitly show what they represent.
-* Update code comment to give more detail on CS/MASK/DIMM layout.
+I think Paolo already spotted this one.
 
-v1->v2:
-* Was patch 4 in v1.
-* Change "has_ddr5" flag to "zn_regs_v2".
-* Drop flag check helper function.
-* Update determine_memory_type() to check bitfield for DDR5.
-* Update code comments.
-
- drivers/edac/amd64_edac.c | 80 +++++++++++++++++++++++++++++++--------
- drivers/edac/amd64_edac.h | 14 +++++++
- 2 files changed, 78 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 49e384207ce0..5806fe657373 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -15,6 +15,21 @@ static struct msr __percpu *msrs;
- 
- static struct amd64_family_type *fam_type;
- 
-+static inline u32 get_umc_reg(u32 reg)
-+{
-+	if (!fam_type->flags.zn_regs_v2)
-+		return reg;
-+
-+	switch (reg) {
-+	case UMCCH_ADDR_CFG:		return UMCCH_ADDR_CFG_DDR5;
-+	case UMCCH_ADDR_MASK_SEC:	return UMCCH_ADDR_MASK_SEC_DDR5;
-+	case UMCCH_DIMM_CFG:		return UMCCH_DIMM_CFG_DDR5;
-+	}
-+
-+	WARN_ONCE(1, "%s: unknown register 0x%x", __func__, reg);
-+	return 0;
-+}
-+
- /* Per-node stuff */
- static struct ecc_settings **ecc_stngs;
- 
-@@ -1429,8 +1444,10 @@ static void __dump_misc_regs_df(struct amd64_pvt *pvt)
- 		edac_dbg(1, "UMC%d x16 DIMMs present: %s\n",
- 				i, (umc->dimm_cfg & BIT(7)) ? "yes" : "no");
- 
--		if (umc->dram_type == MEM_LRDDR4) {
--			amd_smn_read(pvt->mc_node_id, umc_base + UMCCH_ADDR_CFG, &tmp);
-+		if (umc->dram_type == MEM_LRDDR4 || umc->dram_type == MEM_LRDDR5) {
-+			amd_smn_read(pvt->mc_node_id,
-+				     umc_base + get_umc_reg(UMCCH_ADDR_CFG),
-+				     &tmp);
- 			edac_dbg(1, "UMC%d LRDIMM %dx rank multiply\n",
- 					i, 1 << ((tmp >> 4) & 0x3));
- 		}
-@@ -1505,7 +1522,7 @@ static void prep_chip_selects(struct amd64_pvt *pvt)
- 
- 		for_each_umc(umc) {
- 			pvt->csels[umc].b_cnt = 4;
--			pvt->csels[umc].m_cnt = 2;
-+			pvt->csels[umc].m_cnt = fam_type->flags.zn_regs_v2 ? 4 : 2;
- 		}
- 
- 	} else {
-@@ -1545,7 +1562,7 @@ static void read_umc_base_mask(struct amd64_pvt *pvt)
- 		}
- 
- 		umc_mask_reg = get_umc_base(umc) + UMCCH_ADDR_MASK;
--		umc_mask_reg_sec = get_umc_base(umc) + UMCCH_ADDR_MASK_SEC;
-+		umc_mask_reg_sec = get_umc_base(umc) + get_umc_reg(UMCCH_ADDR_MASK_SEC);
- 
- 		for_each_chip_select_mask(cs, umc, pvt) {
- 			mask = &pvt->csels[umc].csmasks[cs];
-@@ -1623,12 +1640,25 @@ static void _determine_memory_type_df(struct amd64_umc *umc)
- 		return;
- 	}
- 
--	if (umc->dimm_cfg & BIT(5))
--		umc->dram_type = MEM_LRDDR4;
--	else if (umc->dimm_cfg & BIT(4))
--		umc->dram_type = MEM_RDDR4;
--	else
--		umc->dram_type = MEM_DDR4;
-+	/*
-+	 * Check if the system supports the "DDR Type" field in UMC Config
-+	 * and has DDR5 DIMMs in use.
-+	 */
-+	if (fam_type->flags.zn_regs_v2 && ((umc->umc_cfg & GENMASK(2, 0)) == 0x1)) {
-+		if (umc->dimm_cfg & BIT(5))
-+			umc->dram_type = MEM_LRDDR5;
-+		else if (umc->dimm_cfg & BIT(4))
-+			umc->dram_type = MEM_RDDR5;
-+		else
-+			umc->dram_type = MEM_DDR5;
-+	} else {
-+		if (umc->dimm_cfg & BIT(5))
-+			umc->dram_type = MEM_LRDDR4;
-+		else if (umc->dimm_cfg & BIT(4))
-+			umc->dram_type = MEM_RDDR4;
-+		else
-+			umc->dram_type = MEM_DDR4;
-+	}
- }
- 
- static void determine_memory_type_df(struct amd64_pvt *pvt)
-@@ -2170,6 +2200,7 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- {
- 	u32 addr_mask_orig, addr_mask_deinterleaved;
- 	u32 msb, weight, num_zero_bits;
-+	int cs_mask_nr = csrow_nr;
- 	int dimm, size = 0;
- 
- 	/* No Chip Selects are enabled. */
-@@ -2185,17 +2216,33 @@ static int f17_addr_mask_to_cs_size(struct amd64_pvt *pvt, u8 umc,
- 		return size;
- 
- 	/*
--	 * There is one mask per DIMM, and two Chip Selects per DIMM.
--	 *	CS0 and CS1 -> DIMM0
--	 *	CS2 and CS3 -> DIMM1
-+	 * Family 17h introduced systems with one mask per DIMM,
-+	 * and two Chip Selects per DIMM.
-+	 *
-+	 *	CS0 and CS1 -> MASK0 / DIMM0
-+	 *	CS2 and CS3 -> MASK1 / DIMM1
-+	 *
-+	 * Family 19h Model 10h introduced systems with one mask per Chip Select,
-+	 * and two Chip Selects per DIMM.
-+	 *
-+	 *	CS0 -> MASK0 -> DIMM0
-+	 *	CS1 -> MASK1 -> DIMM0
-+	 *	CS2 -> MASK2 -> DIMM1
-+	 *	CS3 -> MASK3 -> DIMM1
-+	 *
-+	 * Keep the mask number equal to the Chip Select number for newer systems,
-+	 * and shift the mask number for older systems.
- 	 */
- 	dimm = csrow_nr >> 1;
- 
-+	if (!fam_type->flags.zn_regs_v2)
-+		cs_mask_nr >>= 1;
-+
- 	/* Asymmetric dual-rank DIMM support. */
- 	if ((csrow_nr & 1) && (cs_mode & CS_ODD_SECONDARY))
--		addr_mask_orig = pvt->csels[umc].csmasks_sec[dimm];
-+		addr_mask_orig = pvt->csels[umc].csmasks_sec[cs_mask_nr];
- 	else
--		addr_mask_orig = pvt->csels[umc].csmasks[dimm];
-+		addr_mask_orig = pvt->csels[umc].csmasks[cs_mask_nr];
- 
- 	/*
- 	 * The number of zero bits in the mask is equal to the number of bits
-@@ -2951,6 +2998,7 @@ static struct amd64_family_type family_types[] = {
- 		.f0_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F0,
- 		.f6_id = PCI_DEVICE_ID_AMD_19H_M10H_DF_F6,
- 		.max_mcs = 12,
-+		.flags.zn_regs_v2 = 1,
- 		.ops = {
- 			.early_channel_count	= f17_early_channel_count,
- 			.dbam_to_cs		= f17_addr_mask_to_cs_size,
-@@ -3389,7 +3437,7 @@ static void __read_mc_regs_df(struct amd64_pvt *pvt)
- 		umc_base = get_umc_base(i);
- 		umc = &pvt->umc[i];
- 
--		amd_smn_read(nid, umc_base + UMCCH_DIMM_CFG, &umc->dimm_cfg);
-+		amd_smn_read(nid, umc_base + get_umc_reg(UMCCH_DIMM_CFG), &umc->dimm_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_UMC_CFG, &umc->umc_cfg);
- 		amd_smn_read(nid, umc_base + UMCCH_SDP_CTRL, &umc->sdp_ctrl);
- 		amd_smn_read(nid, umc_base + UMCCH_ECC_CTRL, &umc->ecc_ctrl);
-diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-index 09ad28299c57..6f8147abfa71 100644
---- a/drivers/edac/amd64_edac.h
-+++ b/drivers/edac/amd64_edac.h
-@@ -273,8 +273,11 @@
- #define UMCCH_BASE_ADDR_SEC		0x10
- #define UMCCH_ADDR_MASK			0x20
- #define UMCCH_ADDR_MASK_SEC		0x28
-+#define UMCCH_ADDR_MASK_SEC_DDR5	0x30
- #define UMCCH_ADDR_CFG			0x30
-+#define UMCCH_ADDR_CFG_DDR5		0x40
- #define UMCCH_DIMM_CFG			0x80
-+#define UMCCH_DIMM_CFG_DDR5		0x90
- #define UMCCH_UMC_CFG			0x100
- #define UMCCH_SDP_CTRL			0x104
- #define UMCCH_ECC_CTRL			0x14C
-@@ -483,11 +486,22 @@ struct low_ops {
- 					 unsigned cs_mode, int cs_mask_nr);
- };
- 
-+struct amd64_family_flags {
-+	/*
-+	 * Indicates that the system supports the new register offsets, etc.
-+	 * first introduced with Family 19h Model 10h.
-+	 */
-+	__u64 zn_regs_v2	: 1,
-+
-+	      __reserved	: 63;
-+};
-+
- struct amd64_family_type {
- 	const char *ctl_name;
- 	u16 f0_id, f1_id, f2_id, f6_id;
- 	/* Maximum number of memory controllers per die/node. */
- 	u8 max_mcs;
-+	struct amd64_family_flags flags;
- 	struct low_ops ops;
- };
- 
--- 
-2.25.1
-
+>  static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
+>  {
+>  	return -1;
+> -- 
+> 2.33.1
+> 

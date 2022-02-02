@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738CD4A6E19
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2434A6E27
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245584AbiBBJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:51:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55587 "EHLO
+        id S245605AbiBBJvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:51:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26875 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232164AbiBBJvV (ORCPT
+        by vger.kernel.org with ESMTP id S245593AbiBBJve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:51:21 -0500
+        Wed, 2 Feb 2022 04:51:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643795480;
+        s=mimecast20190719; t=1643795494;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=u2Q5Qw3UNSacmxDmUI9wwxXXuk+9n/t8UWUN6P4flCI=;
-        b=X4C42Uju/01NIaHlorIQzD5VryIqv8PsrE8lAaqXtcsXeBKfFGsdXWRilp3IxtOenL1URs
-        x/JwGCePKmH6cktBJPvngUnLfvVojzUQRqVJNEbmOK1SWbIMP9q0chg1Zian4EiLK7ak4V
-        mbI6FaWlLDEMa0zNnRwUkN2FcAeR3G8=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UY84501MvomnFs5xyvNmmIsM6K/tjlv86HW1KV/TDi4=;
+        b=igU2MCiuZIRE/ZfUtZp0SLtO+J7NVPdAI+pFath6HZk+2D5Gy3ziO5poYBnjoUZa2BUcVg
+        5WKbYx56wZfGVS4FWXOOXoa3hInP7rKRIR+Uj/6R8QwBamque64v5wH30mQo0+vT4Tnifb
+        HbinPmNl/5Izp7Nrjo2pLNQIhZMrupk=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-DbhiCgNbPwOFGc2htHgDpQ-1; Wed, 02 Feb 2022 04:51:19 -0500
-X-MC-Unique: DbhiCgNbPwOFGc2htHgDpQ-1
+ us-mta-209-2F5RkzrmPru3ciFRNJx4cw-1; Wed, 02 Feb 2022 04:51:30 -0500
+X-MC-Unique: 2F5RkzrmPru3ciFRNJx4cw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 391BA1091DBF;
-        Wed,  2 Feb 2022 09:51:18 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 795CF8144E4;
+        Wed,  2 Feb 2022 09:51:29 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.40.194.240])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D3AC752AA;
-        Wed,  2 Feb 2022 09:51:01 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8FA50752AA;
+        Wed,  2 Feb 2022 09:51:18 +0000 (UTC)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -42,9 +43,11 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         Vineeth Pillai <viremana@linux.microsoft.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap for Hyper-V-on-KVM
-Date:   Wed,  2 Feb 2022 10:50:56 +0100
-Message-Id: <20220202095100.129834-1-vkuznets@redhat.com>
+Subject: [PATCH v2 1/4] KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be rebuilt
+Date:   Wed,  2 Feb 2022 10:50:57 +0100
+Message-Id: <20220202095100.129834-2-vkuznets@redhat.com>
+In-Reply-To: <20220202095100.129834-1-vkuznets@redhat.com>
+References: <20220202095100.129834-1-vkuznets@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
@@ -52,37 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since v1:
-- Patches 1/2 from "[PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened
-  MSR-Bitmap for Hyper-V-on-KVM and fix it for KVM-on-Hyper-V" are already
-  merged, dropped.
-- Fix build when !CONFIG_HYPERV (PATCH3 "KVM: nSVM: Split off common
-  definitions for Hyper-V on KVM and KVM on Hyper-V" added).
+Similar to nVMX commit ed2a4800ae9d ("KVM: nVMX: Track whether changes in
+L0 require MSR bitmap for L2 to be rebuilt"), introduce a flag to keep
+track of whether MSR bitmap for L2 needs to be rebuilt due to changes in
+MSR bitmap for L1 or switching to a different L2.
 
-Description:
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ arch/x86/kvm/svm/nested.c | 6 ++++++
+ arch/x86/kvm/svm/svm.c    | 3 ++-
+ arch/x86/kvm/svm/svm.h    | 9 +++++++++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
-hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
-KVM already implements the feature for KVM-on-Hyper-V.
-
-Vitaly Kuznetsov (4):
-  KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
-    rebuilt
-  KVM: x86: Make kvm_hv_hypercall_enabled() static inline
-  KVM: nSVM: Split off common definitions for Hyper-V on KVM and KVM on
-    Hyper-V
-  KVM: nSVM: Implement Enlightened MSR-Bitmap feature
-
- arch/x86/kvm/hyperv.c           | 12 +--------
- arch/x86/kvm/hyperv.h           |  6 ++++-
- arch/x86/kvm/svm/hyperv.h       | 35 ++++++++++++++++++++++++
- arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
- arch/x86/kvm/svm/svm.c          |  3 ++-
- arch/x86/kvm/svm/svm.h          | 11 ++++++++
- arch/x86/kvm/svm/svm_onhyperv.h | 25 +-----------------
- 7 files changed, 95 insertions(+), 44 deletions(-)
- create mode 100644 arch/x86/kvm/svm/hyperv.h
-
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index cf206855ebf0..f27323728be2 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -193,6 +193,8 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
+ 		svm->nested.msrpm[p] = svm->msrpm[p] | value;
+ 	}
+ 
++	svm->nested.force_msr_bitmap_recalc = false;
++
+ 	svm->vmcb->control.msrpm_base_pa = __sme_set(__pa(svm->nested.msrpm));
+ 
+ 	return true;
+@@ -494,6 +496,7 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
+ 	if (svm->nested.vmcb12_gpa != svm->nested.last_vmcb12_gpa) {
+ 		new_vmcb12 = true;
+ 		svm->nested.last_vmcb12_gpa = svm->nested.vmcb12_gpa;
++		svm->nested.force_msr_bitmap_recalc = true;
+ 	}
+ 
+ 	if (unlikely(new_vmcb12 || vmcb_is_dirty(vmcb12, VMCB_SEG))) {
+@@ -1494,6 +1497,9 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+ 
+ 	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+ 	nested_vmcb02_prepare_control(svm);
++
++	svm->nested.force_msr_bitmap_recalc = true;
++
+ 	kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
+ 	ret = 0;
+ out_free:
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 2c99b18d76c0..6b5e2ebcf5d4 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -664,6 +664,7 @@ static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
+ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+ 					u32 msr, int read, int write)
+ {
++	struct vcpu_svm *svm = to_svm(vcpu);
+ 	u8 bit_read, bit_write;
+ 	unsigned long tmp;
+ 	u32 offset;
+@@ -694,7 +695,7 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+ 	msrpm[offset] = tmp;
+ 
+ 	svm_hv_vmcb_dirty_nested_enlightenments(vcpu);
+-
++	svm->nested.force_msr_bitmap_recalc = true;
+ }
+ 
+ void set_msr_interception(struct kvm_vcpu *vcpu, u32 *msrpm, u32 msr,
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 47ef8f4a9358..92fc4f554634 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -163,6 +163,15 @@ struct svm_nested_state {
+ 	struct vmcb_save_area_cached save;
+ 
+ 	bool initialized;
++
++	/*
++	 * Indicates whether MSR bitmap for L2 needs to be rebuilt due to
++	 * changes in MSR bitmap for L1 or switching to a different L2. Note,
++	 * this flag can only be used reliably in conjunction with a paravirt L1
++	 * which informs L0 whether any changes to MSR bitmap for L2 were done
++	 * on its side.
++	 */
++	bool force_msr_bitmap_recalc;
+ };
+ 
+ struct vcpu_sev_es_state {
 -- 
 2.34.1
 

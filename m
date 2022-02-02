@@ -2,268 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346254A6DA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A324A6DAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245415AbiBBJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
+        id S245424AbiBBJTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:19:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245406AbiBBJR2 (ORCPT
+        with ESMTP id S244541AbiBBJTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:17:28 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5264C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 01:17:27 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id d10so63377209eje.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 01:17:27 -0800 (PST)
+        Wed, 2 Feb 2022 04:19:36 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2388C061714;
+        Wed,  2 Feb 2022 01:19:35 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m26so8471223wms.0;
+        Wed, 02 Feb 2022 01:19:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y/kYiRInfsvyElPIDI39Lqck87rYrQWofhDpEmZtPSY=;
-        b=n+zSRRWNoLDbgRRKBeTh+H1uwEewljSjvlihvbIbFUw3/JNwm4kM38DZanK8Dpg7AI
-         +dj2/gAKUckeWANIRVKUrPXyonam/wV5zyN7FV50rmYde2p97d+Yi3FrrB01iAYR+aXM
-         Gum5F3bCNEE25rxs56m2NlmRQh6eW/jDg7HIV3U0Gu10+6C6J8hl7gbvJaKoexUHnUz3
-         c+NCfqJ7i2IsQR/J37EPCprXo5Kjx3pE4isRsLZ91uu9bP64VNLyKplBDsypDvjktOHL
-         YApmDzYRqxp0PBbZpj6v1gulDj6jcdVtQnU/slBRlRN3cSzfXC9Pom0j0U2POdrEe2jR
-         JP2w==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p2wQ8mV586mhuZL4frfEIcmzmgyOteCfGDcIoUviviw=;
+        b=HMR0fQk+43OprJJQhoAWA1vrzxeJ7K9GuusGqJmhmn9qrV4FPNQCuVfQ/EgN6JDuOV
+         ItTGUF5Dgkbzrc0BP3kf4o8RgtuRJDgBUVW2u7ujycRXWXGbP3sHMT+FhVxbYKuCOhUP
+         NuSPhvF73lzYGN6aw9bRp1rufqZXbJGUxmm6uPoLSTgZUOtZAjVsr1FSgFWPnupx0W4b
+         QYCi6oFWCkLwseF/2urpLefcj+NlbRotNyjlgHlzqx/szIH6zrT6aE2x4G4PLXd/L5nc
+         x9Kik9/cIQ5FNFy9P66gMqEm3mpfzY1DYnOAXovJIggmVKx+xv+7Fa+WVJENIfcnY/oU
+         aS6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y/kYiRInfsvyElPIDI39Lqck87rYrQWofhDpEmZtPSY=;
-        b=lU1ekZiJKnvvLzU+zNUIbYQxGrD+7Vl5WbWMjpbNCBtEdKqo7U8ebWnWdxD3J4cnez
-         Nj2GL2lxVz/+R3DzkfRRT6tEK6ibDqBuTbA3X89YqhqjW3v/oat1MzXzG85tV+qPCUm1
-         pscSpXZff9D+bl6Gh2ZG6AWtdKzQc65zAHlrFW8CbXoR3kGXxUi3kThSQFKyd34Vxi1x
-         jjNqGUnN3WjzaahdtLqhbwfKqOSOzKkS0piDRwPrzyj95DPVwl7iGRIEhHlTIjowiEJ4
-         V9If3EBtQH4E5XQ9LxvH5qp6Ioy5joOKVurrPIsOHFw2H/xafaZS2sHhcQMxXaqlAMkm
-         24sQ==
-X-Gm-Message-State: AOAM5318CkhsRl6qBxZTpZjdw0itQDCAfqOwjK6FOp5Og/FA8ntMG5ss
-        j2JzxD1LNxhTRChiJFhkwSwQ6PqAwmxHJtn0t/ADnQ==
-X-Google-Smtp-Source: ABdhPJxsThSLIsef6dEfWt17Wr72wwi5nMcsD+ZG0OofJafpJ2Dp54PSSoa0LpSQl4SlOtjdSg1W/OdtjHGnap7Rq78=
-X-Received: by 2002:a17:906:eb8a:: with SMTP id mh10mr21471265ejb.492.1643793446481;
- Wed, 02 Feb 2022 01:17:26 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p2wQ8mV586mhuZL4frfEIcmzmgyOteCfGDcIoUviviw=;
+        b=blXgJgCx/zGIRD2KucgcrJpP2HDMlIwVY6FAHr+LGdWHT76DI12W+G2JqekKnpBG1r
+         Mhiu+iDaBwypZS7uBhANgeYJ+3neSPBNREQO1FeT0tYMbVNhoQquPJR384iT1XqHPsCk
+         u+BGN/ZPa4aqMHbGKUfEBqjZ6Q9P/8GoHm5gY+oMuSFJQRxPRhaZFLSxjxNpB61Dycer
+         LAtcT4RjAqXa3q4LldA3nNhQw8g3EcIrXBlWeznzVNge61Pe96EvISMKyYT5mVEn2Qx4
+         WWHKXAh8u3haA14DB/pAX62LLhUmye+zXEdtGL0mSwYLZLzwe9fLdPzm9//feNWbf6e4
+         GIuQ==
+X-Gm-Message-State: AOAM5301MlghIuKOgrReWiXVuOJNUBoU5LZCfchwbhOslS0gR7rT0fS+
+        y0LYF/wN7ICjt3VLRguUaxU=
+X-Google-Smtp-Source: ABdhPJwM4L2i3gC4Fnib4qik/6mxnjQrjp2xywymmmJ4lMG28PscLkUb49xWC14FbXhvYlXRHY8BSw==
+X-Received: by 2002:a05:600c:35c4:: with SMTP id r4mr5271109wmq.29.1643793574508;
+        Wed, 02 Feb 2022 01:19:34 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id n22sm4561639wmc.27.2022.02.02.01.19.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 01:19:34 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: gadget: f_uac2: Fix spelling mistake "maxpctksize" -> "maxpcktsize"
+Date:   Wed,  2 Feb 2022 09:19:33 +0000
+Message-Id: <20220202091933.580713-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220130145116.88406-1-nbd@nbd.name> <20220130145116.88406-13-nbd@nbd.name>
-In-Reply-To: <20220130145116.88406-13-nbd@nbd.name>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 2 Feb 2022 10:17:15 +0100
-Message-ID: <CAMRc=MeuGpO3-M=_46K-B5L84ZrfL_tonLtoNHCM3GYgF=Z_Eg@mail.gmail.com>
-Subject: Re: [PATCH v9 12/13] gpio: Add support for Airoha EN7523 GPIO controller
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, soc@kernel.org,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        John Crispin <john@phrozen.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 3:54 PM Felix Fietkau <nbd@nbd.name> wrote:
->
-> From: John Crispin <john@phrozen.org>
->
-> Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-> GPIOs. Each instance in DT is for a single bank.
->
-> Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: John Crispin <john@phrozen.org>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> ---
->  drivers/gpio/Kconfig       |  10 +++
->  drivers/gpio/Makefile      |   1 +
->  drivers/gpio/gpio-en7523.c | 137 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 148 insertions(+)
->  create mode 100644 drivers/gpio/gpio-en7523.c
->
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 60d9374c72c0..0e9aacbcb4bd 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -247,6 +247,16 @@ config GPIO_EM
->         help
->           Say yes here to support GPIO on Renesas Emma Mobile SoCs.
->
-> +config GPIO_EN7523
-> +       tristate "Airoha GPIO support"
-> +       depends on ARCH_AIROHA
-> +       default ARCH_AIROHA
-> +       select GPIO_GENERIC
-> +       select GPIOLIB_IRQCHIP
-> +       help
-> +         Say Y or M here to support the GPIO controller block on the
-> +         Airoha EN7523 SoC. It supports two banks of 32 GPIOs.
-> +
->  config GPIO_EP93XX
->         def_bool y
->         depends on ARCH_EP93XX
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 71ee9fc2ff83..d2269ee0948e 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -56,6 +56,7 @@ obj-$(CONFIG_GPIO_DLN2)                       += gpio-dln2.o
->  obj-$(CONFIG_GPIO_DWAPB)               += gpio-dwapb.o
->  obj-$(CONFIG_GPIO_EIC_SPRD)            += gpio-eic-sprd.o
->  obj-$(CONFIG_GPIO_EM)                  += gpio-em.o
-> +obj-$(CONFIG_GPIO_EN7523)              += gpio-en7523.o
->  obj-$(CONFIG_GPIO_EP93XX)              += gpio-ep93xx.o
->  obj-$(CONFIG_GPIO_EXAR)                        += gpio-exar.o
->  obj-$(CONFIG_GPIO_F7188X)              += gpio-f7188x.o
-> diff --git a/drivers/gpio/gpio-en7523.c b/drivers/gpio/gpio-en7523.c
-> new file mode 100644
-> index 000000000000..f836a8db4c1d
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-en7523.c
-> @@ -0,0 +1,137 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/types.h>
-> +#include <linux/io.h>
-> +#include <linux/bits.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +
-> +#define AIROHA_GPIO_MAX                32
-> +
-> +/**
-> + * airoha_gpio_ctrl - Airoha GPIO driver data
-> + * @gc: Associated gpio_chip instance.
-> + * @data: The data register.
-> + * @dir0: The direction register for the lower 16 pins.
-> + * @dir1: The direction register for the higher 16 pins.
-> + * @output: The output enable register.
-> + */
-> +struct airoha_gpio_ctrl {
-> +       struct gpio_chip gc;
-> +       void __iomem *data;
-> +       void __iomem *dir[2];
-> +       void __iomem *output;
-> +};
-> +
-> +static struct airoha_gpio_ctrl *gc_to_ctrl(struct gpio_chip *gc)
-> +{
-> +       return container_of(gc, struct airoha_gpio_ctrl, gc);
-> +}
-> +
-> +static int airoha_dir_set(struct gpio_chip *gc, unsigned int gpio,
-> +                         int val, int out)
-> +{
-> +       struct airoha_gpio_ctrl *ctrl = gc_to_ctrl(gc);
-> +       u32 dir = ioread32(ctrl->dir[gpio / 16]);
-> +       u32 output = ioread32(ctrl->output);
-> +       u32 mask = BIT((gpio % 16) * 2);
-> +
-> +       if (out) {
-> +               dir |= mask;
-> +               output |= BIT(gpio);
-> +       } else {
-> +               dir &= ~mask;
-> +               output &= ~BIT(gpio);
-> +       }
-> +
-> +       iowrite32(dir, ctrl->dir[gpio / 16]);
-> +
-> +       if (out)
-> +               gc->set(gc, gpio, val);
-> +
-> +       iowrite32(output, ctrl->output);
-> +
-> +       return 0;
-> +}
-> +
-> +static int airoha_dir_out(struct gpio_chip *gc, unsigned int gpio,
-> +                         int val)
-> +{
-> +       return airoha_dir_set(gc, gpio, val, 1);
-> +}
-> +
-> +static int airoha_dir_in(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +       return airoha_dir_set(gc, gpio, 0, 0);
-> +}
-> +
-> +static int airoha_get_dir(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +       struct airoha_gpio_ctrl *ctrl = gc_to_ctrl(gc);
-> +       u32 dir = ioread32(ctrl->dir[gpio / 16]);
-> +       u32 mask = BIT((gpio % 16) * 2);
-> +
-> +       return (dir & mask) ? GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
-> +}
-> +
-> +static int airoha_gpio_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct airoha_gpio_ctrl *ctrl;
-> +       int err;
-> +
-> +       ctrl = devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
-> +       if (!ctrl)
-> +               return -ENOMEM;
-> +
-> +       ctrl->data = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(ctrl->data))
-> +               return PTR_ERR(ctrl->data);
-> +
-> +       ctrl->dir[0] = devm_platform_ioremap_resource(pdev, 1);
-> +       if (IS_ERR(ctrl->dir[0]))
-> +               return PTR_ERR(ctrl->dir[0]);
-> +
-> +       ctrl->dir[1] = devm_platform_ioremap_resource(pdev, 2);
-> +       if (IS_ERR(ctrl->dir[1]))
-> +               return PTR_ERR(ctrl->dir[1]);
-> +
-> +       ctrl->output = devm_platform_ioremap_resource(pdev, 3);
-> +       if (IS_ERR(ctrl->output))
-> +               return PTR_ERR(ctrl->output);
-> +
-> +       err = bgpio_init(&ctrl->gc, dev, 4, ctrl->data, NULL,
-> +                        NULL, NULL, NULL, 0);
-> +       if (err)
-> +               return dev_err_probe(dev, err, "unable to init generic GPIO");
-> +
-> +       ctrl->gc.ngpio = AIROHA_GPIO_MAX;
-> +       ctrl->gc.owner = THIS_MODULE;
-> +       ctrl->gc.direction_output = airoha_dir_out;
-> +       ctrl->gc.direction_input = airoha_dir_in;
-> +       ctrl->gc.get_direction = airoha_get_dir;
-> +
-> +       return devm_gpiochip_add_data(dev, &ctrl->gc, ctrl);
-> +}
-> +
-> +static const struct of_device_id airoha_gpio_of_match[] = {
-> +       { .compatible = "airoha,en7523-gpio" },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, airoha_gpio_of_match);
-> +
-> +static struct platform_driver airoha_gpio_driver = {
-> +       .driver = {
-> +               .name = "airoha-gpio",
-> +               .of_match_table = airoha_gpio_of_match,
-> +       },
-> +       .probe = airoha_gpio_probe,
-> +};
-> +module_platform_driver(airoha_gpio_driver);
-> +
-> +MODULE_DESCRIPTION("Airoha GPIO support");
-> +MODULE_AUTHOR("John Crispin <john@phrozen.org>");
-> +MODULE_LICENSE("GPL v2");
-> --
-> 2.32.0 (Apple Git-132)
->
+There is a spelling mistake in a deb_dbg message. Fix it.
 
-Queued for next, thanks!
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/function/f_uac2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Bart
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index f2237bcdba7c..c9b8d11f9870 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -755,7 +755,7 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+ 
+ 	if (max_size_bw <= max_size_ep)
+ 		dev_dbg(dev,
+-			"%s %s: Would use maxpctksize %d and bInterval %d\n",
++			"%s %s: Would use maxpcktsize %d and bInterval %d\n",
+ 			speed_names[speed], dir, max_size_bw, bint);
+ 	else {
+ 		dev_warn(dev,
+-- 
+2.34.1
+

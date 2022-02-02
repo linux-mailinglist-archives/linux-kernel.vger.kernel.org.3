@@ -2,122 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60DC4A7BBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578C04A7BC2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348104AbiBBXeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:34:02 -0500
-Received: from mx.ucr.edu ([169.235.156.38]:56744 "EHLO mx-lax3-3.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348098AbiBBXeA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:34:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1643844840; x=1675380840;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uavpFDxmGoKjrnyH0fVmnFMq2r7aGr052ubiJDv8DR8=;
-  b=dCWRywTQq0xKthzSJakoV4dzKPy9VPUC+xAWTzqyfDN7THLTayjBWw6A
-   xdXXHAiGxKh3heuoGZZUrUlMsU8AcaGP5inAY8exTio1gm48nWrvrsbAa
-   +pOeAgSnUYfHT/kc01kBfNISvKw8KWKKMC/hPnjCxQigl8uZXIcm8+SdW
-   AndyqnxnKHdej8e/iIQxA6d561yAwV9q3QudwF+i96I7k1VWG2WtWTYbT
-   1k+ULxwKmUObOkkNQSknNZnr3au9DnGZHnKzr649Oh/W8NlVNJvZDlWbg
-   fWrRmuEPGG2gIKzAxslIM0uPYpWPXOxxJbpp9Su14fZQg+bHn63KDHN6p
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="105394236"
-Received: from mail-pj1-f69.google.com ([209.85.216.69])
-  by smtp-lax3-3.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Feb 2022 15:34:00 -0800
-Received: by mail-pj1-f69.google.com with SMTP id a10-20020a17090abe0a00b001b4df1f5a6eso640482pjs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:34:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LoPhiSf2j9AFlf81eKG6xH4TR1F1QmboBbxydv3xQ7Y=;
-        b=Vi+u9jBD+QVIbMUO77wQyOqhnpPIQvWmztX0ACI8XT+Izg3ej/xW05bi3EpXKQmC5b
-         n2YPYxIV9U/xOb7ZmjQpv3qNoS/YYE8CzEdnpG+tSda1iqZ+zUfQ64mA8a+I0O/SBnbh
-         Q5tT4F4wSPQgCi1arxRFL3Dhz5HXvtylb9o7M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LoPhiSf2j9AFlf81eKG6xH4TR1F1QmboBbxydv3xQ7Y=;
-        b=c2sJVzDA5JelfZpsOKiEpNNe+KdOBKZCc7Q6JD7SKYbSnL9IBIWfk6VJxKUyIMWjSm
-         0hupvG3gt1kjIr1x8mU6Peifmb1JjUbLpDDJzeViyacWibMp0GFxiIa6Nuk+jlkm+kmG
-         xCypS2zin8U1HeqJzaYcLqjSQ2mN3BH/7cIUjkPtIMJZ6qnreCn08PFAxVzdgu4cXz3Z
-         q4qyGeFTUp/TPa9Fa70jlqZMPoMoWUfqqcM0P1S/KYwNiP58lN1HohWrhe2Vw+4E74UL
-         HmnclgrG0aLriP5ijkJFBNzuv66EvsGwd8TGoGad6rfEpKwlkDuGr2Fuu7/OIU+sJ6W4
-         KbYA==
-X-Gm-Message-State: AOAM532UPBetXAGpX3j1zckez2EdQxROjK7fAJ0s+0Bk/g/JYZhTsOZm
-        Lw/bbVV9llzMTUAC/2FCaXW9HffL6LgAnIxc2FRJkaPTN4lWXiPhwz5ywpbwrTh5V1ic3EVuzek
-        XhJZYY2aDEdKnEFIysfti03//oQ==
-X-Received: by 2002:a17:903:2283:: with SMTP id b3mr31859673plh.0.1643844839719;
-        Wed, 02 Feb 2022 15:33:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwz4/x8nWtBV0nXYgv98co1MlqgYrtI6GhpsU/PIcCVgrAG4WdSIF+YKtELNEJg4IP2qcHSQQ==
-X-Received: by 2002:a17:903:2283:: with SMTP id b3mr31859649plh.0.1643844839488;
-        Wed, 02 Feb 2022 15:33:59 -0800 (PST)
-Received: from kq.cs.ucr.edu (kq.cs.ucr.edu. [169.235.27.223])
-        by smtp.googlemail.com with ESMTPSA id s2sm26380387pgq.38.2022.02.02.15.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 15:33:59 -0800 (PST)
-From:   Yizhuo Zhai <yzhai003@ucr.edu>
-Cc:     Yizhuo Zhai <yzhai003@ucr.edu>, Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5] fbdev: fbmem: Fix the implicit type casting
-Date:   Wed,  2 Feb 2022 15:33:59 -0800
-Message-Id: <20220202233402.1477864-2-yzhai003@ucr.edu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220202233402.1477864-1-yzhai003@ucr.edu>
-References: <83e46d8d-ec7a-6cbd-010e-7f50f88dcf96@I-love.SAKURA.ne.jp>
- <20220202233402.1477864-1-yzhai003@ucr.edu>
+        id S240428AbiBBXeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230076AbiBBXeU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 18:34:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D219C061714;
+        Wed,  2 Feb 2022 15:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=Jh/EL1diuD4J1JZYZhhqdPKhDKb1uRzo1pLWpqiNQQs=; b=bbPsm2Rw+E4ZQJ3Gw3fUrZTGnO
+        k4tL7MeTqglU0jb/1hlbW+xa+BanJ470QCRr4yvg9ENXOU2gryoa8LYF82kJSVm7rsgG66ol4IQIB
+        4/NUNG9bTcqBoUNlRLR79ulXI5LQ8DO9tyJXr2y/Fv9KrPLoBlvZA1cDIJzUHMsFE1Fey8aLqAfOf
+        VTd/zevfqWmzF29UOcxH+pTAcxesxVHVrFq84jSfiqdsVaDkC7y8br5ZVE6/lkN20W8qroOQ3Ky4N
+        jJcXiP+owiRm5ttbkmMnRJD/ijuNsP/Yey+trKKLUNXCQgLLs692qSL3uR1aCH1A4SvHMLK+Dystg
+        kSCXI3vw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFP8h-00H4m1-Uf; Wed, 02 Feb 2022 23:34:15 +0000
+Date:   Wed, 2 Feb 2022 15:34:15 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH 6/7] modules: Add
+ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+Message-ID: <YfsU9wuMKr4awYce@bombadil.infradead.org>
+References: <cover.1643015752.git.christophe.leroy@csgroup.eu>
+ <848d857871f457f4df37e80fad468d615b237c24.1643015752.git.christophe.leroy@csgroup.eu>
+ <YfBnNuXpR2l2AuCP@bombadil.infradead.org>
+ <b49235ef-1fc3-7b8f-7e23-79f461d83e18@csgroup.eu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <b49235ef-1fc3-7b8f-7e23-79f461d83e18@csgroup.eu>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function do_fb_ioctl(), the "arg" is the type of unsigned long,
-and in "case FBIOBLANK:" this argument is casted into an int before
-passig to fb_blank(). In fb_blank(), the comparision
-if (blank > FB_BLANK_POWERDOWN) would be bypass if the original
-"arg" is a large number, which is possible because it comes from
-the user input. Fix this by adding the check before the function
-call.
+On Wed, Jan 26, 2022 at 06:38:30AM +0000, Christophe Leroy wrote:
+> 
+> 
+> Le 25/01/2022 à 22:10, Luis Chamberlain a écrit :
+> > On Mon, Jan 24, 2022 at 09:22:34AM +0000, Christophe Leroy wrote:
+> >> This can also be useful on other powerpc/32 in order to maximize the
+> >> chance of code being close enough to kernel core to avoid branch
+> >> trampolines.
+> > 
+> > Curious about all this branch trampoline talk. Do you have data to show
+> > negative impact with things as-is?
+> 
+> See 
+> https://github.com/linuxppc/linux/commit/2ec13df167040cd153c25c4d96d0ffc573ac4c40
+> 
+> Or 
+> https://github.com/linuxppc/linux/commit/7d485f647c1f4a6976264c90447fb0dbf07b111d
 
-Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
----
- drivers/video/fbdev/core/fbmem.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 0fa7ede94fa6..d5dec24c4d16 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1162,6 +1162,11 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
- 	case FBIOBLANK:
- 		console_lock();
- 		lock_fb_info(info);
-+		if (arg > FB_BLANK_POWERDOWN) {
-+			unlock_fb_info(info);
-+			console_unlock();
-+			return -EINVAL;
-+		}
- 		ret = fb_blank(info, arg);
- 		/* might again call into fb_blank */
- 		fbcon_fb_blanked(info, arg);
--- 
-2.25.1
+This was useful and fun to read, thanks.
 
+> > Also, was powerpc/32 broken then without this? The commit log seems to
+> > suggest so, but I don't think that's the case. How was this issue noticed?
+> 
+> 
+> Your question is related to the trampoline topic or the exec/noexec 
+> flagging ?
+> 
+> Regarding trampoline, everything is working OK. That's just cherry on 
+> the cake, when putting data away you can have more code closer to the 
+> kernel. But that would not have been a reason in itself for this series.
+> 
+> Regarding the exec/noexec discussion, it's a real issue. powerpc/32 
+> doesn't honor page exec flag, so when you select STRICT_MODULES_RWX and 
+> flag module data as no-exec, it remains executable. That's because 
+> powerpc/32 MMU doesn't have a per page exec flag but only a per 
+> 256Mbytes segment exec flag.
+> 
+> Typical PPC32 layount:
+> 0xf0000000-0xffffffff : VMALLOC AREA ==> NO EXEC
+> 0xc0000000-0xefffffff : Linear kernel memory mapping
+> 0xb0000000-0xbfffffff : MODULES AREA ==> EXEC
+> 0x00000000-0xafffffff : User space ==> EXEC
+> 
+> So STRICT_MODULES_RWX is broken on some powerpc/32
+
+You know, this is the sort of information that I think would be
+very useful for the commit log. Can you ammend?
+
+> > 
+> > Are there other future CPU families being planned where this is all true for
+> > as well? Are they goin to be 32-bit as well?
+> 
+> Future I don't know.
+> 
+> Regarding the trampoline stuff, I see at least the following existing 
+> architectures with a similar constraint:
+> 
+> ARM:
+> 
+> https://elixir.bootlin.com/linux/v5.16/source/arch/arm/include/asm/memory.h#L55
+> 
+> ARM even has a config item to allow trampolines or not. I might add the 
+> same to powerpc to reduce number of pages used by modules.
+> 
+> https://elixir.bootlin.com/linux/v5.16/source/arch/arm/Kconfig#L1514
+> 
+> NDS32 has the constraint
+> 
+> https://elixir.bootlin.com/linux/v5.16/source/arch/nds32/include/asm/memory.h#L41
+> 
+> NIOS2 has the constraint, allthough they handled it in a different way:
+> 
+> https://elixir.bootlin.com/linux/v5.16/source/arch/nios2/kernel/module.c#L30
+> 
+> 
+> 
+> Even ARM64 benefits from modules closer to kernel:
+> 
+> https://elixir.bootlin.com/linux/v5.16/source/arch/arm64/Kconfig#L1848
+> 
+> 
+> Another future opportunity with the ability to allocate module parts 
+> separately is the possibility to then use huge vmalloc mappings.
+> 
+> Today huge vmalloc mappings cannot be used for modules, see recent 
+> discussion at 
+> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20211227145903.187152-4-wangkefeng.wang@huawei.com/
+
+Alrighty, this is sufficient information, thanks!
+
+  Luis

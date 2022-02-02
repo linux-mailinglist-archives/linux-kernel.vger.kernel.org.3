@@ -2,142 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C212E4A76C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE98A4A76C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346234AbiBBRXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:23:36 -0500
+        id S1346212AbiBBRXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:23:33 -0500
 Received: from mga09.intel.com ([134.134.136.24]:46902 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244506AbiBBRXc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:23:32 -0500
+        id S237041AbiBBRXb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:23:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643822612; x=1675358612;
+  t=1643822611; x=1675358611;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dE+VPeGUtHZgWsAhv02d/C3FztwU1vH8EMY00U1inVA=;
-  b=T67dhNHcyWizoJyqOVVpBtRARzyW963sHZhd5N+Sjt88tLf5KWbeYRqW
-   3o+sY33mjBSoBEe4HlE/saTzvRItwb0HfxfDIiujOpFfDwEsas0z7hqm5
-   F3Kthum3irkh/UJtWBeMPI+NAuKeDhYL0S8sRjjGuwlJ3buGCZkH0LtSO
-   rWMchm1l23TKL6kOlJ+tdoxUgR0Erv+dFExHgtYEIB3W3rdVqmucNQptG
-   ifOgjM7l1xuldfqyiUcjFXS/cVuu7Pmjssl6RHGVC5WoGZh0enTWfOjpF
-   ZS+J/S4t8Ir0B/mhrL9jcsSuYpzv3136mnziRDPxMRrB0dWbeeTRGagGP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247744503"
+  bh=FfQwTJzWKATT32F4p5gOzN+KE1zPEG9JU+pMAd3OQ4A=;
+  b=OC0X8g4Ja08YzvUc1tCLjxnDiSjmY6XGN9gFY1EpZ3aMinrZw8bu4kp/
+   UtVGDpNkeur1bRYRHlcUHtGosL9abPSutCTreZhVhBpj9zzEqiCMUoNmZ
+   CNhG+Nhq2Ou0sRKg8yg0s7woA28nvJh7K3tYv8Ir4f6rq0tUchOMBVGO/
+   WKB3CFMWrdW1Ir1jVTxXlvWOaoR46vkUagF7ihC2a71uDBcSwcvszn2Gx
+   sjWsBZRszES54XXaFDf3eo2RKTvyhmGn3JlXNgfueHHrs2avRdCnswVvZ
+   UT5olUVuMD/cQxOdh62SXvGSmcDotGEIGFezNidCowwYnWvMtyj5SYJMd
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247744500"
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="247744503"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+   d="scan'208";a="247744500"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 09:14:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="534924090"
+   d="scan'208";a="698967422"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2022 09:14:10 -0800
+  by orsmga005.jf.intel.com with ESMTP; 02 Feb 2022 09:14:10 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nFJCr-000UsJ-Ni; Wed, 02 Feb 2022 17:14:09 +0000
-Date:   Thu, 3 Feb 2022 01:14:01 +0800
+        id 1nFJCr-000UsG-Ma; Wed, 02 Feb 2022 17:14:09 +0000
+Date:   Thu, 3 Feb 2022 01:14:04 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: Re: [PATCH 7/8] VMCI: dma dg: add support for DMA datagrams sends
-Message-ID: <202202030100.5Mr551y1-lkp@intel.com>
-References: <20220202144910.10349-8-jhansen@vmware.com>
+To:     Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v1 05/14] mtd: spi-nor: xilinx: rename vendor specific
+ functions and defines
+Message-ID: <202202030130.meVKrEGw-lkp@intel.com>
+References: <20220202145853.4187726-6-michael@walle.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202144910.10349-8-jhansen@vmware.com>
+In-Reply-To: <20220202145853.4187726-6-michael@walle.cc>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorgen,
+Hi Michael,
 
 I love your patch! Perhaps something to improve:
 
-[auto build test WARNING on char-misc/char-misc-testing]
+[auto build test WARNING on mtd/spi-nor/next]
 [also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202030100.5Mr551y1-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+url:    https://github.com/0day-ci/linux/commits/Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
+config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20220203/202202030130.meVKrEGw-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/303777a2a8daa11d529827395318bb698ddee57e
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6527d5f32d65d5695ddcc0bcf3ac31928e64a935
         git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-        git checkout 303777a2a8daa11d529827395318bb698ddee57e
+        git fetch --no-tags linux-review Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
+        git checkout 6527d5f32d65d5695ddcc0bcf3ac31928e64a935
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/vmw_vmci/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/mtd/spi-nor/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   drivers/misc/vmw_vmci/vmci_guest.c:103:14: warning: no previous prototype for 'vmci_read_reg' [-Wmissing-prototypes]
-     103 | unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-         |              ^~~~~~~~~~~~~
-   drivers/misc/vmw_vmci/vmci_guest.c:110:6: warning: no previous prototype for 'vmci_write_reg' [-Wmissing-prototypes]
-     110 | void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-         |      ^~~~~~~~~~~~~~
->> drivers/misc/vmw_vmci/vmci_guest.c:118:5: warning: no previous prototype for 'vmci_write_data' [-Wmissing-prototypes]
-     118 | int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
-         |     ^~~~~~~~~~~~~~~
+>> drivers/mtd/spi-nor/xilinx.c:103: warning: expecting prototype for spi_nor_xsr_ready(). Prototype was for xilinx_sr_ready() instead
 
 
-vim +/vmci_write_data +118 drivers/misc/vmw_vmci/vmci_guest.c
+vim +103 drivers/mtd/spi-nor/xilinx.c
 
-   117	
- > 118	int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
-   119	{
-   120		int result;
-   121	
-   122		if (dev->mmio_base != NULL) {
-   123			struct vmci_data_in_out_header *buffer_header = dev->tx_buffer;
-   124			u8 *dg_out_buffer = (u8 *)(buffer_header + 1);
-   125	
-   126			if (VMCI_DG_SIZE(dg) > VMCI_MAX_DG_SIZE)
-   127				return VMCI_ERROR_INVALID_ARGS;
-   128	
-   129			/*
-   130			 * Initialize send buffer with outgoing datagram
-   131			 * and set up header for inline data. Device will
-   132			 * not access buffer asynchronously - only after
-   133			 * the write to VMCI_DATA_OUT_LOW_ADDR.
-   134			 */
-   135			memcpy(dg_out_buffer, dg, VMCI_DG_SIZE(dg));
-   136			buffer_header->opcode = 0;
-   137			buffer_header->size = VMCI_DG_SIZE(dg);
-   138			buffer_header->busy = 1;
-   139	
-   140			vmci_write_reg(dev, lower_32_bits(dev->tx_buffer_base),
-   141				       VMCI_DATA_OUT_LOW_ADDR);
-   142	
-   143			/* Caller holds a spinlock, so cannot block. */
-   144			spin_until_cond(buffer_header->busy == 0);
-   145	
-   146			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
-   147			if (result == VMCI_SUCCESS)
-   148				result = (int)buffer_header->result;
-   149		} else {
-   150			iowrite8_rep(dev->iobase + VMCI_DATA_OUT_ADDR,
-   151				     dg, VMCI_DG_SIZE(dg));
-   152			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
-   153		}
-   154	
-   155		return result;
-   156	}
-   157	
+37ccf5a41e1528 Michael Walle 2022-02-02   94  
+37ccf5a41e1528 Michael Walle 2022-02-02   95  /**
+37ccf5a41e1528 Michael Walle 2022-02-02   96   * spi_nor_xsr_ready() - Query the Status Register of the S3AN flash to see if
+37ccf5a41e1528 Michael Walle 2022-02-02   97   * the flash is ready for new commands.
+37ccf5a41e1528 Michael Walle 2022-02-02   98   * @nor:	pointer to 'struct spi_nor'.
+37ccf5a41e1528 Michael Walle 2022-02-02   99   *
+37ccf5a41e1528 Michael Walle 2022-02-02  100   * Return: 1 if ready, 0 if not ready, -errno on errors.
+37ccf5a41e1528 Michael Walle 2022-02-02  101   */
+6527d5f32d65d5 Michael Walle 2022-02-02  102  static int xilinx_sr_ready(struct spi_nor *nor)
+37ccf5a41e1528 Michael Walle 2022-02-02 @103  {
+37ccf5a41e1528 Michael Walle 2022-02-02  104  	int ret;
+37ccf5a41e1528 Michael Walle 2022-02-02  105  
+6527d5f32d65d5 Michael Walle 2022-02-02  106  	ret = xilinx_read_sr(nor, nor->bouncebuf);
+37ccf5a41e1528 Michael Walle 2022-02-02  107  	if (ret)
+37ccf5a41e1528 Michael Walle 2022-02-02  108  		return ret;
+37ccf5a41e1528 Michael Walle 2022-02-02  109  
+37ccf5a41e1528 Michael Walle 2022-02-02  110  	return !!(nor->bouncebuf[0] & XSR_RDY);
+37ccf5a41e1528 Michael Walle 2022-02-02  111  }
+37ccf5a41e1528 Michael Walle 2022-02-02  112  
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

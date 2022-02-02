@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701A04A6E07
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872224A6E09
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245545AbiBBJpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiBBJpt (ORCPT
+        id S245552AbiBBJqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:46:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49582 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245547AbiBBJqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:45:49 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1449CC061714;
-        Wed,  2 Feb 2022 01:45:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=aDMiXkwi3BfC3SPPQ8t8xXhg90+eUFi719hnxoui15o=; b=AKYee4MOwBLIxJGWS2Fd5t6CKY
-        5bUwgpmi90bHHfELNxvmRp9fT11t3EECIoR8gYj/7pN4CTYqzdoyLtEim8611KNh7YeWS9FVd2XYs
-        jV55GZtHBN+qFeqZUbyCUOMho19C/+3xLp3waKRqvSxwh6APVoESDgt37zgg253fLHarycQNZ0Yx+
-        9/xKBiwYbfIQLHleRjOPLrFnM1oy9Qw/ZgK9P+GvHPf0v7P4/PSzy7QjoE4ZZqZUuPNyAQrQQyKIv
-        fhXd1tHCUsh0QUaU7KxEHcLtk52Gpu8od+e043gXijMYpkWd9/xDqabWGxgzJaoJD610KaClFOVc6
-        Cmj8mHRg==;
-Received: from [2a01:799:95e:a400:cca0:57ac:c55d:a485] (port=49944)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1nFCCw-00049C-ED; Wed, 02 Feb 2022 10:45:46 +0100
-Message-ID: <c6100ec3-b511-17cf-c542-e124c14fb334@tronnes.org>
-Date:   Wed, 2 Feb 2022 10:45:42 +0100
+        Wed, 2 Feb 2022 04:46:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BABE614A0;
+        Wed,  2 Feb 2022 09:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C49C340EC;
+        Wed,  2 Feb 2022 09:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643795168;
+        bh=o0Tcg3aGiYWuN/M/wsdFN2JipEBXv58ClAppDLJ9Qis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RhpMXxjsR+z4dWXbx0Aft1oS9QTsft/um9p1WvjzxXWFczUaTWDJL6A+LLE3Haz76
+         eXbq7inrXDpJciFwXW5ueeDKHZf0GXWQPdkfCNN8IRUy0YqfuDoojeKgIQU9mFc4SH
+         WtAcP71kzV1DJhLHb01nRHACNmbLwOgw5xRevBRY=
+Date:   Wed, 2 Feb 2022 10:45:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH 1/2] config: android-recommended: Don't explicitly
+ disable CONFIG_AIO
+Message-ID: <YfpS19cSbsSTgKVk@kroah.com>
+References: <20220202093314.107927-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
- <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202093314.107927-1-marijn.suijten@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Den 02.02.2022 10.14, skrev Thomas Zimmermann:
-> Hi Noralf,
+On Wed, Feb 02, 2022 at 10:33:13AM +0100, Marijn Suijten wrote:
+> Android nowadays (for a couple years already) requires AIO for at least
+> its `adb` "Android Debug Bridge" [1].  Without this config option
+> (`default y`) it simply refuses start, making users unable to connect to
+> their phone for debugging purposes when using these kernel fragments.
 > 
-> since you're here, I'll just hijack the discussion to ask something only
-> semi-related.
+> [1]: https://cs.android.com/android/_/android/platform/packages/modules/adb/+/a2cb8de5e68067a5e1d002886d5f3b42d91371e1
 > 
-> IIRC the gud driver doesn't update the display immediately during atomic
-> commits. Instead, it instructs a helper thread to do the update. What's
-> the rational behind this design? Is that something we should adopt for
-> other drivers that operate over slow buses (USB, I2C, etc)? Would this
-> be relevant for the ssd1307 driver?
+> Cc: Amit Pundir <amit.pundir@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  kernel/configs/android-recommended.config | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
+> index eb0029c9a6a6..22bd76e43aca 100644
+> --- a/kernel/configs/android-recommended.config
+> +++ b/kernel/configs/android-recommended.config
+> @@ -1,5 +1,4 @@
+>  #  KEEP ALPHABETICALLY SORTED
+> -# CONFIG_AIO is not set
+>  # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+>  # CONFIG_INPUT_MOUSE is not set
+>  # CONFIG_LEGACY_PTYS is not set
+> -- 
+> 2.35.1
 > 
 
-Async flushing is only necessary on multi display setups where there's
-only one rendering loop for all the displays. I saw what tiny/gm12u320.c
-did and Hans gave me the rationale. The SPI drivers run flushing inline.
-Info on the gud wiki:
-https://github.com/notro/gud/wiki/Linux-Host-Driver#asynchronous-flushing
+There are lots of "required" configs now for modern Android releases, do
+you want to sync up with all of them here?  If so, look at the
+gki_defconfig files in the AOSP kernels for the full list of what is
+required.  Is it really needed to keep this file up to date or should it
+be dropped entirely given that no one has noticed how out-of-date it is?
 
-Noralf.
+thanks,
+
+greg k-h

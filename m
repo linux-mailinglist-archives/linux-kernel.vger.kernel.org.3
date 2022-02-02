@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940044A7C1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF75A4A7C23
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244846AbiBBX7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbiBBX7r (ORCPT
+        id S244181AbiBCAAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:00:02 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:49329 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234065AbiBCAAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:59:47 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F370C061714;
-        Wed,  2 Feb 2022 15:59:47 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 283D349C;
-        Thu,  3 Feb 2022 00:59:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643846384;
-        bh=Y2/calNJ4NZSqNPD6NtTHVhrK+72wYv7CuqinZ68NdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GT0UYMc+JVzQ6sWGsqVFdLiNOUyhbB0wvhIONT0mHlBjpH8uBlgXJ7avcd33xaddb
-         wtgOmrZ0hBrOwd6gfOvX3KQPONaKJgHwf/cYUAYWa94naB4Ckxvdl4n+3t2sF+SX7z
-         jvLnIcZGY4poCz9zqBMxGNj6XWuBQUsI+EIW7+4A=
-Date:   Thu, 3 Feb 2022 01:59:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
-        "ribalda@chromium.org" <ribalda@chromium.org>,
+        Wed, 2 Feb 2022 19:00:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JpzLj0t3Sz4xmt;
+        Thu,  3 Feb 2022 10:59:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643846398;
+        bh=2IHWp8kmKG6pwvVBxGoqJsHFkv7IjW45tANE/ocUJCo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mJtV8cNfomv84yN40D9zLILinFiDXnuLdhS5HtKMiCSolQa5nXgCwNu48gAmdeR23
+         aGMv5lQ09i4e4Tg0vjm7ZWznYu3j8cRtwyRn3hAT+aekIaFjGbZSPZWZwxrjRUNFDJ
+         cIrBWbEspI9bpuqCif/67QEj6wTb/6h0ADzfp3ZvEDP8ddL1j3cHJHJ1zhbzC7HNcs
+         ax9PCdNfa5oKCfmZnRI9zloRoGThlUDvkqWC9ke9H1xHHKrjJmhgIYh9B1wcvFX9Z9
+         PihnREsvN85pTyehU0BUR0s2BJjkZUUjLMP6Lw/OGaGuPWnjSBwbfSGeg0RgQCHRJp
+         5Ai8xd0oOh4wA==
+Date:   Thu, 3 Feb 2022 10:59:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     John Harrison <John.C.Harrison@Intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple
- T2-attached FaceTime HD Camera
-Message-ID: <Yfsa2JUiEf74gBbQ@pendragon.ideasonboard.com>
-References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
- <Yfomr83ol/1iGRSv@pendragon.ideasonboard.com>
- <951C1FB9-9709-4CB3-8DD7-703900FE56FD@live.com>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the
+ drm-intel-fixes tree
+Message-ID: <20220203105955.1cd61502@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <951C1FB9-9709-4CB3-8DD7-703900FE56FD@live.com>
+Content-Type: multipart/signed; boundary="Sig_/qYjjXV8pFbe/W.USU2pBn4_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aditya,
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 02, 2022 at 07:08:21AM +0000, Aditya Garg wrote:
-> > On 02-Feb-2022, at 12:07 PM, Laurent Pinchart wrote:
-> > On Wed, Jan 26, 2022 at 10:37:13AM +0000, Aditya Garg wrote:
-> >> From: Paul Pawlowski <paul@mrarm.io>
-> >> 
-> >> Adds the requisite device id to support detection of the Apple FaceTime
-> >> HD webcam exposed over the T2 BCE VHCI interface.
-> >> 
-> >> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-> >> Signed-off-by: Paul Pawlowski <paul@mrarm.io>
-> >> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-> >> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> >> ---
-> >> drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
-> >> 1 file changed, 9 insertions(+)
-> >> 
-> >> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> >> index 7c007426e..88dc9e7aa 100644
-> >> --- a/drivers/media/usb/uvc/uvc_driver.c
-> >> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> >> @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] = {
-> >> 	  .bInterfaceProtocol	= 0,
-> >> 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
-> >> 					| UVC_QUIRK_BUILTIN_ISIGHT) },
-> >> +	/* Apple FaceTime HD Camera (Built-In) */
-> >> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> >> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> >> +	  .idVendor		= 0x05ac,
-> >> +	  .idProduct		= 0x8514,
-> >> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> >> +	  .bInterfaceSubClass	= 1,
-> >> +	  .bInterfaceProtocol	= 0,
-> >> +	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_def },
-> > 
-> > Have you tested that the device doesn't work without this quirk ?
->
-> uvcvideo 1-2:1.1: Failed to query (129) UVC probe control : -110 (exp. 48).
-> uvcvideo 1-2:1.1: Failed to initialize the device (-5).
-> 
-> These errors are encountered without this patch
+Hi all,
 
-Thank you for the confirmation.
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+  drivers/gpu/drm/i915/i915_reg.h
 
-and applied to my tree.
+between commit:
 
-> >> 	/* Apple Built-In iSight via iBridge */
-> >> 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> >> 				| USB_DEVICE_ID_MATCH_INT_INFO,
+  b3f74938d656 ("drm/i915/pmu: Use PM timestamp instead of RING TIMESTAMP f=
+or reference")
 
--- 
-Regards,
+from the drm-intel-fixes tree and commit:
 
-Laurent Pinchart
+  22ba60f617bd ("drm/i915: Move [more] GT registers to their own header fil=
+e")
+
+from the drm-intel tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH7GvsACgkQAVBC80lX
+0GzaEgf/ciUxwV2kDzIokzbMY0hb4N3b7NoLZIMauwA1+8VuA4IxKNAG3Rvoj2jG
++jSAZW7bL8rXjB2clWosD78q7Rjgj4wEFOpbCueoaaSFFU5bRwuft7UFr+Tak5Fq
+6HWtKy3teCRqojMnEP+tIKg5mmF5Xb27SQwXd+E5tBTUVhCbftLR4tOaQeoZmQJD
+Yba5pNP8fI82Fgml1xp5Du+3rWfZmZ/KbggIV2FvLA5tlt/JEk596MmXueqnQ+93
+MRDAVvi6t7MfQtoZ6NfpDrJJ0vHzdqFutIQU5W3VmDKdKVLrgJihYeuKkNCisIaA
+CK3kBAJ+Ku897zHL83PnQTzTkRT6dA==
+=cpd6
+-----END PGP SIGNATURE-----
+
+--Sig_/qYjjXV8pFbe/W.USU2pBn4_--

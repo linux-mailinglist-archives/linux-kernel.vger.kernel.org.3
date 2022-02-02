@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199B24A76EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51B94A76ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346291AbiBBRfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:35:05 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:36819 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiBBRfE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:35:04 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F11ED60009;
-        Wed,  2 Feb 2022 17:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643823303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XJHM+S//eHV18bv/SGD+WZqBPCD5hy69+eUdTMxC6h0=;
-        b=kYQR8I+pQgC9KMkWLja+W9U1hwj5aIiNVtvBSnzRcKeTSkS+cF++rw2qiFTIry5a6u9uEV
-        ferGhvAmCNn41tnjR8OHH/5ZccxPjZGiRFZ85qUA2wv4VGOwvdtgRrUeoIAnm1ALIL5HNf
-        /QZRWsltd1PcURebCNx89k/W05R/UUTCSV9l6lcQFj4Y6I4bodhIL3GI4l2zLqT5NnNeM6
-        agaMXgpFi3W54UnG2nMhkttarGiJP8dCBpKrIGmiqF0FEg2O/5dX/JI4gsRP3WyVmxx3GX
-        RuR19okU/W2uQ5LsXP67T8Cg2XrJrnCyY9+51z2RreoTbcvVgsNiO7hV3u5FEg==
-Date:   Wed, 2 Feb 2022 18:35:00 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 30/30] ld.lld: error: undefined symbol:
- nand_ecc_unregister_on_host_hw_engine
-Message-ID: <20220202183500.7e4ef7cb@xps13>
-In-Reply-To: <YfquJwtbg/hF5WJF@sirena.org.uk>
-References: <202202011308.a6RlPiGp-lkp@intel.com>
-        <20220202154504.7737deed@xps13>
-        <YfqhJZ+BzfMrpN4Y@sirena.org.uk>
-        <20220202163452.746d50ca@xps13>
-        <YfquJwtbg/hF5WJF@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1346295AbiBBRhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:37:10 -0500
+Received: from mout.gmx.net ([212.227.15.19]:55535 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229588AbiBBRhH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:37:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643823377;
+        bh=nuthtyGtekh1QQHr3+HkARKWphnDMvJGe0AUmpkrc7A=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=UgorUlyfz1L7WX1XD13Rv/Kw0rRnC9vqv2dHLJvt/P/wv1/f+JJtRmZjPr04+y3pj
+         FIQDAjc1uBefyweGFLCsd0LpgYX8qFACQ9ZHgdeGgMn5hNN+rfopzVyDjBsmgPYdqo
+         pcxVJwU+35jRbzkqIZdGBMA/Jx3omzQ7H56ifRck=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.163.171]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWRRZ-1mi2Bu1TXH-00XvtJ; Wed, 02
+ Feb 2022 18:36:17 +0100
+Message-ID: <882bfe4e-a5b6-2b2c-167b-eda8c08419e3@gmx.de>
+Date:   Wed, 2 Feb 2022 18:36:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] fbdev: fbmem: Fix the implicit type casting
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Yizhuo Zhai <yzhai003@ucr.edu>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Matthew Wilcox <willy@infradead.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220131065719.1552958-1-yzhai003@ucr.edu>
+ <b1c1f68d-4620-2429-66bd-33d806d31457@gmx.de> <Yfq+/dVOgDVbhjRJ@ravnborg.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <Yfq+/dVOgDVbhjRJ@ravnborg.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VX0YPkte7zZH09cDCCwSMR6sYdUsNWLLA8YgeJOkgJgQF/e0Hdr
+ ulgvAE4VODuPwDya1YKqtltqlyixywIGsh3K/ABDEZWxl2aUbWw7MesYYL0dyZsEFoyBzY4
+ fMXhQKFj6nB7PIZMmz0F44mQGcF3UKOml4d/JksZQguJNYL4ityt/xqwcFWn46dkY8dISrc
+ k4ju0v0v+e5pmBFX/T6UA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:S5DAjWZKd3M=:+qoyAW62vM1CXB8ZyHhb5o
+ oIVMSe7TaTUcNwMjlf9qGfxSkF3iJc4s8xuXYgd/Yap6jWcNAIdZBj055VI5t2AbHFZpyF3pq
+ N0A35aRyx6odqViUui0AvTYshmX6/XXAUW+eFNp3NNbLsV4vqPXMqOGO5ZxA7Ue+L0ebIfCIv
+ wIvlxM95WA8nCtjKnBBA1L6opujM+lSm4pOleyGcSPjngL8daqTf5B92k/ViuoAnM9A+wilTU
+ tFu4F3E/KKhp3hf3wnJHhcQEjeT7c9k1jjDnwu4U9/pB1XI5Ymvog/TYf+PtCRPpH1rQhn2de
+ OZ8S6bMjaJPT7OW+nwSIefQpFsbVMdrdu5BDgaplKIaYf8G8ZbTkKx0ZQybl/lAnBbo89Z0xm
+ GMCMH3mC/ef8l+1/uFgOpruVJrPXR3eLEKwzkwsyQjwGXCnsktx1C8Eqfm5XIW52sV0PkoecA
+ TkxrhiQ7kQt4M4Ks7RoXZPtevYsp91w/9ewt1J0k2YwTfiz59mLDmw1IkaNlzkqRsQbuW1+C/
+ 2CvyQt42GZlq7zAbYFrYbiRwb5K3pRiFq/O1dgPN9ajWt6l3I+CGO6JZAF9IpcaOHswXnTnKo
+ /U49eL7/FgAicyIH94BNBXmqyi9XrRXgS1PA4PkheWFcVyv0Oo4xIQd95JREfCfLNhdRF5L3Z
+ Ew1y6ISsL/nZ7LX7Y3VjjOa8w0zzA5Q5zCXYZXxE+zeo1AlF+hOCWLOdDqtEGQms2E5FD9Inn
+ s2AuwWgDsGzvWkIxkVJrD4rtvnpXNqb/8k0aqvOINQ5USEkJd6s7m3rgX7m8DvtNrUidJbIce
+ ZDHI4XDjGn+WMu+pXjkujVKhF4e0qSyWa/lBIsnEk3El0TLakOQrb/Vl27M+COledZTvZ5u4/
+ ++5D3tz+daxmrNzfEFPeuXTaZ3lF2+EfvCgLuZoSfZJKSma7KO85IdB6QoJNXgHY9nhMOpOMM
+ k8c5lfcYekwgp8rrTPug1FrW3aCRLK0GII3tpxAfTEWj+fTOebogrXHinEb5ikVdxVypZm/XI
+ RAyQKkVgoQ0N2h4Dxu/T33Q7+QykG8WGD/xnjLJ1nLXBBpaQcVj3v3BGBPOV+kX6V9BwLTlYr
+ Hi7AoBrK2dfhN4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 2/2/22 18:27, Sam Ravnborg wrote:
+> Hi Helge,
+>
+> On Tue, Feb 01, 2022 at 04:02:40PM +0100, Helge Deller wrote:
+>> On 1/31/22 07:57, Yizhuo Zhai wrote:
+>>> In function do_fb_ioctl(), the "arg" is the type of unsigned long,
+>>
+>> yes, because it comes from the ioctl framework...
+>>
+>>> and in "case FBIOBLANK:" this argument is casted into an int before
+>>> passig to fb_blank().
+>>
+>> which makes sense IMHO.
+>>
+>>> In fb_blank(), the comparision if (blank > FB_BLANK_POWERDOWN) would
+>>> be bypass if the original "arg" is a large number, which is possible
+>>> because it comes from the user input.
+>>
+>> The main problem I see with your patch is that you change the behaviour=
+.
+>> Let's assume someone passes in -1UL.
+>> With your patch applied, this means the -1 (which is e.g. 0xffffffff on=
+ 32bit)
+>> is converted to a positive integer and will be capped to FB_BLANK_POWER=
+DOWN.
+>> Since most blank functions just check and react on specific values, you=
+ changed
+>> the behaviour that the screen now gets blanked at -1, while it wasn't b=
+efore.
+>>
+>> One could now argue, that it's undefined behaviour if people
+>> pass in wrong values, but anyway, it's different now.
+>
+> We should just plug this hole and in case an illegal value is passed
+> then return -EINVAL.
+>
+> Acceptable values are FB_BLANK_UNBLANK..FB_BLANK_POWERDOWN,
+> anything less than or greater than should result in -EINVAL.
 
-broonie@kernel.org wrote on Wed, 2 Feb 2022 16:15:35 +0000:
+Yes, that's the best solution.
+Yizhuo Zhai, would you mind to resend with that solution?
 
-> On Wed, Feb 02, 2022 at 04:34:52PM +0100, Miquel Raynal wrote:
-> > > On Wed, Feb 02, 2022 at 03:45:04PM +0100, Miquel Raynal wrote: =20
->=20
-> > > > I've failed to prevent faulty configurations with regular depends
-> > > > on/select keywords, so I've come with a new solution which received=
- a
-> > > > successful build coverage test from the 0-day robots.   =20
->=20
-> > > > In order to still be able to use the spi controller driver (=3Dy) w=
-hile
-> > > > mtd is =3Dm or =3Dn, I need to add an IS_REACHABLE() check in a cou=
-ple of
-> > > > headers. This way we can just imply the right MTD symbols from the
-> > > > SPI_MXIC Kconfig entry.   =20
->=20
-> > > Isn't this just a case where we shouldn't allow MTD to be built modul=
-ar? =20
->=20
-> > How would you do that in a nice Kconfig way? =20
->=20
-> depends on MTD=3Dy if SPI_MXC=3Dy
+Helge
 
-In this case I believe we should also add
-
-depends on MTD=3Dm if SPI_MXC=3Dm ?
-
-Anyway, this would force building the ECC support (and MTD...) even
-though we don't need it in most cases.
-
-My idea was to give people the right to only select SPI_MXIC without
-really caring about MTD/ECC support at all because this is IMHO a
-valid use case. We would then save a few kiB of extra MTD fat.
-
-What do you think?
-
-Thanks,
-Miqu=C3=A8l
+> We miss this kind or early checks in many places, and we see the effect
+> of this in some drivers where they do it locally for no good.
+>
+> 	Sam

@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382594A797E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927024A7985
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347232AbiBBUbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S1347139AbiBBUbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347148AbiBBUax (ORCPT
+        with ESMTP id S236170AbiBBUbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:30:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2C8C06173D;
-        Wed,  2 Feb 2022 12:30:52 -0800 (PST)
-Date:   Wed, 02 Feb 2022 20:30:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643833850;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=05IXDmsz590Qt5Iy6Gh3L/QY5R4OhEuU6v550Gi7aRo=;
-        b=2w/ZhfBOL4NeJZ/d5w+0m97pAf0vPNiI9ziaKvNkIi71PvwmWTawwjUVRFmwmDYW7Xjejo
-        zv9QuTKF8CjV1WU0kQcXbzSiZeFMEpccoiI7VCPCZGJTtWQz5dY2ulPDhLqO5Whtz25cbA
-        VGrLBfbB0lU5BSjMX4fMFWpPwDkFWAzYLl+StYpNIqlQMqeO0j2VrA767bvzyb3FQy7QMk
-        KKm5ceyG1IAwdacmV6vWLIfkPJmB4N/U2KM/DSVMT4b8kXC92O3TzVRSJOnNnOUY3DAwMr
-        JF6UFRFVe/gWH5rdFcCzod43S/ZbpegQqISp9JoyJXfR5pacsfEu1GQKdoPwgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643833850;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=05IXDmsz590Qt5Iy6Gh3L/QY5R4OhEuU6v550Gi7aRo=;
-        b=92iMbhDKZbUFBxVNSgKQCgU/hx34hluhPG6J1r9285DcV2Um+9T0diTdwFY52tn6kZl2zv
-        WMA8ftu63JTaSQCw==
-From:   "tip-bot2 for Maciej W. Rozycki" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/irq] x86/PCI: Show the physical address of the $PIR table
-Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <alpine.DEB.2.21.2201020151450.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020151450.56863@angie.orcam.me.uk>
+        Wed, 2 Feb 2022 15:31:49 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72F4C06173E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:31:49 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id r59so397787pjg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2yFJj6ZVefTE/vWISdKzupJXVjEcJPH4z8zqtZHrZMU=;
+        b=g9ENtVpiaPQ7gXq2RjybtD1vNjZ+vkdx4HgR7sglG5kF08w7f3otDMOAwt6gfBvpXj
+         v1OSktJ1XnffVQpqdExOi/gP/MBtuZNQYSffEN+6/VYDauLT9fU7bFs68ehxwVTFV26g
+         +ZpnzNGfnrAAIkDbtsRXJF7wLsYtouY9HtgEM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2yFJj6ZVefTE/vWISdKzupJXVjEcJPH4z8zqtZHrZMU=;
+        b=RuoUrSJRtmLzqyKVBlaHCB1HKET5KL6IEz+WvSWCOL4mmYUxdh2QRQnVGfBN0MGgw+
+         Vngd8w7XHs2lNrCH3vTks7w3jVjXvuxufloSIwnkTxIzZwbOJMblFm2aK3YBRsf+Ushz
+         FyDEA+OwAd95lb4XepCoxIr22FGgt38NQVc9M4SBnQmL75zq+n+uoQDhTmNKYAYm4rxj
+         AG8qZkd3DfLEr/acuWk75dY9JFSVjwmo+Bnm4g4+KFDIAGOpHfaGDfgn4dktXuVFuAGk
+         XIz1V1VC5pwO0b9+S3++twn5UnvOrrYP7tDGe+ooMC6xHcj9Filixj9dhw+WYwxMeyMm
+         TNKA==
+X-Gm-Message-State: AOAM531RtqJMsGLcKtzbi/BPQepnVjNDbNwPAQ+pb5FBE1hMJHoYoibx
+        NiVbaunXC6B57YBTNwYEdKph/Q==
+X-Google-Smtp-Source: ABdhPJwmTwJ5ie1k8bwwQQWok+d1e3DNDo3GqAuF1F32vPbnmIN2LP3OmiFsSSsjNlqbjhUKCc7mLw==
+X-Received: by 2002:a17:903:249:: with SMTP id j9mr31864782plh.81.1643833909142;
+        Wed, 02 Feb 2022 12:31:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ca12sm7166526pjb.11.2022.02.02.12.31.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 12:31:48 -0800 (PST)
+Date:   Wed, 2 Feb 2022 12:31:48 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ariadne Conill <ariadne@dereferenced.org>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Rich Felker <dalias@libc.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH] exec: Force single empty string when argv is empty
+Message-ID: <202202021229.9681AD39B0@keescook>
+References: <20220201000947.2453721-1-keescook@chromium.org>
+ <78959c88715049a4be00fc75bb333d3a@AcuMS.aculab.com>
 MIME-Version: 1.0
-Message-ID: <164383384979.16921.61822794104913419.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78959c88715049a4be00fc75bb333d3a@AcuMS.aculab.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/irq branch of tip:
+On Tue, Feb 01, 2022 at 09:17:47AM +0000, David Laight wrote:
+> From: Kees Cook
+> > Sent: 01 February 2022 00:10
+> ...
+> > While the initial code searches[6][7] turned up what appeared to be
+> > mostly corner case tests, trying to that just reject argv == NULL
+> > (or an immediately terminated pointer list) quickly started tripping[8]
+> > existing userspace programs.
+> > 
+> > The next best approach is forcing a single empty string into argv and
+> > adjusting argc to match. The number of programs depending on argc == 0
+> > seems a smaller set than those calling execve with a NULL argv.
+> 
+> Has anyone considered using the pathname for argv[0]?
+> So converting:
+> 	execl(path, NULL);
+> into:
+> 	execl(path, path, NULL);
+> 
+> I've not spotted any such suggestion.
 
-Commit-ID:     5c2830301a8784d0392aec617856f1b973bc5bea
-Gitweb:        https://git.kernel.org/tip/5c2830301a8784d0392aec617856f1b973bc5bea
-Author:        Maciej W. Rozycki <macro@orcam.me.uk>
-AuthorDate:    Sun, 02 Jan 2022 23:24:23 
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 02 Feb 2022 21:27:54 +01:00
+It came up on some IRC discussions at some point. I'm personally not a
+fan of this because it creates a bit of "new" ABI that has a lot of
+variability (depending on "" is one thing, but depending on a "missing"
+argv matching the exec path is very different). I think there were also
+concerns about dealing with fd-based exec ("what is the 'right' name"),
+etc.
 
-x86/PCI: Show the physical address of the $PIR table
+I'd prefer we stay as simple as possible for this change.
 
-It makes no sense to hide the address of the $PIR table in a debug dump:
-
-PCI: Interrupt Routing Table found at 0x(ptrval)
-
-let alone print its virtual address, given that this is a BIOS entity at 
-a fixed location in the system's memory map.  Show the physical address 
-instead then, e.g.:
-
-PCI: Interrupt Routing Table found at 0xfde10
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2201020151450.56863@angie.orcam.me.uk
-
----
- arch/x86/pci/irq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index 97b63e3..a33fe9c 100644
---- a/arch/x86/pci/irq.c
-+++ b/arch/x86/pci/irq.c
-@@ -84,8 +84,8 @@ static inline struct irq_routing_table *pirq_check_routing_table(u8 *addr)
- 	for (i = 0; i < rt->size; i++)
- 		sum += addr[i];
- 	if (!sum) {
--		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%p\n",
--			rt);
-+		DBG(KERN_DEBUG "PCI: Interrupt Routing Table found at 0x%lx\n",
-+		    __pa(rt));
- 		return rt;
- 	}
- 	return NULL;
+-- 
+Kees Cook

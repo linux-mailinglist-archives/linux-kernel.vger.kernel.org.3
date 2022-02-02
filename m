@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FB24A69EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC394A69F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243805AbiBBC3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 21:29:30 -0500
-Received: from mga01.intel.com ([192.55.52.88]:14595 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230424AbiBBC30 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 21:29:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643768966; x=1675304966;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QIfwxsTloxTCDjYMbsizWEXC4hp3EtD3c1AWi+Q5Wo4=;
-  b=ajh6OI0w/7A7FrTfT5Q8y9dwPFkDpyPfRkKGx5LKhRBS2uvZtTM5WaUX
-   gbmFVKo7ZyU+5cjjz+dgqO6jjJUEIofhskwR/gbgadUNeQH680lyiIZ16
-   kdb4EAhXssp7j+RU/6j6NGNnMxDWAde4y/TYMYcpfhaIC0S0BYRD1nqRd
-   FGUUwKuniql4A/atUE9pXCLYARsoJAqFefOf+XbkdwxxiibhnER9E3ONy
-   xNxjGW2XA3mhQcAzgyPOGWc+W+WD+kE/aYG0wmXcI5F03KDu67nljjVvj
-   HpEiP33oGx8q1MtLeWy025udUp/r8Ad1IM41mgNMp4ziMsq/ER/15HbZz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="272320723"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="272320723"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 18:29:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="698632562"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2022 18:29:24 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nF5Od-000Tzg-LV; Wed, 02 Feb 2022 02:29:23 +0000
-Date:   Wed, 2 Feb 2022 10:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: WARNING: modpost: vmlinux.o(.text.unlikely+0x1810): Section mismatch
- in reference from the function trace_define_generic_fields.isra.0() to the
- variable .init.data:initcall_level_names
-Message-ID: <202202021032.Mz078Swe-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S243809AbiBBCen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 21:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230424AbiBBCem (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 21:34:42 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39331C061714;
+        Tue,  1 Feb 2022 18:34:42 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id y17so15922620ilm.1;
+        Tue, 01 Feb 2022 18:34:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=QIYUzk06jhJsIFqt1jC+AKnwuPSsXKuhreuTZhRBfgY=;
+        b=eiK1djeSqkgN1jM4CTkkoBKF03ioGa8Kc0wYwLOvOFbLD5dc0ZyNth0GokLzpeNjiK
+         e2AVDGZM7gCwRuZ+ShEBYVAu+OY91ik+S5F93wDGdo5cXX9Xnxu54QtmqWdOVkh5wmFb
+         HPKSHdTNFpBsqsTyGjGLHh/tFGcz5Iz5ADMNbJuvFs1NzOC2S/UViVzrlXa11QPtsTQE
+         yOzYdpdSCmLWV0hhExf5/L/7LZzawFzTD7JjIdXP5Q8tJHz94AHMgmGCk6mY210m/MS8
+         LNRN5XqjuAZVes/BLnQ88ROP+Jvnmw9UtDE1zJvDHJtdk7Idk2ICL7RAfFDi0PuLn35a
+         QwBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=QIYUzk06jhJsIFqt1jC+AKnwuPSsXKuhreuTZhRBfgY=;
+        b=037v7w8L+qhhP5DRv3I74QGaYZcdI4rel4NniapamNr3nueowAbOh1cOgZoR7Sb8NL
+         R+GFxxN1WDdnXRT2iEcMLlI4DrSs7QsjAAfl+L7l6TsCD+nw0ITSLJOKoIwZPSZWj64r
+         kYfb5h9fC7BnkfSO8WdqCAMpy5kCexaT2uo8l16QjG5hkmXxbc5MA46KRiZ9sizyzpOO
+         6MU4UWPgp9CavD9bHutnV/C5Sj7FuX4liNelj7fjU3JIMlu3eUz32EUJuLCABymPj4w5
+         IHL1hwQnvFgkBRCLa2vrBamoNOJsxsxnHGKUBrN7pFMn68pzffVtSWK/kO/GTyfPUxiA
+         /NeA==
+X-Gm-Message-State: AOAM531AT24U4Dx0jFz40glQ0MYmmyIwu0zi1WJj8I9mkyJWsuKafWom
+        VmKI8a4iJyMm7UDPnjAIJMH9HUpZXrWxUM9BjDA=
+X-Google-Smtp-Source: ABdhPJzU0BTGTfcGTQewSM5sz+mKynFQQ9gbyJklNUgT7V3nGF5DM2MSaWoRQrr37HZBD+8onyGr0A==
+X-Received: by 2002:a05:6e02:17c6:: with SMTP id z6mr4650383ilu.93.1643769281173;
+        Tue, 01 Feb 2022 18:34:41 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id g5sm22067450ila.59.2022.02.01.18.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 18:34:40 -0800 (PST)
+Message-ID: <61f9edc0.1c69fb81.66df.06d9@mx.google.com>
+Date:   Tue, 01 Feb 2022 18:34:40 -0800 (PST)
+X-Google-Original-Date: Wed, 02 Feb 2022 02:34:39 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220131105220.424085452@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 000/100] 5.10.96-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steven,
+On Mon, 31 Jan 2022 11:55:21 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.96 release.
+> There are 100 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 02 Feb 2022 10:51:59 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.96-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-FYI, the error/warning still remains.
+5.10.96-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-commit: a55f224ff5f238013de8762c4287117e47b86e22 tracing: Fix pid filtering when triggers are attached
-date:   10 weeks ago
-config: xtensa-randconfig-r021-20220202 (https://download.01.org/0day-ci/archive/20220202/202202021032.Mz078Swe-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a55f224ff5f238013de8762c4287117e47b86e22
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a55f224ff5f238013de8762c4287117e47b86e22
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-<< WARNING: modpost: vmlinux.o(.text.unlikely+0x1674): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names
->> WARNING: modpost: vmlinux.o(.text.unlikely+0x1810): Section mismatch in reference from the function trace_define_generic_fields.isra.0() to the variable .init.data:initcall_level_names
-The function trace_define_generic_fields.isra.0() references
-the variable __initdata initcall_level_names.
-This is often because trace_define_generic_fields.isra.0 lacks a __initdata
-annotation or the annotation of initcall_level_names is wrong.
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

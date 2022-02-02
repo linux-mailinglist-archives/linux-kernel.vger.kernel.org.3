@@ -2,141 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9FB4A6E0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADFA4A6E12
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245563AbiBBJrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S245576AbiBBJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiBBJrm (ORCPT
+        with ESMTP id S245565AbiBBJsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:47:42 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E03C061714;
-        Wed,  2 Feb 2022 01:47:42 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nFCEm-0002jG-6d; Wed, 02 Feb 2022 10:47:40 +0100
-Message-ID: <a41bb41e-1a3e-a6eb-be31-3fe94e7f7db6@leemhuis.info>
-Date:   Wed, 2 Feb 2022 10:47:39 +0100
+        Wed, 2 Feb 2022 04:48:53 -0500
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964E0C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 01:48:53 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A34393F7D3;
+        Wed,  2 Feb 2022 10:48:51 +0100 (CET)
+Date:   Wed, 2 Feb 2022 10:48:50 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Bernard <bernard@vivo.com>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm/dpu: Bind pingpong block to intf on active ctls
+ in cmd encoder
+Message-ID: <20220202094850.2asbry44vyh5xw2p@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>, Bernard <bernard@vivo.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211222105513.44860-1-marijn.suijten@somainline.org>
+ <84bd598c-b1b7-984e-9fa1-94ad28087ef0@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-BS
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     workflows@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        regressions@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <cover.1643710947.git.linux@leemhuis.info>
- <e655527632dc4324cc7584cb3a73880d9c733df5.1643710947.git.linux@leemhuis.info>
- <87fsp25g28.fsf@meer.lwn.net>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v4 2/3] docs: regressions*rst: rules of thumb for handling
- regressions
-In-Reply-To: <87fsp25g28.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643795262;13038e33;
-X-HE-SMSGID: 1nFCEm-0002jG-6d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84bd598c-b1b7-984e-9fa1-94ad28087ef0@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.02.22 00:21, Jonathan Corbet wrote:
-> Thorsten Leemhuis <linux@leemhuis.info> writes:
+On 2022-01-20 02:12:51, Dmitry Baryshkov wrote:
+> On 22/12/2021 13:55, Marijn Suijten wrote:
+> > As per the specification of DPU_CTL_ACTIVE_CFG the configuration of
+> > active blocks should be proactively specified, and the pingpong block is
+> > no different.
+> > 
+> > The downstream display driver [1] confirms this by also calling
+> > bind_pingpong_blk on CTL_ACTIVE_CFG.  Note that this else-if is always
+> > entered, as setup_intf_cfg - unlike this mainline dpu driver that
+> > combines both behind the same function pointer - is left NULL in favour
+> > of using setup_intf_cfg_v1 when CTL_ACTIVE_CFG is set.
+> > 
+> > This solves continuous timeouts on at least the Qualcomm sm6125 SoC:
+> > 
+> >      [drm:dpu_encoder_frame_done_timeout:2091] [dpu error]enc31 frame done timeout
+> >      [drm:_dpu_encoder_phys_cmd_handle_ppdone_timeout.isra.0] *ERROR* id:31 pp:0 kickoff timeout 0 cnt 1 koff_cnt 1
+> >      [drm:dpu_encoder_phys_cmd_prepare_for_kickoff] *ERROR* failed wait_for_idle: id:31 ret:-110 pp:0
+> > 
+> > In the same way this pingpong block should also be unbound followed by
+> > an interface flush when the encoder is disabled, according to the
+> > downstream display driver [2].
+> > 
+> > [1]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder_phys_cmd.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n167
+> > [2]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n2986
+> > 
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> One thing that caught my eye this time around...
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
->> + * Address regressions in stable, longterm, or proper mainline releases with
->> +   more urgency than regressions in mainline pre-releases. That changes after
->> +   the release of the fifth pre-release, aka "-rc5": mainline then becomes as
->> +   important, to ensure all the improvements and fixes are ideally tested
->> +   together for at least one week before Linus releases a new mainline version.
+> > ---
+> >   .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  | 21 +++++++++++++++++++
+> >   1 file changed, 21 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> > index 8e433af7aea4..e0e08a874f07 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+> > @@ -71,6 +71,13 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+> >   	intf_cfg.stream_sel = cmd_enc->stream_sel;
+> >   	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
+> >   	ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
+> > +
+> > +	/* setup which pp blk will connect to this intf */
+> > +	if (test_bit(DPU_CTL_ACTIVE_CFG, &ctl->caps->features) && phys_enc->hw_intf->ops.bind_pingpong_blk)
 > 
-> Is that really what we want to suggest?  I ask because (1) fixes for
-> stable releases need to show up in mainline first anyway, and (2) Greg
-> has often stated that the stable releases shouldn't be something that
-> most maintainers need to worry about.  So if the bug is in mainline,
-> that has to get fixed first, and if it's something special to a stable
-> release, well, then the stable folks should fix it :)
+> Nit: here we bind all interfaces, but later we unbind only master. Is 
+> this correct?
 
-Hmmm. Well, afaics in the end many (most?) of the regressions that
-happen in these series are present in mainline as well: either they
-where introduced in an earlier devel cycle or came with a backport to
-stable/longterm and thus are present in mainline as well (unless the
-backport was incomplete or broken). So I'd say it's up to the regular
-developers and not the stable team to fix many (most?) of them.
+Not sure: it seems downstream only calls
+_sde/dpu_encoder_phys_cmd_update_intf_cfg when it is _not_ a ppsplit
+slave, which appears to be very similar to being the master (both check
+for ENC_ROLE_SLAVE but ppsplit also checks RM topology support for
+ppsplit).  Should we do this too before calling
+_dpu_encoder_phys_cmd_update_intf_cfg?
 
-That being said: yes, I think you have a point. This could be fixed with
-some small adjustments to the wording above, but...
+- Marijn
 
->> + * Fix regressions within two or three days, if they are critical for some
->> +   reason -- for example, if the issue is likely to affect many users of the
->> +   kernel series in question on all or certain architectures. Note, this
->> +   includes mainline, as issues like compile errors otherwise might prevent many
->> +   testers or continuous integration systems from testing the series.
-
-...the same aspect is relevant for other points like this one, too. And
-there it's not as easily solved. So maybe this is better addressed with
-a separate point early in the list:
-
-```
-* Developers are expected to handle regressions in all kernel series,
-but are free to leave them to the stable team, if the regression
-probably at no point in time occurred with mainline.
-```
-
-Regressions for example caused by incomplete or broken backports thus
-would be something developers could leave to Greg (and I expect he won't
-mind).
-
->> + * Aim to merge regression fixes into mainline within one week after the culprit
->> +   was identified, if the regression was introduced in a stable/longterm release
->> +   or the development cycle for the latest mainline release (say v5.14). If
->> +   possible, try to address the issue even quicker, if the previous stable
->> +   series (v5.13.y) will be abandoned soon or already was stamped "End-of-Life"
->> +   (EOL) -- this usually happens about three to four weeks after a new mainline
->> +   release.
+> > +		phys_enc->hw_intf->ops.bind_pingpong_blk(
+> > +				phys_enc->hw_intf,
+> > +				true,
+> > +				phys_enc->hw_pp->idx);
+> >   }
+> >   
+> >   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+> > @@ -507,6 +514,7 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
+> >   {
+> >   	struct dpu_encoder_phys_cmd *cmd_enc =
+> >   		to_dpu_encoder_phys_cmd(phys_enc);
+> > +	struct dpu_hw_ctl *ctl;
+> >   
+> >   	if (!phys_enc->hw_pp) {
+> >   		DPU_ERROR("invalid encoder\n");
+> > @@ -523,6 +531,19 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
+> >   
+> >   	if (phys_enc->hw_pp->ops.enable_tearcheck)
+> >   		phys_enc->hw_pp->ops.enable_tearcheck(phys_enc->hw_pp, false);
+> > +
+> > +	if (dpu_encoder_phys_cmd_is_master(phys_enc)) {
+> > +		if (phys_enc->hw_intf->ops.bind_pingpong_blk) {
+> > +			phys_enc->hw_intf->ops.bind_pingpong_blk(
+> > +					phys_enc->hw_intf,
+> > +					false,
+> > +					phys_enc->hw_pp->idx);
+> > +
+> > +			ctl = phys_enc->hw_ctl;
+> > +			ctl->ops.update_pending_flush_intf(ctl, phys_enc->intf_idx);
+> > +		}
+> > +	}
+> > +
+> >   	phys_enc->enable_state = DPU_ENC_DISABLED;
+> >   }
+> >   
 > 
-> How much do we really think developers should worry about nearly-dead
-> stable kernels?  We're about to tell users they shouldn't be running the
-> kernel anyway...
-
-I'd expect we handle near EOL stable release round about normally until
-they become EOL. But anyway, I had something different in mind when I
-wrote the above and I get the feeling my text didn't express it well and
-got you on the wrong track. :-/
-
-My intention was: I want to prevent users getting stuck on EOLed stable
-series (say 5.13.y) when a regression makes it hard or impossible for
-the user to run the directly succeeding stable series (5.14.y).
-
-I think this expresses it better:
-
-```
-* Aim to merge regression fixes into mainline within one week after the
-culprit was identified, if the regression was introduced in either:
-
-  * the development cycle of the latest proper mainline release
-
-  * a recent release in a stable/longterm series
-
-  Try to address regressions in the latest stable series even quicker,
-if the previous series will be abandoned soon or already was stamped
-"End-of-Life" (EOL) -- this usually happens about three to four weeks
-after a new mainline release.
-
-  Remember to mark the fix for backporting by using both the ``Fixes:``
-tag and ``Cc: stable@vger.kernel.org``.
-```
-
-How does that sound?
-
-Thx for the feedback, it's good that these things turned up.
-
-Ciao, Thorsten
+> 
+> -- 
+> With best wishes
+> Dmitry

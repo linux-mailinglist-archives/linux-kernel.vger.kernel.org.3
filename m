@@ -2,234 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829584A75B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C61E4A75BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240234AbiBBQZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:25:40 -0500
-Received: from mail-mw2nam12on2054.outbound.protection.outlook.com ([40.107.244.54]:52064
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229437AbiBBQZj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:25:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WRlilx5qEmQVjFiz4Z12Xg3Mfloey4NVLQ3x1vDxTb+ALJqmtnYjLRst7R72biBzZNjtR7K8ovCa/yDpp7rjyVsPYReltOoUeecMvdcWz3STdr40eJ+TlqRcA3HPHHXUU83JU0HzbZjzX45LxrUFazYgUdKGjRK0mZzkFKdCws8tTi3zSJIyFh150rg9EG/ON/ka2AMMIgEUzlXET6W+H0W/rWhQwqiHhku2im2jREkDmQOD9tkSXBaYBK2yS6B+ef5StPDzu9RdMzpMsdNZrV5uy+vMJvlhtWsuWjieB40AmWrpvxhtmxBL3VLkIFupi9wGM7oVlHB1Ub/9kwCKdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oOFANyY7rEc+TDIcsKTdvLjfLK3nYfKRWVxY+I3ztNU=;
- b=WpDSf18RGfPL/+eigJW4/mCnVaggDxq+/uq3AzJvrGXqMZ77B21qrTGf9FnSTVEHrboaoyDookVTNKPWcN9nFlqq++DAjR8LmyBIiw8JXeDFcdGFhyZHskBRv/EkhBwdsRNlx9s6SUPzWXTAMc1KIgqwko0bkk7HkKZMepo27tKaL99bGqgNeZmcJNDezF/MD17m31wsxZ51A+RtHE0CwIE24d9sof1eDFqUkmpsZa6DsRxKo7gIGXX13yNVSOt+S+ePqlOnFbhd1R+ZS/3aT8NPx0ycDFBGyAWQV3ZmNCSVENxzRPUwJQqhphmHf0DrOv0Z0l3dZ9IfvYOAJ9n+gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oOFANyY7rEc+TDIcsKTdvLjfLK3nYfKRWVxY+I3ztNU=;
- b=e5OIL9lcG0nD/XLtqAWR/JVfhInJgrwT4mHoEDeBqQmkjIOcdq4rCBGU8rLTgrn4fWZfyVwmsHh7qcPek/zIJVRU7i4odH82bMpZ50AribPQmhf9dkteCAvFs2/4ULmPfjQOmqBJZf737KpYWNpVEadV9lT0hco5pz6jcQ0s61+pOgFtc06oDKfoEiCaBCybhGWC59OqBZCe5tmyOwSUhEXrkJr6keAPAzVMODS2tjakKnMY0Yw+LzzSiBehxutIpQYll2uRWN/ZX1eNIk3pn1dNcAZnSu+8X5Fsq7fskNVnq+oclJxyUAAdVHgx6cYJ0oje6z4KM0fahzs20xCbeA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by BL0PR12MB4914.namprd12.prod.outlook.com (2603:10b6:208:1c4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Wed, 2 Feb
- 2022 16:25:37 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::a9db:9c46:183e:c213%3]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
- 16:25:37 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Oscar Salvador <osalvador@suse.de>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>
-Subject: Re: [PATCH v4 3/7] mm: page_isolation: check specified range for unmovable pages
-Date:   Wed, 02 Feb 2022 11:25:35 -0500
-X-Mailer: MailMate (1.14r5864)
-Message-ID: <ED2CBE9C-EC92-44BE-87B6-5FF594415FF1@nvidia.com>
-In-Reply-To: <21c196f8-18ca-d720-4241-00c9461854d3@redhat.com>
-References: <20220119190623.1029355-1-zi.yan@sent.com>
- <20220119190623.1029355-4-zi.yan@sent.com>
- <Yfp2rv0K6d3cNmwg@localhost.localdomain>
- <21c196f8-18ca-d720-4241-00c9461854d3@redhat.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_DDA32845-4AED-435A-8D84-6088D52B516B_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: MN2PR15CA0041.namprd15.prod.outlook.com
- (2603:10b6:208:237::10) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+        id S1345825AbiBBQ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229437AbiBBQ0L (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:26:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED599C061714;
+        Wed,  2 Feb 2022 08:26:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5D82B83141;
+        Wed,  2 Feb 2022 16:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E672FC004E1;
+        Wed,  2 Feb 2022 16:26:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643819168;
+        bh=wusIwvpAYb98F0yAZEFXYnS8gtTO5w+x8X+MClA3MHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gm2cGMr56Pfad5yvlGq7NpXnmAzGI5MgPTaIWTllBoSrlM62h724XW8dQJhz2lntv
+         6rVxPnPi7O9qviKfc6sVFZX0caLBxpcGyRlEJULRpO+uMDFc7SHzztHX4+88zKEXAk
+         oReL5CuoiXrzaiuHrDyYYN3YwwQZmx1/tXPfjqnmbh270BYjTAWb0AB/aWE5RIYWS/
+         RBtPqt472ang7nDDigm0dFQB2XVKu1IAdofgiqpdp2fE/NvOOMexvbh9Df58obsuPJ
+         uDqvHJG+sbHxcQ3qyp7wxFaqzkxBnn6tZ7WOYZUDvBAeHAJYiDk96KL5uOiwjS2lwv
+         ebgorz+D9R2tA==
+Date:   Wed, 2 Feb 2022 09:26:04 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, "# 3.4.x" <stable@vger.kernel.org>
+Subject: Re: [PATCH] Makefile.extrawarn: Move -Wunaligned-access to W=2
+Message-ID: <YfqwnMB2lLXOuahI@dev-arch.archlinux-ax161>
+References: <20220201232229.2992968-1-nathan@kernel.org>
+ <CAK8P3a2Y8nQ55sycxbpfN=71BNO9wuEDt=Q24ELS_u_WNRpqZw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 78537ba2-54e7-4818-6a68-08d9e668a541
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4914:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB49149B9DC33735213180E455C2279@BL0PR12MB4914.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J3QKMF8fgNEMm9Z6Sd6GCrLaxFJDsOZ5IgqUTNy0n4yRtn8Jb4B+AAF/NPHxYeu9eYzA5cC0FRqon+xrL1BYUMBCBylLNSXDs29TBGoOB+A98swr1k6hZ3r5YySc2ytd1yJpKBapMdoyvOE0iFZCU4m4GrzTo4BI3tB66ziPfEuhcgVExoAb8iEml8a/8qT3KDg2GLVXBb6k09H9W5HAazCPp/oYVog8q1X44ox+jWnqVjHjmzNZIoiMOC0ZNmNlbrKW+cFZXpkVjdy8OXiPSzCmDBhe8Vz91k1RRbeO1i9f0ZHFlyZax99MMxtk8xd2asX4RhvXq9XQ3DyS84B5wvDvA94JrgLyQ9FgQaUj9j1DNkyszNb2VRopXAGy0x6pDcv/Xmp0zvzJwimS4yIuZGONDy5io7WRAwPxhumowk5mAmbgSeZE9qONqwfXcz4H2YSpD3Wd5HrW1C5Kr+ewWuBDr5A7aYH2RCnG+liCh6JsH0dahCsbfBQSQLwTj8Uqf0cpwoqEJTki8Rw3Xz+dYrpTnOT/ggxYxDVYbDAPlNwHlHI77u6HMqcoo7ZLIV655T0ZIgi3pmfTuM/vYnxiJI8zI6IGKwJegzBDoFGEpKibTWMjh6X/buqc/dgpUt4N7AuOwbc1uiLcqsdZsOctNk29RLyB5o0Pcsl/SmKECGbk8CO0+E8N1g68fq0Ae/swHraV5QkStrSczyhhWmuNf/53PjOxkVB3BYbct2R6558=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(508600001)(26005)(53546011)(86362001)(6486002)(8676002)(7416002)(4326008)(2906002)(2616005)(83380400001)(5660300002)(8936002)(235185007)(66476007)(36756003)(66556008)(186003)(54906003)(6916009)(38100700002)(33656002)(21480400003)(6506007)(6512007)(316002)(72826004)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Nc/UpiSYzA9tXGcSRJ5pKL4+CLDPGG48cNOyVkVQgVUjHm+9XOvbUJCt5MEI?=
- =?us-ascii?Q?gJDVVKErBc6Lx3H/psIP19R8+zkU6t2yC1qbogkRb4x78CDJziTL4DCQZ7ko?=
- =?us-ascii?Q?nLN+ouAoMbrZjlG1gY3p0pEZ9hE/2+au07DcxUiYESH6ixhVU9/lLkQKhCSZ?=
- =?us-ascii?Q?pZATk/KQd8UmRSaucwJVnQhvEVYF4J9WEC6A0TkwDm/OfC4t4Rrd1ODCstzh?=
- =?us-ascii?Q?FgJhGYfR2el86eSlaaOk48IugbWe8u1lcS7ItRHb6+ElU/V918J/vByks8gf?=
- =?us-ascii?Q?hgk9yjh7En40vnlJN4LPPc9KT3NsUClgKXcsezI4HtSl1ivrKzCc4/FQHXKe?=
- =?us-ascii?Q?88gmufCYWyKHkfkp5ubUHWUoYCl8GW/I1XD7cwLll1CVqiAkQceH8ZIUUoLG?=
- =?us-ascii?Q?fSoOCk9jh0wITduPmwvc6blwYY7JY3mLndN6NBKWO77O9Z+pwEk60jVcQGSB?=
- =?us-ascii?Q?9hIpOeipZiKBSiM2aki6guhMPcV+w/9uXofbI7i1P1f+zJkAEzIDkJg3JvXZ?=
- =?us-ascii?Q?Aq+fXwQEkB/CIA7HlTfoK5W0XcOrn7HAoULpWV16U/xnW7U31M8a9uWFAGO+?=
- =?us-ascii?Q?1BX4kPqVVvsemWCl9satUxZVEgjp6y1j6BEFcKWOy/dvQaJPtSxBJjJnHoJN?=
- =?us-ascii?Q?bq+Mu1GR/XvKGOKYftF8yFuBLwww9Dfwl3dNBQt1ESZbNBVY8swkglFjelaB?=
- =?us-ascii?Q?jjn3hQgzqo4uaQYcUspKV03EF06mCncccWjbq8HmNbFbAGsLwzRgu3tau1Q7?=
- =?us-ascii?Q?BreZrfg17NVuHBJ+vMaHfeMPAsGFabhw5DjgWbePDNV90qTBLOgWTEGQ7TIs?=
- =?us-ascii?Q?ew79hRqxgImgsJUKF7rOEct0uOhUKSC2to77DPzVttSyzGVRaTNHktj560SB?=
- =?us-ascii?Q?H2nzFXDfEE4/RiHd53n4uaQWl85bE/otKESzxfOzSzehOIGUGiPG9l8whmVo?=
- =?us-ascii?Q?Un1KwpMWTckYq13V1+DjCnoG7xA8tKFQRwQAQrbKrOng1Xb0VN7lsTe0WtX8?=
- =?us-ascii?Q?lDJueg1Hs7VtxU1j9tcpdRPvNio3d64Ez6WFzML43cgc3HS/8EGs6ig8j9v4?=
- =?us-ascii?Q?1ujHapkolhF0DQIvVrckTd/2CSusbj97wHl28edRhh/pglgBMkCT9sZmTR4M?=
- =?us-ascii?Q?A394RZ8Z/bEP9T/1bPUaulsEKqpIPVPMDLDHtNJrLbKnnlD7Ml3dCl4U60sy?=
- =?us-ascii?Q?TaEgjvTfiOEI9SbLSC1Ip2+Gk8rBC3p/XYQBRkR8vYSyIN2zJ7YKx9/Pqqll?=
- =?us-ascii?Q?b44+IMI2sAbBQ1uvaMtlJeaeK1CPyxpgOa6lj0ty43omLeLSLTuFgtUSgEAT?=
- =?us-ascii?Q?F+4egI7dtRBqwd4Wv1l8ecUzDIe3o/Xl8rn9cXWNi4iYHIqyxCuBaug85ZXX?=
- =?us-ascii?Q?rpwYGPAt7LXNBE1emgBwhpiD2pCBy6ivj6ClNelS1BBrH6RFPY6H06K2nXuw?=
- =?us-ascii?Q?HIKBD1q1Tm7l2XnSj80kVOafbtQWJRnaqZKulNBQXkzzyH7Mf0HaKqRavesw?=
- =?us-ascii?Q?v7HjKGMLleX4+XelRvNv2iZvQJMjI7oMnUmx7JJNvrCcgHP/ep81TGK8R++M?=
- =?us-ascii?Q?vWT7S19E9P36MEqCJjI=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78537ba2-54e7-4818-6a68-08d9e668a541
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 16:25:37.5338
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i8ULqr6yukvOOwJX4KOc4zUSUrldSWKPkAWc6f8tgrXMIwxbRvM0MvQmGUaVyNdQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4914
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2Y8nQ55sycxbpfN=71BNO9wuEDt=Q24ELS_u_WNRpqZw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_DDA32845-4AED-435A-8D84-6088D52B516B_=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 02, 2022 at 09:12:06AM +0100, Arnd Bergmann wrote:
+> On Wed, Feb 2, 2022 at 12:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > -Wunaligned-access is a new warning in clang that is default enabled for
+> > arm and arm64 under certain circumstances within the clang frontend (see
+> > LLVM commit below). Under an ARCH=arm allmodconfig, there are
+> > 1284 total/70 unique instances of this warning (most of the instances
+> > are in header files), which is quite noisy.
+> >
+> > To keep the build green through CONFIG_WERROR, only allow this warning
+> > with W=2, which seems appropriate according to its description:
+> > "warnings which occur quite often but may still be relevant".
+> >
+> > This intentionally does not use the -Wno-... + -W... pattern that the
+> > rest of the Makefile does because this warning is not enabled for
+> > anything other than certain arm and arm64 configurations within clang so
+> > it should only be "not disabled", rather than explicitly enabled, so
+> > that other architectures are not disturbed by the warning.
+> >
+> > Cc: stable@vger.kernel.org
+> > Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> The warning seems important enough to be considered for W=1 on 32-bit arm,
+> otherwise the chances of anyone actually fixing drivers for it is
+> relatively slim.
 
-On 2 Feb 2022, at 7:25, David Hildenbrand wrote:
+Fair point, I suppose barely anyone does W=2 builds, which means we
+might as well just disable it outright.
 
-> On 02.02.22 13:18, Oscar Salvador wrote:
->> On Wed, Jan 19, 2022 at 02:06:19PM -0500, Zi Yan wrote:
->>> From: Zi Yan <ziy@nvidia.com>
->>>
->>> Enable set_migratetype_isolate() to check specified sub-range for
->>> unmovable pages during isolation. Page isolation is done
->>> at max(MAX_ORDER_NR_PAEGS, pageblock_nr_pages) granularity, but not a=
-ll
->>> pages within that granularity are intended to be isolated. For exampl=
-e,
->>> alloc_contig_range(), which uses page isolation, allows ranges withou=
-t
->>> alignment. This commit makes unmovable page check only look for
->>> interesting pages, so that page isolation can succeed for any
->>> non-overlapping ranges.
->>
->> Another thing that came to my mind.
->> Prior to this patch, has_unmovable_pages() was checking on pageblock
->> granularity, starting at pfn#0 of the pageblock.
->> With this patch, you no longer check on pageblock granularity, which
->> means you might isolate a pageblock, but some pages that sneaked in
->> might actually be unmovable.
->>
->> E.g:
->>
->> Let's say you have a pageblock that spans (pfn#512,pfn#1024),
->> and you pass alloc_contig_range() (pfn#514,pfn#1024).
->> has_unmovable_pages() will start checking the pageblock at pfn#514,
->> and so it will mis pfn#512 and pfn#513. Isn't that a problem, if those=
+> Can you point post the (sufficiently trimmed) output that you get with
+> the warning
+> enabled in an allmodconfig build?
 
->> pfn turn out to be actually unmovable?
->
-> That's the whole idea for being able to allocate parts of an unmovable
-> pageblock that are movable.
->
-> If the first part is unmovable but the second part is movable, nothing
-> should stop us from trying to allocate the second part.
->
-> Of course, we want to remember the original migratetype of the
-> pageblock, to restore that after isolation -- otherwise we'll end up
-> converting all such pageblocks to MIGRATE_MOVABLE. The next patch does
-> that IIRC.
+Sure thing.
 
-Yes. A desirable optimization is to make MIGRATE_ISOLATE a standalone bit=
-,
-so isolating a pageblock will not remove its original migratetype. It is
-on my todo list.
+Here is the trimmed version:
 
->
-> However, devil is in the detail, and I still have to review those parts=
+https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/trimmed.log
 
-> of this series.
+Here is the full output of 'make ARCH=arm LLVM=1 allmodconfig':
 
-Thanks. You can wait for my next version. I am planning to make
-start_isolate_page_range() accept any address range and move migratetype
-save and restore into it, so that the caller do not need to worry about
-alignment.
+https://gist.github.com/nathanchance/6682e6894f75790059ca698c29212c71/raw/f63d54819afeb96f3ea0bb055096849912ac0185/full.log
 
-Basically, start_isolate_page_range() will need to migrate compound pages=
+> I'm not sure why this is enabled by default for arm64, which does not have
+> the problem with fixup handlers.
 
-at the beginning and/or the end of the given range [start_pfn, end_pfn) i=
-f
-start_pfn and/or end_pfn-1 is in the middle of a compound page.
-If start_pfn and/or end_pfn-1 is in the middle of a free page, the free
-page will need to be split and put into separate migratetype lists.
+It is not enabled for arm64 for the kernel. If I am reading the commit
+right, it is only enabled for arm64 when -mno-unaligned-access is passed
+or building for OpenBSD, which obviously don't apply to the kernel (see
+AArch64.cpp).
 
->
->
-> Note that there are no current users of alloc_contig_range() that
-> allocate < MAX_ORDER - 1 -- except CMA, but for CMA we immediately exit=
+For ARM, we see it in the kernel because it is enabled for any version less
+than 7, according to this block in clang/lib/Driver/ToolChains/Arch/ARM.cpp:
 
-> has_unmovable_pages() either way.
->
-> -- =
+    } else if (Triple.isOSLinux() || Triple.isOSNaCl() ||
+               Triple.isOSWindows()) {
+      if (VersionNum < 7) {
+        Features.push_back("+strict-align");
+        if (!ForAS)
+          CmdArgs.push_back("-Wunaligned-access");
+      }
 
-> Thanks,
->
-> David / dhildenb
+There is this comment above this block in the source code:
 
+    // Assume pre-ARMv6 doesn't support unaligned accesses.
+    //
+    // ARMv6 may or may not support unaligned accesses depending on the
+    // SCTLR.U bit, which is architecture-specific. We assume ARMv6
+    // Darwin and NetBSD targets support unaligned accesses, and others don't.
+    //
+    // ARMv7 always has SCTLR.U set to 1, but it has a new SCTLR.A bit
+    // which raises an alignment fault on unaligned accesses. Linux
+    // defaults this bit to 0 and handles it as a system-wide (not
+    // per-process) setting. It is therefore safe to assume that ARMv7+
+    // Linux targets support unaligned accesses. The same goes for NaCl
+    // and Windows.
+    //
+    // The above behavior is consistent with GCC.
 
---
-Best Regards,
-Yan, Zi
+I notice that CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS under certain
+conditions in arch/arm/Kconfig. Would it be worth telling clang that it
+can generate unaligned accesses in those cases via -munaligned-access or
+would that be too expensive? If we did, these warnings would be
+eliminated for configs with CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y,
+then it could be safely placed under W=1.
 
---=_MailMate_DDA32845-4AED-435A-8D84-6088D52B516B_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmH6sH8PHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqKJmYP/iXmUcS1xeOlSjoCiof9XQMxBvznUPT2Ut/h
-uhbd8ZZGGShbY2c+6Eko0/00RwXCfuJx0zmSpBaxHv6dHiJ3dTCg0EAbV0EIjXm4
-AcWVsKx4aIeF+PT+DOih1jjku9+Iypq7knEcnmT5uCmqcgbTK4cCNV4agPKU5H9J
-oi2OqpmbJ8A6fe78sVZgQx94VKXfQ8EZSNkJpMqZOrdv0nsqLlTgnBq5JsEbi/t8
-PMBWYHuqAla+S050tqmK0leiHjbfxxXYb9xq6nYM1f58JV+QnTz+b5wkTj7B7Muh
-sqTLrfRXI0CW0uh0shKfJbTDnqIYcD3Dand+iZDXfwo4kIDrihn7Yvyi+z4Kc7TY
-X8u6xLXDqUH3c4c+a/uRcDwt/3hnVKVntQUBX10ksuE8bXeQOFEWSV0rFDuSgHPB
-1Luw6YOSPBO+WuIayG6YeQ4KaCzg0UjMbWKnrbyqpEIKxBCW7/Ugy2Rjk/97yI7w
-ZNo2lK22QETIeDUjRtQ5BYQ4xDAJF8Y+q4Lyh0ETQyfgsGn1WNiWc+AJvCz9yJgL
-UkKkjfmwdFyEa3tdQntJIE+1g3C6EA+HxqK3L1LuwysYJRinYDAWYKkNyX/kLScC
-dkZt/CenurWv0uMeu0bdhKFdRu7z0w8YQ+1ZhEIkxaNAQ7uLqafmGsdWaQnIrGlM
-8XIMpAeK
-=CvVD
------END PGP SIGNATURE-----
-
---=_MailMate_DDA32845-4AED-435A-8D84-6088D52B516B_=--
+Cheers,
+Nathan

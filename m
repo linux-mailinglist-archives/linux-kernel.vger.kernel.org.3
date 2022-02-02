@@ -2,133 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84B44A7488
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E41F44A7498
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345468AbiBBPXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345134AbiBBPX3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:23:29 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B4BC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:23:29 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id h7so25874318iof.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
-        b=KjTnQGPzCt0S96UuIiNaawuVsmZa9fYmRebjLuFamfRMalfj7glkboFmx2YQiVjxxi
-         OFiyfetLE/KKL1YviKxiRuabpPFcUmMMwWrECiJfjImb8tCVUyU600HZGw/+E5Jg7ncm
-         fQtaS1Gh6MWfhgntWc+BtgcMKLgRdFXik9aGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
-        b=eeF5A2ecZVAOAihyjCXZaQ3B+is9ojn4q+pQVLbALGLwyKbwPMh3Z2r85jkjyV9PHq
-         wh5PlAp+hbfcgT1q2xUlBQZ8uEk5aYC1bxEGYUlkPJ1lBAU0gg2JAdDONKcj651ZSd1c
-         o5CpNLlmpdIQtah6iyBi4uToh8bxZm2o4rfFha33/k+UGuM6u3xUGNAZisoVnXF4qvBd
-         vLFxM6MTDeSVcHEEYBSwPO3fBXxuKoLZ6XPW4BWUWcVxu0dX6dE6iyP4eRAVwjuCuFHu
-         D2xTqpsqAM4Jg9CkjVJOWZA0c0XFK9z/WHOsnBPOnoj0AaSq3GRY9asA8H05UVsEivVT
-         lLHQ==
-X-Gm-Message-State: AOAM530gsHEOPBR0IHmfwWdmYRr6H72pADtDTUIIKDlYlsLv9HlEQWXY
-        E38y7CO88gbXLEmJlUL4Q3nJuLNCz2QW+A==
-X-Google-Smtp-Source: ABdhPJwDnQ5AYawUXmJEJT+iihMTgbH4Y5Qg1y5crUIqxFnZmWZ4x9zV9SU+rsirQ4wVe6B0oamhbg==
-X-Received: by 2002:a02:aa0a:: with SMTP id r10mr9395203jam.246.1643815409098;
-        Wed, 02 Feb 2022 07:23:29 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id z23sm15236046iol.11.2022.02.02.07.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:23:28 -0800 (PST)
-Subject: Re: kselftest tree on kernelci.org
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ece6ea91-c44b-0bea-c4a2-ec099fa94881@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 08:23:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S245093AbiBBP3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:29:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:37926 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230120AbiBBP3h (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 10:29:37 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BFB9113E;
+        Wed,  2 Feb 2022 07:29:37 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.87.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DCD4E3F73B;
+        Wed,  2 Feb 2022 07:29:35 -0800 (PST)
+Date:   Wed, 2 Feb 2022 15:29:32 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        catalin.marinas@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, will@kernel.org
+Subject: Re: [PATCH 5/6] sched/preempt: add PREEMPT_DYNAMIC using static keys
+Message-ID: <YfqjXBgZuNos2nqF@FVFF77S0Q05N>
+References: <20211109172408.49641-1-mark.rutland@arm.com>
+ <20211109172408.49641-6-mark.rutland@arm.com>
+ <20211213220501.GB786870@lothringen>
 MIME-Version: 1.0
-In-Reply-To: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213220501.GB786870@lothringen>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guillaume,
-
-On 2/2/22 6:32 AM, Guillaume Tucker wrote:
-> Hi Shuah,
+On Mon, Dec 13, 2021 at 11:05:01PM +0100, Frederic Weisbecker wrote:
+> On Tue, Nov 09, 2021 at 05:24:07PM +0000, Mark Rutland wrote:
+> > Where an architecture selects HAVE_STATIC_CALL but not
+> > HAVE_STATIC_CALL_INLINE, each static call has an out-of-line trampoline
+> > which will either branch to a callee or return to the caller.
+> > 
+> > On such architectures, a number of constraints can conspire to make
+> > those trampolines more complicated and potentially less useful than we'd
+> > like. For example:
+> > 
+> > * Hardware and software control flow integrity schemes can require the
+> >   additition of "landing pad" instructions (e.g. `BTI` for arm64), which
+> >   will also be present at the "real" callee.
+> > 
+> > * Limited branch ranges can require that trampolines generate or load an
+> >   address into a registter and perform an indirect brach (or at least
+> >   have a slow path that does so). This loses some of the benefits of
+> >   having a direct branch.
+> > 
+> > * Interaction with SW CFI schemes can be complicated and fragile, e.g.
+> >   requiring that we can recognise idiomatic codegen and remove
+> >   indirections understand, at least until clang proves more helpful
+> >   mechanisms for dealing with this.
+> > 
+> > For PREEMPT_DYNAMIC, we don't need the full power of static calls, as we
+> > really only need to enable/disable specific preemption functions. We can
+> > achieve the same effect without a number of the pain points above by
+> > using static keys to fold early return cases into the preemption
+> > functions themselves rather than in an out-of-line trampoline,
+> > effectively inlining the trampoline into the start of the function.
+> > 
+> > For arm64, this results in good code generation, e.g. the
+> > dynamic_cond_resched() wrapper looks as follows (with the first `B` being
+> > replaced with a `NOP` when the function is disabled):
+> > 
+> > | <dynamic_cond_resched>:
+> > |        bti     c
+> > |        b       <dynamic_cond_resched+0x10>
+> > |        mov     w0, #0x0                        // #0
+> > |        ret
+> > |        mrs     x0, sp_el0
+> > |        ldr     x0, [x0, #8]
+> > |        cbnz    x0, <dynamic_cond_resched+0x8>
+> > |        paciasp
+> > |        stp     x29, x30, [sp, #-16]!
+> > |        mov     x29, sp
+> > |        bl      <preempt_schedule_common>
+> > |        mov     w0, #0x1                        // #1
+> > |        ldp     x29, x30, [sp], #16
+> > |        autiasp
+> > |        ret
+> > 
+> > ... compared to the regular form of the function:
+> > 
+> > | <__cond_resched>:
+> > |        bti     c
+> > |        mrs     x0, sp_el0
+> > |        ldr     x1, [x0, #8]
+> > |        cbz     x1, <__cond_resched+0x18>
+> > |        mov     w0, #0x0                        // #0
+> > |        ret
+> > |        paciasp
+> > |        stp     x29, x30, [sp, #-16]!
+> > |        mov     x29, sp
+> > |        bl      <preempt_schedule_common>
+> > |        mov     w0, #0x1                        // #1
+> > |        ldp     x29, x30, [sp], #16
+> > |        autiasp
+> > |        ret
+> > 
+> > Any architecture which implements static keys should be able to use this
+> > to implement PREEMPT_DYNAMIC with similar cost to non-inlined static
+> > calls.
+> > 
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
 > 
-> I've made this PR to start monitoring the "fixes" branch from the
-> kselftest tree on kernelci.org:
-> 
->    https://github.com/kernelci/kernelci-core/pull/998
-> 
+> Anyone has an opinion on that? Can we do better on the arm64 static call side
+> or should we resign ourself to using that static keys direction?
 
-Thank you.
+From speaking with other arm64 folk, I think we're agreed that this is
+preferable to implementing static calls (especially givne the pain points with
+interaction with CFI).
 
-> While kselftest changes eventually land in linux-next, monitoring
-> your tree directly means we can test it earlier and potentially
-> enable more build variants or experimental tests.  Since
-> kernelci.org also builds and runs some kselftests we're regularly
-> finding issues and people are sending fixes for them.  See this
-> recent story for example:
-> 
->    https://twitter.com/kernelci/status/1488831497259921409
-> 
-> Keeping an eye on kselftest patches with kernelci.org means we
-> can verify that fixes do what they're supposed to do with a much
-> larger test coverage than what individual developers can do.
-> We've been applying kselftest fixes on a branch managed by
-> kernelci.org to verify them in the past, but having the actual
-> kselftest tree part of the workflow would seem much better.
-> 
+I don't think it's fair to say we're "resigning outselves" to using static keys
+-- this is vastly simpler to implement and maintain the static call approach,
+should perform no worse than the form of static call trampolines that we'd have
+to implement for static calls, and makes it easier for architectures to enable
+PREEMPT_DYNAMIC, so it seems like an all-round win.
 
-Absolutely.
+> Also I assume that, sooner or later, arm64 will eventually need a static call
+> implementation....
 
-> There are several branches in your tree, while "fixes" seemed
-> like the most useful one to pick I see there is also a "kernelci"
-> branch too but it hasn't been updated for a while, reviving it
-> could give you the possibility to test patches through
-> kernelci.org before applying them on other branches that get
-> pulled into linux-next and mainline.
-> 
+I really hope not, becuase the current design of static calls (with arbitrary
+targets) is not a great fit for arm64.
 
-This branch was a topic branch specific for changes I made for
-kernelci runs to be cleaner - I should delete this.
+The only other major use for static keys on the arm64 side is for tracing
+hooks, and that's *purely* to avoid the overhead that the current clang CFI
+scheme imposes for modules. For that I'd rather fix the CFI scheme, because
+that also interacts poorly with static calls to begin with...
 
-If you are looking for other branches to monitor in addition to
-"fixes" branch, the following are the ones to add:
-
-next (for the merge window), kunit (kunit changes slated for merge window),
-kunit-fixes
-
-> Many things could potentially be done with arbitrary builds and
-> tests etc.  These are some initial suggestions.  How does this
-> sound?
-
-Sounds great to me. Since selftest patches flow through various
-subsystem trees, having kernelci keep an eye is great. This would
-be another pair of eyes in addition to occasional tests I run and
-Linaro (LKTP) monitoring next.
-
-How often do you send reports - I will watch out for them. Thanks
-again for taking the initiative to add kselftest to kernelci.
-
-thanks,
--- Shuah
+Thanks,
+Mark.

@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6AA4A778A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AD74A778D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238286AbiBBSLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:11:01 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:43791 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229800AbiBBSLA (ORCPT
+        id S243565AbiBBSNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229800AbiBBSNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:11:00 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 773B72B002FF;
-        Wed,  2 Feb 2022 13:10:58 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 02 Feb 2022 13:10:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=BzKbLARq0BSnJcyeCRXnM9y5FOWw5F/q2SIlEb
-        vvUnA=; b=ZlB8ag1vlar94J3JIbaoR2kXx0u5H4ra8Sjfw4n3q3CCboC+1wWCB5
-        Sil9FMGVAVjvW9ALaqFkT7TjBKjQjEYXIwngJOGRFEDclHRUlbb5V+mcW1bdyX/y
-        X3v8uK5tze3wQquixUA90I/KgYQeqmMAJt7DE3+IHxU8qftBsY1UI/+YofwLKNVI
-        QsnT0tQ37awOLDS0XJmVk7CGagdBTkPiPhvi0/+HdPsnyLzfsqWlxnjOl1gGYDEx
-        6GdSlO+O0zqCj9/7Io0++wLUKw0eThXoLxGh5Kz4NP8Z1buKEbZL22UUgnkTJB1I
-        Jz9y7CByX94WIGns6NW5RNDNBuhHAZ7Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=BzKbLARq0BSnJcyeC
-        RXnM9y5FOWw5F/q2SIlEbvvUnA=; b=j6XyjRhrAdRmn42tfpWzYZnxr/tR5NmNQ
-        lAVeQ9GP+9I8FJUadv3FsosQl3pJ/MGaYw5GRb1tluNtJ/q3Vbmf9QJ4tTu+8/vL
-        Ecu9nq0OKFO+G0OBbED0NlqmIGh7H8b3DjOVZ+auNFEyCIZc3cokMtSMdtON29YC
-        c00JcIC3f9NF+L7Dep999cildR8hzlZTO/hxcI9wBdNtVVaFOghaBYpFAjZZuMKG
-        JueZlGtY4rzXZeDr3HOod25MgrGNVBDdKW5bKW7co58ia0FudOcYhTlZIfVvR4Dc
-        S5CQIypYApmYekGlWYKrDMdxPZ0iSH+sPI7i9hp9/4LjRMQ2JIiMw==
-X-ME-Sender: <xms:Mcn6YW9q-PIv0RS62gSQaDq8tSetjHrSQhakN0S_3aYOnVspbbeowA>
-    <xme:Mcn6YWsnr0sANF_NSL4Lwq0IabJkqzquKPJBsXfn-yGisp049nAKECNZqYjZLUyvA
-    NdkUKG5fWLPgId6Ww>
-X-ME-Received: <xmr:Mcn6YcBCAq9branccHxmeLHXAZ9ZqTaKoeuQlEPn_Yx32hLjReQ0DzSahQCLJE45GTXU9jrxf-4yxBe_HeCDLDDGKsqFzkB1M5rQi77R0s9ycQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeehgddutdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeeuuddvjeefffelgfeuveehfeegfeetfeetueduudfhudfhheev
-    leetveduleehjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:Mcn6YedX0tmSjPm1uUHblnUFHJGFGKXCK79fg31Xx3K39UL0RYSwbQ>
-    <xmx:Mcn6YbO7wFDha-MGKYMNJvSS_ijTMZBCcamUCn4-wrLJ6qKAwx2fsA>
-    <xmx:Mcn6YYlZnU5Q5bKh2SIpHFlbF-9CzKUVttet6LJ6rRjkpENUYAi78w>
-    <xmx:Msn6YZtSYqi4ZeRclehH33KfZK1uzk6NreNjwvlisoSl3avEIMB-TFfjpQ4>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Feb 2022 13:10:49 -0500 (EST)
-Date:   Wed, 2 Feb 2022 10:10:47 -0800
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>, bas smit <bas@baslab.org>,
-        =?utf-8?B?VG9tw6HFoQ==?= Glozar <tglozar@gmail.com>,
-        Ast-x64 <Ast-x64@protonmail.com>,
-        Viktor Malik <viktor.malik@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, jeyu@kernel.org,
-        masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: Re: [PING PATCH v7] kallsyms: new /proc/kallmodsyms with builtin
- modules
-Message-ID: <20220202181047.frwirxdpufwzkbv3@kashmir.localdomain>
-References: <20211216201919.234994-1-nick.alcock@oracle.com>
- <Yd8CDJA0dy0VaXrB@bombadil.infradead.org>
- <878rvk7uv2.fsf@esperi.org.uk>
- <Yfn145FyE3PDBEad@bombadil.infradead.org>
+        Wed, 2 Feb 2022 13:13:12 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F34C061714;
+        Wed,  2 Feb 2022 10:13:12 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id j16so19053944plx.4;
+        Wed, 02 Feb 2022 10:13:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eb0u774bHSkXJu94buoS80i00AJ4S7aloQ/yxQgzmVA=;
+        b=JG1yv0BSnKp5Bg3Dj6E3UYOxQXqdA/YG99oINcE94IhSvuF4xNyzPupM5wmXLKtuPp
+         jnblEPcupKrH4kAVgvi2eh5pFuNTDbMmnT6vGZQf29DqUU2aukS7TNPH4H48qPDh7flq
+         xsV6PH3+io4Q6INsVo9daY1cZfNTL6BpKXJdmzH6GgEaHLZ4rBHwpw2zSeukXSD/YPMq
+         CCefDVih7ehZ0RaHtZyJl+coNhBXIofk1Z8Z/C3xEXuMX3JMEOllnsXzHnIWtmylLj04
+         d8PQsm81rz4pDaq8t0z2I0fwkcAN3CjGef1///vXsJZL3Qsykglq78zEiOsVe5vUWX4M
+         UKGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eb0u774bHSkXJu94buoS80i00AJ4S7aloQ/yxQgzmVA=;
+        b=Y6vooxMQySnj4KDSBzKD0SFwKCRpnq+S788bygc+CMmdPHYgknSFfmIv+QujT7YQVt
+         riKroVz++R8lP+g7zUZvi8n0lJYhuYyBXPchUCOGBx4EnjE399WsoTkYd/V6s07w2pNN
+         5oGkBAvXUKEvbH0QsfUT1WOOG3Rpwr7K+BDRtCzCjvFTHE0/2u+dqywSOjaoCc4F+XtG
+         DKRNpX1VUOoDZhiKTkWNe2gmG4+N+q69QCMo+bq0tARkazeXDb5nqmd2r6++KhxL9dJL
+         4/3CWSVcKr3+jspjdX8VvBQTdhdtdGFFCofJkWeV++pwiTvDC8lN5KOHZQpb6hSImAEv
+         /g6A==
+X-Gm-Message-State: AOAM530yTwODJxPYWxRF6rULSooFF6KZjv45ZSAVUTMtdNur7EjVRgPG
+        DywVf2HqQvq9CiqW81Vhyx+Q/PMXZuE=
+X-Google-Smtp-Source: ABdhPJzaZUS904IRZsOXQXPRYfM1cF3YkNio9lJx1V5Y95UP3A8YTHHsduYCg7KXsf1j6tcg/Y8O5Q==
+X-Received: by 2002:a17:902:c102:: with SMTP id 2mr31478416pli.92.1643825591593;
+        Wed, 02 Feb 2022 10:13:11 -0800 (PST)
+Received: from localhost.localdomain (101-137-118-25.mobile.dynamic.aptg.com.tw. [101.137.118.25])
+        by smtp.gmail.com with ESMTPSA id 22sm9803716pgf.11.2022.02.02.10.13.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 10:13:11 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        andrew@lunn.ch, leon@kernel.org
+Subject: [PATCH v17, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Thu,  3 Feb 2022 02:12:46 +0800
+Message-Id: <20220202181248.18344-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfn145FyE3PDBEad@bombadil.infradead.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis, Nick,
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-On Tue, Feb 01, 2022 at 07:09:23PM -0800, Luis Chamberlain wrote:
-[...]
-> 
-> I don't see much traction based on what you have said on dtrace
-> on anything other than Oracle Linux stuff, it would be nice if bpftrace
-> folks were excited about your changes and we had support for that
-> there.
+Joseph CHAMG (1):
+  net: Add dm9051 driver
 
-I took a quick look at the v7 cover letter (I'll take a look at
-discussion from previous versions later if I get time) and it's not
-immediately obvious to me why a stable mapping is beneficial.
+JosephCHANG (1):
+  yaml: Add dm9051 SPI network yaml file
 
-Nick, could you elaborate why it's beneficial for dtrace to have a
-stable mapping?
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   31 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1181 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  159 +++
+ 5 files changed, 1434 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-For what it's worth, bpftrace uses /proc/kallsyms rather rarely.
-bpftrace relies on perf_event_open()'s config1 parameter to resolve
-kernel symbol name to address for kprobe attachment. /proc/kallsyms is
-mostly used to resolve kaddr() calls in bpftrace scripts.
 
-Kernel symbol size information would be useful, though. bpftrace
-currently uses the vmlinux ELF to acquire that information.
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
+-- 
+2.20.1
 
-[...]
-
-Thanks,
-Daniel

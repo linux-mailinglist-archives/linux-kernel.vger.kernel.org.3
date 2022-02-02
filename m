@@ -2,54 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C254A72AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA2F4A72B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344684AbiBBOGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236220AbiBBOGj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:06:39 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B06C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uDi4qRiTHxrHXvI2G6wWkTF9D9BxExWiMfyfo/g7fyQ=; b=HgI15XlwepCfpWtwI41yn8oxo+
-        zznTaGCh2oSPcuErpjaaYHX3oFROo8M2Eh4extwuik0P/hVx9wUgdpqkd493oINNVg9wVQdkiqtG3
-        WFffR4mkQtTMRd4p54nJhwm8zV05Fy0teuxfK/FCY8u4deh0ReNEaUODkwSVlcNA+/zUPquQtvGDF
-        eW63AEYyx0CHokshG7itlKthwtyP/Fhjb6vSGyEQKHPggEkXWXLf2ZzGp9qZpuLeUZ+eBS31jRH5V
-        WB1Q5BtQ9oTY0ClrqzSb0Kxym0g5QN7Y4SBnHF8tehTJ9g4ok7+OZwhFeJk/pnSdw/hVCEKFZAK9X
-        /T0CSx/g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFGHL-00FXch-HQ; Wed, 02 Feb 2022 14:06:35 +0000
-Date:   Wed, 2 Feb 2022 06:06:35 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Karolina Drobnik <karolinadrobnik@gmail.com>
-Cc:     linux-mm@kvack.org, rppt@kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH] memblock: Remove unused io.h include
-Message-ID: <YfqP6zs8hFn4c5uz@infradead.org>
-References: <20220131121723.72395-1-karolinadrobnik@gmail.com>
+        id S229734AbiBBOJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:09:25 -0500
+Received: from mga01.intel.com ([192.55.52.88]:13379 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231518AbiBBOJX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:09:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643810963; x=1675346963;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RRwV3oIvnozFrFibpyO8I95VWXndE72lqKzEOL6Ppk8=;
+  b=fpCQZmpKWlC2q5VUYNUZARqQCal13FqgdWeMcWMwZe51/yYcyPaJ5IZM
+   F6zrgMbpp7GEUFGWvg+Aj+bhVjKZUeEoV3hwG21p+F9a82MUUxPIpGZ5T
+   aBMAz0reJ85lVqujvYi1SDNkyJ/WMQwI+whuqEgTWtsUDQ11WbnnTQNaz
+   ZFDCdprTlLqVZ6nfgrVVEFBXPfPilZyLSQb+GGoib1BsCauH2vUc19ooT
+   7byGBmKRQICabLuPtEx4TSy6gtcI429cuCNJ++xr/5O++fX419jb+ch72
+   jMLLPBdrZOvwE1r8AF7b4I/6hXewusAqeXIw2KKXxdwFBhnOKEH0BhYfY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="272406351"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="272406351"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:09:23 -0800
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="627078979"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:09:19 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 16:09:17 +0200
+Date:   Wed, 2 Feb 2022 16:09:17 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
+Message-ID: <YfqQjS5HBUCW6Tfn@lahna>
+References: <1883502.PYKUYFuaPT@kreacher>
+ <YfpQlQ6CH5eoRjuD@lahna>
+ <CAJZ5v0ifQJ=XxXHUSnACzd2cTLRB+ncwEFrwLP0ybuivX2ORAg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131121723.72395-1-karolinadrobnik@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <CAJZ5v0ifQJ=XxXHUSnACzd2cTLRB+ncwEFrwLP0ybuivX2ORAg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 01:17:23PM +0100, Karolina Drobnik wrote:
-> Memblock does not use anything from io.h, remove the include.
+On Wed, Feb 02, 2022 at 02:46:26PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Feb 2, 2022 at 10:36 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Replace acpi_bus_get_device() that is going to be dropped with
+> > > acpi_fetch_acpi_dev().
+> > >
+> > > No intentional functional impact.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> >
+> > Let me know if you want me to pick this up.
 > 
-> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
+> Yes, please, if you can.
 
-Looks good:
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Applied to thunderbolt.git/next, thanks!

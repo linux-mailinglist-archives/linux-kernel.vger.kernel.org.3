@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F60C4A6EB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580804A6EBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245619AbiBBKaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245479AbiBBKaN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:30:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB75C061714;
-        Wed,  2 Feb 2022 02:30:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25275B83080;
-        Wed,  2 Feb 2022 10:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D45BEC340EC;
-        Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643797810;
-        bh=2iKggoFWP/pSFvThOv+1gXnfFM0EtBmGzMus01UuI24=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AvSa/dLF5Mi8+UFEKiUVXHrguSC6NkOZt4bmd80Dts1gKhXy76vo1+2BykMVrIFj2
-         fq2nknrq+mKK5PiXjXgMyqBt7Mv61YIrBDquDQnFAp9kA0GlqjBC7JVlZ/GbXSuU08
-         syqyIE+CDMyFEJJhYDV1/GUZS1YWQrU8lj7mESsXru+J/R4N+sgJ1bB8VihrJka9xS
-         fmepolvx6QAzjm6zJ8E+/pB5GkMLTd70EHsSHflAhqKDW+aI3p4oNGDhp08Fwws0yS
-         Bw9scZ24GR8Q3oj6CJWfDFGxoPr82q/qgwM9Jkv2dv0rcCziP3ZNG7GZj1VXaZXwEq
-         EgdJFkPpofAhw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7038E5D07E;
-        Wed,  2 Feb 2022 10:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229748AbiBBKb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:31:27 -0500
+Received: from cable.insite.cz ([84.242.75.189]:54289 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232194AbiBBKb0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:31:26 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 7CDEBA1A3D402;
+        Wed,  2 Feb 2022 11:31:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1643797884; bh=m57sKCZLcTtk6SauTtGjeo9rjfaMH2ssP+2/C7sdvVY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=qCtgBYxPM8ft2kwxbuXXs+31U2UGhoKWaWYydzgmpFH+SMepg5UEFtCYj5uBu1bPd
+         IzgZMSQByfDngmXufo6qFC6PCE7vrqJUDyv90k2GO5tIAnqwcw1Yrh5SVM1SAM694i
+         j+kdK/mjQYP06OqEwrEMBalPkLLsG9wPyZ3J8Ic4=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id i4YarFuNZVz5; Wed,  2 Feb 2022 11:31:19 +0100 (CET)
+Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 21A85A1A3D400;
+        Wed,  2 Feb 2022 11:31:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1643797879; bh=m57sKCZLcTtk6SauTtGjeo9rjfaMH2ssP+2/C7sdvVY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Pps74gPCpVJFjZa9EDBad20Vh2yQVkBR8cWqPq7ylJNulWdZjBMGzEYlfmJZT/uZX
+         gY4T9LWlOcRoMhdQonfnCMNDC91nd6JovUUG5X2FSH9b46PMo1l3FHbspW69l7sPtW
+         NwdygXmivZg54lxKE5qTGJHvh77UITxSfRv80CM0=
+Subject: Re: [PATCH][next] usb: gadget: f_uac2: Fix spelling mistake
+ "maxpctksize" -> "maxpcktsize"
+To:     Joe Perches <joe@perches.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220202091933.580713-1-colin.i.king@gmail.com>
+ <358563808e6cad1b003e4c5488cf65ff1267f1d8.camel@perches.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <efcb90c2-cfbb-3264-bd6d-bca33b03fa48@ivitera.com>
+Date:   Wed, 2 Feb 2022 11:31:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y +
- CONFIG_DEBUG_INFO_BTF=y
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164379781074.22256.810100339582105585.git-patchwork-notify@kernel.org>
-Date:   Wed, 02 Feb 2022 10:30:10 +0000
-References: <20220201205624.652313-1-nathan@kernel.org>
-In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
+In-Reply-To: <358563808e6cad1b003e4c5488cf65ff1267f1d8.camel@perches.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue,  1 Feb 2022 13:56:19 -0700 you wrote:
-> Hi all,
+Dne 02. 02. 22 v 10:57 Joe Perches napsal(a):
+> On Wed, 2022-02-02 at 09:19 +0000, Colin Ian King wrote:
+>> There is a spelling mistake in a deb_dbg message. Fix it.
+> []
+>> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> []
+>> @@ -755,7 +755,7 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+>>   
+>>   	if (max_size_bw <= max_size_ep)
+>>   		dev_dbg(dev,
+>> -			"%s %s: Would use maxpctksize %d and bInterval %d\n",
+>> +			"%s %s: Would use maxpcktsize %d and bInterval %d\n",
 > 
-> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
-> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
+> why not just spell it out? or use wMaxPacketSize from the uapi include?
+
+My reason for the ugly abbreviation (prone to misspelling for which I 
+apologize) was to keep the line length limit. I would be happy to see 
+wMaxPacketSize instead :-)
+
+Pavel.
+
+> ---
+>   drivers/usb/gadget/function/f_uac2.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> The first four patches add CONFIG_PAHOLE_VERSION and
-> scripts/pahole-version.sh to clean up all the places that pahole's
-> version is transformed into a 3-digit form.
+> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> index f2237bcdba7c0..13b59128121a2 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -755,12 +755,12 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+>   
+>   	if (max_size_bw <= max_size_ep)
+>   		dev_dbg(dev,
+> -			"%s %s: Would use maxpctksize %d and bInterval %d\n",
+> +			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
+>   			speed_names[speed], dir, max_size_bw, bint);
+>   	else {
+>   		dev_warn(dev,
+> -			"%s %s: Req. maxpcktsize %d at bInterval %d > max ISOC %d, may drop data!\n",
+> -			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
+> +			 "%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
+> +			 speed_names[speed], dir, max_size_bw, bint, max_size_ep);
+>   		max_size_bw = max_size_ep;
+>   	}
+>   
 > 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,1/5] MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
-    https://git.kernel.org/bpf/bpf-next/c/f67644b4f282
-  - [bpf-next,2/5] kbuild: Add CONFIG_PAHOLE_VERSION
-    https://git.kernel.org/bpf/bpf-next/c/613fe1692377
-  - [bpf-next,3/5] scripts/pahole-flags.sh: Use pahole-version.sh
-    https://git.kernel.org/bpf/bpf-next/c/2d6c9810eb89
-  - [bpf-next,4/5] lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
-    https://git.kernel.org/bpf/bpf-next/c/6323c81350b7
-  - [bpf-next,5/5] lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
-    https://git.kernel.org/bpf/bpf-next/c/42d9b379e3e1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 

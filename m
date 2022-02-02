@@ -2,80 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F114A700E
+	by mail.lfdr.de (Postfix) with ESMTP id B27DE4A7010
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343948AbiBBLgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
+        id S1343977AbiBBLgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:36:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343860AbiBBLgL (ORCPT
+        with ESMTP id S1343899AbiBBLgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Feb 2022 06:36:11 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79507C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:36:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA42C06173D;
+        Wed,  2 Feb 2022 03:36:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05B81B83091
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A958CC340E4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13330B8307E;
+        Wed,  2 Feb 2022 11:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3C4C340EF;
         Wed,  2 Feb 2022 11:36:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643801767;
-        bh=VuV5fpBatcVQSnnj4klzi06+IGvxAlBN/tidRdh2Omo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ivi2c6YeVPnjyA3frWcRmlgkNcOR/h9DPPZJB0X5UpLiUwIzDdOJyq7g+8BytP7rC
-         5O2dVCwSxdUHZt14OQBHOBQ/tK4W6KkBCc6Lh3iK3GEnIsN6hY9o8N+wDUp15VoeIP
-         X/e0HckJ1TL5HZ/pAoeyoEoRLuXMcK/e9wpZcC74rvl6apMwBooc3/UsQ8aC2wuuOL
-         ur0u/POaFQhk6KLqV5P/+Wu/kILE8iUJtDtvM8+7b6PJxQtVhWd5EeY8flim/9tPxZ
-         4nkMoF3JQdhFsVZDlwCRv10UlkD5YzZlGntxgyQ4oC68Zn6dxMKinhjhxSCroYY/RK
-         9OpC8mIkPFEtg==
+        bh=a1ae4CRR715CYUBaMy5Wvq7XIcUVZv3r/LRlFqiLhcU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ACAYFu7lMBxzuwbdfNTStL40XCbFtT6GoVWnv4CP3EgQ/iOz+K6wOcHkZfBm4jv4W
+         8+OYs7ENFOzdKOVFFenKyHPBfotEK0CvcdAWhyJTUZUY3j+czBWz1T/wuIik2zCqAW
+         4GP37+mFhknWkybJEpIzfN11Jthh7wPR3RKWTebgsO+/IvpJO1cOkbdLMBTuozK45u
+         pIlUpoqhbpD4X+r821bKC12WD9M/GJ+/j0iyqsHzmsVxy0uUYnzqlTztRoxkWyC2+1
+         O4Ylgk2bLhogace9pchPCSNE0w754rhmj74YrLYRFbIT4hu2tLqQAnEPZgADgp4/3G
+         SctclROqzLPWQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1nFDvT-0000Lv-4R; Wed, 02 Feb 2022 12:35:51 +0100
+        id 1nFDvT-0000Lx-8Z; Wed, 02 Feb 2022 12:35:51 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
         Mitchell Tasman <tasman@leaflabs.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] greybus: svc: fix hello processing
-Date:   Wed,  2 Feb 2022 12:33:44 +0100
-Message-Id: <20220202113347.1288-1-johan@kernel.org>
+        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 1/3] greybus: svc: fix an error handling bug in gb_svc_hello()
+Date:   Wed,  2 Feb 2022 12:33:45 +0100
+Message-Id: <20220202113347.1288-2-johan@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220202113347.1288-1-johan@kernel.org>
+References: <20220202113347.1288-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan found and fixed a bug in the SVC HELLO request error handling which
-was introduced when adding a temporary hack to reconfigure the link at
-HELLO.
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-The implementation of the hack abuses the deferred-request processing
-mechanism to send the link-configuration request, which makes the
-HELLO processing a bit hard to follow.
+Cleanup if gb_svc_queue_deferred_request() fails.
 
-The last two patches attempt to remedy this.
+Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220202072016.GA6748@kili
+Cc: stable@vger.kernel.org      # 4.9
+[johan: fix commit summary prefix and rename label ]
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/greybus/svc.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-This could go into either 5.17-rc or -next.
-
-Johan
-
-
-Dan Carpenter (1):
-  greybus: svc: fix an error handling bug in gb_svc_hello()
-
-Johan Hovold (2):
-  greybus: svc: clean up hello error path
-  greybus: svc: clean up link configuration hack at hello
-
- drivers/greybus/svc.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/greybus/svc.c b/drivers/greybus/svc.c
+index ce7740ef449b..51d0875a3480 100644
+--- a/drivers/greybus/svc.c
++++ b/drivers/greybus/svc.c
+@@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operation *op)
+ 
+ 	gb_svc_debugfs_init(svc);
+ 
+-	return gb_svc_queue_deferred_request(op);
++	ret = gb_svc_queue_deferred_request(op);
++	if (ret)
++		goto err_remove_debugfs;
++
++	return 0;
+ 
++err_remove_debugfs:
++	gb_svc_debugfs_exit(svc);
+ err_unregister_device:
+ 	gb_svc_watchdog_destroy(svc);
+ 	device_del(&svc->dev);
 -- 
 2.34.1
 

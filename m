@@ -2,172 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136EE4A6CD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:23:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F124A6CDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244814AbiBBIXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:23:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:57626 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238841AbiBBIXJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:23:09 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2981C21126;
-        Wed,  2 Feb 2022 08:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643790188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LVf1+FCkij+IfM22HKlKn+GHDND82cODe48QSI9u+x0=;
-        b=J+BLinrWFeb6BY16seJl5XwMOuvqiz5jHuHc9/ZTPpyd6MVilRUw9wCChscPlNaQ64zmid
-        0RxWk9Otp98oKlzts7r0Qa4xjG2wKmGwg7Jjzi4FjYrH7DYijlRf+l+jKqlYErG3coUlwK
-        2en6v0RCMWoSCFHBdS/hO2T3cqM3MRg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643790188;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LVf1+FCkij+IfM22HKlKn+GHDND82cODe48QSI9u+x0=;
-        b=vIAeXRk0vEnB95Cxy3jJzQMcAWiRuu08RSFKuzoR+BisJ7Z4FvMtfdj9G9kZeop/nNlotZ
-        Ws2wAUkUxNOIJSCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6E4C13BA2;
-        Wed,  2 Feb 2022 08:23:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YAdTN2s/+mEbIwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 08:23:07 +0000
-Message-ID: <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
-Date:   Wed, 2 Feb 2022 09:23:07 +0100
+        id S244902AbiBBIXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:23:50 -0500
+Received: from mga04.intel.com ([192.55.52.120]:19622 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232819AbiBBIXs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 03:23:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643790228; x=1675326228;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=wdy7MoOCFGG4FgfFGa+kkUzBPB0aW3lGeiiXICIgLq4=;
+  b=VXTl7aHO+dr6VL71w3cLzWTM90cyTp1Ytzxiv15icrdmlPnUxBwP0Qn5
+   FtJF64rIG9hLTQx11yaEc+9iijjadyDgMaWkE4fM1LZX4Yynz6MGoO0rz
+   sobCTGCikBmdgjo9U3ZJr6DCrv5jMQuOKJOBgjn+Vq5yPFrlBKV+r013N
+   UYYFiVXikb0kevgaOEUlELRlJcT3WD3lqzGlVdYOXIVY3zlc6i7U0PNBw
+   LgrsDF0LGHbYFN17iAlpMJt/Dfz2FYWUXdReA5iBJ57LEqMvTuNLHyMHX
+   hy5D7iTq0Q3K3QoO0gAHxndsRBegyFN2dnq4aM+odh6hF401kIQVotQvl
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="246701362"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="246701362"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 00:23:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="538159615"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
+  by orsmga008.jf.intel.com with ESMTP; 02 Feb 2022 00:23:42 -0800
+Subject: Re: [PATCH] perf/x86/intel/pt: Fix crash with stop filters in
+ single-range mode
+To:     Tristan Hume <tristan@thume.ca>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@kernel.org
+References: <20220127220806.73664-1-tristan@thume.ca>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <015e9e04-444f-959d-c003-3d8a9535e738@intel.com>
+Date:   Wed, 2 Feb 2022 10:23:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
+In-Reply-To: <20220127220806.73664-1-tristan@thume.ca>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
- <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
- <CAMuHMdUJpoG=XChpqNotfEDrWCxFUqyhjW2JW1ckAyKcWXvAUw@mail.gmail.com>
- <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------cVusIXqEygqVbwTewwGspTdY"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------cVusIXqEygqVbwTewwGspTdY
-Content-Type: multipart/mixed; boundary="------------b1k0yJmYqaKqqVDGYx3TQ6ki";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Maxime Ripard <maxime@cerno.tech>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Message-ID: <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
- <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
- <CAMuHMdUJpoG=XChpqNotfEDrWCxFUqyhjW2JW1ckAyKcWXvAUw@mail.gmail.com>
- <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
-In-Reply-To: <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
+On 28/01/2022 00:08, Tristan Hume wrote:
+> Add a check for !buf->single before calling pt_buffer_region_size in a
+> place where a missing check can cause a kernel crash.
+> 
+> Fixes a bug introduced by 670638477aede0d7a355ced04b569214aa3feacd,
+> which added a support for PT single-range output mode. Since that commit
+> if a PT stop filter range is hit while tracing, the kernel will crash
+> because of a null pointer dereference in pt_handle_status due to calling
+> pt_buffer_region_size without a ToPA configured.
+> 
+> The commit which introduced single-range mode guarded almost all uses of
+> the ToPA buffer variables with checks of the buf->single variable, but
+> missed the case where tracing was stopped by the PT hardware, which
+> happens when execution hits a configured stop filter.
 
---------------b1k0yJmYqaKqqVDGYx3TQ6ki
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Please add to the commit message:
 
-SGkNCg0KQW0gMDEuMDIuMjIgdW0gMTU6MzYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IE9uIDIvMS8yMiAxNTowNSwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0K
-Pj4gSGkgSmF2aWVyLA0KPj4NCj4+IE9uIFR1ZSwgRmViIDEsIDIwMjIgYXQgMjowMiBQTSBK
-YXZpZXIgTWFydGluZXogQ2FuaWxsYXMNCj4+IDxqYXZpZXJtQHJlZGhhdC5jb20+IHdyb3Rl
-Og0KPj4+IE9uIDIvMS8yMiAxMDozMywgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4+
-PiArew0KPj4+Pj4gKyAgICB1OCBjb2xfZW5kID0gY29sX3N0YXJ0ICsgY29scyAtIDE7DQo+
-Pj4+PiArICAgIGludCByZXQ7DQo+Pj4+PiArDQo+Pj4+PiArICAgIGlmIChjb2xfc3RhcnQg
-PT0gc3NkMTMwNy0+Y29sX3N0YXJ0ICYmIGNvbF9lbmQgPT0gc3NkMTMwNy0+Y29sX2VuZCkN
-Cj4+Pj4+ICsgICAgICAgICAgICByZXR1cm4gMDsNCj4+Pj4+ICsNCj4+Pj4+ICsgICAgcmV0
-ID0gc3NkMTMwN193cml0ZV9jbWQoc3NkMTMwNy0+Y2xpZW50LCBTU0QxMzA3X1NFVF9DT0xf
-UkFOR0UpOw0KPj4+Pj4gKyAgICBpZiAocmV0IDwgMCkNCj4+Pj4+ICsgICAgICAgICAgICBy
-ZXR1cm4gcmV0Ow0KPj4+Pj4gKw0KPj4+Pj4gKyAgICByZXQgPSBzc2QxMzA3X3dyaXRlX2Nt
-ZChzc2QxMzA3LT5jbGllbnQsIGNvbF9zdGFydCk7DQo+Pj4+PiArICAgIGlmIChyZXQgPCAw
-KQ0KPj4+Pj4gKyAgICAgICAgICAgIHJldHVybiByZXQ7DQo+Pj4+PiArDQo+Pj4+PiArICAg
-IHJldCA9IHNzZDEzMDdfd3JpdGVfY21kKHNzZDEzMDctPmNsaWVudCwgY29sX2VuZCk7DQo+
-Pj4+PiArICAgIGlmIChyZXQgPCAwKQ0KPj4+Pj4gKyAgICAgICAgICAgIHJldHVybiByZXQ7
-DQo+Pj4+DQo+Pj4+IENhbiB5b3Ugd3JpdGUgdGhlc2UgY21kcyBpbiBvbmUgc3RlcCwgc3Vj
-aCBhcyBzZXR0aW5nIHVwIGFuIGFycmF5IGFuZA0KPj4+PiBzZW5kaW5nIGl0IHdpdGggc3Nk
-MTMwN193cml0ZV9hcnJheT8NCj4+Pg0KPj4+IEkgZG9uJ3QgdGhpbmsgc28gYmVjYXVzZSB0
-aGUgY29tbWFuZHMgYXJlIGRpZmZlcmVudC4gQnV0IEknbGwgY2hlY2sgdGhlDQo+Pj4gc3Nk
-MTMwNiBkYXRhc2hlZXQgYWdhaW4gdG8gY29uZmlybWEgdGhhdCdzIHRoZSBjYXNlLg0KPj4N
-Cj4+IElJUkMsIEkgdHJpZWQgdGhhdCB3aGlsZSB3b3JraW5nIG9uIHRoZSBvcHRpbWl6YXRp
-b25zIGZvciBzc2QxMzA3ZmIsDQo+PiBhbmQgaXQgZGlkbid0IHdvcmsuDQo+Pg0KPiANCj4g
-VGhhdCdzIHdoYXQgSSB3b3VsZCBoYWQgZXhwZWN0ZWQgYnkgcmVhZGluZyB0aGUgZGF0YXNo
-ZWV0LiBUaGFua3MgYQ0KPiBsb3QgZm9yIGNvbmZpcm1pbmcgbXkgYXNzdW1wdGlvbi4NCg0K
-VGhhbmtzIHRvIGJvdGggb2YgeW91LiBJIHdhcyBhc2tpbmcgYmVjYXVzZSBJIGZvdW5kIHRo
-ZSBjb2RlIHRvIGJlIA0KcmVwZXRpdGl2ZSBhbmQgaXQncyBub3QgY2xlYXIgdGhhdCB0aGVz
-ZSAzIHN0YXRlbWVudHMgYmVsb25nIHRvZ2V0aGVyLg0KDQpJJ2QgbGlrZSB0byBzdWdnZXN0
-IHRvIGFkZCBhIGZ1bmN0aW9uDQoNCiAgIHNzZDEzMDdfd3JpdGVfY21kcyhjbGllbnQsIGxl
-biwgY29uc3QgdTggKmNtZHMpDQoNCnRoYXQgbG9vcHMgdGhyb3VnaCBjbWRzIGFuZCBzZW5k
-cyB0aGUgdmFsdWVzIG9uZSBieSBvbmUuIEEgY2FsbCB3b3VsZCANCmxvb2sgbGlrZSB0aGlz
-Og0KDQogICBjb25zdCB1OCBzZXRfY29sX3JhbmdlW10gPSB7DQogICAgIFNTRDEzMDdfU0VU
-X0NPTF9SQU5HRSwNCiAgICAgY29sX3N0YXJ0LA0KICAgICBjb2xfZW5kDQogICB9Ow0KDQog
-ICBzc2QxMzA3X3dyaXRlX2NtZHMoY2xpZW50LCBBUlJBWV9TSVpFKHNldF9jb2xfcmFuZ2Up
-LCBzZXRfY29sX3JhbmdlKTsNCg0KQU5EL09SDQoNCllvdSBjb3VsZCBoYXZlIGZ1bmN0aW9u
-cyB0aGF0IHRha2UgYSBjb21tYW5kIHdpdGggYXJndW1lbnRzOyBlaXRoZXIgYXMgDQp2YV9h
-cmdzIG9yIHdpdGggb25lIGZ1bmN0aW9uIHBlciBudW1iZXIgb2YgYXJndW1lbnRzLiBPciB5
-b3UgY291bGQgDQpjb21iaW5lIGFsbCB0aGVzZSBzb21laG93Lg0KDQpCZXN0IHJlZ2FyZHMN
-ClRob21hcw0KDQo+ICAgDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQoNCi0tIA0KVGhvbWFzIFpp
-bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
-dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
-ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
-SXZvIFRvdGV2DQo=
+Example:
 
---------------b1k0yJmYqaKqqVDGYx3TQ6ki--
+ # perf record -S -e intel_pt// --filter tracestop __schedule sleep 1
 
---------------cVusIXqEygqVbwTewwGspTdY
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+[ 6148.371226] BUG: unable to handle page fault for address: fffffffffffff028
+[ 6148.371236] #PF: supervisor read access in kernel mode
+[ 6148.371240] #PF: error_code(0x0000) - not-present page
+[ 6148.371244] PGD 6410067 P4D 6410067 PUD 6412067 PMD 0 
+[ 6148.371253] Oops: 0000 [#1] PREEMPT SMP PTI
+[ 6148.371258] CPU: 0 PID: 7279 Comm: perf Not tainted 5.16.0+ #24
+[ 6148.371264] Hardware name: Intel(R) Client Systems NUC8i7BEH/NUC8BEB, BIOS BECFL357.86A.0089.2021.0621.1343 06/21/2021
+[ 6148.371268] RIP: 0010:pt_handle_status+0x94/0x270
+[ 6148.371278] Code: 26 01 00 00 8b 4b 28 4c 8b 43 20 48 8b 73 30 48 89 ca 49 8d b8 28 f0 ff ff 48 8d 0c cf 83 fa ff 75 08 49 63 50 20 48 8d 0c d7 <0f> b7 09 ba 01 00 00 00 66 c1 e9 06 83 e1 0f 83 c1 0c d3 e2 48 63
+[ 6148.371283] RSP: 0018:ffffc9000308fad0 EFLAGS: 00010013
+[ 6148.371288] RAX: 0000000000000002 RBX: ffff8881d62ed500 RCX: fffffffffffff028
+[ 6148.371292] RDX: 0000000000000000 RSI: 0000000000000510 RDI: fffffffffffff028
+[ 6148.371296] RBP: ffffc9000308fae8 R08: 0000000000000000 R09: 0000000000000000
+[ 6148.371299] R10: 0000000000000000 R11: 0000000000000000 R12: 0000051000000002
+[ 6148.371302] R13: ffff88846dc1e020 R14: 0000000000000004 R15: ffff88846dc36208
+[ 6148.371306] FS:  00007f1f8630b3c0(0000) GS:ffff88846dc00000(0000) knlGS:0000000000000000
+[ 6148.371311] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 6148.371315] CR2: fffffffffffff028 CR3: 0000000124ea6001 CR4: 00000000003706f0
+[ 6148.371318] Call Trace:
+[ 6148.371321]  <TASK>
+[ 6148.371325]  pt_event_stop+0x8a/0xd0
+[ 6148.371333]  pt_event_del+0x13/0x20
+[ 6148.371338]  event_sched_out.isra.0+0x7a/0x1c0
+[ 6148.371345]  group_sched_out.part.0+0x43/0x90
+[ 6148.371350]  __perf_event_disable+0x105/0x1f0
+[ 6148.371355]  event_function+0xab/0xf0
+[ 6148.371362]  ? perf_duration_warn+0x30/0x30
+[ 6148.371369]  remote_function+0x51/0x60
+[ 6148.371375]  generic_exec_single+0x66/0xa0
+[ 6148.371381]  smp_call_function_single+0xb9/0x170
+[ 6148.371386]  ? perf_duration_warn+0x30/0x30
+[ 6148.371393]  ? preempt_count_add+0x74/0xc0
+[ 6148.371399]  event_function_call+0x114/0x120
+[ 6148.371405]  ? group_sched_out.part.0+0x90/0x90
+[ 6148.371409]  ? cpu_clock_event_read+0x30/0x30
+[ 6148.371415]  _perf_event_disable+0x48/0x60
+[ 6148.371421]  ? event_function_call+0x120/0x120
+[ 6148.371427]  perf_event_for_each_child+0x3f/0x90
+[ 6148.371432]  ? event_function_call+0x120/0x120
+[ 6148.371438]  _perf_ioctl+0x20c/0x910
+[ 6148.371443]  ? force_compatible_cpus_allowed_ptr+0x1d0/0x1d0
+[ 6148.371451]  ? affine_move_task+0x419/0x610
+[ 6148.371459]  ? __this_cpu_preempt_check+0x13/0x20
+[ 6148.371468]  ? xfd_validate_state+0x23/0x80
+[ 6148.371475]  perf_ioctl+0x48/0x70
+[ 6148.371481]  __x64_sys_ioctl+0x91/0xc0
+[ 6148.371490]  do_syscall_64+0x43/0xc0
+[ 6148.371495]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 6148.371504] RIP: 0033:0x7f1f86d8050b
+[ 6148.371509] Code: 0f 1e fa 48 8b 05 85 39 0d 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 55 39 0d 00 f7 d8 64 89 01 48
+[ 6148.371513] RSP: 002b:00007fffd59a86c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[ 6148.371519] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1f86d8050b
+[ 6148.371522] RDX: 0000000000000000 RSI: 0000000000002401 RDI: 0000000000000005
+[ 6148.371525] RBP: 00007fffd59a8700 R08: 0000000000000000 R09: 00007f1f86e54cc0
+[ 6148.371528] R10: 0000562bd7bad010 R11: 0000000000000246 R12: 0000000000000000
+[ 6148.371531] R13: 0000562bd7bc8f20 R14: 0000562bd7bb1e10 R15: 0000562bd7bc8f20
+[ 6148.371537]  </TASK>
+[ 6148.371539] Modules linked in:
+[ 6148.371544] CR2: fffffffffffff028
+[ 6148.371547] ---[ end trace 542919a16ee8853b ]---
 
------BEGIN PGP SIGNATURE-----
+> 
+> Tested that hitting a stop filter while PT recording successfully
+> records a trace with this patch but crashes without this patch.
+> 
+> Signed-off-by: Tristan Hume <tristan@thume.ca>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6P2sFAwAAAAAACgkQlh/E3EQov+Bi
-ExAA0H8Momk/5syGvVfUO1UWqR7CmrCPDdLxxThqbUKHZ89nexD69olANacyJTLhO4QKPU94d++i
-u1T91nilLberWFneTA+yfSZbJyHWYQ4MWyhQm7vM4SQ3FPYh9DPzIAOrd1oQlj+8WGpn/SV6zbBR
-Fq0AGiJ25bKck7zCcGD7wK8Kc0DPChZ6TuhzOfXCOdg5kzDbinrIFjgNWJjOvgfYyhHF9KTRxLQA
-uLtixSEjcM0GBKzFQzLpj3MPzdOM8EYFgUWlqNJ5PRY4QLyFh3WSUcZ33IGklqBsuQ0z/dhyBNqj
-sN1w72zLBRYWaOLG7n+kSE6iVfa1RfQhzMX868gmlQDdpVURG8v906WI7WOlG3fN8om1WHwwnBTQ
-IS7gqv52mRxi+5dRUzHLj6B6DbUhgtTZW/Ayg0zHXK6g6m8VRzjfpMjMMW/jpuuDg0TBqYZJTHB6
-L0yZ8FMKQeFD5u9dRqYn0eI/w6/DfDwe50ALp8m4sRSDxPJNP6wSyFQY2USS2YGnMA8HOeBjsNGU
-GUmTt7ddRUCoM4fzOOlmZ8Fa9JkaYTVJHImSd4qthvo5lkCS/W+eC2uC4WgYKJJyBbGCpgoqD7sG
-NVBYgKtz6qhcNT5+8YSBrsxaWVVJ70p5AJX11VFMOqsgtLesqc3yfHy+Cfh4BfTZ9YiviJAhNEni
-j4E=
-=ZlY8
------END PGP SIGNATURE-----
+Fixes: 670638477aede0 ("perf/x86/intel/pt: Opportunistically use single range output mode")
+Cc: stable@vger.kernel.org
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
---------------cVusIXqEygqVbwTewwGspTdY--
+> ---
+>  arch/x86/events/intel/pt.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+> index 7f406c14715f..2d33bba9a144 100644
+> --- a/arch/x86/events/intel/pt.c
+> +++ b/arch/x86/events/intel/pt.c
+> @@ -897,8 +897,9 @@ static void pt_handle_status(struct pt *pt)
+>  		 * means we are already losing data; need to let the decoder
+>  		 * know.
+>  		 */
+> -		if (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries) ||
+> -		    buf->output_off == pt_buffer_region_size(buf)) {
+> +		if (!buf->single &&
+> +		    (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries) ||
+> +		     buf->output_off == pt_buffer_region_size(buf))) {
+>  			perf_aux_output_flag(&pt->handle,
+>  			                     PERF_AUX_FLAG_TRUNCATED);
+>  			advance++;
+> 
+

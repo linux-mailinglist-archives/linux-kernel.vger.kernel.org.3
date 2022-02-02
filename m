@@ -2,129 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E994A71EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC004A7237
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344444AbiBBNsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:48:53 -0500
-Received: from mail.efficios.com ([167.114.26.124]:39952 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiBBNsx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:48:53 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 76F2034F3DA;
-        Wed,  2 Feb 2022 08:48:52 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id cqdK2jswhzmF; Wed,  2 Feb 2022 08:48:51 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id B97F734F4E0;
-        Wed,  2 Feb 2022 08:48:51 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B97F734F4E0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643809731;
-        bh=VQmEXGRQQIxzpVJ3876L2AMeTU75MjY0bPrjRl6cGwE=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=F889MTHQl7N/Rl9ZKzoYcNwkiBv4niYRAOnn/BDD+wA2A7SloHaYNlK38A2susBGO
-         DHTIE5iziNt4pGtoHsIn68RFXqIvkQt56rEqHC607KtBmGZMaL5y8A9nW0U9jeojha
-         ABEc6DWL3Mh5xMrYAyaH4a8pIoGiQSEC1KSR5TQzlWxBL5zJ72awB/RRUbHZJm/A6b
-         RDp36Yh+XkzulKyoxxNGV7Dsz0WkWZDUdGPNuNaUIex8TKGLTe3BPEGBMB48vgBnl9
-         2Py1h7gRtvy6JRNAg3vgR7uDuPk43+ucrAzt9w0J1IDLvANkiuDP4dDuqcC51BnSrw
-         QPDcAGP52HbvA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0HZQSn_vItm0; Wed,  2 Feb 2022 08:48:51 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A5D6434F454;
-        Wed,  2 Feb 2022 08:48:51 -0500 (EST)
-Date:   Wed, 2 Feb 2022 08:48:51 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
-Message-ID: <465039213.27161.1643809731530.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220202112343.GZ20638@worktop.programming.kicks-ass.net>
-References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com> <20220202112343.GZ20638@worktop.programming.kicks-ass.net>
-Subject: Re: [RFC PATCH 1/3] Introduce per thread group current virtual cpu
- id
+        id S235969AbiBBNwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:52:02 -0500
+Received: from mga09.intel.com ([134.134.136.24]:27429 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344541AbiBBNwA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 08:52:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643809920; x=1675345920;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K3DNqJv0+Yh88D8/dlbQEwER3t48zPciIGeCaPwX9uA=;
+  b=cB3SY7rWYEfI3rRif/EDlru8Uxrqa9Y5hpf+OivfkvjuUA9EyV9gCUIQ
+   zt2740HeSnQ1Ke/ZQvcqn+y3Ekq5XuKWv1gXanNx+5w+My1xqnwKScFd0
+   Nr389G35GxUubKor4KxyZEDYJVEAxMdSDAkgAMUiN55SYHzhdcBietakB
+   oK7wpiDvH/aUsg0rkwOsAhmEuCom65PQqAK0srJCY3xeWIiwpCm9Q35M0
+   3G3XRdGSWcdY4Uij+TuQS+HlCr+dbju/69RNtyRIVcgzY0pLnl4qe1GZE
+   QDTfqMC52YVTGdT5E2swAASmfffGTGl8l4gltt5FPvrpoSpNB+UjP8ycu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247686416"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="247686416"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 05:51:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="534855601"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2022 05:50:59 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFG2E-000Uek-Jm; Wed, 02 Feb 2022 13:50:58 +0000
+Date:   Wed, 2 Feb 2022 21:50:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH 1/4] mm/kasan: Add CONFIG_KASAN_SOFTWARE
+Message-ID: <202202022149.BRH60mXN-lkp@intel.com>
+References: <a480ac6f31eece520564afd0230c277c78169aa5.1643791473.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
-Thread-Topic: Introduce per thread group current virtual cpu id
-Thread-Index: yKlWk+fUpMMdDPyl2WKE2U6dJjx55g==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a480ac6f31eece520564afd0230c277c78169aa5.1643791473.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Feb 2, 2022, at 6:23 AM, Peter Zijlstra peterz@infradead.org wrote:
+Hi Christophe,
 
-> On Tue, Feb 01, 2022 at 02:25:38PM -0500, Mathieu Desnoyers wrote:
-> 
->> +static inline void tg_vcpu_get(struct task_struct *t)
->> +{
->> +	struct cpumask *cpumask = &t->signal->vcpu_mask;
->> +	unsigned int vcpu;
->> +
->> +	if (t->flags & PF_KTHREAD)
->> +		return;
->> +	/* Atomically reserve lowest available vcpu number. */
->> +	do {
->> +		vcpu = cpumask_first_zero(cpumask);
->> +		WARN_ON_ONCE(vcpu >= nr_cpu_ids);
->> +	} while (cpumask_test_and_set_cpu(vcpu, cpumask));
->> +	t->tg_vcpu = vcpu;
->> +}
->> +
->> +static inline void tg_vcpu_put(struct task_struct *t)
->> +{
->> +	if (t->flags & PF_KTHREAD)
->> +		return;
->> +	cpumask_clear_cpu(t->tg_vcpu, &t->signal->vcpu_mask);
->> +	t->tg_vcpu = 0;
->> +}
-> 
->> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> index 2e4ae00e52d1..2690e80977b1 100644
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct
->> *prev,
->>  	sched_info_switch(rq, prev, next);
->>  	perf_event_task_sched_out(prev, next);
->>  	rseq_preempt(prev);
->> +	tg_vcpu_put(prev);
->> +	tg_vcpu_get(next);
-> 
-> 
-> URGGHHH!!! that's *2* atomics extra on the context switch path. Worse,
-> that's on a line that's trivially contended with a few threads.
+I love your patch! Yet something to improve:
 
-There is one obvious optimization that just begs to be done here: when
-switching between threads belonging to the same process, we can simply
-take the vcpu_id tag of the prev thread and use it for next,
-without requiring any atomic operation.
+[auto build test ERROR on tip/sched/core]
+[also build test ERROR on linus/master v5.17-rc2]
+[cannot apply to hnaz-mm/master next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This only leaves the overhead of added atomics when scheduling between
-threads which belong to different processes. Does it matter as much ?
-If it's the case, then we should really scratch our heads a little more
-to come up with improvements.
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/mm-kasan-Add-CONFIG_KASAN_SOFTWARE/20220202-164612
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ec2444530612a886b406e2830d7f314d1a07d4bb
+config: x86_64-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220202/202202022149.BRH60mXN-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/29c1001f88c380ea391fa5520f2ddcce35e35681
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/mm-kasan-Add-CONFIG_KASAN_SOFTWARE/20220202-164612
+        git checkout 29c1001f88c380ea391fa5520f2ddcce35e35681
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thanks,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Mathieu
+All errors (new ones prefixed by >>):
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+   In file included from arch/x86/boot/compressed/cmdline.c:2:
+   In file included from arch/x86/boot/compressed/misc.h:32:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:136:
+>> include/linux/kasan.h:56:41: error: use of undeclared identifier 'KASAN_SHADOW_SCALE_SHIFT'
+           return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+                                                  ^
+>> include/linux/kasan.h:57:5: error: use of undeclared identifier 'KASAN_SHADOW_OFFSET'
+                   + KASAN_SHADOW_OFFSET;
+                     ^
+   2 errors generated.
+--
+   In file included from arch/x86/boot/compressed/pgtable_64.c:2:
+   In file included from arch/x86/boot/compressed/misc.h:32:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:136:
+>> include/linux/kasan.h:56:41: error: use of undeclared identifier 'KASAN_SHADOW_SCALE_SHIFT'
+           return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+                                                  ^
+>> include/linux/kasan.h:57:5: error: use of undeclared identifier 'KASAN_SHADOW_OFFSET'
+                   + KASAN_SHADOW_OFFSET;
+                     ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return (set->sig[1] | set->sig[0]) == 0;
+                           ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/x86/boot/compressed/pgtable_64.c:3:
+   In file included from include/linux/efi.h:19:
+   In file included from include/linux/proc_fs.h:10:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+
+
+vim +/KASAN_SHADOW_SCALE_SHIFT +56 include/linux/kasan.h
+
+69786cdb379bbc Andrey Ryabinin  2015-08-13  50  
+9577dd74864877 Andrey Konovalov 2018-12-28  51  int kasan_populate_early_shadow(const void *shadow_start,
+69786cdb379bbc Andrey Ryabinin  2015-08-13  52  				const void *shadow_end);
+69786cdb379bbc Andrey Ryabinin  2015-08-13  53  
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  54  static inline void *kasan_mem_to_shadow(const void *addr)
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  55  {
+0b24becc810dc3 Andrey Ryabinin  2015-02-13 @56  	return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
+0b24becc810dc3 Andrey Ryabinin  2015-02-13 @57  		+ KASAN_SHADOW_OFFSET;
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  58  }
+0b24becc810dc3 Andrey Ryabinin  2015-02-13  59  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

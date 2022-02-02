@@ -2,117 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CDD4A6E84
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5066E4A6E82
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343501AbiBBKRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245339AbiBBKRK (ORCPT
+        id S1343489AbiBBKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:17:11 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:53228 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232815AbiBBKRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:17:10 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026C5C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:17:09 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id CF9E53F72A;
-        Wed,  2 Feb 2022 11:17:07 +0100 (CET)
-Date:   Wed, 2 Feb 2022 11:17:06 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-Subject: Re: [PATCH v10 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <20220202101706.ompigtbovbz6shwq@SoMainline.org>
-References: <20211010043912.136640-1-bjorn.andersson@linaro.org>
- <20211010043912.136640-2-bjorn.andersson@linaro.org>
- <YXL0DyyPkS4/wfB7@ripper>
- <20211027211928.tjybwy2lokj6eoun@SoMainline.org>
- <20211027212709.4ma5uzy5titmgzqv@SoMainline.org>
- <YfSQBOHkwCKMGrbu@yoga>
+        Wed, 2 Feb 2022 05:17:08 -0500
+Received: by mail-il1-f199.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso13729898ilu.19
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:17:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=T4JU1DoNJxSChrqfuHiopIuSM4M9SJ+2CDXtqoAN2Pk=;
+        b=UULYZbUz3jn81EE9wjb5B7noow63dV81Hhl8gtfhD1oXpvOB7aj3FpfQthEku+L6c+
+         bq4ZFDkuJpFZdcmk28/kqqjXr1q4+HWgK5w4tkAlX/Md3m12Rkz56+unXfMoF+9NzHtD
+         bY/2KHVjdBT4JNTASt5m7JqFGnubJeh+8QvcONwDmWkVmNdI+oUQ8UPxvUDn7h2dFyFB
+         ofWI0OyjdAMxz0Ek1P9znUjrGj3xhUEKllHqeJrJwVEa7YUTOr4+OZCFR2nwEhCkC0Eo
+         Z+26fWe6iaH2+6lOPMjC7zanq++56txhFuirOCm6LSZtZZuxvBblzam2YJcaEaGkgONP
+         n4XQ==
+X-Gm-Message-State: AOAM531aqiwHTFkbT4YeERRkKaJ5oOxBV7rSox9e6fcmNc6NXCh0pP80
+        SFsgqScAPFU+fs9bRbvgTobO1FWdUNAJhb8O4Ar1W+4IF/ZP
+X-Google-Smtp-Source: ABdhPJw4KeUmCBVwdZfxRK0hXg1ocwqu6RnrmCRYKKNjNwZR7QIHqD5U3iE9JlZq3uGjGDOB4y0gjrFGMpmgO6wluB+daBCTCT/6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfSQBOHkwCKMGrbu@yoga>
+X-Received: by 2002:a05:6e02:1561:: with SMTP id k1mr18620390ilu.146.1643797028546;
+ Wed, 02 Feb 2022 02:17:08 -0800 (PST)
+Date:   Wed, 02 Feb 2022 02:17:08 -0800
+In-Reply-To: <0000000000000560cc05d4bce058@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f82ecc05d706513d@google.com>
+Subject: Re: [syzbot] general protection fault in hidraw_release
+From:   syzbot <syzbot+953a33deaf38c66a915e@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, changbin.du@intel.com,
+        christian.brauner@ubuntu.com, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jikos@kernel.org, kuba@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, yajun.deng@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 18:53:24, Bjorn Andersson wrote:
-> On Wed 27 Oct 16:27 CDT 2021, Marijn Suijten wrote:
-> 
-> > On 2021-10-27 23:19:30, Marijn Suijten wrote:
-> > > Hi Bjorn,
-> > > 
-> > > On 2021-10-22 10:25:35, Bjorn Andersson wrote:
-> > > > On Sat 09 Oct 21:39 PDT 2021, Bjorn Andersson wrote:
-> > > > 
-> > > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > > > > with their output being routed to various other components, such as
-> > > > > current sinks or GPIOs.
-> > > > > 
-> > > > > Each LPG instance can operate on fixed parameters or based on a shared
-> > > > > lookup-table, altering the duty cycle over time. This provides the means
-> > > > > for hardware assisted transitions of LED brightness.
-> > > > > 
-> > > > > A typical use case for the fixed parameter mode is to drive a PWM
-> > > > > backlight control signal, the driver therefor allows each LPG instance
-> > > > > to be exposed to the kernel either through the LED framework or the PWM
-> > > > > framework.
-> > > > > 
-> > > > > A typical use case for the LED configuration is to drive RGB LEDs in
-> > > > > smartphones etc, for which the driver support multiple channels to be
-> > > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > > > > generators will be synchronized, to allow for multi-color patterns.
-> > > > > 
-> > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > ---
-> > > > 
-> > > > Any feedback on this?
-> > > 
-> > > I asked in #linux-msm whether anything is wrong with the patterns,
-> > > since my Sony Discovery (sdm630 with a pm660l) blinks way quicker on a
-> > > pattern that's supposed to stay on for 1s and off for 1s:
-> > > 
-> > >     echo "0 1000 255 1000" > /sys/class/leds/rgb\:status/hw_pattern
-> > > 
-> > > It however seems to be broken in the same way on an older version now
-> > > (this might be v9 or v8) which I don't remember to be the case.  Can you
-> > > double-check if this is all working fine on your side?  If so, I'll have
-> > > to find some time to debug it on my end.
-> > > 
-> > > Thanks!
-> > > - Marijn
-> > 
-> > Another thing I just ran into: on both patch revisions the colors are
-> > flipped.  multi_index reports "red green glue", but the values written
-> > to multi_intensity correspond to "blue green red" instead.  Is it the
-> > same on your side?
-> > 
-> 
-> I booted one of my 8974 devices with RGB LED and the colors matches my
-> expectations. Can you confirm that your mapping in the DT node is
-> correct?
-> 
-> E.g. with pm8941 the mapping should be "backwards":
-> [snip]
+syzbot has bisected this issue to:
 
-Thanks, this was indeed a mistake on my side: downstream pm660l sets
-blue to the first channel too, whereas I set it to red.  Let's blame it
-on downstream mixing zero-based and one-based indices and my inability
-to read that :)
+commit e4b8954074f6d0db01c8c97d338a67f9389c042f
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Tue Dec 7 01:30:37 2021 +0000
 
-- Marijn
+    netlink: add net device refcount tracker to struct ethnl_req_info
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15179fa8700000
+start commit:   9f7fb8de5d9b Merge tag 'spi-fix-v5.17-rc2' of git://git.ke..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17179fa8700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13179fa8700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3e56c9b92aaaee24
+dashboard link: https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fff530700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=106469f0700000
+
+Reported-by: syzbot+953a33deaf38c66a915e@syzkaller.appspotmail.com
+Fixes: e4b8954074f6 ("netlink: add net device refcount tracker to struct ethnl_req_info")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

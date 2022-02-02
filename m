@@ -2,100 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A494A6EB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074E04A6EB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245166AbiBBK2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiBBK2B (ORCPT
+        id S245354AbiBBK3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:29:10 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:42721 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235035AbiBBK3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:28:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFC1C061714;
-        Wed,  2 Feb 2022 02:28:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91869B8307D;
-        Wed,  2 Feb 2022 10:27:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E5D9C004E1;
-        Wed,  2 Feb 2022 10:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643797678;
-        bh=9309zuAje4ZSMnel2PPjJY6oVpPYtw+wX81daTgIU2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oUczvM4XVLV2xIieRd93WKRA/bDWHPu3bGZ1u8+QBmSTrYhSFHaxVMbBYJtCSLWlk
-         mdX5x+MpZ4Sv5+uIMHU+jLXER4S/FFWljsc4xjDHWvsS+VEcrhMQAtNCX18hdie3Tq
-         tvOKmwaVTMS6R5Evd+SWcetYCUDouNAsmsSEUG+69PZy9uHqXoXCViCNb6bZCVNAR4
-         TG1+f7hrbRy5HLTvf0bQpQ8+Wk9CiYxQVNT/kLeieirnakYBqyqiI5wNV+xTUDVxYg
-         9zVoNTWVEA73IoTzK4CT6l4aPLhXwxbfLd3PZNF2l3ePPcUJBCWqpoo5+OLV1VGdhV
-         quemPrBSKHD+w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nFCrU-0003Pl-Ed; Wed, 02 Feb 2022 11:27:41 +0100
-Date:   Wed, 2 Feb 2022 11:27:40 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Mitchell Tasman <tasman@leaflabs.com>,
-        Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] staging: greybus: fix an error handling bug in
- gb_svc_hello()
-Message-ID: <YfpcnDRAyeyoxi10@hovoldconsulting.com>
-References: <20220202072016.GA6748@kili>
+        Wed, 2 Feb 2022 05:29:08 -0500
+Received: by mail-io1-f69.google.com with SMTP id n13-20020a056602340d00b006361f2312deso944699ioz.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:29:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=nEulIPpIJ+MIKD14q/kortqxkpNWNggKXQtSolinqdw=;
+        b=sVHm3THoF6wMphY65wYzY/4I72/H3P1lO492HnOUTH9RtiTW2I5kuEPermHTxiZJ5c
+         uHBO2Rcs2KM0Tnp7og2NpIVopCpXnyYfkY3hKsao+hnOVS/436o1onSyp1KrqKuNdq6F
+         Vsas1WMpLJp8qcRHULu6Lq2idppjHFUejIC723uM0BHOaXryXiAASw7vhrhLSf9rfFW5
+         X6rkJBGYbYFd+N6r03mxBWoqJrlNi62XmxfMQ7/gxNu0EqfVzwxCr/nL83Knn6J1Bvcq
+         9lgKLrZOmo0RwmTOnC0P9sx84i5ZzLvpN/Il6SWj+aaEUMIKhcAgZ3pytPuKiKnVAPXy
+         Z5CA==
+X-Gm-Message-State: AOAM532zuxoBpbzxztCtOPSTEH9Jp2YmDTm19j82RMhMEmGW7Ahq4o51
+        LxNUTt3jjBVl+ixini7FFtkXqBg77X7S7o54knwIPYWBsPGX
+X-Google-Smtp-Source: ABdhPJzkYKK7JWamarEhzKL/vOzo/telIDI1MWTjw59pYJDk7c8XLo1kA18YrsLryANpisSQxWWE+eViXhx+8NgcJcbf+FdgRNEC
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202072016.GA6748@kili>
+X-Received: by 2002:a05:6e02:1c23:: with SMTP id m3mr16967384ilh.258.1643797748172;
+ Wed, 02 Feb 2022 02:29:08 -0800 (PST)
+Date:   Wed, 02 Feb 2022 02:29:08 -0800
+In-Reply-To: <eb631eb1-b7e1-bfb5-0027-1577445ce39a@iogearbox.net>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dccb0305d7067cae@google.com>
+Subject: Re: [syzbot] possible deadlock in ___neigh_create
+From:   syzbot <syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com>
+To:     daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        roopa@nvidia.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 10:20:16AM +0300, Dan Carpenter wrote:
-> Cleanup if gb_svc_queue_deferred_request() fails.
-> 
-> Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
-> From static analysis.  Not tested.
+Hello,
 
-Look correct. Thanks, Dan.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-This part of Greybus no longer lives in staging and the prefix should be
+Reported-and-tested-by: syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com
 
-	greybus: svc:
+Tested on:
 
-I'd also prefer to see all error labels use an err_ prefix consistently.
+commit:         4b48392c net, neigh: Do not trigger immediate probes o..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/dborkman/bpf.git pr/neigh-probe
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5044676c290190f2
+dashboard link: https://syzkaller.appspot.com/bug?extid=5239d0e1778a500d477a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-When looking at this code I found another bug so I'll fix up the above
-nits and send a series with both fixes as there will be a dependency.
-
->  drivers/greybus/svc.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/greybus/svc.c b/drivers/greybus/svc.c
-> index ce7740ef449b..b19651048081 100644
-> --- a/drivers/greybus/svc.c
-> +++ b/drivers/greybus/svc.c
-> @@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operation *op)
->  
->  	gb_svc_debugfs_init(svc);
->  
-> -	return gb_svc_queue_deferred_request(op);
-> +	ret = gb_svc_queue_deferred_request(op);
-> +	if (ret)
-> +		goto remove_debugfs;
-> +
-> +	return 0;
->  
-> +remove_debugfs:
-> +	gb_svc_debugfs_exit(svc);
->  err_unregister_device:
->  	gb_svc_watchdog_destroy(svc);
->  	device_del(&svc->dev);
-
-Johan
+Note: testing is done by a robot and is best-effort only.

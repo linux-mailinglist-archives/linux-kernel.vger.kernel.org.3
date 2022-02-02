@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04904A7110
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB214A7119
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344222AbiBBMu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 07:50:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:57630 "EHLO foss.arm.com"
+        id S1344242AbiBBMy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:54:56 -0500
+Received: from mout.gmx.net ([212.227.17.20]:46767 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230258AbiBBMu7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:50:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B18111FB;
-        Wed,  2 Feb 2022 04:50:58 -0800 (PST)
-Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E52FF3F718;
-        Wed,  2 Feb 2022 04:50:57 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        Steev Klimaszewski <steev@kali.org>
-Subject: Re: [PATCH] irqchip/gic-v3-its: Skip HP notifier when no ITS is registered
-In-Reply-To: <20220202103454.2480465-1-maz@kernel.org>
-References: <20220202103454.2480465-1-maz@kernel.org>
-Date:   Wed, 02 Feb 2022 12:50:52 +0000
-Message-ID: <87pmo5o2j7.mognet@arm.com>
+        id S1344246AbiBBMyz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:54:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643806493;
+        bh=WRVN3BlGhrYJ2hDYSDvlgTraCSrMYSaHLg4/ooc3xLc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=d1NFuz9AMPYS16tXGJNupOwJREnZAUOukweJ7C7/JuX8gxwzZYduZbDgVxfttH8G4
+         wzKGbiw6RteXDHocRk73pqD5LHk1ApJ96eJng56K6j1IktNcl/O7fu50Gav4CkmfY/
+         bSlKnNcrazrLD88DwsTXMSZW5osDj6PRc9crymLA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QWG-1nApJ63nxQ-004P4l; Wed, 02
+ Feb 2022 13:54:52 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: [PATCH 0/2] Fixing the compile-test warnings in pinctrl-npcm7xx
+Date:   Wed,  2 Feb 2022 13:54:36 +0100
+Message-Id: <20220202125438.19345-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7glLdjVidDXKYvA7rh32xSpTaodXZIN4/AAX/UUQc44J9+3XhcZ
+ GJ9xwySyJkTGkTBq2N4d0NULN71a6rLYTDdxMSaqPpG2OJFbE86mtDDUi8/Uf01QP0mQE9d
+ 3MUGcN80Z5cLME0onWyYwMnshf7Ux4gqu5e0dtagdjCNMKmZIYOFJpzOcSqSPzOWDuo6bfw
+ SuGA7zA31PlsqNQ1tXA1w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ywwEcjU9F/M=:SsjdxaNV1jDrJ5JQKl4xlX
+ xLWXIjuGpS1El7RAbsVnz6Ydt0pCkOIuGwp9NiLUZPgWHgTCcQG51rYc33SMyaHMtwjcsb7GA
+ suXnwCyRnjv4NZ9CWAvhupK/9AOQajagutdBLwLbCYjPo3hDKqQDO2wsMn5xhJCtp6wQSga3H
+ QS2WSE8kFHL57W7q0q58bpReqloqJrWHl/M4AM4n6kMtBrSJoIX/HMQ8NqAavMOrmmIUwcBli
+ tpLvvWxRqYOt2c8p0FTwJ12iNVINfkh20kkIa7Htl1IzwcfYZctFiPk71j51u1QPxXBhIVAKy
+ DbU27DOWLOgrlPUfrmgETi2q5iCc+xfUcMUsDfD7AQkVvxVZJmpfOt4/eNoAMb0AUDV0q0H1i
+ FWqcAjhxnl57jkSi4Enr0uImrhc3UYQrnsceEDRsymF6589ffSC4mUwXbwkYVYfOteWoAZHD+
+ q5PaFon0vhEXM2FSrXFOOD+QcA2GdJ8VeOEIFUTau2G5UFommTuq7BeQcKb+DI7pY8u13rraL
+ 6t7GLXYiZB8Yf7NjrcrQv+HinBBlbLm4H9YZQpXpzs9B+YtC4KKjdsXrx9JOkZf+rtt+uawx9
+ Ez9ZMIdqcT7300puzetPDav5CQdhiJ4jMfPRypGM/KH2Bs46sPh8VWU5EqnxINeF5i+9dqsRn
+ lZCiOOhP3vzzlUE1jetHbG6oirmnRsIFQAxCKd30kAn/MG+kwvnVKWRRlifPTEKMusTOZuJlv
+ vwH60UXX+ettucE31eO9uWHOMyl1LMQuaS41deqcnrlAvW5xgD7bYMtnr54DOFkJbPiVirCI9
+ CEF9tAu91sG+M8M1HYX3LRQ2rZ6j3Xr9gZXVA5nVvcYmvVzzaXjsCwPD0QayOjRnCt/EWtnCv
+ Q2k/zLmvgpMXKY4CcwBdn2CwWETWJQWwLC6GsE/rIX5Ax+YCYmXhxzo0l462xj+QB5MCNS/Di
+ /2ffrdl5tHesYxuGoZxrY+Xc7TPdVMYiqDoTYWxrobFQ5574/sMVEtJkB7n4FB/zuKKUtTjvs
+ LMcepZuZlLvAmU4MPzv8exDPviZznvP9sXId0V6Bfsqp7Zpm/njq+jmPRzTPLR8IoHkv1wx7c
+ CpyYddv+SRZCog=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/22 10:34, Marc Zyngier wrote:
-> We have some systems out there that have both LPI support and an
-> ITS, but that don't expose the ITS in their firmware tables
-> (either because it is broken or because they run under a hypervisor
-> that hides it...).
->
+My "Nuvoton WPCM450 pinctrl and GPIO driver" patchset brought two
+warnings[1] in the pinctrl-npcm7xx to light. Here's an attempt at fixing
+them.
 
-Huh :)
+[1]: https://lore.kernel.org/lkml/202201292234.NpSNe4TD-lkp@intel.com/
 
-> Is such a configuration, we still register the HP notifier to free
-> the allocated tables if needed, resulting in a warning as there is
-> no memory to free (nothing was allocated the first place).
->
+Jonathan Neusch=C3=A4fer (2):
+  pinctrl: nuvoton: npcm7xx: Use %zd printk format for ARRAY_SIZE()
+  pinctrl: nuvoton: npcm7xx: Rename DS() macro to DSTR()
 
-Right, so list_empty(&its_nodes) means no ->pend_page, but still having the
-HP notifier means we hit the WARN_ON(!pend_page).
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 160 +++++++++++-----------
+ 1 file changed, 80 insertions(+), 80 deletions(-)
 
-> Fix it by keying the HP notifier on the presence of at least one
-> sucessfully probed ITS.
->
+=2D-
+2.34.1
 
-That looks fine to me.
-
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-
-> Fixes: d23bc2bc1d63 ("irqchip/gic-v3-its: Postpone LPI pending table freeing and memreserve")
-> Reported-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> ---
->  drivers/irqchip/irq-gic-v3-its.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-> index 9e93ff2b6375..cd772973114a 100644
-> --- a/drivers/irqchip/irq-gic-v3-its.c
-> +++ b/drivers/irqchip/irq-gic-v3-its.c
-> @@ -5517,6 +5517,9 @@ int __init its_lpi_memreserve_init(void)
->       if (!efi_enabled(EFI_CONFIG_TABLES))
->               return 0;
->
-> +	if (list_empty(&its_nodes))
-> +		return 0;
-> +
->       gic_rdists->cpuhp_memreserve_state = CPUHP_INVALID;
->       state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
->                                 "irqchip/arm/gicv3/memreserve:online",
-> --
-> 2.34.1

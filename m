@@ -2,147 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500334A6E46
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134644A6E4A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiBBJ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiBBJ6A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:58:00 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF3C061714;
-        Wed,  2 Feb 2022 01:57:59 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id p7so40649318edc.12;
-        Wed, 02 Feb 2022 01:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ey2z3i7QHrRTnQBlHi6Kalzf4a0PXCzJe1Kfeyo/MCQ=;
-        b=RPidongy5qJOr/SrqmoszypGyzGA4K/PnD0/WQS7Y0ux6ophINPE3tX9q/5OgOqvek
-         i1uf8Br4NTeUBf3GezletEwFFIT7V4/aHvzkxOAdWFPeKU8rcXbysTowx6xc+gUY7pUb
-         2BGc0jYa/2E5Wb5vOcg+F2R6NWYp7i8dIC7uQLF27TcMDBKJeq2r1dL8Xz/8wfHH0wzc
-         Ux0ihtyOS+k+bMMZEph040GH4ZMdWYKzPe+uD6t3RMM83MsIPkpE4C8DgZ9PQHm/raPh
-         Lq1jLZZqNhR062h+DvaVdzZxkPHfvp5Lt0J/lc3tPcC+DdnVhzaw6sYM/LGH+QGZxjOw
-         298w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ey2z3i7QHrRTnQBlHi6Kalzf4a0PXCzJe1Kfeyo/MCQ=;
-        b=OR0I7BA7KrcTvdktt2KXRL+pdf8Ep4MfyK1IyM5Si14PB1naDhs7nqlGDoj5zX/66L
-         d8D/UIuwr8bKQECF9nWVIOSP+L3Ex72yzEnJO6PrUO45jnE1Ac3GhO9DEl9PtfRNcelH
-         sMikyE0qAQ7QbIzH3wQhZ5eFdRV1sOvopN3TTONvn6oMc+zdOnOoCP/2Ao0A3acjkJFB
-         9Yl5KCrckn1p4q4ZjuM2f0YrQ7wXDFKVmBYy3LTHVq5g5K3u+ObWZoTYMe3aVXCk6XIi
-         vFcV2mjBfbV1bk+H21fTXQNEOIlcB8I/bkf8Z1+w17zVymjo1As+e6xFTmT84I6bV7nr
-         0aRQ==
-X-Gm-Message-State: AOAM5336sMOQgII8Jvr/Shm4Xb/+ISD3mVpBBVfDScoCy81QTOEBAuWs
-        ikWiF8QBk9qaKynfo1orAzjAe6ub3dIjznrvyaFACfsiK/l8ug==
-X-Google-Smtp-Source: ABdhPJwvui5ZLz6UQOpsNpdYF2nOoANYChNKQAwx1JpetcJ/luF/01Pn+6rdyzfs852oX9Q/V260qkGOSE9fhDFb0Fg=
-X-Received: by 2002:a50:cccb:: with SMTP id b11mr29474435edj.57.1643795878282;
- Wed, 02 Feb 2022 01:57:58 -0800 (PST)
+        id S245698AbiBBJ7R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 04:59:17 -0500
+Received: from aposti.net ([89.234.176.197]:39124 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229741AbiBBJ7Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:59:16 -0500
+Date:   Wed, 02 Feb 2022 09:59:01 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v12 3/9] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh@kernel.org>
+Message-Id: <D29O6R.3788L9G5J66L@crapouillou.net>
+In-Reply-To: <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
+References: <cover.1643632014.git.hns@goldelico.com>
+        <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
 MIME-Version: 1.0
-References: <20220131151432.mfk62bwskotc6w64@ws.net.home> <20220131192337.lzpofr4pz3lhgtl3@zeha.at>
-In-Reply-To: <20220131192337.lzpofr4pz3lhgtl3@zeha.at>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Wed, 2 Feb 2022 12:57:47 +0300
-Message-ID: <CADxRZqwq=XmXZnnENU+vD7_2oC_VtqhG40P-xg=QAzKchT-3Ng@mail.gmail.com>
-Subject: Re: [ANNOUNCE] util-linux v2.38-rc1
-To:     Chris Hofstaedtler <zeha@debian.org>
-Cc:     Karel Zak <kzak@redhat.com>,
-        Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        util-linux <util-linux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 11:48 PM Chris Hofstaedtler <zeha@debian.org> wrote:
->
-> Hello,
->
-> * Karel Zak <kzak@redhat.com> [220131 16:15]:
-> >
-> > The util-linux release v2.38-rc1 is available at
-> >
-> >   http://www.kernel.org/pub/linux/utils/util-linux/v2.38/
-> >
-> > Feedback and bug reports, as always, are welcomed.
->
-> Thanks.
->
-> Some lsfd tests appear to fail in a Debian sbuild build environment,
-> in that they differ in the expected/actual values of DEV[STR] (see
-> below). I did not find time to investigate this closer, but thought
-> it would be best to report it sooner than later.
->
-> Best,
-> Chris
->
-> ---snip---
->
->          lsfd: read-only regular file         ... FAILED (lsfd/mkfds-ro-regular-file)
-> ========= script: /<<PKGBUILDDIR>>/tests/ts/lsfd/mkfds-ro-regular-file =================
-> ================= OUTPUT =====================
->      1  ABC         3  r--  REG /etc/passwd   1
->      2  COMMAND,ASSOC,MODE,TYPE,NAME,POS: 0
->      3  PID[RUN]: 0
->      4  PID[STR]: 0
->      5  INODE[RUN]: 0
->      6  INODE[STR]: 0
->      7  UID[RUN]: 0
->      8  UID[STR]: 0
->      9  USER[RUN]: 0
->     10  USER[STR]: 0
->     11  SIZE[RUN]: 0
->     12  SIZE[STR]: 0
->     13  MNTID[RUN]: 0
->     14  DEV[RUN]: 0
->     15  FINDMNT[RUN]: 0
->     16  DEV[STR]: 1
-> ================= EXPECTED ===================
->      1  ABC         3  r--  REG /etc/passwd   1
->      2  COMMAND,ASSOC,MODE,TYPE,NAME,POS: 0
->      3  PID[RUN]: 0
->      4  PID[STR]: 0
->      5  INODE[RUN]: 0
->      6  INODE[STR]: 0
->      7  UID[RUN]: 0
->      8  UID[STR]: 0
->      9  USER[RUN]: 0
->     10  USER[STR]: 0
->     11  SIZE[RUN]: 0
->     12  SIZE[STR]: 0
->     13  MNTID[RUN]: 0
->     14  DEV[RUN]: 0
->     15  FINDMNT[RUN]: 0
->     16  DEV[STR]: 0
-> ================= O/E diff ===================
-> --- /<<PKGBUILDDIR>>/tests/output/lsfd/mkfds-ro-regular-file    2022-01-31 19:12:43.802603811 +0000
-> +++ /<<PKGBUILDDIR>>/tests/expected/lsfd/mkfds-ro-regular-file  2022-01-31 14:57:47.000000000 +0000
-> @@ -13,4 +13,4 @@
->  MNTID[RUN]: 0
->  DEV[RUN]: 0
->  FINDMNT[RUN]: 0
-> -DEV[STR]: 1
-> +DEV[STR]: 0
-> ==============================================
+Hi Nikolaus,
 
-Chris,
+Le lun., janv. 31 2022 at 13:26:49 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
+> 
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 83 
+> +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 
+> Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> 
+> diff --git 
+> a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml 
+> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> new file mode 100644
+> index 0000000000000..5a2767308c0ab
+> --- /dev/null
+> +++ 
+> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: 
+> http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+> +
+> +maintainers:
+> +  - H. Nikolaus Schaller <hns@goldelico.com>
+> +
+> +description: |
+> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys 
+> DesignWare HDMI 1.4
+> +  TX controller IP with accompanying PHY IP.
+> +
+> +allOf:
+> +  - $ref: synopsys,dw-hdmi.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ingenic,jz4780-dw-hdmi
+> +
+> +  reg-io-width:
+> +    const: 4
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Input from LCD controller output.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Link to the HDMI connector.
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +  - reg-io-width
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
+> +
+> +    hdmi: hdmi@10180000 {
+> +        compatible = "ingenic,jz4780-dw-hdmi";
+> +        reg = <0x10180000 0x8000>;
+> +        reg-io-width = <4>;
+> +        ddc-i2c-bus = <&i2c4>;
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <3>;
+> +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+> +        clock-names = "iahb", "isfr";
+> +        hdmi-5v-supply = <&hdmi_power>;
 
-i had this error on my test system
+Where is this property defined?
 
-https://github.com/util-linux/util-linux/issues/1511
+Cheers,
+-Paul
 
-but i can't reliably reproduce it now (on my current kernel 5.17.0-rc2
-and on debian kernel 5.15.0-3-sparc64-smp )
-Tested with the following command line (for current git util-linux sources):
-$ for i in {1..100}; do tests/run.sh lsfd; done  | grep FAILED
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            hdmi_in: port@0 {
+> +                reg = <0>;
+> +                dw_hdmi_in: endpoint {
+> +                    remote-endpoint = <&jz4780_lcd_out>;
+> +                };
+> +            };
+> +            hdmi_out: port@1 {
+> +                reg = <1>;
+> +                dw_hdmi_out: endpoint {
+> +                    remote-endpoint = <&hdmi_con>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> --
+> 2.33.0
+> 
 
-^^ no failed output
 
-I can reopen the issue above, so we could try to reproduce it.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3FF4A78EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF454A78F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241778AbiBBTuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:50:37 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:44018 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346977AbiBBTue (ORCPT
+        id S1346998AbiBBTuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:50:55 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45070 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236734AbiBBTuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:50:34 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212JoSCj069396;
-        Wed, 2 Feb 2022 13:50:28 -0600
+        Wed, 2 Feb 2022 14:50:54 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212JoleT128181;
+        Wed, 2 Feb 2022 13:50:47 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643831428;
-        bh=PDV41FIeSzz6CCLPpJKxpTZ+EEr1ZsxD91v3CVrekpw=;
+        s=ti-com-17Q1; t=1643831447;
+        bh=tH9m0yOE8pM/q+DfJ1CNCI8WNauocuyfR/BpoG+xeHI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Byts02izTV24QPqQMvm1o8HQgFwAlPuhRXuVHdTQwuSTrSpon3CwGUodX5Rf8Ja2c
-         Kx10LjFBxnsOyB7F+q01zlk8J/m9Ehk9rx2dFqhLyh76s6oWtXHYiabA79zi6+p9N+
-         3FDnO835o+5SZvlIiKiVwBeOpNQGT/d2NfubiI0o=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JoSDs004660
+        b=ZpQ6LfegaDwMOfpD+5pBjnBQKwOe/IiygBFMmTCRYVweQFEo4wd7mxjM7PuS4SX4C
+         leqqHVa/q2GajMwXUMjRnPRPjE7LOn85lmuhrzQv9QdYirrNDTprdz9LXxOjE5W68S
+         k3p8wR4+DC0lSo8wureVcW5ZV53xlAAmhPKDKjm8=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212Jolkp106891
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Feb 2022 13:50:28 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 2 Feb 2022 13:50:47 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Feb 2022 13:50:28 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:50:46 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Feb 2022 13:50:28 -0600
+ Frontend Transport; Wed, 2 Feb 2022 13:50:46 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212JoSHW004263;
-        Wed, 2 Feb 2022 13:50:28 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jok7a004548;
+        Wed, 2 Feb 2022 13:50:46 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        <maz@kernel.org>, <ssantosh@kernel.org>, <kristo@kernel.org>
+To:     <ssantosh@kernel.org>, <kristo@kernel.org>,
+        Peiwei Hu <jlu.hpw@foxmail.com>
 CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL is not defined
-Date:   Wed, 2 Feb 2022 13:50:27 -0600
-Message-ID: <164383139483.1725.16513553485038742707.b4-ty@ti.com>
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] firmware: ti_sci: inproper error handling of ti_sci_probe
+Date:   Wed, 2 Feb 2022 13:50:46 -0600
+Message-ID: <164383144097.1944.17032975343526415419.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <e6c3cb793e1a6a2a0ae2528d5a5650dfe6a4b6ff.1640276505.git.christophe.jaillet@wanadoo.fr>
-References: <e6c3cb793e1a6a2a0ae2528d5a5650dfe6a4b6ff.1640276505.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <tencent_0D5124AF8235001703711A7A09703F918806@qq.com>
+References: <tencent_0D5124AF8235001703711A7A09703F918806@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,18 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe JAILLET,
+Hi Peiwei Hu,
 
-On Thu, 23 Dec 2021 17:23:00 +0100, Christophe JAILLET wrote:
-> Remove an extra ";" which breaks compilation.
+On Tue, 28 Dec 2021 18:01:03 +0800, Peiwei Hu wrote:
+> goto out instead of returning directly in error exiting
 > 
 > 
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL is not defined
-      commit: 043cfff99a18933fda2fb2e163daee73cc07910b
+[1/1] firmware: ti_sci: inproper error handling of ti_sci_probe
+      commit: a181bcfca937b34467e6cd63d7de6073176616e1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

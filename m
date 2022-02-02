@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000164A6CD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D244A6CDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244716AbiBBIWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:22:05 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:2033 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240949AbiBBIWD (ORCPT
+        id S244861AbiBBIXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:23:37 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:59809 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232819AbiBBIXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:22:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643790124; x=1675326124;
-  h=from:to:cc:subject:date:message-id;
-  bh=xj1PMTdKP6FJfcRFDIwPOspQGBNZZNI40X619K+1Jks=;
-  b=ccLXNwiH+oqD7VvJ+Z5HBwX2s7zvoJdb8ESVyz/zSU906t4inZcUdPzP
-   tSFYX3kxyEzKQgNfFpgaX+sPgnaFDIX4wpc7lh0OcbdO9tXK5tc2vbyUY
-   pK62eKdjC1/hO9U1rCU3L0W8Iy9FLfjyCFE2sAW4FZnBpKtjqlCUbYqsy
-   c=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 02 Feb 2022 00:22:03 -0800
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 Feb 2022 00:21:46 -0800
-X-QCInternal: smtphost
-Received: from pmaliset-linux.qualcomm.com ([10.206.64.233])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 02 Feb 2022 13:51:28 +0530
-Received: by pmaliset-linux.qualcomm.com (Postfix, from userid 3848298)
-        id 0C6C721195; Wed,  2 Feb 2022 13:51:26 +0530 (IST)
-From:   Prasad Malisetty <quic_pmaliset@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, swboyd@chromium.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>
-Subject: [PATCH v1] arm64: dts: qcom: sc7280: Fix pcie gpio entries
-Date:   Wed,  2 Feb 2022 13:51:22 +0530
-Message-Id: <1643790082-18417-1-git-send-email-quic_pmaliset@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 2 Feb 2022 03:23:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643790215; x=1675326215;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hUxXJB/MFTpDGZzjslWTKCHu/RO2F8xgwXTvG5hiDj4=;
+  b=HvJqKCcQvJFDMJHkwPWwbWFu7GK23QK7te5/e+xbJmoLTNLNrXwpKzX4
+   lSyXpXTqSG4htt+9MUdRL1pVi3Gy5JDmcJodJ6lP5dw2igDcZ0KG+6vc1
+   hh1dhYRkZy2e9YZZ2pTcCwsmh65GdjXvjRLeOo+b5aJdk+T/+7HgHDXQp
+   6ZNqSq44kgf0JIyMMeNS34UBx3XALNnJqr3dTs5EYUHJVXzt4/QVU9uC6
+   e8k3xx8/TYREpqBRazoB4wx9DYMv++89hUtWwczvzagwU/sxJbPUuNRm5
+   4QamBpvWN/xvFPsqOCu/sqpmubjfEEc3W/JSTxQ3+tWS1iQEFy9BNydsZ
+   g==;
+IronPort-SDR: YyVtIIfwXMOfwXScxh+92rh6NGLKeAwx3vCMJtkaXPhZ4+hOY6P6Dlkyf0DifaJ9wB2GTrtpsl
+ 3YGJCvtIyjYpkKzkR2OCR9qdeGvV/dqsvvNbJILhTOdhRqMX/ONDPzvlXCYaLhoUZNTcZmfHTL
+ 0pw7Ib93YckHt2pgxrKWQ0Xfky5vwGfFRRUXKB2UMa4It6+frbUVvcZDvgjTl+cHXAAiVWveK0
+ CLBnf28UwPHmCiwl5ofovNtMo5B8b5SYJ35iaxNwJgaz6hZyUlsPAvyeq7UImqQnbAKeT+QmnE
+ 3mpqEKrC31c59hco0fgGl/4z
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="84412676"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2022 01:23:34 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 2 Feb 2022 01:23:34 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 2 Feb 2022 01:23:32 -0700
+Message-ID: <d55ed1f583c31df17e98300ca91996a2446f4523.camel@microchip.com>
+Subject: Re: [PATCH net] net: sparx5: do not refer to skb after passing it on
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        kernel test robot <lkp@intel.com>
+Date:   Wed, 2 Feb 2022 09:23:00 +0100
+In-Reply-To: <20220201200521.179857d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220201143057.3533830-1-steen.hegelund@microchip.com>
+         <20220201200521.179857d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current gpio's in IDP file are not mapping properly,
-seeing device timedout failures.
+Hi Jacub,
 
-Corrected pcie gpio entries in dtsi files.
+Thanks for the feedback.
 
-Fixes: 4e24d227aa77 ("arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board")
+I will update according to your suggestions.
 
-Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 35 ++++++++++++++------------------
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 10 ++++++++-
- 2 files changed, 24 insertions(+), 21 deletions(-)
+BR
+Steen
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 78da9ac..84bf9d2 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -243,9 +243,6 @@
- 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
- 
- 	vddpe-3v3-supply = <&nvme_3v3_regulator>;
--
--	pinctrl-names = "default";
--	pinctrl-0 = <&pcie1_reset_n>, <&pcie1_wake_n>;
- };
- 
- &pcie1_phy {
-@@ -360,6 +357,21 @@
- 
- /* PINCTRL - additions to nodes defined in sc7280.dtsi */
- 
-+&pcie1_reset_n {
-+	pins = "gpio2";
-+
-+	drive-strength = <16>;
-+	output-low;
-+	bias-disable;
-+};
-+
-+&pcie1_wake_n {
-+	pins = "gpio3";
-+
-+	drive-strength = <2>;
-+	bias-pull-up;
-+};
-+
- &pm7325_gpios {
- 	key_vol_up_default: key-vol-up-default {
- 		pins = "gpio6";
-@@ -436,23 +448,6 @@
- 		function = "gpio";
- 	};
- 
--	pcie1_reset_n: pcie1-reset-n {
--		pins = "gpio2";
--		function = "gpio";
--
--		drive-strength = <16>;
--		output-low;
--		bias-disable;
--	};
--
--	pcie1_wake_n: pcie1-wake-n {
--		pins = "gpio3";
--		function = "gpio";
--
--		drive-strength = <2>;
--		bias-pull-up;
--	};
--
- 	qup_uart7_sleep_cts: qup-uart7-sleep-cts {
- 		pins = "gpio28";
- 		function = "gpio";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index d4009cc..2e14c37 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1640,7 +1640,7 @@
- 			phy-names = "pciephy";
- 
- 			pinctrl-names = "default";
--			pinctrl-0 = <&pcie1_clkreq_n>;
-+			pinctrl-0 = <&pcie1_clkreq_n>, <&pcie1_reset_n>, <&pcie1_wake_n>;
- 
- 			iommus = <&apps_smmu 0x1c80 0x1>;
- 
-@@ -3272,6 +3272,14 @@
- 				bias-pull-up;
- 			};
- 
-+			pcie1_reset_n: pcie1-reset-n {
-+				function = "gpio";
-+			};
-+
-+			pcie1_wake_n: pcie1-wake-n {
-+				function = "gpio";
-+			};
-+
- 			dp_hot_plug_det: dp-hot-plug-det {
- 				pins = "gpio47";
- 				function = "dp_hot";
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+On Tue, 2022-02-01 at 20:05 -0800, Jakub Kicinski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Tue, 1 Feb 2022 15:30:57 +0100 Steen Hegelund wrote:
+> > Do not try to use any SKB fields after the packet has been passed up in the
+> > receive stack.
+> > 
+> > This error was reported as shown below:
+> 
+> No need to spell it out, the tags speak for themselves.
+> 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > 
+> 
+> Drop this...
+> 
+> > Fixes: f3cad2611a77 (net: sparx5: add hostmode with phylink support)
+> > 
+> 
+> and this empty line - all the tags should be together.
+> 
+> > Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+> > ---
+> >  drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> > b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> > index dc7e5ea6ec15..ebdce4b35686 100644
+> > --- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> > +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> > @@ -145,8 +145,8 @@ static void sparx5_xtr_grp(struct sparx5 *sparx5, u8 grp, bool byte_swap)
+> >       skb_put(skb, byte_cnt - ETH_FCS_LEN);
+> >       eth_skb_pad(skb);
+> >       skb->protocol = eth_type_trans(skb, netdev);
+> > -     netif_rx(skb);
+> >       netdev->stats.rx_bytes += skb->len;
+> > +     netif_rx(skb);
+> >       netdev->stats.rx_packets++;
+> 
+> sorry to nit pick - wouldn't it be neater if both the stats were
+> updated together?  Looks a little strange that netif_rx() is in
+> between the two now.
+> 
+> >  }
+> > 
+> > --
+> > 2.35.1
+> > 
+> 
 

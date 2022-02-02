@@ -1,184 +1,119 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8F24A7AD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:10:12 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 07A9D4A7AE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347814AbiBBWKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347799AbiBBWKJ (ORCPT
+        id S1347825AbiBBWMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:12:19 -0500
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:39665 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347818AbiBBWMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:10:09 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E73C06173B;
-        Wed,  2 Feb 2022 14:10:09 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id 200so989560qki.2;
-        Wed, 02 Feb 2022 14:10:09 -0800 (PST)
+        Wed, 2 Feb 2022 17:12:16 -0500
+Received: by mail-pg1-f178.google.com with SMTP id j10so640785pgc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:reply-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
-        b=fcP42zsjJKBRLsCCLNxeBAvGoAUH+RgY1jYrpOhhT8bMHr7+15EWYSucDQfP1oORdR
-         v8va2D+TIvGEUfFpYyk+KAAnpvrPj2Do2UURxQqDM2NZ0yrVKHV/Tmvmi8VnHPqEl5Sj
-         FzsjYO1CSUmsISBtPa5x3zIEsUBOu9RZDDuPyg2QqPpe+3i2ouYdl1b7XJc+7Yz287oe
-         n4Ll3sdxxGbRuNPqe8Va40e5cgmVlDZI5fIN6fBWjGY94knmRKOKljCldyrgDLu4eqFI
-         61yZGnSZcmCnvpc5Ppek75k/hWgHufZ8NwnxWp4bgKiaLrzdRDurexHwqhp4Nqyni8AG
-         h/rQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IN96kNo2GoNx6nkpd6g9ql6wx8bZFK4D4L/u8xLTqHk=;
+        b=ej/qevWE55BwyYZAXm1T0tW77I6BR+pgBZLQqwDsccA6kqiKb7YAvfuUfaQyWsL1Ai
+         /T4UVWIC54A24aTN/Xx4DHVPRbe7+orJaGeZRp/7flklRyCiklGorONYLFy9aDc0+15+
+         Y5A2LZpA/DQBFe6DDcKyQywjhl55JM5GgfkDM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :reply-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
-        b=C65pH2rY/pHA4/UDlbE1AUvm+emU4zTl6GaizZbzr+Fh/rvc/8XlEKFYQ/8VxXMcjQ
-         BmtafWC6iCpmqVuiZtDjXjFUlkCPyp9tYtOr4OTczSuIQI4bm2uluGhfuuO/K+vWkAYG
-         cdnZwllIAFIdM5tutCsBgVIsiDA6SEhg8zPWgi5uBrsMtvaswkVj1GZIK6OQUjqh4n+L
-         m7hxSWM89ijjSe8fBzEgH6ZaObRsv5QxVZg8ZNOpJ2x7SQKVPgu6sBcelO2oGLzmfYmN
-         YuFCxLVN8k/DsnM62FtrFMLgTm0iTVpinTdyqXeYETiQNKIF5rQ33xURA2TiDZUYxWTo
-         jwVQ==
-X-Gm-Message-State: AOAM532SVVHVa1PIRrbf07l6oATCpnGr0hBEKCAMYp8zxgLDbbS+zNWj
-        t7vHb6vsHErwe1lSfKyiSQ==
-X-Google-Smtp-Source: ABdhPJwRpKyRhMilcGtomGensbv6thBpUXpxVK7cAkdNeBk0lqsREJF6QVbIyABhwvxgVYCy4DCMsQ==
-X-Received: by 2002:a37:4648:: with SMTP id t69mr21000172qka.702.1643839808031;
-        Wed, 02 Feb 2022 14:10:08 -0800 (PST)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id o13sm7298868qtv.36.2022.02.02.14.10.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IN96kNo2GoNx6nkpd6g9ql6wx8bZFK4D4L/u8xLTqHk=;
+        b=L6AZZTSEqCwL4utHceWSap8eGTJeUMiSIQW24dr0pWFRM+OQFwJjHxbXP7CojA9RRi
+         ei8X/Zd7DmMCrBhn2TbyPCL+VVC3zqcDmOe109VKRkMQ6gFYxpnFOhc3uEZ2yIEKRt38
+         D0Ry40A4RycfhsyxRf4Ws7sUQde+mCZQi0ZULMdT2/2XvwjDDlEFyBVVeq8nY5UFMLNo
+         UB3g3EeCjWcR0Drj3E5ncVOzK6rfxCpH0djbY8vjCEtJj+9trC0X3gytPuqXtS/qUEKT
+         X9Tvi7DFyJg+PxP+U+3+0dU17l8yCLIUP50c99jpdK4UvhJ9VAoto2Ohn52gPE8lJx+8
+         IA8Q==
+X-Gm-Message-State: AOAM530GPJHAbDX3PVnFK1a4TAK+geTxPk9tCx+7l29tzE4KSX9Hi4yi
+        Bcv5fdsLR9sta4ISyMIMzilVpQ==
+X-Google-Smtp-Source: ABdhPJwlVFChYEmq5VaZf5imvLjciEamNSjwDq0IsZQ+oI4+zA9/JblaMbVaWQmXiL7zU9bTnDK2/g==
+X-Received: by 2002:a63:5242:: with SMTP id s2mr25560468pgl.435.1643839876557;
+        Wed, 02 Feb 2022 14:11:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c17sm28402108pfv.68.2022.02.02.14.11.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 14:10:07 -0800 (PST)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:c4e6:e49c:6958:ac58])
-        by serve.minyard.net (Postfix) with ESMTPSA id 68539181297;
-        Wed,  2 Feb 2022 22:10:06 +0000 (UTC)
-Date:   Wed, 2 Feb 2022 16:10:05 -0600
-From:   Corey Minyard <minyard@acm.org>
-To:     "Verdun, Jean-Marie" <verdun@hpe.com>
-Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Hao Fang <fanghao11@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Richard Weinberger <richard@nod.at>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Wed, 02 Feb 2022 14:11:16 -0800 (PST)
+Date:   Wed, 2 Feb 2022 14:11:15 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Openipmi-developer] [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <20220202221005.GD2091156@minyard.net>
-Reply-To: minyard@acm.org
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
- <20220202175635.GC2091156@minyard.net>
- <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
+        linux-kbuild@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
+Message-ID: <202202021409.2AA6A4246@keescook>
+References: <20210818081118.1667663-1-keescook@chromium.org>
+ <20210818081118.1667663-5-keescook@chromium.org>
+ <20220202160903.GA2337834@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
+In-Reply-To: <20220202160903.GA2337834@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 06:14:57PM +0000, Verdun, Jean-Marie wrote:
-> > This is far too big for a single patch.  It needs to be broken into
-> > functional chunks that can be reviewed individually.  Each driver and
-> > each device tree change along with it's accompanying code need to be
-> > done in individual patches.  The way it is it can't be reviewed in any
-> > sane manner.
+On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
+> On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
+> > With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
+> > coverage, it is now possible to enable -Warray-bounds. Since both
+> > GCC and Clang include -Warray-bounds in -Wall, we just need to stop
+> > disabling it.
+> > 
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: linux-kbuild@vger.kernel.org
+> > Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  Makefile | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index a4aca01a4835..af22b83cede7 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+> >  
+> >  # We'll want to enable this eventually, but it's not going away for 5.7 at least
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
+> > -KBUILD_CFLAGS += -Wno-array-bounds
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+> >  
+> >  # Another good warning that we'll want to enable eventually
 > 
-> > -corey
+> alpha:defconfig:
 > 
-> Thanks for your feedback. We are getting a little bit lost here, as our plan was to submit initial
-> 
-> - bindings
-> - dts for SoC and 1 board
-> - initial platform init code
-> 
-> Then drivers code avoiding to send many dts updates which might complexify the review. We wanted to send all drivers code to relevant reviewers by tomorrow.
-> 
-> So, what you are asking ( do not worry I am not trying to negotiate, I just want to avoid English misunderstandings as I am French) is to send per driver
-> 
-> - binding
-> - dts update
-> - driver code
-> 
-> For each driver through different submission (with each of them containing the 3 associated parts) ?
+> In function '__memset',
+>     inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
 
-Arnd gave an excellent explaination for this.
+Ah! With Arnd and Nathan's help, I saw:
+https://lore.kernel.org/all/20210912160149.2227137-3-linux@roeck-us.net/
+which is solving the same problem (just manifested through different
+diagnostics). The same solution works here. I'll get the patches sent...
 
-To be clear, you need to split out changes to individual subsystems and
-submit those to the maintainers for that subsystem and not send them to
-everyone.  That way you reduce sending emails to people who don't need
-to see them.
-
-Once you have a set of patches for a subsystem, you can submit them as one
-set.  That is generally preferred.  The "git send-email" or "git
-format-patch" tools are generally what we use, they let you compose a
-header message where you can give an overall explaination, then it sends
-the individual changes as followup messages to the header message.
-
--corey
-
-> 
-> What shall be the initial one in our case as we are introducing a platform ? An empty dts infrastructure and then we make it grow one step at a time ?
-> 
-> vejmarie
-> 
-> ﻿
->  
-> 
-> 
-> _______________________________________________
-> Openipmi-developer mailing list
-> Openipmi-developer@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/openipmi-developer
+-- 
+Kees Cook

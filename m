@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53ED24A78E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88514A78EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbiBBTtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:49:45 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:35158 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiBBTto (ORCPT
+        id S1346984AbiBBTtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:49:53 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44944 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346967AbiBBTtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:49:44 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212JnQVY115371;
-        Wed, 2 Feb 2022 13:49:26 -0600
+        Wed, 2 Feb 2022 14:49:52 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnim6127964;
+        Wed, 2 Feb 2022 13:49:44 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643831366;
-        bh=hvsHZm8OlbAUiFjTn0w2jr5q8Ay/1dFkrjFBr7OmLRA=;
+        s=ti-com-17Q1; t=1643831384;
+        bh=DIp43XSAMx2adaN2x1pPnNwrO9YL3U19pEVY50lVnro=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=D9rfeYal3AfGzQHsLe8fBOMBUWhbKrourowq3QHvXCbODajTyf8ktwoglgFruYlyB
-         ufX6Qa7Fg0UzwZ/kDEGrgLldxIvwluWQU176+FuiDrFaCIQ+H5o1iSrQdWCoGgXJGw
-         6WKnWfecTbyyMrZebZTrZb/FiidIThrbje70fHCg=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JnQoD038094
+        b=pucDKKT/IHoySA4FMMY4TPFqqm+CfSuAt+ZSx2+GbqLgZRKfRN2+U0HY2xQpG0Xpw
+         rbAwEYyz4Bh6Cwj0yUSK91GEdUsTvL6RuAomnUMx0zRiR96guIY5k8nCmdP0kp7iP2
+         qbtAtkLZDyVEHUUY3E67fBNbuUyyLVt1bD6iwiCo=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JnioI083004
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Feb 2022 13:49:26 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 2 Feb 2022 13:49:44 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Feb 2022 13:49:26 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:49:44 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Feb 2022 13:49:26 -0600
+ Frontend Transport; Wed, 2 Feb 2022 13:49:44 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212JnQ5U042143;
-        Wed, 2 Feb 2022 13:49:26 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnh1j042364;
+        Wed, 2 Feb 2022 13:49:43 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     <ssantosh@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: k3-ringacc: Use devm_bitmap_zalloc() when applicable
-Date:   Wed, 2 Feb 2022 13:49:25 -0600
-Message-ID: <164383135100.1523.10038747585864521872.b4-ty@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-pm@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
+Date:   Wed, 2 Feb 2022 13:49:43 -0600
+Message-ID: <164383137177.1624.10089341781660907242.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <45544b0d97a7bea7764292852842adf5085a7700.1640276001.git.christophe.jaillet@wanadoo.fr>
-References: <45544b0d97a7bea7764292852842adf5085a7700.1640276001.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,19 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe JAILLET,
+Hi Lad Prabhakar,
 
-On Thu, 23 Dec 2021 17:14:46 +0100, Christophe JAILLET wrote:
-> 'rings_inuse' and 'proxy_inuse' are bitmaps. So use 'devm_bitmap_zalloc()'
-> to simplify code and improve the semantic.
+On Wed, 5 Jan 2022 18:03:22 +0000, Lad Prabhakar wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypasses the hierarchical setup and messes up the
+> irq chaining.
 > 
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq_optional().
 > 
+> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] soc: ti: k3-ringacc: Use devm_bitmap_zalloc() when applicable
-      commit: a8eba8dde5fbf0b9f62a38230af6d66c389c37fc
+[1/1] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
+      commit: 001d7c83704bc98c28cc6444d2e7518d12ed029f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

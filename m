@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE3E4A6DA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346254A6DA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245403AbiBBJRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S245415AbiBBJRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245394AbiBBJRH (ORCPT
+        with ESMTP id S245406AbiBBJR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:17:07 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74980C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 01:17:07 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id s5so63086440ejx.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 01:17:07 -0800 (PST)
+        Wed, 2 Feb 2022 04:17:28 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5264C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 01:17:27 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id d10so63377209eje.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 01:17:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=x9rntTeDhb6XRDh9/nW9Vd6mnOlOZBc9Iqn9gcca+t4=;
-        b=BHT96a9j020XxUsQWDK20Qo2NUtO20lg55wm++jPoJnYThjUUezbh67CjJK7F0rhHM
-         WMR0SlUFQ67HKnd5UAq3t8wQw0/IcfiDR64E3Bl3ek5iU+rwGtlsQZv4EhHS3HlLll70
-         vz81NfQyhvIr/DEWlvNCdVHwVdrYwjwE9rJGuyve+JUZRxMWWVM4Ob6EneixpLbaAEL3
-         mL8ezHkwZky0WbKNDvZRzGI3ZK6UaCQ70KIPB4ePlH3jMJWTS1GZycbEkrbm1j6fw1Um
-         8sXv5bQxeCXb57VdMFBZNPF2Oeyyi4RN6dtQaE8SAPEe1FFoplZ5LDWHWcIAME4ULSu0
-         Kj/A==
+        bh=Y/kYiRInfsvyElPIDI39Lqck87rYrQWofhDpEmZtPSY=;
+        b=n+zSRRWNoLDbgRRKBeTh+H1uwEewljSjvlihvbIbFUw3/JNwm4kM38DZanK8Dpg7AI
+         +dj2/gAKUckeWANIRVKUrPXyonam/wV5zyN7FV50rmYde2p97d+Yi3FrrB01iAYR+aXM
+         Gum5F3bCNEE25rxs56m2NlmRQh6eW/jDg7HIV3U0Gu10+6C6J8hl7gbvJaKoexUHnUz3
+         c+NCfqJ7i2IsQR/J37EPCprXo5Kjx3pE4isRsLZ91uu9bP64VNLyKplBDsypDvjktOHL
+         YApmDzYRqxp0PBbZpj6v1gulDj6jcdVtQnU/slBRlRN3cSzfXC9Pom0j0U2POdrEe2jR
+         JP2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=x9rntTeDhb6XRDh9/nW9Vd6mnOlOZBc9Iqn9gcca+t4=;
-        b=IOyujUqQQmRLhXHS/TC65rhZGWgE7Z6oZG1j588sP4c5v4Hgp/9rjhmfDThKBdhNG1
-         NOLuHv0k4Y+HiE5q/Vmk2Bfj1Ckw1amdKi3jDAb5h0zgADwPSzvApkZg8ZSItApI1mJF
-         xNk0BJIgQ9bJWpJrM1q4oe9WNIy/L6oaNqdXTcowJY1BfIU1c1Jhx2HqnYZNY8qzGZxv
-         dUfn5ySdilszVdJX6h41fSPOlAkXo6kRmgcwJAXe+iyKqVX2NbkQzNucZZYoBpMMGIiL
-         YIH5bl2Ivh//bQQdz7pCcckquEHRGkGQ1yPtukYHESsfYWkMHsUhfohp1wLffGwa8DLa
-         Pvrg==
-X-Gm-Message-State: AOAM5307UD0hbljtYQ8qMklZS7hp7yewRjg8v1RoaHne3tCeQ11fqxL4
-        wpI2pVKYaknHq9nwQr6YK0Tip23vGmSm2rmE7gi6cA==
-X-Google-Smtp-Source: ABdhPJxO+YT7KVoH0Asl2I194MEaiGQV+55OzPqr2jrXyPvrkGNsigRcmzQHLC5k4+p9ZlceBbVedREV04aU+lGUj4w=
-X-Received: by 2002:a17:907:6e1f:: with SMTP id sd31mr24802407ejc.286.1643793425982;
- Wed, 02 Feb 2022 01:17:05 -0800 (PST)
+        bh=Y/kYiRInfsvyElPIDI39Lqck87rYrQWofhDpEmZtPSY=;
+        b=lU1ekZiJKnvvLzU+zNUIbYQxGrD+7Vl5WbWMjpbNCBtEdKqo7U8ebWnWdxD3J4cnez
+         Nj2GL2lxVz/+R3DzkfRRT6tEK6ibDqBuTbA3X89YqhqjW3v/oat1MzXzG85tV+qPCUm1
+         pscSpXZff9D+bl6Gh2ZG6AWtdKzQc65zAHlrFW8CbXoR3kGXxUi3kThSQFKyd34Vxi1x
+         jjNqGUnN3WjzaahdtLqhbwfKqOSOzKkS0piDRwPrzyj95DPVwl7iGRIEhHlTIjowiEJ4
+         V9If3EBtQH4E5XQ9LxvH5qp6Ioy5joOKVurrPIsOHFw2H/xafaZS2sHhcQMxXaqlAMkm
+         24sQ==
+X-Gm-Message-State: AOAM5318CkhsRl6qBxZTpZjdw0itQDCAfqOwjK6FOp5Og/FA8ntMG5ss
+        j2JzxD1LNxhTRChiJFhkwSwQ6PqAwmxHJtn0t/ADnQ==
+X-Google-Smtp-Source: ABdhPJxsThSLIsef6dEfWt17Wr72wwi5nMcsD+ZG0OofJafpJ2Dp54PSSoa0LpSQl4SlOtjdSg1W/OdtjHGnap7Rq78=
+X-Received: by 2002:a17:906:eb8a:: with SMTP id mh10mr21471265ejb.492.1643793446481;
+ Wed, 02 Feb 2022 01:17:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130145116.88406-1-nbd@nbd.name> <20220130145116.88406-12-nbd@nbd.name>
-In-Reply-To: <20220130145116.88406-12-nbd@nbd.name>
+References: <20220130145116.88406-1-nbd@nbd.name> <20220130145116.88406-13-nbd@nbd.name>
+In-Reply-To: <20220130145116.88406-13-nbd@nbd.name>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 2 Feb 2022 10:16:55 +0100
-Message-ID: <CAMRc=McAvYmjvCU8-OA3Yb+YuXF7KaGC6E3RnFMN7eSUXiUz+Q@mail.gmail.com>
-Subject: Re: [PATCH v9 11/13] dt-bindings: arm: airoha: Add binding for Airoha
- GPIO controller
+Date:   Wed, 2 Feb 2022 10:17:15 +0100
+Message-ID: <CAMRc=MeuGpO3-M=_46K-B5L84ZrfL_tonLtoNHCM3GYgF=Z_Eg@mail.gmail.com>
+Subject: Re: [PATCH v9 12/13] gpio: Add support for Airoha EN7523 GPIO controller
 To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        John Crispin <john@phrozen.org>, soc@kernel.org,
+Cc:     Linus Walleij <linus.walleij@linaro.org>, soc@kernel.org,
         "moderated list:ARM/Mediatek SoC..." 
         <linux-mediatek@lists.infradead.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Rob Herring <robh@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        John Crispin <john@phrozen.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -73,93 +70,196 @@ On Sun, Jan 30, 2022 at 3:54 PM Felix Fietkau <nbd@nbd.name> wrote:
 > From: John Crispin <john@phrozen.org>
 >
 > Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-> GPIOs
+> GPIOs. Each instance in DT is for a single bank.
 >
+> Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > Signed-off-by: John Crispin <john@phrozen.org>
 > Signed-off-by: Felix Fietkau <nbd@nbd.name>
 > ---
->  .../bindings/gpio/airoha,en7523-gpio.yaml     | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml
+>  drivers/gpio/Kconfig       |  10 +++
+>  drivers/gpio/Makefile      |   1 +
+>  drivers/gpio/gpio-en7523.c | 137 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 148 insertions(+)
+>  create mode 100644 drivers/gpio/gpio-en7523.c
 >
-> diff --git a/Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml b/Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 60d9374c72c0..0e9aacbcb4bd 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -247,6 +247,16 @@ config GPIO_EM
+>         help
+>           Say yes here to support GPIO on Renesas Emma Mobile SoCs.
+>
+> +config GPIO_EN7523
+> +       tristate "Airoha GPIO support"
+> +       depends on ARCH_AIROHA
+> +       default ARCH_AIROHA
+> +       select GPIO_GENERIC
+> +       select GPIOLIB_IRQCHIP
+> +       help
+> +         Say Y or M here to support the GPIO controller block on the
+> +         Airoha EN7523 SoC. It supports two banks of 32 GPIOs.
+> +
+>  config GPIO_EP93XX
+>         def_bool y
+>         depends on ARCH_EP93XX
+> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+> index 71ee9fc2ff83..d2269ee0948e 100644
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -56,6 +56,7 @@ obj-$(CONFIG_GPIO_DLN2)                       += gpio-dln2.o
+>  obj-$(CONFIG_GPIO_DWAPB)               += gpio-dwapb.o
+>  obj-$(CONFIG_GPIO_EIC_SPRD)            += gpio-eic-sprd.o
+>  obj-$(CONFIG_GPIO_EM)                  += gpio-em.o
+> +obj-$(CONFIG_GPIO_EN7523)              += gpio-en7523.o
+>  obj-$(CONFIG_GPIO_EP93XX)              += gpio-ep93xx.o
+>  obj-$(CONFIG_GPIO_EXAR)                        += gpio-exar.o
+>  obj-$(CONFIG_GPIO_F7188X)              += gpio-f7188x.o
+> diff --git a/drivers/gpio/gpio-en7523.c b/drivers/gpio/gpio-en7523.c
 > new file mode 100644
-> index 000000000000..66c00ec85731
+> index 000000000000..f836a8db4c1d
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/airoha,en7523-gpio.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/airoha,en7523-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/gpio/gpio-en7523.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +
-> +title: Airoha EN7523 GPIO controller
+> +#include <linux/types.h>
+> +#include <linux/io.h>
+> +#include <linux/bits.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
 > +
-> +maintainers:
-> +  - John Crispin <john@phrozen.org>
+> +#define AIROHA_GPIO_MAX                32
 > +
-> +description: |
-> +  Airoha's GPIO controller on their ARM EN7523 SoCs consists of two banks of 32
-> +  GPIOs.
+> +/**
+> + * airoha_gpio_ctrl - Airoha GPIO driver data
+> + * @gc: Associated gpio_chip instance.
+> + * @data: The data register.
+> + * @dir0: The direction register for the lower 16 pins.
+> + * @dir1: The direction register for the higher 16 pins.
+> + * @output: The output enable register.
+> + */
+> +struct airoha_gpio_ctrl {
+> +       struct gpio_chip gc;
+> +       void __iomem *data;
+> +       void __iomem *dir[2];
+> +       void __iomem *output;
+> +};
 > +
-> +properties:
-> +  $nodename:
-> +    pattern: "^gpio@[0-9a-f]+$"
+> +static struct airoha_gpio_ctrl *gc_to_ctrl(struct gpio_chip *gc)
+> +{
+> +       return container_of(gc, struct airoha_gpio_ctrl, gc);
+> +}
 > +
-> +  compatible:
-> +    items:
-> +      - const: airoha,en7523-gpio
+> +static int airoha_dir_set(struct gpio_chip *gc, unsigned int gpio,
+> +                         int val, int out)
+> +{
+> +       struct airoha_gpio_ctrl *ctrl = gc_to_ctrl(gc);
+> +       u32 dir = ioread32(ctrl->dir[gpio / 16]);
+> +       u32 output = ioread32(ctrl->output);
+> +       u32 mask = BIT((gpio % 16) * 2);
 > +
-> +  reg:
-> +    description: |
-> +      The first tuple points to the input register.
-> +      The second and third tuple point to the direction registers
-> +      The fourth tuple points to the output register
-> +    maxItems: 4
+> +       if (out) {
+> +               dir |= mask;
+> +               output |= BIT(gpio);
+> +       } else {
+> +               dir &= ~mask;
+> +               output &= ~BIT(gpio);
+> +       }
 > +
-> +  "#gpio-cells":
-> +    const: 2
+> +       iowrite32(dir, ctrl->dir[gpio / 16]);
 > +
-> +  gpio-controller: true
+> +       if (out)
+> +               gc->set(gc, gpio, val);
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#gpio-cells"
-> +  - gpio-controller
+> +       iowrite32(output, ctrl->output);
 > +
-> +additionalProperties: false
+> +       return 0;
+> +}
 > +
-> +examples:
-> +  - |
-> +    gpio0: gpio@1fbf0200 {
-> +        compatible = "airoha,en7523-gpio";
-> +        reg = <0x1fbf0204 0x4>,
-> +              <0x1fbf0200 0x4>,
-> +              <0x1fbf0220 0x4>,
-> +              <0x1fbf0214 0x4>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +    };
+> +static int airoha_dir_out(struct gpio_chip *gc, unsigned int gpio,
+> +                         int val)
+> +{
+> +       return airoha_dir_set(gc, gpio, val, 1);
+> +}
 > +
-> +    gpio1: gpio@1fbf0270 {
-> +        compatible = "airoha,en7523-gpio";
-> +        reg = <0x1fbf0270 0x4>,
-> +              <0x1fbf0260 0x4>,
-> +              <0x1fbf0264 0x4>,
-> +              <0x1fbf0278 0x4>;
-> +        gpio-controller;
-> +        #gpio-cells = <2>;
-> +    };
+> +static int airoha_dir_in(struct gpio_chip *gc, unsigned int gpio)
+> +{
+> +       return airoha_dir_set(gc, gpio, 0, 0);
+> +}
 > +
+> +static int airoha_get_dir(struct gpio_chip *gc, unsigned int gpio)
+> +{
+> +       struct airoha_gpio_ctrl *ctrl = gc_to_ctrl(gc);
+> +       u32 dir = ioread32(ctrl->dir[gpio / 16]);
+> +       u32 mask = BIT((gpio % 16) * 2);
 > +
-
-I removed this unnecessary newline when applying.
-
-> +...
+> +       return (dir & mask) ? GPIO_LINE_DIRECTION_OUT : GPIO_LINE_DIRECTION_IN;
+> +}
+> +
+> +static int airoha_gpio_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct airoha_gpio_ctrl *ctrl;
+> +       int err;
+> +
+> +       ctrl = devm_kzalloc(dev, sizeof(*ctrl), GFP_KERNEL);
+> +       if (!ctrl)
+> +               return -ENOMEM;
+> +
+> +       ctrl->data = devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(ctrl->data))
+> +               return PTR_ERR(ctrl->data);
+> +
+> +       ctrl->dir[0] = devm_platform_ioremap_resource(pdev, 1);
+> +       if (IS_ERR(ctrl->dir[0]))
+> +               return PTR_ERR(ctrl->dir[0]);
+> +
+> +       ctrl->dir[1] = devm_platform_ioremap_resource(pdev, 2);
+> +       if (IS_ERR(ctrl->dir[1]))
+> +               return PTR_ERR(ctrl->dir[1]);
+> +
+> +       ctrl->output = devm_platform_ioremap_resource(pdev, 3);
+> +       if (IS_ERR(ctrl->output))
+> +               return PTR_ERR(ctrl->output);
+> +
+> +       err = bgpio_init(&ctrl->gc, dev, 4, ctrl->data, NULL,
+> +                        NULL, NULL, NULL, 0);
+> +       if (err)
+> +               return dev_err_probe(dev, err, "unable to init generic GPIO");
+> +
+> +       ctrl->gc.ngpio = AIROHA_GPIO_MAX;
+> +       ctrl->gc.owner = THIS_MODULE;
+> +       ctrl->gc.direction_output = airoha_dir_out;
+> +       ctrl->gc.direction_input = airoha_dir_in;
+> +       ctrl->gc.get_direction = airoha_get_dir;
+> +
+> +       return devm_gpiochip_add_data(dev, &ctrl->gc, ctrl);
+> +}
+> +
+> +static const struct of_device_id airoha_gpio_of_match[] = {
+> +       { .compatible = "airoha,en7523-gpio" },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, airoha_gpio_of_match);
+> +
+> +static struct platform_driver airoha_gpio_driver = {
+> +       .driver = {
+> +               .name = "airoha-gpio",
+> +               .of_match_table = airoha_gpio_of_match,
+> +       },
+> +       .probe = airoha_gpio_probe,
+> +};
+> +module_platform_driver(airoha_gpio_driver);
+> +
+> +MODULE_DESCRIPTION("Airoha GPIO support");
+> +MODULE_AUTHOR("John Crispin <john@phrozen.org>");
+> +MODULE_LICENSE("GPL v2");
 > --
 > 2.32.0 (Apple Git-132)
 >

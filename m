@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243264A7326
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887604A7330
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344993AbiBBObl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:31:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56012 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230290AbiBBObk (ORCPT
+        id S1343976AbiBBOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237846AbiBBOeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:31:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643812299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MyaJSjL0Dz4PWQLKWTTGsW9XoK3E6CFP4+bGWUvW21Q=;
-        b=BljXGuv+HB2tCEZiXn3Tuyghocf7fD7Ayw0F+aU0mlWKiNbN29Zr3nfnVHQtQzfVEpprYa
-        +ZxB3y4eG3T74FeF1vdbR7KVdOPnRMXi0WL9WliLGrkLLwPgTtzE+OP0thBHB9UjbcSfHB
-        h8uBHMqfybuMX3d+1CNC3dxSPB0lEOQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-zZTGoK3OOuqJAf2vIECu4Q-1; Wed, 02 Feb 2022 09:31:36 -0500
-X-MC-Unique: zZTGoK3OOuqJAf2vIECu4Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3BA44801B26;
-        Wed,  2 Feb 2022 14:31:32 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.193.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BAB1E57F2D;
-        Wed,  2 Feb 2022 14:31:31 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 69AE51800397; Wed,  2 Feb 2022 15:31:28 +0100 (CET)
-Date:   Wed, 2 Feb 2022 15:31:28 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 4/5] efi: Load efi_secret module if EFI secret area is
- populated
-Message-ID: <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
- <20220201124413.1093099-5-dovmurik@linux.ibm.com>
- <20220202084723.ushasiekb3cxami4@sirius.home.kraxel.org>
- <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
+        Wed, 2 Feb 2022 09:34:19 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCFDC06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:34:19 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id e28so18959117pfj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=16vqX60UmjqWNFm7zG92JTmfSodESNq7kHVS1cy34iA=;
+        b=pIE1avRsIxoQ5fVb4NSUe2Fxzd41PZOYVQWoiDsv0TjH20bhHYZ6DaMZU98/la6pab
+         Ys6Qj3meDpkxL4odhvTHC3NKoSceGl6HCEEbjCFCljQyHx5pq0eXnKt4rhvwLEM0WPdN
+         jxHZWknT/IImkOgRBUgIUSkYo1p5IUWAten8PDNxyfwCOk0eIpxZlep6r6Cv3FkTx58R
+         WtJuO/aQKel4Hjwnsn33aCyWIn6ru+9Fc/xQZ459ZpfYNxVWtVIg2Gi0IwMANRRV4wML
+         QMzxLkfQltwAIg0/1hSHN0+y8MX9A61/sDEgQ5LaKetiS2+zr6uC64oWPnFzQ3mwsGs8
+         mgeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=16vqX60UmjqWNFm7zG92JTmfSodESNq7kHVS1cy34iA=;
+        b=0Xdaz4yFL4UWdGi6w4IRUv5YIDSuGDTPEGrgrMECWWTnJldHv6l9Qlk9OqYLp7HDIp
+         T+ujTGU2jwn0+Pd1jnH5iwm8zKGedeCJRaSRxcPzWoJkQ1SCIa7pjKX40GjAexBSIyKu
+         b5V0+Lx8LvPOcJ/crsnumEKFwmrFNTXO/M/8uhwstW95S+HbgRvjuAlCDdcV13pYbwCQ
+         8pSednRJCKAVqgSqtlb9Lc2awiAbnMJ6C0R9dE18iJ4amhXelAi+26qTpHbksoZR8ViC
+         L9it/0DPhC9aOGLQ1MAGIcZSVn4fJLT8t55aP1qgaiP/t30T7K3V8eA8IE9s96UZVsqZ
+         GPlA==
+X-Gm-Message-State: AOAM530sTl32bUxPm4tN08GZd2Yiw5t4BiaQAy8ey1BZxbAN70my3YuW
+        CP5IzKJQ36QSiMJ1DkK4qOxpZf450Kq0dQ==
+X-Google-Smtp-Source: ABdhPJxOdQap8/4HoWdm4i8JqHFqRS1d4ylTDNP39+aW3pX5NvYo3r+I5ODTVwdlAGTqeidAEK+lQQ==
+X-Received: by 2002:a62:7650:: with SMTP id r77mr29703773pfc.85.1643812458488;
+        Wed, 02 Feb 2022 06:34:18 -0800 (PST)
+Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id s9sm29079268pgm.76.2022.02.02.06.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 06:34:18 -0800 (PST)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
+        hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org
+Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v2 0/6] Fix some bugs related to ramp and dax
+Date:   Wed,  2 Feb 2022 22:33:01 +0800
+Message-Id: <20220202143307.96282-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 01:08:43PM +0200, Dov Murik wrote:
-> 
-> 
-> On 02/02/2022 10:47, Gerd Hoffmann wrote:
-> > On Tue, Feb 01, 2022 at 12:44:12PM +0000, Dov Murik wrote:
-> >> If the efi_secret module is built, register a late_initcall in the EFI
-> >> driver which checks whether the EFI secret area is available and
-> >> populated, and then requests to load the efi_secret module.
-> > 
-> >> +	area = memremap(efi.coco_secret, sizeof(*area), MEMREMAP_WB);
-> >> +	if (!area) {
-> >> +		pr_err("Failed to map confidential computing secret area descriptor\n");
-> >> +		return -ENOMEM;
-> >> +	}
-> >> +	if (!area->base_pa || area->size < sizeof(*header_guid))
-> >> +		goto unmap_desc;
-> >> +
-> >> +	header_guid = (void __force *)ioremap_encrypted(area->base_pa, sizeof(*header_guid));
-> >> +	if (!header_guid) {
-> >> +		pr_err("Failed to map secret area\n");
-> >> +		ret = -ENOMEM;
-> >> +		goto unmap_desc;
-> >> +	}
-> >> +	if (efi_guidcmp(*header_guid, EFI_SECRET_TABLE_HEADER_GUID))
-> >> +		goto unmap_encrypted;
-> > 
-> > Why these sanity checks are here and not in the efi_secret module?
-> 
-> The same checks indeed appear in the efi_secret module (see in patch 3:
-> efi_secret_map_area() and the beginning of efi_secret_securityfs_setup()).
-> 
-> However, in the efi_secret module, the checks are noisy, because they
-> expect the secret area to be populated.  For example:
-> 
-> +	if (efi.coco_secret == EFI_INVALID_TABLE_ADDR) {
-> +		pr_err("Secret area address is not available\n");
-> +		return -EINVAL;
-> +	}
+Patch 1-2 fix a cache flush bug, because subsequent patches depend on
+those on those changes, there are placed in this series.  Patch 3-4
+are preparation for fixing a dax bug in patch 5.  Patch 6 is code cleanup
+since the previous patch remove the usage of follow_invalidate_pte().
 
-Note I explicitly excluded that check ;)
+Changes in v2:
+  - Avoid the overly long line in lots of places suggested by Christoph.
+  - Fix a compiler warning reported by kernel test robot since pmd_pfn()
+    is not defined when !CONFIG_TRANSPARENT_HUGEPAGE on powerpc architecture.
+  - Split a new patch 4 for preparation of fixing the dax bug.
 
-Checking whenever efi.coco_secret looks valid and only try load
-efi_secret if that is the case (and otherwise stay silent) makes
-perfect sense.  The other checks should be dropped IMHO.
+Muchun Song (6):
+  mm: rmap: fix cache flush on THP pages
+  dax: fix cache flush on PMD-mapped pages
+  mm: page_vma_mapped: support checking if a pfn is mapped into a vma
+  mm: rmap: introduce pfn_mkclean_range() to cleans PTEs
+  dax: fix missing writeprotect the pte entry
+  mm: remove range parameter from follow_invalidate_pte()
 
-> Another approach could be to just try to load the module anyway, and
-> the module will fail (silently? noisily?) if there's no designated
-> secret area or it's not populated.  I feel that will be harder to
-> understand what's going on.
+ fs/dax.c                | 82 ++++------------------------------------------
+ include/linux/mm.h      |  3 --
+ include/linux/rmap.h    | 17 ++++++++--
+ include/linux/swapops.h | 13 +++++---
+ mm/internal.h           | 52 +++++++++++++++++++----------
+ mm/memory.c             | 23 ++-----------
+ mm/page_vma_mapped.c    | 68 ++++++++++++++++++++++++--------------
+ mm/rmap.c               | 87 ++++++++++++++++++++++++++++++++++++++-----------
+ 8 files changed, 180 insertions(+), 165 deletions(-)
 
-I think the module should fail noisily.  See above for autoload.  In
-case the module is loaded (either manually by the admin, or because
-efi.coco_secret != EFI_INVALID_TABLE_ADDR) and it can't actually load
-the secrets we want know why ...
-
-take care,
-  Gerd
+-- 
+2.11.0
 

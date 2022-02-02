@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 873704A6ABA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E024A6ABC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244211AbiBBED1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 23:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S244215AbiBBEF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 23:05:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiBBEDX (ORCPT
+        with ESMTP id S232069AbiBBEF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 23:03:23 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F62C061714;
-        Tue,  1 Feb 2022 20:03:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 1 Feb 2022 23:05:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B185C061714;
+        Tue,  1 Feb 2022 20:05:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JpSp115MMz4xkH;
-        Wed,  2 Feb 2022 15:03:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643774601;
-        bh=fPSUE9cT5IaVsFt6OxDftNTj1uNRzbWDxReqIA1Ne/M=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95F7AB82F70;
+        Wed,  2 Feb 2022 04:05:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFD3C004E1;
+        Wed,  2 Feb 2022 04:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643774723;
+        bh=oxbbL/7HMUwj9VfiRo09uO7jEK454MuKV84eIgFo8Go=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Jawe4pnq7tN0yJz4BBc1YGquJ24/pAaOFu28eD/K/+MPAByg0MEFeqPyBYgLtvyG8
-         YSWZ94zbi3Sn2QIN0IIxX00KF8yFWxTnIVSQl2EV9rMy4ScNRyGCvv8Y+V/56AiaWn
-         57jXwEbELHX25e2GMhbLNSeccSIjkrVximwfFjVP2m7UlsLtZN3LaDYgssAx4r7iHZ
-         PHUuSMBBnk8hgG+jvR5Nj9JzccePz42BUlkjpXYa5K3Jm/IA+mz/rJNyzUNTVkpj5V
-         pAmqeGAaULNBv0FXNpiVG4gJTRiKLpQrmF1Qqd484BEXRkzIICUvipDtK+BVVTcJ7y
-         sOPcryUAplQqg==
-Date:   Wed, 2 Feb 2022 15:03:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Rajat Jain <rajatja@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm tree
-Message-ID: <20220202150320.3e9bdd62@canb.auug.org.au>
-In-Reply-To: <20220202150201.290c7d3d@canb.auug.org.au>
-References: <20220202150201.290c7d3d@canb.auug.org.au>
+        b=pt3rmvr4JeVdV1AltD2Linl+hj08cNgmKgROcjgR3N3UzirHCMEgizsCYI3/o+0t0
+         /TKiQwNOqbiVw6qqCnttHnSDJMhP4CmZI67dlzC2+MTOiCoylTwtMx7Axiq+cbDdLC
+         LNbTUKekXnV1KffwYEJlszzuYUQkIuHnsdb7nd3S7KKAouG8EPXuggs0oGfH/sBy7o
+         z7Qb15N8xksHms6CxbCdm94DhIM5rwZBEm6SErsRJCu6W2DtvtR8+erYsuA6JDPJlF
+         eEAXjyjtH6dtgxmzC2iTK/eV9eLddaM06JuWLYMt02nyNcU+Qb8A4f7ARrIJ4PysbS
+         g43rhuwUA+5Ag==
+Date:   Tue, 1 Feb 2022 20:05:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Dan Carpenter" <dan.carpenter@oracle.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH net] net: sparx5: do not refer to skb after passing it
+ on
+Message-ID: <20220201200521.179857d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220201143057.3533830-1-steen.hegelund@microchip.com>
+References: <20220201143057.3533830-1-steen.hegelund@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qXoKYoK/5G2wYu3I20es+3L";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/qXoKYoK/5G2wYu3I20es+3L
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 1 Feb 2022 15:30:57 +0100 Steen Hegelund wrote:
+> Do not try to use any SKB fields after the packet has been passed up in the
+> receive stack.
+> 
+> This error was reported as shown below:
 
-Hi all,
+No need to spell it out, the tags speak for themselves.
 
-On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the drm tree, today's linux-next build (htmldocs) produced
-> this warning:
->=20
-> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or me=
-mber 'data' not described in 'drm_privacy_screen_register'
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
 
-Actually:
+Drop this...
 
-drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or me=
-mber 'data' not described in 'drm_privacy_screen_register'
+> Fixes: f3cad2611a77 (net: sparx5: add hostmode with phylink support)
+> 
 
---=20
-Cheers,
-Stephen Rothwell
+and this empty line - all the tags should be together.
 
---Sig_/qXoKYoK/5G2wYu3I20es+3L
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+> ---
+>  drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> index dc7e5ea6ec15..ebdce4b35686 100644
+> --- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+> @@ -145,8 +145,8 @@ static void sparx5_xtr_grp(struct sparx5 *sparx5, u8 grp, bool byte_swap)
+>  	skb_put(skb, byte_cnt - ETH_FCS_LEN);
+>  	eth_skb_pad(skb);
+>  	skb->protocol = eth_type_trans(skb, netdev);
+> -	netif_rx(skb);
+>  	netdev->stats.rx_bytes += skb->len;
+> +	netif_rx(skb);
+>  	netdev->stats.rx_packets++;
 
------BEGIN PGP SIGNATURE-----
+sorry to nit pick - wouldn't it be neater if both the stats were
+updated together?  Looks a little strange that netif_rx() is in
+between the two now.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH6AogACgkQAVBC80lX
-0GxoRAf9HxTTUeh6Up+L3aae7sxok64xRTLPEKfde0esK0UxsW1JtPzrJH52uZip
-hZs7TpEcPBr84zmESpAAxpr0uFABKR0KbDUOIVNfDukD7Euo9oHlv1HNFvkpl1Kx
-Pz0U6H00b96RaqUoRm8ZGKzR9goGLaCsop0QcI8xm1aQ812J+nTVUZCfbmLCsvmL
-X4w8q44uxpbvk+Gq9JU6BASYPj6mitE63pkk8u4kzhJ5NCqfr1C5a3KkvtBe32s2
-bBAooFeqtwPqqeDD4An/BK9Y+67pJClfE8H/2woTuqLVsuz44DZ2VzlInHQA+fqf
-Ouxp7R7/EFdm20z3u189duUlvrhJLw==
-=VsnU
------END PGP SIGNATURE-----
+>  }
+> 
+> --
+> 2.35.1
+> 
 
---Sig_/qXoKYoK/5G2wYu3I20es+3L--

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A399D4A7251
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2134A7253
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344445AbiBBNxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:53:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40037 "EHLO
+        id S1344585AbiBBNxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:53:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41645 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344519AbiBBNxo (ORCPT
+        by vger.kernel.org with ESMTP id S1344519AbiBBNxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:53:44 -0500
+        Wed, 2 Feb 2022 08:53:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643810023;
+        s=mimecast20190719; t=1643810031;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iTqwruTWPfHMFTIBAKX8hnY20kDuzrc4oApkYAdRO6g=;
-        b=iRI0cYP1pUemaRfko4RHOvJP0M//SqkNTd2mz7b+lUYyUn4PYctsilYSCoh9THo4J4LYnm
-        mCVPSzHNY08NIGhpdySu4ZddtgIedmahyacLUTIkf+LE7uEzU7ma2CS+3gjEW3eFV3ByTj
-        vGu8mslNKm0Vn9PhAUkdz96V4JmBXmw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rU7PA92V+49dsAGPuIeIV/v8wUH1DOur5mrpoKB+KuE=;
+        b=SvaY1mJscb8/mRyCJkqZ/bFuLaz1tGaMT1sEj3IRpn/VavLo+rUivxvnDmqeWRFIOMKNpp
+        oUrseF0wrR0JivNPgMT0OUHyxq5FTWye2pa42DMwspsffNp9RAV+QeY1JnubT9gkeZJCRG
+        ef/46mH8hNz+qq7DNaJoSu7xwd7MljY=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-474-qFrdEgoNNDugvktvKNFeXw-1; Wed, 02 Feb 2022 08:53:42 -0500
-X-MC-Unique: qFrdEgoNNDugvktvKNFeXw-1
-Received: by mail-ed1-f69.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso10346666edk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:53:42 -0800 (PST)
+ us-mta-615-sYgERnktOMGohcfJoxwb-w-1; Wed, 02 Feb 2022 08:53:48 -0500
+X-MC-Unique: sYgERnktOMGohcfJoxwb-w-1
+Received: by mail-ed1-f72.google.com with SMTP id w3-20020a50c443000000b0040696821132so10412149edf.22
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:53:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iTqwruTWPfHMFTIBAKX8hnY20kDuzrc4oApkYAdRO6g=;
-        b=5wHMuVvClWqAN/TmgGlWtezHRfmCbEQRIsQsSff28j0Cy5WQIcHmtQvP/Fcb4oRYDn
-         5bs/R1Aiq2D6U8uFU6rVad6K3Cyr3EYT61HVvYbdpke9un74A/gC4q56vt+AkAcEgZr4
-         UsG0H7M65oqz6n1wTFashGJPZncqy7yUZjLLDleflWkpuyCCiAPX9dgz671M543D2A45
-         wyzolI/XBTGw71xVOXCnUNXwWaU/jXCL/ryO9AiazSnnXy0m4E2ptQwauQl1jUrRXvU7
-         MDLTX4fisNjdvfons5fMVCNfshR/CUkhhT8CW7V35FNFYCqO4pHx0+L/Ip+9XwL0QkqW
-         oejg==
-X-Gm-Message-State: AOAM533y9QsQqfmHPBiYqqe42HUxhXaNaTA7bVKC2qXV5LDdF6ANacyP
-        gkDkjxfQzYDg04hR2UN/WuJPUZAL9xyd2mbBmTRYWPIXO4dSSn+1VglUBEfK+vluAbuuLBeZ+Pr
-        HYEZb2bkwWNfOtzGdVcT5rSet
-X-Received: by 2002:a17:906:3602:: with SMTP id q2mr24970112ejb.331.1643810021166;
-        Wed, 02 Feb 2022 05:53:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyXzqoQS1ZvJxxLsZ+BwuIIPfRrZtm3dn+Sy3pGMKpT/12UlVJwv5gPSUhL3DCYSekTahKqjg==
-X-Received: by 2002:a17:906:3602:: with SMTP id q2mr24970087ejb.331.1643810020887;
-        Wed, 02 Feb 2022 05:53:40 -0800 (PST)
+        bh=rU7PA92V+49dsAGPuIeIV/v8wUH1DOur5mrpoKB+KuE=;
+        b=bpDEG4opEycE7jZoFnbfjesR0qpPSJtaEcxyNSfK3rLmFSLdxxCK8y+qtiYRsf40Gt
+         P1D0DP9tIIEHJzEI/Kv9W9gvsaFviG0lfOT5ABHyGYGYcBsgBWVnc9dizhoDCVKgTIgy
+         TIh6VvSkx5irPfZ+HoDCPtvNOIDAezTPLjKffr7pgIru3LIVqsWPusM0TnKaMSfuzn16
+         yKuJ6/PQVYoLDl2NWERnP3hEKedvefQ8CuX8I7kCWaMuuCao+HegS8mDFCwvPyFeyr64
+         tLch6q5mdmPIOJG3AF3HCgqkhphGGvMA9NDrPka/MTVHdCodGM08jrzyhf18BVUMQyOX
+         iUEg==
+X-Gm-Message-State: AOAM531Nh1X3T3jdNgFbNY8+XHSPunPxY3YuZML7YvQwS5hig87h8hdM
+        +cO3WJSu6N2OPM4MelW52gxX5I+qJFvVyrJG0EpyaKwyb4OzsHm4B19dRwZc+gWdbqytwoRn3+L
+        6ewWb06JbLE8FujKFwdzefy8H
+X-Received: by 2002:a17:907:2ce1:: with SMTP id hz1mr19339608ejc.681.1643810027526;
+        Wed, 02 Feb 2022 05:53:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwwQirmhCLHvQ2UdBTeDbmq1tdFdGGrZl5m4jins0KciHUjrD9AYG1LHNgFrDoNGbtQI+UUJg==
+X-Received: by 2002:a17:907:2ce1:: with SMTP id hz1mr19339588ejc.681.1643810027285;
+        Wed, 02 Feb 2022 05:53:47 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id a18sm2368808edu.31.2022.02.02.05.53.40
+        by smtp.gmail.com with ESMTPSA id by4sm2868404edb.107.2022.02.02.05.53.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 05:53:40 -0800 (PST)
+        Wed, 02 Feb 2022 05:53:46 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         KP Singh <kpsingh@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Jiri Olsa <olsajiri@gmail.com>
-Subject: [PATCH 1/8] bpf: Add support to attach kprobe program with fprobe
-Date:   Wed,  2 Feb 2022 14:53:26 +0100
-Message-Id: <20220202135333.190761-2-jolsa@kernel.org>
+Subject: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
+Date:   Wed,  2 Feb 2022 14:53:27 +0100
+Message-Id: <20220202135333.190761-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220202135333.190761-1-jolsa@kernel.org>
 References: <20220202135333.190761-1-jolsa@kernel.org>
@@ -78,439 +78,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding new link type BPF_LINK_TYPE_FPROBE that attaches kprobe program
-through fprobe API.
+Adding support to call get_func_ip_fprobe helper from kprobe
+programs attached by fprobe link.
 
-The fprobe API allows to attach probe on multiple functions at once very
-fast, because it works on top of ftrace. On the other hand this limits
-the probe point to the function entry or return.
+Also adding support to inline it, because it's single load
+instruction.
 
-The kprobe program gets the same pt_regs input ctx as when it's attached
-through the perf API.
-
-Adding new attach type BPF_TRACE_FPROBE that enables such link for kprobe
-program.
-
-User provides array of addresses or symbols with count to attach the kprobe
-program to. The new link_create uapi interface looks like:
-
-  struct {
-          __aligned_u64   syms;
-          __aligned_u64   addrs;
-          __u32           cnt;
-          __u32           flags;
-  } fprobe;
-
-The flags field allows single BPF_F_FPROBE_RETURN bit to create return fprobe.
-
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf_types.h      |   1 +
- include/uapi/linux/bpf.h       |  13 ++
- kernel/bpf/syscall.c           | 248 ++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |  13 ++
- 4 files changed, 270 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
+ kernel/trace/bpf_trace.c | 16 +++++++++++++++-
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index 48a91c51c015..e279cea46653 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -140,3 +140,4 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_XDP, xdp)
- #ifdef CONFIG_PERF_EVENTS
- BPF_LINK_TYPE(BPF_LINK_TYPE_PERF_EVENT, perf)
- #endif
-+BPF_LINK_TYPE(BPF_LINK_TYPE_FPROBE, fprobe)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a7f0ddedac1f..c0912f0a3dfe 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -997,6 +997,7 @@ enum bpf_attach_type {
- 	BPF_SK_REUSEPORT_SELECT,
- 	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
- 	BPF_PERF_EVENT,
-+	BPF_TRACE_FPROBE,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -1011,6 +1012,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_NETNS = 5,
- 	BPF_LINK_TYPE_XDP = 6,
- 	BPF_LINK_TYPE_PERF_EVENT = 7,
-+	BPF_LINK_TYPE_FPROBE = 8,
- 
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -1118,6 +1120,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* link_create.fprobe.flags used in LINK_CREATE command for
-+ * BPF_TRACE_FPROBE attach type to create return probe.
-+ */
-+#define BPF_F_FPROBE_RETURN	(1U << 0)
-+
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-  * the following extensions:
-  *
-@@ -1472,6 +1479,12 @@ union bpf_attr {
- 				 */
- 				__u64		bpf_cookie;
- 			} perf_event;
-+			struct {
-+				__aligned_u64	syms;
-+				__aligned_u64	addrs;
-+				__u32		cnt;
-+				__u32		flags;
-+			} fprobe;
- 		};
- 	} link_create;
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 72ce1edde950..0cfbb112c8e1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -32,6 +32,7 @@
- #include <linux/bpf-netns.h>
- #include <linux/rcupdate_trace.h>
- #include <linux/memcontrol.h>
-+#include <linux/fprobe.h>
- 
- #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
- 			  (map)->map_type == BPF_MAP_TYPE_CGROUP_ARRAY || \
-@@ -3015,8 +3016,235 @@ static int bpf_perf_link_attach(const union bpf_attr *attr, struct bpf_prog *pro
- 	fput(perf_file);
- 	return err;
- }
-+#else
-+static int bpf_perf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /* CONFIG_PERF_EVENTS */
- 
-+#ifdef CONFIG_FPROBE
-+
-+struct bpf_fprobe_link {
-+	struct bpf_link link;
-+	struct fprobe fp;
-+	unsigned long *addrs;
-+};
-+
-+static void bpf_fprobe_link_release(struct bpf_link *link)
-+{
-+	struct bpf_fprobe_link *fprobe_link;
-+
-+	fprobe_link = container_of(link, struct bpf_fprobe_link, link);
-+	unregister_fprobe(&fprobe_link->fp);
-+}
-+
-+static void bpf_fprobe_link_dealloc(struct bpf_link *link)
-+{
-+	struct bpf_fprobe_link *fprobe_link;
-+
-+	fprobe_link = container_of(link, struct bpf_fprobe_link, link);
-+	kfree(fprobe_link->addrs);
-+	kfree(fprobe_link);
-+}
-+
-+static const struct bpf_link_ops bpf_fprobe_link_lops = {
-+	.release = bpf_fprobe_link_release,
-+	.dealloc = bpf_fprobe_link_dealloc,
-+};
-+
-+static int fprobe_link_prog_run(struct bpf_fprobe_link *fprobe_link,
-+				struct pt_regs *regs)
-+{
-+	int err;
-+
-+	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
-+		err = 0;
-+		goto out;
-+	}
-+
-+	rcu_read_lock();
-+	migrate_disable();
-+	err = bpf_prog_run(fprobe_link->link.prog, regs);
-+	migrate_enable();
-+	rcu_read_unlock();
-+
-+ out:
-+	__this_cpu_dec(bpf_prog_active);
-+	return err;
-+}
-+
-+static void fprobe_link_entry_handler(struct fprobe *fp, unsigned long entry_ip,
-+				      struct pt_regs *regs)
-+{
-+	unsigned long saved_ip = instruction_pointer(regs);
-+	struct bpf_fprobe_link *fprobe_link;
-+
-+	/*
-+	 * Because fprobe's regs->ip is set to the next instruction of
-+	 * dynamic-ftrace insturction, correct entry ip must be set, so
-+	 * that the bpf program can access entry address via regs as same
-+	 * as kprobes.
-+	 */
-+	instruction_pointer_set(regs, entry_ip);
-+
-+	fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
-+	fprobe_link_prog_run(fprobe_link, regs);
-+
-+	instruction_pointer_set(regs, saved_ip);
-+}
-+
-+static void fprobe_link_exit_handler(struct fprobe *fp, unsigned long entry_ip,
-+				     struct pt_regs *regs)
-+{
-+	unsigned long saved_ip = instruction_pointer(regs);
-+	struct bpf_fprobe_link *fprobe_link;
-+
-+	instruction_pointer_set(regs, entry_ip);
-+
-+	fprobe_link = container_of(fp, struct bpf_fprobe_link, fp);
-+	fprobe_link_prog_run(fprobe_link, regs);
-+
-+	instruction_pointer_set(regs, saved_ip);
-+}
-+
-+static int fprobe_resolve_syms(const void *usyms, u32 cnt,
-+			       unsigned long *addrs)
-+{
-+	unsigned long addr, size;
-+	const char **syms;
-+	int err = -ENOMEM;
-+	unsigned int i;
-+	char *func;
-+
-+	size = cnt * sizeof(*syms);
-+	syms = kzalloc(size, GFP_KERNEL);
-+	if (!syms)
-+		return -ENOMEM;
-+
-+	func = kzalloc(KSYM_NAME_LEN, GFP_KERNEL);
-+	if (!func)
-+		goto error;
-+
-+	if (copy_from_user(syms, usyms, size)) {
-+		err = -EFAULT;
-+		goto error;
-+	}
-+
-+	for (i = 0; i < cnt; i++) {
-+		err = strncpy_from_user(func, syms[i], KSYM_NAME_LEN);
-+		if (err == KSYM_NAME_LEN)
-+			err = -E2BIG;
-+		if (err < 0)
-+			goto error;
-+
-+		err = -EINVAL;
-+		if (func[0] == '\0')
-+			goto error;
-+		addr = kallsyms_lookup_name(func);
-+		if (!addr)
-+			goto error;
-+		if (!kallsyms_lookup_size_offset(addr, &size, NULL))
-+			size = MCOUNT_INSN_SIZE;
-+		addr = ftrace_location_range(addr, addr + size - 1);
-+		if (!addr)
-+			goto error;
-+		addrs[i] = addr;
-+	}
-+
-+	err = 0;
-+error:
-+	kfree(syms);
-+	kfree(func);
-+	return err;
-+}
-+
-+static int bpf_fprobe_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+{
-+	struct bpf_fprobe_link *link = NULL;
-+	struct bpf_link_primer link_primer;
-+	unsigned long *addrs;
-+	u32 flags, cnt, size;
-+	void __user *uaddrs;
-+	void __user *usyms;
-+	int err;
-+
-+	/* no support for 32bit archs yet */
-+	if (sizeof(u64) != sizeof(void *))
-+		return -EINVAL;
-+
-+	if (prog->expected_attach_type != BPF_TRACE_FPROBE)
-+		return -EINVAL;
-+
-+	flags = attr->link_create.fprobe.flags;
-+	if (flags & ~BPF_F_FPROBE_RETURN)
-+		return -EINVAL;
-+
-+	uaddrs = u64_to_user_ptr(attr->link_create.fprobe.addrs);
-+	usyms = u64_to_user_ptr(attr->link_create.fprobe.syms);
-+	if ((!uaddrs && !usyms) || (uaddrs && usyms))
-+		return -EINVAL;
-+
-+	cnt = attr->link_create.fprobe.cnt;
-+	if (!cnt)
-+		return -EINVAL;
-+
-+	size = cnt * sizeof(*addrs);
-+	addrs = kzalloc(size, GFP_KERNEL);
-+	if (!addrs)
-+		return -ENOMEM;
-+
-+	if (uaddrs) {
-+		if (copy_from_user(addrs, uaddrs, size)) {
-+			err = -EFAULT;
-+			goto error;
-+		}
-+	} else {
-+		err = fprobe_resolve_syms(usyms, cnt, addrs);
-+		if (err)
-+			goto error;
-+	}
-+
-+	link = kzalloc(sizeof(*link), GFP_KERNEL);
-+	if (!link) {
-+		err = -ENOMEM;
-+		goto error;
-+	}
-+
-+	bpf_link_init(&link->link, BPF_LINK_TYPE_FPROBE,
-+		      &bpf_fprobe_link_lops, prog);
-+
-+	err = bpf_link_prime(&link->link, &link_primer);
-+	if (err)
-+		goto error;
-+
-+	if (flags & BPF_F_FPROBE_RETURN)
-+		link->fp.exit_handler = fprobe_link_exit_handler;
-+	else
-+		link->fp.entry_handler = fprobe_link_entry_handler;
-+
-+	link->addrs = addrs;
-+
-+	err = register_fprobe_ips(&link->fp, addrs, cnt);
-+	if (err) {
-+		bpf_link_cleanup(&link_primer);
-+		return err;
-+	}
-+
-+	return bpf_link_settle(&link_primer);
-+
-+error:
-+	kfree(link);
-+	kfree(addrs);
-+	return err;
-+}
-+#else /* !CONFIG_FPROBE */
-+static int bpf_fprobe_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif
-+
- #define BPF_RAW_TRACEPOINT_OPEN_LAST_FIELD raw_tracepoint.prog_fd
- 
- static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
-@@ -4248,7 +4476,7 @@ static int tracing_bpf_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
- 	return -EINVAL;
- }
- 
--#define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
-+#define BPF_LINK_CREATE_LAST_FIELD link_create.fprobe.flags
- static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- {
- 	enum bpf_prog_type ptype;
-@@ -4272,7 +4500,6 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 		ret = tracing_bpf_link_attach(attr, uattr, prog);
- 		goto out;
- 	case BPF_PROG_TYPE_PERF_EVENT:
--	case BPF_PROG_TYPE_KPROBE:
- 	case BPF_PROG_TYPE_TRACEPOINT:
- 		if (attr->link_create.attach_type != BPF_PERF_EVENT) {
- 			ret = -EINVAL;
-@@ -4280,6 +4507,14 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1ae41d0cf96c..a745ded00635 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			continue;
  		}
- 		ptype = prog->type;
- 		break;
-+	case BPF_PROG_TYPE_KPROBE:
-+		if (attr->link_create.attach_type != BPF_PERF_EVENT &&
-+		    attr->link_create.attach_type != BPF_TRACE_FPROBE) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		ptype = prog->type;
-+		break;
- 	default:
- 		ptype = attach_type_to_prog_type(attr->link_create.attach_type);
- 		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type) {
-@@ -4311,13 +4546,16 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 		ret = bpf_xdp_link_attach(attr, prog);
- 		break;
- #endif
--#ifdef CONFIG_PERF_EVENTS
- 	case BPF_PROG_TYPE_PERF_EVENT:
- 	case BPF_PROG_TYPE_TRACEPOINT:
--	case BPF_PROG_TYPE_KPROBE:
- 		ret = bpf_perf_link_attach(attr, prog);
- 		break;
--#endif
-+	case BPF_PROG_TYPE_KPROBE:
-+		if (attr->link_create.attach_type == BPF_PERF_EVENT)
-+			ret = bpf_perf_link_attach(attr, prog);
-+		else
-+			ret = bpf_fprobe_link_attach(attr, prog);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a7f0ddedac1f..c0912f0a3dfe 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -997,6 +997,7 @@ enum bpf_attach_type {
- 	BPF_SK_REUSEPORT_SELECT,
- 	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
- 	BPF_PERF_EVENT,
-+	BPF_TRACE_FPROBE,
- 	__MAX_BPF_ATTACH_TYPE
- };
  
-@@ -1011,6 +1012,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_NETNS = 5,
- 	BPF_LINK_TYPE_XDP = 6,
- 	BPF_LINK_TYPE_PERF_EVENT = 7,
-+	BPF_LINK_TYPE_FPROBE = 8,
+-		/* Implement bpf_get_func_ip inline. */
++		/* Implement tracing bpf_get_func_ip inline. */
+ 		if (prog_type == BPF_PROG_TYPE_TRACING &&
+ 		    insn->imm == BPF_FUNC_get_func_ip) {
+ 			/* Load IP address from ctx - 16 */
+@@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			continue;
+ 		}
  
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -1118,6 +1120,11 @@ enum bpf_link_type {
-  */
- #define BPF_F_XDP_HAS_FRAGS	(1U << 5)
- 
-+/* link_create.fprobe.flags used in LINK_CREATE command for
-+ * BPF_TRACE_FPROBE attach type to create return probe.
-+ */
-+#define BPF_F_FPROBE_RETURN	(1U << 0)
++		/* Implement kprobe/fprobe bpf_get_func_ip inline. */
++		if (prog_type == BPF_PROG_TYPE_KPROBE &&
++		    eatype == BPF_TRACE_FPROBE &&
++		    insn->imm == BPF_FUNC_get_func_ip) {
++			/* Load IP address from ctx (struct pt_regs) ip */
++			insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
++						  offsetof(struct pt_regs, ip));
 +
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-  * the following extensions:
-  *
-@@ -1472,6 +1479,12 @@ union bpf_attr {
- 				 */
- 				__u64		bpf_cookie;
- 			} perf_event;
-+			struct {
-+				__aligned_u64	syms;
-+				__aligned_u64	addrs;
-+				__u32		cnt;
-+				__u32		flags;
-+			} fprobe;
- 		};
- 	} link_create;
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
++			if (!new_prog)
++				return -ENOMEM;
++
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			continue;
++		}
++
+ patch_call_imm:
+ 		fn = env->ops->get_func_proto(insn->imm, env->prog);
+ 		/* all functions that have prototype and verifier allowed
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index a2024ba32a20..28e59e31e3db 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
  
++BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
++{
++	/* This helper call is inlined by verifier. */
++	return regs->ip;
++}
++
++static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
++	.func		= bpf_get_func_ip_fprobe,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++};
++
+ BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
+ {
+ 	struct bpf_trace_run_ctx *run_ctx;
+@@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_override_return_proto;
+ #endif
+ 	case BPF_FUNC_get_func_ip:
+-		return &bpf_get_func_ip_proto_kprobe;
++		return prog->expected_attach_type == BPF_TRACE_FPROBE ?
++			&bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
+ 	case BPF_FUNC_get_attach_cookie:
+ 		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
 -- 
 2.34.1
 

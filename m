@@ -2,133 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99904A79D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930614A79D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347336AbiBBU4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S1347347AbiBBU4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235461AbiBBU4D (ORCPT
+        with ESMTP id S230399AbiBBU4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:56:03 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D9C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:56:03 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso750160pjt.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:56:03 -0800 (PST)
+        Wed, 2 Feb 2022 15:56:32 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92901C061714;
+        Wed,  2 Feb 2022 12:56:32 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id bs32so826469qkb.1;
+        Wed, 02 Feb 2022 12:56:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+MOwEsZXX1JZ92aEsSTA+4bQ9fwXO7uqj6443Uicqb0=;
-        b=Mb5OwFKvf8tT0DvmVkSF03zpcm3XzqSHtUtuMB8JAyioHdfW8f1uw1h2J6Oi+HuZLb
-         3LH+5wQkRmNadqvUPytAJvY42l3NtWc5K9Qh9vU1oRYmBEQ2jlHROGDTkZ7g2fyV3Rvv
-         xhWjglkXHBLAiS2L/bD5rGfl/Mrf6dN2i0eFk=
+        bh=2oBJmK/+RBc8FE7PZmIHJK5BlYsD+KPlOD7Zr3SmWis=;
+        b=IjdRGcpiq/kU8e8JDfGm198uCN3Ay9NCRoeG99nRmaxObU0Z+Ri617Om8zaXoE25N4
+         14JG8CM/RGyQyTEmEZ4+/xrPY+FzfOxqvsNsFXoObz3HbjxApLOC/Q2tIYS0PXZlKNRE
+         LGa3aOcDFelY+Q1eIAIpWuM3dDiKp3hE1S1lbZDZRGDTBlcMXUrplj4T8l/imyPfc9DB
+         4UEBGlNi1HXoYdj3tVip7++2N72fQcrBvGXKPlWkWAOZJbnwjYU5Q4o2Ghh6+5VSlg+9
+         qhjojkaaqoKpnZaAUJc4hvxiQ3SS3GvcdCOnivES0J+XlIII3au78CeA64LzN25BvjtQ
+         aAEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+MOwEsZXX1JZ92aEsSTA+4bQ9fwXO7uqj6443Uicqb0=;
-        b=OnAeQ5spgoXCGYQEJir/RaGuPwL7KkRkLfHnhqs7X/eDEiH5NI0EckZmFUVyRNBSRG
-         gobEfciVQ9UmZv5P5EXOZaAZLt/yKvH+w7uarDYLW4y8+/qkQFTQ84z2eKff0eTC8IiW
-         IUUKW06IYv2R97WhE2DJJSbsyZJ3Xhea4NbsZX8PGfLYDJ/+3Bm96O5idtKRwEcbNLkO
-         6thA97wuWZ95yRgCSy2VPWmMQx2BuDIron2zqhvckuN4/yEDftJLhTn7yZHVycS8GM8+
-         SfRTJO0HfPBVBv41no0yNcWLSgpdI0LevGfpf8YIcWuCAsD3yI6DePD1Wo2YtvH4Qk1j
-         1wUA==
-X-Gm-Message-State: AOAM533Y9QNQL8KUygnpTpdnXeZn1Sp0cqQtsqiMyRzZHKJVwEiIf8nT
-        wBJJbJ+B0PYgZ1x9cMW0lit7uQ==
-X-Google-Smtp-Source: ABdhPJyfeZdi8A1JowZl63xE7cjRteRe2f/EQsWsDnneOxd/1gPZEhtH8tPe/EVOXmca0ssZNZc69w==
-X-Received: by 2002:a17:90a:548:: with SMTP id h8mr10099210pjf.109.1643835362724;
-        Wed, 02 Feb 2022 12:56:02 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a14sm28023672pfv.212.2022.02.02.12.56.02
+        bh=2oBJmK/+RBc8FE7PZmIHJK5BlYsD+KPlOD7Zr3SmWis=;
+        b=hm66H5HgdWqX9okOW0VTVXelXXtLURWsGam0L6T9/WZw3ZmGNJqL3l3vbI+kSdNaHQ
+         MBs2KZUYFyOCJ+XNvMMwfbVAKj9hsIXE6oHSpldpbl4zggjuq5wOWvV4e5szA1pDsMan
+         Vj5Wc89ibGM6O/FgkGaS1HXQXA0T7FUfRHji3Gvv2+4/nqUzFPQH+/J/zVtB77Ws3393
+         2qbqn4w7u11TejC+XJUvJEsK4p6lvO8YuwdUGQECi9S0cZXDoa9kjpb0K8LQhI/cskzM
+         1tGGeCnw4DLDoNkcBz5ZeMRabKHm/NY9qRID4e1Ain+Q0pKHQqrFVkJXThQiAfrIUOJG
+         m80w==
+X-Gm-Message-State: AOAM532CiQC1o0VZsvSjqUWtwOUBlvVh78XTHA1Y7fAPwOeHcVnRDVcH
+        WW7McOJno49COsrrDzBsPS8=
+X-Google-Smtp-Source: ABdhPJzZXB9Y3XZwRz0Y8ng7Vr5OzC7UnSl3/1MEpsMNYDrSC2FkfaMUKQHSNxKCEcO0f3zWWJ2T8w==
+X-Received: by 2002:a05:620a:319b:: with SMTP id bi27mr21596353qkb.505.1643835391682;
+        Wed, 02 Feb 2022 12:56:31 -0800 (PST)
+Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
+        by smtp.gmail.com with ESMTPSA id b8sm1772339qtx.79.2022.02.02.12.56.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 12:56:02 -0800 (PST)
-Date:   Wed, 2 Feb 2022 12:56:01 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
-Message-ID: <202202021254.5A1FD4FFBF@keescook>
-References: <20210818081118.1667663-1-keescook@chromium.org>
- <20210818081118.1667663-5-keescook@chromium.org>
- <20220202160903.GA2337834@roeck-us.net>
+        Wed, 02 Feb 2022 12:56:30 -0800 (PST)
+Date:   Wed, 2 Feb 2022 15:56:28 -0500
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     jic23@kernel.org, andy.shevchenko@gmail.com, lars@metafoo.de,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v13 08/11] iio: afe: rescale: add RTD temperature sensor
+ support
+Message-ID: <Yfrv/K8ohqTINEED@shaak>
+References: <20220130161101.1067691-1-liambeguin@gmail.com>
+ <20220130161101.1067691-9-liambeguin@gmail.com>
+ <cb48ec7c-da91-cadd-ee7f-02691671e7be@axentia.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202160903.GA2337834@roeck-us.net>
+In-Reply-To: <cb48ec7c-da91-cadd-ee7f-02691671e7be@axentia.se>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
-> On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
-> > With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
-> > coverage, it is now possible to enable -Warray-bounds. Since both
-> > GCC and Clang include -Warray-bounds in -Wall, we just need to stop
-> > disabling it.
+Hi Peter,
+On Wed, Feb 02, 2022 at 05:58:25PM +0100, Peter Rosin wrote:
+> Hi!
+> 
+> On 2022-01-30 17:10, Liam Beguin wrote:
+> > An RTD (Resistance Temperature Detector) is a kind of temperature
+> > sensor used to get a linear voltage to temperature reading within a
+> > give range (usually 0 to 100 degrees Celsius). Common types of RTDs
+> > include PT100, PT500, and PT1000.
 > > 
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+> > Reviewed-by: Peter Rosin <peda@axentia.se>
 > > ---
-> >  Makefile | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/Makefile b/Makefile
-> > index a4aca01a4835..af22b83cede7 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
-> >  
-> >  # We'll want to enable this eventually, but it's not going away for 5.7 at least
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
-> > -KBUILD_CFLAGS += -Wno-array-bounds
-> >  KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
-> >  
-> >  # Another good warning that we'll want to enable eventually
+
+-- snip --
+
+> > +
+> > +	tmp = r0 * iexc * alpha / MEGA;
+> > +	factor = gcd(tmp, MEGA);
+> > +	rescale->numerator = MEGA / factor;
+> > +	rescale->denominator = tmp / factor;
+> > +
+> > +	rescale->offset = -1 * ((r0 * iexc) / MEGA * MILLI);
 > 
-> alpha:defconfig:
+> The inner (unneeded) brackets are not helping with clarifying
+> the precedence. The most "problematic" operation is the last
+> multiplication inside the outer brackets. Extra brackets are
+> more useful like this, methinks:
 > 
-> In function '__memset',
->     inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
-> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->    37 |                         return __builtin_memset(s, c, n);
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
-> In function '__memset',
->     inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
-> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->    37 |                         return __builtin_memset(s, c, n);
->       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
-> In function '__memset',
->     inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
-> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->    37 |                         return __builtin_memset(s, c, n);
+> 	rescale->offset = -1 * ((r0 * iexc / MEGA) * MILLI);
+> 
+> But, what is more important is that you in v10 had:
+> 
+> 	rescale->offset = -1 * ((r0 * iexc) / 1000);
+> 
+> What you tricked yourself into writing when you converted to
+> these prefix defines is not equivalent. You lose precision.
+> 
+> I.e. dividing by 1000000 and then multiplying by 1000 is not
+> the same as dividing directly with 1000. And you know this, but
+> didn't notice perhaps exactly because you got yourself entangled
+> in prefix macros that blurred the picture?
 
-Thanks! I'll take a look. Every instance of the "[0, 0]" bounds means
-the compiler believes there's a way for the destination to be determined
-at compile-time to be NULL.
+Apologies for this oversight. Your observation is correct, I looked at
+the prefix changes and failed to catch this mistake.
 
-> xtensa:allmodconfig:
-> --------------
-> Error log:
-> In file included from include/linux/uaccess.h:11,
->                  from include/linux/sched/task.h:11,
->                  from arch/xtensa/kernel/process.c:21:
-> arch/xtensa/kernel/process.c: In function 'copy_thread':
-> arch/xtensa/kernel/process.c:262:52: error: array subscript 53 is above array bounds of 'long unsigned int[16]'
+Would you be okay with the following:
 
-I assume this is a weird cast. I will also check this one out.
+	rescale->offset = -1 * ((r0 * iexc) / KILO);
 
-Thanks!
+This would keep things consistent with what I said here[1].
 
--- 
-Kees Cook
+[1] https://lore.kernel.org/linux-iio/YfmJ3P1gYaEkVjlY@shaak/
+
+> These macros have wasted quite a bit of review time. I'm not
+> fully convinced they represent an improvement...
+
+Sorry for the wasted cycles here.
+
+Cheers,
+Liam
+
+> Cheers,
+> Peter
+> 
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  enum rescale_variant {
+> >  	CURRENT_SENSE_AMPLIFIER,
+> >  	CURRENT_SENSE_SHUNT,
+> >  	VOLTAGE_DIVIDER,
+> > +	TEMP_SENSE_RTD,
+> >  };
+> >  
+> >  static const struct rescale_cfg rescale_cfg[] = {
+> > @@ -414,6 +456,10 @@ static const struct rescale_cfg rescale_cfg[] = {
+> >  		.type = IIO_VOLTAGE,
+> >  		.props = rescale_voltage_divider_props,
+> >  	},
+> > +	[TEMP_SENSE_RTD] = {
+> > +		.type = IIO_TEMP,
+> > +		.props = rescale_temp_sense_rtd_props,
+> > +	},
+> >  };
+> >  
+> >  static const struct of_device_id rescale_match[] = {
+> > @@ -423,6 +469,8 @@ static const struct of_device_id rescale_match[] = {
+> >  	  .data = &rescale_cfg[CURRENT_SENSE_SHUNT], },
+> >  	{ .compatible = "voltage-divider",
+> >  	  .data = &rescale_cfg[VOLTAGE_DIVIDER], },
+> > +	{ .compatible = "temperature-sense-rtd",
+> > +	  .data = &rescale_cfg[TEMP_SENSE_RTD], },
+> >  	{ /* sentinel */ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, rescale_match);

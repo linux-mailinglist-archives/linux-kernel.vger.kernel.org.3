@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD9B4A7BE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2D64A7BE8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348128AbiBBXts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:49:48 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:61334 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236839AbiBBXtr (ORCPT
+        id S1348146AbiBBXvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:51:07 -0500
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:51415 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239716AbiBBXuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:49:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643845787; x=1675381787;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=ebB5DIRkM6RPvA708tvHx1B2UHGzS4knaLmymv8Ktlc=;
-  b=mkc6w55Y8vU8oYauPKDTf6NLarMicJTl+F9MVTf7xoNgcAR6x2KSLiHa
-   k9wzPrGNjHH0MWKyk4WBxO3rRO6NJtBqqwRFSAJjicfe7cuqi/xnauYRo
-   p28yLwRMVeyGs9VRcg+osy4fzA0/lKVmD5BDJwegi7l4MTJXx86Wwr0+E
-   /xXY8RAqzsi9RimcfAesi8oy8eCQtyMenHD9jJcRrPIVJsxmDVV/33vxJ
-   nV2M3Dv3EslmKYP2WODce8s3D5QMb6/XR6gcwc0NJhfXVwypOP3lL4J16
-   YFdy6pV9NiJGasWq2PLtflQbYf7PfTDlD6Ab5zQco5FTlq/r3sYF6e+Q7
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,338,1635177600"; 
-   d="scan'208";a="303922762"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Feb 2022 07:49:46 +0800
-IronPort-SDR: dZUgorZL7og0ZpX2aIIaHsAnyqYKIc2xVZ+HiEB1s1NbtRVOS1k4ILesHJZ07KVyT64mZR2o4U
- ruljmeoCPrHIJO+AQiCCR9IQqeemo2k5qfq6pFSl6dSv6F5qvjyBD0pVKMENOhJUu+7t/PU61r
- BeHX60DB3c7fAVGi1EHdazIG9iDZm80Jkyh/aWogzMkb1YYy2E6NIwPlneclT6hCY0Ye/M9t4V
- /9VxCo26f4q83k8MLblVTS/1gG6OZDj0Mq94tGw7+H43LBhjrRjIb7FfhiSpeUy2j5fW4wNskF
- 21dp74OQ53M4ltucYLjmfSgn
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 15:22:55 -0800
-IronPort-SDR: 2tHElrbZcQgIbgnDqXK1TYer3J+HBiiRAT5Jxsj8bMa5dFkshb9AfpZBvsQ7eOxWsO1kkLZNNY
- L2rJK+1w9SV0J2t2ODhYRYKa0C9WLENCWsPzTIFU3fHXPL4FqU2Mg7uLcbT6WH20+QFC81djZr
- jLZ/0HsuqU/fBAqSvmm/ZvcAJN5DL5J+EKt0QoIC5ESzMFxKTwGimhOJt03wmsGa3A3TMqvSk5
- w3eE103C+3DJSBw248/EurAQa6NCEAhZezFGDNgYseixYv2KvOTfe1x4C+Kd0z/kg2lvSOcGm2
- Gxw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 15:49:47 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jpz6y2239z1SVny
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:49:46 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:references:to:from:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643845784; x=1646437785; bh=ebB5DIRkM6RPvA708tvHx1B2UHGzS4knaLm
-        ymv8Ktlc=; b=dZxceuL0FccPLSlzQsGU8puGmVWmxj9l+YCZ8nAQkRP3dZwiUIV
-        af/NeTYVur8RfYyczqEm9WoBNnokDBxL3rikJR821k35AL1rPWRxqGn1HF7SvzGa
-        s0xrJEzNFvm/2b45j6YKmjMQVe+qmgny6dk+pp68xYXxQoi6K5/UtUDnA8/XOFMh
-        F8mwMh2hNZ8fId1k07NAx6hsqvLMH2xzNv8NeDwuwIlqwt15PLdlE4rIfFNxA1Fj
-        d1RryfvmyX2/js+W0Ka5JwumBqzoHasEemp0QT6vRx21dQFhfxbNWhZd9PptKPDj
-        szBKM0FnJa3/Ny4ULLoHm9wt4GnUn6Erlnw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vFXYRx7LeZ-4 for <linux-kernel@vger.kernel.org>;
-        Wed,  2 Feb 2022 15:49:44 -0800 (PST)
-Received: from [10.225.163.63] (unknown [10.225.163.63])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jpz6v698Bz1Rwrw;
-        Wed,  2 Feb 2022 15:49:43 -0800 (PST)
-Message-ID: <031eceaf-402f-7bca-10c4-8959e62e7fe3@opensource.wdc.com>
-Date:   Thu, 3 Feb 2022 08:49:42 +0900
+        Wed, 2 Feb 2022 18:50:51 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4F6C55C01D4;
+        Wed,  2 Feb 2022 18:50:51 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 02 Feb 2022 18:50:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=G3uMJoiuyTNYSzQLHkBtYHuRGGlAUi5KOnThdB
+        0YcG8=; b=NXJUF3YhKRU8bfeCGs/x/X2JQdeLsluEgkicQJx6DgojU5K1kP1egf
+        MjvBexuh379F9p7Hr4QkjeDfPjE7jLlYpXnA1EPaJ19oF2CbNNG2SBOhhvNyuyQv
+        D7ruPgB3BaHr37k7Q3/dKrASPaQqFCDDxpYLbQsoDNhEFTN6nwRBB6d6GnOPQTe2
+        r252aLGGfKgYE2rtu1Ok1VdvI3h7mSa+V6pHiIWAV46SDEEP+v2oTcGvrdQAediW
+        zCFM9acWwtLAdznMqKjlYINtKITMbm8Y7qWf96JUYVr1Zcv++ImPgDlSySBvtnwV
+        d9tEjmSWYcW7Kiypgq2VrYAAaX2Cje2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=G3uMJo
+        iuyTNYSzQLHkBtYHuRGGlAUi5KOnThdB0YcG8=; b=MIKrEs6WfmCWJ7tQql0C80
+        WHMokSU/wQi3Xs0D+OzuLb7WpxE993bmu2xDWxOPv7CD5/UzlaDizng73KhrG+Im
+        T+utaLt4xjJ8azlv/z9airUp9fRigZOI5tMiBcB3O8HRvTc8/2uuc04HO/AAWIAo
+        huR7yIH+mydfbKdADO+CqkzjmbjBQSn9wN46ptZgnQ9rP4hvMMTLcFuRBCUUW1zV
+        v0VcMZLlWbb6uvaSdDoEc6yEpIg/xoCJCzufplkqmPKtKJoQBqScgrgNR4xxG2mX
+        tYoQreaKvZDRtqs8CMAsPzG9Tp5aXFd1/P1csPDy9qWnLd161pf8+rCRabOWFU6A
+        ==
+X-ME-Sender: <xms:2hj7YVtOiVGqZ2pZ55PmWyi7jPOog0EOPBsseY4c0ErmU8m-PAJ2lQ>
+    <xme:2hj7Yec6toGLUbgOYviI0ZPpuFgHdzq_7xfXm3j8RZKQ6E36EvZ_oUSK4mUpSfwnM
+    VO2Vpc6BR5kIOnN1Q>
+X-ME-Received: <xmr:2hj7YYz21onOCS5Gy_x_fWyGDaGxdyN9yzaiwh-eImjlfkD-E1IE2FpXjd-R_JRSeIMB4xQ_o4Q2nXe7sMClgR_h3HEzQZqZojBRTLnm_RHdVRqZKJjhBkCC_qx75BFFwluirg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdduvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvleefveegvefghfegheeghfehtdeigeejfefhvedvueekieefheetfffg
+    veethfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:2hj7YcMt_MdI0rrH2DIeCHb7e1Mr7yHSJuxGyVx15C06csFGZy-_fg>
+    <xmx:2hj7YV9yhD214nDm-krfaw8GMwfCx5b1COQwiYoOsrLLMbYoHrIavA>
+    <xmx:2hj7YcWooIKl7elu2kANYbtxeNxftV4qNYWyuwpPXoPM1xpJV_kdDQ>
+    <xmx:2xj7YeNM0J5PlIMVIm2-wDTYVw3NZx9Iw1du4tVNBTdB4BfVCurOoA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Feb 2022 18:50:50 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2 0/3] iio: Silan SC7A20 accelerometer support
+Date:   Wed,  2 Feb 2022 17:50:45 -0600
+Message-Id: <20220202235049.8051-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell
- 88SE9235
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
- <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
- <1378dd0a-52d2-c998-5713-e6875c601194@molgen.mpg.de>
- <4c3df325-dc9f-5eed-5585-7d2e5203b65f@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <4c3df325-dc9f-5eed-5585-7d2e5203b65f@opensource.wdc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 08:05, Damien Le Moal wrote:
->>> ata: ahci: Add support for Marvell 88SE9235 adapter
->>>
->>> Since it is exactly what this patch is doing by adding a PCI ID.
->>
->> Thank you for applying the patch. I saw the summary/title change also=20
->> with the other patch. I am sorry, but I totally disagree. Reading that=
-=20
->> summary/title in `git log --oneline`, it=E2=80=99s not clear at all, w=
-hat the=20
->> patch does, and the full description or diff has to be read. =E2=80=9C=
-Add=20
->> support=E2=80=9D for me means, that it was unsupported before, which i=
-s not true=20
->> at all as the defaults were used.
->=20
-> Right... I did not consider the final entry in the ahci_pci_tbl table
-> which matches against the device against the PCI AHCI storage class.
-> So right you are. I will restore your original commit title/message.
->=20
-> Thanks for checking.
+This chip is register-compatible with an ST part, so it works without
+any issues when added to the existing driver.
 
-Fixed now !
+Previously I called it a clone, but it's not really a clone, because
+it's not a drop-in replacement for the other chips. The software
+interface matches the ST parts, but the pinout does not. Instead, the
+pinout matches the Kionix KX122 and KX132.
 
+Changes in v2:
+ - Move the new compatible to its own section
+ - Add a comment about the WAI value
+ - Update commit messages
 
---=20
-Damien Le Moal
-Western Digital Research
+Samuel Holland (3):
+  dt-bindings: vendor-prefixes: Add silan vendor prefix
+  dt-bindings: iio: st: Add Silan SC7A20 accelerometer
+  iio: accel: st_accel: Add support for Silan SC7A20
+
+ .../bindings/iio/st,st-sensors.yaml           |  3 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ drivers/iio/accel/st_accel.h                  |  2 +
+ drivers/iio/accel/st_accel_core.c             | 83 +++++++++++++++++++
+ drivers/iio/accel/st_accel_i2c.c              |  5 ++
+ 5 files changed, 95 insertions(+)
+
+-- 
+2.33.1
+

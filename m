@@ -2,98 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6704D4A6975
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 02:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C8E4A697D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 02:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243587AbiBBBA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 20:00:56 -0500
-Received: from mga03.intel.com ([134.134.136.65]:20163 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229994AbiBBBAz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 20:00:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643763655; x=1675299655;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vDbMgeOCMKbsw6F5Rtn4JMP/kbMOZMhb5AzDRkk3ig4=;
-  b=Z7tbi7yA7IC0mElL/R17XN5xC2fLrSGlbUoR43RJ78PCHBbxI53Te2LM
-   qnVc0MeDUgEufwaJrigqCNISNqAm4nUusA7Zbwmmd9v4WTKPKdOUuqMyh
-   EdfMaPoMyFSdFeoJawXmQ2TQhrFhwGoSiQKAo15QEpOqJEZvEYh4xnhW1
-   w/WUShv+WyLekTvIoVr/4zD7sXtes0qUPLvm9fusgLrGwZfbhz1WAFi+o
-   teJCBx1vt0oAJEKbOnh5BsRLLhjdOKG+n25g5xgzj6gYUtYDurM1D8uso
-   i7bcYmo97zT7aTRoLTuNktPiMeNZtnln+f/OpCQ9xrBkcIMCyW4mcgwXu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="247778221"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="247778221"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 17:00:54 -0800
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="538052810"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 17:00:53 -0800
-Date:   Tue, 1 Feb 2022 17:00:53 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 03/44] x86/pkeys: Create pkeys_common.h
-Message-ID: <20220202010053.GT785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-4-ira.weiny@intel.com>
- <7bb7d2be-9fa0-1b0d-17d1-adb7d58d5389@intel.com>
+        id S243610AbiBBBMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 20:12:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229994AbiBBBMD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 20:12:03 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26421C061714;
+        Tue,  1 Feb 2022 17:12:03 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id y84so23607155iof.0;
+        Tue, 01 Feb 2022 17:12:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oX4QYPgKMF1ySmPW1A2Fc76TKnI8tmOOFZVE50sLVdM=;
+        b=j8mI87ZCJd4p+JxPi60FStbr1RHpCNDYz2m9pyWQMeE3R9/N+Of1nH7RPHuTe2Oero
+         /602Ui9weQPh/VzTQ7mxn0oBzIKu/sjx1WDoBj1m4G6CG5Cfssgwzk/tW1Wrrw6vge/Q
+         lqO1JI4eXZpYtGlZEmwirj8E9RHD193NZSgQZpZdV8kiDvUIU6ZCuiJwCyyDl1Yp2wWj
+         6oez0kvaP/gGVX/zJta6PSImaTi5Y+DQUIP8oND09zOSU/uex63Rbj0dNq2SUEV9v/kc
+         Ol854b3oo1+JH1iG+4zsEC7ZqdyHbKv2GPit8aNHUhh1vhTzA2NoeZje2jJZW+QjShDv
+         lZHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oX4QYPgKMF1ySmPW1A2Fc76TKnI8tmOOFZVE50sLVdM=;
+        b=JhzRHFoDj2LqbxnRfLuZwbt1feoY2LGVqj2lTtih/CNUCJNHwyoGH1Lfh0O66bW9dE
+         gtGQvNdWwcmUuNJFMDj6R83IDnDilu2m0ckfzZVZtcSo27leNjqa48Yk1gfi6Am/NNll
+         BOTJkIxrVIBtNgpdugpKZY/+w5PZ4WIoWgA40oxnCokwbGerQKWAYrvGBGrfp8IutdaG
+         DmL6TbYSXMxuBBZ5RhPGQEquUq8+WC/eRFaofapnpzpce9+WFrHWNFt6/G5cOTVsIrL2
+         yJQ1wSLJLdepirM3id6H4nsrYv9Vjxm+Q/fFeZGoIBzgcwQPlAkm+1IW1/ZiUeA131d/
+         7dag==
+X-Gm-Message-State: AOAM531xhGCAGnMn3Ks6rx2xiSKgFufHvDbTK+biXNNhDhmn1mpmRdvU
+        5uAH9zqV/6VWm4DDCETFh3lTT31UXX8szunfCBT1Ow6g
+X-Google-Smtp-Source: ABdhPJyXX1twyRR+678XjVBO0sCwrCTB7XrhMX4vpAv6YoNNYiWfVEFuuFnQBU0etSfQM/CuIRPWWJrM0781bf4k6NE=
+X-Received: by 2002:a6b:ea08:: with SMTP id m8mr15173748ioc.172.1643764322472;
+ Tue, 01 Feb 2022 17:12:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bb7d2be-9fa0-1b0d-17d1-adb7d58d5389@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20220202003033.704951-1-keescook@chromium.org> <20220202003033.704951-2-keescook@chromium.org>
+In-Reply-To: <20220202003033.704951-2-keescook@chromium.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 2 Feb 2022 02:11:51 +0100
+Message-ID: <CANiq72n1d7ouKNi+pbsy7chsg0DfCXxez27qqtS9XE1n3m5=8Q@mail.gmail.com>
+Subject: Re: [PATCH 1/4] Compiler Attributes: Add Clang's __pass_object_size
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        George Burgess IV <gbiv@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:43:54PM -0800, Dave Hansen wrote:
-> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > Protection Keys User (PKU) and Protection Keys Supervisor (PKS) work in
-> > similar fashions and can share common defines.  Specifically PKS and PKU
-> > each have:
-> > 
-> > 	1. A single control register
-> > 	2. The same number of keys
-> > 	3. The same number of bits in the register per key
-> > 	4. Access and Write disable in the same bit locations
-> > 
-> > Given the above, share all the macros that synthesize and manipulate
-> > register values between the two features.  Share these defines by moving
-> > them into a new header, change their names to reflect the common use,
-> > and include the header where needed.
-> 
-> I'd probably include *one* more sentence to prime the reader for the
-> pattern they are about to see.  Perhaps:
-> 
-> 	This mostly takes the form of converting names from the PKU-
-> 	specific "PKRU" to the U/S-agnostic "PKR".
+On Wed, Feb 2, 2022 at 1:30 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> +/*
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size
 
-Fair enough.
+For attributes that are not supported under all compilers, we have the
+"Optional" lines in the comment. From a quick look in Godbolt,
+`__pass_object_size__` and `__overloadable__` are supported for all
+Clang >= 11 but not GCC/ICC. Thus, could you please add to the
+comment:
 
-> 
-> > Also while editing the code remove the use of 'we' from comments being
-> > touched.
-> > 
-> > NOTE the checkpatch errors are ignored for the init_pkru_value to
-> > align the values in the code.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> Either way, this looks fine:
-> 
-> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+    * Optional: not supported by gcc.
+    * Optional: not supported by icc.
+
+to those two patches?
+
+For `__diagnose_as_builtin__`, I only see it on Clang trunk, so I
+assume >= 14, thus could you please add:
+
+    * Optional: only supported since clang >= 14.
+
+?
 
 Thanks!
-Ira
+
+> + * The "type" argument should match the __builtin_object_size(p, type) usage.
+
+This should go above on top of the comment (it is true there is one
+case that does not follow it, but that one has to be cleaned up).
+
+Also, this bit seems to be explained in the Clang documentation (i.e.
+not kernel-specific). Do you think we need it here?
+
+Cheers,
+Miguel

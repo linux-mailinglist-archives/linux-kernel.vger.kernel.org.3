@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A545A4A6F71
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CF04A6F7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242334AbiBBLDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+        id S229549AbiBBLEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiBBLDI (ORCPT
+        with ESMTP id S1343703AbiBBLD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:03:08 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF85C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:03:08 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 76B593F7DF;
-        Wed,  2 Feb 2022 12:03:06 +0100 (CET)
-Date:   Wed, 2 Feb 2022 12:03:05 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-Subject: Re: [PATCH v10 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <20220202110305.gbow3e3stolb67v5@SoMainline.org>
-References: <20211010043912.136640-1-bjorn.andersson@linaro.org>
- <20211010043912.136640-2-bjorn.andersson@linaro.org>
- <YXL0DyyPkS4/wfB7@ripper>
- <20211027211928.tjybwy2lokj6eoun@SoMainline.org>
- <YfSPYkbTXMOUGKkG@yoga>
+        Wed, 2 Feb 2022 06:03:56 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6851FC06173D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:03:56 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id t9so28291118lji.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:03:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=100iRySg13jRbyYYPEv3/nn8V1TwHUUo9Gya4DuFw3Y=;
+        b=OW2OZc67gckPCB6/EQ8p6tgVM02YOZg/lTlZsdTRvpaIgrmNps/d8ZUlnZ/Qic6fHh
+         WIaFU2hVMNAK7ucpbrt2+sJwwGN8mtQScHNLrJIxvYDaWAy91BYIAvnSF1V53/uzknT3
+         2wq7kl0Zae3n1/yCcLyHLGQcjaZwV+1qDQfWUjRIUV9GtYWBEOtkuKjtimy2/8dalScz
+         McOtuy+0euhNw8DqvyTPJrLp/OzMuaQF3ALyOXUCxL8WHAeb1OYleo+u8aWJG4y5NiVo
+         eEpRj8zvxgcWcByAEuOdi1nmKSQmk9gvFRq+rOEVUH86Ctge7zUEuqLnSdOgyTjfzMAi
+         DlMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=100iRySg13jRbyYYPEv3/nn8V1TwHUUo9Gya4DuFw3Y=;
+        b=HJzSc2RvLW7CLPi5d8R4c4v98s2Gdjw69CSD8NSaJcDFXNG6l+tDs4LJxlH88J5Lg6
+         h3z1fiGk2EKcll46muD+zsMmM7OMzvsUHdyQq5fColhcsZV2jD84m8fz2K6O8Zu4YbYJ
+         LpySANOCUdA7o87vbfA9+JUwq70tXrEGdItpUZobsMBS3ah4L/0SIemo1jckaph6/Fqu
+         JqEBBRl/A037cwBTiph+m/UOB24iNwO5eH0I0QSa5g3oeFZrDjYsqldEvzooHh/nuBKT
+         QpFoD+6buyhOh2JBX5uSOlapWPqVVnCufnbb0LUj0h8tzJX10Jeb7foWooM4yLRC/3FP
+         nEXw==
+X-Gm-Message-State: AOAM531lRhKcsvIGLhMRgdK8Cn/Z98RtmQwZUOcD1MuRwpZofUmT7hNA
+        8lzGiS+9k/8fnLVsPARgZFc=
+X-Google-Smtp-Source: ABdhPJwedQ4oNRP3Zi0OF/J7s0rXaRiHl7TLBC5htK0I4kBF6mFjCrF0jKW1G9qjYdimAlpvWpx5aA==
+X-Received: by 2002:a2e:b16e:: with SMTP id a14mr18947294ljm.35.1643799834775;
+        Wed, 02 Feb 2022 03:03:54 -0800 (PST)
+Received: from localhost.localdomain (staticline-31-183-164-222.toya.net.pl. [31.183.164.222])
+        by smtp.gmail.com with ESMTPSA id r14sm4503937lfr.129.2022.02.02.03.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 03:03:54 -0800 (PST)
+From:   Karolina Drobnik <karolinadrobnik@gmail.com>
+To:     linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, rppt@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Karolina Drobnik <karolinadrobnik@gmail.com>
+Subject: [PATCH v2 06/16] tools/include: Add cache.h stub
+Date:   Wed,  2 Feb 2022 12:03:05 +0100
+Message-Id: <5e02865094aaf56dd30772722799e53f4130ebc8.1643796665.git.karolinadrobnik@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1643796665.git.karolinadrobnik@gmail.com>
+References: <cover.1643796665.git.karolinadrobnik@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfSPYkbTXMOUGKkG@yoga>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-28 18:50:42, Bjorn Andersson wrote:
-> On Wed 27 Oct 16:19 CDT 2021, Marijn Suijten wrote:
-> 
-> > Hi Bjorn,
-> > 
-> > On 2021-10-22 10:25:35, Bjorn Andersson wrote:
-> > > On Sat 09 Oct 21:39 PDT 2021, Bjorn Andersson wrote:
-> > > 
-> > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > > > with their output being routed to various other components, such as
-> > > > current sinks or GPIOs.
-> > > > 
-> > > > Each LPG instance can operate on fixed parameters or based on a shared
-> > > > lookup-table, altering the duty cycle over time. This provides the means
-> > > > for hardware assisted transitions of LED brightness.
-> > > > 
-> > > > A typical use case for the fixed parameter mode is to drive a PWM
-> > > > backlight control signal, the driver therefor allows each LPG instance
-> > > > to be exposed to the kernel either through the LED framework or the PWM
-> > > > framework.
-> > > > 
-> > > > A typical use case for the LED configuration is to drive RGB LEDs in
-> > > > smartphones etc, for which the driver support multiple channels to be
-> > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > > > generators will be synchronized, to allow for multi-color patterns.
-> > > > 
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > ---
-> > > 
-> > > Any feedback on this?
-> > 
-> > I asked in #linux-msm whether anything is wrong with the patterns,
-> > since my Sony Discovery (sdm630 with a pm660l) blinks way quicker on a
-> > pattern that's supposed to stay on for 1s and off for 1s:
-> > 
-> >     echo "0 1000 255 1000" > /sys/class/leds/rgb\:status/hw_pattern
-> > 
-> > It however seems to be broken in the same way on an older version now
-> > (this might be v9 or v8) which I don't remember to be the case.  Can you
-> > double-check if this is all working fine on your side?  If so, I'll have
-> > to find some time to debug it on my end.
-> > 
-> 
-> I had missed the fact that LPG_RAMP_DURATION_REG is two registers for
-> msg and lsb, for a total of 9 bits of duration. So what you saw was
-> probably ticking at 232ms.
-> 
-> Note though that the pattern uses the last time as "high pause", so I
-> expect that you should have seen 232 ms of off, followed by 464ms of
-> light.
+Add a dummy version of the cache header.
 
-Visual inspection seems to confirm those numbers indeed!
+Signed-off-by: Karolina Drobnik <karolinadrobnik@gmail.com>
+---
+ tools/include/linux/cache.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 tools/include/linux/cache.h
 
-> I've fixed this for v11, both rejecting invalid input and writing out
-> all 9 bits.
+diff --git a/tools/include/linux/cache.h b/tools/include/linux/cache.h
+new file mode 100644
+index 000000000000..9e9d585f0b9d
+--- /dev/null
++++ b/tools/include/linux/cache.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _TOOLS_LINUX_CACHE_H
++#define _TOOLS_LINUX_CACHE_H
++
++#define L1_CACHE_SHIFT		5
++#define L1_CACHE_BYTES		(1 << L1_CACHE_SHIFT)
++
++#define SMP_CACHE_BYTES L1_CACHE_BYTES
++
++#endif
+-- 
+2.30.2
 
-Doesn't that 512ms limit, together with using only the last value for
-hi_pause (and not the first value for lo_pause) force users to write
-patterns in a certain way which is not easily conveyed to the caller
-except by reading the comment in the driver?  I'd guess lo_pause can be
-used even if not in ping-pong mode, it should just hold at the first
-value for the given duration?
-
-(That said hw_pattern is anyway already riddled with device-specific
-information, such as only having one `delta_t` which functions as the
-step size for every entry, and with the change above would need to be
-sourced from another step that's not the first.)
-
-Bit of a stretch, but perhaps worth noting anyway: should this be
-written in documentation somewhere, together with pattern examples and
-their desired outcome to function as testcases too?
-
-- Marijn

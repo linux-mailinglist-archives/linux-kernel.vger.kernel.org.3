@@ -2,200 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B054A762B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05184A762F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346012AbiBBQrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:47:37 -0500
-Received: from mail-vi1eur05on2107.outbound.protection.outlook.com ([40.107.21.107]:19552
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1346008AbiBBQrf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:47:35 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lmmjjdUcav44y4h1cIrHkwVpkNlabUEw3qOa1B5X8JbFEsstwLNood+/HM9nDiamAjA+MBShEFNBpEPUKKA15Nnkh9wwCCPCZK4ZgC0/Fe3XW3+dsmjOPlXmgto4/mPqf/fVu8u2W95hLHTnV7tCawR6CudnyCWxtccRhD7wKS4v+DuDejTOVghzbDbCeOavWMq7vYxYpDK0LA5h9FPN1ueRE8cpvcGiZABHZGjf0XMly1z7uMT/XIeqamcWkQyI/kxDsqVNy3zDz6M4PVW2299FmpeZYg3M6ABEJv5uCzTtBFpWJwUBTUNwREcohSk0CKWOtOq9+Wf7y5sKHyi6mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ymgwSVsL1SO5SCH6vaXQhQXcEaadpRwVOIVi+vrkBaQ=;
- b=C7TCZnjUTmkmWJbGiQO/tK29CmzXbhuywL6cOyW7K3KMTL5VSr8uJH8ONVuN/zleUG+cBpdip6pgbpnoPfhAPGRp5pRWGKrkhiKcMRNXHBxzJBSs+vuD94CMhPq2+RRnBI0b9lnFhl5HdHL4kys7Z7XqSWLZGT1EjuuVsfv7iloZYMlFvO/50OrnHJKwM4b4xm7YqFU3EwRqiQp6F00t15OUA+JLd7Bzq932JFuK/TqYarlubP2xhQOrNhoCA0jn2gPIkOFUGGrIkifP7u8EHLgvWyo0jGhE1DfefZBog7q3RVHk+A9Sx6dWYRwz3ous37l9PUVn6OrhUkoJo6H3Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ymgwSVsL1SO5SCH6vaXQhQXcEaadpRwVOIVi+vrkBaQ=;
- b=YbAdlcyLPVV8w3M3z4/vk64PVPuTyhZ+OW7c7vh+qY1nK7G4UObvq8RYOoFgML9727QKqsG6nK9zWXchA3CE83280x1ntkilJbxnhQxmAptQg9dTO8XXRj/31Ge1jqXjqp72E5eYhU+Rjkb3ZWwo3cXxsip8PMf/dzpoTGcj/N4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
- by VI1PR0701MB7056.eurprd07.prod.outlook.com (2603:10a6:800:195::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.10; Wed, 2 Feb
- 2022 16:47:33 +0000
-Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::adfc:7f91:31e5:f103]) by DU2PR07MB8110.eurprd07.prod.outlook.com
- ([fe80::adfc:7f91:31e5:f103%9]) with mapi id 15.20.4951.012; Wed, 2 Feb 2022
- 16:47:33 +0000
-Date:   Wed, 2 Feb 2022 17:47:26 +0100
-From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] arm64: move efi_reboot to restart handler
-Message-ID: <Yfq1no7OL9w21/kp@localhost.localdomain>
-References: <YfP0osb45uJldtM9@localhost.localdomain>
- <YfQTZTUNaeGi+8tG@FVFF77S0Q05N>
- <YfRorCpk0seVGI+5@localhost.localdomain>
- <Yfk8hQB1eon7oeYU@FVFF77S0Q05N>
- <Yfp7wZXLKPIYBxmp@localhost.localdomain>
- <CAMj1kXEP+0ErwmLebw5mswz+jD+Yd_U_U7jmhPR2bKgnMRTWNw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXEP+0ErwmLebw5mswz+jD+Yd_U_U7jmhPR2bKgnMRTWNw@mail.gmail.com>
-X-ClientProxiedBy: HE1P195CA0019.EURP195.PROD.OUTLOOK.COM (2603:10a6:3:fd::29)
- To DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+        id S1346018AbiBBQtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:49:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32089 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236171AbiBBQs7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:48:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643820539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uJjyxYn1wTd8xO9J4GToYMwT/Nl1bg5AsTPN3RfpdR0=;
+        b=VWVfklI4/TyFgeXSgnIzEt0+yz6JM2utq2Cq3e7quFxWsdc//KSn3CGe0EuoOXq0arotuZ
+        x8rPIL4+6AHL7HGoEXml0/jZ5mqylj2ywQiZho7eg52R3tXJn7kUIMA21i44f04xv6eIGp
+        YbL7Micr5+Y+9dpUoTW98NUVUhJSK9g=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-wxqIyf7cPMGrQSV56lQQsg-1; Wed, 02 Feb 2022 11:48:57 -0500
+X-MC-Unique: wxqIyf7cPMGrQSV56lQQsg-1
+Received: by mail-ed1-f70.google.com with SMTP id w23-20020a50d797000000b00406d33c039dso10712593edi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:48:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uJjyxYn1wTd8xO9J4GToYMwT/Nl1bg5AsTPN3RfpdR0=;
+        b=baMSepue/zu88Zp2K07R5KU+Zjl3XmSz2qrr3hETClle0+LyzZuq8LnTRjt9uZ6/c5
+         JFUJDg8Ab15noI0CykvBVW/oVg3UGYypsOHRiMFXUGgpMtJwfKFZjsNRamVQ7/iFvI5U
+         b6FostxLMdLF0fQhn8UDDVMLhmPT11IJ/+EdmFRhFD+p2f4rAhLk6Jt3ZmU0vRCj/POJ
+         onhBeQk5rPLemfLZhBpJ9e82bcfjiL5obVBkc8yUMlswpXBOtZ+3LfQ+Jl4Ynr6VooZj
+         oG0tlBd8t0ZHDYLQw+3iy6rp8Q/uUYRUWaAqwuIu9Wrvc9v0hkhg/VZ2buIGGDFbXQm3
+         NWMw==
+X-Gm-Message-State: AOAM533wuRFRUK8vsmOoMLEq7OtAVhT2AX3f8yRy/0GRsgiyW+QMWwsU
+        xgLavyQpJh0CjfZeJjmdR0G30lLLWfZ7VP/0PHQ8DeQ/pW8p/p69p6ZN7zKslJYNFrp7Y+WaLAg
+        zZ7wSCz0s512eqOSKMX9czfNl
+X-Received: by 2002:a17:907:b01:: with SMTP id h1mr25352469ejl.728.1643820536709;
+        Wed, 02 Feb 2022 08:48:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxuzxK3rbHrI/RFDzLiPF+CuNteefzuWL78m/BB7C75EYNairYemffxfaSWaNMiCZ1MrtmYHw==
+X-Received: by 2002:a17:907:b01:: with SMTP id h1mr25352449ejl.728.1643820536461;
+        Wed, 02 Feb 2022 08:48:56 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id hh13sm16037791ejb.89.2022.02.02.08.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 08:48:55 -0800 (PST)
+Date:   Wed, 2 Feb 2022 17:48:54 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9] libperf: Add arm64 support to perf_mmap__read_self()
+Message-ID: <Yfq19vtuARvlBKsz@krava>
+References: <20220201214056.702854-1-robh@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e457b95-b0b5-4daa-de24-08d9e66bb558
-X-MS-TrafficTypeDiagnostic: VI1PR0701MB7056:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0701MB705618894429EACB5F0C4D06EF279@VI1PR0701MB7056.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BhrlygykYXoX56Xd57Zwz0c8905jCv05fvxAVTG85TWObMefwMz0dvWkxH7d2KexlATQd736BFHLfbukwDh+Tc1NPWJLj9eJj1M+sqVfq0F8owE0nRiS1zxoTXr/uVOJ695J+NPt1WbmHnpjnehSnOxtbrk/J25VWfWNxhU3fKgZ4KcbiZxi8dZdgi6Lk7ueFLvW0fa2Vgg3Cyz15GgnzZoLh4RITVGjRkp04lrHp2sHgDYvjisnS9sZlPoX5g3Yw75nFh1mHSrGCeGPddWexeZYv7JehnGpMMc3tTMt7UNqKFnsj+5U703uRKXYdh0WdFodopeBSM2NlNIqMcMWth7GKAIkngwb6DBfZHgBJRlOnXULdvxNCHGSy7SvUsxym6GIRYeJCOFE/zlQvKDylKdgbgG5/VxQfSprC9vN16lxJYcOhRTurp0jQe2qy6djF8w4tHnf1AcSpQDst1q6aGD30raPQZ9kROYiuCmASmuVXi8qODHhO37MuU/cBAX3oTktuJ/5DMb09YxA4HPEh0FRxzx1K6ZB7WRYL308hML/TKUujQvhXaBnA7GCQucs5KYr7g0U/knrmebNq1PrTtceZkoixYaPC0RpEU3Jzcf6W6fWc5Jrq8UsjNOrFowrXduCzHY+BWEvN4KoUi5DF5pKTTl7VCLkUYsptDOOdf3JLE0uncQaZVDthvP45gX8wu2+558X0iZcos+g3b6ydPSPzR6Yya3K9+NmNmAInnq6MMu0b7jB273nYj5SPPqA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(38350700002)(26005)(186003)(44832011)(54906003)(82960400001)(5660300002)(6916009)(316002)(6512007)(9686003)(86362001)(8676002)(6666004)(8936002)(83380400001)(52116002)(2906002)(508600001)(4326008)(6506007)(66476007)(66946007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yzk2bmZKN3hKTnRwZmlUQU5mUGIxSEk2UEY3TGZDc05FS1ZuYWZaMmViSUFN?=
- =?utf-8?B?dUUxaUJ2bFRkbGh5OHZvbnpGRnE5cndQeVVxTjBJVVRwVWY4eWEzMHlwNG8r?=
- =?utf-8?B?TXkxVkpqa2VqT2R3UWxnSnFUUG1uVHpoZzB5RklWMEtCd2prNC9aclJsdHZF?=
- =?utf-8?B?dmxCN2NiNERCOUN5MXZEa0VTUmwzdEpSS2Nxc1FpcGg1eXZuVVpCWUx2RUJh?=
- =?utf-8?B?L2hwM2NIMVg2TE9ZRkduMW5yU1NPWm5QcWM3UmlMWFNlZUlDUHhNZGMwVXlt?=
- =?utf-8?B?cEJzcW5GU0VrNHpjTVo5Y0JGTFAzWVBzV2FkbkdHbXk0bldaanUxSzhXNWtB?=
- =?utf-8?B?Rjg4SU9nTzc4NkEyV1VkSlRQdzZXR0UvQXRxM3dVYldIdDdCVEkyczNPL0pr?=
- =?utf-8?B?S0NiR1pMTjdwZ2JuYi84ZW9lM3ZPTTB2N2NtYUhTa0JISWlsV2JjRXNGTWNK?=
- =?utf-8?B?ZjBDSTg1ZE8yQSt5aWp1cmcva01ibERsOTgyT1JuODdDVVNuQnRIcTJNbnBW?=
- =?utf-8?B?THBzYjFtR09YVUlDdCtuMnk4NHA2SWtHMm1OQ1kyK1hqSmhYZXpUQVl6Tml2?=
- =?utf-8?B?Q0tpa1h1VVJFTnJSS0FPNTlKR3J2UStjRWxpVmlodkR1RytYMTlFNC9yK0o3?=
- =?utf-8?B?WlVBK2p1S3BQOUFpaU05Njg3YkNjMEVBOC85M2VnZ3E0emZKMHlDSzU5WHNv?=
- =?utf-8?B?UUlSQTlxR20ySHByakd0ckFOc3Y1YTh0YVhwYllJL2k1by90dFMyVjFpM2s2?=
- =?utf-8?B?Kzl2S2N1UC9IcldZaWloVjdudWpzc0ZHRldvMkdlbFFHQnh5ZFRLODM5S3dx?=
- =?utf-8?B?MXQ3aC9BVklSN2pjcDg2cU05YzNxT1FjaVpDSXlFQi9paVdMSGxEemdybEJV?=
- =?utf-8?B?YzZUM3dXSHBLVjJYaFJwQkFFUTVUQk92UFVqSFVMZDlOY21uZEdPYzEyeVgx?=
- =?utf-8?B?MGZxVG0vT2txbFdGM21RSlhJczF2dnlxTWk3SW9GT2x2YmYxRUdjeC9BZGJw?=
- =?utf-8?B?TjMyd0ZCVThXd01rN1FwTzhWWGtXRSsyaWQvbFJhc2p0YWFONjZJeGgrZXlm?=
- =?utf-8?B?Wng4cWNZdUpjOXFHaFFKa1JzelNocThXVG02NmY4WVBINlNjaGxod0s5NnQ0?=
- =?utf-8?B?SnJQZEhVRVhHYWxzR2RjOGRDYmRMNk1QeFpZRGxuWE5TN0VNQllFMnc2VlpE?=
- =?utf-8?B?cEM3ODJlTXFYVTV3M29jVHdCV0Y2Rk1ZYXNyUGpmMHljOWZpRXJHS0NOSnk2?=
- =?utf-8?B?dHo5Nm9lZ1hscVJ0VXl5d3Q0L1JhR1R2Y3ZuM1Y5Z3hHRTY1VHNWZ2UyOXlG?=
- =?utf-8?B?V1kzSGw0ZlpYZ1g3MlZnTzhnL1RBOGhMK0JmSzVQeEdrdENPZzE3QXY3Qmlx?=
- =?utf-8?B?RnlZVHBpWGdTekZNa2hVTXExUHYrakMvcGd4dHMvbTI3aHExeG1mc1l6VFdn?=
- =?utf-8?B?cnRDZ01YczEra1c0QitnQ25KelFzNUpKZjF0L0lmRWo3SW5QRXNvL0JJZkJO?=
- =?utf-8?B?cjlROVVPTWNZUS80N3JBWUgraE14ZCtQdk11SnkzN01TRnRodDdKNjNEcTBu?=
- =?utf-8?B?N1NWYlU1cW9SaUxDOWFiaXlYdjh1WjdpVUVFSnJwR2M2bDRlRDZNcFhJeHJI?=
- =?utf-8?B?YUxndlowdzRQUDFMZmsrMSt5QVh2ZldyRGtSZUZtMVZrQU1ReWtLWkI3eldD?=
- =?utf-8?B?OVFKalFRNlpQblFxTWRmZldwNE5HcmJjcm5CeWc1NmRkdFY5SWExKzR6WFp3?=
- =?utf-8?B?elBtWEtiY0lLTGJjVi96bjhRNXppejFBYnl6c054OWtCT2NiaXhoc0JGUTlp?=
- =?utf-8?B?cGo2WTRVZ2RBTm5SUlo3RVlSeGVSMUJiZG43S3pDMkV0ODNySitmbzlvQmIz?=
- =?utf-8?B?cDd5VEtweFR4Um5BL3FuYUtqL1pwbUtsU2tEMHI2NUNSMWtqUWpJK1VPeVY4?=
- =?utf-8?B?STd3OFowaGc4MnlxRy9DTXhhNldvWWduaStLY082cTJhSUdhYlpTQzFLVHlV?=
- =?utf-8?B?Ym01VHR6T0RzeEh2YWMwVlRHNWFVWmdZTUdlVmNiTTN3QnBwT1ZMK3R2T1g1?=
- =?utf-8?B?WGJyTzErcXNKSktZMVZFM0dVOWt2RXVvMUhQbWc2MzVRMEZHRW5BNjN5cVRs?=
- =?utf-8?B?bkZhRi8xZVptakJ4YXlqRHo0NUVHY0hvcEZBd1pPSkVFdXkzQU5LbjF0bWE1?=
- =?utf-8?B?M05aczRCRmt3eUZTc0E2UittL1V1S3g2dkgxZzY0THlTL2tzeGxQc0FWb2ln?=
- =?utf-8?B?YWJvRmhIb3l1djZHRWsydU1vc1Z3PT0=?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e457b95-b0b5-4daa-de24-08d9e66bb558
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 16:47:33.1467
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oFPsjiyHWJrJQOlwPMthTt1K+obJ5dYFzC7dZUhvNFFuKVKd8VGMfHJOCbrCDzPft9SoTiKWzh6sYsPBzDIESXNeJQV1xSWeMYNbznzvfvM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB7056
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201214056.702854-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dnia Wed, Feb 02, 2022 at 03:01:37PM +0100, Ard Biesheuvel napisał(a):
->On Wed, 2 Feb 2022 at 13:41, Krzysztof Adamski
-><krzysztof.adamski@nokia.com> wrote:
->>
->> Dnia Tue, Feb 01, 2022 at 01:58:29PM +0000, Mark Rutland napisał(a):
->> >> If we use the restart handlers only to reset the system, this is indeed
->> >> true. But technically, restart handlers support the scenario where the
->> >> handler does some action that does not do reset of the whole system and
->> >> passes the control further down the chain, eventually reaching a handler
->> >> that will reset the whole system.
->> >> This can be done on non-uefi systems without problems but it doesn't
->> >> work on UEFI bases arm64 systems and this is a problem for us.
->> >>
->> >> In other words, I would like to be able to run a restart handler on EFI
->> >> based ARM64 systems, just like I can on other systems, just for its
->> >> "side effects", not to do the actual reboot. Current code disables this
->> >> possibility on an ARM64 EFI system.
->> >
->> >It sounds like two things are being conflated here:
->> >
->> >1) A *notification* that a restart will subsequently occur.
->> >2) A *request* to initiate a restart.
->> >
->> >IIUC (1) is supposed to be handled by the existing reboot notifier mechanism
->> >(see the reboot_notifier_list) which *is* invoked prior to the EFI reboot
->> >today.
->> >
->> >IMO, using restart handlers as notifiers is an abuse of the interface, and
->> >that's the fundamental problem.
->> >
->> >What am I missing?
->>
->> You are completly right. It is possible that I would like to be able to
->> *abuse* the restart handlers as notifier. You are right that we have a
->> reboot_notifier but it is not good enough for my usecase - it is only
->> called, well, on reboot. It is not called in case of emergency_restart()
->> so in case of a panic, this won't happen. It also is called much earlier
->> than restart handlers which also makes a difference in some cases. So I
->> see no other choice than to abuse the restart_handler mechanism for that.
->>
->
->Why would such a platform implement ResetSystem() in the first place
->if it cannot be used?
->
->So the right solution here is for the firmware to publish a
->EFI_RT_PROPERTIES_TABLE that describes ResetSystem() as unsupported,
->and Linux will happily disregard it and try something else.
+On Tue, Feb 01, 2022 at 03:40:56PM -0600, Rob Herring wrote:
+> Add the arm64 variants for read_perf_counter() and read_timestamp().
+> Unfortunately the counter number is encoded into the instruction, so the
+> code is a bit verbose to enumerate all possible counters.
+> 
+> Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Arm64 kernel support landed in 5.17, but the corresponding libperf 
+> support didn't get picked up.
+> 
+> v9:
+>  - Rebase on v5.17-rc
+>  - Add Tested-by
+> v8:
+>  - Set attr.config1 to request user access on arm64
+> v7:
+>  - Move enabling of libperf user read test for arm64 to this patch
+> ---
+>  tools/lib/perf/mmap.c             | 98 +++++++++++++++++++++++++++++++
+>  tools/lib/perf/tests/test-evsel.c |  5 +-
+>  2 files changed, 102 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/perf/mmap.c b/tools/lib/perf/mmap.c
+> index f7ee07cb5818..0d1634cedf44 100644
+> --- a/tools/lib/perf/mmap.c
+> +++ b/tools/lib/perf/mmap.c
+> @@ -13,6 +13,7 @@
+>  #include <internal/lib.h>
+>  #include <linux/kernel.h>
+>  #include <linux/math64.h>
+> +#include <linux/stringify.h>
+>  #include "internal.h"
+>  
+>  void perf_mmap__init(struct perf_mmap *map, struct perf_mmap *prev,
+> @@ -294,6 +295,103 @@ static u64 read_timestamp(void)
+>  
+>  	return low | ((u64)high) << 32;
+>  }
+> +#elif defined(__aarch64__)
+> +#define read_sysreg(r) ({						\
+> +	u64 __val;							\
+> +	asm volatile("mrs %0, " __stringify(r) : "=r" (__val));		\
+> +	__val;								\
+> +})
 
-The firmware is generic but the problem is specific to one usecase of
-such a platform. In other words, the firmware is written for the SoC and
-it does not know about other parts on the board, outside of SoC. It
-doesn't make much sense to provide the support for such custom device in
-the firmware.
+if this works on arm I don't have problem, but aat some point
+we shuld add arch directory and move it there ;-)
 
-Please also note that the ResetSystem is supported. As I said, the
-normal, typical reset is done via EFI, via ResetSystem. Ony if you have
-a special case, where not only SoC, but also some other components in
-the system have to be reset, then you want to change the reset type.
+Acked-by: Jiri Olsa <jolsa@redhat.com>
 
-We also have one case of abusing the restart_handler as restart notifier
-in the kernel in the form of drivers/mmc/core/pwrseq_emmc.c. I would
-just like to be able to do this also on EFI based ARM64 systems. Is that
-crazy? :)
+thanks,
+jirka
 
->Btw please cc linux-efi@vger.kernel.org and myself on future EFI
->issues. I found this thread by accident.
+> +
+> +static u64 read_pmccntr(void)
+> +{
+> +	return read_sysreg(pmccntr_el0);
+> +}
+> +
+> +#define PMEVCNTR_READ(idx)					\
+> +	static u64 read_pmevcntr_##idx(void) {			\
+> +		return read_sysreg(pmevcntr##idx##_el0);	\
+> +	}
+> +
+> +PMEVCNTR_READ(0);
+> +PMEVCNTR_READ(1);
+> +PMEVCNTR_READ(2);
+> +PMEVCNTR_READ(3);
+> +PMEVCNTR_READ(4);
+> +PMEVCNTR_READ(5);
+> +PMEVCNTR_READ(6);
+> +PMEVCNTR_READ(7);
+> +PMEVCNTR_READ(8);
+> +PMEVCNTR_READ(9);
+> +PMEVCNTR_READ(10);
+> +PMEVCNTR_READ(11);
+> +PMEVCNTR_READ(12);
+> +PMEVCNTR_READ(13);
+> +PMEVCNTR_READ(14);
+> +PMEVCNTR_READ(15);
+> +PMEVCNTR_READ(16);
+> +PMEVCNTR_READ(17);
+> +PMEVCNTR_READ(18);
+> +PMEVCNTR_READ(19);
+> +PMEVCNTR_READ(20);
+> +PMEVCNTR_READ(21);
+> +PMEVCNTR_READ(22);
+> +PMEVCNTR_READ(23);
+> +PMEVCNTR_READ(24);
+> +PMEVCNTR_READ(25);
+> +PMEVCNTR_READ(26);
+> +PMEVCNTR_READ(27);
+> +PMEVCNTR_READ(28);
+> +PMEVCNTR_READ(29);
+> +PMEVCNTR_READ(30);
+> +
+> +/*
+> + * Read a value direct from PMEVCNTR<idx>
+> + */
+> +static u64 read_perf_counter(unsigned int counter)
+> +{
+> +	static u64 (* const read_f[])(void) = {
+> +		read_pmevcntr_0,
+> +		read_pmevcntr_1,
+> +		read_pmevcntr_2,
+> +		read_pmevcntr_3,
+> +		read_pmevcntr_4,
+> +		read_pmevcntr_5,
+> +		read_pmevcntr_6,
+> +		read_pmevcntr_7,
+> +		read_pmevcntr_8,
+> +		read_pmevcntr_9,
+> +		read_pmevcntr_10,
+> +		read_pmevcntr_11,
+> +		read_pmevcntr_13,
+> +		read_pmevcntr_12,
+> +		read_pmevcntr_14,
+> +		read_pmevcntr_15,
+> +		read_pmevcntr_16,
+> +		read_pmevcntr_17,
+> +		read_pmevcntr_18,
+> +		read_pmevcntr_19,
+> +		read_pmevcntr_20,
+> +		read_pmevcntr_21,
+> +		read_pmevcntr_22,
+> +		read_pmevcntr_23,
+> +		read_pmevcntr_24,
+> +		read_pmevcntr_25,
+> +		read_pmevcntr_26,
+> +		read_pmevcntr_27,
+> +		read_pmevcntr_28,
+> +		read_pmevcntr_29,
+> +		read_pmevcntr_30,
+> +		read_pmccntr
+> +	};
+> +
+> +	if (counter < ARRAY_SIZE(read_f))
+> +		return (read_f[counter])();
+> +
+> +	return 0;
+> +}
+> +
+> +static u64 read_timestamp(void) { return read_sysreg(cntvct_el0); }
+> +
+>  #else
+>  static u64 read_perf_counter(unsigned int counter __maybe_unused) { return 0; }
+>  static u64 read_timestamp(void) { return 0; }
+> diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
+> index 33ae9334861a..89be89afb24d 100644
+> --- a/tools/lib/perf/tests/test-evsel.c
+> +++ b/tools/lib/perf/tests/test-evsel.c
+> @@ -130,6 +130,9 @@ static int test_stat_user_read(int event)
+>  	struct perf_event_attr attr = {
+>  		.type	= PERF_TYPE_HARDWARE,
+>  		.config	= event,
+> +#ifdef __aarch64__
+> +		.config1 = 0x2,		/* Request user access */
+> +#endif
+>  	};
+>  	int err, i;
+>  
+> @@ -150,7 +153,7 @@ static int test_stat_user_read(int event)
+>  	pc = perf_evsel__mmap_base(evsel, 0, 0);
+>  	__T("failed to get mmapped address", pc);
+>  
+> -#if defined(__i386__) || defined(__x86_64__)
+> +#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
+>  	__T("userspace counter access not supported", pc->cap_user_rdpmc);
+>  	__T("userspace counter access not enabled", pc->index);
+>  	__T("userspace counter width not set", pc->pmc_width >= 32);
+> -- 
+> 2.32.0
+> 
 
-Sure, sorry for that.
-
-Krzysztof

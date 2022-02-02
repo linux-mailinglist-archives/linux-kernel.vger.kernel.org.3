@@ -1,135 +1,153 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7854A6B82
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 06:32:25 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 998784A6B8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 06:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244662AbiBBFcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 00:32:24 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:20750 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244486AbiBBFcW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 00:32:22 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643779942; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=+8A3HqRShnpoP+gZhCSNyFS6qiL0RZHDQAAX0f9uISA=; b=aa3VkdSyXWP9+VYAcX7nq8jYTDoXKoxYsUdDkE+Os9UByA5cP4jbH+fHlKOz8ItGaXHZMS2h
- pdNbDyyJuiSeHBZup1YrjCUOvRYy029gewfiitml/fGusQSWjzqWGNyNUJpk2OC1hZx9w6mh
- Wz+GLa6dl6JQQFyLbH03IVuGrE8=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 61fa1766e46e09ccb695233e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Feb 2022 05:32:22
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8B173C4338F; Wed,  2 Feb 2022 05:32:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E19E4C4338F;
-        Wed,  2 Feb 2022 05:32:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org E19E4C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v3] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio clock controllers
-Date:   Wed,  2 Feb 2022 11:02:07 +0530
-Message-Id: <20220202053207.14256-1-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.17.1
+        id S238088AbiBBFjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 00:39:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:35692 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232452AbiBBFjl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 00:39:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A584AED1;
+        Tue,  1 Feb 2022 21:39:40 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.43.221])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 090FA3F718;
+        Tue,  1 Feb 2022 21:39:36 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: Merge pte_mkhuge() call into arch_make_huge_pte()
+Date:   Wed,  2 Feb 2022 11:08:06 +0530
+Message-Id: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the low pass audio clock controller device nodes.
+Each call into pte_mkhuge() is invariably followed by arch_make_huge_pte().
+Instead arch_make_huge_pte() can accommodate pte_mkhuge() at the beginning.
+This updates generic fallback stub for arch_make_huge_pte() and available
+platforms definitions. This makes huge pte creation much cleaner and easier
+to follow.
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- * Fix unwanted extra spaces in reg property.
- * Fix lpass_aon node clock phandle <&lpasscc> to <&lpasscore>
+ arch/arm64/mm/hugetlbpage.c                      | 1 +
+ arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h | 1 +
+ arch/sparc/mm/hugetlbpage.c                      | 1 +
+ include/linux/hugetlb.h                          | 2 +-
+ mm/hugetlb.c                                     | 3 +--
+ mm/vmalloc.c                                     | 1 -
+ 6 files changed, 5 insertions(+), 4 deletions(-)
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 43 ++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 937c2e0e93eb..0d8a0d9d0f89 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -8,6 +8,8 @@
- #include <dt-bindings/clock/qcom,dispcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gcc-sc7280.h>
- #include <dt-bindings/clock/qcom,gpucc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpassaudiocc-sc7280.h>
-+#include <dt-bindings/clock/qcom,lpasscorecc-sc7280.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/clock/qcom,videocc-sc7280.h>
- #include <dt-bindings/interconnect/qcom,sc7280.h>
-@@ -1744,6 +1746,47 @@
- 			#clock-cells = <1>;
- 		};
-
-+		lpass_audiocc: clock-controller@3300000 {
-+			compatible = "qcom,sc7280-lpassaudiocc";
-+			reg = <0 0x03300000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&lpass_aon LPASS_AON_CC_MAIN_RCG_CLK_SRC>;
-+			clock-names = "bi_tcxo", "lpass_aon_cc_main_rcg_clk_src";
-+			power-domains = <&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_aon: clock-controller@3380000 {
-+			compatible = "qcom,sc7280-lpassaoncc";
-+			reg = <0 0x03380000 0 0x30000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			       <&rpmhcc RPMH_CXO_CLK_A>,
-+			       <&lpasscore LPASS_CORE_CC_CORE_CLK>;
-+			clock-names = "bi_tcxo", "bi_tcxo_ao", "iface";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpasscore: clock-controller@3900000 {
-+			compatible = "qcom,sc7280-lpasscorecc";
-+			reg = <0 0x03900000 0 0x50000>;
-+			clocks =  <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>;
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		lpass_hm: clock-controller@3c00000 {
-+			compatible = "qcom,sc7280-lpasshm";
-+			reg = <0 0x3c00000 0 0x28>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			#clock-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		lpass_ag_noc: interconnect@3c40000 {
- 			reg = <0 0x03c40000 0 0xf080>;
- 			compatible = "qcom,sc7280-lpass-ag-noc";
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index ffb9c229610a..228226c5fa80 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -347,6 +347,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
+ {
+ 	size_t pagesize = 1UL << shift;
+ 
++	entry = pte_mkhuge(entry);
+ 	if (pagesize == CONT_PTE_SIZE) {
+ 		entry = pte_mkcont(entry);
+ 	} else if (pagesize == CONT_PMD_SIZE) {
+diff --git a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+index 64b6c608eca4..e41e095158c7 100644
+--- a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
++++ b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+@@ -70,6 +70,7 @@ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags
+ {
+ 	size_t size = 1UL << shift;
+ 
++	entry = pte_mkhuge(entry);
+ 	if (size == SZ_16K)
+ 		return __pte(pte_val(entry) & ~_PAGE_HUGE);
+ 	else
+diff --git a/arch/sparc/mm/hugetlbpage.c b/arch/sparc/mm/hugetlbpage.c
+index 0f49fada2093..d8e0e3c7038d 100644
+--- a/arch/sparc/mm/hugetlbpage.c
++++ b/arch/sparc/mm/hugetlbpage.c
+@@ -181,6 +181,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
+ {
+ 	pte_t pte;
+ 
++	entry = pte_mkhuge(entry);
+ 	pte = hugepage_shift_to_tte(entry, shift);
+ 
+ #ifdef CONFIG_SPARC64
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index d1897a69c540..52c462390aee 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -754,7 +754,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
+ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
+ 				       vm_flags_t flags)
+ {
+-	return entry;
++	return pte_mkhuge(entry);
+ }
+ #endif
+ 
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 61895cc01d09..5ca253c1b4e4 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4637,7 +4637,6 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
+ 					   vma->vm_page_prot));
+ 	}
+ 	entry = pte_mkyoung(entry);
+-	entry = pte_mkhuge(entry);
+ 	entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
+ 
+ 	return entry;
+@@ -6172,7 +6171,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 			unsigned int shift = huge_page_shift(hstate_vma(vma));
+ 
+ 			old_pte = huge_ptep_modify_prot_start(vma, address, ptep);
+-			pte = pte_mkhuge(huge_pte_modify(old_pte, newprot));
++			pte = huge_pte_modify(old_pte, newprot);
+ 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
+ 			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
+ 			pages++;
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 4165304d3547..d0b14dd73adc 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -118,7 +118,6 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 		if (size != PAGE_SIZE) {
+ 			pte_t entry = pfn_pte(pfn, prot);
+ 
+-			entry = pte_mkhuge(entry);
+ 			entry = arch_make_huge_pte(entry, ilog2(size), 0);
+ 			set_huge_pte_at(&init_mm, addr, pte, entry);
+ 			pfn += PFN_DOWN(size);
+-- 
+2.25.1
 

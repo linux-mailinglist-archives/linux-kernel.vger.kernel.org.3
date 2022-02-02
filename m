@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B494A6E92
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6404A6E86
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343522AbiBBKVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S244402AbiBBKTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:19:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343511AbiBBKVw (ORCPT
+        with ESMTP id S231940AbiBBKTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:21:52 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340BBC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:21:52 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id c24so41292047edy.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:21:52 -0800 (PST)
+        Wed, 2 Feb 2022 05:19:36 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D375C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:19:36 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id m9so38741249oia.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:19:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onRlZdRbDosaab/y/zUC++ZMX5giuurTyAahBOEwPR8=;
-        b=Iw8mIF0IhzTswuIYzJcfjySaSEWJKOjDnQp43YD102crOmlk6ox48nP108mNAPQatc
-         scZPiFCncu7zFYS/sGdDAV32PuAL/d0WMFsnJKi/7/U/vBTfLXpKjIYfJys+khnY66Fn
-         taN0nCKP4/pAqVCuAHztjDePFlX0QmtWfoQ0g=
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=6l/DM9ImdTh5sC0SRd750Jv7/fvf3BxvSlWsRYW3v9E=;
+        b=n6ADlOVcwJanVuG0T/+5Kbdup+OsZIMmLP1/tPJiWcOUE3h7RbfySDMyHh7FeB32y5
+         VijQ88s2IR1yv4sId07MURPl3tyg3mFN9VCw69XLBEUlmJsVzmikLrk9wpUwlZZH0OZQ
+         LgYwRKiOr+yid7GCGmEG+N6zs4pPIQi7vWmPaskYZGt2pO7/ePVxfxlJMZ4IZ89qEmzD
+         nT+Z68t1JgWvkU8SKY+qQKfSzMjkdOXjFwk9lpCWlruASzcpXDCEVCS1YUwsJ5yy0ZdE
+         D+40dEM5pIsKeMVCSZwWAWmrPav2PmaAE7a64FBBc2V5F5C7r1a78lcccvKUZP4MEUtl
+         sQmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=onRlZdRbDosaab/y/zUC++ZMX5giuurTyAahBOEwPR8=;
-        b=gHY0yBS59YulTJFBJxH88JwRI0S+979c8ybTxpvLWb4PaNr0LloU8YS+4YKIUsncMg
-         MpwesN1WXtr6HaJaCn33N74WpxLxKwNnMcKxbdGLW/d2bWubcI3iQelJWhaTgKD4K1Ho
-         toMqMXDYINKktKMrpGYDX2Bl8kxHPxJp0Byo7GIOm13ydCjt9alukGqJjHVgyozP85Il
-         Dg7z6qVs5oy3jfKj7sQnZpZp8xn9W4attllqACPx20CgPSWogszN705SpVkuPGfrkegH
-         iRwsFInZ0KoQqS7RaokjSycuCbj5Uewrzgxa3nVOgQVwmnxsIQNja9N55YXvbc0QbpL6
-         1RJA==
-X-Gm-Message-State: AOAM533Id7jsAdN5dvF78xCnq8is3nfWsHdYZTlADr+5zPsF59DOiuzj
-        hlSnk1M4/79+nV+uiY2TIBUWbpOgUg22n6Ao
-X-Google-Smtp-Source: ABdhPJx+fpprtlVWRfOIbm22oor83E+wyYwA4ey03sqFiVnjRuxsTVTcpecmQmC5c/zbGMz6xVJlmw==
-X-Received: by 2002:a05:6402:2682:: with SMTP id w2mr29049244edd.355.1643797310747;
-        Wed, 02 Feb 2022 02:21:50 -0800 (PST)
-Received: from localhost.localdomain ([80.208.64.233])
-        by smtp.gmail.com with ESMTPSA id v2sm15277559ejb.114.2022.02.02.02.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 02:21:50 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] include: drop pointless __compiler_offsetof indirection
-Date:   Wed,  2 Feb 2022 11:21:47 +0100
-Message-Id: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.31.1
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=6l/DM9ImdTh5sC0SRd750Jv7/fvf3BxvSlWsRYW3v9E=;
+        b=NzobvH+a/ahjivRsZRicW/x9QP1EFAxMTT+SmcF/Vvly5ZYNwXPggB1oxTXJH9rlVS
+         kCEOkSH0j+NB7zNtgWnxgLeoX1T/wuiV3GHgpChxMroSaLqMj5t9rtV4dbfUlR+yl+9o
+         6pTvuQGq76cfhTWfvMezRNv31FkMx2Va3yAFTfG193u0JPxeKxxXyqeWF/y6TCZiFRSL
+         cTNlhWQGpm+IteXi+bwOU6O3NGagpTTl14yyn4DKdmnrK2F8cYp9E4MYME8iO2H6laPt
+         ELXx9rTkl0bWLyvy7dRWYx0m6ZELHbk7+WEmsgl6R/Gbk7c//iiyPhxZrSAxnTY/ERMU
+         bPCw==
+X-Gm-Message-State: AOAM532LLFMtXZef9R/2L8rAFtf+7xq2GBPGCGMSwZqDOu0Ctdx2huzV
+        mxOFwHoMOhfABf4cviQA0sI1E557epn65g==
+X-Google-Smtp-Source: ABdhPJxSkLH6GxdI9JND7Xhd4KKafvqdYxf53Tn+Tb93DmL4IBDf4jnThIILPhIHzxjiY/+Qyzf60A==
+X-Received: by 2002:aca:398a:: with SMTP id g132mr3938732oia.207.1643797175048;
+        Wed, 02 Feb 2022 02:19:35 -0800 (PST)
+Received: from ?IPv6:2607:fb90:c231:2d7a:bcf9:65ff:fe5e:34ca? ([2607:fb90:c231:2d7a:bcf9:65ff:fe5e:34ca])
+        by smtp.gmail.com with ESMTPSA id c21sm11357463oto.55.2022.02.02.02.19.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 02:19:34 -0800 (PST)
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Rob Landley <rob@landley.net>
+Subject: [PATCH] try generic compiler name "cc" before falling back to "gcc".
+Message-ID: <e64d3b56-9f60-4cc6-0110-a4db7543d8e1@landley.net>
+Date:   Wed, 2 Feb 2022 04:22:03 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(1) compiler_types.h is unconditionally included via an -include
-flag (see scripts/Makefile.lib), and it defines __compiler_offsetof
-unconditionally. So testing for definedness of __compiler_offsetof is
-mostly pointless.
+Distros like debian install the generic "cc" name for both gcc and clang, and
+the plumbing already does CC_VERSION_TEXT to include Makefile.clang if necessary.
 
-(2) Every relevant compiler provides __builtin_offsetof (even sparse
-has had that for 14 years), and if for whatever reason one would end
-up picking up the poor man's fallback definition (C file compiler with
-completely custom CFLAGS?), newer clang versions won't treat the
-result as an Integer Constant Expression, so if used in place where
-such is required (static initializer or static_assert), one would
-get errors like
-
-t.c:11:16: error: static_assert expression is not an integral constant expression
-t.c:11:16: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression
-t.c:4:33: note: expanded from macro 'offsetof'
-#define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
-
-So just define offsetof unconditionally and directly in terms of
-__builtin_offsetof.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Rob Landley <rob@landley.net>
 ---
- include/linux/compiler_types.h | 2 --
- include/linux/stddef.h         | 6 +-----
- 2 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 3c1795fdb568..83ee7f7ada5d 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -137,8 +137,6 @@ struct ftrace_likely_data {
-  */
- #define __naked			__attribute__((__naked__)) notrace
- 
--#define __compiler_offsetof(a, b)	__builtin_offsetof(a, b)
--
- /*
-  * Prefer gnu_inline, so that extern inline functions do not emit an
-  * externally visible function. This makes extern inline behave as per gnu89
-diff --git a/include/linux/stddef.h b/include/linux/stddef.h
-index ca507bd5f808..929d67710cc5 100644
---- a/include/linux/stddef.h
-+++ b/include/linux/stddef.h
-@@ -13,11 +13,7 @@ enum {
- };
- 
- #undef offsetof
--#ifdef __compiler_offsetof
--#define offsetof(TYPE, MEMBER)	__compiler_offsetof(TYPE, MEMBER)
--#else
--#define offsetof(TYPE, MEMBER)	((size_t)&((TYPE *)0)->MEMBER)
--#endif
-+#define offsetof(TYPE, MEMBER)	__builtin_offsetof(TYPE, MEMBER)
- 
- /**
-  * sizeof_field() - Report the size of a struct field in bytes
--- 
-2.31.1
+Tested that llvm works with the hexagon toolchain wrapped as:
 
+$ ls
+hexagon-unknown-linux-musl-ar   hexagon-unknown-linux-musl-objcopy
+hexagon-unknown-linux-musl-c++  hexagon-unknown-linux-musl-objdump
+hexagon-unknown-linux-musl-cc   hexagon-unknown-linux-musl-ranlib
+hexagon-unknown-linux-musl-ld   hexagon-unknown-linux-musl-readelf
+hexagon-unknown-linux-musl-nm
+
+ Makefile |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3f07f0f04475..f3f8df88f249 100644
+--- a/Makefile
++++ b/Makefile
+@@ -427,7 +427,7 @@ ifneq ($(LLVM),)
+ HOSTCC	= clang
+ HOSTCXX	= clang++
+ else
+-HOSTCC	= gcc
++HOSTCC	:= $(shell cc --version >/dev/null 2>&1 && echo cc || echo gcc)
+ HOSTCXX	= g++
+ endif
+
+@@ -452,7 +452,8 @@ OBJDUMP		= llvm-objdump
+ READELF		= llvm-readelf
+ STRIP		= llvm-strip
+ else
+-CC		= $(CROSS_COMPILE)gcc
++CC		:= $(CROSS_COMPILE)$(shell $(CROSS_COMPILE)cc --version \
++			>/dev/null 2>&1 && echo cc || echo gcc)
+ LD		= $(CROSS_COMPILE)ld
+ AR		= $(CROSS_COMPILE)ar
+ NM		= $(CROSS_COMPILE)nm

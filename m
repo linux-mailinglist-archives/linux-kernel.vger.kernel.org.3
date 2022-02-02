@@ -2,81 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C309C4A6F9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C887D4A6FA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343717AbiBBLJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S1343741AbiBBLLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236517AbiBBLJm (ORCPT
+        with ESMTP id S236517AbiBBLLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:09:42 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753BAC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:09:42 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id z20so28347513ljo.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:09:42 -0800 (PST)
+        Wed, 2 Feb 2022 06:11:01 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3528CC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:11:01 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id k31so59880529ybj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:11:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SVDMau3BPach0JL9Wmxer1K1pvz+KKD1rLXC1L+vcHw=;
-        b=A51jSGvTumSNMch+65a2dOSRj2g7gdmdmgWB2EswHS0BLVrMURb963yA5z9Dxexfdf
-         M2+kwtDMVYPxOODFg6QT9hpOaxn+Kw+ongcvHBACKEkJ95VVQsNT11YbrzWNBVRepGAW
-         a5Zq3AHiT2IwNMzS/PEm+vACMHoFBcdMDXfWlwdGLyV59ro+28d/j3QXBjSIVEAObcLa
-         p8b912QjQdK2coKpkiL+18Gt8l2mA21tmiqlnAb91Pw9JsWsCUm9c5fLmNnsm90tGqqY
-         ocz6eSsQVBg4tDXbThHFzAZYtJ96UlJ7Pdr+shZyyje1wlmLNAQde6OikUgU2PNqsd2b
-         cvaA==
+        d=fooishbar-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5o2JVyWPjvF0CuBYdtH6rf3OCwSu8v5z/m2E3EDxEVQ=;
+        b=6JC4qWqQoyur6n49lXlwJ8argU2sfdQwrI+5UZ/cAgJfz/Wny6UxNwpfY4nKvjDOf4
+         bC8yqlshTJqy2m9fSfRZx1mHvZHvU9NCnbTm2Hz8QKFGXNmTLuF2q/PQPQcJnF2rdPfI
+         7EQ8tQsgBfjmBUJ7GKHlLlmXRyoppvNp37bOKrZ4l/v573+8dKE7AtQOjDIqDzNUrl5O
+         M5dmxC6WklOEBh19YK8riY5u60LO+BbHsdTedAZO8mKbSRT+bkvd5WqWMzTGa0MP8bsy
+         i2QRtLbgjqRDiIiagTRyBHl/amtF7ScuFdW7LxgXu1qUFnOZTEOkenxrGPpIREqp5/KT
+         gUXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SVDMau3BPach0JL9Wmxer1K1pvz+KKD1rLXC1L+vcHw=;
-        b=KN/GaI1y8MVV7c8AsBtR58h15w4b/vL9mPr0z5GJSEp7fmqDYzyNuSAU7XNyvKlp53
-         KCE5XF9UkTGpWAVr9qH/TF0L4B5PLd1gWYu13y57etp1DBhJOUM2f9Tx3vnYbuxKu/UG
-         t7MYUbQLRvZ0Fr0IIwrKm6ORK/V2d6h2oCdMua0nzxvXIV83emie4C0kP8DXRA/Jq1g8
-         HYIZteSgbf3OdoroITFZfsmK25W1gIjLdUO+3Eoc4R/jBBYejmZH/mD0MyCsa6bPAe/1
-         xTpOWZ4iTgJTV4COVvathHQ1XSurvAiyvi0pne+u85O7xDxnhi3tVh0/Q0C42YxeLA/7
-         s6fA==
-X-Gm-Message-State: AOAM531q+akEZnMdk/Vf+0A+NSidyW8XCNNvlBhiGLd/nEIAr73SFAHX
-        uhVBqSQGeW5hOTCuUJNKaJg=
-X-Google-Smtp-Source: ABdhPJyCV4jvFba/qkq8tuSroz2OHquhQI5ATN4bKgj8q9eTQbMTDHWe4p31Maor3KQ6vwKMEgtPvA==
-X-Received: by 2002:a2e:a607:: with SMTP id v7mr19769950ljp.248.1643800180658;
-        Wed, 02 Feb 2022 03:09:40 -0800 (PST)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id d4sm2174435lja.35.2022.02.02.03.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 03:09:39 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Wed, 2 Feb 2022 12:09:38 +0100
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>
-Subject: Re: [PATCH v3 1/1] mm/vmalloc: Move draining areas out of caller
- context
-Message-ID: <YfpmcrxamjfQ4jDj@pc638.lan>
-References: <20220131144058.35608-1-urezki@gmail.com>
- <Yfo5N8XWSr1n+F20@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5o2JVyWPjvF0CuBYdtH6rf3OCwSu8v5z/m2E3EDxEVQ=;
+        b=U0tBCBQrbV3vE5wATnfJ6tmaANOGdhUuqHr9VdqJgQBRAXnuJfkMmpgKeUuO1ajuJj
+         7i6FaqYkudzLB/Kslh7IYOZIOzmgyt2LLTaG4bEIzZ3Fs6Dg6YgsE7fy9D0VO0DzOmCQ
+         QdIiJon0J4OCmmZHARw2kucoavSiEyMJfrztSuu7iha+P8zhZJuWldjh+YIGolvxk9KO
+         KFLChP+W/HyVGoTrxwx1+qjhy6hkCD4baA2opnDa/GtWSH8d8jo4ljtJyCaGb6/Gbhnz
+         NfqNXCvzOAUwxjD+5o5XDgG2GKZHuWJWAYI6ApwXbaEYLgiFo1cT8Xbimj8rvIjhbQV6
+         Qubg==
+X-Gm-Message-State: AOAM533w8KXJMm71FYD4dqtSil6TXCfAPkRSlx7Es3dAZPglyJbNvDdQ
+        z5+CprOrny/r3+EnTSINPMpCtwuJzw2KbonoFvTBPw==
+X-Google-Smtp-Source: ABdhPJxXYTqOt/oSe5PrM2Wrpx8vatAUxY/eNAT3jcriiGBCZwZLVaTevoVERbyDMHiO0clxqoChrMTzgZvvtsyVmcE=
+X-Received: by 2002:a25:a206:: with SMTP id b6mr20061500ybi.707.1643800260369;
+ Wed, 02 Feb 2022 03:11:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfo5N8XWSr1n+F20@infradead.org>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch> <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+In-Reply-To: <20220131210552.482606-2-daniel.vetter@ffwll.ch>
+From:   Daniel Stone <daniel@fooishbar.org>
+Date:   Wed, 2 Feb 2022 11:10:49 +0000
+Message-ID: <CAPj87rMhkdtoUHTB4y4HLR8KM2tPkQCufFcHbvA0_xHycCHmhg@mail.gmail.com>
+Subject: Re: [PATCH 01/21] MAINTAINERS: Add entry for fbdev core
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Gerd Hoffmann <kraxel@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sven Schnelle <svens@stackframe.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 11:56:39PM -0800, Christoph Hellwig wrote:
-> Looks good,
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+On Mon, 31 Jan 2022 at 21:06, Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+> Ever since Tomi extracted the core code in 2014 it's been defacto me
+> maintaining this, with help from others from dri-devel and sometimes
+> Linus (but those are mostly merge conflicts):
 >
-Appreciate for review and feedback!
+> $ git shortlog -ns  drivers/video/fbdev/core/ | head -n5
+>     35  Daniel Vetter
+>     23  Linus Torvalds
+>     10  Hans de Goede
+>      9  Dave Airlie
+>      6  Peter Rosin
+>
+> I think ideally we'd also record that the various firmware fb drivers
+> (efifb, vesafb, ...) are also maintained in drm-misc because for the
+> past few years the patches have either been to fix handover issues
+> with drm drivers, or caused handover issues with drm drivers. So any
+> other tree just doesn't make sense. But also, there's plenty of
+> outdated MAINTAINER entries for these with people and git trees that
+> haven't been active in years, so maybe let's just leave them alone.
+> And furthermore distros are now adopting simpledrm as the firmware fb
+> driver, so hopefully the need to care about the fbdev firmware drivers
+> will go down going forward.
+>
+> Note that drm-misc is group maintained, I expect that to continue like
+> we've done before, so no new expectations that patches all go through
+> my hands. That would be silly. This also means I'm happy to put any
+> other volunteer's name in the M: line, but otherwise git log says I'm
+> the one who's stuck with this.
 
---
-Vlad Rezki
+Acked-by: Daniel Stone <daniels@collabora.com>

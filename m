@@ -2,80 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039E44A6922
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84E34A6925
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243262AbiBBARW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:17:22 -0500
-Received: from mga11.intel.com ([192.55.52.93]:34886 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243178AbiBBARV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:17:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643761041; x=1675297041;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AcqrJTov8DeKhBB4HDvm7SyZlS3Ngs/SVJk64zjhbF4=;
-  b=PuF8FSyT4dsQpoPia4WlS0Ww3yT4XAf4HDHW9sNVSxfZF5fYivOBbBMF
-   nRL/YNb7Qs/80iEB3SLnNb9P6Y1aBAjxa7GFMf40tANb/FE0wmhlfiWDQ
-   teLVdlxaoj0wYxqs9O09Sj7g8eoGd8fQR82cKs7bUjAlWt1z6i6Sr3U9y
-   vCzuJ0Cu3L2Z9MG8GtWPYWPXWZ2t3tC02VVVbAQtQDyaWkv8niVaGDJkh
-   XIkcB3dyJ1klt598RDpRo/zFzIetufjQIEpFFmPtNHUFfmu5euiXoL88W
-   XcntXpuYDD+mDIDfkc3agseElA+ChHQB3ndRiurO0hfwEBEZfPIK8QLM/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="245418984"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="245418984"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 16:17:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="497566044"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 Feb 2022 16:17:19 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nF3Ko-000Trj-SV; Wed, 02 Feb 2022 00:17:18 +0000
-Date:   Wed, 2 Feb 2022 08:16:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [csky-linux:riscv_compat_v5 20/21] riscv64-linux-ld:
- arch/riscv/kernel/compat_syscall_table.o:undefined reference to
- `compat_sys_fadvise64_64'
-Message-ID: <202202020825.z4o2smGO-lkp@intel.com>
+        id S243283AbiBBASp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:18:45 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:43172 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243271AbiBBASm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 19:18:42 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643761120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rLeMv/6RS1ogEasjh9A5UMG6k0Sx2F9mFXDj2XcIXBw=;
+        b=0mMOatM2Wvl0WOsQZITl8s0objldVvOXxRC3Ox2mRIUqFByfCxR8r2GOhmU4RtkXkSoh3o
+        y1yPgpOZ3ATBmWppZDm8QbIsIE2Bhb3NNH1BHD0CR5fnS2xAYvj0hqtFNjx3BHrRmvuqyz
+        54MAKuYtc+eAmsf9rsoy35oN3p4ihr7pKnU3VXYqvsBpXu0Y82b+HStYMuAFKpNgDAcunA
+        k8l11H1Y+1w2wa62S6X+F/fUnAZ4x24MI6vDTxSYjK/IW5R5nOJ1vkoLvgjVh/B+kOfloT
+        b+6dbn6WLO533IuLodJoYV4rXN1o/ZfcEjj91TT9iLwKLOoAMuMVs1fuM0+V9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643761120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rLeMv/6RS1ogEasjh9A5UMG6k0Sx2F9mFXDj2XcIXBw=;
+        b=MnhYGecwZI372SPHnzkYGxMXuGTriiBgN12nFF3QkqYw5gwclVjTVJJ2SVrjkt621AwdDh
+        w9kOTUG+oMllBHAw==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCHv2 21/29] x86/tdx: Exclude shared bit from __PHYSICAL_MASK
+In-Reply-To: <20220124150215.36893-22-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-22-kirill.shutemov@linux.intel.com>
+Date:   Wed, 02 Feb 2022 01:18:40 +0100
+Message-ID: <87ee4mw273.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v5
-head:   471721ad5e81a434eb4c5d84187312fedaf6cf72
-commit: a43cb0b9c0aaa0888a758b2155ef7554a3328aec [20/21] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-randconfig-m031-20220131 (https://download.01.org/0day-ci/archive/20220202/202202020825.z4o2smGO-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/a43cb0b9c0aaa0888a758b2155ef7554a3328aec
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v5
-        git checkout a43cb0b9c0aaa0888a758b2155ef7554a3328aec
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> In TDX guests, by default memory is protected from host access. If a
+> guest needs to communicate with the VMM (like the I/O use case), it uses
+> a single bit in the physical address to communicate the protected/shared
+> attribute of the given page.
+>
+> In the x86 ARCH code, __PHYSICAL_MASK macro represents the width of the
+> physical address in the given architecture. It is used in creating
+> physical PAGE_MASK for address bits in the kernel. Since in TDX guest,
+> a single bit is used as metadata, it needs to be excluded from valid
+> physical address bits to avoid using incorrect addresses bits in the
+> kernel.
+>
+> Enable DYNAMIC_PHYSICAL_MASK to support updating the __PHYSICAL_MASK.
+>
+> Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-All errors (new ones prefixed by >>):
+Impressive....
 
->> riscv64-linux-ld: arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8): undefined reference to `compat_sys_fadvise64_64'
+> ---
+>  arch/x86/Kconfig      | 1 +
+>  arch/x86/kernel/tdx.c | 8 ++++++++
+>  2 files changed, 9 insertions(+)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>

@@ -2,97 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9724A68E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2EB4A68E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243049AbiBBAAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiBBAAK (ORCPT
+        id S243055AbiBBABQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:01:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:35166 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230081AbiBBABP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:00:10 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F250C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:00:10 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id d10so59373012eje.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 16:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GqllxHt7yNoWu7VaWkakCDa1qzT4RpRcgjBmYDF5Djg=;
-        b=d670fUvw0MYPj7AP65Zg5wsXk1t723UvfwdMSeF7nwsVXZuEUwKQyXRDkloAalyg5m
-         PRDINzdmr+XKFP9yLKnHNhUpnZc9h/muYNaX9vqgUtS2ZIQZp3Lv3Hxzj/+Ajpa6NDlo
-         vDTzfvl8TUIFgMTOil6NCqy2zrmyFmDr9V2gwGQ7qE9v21Z3XWlClovac0H21dI+5diu
-         EcoCth1fIHjU0o+piYxzvyHP6xqXqhIVSR4Aot2aRIaUkpHkNzu0b8kyfVrUsUbaRaJw
-         Eh6GfxAGRYJ9ZU7e5xW04WjXNH7GHYkKCNnrT8KTy4BXcjvHPYLeB3TP+bwWVULhswqQ
-         eCmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GqllxHt7yNoWu7VaWkakCDa1qzT4RpRcgjBmYDF5Djg=;
-        b=XySzfthS36NhzbFIK7iHxjh7SZYtILhnw+C3KEt6sXskhiImBadd/zokOS7a2f9+4+
-         tbusn43BXupfRb2rwUTgMu1WQlD1Shu8UgaYauhLGS7ExoZkLRcoc1Al+kuYBi4/99EB
-         0hNRt4Xvi8bcOUVqYJ4cOv5bbNYGqvEaqBePMeX/awiN53RhKAUk1kUEfztcvLlp/Q9l
-         EjCfKxhL6YejsCGaIzMjtKvaKwaQsUBocp9/37gR8MYxNqSe+pfUQkr/NxyqHfJhIi3Z
-         TaYPo3JwMDlQMx6I5enHFy7/Yb9wLeOfv0Wm4qtVuLuVcw8cXFomrBP0hNm1/+a6f/re
-         NfnA==
-X-Gm-Message-State: AOAM531lH2Lwaas4VMDPJIbZYkqPEtWTmf7EmGeBD19m4+/+3FPG3xkB
-        LkZHZLXLvwrFNaBjJmPDorsZBgF0afsb84+XGS0=
-X-Google-Smtp-Source: ABdhPJzkU+AoivYaiO+CIbSwtDKaKtKrGb1L6g/G7HKxp0CwA2yyfw4ai/4HM+r9lTmE2r5dHKmXjqmmtuLlzBb87Lg=
-X-Received: by 2002:a17:907:d10:: with SMTP id gn16mr18527609ejc.652.1643760008830;
- Tue, 01 Feb 2022 16:00:08 -0800 (PST)
+        Tue, 1 Feb 2022 19:01:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42A5DB82FB7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 00:01:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4AB9C340ED;
+        Wed,  2 Feb 2022 00:01:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643760073;
+        bh=qUVF7kTyEancPlf3zp+fG1Apgn/5q8QCxp97FRG2MdY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LAdzJN/By+BPbYN6+X/5P6s6zE1Cy8Lk2GUCFfuZd4D4U68XWXy3Fv05MIKqetlTl
+         U/SAIcBOf/QgTkD1a9rPNAB0o96LsmXiY8J0em+yqIHjvLCnpxuGbQKg5g9dmpKc1F
+         jXfwdDhwhD9/4h9/MWXzjusebQe3qUnYwO3uAGiDdmnfH563eGM7ceerK9J2pHJf0m
+         IK77uxEl/onQ37MjegMAufFG5/6bKlJNEfdPRxFjyYG0QeswflQT/J6b/3iFVAcuPj
+         VwjB8WnuFT6DKgbWoWMlYgRO2pcAqDwHQvk+zrsw9WzBh+Fv2oRzxpdJLqWB/Zso8Z
+         0lxkqh3LdwI9A==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] tick: Detect and fix jiffies update stall
+Date:   Wed,  2 Feb 2022 01:01:07 +0100
+Message-Id: <20220202000107.416695-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com> <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org>
-In-Reply-To: <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 1 Feb 2022 20:59:59 -0300
-Message-ID: <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
-Subject: Re: Kconfig CONFIG_FB dependency regression
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Bing Yuan <Bing.Yuan@synopsys.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
+On some rare cases, the timekeeper CPU may be delaying its jiffies
+update duty for a while. Known causes include:
 
-On Tue, Feb 1, 2022 at 8:06 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 2/1/22 15:01, Thinh Nguyen wrote:
-> > Hi,
-> >
-> > One of our test setups is unable to boot (stuck at initramfs). Git
-> > bisection points to the commit below:
-> >
-> > f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
-> >
-> > Reverting this patch resolves the issue. This issue persists in mainline
-> > also. Unfortunately there isn't any meaningful log. Hopefully someone
-> > can give some insight as to what could be the issue and revert/fix this
-> > issue.
->
-> Hi,
-> Did you enable DRM_FBDEV_EMULATION?
-> Please provide the failing .config file.
+* The timekeeper is waiting on stop_machine in a MULTI_STOP_DISABLE_IRQ
+  or MULTI_STOP_RUN state. Disabled interrupts prevent from timekeeping
+  updates while waiting for the target CPU to complete its
+  stop_machine() callback.
 
-Does selecting CONFIG_FB=y help?
+* The timekeeper vcpu has VMEXIT'ed for a long while due to some overload
+  on the host.
 
-We had to manually select this option in imx_v6_v7_defconfig after f611b1e7624c.
+Detect and fix these situations with emergency timekeeping catchups.
 
-Please see:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v5.17-rc2&id=c54467482ffd407a4404c990697f432bfcb6cdc4
+Original-patch-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ kernel/time/tick-sched.c | 17 +++++++++++++++++
+ kernel/time/tick-sched.h |  4 ++++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 17a283ce2b20..c89f50a7e690 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -169,6 +169,8 @@ static ktime_t tick_init_jiffy_update(void)
+ 	return period;
+ }
+ 
++#define MAX_STALLED_JIFFIES 5
++
+ static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
+ {
+ 	int cpu = smp_processor_id();
+@@ -196,6 +198,21 @@ static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
+ 	if (tick_do_timer_cpu == cpu)
+ 		tick_do_update_jiffies64(now);
+ 
++	/*
++	 * If jiffies update stalled for too long (timekeeper in stop_machine()
++	 * or VMEXIT'ed for several msecs), force an update.
++	 */
++	if (ts->last_tick_jiffies != jiffies) {
++		ts->stalled_jiffies = 0;
++		ts->last_tick_jiffies = READ_ONCE(jiffies);
++	} else {
++		if (++ts->stalled_jiffies == MAX_STALLED_JIFFIES) {
++			tick_do_update_jiffies64(now);
++			ts->stalled_jiffies = 0;
++			ts->last_tick_jiffies = READ_ONCE(jiffies);
++		}
++	}
++
+ 	if (ts->inidle)
+ 		ts->got_idle_tick = 1;
+ }
+diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
+index d952ae393423..504649513399 100644
+--- a/kernel/time/tick-sched.h
++++ b/kernel/time/tick-sched.h
+@@ -49,6 +49,8 @@ enum tick_nohz_mode {
+  * @timer_expires_base:	Base time clock monotonic for @timer_expires
+  * @next_timer:		Expiry time of next expiring timer for debugging purpose only
+  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
++ * @last_tick_jiffies:	Value of jiffies seen on last tick
++ * @stalled_jiffies:	Number of stalled jiffies detected across ticks
+  */
+ struct tick_sched {
+ 	struct hrtimer			sched_timer;
+@@ -77,6 +79,8 @@ struct tick_sched {
+ 	u64				next_timer;
+ 	ktime_t				idle_expires;
+ 	atomic_t			tick_dep_mask;
++	unsigned long			last_tick_jiffies;
++	unsigned int			stalled_jiffies;
+ };
+ 
+ extern struct tick_sched *tick_get_tick_sched(int cpu);
+-- 
+2.25.1
+

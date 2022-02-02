@@ -2,79 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05AF4A78E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541934A78E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346962AbiBBTrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
+        id S1346965AbiBBTtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbiBBTrj (ORCPT
+        with ESMTP id S231390AbiBBTtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:47:39 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7671C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:47:39 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643831258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZoMxZzJu0S/zqcRHBoQiDF6946Gib9Z2JSpxFb9lqcU=;
-        b=19/icYGJQiS5348IT4VwZu2g7WTaZchV1+AlxNtTqRusdinWD0Gk3hEaTZZCqlAPecL7Zq
-        TrjdwfzdlhaKIjNCcOS1CQ+44vxg3szX9TVUGUy4DpLAeFtn6LVl4VEX+IyzFYiiVQCGsf
-        3IAe8PPGDyI+Zik3IsecXxHCDk0AIQtaRd5vOgLD/8lIpOjSeOC5u6CtU19/o9k/PMXFEt
-        F/mo2IHQRmmqY123EpQU3Tf4MeVj83ruZUpTpl2te+mt221HL0lQS1aZcf1xewpKqPkO+K
-        QgxZSxBPheE3GTEDJ9uvbY1fXgzx3JbuLxlQE6NmWFVirEjEhQ6MWtWHIfFPxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643831258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZoMxZzJu0S/zqcRHBoQiDF6946Gib9Z2JSpxFb9lqcU=;
-        b=JMHGuKF10zNs7Za6nG512D3d0fxafCKRCjHyK8Y0QvCO7oX/ZejP8IGoGGHliV2IVYUAjE
-        mD7IW/G2/PVvfNAg==
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
-In-Reply-To: <20220202192710.d7k4pgqczpyrkers@black.fi.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
- <87bkzqw1vr.ffs@tglx> <20220202192710.d7k4pgqczpyrkers@black.fi.intel.com>
-Date:   Wed, 02 Feb 2022 20:47:37 +0100
-Message-ID: <877dadt5ie.ffs@tglx>
+        Wed, 2 Feb 2022 14:49:01 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D81C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:49:01 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b9so1229538lfq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 11:49:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X4aJfctSbRMZuzvUkpBVrI4wB5MY5G7hf31Xe4XK4b8=;
+        b=Us0vtuOBprfLEqvLHQDzrGhm18RE8Rg34BdfzcP2JDopYH2EfoknKFadApKgBKbmj4
+         OuLxmwMLKbhxcKaNTvYvI4xCLXWE4WVIFAVmLAgxYDFVcdSLqiY3S+EOmzyW74TBlmU8
+         hzCcj4howm1nFBknrv8dOEKf7LNxK4lFIHIfLuwAoN2KclgqVGesFmkIvC1s63zTNFWe
+         lXvi6l1MMF5chJOmdpRVdSt8ipQUq2QF848h7cn2MIg2ZqnqCdSQtaXhCznHSz50PJGX
+         pw63jbYWejY2CJHfxRO+iEkBlj9MKefB9yx/fz0I5pZ7ExJdmeT7ty5GIZzoAh/ISin2
+         AErg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X4aJfctSbRMZuzvUkpBVrI4wB5MY5G7hf31Xe4XK4b8=;
+        b=oY1O5N/PDmr6ILBzUHagrrWaqWqpbx3/k1ekhUKd/ak/dhwhh4cCUg7g6Ph4a1Hu04
+         xLS7AL8wQZPGCMYl7UbhOfREC1z4uyqgfmDVAQnRAQLI2vGp6cOhnuOQHr5Q2RE6QI+X
+         1fYoPBoW43bp/Aa1eqFjc26bUyK5twSHs3nPPgbn11q8P7Gcx0pxeNavLbkAjtVAw9ns
+         5X9ZPs+rzR1iLoGOOTfGyIxIz17UQRmFCcDJjPLQCRDPuQRQFR9b13zAh0PepN2PH8Jn
+         F1Zgl60CT+joSxIvLc5xgth4XHACFQy5IcdtgAH64G4pfbkvi+IBLtSgsi1N3zkWjd15
+         d9Nw==
+X-Gm-Message-State: AOAM530qH8+PGRzzW5bWpPXw1LTz6CcANnX4VmL7lyNqX3CXOnk6zu5t
+        hj6QvH9262fWqMU/0yvs1DiMY9WnYR/ydSpe72a10S52w4M=
+X-Google-Smtp-Source: ABdhPJybNdXfG7Q/jDBEIa4qm8bUj7hsTpDmd0or0Rg1zB1IW+GIT1q77c3MSDvwG4Li9Ol3dm6ku9x8r73i/umaTBE=
+X-Received: by 2002:ac2:5fcd:: with SMTP id q13mr24738604lfg.152.1643831339664;
+ Wed, 02 Feb 2022 11:48:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220202151734.10418-1-jandryuk@gmail.com> <YfrC/fQvQ1nkIJNJ@grain>
+In-Reply-To: <YfrC/fQvQ1nkIJNJ@grain>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Wed, 2 Feb 2022 14:48:48 -0500
+Message-ID: <CAKf6xpsfDpEpjSjYbGU5fQOxqjccbu3CAXTxpcKggKYu6qEfNA@mail.gmail.com>
+Subject: Re: [PATCH] kcmp: Comment get_file_raw_ptr() RCU usage
+To:     Cyrill Gorcunov <gorcunov@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02 2022 at 22:27, Kirill A. Shutemov wrote:
-> On Wed, Feb 02, 2022 at 01:25:28AM +0100, Thomas Gleixner wrote:
->> On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
->> I cannot find any of the above mentioned subsystems in this grep
->> output. Neither does this patch add any users which require those
->> exports.
+On Wed, Feb 2, 2022 at 12:44 PM Cyrill Gorcunov <gorcunov@gmail.com> wrote:
 >
-> Try to grep pgprot_decrypted().
+> On Wed, Feb 02, 2022 at 10:17:34AM -0500, Jason Andryuk wrote:
+> > This usage of RCU appears wrong since the pointer is passed outside the
+> > RCU region.  However, it is not dereferenced, so it is "okay".  Leave a
+> > comment for the next reader.
+> >
+> > Without a reference, these comparisons are racy, but even with their use
+> > inside an RCU region, the result could go stale.
+> >
+> > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> > ---
+> > I was looking for examples of task_lookup_fd_rcu()/files_lookup_fd_rcu()
+> > and found this.  It differed from the example given in
+> > Documentation/filesystems/files.rst, so I was initially confused.  A
+> > comment seemed appropriate to avoid confusion.
+> >
+> >  kernel/kcmp.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/kernel/kcmp.c b/kernel/kcmp.c
+> > index 5353edfad8e1..4fb23f242e0f 100644
+> > --- a/kernel/kcmp.c
+> > +++ b/kernel/kcmp.c
+> > @@ -63,6 +63,9 @@ get_file_raw_ptr(struct task_struct *task, unsigned int idx)
+> >  {
+> >       struct file *file;
+> >
+> > +     /* This RCU locking is only present to silence warnings.  The pointer
+> > +      * value is only used for comparison and not dereferenced, so it is
+> > +      * acceptable. */
+> >       rcu_read_lock();
+> >       file = task_lookup_fd_rcu(task, idx);
+> >       rcu_read_unlock();
+>
+> They are not wrong, this is just such a bit weird semantics where
+> we fetch the pointers and strictly speaking map them into numbers
+> set to compare. But I agree that such tricks might confuse. How about
+>
+>         /*
+>          * Fetching file pointers inside RCU read-lock section
+>          * and reuse them as plain numbers is done in a sake
+>          * of speed. But make sure never dereference them after.
+>          */
 
-Bah.
+I would tweak it a little to "Fetch file pointers inside RCU read-lock
+section, but skip additional locking for speed.  The pointer values
+will be used as integers, and must not be dereferenced."
 
-> I guess we can get away not exporting pgprot_encrypted(), but this
-> asymmetry bothers me :)
-
-Well, no. We export only stuff which is needed. Exporting just because
-is a NONO.
+One other idea I had was to switch the return value to "void *".  That
+way it isn't a struct file, and it isn't readily dereference-able.
+But I wasn't sure if that would be overkill.  What do you think?
 
 Thanks,
-
-        tglx
+Jason

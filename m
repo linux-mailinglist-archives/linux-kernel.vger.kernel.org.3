@@ -2,114 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F78F4A7578
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAA34A757A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345820AbiBBQGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
+        id S1345795AbiBBQGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345768AbiBBQGR (ORCPT
+        with ESMTP id S1345783AbiBBQGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:06:17 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545EBC061401
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:06:17 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id k17so18817928plk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:06:17 -0800 (PST)
+        Wed, 2 Feb 2022 11:06:21 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CD3C061751
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:06:20 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id i10so62484220ybt.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:06:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ye0S9ZGhY+9EmUZN3Zyu0p+11AX+B8bmbaaOWhr2T0c=;
-        b=THKJNrl8wZq9kLm8aIUQsyrUyYnORIkUj0AsqjphNpw6zKOLSU8mqe9LQMXJhqfiew
-         6DsPPj5bqxhMpt7Fi9y3F1lK310+oJJ9mGsTFpzoKxamrrhR4Ba+/AupkvmyEhHI99Zg
-         W2nXGzr1QnqjZvGL1A0rlvwPLTg4hCskXlNps=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PhE+HHyFpW2DRFHuTlt75S2kEEeDfA0eG+B/I+nmgv4=;
+        b=fFh7H+BbaOQ4B+p05GH56raXfaOn8ajgIVdTEPxN9lHFK7SPrCVHpsHplZvXWummPB
+         G0p4aJBVAWs9KblSVpZriM1XMf1BE8u8b7bkSCnh269FB61HmvjuckgfiudKUXXEnfTs
+         yj5tN50Jpu35k1QkQUQYCtj9jwnSkI5vMTL7yr/FiXn+mY7B3IHxz8E+JdOLWVryNCor
+         ERUkmIpd/PZDbx66Urb/7WFvPziTDhA898AtS0CMNI/ZNuQOnt8+fuaZ3+aLFA1E0jrA
+         PWVAi6pCHZpB9hVOYgT1/1wMgL1l2jw2xoEL3JlZMTxC5sDTtnVVMuZBwv5J5yPAbRo4
+         B0gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ye0S9ZGhY+9EmUZN3Zyu0p+11AX+B8bmbaaOWhr2T0c=;
-        b=JypB3epR4+P0Rcj74AijP10i6sojPtf/JVPlib4KonTVz2koFv0fls3TWM2YYkU1hE
-         SWukhJdr8J8hCv/y1CrL7iOYUTY16iIpkpEArw+DSePEDTrFeMQK018QMr1YwI8t+/zG
-         Tp2xduF93snsWCpSGjuarfXW3CLVrBMFY0dr8v3NqFNbQST4f4Po7jFVYmqjAXNcGDjV
-         roOaajmJlQ2SI/PND35aslGXNKf7ydx1uP8zt2+o+v7sDqdCsoatGhv2/DOACxvj7b6+
-         ZCUqYPUCEyiLPDSAgQwA5DtVXsO4GFjg+9b3cqOj2EHHS74cDgm5x5ww8Hn0VO9RFabt
-         8Now==
-X-Gm-Message-State: AOAM531X7Xvpi6jRIIluyTy0Mr0G62QY4feIJ2tmL3K3szj5TJzLnKSA
-        c03G/54xTo14H706b/KbE87CLg==
-X-Google-Smtp-Source: ABdhPJwmobxexK4WZn3maJdnwfwFpSVFi9apHR9NwFwzjjq9KmTbT11kIv6UjVpfSKsQhHnnARnRsg==
-X-Received: by 2002:a17:90b:38c7:: with SMTP id nn7mr8872415pjb.124.1643817976720;
-        Wed, 02 Feb 2022 08:06:16 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:7ce0:466c:be86:774])
-        by smtp.gmail.com with ESMTPSA id g5sm14722397pgc.51.2022.02.02.08.06.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:06:16 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH RESEND v5 4/4] dt-bindings: drm/bridge: anx7625: Add aux-bus node
-Date:   Thu,  3 Feb 2022 00:06:02 +0800
-Message-Id: <20220202160602.440792-4-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-In-Reply-To: <20220202160602.440792-1-hsinyi@chromium.org>
-References: <20220202160602.440792-1-hsinyi@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PhE+HHyFpW2DRFHuTlt75S2kEEeDfA0eG+B/I+nmgv4=;
+        b=NSwrTV4PdY2doGSzqAD0ksTCyoO3dF/94X49ObYw/8naWJznkU0kds8v4Z3W1IsZ6T
+         D4bQKW/bY9Bd5viYOVCe/ldWchxSjAAh7uYl2sVZqTzQ0SWvoowVsyKLN9NDEdgTIEaT
+         cV0dlWVJdXRACFMlZ7Ec2gyEcNkOC/qSxP18wyA9a1hqatVagcmXaogSSZN5vi206v+C
+         ZbDgB9r/FZZIqdj4HEdQefSE7e20ZvJ3wUTR9oTyjh5Szj2Y0w2v1iE3zNDNd73S2mk9
+         gPp6ERA32Bwl1ytGmPQwU1Rri/O+7YUm7oFlHhM5NgA6qRAzH5dX0MqaWYg4PBOPD0F8
+         VunQ==
+X-Gm-Message-State: AOAM530qj4bqhQ344Uf8K0UX6mo31X2MvJbpYitgJDfqZuxHfg9eX5xo
+        8IdfMDr0GiLZ+Xt2orji2xQhazRsO1EyVFtvaS+uag==
+X-Google-Smtp-Source: ABdhPJzafC5pwY46k2rXmjcY5vPjKYi8a7v4ircglXyoNbcuYsGfJNrRsCHGMMK6c6myzjuypdKKvDpQA0n24144LB0=
+X-Received: by 2002:a25:8011:: with SMTP id m17mr42060866ybk.284.1643817979539;
+ Wed, 02 Feb 2022 08:06:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220201144940.2488782-1-clabbe@baylibre.com>
+In-Reply-To: <20220201144940.2488782-1-clabbe@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 2 Feb 2022 17:06:08 +0100
+Message-ID: <CACRpkdbAvexv2bokpqD+YhFpsdfaEGJZbvNBoWE4OQxtRwCpXg@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: net: convert net/cortina,gemini-ethernet
+ to yaml
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        ulli.kroll@googlemail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-List panel under aux-bus node if it's connected to anx7625's aux bus.
+On Tue, Feb 1, 2022 at 3:49 PM Corentin Labbe <clabbe@baylibre.com> wrote:
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
- .../display/bridge/analogix,anx7625.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> Converts net/cortina,gemini-ethernet.txt to yaml
+> This permits to detect some missing properties like interrupts
+>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> Change since v1:
+> - fixed report done by Rob's bot
 
-diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-index 1d3e88daca041a..0d38d6fe39830f 100644
---- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-+++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-@@ -83,6 +83,9 @@ properties:
-     type: boolean
-     description: let the driver enable audio HDMI codec function or not.
- 
-+  aux-bus:
-+    $ref: /schemas/display/dp-aux-bus.yaml#
-+
-   ports:
-     $ref: /schemas/graph.yaml#/properties/ports
- 
-@@ -167,5 +170,19 @@ examples:
-                     };
-                 };
-             };
-+
-+            aux-bus {
-+                panel {
-+                    compatible = "innolux,n125hce-gn1";
-+                    power-supply = <&pp3300_disp_x>;
-+                    backlight = <&backlight_lcd0>;
-+
-+                    port {
-+                        panel_in: endpoint {
-+                            remote-endpoint = <&anx7625_out>;
-+                        };
-+                    };
-+                };
-+            };
-         };
-     };
--- 
-2.35.0.rc2.247.g8bbb082509-goog
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij

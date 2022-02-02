@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353EC4A79CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9774A79CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347315AbiBBUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:54:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241698AbiBBUyg (ORCPT
+        id S1347323AbiBBUzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:55:14 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:56966 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231705AbiBBUzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:54:36 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5D0C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:54:36 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id h23so482742pgk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=l2Oma9zXCLWmq5QWeFwdvr5FNqJvallv/jOB/x/DuMo=;
-        b=PUMB0XI/DBpwDBjvrTU4GRblhYvTYge8mzWnov2rHbPeccUHMEWLLWO4Ox835bCcpg
-         vipWFV2JKk6RSWJrGEcbDILjvbqlik4DgefMvzZNmQMwm9nzoS6kPhU0b+Ppplw7dQ3g
-         XXJDRQ6lRNyf8LM1HeN3vKBIcEfGkghW6UZv0048O8odgN/WKuzLu3ufUG1OvrMJyEtC
-         t7x0A5nEjNAEbw+SLG49jpkkpzvUd3ol2coeKzQRYXY0CmrIIMJozuFFpQk4zoYCXgDy
-         A+NNfFCti8EGbKzo26fpTpaMDXBxNqwPEG8e2LMBodnru6PtY6QcQlsWbJPUSbWbLXBc
-         xDmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l2Oma9zXCLWmq5QWeFwdvr5FNqJvallv/jOB/x/DuMo=;
-        b=XhNZE37ACOSscMXyjvaVDFYPUtISzP6sYZdlavzhgLTIgpMtogcbGo9gYx8cyfmN7h
-         s83FQlp6SHNjAijwid3aDO4F5NrG5rdXiJw9uWFePKfHOyaWfg6EvtM1rrexK04OL7Ar
-         MOFz2gYQs4DLcAQF7FKXpnVuHsHYuigJqHGv+RhGsBUE7npQQz+7wdncFy3mtSm19JDv
-         gRPnO400V3MwGCpKoSyduQsVi7rtU+2ScL9UopbAUw1n3sCYeHY2enWFN/Ml7347kk8m
-         LMxD3gdsc7InwfpGqGLwl5CtdvVDex10mLSbM3WmProYTiMsK1o04oqdSOBoK9pza9gs
-         nx1A==
-X-Gm-Message-State: AOAM532Qmcqw9Co7YwxyKtktIFenwIJcdcf8idH9dFz1vyTj+6yWjekh
-        22kcp4dh7B3LHV4DWTIE0/GEjQ==
-X-Google-Smtp-Source: ABdhPJxxsEXOdAKWRKznRFLLkUlAgp8BBmDHDhft6rZzZrSGwJ8lyMOEhAyse98KdIdkzQKoL5th+g==
-X-Received: by 2002:a63:5545:: with SMTP id f5mr25618685pgm.157.1643835275909;
-        Wed, 02 Feb 2022 12:54:35 -0800 (PST)
-Received: from x1 ([2601:1c2:1001:7090:9646:73e6:2457:2f0f])
-        by smtp.gmail.com with ESMTPSA id f8sm25371811pfe.204.2022.02.02.12.54.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 12:54:35 -0800 (PST)
-Date:   Wed, 2 Feb 2022 12:54:59 -0800
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keerthy <j-keerthy@ti.com>, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: Re: [PATCH 2/2] clocksource/drivers/timer-ti-dm: Handle dra7 timer
- wrap errata i940
-Message-ID: <Yfrvo+kVd9ZHJjBX@x1>
-References: <20210323074326.28302-1-tony@atomide.com>
- <20210323074326.28302-3-tony@atomide.com>
- <YfWsG0p6to3IJuvE@x1>
- <Yfe25rpSY8OFPxzr@atomide.com>
+        Wed, 2 Feb 2022 15:55:13 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Kt8Pw017489;
+        Wed, 2 Feb 2022 14:55:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643835308;
+        bh=TSgd+xCGzaaE5vue8g+IcUiNAO25KhYriLW5DLA2pPI=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=u8mqbfANm00fkjhdPrNjsbO6Nk+m06TpQ1kbP7Lq342oHBmtWiz8ESzRwICemdG21
+         x0mRGffLmI0rnnAHj74k4yrS2I9PvG1ZqbuL+E4pX55ILQJHLUrmOPZXJfSGQqCPBC
+         qSyQyRknxXF9iqoUKH0BfK/cUJBlKnp9j/pP92pw=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212Kt8JH044381
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Feb 2022 14:55:08 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Feb 2022 14:55:08 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Feb 2022 14:55:08 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Kt8Eh025309;
+        Wed, 2 Feb 2022 14:55:08 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] arm64: dts: ti: k3-am64-main: add RTI watdog nodes
+Date:   Wed, 2 Feb 2022 14:55:07 -0600
+Message-ID: <164383529402.22839.4290486437592010268.b4-ty@ti.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220111134552.800704-1-christian.gmeiner@gmail.com>
+References: <20220111134552.800704-1-christian.gmeiner@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfe25rpSY8OFPxzr@atomide.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 12:16:06PM +0200, Tony Lindgren wrote:
-> Hi,
+Hi Christian Gmeiner,
+
+On Tue, 11 Jan 2022 14:45:48 +0100, Christian Gmeiner wrote:
+> Add the needed bus mappings for the two main RTI memory ranges and
+> the required device tree nodes in the main domain.
 > 
-> * Drew Fustini <dfustini@baylibre.com> [220129 21:05]:
-> > On Tue, Mar 23, 2021 at 09:43:26AM +0200, Tony Lindgren wrote:
-> > > There is a timer wrap issue on dra7 for the ARM architected timer.
-> > > In a typical clock configuration the timer fails to wrap after 388 days.
-> > > 
-> > > To work around the issue, we need to use timer-ti-dm percpu timers instead.
-> > > 
-> > > Let's configure dmtimer3 and 4 as percpu timers by default, and warn about
-> > > the issue if the dtb is not configured properly.
-> > 
-> > Hi Tony,
-> > 
-> > This causes a conflict for IPU2 which is using timer 3 and 4.
-> > 
-> > From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
-> > 
-> >   &ipu2 {
-> >           mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
-> >           ti,timers = <&timer3>;
-> >           ti,watchdog-timers = <&timer4>, <&timer9>;
-> >   };
 > 
-> OK, sorry I missed that part.
-> 
-> > I noticed an error ("could not get timer platform device") when booting
-> > mainline on a BeagleBoard X15 (AM578):
-> > 
-> >   omap-rproc 55020000.ipu: assigned reserved memory node ipu2-memory@95800000
-> >   remoteproc remoteproc1: 55020000.ipu is available
-> >   remoteproc remoteproc1: powering up 55020000.ipu
-> >   remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4, size 3747220
-> >   omap-rproc 55020000.ipu: could not get timer platform device
-> >   omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
-> >   remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
-> > 
-> > I switched this errata fix to use timer 15 and 16 instead which resolves
-> > the error.  Do you think that is an acceptable solution?
-> 
-> I think the only difference is that timers 15 and 16 are in l4_per3 instead
-> of l4_per1. I doubt that matters as they are pretty much always clocked in
-> this case. If you want to check you can run cyclictest :)
 
-I ran this with existing errata fix with dmtimer 3 and 4:
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-root@am57xx-evm:~# cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-# /dev/cpu_dma_latency set to 0us
-policy: fifo: loadavg: 0.02 0.03 0.05 
+[1/1] arm64: dts: ti: k3-am64-main: add RTI watdog nodes
+      commit: 41fe04c0d76bb19114ee9f09ae07e2884cdcd75f
 
-T: 0 ( 1449) P:80 I:200 C: 800368 Min:      0 Act:   32 Avg:   22 Max:     128
-T: 1 ( 1450) P:80 I:200 C: 800301 Min:      0 Act:   12 Avg:   23 Max:      70
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-And the results after my switch to dmtimer 15 and 16:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-root@am57xx-evm:~# cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-# /dev/cpu_dma_latency set to 0us
-policy: fifo: loadavg: 0.36 0.19 0.07
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-T: 0 ( 1711) P:80 I:200 C: 759599 Min:      0 Act:    6 Avg:   22 Max:     108
-T: 1 ( 1712) P:80 I:200 C: 759539 Min:      0 Act:   19 Avg:   23 Max:      79
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-This doesn't appear to show any latency regression.
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
-Any other options for cyclictest that that you'd recommend trying?
-
-Thank you,
-Drew

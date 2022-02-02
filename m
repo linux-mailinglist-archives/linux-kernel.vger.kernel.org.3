@@ -2,140 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421544A7163
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3D24A716C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbiBBNTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S1344265AbiBBNVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiBBNTd (ORCPT
+        with ESMTP id S232991AbiBBNVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:19:33 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832AAC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:19:33 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id m14so38101500wrg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:19:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=UYI//ra1wTgLyHqKdRvMjbFjIxVxiJ90kyMxoCqfe7o=;
-        b=BdnTyOGFvWo7ZOsPwl6fux65m4DLYweJEERzekMEE8H27wwdS3+nQ/U2j33dBYMudw
-         Eq0TXwdago9sG6j3KDWOLpvLf3b+IoUHY8DL/rwfZEN5abJJTKke3i2EeSxkj/Ah1i/K
-         j3J6uUnSK95UqDWXhoHzCS2LbBvYevBbttD5uFfKCiQplkh/aunp0/MbA0xKhdasCknv
-         uuWvt89ICmhS2Urtrfl6SYFsHIJ9WxX2eyyy4qkEShPKDPo5IDvaN1UaQIWuwiJFZSjA
-         A0muRiAE1N2UClRfFkVFgLfzEKz36nyYyXsHY3s0LIvJzL/7Y1wOVa0n1bW6jSX/+iJm
-         aukg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=UYI//ra1wTgLyHqKdRvMjbFjIxVxiJ90kyMxoCqfe7o=;
-        b=T2kbSlV4J+tLXvEL6I98lO7kzPsftaRqSYMEKO6xuaYCyM+0muUaP+fD2ZdGNX3/sN
-         cT19XDfqgajy3lfwhnZUMfvOo+gZfHIVwucD+VilFjZTFu4FW3029aHMPX92tXg9626E
-         EwPQteDQQgjTLkpmydJiNmRu7NElgJAGWI7o6+81EsVnUenmWfgkjIhbT/OMLfeGxQao
-         0avNFShto5ZgAkP2VjVUEVUb/+uZHgMrQz+pgm4eVfONeXNCOSqs8PxqfllD7W1R2sQY
-         ztjiApcxXhlTcr6UZ776vurhheSmkVi7LLSPSNNUrB9MfCSUXofM50GVkHe/XUzXlATv
-         lFlA==
-X-Gm-Message-State: AOAM533M3GyX+gRLamSX+ioFTtGfQ2dYaSjNVGastpHWqVNVu+E46dfa
-        v5Bg9VsBjs2iFhjcokiKJ2NtP/H03M+jUgIb
-X-Google-Smtp-Source: ABdhPJzICvYrz69A0ityikLYb25DkNUNN2ptebetqW4p1gmz63PHRuJ5vDe+5x5Y5OTc6DJ6I4foww==
-X-Received: by 2002:a5d:614d:: with SMTP id y13mr1433428wrt.553.1643807972109;
-        Wed, 02 Feb 2022 05:19:32 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.nat-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id t18sm17797789wri.34.2022.02.02.05.19.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Feb 2022 05:19:31 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.40.0.1.81\))
-Subject: Re: [PATCH] RISC-V: KVM: make CY, TM, and IR counters accessible in
- VU mode
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <CAAhSdy2wX7Re4yepV7ReNQazF9jb-eqSUDE7rLCarr3iUchzkQ@mail.gmail.com>
-Date:   Wed, 2 Feb 2022 13:19:31 +0000
-Cc:     Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B04F937F-6FC8-42F5-9D6B-7EF1148F9646@jrtc27.com>
-References: <20220131110307.1684739-1-mchitale@ventanamicro.com>
- <CAAhSdy2wX7Re4yepV7ReNQazF9jb-eqSUDE7rLCarr3iUchzkQ@mail.gmail.com>
-To:     Anup Patel <anup@brainfault.org>
-X-Mailer: Apple Mail (2.3693.40.0.1.81)
+        Wed, 2 Feb 2022 08:21:46 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301AFC061714;
+        Wed,  2 Feb 2022 05:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SoV3r288QEP7ETkrQHVuY/ATfMTUxF59iaqhIfRcPGI=; b=ztkj1INHInsEJO4Rj/LvLtqjJC
+        BGKnqUhJTuEHZ9Wvl8RnXhlzz6qvfPDYGU0zn7wWf10qAcVvSG5wGC0fzResM/camXh3ACVJg6e3I
+        pM2wuNr4T5AJ29eZ7Gsyidl00hEdOWBYi0I8int7unA3XnKiLnenY6Xwx5u82lPVtbm6YFb5Ckqvo
+        U/bGQvXQShtSJrSv4QwgBdnp6WldT7nFgN0iO81GrnoQw/zQfPz/ZUoNQ58aWMbCVZoEe5zznzjXj
+        9Jcuj0ncF5JmWTuZXWXtPgSmZytzL9dasExtfA7wSJCqBl+1wenvCLk/ob5BAG13Xqz4wXM5TaC3n
+        Gy1M/iXw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFFZi-00FLFj-Aj; Wed, 02 Feb 2022 13:21:30 +0000
+Date:   Wed, 2 Feb 2022 05:21:30 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
+        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
+        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
+        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] mce: fix set_mce_nospec to always unmap the whole
+ page
+Message-ID: <YfqFWjFcdJSwjRaU@infradead.org>
+References: <20220128213150.1333552-1-jane.chu@oracle.com>
+ <20220128213150.1333552-2-jane.chu@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128213150.1333552-2-jane.chu@oracle.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2 Feb 2022, at 11:14, Anup Patel <anup@brainfault.org> wrote:
->=20
-> On Mon, Jan 31, 2022 at 4:33 PM Mayuresh Chitale
-> <mchitale@ventanamicro.com> wrote:
->>=20
->> Those applications that run in VU mode and access the time CSR cause
->> a virtual instruction trap as Guest kernel currently does not
->> initialize the scounteren CSR.
->>=20
->> To fix this, we should make CY, TM, and IR counters accessibile
->> by default in VU mode (similar to OpenSBI).
->>=20
->> Fixes: a33c72faf2d73 ("RISC-V: KVM: Implement VCPU create, init and
->> destroy functions")
->> Cc:stable@vger.kernel.org
->> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
->=20
-> Thanks, I have queued this for fixes.
+> +static inline int set_mce_nospec(unsigned long pfn)
+>  {
+>  	unsigned long decoy_addr;
+>  	int rc;
+> @@ -117,10 +113,7 @@ static inline int set_mce_nospec(unsigned long pfn, bool unmap)
+>  	 */
+>  	decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
+>  
+> -	if (unmap)
+> -		rc = set_memory_np(decoy_addr, 1);
+> -	else
+> -		rc = set_memory_uc(decoy_addr, 1);
+> +	rc = set_memory_np(decoy_addr, 1);
+>  	if (rc)
+>  		pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
+>  	return rc;
+> @@ -130,7 +123,7 @@ static inline int set_mce_nospec(unsigned long pfn, bool unmap)
+>  /* Restore full speculative operation to the pfn. */
+>  static inline int clear_mce_nospec(unsigned long pfn)
+>  {
+> -	return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
+> +	return _set_memory_present((unsigned long) pfn_to_kaddr(pfn), 1);
+>  }
 
-The formatting is clearly wrong...
+Wouldn't it make more sense to move these helpers out of line rather
+than exporting _set_memory_present?
 
-> Regards,
-> Anup
->=20
->> ---
->> arch/riscv/kvm/vcpu.c | 4 ++++
->> 1 file changed, 4 insertions(+)
->>=20
->> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
->> index 0c5239e05721..caaf824347b9 100644
->> --- a/arch/riscv/kvm/vcpu.c
->> +++ b/arch/riscv/kvm/vcpu.c
->> @@ -90,6 +90,7 @@ int kvm_arch_vcpu_precreate(struct kvm *kvm, =
-unsigned int id)
->> int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->> {
->>        struct kvm_cpu_context *cntx;
->> +       struct kvm_vcpu_csr *reset_csr =3D =
-&vcpu->arch.guest_reset_csr;
->>=20
->>        /* Mark this VCPU never ran */
->>        vcpu->arch.ran_atleast_once =3D false;
->> @@ -106,6 +107,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->>        cntx->hstatus |=3D HSTATUS_SPVP;
->>        cntx->hstatus |=3D HSTATUS_SPV;
->>=20
->> +       /* By default, make CY, TM, and IR counters accessible in VU =
-mode */
->> +       reset_csr->scounteren=3D0x7;
+>  /*
+> - * _set_memory_prot is an internal helper for callers that have been passed
+> + * __set_memory_prot is an internal helper for callers that have been passed
 
-... here
-
-Jess
-
->> +
->>        /* Setup VCPU timer */
->>        kvm_riscv_vcpu_timer_init(vcpu);
->>=20
->> --
->> 2.25.1
->>=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+This looks unrelated to the patch.

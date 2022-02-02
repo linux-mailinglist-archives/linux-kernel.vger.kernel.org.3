@@ -2,199 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371934A74BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCF14A74C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243575AbiBBPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbiBBPiC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:38:02 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D86AC06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:38:02 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id 15so17352872ilg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:38:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LXZjdBVUtQGV4jUy/sSg/c0o5bKUeLjM4SJrys+RBDA=;
-        b=EwQJWxpGepkosxid+haDZbAtfhCXdkymdOi2U11KFVv5IkJFH9hjEIv9LmMM22rxv5
-         v0I/0YeesBXynB/GV98KKdIvjPbMkrre483WJBHQ2pSjJusq75/gVpwWfVoYpwOw7lC6
-         VWBPjYC3pu+IRCuYMYnjuZXTTX3frS9b+Vdqw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LXZjdBVUtQGV4jUy/sSg/c0o5bKUeLjM4SJrys+RBDA=;
-        b=XKYZ4KqwPf7b1HDe/BgAZpbKUYQmyH7OPlUJwPjSZzb4FRxmFPmBxke0V8ZiQ2pV0A
-         fdHYvx7G+Mh1w8saY4Mudjrq0/2s2tb25WhYF/0ijxK98YH7VngR5Hul8W5kZuJk5pPM
-         AoEymL2KYa8wo/Ih/XTTWgPDfjdmaYM1t/MAoD+n050Pa9qWHcdSxZBxOiRsMkYvoWeO
-         DkovshRkyCheroGEG9kjeJt3IXUZMv1bVeXTiwiNAt+y3kUvpLkYNergP6u2xaHLUkJp
-         o4etJ/15f5MIZBoTr59w9exqKnFlFItj7FjwJ8eiZ2Qj96vCdMLaZQL/RBDDu7/kdY/6
-         VVfg==
-X-Gm-Message-State: AOAM533DqLa+2/tkuEX+VyeIQ6Nzl8ofoMqzTly5vnS0s9SFdt8GAUYB
-        c5W5Muz0/9SOlYl4JBFXT0cyX+oWgE4OCw==
-X-Google-Smtp-Source: ABdhPJwfiWKpXveDzSNYkiR3H023Pib40kGyvlwMsW+DNk0pJwntUJqORfSqg/OKLw6ndSNPpjpj6g==
-X-Received: by 2002:a05:6e02:1bab:: with SMTP id n11mr18892902ili.213.1643816281468;
-        Wed, 02 Feb 2022 07:38:01 -0800 (PST)
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com. [209.85.166.181])
-        by smtp.gmail.com with ESMTPSA id g19sm10021640ilk.30.2022.02.02.07.37.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:37:59 -0800 (PST)
-Received: by mail-il1-f181.google.com with SMTP id s1so17347413ilj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:37:59 -0800 (PST)
-X-Received: by 2002:a92:c011:: with SMTP id q17mr16748310ild.165.1643816278744;
- Wed, 02 Feb 2022 07:37:58 -0800 (PST)
+        id S236761AbiBBPju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:39:50 -0500
+Received: from mail-bn8nam12on2061.outbound.protection.outlook.com ([40.107.237.61]:38729
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233663AbiBBPjs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 10:39:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c3qreNpelhkHIdRLcl+mcegwDdxWEFtyriThGidlGfZcRIUd+Nucb475BrlH0Fcvbnh46ED8O2JW4IeEsWofgH3ak0lhyusbTONyrO5N5UbsFQLMhimtgLOYnqiTS12OXephGUIR19tZTRyLwpnwKEZe2C7vWUObeSC8/fMa5upsdp8ziSHlqY4GKFcgeRrSLWs4hK/YnnE3FtfU5PkmInnjfaYASPuXEh3NYBCuimYCWFZY2+povRckzopbw5+u4yDUK6/MuJO7q5/4UxM2f1awwQvRNnWYISatmLsuQBLFYzoZcagpBMmdHqhw20AHpo3z67kkBPBQHpkEn2yKpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=joc/QWnnJvGBCLRycoEcdiKv6QU+UyUvNbyskxvN0MM=;
+ b=LbyASfqwCdcoWg/3gya0Mn5BtR0jFbHIYFtmmJiyez9+pLyx7WVV84fQDizS+MSaH647rtWEXEjXdfG3V68elvOMtPPeEeRMORpRFcS7iGxDjojdtGZCPr//x6sHj3OW78F4uB/C4rKmi8V+CyXiehMlSMoSy85WD/fcOO+MS+j+1ngGRq8kojo+l5l0olXKdJPkNDUpmrE86w7OE6Vlg0Nl7mGLn48OaMdNthzPB1HpFGQ/nU8GKwNwxDm3aZ5HIZ8jvMsHSNOmGaJ7ZOw233ggqYWe89xK309vxg0VRpoYH63wZvD6WIuhuJxZojcVSbaPoo0uWij4QKHpuAZyyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=joc/QWnnJvGBCLRycoEcdiKv6QU+UyUvNbyskxvN0MM=;
+ b=HDBZsvuKauLZtc4EhxHsskQ99DsjV0xJsvEOArCjTC3GioqVBb7HDmEc7zXPFhibt5UhcxS09SoFzZ9iLm7RD6lyfvRYePPlLNSOHqq5jULrsPU41z27BFd7F3mLsf45RBPilNBR7HD4VaOsclQPoI6KcB0t1oy6uarvILTkSEwy5IYnMUTWJTtAKepercyrZGa9nOQEf8vT/vTmoMzOeO/UAyBHyhCTI/KuFAUZNPW+upObo0Ex3bxDOTzu5b1/n27uwk1h9RDWvjQXedaUguVai0PF14M7XuymIIdiMVlj8zRM/45Ax12up0l99fMFigo+IhwZri5DOWbYaKTkhw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM5PR12MB1180.namprd12.prod.outlook.com (2603:10b6:3:74::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4951.12; Wed, 2 Feb 2022 15:39:46 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4951.012; Wed, 2 Feb 2022
+ 15:39:46 +0000
+Date:   Wed, 2 Feb 2022 11:39:45 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        yuzenghui <yuzenghui@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: Re: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+Message-ID: <20220202153945.GT1786498@nvidia.com>
+References: <20210702095849.1610-1-shameerali.kolothum.thodi@huawei.com>
+ <20220202131448.GA2538420@nvidia.com>
+ <a29ae3ea51344e18b9659424772a4b42@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a29ae3ea51344e18b9659424772a4b42@huawei.com>
+X-ClientProxiedBy: BL0PR1501CA0021.namprd15.prod.outlook.com
+ (2603:10b6:207:17::34) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
- <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de> <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
- <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
-In-Reply-To: <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 2 Feb 2022 07:37:47 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
-Message-ID: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
-Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Marek Vasut <marex@denx.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
-        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        David Airlie <airlied@linux.ie>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        lkft-triage@lists.linaro.org,
-        Grace Mi <grace.mi@ecs.corp-partner.google.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c264ac89-5b12-4d60-394c-08d9e6623db9
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1180:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1180611BCAEA0D079C1EB3A2C2279@DM5PR12MB1180.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MhwmnZY8fQU4/rBMQK7dQSsY/9f2untOAeUAmh4KC7PuOMm0vqosGlL/EBp4415pVfNvAafbUcX4SpHJqszk+OiJy31luEOKQv9Yo0VNZoiEcZur2q9nr5v5o1/LAVuCD6hB7b0j8dy5RlYSxmBd3IuR7WIF7qkxCEcpC5Y14ZSYhY/rHpfhlYDqOMUPnqL5iA8QW272ITzHL03RJqzxylaTqxVZRvfHK8QincRmUc4Egwh1Wn5dFhFTg+PxBhmjjWwHLx9UPUKJWe26HnlDhUGhyXqjO9n3+oz2PvaQdGTx/Q0P/7A31ElcZu7wg1atL9VcXN/j5Ded4ckIXzBRrsDJqKYD6Wjw0BDeJ0nRT5C1OOHfu9UGVBZ2iBxCwlZdbIU8+wF661XYqXEvna5MjRJx/nbYx7As3fW2UOBU6z7bPRpBYqeW1EcX/v/+NygYy7fzXU5eUlpmpnE56IZmMzP6LGF/v6zQ7oOXA8ssE788W25yBxvc6ZJKuuptXvbIcGwVqnXpe/3bYFurTkf+zxNPnJv0Ii++9ilKJkIbyVxVyjJX+uIIjp0TtqSGRaa8c9kMKZpOhHnZ01NGn4HTfxy2EpPOzUDxIp/Q1LUj3fJ5UlQZsMloI4oK16DhcJ1yFEbWVRjZwNAcv5qnK1dlOw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(6916009)(508600001)(6512007)(38100700002)(86362001)(316002)(36756003)(6486002)(66476007)(66556008)(26005)(66946007)(1076003)(186003)(83380400001)(6506007)(8676002)(8936002)(4326008)(2906002)(33656002)(2616005)(7416002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q5DChHyFhR5NdoFrnTu7PeEYvET8J0v26W3uPZ6vKejwNnciLraZ3fdBwauV?=
+ =?us-ascii?Q?nj3SF0JshZuSQgqno/o0nBz6AO1UUtYFxE/0whApnypEQX2F9yaHjYtyURPz?=
+ =?us-ascii?Q?xfVkaDequIckICBrDYrx/M2Cm0W9vHxDGiquIytJGVG2UvYkLhuEzgIuGm0/?=
+ =?us-ascii?Q?6VJBOkNWj0SA0YiISVd9LzuX7KPjd3o+Oxl6a0RyIpwfrCgw3dnW3Z9f0fvt?=
+ =?us-ascii?Q?GwI1BVVQ1A/qqGn/D2/SIRCCW6MmpJ5KCtaLHl6p8CQQjR2iyWnQ/62m+pze?=
+ =?us-ascii?Q?fx7IDrTyDErhcO5eWC2oMMSotl1MKE4sYXXep+uvElB9nOn2EhCav3ZTHlxt?=
+ =?us-ascii?Q?GeREtlDM2IlH+L8dtX1Tg90GQ/N/gUXOau7d2i27e273i801u2XsQYZCUW8t?=
+ =?us-ascii?Q?hG0bl6hiXDKAT7umO6qahCr0qbF3wrThUeKPzTuJWe6+I4rVU8cx2ulP+lDt?=
+ =?us-ascii?Q?U2WKYARrvB+6xz+1RGXMvzAmpeEMVvWNrAOsdgF1gljiQQn7I0rDFIuCInMV?=
+ =?us-ascii?Q?MCyYOHvggbmys1uScfRiO+Sg6HM8qEcheAtGn3EoUj/kzYaM/ZiusJjRKEDD?=
+ =?us-ascii?Q?P81dmSHUdI5XLwyYjk58FRtcHdku+xhnrrlPhAbUuYVMRh3LiaFEAkx+7WEJ?=
+ =?us-ascii?Q?Uuc5zfy9a9E9vuYCzaTe1cOupgS2IS+rRiv2/27gqnZIXc6KBBTt0PaI38or?=
+ =?us-ascii?Q?duzFbEbA9bg4Ck4dL7NOL2bFoHMuLwontRBK6SFMGYjz4xOZNDLYybO4iXO2?=
+ =?us-ascii?Q?75LCDIOD3K2qPVpXDhl76UEmJaKuQDxynsLt90ky9sF6R4/0Zj+PJsn84nII?=
+ =?us-ascii?Q?Ch0ofawwrO1GxKBg6bVADP5aJucLV1SZ5Y7QnJf3yIUiWl8GCQpIrlDIdtKx?=
+ =?us-ascii?Q?FfT2T70Bm3QbuvedzJIIHUlUjnTFFeoow9R57B6rtljIhSfmfE63pISPIMwZ?=
+ =?us-ascii?Q?JAtF+7r1kZv5A4WWF8Qq1NcqCim7+USUTxmrd+MocO6Ljj8bnQ2gyccSY1Jk?=
+ =?us-ascii?Q?6l3HGxMAHF/YDdEITpwoZRDdGSxnF/VykJ2vLf8W8eaYeaM6/6obptL+6FVf?=
+ =?us-ascii?Q?bRfToH8kFFa4INukO57BunK1HMa6NiS6CvTSU1G4zyYq+137VbD6t8mUY/rZ?=
+ =?us-ascii?Q?ndMnSwKNz0ycxZa54gK+2xDFF79YRdLeM+oymFc/IZRRpkjejIw3KYRnquOe?=
+ =?us-ascii?Q?9G9Dz72eIDf/kO7PZh4GDsifhDKv/xQI59vo1v8YErWWMh2VBpKKn/KoQTkx?=
+ =?us-ascii?Q?1LTKcOR6UhmvBCSYFf3aYtVw0hk15XotTkrZ18yNoTC/NIA7ofEx9CA0a2G2?=
+ =?us-ascii?Q?rdQ7cicdPubl2OKh8eovTS2aCIlmYmjqjr2HVufx//rJZD9i1uljxQk5CJeV?=
+ =?us-ascii?Q?ug+HaW1VMEJP5yxiUSrGQO85IbtRgOGKSd+iRHDtvNQC/KQLdkgCNsCL5KVk?=
+ =?us-ascii?Q?5HDdfzrCbMv9B9kSulTC4qkGyqn9q9O5Khc13we3snimJQWIUne+e3QaG3N6?=
+ =?us-ascii?Q?UF/GjOm3RhnwgmgFMSzEjkM1r1q/bi8KA/qVRR0fNm8MMoJNFiPm+rOcQUUX?=
+ =?us-ascii?Q?zlN58axWb1n+CWNIyEo=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c264ac89-5b12-4d60-394c-08d9e6623db9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 15:39:46.7774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zvnk/wK2FkyRt8qSqKtFUtLchRyeYmsEKJYkdvMlbuNBMxHrZmV+N96MsdMcs2Ik
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Feb 02, 2022 at 02:34:52PM +0000, Shameerali Kolothum Thodi wrote:
 
-On Wed, Feb 2, 2022 at 2:25 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
->
-> Hi
->
-> Am 02.02.22 um 10:28 schrieb Ard Biesheuvel:
-> > On Wed, 2 Feb 2022 at 10:08, Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>
-> >> Hi
-> >>
-> >> Am 02.02.22 um 10:02 schrieb Naresh Kamboju:
-> >>> Following builds failed on Linux next 20220202 arm architecture.
-> >>>     - arm-gcc-10-omap2plus_defconfig
-> >>>     - arm-clang-nightly-shmobile_defconfig
-> >>>     - arm-gcc-8-lpc32xx_defconfig
-> >>>     - arm-clang-13-shmobile_defconfig
-> >>>     - arm-gcc-10-shmobile_defconfig
-> >>>     - arm-clang-11-shmobile_defconfig
-> >>>     - arm-clang-11-omap2plus_defconfig
-> >>>     - arm-clang-13-omap2plus_defconfig
-> >>>     - arm-clang-11-lpc32xx_defconfig
-> >>>     - arm-gcc-8-omap2plus_defconfig
-> >>>     - arm-gcc-9-vexpress_defconfig
-> >>>     - arm-clang-nightly-lpc32xx_defconfig
-> >>>     - arm-gcc-9-shmobile_defconfig
-> >>>     - arm-clang-13-lpc32xx_defconfig
-> >>>     - arm-gcc-10-sama5_defconfig
-> >>>     - arm-clang-11-vexpress_defconfig
-> >>>     - arm-clang-11-sama5_defconfig
-> >>>     - arm-gcc-9-omap2plus_defconfig
-> >>>     - arm-clang-nightly-sama5_defconfig
-> >>>     - arm-clang-13-vexpress_defconfig
-> >>>     - arm-clang-nightly-vexpress_defconfig
-> >>>     - arm-gcc-9-lpc32xx_defconfig
-> >>>     - arm-clang-12-vexpress_defconfig
-> >>>     - arm-gcc-10-vexpress_defconfig
-> >>>     - arm-clang-12-shmobile_defconfig
-> >>>     - arm-gcc-11-omap2plus_defconfig
-> >>>     - arm-gcc-9-sama5_defconfig
-> >>>     - arm-gcc-8-shmobile_defconfig
-> >>>     - arm-gcc-10-lpc32xx_defconfig
-> >>>     - arm-clang-12-omap2plus_defconfig
-> >>>     - arm-gcc-8-vexpress_defconfig
-> >>>     - arm-clang-12-sama5_defconfig
-> >>>     - arm-clang-nightly-omap2plus_defconfig
-> >>>     - arm-gcc-11-lpc32xx_defconfig
-> >>>     - arm-gcc-11-sama5_defconfig
-> >>>     - arm-gcc-11-shmobile_defconfig
-> >>>     - arm-gcc-11-vexpress_defconfig
-> >>>     - arm-gcc-8-sama5_defconfig
-> >>>     - arm-clang-13-sama5_defconfig
-> >>>     - arm-clang-12-lpc32xx_defconfig
-> >>>
-> >>>
-> >>> make --silent --keep-going --jobs=8  ARCH=arm
-> >>> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-> >>> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc' vexpress_defconfig
-> >>> make --silent --keep-going --jobs=8  ARCH=arm
-> >>> CROSS_COMPILE=arm-linux-gnueabihf- 'CC=sccache
-> >>> arm-linux-gnueabihf-gcc' 'HOSTCC=sccache gcc'
-> >>> arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in function
-> >>> `panel_edp_probe':
-> >>> panel-edp.c:(.text+0xb74): undefined reference to `drm_panel_dp_aux_backlight'
-> >>> make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
-> >>>
-> >>>
-> >>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >>>
-> >>> meta data:
-> >>> -----------
-> >>>       git describe: next-20220202
-> >>>       git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >>>       target_arch: arm
-> >>>       kconfig: vexpress_defconfig
-> >>>       toolchain: gcc-11
-> >>>
-> >>> Build log:
-> >>> -------------
-> >>> https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/
-> >>>
-> >>> Steps to reproduce:
-> >>> --------------------
-> >>> # To install tuxmake on your system globally:
-> >>> # sudo pip3 install -U tuxmake
-> >>> #
-> >>> # See https://docs.tuxmake.org/ for complete documentation.
-> >>> # Original tuxmake command with fragments listed below.
-> >>>
-> >>> tuxmake --runtime podman --target-arch arm --toolchain gcc-11
-> >>> --kconfig vexpress_defconfig
-> >>>
-> >>> tuxmake --runtime podman --target-arch arm --toolchain gcc-11
-> >>> --kconfig https://builds.tuxbuild.com/24XRim72vFXix6l6MdAJNENy6je/config
-> >>
-> >> You'll now need
-> >>
-> >>     CONFIG_DRM_DP_HELPER=y
-> >>
-> >> in your config.
-> >>
-> >
-> > That should never be the solution for linker errors such as this one.
-> >
-> > If CONFIG_DRM_PANEL_EDP relies on something provided by
-> > CONFIG_DRM_DP_HELPER, it should select it or depend on it in Kconfig.
->
-> Of course, we'll provide a patch for the Kconfig files.
+> > There are few topics to consider:
+> >  - Which of the three feature sets (STOP_COPY, P2P and PRECOPY) make
+> >    sense for this driver?
+> 
+> I think it will be STOP_COPY only for now. We might have PRECOPY feature once
+> we have the SMMUv3 HTTU support in future.
 
-There was discussion about this last November but I guess nothing came of it?
+HTTU is the dirty tracking feature? To be clear VFIO migration support
+for PRECOPY has nothing to do with IOMMU based dirty page tracking.
+ 
+> >  - I think we discussed the P2P implementation and decided it would
+> >    work for this device? Can you re-read and confirm?
+> 
+> In our case these devices are Integrated End Point devices and doesn't have
+> P2P DMA capability. Hence the FSM arcs will be limited to STOP_COPY feature
+> I guess. Also, since we cannot guarantee a NDMA state in STOP, my
+> assumption currently is the onus of making sure that no MMIO access happens 
+> in STOP is on the user. Is that a valid assumption?
 
-https://lore.kernel.org/r/20211117062704.14671-1-rdunlap@infradead.org/
+Yes, you can treat RUNNING_P2P as the same as STOP and rely on no MMIO
+access to sustain it.
 
-In there Arnd provided a proposed patch. If everyone likes that and it
-fixes things then we can apply it...
+(and I'm wondering sometimes if we should rename RUNNING_P2P to
+STOP_P2P - ie the device is stopped but still allows inbound P2P to
+make this clearer)
 
--Doug
+> Do we need to set the below before the feature query?
+> Or am I using a wrong Qemu/kernel repo?
+> 
+> +++ b/hw/vfio/migration.c
+> @@ -488,6 +488,7 @@ static int vfio_migration_query_flags(VFIODevice
+> *vbasedev, uint64_t *mig_flags)
+>      struct vfio_device_feature_migration *mig = (void *)feature->data;
+> 
+>      feature->argsz = sizeof(buf);
+> +    feature->flags = VFIO_DEVICE_FEATURE_MIGRATION | VFIO_DEVICE_FEATURE_GET;
+>      if (ioctl(vbasedev->fd, VFIO_DEVICE_FEATURE, feature) != 0)
+>          return -EOPNOTSUPP;
+
+Oh, this is my mistake I thought this got pushed to that github
+already but didn't, I updated it.
+
+If you have a prototype can you post another RFC?
+
+Thanks,
+Jason

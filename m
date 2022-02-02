@@ -2,164 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270704A7347
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979EC4A7344
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344868AbiBBOfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345047AbiBBOfI (ORCPT
+        id S1345070AbiBBOe7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 09:34:59 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4661 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234062AbiBBOez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:35:08 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D5CC061744
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:35:01 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id e28so18960930pfj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:35:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yfAXAcV/wZ+uHO6JBR1mzR4k32V5m276WxyzPLvNLTE=;
-        b=Jtk3Kzgm/acaQdPFcEkC9Vlykmm8QQmOLbTQ0WNCe5c19+7qPERmzZTnk2K/kXPWT3
-         awBMTwT+IctxLSgpQTzoCPDBfv7AnZh8a7ms5e+HG/IcD4gkzcs+GVpFwq0BSaaEOBzC
-         +Z8F1B1ZxZOxRnIMDLeurg++5JhMZLe2voq7jns4oadz++eOKm6B6z+X9URirr4NHkff
-         oy5mB5XhSrwbAb6rAdlIm9OzVkgFJv+SE8i0xol8ijOkdIvv1Hfrr/Ck5yvb/m/I5Jrq
-         45/qvfmRK3Rxch2z7W9+sPNOSQH6/gz0279qxMsX6gU59wHHjcAL2zSo6NjBGpmVSnyW
-         a01w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yfAXAcV/wZ+uHO6JBR1mzR4k32V5m276WxyzPLvNLTE=;
-        b=h86MrSACHCU4KQ+/7UABcxrOnXxv0Hi7L+4xfPQHniWv86Wq47ZJNa79007oklpOmL
-         tdu5UO7CoEI+UI3iEOk0IW4KbxVQ+dh/8mazLHHCa3TeRotkPKLDpvt+4sQnSNMtiAlr
-         kZOMKgFHzSa172gT3ZFvW3vNcuUYjoWZkbVDPOzGE9iEqeb2ZhkUsjw5sceUdfhdrbCC
-         4cl4R3uvLULmZZQx7dxxOxdt4E7u/8H9lN9/vRxxIwLU/JL6/L8vfcXSkAmHg2wY+B3R
-         5IRNE9C1u4fLxQtuggfChrWl4DMeOzAltlBm9q+mr3OzVnghdj+CvUEZi4UNypYWcAmD
-         jOjQ==
-X-Gm-Message-State: AOAM533umdFVFqv4VvXoDQEHAVCJUKx2B/81gh37pfRMwcY7KOyDlnED
-        1p9sZ/0bScZe9r3VMEWNpVAwYQ==
-X-Google-Smtp-Source: ABdhPJzW7VqsfdOXDPUXv6t69WSXlrB+FLAIOju7z/IcFQKVnTEKauVXBfJqD5J3XyiRSyiWJX7H4w==
-X-Received: by 2002:a05:6a00:174b:: with SMTP id j11mr9475901pfc.19.1643812500607;
-        Wed, 02 Feb 2022 06:35:00 -0800 (PST)
-Received: from FVFYT0MHHV2J.tiktokcdn.com ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id s9sm29079268pgm.76.2022.02.02.06.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 06:35:00 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
-        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
-        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
-        hughd@google.com, xiyuyang19@fudan.edu.cn,
-        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
-        hch@infradead.org
-Cc:     linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v2 6/6] mm: remove range parameter from follow_invalidate_pte()
-Date:   Wed,  2 Feb 2022 22:33:07 +0800
-Message-Id: <20220202143307.96282-7-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20220202143307.96282-1-songmuchun@bytedance.com>
-References: <20220202143307.96282-1-songmuchun@bytedance.com>
+        Wed, 2 Feb 2022 09:34:55 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jpkp33h5Xz67cpv;
+        Wed,  2 Feb 2022 22:34:19 +0800 (CST)
+Received: from lhreml713-chm.china.huawei.com (10.201.108.64) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Feb 2022 15:34:52 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml713-chm.china.huawei.com (10.201.108.64) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Feb 2022 14:34:52 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Wed, 2 Feb 2022 14:34:52 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        yuzenghui <yuzenghui@huawei.com>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+Thread-Topic: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+Thread-Index: AQHYGDbmFHRHIXj6i0KnDwR2h2vbX6yAR7ag
+Date:   Wed, 2 Feb 2022 14:34:52 +0000
+Message-ID: <a29ae3ea51344e18b9659424772a4b42@huawei.com>
+References: <20210702095849.1610-1-shameerali.kolothum.thodi@huawei.com>
+ <20220202131448.GA2538420@nvidia.com>
+In-Reply-To: <20220202131448.GA2538420@nvidia.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only user (DAX) of range parameter of follow_invalidate_pte()
-is gone, it safe to remove the range paramter and make it static
-to simlify the code.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- include/linux/mm.h |  3 ---
- mm/memory.c        | 23 +++--------------------
- 2 files changed, 3 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index d211a06784d5..7895b17f6847 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1814,9 +1814,6 @@ void free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 		unsigned long end, unsigned long floor, unsigned long ceiling);
- int
- copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma);
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp);
- int follow_pte(struct mm_struct *mm, unsigned long address,
- 	       pte_t **ptepp, spinlock_t **ptlp);
- int follow_pfn(struct vm_area_struct *vma, unsigned long address,
-diff --git a/mm/memory.c b/mm/memory.c
-index 514a81cdd1ae..e8ce066be5f2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4869,9 +4869,8 @@ int __pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
- }
- #endif /* __PAGETABLE_PMD_FOLDED */
- 
--int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
--			  struct mmu_notifier_range *range, pte_t **ptepp,
--			  pmd_t **pmdpp, spinlock_t **ptlp)
-+static int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
-+				 pte_t **ptepp, pmd_t **pmdpp, spinlock_t **ptlp)
- {
- 	pgd_t *pgd;
- 	p4d_t *p4d;
-@@ -4898,31 +4897,17 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 		if (!pmdpp)
- 			goto out;
- 
--		if (range) {
--			mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0,
--						NULL, mm, address & PMD_MASK,
--						(address & PMD_MASK) + PMD_SIZE);
--			mmu_notifier_invalidate_range_start(range);
--		}
- 		*ptlp = pmd_lock(mm, pmd);
- 		if (pmd_huge(*pmd)) {
- 			*pmdpp = pmd;
- 			return 0;
- 		}
- 		spin_unlock(*ptlp);
--		if (range)
--			mmu_notifier_invalidate_range_end(range);
- 	}
- 
- 	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
- 		goto out;
- 
--	if (range) {
--		mmu_notifier_range_init(range, MMU_NOTIFY_CLEAR, 0, NULL, mm,
--					address & PAGE_MASK,
--					(address & PAGE_MASK) + PAGE_SIZE);
--		mmu_notifier_invalidate_range_start(range);
--	}
- 	ptep = pte_offset_map_lock(mm, pmd, address, ptlp);
- 	if (!pte_present(*ptep))
- 		goto unlock;
-@@ -4930,8 +4915,6 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- 	return 0;
- unlock:
- 	pte_unmap_unlock(ptep, *ptlp);
--	if (range)
--		mmu_notifier_invalidate_range_end(range);
- out:
- 	return -EINVAL;
- }
-@@ -4960,7 +4943,7 @@ int follow_invalidate_pte(struct mm_struct *mm, unsigned long address,
- int follow_pte(struct mm_struct *mm, unsigned long address,
- 	       pte_t **ptepp, spinlock_t **ptlp)
- {
--	return follow_invalidate_pte(mm, address, NULL, ptepp, NULL, ptlp);
-+	return follow_invalidate_pte(mm, address, ptepp, NULL, ptlp);
- }
- EXPORT_SYMBOL_GPL(follow_pte);
- 
--- 
-2.11.0
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 02 February 2022 13:15
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
+> mgurtovoy@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
+> <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+> yuzenghui <yuzenghui@huawei.com>; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
+> Subject: Re: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+> 
+> On Fri, Jul 02, 2021 at 10:58:45AM +0100, Shameer Kolothum wrote:
+> > This series attempts to add vfio live migration support for
+> > HiSilicon ACC VF devices. HiSilicon ACC VF device MMIO space
+> > includes both the functional register space and migration
+> > control register space. As discussed in RFCv1[0], this may create
+> > security issues as these regions get shared between the Guest
+> > driver and the migration driver. Based on the feedback, we tried
+> > to address those concerns in this version.
+> >
+> > This is now based on the new vfio-pci-core framework proposal[1].
+> > Understand that the framework proposal is still under discussion,
+> > but really appreciate any feedback on the approach taken here
+> > to mitigate the security risks.
+> 
+> Hi, can you look at the v6 proposal for the mlx5 implementation of the
+> migration API and see if it meets hisilicon acc's needs as well?
+> 
+> https://lore.kernel.org/all/20220130160826.32449-1-yishaih@nvidia.com/
+
+Yes, I saw that one. Thanks for that and is now looking into it.
+
+> 
+> There are few topics to consider:
+>  - Which of the three feature sets (STOP_COPY, P2P and PRECOPY) make
+>    sense for this driver?
+
+I think it will be STOP_COPY only for now. We might have PRECOPY feature once
+we have the SMMUv3 HTTU support in future.
+
+> 
+>    I see pf_qm_state_pre_save() but didn't understand why it wanted to
+>    send the first 32 bytes in the PRECOPY mode? It is fine, but it
+>    will add some complexity to continue to do this.
+
+That was mainly to do a quick verification between src and dst compatibility
+before we start saving the state. I think probably we can delay that check
+for later.
+
+>  - I think we discussed the P2P implementation and decided it would
+>    work for this device? Can you re-read and confirm?
+
+In our case these devices are Integrated End Point devices and doesn't have
+P2P DMA capability. Hence the FSM arcs will be limited to STOP_COPY feature
+I guess. Also, since we cannot guarantee a NDMA state in STOP, my
+assumption currently is the onus of making sure that no MMIO access happens 
+in STOP is on the user. Is that a valid assumption?
+
+>  - Are the arcs we defined going to work here as well? The current
+>    implementation in hisi_acc_vf_set_device_state() is very far away
+>    from what the v1 protocol is, so I'm having a hard time guessing,
+>    but..
+
+Right. The FSM has changed a couple of times since we posted this.
+I am going to rebase all that now.
+
+>       RESUMING -> STOP
+>         Probably vf_qm_state_resume()
+> 
+>       RUNNING -> STOP
+>         vf_qm_fun_restart() - that is oddly named..
+> 
+>       STOP -> RESUMING
+>         Seems to be a nop (likely a bug)
+> 
+>       STOP -> RUNNING
+>          Not implemented currenty? (also a bug)
+> 
+>       STOP -> STOP_COPY
+>          pf_qm_state_pre_save / vf_qm_state_save
+> 
+>       STOP_COPY -> STOP
+>          NOP
+
+I will check and verify this.
+
+>    And the modification for the P2P/NO DMA is presumably just
+>    fun_restart too since stopping the device and stopping DMA are
+>    going to be the same thing here?
+
+Yes, in our case stopping device and stopping DMA are effectively the
+same thing.
+
+> 
+> The mlx5 implementation linked above is a full example you can cut and
+> paste from for how to implement the state function and the how to do
+> the data transfer. The f_ops read/write implementation for acc looks
+> trivial as it only streams the fixed size and pre-allocated 'struct
+> acc_vf_data'
+> 
+> It looks like it would be a short path to implement our v2 proposal
+> and remove a lot of driver code, as we saw in mlx5.
+> 
+
+Ok. These are the git repo I am using for the rework,
+https://github.com/jgunthorpe/qemu/commits/vfio_migration_v2
+https://github.com/jgunthorpe/linux/tree/vfio_migration_v2
+
+Please let me know if the above are not up to date.
+
+Also, just noted that my quick prototype is now failing
+with below error,
+
+" Error: VFIO device doesn't support migration"
+
+Do we need to set the below before the feature query?
+Or am I using a wrong Qemu/kernel repo?
+
+--- a/hw/vfio/migration.c
++++ b/hw/vfio/migration.c
+@@ -488,6 +488,7 @@ static int vfio_migration_query_flags(VFIODevice
+*vbasedev, uint64_t *mig_flags)
+     struct vfio_device_feature_migration *mig = (void *)feature->data;
+
+     feature->argsz = sizeof(buf);
++    feature->flags = VFIO_DEVICE_FEATURE_MIGRATION | VFIO_DEVICE_FEATURE_GET;
+     if (ioctl(vbasedev->fd, VFIO_DEVICE_FEATURE, feature) != 0)
+         return -EOPNOTSUPP;
+
+Thanks,
+Shameer
 

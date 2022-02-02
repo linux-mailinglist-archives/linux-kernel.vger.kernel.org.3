@@ -2,130 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB754A7560
+	by mail.lfdr.de (Postfix) with ESMTP id E8B9B4A7562
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239398AbiBBQEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:04:44 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56944 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234360AbiBBQEn (ORCPT
+        id S1345713AbiBBQE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343546AbiBBQEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:04:43 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 212E69Ya027428;
-        Wed, 2 Feb 2022 16:04:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=9NuijRvVfCgStj+uKowStpwOkLQEsf6EhU5eLkUU6OA=;
- b=OHym0JjeGRuTKCGsWsrOr5/H3b6oqFMcIpgqc04U3jWFcLaPZ/bxbfVJ5V2BJHjCId7i
- /iCXncWbDnLPatARBVqqoLcnbV8a/eOr4X6QBMtk+Qvf4joiyE4YzKLTvJCpYU5uc188
- FK+v3w0AVO6jYZfSl8HxzMegiDP2WK7hmNulIaCP1vTtzNxwZIB7wds8/9r91u78Pq+Y
- kaTgdVpablsYT6/feSeLxw9sQV5pCbJytOpNJbreCMd5LQcwxr6POIFEYluM6daBSHcE
- L+6os1MryiV4aD9HCszwSJ9QHasomBB6chrLLqIK/Vs4fFJH2/U9RTnMXuAVJAxE14mi zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dyt7x4ekp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Feb 2022 16:04:29 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 212E83Iv039656;
-        Wed, 2 Feb 2022 16:04:28 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dyt7x4ejw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Feb 2022 16:04:28 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 212FwRp9004873;
-        Wed, 2 Feb 2022 16:04:26 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3dvvujpt61-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Feb 2022 16:04:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 212G4LvH46072136
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Feb 2022 16:04:21 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37CAA4C059;
-        Wed,  2 Feb 2022 16:04:21 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFC5A4C04E;
-        Wed,  2 Feb 2022 16:04:18 +0000 (GMT)
-Received: from sig-9-65-79-154.ibm.com (unknown [9.65.79.154])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  2 Feb 2022 16:04:18 +0000 (GMT)
-Message-ID: <d08ffbb2f803cd26f4d9697868e138cdb2e71d32.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 00/27] ima: Namespace IMA with audit support in
- IMA-ns
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 02 Feb 2022 11:04:18 -0500
-In-Reply-To: <3f053d38-00f7-b495-4ea2-3c61fa120284@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220202141329.k5jcsbutpmzv53c3@wittgenstein>
-         <3f053d38-00f7-b495-4ea2-3c61fa120284@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: A8p0VPUdxKCS_mcla4NjbftohdTcgfzG
-X-Proofpoint-GUID: orZpxAzCsBDWXKObK5I93ubI0xiQrtQk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-02_07,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- clxscore=1015 adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202020090
+        Wed, 2 Feb 2022 11:04:55 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F288CC06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:04:54 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id p7so42989758edc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W8XDJWaf+HoqlQNAE1r2JlUclS76hjxcv6QG3k0ojVY=;
+        b=aewIzRW3bYO9Qtvi7ydqWjuFPI08RZUw1/OybUT1wYKGO2mJlxKzTiBSYhgcPlpEpT
+         xDF8igGtowMtCHME+9TAmdAfBfOmPykesYpCGZ1qLXrvJeumxlSiokQVowqKEZKEZU3v
+         oB/4cMClDgQxpya/m9MRTkK1GFvVLEVB0p6GqQaPyIePmHPm9WKyHjGW53qG1S7XhDSW
+         ejZblN14eIi0NTJK9eU/LnPnZDGIfoGcH4Uz65H7hWeaheeHcmIHPV2rGEmfFU/3BxUC
+         +0L6GUNohQi9mvCDHqn9pDCsUfXQcPOXU2/m/egCWB9u1qD8WYbHFmmxh4Jt01BC1gaY
+         Az0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W8XDJWaf+HoqlQNAE1r2JlUclS76hjxcv6QG3k0ojVY=;
+        b=BbyTYJ3NEmFaPVb8VmToxNxSo7THFmx9v4okjZDzV0egPBL9oonIlAebiaLQvVaTsY
+         VM8iJaoSGRuhyKaVFODSfTCUMi1eBSuw9h7ZUpywLaqiYcDagN3OxBounQbfCYw4dUrJ
+         L0ItxfxJFF/6+JNvDdM3/us4ZcazMrNTAtSVBsGTVhm2mGUQqAthaB47BIEZO3oOOJBT
+         gDD3fIa4yCrE7kIKPVQNFEUC0v59s6zeF2Lcv7okPxJDpxLU3zjJppGvkJQ1Z3mRSlqY
+         2WxivEWFxGfs98rJsA2/mQDyy+QeHCab21c9mJlUohvyi2MJNj/MLCHvb7fVWIrV/B9f
+         dQuA==
+X-Gm-Message-State: AOAM533k2942970uHKvNbP1KxpOnLkNty/AF6pFmt3Zc/HUiP0XhUquA
+        IArJ37wIW5ec+IYnOlcXmx5ZdmRXCDRB3zpddYlg
+X-Google-Smtp-Source: ABdhPJzIYm4R3hFxsLqXy5P6CnVCHdTDObqlpa9JdFdXHJwMMuF58QjL3ONLdVHQwGsYwm2ftdw32L2jtgeJM+Mbxzs=
+X-Received: by 2002:a05:6402:345:: with SMTP id r5mr31399867edw.269.1643817893533;
+ Wed, 02 Feb 2022 08:04:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20220202112511.18010-1-vbendel@redhat.com>
+In-Reply-To: <20220202112511.18010-1-vbendel@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 2 Feb 2022 11:04:42 -0500
+Message-ID: <CAHC9VhR4eTEOO2m=HXYdG89mDBOPnd5BcWLwMCO-qZ8BWNMd9Q@mail.gmail.com>
+Subject: Re: [PATCH v2] selinux: fix double free of cond_list on error paths
+To:     vbendel@redhat.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        omosnace@redhat.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-02 at 09:40 -0500, Stefan Berger wrote:
-> On 2/2/22 09:13, Christian Brauner wrote:
-> > On Tue, Feb 01, 2022 at 03:37:08PM -0500, Stefan Berger wrote:
-> >>
-> >> v10:
-> >>   - Added A-b's; addressed issues from v9
-> >>   - Added 2 patches to support freeing of iint after namespace deletion
-> >>   - Added patch to return error code from securityfs functions
-> >>   - Added patch to limit number of policy rules in IMA-ns to 1024
-> > I'm going to go take a lighter touch with this round of reviews.
-> > First, because I have February off. :)
-> > Second, because I think that someone who is more familiar with IMA and
-> > its requirements should take another look to provide input and ask more
-> > questions. Last time I spoke to Serge he did want to give this a longer
-> > look and maybe also has additional questions.
-> 
-> The one problem I am seeing is that we probably cannot support auditing 
-> in IMA namespaces since every user can now create an IMA namespace. 
-> Unless auditing was namespaced, the way it is now gives too much control 
-> to the user to flood the host audit log.
+On Wed, Feb 2, 2022 at 6:25 AM <vbendel@redhat.com> wrote:
+>
+> From: Vratislav Bendel <vbendel@redhat.com>
+>
+> On error path from cond_read_list() and duplicate_policydb_cond_list()
+> the cond_list_destroy() gets called a second time in caller functions,
+> resulting in NULL pointer deref.
+> Fix this by resetting the cond_list_len to 0 in cond_list_destroy(),
+> making subsequent calls a noop.
+>
+> Also consistently reset the cond_list pointer to NULL after freeing.
+>
+> Signed-off-by: Vratislav Bendel <vbendel@redhat.com>
+> ---
+>  security/selinux/ss/conditional.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Stefan, we need to differentiate between the different types of audit
-records being produced by IMA.  Some of these are informational, like
-the policy rules being loaded or "Time of Measure, Time of Use"
-(ToMToU) records.  When we discuss IMA-audit we're referring to the
-file hashes being added in the audit log.  These are the result of the
-IMA "audit" policy rules.
+I just merged this into selinux/stable-5.17 and I'll plan on sending
+this up to Linus tomorrow, thanks Vratislav.
 
-How much of these informational messages should be audited in IMA
-namespaces still needs to be discussed.  For now, feel free to limit
-the audit messages to just the file hashes.
-
-thanks,
-
-Mimi
-
+-- 
+paul-moore.com

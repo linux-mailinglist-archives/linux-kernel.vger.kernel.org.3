@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9014A7B8A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 075F94A7B8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:13:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348036AbiBBXMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:12:23 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:47813 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347913AbiBBXMV (ORCPT
+        id S1348043AbiBBXMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347913AbiBBXMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:12:21 -0500
-Received: by mail-io1-f72.google.com with SMTP id 193-20020a6b01ca000000b00612778c712aso553317iob.14
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:12:21 -0800 (PST)
+        Wed, 2 Feb 2022 18:12:50 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FF1C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:12:49 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b9so2171343lfq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kxLZoNp/4LQPZ5USv0kT/ANrlVIeVswz1mwyMInuRpk=;
+        b=Q2moWDCWxi4BS8PPyCaJoqnrPIZQcruQgJjzpamHlvHl8nfkZnrnUwhlebZjL4Qlid
+         AZFzASi+lGjNRFfFNjvPEAV2OO1mxc2n/gPx8V0KnqP5u6M4wJHDfXsL1tbK3dOCogdZ
+         v5sFcJe1cu9GkyUnxpnJ3HA3l8dpy1RjXvbvrK8Z/rAK9aOYhuhE66KFBdjyjDKqfZlT
+         +wq0XncRggDytCxIhnPTtZSQBB8unOSP4gvw0dAqmb2KU9UablWXiH0mbP3wrGYlLrXp
+         3dsxxtU1+Z++ZC+wI7jM2kRxCYui1ckWsccWdwkq3TdAX9Dv2DXTOhZ2rgkBuiM3VxZa
+         mdNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=htmVlWGuHKKb3tjIfvhIeE41rcc33nqlNcOJ/WR1NFg=;
-        b=OEyKamoVkPk82WIrDl+T3ufHgbtfjb89eQ389854TrYPmJUnWEWjGph+nxZR9k1bVZ
-         hb54fXHjI/lPhxv1HaZOZ74pezNU7EDDEZByeY72ejzLplEptexgHTqp8swhGLEhmfRm
-         Z4F2Tv8lLWRR+R4QQRZX74yPtTVEBMSev7BF5l6bkcl+fig1jzIzvwfq/NUv83FXCVJD
-         VS451Zu1k80bIQFBxgVD9+dgl64iPVbaq/UqMcB87pAab0axdoCCC2PHU+YyajMc45Ht
-         bGVr9lqBq+eZV/zAqRfMDnlCF4fj5rJ+GDDC5Ppj2t4GClVReqIfog0Et28zoyM2067S
-         R9JQ==
-X-Gm-Message-State: AOAM5301hRw2tXQEyG6BOx1kC+BAwLjBE+vbHEIsCLm4t2EHQ1hVTM/q
-        q1L8dOh2zhyaF7tHRzr08Xxo2fuRGar806DshmG8EU/wYs0/
-X-Google-Smtp-Source: ABdhPJwfLeBxifdPwKYe9fuxoJzEo+ppyRuD/M/W85+SkRlpjuuPSlnJBOjJ4+VpsKr+HEvsxw1SN6i8HmPmbinpLwQ5GEtxpIJv
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kxLZoNp/4LQPZ5USv0kT/ANrlVIeVswz1mwyMInuRpk=;
+        b=QMmKTbQ5sMe6IfJoomANXn8dMSSvAmREaNZi17wKUWqjepmKumwCsznc2rqYIa7r/V
+         OCMnZVFQ4vkfKXPL9oLfgwsJbZLE4V4+9i5HzjFu8GDpzzCZFDUYgfe9LKEmVpziWVLk
+         o87HEuADfL6Kqn3wNSvy3Jq3+Xm6AL3cOhXqFJoCUYCaW/8gKn+gtqVVK+c099cd8j7o
+         HNkxd9Ar1HOCwAKf+C8Iarjo1zpRzCg2abrQcHIr8BNm6AskoZ/N4QlfHhRzbuusGbt2
+         8ZgBHvGwtuzbFXdztmWyFijry0fGh3CAqAyJqscmRiunsA5fRG8W/VhoZ50hqvZrK/iB
+         G4wg==
+X-Gm-Message-State: AOAM531WGGLA2IXQVE+eoeh/Ec2MrVoSE/rvaIZuL12dOcG0XlQnYkQt
+        CWu1rPwPoqUmdIrIEgovUMPg1ldopCY/ky2qyBDQ+Q==
+X-Google-Smtp-Source: ABdhPJwi69J10B5BJjANF390JZYBG3ldtIxVMDaHUe2bQC7/YKzyMziklWm0E/V2hAP0KIVpwrcww6mql102RTB9yMQ=
+X-Received: by 2002:ac2:5510:: with SMTP id j16mr24302186lfk.240.1643843567939;
+ Wed, 02 Feb 2022 15:12:47 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:70c3:: with SMTP id f186mr17553128jac.155.1643843539556;
- Wed, 02 Feb 2022 15:12:19 -0800 (PST)
-Date:   Wed, 02 Feb 2022 15:12:19 -0800
-In-Reply-To: <00000000000061d7eb05d7057144@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003de3e105d7112674@google.com>
-Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
-From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <20220202230515.2931333-1-nathan@kernel.org>
+In-Reply-To: <20220202230515.2931333-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 2 Feb 2022 15:12:35 -0800
+Message-ID: <CAKwvOdkQ__2A3NohrcJgF+JABSDnSyEKzD97qVa4cpM==GPONQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Makefile.extrawarn: Move -Wunaligned-access to W=1
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Wed, Feb 2, 2022 at 3:07 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> -Wunaligned-access is a new warning in clang that is default enabled for
+> arm and arm64 under certain circumstances within the clang frontend (see
+> LLVM commit below). On v5.17-rc2, an ARCH=arm allmodconfig build shows
+> 1284 total/70 unique instances of this warning (most of the instances
+> are in header files), which is quite noisy.
+>
+> To keep a normal build green through CONFIG_WERROR, only show this
+> warning with W=1, which will allow automated build systems to catch new
+> instances of the warning so that the total number can be driven down to
+> zero eventually since catching unaligned accesses at compile time would
+> be generally useful.
+>
+> Cc: stable@vger.kernel.org
+> Link: https://github.com/llvm/llvm-project/commit/35737df4dcd28534bd3090157c224c19b501278a
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1569
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1576
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-HEAD commit:    dd5152ab338c Merge branch 'bpf-btf-dwarf5'
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=138d300c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b210f94c3ec14b22
-dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d37f00700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14745624700000
+Thanks to you and Arnd for working out whether this is important to
+pursue. Sounds like it is.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com
+> ---
+>
+> v1 -> v2: https://lore.kernel.org/r/20220201232229.2992968-1-nathan@kernel.org/
+>
+> * Move to W=1 instead of W=2 so that new instances are caught (Arnd).
+> * Add links to the ClangBuiltLinux issue tracker.
+>
+>  scripts/Makefile.extrawarn | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index d53825503874..8be892887d71 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -51,6 +51,7 @@ KBUILD_CFLAGS += -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wno-format-zero-length
+>  KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+>  KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+> +KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+>  endif
+>
+>  endif
+>
+> base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+> --
+> 2.35.1
+>
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 check_copy_size include/linux/thread_info.h:230 [inline]
-WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 copy_from_user include/linux/uaccess.h:191 [inline]
-WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
-Modules linked in:
-CPU: 1 PID: 3596 Comm: syz-executor589 Not tainted 5.16.0-syzkaller-11587-gdd5152ab338c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:check_copy_size include/linux/thread_info.h:230 [inline]
-RIP: 0010:copy_from_user include/linux/uaccess.h:191 [inline]
-RIP: 0010:bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
-Code: fd 06 48 c1 e5 0c 48 01 c5 e8 b5 71 0d fa 49 81 fe ff ff ff 7f 0f 86 08 fe ff ff 4c 8b 74 24 60 4c 8b 7c 24 68 e8 09 6f 0d fa <0f> 0b 41 bc f2 ff ff ff e9 02 fb ff ff 4c 8b 74 24 60 4c 8b 7c 24
-RSP: 0018:ffffc90002acfb40 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000fffff0de RCX: 0000000000000000
-RDX: ffff88801ad5ba00 RSI: ffffffff876ae697 RDI: 0000000000000003
-RBP: ffff88801e32b000 R08: 000000007fffffff R09: ffffffff8d9399d7
-R10: ffffffff876ae67b R11: 000000000000001f R12: 0000000000000dc0
-R13: ffff888019342000 R14: 0000000000000000 R15: ffffc90000d6e000
-FS:  00005555560c8300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000280 CR3: 000000001df60000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
- __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
- __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd2338db1d9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd14e00248 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd2338db1d9
-RDX: 0000000000000048 RSI: 00000000200013c0 RDI: 000000000000000a
-RBP: 00007fd23389f1c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd23389f250
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
 
+-- 
+Thanks,
+~Nick Desaulniers

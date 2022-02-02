@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2294A773F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB304A775A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbiBBR5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S1346431AbiBBR5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346425AbiBBR5N (ORCPT
+        with ESMTP id S1346419AbiBBR5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Feb 2022 12:57:13 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3A2C06173B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC46BC06173D;
         Wed,  2 Feb 2022 09:57:12 -0800 (PST)
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7B7F5D97;
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E31A3E04;
         Wed,  2 Feb 2022 18:56:49 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824609;
-        bh=gQW6rIcJEbXKCWQJrx+5bX/2dvSKaZOaNpWU2LZIWXc=;
+        s=mail; t=1643824610;
+        bh=1oG8FpUhanwzJ6Xba8rv47glsXs3JVRy9iJcIqk3Grs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VVAYmcd4XUtj4VSaky2Eiq+KwcntJiHLXAWA/EWOj+Z+fG5ERVSYnljZ538E3BdSJ
-         Bghsbf05jwtmbJrIb8Oh3eG/WSOOvjHLjYZYT2EihnIW6yGPoMqIT5WWCzRPq26hNu
-         i0GB5PierPUxattNE7gTR1dIlbjvlGzAub0w78X8=
+        b=j7UYdY2dRIPVhpWwWnv2DUXzxM62S3z5MZkBDfcHPcR/Ha9pjiIXxiVVv+FyLXJJA
+         GCiQeQh81GAnPm/gmM2XOR2g5efCxjAjhuYmBHyBUefUxbMmW+cicYfg30VvN3fdzq
+         hDF9rfUZ/FM1PX/c/Lb/l4Kj1jGuURyNNwcZTJFY=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -33,140 +33,167 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 02/11] media: v4l: Add V4L2-PIX-FMT-Y14P format
-Date:   Wed,  2 Feb 2022 18:56:30 +0100
-Message-Id: <20220202175639.149681-3-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v3 03/11] media: dt-bindings: media: Add bindings for bcm2835-unicam
+Date:   Wed,  2 Feb 2022 18:56:31 +0100
+Message-Id: <20220202175639.149681-4-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a packed grey-scale image format with a depth of 14 bits per
-pixel. Every four consecutive samples are packed into seven bytes. Each
-of the first four bytes contain the eight high order bits of the pixels,
-and the three following bytes contains the six least significants bits
-of each pixel, in the same order.
+Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+camera interface. Also add a MAINTAINERS entry for it.
 
-As the other formats only needed 5 bytes before, append two bytes in the
-documentation array.
-
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../media/v4l/pixfmt-yuv-luma.rst             | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Dave: I assumed you were the maintainer for this file, as I based it on the
+bcm2835-unicam.txt file. Are  you happy to be added directly as the
+maintainer, or should this be specified as "Raspberry Pi Kernel
+Maintenance <kernel-list@raspberrypi.com>"
+---
+ .../bindings/media/brcm,bcm2835-unicam.yaml   | 107 ++++++++++++++++++
+ MAINTAINERS                                   |   7 ++
+ 2 files changed, 114 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-index d37ce6027095..c64485b03d27 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
-@@ -36,6 +36,8 @@ are often referred to as greyscale formats.
-       - Byte 2
-       - Byte 3
-       - Byte 4
-+      - Byte 5
-+      - Byte 6
- 
-     * .. _V4L2-PIX-FMT-GREY:
- 
-@@ -47,6 +49,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10:
- 
-@@ -58,6 +62,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10BPACK:
- 
-@@ -69,6 +75,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`2`\ [9:6]
-       - Y'\ :sub:`2`\ [5:0] Y'\ :sub:`3`\ [9:8]
-       - Y'\ :sub:`3`\ [7:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y10P:
- 
-@@ -80,6 +88,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`2`\ [9:2]
-       - Y'\ :sub:`3`\ [9:2]
-       - Y'\ :sub:`3`\ [1:0] Y'\ :sub:`2`\ [1:0] Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [1:0]
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12:
- 
-@@ -91,6 +101,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y12P:
- 
-@@ -102,6 +114,8 @@ are often referred to as greyscale formats.
-       - Y'\ :sub:`1`\ [3:0] Y'\ :sub:`0`\ [3:0]
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y14:
- 
-@@ -113,6 +127,21 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
+diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+new file mode 100644
+index 000000000000..5bf41a8834fa
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+@@ -0,0 +1,107 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+    * .. _V4L2-PIX-FMT-Y14P:
++title: Broadcom BCM283x Camera Interface (Unicam)
 +
-+      - ``V4L2_PIX_FMT_Y14P``
-+      - 'Y14P'
++maintainers:
++  - Dave Stevenson <dave.stevenson@raspberrypi.com>
 +
-+      - Y'\ :sub:`0`\ [13:6]
-+      - Y'\ :sub:`1`\ [13:6]
-+      - Y'\ :sub:`2`\ [13:6]
-+      - Y'\ :sub:`3`\ [13:6]
-+      - Y'\ :sub:`1`\ [1:0] Y'\ :sub:`0`\ [5:0]
-+      - Y'\ :sub:`2`\ [3:0] Y'\ :sub:`1`\ [5:2]
-+      - Y'\ :sub:`3`\ [5:0] Y'\ :sub:`2`\ [5:4]
++description: |-
++  The Unicam block on BCM283x SoCs is the receiver for either
++  CSI-2 or CCP2 data from image sensors or similar devices.
++
++  The main platform using this SoC is the Raspberry Pi family of boards.
++  On the Pi the VideoCore firmware can also control this hardware block,
++  and driving it from two different processors will cause issues.
++  To avoid this, the firmware checks the device tree configuration
++  during boot. If it finds device tree nodes starting by csi then
++  it will stop the firmware accessing the block, and it can then
++  safely be used via the device tree binding.
++
++properties:
++  compatible:
++    const: brcm,bcm2835-unicam
++
++  reg:
++    maxItems: 2
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Clock for the camera.
++      - description: Clock for the vpu.
++
++  clock-names:
++    items:
++      - const: lp
++      - const: vpu
++
++  power-domains:
++    items:
++      - description: Unicam power domain
++
++  num-data-lanes:
++    items:
++      - enum: [ 2, 4 ]
++
++  port:
++    additionalProperties: false
++    $ref: /schemas/graph.yaml#/$defs/port-base
++
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes: true
++          link-frequencies: true
++
++        required:
++          - data-lanes
++          - link-frequencies
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - power-domains
++  - num-data-lanes
++  - port
++
++additionalProperties: False
++
++examples:
++  - |
++    #include <dt-bindings/clock/bcm2835.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/raspberrypi-power.h>
++    csi1: csi@7e801000 {
++        compatible = "brcm,bcm2835-unicam";
++        reg = <0x7e801000 0x800>,
++              <0x7e802004 0x4>;
++        interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clocks BCM2835_CLOCK_CAM1>,
++                 <&firmware_clocks 4>;
++        clock-names = "lp", "vpu";
++        power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
++        num-data-lanes = <2>;
++        port {
++                csi1_ep: endpoint {
++                        remote-endpoint = <&imx219_0>;
++                        data-lanes = <1 2>;
++                        link-frequencies = /bits/ 64 <456000000>;
++                };
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a0770a861ca4..29344ea86847 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3670,6 +3670,13 @@ N:	bcm113*
+ N:	bcm216*
+ N:	kona
  
-     * .. _V4L2-PIX-FMT-Y16:
- 
-@@ -124,6 +153,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
-     * .. _V4L2-PIX-FMT-Y16-BE:
- 
-@@ -135,6 +166,8 @@ are often referred to as greyscale formats.
-       - ...
-       - ...
-       - ...
-+      - ...
-+      - ...
- 
- .. raw:: latex
- 
++BROADCOM BCM2835 CAMERA DRIVER
++M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
++F:	arch/arm/boot/dts/bcm283x*
++
+ BROADCOM BCM47XX MIPS ARCHITECTURE
+ M:	Hauke Mehrtens <hauke@hauke-m.de>
+ M:	Rafał Miłecki <zajec5@gmail.com>
 -- 
 2.32.0
 

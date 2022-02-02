@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4354A71C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447AA4A71CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344399AbiBBNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiBBNoH (ORCPT
+        id S242108AbiBBNpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:45:10 -0500
+Received: from mail-yb1-f174.google.com ([209.85.219.174]:42739 "EHLO
+        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230494AbiBBNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:44:07 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43376C061714;
-        Wed,  2 Feb 2022 05:44:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g4vUH6EzyLT2vaGYwlen5+OHvw9Zb7oDiztQ44k8gOY=; b=taz5SADOs9Pfi14hGDnEcDNHDC
-        qPdeN8oYaj1zKm1GTA8AvbbszJ99pctasgAt+q64guHYT/RAxDVg1543f4Fkgb64xN1y7CYxxfR/z
-        X/WEwPUQmi/0ZWKYb9iSzDz2OHM1dxmGFYDQ+67c8IZ4ZNdPTQ/t7zhx5KrHrFPEgk4YqIbmeITIG
-        /iNDlc2pDVeJXerurYMgHnhflHW1/wZRcXuX5c8LGZjufWsrG593L6XNNCwmawN2pdoQ3EvjXD+j+
-        5rliuRKcexGGJexwyWQz4oDlGocfsFbHyFPEijUawPGjyE8Oe0G5Vyg07U4/rmtLwKJA1TDwAC+6l
-        mQE48Q3Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFFvW-00FNmE-0j; Wed, 02 Feb 2022 13:44:02 +0000
-Date:   Wed, 2 Feb 2022 05:44:01 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david@fromorbit.com, djwong@kernel.org, dan.j.williams@intel.com,
-        hch@infradead.org, vishal.l.verma@intel.com, dave.jiang@intel.com,
-        agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        ira.weiny@intel.com, willy@infradead.org, vgoyal@redhat.com,
-        linux-fsdevel@vger.kernel.org, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v5 6/7] dax: add recovery_write to dax_iomap_iter in
- failure path
-Message-ID: <YfqKoZ79CqvW8eLq@infradead.org>
-References: <20220128213150.1333552-1-jane.chu@oracle.com>
- <20220128213150.1333552-7-jane.chu@oracle.com>
+        Wed, 2 Feb 2022 08:45:08 -0500
+Received: by mail-yb1-f174.google.com with SMTP id m6so61096233ybc.9;
+        Wed, 02 Feb 2022 05:45:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uB/YVoClaRjty4b1DpQC/jyBIC7Zl/3uSSAzUawr1v0=;
+        b=rhOQszFJr7z/HKf0/60fgYGlRJfqq7b7PWc9tJgTiSJNHUyICQk7H+D79fGZFImsp9
+         LpQSgVcZniiwMNsOTqNPMzkByy+7++GDvGVkT+qcsdIb6HO9GrWeX4vuCPPDbAxkMvdU
+         4x0DVkYwsYdzC2PQCdrtDzmZFWuG06yUhTBKArssRT14W2R74Ys+orPBBNkB12vBZe8e
+         lHGp6NV5BWL4FkEtWRNxUHGlzaPXbj+l1XS/uJoFs3a+p8+s4SUJWsI4vKOGlyM+byZ9
+         PN/x/YChp5WLavy42oivGSwOnGdzZ4tm0rlEEj2DnoUh5b+/r500Q0dOngUT9TkObxwv
+         0iLA==
+X-Gm-Message-State: AOAM532Bl1RwY3nQzhXrq8tu6M0cQw1dvuIBSmvKN/SeTwl+m17mGF+E
+        LfLDixbHXqnn7y6C03h/DDEDimJPH2v5pHeVbuU=
+X-Google-Smtp-Source: ABdhPJwm4b9rkjIKnZ+Mj/K6IFCtS7kkWBU4vRKOS00anGZHGLtiMuT3CglGBQUdfLldvS5HYBkq+Zn7PDufytBd0/c=
+X-Received: by 2002:a05:6902:1507:: with SMTP id q7mr44523541ybu.343.1643809508235;
+ Wed, 02 Feb 2022 05:45:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128213150.1333552-7-jane.chu@oracle.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <5790600.lOV4Wx5bFT@kreacher> <fca634ba-a05a-10e3-4c12-8774c49a91fe@arm.com>
+In-Reply-To: <fca634ba-a05a-10e3-4c12-8774c49a91fe@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 2 Feb 2022 14:44:56 +0100
+Message-ID: <CAJZ5v0gKqhTD_ECRNVecmR_Lv_jRDn_LdszBRWwBwmD+75Mq4A@mail.gmail.com>
+Subject: Re: [PATCH] hwtracing: coresight: Replace acpi_bus_get_device()
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:31:49PM -0700, Jane Chu wrote:
-> +typedef size_t (*iter_func_t)(struct dax_device *dax_dev, pgoff_t pgoff,
-> +		void *addr, size_t bytes, struct iov_iter *i);
->  static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  		struct iov_iter *iter)
->  {
-> @@ -1210,6 +1212,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
->  	ssize_t ret = 0;
->  	size_t xfer;
->  	int id;
-> +	iter_func_t write_func = dax_copy_from_iter;
+On Wed, Feb 2, 2022 at 12:43 PM Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> Hi Rafael
+>
+> On 01/02/2022 17:58, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Replace acpi_bus_get_device() that is going to be dropped with
+> > acpi_fetch_acpi_dev().
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+>
+> > ---
+> >   drivers/hwtracing/coresight/coresight-platform.c |    8 ++++----
+> >   1 file changed, 4 insertions(+), 4 deletions(-)
+> >
+> > Index: linux-pm/drivers/hwtracing/coresight/coresight-platform.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/hwtracing/coresight/coresight-platform.c
+> > +++ linux-pm/drivers/hwtracing/coresight/coresight-platform.c
+> > @@ -626,7 +626,7 @@ static int acpi_coresight_parse_link(str
+> >                                    const union acpi_object *link,
+> >                                    struct coresight_connection *conn)
+> >   {
+> > -     int rc, dir;
+> > +     int dir;
+> >       const union acpi_object *fields;
+> >       struct acpi_device *r_adev;
+> >       struct device *rdev;
+> > @@ -643,9 +643,9 @@ static int acpi_coresight_parse_link(str
+> >           fields[3].type != ACPI_TYPE_INTEGER)
+> >               return -EINVAL;
+> >
+> > -     rc = acpi_bus_get_device(fields[2].reference.handle, &r_adev);
+> > -     if (rc)
+> > -             return rc;
+> > +     r_adev = acpi_fetch_acpi_dev(fields[2].reference.handle);
+> > +     if (!r_adev)
+> > +             return -ENODEV;
+> >
+>
+> Is this patch part of a series ?
 
-This use of a function pointer causes indirect call overhead.  A simple
-"bool in_recovery" or do_recovery does the trick in a way that is
-both more readable and generates faster code.
+No, it isn't.
 
-> +		if ((map_len == -EIO) && (iov_iter_rw(iter) == WRITE)) {
+> I don't see acpi_fetch_acpi_dev() in v5.17-rc1, which our tree is based on at the moment.
 
-No need for the braces.
+acpi_fetch_acpi_dev() is there in v5.17-rc1.  Please see
 
->  		if (iov_iter_rw(iter) == WRITE)
-> -			xfer = dax_copy_from_iter(dax_dev, pgoff, kaddr,
-> -					map_len, iter);
-> +			xfer = write_func(dax_dev, pgoff, kaddr, map_len, iter);
->  		else
->  			xfer = dax_copy_to_iter(dax_dev, pgoff, kaddr,
->  					map_len, iter);
+https://elixir.bootlin.com/linux/v5.17-rc1/A/ident/acpi_fetch_acpi_dev
 
-i.e.
+> Please could you point us to the changes ?
+>
+> Also do you expect to pull this via your tree ?
 
-		if (iov_iter_rw(iter) == READ)
-			xfer = dax_copy_to_iter(dax_dev, pgoff, kaddr,
-					map_len, iter);
-		else if (unlikely(do_recovery))
-			xfer = dax_recovery_write(dax_dev, pgoff, kaddr,
-					map_len, iter);
-		else
-			xfer = dax_copy_from_iter(dax_dev, pgoff, kaddr,
-					map_len, iter);
+I can route it via the ACPI tree, but it may as well be routed along
+with other coresight-platform.c changes, if any.

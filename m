@@ -2,87 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638274A6FE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9F74A6FEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343939AbiBBLZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S236049AbiBBL11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbiBBLZi (ORCPT
+        with ESMTP id S231717AbiBBL1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:25:38 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C254C06173D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:25:38 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id b9so39927602lfq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=njtgT/Hj6QOxnTQzsDM9CxbROgEchM6ZlUmD1fFi8h0=;
-        b=Yfa9SzdZEFSzuNuCORX+HsBgYgMhscV1+2ILJIRa/wl7Phq/cinr6ADeGyWPwJvZEJ
-         RMh9md7Ho62CMKs0lnpf2ZGgsJB2xu9GWx6Ueb07SjVLWBjUqcj4zlYYrypLukUIeBo4
-         RkIq+nUHybAsIjlBzWYPD2YwrQuAZEk2xOneZV1vqVWOwNfkuQEPntWoWUfygqQTV0F9
-         7f0t/ZenpYgP1R7LvCxiXriWoSQOHMIwDGpvILIdgSFnWR3HeTkK/Guh9McHFGEg7SzW
-         yZbbd/fejaV/UEYiugiLKjTIifG26G8RX1WlDfzHNIiskGl6nljJAQaglo/L5sAUshXf
-         lJ2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=njtgT/Hj6QOxnTQzsDM9CxbROgEchM6ZlUmD1fFi8h0=;
-        b=YbvMyOBqnf20ZVBDO37ukCSRuE4pqoFhAMZaj9zQAixdxW72p9T9V5zR1q/vgSdJnD
-         Xo5xTonXi5ib2LwsDgBkxVADoE1mni0AsxaYQiR+csccXqJYT8ku/P/OqIY0fBvh2k2J
-         TuZPqiyYjiJfLdZgKkORSskdfEjMR4KrCIjkqNKecdFlnnfOS3oomyutl/Td2aqM2K5/
-         3MwiRvEt4qE2BI/yaYdM6/DVGR5VEuiBZfwrawFuLwo2Ynywb8ZMRFtfQa78JXCAifj0
-         eMmvBdpMhjdApXFho8Zsi3TjDPaU6Nj4FpppOh4k3aEgIM9cgSRgbi3S3fj2HcuIKcu3
-         nNSQ==
-X-Gm-Message-State: AOAM533XnRSpFG25yTROjnfm1ZHd2/NqhEP4qjGtwsU0NofTpJHi2sWk
-        n5hEyUSY3KFd5vmyl9DXANkVUg==
-X-Google-Smtp-Source: ABdhPJxqWwktBiY9sY0hxxB5jfTG/UKv+PohXhZtZgufEqPQZfD4nwQTeH9kSFDrFTn378LB88Zt2Q==
-X-Received: by 2002:a05:6512:238c:: with SMTP id c12mr22469363lfv.333.1643801136432;
-        Wed, 02 Feb 2022 03:25:36 -0800 (PST)
-Received: from [192.168.112.17] (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id n20sm2769079ljg.136.2022.02.02.03.25.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 03:25:35 -0800 (PST)
-Message-ID: <8c3dfbb7-3978-438b-36cc-6bb0fa57a814@cogentembedded.com>
-Date:   Wed, 2 Feb 2022 14:25:34 +0300
+        Wed, 2 Feb 2022 06:27:25 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CE4C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:27:25 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8C23C1EC0513;
+        Wed,  2 Feb 2022 12:27:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643801239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6U0VnmNfGDUReCoshGyJhk0zAJfFhYADT+EeJhXO21s=;
+        b=rJwpIZCtK06pLBa7yV8YFPpJNZ41vZkAFYf2zIpkCOWoV0PXia5fbYcJo56kbfEDUi1h/W
+        4u8oFtpCuE3wScUH54AQBsAc3iArAn2tqNudTx3iUTyw4pWT+r5jZqpEZ4Vyw2FYfKlM9D
+        Y33Twp5PfhNo4FuHRJTZB1NtE0vRjuA=
+Date:   Wed, 2 Feb 2022 12:27:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCHv2 16/29] x86/boot: Add a trampoline for booting APs via
+ firmware handoff
+Message-ID: <Yfpqk0amEbcyte+w@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] media: rcar-vin: require master VIN only for CSI source
-Content-Language: en-US
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vladimir Barinov <vladimir.barinov@cogentembedded.com>
-References: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
- <Yfpm/7p/O4WPpx3m@oden.dyn.berto.se>
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-In-Reply-To: <Yfpm/7p/O4WPpx3m@oden.dyn.berto.se>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+On Mon, Jan 24, 2022 at 06:02:02PM +0300, Kirill A. Shutemov wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> Historically, x86 platforms have booted secondary processors (APs)
+> using INIT followed by the start up IPI (SIPI) messages. In regular
+> VMs, this boot sequence is supported by the VMM emulation. But such a
+> wakeup model is fatal for secure VMs like TDX in which VMM is an
+> untrusted entity. To address this issue, a new wakeup model was added
+> in ACPI v6.4, in which firmware (like TDX virtual BIOS) will help boot
+> the APs. More details about this wakeup model can be found in ACPI
+> specification v6.4, the section titled "Multiprocessor Wakeup Structure".
+> 
+> Since the existing trampoline code requires processors to boot in real
+> mode with 16-bit addressing, it will not work for this wakeup model
+> (because it boots the AP in 64-bit mode). To handle it, extend the
+> trampoline code to support 64-bit mode firmware handoff. Also, extend
+> IDT and GDT pointers to support 64-bit mode hand off.
+> 
+> There is no TDX-specific detection for this new boot method. The kernel
+> will rely on it as the sole boot method whenever the new ACPI structure
+> is present.
+> 
+> The ACPI table parser for the MADT multiprocessor wake up structure and
+> the wakeup method that uses this structure will be added by the following
+> patch in this series.
+> 
+> Reported-by: Kai Huang <kai.huang@intel.com>
 
-> I agree this issue needs to be addressed and I think the use-case is
-> covered in the patch 1/3 in the VIN routing series [1].
+I wonder what that Reported-by tag means here for this is a feature
+patch, not a bug fix or so...
 
-Indeed, that patch moves the check to CSI-only path, which is exactly what I tried to do. Thank you!
+> diff --git a/arch/x86/include/asm/realmode.h b/arch/x86/include/asm/realmode.h
+> index 331474b150f1..fd6f6e5b755a 100644
+> --- a/arch/x86/include/asm/realmode.h
+> +++ b/arch/x86/include/asm/realmode.h
+> @@ -25,6 +25,7 @@ struct real_mode_header {
+>  	u32	sev_es_trampoline_start;
+>  #endif
+>  #ifdef CONFIG_X86_64
+> +	u32	trampoline_start64;
+>  	u32	trampoline_pgd;
+>  #endif
 
-> I don't have
-> access to King Fisher hardware so I can't test it, if you do could you
-> test that series and see if it fix the issue?
+Hmm, so there's trampoline_start, sev_es_trampoline_start and
+trampoline_start64. If those are mutually exclusive, can we merge them
+all into a single trampoline_start?
 
-Right now I don't have all needed hw to run the test that reproduced the issue. If/when I get access to 
-hw, I will try it.
+-- 
+Regards/Gruss,
+    Boris.
 
-Nikita
+https://people.kernel.org/tglx/notes-about-netiquette

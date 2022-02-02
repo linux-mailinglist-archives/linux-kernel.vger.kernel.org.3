@@ -2,162 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5004A6C16
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8767B4A6C1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiBBHI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:08:29 -0500
-Received: from mail-bmxind01olkn2087.outbound.protection.outlook.com ([40.92.103.87]:17574
-        "EHLO IND01-BMX-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229462AbiBBHI2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:08:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TjJQHtk/ExTU7n7HtXlAVbk93Y/b8WCPj126BPn2CkAOqrGxGipbrZIK8NyNIMHFo+o8tJ6hmWVfYp/Usygl7Wfnk1rRIedXC5NrKxvnJ4WROhyfO5E/r1F0TUCIXEMo0Np3ImscuCPtFDxuKoqXifhb1Ln8RDLX3Mt5OgRMaN3erIgOIuEcyVK0YZOPmhLXtB9aXVzOVpU1JmDmdB1unVaaRsyl8QNFAq31G+yg7d6YRNh7mEQQJtd0x+QQ7HR0drnNPOfA/e0Y3MxUIRkklJnDBo0rB1kCvHiuh6TCCjI/i9jWOe7TA2odB9yfhWNml6T3E5k1V7mGHX2LlCBdBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DIV9ax1TDVo7LWawhjtJ4prLDmVk9D9F5rS00qmDKkw=;
- b=ZT2D2jZV8CnU6pf4K19waRVvW5M243owWDhHa493TF2BbjmUXcxxHUrh8REnYnSmR3Y2ehz/eY4NxTs7wT2Ca9Tv17m2IRbfMbNRdnZWkgcZPCsy0/F8PEUF9dWU729hxCOfcLOxlo71eIWsXqaTCJm0yWIM4EnmxLkFSyUp2hrvrMMyOF5KSw1HXCQvg+fwfa2iU9agN9uAJNRqh1t8ol/TnvwNThSiYcg7BDanpontqvgQyQjbE6Vp62yr/3uvTRvA2lL1TsU+Pi192i6JHm7OvaPwrVxYzaPPINGfODQQjpdvSpq/UmfyOYwVJorcz/NgUv9pmuUR0eBMxOOqUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DIV9ax1TDVo7LWawhjtJ4prLDmVk9D9F5rS00qmDKkw=;
- b=uAu506BAtxTMHHorSl2xT7VZdSkqR2pnJZQxTSMndv4TA6/Y6MS0dFnKAyzYcAJBY51DNTNHXiLuIf4p+RB6WfFnsqCSPC1yi5ijHP2P6ZnGxD6ljZmJGS5CtnrCVStHmUIiNsqan1GynTS7yWn1WwC64FgxZt1xHT8Y7/k3bWx8vlzqmO5VivsOYzu3Ekq/QAQz6NhRFrVqtSdQQ4thY6B+OBoyg2yBD47KlGYJj+EVlKRmZ842hf7xFRAOCKqtwyU5I3h123KUu5+PFrFZgyQ3SsvUFDjpDdp6XJYekbLPwlbeb/ifsEKmZvQb2aYbuBBqdfrqw3j+SEI+ynD2jg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by BM1PR01MB4930.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
- 2022 07:08:21 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4951.012; Wed, 2 Feb 2022
- 07:08:21 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-CC:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
-        "ribalda@chromium.org" <ribalda@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple T2-attached
- FaceTime HD Camera
-Thread-Topic: [PATCH RESEND] media: uvcvideo: Add support for Apple
- T2-attached FaceTime HD Camera
-Thread-Index: AQHYEqCuFa0IUQWRI0uS4fqZrMlb86x/2XiAgAAImYA=
-Date:   Wed, 2 Feb 2022 07:08:21 +0000
-Message-ID: <951C1FB9-9709-4CB3-8DD7-703900FE56FD@live.com>
-References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
- <Yfomr83ol/1iGRSv@pendragon.ideasonboard.com>
-In-Reply-To: <Yfomr83ol/1iGRSv@pendragon.ideasonboard.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [Bf6bj0dXtjju2tegpFmO8XX8AGLgdNFDlXVNYWnKMYYDy+gojh2zigLCsq4Kg7fe]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 63d921da-168a-4e21-9cc1-08d9e61acc1b
-x-ms-traffictypediagnostic: BM1PR01MB4930:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sZaceBkVBjbdug41+t0EIHMPrIZN/fM5YQBkylvUz1fjsRpj4njm6KbfUj2jSGypuUQyzmEE7AAdW98lxvbMLk0M/i3hFhr3QV+b5b5G/aD9jcbYSnBQRgDz6PLuDTMKfHBIcoghUdGOYVcJ9zmeBag4URC7UP7fg/s1cM5nw0hQDiTYkPWaCMIkz7xVxCoEVlC48jYja7MUZ6tCAt0F5nP4HAinWjKbhX9KXwaHsxr8zRFWpJ1SpLpGiE7e83SEAMugMb6Z7BjG8+5Q9ZCKaJ8vPz6uvlshyHenQqs7AyoGHLOOanJtBkeY0CK029DEotad29Dino7nUfOwDcgYui7t5zKE30Z3UcbcRW2EH8qyPGzzFagiM9Lqb2kFU3auK5wTuiFM3NfI9tqLTxrytjnocBdHY29i+wXFAtRrRBXz2M5HL3WeNysqPaAs4WLqvx4HX5Oi3XT2uHUmSq3L1J/VX40Grzhfa/kP8a058dE7eoc+zDb2cBoZKNm8qUseuYYnmKsDPt7nDXjK0s7syhN7utBkBCbL/v8T/GqEpDekxbg+ZIzQSP7Tjq2GjZ5sOiXrAarQeFt4e6GMFWWNQg==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Pmqu9D8mBqov/7oF84k0R3V3iIwtxt/bMV6F9kYXZ69rf7iBDtBNzLBEANf0?=
- =?us-ascii?Q?ipeJ2JBr/mH9OOfTPski3u/GEk4LGADbUVB9AaYD+DUuBG109S1VUwF3roiC?=
- =?us-ascii?Q?yGvRFgNNDvet3LiBBJl88ALxePm1xKGNkLFvMJegphdD1yLTV9db1GDYEnoA?=
- =?us-ascii?Q?r1puLRcpY47bwdg4b6qmC555igJsjXqKGQ6eSc8XMFZbnB8TtWcldzzd4YXB?=
- =?us-ascii?Q?R8/beH46icCgjdWq+lWfbpP7FC56AoHWDfcdJxyO6S75It+xPl4ycFQdweEZ?=
- =?us-ascii?Q?ED17k1nlHkPSgaQOqxaiGbSq1LUr9FFGDAhPcv7jw/4T6xSfD5c8+6rCg0gI?=
- =?us-ascii?Q?31UATeySRC8zCj8HicWGrVhJ7I+swX629POfEWo5IsU8uNYAEI1VNqkTwX1R?=
- =?us-ascii?Q?M0yEUN6doQ4mNM7tDDr3o0MGD0Yj8MXOoCITEnRjNl35QJeSshf+hdIeBJQY?=
- =?us-ascii?Q?j6Nz36/1qQgZeTEf68h0w0o9zqHIJasc/trsvARBomFcPaTqSPSw2iZBUQDI?=
- =?us-ascii?Q?lzqvu3lF07IP7rLTwMX1OVTstwXht8zDPygwTMTuXeoTeW6SAUaDpzxUT65s?=
- =?us-ascii?Q?aBIJlfZuGxSvjza41dykhMmSWx4ATsk5R2SpjxCJY9biTaEeiAkdOtS7nxNC?=
- =?us-ascii?Q?8EUoGVgRKEek59Cpn4bcJLr+uBa/oRLLKYdiPKBVyB2X6U8cR3HhNNqGUD+q?=
- =?us-ascii?Q?hyxhirS8q68+3zC4UR/uhltFd1GxbMHJ7GnONbBsLn53TRJ0OEUuI+nhJe3o?=
- =?us-ascii?Q?bypITRUW1WdDk6VhuHVZV++QMWFWUdwvArWwqEYjBW97W8qCPtOx4uU//b1D?=
- =?us-ascii?Q?ghpzWjhut0fdqKgunWKUhGwEcP1Zo+LQJqHUd+5Z5/a/dV6z3qcXOXTQTDwc?=
- =?us-ascii?Q?PgXtUtCJxG6p39w4byYaguFDBGDJ50WvpVL974gNOgQOdIY6P7ezGwImOZ7j?=
- =?us-ascii?Q?/tFX9pk+N7DdbgmAZ/qms8qTBUlcjZETl5iJxtMrtIHiRnrDVpAkSADfGwmB?=
- =?us-ascii?Q?HhF+98MrmKj+ZTq4kJqoYp5XzA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2959B2FAD2E9FB4A9AA0A3B226F46F4A@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S230030AbiBBHIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229878AbiBBHIb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 02:08:31 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1C3C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 23:08:31 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id s61-20020a17090a69c300b001b4d0427ea2so5915759pjj.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 23:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J3JQTLsN4TUWXq+11AQA6HaRBL7yUQ8UUNf/bjPP2sw=;
+        b=gBooyEowC9KX+DVIUdtnfC1zaMjq2bIY6R6DnGobUlUZ37R+D2UNCiqp6HkmLQ7qf3
+         rnevRMKeSIs/Dr9uVXqn/UJ0yPcWA2Bwc5Oul0c+fTntBcX4700jji9hoN/pODPhJdyE
+         d/CLo7g+NwrK87pj/NR1dI7h3bc9pB7Zn29Kd9nmGnaXezFqFkYjM56YVTNVxLMYN2H9
+         yOt5E5MHUnD7FmGrlVopGEfCJIP6JGTOl5w7/VN2lkuYc5ljRMRIV5Gp51/l7jSd3T17
+         rtK6j05fzaOxOSEsWyq/yLK9yhqbGxM1rCGOxxMaRVoLYMFJ15vQOT1KYy6r9QD3ciUr
+         3MXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=J3JQTLsN4TUWXq+11AQA6HaRBL7yUQ8UUNf/bjPP2sw=;
+        b=vjx6zv52ikRpj418oXFv2zKohIiyQtJK4IlIxN/2MiW5QTgzkCh/tgt0kjJ08QspQX
+         TMS5DXM1SYl5sb2COG8LE0t8BUwE4N6KTZ7uD2zwIubzMwJSKJQctc4l5T8/YcAVmJQF
+         KHG9cXMimBW17KdkKzNzC3yNJAOgmhL2bji7xCdrUMoiYegofL9JhgyDlO4i/ds/TzP/
+         xHxFmxaKd0F3csR7cYt1RSo7s0hDqz+ioHLpsWd6iafeJih+wyFUcZ7oYq+ACweZgclT
+         rgsWY6xvgON+F1TVxgsksoLMYySMGxfiMeoW9J9Vy+NVRZ8kPYvYrOD4i6uTrQRznn0D
+         0Fug==
+X-Gm-Message-State: AOAM5325NWEzH5WcBt4810PQP63/1ieqpj6+7eOkX9V14PPeqquMgtfC
+        8Hwd5QHrF9Vx8+i96ZqDFMc=
+X-Google-Smtp-Source: ABdhPJx/pntocgiCGlqF+6TiXN9dvs0T5AZf4M/lkOBaHxCSc+Uu1Rfsj45QOD/7pui5KCKip9qoAQ==
+X-Received: by 2002:a17:903:234c:: with SMTP id c12mr28356589plh.55.1643785710896;
+        Tue, 01 Feb 2022 23:08:30 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:c6f0:9c9f:e426:5704:d42b])
+        by smtp.gmail.com with ESMTPSA id e15sm4936879pjd.52.2022.02.01.23.08.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 23:08:30 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
+Subject: [PATCH 0/4] Handle chroot tasks properly (v2)
+Date:   Tue,  1 Feb 2022 23:08:24 -0800
+Message-Id: <20220202070828.143303-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63d921da-168a-4e21-9cc1-08d9e61acc1b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2022 07:08:21.6909
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BM1PR01MB4930
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent
+Hello,
 
-> On 02-Feb-2022, at 12:07 PM, Laurent Pinchart <laurent.pinchart@ideasonbo=
-ard.com> wrote:
->=20
-> Hi Aditya,
->=20
-> Thank you for the patch, and sorry for the late reply.
->=20
-> On Wed, Jan 26, 2022 at 10:37:13AM +0000, Aditya Garg wrote:
->> From: Paul Pawlowski <paul@mrarm.io>
->>=20
->> Adds the requisite device id to support detection of the Apple FaceTime
->> HD webcam exposed over the T2 BCE VHCI interface.
->>=20
->> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
->> Signed-off-by: Paul Pawlowski <paul@mrarm.io>
->> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
->> Signed-off-by: Aditya Garg <gargaditya08@live.com>
->> ---
->> drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
->> 1 file changed, 9 insertions(+)
->>=20
->> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/=
-uvc_driver.c
->> index 7c007426e..88dc9e7aa 100644
->> --- a/drivers/media/usb/uvc/uvc_driver.c
->> +++ b/drivers/media/usb/uvc/uvc_driver.c
->> @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] =3D {
->> 	  .bInterfaceProtocol	=3D 0,
->> 	  .driver_info		=3D UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
->> 					| UVC_QUIRK_BUILTIN_ISIGHT) },
->> +	/* Apple FaceTime HD Camera (Built-In) */
->> +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
->> +				| USB_DEVICE_ID_MATCH_INT_INFO,
->> +	  .idVendor		=3D 0x05ac,
->> +	  .idProduct		=3D 0x8514,
->> +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
->> +	  .bInterfaceSubClass	=3D 1,
->> +	  .bInterfaceProtocol	=3D 0,
->> +	  .driver_info		=3D (kernel_ulong_t)&uvc_quirk_probe_def },
->=20
-> Have you tested that the device doesn't work without this quirk ?
-uvcvideo 1-2:1.1: Failed to query (129) UVC probe control : -110 (exp. 48).
-uvcvideo 1-2:1.1: Failed to initialize the device (-5).
+I found that perf tools don't work well with tasks in a chroot.  The
+filenames in MMAP record are from the root directory of the task so
+it's different than what it sees from outside.
 
-These errors are encountered without this patch
->=20
->> 	/* Apple Built-In iSight via iBridge */
->> 	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
->> 				| USB_DEVICE_ID_MATCH_INT_INFO,
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
+ * changes in v2)
+  - add Jiri's Acked-by
+  - split stderr setup for objdump
+
+I've tested it with a simple program (myprog - statically built) which
+just consumes cpu cycles in a loop for a while (default 1 sec, can by
+overridden by a command-line argument).
+
+  # cd $HOME
+  # mkdir -p myroot/bin
+  # cp myprog myroot/bin
+
+  # perf record chroot myroot myprog
+  # perf report -D | grep MMAP | grep myprog
+  2084916774977911 0xa2e4 [0x70]: PERF_RECORD_MMAP2 3363818/3363818: \
+  [0x401000(0x80000) @ 0x1000 fe:01 4346398 2543719070]: r-xp /bin/myprog
+
+So it's reported as /bin/myprog and then it's unable to symbolize the
+samples.  It seems hard to fix it for the above use case as the record
+ended after the task exited.  It cannot know the root directory of the
+task anymore.  But we can fix it for real-time use cases like perf top
+or pipe-mode at least.
+
+I tested it again with the following command.
+
+  # perf record -o- chroot myroot myprog | perf report -i-
+  ...
+  #
+  # Overhead  Command  Shared Object      Symbol                          
+  # ........  .......  .................  ................................
+  #
+      46.02%  myprog   myprog             [.] 0x000000000000178a
+      36.71%  myprog   myprog             [.] 0x0000000000001792
+      17.12%  myprog   myprog             [.] 0x000000000000178e
+       0.05%  myprog   myprog             [.] 0x0000000000001796
+       0.05%  chroot   ld-2.33.so         [.] intel_check_word.constprop.0
+
+The symbols are not resolved because it failed to load the symbol
+table as it didn't find the file in the given path.
+
+So I modified the code to try a new name prepended with the task's
+root directory when it's not "/".  With this change, I can see the
+symbols of myprog.  In fact, it depends on timing if perf report hits
+the file before the task is gone.  Increasing the loop time to 3 sec
+helped it to get symbols reliably.
+
+  # perf record -o- chroot myroot myprog 3 | perf report -i-
+  ...
+  #
+  # Overhead  Command  Shared Object      Symbol                       
+  # ........  .......  .................  .............................
+  #
+      99.83%  myprog   myprog             [.] loop
+       0.04%  chroot   [kernel.kallsyms]  [k] fxregs_fixup
+       0.04%  chroot   [kernel.kallsyms]  [k] rsm_load_seg_32
+       0.03%  chroot   [kernel.kallsyms]  [k] show_cpuinfo_cur_freq
+       0.01%  myprog   [kernel.kallsyms]  [k] alarmtimer_fired
+
+
+I also found that perf inject and perf annotate need the similar changes.
+
+You can get it from 'perf/dso-chroot-v2' branch at
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  perf annotate: Set error stream of objdump process for TUI
+  perf tools: Try chroot'ed filename when opening dso/symbol
+  perf inject: Try chroot directory when reading build-id
+  perf annotate: Try chroot filename for objdump
+
+ tools/perf/builtin-inject.c | 10 ++++++++++
+ tools/perf/util/annotate.c  | 11 +++++++++++
+ tools/perf/util/dso.c       | 15 +++++++++++++--
+ tools/perf/util/dsos.c      | 13 +++++++++++++
+ tools/perf/util/symbol.c    | 10 ++++++++++
+ tools/perf/util/util.c      | 31 +++++++++++++++++++++++++++++++
+ tools/perf/util/util.h      |  2 ++
+ 7 files changed, 90 insertions(+), 2 deletions(-)
+
+
+base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 

@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53024A76F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509854A76F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242914AbiBBRjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbiBBRi7 (ORCPT
+        id S1346308AbiBBRkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:40:55 -0500
+Received: from smtpweb147.aruba.it ([62.149.158.147]:50189 "EHLO
+        smtpweb147.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229816AbiBBRky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:38:59 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A4C06173E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 09:38:59 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id z199so26390640iof.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 09:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5ZgUDIIYZb0p0sGt1ruE6r7EKduNuE6iJPlnBrAIoKA=;
-        b=cUKtZGMEPyShwOxkBLK4TT6kN7iU9FHiF/YbNpPfqYjw0okt5j1OVTXSJqqaOO1qic
-         /YNUuFlCbUAaGudiS8lOBDA3wHToNsrSsxYGp1MlhN6AGhKBfd3tQ42rHsivBJ0Xao5K
-         Ny30q3/1w0SYI7sr4pWArpxIagMxVCqYJcmwo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5ZgUDIIYZb0p0sGt1ruE6r7EKduNuE6iJPlnBrAIoKA=;
-        b=jKuBqQPSIdPUxctvPRykX30Onn2KNlMKMwtONOhVl0xF3UT90XFQdr+La2117+gikq
-         6/vH1cuFYtDaJuLkB7zuKxCxRxF3HorZGUR0jvG3NZyDmV89m5fPWd4xW3QjsbdT6lqS
-         jAMYoAigKI8Og2v1Yq2YVuzqCPcVjXFmC7sFGooiOn03uhls90Euj6ugXYOzjSd4tk3L
-         ALtKX4o/VGvH9LJWdSzBflfnedyrYrX7Ri/9o5jLuAMAalSSaNUJPS9F2WX2Yqtl49As
-         nEolQnbLtDXQ/k4GMpduvP68C02PyS+xtdDYNgtTFBFHfh4M26712dSWpQp33sHgI24u
-         Vy3A==
-X-Gm-Message-State: AOAM530oTeneXBwSouOSf6XggDn6XY95iD64kPSn9nKMZK2T9RgvqZpe
-        gj1Ka3PcQuHI9be6PJnKSJAgtQ==
-X-Google-Smtp-Source: ABdhPJywVmU21xcaWcoRexhtWbe7YKkj4yex5iylSdnFCIHBDrhD2VplYVOBvZUOkDTituScSgE0Hw==
-X-Received: by 2002:a05:6638:4105:: with SMTP id ay5mr16415785jab.186.1643823538745;
-        Wed, 02 Feb 2022 09:38:58 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id y22sm3767548iow.2.2022.02.02.09.38.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 09:38:58 -0800 (PST)
-Subject: Re: [PATCH] selftests/exec: Avoid future NULL argv execve warning
-To:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220201000807.2453486-1-keescook@chromium.org>
- <Yfqfo0rbq/B/l6IP@localhost.localdomain>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7af32164-dbdf-26f1-1aaa-b720365f9743@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 10:38:57 -0700
+        Wed, 2 Feb 2022 12:40:54 -0500
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id FJcgnDQgMI46dFJcgnXDNE; Wed, 02 Feb 2022 18:40:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1643823652; bh=5qvPzN5AlRZmOFVpAhP0fgxJuLitO3mtkVyS5bHQlRg=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=FSpjRj370ENUVrXmFThK4YcfgShPKOB0BM/IvVGxt/kf7Pg99chMpfzoRkX+qgavI
+         8l/eCgpbzU/lWb+4dePBo8dPsR2dvCcMcBT8pH2yLi5zAj+Y5PjaqWZ+e4NxnjQ8nA
+         t6vo6lvb2fUu0R9dof5q48yY3hSBtq+PCoCOxM+dWStz0spEw49DEyj2XVWzCnEDul
+         UV7KHpogNPtrk8cB3/JbN8F6qW7RDMukaRxAjL8kHIEZgYiNmv79+ElFHv5FyLkO9h
+         sqpItvPNzInb+FjUWzXKyU7Nv6V6SzA+Btkdcmb5WhhPz6n+lnlAWFd74uLzELpDMH
+         Cm8UNrMUdCw8w==
+Subject: Re: [PATCH] pps: clients: gpio: Propagate return value from
+ pps_gpio_probe
+To:     Robert Hancock <robert.hancock@calian.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rasm@fe.up.pt" <rasm@fe.up.pt>,
+        "jamesnuss@nanometrics.ca" <jamesnuss@nanometrics.ca>
+References: <20220112205214.2060954-1-robert.hancock@calian.com>
+ <Yd9DDJ2HmptwIITA@smile.fi.intel.com>
+ <d21aeae0-f75d-f8b9-032a-f4751696d467@enneenne.com>
+ <f74e32552955b2293d814cfd14729ab190d8ddbe.camel@calian.com>
+ <5178d655-a9f0-0a0e-866c-b85b7eda69f3@enneenne.com>
+ <72a4b544d8ed7dc6ff809f21752dd56889185f65.camel@calian.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+Message-ID: <7a68de3b-60db-c2b3-50a8-9ae0e93bd42f@enneenne.com>
+Date:   Wed, 2 Feb 2022 18:40:50 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <Yfqfo0rbq/B/l6IP@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <72a4b544d8ed7dc6ff809f21752dd56889185f65.camel@calian.com>
+Content-Type: multipart/mixed;
+ boundary="------------5BEB4CACA972B36D4F12B57B"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfJw6/v0gFIkz4SRvTVz32D44LvGzr9H0GXtsydCvlnBQxOAfSTj/sFno/vljZJnn/7e+sKd+LfNURAhFEz1HlRPm09vqb30MRFdVONAwQbSnXfaas2UD
+ P//OUpybDoewRp+Y/QamgcyqptMMnuskTG+TcHnQhE4Bo3n9Ym4FYZgunudsgkhrdRzdnI/Btq8Gi+hY0QS2NqRv3yakAmuinlTUqDskP1lLw12RbUzqCs7A
+ GrM1CzVrv8eAELV4zBxdrBSRTEU9ntxIREc1qfpuXzRt8Ge5o6UoHEzslEg+rE/gx0kXWNiW11IFtAoJOLPHrfwijfWlq5Bd89D/+U238Q1hL/S/RyvtOfLu
+ frhT6ohMZFnsvBa4yFPVQK7xfNMzaorhKbNjx/gmuTsvLENBZOClYNfXfUL3I4fOKEjPEtAR
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 8:13 AM, Alexey Dobriyan wrote:
-> On Mon, Jan 31, 2022 at 04:08:07PM -0800, Kees Cook wrote:
->> Build actual argv for launching recursion test to avoid future warning
->> about using an empty argv in execve().
+This is a multi-part message in MIME format.
+--------------5BEB4CACA972B36D4F12B57B
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+On 02/02/22 18:04, Robert Hancock wrote:
+> On Sun, 2022-01-30 at 10:35 +0100, Rodolfo Giometti wrote:
+>> On 29/01/22 23:02, Robert Hancock wrote:
+>>> On Thu, 2022-01-13 at 09:17 +0100, Rodolfo Giometti wrote:
+>>>> On 12/01/22 22:07, Andy Shevchenko wrote:
+>>>>> On Wed, Jan 12, 2022 at 02:52:14PM -0600, Robert Hancock wrote:
+>>>>>> If the pps-gpio driver was probed prior to the GPIO device it uses,
+>>>>>> the
+>>>>>> devm_gpiod_get call returned an -EPROBE_DEFER error, but
+>>>>>> pps_gpio_probe
+>>>>>> replaced that error code with -EINVAL, causing the pps-gpio probe to
+>>>>>> fail and not be retried later. Propagate the error return value so
+>>>>>> that
+>>>>>> deferred probe works properly.
+>>>>>
+>>>>> FWIW,
+>>>>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>>>
+>>>> Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+>>>
+>>> It's not entirely clear to me what tree PPS patches are supposed to go
+>>> through.
+>>> Seems like some recent ones have gone through char-misc? Not sure if
+>>> someone
+>>> has this in their queue?
+>>
+>> LinuxPPS has no its own tree. All related patches usually are sent to me to
+>> be
+>> acked and to Greg Kroah-Hartman for inclusion.
+>>
+>> Ciao,
+>>
+>> Rodolfo
+>>
 > 
->> --- a/tools/testing/selftests/exec/recursion-depth.c
->> +++ b/tools/testing/selftests/exec/recursion-depth.c
->> @@ -24,8 +24,14 @@
->>   #include <sys/mount.h>
->>   #include <unistd.h>
->>   
->> +#define FILENAME "/tmp/1"
->> +#define HASHBANG "#!" FILENAME "\n"
->> +
->>   int main(void)
->>   {
->> +	char * const argv[] = { FILENAME, NULL };
->> +	int rv;
-> 
-> Can we move out of -Wdeclaration-after-statement mentality in tests at least?
+> It looks like some MAINTAINERS links should maybe be updated for PPS - the
+> referenced page at http://wiki.enneenne.com/index.php/LinuxPPS_support seems to
+> be dead. There is http://linuxpps.org/doku.php which points to a new mailing
+> list location as well,
 
-selftest like the rest of the kernel follows the same coding guidelines.
-It will follow the moving "-Wdeclaration-after-statement mentality" when
-the rest of the kernel does.
+Yeah. Attached is a patch to fix these.
 
-Looks like this topic was discussed in the following:
-https://patchwork.kernel.org/project/linux-kbuild/patch/c6fda26e8d134264b04fadc3386d6c32@gmail.com/
+> but that seems to have very little activity.
 
-thanks,
--- Shuah
+That's one of reasons why LunuxPPS doesn't have its own tree. :)
+
+Ciao,
+
+Rodolfo
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
+
+--------------5BEB4CACA972B36D4F12B57B
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-MAINTAINERS-update-LinuxPPS-s-resources.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="0001-MAINTAINERS-update-LinuxPPS-s-resources.patch"
+
+From ab95f9b0dcbd538eb43e09eb358c782404ddf024 Mon Sep 17 00:00:00 2001
+From: Rodolfo Giometti <giometti@enneenne.com>
+Date: Wed, 2 Feb 2022 18:37:20 +0100
+Subject: [PATCH] MAINTAINERS: update LinuxPPS's resources
+
+Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f41088418aae..9176ba3093b7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15490,9 +15490,9 @@ F:	drivers/net/ppp/ppp_*
+ 
+ PPS SUPPORT
+ M:	Rodolfo Giometti <giometti@enneenne.com>
+-L:	linuxpps@ml.enneenne.com (subscribers-only)
++L:	discussions@linuxpps.org (subscribers-only)
+ S:	Maintained
+-W:	http://wiki.enneenne.com/index.php/LinuxPPS_support
++W:	http://linuxpps.org/doku.php
+ F:	Documentation/ABI/testing/sysfs-pps
+ F:	Documentation/devicetree/bindings/pps/pps-gpio.txt
+ F:	Documentation/driver-api/pps.rst
+-- 
+2.25.1
+
+
+--------------5BEB4CACA972B36D4F12B57B--

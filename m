@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B724A74F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D625C4A74FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345594AbiBBPxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S1345597AbiBBPyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiBBPxx (ORCPT
+        with ESMTP id S1345596AbiBBPyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:53:53 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1E1C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:53:53 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id d188so25966406iof.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:53:53 -0800 (PST)
+        Wed, 2 Feb 2022 10:54:03 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8391AC06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:54:03 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id v74so19169757pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=ENABLJMA05R4soziave+d7UPm5zfjbrRymzXBoJsaW0z6qAKD2n9BRtw7tMe8IWvtT
-         Dtw076aY5ms2kHZAAIDpNevhFb8kbWcCRn5sIFiTdWfl+S4e2MesYrqCgrU0NJHNQkOc
-         frhUCeyRRNVCb6l36CVwAiB4lbVwnXLyCG9nQ=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QhI0g3H91MNQawpFWeFiSZKM1lUpHcArsiuPvxg5hME=;
+        b=THsSc61G6LQn9DjlHLxzAdXdveyIDLT4naDOiIPkZZ6oCHaBDDeGkPOI/cGeSgWxe7
+         5wGjpfMyTtXYT3tcQJPNI4Kd5y0gTPTb+QKyR2OdQ2H1unV1EAJImgs8G/JuyvoFqjIR
+         K8f/VXTH6kihyc7vNqUMgDehtzCrtsTmNKV1aCrUNtU1W2uPfwar4mM+CeK+dFWM0+Ee
+         2nHF54cQX4Ixt7q4g28Rsb5/VWGRQIlL5DdGRoly8SUpGrtZWiJNbLVrsGH9XFmq6Tf+
+         avJcS11nFMMRehH5rbZ1+RQ7q+zWmAum5wpfbiHv6tzbFNL6/YW6t6svmWHnjzQfG6lk
+         RMgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WXOsmtDny0WluDniF2bqbqtLayhd1SNumBfgvAoXVDc=;
-        b=qqychudCEJPQdtvHXLvVzl42EjZPKSCP+dYx1eY3jwQXniBOenLZW5q7/VV5mqJ4fB
-         jPRATZulNNW8r20SUAXRVERpwlV97zIKibN8/IQofnC46/2LMgHQyHXpaMgL4ATLu+YQ
-         VYcZEJq97frPiqZxI4thfD2aq0/xq89l8tF6z1xfgwV8le8QKrAnYPI80jHbtfq+/rwJ
-         UKLV5Xukrqgm5fgW/HeAqK4e4RzUHkyjMM9kE8uEQvTym/bkm+s8TKcxVAwZjNYO5YOI
-         xYbz7HoXpGNTwLF/q/TaX15al0fg/KrzaRT2HzYqZhbn2W0sxm86ZbVW4owxaKkk4ouU
-         aOUQ==
-X-Gm-Message-State: AOAM532Sz3ESEuUNeuNd4+nfaqxd/tj0C+S+z7SRQIoK4X8dNvaX9iWW
-        o+pZAEwQRt6FW5egrfGIZVWf5w==
-X-Google-Smtp-Source: ABdhPJw6EtuJMPNRgqXBZ1urjdtS9DTte0fKkn/dXlVvcSumMDMNt2EoK1WwnohoNyDsHDMB2u/rhg==
-X-Received: by 2002:a02:9f07:: with SMTP id z7mr12280320jal.87.1643817232526;
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id o4sm17381145iou.42.2022.02.02.07.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:53:52 -0800 (PST)
-Subject: Re: [PATCH] selftests: fixup build warnings in pidfd / clone3 tests
-To:     Christian Brauner <brauner@kernel.org>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220127221115.3731388-1-axelrasmussen@google.com>
- <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <54a0cd63-6ec9-21fa-722a-da933b0ff1bf@linuxfoundation.org>
-Date:   Wed, 2 Feb 2022 08:53:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QhI0g3H91MNQawpFWeFiSZKM1lUpHcArsiuPvxg5hME=;
+        b=fIJ22G6zUQ9FGdVZ3xfG8Zx3EhBB6uBQXyMnBQjghsBJjQE0ZGkCMdjBJ0rANSLZSl
+         cdcvMvEJlR/QfmILkd25iRHaPmiGKfxCmQv06xoZDGBlt8q9NAogYyG5E23wkE7/0tRM
+         Sbv587Ql62HQLgdR9N5A6gLgoY75W5vcO5V+K76Y1CPjg/nHtpXuDWSnQzjwnUZesSFp
+         LSx5KEVvM5SpwFcp2nLJ+jgA5RuPu3VqpdueirtwnjBtrsI1FTAIDiU8iuwmJFZyXbx7
+         5H5a2qjPp641x5e+Cw9isicJTlv94odjnE8X7y09DGZBgIzStQ5muUxZKUxTjGyUleSD
+         f8rQ==
+X-Gm-Message-State: AOAM531N78IN2zgmUPklpdHu4tKSrV0vla/M3OSAy47S8eScWs16jY/v
+        DMjaBiokur0PRB/ZIdvKHGu79A==
+X-Google-Smtp-Source: ABdhPJx2D8mRIETLkmJLR3ervdkS8DPHKNlRK6mFJPmaIJuxHrAE6u9fd7+WMg46WVWi8Mvypr7n+w==
+X-Received: by 2002:a63:1d4:: with SMTP id 203mr15823549pgb.462.1643817242784;
+        Wed, 02 Feb 2022 07:54:02 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l78sm8018284pfd.131.2022.02.02.07.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 07:54:02 -0800 (PST)
+Date:   Wed, 2 Feb 2022 15:53:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        pbonzini@redhat.com, joro@8bytes.org, mlevitsk@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
+        jon.grimm@amd.com
+Subject: Re: [PATCH v3 3/3] KVM: SVM: Extend host physical APIC ID field to
+ support more than 8-bit
+Message-ID: <YfqpFt5raCd/LZzr@google.com>
+References: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
+ <20211213113110.12143-4-suravee.suthikulpanit@amd.com>
+ <Yc3qt/x1YPYKe4G0@google.com>
+ <34a47847-d80d-e93d-a3fe-c22382977c1c@amd.com>
+ <Yfms5evHbN8JVbVX@google.com>
+ <9d2ca4ab-b945-6356-5e4b-265b1a474657@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20220128085759.qgn7o3w57d6oknzv@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d2ca4ab-b945-6356-5e4b-265b1a474657@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/28/22 1:57 AM, Christian Brauner wrote:
-> On Thu, Jan 27, 2022 at 02:11:15PM -0800, Axel Rasmussen wrote:
->> These are some trivial fixups, which were needed to build the tests with
->> clang and -Werror. The following issues are fixed:
->>
->> - Remove various unused variables.
->> - In child_poll_leader_exit_test, clang isn't smart enough to realize
->>    syscall(SYS_exit, 0) won't return, so it complains we never return
->>    from a non-void function. Add an extra exit(0) to appease it.
->> - In test_pidfd_poll_leader_exit, ret may be branched on despite being
->>    uninitialized, if we have !use_waitpid. Initialize it to zero to get
->>    the right behavior in that case.
->>
->> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->> ---
-> 
-> Thanks!
-> (Fwiw, all those tests should also be ported to use the TEST_*() harness
-> infra. Currently it's an annoying mix.)
-> Acked-by: Christian Brauner <brauner@kernel.org>
-> 
+On Wed, Feb 02, 2022, Suthikulpanit, Suravee wrote:
+> As I mentioned, the APM will be corrected to remove the word "x2APIC".
 
-Yes. Porting would be great. I will take this for now for 5.17-rc4
+Ah, I misunderstood what part was being amended.
 
-thanks,
--- Shuah
+> Essentially, it will be changed to:
+> 
+>  * 7:0  - For systems w/ max APIC ID upto 255 (a.k.a old system)
+>  * 11:8 - For systems w/ max APIC ID 256 and above (a.k.a new system). Otherwise, reserved and should be zero.
+> 
+> As for the required number of bits, there is no good way to tell what's the max
+> APIC ID would be on a particular system. Hence, we utilize the apic_get_max_phys_apicid()
+> to figure out how to properly program the table (which is leaving the reserved field
+> alone when making change to the table).
+> 
+> The avic_host_physical_id_mask is not just for protecting APIC ID larger than
+> the allowed fields. It is also currently used for clearing the old physical APIC ID table entry
+> before programing it with the new APIC ID.
+
+Just clear 11:0 unconditionally, the reserved bits are Should Be Zero.
+
+> So, What if we use the following logic:
+> 
+> +	u32 count = get_count_order(apic_get_max_phys_apicid());
+> +
+> +	/*
+> +	 * Depending on the maximum host physical APIC ID available
+> +	 * on the system, AVIC can support upto 8-bit or 12-bit host
+> +	 * physical APIC ID.
+> +	 */
+> +	if (count <= 8)
+> +		avic_host_physical_id_mask = GENMASK(7, 0);
+> +	else if (count <= 12)
+> +		avic_host_physical_id_mask = GENMASK(11, 0);
+> +	else
+> +		/* Warn and Disable AVIC here due to unable to satisfy APIC ID requirement */
+
+I still don't see the point.  It's using the max APIC ID to verify that the max
+APIC ID is valid.  Either we trust hardware to not screw up assigning APIC IDs,
+or we don't use AVIC.

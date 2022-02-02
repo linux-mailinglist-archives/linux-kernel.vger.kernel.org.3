@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B1A4A726E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1204A7272
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243454AbiBBN4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:56:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45408 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbiBBN4i (ORCPT
+        id S241186AbiBBN7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230213AbiBBN7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:56:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E290EB830CE;
-        Wed,  2 Feb 2022 13:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74964C004E1;
-        Wed,  2 Feb 2022 13:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643810195;
-        bh=i3Wl1PIcI1R8gZONAXMRTX8wXCIK09GZNAlBvHC4fQ8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=T/ZSDiJe218DWQXungnNozQ68nnU0HzrBOnMFfY1WSWexVnpBIsRZkBJrXqvTfn3Y
-         Op8O+tz8t3dyHq9+LOytosMmxPQ0mTRCIoBNyIHUzzd+wL/lKBJ1CFJeqvlH4JBvX5
-         C2y7WM5Vqjlx+EWliW4ocLVrRVu1E4/ysaA+FT/4sZpheVi5pjooZQVB+k+pBLmXpX
-         2/5Qohkx6k5oZdlh9tBKvZ2/mCAADiayQO2G9wvXgL87PFx84Jln5+qnhPt3DNgf+h
-         gTB4kgAnaFs+bIkcsHjNYrMztZ58TT7vJA3V3qDKyXsD1ph7rqnTDT3GBgCYvtlmB+
-         v+tMNkPXqTSjA==
-Date:   Wed, 2 Feb 2022 14:56:32 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Angela Czubak <acz@semihalf.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/12] i2c-hid: fixes for unnumbered reports and other
- improvements
-In-Reply-To: <20220118072628.1617172-1-dmitry.torokhov@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2202021456020.11721@cbobk.fhfr.pm>
-References: <20220118072628.1617172-1-dmitry.torokhov@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 2 Feb 2022 08:59:05 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA2C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:59:05 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id p5so61172998ybd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:59:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aWG9s1d/GvbwnTAYal6lRjtSrir89rmlhhFZo56v7xg=;
+        b=0nQIn2NAlIoliEmY6SS6YwYBuiIbHPE+5Apygk3dbZfBoCgVICwMSvt9lX90OuMT9S
+         6QrtNpPBhvW6Vl0yZw4cHWfyaz0WaHJ0LeTL7B873nyREhUI4pi82laXzphU34F6cujz
+         xsjRgnBHHZYb/CGMqVOwxpRNZ8ChRWryGOXrvZS1FL16+NILZ8x4A6KHaxhsNfCSY+vo
+         culkY6dG8arMD37GC2AGT+NwvcYKA0k3s0d0sdtssSfO/mAHI8XUwbcC/8gkK7+jpM/w
+         7L1mwjf24KLb13ToS5UztFDh4tGi/fZp1Z+0SamF0syShLYGKe2rIDc9whjazf5VTzNH
+         qcEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aWG9s1d/GvbwnTAYal6lRjtSrir89rmlhhFZo56v7xg=;
+        b=jBOSS9W7YwLaFyikUiwBQVi0hGUVE9R4mizmpohi/W2+5rQBZozAOmcRndA7tADMFX
+         ajhMf24fKQIBKieJKE495KGfIcxUpswPwTmEFOdsIijsTEhIUgxrHA0rFb1ddmX1QygT
+         pZ6KGHpUrN6e/McZYtgoBoJGGoFqHvqVyVK63oMgRElQw0kQbTwojzwuKKspbUSa0snF
+         J3XNOk0ZCI1VoppKJmd5yMjk6ITkIXNAdWEJrOt5yN0tOuQyRr3yDlZah8Adzb3cAAho
+         2DXXq5B7U52dJgoYeaLGZVEUFX6+wvktl58Lsqi8FA2L/jPV2EQhQjuf34m/M6vGuYrN
+         y2AA==
+X-Gm-Message-State: AOAM532KfqlT4qylAXhIFQ43Zc4L4zVZwqTQ94z4uLhU2xAL8OubR02H
+        2bT5AI7gOOBzPC4LiYSiwmOe9HnvT1T2Jt2Bbg+7ew==
+X-Google-Smtp-Source: ABdhPJxnAIVW3l9/Qp/Grw4bohejfPa8v/qFOIktxw0zhGzSL9UlCZsT5sNDz0zULIC2JOT6+Dx4DqAbc2IbbSrXlDI=
+X-Received: by 2002:a25:6b4e:: with SMTP id o14mr30320536ybm.485.1643810344332;
+ Wed, 02 Feb 2022 05:59:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20220131160254.43211-1-songmuchun@bytedance.com>
+ <20220131160254.43211-5-songmuchun@bytedance.com> <14df55c2-cab5-8ff0-5986-fd186c2f60d7@oracle.com>
+In-Reply-To: <14df55c2-cab5-8ff0-5986-fd186c2f60d7@oracle.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 2 Feb 2022 21:58:26 +0800
+Message-ID: <CAMZfGtWet8NB6+psZpEQDzX9uoUMNL4OiNDukREB4=D91JRG=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] mm: hugetlb: fix missing cache flush in hugetlb_mcopy_atomic_pte()
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, zi.yan@cs.rutgers.edu,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Lars Persson <lars.persson@axis.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Jan 2022, Dmitry Torokhov wrote:
+On Wed, Feb 2, 2022 at 6:24 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> Cc: Matthew
+>
+> On 1/31/22 08:02, Muchun Song wrote:
+> > folio_copy() will copy the data from one page to the target page, then
+> > the target page will be mapped to the user space address, which might
+> > have an alias issue with the kernel address used to copy the data from
+> > the page to.  Fix this issue by flushing dcache but not use
+> > flush_dcache_folio() since it is not backportable.
+> >
+> > Fixes: 8cc5fcbb5be8 ("mm, hugetlb: fix racy resv_huge_pages underflow on UFFDIO_COPY")
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >  mm/hugetlb.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index a1baa198519a..f1f1ab31dc8a 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -5804,6 +5804,8 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> >                       goto out;
+> >               }
+> >       } else {
+> > +             int i, nr;
+> > +
+> >               if (vm_shared &&
+> >                   hugetlbfs_pagecache_present(h, dst_vma, dst_addr)) {
+> >                       put_page(*pagep);
+> > @@ -5819,6 +5821,9 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
+> >                       goto out;
+> >               }
+> >               folio_copy(page_folio(page), page_folio(*pagep));
+>
+> What if we changed that folio_copy() to?
+>
+>                 copy_user_huge_page(page, *pagep, dst_addr, dst_vma,
+>                         pages_per_huge_page(h));
+>
+> Seems like that would take care of the flush_dcache_page and it would be
+> backportable.
 
-> Hi,
-> 
-> This series came about after I reviewed Angela's patch that fixed issues
-> with incorrect handling of high-numbered reports (15 and above) in
-> i2c-hid driver:
-> 
-> - it appears to me that the driver did not handle unnumbered reports
->   correctly as the kernel internally expects unnumbered reports to be
->   still prepended with report number 0, but i2c_hid_get_raw_report() and
->   i2c_hid_output_raw_report() only expected report ID to be present for
->   numbered reports.
-> 
-> - the driver tried to consolidate both command handling and sending
->   output reports in __i2c_hid_command() but the rules for different
->   commands vary significantly and because of that the logic was hard to
->   follow and it bled out from __i2c_hid_command() to callers. I decided
->   to introduce a few simple helpers and have the data encoding for
->   individual commands done at the call site. I believe this made it
->   easier to validate the rules and the logic and allowed to remove
->   special handling for the HID descriptor retrieval, among other things.
-> 
-> - the driver does too many copying of data; encoding the data for
->   commands at the call site allowed to only copy data once into the
->   transfer buffers.
-> 
-> I tested this on a couple of Chromebooks with i2c-hid touchscreens, but
-> it would be great if other folks tried it out as well.
+Agree. I also can replace folio_copy() with copy_user_huge_page().
 
-Benjamin,
-
-is this something you could feed into your testing machinery as well? (not 
-sure whether it's handling i2c-hid specifics).
-
-Thanks!
-
--- 
-Jiri Kosina
-SUSE Labs
-
+>
+> Of course, Matthew may hate the idea.  Not sure if there are any plans to
+> convert copy_user_huge_page to use folio type as it has some special hinting
+> logic.

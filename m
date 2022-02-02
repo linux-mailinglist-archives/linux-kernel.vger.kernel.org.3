@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A90E4A6EE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A6B4A6EF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbiBBKl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:41:28 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:41748 "EHLO
+        id S1343582AbiBBKll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:41:41 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41778 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiBBKl0 (ORCPT
+        with ESMTP id S239380AbiBBKla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:41:26 -0500
+        Wed, 2 Feb 2022 05:41:30 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B7AB32110B;
-        Wed,  2 Feb 2022 10:41:25 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 91DF821111;
+        Wed,  2 Feb 2022 10:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643798485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=ltQWgxs1hZJaXyb5EOG83MmulANVyd58GuQIHA710Gw=;
-        b=tv/afUwIFi1MQ3xi4QXiQphZqX3xdC0KwmWeKxuQ7ggbrjof7uL1ZhODZziE5cqp7u5+Q+
-        lEVkm4aIiy/t2+KSM3D+t2zA7vPhn7dUD8cnsEMT0kyYV5sjAHV71KGugpiGMdSUB0mCk/
-        dEqhSd0+vy7bkERxfoED2PoUwqDjU9Y=
+        t=1643798489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J+L6VyJmCMvNVNuiDAXoevTUJE4AYHiaWKCh7cVzh1c=;
+        b=RkDxzeqzWMKn4dtAuxLntVdD3DZKqzuQxPXaJ3bd8+3bJJerH2/XC0pP0jForFnXKfKB1n
+        /XyomBIUtuyHd2QFC+5F6c1OTkVZGfMrqvqrhlxnh9bLRJ3p5kHwdsFBUs+b6lRZO7D8to
+        APmp9aXQxUgcQciJ2qUv79etOH9saoY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643798485;
+        s=susede2_ed25519; t=1643798489;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=ltQWgxs1hZJaXyb5EOG83MmulANVyd58GuQIHA710Gw=;
-        b=B3y0aeF5gz2ntvs7wCZKEcZu1eD+glUdPfNRot9SPHwcd/gxZVxb0VA+IMesG0jK0Qu1C3
-        7DpADPw+ONun/1Dw==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J+L6VyJmCMvNVNuiDAXoevTUJE4AYHiaWKCh7cVzh1c=;
+        b=LyzK6yBiz+IfPR35OT4uy0ligZDyZkbv1wbvbhIN1nmT6Mdgeko5Rh00Nw0fpYD4xMKJvT
+        r/uFaL4I66SbgjCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2F7B13E02;
-        Wed,  2 Feb 2022 10:41:25 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B9F213E02;
+        Wed,  2 Feb 2022 10:41:29 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id hTVhJ9Vf+mFNbAAAMHmgww
-        (envelope-from <nstange@suse.de>); Wed, 02 Feb 2022 10:41:25 +0000
+        id zX2cHNlf+mFdbAAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 02 Feb 2022 10:41:29 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
@@ -51,104 +55,197 @@ Cc:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         keyrings@vger.kernel.org, Nicolai Stange <nstange@suse.de>
-Subject: [PATCH v3 00/15] crypto: dh - infrastructure for NVM in-band auth and FIPS conformance
-Date:   Wed,  2 Feb 2022 11:39:57 +0100
-Message-Id: <20220202104012.4193-1-nstange@suse.de>
+Subject: [PATCH v3 01/15] crypto: kpp - provide support for KPP template instances
+Date:   Wed,  2 Feb 2022 11:39:58 +0100
+Message-Id: <20220202104012.4193-2-nstange@suse.de>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20220202104012.4193-1-nstange@suse.de>
+References: <20220202104012.4193-1-nstange@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+The upcoming support for the RFC 7919 ffdhe group parameters will be
+made available in the form of templates like "ffdhe2048(dh)",
+"ffdhe3072(dh)" and so on. Template instantiations thereof would wrap the
+inner "dh" kpp_alg and also provide kpp_alg services to the outside again.
+Furthermore, it might be perhaps be desirable to provide KDF templates in
+the future, which would similarly wrap an inner kpp_alg and present
+themselves to the outside as another kpp_alg, transforming the shared
+secret on its way out.
 
-first of all, to the people primarily interested in security/keys/, there's
-a rather trivial change to security/keys/dh.c in patch 4/15. It would be
-great to get ACKs for that...
+Introduce the bits needed for supporting KPP template instances. Everything
+related to inner kpp_alg spawns potentially being held by such template
+instances will be deferred to a subsequent patch in order to facilitate
+review.
 
-This is a complete rework of the v2 patchset to be found at [1]. Most
-notably, the ffdheXYZ groups are now made accessible by means of templates
-wrapping the generic dh: ffdhe2048(dh) ffdhe3072(dh), etc, rather than by
-that fixed enum dh_group_id as before. For your reference, this change has
-been suggested at [2].
+Define struct struct kpp_instance in close analogy to the already existing
+skcipher_instance, shash_instance and alike, but wrapping a struct kpp_alg.
+Implement the new kpp_register_instance() template instance registration
+primitive. Provide some helper functions for
+- going back and forth between a generic struct crypto_instance and the new
+  struct kpp_instance,
+- obtaining the instantiating kpp_instance from a crypto_kpp transform and
+- for accessing a given kpp_instance's implementation specific context
+  data.
 
-Plain "dh" usage will be disallowed in FIPS mode now, which will break
-keyctl(KEYCTL_DH_COMPUTE) functionality in FIPS mode. As per the
-discussion from [2], this is acceptable or perhaps even desirable.
+Annotate everything with proper kernel-doc comments, even though
+include/crypto/internal/kpp.h is not considered for the generated docs.
 
-The only motivation to include the RFC 3526 MODP groups in the previous v2
-had been to keep keyctl(KEYCTL_DH_COMPUTE) somewhat workable in FIPS mode.
-These groups have been dropped accordingly now and this patchset only
-introduces support for the RFC 7919 FFDHE groups, which is what is needed
-by NVM in-band authentication.
+Signed-off-by: Nicolai Stange <nstange@suse.de>
+---
+ crypto/kpp.c                  | 20 +++++++++
+ include/crypto/internal/kpp.h | 83 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 103 insertions(+)
 
-In order to be able to restrict plain "dh" usage in FIPS mode while
-still allowing the usage of those new ffdheXYZ(dh) instantiations, I
-incorporated a modified version of the patch posted by Herbert at
-[3] ("crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)")
-into this series here as [12/15] ("crypto: api - allow algs only in
-specific constructions in FIPS mode"). There had been two changes worth
-mentioning:
-- An attempt to make it more generic by having crypto_grab_spawn()
-  to include FIPS_INTERNAL in the lookup and also, to let
-  crypto_register_instance() to propagate this flag from the
-  child spawns into the instance to be registered.
-- To skip the actual self-test executions for !->fips_allowed algorithms,
-  just as before. The rationale for this can be found in the discussion to
-  [3].
-With these changes, all breakage is to blame on me and thus, I assumed
-authorship of this patch. I reflected the fact that this is heavily based
-on Herbert's work by means of an Originally-by tag and sincerely hope this
-is an appropriate way of recording the patch's history.
-
-This series has been tested on x86_64 and s390x (big endian) with FIPS mode
-both enabled and disabled each.
-
-Thanks!
-
-Nicolai
-
-[1] https://lore.kernel.org/r/20211209090358.28231-1-nstange@suse.de
-[2] https://lore.kernel.org/r/20211217055227.GA20698@gondor.apana.org.au
-[3] https://lore.kernel.org/r/Yd0gInht+V+Kcsw2@gondor.apana.org.au
-
-Nicolai Stange (15):
-  crypto: kpp - provide support for KPP template instances
-  crypto: kpp - provide support for KPP spawns
-  crypto: dh - remove struct dh's ->q member
-  crypto: dh - constify struct dh's pointer members
-  crypto: dh - split out deserialization code from crypto_dh_decode()
-  crypto: dh - introduce common code for built-in safe-prime group
-    support
-  crypto: dh - implement ffdheXYZ(dh) templates
-  crypto: testmgr - add known answer tests for ffdheXYZ(dh) templates
-  crypto: dh - implement private key generation primitive for
-    ffdheXYZ(dh)
-  crypto: testmgr - add keygen tests for ffdheXYZ(dh) templates
-  crypto: dh - allow for passing NULL to the ffdheXYZ(dh)s'
-    ->set_secret()
-  crypto: api - allow algs only in specific constructions in FIPS mode
-  crypto: dh - disallow plain "dh" usage in FIPS mode
-  lib/mpi: export mpi_rshift
-  crypto: dh - calculate Q from P for the full public key verification
-
- crypto/Kconfig                |    8 +
- crypto/algapi.c               |   18 +-
- crypto/api.c                  |   19 +-
- crypto/dh.c                   |  687 +++++++++++++++-
- crypto/dh_helper.c            |   44 +-
- crypto/kpp.c                  |   29 +
- crypto/tcrypt.c               |    4 +-
- crypto/testmgr.c              |   61 +-
- crypto/testmgr.h              | 1445 ++++++++++++++++++++++++++++++++-
- include/crypto/dh.h           |   26 +-
- include/crypto/internal/kpp.h |  158 ++++
- include/linux/crypto.h        |    9 +
- lib/mpi/mpi-bit.c             |    1 +
- security/keys/dh.c            |    2 +-
- 14 files changed, 2443 insertions(+), 68 deletions(-)
-
+diff --git a/crypto/kpp.c b/crypto/kpp.c
+index 313b2c699963..458195495a1d 100644
+--- a/crypto/kpp.c
++++ b/crypto/kpp.c
+@@ -68,9 +68,17 @@ static int crypto_kpp_init_tfm(struct crypto_tfm *tfm)
+ 	return 0;
+ }
+ 
++static void crypto_kpp_free_instance(struct crypto_instance *inst)
++{
++	struct kpp_instance *kpp = kpp_instance(inst);
++
++	kpp->free(kpp);
++}
++
+ static const struct crypto_type crypto_kpp_type = {
+ 	.extsize = crypto_alg_extsize,
+ 	.init_tfm = crypto_kpp_init_tfm,
++	.free = crypto_kpp_free_instance,
+ #ifdef CONFIG_PROC_FS
+ 	.show = crypto_kpp_show,
+ #endif
+@@ -111,5 +119,17 @@ void crypto_unregister_kpp(struct kpp_alg *alg)
+ }
+ EXPORT_SYMBOL_GPL(crypto_unregister_kpp);
+ 
++int kpp_register_instance(struct crypto_template *tmpl,
++			  struct kpp_instance *inst)
++{
++	if (WARN_ON(!inst->free))
++		return -EINVAL;
++
++	kpp_prepare_alg(&inst->alg);
++
++	return crypto_register_instance(tmpl, kpp_crypto_instance(inst));
++}
++EXPORT_SYMBOL_GPL(kpp_register_instance);
++
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Key-agreement Protocol Primitives");
+diff --git a/include/crypto/internal/kpp.h b/include/crypto/internal/kpp.h
+index 659b642efada..c4d5a970fe9d 100644
+--- a/include/crypto/internal/kpp.h
++++ b/include/crypto/internal/kpp.h
+@@ -10,6 +10,24 @@
+ #include <crypto/kpp.h>
+ #include <crypto/algapi.h>
+ 
++/**
++ * struct kpp_instance - KPP template instance
++ * @free: Callback getting invoked upon instance destruction. Must be set.
++ * @s: Internal. Generic crypto core instance state properly layout
++ *     to alias with @alg as needed.
++ * @alg: The &struct kpp_alg implementation provided by the instance.
++ */
++struct kpp_instance {
++	void (*free)(struct kpp_instance *inst);
++	union {
++		struct {
++			char head[offsetof(struct kpp_alg, base)];
++			struct crypto_instance base;
++		} s;
++		struct kpp_alg alg;
++	};
++};
++
+ /*
+  * Transform internal helpers.
+  */
+@@ -33,6 +51,62 @@ static inline const char *kpp_alg_name(struct crypto_kpp *tfm)
+ 	return crypto_kpp_tfm(tfm)->__crt_alg->cra_name;
+ }
+ 
++/*
++ * Template instance internal helpers.
++ */
++/**
++ * kpp_crypto_instance() - Cast a &struct kpp_instance to the corresponding
++ *                         generic &struct crypto_instance.
++ * @inst: Pointer to the &struct kpp_instance to be cast.
++ * Return: A pointer to the &struct crypto_instance embedded in @inst.
++ */
++static inline struct crypto_instance *kpp_crypto_instance(
++	struct kpp_instance *inst)
++{
++	return &inst->s.base;
++}
++
++/**
++ * kpp_instance() - Cast a generic &struct crypto_instance to the corresponding
++ *                  &struct kpp_instance.
++ * @inst: Pointer to the &struct crypto_instance to be cast.
++ * Return: A pointer to the &struct kpp_instance @inst is embedded in.
++ */
++static inline struct kpp_instance *kpp_instance(struct crypto_instance *inst)
++{
++	return container_of(inst, struct kpp_instance, s.base);
++}
++
++/**
++ * kpp_alg_instance() - Get the &struct kpp_instance a given KPP transform has
++ *                      been instantiated from.
++ * @kpp: The KPP transform instantiated from some &struct kpp_instance.
++ * Return: The &struct kpp_instance associated with @kpp.
++ */
++static inline struct kpp_instance *kpp_alg_instance(struct crypto_kpp *kpp)
++{
++	return kpp_instance(crypto_tfm_alg_instance(&kpp->base));
++}
++
++/**
++ * kpp_instance_ctx() - Get a pointer to a &struct kpp_instance's implementation
++ *                      specific context data.
++ * @inst: The &struct kpp_instance whose context data to access.
++ *
++ * A KPP template implementation may allocate extra memory beyond the
++ * end of a &struct kpp_instance instantiated from &crypto_template.create().
++ * This function provides a means to obtain a pointer to this area.
++ *
++ * Return: A pointer to the implementation specific context data.
++ */
++static inline void *kpp_instance_ctx(struct kpp_instance *inst)
++{
++	return crypto_instance_ctx(kpp_crypto_instance(inst));
++}
++
++/*
++ * KPP algorithm (un)registration functions.
++ */
+ /**
+  * crypto_register_kpp() -- Register key-agreement protocol primitives algorithm
+  *
+@@ -56,4 +130,13 @@ int crypto_register_kpp(struct kpp_alg *alg);
+  */
+ void crypto_unregister_kpp(struct kpp_alg *alg);
+ 
++/**
++ * kpp_register_instance() - Register a KPP template instance.
++ * @tmpl: The instantiating template.
++ * @inst: The KPP template instance to be registered.
++ * Return: %0 on success, negative error code otherwise.
++ */
++int kpp_register_instance(struct crypto_template *tmpl,
++			  struct kpp_instance *inst);
++
+ #endif
 -- 
 2.26.2
 

@@ -2,126 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0A24A6CEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6405E4A6CEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244933AbiBBI3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:29:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46447 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244908AbiBBI3c (ORCPT
+        id S244943AbiBBIbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:31:33 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:37981 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237303AbiBBIbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:29:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643790571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W0bztKGpIcohzL9Sc0p+LBRUNxZykmedDS+Nu+iWafY=;
-        b=jP3FogmUpSQMnIc6qVTwgcY24oY0sPwkWTyVBBlp0tOfuO3iA/WzHUzaOolZWeby4SgYkj
-        Ez4/ND3mxocMHMyu2Bn5MopW+LzXO9ndUHqYZX0fgI9AnKoK13DcHQl1UJj1OtnNlUrg/b
-        MSfcchOM9iypwh+AdVKzLhc6dBwDrDI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-368-kWGLCcueMmWaO8DBKQ1waA-1; Wed, 02 Feb 2022 03:29:30 -0500
-X-MC-Unique: kWGLCcueMmWaO8DBKQ1waA-1
-Received: by mail-wm1-f72.google.com with SMTP id o194-20020a1ca5cb000000b00350b177fb22so3422736wme.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 00:29:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=W0bztKGpIcohzL9Sc0p+LBRUNxZykmedDS+Nu+iWafY=;
-        b=1SO7k24gG50jH718mQjCjQqiyNZEoeKmYlqeeXXd6X5HwgdeC8hOqbWnR+cZfLTnX7
-         r1ICM1RSlIa9L2J2EkynWCi+JjcgN13mGLK9zpD2ByTRXRXKfxCrgYaC3V/qzpFBvwRY
-         CcAhC5ttc4Nb26viytVByf9MNHv5Wq7CU9Ma3XBsqgI0OtxwWXlT/z5okTF1yEaFcap5
-         UaKHaWmTmAZev31WbuyjVOgZt1yvz01oNNZ7BjtZvS8H4w3k/dkcLAy3SXesRNcoSyL5
-         cusxbZdzZPoB8eFavSzoejt3UE6nFbYTtSzmnbqzZyxyTndFgUui0zA3eRyk8pScVB5y
-         x8NA==
-X-Gm-Message-State: AOAM531f9n7WsxxZvaGMdbfGoqJcHt9X1QrN0t3fkDXNikZREM1ujTtR
-        pyao3ECX0SehKbmCYMrcA5Iz1nYjX/yEeLz9ykEcAar6FXE9lu3gFqTfviVWL2tsARoeniZg0GH
-        jG2kNWoG6lwUFNsi67OCTu2jE
-X-Received: by 2002:a5d:6acf:: with SMTP id u15mr14123802wrw.483.1643790569358;
-        Wed, 02 Feb 2022 00:29:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyZ+ZXpYCgyI5AjaHIrkAs/aXj0KAcVKPE7/o7d9nr5TSaq8+Wpfx9p5zSxXVdSNWJTBqZEw==
-X-Received: by 2002:a5d:6acf:: with SMTP id u15mr14123791wrw.483.1643790569132;
-        Wed, 02 Feb 2022 00:29:29 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id n13sm4185614wms.8.2022.02.02.00.29.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 00:29:28 -0800 (PST)
-Message-ID: <042a42a9-0446-1b29-beae-493882cc18ca@redhat.com>
-Date:   Wed, 2 Feb 2022 09:29:27 +0100
+        Wed, 2 Feb 2022 03:31:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643790692; x=1675326692;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u+DzTfKMjcecMARYYAmOWUUJ2SW4bIwLVPvUzcWVG28=;
+  b=CTZkczvN5tjQIKL0xBYgmKX1XQSlO4DtElcdKjD16Fdj4fCMDhaWsoGj
+   kGblzgZM9z4t3qRBpwizC5lRjLBx4SsS5UFhwVXlJFtNMwZH7d7xb5fnX
+   yY1g6pbV+Ff8mNqrqdkhiaaXM+rmNtJjzQmgtY2a3mHdqLltSS3rJbjyR
+   S9O/1vXb1uSlq35CxJRMKwpVC5VQb9FezfYcLF/Wo3bNuKB2TugLmQfBR
+   RMHjc9j2vtcZ6og84uDYQFdHycEbMx/WdeW14W2gkQJQqHEcBatGJGwCU
+   zabTwsQMcE4K46DoN8pIrjhUJVH2kT3c+T66yNdj5hIs8UZ1+nX01eYhA
+   g==;
+IronPort-SDR: HrLsfAkEaxHvnyiqLFs4XJ7ooFesl42N5wt1tF6vC/8NT++lDk5ThMENLLj6tzh3Krhlf6E5QY
+ 7Iht3eBe/C8hhI08nt2Mxaj8mpF6UJxE1dcBh/ljtEUrNHTDmkoDKBmGqgG8nRL45x7Ud4FdC/
+ Ry8S7bRHE0UqrenG0XodLT5DOkeUJdmFR0v0CtVc6Y3TyqUA2g+SIpzQA1EGVmzgfWz3fNcXQs
+ 4JQyRSPp4KlSA30fWKc97Eg1UGfPeocs+Mzz6sBPBnWsunlbxC6JmwsBBBOlngffzHWmHdIDBa
+ OWFVdfXglwmojel2EnKFTTfQ
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="84413464"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2022 01:31:31 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 2 Feb 2022 01:31:31 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 2 Feb 2022 01:31:30 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Dan Carpenter" <dan.carpenter@oracle.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH net v2] net: sparx5: do not refer to skb after passing it on
+Date:   Wed, 2 Feb 2022 09:30:39 +0100
+Message-ID: <20220202083039.3774851-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220131202916.2374502-1-javierm@redhat.com>
- <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
- <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
- <CAMuHMdUJpoG=XChpqNotfEDrWCxFUqyhjW2JW1ckAyKcWXvAUw@mail.gmail.com>
- <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
- <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
+Do not try to use any SKB fields after the packet has been passed up in the
+receive stack.
 
-On 2/2/22 09:23, Thomas Zimmermann wrote:
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+---
+ drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[snip]
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+index dc7e5ea6ec15..148d431fcde4 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
+@@ -145,9 +145,9 @@ static void sparx5_xtr_grp(struct sparx5 *sparx5, u8 grp, bool byte_swap)
+ 	skb_put(skb, byte_cnt - ETH_FCS_LEN);
+ 	eth_skb_pad(skb);
+ 	skb->protocol = eth_type_trans(skb, netdev);
+-	netif_rx(skb);
+ 	netdev->stats.rx_bytes += skb->len;
+ 	netdev->stats.rx_packets++;
++	netif_rx(skb);
+ }
 
-> 
-> Thanks to both of you. I was asking because I found the code to be 
-> repetitive and it's not clear that these 3 statements belong together.
-> 
-> I'd like to suggest to add a function
-> 
->    ssd1307_write_cmds(client, len, const u8 *cmds)
-> 
-> that loops through cmds and sends the values one by one. A call would 
-> look like this:
-> 
->    const u8 set_col_range[] = {
->      SSD1307_SET_COL_RANGE,
->      col_start,
->      col_end
->    };
-> 
->    ssd1307_write_cmds(client, ARRAY_SIZE(set_col_range), set_col_range);
-> 
-> AND/OR
-> 
-> You could have functions that take a command with arguments; either as 
-> va_args or with one function per number of arguments. Or you could 
-> combine all these somehow.
->
-
-Thanks for the suggestion, that a makes sense to me. I'll look into
-it when working on v2. Probably during the weekend.
-
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+ static int sparx5_inject(struct sparx5 *sparx5,
+--
+2.35.1
 

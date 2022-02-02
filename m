@@ -2,193 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30214A771C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 001E84A7720
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346360AbiBBRwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:52:13 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63666 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232989AbiBBRwM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:52:12 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2124Rv71025943;
-        Wed, 2 Feb 2022 09:51:41 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=CSAOF8y2oShb7pKB9BXGHxcRfFq91WItrqZCP+LHSBI=;
- b=iWUu7PeM2a6PLAiqcZNuQPaccog6cjjAZRxUrlaVE1y4hXkEajM5WTA/KCs6yBVn3Vgo
- P5b+a8YAKOdDjVLbN8BWP2vOtBKUWkqISVETWczKyWkxFvH2IFI8jJ7X9NHP+/iRuAzF
- 1MVpDXAq3x13S+miNcSFHpbM5Y8T7yOMtQs= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dyjxu3xpv-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 02 Feb 2022 09:51:41 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Feb 2022 09:51:37 -0800
+        id S1346364AbiBBRwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:52:22 -0500
+Received: from mail-eopbgr70107.outbound.protection.outlook.com ([40.107.7.107]:61250
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346366AbiBBRwT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:52:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eoDwlIGHVaJYqqcKEbw64BCY9pH7xClsQp9Jx3xkYkMWJR2bhcHoLmiyjAgRw+h+40CgEiCCCpGOTDt3sFG6r5jvaVKICRRoXUqZzX7B/qHCUuflFk2j+DTwY+V/F1syx2EVOsa9OS1wUBIHm6UcDQtHdZIUVC6U8Rf/cn21Hh5WvT7JBEswHwu2WbxLEN5CKkWGqp4ztXdRb72HtzjUXmggmzQ+pWmJqm0S/Y208DmuUMUvUkb+8i+5EHbCKNoRmCkttzC0pKk+ltMOvjKVu2t1/MfxbwITg8OQ+8P4Ew0g3kYSfhW4+xImzAV6gd92xleGLsRbB+0Yg91jUoNFfg==
+ b=Lp7biC+ugE0H6BI0OgRQe0gNYrNT/oj8MLM70Ixmj0p/bNla0jUj2PlWQVWIdK8vZnV9rklsYtpvocgJswf3Czvo1yGocJ0EZ5rJjSLV4WeGRMtfol9bT7tHCmzfSikG/eJGchkU3T9rHcPuaNNtmawbsuIIGSfx372QYlYGkDBCP/Q1RjbZv3twkKrGJN1jXdnWHrb9z8U/ROPJ/NZrGcIj9z9lOr39DHeSfRLNyA8G0uv7mVbtB+Njlt7sO6v0C0JUc1ZztQCYdnY68WADHiN76+qzInpSr+JHm8KMqQR4pDz36gud9l0QaK7DBK4zZRAF6Zx1FzkhCjLswkPvgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CSAOF8y2oShb7pKB9BXGHxcRfFq91WItrqZCP+LHSBI=;
- b=J9mUj26yg9QezeJCcJmTcrwodGsWTPxFfOsJ6GiSNIK/OCEeXRnq2LdaZzMfC2FpxxmpXJrNMCDR1wt1Y5WQdnTAGBpx1qWQfAyjmlwe4FEF7bNc0/dVf0dh1omnr3txd+Wp2AyoWV2ZG4QKUlAlASRIpYSagba8wDYxsTnkWESLxvLMYXkXphQzNUC9Dd2LQKcn+OwEmL4Wb5q9uWTQGB2v6XDPHeTHeYVGHHOQflIdfrcwRdD+Ou3R7W05DDSgLWBnHwx0NciJhCfzZv+wWXtYN1xEZxfapeXZLVwlKLnIbx2fcuv+wLdbCh0pV/oZCVWESu/+p4AdhyR28feUPw==
+ bh=c+f6I9jWg82oiXTIiTDru6eHwgIXZSXfk7HqDYjbQkk=;
+ b=c/MxfBLO3dzaUPs8ueSBXDbtp0s3pmDGS1x8jKqtKFLUhRI3VUq1s3vaWvAAW9A/wM/FIVOXo0CrD1Lbd0X/gL3JUq20AMT8PX8dqh5NKNttXJMf9szNCeiJURYm62hv9gsHbIbv1wW1vcASLcLDG0P4297fexTXgf1MGzdDsGDf7T2dGTtogXa6tnWa3jUO7KmtPyGr1g0GrBKyI8fs/fuX/R/PlY+pLawy+TpX9tdx1jO6I+KP8ha38zp83z5oeXHBrBDMl7XcMDtRiVmRY/W5K/mAJsqDZuO7WWB3f6qRmUtVcW+AN+sLntmJk+vdR+wK8oNjwdeaQg3/PrC+Dg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
- by SJ0PR15MB4600.namprd15.prod.outlook.com (2603:10b6:a03:37d::7) with
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
+ s=selector1-nokia-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c+f6I9jWg82oiXTIiTDru6eHwgIXZSXfk7HqDYjbQkk=;
+ b=ChWg0feoRM/nUUOkkAj9L8OzdI5Uppb0z0sXBS5oLJZiEdi8IbZGsctpe2H+LpnetmBxv1p007cIU/LJo3xqtyShdW3B0ZHimnvqgdX+SgYXriEi6XoKSVY0RQ0SW7WRF4mNdomBEzD4O7jLBr/jV+pEVh9ZsGhS3n8vlbkmjOY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia.com;
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
+ by AM0PR0702MB3745.eurprd07.prod.outlook.com (2603:10a6:208:16::33) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
- 2022 17:51:36 +0000
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::d4ac:5796:5198:ecd2]) by BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::d4ac:5796:5198:ecd2%3]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
- 17:51:36 +0000
-Date:   Wed, 2 Feb 2022 09:51:32 -0800
-From:   Roman Gushchin <guro@fb.com>
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-mm@kvack.org>, Ira Weiny <ira.weiny@intel.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
-Message-ID: <YfrEpOGObnc0mYAW@carbon.dhcp.thefacebook.com>
-References: <YfeuK5j7cbgM+Oo+@dhcp22.suse.cz>
- <YfgT/9tEREQNiiAN@cmpxchg.org>
- <YfgnUZQBRkqhrEIb@carbon.dhcp.thefacebook.com>
- <Yfgpknwr1tMnPkqh@dhcp22.suse.cz>
- <12686956-612d-d89b-5641-470d5e913090@redhat.com>
- <YfkQJ4QhfY0dICB9@dhcp22.suse.cz>
- <268a8bdf-4c70-b967-f34c-2293b54186f0@redhat.com>
- <YfpHbtffFi2x1L4p@dhcp22.suse.cz>
- <YfqpSPLC+LAdqbJX@carbon.dhcp.thefacebook.com>
- <YfqzbwAPKpshXSLK@dhcp22.suse.cz>
-Content-Type: text/plain; charset="us-ascii"
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.5; Wed, 2 Feb
+ 2022 17:52:16 +0000
+Received: from DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::adfc:7f91:31e5:f103]) by DU2PR07MB8110.eurprd07.prod.outlook.com
+ ([fe80::adfc:7f91:31e5:f103%9]) with mapi id 15.20.4951.012; Wed, 2 Feb 2022
+ 17:52:16 +0000
+Date:   Wed, 2 Feb 2022 18:52:10 +0100
+From:   Krzysztof Adamski <krzysztof.adamski@nokia.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] arm64: move efi_reboot to restart handler
+Message-ID: <YfrEynukTySY0FhE@localhost.localdomain>
+References: <YfP0osb45uJldtM9@localhost.localdomain>
+ <YfQTZTUNaeGi+8tG@FVFF77S0Q05N>
+ <YfRorCpk0seVGI+5@localhost.localdomain>
+ <Yfk8hQB1eon7oeYU@FVFF77S0Q05N>
+ <Yfp7wZXLKPIYBxmp@localhost.localdomain>
+ <CAMj1kXEP+0ErwmLebw5mswz+jD+Yd_U_U7jmhPR2bKgnMRTWNw@mail.gmail.com>
+ <Yfq1no7OL9w21/kp@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <YfqzbwAPKpshXSLK@dhcp22.suse.cz>
-X-ClientProxiedBy: MW4PR04CA0089.namprd04.prod.outlook.com
- (2603:10b6:303:6b::34) To BYAPR15MB4136.namprd15.prod.outlook.com
- (2603:10b6:a03:96::24)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yfq1no7OL9w21/kp@localhost.localdomain>
+X-ClientProxiedBy: HE1P195CA0003.EURP195.PROD.OUTLOOK.COM (2603:10a6:3:fd::13)
+ To DU2PR07MB8110.eurprd07.prod.outlook.com (2603:10a6:10:239::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ca44078f-a967-4a1d-4575-08d9e674a83b
-X-MS-TrafficTypeDiagnostic: SJ0PR15MB4600:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR15MB4600BC0D2646E4290BA8F30DBE279@SJ0PR15MB4600.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Office365-Filtering-Correlation-Id: 4c5351c2-5212-434e-4744-08d9e674c035
+X-MS-TrafficTypeDiagnostic: AM0PR0702MB3745:EE_
+X-Microsoft-Antispam-PRVS: <AM0PR0702MB374592873CF5A6BE5E4C0AD9EF279@AM0PR0702MB3745.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RC9XIw9H9GVANHyrkDBuoPi+GbdDwTvJf4jb9/1actjij9Uos6bu2ccdIIH1fDHAMdiaB16Ilkk/agXjYWQA0u0eQCrIeuaXRewtVPsCOgyXIxoqvdjSs5vnYf2Aw86wCumMGZ7gP+PNjbwvmjnzSkENGDxY+wkyzwz9nuFPllITX3Cpicm7FUbkACGw5oAfv/Ace/vYiHbsEoT8Bu9ZSxN2dDcqQT1E8pJSK+LyhbJJCtn1+MMbM15SGPsjrky11KjK8YLNMM9M6kheEnBXvfQ1B4a7urwa63HNoRPGkgY+P/Y4nJjVqop7jaWC8xEZODCHYzCQ66TmgZ6vDMyIemAY5GwQB3Ej1tZOjozx+KIUJtFqepPI0kv+hcpWpLHZvZNfZ7DUgyVtHoU2ewLwSKalMIbv1yMKccyufA7QsuQYNGyMYPRUfo69i+7ZlNDVkcafVWXJ7e7UYmP/lvA1RuUxI+Lc3/bKfnfEqGeirZtsyp2f9/Z9l0E9HL4eTiGE+aDs+TUxoiTIpxPSmoz1DUWo1WD3Ds2nX7MqmTCyzDVh08u7+sG6oY1nYHdd2T5zj0cwkvO22zVlAfUXKHEwdKlnpxXsJe/E4BWRhksPGmorrC8mg0lQc48I5AhAgiSZccf8QpgkVUlzWxm8mHxK1A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(54906003)(6916009)(2906002)(9686003)(6512007)(66946007)(8936002)(66556008)(4326008)(86362001)(38100700002)(8676002)(66476007)(508600001)(6486002)(316002)(186003)(7416002)(5660300002)(6506007)(6666004)(53546011)(52116002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 9t6eeCliBUvin4+A2n0BY8UR8gfpx6o/czi6YnR4ZAeTUxPM/WOjfWmAP1a5kT5x7UYggfwJ/0hunxr+Va36VqnFHc7ZTDwEhd23Ji8sMcumqP0fCXhOX7U0x4Wa5WDvP+Gq2F3XvE2V8nj0fIS1vV57tkDNm98TmMS62oOItOyASIdsGj91BWzyOdNWOTu8KGPdvMHsyur8R+0TVqVtBTjEc32tvygkhx29YNp4KDnqfudqRVNhG9eEwC+6WTxQh91D7ZVv3OR6SvcYY8LqXsTHypn+EAscR4RNr2faMOqrvW4NxXl7YLz5rXSz8uJWjYysZUCYjbcCzvoQWXaFfhreZoIs8xsmsGLcuRxAX5ER+/UyZglRJT+kjJQPqIlqriGJRh+3Pi09zz1XdnV82glrhGrdSBax/ahWa3YS2bG+IIZV4Vk5+pfUE2xBJMeeT8crVaEg1n/X5y1e54mKSjkwOwNf++M8iPA3xdkEuro7hAQsDRYBYA2rNOrrYCMOqn0Vg65UHOrZeKQhALNcCQJ2u18t6dI0WE8COXuOzcHGh1s4kI9JLiZFE2ha5/d+KlY27W2Fin+rG6zGq9cVsvXWfBTLkj5nviL57004YK8547r6q7kv2V01xqg+PVd3YYiet7IN4FdCS2tD8q1KqJDLakH6RHHWqG+xk/UkFDLMRIeoYJrdu8+2zrBiQfWuSiHfnMkTKXFNmN2aI+6rdQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR07MB8110.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(38350700002)(66946007)(54906003)(38100700002)(6916009)(8936002)(66556008)(186003)(316002)(86362001)(83380400001)(6512007)(9686003)(66476007)(6486002)(508600001)(26005)(82960400001)(8676002)(2906002)(6506007)(6666004)(44832011)(52116002)(5660300002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y7qsojFVNHVwCD+69LDeNdR1D2VBVNXHaJV6uBZZPPX59a34XSGO44RERTGX?=
- =?us-ascii?Q?41Qd0SLhX868H5sEwLT6uEn+FmePw6tBVFdbNGP6hyEUfqeu5ZEIC5lnbN1F?=
- =?us-ascii?Q?ZkWsmpmjWFxsUsfcQYUWiXmmpRWU1f4BX5gIYq57BhxlWPpo6PFR0aGFcW1B?=
- =?us-ascii?Q?1RbjF/+IV6P1DGsKFQHIWSV5NsGXsldiGDM+oQG0X9v4WVdNmeafooQbSADT?=
- =?us-ascii?Q?R4Y7nDRDUY1+4Rzeskupebhmq0YAx2/KTBq4XOwA+vsHB0LR4rEE5jTPSgyi?=
- =?us-ascii?Q?Wp+x1uIDdfK7bZgwQgBm8WLDOq1lQy5lWPGyr+WZwy/MCMFV66PKeLqz5yce?=
- =?us-ascii?Q?DgpLstn0Nqg9aJhnYdLLUwDeR1Xz+WFgeonV/DfV/qhkrfTHj9md0L67jsJe?=
- =?us-ascii?Q?Hqw0InS4MNi+QN5N7FTiHUy4rMoCyu9FoshLx8ZQu5/GE4v/DGjR+DsljQ/A?=
- =?us-ascii?Q?6+pI8yPHj+NNu3Uw/hb8ExU/NlNH6AXKNQiTXBr6O8BmAYMOc+RhreEFBjX7?=
- =?us-ascii?Q?mKHp5tgliapOqegmrlr3ZlyKzgRpvl4COGysXlU4ru2UKSDrhWAB59f6Ka+x?=
- =?us-ascii?Q?5G1hSM5fhUsk03WJ+xU5PE3osQEpjWFT5COpyJJ1Y72xBSZ27fFtvlF0+YwY?=
- =?us-ascii?Q?v1PjUm5GmJbt2iVDyBwT5A0PnELlGg0nanpA/V7SZr6HKmN/4t6tNRZZuLHA?=
- =?us-ascii?Q?RsDR1A9OrVhJlVTmiRTK5sgp/ri0XUrhiDGd7ZK8turMWojShiFW1MNX2F2A?=
- =?us-ascii?Q?cYvpgNntcMk/ckJrdlWNMlT2LocFU++V5gV8YWc81sEygU2UGl1VsGa/SerO?=
- =?us-ascii?Q?YqDlkl4qJNxOnFS7IsQtBUYpCg9DrF/nQtCcPDek83051JkBl6dxsyhwGvSs?=
- =?us-ascii?Q?sHbycZP551H/hG6jg3hFUHeTaW+AqOXTAZgZ9tJdhtRYS5f1aKejKj5ICPpu?=
- =?us-ascii?Q?VBMEQu5ZKAUi4pfJTFcwWxt0GYVwUgwAfs0a/ljSD7TLF1G8OeL3qV/wuXr7?=
- =?us-ascii?Q?krP+dZXq8JQ+CJ6ifNqvLoI+vWRlbSY0TKMyfLmVdviOAlJPhL7UrEoTb74s?=
- =?us-ascii?Q?yDcfNuTluxZSFLs9OJneKz75TgBnXly9mPKoO452PIlh+2siHMc3t20emjk4?=
- =?us-ascii?Q?fx2z4Wpuzo3wEDB4rE3HMKTWRHj3+IuzUmkJrkgrTU4+ohrPb59eJgoESff8?=
- =?us-ascii?Q?TSEnrIqnxNbt2OZ9eY1A6yYPyhsaraz1+tpYO0YIFIj4L9OsAZlTcOzq9RUr?=
- =?us-ascii?Q?pByHYbyZtHX555DDhROmDzzqFarfy4MSMbuTSIez0jh2rLnm3xeVmyrlC+eN?=
- =?us-ascii?Q?u6ZcnJgZcg1hxnp575Z2CaWA1gnf3VfEUb0yw5wf4R4smEr+U9fGtaPq0Dn2?=
- =?us-ascii?Q?tEPfa0bvPJOlinlBInRDM2Bq16OPAvYRe3rGco2J2syiBwPaqvJ9y9V3RJ00?=
- =?us-ascii?Q?/fP5py6EhWI4zCcGhhOdzMC4r+Cs1MUWc2Bs4ZXFC7K+FaKb96GCJP7yO/AD?=
- =?us-ascii?Q?4QN26VMaW+aUHqYzelcp1Lz/8FRQDN5p1/mVzuGghmXyqoL91Sr06yqr8JR6?=
- =?us-ascii?Q?DqcaSS7eidBIaGtYfIxAja0USGLwS7zpYefIb3Ct?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca44078f-a967-4a1d-4575-08d9e674a83b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aDNsQ1dyUEJTbG0zMWVobmFRanN2dHU0c0p1b3NBclRvbC8yU0hObStyVk5N?=
+ =?utf-8?B?K2xTQ1J5WkNzSWhLamR2MkE3ZEpRUmpLM2lOVUxJNWN4ZnBEWS9wSnBrdFdu?=
+ =?utf-8?B?cDEyRmg0VENrKytra242UXBRd1pyOXRrblg1UTBPSmJKNWZ2Nm1jZE00NGVR?=
+ =?utf-8?B?bzZtVDAza3FuVjYrNUNRa1pEZ1hTeXpKRGJ0RkkvdWwrdU9wb1NQZmZZeG10?=
+ =?utf-8?B?TURFcitRRzBTSEdtbUpBclVha3hqUHVRYTVHZFpJSHVTeENYWHJPRzIyb0hR?=
+ =?utf-8?B?ZGUzbmZqcVJZekhjelQ2VGFibVVkdVdsMHRTZjdqaktVbVVpRXdjVTBuWWda?=
+ =?utf-8?B?WWJ6Mis5cDBpSHNiQ2UzYkJCZFlVUnlPQWo1Qkt2TkM3V3NpZ0l1WEJWTVNs?=
+ =?utf-8?B?cUNHaCtZVEt3Vk9rL3RjdmxuZ2NDa1dScXZaWmMzSHFrSjJJZVBDcDdFRXB3?=
+ =?utf-8?B?VU9DWWVqRVV5QmtyVTBYM2tBTzNHY3dXUEhLbG1UWGxFRmVIcGUzVys5THY0?=
+ =?utf-8?B?dldEd3JVVGRJaXgreDZXR0NlRkpNTzZ0WGdHalJWTmswTlZGN0JHdnNCYkJ2?=
+ =?utf-8?B?RnpqNHhYUE01RithTDNDTlNLVjdpc1luRGZMNm1mcFFWaUVZNW9uUXdaWWh4?=
+ =?utf-8?B?d1JscTNvN212OVI3aFR6cUU4WWlPVElNeDdvclM0aThTNE9PM0ZmRHVMclhZ?=
+ =?utf-8?B?ei9iZHROQzhjSG12aGEyNmFMd0hTT1FMNXVUL3J1K3YzZm01ZGUzWGZVWjFQ?=
+ =?utf-8?B?b0djNE5acUx2UEV0bVp4VFNTcVNCVWJvWHdFdG4vSlU3M2ZBL2JLZGI4K0xU?=
+ =?utf-8?B?TWQyTlo5MjRJMEpvdHVJd2ZIRnFOTnAvVStSbmxJMGtSTTRqZ1RtcFFuc045?=
+ =?utf-8?B?dVdpWG05WGFadlgwU2pXL1VyMDZ5RWhrTUxlZmJ4MmV2TGxWOUNaMDF0YWUz?=
+ =?utf-8?B?NitGMHhva2ZJaFNocTljMzlvN3pZaHNPWElocGhWSUZzQngwU2ttVVI5ZFVr?=
+ =?utf-8?B?clcrQzBBSkZRTkVUa09IVDc4VFIzbU5JSXpuV1FxbmZuSTA1NzhlTGl6NEFF?=
+ =?utf-8?B?VTkyS2NPZ3B6ekRBNmdLNjNCRThXYk5GamJtb2xSZFlHM0R1MEQ0YnNGeU1V?=
+ =?utf-8?B?ZXc2WkUrRENMOEM0T2xFamVISUEyWEI5WlpkTEdJNWNHVXNKb1dSc3VEMGFy?=
+ =?utf-8?B?T2RSU0I3cUhIM1IzcFRPRWQzSUptdnZaNDRQa3NtclZ0ajlEU2V3ZSt0OVN6?=
+ =?utf-8?B?Zzd5QzJSbjNiYmRLRlR5WjdPWmU5WFBlSDZIWHBTS3hNTm5DNWxnQTVDc2dR?=
+ =?utf-8?B?Qk04YmhHT084MFN2WHc1NTNNUm43bm9qc05Ea3l2VmdmWXE5aXRDTmNwblZ5?=
+ =?utf-8?B?N3JOQm5YNXhzbVM5NjhUUDhvMzFLcHZlbVpQb3YvdWdQamxoWmJocWVnaGFO?=
+ =?utf-8?B?VkY1a05IWlNyNGVKTWtjSGU4ODFUWVBvMEN3Q2NBWXdFK2ZpTE9GZTR3OSs0?=
+ =?utf-8?B?eW1LZFVOYnR0STVsdEE0cHdwMmdTeXRqNU05WDJ1K3Nwb0JpalhmNVFDNzlK?=
+ =?utf-8?B?QVdmVVpXT2ZIbmFsallHaXFpY3hFQnIveFVkU1NYckxvVEF2azZnczRUeVBo?=
+ =?utf-8?B?bmJXdjZMK3VFYXpJejJrZDVWR05BRHlUc0pzSDVBazRwaG1xUE5FNmtZSTZM?=
+ =?utf-8?B?Y0VOa2VHV1RDemZKOFJtcHFZTm0vVythd2JQb2hrNVZSNXdSb1RiN3AxUDN0?=
+ =?utf-8?B?NXBSNzhPZXJIYXBPQjZ0OE1OcjlGQVhUaWZuTkxHd0xEMS9yMGZsRGJNVkFF?=
+ =?utf-8?B?VVhGMlNHVURzZmFscUErSmNDNEd1S2R3SkJBZXZZbVlad1NBMHpiWVpJWFdk?=
+ =?utf-8?B?ZVo4SGcyamVRcnRUbkdWZTluWGVPclAwWTZQd3h0V0ROVFhrWGU4YnFUKzBo?=
+ =?utf-8?B?Q3B0M3hUa0lNd05QSEFBVzlhd1phZTdMRi9FUnMremlqWDF1SnFMYlpiNXFu?=
+ =?utf-8?B?d3l3OUVEejVSa210SXhOYk56dGxDVU83TkZaK3hpZ21WYUdpc2pHQUFLNVM4?=
+ =?utf-8?B?Q1EvTmxrdXNlNGRENVFKZVBhYktGdzlLTFpOSFVsV1JOTHpDeXdFSitFNFJC?=
+ =?utf-8?B?dWdnQnVlRXptQm5VRXpvSm1yOGluUlFVdHNXNzNBR0lxUUtZa0FUeHZpcDhI?=
+ =?utf-8?B?c1lEOWhuSnlQMlZBcmJyNGdPQVpUejZDUDNQci82Z2ZiZTdyUUluSEpCcUxn?=
+ =?utf-8?B?cStjaGxPNU80OFh5NWtRRWNQVUtnPT0=?=
+X-OriginatorOrg: nokia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c5351c2-5212-434e-4744-08d9e674c035
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR07MB8110.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 17:51:36.5655
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 17:52:16.6978
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3npXZtvbS1C18sqefPk/VadDMnzZdxHlZzwQO44dGZhMGWabzVpUQ0EJfrpD1f4z
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4600
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: OqWeYJJXvvBujFEcsUpfg34JSu5dvZ9Q
-X-Proofpoint-ORIG-GUID: OqWeYJJXvvBujFEcsUpfg34JSu5dvZ9Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-02_08,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
- mlxlogscore=487 suspectscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202020100
-X-FB-Internal: deliver
+X-MS-Exchange-CrossTenant-UserPrincipalName: qGPuOO4E1v76k4s/pSsX2JqSlfKKPNnea3rtVD+YO33MYhLGzG3iQWhD9nlYIhMjOdpxNCHRnkdLQEAPJ3tttKe8zs4FR1halc8COMeXjiY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0702MB3745
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 05:38:07PM +0100, Michal Hocko wrote:
-> On Wed 02-02-22 07:54:48, Roman Gushchin wrote:
-> > On Wed, Feb 02, 2022 at 09:57:18AM +0100, Michal Hocko wrote:
-> > > On Tue 01-02-22 11:41:19, Waiman Long wrote:
-> > > > 
-> > > > On 2/1/22 05:49, Michal Hocko wrote:
-> > > [...]
-> > > > > Could you be more specific? Offlined memcgs are still part of the
-> > > > > hierarchy IIRC. So it shouldn't be much more than iterating the whole
-> > > > > cgroup tree and collect interesting data about dead cgroups.
-> > > > 
-> > > > What I mean is that without piggybacking on top of page_owner, we will to
-> > > > add a lot more code to collect and display those information which may have
-> > > > some overhead of its own.
-> > > 
-> > > Yes, there is nothing like a free lunch. Page owner is certainly a tool
-> > > that can be used. My main concern is that this tool doesn't really
-> > > scale on large machines with a lots of memory. It will provide a very
-> > > detailed information but I am not sure this is particularly helpful to
-> > > most admins (why should people process tons of allocation backtraces in
-> > > the first place). Wouldn't it be sufficient to have per dead memcg stats
-> > > to see where the memory sits?
-> > > 
-> > > Accumulated offline memcgs is something that bothers more people and I
-> > > am really wondering whether we can do more for those people to evaluate
-> > > the current state.
-> > 
-> > Cgroup v2 has corresponding counters for years. Or do you mean something different?
-> 
-> Do we have anything more specific than nr_dying_descendants?
+Dnia Wed, Feb 02, 2022 at 05:47:33PM +0100, Krzysztof Adamski napisał(a):
+>Dnia Wed, Feb 02, 2022 at 03:01:37PM +0100, Ard Biesheuvel napisał(a):
+>>On Wed, 2 Feb 2022 at 13:41, Krzysztof Adamski
+>><krzysztof.adamski@nokia.com> wrote:
+>>>
+>>>Dnia Tue, Feb 01, 2022 at 01:58:29PM +0000, Mark Rutland napisał(a):
+>>>>> If we use the restart handlers only to reset the system, this is indeed
+>>>>> true. But technically, restart handlers support the scenario where the
+>>>>> handler does some action that does not do reset of the whole system and
+>>>>> passes the control further down the chain, eventually reaching a handler
+>>>>> that will reset the whole system.
+>>>>> This can be done on non-uefi systems without problems but it doesn't
+>>>>> work on UEFI bases arm64 systems and this is a problem for us.
+>>>>>
+>>>>> In other words, I would like to be able to run a restart handler on EFI
+>>>>> based ARM64 systems, just like I can on other systems, just for its
+>>>>> "side effects", not to do the actual reboot. Current code disables this
+>>>>> possibility on an ARM64 EFI system.
+>>>>
+>>>>It sounds like two things are being conflated here:
+>>>>
+>>>>1) A *notification* that a restart will subsequently occur.
+>>>>2) A *request* to initiate a restart.
+>>>>
+>>>>IIUC (1) is supposed to be handled by the existing reboot notifier mechanism
+>>>>(see the reboot_notifier_list) which *is* invoked prior to the EFI reboot
+>>>>today.
+>>>>
+>>>>IMO, using restart handlers as notifiers is an abuse of the interface, and
+>>>>that's the fundamental problem.
+>>>>
+>>>>What am I missing?
+>>>
+>>>You are completly right. It is possible that I would like to be able to
+>>>*abuse* the restart handlers as notifier. You are right that we have a
+>>>reboot_notifier but it is not good enough for my usecase - it is only
+>>>called, well, on reboot. It is not called in case of emergency_restart()
+>>>so in case of a panic, this won't happen. It also is called much earlier
+>>>than restart handlers which also makes a difference in some cases. So I
+>>>see no other choice than to abuse the restart_handler mechanism for that.
+>>>
+>>
+>>Why would such a platform implement ResetSystem() in the first place
+>>if it cannot be used?
+>>
+>>So the right solution here is for the firmware to publish a
+>>EFI_RT_PROPERTIES_TABLE that describes ResetSystem() as unsupported,
+>>and Linux will happily disregard it and try something else.
+>
+>The firmware is generic but the problem is specific to one usecase of
+>such a platform. In other words, the firmware is written for the SoC and
+>it does not know about other parts on the board, outside of SoC. It
+>doesn't make much sense to provide the support for such custom device in
+>the firmware.
+>
+>Please also note that the ResetSystem is supported. As I said, the
+>normal, typical reset is done via EFI, via ResetSystem. Ony if you have
+>a special case, where not only SoC, but also some other components in
+>the system have to be reset, then you want to change the reset type.
+>
+>We also have one case of abusing the restart_handler as restart notifier
+>in the kernel in the form of drivers/mmc/core/pwrseq_emmc.c. I would
+>just like to be able to do this also on EFI based ARM64 systems. Is that
+>crazy? :)
 
-No, just nr_dying_descendants.
+Sorry, I forgot to mention another argument - doing that in the firmware
+is SoC specific while doing that in the kernel is platform agnostic. We
+use the same code on different platforms, architectures, etc.
 
-> I was thinking about an interface which would provide paths and stats for dead
-> memcgs. But I have to confess I haven't really spent much time thinking
-> about how much work that would be. I am by no means against adding memcg
-> information to the page owner. I just think there must be a better way
-> to present resource consumption by dead memcgs.
+Now, I don't understand why it is sane to have this functionality on
+other archs, when we use PSCI or whatever else reset mechanism, but it
+isn't if we use EFI.
 
-I'd go with a drgn script. I wrote a bunch of them some times ago and
-can probably revive them and post here (will take few days).
+For the notification purpose, we acknowledge it might be beneficial to
+notify some code about the reboot (this is why we have the
+reboot_notifier functionality) but having such a notifier on reset,
+instead of reboot (i.e. at the end of the whole process and at all
+possible cases where we reset our machine), seems strange. I don't get
+it.
 
-I agree that the problem still exists and providing some tool around would be
-useful.
-
-Thanks!
+Krzysztof

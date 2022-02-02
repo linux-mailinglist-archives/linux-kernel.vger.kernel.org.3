@@ -2,118 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C654A6EDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A90E4A6EE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiBBKih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:38:37 -0500
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:38783 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiBBKif (ORCPT
+        id S237894AbiBBKl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:41:28 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41748 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231252AbiBBKl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:38:35 -0500
-Received: by mail-ua1-f41.google.com with SMTP id n15so18276167uaq.5;
-        Wed, 02 Feb 2022 02:38:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mEdhH32JRLl4dka4c3SOy+Q/qa9dhrWU9+uGTrYbEM4=;
-        b=eVX95AnpLrYV4PKAAIcRitmEOYulT7cUNMx7bJKg1e5SxZqRqaax7LWo4FU4BBo2MW
-         LVAiI9WStsICxmMoM26bcPxlhmXreswDKOoOtxGunDBuC7+SODzC7k37mAf+0UJMR1zT
-         7/qDxVfFSZxEr94lY+yyE+ZoWeY6vpO98URs59PjVy6crRzc3gpOa8ADgoREkInNtdH7
-         BL0RPlSC2+FBO/cS+tT8mraK2Ip+3oQTvAO2F29NE7eubfyC0rGl5znhqcY8nB/EMeum
-         ui1yHQsOpDY7JsSt7/9GllaWrdTvVKWrY52AghM/OreRSz4LWwJmaBS9NSW9ixYIS5DK
-         kZJg==
-X-Gm-Message-State: AOAM532mYgbDGjVRUxRY+8ML3qNWcOqRzNST1X4Aspc5zBOd/yKfnF/E
-        ZevSWDFQuGuUpq704H/fzOE9JF0WZZb4Nw==
-X-Google-Smtp-Source: ABdhPJwXKrYZHdIyxNmwX0sNTJ/hF4BZ/nM61lp+5QJZre//BiEiJsS30dFkN1iIhslURAuoVuSimw==
-X-Received: by 2002:a05:6102:c47:: with SMTP id y7mr9775233vss.20.1643798314811;
-        Wed, 02 Feb 2022 02:38:34 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id z10sm6092414uap.14.2022.02.02.02.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 02:38:34 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id n15so18276118uaq.5;
-        Wed, 02 Feb 2022 02:38:34 -0800 (PST)
-X-Received: by 2002:a67:b00e:: with SMTP id z14mr11213904vse.57.1643798314183;
- Wed, 02 Feb 2022 02:38:34 -0800 (PST)
+        Wed, 2 Feb 2022 05:41:26 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B7AB32110B;
+        Wed,  2 Feb 2022 10:41:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643798485; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ltQWgxs1hZJaXyb5EOG83MmulANVyd58GuQIHA710Gw=;
+        b=tv/afUwIFi1MQ3xi4QXiQphZqX3xdC0KwmWeKxuQ7ggbrjof7uL1ZhODZziE5cqp7u5+Q+
+        lEVkm4aIiy/t2+KSM3D+t2zA7vPhn7dUD8cnsEMT0kyYV5sjAHV71KGugpiGMdSUB0mCk/
+        dEqhSd0+vy7bkERxfoED2PoUwqDjU9Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643798485;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ltQWgxs1hZJaXyb5EOG83MmulANVyd58GuQIHA710Gw=;
+        b=B3y0aeF5gz2ntvs7wCZKEcZu1eD+glUdPfNRot9SPHwcd/gxZVxb0VA+IMesG0jK0Qu1C3
+        7DpADPw+ONun/1Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2F7B13E02;
+        Wed,  2 Feb 2022 10:41:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hTVhJ9Vf+mFNbAAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 02 Feb 2022 10:41:25 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
+        Hannes Reinecke <hare@suse.de>, Torsten Duwe <duwe@suse.de>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, Nicolai Stange <nstange@suse.de>
+Subject: [PATCH v3 00/15] crypto: dh - infrastructure for NVM in-band auth and FIPS conformance
+Date:   Wed,  2 Feb 2022 11:39:57 +0100
+Message-Id: <20220202104012.4193-1-nstange@suse.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20220121014117.21248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUW+7mCLHnWbPQ4oxNO9Awri9TNN8bTDq7uGSYncAdWKw@mail.gmail.com> <OS0PR01MB5922ECB3E4DEDB2595D0101786279@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922ECB3E4DEDB2595D0101786279@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 2 Feb 2022 11:38:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXw3Uy=jOivke6exPrUXg4a-yyg_Sg3ote48tqwTCwDzQ@mail.gmail.com>
-Message-ID: <CAMuHMdXw3Uy=jOivke6exPrUXg4a-yyg_Sg3ote48tqwTCwDzQ@mail.gmail.com>
-Subject: Re: [PATCH v2] soc: renesas: Add support for reading product revision
- for RZ/G2L family
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+Hi all,
 
-On Wed, Feb 2, 2022 at 10:51 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > Subject: Re: [PATCH v2] soc: renesas: Add support for reading product
-> > revision for RZ/G2L family
-> > On Fri, Jan 21, 2022 at 2:41 AM Lad Prabhakar <prabhakar.mahadev-
-> > lad.rj@bp.renesas.com> wrote:
-> > > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > > As per RZ/G2L HW manual (Rev.1.00 Sep, 2021) DEV_ID [31:28] indicates
-> > > product revision. Use this information to populate the revision info
-> > > for RZ/G2L family.
-> > >
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+first of all, to the people primarily interested in security/keys/, there's
+a rather trivial change to security/keys/dh.c in patch 4/15. It would be
+great to get ACKs for that...
 
-> > > --- a/drivers/soc/renesas/renesas-soc.c
-> > > +++ b/drivers/soc/renesas/renesas-soc.c
-> > > @@ -405,41 +417,38 @@ static int __init renesas_soc_init(void)
-> > >
-> > >                         eshi = ((product >> 4) & 0x0f) + 1;
-> > >                         eslo = product & 0xf;
-> > > +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL,
-> > "ES%u.%u",
-> > > +                                                          eshi, eslo);
-> > > +               }  else if (id == &id_rzg2l) {
-> > > +                       eshi =  ((product >> 28) & 0x0f);
-> > > +                       soc_dev_attr->revision = kasprintf(GFP_KERNEL,
-> > "Rev %u",
-> > > +                                                          eshi);
-> >
-> > Would you mind if I would drop the "Rev " while applying?
->
-> Kernel reports the below message after dropping Rev. Is it OK?
->
-> [    0.018297] Detected Renesas RZ/G2L r9a07g044 1
+This is a complete rework of the v2 patchset to be found at [1]. Most
+notably, the ffdheXYZ groups are now made accessible by means of templates
+wrapping the generic dh: ffdhe2048(dh) ffdhe3072(dh), etc, rather than by
+that fixed enum dh_group_id as before. For your reference, this change has
+been suggested at [2].
 
-That's indeed not so nice...
+Plain "dh" usage will be disallowed in FIPS mode now, which will break
+keyctl(KEYCTL_DH_COMPUTE) functionality in FIPS mode. As per the
+discussion from [2], this is acceptable or perhaps even desirable.
 
-Either we have to add it back, or do something like:
+The only motivation to include the RFC 3526 MODP groups in the previous v2
+had been to keep keyctl(KEYCTL_DH_COMPUTE) somewhat workable in FIPS mode.
+These groups have been dropped accordingly now and this patchset only
+introduces support for the RFC 7919 FFDHE groups, which is what is needed
+by NVM in-band authentication.
 
--       pr_info("Detected Renesas %s %s %s\n", soc_dev_attr->family,
--               soc_dev_attr->soc_id, soc_dev_attr->revision ?: "");
-+       pr_info("Detected Renesas %s %s%s%s\n", soc_dev_attr->family,
-+               soc_dev_attr->soc_id, soc_dev_attr->revision ? " Rev " : "",
-+               soc_dev_attr->revision ?: "");
+In order to be able to restrict plain "dh" usage in FIPS mode while
+still allowing the usage of those new ffdheXYZ(dh) instantiations, I
+incorporated a modified version of the patch posted by Herbert at
+[3] ("crypto: api - Disallow sha1 in FIPS-mode while allowing hmac(sha1)")
+into this series here as [12/15] ("crypto: api - allow algs only in
+specific constructions in FIPS mode"). There had been two changes worth
+mentioning:
+- An attempt to make it more generic by having crypto_grab_spawn()
+  to include FIPS_INTERNAL in the lookup and also, to let
+  crypto_register_instance() to propagate this flag from the
+  child spawns into the instance to be registered.
+- To skip the actual self-test executions for !->fips_allowed algorithms,
+  just as before. The rationale for this can be found in the discussion to
+  [3].
+With these changes, all breakage is to blame on me and thus, I assumed
+authorship of this patch. I reflected the fact that this is heavily based
+on Herbert's work by means of an Originally-by tag and sincerely hope this
+is an appropriate way of recording the patch's history.
 
-Any other options?
+This series has been tested on x86_64 and s390x (big endian) with FIPS mode
+both enabled and disabled each.
 
-Gr{oetje,eeting}s,
+Thanks!
 
-                        Geert
+Nicolai
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1] https://lore.kernel.org/r/20211209090358.28231-1-nstange@suse.de
+[2] https://lore.kernel.org/r/20211217055227.GA20698@gondor.apana.org.au
+[3] https://lore.kernel.org/r/Yd0gInht+V+Kcsw2@gondor.apana.org.au
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Nicolai Stange (15):
+  crypto: kpp - provide support for KPP template instances
+  crypto: kpp - provide support for KPP spawns
+  crypto: dh - remove struct dh's ->q member
+  crypto: dh - constify struct dh's pointer members
+  crypto: dh - split out deserialization code from crypto_dh_decode()
+  crypto: dh - introduce common code for built-in safe-prime group
+    support
+  crypto: dh - implement ffdheXYZ(dh) templates
+  crypto: testmgr - add known answer tests for ffdheXYZ(dh) templates
+  crypto: dh - implement private key generation primitive for
+    ffdheXYZ(dh)
+  crypto: testmgr - add keygen tests for ffdheXYZ(dh) templates
+  crypto: dh - allow for passing NULL to the ffdheXYZ(dh)s'
+    ->set_secret()
+  crypto: api - allow algs only in specific constructions in FIPS mode
+  crypto: dh - disallow plain "dh" usage in FIPS mode
+  lib/mpi: export mpi_rshift
+  crypto: dh - calculate Q from P for the full public key verification
+
+ crypto/Kconfig                |    8 +
+ crypto/algapi.c               |   18 +-
+ crypto/api.c                  |   19 +-
+ crypto/dh.c                   |  687 +++++++++++++++-
+ crypto/dh_helper.c            |   44 +-
+ crypto/kpp.c                  |   29 +
+ crypto/tcrypt.c               |    4 +-
+ crypto/testmgr.c              |   61 +-
+ crypto/testmgr.h              | 1445 ++++++++++++++++++++++++++++++++-
+ include/crypto/dh.h           |   26 +-
+ include/crypto/internal/kpp.h |  158 ++++
+ include/linux/crypto.h        |    9 +
+ lib/mpi/mpi-bit.c             |    1 +
+ security/keys/dh.c            |    2 +-
+ 14 files changed, 2443 insertions(+), 68 deletions(-)
+
+-- 
+2.26.2
+

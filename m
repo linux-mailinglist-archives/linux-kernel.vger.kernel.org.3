@@ -2,125 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D244A6CDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136EE4A6CD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244861AbiBBIXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:23:37 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:59809 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232819AbiBBIXf (ORCPT
+        id S244814AbiBBIXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:23:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57626 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238841AbiBBIXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:23:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643790215; x=1675326215;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hUxXJB/MFTpDGZzjslWTKCHu/RO2F8xgwXTvG5hiDj4=;
-  b=HvJqKCcQvJFDMJHkwPWwbWFu7GK23QK7te5/e+xbJmoLTNLNrXwpKzX4
-   lSyXpXTqSG4htt+9MUdRL1pVi3Gy5JDmcJodJ6lP5dw2igDcZ0KG+6vc1
-   hh1dhYRkZy2e9YZZ2pTcCwsmh65GdjXvjRLeOo+b5aJdk+T/+7HgHDXQp
-   6ZNqSq44kgf0JIyMMeNS34UBx3XALNnJqr3dTs5EYUHJVXzt4/QVU9uC6
-   e8k3xx8/TYREpqBRazoB4wx9DYMv++89hUtWwczvzagwU/sxJbPUuNRm5
-   4QamBpvWN/xvFPsqOCu/sqpmubjfEEc3W/JSTxQ3+tWS1iQEFy9BNydsZ
-   g==;
-IronPort-SDR: YyVtIIfwXMOfwXScxh+92rh6NGLKeAwx3vCMJtkaXPhZ4+hOY6P6Dlkyf0DifaJ9wB2GTrtpsl
- 3YGJCvtIyjYpkKzkR2OCR9qdeGvV/dqsvvNbJILhTOdhRqMX/ONDPzvlXCYaLhoUZNTcZmfHTL
- 0pw7Ib93YckHt2pgxrKWQ0Xfky5vwGfFRRUXKB2UMa4It6+frbUVvcZDvgjTl+cHXAAiVWveK0
- CLBnf28UwPHmCiwl5ofovNtMo5B8b5SYJ35iaxNwJgaz6hZyUlsPAvyeq7UImqQnbAKeT+QmnE
- 3mpqEKrC31c59hco0fgGl/4z
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="84412676"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2022 01:23:34 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 2 Feb 2022 01:23:34 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 2 Feb 2022 01:23:32 -0700
-Message-ID: <d55ed1f583c31df17e98300ca91996a2446f4523.camel@microchip.com>
-Subject: Re: [PATCH net] net: sparx5: do not refer to skb after passing it on
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel test robot <lkp@intel.com>
-Date:   Wed, 2 Feb 2022 09:23:00 +0100
-In-Reply-To: <20220201200521.179857d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20220201143057.3533830-1-steen.hegelund@microchip.com>
-         <20220201200521.179857d7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 
+        Wed, 2 Feb 2022 03:23:09 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2981C21126;
+        Wed,  2 Feb 2022 08:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643790188; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LVf1+FCkij+IfM22HKlKn+GHDND82cODe48QSI9u+x0=;
+        b=J+BLinrWFeb6BY16seJl5XwMOuvqiz5jHuHc9/ZTPpyd6MVilRUw9wCChscPlNaQ64zmid
+        0RxWk9Otp98oKlzts7r0Qa4xjG2wKmGwg7Jjzi4FjYrH7DYijlRf+l+jKqlYErG3coUlwK
+        2en6v0RCMWoSCFHBdS/hO2T3cqM3MRg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643790188;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LVf1+FCkij+IfM22HKlKn+GHDND82cODe48QSI9u+x0=;
+        b=vIAeXRk0vEnB95Cxy3jJzQMcAWiRuu08RSFKuzoR+BisJ7Z4FvMtfdj9G9kZeop/nNlotZ
+        Ws2wAUkUxNOIJSCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6E4C13BA2;
+        Wed,  2 Feb 2022 08:23:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YAdTN2s/+mEbIwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 08:23:07 +0000
+Message-ID: <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
+Date:   Wed, 2 Feb 2022 09:23:07 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20220131202916.2374502-1-javierm@redhat.com>
+ <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
+ <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
+ <CAMuHMdUJpoG=XChpqNotfEDrWCxFUqyhjW2JW1ckAyKcWXvAUw@mail.gmail.com>
+ <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------cVusIXqEygqVbwTewwGspTdY"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacub,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------cVusIXqEygqVbwTewwGspTdY
+Content-Type: multipart/mixed; boundary="------------b1k0yJmYqaKqqVDGYx3TQ6ki";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Maxime Ripard <maxime@cerno.tech>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Message-ID: <946f8fbb-cd64-12d0-ecd9-13af18a00590@suse.de>
+Subject: Re: [PATCH 3/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
+References: <20220131202916.2374502-1-javierm@redhat.com>
+ <cc093cd5-fba1-5d84-5894-81a6e1d039ff@suse.de>
+ <73dbc5c7-b9e2-a260-49a6-0b96f342391e@redhat.com>
+ <CAMuHMdUJpoG=XChpqNotfEDrWCxFUqyhjW2JW1ckAyKcWXvAUw@mail.gmail.com>
+ <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
+In-Reply-To: <3df2add7-6034-0527-825a-74e62e76dace@redhat.com>
 
-Thanks for the feedback.
+--------------b1k0yJmYqaKqqVDGYx3TQ6ki
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I will update according to your suggestions.
+SGkNCg0KQW0gMDEuMDIuMjIgdW0gMTU6MzYgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IE9uIDIvMS8yMiAxNTowNSwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0K
+Pj4gSGkgSmF2aWVyLA0KPj4NCj4+IE9uIFR1ZSwgRmViIDEsIDIwMjIgYXQgMjowMiBQTSBK
+YXZpZXIgTWFydGluZXogQ2FuaWxsYXMNCj4+IDxqYXZpZXJtQHJlZGhhdC5jb20+IHdyb3Rl
+Og0KPj4+IE9uIDIvMS8yMiAxMDozMywgVGhvbWFzIFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4+
+PiArew0KPj4+Pj4gKyAgICB1OCBjb2xfZW5kID0gY29sX3N0YXJ0ICsgY29scyAtIDE7DQo+
+Pj4+PiArICAgIGludCByZXQ7DQo+Pj4+PiArDQo+Pj4+PiArICAgIGlmIChjb2xfc3RhcnQg
+PT0gc3NkMTMwNy0+Y29sX3N0YXJ0ICYmIGNvbF9lbmQgPT0gc3NkMTMwNy0+Y29sX2VuZCkN
+Cj4+Pj4+ICsgICAgICAgICAgICByZXR1cm4gMDsNCj4+Pj4+ICsNCj4+Pj4+ICsgICAgcmV0
+ID0gc3NkMTMwN193cml0ZV9jbWQoc3NkMTMwNy0+Y2xpZW50LCBTU0QxMzA3X1NFVF9DT0xf
+UkFOR0UpOw0KPj4+Pj4gKyAgICBpZiAocmV0IDwgMCkNCj4+Pj4+ICsgICAgICAgICAgICBy
+ZXR1cm4gcmV0Ow0KPj4+Pj4gKw0KPj4+Pj4gKyAgICByZXQgPSBzc2QxMzA3X3dyaXRlX2Nt
+ZChzc2QxMzA3LT5jbGllbnQsIGNvbF9zdGFydCk7DQo+Pj4+PiArICAgIGlmIChyZXQgPCAw
+KQ0KPj4+Pj4gKyAgICAgICAgICAgIHJldHVybiByZXQ7DQo+Pj4+PiArDQo+Pj4+PiArICAg
+IHJldCA9IHNzZDEzMDdfd3JpdGVfY21kKHNzZDEzMDctPmNsaWVudCwgY29sX2VuZCk7DQo+
+Pj4+PiArICAgIGlmIChyZXQgPCAwKQ0KPj4+Pj4gKyAgICAgICAgICAgIHJldHVybiByZXQ7
+DQo+Pj4+DQo+Pj4+IENhbiB5b3Ugd3JpdGUgdGhlc2UgY21kcyBpbiBvbmUgc3RlcCwgc3Vj
+aCBhcyBzZXR0aW5nIHVwIGFuIGFycmF5IGFuZA0KPj4+PiBzZW5kaW5nIGl0IHdpdGggc3Nk
+MTMwN193cml0ZV9hcnJheT8NCj4+Pg0KPj4+IEkgZG9uJ3QgdGhpbmsgc28gYmVjYXVzZSB0
+aGUgY29tbWFuZHMgYXJlIGRpZmZlcmVudC4gQnV0IEknbGwgY2hlY2sgdGhlDQo+Pj4gc3Nk
+MTMwNiBkYXRhc2hlZXQgYWdhaW4gdG8gY29uZmlybWEgdGhhdCdzIHRoZSBjYXNlLg0KPj4N
+Cj4+IElJUkMsIEkgdHJpZWQgdGhhdCB3aGlsZSB3b3JraW5nIG9uIHRoZSBvcHRpbWl6YXRp
+b25zIGZvciBzc2QxMzA3ZmIsDQo+PiBhbmQgaXQgZGlkbid0IHdvcmsuDQo+Pg0KPiANCj4g
+VGhhdCdzIHdoYXQgSSB3b3VsZCBoYWQgZXhwZWN0ZWQgYnkgcmVhZGluZyB0aGUgZGF0YXNo
+ZWV0LiBUaGFua3MgYQ0KPiBsb3QgZm9yIGNvbmZpcm1pbmcgbXkgYXNzdW1wdGlvbi4NCg0K
+VGhhbmtzIHRvIGJvdGggb2YgeW91LiBJIHdhcyBhc2tpbmcgYmVjYXVzZSBJIGZvdW5kIHRo
+ZSBjb2RlIHRvIGJlIA0KcmVwZXRpdGl2ZSBhbmQgaXQncyBub3QgY2xlYXIgdGhhdCB0aGVz
+ZSAzIHN0YXRlbWVudHMgYmVsb25nIHRvZ2V0aGVyLg0KDQpJJ2QgbGlrZSB0byBzdWdnZXN0
+IHRvIGFkZCBhIGZ1bmN0aW9uDQoNCiAgIHNzZDEzMDdfd3JpdGVfY21kcyhjbGllbnQsIGxl
+biwgY29uc3QgdTggKmNtZHMpDQoNCnRoYXQgbG9vcHMgdGhyb3VnaCBjbWRzIGFuZCBzZW5k
+cyB0aGUgdmFsdWVzIG9uZSBieSBvbmUuIEEgY2FsbCB3b3VsZCANCmxvb2sgbGlrZSB0aGlz
+Og0KDQogICBjb25zdCB1OCBzZXRfY29sX3JhbmdlW10gPSB7DQogICAgIFNTRDEzMDdfU0VU
+X0NPTF9SQU5HRSwNCiAgICAgY29sX3N0YXJ0LA0KICAgICBjb2xfZW5kDQogICB9Ow0KDQog
+ICBzc2QxMzA3X3dyaXRlX2NtZHMoY2xpZW50LCBBUlJBWV9TSVpFKHNldF9jb2xfcmFuZ2Up
+LCBzZXRfY29sX3JhbmdlKTsNCg0KQU5EL09SDQoNCllvdSBjb3VsZCBoYXZlIGZ1bmN0aW9u
+cyB0aGF0IHRha2UgYSBjb21tYW5kIHdpdGggYXJndW1lbnRzOyBlaXRoZXIgYXMgDQp2YV9h
+cmdzIG9yIHdpdGggb25lIGZ1bmN0aW9uIHBlciBudW1iZXIgb2YgYXJndW1lbnRzLiBPciB5
+b3UgY291bGQgDQpjb21iaW5lIGFsbCB0aGVzZSBzb21laG93Lg0KDQpCZXN0IHJlZ2FyZHMN
+ClRob21hcw0KDQo+ICAgDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQoNCi0tIA0KVGhvbWFzIFpp
+bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
+dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
+ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
+SXZvIFRvdGV2DQo=
 
-BR
-Steen
+--------------b1k0yJmYqaKqqVDGYx3TQ6ki--
 
-On Tue, 2022-02-01 at 20:05 -0800, Jakub Kicinski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On Tue, 1 Feb 2022 15:30:57 +0100 Steen Hegelund wrote:
-> > Do not try to use any SKB fields after the packet has been passed up in the
-> > receive stack.
-> > 
-> > This error was reported as shown below:
-> 
-> No need to spell it out, the tags speak for themselves.
-> 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > 
-> 
-> Drop this...
-> 
-> > Fixes: f3cad2611a77 (net: sparx5: add hostmode with phylink support)
-> > 
-> 
-> and this empty line - all the tags should be together.
-> 
-> > Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
-> > ---
-> >  drivers/net/ethernet/microchip/sparx5/sparx5_packet.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-> > b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-> > index dc7e5ea6ec15..ebdce4b35686 100644
-> > --- a/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-> > +++ b/drivers/net/ethernet/microchip/sparx5/sparx5_packet.c
-> > @@ -145,8 +145,8 @@ static void sparx5_xtr_grp(struct sparx5 *sparx5, u8 grp, bool byte_swap)
-> >       skb_put(skb, byte_cnt - ETH_FCS_LEN);
-> >       eth_skb_pad(skb);
-> >       skb->protocol = eth_type_trans(skb, netdev);
-> > -     netif_rx(skb);
-> >       netdev->stats.rx_bytes += skb->len;
-> > +     netif_rx(skb);
-> >       netdev->stats.rx_packets++;
-> 
-> sorry to nit pick - wouldn't it be neater if both the stats were
-> updated together?  Looks a little strange that netif_rx() is in
-> between the two now.
-> 
-> >  }
-> > 
-> > --
-> > 2.35.1
-> > 
-> 
+--------------cVusIXqEygqVbwTewwGspTdY
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6P2sFAwAAAAAACgkQlh/E3EQov+Bi
+ExAA0H8Momk/5syGvVfUO1UWqR7CmrCPDdLxxThqbUKHZ89nexD69olANacyJTLhO4QKPU94d++i
+u1T91nilLberWFneTA+yfSZbJyHWYQ4MWyhQm7vM4SQ3FPYh9DPzIAOrd1oQlj+8WGpn/SV6zbBR
+Fq0AGiJ25bKck7zCcGD7wK8Kc0DPChZ6TuhzOfXCOdg5kzDbinrIFjgNWJjOvgfYyhHF9KTRxLQA
+uLtixSEjcM0GBKzFQzLpj3MPzdOM8EYFgUWlqNJ5PRY4QLyFh3WSUcZ33IGklqBsuQ0z/dhyBNqj
+sN1w72zLBRYWaOLG7n+kSE6iVfa1RfQhzMX868gmlQDdpVURG8v906WI7WOlG3fN8om1WHwwnBTQ
+IS7gqv52mRxi+5dRUzHLj6B6DbUhgtTZW/Ayg0zHXK6g6m8VRzjfpMjMMW/jpuuDg0TBqYZJTHB6
+L0yZ8FMKQeFD5u9dRqYn0eI/w6/DfDwe50ALp8m4sRSDxPJNP6wSyFQY2USS2YGnMA8HOeBjsNGU
+GUmTt7ddRUCoM4fzOOlmZ8Fa9JkaYTVJHImSd4qthvo5lkCS/W+eC2uC4WgYKJJyBbGCpgoqD7sG
+NVBYgKtz6qhcNT5+8YSBrsxaWVVJ70p5AJX11VFMOqsgtLesqc3yfHy+Cfh4BfTZ9YiviJAhNEni
+j4E=
+=ZlY8
+-----END PGP SIGNATURE-----
+
+--------------cVusIXqEygqVbwTewwGspTdY--

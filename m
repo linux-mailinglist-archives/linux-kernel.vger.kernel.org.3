@@ -2,219 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9F4A6C93
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5B14A6C96
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbiBBICk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S241773AbiBBIDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241815AbiBBICj (ORCPT
+        with ESMTP id S241559AbiBBIDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:02:39 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66319C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 00:02:38 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id w81so36199679ybg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 00:02:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5ULnuSMw6BaafnM0dXfWCNvtwKS09lgezUw+stHInS8=;
-        b=Y7bQbHPPQr1LLRjw84cKLVNPallo6EJeAY36Y1X6RJJCuLHf6NTKlDxOmcyShUXmp1
-         DB/TvA/VpqojM6OlSeyb6C0dwg2c7o0jfFetZpZFyuULXtlTNts3ZACV1MliS/3ky8CI
-         i84lRuie5MY5Uqg+kKVEflR0AQUf9tXWJ0//Wa4YLv1hdFnRYA7bVs9PFbjyVG5g3GBN
-         IrLx4RWoGnr/aSayfga+yWwrjr484blmV+OAw37dbQgjVw9MAnLf7O5+xt9X0lGjT+kB
-         Iw/yBft6kNt96SylsqIWD8G1iKJTf6zwwyQqO6Go1hVLurOCPBHD70pkHFEyBDEFj5Z8
-         egYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5ULnuSMw6BaafnM0dXfWCNvtwKS09lgezUw+stHInS8=;
-        b=bgDpl9W3zTooHQ6rIA8advSWeE0i6ctisSlJuw90jMaspIR15M4BJTmXXZK8dS8Xt2
-         6NeHRdlxOA3p7JcSYaj6C+cBOaYJilaoq66EbPTe5/IPf1obwF4Z8t6WoP2USJkSiNHt
-         oEjsir7bJvftg3wPAcBCL1z1kfdKAHDE6z4nz+EjZw3GQonmPYoe+QHLuZxtr1hUx+tp
-         0s//syDGfXw1uAGS7BfaBbBXowoGLIX+STeiy8H+ZOVB2m3ekFKjvLZ7PEjA2EXCvLy8
-         SZqVlp6vh4Y3hUMbLwifSxWjXSVouIhQXVTGxj0BPl2fbGqXkbdbkWxtKY8gY9FSucWy
-         30ew==
-X-Gm-Message-State: AOAM533qQEj9SeWm85YhVUTzdkt1E9n9dDUWkeF7zkYGrZSfTarDDeE0
-        y7tQE2Y3EnItpJEAslW8T8mK7K9Bf2mawTlKZRTS4u4Sy4qV8g==
-X-Google-Smtp-Source: ABdhPJySyX8uXEgfILIb5iQ/uH0ZoNt0kzAhB6o9r05s+YYosOlvSnTSgyf1Kc6EadgCF0WxKNwI1XPbox9eTXxWV8c=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr42773358ybo.108.1643788957241;
- Wed, 02 Feb 2022 00:02:37 -0800 (PST)
+        Wed, 2 Feb 2022 03:03:14 -0500
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A06C06173D;
+        Wed,  2 Feb 2022 00:03:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=seEgaVlgz/Vp+D6vXdUCwzahcTfzufMMD8/HyxzkVJk=; b=YipIM99ngR8F00+RNu2Nn/sD4t
+        6IdBK9yQHpPyr69n1jrcw+F3WlA2dibRL3Qv2e9PKjHc93gyHAF4F5619u32MhCf6+ulIzHncaVyF
+        ZIjFORI1C9hwiAINgBx0PFlUDkBPMqKeNjJJyVQoLel9wsebdMpVvQU3/yZ5cEwxqD/EqLUgVee1H
+        bk0E8uXIwWkNqSW2FU8YnhCE95NBRDpyt4VdsAKZPbTo5pgvvlLIAqA0R7SvYJgjQ0USLDrL/u9/V
+        WcGS0bEF9OO81qCe1TVI0SVvA9uhlVLU/YO/9AqNCbV14w36eXO12446cFY7b26tE0soL+0m0CG73
+        CwnuTENA==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1nFAbe-00ClBn-TT; Wed, 02 Feb 2022 08:03:10 +0000
+Date:   Wed, 2 Feb 2022 08:03:10 +0000
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/17] ARM: dts: qcom: add missing rpm regulators and
+ cells for ipq8064
+Message-ID: <Yfo6vgdTR4ZLGZZ4@earth.li>
+References: <20220118012051.21691-1-ansuelsmth@gmail.com>
+ <20220118012051.21691-4-ansuelsmth@gmail.com>
+ <Yfhmum8BnB1JIALP@builder.lan>
+ <YflGGM45F3TqERNj@earth.li>
+ <YfmtHFfW00Qr2cLc@Ansuel-xps.localdomain>
 MIME-Version: 1.0
-References: <20220201180822.148370751@linuxfoundation.org>
-In-Reply-To: <20220201180822.148370751@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 2 Feb 2022 13:32:23 +0530
-Message-ID: <CA+G9fYvOzZq+zd2YJmTCOCPazy_A85DrZWr2VrK+y-mGg5Nu7w@mail.gmail.com>
-Subject: Re: [PATCH 4.4 00/25] 4.4.302-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfmtHFfW00Qr2cLc@Ansuel-xps.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 at 23:47, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> NOTE!  This is the proposed LAST 4.4.y kernel release to happen under
-> the rules of the normal stable kernel releases.  After this one, it will
-> be marked End-Of-Life as it has been 6 years and you really should know
-> better by now and have moved to a newer kernel tree.  After this one, no
-> more security fixes will be backported and you will end up with an
-> insecure system over time.
->
-> --------------------------
->
-> This is the start of the stable review cycle for the 4.4.302 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 03 Feb 2022 18:08:10 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.4.302-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Feb 01, 2022 at 10:58:52PM +0100, Ansuel Smith wrote:
+> On Tue, Feb 01, 2022 at 02:39:20PM +0000, Jonathan McDowell wrote:
+> > On Mon, Jan 31, 2022 at 04:46:18PM -0600, Bjorn Andersson wrote:
+> > > On Mon 17 Jan 19:20 CST 2022, Ansuel Smith wrote:
+> > > 
+> > > > Add cells definition for rpm node and add missing regulators for the 4
+> > > > regulator present on ipq8064. There regulators are controlled by rpm and
+> > > > to correctly works gsbi4_i2c require to be NEVER disabled or rpm will
+> > > > reject any regulator change request.
+> > > > 
+> > > 
+> > > Is the SMB208 mandatory on all ipq8064 designs, or should this be pushed
+> > > out to the device dts?
+> > 
+> > It's not; the RB3011 uses a different regulator (a TPS563900).
+> >
+> 
+> Fact is that that's a special case. We have 20 devices based on ipq806x
+> and they all have smb208 regulators.
 
+Indeed, it's another Mikrotik special unfortunately (I haven't managed
+to get the SMEM driver to work on the platform either).
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> Is the TPS563900 also controlled by rpm?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+AFAICT it's CPU controlled via I2C. It looks like one output is shared
+for the CPU cores etc and the other is for the NSS cores, rather than
+the full control the smb208 offers.
 
-## Build
-* kernel: 4.4.302-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.4.y
-* git commit: 806b2893e0101bdff3ead10f038759a025f73557
-* git describe: v4.4.301-26-g806b2893e010
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.4.y/build/v4.4.3=
-01-26-g806b2893e010
+> Anyway should we use a dedicated dtsi to declare the correct regulators?
 
-## Test Regressions (compared to v4.4.299-114-g37c6a274092f)
-No test regressions found.
+I've got no problem with smb208 being the default, but please add any
+appropriate disabling of it to the RB3011 DTS.
 
-## Metric Regressions (compared to v4.4.299-114-g37c6a274092f)
-No metric regressions found.
+> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > > ---
+> > > >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 35 +++++++++++++++++++++++++++++
+> > > >  1 file changed, 35 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > > index 094125605bea..824cf13dd037 100644
+> > > > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> > > > @@ -829,10 +829,45 @@ rpm: rpm@108000 {
+> > > >  			clocks = <&gcc RPM_MSG_RAM_H_CLK>;
+> > > >  			clock-names = "ram";
+> > > >  
+> > > > +			#address-cells = <1>;
+> > > > +			#size-cells = <0>;
+> > > > +
+> > > >  			rpmcc: clock-controller {
+> > > >  				compatible = "qcom,rpmcc-ipq806x", "qcom,rpmcc";
+> > > >  				#clock-cells = <1>;
+> > > >  			};
+> > > > +
+> > > > +			regulators {
+> > > > +				compatible = "qcom,rpm-smb208-regulators";
+> > > > +
+> > > > +				smb208_s1a: s1a {
+> > > > +					regulator-min-microvolt = <1050000>;
+> > > > +					regulator-max-microvolt = <1150000>;
+> > > > +
+> > > > +					qcom,switch-mode-frequency = <1200000>;
+> > > > +				};
+> > > > +
+> > > > +				smb208_s1b: s1b {
+> > > > +					regulator-min-microvolt = <1050000>;
+> > > > +					regulator-max-microvolt = <1150000>;
+> > > > +
+> > > > +					qcom,switch-mode-frequency = <1200000>;
+> > > > +				};
+> > > > +
+> > > > +				smb208_s2a: s2a {
+> > > > +					regulator-min-microvolt = < 800000>;
+> > > > +					regulator-max-microvolt = <1250000>;
+> > > > +
+> > > > +					qcom,switch-mode-frequency = <1200000>;
+> > > > +				};
+> > > > +
+> > > > +				smb208_s2b: s2b {
+> > > > +					regulator-min-microvolt = < 800000>;
+> > > > +					regulator-max-microvolt = <1250000>;
+> > > > +
+> > > > +					qcom,switch-mode-frequency = <1200000>;
+> > > > +				};
+> > > > +			};
+> > > >  		};
+> > > >  
+> > > >  		tcsr: syscon@1a400000 {
+> > > > -- 
+> > > > 2.33.1
 
-## Test Fixes (compared to v4.4.299-114-g37c6a274092f)
-No test fixes found.
+J.
 
-## Metric Fixes (compared to v4.4.299-114-g37c6a274092f)
-No metric fixes found.
-
-## Test result summary
-total: 55060, pass: 44792, fail: 242, skip: 8710, xfail: 1316
-
-## Build Summary
-* arm: 258 total, 258 passed, 0 failed
-* arm64: 62 total, 62 passed, 0 failed
-* i386: 35 total, 35 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 44 total, 44 passed, 0 failed
-* sparc: 24 total, 24 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 2 total, 1 passed, 1 failed
-* x86_64: 60 total, 48 passed, 12 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+/-\                             | 101 things you can't have too much
+|@/  Debian GNU/Linux Developer |         of : 13 - Holidays.
+\-                              |

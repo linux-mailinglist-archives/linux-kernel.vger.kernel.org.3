@@ -2,88 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA8F4A75F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4BF4A760A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbiBBQf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:35:28 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53082 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiBBQf1 (ORCPT
+        id S1345933AbiBBQg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241212AbiBBQgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:35:27 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 2 Feb 2022 11:36:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C115DC061714;
+        Wed,  2 Feb 2022 08:36:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 97A6E1F384;
-        Wed,  2 Feb 2022 16:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643819726; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Dd4PVcW8Gh92qdOSXS52+1meGC/lQXnewRPI3vvCWE=;
-        b=M/SKFXYhXQ0yaSChw6wIxQwQ5d7HBnBbnYDlWEH+hnqD2gnRU3+xCI+6AWEYpiwh1tZdAu
-        KtJW8t4cx4QWxS5Zk62NXbTFdF8LzZ/KzDdwHjY0IPBREvgkfYKKJBsC6NFxl0sOiX45a/
-        hZg94FHTstR+iwC2GeJTfVyDJOOjisk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643819726;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Dd4PVcW8Gh92qdOSXS52+1meGC/lQXnewRPI3vvCWE=;
-        b=hsKjmKbgvjeh8w2ffnsVRR8qq8GIDQrxEVIgm82LLhaDtX8FUazOVZXfsAC08LwbHR+9cf
-        G0oQWZAD3QabcgCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC30813E99;
-        Wed,  2 Feb 2022 16:35:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HM+JMcyy+mFZNgAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 02 Feb 2022 16:35:24 +0000
-Date:   Wed, 2 Feb 2022 17:35:22 +0100
-From:   Oscar Salvador <osalvador@suse.de>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Eric Ren <renzhengeek@gmail.com>
-Subject: Re: [PATCH v4 3/7] mm: page_isolation: check specified range for
- unmovable pages
-Message-ID: <YfqyyiB4HOxjStY/@localhost.localdomain>
-References: <20220119190623.1029355-1-zi.yan@sent.com>
- <20220119190623.1029355-4-zi.yan@sent.com>
- <Yfp2rv0K6d3cNmwg@localhost.localdomain>
- <21c196f8-18ca-d720-4241-00c9461854d3@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DF406171B;
+        Wed,  2 Feb 2022 16:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB5BC004E1;
+        Wed,  2 Feb 2022 16:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643819783;
+        bh=NpTl53ki0JoX6PQMusZWHm1sU34zPNG6sMVDbfk2CUQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=F/uLFrpBYOQKqAJ8lLgP1fd0QurQIyaN/3Cd5iNTCpNO16yuARBut1reAXCtQC7r+
+         Et7lsLmruheFwIkt0eUJvqX+s20K4IjGE1pDY7ImjvH4ktXIg3i+PFcoxpSdLZmbBZ
+         iwbRk/1B1Kem3EuJpMaXb1RGxBVlWF+kYit8Ea5hnBbYQOfJ1kpFyifQHLMF0OZvx8
+         dxeT0c5VWuHajBGCxCAmCNDlS4WNmyDebjXiJIIAt+NxZtor5YlIGamcR3dTdIhN8F
+         Azmje56r+qfcfntLAIa9+yOjF+8vS1x1vShPGTorSe8MKiTWNQ7OpStpEkEpeP0Zr4
+         KJGEw0ZGNr54A==
+Date:   Wed, 2 Feb 2022 10:36:22 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Bean Huo <huobean@gmail.com>
+Cc:     songxiaowei@hisilicon.com, wangbinghui@hisilicon.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, ffclaire1224@gmail.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        beanhuo@micron.com
+Subject: Re: [PATCH] PCI: kirin: Fix kirin960-pcie probe failure issue
+Message-ID: <20220202163622.GA18307@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <21c196f8-18ca-d720-4241-00c9461854d3@redhat.com>
+In-Reply-To: <20220202162659.GA12603@bhelgaas>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 01:25:28PM +0100, David Hildenbrand wrote:
-> That's the whole idea for being able to allocate parts of an unmovable
-> pageblock that are movable.
+On Wed, Feb 02, 2022 at 10:26:59AM -0600, Bjorn Helgaas wrote:
+> [+cc Fan]
 > 
-> If the first part is unmovable but the second part is movable, nothing
-> should stop us from trying to allocate the second part.
+> If you're fixing a previous commit, please cc the author of that
+> commit.
 
-Yeah, I see, I was a bit slow there, but I see the point now.
- 
-Thanks David
-
--- 
-Oscar Salvador
-SUSE Labs
+Sorry, I missed the fact that you already *did* cc Fan.

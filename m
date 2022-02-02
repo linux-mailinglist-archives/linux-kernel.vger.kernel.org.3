@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FBF4A76C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 626774A76C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346240AbiBBRYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:24:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43203 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242514AbiBBRYR (ORCPT
+        id S1346254AbiBBRYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242514AbiBBRYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:24:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643822656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a3OAAhJ1yQ586G1GSfs1iva0fA7dOQbeoU53qGnYVps=;
-        b=U6TIpxq+4usR7Gh+UpQnA9N/aodMJ82vXCKt7rXEub26n0j0mv/BVpwb+vHNSgq/F9LOU+
-        jojTLXOMhl0e+VbAkrCUcnRmaykPfYGc0XSdemhroI6Lo3DdfudPiRYVCDG8bQfg1wHg07
-        XIPrh0R/uwpXn6aLWgY30QPtoymY9CM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-522-2jJZ7fGbPbOp9LgrWv-QXg-1; Wed, 02 Feb 2022 12:24:15 -0500
-X-MC-Unique: 2jJZ7fGbPbOp9LgrWv-QXg-1
-Received: by mail-wm1-f69.google.com with SMTP id s1-20020a1ca901000000b0034ece94dd8cso4293695wme.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 09:24:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a3OAAhJ1yQ586G1GSfs1iva0fA7dOQbeoU53qGnYVps=;
-        b=okT3BaN827Ylogk5PW/YRTgt7oImwdOoCo2xC8jTxywgrFYu1cvljTscROSABEI+TN
-         +V7vAo5XhSNjzf5ecfN47+OTyyG4h3QVvzNK/lqLowaPvPkCaDD9D2YvHzI4DKCUr2hV
-         W4KIDW3n5N87qnj8zqgob3/J9LUE8M4Tg1rxtrh71b1hJVFhscBLenqqDKInJ1/C9OcH
-         1cBDjtrq4Mj36iuw5XH9z8n4/IEgWCBohbUBowgtsPC2FlTVUj866c68cPDVfD5fSUU7
-         J7LaOMRkFzIJ7sUSRrU8H5/uTZL9KcbtaL4L+EBmgffFtemWLhT2I4mjQBwmkDosJV+e
-         koUg==
-X-Gm-Message-State: AOAM533zpQOo2rbKfAFLuziSKEC7dQconJZbCEYpEE35Yaz7jRcpVd7f
-        yVCWdtDIkCJ1Y5EvzTW1VYh+Hw2TaOQiCwrticR5CPO4VcGBBJLUOByzjmAueeo4VHNZD36nSiE
-        BeCGZKSnbhNk0D4DYnL0DHQay
-X-Received: by 2002:a05:600c:4801:: with SMTP id i1mr7027713wmo.180.1643822654619;
-        Wed, 02 Feb 2022 09:24:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxSSayZ7Fi8nDt3X2L7PRK4VumZHeWPrHmdIcrsIB/sUgpK7JI78M0RwK69qEVM5hPwZUtFxg==
-X-Received: by 2002:a05:600c:4801:: with SMTP id i1mr7027702wmo.180.1643822654476;
-        Wed, 02 Feb 2022 09:24:14 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id r2sm25729143wrz.99.2022.02.02.09.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 09:24:13 -0800 (PST)
-Date:   Wed, 2 Feb 2022 18:24:12 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <olsajiri@gmail.com>
-Subject: Re: [PATCH 0/8] bpf: Add fprobe link
-Message-ID: <Yfq+PJljylbwJ3Bf@krava>
-References: <20220202135333.190761-1-jolsa@kernel.org>
- <CAADnVQ+hTWbvNgnvJpAeM_-Ui2-G0YSM3QHB9G2+2kWEd4-Ymw@mail.gmail.com>
+        Wed, 2 Feb 2022 12:24:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70901C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 09:24:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63B8F617EF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 17:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51CEC004E1;
+        Wed,  2 Feb 2022 17:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643822681;
+        bh=m3b6JLektjB/7M4PIprzOo7AlaYiSiEHs+yMP8snFiU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eo4mBGWIad0gxzp9g1bHzL2AaaRhi0FYjUJHaBpqPUeMk/EXC7eIJPYeWgiAWNdeQ
+         RGnfjNClQotQRoCuQKnsSkIY5l0MhOcGOoRIuPOVd9NvxqQHP+GW6ZwwWv8sn/5QB/
+         IWZe4U68nbH5irFHVe31vgPXYEsZzGhSlBYcb1dfhNKd6t6F1SFaWaauPGoDR/gjb4
+         DDx8mAjYpFA08n2Xt8qce4hKcX1+LDCFsAjALidEV0IMe8rwiRh5EAAdUNzCyCEjhS
+         uaW0Y7sY/h9+eJ2f9JbIThZROKBS1qfB+OnBttbqfx/SxJKxiZv4rueW7+J+Ijd23Z
+         F5wU8gz3uZSCw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7BEA35C0418; Wed,  2 Feb 2022 09:24:41 -0800 (PST)
+Date:   Wed, 2 Feb 2022 09:24:41 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] tick: Detect and fix jiffies update stall
+Message-ID: <20220202172441.GM4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220202000107.416695-1-frederic@kernel.org>
+ <20220202014934.GI4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220202021951.GA415483@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQ+hTWbvNgnvJpAeM_-Ui2-G0YSM3QHB9G2+2kWEd4-Ymw@mail.gmail.com>
+In-Reply-To: <20220202021951.GA415483@lothringen>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 09:09:53AM -0800, Alexei Starovoitov wrote:
-> On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > hi,
-> > this patchset adds new link type BPF_LINK_TYPE_FPROBE that attaches kprobe
-> > program through fprobe API [1] instroduced by Masami.
+On Wed, Feb 02, 2022 at 03:19:51AM +0100, Frederic Weisbecker wrote:
+> On Tue, Feb 01, 2022 at 05:49:34PM -0800, Paul E. McKenney wrote:
+> > On Wed, Feb 02, 2022 at 01:01:07AM +0100, Frederic Weisbecker wrote:
+> > > On some rare cases, the timekeeper CPU may be delaying its jiffies
+> > > update duty for a while. Known causes include:
+> > > 
+> > > * The timekeeper is waiting on stop_machine in a MULTI_STOP_DISABLE_IRQ
+> > >   or MULTI_STOP_RUN state. Disabled interrupts prevent from timekeeping
+> > >   updates while waiting for the target CPU to complete its
+> > >   stop_machine() callback.
+> > > 
+> > > * The timekeeper vcpu has VMEXIT'ed for a long while due to some overload
+> > >   on the host.
+> > > 
+> > > Detect and fix these situations with emergency timekeeping catchups.
+> > > 
+> > > Original-patch-by: Paul E. McKenney <paulmck@kernel.org>
+> > > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > 
+> > Nice, thank you!
+> > 
+> > So I should revert your earlier patch, apply this one, and then test
+> > the result?
 > 
-> No new prog type please.
-> I thought I made my reasons clear earlier.
-> It's a multi kprobe. Not a fprobe or any other name.
-> The kernel internal names should not leak into uapi.
+> No need to revert the nohz_full fix, this new one deals with non-dynticks
+> issues. This way we cover every timekeeper stall situations:
 > 
+> _ dynticks-idle is handled on IRQ entry
+> 
+> _ full dynticks is handled on IRQ entry in case of CPU 0 (traditional nohz_full
+>   timekeeper) timekeeping stall. Let's hope we won't need to handle syscalls and
+>   faults as well but we'll see...
+>   
+> _ periodic ticks are now handled on the tick.
+> 
+> So you just need to apply this patch on your dev branch for testing.
 
-well it's not new prog type, it's new link type that allows
-to attach kprobe program to multiple functions
+I have pulled it in, thank you!  I will beat on it.
 
-the original change used BPF_LINK_TYPE_RAW_KPROBE, which did not
-seem to fit anymore, so I moved to FPROBE, because that's what
-it is ;-)
+I am guessing that this goes up some other path to mainline, so I have
+marked it "EXP".
 
-but if you don't want new name in uapi we could make this more
-obvious with link name:
-  BPF_LINK_TYPE_MULTI_KPROBE
-
-and bpf_attach_type:
-  BPF_TRACE_MULTI_KPROBE
-
-jirka
-
+							Thanx, Paul

@@ -2,113 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A184A6945
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7532A4A694A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243392AbiBBAdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:33:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243361AbiBBAdp (ORCPT
+        id S243429AbiBBAhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:37:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51253 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243361AbiBBAhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:33:45 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27654C06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:33:45 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id s18so23389730ioa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 16:33:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JepB/7vXyZQxWCvygSiSQrAo+dG4wBZLbFMfRyPaAg4=;
-        b=BYjOOb9hkhtXBfhwGlSCCO509XKcvbv2hf2hjKfopkh4jOXW8O7HhQjDtyYIJa0jl5
-         qTtw9X86XWTlwMVzFMnM1PJoeTfB9MsBay3aIwLob3YGE1Oy90CKWlPXcFf5aPf5E+FR
-         QnQRAqB7avjTD9AOWkm0wdpaP7ob+3r/RNbW8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JepB/7vXyZQxWCvygSiSQrAo+dG4wBZLbFMfRyPaAg4=;
-        b=36+8vQOMlDUwus0EsLRllQPesNLet0KVnToDhkFG27HHECpqH9ce5JmGyVgeJGmml6
-         fASsXelcKsRPWYY6AWKEyTUJTc8nKpdbYSby9L45aodP6gmFVojiW1MjJiBuPBzVpxiQ
-         G6W7Bp37BNoRNU/E6rmHByYxymVUzG/hw+MldmzzHuoKXjkOlP7EPTZOIzXA6jQmWR6O
-         bxfuOkmtNK4qDs/f//Da6QqVwWxiEmxTDnOC/6m5HMfYDBLhQWnG++Y3Nn0+x+JEShP9
-         kH+hSAYFB1baPIdfKX3KPCpsmxbKQqWg4+98Kil9U0dttypqf0+u5O5yYMyzQx8ICfep
-         vpMg==
-X-Gm-Message-State: AOAM531bsPW9Fng5ZigxqLWdx/2tf8RbWz0U1s7ipBi0o7hqxx+FhR30
-        7oqa++fTN5mI/P9wGEjvpwUnTSAvF7i7Ng==
-X-Google-Smtp-Source: ABdhPJyLnuma3ioM5xd1+ADrOhX9jvjTMjYRkEa1l7nl/NLBbTeuZXG1YAA6NxvjtObNkd79ajkSow==
-X-Received: by 2002:a02:6248:: with SMTP id d69mr14688442jac.133.1643762024503;
-        Tue, 01 Feb 2022 16:33:44 -0800 (PST)
-Received: from shuah-tx13.internal ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id l13sm5971445ilj.24.2022.02.01.16.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 16:33:44 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     akpm@linux-foundation.org, shuah@kernel.org, chi.minghao@zte.com.cn
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kselftest/vm: Revert "tools/testing/selftests/vm/userfaultfd.c: use swap() to make code cleaner"
-Date:   Tue,  1 Feb 2022 17:33:40 -0700
-Message-Id: <20220202003340.87195-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Tue, 1 Feb 2022 19:37:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643762233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kcWuqd5evricJIxS6cUHjNVZ199P8EXWi5nJ6wTm+mw=;
+        b=fMtdMmsPC8xdBgLajAtmVE1VsZBqxclwl7Z6vTzm5/v4cTmzQ/PbX/tGD4gt87xQ9CS8vb
+        pwE0C7kPbcaWPAa+fra0tr6OBBNtkwdIFaHk0UgvfN1nky2pULedsOpLOInmxWEheJJjJL
+        mIQHVU38wNRQZtJfjhUpfnke8GpVNVs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-104-HJoyl65mNLytNk4FbvMUZQ-1; Tue, 01 Feb 2022 19:37:10 -0500
+X-MC-Unique: HJoyl65mNLytNk4FbvMUZQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A01A11124C40;
+        Wed,  2 Feb 2022 00:37:09 +0000 (UTC)
+Received: from llong.com (unknown [10.22.19.61])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 688FD105C74E;
+        Wed,  2 Feb 2022 00:36:52 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Justin Forbes <jforbes@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12 warning
+Date:   Tue,  1 Feb 2022 19:35:50 -0500
+Message-Id: <20220202003550.698768-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With this change, userfaultfd fails to build with undefined reference
-swap() error:
+The gcc 12 compiler reports a "'mem_section' will never be NULL"
+warning on the following code:
 
-userfaultfd.c: In function ‘userfaultfd_stress’:
-userfaultfd.c:1530:17: warning: implicit declaration of function ‘swap’; did you mean ‘swab’? [-Wimplicit-function-declaration]
- 1530 |                 swap(area_src, area_dst);
-      |                 ^~~~
-      |                 swab
-/usr/bin/ld: /tmp/ccDGOAdV.o: in function `userfaultfd_stress':
-userfaultfd.c:(.text+0x549e): undefined reference to `swap'
-/usr/bin/ld: userfaultfd.c:(.text+0x54bc): undefined reference to `swap'
-collect2: error: ld returned 1 exit status
+    static inline struct mem_section *__nr_to_section(unsigned long nr)
+    {
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+        if (!mem_section)
+                return NULL;
+    #endif
+        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+                return NULL;
+       :
 
-Revert the commit to fix the problem.
+It happens with both CONFIG_SPARSEMEM_EXTREME on and off. The mem_section
+definition is
 
-Fixes: 2c769ed7137a ("tools/testing/selftests/vm/userfaultfd.c: use swap() to make code cleaner")
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+    extern struct mem_section **mem_section;
+    #else
+    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+    #endif
+
+In the CONFIG_SPARSEMEM_EXTREME case, mem_section obviously cannot
+be NULL, but *mem_section can be if memory hasn't been allocated for
+the dynamic mem_section[] array yet. In the !CONFIG_SPARSEMEM_EXTREME
+case, mem_section is a static 2-dimensional array and so the check
+"!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
+
+Fix this warning by checking for "!*mem_section" instead of
+"!mem_section" and moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
+check up inside the CONFIG_SPARSEMEM_EXTREME block.
+
+Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
+Fixes: 3e347261a80b ("sparsemem extreme implementation")
+Reported-by: Justin Forbes <jforbes@redhat.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- tools/testing/selftests/vm/userfaultfd.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ include/linux/mmzone.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index d3fd24f9fae8..2f49c9af1b58 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -1417,6 +1417,7 @@ static void userfaultfd_pagemap_test(unsigned int test_pgsize)
- static int userfaultfd_stress(void)
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index aed44e9b5d89..08517376c765 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -1390,11 +1390,9 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
+ static inline struct mem_section *__nr_to_section(unsigned long nr)
  {
- 	void *area;
-+	char *tmp_area;
- 	unsigned long nr;
- 	struct uffdio_register uffdio_register;
- 	struct uffd_stats uffd_stats[nr_cpus];
-@@ -1527,9 +1528,13 @@ static int userfaultfd_stress(void)
- 					    count_verify[nr], nr);
- 
- 		/* prepare next bounce */
--		swap(area_src, area_dst);
-+		tmp_area = area_src;
-+		area_src = area_dst;
-+		area_dst = tmp_area;
- 
--		swap(area_src_alias, area_dst_alias);
-+		tmp_area = area_src_alias;
-+		area_src_alias = area_dst_alias;
-+		area_dst_alias = tmp_area;
- 
- 		uffd_stats_report(uffd_stats, nr_cpus);
- 	}
+ #ifdef CONFIG_SPARSEMEM_EXTREME
+-	if (!mem_section)
++	if (!*mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
+ 		return NULL;
+ #endif
+-	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+-		return NULL;
+ 	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
+ }
+ extern size_t mem_section_usage_size(void);
 -- 
-2.32.0
+2.27.0
 

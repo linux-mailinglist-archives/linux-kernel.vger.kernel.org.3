@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4D64A700D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646274A700F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343597AbiBBLgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiBBLgI (ORCPT
+        id S1343942AbiBBLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:36:48 -0500
+Received: from mail.efficios.com ([167.114.26.124]:54762 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241292AbiBBLgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:36:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A7C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:36:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C3D616E3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F07C004E1;
-        Wed,  2 Feb 2022 11:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643801767;
-        bh=UyZaJ0tB41ZV6qBFKK9qIgn5LBAmyc6MC+K+6DFNjjY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Db18p5vr4c8W40fy+RORFCyNFR8aqxfBfI6Vy+ODBeUx/blR7PxB1PJ/iCWUVxnMb
-         nxGC8BMUbjizY78IYE0jYgBs9+4BLCiwDSvBDdS6u2HikLWZeWflhd/DpPrvSAmoy8
-         Jy+Z9GTjuJs3bowDt9RVwduyGJvWIvrrOoi3q1ywlE7hhVYEkrQ8sKpepnQJIZQ7rC
-         3chnSUOFKc0juQIVvC6xOHzad8HVnhWGLdCErGjEfhzL5GH9yV7/YBjQoWYueKm5kn
-         DhuoXjj6abIUFADblDBtaJg4mjp+mTSKf5wkBZYd9Ir5WCZvYe6MBiLlXAxvev8bRL
-         JkpbnY/ZP4+JA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nFDvT-0000M1-EE; Wed, 02 Feb 2022 12:35:51 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Mitchell Tasman <tasman@leaflabs.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        greybus-dev@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] greybus: svc: clean up link configuration hack at hello
-Date:   Wed,  2 Feb 2022 12:33:47 +0100
-Message-Id: <20220202113347.1288-4-johan@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220202113347.1288-1-johan@kernel.org>
-References: <20220202113347.1288-1-johan@kernel.org>
+        Wed, 2 Feb 2022 06:36:45 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id B785434EB03;
+        Wed,  2 Feb 2022 06:36:44 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id BcjIfy6EbqW3; Wed,  2 Feb 2022 06:36:44 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3A12B34E92B;
+        Wed,  2 Feb 2022 06:36:44 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3A12B34E92B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1643801804;
+        bh=rxS2P9dAZNsnpQt9S56KVrnhmEyCUB0/0QQLFiwcG4M=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=fU+aRFidh/q56dL5ZhXWz9i50Q3f6eIBNxRcr3WK9Jv5AmwjHV9KdcZvACpBUgDQ6
+         ROejxUBkXZnK1hLCtXcFkwFmPaQtAAVy1jegehFEA3PfyqATvXss380XGsiO1pGP+z
+         JsOj5JNv0TOibk/uJUazbrLVf8g55CwQaRWGitHXMt5DKcGDm5clEUsf76Y6G4MwkD
+         bV13tgHVBhJeaWlUiOVitS6ZSYZLZWbGa5rnWuuZVZDinU2luTsOW8VtBHJm9wkl+1
+         3SqzkIiOaccx1Hd0eRmbnEm5A5OwFmGHgZ2fVn1K5JNNX2+oTHrb6jo88fg1x3FclO
+         HGc2FH+NLd5CQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2orB1KVM8yug; Wed,  2 Feb 2022 06:36:44 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 2BAFA34E9AD;
+        Wed,  2 Feb 2022 06:36:44 -0500 (EST)
+Date:   Wed, 2 Feb 2022 06:36:44 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Chris Kennelly <ckennelly@google.com>,
+        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@posk.io>,
+        libc-alpha <libc-alpha@sourceware.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Message-ID: <1375227765.27051.1643801804042.JavaMail.zimbra@efficios.com>
+In-Reply-To: <875ypx1x0d.fsf@oldenburg.str.redhat.com>
+References: <432231420.24682.1643727496135.JavaMail.zimbra@efficios.com> <CAEE+ybn_Cp1-T=2uB7xJqU2gEU-PxzsaV5jqCOupNp2cx_bK-Q@mail.gmail.com> <87mtja1fuz.fsf@oldenburg.str.redhat.com> <875ypx1x0d.fsf@oldenburg.str.redhat.com>
+Subject: Re: Aligning tcmalloc with glibc 2.35 rseq ABI
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
+Thread-Topic: Aligning tcmalloc with glibc 2.35 rseq ABI
+Thread-Index: bfYiCaJUUsTdq41BtJE3Fb9JJIH1YA==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to
-handle required load") added a temporary hack which reconfigures the
-link at HELLO by abusing the deferred request processing mechanism.
+----- On Feb 2, 2022, at 3:41 AM, Florian Weimer fweimer@redhat.com wrote:
 
-Restructure the HELLO request processing so that the link-configuration
-work is queued before creating the debugfs files and add a comment
-explaining why it's there.
+> * Florian Weimer:
+> 
+>> * Chris Kennelly:
+>>
+>>> Thanks for the heads up.
+>>>
+>>> I did have a question about whether the new protocol would introduce
+>>> an extra memory reference while initializing a critical section.
+>>>
+>>> * With initial-exec TLS, I can directly reference __rseq_abi.
+>>> * With the new ABI, I might need to ask glibc for the address of the
+>>> registered rseq structure in its thread data.
+>>
+>> You can write __rseq_offset to a static/hidden variable in an ELF
+>> constructor, and then use pretty much the same assembler sequences as
+>> for initial-exec TLS on most architectures.
+> 
+> And now I'm kind of worried that we should be using ptrdiff_t for
+> __rseq_offset because that's what the initial-exec relocations use. 8-/
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/greybus/svc.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+I suspect the underlying question here is: how likely is it that a libc
+requires an offset of more than 2GB either way from the thread pointer
+to allocate its rseq thread area on a 64-bit architecture ?
 
-diff --git a/drivers/greybus/svc.c b/drivers/greybus/svc.c
-index 4f93d6b2f4ed..56d2b44d6fef 100644
---- a/drivers/greybus/svc.c
-+++ b/drivers/greybus/svc.c
-@@ -864,16 +864,19 @@ static int gb_svc_hello(struct gb_operation *op)
- 		goto err_deregister_svc;
- 	}
- 
--	gb_svc_debugfs_init(svc);
--
-+	/*
-+	 * FIXME: This is a temporary hack to reconfigure the link at HELLO
-+	 * (which abuses the deferred request processing mechanism).
-+	 */
- 	ret = gb_svc_queue_deferred_request(op);
- 	if (ret)
--		goto err_remove_debugfs;
-+		goto err_destroy_watchdog;
-+
-+	gb_svc_debugfs_init(svc);
- 
- 	return 0;
- 
--err_remove_debugfs:
--	gb_svc_debugfs_exit(svc);
-+err_destroy_watchdog:
- 	gb_svc_watchdog_destroy(svc);
- err_deregister_svc:
- 	device_del(&svc->dev);
+Thanks,
+
+Mathieu
+
 -- 
-2.34.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

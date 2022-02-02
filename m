@@ -2,74 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525844A734D
+	by mail.lfdr.de (Postfix) with ESMTP id 048EB4A734C
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345055AbiBBOgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:36:12 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:34780 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiBBOgK (ORCPT
+        id S1345054AbiBBOgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbiBBOgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:36:10 -0500
-Received: by mail-il1-f197.google.com with SMTP id a18-20020a923312000000b002b384dccc91so14205698ilf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:36:10 -0800 (PST)
+        Wed, 2 Feb 2022 09:36:42 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C950CC061714;
+        Wed,  2 Feb 2022 06:36:42 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id z5so18418129plg.8;
+        Wed, 02 Feb 2022 06:36:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=c5ilWsskzu3dpmU/mylu+bxXBWHwHUo4oYiiOl8lnqg=;
+        b=j+i2IH9TTmno5Ci2jjglXFh9gBPNQE2OQMt7YSZ8a1DQH78WbW59Aq3Y0q34FjwVeN
+         0kkoijgeIvYexpdiSHjIdr3sR6zvDRIqZrV1R1K9uf7alixm3pzNB+6iGi/6XivHMdBb
+         9aF1qQuWeJkITh1Kys6H9pbIl6PjfJ4NziO/qGJx0vbek3/z41GWzHuzB5GtwX/8hHUB
+         Bj+Bl4+G77sMnfbqgZtNGYbgvYRzkuDZvI+Ng0CzO7R0414Wh3jOGq42RbghwCZddTNy
+         t7krMJ8BRBUY8eaX05HjjHsJU9OkrI+bIbTsuYhv19ZYwz25jZ9e+vpf6ooSwruSGnJL
+         l92Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Eymh4pHURRqeuFwS8adn0p8QhOCEykcqbl9dEc138NY=;
-        b=qhnrGtdPioJ8Gb/MtQGjqHA2rdQSdnIIy41tsjqO1w9pWa2Lx1VZDVlnFANzSKowBE
-         gWsUD9MXAgCZKcf0EnBmjs1ZAC7M3fA7jlaFc/gxmyelOL0bgipnVvueU599ARPB07Dw
-         U44twp9rODEGXsKg7CiUtqnitUr2Z6BC0Khoxo8Ih3Q8mcYvdWdUHTeoO/ZLagB32AEf
-         7FjaJ5WAncvKkii1YM2FZpJ05w2mL1Y871qB//A0YHcIybRx5+/bjVue5EIr9PP3/Iu4
-         31RzBe/CLJUlci0tv9/PMUMcc4b3uFN3zWyfPxSE1HwCHAmYZ5K4CgPbblcHVqxjDAXc
-         pp9w==
-X-Gm-Message-State: AOAM532p3bvPJce4Jn436JoUAPiTHoDPnQPDOMpCcJb0WVE+HI3P7MDo
-        fpgSFZKJBEB6wZYTX11AHxBp2FX1B3u5giLjUNIGZvJwZam6
-X-Google-Smtp-Source: ABdhPJwGogskVKanVKmmmO1deCNQWTYAR4unUVwG5nX2dggT73jsD2XxfgJcLs4y20Iwprc8IHZ1DEukzWl+iHfMi84JlWn5xHSa
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c5ilWsskzu3dpmU/mylu+bxXBWHwHUo4oYiiOl8lnqg=;
+        b=SU9tb9f+iJPKNV/whvD3L6A/Y8OrN9jc3KLANxJszlhxDEzEcaC4TPm4t84CuW5+UB
+         i8hzp/L4cLXK8fAUW6Tb2MMewou6MUCMaAhmAkHIGrNahGThvNc0sdphSV2xDZtI6+Ph
+         yPVuFZIbIfvVIx9kVtQri0Vu0kOAaxrf8nPf6tGQuAnOWR5n/bwFnDYGRfay4NYvAF0y
+         w4ZLbz5cM/fE8sZbUKAe9hLpy994tzr7XEE7ZJ0FkDTm+ETwgEiHComW41zP0lG7wQu+
+         f4dELzERkrvvOo5PyokSVFddw9YvzM6/lltnyXdqSl+ywBFAW54yLNSysILpqqnJzv+A
+         Pepg==
+X-Gm-Message-State: AOAM532KEdSHFIAptGdOsbDTrOWFd+5lw3lGnVvD5lwNze1URcUhm68T
+        cM2jMUN5qzv91Uaru3hHL/E=
+X-Google-Smtp-Source: ABdhPJz8auFLIWpqoq6yDdtZumYJt3qYm8v+O3l0kwOtA8BmumK/WvbzPOELeOyiqW7qERFyR3aEZw==
+X-Received: by 2002:a17:90a:1b0d:: with SMTP id q13mr8453842pjq.14.1643812602299;
+        Wed, 02 Feb 2022 06:36:42 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50c? ([2404:f801:9000:1a:efea::50c])
+        by smtp.gmail.com with ESMTPSA id j8sm1148137pfu.55.2022.02.02.06.36.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 06:36:42 -0800 (PST)
+Message-ID: <a11c5b65-5284-16e7-5302-23147401eb1c@gmail.com>
+Date:   Wed, 2 Feb 2022 22:36:35 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2e90:: with SMTP id m16mr16733470iow.74.1643812569793;
- Wed, 02 Feb 2022 06:36:09 -0800 (PST)
-Date:   Wed, 02 Feb 2022 06:36:09 -0800
-In-Reply-To: <0000000000000a9b7d05d6ee565f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004cc7f905d709f0f6@google.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in ringbuf_map_alloc
-From:   syzbot <syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, andreyknvl@google.com,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, elver@google.com,
-        glider@google.com, hotforest@gmail.com, houtao1@huawei.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, sfr@canb.auug.org.au,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/2] x86/hyperv/Swiotlb: Add swiotlb_alloc_from_low_pages
+ switch
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, michael.h.kelley@microsoft.com,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com
+References: <20220126161053.297386-1-ltykernel@gmail.com>
+ <Yfo84XYBsV7tA6Xd@infradead.org>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <Yfo84XYBsV7tA6Xd@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+On 2/2/2022 4:12 PM, Christoph Hellwig wrote:
+> I think this interface is a little too hacky.  In the end all the
+> non-trusted hypervisor schemes (including the per-device swiotlb one)
+> can allocate the memory from everywhere and want for force use of
+> swiotlb.  I think we need some kind of proper interface for that instead
+> of setting all kinds of global variables.
 
-commit c34cdf846c1298de1c0f7fbe04820fe96c45068c
-Author: Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed Feb 2 01:04:27 2022 +0000
+Hi Christoph:
+      Thanks for your review. I draft the following patch to export a
+interface swiotlb_set_alloc_from_low_pages(). Could you have a look
+whether this looks good for you.
 
-    kasan, vmalloc: unpoison VM_ALLOC pages after mapping
+diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+index f6c3638255d5..2b4f92668bc7 100644
+--- a/include/linux/swiotlb.h
++++ b/include/linux/swiotlb.h
+@@ -39,6 +39,7 @@ enum swiotlb_force {
+  extern void swiotlb_init(int verbose);
+  int swiotlb_init_with_tbl(char *tlb, unsigned long nslabs, int verbose);
+  unsigned long swiotlb_size_or_default(void);
++void swiotlb_set_alloc_from_low_pages(bool low);
+  extern int swiotlb_late_init_with_tbl(char *tlb, unsigned long nslabs);
+  extern int swiotlb_late_init_with_default_size(size_t default_size);
+  extern void __init swiotlb_update_mem_attributes(void);
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index f1e7ea160b43..62bf8b5cc3e4 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -73,6 +73,8 @@ enum swiotlb_force swiotlb_force;
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=128cb900700000
-start commit:   6abab1b81b65 Add linux-next specific files for 20220202
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=118cb900700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=168cb900700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8d8750556896349
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ad567a418794b9b5983
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1450d9f0700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=130ef35bb00000
+  struct io_tlb_mem io_tlb_default_mem;
 
-Reported-by: syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com
-Fixes: c34cdf846c12 ("kasan, vmalloc: unpoison VM_ALLOC pages after mapping")
++static bool swiotlb_alloc_from_low_pages = true;
++
+  phys_addr_t swiotlb_unencrypted_base;
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+  /*
+@@ -116,6 +118,11 @@ void swiotlb_set_max_segment(unsigned int val)
+                 max_segment = rounddown(val, PAGE_SIZE);
+  }
+
++void swiotlb_set_alloc_from_low_pages(bool low)
++{
++       swiotlb_alloc_from_low_pages = low;
++}
++
+  unsigned long swiotlb_size_or_default(void)
+  {
+         return default_nslabs << IO_TLB_SHIFT;
+@@ -284,8 +291,15 @@ swiotlb_init(int verbose)
+         if (swiotlb_force == SWIOTLB_NO_FORCE)
+                 return;
+
+-       /* Get IO TLB memory from the low pages */
+-       tlb = memblock_alloc_low(bytes, PAGE_SIZE);
++       /*
++        * Get IO TLB memory from the low pages if 
+swiotlb_alloc_from_low_pages
++        * is set.
++        */
++       if (swiotlb_alloc_from_low_pages)
++               tlb = memblock_alloc_low(bytes, PAGE_SIZE);
++       else
++               tlb = memblock_alloc(bytes, PAGE_SIZE);
++
+         if (!tlb)
+                 goto fail;
+         if (swiotlb_init_with_tbl(tlb, default_nslabs, verbose))
+
+

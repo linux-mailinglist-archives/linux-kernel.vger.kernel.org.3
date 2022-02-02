@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBC04A713E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BE14A7144
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238785AbiBBNI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:08:57 -0500
-Received: from mail.efficios.com ([167.114.26.124]:55572 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiBBNI4 (ORCPT
+        id S1344264AbiBBNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229706AbiBBNLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:08:56 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 1647B34ECF1;
-        Wed,  2 Feb 2022 08:08:56 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id iTcKd-Q8oOys; Wed,  2 Feb 2022 08:08:55 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9A13334ECF0;
-        Wed,  2 Feb 2022 08:08:55 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9A13334ECF0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643807335;
-        bh=vzO0p5w5j7FZ4ViC/C4AbqNMVeUQHoVdH0umaEKhaX8=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=KLgBxHkf93QCuZ3WY8v/zAlE1UWPlw3hnI4czYXnJxuEEBSd5a2Haw2+OQWFkuz8b
-         Z34IyD5fi3wkpzf9sa264PdCaWwo7L44IFC+QtUHFJPFMaQM/dhr76D+5z/gO/UolN
-         qQIXZituMAETOD9Dbkp3RFbca0FP6PtRDehTDfYmvbybfmxGzJ9Cyv8/sdi9fREjef
-         Dv2UvYQ7png3U3WLXRPr1FHphItE/4cJA3Jf01SD+SC+bytkWOMbk9P8Rw61wgpAcR
-         FRcm+d+VsoJsV6CYMjEiO6BZ43FKVKXuvt7dUkGbV7OPWq57wF24n8w1FyBuFs1yhZ
-         9a99UaKcR/jCQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id GwcRLFcMm8Lg; Wed,  2 Feb 2022 08:08:55 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 7CEBE34EEEE;
-        Wed,  2 Feb 2022 08:08:55 -0500 (EST)
-Date:   Wed, 2 Feb 2022 08:08:55 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Chris Kennelly <ckennelly@google.com>,
-        Paul Turner <pjt@google.com>, Peter Oskolkov <posk@posk.io>,
-        libc-alpha <libc-alpha@sourceware.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Message-ID: <770517862.27112.1643807335312.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1375227765.27051.1643801804042.JavaMail.zimbra@efficios.com>
-References: <432231420.24682.1643727496135.JavaMail.zimbra@efficios.com> <CAEE+ybn_Cp1-T=2uB7xJqU2gEU-PxzsaV5jqCOupNp2cx_bK-Q@mail.gmail.com> <87mtja1fuz.fsf@oldenburg.str.redhat.com> <875ypx1x0d.fsf@oldenburg.str.redhat.com> <1375227765.27051.1643801804042.JavaMail.zimbra@efficios.com>
-Subject: Re: Aligning tcmalloc with glibc 2.35 rseq ABI
+        Wed, 2 Feb 2022 08:11:44 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A9C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:11:44 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id k17so60833106ybk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VRxmddxUqjtmE1SAQlXRcVL9E92uGA2bWan95kfPEMA=;
+        b=SO5gIgkGEb8LupYQiu4GL7MTyNPKJ0PgjOXjzSiCRxRjE5nCySCNlz759gi2mdGV3W
+         8G4yss+TXVvymiKTi9gvzKN81VD22fQBHpG7FoXeOWFEgjGpMvM74G7yde49/IiP/BO6
+         ctDChANbtzA/kE+FimaadEpc0JZ9Ra0orzgbAjIa3JQ/F1uISo8hSjmIE8N65QR1vwzF
+         eH9LrUqL8MiQ/VXM+jwDZHGeYxHNIm90mAMwE5ITCWGGTPZWXHuAVr4tKkIzlgkmw+77
+         evGkFIwJEC9X73EBsUq4gx5S2VxfP9vPEiU/fJ8zqa98LqKvHE+IDjDWluqPkp56bvbY
+         hSoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VRxmddxUqjtmE1SAQlXRcVL9E92uGA2bWan95kfPEMA=;
+        b=stlyviI6UkHX8jPozjFFLmahukefYfY16ppgEm41umYJXbFnhb4Hxm8ocHQV5Jjh7V
+         OjpVvmN9azvOrGFVhvt8e47oC9GgsLPXqynndI0sybkChg+6ZOfk6oB0tcnX5BttKeS0
+         dAzr5+scplfWz7tazlVBzlkOCiDIDcHHhaZkUjV0rEqiNZ6IQaw6P73R4dkP2NwsQJ8B
+         W8YQ1Yza2ObZSmUnGkeWVLg5rodnKUi8oEvR3/5uwqJdlXsZLXXUwUSfO48PHTV6p/6Q
+         06NhlveOLF96DaIi7Qk7s2OYo7olvzvH7giEcztZjz0uK2kDU7Ty0OJyPltscgC6izbR
+         m2Kw==
+X-Gm-Message-State: AOAM532b9XmNOWy/tDdfeHrZxZ/euu+X38FFSn24+OE9wyxO7/PsaG3Z
+        FBMG0lkpDuroUF1IJsr6ncGUMxAIv4aYH63yty1oZA==
+X-Google-Smtp-Source: ABdhPJyGi0HVzpQAXkQH5WyhLX6hcqoFpVpchwrEQc6BSOc8lH12vDoOKZMr2EGx5hYytnj8YdUCCkU7YA12pJeNZDo=
+X-Received: by 2002:a25:6b4e:: with SMTP id o14mr30120276ybm.485.1643807503770;
+ Wed, 02 Feb 2022 05:11:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
-Thread-Topic: Aligning tcmalloc with glibc 2.35 rseq ABI
-Thread-Index: bfYiCaJUUsTdq41BtJE3Fb9JJIH1YGMmnFBS
+References: <20220201033459.156944-1-mike.kravetz@oracle.com>
+In-Reply-To: <20220201033459.156944-1-mike.kravetz@oracle.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Wed, 2 Feb 2022 21:11:05 +0800
+Message-ID: <CAMZfGtXTWK-1G1Qm_Zqmd--5bcDtm4YzA6SSHHRutefgC7KXAQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/vm: cleanup hugetlb file after mremap test
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mina Almasry <almasrymina@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Feb 2, 2022, at 6:36 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Tue, Feb 1, 2022 at 11:35 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> The hugepage-mremap test will create a file in a hugetlb filesystem.
+> In a default 'run_vmtests' run, the file will contain all the hugetlb
+> pages.  After the test, the file remains and there are no free hugetlb
+> pages for subsequent tests. This causes those hugetlb tests to fail.
+>
+> Change hugepage-mremap to take the name of the hugetlb file as an
+> argument.  Unlink the file within the test, and just to be sure remove
+> the file in the run_vmtests script.
+>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+[...]
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index e09040a3dc08..e10d50e0b8e8 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -111,13 +111,14 @@ fi
+>  echo "-----------------------"
+>  echo "running hugepage-mremap"
+>  echo "-----------------------"
+> -./hugepage-mremap 256
+> +./hugepage-mremap $mnt/huge_mremap
+>  if [ $? -ne 0 ]; then
+>         echo "[FAIL]"
+>         exitcode=1
+>  else
+>         echo "[PASS]"
+>  fi
+> +rm -f $mnt/huge_mremap
+>
 
-> ----- On Feb 2, 2022, at 3:41 AM, Florian Weimer fweimer@redhat.com wrote:
-> 
->> * Florian Weimer:
->> 
->>> * Chris Kennelly:
->>>
->>>> Thanks for the heads up.
->>>>
->>>> I did have a question about whether the new protocol would introduce
->>>> an extra memory reference while initializing a critical section.
->>>>
->>>> * With initial-exec TLS, I can directly reference __rseq_abi.
->>>> * With the new ABI, I might need to ask glibc for the address of the
->>>> registered rseq structure in its thread data.
->>>
->>> You can write __rseq_offset to a static/hidden variable in an ELF
->>> constructor, and then use pretty much the same assembler sequences as
->>> for initial-exec TLS on most architectures.
->> 
->> And now I'm kind of worried that we should be using ptrdiff_t for
->> __rseq_offset because that's what the initial-exec relocations use. 8-/
-> 
-> I suspect the underlying question here is: how likely is it that a libc
-> requires an offset of more than 2GB either way from the thread pointer
-> to allocate its rseq thread area on a 64-bit architecture ?
+A little strange (since file creation and deletion are not in the same place).
+I know $mnt/huge_mremap is created in hugepage-mremap. But I think
+hugepage-mremap should do the housekeeping instead of deleting the file
+here. Or we can create the file before doing the test. Like:
 
-More to the point: is ptrdiff_t the correct type here ? I think so.
-Do we want to revert the ABI and wait another 6 months before we
-bring back rseq into glibc just for this ? I'm not sure this limitation
-justifies it.
+ + touch $mnt/huge_mremap
+ -./hugepage-mremap 256
+ +./hugepage-mremap $mnt/huge_mremap
+ +rm -f $mnt/huge_mremap
 
-So if there is a quick way to fix that before the official 2.35 release,
-I'm all for it, otherwise I cannot say that __rseq_offset being an "int"
-rather than a "ptrdiff_t" will make much real-life difference (unless
-I'm proven wrong). But we will be stuck with this quirk forever.
+Otherwise LGTM.
 
-Thanks,
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks.

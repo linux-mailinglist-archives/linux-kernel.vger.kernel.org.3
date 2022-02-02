@@ -2,126 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB2E4A6F1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B124A6F24
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbiBBKq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:46:57 -0500
-Received: from mga02.intel.com ([134.134.136.20]:8663 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229631AbiBBKq4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:46:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643798816; x=1675334816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+0frq3/pxSbf/XvLi5+RhsXZXIGjY/DHMNgJEUnWoi4=;
-  b=gRmgf1IK5BVtkK15hHmJ+WR14VFeMffOQ+ETP0t6KlkMkIx4c5H3kQsp
-   aTnvjdP2T0EqT06RCHThUiRnwyEFDMmVj7BeJCSO5ZAlAji85GLl6Cicg
-   pvJy3xj+OnCsUi4cVRH5of5ui1MJgQQmKJ+Xy29iXZzOhD2q1cd2q9W0T
-   1Avufh5+1wezQhOGZcsn2M7NzPJZ4LJLdpjEjLf47kbkmpKX5UK0VuX1C
-   ruWtn4WdFbRAywyL5o73zloGMs9unD3W8tNbm8dZ0SZpCWx2+ofBRagky
-   v+ePj2L9Jn5/5HeScP8e7NbdDfVdT57M/dtNAwV5eYQ2E1hBQH73OVny9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235287987"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="235287987"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 02:46:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="771401008"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2022 02:46:52 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFDA3-000UTg-UZ; Wed, 02 Feb 2022 10:46:51 +0000
-Date:   Wed, 2 Feb 2022 18:46:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, netdev@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v2] drivers: net: Replace acpi_bus_get_device()
-Message-ID: <202202021810.82z7OPTR-lkp@intel.com>
-References: <11918902.O9o76ZdvQC@kreacher>
+        id S240121AbiBBKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240017AbiBBKrS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:47:18 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4017C06173D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:47:17 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b9so39714900lfq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yv9CJkTA34A5RzRG7XItJLyzPP8c4yOqEtb0dgEMVtA=;
+        b=hsRBWewEhi0L0fXWokAVChGocpjD1gZcIoNItYN1sx8yfacO5cc1QO7CKZ4GqmiZ6a
+         vPl6SJMkQPrFXUJNcA0HInSJ6LKBwRXxhXxAtAVWubQI0RGaCZfjqDHtvbRHIxwbkocZ
+         9IlEHxnDjHkABfVU8cFBrdMvMbfrRkq/PtiFHyVfC63aj1PCOfk5x5+lsJXLsRCjYRTp
+         6MPa8KTyYH+QyL7N9j2nXwi++h1CHxaUL4AjKWVKm5uQ3n+Yu0UtiiuoKEoxpzwa2lJB
+         uAVGjKKwi+TEOLeCET+XtyY7bHcVcSMUyn4Gq9urNk2S9ledKWmnyBTSCC6JlUcjRWjo
+         Ue2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yv9CJkTA34A5RzRG7XItJLyzPP8c4yOqEtb0dgEMVtA=;
+        b=odXIW1Li65wXoDAefxMbAo0DOCV0jywtdiqYg5rZ1foYohmAsJkz6o69Zs6LLNEBz2
+         6J8KrMHzuxoV27Iy2YJ8/EAdbnNUsu0b2XEQs8x7xCgR6vDU54R3GmxmZKxgYIlBBN5Z
+         SBRMsupJ/sOA5kgTa873D5CCxYXzik1quVCuk5RRS0giELAy7vFEA76zf17UJssxppNC
+         Qs2f/XcRFbSEVfqgDtczUYOY/7Hle84VaQVF3+Ge5BKD33yjRYevNLBdT+jXp2M3vmd9
+         fHleJueGpqQe06IIjJZt9JQBBaS74LnjMlOoNLgaGavX5vCebNjS/F0aWe+TWZrBA7ER
+         yx4Q==
+X-Gm-Message-State: AOAM532AexKDP51gZyaj2lLUFewk+oUT/SP6sxXr238KKHH/G/6jcRKP
+        KgGja5IuQxK65GV03Vitiw2x2Q==
+X-Google-Smtp-Source: ABdhPJwmRvDR5kh3gu0N9Ob6zzWoEJRtqALJTSm03MXoav1csitHbCd7sukTsMwhJozmjUDTr7584Q==
+X-Received: by 2002:a05:6512:2821:: with SMTP id cf33mr22093956lfb.37.1643798836263;
+        Wed, 02 Feb 2022 02:47:16 -0800 (PST)
+Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
+        by smtp.gmail.com with ESMTPSA id v5sm2844143lfg.124.2022.02.02.02.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 02:47:15 -0800 (PST)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] media: rcar-vin: require master VIN only for CSI source
+Date:   Wed,  2 Feb 2022 13:47:00 +0300
+Message-Id: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11918902.O9o76ZdvQC@kreacher>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Rafael,
+Hardware limitations on VINs that can be used at the same time cover only
+CSI data source. For parallel source, any single VIN can work.
 
-I love your patch! Yet something to improve:
+This patch moves check for master VIN availability in
+rvin_csi2_link_notify() below processing the parallel case.
 
-[auto build test ERROR on net/master]
-[also build test ERROR on net-next/master horms-ipvs/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This fixes media-ctl usage on KF board when both CSI and parallel cameras
+are in use on the same system. In such a setup, VINs 0-3 are used for
+CSI cameras and VIN5 is used for parallel camera.
 
-url:    https://github.com/0day-ci/linux/commits/Rafael-J-Wysocki/drivers-net-Replace-acpi_bus_get_device/20220202-035902
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 881cc731df6af99a21622e9be25a23b81adcd10b
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220202/202202021810.82z7OPTR-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/1d2a29e30eb391a02f25f551e6f4242e32f5b01f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Rafael-J-Wysocki/drivers-net-Replace-acpi_bus_get_device/20220202-035902
-        git checkout 1d2a29e30eb391a02f25f551e6f4242e32f5b01f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/media/cec/platform/seco/ drivers/net/ethernet/cavium/thunder/ drivers/net/wireless/ath/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/cavium/thunder/thunder_bgx.c:1409:24: error: use of undeclared identifier 'bgx'
-           struct device *dev = &bgx->pdev->dev;
-                                 ^
-   1 error generated.
-
-
-vim +/bgx +1409 drivers/net/ethernet/cavium/thunder/thunder_bgx.c
-
-46b903a01c053d0 David Daney       2015-08-10  1403  
-46b903a01c053d0 David Daney       2015-08-10  1404  /* Currently only sets the MAC address. */
-46b903a01c053d0 David Daney       2015-08-10  1405  static acpi_status bgx_acpi_register_phy(acpi_handle handle,
-46b903a01c053d0 David Daney       2015-08-10  1406  					 u32 lvl, void *context, void **rv)
-46b903a01c053d0 David Daney       2015-08-10  1407  {
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1408  	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
-1d82efaca87ecf5 Robert Richter    2016-02-11 @1409  	struct device *dev = &bgx->pdev->dev;
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1410  	struct bgx *bgx = context;
-46b903a01c053d0 David Daney       2015-08-10  1411  
-1d2a29e30eb391a Rafael J. Wysocki 2022-02-01  1412  	if (!adev)
-46b903a01c053d0 David Daney       2015-08-10  1413  		goto out;
-46b903a01c053d0 David Daney       2015-08-10  1414  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1415  	acpi_get_mac_address(dev, adev, bgx->lmac[bgx->acpi_lmac_idx].mac);
-46b903a01c053d0 David Daney       2015-08-10  1416  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1417  	SET_NETDEV_DEV(&bgx->lmac[bgx->acpi_lmac_idx].netdev, dev);
-46b903a01c053d0 David Daney       2015-08-10  1418  
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1419  	bgx->lmac[bgx->acpi_lmac_idx].lmacid = bgx->acpi_lmac_idx;
-7aa4865506a26c6 Vadim Lomovtsev   2017-01-12  1420  	bgx->acpi_lmac_idx++; /* move to next LMAC */
-46b903a01c053d0 David Daney       2015-08-10  1421  out:
-46b903a01c053d0 David Daney       2015-08-10  1422  	return AE_OK;
-46b903a01c053d0 David Daney       2015-08-10  1423  }
-46b903a01c053d0 David Daney       2015-08-10  1424  
-
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/media/platform/rcar-vin/rcar-core.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+index 0186ae235113..038ee187f95a 100644
+--- a/drivers/media/platform/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/rcar-vin/rcar-core.c
+@@ -826,11 +826,6 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
+ 	vin = container_of(vdev, struct rvin_dev, vdev);
+ 	master_id = rvin_group_id_to_master(vin->id);
+ 
+-	if (WARN_ON(!group->vin[master_id])) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
+-
+ 	/* Build a mask for already enabled links. */
+ 	for (i = master_id; i < master_id + 4; i++) {
+ 		if (!group->vin[i])
+@@ -878,6 +873,11 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
+ 		goto out;
+ 	}
+ 
++	if (WARN_ON(!group->vin[master_id])) {
++		ret = -ENODEV;
++		goto out;
++	}
++
+ 	channel = rvin_group_csi_pad_to_channel(link->source->index);
+ 	mask_new = mask & rvin_csi2_get_mask(vin, csi_id, channel);
+ 	vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask, mask_new);
+-- 
+2.30.2
+

@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A32A4A6FDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B539D4A6FD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbiBBLVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:21:24 -0500
-Received: from relay3.hostedemail.com ([64.99.140.33]:42771 "EHLO
-        relay3.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiBBLVV (ORCPT
+        id S235781AbiBBLVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230222AbiBBLVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:21:21 -0500
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id E0A92212E0;
-        Wed,  2 Feb 2022 11:21:19 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 0368B80017;
-        Wed,  2 Feb 2022 11:20:56 +0000 (UTC)
-Message-ID: <a0ee4c6252ba69ec1425421ed3f297b12dfdcc3f.camel@perches.com>
-Subject: Re: [PATCH] rtlwifi: remove redundant initialization of variable
- ul_encalgo
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Pkshih <pkshih@realtek.com>, "kvalo@kernel.org" <kvalo@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 02 Feb 2022 03:21:17 -0800
-In-Reply-To: <20220202110554.GT1978@kadam>
-References: <20220130223714.6999-1-colin.i.king@gmail.com>
-         <55f8c7f2c75b18cd628d02a25ed96fae676eace2.camel@realtek.com>
-         <20220202050229.GS1951@kadam>
-         <90e40bb19320dcc2f2099b97b4b9d7d23325eaac.camel@perches.com>
-         <20220202110554.GT1978@kadam>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Wed, 2 Feb 2022 06:21:45 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B097C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:21:45 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id f17so37710812wrx.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CLpBWpR4AdxV5k5a9SzxOwC4Is5G/R+GFZUj0OPG68E=;
+        b=0GzZnB6+OCeckMUkTJmkIO5sfwKHCblMsvuWqQfWsqJAhSN7p5my9G/QCBoR6UwdAi
+         jN/c7wPi23GCh/djF3RvdTynngxkjgI4Ct6t3wl5Qt/YFhFpU4FSATeju5bRLe6Xi05M
+         6Q0voGGh4CpnD/whLpVbYzlLvBThs1p5AscZe1PUEtOENxlUTOZHWuQNPb/orkrS7CZq
+         CKaZWk2Uxa89CqefqP9gdaLI9gb+wBBgh8QjhHLgzuCgCg3kGVjB6nLc5EgLxPRciSUN
+         LU8GAoJvu9GdmAQPYgNnbPKtbIz0BgB+3D25b0wmvSaAL7w7c/ZFbRsKj8Ymy+C8GdWW
+         Wkog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CLpBWpR4AdxV5k5a9SzxOwC4Is5G/R+GFZUj0OPG68E=;
+        b=eeHeCeZDzOtomJtLVz8wPMW6Ajm6epWod0Y41wlzHcs40+eqi8Rc2OBx1qqLN8Gmm8
+         5iARIu9GkYAwWuZQKBFcnCgux8SAavMXqwWwo48/B2Lho8TiVq6PDNs8TbL7gwyXT6ic
+         9bMIZZt3eEQ/R8+Daaun49UGNvv2GOtm2+iarpHraO/TqZ+jiJC1njRKN0OBaG+H1FbB
+         vzoUd767S2jAeNaH3lzo5ki2l17dmtLOw/jOjOEqIPGeCFo8UtCvSyWfKqvHBQOGe7p0
+         LpEY5utKfAdOjDRTYXDVQsFDeCb3AWIdpoB/5c8KU0n6wqtClarLs0VHi4M4hTOwUj7G
+         Krhw==
+X-Gm-Message-State: AOAM532SLmdoeXm5lZ+++8AOzo8vG2a9tAxba+djX4q95kS0LZxAohq0
+        ZsoXVEh/KMEtai3eb5peb0stQUvH4SBl24JhxW3+Vg==
+X-Google-Smtp-Source: ABdhPJzlXdO1QshYnBgRMzXJ2ivnlrYwpOvle2NHmkETsqwszvU55uwzYT90mGUVAB/9xurup36pfFR95cYb5rz617U=
+X-Received: by 2002:adf:d08c:: with SMTP id y12mr25480446wrh.346.1643800903609;
+ Wed, 02 Feb 2022 03:21:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.35
-X-Stat-Signature: yntegr61bhth4o37xokye356pnstz3jh
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 0368B80017
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/nffVRXJall65azq8iu1FI4aKTxEamYtk=
-X-HE-Tag: 1643800856-284986
+References: <20220131164232.295585-1-apatel@ventanamicro.com>
+In-Reply-To: <20220131164232.295585-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 2 Feb 2022 16:51:30 +0530
+Message-ID: <CAAhSdy3ReL2cJXZ+0YMcEeWJg02p86Sr-dNXKXm7GMMaqUZJiA@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: Fix SBI implementation version
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-02 at 14:05 +0300, Dan Carpenter wrote:
-> On Wed, Feb 02, 2022 at 02:10:40AM -0800, Joe Perches wrote:
-> > On Wed, 2022-02-02 at 08:02 +0300, Dan Carpenter wrote:
-> > > On Mon, Jan 31, 2022 at 02:53:40AM +0000, Pkshih wrote:
-> > > > On Sun, 2022-01-30 at 22:37 +0000, Colin Ian King wrote:
-> > > > 
-> > > > When I check this patch, I find there is no 'break' for default case.
-> > > > Do we need one? like
-> > > > 
-> > > > @@ -226,6 +226,7 @@ void rtl_cam_empty_entry(struct ieee80211_hw *hw, u8 uc_index)
-> > > >                 break;
-> > > >         default:
-> > > >                 ul_encalgo = rtlpriv->cfg->maps[SEC_CAM_AES];
-> > > > +               break;
-> > > 
-> > > No, it's not necessary.  The choice of style is up to the original
-> > > developer.
-> > 
-> > every case should have one.
-> > 
-> > Documentation/process/deprecated.rst:
-> > 
-> > All switch/case blocks must end in one of:
-> > 
-> > * break;
-> > * fallthrough;
-> > * continue;
-> > * goto <label>;
-> > * return [expression];
-> > 
-> 
-> I doubt that's what Kees had in mind when he wrote that.
+On Mon, Jan 31, 2022 at 10:13 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> The SBI implementation version returned by KVM RISC-V should be the
+> Host Linux version code.
+>
+> Fixes: c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-uhh, I wrote that.  I think Kees reformatted it for .rst
+Thanks, I have queued this for fixes.
 
-> The extra break statement doesn't improve readability.  It also doesn't
-> hurt readability.
-> 
-> There is no reason to add a break statement after a default case.  No
-> one is going to add another case after the default case.
+Regards,
+Anup
 
-Several hundred switch statements in the kernel use default:
-as the first block.
-
-> And if they
-> do then a dozen static analysis tools will complain about the missing
-> break.
-
-true, doesn't mean that's a good thing.
-
-
+> ---
+>  arch/riscv/kvm/vcpu_sbi_base.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 4ecf377f483b..48f431091cdb 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/err.h>
+>  #include <linux/kvm_host.h>
+> +#include <linux/version.h>
+>  #include <asm/csr.h>
+>  #include <asm/sbi.h>
+>  #include <asm/kvm_vcpu_timer.h>
+> @@ -32,7 +33,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>                 *out_val = KVM_SBI_IMPID;
+>                 break;
+>         case SBI_EXT_BASE_GET_IMP_VERSION:
+> -               *out_val = 0;
+> +               *out_val = LINUX_VERSION_CODE;
+>                 break;
+>         case SBI_EXT_BASE_PROBE_EXT:
+>                 if ((cp->a0 >= SBI_EXT_EXPERIMENTAL_START &&
+> --
+> 2.25.1
+>

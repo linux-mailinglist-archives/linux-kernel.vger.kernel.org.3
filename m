@@ -2,113 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7532A4A694A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254124A6948
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243429AbiBBAhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:37:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51253 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243361AbiBBAhO (ORCPT
+        id S243413AbiBBAf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:35:59 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:43330 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243361AbiBBAf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:37:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643762233;
+        Tue, 1 Feb 2022 19:35:57 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643762155;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=kcWuqd5evricJIxS6cUHjNVZ199P8EXWi5nJ6wTm+mw=;
-        b=fMtdMmsPC8xdBgLajAtmVE1VsZBqxclwl7Z6vTzm5/v4cTmzQ/PbX/tGD4gt87xQ9CS8vb
-        pwE0C7kPbcaWPAa+fra0tr6OBBNtkwdIFaHk0UgvfN1nky2pULedsOpLOInmxWEheJJjJL
-        mIQHVU38wNRQZtJfjhUpfnke8GpVNVs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-HJoyl65mNLytNk4FbvMUZQ-1; Tue, 01 Feb 2022 19:37:10 -0500
-X-MC-Unique: HJoyl65mNLytNk4FbvMUZQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A01A11124C40;
-        Wed,  2 Feb 2022 00:37:09 +0000 (UTC)
-Received: from llong.com (unknown [10.22.19.61])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 688FD105C74E;
-        Wed,  2 Feb 2022 00:36:52 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] mm/sparsemem: Fix 'mem_section' will never be NULL gcc 12 warning
-Date:   Tue,  1 Feb 2022 19:35:50 -0500
-Message-Id: <20220202003550.698768-1-longman@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Xudt/1SVXxRDSAo0YR4XJsi03SY4B60SrXuaXjIQIo=;
+        b=1iCDj2nNY6Bpay67jZM5r1f6Q5iMhDdg+lt0RI9DKvwBJUBFVp5tGpA4Q3xEGENgCICP7n
+        foYiweJUyhuSUTqR+EM6/OlXbMS+s0PhRzaa6skcCs26CJQkDwVnd5UWT2qauSJea/TOQB
+        CTI32CuBHvyNPEQS+EYnfqn6o3b83kF6ryXDGGFAZG38tJ57k67ULC7Zanj+DuSBOBtu55
+        e5iQ9bMmZ8CMSjgUtliApoxXK6CPLMRhGT3oBMZGdupAMdowWVLtpz7PrwxMYKhbewLr4U
+        gJsefiSqv1dvDYC42ploSxVa88ZhPEvV+N3QPyJjIaLqKBGkRLXTHqygTLbVFg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643762155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Xudt/1SVXxRDSAo0YR4XJsi03SY4B60SrXuaXjIQIo=;
+        b=8xCqzp14BPLDps1q/5K8jmFwezgWc3qF0nQFx7GcfOi4Ql7S0ZdnIJW65eVmjEBa1Ld7nf
+        A+jdpOYIZHRxcQCw==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCHv2 23/29] x86/tdx: Add helper to convert memory between
+ shared and private
+In-Reply-To: <20220124150215.36893-24-kirill.shutemov@linux.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-24-kirill.shutemov@linux.intel.com>
+Date:   Wed, 02 Feb 2022 01:35:54 +0100
+Message-ID: <878ruuw1ed.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The gcc 12 compiler reports a "'mem_section' will never be NULL"
-warning on the following code:
+On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
+> Intel TDX protects guest memory from VMM access. Any memory that is
+> required for communication with the VMM must be explicitly shared.
+>
+> It is a two-step process: the guest sets the shared bit in the page
+> table entry and notifies VMM about the change. The notification happens
+> using MapGPA hypercall.
+>
+> Conversion back to private memory requires clearing the shared bit,
+> notifying VMM with MapGPA hypercall following with accepting the memory
+> with AcceptPage hypercall.
+>
+> Provide a helper to do conversion between shared and private memory.
+> It is going to be used by the following patch.
 
-    static inline struct mem_section *__nr_to_section(unsigned long nr)
-    {
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-        if (!mem_section)
-                return NULL;
-    #endif
-        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-                return NULL;
-       :
+Strike that last sentence...
 
-It happens with both CONFIG_SPARSEMEM_EXTREME on and off. The mem_section
-definition is
+> --- a/arch/x86/kernel/tdx.c
+> +++ b/arch/x86/kernel/tdx.c
+> @@ -13,6 +13,10 @@
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+>  #define TDX_GET_VEINFO			3
+> +#define TDX_ACCEPT_PAGE			6
+> +
+> +/* TDX hypercall Leaf IDs */
+> +#define TDVMCALL_MAP_GPA		0x10001
+>  
+>  /* See Exit Qualification for I/O Instructions in VMX documentation */
+>  #define VE_IS_IO_IN(exit_qual)		(((exit_qual) & 8) ? 1 : 0)
+> @@ -97,6 +101,80 @@ static void tdx_get_info(void)
+>  	td_info.attributes = out.rdx;
+>  }
+>  
+> +static bool tdx_accept_page(phys_addr_t gpa, enum pg_level pg_level)
+> +{
+> +	/*
+> +	 * Pass the page physical address to the TDX module to accept the
+> +	 * pending, private page.
+> +	 *
+> +	 * Bits 2:0 if GPA encodes page size: 0 - 4K, 1 - 2M, 2 - 1G.
+> +	 */
+> +	switch (pg_level) {
+> +	case PG_LEVEL_4K:
+> +		break;
+> +	case PG_LEVEL_2M:
+> +		gpa |= 1;
+> +		break;
+> +	case PG_LEVEL_1G:
+> +		gpa |= 2;
+> +		break;
+> +	default:
+> +		return true;
 
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-    extern struct mem_section **mem_section;
-    #else
-    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-    #endif
+Crack. boolean return true means success. Can we please keep this
+convention straight throughout the code and not as you see fit?
 
-In the CONFIG_SPARSEMEM_EXTREME case, mem_section obviously cannot
-be NULL, but *mem_section can be if memory hasn't been allocated for
-the dynamic mem_section[] array yet. In the !CONFIG_SPARSEMEM_EXTREME
-case, mem_section is a static 2-dimensional array and so the check
-"!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
+This random choice of return code meanings is just a recipe for
+disaster. Consistency matters.
 
-Fix this warning by checking for "!*mem_section" instead of
-"!mem_section" and moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-check up inside the CONFIG_SPARSEMEM_EXTREME block.
+> +	}
+> +
+> +	return __tdx_module_call(TDX_ACCEPT_PAGE, gpa, 0, 0, 0, NULL);
+> +}
+> +
+> +/*
+> + * Inform the VMM of the guest's intent for this physical page: shared with
+> + * the VMM or private to the guest.  The VMM is expected to change its mapping
+> + * of the page in response.
+> + */
+> +int tdx_hcall_request_gpa_type(phys_addr_t start, phys_addr_t end, bool enc)
+> +{
+> +	u64 ret;
+> +
+> +	if (end <= start)
+> +		return -EINVAL;
+> +
+> +	if (!enc) {
+> +		start |= tdx_shared_mask();
+> +		end |= tdx_shared_mask();
+> +	}
+> +
+> +	/*
+> +	 * Notify the VMM about page mapping conversion. More info about ABI
+> +	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> +	 * sec "TDG.VP.VMCALL<MapGPA>"
+> +	 */
+> +	ret = _tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0, NULL);
+> +
+> +	if (ret)
+> +		ret = -EIO;
+> +
+> +	if (ret || !enc)
+> +		return ret;
+> +
+> +	/*
+> +	 * For shared->private conversion, accept the page using
+> +	 * TDX_ACCEPT_PAGE TDX module call.
+> +	 */
+> +	while (start < end) {
+> +		/* Try 2M page accept first if possible */
 
-Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
-Fixes: 3e347261a80b ("sparsemem extreme implementation")
-Reported-by: Justin Forbes <jforbes@redhat.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- include/linux/mmzone.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Talking about consistency:
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index aed44e9b5d89..08517376c765 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1390,11 +1390,9 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
- static inline struct mem_section *__nr_to_section(unsigned long nr)
- {
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!mem_section)
-+	if (!*mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
- 	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
- }
- extern size_t mem_section_usage_size(void);
--- 
-2.27.0
+tdx_accept_page() implements 1G maps, but they are not required to be
+handled here for some random reason, right?
 
+> +		if (!(start & ~PMD_MASK) && end - start >= PMD_SIZE &&
+> +		    !tdx_accept_page(start, PG_LEVEL_2M)) {
+> +			start += PMD_SIZE;
+> +			continue;
+> +		}
+> +
+> +		if (tdx_accept_page(start, PG_LEVEL_4K))
+> +			return -EIO;
+> +		start += PAGE_SIZE;
+> +	}
+
+Thanks,
+
+        tglx

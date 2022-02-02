@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7A24A6DDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC494A6DE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245496AbiBBJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:34:09 -0500
-Received: from relay05.th.seeweb.it ([5.144.164.166]:48497 "EHLO
-        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245487AbiBBJeI (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:34:08 -0500
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D64B23F7FE;
-        Wed,  2 Feb 2022 10:34:06 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Cc:     Marijn Suijten <marijns95@gmail.com>, linux-kernel@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: [PATCH 2/2] config: android-recommended: Disable BPF_UNPRIV_DEFAULT_OFF for netd
-Date:   Wed,  2 Feb 2022 10:33:55 +0100
-Message-Id: <20220202093355.108460-2-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.35.1
+        id S245481AbiBBJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:36:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:23217 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233108AbiBBJg1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:36:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643794587; x=1675330587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aGOR40E//2wKW+FbAQsqESY03jgYlxNctka/YDN7FLE=;
+  b=EM1DF3SVoMev8MwxrfiKW/oVMBuawXrI0KBPia1CvV8scuvi+1JUipY/
+   vB4ghhKll/GxAmlP2LEX9D3xgmcERmOAD2OD3hmU4nV9M2Z88d34Ij62C
+   kRKx7YP9+6hD8YF8OP17eU7P/EVvxhbbMzq4D0F3Ur9Xc6hjnkyc0GzYc
+   1/1WyIu7Jk7RNYDKK/Uzf7Lu3zskLBIcd/gGH2R9osfMYJglSGksuTL/Y
+   DtVCs5T4yQEBaZY3OGL1zEOBwKKwFEhzXEHcpVHvKQ52YeJid2ROPg7YX
+   fFrK6XKxcyQ8I735sBV7mKanGqAeD4NBQg5pplm6furxBTx6gH/TbqqTu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235277853"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="235277853"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:26 -0800
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="630863516"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:23 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 11:36:21 +0200
+Date:   Wed, 2 Feb 2022 11:36:21 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
+Message-ID: <YfpQlQ6CH5eoRjuD@lahna>
+References: <1883502.PYKUYFuaPT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1883502.PYKUYFuaPT@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijns95@gmail.com>
+On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-AOSP's `netd` process fails to start on Android S:
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-    E ClatdController: getClatEgress4MapFd() failure: Operation not permitted
-    I netd    : Initializing ClatdController: 410us
-    E netd    : Failed to start trafficcontroller: (Status[code: 1, msg: "Pinned map not accessible or does not exist: (/sys/fs/bpf/map_netd_cookie_tag_map): Operation not permitted"])
-    E netd    : CRITICAL: sleeping 60 seconds, netd exiting with failure, crash loop likely!
-
-And on Android R:
-
-    I ClatdController: 4.9+ kernel and device shipped with P - clat ebpf might work.
-    E ClatdController: getClatEgressMapFd() failure: Operation not permitted
-    I netd    : Initializing ClatdController: 1409us
-    E netd    : Failed to start trafficcontroller: (Status[code: 1, msg: "Pinned map not accessible or does not exist: (/sys/fs/bpf/map_netd_cookie_tag_map): Operation not permitted"])
-
-These permission issues are caused by 08389d888287 ("bpf: Add kconfig
-knob for disabling unpriv bpf by default") because AOSP does not provide
-netd the `SYS_ADMIN` capability, and also has no userspace support for
-the `BPF` capability yet.
-
-Cc: Amit Pundir <amit.pundir@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: John Stultz <john.stultz@linaro.org>
-[John suggested this in https://linaro.atlassian.net/browse/ACK-107?focusedCommentId=117382]
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- kernel/configs/android-recommended.config | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
-index 22bd76e43aca..e400fbbc8aba 100644
---- a/kernel/configs/android-recommended.config
-+++ b/kernel/configs/android-recommended.config
-@@ -1,4 +1,5 @@
- #  KEEP ALPHABETICALLY SORTED
-+# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
- # CONFIG_INPUT_MOUSE is not set
- # CONFIG_LEGACY_PTYS is not set
--- 
-2.35.1
-
+Let me know if you want me to pick this up.

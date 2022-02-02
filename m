@@ -2,114 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1461C4A6C0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC574A6C11
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244785AbiBBHF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbiBBHFZ (ORCPT
+        id S244853AbiBBHFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:05:37 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55722 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239384AbiBBHF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:05:25 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3F4C061714;
-        Tue,  1 Feb 2022 23:05:25 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id n17so24271589iod.4;
-        Tue, 01 Feb 2022 23:05:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SpryQOT2uTRwsdibcfsESI84DVoBT/VezHdCUqIw1nM=;
-        b=Yh8JER6t2u+rs0xm1gDMhpppjo8c55JDcz4lc1HhglDS5vddc25oWSMVv5dafoq2tL
-         X0EqeQ14PSrUBuQkDiKHBefLoTCrIPMhBcMLC4RBUJhmE816dG1uZB9z3Sk6BbJklR3D
-         Y6a17cBDceerLRMxU8JtWsbkJrqxlp3m1OZNOmBvDWxdv1i3Z4SOTXFxfqYAnKryxNoS
-         Fhjl60AsaagVaNs1saZNbjsF9Vh7z04r7CWdRI6Fo4GCYvqXXp2ewZeDC79N66/yVUo6
-         LsUtUpHgRc6Rdk5tsGhSvgH2C2oCIAVi7+2HyASUyd7UtuupMDN9XfJnLBhHxs3Doeed
-         rmlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SpryQOT2uTRwsdibcfsESI84DVoBT/VezHdCUqIw1nM=;
-        b=n7dBvnRJnjhyILduExkcn0unr80g4Bm7z3kXxCHYd+8CVwovS1gtEHbOP81Z/oGut4
-         C0ILWy3Qfgk2b0v1XZp0fMkpoCOePkGZJgOr7q6t3iobs9UOlLXe9jsIBsd8qW3cH/op
-         IZR3K13m6acyQAWhqTGcb9jkX4bMb8L+GKXSirnK6X/HXZP+k05zyHmlp4ZDONecz2+2
-         fJVn2RiZETIfcA0GxOgnc3oGbStWMdIwzxr016JG9pxtyOjdzjTwffvN6+pdFaKYiKM4
-         taQ/HjGxHDXTjsSR7DK+fV0U5uuhuc+ZP31MUMuYqb3zGkYR8krdzAbYjXRIA/rRuipb
-         OE6w==
-X-Gm-Message-State: AOAM533c5qjCKBr2AcCokzC8UJe3TSd5MDZsXIxgiV+uI1cxZS9edYtt
-        JXpblPQjcfo9fZHM5Lu+d4x/pN9gs8Ho3XZuq+8=
-X-Google-Smtp-Source: ABdhPJyR0STyeIw70QHeReGkVxZkBvrSHZI1p+33uA5B2bkuVWZRQTmlR4YBRQ37MslJVt1AuMhh4dGDaT+Tp8C9mTQ=
-X-Received: by 2002:a02:2422:: with SMTP id f34mr14962916jaa.237.1643785524885;
- Tue, 01 Feb 2022 23:05:24 -0800 (PST)
+        Wed, 2 Feb 2022 02:05:29 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A17AB83023;
+        Wed,  2 Feb 2022 07:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AF7C340EC;
+        Wed,  2 Feb 2022 07:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643785527;
+        bh=coZm+4It0SjWaIfb3t2MkJl7FPFYDrkHgtvlecwJN5M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mVs87BvyssNJyznmo0e3HSuwEwBXAzALSzWcRcNheffVRi6Kf1JR4ut64f5BwbxRL
+         0zuRUCPC31fUxEJf1CRFr7nm141jlrxB6se24fPrLHYhFx58Np6AE78JgAbusQ6sTQ
+         FIz2pChVjifI/SZQpkCdf9dRaQKsmn9pnzG5MIBI=
+Date:   Wed, 2 Feb 2022 08:05:23 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Dov Murik <dovmurik@linux.ibm.com>, linux-efi@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nayna Jain <nayna@linux.ibm.com>,
+        dougmill@linux.vnet.ibm.com, gcwilson@linux.ibm.com,
+        gjoyce@ibm.com, linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        dja@axtens.net
+Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
+ secret area
+Message-ID: <YfotMyQiQ66xfCOQ@kroah.com>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+ <Yfk6vEuZFtgtA+G+@kroah.com>
+ <37779659ca96ac9c1f11bcc0ac0665895c795b54.camel@linux.ibm.com>
+ <20220202040157.GA8019@srcf.ucam.org>
+ <YfogOurPZb7+Yelo@kroah.com>
+ <20220202065443.GA9249@srcf.ucam.org>
 MIME-Version: 1.0
-References: <20220201205624.652313-1-nathan@kernel.org>
-In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 1 Feb 2022 23:05:13 -0800
-Message-ID: <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y + CONFIG_DEBUG_INFO_BTF=y
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202065443.GA9249@srcf.ucam.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 12:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi all,
->
-> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
-> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
->
-> The first four patches add CONFIG_PAHOLE_VERSION and
-> scripts/pahole-version.sh to clean up all the places that pahole's
-> version is transformed into a 3-digit form.
->
-> The fourth patch adds a PAHOLE_VERSION dependency to DEBUG_INFO_DWARF5
-> so that there are no build errors when it is selected with
-> DEBUG_INFO_BTF.
->
-> I build tested Fedora's aarch64 and x86_64 config with ToT clang 14.0.0
-> and GCC 11 with CONFIG_DEBUG_INFO_DWARF5 enabled with both pahole 1.21
-> and 1.23.
->
-> Nathan Chancellor (5):
->   MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
->   kbuild: Add CONFIG_PAHOLE_VERSION
->   scripts/pahole-flags.sh: Use pahole-version.sh
->   lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
->   lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
->
+On Wed, Feb 02, 2022 at 06:54:43AM +0000, Matthew Garrett wrote:
+> On Wed, Feb 02, 2022 at 07:10:02AM +0100, Greg KH wrote:
+> > On Wed, Feb 02, 2022 at 04:01:57AM +0000, Matthew Garrett wrote:
+> > > We're talking about things that have massively different semantics.
+> > 
+> > I see lots of different platforms trying to provide access to their
+> > "secure" firmware data to userspace in different ways.  That feels to me
+> > like they are the same thing that userspace would care about in a
+> > unified way.
+> 
+> EFI variables are largely for the OS to provide information to the 
+> firmware, while this patchset is to provide information from the 
+> firmware to the OS. I don't see why we'd expect to use the same userland 
+> tooling for both.
 
-LGTM. I'd probably combine patches 2 and 3, but it's minor. I really
-like the CONFIG_PAHOLE_VERSION and how much cleaner it makes Kconfig
-options.
+I totally agree, I'm not worried about EFI variables here, I don't know
+why that came up.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> In the broader case - I don't think we *can* use the same userland
+> tooling for everything. For example, the patches to add support for 
+> manipulating the Power secure boot keys originally attempted to make it 
+> look like efivars, but the underlying firmware semantics are 
+> sufficiently different that even exposing the same kernel interface 
+> wouldn't be a sufficient abstraction and userland would still need to 
+> behave differently. Exposing an interface that looks consistent but 
+> isn't is arguably worse for userland than exposing explicitly distinct 
+> interfaces.
 
->  MAINTAINERS               |  2 ++
->  init/Kconfig              |  4 ++++
->  lib/Kconfig.debug         |  6 +++---
->  scripts/pahole-flags.sh   |  2 +-
->  scripts/pahole-version.sh | 13 +++++++++++++
->  5 files changed, 23 insertions(+), 4 deletions(-)
->  create mode 100755 scripts/pahole-version.sh
->
->
-> base-commit: 533de4aea6a91eb670ff8ff2b082bb34f2c5d6ab
-> --
-> 2.35.1
->
+So what does userspace really need here?  Just the ability to find if
+the platform has blobs that it cares about, and how to read/write them.
+
+I see different platform patches trying to stick these blobs in
+different locations and ways to access (securityfs, sysfs, char device
+node), which seems crazy to me.  Why can't we at least pick one way to
+access these to start with, and then have the filesystem layout be
+platform-specific as needed, which will give the correct hints to
+userspace as to what it needs to do here?
+
+thanks,
+
+greg k-h

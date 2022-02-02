@@ -2,123 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9843A4A7A1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45014A7A21
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbiBBVSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 16:18:31 -0500
-Received: from mga02.intel.com ([134.134.136.20]:60397 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232071AbiBBVS3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 16:18:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643836709; x=1675372709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pKbwTf351WMGvUo20IwzPN+wwoLePreHupAdfPbGkZg=;
-  b=Mnid2m3zeoEGpqZW45YRe+fZcplPdn+32XrFmoUxLB3E506ED9KlOEry
-   h5Ak705jv1oKzkriZ479OkKWk88Re73O5ua1pdxIEbgg6gk1b413pR3J4
-   kZBUTDt9NfFigeyR6enKXxMNE4sPlYgUW2Kn2wazSEVlXeZjhtSHUrHw7
-   SC/wvmcyyjEL8B2l5V4ihncz3bdo5GvozbcBFPst3YVs8gy5Z3ItAvThK
-   4iNUKb1Yf84tOyZS22hnLTdtWWnsS/xLk016wDXwTXoQ0c4aH2nj33ImF
-   qzTQaxhXb5dnRoPJnnWW4kIfMvOxyw2D3dZfnhilHiyyV//3zj8VSn5Ys
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="235421865"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="235421865"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 13:18:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="699059022"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 Feb 2022 13:18:27 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFN1H-000V8n-0Q; Wed, 02 Feb 2022 21:18:27 +0000
-Date:   Thu, 3 Feb 2022 05:18:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: Re: [PATCH 2/8] VMCI: dma dg: add MMIO access to registers
-Message-ID: <202202030509.ZJep87ms-lkp@intel.com>
-References: <20220202144910.10349-3-jhansen@vmware.com>
+        id S242193AbiBBVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 16:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232071AbiBBVTt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 16:19:49 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AD7C061714;
+        Wed,  2 Feb 2022 13:19:49 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id y17so490056ilm.1;
+        Wed, 02 Feb 2022 13:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1f3qkBr7OwcMuEx7wDz36wE1LVweMZmBxkf7MbPeZyY=;
+        b=FW3cbUBB7agROZ5YjTp7b4wsXG8Zt/C3ptprYzXJKdtvPFTcrX4Afpqs/7NS0o+/vE
+         jJsIE6EDQb7vXkcYP4K+7r7iydD7Ze+2DI4m1g1gypljaI34DYo3pml8tDShbPTwYwQR
+         Y5Q/+q4U9oYRq9zmfzxVrrKBbuu8oz3uFgyuUnzt/v/cL6uVTNyOB4OneO53sQT1Vo1D
+         lMRJ8D40UcPgYxD3SRwynNM6V2lPtVR6JyM7Lmw03ey4Yh2r855NYSl837GElvTPH8F9
+         EiuVUBLvwyKelinM55k0PZ1TuyQrDYT42NL1Dsey6+ck8I1lgr1WdovEBekVjCGeqt2X
+         v45A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1f3qkBr7OwcMuEx7wDz36wE1LVweMZmBxkf7MbPeZyY=;
+        b=ZXVf3GkS94ZhtIprnax0lEvVLf/Xs5eZn7smjTS2wnoo1audi+biRXKHVSQJ3dFuez
+         6kIZ5IavTMISd9aMwsUv7AmfyYdbVriSjvV6bcSsL8NaCrDRbL3H8+9rFhzoY49L9ic9
+         YB6Tb09lZALJI2vcABhSKcuKwVtFkzsrb6X7W8nqvrjI3mR2zZlyI3lMC2Sx/ydNBmi8
+         2EkmYjZrOt9i7+8V7xs78l/UggTMnyTBRR9CIrBig40xQuBH35QbqtXcHtGr33qmn90I
+         ylRWWWvWTCvBD9QOcEQ7No64QP/PXUMsdKi1rtDZKaKwRf88/UxZbpmKQRTVWFNs3fIN
+         38FA==
+X-Gm-Message-State: AOAM531HFy8LlnJ9wbaPG2hUjQq/e8cZl1KGoaQjnhjCqfLXSfEhyMHC
+        eSoiq35iWjzLz9KEjcUVfMOwrrXj+kMw+OEEpqY=
+X-Google-Smtp-Source: ABdhPJwltdwbEUw1cD6vun2+dt9kM8XuGcKuEW6K+qmiH1QnB8UKmy7cfDAtdjSF3hCiPhz+q6+7gGJ4BjDsp+QuIoI=
+X-Received: by 2002:a05:6e02:80d:: with SMTP id u13mr18427272ilm.151.1643836788498;
+ Wed, 02 Feb 2022 13:19:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202144910.10349-3-jhansen@vmware.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220202003033.704951-1-keescook@chromium.org>
+ <20220202003033.704951-2-keescook@chromium.org> <CANiq72n1d7ouKNi+pbsy7chsg0DfCXxez27qqtS9XE1n3m5=8Q@mail.gmail.com>
+ <202202021307.75435AF9@keescook>
+In-Reply-To: <202202021307.75435AF9@keescook>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 2 Feb 2022 22:19:37 +0100
+Message-ID: <CANiq72kw_=6HfSbVJovxQuJwYT8sQ2TNnyRa8gr6v1i5Jws9ZA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] Compiler Attributes: Add Clang's __pass_object_size
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        George Burgess IV <gbiv@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorgen,
+On Wed, Feb 2, 2022 at 10:09 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> It's the kind of detail I feel like I might forget a month from now, so
+> I added it as a bit of a hint. If you think it's too redundant, I can
+> leave it off.
 
-I love your patch! Perhaps something to improve:
+If you think it is valuable having it nearby (e.g. when inspecting the
+definition of the attribute in a call site), then it is fine having
+them -- I am all for documentation (and we could consider having a
+small summary/one-liner for all attributes). But, in general, I would
+avoid repeating all the compiler docs (or, if needed, we could fix
+those upstream if they are not clear etc.).
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Thanks!
 
-url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
-config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220203/202202030509.ZJep87ms-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/f2afd39bab80c2e42ac789f6d949d779411df928
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-        git checkout f2afd39bab80c2e42ac789f6d949d779411df928
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got char * @@
-   drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse:     got char *
->> drivers/misc/vmw_vmci/vmci_guest.c:93:14: sparse: sparse: symbol 'vmci_read_reg' was not declared. Should it be static?
->> drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got char * @@
-   drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse:     got char *
->> drivers/misc/vmw_vmci/vmci_guest.c:100:6: sparse: sparse: symbol 'vmci_write_reg' was not declared. Should it be static?
->> drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char *mmio_base @@     got void [noderef] __iomem * @@
-   drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse:     expected char *mmio_base
-   drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse:     got void [noderef] __iomem *
-
-Please review and possibly fold the followup patch.
-
-vim +96 drivers/misc/vmw_vmci/vmci_guest.c
-
-    92	
-  > 93	unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-    94	{
-    95		if (dev->mmio_base != NULL)
-  > 96			return readl(dev->mmio_base + reg);
-    97		return ioread32(dev->iobase + reg);
-    98	}
-    99	
- > 100	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   101	{
-   102		if (dev->mmio_base != NULL)
- > 103			writel(val, dev->mmio_base + reg);
-   104		else
-   105			iowrite32(val, dev->iobase + reg);
-   106	}
-   107	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Cheers,
+Miguel

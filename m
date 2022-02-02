@@ -2,478 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3734A77C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E8F4A77D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbiBBSVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:21:15 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:24802 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234473AbiBBSVO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:21:14 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643826073; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=00lZqAy3JgHwy8QZ/4SSrtFd9A6S8UTHdA19weFzwNs=; b=DUwAc5ilhae7P6lRFKM1SRUu17ce4PSQRwFeZ2ColY98LbcpJTKXw9Z5WXlVc0OKtgK3J4Dj
- EyDcqMzlM0j/SosfTe24NtrCp2RhMoWzrNRQZhpsN8UIiGidlaEvKjn4Q2x1knPaSfogDDg6
- ZGBDIV9YKAdQYkISB0CHHG6oRqM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 61facb99e0d9ede916180c4a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Feb 2022 18:21:13
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 69304C4360D; Wed,  2 Feb 2022 18:21:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 033DFC4360C;
-        Wed,  2 Feb 2022 18:21:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 033DFC4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v1 2/2] clk: qcom: sc7280: Update clk_init_data to const for clock controllers
-Date:   Wed,  2 Feb 2022 23:50:53 +0530
-Message-Id: <20220202182053.22925-2-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220202182053.22925-1-tdas@codeaurora.org>
-References: <20220202182053.22925-1-tdas@codeaurora.org>
+        id S1346585AbiBBSXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:23:06 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:13486 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234473AbiBBSXE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 13:23:04 -0500
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 212HY7Vx009705;
+        Wed, 2 Feb 2022 18:23:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ to : cc : from : subject : content-type : content-transfer-encoding :
+ mime-version; s=corp-2021-07-09;
+ bh=zTT3EgOCaBVx3Yd8AM7PuDlbF/y2Vjjcw1If8RtzBwA=;
+ b=d7mXZ1ZXMDf39JOBzKW+BQlAKhBTnr6bR1XwZNnFkVpFkecdCGkCvJQATsaCzNKHxisD
+ vBGi26bcU79IKQzVBcSFhO+NQ7Ytsu7lq+2up1HuZGb7KrGPerBxEtn1xpSymEaM+dlw
+ icpP92sBzMQxA7WMdF/cOVZqPawbbTZUtXCtAXcfnESiQ+L+r5/leXADvoMJ7cmwkPt2
+ spui8kyx8mc05Ok0wxWuMvoZ+d6TtJU7N4M42Cv+4WEtrgTFZqX1zR6hORensZuVmRdq
+ M8osN/q1L+gy4+miKD6kO8je18RzC9xv5bEMbIiZVZTF57UEMjdfXpT3oXN8HOZhWdD2 Jg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9fxxhk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Feb 2022 18:23:01 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 212IBTQp008222;
+        Wed, 2 Feb 2022 18:22:58 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2043.outbound.protection.outlook.com [104.47.74.43])
+        by userp3030.oracle.com with ESMTP id 3dvtq38j6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Feb 2022 18:22:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VQfoQMTiQn5O9NJEHbdfIaG6YMdYw0z1uSPtvd0KDaa49msBKnoUev7xh+owHmFqnEG1R0KJ2DPm9ZMJaI4AB+b4AetZyUCGLhi5FPVWtYzonDbSEMoBXkN2K2cNHdqAPTvB+KwsIaj0U6Ld+RQIwbKtHbjNx0/LevjCZOCiB68YSeySUhWA/PndKHVBeTCS81Xh2gQfocrEaqtnPLxhMui7CtNc7NP+LJJVIN06MUTypds/h84to9IWiRUdMMbcjENEJLEnJCxHGf9qBYNSYqujuP9b2euFuRHf2gJ8Oy8rOrjBEpS/lteXCODLYmZasPHDfrCKA/Yg8l2ty8OtQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zTT3EgOCaBVx3Yd8AM7PuDlbF/y2Vjjcw1If8RtzBwA=;
+ b=HJBFgJ++Hn+aLBAIOSOIt4BUDTvBSftc1dqgt5Gmuyyo/k9bfu/5LEajeQ8It7E6UPHN67M1ej/nYO0nv1JRTG51j3Bq4RR8NTw+QJz9ssMxyzQ5LaSfVuMjSHe33c5UQb4Y0yvkRTq170jPxTOCD4NxM126lQl1P+jm+ymSggaXIDtKnXeAt7QaosthLpjwQTdIIl7XTJ51lhjzupTcYQrCMBbn1rS3UwiNCw4Z+8VNw/OObKHSGVTEUapJlDDahjtD9VDgENCIif7T3gdLqLigRxNcMo31Lz4vtC2dqqLrsvCaZPis5n9dXIKMqODzgieRk9PjazJ6RJkfFjFMWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zTT3EgOCaBVx3Yd8AM7PuDlbF/y2Vjjcw1If8RtzBwA=;
+ b=nloKrzg+7alVsX5trc1Ufi2ad8BRh+r8cum1I8aZIqPEHzKAwvyobwPvovPKTPmp/osWWm/ffBuOhoHjImrQmSDfm0JdDtn4lGQ0/rEyM4BvVJAhigriq9eEoHMPUw8QFHpSf/I10qUzvmq7K+rg9qJXGgvwxZI09Gjqr+jenbg=
+Received: from CH2PR10MB3752.namprd10.prod.outlook.com (2603:10b6:610:d::23)
+ by BN6PR1001MB2052.namprd10.prod.outlook.com (2603:10b6:405:2c::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
+ 2022 18:22:56 +0000
+Received: from CH2PR10MB3752.namprd10.prod.outlook.com
+ ([fe80::d5e7:fe0d:ecda:1c93]) by CH2PR10MB3752.namprd10.prod.outlook.com
+ ([fe80::d5e7:fe0d:ecda:1c93%5]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
+ 18:22:56 +0000
+Message-ID: <87838c92-484e-d9f0-4840-f9e9db712c9d@oracle.com>
+Date:   Wed, 2 Feb 2022 13:22:54 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+From:   George Kennedy <george.kennedy@oracle.com>
+Subject: [PATCH v2 RESEND 3] video: fbdev: cirrusfb: check pixclock to avoid
+ divide by zero
+Organization: Oracle Corporation
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BL1PR13CA0143.namprd13.prod.outlook.com
+ (2603:10b6:208:2bb::28) To CH2PR10MB3752.namprd10.prod.outlook.com
+ (2603:10b6:610:d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: eaebad79-67f1-4377-644c-08d9e67908f9
+X-MS-TrafficTypeDiagnostic: BN6PR1001MB2052:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1001MB2052C7AA0A1A3360D0343762E6279@BN6PR1001MB2052.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yIcAaWvdUQzgLy3z+XN1FRsa1XCL1KNMsrngcXKJd2JLdLff2q/LeoEb72cucYaCCXP0iUBn18xBI1Hex2U6CNH07e2ScLqRlKkvusRW+ScNfPH1bXBNEitiV9hkQ8jhdHDBS7jcUaGFpg0gEh/vuqwegwT9Bau8D3aD63xYCIRMbrxsL3P87A47A0LjcopYeVy2V2wXr1YCDRohMeWdMpnU/TY5z8KrvvcCtGs+MOlZp13Py8L5hZyp5sUetKCozXBbtiXwaW8PO667sTgo5pEn4ZJyrKDHPiD2mMJkU25YphXxIkAzasnkXjdLORbIE6E+bs74oiZ9Avba3X41giTp4Dl2F/3VyH8MkqsOVusr6LM6mK5/McgWV4IKIAmYvfEHJBSdK6I5NmfUioIGVHM2hdCRAxN8j1TSsicHgojgOi6y8L942A6qbC6cJSg4JDXupIhjabLLoAvjTJJ0xC17KqQi/FS5O6oFsMegrzTkJq7x7L4kqjNIlDFZn0NeVoTO0iMPmTp7+fdg0oXmmqSWuK8iD/NUAB/Kuo/22Cu9aBWSJPRHRkOPSeaz56zNFiEt91VGM5l81yGC6z8XQ0WXTOnp2HsCvKtxyzvBeYJTzPKmIo1co+koljfZc0CshQUDAd8zWTeOgVxFB7rp65CQegSm7U+t9SE8JYpOHGeIqeBXuaU/djJyO25i0eDCx7j/FbLjc4jzzuWk6ZCf6WkEl+gxjI7t+eGotEQSRI4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB3752.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(36916002)(6506007)(6512007)(2906002)(38100700002)(83380400001)(2616005)(107886003)(44832011)(26005)(66946007)(66556008)(66476007)(8936002)(6486002)(186003)(31686004)(508600001)(8676002)(4326008)(86362001)(31696002)(54906003)(316002)(6916009)(36756003)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmR2alNhUmwzcEVTUzROOE9GVmtSTGR5NTRuKzU0OTZpR2JVeU9qTlhuOXF4?=
+ =?utf-8?B?ZWJmaFNnZFhLY0swcFdMd2xoRitBam1qUkVYMHpDZTJGRUV1MDRvaHRrYU1C?=
+ =?utf-8?B?Q2NHc3VHa0FVS21ObUZYS2R5bWYyRVViNDh2a1RSTUorcVQ3RUpEcEhJT1lo?=
+ =?utf-8?B?dDc3Q2tWdk1wbXFIa3JPc2NoZGg3SjJMamU5UnpteUxQajl6TVVjcW5wTzNL?=
+ =?utf-8?B?ZTh2SkFndGRpTXlzVXdUMndvTHlnNEgrSjZHaE03Q0NBVzZ2SU8zVSsxM2Zn?=
+ =?utf-8?B?blZHUW1kZWl2THRQU0JHc3IwZDNQNWhRb3Q1U0pndGcrQU9FVDVWVSs2OFdO?=
+ =?utf-8?B?d21FQ3FsZlVaekM5NThTaU9jeE1zQkV4bStyMWRhWTIreDBydkNvbEZMcHVk?=
+ =?utf-8?B?QlRuTGhNVHY5bUdET29UV0RQM1hxR0I1L1lMQnMzbHA4aFVXeTRYTVNEc2dL?=
+ =?utf-8?B?eFdnaVV4Nko3c09qMEhwMlhiTGlOZC9FdENIQmNMTlFyeTJ1NHllZFBuaElo?=
+ =?utf-8?B?d3BlWUhBR1FMbXJ3M29VZFNSc3AvbFBzOGdQVlZwVXpTNSttM0M5SS9VdG1l?=
+ =?utf-8?B?MWR2TUdGZGpRdzh5dVdIUUNJRjhrVFdsQWp6T1VDQWIwZ1BUQ2Z0L3BPTnVC?=
+ =?utf-8?B?bUUwbzhxMFN2eUI1ZG94aE53ckFTU3VZWmNWZms4MEhlaGtsS05SS01NUkYv?=
+ =?utf-8?B?cUtFVERwUzE2NE4vQ3BybVlBVElvSHRQR2d4NXdqQWozYXFwM1dvZkd3TGpN?=
+ =?utf-8?B?Yk5qdGxsRHVHcTg3ampiMVp6enU4Y1puTy95Si9zYmYvZFBiNW1HVHd5ZlIx?=
+ =?utf-8?B?WldCWkE0ZUsxL1M3ZHk2TFhUWERtRXFuQkc0ZmFkMVZEQU9TclIrdFVwYnJv?=
+ =?utf-8?B?SFFaTGh5SUowZzdWRlhLZERlUFhZdlN6cmg3elhPWm9nQkpmeEJIY3Bua3Zp?=
+ =?utf-8?B?cUpoYnFpNTIxYXhJTjRrOUdoQnJlK1JaTU5pWmVkK3NpRE0rUG5QRm5sVkVJ?=
+ =?utf-8?B?TWpDN2lLcnJVMzJSTkZKQzZtSkVIY09RYTNlaHFmOHpBdkRUeDlhaGduMzZZ?=
+ =?utf-8?B?RllSb1BYZk5oUkVxWlVScjVHeWhpeVA5SEtJRUM5K1hDd3hKNk5pUmlpZzRq?=
+ =?utf-8?B?dEdmZWFYSUo2ZDZpMGxWUzlUVDBsUEd0TWFUWnQ3bXJrbUJOUW4yUWp4aHNJ?=
+ =?utf-8?B?VElDU0JCVStoSEc2ZnEyTFFBTU1OaisraThLYitsVzVKTUNrS2N1a2lFV0Zz?=
+ =?utf-8?B?K1B1ZHBwWkF1dFhTckdGVldOc0diR2xnVUVwODVOZEtVQzBzOEczdG02YjRk?=
+ =?utf-8?B?VGVWOVIyd1BWMTMzdUlXTXl4N3JmOWVHLzdPV2YyTG9uemIrRzE5ZGQyYlNH?=
+ =?utf-8?B?WThqSy9hd2R5MVowYjE4SXVPMXNManJNVVh1YXRjZ1dVRGo1Zkl2NGpOQ1Rm?=
+ =?utf-8?B?aTVoaGV5Y3RFOVhKTUtmdkRWbTJySVlWalRvVWl6WFprZE8yN1RtV0dLdG1R?=
+ =?utf-8?B?QVYrYmRXUmdGclk2QVFjL2FUYlNGN1dObWN3Nmh2T1dWak0wK3h5eFdEd2kx?=
+ =?utf-8?B?REgvT1h3Q0pOOEhzYzZXM0xZRmNHb2h3RjV2ajhXd3NPcEZDamFsNnVNcnVx?=
+ =?utf-8?B?eWlFNmtoMTRtNTg2SFpLcEp2N1ZNNlJrb0hMb3JZMk9ER2lTcVlubDdSSGov?=
+ =?utf-8?B?NEpJdU9CTXJkZU1GRU9FZkVYbnFkWkRFQVFmZkVqQ09GMWNxM3NXSzBEZU5m?=
+ =?utf-8?B?SlErMmtmNjNCZzU1OTNOQzVVdzZ6ODJoaHg3VlRacExNMmhrSkVIaEZINExz?=
+ =?utf-8?B?WHU1SXRFVWFmNXdoaUxDVndmMzVFUmhiU285VVYvTlIzRVp2WFdsYmRvUzFU?=
+ =?utf-8?B?YnZ5K084azc1TStsNDNLOXNMSFhlM3E4dk1jZTgyR1QrU2drd01HanI3dHFS?=
+ =?utf-8?B?WHZmbXdLd0VrZHlMUkNEVCtJbkxvK2UzV0lrM3F0VlliRFpZZ0YySmpxb2xr?=
+ =?utf-8?B?elMvMVhkLzJrZFF4TEZnMDlkVkdaeDcxeE1Pckk0OFh6elRuaU9RWmZoMHhp?=
+ =?utf-8?B?L0VYNSsrSmtTTDBURVRIN21US2J4a3RUSGxYVkp2cTNnTmxvS1N4VjYyWktw?=
+ =?utf-8?B?S1cwaGk0SmJTQlJ0QTBNQ0d0eGpnTFRHNGp3Z3o0bC82aDEvWmJxRExYdDVO?=
+ =?utf-8?B?SCtCa3c1U1FlTzRSNXNqQW1KZnIvRzdkM296Rk05ZFUzcjlqeFprUWNJeW9m?=
+ =?utf-8?B?OFBvOElpUDVXTzNlTlAySHpaMlNnPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eaebad79-67f1-4377-644c-08d9e67908f9
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB3752.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 18:22:56.7035
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NV4L7cajIWe4fz5d+NGudL3BKHz+nm+B/154VsMWTOQpJuQByaO+KRNvwCXpLcq5cIMhKNOHH3AMT9QnuLi7tkPz5CvY4V25kZrPDEr0mGs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1001MB2052
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10246 signatures=673430
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020102
+X-Proofpoint-GUID: N1XL77oq2mKF_IU55PRnL9_qTOQW4ztB
+X-Proofpoint-ORIG-GUID: N1XL77oq2mKF_IU55PRnL9_qTOQW4ztB
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update clk_init_data to const and also use index instead of fw_name for
-graphics, lpasscc and video clock controller.
+Do a sanity check on pixclock value to avoid divide by zero.
 
-Fixes: 3e0f01d6c7e74 ("clk: qcom: Add graphics clock controller driver for SC7280")
-Fixes: 4ab43d171181d ("clk: qcom: Add lpass clock controller driver for SC7280")
-Fixes: fae7617bb1428 ("clk: qcom: Add video clock controller driver for SC7280")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
+If the pixclock value is zero, the cirrusfb driver will round up
+pixclock to get the derived frequency as close to maxclock as
+possible.
+
+Syzkaller reported a divide error in cirrusfb_check_pixclock.
+
+divide error: 0000 [#1] SMP KASAN PTI
+CPU: 0 PID: 14938 Comm: cirrusfb_test Not tainted 5.15.0-rc6 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2
+RIP: 0010:cirrusfb_check_var+0x6f1/0x1260
+
+Call Trace:
+  fb_set_var+0x398/0xf90
+  do_fb_ioctl+0x4b8/0x6f0
+  fb_ioctl+0xeb/0x130
+  __x64_sys_ioctl+0x19d/0x220
+  do_syscall_64+0x3a/0x80
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Cc: <stable@vger.kernel.org> # 5.4.y
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: George Kennedy<george.kennedy@oracle.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
- drivers/clk/qcom/gpucc-sc7280.c   | 56 +++++++++++++++----------------
- drivers/clk/qcom/lpasscc-sc7280.c | 14 ++++----
- drivers/clk/qcom/videocc-sc7280.c | 26 +++++++-------
- 3 files changed, 48 insertions(+), 48 deletions(-)
+Hi Andrew, can you pick this patch up?  Some of the fbdev drivers have
+maintainers but the cirrusfb.c is basically orphaned.  I sent this patch
+in Oct and again in Dec and no one picked it up.  Geert has reviewed it.
+Obviously the original code just crashed so this shouldn't be
+controversial.
 
-diff --git a/drivers/clk/qcom/gpucc-sc7280.c b/drivers/clk/qcom/gpucc-sc7280.c
-index 9a832f2bcf49..e8f6abc5261f 100644
---- a/drivers/clk/qcom/gpucc-sc7280.c
-+++ b/drivers/clk/qcom/gpucc-sc7280.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021-2022, The Linux Foundation. All rights reserved.
-  */
+v2: Geert says that instead of just returning an error, this is supposed
+to find a valid pixclock and use that.
 
- #include <linux/clk-provider.h>
-@@ -36,10 +36,10 @@ static struct clk_alpha_pll gpu_cc_pll0 = {
- 	.num_vco = ARRAY_SIZE(lucid_vco),
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
- 	.clkr = {
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_pll0",
- 			.parent_data = &(const struct clk_parent_data){
--				.fw_name = "bi_tcxo",
-+				.index = 0,
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_lucid_ops,
-@@ -65,10 +65,10 @@ static struct clk_alpha_pll gpu_cc_pll1 = {
- 	.num_vco = ARRAY_SIZE(lucid_vco),
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
- 	.clkr = {
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_pll1",
- 			.parent_data = &(const struct clk_parent_data){
--				.fw_name = "bi_tcxo",
-+				.index = 0,
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_lucid_ops,
-@@ -85,11 +85,11 @@ static const struct parent_map gpu_cc_parent_map_0[] = {
- };
+RESEND: Added the Reviewed by: and Cc: <stable@vger.kernel.org>
 
- static const struct clk_parent_data gpu_cc_parent_data_0[] = {
--	{ .fw_name = "bi_tcxo" },
-+	{ .index = 0 },
- 	{ .hw = &gpu_cc_pll0.clkr.hw },
- 	{ .hw = &gpu_cc_pll1.clkr.hw },
--	{ .fw_name = "gcc_gpu_gpll0_clk_src" },
--	{ .fw_name = "gcc_gpu_gpll0_div_clk_src" },
-+	{ .index = 1 }, /* gcc_gpu_gpll0_clk_src */
-+	{ .index = 2 }, /* gcc_gpu_gpll0_div_clk_src */
- };
+Thank you,
+George
 
- static const struct parent_map gpu_cc_parent_map_1[] = {
-@@ -100,10 +100,10 @@ static const struct parent_map gpu_cc_parent_map_1[] = {
- };
+  drivers/video/fbdev/cirrusfb.c | 16 ++++++++--------
+  1 file changed, 8 insertions(+), 8 deletions(-)
 
- static const struct clk_parent_data gpu_cc_parent_data_1[] = {
--	{ .fw_name = "bi_tcxo", },
-+	{ .index = 0, },
- 	{ .hw = &gpu_cc_pll1.clkr.hw },
--	{ .fw_name = "gcc_gpu_gpll0_clk_src", },
--	{ .fw_name = "gcc_gpu_gpll0_div_clk_src", },
-+	{ .index = 1 }, /* gcc_gpu_gpll0_clk_src */
-+	{ .index = 2 }, /* gcc_gpu_gpll0_div_clk_src */
- };
+diff --git a/drivers/video/fbdev/cirrusfb.c 
+b/drivers/video/fbdev/cirrusfb.c
+index 93802ab..3d47c34 100644
+--- a/drivers/video/fbdev/cirrusfb.c
++++ b/drivers/video/fbdev/cirrusfb.c
+@@ -469,7 +469,7 @@ static int cirrusfb_check_mclk(struct fb_info *info, 
+long freq)
+      return 0;
+  }
 
- static const struct freq_tbl ftbl_gpu_cc_gmu_clk_src[] = {
-@@ -119,7 +119,7 @@ static struct clk_rcg2 gpu_cc_gmu_clk_src = {
- 	.hid_width = 5,
- 	.parent_map = gpu_cc_parent_map_0,
- 	.freq_tbl = ftbl_gpu_cc_gmu_clk_src,
--	.clkr.hw.init = &(struct clk_init_data){
-+	.clkr.hw.init = &(const struct clk_init_data){
- 		.name = "gpu_cc_gmu_clk_src",
- 		.parent_data = gpu_cc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_0),
-@@ -140,7 +140,7 @@ static struct clk_rcg2 gpu_cc_hub_clk_src = {
- 	.hid_width = 5,
- 	.parent_map = gpu_cc_parent_map_1,
- 	.freq_tbl = ftbl_gpu_cc_hub_clk_src,
--	.clkr.hw.init = &(struct clk_init_data){
-+	.clkr.hw.init = &(const struct clk_init_data){
- 		.name = "gpu_cc_hub_clk_src",
- 		.parent_data = gpu_cc_parent_data_1,
- 		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_1),
-@@ -152,7 +152,7 @@ static struct clk_regmap_div gpu_cc_hub_ahb_div_clk_src = {
- 	.reg = 0x11c0,
- 	.shift = 0,
- 	.width = 4,
--	.clkr.hw.init = &(struct clk_init_data) {
-+	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "gpu_cc_hub_ahb_div_clk_src",
- 		.parent_hws = (const struct clk_hw*[]){
- 			&gpu_cc_hub_clk_src.clkr.hw,
-@@ -167,7 +167,7 @@ static struct clk_regmap_div gpu_cc_hub_cx_int_div_clk_src = {
- 	.reg = 0x11bc,
- 	.shift = 0,
- 	.width = 4,
--	.clkr.hw.init = &(struct clk_init_data) {
-+	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "gpu_cc_hub_cx_int_div_clk_src",
- 		.parent_hws = (const struct clk_hw*[]){
- 			&gpu_cc_hub_clk_src.clkr.hw,
-@@ -184,7 +184,7 @@ static struct clk_branch gpu_cc_ahb_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1078,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_ahb_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_hub_ahb_div_clk_src.clkr.hw,
-@@ -202,7 +202,7 @@ static struct clk_branch gpu_cc_crc_ahb_clk = {
- 	.clkr = {
- 		.enable_reg = 0x107c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_crc_ahb_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_hub_ahb_div_clk_src.clkr.hw,
-@@ -220,7 +220,7 @@ static struct clk_branch gpu_cc_cx_gmu_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1098,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_cx_gmu_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_gmu_clk_src.clkr.hw,
-@@ -238,7 +238,7 @@ static struct clk_branch gpu_cc_cx_snoc_dvm_clk = {
- 	.clkr = {
- 		.enable_reg = 0x108c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_cx_snoc_dvm_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -251,7 +251,7 @@ static struct clk_branch gpu_cc_cxo_aon_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1004,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_cxo_aon_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -264,7 +264,7 @@ static struct clk_branch gpu_cc_cxo_clk = {
- 	.clkr = {
- 		.enable_reg = 0x109c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_cxo_clk",
- 			.ops = &clk_branch2_aon_ops,
- 		},
-@@ -277,7 +277,7 @@ static struct clk_branch gpu_cc_gx_gmu_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1064,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_gx_gmu_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_gmu_clk_src.clkr.hw,
-@@ -295,7 +295,7 @@ static struct clk_branch gpu_cc_hlos1_vote_gpu_smmu_clk = {
- 	.clkr = {
- 		.enable_reg = 0x5000,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_hlos1_vote_gpu_smmu_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -308,7 +308,7 @@ static struct clk_branch gpu_cc_hub_aon_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1178,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_hub_aon_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_hub_clk_src.clkr.hw,
-@@ -326,7 +326,7 @@ static struct clk_branch gpu_cc_hub_cx_int_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1204,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_hub_cx_int_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&gpu_cc_hub_cx_int_div_clk_src.clkr.hw,
-@@ -344,7 +344,7 @@ static struct clk_branch gpu_cc_mnd1x_0_gfx3d_clk = {
- 	.clkr = {
- 		.enable_reg = 0x802c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_mnd1x_0_gfx3d_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -357,7 +357,7 @@ static struct clk_branch gpu_cc_mnd1x_1_gfx3d_clk = {
- 	.clkr = {
- 		.enable_reg = 0x8030,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_mnd1x_1_gfx3d_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -370,7 +370,7 @@ static struct clk_branch gpu_cc_sleep_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1090,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "gpu_cc_sleep_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
-index b39ee1c9647b..ef055706b442 100644
---- a/drivers/clk/qcom/lpasscc-sc7280.c
-+++ b/drivers/clk/qcom/lpasscc-sc7280.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021-2022, The Linux Foundation. All rights reserved.
-  */
+-static int cirrusfb_check_pixclock(const struct fb_var_screeninfo *var,
++static int cirrusfb_check_pixclock(struct fb_var_screeninfo *var,
+                     struct fb_info *info)
+  {
+      long freq;
+@@ -478,9 +478,7 @@ static int cirrusfb_check_pixclock(const struct 
+fb_var_screeninfo *var,
+      unsigned maxclockidx = var->bits_per_pixel >> 3;
 
- #include <linux/clk-provider.h>
-@@ -23,7 +23,7 @@ static struct clk_branch lpass_q6ss_ahbm_clk = {
- 	.clkr = {
- 		.enable_reg = 0x1c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_q6ss_ahbm_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -36,7 +36,7 @@ static struct clk_branch lpass_q6ss_ahbs_clk = {
- 	.clkr = {
- 		.enable_reg = 0x20,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_q6ss_ahbs_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -49,7 +49,7 @@ static struct clk_branch lpass_top_cc_lpi_q6_axim_hs_clk = {
- 	.clkr = {
- 		.enable_reg = 0x0,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_top_cc_lpi_q6_axim_hs_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -63,7 +63,7 @@ static struct clk_branch lpass_qdsp6ss_core_clk = {
- 	.clkr = {
- 		.enable_reg = 0x20,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_qdsp6ss_core_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -77,7 +77,7 @@ static struct clk_branch lpass_qdsp6ss_xo_clk = {
- 	.clkr = {
- 		.enable_reg = 0x38,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_qdsp6ss_xo_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -91,7 +91,7 @@ static struct clk_branch lpass_qdsp6ss_sleep_clk = {
- 	.clkr = {
- 		.enable_reg = 0x3c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "lpass_qdsp6ss_sleep_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
-index 615695d82319..ba192ce6163e 100644
---- a/drivers/clk/qcom/videocc-sc7280.c
-+++ b/drivers/clk/qcom/videocc-sc7280.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021-2022, The Linux Foundation. All rights reserved.
-  */
+      /* convert from ps to kHz */
+-    freq = PICOS2KHZ(var->pixclock);
+-
+-    dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
++    freq = PICOS2KHZ(var->pixclock ? : 1);
 
- #include <linux/clk-provider.h>
-@@ -45,10 +45,10 @@ static struct clk_alpha_pll video_pll0 = {
- 	.num_vco = ARRAY_SIZE(lucid_vco),
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
- 	.clkr = {
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_pll0",
- 			.parent_data = &(const struct clk_parent_data){
--				.fw_name = "bi_tcxo",
-+				.index = 0,
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_lucid_ops,
-@@ -62,7 +62,7 @@ static const struct parent_map video_cc_parent_map_0[] = {
- };
-
- static const struct clk_parent_data video_cc_parent_data_0[] = {
--	{ .fw_name = "bi_tcxo" },
-+	{ .index = 0 },
- 	{ .hw = &video_pll0.clkr.hw },
- };
-
-@@ -89,7 +89,7 @@ static struct clk_rcg2 video_cc_iris_clk_src = {
- 	.hid_width = 5,
- 	.parent_map = video_cc_parent_map_0,
- 	.freq_tbl = ftbl_video_cc_iris_clk_src,
--	.clkr.hw.init = &(struct clk_init_data){
-+	.clkr.hw.init = &(const struct clk_init_data){
- 		.name = "video_cc_iris_clk_src",
- 		.parent_data = video_cc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(video_cc_parent_data_0),
-@@ -109,7 +109,7 @@ static struct clk_rcg2 video_cc_sleep_clk_src = {
- 	.hid_width = 5,
- 	.parent_map = video_cc_parent_map_1,
- 	.freq_tbl = ftbl_video_cc_sleep_clk_src,
--	.clkr.hw.init = &(struct clk_init_data){
-+	.clkr.hw.init = &(const struct clk_init_data){
- 		.name = "video_cc_sleep_clk_src",
- 		.parent_data = video_cc_parent_data_1,
- 		.num_parents = ARRAY_SIZE(video_cc_parent_data_1),
-@@ -123,7 +123,7 @@ static struct clk_branch video_cc_iris_ahb_clk = {
- 	.clkr = {
- 		.enable_reg = 0x5004,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_iris_ahb_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&video_cc_iris_clk_src.clkr.hw,
-@@ -141,7 +141,7 @@ static struct clk_branch video_cc_mvs0_axi_clk = {
- 	.clkr = {
- 		.enable_reg = 0x800c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_mvs0_axi_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -156,7 +156,7 @@ static struct clk_branch video_cc_mvs0_core_clk = {
- 	.clkr = {
- 		.enable_reg = 0x3010,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_mvs0_core_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&video_cc_iris_clk_src.clkr.hw,
-@@ -174,7 +174,7 @@ static struct clk_branch video_cc_mvsc_core_clk = {
- 	.clkr = {
- 		.enable_reg = 0x2014,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_mvsc_core_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&video_cc_iris_clk_src.clkr.hw,
-@@ -192,7 +192,7 @@ static struct clk_branch video_cc_mvsc_ctl_axi_clk = {
- 	.clkr = {
- 		.enable_reg = 0x8004,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_mvsc_ctl_axi_clk",
- 			.ops = &clk_branch2_ops,
- 		},
-@@ -205,7 +205,7 @@ static struct clk_branch video_cc_sleep_clk = {
- 	.clkr = {
- 		.enable_reg = 0x7034,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_sleep_clk",
- 			.parent_hws = (const struct clk_hw*[]){
- 				&video_cc_sleep_clk_src.clkr.hw,
-@@ -223,7 +223,7 @@ static struct clk_branch video_cc_venus_ahb_clk = {
- 	.clkr = {
- 		.enable_reg = 0x801c,
- 		.enable_mask = BIT(0),
--		.hw.init = &(struct clk_init_data){
-+		.hw.init = &(const struct clk_init_data){
- 			.name = "video_cc_venus_ahb_clk",
- 			.ops = &clk_branch2_ops,
- 		},
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
-
+      maxclock = cirrusfb_board_info[cinfo->btype].maxclock[maxclockidx];
+      cinfo->multiplexing = 0;
+@@ -488,11 +486,13 @@ static int cirrusfb_check_pixclock(const struct 
+fb_var_screeninfo *var,
+      /* If the frequency is greater than we can support, we might be able
+       * to use multiplexing for the video mode */
+      if (freq > maxclock) {
+-        dev_err(info->device,
+-            "Frequency greater than maxclock (%ld kHz)\n",
+-            maxclock);
+-        return -EINVAL;
++        var->pixclock = KHZ2PICOS(maxclock);
++
++        while ((freq = PICOS2KHZ(var->pixclock)) > maxclock)
++            var->pixclock++;
+      }
++    dev_dbg(info->device, "desired pixclock: %ld kHz\n", freq);
++
+      /*
+       * Additional constraint: 8bpp uses DAC clock doubling to allow 
+maximum
+       * pixel clock
+-- 1.8.3.1

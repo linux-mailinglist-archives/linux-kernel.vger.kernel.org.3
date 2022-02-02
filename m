@@ -2,83 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD2C4A6E5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136EC4A6E57
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245724AbiBBKFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:05:46 -0500
-Received: from relay06.th.seeweb.it ([5.144.164.167]:51949 "EHLO
-        relay06.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245650AbiBBKFn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S245711AbiBBKFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 2 Feb 2022 05:05:43 -0500
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0927D3F704;
-        Wed,  2 Feb 2022 11:05:42 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH v2 2/2] config: android-recommended: Disable BPF_UNPRIV_DEFAULT_OFF for netd
-Date:   Wed,  2 Feb 2022 11:05:28 +0100
-Message-Id: <20220202100528.190794-2-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220202100528.190794-1-marijn.suijten@somainline.org>
-References: <20220202100528.190794-1-marijn.suijten@somainline.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233894AbiBBKFl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:05:41 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91C3C061714;
+        Wed,  2 Feb 2022 02:05:41 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFCWB-0006QL-5B; Wed, 02 Feb 2022 11:05:39 +0100
+Message-ID: <35bf934c-d8ed-7988-69f3-e0cb53e0adf4@leemhuis.info>
+Date:   Wed, 2 Feb 2022 11:05:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-BS
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        regressions@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1643710947.git.linux@leemhuis.info>
+ <b32d06dca7d228d61692acaff386928bd673754f.1643710947.git.linux@leemhuis.info>
+ <87k0ee5gf2.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v4 1/3] docs: add two documents about regression handling
+In-Reply-To: <87k0ee5gf2.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643796341;cd3236e6;
+X-HE-SMSGID: 1nFCWB-0006QL-5B
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AOSP's `netd` process fails to start on Android S:
+On 02.02.22 00:13, Jonathan Corbet wrote:
+> OK, I'll try not to take so long to have a look at it this time.
+> 
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
+> 
+>> Create two documents explaining various aspects around regression
+>> handling and tracking; one is aimed at users, the other targets
+>> developers.
+>>
+>> The texts among others describe the first rule of Linux kernel
+>> development and what it means in practice. They also explain what a
+>> regression actually is and how to report one properly.
+>>
+>> Both texts additionally provide a brief introduction to the bot the
+>> kernel's regression tracker uses to facilitate the work, but mention the
+>> use is optional.
+>>
+>> To sum things up, provide a few quotes from Linus in the document for
+>> developers to show how serious he takes regressions.
+>>
+>> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+>> ---
+>>  Documentation/admin-guide/index.rst           |   1 +
+>>  .../admin-guide/regressions-users.rst         | 436 ++++++++++++
+>>  Documentation/process/index.rst               |   1 +
+>>  Documentation/process/regressions-devs.rst    | 672 ++++++++++++++++++
+> 
+> I'll start with some *serious* bikesheddery...it's best if the names of
+> the files tell readers what's inside.  This isn't something I feel
+> really strongly about, but we could consider
 
-    E ClatdController: getClatEgress4MapFd() failure: Operation not permitted
-    I netd    : Initializing ClatdController: 410us
-    E netd    : Failed to start trafficcontroller: (Status[code: 1, msg: "Pinned map not accessible or does not exist: (/sys/fs/bpf/map_netd_cookie_tag_map): Operation not permitted"])
-    E netd    : CRITICAL: sleeping 60 seconds, netd exiting with failure, crash loop likely!
+I wasn't totally happy with the file names myself, so it's good that you
+bring it up.
 
-And on Android R:
+> 	admin-guide/reporting-regressions.txt (or just regressions.txt)
+>         process/regression-policy.txt
 
-    I ClatdController: 4.9+ kernel and device shipped with P - clat ebpf might work.
-    E ClatdController: getClatEgressMapFd() failure: Operation not permitted
-    I netd    : Initializing ClatdController: 1409us
-    E netd    : Failed to start trafficcontroller: (Status[code: 1, msg: "Pinned map not accessible or does not exist: (/sys/fs/bpf/map_netd_cookie_tag_map): Operation not permitted"])
+I like "reporting-regressions.txt", but I wonder if using the word
+"policy" is a good idea. I tried to avoid it (and similar words, like
+guidelines), as they might do more harm then good. So how about:
 
-These permission issues are caused by 08389d888287 ("bpf: Add kconfig
-knob for disabling unpriv bpf by default") because AOSP does not provide
-netd the `SYS_ADMIN` capability, and also has no userspace support for
-the `BPF` capability yet.
+ 	admin-guide/reporting-regressions.rst
+        process/regressions.rst
 
-Cc: Amit Pundir <amit.pundir@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: John Stultz <john.stultz@linaro.org>
-[John suggested this in https://linaro.atlassian.net/browse/ACK-107?focusedCommentId=117382]
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
----
+> [...] 
+>> +Send a mail to the regressions mailing list (regressions@lists.linux.dev) while
+>> +CCing the Linux kernel's regression tracker (regressions@leemhuis.info); if the
+>> +issue might better be dealt with in private, feel free to omit the list.
+> 
+> Perhaps a separate concern, but might you want to set up an @kernel.org
+> alias for the regression tracker?  Trust me, you're not gonna want to
+> run it forever, and the ability to quickly redirect the mail may prove
+> to be a nice thing to have.  An email address with your domain sitting
+> in the docs will circulate for years after it gets changed.
 
-Changes since v1:
-- Drop accidental `From:` override with my other email.
+Yeah, it's on my mental to do list for a few weeks already, but never
+set down to actually get this rolling. You are right, I'll ask for an alias.
 
- kernel/configs/android-recommended.config | 1 +
- 1 file changed, 1 insertion(+)
+>> +Is the "no regressions" rule really adhered in practice?
+>> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> +
+>> +It's taken really serious, as can be seen by many mailing list posts from Linux
+> 
+> serious*ly*
 
-diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
-index 22bd76e43aca..e400fbbc8aba 100644
---- a/kernel/configs/android-recommended.config
-+++ b/kernel/configs/android-recommended.config
-@@ -1,4 +1,5 @@
- #  KEEP ALPHABETICALLY SORTED
-+# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
- # CONFIG_INPUT_MOUSE is not set
- # CONFIG_LEGACY_PTYS is not set
--- 
-2.35.1
+Fixed.
 
+> Otherwise I can't find a lot to complain about at this point.  I'm not
+> really convinced that we need all those Quotations From Chairman Linus,
+> but I won't fight about it either :)
+
+I'll take a look again and consider kicking a few.
+
+> In general, though, unless objections show up, I don't see any real
+> reason to not apply this one.
+
+Great, many thx!
+
+Ciao, Thorsten

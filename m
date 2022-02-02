@@ -2,126 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDE44A78DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45C54A78DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345148AbiBBTp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S1346952AbiBBTqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiBBTpY (ORCPT
+        with ESMTP id S229889AbiBBTqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:45:24 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F1BC061714;
-        Wed,  2 Feb 2022 11:45:24 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id e20so571351qvu.7;
-        Wed, 02 Feb 2022 11:45:24 -0800 (PST)
+        Wed, 2 Feb 2022 14:46:51 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38943C061714;
+        Wed,  2 Feb 2022 11:46:51 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b13so819495edn.0;
+        Wed, 02 Feb 2022 11:46:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zvZjFpyIkbMZ/ze0qgMESQH0VN7MsTwLvLVU0S1wAiQ=;
-        b=ZjZZWUpbJ4YlRq/+yUqkwRremL1orcOhbUOfoJdo7VKeZOMKKWQ3Eqcb0mTxCFyyf+
-         /dSoFi0zX1Rx1vZqWcFPY9e/e0ev9Q6dFxZU3xdLqx+sa2JPG6kQBkZPLzIn7PlU7TDK
-         4VsQgIf7xkNz39RjWwKafCd9nrKUbF+X/wbCP2vGJca07c/ATZ+vkPk7ri0s7Oge2a4Z
-         bSiqTc6Zg0KlzAdDZW5jUyvXthTFS+B/Rng63lb2hsNOonWe0hxBEb21/pZRR7TUUdIs
-         T64s5Fff6ypHmpevHkE2zfZQu3w6i8eWoTTJ2B20fvlW93RubBS+JdvUCvJ2+xh2uGOf
-         eqpw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rnmPw/OuvT5nnEtXmJqegdwVhZuNfh1sLakxnaRWZtU=;
+        b=iagGXqbnA+/6CPbz6jGozukFarqUd+V88acZVpP4hERalD6uejXfAcY73H+/dboFpw
+         1Pc3X46l4+FLyndDBx97RwsGO9mOU+EAAWk59xaLe07nTyuVm/2u36KPP8Ees3MmnIFc
+         FXIZIQXKYc8xcEsv6crEHugs/WbMJz07GYh81Ws/XVJ4sJEPzFWslDiJK4fGXvsMNdXU
+         PgttMXxfxTMvUMuYw+FGGdZ7LePhseUv75bP/7kcH/SqMRsfeRSsMXBlfKUwjHjThlE7
+         0FoGW8hpkogZ11SutO1U9iHasnHzu8IuPAP+hudUyiEKmy4mcw83q6mM45UzN8sWW1pV
+         rR/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zvZjFpyIkbMZ/ze0qgMESQH0VN7MsTwLvLVU0S1wAiQ=;
-        b=O/Em12WM07dvlNxgAa6aLyGLEJU/dPwlHSpcO2/FXri9urrfttQ3tx0YAsYSyFrST4
-         o69B7dJBXQ0B5BGh/L2dBGdy9fFqCpo13ygXCI4Nv6urrvG7TFpMMhEeNngZh2Q6yTr/
-         rfwiBThKtmSDhad+sbLtiFuv04aHD7CYBu/ctW2gCWYSoA8oGYnotOQMjBm1ddch5vYn
-         9NH93+7eVN+NHreWCrjSNWb8rtuRQDYQJXXFxid8gdRYCGvSS1SiOklrisqitlYbRuhU
-         cETxFhgFEHSXelUv7Q+wR3aGwlc07Fdz31Thklmiq/Ub94beJ+ZGf+c88iVa/dFD45lm
-         OSzQ==
-X-Gm-Message-State: AOAM531znMMkDkI7BGzwuWGqvxPtQzm4EAInbrfOUNY39zAm29pdm9Gn
-        AhCRLCAUiNH89eiuypf9ATUt5CEO8F4=
-X-Google-Smtp-Source: ABdhPJxMlYPNb3Wz/7Db4weEwB61I8vPWSanIMN61TUGOJytV74HXU2jDPn145Ge8efptHJNV1J6Dg==
-X-Received: by 2002:ad4:5bae:: with SMTP id 14mr27585672qvq.69.1643831123186;
-        Wed, 02 Feb 2022 11:45:23 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id y16sm1907888qta.11.2022.02.02.11.45.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 11:45:22 -0800 (PST)
-From:   frowand.list@gmail.com
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] of: unittest: config option - print pass message at same level as fail
-Date:   Wed,  2 Feb 2022 13:45:13 -0600
-Message-Id: <20220202194513.2840070-1-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rnmPw/OuvT5nnEtXmJqegdwVhZuNfh1sLakxnaRWZtU=;
+        b=FvUhGQqKYWMZFBFAdcphM7+VNNKLT7djXivn8xpJaxLjXEqc6yIJcfaz/x5WUUsbHU
+         87Kf2J6v+BjMiFBAraAajhrbnlOfWD/1SGOpTwEhdVT6MC3yJoVfpWU2/b00pgp2aRor
+         TY1TYmBeUeeKcfRe9LuYBFjLMdgpRqymC1RaA5HL/y8P/mo6EJjMhzbg7jRxU2xYvvjc
+         HoB2IP9VNnlvOmNXqOZulQs3iI+UDYhtk+SGjG8ewoYueblgFW1PGXTFyVfX1BcVGR2e
+         GyvS7xHp0OalOC6QFBMuw3T/BP6aOyygQGQOky2O7qoTc7d6G3BMBH/1A7HNZHxHKSjC
+         NhUg==
+X-Gm-Message-State: AOAM530/HnsI7iHqSO/5oOtFAdLiGEs3QyZkare6uFkHgX7HHPqFTZq3
+        J5zpclz9RqFOZI8BtlWgtvOI+soaUP7J9YIXVXM=
+X-Google-Smtp-Source: ABdhPJyXVxqNMmfb2b4TgCMxti9E2qhIYKGuf0BCS0PaAUFncuGmQK6OxuuSbLsJX1AM6ivknDuRZDLOUoSgmZZPRWs=
+X-Received: by 2002:a05:6402:1705:: with SMTP id y5mr31690498edu.200.1643831209595;
+ Wed, 02 Feb 2022 11:46:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220202181248.18344-1-josright123@gmail.com> <20220202181248.18344-3-josright123@gmail.com>
+In-Reply-To: <20220202181248.18344-3-josright123@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 2 Feb 2022 21:45:13 +0200
+Message-ID: <CAHp75VeRoG3+UmPm41O0+5YmxDgDr3ESFtvMzn2c-SGpUePETw@mail.gmail.com>
+Subject: Re: [PATCH v17, 2/2] net: Add dm9051 driver
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev <netdev@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+On Wed, Feb 2, 2022 at 8:13 PM Joseph CHAMG <josright123@gmail.com> wrote:
+>
+> Add davicom dm9051 spi ethernet driver, The driver work for the
+> device platform which has the spi master
 
-Printing the devicetree unittest pass message for each passed test
-creates much console verbosity.  The existing pass messages are
-printed at loglevel KERN_DEBUG so they will not print by default.
+...
 
-The test community expects either a pass or a fail message for each
-test in a test suite.  The messages are typically post-processed to
-report pass/fail results.
+> +       ret = regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
 
-The pass messages can currently be reported by enabling KERN_DEBUG
-loglevel for the console, but this also results in other additional
-messages.  Create OF_UNITTEST_SHOW_PASS to enable printing the pass
-messages at the same loglevel as the fail messages.
+0x0 --> 0
 
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
- drivers/of/Kconfig    | 10 ++++++++++
- drivers/of/unittest.c |  5 ++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-index 80b5fd44ab1c..6ad05df4f7d4 100644
---- a/drivers/of/Kconfig
-+++ b/drivers/of/Kconfig
-@@ -25,6 +25,16 @@ config OF_UNITTEST
- 
- 	  If unsure, say N here, but this option is safe to enable.
- 
-+config OF_UNITTEST_SHOW_PASS
-+	bool "Device Tree runtime unit tests, report each pass"
-+	depends on OF_UNITTEST
-+	help
-+	  The messages reporting an individual test pass are normally
-+	  printed at loglevel KERN_DEBUG.  Enable this option to print
-+	  the PASS messages at the same loglevel as the FAIL messages.
-+
-+	  If unsure, say N here, but this option is safe to enable.
-+
- config OF_ALL_DTBS
- 	bool "Build all Device Tree Blobs"
- 	depends on COMPILE_TEST
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 70992103c07d..efcec1c6c895 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -44,7 +44,10 @@ static struct unittest_results {
- 		pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
- 	} else { \
- 		unittest_results.passed++; \
--		pr_debug("pass %s():%i\n", __func__, __LINE__); \
-+		if (IS_ENABLED(CONFIG_OF_UNITTEST_SHOW_PASS)) \
-+			pr_err("pass %s():%i\n", __func__, __LINE__); \
-+		else \
-+			pr_debug("pass %s():%i\n", __func__, __LINE__); \
- 	} \
- 	failed; \
- })
+> +       if (ret)
+> +               return ret;
+
+...
+
+> +       return regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
+
+Ditto.
+
+...
+
+> +       ret = regmap_update_bits(db->regmap_dm, DM9051_FCR, 0xff, fcr);
+
+GENMASK(7, 0) ?
+
+...
+
+> +static int dm9051_map_chipid(struct board_info *db)
+> +{
+> +       struct device *dev = &db->spidev->dev;
+> +       unsigned int ret;
+> +       unsigned short wid;
+> +       u8 buff[6];
+> +
+> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_VIDL, buff, 6);
+
+sizeof(buff)
+
+> +       if (ret < 0) {
+> +               netif_err(db, drv, db->ndev, "%s: error %d bulk_read reg %02x\n",
+> +                         __func__, ret, DM9051_VIDL);
+> +               return ret;
+> +       }
+
+> +       wid = buff[3] << 8 | buff[2];
+
+get_unaligned_le16()
+
+> +       if (wid != DM9051_ID) {
+> +               dev_err(dev, "chipid error as %04x !\n", wid);
+> +               return -ENODEV;
+> +       }
+> +
+> +       dev_info(dev, "chip %04x found\n", wid);
+> +       return 0;
+> +}
+
+...
+
+> +static int dm9051_map_etherdev_par(struct net_device *ndev, struct board_info *db)
+> +{
+> +       u8 addr[ETH_ALEN];
+> +       int ret;
+> +
+> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_PAR, addr, ETH_ALEN);
+
+sizeof(addr)
+
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       if (!is_valid_ether_addr(addr)) {
+> +               eth_hw_addr_random(ndev);
+
+> +               ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
+
+Ditto.
+
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               dev_dbg(&db->spidev->dev, "Use random MAC address\n");
+> +               return 0;
+> +       }
+> +
+> +       eth_hw_addr_set(ndev, addr);
+> +       return 0;
+> +}
+
+...
+
+> +       db->mdiobus->phy_mask = (u32)~GENMASK(1, 1);
+
+For a single bit it might be better to use BIT(1)
+
+...
+
+> +       ret = devm_mdiobus_register(&spi->dev, db->mdiobus);
+> +       if (ret)
+> +               dev_err(&spi->dev, "Could not register MDIO bus\n");
+> +
+
+> +       return 0;
+
+return ret; ?
+
+...
+
+> +       snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT,
+
+sizeof(phy_id) + 3
+
+> +                db->mdiobus->id, DM9051_PHY_ADDR);
+
+...
+
+> +       if (IS_ERR(db->phydev))
+> +               return PTR_ERR(db->phydev);
+> +       return 0;
+
+return PTR_ERR_OR_ZERO();
+
+...
+
+> +               if ((rxbyte & 0xff) != DM9051_PKT_RDY)
+
+GENMASK(7, 0) ?
+
+> +                       break; /* exhaust-empty */
+
+...
+
+> +               ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
+
+
+Ditto.
+
+> +               if (ret)
+> +                       return ret;
+
+...
+
+> +               ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
+
+Ditto.
+
+Perhaps it needs its own definition after all?
+
+> +               if (ret)
+> +                       return ret;
+
+...
+
+> +spi_err:
+
+out_unlock:
+
+> +       mutex_unlock(&db->spi_lockm);
+> +
+> +       return IRQ_HANDLED;
+
+...
+
+> +       result = regmap_bulk_write(db->regmap_dmbulk, DM9051_MAR, db->rctl.hash_table, 8);
+
+Is hash_table an array? Then sizeof() or ARRAY_SIZE() should work.
+
+> +       if (result < 0) {
+> +               netif_err(db, drv, ndev, "%s: error %d bulk writing reg %02x, len %d\n",
+> +                         __func__, result, DM9051_MAR, 8);
+
+Ditto.
+
+> +               goto spi_err;
+> +       }
+
+...
+
+> +spi_err:
+
+out_unlock:
+
+You need to describe what will be done if one goes to the label.
+
+> +       mutex_unlock(&db->spi_lockm);
+
+...
+
+> +       /* The whole dm9051 chip registers could not be accessed within 1 ms
+> +        * after above GPR power on control
+> +        */
+> +       mdelay(1);
+
+Why atomic?
+
+...
+
+> +       ret = request_threaded_irq(spi->irq, NULL, dm9051_rx_threaded_irq,
+> +                                  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+
+Why do you ignore IRQ flags from DT?
+
+> +                                  ndev->name, db);
+
+...
+
+> +       /* the multicast address in Hash Table : 64 bits */
+> +       netdev_for_each_mc_addr(ha, ndev) {
+> +               hash_val = ether_crc_le(ETH_ALEN, ha->addr) & 0x3f;
+
+GENMASK() ?
+
+> +               rxctrl.hash_table[hash_val / 16] |= 1U << (hash_val % 16);
+
+BIT() ?
+
+> +       }
+
+...
+
+> +       /* schedule work to do the actual set of the data if needed */
+
+> +       if (memcmp(&db->rctl, &rxctrl, sizeof(rxctrl))) {
+> +               memcpy(&db->rctl, &rxctrl, sizeof(rxctrl));
+
+Hmm... This is interesting...
+
+> +               schedule_work(&db->rxctrl_work);
+> +       }
+
+...
+
+> +       ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
+
+sizeof() ?
+
+...
+
+> +       int ret = 0;
+
+Redundant assignment.
+
+...
+
+> +       ret = devm_register_netdev(dev, ndev);
+> +       if (ret) {
+
+> +               dev_err(dev, "failed to register network device\n");
+> +               phy_disconnect(db->phydev);
+> +               return ret;
+
+phy_disconnect();
+return dev_err_probe();
+
+> +       }
+
+...
+
+> +err_stopthread:
+> +       return ret;
+
+Useless. Return in-place.
+
+...
+
+> +static struct spi_driver dm9051_driver = {
+> +       .driver = {
+> +               .name = DRVNAME_9051,
+> +               .of_match_table = dm9051_match_table,
+> +       },
+> +       .probe = dm9051_probe,
+> +       .remove = dm9051_drv_remove,
+> +       .id_table = dm9051_id_table,
+> +};
+
+> +
+
+Redundant blank line.
+
+> +module_spi_driver(dm9051_driver);
+
+...
+
++ bits.h
+
+> +#include <linux/netdevice.h>
+
+> +#include <linux/mii.h>
+
+How is that header being used in this header?
+
+> +#include <linux/types.h>
+
+...
+
+> +#define INTCR_POL_LOW          BIT(0)
+> +#define INTCR_POL_HIGH         (0 << 0)
+
+In this case, be consistent:
+
+#define INTCR_POL_LOW          (1 << 0)
+#define INTCR_POL_HIGH         (0 << 0)
+
 -- 
-Frank Rowand <frank.rowand@sony.com>
-
+With Best Regards,
+Andy Shevchenko

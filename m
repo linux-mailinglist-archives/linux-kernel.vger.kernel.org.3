@@ -2,340 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED874A7063
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ADC4A7065
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344028AbiBBL5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:57:01 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.103]:32989 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233546AbiBBL5A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:57:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643802997;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=P1UU9/Rd4PWE6S/mNmRynY70CMbHTFJdQ7fBfwQCW4Q=;
-    b=EFC+nZZfHUsltYdOFwdou7RTL0skLnR4kDUCYa9O2IwgpkayuqowhnH/j7gd3wRB9J
-    ye0BJgdgh5yoZUt4KcPkSUMF8eufiGc3YbrHzysjBJ/j/1lI+eXmmwCEgUj7w3Tvqt1F
-    NPeBbsWIN7F5dLVI/nRLKZ+SqxLm8eu+b7FkVxctQw/0REqHDlPTwFrKgTJaf/7qTcJ/
-    AyjKjzECdRXD+ZqqVXCy0/e1rFZujH2VkFJzOGIAujCDBXrnxRuvW86C0X6YoJ1LUhYe
-    wt11AWneSPalu8dn1Zl7jgKLdSVJWP9F6KLRPyNlMHINxqyAW9pPWFxQ+bQzT+JkAjxD
-    GC9w==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDCocQ=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y12Bua9kq
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 2 Feb 2022 12:56:36 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v12 2/9] drm/ingenic: Add support for JZ4780 and HDMI
- output
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <N7AO6R.7I6FABF106MT1@crapouillou.net>
-Date:   Wed, 2 Feb 2022 12:56:35 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <1F27171F-DFCA-4707-8F50-D1A343F6D78E@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
- <6a7b188769a7ad477bf8cb71e1b9bc086b92388d.1643632014.git.hns@goldelico.com>
- <N7AO6R.7I6FABF106MT1@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        id S1344034AbiBBL56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:57:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:54014 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232566AbiBBL55 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 06:57:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B2221FB;
+        Wed,  2 Feb 2022 03:57:57 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.87.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EA673F718;
+        Wed,  2 Feb 2022 03:57:55 -0800 (PST)
+Date:   Wed, 2 Feb 2022 11:57:51 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, robh@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 2/2] perf: Expand perf_branch_entry.type
+Message-ID: <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
+References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
+ <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-thanks for the reviews. Looks as if we are close to making a goal.
+On Fri, Jan 28, 2022 at 11:14:13AM +0530, Anshuman Khandual wrote:
+> Current perf_branch_entry.type is a 4 bits field just enough to accommodate
+> 16 generic branch types. This is insufficient to accommodate platforms like
+> arm64 which has much more branch types.
 
-> Am 02.02.2022 um 11:23 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> Le lun., janv. 31 2022 at 13:26:48 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> From: Paul Boddie <paul@boddie.org.uk>
->> Add support for the LCD controller present on JZ4780 SoCs.
->> This SoC uses 8-byte descriptors which extend the current
->> 4-byte descriptors used for other Ingenic SoCs.
->> Tested on MIPS Creator CI20 board.
->> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
->> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 61 =
-++++++++++++++++++++++-
->> drivers/gpu/drm/ingenic/ingenic-drm.h     | 38 ++++++++++++++
->> 2 files changed, 98 insertions(+), 1 deletion(-)
->> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c =
-b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->> index 9c60fc4605e4b..ccdb9eedd9247 100644
->> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->> @@ -6,6 +6,7 @@
->> #include "ingenic-drm.h"
->> +#include <linux/bitfield.h>
->> #include <linux/component.h>
->> #include <linux/clk.h>
->> #include <linux/dma-mapping.h>
->> @@ -49,6 +50,11 @@ struct ingenic_dma_hwdesc {
->> 	u32 addr;
->> 	u32 id;
->> 	u32 cmd;
->> +	/* extended hw descriptor for jz4780 */
->> +	u32 offsize;
->> +	u32 pagewidth;
->> +	u32 cpos;
->> +	u32 dessize;
->> } __aligned(16);
->> struct ingenic_dma_hwdescs {
->> @@ -59,7 +65,9 @@ struct ingenic_dma_hwdescs {
->> struct jz_soc_info {
->> 	bool needs_dev_clk;
->> 	bool has_osd;
->> +	bool has_alpha;
->> 	bool map_noncoherent;
->> +	bool use_extended_hwdesc;
->> 	unsigned int max_width, max_height;
->> 	const u32 *formats_f0, *formats_f1;
->> 	unsigned int num_formats_f0, num_formats_f1;
->> @@ -446,6 +454,9 @@ static int ingenic_drm_plane_atomic_check(struct =
-drm_plane *plane,
->> 	if (!crtc)
->> 		return 0;
->> +	if (plane =3D=3D &priv->f0)
->> +		return -EINVAL;
->=20
-> This will break JZ4725B -> JZ4770 SoCs, the f0 plane is perfectly =
-usable there.
+It would be good to mention BRBE specifically here, along with specific values
+and a rought intro, e.g.
 
-Hm. I think it was your request/proposal to add this [1]?
+| The Arm Branch Record Buffer Extension (BRBE) distinguishes $N types of
+| branch/exception/return: <rough summary here>. There's not enough space to
+| describe these all in perf_branch_entry.type, as this is a 4-bit field.
 
-What I have forgotten is why the f0 plane should not be usable for =
-jz4780.
+That way reviewers (and anyone looking at the patch in future) have a lot more
+rationale to work with. A rough summary of the distinct branch types would be
+*really* helpful.
 
-BR and thanks,
-Nikolaus
+> Lets just expands this field into a 6 bits one, which can now hold 64 generic
+> branch types.
 
-[1] end of =
-https://patchwork.kernel.org/project/dri-devel/patch/2c7d0aa7d3ef480ebb996=
-d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com/#24578683
+Is it safe (ABI-wise) to extend a bit-field like this? Does that break any
+combination of old/new userspace and old/new kernel? I'm not sure how bit
+fields are managed w.r.t. endianness, but normally extending a field would
+break BE, so this seems suspicious.
 
+I suspect we might need to allocate a *separate* field for new values, and
+possibly reserve a value in the existing field to say "go look at the new
+field".
 
->=20
-> Cheers,
-> -Paul
->=20
->> +
->> 	crtc_state =3D drm_atomic_get_existing_crtc_state(state,
->> 							crtc);
->> 	if (WARN_ON(!crtc_state))
->> @@ -662,6 +673,33 @@ static void =
-ingenic_drm_plane_atomic_update(struct drm_plane *plane,
->> 		hwdesc->cmd =3D JZ_LCD_CMD_EOF_IRQ | (width * height * =
-cpp / 4);
->> 		hwdesc->next =3D dma_hwdesc_addr(priv, next_id);
->> +		if (priv->soc_info->use_extended_hwdesc) {
->> +			hwdesc->cmd |=3D JZ_LCD_CMD_FRM_ENABLE;
->> +
->> +			/* Extended 8-byte descriptor */
->> +			hwdesc->cpos =3D 0;
->> +			hwdesc->offsize =3D 0;
->> +			hwdesc->pagewidth =3D 0;
->> +
->> +			switch (newstate->fb->format->format) {
->> +			case DRM_FORMAT_XRGB1555:
->> +				hwdesc->cpos |=3D JZ_LCD_CPOS_RGB555;
->> +				fallthrough;
->> +			case DRM_FORMAT_RGB565:
->> +				hwdesc->cpos |=3D JZ_LCD_CPOS_BPP_15_16;
->> +				break;
->> +			case DRM_FORMAT_XRGB8888:
->> +				hwdesc->cpos |=3D JZ_LCD_CPOS_BPP_18_24;
->> +				break;
->> +			}
->> +			hwdesc->cpos |=3D (JZ_LCD_CPOS_COEFFICIENT_1 <<
->> +					 =
-JZ_LCD_CPOS_COEFFICIENT_OFFSET);
->> +			hwdesc->dessize =3D
->> +				(0xff << JZ_LCD_DESSIZE_ALPHA_OFFSET) |
->> +				FIELD_PREP(JZ_LCD_DESSIZE_HEIGHT_MASK, =
-height - 1) |
->> +				FIELD_PREP(JZ_LCD_DESSIZE_WIDTH_MASK, =
-width - 1);
->> +		}
->> +
->> 		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
->> 			fourcc =3D newstate->fb->format->format;
->> @@ -693,6 +731,9 @@ static void =
-ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
->> 		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
->> 	}
->> +	if (priv->soc_info->use_extended_hwdesc)
->> +		cfg |=3D JZ_LCD_CFG_DESCRIPTOR_8;
->> +
->> 	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
->> 		cfg |=3D JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
->> 	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
->> @@ -1015,6 +1056,7 @@ static int ingenic_drm_bind(struct device *dev, =
-bool has_components)
->> 	long parent_rate;
->> 	unsigned int i, clone_mask =3D 0;
->> 	int ret, irq;
->> +	u32 osdc =3D 0;
->> 	soc_info =3D of_device_get_match_data(dev);
->> 	if (!soc_info) {
->> @@ -1272,7 +1314,10 @@ static int ingenic_drm_bind(struct device =
-*dev, bool has_components)
->> 	/* Enable OSD if available */
->> 	if (soc_info->has_osd)
->> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->> +		osdc |=3D JZ_LCD_OSDC_OSDEN;
->> +	if (soc_info->has_alpha)
->> +		osdc |=3D JZ_LCD_OSDC_ALPHAEN;
->> +	regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
->> 	mutex_init(&priv->clk_mutex);
->> 	priv->clock_nb.notifier_call =3D ingenic_drm_update_pixclk;
->> @@ -1468,10 +1513,24 @@ static const struct jz_soc_info =
-jz4770_soc_info =3D {
->> 	.num_formats_f0 =3D ARRAY_SIZE(jz4770_formats_f0),
->> };
->> +static const struct jz_soc_info jz4780_soc_info =3D {
->> +	.needs_dev_clk =3D true,
->> +	.has_osd =3D true,
->> +	.has_alpha =3D true,
->> +	.use_extended_hwdesc =3D true,
->> +	.max_width =3D 4096,
->> +	.max_height =3D 2048,
->> +	.formats_f1 =3D jz4770_formats_f1,
->> +	.num_formats_f1 =3D ARRAY_SIZE(jz4770_formats_f1),
->> +	.formats_f0 =3D jz4770_formats_f0,
->> +	.num_formats_f0 =3D ARRAY_SIZE(jz4770_formats_f0),
->> +};
->> +
->> static const struct of_device_id ingenic_drm_of_match[] =3D {
->> 	{ .compatible =3D "ingenic,jz4740-lcd", .data =3D =
-&jz4740_soc_info },
->> 	{ .compatible =3D "ingenic,jz4725b-lcd", .data =3D =
-&jz4725b_soc_info },
->> 	{ .compatible =3D "ingenic,jz4770-lcd", .data =3D =
-&jz4770_soc_info },
->> +	{ .compatible =3D "ingenic,jz4780-lcd", .data =3D =
-&jz4780_soc_info },
->> 	{ /* sentinel */ },
->> };
->> MODULE_DEVICE_TABLE(of, ingenic_drm_of_match);
->> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm.h =
-b/drivers/gpu/drm/ingenic/ingenic-drm.h
->> index 22654ac1dde1c..cb1d09b625881 100644
->> --- a/drivers/gpu/drm/ingenic/ingenic-drm.h
->> +++ b/drivers/gpu/drm/ingenic/ingenic-drm.h
->> @@ -44,8 +44,11 @@
->> #define JZ_REG_LCD_XYP1				0x124
->> #define JZ_REG_LCD_SIZE0			0x128
->> #define JZ_REG_LCD_SIZE1			0x12c
->> +#define JZ_REG_LCD_PCFG				0x2c0
->> #define JZ_LCD_CFG_SLCD				BIT(31)
->> +#define JZ_LCD_CFG_DESCRIPTOR_8			BIT(28)
->> +#define JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN	BIT(25)
->> #define JZ_LCD_CFG_PS_DISABLE			BIT(23)
->> #define JZ_LCD_CFG_CLS_DISABLE			BIT(22)
->> #define JZ_LCD_CFG_SPL_DISABLE			BIT(21)
->> @@ -63,6 +66,7 @@
->> #define JZ_LCD_CFG_DE_ACTIVE_LOW		BIT(9)
->> #define JZ_LCD_CFG_VSYNC_ACTIVE_LOW		BIT(8)
->> #define JZ_LCD_CFG_18_BIT			BIT(7)
->> +#define JZ_LCD_CFG_24_BIT			BIT(6)
->> #define JZ_LCD_CFG_PDW				(BIT(5) | =
-BIT(4))
->> #define JZ_LCD_CFG_MODE_GENERIC_16BIT		0
->> @@ -132,6 +136,7 @@
->> #define JZ_LCD_CMD_SOF_IRQ			BIT(31)
->> #define JZ_LCD_CMD_EOF_IRQ			BIT(30)
->> #define JZ_LCD_CMD_ENABLE_PAL			BIT(28)
->> +#define JZ_LCD_CMD_FRM_ENABLE			BIT(26)
->> #define JZ_LCD_SYNC_MASK			0x3ff
->> @@ -153,6 +158,7 @@
->> #define JZ_LCD_RGBC_EVEN_BGR			(0x5 << 0)
->> #define JZ_LCD_OSDC_OSDEN			BIT(0)
->> +#define JZ_LCD_OSDC_ALPHAEN			BIT(2)
->> #define JZ_LCD_OSDC_F0EN			BIT(3)
->> #define JZ_LCD_OSDC_F1EN			BIT(4)
->> @@ -176,6 +182,38 @@
->> #define JZ_LCD_SIZE01_WIDTH_LSB			0
->> #define JZ_LCD_SIZE01_HEIGHT_LSB		16
->> +#define JZ_LCD_DESSIZE_ALPHA_OFFSET		24
->> +#define JZ_LCD_DESSIZE_HEIGHT_MASK		GENMASK(23, 12)
->> +#define JZ_LCD_DESSIZE_WIDTH_MASK		GENMASK(11, 0)
->> +
->> +#define JZ_LCD_CPOS_BPP_15_16			(4 << 27)
->> +#define JZ_LCD_CPOS_BPP_18_24			(5 << 27)
->> +#define JZ_LCD_CPOS_BPP_30			(7 << 27)
->> +#define JZ_LCD_CPOS_RGB555			BIT(30)
->> +#define JZ_LCD_CPOS_PREMULTIPLY_LCD		BIT(26)
->> +#define JZ_LCD_CPOS_COEFFICIENT_OFFSET		24
->> +#define JZ_LCD_CPOS_COEFFICIENT_0		0
->> +#define JZ_LCD_CPOS_COEFFICIENT_1		1
->> +#define JZ_LCD_CPOS_COEFFICIENT_ALPHA1		2
->> +#define JZ_LCD_CPOS_COEFFICIENT_1_ALPHA1	3
->> +
->> +#define JZ_LCD_RGBC_RGB_PADDING			BIT(15)
->> +#define JZ_LCD_RGBC_RGB_PADDING_FIRST		BIT(14)
->> +#define JZ_LCD_RGBC_422				BIT(8)
->> +#define JZ_LCD_RGBC_RGB_FORMAT_ENABLE		BIT(7)
->> +
->> +#define JZ_LCD_PCFG_PRI_MODE			BIT(31)
->> +#define JZ_LCD_PCFG_HP_BST_4			(0 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_8			(1 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_16			(2 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_32			(3 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_64			(4 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_16_CONT		(5 << 28)
->> +#define JZ_LCD_PCFG_HP_BST_DISABLE		(7 << 28)
->> +#define JZ_LCD_PCFG_THRESHOLD2_OFFSET		18
->> +#define JZ_LCD_PCFG_THRESHOLD1_OFFSET		9
->> +#define JZ_LCD_PCFG_THRESHOLD0_OFFSET		0
->> +
->> struct device;
->> struct drm_plane;
->> struct drm_plane_state;
->> --
->> 2.33.0
->=20
->=20
+Do you have any rationale for 64 values specifically? e.g. is that mostly for
+future extensibility? How many will we need for Arm's BRBE?
 
+Do those types fall into a hierarchy, that we could split across separate
+fields?
+
+> This also adds more generic branch types.
+
+This feels like ti should be in a separate/subsequent patch. If nothing else
+that aids bisectability if changing the size of the field breaks anything.
+
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  include/uapi/linux/perf_event.h       | 10 ++++++++--
+>  tools/include/uapi/linux/perf_event.h | 10 ++++++++--
+>  tools/perf/util/branch.c              |  8 +++++++-
+>  tools/perf/util/branch.h              |  4 ++--
+>  4 files changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+> index b91d0f575d0c..361fdc6b87a0 100644
+> --- a/include/uapi/linux/perf_event.h
+> +++ b/include/uapi/linux/perf_event.h
+> @@ -256,6 +256,12 @@ enum {
+>  	PERF_BR_FIQ		= 13,	/* fiq */
+>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+
+This is really unclear. What is "instruction debug" vs "data debug" ?
+
+Are there meant for breakpoint/watchpoint exceptions? HW breakpoints vs BRK
+instructions?
+
+> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+
+There are many other potential faults a CPU could take; are these specifically
+what Arm's BRBE provides?
+
+> +	PERF_BR_SERROR		= 21,	/* system error */
+
+This is really arm-specific; IIUC the closest thing on x86 is an MCE.
+
+>  	PERF_BR_MAX,
+>  };
+>  
+> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>  		in_tx:1,    /* in transaction */
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+> -		type:4,     /* branch type */
+> -		reserved:40;
+> +		type:6,     /* branch type */
+
+As above, is this a safe-change ABI-wise?
+
+Thanks,
+Mark.
+
+> +		reserved:38;
+>  };
+>  
+>  union perf_sample_weight {
+> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+> index 1882054e8684..9a82b8aaed93 100644
+> --- a/tools/include/uapi/linux/perf_event.h
+> +++ b/tools/include/uapi/linux/perf_event.h
+> @@ -256,6 +256,12 @@ enum {
+>  	PERF_BR_FIQ		= 13,	/* fiq */
+>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+> +	PERF_BR_SERROR		= 21,	/* system error */
+>  	PERF_BR_MAX,
+>  };
+>  
+> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>  		in_tx:1,    /* in transaction */
+>  		abort:1,    /* transaction abort */
+>  		cycles:16,  /* cycle count to last branch */
+> -		type:4,     /* branch type */
+> -		reserved:40;
+> +		type:6,     /* branch type */
+> +		reserved:38;
+>  };
+>  
+>  union perf_sample_weight {
+> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+> index 74e5e67b1779..1e216ea2e2a8 100644
+> --- a/tools/perf/util/branch.c
+> +++ b/tools/perf/util/branch.c
+> @@ -54,7 +54,13 @@ const char *branch_type_name(int type)
+>  		"IRQ",
+>  		"FIQ",
+>  		"DEBUG_HALT",
+> -		"DEBUG_EXIT"
+> +		"DEBUG_EXIT",
+> +		"DEBUG_INST",
+> +		"DEBUG_DATA",
+> +		"FAULT_ALGN",
+> +		"FAULT_DATA",
+> +		"FAULT_INST",
+> +		"SERROR"
+>  	};
+>  
+>  	if (type >= 0 && type < PERF_BR_MAX)
+> diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
+> index 17b2ccc61094..875d99abdc36 100644
+> --- a/tools/perf/util/branch.h
+> +++ b/tools/perf/util/branch.h
+> @@ -23,8 +23,8 @@ struct branch_flags {
+>  			u64 in_tx:1;
+>  			u64 abort:1;
+>  			u64 cycles:16;
+> -			u64 type:4;
+> -			u64 reserved:40;
+> +			u64 type:6;
+> +			u64 reserved:38;
+>  		};
+>  	};
+>  };
+> -- 
+> 2.25.1
+> 

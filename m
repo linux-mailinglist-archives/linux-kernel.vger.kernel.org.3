@@ -2,171 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F234A79C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603CC4A79C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbiBBUwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
+        id S1347309AbiBBUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347251AbiBBUwD (ORCPT
+        with ESMTP id S1347294AbiBBUxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:52:03 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4802C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:52:02 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id y17so289651plg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:52:02 -0800 (PST)
+        Wed, 2 Feb 2022 15:53:25 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EA7C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:53:24 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id c3so301620pls.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:53:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=cPEMedQu4jTNYHJmp71olOjxDB0xRf7+fA/WfqhgIVA=;
-        b=EAlOPLnqtqVr6UWoSRQCQiil8xtekqy0ucrjftpEPAugnwRJaCgExC22zDJ3dLa32p
-         IEtN7Zr25QITv0r/g5zMyAkjB0tErkFPXm8iUVah6oF4t6y9SojxveFQX8MkNVFtbGkl
-         Y02gvbpZvq4nfuJCQ6hoiWRRvdk4dxnYiQ4EI=
+        bh=ETnKDeiOpwbtdI5wfgwyS9AlH6EKFDBz28cAyBq176w=;
+        b=Z8n6/iQ6Ng/iumDQGn5Zu/vWC5/7pLHgLzDZnJkpoNCssZHWsOx9eC6Sb1V2fJCNzQ
+         6/0govRNCPerrev9lxboz2wl/wAoCyKRc90QsEnQWwXUMfCVwjCe3hu60jurrl1OatSt
+         3NHG35dR73JSUUn6+43aaOaaymCDSFhkt6Gks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=cPEMedQu4jTNYHJmp71olOjxDB0xRf7+fA/WfqhgIVA=;
-        b=JzbIIu3F/7dI0VqEsLEnVM0A6vyVvIxU+terYF2zXfffVVKMpnNaCkKCPkPTqnwktH
-         G/SQHwCWdVwa5kkylS3HUPNhcDBd7MEHWDUkT8m543kRdvS1eqW8uU3nP/p338idIgjL
-         EmUHoTi56hEuCC5fNF0J7GakNv9rO4DO31gP9Z4fZo+pUw2V851kATFmPXEd7JeLAjXO
-         rG+675qCORWipmLIxAPie3TRk4XufsPPrOUEnPznvQamBVlMchHaHamJc1ZoXq35D+EH
-         6pg7k+gbP91b2J02wJ0HtgocAesAbq8GvswbPc+a9iXHZGr4KvgANpE0jOX/daUja9FR
-         8SLg==
-X-Gm-Message-State: AOAM531pdzqBGppBHtOUQ6WOTozMsoCtQVIfpDfKKsTmLAtMa/eOOAnN
-        FrcpypH5aKHA2gBdivWjv01c1IX/B4Flmw==
-X-Google-Smtp-Source: ABdhPJxdd9YfV7EbD3xvSuaZUXxBX9DB7g4c3W3Ag1C9zKX/pGzoQSAo0PKxahuKofQSPv3t073cQw==
-X-Received: by 2002:a17:902:d64a:: with SMTP id y10mr18742283plh.66.1643835121970;
-        Wed, 02 Feb 2022 12:52:01 -0800 (PST)
+        bh=ETnKDeiOpwbtdI5wfgwyS9AlH6EKFDBz28cAyBq176w=;
+        b=pWmLI5I7a/b1T3avPeprKymzZ4YTBZRL7cXu5bPP1M1eU0RnX0GnMqSXdCTwqvMGpH
+         TImYbiWMPe5Pduq5RhEmwqs3yFROrgdQpT95RozzFGdD7woW4otwL2/VwHnsHW+YOub2
+         CBI+5KAj3FLZbfiqOR/XwRYL4TS0oSOcRT5lezddjJ0Isrm8OmjIg9yBHtuvdCw4ir49
+         9946qMZrX26/Ao+i6Wo0wMOYam0bNV4I38W/V+pRpkXvQGBjKzRriUx2bGJVKEXtVOdu
+         M5yfsMtw8QiT0/7SO8GMC+0VD6JJgqji4bxhgpEesLfYaJiDOoMy2Y7EnG2RjJwiO23d
+         B60g==
+X-Gm-Message-State: AOAM533/szxBMJpCchNoPRr4tBFFA6EtAMRyuMyZZfRdUUXl/yHo7dm+
+        cr2OP4Iz8YhZg6TnAR1sQUvRaPtdzsvhlQ==
+X-Google-Smtp-Source: ABdhPJysBLPSxyD4Zj/4RBqUVky3ecL5kEsRiYnlSK96emSeDBQdAUZPYWpHfccyeJDtLUzp7z6b/Q==
+X-Received: by 2002:a17:90b:1912:: with SMTP id mp18mr10098907pjb.152.1643835204425;
+        Wed, 02 Feb 2022 12:53:24 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f16sm28486385pfa.147.2022.02.02.12.52.01
+        by smtp.gmail.com with ESMTPSA id p22sm24518460pfw.139.2022.02.02.12.53.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 12:52:01 -0800 (PST)
-Date:   Wed, 2 Feb 2022 12:52:00 -0800
+        Wed, 02 Feb 2022 12:53:24 -0800 (PST)
+Date:   Wed, 2 Feb 2022 12:53:23 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <202202021237.487D3DE73@keescook>
-References: <20220130183653.491292-1-keescook@chromium.org>
- <20220202160149.GA2322037@roeck-us.net>
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] include: drop pointless __compiler_offsetof indirection
+Message-ID: <202202021253.B62C357@keescook>
+References: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202160149.GA2322037@roeck-us.net>
+In-Reply-To: <20220202102147.326672-1-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 08:01:49AM -0800, Guenter Roeck wrote:
-> On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
-> > Add a simple test for strlen() functionality, including using it as a
-> > constant expression.
-> > 
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: Peter Rosin <peda@axentia.se>
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> > I'll be taking this as part of my Clang FORTIFY_SOURCE series.
-> > ---
-> >  lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> > 
-> > diff --git a/lib/test_string.c b/lib/test_string.c
-> > index 9dfd6f52de92..59994f552c48 100644
-> > --- a/lib/test_string.c
-> > +++ b/lib/test_string.c
-> > @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
-> >  	return 0;
-> >  }
-> >  
-> > +/*
-> > + * Unlike many other string functions, strlen() can be used in
-> > + * static initializers when string lengths are known at compile
-> > + * time. (i.e. Under these conditions, strlen() is a constant
-> > + * expression.) Make sure it can be used this way.
-> > + */
-> > +static const int strlen_ce = strlen("tada, a constant expression");
-> > +
+On Wed, Feb 02, 2022 at 11:21:47AM +0100, Rasmus Villemoes wrote:
+> (1) compiler_types.h is unconditionally included via an -include
+> flag (see scripts/Makefile.lib), and it defines __compiler_offsetof
+> unconditionally. So testing for definedness of __compiler_offsetof is
+> mostly pointless.
 > 
-> This results in:
+> (2) Every relevant compiler provides __builtin_offsetof (even sparse
+> has had that for 14 years), and if for whatever reason one would end
+> up picking up the poor man's fallback definition (C file compiler with
+> completely custom CFLAGS?), newer clang versions won't treat the
+> result as an Integer Constant Expression, so if used in place where
+> such is required (static initializer or static_assert), one would
+> get errors like
 > 
-> lib/test_string.c:188:30: error: initializer element is not constant
->   188 | static const int strlen_ce = strlen("tada, a constant expression");
+> t.c:11:16: error: static_assert expression is not an integral constant expression
+> t.c:11:16: note: cast that performs the conversions of a reinterpret_cast is not allowed in a constant expression
+> t.c:4:33: note: expanded from macro 'offsetof'
+> #define offsetof(TYPE, MEMBER)  ((size_t)&((TYPE *)0)->MEMBER)
 > 
-> for several of my tests. I don't think you can mandate that a compiler
-> implements this.
-
-Which tests?
-
-This property of strlen() is already required by our builds (this is how
-I tripped over it). For example:
-
-drivers/firmware/xilinx/zynqmp-debug.c:
-
-#define PM_API(id)               {id, #id, strlen(#id)}
-static struct pm_api_info pm_api_list[] = {
-        PM_API(PM_GET_API_VERSION),
-        PM_API(PM_QUERY_DATA),
-};
-
-
-
+> So just define offsetof unconditionally and directly in terms of
+> __builtin_offsetof.
 > 
-> Guenter
-> 
-> > +static __init int strlen_selftest(void)
-> > +{
-> > +	/* String length ruler:         123456789012345 */
-> > +	static const char normal[]   = "I am normal";
-> > +	static const char *ptr       = "where do I go?";
-> > +	static const char trailing[] = "hidden NULLs\0\0\0";
-> > +	static const char leading[]  = "\0\0hidden text";
-> > +
-> > +	if (strlen(normal) != 11)
-> > +		return 0x100001;
-> > +	if (strlen(ptr++) != 14)
-> > +		return 0x100002;
-> > +	if (strlen(ptr++) != 13)
-> > +		return 0x100003;
-> > +	if (strlen(trailing) != 12)
-> > +		return 0x100004;
-> > +	if (strlen(leading) != 0)
-> > +		return 0x100005;
-> > +	if (strlen_ce != 27)
-> > +		return 0x100006;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static __exit void string_selftest_remove(void)
-> >  {
-> >  }
-> > @@ -212,6 +244,11 @@ static __init int string_selftest_init(void)
-> >  	if (subtest)
-> >  		goto fail;
-> >  
-> > +	test = 5;
-> > +	subtest = strlen_selftest();
-> > +	if (subtest)
-> > +		goto fail;
-> > +
-> >  	pr_info("String selftests succeeded\n");
-> >  	return 0;
-> >  fail:
-> > -- 
-> > 2.30.2
-> > 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+
+Yes please. :)
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook

@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033434A7B50
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E6C4A7B65
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347960AbiBBWxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S241089AbiBBXB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236831AbiBBWx3 (ORCPT
+        with ESMTP id S233672AbiBBXBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:53:29 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4408C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:53:29 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id x3so575193pll.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:53:29 -0800 (PST)
+        Wed, 2 Feb 2022 18:01:25 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8C6C061714;
+        Wed,  2 Feb 2022 15:01:25 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id d188so1005341iof.7;
+        Wed, 02 Feb 2022 15:01:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rPOGjmoDh+fnvSCSK8zT1oohl04D24duwddzgIk3nEI=;
-        b=DSgFXePcmMMfWdOEhQeZbRpAjykr8OqvlykT3vCxMLBrsZRkn86Hvb81D++0cC2O7P
-         eaiNtWAwguoFP7szwvwShBZmO2pc9mHzce2wim2ngtRcdJkVeEeL4U4vUYdUSyZ7DMmZ
-         vroJKfx3Nnfi/kZ93LGkWU1daDD1zrRjLqRAc=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BQ6YlbcUeFT4O0Nhx5T4/GpxgiCqtz3B2qSA3LJqXC0=;
+        b=H5gnVwBgv0BQwl4PVZ6+7lRxMM7lzcosf6ft80+GoLc8IqEgezcDKymg3+1w5bd+6m
+         kI2P/av2BwDlilA6ZqhHThlM3med9Z7q2KwXc7/Nna01L/wxXC24he6Jm7PbfuWvsIqs
+         M3E/i1RRtg/hBlNFvZvOxlzJ6AQTuViO4T/ajceDT6gDB3UuPfnhbHj3IrV6pIFeH4Yo
+         ivgw5XzMsaQLzEsLxeaozAZxbUzpw78ML2SUGhngwzzWGUCMrzp6yArxJyExZhBMs3ib
+         7TJ3UjapkIxoveDi7L4Wja1ziyg7kicui7Le+ylVdNsTYsATrzs+2eAo1+ZXQhEkBvZD
+         s3Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rPOGjmoDh+fnvSCSK8zT1oohl04D24duwddzgIk3nEI=;
-        b=tlZj2ojkALz9aP4ul5Ze0rLf3oukrrdYd+XFhXXVe9pV/YrvHA2dWg+FGTc09hYOZe
-         Zsj+iIRvXSc1o+EdhNRWahwwm++B5wQ+fp1US//OMuqyiuUEySSOTFrdMojpQl+raLX5
-         B02Jow8+Pmz9Y06y6SVN1kco1yaYd1QQk3R+W05IYtiemcfva74jIpSSPh/XB0/5K4PT
-         roHxtFHd7ZFkZ2SfEveMZnvSvSofAAn6xDdci8O50C6PbwBwnDrei6P9St61pFsFXpWP
-         PHh5hEnFzZQmDKhLEWwWOhOA33cbG6a8041bdWt4ooN8UjN2cybQkDGCUyniAdIvc/qA
-         zs6A==
-X-Gm-Message-State: AOAM530Xo7oTisVlOYFyQjoyVs/RRWM0zkmwtu8muErhQ6QKYXGXGPYG
-        9STtf1aOnWd9uNI52ee9iHULog==
-X-Google-Smtp-Source: ABdhPJy46YbgYX/2Q0sy9QYIAZD2Glw5/E490qFkjT5TsETXWbOxhTpw8AgDHSKiaI572HENl1BfAQ==
-X-Received: by 2002:a17:902:ec8a:: with SMTP id x10mr32767661plg.107.1643842409322;
-        Wed, 02 Feb 2022 14:53:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y18sm24093086pgh.67.2022.02.02.14.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 14:53:29 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] m68k: cmpxchg: Dereference matching size
-Date:   Wed,  2 Feb 2022 14:53:27 -0800
-Message-Id: <20220202225327.1544295-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BQ6YlbcUeFT4O0Nhx5T4/GpxgiCqtz3B2qSA3LJqXC0=;
+        b=LJnTA56T+lrI25WvyHQhmxjqQc95GRp7CLLnqOIPqAKi4KYr20jrPe/hwb5qtT4SEz
+         vQnImsTq0/Hx4fCXEQxj2iUEoOy3spwQvTALUKQ4/tQsq9CPQlGYKH7zafqFvBMBtYut
+         wGdFEk6cjCTloT961iKyAkZJpYnYLhjJjPQztOgud30q2Z4YYKi0I4YSOgBgnGnh6048
+         2bo6JGIAr2wN0kLQPGRD/1JQvFyUStfbYXjY6RTNCbmQZRHTyFdM0yJ9IGWcJb5A3TFU
+         rQNb1ROZQYaUbZSXseS61ZOR2/kLpsDUMP9RuVj4/GRe75SCoQWgqaQttv8X7O3vUyDx
+         mAWQ==
+X-Gm-Message-State: AOAM531t1Gl5/dAgsQnALnjgf4DgjXYnwThikk4akBR++L+TAxNZ1XQx
+        mV/RNifPtCvbXzAWxQCmx0t1CXLp5K3unwPf0HM=
+X-Google-Smtp-Source: ABdhPJyzifSWutAPofCeunWEFMCxCCtEpD6jJ8xxmWnsmNAA7l8ym/NPzWQVAFa5k0qyW4OKknY4JeOlfFTBVC7OnvE=
+X-Received: by 2002:a05:6638:4105:: with SMTP id ay5mr16910109jab.186.1643842884934;
+ Wed, 02 Feb 2022 15:01:24 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2399; h=from:subject; bh=NU7D+OEXrcXgfft/7RjJlfx2jx9vXFgzFYyD/JEV3D8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh+wtm8ge1jg+Y66KWK4NHs6Y8l51oU5IKktstmzgP 8aFbX3CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfsLZgAKCRCJcvTf3G3AJo54EA CcDIB/M3H+2sLSu4vwe7wzdgtnDCvYBViuTWvKj9z6jyF+/0bEwDwZtCByZtayJmHpkrULNUlR7ge5 sJeji6qeS9CF1nEDQ0KUUeQ+qc66CSWudWduR8j7w/di4TG4AW09Tqlrvkm5/MCNw68uKjR+43iHRf 2INuy6H/p6OWXhgrp4XUQPpyZc+VxSGDp0nRJrZNTKYl454nCfljSzi7jwNVMG7W5Hvqk1Lt5txAr4 Mg11KaGr5xQ/TeOlpcXRnMHEXYpvRecdV0zBiWx1OW3FznjNcgKVWInxf03Fi9wD6GDnmjvOItrNOf HPQKlGbHXbsE2MQQGKrsmW9gys8j8L0wVNOH8dBfhA54Nk+5JDxEmsXKQPCgxuaI5I8VMkKRSbxQjZ 01Rjh+YCTTeebOq1ByPU1by4zI0OKihA1QVv/cPBcgQ7Ja7YKL4yaAf5W1HtmyOz1aV1wnscX1gRpr SAXKlyva9J/EzaQC5gIT+C6jfsX/IGvKWUE691IQGNMzPN/PNJeSWSjbpcbDdbmZN+MMNZEXN5uFAR 1AoQab4fNBAKcrRRPBQnonpliW33MWJ2gZmVre8aQXIy1BbcSUmAQ27qGC5/R7p9KyVIkDhCNtyyct wfDsT4TpBTKUjnXdfGTVOck+cQVJELGXZwGm8cB30kwnD5e6KiAubfaXqt6A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20220131204357.1133674-1-keescook@chromium.org>
+ <6641e01b86374ce197020d57c65ae3b3@AcuMS.aculab.com> <CANiq72neVsdLRyLn24avMhLCaHxMEiG0bD-ZkG46O7J29FanYA@mail.gmail.com>
+ <6d75ee32e7c3415ebcfa12e61d26aa87@AcuMS.aculab.com>
+In-Reply-To: <6d75ee32e7c3415ebcfa12e61d26aa87@AcuMS.aculab.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 3 Feb 2022 00:01:14 +0100
+Message-ID: <CANiq72nep38_aFpUNc5C3Po_AKmuiogqvzc_pJgvixJqy9POwg@mail.gmail.com>
+Subject: Re: [PATCH] linux/const.h: Explain how __is_constexpr() works
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the recent arm64 fix[1], avoid overly wide casts in the cmpxchg
-implementation. Avoid this warning under -Warray-bounds with GCC 11:
+On Wed, Feb 2, 2022 at 11:20 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> The type of the result depends on the type of the 2nd and 3rd arguments.
+> Not on the value of the first one.
 
-net/sched/cls_tcindex.c: In function 'tcindex_set_parms':
-./arch/m68k/include/asm/cmpxchg.h:64:17: warning: array subscript 'volatile struct __xchg_dummy[0]' is partly outside array bounds of 'struct tcf_result[1]' [-Warray-bounds]
-   64 |                 __asm__ __volatile__
-      |                 ^~~~~~~
-net/sched/cls_tcindex.c:338:27: note: while referencing 'cr'
-  338 |         struct tcf_result cr = {};
-      |                           ^~
+I am not talking about the first operand. The behavior of the
+conditional operator has a few cases. Since you mentioned promotions,
+it looked like you were thinking about what happens for the arithmetic
+types case, i.e.
 
-No binary output differences are seen from this change.
+"""If both the second and third operands have arithmetic type, the
+result type that would be determined by the usual arithmetic
+conversions, were they applied to those two operands, is the type of
+the result."""
 
-[1] commit 3364c6ce23c6 ("arm64: atomics: lse: Dereference matching size")
+which could lead to thinking that the expressions need to have the
+same type as you mentioned, but that is not true, and the arithmetic
+types case is not used in the macro either. The cases used are the
+null pointer constant vs. pointer and the pointer to void vs. pointer
+to object type.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/m68k/include/asm/cmpxchg.h | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> It has nothing to with the condition, the compiler is trying to 'sort out'
+> a suitable return type.
+>
+> I suspect the mismatched pointer types might even be a gcc extension.
 
-diff --git a/arch/m68k/include/asm/cmpxchg.h b/arch/m68k/include/asm/cmpxchg.h
-index e8ca4b0ccefa..6cf464cdab06 100644
---- a/arch/m68k/include/asm/cmpxchg.h
-+++ b/arch/m68k/include/asm/cmpxchg.h
-@@ -4,8 +4,7 @@
- 
- #include <linux/irqflags.h>
- 
--struct __xchg_dummy { unsigned long a[100]; };
--#define __xg(x) ((volatile struct __xchg_dummy *)(x))
-+#define __xg(type, x) ((volatile type *)(x))
- 
- extern unsigned long __invalid_xchg_size(unsigned long, volatile void *, int);
- 
-@@ -50,7 +49,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
- 			 "1:\n\t"
- 			 "casb %0,%1,%2\n\t"
- 			 "jne 1b"
--			 : "=&d" (x) : "d" (x), "m" (*__xg(ptr)) : "memory");
-+			 : "=&d" (x) : "d" (x), "m" (*__xg(u8, ptr)) : "memory");
- 		break;
- 	case 2:
- 		__asm__ __volatile__
-@@ -58,7 +57,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
- 			 "1:\n\t"
- 			 "casw %0,%1,%2\n\t"
- 			 "jne 1b"
--			 : "=&d" (x) : "d" (x), "m" (*__xg(ptr)) : "memory");
-+			 : "=&d" (x) : "d" (x), "m" (*__xg(u16, ptr)) : "memory");
- 		break;
- 	case 4:
- 		__asm__ __volatile__
-@@ -66,7 +65,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
- 			 "1:\n\t"
- 			 "casl %0,%1,%2\n\t"
- 			 "jne 1b"
--			 : "=&d" (x) : "d" (x), "m" (*__xg(ptr)) : "memory");
-+			 : "=&d" (x) : "d" (x), "m" (*__xg(u32, ptr)) : "memory");
- 		break;
- 	default:
- 		x = __invalid_xchg_size(x, ptr, size);
--- 
-2.30.2
+That is why I said it does not fit the constraints of the operator.
+The standard does not describe what happens in such a case.
 
+Cheers,
+Miguel

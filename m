@@ -2,217 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C11C4A7B72
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF514A7B77
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347996AbiBBXGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:06:02 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:37044 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbiBBXGB (ORCPT
+        id S1348001AbiBBXG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:06:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58304 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234207AbiBBXG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:06:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643843160; x=1675379160;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NGAPUIaEsO3aMi4Qi5/6U7okQHSqH+e13bpfc7DdLHM=;
-  b=qDg8C9Ko+x7QG3HsjqR12qyYfM1qFCSN9YK5L3b4zRfoA3OQHbUDtFFH
-   LFySib4QFePKK44oVqNBOoowz5qkptH8ngQQ5qfQyzyNl6fcPO3Jt2urb
-   +xov7r6ezqdKFBe7OPR0157Bd1btoI2kCBj4KdVX8Bj/oK32blbF0UpxF
-   A1PnLixXdZ7n6rChesflFYIC2lw0xSlJDt0qInQCX1XwH7lMuWNyz0kJg
-   m+VJvTh3lDUGRp/KT1r7bega9VDC1l1ybUT1cHKfEbSg2U+kVBB+ArzgC
-   5YVR3tGLnUQQCoRzCkhJcqTitVJ4mVFEOc0dd6mOUX3JyRqkr3TfQ1q1d
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,338,1635177600"; 
-   d="scan'208";a="303919051"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Feb 2022 07:06:00 +0800
-IronPort-SDR: w3rITx7u64h9l7Gs0DxFQOWSJ66YqBkKyhQY9NdiSLQ+eDQH9mznLldinTDscQpRVaMKZQ5igL
- zBy35UN7Fop2njsGuivoFAKtOJdL6OT6B90+XjrblRRx4qmrUJgtjmJy2A1P8LJPl68v7irSKm
- Z6T03Md8PgMqKekNOuu6+VfxV0HDHdX45BbtBAppRjMa2cy7v+tR8bhRMUrybgR0d7BEA4EsbS
- h9XrVV8OpKNL6sy1DdVbysHCxN8IZOAMGo0ilRUIkBMVRfzyR1aQcZ7mRYZFirTsucPX9bSm3F
- tyxUJ4NOyllljvh3JAKMmeKH
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 14:37:56 -0800
-IronPort-SDR: ftyKrt3ILxfzb2UOfu3Akc9JANp53aYr75j57tII6FjRZqNVF4NpgVsg14B2Ip7jY7EmsAyyqm
- KPL0PDcAXaec80Bg8kyir9HxQJd6B7TrdhVRzrChMLc7AkO5E+uPg0xW9STqE4CFiJz13W/XFg
- XgOrnRrGFX2TcP/PFkhMoF1rzrlx0fg2Ex2ppRBojKqaGFTmOSvAbMxH9dqvVMB0W/4dqSls5V
- hhMmFdj/rspdXkra/17GgiLCBg/Iffj5S8GtvoLhmMYfpxZbha4irQnqIJt7ZfEIut9iOTPC5p
- iWE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 15:06:00 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jpy8S2h6Kz1SHwl
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:06:00 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643843160; x=1646435161; bh=NGAPUIaEsO3aMi4Qi5/6U7okQHSqH+e13bp
-        fc7DdLHM=; b=DmwBwvL8JdQwxqr+0u5QQHfL1N/bm1iaCFzl/t6TFW4LhOvYZje
-        sEOXYMYtMt28Qs9HnKtfjz/w3x0JJ5fFQa4klOFR7GpClrDJefY+QtDxPPqrQFAp
-        oCGWkjrWimfSgUrGk5UbI5uloqp7dAzRnTsxmAlMLSOBtiRRZhAM6jUW6rPff+J7
-        Ej7k6KbYnV5/xizXYRurm2I7eMtgDPlHAAh+DcO//H85JuQ2siPcJiWU9MW9HwLf
-        My5fC3ciN74wROLaApDcWMsHapuF2TABsLVK7/zuHGJ2EwefyUnK9tZfLwL4y1i8
-        JSXJZk8oNd3jCm0ZiTdDtr0JwNWNGu5vzNQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QzpI0JePljn4 for <linux-kernel@vger.kernel.org>;
-        Wed,  2 Feb 2022 15:06:00 -0800 (PST)
-Received: from [10.225.163.63] (unknown [10.225.163.63])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jpy8R2fB7z1Rwrw;
-        Wed,  2 Feb 2022 15:05:59 -0800 (PST)
-Message-ID: <4c3df325-dc9f-5eed-5585-7d2e5203b65f@opensource.wdc.com>
-Date:   Thu, 3 Feb 2022 08:05:57 +0900
+        Wed, 2 Feb 2022 18:06:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643843216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=srHq4RerCPcuK2/I9lWBI5nczQqLUr4zYMys9nonwW0=;
+        b=ANHHMEoEt4kme7PJSzZBjj3biAAgFIaNGmWaDG62aj49RUPavtiX6235XGQ+nM/Ujpq3L/
+        rIfzsl9T9wEBizsO/qTCKd+8YrhVswQpFyCxekSzqghzOobv74asghUS6tWYHam7OdDaIt
+        YqWDL/Yz3GlXUlf2bzJ/WHdnPYpJl2k=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-i09LabvbO1eil30Q4Q1CrA-1; Wed, 02 Feb 2022 18:06:55 -0500
+X-MC-Unique: i09LabvbO1eil30Q4Q1CrA-1
+Received: by mail-qv1-f71.google.com with SMTP id u15-20020a0cec8f000000b00425d89d8be0so902975qvo.20
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:06:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=srHq4RerCPcuK2/I9lWBI5nczQqLUr4zYMys9nonwW0=;
+        b=5XvO2jFSAHiS8Fwtd7ksl6vHtZNVLqF/yKaKHumh++lF6KbGidmNYoDIZLzUi/b0vS
+         fvINYpBaI1+y0NDWSgIBdIXoWoNx4uupidwuoABKtAMqNq73XlhO/lOtQIDBplgM3mCn
+         I7ycae+iMmJEWQoYso6KCXtyqcBFuzJJ6CxclbII/40wZEOFgFWsEbjJEFrU6mqPyQe6
+         JegJn2INF0SmZCrie72RxXj/Ua8jzdGh8cskltctBaMt3bPTjFd/5PLxVJ4n8yM+SDcC
+         a4kFZw6rEhPL61OqjXbHQ+1zZ0VLD1CM62Ugys6NJfpu3Hen/B6xbKB4dR/FjxQs3zKW
+         iR3Q==
+X-Gm-Message-State: AOAM531TgZP5dUULOIy5DS15dKdD3BkV1AgIXaRrfX9M77cqfwarf8S4
+        G154egrVFAGTheeeUK9fWybc2EiaLgRdM17/7p3B6p9p/+lgoN8tKM/FXpnGQvB8X+y9R7DxAY9
+        F4eU8epKkNDgiI5U9jlJhbLRH
+X-Received: by 2002:a05:622a:144a:: with SMTP id v10mr16612648qtx.350.1643843214561;
+        Wed, 02 Feb 2022 15:06:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwhd9wQP9nLOoPNf+zPu0Q9gF2MAe960omGhUqE/PcrJrAiip/p0+OPiu1a41WQoa5ljwp9Zg==
+X-Received: by 2002:a05:622a:144a:: with SMTP id v10mr16612625qtx.350.1643843214253;
+        Wed, 02 Feb 2022 15:06:54 -0800 (PST)
+Received: from optiplex-fbsd (c-73-182-255-193.hsd1.nh.comcast.net. [73.182.255.193])
+        by smtp.gmail.com with ESMTPSA id h7sm3106143qtb.27.2022.02.02.15.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 15:06:53 -0800 (PST)
+Date:   Wed, 2 Feb 2022 18:06:51 -0500
+From:   Rafael Aquini <aquini@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>
+Subject: Re: [PATCH v4 0/4] mm/page_owner: Extend page_owner to show memcg
+ information
+Message-ID: <YfsOi38nXkyCrYam@optiplex-fbsd>
+References: <20220131192308.608837-5-longman@redhat.com>
+ <20220202203036.744010-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell
- 88SE9235
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
- <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
- <1378dd0a-52d2-c998-5713-e6875c601194@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1378dd0a-52d2-c998-5713-e6875c601194@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202203036.744010-1-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 23:29, Paul Menzel wrote:
-> Dear Damien,
->=20
->=20
-> Am 02.02.22 um 09:14 schrieb Damien Le Moal:
->> On 2/1/22 16:12, Paul Menzel wrote:
->>> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
->>> not needed for the Marvell 88SE9235.
->>>
->>>      $ lspci -nn -s 0021:0e:00.0
->>>      0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Lt=
-d. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11=
-)
->>>
->>> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
->>>
->>> Currently, without this patch (with 200 ms delay), device probe for a=
-ta1
->>> takes 485 ms:
->>>
->>>      [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3fe881000100 irq 39
->>>      [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3fe881000180 irq 39
->>>      [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3fe881000200 irq 39
->>>      [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3fe881000280 irq 39
->>>      [=E2=80=A6]
->>>      [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
->>>      [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
->>>      [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl=
- 300)
->>>      [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00L=
-Y265IBM, BE33, max UDMA/133
->>>      [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
-depth 32), AA
->>>      [    3.841796] ata2.00: configured for UDMA/133
->>>      [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl=
- 300)
->>>      [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00L=
-Y265IBM, BE33, max UDMA/133
->>>      [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
-depth 32), AA
->>>      [    3.846043] ata1.00: configured for UDMA/133
->>>
->>> With this patch (no delay) device probe for ata1 takes 273 ms:
->>>
->>>      [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3f e881000100 irq 39
->>>      [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3f e881000180 irq 39
->>>      [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3f e881000200 irq 39
->>>      [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000=
- port 0x3f e881000280 irq 39
->>>      [=E2=80=A6]
->>>      [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
->>>      [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
->>>      [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl=
- 300)
->>>      [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl=
- 300)
->>>      [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00L=
-Y265IBM, BE33, max UDMA/133
->>>      [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00L=
-Y265IBM, BE33, max UDMA/133
->>>      [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
-depth 32), AA
->>>      [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (=
-depth 32), AA
->>>      [    3.900070] ata1.00: configured for UDMA/133
->>>      [    3.900166] ata2.00: configured for UDMA/133
->>>
->>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->>> ---
->>> v2: address comments for commit message (but forgot v2 tag)
->>> v3: resend with v3 tag in subject line/commit message summary
->>>
->>>   drivers/ata/ahci.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
->>> index ab5811ef5a53..edca4e8fd44e 100644
->>> --- a/drivers/ata/ahci.c
->>> +++ b/drivers/ata/ahci.c
->>> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] =
-=3D {
->>>   	  .driver_data =3D board_ahci_yes_fbs },
->>>   	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
->>>   	  .driver_data =3D board_ahci_yes_fbs },
->>> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
->>> +	  .driver_data =3D board_ahci_no_debounce_delay },
->>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 6=
-42L */
->>>   	  .driver_data =3D board_ahci_yes_fbs },
->>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 6=
-44L */
->>
->> Applied to for-5.18 with commit title and message changes. The title i=
-s now:
->>
->> ata: ahci: Add support for Marvell 88SE9235 adapter
->>
->> Since it is exactly what this patch is doing by adding a PCI ID.
->=20
-> Thank you for applying the patch. I saw the summary/title change also=20
-> with the other patch. I am sorry, but I totally disagree. Reading that=20
-> summary/title in `git log --oneline`, it=E2=80=99s not clear at all, wh=
-at the=20
-> patch does, and the full description or diff has to be read. =E2=80=9CA=
-dd=20
-> support=E2=80=9D for me means, that it was unsupported before, which is=
- not true=20
-> at all as the defaults were used.
+On Wed, Feb 02, 2022 at 03:30:32PM -0500, Waiman Long wrote:
+>  v4:
+>   - Take rcu_read_lock() when memcg is being accessed as suggested by
+>     Michal.
+>   - Make print_page_owner_memcg() return the new offset into the buffer
+>     and put CONFIG_MEMCG block inside as suggested by Mike.
+>   - Directly use TASK_COMM_LEN as length of name buffer as suggested by
+>     Roman.
+> 
+>  v3:
+>   - Add unlikely() to patch 1 and clarify that -1 will not be returned.
+>   - Use a helper function to print out memcg information in patch 3.
+>   - Add a new patch 4 to store task command name in page_owner
+>     structure.
+> 
+>  v2:
+>   - Remove the SNPRINTF() macro as suggested by Ira and use scnprintf()
+>     instead to remove some buffer overrun checks.
+>   - Add a patch to optimize vscnprintf with a size parameter of 0.
+> 
+> While debugging the constant increase in percpu memory consumption on
+> a system that spawned large number of containers, it was found that a
+> lot of offline mem_cgroup structures remained in place without being
+> freed. Further investigation indicated that those mem_cgroup structures
+> were pinned by some pages.
+> 
+> In order to find out what those pages are, the existing page_owner
+> debugging tool is extended to show memory cgroup information and whether
+> those memcgs are offline or not. With the enhanced page_owner tool,
+> the following is a typical page that pinned the mem_cgroup structure
+> in my test case:
+> 
+> Page allocated via order 0, mask 0x1100cca(GFP_HIGHUSER_MOVABLE), pid 162970 (podman), ts 1097761405537 ns, free_ts 1097760838089 ns
+> PFN 1925700 type Movable Block 3761 type Movable Flags 0x17ffffc00c001c(uptodate|dirty|lru|reclaim|swapbacked|node=0|zone=2|lastcpupid=0x1fffff)
+>  prep_new_page+0xac/0xe0
+>  get_page_from_freelist+0x1327/0x14d0
+>  __alloc_pages+0x191/0x340
+>  alloc_pages_vma+0x84/0x250
+>  shmem_alloc_page+0x3f/0x90
+>  shmem_alloc_and_acct_page+0x76/0x1c0
+>  shmem_getpage_gfp+0x281/0x940
+>  shmem_write_begin+0x36/0xe0
+>  generic_perform_write+0xed/0x1d0
+>  __generic_file_write_iter+0xdc/0x1b0
+>  generic_file_write_iter+0x5d/0xb0
+>  new_sync_write+0x11f/0x1b0
+>  vfs_write+0x1ba/0x2a0
+>  ksys_write+0x59/0xd0
+>  do_syscall_64+0x37/0x80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> Charged to offline memcg libpod-conmon-15e4f9c758422306b73b2dd99f9d50a5ea53cbb16b4a13a2c2308a4253cc0ec8.
+> 
+> So the page was not freed because it was part of a shmem segment. That
+> is useful information that can help users to diagnose similar problems.
+> 
+> With cgroup v1, /proc/cgroups can be read to find out the total number
+> of memory cgroups (online + offline). With cgroup v2, the cgroup.stat of
+> the root cgroup can be read to find the number of dying cgroups (most
+> likely pinned by dying memcgs).
+> 
+> The page_owner feature is not supposed to be enabled for production
+> system due to its memory overhead. However, if it is suspected that
+> dying memcgs are increasing over time, a test environment with page_owner
+> enabled can then be set up with appropriate workload for further analysis
+> on what may be causing the increasing number of dying memcgs.
+> 
+> Waiman Long (4):
+>   lib/vsprintf: Avoid redundant work with 0 size
+>   mm/page_owner: Use scnprintf() to avoid excessive buffer overrun check
+>   mm/page_owner: Print memcg information
+>   mm/page_owner: Record task command name
+> 
+>  lib/vsprintf.c  |  8 +++---
+>  mm/page_owner.c | 70 ++++++++++++++++++++++++++++++++++++++-----------
+>  2 files changed, 60 insertions(+), 18 deletions(-)
+> 
+> -- 
+> 2.27.0
+>
 
-Right... I did not consider the final entry in the ahci_pci_tbl table
-which matches against the device against the PCI AHCI storage class.
-So right you are. I will restore your original commit title/message.
+Thank you, Waiman.
 
-Thanks for checking.
+Acked-by: Rafael Aquini <aquini@redhat.com>
 
---=20
-Damien Le Moal
-Western Digital Research

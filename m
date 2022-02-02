@@ -2,168 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ED94A7B88
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9014A7B8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348031AbiBBXMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiBBXMH (ORCPT
+        id S1348036AbiBBXMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:12:23 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:47813 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347913AbiBBXMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:12:07 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88720C061714;
-        Wed,  2 Feb 2022 15:12:07 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id j38-20020a9d1926000000b0059fa6de6c71so921414ota.10;
-        Wed, 02 Feb 2022 15:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=t29/K+CRAzr2C0Y4zdBwQdSLvuEbGx2x0Uo7Ij6d/QU=;
-        b=Yhr00QwTQbAUMNWJsy/noa8zs8PvkvEhkcRKUwFOldhEFckHStjC8Umi/SL/UO7KhW
-         DapLyXfwOmf/TDHkE1Epqcwubwq446noAyYkpHoYuezANTYykUjGCI/LVwkQWz9NHi9e
-         MhDf5gtyXZQIzVfmGvBabmOyQKVz2390HcKVBnwIfrhjhAVppCUj9YxrHUBwITJ9SuKp
-         m/WGbSM+2hvciWYwltw+n9lkuXZsV7gVlxn67w5GxWh68cGI+zEYvfUKoFSE39i45nOs
-         OY7WWIyVmssrr1jHC1aiZGAcmp8BRBkHr+7PFOy2AVDEYQbYq48EfBj+mYZ2Klf1Ix3H
-         pSjw==
+        Wed, 2 Feb 2022 18:12:21 -0500
+Received: by mail-io1-f72.google.com with SMTP id 193-20020a6b01ca000000b00612778c712aso553317iob.14
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:12:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=t29/K+CRAzr2C0Y4zdBwQdSLvuEbGx2x0Uo7Ij6d/QU=;
-        b=OoMSeMc/GZcgbyfxfel6FayJW2GhiejdZfJZSmv/q0W+9gNcIPGyaSdXU0fkrdkmdQ
-         i5TuaIkENU5EtecpGRxoFFjOi0Y8cZxTCJ0gHbhtyHOXU7Twk/3Ek1xMktmTtVQnAveo
-         0N3nqrVPf2nW/HVxZksL0yM6mul2ncNzK0+tNghMw0ESBc5J5ZIFwgcd/gIbmVTVn1Gg
-         6eoF6MoMwzzc9dgkSMM3GhIIidoxMhznE3m/p2m8gUwQsFk3MCHDpcG4Zz9I/V9TUZTe
-         XvyNMccHbYtZzxiJr+zRJmir67coE50KqnX4vdbiXrSflxH6icuq/nsbCuroBp8THdmB
-         cEgg==
-X-Gm-Message-State: AOAM530tc1MlPPbKkHcnWj+9fIUI4juwsaO0wSKPRowya8xtHRyVzM78
-        Fco/QhnO+s9HcH9zZqIcc/TciYVnKjuScw==
-X-Google-Smtp-Source: ABdhPJzqeLBvSKmuB4xo8RTR/vfquflC7QfdejlXnWv02QOSZcxpWYEKEU1AN1+LL/9H1JXiGpPRTA==
-X-Received: by 2002:a9d:62da:: with SMTP id z26mr17266586otk.26.1643843526905;
-        Wed, 02 Feb 2022 15:12:06 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e92sm8413598ote.72.2022.02.02.15.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 15:12:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net>
-Date:   Wed, 2 Feb 2022 15:12:03 -0800
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=htmVlWGuHKKb3tjIfvhIeE41rcc33nqlNcOJ/WR1NFg=;
+        b=OEyKamoVkPk82WIrDl+T3ufHgbtfjb89eQ389854TrYPmJUnWEWjGph+nxZR9k1bVZ
+         hb54fXHjI/lPhxv1HaZOZ74pezNU7EDDEZByeY72ejzLplEptexgHTqp8swhGLEhmfRm
+         Z4F2Tv8lLWRR+R4QQRZX74yPtTVEBMSev7BF5l6bkcl+fig1jzIzvwfq/NUv83FXCVJD
+         VS451Zu1k80bIQFBxgVD9+dgl64iPVbaq/UqMcB87pAab0axdoCCC2PHU+YyajMc45Ht
+         bGVr9lqBq+eZV/zAqRfMDnlCF4fj5rJ+GDDC5Ppj2t4GClVReqIfog0Et28zoyM2067S
+         R9JQ==
+X-Gm-Message-State: AOAM5301hRw2tXQEyG6BOx1kC+BAwLjBE+vbHEIsCLm4t2EHQ1hVTM/q
+        q1L8dOh2zhyaF7tHRzr08Xxo2fuRGar806DshmG8EU/wYs0/
+X-Google-Smtp-Source: ABdhPJwfLeBxifdPwKYe9fuxoJzEo+ppyRuD/M/W85+SkRlpjuuPSlnJBOjJ4+VpsKr+HEvsxw1SN6i8HmPmbinpLwQ5GEtxpIJv
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-References: <20220130183653.491292-1-keescook@chromium.org>
- <20220202160149.GA2322037@roeck-us.net> <202202021237.487D3DE73@keescook>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-In-Reply-To: <202202021237.487D3DE73@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a02:70c3:: with SMTP id f186mr17553128jac.155.1643843539556;
+ Wed, 02 Feb 2022 15:12:19 -0800 (PST)
+Date:   Wed, 02 Feb 2022 15:12:19 -0800
+In-Reply-To: <00000000000061d7eb05d7057144@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003de3e105d7112674@google.com>
+Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
+From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 12:52, Kees Cook wrote:
-> On Wed, Feb 02, 2022 at 08:01:49AM -0800, Guenter Roeck wrote:
->> On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
->>> Add a simple test for strlen() functionality, including using it as a
->>> constant expression.
->>>
->>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->>> Cc: Peter Rosin <peda@axentia.se>
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>> ---
->>> I'll be taking this as part of my Clang FORTIFY_SOURCE series.
->>> ---
->>>   lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
->>>   1 file changed, 37 insertions(+)
->>>
->>> diff --git a/lib/test_string.c b/lib/test_string.c
->>> index 9dfd6f52de92..59994f552c48 100644
->>> --- a/lib/test_string.c
->>> +++ b/lib/test_string.c
->>> @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
->>>   	return 0;
->>>   }
->>>   
->>> +/*
->>> + * Unlike many other string functions, strlen() can be used in
->>> + * static initializers when string lengths are known at compile
->>> + * time. (i.e. Under these conditions, strlen() is a constant
->>> + * expression.) Make sure it can be used this way.
->>> + */
->>> +static const int strlen_ce = strlen("tada, a constant expression");
->>> +
->>
->> This results in:
->>
->> lib/test_string.c:188:30: error: initializer element is not constant
->>    188 | static const int strlen_ce = strlen("tada, a constant expression");
->>
->> for several of my tests. I don't think you can mandate that a compiler
->> implements this.
-> 
-> Which tests?
-> 
+syzbot has found a reproducer for the following issue on:
 
-Some examples:
+HEAD commit:    dd5152ab338c Merge branch 'bpf-btf-dwarf5'
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=138d300c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b210f94c3ec14b22
+dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d37f00700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14745624700000
 
-Build reference: next-20220202
-Compiler version: m68k-linux-gcc (GCC) 11.2.0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com
 
-Building m68k:defconfig ... failed
---------------
-Error log:
-lib/test_string.c:188:30: error: initializer element is not constant
-   188 | static const int strlen_ce = strlen("tada, a constant expression");
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 check_copy_size include/linux/thread_info.h:230 [inline]
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 copy_from_user include/linux/uaccess.h:191 [inline]
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Modules linked in:
+CPU: 1 PID: 3596 Comm: syz-executor589 Not tainted 5.16.0-syzkaller-11587-gdd5152ab338c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_copy_size include/linux/thread_info.h:230 [inline]
+RIP: 0010:copy_from_user include/linux/uaccess.h:191 [inline]
+RIP: 0010:bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Code: fd 06 48 c1 e5 0c 48 01 c5 e8 b5 71 0d fa 49 81 fe ff ff ff 7f 0f 86 08 fe ff ff 4c 8b 74 24 60 4c 8b 7c 24 68 e8 09 6f 0d fa <0f> 0b 41 bc f2 ff ff ff e9 02 fb ff ff 4c 8b 74 24 60 4c 8b 7c 24
+RSP: 0018:ffffc90002acfb40 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000fffff0de RCX: 0000000000000000
+RDX: ffff88801ad5ba00 RSI: ffffffff876ae697 RDI: 0000000000000003
+RBP: ffff88801e32b000 R08: 000000007fffffff R09: ffffffff8d9399d7
+R10: ffffffff876ae67b R11: 000000000000001f R12: 0000000000000dc0
+R13: ffff888019342000 R14: 0000000000000000 R15: ffffc90000d6e000
+FS:  00005555560c8300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000280 CR3: 000000001df60000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
+ __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd2338db1d9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd14e00248 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd2338db1d9
+RDX: 0000000000000048 RSI: 00000000200013c0 RDI: 000000000000000a
+RBP: 00007fd23389f1c0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd23389f250
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Building mips:malta_defconfig:nocd:smp:net,e1000:initrd ... failed
-------------
-Error log:
-lib/test_string.c:188:30: error: initializer element is not constant
-  static const int strlen_ce = strlen("tada, a constant expression");
-
-Building i386:q35:Broadwell:defconfig:smp:ata:net,rtl8139:hd ... failed
-------------
-Error log:
-lib/test_string.c:188:30: error: initializer element is not constant
-   188 | static const int strlen_ce = strlen("tada, a constant expression");
-
-i386 and is defconfig + CONFIG_STRING_SELFTEST=y; mips is
-malta_defconfig + CONFIG_STRING_SELFTEST=y. All use gcc 11.2.
-
-There may be more, but there are so many failures in -next right now
-that I may be missing some.
-
-> This property of strlen() is already required by our builds (this is how
-> I tripped over it). For example:
-> 
-> drivers/firmware/xilinx/zynqmp-debug.c:
-> 
-> #define PM_API(id)               {id, #id, strlen(#id)}
-> static struct pm_api_info pm_api_list[] = {
->          PM_API(PM_GET_API_VERSION),
->          PM_API(PM_QUERY_DATA),
-> };
-
-I do not think that it is a C standard that strlen() on a constant string
-must be compile-time evaluated and result in a constant.
-
-Anyway, key difference, I think, is the presence of an architecture-specific
-version of strlen(), or the maybe non-presence of __HAVE_ARCH_STRLEN,
-or the definition of strlen() in include/linux/fortify-string.h.
-
-Guenter

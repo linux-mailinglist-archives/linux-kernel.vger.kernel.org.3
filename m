@@ -2,136 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FFA4A7052
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE1A4A705B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343994AbiBBLva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:51:30 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:38560 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiBBLv2 (ORCPT
+        id S1344013AbiBBLy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:54:28 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:54578 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231839AbiBBLyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:51:28 -0500
-Received: by mail-il1-f198.google.com with SMTP id l2-20020a922902000000b002bc386db1beso6298559ilg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:51:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Czam2PfI+vECvmB19D4+RWWem8qSnvaySN3xSaozTXs=;
-        b=KPuE/gMvScVOYwFJgWupeQJ5miLR0GdITyFQINZOTBg+sHJYloOJk5sjrpo82soSxi
-         256raWwX4gUPSRSOKd5yX1aAtD/LvSZUWBbTwcLSzZXigQ9TcQzB1pPLNV+GUbQfwsIv
-         ZMPfRx3leGsmctj9HGX72HRz/bVow79eE2gHagMELt+vp/oQr4QRH2xW3pcLYXdsic3P
-         W35DuIhidIMyFx0cPHytmVEv9o18HPrI9NmI3gSKs6PUVMSddp0pl2Y4STXqLfFSI2Ec
-         jpAvgPNfupARybfz5Iy+oyFf2RGHSt/DEZJYZ1h24XrzPq0blPaquVyy7hwQX6bc5ZII
-         MWrA==
-X-Gm-Message-State: AOAM5336l95fmKZNw2oDk2rKuUOkLmQQQXASi1wlE2C3XOy5LTms5OKU
-        alc+26dYzjlImLKoEQ6mccDl9fB3iMcOmceRfS+H96oF4u+x
-X-Google-Smtp-Source: ABdhPJzCjl2H/uG6VFwYRBIsNpqHTNX0x+oXtlYAGckAIJXlV+ich9wb3aySHYdPpjGigirpYnmfjxDN26ADh8P+f6NktX0xDGwC
+        Wed, 2 Feb 2022 06:54:24 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212BrUQD124243;
+        Wed, 2 Feb 2022 05:53:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643802810;
+        bh=ZCiOlYN6uGVwo49DCOPGVRgsHZSeZjio+2Askyn+jEU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Oe8FV/lTfcLmVGZDXiBYYSuW6er4n7IOenQBNpF3uJA3Dliw3ACK1iPNIxt0N2QyQ
+         jh+YwlBhPdJpCiwuMEwjWK5yOKR3O7ipo1ZObkANAFh4AR+GmNoNVyOvaIqyGhE3Wx
+         O4O1XKiw/cpSgYNtNsnRfLK1U8nX9HHvKLsVAhTI=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212BrU9N004577
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Feb 2022 05:53:30 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Feb 2022 05:53:28 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Feb 2022 05:53:28 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212BrRl5023205;
+        Wed, 2 Feb 2022 05:53:28 -0600
+Date:   Wed, 2 Feb 2022 17:23:27 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Christophe Kerello <christophe.kerello@foss.st.com>
+CC:     Miquel Raynal <miquel.raynal@bootlin.com>, <richard@nod.at>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>, <chenshumin86@sina.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Khouloud Touil <ktouil@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v2 4/4] mtd: core: Fix a conflict between MTD and NVMEM
+ on wp-gpios property
+Message-ID: <20220202115327.53oqg5n7tx6b6q7u@ti.com>
+References: <20220131095755.8981-1-christophe.kerello@foss.st.com>
+ <20220131095755.8981-5-christophe.kerello@foss.st.com>
+ <20220131144309.0ffe7cc8@xps13>
+ <20220201104727.7xvcyexf3yucegcb@ti.com>
+ <eebfa629-ead2-d63f-9cfb-4cafc1534678@foss.st.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9507:: with SMTP id r7mr16328334ioj.199.1643802687773;
- Wed, 02 Feb 2022 03:51:27 -0800 (PST)
-Date:   Wed, 02 Feb 2022 03:51:27 -0800
-In-Reply-To: <00000000000027db6705d6e6e88a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004923a605d707a31a@google.com>
-Subject: Re: [syzbot] possible deadlock in ___neigh_create
-From:   syzbot <syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com>
-To:     daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        roopa@nvidia.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <eebfa629-ead2-d63f-9cfb-4cafc1534678@foss.st.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
++ Khouloud, Linus, Bartosz
 
-HEAD commit:    9f7fb8de5d9b Merge tag 'spi-fix-v5.17-rc2' of git://git.ke..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b5fcf4700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b4a89edfcc8f7c74
-dashboard link: https://syzkaller.appspot.com/bug?extid=5239d0e1778a500d477a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dd62bfb00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10581cbfb00000
+On 02/02/22 11:44AM, Christophe Kerello wrote:
+> Hi,
+> 
+> On 2/1/22 11:47, Pratyush Yadav wrote:
+> > On 31/01/22 02:43PM, Miquel Raynal wrote:
+> > > Hi Vignesh, Tudory, Pratyush,
+> > > 
+> > > + Tudor and Pratyush
+> > > 
+> > > christophe.kerello@foss.st.com wrote on Mon, 31 Jan 2022 10:57:55 +0100:
+> > > 
+> > > > Wp-gpios property can be used on NVMEM nodes and the same property can
+> > > > be also used on MTD NAND nodes. In case of the wp-gpios property is
+> > > > defined at NAND level node, the GPIO management is done at NAND driver
+> > > > level. Write protect is disabled when the driver is probed or resumed
+> > > > and is enabled when the driver is released or suspended.
+> > > > 
+> > > > When no partitions are defined in the NAND DT node, then the NAND DT node
+> > > > will be passed to NVMEM framework. If wp-gpios property is defined in
+> > > > this node, the GPIO resource is taken twice and the NAND controller
+> > > > driver fails to probe.
+> > > > 
+> > > > A new Boolean flag named skip_wp_gpio has been added in nvmem_config.
+> > > > In case skip_wp_gpio is set, it means that the GPIO is handled by the
+> > > > provider. Lets set this flag in MTD layer to avoid the conflict on
+> > > > wp_gpios property.
+> > > > 
+> > > > Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+> > > > ---
+> > > >   drivers/mtd/mtdcore.c | 2 ++
+> > > >   1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> > > > index 70f492dce158..e6d251594def 100644
+> > > > --- a/drivers/mtd/mtdcore.c
+> > > > +++ b/drivers/mtd/mtdcore.c
+> > > > @@ -546,6 +546,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
+> > > >   	config.stride = 1;
+> > > >   	config.read_only = true;
+> > > >   	config.root_only = true;
+> > > > +	config.skip_wp_gpio = true;
+> > > >   	config.no_of_node = !of_device_is_compatible(node, "nvmem-cells");
+> > > >   	config.priv = mtd;
+> > > > @@ -833,6 +834,7 @@ static struct nvmem_device *mtd_otp_nvmem_register(struct mtd_info *mtd,
+> > > >   	config.owner = THIS_MODULE;
+> > > >   	config.type = NVMEM_TYPE_OTP;
+> > > >   	config.root_only = true;
+> > > > +	config.skip_wp_gpio = true;
+> > > >   	config.reg_read = reg_read;
+> > > >   	config.size = size;
+> > > >   	config.of_node = np;
+> > > 
+> > > TLDR: There is a conflict between MTD and NVMEM, who should handle the
+> > > WP pin when there is one? At least for raw NAND devices, I don't want
+> > > the NVMEM core to handle the wp pin. So we've introduced this
+> > > skip_wp_gpio nvmem config option. But there are two places where this
+> > > boolean can be set and one of these is for otp regions (see above). In
+> > > this case, I don't know if it is safe or if CFI/SPI-NOR rely on the
+> > > nvmem protection. Please tell us if you think this is fine for you.
+> > 
+> > Why does NVMEM touch hardware write protection in the first place? The
+> > purpose of the framework is to provide a way to retrieve config stored
+> > in memory. It has no business dealing with details of the chip like the
+> > WP line. That should be MTD's job (which it should delegate to SPI NOR,
+> > SPI NAND, etc.). If you want to write protect a cell then do it in
+> > software. I don't see why NVMEM should be dealing with hardware directly
+> > at all.
+> > 
+> > That is my mental model of how things _should_ work. I have not spent
+> > much time digging into how things actually work currently.
+> > 
+> 
+> Wp-gpios property management was added in MVMEM framework in January 2020 =>
+> sha1: 2a127da461a9d8d97782d6e82b227041393eb4d2
+> "
+>     nvmem: add support for the write-protect pin
+> 
+>     The write-protect pin handling looks like a standard property that
+>     could benefit other users if available in the core nvmem framework.
+> 
+>     Instead of modifying all the memory drivers to check this pin, make
+>     the NVMEM subsystem check if the write-protect GPIO being passed
+>     through the nvmem_config or defined in the device tree and pull it
+>     low whenever writing to the memory.
+> "
+> 
+> And this modification was done for EEPROMs flashes => sha1:
+> 1c89074bf85068d1b86f2e0f0c2110fdd9b83c9f
+> "
+>     eeprom: at24: remove the write-protect pin support
+> 
+>     NVMEM framework is an interface for the at24 EEPROMs as well as for
+>     other drivers, instead of passing the wp-gpios over the different
+>     drivers each time, it would be better to pass it over the NVMEM
+>     subsystem once and for all.
+> 
+>     Removing the support for the write-protect pin after adding it to
+>     the NVMEM subsystem.
+> "
+> 
+> Current NVMEM framework implementation toggles the WP GPIO when reg_write
+> nvmem_config API is defined. In case of MTD framework, reg_write is not
+> defined in nvmem_config.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com
+Thanks for digging these up. I think this was the wrong decision to 
+make. NVMEM should just provide the APIs for handling read/write, and 
+leave the rest to the drivers.
 
-============================================
-WARNING: possible recursive locking detected
-5.17.0-rc2-syzkaller-00039-g9f7fb8de5d9b #0 Not tainted
---------------------------------------------
-kworker/0:1/7 is trying to acquire lock:
-ffffffff8d4dd130 (&tbl->lock){+.-.}-{2:2}, at: ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
+It might be convenient for some drivers to put the WP GPIO handling to 
+NVMEM core but I just don't think it is the job of the framework to deal 
+with this, and it just does not know enough about the device to deal 
+with correctly and completely anyway. For example, wp-gpio is only one 
+of the ways to write protect a chip. SPI NOR flashes have a WP# pin that 
+is often toggled via the SPI controller. There could also be registers 
+that do the write protection.
 
-but task is already holding lock:
-ffffffff8d4dd130 (&tbl->lock){+.-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
+One would have to make strong justifications for making nvmem directly 
+deal with hardware level details to convince me it is a good idea. IMHO 
+if AT24 EEPROM is the only driver relying on this as of now then we 
+should just revert the patches and not have to deal with the 
+skip_wp_gpio hackery.
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+> 
+> Based on the comments made, it seems that we also agree that this write
+> protection should be handled by MTD subsystems or associated drivers and not
+> by MVMEN framework for MTD use cases.
+> 
+> The proposal implementation should solve this conflict for MTD framework
+> without breaking anything for others NVMEM users (EEPROMs flashes for
+> example).
 
-       CPU0
-       ----
-  lock(&tbl->lock);
-  lock(&tbl->lock);
-
- *** DEADLOCK ***
-
- May be due to missing lock nesting notation
-
-5 locks held by kworker/0:1/7:
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:631 [inline]
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:658 [inline]
- #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_one_work+0x890/0x1650 kernel/workqueue.c:2278
- #1: ffffc90000cc7db8 ((work_completion)(&(&tbl->managed_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8c4/0x1650 kernel/workqueue.c:2282
- #2: ffffffff8d4dd130 (&tbl->lock){+.-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
- #3: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: ip6_nd_hdr net/ipv6/ndisc.c:466 [inline]
- #3: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: ndisc_send_skb+0x84b/0x17f0 net/ipv6/ndisc.c:502
- #4: ffffffff8bb83bc0 (rcu_read_lock_bh){....}-{1:2}, at: lwtunnel_xmit_redirect include/net/lwtunnel.h:95 [inline]
- #4: ffffffff8bb83bc0 (rcu_read_lock_bh){....}-{1:2}, at: ip6_finish_output2+0x2ad/0x14f0 net/ipv6/ip6_output.c:112
-
-stack backtrace:
-CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.17.0-rc2-syzkaller-00039-g9f7fb8de5d9b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_power_efficient neigh_managed_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
- check_deadlock kernel/locking/lockdep.c:2999 [inline]
- validate_chain kernel/locking/lockdep.c:3788 [inline]
- __lock_acquire.cold+0x149/0x3ab kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __raw_write_lock_bh include/linux/rwlock_api_smp.h:202 [inline]
- _raw_write_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:334
- ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
- ip6_finish_output2+0x1070/0x14f0 net/ipv6/ip6_output.c:123
- __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
- __ip6_finish_output+0x61e/0xe90 net/ipv6/ip6_output.c:170
- ip6_finish_output+0x32/0x200 net/ipv6/ip6_output.c:201
- NF_HOOK_COND include/linux/netfilter.h:296 [inline]
- ip6_output+0x1e4/0x530 net/ipv6/ip6_output.c:224
- dst_output include/net/dst.h:451 [inline]
- NF_HOOK include/linux/netfilter.h:307 [inline]
- ndisc_send_skb+0xa99/0x17f0 net/ipv6/ndisc.c:508
- ndisc_send_ns+0x3a9/0x840 net/ipv6/ndisc.c:650
- ndisc_solicit+0x2cd/0x4f0 net/ipv6/ndisc.c:742
- neigh_probe+0xc2/0x110 net/core/neighbour.c:1040
- __neigh_event_send+0x37d/0x1570 net/core/neighbour.c:1201
- neigh_event_send include/net/neighbour.h:470 [inline]
- neigh_managed_work+0x162/0x250 net/core/neighbour.c:1574
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

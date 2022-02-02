@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029ED4A70A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7113E4A70B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344120AbiBBMWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 07:22:52 -0500
-Received: from mga06.intel.com ([134.134.136.31]:10273 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239210AbiBBMWv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:22:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643804571; x=1675340571;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eamKrK/VTEauZLd9AACZ72hNNHTYn1T5iAicwAio230=;
-  b=GITnRpK9130xyXR6PtzxXp7wj6RFv50b3RAkAaZOcL1v3pFF+fShFric
-   0l2OYxF+aAz2nH+99lsivsxxoEgLP2Q1DiQaU2y7y4tJvNwtjbjcb6Q/a
-   0H9OBIWFK+XOoZOX0bNEOoZTP6YORBFrBRbyy3L6HOHKRxJxCdMUqw/6g
-   9KuZ9ICNQUs7UpLNTQQrK21+8yyIAXxETWDwNe+gZ7YFD6eFen0OTnv/j
-   sJMlhvB5YCWWK9AaHHzoeCUaSfea6UoWcuIpARd9SHs8J8jxaigWgzo6a
-   YeR6p3mOy+Up+tfkawlThqfl+l5B6tFNHSmM7eWjm6tdKFVWWc52zBltg
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="308633227"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="308633227"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 04:22:51 -0800
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="565970219"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 04:22:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFEds-0004d4-Dd;
-        Wed, 02 Feb 2022 14:21:44 +0200
-Date:   Wed, 2 Feb 2022 14:21:44 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Peter Robinson <pbrobinson@gmail.com>
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Message-ID: <Yfp3WL8JMlSP19MI@smile.fi.intel.com>
-References: <CAMuHMdVP6ER119r2KAegjZes1a=KWZ47z6j=kgQ0oNx1oeUJ+w@mail.gmail.com>
- <51f54519-bb8b-f108-1c1e-4fed101ca5ef@redhat.com>
- <CAMuHMdVwUfv7pXhPazsgG6t=X=aVtDQkFUk_=mUuFH8Fscx8wg@mail.gmail.com>
- <abf63995-a529-1e80-18c3-df473a3e7a9c@redhat.com>
- <YfmaqUBqCrgp0QdO@ravnborg.org>
- <e552caec-5136-f4b2-12dc-23b182ab8af6@redhat.com>
- <YfploeCM6C5y3Imj@smile.fi.intel.com>
- <2f149fef-b991-9e34-98cb-426e561192ff@redhat.com>
- <YfpwGtjj5hGkN7A4@smile.fi.intel.com>
- <a3a06362-ab9f-e29b-4f03-968e3f1865ba@redhat.com>
+        id S1344128AbiBBMXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:23:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37182 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245587AbiBBMXj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:23:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C898B830B2;
+        Wed,  2 Feb 2022 12:23:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A3AC004E1;
+        Wed,  2 Feb 2022 12:23:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="l8b6PN2Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643804613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TGEzqHTDCMG8mI3TmhK6JduZrlIkNoEeX3AHXuvfN00=;
+        b=l8b6PN2YTOt5a6ONR2PcsjguyoljXFj8sF/NfE9DiuT/S9/WNEFzPQs+EIcDCnMkhG6Q7X
+        bgKdPug0C85/4dubUin9/YA9GfW9n1jbfcHsyMs/Zc3E/MMmqQkKm4RrSKqdlKk5WgRmjo
+        SZEG31O0LpahrNXjSfOOUOjBuXGYbHs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 92887216 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Feb 2022 12:23:33 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id i62so60328290ybg.5;
+        Wed, 02 Feb 2022 04:23:33 -0800 (PST)
+X-Gm-Message-State: AOAM530M2e5oAt0vMZSQxlGOzhu9z1KCQlbHFuOAH9u0dxY5/KnuPSZv
+        RxPrZlIkRtRQ5jbdRVptrPUov1PbsReUL6RveU0=
+X-Google-Smtp-Source: ABdhPJy3DoJDwZfwHAMG8lESNaJ7LhGJU3bDGnZiU3LXFymHywyLCT8c3UU4mtIKpEgG5Fd3wUiRYvU/+kHHT8Eq2Nw=
+X-Received: by 2002:a05:6902:726:: with SMTP id l6mr3477287ybt.115.1643804611659;
+ Wed, 02 Feb 2022 04:23:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3a06362-ab9f-e29b-4f03-968e3f1865ba@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220201161342.154666-1-Jason@zx2c4.com> <1920812.EuvsCRJjSr@tauon.chronox.de>
+In-Reply-To: <1920812.EuvsCRJjSr@tauon.chronox.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 2 Feb 2022 13:23:21 +0100
+X-Gmail-Original-Message-ID: <CAHmME9ouMHtTQxB1WHq3H+nfbg27OFaJtw78E5epCJsiHt3sHg@mail.gmail.com>
+Message-ID: <CAHmME9ouMHtTQxB1WHq3H+nfbg27OFaJtw78E5epCJsiHt3sHg@mail.gmail.com>
+Subject: Re: [PATCH] random: use computational hash for entropy extraction
+To:     Stephan Mueller <smueller@chronox.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 12:54:32PM +0100, Javier Martinez Canillas wrote:
-> On 2/2/22 12:50, Andy Shevchenko wrote:
-> >> What's your suggestion then to solve the issue mentioned above ? With my distro
-> >> maintainer hat I don't care that much, since the fbdev drivers will be disabled.
-> > 
-> > I think both of them can work together. If user doesn't care, the first one wins.
-> 
-> I don't think this is a good idea but as mentioned I don't really care that much
-> since we will disable all fbdev drivers anyway. So I'm happy to allow them both.
+Hi Stephan,
 
-Thanks!
+It's like this for a few reasons:
 
--- 
-With Best Regards,
-Andy Shevchenko
+- Primarily, we want to feed 32 bytes back in after finalization (in
+this case as a PRF key), just as the code does before this patch, and
+return 32 bytes to the caller, and we don't want those to be relatable
+to each other after the seed is erased from the stack.
+- Actually, your statement isn't correct: _extract_entropy is called
+for 48 bytes at ~boot time, with the extra 16 bytes affecting the
+block and nonce positions of the chacha state. I'm not sure this is
+very sensible to do -- it really is not adding anything -- but I'd
+like to avoid changing multiple things at once, when these are better
+discussed and done separately. (I have a separate patch for something
+along those lines.)
+- Similarly, I'd like to avoid changing the general idea of what
+_extract_entropy does (the underscore version has never accounted for
+entropy counts), deferring anything like that, should it become
+necessary, to an additional patch, where again it can be discussed
+separately.
+- By deferring the RDRAND addition to the second phase, we avoid a
+potential compression call while the input pool lock is held, reducing
+our critical section.
+- HKDF-like constructions are well studied and understood in the model
+we're working in, so it forms a natural and somewhat boring fit for
+doing what we want to do.
 
-
+Regards,
+Jason

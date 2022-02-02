@@ -2,148 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18634A7435
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51F64A7443
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345320AbiBBPFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbiBBPFJ (ORCPT
+        id S1345341AbiBBPJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:09:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:27646 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231908AbiBBPJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:05:09 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8FCC061714;
-        Wed,  2 Feb 2022 07:05:08 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id q22so29309987ljh.7;
-        Wed, 02 Feb 2022 07:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=zGAcEl5zSbDsGaRdTk3xOxAdBMyz853R9ybuFrbrUe8=;
-        b=jStWXkATdsbkE3n4Nr46atX2F1K4ZanuB8lCDQJ4p/b1+AHcdvD86KaYRm1bAHkyJw
-         AiHxqz98X0ZNGKItIVe/Aq5pbhWMIzeKnTgOaK1k5Sz5K9miHRfpJ8M5pxXIFwTmdDTz
-         gKEOW4EiTuwI+1R+zwpe5k9vBL2N4L2RuT4JSRjRAZ3a8KVWzHSVClpHPdEHsq08wPhH
-         Y9p1d1rQJ6/wxDx7oqb+lSuOk2zpbkMrFqszjsh6Bs6jPbD8VlDFbt8g52e5aW0iRyqQ
-         KldHeeb8LV/PQT8urJ1yhxMhI1/W44MfISox2cTI45VqzbFIlhOkne24S/KRRfs6z/eu
-         Nxjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=zGAcEl5zSbDsGaRdTk3xOxAdBMyz853R9ybuFrbrUe8=;
-        b=OHAaRGvGo5MAEsLgCDN9gbSV6yWbHzYQ7LEqmN8YAOJh3pONajji64ACnCu9MecDD7
-         9VDxrV/6EyKZUX+4txvHAoDSX61NXfphwAvQtch4gez7tkmwOeyxR2enJhSmkoaijV8s
-         EaDRh+zij9s6+g/Z8VJZRRBC2xB92SIop4g0lF8+nPReW9qX8Q5VgLSgp13IVp+eZbpR
-         Q/28DD0Pmknd1j/mDEDlsZtaalbL+Kp11TCyQJVLf+Xqzd+rftPZSnomYRHfPh87MN8+
-         YZl1Lh+YrC5KA9F9eL8wq5vMchsjeO77aFy470wFEmon5pEqsDenNdMc4zGKKIAXf9Ty
-         qUEg==
-X-Gm-Message-State: AOAM5310TLsaiMIMNKWgIksraYMHfQMxevz/PsGtlOxMjTZA7JQScz49
-        Y3wxGoXxPMoMWmVkbrZ8kQE=
-X-Google-Smtp-Source: ABdhPJwB12Rph8wmFejGOBUmlgO7ed9XOy/Rkl5Th4ZwDST48HpDD1i8xNNU2iPPOZN70Slbo8qXMQ==
-X-Received: by 2002:a2e:3102:: with SMTP id x2mr19669295ljx.211.1643814306787;
-        Wed, 02 Feb 2022 07:05:06 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id j5sm1485618ljo.137.2022.02.02.07.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 07:05:06 -0800 (PST)
-Date:   Wed, 2 Feb 2022 17:04:55 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-Message-ID: <20220202170455.3eece5a3@eldfell>
-In-Reply-To: <c6100ec3-b511-17cf-c542-e124c14fb334@tronnes.org>
-References: <20220131201225.2324984-1-javierm@redhat.com>
-        <20220131201225.2324984-2-javierm@redhat.com>
-        <YfhMESTylI1NTKDg@ravnborg.org>
-        <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
-        <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
-        <c6100ec3-b511-17cf-c542-e124c14fb334@tronnes.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 2 Feb 2022 10:09:30 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 212DK5dS012616;
+        Wed, 2 Feb 2022 15:09:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=/L7LgOqBnUWKyovGdW9Yyvs7GhfLMvadBzkskdLQKG0=;
+ b=kInV1hwU5kAwk6ywy95F+7svUiu2lATh8cw8EPJAX60kwK+1SOVxNCC6HTgjzYq4pgX7
+ ILngONIfUeWt7FajEf5kpeOaSwv23onvwAQ1YCyRYqTg1X4YmUXFhjWanCTSQmB2RFL2
+ hJo3GQCzDfX5s/3tw/+ZoMCel+cZ3aIsONil9EasG8P4C4LkOiA19V0ceCfv4TWYrhnT
+ O/AwcMeWgmDQZsPhKRKA5zEXS1LvpZ3CsS4DCAbNaqUsnRMW13gkE1UpJoYAxhdJpi6r
+ 3hZhdjnnW8v0xvXM1TK9oiWh3MV4uD2zjbdw5OQwvASHa2lekVgO04TAXy587BNQphUX kA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dyr2ce17h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 15:09:15 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 212DWSHw009862;
+        Wed, 2 Feb 2022 15:09:14 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dyr2ce16y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 15:09:14 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 212F2nja021440;
+        Wed, 2 Feb 2022 15:09:13 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04dal.us.ibm.com with ESMTP id 3dvw7brrfp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 15:09:13 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 212F9Awu35848628
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Feb 2022 15:09:11 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD67428065;
+        Wed,  2 Feb 2022 15:09:10 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD93228059;
+        Wed,  2 Feb 2022 15:09:04 +0000 (GMT)
+Received: from [9.65.240.79] (unknown [9.65.240.79])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Feb 2022 15:09:04 +0000 (GMT)
+Message-ID: <cb548aa2-1ac3-46e7-91e4-f57a4fd63754@linux.ibm.com>
+Date:   Wed, 2 Feb 2022 17:09:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WjkHlZCIIXSuY/pBxDvwVSo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 4/5] efi: Load efi_secret module if EFI secret area is
+ populated
+Content-Language: en-US
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+ <20220201124413.1093099-5-dovmurik@linux.ibm.com>
+ <20220202084723.ushasiekb3cxami4@sirius.home.kraxel.org>
+ <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
+ <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Dzdajyehst2K1ofnbMtB5uQv7AKyejMc
+X-Proofpoint-ORIG-GUID: -oktOVuqy-KseV4GOevec6u13hg_4yEt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-02_07,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 phishscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020084
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WjkHlZCIIXSuY/pBxDvwVSo
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 2 Feb 2022 10:45:42 +0100
-Noralf Tr=C3=B8nnes <noralf@tronnes.org> wrote:
-
-> Den 02.02.2022 10.14, skrev Thomas Zimmermann:
-> > Hi Noralf,
-> >=20
-> > since you're here, I'll just hijack the discussion to ask something only
-> > semi-related.
-> >=20
-> > IIRC the gud driver doesn't update the display immediately during atomic
-> > commits. Instead, it instructs a helper thread to do the update. What's
-> > the rational behind this design? Is that something we should adopt for
-> > other drivers that operate over slow buses (USB, I2C, etc)? Would this
-> > be relevant for the ssd1307 driver?
-> >  =20
->=20
-> Async flushing is only necessary on multi display setups where there's
-> only one rendering loop for all the displays. I saw what tiny/gm12u320.c
-> did and Hans gave me the rationale. The SPI drivers run flushing inline.
-> Info on the gud wiki:
-> https://github.com/notro/gud/wiki/Linux-Host-Driver#asynchronous-flushing
-
-Hi,
-
-please also consider that userspace may throttle to the KMS pageflip
-events. If the pageflip event is immediate from submitting a flip, that
-could mean userspace will be repainting in a busy-loop, like 1 kHz.
-However, I remember something about virtual KMS drivers doing exactly
-this, and there being something that tells userspace to throttle itself
-instead of depending on pageflip completions. I just forget how that is
-supposed to work, and I'm fairly sure that e.g. Weston does not behave
-well there.
-
-Unfortunately, the pageflip event is also what synchronises FB usage.
-Once flipping in a new FB completed, the old FB is free for re-use.
-But, if the kernel is still copying out from the old FB, userspace may
-partially overwrite the contents, temporarily leading to an incomplete
-or too new image on screen. Do you have anything to prevent that?
 
 
-Thanks,
-pq
+On 02/02/2022 16:31, Gerd Hoffmann wrote:
+> On Wed, Feb 02, 2022 at 01:08:43PM +0200, Dov Murik wrote:
+>>
+>>
+>> On 02/02/2022 10:47, Gerd Hoffmann wrote:
+>>> On Tue, Feb 01, 2022 at 12:44:12PM +0000, Dov Murik wrote:
+>>>> If the efi_secret module is built, register a late_initcall in the EFI
+>>>> driver which checks whether the EFI secret area is available and
+>>>> populated, and then requests to load the efi_secret module.
+>>>
+>>>> +	area = memremap(efi.coco_secret, sizeof(*area), MEMREMAP_WB);
+>>>> +	if (!area) {
+>>>> +		pr_err("Failed to map confidential computing secret area descriptor\n");
+>>>> +		return -ENOMEM;
+>>>> +	}
+>>>> +	if (!area->base_pa || area->size < sizeof(*header_guid))
+>>>> +		goto unmap_desc;
+>>>> +
+>>>> +	header_guid = (void __force *)ioremap_encrypted(area->base_pa, sizeof(*header_guid));
+>>>> +	if (!header_guid) {
+>>>> +		pr_err("Failed to map secret area\n");
+>>>> +		ret = -ENOMEM;
+>>>> +		goto unmap_desc;
+>>>> +	}
+>>>> +	if (efi_guidcmp(*header_guid, EFI_SECRET_TABLE_HEADER_GUID))
+>>>> +		goto unmap_encrypted;
+>>>
+>>> Why these sanity checks are here and not in the efi_secret module?
+>>
+>> The same checks indeed appear in the efi_secret module (see in patch 3:
+>> efi_secret_map_area() and the beginning of efi_secret_securityfs_setup()).
+>>
+>> However, in the efi_secret module, the checks are noisy, because they
+>> expect the secret area to be populated.  For example:
+>>
+>> +	if (efi.coco_secret == EFI_INVALID_TABLE_ADDR) {
+>> +		pr_err("Secret area address is not available\n");
+>> +		return -EINVAL;
+>> +	}
+> 
+> Note I explicitly excluded that check ;)
+> 
+> Checking whenever efi.coco_secret looks valid and only try load
+> efi_secret if that is the case (and otherwise stay silent) makes
+> perfect sense.  The other checks should be dropped IMHO.
+> 
+>> Another approach could be to just try to load the module anyway, and
+>> the module will fail (silently? noisily?) if there's no designated
+>> secret area or it's not populated.  I feel that will be harder to
+>> understand what's going on.
+> 
+> I think the module should fail noisily.  See above for autoload.  In
+> case the module is loaded (either manually by the admin, or because
+> efi.coco_secret != EFI_INVALID_TABLE_ADDR) and it can't actually load
+> the secrets we want know why ...
+> 
 
---Sig_/WjkHlZCIIXSuY/pBxDvwVSo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Note that the AmdSev build of OVMF always publishes
+LINUX_EFI_COCO_SECRET_TABLE_GUID in the EFI table.  Even when
+LAUNCH_SECRET was not executed.  In such cases the secret area will be
+empty.
 
------BEGIN PGP SIGNATURE-----
+If we keep only the 'efi.coco_secret != EFI_INVALID_TABLE_ADDR' check,
+we'll get errors from efi_secret for every VM launch that doesn't
+undergo LAUNCH_SECRET.  I don't think that's good.
 
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmH6nZcACgkQI1/ltBGq
-qqf/fA/9GWEbIffTcEQ1bgTLS1bvxOSJHl23hNSsG+SZKOAWl4xRyKbPxAxUlXST
-dHeg56RX0psfejXIy0/u8b1+kFtoW2fGgrDSpVyHWVJS0CThcjLvjA7/VU5JaYBm
-6TQNDvHe1sT8d00XsNaTOXJ4MQm1EhC1YOguoqr74a84ixVrvEbYxmfF58wX6uVi
-4Kq2As+831fH1iGlTPULBLpjK0pJdlVM+LfCZjCR8IjznaPIvH8qle9QJDjriRE2
-IBqc0zw0HwSCUTs5k68oltjvFVNfEiVLWQISK8CK1Mnw29CKWkeowbx76RzsTx2U
-qSIxwkS3JnpzBVOQIw83i74GzMcJK78a4PGWQc2BP1Zdr5XXx1CjDG4V5i/oj7LS
-V4sfIIi29esJ6wb1C0wAoxNHKA1FxI9QFqhiIXaD5R7pTeM+ysnh0Iqh/42KMOSA
-CfSMbTBIs2oP0YzoUh+tLU1FEwfpW7LQBci32EujuUsQggcGWRvtI6Y2b8+L+a4F
-Nnojdf5BrB0Ggq22LvfctgUze+DY6OdDQz0Y12e7QPAHlrErLLAeqp560Z8SwNYP
-86sq8TOgfN094rp4jwdmuYr1Kn73Lxe6kuHgwwwaF/xDfTM+0gjnYqfogzCVDC4W
-Uj2Ry8T8pGajGwsMSiWOM9hutqO4UXuaJ04+T6qY3otLIXhxuDo=
-=V1N6
------END PGP SIGNATURE-----
+If we *do* want to check that the area starts with
+EFI_SECRET_TABLE_HEADER_GUID (like I think we should), we need all the
+checks before that, like checking that the area is big enough, and that
+all the memremap()s succeed -- before actually comparing the
+header_guid.  The checks are basically prerequisites for calling
+efi_guidcmp() safely.
 
---Sig_/WjkHlZCIIXSuY/pBxDvwVSo--
+-Dov
+

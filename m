@@ -2,257 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05E74A7964
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961074A7982
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347095AbiBBU33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:29:29 -0500
-Received: from mga07.intel.com ([134.134.136.100]:1364 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230454AbiBBU32 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:29:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643833768; x=1675369768;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cCD02Yx9Gu0a31iJjmnPVyynU/NEGUjd0OPG2bpWqPU=;
-  b=S+AkB9J2mFo7DyJnALf4K2eghBlA6P4zgUhxO/Jlq7XgAzOb+Xc/WWVj
-   E+L7uVuaDL+4d2EAXDa6OQ7bNN84P6NoxwuYWQ8BmlEys8xXD+cElQOSV
-   TZkr0XAH67ihHt0O7266VlepB1UXOfUaKIYeEZUnX6uaEGRTO1EKkAIIq
-   7+u6MUMBuYN88c5Dh8qYhNYBnUW8WkJSXrxotTkgJzfbLiV2gGK8dPZDa
-   s8QHQ/xrLFsgaozDc3AhfWzZrhgVugOh/PRYB8pG3K+qOKIHzL11nFHka
-   bCR98qwCOSyBXwLCYL6JiOKBNa9wXayszNtaUnNJLCL+HP4kuI0vxBNjl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311319842"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="311319842"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:29:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="482984220"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 12:29:25 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 20E903B7; Wed,  2 Feb 2022 22:29:39 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: [PATCH v1 1/1] iio: frequency: adf4350: Make use of device properties
-Date:   Wed,  2 Feb 2022 22:29:36 +0200
-Message-Id: <20220202202936.56475-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1347181AbiBBUct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:32:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43798 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347163AbiBBUcs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 15:32:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643833967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wcENReRHFRW4er+uIjMQ9SA6VL83pYAObKBta+stQfk=;
+        b=Oua1l7DJd7u+b4XmbJ1xBBfUnFT2dq+3PlvBE92yxSCsnZWCLMg1WW5FRmixEHICW8x6lf
+        DXka72rZgFB6Dd6MCqZeYrnr/EgoK/ykHUurh4GJ/YV/f1jibL7FfUatburHjLrAfuqJ4j
+        zd19mnv9f/32c3v9taaLkoHFP4+E+/w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-cg6h955nOXS8hPI6xg15BQ-1; Wed, 02 Feb 2022 15:32:46 -0500
+X-MC-Unique: cg6h955nOXS8hPI6xg15BQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 16AC2344DD;
+        Wed,  2 Feb 2022 20:32:44 +0000 (UTC)
+Received: from llong.com (unknown [10.22.34.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E86B012E23;
+        Wed,  2 Feb 2022 20:32:19 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/4] mm/page_owner: Extend page_owner to show memcg information
+Date:   Wed,  2 Feb 2022 15:30:32 -0500
+Message-Id: <20220202203036.744010-1-longman@redhat.com>
+In-Reply-To: <20220131192308.608837-5-longman@redhat.com>
+References: <20220131192308.608837-5-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+ v4:
+  - Take rcu_read_lock() when memcg is being accessed as suggested by
+    Michal.
+  - Make print_page_owner_memcg() return the new offset into the buffer
+    and put CONFIG_MEMCG block inside as suggested by Mike.
+  - Directly use TASK_COMM_LEN as length of name buffer as suggested by
+    Roman.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/frequency/adf4350.c | 103 +++++++++++++-------------------
- 1 file changed, 42 insertions(+), 61 deletions(-)
+ v3:
+  - Add unlikely() to patch 1 and clarify that -1 will not be returned.
+  - Use a helper function to print out memcg information in patch 3.
+  - Add a new patch 4 to store task command name in page_owner
+    structure.
 
-diff --git a/drivers/iio/frequency/adf4350.c b/drivers/iio/frequency/adf4350.c
-index 3d9eba716b69..fe5435e76957 100644
---- a/drivers/iio/frequency/adf4350.c
-+++ b/drivers/iio/frequency/adf4350.c
-@@ -7,17 +7,18 @@
- 
- #include <linux/device.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/sysfs.h>
- #include <linux/spi/spi.h>
- #include <linux/regulator/consumer.h>
- #include <linux/err.h>
--#include <linux/module.h>
- #include <linux/gcd.h>
- #include <linux/gpio/consumer.h>
- #include <asm/div64.h>
- #include <linux/clk.h>
--#include <linux/of.h>
- 
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-@@ -381,10 +382,8 @@ static const struct iio_info adf4350_info = {
- 	.debugfs_reg_access = &adf4350_reg_access,
- };
- 
--#ifdef CONFIG_OF
- static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
- {
--	struct device_node *np = dev->of_node;
- 	struct adf4350_platform_data *pdata;
- 	unsigned int tmp;
- 
-@@ -392,101 +391,83 @@ static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
- 	if (!pdata)
- 		return NULL;
- 
--	snprintf(&pdata->name[0], SPI_NAME_SIZE - 1, "%pOFn", np);
-+	snprintf(pdata->name, sizeof(pdata->name), "%pfw", dev_fwnode(dev));
- 
- 	tmp = 10000;
--	of_property_read_u32(np, "adi,channel-spacing", &tmp);
-+	device_property_read_u32(dev, "adi,channel-spacing", &tmp);
- 	pdata->channel_spacing = tmp;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,power-up-frequency", &tmp);
-+	device_property_read_u32(dev, "adi,power-up-frequency", &tmp);
- 	pdata->power_up_frequency = tmp;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,reference-div-factor", &tmp);
-+	device_property_read_u32(dev, "adi,reference-div-factor", &tmp);
- 	pdata->ref_div_factor = tmp;
- 
--	pdata->ref_doubler_en = of_property_read_bool(np,
--			"adi,reference-doubler-enable");
--	pdata->ref_div2_en = of_property_read_bool(np,
--			"adi,reference-div2-enable");
-+	pdata->ref_doubler_en = device_property_read_bool(dev, "adi,reference-doubler-enable");
-+	pdata->ref_div2_en = device_property_read_bool(dev, "adi,reference-div2-enable");
- 
- 	/* r2_user_settings */
--	pdata->r2_user_settings = of_property_read_bool(np,
--			"adi,phase-detector-polarity-positive-enable") ?
--			ADF4350_REG2_PD_POLARITY_POS : 0;
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,lock-detect-precision-6ns-enable") ?
--			ADF4350_REG2_LDP_6ns : 0;
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,lock-detect-function-integer-n-enable") ?
--			ADF4350_REG2_LDF_INT_N : 0;
-+	pdata->r2_user_settings = 0;
-+	if (deivice_property_read_bool(dev, "adi,phase-detector-polarity-positive-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_PD_POLARITY_POS;
-+	if (device_property_read_bool(dev, "adi,lock-detect-precision-6ns-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_LDP_6ns;
-+	if (device_property_read_bool(dev, "adi,lock-detect-function-integer-n-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_LDF_INT_N;
- 
- 	tmp = 2500;
--	of_property_read_u32(np, "adi,charge-pump-current", &tmp);
-+	device_property_read_u32(dev, "adi,charge-pump-current", &tmp);
- 	pdata->r2_user_settings |= ADF4350_REG2_CHARGE_PUMP_CURR_uA(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,muxout-select", &tmp);
-+	device_property_read_u32(dev, "adi,muxout-select", &tmp);
- 	pdata->r2_user_settings |= ADF4350_REG2_MUXOUT(tmp);
- 
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,low-spur-mode-enable") ?
--			ADF4350_REG2_NOISE_MODE(0x3) : 0;
-+	if (device_property_read_bool(dev, "adi,low-spur-mode-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_NOISE_MODE(0x3);
- 
- 	/* r3_user_settings */
- 
--	pdata->r3_user_settings = of_property_read_bool(np,
--			"adi,cycle-slip-reduction-enable") ?
--			ADF4350_REG3_12BIT_CSR_EN : 0;
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,charge-cancellation-enable") ?
--			ADF4351_REG3_CHARGE_CANCELLATION_EN : 0;
--
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,anti-backlash-3ns-enable") ?
--			ADF4351_REG3_ANTI_BACKLASH_3ns_EN : 0;
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,band-select-clock-mode-high-enable") ?
--			ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH : 0;
-+	pdata->r3_user_settings = 0;
-+	if (device_property_read_bool(dev, "adi,cycle-slip-reduction-enable"))
-+		pdata->r3_user_settings |= ADF4350_REG3_12BIT_CSR_EN;
-+	if (device_property_read_bool(dev, "adi,charge-cancellation-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_CHARGE_CANCELLATION_EN;
-+	if (device_property_read_bool(dev, "adi,anti-backlash-3ns-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_ANTI_BACKLASH_3ns_EN;
-+	if (device_property_read_bool(dev, "adi,band-select-clock-mode-high-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,12bit-clk-divider", &tmp);
-+	device_property_read_u32(dev, "adi,12bit-clk-divider", &tmp);
- 	pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,clk-divider-mode", &tmp);
-+	device_property_read_u32(dev, "adi,clk-divider-mode", &tmp);
- 	pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV_MODE(tmp);
- 
- 	/* r4_user_settings */
- 
--	pdata->r4_user_settings = of_property_read_bool(np,
--			"adi,aux-output-enable") ?
--			ADF4350_REG4_AUX_OUTPUT_EN : 0;
--	pdata->r4_user_settings |= of_property_read_bool(np,
--			"adi,aux-output-fundamental-enable") ?
--			ADF4350_REG4_AUX_OUTPUT_FUND : 0;
--	pdata->r4_user_settings |= of_property_read_bool(np,
--			"adi,mute-till-lock-enable") ?
--			ADF4350_REG4_MUTE_TILL_LOCK_EN : 0;
-+	pdata->r4_user_settings = 0;
-+	if (device_property_read_bool(dev, "adi,aux-output-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_EN;
-+	if (device_property_read_bool(dev, "adi,aux-output-fundamental-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_FUND;
-+	if (device_property_read_bool(dev, "adi,mute-till-lock-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_MUTE_TILL_LOCK_EN;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,output-power", &tmp);
-+	device_property_read_u32(dev, "adi,output-power", &tmp);
- 	pdata->r4_user_settings |= ADF4350_REG4_OUTPUT_PWR(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,aux-output-power", &tmp);
-+	device_property_read_u32(dev, "adi,aux-output-power", &tmp);
- 	pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_PWR(tmp);
- 
- 	return pdata;
- }
--#else
--static
--struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
--{
--	return NULL;
--}
--#endif
- 
- static int adf4350_probe(struct spi_device *spi)
- {
-@@ -496,7 +477,7 @@ static int adf4350_probe(struct spi_device *spi)
- 	struct clk *clk = NULL;
- 	int ret;
- 
--	if (spi->dev.of_node) {
-+	if (dev_fwnode(&spi->dev)) {
- 		pdata = adf4350_parse_dt(&spi->dev);
- 		if (pdata == NULL)
- 			return -EINVAL;
-@@ -625,7 +606,7 @@ MODULE_DEVICE_TABLE(spi, adf4350_id);
- static struct spi_driver adf4350_driver = {
- 	.driver = {
- 		.name	= "adf4350",
--		.of_match_table = of_match_ptr(adf4350_of_match),
-+		.of_match_table = adf4350_of_match,
- 	},
- 	.probe		= adf4350_probe,
- 	.remove		= adf4350_remove,
+ v2:
+  - Remove the SNPRINTF() macro as suggested by Ira and use scnprintf()
+    instead to remove some buffer overrun checks.
+  - Add a patch to optimize vscnprintf with a size parameter of 0.
+
+While debugging the constant increase in percpu memory consumption on
+a system that spawned large number of containers, it was found that a
+lot of offline mem_cgroup structures remained in place without being
+freed. Further investigation indicated that those mem_cgroup structures
+were pinned by some pages.
+
+In order to find out what those pages are, the existing page_owner
+debugging tool is extended to show memory cgroup information and whether
+those memcgs are offline or not. With the enhanced page_owner tool,
+the following is a typical page that pinned the mem_cgroup structure
+in my test case:
+
+Page allocated via order 0, mask 0x1100cca(GFP_HIGHUSER_MOVABLE), pid 162970 (podman), ts 1097761405537 ns, free_ts 1097760838089 ns
+PFN 1925700 type Movable Block 3761 type Movable Flags 0x17ffffc00c001c(uptodate|dirty|lru|reclaim|swapbacked|node=0|zone=2|lastcpupid=0x1fffff)
+ prep_new_page+0xac/0xe0
+ get_page_from_freelist+0x1327/0x14d0
+ __alloc_pages+0x191/0x340
+ alloc_pages_vma+0x84/0x250
+ shmem_alloc_page+0x3f/0x90
+ shmem_alloc_and_acct_page+0x76/0x1c0
+ shmem_getpage_gfp+0x281/0x940
+ shmem_write_begin+0x36/0xe0
+ generic_perform_write+0xed/0x1d0
+ __generic_file_write_iter+0xdc/0x1b0
+ generic_file_write_iter+0x5d/0xb0
+ new_sync_write+0x11f/0x1b0
+ vfs_write+0x1ba/0x2a0
+ ksys_write+0x59/0xd0
+ do_syscall_64+0x37/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+Charged to offline memcg libpod-conmon-15e4f9c758422306b73b2dd99f9d50a5ea53cbb16b4a13a2c2308a4253cc0ec8.
+
+So the page was not freed because it was part of a shmem segment. That
+is useful information that can help users to diagnose similar problems.
+
+With cgroup v1, /proc/cgroups can be read to find out the total number
+of memory cgroups (online + offline). With cgroup v2, the cgroup.stat of
+the root cgroup can be read to find the number of dying cgroups (most
+likely pinned by dying memcgs).
+
+The page_owner feature is not supposed to be enabled for production
+system due to its memory overhead. However, if it is suspected that
+dying memcgs are increasing over time, a test environment with page_owner
+enabled can then be set up with appropriate workload for further analysis
+on what may be causing the increasing number of dying memcgs.
+
+Waiman Long (4):
+  lib/vsprintf: Avoid redundant work with 0 size
+  mm/page_owner: Use scnprintf() to avoid excessive buffer overrun check
+  mm/page_owner: Print memcg information
+  mm/page_owner: Record task command name
+
+ lib/vsprintf.c  |  8 +++---
+ mm/page_owner.c | 70 ++++++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 60 insertions(+), 18 deletions(-)
+
 -- 
-2.34.1
+2.27.0
 

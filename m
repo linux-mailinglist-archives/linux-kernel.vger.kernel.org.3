@@ -2,91 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CA54A72E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8814A72E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344867AbiBBOVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344862AbiBBOVs (ORCPT
+        id S1344858AbiBBOVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:21:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33761 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233711AbiBBOVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:21:48 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967EC061714;
-        Wed,  2 Feb 2022 06:21:48 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b13so42606887edn.0;
-        Wed, 02 Feb 2022 06:21:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=uZxG6ejcH+oTnDpDsfC5qB/qJgKr2fa+FUx9iDGet0A=;
-        b=bfAELRSTJH5KgdkiGqCQXeFRZeV2LwexqkR0eM0O4Y66Dm8Af6YSMpkfrkeJbbgKrh
-         elXrjOvtZSRPwO+6ZwJvl7ETD5q8XR4Q9Ikp+oo/4Y7XNhoCAJe3j1lBV8nMCeQzNr3W
-         1pMqoyyGFAOEWVmP2jlXKrnDNw06lPnlUY1rc/CFAK26iAtGMERgbSplC3LsHT5/b8m1
-         gfhhM95CP+QrC+deydWKmxp6MbZ0V6IfuKxySoud5sdriBK8c2n6xiD2JYm8CIndQTQa
-         SAmMAtwPbbsYhPa4cMxwRUoKSt+98tbMuIfn8+t5dG/rHRaTeCKMBr3+JD5Qvkw5pajX
-         3ZSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=uZxG6ejcH+oTnDpDsfC5qB/qJgKr2fa+FUx9iDGet0A=;
-        b=M3pZIxNViqkZWUBJ86Pag4Bv243z1uOBGI0VrEyvNptY4wYYKwnUSIC20m5r4ucvWv
-         UbB+Je0ojtgSpqMBkfTNweYD9o5iycY+eze+mJtnhTY0CK0afvyG3pffL+gD4uUu31o3
-         2EVtsFxqU7qiPrJWZxy/t5xfH1A+fL9pTTeBeoIpclt6211wFnXxdiYNSE5YkmXbl4Au
-         UbSRFrvEfhKcB8QGQ39/iRC/ym/nsMMqEVT2nNdWki1B0qxFPJPRYMQXEP/OCuP4CdUN
-         9MN8CvzR80RtRTEZgbM92ThaV3C1wwWydsNfs0r55sdUN2ZUDNPjOEj/HRZ6Gtikirwl
-         1dKQ==
-X-Gm-Message-State: AOAM531+SRAAwGGit+Cfp0CoDm0MHUfyG3zJXD7Qe67y4hQIeS/GVfdb
-        8UitufhTLoXv2bQBBtcDuqjl43soluBl67KKOlAmSDlmFzs=
-X-Google-Smtp-Source: ABdhPJy/jhevC/1abuSRWlcDmvSsGBSvixZwyaqJd+WaKS3f2CIiGz1EB0Y4pIvXD0WQzU2FZkv2oZRLQkjL09AJ+Zw=
-X-Received: by 2002:aa7:dd8f:: with SMTP id g15mr6382743edv.436.1643811706757;
- Wed, 02 Feb 2022 06:21:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20220202125438.19345-1-j.neuschaefer@gmx.net>
-In-Reply-To: <20220202125438.19345-1-j.neuschaefer@gmx.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 2 Feb 2022 16:20:11 +0200
-Message-ID: <CAHp75VdtTzkXVY21WZje1EkqixOOxxA3M09NfqQanV0XSRiNjQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fixing the compile-test warnings in pinctrl-npcm7xx
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 2 Feb 2022 09:21:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643811676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rc7y+qsfGPT7XYtxcTLv5dlwctU2TOvhYLpkEZO+kh4=;
+        b=RwCATeICOKfJqal1eANSF5F909D58iJs4pilYEUndgdc/yXxkAh6xX70HRUxJxhAeFoOMZ
+        5Nl+NRThehfuzmOa2+pMfYHDl8LL9exHMJ3bTAKdqS+ScwU+3D5rLApEzwfZSNevSDbg8j
+        rgHcqqlwk2gnem6nzcJf43WOpGbCLOM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-cwareHhTOpef4PBWhN7rjQ-1; Wed, 02 Feb 2022 09:21:11 -0500
+X-MC-Unique: cwareHhTOpef4PBWhN7rjQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 616271923E2D;
+        Wed,  2 Feb 2022 14:21:10 +0000 (UTC)
+Received: from localhost (unknown [10.64.242.145])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9DCDA108F842;
+        Wed,  2 Feb 2022 14:21:07 +0000 (UTC)
+Date:   Wed, 02 Feb 2022 23:21:06 +0900 (JST)
+Message-Id: <20220202.232106.1642450897216370276.yamato@redhat.com>
+To:     matorola@gmail.com
+Cc:     zeha@debian.org, kzak@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, util-linux@vger.kernel.org
+Subject: Re: [ANNOUNCE] util-linux v2.38-rc1
+From:   Masatake YAMATO <yamato@redhat.com>
+In-Reply-To: <CADxRZqwq=XmXZnnENU+vD7_2oC_VtqhG40P-xg=QAzKchT-3Ng@mail.gmail.com>
+References: <20220131151432.mfk62bwskotc6w64@ws.net.home>
+        <20220131192337.lzpofr4pz3lhgtl3@zeha.at>
+        <CADxRZqwq=XmXZnnENU+vD7_2oC_VtqhG40P-xg=QAzKchT-3Ng@mail.gmail.com>
+Organization: Red Hat Japan, Inc.
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 2:54 PM Jonathan Neusch=C3=A4fer
-<j.neuschaefer@gmx.net> wrote:
->
-> My "Nuvoton WPCM450 pinctrl and GPIO driver" patchset brought two
-> warnings[1] in the pinctrl-npcm7xx to light. Here's an attempt at fixing
-> them.
+Hi,
 
-With added the respective Fixes tag to each of them
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+thank you for testing lsfd.
 
-Thanks!
-
-> [1]: https://lore.kernel.org/lkml/202201292234.NpSNe4TD-lkp@intel.com/
->
-> Jonathan Neusch=C3=A4fer (2):
->   pinctrl: nuvoton: npcm7xx: Use %zd printk format for ARRAY_SIZE()
->   pinctrl: nuvoton: npcm7xx: Rename DS() macro to DSTR()
->
->  drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 160 +++++++++++-----------
->  1 file changed, 80 insertions(+), 80 deletions(-)
->
-> --
-> 2.34.1
->
+Could you tell me what kind of file system for /etc/passwd do you use for testing?
+When trying to reproduce the bug, could you applying the following change?
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+diff --git a/tests/ts/lsfd/lsfd-functions.bash b/tests/ts/lsfd/lsfd-functions.bash
+index 597e48cf4..a81647ccb 100644
+--- a/tests/ts/lsfd/lsfd-functions.bash
++++ b/tests/ts/lsfd/lsfd-functions.bash
+@@ -43,6 +43,13 @@ function lsfd_compare_dev {
+     # if we use findmnt.
+     local FINDMNT_MNTID_DEV=$("${FINDMNT}" --raw -n -o ID,MAJ:MIN | grep "^${MNTID}")
+     echo 'FINDMNT[RUN]:' $?
+-    [ "${MNTID} ${DEV}" == "${FINDMNT_MNTID_DEV}" ]
+-    echo 'DEV[STR]:' $?
++    if [ "${MNTID} ${DEV}" == "${FINDMNT_MNTID_DEV}" ]; then
++	echo 'DEV[STR]:' 0
++    else
++	echo 'DEV[STR]:' 1
++	echo 'MNTID:' "${MNTID}"
++	echo 'DEV:' "${DEV}"
++	echo 'MNTID DEV:' "${MNTID} ${DEV}"
++	echo 'FINDMNT_MNTID_DEV:' "${FINDMNT_MNTID_DEV}"
++    fi
+ }
+
+
+Masatake YAMATO
+
+From: Anatoly Pugachev <matorola@gmail.com>
+Subject: Re: [ANNOUNCE] util-linux v2.38-rc1
+Date: Wed, 2 Feb 2022 12:57:47 +0300
+
+> On Tue, Feb 1, 2022 at 11:48 PM Chris Hofstaedtler <zeha@debian.org> wrote:
+>>
+>> Hello,
+>>
+>> * Karel Zak <kzak@redhat.com> [220131 16:15]:
+>> >
+>> > The util-linux release v2.38-rc1 is available at
+>> >
+>> >   http://www.kernel.org/pub/linux/utils/util-linux/v2.38/
+>> >
+>> > Feedback and bug reports, as always, are welcomed.
+>>
+>> Thanks.
+>>
+>> Some lsfd tests appear to fail in a Debian sbuild build environment,
+>> in that they differ in the expected/actual values of DEV[STR] (see
+>> below). I did not find time to investigate this closer, but thought
+>> it would be best to report it sooner than later.
+>>
+>> Best,
+>> Chris
+>>
+>> ---snip---
+>>
+>>          lsfd: read-only regular file         ... FAILED (lsfd/mkfds-ro-regular-file)
+>> ========= script: /<<PKGBUILDDIR>>/tests/ts/lsfd/mkfds-ro-regular-file =================
+>> ================= OUTPUT =====================
+>>      1  ABC         3  r--  REG /etc/passwd   1
+>>      2  COMMAND,ASSOC,MODE,TYPE,NAME,POS: 0
+>>      3  PID[RUN]: 0
+>>      4  PID[STR]: 0
+>>      5  INODE[RUN]: 0
+>>      6  INODE[STR]: 0
+>>      7  UID[RUN]: 0
+>>      8  UID[STR]: 0
+>>      9  USER[RUN]: 0
+>>     10  USER[STR]: 0
+>>     11  SIZE[RUN]: 0
+>>     12  SIZE[STR]: 0
+>>     13  MNTID[RUN]: 0
+>>     14  DEV[RUN]: 0
+>>     15  FINDMNT[RUN]: 0
+>>     16  DEV[STR]: 1
+>> ================= EXPECTED ===================
+>>      1  ABC         3  r--  REG /etc/passwd   1
+>>      2  COMMAND,ASSOC,MODE,TYPE,NAME,POS: 0
+>>      3  PID[RUN]: 0
+>>      4  PID[STR]: 0
+>>      5  INODE[RUN]: 0
+>>      6  INODE[STR]: 0
+>>      7  UID[RUN]: 0
+>>      8  UID[STR]: 0
+>>      9  USER[RUN]: 0
+>>     10  USER[STR]: 0
+>>     11  SIZE[RUN]: 0
+>>     12  SIZE[STR]: 0
+>>     13  MNTID[RUN]: 0
+>>     14  DEV[RUN]: 0
+>>     15  FINDMNT[RUN]: 0
+>>     16  DEV[STR]: 0
+>> ================= O/E diff ===================
+>> --- /<<PKGBUILDDIR>>/tests/output/lsfd/mkfds-ro-regular-file    2022-01-31 19:12:43.802603811 +0000
+>> +++ /<<PKGBUILDDIR>>/tests/expected/lsfd/mkfds-ro-regular-file  2022-01-31 14:57:47.000000000 +0000
+>> @@ -13,4 +13,4 @@
+>>  MNTID[RUN]: 0
+>>  DEV[RUN]: 0
+>>  FINDMNT[RUN]: 0
+>> -DEV[STR]: 1
+>> +DEV[STR]: 0
+>> ==============================================
+> 
+> Chris,
+> 
+> i had this error on my test system
+> 
+> https://github.com/util-linux/util-linux/issues/1511
+> 
+> but i can't reliably reproduce it now (on my current kernel 5.17.0-rc2
+> and on debian kernel 5.15.0-3-sparc64-smp )
+> Tested with the following command line (for current git util-linux sources):
+> $ for i in {1..100}; do tests/run.sh lsfd; done  | grep FAILED
+> 
+> ^^ no failed output
+> 
+> I can reopen the issue above, so we could try to reproduce it.
+> 
+

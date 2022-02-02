@@ -2,197 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C02B4A713B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134704A713D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344251AbiBBNF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:05:28 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:43751 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiBBNF0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:05:26 -0500
-Received: by mail-io1-f70.google.com with SMTP id a185-20020a6bcac2000000b00604c268546dso15104624iog.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:05:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zQXGrOyM/m+ZM+9ONIPJs1OIP/l9+wtUCdGPQwap1aY=;
-        b=Pf9kSfFejbALsHhvlBh23Q6xq9Q0fVwCb9b/mtqtUasu8rxv1Q1fNjaa+G+tVT0W5n
-         aBeqGo/Uuly5Kxfayof8Yn7Dx5EEZq1S18yrFU+czoX0OiVICCabc2wCbxlG1tM3AZfo
-         pr4fBupekfHPYaaKjC/EMnT0I8Sl2JdWvwk86bQL1eYxTt1DP+Mah0yQqzYf61xtwlJ5
-         +CuRtXDSPd2/GzP7i4vIDcXPl3fcceQKOMYGv7QXJkNZgWJgvFWA4u9VUa2y8Llq31xS
-         hknnHO0jGuvWWjq9/wJnVevYmHwx5Y9L55Tom9yEASTZs7s/PDzMwGxyThAaxsAn2vmf
-         q2KA==
-X-Gm-Message-State: AOAM531mz9amGechhPm48qTatXwjbXQobrkvSs2sy8jRfCSy5edrlQto
-        uN/qMjRHc4LZkWUiTD85o7Uci+4SKogOKZ0V5C1Gen54rIXt
-X-Google-Smtp-Source: ABdhPJxxAD29A0NebrH6Lg8nAKarow0gH88Ym7mR/EULdom6wB6jb0fcotKxhNInM9BmRX+RJ3xwr1bR3ygH200jKwDRA2S6/NzR
+        id S1344173AbiBBNGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:06:10 -0500
+Received: from mga14.intel.com ([192.55.52.115]:37984 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229957AbiBBNGJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 08:06:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643807169; x=1675343169;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=68aFLvgc9OSad5z3Pdpw/01FyNt3GoVy64K5S+1Fk68=;
+  b=AING72eODD4EiHKY1zhViddoXFXB6I61vxn5DOeZcc7IiNNzeY9DPEke
+   K54AW4PanJA3WjqbfArDbs1IDi846jIguZjcMWo74Cb4DYop89tqVAFhs
+   f6Sm9yqOmFnWucpks3eNwpH4qPvi+rhVKBZiqwReRvuCAgFGtqIuqLlMU
+   dwHwQ/mdePMkD1COH10dqgU91BnM5itiF23GSo/+3dzI26yL3rvEB6eh0
+   0H2j+32hVSH+zCkRlxud6wa7vFKwCLBGqOGDPRsVo3Y0QP+nYVS56LqGC
+   FZQPbeh/Bl8YL5aYipWm7yNzC0O9Oid/IoS3ue8Y7JzrHSdj4Gl399HaX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248129907"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="248129907"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 05:06:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="480097987"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2022 05:06:02 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id C01E03B7; Wed,  2 Feb 2022 15:06:16 +0200 (EET)
+Date:   Wed, 2 Feb 2022 16:06:16 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 06/29] x86/tdx: Add MSR support for TDX guests
+Message-ID: <20220202130616.xknv5y5s4xavuzmi@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-7-kirill.shutemov@linux.intel.com>
+ <871r0mz2rm.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:d48:: with SMTP id h8mr17408561ilj.212.1643807126106;
- Wed, 02 Feb 2022 05:05:26 -0800 (PST)
-Date:   Wed, 02 Feb 2022 05:05:26 -0800
-In-Reply-To: <000000000000df66a505d68df8d1@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d4b6fd05d708ab03@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in bpf_prog_test_run_xdp
-From:   syzbot <syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <871r0mz2rm.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Tue, Feb 01, 2022 at 10:38:05PM +0100, Thomas Gleixner wrote:
+> On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> > +static bool tdx_read_msr(unsigned int msr, u64 *val)
+> > +{
+> > +	struct tdx_hypercall_output out;
+> > +
+> > +	/*
+> > +	 * Emulate the MSR read via hypercall. More info about ABI
+> > +	 * can be found in TDX Guest-Host-Communication Interface
+> > +	 * (GHCI), sec titled "TDG.VP.VMCALL<Instruction.RDMSR>".
+> > +	 */
+> > +	if (_tdx_hypercall(EXIT_REASON_MSR_READ, msr, 0, 0, 0, &out))
+> > +		return false;
+> > +
+> > +	*val = out.r11;
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +static bool tdx_write_msr(unsigned int msr, unsigned int low,
+> > +			       unsigned int high)
+> > +{
+> > +	u64 ret;
+> > +
+> > +	/*
+> > +	 * Emulate the MSR write via hypercall. More info about ABI
+> > +	 * can be found in TDX Guest-Host-Communication Interface
+> > +	 * (GHCI) sec titled "TDG.VP.VMCALL<Instruction.WRMSR>".
+> > +	 */
+> > +	ret = _tdx_hypercall(EXIT_REASON_MSR_WRITE, msr, (u64)high << 32 | low,
+> > +			     0, 0, NULL);
+> > +
+> > +	return ret ? false : true;
+> > +}
+> > +
+> >  bool tdx_get_ve_info(struct ve_info *ve)
+> >  {
+> >  	struct tdx_module_output out;
+> > @@ -132,11 +165,22 @@ static bool tdx_virt_exception_user(struct pt_regs *regs, struct ve_info *ve)
+> >  static bool tdx_virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
+> >  {
+> >  	bool ret = false;
+> > +	u64 val;
+> >  
+> >  	switch (ve->exit_reason) {
+> >  	case EXIT_REASON_HLT:
+> >  		ret = tdx_halt();
+> >  		break;
+> > +	case EXIT_REASON_MSR_READ:
+> > +		ret = tdx_read_msr(regs->cx, &val);
+> > +		if (ret) {
+> > +			regs->ax = lower_32_bits(val);
+> > +			regs->dx = upper_32_bits(val);
+> > +		}
+> > +		break;
+> 
+> Why here?
+> 
+> static bool tdx_read_msr(struct pt_regs *regs)
+> {
+> 	struct tdx_hypercall_output out;
+> 
+> 	/*
+> 	 * Emulate the MSR read via hypercall. More info about ABI
+> 	 * can be found in TDX Guest-Host-Communication Interface
+> 	 * (GHCI), sec titled "TDG.VP.VMCALL<Instruction.RDMSR>".
+> 	 */
+> 	if (_tdx_hypercall(EXIT_REASON_MSR_READ, regs->cx, 0, 0, 0, &out))
+> 		return false;
+> 
+> 	regs->ax = lower_32_bits(out.r11);
+> 	regs->dx = upper_32_bits(out.r11);
+> 	return true;
+> }
+> 
+> and
+> 
+> static bool tdx_read_msr(struct pt_regs *regs)
+> {
+> 	/*
+> 	 * Emulate the MSR write via hypercall. More info about ABI
+> 	 * can be found in TDX Guest-Host-Communication Interface
+> 	 * (GHCI) sec titled "TDG.VP.VMCALL<Instruction.WRMSR>".
+> 	 */
+> 	return !!_tdx_hypercall(EXIT_REASON_MSR_WRITE, regs->cx,
+>         			(u64)regs->dx << 32 | regs->ax,
+> 			     	0, 0, NULL);
+> }
+> 
+> Also the switch case can be simplified as the only action after 'break;'
+> is 'return ret':
+> 
+> 	switch (ve->exit_reason) {
+> 	case EXIT_REASON_HLT:
+> 		return tdx_halt();
+> 	case EXIT_REASON_MSR_READ:
+> 		return tdx_read_msr(regs);
+> 	case EXIT_REASON_MSR_WRITE:
+> 		return tdx_write_msr(regs);
+>         default:
+>                 ....
+> 
+> Hmm?
 
-HEAD commit:    dd5152ab338c Merge branch 'bpf-btf-dwarf5'
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15b770dbb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b210f94c3ec14b22
-dashboard link: https://syzkaller.appspot.com/bug?extid=6d70ca7438345077c549
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10044d98700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1613fa8fb00000
+No problem with this approach on read side.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com
+On the write side there's one important optimization (outside of the
+initial TDX enabling):
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in __skb_frag_set_page include/linux/skbuff.h:3242 [inline]
-BUG: KASAN: slab-out-of-bounds in bpf_prog_test_run_xdp+0x10ac/0x1150 net/bpf/test_run.c:972
-Write of size 8 at addr ffff88801dc53000 by task syz-executor098/3592
+https://github.com/intel/tdx/commit/2cea8becaa5a287c93266c01fc7f2a4ed53c509d
 
-CPU: 1 PID: 3592 Comm: syz-executor098 Not tainted 5.16.0-syzkaller-11587-gdd5152ab338c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0x8d/0x336 mm/kasan/report.c:255
- __kasan_report mm/kasan/report.c:442 [inline]
- kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
- __skb_frag_set_page include/linux/skbuff.h:3242 [inline]
- bpf_prog_test_run_xdp+0x10ac/0x1150 net/bpf/test_run.c:972
- bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
- __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
- __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fada7c9e229
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff58406588 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fada7c9e229
-RDX: 0000000000000048 RSI: 0000000020000000 RDI: 000000000000000a
-RBP: 00007fada7c62210 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fada7c622a0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+It will require rework, maybe use separate __tdx_hypercall() for the
+paravirt call implementation.
 
-Allocated by task 3592:
- kasan_save_stack+0x1e/0x50 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:46 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:586 [inline]
- kzalloc include/linux/slab.h:715 [inline]
- bpf_test_init.isra.0+0x9f/0x150 net/bpf/test_run.c:411
- bpf_prog_test_run_xdp+0x2f8/0x1150 net/bpf/test_run.c:941
- bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
- __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
- __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88801dc52000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 0 bytes to the right of
- 4096-byte region [ffff88801dc52000, ffff88801dc53000)
-The buggy address belongs to the page:
-page:ffffea0000771400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1dc50
-head:ffffea0000771400 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888010c42140
-raw: 0000000000000000 0000000080040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3592, ts 49734537716, free_ts 49716400399
- prep_new_page mm/page_alloc.c:2434 [inline]
- get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2271
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab mm/slub.c:1944 [inline]
- new_slab+0x28a/0x3b0 mm/slub.c:2004
- ___slab_alloc+0x87c/0xe90 mm/slub.c:3018
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3105
- slab_alloc_node mm/slub.c:3196 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc_trace+0x289/0x2c0 mm/slub.c:3255
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:715 [inline]
- ima_calc_file_hash_tfm+0x282/0x3b0 security/integrity/ima/ima_crypto.c:477
- ima_calc_file_shash security/integrity/ima/ima_crypto.c:515 [inline]
- ima_calc_file_hash+0x19d/0x4b0 security/integrity/ima/ima_crypto.c:572
- ima_collect_measurement+0x4c9/0x570 security/integrity/ima/ima_api.c:254
- process_measurement+0xd37/0x1920 security/integrity/ima/ima_main.c:337
- ima_bprm_check+0xd0/0x220 security/integrity/ima/ima_main.c:491
- security_bprm_check+0x7d/0xa0 security/security.c:869
- search_binary_handler fs/exec.c:1714 [inline]
- exec_binprm fs/exec.c:1767 [inline]
- bprm_execve fs/exec.c:1836 [inline]
- bprm_execve+0x732/0x19b0 fs/exec.c:1798
- do_execveat_common+0x5e3/0x780 fs/exec.c:1925
- do_execve fs/exec.c:1993 [inline]
- __do_sys_execve fs/exec.c:2069 [inline]
- __se_sys_execve fs/exec.c:2064 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2064
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1352 [inline]
- free_pcp_prepare+0x374/0x870 mm/page_alloc.c:1404
- free_unref_page_prepare mm/page_alloc.c:3325 [inline]
- free_unref_page+0x19/0x690 mm/page_alloc.c:3404
- __unfreeze_partials+0x320/0x340 mm/slub.c:2536
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6d/0x160 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:447
- kasan_slab_alloc include/linux/kasan.h:260 [inline]
- slab_post_alloc_hook mm/slab.h:732 [inline]
- slab_alloc_node mm/slub.c:3230 [inline]
- slab_alloc mm/slub.c:3238 [inline]
- kmem_cache_alloc+0x202/0x3a0 mm/slub.c:3243
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:138
- getname_flags+0x9a/0xe0 include/linux/audit.h:323
- user_path_at_empty+0x2b/0x60 fs/namei.c:2800
- user_path_at include/linux/namei.h:57 [inline]
- vfs_statx+0x142/0x390 fs/stat.c:221
- vfs_fstatat fs/stat.c:243 [inline]
- __do_sys_newfstatat+0x96/0x120 fs/stat.c:412
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
- ffff88801dc52f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88801dc52f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88801dc53000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                   ^
- ffff88801dc53080: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88801dc53100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
+-- 
+ Kirill A. Shutemov

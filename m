@@ -2,114 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF4C4A772A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5392A4A7730
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346379AbiBBR4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:56:19 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:34682 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346305AbiBBR4S (ORCPT
+        id S1346407AbiBBR5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:57:11 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:58140 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346408AbiBBR4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:56:18 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 566B61F383;
-        Wed,  2 Feb 2022 17:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643824577; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eUaCCmIrt4YXjEHnPOouYBMineoqEjQxWMOeykndMd0=;
-        b=LVC7QKF9m3y87F2lRODe1hv/0VpW6yBSKfqzNrbC+ql2jmd+Gdx7rF40xvljUGtdOYzaik
-        dFyHjYuA394ZAR40l98/+zytDpSVZV7EnNLBgnsAoCmYkfj+UeOcwQQGudFdWr0CMa1WaP
-        rxWjwNZtjIvt35GHr7ossjaNISAv4oU=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AEECFA3B84;
-        Wed,  2 Feb 2022 17:56:16 +0000 (UTC)
-Date:   Wed, 2 Feb 2022 18:56:16 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2 3/3] mm/page_owner: Dump memcg information
-Message-ID: <YfrFwCur8XR1AIdK@dhcp22.suse.cz>
-References: <YfgT/9tEREQNiiAN@cmpxchg.org>
- <YfgnUZQBRkqhrEIb@carbon.dhcp.thefacebook.com>
- <Yfgpknwr1tMnPkqh@dhcp22.suse.cz>
- <12686956-612d-d89b-5641-470d5e913090@redhat.com>
- <YfkQJ4QhfY0dICB9@dhcp22.suse.cz>
- <268a8bdf-4c70-b967-f34c-2293b54186f0@redhat.com>
- <YfpHbtffFi2x1L4p@dhcp22.suse.cz>
- <YfqpSPLC+LAdqbJX@carbon.dhcp.thefacebook.com>
- <YfqzbwAPKpshXSLK@dhcp22.suse.cz>
- <YfrEpOGObnc0mYAW@carbon.dhcp.thefacebook.com>
+        Wed, 2 Feb 2022 12:56:50 -0500
+Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9DB5F2F3;
+        Wed,  2 Feb 2022 18:56:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643824608;
+        bh=4gzDfwsslGC43s2cDQGFo1Ma/YkrMy2T0iVVt4XdW98=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hkAxVsjg1EjMt48KzwBeXPKiG1aHIMclx+f8YVSUufY7dqMc5f0L0Brbzb0+xk193
+         yKxfAHweAtIK/l2feZsBytcFqvaOZQWYgfcwThsgGi14aANYdVnlDNZqamjN1xlrli
+         bY6SMnOh14x8Tj6r5iNhvOiP/cGV2I+ZdZywrNJ4=
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+To:     jeanmichel.hautbois@ideasonboard.com
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com
+Subject: [RFC PATCH v3 00/11] Add support for BCM2835 camera interface (unicam)
+Date:   Wed,  2 Feb 2022 18:56:28 +0100
+Message-Id: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfrEpOGObnc0mYAW@carbon.dhcp.thefacebook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 02-02-22 09:51:32, Roman Gushchin wrote:
-> On Wed, Feb 02, 2022 at 05:38:07PM +0100, Michal Hocko wrote:
-> > On Wed 02-02-22 07:54:48, Roman Gushchin wrote:
-> > > On Wed, Feb 02, 2022 at 09:57:18AM +0100, Michal Hocko wrote:
-> > > > On Tue 01-02-22 11:41:19, Waiman Long wrote:
-> > > > > 
-> > > > > On 2/1/22 05:49, Michal Hocko wrote:
-> > > > [...]
-> > > > > > Could you be more specific? Offlined memcgs are still part of the
-> > > > > > hierarchy IIRC. So it shouldn't be much more than iterating the whole
-> > > > > > cgroup tree and collect interesting data about dead cgroups.
-> > > > > 
-> > > > > What I mean is that without piggybacking on top of page_owner, we will to
-> > > > > add a lot more code to collect and display those information which may have
-> > > > > some overhead of its own.
-> > > > 
-> > > > Yes, there is nothing like a free lunch. Page owner is certainly a tool
-> > > > that can be used. My main concern is that this tool doesn't really
-> > > > scale on large machines with a lots of memory. It will provide a very
-> > > > detailed information but I am not sure this is particularly helpful to
-> > > > most admins (why should people process tons of allocation backtraces in
-> > > > the first place). Wouldn't it be sufficient to have per dead memcg stats
-> > > > to see where the memory sits?
-> > > > 
-> > > > Accumulated offline memcgs is something that bothers more people and I
-> > > > am really wondering whether we can do more for those people to evaluate
-> > > > the current state.
-> > > 
-> > > Cgroup v2 has corresponding counters for years. Or do you mean something different?
-> > 
-> > Do we have anything more specific than nr_dying_descendants?
-> 
-> No, just nr_dying_descendants.
-> 
-> > I was thinking about an interface which would provide paths and stats for dead
-> > memcgs. But I have to confess I haven't really spent much time thinking
-> > about how much work that would be. I am by no means against adding memcg
-> > information to the page owner. I just think there must be a better way
-> > to present resource consumption by dead memcgs.
-> 
-> I'd go with a drgn script. I wrote a bunch of them some times ago and
-> can probably revive them and post here (will take few days).
+Hello !
 
-That would be really awsome!
+This patch series adds the BCM2835 CCP2/CSI2 camera interface named
+unicam. This driver is already used in the out-of-tree linux-rpi
+repository [1], and this work aims to support it in mainline.
 
-Thanks!
+The series is based on top of:
+- Rebased on top of 5.16 Tomi Valkeinen's multiplexed stream work, on
+  his multistream/work branch [2] which has been submitted as v10 at the
+  time of this writing. The objective is to demonstrate the use of
+  multiplexed streams on a real world widely used example as well as
+  supporting unicam mainline.
+- The "Add 12bit and 14bit luma-only formats" series [3] is partly
+  applied (the Y10P format bug) the new formats are now part of this
+  series.
+
+The series is made of 11 patches:
+- 1/11 and 2/11 introduce the new formats needed for the unicam driver
+- 3/11 introduces dt-bindings documentation and MAINTAINERS entry I have
+  tentatively assigned maintainership, is this fine ?
+- 4/11 adds the driver support in media/platform
+- 5/11 introduces the csi nodes in the bcm2711 file, in a disabled state
+- 6/11 to 10/11 modifies imx219 driver to make it use the multiplexed
+  streams API
+- 11/11 is the imx219 dtsi file tested on my RPi 4b with the mainline
+  dtb and not the downstream dtb anymore. *This patch is not intended to
+be applied*.
+
+All those patches are in my tree [4].
+
+Patch 4/11 comes from the linux-rpi work [1] with substantial
+modifications:
+- Removed the non-mc API which is deprecated, and not needed upstream
+- Moved from one video node with two source pads (image and embedded) to
+  two video nodes
+- Added a subdev between the sensor and the video nodes to properly
+  route the streams
+- Added support for multiplexed streams API
+
+In order to test it, one will need a RPi board and the camv2 (imx219)
+sensor.  An updated v4l-utils is also needed [5] to have support for
+multiplexed streams.
+
+v4l2-compliance passes on both video devices, without streaming testing
+though with one exception: as the colorspace support is removed in v3,
+we now have:
+
+test VIDIOC_G_FMT: OK
+  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
+	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+test VIDIOC_TRY_FMT: FAIL
+  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
+	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+test VIDIOC_S_FMT: FAIL
+
+This series since its v2 does integrate the device tree nodes into the
+upstream BCM2835 or BCM2711 device tree support.
+
+In order to properly configure the media pipeline, it is needed to call
+the usual ioctls, and configure routing in order to send the embedded
+data from the sensor to the "unicam-embedded" device node :
+
+```
+media=0
+media-ctl -d${media} -l "'imx219 2-0010':0->'unicam-subdev':0 [1]"
+media-ctl -d${media} -l "'unicam-subdev':1->'unicam-image':0 [1]"
+media-ctl -d${media} -v -R "'unicam-subdev' [0/0->1/0[1],0/1->2/0[1]]"
+media-ctl -d${media} -V "'imx219 2-0010':0/0 [fmt:SRGGB10_1X10/3280x2464 field:none]"
+v4l2-ctl -d0 --set-fmt-video width=3280,height=2464,pixelformat='pRAA',field=none
+media-ctl -d${media} -v -V "'imx219 2-0010':0/1 [fmt:METADATA_8/16384x1 field:none]"
+media-ctl -d${media} -p
+```
+
+Be sure to configure the routes before setting the format, as s_routing
+resets the default format.
+
+The media-ctl topology is:
+```
+pi@raspberrypi:~ $ media-ctl -d${media} -p
+Media controller API version 5.16.0
+
+Media device information
+------------------------
+driver          unicam
+model           unicam
+serial          
+bus info        platform:fe801000.csi
+hw revision     0x0
+driver version  5.16.0
+
+Device topology
+- entity 1: unicam-subdev (3 pads, 3 links, 2 routes)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev0
+	routes:
+		0/0 -> 1/0 [ACTIVE]
+		0/1 -> 2/0 [ACTIVE]
+	pad0: Sink
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
+		[stream:1 fmt:METADATA_8/16384x1 field:none]
+		<- "imx219 2-0010":0 [ENABLED,IMMUTABLE]
+	pad1: Source
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
+		-> "unicam-image":0 [ENABLED,IMMUTABLE]
+	pad2: Source
+		[stream:0 fmt:METADATA_8/16384x1 field:none]
+		-> "unicam-embedded":0 [ENABLED,IMMUTABLE]
+
+- entity 5: imx219 2-0010 (1 pad, 1 link, 2 routes)
+            type V4L2 subdev subtype Sensor flags 0
+            device node name /dev/v4l-subdev1
+	routes:
+		0/0 -> 0/0 [ACTIVE, IMMUTABLE, SOURCE]
+		0/0 -> 0/1 [ACTIVE, SOURCE]
+	pad0: Source
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw
+		crop.bounds:(8,8)/3280x2464
+		crop:(8,8)/3280x2464]
+		[stream:1 fmt:METADATA_8/16384x1 field:none
+		crop.bounds:(8,8)/3280x2464
+		crop:(8,8)/3280x2464]
+		-> "unicam-subdev":0 [ENABLED,IMMUTABLE]
+
+- entity 9: unicam-image (1 pad, 1 link, 0 route)
+            type Node subtype V4L flags 1
+            device node name /dev/video0
+	pad0: Sink
+		<- "unicam-subdev":1 [ENABLED,IMMUTABLE]
+
+- entity 15: unicam-embedded (1 pad, 1 link, 0 route)
+             type Node subtype V4L flags 0
+             device node name /dev/video1
+	pad0: Sink
+		<- "unicam-subdev":2 [ENABLED,IMMUTABLE]
+
+```
+
+Then a frame can be capture with yavta:
+`yavta --capture=1 /dev/video0 -F/tmp/test-#.bin`
+
+In v3, capture on the metadata node (/dev/video1 in my case) can't be
+started if capture on image node (/dev/video0) is not already started.
+This can be tested using yavta, letting it capture frames indefinitely
+and start another yavta instance on the /dev/video1 node.
+
+
+Side note:
+My tree [4] also includes a backport for the unicam-isp drivers, it is
+then possible, and it has been successfully tested, to use libcamera and
+qcam to display the camera output.
+
+[1]: https://github.com/raspberrypi/linux/tree/rpi-5.15.y
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/tomba/linux.git/log/?h=multistream/work
+[3]: https://patchwork.linuxtv.org/project/linux-media/list/?series=7099
+[4]: https://github.com/jhautbois/linux-rpi/tree/jmh/tomba/multistream/next/work-v10-with-laurent-isp-v3
+[5]: https://github.com/jhautbois/v4l-utils/tree/jmh/tomi-multiplexed-streams
+
+Jean-Michel Hautbois (11):
+  media: v4l: Add V4L2-PIX-FMT-Y12P format
+  media: v4l: Add V4L2-PIX-FMT-Y14P format
+  media: dt-bindings: media: Add bindings for bcm2835-unicam
+  media: bcm2835-unicam: Add support for CCP2/CSI2 camera interface
+  ARM: dts: bcm2711: Add unicam CSI nodes
+  media: imx219: Rename mbus codes array
+  media: imx219: Switch from open to init_cfg
+  media: imx219: Introduce the set_routing operation
+  media: imx219: use a local v4l2_subdev to simplify reading
+  media: imx219: Add support for the V4L2 subdev active state
+  media: bcm283x: Include the imx219 node
+
+ .../bindings/media/brcm,bcm2835-unicam.yaml   |  107 +
+ .../media/v4l/pixfmt-yuv-luma.rst             |   44 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |    1 +
+ arch/arm/boot/dts/bcm2711.dtsi                |   25 +
+ arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi     |  102 +
+ drivers/media/i2c/imx219.c                    |  344 ++-
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    2 +
+ drivers/media/platform/bcm2835/Kconfig        |   21 +
+ drivers/media/platform/bcm2835/Makefile       |    3 +
+ .../media/platform/bcm2835/bcm2835-unicam.c   | 2586 +++++++++++++++++
+ .../media/platform/bcm2835/vc4-regs-unicam.h  |  253 ++
+ 13 files changed, 3349 insertions(+), 148 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+ create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
+ create mode 100644 drivers/media/platform/bcm2835/Kconfig
+ create mode 100644 drivers/media/platform/bcm2835/Makefile
+ create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
+ create mode 100644 drivers/media/platform/bcm2835/vc4-regs-unicam.h
 
 -- 
-Michal Hocko
-SUSE Labs
+2.32.0
+

@@ -2,93 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB224A7483
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84B44A7488
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345449AbiBBPWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S1345468AbiBBPXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiBBPWI (ORCPT
+        with ESMTP id S1345134AbiBBPX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:22:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6EAC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:22:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28193B83066
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113DDC004E1;
-        Wed,  2 Feb 2022 15:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643815325;
-        bh=OTLXgwve+GXUKqJgusIix6IvLJEmARJe1ZPe1Wk9IxQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UxdeogQjte72mAnF7hRypZPI8xAbel7BrvRvPRlt1nfnufzyW07t/bWcHBqQ+cWPm
-         Gfc7wtq1yWuM2Uxpn/bNERIJOeOvPeaoI++xw+q2x8VrjZqBmySMQSBjFDba9IJcW6
-         +cwWNGtZFw79R6zllZHcbqxZrAX74luFmU3CzYCl7aa1qHcw4b+lbh8fH1pEj+uRAU
-         UT0vNpdnpUacazhAij3sM8PDYaMhN6cYmFT54tdjOiJqYFz5AdKJ3TUpuMoCMpyKBE
-         UBR1KsMFehen3PYeGvOFkAHjM8IfDBW3goWi6ZgbHxbfzVlmxlK6r/uhtmXJ5WFkHG
-         QBJj61DDUrK7w==
-Date:   Wed, 2 Feb 2022 20:52:01 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-imx@nxp.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Wyon Bi <bivvy.bi@rock-chips.com>
-Subject: Re: [PATCH v4] phy: dphy: Correct clk_pre parameter
-Message-ID: <YfqhmSEL8Jym8FhA@matsya>
-References: <20220124024007.1465018-1-victor.liu@nxp.com>
+        Wed, 2 Feb 2022 10:23:29 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B4BC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:23:29 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id h7so25874318iof.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:23:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
+        b=KjTnQGPzCt0S96UuIiNaawuVsmZa9fYmRebjLuFamfRMalfj7glkboFmx2YQiVjxxi
+         OFiyfetLE/KKL1YviKxiRuabpPFcUmMMwWrECiJfjImb8tCVUyU600HZGw/+E5Jg7ncm
+         fQtaS1Gh6MWfhgntWc+BtgcMKLgRdFXik9aGQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XFqlwHLzxsSkTu4EbLQcoHbn4CyjCcQeSmjOwD3D0b8=;
+        b=eeF5A2ecZVAOAihyjCXZaQ3B+is9ojn4q+pQVLbALGLwyKbwPMh3Z2r85jkjyV9PHq
+         wh5PlAp+hbfcgT1q2xUlBQZ8uEk5aYC1bxEGYUlkPJ1lBAU0gg2JAdDONKcj651ZSd1c
+         o5CpNLlmpdIQtah6iyBi4uToh8bxZm2o4rfFha33/k+UGuM6u3xUGNAZisoVnXF4qvBd
+         vLFxM6MTDeSVcHEEYBSwPO3fBXxuKoLZ6XPW4BWUWcVxu0dX6dE6iyP4eRAVwjuCuFHu
+         D2xTqpsqAM4Jg9CkjVJOWZA0c0XFK9z/WHOsnBPOnoj0AaSq3GRY9asA8H05UVsEivVT
+         lLHQ==
+X-Gm-Message-State: AOAM530gsHEOPBR0IHmfwWdmYRr6H72pADtDTUIIKDlYlsLv9HlEQWXY
+        E38y7CO88gbXLEmJlUL4Q3nJuLNCz2QW+A==
+X-Google-Smtp-Source: ABdhPJwDnQ5AYawUXmJEJT+iihMTgbH4Y5Qg1y5crUIqxFnZmWZ4x9zV9SU+rsirQ4wVe6B0oamhbg==
+X-Received: by 2002:a02:aa0a:: with SMTP id r10mr9395203jam.246.1643815409098;
+        Wed, 02 Feb 2022 07:23:29 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id z23sm15236046iol.11.2022.02.02.07.23.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 07:23:28 -0800 (PST)
+Subject: Re: kselftest tree on kernelci.org
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ece6ea91-c44b-0bea-c4a2-ec099fa94881@linuxfoundation.org>
+Date:   Wed, 2 Feb 2022 08:23:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124024007.1465018-1-victor.liu@nxp.com>
+In-Reply-To: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-01-22, 10:40, Liu Ying wrote:
-> The D-PHY specification (v1.2) explicitly mentions that the T-CLK-PRE
-> parameter's unit is Unit Interval(UI) and the minimum value is 8.  Also,
-> kernel doc of the 'clk_pre' member of struct phy_configure_opts_mipi_dphy
-> mentions that it should be in UI.  However, the dphy core driver wrongly
-> sets 'clk_pre' to 8000, which seems to hint that it's in picoseconds.
-> 
-> So, let's fix the dphy core driver to correctly reflect the T-CLK-PRE
-> parameter's minimum value according to the D-PHY specification.
-> 
-> I'm assuming that all impacted custom drivers shall program values in
-> TxByteClkHS cycles into hardware for the T-CLK-PRE parameter.  The D-PHY
-> specification mentions that the frequency of TxByteClkHS is exactly 1/8
-> the High-Speed(HS) bit rate(each HS bit consumes one UI).  So, relevant
-> custom driver code is changed to program those values as
-> DIV_ROUND_UP(cfg->clk_pre, BITS_PER_BYTE), then.
-> 
-> Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-> Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-> as I don't have the hardwares.
+Hi Guillaume,
 
-Applied, thanks
+On 2/2/22 6:32 AM, Guillaume Tucker wrote:
+> Hi Shuah,
+> 
+> I've made this PR to start monitoring the "fixes" branch from the
+> kselftest tree on kernelci.org:
+> 
+>    https://github.com/kernelci/kernelci-core/pull/998
+> 
 
--- 
-~Vinod
+Thank you.
+
+> While kselftest changes eventually land in linux-next, monitoring
+> your tree directly means we can test it earlier and potentially
+> enable more build variants or experimental tests.  Since
+> kernelci.org also builds and runs some kselftests we're regularly
+> finding issues and people are sending fixes for them.  See this
+> recent story for example:
+> 
+>    https://twitter.com/kernelci/status/1488831497259921409
+> 
+> Keeping an eye on kselftest patches with kernelci.org means we
+> can verify that fixes do what they're supposed to do with a much
+> larger test coverage than what individual developers can do.
+> We've been applying kselftest fixes on a branch managed by
+> kernelci.org to verify them in the past, but having the actual
+> kselftest tree part of the workflow would seem much better.
+> 
+
+Absolutely.
+
+> There are several branches in your tree, while "fixes" seemed
+> like the most useful one to pick I see there is also a "kernelci"
+> branch too but it hasn't been updated for a while, reviving it
+> could give you the possibility to test patches through
+> kernelci.org before applying them on other branches that get
+> pulled into linux-next and mainline.
+> 
+
+This branch was a topic branch specific for changes I made for
+kernelci runs to be cleaner - I should delete this.
+
+If you are looking for other branches to monitor in addition to
+"fixes" branch, the following are the ones to add:
+
+next (for the merge window), kunit (kunit changes slated for merge window),
+kunit-fixes
+
+> Many things could potentially be done with arbitrary builds and
+> tests etc.  These are some initial suggestions.  How does this
+> sound?
+
+Sounds great to me. Since selftest patches flow through various
+subsystem trees, having kernelci keep an eye is great. This would
+be another pair of eyes in addition to occasional tests I run and
+Linaro (LKTP) monitoring next.
+
+How often do you send reports - I will watch out for them. Thanks
+again for taking the initiative to add kselftest to kernelci.
+
+thanks,
+-- Shuah

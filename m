@@ -2,113 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B144A78E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05AF4A78E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346954AbiBBTrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S1346962AbiBBTrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239991AbiBBTra (ORCPT
+        with ESMTP id S241559AbiBBTrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:47:30 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F61C06173E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:47:29 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id v186so2004573ybg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 11:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=co0UxehcT10KvKeO2HMl27sRQGzVzaRaaBVplxip7qw=;
-        b=SLaoGd8dLroMo5YxyBi9jnv5iD6ziKqemavNXtbhEP97AYJ3eyFPP49FNWfveLhMox
-         zQBZhH1z59850/KS+1pgUI5iBxZkDZCrmXt6l0T+Evp/is5lkdF8MVzUYsmMfFyGVFNY
-         K3SuKfccY94QuyCApGmUtWgq4hGMPNHRXjShw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=co0UxehcT10KvKeO2HMl27sRQGzVzaRaaBVplxip7qw=;
-        b=a3sAe3gLaS8RqiozwmHrJvR7uOtin30ciJRa8+i9JtHbZNLvm13R87LFk4Exl4b+E0
-         qvVXeV5zevz9+hj63mvMqVyWbu9+8C3oYPzGKTe9SAYXrmVfQPzHaG10k92Eh+7gpSjM
-         1VauhURVElnsoALpwOjR6931sHs6fBOgo1WnIQFhUDs6kw0ahFtk5jDy92h0Jr9Uc3hd
-         IeMCpCM0+HLeISxXnDARC+y1D+wUYGfMx11//thPf4O6BlrHpe47CvKurJtFJBzFrWNw
-         iai3EyqfgMtXFHVDcE7lfZMorsiuFKr+qP717wMb1doqDZ7CC19BAy1RHMuwIxfXyjzt
-         8Q+w==
-X-Gm-Message-State: AOAM532g2Lq0IQLJSly5jbkdOBpGtrZqqQ/5bCSjgJFfm7wjRseIVRb2
-        /MDRaD+jenLJIGRwx6kWNvkfiDRkBhWmOEJYO8+8cA==
-X-Google-Smtp-Source: ABdhPJyx/Yh66eh4potOrtkBUp+MmWnprcO9LCD3hc+BXMIwtFIjdb4Yi0zFxHHLneg7LA52ah5I8u469dqUjBcQ/tE=
-X-Received: by 2002:a0d:ca8f:: with SMTP id m137mr2154641ywd.5.1643831248225;
- Wed, 02 Feb 2022 11:47:28 -0800 (PST)
+        Wed, 2 Feb 2022 14:47:39 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7671C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:47:39 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643831258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZoMxZzJu0S/zqcRHBoQiDF6946Gib9Z2JSpxFb9lqcU=;
+        b=19/icYGJQiS5348IT4VwZu2g7WTaZchV1+AlxNtTqRusdinWD0Gk3hEaTZZCqlAPecL7Zq
+        TrjdwfzdlhaKIjNCcOS1CQ+44vxg3szX9TVUGUy4DpLAeFtn6LVl4VEX+IyzFYiiVQCGsf
+        3IAe8PPGDyI+Zik3IsecXxHCDk0AIQtaRd5vOgLD/8lIpOjSeOC5u6CtU19/o9k/PMXFEt
+        F/mo2IHQRmmqY123EpQU3Tf4MeVj83ruZUpTpl2te+mt221HL0lQS1aZcf1xewpKqPkO+K
+        QgxZSxBPheE3GTEDJ9uvbY1fXgzx3JbuLxlQE6NmWFVirEjEhQ6MWtWHIfFPxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643831258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZoMxZzJu0S/zqcRHBoQiDF6946Gib9Z2JSpxFb9lqcU=;
+        b=JMHGuKF10zNs7Za6nG512D3d0fxafCKRCjHyK8Y0QvCO7oX/ZejP8IGoGGHliV2IVYUAjE
+        mD7IW/G2/PVvfNAg==
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 22/29] x86/tdx: Make pages shared in ioremap()
+In-Reply-To: <20220202192710.d7k4pgqczpyrkers@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-23-kirill.shutemov@linux.intel.com>
+ <87bkzqw1vr.ffs@tglx> <20220202192710.d7k4pgqczpyrkers@black.fi.intel.com>
+Date:   Wed, 02 Feb 2022 20:47:37 +0100
+Message-ID: <877dadt5ie.ffs@tglx>
 MIME-Version: 1.0
-References: <20220126180020.15873-1-dustin@howett.net> <20220126180020.15873-3-dustin@howett.net>
- <YfLqloFQpF7bURGi@chromium.org> <CA+BfgNKS_uGZVh5K=O5Q-Brj-wWyg+gn1Nx4-Gr5OVb46ZFi=A@mail.gmail.com>
- <YfLxw9r6VvbxijRM@chromium.org> <CA+BfgNKCYT6EnOK1JTsy+AJCzZ+p6UbYD+SgBZ=ANHCV1pC7oA@mail.gmail.com>
- <CAJnPg5+bU68s2hq75aewap2gyW3YB+gpamKmuB-VfcpGf5krwA@mail.gmail.com>
-In-Reply-To: <CAJnPg5+bU68s2hq75aewap2gyW3YB+gpamKmuB-VfcpGf5krwA@mail.gmail.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 2 Feb 2022 11:47:17 -0800
-Message-ID: <CACeCKafGc7Mbijb4QMJ36atPP08yUN2MSA+ya-vQR-rbAFrPKg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_lpcs: reserve the MEC LPC
- I/O ports first
-To:     Aseda Aboagye <aaboagye@google.com>
-Cc:     Dustin Howett <dustin@howett.net>, linux-kernel@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Michael Niksa <michael.niksa@live.com>,
-        Aseda Aboagye <aaboagye@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Jan 28, 2022 at 9:57 AM Aseda Aboagye <aaboagye@google.com> wrote:
+On Wed, Feb 02 2022 at 22:27, Kirill A. Shutemov wrote:
+> On Wed, Feb 02, 2022 at 01:25:28AM +0100, Thomas Gleixner wrote:
+>> On Mon, Jan 24 2022 at 18:02, Kirill A. Shutemov wrote:
+>> I cannot find any of the above mentioned subsystems in this grep
+>> output. Neither does this patch add any users which require those
+>> exports.
 >
-> Generally ec_commands.h is to be kept in sync with the copies in other projects. Periodically when someone modifies it, we should update the copies as well.
-> --
-> Aseda Aboagye
->
->
-> On Thu, Jan 27, 2022 at 9:16 PM Dustin Howett <dustin@howett.net> wrote:
->>
->> On Thu, Jan 27, 2022 at 1:25 PM Prashant Malani <pmalani@chromium.org> wrote:
->> >
->> > What source do Framework laptop ECs (MECs?) compile their EC firmware
->> > from?
->>
->> They just released their source here:
->> https://github.com/FrameworkComputer/EmbeddedController
->>
->> FWIW, this series was written before they went open, and you're not
->> likely to see a similar construct
->> over there.
->>
->> > Yeah, I wasn't thinking about userland i/o port access, but just having
->> > this behaviour/different I/O port mapping described in the EC code base
->> > too.
->>
->> Happy to submit this over there as well. Are cros_ec_commands.h (here)
->> and ec_commands.h (there)
->> intended to be kept in 1:1 sync?
+> Try to grep pgprot_decrypted().
 
-It's not auto-generated, but FWIW cros_ec_commands.h is a subset of
-ec_commands.h (only the parts of ec_commands.h which are relevant to
-the kernel drivers are brought over)
+Bah.
 
->>
->> As well, is this a blocking concern?
-I'd prefer it to be first documented in the EC sources via a header
-update before we make changes to the kernel here. This ensures that
-the authors and maintainers of the various EC sources (Chromium EC,
-framework EC etc) are aware of this change and sign-off on it.
+> I guess we can get away not exporting pgprot_encrypted(), but this
+> asymmetry bothers me :)
 
-I think making this update to the Chromium OS platform/ec code base
-will be sufficient (it can flow down to framework when/if they chose
-to sync to Chromium platform/ec); but happy to be corrected here by
-Aseda or other EC experts.
+Well, no. We export only stuff which is needed. Exporting just because
+is a NONO.
 
 Thanks,
+
+        tglx

@@ -2,137 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CECF4A7569
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B67C4A756F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345730AbiBBQFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
+        id S243211AbiBBQGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345732AbiBBQFi (ORCPT
+        with ESMTP id S1344806AbiBBQGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:05:38 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E63FC06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:05:37 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i186so16706830pfe.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:05:37 -0800 (PST)
+        Wed, 2 Feb 2022 11:06:08 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09D7C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:06:08 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso6416603pjm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:06:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yqK5MLTl2xNuINrlf3fO99F6jKkeeqpnAsyOTq/QdsY=;
-        b=omj6doHtoJY17veFe8sQU7Cmg6x2J8MqoUhsX7k7C63TNCbhW5x9y1bGWckN2qif/x
-         6iScQHtPmlsw+gqCRU6ez4J0V9RC5VaOptJYWYILu98gte5z58yT//P7HodOcq+KNpLi
-         Rff7r7N9VCPAPcQG17PJxJzQXBegojuVs2kda+1oUA9QxzvBfQnVPpU4aiKYRN+D2DWw
-         462vBzLQlCF7x+vbgHdPl3wwkxDwmjxHt4sH/mFjxvDi3U2DNvn9FkEPu3OeCoa7cDdj
-         FyrnNxveN3s3SQBAWH963d9CuI45mNC40JSHM8W69GouMa3hBp0Gd3invDF8aHFrUu2n
-         kgwg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ComyNVKqoyy5Ml0gbYTNF5CGFuK1LECSfgHPd03rA/Q=;
+        b=KnrN3RISEqRmj5VLldmhh/9I02hGHvjKYYy4qI0kSbIuw3Xldd5qGv3KXcV5gum0Vh
+         LnvVC0/kaiuORsCsjK2N+7qCGBhpGQBxDaDQEwALEGpEOqx0qxAhFphYtnoqROeJtkzH
+         +LIivfCX2jI5ESjCYjMz0GOzp4lSnuFieVkIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yqK5MLTl2xNuINrlf3fO99F6jKkeeqpnAsyOTq/QdsY=;
-        b=ONm0smYbgZo7aagV6+RQTnAUBmUvyZwzK321y3DY2HylZhffphyYOOwpzyQ7NT90gq
-         phfQo0ilFIJttIBDnntOb2TViXBBKJktX5HyuZDBWG2MlyKoNPt6TSaGwsfuk1F7RuLN
-         ekobtwhZHVHf8bTGAv7qW9zRmK2MiUlaqpaQk8+Txn/pb6RIQnuj2LZcRQ7kIUfjCs55
-         y/3fsMNhcmpmeuEF5GaOPgHwjhX10Uzul6aNrY7ZMPwpzpEp4niB4rqpRro1didgzC+l
-         gaPKAhGY1zLGYNOWupLzd9DuR4bBrPCGfRulkY4hoQfjYkwrXyejf28oJ17BGrfXu3zM
-         ai7Q==
-X-Gm-Message-State: AOAM531BU50ehwVEgdYP3o+gTIS7ntXXsQ5EcRJlHv3W/ootMJDQavhH
-        /m6QIAevrufF2aAq5/ZhD07kEg==
-X-Google-Smtp-Source: ABdhPJyVuMgXy9sJ7c475B0/eoyoSeQgJcgUEYfrNF1AwDQH/tPYoLN1ijQ6+BjavEGag97f30Pbqg==
-X-Received: by 2002:a62:52d4:: with SMTP id g203mr30348392pfb.19.1643817936918;
-        Wed, 02 Feb 2022 08:05:36 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 12sm6902701pjd.33.2022.02.02.08.05.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ComyNVKqoyy5Ml0gbYTNF5CGFuK1LECSfgHPd03rA/Q=;
+        b=Vmw8g2PpjlWhAA+97EeEPGDMiPFqzvgE0/ij8+BIaH3rfU06sFrsxh/yuaDdCy27dv
+         xoHgV4waJ81Yrzox1o7hoEBN9JyMSU3UmAdRyShlU9MGSzBL9lwAzVnv2aywT2k30bT/
+         1kPuPOAvHTFEZ0A3m0p71LA4cy4pxAOVXKx/CNSDDXL2ClabqYixpJQ2crsvJ3JswMnc
+         nXRSQzaGsGm/I0jB6A7rF5ByEQAHFRN9hDDjJK75cnerWrkvhxxooUteQ3SiQ/v0uVFG
+         nD5bqDl1NfeR6hNPdn3oYzPrnvWlvnZj+1Q6eJoG5iAyTYIr78PbWkh2bUfoz0WXMAZK
+         6eLA==
+X-Gm-Message-State: AOAM531RImmIwSR4U924dPME7Oe6jp5HjePF+baolvLEbaUBsUK4kmQT
+        bds5VVfCThxT0n+nf/C5MPNk1Q==
+X-Google-Smtp-Source: ABdhPJzpGYUc0+rAyDL6+8pgErzLvRA3W8Ov6ZosJkU6OSOORfwQKG9HGsXfQSSBilrwmBcQtUtxjQ==
+X-Received: by 2002:a17:90b:4b05:: with SMTP id lx5mr8845331pjb.128.1643817968126;
+        Wed, 02 Feb 2022 08:06:08 -0800 (PST)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:7ce0:466c:be86:774])
+        by smtp.gmail.com with ESMTPSA id g5sm14722397pgc.51.2022.02.02.08.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:05:36 -0800 (PST)
-Date:   Wed, 2 Feb 2022 16:05:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
-        pbonzini@redhat.com, joro@8bytes.org, mlevitsk@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
-        jon.grimm@amd.com
-Subject: Re: [PATCH v3 3/3] KVM: SVM: Extend host physical APIC ID field to
- support more than 8-bit
-Message-ID: <YfqrzHc0cbuiKKt0@google.com>
-References: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
- <20211213113110.12143-4-suravee.suthikulpanit@amd.com>
- <Yc3qt/x1YPYKe4G0@google.com>
- <34a47847-d80d-e93d-a3fe-c22382977c1c@amd.com>
- <Yfms5evHbN8JVbVX@google.com>
- <9d2ca4ab-b945-6356-5e4b-265b1a474657@amd.com>
- <YfqpFt5raCd/LZzr@google.com>
+        Wed, 02 Feb 2022 08:06:07 -0800 (PST)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH RESEND v5 1/4] drm/bridge: anx7625: send DPCD command to downstream
+Date:   Thu,  3 Feb 2022 00:05:59 +0800
+Message-Id: <20220202160602.440792-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfqpFt5raCd/LZzr@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022, Sean Christopherson wrote:
-> On Wed, Feb 02, 2022, Suthikulpanit, Suravee wrote:
-> > As I mentioned, the APM will be corrected to remove the word "x2APIC".
-> 
-> Ah, I misunderstood what part was being amended.
-> 
-> > Essentially, it will be changed to:
-> > 
-> >  * 7:0  - For systems w/ max APIC ID upto 255 (a.k.a old system)
-> >  * 11:8 - For systems w/ max APIC ID 256 and above (a.k.a new system). Otherwise, reserved and should be zero.
-> > 
-> > As for the required number of bits, there is no good way to tell what's the max
-> > APIC ID would be on a particular system. Hence, we utilize the apic_get_max_phys_apicid()
-> > to figure out how to properly program the table (which is leaving the reserved field
-> > alone when making change to the table).
-> > 
-> > The avic_host_physical_id_mask is not just for protecting APIC ID larger than
-> > the allowed fields. It is also currently used for clearing the old physical APIC ID table entry
-> > before programing it with the new APIC ID.
-> 
-> Just clear 11:0 unconditionally, the reserved bits are Should Be Zero.
+From: Xin Ji <xji@analogixsemi.com>
 
-Actually, that needs to be crafted a bug fix that's sent to stable@, otherwise
-running old kernels on new hardware will break.  I'm pretty sure this is the
-entirety of what's needed.
+Send DPCD command to downstream before anx7625 power down,
+let downstream monitor enter into standby mode.
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 90364d02f22a..e4cfd8bf4f24 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -974,17 +974,12 @@ avic_update_iommu_vcpu_affinity(struct kvm_vcpu *vcpu, int cpu, bool r)
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+v3->v4:
+Use common DP_AUX_NATIVE_READ/WRITE
+
+Previously in:
+https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
+ drivers/gpu/drm/bridge/analogix/anx7625.h |  2 --
+ 2 files changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 76662fce4ce61d..17b23940549a42 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
+ 	return ret;
+ }
+ 
++static int anx7625_reg_block_write(struct anx7625_data *ctx,
++				   struct i2c_client *client,
++				   u8 reg_addr, u8 len, u8 *buf)
++{
++	int ret;
++	struct device *dev = &client->dev;
++
++	i2c_access_workaround(ctx, client);
++
++	ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
++	if (ret < 0)
++		dev_err(dev, "write i2c block failed id=%x\n:%x",
++			client->addr, reg_addr);
++
++	return ret;
++}
++
+ static int anx7625_write_or(struct anx7625_data *ctx,
+ 			    struct i2c_client *client,
+ 			    u8 offset, u8 mask)
+@@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
+ 	return 0;
+ }
+ 
+-static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+-				 u32 address, u8 len, u8 *buf)
++static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
++				  u32 address, u8 len, u8 *buf)
  {
-        u64 entry;
--       /* ID = 0xff (broadcast), ID > 0xff (reserved) */
-        int h_physical_id = kvm_cpu_get_apicid(cpu);
-        struct vcpu_svm *svm = to_svm(vcpu);
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
+@@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	addrm = (address >> 8) & 0xFF;
+ 	addrh = (address >> 16) & 0xFF;
+ 
+-	cmd = DPCD_CMD(len, DPCD_READ);
+-	cmd = ((len - 1) << 4) | 0x09;
++	cmd = DPCD_CMD(len, op);
+ 
+ 	/* Set command and length */
+ 	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+@@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+ 				 AP_AUX_ADDR_19_16, addrh);
+ 
++	if (op == DP_AUX_NATIVE_WRITE)
++		ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
++					       AP_AUX_BUFF_START, len, buf);
+ 	/* Enable aux access */
+ 	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+ 				AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
+@@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 		return -EIO;
+ 	}
+ 
+-	usleep_range(2000, 2100);
+-
+ 	ret = wait_aux_op_finish(ctx);
+ 	if (ret) {
+ 		dev_err(dev, "aux IO error: wait aux op finish.\n");
+ 		return ret;
+ 	}
+ 
++	/* Write done */
++	if (op == DP_AUX_NATIVE_WRITE)
++		return 0;
++
++	/* Read done, read out dpcd data */
+ 	ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
+ 				     AP_AUX_BUFF_START, len, buf);
+ 	if (ret < 0) {
+@@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+ 	}
+ 
+ 	/* Read downstream capability */
+-	anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
++	anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+ 	if (!(bcap & 0x01)) {
+ 		pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+ 		return 0;
+@@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ {
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
++	u8 data;
+ 
+ 	DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
+ 
+@@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ 	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
+ 
+ 	ret |= anx7625_video_mute_control(ctx, 1);
++
++	dev_dbg(dev, "notify downstream enter into standby\n");
++	/* Downstream monitor enter into standby mode */
++	data = 2;
++	ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+ 	if (ret < 0)
+ 		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+ 
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+index 56165f5b254c14..64a8ab56529404 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.h
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+@@ -242,8 +242,6 @@
+ 
+ #define AP_AUX_COMMAND	0x27  /* com+len */
+ #define LENGTH_SHIFT	4
+-#define DPCD_READ	0x09
+-#define DPCD_WRITE	0x08
+ #define DPCD_CMD(len, cmd)	((((len) - 1) << LENGTH_SHIFT) | (cmd))
+ 
+ /* Bit 0&1: 3D video structure */
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 
-        lockdep_assert_preemption_disabled();
-
--       /*
--        * Since the host physical APIC id is 8 bits,
--        * we can support host APIC ID upto 255.
--        */
--       if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-+       if (WARN_ON(h_physical_id & ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-                return;
-
-        /*
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 73525353e424..a157af1cce6a 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -560,7 +560,7 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
- #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT                        31
- #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK               (1 << 31)
-
--#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK   (0xFFULL)
-+#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK   GENMASK_ULL(11:0)
- #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK       (0xFFFFFFFFFFULL << 12)
- #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK         (1ULL << 62)
- #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK              (1ULL << 63)

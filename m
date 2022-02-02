@@ -2,143 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678A54A77A0
+	by mail.lfdr.de (Postfix) with ESMTP id B5C594A77A1
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiBBSPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:15:34 -0500
-Received: from mga11.intel.com ([192.55.52.93]:53222 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229557AbiBBSPc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:15:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643825732; x=1675361732;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5L2IGhFElsUioIEHW2pw7wMqbxrTXBoGVWymIBIhZSQ=;
-  b=cSkmO79RYRgu8rtPbSZ1JIQkpw7zmXshRQWfjrH5x/XqILJNEOf0n/Jh
-   kycQPgRy50Ul9q3oykcOy6CAaaXZfN69FWcJtD+gBCH54xKbrcT1N00pO
-   lms+1lGpUP29Kg9jg1KL9my2PURVvsAsiHX7U4IzTK+HCbkfek9zTxZck
-   vyUic+9WuPD2D2MkfTDV/K+LXIB26ZAiRJo9i+yptKWnidLeIa10GPcEi
-   9or1cFC+fRX/jW8H85Q6gZREwAHJi6BWlcuZTKXaAhRc9TFGEGUOJ9r2f
-   LNoRuXDRiYrbPJljSzf5vf47OSQpMOW77mszo084vZ8LtqU474id4f+q2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="245587196"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="245587196"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 10:15:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="676528121"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2022 10:15:15 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFK9z-000Uwe-A4; Wed, 02 Feb 2022 18:15:15 +0000
-Date:   Thu, 3 Feb 2022 02:15:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v1 12/14] mtd: spi-nor: move all spansion specifics into
- spansion.c
-Message-ID: <202202030228.8WUETAc8-lkp@intel.com>
-References: <20220202145853.4187726-13-michael@walle.cc>
+        id S1346509AbiBBSPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:15:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230015AbiBBSPd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 13:15:33 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E75BC061714;
+        Wed,  2 Feb 2022 10:15:33 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id w14so316239edd.10;
+        Wed, 02 Feb 2022 10:15:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v/U8fVC5zL2dJfRqWDcSCVX9Gpyo+oVG/Sm5T8MpT7g=;
+        b=kjc2gyUX7T4kqd/wjVfkflqSm0C4yquHLnKc8BGIMwYwx+mR/2TXNgZaF/LQgELqkI
+         fPt0ToGOmhDNCpKJCY+ua/+gc+tH3KgfFzbMvalW19HDb7QRDVpIjTl+RHClbZTsOngU
+         Z9Zp9b/+xsxYA5bHs1kbnlatH2Q30f3pbwhQnOcvLvaQlsw2VffkXTP9qAkyn8ZEgjO4
+         c3D3JIQ8h1U3nEfo9wAsMAssJ7MknkuVu70hLyR6l6sHbvrdf8nlyL6PLeL4BpXhvSwm
+         MuG/PHyVgtYCxLFQWQoMwTY+IOdkEa7RB+5Oo0gpw3XEPCrJQrtBMcWLYqkHMP/BP1ms
+         Hgvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v/U8fVC5zL2dJfRqWDcSCVX9Gpyo+oVG/Sm5T8MpT7g=;
+        b=eFDKYwd/pjQmB1V5/6S9TuxZ8DA3q1Dkif8vulVWvphghj4ux2C9vFm+tqoMf+AwzL
+         TRbalG02MmVzywORhcB+VzbYJPyX1OPYLT06u0abg1b8aiwIOoEaCS/V0lJ6SdXIzs+q
+         deSkDZEwwAuDokvY48ZihLQ709IV039FrvLGKjQvv1KkbSgPAm+Mo8JnHuDuz5AopRKi
+         uhT0vwe1FFN5LOLbWdb7D2wZj3lp6Fd2a8KcQ1wNPeH4mDJX72VcYdF0j9d9hHWIfZW7
+         gkq2jIwcyp6yT5QDjI+pO0p8hCESAG3RN7KCVus4kibcTo16S8ua0KY306FluYnvDjjK
+         PPMQ==
+X-Gm-Message-State: AOAM533xhJ58xlk5rWtE4ltCsapb0txMJxlpujiYfP2PHHW8d4YMJBjR
+        jN3bwzbHY+S0dvr2DOD58y96onXR8UyFUuY4Tww=
+X-Google-Smtp-Source: ABdhPJzWpM7xHwZ4APAl/3BbvJZYwobcUY4R15vDKULkKrCIAuz9g4Auxgui+aeiJsreOaFdmo5pWAq6dVNKQ9jJMKY=
+X-Received: by 2002:a05:6402:268d:: with SMTP id w13mr31621173edd.287.1643825731690;
+ Wed, 02 Feb 2022 10:15:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202145853.4187726-13-michael@walle.cc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220124082803.94286-1-francesco.dolcini@toradex.com> <20220124082803.94286-2-francesco.dolcini@toradex.com>
+In-Reply-To: <20220124082803.94286-2-francesco.dolcini@toradex.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 2 Feb 2022 15:15:22 -0300
+Message-ID: <CAOMZO5Bnz7sz+z-j2Bi4f4hzdda-FZ7bk-qZLzvMYA3HtP9g_g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ARM: dts: imx7s: Define operating points table for cpufreq
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi Francesco,
 
-I love your patch! Perhaps something to improve:
+On Mon, Jan 24, 2022 at 5:28 AM Francesco Dolcini
+<francesco.dolcini@toradex.com> wrote:
+>
+> From: Denys Drozdov <denys.drozdov@toradex.com>
+>
+> Processor operating points for imx7s.dtsi should be properly defined to
+> perform correct imx-cpufreq-dt probe and registration and provide an
+> access to the temperature sensors using the i.MX thermal driver.
+>
+> Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-[auto build test WARNING on mtd/spi-nor/next]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
-config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20220203/202202030228.8WUETAc8-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/01f9808a20c96553c43f929e10f3fb448cd8bd93
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220202-230139
-        git checkout 01f9808a20c96553c43f929e10f3fb448cd8bd93
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/mtd/spi-nor/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/mtd/spi-nor/spansion.c:332:5: warning: no previous prototype for 'spi_nor_sr_ready_and_clear' [-Wmissing-prototypes]
-     332 | int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/spi_nor_sr_ready_and_clear +332 drivers/mtd/spi-nor/spansion.c
-
-   324	
-   325	/**
-   326	 * spi_nor_sr_ready_and_clear() - Query the Status Register to see if the flash
-   327	 * is ready for new commands and clear it.
-   328	 * @nor:	pointer to 'struct spi_nor'.
-   329	 *
-   330	 * Return: 1 if ready, 0 if not ready, -errno on errors.
-   331	 */
- > 332	int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
-   333	{
-   334		int ret;
-   335	
-   336		ret = spi_nor_read_sr(nor, nor->bouncebuf);
-   337		if (ret)
-   338			return ret;
-   339	
-   340		if (nor->bouncebuf[0] & (SR_E_ERR | SR_P_ERR)) {
-   341			if (nor->bouncebuf[0] & SR_E_ERR)
-   342				dev_err(nor->dev, "Erase Error occurred\n");
-   343			else
-   344				dev_err(nor->dev, "Programming Error occurred\n");
-   345	
-   346			spi_nor_clear_sr(nor);
-   347	
-   348			/*
-   349			 * WEL bit remains set to one when an erase or page program
-   350			 * error occurs. Issue a Write Disable command to protect
-   351			 * against inadvertent writes that can possibly corrupt the
-   352			 * contents of the memory.
-   353			 */
-   354			ret = spi_nor_write_disable(nor);
-   355			if (ret)
-   356				return ret;
-   357	
-   358			return -EIO;
-   359		}
-   360	
-   361		return !(nor->bouncebuf[0] & SR_WIP);
-   362	}
-   363	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Fabio Estevam <festevam@gmail.com>

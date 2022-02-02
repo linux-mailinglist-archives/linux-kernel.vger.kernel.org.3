@@ -2,114 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D625C4A74FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AA64A74FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345597AbiBBPyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:54:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345596AbiBBPyD (ORCPT
+        id S241470AbiBBPyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:54:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:52514 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345606AbiBBPyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:54:03 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8391AC06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:54:03 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id v74so19169757pfc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QhI0g3H91MNQawpFWeFiSZKM1lUpHcArsiuPvxg5hME=;
-        b=THsSc61G6LQn9DjlHLxzAdXdveyIDLT4naDOiIPkZZ6oCHaBDDeGkPOI/cGeSgWxe7
-         5wGjpfMyTtXYT3tcQJPNI4Kd5y0gTPTb+QKyR2OdQ2H1unV1EAJImgs8G/JuyvoFqjIR
-         K8f/VXTH6kihyc7vNqUMgDehtzCrtsTmNKV1aCrUNtU1W2uPfwar4mM+CeK+dFWM0+Ee
-         2nHF54cQX4Ixt7q4g28Rsb5/VWGRQIlL5DdGRoly8SUpGrtZWiJNbLVrsGH9XFmq6Tf+
-         avJcS11nFMMRehH5rbZ1+RQ7q+zWmAum5wpfbiHv6tzbFNL6/YW6t6svmWHnjzQfG6lk
-         RMgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QhI0g3H91MNQawpFWeFiSZKM1lUpHcArsiuPvxg5hME=;
-        b=fIJ22G6zUQ9FGdVZ3xfG8Zx3EhBB6uBQXyMnBQjghsBJjQE0ZGkCMdjBJ0rANSLZSl
-         cdcvMvEJlR/QfmILkd25iRHaPmiGKfxCmQv06xoZDGBlt8q9NAogYyG5E23wkE7/0tRM
-         Sbv587Ql62HQLgdR9N5A6gLgoY75W5vcO5V+K76Y1CPjg/nHtpXuDWSnQzjwnUZesSFp
-         LSx5KEVvM5SpwFcp2nLJ+jgA5RuPu3VqpdueirtwnjBtrsI1FTAIDiU8iuwmJFZyXbx7
-         5H5a2qjPp641x5e+Cw9isicJTlv94odjnE8X7y09DGZBgIzStQ5muUxZKUxTjGyUleSD
-         f8rQ==
-X-Gm-Message-State: AOAM531N78IN2zgmUPklpdHu4tKSrV0vla/M3OSAy47S8eScWs16jY/v
-        DMjaBiokur0PRB/ZIdvKHGu79A==
-X-Google-Smtp-Source: ABdhPJx2D8mRIETLkmJLR3ervdkS8DPHKNlRK6mFJPmaIJuxHrAE6u9fd7+WMg46WVWi8Mvypr7n+w==
-X-Received: by 2002:a63:1d4:: with SMTP id 203mr15823549pgb.462.1643817242784;
-        Wed, 02 Feb 2022 07:54:02 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l78sm8018284pfd.131.2022.02.02.07.54.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 07:54:02 -0800 (PST)
-Date:   Wed, 2 Feb 2022 15:53:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
-        pbonzini@redhat.com, joro@8bytes.org, mlevitsk@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        peterz@infradead.org, hpa@zytor.com, thomas.lendacky@amd.com,
-        jon.grimm@amd.com
-Subject: Re: [PATCH v3 3/3] KVM: SVM: Extend host physical APIC ID field to
- support more than 8-bit
-Message-ID: <YfqpFt5raCd/LZzr@google.com>
-References: <20211213113110.12143-1-suravee.suthikulpanit@amd.com>
- <20211213113110.12143-4-suravee.suthikulpanit@amd.com>
- <Yc3qt/x1YPYKe4G0@google.com>
- <34a47847-d80d-e93d-a3fe-c22382977c1c@amd.com>
- <Yfms5evHbN8JVbVX@google.com>
- <9d2ca4ab-b945-6356-5e4b-265b1a474657@amd.com>
+        Wed, 2 Feb 2022 10:54:10 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2832521108;
+        Wed,  2 Feb 2022 15:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643817249; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUXUj16uy0IAkREyILFIyfgu27cz5tMAIn1ieaEqIvA=;
+        b=PAZhDN30t/U/yUkjPyjLhEDn+M1irRT5plvcHfTruNrJZ6wGb3LnwXUqLfN4gfBc8prj5e
+        Jr3PBF1l/x3KsHxJ/wBSXDhc/HrrIEQAtBQBNehN5CsEKwhg4G/uhyO+pDRMfnPJNSBPxd
+        +/2PdbhN4E4CmPM56f0cp3of7UpSFH0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643817249;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUXUj16uy0IAkREyILFIyfgu27cz5tMAIn1ieaEqIvA=;
+        b=DwJZ0BJx3rIn4MXDnlPZP2rLPTd5r8qBROd8klxb5MnAnZO8anfLw6KvXgjOFoSl7qMBZ8
+        EoGrZ8WFCwOQiqAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B66DF13E8F;
+        Wed,  2 Feb 2022 15:54:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Bu5aKyCp+mHJHwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 15:54:08 +0000
+Message-ID: <f17a093f-610b-2c37-8950-e8b1701f55a7@suse.de>
+Date:   Wed, 2 Feb 2022 16:54:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d2ca4ab-b945-6356-5e4b-265b1a474657@amd.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
+ `drm_panel_dp_aux_backlight'
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Marek Vasut <marex@denx.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        David Airlie <airlied@linux.ie>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        lkft-triage@lists.linaro.org,
+        Grace Mi <grace.mi@ecs.corp-partner.google.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+ <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
+ <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+ <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+ <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------3rPhmaKw0jACegMxp0yf5QP3"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022, Suthikulpanit, Suravee wrote:
-> As I mentioned, the APM will be corrected to remove the word "x2APIC".
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------3rPhmaKw0jACegMxp0yf5QP3
+Content-Type: multipart/mixed; boundary="------------mnSZ9lKqSoVowtIf067tmc7x";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Doug Anderson <dianders@chromium.org>
+Cc: Marek Vasut <marex@denx.de>, Stephen Rothwell <sfr@canb.auug.org.au>,
+ regressions@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+ Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+ David Airlie <airlied@linux.ie>, Naresh Kamboju <naresh.kamboju@linaro.org>,
+ Randy Dunlap <rdunlap@infradead.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Linux-Next Mailing List <linux-next@vger.kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>, lkft-triage@lists.linaro.org,
+ Grace Mi <grace.mi@ecs.corp-partner.google.com>,
+ Sam Ravnborg <sam@ravnborg.org>, Ard Biesheuvel <ardb@kernel.org>,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>
+Message-ID: <f17a093f-610b-2c37-8950-e8b1701f55a7@suse.de>
+Subject: Re: [next] arm: panel-edp.c:(.text+0xb74): undefined reference to
+ `drm_panel_dp_aux_backlight'
+References: <CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com>
+ <76ff2848-3af4-6758-6e98-91a4c9ad26d8@suse.de>
+ <CAMj1kXE6Q9uW45Q5A-TuPDiXTPOGrGjUn_8FUBKNGQ1g9bd3Rg@mail.gmail.com>
+ <a1dd9d31-3ad0-b58f-c67b-5896048281ed@suse.de>
+ <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
+In-Reply-To: <CAD=FV=UzVczyMKiCt9tkMBveGqWFbACMF_Z1GRWypz+awSO06Q@mail.gmail.com>
 
-Ah, I misunderstood what part was being amended.
+--------------mnSZ9lKqSoVowtIf067tmc7x
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> Essentially, it will be changed to:
-> 
->  * 7:0  - For systems w/ max APIC ID upto 255 (a.k.a old system)
->  * 11:8 - For systems w/ max APIC ID 256 and above (a.k.a new system). Otherwise, reserved and should be zero.
-> 
-> As for the required number of bits, there is no good way to tell what's the max
-> APIC ID would be on a particular system. Hence, we utilize the apic_get_max_phys_apicid()
-> to figure out how to properly program the table (which is leaving the reserved field
-> alone when making change to the table).
-> 
-> The avic_host_physical_id_mask is not just for protecting APIC ID larger than
-> the allowed fields. It is also currently used for clearing the old physical APIC ID table entry
-> before programing it with the new APIC ID.
+SGkNCg0KQW0gMDIuMDIuMjIgdW0gMTY6Mzcgc2NocmllYiBEb3VnIEFuZGVyc29uOg0KPiBI
+aSwNCj4gDQo+IE9uIFdlZCwgRmViIDIsIDIwMjIgYXQgMjoyNSBBTSBUaG9tYXMgWmltbWVy
+bWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6DQo+Pg0KPj4gSGkNCj4+DQo+PiBB
+bSAwMi4wMi4yMiB1bSAxMDoyOCBzY2hyaWViIEFyZCBCaWVzaGV1dmVsOg0KPj4+IE9uIFdl
+ZCwgMiBGZWIgMjAyMiBhdCAxMDowOCwgVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5u
+QHN1c2UuZGU+IHdyb3RlOg0KPj4+Pg0KPj4+PiBIaQ0KPj4+Pg0KPj4+PiBBbSAwMi4wMi4y
+MiB1bSAxMDowMiBzY2hyaWViIE5hcmVzaCBLYW1ib2p1Og0KPj4+Pj4gRm9sbG93aW5nIGJ1
+aWxkcyBmYWlsZWQgb24gTGludXggbmV4dCAyMDIyMDIwMiBhcm0gYXJjaGl0ZWN0dXJlLg0K
+Pj4+Pj4gICAgICAtIGFybS1nY2MtMTAtb21hcDJwbHVzX2RlZmNvbmZpZw0KPj4+Pj4gICAg
+ICAtIGFybS1jbGFuZy1uaWdodGx5LXNobW9iaWxlX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAt
+IGFybS1nY2MtOC1scGMzMnh4X2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1jbGFuZy0x
+My1zaG1vYmlsZV9kZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTEwLXNobW9iaWxl
+X2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1jbGFuZy0xMS1zaG1vYmlsZV9kZWZjb25m
+aWcNCj4+Pj4+ICAgICAgLSBhcm0tY2xhbmctMTEtb21hcDJwbHVzX2RlZmNvbmZpZw0KPj4+
+Pj4gICAgICAtIGFybS1jbGFuZy0xMy1vbWFwMnBsdXNfZGVmY29uZmlnDQo+Pj4+PiAgICAg
+IC0gYXJtLWNsYW5nLTExLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWdj
+Yy04LW9tYXAycGx1c19kZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTktdmV4cHJl
+c3NfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWNsYW5nLW5pZ2h0bHktbHBjMzJ4eF9k
+ZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTktc2htb2JpbGVfZGVmY29uZmlnDQo+
+Pj4+PiAgICAgIC0gYXJtLWNsYW5nLTEzLWxwYzMyeHhfZGVmY29uZmlnDQo+Pj4+PiAgICAg
+IC0gYXJtLWdjYy0xMC1zYW1hNV9kZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tY2xhbmct
+MTEtdmV4cHJlc3NfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWNsYW5nLTExLXNhbWE1
+X2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1nY2MtOS1vbWFwMnBsdXNfZGVmY29uZmln
+DQo+Pj4+PiAgICAgIC0gYXJtLWNsYW5nLW5pZ2h0bHktc2FtYTVfZGVmY29uZmlnDQo+Pj4+
+PiAgICAgIC0gYXJtLWNsYW5nLTEzLXZleHByZXNzX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAt
+IGFybS1jbGFuZy1uaWdodGx5LXZleHByZXNzX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFy
+bS1nY2MtOS1scGMzMnh4X2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1jbGFuZy0xMi12
+ZXhwcmVzc19kZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTEwLXZleHByZXNzX2Rl
+ZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1jbGFuZy0xMi1zaG1vYmlsZV9kZWZjb25maWcN
+Cj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTExLW9tYXAycGx1c19kZWZjb25maWcNCj4+Pj4+ICAg
+ICAgLSBhcm0tZ2NjLTktc2FtYTVfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWdjYy04
+LXNobW9iaWxlX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1nY2MtMTAtbHBjMzJ4eF9k
+ZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tY2xhbmctMTItb21hcDJwbHVzX2RlZmNvbmZp
+Zw0KPj4+Pj4gICAgICAtIGFybS1nY2MtOC12ZXhwcmVzc19kZWZjb25maWcNCj4+Pj4+ICAg
+ICAgLSBhcm0tY2xhbmctMTItc2FtYTVfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWNs
+YW5nLW5pZ2h0bHktb21hcDJwbHVzX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1nY2Mt
+MTEtbHBjMzJ4eF9kZWZjb25maWcNCj4+Pj4+ICAgICAgLSBhcm0tZ2NjLTExLXNhbWE1X2Rl
+ZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1nY2MtMTEtc2htb2JpbGVfZGVmY29uZmlnDQo+
+Pj4+PiAgICAgIC0gYXJtLWdjYy0xMS12ZXhwcmVzc19kZWZjb25maWcNCj4+Pj4+ICAgICAg
+LSBhcm0tZ2NjLTgtc2FtYTVfZGVmY29uZmlnDQo+Pj4+PiAgICAgIC0gYXJtLWNsYW5nLTEz
+LXNhbWE1X2RlZmNvbmZpZw0KPj4+Pj4gICAgICAtIGFybS1jbGFuZy0xMi1scGMzMnh4X2Rl
+ZmNvbmZpZw0KPj4+Pj4NCj4+Pj4+DQo+Pj4+PiBtYWtlIC0tc2lsZW50IC0ta2VlcC1nb2lu
+ZyAtLWpvYnM9OCAgQVJDSD1hcm0NCj4+Pj4+IENST1NTX0NPTVBJTEU9YXJtLWxpbnV4LWdu
+dWVhYmloZi0gJ0NDPXNjY2FjaGUNCj4+Pj4+IGFybS1saW51eC1nbnVlYWJpaGYtZ2NjJyAn
+SE9TVENDPXNjY2FjaGUgZ2NjJyB2ZXhwcmVzc19kZWZjb25maWcNCj4+Pj4+IG1ha2UgLS1z
+aWxlbnQgLS1rZWVwLWdvaW5nIC0tam9icz04ICBBUkNIPWFybQ0KPj4+Pj4gQ1JPU1NfQ09N
+UElMRT1hcm0tbGludXgtZ251ZWFiaWhmLSAnQ0M9c2NjYWNoZQ0KPj4+Pj4gYXJtLWxpbnV4
+LWdudWVhYmloZi1nY2MnICdIT1NUQ0M9c2NjYWNoZSBnY2MnDQo+Pj4+PiBhcm0tbGludXgt
+Z251ZWFiaWhmLWxkOiBkcml2ZXJzL2dwdS9kcm0vcGFuZWwvcGFuZWwtZWRwLm86IGluIGZ1
+bmN0aW9uDQo+Pj4+PiBgcGFuZWxfZWRwX3Byb2JlJzoNCj4+Pj4+IHBhbmVsLWVkcC5jOigu
+dGV4dCsweGI3NCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGRybV9wYW5lbF9kcF9hdXhf
+YmFja2xpZ2h0Jw0KPj4+Pj4gbWFrZVsxXTogKioqIFsvYnVpbGRzL2xpbnV4L01ha2VmaWxl
+OjEyMjI6IHZtbGludXhdIEVycm9yIDENCj4+Pj4+DQo+Pj4+Pg0KPj4+Pj4gUmVwb3J0ZWQt
+Ynk6IExpbnV4IEtlcm5lbCBGdW5jdGlvbmFsIFRlc3RpbmcgPGxrZnRAbGluYXJvLm9yZz4N
+Cj4+Pj4+DQo+Pj4+PiBtZXRhIGRhdGE6DQo+Pj4+PiAtLS0tLS0tLS0tLQ0KPj4+Pj4gICAg
+ICAgIGdpdCBkZXNjcmliZTogbmV4dC0yMDIyMDIwMg0KPj4+Pj4gICAgICAgIGdpdF9yZXBv
+OiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9uZXh0
+L2xpbnV4LW5leHQuZ2l0DQo+Pj4+PiAgICAgICAgdGFyZ2V0X2FyY2g6IGFybQ0KPj4+Pj4g
+ICAgICAgIGtjb25maWc6IHZleHByZXNzX2RlZmNvbmZpZw0KPj4+Pj4gICAgICAgIHRvb2xj
+aGFpbjogZ2NjLTExDQo+Pj4+Pg0KPj4+Pj4gQnVpbGQgbG9nOg0KPj4+Pj4gLS0tLS0tLS0t
+LS0tLQ0KPj4+Pj4gaHR0cHM6Ly9idWlsZHMudHV4YnVpbGQuY29tLzI0WFJpbTcydkZYaXg2
+bDZNZEFKTkVOeTZqZS8NCj4+Pj4+DQo+Pj4+PiBTdGVwcyB0byByZXByb2R1Y2U6DQo+Pj4+
+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPj4+Pj4gIyBUbyBpbnN0YWxsIHR1eG1ha2Ugb24g
+eW91ciBzeXN0ZW0gZ2xvYmFsbHk6DQo+Pj4+PiAjIHN1ZG8gcGlwMyBpbnN0YWxsIC1VIHR1
+eG1ha2UNCj4+Pj4+ICMNCj4+Pj4+ICMgU2VlIGh0dHBzOi8vZG9jcy50dXhtYWtlLm9yZy8g
+Zm9yIGNvbXBsZXRlIGRvY3VtZW50YXRpb24uDQo+Pj4+PiAjIE9yaWdpbmFsIHR1eG1ha2Ug
+Y29tbWFuZCB3aXRoIGZyYWdtZW50cyBsaXN0ZWQgYmVsb3cuDQo+Pj4+Pg0KPj4+Pj4gdHV4
+bWFrZSAtLXJ1bnRpbWUgcG9kbWFuIC0tdGFyZ2V0LWFyY2ggYXJtIC0tdG9vbGNoYWluIGdj
+Yy0xMQ0KPj4+Pj4gLS1rY29uZmlnIHZleHByZXNzX2RlZmNvbmZpZw0KPj4+Pj4NCj4+Pj4+
+IHR1eG1ha2UgLS1ydW50aW1lIHBvZG1hbiAtLXRhcmdldC1hcmNoIGFybSAtLXRvb2xjaGFp
+biBnY2MtMTENCj4+Pj4+IC0ta2NvbmZpZyBodHRwczovL2J1aWxkcy50dXhidWlsZC5jb20v
+MjRYUmltNzJ2RlhpeDZsNk1kQUpORU55NmplL2NvbmZpZw0KPj4+Pg0KPj4+PiBZb3UnbGwg
+bm93IG5lZWQNCj4+Pj4NCj4+Pj4gICAgICBDT05GSUdfRFJNX0RQX0hFTFBFUj15DQo+Pj4+
+DQo+Pj4+IGluIHlvdXIgY29uZmlnLg0KPj4+Pg0KPj4+DQo+Pj4gVGhhdCBzaG91bGQgbmV2
+ZXIgYmUgdGhlIHNvbHV0aW9uIGZvciBsaW5rZXIgZXJyb3JzIHN1Y2ggYXMgdGhpcyBvbmUu
+DQo+Pj4NCj4+PiBJZiBDT05GSUdfRFJNX1BBTkVMX0VEUCByZWxpZXMgb24gc29tZXRoaW5n
+IHByb3ZpZGVkIGJ5DQo+Pj4gQ09ORklHX0RSTV9EUF9IRUxQRVIsIGl0IHNob3VsZCBzZWxl
+Y3QgaXQgb3IgZGVwZW5kIG9uIGl0IGluIEtjb25maWcuDQo+Pg0KPj4gT2YgY291cnNlLCB3
+ZSdsbCBwcm92aWRlIGEgcGF0Y2ggZm9yIHRoZSBLY29uZmlnIGZpbGVzLg0KPiANCj4gVGhl
+cmUgd2FzIGRpc2N1c3Npb24gYWJvdXQgdGhpcyBsYXN0IE5vdmVtYmVyIGJ1dCBJIGd1ZXNz
+IG5vdGhpbmcgY2FtZSBvZiBpdD8NCj4gDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3Iv
+MjAyMTExMTcwNjI3MDQuMTQ2NzEtMS1yZHVubGFwQGluZnJhZGVhZC5vcmcvDQo+IA0KPiBJ
+biB0aGVyZSBBcm5kIHByb3ZpZGVkIGEgcHJvcG9zZWQgcGF0Y2guIElmIGV2ZXJ5b25lIGxp
+a2VzIHRoYXQgYW5kIGl0DQo+IGZpeGVzIHRoaW5ncyB0aGVuIHdlIGNhbiBhcHBseSBpdC4u
+Lg0KDQpZZXAsIGFwcGFyZW50bHkgdGhpcyB3YXMgYnJva2VuIGJlZm9yZS4gV2UgcmVjZW50
+bHkgbW92ZWQgdGhlc2Ugc3ltYm9scyANCmZyb20gQ09ORklHX0RSTV9LTVNfSEVMUEVSIGJl
+aGluZCBDT05GSUdfRFJNX0RQX0hFTFBFUi4gV2UnZCBoYXZlIHRvIHVzZSANCnRoYXQgaW5z
+dGVhZC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gLURvdWcNCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xy
+bmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNm
+w7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Just clear 11:0 unconditionally, the reserved bits are Should Be Zero.
+--------------mnSZ9lKqSoVowtIf067tmc7x--
 
-> So, What if we use the following logic:
-> 
-> +	u32 count = get_count_order(apic_get_max_phys_apicid());
-> +
-> +	/*
-> +	 * Depending on the maximum host physical APIC ID available
-> +	 * on the system, AVIC can support upto 8-bit or 12-bit host
-> +	 * physical APIC ID.
-> +	 */
-> +	if (count <= 8)
-> +		avic_host_physical_id_mask = GENMASK(7, 0);
-> +	else if (count <= 12)
-> +		avic_host_physical_id_mask = GENMASK(11, 0);
-> +	else
-> +		/* Warn and Disable AVIC here due to unable to satisfy APIC ID requirement */
+--------------3rPhmaKw0jACegMxp0yf5QP3
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-I still don't see the point.  It's using the max APIC ID to verify that the max
-APIC ID is valid.  Either we trust hardware to not screw up assigning APIC IDs,
-or we don't use AVIC.
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6qSAFAwAAAAAACgkQlh/E3EQov+AC
+UhAAqVy+7nc3saYAIY3Rlz8vKuGVK2JRIpclNsis0CwgYH8AlclXG3eMCAsGUyxarWnUQc0ycvNA
+8ouNeDZ5PzTy+GwFTbgxTDvcrvN1JgEuDz0U0i8HbWxjEbFHvCv4HULyOckYzOxc4pE71EvYqqfH
+d/LsP5cF8xOIgzH+jgu6uWrBTY73qAmON+t/y0nMq2LsfqSv0XRK9UERocOJUzQzb3f1DZDdGQg6
+q2X8fsFegddFVlvm2C49p6PgTInIQ/FqYCE1et3hQ4GjQVR1NOWAiV1xb5GgiTAjsGTcuODUdfUp
+hGxRJlCn4BMT+2BtLYIlFH/luOaSTr9fko92EyYR8S0yfoT0pKCNc1Jym2wmsRPZcTijKV/QWALw
+TTC/k+CSZH2hcEwYTawli3aPslAfu7ziOLpoBJx+R49kVRLhe885amJcZLUakvN69P5fux1wKum2
+OXYYZaJnPgKfiFex1dMbc7uBHQGg9BSSEA40gm0ts9svI20Fb6H0S0Oc0Ix3fFKfXOHp7drEgRg3
+L/uUcJzTWPCfv5TZfHxGuF8nAolpRh5vxgetNd0+yCvvF8890ntMFLzSG7UUFv5bW7T2glr4dYgw
+xw6DWVz305j358oUeQIH0EuiSppfTZ8NGUYfg3nSrROVWJJerbYcg3awk7yCZoATNPJPYcu54e6W
+w6c=
+=Q+Mo
+-----END PGP SIGNATURE-----
+
+--------------3rPhmaKw0jACegMxp0yf5QP3--

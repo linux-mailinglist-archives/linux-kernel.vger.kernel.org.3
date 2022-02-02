@@ -2,124 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513254A7766
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ABB4A7771
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240113AbiBBSAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:00:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59821 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232155AbiBBSAL (ORCPT
+        id S241144AbiBBSEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240018AbiBBSEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:00:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643824810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q8XQnZHCXMGpSeHP6hYFSb8NjmQibz0nfsdttbvlCtM=;
-        b=L9IlyPNYTlWakLJMoF7jlVKMoXxmCNA2EW8PiIW3EJJuvSUUNYAEogzc0Q8Xfr9LwnHvGj
-        InN8aHHN3qCswtYkbLn+lm/PjHTIc8AmUwAywzIMLpxwjcQ+mEBjGC4F7kNKywOBZzlZpM
-        7J1cCUH5+CuUE8PSmie3Sse1sLVI95E=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-lricoqNiN1W5urd2IjalEQ-1; Wed, 02 Feb 2022 13:00:09 -0500
-X-MC-Unique: lricoqNiN1W5urd2IjalEQ-1
-Received: by mail-pj1-f71.google.com with SMTP id s9-20020a17090aad8900b001b82d1e4dc8so12145pjq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 10:00:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q8XQnZHCXMGpSeHP6hYFSb8NjmQibz0nfsdttbvlCtM=;
-        b=4A65azHo63+pfY+BcI3sNQ7+LvGWMxF2QnXCPGeadnszzrOM8Jgl62Yi/B4sNvVHMl
-         PhnFAlMib3MZfWvYgPf3tq9Tlg4l9J+gM6PEMYsJIgjqID8B0ev4Hryo2k2xr0jl81tF
-         EDFmRFcLfodWSH4iqUEr5xT2Yz+ZCpRO2SGbrq1f1ilQ4vL+2cbPd8ZPdDGfdLJ2duCV
-         eRbxylCk8wJeNCtYIdRBqFO8Ql4i8lwR9w2U3ZO/ZsO8qbXQNfsArsVMs8W0B5Dv+R3i
-         lkU+oNWZxzyGDDgr4N9Q1Fof9ksRGnS2cY7yjXOOvuyM1AY9HHMLURQW4rqpa6yK22ZS
-         ICzg==
-X-Gm-Message-State: AOAM530K1L1/O6t1qKKd25invpokbonW66DENCtn5UBMG7RANEEWlltI
-        PklzLC7BRG6ngBW15agAUuQDs+8cqgW3FMCyckL+3JS/RRQ56NO4lDlYQljkiF1bayU0ofnJXt8
-        sTKrLm7Wikk4atPfWTGb7i6WKf4BokBCgNEbSHKs9
-X-Received: by 2002:a17:902:d4c5:: with SMTP id o5mr31890670plg.116.1643824808132;
-        Wed, 02 Feb 2022 10:00:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzVbePOC3ynG8ZgvbD6lpNW6ZmCdGhelPP4uNTVK7J2attRGd/LDIbiWyllIm1jmhbwCxun9lYL0ug9ovRTZ2Q=
-X-Received: by 2002:a17:902:d4c5:: with SMTP id o5mr31890613plg.116.1643824807495;
- Wed, 02 Feb 2022 10:00:07 -0800 (PST)
-MIME-Version: 1.0
-References: <20220118072628.1617172-1-dmitry.torokhov@gmail.com> <nycvar.YFH.7.76.2202021456020.11721@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2202021456020.11721@cbobk.fhfr.pm>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 2 Feb 2022 18:59:56 +0100
-Message-ID: <CAO-hwJJ08vfMTEhU03VEef8Ejx=Ts+akUwGMKTUGqMWwOK3QoA@mail.gmail.com>
-Subject: Re: [PATCH 00/12] i2c-hid: fixes for unnumbered reports and other improvements
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Angela Czubak <acz@semihalf.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 2 Feb 2022 13:04:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF30C061714;
+        Wed,  2 Feb 2022 10:04:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39B4961804;
+        Wed,  2 Feb 2022 18:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A4B8EC340EC;
+        Wed,  2 Feb 2022 18:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643825051;
+        bh=/1Ld/hOtHvIe0ZHOphStNhUPELe76TiJfnxUQFN+SBE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=SIIX+voswHUGSBDeuE4I0+Bd7ttakFvnUU7Kg4n/z9fE/wgpyfH0VHZccF/RVb7hO
+         LvYOfybS/93Sw0pcUka6Bo5md0Gc0H/2Qc0MTiErFLfXZXnj56N5MJbrR69tULK5J5
+         Ryf8WH80UvBA1AbC9CFQafP27o2O2QXU84dl8JPlj8wtDMV7lCIF26ekvZxf8W3TxK
+         rFoOcUUZ6eOeUENYdffdLD8wDOTv1N6uALuYO57PNcjaVKssnpa9CQmy+P0BRNlv94
+         1utJczD12+eyBQiSyENAlK2AHzRiGs0vVhIuNIkMGdf/IBNVsK8zL+NXHF+YauW2y4
+         daKjFhwvNvanA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 898DAE5D091;
+        Wed,  2 Feb 2022 18:04:11 +0000 (UTC)
+Subject: Re: [GIT PULL] pin control fixes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CACRpkdanZHES7tKFdq6_VjL+1PVCUXHADS+q-KR-MJ3b8tjsEA@mail.gmail.com>
+References: <CACRpkdanZHES7tKFdq6_VjL+1PVCUXHADS+q-KR-MJ3b8tjsEA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CACRpkdanZHES7tKFdq6_VjL+1PVCUXHADS+q-KR-MJ3b8tjsEA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v5.17-2
+X-PR-Tracked-Commit-Id: baf927a833ca2c6717795ac131079f485cb7a5dc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3e5832e923a9c3a12c76980f68853668d4675ecf
+Message-Id: <164382505155.25739.10739136658219746150.pr-tracker-bot@kernel.org>
+Date:   Wed, 02 Feb 2022 18:04:11 +0000
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 2:56 PM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Mon, 17 Jan 2022, Dmitry Torokhov wrote:
->
-> > Hi,
-> >
-> > This series came about after I reviewed Angela's patch that fixed issues
-> > with incorrect handling of high-numbered reports (15 and above) in
-> > i2c-hid driver:
-> >
-> > - it appears to me that the driver did not handle unnumbered reports
-> >   correctly as the kernel internally expects unnumbered reports to be
-> >   still prepended with report number 0, but i2c_hid_get_raw_report() and
-> >   i2c_hid_output_raw_report() only expected report ID to be present for
-> >   numbered reports.
-> >
-> > - the driver tried to consolidate both command handling and sending
-> >   output reports in __i2c_hid_command() but the rules for different
-> >   commands vary significantly and because of that the logic was hard to
-> >   follow and it bled out from __i2c_hid_command() to callers. I decided
-> >   to introduce a few simple helpers and have the data encoding for
-> >   individual commands done at the call site. I believe this made it
-> >   easier to validate the rules and the logic and allowed to remove
-> >   special handling for the HID descriptor retrieval, among other things.
-> >
-> > - the driver does too many copying of data; encoding the data for
-> >   commands at the call site allowed to only copy data once into the
-> >   transfer buffers.
-> >
-> > I tested this on a couple of Chromebooks with i2c-hid touchscreens, but
-> > it would be great if other folks tried it out as well.
->
-> Benjamin,
->
-> is this something you could feed into your testing machinery as well? (not
-> sure whether it's handling i2c-hid specifics).
+The pull request you sent on Wed, 2 Feb 2022 00:56:51 +0100:
 
-Not really. I mean I have a sample touchpad connected on an USB to I2C
-bridge that I included in the automated tests (though it may be
-failing in the latest release because I need to update the patch that
-enables it), but it would probably not catch all the corner cases.
+> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v5.17-2
 
-I can add this series to my local tree and test on my XPS with both
-and Elan touchpad and a Wacom touchscreen/panel. It will still add a
-few more tests :)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3e5832e923a9c3a12c76980f68853668d4675ecf
 
-I'll try to report that tomorrow now that I think I fixed my tablet series.
+Thank you!
 
-Cheers,
-Benjamin
-
->
-> Thanks!
->
-> --
-> Jiri Kosina
-> SUSE Labs
->
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7744A696F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D0D4A6974
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 02:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243189AbiBBA5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:57:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55294 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiBBA5e (ORCPT
+        id S243568AbiBBBAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 20:00:04 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:47027 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229994AbiBBBAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:57:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03D3AB82FE3;
-        Wed,  2 Feb 2022 00:57:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0ADC340E9;
-        Wed,  2 Feb 2022 00:57:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643763451;
-        bh=98nNxIicM+eGuu2qldo7Nd5//SGeL28ZWSKsTcZhXvg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rrb7mWmgANB3YX7E0kRwUuTkiTUHTOibbHQW75C/iE427FdDW0TIl9W0vZe0yTAl/
-         l6OehIROUaAMRSb5qXriC4+CE8vL+eFgUxyYMutR/zE4O74GlkVXiFTjLt0yq/O0f2
-         p2YRXN+WVg5QVOB16Zc+fdZMOSdh+PreyFzTKi5vRZnCRfdVhEyAdAgeha5yFpcsKQ
-         IVfwd9QsLPi/vLAc9/HcgHoC4IKZQNslnq8pJGdbqpjrPyBLnDwK9tMA5IZkOPRJCx
-         RBkGe6h1WJyGRioMz8Gdj7GVNDpRDdhpmgbEE1dbJAcVj/ZuG2MldWTLz6OZ17esSe
-         tgjiAVi9/0LOQ==
-Date:   Tue, 1 Feb 2022 16:57:30 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Network Development <netdev@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jacky Chou <jackychou@asix.com.tw>, Willy Tarreau <w@1wt.eu>
-Subject: Re: [BUG] net_device UAF: linkwatch_fire_event() calls dev_hold()
- after netdev_wait_allrefs() is done
-Message-ID: <20220201165730.1adb7e66@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CAG48ez0sa2+eEAnS3UMLmLbDRfM6iC4K3vRcUdA9LpDbSJF0XA@mail.gmail.com>
-References: <CAG48ez0MHBbENX5gCdHAUXZ7h7s20LnepBF-pa5M=7Bi-jZrEA@mail.gmail.com>
-        <20220127181930.355c8c82@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CAG48ez0sa2+eEAnS3UMLmLbDRfM6iC4K3vRcUdA9LpDbSJF0XA@mail.gmail.com>
+        Tue, 1 Feb 2022 20:00:03 -0500
+Received: by mail-oi1-f179.google.com with SMTP id y23so36734777oia.13;
+        Tue, 01 Feb 2022 17:00:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FwmA6JKPlfYdb8O53eG4VPOnrHtZJfiTdm/qzeAbUSI=;
+        b=SYQ96a8I1nh6Jzf6qWyO925ysIHvdFYAPVH2RGa6gSdKUydWKECsAPmW2jfA+4mMAh
+         Le74n8R3uS+NrvIzlmn8TdqodGsxSkjhbt4AKBPioMbQLfid6Rf9hfb9Lk7sLdSzH4cP
+         uxHqNR8kOIYsKN6TmSD30nj87k2BByPzToHTsh61oKnl+s8isXTS1uzuSU7YkhhjLTl1
+         0pibU752N31Zb9Wcj19SUWxoPkV24MbtzbV3LwBUHrvD1++khs+8CnaRrLkrwmB+l4ac
+         Y5phY7PgF/lfvkpjl0rynJMV31aOqwIKoqM7oefDLADcewzDXZaQiqaHRU/Pp6bW44vb
+         6V2g==
+X-Gm-Message-State: AOAM5331ZSRuCmjr1eQZ787ClfMa7rpev0q4/SuFTQxOpdK+B59E+W8Z
+        n9SscHbuoppVOJONBw5VfOTsliQEuA==
+X-Google-Smtp-Source: ABdhPJx94mzW80s1AVWpJttUhCzADCAhxdp8POgQUBSKTXkKjvBSI6IyPsZx17pLj82OsvpC+Wqtxg==
+X-Received: by 2002:a05:6808:1645:: with SMTP id az5mr3359794oib.313.1643763602315;
+        Tue, 01 Feb 2022 17:00:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bc36sm5100831oob.45.2022.02.01.17.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 17:00:01 -0800 (PST)
+Received: (nullmailer pid 1101236 invoked by uid 1000);
+        Wed, 02 Feb 2022 01:00:00 -0000
+Date:   Tue, 1 Feb 2022 19:00:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     guoren@kernel.org
+Cc:     anup@brainfault.org, Guo Ren <guoren@linux.alibaba.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        maz@kernel.org, tglx@linutronix.de,
+        Rob Herring <robh+dt@kernel.org>, palmer@dabbelt.com,
+        samuel@sholland.org
+Subject: Re: [PATCH V7 1/2] dt-bindings: update riscv plic compatible string
+Message-ID: <YfnXkO98mpm9O0zH@robh.at.kernel.org>
+References: <20220130135634.1213301-1-guoren@kernel.org>
+ <20220130135634.1213301-2-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220130135634.1213301-2-guoren@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 23:46:16 +0100 Jann Horn wrote:
-> On Fri, Jan 28, 2022 at 3:19 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> > Interesting..
-> >
-> > I don't know what link_reset does, but since it turns the carrier on it
-> > seems like something that should be flushed/canceled when the device
-> > goes down. unregister brings the device down under rtnl_lock.
-> >
-> > On Fri, 28 Jan 2022 02:51:24 +0100 Jann Horn wrote:  
-> > > Is the bug that usbnet_disconnect() should be stopping &dev->kevent
-> > > before calling unregister_netdev()?  
-> >
-> > I'd say not this one, I think the generally agreed on semantics are that
-> > the netdev is under users control between register and unregister, we
-> > should not cripple it before unregister.
-> >  
-> > > Or is the bug that ax88179_link_reset() doesn't take some kind of lock
-> > > and re-check that the netdev is still alive?  
-> >
-> > That'd not be an uncommon way to fix this.. taking rtnl_lock, not even
-> > a driver lock in similar.  
+On Sun, 30 Jan 2022 21:56:33 +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Ah, I found a comment with a bit of explanation on how this is
-> supposed to work... usbnet_stop() explains:
+> Add the compatible string "thead,c900-plic" to the riscv plic
+> bindings to support allwinner d1 SOC which contains c906 core.
 > 
->     /* deferred work (task, timer, softirq) must also stop.
->      * can't flush_scheduled_work() until we drop rtnl (later),
->      * else workers could deadlock; so make workers a NOP.
->      */
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> ---
+>  .../sifive,plic-1.0.0.yaml                    | 21 +++++++++++++------
+>  1 file changed, 15 insertions(+), 6 deletions(-)
 > 
-> And usbnet_stop() is ->ndo_stop(), which indeed runs under RTNL.
-> 
-> I wonder what the work items can do that'd conflict with RTNL... or is
-> the comment just talking about potential issues if a bunch of *other*
-> work items need RTNL and clog up the system_wq so that
-> flush_scheduled_work() blocks forever?
 
-Good question. Nothing that would explicitly take rtnl_lock jumps out
-in the usbnet code or the link_reset handler. The code is ancient, too:
-
-/* work that cannot be done in interrupt context uses keventd.
- *
- * NOTE:  with 2.5 we could do more of this using completion callbacks,
-
-:)
-
-> If it's the latter case, I guess we could instead do cancel_work_sync() and
-> then maybe re-run the work function's handler one more time
-> synchronously?
-
-cancel_sync() sounds good, lan78xx.c does that plus clearing the event
-bits. I don't think you need to call the link_reset handler manually,
-the stop function should shut down the link, anyway.
+Reviewed-by: Rob Herring <robh@kernel.org>

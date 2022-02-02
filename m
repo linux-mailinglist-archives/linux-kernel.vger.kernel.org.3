@@ -2,149 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871774A6F31
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DAE4A6F36
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiBBKyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:54:38 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56748 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiBBKyc (ORCPT
+        id S1343573AbiBBKyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235421AbiBBKyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Feb 2022 05:54:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2CE5B83086;
-        Wed,  2 Feb 2022 10:54:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 670A5C340F0;
-        Wed,  2 Feb 2022 10:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643799270;
-        bh=YaErwgEV6u6M+OhsAi4SczNs7iHw2evXeDZkXFHsX+o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GAGH6R8zllkRqqOh4pWIz7UlLpi/1U+L4KaC/sWRbM0N4aednJldOaN2DgqbCldtm
-         n736xh/GuOrES5kfnjVj89yWTotpiQXIjps9fnlgD9kuBGerLNt/7MzVArsIHRj6ix
-         Y6zt5wf2OoHD7EREvZDwgGgYx9ldrtXkFiMJcVjQMv9X67Qb4G0mz/hXdRCbNtd20v
-         euMsJ66qrMnnGIL4K+lUKSwoUXZaNywemkckZDAGXdbCcx8zYogTgQYpMog/F5WFrT
-         3syGzdF+eGZME66Neb3UxeTZLfUPiTf/6nexRxcI44KBVT9Huux2Bqg+TP4CTABnPY
-         VaHTHzAJCZjbg==
-Received: by mail-wr1-f46.google.com with SMTP id k18so37590153wrg.11;
-        Wed, 02 Feb 2022 02:54:30 -0800 (PST)
-X-Gm-Message-State: AOAM530deqEq3JSyEX8EFeofHHjZXQCxTNLHqK+3a7gCfRfjRZmvbmLa
-        b2X+hxxqm31pfkYvXsK7XaTvqiDE1SL0W6HmFYc=
-X-Google-Smtp-Source: ABdhPJxXQnmVGiQ6++DgTKrPDzuwG95DqfKcTlxhLVOsI6p/ssls6IrzqObL5TpmOLh1hayTFyI76Fa7LUWwzVeJ0X8=
-X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr24916503wry.417.1643799268703;
- Wed, 02 Feb 2022 02:54:28 -0800 (PST)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B81C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:54:32 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id s13so64403953ejy.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qRzI+h4+4G3K8WlXyiWrWECSH5mt2N8z3QLOfw+ZawA=;
+        b=6crsEOUF+BltFBb1hKPB45Jbk3Fyj4l9PeUrgNqQ8AOLnFw4LYEyRY5oa1GelyZK81
+         8nGw12FZcCEM2I4sANtgtnYatCUbNXNep0WJn6RCGxLJ32w0zRK+nLRrdYCrk3psTiCr
+         PG3jOoCIiRmfA0pZ7w5P1eK5nikm24Ii4caBBq9/AMLek/z39uJOOga6xvzbx6dbqu//
+         MVvIimT51bMKW6c4S0KYvG4bAr3XTZdoM7nNKDfQVug0KHZhB3pV+QhkE1dshbn3W/WG
+         fLGChz5vNMF5IgKBkwhmpiDF2zkS99eIUCTGhljZJG4cSsS0tlGb0bnNMw2r1s7g8px/
+         tm5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qRzI+h4+4G3K8WlXyiWrWECSH5mt2N8z3QLOfw+ZawA=;
+        b=RE7z91EQ/fZq/DVd/A1npGEcuBVsOfYeKNGIiNRcNQVton6gtONqQQF3tEyCgm2UfT
+         WD1Gs4HcWa4ofNgRjKPnmg1uuUdF4SnxtwBIsqWcqB3iGfsL9dZWpds8Z66xnv+1uAYz
+         1sQggBQnZF4fH2RyXqSQzfLLhHoMFUw+gcnFUGnEmstMzYxf8Ks+W1H6rCrml5ocDHfr
+         OGMIaj5Ku4868M1TpWc5LRYQG6Qiw5BFfEETImlYwjZFV5N7t6dEZx6PnP6H94kPvu6t
+         GyALSsouqZ8rN96+svAWjaamkRgNH5n4UTGwj6nvtZJ0oa7em1u4qMSaS5SPDUGg0Ao8
+         oK8Q==
+X-Gm-Message-State: AOAM530imrQdi+Kvq4Q4w3r3S+9mv1Jj1tJmDqVzvNsLpzQSU8vXGrmt
+        jtC3Z2SUOnT+SLstN8HitPdxDgQ2pK5I/IyiJIoSYg==
+X-Google-Smtp-Source: ABdhPJwAMLpCwX1yF59xEw6bQlSCaxNpbgzeRxBctFwzXbjiP2pgZK6JNnp4qRE8QXsuXDh6SGCvOFE6PO5MkpWrlys=
+X-Received: by 2002:a17:906:c150:: with SMTP id dp16mr23410451ejc.736.1643799271223;
+ Wed, 02 Feb 2022 02:54:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131225250.409564-1-ndesaulniers@google.com>
- <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
- <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com>
- <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com> <CAKwvOdn0C4Mt=Nb-HjLQtrsJ=X6zqgMssVHT_2QeZpnjb=-HhA@mail.gmail.com>
-In-Reply-To: <CAKwvOdn0C4Mt=Nb-HjLQtrsJ=X6zqgMssVHT_2QeZpnjb=-HhA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 2 Feb 2022 11:54:17 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEaQPg0MfrT3rOthscbXLg7KyymdOVLvWD6E1vvkryAtQ@mail.gmail.com>
-Message-ID: <CAMj1kXEaQPg0MfrT3rOthscbXLg7KyymdOVLvWD6E1vvkryAtQ@mail.gmail.com>
-Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        Kees Cook <keescook@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Baker <len.baker@gmx.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+References: <6a62a531227cd4f20d77d50cdde60c7a18b9f052.1643625325.git.geert+renesas@glider.be>
+ <CAHp75Vd68gsU-NWTGv4Y7Mo4-Vq7DBePa_yVxpDq=DAN5GLEBA@mail.gmail.com>
+ <CAMuHMdUq3qZqVHH-QSVnwemVRyCp7b2Ldd-7Q2V8CXcj0+9aow@mail.gmail.com> <CAHp75VccHbfmmk7bEXRrQOcePYxCb28sEY-RV6GBCgXAo8A5Sw@mail.gmail.com>
+In-Reply-To: <CAHp75VccHbfmmk7bEXRrQOcePYxCb28sEY-RV6GBCgXAo8A5Sw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 2 Feb 2022 11:54:20 +0100
+Message-ID: <CAMRc=MeytMp7JSZUZ+6hz=g77dF1sp83uRMbf5bqvVgKneyV+Q@mail.gmail.com>
+Subject: Re: [PATCH] gpio: aggregator: Fix calling into sleeping GPIO controllers
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Mikko_Salom=C3=A4ki?= <ms@datarespons.se>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 04:26, Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Tue, Feb 1, 2022 at 9:59 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> On Tue, Feb 1, 2022 at 2:15 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Tue, 1 Feb 2022 at 20:40, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > >
-> > > On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
-> > > > >
-> > > > > +     around an asm statement so long as clobbers are not violated. For example,
-> > > > > +
-> > > > > +       asm volatile ("");
-> > > > > +       flag = true;
-> > > > > +
-> > > > > +     May be modified by the compiler to:
-> > > > > +
-> > > > > +       flag = true;
-> > > > > +       asm volatile ("");
-> > > > > +
-> > > > > +     Marking an asm statement as volatile is not a substitute for barrier(),
-> > > > > +     and is implicit for asm goto statements and asm statements that do not
-> > > > > +     have outputs (like the above example). Prefer either:
-> > > > > +
-> > > > > +       asm ("":::"memory");
-> > > > > +       flag = true;
-> > > > > +
-> > > > > +     Or:
-> > > > > +
-> > > > > +       asm ("");
-> > > > > +       barrier();
-> > > > > +       flag = true;
-> > > > > +
-> > > >
-> > > > I would expect the memory clobber to only hazard against the
-> > > > assignment of flag if it results in a store, but looking at your
-> > > > Godbolt example, this appears to apply even if flag is kept in a
-> > > > register.
-> > > >
-> > > > Is that behavior documented/codified anywhere? Or are we relying on
-> > > > compiler implementation details here?
-> > >
-> > > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-> > > "Note that the compiler can move even volatile asm instructions
-> > > relative to other code, including across jump instructions."
-> > >
-> >
-> > That doesn't really answer my question. We are documenting here that
-> > asm volatile does not prevent reordering but non-volatile asm with a
-> > "memory" clobber does, and even prevents reordering of instructions
-> > that do not modify memory to begin with.
-> >
-> > Why is it justified to rely on this undocumented behavior?
+> On Tue, Feb 1, 2022 at 10:54 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Tue, Feb 1, 2022 at 9:35 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Tue, Feb 1, 2022 at 10:09 PM Geert Uytterhoeven
+> > > <geert+renesas@glider.be> wrote:
 >
-> I see your point.  You're right, I couldn't find anywhere where such
-> behavior was specified.  So the suggestion to use barrier() would rely
-> on unspecified behavior and should not be suggested.
+> ...
 >
-> Probably worth still mentioning that `volatile` qualifying an asm
-> statement doesn't prevent such reordering in this document somehow,
-> and perhaps that it's (currently) unspecified whether a barrier() can
-> prevent re-ordering with regards to non-memory-modifying instructions.
+> > > > +       return chip->can_sleep ? gpiod_get_value_cansleep(fwd->descs[offset])
+> > > > +                              : gpiod_get_value(fwd->descs[offset]);
+> > >
+> > > This indentation kills the perfectionist in me :-)
+> >
+> > Why? The above is aligned perfectly ("?" just above ":")?
+> >
+> > > What about:
+> > >
+> > >        return chip->can_sleep ?
+> > >                gpiod_get_value_cansleep(fwd->descs[offset]) :
+> > > gpiod_get_value(fwd->descs[offset]);
+> > >
+> > > ?
+> > >
+> > > Or as variant
+> > >
+> > >        struct gpio_desc *desc = fwd->descs[offset];
+> > >
+> > >        return chip->can_sleep ? gpiod_get_value_cansleep(desc) :
+> > > gpiod_get_value(desc);
+> > >
+> > > ?
+> >
+> > IMHO, those are ugly as hell ;-)
+>
+> I have the same opinion about your initial variant. :-)
+>
+> So, up to the maintainer(s) what to do.
+>
 
-Yes, and to correct myself here, I meant 'instructions that do not
-/reference/ memory to begin with.
+It's Geert's code so let's keep his version. I like it better myself too.
 
-I suppose the problem here is that the distinction only matters for
-things like objtool obsessing about whether or not instructions look
-unreachable, and relying on asm volatile() to insert markers into the
-object code.
+Queued for fixes.
 
-So it seems we need a stronger clobber, one which avoids any kind of
-reordering at the instruction level.
+Bart

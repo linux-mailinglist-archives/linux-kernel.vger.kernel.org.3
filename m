@@ -2,115 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BD64A75B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CE14A75B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345821AbiBBQYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:24:31 -0500
-Received: from mga12.intel.com ([192.55.52.136]:9064 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236409AbiBBQYa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:24:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643819070; x=1675355070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=crIMANMLKBvQD5aO8/SbvlEbfgJkAqaDfeDT9EokKZE=;
-  b=P1DcY38jzVOvNCGuNJK6At4mFbxvK3q/sOtJ8Wmm6lUaTKsbQGx7Aa85
-   lq+OQDE8eTHxoPgH8CJPKmb1qv46/O1I6oEZgYcSB1ERL9QmyDKPVtiL8
-   9VRZ10d6xGodqYczHKlSKsc4cMoVVOKWsLX6Z3L3WjlYyT40cItxDk16b
-   ovcRFoOAj0jZE5lVL4EvMUqbm8FcLuNj927fNhlP6Ko6vlk/gap0OhLKK
-   taFDYaXZyYU3GIwV46lGjYauTFD37pqMsZICHLEyfDFAz4RhZy2ouvf6N
-   /6J1oXRz3z86cYVEGgw7Bd+IkjtWKWgjo9XLmE0wJ+KiR2JaFFbVW+ix9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="227923534"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="227923534"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 08:24:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="771489431"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2022 08:24:08 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFIQR-000Uom-R8; Wed, 02 Feb 2022 16:24:07 +0000
-Date:   Thu, 3 Feb 2022 00:23:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: Re: [PATCH 2/8] VMCI: dma dg: add MMIO access to registers
-Message-ID: <202202030055.O6CyDujA-lkp@intel.com>
-References: <20220202144910.10349-3-jhansen@vmware.com>
+        id S1345810AbiBBQYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:24:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236409AbiBBQYP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:24:15 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DA4C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:24:14 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id n32so19212150pfv.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4RU4nT0A8ScUi0XH1TGWZby5UrMX36vrOc8ZNPOHMnY=;
+        b=BjMp2b4aJS29gAsExIeXJwymLti9bMZuWps/hQkbpCNpsSkjMKG09LT9KlGWO3iYiU
+         yS7C3p5MsMsRtocfTWpx56BrKisYaNkfHVkltZyjSpuHvpkOYS2YYtuSdmHYwYpOWlkw
+         3rnqE4y37W8fi0Qu04lzK5IPncZHF6JdALe3v3q/106EEJ5qvVLjWBi/Svm8JHK0L1vp
+         k+9Ub5bgSE6ayDgYSCg7bmeTkGLS4b4bvJI3TbSdP1Ib3Eqe2hYjknPEsuGlwZ6ZwgB4
+         2ZJHwHHShHV9OMe5dVX/bhSYQovPOz0pFqpSkl4bBzuKwAOWZ1McOZtuyTDx0xiGufRc
+         zZ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4RU4nT0A8ScUi0XH1TGWZby5UrMX36vrOc8ZNPOHMnY=;
+        b=zs8FPhihEBcw+ockDqduCrTBvTe9UfgNfiSwTdL96URJ3BaiWs9j+TrPmRVq6Umz4F
+         5ebtg45zd0X7uqFtjgyWS3OV/PqhVVnChP9ezbpTUeAbgBfAU7mDJGUsU5B5XTQH2b3T
+         PvofxHkuTbuzK8D7CYKRdLeuCe2t5aSb+f7SvSAl6WK99sP9KhRXOt+WIufkoHy9cO9W
+         q3qmUkZ4zlVZGkvZZw6puYgFvZxyWNS7lvgp1Y+QKLHaC6xiTjoktShs2oc9rVhtgQlf
+         9J64EwMr5oeDxW2BuMwfoS6xPUyd1cKanMJtRBOEB0MtN7FZGzE3jRrAeSjWTHIe6HAc
+         n5Xw==
+X-Gm-Message-State: AOAM530uljqeR150hT6ERXH/iBS27JBJ5w0zgOHSZEG7B8DcM//e3RNy
+        2PbdP2hcE57TOiAJ4D9Glq0=
+X-Google-Smtp-Source: ABdhPJzKBckS0KU9uqHVFtKYVdrbjhsxdWHHuWUI+DUjuhAJZzFyyGTrixlAGa6YTa0wYc0A5+m80w==
+X-Received: by 2002:a05:6a00:885:: with SMTP id q5mr17134700pfj.6.1643819054229;
+        Wed, 02 Feb 2022 08:24:14 -0800 (PST)
+Received: from [10.230.29.214] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m38sm33846917pgl.64.2022.02.02.08.24.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 08:24:13 -0800 (PST)
+Message-ID: <71178ae0-053d-d2f4-88cf-a41513432351@gmail.com>
+Date:   Wed, 2 Feb 2022 08:24:11 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202144910.10349-3-jhansen@vmware.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/3] phy: phy-brcm-usb: Fixes for phy-brcm-usb driver
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-phy@lists.infradead.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211201180653.35097-1-alcooperx@gmail.com>
+ <7cbb745e-8b95-1eed-0903-44070a112ec0@gmail.com> <Ye0/8MSBRVNuBr3L@matsya>
+ <e801d672-bedf-b08b-d27b-2b0cdd476a6d@gmail.com> <YfoPIGfs5Q3IwrPm@matsya>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YfoPIGfs5Q3IwrPm@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorgen,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202030055.O6CyDujA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/f2afd39bab80c2e42ac789f6d949d779411df928
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-        git checkout f2afd39bab80c2e42ac789f6d949d779411df928
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/vmw_vmci/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/vmw_vmci/vmci_guest.c:93:14: warning: no previous prototype for 'vmci_read_reg' [-Wmissing-prototypes]
-      93 | unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-         |              ^~~~~~~~~~~~~
->> drivers/misc/vmw_vmci/vmci_guest.c:100:6: warning: no previous prototype for 'vmci_write_reg' [-Wmissing-prototypes]
-     100 | void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-         |      ^~~~~~~~~~~~~~
 
 
-vim +/vmci_read_reg +93 drivers/misc/vmw_vmci/vmci_guest.c
+On 2/1/2022 8:57 PM, Vinod Koul wrote:
+> On 27-01-22, 17:01, Florian Fainelli wrote:
+>>
+>>
+>> On 1/23/2022 3:45 AM, Vinod Koul wrote:
+>>> On 19-01-22, 15:26, Florian Fainelli wrote:
+>>>> Hi Vinod,
+>>>>
+>>>> On 12/1/21 10:06 AM, Al Cooper wrote:
+>>>>> A few fixes for the phy-brcm-usb driver.
+>>>>>
+>>>>> Al Cooper (3):
+>>>>>     phy: usb: Leave some clocks running during suspend
+>>>>>     usb: Add "wake on" functionality for newer Synopsis XHCI controllers
+>>>>>     phy: broadcom: Kconfig: Fix PHY_BRCM_USB config option
+>>>>
+>>>> Are you able to pick up those patches? Thank you
+>>>
+>>> Applied phy patches to phy-fixes, thanks
+>>
+>> Thanks! I can see patches 1 and 3 there but patch 2 is not in phy-fixes or
+>> your next branch. Can you pick it up if it is satisfactory? Thanks!
+> 
+> That is usb patch right. I wont pick unless Greg acks it to go thru phy
+> tree
 
-    92	
-  > 93	unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-    94	{
-    95		if (dev->mmio_base != NULL)
-    96			return readl(dev->mmio_base + reg);
-    97		return ioread32(dev->iobase + reg);
-    98	}
-    99	
- > 100	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   101	{
-   102		if (dev->mmio_base != NULL)
-   103			writel(val, dev->mmio_base + reg);
-   104		else
-   105			iowrite32(val, dev->iobase + reg);
-   106	}
-   107	
+This is an USB PHY patch, I suppose the subject including "usb: " did 
+somewhat mislead you. Here is the diffstat just for that patch:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  .../phy/broadcom/phy-brcm-usb-init-synopsys.c | 46 +++++++++++++++----
+  1 file changed, 38 insertions(+), 8 deletions(-)
+
+definitively falling into the PHY subsystem.
+-- 
+Florian

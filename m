@@ -2,132 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EBC4A731A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEB64A731F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344969AbiBBO3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:29:31 -0500
-Received: from mx3.molgen.mpg.de ([141.14.17.11]:59937 "EHLO mx1.molgen.mpg.de"
+        id S1344983AbiBBO3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:29:34 -0500
+Received: from mail-bn8nam12on2042.outbound.protection.outlook.com ([40.107.237.42]:12321
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1344966AbiBBO3a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:29:30 -0500
-Received: from [10.59.106.37] (unknown [77.235.169.38])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 13FD361EA1924;
-        Wed,  2 Feb 2022 15:29:27 +0100 (CET)
-Message-ID: <1378dd0a-52d2-c998-5713-e6875c601194@molgen.mpg.de>
-Date:   Wed, 2 Feb 2022 15:29:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell
- 88SE9235
+        id S231839AbiBBO3b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:29:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GMy1xje+aYNvj+ACRbj0i7F5KOaFWvMVk2qd5U/kdjmZQ1grO63jv9QjNeyK79jF3Y4p27KcXeErxhyA7RI0qZRLQ23NU4PleovQzHxHYOnEhPiRfYZicqXWiNHkqQfDmGSCTcJ6QOgkCDAuwz6ILUlWMUz/2KwF1sPQHluy5FHnmK+43JPeNSSb5KMnxg8X1yxys5WMwwdaXZuDXvi9X0yJbuq64tVJcp8bBgHzKPFTD+ywD0HdMAP47OU4sg28lbk/kxL0MMoCkJdfeMAf8c1sWS4mJqr8Gw83QkqEOVTLPhXLoz2h5nZ/ZZVMH2WoRdiktXaLj0VTVdY6hVe9Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=83Y6/dQMtYl9R++ehd+j0F5hazIe9dfRfSyEn4pWNVs=;
+ b=UYRINGMMMYRsHgCfFkwDKPx5Jy7bwNuljK2CgplMesiTkFHpx4WV8BhkdpywVW/fuDBExZVpbSdehDYL5eFcnO4YRDqHq0Xxj8MBzON7B7zGWe4vz/I2KQmnUVNyibddWHAOPu0jDkYRH+/aSwCSH56vP9klvwl6ZXU8bbD11b9W1XqcU8bK0jQDFDyOEGkzmqYpGNvWilm9i4xOs/8CVx+BL5rXZ7FYxKTfJFc5E0dD7tCnS02WcO8BO9OMA+kmOSINuQhCi8Go+jRvDhvDblryZZVZAFP/wE00gv5i+cXJIftq2AVRGwOvPIt1gSzY9elOyHeXklLngB4Y4e1IXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=83Y6/dQMtYl9R++ehd+j0F5hazIe9dfRfSyEn4pWNVs=;
+ b=JIUKszsi3HONHh3ROxZvTNJKt8oIZRy0NwPIOzm5lbPWnJ1psVHlap9YQ5BMP2X+fDeErMnf50lgSvdQInl5clW8vcDvwX2UL9YbbBBICliJmNyGnSjvf2Wv87OY3wVQTygC00YMB3S2FwMO4d0vIVOxP7eod39E0o+ncvxleHw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by DM4PR12MB5360.namprd12.prod.outlook.com (2603:10b6:5:39f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
+ 2022 14:29:29 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817%4]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
+ 14:29:28 +0000
+Cc:     brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 15/43] x86/sev: Register GHCB memory when SEV-SNP is
+ active
+To:     Borislav Petkov <bp@alien8.de>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-16-brijesh.singh@amd.com> <YfpeSErxB9KHOd7m@zn.tnic>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+Message-ID: <0b1835df-8529-df63-31c2-945e93118a96@amd.com>
+Date:   Wed, 2 Feb 2022 08:29:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <YfpeSErxB9KHOd7m@zn.tnic>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
- <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0352.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::21) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 45732e02-5fa8-4aa4-a7af-08d9e6586b91
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5360:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5360E380448022C3A5AEE124E5279@DM4PR12MB5360.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2201;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FXxVIt39keHl83b0UeE5xx1IORXxQI2o8vdeHvLG/lGw2NAcQFAKAZz+pJr1IdCpGVLpxc8onRyLzZdy06OBBMcyUm2p3sOxyKEcl24foo7v0KKYfkUxC6qkp+0ZHEHneUegmN5VTTu6Yu3tXpPizueNTadtqLK5VDA2xvZPbyWzW6hPN28riq5i5JBB+aWA8TYgWM8ZcHKZytJywd2AXDxK3PbA1NttKkVHqP3dnIBPkma6C3b14a30gnQ6zDOcKBABvyWEDl5623jpWOulF4HwAJJKLb1192Sl55Se89RujDrn0UsIgQXaZJc8eDlAwn8KlXajCUagYUI77UwrhHT59eXijToWO8DwKuUb5NgO0AGdN3V00kvnNPPxcgj7nS9UOqUgXAlchFD/WtuJB1NAfiHWfQdtQn/VVN1LYVmJ0r3vSu/+AfAo/4A/3Qt20UB+Zm+u/ymZNq3SfE+S3d6mo7PeDH+fgKhbmBHQYCOUHXaaCfyJmxzoo3IegFvAXaDG/vAzISLbciN2cGRDc3cLDCqkaW3P5UCV8XuVdIzOzNojk4NQAzsC9wu76a6o7GJWTfenEaJy0SZxd1vPoYQiJyMmK/rkZ2HA3szn7hfpuwttm+kDcjuHkz/gWr3bqlASjLfXkJ7/CjK45alkoB1ldeyLa25Pz/0Za+joK64SZ4+gzHMYKDhG7y8PweZM3arS9lEFUDOh59loAiuYgqDevYOgwyp4KFgmyYl4+gFsCqiWRQVLSaVEsKJrMlwR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(6916009)(38100700002)(44832011)(5660300002)(7416002)(7406005)(8936002)(8676002)(66476007)(66556008)(66946007)(4326008)(31696002)(316002)(26005)(2616005)(186003)(6486002)(508600001)(6666004)(6512007)(53546011)(2906002)(6506007)(558084003)(31686004)(36756003)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T3VvbDZOay92MUorbzVEaGFnTG5ISkQweTk1eTVrcUNoeFkrOVJWSmRod3Nj?=
+ =?utf-8?B?bjA1QVFPZXhQa0lSU2ZnT1ZLWUpSY0VkT0ZyblJHZXB3bndTSWZ0UnE3b3B3?=
+ =?utf-8?B?RFA5U0FkYkwzOUpzT0I5d042dVdrR0prY3Z6M0FkMk9MdTNUSS9UWUxVQUZ4?=
+ =?utf-8?B?aW50aGRFQkFUREZLYnNDUTg5d3B2SXhHOWMxR012d0R6VndaY0RUckhIbFNx?=
+ =?utf-8?B?ZCtoaHM3bDhZbk1QbjhMQjZyZFp2aEpScWlYcllSTDlSTTU1TkFvVnBSWnU5?=
+ =?utf-8?B?cG9hNzM0NnB5T0dab2ZhRVJidjZzQnhmTjBwdmJwS3N1MWZaMXkwcTlIVzdy?=
+ =?utf-8?B?c2lhSUI1TUxhazNCTzBCRzA3eEdxT2xPbG1aMmhnSi95Z2doN1FXOEVnMmxM?=
+ =?utf-8?B?Z1g0OXIvM1dnRVp4Nm9oR1RBVDZVSUhmQk9BdUdNOXJaZFFpY3B1Znl6NnYz?=
+ =?utf-8?B?TnFMazMzeW1CSW02cDNFY1piV01ITW9kZFI2QzAxYTY3aDhUS2NKZlY0Zi9m?=
+ =?utf-8?B?RW0xSnVZcUhKOUk2Zk9QNDg5aDBwMVBiVmhzcTRKd2hNRHJMR3F0UUdCcDFS?=
+ =?utf-8?B?anBQYWhIN1lkdm8zZFNmeG5EWmtmSjZka1JPQ3IzUURyZ2g4d2FNT21zMTd0?=
+ =?utf-8?B?bE0zbEM1cnkrYmhKV1dKSHRxOHBQSENNakQwZERJeksyaTJDK0cxYTlscHJv?=
+ =?utf-8?B?cXFXd0VDL3V0NXVwUnNiZVlUZ3MwY1cxOExVaWkxUkFCYkdFdlF6bkFrV0hZ?=
+ =?utf-8?B?RnVMTnVaNW9ITVFCUEJKdFRyVTBYV1YvQmVZazNUUjVqbU5tWWRVQVdTRnBG?=
+ =?utf-8?B?YkVVMHVtbEhldG50allZL0ZTU0J6V1FwdDJmMFhkWUhkdzlEQ1g2bms0K24y?=
+ =?utf-8?B?QUNuclQvbHQ1RnBETS9VNFdtaWRleTBwZGhxeEk0SXRYWTV4TUtjdGtzcEdP?=
+ =?utf-8?B?SmlVQmVkMzFvVmxobkw0Z3JwZnhVbTVRZmx1VGNLWWhHM2JyZ0UvVG5Gekth?=
+ =?utf-8?B?eTd4cGtpWVQxMU9Hd2UvSHlQQVlFVTREbnBQQUQ1VlU0SzV2c29Uck9NMXpu?=
+ =?utf-8?B?ZTZsT1hRdXhSUkUyZGVFRmo3SHNzbllvWCtFVHNxOFFBNUFtMjBrUGRNNmM4?=
+ =?utf-8?B?TmVzaTAvd1gvK1d4bHlucnNFcW1tYTE3aUVXb2tEMTRoSVVUY1NLREFnTzRR?=
+ =?utf-8?B?U1Vlc1drM2s3U05rRnVZNHJkUXdBd2xqb3BrQnN4bi9xY1UvcFE2Um1JMDFN?=
+ =?utf-8?B?cDRPTEpiQ1Fubnc5dHdoS0FPZDZnVTNSUzlBLzdMRHNZRjFQM3Iva01oV3Zq?=
+ =?utf-8?B?dXN0OFByMW44d0NOQUV2TE1kWUhrbmlUVzl6UHQzdDVjM2hwNGdHTnducUox?=
+ =?utf-8?B?S2xFYnd5WG8xUmJpK1o0Rno3dTY1eEtEdk9jcGlJZkUwVHlhbmlieTEreE1h?=
+ =?utf-8?B?T3kreGVZTGIyRFVUays2RW0zNlN1RWdsK1RUYVVESm9pZCtiNmQ4R0ZWVnRD?=
+ =?utf-8?B?ZkxaV0xjS29RYVI2VmRzY050bnd2OVlpYkphRWVUQ1BsY3YyQnlXRHkrS2dC?=
+ =?utf-8?B?WDhHOHNPZnVVM09lN2JDV2p3M24vYjE0YXZOSGx3djYwWTJWWEZSalNySVhK?=
+ =?utf-8?B?aDJDT1FjTkNyNlNoY1BnbndnT3Jkc2V0aWNyRit2VEVleUVHeWFYRUg0N1Ns?=
+ =?utf-8?B?TlNLVWtKbVBNOVJ5czVBcyt3KzFaNkZ3NjRVOFowMCtPbXBmdUxZRmkvSkV6?=
+ =?utf-8?B?WjYydWdkQTNVTXpMYkNMc3dNcmVZQnd5MDhodE16YmF1REZBKzdGUUNHVWE4?=
+ =?utf-8?B?MlVTSzBxaCtPWm5WdFBoMHpJcEtYd3FoN0FKeU85ckNrUmsyZjFjeVVqK2Rv?=
+ =?utf-8?B?cWdJb3Z1aWpsL0hYS3RlU01ydjMzUkZKTzRRSGUrZG5Xb0REU0puZDRyVDY4?=
+ =?utf-8?B?ckpvcUR4RzVTejJ5K0hydVhEUXZjNEdJeWorOW5nNjl5NkwrTVQwclNlSGM1?=
+ =?utf-8?B?Y1A3SHNVMUNQbTc5WW05Qk4xOXpqNk9WN2xHRUxxY3lZa09ZWTRsR0s2VWlr?=
+ =?utf-8?B?cE5MOUc1d0FqM3lobCtycVNTWUlZKzFUcUNHNHpzQ21neWZ2VEczZ2ZuOHdy?=
+ =?utf-8?B?RTBuRForSXEyRkRXcVdKeUt5VFJ5VzRwT29CbXAvYmZWZnJ4cGRUelAvRUZm?=
+ =?utf-8?Q?jD9E6MgLLXXyN7uVD22E1pk=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45732e02-5fa8-4aa4-a7af-08d9e6586b91
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 14:29:28.7104
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O9z585KmR+MPio28F+D/t0w+/uKqVbtEEm9Zrq9zehQi0NgVYS78NfdR86eWvnmcl/NMj6kOWaNMVLBpcYd9PA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5360
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Damien,
 
 
-Am 02.02.22 um 09:14 schrieb Damien Le Moal:
-> On 2/1/22 16:12, Paul Menzel wrote:
->> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
->> not needed for the Marvell 88SE9235.
->>
->>      $ lspci -nn -s 0021:0e:00.0
->>      0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
->>
->> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
->>
->> Currently, without this patch (with 200 ms delay), device probe for ata1
->> takes 485 ms:
->>
->>      [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000100 irq 39
->>      [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000180 irq 39
->>      [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000200 irq 39
->>      [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000280 irq 39
->>      […]
->>      [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
->>      [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
->>      [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.841796] ata2.00: configured for UDMA/133
->>      [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.846043] ata1.00: configured for UDMA/133
->>
->> With this patch (no delay) device probe for ata1 takes 273 ms:
->>
->>      [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000100 irq 39
->>      [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000180 irq 39
->>      [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000200 irq 39
->>      [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000280 irq 39
->>      […]
->>      [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
->>      [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
->>      [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
->>      [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
->>      [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
->>      [    3.900070] ata1.00: configured for UDMA/133
->>      [    3.900166] ata2.00: configured for UDMA/133
->>
->> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> ---
->> v2: address comments for commit message (but forgot v2 tag)
->> v3: resend with v3 tag in subject line/commit message summary
->>
->>   drivers/ata/ahci.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
->> index ab5811ef5a53..edca4e8fd44e 100644
->> --- a/drivers/ata/ahci.c
->> +++ b/drivers/ata/ahci.c
->> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] = {
->>   	  .driver_data = board_ahci_yes_fbs },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
->>   	  .driver_data = board_ahci_yes_fbs },
->> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
->> +	  .driver_data = board_ahci_no_debounce_delay },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L */
->>   	  .driver_data = board_ahci_yes_fbs },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L */
-> 
-> Applied to for-5.18 with commit title and message changes. The title is now:
-> 
-> ata: ahci: Add support for Marvell 88SE9235 adapter
-> 
-> Since it is exactly what this patch is doing by adding a PCI ID.
+On 2/2/22 4:34 AM, Borislav Petkov wrote:
+> That move doesn't look like it's needed anymore, does it?
 
-Thank you for applying the patch. I saw the summary/title change also 
-with the other patch. I am sorry, but I totally disagree. Reading that 
-summary/title in `git log --oneline`, it’s not clear at all, what the 
-patch does, and the full description or diff has to be read. “Add 
-support” for me means, that it was unsupported before, which is not true 
-at all as the defaults were used.
+Ah, yes, we no longer need it. I will be remove it in the next rev.
 
-> The comments about the 200ms debounce delay not being needed is kept as
-> a description of how this new adapter support is defined, using the
-> board_ahci_no_debounce_delay board definition.
-
-
-Kind regards,
-
-Paul
+-Brijesh

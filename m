@@ -2,85 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CAC4A6AC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1B84A6ACA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244267AbiBBEKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 23:10:50 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:39073 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiBBEKs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 23:10:48 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JpSyZ0gYtz4xjx;
-        Wed,  2 Feb 2022 15:10:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643775047;
-        bh=FqG0revIyQjV9+Ys6oYq1LnaXb7bQzHO5eXwJcK5vTs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lCmQdW22mE7QIrii8qagiY2B61BiMfCGkx0H4CNcjYZKHBFaAW31kn7Th1bnaN+Bi
-         rOxG/eGYASxFa+SO8efErUoYrsCkQZ//oH00wMkhi9ZdRC3/GGVr9YW4lYdAIUPK9h
-         rR8MZbo7310D42cuc3FQFM1Veandq4qy/4ziJTnWFweOj0z4fPS2eHYSZlrb6tscXn
-         n0rEKV49Ji09utlO7WbmxXAyyCDRCGQYCCzh8DSNWyPfVMhzC1ZwTz8vYxkSoBG1yg
-         qW81yYZcOgPE5+56YrUeFw2phU/Y+BoklZYKbE5RaGV9kephdW8S7mlhiMZXW7Eciz
-         HI2VXaa1O/N9Q==
-Date:   Wed, 2 Feb 2022 15:10:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the drm tree
-Message-ID: <20220202151045.23205624@canb.auug.org.au>
+        id S244280AbiBBENh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 23:13:37 -0500
+Received: from mail-dm6nam11on2045.outbound.protection.outlook.com ([40.107.223.45]:12769
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232236AbiBBENc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 23:13:32 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fIT8jpge4CcVgkH+6gacF8oUp9i/Tir+raL4lcZtd5PVig99rdoOUcUEa8wVD2bwz3O744c4tJ54Sosxm+ZYhZ6ZbkQGQCt2xSmAd0qKSce4A7xdcyURvXRtNPyJRgXhvA4R3hfkySWQpXOPV9SmtFj6weftAqqriuJTmTKKhah3Se7po323xDmxiPM8W3MLT+8i6p+LO3W5R+kF+xs8Ai2y35KgXEVNnvmWqGNvpWxwn2JSih27Nx5X8Io8xusnKdk/VFkgWX3LnrkOAmKKKSooA+jz2NQMvXkc7/XHj1hyme27XMAQCUcUZiE4rEZVfC2wGbOS2vsIRbeAYBtCVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vLTDWExBMPxK2LJgLbaSqQ5IzEY//W6KUDcFTmUhao4=;
+ b=HLDewysR/KDHJIQEEDh/7zwkl1BApXguw7czYIeWxt0/H5k84NgEEmhkjPszTReuVdDV1EIi/RYMIJs22IMTDbrIGIRuy0m2di/fKhkOB0i72Ga8k4GGNrBS4Wb0mTtraozBq1HZw8be3256a7vMFQGy9g9Q928xaNDGLJCYfYzYOZqjTA4XLluZfrkjOK/QotGHhkqPvZ4lPIi5JEJgaJVrLlrj4k67ue9Gm/rSZNGFph1ZiTH/YTvP4WyZdMEaTktQMqVYYclKQ8NxyFekqmh/GmUgUpVhsO7aIqa8rbU1ltjfFIoNFrXleA3PROzFW091BaWBje0S6KtROyod0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vLTDWExBMPxK2LJgLbaSqQ5IzEY//W6KUDcFTmUhao4=;
+ b=GGw3kntdvLT1OmKA9AHoI8g9VlqHPk01Nq/yeJLurDckUPqEXNA7B0YjLms9rcGtXpHVbyvahcF5sHIMznLmafL8Z/V/ryQpGzP/USc6rFmld1YFcgrs0HXx0R2llm3YuQ7s2BZbXWJCT2WSRxa/b/WprA2MRkjKAC/6ahLfCb8=
+Received: from DM5PR2001CA0014.namprd20.prod.outlook.com (2603:10b6:4:16::24)
+ by BY5PR12MB3780.namprd12.prod.outlook.com (2603:10b6:a03:1a2::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Wed, 2 Feb
+ 2022 04:13:29 +0000
+Received: from DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:16:cafe::2e) by DM5PR2001CA0014.outlook.office365.com
+ (2603:10b6:4:16::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Wed, 2 Feb 2022 04:13:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT021.mail.protection.outlook.com (10.13.173.76) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Wed, 2 Feb 2022 04:13:28 +0000
+Received: from sp5-759chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 1 Feb
+ 2022 22:13:26 -0600
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <x86@kernel.org>
+CC:     <seanjc@google.com>, <mlevitsk@redhat.com>, <pbonzini@redhat.com>,
+        <joro@8bytes.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <peterz@infradead.org>, <hpa@zytor.com>,
+        <jon.grimm@amd.com>,
+        "Suravee Suthikulpanit" <suravee.suthikulpanit@amd.com>
+Subject: [PATCH v4 0/3] svm: avic: Allow AVIC support on system w/ physical APIC ID > 255
+Date:   Tue, 1 Feb 2022 22:11:09 -0600
+Message-ID: <20220202041112.273017-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aCnuzjM0VF6RvnWI7x4p1Ea";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2c79f930-c1d4-4ea6-d67d-08d9e6025df9
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3780:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR12MB3780CB4F949B69BF8173AAFBF3279@BY5PR12MB3780.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Uxac/SKXcQmmyBsvnMw/fDvizmvPT0IuHMTyeKdMy1BBryviC9IBbDUe4FmgxMD0gd6ZZNN9k0gAQOJqPT7S9QaLEA3qd/rQ3EhYSsL6DlvSRGn8Mw8cHlFnNn52hiAOe5slYXHHh0GFH2enEiKk0DOkV0VnDt3AOO3NdTJM5FYVa4kBLpIfvh55YbrxqHhwSo7Wh56RbYO/rzz6qO5wKZou4//R/AgyMhjUGP4zbH9yN3JUpbboYqOHEVCd4VcgnLeXkyuLQqXbFgO6Q3rJ05FfJocOaTtMzUW7R4IBItoSHoqbefqsDkwcrV2S+2kwyQmLTLHNkCY5GGDM1mmgKdUIRzHn7WccnK+1BhsJ9DbPSmjO3JMXQFFH8RoPvtZcRgNFfqFhhl3fgUzXhG8B/9ng4punPH/XpeJ+eMbMZlGiYTThTquy6JNBpe291RRWq+pdJ7UCjDe16jhXsDHFDofS/xJmbhXGnuS0zi2ov/pfTdGfKu5GCF/6w14E3u0R3SPPt8VVyW4QM0puA93NRdR1ByXQmJazRqU+9CNiyHNaCKKu5U+FYmQLuEz4Y74hNR0Z4wYYZeGLsHssVvPs8odPSq+siSneUvvmCWXrbnR+C5aP+sYTDUPVyLHp4sHvXqysr7CUY1jcI9iS7Pw7vPwAbDD51DRs46fuoeK6G8w5//aGud6yEzFvpH4Yoeu5wfaJmWtmTcSfK9sVBMWiNWU9tMyy4wjR5/MWsLgcPTMYxgPTdB7zaTnyM8UhBsuG1cghHknjm7KpaxUjo1UTrnivE2dTeH/B7heDpp/VV0Q=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(16526019)(7696005)(2906002)(508600001)(81166007)(36756003)(70586007)(6666004)(336012)(82310400004)(426003)(1076003)(8676002)(26005)(2616005)(70206006)(54906003)(8936002)(356005)(5660300002)(186003)(316002)(4326008)(83380400001)(110136005)(47076005)(7416002)(86362001)(44832011)(40460700003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 04:13:28.9519
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c79f930-c1d4-4ea6-d67d-08d9e6025df9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3780
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aCnuzjM0VF6RvnWI7x4p1Ea
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Originally, AMD SVM AVIC supports 8-bit host physical APIC ID.
+However, newer AMD systems can have physical APIC ID larger than 255,
+and AVIC hardware has been extended to support upto 12-bit host
+physical APIC ID.
 
-Hi all,
+This series introduces a helper function in the APIC subsystem to get
+the maximum physical APIC ID allowing the SVM AVIC driver to calculate
+the proper size to program the host physical APIC ID in the AVIC
+physical APIC ID table entry.
 
-After merging the drm tree, today's linux-next build (htmldocs) produced
-this warning:
+Regards,
+Suravee Suthikulpanit
 
-include/drm/drm_connector.h:637: warning: Function parameter or member 'edi=
-d_hdmi_rgb444_dc_modes' not described in 'drm_display_info'
-include/drm/drm_connector.h:637: warning: Function parameter or member 'edi=
-d_hdmi_ycbcr444_dc_modes' not described in 'drm_display_info'
+Changes from V3 (https://lkml.org/lkml/2021/12/13/1062)
 
-Introduced by commit
+ * Rename and modify patch 1/3 to also set vcpu_(un)blocking only
+   when AVIC is enabled.
 
-  4adc33f36d80 ("drm/edid: Split deep color modes between RGB and YUV444")
+ * PATCH 3/3: Instead of dynamically calculate the host
+   physical APIC ID mask value, use the max host physical APIC ID
+   to determine whether to use 8-bit or 12-bit mask.
 
---=20
-Cheers,
-Stephen Rothwell
+ * PATCH 3/3: change avic_host_physical_id_mask size.
 
---Sig_/aCnuzjM0VF6RvnWI7x4p1Ea
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ * PATCH 3/3: change warning condition in avic_vcpu_load()
 
------BEGIN PGP SIGNATURE-----
+Suravee Suthikulpanit (3):
+  KVM: SVM: Only call vcpu_(un)blocking when AVIC is enabled.
+  x86/apic: Add helper function to get maximum physical APIC ID
+  KVM: SVM: Add support for 12-bit host physical APIC ID
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH6BEUACgkQAVBC80lX
-0GwqxAf9Gx+Bctg07MRPALSAcThO9QqJtaAa8imgMBOfoM9SApzsrWnho8lbVfyc
-Y5AYJ9PdN+qu0yePEHdmsuLN7DvEO24etcX7fJUiE+03iU68CdHWm5dNKgxcwq26
-P55EwjlAxiNeRcJ5zj8fn+7ygdpafHwJwcGjdY8Z01h7jqwmc+G1+IgRSBTmQvju
-VMYZYRHYWNPhjrViEfB37h7zeSotTsZFVaeL05U+kjHuR5qpWyJTug1FUiGNOUV4
-AGf4OrFDhvsxQ4EOJW01Y3NXu9OktEAXvQYm2G/omQtpd2CqXe7yu2WUL0OeUDbZ
-EuFh5Lnl6aq+/PDrvYBYPbHWdYwKoA==
-=JhTS
------END PGP SIGNATURE-----
+ arch/x86/include/asm/apic.h |  1 +
+ arch/x86/kernel/apic/apic.c |  6 +++++
+ arch/x86/kvm/svm/avic.c     | 50 +++++++++++++++++++++++++++++--------
+ arch/x86/kvm/svm/svm.c      | 10 ++------
+ arch/x86/kvm/svm/svm.h      |  4 +--
+ 5 files changed, 49 insertions(+), 22 deletions(-)
 
---Sig_/aCnuzjM0VF6RvnWI7x4p1Ea--
+-- 
+2.25.1
+

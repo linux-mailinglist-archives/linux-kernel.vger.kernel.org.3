@@ -2,92 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B434A7320
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EBC4A731A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiBBO3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:29:14 -0500
-Received: from mail-ua1-f44.google.com ([209.85.222.44]:47098 "EHLO
-        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbiBBO3M (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:29:12 -0500
-Received: by mail-ua1-f44.google.com with SMTP id c36so19367584uae.13;
-        Wed, 02 Feb 2022 06:29:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZRyCOx+Er0yiaBLPHzoN2OzH4NMZ0OLZ67W+SG58hjg=;
-        b=DRUFJoux3xyokkrD/EswQEodo8Md3ImhN7hZvY8XOX2XJ6b0LeT7lgpmI1ejgCNCNn
-         epz2gm97VwlkgGA226llhql820/y68ufFtMMfGtfHy26LesYOIZbyXxRQQDYB9Cu+Vtk
-         WSJ+QVAfylxdT2BMXpoWvMO8IKDAUBRg0J4MC0SmZA0nhloBWmhEIBGZIqU/kVRULaqE
-         EYmNTx4lS3wHVPLPwPKSwKOFk+X0YuC/nIDVH56HYCOdlu9TsdyOgnQxL7VHRgtHe6xk
-         c82R9ED/4zThWX1XBeN4R0DNknrZTOYrXppwd6fBKTHLueBDVBOet5XiuINe9GyjfemU
-         N7DA==
-X-Gm-Message-State: AOAM530EigAAoL8vaMMcWP+sOUjW7jwxmUZiTj1phan/0AX6HezXKfCI
-        HjJ0SVg70yzckLh44n1o7WQ3m5Z6vZcB0Q==
-X-Google-Smtp-Source: ABdhPJzip04UbGxKp9OpIFLIunRV7lYMuDGHhHIM0NZ/CrKLjIdiIOnKECXAfZoN+0cA8osgTDSQXw==
-X-Received: by 2002:a67:f70f:: with SMTP id m15mr11760366vso.61.1643812151300;
-        Wed, 02 Feb 2022 06:29:11 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id c7sm5663197vkn.23.2022.02.02.06.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 06:29:10 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id 60so2375698uae.1;
-        Wed, 02 Feb 2022 06:29:10 -0800 (PST)
-X-Received: by 2002:a67:a401:: with SMTP id n1mr11148475vse.38.1643812150361;
- Wed, 02 Feb 2022 06:29:10 -0800 (PST)
+        id S1344969AbiBBO3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:29:31 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:59937 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344966AbiBBO3a (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:29:30 -0500
+Received: from [10.59.106.37] (unknown [77.235.169.38])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 13FD361EA1924;
+        Wed,  2 Feb 2022 15:29:27 +0100 (CET)
+Message-ID: <1378dd0a-52d2-c998-5713-e6875c601194@molgen.mpg.de>
+Date:   Wed, 2 Feb 2022 15:29:15 +0100
 MIME-Version: 1.0
-References: <20220201120310.878267-1-maz@kernel.org> <20220201120310.878267-9-maz@kernel.org>
-In-Reply-To: <20220201120310.878267-9-maz@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 2 Feb 2022 15:28:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWy+kYMNv+xLT6ybqnMKvaMchBXwXV-NSFNKDAfgPnLhQ@mail.gmail.com>
-Message-ID: <CAMuHMdWy+kYMNv+xLT6ybqnMKvaMchBXwXV-NSFNKDAfgPnLhQ@mail.gmail.com>
-Subject: Re: [PATCH 08/12] gpio: rcar: Move PM device over to irq domain
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell
+ 88SE9235
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
+ <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 1:16 PM Marc Zyngier <maz@kernel.org> wrote:
-> Move the reference to the device over to the irq domain.
->
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+Dear Damien,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Wake-up still works fine on R-Car M2-W, so
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Am 02.02.22 um 09:14 schrieb Damien Le Moal:
+> On 2/1/22 16:12, Paul Menzel wrote:
+>> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
+>> not needed for the Marvell 88SE9235.
+>>
+>>      $ lspci -nn -s 0021:0e:00.0
+>>      0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. 88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
+>>
+>> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
+>>
+>> Currently, without this patch (with 200 ms delay), device probe for ata1
+>> takes 485 ms:
+>>
+>>      [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000100 irq 39
+>>      [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000180 irq 39
+>>      [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000200 irq 39
+>>      [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3fe881000280 irq 39
+>>      […]
+>>      [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
+>>      [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
+>>      [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+>>      [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
+>>      [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
+>>      [    3.841796] ata2.00: configured for UDMA/133
+>>      [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+>>      [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
+>>      [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
+>>      [    3.846043] ata1.00: configured for UDMA/133
+>>
+>> With this patch (no delay) device probe for ata1 takes 273 ms:
+>>
+>>      [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000100 irq 39
+>>      [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000180 irq 39
+>>      [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000200 irq 39
+>>      [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 port 0x3f e881000280 irq 39
+>>      […]
+>>      [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
+>>      [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
+>>      [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+>>      [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+>>      [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
+>>      [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY265IBM, BE33, max UDMA/133
+>>      [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
+>>      [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (depth 32), AA
+>>      [    3.900070] ata1.00: configured for UDMA/133
+>>      [    3.900166] ata2.00: configured for UDMA/133
+>>
+>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>> ---
+>> v2: address comments for commit message (but forgot v2 tag)
+>> v3: resend with v3 tag in subject line/commit message summary
+>>
+>>   drivers/ata/ahci.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
+>> index ab5811ef5a53..edca4e8fd44e 100644
+>> --- a/drivers/ata/ahci.c
+>> +++ b/drivers/ata/ahci.c
+>> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] = {
+>>   	  .driver_data = board_ahci_yes_fbs },
+>>   	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
+>>   	  .driver_data = board_ahci_yes_fbs },
+>> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
+>> +	  .driver_data = board_ahci_no_debounce_delay },
+>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L */
+>>   	  .driver_data = board_ahci_yes_fbs },
+>>   	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L */
+> 
+> Applied to for-5.18 with commit title and message changes. The title is now:
+> 
+> ata: ahci: Add support for Marvell 88SE9235 adapter
+> 
+> Since it is exactly what this patch is doing by adding a PCI ID.
 
-Gr{oetje,eeting}s,
+Thank you for applying the patch. I saw the summary/title change also 
+with the other patch. I am sorry, but I totally disagree. Reading that 
+summary/title in `git log --oneline`, it’s not clear at all, what the 
+patch does, and the full description or diff has to be read. “Add 
+support” for me means, that it was unsupported before, which is not true 
+at all as the defaults were used.
 
-                        Geert
+> The comments about the 200ms debounce delay not being needed is kept as
+> a description of how this new adapter support is defined, using the
+> board_ahci_no_debounce_delay board definition.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Kind regards,
+
+Paul

@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D454A69C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523774A69C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243746AbiBBCBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 21:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S243760AbiBBCBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 21:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243369AbiBBCBJ (ORCPT
+        with ESMTP id S243752AbiBBCBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 21:01:09 -0500
+        Tue, 1 Feb 2022 21:01:11 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200B0C06173E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 18:01:09 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id y4-20020a5b0f44000000b00611862e546dso37038507ybr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 18:01:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E70C06173D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 18:01:11 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id u11-20020a25ab0b000000b0061a3e951dceso6564967ybi.15
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 18:01:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=+oZZAJ93Jy4UHYgQMOKgcZ+Tafx++iolBtq7+r39Tt8=;
-        b=UbQZqjK39u6TMbV7ooe4Qpn8t7EH7BRXJ+czxhC1600IQy3DDw3FS+kVkxYDRRl3vl
-         Ryu5jR9neodQl/6jvFh9Itjq0tGpjiD6UDIEYHIjTiGLW+Dr9d0DquZtsolJ8wU/yLeV
-         edZ7QX5teM86K1tiHqNfPmwJk6yv7wXaTydlOGgEb6JUrWd8/6RbIPYhG69X6u6ja0qR
-         caNw/+3fgrg89vkjtWhoe1MWYAQUmpI+F1beyh/a70yzqnjgnfn0M0O54A9/kgtIrrNj
-         BmfLvZ2l8DMl2mjOvF2QduGDI5LZISh7vBChoJ/FIS4R2MvS4J76ywRsWeJVLFMSs6d9
-         YVMw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=q1oi/RXvkD8Dq7uJmeyWkylsnr5bf/ofiDPgwV3XBxs=;
+        b=HxhJFx8m1xXWPSkOOlyIHZ6TrBS88zHq/VAT9Azm8OrGOXPZ9brzpZt4GDmYgOJy5d
+         ynIOdFCljbEHCcUOgSq9oY6YBG5ym7KHqVPEvqeLPOvSDDelPg+wpmLbl7w+c1e1tUfz
+         zzoKk/HVz+AOO/D8kD1g0E3cghS3LbDh588/FaPOBvMytF3sr93ri6+p0AEEHJexUu2q
+         hIQT6OliOYVL+oHVbUo1X8dX3Cwh744nCTUT30tFFRnxC5XkOVyX9VOjZcNPmqFSMiCi
+         C3A4uhN+FsT2AEv6udiM3Cib0xVhFo7fiC74QvwT5yC88rcxCP4xT4vwK63dV4piNsaq
+         roVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=+oZZAJ93Jy4UHYgQMOKgcZ+Tafx++iolBtq7+r39Tt8=;
-        b=aoB7gXCJdN7DZPF3VLtx2jlC6Nd2mg1y+Y87hkUixQ+9NC6rRK/7lfOpzJGLz405r0
-         KJQrJUOJ4rHTcDySNU3lyjYevEKcQQ37BF2xYR0JNdakegICgQFD7/NiLSN1kGgxP38y
-         OFEg7BbbM63Pb7AD9rx4mEvsE2wE/eakqxQ8zwkAsaU9TfbWjNw2XCIC/UPJaQDhY7IA
-         M7MMEjt+qOEtSOyzhL6kxMAuaUx2LvHU4zhXt1YKhnpOfgwm5pls8yLu1os/Jmc9F+Sc
-         HH9YaP3m01vckUMjmXhZ+jz/42d7XuPvB0+MpGlj7eExP/YRUXPtKMXqVuJ4cw9sYdQw
-         qSSw==
-X-Gm-Message-State: AOAM532lo5EW7UfP/+VRvRw8GoBgS5wHkxHH6rnsVt1QSFgAgLAqwkct
-        S+fB518UCSWUVmJHU3C4/6wv9on2w52G
-X-Google-Smtp-Source: ABdhPJyY11MiO9c+Nqia5AcbphlMlCViWeU/vlCMo+UMffUd5Y5GEWLyzan3ovSdlF4GgrZlbtU4lO1oPpBm
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=q1oi/RXvkD8Dq7uJmeyWkylsnr5bf/ofiDPgwV3XBxs=;
+        b=UrF66UkyElzBHjxjrv+MVKnyPgIu14TbKiXmmtf3IJ+Ul7BOCQGCQpThDLqMdRX4cF
+         gcJzobxVMo2pzId2vQM7Sp3VMNwjfAi/E43gFiktzxjlfy/eevIaiT2Io9kBO4/9ogWw
+         5/eC0hVfEVjUuwUI5oSVA216BecwrpOlawLhlsCFcrzhwkZ/dTiwDpLLQKEfYCHbA2xM
+         Pqj36mLXTVeN+knALbJzeBlkhgJNVJYLpb/utXao4I4EdPFIaT7+81TlhZ8zhSIRqvUN
+         3IMzZFot965OnuBBLBSfiaOSQhI7wUOPLa74yXBwoZDFzJ5+0/mp8bxxekAJmG16k4xk
+         PGnA==
+X-Gm-Message-State: AOAM531teNk7Y8j1NdaXz+aAg0StUORO+aZpvHwzELI2vJKeabRXNZtj
+        2TwURRrnykAGYIAnseCocxO4wSetdE0R
+X-Google-Smtp-Source: ABdhPJwEpwwsb0wPv1uBzyjNY2EpARcBgOMHZ0zvO/DbYf2KSjn9bDzFDRksVosNRbsKOee80RK5err37Kpz
 X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:57dc:f744:660d:72d])
- (user=rajatja job=sendgmr) by 2002:a25:e7d7:: with SMTP id
- e206mr24915081ybh.695.1643767267984; Tue, 01 Feb 2022 18:01:07 -0800 (PST)
-Date:   Tue,  1 Feb 2022 18:01:02 -0800
-Message-Id: <20220202020103.2149130-1-rajatja@google.com>
+ (user=rajatja job=sendgmr) by 2002:a25:e5c7:: with SMTP id
+ c190mr29691167ybh.175.1643767270447; Tue, 01 Feb 2022 18:01:10 -0800 (PST)
+Date:   Tue,  1 Feb 2022 18:01:03 -0800
+In-Reply-To: <20220202020103.2149130-1-rajatja@google.com>
+Message-Id: <20220202020103.2149130-2-rajatja@google.com>
 Mime-Version: 1.0
+References: <20220202020103.2149130-1-rajatja@google.com>
 X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH v2 1/2] PCI: Allow internal devices to be marked as untrusted
+Subject: [PATCH v2 2/2] dt-bindings: Document "UntrustedDevice" property for
+ PCI devices
 From:   Rajat Jain <rajatja@google.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -72,84 +77,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today the pci_dev->untrusted is set for any devices sitting downstream
-an external facing port (determined via "ExternalFacingPort" or the
-"external-facing" properties).
-
-However, currently there is no way for internal devices to be marked as
-untrusted.
-
-There are use-cases though, where a platform would like to treat an
-internal device as untrusted (perhaps because it runs untrusted firmware
-or offers an attack surface by handling untrusted network data etc).
-
-Introduce a new "UntrustedDevice" property that can be used by the
-firmware to mark any device as untrusted.
+Add the new "UntrustedDevice" property for PCI devices. This property
+is optional and can be applied to any PCI device.
 
 Signed-off-by: Rajat Jain <rajatja@google.com>
 ---
-v2: * Also use the same property for device tree based systems.
-    * Add documentation (next patch)
+v2: Initial version (added documentation based on comments)
+v1: Does not exist.
 
- drivers/pci/of.c       | 2 ++
- drivers/pci/pci-acpi.c | 1 +
- drivers/pci/pci.c      | 9 +++++++++
- drivers/pci/pci.h      | 2 ++
- 4 files changed, 14 insertions(+)
+ Documentation/devicetree/bindings/pci/pci.txt | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index cb2e8351c2cc..e8b804664b69 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -24,6 +24,8 @@ void pci_set_of_node(struct pci_dev *dev)
- 						    dev->devfn);
- 	if (dev->dev.of_node)
- 		dev->dev.fwnode = &dev->dev.of_node->fwnode;
+diff --git a/Documentation/devicetree/bindings/pci/pci.txt b/Documentation/devicetree/bindings/pci/pci.txt
+index 6a8f2874a24d..bc1ba10f51e1 100644
+--- a/Documentation/devicetree/bindings/pci/pci.txt
++++ b/Documentation/devicetree/bindings/pci/pci.txt
+@@ -82,3 +82,38 @@ pcie@10000000 {
+ 		external-facing;
+ 	};
+ };
 +
-+	pci_set_untrusted(dev);
- }
- 
- void pci_release_of_node(struct pci_dev *dev)
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index a42dbf448860..2bffbd5c6114 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -1356,6 +1356,7 @@ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
- 
- 	pci_acpi_optimize_delay(pci_dev, adev->handle);
- 	pci_acpi_set_external_facing(pci_dev);
-+	pci_set_untrusted(pci_dev);
- 	pci_acpi_add_edr_notifier(pci_dev);
- 
- 	pci_acpi_add_pm_notifier(adev, pci_dev);
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 9ecce435fb3f..41e887c27004 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -6869,3 +6869,12 @@ static int __init pci_realloc_setup_params(void)
- 	return 0;
- }
- pure_initcall(pci_realloc_setup_params);
++PCI Device Properties
++---------------------
++Following optional properties may be present for any PCI device:
 +
-+void pci_set_untrusted(struct pci_dev *pdev)
-+{
-+	u8 val;
++- UntrustedDevice:
++   When present, this property is an indicator that this PCI device (and
++   any downstream devices) are to be treated as untrusted by the kernel.
++   The kernel can, for example, use this information to isolate such
++   devices using a strict DMA protection via the IOMMU.
 +
-+	if (!device_property_read_u8(&pdev->dev, "UntrustedDevice", &val)
-+	    && val)
-+		pdev->untrusted = 1;
-+}
-diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-index 3d60cabde1a1..6c273ce5e0ba 100644
---- a/drivers/pci/pci.h
-+++ b/drivers/pci/pci.h
-@@ -761,4 +761,6 @@ static inline pci_power_t mid_pci_get_power_state(struct pci_dev *pdev)
- }
- #endif
- 
-+void pci_set_untrusted(struct pci_dev *pdev);
++   Example device tree node:
++	pcie@0008 {
++		/* PCI device 00:01.0 is an untrusted device */
++		reg = <0x00000800 0 0 0 0>;
++		UntrustedDevice = <1>;
++	};
 +
- #endif /* DRIVERS_PCI_H */
++   Example ACPI node:
++	Scope (\_SB.PCI0.WFA3)
++	    {
++	        Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
++	        {
++	            ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device
++	Properties for _DSD */,
++	            Package (0x01)
++	            {
++	                Package (0x02)
++	                {
++	                    "UntrustedDevice",
++	                    One
++	                }
++	            }
++	        })
++	    }
 -- 
 2.35.0.rc2.247.g8bbb082509-goog
 

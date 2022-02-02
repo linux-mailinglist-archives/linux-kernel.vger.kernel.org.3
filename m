@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9DB4A6EE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 479A74A6EF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343693AbiBBKmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:42:05 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:36770 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245001AbiBBKlh (ORCPT
+        id S1343677AbiBBKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:41:56 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41900 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245097AbiBBKli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:41:37 -0500
+        Wed, 2 Feb 2022 05:41:38 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EED9A1F387;
-        Wed,  2 Feb 2022 10:41:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3097721136;
+        Wed,  2 Feb 2022 10:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643798495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1643798497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yVrOdXP55KwyevEnk2bjml5wRX2UHp0zngksfaywLa0=;
-        b=oB+T6B5TMUwwSyvfA7CVbLRFP4cZWUyCJsYzLHRHyM2ijtgtQ1UDyPUS8sMTOY21wKqB0K
-        SF7MuNvbJgfwHP2PauCAO1YD4LJw0e+AWPTdM4Ocd7bKVzmMQ/qC88umt/iUsF3Bxq84O2
-        fV2dFoCJmlH4sX5ULgrACkmeZnHioOo=
+        bh=M3roInrI5pK+nUGzKFfzfq7xvY2zzbeakqSMPLP9mbU=;
+        b=ZeIQS8+usD/ganEpeRp+9C/yo8WUC9LLtd44QANcGdIUnBYc4pRfZBJWDIbEOJO4W5kltK
+        TKtdT46QKfsj+Az6YQNzfF8Fq0sjg9kU7Gg1kQ2jNMfXkQdZ/qt/e4Fm0YPMS2t8x+iJIY
+        vRvX5dygRlJszRPKJqA1/OKzJAdyFRc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643798495;
+        s=susede2_ed25519; t=1643798497;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yVrOdXP55KwyevEnk2bjml5wRX2UHp0zngksfaywLa0=;
-        b=UHhTqTQ4aylwxHnJd4QH9hr96l6YlZTWfmTKIkv2s58Vue1VpobLRLnr5ME0t32EyD/hYT
-        PXX8HqpTX/4juBBQ==
+        bh=M3roInrI5pK+nUGzKFfzfq7xvY2zzbeakqSMPLP9mbU=;
+        b=SFHRoQo3G5BZCyl4Dmwiblov+vwhoqluwKS0rvNa8UvmsZ9v+Ja9aLiXTjUpcBC1yY1C5x
+        w+acGBisYg/Gu9Ag==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D9D0513E02;
-        Wed,  2 Feb 2022 10:41:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19F8113E02;
+        Wed,  2 Feb 2022 10:41:37 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id I8qUM99f+mF0bAAAMHmgww
-        (envelope-from <nstange@suse.de>); Wed, 02 Feb 2022 10:41:35 +0000
+        id RHfzBOFf+mF6bAAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 02 Feb 2022 10:41:37 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
@@ -55,9 +55,9 @@ Cc:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         keyrings@vger.kernel.org, Nicolai Stange <nstange@suse.de>
-Subject: [PATCH v3 06/15] crypto: dh - introduce common code for built-in safe-prime group support
-Date:   Wed,  2 Feb 2022 11:40:03 +0100
-Message-Id: <20220202104012.4193-7-nstange@suse.de>
+Subject: [PATCH v3 07/15] crypto: dh - implement ffdheXYZ(dh) templates
+Date:   Wed,  2 Feb 2022 11:40:04 +0100
+Message-Id: <20220202104012.4193-8-nstange@suse.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220202104012.4193-1-nstange@suse.de>
 References: <20220202104012.4193-1-nstange@suse.de>
@@ -67,318 +67,369 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent work on NVME in-band authentication support ([1]) needs to invoke
-the "dh" KPP with the FFDHE safe-prime group parameters as specified in
-RFC 7919 and generate ephemeral keys suitable for the respective group. By
-coincidence, the requirements from NIST SP800-56Arev3,
-sec. 5.5.2 ("Assurance of Domain-Parameter Validity") basically boil down
-to disallowing any group parameters not among the approved safe-prime
-groups specified in either RFC 7919 or RFC 3526 in FIPS mode. Furthermore,
-SP800-56Arev3 specifies the respective security strength for each of the
-approved safe-prime groups, which has a direct impact on the minimum key
-lengths.
+Current work on NVME in-band authentication support ([1]) needs to invoke
+DH with the FFDHE safe-prime group parameters specified in RFC 7919.
 
-In this light, it's desirable to introduce built-in support for the
-RFC 7919 safe-prime groups to the kernel's DH implementation, provide a
-SP800-56Arev3 conforming key generation primitive for those and render
-non-approved group parameters unusable in FIPS mode on the way.
+Introduce a new CRYPTO_DH_RFC7919_GROUPS Kconfig option. If enabled, make
+dh_generic register a couple of ffdheXYZ(dh) templates, one for each group:
+ffdhe2048(dh), ffdhe3072(dh), ffdhe4096(dh), ffdhe6144(dh) and
+ffdhe8192(dh). Their respective ->set_secret() expects a (serialized)
+struct dh, just like the underlying "dh" implementation does, but with the
+P and G values unset so that the safe-prime constants for the given group
+can be filled in by the wrapping template.
 
-As suggested ([2]) in the course of discussion to previous iterations of
-this patchset, the built-in support for ffdhe groups would be best made
-available in the form of templates wrapping the existing "dh"
-implementation, one for each group specified by RFC 7919: ffdhe2048(dh),
-ffdhe3072(dh), ffdhe4096(dh), ffdhe6144(dh) and ffdhe8192(dh). As these
-templates differ only in the safe-prime constants they'd configure the
-inner "dh" transforms with, they can share almost all of their
-"dh"-wrapping template implementation code.
+Internally, a struct dh_safe_prime instance is being defined for each of
+the ffdheXYZ(dh) templates as appropriate. In order to prepare for future
+key generation, fill in the maximum security strength values as specified
+by SP800-56Arev3 on the go, even though they're not needed at this point
+yet.
 
-Introduce this common code to dh_generic. The actual dump of the RFC 7919
-safe-prime constants will be deferred to the next patch in order to
-facilitate review. The ephemeral key generation primitive mentioned above
-likewise deserves a patch on its own, as does the mechanism by which
-unapproved groups are rendered unusable in FIPS mode.
-
-Define a struct dh_safe_prime container for specifying the individual
-templates' associated safe-prime group constants. All ffdheXYZ(dh) template
-instances will store a pointer to such a dh_safe_prime in their context
-areas each. Implement the common __dh_safe_prime_create() template
-instantiation helper. The intention is that the individual ffdheXYZ(dh)
-crypto_templates' ->create() implementations will simply forward any calls
-to __dh_safe_prime_create(), passing a suitable dh_safe_prime in addition
-to the received ->create() arguments. __dh_safe_prime_create() would then
-create and register a kpp_instance as appropriate, storing the given
-dh_safe_prime pointer alongside a crypto_kpp_spawn for the inner "dh"
-kpp_alg in the context area.
-
-As the ffdheXYZ(dh) kpp_instances are supposed to act as proxies to the
-inner "dh" kpp_alg, make each of their associated crypto_kpp transforms to
-in turn own an inner "dh" transform, a pointer to which gets stored in the
-context area. Setup and teardown are getting handled from the outer
-->init_tfm() and ->exit_tfm() respectively.
-
-In order to achieve the overall goal and let the ffdheXYZ(dh) kpp_instances
-configure the inner "dh" transforms with the respective group parameters,
-make their common ->set_secret(), the new dh_safe_prime_set_secret(), fill
-in the P and G values before forwarding the call to the inner "dh"'s
-->set_secret(). Note that the outer ->set_secret() can obtain the P value
-associated with the given ffdheXYZ(dh) kpp_instance by means of the
-dh_safe_prime referenced from the latter's context. The value of G OTOH
-always equals constant 2 for the safe-prime groups.
-
-Finally, make the remaining two kpp_alg primitives both operating on
-kpp_requests, i.e. ->generate_public_key() and ->compute_shared_secret(),
-to merely forward any request to the inner "dh" implementation. However, a
-kpp_request instance received from the outside cannot get simply passed
-on as-is, because its associated transform (crypto_kpp_reqtfm()) will have
-been set to the outer ffdheXYZ(dh) one. In order to handle this, reserve
-some space in the outer ffdheXYZ(dh) kpp_requests' context areas for in
-turn storing an inner kpp_request suitable for "dh" each. Make the outer
-->generate_public_key() and ->compute_shared_secret() respectively to setup
-this inner kpp_request by means of the new dh_safe_prime_prepare_dh_req()
-helper before handing it over to the "dh" implementation for further
-processing. dh_safe_prime_prepare_dh_req() basically copies the outer
-kpp_request received from the outside over to the inner one, but installs
-the inner transform and its own ->complete() proxy callback therein. This
-completion callback, the new dh_safe_prime_complete_req(), doesn't do
-anything beyond completing the outer request. Note that there exist some
-examples in crypto/, which would simply install the completion handler
-from the outer request at the inner one in similar setups, e.g. seqiv.
-However, this would mean that the user-provided completion handler won't
-get called with the address of the outer kpp_request initially submitted
-and the handler might not be prepared for this. Users could certainly work
-around this by setting the callback ->data properly, but IMO it's cleaner
-this way. Furthermore, it might make sense to extend
-dh_safe_prime_complete_req() in the future and move e.g. those
-post-computation FIPS checks from the generic "dh" implementation to the
-ffdheXYZ(dh) templates.
+Implement the respective ffdheXYZ(dh) crypto_template's ->create() by
+simply forwarding any calls to the __dh_safe_prime_create() helper
+introduced with the previous commit, passing the associated dh_safe_prime
+in addition to the received ->create() arguments.
 
 [1] https://lore.kernel.org/r/20211202152358.60116-1-hare@suse.de
-[2] https://lore.kernel.org/r/20211217055227.GA20698@gondor.apana.org.au
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- crypto/dh.c | 208 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 208 insertions(+)
+ crypto/Kconfig |   7 ++
+ crypto/dh.c    | 298 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 304 insertions(+), 1 deletion(-)
 
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index fa1741bb568f..e041cabe93da 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -231,6 +231,13 @@ config CRYPTO_DH
+ 	help
+ 	  Generic implementation of the Diffie-Hellman algorithm.
+ 
++config CRYPTO_DH_RFC7919_GROUPS
++	bool "Support for RFC 7919 FFDHE group parameters"
++	default n
++	depends on CRYPTO_DH
++	help
++	  Provide support for RFC 7919 FFDHE group parameters. If unsure, say N.
++
+ config CRYPTO_ECC
+ 	tristate
+ 	select CRYPTO_RNG_DEFAULT
 diff --git a/crypto/dh.c b/crypto/dh.c
-index abc2a72c8271..08fb7610fe2a 100644
+index 08fb7610fe2a..d0adb1705fe7 100644
 --- a/crypto/dh.c
 +++ b/crypto/dh.c
-@@ -257,6 +257,214 @@ static struct kpp_alg dh = {
- 	},
- };
+@@ -465,13 +465,309 @@ static int __maybe_unused __dh_safe_prime_create(
+ 	return err;
+ }
  
++#ifdef CONFIG_CRYPTO_DH_RFC7919_GROUPS
 +
-+struct dh_safe_prime {
-+	unsigned int max_strength;
-+	unsigned int p_size;
-+	const char *p;
++static const struct dh_safe_prime ffdhe2048_prime = {
++	.max_strength = 112,
++	.p_size = 256,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x28\x5c\x97\xff\xff\xff\xff\xff\xff\xff\xff",
 +};
 +
-+static const char safe_prime_g[]  = { 2 };
-+
-+struct dh_safe_prime_instance_ctx {
-+	struct crypto_kpp_spawn dh_spawn;
-+	const struct dh_safe_prime *safe_prime;
++static const struct dh_safe_prime ffdhe3072_prime = {
++	.max_strength = 128,
++	.p_size = 384,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\xc6\x2e\x37\xff\xff\xff\xff\xff\xff\xff\xff",
 +};
 +
-+struct dh_safe_prime_tfm_ctx {
-+	struct crypto_kpp *dh_tfm;
++static const struct dh_safe_prime ffdhe4096_prime = {
++	.max_strength = 152,
++	.p_size = 512,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x65\x5f\x6a\xff\xff\xff\xff\xff\xff\xff\xff",
 +};
 +
-+static void dh_safe_prime_free_instance(struct kpp_instance *inst)
-+{
-+	struct dh_safe_prime_instance_ctx *ctx = kpp_instance_ctx(inst);
++static const struct dh_safe_prime ffdhe6144_prime = {
++	.max_strength = 176,
++	.p_size = 768,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x0d\xd9\x02\x0b\xfd\x64\xb6\x45\x03\x6c\x7a"
++	"\x4e\x67\x7d\x2c\x38\x53\x2a\x3a\x23\xba\x44\x42\xca\xf5\x3e\xa6"
++	"\x3b\xb4\x54\x32\x9b\x76\x24\xc8\x91\x7b\xdd\x64\xb1\xc0\xfd\x4c"
++	"\xb3\x8e\x8c\x33\x4c\x70\x1c\x3a\xcd\xad\x06\x57\xfc\xcf\xec\x71"
++	"\x9b\x1f\x5c\x3e\x4e\x46\x04\x1f\x38\x81\x47\xfb\x4c\xfd\xb4\x77"
++	"\xa5\x24\x71\xf7\xa9\xa9\x69\x10\xb8\x55\x32\x2e\xdb\x63\x40\xd8"
++	"\xa0\x0e\xf0\x92\x35\x05\x11\xe3\x0a\xbe\xc1\xff\xf9\xe3\xa2\x6e"
++	"\x7f\xb2\x9f\x8c\x18\x30\x23\xc3\x58\x7e\x38\xda\x00\x77\xd9\xb4"
++	"\x76\x3e\x4e\x4b\x94\xb2\xbb\xc1\x94\xc6\x65\x1e\x77\xca\xf9\x92"
++	"\xee\xaa\xc0\x23\x2a\x28\x1b\xf6\xb3\xa7\x39\xc1\x22\x61\x16\x82"
++	"\x0a\xe8\xdb\x58\x47\xa6\x7c\xbe\xf9\xc9\x09\x1b\x46\x2d\x53\x8c"
++	"\xd7\x2b\x03\x74\x6a\xe7\x7f\x5e\x62\x29\x2c\x31\x15\x62\xa8\x46"
++	"\x50\x5d\xc8\x2d\xb8\x54\x33\x8a\xe4\x9f\x52\x35\xc9\x5b\x91\x17"
++	"\x8c\xcf\x2d\xd5\xca\xce\xf4\x03\xec\x9d\x18\x10\xc6\x27\x2b\x04"
++	"\x5b\x3b\x71\xf9\xdc\x6b\x80\xd6\x3f\xdd\x4a\x8e\x9a\xdb\x1e\x69"
++	"\x62\xa6\x95\x26\xd4\x31\x61\xc1\xa4\x1d\x57\x0d\x79\x38\xda\xd4"
++	"\xa4\x0e\x32\x9c\xd0\xe4\x0e\x65\xff\xff\xff\xff\xff\xff\xff\xff",
++};
 +
-+	crypto_drop_kpp(&ctx->dh_spawn);
-+	kfree(inst);
++static const struct dh_safe_prime ffdhe8192_prime = {
++	.max_strength = 200,
++	.p_size = 1024,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x0d\xd9\x02\x0b\xfd\x64\xb6\x45\x03\x6c\x7a"
++	"\x4e\x67\x7d\x2c\x38\x53\x2a\x3a\x23\xba\x44\x42\xca\xf5\x3e\xa6"
++	"\x3b\xb4\x54\x32\x9b\x76\x24\xc8\x91\x7b\xdd\x64\xb1\xc0\xfd\x4c"
++	"\xb3\x8e\x8c\x33\x4c\x70\x1c\x3a\xcd\xad\x06\x57\xfc\xcf\xec\x71"
++	"\x9b\x1f\x5c\x3e\x4e\x46\x04\x1f\x38\x81\x47\xfb\x4c\xfd\xb4\x77"
++	"\xa5\x24\x71\xf7\xa9\xa9\x69\x10\xb8\x55\x32\x2e\xdb\x63\x40\xd8"
++	"\xa0\x0e\xf0\x92\x35\x05\x11\xe3\x0a\xbe\xc1\xff\xf9\xe3\xa2\x6e"
++	"\x7f\xb2\x9f\x8c\x18\x30\x23\xc3\x58\x7e\x38\xda\x00\x77\xd9\xb4"
++	"\x76\x3e\x4e\x4b\x94\xb2\xbb\xc1\x94\xc6\x65\x1e\x77\xca\xf9\x92"
++	"\xee\xaa\xc0\x23\x2a\x28\x1b\xf6\xb3\xa7\x39\xc1\x22\x61\x16\x82"
++	"\x0a\xe8\xdb\x58\x47\xa6\x7c\xbe\xf9\xc9\x09\x1b\x46\x2d\x53\x8c"
++	"\xd7\x2b\x03\x74\x6a\xe7\x7f\x5e\x62\x29\x2c\x31\x15\x62\xa8\x46"
++	"\x50\x5d\xc8\x2d\xb8\x54\x33\x8a\xe4\x9f\x52\x35\xc9\x5b\x91\x17"
++	"\x8c\xcf\x2d\xd5\xca\xce\xf4\x03\xec\x9d\x18\x10\xc6\x27\x2b\x04"
++	"\x5b\x3b\x71\xf9\xdc\x6b\x80\xd6\x3f\xdd\x4a\x8e\x9a\xdb\x1e\x69"
++	"\x62\xa6\x95\x26\xd4\x31\x61\xc1\xa4\x1d\x57\x0d\x79\x38\xda\xd4"
++	"\xa4\x0e\x32\x9c\xcf\xf4\x6a\xaa\x36\xad\x00\x4c\xf6\x00\xc8\x38"
++	"\x1e\x42\x5a\x31\xd9\x51\xae\x64\xfd\xb2\x3f\xce\xc9\x50\x9d\x43"
++	"\x68\x7f\xeb\x69\xed\xd1\xcc\x5e\x0b\x8c\xc3\xbd\xf6\x4b\x10\xef"
++	"\x86\xb6\x31\x42\xa3\xab\x88\x29\x55\x5b\x2f\x74\x7c\x93\x26\x65"
++	"\xcb\x2c\x0f\x1c\xc0\x1b\xd7\x02\x29\x38\x88\x39\xd2\xaf\x05\xe4"
++	"\x54\x50\x4a\xc7\x8b\x75\x82\x82\x28\x46\xc0\xba\x35\xc3\x5f\x5c"
++	"\x59\x16\x0c\xc0\x46\xfd\x82\x51\x54\x1f\xc6\x8c\x9c\x86\xb0\x22"
++	"\xbb\x70\x99\x87\x6a\x46\x0e\x74\x51\xa8\xa9\x31\x09\x70\x3f\xee"
++	"\x1c\x21\x7e\x6c\x38\x26\xe5\x2c\x51\xaa\x69\x1e\x0e\x42\x3c\xfc"
++	"\x99\xe9\xe3\x16\x50\xc1\x21\x7b\x62\x48\x16\xcd\xad\x9a\x95\xf9"
++	"\xd5\xb8\x01\x94\x88\xd9\xc0\xa0\xa1\xfe\x30\x75\xa5\x77\xe2\x31"
++	"\x83\xf8\x1d\x4a\x3f\x2f\xa4\x57\x1e\xfc\x8c\xe0\xba\x8a\x4f\xe8"
++	"\xb6\x85\x5d\xfe\x72\xb0\xa6\x6e\xde\xd2\xfb\xab\xfb\xe5\x8a\x30"
++	"\xfa\xfa\xbe\x1c\x5d\x71\xa8\x7e\x2f\x74\x1e\xf8\xc1\xfe\x86\xfe"
++	"\xa6\xbb\xfd\xe5\x30\x67\x7f\x0d\x97\xd1\x1d\x49\xf7\xa8\x44\x3d"
++	"\x08\x22\xe5\x06\xa9\xf4\x61\x4e\x01\x1e\x2a\x94\x83\x8f\xf8\x8c"
++	"\xd6\x8c\x8b\xb7\xc5\xc6\x42\x4c\xff\xff\xff\xff\xff\xff\xff\xff",
++};
++
++static int dh_ffdhe2048_create(struct crypto_template *tmpl,
++			       struct rtattr **tb)
++{
++	return  __dh_safe_prime_create(tmpl, tb, &ffdhe2048_prime);
 +}
 +
-+static inline struct dh_safe_prime_instance_ctx *dh_safe_prime_instance_ctx(
-+	struct crypto_kpp *tfm)
++static int dh_ffdhe3072_create(struct crypto_template *tmpl,
++			       struct rtattr **tb)
 +{
-+	return kpp_instance_ctx(kpp_alg_instance(tfm));
++	return  __dh_safe_prime_create(tmpl, tb, &ffdhe3072_prime);
 +}
 +
-+static inline struct kpp_alg *dh_safe_prime_dh_alg(
-+	struct dh_safe_prime_tfm_ctx *ctx)
++static int dh_ffdhe4096_create(struct crypto_template *tmpl,
++			       struct rtattr **tb)
 +{
-+	return crypto_kpp_alg(ctx->dh_tfm);
++	return  __dh_safe_prime_create(tmpl, tb, &ffdhe4096_prime);
 +}
 +
-+static int dh_safe_prime_init_tfm(struct crypto_kpp *tfm)
++static int dh_ffdhe6144_create(struct crypto_template *tmpl,
++			       struct rtattr **tb)
 +{
-+	struct dh_safe_prime_instance_ctx *inst_ctx =
-+		dh_safe_prime_instance_ctx(tfm);
-+	struct dh_safe_prime_tfm_ctx *tfm_ctx = kpp_tfm_ctx(tfm);
-+
-+	tfm_ctx->dh_tfm = crypto_spawn_kpp(&inst_ctx->dh_spawn);
-+	if (IS_ERR(tfm_ctx->dh_tfm))
-+		return PTR_ERR(tfm_ctx->dh_tfm);
-+
-+	return 0;
++	return  __dh_safe_prime_create(tmpl, tb, &ffdhe6144_prime);
 +}
 +
-+static void dh_safe_prime_exit_tfm(struct crypto_kpp *tfm)
++static int dh_ffdhe8192_create(struct crypto_template *tmpl,
++			       struct rtattr **tb)
 +{
-+	struct dh_safe_prime_tfm_ctx *tfm_ctx = kpp_tfm_ctx(tfm);
-+
-+	crypto_free_kpp(tfm_ctx->dh_tfm);
++	return  __dh_safe_prime_create(tmpl, tb, &ffdhe8192_prime);
 +}
 +
-+static int dh_safe_prime_set_secret(struct crypto_kpp *tfm, const void *buffer,
-+				    unsigned int len)
-+{
-+	struct dh_safe_prime_instance_ctx *inst_ctx =
-+		dh_safe_prime_instance_ctx(tfm);
-+	struct dh_safe_prime_tfm_ctx *tfm_ctx = kpp_tfm_ctx(tfm);
-+	struct dh params;
-+	void *buf;
-+	unsigned int buf_size;
-+	int err;
++static struct crypto_template crypto_ffdhe_templates[] = {
++	{
++		.name = "ffdhe2048",
++		.create = dh_ffdhe2048_create,
++		.module = THIS_MODULE,
++	},
++	{
++		.name = "ffdhe3072",
++		.create = dh_ffdhe3072_create,
++		.module = THIS_MODULE,
++	},
++	{
++		.name = "ffdhe4096",
++		.create = dh_ffdhe4096_create,
++		.module = THIS_MODULE,
++	},
++	{
++		.name = "ffdhe6144",
++		.create = dh_ffdhe6144_create,
++		.module = THIS_MODULE,
++	},
++	{
++		.name = "ffdhe8192",
++		.create = dh_ffdhe8192_create,
++		.module = THIS_MODULE,
++	},
++};
 +
-+	err = __crypto_dh_decode_key(buffer, len, &params);
-+	if (err)
-+		return err;
++#else /* ! CONFIG_CRYPTO_DH_RFC7919_GROUPS */
 +
-+	if (params.p_size || params.g_size)
-+		return -EINVAL;
++static struct crypto_template crypto_ffdhe_templates[] = {};
 +
-+	params.p = inst_ctx->safe_prime->p;
-+	params.p_size = inst_ctx->safe_prime->p_size;
-+	params.g = safe_prime_g;
-+	params.g_size = sizeof(safe_prime_g);
++#endif /* CONFIG_CRYPTO_DH_RFC7919_GROUPS */
 +
-+	buf_size = crypto_dh_key_len(&params);
-+	buf = kmalloc(buf_size, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	err = crypto_dh_encode_key(buf, buf_size, &params);
-+	if (err)
-+		goto out;
-+
-+	err = crypto_kpp_set_secret(tfm_ctx->dh_tfm, buf, buf_size);
-+out:
-+	kfree_sensitive(buf);
-+	return err;
-+}
-+
-+static void dh_safe_prime_complete_req(struct crypto_async_request *dh_req,
-+				       int err)
-+{
-+	struct kpp_request *req = dh_req->data;
-+
-+	kpp_request_complete(req, err);
-+}
-+
-+static struct kpp_request *dh_safe_prime_prepare_dh_req(struct kpp_request *req)
-+{
-+	struct dh_safe_prime_tfm_ctx *tfm_ctx =
-+		kpp_tfm_ctx(crypto_kpp_reqtfm(req));
-+	struct kpp_request *dh_req = kpp_request_ctx(req);
-+
-+	kpp_request_set_tfm(dh_req, tfm_ctx->dh_tfm);
-+	kpp_request_set_callback(dh_req, req->base.flags,
-+				 dh_safe_prime_complete_req, req);
-+
-+	kpp_request_set_input(dh_req, req->src, req->src_len);
-+	kpp_request_set_output(dh_req, req->dst, req->dst_len);
-+
-+	return dh_req;
-+}
-+
-+static int dh_safe_prime_generate_public_key(struct kpp_request *req)
-+{
-+	struct kpp_request *dh_req = dh_safe_prime_prepare_dh_req(req);
-+
-+	return crypto_kpp_generate_public_key(dh_req);
-+}
-+
-+static int dh_safe_prime_compute_shared_secret(struct kpp_request *req)
-+{
-+	struct kpp_request *dh_req = dh_safe_prime_prepare_dh_req(req);
-+
-+	return crypto_kpp_compute_shared_secret(dh_req);
-+}
-+
-+static unsigned int dh_safe_prime_max_size(struct crypto_kpp *tfm)
-+{
-+	struct dh_safe_prime_tfm_ctx *tfm_ctx = kpp_tfm_ctx(tfm);
-+
-+	return crypto_kpp_maxsize(tfm_ctx->dh_tfm);
-+}
-+
-+static int __maybe_unused __dh_safe_prime_create(
-+	struct crypto_template *tmpl, struct rtattr **tb,
-+	const struct dh_safe_prime *safe_prime)
-+{
-+	struct kpp_instance *inst;
-+	struct dh_safe_prime_instance_ctx *ctx;
-+	const char *dh_name;
-+	struct kpp_alg *dh_alg;
-+	u32 mask;
-+	int err;
-+
-+	err = crypto_check_attr_type(tb, CRYPTO_ALG_TYPE_KPP, &mask);
-+	if (err)
-+		return err;
-+
-+	dh_name = crypto_attr_alg_name(tb[1]);
-+	if (IS_ERR(dh_name))
-+		return PTR_ERR(dh_name);
-+
-+	inst = kzalloc(sizeof(*inst) + sizeof(*ctx), GFP_KERNEL);
-+	if (!inst)
-+		return -ENOMEM;
-+
-+	ctx = kpp_instance_ctx(inst);
-+
-+	err = crypto_grab_kpp(&ctx->dh_spawn, kpp_crypto_instance(inst),
-+			      dh_name, 0, mask);
-+	if (err)
-+		goto err_free_inst;
-+
-+	err = -EINVAL;
-+	dh_alg = crypto_spawn_kpp_alg(&ctx->dh_spawn);
-+	if (strcmp(dh_alg->base.cra_name, "dh"))
-+		goto err_free_inst;
-+
-+	ctx->safe_prime = safe_prime;
-+
-+	err = crypto_inst_setname(kpp_crypto_instance(inst),
-+				  tmpl->name, &dh_alg->base);
-+	if (err)
-+		goto err_free_inst;
-+
-+	inst->alg.set_secret = dh_safe_prime_set_secret;
-+	inst->alg.generate_public_key = dh_safe_prime_generate_public_key;
-+	inst->alg.compute_shared_secret = dh_safe_prime_compute_shared_secret;
-+	inst->alg.max_size = dh_safe_prime_max_size;
-+	inst->alg.init = dh_safe_prime_init_tfm;
-+	inst->alg.exit = dh_safe_prime_exit_tfm;
-+	inst->alg.reqsize = sizeof(struct kpp_request) + dh_alg->reqsize;
-+	inst->alg.base.cra_priority = dh_alg->base.cra_priority;
-+	inst->alg.base.cra_module = THIS_MODULE;
-+	inst->alg.base.cra_ctxsize = sizeof(struct dh_safe_prime_tfm_ctx);
-+
-+	inst->free = dh_safe_prime_free_instance;
-+
-+	err = kpp_register_instance(tmpl, inst);
-+	if (err)
-+		goto err_free_inst;
-+
-+	return 0;
-+
-+err_free_inst:
-+	dh_safe_prime_free_instance(inst);
-+
-+	return err;
-+}
 +
  static int dh_init(void)
  {
- 	return crypto_register_kpp(&dh);
+-	return crypto_register_kpp(&dh);
++	int err;
++
++	err = crypto_register_kpp(&dh);
++	if (err)
++		return err;
++
++	err = crypto_register_templates(crypto_ffdhe_templates,
++					ARRAY_SIZE(crypto_ffdhe_templates));
++	if (err) {
++		crypto_unregister_kpp(&dh);
++		return err;
++	}
++
++	return 0;
+ }
+ 
+ static void dh_exit(void)
+ {
++	crypto_unregister_templates(crypto_ffdhe_templates,
++				    ARRAY_SIZE(crypto_ffdhe_templates));
+ 	crypto_unregister_kpp(&dh);
+ }
+ 
 -- 
 2.26.2
 

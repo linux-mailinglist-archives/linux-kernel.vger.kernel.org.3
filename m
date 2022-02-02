@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A544A719C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B50FE4A719E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241254AbiBBNci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:32:38 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57642 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiBBNcg (ORCPT
+        id S237787AbiBBNdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbiBBNdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:32:36 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id 9916E1F4459C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643808755;
-        bh=itrri+xresWOD9wIBg0EiwvvsJKxEyhEpv0hS7QNFeI=;
-        h=Date:To:Cc:From:Subject:From;
-        b=UM3XKm6Gi0hGCd5eFhRcCp3L4CEbSIPf4nPxxWwoH0pVgDDgMGtWsV0pDal0hQrOn
-         BWJvOqsToB24U7dOgQdeSNYiBXZPUgKvR6PP0l0qkv0TpHf3cb2y73jXzq7QEm+wJS
-         AW/KgGGCWWiq4yryMuUwSZP+FIQ0BQqlS+0mlZqf5mQ4/zS/bACVHTJMtgpQuthiQw
-         cRYGFr66Noz8R2nxjHjJSvkUfczT9xOuHle7lZFC+FPOM/QhaPKUxfOfspcDQiYwx6
-         XMFhfj+kQQX6OvkdUaZ5yHThKyPqzUJAc4Q61+Jst+2E844wCRh1aP/BPfB+5ea7yJ
-         +l8HJy4aKR5PQ==
-Message-ID: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
-Date:   Wed, 2 Feb 2022 13:32:31 +0000
+        Wed, 2 Feb 2022 08:33:37 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AFEC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:33:37 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a28so40647709lfl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=OPnKCkZGDoQrwnJ9z/Y0UltylHxhbgv9vbyJ9zKUEzU=;
+        b=icnznORs3mty+5wEQWQ1pHeS6r1CqEhM2EzZRr7wT7D/HgCDhaDQkKCPDs927lYI6i
+         HyqXmDNLUMk/JpiRLfhHjuM/h3hF2w1S/U8FEBK1tVxAb2FYD/i7GgQI/zetI4GSLiyR
+         KeWgWz0QD1yWJTVNvhTG71WNRdTXR0w2Fdj4usA0+Rb/z7S76jeUcp2fuy/XTk2tXjWS
+         yfsPvi+V3sA7j/msWwEziF5Zys32ZTy9ScxyMy93m5XE6C3DOemNm3+qoDmG/2Jk6A2M
+         aIxPiCIyU1Zc88XkiKJUZusXp0r+TY7a79SHgCHqSh+whnkQvLf/vS5viCUC3kZKQUz+
+         BF9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=OPnKCkZGDoQrwnJ9z/Y0UltylHxhbgv9vbyJ9zKUEzU=;
+        b=mLQuK+DIo82K3d0noytZWraf9rfjBxACkW7pQYHeZhMWE4B0hp2+fcZEvloBGl3Xby
+         J1Nc7ob00sTOnbQKUY/O3+jhDvOHEvwBMo3vKOmuid5G/Jh1kETDwwAqBQh1HXz/9wOS
+         lEVf7W5pVhORie9I+RTHt7CG1JrlYXgMX/VgZBZOGs9EmYs1r9I8zvwBe66fZfAdqfOH
+         vwBf7usaUP6whcOr78WWtHxu+pzB4tqHUGI86awkNLUUNiolH/aXnCTYQZJNzEUod2ja
+         Nb2nzyVBeZjCYRS+nuB7fj2I70o0C6KQgfXgIlT2IAQOFRHx6Ciuj0qNhiriGCLBJwss
+         A5AA==
+X-Gm-Message-State: AOAM5302VeaVvRbCcMAZMoijch3NYVfd2aTmoqnIYcWxBvm2c0bhXkK+
+        AhcfTKPAktTA7xXUsxwrVa+ktIqGw6+0Xm82aa8=
+X-Google-Smtp-Source: ABdhPJxL+txmXD4YvYXS0AZVpqT+mc6w7SA50DUM+WSg0UDi6qA7CgI/dIDGQ7Z2sSxPyMHT1G9JvOkMw6rZO6u4Goo=
+X-Received: by 2002:a05:6512:3f98:: with SMTP id x24mr2351760lfa.438.1643808815305;
+ Wed, 02 Feb 2022 05:33:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-Subject: kselftest tree on kernelci.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:6520:3841:b0:190:a3cd:1db2 with HTTP; Wed, 2 Feb 2022
+ 05:33:34 -0800 (PST)
+Reply-To: kodjikokou09@gmail.com
+From:   kodji kokou <abrahammusa873@gmail.com>
+Date:   Wed, 2 Feb 2022 13:33:34 +0000
+Message-ID: <CAMv6RRM26ihUHsQ7MHgnLuB1E9oVxaKwsDg=+dixdDDKhBq8Aw@mail.gmail.com>
+Subject: Re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuah,
+Bank =C5=9Awiatowy i =C5=9Awiatowa Organizacja Zdrowia (WHO) we wsp=C3=B3=
+=C5=82pracy z
+Organizacj=C4=85 Rodzicielsk=C4=85, Rad=C4=85 Gospodarcz=C4=85 i Spo=C5=82e=
+czn=C4=85 Narod=C3=B3w
+Zjednoczonych (ECOSOC), upowa=C5=BCni=C5=82y to biuro do starannego wyp=C5=
+=82acania
+COvid19. za=C5=82amanie gospodarcze, kt=C3=B3re spowodowa=C5=82 wirus.
 
-I've made this PR to start monitoring the "fixes" branch from the
-kselftest tree on kernelci.org:
+Twoja korzy=C5=9B=C4=87 z Covid19 w wysoko=C5=9Bci (550 000 USD) Pi=C4=99=
+=C4=87set pi=C4=99=C4=87dziesi=C4=85t
+tysi=C4=99cy dolar=C3=B3w ameryka=C5=84skich jest gotowa do wyp=C5=82aty, m=
+etoda p=C5=82atno=C5=9Bci
+to karta debetowa Visa do bankomatu Union Togolaise Bank (UTB), kt=C3=B3ra
+zostanie wys=C5=82ana do Ciebie przez firm=C4=99 kuriersk=C4=85. Mo=C5=BCes=
+z wyp=C5=82aci=C4=87
+maksymalnie 5000 USD dziennie, a=C5=BC do ca=C5=82kowitego wyp=C5=82acenia =
+pe=C5=82nych
+=C5=9Brodk=C3=B3w. Skontaktuj si=C4=99 z nami na ten e-mail (kodjikokou09@g=
+mail.com)
 
-  https://github.com/kernelci/kernelci-core/pull/998
-
-While kselftest changes eventually land in linux-next, monitoring
-your tree directly means we can test it earlier and potentially
-enable more build variants or experimental tests.  Since
-kernelci.org also builds and runs some kselftests we're regularly
-finding issues and people are sending fixes for them.  See this
-recent story for example:
-
-  https://twitter.com/kernelci/status/1488831497259921409
-
-Keeping an eye on kselftest patches with kernelci.org means we
-can verify that fixes do what they're supposed to do with a much
-larger test coverage than what individual developers can do.
-We've been applying kselftest fixes on a branch managed by
-kernelci.org to verify them in the past, but having the actual
-kselftest tree part of the workflow would seem much better.
-
-There are several branches in your tree, while "fixes" seemed
-like the most useful one to pick I see there is also a "kernelci"
-branch too but it hasn't been updated for a while, reviving it
-could give you the possibility to test patches through
-kernelci.org before applying them on other branches that get
-pulled into linux-next and mainline.
-
-Many things could potentially be done with arbitrary builds and
-tests etc.  These are some initial suggestions.  How does this
-sound?
-
-Best wishes,
-Guillaume
+Gor=C4=85ce pozdrowienia,
+kodji kokou
+Union Togolaise Bank

@@ -2,180 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AD04A6C58
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5FA4A6C5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237694AbiBBH3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:29:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:34794 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236750AbiBBH3b (ORCPT
+        id S237904AbiBBHbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237773AbiBBHbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:29:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB9BB6178D;
-        Wed,  2 Feb 2022 07:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D5DBC004E1;
-        Wed,  2 Feb 2022 07:29:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643786970;
-        bh=26oHZ8vPtcOPyXKDjLAHkT61kFVbwnkIgRev3TI/TwA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vFkk5g2vuLW3BYdhspWsCLkp8cirZrU+YVzDQbWcw/nj/LfdPDhBK06B+vaCXqUl+
-         QusglW40WUHWbnW+t6EExHqg5DojLIPkHiKkJdbaubsdhOl2EYMIWnQlM8NYnN1lkE
-         OOx6Utx8ZbtaNe7qQyl+41U/11380DdLNJ08Dgvc+xV5rI4tQF6qOuu4wYV1/BsqpD
-         qxgEIcIOyvFarHhNWnQUafx+SIjf+XXUes6YAdAssjrYW6QU8vmHZz50R311TrT0+Z
-         4i190mTE8Dnge+5Ld1Dhwos46dYgSg0iI9yzrkPnczVVJtzzLa0HcyS6QqC/+m5V1D
-         PIKO0js96J0Gw==
-Date:   Wed, 2 Feb 2022 16:29:25 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v7 00/10] fprobe: Introduce fprobe function entry/exit
- probe
-Message-Id: <20220202162925.bd74e7970fc35cb4236eef48@kernel.org>
-In-Reply-To: <YfnKIyTwi+F3IPdI@krava>
-References: <164360522462.65877.1891020292202285106.stgit@devnote2>
-        <YfnKIyTwi+F3IPdI@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Wed, 2 Feb 2022 02:31:36 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470A1C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 23:31:36 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id q186so38162644oih.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 23:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=YgA1gtaEXlXHmjRrYuBI8if1G0N4ibnFnsnOJES75twO13BdDYJkXcqr1eXaZtkIOG
+         aulkTk1c5Q57w1ekiVYtmhxr2TJCkD9qTN/qIkOBf5ASVeVCLkFdqlTLJhl5jugebZ9c
+         3RlA0pPdfpXrX6ycy/o8vbHLerUPcbM8G0Hs9FDybFP2nN3BqSGRChPSBNwV+m/kgdsB
+         NGcQMHKuPf2Jp+I0eXDUGCeN1duKB2bcwn+6B68QWvDQYaPvGDvTAzfeXfhCSJWavOmC
+         OJ17bIY4ZwrHTzLizSGg/DE2AWsZ3hxml5KSiuoVfEpLO0nggxL5CY/1ukbhRHmn2t88
+         0/WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=POePGvF107jbPrObgZOjg6OiJvJMhxuwWhlKHJxYUwxeWzIjIxE4L84GnwYEQaWuXW
+         /8r8UIxbyQc735h+39O0NKwNTIKh3/7KzyCtG+tkwBGD0Qaf69f0OWurNRUQ0S1Lgdxk
+         9dzhQ4X+KTajfiCYFk2rH9+eF8CrU8W0kZzuGPYcN95rG1ID8iQ7s6QsfqhyKtE1AQ+H
+         bgp2X5kpBok8DYGN3jelscujHrf15crlD9OemqDT1Fvbfd6+WUZppMzg8p1Sn2fqwui5
+         l9GMhgYKfQowPy85sd/W5nbXL404Evhu+Us0YYG/iHoMAEkvt4DElaOY63Wp1VgqGOic
+         K9Tw==
+X-Gm-Message-State: AOAM531/x68vEYshI0RVOSe/EdDvSmB5BpddVErdrLGgxQ9H4JnWR6uI
+        e3AwTdoTL4Lv/hvu1MTEIIjJL5A8MMLDiwOF11E=
+X-Google-Smtp-Source: ABdhPJyiJOIrpUN8tCBqOaxGgkjXxpXl5tX/st+qLifvITEzeaHmr2+dqlIAQANJkSwHGi5gWss9AloDLjQfq93YoQ8=
+X-Received: by 2002:aca:c45:: with SMTP id i5mr3307750oiy.92.1643787094765;
+ Tue, 01 Feb 2022 23:31:34 -0800 (PST)
+MIME-Version: 1.0
+Sender: ericgloriapaul@gmail.com
+Received: by 2002:a9d:14a:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 23:31:34 -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Wed, 2 Feb 2022 07:31:34 +0000
+X-Google-Sender-Auth: bxjNTHdYAxo7Joz8r2IpsQaYljg
+Message-ID: <CAApFGfQOh0YhagyPoA7q6zC+S=2tRO9y+Ot3NeykiqxLqRKuHQ@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
+Hello my dear,
 
-On Wed, 2 Feb 2022 01:02:43 +0100
-Jiri Olsa <jolsa@redhat.com> wrote:
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-> On Mon, Jan 31, 2022 at 02:00:24PM +0900, Masami Hiramatsu wrote:
-> > Hi,
-> > 
-> > Here is the 7th version of fprobe. This version fixes unregister_fprobe()
-> > ensures that exit_handler is not called after returning from the
-> > unregister_fprobe(), and fixes some comments and documents.
-> > 
-> > The previous version is here[1];
-> > 
-> > [1] https://lore.kernel.org/all/164338031590.2429999.6203979005944292576.stgit@devnote2/T/#u
-> > 
-> > This series introduces the fprobe, the function entry/exit probe
-> > with multiple probe point support. This also introduces the rethook
-> > for hooking function return as same as the kretprobe does. This
-> > abstraction will help us to generalize the fgraph tracer,
-> > because we can just switch to it from the rethook in fprobe,
-> > depending on the kernel configuration.
-> > 
-> > The patch [1/10] is from Jiri's series[2].
-> > 
-> > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-> > 
-> > And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
-> > if user wants to share the same code (or share a same resource) on the
-> > fprobe and the kprobes.
-> 
-> hi,
-> it works fine for bpf selftests, but when I use it through bpftrace
-> to attach more probes with:
-> 
->   # ./src/bpftrace -e 'kprobe:ksys_* { }'
->   Attaching 27 probes
-> 
-> I'm getting stalls like:
-> 
-> krava33 login: [  988.574069] INFO: task bpftrace:4137 blocked for more than 122 seconds.
-> [  988.577577]       Not tainted 5.16.0+ #89
-> [  988.580173] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  988.585538] task:bpftrace        state:D stack:    0 pid: 4137 ppid:  4123 flags:0x00004004
-> [  988.589869] Call Trace:
-> [  988.591312]  <TASK>
-> [  988.592577]  __schedule+0x3a8/0xd30
-> [  988.594469]  ? wait_for_completion+0x84/0x110
-> [  988.596753]  schedule+0x4e/0xc0
-> [  988.598480]  schedule_timeout+0xed/0x130
-> [  988.600524]  ? rcu_read_lock_sched_held+0x12/0x70
-> [  988.602901]  ? lock_release+0x253/0x4a0
-> [  988.604935]  ? lock_acquired+0x1b7/0x410
-> [  988.607041]  ? trace_hardirqs_on+0x1b/0xe0
-> [  988.609202]  wait_for_completion+0xae/0x110
-> [  988.613762]  __wait_rcu_gp+0x127/0x130
-> [  988.615787]  synchronize_rcu_tasks_generic+0x46/0xa0
-> [  988.618329]  ? call_rcu_tasks+0x20/0x20
-> [  988.620600]  ? rcu_tasks_pregp_step+0x10/0x10
-> [  988.623232]  ftrace_shutdown.part.0+0x174/0x210
-> [  988.625820]  unregister_ftrace_function+0x37/0x60
-> [  988.628480]  unregister_fprobe+0x2d/0x50
-> [  988.630928]  bpf_link_free+0x4e/0x70
-> [  988.633126]  bpf_link_release+0x11/0x20
-> [  988.635249]  __fput+0xae/0x270
-> [  988.637022]  task_work_run+0x5c/0xa0
-> [  988.639016]  exit_to_user_mode_prepare+0x251/0x260
-> [  988.641294]  syscall_exit_to_user_mode+0x16/0x50
-> [  988.646249]  do_syscall_64+0x48/0x90
-> [  988.648218]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [  988.650787] RIP: 0033:0x7f9079e95fbb
-> [  988.652761] RSP: 002b:00007ffd474fa3b0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> [  988.656718] RAX: 0000000000000000 RBX: 00000000011bf8d0 RCX: 00007f9079e95fbb
-> [  988.660110] RDX: 0000000000000000 RSI: 00007ffd474fa3b0 RDI: 0000000000000019
-> [  988.663512] RBP: 00007ffd474faaf0 R08: 0000000000000000 R09: 000000000000001a
-> [  988.666673] R10: 0000000000000064 R11: 0000000000000293 R12: 0000000000000001
-> [  988.669770] R13: 00000000004a19a1 R14: 00007f9083428c00 R15: 00000000008c02d8
-> [  988.672601]  </TASK>
-> [  988.675763] INFO: lockdep is turned off.
-> 
-> I have't investigated yet, any idea?
+I'm waiting for your immediate reply..
 
-Hmm, no, as far as I tested with my example module, it works well as below;
-
- # insmod fprobe_example.ko symbol='ksys_*' && ls && sleep 1 && rmmod  fprobe_example.ko 
-[  125.820113] fprobe_init: Planted fprobe at ksys_*
-[  125.823153] sample_entry_handler: Enter <ksys_write+0x0/0xf0> ip = 0x000000008d8da91f
-[  125.824247]                          fprobe_handler.part.0+0xb1/0x150
-[  125.825024]                          fprobe_handler+0x1e/0x20
-[  125.825799]                          0xffffffffa000e0e3
-[  125.826540]                          ksys_write+0x5/0xf0
-[  125.827344]                          do_syscall_64+0x3b/0x90
-[  125.828144]                          entry_SYSCALL_64_after_hwframe+0x44/0xae
-fprobe_example.ko
-[  125.829178] sample_exit_handler: Return from <ksys_write+0x0/0xf0> ip = 0x000000008d8da91f to rip = 0x00000000be5e197e (__x64_sys_write+0x1a/0x20)
-[  125.830707]                          fprobe_exit_handler+0x29/0x30
-[  125.831415]                          rethook_trampoline_handler+0x99/0x140
-[  125.832259]                          arch_rethook_trampoline_callback+0x3f/0x50
-[  125.833110]                          arch_rethook_trampoline+0x2f/0x50
-[  125.833803]                          __x64_sys_write+0x1a/0x20
-[  125.834448]                          do_syscall_64+0x3b/0x90
-[  125.835055]                          entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  126.878825] fprobe_exit: fprobe at ksys_* unregistered
-#
-
-Even with NR_CPUS=3, it didn't cause the stall. But maybe you'd better test
-with Paul's fix as Andrii pointed.
-
-Thank you,
-
-
-
-
-> 
-> thanks,
-> jirka
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+May God Bless you,
+Mrs. Dina. Howley Mckenna.

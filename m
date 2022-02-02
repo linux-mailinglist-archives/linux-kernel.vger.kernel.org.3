@@ -2,180 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596014A7757
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E744A7738
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346582AbiBBR5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:57:53 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:58274 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346499AbiBBR52 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:57:28 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 67BE21850;
-        Wed,  2 Feb 2022 18:56:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643824613;
-        bh=3lrGwNeqv8zUuSa8vZIr+ceF4CcaJqG9pp3tPlC2K/U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uYmuQ1hKzba11PQY9WPV1yOlDA1V8kdNg78UVgBUYTh0jmVHOar6yEiN5vaYTdhgH
-         +Fq7Zhq4rxGmIwZfYxF9BJRnEyXNXoR+x8E1R/lT6CY/hCOWJO2NX4i53QQGtOAyxb
-         7C/eTAmD0C1Rox0LvpmXdAR4rb1fepNfkpDtHNPo=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com
-Subject: [RFC PATCH v3 11/11] media: bcm283x: Include the imx219 node
-Date:   Wed,  2 Feb 2022 18:56:39 +0100
-Message-Id: <20220202175639.149681-12-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
+        id S234759AbiBBR6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:58:15 -0500
+Received: from mga04.intel.com ([192.55.52.120]:58969 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346442AbiBBR6I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:58:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643824689; x=1675360689;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=txTKV4GqxfW43WOJ6xN1Pg09D3EcGyQs318zawtFlSE=;
+  b=JfLAiPNblRJu3Kmu1EjL5Klsxi1tqAYpNEcdX6jua77HAhQYgZYAVAZP
+   NQMnzJrfCGD3iKk9tjO/KJur3J2BMbmWqCMlp8iNtXgbCYNXmLsV4/sOT
+   LnG2qmgED2TjAPPanSC57Axn7EVXu8tRoePJLseuvV4mQziC9pUE9pIvO
+   3Yf5QxnVpUjJLn8CA0YUB5LZHhTTsuD/GByd1bVG9bdk8ShHhREcpmR13
+   gcvEWYaYlR3yycoW7iyYpaT4CRCdDrTBvxHnMhLYA4LQ6dZweXYFc7Wel
+   tjlNbx9zPifLllcNZBhjousZMv2HxGZ+1NDfBfNbijKOHQjX8YQvPxHX4
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="246818355"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="246818355"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 09:58:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="599643976"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Feb 2022 09:58:06 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6443F3B7; Wed,  2 Feb 2022 19:58:20 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] iio: trigger: stm32-timer: Make use of device properties
+Date:   Wed,  2 Feb 2022 19:58:15 +0200
+Message-Id: <20220202175815.54100-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WARNING:
-This patch is only used to demonstrate how the imx219 node is included
-in the bcm2711-rpi-4-b device tree, and is not intended to be merged.
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-Configure the csi1 endpoint, add the imx219 node and connect it through
-the i2c mux.
-
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm/boot/dts/bcm2711-rpi-4-b.dts     |   1 +
- arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi | 102 ++++++++++++++++++++++
- 2 files changed, 103 insertions(+)
- create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
+ drivers/iio/trigger/stm32-timer-trigger.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-index 4432412044de..f7625b70fe57 100644
---- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-+++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-@@ -4,6 +4,7 @@
- #include "bcm2711-rpi.dtsi"
- #include "bcm283x-rpi-usb-peripheral.dtsi"
- #include "bcm283x-rpi-wifi-bt.dtsi"
-+#include "bcm283x-rpi-imx219.dtsi"
+diff --git a/drivers/iio/trigger/stm32-timer-trigger.c b/drivers/iio/trigger/stm32-timer-trigger.c
+index 4f9461e1412c..5049d9ecfc1a 100644
+--- a/drivers/iio/trigger/stm32-timer-trigger.c
++++ b/drivers/iio/trigger/stm32-timer-trigger.c
+@@ -11,9 +11,10 @@
+ #include <linux/iio/timer/stm32-timer-trigger.h>
+ #include <linux/iio/trigger.h>
+ #include <linux/mfd/stm32-timers.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/of_device.h>
++#include <linux/property.h>
  
- / {
- 	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
-diff --git a/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-new file mode 100644
-index 000000000000..f2c6a85fd731
---- /dev/null
-+++ b/arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/clock/bcm2835.h>
-+
-+/ {
-+	compatible = "brcm,bcm2835";
-+
-+	imx219_vdig: fixedregulator@1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vdig";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+	};
-+
-+	imx219_vddl: fixedregulator@2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vddl";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+	};
-+
-+	imx219_clk: imx219_clk {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <24000000>;
-+		clock-output-names = "24MHz-clock";
-+	};
-+
-+	cam1_reg: cam1_reg {
-+		compatible = "regulator-fixed";
-+		regulator-name = "imx219_vana";
-+		enable-active-high;
-+		status = "okay";
-+		gpio = <&expgpio 5 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	i2c0mux {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		i2c-parent = <&i2c0>;
-+
-+		pinctrl-names = "i2c0", "i2c_csi_dsi";
-+		pinctrl-0 = <&i2c0_gpio0>;
-+		pinctrl-1 = <&i2c0_gpio44>;
-+
-+		i2c@0 {
-+			reg = <0>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		i2c@1 {
-+			reg = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			imx219: sensor@10 {
-+				compatible = "sony,imx219";
-+				reg = <0x10>;
-+				status = "okay";
-+
-+				clocks = <&imx219_clk>;
-+				clock-names = "xclk";
-+
-+				VANA-supply = <&cam1_reg>;   /* 2.8v */
-+				VDIG-supply = <&imx219_vdig>;   /* 1.8v */
-+				VDDL-supply = <&imx219_vddl>;   /* 1.2v */
-+
-+				rotation = <0>;
-+				orientation = <0>;
-+
-+				port {
-+					imx219_0: endpoint {
-+						remote-endpoint = <&csi1_ep>;
-+						clock-lanes = <0>;
-+						data-lanes = <1 2>;
-+						clock-noncontinuous;
-+						link-frequencies = /bits/ 64 <456000000>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&csi1 {
-+	status="okay";
-+	num-data-lanes = <2>;
-+	port {
-+		csi1_ep: endpoint {
-+			remote-endpoint = <&imx219_0>;
-+			data-lanes = <1 2>;
-+			clock-lanes = <0>;
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	/delete-property/ pinctrl-names;
-+	/delete-property/ pinctrl-0;
-+};
-+
+ #define MAX_TRIGGERS 7
+ #define MAX_VALIDS 5
+@@ -771,11 +772,11 @@ static int stm32_timer_trigger_probe(struct platform_device *pdev)
+ 	unsigned int index;
+ 	int ret;
+ 
+-	if (of_property_read_u32(dev->of_node, "reg", &index))
+-		return -EINVAL;
++	ret = device_property_read_u32(dev, "reg", &index);
++	if (ret)
++		return ret;
+ 
+-	cfg = (const struct stm32_timer_trigger_cfg *)
+-		of_match_device(dev->driver->of_match_table, dev)->data;
++	cfg = device_get_match_data(dev);
+ 
+ 	if (index >= ARRAY_SIZE(triggers_table) ||
+ 	    index >= cfg->num_valids_table)
 -- 
-2.32.0
+2.34.1
 

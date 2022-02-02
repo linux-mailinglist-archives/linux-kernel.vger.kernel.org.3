@@ -2,165 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADFA4A6E12
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738CD4A6E19
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245576AbiBBJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245565AbiBBJsx (ORCPT
+        id S245584AbiBBJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:51:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55587 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232164AbiBBJvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:48:53 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964E0C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 01:48:53 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Feb 2022 04:51:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643795480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u2Q5Qw3UNSacmxDmUI9wwxXXuk+9n/t8UWUN6P4flCI=;
+        b=X4C42Uju/01NIaHlorIQzD5VryIqv8PsrE8lAaqXtcsXeBKfFGsdXWRilp3IxtOenL1URs
+        x/JwGCePKmH6cktBJPvngUnLfvVojzUQRqVJNEbmOK1SWbIMP9q0chg1Zian4EiLK7ak4V
+        mbI6FaWlLDEMa0zNnRwUkN2FcAeR3G8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-377-DbhiCgNbPwOFGc2htHgDpQ-1; Wed, 02 Feb 2022 04:51:19 -0500
+X-MC-Unique: DbhiCgNbPwOFGc2htHgDpQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A34393F7D3;
-        Wed,  2 Feb 2022 10:48:51 +0100 (CET)
-Date:   Wed, 2 Feb 2022 10:48:50 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Bernard <bernard@vivo.com>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 391BA1091DBF;
+        Wed,  2 Feb 2022 09:51:18 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.40.194.240])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D3AC752AA;
+        Wed,  2 Feb 2022 09:51:01 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Vineeth Pillai <viremana@linux.microsoft.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/msm/dpu: Bind pingpong block to intf on active ctls
- in cmd encoder
-Message-ID: <20220202094850.2asbry44vyh5xw2p@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>, Bernard <bernard@vivo.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211222105513.44860-1-marijn.suijten@somainline.org>
- <84bd598c-b1b7-984e-9fa1-94ad28087ef0@linaro.org>
+Subject: [PATCH v2 0/4] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap for Hyper-V-on-KVM
+Date:   Wed,  2 Feb 2022 10:50:56 +0100
+Message-Id: <20220202095100.129834-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <84bd598c-b1b7-984e-9fa1-94ad28087ef0@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-20 02:12:51, Dmitry Baryshkov wrote:
-> On 22/12/2021 13:55, Marijn Suijten wrote:
-> > As per the specification of DPU_CTL_ACTIVE_CFG the configuration of
-> > active blocks should be proactively specified, and the pingpong block is
-> > no different.
-> > 
-> > The downstream display driver [1] confirms this by also calling
-> > bind_pingpong_blk on CTL_ACTIVE_CFG.  Note that this else-if is always
-> > entered, as setup_intf_cfg - unlike this mainline dpu driver that
-> > combines both behind the same function pointer - is left NULL in favour
-> > of using setup_intf_cfg_v1 when CTL_ACTIVE_CFG is set.
-> > 
-> > This solves continuous timeouts on at least the Qualcomm sm6125 SoC:
-> > 
-> >      [drm:dpu_encoder_frame_done_timeout:2091] [dpu error]enc31 frame done timeout
-> >      [drm:_dpu_encoder_phys_cmd_handle_ppdone_timeout.isra.0] *ERROR* id:31 pp:0 kickoff timeout 0 cnt 1 koff_cnt 1
-> >      [drm:dpu_encoder_phys_cmd_prepare_for_kickoff] *ERROR* failed wait_for_idle: id:31 ret:-110 pp:0
-> > 
-> > In the same way this pingpong block should also be unbound followed by
-> > an interface flush when the encoder is disabled, according to the
-> > downstream display driver [2].
-> > 
-> > [1]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder_phys_cmd.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n167
-> > [2]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n2986
-> > 
-> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> > ---
-> >   .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  | 21 +++++++++++++++++++
-> >   1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > index 8e433af7aea4..e0e08a874f07 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-> > @@ -71,6 +71,13 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
-> >   	intf_cfg.stream_sel = cmd_enc->stream_sel;
-> >   	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
-> >   	ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
-> > +
-> > +	/* setup which pp blk will connect to this intf */
-> > +	if (test_bit(DPU_CTL_ACTIVE_CFG, &ctl->caps->features) && phys_enc->hw_intf->ops.bind_pingpong_blk)
-> 
-> Nit: here we bind all interfaces, but later we unbind only master. Is 
-> this correct?
+Changes since v1:
+- Patches 1/2 from "[PATCH 0/5] KVM: SVM: nSVM: Implement Enlightened
+  MSR-Bitmap for Hyper-V-on-KVM and fix it for KVM-on-Hyper-V" are already
+  merged, dropped.
+- Fix build when !CONFIG_HYPERV (PATCH3 "KVM: nSVM: Split off common
+  definitions for Hyper-V on KVM and KVM on Hyper-V" added).
 
-Not sure: it seems downstream only calls
-_sde/dpu_encoder_phys_cmd_update_intf_cfg when it is _not_ a ppsplit
-slave, which appears to be very similar to being the master (both check
-for ENC_ROLE_SLAVE but ppsplit also checks RM topology support for
-ppsplit).  Should we do this too before calling
-_dpu_encoder_phys_cmd_update_intf_cfg?
+Description:
 
-- Marijn
+Enlightened MSR-Bitmap feature implements a PV protocol for L0 and L1
+hypervisors to collaborate and skip unneeded updates to MSR-Bitmap.
+KVM already implements the feature for KVM-on-Hyper-V.
 
-> > +		phys_enc->hw_intf->ops.bind_pingpong_blk(
-> > +				phys_enc->hw_intf,
-> > +				true,
-> > +				phys_enc->hw_pp->idx);
-> >   }
-> >   
-> >   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
-> > @@ -507,6 +514,7 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
-> >   {
-> >   	struct dpu_encoder_phys_cmd *cmd_enc =
-> >   		to_dpu_encoder_phys_cmd(phys_enc);
-> > +	struct dpu_hw_ctl *ctl;
-> >   
-> >   	if (!phys_enc->hw_pp) {
-> >   		DPU_ERROR("invalid encoder\n");
-> > @@ -523,6 +531,19 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
-> >   
-> >   	if (phys_enc->hw_pp->ops.enable_tearcheck)
-> >   		phys_enc->hw_pp->ops.enable_tearcheck(phys_enc->hw_pp, false);
-> > +
-> > +	if (dpu_encoder_phys_cmd_is_master(phys_enc)) {
-> > +		if (phys_enc->hw_intf->ops.bind_pingpong_blk) {
-> > +			phys_enc->hw_intf->ops.bind_pingpong_blk(
-> > +					phys_enc->hw_intf,
-> > +					false,
-> > +					phys_enc->hw_pp->idx);
-> > +
-> > +			ctl = phys_enc->hw_ctl;
-> > +			ctl->ops.update_pending_flush_intf(ctl, phys_enc->intf_idx);
-> > +		}
-> > +	}
-> > +
-> >   	phys_enc->enable_state = DPU_ENC_DISABLED;
-> >   }
-> >   
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+Vitaly Kuznetsov (4):
+  KVM: nSVM: Track whether changes in L0 require MSR bitmap for L2 to be
+    rebuilt
+  KVM: x86: Make kvm_hv_hypercall_enabled() static inline
+  KVM: nSVM: Split off common definitions for Hyper-V on KVM and KVM on
+    Hyper-V
+  KVM: nSVM: Implement Enlightened MSR-Bitmap feature
+
+ arch/x86/kvm/hyperv.c           | 12 +--------
+ arch/x86/kvm/hyperv.h           |  6 ++++-
+ arch/x86/kvm/svm/hyperv.h       | 35 ++++++++++++++++++++++++
+ arch/x86/kvm/svm/nested.c       | 47 ++++++++++++++++++++++++++++-----
+ arch/x86/kvm/svm/svm.c          |  3 ++-
+ arch/x86/kvm/svm/svm.h          | 11 ++++++++
+ arch/x86/kvm/svm/svm_onhyperv.h | 25 +-----------------
+ 7 files changed, 95 insertions(+), 44 deletions(-)
+ create mode 100644 arch/x86/kvm/svm/hyperv.h
+
+-- 
+2.34.1
+

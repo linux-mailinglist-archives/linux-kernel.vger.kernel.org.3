@@ -2,166 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771A44A6A70
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F2B4A6A80
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243961AbiBBDJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 22:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiBBDJc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 22:09:32 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F828C061714;
-        Tue,  1 Feb 2022 19:09:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EBTvOJMgshLVKwRgaVv9TzsaPaVgbHvo5Y3tNNYYxos=; b=ppMUasTQ2NFIVratM9ikS7NFj/
-        UkF8HogTa6VyMQMaEkP3bez5gB08f3r8SAmGcIbndR+fN69hG3SqQcJnbJHslsRzfKDcWLXQ187YN
-        Rsy6gusydbbXGtokmGO6Gkkvd+Ze+GY01eaRfpoyX6s2CzMehJ8/xUj989/9lLoBwIHKVp3VolRTv
-        Ers/GM9tExG8EFYQ4ibYH7M5zLKjMZ/Gkqvqh5FdSbV5N2icoX5ljSE2BZnOT/dbz+iMqY2S8OZbW
-        wScNVRn9WViPuV5wwf5Ldq/7igZRlSjwOPR2D8AeU0do+8arbHlI0SeUoK0fPtQLNvtVjuAwwt3cF
-        8lHH00rA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nF61L-00E3f0-EG; Wed, 02 Feb 2022 03:09:23 +0000
-Date:   Tue, 1 Feb 2022 19:09:23 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>, bas smit <bas@baslab.org>,
-        =?utf-8?B?VG9tw6HFoQ==?= Glozar <tglozar@gmail.com>,
-        Ast-x64 <Ast-x64@protonmail.com>,
-        Viktor Malik <viktor.malik@gmail.com>,
-        Daniel Xu <dxu@dxuuu.xyz>, Jiri Olsa <jolsa@kernel.org>
-Cc:     jeyu@kernel.org, masahiroy@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com
-Subject: Re: [PING PATCH v7] kallsyms: new /proc/kallmodsyms with builtin
- modules
-Message-ID: <Yfn145FyE3PDBEad@bombadil.infradead.org>
-References: <20211216201919.234994-1-nick.alcock@oracle.com>
- <Yd8CDJA0dy0VaXrB@bombadil.infradead.org>
- <878rvk7uv2.fsf@esperi.org.uk>
+        id S243991AbiBBDX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 22:23:29 -0500
+Received: from mail-co1nam11on2087.outbound.protection.outlook.com ([40.107.220.87]:43344
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230342AbiBBDX0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 22:23:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iParlnREOQlg71v2dZr9VeLkSdY755EBU+RVmwHT4/bHice79tTKuACj3MlWk44j2s8/dd8NIE+VNmmkfq5cswE2n9KX8LWAcRXspRz3vxaLrBIFSaHw+BeTteOTSvaI4n6/21p8Wmky1fpl6hA0YxIYOmNzIJmoyTgPrwLbZsuHbQ7vJDGjBdOc6DeiOSbfxukHH8p+YupDXBZCXo+Tfx79GRqlBqiogWfev8S5Jfcy5zmcX/lbLaqcdm5CPP+sw8GWcWJY3oC5kIjorvGlCGM5NL8qBb76SdGtbOz83PrFyJHPibREZ0FRelr4FG163sKspqPhucUvqlZBeo1u4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=90TpX/TSNluqHpOvHQ2FEHPnVbX6OdtBAW2rtEA2Ags=;
+ b=I9cH0K3hT25MtoJ/E+Fw2c5glk7zrWcpLhLQgrvTNNe9h8KrFmxCNEg+Ab1UGsNnTe38Xcmk7RdFYQiAqhgfh5tIIdM9YWXumzUs5tZMYzxK8ntkA9MkiE10UL6oOy/fBgCXbjDy0ZtTlvgci6HHU5qbGep67m63X5XtD2zu21JC2kZ8pCz8vB0rX53h6Kb1kdI4DrMpjiUzn/Oc52e94SbV5dtc/Gb1ZNdMrZRZ0WFHSm2S//8TOqYpOK7Eb5y7+7rmtmtUAWv0jAXp4C8RKTCxSLVmYU9gFy+BRZSSKz/Ek+Hf4mGJ0QQAHz//XjUajz73gQc7LpOEM+RsCoCD4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=90TpX/TSNluqHpOvHQ2FEHPnVbX6OdtBAW2rtEA2Ags=;
+ b=FOC74++1uzAv+FiXlxm4UO77ZASXRTJj+C4+/EVxhF5Sbn8eMekOJz11B5qx6sQVRUJBBxvKOfuy9qSI83Qc/Y/zRSXK0yAAnhVbsPtJA9Zei7rpvzYqAxjf1bzhyIr9joEcM7Z1Qm6fHLY/Sxy00ld+cLXY3haghF7QVr+3wdzANnZtoQKRRnVtukkJKZaSTTTEesbaiKU3W3ACR0ZGU/89fHdBZHTmNebrVwPOPTE/9GGKHGdG3EnH9rVj3pdbDtEV316/be2cWf0f3075UkFRGUXcZkNSgLJlQN2y/3Hu6dDZHhIVUvOp8cpEpYRtfMkoE7CyXCI/R75sQ2PzJg==
+Received: from MW4P223CA0016.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::21)
+ by CH0PR12MB5201.namprd12.prod.outlook.com (2603:10b6:610:b8::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Wed, 2 Feb
+ 2022 03:23:24 +0000
+Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:80:cafe::76) by MW4P223CA0016.outlook.office365.com
+ (2603:10b6:303:80::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17 via Frontend
+ Transport; Wed, 2 Feb 2022 03:23:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4951.12 via Frontend Transport; Wed, 2 Feb 2022 03:23:23 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 2 Feb
+ 2022 03:23:22 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Tue, 1 Feb 2022
+ 19:23:22 -0800
+Received: from sandstorm.attlocal.net (10.127.8.12) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Tue, 1 Feb 2022 19:23:21 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Will McVicker <willmcvicker@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] Revert mm/gup: small refactoring: simplify try_grab_page()
+Date:   Tue, 1 Feb 2022 19:23:17 -0800
+Message-ID: <20220202032317.327741-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878rvk7uv2.fsf@esperi.org.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f86d3e31-7b6b-4abd-c0eb-08d9e5fb5ea0
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5201:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB52010F4C0C2BB3171155DEEDA8279@CH0PR12MB5201.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:751;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p2Jp/3y8pQMd72GczYlF+ATgySLlIWEZ8fkCXTpkjK2I0GeJTsNVYkA3QJXC+Z1AtoWKoJyKAppylX2SwkIm1zuZrW+NgP0qeAx/hcNiWlMkb0uZxByRle6/wf440EA1wYb2kxZVN+aMVgHwdvMupdkZvi0MhbgbIppYxqQWEhR9iniH371u0etCwDWUtf4xaLPgyiGvyQb9Pu2qdToZd4MC3593gbwokOcIa69GZuiJGwR8lDLvXN2fsdryXsIdT4dDAqK3q+FKshoellJCLzwHa51oXkFtfg5B9KEoP+CL1ute89c7RxzyYlauqMexLRC0OPgbViFLkxWcqTDLVUKYU9XkvNGFv79327Vc+bsvL6lsUPYbyqSwZ6W1KBdrbvh5GljyoTh3dtPe84O8a+7GfagCYVs6dupW1A6XJ0YLUGJBvj37H0sgH9nEJnbJRssV6PKGW/sqBe1u/DqhPB0iq19k0fMEVLth4Z7ZkxhTAFZgXDQLrNVkZ/aORSSj0+98uNNoURGz3fYRdNHfjJZeFEClMJUCgVtqEuwORdODRQ0pnfQCPLnSVzy5W0NBtAFFrVDtyPySnHmswAvmfdxMP+HXNk5WmrnHVZfM31aqzpfYkIuMny+vd70ral2b3E13Jx0jzVyUuetqAWZ2rVJDIJ8xZrlQWB1qIzLmtbR/JGchLL49U1gVyUumMMFA3F/QL1H8Yyqlm16eQeGRMneYcNok52Jz40AGxG1YAVnFpVPufyBzK62JSLw51MlTlUcN67lq4yIIIcRnzxXoFYRS4sLl41DwJeHbr+oIyqQ=
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(7416002)(5660300002)(70206006)(4326008)(36860700001)(47076005)(2906002)(6916009)(36756003)(8936002)(70586007)(316002)(54906003)(40460700003)(8676002)(82310400004)(26005)(86362001)(336012)(1076003)(81166007)(186003)(508600001)(6666004)(966005)(2616005)(356005)(83380400001)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 03:23:23.5531
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f86d3e31-7b6b-4abd-c0eb-08d9e5fb5ea0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5201
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC'ing bfptrace folks for feedback.
+This reverts commit 54d516b1d62ff8f17cee2da06e5e4706a0d00b8a
 
-I'm pretty reluctant to merge any of this unless we have wide community
-desire to see this. I'm not quite seeing that yet.
+That commit did a refactoring that effectively combined fast and slow
+gup paths (again). And that was again incorrect, for two reasons:
 
-On Wed, Jan 12, 2022 at 04:59:45PM +0000, Nick Alcock wrote:
-> On 12 Jan 2022, Luis Chamberlain stated:
-> 
-> > On Thu, Dec 16, 2021 at 08:19:12PM +0000, Nick Alcock wrote:
-> >> /proc/kallsyms is very useful for tracers and other tools that need to
-> >> map kernel symbols to addresses.
-> >> 
-> >> It would be useful
-> >
-> > It took me digging on archives to see to *who* this is useful to.
-> > The short answer seeme to be dtrace. Can you work on getting use
-> > of this for something (I don't know, maybe kernelshark?) that does
-> > not taint the kernel? Last I checked using dtrace on linux taints the
-> > kernel.
-> 
-> It hasn't tainted the kernel for at least four years :) v1 (with a
-> kernel module) has been GPLv2 since 2017; v2 is pure-BPF and has no
-> DTrace-specific kernel modules,
+a) Fast gup and slow gup get reference counts on pages in different ways
+and with different goals: see Linus' writeup in commit cd1adf1b63a1
+("Revert "mm/gup: remove try_get_page(), call try_get_compound_head()
+directly""), and
 
-I google for dtrace LInux and I end up here:
+b) try_grab_compound_head() also has a specific check for "FOLL_LONGTERM
+&& !is_pinned(page)", that assumes that the caller can fall back to slow
+gup. This resulted in new failures, as recently report by Will McVicker
+[1].
 
-https://www.oracle.com/linux/downloads/linux-dtrace.html
+But (a) has problems too, even though they may not have been reported
+yet. So just revert this.
 
-It then has documentation dating back to year 2020, and I can't
-apt-get install any of these "dtrace-utils" or anything with dtrace.
+[1] https://lore.kernel.org/r/20220131203504.3458775-1-willmcvicker@google.com
 
-How do I get running with dtrace on debian? Typically this is a flag
-it has some funky license. You metioned dtrace is GPLv2 since 2017, does
-the same apply to the pure-BPF stuff?
+Fixes: 54d516b1d62f ("mm/gup: small refactoring: simplify try_grab_page()")
+Cc: Christoph Hellwig <hch@lst.de>
+Tested-by: Will McVicker <willmcvicker@google.com>
+Cc: Minchan Kim <minchan@google.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: stable@vger.kernel.org # 5.15
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
 
-Note I see a bpftrace effort, can that be made to use your changes?
-At *least* I can install that on a regular distro. And it notes
-"The bpftrace language is inspired by awk and C, and predecessor tracers
-such as DTrace and SystemTap."
+Since v1, I've only changed the commit description:
 
-I see on that page it says:
+* Added Will's Tested-by
 
-Note that DTrace requires the Unbreakable Enterprise Kernel (UEK)
-release 5 or higher. 
+* Added Cc: stable
 
-> just using some new things we have to
-> add to the kernel, most of which seem plausibly useful to others too
-> (kallmodsyms, waitfd pro tem until pidfd supports ptracers, and CTF).
+ mm/gup.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
-All sounds nice, but I'd like to give this all a spin, but I can't
-find anything remotely close to anything sensible to try it out.
-I don't want to run any Oracle kernel. I want to run things upstream.
+diff --git a/mm/gup.c b/mm/gup.c
+index f0af462ac1e2..a9d4d724aef7 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -124,8 +124,8 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
+  * considered failure, and furthermore, a likely bug in the caller, so a warning
+  * is also emitted.
+  */
+-struct page *try_grab_compound_head(struct page *page,
+-				    int refs, unsigned int flags)
++__maybe_unused struct page *try_grab_compound_head(struct page *page,
++						   int refs, unsigned int flags)
+ {
+ 	if (flags & FOLL_GET)
+ 		return try_get_compound_head(page, refs);
+@@ -208,10 +208,35 @@ static void put_compound_head(struct page *page, int refs, unsigned int flags)
+  */
+ bool __must_check try_grab_page(struct page *page, unsigned int flags)
+ {
+-	if (!(flags & (FOLL_GET | FOLL_PIN)))
+-		return true;
++	WARN_ON_ONCE((flags & (FOLL_GET | FOLL_PIN)) == (FOLL_GET | FOLL_PIN));
+ 
+-	return try_grab_compound_head(page, 1, flags);
++	if (flags & FOLL_GET)
++		return try_get_page(page);
++	else if (flags & FOLL_PIN) {
++		int refs = 1;
++
++		page = compound_head(page);
++
++		if (WARN_ON_ONCE(page_ref_count(page) <= 0))
++			return false;
++
++		if (hpage_pincount_available(page))
++			hpage_pincount_add(page, 1);
++		else
++			refs = GUP_PIN_COUNTING_BIAS;
++
++		/*
++		 * Similar to try_grab_compound_head(): even if using the
++		 * hpage_pincount_add/_sub() routines, be sure to
++		 * *also* increment the normal page refcount field at least
++		 * once, so that the page really is pinned.
++		 */
++		page_ref_add(page, refs);
++
++		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED, 1);
++	}
++
++	return true;
+ }
+ 
+ /**
 
-> This is not a DTrace-specific feature in any case: all my submissions
-> have noted that it seems likely to be useful to anyone who wants a
-> stable reference to modules that doesn't change whenever the kernel
-> config changes, which probably means most tracers with support for
-> kernel modules which implement anything like a programming language.
+base-commit: 9f7fb8de5d9bac17b6392a14af40baf555d9129b
+-- 
+2.35.1
 
-Great! But I'd like things to have tools
-
-> > Without valid upstream users I see no need to add more complexity to the
-> > kernel. And complexity added by tainting modules or not upstream modules
-> 
-> We don't need any of those any more :) Even CTF is now generated by GCC
-> (once GCC 12 is released) and deduplicated by GNU ld: the CTF patch will
-> be only a few hundred lines long once GCC 12 is out and I drop the
-> DWARF->CTF translator.
-
-Great!
-
-> > Without a valid non-taining user being made very clear with a value-add,
-> > I will have to ignore this.
-> 
-> I hope this gives you a reason to not ignore it! Have some links:
-> 
-> DTrace v1 (maintenance mode, fairly hefty GPL kernel module, UPL
-> userspace; fully-functional including fbt, kernel side will shrink):
-> 
->   https://github.com/oracle/dtrace-linux-kernel v1/5.15
->   https://github.com/oracle/dtrace-utils 1.x-branch-dev
-> 
-> DTrace v2 based on BPF, in progress, some features still missing (UPL
-> userspace and a few GPL kernel patches, including this one: needs a BPF
-> cross-compiler, which is a new GCC 12 target):
-> 
->   https://github.com/oracle/dtrace-linux-kernel v2/5.14.9
->   https://github.com/oracle/dtrace-utils 2.0-branch
-
-The "The Universal Permissive License (UPL)"? Really ? Anyway it seems
-to be at least GPL compatible. I'm curios why no distro has picked up
-any of this work?
-
-I don't see much traction based on what you have said on dtrace
-on anything other than Oracle Linux stuff, it would be nice if bpftrace
-folks were excited about your changes and we had support for that
-there.
-
-> (I'm going to respin all of these kernel branches against 5.17-rc once
-> the merge window closes, and bring the things both kernel trees have in
-> common into sync. I'll drop you a line once that's done.)
-
-Nice.
-
-> Config-wise both of these need kernels with CONFIG_KALLMODSYMS,
-> CONFIG_WAITFD and CONFIG_CTF turned on, and a kernel built with a 'make
-> ctf' done after 'make', and the kernel source tree available when DTrace
-> proper is built.
-
-Thanks for the heads up.
-
-  Luis

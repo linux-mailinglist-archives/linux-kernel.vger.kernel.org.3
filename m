@@ -2,257 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD9D4A79D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99904A79D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237888AbiBBU4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S1347336AbiBBU4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347338AbiBBU4H (ORCPT
+        with ESMTP id S235461AbiBBU4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:56:07 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC64C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:56:07 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b2-20020a252e42000000b00619593ff8ddso1672231ybn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:56:07 -0800 (PST)
+        Wed, 2 Feb 2022 15:56:03 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379D9C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:56:03 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso750160pjt.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:56:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=cx1XGJFOM9vV+ujVLRyBYr3s7YbuCuxv2q/Mj2t/VXY=;
-        b=Miom91qjEDgMZF68by2WdOphaXYlYcjxGQCKPhn3uKhvERmOjZvoPwNxb0+h2fk/pR
-         /5JTthMz96Wx5EzgrHxTPnfeAYcp3ZCDmX/P7/7TKMVjy7x09fASzF9wsB3LeYkmF4FA
-         aVbBg0/LEZC14qFUQReiphE+Wdiw7ZeareTm3wneA5hgdJeyyV6m7bZ/0LwWn/5aVhoJ
-         sscipcIXxHyQD3lnMykkRBE9k836RawsQ7ulT2UXzIRRdovonwz8e1HSAeUSTHPn8xMq
-         rvgx/jmtNUguHlpJqgQGCdWvqg2Jc6BgNOiiltVBeRi9HZ3ztGPPsL8g4gSqZcee9cY2
-         0r4Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+MOwEsZXX1JZ92aEsSTA+4bQ9fwXO7uqj6443Uicqb0=;
+        b=Mb5OwFKvf8tT0DvmVkSF03zpcm3XzqSHtUtuMB8JAyioHdfW8f1uw1h2J6Oi+HuZLb
+         3LH+5wQkRmNadqvUPytAJvY42l3NtWc5K9Qh9vU1oRYmBEQ2jlHROGDTkZ7g2fyV3Rvv
+         xhWjglkXHBLAiS2L/bD5rGfl/Mrf6dN2i0eFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=cx1XGJFOM9vV+ujVLRyBYr3s7YbuCuxv2q/Mj2t/VXY=;
-        b=VnaCdCNYgoBR4PnIVRq1445jj/sp/vO6znkxa/aS/VJz/MXgasmjhAmjOL+/MC2w/R
-         5kpqKf4gOVbLIaHr1y0iiKgUkd2xy2nhjo90UYmxSGXDepHbnitfsG47s56JNykInyUe
-         Mq0XrKx1Atn2Wa3IzLmbMk4MXc/6aZnhoZBgZjkJEnOw46Hj55RIv3SQDShW27LyZ88k
-         A+9nvpZURt02oc681NFOCgXjJDZP1ZKaqS8eJ2AAJ9MSuCLCkT2I8WluDcRzQzsCFZdm
-         D4EPjQCbhLYGo9MKJGGb1WZb67pbF1051XmKSzq+589Q/wYqxlXOta6GquaitvFi8/tl
-         E6sA==
-X-Gm-Message-State: AOAM531VFt4XY2u2O8yLYJklRFISehbL3mqwGs+vf3VjGnngZ3ltPKDD
-        tzql8XEQjSD1HX9+CPfGeQmS0/WKPMM9bdD/yeM=
-X-Google-Smtp-Source: ABdhPJzjOIdXwdMxzPKt+BAnyHps+zRIsPRjzOHXQtDzfFRtgjc/T/6/kRcAWunw6snKE7Ar13SGEnGpgafrtTQ7whk=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:90a:a2a6:ce25:fda2])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:1028:: with SMTP id
- x8mr41613379ybt.583.1643835366769; Wed, 02 Feb 2022 12:56:06 -0800 (PST)
-Date:   Wed,  2 Feb 2022 12:55:53 -0800
-Message-Id: <20220202205557.2260694-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1643835353; l=6651;
- s=20211004; h=from:subject; bh=XnpkEF4H4ongVqCF0+NLNSyetMQoOyby61mBk4p47DY=;
- b=SdUMlOeS7d9udoAwDdc3bdAJFGNhDRUrkTCaq1swi9UcYcxwZq13ZSbgwzWQokVLje1gGGZrmlzJ
- bOKCNeh/CJBE7uIqSjfgY0FkI5mTRG2wL/5cT7zW53BvZK4dB9qC
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH] x86: bug.h: merge annotate_reachable into _BUG_FLAGS for __WARN_FLAGS
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-sparse@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+MOwEsZXX1JZ92aEsSTA+4bQ9fwXO7uqj6443Uicqb0=;
+        b=OnAeQ5spgoXCGYQEJir/RaGuPwL7KkRkLfHnhqs7X/eDEiH5NI0EckZmFUVyRNBSRG
+         gobEfciVQ9UmZv5P5EXOZaAZLt/yKvH+w7uarDYLW4y8+/qkQFTQ84z2eKff0eTC8IiW
+         IUUKW06IYv2R97WhE2DJJSbsyZJ3Xhea4NbsZX8PGfLYDJ/+3Bm96O5idtKRwEcbNLkO
+         6thA97wuWZ95yRgCSy2VPWmMQx2BuDIron2zqhvckuN4/yEDftJLhTn7yZHVycS8GM8+
+         SfRTJO0HfPBVBv41no0yNcWLSgpdI0LevGfpf8YIcWuCAsD3yI6DePD1Wo2YtvH4Qk1j
+         1wUA==
+X-Gm-Message-State: AOAM533Y9QNQL8KUygnpTpdnXeZn1Sp0cqQtsqiMyRzZHKJVwEiIf8nT
+        wBJJbJ+B0PYgZ1x9cMW0lit7uQ==
+X-Google-Smtp-Source: ABdhPJyfeZdi8A1JowZl63xE7cjRteRe2f/EQsWsDnneOxd/1gPZEhtH8tPe/EVOXmca0ssZNZc69w==
+X-Received: by 2002:a17:90a:548:: with SMTP id h8mr10099210pjf.109.1643835362724;
+        Wed, 02 Feb 2022 12:56:02 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a14sm28023672pfv.212.2022.02.02.12.56.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 12:56:02 -0800 (PST)
+Date:   Wed, 2 Feb 2022 12:56:01 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
+Message-ID: <202202021254.5A1FD4FFBF@keescook>
+References: <20210818081118.1667663-1-keescook@chromium.org>
+ <20210818081118.1667663-5-keescook@chromium.org>
+ <20220202160903.GA2337834@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202160903.GA2337834@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __WARN_FLAGS, we had two asm statements (abbreviated):
-asm volatile("ud2");
-asm volatile(".pushsection .discard.reachable");
+On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
+> On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
+> > With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
+> > coverage, it is now possible to enable -Warray-bounds. Since both
+> > GCC and Clang include -Warray-bounds in -Wall, we just need to stop
+> > disabling it.
+> > 
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: linux-kbuild@vger.kernel.org
+> > Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  Makefile | 1 -
+> >  1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index a4aca01a4835..af22b83cede7 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+> >  
+> >  # We'll want to enable this eventually, but it's not going away for 5.7 at least
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
+> > -KBUILD_CFLAGS += -Wno-array-bounds
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+> >  
+> >  # Another good warning that we'll want to enable eventually
+> 
+> alpha:defconfig:
+> 
+> In function '__memset',
+>     inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
 
-These pair of statements are used to trigger an exception, but then help
-objtool understand that for warnings, control flow will be restored
-immediately afterwards.
+Thanks! I'll take a look. Every instance of the "[0, 0]" bounds means
+the compiler believes there's a way for the destination to be determined
+at compile-time to be NULL.
 
-The problem is that volatile is not a compiler barrier. GCC explicitly
-documents this.
+> xtensa:allmodconfig:
+> --------------
+> Error log:
+> In file included from include/linux/uaccess.h:11,
+>                  from include/linux/sched/task.h:11,
+>                  from arch/xtensa/kernel/process.c:21:
+> arch/xtensa/kernel/process.c: In function 'copy_thread':
+> arch/xtensa/kernel/process.c:262:52: error: array subscript 53 is above array bounds of 'long unsigned int[16]'
 
-> Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions.
+I assume this is a weird cast. I will also check this one out.
 
-Also, no clobbers are specified to prevent instructions from subsequent
-statements from being scheduled by compiler before the second asm
-statement. This can lead to instructions from subsequent statements
-being emitted by the compiler before the second asm statement.
+Thanks!
 
-Providing a scheduling model such as via -march= options enables the
-compiler to better schedule instructions with known latencies to hide
-latencies from data hazards compared to inline asm statements in which
-latencies are not estimated.
-
-If an instruction gets scheduled by the compiler between the two asm
-statements, then objtool will think that it is not reachable, producing
-a warning.
-
-To prevent instructions from being scheduled in between the two asm
-statements, merge them.
-
-This change also removes an unnecessary unreachable() asm annotation
-from BUG() in favor of __builtin_unreachable(). objtool is able to track
-that the ud2 from BUG() terminates control flow within the function.
-
-Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-Link: https://github.com/ClangBuiltLinux/linux/issues/1483
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Note to reviewers:
-This patch is related but somewhat orthogonal to
-https://lore.kernel.org/llvm/20220114010526.1776605-1-ndesaulniers@google.com/.
-We're still discussing in
-https://lore.kernel.org/llvm/20220131225250.409564-1-ndesaulniers@google.com/
-whether such a barrier exists to salvage instrumentation_{begin|end}. I
-may have follow up patches based on the result of that discussion.
-Regardless of the outcome, I think this patch stands on its own merit,
-and any changes to instrumentation_{begin|end} would not undo the
-merging of asm statements done in this patch. Finally, I tried adding a
-diagnostic to clang to warn when volatile is being used in a way that's
-suspicious (https://goto.google.com/llvm-cr/D118297), but I don't think
-that will land. Thanks to Nathan for the relevant citiation of the GCC
-docs.
-
- arch/x86/include/asm/bug.h | 20 +++++++++++---------
- include/linux/compiler.h   | 21 +++++----------------
- 2 files changed, 16 insertions(+), 25 deletions(-)
-
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index 84b87538a15d..f98db09bffd4 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -22,7 +22,7 @@
- 
- #ifdef CONFIG_DEBUG_BUGVERBOSE
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
-@@ -31,7 +31,8 @@ do {									\
- 		     "\t.word %c1"        "\t# bug_entry::line\n"	\
- 		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c3\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra \
- 		     : : "i" (__FILE__), "i" (__LINE__),		\
- 			 "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
-@@ -39,14 +40,15 @@ do {									\
- 
- #else /* !CONFIG_DEBUG_BUGVERBOSE */
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
- 		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
- 		     "\t.word %c0"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c1\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra \
- 		     : : "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
- } while (0)
-@@ -55,7 +57,7 @@ do {									\
- 
- #else
- 
--#define _BUG_FLAGS(ins, flags)  asm volatile(ins)
-+#define _BUG_FLAGS(ins, flags, extra)  asm volatile(ins)
- 
- #endif /* CONFIG_GENERIC_BUG */
- 
-@@ -63,8 +65,8 @@ do {									\
- #define BUG()							\
- do {								\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, 0);					\
--	unreachable();						\
-+	_BUG_FLAGS(ASM_UD2, 0, "");				\
-+	__builtin_unreachable();				\
- } while (0)
- 
- /*
-@@ -75,9 +77,9 @@ do {								\
-  */
- #define __WARN_FLAGS(flags)					\
- do {								\
-+	__auto_type f = BUGFLAG_WARNING|(flags);		\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));		\
--	annotate_reachable();					\
-+	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
- 	instrumentation_end();					\
- } while (0)
- 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 429dcebe2b99..0f7fd205ab7e 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -117,14 +117,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
-  */
- #define __stringify_label(n) #n
- 
--#define __annotate_reachable(c) ({					\
--	asm volatile(__stringify_label(c) ":\n\t"			\
--		     ".pushsection .discard.reachable\n\t"		\
--		     ".long " __stringify_label(c) "b - .\n\t"		\
--		     ".popsection\n\t" : : "i" (c));			\
--})
--#define annotate_reachable() __annotate_reachable(__COUNTER__)
--
- #define __annotate_unreachable(c) ({					\
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.unreachable\n\t"		\
-@@ -133,24 +125,21 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- })
- #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
- 
--#define ASM_UNREACHABLE							\
--	"999:\n\t"							\
--	".pushsection .discard.unreachable\n\t"				\
--	".long 999b - .\n\t"						\
-+#define ASM_REACHABLE							\
-+	"998:\n\t"							\
-+	".pushsection .discard.reachable\n\t"				\
-+	".long 998b - .\n\t"						\
- 	".popsection\n\t"
- 
- /* Annotate a C jump table to allow objtool to follow the code flow */
- #define __annotate_jump_table __section(".rodata..c_jump_table")
- 
- #else
--#define annotate_reachable()
- #define annotate_unreachable()
-+# define ASM_REACHABLE
- #define __annotate_jump_table
- #endif
- 
--#ifndef ASM_UNREACHABLE
--# define ASM_UNREACHABLE
--#endif
- #ifndef unreachable
- # define unreachable() do {		\
- 	annotate_unreachable();		\
-
-base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
 -- 
-2.35.0.rc2.247.g8bbb082509-goog
-
+Kees Cook

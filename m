@@ -2,96 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9774A79CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BB64A79D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347323AbiBBUzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:55:14 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:56966 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiBBUzN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:55:13 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Kt8Pw017489;
-        Wed, 2 Feb 2022 14:55:08 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643835308;
-        bh=TSgd+xCGzaaE5vue8g+IcUiNAO25KhYriLW5DLA2pPI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=u8mqbfANm00fkjhdPrNjsbO6Nk+m06TpQ1kbP7Lq342oHBmtWiz8ESzRwICemdG21
-         x0mRGffLmI0rnnAHj74k4yrS2I9PvG1ZqbuL+E4pX55ILQJHLUrmOPZXJfSGQqCPBC
-         qSyQyRknxXF9iqoUKH0BfK/cUJBlKnp9j/pP92pw=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212Kt8JH044381
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Feb 2022 14:55:08 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Feb 2022 14:55:08 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Feb 2022 14:55:08 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Kt8Eh025309;
-        Wed, 2 Feb 2022 14:55:08 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am64-main: add RTI watdog nodes
-Date:   Wed, 2 Feb 2022 14:55:07 -0600
-Message-ID: <164383529402.22839.4290486437592010268.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220111134552.800704-1-christian.gmeiner@gmail.com>
-References: <20220111134552.800704-1-christian.gmeiner@gmail.com>
+        id S1347330AbiBBUzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:55:23 -0500
+Received: from mga09.intel.com ([134.134.136.24]:64097 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347331AbiBBUzU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 15:55:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643835321; x=1675371321;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CdJlJPui20ZYUBnP9Qq9k7eB0SBmLsgUn7XCbKkohes=;
+  b=FYi/pndRo+o1/Qg21NHeY6CLwmvFcUD+5PHSCdzVMBOkghqT7XUNXuxq
+   cyjsNETFw2s1E9xPmWkXRl5J6qR7CufeCtWsaMAyNIGtxxTo8nGTsrAqK
+   l6jciG2ME7+DgG0R7rizkFVAGlFnvRa6rSLTelPBoJfZI6kbiS8YKmyap
+   W2dUS76R/uUM3t1RUudbA1kob5ed6n/Ufzl7s9YEMiZG+78garTKzDgDO
+   j1sZELLN585GcIp1o3p89deWEMphONt0+cp+cQVlCq8c9cdT3mQ6xDtXZ
+   CP5m2F63hFB3GJ+hzLNoQDG/geuIGkhQbEqsfA2UsHp8U/3UTJDKabNiM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247785420"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="247785420"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:55:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="480247469"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2022 12:55:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7F5D93B7; Wed,  2 Feb 2022 22:55:32 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Crt Mori <cmo@melexis.com>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: temperature: mlx90632: Switch from of headers to mod_devicetable.h
+Date:   Wed,  2 Feb 2022 22:55:31 +0200
+Message-Id: <20220202205531.57966-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian Gmeiner,
+There is nothing directly using of specific interfaces in this driver,
+so lets not include the headers.
 
-On Tue, 11 Jan 2022 14:45:48 +0100, Christian Gmeiner wrote:
-> Add the needed bus mappings for the two main RTI memory ranges and
-> the required device tree nodes in the main domain.
-> 
-> 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/temperature/mlx90632.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have applied the following to branch ti-k3-dts-next on [1].
-Thank you!
-
-[1/1] arm64: dts: ti: k3-am64-main: add RTI watdog nodes
-      commit: 41fe04c0d76bb19114ee9f09ae07e2884cdcd75f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+diff --git a/drivers/iio/temperature/mlx90632.c b/drivers/iio/temperature/mlx90632.c
+index 608ccb1d8bc8..7ee7ff8047a4 100644
+--- a/drivers/iio/temperature/mlx90632.c
++++ b/drivers/iio/temperature/mlx90632.c
+@@ -13,9 +13,9 @@
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/limits.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/math64.h>
+-#include <linux/of.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.34.1
 

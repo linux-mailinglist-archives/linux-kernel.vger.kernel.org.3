@@ -2,70 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDFE4A7830
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30434A7834
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346748AbiBBSqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:46:05 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:54596 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346733AbiBBSqD (ORCPT
+        id S1346756AbiBBSrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346751AbiBBSrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:46:03 -0500
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id FKdinz4vkzBp5FKdinKnVu; Wed, 02 Feb 2022 19:46:00 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 02 Feb 2022 19:46:00 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <d31d8348-c7ee-587a-d376-85e86092436f@wanadoo.fr>
-Date:   Wed, 2 Feb 2022 19:45:57 +0100
+        Wed, 2 Feb 2022 13:47:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEDC06173B;
+        Wed,  2 Feb 2022 10:47:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7494361924;
+        Wed,  2 Feb 2022 18:47:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6679FC004E1;
+        Wed,  2 Feb 2022 18:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643827621;
+        bh=mBEDkji8JCmpzgtRJ5DMy3ZN8wH4LrWa0MpCxfoCfXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J+KrxYLQSUe0x+kG6UILvvDSncCJDWkO3sFXCKBveYaqtaKXNWGAhZaQaZq9HJRKY
+         7dYljhXz2CtXXA0onqZI4o3qNd9XCx3beakUgmNHS7HWSYJkdmvHHQ1fE2yhPZu5Y+
+         J9KtCRti8rIH2ksrgjuMUqEQS46WNxZVBFwxir1Rzip8zMcK9oUF2kgj8zdkmv+RQm
+         q9kEKkS4jot6gXxsIZ3sdrQARzfIVUxXxRjUj4g8ZUDLfWCnWHVhixtm6EADB/GgEb
+         0y0h+doNRhPH5wj/C11uQWvWlVPZRtaSfh5OuFnNhn/t+Zi94Us787VV7KFXVo/AA3
+         oqkuHl+pvTKFQ==
+Date:   Wed, 2 Feb 2022 18:46:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     madvenka@linux.microsoft.com
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Message-ID: <YfrRoA63/UOXTJc0@sirena.org.uk>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] dmaengine: ptdma: Fix the error handling path in
- pt_core_init()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, dmaengine@vger.kernel.org
-References: <1b2573cf3cd077494531993239f80c08e7feb39e.1643551909.git.christophe.jaillet@wanadoo.fr>
- <20220202071530.GV1951@kadam>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220202071530.GV1951@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="njCht9jCwRKJ+dPv"
+Content-Disposition: inline
+In-Reply-To: <20220117145608.6781-7-madvenka@linux.microsoft.com>
+X-Cookie: Quack!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/02/2022 à 08:15, Dan Carpenter a écrit :
-> On Sun, Jan 30, 2022 at 03:12:09PM +0100, Christophe JAILLET wrote:
->> @@ -230,7 +230,7 @@ int pt_core_init(struct pt_device *pt)
->>   	/* Request an irq */
->>   	ret = request_irq(pt->pt_irq, pt_core_irq_handler, 0, dev_name(pt->dev), pt);
->>   	if (ret)
->> -		goto e_pool;
->> +		goto e_dma_alloc;
-> 
-> These are ComeFrom label names.  It's an unfortunate style of naming
-> labels based on the goto location instead of saying what the goto does.
-> 
-> This is one of those cases where the code has moved on, and now the name
-> no longer points to where it came from or to where it's going.  It just
-> stands as a Hyperart Thomasson pointing to the past.  It reminds us of
-> change and decay.  Take time to smell the air in autumn.  Beauty is all
-> around.
-> 
-> regards,
-> dan carpenter
-> 
 
-Autumn is over. Winter is coming (tm). And Spring will soon be there.
+--njCht9jCwRKJ+dPv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'll try to send a refreshing update as a V2 to go one step further and 
-do some spring cleaning in the labels used here.
+On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrot=
+e:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>=20
+> Rename the arguments to unwind() for better consistency. Also, use the
+> typedef stack_trace_consume_fn for the consume_entry function as it is
+> already defined in linux/stacktrace.h.
 
-CJ
+Consistency with...?  But otherwise:
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--njCht9jCwRKJ+dPv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH60Z8ACgkQJNaLcl1U
+h9CRVAf/e7AUjvtw9CpStQl88F9xMn8uBVroK2T5X0IIX6ev12GrMUMGHNt9qioZ
+VdPU8CbLEzkj0NTQNGiQTQpbu6UmhVqpwyCMgOmE9/Bf75xeb2p72XY1U03kDa36
+ZxPVma74wWOyyo26AnMDYoTrA3li0NQdFVXS2y9MUQeiRKc6xhloS4bj24TluSbr
+5S9ln91rxiXG8IxpmwK/XXSVT//SrNcPMiuMiHYefcKwZtcadH/iBNmXW8qj0MQY
+TwAlOnRItDBGA9lfLNBqGqKM77wMDHzCU9WIxyz5/vq09+B+gHTvSEp5LTTcpmO0
+mcjCjwzOfs2hs+Hl9uzmaYj93BDajg==
+=E+Wb
+-----END PGP SIGNATURE-----
+
+--njCht9jCwRKJ+dPv--

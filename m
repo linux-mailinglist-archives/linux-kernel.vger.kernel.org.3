@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B539D4A6FD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3060F4A6FE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbiBBLVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S1343819AbiBBLYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:24:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiBBLVp (ORCPT
+        with ESMTP id S230478AbiBBLYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:21:45 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B097C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:21:45 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id f17so37710812wrx.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CLpBWpR4AdxV5k5a9SzxOwC4Is5G/R+GFZUj0OPG68E=;
-        b=0GzZnB6+OCeckMUkTJmkIO5sfwKHCblMsvuWqQfWsqJAhSN7p5my9G/QCBoR6UwdAi
-         jN/c7wPi23GCh/djF3RvdTynngxkjgI4Ct6t3wl5Qt/YFhFpU4FSATeju5bRLe6Xi05M
-         6Q0voGGh4CpnD/whLpVbYzlLvBThs1p5AscZe1PUEtOENxlUTOZHWuQNPb/orkrS7CZq
-         CKaZWk2Uxa89CqefqP9gdaLI9gb+wBBgh8QjhHLgzuCgCg3kGVjB6nLc5EgLxPRciSUN
-         LU8GAoJvu9GdmAQPYgNnbPKtbIz0BgB+3D25b0wmvSaAL7w7c/ZFbRsKj8Ymy+C8GdWW
-         Wkog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CLpBWpR4AdxV5k5a9SzxOwC4Is5G/R+GFZUj0OPG68E=;
-        b=eeHeCeZDzOtomJtLVz8wPMW6Ajm6epWod0Y41wlzHcs40+eqi8Rc2OBx1qqLN8Gmm8
-         5iARIu9GkYAwWuZQKBFcnCgux8SAavMXqwWwo48/B2Lho8TiVq6PDNs8TbL7gwyXT6ic
-         9bMIZZt3eEQ/R8+Daaun49UGNvv2GOtm2+iarpHraO/TqZ+jiJC1njRKN0OBaG+H1FbB
-         vzoUd767S2jAeNaH3lzo5ki2l17dmtLOw/jOjOEqIPGeCFo8UtCvSyWfKqvHBQOGe7p0
-         LpEY5utKfAdOjDRTYXDVQsFDeCb3AWIdpoB/5c8KU0n6wqtClarLs0VHi4M4hTOwUj7G
-         Krhw==
-X-Gm-Message-State: AOAM532SLmdoeXm5lZ+++8AOzo8vG2a9tAxba+djX4q95kS0LZxAohq0
-        ZsoXVEh/KMEtai3eb5peb0stQUvH4SBl24JhxW3+Vg==
-X-Google-Smtp-Source: ABdhPJzlXdO1QshYnBgRMzXJ2ivnlrYwpOvle2NHmkETsqwszvU55uwzYT90mGUVAB/9xurup36pfFR95cYb5rz617U=
-X-Received: by 2002:adf:d08c:: with SMTP id y12mr25480446wrh.346.1643800903609;
- Wed, 02 Feb 2022 03:21:43 -0800 (PST)
+        Wed, 2 Feb 2022 06:24:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71C9C061714;
+        Wed,  2 Feb 2022 03:24:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0uChyntsGbZTYF0NOYbJgym9Avq1awMCpANR+feQH8w=; b=DYhEZ9Kr6q4Vf8w3RGMPtj5fer
+        CeDPlxxRKjB8rYp0besQzPX5n1VUUl5wdTY02xwPKrz1GS/iw5KUJv85yQRLqiR1T9/JghiH1FdAM
+        eh5Jz6bvL7r/WriU89jKlO8TANkIcRPNPtVuWC6yOLsHZzVy+F8LjKfKZAGIEGZfxVQTVubw9+tD4
+        CTS7fph0lnMnS+SHC2E5Xju+4aCx3OeTjeKy1/6/p4mWFmeS+VQQKyulRwbXOQZDSmVGeHILZVTIf
+        wC8uHNKYY65xQ2KcEz9zVkSoAltQ8O9jHvtoqWmiaJP9jj9okWkuq3BL5FQdHe/OZoMjbpO4sk1R0
+        XcCAgJ3A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFDjk-00ESwW-8Y; Wed, 02 Feb 2022 11:23:44 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1ACFB98327C; Wed,  2 Feb 2022 12:23:43 +0100 (CET)
+Date:   Wed, 2 Feb 2022 12:23:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>
+Subject: Re: [RFC PATCH 1/3] Introduce per thread group current virtual cpu id
+Message-ID: <20220202112343.GZ20638@worktop.programming.kicks-ass.net>
+References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-References: <20220131164232.295585-1-apatel@ventanamicro.com>
-In-Reply-To: <20220131164232.295585-1-apatel@ventanamicro.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 2 Feb 2022 16:51:30 +0530
-Message-ID: <CAAhSdy3ReL2cJXZ+0YMcEeWJg02p86Sr-dNXKXm7GMMaqUZJiA@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: KVM: Fix SBI implementation version
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        KVM General <kvm@vger.kernel.org>,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201192540.10439-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:13 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> The SBI implementation version returned by KVM RISC-V should be the
-> Host Linux version code.
->
-> Fixes: c62a76859723 ("RISC-V: KVM: Add SBI v0.2 base extension")
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+On Tue, Feb 01, 2022 at 02:25:38PM -0500, Mathieu Desnoyers wrote:
 
-Thanks, I have queued this for fixes.
+> +static inline void tg_vcpu_get(struct task_struct *t)
+> +{
+> +	struct cpumask *cpumask = &t->signal->vcpu_mask;
+> +	unsigned int vcpu;
+> +
+> +	if (t->flags & PF_KTHREAD)
+> +		return;
+> +	/* Atomically reserve lowest available vcpu number. */
+> +	do {
+> +		vcpu = cpumask_first_zero(cpumask);
+> +		WARN_ON_ONCE(vcpu >= nr_cpu_ids);
+> +	} while (cpumask_test_and_set_cpu(vcpu, cpumask));
+> +	t->tg_vcpu = vcpu;
+> +}
+> +
+> +static inline void tg_vcpu_put(struct task_struct *t)
+> +{
+> +	if (t->flags & PF_KTHREAD)
+> +		return;
+> +	cpumask_clear_cpu(t->tg_vcpu, &t->signal->vcpu_mask);
+> +	t->tg_vcpu = 0;
+> +}
 
-Regards,
-Anup
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 2e4ae00e52d1..2690e80977b1 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4795,6 +4795,8 @@ prepare_task_switch(struct rq *rq, struct task_struct *prev,
+>  	sched_info_switch(rq, prev, next);
+>  	perf_event_task_sched_out(prev, next);
+>  	rseq_preempt(prev);
+> +	tg_vcpu_put(prev);
+> +	tg_vcpu_get(next);
 
-> ---
->  arch/riscv/kvm/vcpu_sbi_base.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-> index 4ecf377f483b..48f431091cdb 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_base.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
-> @@ -9,6 +9,7 @@
->  #include <linux/errno.h>
->  #include <linux/err.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/version.h>
->  #include <asm/csr.h>
->  #include <asm/sbi.h>
->  #include <asm/kvm_vcpu_timer.h>
-> @@ -32,7 +33,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->                 *out_val = KVM_SBI_IMPID;
->                 break;
->         case SBI_EXT_BASE_GET_IMP_VERSION:
-> -               *out_val = 0;
-> +               *out_val = LINUX_VERSION_CODE;
->                 break;
->         case SBI_EXT_BASE_PROBE_EXT:
->                 if ((cp->a0 >= SBI_EXT_EXPERIMENTAL_START &&
-> --
-> 2.25.1
->
+
+URGGHHH!!! that's *2* atomics extra on the context switch path. Worse,
+that's on a line that's trivially contended with a few threads.

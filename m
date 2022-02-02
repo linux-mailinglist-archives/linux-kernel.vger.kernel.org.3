@@ -2,87 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C1C4A69D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 620184A69D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243781AbiBBCDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 21:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S243782AbiBBCGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 21:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242899AbiBBCDs (ORCPT
+        with ESMTP id S231835AbiBBCGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 21:03:48 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E741C061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 18:03:48 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id c6so56573191ybk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 18:03:48 -0800 (PST)
+        Tue, 1 Feb 2022 21:06:35 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3EAC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 18:06:35 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id h12so18871812pjq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 18:06:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=KK4Kio9Yj2Dgmh4Ubko8XFAQ/S0bnWjcbgpe675v1aA=;
-        b=ciWl/1pH7+TLXPfDiTpOt9YPMj6aJ6CpQL+54EWrhfJ6fZpbKFdKrYinmonMDdWENI
-         8IOFDwWiYt54f0fKJfQxUMixumpkBKuTUzPQptyjTGwV65BAqLDU/5pRieC5p/QPlfHo
-         sM/4WF1oPiTBiz5u6Fh6m94NZlt2dDAQm4//Ly+RpceYxjQf+lql8oRpwFYlANZ1AU1V
-         pWoV7DaTvf9RwxgCnJsycAO33kPqNi2mc3N0SkvfL+oL3nGEpq+ramH/eCEnjdHK8dzJ
-         QruO4VarPMyf6kivtNTR88EdUW+UuTFvPyyz2B3DL7QySkzJdPTLr1SN7EufrM49XwJY
-         ZtXg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H8NaK6sogIQ9vr23uq3ONCRZOGt+JDgbjU55p0WZp4U=;
+        b=bfP6aLccvV4nBE91AzyhEB+9wzkc3lnTdeQz2pDYN+pboTQ/PNybvwrn+LpcyKBBxv
+         KeWaA+rToyLUpVDwgxI7FDgZtJGZOoMSTMPsXpPVcPiqQyWtb2hOp8ZCp27GHqDI6sb1
+         0GOVrybLfDhc8lgnSrII4ufgbX/XH6ixzM7lF3uFWj44zEQ6yJZwv6q+szt45nm91d7m
+         X8DZr01oeCBpXuNWL4yP263MF73rs3FBn5OxE7LQ/rCISl86epCO1jHqvAJ9uqZNIU6H
+         PXs1dzc2aqAO/WtzZGqCliKcS+jd6L2aiYOnXmSA0C6GFVrXo8k8BeNRgHnxGVTJFO+c
+         B1cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=KK4Kio9Yj2Dgmh4Ubko8XFAQ/S0bnWjcbgpe675v1aA=;
-        b=swnt6oA9jAYGLEOr+dvR39bnHo1a94BHFyrYS0Rt7n8ASHdi46Z6QhyPa6GmgCI9aQ
-         rTDqe2ci4+FWt1n2E75CO4uMsHmRMHMYgMf/ccXNyehOGqwZE7GmUn1x+AOdLD/M3c7J
-         ZSZzIHeXLo0eM3i4CLRILSkKmrloYU9GhemBVcZLsOsBZLEBRI9dFLAlNX8+G5OXx40k
-         wfFjnlhB9xWQIg0R5pEZ3rXD3Gi06bdp2d9kVHvnpgjVeqvpaL8FBNKIeonHNa4rIRps
-         gebxLK0XoCPHJjAnUw3kWtJTEkVGVADBbX6JjV0Rt2c05R1oHrUt9Lh8Aggapl80hKcT
-         MZkQ==
-X-Gm-Message-State: AOAM532x7hX/gA7UChe4V2umR074EWVJRzS0XpeHkqNLZjYDtCao7vFM
-        F15xecQ3n35m/jWQHCegAhMgDsZOZP0E5Pl14wY=
-X-Google-Smtp-Source: ABdhPJyn7yJfvZ5OCWGLWLz0q1SLcK5Em6KX6MFXd3knh+5+wwwwhAzNyLWLJDWP4uf0XSEgIylqyjFJ5Hxh7f1Jly4=
-X-Received: by 2002:a25:a206:: with SMTP id b6mr18397321ybi.707.1643767427290;
- Tue, 01 Feb 2022 18:03:47 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H8NaK6sogIQ9vr23uq3ONCRZOGt+JDgbjU55p0WZp4U=;
+        b=KGazxjh72qfeY3Ixqc6JoWHcWz7gHxTu55UypyL3+u6kOldFZhg8UmxgWlXITZ4Dnh
+         mJL14vlc+8DtLlSAkLUF+aXw2QYSb3VNUGHeBULGsmyyJ6sNDxTBOXIcG7JH0jsQVQ/w
+         aiAl7KYQoLrHFatmfyBmoRuqhdQhjO/wQ4Z+PbzQxYMDosW1l2Ej75E/RDeV/iktyw7o
+         VJQSeDHPeUGJg9MAxFfGGqHwGvOh5HeFAA/fwKutHGHs/6XBCWe1CQ/bejTQTfMphY1W
+         uTmemfoQpCqvA2VuguIxvv2CGhK3RrBgiqdkDB3Flk12UO671GJcGUcFYZGl/w1mcx+T
+         /kyQ==
+X-Gm-Message-State: AOAM532VgwTcTS5MC1aUBnRhRvB/85ZnCSLdxodcWfCP8zkXH+6ThaXz
+        FVqQbZah6CQR1UEkB3dWhBCgh87fTJyZRwuB/HIRUA==
+X-Google-Smtp-Source: ABdhPJx0554lrOHB07UdrxMgw1RFi/OP2MSvhvTbPt2YwPByF5SP+JUPDvszH7looKd1nhnBvBbvijrznsTw/Kwt9XI=
+X-Received: by 2002:a17:902:ced2:: with SMTP id d18mr28827516plg.21.1643767594601;
+ Tue, 01 Feb 2022 18:06:34 -0800 (PST)
 MIME-Version: 1.0
-Sender: mrrnra.kabore@gmail.com
-Received: by 2002:a05:7000:92d6:0:0:0:0 with HTTP; Tue, 1 Feb 2022 18:03:46
- -0800 (PST)
-From:   Ann William <annwilliam372@gmail.com>
-Date:   Tue, 1 Feb 2022 18:03:46 -0800
-X-Google-Sender-Auth: RBp_5NuHIHYXWJO21Qu2rlp5e-k
-Message-ID: <CAObd1coVF1Tcq-=hGYS3sK6=fjpXoAmmEq4E3o5uquLmgEQtQw@mail.gmail.com>
-Subject: Re: Greetings My Dear,
-To:     undisclosed-recipients:;
+References: <20220121214117.GA1154852@bhelgaas> <Ye5GvQbFKo+CFtRb@lahna>
+ <Ye/X7E2dKb+zem34@lahna> <Ye/btvA1rLB2rp02@kroah.com> <Ye/zTHR5aCG58z87@lahna>
+ <CAJZ5v0gitdeEAxcgSoB1=VHA9FnRdCtmUqA_cN_f1a2yFRDghQ@mail.gmail.com>
+ <CACK8Z6H2DLTJgxgS3pcvfOh=5S8cxEMKvwEPfB9zoVf1g2H_UQ@mail.gmail.com>
+ <YfOf2X7Snm7cvDRV@lahna> <CACK8Z6FMgc5UQY-ZGB9sKYR5Wt6L6huTnEKZaFyVRAmDmQt9XQ@mail.gmail.com>
+ <CAJZ5v0iuM_qjhPxvhzgvtKM-4pBB2skf9G=R=Qo6NzKnZ2LN=w@mail.gmail.com>
+ <YfeEoF35RPDVMdzD@lahna> <CACK8Z6EBbdPHhMtD+vMWs54GRw-ChCeNNfeKM4Hk5JcAqex6hg@mail.gmail.com>
+In-Reply-To: <CACK8Z6EBbdPHhMtD+vMWs54GRw-ChCeNNfeKM4Hk5JcAqex6hg@mail.gmail.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Tue, 1 Feb 2022 18:05:58 -0800
+Message-ID: <CACK8Z6ET81wSUu_kyMHx88OUPvicMoxMejYp_0vwRGP75urFrQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: ACPI: Allow internal devices to be marked as untrusted
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings,
+On Mon, Jan 31, 2022 at 11:57 AM Rajat Jain <rajatja@google.com> wrote:
+>
+> Hello Mika, Rafael,
+>
+> On Sun, Jan 30, 2022 at 10:42 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > On Sun, Jan 30, 2022 at 03:30:39PM +0100, Rafael J. Wysocki wrote:
+> > > > I'm open to doing so if the others also feel the same way. IMHO
+> > > > though, the semantics of ACPI "DmaProperty" differ from the semantics
+> > > > of the property I'm proposing here.
+> > > >
+> > > > The current (documented) semantics (of "DmaProperty"): *This device
+> > > > (root port) is trusted*, but any devices downstream are not to be
+> > > > trusted.
+> > > >
+> > > > What I need and am proposing (new "UntrustedDevice"): *This device as
+> > > > well as any downstream devices* are untrusted.
+> > > >
+> > > > Note that there may be firmware implementing "DmaProperty" already out
+> > > > there (for windows), and if we decide to use it for my purposes, then
+> > > > there shall be a discrepancy in how Linux uses that property vs
+> > > > Windows. Is that acceptable?
+> > >
+> > > It may be confusing, so I'd rather not do that.
+> > >
+> > > The platform firmware will use it with the Windows use case in mind
+> > > and if it has side effects in Linux, problems are likely to appear in
+> > > the field.
+> > >
+> > > So the question is rather not about it being acceptable, but about
+> > > whether or not this is generally going to work.
+> >
+> > I was kind of implying that we could perhaps contact Microsoft and ask
+> > them if the wording could be changed to cover all the devices, not just
+> > PCIe root ports. I think this is something they will also need for
+> > things like internal WI-FI controllers.
+>
+> We (Chromeos) do not have a contact at Microsoft, not sure if Intel
+> does. If someone can point me to a contact I will be happy to initiate
+> a conversation. However, given that they have already published it,
+> and changing the semantics might mean they will also have to change
+> windows implementation. Not sure if we have enough leverage with
+> Microsoft here, so I wouldn't have any high hopes though.
 
-I sent this mail praying it will find you in a good condition, since I
-myself am in a very critical health condition in which I sleep every
-night  without knowing if I may be alive to see the next day. I am
-Mrs.William Ann, a widow suffering from a long time illness. I have
-some funds I  inherited from my late husband, the sum of
-($11,000,000.00, Eleven Million Dollars) my Doctor told me recently
-that I have serious sickness which is a cancer problem. What disturbs
-me most is my stroke sickness. Having known my condition, I decided to
-donate this fund to a good person that will utilize it the way I am
-going to instruct herein. I need a very honest God.
+To keep everyone updated, Mika has helped me initiate a conversation
+with Microsoft on this (Thanks a lot Mika!). We're still waiting to
+hear their feedback. Until then, I've posted a v2 for review at:
+https://patchwork.kernel.org/project/linux-pci/patch/20220202020103.2149130-1-rajatja@google.com/
 
-fearing a person who can claim this money and use it for Charity
-works, for orphanages, widows and also build schools for less
-privileges that will be named after my late husband if possible and to
-promote the word of God and the effort that the house of God is
-maintained. I do not want a situation where this money will be used in
-an ungodly manner. That's why I' making this decision. I'm not afraid
-of death so I know where I'm going. I accept this decision because I
-do not have any child who will inherit this money after I die. Please
-I want your sincere and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your
-reply.
+If we can reach an agreement with Microsoft, I can change the property
+name in the patch (to "DmaProperty"), but would appreciate review of
+any other aspects of v2 in the meantime.
 
-May God Bless you,
-Mrs.William Ann,
+Thanks & Best Regards,
+
+Rajat
+
+
+> Like Rafael
+> said, we're on the receiving end here.
+>
+> Rafael, one last question: is "untrusted-device" an acceptable ACPI
+> property name, or does it have to be Camel case?
+>
+> Thanks & Best Regards,
+>
+> Rajat
+>
+> >
+> > If that's not possible then no objections adding "UntrustedDevice". We
+> > just need to deal with the "DmaProperty" anyway and both end up setting
+> > pdev->untrusted in the similar manner.

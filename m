@@ -2,108 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65F14A6C99
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7424A6C9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242623AbiBBIEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:04:06 -0500
-Received: from cavan.codon.org.uk ([176.126.240.207]:50648 "EHLO
-        cavan.codon.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbiBBIED (ORCPT
+        id S242813AbiBBIFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:05:46 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:58139 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237918AbiBBIFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:04:03 -0500
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id A3FF540A51; Wed,  2 Feb 2022 08:04:01 +0000 (GMT)
-Date:   Wed, 2 Feb 2022 08:04:01 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nayna Jain <nayna@linux.ibm.com>, dougmill@linux.vnet.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@ibm.com,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Axtens <dja@axtens.net>
-Subject: Re: [PATCH v7 0/5] Allow guest access to EFI confidential computing
- secret area
-Message-ID: <20220202080401.GA9861@srcf.ucam.org>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
- <Yfk6vEuZFtgtA+G+@kroah.com>
- <37779659ca96ac9c1f11bcc0ac0665895c795b54.camel@linux.ibm.com>
- <20220202040157.GA8019@srcf.ucam.org>
- <YfogOurPZb7+Yelo@kroah.com>
- <20220202065443.GA9249@srcf.ucam.org>
- <YfotMyQiQ66xfCOQ@kroah.com>
- <20220202071023.GA9489@srcf.ucam.org>
- <CAMj1kXFTyc9KnMsnvs+mt80DbJL8VGKKcQ0J=4NrGYGSAG8sRw@mail.gmail.com>
+        Wed, 2 Feb 2022 03:05:44 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M1HuU-1nCPUa14Sw-002l5x; Wed, 02 Feb 2022 09:05:42 +0100
+Received: by mail-ot1-f41.google.com with SMTP id p3-20020a0568301d4300b005a7a702f921so1881272oth.9;
+        Wed, 02 Feb 2022 00:05:41 -0800 (PST)
+X-Gm-Message-State: AOAM533jjMFSzHIsvhi0uyFVWS01m4DLw8JRk823ct6KHCqZrIv9YhkD
+        daeFxj4QPvBuMJFsOSQk30H4+rP4J7XPMDkAgM8=
+X-Google-Smtp-Source: ABdhPJyPZ8Lnp/iDBwEf4uMCVPdD5GV2v9mZTZcRfjsPKSiXiBJWlV5tI1/aMflbb0I2FbZvbctmakWelMGNuVMKNe0=
+X-Received: by 2002:a9d:73da:: with SMTP id m26mr16800935otk.72.1643789140692;
+ Wed, 02 Feb 2022 00:05:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFTyc9KnMsnvs+mt80DbJL8VGKKcQ0J=4NrGYGSAG8sRw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220201150339.1028032-1-arnd@kernel.org> <90333cef-9ad1-bbf5-5c46-86083c1f5b24@arm.com>
+ <YflyZytGG49kbvV9@shell.armlinux.org.uk> <CAK8P3a0jFMhtajAA9L6u56fbFRxBXhhsfMrfGisHdoP8qCFKMg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0jFMhtajAA9L6u56fbFRxBXhhsfMrfGisHdoP8qCFKMg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 2 Feb 2022 09:05:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1cnQ=uJ84tGxfPi8km_qmOY9=iUuV1NKBqKevTAbWVCg@mail.gmail.com>
+Message-ID: <CAK8P3a1cnQ=uJ84tGxfPi8km_qmOY9=iUuV1NKBqKevTAbWVCg@mail.gmail.com>
+Subject: Re: [RFC] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:kP/3agi1q1OA7Saq6/DrmaYaXFuhQIyH2bQgd+lGOoVLL24Tv/L
+ lFKXPzFiy0d9sBHAFeo1Th7IYHw/LCwgt5jkSA86RxMxzZLUQHrItd6tGToIcLHh70F18js
+ ulIhJPx/HQUoWIcKlEi2fLjB0I+BWnCtFVgpyEHhtHybLwzzRy7n7u7ZPhs6w++AoaSiBe6
+ 1GP+T7sRAEDFLoigbxrqQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3lE2vQWWzZY=:ng6IiwUP9F2JiaP8V8T6r9
+ 9u/uBcDPvvE6ughJeCIqHNXBEWN8Isu93sBbW77OJVRGImRR/wx58lrhOj090EmBpLA7WVzUM
+ 7iQoqc1flavgcHRB6KJ85lhgk7PbuXtkmlRmkD8AFzz4cMhbxAyenmbK+1Z2RDQcFr9z1HgIk
+ jKhM0XFElX6VyntIshft7bubtAFPrrOtZGxj582CgzXs2iyCkBh4r7lGy597wtK4zQaQro+VC
+ kbLVD11A1PvHq+3g4zTf36lZX6igVFFv4gOKxk9MzgeVzK2CifYVCcMEoZZSpXx4ArruH697n
+ bx81c9UO+jt7UF9WkGuO/NmFeAFrm+N6T65jm0FSwXxa+fCSZhF3YW+XXUCCOAbNOQccpLMhZ
+ oYvEWXPGcwYreCMvtMbKwYOcFOs29GwyJfCbTVx0bPR04Fh3/2qjMWcKFD4prA6XYm9hEm6Cf
+ t49GRmpEqx5xH2UvLC+wAgL2W9/7vdZbmTqsCYnbH8P3RmoWfUsEh/PyMbB8yLXeapslNJFCT
+ 9MDDQ6O+hbskv7UFtizk0E0cExiHIborsyotRtcw8F/1XF8Pbkbykzmc9//tfqWUjBPO9Ge0/
+ T/9OCeh7C99tya/k0ZFJ/UwNKliihDGXLOyLhR+T5wlh1nMhmjjwS/kYEdTnqd5gO+FsiGfTH
+ nn1Vr1NFv4ZS7va2+3G9LRpRxjItFhFF3piDAPFlswRzy4ll8S0Ta9N2nI/gRB2287Q6bG6IH
+ rz35XNAxBVqkrWtzYKjWfLVwus49hU+quJLFhriG+qpJhYKEmXR87j4Owu7x0hm6mQuF1bJNe
+ bpZdi0SqQif28uAPce+pBQoIU1a4txI3piGKPiJ13/NkHi/ap4=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 08:22:03AM +0100, Ard Biesheuvel wrote:
-> On Wed, 2 Feb 2022 at 08:10, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> > Which other examples are you thinking of? I think this conversation may
-> > have accidentally become conflated with a different prior one and now
-> > we're talking at cross purposes.
-> 
-> This came up a while ago during review of one of the earlier revisions
-> of this patch set.
-> 
-> https://lore.kernel.org/linux-efi/YRZuIIVIzMfgjtEl@google.com/
-> 
-> which describes another two variations on the theme, for pKVM guests
-> as well as Android bare metal.
+On Wed, Feb 2, 2022 at 12:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> while this part would not work if dma_alloc_flags() ends up getting
+> memory that is not accessible. At the minimum I need to drop the
+> machine_is_assabet() check and always allocate a safe buffer to
+> back hcd->local_mem regardless of the machine.
 
-Oh, I see! That makes much more sense - sorry, I wasn't Cc:ed on that, 
-so thought this was related to the efivars/Power secure boot. My 
-apologies, sorry for the noise. In that case, given the apparent 
-agreement between the patch owners that a consistent interface would 
-work for them, I think I agree with Greg that we should strive for that. 
-Given the described behaviour of the Google implementation, it feels 
-like the semantics in this implementation would be sufficient for them 
-as well, but having confirmation of that would be helpful.
+I double-checked this to ensure we don't have to check for sa1100
+vs pxa instead, and I found that all three sa1100 platforms with sa1111
+(assabet/neponset, badge4, jornada720) enable DMA, but the one
+pxa machine (lubbock) has the DMA mask set to 0 and won't
+be able to use OHCI anyway.
 
-On the other hand, I also agree that a new filesystem for this is 
-overkill. I did that for efivarfs and I think the primary lesson from 
-that is that people who aren't familiar with the vfs shouldn't be 
-writing filesystems. Securityfs seems entirely reasonable, and it's 
-consistent with other cases where we expose firmware-provided data 
-that's security relevant.
-
-The only thing I personally struggle with here is whether "coco" is the 
-best name for it, and whether there are reasonable use cases that 
-wouldn't be directly related to confidential computing (eg, if the 
-firmware on a bare-metal platform had a mechanism for exposing secrets 
-to the OS based on some specific platform security state, it would seem 
-reasonable to expose it via this mechanism but it may not be what we'd 
-normally think of as Confidential Computing).
-
-But I'd also say that while we only have one implementation currently 
-sending patches, it's fine for the code to live in that implementation 
-and then be abstracted out once we have another.
+       Arnd

@@ -2,123 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A764A7281
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A735E4A7291
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344706AbiBBOBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344646AbiBBOBv (ORCPT
+        id S1344741AbiBBOCW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 09:02:22 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:42831 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235440AbiBBOCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:01:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F92C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:01:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 438B1617F0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82A8C340ED
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:01:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643810510;
-        bh=uSBHocmLnCmMwcSkbq1j0OtxS41oNNINKaJqar0f250=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=p92mUzIOfxLfrBqJ3GgpORGL6IGCJ6PxH6YDkaCxkoCRicCxggyGMOcEOiio85gSz
-         WZBXdLzww9ZUVMZGQzug2RCKEsG3BAXdRym9EvlIu1NQdAMlKtTRsKmhDIDeLL1Tnh
-         Z9oSaOUCPI6jlBv0/KL5sW/8+eTblAGy+lds4TbTlimzBkf0pGmUNyHv9ZQwRPgIj3
-         p3oy1htdARnejboPJ/UwAQvv7dQnLO+MbkS1OHuJrDLhbempgnbTsu/Dt2s5N+9GMe
-         xjsIlOKMpHCkS2ukrmOyw/mYVY0nDtctksc5YjiZSmebLxxYO4a12uudJcR0w2VviP
-         vrOMwynfHaReQ==
-Received: by mail-wr1-f50.google.com with SMTP id h7so6774137wrc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:01:50 -0800 (PST)
-X-Gm-Message-State: AOAM532e/c87udPEiHFTKozCVqoihejclbTFnIYZecDJXDi10IZ8qtfH
-        Uwc3GMCD1UoneO2je6pGYeoqIkoW8+igYL70rm4=
-X-Google-Smtp-Source: ABdhPJxZ24ZW0U4wDz2icx2KPfTF7ramCqisfnEX5yTPNuYH09Rte02aSzdx80Og0f5iraT23DCJcd3757Ysb6dyxWU=
-X-Received: by 2002:a05:6000:1c9:: with SMTP id t9mr25966742wrx.550.1643810508877;
- Wed, 02 Feb 2022 06:01:48 -0800 (PST)
+        Wed, 2 Feb 2022 09:02:19 -0500
+Received: by mail-ua1-f54.google.com with SMTP id e17so19259384uad.9;
+        Wed, 02 Feb 2022 06:02:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W397sX4ZIPE6GurWc9LBauNlzgQqsNKvK7n7V8hBvHg=;
+        b=vXIEhJji2M2Ui5bSwzr5sDgaBMmYoXkThh6aSnEzeUQOwHSJ6AxRkbtMz/DhqAZ4FB
+         KfvU3t37vwVw2m/uw2q+Uv8h7Rs7XZgpW0sgqOfDpBiUH8I95ljWyXY/vNlBjftvp54c
+         hDkWhR2ppON6yvBUGUFdjO7HnzcQHFsZfMVlqIfP1HRf8wtrA5pFAr5K1hrYYt0S+/vp
+         lOLH6gEXWiUK2NT6bFLW3uBisZdCB54Z+5Ag6ShPN8coHzPBtx+mEACIPZIC5vpt4LSt
+         eAKx7tMf4UkObB2/qpMNk1ScCFmaV5Skk7ekoju9oY6wDGp9dNWcqLknq6YAyRiUuRyf
+         vRVg==
+X-Gm-Message-State: AOAM53011PHkHGzJj3A5p/t3Dh1RRYrXKOD8HaksMNanBdgzqUy3INsL
+        QrI3YMLCT4TJrLFGepttz7jl40HZg+x4Bg==
+X-Google-Smtp-Source: ABdhPJwrdxKYe66CQeAGWlF6jLnSq8KxD96wr5xMxhMQoDlTpK7/wYjcnOcL3DC/SiX+oamGJWXvbg==
+X-Received: by 2002:ab0:6f11:: with SMTP id r17mr14040548uah.128.1643810536954;
+        Wed, 02 Feb 2022 06:02:16 -0800 (PST)
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com. [209.85.222.49])
+        by smtp.gmail.com with ESMTPSA id h30sm4860274vsq.7.2022.02.02.06.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 06:02:15 -0800 (PST)
+Received: by mail-ua1-f49.google.com with SMTP id a24so5575047uat.10;
+        Wed, 02 Feb 2022 06:02:15 -0800 (PST)
+X-Received: by 2002:a67:c198:: with SMTP id h24mr12258207vsj.5.1643810534765;
+ Wed, 02 Feb 2022 06:02:14 -0800 (PST)
 MIME-Version: 1.0
-References: <YfP0osb45uJldtM9@localhost.localdomain> <YfQTZTUNaeGi+8tG@FVFF77S0Q05N>
- <YfRorCpk0seVGI+5@localhost.localdomain> <Yfk8hQB1eon7oeYU@FVFF77S0Q05N> <Yfp7wZXLKPIYBxmp@localhost.localdomain>
-In-Reply-To: <Yfp7wZXLKPIYBxmp@localhost.localdomain>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 2 Feb 2022 15:01:37 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEP+0ErwmLebw5mswz+jD+Yd_U_U7jmhPR2bKgnMRTWNw@mail.gmail.com>
-Message-ID: <CAMj1kXEP+0ErwmLebw5mswz+jD+Yd_U_U7jmhPR2bKgnMRTWNw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: move efi_reboot to restart handler
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Matija Glavinic-Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220201075824.aixrvkvmjde2ihxx@pengutronix.de>
+ <20220202123542.3721512-1-conor.dooley@microchip.com> <CAMuHMdWrmuY7pwY8U0t9LumEvUTBEA06uV7hNyKFAPMQtE98_A@mail.gmail.com>
+ <3862e358-901c-e848-71af-01eceed26f74@microchip.com>
+In-Reply-To: <3862e358-901c-e848-71af-01eceed26f74@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 2 Feb 2022 15:02:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXvw9cNNzBhp-sSMTXxP2eALhB=fD78Wgx-kks7wr6oiQ@mail.gmail.com>
+Message-ID: <CAMuHMdXvw9cNNzBhp-sSMTXxP2eALhB=fD78Wgx-kks7wr6oiQ@mail.gmail.com>
+Subject: Re: [PATCH v5 06/12] dt-bindings: pwm: add microchip corepwm binding
+To:     Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@rivosinc.com>,
+        Bin Meng <bin.meng@windriver.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daire.McNamara@microchip.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Ivan.Griffin@microchip.com, Jassi Brar <jassisinghbrar@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Lewis Hanly <Lewis.Hanly@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 13:41, Krzysztof Adamski
-<krzysztof.adamski@nokia.com> wrote:
->
-> Dnia Tue, Feb 01, 2022 at 01:58:29PM +0000, Mark Rutland napisa=C5=82(a):
-> >> If we use the restart handlers only to reset the system, this is indee=
-d
-> >> true. But technically, restart handlers support the scenario where the
-> >> handler does some action that does not do reset of the whole system an=
-d
-> >> passes the control further down the chain, eventually reaching a handl=
-er
-> >> that will reset the whole system.
-> >> This can be done on non-uefi systems without problems but it doesn't
-> >> work on UEFI bases arm64 systems and this is a problem for us.
+Hi Conor,
+
+On Wed, Feb 2, 2022 at 2:46 PM <Conor.Dooley@microchip.com> wrote:
+> On 02/02/2022 13:28, Geert Uytterhoeven wrote:
+> > On Wed, Feb 2, 2022 at 1:33 PM <conor.dooley@microchip.com> wrote:
+> >>> On 01/02/2022 07:58, Uwe Kleine-König wrote:
+> >>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>>> On Mon, Jan 31, 2022 at 11:47:21AM +0000, conor.dooley@microchip.com wrote:
+> >>>> From: Conor Dooley <conor.dooley@microchip.com>
+> >>>>
+> >>>> Add device tree bindings for the Microchip fpga fabric based "core" PWM
+> >>>> controller.
+> >>>>
+> >>>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>>>
+> >>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >>>> ---
+> >>>> .../bindings/pwm/microchip,corepwm.yaml       | 75 +++++++++++++++++++
+> >
+> >>>> +  microchip,sync-update:
+> >>>> +    description: |
+> >>>> +      In synchronous mode, all channels are updated at the beginning of the PWM period.
+> >>>> +      Asynchronous mode is relevant to applications such as LED control, where
+> >>>> +      synchronous updates are not required. Asynchronous mode lowers the area size,
+> >>>> +      reducing shadow register requirements. This can be set at run time, provided
+> >>>> +      SHADOW_REG_EN is asserted. SHADOW_REG_EN is set by the FPGA bitstream programmed
+> >>>> +      to the device.
+> >>>> +      Each bit corresponds to a PWM channel & represents whether synchronous mode is
+> >>>> +      possible for the PWM channel.
+> >>>> +
+> >>>> +    $ref: /schemas/types.yaml#/definitions/uint16
+> >>>> +    default: 0
+> >>>
+> >>> I'm not sure I understand this correctly. This is a soft-core and you
+> >>> can synthesize it either with or without the ability to do synchronous
+> >>> updates or not, right? All 16 channels share the same period length and
+> >>> in the simple implementation changing the duty cycle is done at once
+> >>> (maybe introducing a glitch) and in the more expensive implementation
+> >>> there is a register to implement both variants?
 > >>
-> >> In other words, I would like to be able to run a restart handler on EF=
-I
-> >> based ARM64 systems, just like I can on other systems, just for its
-> >> "side effects", not to do the actual reboot. Current code disables thi=
-s
-> >> possibility on an ARM64 EFI system.
+> >> Correct. If the IP is instantiated with SHADOW_REG_ENx=1, both
+> >> registers that control the duty cycle for channel x have a second
+> >> "shadow reg" synthesised. At runtime a bit wide register exposed to
+> >> APB can be used to toggle on/off synchronised mode for all channels
+> >> it has been synthesised for.
+> >>
+> >> I will reword this description since it is not clear.
 > >
-> >It sounds like two things are being conflated here:
-> >
-> >1) A *notification* that a restart will subsequently occur.
-> >2) A *request* to initiate a restart.
-> >
-> >IIUC (1) is supposed to be handled by the existing reboot notifier mecha=
-nism
-> >(see the reboot_notifier_list) which *is* invoked prior to the EFI reboo=
-t
-> >today.
-> >
-> >IMO, using restart handlers as notifiers is an abuse of the interface, a=
-nd
-> >that's the fundamental problem.
-> >
-> >What am I missing?
+> > Shouldn't it use a different compatible value instead?
+> > Differentiation by properties is not recommended, as it's easy to
+> > miss a difference.
 >
-> You are completly right. It is possible that I would like to be able to
-> *abuse* the restart handlers as notifier. You are right that we have a
-> reboot_notifier but it is not good enough for my usecase - it is only
-> called, well, on reboot. It is not called in case of emergency_restart()
-> so in case of a panic, this won't happen. It also is called much earlier
-> than restart handlers which also makes a difference in some cases. So I
-> see no other choice than to abuse the restart_handler mechanism for that.
->
+> Either you have something in mind that I've not thought of, or I've done
+> a bad job of explaining again. The buffer/"shadow" registers are
+> synthesised on a per channel basis, so any combination of the 16
+> channels may have this capability. The same applies to the DAC mode, per
+> channel there too.
 
-Why would such a platform implement ResetSystem() in the first place
-if it cannot be used?
+Oops, hadn't noticed this is per channel. Indeed, then a different
+compatible value is futile.
+So since "microchip,sync-update" is a bitmask, perhaps it should be
+called "microchip,sync-update-mask"?
+Same for "microchip,dac-mode" -> "microchip,dac-mode-mask"?
 
-So the right solution here is for the firmware to publish a
-EFI_RT_PROPERTIES_TABLE that describes ResetSystem() as unsupported,
-and Linux will happily disregard it and try something else.
+Also, using different integer sizes than uint32 is frowned upon, unless
+there is a very good reason to do so. I can imagine a future version
+would support more channels, and then uint16 becomes a limitation.
 
-Btw please cc linux-efi@vger.kernel.org and myself on future EFI
-issues. I found this thread by accident.
+For both: Rob?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

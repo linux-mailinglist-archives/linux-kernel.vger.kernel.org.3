@@ -2,84 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872224A6E09
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9FB4A6E0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245552AbiBBJqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:46:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49582 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245547AbiBBJqJ (ORCPT
+        id S245563AbiBBJrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:47:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229829AbiBBJrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:46:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BABE614A0;
-        Wed,  2 Feb 2022 09:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C49C340EC;
-        Wed,  2 Feb 2022 09:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643795168;
-        bh=o0Tcg3aGiYWuN/M/wsdFN2JipEBXv58ClAppDLJ9Qis=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RhpMXxjsR+z4dWXbx0Aft1oS9QTsft/um9p1WvjzxXWFczUaTWDJL6A+LLE3Haz76
-         eXbq7inrXDpJciFwXW5ueeDKHZf0GXWQPdkfCNN8IRUy0YqfuDoojeKgIQU9mFc4SH
-         WtAcP71kzV1DJhLHb01nRHACNmbLwOgw5xRevBRY=
-Date:   Wed, 2 Feb 2022 10:45:59 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH 1/2] config: android-recommended: Don't explicitly
- disable CONFIG_AIO
-Message-ID: <YfpS19cSbsSTgKVk@kroah.com>
-References: <20220202093314.107927-1-marijn.suijten@somainline.org>
+        Wed, 2 Feb 2022 04:47:42 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E03C061714;
+        Wed,  2 Feb 2022 01:47:42 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFCEm-0002jG-6d; Wed, 02 Feb 2022 10:47:40 +0100
+Message-ID: <a41bb41e-1a3e-a6eb-be31-3fe94e7f7db6@leemhuis.info>
+Date:   Wed, 2 Feb 2022 10:47:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202093314.107927-1-marijn.suijten@somainline.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-BS
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        regressions@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1643710947.git.linux@leemhuis.info>
+ <e655527632dc4324cc7584cb3a73880d9c733df5.1643710947.git.linux@leemhuis.info>
+ <87fsp25g28.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v4 2/3] docs: regressions*rst: rules of thumb for handling
+ regressions
+In-Reply-To: <87fsp25g28.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643795262;13038e33;
+X-HE-SMSGID: 1nFCEm-0002jG-6d
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 10:33:13AM +0100, Marijn Suijten wrote:
-> Android nowadays (for a couple years already) requires AIO for at least
-> its `adb` "Android Debug Bridge" [1].  Without this config option
-> (`default y`) it simply refuses start, making users unable to connect to
-> their phone for debugging purposes when using these kernel fragments.
+On 02.02.22 00:21, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
 > 
-> [1]: https://cs.android.com/android/_/android/platform/packages/modules/adb/+/a2cb8de5e68067a5e1d002886d5f3b42d91371e1
+> One thing that caught my eye this time around...
 > 
-> Cc: Amit Pundir <amit.pundir@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: John Stultz <john.stultz@linaro.org>
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  kernel/configs/android-recommended.config | 1 -
->  1 file changed, 1 deletion(-)
+>> + * Address regressions in stable, longterm, or proper mainline releases with
+>> +   more urgency than regressions in mainline pre-releases. That changes after
+>> +   the release of the fifth pre-release, aka "-rc5": mainline then becomes as
+>> +   important, to ensure all the improvements and fixes are ideally tested
+>> +   together for at least one week before Linus releases a new mainline version.
 > 
-> diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
-> index eb0029c9a6a6..22bd76e43aca 100644
-> --- a/kernel/configs/android-recommended.config
-> +++ b/kernel/configs/android-recommended.config
-> @@ -1,5 +1,4 @@
->  #  KEEP ALPHABETICALLY SORTED
-> -# CONFIG_AIO is not set
->  # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
->  # CONFIG_INPUT_MOUSE is not set
->  # CONFIG_LEGACY_PTYS is not set
-> -- 
-> 2.35.1
-> 
+> Is that really what we want to suggest?  I ask because (1) fixes for
+> stable releases need to show up in mainline first anyway, and (2) Greg
+> has often stated that the stable releases shouldn't be something that
+> most maintainers need to worry about.  So if the bug is in mainline,
+> that has to get fixed first, and if it's something special to a stable
+> release, well, then the stable folks should fix it :)
 
-There are lots of "required" configs now for modern Android releases, do
-you want to sync up with all of them here?  If so, look at the
-gki_defconfig files in the AOSP kernels for the full list of what is
-required.  Is it really needed to keep this file up to date or should it
-be dropped entirely given that no one has noticed how out-of-date it is?
+Hmmm. Well, afaics in the end many (most?) of the regressions that
+happen in these series are present in mainline as well: either they
+where introduced in an earlier devel cycle or came with a backport to
+stable/longterm and thus are present in mainline as well (unless the
+backport was incomplete or broken). So I'd say it's up to the regular
+developers and not the stable team to fix many (most?) of them.
 
-thanks,
+That being said: yes, I think you have a point. This could be fixed with
+some small adjustments to the wording above, but...
 
-greg k-h
+>> + * Fix regressions within two or three days, if they are critical for some
+>> +   reason -- for example, if the issue is likely to affect many users of the
+>> +   kernel series in question on all or certain architectures. Note, this
+>> +   includes mainline, as issues like compile errors otherwise might prevent many
+>> +   testers or continuous integration systems from testing the series.
+
+...the same aspect is relevant for other points like this one, too. And
+there it's not as easily solved. So maybe this is better addressed with
+a separate point early in the list:
+
+```
+* Developers are expected to handle regressions in all kernel series,
+but are free to leave them to the stable team, if the regression
+probably at no point in time occurred with mainline.
+```
+
+Regressions for example caused by incomplete or broken backports thus
+would be something developers could leave to Greg (and I expect he won't
+mind).
+
+>> + * Aim to merge regression fixes into mainline within one week after the culprit
+>> +   was identified, if the regression was introduced in a stable/longterm release
+>> +   or the development cycle for the latest mainline release (say v5.14). If
+>> +   possible, try to address the issue even quicker, if the previous stable
+>> +   series (v5.13.y) will be abandoned soon or already was stamped "End-of-Life"
+>> +   (EOL) -- this usually happens about three to four weeks after a new mainline
+>> +   release.
+> 
+> How much do we really think developers should worry about nearly-dead
+> stable kernels?  We're about to tell users they shouldn't be running the
+> kernel anyway...
+
+I'd expect we handle near EOL stable release round about normally until
+they become EOL. But anyway, I had something different in mind when I
+wrote the above and I get the feeling my text didn't express it well and
+got you on the wrong track. :-/
+
+My intention was: I want to prevent users getting stuck on EOLed stable
+series (say 5.13.y) when a regression makes it hard or impossible for
+the user to run the directly succeeding stable series (5.14.y).
+
+I think this expresses it better:
+
+```
+* Aim to merge regression fixes into mainline within one week after the
+culprit was identified, if the regression was introduced in either:
+
+  * the development cycle of the latest proper mainline release
+
+  * a recent release in a stable/longterm series
+
+  Try to address regressions in the latest stable series even quicker,
+if the previous series will be abandoned soon or already was stamped
+"End-of-Life" (EOL) -- this usually happens about three to four weeks
+after a new mainline release.
+
+  Remember to mark the fix for backporting by using both the ``Fixes:``
+tag and ``Cc: stable@vger.kernel.org``.
+```
+
+How does that sound?
+
+Thx for the feedback, it's good that these things turned up.
+
+Ciao, Thorsten

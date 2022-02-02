@@ -2,138 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5EB4A6D94
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFC4A6D97
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245363AbiBBJOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:14:10 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58612 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiBBJOI (ORCPT
+        id S245372AbiBBJOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:14:22 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:33391 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241591AbiBBJOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:14:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5F5F31F383;
-        Wed,  2 Feb 2022 09:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643793247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VGaEopolAvl1vay+2D2pXDxvd4KCA4P6ayFyqkb1R0I=;
-        b=CO4VaGHa+kSZrOZqdEskiYP36IG5XmodUKi2GeCohPY0uM789V2DgfZhC9XAemSW8oJu2u
-        RRdOpVTvNR+KPyqzTGA4yB+k3XSp+2kd/+AIKH+BZv8mgZ5QnMlCMTLnPPigwNTBbcDYc6
-        ZHUdBmO58pd6mMVM2YWj+Lzcywb3zgY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643793247;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VGaEopolAvl1vay+2D2pXDxvd4KCA4P6ayFyqkb1R0I=;
-        b=SoY7nsu6xVyAmtRg9p7bYmpLCMMa3/Yee7IHY2JVOpbX6U7VKcA86x43qB/MozPeoUhl92
-        2RvM/eOioY4JErBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A32013DF0;
-        Wed,  2 Feb 2022 09:14:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ehdCBV9L+mFkPQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 02 Feb 2022 09:14:07 +0000
-Message-ID: <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
-Date:   Wed, 2 Feb 2022 10:14:06 +0100
+        Wed, 2 Feb 2022 04:14:21 -0500
+Received: by mail-io1-f70.google.com with SMTP id d6-20020a6b6e06000000b006101dc42ec8so14851354ioh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 01:14:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Y4zMAKmF3fJtUB5SQPyW2jumUn+FB4DDBgKyoPqrmVs=;
+        b=RQ36QO4ldEF1oyaFIQKm3xHaIKHs7SyBZkTAsIuBGtifmDcn10OvpqTB1hGbTHlmCM
+         YnCXmQxhGyuig2P9eiyqC1mOJUvMBGTewWGPMdkbUrHauiX4JjMnDGAAcnf71lxiR6FK
+         ZGZ3t0OR2HEwJ6xe+jb+QhIOhAdrGenoxFDf8NGce6h4r98Poa8TAsRdrAlmo5AKqoN/
+         uHJE6TTAKmoaBxdbc9Z9h8vZev3/+/6O7Z+/zwr9+CmAdezKdNoVeOhfMF6rMDfl7bQK
+         TMPW7OukR+tkH9+9As6Us+RubxwdNdSyV1arG6SnyUdtsROCbz3wsi9r+6GBwAy+jf2d
+         AoqQ==
+X-Gm-Message-State: AOAM531gmP1FVX80+UfOOtx+ZSxgp1NXM2oi6EjbOkap8SaWPnpCcxSU
+        FZgi85BmK0Xgr8YXQxF7YZmb1wiCkds3cPwE6ETnhgTsPhgE
+X-Google-Smtp-Source: ABdhPJw0U4DGDJ2fpSgP7caUnjZiGgAXuNFu3X7dx25PooA913HBlmaQjKArM091EKapdvbsNSw948hgZ85Y8dFXjR3+xRtUOizi
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-Content-Language: en-US
-To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------FndkqVO09pyI4e7xoz9safGT"
+X-Received: by 2002:a05:6602:2c44:: with SMTP id x4mr16114027iov.111.1643793260598;
+ Wed, 02 Feb 2022 01:14:20 -0800 (PST)
+Date:   Wed, 02 Feb 2022 01:14:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000061d7eb05d7057144@google.com>
+Subject: [syzbot] WARNING in bpf_prog_test_run_xdp
+From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------FndkqVO09pyI4e7xoz9safGT
-Content-Type: multipart/mixed; boundary="------------wnU0sWHf0kqwXpNJOmXZj0A8";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Sam Ravnborg <sam@ravnborg.org>,
- Javier Martinez Canillas <javierm@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
- David Airlie <airlied@linux.ie>, Daniel Vetter <daniel.vetter@ffwll.ch>,
- dri-devel@lists.freedesktop.org, Geert Uytterhoeven <geert@linux-m68k.org>,
- Maxime Ripard <maxime@cerno.tech>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Emil Velikov <emil.l.velikov@gmail.com>
-Message-ID: <4966d03e-ee0c-5130-3819-05a90a8f6d06@suse.de>
-Subject: Re: [PATCH 1/4] drm: Add I2C connector type
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <20220131201225.2324984-2-javierm@redhat.com> <YfhMESTylI1NTKDg@ravnborg.org>
- <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
-In-Reply-To: <4d9a56a7-da25-b411-61cc-372c6fa9011d@tronnes.org>
+Hello,
 
---------------wnU0sWHf0kqwXpNJOmXZj0A8
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+syzbot found the following issue on:
 
-SGkgTm9yYWxmLA0KDQpzaW5jZSB5b3UncmUgaGVyZSwgSSdsbCBqdXN0IGhpamFjayB0aGUg
-ZGlzY3Vzc2lvbiB0byBhc2sgc29tZXRoaW5nIG9ubHkgDQpzZW1pLXJlbGF0ZWQuDQoNCklJ
-UkMgdGhlIGd1ZCBkcml2ZXIgZG9lc24ndCB1cGRhdGUgdGhlIGRpc3BsYXkgaW1tZWRpYXRl
-bHkgZHVyaW5nIGF0b21pYyANCmNvbW1pdHMuIEluc3RlYWQsIGl0IGluc3RydWN0cyBhIGhl
-bHBlciB0aHJlYWQgdG8gZG8gdGhlIHVwZGF0ZS4gV2hhdCdzIA0KdGhlIHJhdGlvbmFsIGJl
-aGluZCB0aGlzIGRlc2lnbj8gSXMgdGhhdCBzb21ldGhpbmcgd2Ugc2hvdWxkIGFkb3B0IGZv
-ciANCm90aGVyIGRyaXZlcnMgdGhhdCBvcGVyYXRlIG92ZXIgc2xvdyBidXNlcyAoVVNCLCBJ
-MkMsIGV0Yyk/IFdvdWxkIHRoaXMgDQpiZSByZWxldmFudCBmb3IgdGhlIHNzZDEzMDcgZHJp
-dmVyPw0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQotLSANClRob21hcyBaaW1tZXJtYW5u
-DQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBH
-ZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0K
-KEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rl
-dg0K
+HEAD commit:    ff58831fa02d Merge branch 'Cadence-ZyncMP-SGMII'
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16fe8fe4700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ae0d71385f83fe54
+dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
---------------wnU0sWHf0kqwXpNJOmXZj0A8--
+Unfortunately, I don't have any reproducer for this issue yet.
 
---------------FndkqVO09pyI4e7xoz9safGT
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com
 
------BEGIN PGP SIGNATURE-----
+WARNING: CPU: 0 PID: 13059 at include/linux/thread_info.h:230 check_copy_size include/linux/thread_info.h:230 [inline]
+WARNING: CPU: 0 PID: 13059 at include/linux/thread_info.h:230 copy_from_user include/linux/uaccess.h:191 [inline]
+WARNING: CPU: 0 PID: 13059 at include/linux/thread_info.h:230 bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Modules linked in:
+CPU: 0 PID: 13059 Comm: syz-executor.3 Not tainted 5.17.0-rc1-syzkaller-00495-gff58831fa02d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_copy_size include/linux/thread_info.h:230 [inline]
+RIP: 0010:copy_from_user include/linux/uaccess.h:191 [inline]
+RIP: 0010:bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Code: fd 06 48 c1 e5 0c 48 01 c5 e8 55 76 09 fa 49 81 fe ff ff ff 7f 0f 86 08 fe ff ff 4c 8b 74 24 60 4c 8b 7c 24 68 e8 a9 73 09 fa <0f> 0b 41 bc f2 ff ff ff e9 02 fb ff ff 4c 8b 74 24 60 4c 8b 7c 24
+RSP: 0018:ffffc9000552fb40 EFLAGS: 00010212
+RAX: 000000000000011d RBX: 00000000fffff0a4 RCX: ffffc9000ba49000
+RDX: 0000000000040000 RSI: ffffffff876ee9a7 RDI: 0000000000000003
+RBP: ffff88806d779000 R08: 000000007fffffff R09: ffffffff8d94d717
+R10: ffffffff876ee98b R11: 000000000000001f R12: 0000000000000dc0
+R13: ffff88804f43a000 R14: 0000000000000000 R15: ffffc90002056000
+FS:  00007faff28c2700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4ff63b9058 CR3: 0000000074132000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
+ __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faff3f8f059
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faff28c2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007faff40a2100 RCX: 00007faff3f8f059
+RDX: 0000000000000048 RSI: 0000000020000180 RDI: 000000000000000a
+RBP: 00007faff3fe908d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc3e8ffe3f R14: 00007faff28c2300 R15: 0000000000022000
+ </TASK>
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH6S14FAwAAAAAACgkQlh/E3EQov+B2
-dhAAmUk7hZVbh7kpyuDZLO5lLjg3IGDxYwEDbQBD96KxgxbrM2yYyx4mSysTqgUYek775ZfvdMbV
-aFoQMt8142Fxvva+jXPER6kZN7IPSUTc6ViH1pocYPK/kkqRjG27+fIXmr0gjVb492CBJ0CrVpGo
-vxIyhpv9yPnctVYMuyPE65S5WZmAew+4r17iaOVs2wPzxB5Vshgjhzv0F1qh+0UERqvVKVXriOaf
-aExR57kR0t+tHBWOHsC9WtWa2xaFSWREqhZVoyxVB7K3ZjVceIlbAalqmF+i/zHQ2Slp1gqnpMTz
-BuqKlgxOzgCTlWrA7cWd479lu65+kcwoaVqRufvPde8ANKSr9veDyHFgqWKlOEYwZFUdn+zsNyON
-R7OSfUmiZwZZpjLl3xNd7fnlNv3dy9K/7Pqdmnd4IZ4BRIsW+TzPuetdkC8J+KAI/kGfrGSLdtHQ
-fhpQZa+xH8rOcAzPOvvGL6gYXvinSucKdWHRmNKv89R6C77QuCRPLDJdSeOylgJQHU9gCxtwJOu/
-xrCV2CUcussh2SmhM9HszrRe5VkB4vAaVZCHHROXAFypKSoqRV26RwXM8TxfTgYwSsu4WsPzYzv+
-glzuSIa7mzinC2LwPgmsKMOno2lQjzRhj3C5bkgGelwTMVkJbIY3dWw+5rBuByzGhqORN7maHvHP
-8gQ=
-=g4mF
------END PGP SIGNATURE-----
 
---------------FndkqVO09pyI4e7xoz9safGT--
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

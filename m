@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB214A7119
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA804A711D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344242AbiBBMy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 07:54:56 -0500
-Received: from mout.gmx.net ([212.227.17.20]:46767 "EHLO mout.gmx.net"
+        id S1344250AbiBBMzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:55:06 -0500
+Received: from mout.gmx.net ([212.227.15.19]:33723 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344246AbiBBMyz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:54:55 -0500
+        id S233480AbiBBMzE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:55:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643806493;
-        bh=WRVN3BlGhrYJ2hDYSDvlgTraCSrMYSaHLg4/ooc3xLc=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=d1NFuz9AMPYS16tXGJNupOwJREnZAUOukweJ7C7/JuX8gxwzZYduZbDgVxfttH8G4
-         wzKGbiw6RteXDHocRk73pqD5LHk1ApJ96eJng56K6j1IktNcl/O7fu50Gav4CkmfY/
-         bSlKnNcrazrLD88DwsTXMSZW5osDj6PRc9crymLA=
+        s=badeba3b8450; t=1643806495;
+        bh=qrJUuvQc6jPR2ZNSIzsZu+O8vNlEvzG2uDxO2T+grCo=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=fglQB5Rj4leqigekS6pWeKiLYrrwZJLEuevJ4BtsQ48yY8WZ6vn8VEiJB6gJSP3+j
+         hEZFwXwehXTPMlzeatOWl6NAatkVvmcxjQjN5bx+mN1p8L7HAWZMAhgollPdS0LM+w
+         Vh52Ojlou0Vi49gsjIuIe/Y1qHwYvKlDevEKTnQI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QWG-1nApJ63nxQ-004P4l; Wed, 02
- Feb 2022 13:54:52 +0100
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWASe-1mhZ5R0Ony-00Xdrx; Wed, 02
+ Feb 2022 13:54:55 +0100
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     linux-gpio@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: [PATCH 0/2] Fixing the compile-test warnings in pinctrl-npcm7xx
-Date:   Wed,  2 Feb 2022 13:54:36 +0100
-Message-Id: <20220202125438.19345-1-j.neuschaefer@gmx.net>
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        kernel test robot <lkp@intel.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH 1/2] pinctrl: nuvoton: npcm7xx: Use %zd printk format for ARRAY_SIZE()
+Date:   Wed,  2 Feb 2022 13:54:37 +0100
+Message-Id: <20220202125438.19345-2-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220202125438.19345-1-j.neuschaefer@gmx.net>
+References: <20220202125438.19345-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:7glLdjVidDXKYvA7rh32xSpTaodXZIN4/AAX/UUQc44J9+3XhcZ
- GJ9xwySyJkTGkTBq2N4d0NULN71a6rLYTDdxMSaqPpG2OJFbE86mtDDUi8/Uf01QP0mQE9d
- 3MUGcN80Z5cLME0onWyYwMnshf7Ux4gqu5e0dtagdjCNMKmZIYOFJpzOcSqSPzOWDuo6bfw
- SuGA7zA31PlsqNQ1tXA1w==
+X-Provags-ID: V03:K1:ZWqmhLCAcRSmjyC8K9WB6W9M8GnP36nKKAXE/+YrMCXd+rRfjEB
+ 8Htv50uVfo0xE40KSJA2Sy/0CjEI9EbORbOw+Zxn1IEO7A1PpmQ3eAjHKeDGYqSQpa9gpNp
+ /chtHrvuIo85/o33eUkV4XhoLk/TLLgcmyIYKMbycKOY9VfKC+NvuU1kVVxWASm6pC2JH0S
+ 25cgLmEdWMCDhjHeAsMbQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ywwEcjU9F/M=:SsjdxaNV1jDrJ5JQKl4xlX
- xLWXIjuGpS1El7RAbsVnz6Ydt0pCkOIuGwp9NiLUZPgWHgTCcQG51rYc33SMyaHMtwjcsb7GA
- suXnwCyRnjv4NZ9CWAvhupK/9AOQajagutdBLwLbCYjPo3hDKqQDO2wsMn5xhJCtp6wQSga3H
- QS2WSE8kFHL57W7q0q58bpReqloqJrWHl/M4AM4n6kMtBrSJoIX/HMQ8NqAavMOrmmIUwcBli
- tpLvvWxRqYOt2c8p0FTwJ12iNVINfkh20kkIa7Htl1IzwcfYZctFiPk71j51u1QPxXBhIVAKy
- DbU27DOWLOgrlPUfrmgETi2q5iCc+xfUcMUsDfD7AQkVvxVZJmpfOt4/eNoAMb0AUDV0q0H1i
- FWqcAjhxnl57jkSi4Enr0uImrhc3UYQrnsceEDRsymF6589ffSC4mUwXbwkYVYfOteWoAZHD+
- q5PaFon0vhEXM2FSrXFOOD+QcA2GdJ8VeOEIFUTau2G5UFommTuq7BeQcKb+DI7pY8u13rraL
- 6t7GLXYiZB8Yf7NjrcrQv+HinBBlbLm4H9YZQpXpzs9B+YtC4KKjdsXrx9JOkZf+rtt+uawx9
- Ez9ZMIdqcT7300puzetPDav5CQdhiJ4jMfPRypGM/KH2Bs46sPh8VWU5EqnxINeF5i+9dqsRn
- lZCiOOhP3vzzlUE1jetHbG6oirmnRsIFQAxCKd30kAn/MG+kwvnVKWRRlifPTEKMusTOZuJlv
- vwH60UXX+ettucE31eO9uWHOMyl1LMQuaS41deqcnrlAvW5xgD7bYMtnr54DOFkJbPiVirCI9
- CEF9tAu91sG+M8M1HYX3LRQ2rZ6j3Xr9gZXVA5nVvcYmvVzzaXjsCwPD0QayOjRnCt/EWtnCv
- Q2k/zLmvgpMXKY4CcwBdn2CwWETWJQWwLC6GsE/rIX5Ax+YCYmXhxzo0l462xj+QB5MCNS/Di
- /2ffrdl5tHesYxuGoZxrY+Xc7TPdVMYiqDoTYWxrobFQ5574/sMVEtJkB7n4FB/zuKKUtTjvs
- LMcepZuZlLvAmU4MPzv8exDPviZznvP9sXId0V6Bfsqp7Zpm/njq+jmPRzTPLR8IoHkv1wx7c
- CpyYddv+SRZCog=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:h9N/5/PQ3RQ=:ftb7iTO7pPj2qxqyb/208V
+ YslLqXEgl5VcTRRi4tTzM/MRmYwC5gexTKNE3Br2bglsXilNHzXlmfs3C7wSO8/nTYdCY3qYD
+ RBtiNSn+Pnxcl7O1HcsJfbgX3Rf/sqNj3mNGGHcSmW1pTwproqb0ygfvK3EYvTxQ+WRFSypfU
+ k43SBxqH/d/hzx09Jydtnr+ALELkNU+UOrfU9ycM59HveGfMpbVpJCioArLFn/dT1sxW764Pz
+ lJvdH40otQIR9cjp8ZUXwemm6BZSfzG7iGrAThwPTuuBkzC0hSCClKl7zurDnLVFZ3DeanxAk
+ UarUEo0sZJmAQXRp6NXtdfKb5ciup5Fu67Pp/A/fZZKHPBpiGFJymnAdnRVgIF25Jrcacai0A
+ HXlDZpCXEwBvePJdRa4HALP3nkVAt1/BAAY9FrWgsiCSZuCp5KXE5xyn9npBzKI14ESzB0Pyf
+ /1Nq/mvtPmMwgXf/GxubeYZT2QNW5eme+qVSHZO9xKJf6PRztqEiLI558MnwgVolXa+pCdNjA
+ Ep8GHaU8MKpMujI5tYOaIpyOSDpjI4ISuesiMbrhqSljEH2UhQ+J7ZWp5FYJO26DLG35dhhrD
+ WdmFs6U5DK4S+zKzGdHOfk66umoEsOgbf0gPi74tHWP81PqpqBmMXAxkeQXwwXADB6mYrj2L7
+ BTKIRz6vJ68y6xg7630eQZw1T5wdgiLORtMYm8lymcXBS06MiUY+WrcogunWPBEzJ60Pnjd9M
+ QLVQ18V2vWLD3ysylkaAjRmMVu9FEpFLcqZlbxAMinWCmmwK2J3gh/+0Q9J0Wg8E8n81Ktzf/
+ sFSO74pQAFDer5Qc/LiOuxFKJ16x/GQIrsR0XrqxQRfGpubvG6aJnF/wzNxWZ1su88lnXNZd2
+ HcfXxLD8jl8EYLDt/I3JfzGkhQeHbHFlE4EwdQ13hvedC/cdRhAf6qXWN1nhkOvq2OULO3nGY
+ QbhPKtvCYoxMovJM9zS7Rtlx8AoM6imK27n8TbVymZRu9hExAnmNN6qAzesvCAV2XSVq6DWaU
+ GwKRQTimJnzKsph+CMGV4DPniG1SQbDVl8JppznzH7kBNXtH95m7PLFtk7YYekAbLCIqli8i/
+ oXOIe5aSEa5tmQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My "Nuvoton WPCM450 pinctrl and GPIO driver" patchset brought two
-warnings[1] in the pinctrl-npcm7xx to light. Here's an attempt at fixing
-them.
+When compile-testing on 64-bit architectures, GCC complains about the
+mismatch of types between the %d format specifier and value returned by
+ARRAY_LENGTH(). Use %zd, which is correct everywhere.
 
-[1]: https://lore.kernel.org/lkml/202201292234.NpSNe4TD-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jonathan Neusch=C3=A4fer (2):
-  pinctrl: nuvoton: npcm7xx: Use %zd printk format for ARRAY_SIZE()
-  pinctrl: nuvoton: npcm7xx: Rename DS() macro to DSTR()
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/n=
+uvoton/pinctrl-npcm7xx.c
+index 4d81908d6725d..705576e03e334 100644
+=2D-- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -1561,7 +1561,7 @@ static int npcm7xx_get_groups_count(struct pinctrl_d=
+ev *pctldev)
+ {
+ 	struct npcm7xx_pinctrl *npcm =3D pinctrl_dev_get_drvdata(pctldev);
 
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 160 +++++++++++-----------
- 1 file changed, 80 insertions(+), 80 deletions(-)
+-	dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
++	dev_dbg(npcm->dev, "group size: %zd\n", ARRAY_SIZE(npcm7xx_groups));
+ 	return ARRAY_SIZE(npcm7xx_groups);
+ }
 
 =2D-
 2.34.1

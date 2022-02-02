@@ -2,119 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61564A6FF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E574A6FFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343913AbiBBL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:28:08 -0500
-Received: from relay05.th.seeweb.it ([5.144.164.166]:40531 "EHLO
-        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343903AbiBBL2H (ORCPT
+        id S1343926AbiBBLbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:31:34 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:57621 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245225AbiBBLbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:28:07 -0500
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E2B9D3F7F0;
-        Wed,  2 Feb 2022 12:28:05 +0100 (CET)
-Date:   Wed, 2 Feb 2022 12:28:04 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH 1/2] config: android-recommended: Don't explicitly
- disable CONFIG_AIO
-Message-ID: <20220202112804.oy3qpoczge5sjn6w@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Wed, 2 Feb 2022 06:31:32 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 168362B00949;
+        Wed,  2 Feb 2022 06:31:31 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 02 Feb 2022 06:31:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=s+xzvHlh5mml7Y
+        epjnQMHIC86SIHC20vVql/uYjQsSI=; b=HqO5YJBpXUdEVM3OC0JD7cnoQXtL2U
+        5XYV6/ILtpYHhITzZwjyg/6oPIh201uveyOhRfsEfx6XvTcK4WZXb05D6Dm7IqhG
+        YICSWmdEI+E2A5ft1Xw6KI8FwB00OckhAQR0nvny/jGo+0EfQf87maHxqL6Oe6At
+        JUcAOxnDqYZvBblBII/EVgxMFsht700O0qLrh5426vb26idMF5w+Xrd2dG9ky+mN
+        YumA+XVZpgMtbwVlCJ+0bnMEVbsd0+RdOr95eSQqp74puKvTaT/zKhW5DCFAYMRf
+        9pSDB7rM4pXsjon6e/GHvpy/EpQtWudxtRY/NoJM0PdHk2SqqpDpCHcg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=s+xzvHlh5mml7YepjnQMHIC86SIHC20vVql/uYjQs
+        SI=; b=m41hyTiTMtqWUuyooz2/wKDf5xEh5yyJ7z8sS14WmLgr9RSghA/TnciXE
+        6U5lLeKUgCacrmwt4mUBmoJwncqu+kPhkjh5aQOuWfCJsaAjhzEitWK3ljeSbGmp
+        82wsuNvqgan+hMOmYn4h/m0R/XZGW8r/HetnB3dTy6Mt0nplBT7shHFx6CS79mY+
+        54bA9w0IVw4rTYppwt3Hy+8Zhkx8+tFbFXYXABpd4paQq4jWYGXV61W+Uwx3WYml
+        +u5fnuvNnDGjHLwNRdWGOGdQiP8croahNGvM/Zhb9fRsLUYLx7WtZOBa9JbKz4FJ
+        TavDjimST4Jg/OJ77aslL5TtmfklQ==
+X-ME-Sender: <xms:kWv6YbCpOWwbjo2fEEuZPQXR6fWs8WJ1txn3dnI23fPvR_jEq6BtYA>
+    <xme:kWv6YRh8NznxWsAQ0qT2a5VakvdP6rhEGxnbBiBpTPUyyd_ed0xtLh1qh1gWdi2o1
+    RYsPJ-ST-5zYXxEbzE>
+X-ME-Received: <xmr:kWv6YWm-nWM_bt1-HKUi0q0IXtnpvYgFdHhaqec5bvACze8gY3lsuD44_1voiOzGykZEhEfStHDo6MwtJ9AIE_N6Uz7gG4w6BdAI5Lg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeehgddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
+    vddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:kWv6YdzU6_6XRI4ekXyhAC8YzPWi1m1xNUunpLwP_xM4f5se8A8_VQ>
+    <xmx:kWv6YQQOu6pQ-o8B5aZQ677z9Y2qiH_PDo09C_Wv5_V5NMXjRAbgAA>
+    <xmx:kWv6YQYs06Q3gCfuX_p_bffS9DRDIzXjyoge9q2TNCQJjM_hV0gSyQ>
+    <xmx:kmv6Ydj-2Ue1nKfs8umtoxrCpvUcJB1846mQ3s7l53Sz1eZ2oWHDrrYys-k>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Feb 2022 06:31:28 -0500 (EST)
+Date:   Wed, 2 Feb 2022 12:31:26 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Gerd Hoffmann <kraxel@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        phone-devel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, Amit Pundir <amit.pundir@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-References: <20220202093314.107927-1-marijn.suijten@somainline.org>
- <YfpS19cSbsSTgKVk@kroah.com>
- <20220202101246.qinrngus3llyjwo6@SoMainline.org>
- <YfpdH9zOLiWQBgU7@kroah.com>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sven Schnelle <svens@stackframe.org>
+Subject: Re: [PATCH 01/21] MAINTAINERS: Add entry for fbdev core
+Message-ID: <20220202113126.3rgzqkhnorrbfj6b@houat>
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
+ <20220131210552.482606-2-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfpdH9zOLiWQBgU7@kroah.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220131210552.482606-2-daniel.vetter@ffwll.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-02 11:29:51, Greg Kroah-Hartman wrote:
-> On Wed, Feb 02, 2022 at 11:12:46AM +0100, Marijn Suijten wrote:
-> > On 2022-02-02 10:45:59, Greg Kroah-Hartman wrote:
-> > > On Wed, Feb 02, 2022 at 10:33:13AM +0100, Marijn Suijten wrote:
-> > > > Android nowadays (for a couple years already) requires AIO for at least
-> > > > its `adb` "Android Debug Bridge" [1].  Without this config option
-> > > > (`default y`) it simply refuses start, making users unable to connect to
-> > > > their phone for debugging purposes when using these kernel fragments.
-> > > > 
-> > > > [1]: https://cs.android.com/android/_/android/platform/packages/modules/adb/+/a2cb8de5e68067a5e1d002886d5f3b42d91371e1
-> > > > 
-> > > > Cc: Amit Pundir <amit.pundir@linaro.org>
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: John Stultz <john.stultz@linaro.org>
-> > > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > > > ---
-> > > >  kernel/configs/android-recommended.config | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > > 
-> > > > diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
-> > > > index eb0029c9a6a6..22bd76e43aca 100644
-> > > > --- a/kernel/configs/android-recommended.config
-> > > > +++ b/kernel/configs/android-recommended.config
-> > > > @@ -1,5 +1,4 @@
-> > > >  #  KEEP ALPHABETICALLY SORTED
-> > > > -# CONFIG_AIO is not set
-> > > >  # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-> > > >  # CONFIG_INPUT_MOUSE is not set
-> > > >  # CONFIG_LEGACY_PTYS is not set
-> > > > -- 
-> > > > 2.35.1
-> > > > 
-> > > 
-> > > There are lots of "required" configs now for modern Android releases, do
-> > > you want to sync up with all of them here?  If so, look at the
-> > > gki_defconfig files in the AOSP kernels for the full list of what is
-> > > required.  Is it really needed to keep this file up to date or should it
-> > > be dropped entirely given that no one has noticed how out-of-date it is?
-> > 
-> > This is all I need for now to get Android booting with a mainline
-> > kernel, no fancy features though that make the device worthy of being a
-> > phone (pending hardware drivers).
-> 
-> Why is adb needed to boot?
+On Mon, Jan 31, 2022 at 10:05:32PM +0100, Daniel Vetter wrote:
+> Ever since Tomi extracted the core code in 2014 it's been defacto me
+> maintaining this, with help from others from dri-devel and sometimes
+> Linus (but those are mostly merge conflicts):
+>=20
+> $ git shortlog -ns  drivers/video/fbdev/core/ | head -n5
+>     35  Daniel Vetter
+>     23  Linus Torvalds
+>     10  Hans de Goede
+>      9  Dave Airlie
+>      6  Peter Rosin
+>=20
+> I think ideally we'd also record that the various firmware fb drivers
+> (efifb, vesafb, ...) are also maintained in drm-misc because for the
+> past few years the patches have either been to fix handover issues
+> with drm drivers, or caused handover issues with drm drivers. So any
+> other tree just doesn't make sense. But also, there's plenty of
+> outdated MAINTAINER entries for these with people and git trees that
+> haven't been active in years, so maybe let's just leave them alone.
+> And furthermore distros are now adopting simpledrm as the firmware fb
+> driver, so hopefully the need to care about the fbdev firmware drivers
+> will go down going forward.
+>=20
+> Note that drm-misc is group maintained, I expect that to continue like
+> we've done before, so no new expectations that patches all go through
+> my hands. That would be silly. This also means I'm happy to put any
+> other volunteer's name in the M: line, but otherwise git log says I'm
+> the one who's stuck with this.
+>=20
+> Cc: Dave Airlie <airlied@gmail.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: DRI Development <dri-devel@lists.freedesktop.org>
+> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+> Cc: Claudio Suarez <cssk@net-c.es>
+> Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Sven Schnelle <svens@stackframe.org>
+> Cc: Gerd Hoffmann <kraxel@redhat.com>
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 
-It's been 3-4 years since this happened, it probably wasn't witholding
-boot back then but as you mention below pretty much vital when paired
-with a readonly uart during early (hobbyist) bringup.
+Acked-by: Maxime Ripard <maxime@cerno.tech>
 
-> I know some Android people are working to try to get rid of the AIO
-> requirement of adb, as it's only a debugging tool (an important one,
-> yes), so they can turn off AIO in the kernel image due to the complexity
-> there.  So why turn it back on here?
-
-I wasn't aware of that, should we leave this config fragment in a broken
-state until this initiative lands in AOSP somewhere?
-
-> > Perhaps replacing these config fragments with gki_defconfig upstream
-> > is a good idea - as discussed with John - but that's not something for
-> > me to decide nor embark on :).
-> > Having them upstreamed might be nicer than finding the appropriate
-> > corresponding downstream tree.
-> 
-> Keeping defconfigs up to date is a loosing battle for the most part, I
-> doubt many platforms actually do this well.
-
-I thought - hoped - the plan was to upstream as much as possible to
-close the gap of downstream divergence, including defconfig?
-
-Then the only feasible alternative is to drop these unmaintained,
-"incorrect" fragments and let kernel builders piece together their own
-based on the AOSP common kernel gki_defconfig tree?
-
-- Marijn
+Maxime

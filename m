@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF454A78F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FF84A78F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346998AbiBBTuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:50:55 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45070 "EHLO
+        id S1347001AbiBBTvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:51:16 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45102 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236734AbiBBTuy (ORCPT
+        with ESMTP id S236734AbiBBTvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:50:54 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212JoleT128181;
-        Wed, 2 Feb 2022 13:50:47 -0600
+        Wed, 2 Feb 2022 14:51:14 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Jp8LS128254;
+        Wed, 2 Feb 2022 13:51:08 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643831447;
-        bh=tH9m0yOE8pM/q+DfJ1CNCI8WNauocuyfR/BpoG+xeHI=;
+        s=ti-com-17Q1; t=1643831468;
+        bh=0gjEM2UzENE9r+9jEBufBpH7/PtClM6NN05Lx6PZ8tY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ZpQ6LfegaDwMOfpD+5pBjnBQKwOe/IiygBFMmTCRYVweQFEo4wd7mxjM7PuS4SX4C
-         leqqHVa/q2GajMwXUMjRnPRPjE7LOn85lmuhrzQv9QdYirrNDTprdz9LXxOjE5W68S
-         k3p8wR4+DC0lSo8wureVcW5ZV53xlAAmhPKDKjm8=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212Jolkp106891
+        b=bDmoOiXPeeViNPmfLLWyDG9DJxutjbshEclk25PS6BuGpnHShqpJwbe1SJO9F6XQm
+         fJcDq3801vJegeRRRONTLHM+WykO3FJaFh4T15PQQ7J/1NonTK/aHBwJcqA8kdJ9la
+         dZibUUeFrBf9nQ5urWEBKnMROqYnNhyP5RQPeCEs=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212Jp8lB005853
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Feb 2022 13:50:47 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 2 Feb 2022 13:51:08 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Feb 2022 13:50:46 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:51:08 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Feb 2022 13:50:46 -0600
+ Frontend Transport; Wed, 2 Feb 2022 13:51:08 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jok7a004548;
-        Wed, 2 Feb 2022 13:50:46 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jp8Mg095982;
+        Wed, 2 Feb 2022 13:51:08 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     <ssantosh@kernel.org>, <kristo@kernel.org>,
-        Peiwei Hu <jlu.hpw@foxmail.com>
-CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] firmware: ti_sci: inproper error handling of ti_sci_probe
-Date:   Wed, 2 Feb 2022 13:50:46 -0600
-Message-ID: <164383144097.1944.17032975343526415419.b4-ty@ti.com>
+To:     <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Tony Lindgren <tony@atomide.com>
+CC:     Nishanth Menon <nm@ti.com>
+Subject: Re: [PATCH] soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
+Date:   Wed, 2 Feb 2022 13:51:03 -0600
+Message-ID: <164383145850.2040.4786368708815305819.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <tencent_0D5124AF8235001703711A7A09703F918806@qq.com>
-References: <tencent_0D5124AF8235001703711A7A09703F918806@qq.com>
+In-Reply-To: <20220114062840.16620-1-linmq006@gmail.com>
+References: <20220114062840.16620-1-linmq006@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,18 +59,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peiwei Hu,
+Hi Miaoqian Lin,
 
-On Tue, 28 Dec 2021 18:01:03 +0800, Peiwei Hu wrote:
-> goto out instead of returning directly in error exiting
+On Fri, 14 Jan 2022 06:28:40 +0000, Miaoqian Lin wrote:
+> platform_get_irq() returns negative error number instead 0 on failure.
+> And the doc of platform_get_irq() provides a usage example:
 > 
+>     int irq = platform_get_irq(pdev, 0);
+>     if (irq < 0)
+>         return irq;
 > 
+> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] firmware: ti_sci: inproper error handling of ti_sci_probe
-      commit: a181bcfca937b34467e6cd63d7de6073176616e1
+[1/1] soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
+      commit: c3d66a164c726cc3b072232d3b6d87575d194084
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

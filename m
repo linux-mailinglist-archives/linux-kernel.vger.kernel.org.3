@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6025C4A760B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9A04A760E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345935AbiBBQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S1345948AbiBBQhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345953AbiBBQgg (ORCPT
+        with ESMTP id S239809AbiBBQhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:36:36 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42C4C061714;
-        Wed,  2 Feb 2022 08:36:35 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r10so43592773edt.1;
-        Wed, 02 Feb 2022 08:36:35 -0800 (PST)
+        Wed, 2 Feb 2022 11:37:06 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3072AC061714;
+        Wed,  2 Feb 2022 08:37:06 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id me13so67466785ejb.12;
+        Wed, 02 Feb 2022 08:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=S9ViQKjdafpkt5ic07P4h3uUAndSyjNg2nRx9QigItQ=;
-        b=Be99NaueJJ3OFKHNUAkGtQHsLLLV1C9MYXtI+GcXNjbfpd2dnLisNdYi/5F4VAyRcT
-         UyYGHmePZQm7BUKOI2OJDPusJ5kKN2piZ3LS7WKquPRWgqMfts8Mh+yytf0grWf5ISzc
-         qrBzI8kcHSZ22j1GDogU2xseaUwb+h/c6MxEzvtftxmP20NgkhdIzSVuPYB5r0Zfwlg/
-         oenvuIVuFkUl+j/+qjk7b93qECEWHGfSQhH/xssrenUasvHIDhbsZxYa0Vi56Ap4KX30
-         SV5MSKDftOjZtea8S/L6yGWp44yCWJp4eotPu/1egpzE171jShYZSy0KjmVBfFYmRnlQ
-         Txfw==
+        bh=Cd2L7uJjqX5X65ANfXGFgzVTnafQ2XhujK8sHBCfjuk=;
+        b=SRa8Io2MbRzk3l5SK9isqBAaRwOJc8Lms8I0mHmPtJzBhhrio5x2R1NTl50VfftL5i
+         wtZavavJmWgy37uwUClyHPoC+KmvVKr2ow002HwiK5UvTdwmIBdqOymwIaTMuwORSJHx
+         WgcRS/Wp8yOVxfbLNvV1Ikf1dtZyMeLYSxpeWqPFKTF85VY9yZUA2iiDkVuFMtfflpV/
+         ZNqs0F+e10o96wz9lfIMMFAgIJxZrF4CiVHQLZIIs5c1hdxE8cFZMVY5mmXOLy4LQM3N
+         KQQN6NqlX2OUKlvJme5z6msZ9HBTQujNrjQd3DVjRhmrKINPZRUla2sRzS+fNov8GP+v
+         vOIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=S9ViQKjdafpkt5ic07P4h3uUAndSyjNg2nRx9QigItQ=;
-        b=HT3mXDed7TPhCaXlyHJlSPAn3RAxAt7JuiaGTp5u011ydpkT08mMF4PglPo++Ggmjs
-         SPFyPfgmcK0ENudMOt4dX8fvSrB1+Cd9LpQ8RdXHmNbFW2ptr9iMBgXoLo+xfj71G7RO
-         F975Z6o4YL7VtLrcvYwHmo07eGg74TPxeKkZ1Wom3SazeSerxH8/tQL/lKW9apIZndqL
-         tzLY3VmR5Li1iT/0Ed+brXZTEbyTcUzqqHE+DG9ZZxYQBft9gubizDq673hHExsCNS8r
-         AGgs2obIvxyu+Wot62Jjk5D5XBOmokxqHkhjTEdXgWKZqvpMqHcu9vgOtOyahVNy4t63
-         lA7Q==
-X-Gm-Message-State: AOAM531MLl5FpBy3Wd9qMzirnEauN2D/Nu5Wthrl3s7gME4in7XfMBpW
-        HPI1e/0ZCX7MZ0Oro4IIMGc=
-X-Google-Smtp-Source: ABdhPJztGAeJV1pm9NWNjCRXMHxJfQvPEe+ZkAbMQvG6Gfb9slpHWl8MomEUWSu0fppuORMglpJ3ew==
-X-Received: by 2002:aa7:c5cf:: with SMTP id h15mr30714614eds.352.1643819793925;
-        Wed, 02 Feb 2022 08:36:33 -0800 (PST)
+        bh=Cd2L7uJjqX5X65ANfXGFgzVTnafQ2XhujK8sHBCfjuk=;
+        b=iRGW75rPQDCEwTcAdC88NZvXRmW+eGJ+crVlRyxywQ54zqv0MIPVXZBLoW+C3J847h
+         ASK7ShSooIGqhep8NdBMPT91TYo0aViQ//GAGpjcvfg8chPFwnNSqGmjH7nIh1LKuIJX
+         ozWSQY1idNXv21UY+a85XCqYIblL0+KRK05i3wzhWYEopJ7cohqqwVjrCdj+iuzkdz6f
+         IWNFCu5zPIQdau0Ivpf1XVK/TEDY7/7Wy2YvAOfreTyC6w8FR87oCAvDL0OwKQfZ+gnM
+         j5xa4kYk/PyRWx5MKu9LgRgvOIsXcq7Gfti2UzUNpx3us54LfSN1VVV8NrbIAMukzmEN
+         EdSA==
+X-Gm-Message-State: AOAM531wo3pLSBNl9xe935IBUqqEG98DU5b59jCLj7Gg4Y+zOXNcDqC6
+        s2ru7ONjUSya+biIVbruJcY=
+X-Google-Smtp-Source: ABdhPJy1r4v5P6yPdGmqIX4qx7EFiacE68y8GIyjMzqFVYw5OA2PnEyoN79TNPqHpQWIFetOU5hgPA==
+X-Received: by 2002:a17:906:7712:: with SMTP id q18mr21712684ejm.434.1643819824755;
+        Wed, 02 Feb 2022 08:37:04 -0800 (PST)
 Received: from adroid (027-177-184-091.ip-addr.vsenet.de. [91.184.177.27])
-        by smtp.gmail.com with ESMTPSA id a7sm21334313edr.34.2022.02.02.08.36.32
+        by smtp.gmail.com with ESMTPSA id w22sm8282605ejc.137.2022.02.02.08.37.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:36:33 -0800 (PST)
+        Wed, 02 Feb 2022 08:37:04 -0800 (PST)
 From:   =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>
-Subject: [PATCH 2/3] ARM: dts: exynos: add simple battery to p4note
-Date:   Wed,  2 Feb 2022 17:34:14 +0100
-Message-Id: <9436c417fc542eaa74011046369e089a68eea39e.1643757744.git.martin.juecker@gmail.com>
+Subject: [PATCH 3/3] ARM: defconfig: add smb347 charger driver for p4note
+Date:   Wed,  2 Feb 2022 17:34:17 +0100
+Message-Id: <aba0d1ffe6a34ed09022cb8ea6e780b01b7d70c0.1643757744.git.martin.juecker@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <5d15937b6a7c4ae82a8f0d164fa28a4d4ad46325.1643757744.git.martin.juecker@gmail.com>
 References: <5d15937b6a7c4ae82a8f0d164fa28a4d4ad46325.1643757744.git.martin.juecker@gmail.com>
@@ -69,54 +69,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple battery node to the p4note device tree to set the missing
-values for the charger to work properly.
+The Summit SMB347 charger has been added to the p4note device tree,
+enable the driver in exynos and multi_v7 defconfigs.
 
 Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
 ---
- arch/arm/boot/dts/exynos4412-p4note.dtsi | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ arch/arm/configs/exynos_defconfig   | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-index 63459db653ea..fcd75cceb877 100644
---- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
-@@ -115,6 +115,17 @@ wlan_pwrseq: sdhci3-pwrseq {
- 		clock-names = "ext_clock";
- 	};
- 
-+	battery_cell: battery-cell {
-+		compatible = "simple-battery";
-+		device-chemistry = "lithium-ion";
-+		constant-charge-current-max-microamp = <2200000>;
-+		precharge-current-microamp = <250000>;
-+		charge-term-current-microamp = <250000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+
-+		power-supplies = <&power_supply>;
-+	};
-+
- 	i2c-gpio-1 {
- 		compatible = "i2c-gpio";
- 		sda-gpios = <&gpy2 4 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-@@ -193,7 +204,7 @@ i2c-gpio-4 {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
--		charger@6 {
-+		power_supply: charger@6 {
- 			compatible = "summit,smb347";
- 			reg = <0x6>;
- 			summit,enable-usb-charging;
-@@ -201,6 +212,8 @@ charger@6 {
- 			summit,fast-voltage-threshold-microvolt = <2600000>;
- 			summit,chip-temperature-threshold-celsius = <130>;
- 			summit,usb-current-limit-microamp = <1800000>;
-+
-+			monitored-battery = <&battery_cell>;
- 		};
- 	};
- 
+diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
+index c58877cfdc9d..9d3191de96b6 100644
+--- a/arch/arm/configs/exynos_defconfig
++++ b/arch/arm/configs/exynos_defconfig
+@@ -159,6 +159,7 @@ CONFIG_CHARGER_MAX14577=y
+ CONFIG_CHARGER_MAX77693=y
+ CONFIG_CHARGER_MAX8997=y
+ CONFIG_CHARGER_MAX8998=y
++CONFIG_CHARGER_SMB347=y
+ CONFIG_CHARGER_TPS65090=y
+ CONFIG_SENSORS_LM90=y
+ CONFIG_SENSORS_NTC_THERMISTOR=y
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 1c2c3e9f0e05..bfbcb57e2083 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -510,6 +510,7 @@ CONFIG_CHARGER_MAX14577=m
+ CONFIG_CHARGER_MAX77693=m
+ CONFIG_CHARGER_MAX8997=m
+ CONFIG_CHARGER_MAX8998=m
++CONFIG_CHARGER_SMB347=m
+ CONFIG_CHARGER_TPS65090=y
+ CONFIG_SENSORS_ARM_SCMI=y
+ CONFIG_SENSORS_ASPEED=m
 -- 
 2.25.1
 

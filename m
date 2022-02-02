@@ -2,150 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367414A7695
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C212E4A76C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346172AbiBBRMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:12:21 -0500
-Received: from brightrain.aerifal.cx ([216.12.86.13]:60138 "EHLO
-        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237512AbiBBRMU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:12:20 -0500
-Date:   Wed, 2 Feb 2022 12:12:19 -0500
-From:   Rich Felker <dalias@libc.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exec: Force single empty string when argv is empty
-Message-ID: <20220202171218.GQ7074@brightrain.aerifal.cx>
-References: <20220201000947.2453721-1-keescook@chromium.org>
- <20220201145324.GA29634@brightrain.aerifal.cx>
- <1A24DA4E-2B15-4A95-B2A1-F5F963E0CD6F@chromium.org>
+        id S1346234AbiBBRXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:23:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:46902 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244506AbiBBRXc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:23:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643822612; x=1675358612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dE+VPeGUtHZgWsAhv02d/C3FztwU1vH8EMY00U1inVA=;
+  b=T67dhNHcyWizoJyqOVVpBtRARzyW963sHZhd5N+Sjt88tLf5KWbeYRqW
+   3o+sY33mjBSoBEe4HlE/saTzvRItwb0HfxfDIiujOpFfDwEsas0z7hqm5
+   F3Kthum3irkh/UJtWBeMPI+NAuKeDhYL0S8sRjjGuwlJ3buGCZkH0LtSO
+   rWMchm1l23TKL6kOlJ+tdoxUgR0Erv+dFExHgtYEIB3W3rdVqmucNQptG
+   ifOgjM7l1xuldfqyiUcjFXS/cVuu7Pmjssl6RHGVC5WoGZh0enTWfOjpF
+   ZS+J/S4t8Ir0B/mhrL9jcsSuYpzv3136mnziRDPxMRrB0dWbeeTRGagGP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247744503"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="247744503"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 09:14:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="534924090"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Feb 2022 09:14:10 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFJCr-000UsJ-Ni; Wed, 02 Feb 2022 17:14:09 +0000
+Date:   Thu, 3 Feb 2022 01:14:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
+        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>
+Subject: Re: [PATCH 7/8] VMCI: dma dg: add support for DMA datagrams sends
+Message-ID: <202202030100.5Mr551y1-lkp@intel.com>
+References: <20220202144910.10349-8-jhansen@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1A24DA4E-2B15-4A95-B2A1-F5F963E0CD6F@chromium.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20220202144910.10349-8-jhansen@vmware.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 07:50:42AM -0800, Kees Cook wrote:
-> 
-> 
-> On February 1, 2022 6:53:25 AM PST, Rich Felker <dalias@libc.org> wrote:
-> >On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
-> >> Quoting[1] Ariadne Conill:
-> >> 
-> >> "In several other operating systems, it is a hard requirement that the
-> >> second argument to execve(2) be the name of a program, thus prohibiting
-> >> a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-> >> but it is not an explicit requirement[2]:
-> >> 
-> >>     The argument arg0 should point to a filename string that is
-> >>     associated with the process being started by one of the exec
-> >>     functions.
-> >> ....
-> >> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
-> >> but there was no consensus to support fixing this issue then.
-> >> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
-> >> of this bug in a shellcode, we can reconsider.
-> >> 
-> >> This issue is being tracked in the KSPP issue tracker[5]."
-> >> 
-> >> While the initial code searches[6][7] turned up what appeared to be
-> >> mostly corner case tests, trying to that just reject argv == NULL
-> >> (or an immediately terminated pointer list) quickly started tripping[8]
-> >> existing userspace programs.
-> >> 
-> >> The next best approach is forcing a single empty string into argv and
-> >> adjusting argc to match. The number of programs depending on argc == 0
-> >> seems a smaller set than those calling execve with a NULL argv.
-> >> 
-> >> Account for the additional stack space in bprm_stack_limits(). Inject an
-> >> empty string when argc == 0 (and set argc = 1). Warn about the case so
-> >> userspace has some notice about the change:
-> >> 
-> >>     process './argc0' launched './argc0' with NULL argv: empty string added
-> >> 
-> >> Additionally WARN() and reject NULL argv usage for kernel threads.
-> >> 
-> >> [1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
-> >> [2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-> >> [3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-> >> [4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-> >> [5] https://github.com/KSPP/linux/issues/176
-> >> [6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
-> >> [7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
-> >> [8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
-> >> 
-> >> Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-> >> Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-> >> Cc: Matthew Wilcox <willy@infradead.org>
-> >> Cc: Christian Brauner <brauner@kernel.org>
-> >> Cc: Rich Felker <dalias@libc.org>
-> >> Cc: Eric Biederman <ebiederm@xmission.com>
-> >> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> >> Cc: linux-fsdevel@vger.kernel.org
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Kees Cook <keescook@chromium.org>
-> >> ---
-> >>  fs/exec.c | 26 +++++++++++++++++++++++++-
-> >>  1 file changed, 25 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/fs/exec.c b/fs/exec.c
-> >> index 79f2c9483302..bbf3aadf7ce1 100644
-> >> --- a/fs/exec.c
-> >> +++ b/fs/exec.c
-> >> @@ -495,8 +495,14 @@ static int bprm_stack_limits(struct linux_binprm *bprm)
-> >>  	 * the stack. They aren't stored until much later when we can't
-> >>  	 * signal to the parent that the child has run out of stack space.
-> >>  	 * Instead, calculate it here so it's possible to fail gracefully.
-> >> +	 *
-> >> +	 * In the case of argc = 0, make sure there is space for adding a
-> >> +	 * empty string (which will bump argc to 1), to ensure confused
-> >> +	 * userspace programs don't start processing from argv[1], thinking
-> >> +	 * argc can never be 0, to keep them from walking envp by accident.
-> >> +	 * See do_execveat_common().
-> >>  	 */
-> >> -	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
-> >> +	ptr_size = (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
-> >
-> >From #musl:
-> >
-> ><mixi> kees: shouldn't the min(bprm->argc, 1) be max(...) in your patch?
-> 
-> Fix has already been sent, yup.
-> 
-> >I'm pretty sure without fixing that, you're introducing a giant vuln
-> >here.
-> 
-> I wouldn't say "giant", but yes, it weakened a defense in depth for
-> avoiding high stack utilization.
+Hi Jorgen,
 
-I thought it was deciding the amount of memory to allocate/reserve for
-the arg slots, but based on the comment it looks like it's just a way
-to fail early rather than making the new process image fault later if
-they don't fit.
+I love your patch! Perhaps something to improve:
 
-> > I believe this is the second time a patch attempting to fix this
-> >non-vuln has proposed adding a new vuln...
-> 
-> Mistakes happen, and that's why there is review and testing. Thank
-> you for being part of the review process! :)
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I know, and I'm sorry for being a bit hostile over it, and for jumping
-the gun about the severity. I just get frustrated when I see a rush to
-make changes over an incidental part of a popularized vuln, with
-disproportionate weight on "doing something" and not enough on being
-careful.
+url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202030100.5Mr551y1-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/303777a2a8daa11d529827395318bb698ddee57e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+        git checkout 303777a2a8daa11d529827395318bb698ddee57e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/misc/vmw_vmci/
 
-Rich
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/misc/vmw_vmci/vmci_guest.c:103:14: warning: no previous prototype for 'vmci_read_reg' [-Wmissing-prototypes]
+     103 | unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
+         |              ^~~~~~~~~~~~~
+   drivers/misc/vmw_vmci/vmci_guest.c:110:6: warning: no previous prototype for 'vmci_write_reg' [-Wmissing-prototypes]
+     110 | void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+         |      ^~~~~~~~~~~~~~
+>> drivers/misc/vmw_vmci/vmci_guest.c:118:5: warning: no previous prototype for 'vmci_write_data' [-Wmissing-prototypes]
+     118 | int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
+         |     ^~~~~~~~~~~~~~~
+
+
+vim +/vmci_write_data +118 drivers/misc/vmw_vmci/vmci_guest.c
+
+   117	
+ > 118	int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
+   119	{
+   120		int result;
+   121	
+   122		if (dev->mmio_base != NULL) {
+   123			struct vmci_data_in_out_header *buffer_header = dev->tx_buffer;
+   124			u8 *dg_out_buffer = (u8 *)(buffer_header + 1);
+   125	
+   126			if (VMCI_DG_SIZE(dg) > VMCI_MAX_DG_SIZE)
+   127				return VMCI_ERROR_INVALID_ARGS;
+   128	
+   129			/*
+   130			 * Initialize send buffer with outgoing datagram
+   131			 * and set up header for inline data. Device will
+   132			 * not access buffer asynchronously - only after
+   133			 * the write to VMCI_DATA_OUT_LOW_ADDR.
+   134			 */
+   135			memcpy(dg_out_buffer, dg, VMCI_DG_SIZE(dg));
+   136			buffer_header->opcode = 0;
+   137			buffer_header->size = VMCI_DG_SIZE(dg);
+   138			buffer_header->busy = 1;
+   139	
+   140			vmci_write_reg(dev, lower_32_bits(dev->tx_buffer_base),
+   141				       VMCI_DATA_OUT_LOW_ADDR);
+   142	
+   143			/* Caller holds a spinlock, so cannot block. */
+   144			spin_until_cond(buffer_header->busy == 0);
+   145	
+   146			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
+   147			if (result == VMCI_SUCCESS)
+   148				result = (int)buffer_header->result;
+   149		} else {
+   150			iowrite8_rep(dev->iobase + VMCI_DATA_OUT_ADDR,
+   151				     dg, VMCI_DG_SIZE(dg));
+   152			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
+   153		}
+   154	
+   155		return result;
+   156	}
+   157	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

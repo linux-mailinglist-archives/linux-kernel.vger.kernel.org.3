@@ -2,99 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B054A6D05
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0AF4A6D0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245014AbiBBIit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:38:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33633 "EHLO
+        id S245026AbiBBIjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:39:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34193 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234614AbiBBIis (ORCPT
+        by vger.kernel.org with ESMTP id S245039AbiBBIi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:38:48 -0500
+        Wed, 2 Feb 2022 03:38:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643791121;
+        s=mimecast20190719; t=1643791135;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
-        b=hvlJWCLz014lHSnbOrHUfr2E1LFtE4KKNIozv6wMKZhtuwKwcUjaY1Qul7KBqF01Ns1p5F
-        yUu61ogr0+gzkR8WMVtRpSRrXpyeJFxsaj2J9xcIsI2DN/LPbAhESPdYD6mqTf8QVZFxRX
-        9WY4c51hU5/11tpkQjXl18LCOh2XG14=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=IQ96plJnExVz4IofZgZgy11FIOo1veP7nuoBU4KJMcA=;
+        b=BQmHESqj7So+lESTgNlrXx12KcqJ3SGlSnqbUdeIlnOt3tKjzBvXxDV41RnR54R0yfUfJu
+        06JSlQkc7butqaeEC/TdQ5eYG6XMhfZ5Ywga6YikkPbmvlchYrs9qMwMh2bDRLSn21JkoT
+        /d9U9GsE9K1hS1tBz4jgxYb70LQz5Vc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-13-LOnTCEuOPYKGrPsQHYN3bw-1; Wed, 02 Feb 2022 03:38:40 -0500
-X-MC-Unique: LOnTCEuOPYKGrPsQHYN3bw-1
-Received: by mail-ed1-f69.google.com with SMTP id w23-20020a50d797000000b00406d33c039dso10024497edi.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 00:38:40 -0800 (PST)
+ us-mta-606-V1TOX9n-N9uDNGP3YlDnUQ-1; Wed, 02 Feb 2022 03:38:54 -0500
+X-MC-Unique: V1TOX9n-N9uDNGP3YlDnUQ-1
+Received: by mail-wm1-f70.google.com with SMTP id c7-20020a1c3507000000b0034a0dfc86aaso3423009wma.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 00:38:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=162v2xzxQ3u4een4KbGtcbrsH49dUuDX0sFGI3OoKaM=;
-        b=EsWffnPFYNK2Ll/+6SsT9PDGYVslyzelpMrFavM2MMWKnIABAl2N4z4M89jh3Welg3
-         AzcVPkOlzTQsa+tCcunSiy/gU2Zsu9NlPMvlCLyLyQ9Ije3mBfhuwTK7M5oJTdAArm/x
-         SSDiFT8b+AFy4J0c18zYXZF0nq23wZYLLQ1gCkCbSSyvsoWTEX9+BmFw+XpI6Y6fnxH9
-         cZJDsi4oRs9nUNoNfw44i0CjdIXAP2ZathadUeckpveUoiiB0hP7shzHJJDjc4pIpL2d
-         oKjvThCTQwnKrDrWDjK9dWF+qXa0j/Ao8Af2Y5Fz63fF2zq6uQoFidKSnT9gOI+bIbwm
-         m0pA==
-X-Gm-Message-State: AOAM531TJJ6X9RuR/lUb1J3zO7vN5sXXSpO8SHaStRl8CD8m6J+t2DN+
-        o3i5AKLppwXNEres6jzpsl1QtM5IVKbeLzL1gLe6j0ShmujCzldcuYh1Z2ptDaMNBNyFoFMkeAJ
-        2HRQE3hGUkACGCMJTuPIwggLq
-X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315050ejd.433.1643791119156;
-        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxEdyJNA8q1uNmHWvFYEP/YNkKz8zxzVGxoUKfJxYwDg29nVRSAIrzftsT2br720j5xsvp4tQ==
-X-Received: by 2002:a17:906:2758:: with SMTP id a24mr23315040ejd.433.1643791119012;
-        Wed, 02 Feb 2022 00:38:39 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id lf16sm15322042ejc.25.2022.02.02.00.38.38
+        bh=IQ96plJnExVz4IofZgZgy11FIOo1veP7nuoBU4KJMcA=;
+        b=t3BixA1nyhgnonhwfnUWptmnyxqfflihVO5U7kPKe5RY4dqQhxYR/sPVwQewTJpjD6
+         7Dg+G761gg9AZRsE8YUTtsZP6mhaE5PXqBzB+Q9QIXdTZrguq2rnUqW9y1A+tWKCsZZm
+         HaXPOqXSetGRoQoqW2iWNrPp6yZshO8LDfxk71Ms+bqiHLaWPZkfePFtMPHWh7/v8D9Z
+         CZsNpYT7KxOSnJZxVCDrqIHQ/XtOKlIR8WdAytS5G1rgH8A2SmxIC+I3hoODr9v4++oi
+         TFB1N2iYW23m8uyv+l09zLcggVDcwlVyKK/YOTmotnzrEMCgwndXi+k1LutncXjZNZ5F
+         0wQA==
+X-Gm-Message-State: AOAM532xqCnlVQ26eQLqUPsEjJHomjY8lA4hUgqYvaxw51aGFopgOSum
+        0vegZoKfu9LRqpFtsuZjlsUjZWPAGRsF5MH1FP4TLhQQlZo31gVx9xzWu6bi7TJT6z1OIhKccxu
+        IB8Wn5F+Tg4L8CC9JwZMmeXOh
+X-Received: by 2002:a05:600c:21c1:: with SMTP id x1mr5150573wmj.59.1643791133573;
+        Wed, 02 Feb 2022 00:38:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxC9orog6Z8LfxDGH06ODz7grjUoMzfg+w2FlDgm3DeIkMP38HoKyw95IAqRi1WUhNTRJi28Q==
+X-Received: by 2002:a05:600c:21c1:: with SMTP id x1mr5150546wmj.59.1643791133371;
+        Wed, 02 Feb 2022 00:38:53 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z17sm3963598wmf.47.2022.02.02.00.38.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 00:38:38 -0800 (PST)
-Message-ID: <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
-Date:   Wed, 2 Feb 2022 09:38:37 +0100
+        Wed, 02 Feb 2022 00:38:52 -0800 (PST)
+Message-ID: <e552caec-5136-f4b2-12dc-23b182ab8af6@redhat.com>
+Date:   Wed, 2 Feb 2022 09:38:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: linux-next: build warning after merge of the drm tree
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Rajat Jain <rajatja@google.com>,
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220202150201.290c7d3d@canb.auug.org.au>
- <20220202150320.3e9bdd62@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220202150320.3e9bdd62@canb.auug.org.au>
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Peter Robinson <pbrobinson@gmail.com>
+References: <20220131201225.2324984-1-javierm@redhat.com>
+ <YfhM97cVH3+lJKg0@ravnborg.org> <Yfj/XGRRDNABsLPm@smile.fi.intel.com>
+ <f8d71acb-5c8b-ac4e-0c32-38eb66af04c3@redhat.com>
+ <CAMuHMdVP6ER119r2KAegjZes1a=KWZ47z6j=kgQ0oNx1oeUJ+w@mail.gmail.com>
+ <51f54519-bb8b-f108-1c1e-4fed101ca5ef@redhat.com>
+ <CAMuHMdVwUfv7pXhPazsgG6t=X=aVtDQkFUk_=mUuFH8Fscx8wg@mail.gmail.com>
+ <abf63995-a529-1e80-18c3-df473a3e7a9c@redhat.com>
+ <YfmaqUBqCrgp0QdO@ravnborg.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YfmaqUBqCrgp0QdO@ravnborg.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Sam,
 
-On 2/2/22 05:03, Stephen Rothwell wrote:
-> Hi all,
+On 2/1/22 21:40, Sam Ravnborg wrote:
+
+[snip]
+
 > 
-> On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the drm tree, today's linux-next build (htmldocs) produced
->> this warning:
->>
->> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
+> I took a look at the datasheets - and all ssd1305, ssd1306 and ssd1307
+> are the same. They have timing constrains on the Vcc.
+> The random schematic I found on the net showed me that a PWM was used to
+> control the Vcc voltage - which again is used to control the brightness.
 > 
-> Actually:
+> All the above has nothing to do with backlight - I had this mixed up in
+> my head.
+>
+
+Yes, same here. I was leaning towards fixing the DT binding but then due
+Geert comment and after reading the datasheets for ssd130{5,6,7} like you
+I had the same understanding.
+
+Glad that you agree.
+
+[snip] 
+
 > 
-> drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
+> Last I recommend to drop the fbdev variant - if the drm driver has any
+> regressions we can fix them. And I do not see any other way to move
+> users over. Unless their setup breaks then they do not change.
+>
 
-Thank you for reporting this, I will prepare a patch fixing this.
+As I mentioned in this thread I wouldn't propose to drop the fbdev variant.
+I prefer to use the carrot and not the stick. Peter Robinson suggested to
+make the driver mutually exclusive and add !FB_SSD1307 in the config symbol.
 
-Regards,
+I think that makes sense and will do it in v2.
 
-Hans
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

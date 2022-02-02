@@ -2,126 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087804A757F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E74A7585
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345683AbiBBQJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiBBQJG (ORCPT
+        id S1345762AbiBBQKP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 11:10:15 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4662 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbiBBQKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:09:06 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B08C061714;
-        Wed,  2 Feb 2022 08:09:06 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so19875317otr.11;
-        Wed, 02 Feb 2022 08:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v6kuMWAWRh6UNWKt1To15PX+Alnw0cwwwqkktpikgvU=;
-        b=lQg/DOsL9qtQzb83BcwHQB57seYU+r6Wb6Tn+EsFeSafq5cg0JB8z8wGhb8pKi/e/B
-         x08nwRT8WIQdSzde8afN7+G8vSgEcj+un4DDDjOsKw0l3rzFhaW2ShFs9YQBiFfxt7ZT
-         aZBRjlPhbEQ+w/OZUQfec2B5m5Jo+/OB5ByWasga8tKs+bSM2niKgCHQRE8YT+xrZBRx
-         vey3z/Ot7SnDSQQErJ/7J23bOIeKafbiGJ8I0iUDpvWu8U+ZtnTIu6nomw+H6VcC73wM
-         PSgRYH3KYoNqlTuwiHu+7f+vdD+Xj0DAS2cmal5FoT7l6raGVZAOCsTs4Wy05oubFx5j
-         VGmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=v6kuMWAWRh6UNWKt1To15PX+Alnw0cwwwqkktpikgvU=;
-        b=L9pl0y89FQm0tln4OIoFUcqOZzsQ/N33jbxSFDJ390rs9IYGiD071qzkTGGKpjSH79
-         BAhJeZmjcsLnGX0S+GyMNAvzFkHWg1qeFvPQVxncQ61c/vtOzOb3OIN18B6NqCHt6XGh
-         A5ziQcBgq5H5jZIZGSQledXzCoj7Hp4pjHm18eIYOKYXSsMg12/skq4zXUDco5y3+XnU
-         MZYj7nwwYTbUyFV5kep+wmcSy9gdnQVAspvDvdSVTvmx6XsE2Pqzw+PevFcGArWLlSKJ
-         COZbmZS2aN60S6LnTFKc4UbQm4maIcBKZ3sXV50+uy/xCtrSZqk/hDCCpDH/4Px2lgNJ
-         mVWw==
-X-Gm-Message-State: AOAM532Ak+j5XR6ghuI1AsMb18SQe0zSymHv0Dc8ELUffgY5hbgLJqNz
-        7mGz6/HnzJzkixemYns0qTM=
-X-Google-Smtp-Source: ABdhPJwzIPq7/SXvESsrrYxg24FI7X7Ew67gS5YI1WpQh9CGadlW5Tn8no8geA9iu9N2MExRT9mPEw==
-X-Received: by 2002:a9d:73d8:: with SMTP id m24mr17206726otk.52.1643818145370;
-        Wed, 02 Feb 2022 08:09:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t22sm6044586oiw.2.2022.02.02.08.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:09:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 08:09:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
-Message-ID: <20220202160903.GA2337834@roeck-us.net>
-References: <20210818081118.1667663-1-keescook@chromium.org>
- <20210818081118.1667663-5-keescook@chromium.org>
+        Wed, 2 Feb 2022 11:10:09 -0500
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JpmqB2Czqz67nGj;
+        Thu,  3 Feb 2022 00:05:26 +0800 (CST)
+Received: from lhreml716-chm.china.huawei.com (10.201.108.67) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Feb 2022 17:10:07 +0100
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ lhreml716-chm.china.huawei.com (10.201.108.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Feb 2022 16:10:06 +0000
+Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
+ lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
+ 15.01.2308.021; Wed, 2 Feb 2022 16:10:06 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        liulongfang <liulongfang@huawei.com>,
+        "Zengtao (B)" <prime.zeng@hisilicon.com>,
+        yuzenghui <yuzenghui@huawei.com>,
+        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
+        "Wangzhou (B)" <wangzhou1@hisilicon.com>
+Subject: RE: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+Thread-Topic: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
+Thread-Index: AQHYGDbmFHRHIXj6i0KnDwR2h2vbX6yAR7aggAAeEICAAAa58A==
+Date:   Wed, 2 Feb 2022 16:10:06 +0000
+Message-ID: <c8a0731c589e49068a78afcc73d66bfa@huawei.com>
+References: <20210702095849.1610-1-shameerali.kolothum.thodi@huawei.com>
+ <20220202131448.GA2538420@nvidia.com>
+ <a29ae3ea51344e18b9659424772a4b42@huawei.com>
+ <20220202153945.GT1786498@nvidia.com>
+In-Reply-To: <20220202153945.GT1786498@nvidia.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210818081118.1667663-5-keescook@chromium.org>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
-> With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
-> coverage, it is now possible to enable -Warray-bounds. Since both
-> GCC and Clang include -Warray-bounds in -Wall, we just need to stop
-> disabling it.
+
+
+> -----Original Message-----
+> From: Jason Gunthorpe [mailto:jgg@nvidia.com]
+> Sent: 02 February 2022 15:40
+> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-crypto@vger.kernel.org; alex.williamson@redhat.com;
+> mgurtovoy@nvidia.com; Linuxarm <linuxarm@huawei.com>; liulongfang
+> <liulongfang@huawei.com>; Zengtao (B) <prime.zeng@hisilicon.com>;
+> yuzenghui <yuzenghui@huawei.com>; Jonathan Cameron
+> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
+> Subject: Re: [RFC v2 0/4] vfio/hisilicon: add acc live migration driver
 > 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  Makefile | 1 -
->  1 file changed, 1 deletion(-)
+> On Wed, Feb 02, 2022 at 02:34:52PM +0000, Shameerali Kolothum Thodi
+> wrote:
 > 
-> diff --git a/Makefile b/Makefile
-> index a4aca01a4835..af22b83cede7 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
->  
->  # We'll want to enable this eventually, but it's not going away for 5.7 at least
->  KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
-> -KBUILD_CFLAGS += -Wno-array-bounds
->  KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
->  
->  # Another good warning that we'll want to enable eventually
+> > > There are few topics to consider:
+> > >  - Which of the three feature sets (STOP_COPY, P2P and PRECOPY) make
+> > >    sense for this driver?
+> >
+> > I think it will be STOP_COPY only for now. We might have PRECOPY
+> > feature once we have the SMMUv3 HTTU support in future.
+> 
+> HTTU is the dirty tracking feature? To be clear VFIO migration support for
+> PRECOPY has nothing to do with IOMMU based dirty page tracking.
 
-alpha:defconfig:
+Yes, it is based on the IOMMU hardware dirty bit management support.
+A RFC was posted sometime back,
+https://lore.kernel.org/kvm/20210507103608.39440-1-zhukeqian1@huawei.com/
 
-In function '__memset',
-    inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
-./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
-   37 |                         return __builtin_memset(s, c, n);
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
-In function '__memset',
-    inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
-./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
-   37 |                         return __builtin_memset(s, c, n);
-      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
-In function '__memset',
-    inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
-./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
-   37 |                         return __builtin_memset(s, c, n);
+Ok, my guess was that the PRECOPY here was related. Thanks for clarifying.
 
+> 
+> > >  - I think we discussed the P2P implementation and decided it would
+> > >    work for this device? Can you re-read and confirm?
+> >
+> > In our case these devices are Integrated End Point devices and doesn't
+> > have P2P DMA capability. Hence the FSM arcs will be limited to
+> > STOP_COPY feature I guess. Also, since we cannot guarantee a NDMA
+> > state in STOP, my assumption currently is the onus of making sure that
+> > no MMIO access happens in STOP is on the user. Is that a valid assumption?
+> 
+> Yes, you can treat RUNNING_P2P as the same as STOP and rely on no MMIO
+> access to sustain it.
 
-xtensa:allmodconfig:
---------------
-Error log:
-In file included from include/linux/uaccess.h:11,
-                 from include/linux/sched/task.h:11,
-                 from arch/xtensa/kernel/process.c:21:
-arch/xtensa/kernel/process.c: In function 'copy_thread':
-arch/xtensa/kernel/process.c:262:52: error: array subscript 53 is above array bounds of 'long unsigned int[16]'
+Ok.
+ 
+> (and I'm wondering sometimes if we should rename RUNNING_P2P to
+> STOP_P2P - ie the device is stopped but still allows inbound P2P to make this
+> clearer)
+> 
+> > Do we need to set the below before the feature query?
+> > Or am I using a wrong Qemu/kernel repo?
+> >
+> > +++ b/hw/vfio/migration.c
+> > @@ -488,6 +488,7 @@ static int vfio_migration_query_flags(VFIODevice
+> > *vbasedev, uint64_t *mig_flags)
+> >      struct vfio_device_feature_migration *mig = (void
+> > *)feature->data;
+> >
+> >      feature->argsz = sizeof(buf);
+> > +    feature->flags = VFIO_DEVICE_FEATURE_MIGRATION |
+> > + VFIO_DEVICE_FEATURE_GET;
+> >      if (ioctl(vbasedev->fd, VFIO_DEVICE_FEATURE, feature) != 0)
+> >          return -EOPNOTSUPP;
+> 
+> Oh, this is my mistake I thought this got pushed to that github already but
+> didn't, I updated it.
 
+Ok. Thanks.
+ 
+> If you have a prototype can you post another RFC?
+
+Sure, will do. I just started and has only a skeleton proto based on v2 now.
+Will send out a RFC soon once I have all the FSM arcs implemented 
+and sanity tested.
+
+Thanks,
+Shameer

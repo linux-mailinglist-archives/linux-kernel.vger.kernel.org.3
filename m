@@ -2,308 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A88D4A6E9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C49D4A6EAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244935AbiBBKYF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 05:24:05 -0500
-Received: from aposti.net ([89.234.176.197]:44304 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231215AbiBBKYD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:24:03 -0500
-Date:   Wed, 02 Feb 2022 10:23:47 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v12 2/9] drm/ingenic: Add support for JZ4780 and HDMI
- output
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Message-Id: <N7AO6R.7I6FABF106MT1@crapouillou.net>
-In-Reply-To: <6a7b188769a7ad477bf8cb71e1b9bc086b92388d.1643632014.git.hns@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
-        <6a7b188769a7ad477bf8cb71e1b9bc086b92388d.1643632014.git.hns@goldelico.com>
+        id S245229AbiBBKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:25:55 -0500
+Received: from www62.your-server.de ([213.133.104.62]:54592 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242029AbiBBKZy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:25:54 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nFCpg-00009B-4Z; Wed, 02 Feb 2022 11:25:48 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nFCpf-00078Q-P3; Wed, 02 Feb 2022 11:25:47 +0100
+Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y +
+ CONFIG_DEBUG_INFO_BTF=y
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+References: <20220201205624.652313-1-nathan@kernel.org>
+ <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c1eb308e-1f02-492b-53f1-762daa3d8ff3@iogearbox.net>
+Date:   Wed, 2 Feb 2022 11:25:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26440/Tue Feb  1 10:29:16 2022)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
+On 2/2/22 8:05 AM, Andrii Nakryiko wrote:
+> On Tue, Feb 1, 2022 at 12:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>>
+>> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
+>> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
+>>
+>> The first four patches add CONFIG_PAHOLE_VERSION and
+>> scripts/pahole-version.sh to clean up all the places that pahole's
+>> version is transformed into a 3-digit form.
+>>
+>> The fourth patch adds a PAHOLE_VERSION dependency to DEBUG_INFO_DWARF5
+>> so that there are no build errors when it is selected with
+>> DEBUG_INFO_BTF.
+>>
+>> I build tested Fedora's aarch64 and x86_64 config with ToT clang 14.0.0
+>> and GCC 11 with CONFIG_DEBUG_INFO_DWARF5 enabled with both pahole 1.21
+>> and 1.23.
+>>
+>> Nathan Chancellor (5):
+>>    MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
+>>    kbuild: Add CONFIG_PAHOLE_VERSION
+>>    scripts/pahole-flags.sh: Use pahole-version.sh
+>>    lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+>>    lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+>>
+> 
+> LGTM. I'd probably combine patches 2 and 3, but it's minor. I really
+> like the CONFIG_PAHOLE_VERSION and how much cleaner it makes Kconfig
+> options.
 
-Le lun., janv. 31 2022 at 13:26:48 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Paul Boddie <paul@boddie.org.uk>
-> 
-> Add support for the LCD controller present on JZ4780 SoCs.
-> This SoC uses 8-byte descriptors which extend the current
-> 4-byte descriptors used for other Ingenic SoCs.
-> 
-> Tested on MIPS Creator CI20 board.
-> 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 61 
-> ++++++++++++++++++++++-
->  drivers/gpu/drm/ingenic/ingenic-drm.h     | 38 ++++++++++++++
->  2 files changed, 98 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
-> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index 9c60fc4605e4b..ccdb9eedd9247 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -6,6 +6,7 @@
-> 
->  #include "ingenic-drm.h"
-> 
-> +#include <linux/bitfield.h>
->  #include <linux/component.h>
->  #include <linux/clk.h>
->  #include <linux/dma-mapping.h>
-> @@ -49,6 +50,11 @@ struct ingenic_dma_hwdesc {
->  	u32 addr;
->  	u32 id;
->  	u32 cmd;
-> +	/* extended hw descriptor for jz4780 */
-> +	u32 offsize;
-> +	u32 pagewidth;
-> +	u32 cpos;
-> +	u32 dessize;
->  } __aligned(16);
-> 
->  struct ingenic_dma_hwdescs {
-> @@ -59,7 +65,9 @@ struct ingenic_dma_hwdescs {
->  struct jz_soc_info {
->  	bool needs_dev_clk;
->  	bool has_osd;
-> +	bool has_alpha;
->  	bool map_noncoherent;
-> +	bool use_extended_hwdesc;
->  	unsigned int max_width, max_height;
->  	const u32 *formats_f0, *formats_f1;
->  	unsigned int num_formats_f0, num_formats_f1;
-> @@ -446,6 +454,9 @@ static int ingenic_drm_plane_atomic_check(struct 
-> drm_plane *plane,
->  	if (!crtc)
->  		return 0;
-> 
-> +	if (plane == &priv->f0)
-> +		return -EINVAL;
-
-This will break JZ4725B -> JZ4770 SoCs, the f0 plane is perfectly 
-usable there.
-
-Cheers,
--Paul
-
-> +
->  	crtc_state = drm_atomic_get_existing_crtc_state(state,
->  							crtc);
->  	if (WARN_ON(!crtc_state))
-> @@ -662,6 +673,33 @@ static void 
-> ingenic_drm_plane_atomic_update(struct drm_plane *plane,
->  		hwdesc->cmd = JZ_LCD_CMD_EOF_IRQ | (width * height * cpp / 4);
->  		hwdesc->next = dma_hwdesc_addr(priv, next_id);
-> 
-> +		if (priv->soc_info->use_extended_hwdesc) {
-> +			hwdesc->cmd |= JZ_LCD_CMD_FRM_ENABLE;
-> +
-> +			/* Extended 8-byte descriptor */
-> +			hwdesc->cpos = 0;
-> +			hwdesc->offsize = 0;
-> +			hwdesc->pagewidth = 0;
-> +
-> +			switch (newstate->fb->format->format) {
-> +			case DRM_FORMAT_XRGB1555:
-> +				hwdesc->cpos |= JZ_LCD_CPOS_RGB555;
-> +				fallthrough;
-> +			case DRM_FORMAT_RGB565:
-> +				hwdesc->cpos |= JZ_LCD_CPOS_BPP_15_16;
-> +				break;
-> +			case DRM_FORMAT_XRGB8888:
-> +				hwdesc->cpos |= JZ_LCD_CPOS_BPP_18_24;
-> +				break;
-> +			}
-> +			hwdesc->cpos |= (JZ_LCD_CPOS_COEFFICIENT_1 <<
-> +					 JZ_LCD_CPOS_COEFFICIENT_OFFSET);
-> +			hwdesc->dessize =
-> +				(0xff << JZ_LCD_DESSIZE_ALPHA_OFFSET) |
-> +				FIELD_PREP(JZ_LCD_DESSIZE_HEIGHT_MASK, height - 1) |
-> +				FIELD_PREP(JZ_LCD_DESSIZE_WIDTH_MASK, width - 1);
-> +		}
-> +
->  		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
->  			fourcc = newstate->fb->format->format;
-> 
-> @@ -693,6 +731,9 @@ static void 
-> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
->  		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
->  	}
-> 
-> +	if (priv->soc_info->use_extended_hwdesc)
-> +		cfg |= JZ_LCD_CFG_DESCRIPTOR_8;
-> +
->  	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
->  		cfg |= JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
->  	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
-> @@ -1015,6 +1056,7 @@ static int ingenic_drm_bind(struct device *dev, 
-> bool has_components)
->  	long parent_rate;
->  	unsigned int i, clone_mask = 0;
->  	int ret, irq;
-> +	u32 osdc = 0;
-> 
->  	soc_info = of_device_get_match_data(dev);
->  	if (!soc_info) {
-> @@ -1272,7 +1314,10 @@ static int ingenic_drm_bind(struct device 
-> *dev, bool has_components)
-> 
->  	/* Enable OSD if available */
->  	if (soc_info->has_osd)
-> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
-> +		osdc |= JZ_LCD_OSDC_OSDEN;
-> +	if (soc_info->has_alpha)
-> +		osdc |= JZ_LCD_OSDC_ALPHAEN;
-> +	regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
-> 
->  	mutex_init(&priv->clk_mutex);
->  	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
-> @@ -1468,10 +1513,24 @@ static const struct jz_soc_info 
-> jz4770_soc_info = {
->  	.num_formats_f0 = ARRAY_SIZE(jz4770_formats_f0),
->  };
-> 
-> +static const struct jz_soc_info jz4780_soc_info = {
-> +	.needs_dev_clk = true,
-> +	.has_osd = true,
-> +	.has_alpha = true,
-> +	.use_extended_hwdesc = true,
-> +	.max_width = 4096,
-> +	.max_height = 2048,
-> +	.formats_f1 = jz4770_formats_f1,
-> +	.num_formats_f1 = ARRAY_SIZE(jz4770_formats_f1),
-> +	.formats_f0 = jz4770_formats_f0,
-> +	.num_formats_f0 = ARRAY_SIZE(jz4770_formats_f0),
-> +};
-> +
->  static const struct of_device_id ingenic_drm_of_match[] = {
->  	{ .compatible = "ingenic,jz4740-lcd", .data = &jz4740_soc_info },
->  	{ .compatible = "ingenic,jz4725b-lcd", .data = &jz4725b_soc_info },
->  	{ .compatible = "ingenic,jz4770-lcd", .data = &jz4770_soc_info },
-> +	{ .compatible = "ingenic,jz4780-lcd", .data = &jz4780_soc_info },
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, ingenic_drm_of_match);
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm.h 
-> b/drivers/gpu/drm/ingenic/ingenic-drm.h
-> index 22654ac1dde1c..cb1d09b625881 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm.h
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm.h
-> @@ -44,8 +44,11 @@
->  #define JZ_REG_LCD_XYP1				0x124
->  #define JZ_REG_LCD_SIZE0			0x128
->  #define JZ_REG_LCD_SIZE1			0x12c
-> +#define JZ_REG_LCD_PCFG				0x2c0
-> 
->  #define JZ_LCD_CFG_SLCD				BIT(31)
-> +#define JZ_LCD_CFG_DESCRIPTOR_8			BIT(28)
-> +#define JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN	BIT(25)
->  #define JZ_LCD_CFG_PS_DISABLE			BIT(23)
->  #define JZ_LCD_CFG_CLS_DISABLE			BIT(22)
->  #define JZ_LCD_CFG_SPL_DISABLE			BIT(21)
-> @@ -63,6 +66,7 @@
->  #define JZ_LCD_CFG_DE_ACTIVE_LOW		BIT(9)
->  #define JZ_LCD_CFG_VSYNC_ACTIVE_LOW		BIT(8)
->  #define JZ_LCD_CFG_18_BIT			BIT(7)
-> +#define JZ_LCD_CFG_24_BIT			BIT(6)
->  #define JZ_LCD_CFG_PDW				(BIT(5) | BIT(4))
-> 
->  #define JZ_LCD_CFG_MODE_GENERIC_16BIT		0
-> @@ -132,6 +136,7 @@
->  #define JZ_LCD_CMD_SOF_IRQ			BIT(31)
->  #define JZ_LCD_CMD_EOF_IRQ			BIT(30)
->  #define JZ_LCD_CMD_ENABLE_PAL			BIT(28)
-> +#define JZ_LCD_CMD_FRM_ENABLE			BIT(26)
-> 
->  #define JZ_LCD_SYNC_MASK			0x3ff
-> 
-> @@ -153,6 +158,7 @@
->  #define JZ_LCD_RGBC_EVEN_BGR			(0x5 << 0)
-> 
->  #define JZ_LCD_OSDC_OSDEN			BIT(0)
-> +#define JZ_LCD_OSDC_ALPHAEN			BIT(2)
->  #define JZ_LCD_OSDC_F0EN			BIT(3)
->  #define JZ_LCD_OSDC_F1EN			BIT(4)
-> 
-> @@ -176,6 +182,38 @@
->  #define JZ_LCD_SIZE01_WIDTH_LSB			0
->  #define JZ_LCD_SIZE01_HEIGHT_LSB		16
-> 
-> +#define JZ_LCD_DESSIZE_ALPHA_OFFSET		24
-> +#define JZ_LCD_DESSIZE_HEIGHT_MASK		GENMASK(23, 12)
-> +#define JZ_LCD_DESSIZE_WIDTH_MASK		GENMASK(11, 0)
-> +
-> +#define JZ_LCD_CPOS_BPP_15_16			(4 << 27)
-> +#define JZ_LCD_CPOS_BPP_18_24			(5 << 27)
-> +#define JZ_LCD_CPOS_BPP_30			(7 << 27)
-> +#define JZ_LCD_CPOS_RGB555			BIT(30)
-> +#define JZ_LCD_CPOS_PREMULTIPLY_LCD		BIT(26)
-> +#define JZ_LCD_CPOS_COEFFICIENT_OFFSET		24
-> +#define JZ_LCD_CPOS_COEFFICIENT_0		0
-> +#define JZ_LCD_CPOS_COEFFICIENT_1		1
-> +#define JZ_LCD_CPOS_COEFFICIENT_ALPHA1		2
-> +#define JZ_LCD_CPOS_COEFFICIENT_1_ALPHA1	3
-> +
-> +#define JZ_LCD_RGBC_RGB_PADDING			BIT(15)
-> +#define JZ_LCD_RGBC_RGB_PADDING_FIRST		BIT(14)
-> +#define JZ_LCD_RGBC_422				BIT(8)
-> +#define JZ_LCD_RGBC_RGB_FORMAT_ENABLE		BIT(7)
-> +
-> +#define JZ_LCD_PCFG_PRI_MODE			BIT(31)
-> +#define JZ_LCD_PCFG_HP_BST_4			(0 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_8			(1 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_16			(2 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_32			(3 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_64			(4 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_16_CONT		(5 << 28)
-> +#define JZ_LCD_PCFG_HP_BST_DISABLE		(7 << 28)
-> +#define JZ_LCD_PCFG_THRESHOLD2_OFFSET		18
-> +#define JZ_LCD_PCFG_THRESHOLD1_OFFSET		9
-> +#define JZ_LCD_PCFG_THRESHOLD0_OFFSET		0
-> +
->  struct device;
->  struct drm_plane;
->  struct drm_plane_state;
-> --
-> 2.33.0
-> 
-
-
++1, thanks for working on getting this enabled! I think patches 2 and 3 are
+rather logically separate, so as-is is fine as well imho. Applied, thanks!

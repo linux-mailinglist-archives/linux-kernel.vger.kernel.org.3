@@ -2,184 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9414A74F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC654A74F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345583AbiBBPus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S1345589AbiBBPwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:52:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345566AbiBBPuo (ORCPT
+        with ESMTP id S1345566AbiBBPwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:50:44 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC41C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:50:44 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so7216940pjq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:50:44 -0800 (PST)
+        Wed, 2 Feb 2022 10:52:50 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54326C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:52:50 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id z7so17406233ilb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=n2Bdj/sV7I9YYST/a6Ee+uQKpWStxnhqS6FCuPodXGI=;
-        b=F3ZMKUgp1tN25A8goPns7uiIg6+q4JCdBIfHNcLOjskWhHLztZ3IOsMjBPb9EYpP41
-         NlKix/zibD64RhL0/Gff9y2zuBiSFX5dVLWUOokhFGNetNeRL8JA3E8Ch2D5samJ+RdJ
-         MQaWo7gjXWDOd3F40H32FV3yLyI+ehlw4QRy0=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hnuCjOcrcVbTrSMGDeFitTnyY+vwDbK2/TPhiEo9TIY=;
+        b=bGrhcn/ZvfDpHWNEWDSBjLp+4cy2d/yHhtihOOYV3lMkyzPmQxHG84pnZf01rhqafB
+         WbEdrn1JDmAZhI0+ucBk7sTbZ5hhY6+d3AA1OZBz2+JRSROtN3nUtnC7vZbh28Rhod8Q
+         iKMvXn7CqgBHMWzG6+vZ0i+h+urQ2ZH1maBHk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=n2Bdj/sV7I9YYST/a6Ee+uQKpWStxnhqS6FCuPodXGI=;
-        b=NMDEPv1byygTZ1QkwsKEuebsHa+Wkmj1nxAbCH+kFLHPOCox9sTJDY3G6+a8gYzscf
-         cU+kTXhjwQXRr5jWGJ4WuCRJeouqdIrseU2kKED+sHPyLoidmAP4cBUuYPUtY0ZOuN7j
-         4R16dALZRSmQUVk03bQOFh2YbNg34hWJsjbnlA1iLZHAy69FWjW5pnseXhUYdV+UiHW6
-         foVRdRc8NVKirwwm3tlIoHefqNp1MlHZVg5jqW06gXfoOvPJ/KrRxzO7//4sGb+ZBygv
-         dEHInmiK0Gw/LDEXeDV3TwKC1PtUBqQl/idIxZTS7APN6KCqOaJYWrGZ6UPyUwwnAaly
-         VRrA==
-X-Gm-Message-State: AOAM5300smdVkf6klZ//l0v5AxpUudpnr6em/GAVvHKwGYVbmMzI090q
-        wb0jlCYwxJzg0/grGt+gpOaOtQ==
-X-Google-Smtp-Source: ABdhPJzOAbgWypiDTkn1zBlB8teQw5RfDJocPB4d/hP/ydQr3CtMkR74WzhAsep9R8qH82gACMoSuw==
-X-Received: by 2002:a17:902:eacc:: with SMTP id p12mr31311692pld.123.1643817043774;
-        Wed, 02 Feb 2022 07:50:43 -0800 (PST)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h11sm14933953pfe.214.2022.02.02.07.50.43
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hnuCjOcrcVbTrSMGDeFitTnyY+vwDbK2/TPhiEo9TIY=;
+        b=wZCwVkhq8SvxqwEHBaNkG44nZc2M3Z3bRBWcn23CWB/BTkG0B3QRFYrwsbxz0Fjrog
+         RHAtrGKdXUmYtrUCiw7qbHAdr3UxR01BQxONeuShdKKKg8g/DbJOjjtRt5GIGGJ8v0rR
+         NcUHCyYe4bkKq8/RtORHdvw/65QryoGQP1uGdBM6jtHQJ11icuWfTpMnz7eLMY31Lp5l
+         krHZAICZX2Ap1vsBcndRnN36d8xN0rr0LE/DOXhRhm8QZgiQ6eeewwn23gzEYKCCU8nY
+         mZrqlBT0HMHdgNT59mSo+pqr3yP005vQFPWaKtwbXwVCcwkQsOGp+y+au8E7gEBQ59jS
+         Tz6w==
+X-Gm-Message-State: AOAM533FyG03Vvx0hLK2AwigS6IDl8RFh3XF93UY+cDBFUOUsyaJ67qd
+        nidxJsnpsOSO/pi2xZXATT96Pg==
+X-Google-Smtp-Source: ABdhPJyF+eRCT1nRVCPDFDYtMeqLp9IKbZfVRn14uMg4P8XLDHSDNIADZx4gognWvY9yFB+l1cKjHw==
+X-Received: by 2002:a92:1901:: with SMTP id 1mr16973107ilz.70.1643817169453;
+        Wed, 02 Feb 2022 07:52:49 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e11sm17164586ioq.41.2022.02.02.07.52.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 07:50:43 -0800 (PST)
-Date:   Wed, 02 Feb 2022 07:50:42 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Rich Felker <dalias@libc.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] exec: Force single empty string when argv is empty
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220201145324.GA29634@brightrain.aerifal.cx>
-References: <20220201000947.2453721-1-keescook@chromium.org> <20220201145324.GA29634@brightrain.aerifal.cx>
-Message-ID: <1A24DA4E-2B15-4A95-B2A1-F5F963E0CD6F@chromium.org>
+        Wed, 02 Feb 2022 07:52:49 -0800 (PST)
+Subject: Re: [PATCH] pidfd: fix test failure due to stack overflow on some
+ arches
+To:     Christian Brauner <brauner@kernel.org>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220127212951.3604667-1-axelrasmussen@google.com>
+ <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <924d8fd8-7069-41d2-9887-f36160d9f598@linuxfoundation.org>
+Date:   Wed, 2 Feb 2022 08:52:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220128085616.tnsowlg5iff6ofm4@wittgenstein>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On February 1, 2022 6:53:25 AM PST, Rich Felker <dalias@libc=2Eorg> wrote:
->On Mon, Jan 31, 2022 at 04:09:47PM -0800, Kees Cook wrote:
->> Quoting[1] Ariadne Conill:
->>=20
->> "In several other operating systems, it is a hard requirement that the
->> second argument to execve(2) be the name of a program, thus prohibiting
->> a scenario where argc < 1=2E POSIX 2017 also recommends this behaviour,
->> but it is not an explicit requirement[2]:
->>=20
->>     The argument arg0 should point to a filename string that is
->>     associated with the process being started by one of the exec
->>     functions=2E
->> =2E=2E=2E=2E
->> Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
->> but there was no consensus to support fixing this issue then=2E
->> Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
->> of this bug in a shellcode, we can reconsider=2E
->>=20
->> This issue is being tracked in the KSPP issue tracker[5]=2E"
->>=20
->> While the initial code searches[6][7] turned up what appeared to be
->> mostly corner case tests, trying to that just reject argv =3D=3D NULL
->> (or an immediately terminated pointer list) quickly started tripping[8]
->> existing userspace programs=2E
->>=20
->> The next best approach is forcing a single empty string into argv and
->> adjusting argc to match=2E The number of programs depending on argc =3D=
-=3D 0
->> seems a smaller set than those calling execve with a NULL argv=2E
->>=20
->> Account for the additional stack space in bprm_stack_limits()=2E Inject=
- an
->> empty string when argc =3D=3D 0 (and set argc =3D 1)=2E Warn about the =
-case so
->> userspace has some notice about the change:
->>=20
->>     process '=2E/argc0' launched '=2E/argc0' with NULL argv: empty stri=
-ng added
->>=20
->> Additionally WARN() and reject NULL argv usage for kernel threads=2E
->>=20
->> [1] https://lore=2Ekernel=2Eorg/lkml/20220127000724=2E15106-1-ariadne@d=
-ereferenced=2Eorg/
->> [2] https://pubs=2Eopengroup=2Eorg/onlinepubs/9699919799/functions/exec=
-=2Ehtml
->> [3] https://bugzilla=2Ekernel=2Eorg/show_bug=2Ecgi?id=3D8408
->> [4] https://www=2Equalys=2Ecom/2022/01/25/cve-2021-4034/pwnkit=2Etxt
->> [5] https://github=2Ecom/KSPP/linux/issues/176
->> [6] https://codesearch=2Edebian=2Enet/search?q=3Dexecve%5C+*%5C%28%5B%5=
-E%2C%5D%2B%2C+*NULL&literal=3D0
->> [7] https://codesearch=2Edebian=2Enet/search?q=3Dexeclp%3F%5Cs*%5C%28%5=
-B%5E%2C%5D%2B%2C%5Cs*NULL&literal=3D0
->> [8] https://lore=2Ekernel=2Eorg/lkml/20220131144352=2EGE16385@xsang-Opt=
-iPlex-9020/
->>=20
->> Reported-by: Ariadne Conill <ariadne@dereferenced=2Eorg>
->> Reported-by: Michael Kerrisk <mtk=2Emanpages@gmail=2Ecom>
->> Cc: Matthew Wilcox <willy@infradead=2Eorg>
->> Cc: Christian Brauner <brauner@kernel=2Eorg>
->> Cc: Rich Felker <dalias@libc=2Eorg>
->> Cc: Eric Biederman <ebiederm@xmission=2Ecom>
->> Cc: Alexander Viro <viro@zeniv=2Elinux=2Eorg=2Euk>
->> Cc: linux-fsdevel@vger=2Ekernel=2Eorg
->> Cc: stable@vger=2Ekernel=2Eorg
->> Signed-off-by: Kees Cook <keescook@chromium=2Eorg>
+On 1/28/22 1:56 AM, Christian Brauner wrote:
+> On Thu, Jan 27, 2022 at 01:29:51PM -0800, Axel Rasmussen wrote:
+>> When running the pidfd_fdinfo_test on arm64, it fails for me. After some
+>> digging, the reason is that the child exits due to SIGBUS, because it
+>> overflows the 1024 byte stack we've reserved for it.
+>>
+>> To fix the issue, increase the stack size to 8192 bytes (this number is
+>> somewhat arbitrary, and was arrived at through experimentation -- I kept
+>> doubling until the failure no longer occurred).
+>>
+>> Also, let's make the issue easier to debug. wait_for_pid() returns an
+>> ambiguous value: it may return -1 in all of these cases:
+>>
+>> 1. waitpid() itself returned -1
+>> 2. waitpid() returned success, but we found !WIFEXITED(status).
+>> 3. The child process exited, but it did so with a -1 exit code.
+>>
+>> There's no way for the caller to tell the difference. So, at least log
+>> which occurred, so the test runner can debug things.
+>>
+>> While debugging this, I found that we had !WIFEXITED(), because the
+>> child exited due to a signal. This seems like a reasonably common case,
+>> so also print out whether or not we have WIFSIGNALED(), and the
+>> associated WTERMSIG() (if any). This lets us see the SIGBUS I'm fixing
+>> clearly when it occurs.
+>>
+>> Finally, I'm suspicious of allocating the child's stack on our stack.
+>> man clone(2) suggests that the correct way to do this is with mmap(),
+>> and in particular by setting MAP_STACK. So, switch to doing it that way
+>> instead.
+> 
+> Heh, yes. :)
+> 
+> commit 99c3a000279919cc4875c9dfa9c3ebb41ed8773e
+> Author: Michael Kerrisk <mtk.manpages@gmail.com>
+> Date:   Thu Nov 14 12:19:21 2019 +0100
+> 
+>      clone.2: Allocate child's stack using mmap(2) rather than malloc(3)
+> 
+>      Christian Brauner suggested mmap(MAP_STACKED), rather than
+>      malloc(), as the canonical way of allocating a stack for the
+>      child of clone(), and Jann Horn noted some reasons why:
+> 
+>          Not on Linux, but on OpenBSD, they do use MAP_STACK now
+>          AFAIK; this was announced here:
+>          <http://openbsd-archive.7691.n7.nabble.com/stack-register-checking-td338238.html>.
+>          Basically they periodically check whether the userspace
+>          stack pointer points into a MAP_STACK region, and if not,
+>          they kill the process. So even if it's a no-op on Linux, it
+>          might make sense to advise people to use the flag to improve
+>          portability? I'm not sure if that's something that belongs
+>          in Linux manpages.
+> 
+>          Another reason against malloc() is that when setting up
+>          thread stacks in proper, reliable software, you'll probably
+>          want to place a guard page (in other words, a 4K PROT_NONE
+>          VMA) at the bottom of the stack to reliably catch stack
+>          overflows; and you probably don't want to do that with
+>          malloc, in particular with non-page-aligned allocations.
+> 
+>      And the OpenBSD 6.5 manual pages says:
+> 
+>          MAP_STACK
+>              Indicate that the mapping is used as a stack. This
+>              flag must be used in combination with MAP_ANON and
+>              MAP_PRIVATE.
+> 
+>      And I then noticed that MAP_STACK seems already to be on
+>      FreeBSD for a long time:
+> 
+>          MAP_STACK
+>              Map the area as a stack.  MAP_ANON is implied.
+>              Offset should be 0, fd must be -1, and prot should
+>              include at least PROT_READ and PROT_WRITE.  This
+>              option creates a memory region that grows to at
+>              most len bytes in size, starting from the stack
+>              top and growing down.  The stack top is the start‐
+>              ing address returned by the call, plus len bytes.
+>              The bottom of the stack at maximum growth is the
+>              starting address returned by the call.
+> 
+>              The entire area is reserved from the point of view
+>              of other mmap() calls, even if not faulted in yet.
+> 
+>      Reported-by: Jann Horn <jannh@google.com>
+>      Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
+>      Signed-off-by: Michael Kerrisk <mtk.manpages@gmail.com>
+> 
+> 
+>>
+>> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 >> ---
->>  fs/exec=2Ec | 26 +++++++++++++++++++++++++-
->>  1 file changed, 25 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/fs/exec=2Ec b/fs/exec=2Ec
->> index 79f2c9483302=2E=2Ebbf3aadf7ce1 100644
->> --- a/fs/exec=2Ec
->> +++ b/fs/exec=2Ec
->> @@ -495,8 +495,14 @@ static int bprm_stack_limits(struct linux_binprm *=
-bprm)
->>  	 * the stack=2E They aren't stored until much later when we can't
->>  	 * signal to the parent that the child has run out of stack space=2E
->>  	 * Instead, calculate it here so it's possible to fail gracefully=2E
->> +	 *
->> +	 * In the case of argc =3D 0, make sure there is space for adding a
->> +	 * empty string (which will bump argc to 1), to ensure confused
->> +	 * userspace programs don't start processing from argv[1], thinking
->> +	 * argc can never be 0, to keep them from walking envp by accident=2E
->> +	 * See do_execveat_common()=2E
->>  	 */
->> -	ptr_size =3D (bprm->argc + bprm->envc) * sizeof(void *);
->> +	ptr_size =3D (min(bprm->argc, 1) + bprm->envc) * sizeof(void *);
->
->From #musl:
->
-><mixi> kees: shouldn't the min(bprm->argc, 1) be max(=2E=2E=2E) in your p=
-atch?
+> 
+> Yeah, stack handling - especially with legacy clone() - is yucky on the
+> best of days. Thank you for the fix.
+> 
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> 
 
-Fix has already been sent, yup=2E
+Thank you both. Will apply for 5.17-rc4 or so.
 
->I'm pretty sure without fixing that, you're introducing a giant vuln
->here=2E
-
-I wouldn't say "giant", but yes, it weakened a defense in depth for avoidi=
-ng high stack utilization=2E
-
-> I believe this is the second time a patch attempting to fix this
->non-vuln has proposed adding a new vuln=2E=2E=2E
-
-Mistakes happen, and that's why there is review and testing=2E Thank you f=
-or being part of the review process! :)
-
--Kees
-
---=20
-Kees Cook
+thanks,
+-- Shuah

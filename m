@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998784A6B8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 06:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027AA4A6BB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbiBBFjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 00:39:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:35692 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232452AbiBBFjl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 00:39:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A584AED1;
-        Tue,  1 Feb 2022 21:39:40 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.43.221])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 090FA3F718;
-        Tue,  1 Feb 2022 21:39:36 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: Merge pte_mkhuge() call into arch_make_huge_pte()
-Date:   Wed,  2 Feb 2022 11:08:06 +0530
-Message-Id: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S244668AbiBBFxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 00:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244122AbiBBFxU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 00:53:20 -0500
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72370C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 21:53:20 -0800 (PST)
+Received: by mail-ej1-x64a.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso7567567eje.20
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 21:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=YEcxhso9sKjwZhJ6R9y6hnaWvi7Bzl1Na0XtKw+cwWk=;
+        b=fUSdWYOdHeKUeMgW6YkmBxSB/53js0/Xi9yPMPIeXKRuuprd68oDxxw8HXs56pmzJG
+         TbGOtSyTeaMoteeqDmLO5y7xP36mECmU8T0tPomihYtHDMaGXXCkcWYOyUfUasPNi835
+         kDXwHeG0kcsd3Cn/KKcZGwYPIkWPIroW53VaM1DC8BSncx9oeWZCe29sgii32Q7ug5mh
+         u/0Ws5Jq/MiYnvh1cosoRQlgXMdK8sVbo/KwcYTdIh7dVj2F9LN3w5Ss57bUGk40JoT7
+         qzUrnoNpR1o7tJSkKNk5bZ0w15/js/EiMbtt8yYzNZnBSHucZmO1n+E+sZakSLGPxv1l
+         VlXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=YEcxhso9sKjwZhJ6R9y6hnaWvi7Bzl1Na0XtKw+cwWk=;
+        b=QDMckJRRE4IxFvE8PzsYvoaFPTUvy64214h2Ps5/18irDo2gXiQEk6QM8/FbWIciD9
+         KUO/5/mJFWqJNw6ciqg2kz/XetecNPDy5AFp5o4oTExcn7j6Vkps1eR1JwAH6Lj2rNTX
+         /x3IxWtokpH6UTmv/wwAyJEell9nqkh7AnZl8rGXJX9LOeqS34RYCsu9ZXIBWoGNj+Xh
+         NNQtxWGemer6IHwfxDHkV8PYD2Si7fB6NHgU09tE8Q70Z2Rt3boZOeLpaUgDR+5sRCAs
+         JnbF7KhUWoQ6hZ7iFfZTv8BGWcDEVenG3MTkjDaIsDkitJ3ola3GN51X4Z/VcKl+VYDO
+         FrGA==
+X-Gm-Message-State: AOAM5331Fl/B7qvSWMcVLUjezZTuJqIUqri1znxM1G8ICSuX27NMHpZN
+        ++gXoscTlIufr63wO8l0rZfrtSTMa6vY
+X-Google-Smtp-Source: ABdhPJy+IHzyXutWJqA4hoUVM+uvXkIGkC09+jxx++EYw7o7QO1y6QxSCE62QHzHX7JdsiYBk8mn1cr2h8hxeQ==
+X-Received: from wedsonaf2.lon.corp.google.com ([2a00:79e0:d:209:954b:6afb:eea6:ecc2])
+ (user=wedsonaf job=sendgmr) by 2002:a50:ed16:: with SMTP id
+ j22mr29245372eds.114.1643781198818; Tue, 01 Feb 2022 21:53:18 -0800 (PST)
+Date:   Wed,  2 Feb 2022 05:51:23 +0000
+Message-Id: <20220202055123.2144842-1-wedsonaf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] powerpc/module_64: use module_init_section instead of
+ patching names
+From:   Wedson Almeida Filho <wedsonaf@google.com>
+To:     mpe@ellerman.id.au
+Cc:     benh@kernel.crashing.org, paulus@samba.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Each call into pte_mkhuge() is invariably followed by arch_make_huge_pte().
-Instead arch_make_huge_pte() can accommodate pte_mkhuge() at the beginning.
-This updates generic fallback stub for arch_make_huge_pte() and available
-platforms definitions. This makes huge pte creation much cleaner and easier
-to follow.
+Without this patch, module init sections are disabled by patching their
+names in arch-specific code when they're loaded (which prevents code in
+layout_sections from finding init sections). This patch uses the new
+arch-specific module_init_section instead.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+This allows modules that have .init_array sections to have the
+initialisers properly called (on load, before init). Without this patch,
+the initialisers are not called because .init_array is renamed to
+_init_array, and thus isn't found by code in find_module_sections().
+
+Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
 ---
- arch/arm64/mm/hugetlbpage.c                      | 1 +
- arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h | 1 +
- arch/sparc/mm/hugetlbpage.c                      | 1 +
- include/linux/hugetlb.h                          | 2 +-
- mm/hugetlb.c                                     | 3 +--
- mm/vmalloc.c                                     | 1 -
- 6 files changed, 5 insertions(+), 4 deletions(-)
+ arch/powerpc/kernel/module_64.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index ffb9c229610a..228226c5fa80 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -347,6 +347,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
- {
- 	size_t pagesize = 1UL << shift;
- 
-+	entry = pte_mkhuge(entry);
- 	if (pagesize == CONT_PTE_SIZE) {
- 		entry = pte_mkcont(entry);
- 	} else if (pagesize == CONT_PMD_SIZE) {
-diff --git a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
-index 64b6c608eca4..e41e095158c7 100644
---- a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
-+++ b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
-@@ -70,6 +70,7 @@ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags
- {
- 	size_t size = 1UL << shift;
- 
-+	entry = pte_mkhuge(entry);
- 	if (size == SZ_16K)
- 		return __pte(pte_val(entry) & ~_PAGE_HUGE);
- 	else
-diff --git a/arch/sparc/mm/hugetlbpage.c b/arch/sparc/mm/hugetlbpage.c
-index 0f49fada2093..d8e0e3c7038d 100644
---- a/arch/sparc/mm/hugetlbpage.c
-+++ b/arch/sparc/mm/hugetlbpage.c
-@@ -181,6 +181,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
- {
- 	pte_t pte;
- 
-+	entry = pte_mkhuge(entry);
- 	pte = hugepage_shift_to_tte(entry, shift);
- 
- #ifdef CONFIG_SPARC64
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index d1897a69c540..52c462390aee 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -754,7 +754,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
- static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
- 				       vm_flags_t flags)
- {
--	return entry;
-+	return pte_mkhuge(entry);
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 5d77d3f5fbb5..6a45e6ddbe58 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -277,6 +277,12 @@ static Elf64_Sym *find_dot_toc(Elf64_Shdr *sechdrs,
+ 	return NULL;
  }
- #endif
  
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 61895cc01d09..5ca253c1b4e4 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4637,7 +4637,6 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
- 					   vma->vm_page_prot));
- 	}
- 	entry = pte_mkyoung(entry);
--	entry = pte_mkhuge(entry);
- 	entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
++bool module_init_section(const char *name)
++{
++	/* We don't handle .init for the moment: always return false. */
++	return false;
++}
++
+ int module_frob_arch_sections(Elf64_Ehdr *hdr,
+ 			      Elf64_Shdr *sechdrs,
+ 			      char *secstrings,
+@@ -286,7 +292,6 @@ int module_frob_arch_sections(Elf64_Ehdr *hdr,
  
- 	return entry;
-@@ -6172,7 +6171,7 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
- 			unsigned int shift = huge_page_shift(hstate_vma(vma));
+ 	/* Find .toc and .stubs sections, symtab and strtab */
+ 	for (i = 1; i < hdr->e_shnum; i++) {
+-		char *p;
+ 		if (strcmp(secstrings + sechdrs[i].sh_name, ".stubs") == 0)
+ 			me->arch.stubs_section = i;
+ 		else if (strcmp(secstrings + sechdrs[i].sh_name, ".toc") == 0) {
+@@ -298,10 +303,6 @@ int module_frob_arch_sections(Elf64_Ehdr *hdr,
+ 			dedotify_versions((void *)hdr + sechdrs[i].sh_offset,
+ 					  sechdrs[i].sh_size);
  
- 			old_pte = huge_ptep_modify_prot_start(vma, address, ptep);
--			pte = pte_mkhuge(huge_pte_modify(old_pte, newprot));
-+			pte = huge_pte_modify(old_pte, newprot);
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
- 			pages++;
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 4165304d3547..d0b14dd73adc 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -118,7 +118,6 @@ static int vmap_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
- 		if (size != PAGE_SIZE) {
- 			pte_t entry = pfn_pte(pfn, prot);
- 
--			entry = pte_mkhuge(entry);
- 			entry = arch_make_huge_pte(entry, ilog2(size), 0);
- 			set_huge_pte_at(&init_mm, addr, pte, entry);
- 			pfn += PFN_DOWN(size);
+-		/* We don't handle .init for the moment: rename to _init */
+-		while ((p = strstr(secstrings + sechdrs[i].sh_name, ".init")))
+-			p[0] = '_';
+-
+ 		if (sechdrs[i].sh_type == SHT_SYMTAB)
+ 			dedotify((void *)hdr + sechdrs[i].sh_offset,
+ 				 sechdrs[i].sh_size / sizeof(Elf64_Sym),
 -- 
-2.25.1
+2.35.0.rc2.247.g8bbb082509-goog
 

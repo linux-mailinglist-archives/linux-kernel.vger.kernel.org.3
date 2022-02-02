@@ -2,83 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326764A6BF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 890234A6BE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245321AbiBBGxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 01:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S245024AbiBBGxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 01:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244752AbiBBGwi (ORCPT
+        with ESMTP id S244790AbiBBGwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 01:52:38 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374D5C061760
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 22:20:35 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id p5so57803618ybd.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 22:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=l+uquXfESx/tqrOtddQGRoiIWx2qKNEmqj7QtyIjnzQ=;
-        b=QmKh8tFM984sX84kix0/AjjcelJ9TjXYHtRsbztXekjiphwpeE3ZIJDDyC01dksTKJ
-         vkxj4B9hbQ2D53MVD6pcGorWiGQy2TRFLsq47OUN9gpvU/j9Yy/lk7r9gL2EsQFe8Wr1
-         UWnZONTFTrpIc3g7yRUb2DxVp7dEjZe2UbcFqXbZCjSKCOv0txfE9aqQChhBf5/UOeu6
-         vbG9/HDW5OE9saPUHtCLqwnxF4lL3U0oeliVh7p4Dqj4YQViwRSXlauTZZr5m2zC9W9O
-         TGJaPw76xdddIIdtsS+SY4jcyKbv74k59/F70mhyiTWDCmlsoQ5MQJDicmv4txCIYo+O
-         MqsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=l+uquXfESx/tqrOtddQGRoiIWx2qKNEmqj7QtyIjnzQ=;
-        b=h3noFQyaZZuf6/hKwYLU88WHCY3PQP9w1LxuwjkRkIUBEQLbQLS11tDJOR6jOwXeds
-         JsPBiPqe65zcE0IJKhOiIzU3P0S6DlIL0SRGDQjm14XpFYe0U+Hv1YbXWdm+A8uy6bpN
-         zra/eseFSF1At7Mgq43h8klmnLeROOlQVMP6PoP8dHxEaiRHxtk4l1zfKE5eK1vc6Yg7
-         wqc1G4BADB991OpNA3iCrTpVkZmcAhKR60+gCl4IKGtjyo+KYdlGuOqyS8nw+7L3uk3C
-         myC+FBB7aOlgk60pgzxpXyhNCj+hrAn0CUGYBYsSR6oLbFcCrDitbyIptbHTHG7AUqZN
-         kXTw==
-X-Gm-Message-State: AOAM5301Pjxg949za+qBFDDEPkmpwdFYDf97zTnATv15nGjntd8595UM
-        0SM/ruNw4V8fZdjDlX6QozsWR9/6Ucynw77L4g==
-X-Google-Smtp-Source: ABdhPJwj/bHR0Ip+EbPNcK38G3Rjs2+9sA8l+zNTl0xbw5ergXbLfGerauojvR+04Qsugnjn01gYWOMB3eKFsEZq1jc=
-X-Received: by 2002:a25:7904:: with SMTP id u4mr39743674ybc.563.1643782834006;
- Tue, 01 Feb 2022 22:20:34 -0800 (PST)
+        Wed, 2 Feb 2022 01:52:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1C2C061762
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 22:22:23 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D381A1EC04D3;
+        Wed,  2 Feb 2022 07:22:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643782938;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+yWMCdKjUAP7NDfIK/YUGlNwkHassb0AYsOAb+HOldU=;
+        b=ZWI7UGbFaRsqZ3Kb58DFXl1OEXLWUDPJxuWZMdrnDCQhpa+bjCOyjgKW1WbtZz/MHYILic
+        IhVekRG7D0/Md9nmwkLEu6er6LagFIrqDZbsCWs5RWjNBN531JomWRYGi5Stf6HzxmNh5/
+        0n0AUGxsgL4ZI1CICQcPxS2wC6qEv/A=
+Date:   Wed, 2 Feb 2022 07:22:13 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 13/29] x86/tdx: Add port I/O emulation
+Message-ID: <YfojFe6Rh0ETLc28@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-14-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:62cd:b0:202:30ba:64ca with HTTP; Tue, 1 Feb 2022
- 22:20:33 -0800 (PST)
-Reply-To: aishagaddafi157@aol.com
-From:   Mrs Aisha Al-Qaddafi <webbweb123@gmail.com>
-Date:   Wed, 2 Feb 2022 07:20:33 +0100
-Message-ID: <CAM-TX51K=J-sQ19LCg84YoqREtX7c9euy4Pb_dH8dzMWw=+cQw@mail.gmail.com>
-Subject: Urgent reply needed!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220124150215.36893-14-kirill.shutemov@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Mon, Jan 24, 2022 at 06:01:59PM +0300, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
+> index 8e630eeb765d..e73af22a4c11 100644
+> --- a/arch/x86/kernel/tdx.c
+> +++ b/arch/x86/kernel/tdx.c
+> @@ -13,6 +13,12 @@
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_VEINFO			3
+>  
+> +/* See Exit Qualification for I/O Instructions in VMX documentation */
+> +#define VE_IS_IO_IN(exit_qual)		(((exit_qual) & 8) ? 1 : 0)
+> +#define VE_GET_IO_SIZE(exit_qual)	(((exit_qual) & 7) + 1)
+> +#define VE_GET_PORT_NUM(exit_qual)	((exit_qual) >> 16)
+> +#define VE_IS_IO_STRING(exit_qual)	((exit_qual) & 16 ? 1 : 0)
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only daughter to Former
-President of Libya Col. Muammar Al-Qaddafi. Am a Widow with Children.
+Use BIT() and masks here. For example:
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+#define VE_IS_IO_STRING(e)	((e) & BIT(4))
 
-I am willing to negotiate investment/business profit sharing ratio
-with you based on the future investment earning profits.
+You don't need the ternary ?: either as you're using them all in a
+boolean context.
 
-If you are willing to handle this project on my behalf, kindly reply
-urgent to enable me provide you more information about the investment
-funds.
+> +static bool tdx_handle_io(struct pt_regs *regs, u32 exit_qual)
+> +{
+> +	struct tdx_hypercall_output out;
+> +	int size, port, ret;
+> +	u64 mask;
+> +	bool in;
+> +
+> +	if (VE_IS_IO_STRING(exit_qual))
+> +		return false;
+> +
+> +	in   = VE_IS_IO_IN(exit_qual);
+> +	size = VE_GET_IO_SIZE(exit_qual);
+> +	port = VE_GET_PORT_NUM(exit_qual);
+> +	mask = GENMASK(BITS_PER_BYTE * size, 0);
+> +
+> +	/*
+> +	 * Emulate the I/O read/write via hypercall. More info about
+> +	 * ABI can be found in TDX Guest-Host-Communication Interface
+> +	 * (GHCI) sec titled "TDG.VP.VMCALL<Instruction.IO>".
 
-Your Urgent Reply Will Be Appreciated
+"section"
 
-Best Regards
-Mrs Aisha Al-Qaddafi
-Email: (  aishagaddafi157@aol.com  ).
+> +	 */
+> +	ret = _tdx_hypercall(EXIT_REASON_IO_INSTRUCTION, size, !in, port,
+> +			     in ? 0 : regs->ax, &out);
+> +	if (!in)
+> +		return !ret;
+> +
+> +	regs->ax &= ~mask;
+> +	regs->ax |= ret ? UINT_MAX : out.r11 & mask;
+> +
+> +	return !ret;
+> +}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D434A7A91
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A844A7A98
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244114AbiBBVjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 16:39:32 -0500
-Received: from mga12.intel.com ([192.55.52.136]:37102 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232659AbiBBVja (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 16:39:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643837970; x=1675373970;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Yk/jgFqWUvz1adqNi+GwqR741IdbZbWUzfwflmMjc10=;
-  b=N408mK+T08OF1HftYslZufGH/RD55Ilgy8b3YzbNA2h7OOQymC/a0Gl1
-   tq9NWPVBs6x9k6oDpgC/pel+3VC1ypzUzIYBy3zXrrJmTiQFvaB3XwoFv
-   N5lJulDmDgorWRVkU45S/mDugOnLRzAoYWqyl8Mh/nvJ7sZSDir4tt+Xw
-   URixhNU1eX/jcO3yQsWdS1byv4aKZjzfcXLhKVLrdyjYPBJO2QuCOHw6o
-   gqlYlIUd79zmyF5lZ1zyEb5dWg73a+5pRDb+2BfkfNbEysf6i3dYj2mVo
-   UYkXQmswvQ1hpeM2Mg3Y75dsGDLPL/kLjDKTi0YWE9PMl44Wur3gDpCoc
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="227994843"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="227994843"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 13:39:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="497896299"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 Feb 2022 13:39:28 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFNLb-000V9r-Ip; Wed, 02 Feb 2022 21:39:27 +0000
-Date:   Thu, 3 Feb 2022 05:38:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+        id S1347697AbiBBVnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 16:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233512AbiBBVnE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 16:43:04 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A625CC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 13:43:04 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id e81so917658oia.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 13:43:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W3C86wM4RRIil8SxMQCDDt7pq/c7kC+1ToUwcaauhcY=;
+        b=bcf0lTZn99V9oVeN3ea94gI1jVOL8i6cIyNZAtSXBbrZbPkj8NiwExPSavIGezwB08
+         Yt2kEnAKIfK+aMT4IMo13Lf2CI613trgWsAu4Xz7yme4kxZTHYcGto0WkIrYeqeJ2paT
+         28Laff0Gxkao9X+felx3/7XAyw5d+vPztBfK2aBiCnNS2KLhhgYku9YK3wc5FwDD98aI
+         GuRSCHSGpXjmhiq+79D/+vguYkybVKv6rM+Qmswkz29/ARg/whzqyxkQIqtY90nsJCB9
+         ewRk0pOkfGjjbCxd9KVqKUXTYPjmxbargNak9k85YpPdHIQKt+5zr5g+F5J4deC7ebCm
+         wG/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W3C86wM4RRIil8SxMQCDDt7pq/c7kC+1ToUwcaauhcY=;
+        b=dAPtpZ/QgE9eP8vSpegOX/hFMXnNFz36x0pTb1GjyXcaGCeGnf7wBLGoJnV33gahzN
+         PoaqVeupmmSn3CDlYB49gDY07v59yRtNlb1Wjw55dZoi+cD5kP+nhq6D+XIEW5P0FAq8
+         G4ooxLyD3QH1P5XDWSAcxhr1QbXK4Ux0kljEhezi8yoTzwynZMJLedeJURgwnSm0lXdQ
+         spHk1jP6MZnzklvjV8CmVrkbL6yjFbHOXVJd4aTwjuIaYL9mZd63XLmiuk3bIByd9ydA
+         N3KiTgVKsGCjSJQ1nugVCAJskYL+VOCNnXu1HyF4SaIcsMTKk8PC6lIGCr5+sxpdpImD
+         Yfkg==
+X-Gm-Message-State: AOAM532HUKCOsOIhFj15WJzzFbh68lQVJ0R1PrfFXcyBUxn1bJENKNql
+        ht3NrcUdgmKuYmoYO+Ywlbo=
+X-Google-Smtp-Source: ABdhPJxX0n9uNpXvgGpEUqJyCL3sYTi8+QyGIJtIaJ57BLSpqMGEySXmBI0EIFOhg4b3VrVTjkeuvw==
+X-Received: by 2002:a05:6808:10ce:: with SMTP id s14mr1474773ois.164.1643838183932;
+        Wed, 02 Feb 2022 13:43:03 -0800 (PST)
+Received: from magali.lan ([191.181.56.252])
+        by smtp.gmail.com with ESMTPSA id y15sm11701268oof.37.2022.02.02.13.43.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 13:43:03 -0800 (PST)
+From:   Magali Lemes <magalilemes00@gmail.com>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     Magali Lemes <magalilemes00@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [RFC PATCH] mtd: spi-nor: spi_nor_sr_ready_and_clear() can be static
-Message-ID: <20220202213855.GA31097@9f7316611cc3>
-References: <20220202145853.4187726-13-michael@walle.cc>
+Subject: [PATCH] drm/amd/display: Use NULL pointer instead of plain integer
+Date:   Wed,  2 Feb 2022 18:38:56 -0300
+Message-Id: <20220202213856.409403-1-magalilemes00@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202145853.4187726-13-michael@walle.cc>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/mtd/spi-nor/spansion.c:332:5: warning: symbol 'spi_nor_sr_ready_and_clear' was not declared. Should it be static?
+Assigning 0L to a pointer variable caused the following warning:
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dsc/rc_calc_fpu.c:71:40:
+warning: Using plain integer as NULL pointer
+
+In order to remove this warning, this commit assigns a NULL pointer to
+the pointer variable that caused this issue.
 
 Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Magali Lemes <magalilemes00@gmail.com>
 ---
- spansion.c |    2 +-
+ drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
-index 4756fb88eab232..242d55e043f08d 100644
---- a/drivers/mtd/spi-nor/spansion.c
-+++ b/drivers/mtd/spi-nor/spansion.c
-@@ -329,7 +329,7 @@ static void spi_nor_clear_sr(struct spi_nor *nor)
-  *
-  * Return: 1 if ready, 0 if not ready, -errno on errors.
-  */
--int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
-+static int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
- {
- 	int ret;
+diff --git a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
+index ec636d06e18c..ef75eb7d5adc 100644
+--- a/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
++++ b/drivers/gpu/drm/amd/display/dc/dml/dsc/rc_calc_fpu.c
+@@ -68,7 +68,7 @@ static void get_qp_set(qp_set qps, enum colour_mode cm, enum bits_per_comp bpc,
+ 	int sel = table_hash(mode, bpc, max_min);
+ 	int table_size = 0;
+ 	int index;
+-	const struct qp_entry *table = 0L;
++	const struct qp_entry *table = NULL;
  
+ 	// alias enum
+ 	enum { min = DAL_MM_MIN, max = DAL_MM_MAX };
+-- 
+2.25.1
+

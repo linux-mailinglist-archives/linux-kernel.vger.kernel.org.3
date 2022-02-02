@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4761E4A70F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91404A70FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242028AbiBBMlg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 07:41:36 -0500
-Received: from aposti.net ([89.234.176.197]:46104 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240128AbiBBMlf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:41:35 -0500
-Date:   Wed, 02 Feb 2022 12:41:21 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v12 2/9] drm/ingenic: Add support for JZ4780 and HDMI
- output
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Message-Id: <XKGO6R.LTTYDEGZ8RJH3@crapouillou.net>
-In-Reply-To: <78F51BD7-112A-458D-8FCE-6A67572A182B@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
-        <6a7b188769a7ad477bf8cb71e1b9bc086b92388d.1643632014.git.hns@goldelico.com>
-        <N7AO6R.7I6FABF106MT1@crapouillou.net>
-        <1F27171F-DFCA-4707-8F50-D1A343F6D78E@goldelico.com>
-        <CYEO6R.2QDXEFO5G1WQ3@crapouillou.net>
-        <37CB6D86-4295-4281-BF3E-3E4B40E74196@goldelico.com>
-        <5ZFO6R.M6Z7S3EBA1YC1@crapouillou.net>
-        <78F51BD7-112A-458D-8FCE-6A67572A182B@goldelico.com>
+        id S1344195AbiBBMqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:46:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35536 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234582AbiBBMp7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:45:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643805959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2MgpqkUcQy8xm2YEczHn5aMWVUVny42CQPa38ApqUo=;
+        b=VBp3nBumZQG3y5BnoX/TJeVgV7ojZEiJgWPQPteEpPQVGeGJpsTEWoFLOEYg+/YRSJb25B
+        uT4fp4fwhpqVFKc0VJ6jH2Vdn9buQqmTfO8q73JFUutQNEKZakt5g1suy51cpc6k/2k/Ey
+        VBfXchn/8ijykm0+MXT5760YX9VhlEE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-2dT8xX2RPAC9InBHVL4mMQ-1; Wed, 02 Feb 2022 07:45:58 -0500
+X-MC-Unique: 2dT8xX2RPAC9InBHVL4mMQ-1
+Received: by mail-ej1-f70.google.com with SMTP id rl11-20020a170907216b00b006b73a611c1aso8053559ejb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 04:45:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L2MgpqkUcQy8xm2YEczHn5aMWVUVny42CQPa38ApqUo=;
+        b=p/OzGw2gLL4+KSixOzVJxYIRcx8eM7jLzM0W/TyTFVMhVnuBAPWXvcWaW1AY2704Fp
+         oNFnAcZ9mU77icuZRfmsyeb3+lxQvK4OuqOHQ1q/wK15SaUEnwQk6zS1h0+ZzHEddv9N
+         CbEGSANTi5A7y2sUXM2XXBhZnV91qYtSCHcBbv89HEQ8qF6t3gzOeYKrNlPwZKUMqs8W
+         TWpraj4E4J47JEH3hrRcEigKxFxrn7mAlZAaqdt90cunEUT3fZ+iDrhnM9UrP9QXWg1e
+         XFHMehAodcR6dHDyF3csP+VaIsJUQWMOo0NqlIPqDGDPdP5if7OKnCS5nmDaKjkeFP7y
+         vuBA==
+X-Gm-Message-State: AOAM531Aa6qrGebB/BaEFk69rFdqTbLeT64YH2/bERSdELVYMDqNmdNW
+        jjSPBprBZwQ1uj/oM6eobF9dk89qcLybU09YJYsCu+Fd9ylBf9RHEgm0Ru5kFOC4hyQRgPyaKfh
+        tEc4946UDrz+MBxtWvfIBlcH8
+X-Received: by 2002:a05:6402:698:: with SMTP id f24mr30447153edy.159.1643805957168;
+        Wed, 02 Feb 2022 04:45:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0BOt5vFNLNoU+2m3VvI1dwFENKVK9kPv+3YXwZ4YNAFwj6bqDiewZqYzq9PKmLgXw0q43hA==
+X-Received: by 2002:a05:6402:698:: with SMTP id f24mr30447139edy.159.1643805957039;
+        Wed, 02 Feb 2022 04:45:57 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id q6sm15775628ejx.113.2022.02.02.04.45.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 04:45:56 -0800 (PST)
+Message-ID: <8386b5bf-46bd-5927-9119-cdf77e1df082@redhat.com>
+Date:   Wed, 2 Feb 2022 13:45:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH][next] power: supply: axp288_fuel_gauge: Fix spelling
+ mistake "resisitor" -> "resistor"
+Content-Language: en-US
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220202091246.580091-1-colin.i.king@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220202091246.580091-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 2/2/22 10:12, Colin Ian King wrote:
+> There is a spelling mistake in a MODULE_PARM_DESC description. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Le mer., févr. 2 2022 at 13:33:15 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> 
-> 
->>  Am 02.02.2022 um 13:28 schrieb Paul Cercueil <paul@crapouillou.net>:
->> 
->> 
->> 
->>  Le mer., févr. 2 2022 at 13:17:14 +0100, H. Nikolaus Schaller 
->> <hns@goldelico.com> a écrit :
->>>  Hi Paul,
->>>>  Am 02.02.2022 um 13:06 schrieb Paul Cercueil 
->>>> <paul@crapouillou.net>:
->>>>  Hi Nikolaus,
->>>>>>>  @@ -446,6 +454,9 @@ static int 
->>>>>>> ingenic_drm_plane_atomic_check(struct drm_plane *plane,
->>>>>>>  	if (!crtc)
->>>>>>>  		return 0;
->>>>>>>  +	if (plane == &priv->f0)
->>>>>>>  +		return -EINVAL;
->>>>>>  This will break JZ4725B -> JZ4770 SoCs, the f0 plane is 
->>>>>> perfectly usable there.
->>>>>  Hm. I think it was your request/proposal to add this [1]?
->>>>  Because otherwise with your current patchset the f0 plane does 
->>>> not work *on JZ4780*.
->>>  Not that I am eager to fix that, but...
->>>  maybe it could be better to fix than having the check and -EINVAL 
->>> depend on SoC compatible string
->>>  (or some new flag in soc_info. plane_f0_not_working)?
->> 
->>  Totally agree! A proper fix would be much better. A 
->> "plane_f0_not_working" in the meantime is OK with me.
-> 
-> Ok, then I'll prepare a v13 with plane_f0_not_working.
-> 
->> 
->>  Note that there are other things not working with your current 
->> implementation, for instance you cannot set the X/Y start position 
->> of the f1 plane, which means it's only really usable for fullscreen 
->> desktop/windows.
-> 
-> Is setting x/y possible for the other SoC?
+Oops my bad, patch looks good to me:
 
-Yes. They support different x/y positions, sizes, and pixel format for 
-both f0, f1 and IPU planes.
+Acked-by: Hans de Goede <hdegoede@redhat.com>
 
--Paul
+Regards,
 
->> 
->>>>  It does work on older SoCs.
->>>>>  What I have forgotten is why the f0 plane should not be usable 
->>>>> for jz4780.
->>>>  We return an error here to prevent userspace from using the f0 
->>>> plane until it's effectively working on the JZ4780.
->>>  Well, what would be not working with that plane if user-space 
->>> would try to use it?
->> 
->>  From what I remember, it wouldn't show anything on screen, and 
->> after that trying to use the f1 plane wouldn't work either.
-> 
-> Ok. That may become a big project to fix. So let's do step 1 first.
-> 
-> BR and thanks,
-> NIkolaus
-> 
+Hans
 
+> ---
+>  drivers/power/supply/axp288_fuel_gauge.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+> index dcedbc59732d..13be2c1d6528 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -91,7 +91,7 @@
+>  
+>  static bool no_current_sense_res;
+>  module_param(no_current_sense_res, bool, 0444);
+> -MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resisitor");
+> +MODULE_PARM_DESC(no_current_sense_res, "No (or broken) current sense resistor");
+>  
+>  enum {
+>  	QWBTU_IRQ = 0,
+> 
 

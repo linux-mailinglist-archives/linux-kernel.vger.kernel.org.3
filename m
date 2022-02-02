@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3154A7902
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1264A790C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347052AbiBBTxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbiBBTxF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:53:05 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03EDC061714;
-        Wed,  2 Feb 2022 11:53:05 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id y23so319997oia.13;
-        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
-        b=CDBJpW2r1wf4eigdGkr2V3IrvGBF1xzJPfbz1cW8hvexOIc3Bqqe2/aFWwOiZhIob7
-         RfmtODcRYQU9+t+pXV5KC+16mpLpvgFFM5bBgmyDMjzeTayORc8VAAxcAiLcyst9P+lW
-         LNP8llOOPsky8AS5TlwYipDYeti9NR7W6RJXTG7oFxkO9/krL9RfkSFZ/Wiju7HRuICK
-         g8HabQbbuwEICZ/yuQAJ1p4tt45PJxg2T7E925GUcuNAFcn4mTHbBUpKcAe4derklUOn
-         9o/QA6wojlmX6EC4x/7nP+OT99lV+r50AjkCvEhtiJuFpic1nIM+VGgtLGHHWydu69jO
-         9wIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KAapnjqdupg9fXil76Py0BtdEYN3g3+SW5GIOZidvYY=;
-        b=1/fOapZxFirxd77fkIxFtUPzl5vASO8BuLZYrqTGpkpFTXJx4n5zcKpmiwvotCI50B
-         DtkFlO+qzYKaFwWurpOKvLyAMHOr20CvvlfErOToyZV9RR9F+m054D53shr7N2kpW98C
-         Zl1kJ56Z0Xl0Vi3HAvwFDW1iklNYpAxABl2+knkI+slM7+fQRESY2dk2hGb0UxvTq+Sx
-         7Xg3cpbeUM0Ud2LZCUU7GxA0PwuThAYyhZz1in1U21H/pvMB7RaHGbaFzjNvCoiYnAFK
-         wjVyTV4UZedjlg+76SipSH1DHuQT5c04HoryZ2nQAxGQookb3+34aH9p9SeETdGhnJbv
-         P0/Q==
-X-Gm-Message-State: AOAM530NAOnxRDFfT2D9V1JB/IqCz6UUK8cg6KLWwdCfN+weZoXqokdx
-        81N7BMlHKoFERIROrZyjbaAAPY2qtsPxMQ==
-X-Google-Smtp-Source: ABdhPJxvw0En4YbOUz5a0ijavlnDr7FTM+Drf8Cy32SojnkMJ1wqRLvIcSilLwtGWf55xTxvUfQkOA==
-X-Received: by 2002:a05:6808:1490:: with SMTP id e16mr5756692oiw.8.1643831585077;
-        Wed, 02 Feb 2022 11:53:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l38sm17889158otl.45.2022.02.02.11.53.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 11:53:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 11:53:03 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] usb: typec: Factor out non-PD fwnode properties
-Message-ID: <20220202195303.GE2346468@roeck-us.net>
-References: <20220201032440.5196-3-samuel@sholland.org>
- <202202021458.xcH4F4SQ-lkp@intel.com>
+        id S1347056AbiBBTzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:55:03 -0500
+Received: from mga11.intel.com ([192.55.52.93]:60938 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229481AbiBBTzD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 14:55:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643831703; x=1675367703;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=y5ntJ5RdaDE7jrG5eEFatH115Trqmvs9XFLjUyDSvQY=;
+  b=PS0+aWWROyEr2ESsuzzV68/x4x3mbryxV8ZCVPpew4KNTG4pQg0GXAcb
+   setujrjeMOOLviGeuehlogOS1vfTp5FDFXqrN7l7KgbfBOVYh8zkh81Dv
+   oVTq+mzsXoRkNmTqTq/+En/3pq8xly3HUoZ3/PdKbGPKN1WE4XE5p6KKH
+   q9JaOtBDJgxUSPCS7FPVayMQWAqogmeVl4fW0Yc0ClxxNw3zTyWeWvZBS
+   Y3tGeScoOLuvD71Spx9raJaVxP+koQX048YncVzPO9V6X7YTWjmZpBU5E
+   7iRSpARJD6306mHh2NuQKngTayU6f0JS5g57yJpWDp+XeCwdPUtnWrBC8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="245604632"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="245604632"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 11:55:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="583559701"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Feb 2022 11:55:01 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BA1E93B7; Wed,  2 Feb 2022 21:55:15 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/1] iio: multiplexer: Make use of device properties
+Date:   Wed,  2 Feb 2022 21:55:11 +0200
+Message-Id: <20220202195511.55987-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202021458.xcH4F4SQ-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 02:22:27PM +0800, kernel test robot wrote:
-> Hi Samuel,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on usb/usb-testing]
-> [also build test WARNING on robh/for-next v5.17-rc2 next-20220202]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Samuel-Holland/dt-bindings-vendor-prefixes-Add-willsemi/20220201-112541
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> config: openrisc-randconfig-m031-20220201 (https://download.01.org/0day-ci/archive/20220202/202202021458.xcH4F4SQ-lkp@intel.com/config)
-> compiler: or1k-linux-gcc (GCC) 11.2.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> smatch warnings:
-> drivers/usb/typec/class.c:1919 typec_get_fw_cap() warn: unsigned 'cap->type' is never less than zero.
-> drivers/usb/typec/class.c:1926 typec_get_fw_cap() warn: unsigned 'cap->data' is never less than zero.
-> 
+Convert the module to be property provider agnostic and allow
+it to be used on non-OF platforms.
 
-Ah yes, there was a reason to assign the return values to 'ret' first
-and only afterwards to the actual capabilities. Please fix and resubmit.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/multiplexer/iio-mux.c | 48 ++++++++++++++-----------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-Guenter
+diff --git a/drivers/iio/multiplexer/iio-mux.c b/drivers/iio/multiplexer/iio-mux.c
+index f422d44377df..e6f0fef96494 100644
+--- a/drivers/iio/multiplexer/iio-mux.c
++++ b/drivers/iio/multiplexer/iio-mux.c
+@@ -10,11 +10,12 @@
+ #include <linux/err.h>
+ #include <linux/iio/consumer.h>
+ #include <linux/iio/iio.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/mux/consumer.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ 
+ struct mux_ext_info_cache {
+ 	char *data;
+@@ -324,37 +325,20 @@ static int mux_configure_channel(struct device *dev, struct mux *mux,
+ 	return 0;
+ }
+ 
+-/*
+- * Same as of_property_for_each_string(), but also keeps track of the
+- * index of each string.
+- */
+-#define of_property_for_each_string_index(np, propname, prop, s, i)	\
+-	for (prop = of_find_property(np, propname, NULL),		\
+-	     s = of_prop_next_string(prop, NULL),			\
+-	     i = 0;							\
+-	     s;								\
+-	     s = of_prop_next_string(prop, s),				\
+-	     i++)
+-
+ static int mux_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *np = pdev->dev.of_node;
+ 	struct iio_dev *indio_dev;
+ 	struct iio_channel *parent;
+ 	struct mux *mux;
+-	struct property *prop;
+-	const char *label;
++	const char **labels;
+ 	u32 state;
++	int children, all_children;
+ 	int sizeof_ext_info;
+-	int children;
+ 	int sizeof_priv;
+ 	int i;
+ 	int ret;
+ 
+-	if (!np)
+-		return -ENODEV;
+-
+ 	parent = devm_iio_channel_get(dev, "parent");
+ 	if (IS_ERR(parent))
+ 		return dev_err_probe(dev, PTR_ERR(parent),
+@@ -366,9 +350,21 @@ static int mux_probe(struct platform_device *pdev)
+ 		sizeof_ext_info *= sizeof(*mux->ext_info);
+ 	}
+ 
++	all_children = device_property_count_string_array(dev, "channels");
++	if (all_children < 0)
++		return all_children;
++
++	labels = devm_kmalloc_array(dev, all_children, sizeof(char *), GFP_KERNEL);
++	if (!labels)
++		return -ENOMEM;
++
++	ret = device_property_read_string_array(dev, "channels", labels, all_children);
++	if (ret < 0)
++		return ret;
++
+ 	children = 0;
+-	of_property_for_each_string(np, "channels", prop, label) {
+-		if (*label)
++	for (state = 0; state < all_children; state++) {
++		if (*labels[state])
+ 			children++;
+ 	}
+ 	if (children <= 0) {
+@@ -395,7 +391,7 @@ static int mux_probe(struct platform_device *pdev)
+ 	mux->cached_state = -1;
+ 
+ 	mux->delay_us = 0;
+-	of_property_read_u32(np, "settle-time-us", &mux->delay_us);
++	device_property_read_u32(dev, "settle-time-us", &mux->delay_us);
+ 
+ 	indio_dev->name = dev_name(dev);
+ 	indio_dev->info = &mux_info;
+@@ -426,11 +422,11 @@ static int mux_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	i = 0;
+-	of_property_for_each_string_index(np, "channels", prop, label, state) {
+-		if (!*label)
++	for (state = 0; state < all_children; state++) {
++		if (!*labels[state])
+ 			continue;
+ 
+-		ret = mux_configure_channel(dev, mux, state, label, i++);
++		ret = mux_configure_channel(dev, mux, state, labels[state], i++);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+-- 
+2.34.1
+

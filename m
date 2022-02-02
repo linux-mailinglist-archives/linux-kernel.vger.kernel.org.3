@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55664A76B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E134A76B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346175AbiBBRT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:19:57 -0500
-Received: from mta-11-4.privateemail.com ([198.54.127.104]:45250 "EHLO
-        MTA-11-4.privateemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiBBRT4 (ORCPT
+        id S1346229AbiBBRUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:20:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:46048 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230363AbiBBRUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:19:56 -0500
-Received: from mta-11.privateemail.com (localhost [127.0.0.1])
-        by mta-11.privateemail.com (Postfix) with ESMTP id CAA4C18000AA;
-        Wed,  2 Feb 2022 12:19:55 -0500 (EST)
-Received: from localhost.localdomain (unknown [10.20.151.154])
-        by mta-11.privateemail.com (Postfix) with ESMTPA id 108D618000AE;
-        Wed,  2 Feb 2022 12:19:52 -0500 (EST)
-From:   Jordy Zomer <jordy@pwning.systems>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jordy Zomer <jordy@pwning.systems>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ofir Bitton <obitton@habana.ai>,
-        Dani Liberman <dliberman@habana.ai>,
-        Omer Shpigelman <oshpigelman@habana.ai>,
-        Sagiv Ozeri <sozeri@habana.ai>,
-        Yuri Nudelman <ynudelman@habana.ai>,
-        farah kassabri <fkassabri@habana.ai>,
-        Koby Elbaz <kelbaz@habana.ai>
-Subject: [PATCHv2] habanalabs: fix potential spectre v1 gadgets
-Date:   Wed,  2 Feb 2022 18:19:24 +0100
-Message-Id: <20220202171931.3525220-1-jordy@pwning.systems>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <CAFCwf12QygXk=8WbH9qDhyyqKY6ZGVCUSJM93viQ0armc8dgfg@mail.gmail.com>
-References: <CAFCwf12QygXk=8WbH9qDhyyqKY6ZGVCUSJM93viQ0armc8dgfg@mail.gmail.com>
+        Wed, 2 Feb 2022 12:20:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC244617E3;
+        Wed,  2 Feb 2022 17:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 44AFAC340ED;
+        Wed,  2 Feb 2022 17:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643822410;
+        bh=1khkt3/JcCulRHYzhGquD0jyR/SW2E9+oMa5CW14XiU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GPFi/OfU9uK1X2tyil9VCNsxixh0uyLySs2aGWcQnv4TO3BdGotHACbVC3LRKQuem
+         dh70Vp8VOZskwkOGZugll0XPBxsisOzmXGA7bJ2/L6jXGXK9GXXR8mjqclaEcuo1IQ
+         yM2TmbApRdZ+f7Fdi40gT0qaimTXVADn91nNTyF64x81Jv5OLevXp3an1EywsdoHlo
+         liFiJy8XaoGMAobnCYbIdnnlwosU1Xa1BD1W4b92RnLnfqTXdcc4FeSB/9pEUU23It
+         UaQ6VwmYYhwTZKJF+cGe6jczzU+RJt9Iybh4WuHUKjWKZBe0rjsC8Qv8+Ik22jdGLe
+         0Gfzob6sMPTWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1A198E6BB30;
+        Wed,  2 Feb 2022 17:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+Subject: Re: [PATCH net v2] net: sparx5: do not refer to skb after passing it on
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164382241009.2143.7850351482664563943.git-patchwork-notify@kernel.org>
+Date:   Wed, 02 Feb 2022 17:20:10 +0000
+References: <20220202083039.3774851-1-steen.hegelund@microchip.com>
+In-Reply-To: <20220202083039.3774851-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, UNGLinuxDriver@microchip.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com,
+        lkp@intel.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It appears like nr could be a Spectre v1 gadget as it's supplied by a
-user and used as an array index. Prevent the contents
-of kernel memory from being leaked to userspace via speculative
-execution by using array_index_nospec.
+Hello:
 
-Thanks for noticing Oded, made the changes.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+On Wed, 2 Feb 2022 09:30:39 +0100 you wrote:
+> Do not try to use any SKB fields after the packet has been passed up in the
+> receive stack.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+> 
+> [...]
 
----
-Changes v1 -> v2: Added the correct offsets
----
- drivers/misc/habanalabs/common/habanalabs_ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+Here is the summary with links:
+  - [net,v2] net: sparx5: do not refer to skb after passing it on
+    https://git.kernel.org/netdev/net/c/81eb8b0b1878
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs_ioctl.c b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-index 3ba3a8ffda3e..c1cdf712a10d 100644
---- a/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-+++ b/drivers/misc/habanalabs/common/habanalabs_ioctl.c
-@@ -14,6 +14,7 @@
- #include <linux/fs.h>
- #include <linux/uaccess.h>
- #include <linux/slab.h>
-+#include <linux/nospec.h>
- 
- static u32 hl_debug_struct_size[HL_DEBUG_OP_TIMESTAMP + 1] = {
- 	[HL_DEBUG_OP_ETR] = sizeof(struct hl_debug_params_etr),
-@@ -849,6 +850,7 @@ long hl_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
- 	}
- 
- 	if ((nr >= HL_COMMAND_START) && (nr < HL_COMMAND_END)) {
-+		nr = array_index_nospec(nr, HL_COMMAND_END);
- 		ioctl = &hl_ioctls[nr];
- 	} else {
- 		dev_err(hdev->dev, "invalid ioctl: pid=%d, nr=0x%02x\n",
-@@ -872,6 +874,7 @@ long hl_ioctl_control(struct file *filep, unsigned int cmd, unsigned long arg)
- 	}
- 
- 	if (nr == _IOC_NR(HL_IOCTL_INFO)) {
-+		nr = array_index_nospec(nr, _IOC_NR(HL_IOCTL_INFO)+1);
- 		ioctl = &hl_ioctls_control[nr];
- 	} else {
- 		dev_err(hdev->dev_ctrl, "invalid ioctl: pid=%d, nr=0x%02x\n",
+You are awesome, thank you!
 -- 
-2.27.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86034A7B00
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C31254A7AFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347843AbiBBWTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:19:33 -0500
-Received: from mga17.intel.com ([192.55.52.151]:60535 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235181AbiBBWTc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:19:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643840372; x=1675376372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XfujBTN+u0aYzQcxfjJSTOYOLdePPqbT+2Jtxu0iXqY=;
-  b=HPYS/4ROfjY5mnd6j+my9N55PiWyWRWluLes2dmCwuKAk3LMFt7DmUrv
-   oTbD8ckHdciR1BInQoNPrTQp2blLkNbValr7LdUJvUlNaLvsMcpERG4d2
-   aPIZhyv5MzaBFwU3r5tEg0VvkURqnSS3n3MHjVRdwiOksptNfjDVLLGjv
-   5d4EvJ5Go/hujz+dAvDg8+HjWRNDK3FvDc0Ff6kw8rs24TYIBDwSN6Lnf
-   QlAy5p1wPQ/tLVd8KrVvBOmF0NrqZovSCDupE8x1BAHYp5EOu4gQBHitq
-   HpRFnsmZQnKe6krBfSWKP74dCaV9AO7APIbnZRfGKDvIBpHxwFExSvSXn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228685497"
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="228685497"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 14:19:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="483018110"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 14:19:29 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFNyK-000VCn-QL; Wed, 02 Feb 2022 22:19:28 +0000
-Date:   Thu, 3 Feb 2022 06:19:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        gregkh@linuxfoundation.org, pv-drivers@vmware.com,
-        Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: Re: [PATCH 2/8] VMCI: dma dg: add MMIO access to registers
-Message-ID: <202202030643.4ehOD5SG-lkp@intel.com>
-References: <20220202144910.10349-3-jhansen@vmware.com>
+        id S1347846AbiBBWTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:19:51 -0500
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:45985 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347845AbiBBWTu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 17:19:50 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id DC7CB5C0186;
+        Wed,  2 Feb 2022 17:19:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 02 Feb 2022 17:19:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=j5Y8ilTGveXraQd360AMKChOGsivYDofx2aDpvsAavc=; b=AIyzq
+        /SYCM+kfIlAcC5s9Nq+kYUc0csQd09IqyUAo6G4YaKILttS8Of7+HwTvXP9bu4CX
+        KmON3zLZ0ZTPuq1mEdUEX93eZIcQE9i3NoKd2o+Ox0qVK9xz8+MuDU2PiovM9dIC
+        MFq8K+9R6/0BdSiy6vlB0nT9gjpbteOLWX+ScZyJlq4t8zEX6vD7DNgLxDFM5+kN
+        wkOJ7ConkZHeibLOE5taa46Dn8dbanJ5GQlRuJsh8Za0wJd+fmhPsgp9WgTMSHHj
+        +lI8XWuTnXNTjyCSS/GF/Mb0V4X/m80GgTGfL+w4ou9P9gb/I4rtGIL2hHwIi5wJ
+        HJsnN0sJn+oARo7vA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=j5Y8ilTGveXraQd360AMKChOGsivY
+        Dofx2aDpvsAavc=; b=nWF60lG98jBd9F5MI3qbw2BojNgd/FTXo/pCQsQZq21uT
+        qZZJNEzsWr3d42LWc+XTTiKERdHi/DlVEkne0iH1Ceqwk4e2772ko0uEXOVNcPUi
+        5LXOdSvw6ShBQumK/51ExVVPzn4jkRThX5SaAW+y0iE1u7NNXAI3p0mP+U2ZWHML
+        cJOKL5Y+uyifgdnd28PUsjPjZX4exmYj8qEgR0eBTWKKvyuMdTHHAXiunnQRSWIy
+        jBlqIGQwq4XHd6AZRdxFYuETRv9Jx3hz3XUYMIZjQjNC+Dhb4lDEV8G7yirV6ZzP
+        sh9mEb0Edcyv1aR67bxWPgvCsRqYHiyEfmwU5vJtQ==
+X-ME-Sender: <xms:hQP7YZkDAM3J2peOIWyxXhChGdS9dV7mAkQZ-ElwkXnLHPtqGg93rw>
+    <xme:hQP7YU0aP5OuUGXa0qTHxnAQMEdehOVAfTWe1kPOG1SGLI78XSWO-yAtIIFMlUUWg
+    ayvjGlfB-uLoJV8jA>
+X-ME-Received: <xmr:hQP7Yfq421_YMFLevWxxquY38J6WzLgmUgtBpQUyJJvMn9rTish764UR0e4nzlL00PeLqOXHco3ubf4D5_erXj0Nr_Fyrg9L2bD2bFJlYQ73atx4PVC05sxpeqvnuI_fkHpq6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeehgdduiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:hQP7YZnKGdAXtzHPVBUeq7uSSCJBrki2Ast58EXy2uiryfRsbaL9Bg>
+    <xmx:hQP7YX19UHakEV13WmyB1y-qMC2BJRBthCxsKWoG6OTvmSVPvYnp0g>
+    <xmx:hQP7YYtYJkfoYBGww_NhPs3_vkYeCdlMosBPm2PVEwpfug7nnFmi9A>
+    <xmx:hQP7YRqBybmcPhTVYE0wQRUyj4O5d0HQWjAuLPaqfkFE1NzGLxuO0Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Feb 2022 17:19:48 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2 0/4] usb: typec: WUSB3801 devicetree bindings and driver
+Date:   Wed,  2 Feb 2022 16:19:43 -0600
+Message-Id: <20220202221948.5690-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202144910.10349-3-jhansen@vmware.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorgen,
+This series adds bindings and a driver for the Willsemi WUSB3801. This
+chip's bindings use the standard USB Type-C connector bindings, but the
+driver does not use the TCPM library, so a refactoring patch is included
+to avoid duplicating some fwnode parsing code.
 
-I love your patch! Perhaps something to improve:
+Changes in v2:
+ - Always put the return values from typec_find_* in a signed variable
+   for error checking.
+ - License the driver as GPL 2 only; probably best anyway as I used a
+   lot of other drivers/usb/typec code as inspiration
+ - Don't try to be clever; use `default` instead of `unreachable`
+ - Free the IRQ before unregistering the partner/port
 
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Samuel Holland (4):
+  dt-bindings: vendor-prefixes: Add willsemi
+  dt-bindings: usb: Add WUSB3801 Type-C Port Controller
+  usb: typec: Factor out non-PD fwnode properties
+  usb: typec: Support the WUSB3801 port controller
 
-url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
-config: i386-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220203/202202030643.4ehOD5SG-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f2afd39bab80c2e42ac789f6d949d779411df928
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-        git checkout f2afd39bab80c2e42ac789f6d949d779411df928
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
+ .../bindings/usb/willsemi,wusb3801.yaml       |  75 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ drivers/usb/typec/Kconfig                     |  10 +
+ drivers/usb/typec/Makefile                    |   1 +
+ drivers/usb/typec/class.c                     |  52 ++
+ drivers/usb/typec/tcpm/tcpm.c                 |  32 +-
+ drivers/usb/typec/wusb3801.c                  | 445 ++++++++++++++++++
+ include/linux/usb/typec.h                     |   3 +
+ 8 files changed, 589 insertions(+), 31 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml
+ create mode 100644 drivers/usb/typec/wusb3801.c
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+2.33.1
 
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/vmw_vmci/vmci_guest.c:93:14: warning: no previous prototype for function 'vmci_read_reg' [-Wmissing-prototypes]
-   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-                ^
-   drivers/misc/vmw_vmci/vmci_guest.c:93:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-   ^
-   static 
->> drivers/misc/vmw_vmci/vmci_guest.c:100:6: warning: no previous prototype for function 'vmci_write_reg' [-Wmissing-prototypes]
-   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-        ^
-   drivers/misc/vmw_vmci/vmci_guest.c:100:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/vmci_read_reg +93 drivers/misc/vmw_vmci/vmci_guest.c
-
-    92	
-  > 93	unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-    94	{
-    95		if (dev->mmio_base != NULL)
-    96			return readl(dev->mmio_base + reg);
-    97		return ioread32(dev->iobase + reg);
-    98	}
-    99	
- > 100	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   101	{
-   102		if (dev->mmio_base != NULL)
-   103			writel(val, dev->mmio_base + reg);
-   104		else
-   105			iowrite32(val, dev->iobase + reg);
-   106	}
-   107	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

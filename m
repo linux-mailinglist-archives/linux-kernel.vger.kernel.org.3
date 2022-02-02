@@ -2,187 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA794A6EC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 750064A6EDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbiBBKc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:32:28 -0500
-Received: from mga07.intel.com ([134.134.136.100]:18522 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343528AbiBBKcY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:32:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643797944; x=1675333944;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kisgyZx+r6YHxPfLXxFt+dwXzncdWZBo6K/KqitlpPo=;
-  b=S9DsRjgM9foTPEudzkndeWVOCa8xhBzmiJJyxdpNXHQxdpl1x+laOiuJ
-   sDnMdKD3fFN2OYd3TIHk2hl7DJzA/tojacBGCZBlZP/MQ9NkVSwNULGAY
-   qAJ9UKhEled5VD06h0VDd8EQ36nSwzu+P2J4Jq4Fy4xQD4H6mLuki4OgH
-   7dwIjVE8ago7lfSWpmgHKew0azQ92CowWBT03GCi2UbpG37VrR4g3jma1
-   OiiJVAQDQoBSwrjhlGEItirtCSP0J1IoYk+AX2z0pGgzJCf8rt2IQLvbB
-   C2iY8KrNTs9lFBpE2qGRWfSQ74JivuLQrVJ6KUeCbwKJ1P5LAAiZwMDXU
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="311197286"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="311197286"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 02:32:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="480059413"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 02 Feb 2022 02:32:24 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 2 Feb 2022 02:32:23 -0800
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 2 Feb 2022 02:32:23 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 2 Feb 2022 02:32:23 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 2 Feb 2022 02:32:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=COuewCyDUAv+vuI2POcZ/Ucf2gbYbdg668RFpaBey24ZTwEIu95gEtKYS9qyBDyKmnTEjPAjId6N5CxGI7uPdbnlcXt6Ch30+cSZbtewmN1RztE8PNXfQK7V8371nsh9H9j/gRyZ49tzaiWJfUKkRG2j7yMqO3t27kdB4PhbPm84UwA0Sa/KF4+JeaMLv8fri/ZG3LudZwIxfMmZytE94WmhtH4ibnPDjXIgVC+J76UXPnq+AtTM742zur69OIGpyxiL4b6qtfWWac0D2ORi7o+Hz2OhAV3i6fYYqbbggr+67FP4sPwupUyzqInUkjn0XnVQLjmnmujg9vcO9udlKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kxEcX8pxuTEaPF8BR/61pClEYeRubNbBJRnI9e8lhYc=;
- b=JNo+7/ZVbbQiSykOZJt3dBx6jTxhJ/UmmcJ8Wvv5EddpNuAeUiiMNdJirOJBEUVB3jf3xfmVfj8VIJvYFLjFzKSNxtc4kHq4SE+Ih1T8WYeSX8OipJ95g53RB3nfnyPR6HWo6s4w7iAz2uee99YTBhw2WwDRY62t5+MaiQQ1quRC79LIXYQO+tysN8JndvdBEPPfB9c0ARWO2nyPZPvSvrqF8pxCfipYY/JggeqEAKlNjZ4iTVCXQ+T0rDL7MstNkklOLleynmT3xeCEG70PPhk0zartlg58Cu3H7QKKnxBgb8/Jk3JXCWIgUnl754KCtRj9DHwXPUr959N9K85cwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com (2603:10b6:8:38::14) by
- MN2PR11MB4519.namprd11.prod.outlook.com (2603:10b6:208:26c::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4951.12; Wed, 2 Feb 2022 10:32:17 +0000
-Received: from DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9]) by DM8PR11MB5621.namprd11.prod.outlook.com
- ([fe80::fcc9:90bb:b249:e2e9%7]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
- 10:32:17 +0000
-From:   "Jankowski, Konrad0" <konrad0.jankowski@intel.com>
-To:     "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-Subject: RE: [Intel-wired-lan] [PATCH] ethernet/intel: remove redundant ret
- variable
-Thread-Topic: [Intel-wired-lan] [PATCH] ethernet/intel: remove redundant ret
- variable
-Thread-Index: AQHYBjIJR9l9yAesv0K+q/Tr2nRQ5ayAM8sQ
-Date:   Wed, 2 Feb 2022 10:32:17 +0000
-Message-ID: <DM8PR11MB5621F1AA3A53025D348243C9AB279@DM8PR11MB5621.namprd11.prod.outlook.com>
-References: <20220110104656.646861-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220110104656.646861-1-chi.minghao@zte.com.cn>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.6.200.16
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8a4ae482-df71-4689-663d-08d9e63748eb
-x-ms-traffictypediagnostic: MN2PR11MB4519:EE_
-x-microsoft-antispam-prvs: <MN2PR11MB4519CB0045DE335B80D3FCBBAB279@MN2PR11MB4519.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:389;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W5cu/KEBgYTm+tvTYi/xOf+cYZ6x0/kWUT4z63o5EvlFpkrzeNz+UXwTcBNedAnGGqgNDKfnBQqMvXBYmuBRmuO489TY4imSd83X89AL/nm3TGEMf8AyylCnQ/qYqlntMKMIhpKL7IblqdT5mmYM39iZDGpgPaoKQSG6x9LXzBJIvdZGF6rUzAs6lqkV3guC2H25G9VHd1Mq5UCGyIJdQ1SuzVjbuM3WF0WgHRrU8H8KbQdDeUvNlV0EtD/UUhR630neFbPZtS8aOtbJ16iRPi9IUHesZ5uSSy6k8/zIGQug9giNUGiWKu4vPUsZfVoRI/72+SHkjU9bsSMEgU5H920Gh2EVyo5/I06gwMIsUeeQwzWVpfvVKnF0dC4HQblBmp3a30R09mbScddVwxZS2TjcvAPCDNuow33uRqv0e2KKkvChfWk1QKu+269cfJbWZcVvlAWm5uO3vwWBIa42rdDXwSzoAtWgWVRTN0kEUxMvcwh/mp+gmdDEmw7WJj+c5Th+bgUQ6FiB3wl2pk6q8jzdWVjKgP3yenQm7vguwdSkrLXF2fckRodx+G/SRB2InY7f8wXH2hbzwzHMXm+aG/EfxB2kUp83cXaC0KLaST7M1BqRGoOKZkuQVgh/MVBj7gXh6Pxivs4NdC64ZahK6dJehEQbXSxvH68Qe9bBqMPwOMrv6AFvNhyGS9d3U1NcwZFXcG/kHieaiiitYrEFdA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5621.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(38100700002)(38070700005)(52536014)(82960400001)(122000001)(5660300002)(4744005)(6506007)(7696005)(9686003)(53546011)(6636002)(316002)(71200400001)(110136005)(8936002)(54906003)(8676002)(83380400001)(66556008)(66476007)(66446008)(64756008)(26005)(186003)(4326008)(66946007)(76116006)(33656002)(55016003)(508600001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?C0LyXBIdYEJQRhyr6h/wAwUf1KeZlwvYwxcvCsTd3QIodkewYqg8CIwp+eDP?=
- =?us-ascii?Q?Z8tiseerNnzefbLAi5P1LLZZDDXdyLEdXFXcwoCpehtgRU0PqzOUTo2LxQ01?=
- =?us-ascii?Q?8SXLYDF4oDCCLhLI+j8lNz8zdyPyg/EEY8eKuZbqDh6N8CLzGHfnJUkRspYg?=
- =?us-ascii?Q?AKXeGW8hkqgzGDezyTLrXfNG1sSregtKDL+doce6kZ4uokHMvvod/aBT3295?=
- =?us-ascii?Q?qYeiE1YT9gUVQbTvIlyy2gbantmxyjWsNDmuuj1hdxFiFzCMQx+pwmKRCpIR?=
- =?us-ascii?Q?hFwPY9Udr5lN70lbJQ9ldV6HbblwwMP+4e7Ec1cEnCix9Pi+MldjlelnrS97?=
- =?us-ascii?Q?J+RS4RwTEv+dSk/zfYi6dUhQdGlKHzjDMXOw4U7EVop67K135QgGc5AA6Y92?=
- =?us-ascii?Q?vxQEBKFHKsSR1l62wFqWXQ9MlLJqwgzh5SOCBa5z5y9Ca9yQPnl3Kv2F9Ghu?=
- =?us-ascii?Q?F26OVbeE1t+qYGD6PDCUbmxJMxRXLpDxVqZ4pttfWnTw0l5ayBOf51kTZMvh?=
- =?us-ascii?Q?ZS9TjSA2PIo/3XUT+RYtZ9sMavfu0Q+0F4az3n2ZgLQ1nwKA4nvM3d0UWenA?=
- =?us-ascii?Q?4Jk69hv+q7AdpXLuN9foMWWLrfkZhChdJbGLd87Qnc0B/nrhP0nE3XIiK9vA?=
- =?us-ascii?Q?UdVIxOKOb0qFzrRnHW+YwwvWD4fgdxalhk2rTz49wbDPplTvCEjOrWh/tuda?=
- =?us-ascii?Q?Ujym+GUYloVbmxqZzxfr66sa9vUCnUv0qewR/tjRljDJjUPnn6TH/lPL3atu?=
- =?us-ascii?Q?eQi59TpN7O4pEuyG8xOHkUoHFSqTDvYgd3FuC+i4yyEeu4fWt5bhBsRYBDXC?=
- =?us-ascii?Q?Z1FsziirR6nu11NymCj1UgsRuOi/++fRv0asU989rMqUjtgtG/mbEt5BqSlh?=
- =?us-ascii?Q?PwstucDnRcvrebVL35xAclC/ohqo596NDaIszggznpkx5fxLmfSerK2ipkOW?=
- =?us-ascii?Q?DlSPlgt3HEFfSMAhGsUgw8eomaenO4u7boKtvF3CN6A1JOYIekQbrerW9iVr?=
- =?us-ascii?Q?O0Ds/kQ6IjGx94fQtSodD5T1Yu7GmcLWX1O4xd+UMaQRlFfMQ6jCHCbQPljz?=
- =?us-ascii?Q?9MSBwwBIuZCQ5HavBH9uacDAG0o9zU/JTZ8sG8BSPUuaPJZS9muf8ZO77oe8?=
- =?us-ascii?Q?shM3FvjSJ+ouCrWFkwHGJhUPHAuRbJgoK5+XOVg9VU1I5erzmPgATsxKe/NV?=
- =?us-ascii?Q?rqI9IRf4KH6mSDoQCi7reGyJZw0x4jgayI6MUdi/754y33LkQkloFhoEU/A+?=
- =?us-ascii?Q?/89Fxwo86LfDP1tizkAQitGt+eb0/mYNubLH1oKfdY7ueLcyZC/hE0jHAWtA?=
- =?us-ascii?Q?QtUDcIL7AGfGC2KaylWcq1hsDNaSc94YZgQZF0iL5kjsHdbsuFafqcX7Peqg?=
- =?us-ascii?Q?D0d1FY5ZJFXT/ZqO5v0Y70ZoNh1F9jcxd5gN4nS3CMxXbZuJQ5fSN1NMlzp2?=
- =?us-ascii?Q?hMSuCgopQNlWYdkkpkU7WAdxDnCN9+VyOJHkVnLis5D5zy6jHviaFpFr301m?=
- =?us-ascii?Q?py4aoiWZZkJ3mJgKR/3KLVggA/g6O3ACxOhtOxpnSHIovdQ+7aj2/a+EvZZM?=
- =?us-ascii?Q?wMf0pStSBvqeLC/4wn4UJa7mY/clYEqk5pTMojB3yV0TCgG41UVSkTazsW7O?=
- =?us-ascii?Q?zaaP5CXk0BfrUpwFa0G+1ZH2eqxRoL/OuuAwtqCsEBl73BBjKfTc0dhyKyc+?=
- =?us-ascii?Q?gEtvsA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S232839AbiBBKiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:38:50 -0500
+Received: from mailout4.samsung.com ([203.254.224.34]:60560 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232066AbiBBKit (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:38:49 -0500
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220202103847epoutp046962ccf4dc412a1ea46212d3a8399796~P8d6jGdNt0362403624epoutp04T
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 10:38:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220202103847epoutp046962ccf4dc412a1ea46212d3a8399796~P8d6jGdNt0362403624epoutp04T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643798327;
+        bh=Wx8ROO8op3VTnOEzgAZLt9x0NeCwPv6eupDtuwPaXzw=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=MBjnLFWH3munjSxZuHkxDMbCbq6eVYwkIZ7lt6wXMXcNjjI+dcxEyI1rSkd3KShrL
+         cp3otcnStMdY80uFbe2A3F/DfDd3IMim36z3D1Cbicn/1Qy08gM/YR8FZtVkm/0wHy
+         ToIO57c0B/4Ay/jlOYiyTbSRj4e0/T3xec2DZAiU=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220202103847epcas5p39d6bcdd378ab9380554fcab835dc2c6e~P8d6IXn_v3184231842epcas5p3K;
+        Wed,  2 Feb 2022 10:38:47 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F0.36.05590.63F5AF16; Wed,  2 Feb 2022 19:38:47 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220202103319epcas5p4ed4ae53759fc5c241bc8068132c989d7~P8ZJd7Uef0903109031epcas5p4Y;
+        Wed,  2 Feb 2022 10:33:19 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220202103319epsmtrp1fe2c5a822bf6af3200f6c1fcf624a47f~P8ZJdJ_mH3005430054epsmtrp1B;
+        Wed,  2 Feb 2022 10:33:19 +0000 (GMT)
+X-AuditID: b6c32a4b-739ff700000015d6-11-61fa5f36fc73
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1A.A1.08738.FED5AF16; Wed,  2 Feb 2022 19:33:19 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.44]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220202103317epsmtip21b11c3fd8241b19a88a71f82c2fab296~P8ZHgBay02377923779epsmtip2o;
+        Wed,  2 Feb 2022 10:33:17 +0000 (GMT)
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     apw@canonical.com, joe@perches.com, dwaipayanray1@gmail.com,
+        lukas.bulwahn@gmail.com, markus@trippelsdorf.de,
+        akpm@linux-foundation.org
+Cc:     jack@suse.cz, rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        Maninder Singh <maninder1.s@samsung.com>,
+        Vaneet Narang <v.narang@samsung.com>
+Subject: [PATCH v3] scripts/checkpatch.pl: remove _deferred and
+ _deferred_once false warning
+Date:   Wed,  2 Feb 2022 16:03:09 +0530
+Message-Id: <20220202103309.1914992-1-maninder1.s@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5621.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a4ae482-df71-4689-663d-08d9e63748eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2022 10:32:17.0143
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kmbShR3VVZ4X5Y8/LL56TarNvTKLVecyL9ebcK0FUFP44vpMwspNLDOLPLfCyHqME2TGhY0JQGxpGAgLLYUFZTsdkQ8Gql/D7Bno8xOrFic=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4519
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMKsWRmVeSWpSXmKPExsWy7bCmpq55/K9Eg/5nTBZz1q9hs/iwVsNi
+        /cJlzBazpzczWcy+/5jF4vKuOWwWLUfbWSwOz29jsfj//zaTxb6OB0wWh07OZXTg9pjV0Mvm
+        sXPWXXaPln232D1OzPjN4vFl1TVmj74tqxg9ziw4wu7Rv+sCk8fnTXIBnFFcNimpOZllqUX6
+        dglcGc8mdzAWvBKueDK1lb2B8Y1AFyMnh4SAicSMT1eZuhi5OIQEdjNKHF87hxkkISTwiVFi
+        3/IMiMRnRomLz46zwXS8efOPFSKxi1Fi24lfjBDOF0aJXZMXsoJUsQnoSazatYcFJCEi0Mso
+        MeP1crAWZoHpjBJT5nSzgFQJC8RJvDq5mwnEZhFQlTg1+RpYnFfATuLx8QmMEPvkJWZe+s4O
+        EReUODnzCVgNM1C8eetsZpChEgK9HBKP2nZCHegisWLtaiYIW1ji1fEt7BC2lMTL/jZ2iIZu
+        RokN3cdYIJwZjBKfD16FWmcv8eQiyBMcQCs0Jdbv0ocIy0pMPbWOCWIzn0Tv7ydQC3gldsyD
+        sVUlWm5uYIWwpSU+f/zIAmF7SDTMmsYCCdZYifWftjNOYJSfheShWUgemoWweQEj8ypGydSC
+        4tz01GLTAuO81HK94sTc4tK8dL3k/NxNjOB0peW9g/HRgw96hxiZOBgPMUpwMCuJ8O5d+D1R
+        iDclsbIqtSg/vqg0J7X4EKM0B4uSOO+p9A2JQgLpiSWp2ampBalFMFkmDk6pBiY504D9F13P
+        XMpedfi7/rxfPVclV8X+YlghuMPPuNbp5NHSG+szC/Ys7p+7b+WRpgs+8a2PVkTuWnDO+a+b
+        iZaEP8O0fx2HZQIfcf4KNr9hcKE69otVxSdupXlTtt6of35+9qzqVd1f3/LqMTfEfOv9Wf76
+        /W6XSS1njPivPc43fxO1b/5pnY0LnY1SfuQ46cYkKf+/NnXZn7nL3eR5y/z9wgotM3uW3FzB
+        aLhW4eH1epMj4Xz71D5brVFelfCk5v51SYEv4v3ujeteHeyV2zxhUVbvn2heN0/bD8tXKnBm
+        Vv5Q8/Y62ljZa1P81OFXUwC7352Ff5tmuGxgN6iNVwjKWG+uwRPeriG1War9yxolluKMREMt
+        5qLiRADUfbplxgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOLMWRmVeSWpSXmKPExsWy7bCSvO772F+JBvueGlnMWb+GzeLDWg2L
+        9QuXMVvMnt7MZDH7/mMWi8u75rBZtBxtZ7E4PL+NxeL//9tMFvs6HjBZHDo5l9GB22NWQy+b
+        x85Zd9k9WvbdYvc4MeM3i8eXVdeYPfq2rGL0OLPgCLtH/64LTB6fN8kFcEZx2aSk5mSWpRbp
+        2yVwZTyb3MFY8Eq44snUVvYGxjcCXYycHBICJhJv3vxj7WLk4hAS2MEoMfnQfVaIhLTEz3/v
+        WSBsYYmV/56zg9hCAp8YJTadTQGx2QT0JFbt2sMC0iwiMJVR4t3VZewgDrPAbEaJe7sfgHUL
+        C8RItO77ATaVRUBV4tTka2BxXgE7icfHJzBCbJCXmHnpOztEXFDi5MwnYDXMQPHmrbOZJzDy
+        zUKSmoUktYCRaRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnDYa2ntYNyz6oPeIUYm
+        DsZDjBIczEoivHsXfk8U4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6YklqdmpqQWoR
+        TJaJg1OqgWmNtbxiXs85gVK3q4rO15/86F7qK76YZabTbxav+05ff51nZ/3wh12m+llkyT7D
+        f57Bf1b4MRyd9yqO6XlMv36a4f0JJkoiIfY2Jzo8F71liFssdvxj4I4bWd3MwWd+flafkdE7
+        8XT02hC7Ez5R6z87OVxQUeQxllr38+DOWSUN705YCuv6v/57nGHiHp8ttndDzLJeNrc+skku
+        //PVSfRAImP+G/YLbI+ahPMMj3FJyFzYt9k7nWmr06eU5W4v+DNm+XatMlr5QXLbkZ1LWxan
+        uMkEz5S1j0pSYVVs2Ld98ctTL75NXbTh4MP9n5179wo6v9zv9OCmZ+JpJv1Nx7dZL7kswGB9
+        5Xkh56llUzWVWIozEg21mIuKEwFGx7Rx6gIAAA==
+X-CMS-MailID: 20220202103319epcas5p4ed4ae53759fc5c241bc8068132c989d7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20220202103319epcas5p4ed4ae53759fc5c241bc8068132c989d7
+References: <CGME20220202103319epcas5p4ed4ae53759fc5c241bc8068132c989d7@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+with commit 98e35f5894cf ("printk: git rid of [sched_delayed] message for
+printk_deferred") printk_deferred and printk_deferred_once requires
+LOGLEVEL in argument, but checkpatch.pl was not fixed and still reports
+it as warning:
 
+WARNING: Possible unnecessary KERN_ALERT
+printk_deferred(KERN_ALERT "checking deferred\n");
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> cgel.zte@gmail.com
-> Sent: Monday, January 10, 2022 11:47 AM
-> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>
-> Cc: netdev@vger.kernel.org; Zeal Robot <zealci@zte.com.cn>; linux-
-> kernel@vger.kernel.org; Minghao Chi <chi.minghao@zte.com.cn>; intel-
-> wired-lan@lists.osuosl.org; CGEL ZTE <cgel.zte@gmail.com>;
-> kuba@kernel.org; davem@davemloft.net
-> Subject: [Intel-wired-lan] [PATCH] ethernet/intel: remove redundant ret
-> variable
->=20
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> Return value directly instead of taking this in another redundant variabl=
-e.
->=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
-> ---
->  drivers/net/ethernet/intel/iavf/iavf_main.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> b/drivers/net/ethernet/intel/iavf/iavf_main.c
-> index 504fea4e90fb..a138dc64b8b7 100644
-> --- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-> +++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+As suggested by Andy, made 2 functions from logFunction.
 
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+1. logFunction: with all checks
+2. logFunctionCore: without printk(?:_ratelimited|_once|_deferred) checking
+
+and call logFunctionCore instead of logFunction for checking of loglevel,
+which will exclude checking of printk(?:_ratelimited|_once|_deferred).
+
+This way, there is no need to maintain same stanza at multipe places
+for removing printk flavours.
+
+Co-developed-by: Vaneet Narang <v.narang@samsung.com>
+Signed-off-by: Vaneet Narang <v.narang@samsung.com>
+Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+---
+v1 -> v2: made 2 functions to remove _deferred and _deferred_once
+	as suggested by Andy Whitcroft.
+v2-> v3: updated commit message with info of change in printk_deferred.
+	https://lkml.org/lkml/2022/2/2/61
+
+ scripts/checkpatch.pl | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index b01c36a15d9d..a6fa0c7360be 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -584,8 +584,7 @@ our $typeTypedefs = qr{(?x:
+ 
+ our $zero_initializer = qr{(?:(?:0[xX])?0+$Int_type?|NULL|false)\b};
+ 
+-our $logFunctions = qr{(?x:
+-	printk(?:_ratelimited|_once|_deferred_once|_deferred|)|
++our $logFunctionsCore = qr{(?x:
+ 	(?:[a-z0-9]+_){1,2}(?:printk|emerg|alert|crit|err|warning|warn|notice|info|debug|dbg|vdbg|devel|cont|WARN)(?:_ratelimited|_once|)|
+ 	TP_printk|
+ 	WARN(?:_RATELIMIT|_ONCE|)|
+@@ -594,6 +593,11 @@ our $logFunctions = qr{(?x:
+ 	seq_vprintf|seq_printf|seq_puts
+ )};
+ 
++our $logFunctions = qr{(?x:
++	printk(?:_ratelimited|_once|_deferred_once|_deferred|)|
++	$logFunctionsCore
++)};
++
+ our $allocFunctions = qr{(?x:
+ 	(?:(?:devm_)?
+ 		(?:kv|k|v)[czm]alloc(?:_array)?(?:_node)? |
+@@ -6298,8 +6302,7 @@ sub process {
+ 		}
+ 
+ # check for logging functions with KERN_<LEVEL>
+-		if ($line !~ /printk(?:_ratelimited|_once)?\s*\(/ &&
+-		    $line =~ /\b$logFunctions\s*\(.*\b(KERN_[A-Z]+)\b/) {
++		if ($line =~ /\b$logFunctionsCore\s*\(.*\b(KERN_[A-Z]+)\b/) {
+ 			my $level = $1;
+ 			if (WARN("UNNECESSARY_KERN_LEVEL",
+ 				 "Possible unnecessary $level\n" . $herecurr) &&
+-- 
+2.17.1
+

@@ -2,373 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45C54A78DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B144A78E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346952AbiBBTqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S1346954AbiBBTrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiBBTqv (ORCPT
+        with ESMTP id S239991AbiBBTra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:46:51 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38943C061714;
-        Wed,  2 Feb 2022 11:46:51 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id b13so819495edn.0;
-        Wed, 02 Feb 2022 11:46:51 -0800 (PST)
+        Wed, 2 Feb 2022 14:47:30 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F61C06173E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:47:29 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v186so2004573ybg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 11:47:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rnmPw/OuvT5nnEtXmJqegdwVhZuNfh1sLakxnaRWZtU=;
-        b=iagGXqbnA+/6CPbz6jGozukFarqUd+V88acZVpP4hERalD6uejXfAcY73H+/dboFpw
-         1Pc3X46l4+FLyndDBx97RwsGO9mOU+EAAWk59xaLe07nTyuVm/2u36KPP8Ees3MmnIFc
-         FXIZIQXKYc8xcEsv6crEHugs/WbMJz07GYh81Ws/XVJ4sJEPzFWslDiJK4fGXvsMNdXU
-         PgttMXxfxTMvUMuYw+FGGdZ7LePhseUv75bP/7kcH/SqMRsfeRSsMXBlfKUwjHjThlE7
-         0FoGW8hpkogZ11SutO1U9iHasnHzu8IuPAP+hudUyiEKmy4mcw83q6mM45UzN8sWW1pV
-         rR/A==
+        bh=co0UxehcT10KvKeO2HMl27sRQGzVzaRaaBVplxip7qw=;
+        b=SLaoGd8dLroMo5YxyBi9jnv5iD6ziKqemavNXtbhEP97AYJ3eyFPP49FNWfveLhMox
+         zQBZhH1z59850/KS+1pgUI5iBxZkDZCrmXt6l0T+Evp/is5lkdF8MVzUYsmMfFyGVFNY
+         K3SuKfccY94QuyCApGmUtWgq4hGMPNHRXjShw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rnmPw/OuvT5nnEtXmJqegdwVhZuNfh1sLakxnaRWZtU=;
-        b=FvUhGQqKYWMZFBFAdcphM7+VNNKLT7djXivn8xpJaxLjXEqc6yIJcfaz/x5WUUsbHU
-         87Kf2J6v+BjMiFBAraAajhrbnlOfWD/1SGOpTwEhdVT6MC3yJoVfpWU2/b00pgp2aRor
-         TY1TYmBeUeeKcfRe9LuYBFjLMdgpRqymC1RaA5HL/y8P/mo6EJjMhzbg7jRxU2xYvvjc
-         HoB2IP9VNnlvOmNXqOZulQs3iI+UDYhtk+SGjG8ewoYueblgFW1PGXTFyVfX1BcVGR2e
-         GyvS7xHp0OalOC6QFBMuw3T/BP6aOyygQGQOky2O7qoTc7d6G3BMBH/1A7HNZHxHKSjC
-         NhUg==
-X-Gm-Message-State: AOAM530/HnsI7iHqSO/5oOtFAdLiGEs3QyZkare6uFkHgX7HHPqFTZq3
-        J5zpclz9RqFOZI8BtlWgtvOI+soaUP7J9YIXVXM=
-X-Google-Smtp-Source: ABdhPJyXVxqNMmfb2b4TgCMxti9E2qhIYKGuf0BCS0PaAUFncuGmQK6OxuuSbLsJX1AM6ivknDuRZDLOUoSgmZZPRWs=
-X-Received: by 2002:a05:6402:1705:: with SMTP id y5mr31690498edu.200.1643831209595;
- Wed, 02 Feb 2022 11:46:49 -0800 (PST)
+        bh=co0UxehcT10KvKeO2HMl27sRQGzVzaRaaBVplxip7qw=;
+        b=a3sAe3gLaS8RqiozwmHrJvR7uOtin30ciJRa8+i9JtHbZNLvm13R87LFk4Exl4b+E0
+         qvVXeV5zevz9+hj63mvMqVyWbu9+8C3oYPzGKTe9SAYXrmVfQPzHaG10k92Eh+7gpSjM
+         1VauhURVElnsoALpwOjR6931sHs6fBOgo1WnIQFhUDs6kw0ahFtk5jDy92h0Jr9Uc3hd
+         IeMCpCM0+HLeISxXnDARC+y1D+wUYGfMx11//thPf4O6BlrHpe47CvKurJtFJBzFrWNw
+         iai3EyqfgMtXFHVDcE7lfZMorsiuFKr+qP717wMb1doqDZ7CC19BAy1RHMuwIxfXyjzt
+         8Q+w==
+X-Gm-Message-State: AOAM532g2Lq0IQLJSly5jbkdOBpGtrZqqQ/5bCSjgJFfm7wjRseIVRb2
+        /MDRaD+jenLJIGRwx6kWNvkfiDRkBhWmOEJYO8+8cA==
+X-Google-Smtp-Source: ABdhPJyx/Yh66eh4potOrtkBUp+MmWnprcO9LCD3hc+BXMIwtFIjdb4Yi0zFxHHLneg7LA52ah5I8u469dqUjBcQ/tE=
+X-Received: by 2002:a0d:ca8f:: with SMTP id m137mr2154641ywd.5.1643831248225;
+ Wed, 02 Feb 2022 11:47:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20220202181248.18344-1-josright123@gmail.com> <20220202181248.18344-3-josright123@gmail.com>
-In-Reply-To: <20220202181248.18344-3-josright123@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 2 Feb 2022 21:45:13 +0200
-Message-ID: <CAHp75VeRoG3+UmPm41O0+5YmxDgDr3ESFtvMzn2c-SGpUePETw@mail.gmail.com>
-Subject: Re: [PATCH v17, 2/2] net: Add dm9051 driver
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev <netdev@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Leon Romanovsky <leon@kernel.org>
+References: <20220126180020.15873-1-dustin@howett.net> <20220126180020.15873-3-dustin@howett.net>
+ <YfLqloFQpF7bURGi@chromium.org> <CA+BfgNKS_uGZVh5K=O5Q-Brj-wWyg+gn1Nx4-Gr5OVb46ZFi=A@mail.gmail.com>
+ <YfLxw9r6VvbxijRM@chromium.org> <CA+BfgNKCYT6EnOK1JTsy+AJCzZ+p6UbYD+SgBZ=ANHCV1pC7oA@mail.gmail.com>
+ <CAJnPg5+bU68s2hq75aewap2gyW3YB+gpamKmuB-VfcpGf5krwA@mail.gmail.com>
+In-Reply-To: <CAJnPg5+bU68s2hq75aewap2gyW3YB+gpamKmuB-VfcpGf5krwA@mail.gmail.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 2 Feb 2022 11:47:17 -0800
+Message-ID: <CACeCKafGc7Mbijb4QMJ36atPP08yUN2MSA+ya-vQR-rbAFrPKg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] platform/chrome: cros_ec_lpcs: reserve the MEC LPC
+ I/O ports first
+To:     Aseda Aboagye <aaboagye@google.com>
+Cc:     Dustin Howett <dustin@howett.net>, linux-kernel@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Michael Niksa <michael.niksa@live.com>,
+        Aseda Aboagye <aaboagye@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 8:13 PM Joseph CHAMG <josright123@gmail.com> wrote:
+Hi,
+
+On Fri, Jan 28, 2022 at 9:57 AM Aseda Aboagye <aaboagye@google.com> wrote:
 >
-> Add davicom dm9051 spi ethernet driver, The driver work for the
-> device platform which has the spi master
-
-...
-
-> +       ret = regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
-
-0x0 --> 0
-
-
-> +       if (ret)
-> +               return ret;
-
-...
-
-> +       return regmap_write(db->regmap_dm, DM9051_EPCR, 0x0);
-
-Ditto.
-
-...
-
-> +       ret = regmap_update_bits(db->regmap_dm, DM9051_FCR, 0xff, fcr);
-
-GENMASK(7, 0) ?
-
-...
-
-> +static int dm9051_map_chipid(struct board_info *db)
-> +{
-> +       struct device *dev = &db->spidev->dev;
-> +       unsigned int ret;
-> +       unsigned short wid;
-> +       u8 buff[6];
-> +
-> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_VIDL, buff, 6);
-
-sizeof(buff)
-
-> +       if (ret < 0) {
-> +               netif_err(db, drv, db->ndev, "%s: error %d bulk_read reg %02x\n",
-> +                         __func__, ret, DM9051_VIDL);
-> +               return ret;
-> +       }
-
-> +       wid = buff[3] << 8 | buff[2];
-
-get_unaligned_le16()
-
-> +       if (wid != DM9051_ID) {
-> +               dev_err(dev, "chipid error as %04x !\n", wid);
-> +               return -ENODEV;
-> +       }
-> +
-> +       dev_info(dev, "chip %04x found\n", wid);
-> +       return 0;
-> +}
-
-...
-
-> +static int dm9051_map_etherdev_par(struct net_device *ndev, struct board_info *db)
-> +{
-> +       u8 addr[ETH_ALEN];
-> +       int ret;
-> +
-> +       ret = regmap_bulk_read(db->regmap_dmbulk, DM9051_PAR, addr, ETH_ALEN);
-
-sizeof(addr)
-
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       if (!is_valid_ether_addr(addr)) {
-> +               eth_hw_addr_random(ndev);
-
-> +               ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
-
-Ditto.
-
-> +               if (ret < 0)
-> +                       return ret;
-> +
-> +               dev_dbg(&db->spidev->dev, "Use random MAC address\n");
-> +               return 0;
-> +       }
-> +
-> +       eth_hw_addr_set(ndev, addr);
-> +       return 0;
-> +}
-
-...
-
-> +       db->mdiobus->phy_mask = (u32)~GENMASK(1, 1);
-
-For a single bit it might be better to use BIT(1)
-
-...
-
-> +       ret = devm_mdiobus_register(&spi->dev, db->mdiobus);
-> +       if (ret)
-> +               dev_err(&spi->dev, "Could not register MDIO bus\n");
-> +
-
-> +       return 0;
-
-return ret; ?
-
-...
-
-> +       snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT,
-
-sizeof(phy_id) + 3
-
-> +                db->mdiobus->id, DM9051_PHY_ADDR);
-
-...
-
-> +       if (IS_ERR(db->phydev))
-> +               return PTR_ERR(db->phydev);
-> +       return 0;
-
-return PTR_ERR_OR_ZERO();
-
-...
-
-> +               if ((rxbyte & 0xff) != DM9051_PKT_RDY)
-
-GENMASK(7, 0) ?
-
-> +                       break; /* exhaust-empty */
-
-...
-
-> +               ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
-
-
-Ditto.
-
-> +               if (ret)
-> +                       return ret;
-
-...
-
-> +               ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
-
-Ditto.
-
-Perhaps it needs its own definition after all?
-
-> +               if (ret)
-> +                       return ret;
-
-...
-
-> +spi_err:
-
-out_unlock:
-
-> +       mutex_unlock(&db->spi_lockm);
-> +
-> +       return IRQ_HANDLED;
-
-...
-
-> +       result = regmap_bulk_write(db->regmap_dmbulk, DM9051_MAR, db->rctl.hash_table, 8);
-
-Is hash_table an array? Then sizeof() or ARRAY_SIZE() should work.
-
-> +       if (result < 0) {
-> +               netif_err(db, drv, ndev, "%s: error %d bulk writing reg %02x, len %d\n",
-> +                         __func__, result, DM9051_MAR, 8);
-
-Ditto.
-
-> +               goto spi_err;
-> +       }
-
-...
-
-> +spi_err:
-
-out_unlock:
-
-You need to describe what will be done if one goes to the label.
-
-> +       mutex_unlock(&db->spi_lockm);
-
-...
-
-> +       /* The whole dm9051 chip registers could not be accessed within 1 ms
-> +        * after above GPR power on control
-> +        */
-> +       mdelay(1);
-
-Why atomic?
-
-...
-
-> +       ret = request_threaded_irq(spi->irq, NULL, dm9051_rx_threaded_irq,
-> +                                  IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-
-Why do you ignore IRQ flags from DT?
-
-> +                                  ndev->name, db);
-
-...
-
-> +       /* the multicast address in Hash Table : 64 bits */
-> +       netdev_for_each_mc_addr(ha, ndev) {
-> +               hash_val = ether_crc_le(ETH_ALEN, ha->addr) & 0x3f;
-
-GENMASK() ?
-
-> +               rxctrl.hash_table[hash_val / 16] |= 1U << (hash_val % 16);
-
-BIT() ?
-
-> +       }
-
-...
-
-> +       /* schedule work to do the actual set of the data if needed */
-
-> +       if (memcmp(&db->rctl, &rxctrl, sizeof(rxctrl))) {
-> +               memcpy(&db->rctl, &rxctrl, sizeof(rxctrl));
-
-Hmm... This is interesting...
-
-> +               schedule_work(&db->rxctrl_work);
-> +       }
-
-...
-
-> +       ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_PAR, ndev->dev_addr, ETH_ALEN);
-
-sizeof() ?
-
-...
-
-> +       int ret = 0;
-
-Redundant assignment.
-
-...
-
-> +       ret = devm_register_netdev(dev, ndev);
-> +       if (ret) {
-
-> +               dev_err(dev, "failed to register network device\n");
-> +               phy_disconnect(db->phydev);
-> +               return ret;
-
-phy_disconnect();
-return dev_err_probe();
-
-> +       }
-
-...
-
-> +err_stopthread:
-> +       return ret;
-
-Useless. Return in-place.
-
-...
-
-> +static struct spi_driver dm9051_driver = {
-> +       .driver = {
-> +               .name = DRVNAME_9051,
-> +               .of_match_table = dm9051_match_table,
-> +       },
-> +       .probe = dm9051_probe,
-> +       .remove = dm9051_drv_remove,
-> +       .id_table = dm9051_id_table,
-> +};
-
-> +
-
-Redundant blank line.
-
-> +module_spi_driver(dm9051_driver);
-
-...
-
-+ bits.h
-
-> +#include <linux/netdevice.h>
-
-> +#include <linux/mii.h>
-
-How is that header being used in this header?
-
-> +#include <linux/types.h>
-
-...
-
-> +#define INTCR_POL_LOW          BIT(0)
-> +#define INTCR_POL_HIGH         (0 << 0)
-
-In this case, be consistent:
-
-#define INTCR_POL_LOW          (1 << 0)
-#define INTCR_POL_HIGH         (0 << 0)
-
--- 
-With Best Regards,
-Andy Shevchenko
+> Generally ec_commands.h is to be kept in sync with the copies in other projects. Periodically when someone modifies it, we should update the copies as well.
+> --
+> Aseda Aboagye
+>
+>
+> On Thu, Jan 27, 2022 at 9:16 PM Dustin Howett <dustin@howett.net> wrote:
+>>
+>> On Thu, Jan 27, 2022 at 1:25 PM Prashant Malani <pmalani@chromium.org> wrote:
+>> >
+>> > What source do Framework laptop ECs (MECs?) compile their EC firmware
+>> > from?
+>>
+>> They just released their source here:
+>> https://github.com/FrameworkComputer/EmbeddedController
+>>
+>> FWIW, this series was written before they went open, and you're not
+>> likely to see a similar construct
+>> over there.
+>>
+>> > Yeah, I wasn't thinking about userland i/o port access, but just having
+>> > this behaviour/different I/O port mapping described in the EC code base
+>> > too.
+>>
+>> Happy to submit this over there as well. Are cros_ec_commands.h (here)
+>> and ec_commands.h (there)
+>> intended to be kept in 1:1 sync?
+
+It's not auto-generated, but FWIW cros_ec_commands.h is a subset of
+ec_commands.h (only the parts of ec_commands.h which are relevant to
+the kernel drivers are brought over)
+
+>>
+>> As well, is this a blocking concern?
+I'd prefer it to be first documented in the EC sources via a header
+update before we make changes to the kernel here. This ensures that
+the authors and maintainers of the various EC sources (Chromium EC,
+framework EC etc) are aware of this change and sign-off on it.
+
+I think making this update to the Chromium OS platform/ec code base
+will be sufficient (it can flow down to framework when/if they chose
+to sync to Chromium platform/ec); but happy to be corrected here by
+Aseda or other EC experts.
+
+Thanks,

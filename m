@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AFE4A6C0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1461C4A6C0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242524AbiBBHCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:02:50 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:44961 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbiBBHCt (ORCPT
+        id S244785AbiBBHF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239384AbiBBHFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:02:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643785369; x=1675321369;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qM2szEr4iwIMDuYBKDIcOf6vZ5wmYPS1pXc5cwARPHk=;
-  b=qODIniYKIN2wc8Nw34ig2ZIStbuV/xhfsWMk5fDScbSkvr4UxHjpEERG
-   0ReThgtCtTPp6KZndsseUV3JiQmCqcEGQ/atHNZbAOfjckt8FlL/fjjqj
-   04O7ftcPWRPfI8uHy7dBNVUKmzjerlGigPzFbTnQ3QHo87OMafjDTvAt1
-   WLWF7rd03JD0bsOkWdfpJ+az3y4EyFOzqJDiNFo7pI+hbdlQjKzIXQ9hQ
-   odStr2QnmTK7Btq9OMOAyW994d/505hKMjl9dZYN0Ts3XHA4BBX4mY4E2
-   RNoZY+ejyJaiAFJ+ZqRul1DiM+hshJM2ukBZeZi//GFtk0fjHYdEVFWZl
-   A==;
-IronPort-SDR: GuV5vXbw28Sc92CaDw1xxo/7kp2sMx6JQM68Y3wrxZHeTausrt0SbC9lmZZgH5C/iMPQzcgFu0
- oCDVs52mZrae09njlWaIKyycszWX8nmmN2T6AXSzOWq0tZc0frOr0+h4UrDJdzX5eROiw05E2v
- jKJTV20sL3UvE/7vFYmMSPcBTaCNOOtCQfmD+u7oqs7ODooG7nhy1n3/k5FPkKdVosODoOL3fg
- KvZenwfn6aF2ORJssCM6GTMlwXWsB7q/IN2q53YAt4F42q/x54rSuU8bSRfjfKbixwqRWJ2hI4
- vCudAbC+XC8PBI3hrtOhNS2G
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="144624961"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Feb 2022 00:02:48 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 2 Feb 2022 00:02:48 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 2 Feb 2022 00:02:46 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <alexandre.belloni@bootlin.com>
-CC:     <linux@armlinux.org.uk>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] ARM: configs: at91: sama7: Enable UBIFS_FS
-Date:   Wed, 2 Feb 2022 09:02:44 +0200
-Message-ID: <20220202070244.150022-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 2 Feb 2022 02:05:25 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3F4C061714;
+        Tue,  1 Feb 2022 23:05:25 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id n17so24271589iod.4;
+        Tue, 01 Feb 2022 23:05:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SpryQOT2uTRwsdibcfsESI84DVoBT/VezHdCUqIw1nM=;
+        b=Yh8JER6t2u+rs0xm1gDMhpppjo8c55JDcz4lc1HhglDS5vddc25oWSMVv5dafoq2tL
+         X0EqeQ14PSrUBuQkDiKHBefLoTCrIPMhBcMLC4RBUJhmE816dG1uZB9z3Sk6BbJklR3D
+         Y6a17cBDceerLRMxU8JtWsbkJrqxlp3m1OZNOmBvDWxdv1i3Z4SOTXFxfqYAnKryxNoS
+         Fhjl60AsaagVaNs1saZNbjsF9Vh7z04r7CWdRI6Fo4GCYvqXXp2ewZeDC79N66/yVUo6
+         LsUtUpHgRc6Rdk5tsGhSvgH2C2oCIAVi7+2HyASUyd7UtuupMDN9XfJnLBhHxs3Doeed
+         rmlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SpryQOT2uTRwsdibcfsESI84DVoBT/VezHdCUqIw1nM=;
+        b=n7dBvnRJnjhyILduExkcn0unr80g4Bm7z3kXxCHYd+8CVwovS1gtEHbOP81Z/oGut4
+         C0ILWy3Qfgk2b0v1XZp0fMkpoCOePkGZJgOr7q6t3iobs9UOlLXe9jsIBsd8qW3cH/op
+         IZR3K13m6acyQAWhqTGcb9jkX4bMb8L+GKXSirnK6X/HXZP+k05zyHmlp4ZDONecz2+2
+         fJVn2RiZETIfcA0GxOgnc3oGbStWMdIwzxr016JG9pxtyOjdzjTwffvN6+pdFaKYiKM4
+         taQ/HjGxHDXTjsSR7DK+fV0U5uuhuc+ZP31MUMuYqb3zGkYR8krdzAbYjXRIA/rRuipb
+         OE6w==
+X-Gm-Message-State: AOAM533c5qjCKBr2AcCokzC8UJe3TSd5MDZsXIxgiV+uI1cxZS9edYtt
+        JXpblPQjcfo9fZHM5Lu+d4x/pN9gs8Ho3XZuq+8=
+X-Google-Smtp-Source: ABdhPJyR0STyeIw70QHeReGkVxZkBvrSHZI1p+33uA5B2bkuVWZRQTmlR4YBRQ37MslJVt1AuMhh4dGDaT+Tp8C9mTQ=
+X-Received: by 2002:a02:2422:: with SMTP id f34mr14962916jaa.237.1643785524885;
+ Tue, 01 Feb 2022 23:05:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20220201205624.652313-1-nathan@kernel.org>
+In-Reply-To: <20220201205624.652313-1-nathan@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 1 Feb 2022 23:05:13 -0800
+Message-ID: <CAEf4BzbLwMCHDncHW-hH2kgOWc9jQK7QVkcH9aOKm7n7YC2LgQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] Allow CONFIG_DEBUG_INFO_DWARF5=y + CONFIG_DEBUG_INFO_BTF=y
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sama7g5 contains a Static Memory Controller that can communicate with
-NAND flashes. Enable UBIFS_FS in case one wants to put an ubifs rootfs
-on a NAND flash. CONFIG_CRYPTO_LZO and CONFIG_CRYPTO_DEFLATE appear as
-removed because they are selected by CONFIG_UBIFS_FS.
+On Tue, Feb 1, 2022 at 12:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi all,
+>
+> This series allows CONFIG_DEBUG_INFO_DWARF5 to be selected with
+> CONFIG_DEBUG_INFO_BTF=y by checking the pahole version.
+>
+> The first four patches add CONFIG_PAHOLE_VERSION and
+> scripts/pahole-version.sh to clean up all the places that pahole's
+> version is transformed into a 3-digit form.
+>
+> The fourth patch adds a PAHOLE_VERSION dependency to DEBUG_INFO_DWARF5
+> so that there are no build errors when it is selected with
+> DEBUG_INFO_BTF.
+>
+> I build tested Fedora's aarch64 and x86_64 config with ToT clang 14.0.0
+> and GCC 11 with CONFIG_DEBUG_INFO_DWARF5 enabled with both pahole 1.21
+> and 1.23.
+>
+> Nathan Chancellor (5):
+>   MAINTAINERS: Add scripts/pahole-flags.sh to BPF section
+>   kbuild: Add CONFIG_PAHOLE_VERSION
+>   scripts/pahole-flags.sh: Use pahole-version.sh
+>   lib/Kconfig.debug: Use CONFIG_PAHOLE_VERSION
+>   lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+
+>
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- arch/arm/configs/sama7_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+LGTM. I'd probably combine patches 2 and 3, but it's minor. I really
+like the CONFIG_PAHOLE_VERSION and how much cleaner it makes Kconfig
+options.
 
-diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-index 342d9f30d9d2..c12278174579 100644
---- a/arch/arm/configs/sama7_defconfig
-+++ b/arch/arm/configs/sama7_defconfig
-@@ -86,6 +86,7 @@ CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_ATMEL=y
- # CONFIG_MTD_NAND_ECC_SW_HAMMING is not set
- CONFIG_MTD_SPI_NOR=y
-+CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_COUNT=1
-@@ -187,6 +188,7 @@ CONFIG_EXT3_FS=y
- CONFIG_FANOTIFY=y
- CONFIG_VFAT_FS=y
- CONFIG_TMPFS=y
-+CONFIG_UBIFS_FS=y
- CONFIG_NFS_FS=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
-@@ -194,8 +196,6 @@ CONFIG_NLS_CODEPAGE_850=y
- CONFIG_NLS_ISO8859_1=y
- CONFIG_NLS_UTF8=y
- CONFIG_LSM="N"
--CONFIG_CRYPTO_DEFLATE=y
--CONFIG_CRYPTO_LZO=y
- # CONFIG_CRYPTO_HW is not set
- CONFIG_CRC_CCITT=y
- CONFIG_CRC_ITU_T=y
--- 
-2.25.1
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
+>  MAINTAINERS               |  2 ++
+>  init/Kconfig              |  4 ++++
+>  lib/Kconfig.debug         |  6 +++---
+>  scripts/pahole-flags.sh   |  2 +-
+>  scripts/pahole-version.sh | 13 +++++++++++++
+>  5 files changed, 23 insertions(+), 4 deletions(-)
+>  create mode 100755 scripts/pahole-version.sh
+>
+>
+> base-commit: 533de4aea6a91eb670ff8ff2b082bb34f2c5d6ab
+> --
+> 2.35.1
+>

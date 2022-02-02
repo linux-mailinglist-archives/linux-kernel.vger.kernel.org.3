@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A54A7978
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE044A797C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347177AbiBBUbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:31:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:48976 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347120AbiBBUas (ORCPT
+        id S1347191AbiBBUbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347134AbiBBUau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:30:48 -0500
-Date:   Wed, 02 Feb 2022 20:30:46 -0000
+        Wed, 2 Feb 2022 15:30:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F84FC06173B;
+        Wed,  2 Feb 2022 12:30:50 -0800 (PST)
+Date:   Wed, 02 Feb 2022 20:30:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643833847;
+        s=2020; t=1643833848;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=L2beHnRyD57KQHoaZD0r7xoMZxPiSoUs0rlsC2RzkOw=;
-        b=l9B9IC18k+X1R/TCLoDkcxlx2x432ApV7aoQxmrnAFxC5ZWNskWKbVlAan2LVbnLZkk7La
-        WDumprfx6z2YixSOGsOa+OA6B9OxZpMGBDbwjcvlqELxbTQBYqg81pxwi7PpsNWJiYe97f
-        fdtvHx5ZoXgAhqvIs28dAWxlHAdX49VBD2IjEv9lHVSVjVPRK6EfTQIcPAxrDkVCobQIzB
-        Xkb1Y6FxSTU4vf0PlAJREbwbpLbrEAmEV5O4JR1Z8pgbI8soXiYcJMc5WwRfDGqzRnWsCM
-        526wDGhzMHLEZ3NVZE90se8am8DnJ/zzjLEtN5rGXsKq5cSur22OJtcazo6/Hg==
+        bh=QwL6ImiIFbGk1ZxSuKWALC4wGw+S9Uyhv6lO2i334fA=;
+        b=n9qqKZMrqn4HhK6Eddq8izvAfbSxvN7Z+adee6qjAyFUp9L5oAxyu/GADv5FEWBjZcw070
+        2Ab2Bm4Z1K1e4EhR+ngw0QjBsF5Ua9myyPj0Q0ncUn/RkC6H7RtHwAOHHRst2d2dxRCj83
+        6fB9ddTL6SRiBwnttB0HwyqVXH5N91CtLQT69kDFB9L793EddNYDfMSp4nC7KnU4z1sUW8
+        a+hq7bStt/5JWU2h5Y0f+JoTk504pERzU4uiP1wfZPA6/ppEc896GHIJayX1b5ygDAc1AB
+        TJEFA6cEHj59942VL8Pw4TU6c41rYlojaiO7nWaKilAZj5moAe+wVF2wEFPOLg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643833847;
+        s=2020e; t=1643833848;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=L2beHnRyD57KQHoaZD0r7xoMZxPiSoUs0rlsC2RzkOw=;
-        b=oNbmQ4GW8fBMl7u5LDZLtKXh7oFWm/frFGL07r5g+dbURkxfl1ji90bdSULA+kNd4D6+7y
-        AGoiK4DomlVzG6BA==
+        bh=QwL6ImiIFbGk1ZxSuKWALC4wGw+S9Uyhv6lO2i334fA=;
+        b=+PkjcPChtWcaxvIUByZQZJaPr0kUfl1uprYgmX1YIt2EbM4brvj0QEs7MqJh0r8PrJKlh5
+        Bi/8AxwxxZcyASDg==
 From:   "tip-bot2 for Maciej W. Rozycki" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/irq] x86/PCI: Handle IRQ swizzling with PIRQ routers
+Subject: [tip: x86/irq] x86/PCI: Also match function number in $PIR table
 Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <alpine.DEB.2.21.2201020158320.56863@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201020158320.56863@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2201020154440.56863@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2201020154440.56863@angie.orcam.me.uk>
 MIME-Version: 1.0
-Message-ID: <164383384623.16921.5814708160589665711.tip-bot2@tip-bot2>
+Message-ID: <164383384716.16921.7522475956670765987.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -58,248 +61,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/irq branch of tip:
 
-Commit-ID:     c9df2d2677e823a110456bedd4357360b9ee2eda
-Gitweb:        https://git.kernel.org/tip/c9df2d2677e823a110456bedd4357360b9ee2eda
+Commit-ID:     9598dca94cbf86c1bd62e752baf5edb8001f36dd
+Gitweb:        https://git.kernel.org/tip/9598dca94cbf86c1bd62e752baf5edb8001f36dd
 Author:        Maciej W. Rozycki <macro@orcam.me.uk>
-AuthorDate:    Sun, 02 Jan 2022 23:24:41 
+AuthorDate:    Sun, 02 Jan 2022 23:24:35 
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Wed, 02 Feb 2022 21:27:55 +01:00
 
-x86/PCI: Handle IRQ swizzling with PIRQ routers
+x86/PCI: Also match function number in $PIR table
 
-Similarly to MP-tables PIRQ routing tables may not list devices behind 
-PCI-to-PCI bridges, leading to interrupt routing failures, e.g.:
+Contrary to the PCI BIOS specification[1] some systems include the PCI 
+function number for onboard devices in their $PIR table.  Consequently 
+the wrong entry can be matched leading to interrupt routing failures.
 
-pci 0000:00:07.0: PIIX/ICH IRQ router [8086:7000]
-pci 0000:02:00.0: ignoring bogus IRQ 255
-pci 0000:02:01.0: ignoring bogus IRQ 255
-pci 0000:02:02.0: ignoring bogus IRQ 255
-pci 0000:04:00.0: ignoring bogus IRQ 255
-pci 0000:04:00.3: ignoring bogus IRQ 255
-pci 0000:00:11.0: PCI INT A -> PIRQ 63, mask deb8, excl 0c20
-pci 0000:00:11.0: PCI INT A -> newirq 0
-PCI: setting IRQ 11 as level-triggered
-pci 0000:00:11.0: found PCI INT A -> IRQ 11
-pci 0000:00:11.0: sharing IRQ 11 with 0000:00:07.2
-pci 0000:02:00.0: PCI INT A not found in routing table
-pci 0000:02:01.0: PCI INT A not found in routing table
-pci 0000:02:02.0: PCI INT A not found in routing table
-pci 0000:04:00.0: PCI INT A not found in routing table
-pci 0000:04:00.3: PCI INT D not found in routing table
-pci 0000:06:05.0: PCI INT A not found in routing table
-pci 0000:06:08.0: PCI INT A not found in routing table
-pci 0000:06:08.1: PCI INT B not found in routing table
-pci 0000:06:08.2: PCI INT C not found in routing table
+For example the Tyan Tomcat IV S1564D board has:
 
-and consequently non-working devices.  Since PCI-to-PCI bridges have a 
-standardised way of routing interrupts by the means of swizzling do it 
-for configurations that use a PIRQ router as well, like with APIC-based 
-setups, and use the determined corresponding topmost bridge's interrupt 
-pin assignment to route a given device's interrupt:
+00:07.1 slot=00
+ 0:00/deb8
+ 1:00/deb8
+ 2:00/deb8
+ 3:00/deb8
 
-pci 0000:00:07.0: PIIX/ICH IRQ router [8086:7000]
-pci 0000:02:00.0: ignoring bogus IRQ 255
-pci 0000:02:01.0: ignoring bogus IRQ 255
-pci 0000:02:02.0: ignoring bogus IRQ 255
-pci 0000:04:00.0: ignoring bogus IRQ 255
-pci 0000:04:00.3: ignoring bogus IRQ 255
-pci 0000:00:11.0: PCI INT A -> PIRQ 63, mask deb8, excl 0c20
-pci 0000:00:11.0: PCI INT A -> newirq 0
-PCI: setting IRQ 11 as level-triggered
-pci 0000:00:11.0: found PCI INT A -> IRQ 11
-pci 0000:00:11.0: sharing IRQ 11 with 0000:00:07.2
-pci 0000:02:00.0: using bridge 0000:00:11.0 INT A to get INT A
-pci 0000:00:11.0: sharing IRQ 11 with 0000:02:00.0
-pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:04:00.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:04:00.3: using bridge 0000:00:11.0 INT A to get INT D
-pci 0000:00:11.0: sharing IRQ 11 with 0000:04:00.3
-pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
-pci 0000:06:08.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:06:08.1: using bridge 0000:00:11.0 INT D to get INT B
-pci 0000:06:08.2: using bridge 0000:00:11.0 INT A to get INT C
-pci 0000:00:11.0: sharing IRQ 11 with 0000:06:08.2
-pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:01.0: PCI INT A -> PIRQ 60, mask deb8, excl 0c20
-pci 0000:02:01.0: PCI INT A -> newirq 0
-PCI: setting IRQ 10 as level-triggered
-pci 0000:02:01.0: found PCI INT A -> IRQ 10
-pci 0000:02:01.0: sharing IRQ 10 with 0000:00:14.0
-pci 0000:02:00.0: using bridge 0000:00:11.0 INT A to get INT A
-pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:04:00.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:01.0: sharing IRQ 10 with 0000:04:00.0
-pci 0000:04:00.3: using bridge 0000:00:11.0 INT A to get INT D
-pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
-pci 0000:06:08.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:06:08.1: using bridge 0000:00:11.0 INT D to get INT B
-pci 0000:06:08.2: using bridge 0000:00:11.0 INT A to get INT C
-pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:02:02.0: PCI INT A -> PIRQ 61, mask deb8, excl 0c20
-pci 0000:02:02.0: PCI INT A -> newirq 0
-PCI: setting IRQ 5 as level-triggered
-pci 0000:02:02.0: found PCI INT A -> IRQ 5
-pci 0000:02:02.0: sharing IRQ 5 with 0000:00:13.0
-pci 0000:02:00.0: using bridge 0000:00:11.0 INT A to get INT A
-pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:04:00.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:04:00.3: using bridge 0000:00:11.0 INT A to get INT D
-pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
-pci 0000:06:08.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:02:02.0: sharing IRQ 5 with 0000:06:08.0
-pci 0000:06:08.1: using bridge 0000:00:11.0 INT D to get INT B
-pci 0000:06:08.2: using bridge 0000:00:11.0 INT A to get INT C
-pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
-pci 0000:06:05.0: PCI INT A -> PIRQ 62, mask deb8, excl 0c20
-pci 0000:06:05.0: PCI INT A -> newirq 0
-pci 0000:06:05.0: found PCI INT A -> IRQ 5
-pci 0000:06:05.0: sharing IRQ 5 with 0000:00:12.0
-pci 0000:02:00.0: using bridge 0000:00:11.0 INT A to get INT A
-pci 0000:02:01.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:02:02.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:04:00.0: using bridge 0000:00:11.0 INT B to get INT A
-pci 0000:04:00.3: using bridge 0000:00:11.0 INT A to get INT D
-pci 0000:06:05.0: using bridge 0000:00:11.0 INT D to get INT A
-pci 0000:06:08.0: using bridge 0000:00:11.0 INT C to get INT A
-pci 0000:06:08.1: using bridge 0000:00:11.0 INT D to get INT B
-pci 0000:06:05.0: sharing IRQ 5 with 0000:06:08.1
-pci 0000:06:08.2: using bridge 0000:00:11.0 INT A to get INT C
+00:07.2 slot=00
+ 0:00/deb8
+ 1:00/deb8
+ 2:00/deb8
+ 3:63/deb8
 
-Adjust log messages accordingly.
+for its IDE interface and USB controller functions of the 82371SB PIIX3
+southbridge.  Consequently the first entry matches causing the inability to
+route the USB interrupt in the `noapic' mode, in which case the kernel must
+rely on the interrupt line set by the BIOS:
+
+uhci_hcd 0000:00:07.2: runtime IRQ mapping not provided by arch
+uhci_hcd 0000:00:07.2: PCI INT D not routed
+uhci_hcd 0000:00:07.2: enabling bus mastering
+uhci_hcd 0000:00:07.2: UHCI Host Controller
+uhci_hcd 0000:00:07.2: new USB bus registered, assigned bus number 1
+uhci_hcd 0000:00:07.2: irq 11, io base 0x00006000
+
+Try to match the PCI device and function combined then and if that fails 
+move on to PCI device matching only.  Compliant systems will only have a 
+single $PIR table entry per PCI device, so this update does not change 
+the semantics with them, while systems that have several entries for 
+individual functions of a single PCI device each will match the correct 
+entry:
+
+uhci_hcd 0000:00:07.2: runtime IRQ mapping not provided by arch
+uhci_hcd 0000:00:07.2: PCI INT D -> PIRQ 63, mask deb8, excl 0c20
+uhci_hcd 0000:00:07.2: PCI INT D -> newirq 11
+uhci_hcd 0000:00:07.2: found PCI INT D -> IRQ 11
+uhci_hcd 0000:00:07.2: sharing IRQ 11 with 0000:00:11.0
+uhci_hcd 0000:00:07.2: enabling bus mastering
+uhci_hcd 0000:00:07.2: UHCI Host Controller
+uhci_hcd 0000:00:07.2: new USB bus registered, assigned bus number 1
+uhci_hcd 0000:00:07.2: irq 11, io base 0x00006000
+
+[1] "PCI BIOS Specification", Revision 2.1, PCI Special Interest Group,
+    August 26, 1994, Table 4-1 "Layout of IRQ routing table entry.", p.
+    12
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2201020158320.56863@angie.orcam.me.uk
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2201020154440.56863@angie.orcam.me.uk
 
 ---
- arch/x86/pci/irq.c | 60 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 47 insertions(+), 13 deletions(-)
+ arch/x86/pci/irq.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index dcb9c21..bd32e4b 100644
+index b6b9853..dcb9c21 100644
 --- a/arch/x86/pci/irq.c
 +++ b/arch/x86/pci/irq.c
-@@ -1138,7 +1138,7 @@ static void __init pirq_find_router(struct irq_router *r)
-  * for motherboard devices, so if a complete match is found, then give
-  * it precedence over a slot match.
-  */
--static struct irq_info *pirq_get_info(struct pci_dev *dev)
-+static struct irq_info *pirq_get_dev_info(struct pci_dev *dev)
- {
- 	struct irq_routing_table *rt = pirq_table;
- 	int entries = (rt->size - sizeof(struct irq_routing_table)) /
-@@ -1157,11 +1157,42 @@ static struct irq_info *pirq_get_info(struct pci_dev *dev)
- 	return slotinfo;
+@@ -1132,18 +1132,29 @@ static void __init pirq_find_router(struct irq_router *r)
+ 	/* The device remains referenced for the kernel lifetime */
  }
  
 +/*
-+ * Buses behind bridges are typically not listed in the PIRQ routing table.
-+ * Do the usual dance then and walk the tree of bridges up adjusting the
-+ * pin number accordingly on the way until the originating root bus device
-+ * has been reached and then use its routing information.
++ * We're supposed to match on the PCI device only and not the function,
++ * but some BIOSes build their tables with the PCI function included
++ * for motherboard devices, so if a complete match is found, then give
++ * it precedence over a slot match.
 + */
-+static struct irq_info *pirq_get_info(struct pci_dev *dev, u8 *pin)
-+{
-+	struct pci_dev *temp_dev = dev;
-+	struct irq_info *info;
-+	u8 temp_pin = *pin;
-+	u8 dpin = temp_pin;
-+
-+	info = pirq_get_dev_info(dev);
-+	while (!info && temp_dev->bus->parent) {
-+		struct pci_dev *bridge = temp_dev->bus->self;
-+
-+		temp_pin = pci_swizzle_interrupt_pin(temp_dev, temp_pin);
-+		info = pirq_get_dev_info(bridge);
-+		if (info)
-+			dev_warn(&dev->dev,
-+				 "using bridge %s INT %c to get INT %c\n",
-+				 pci_name(bridge),
-+				 'A' + temp_pin - 1, 'A' + dpin - 1);
-+
-+		temp_dev = bridge;
-+	}
-+	*pin = temp_pin;
-+	return info;
-+}
-+
- static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
+ static struct irq_info *pirq_get_info(struct pci_dev *dev)
  {
--	u8 pin;
+ 	struct irq_routing_table *rt = pirq_table;
+ 	int entries = (rt->size - sizeof(struct irq_routing_table)) /
+ 		sizeof(struct irq_info);
++	struct irq_info *slotinfo = NULL;
  	struct irq_info *info;
- 	int i, pirq, newirq;
-+	u8 dpin, pin;
- 	int irq = 0;
- 	u32 mask;
- 	struct irq_router *r = &pirq_router;
-@@ -1169,8 +1200,8 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
- 	char *msg = NULL;
  
- 	/* Find IRQ pin */
--	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &pin);
--	if (!pin) {
-+	pci_read_config_byte(dev, PCI_INTERRUPT_PIN, &dpin);
-+	if (!dpin) {
- 		dev_dbg(&dev->dev, "no interrupt pin\n");
- 		return 0;
- 	}
-@@ -1183,20 +1214,21 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
- 	if (!pirq_table)
- 		return 0;
+ 	for (info = rt->slots; entries--; info++)
+-		if (info->bus == dev->bus->number &&
+-			PCI_SLOT(info->devfn) == PCI_SLOT(dev->devfn))
+-			return info;
+-	return NULL;
++		if (info->bus == dev->bus->number) {
++			if (info->devfn == dev->devfn)
++				return info;
++			if (!slotinfo &&
++			    PCI_SLOT(info->devfn) == PCI_SLOT(dev->devfn))
++				slotinfo = info;
++		}
++	return slotinfo;
+ }
  
--	info = pirq_get_info(dev);
-+	pin = dpin;
-+	info = pirq_get_info(dev, &pin);
- 	if (!info) {
- 		dev_dbg(&dev->dev, "PCI INT %c not found in routing table\n",
--			'A' + pin - 1);
-+			'A' + dpin - 1);
- 		return 0;
- 	}
- 	pirq = info->irq[pin - 1].link;
- 	mask = info->irq[pin - 1].bitmap;
- 	if (!pirq) {
--		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + pin - 1);
-+		dev_dbg(&dev->dev, "PCI INT %c not routed\n", 'A' + dpin - 1);
- 		return 0;
- 	}
- 	dev_dbg(&dev->dev, "PCI INT %c -> PIRQ %02x, mask %04x, excl %04x",
--		'A' + pin - 1, pirq, mask, pirq_table->exclusive_irqs);
-+		'A' + dpin - 1, pirq, mask, pirq_table->exclusive_irqs);
- 	mask &= pcibios_irq_mask;
- 
- 	/* Work around broken HP Pavilion Notebooks which assign USB to
-@@ -1238,7 +1270,7 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
- 				newirq = i;
- 		}
- 	}
--	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + pin - 1, newirq);
-+	dev_dbg(&dev->dev, "PCI INT %c -> newirq %d", 'A' + dpin - 1, newirq);
- 
- 	/* Check if it is hardcoded */
- 	if ((pirq & 0xf0) == 0xf0) {
-@@ -1272,15 +1304,17 @@ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)
- 			return 0;
- 		}
- 	}
--	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n", msg, 'A' + pin - 1, irq);
-+	dev_info(&dev->dev, "%s PCI INT %c -> IRQ %d\n",
-+		 msg, 'A' + dpin - 1, irq);
- 
- 	/* Update IRQ for all devices with the same pirq value */
- 	for_each_pci_dev(dev2) {
--		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &pin);
--		if (!pin)
-+		pci_read_config_byte(dev2, PCI_INTERRUPT_PIN, &dpin);
-+		if (!dpin)
- 			continue;
- 
--		info = pirq_get_info(dev2);
-+		pin = dpin;
-+		info = pirq_get_info(dev2, &pin);
- 		if (!info)
- 			continue;
- 		if (info->irq[pin - 1].link == pirq) {
+ static int pcibios_lookup_irq(struct pci_dev *dev, int assign)

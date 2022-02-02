@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08744A7613
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E15A4A7616
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345955AbiBBQib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:38:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:53302 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbiBBQi3 (ORCPT
+        id S1345967AbiBBQjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231801AbiBBQjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:38:29 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5BD071F387;
-        Wed,  2 Feb 2022 16:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643819908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F1UflJiT/C+aLCGaPFrCtnXw6syIU85V9VqllgoyNsQ=;
-        b=puI/AdpQ/jspQcK3mXAqRUwhDRtHt1MSPBzzy8N1Mifk+8scPd3zOn7xXDLF0P4jalWpeb
-        3zwY+UlTQjuUbb+X5lykpgnY7ikIqin5+iKBeSeAhsHoiLtY6dwohtEa+d1kt2pdGnoc9k
-        d+VpKvXPETRjviF2CwXpqYJ7fdzdStE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643819908;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F1UflJiT/C+aLCGaPFrCtnXw6syIU85V9VqllgoyNsQ=;
-        b=4grxMtf5PsW9idScRI3PE3js7l6vQVXkZjy99aCei5I5HHh9Wy0iCDyXXx0hHR6VbI79sQ
-        fHfUdD3zucB26NAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F2A4913E99;
-        Wed,  2 Feb 2022 16:38:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +AUgL4Oz+mHsNwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 02 Feb 2022 16:38:27 +0000
-Message-ID: <c2294974-38a5-1900-2af7-10d317493b63@suse.de>
-Date:   Wed, 2 Feb 2022 17:38:27 +0100
+        Wed, 2 Feb 2022 11:39:42 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E4FC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:39:42 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id p125so18755032pga.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 08:39:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tY7gifojugJSD5p4YfWSz9NLQ3A3BS+rqgnzng9kvSw=;
+        b=BDw1mjVM+280XSXCpS330TZurj8fGxBv+iO6moGSKQvKefM5AOP+UBihwh/pltBMNR
+         gadkcufziPPtSNG/j1UEaBG5T16386R1jrR8/enqNPP0c4A0ZdHK8g+TVbaPvXFRB8Dz
+         +t9cyrk2C4kswXaNLPfRJbU2CnC+o+g9YPvMt8AuWVnHL3qKlu7bgC2ydF3U113GUgrG
+         eq+7hmuTqV537xt2U1us/MTANqzEYmFECDNQRQ+unKXlCYAKs3uM8+5Q83GxCeNKpSLk
+         B6unFTv5JKltb2yLKuoUDd5c1/ByDyRtJBHfqm9nH29TUQf3UiVYgl2oFm0GtM8MfNab
+         Zj1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tY7gifojugJSD5p4YfWSz9NLQ3A3BS+rqgnzng9kvSw=;
+        b=KavaIRZp4+me4auqZ/ROFN7wD1QdE0qVDs6ygYEcVbdGI5DsSJhw3cACkwpjylYx4W
+         0zAYjjYDeiEWR4HH6MhmueGju1nrhBL27AZ54poVUj/jIVPZHH2cg505HXj6IZmMQlHy
+         /PeT3KGkjNlLinc/MiwZiTrJ+4ix6iFV7KgabbOtTzBzadZM3xc5kPOyTnaCNyZuqQyi
+         aM2p8iExaQfgB2DfAvcKLsZTb8L8j++YJ0bg97SHrMOfwmBUeC8f3ouWWg/8fFinLdh+
+         HFGtPEjFZiHkN1unfebDCrFL1rIRqxqW6FY5pX+HNWIY1S4HjzQFywx7wtbGg5E2Gzm7
+         zn1A==
+X-Gm-Message-State: AOAM532T9Ufe6/ZeHhwFxMyozOCO8yXgvZdeO3SI15KP6HookEgXAEEt
+        TQ94gAGq6KrL7h+htludCLG1C9kUEPKRIjP4VQ20Dg==
+X-Google-Smtp-Source: ABdhPJyTguLiL2diyFPk98mfUwfK8MI6kgRxK+9KfJJmXZoB0buNdO7m9XYTxFJhYAqKBZhxV38R/qAPe+/HPj9Dd4k=
+X-Received: by 2002:a05:6a00:2343:: with SMTP id j3mr30022335pfj.7.1643819982134;
+ Wed, 02 Feb 2022 08:39:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCHv2 7/7] nvme: add support for enhanced metadata
-Content-Language: en-US
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com, colyli@suse.de
-References: <20220201190128.3075065-1-kbusch@kernel.org>
- <20220201190128.3075065-8-kbusch@kernel.org>
- <aaf56d4b-8554-e677-119e-9d23c921fe0a@suse.de>
- <20220202154131.GA3077632@dhcp-10-100-145-180.wdc.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20220202154131.GA3077632@dhcp-10-100-145-180.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220202000522.A3834C340EB@smtp.kernel.org> <46e56d44-bd7d-9239-a5db-099b6e285bee@infradead.org>
+In-Reply-To: <46e56d44-bd7d-9239-a5db-099b6e285bee@infradead.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 2 Feb 2022 08:39:06 -0800
+Message-ID: <CAJD7tkYMhnf-Ph8tpC-E4Zudt53grP1SddUxScXsh76Acg2aTg@mail.gmail.com>
+Subject: Re: mmotm 2022-02-01-16-04 uploaded (mm/memcontrol.c)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 16:41, Keith Busch wrote:
-> On Wed, Feb 02, 2022 at 02:28:53PM +0100, Hannes Reinecke wrote:
->> On 2/1/22 20:01, Keith Busch wrote:
-[ .. ]
->>> @@ -3104,7 +3218,7 @@ int nvme_init_ctrl_finish(struct nvme_ctrl *ctrl)
->>>    	if (ret < 0)
->>>    		return ret;
->>> -	ret = nvme_configure_acre(ctrl);
->>> +	ret = nvme_configure_host_options(ctrl);
->>>    	if (ret < 0)
->>>    		return ret;
->>
->> This could be made into a separate patch, is it's not directly related to PI
->> support. >
-> Well, the driver can't read the new PI formats without enabling host
-> supported features for it. Enabling the feature tells the controller
-> we're going to check for it, so I don't think we could reasonably split
-> this part into a prep patch from the part that sets up the PI formats.
+Thanks for pointing this out. The kernel test robot emailed me about
+it and I am working on fixing it for v2.
 
-Actually I was thinking about a patch renaming 'nvme_configure_acre' 
-into 'nvme_configure_host_options', as _this_ really is independent.
-When mixed together with the PI stuff it's hard to track down from the 
-commit message when it got changed.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+On Tue, Feb 1, 2022 at 7:50 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+>
+>
+> On 2/1/22 16:05, Andrew Morton wrote:
+> > The mm-of-the-moment snapshot 2022-02-01-16-04 has been uploaded to
+> >
+> >    https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > mmotm-readme.txt says
+> >
+> > README for mm-of-the-moment:
+> >
+> > https://www.ozlabs.org/~akpm/mmotm/
+> >
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> >
+> > You will need quilt to apply these patches to the latest Linus release =
+(5.x
+> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated=
+ in
+> > https://ozlabs.org/~akpm/mmotm/series
+> >
+> > The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss=
+,
+> > followed by the base kernel version against which this patch series is =
+to
+> > be applied.
+>
+> on i386:
+> (memcg-add-per-memcg-total-kernel-memory-stat.patch)
+>
+>
+> ../mm/memcontrol.c: In function =E2=80=98uncharge_batch=E2=80=99:
+> ../mm/memcontrol.c:6805:4: error: implicit declaration of function =E2=80=
+=98mem_cgroup_kmem_record=E2=80=99; did you mean =E2=80=98mem_cgroup_id_rem=
+ove=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+>     mem_cgroup_kmem_record(ug->memcg, -ug->nr_kmem);
+>     ^~~~~~~~~~~~~~~~~~~~~~
+>     mem_cgroup_id_remove
+>
+>
+> Full randconfig file is attached.
+>
+> --
+> ~Randy

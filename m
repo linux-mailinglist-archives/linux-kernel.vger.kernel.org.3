@@ -2,122 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313614A6BE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893D54A6BF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245104AbiBBGxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 01:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S245290AbiBBGxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 01:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244694AbiBBGwj (ORCPT
+        with ESMTP id S244751AbiBBGwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 01:52:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CC3C061751
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 22:08:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3FBDB83008
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E52C004E1;
-        Wed,  2 Feb 2022 06:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643782084;
-        bh=HvguaN/KnZ4Mt0Cs/C294n4Y3l8Qu7MGLAl0oB6BX8A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dmv/O/fu5NnmFseISuSg9qnGKsfJ+GJKJEkZ8vZjnaF7XparyJocs3xwnglIv0Hn5
-         B1wgm/vqIf/RxYTIDwPtrBlHm3BO4o6YI+3tR8ymy0ODR19N+P8gfPYcYM+2NG0s8V
-         8WotdaRor7WyMp4yCgDoyYtMDcvJoviH0w1CojQD0LqJrxP3tRdUHh7PmL+o8/5M+o
-         CC2Q9zJjwOcN20qyU5og1CQA1Lu8COT6nL/CQHFZZJEi6MSAoUZZpMn5cGD6G9RXrr
-         R8yI1HFyuMiZRXrLLvh+IQYvxo2RLmd8/sLF+OSLlIfJV8h999dPQP4g++k3yHuadB
-         8KI7BZDO14UYg==
-Date:   Wed, 2 Feb 2022 08:07:55 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH] mm/sparsemem: Fix 'mem_section' will never be NULL gcc
- 12 warning
-Message-ID: <Yfofu76KPbT2S9Ni@kernel.org>
-References: <20220201192924.672675-1-longman@redhat.com>
+        Wed, 2 Feb 2022 01:52:38 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32CC061755;
+        Tue,  1 Feb 2022 22:08:26 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nF8oW-0002ui-WD; Wed, 02 Feb 2022 07:08:21 +0100
+Message-ID: <7a1e66cc-a1c5-54c7-ca7d-04a389beb8b2@leemhuis.info>
+Date:   Wed, 2 Feb 2022 07:08:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201192924.672675-1-longman@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-BS
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        regressions@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+References: <cover.1643710947.git.linux@leemhuis.info>
+ <978ad91647e93b20b7fe12c3f237f6de8f9eaca1.1643710947.git.linux@leemhuis.info>
+ <87bkzq5fxu.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v4 3/3] docs: reporting-issues.rst: link new document
+ about regressions
+In-Reply-To: <87bkzq5fxu.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643782106;67ce4a9f;
+X-HE-SMSGID: 1nF8oW-0002ui-WD
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 02:29:24PM -0500, Waiman Long wrote:
-> The gcc 12 compiler reports a warning on the following code:
+On 02.02.22 00:23, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
 > 
->     static inline struct mem_section *__nr_to_section(unsigned long nr)
->     {
->     #ifdef CONFIG_SPARSEMEM_EXTREME
->         if (!mem_section)
->                 return NULL;
->     #endif
->        :
+>> Make Documentation/admin-guide/reporting-issues.rst point to the newly
+>> created document about regressions
+>> (Documentation/admin-guide/regressions-users.rst). This allows to
+>> shorten a few explanations the new document describes better and in more
+>> detail.
+>>
+>> While at it move the copyright hint to the end of the file, as suggested
+>> during review of the new documents about regressions.
+>>
+>> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+>> ---
+>>  .../admin-guide/reporting-issues.rst          | 60 +++++++++----------
+>>  1 file changed, 29 insertions(+), 31 deletions(-)
 > 
-> With CONFIG_SPARSEMEM_EXTREME on, the mem_section definition is
+> [...]
 > 
->     extern struct mem_section **mem_section;
+>> +You deal with a regression if some application or practical use case running
+>> +fine with one Linux kernel works worse or not at all with a newer version
+>> +compiled using a similar configuration. The document
+>> +'Documentation/admin-guide/regressions-users.rst' explains this in more detail.
 > 
-> Obviously, mem_section cannot be NULL, but *mem_section can be if memory
-> hasn't been allocated for the dynamic mem_section[] array yet. Fix this
-> warning by checking for "!*mem_section" instead.
+> Some of those quotes around file names are still sneaking in.
 
-Hmm, if mem_section cannot be NULL, it means if will be never allocated,
-no?
+I did that on purpose here, as the file right now uses single quotes for
+doc references almost everywhere and I thought I better stick to its
+style -- especially as one such a quoted references is pretty close by
+in this case, so it would look odd to quote one but not the other:
 
-static void __init memory_present(int nid, unsigned long start, unsigned long end)
-{
-	unsigned long pfn;
+```
+[...] compiled using a similar configuration. The document
+ 'Documentation/admin-guide/regressions-users.rst' explains this in more
+detail.
+ It also provides a good deal of other information about regressions you
+might
+ want to be aware of; it for example explains how to add your issue to
+the list
+ of tracked regressions, to ensure it won't fall through the cracks.
 
-#ifdef CONFIG_SPARSEMEM_EXTREME
-	if (unlikely(!mem_section)) {
-		unsigned long size, align;
 
-		size = sizeof(struct mem_section *) * NR_SECTION_ROOTS;
-		align = 1 << (INTERNODE_CACHE_SHIFT);
-		mem_section = memblock_alloc(size, align);
-		if (!mem_section)
-			panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-			      __func__, size, align);
-	}
-#endif
 
-...
+What qualifies as security issue is left to your judgment. Consider reading
+ 'Documentation/admin-guide/security-bugs.rst' before proceeding, as it
+ [...]
+```
 
-> 
-> Fixes: 83e3c48729d9 ("mm/sparsemem: Allocate mem_section at runtime for CONFIG_SPARSEMEM_EXTREME=y")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  include/linux/mmzone.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index aed44e9b5d89..bd1b19925f3b 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1390,7 +1390,7 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
->  static inline struct mem_section *__nr_to_section(unsigned long nr)
->  {
->  #ifdef CONFIG_SPARSEMEM_EXTREME
-> -	if (!mem_section)
-> +	if (!*mem_section)
->  		return NULL;
->  #endif
->  	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-> -- 
-> 2.27.0
-> 
-> 
+Stupid me just forgot to use single quotes for the second link to
+Documentation/admin-guide/regressions-users.rst. Will fix this up :-/
 
--- 
-Sincerely yours,
-Mike.
+That being said: in a mail on Monday I already raised the issue like
+this (slightly reworded):
+
+----
+I noticed I quoted internal references in reporting-issues.rst quite
+often. IMHO it improves readability sometimes (it depends a lot on the
+title of the target document), as can be seen in this example.
+
+The source text looks like this:
+
+```
+If your kernel is tainted, study
+'Documentation/admin-guide/tainted-kernels.rst' to find out why.
+[...]
+To find the change there is a process called 'bisection' which the
+document 'Documentation/admin-guide/bug-bisect.rst' describes in detail.
+```
+
+After processing to HTML the text looks like this:
+
+```
+If your kernel is tainted, study ‘Tainted kernels‘ to find out why.
+[...]
+To find the change there is a process called ‘bisection’ which the
+document ‘Bisecting a bug’ describes in detail.
+```
+
+Sure, "Tainted kernels" and "Bisecting a bug" are links and hence
+displayed differently by the browser, but I think the quotes help. But YMMV.
+
+I sooner or later hope to improve and fix a few things in
+reporting-issues.rst anyway. Let me know if I should take the
+opportunity to remove the single quotes then.
+----
+
+So I'd say: I add two more quoted doc links to the file now and fix this
+up later, if you still think removing the quotes is a good idea. Or do
+you want me to remove the single quotes now in that patch (or a separate
+one?)? It's not a big deal, there are only about 10 docs references.
+
+Ciao, Thorsten

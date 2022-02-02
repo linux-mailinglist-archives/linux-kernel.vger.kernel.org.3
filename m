@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD084A73EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0984A73E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345253AbiBBOzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:55:43 -0500
+        id S1345267AbiBBOzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:55:47 -0500
 Received: from mail-dm6nam10on2046.outbound.protection.outlook.com ([40.107.93.46]:1824
         "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S242489AbiBBOzc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:55:32 -0500
+        id S236194AbiBBOzd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:55:33 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N0Ygbf7dbxJspinRb/C2RYmVl596LjIr7sXelBpZ4qcAH3i4Hx5DK1JmJ/2GDh/vb9O7yTA/8W7RrpI/lusluIvBeAkPituv18jWre+hYwJQ7Me6lR++X3RpuyhSp43BTtclthTGJ2PkKgYgoS8sJOQRpKiuVvwvsDCzA0gYSgk9EoDvpfj5J/s361OcnK2nBUdjaJhYLRefaThMOGOvLXvKmYY6rLGnKWWf744PfirMaC3UX6Ks237dYXQMVMWeDPOY2SS7juv7SxHHGWSMhz4L6U/34E8EFy/E5sZINnFtMIfUZUIATMAPaZHIocrkH0gRwcBZn/P26ZqoJ+46iQ==
+ b=OMly48gGeldpRksmD+bRHh771cU7tmz+5dU2+ZuPkHXwjpMcnVpuKHtsVzMiN1zIrKFV3O8pHKiDxYx1nsuYY3u08zbgS92yGWjXnWDPTXeiXYCeNFVL04XJbe0Uxl7zyjI5tryDX95Wnws1JedEvKFc7rwPSMeoFjhRSdTDi2Hf475nq5xzk6UHH88/j+cvwt1XPinu25NK1mmrEP2LHZhLb1mnK0b4rnoAzXK5plydzd5nr2QITYmBHDGG8NepjEKtc9qeMWRzhDGQBAMXOwAsdF+Dj2JyQAarZ9kcGTJsHLyYm4LWnyicSwQRaDGJBcxqJ7l9v0nK1CqGZd+vfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vJvZ4QzMdhb/lLZaDpx8KRU3rPrTwODkLDDkeLD39D0=;
- b=NH3M+di1T4ZL6I0c2qEul5cHzAZr3aUIBgeBLFyeeeRpNvKFBqkh8bpdhHG+WzHGY3PbdHUQBDsRFZxUySupQG4LZvSKxD54pjkL95t3syUkGU92LjSp13AJeHR2d7kQiKUClsVruROu5hLxW2kXoQ3rv0CVAhgTl//2kyVlah756+Icw4Ww8VGxDDer8O3gVB+i3JLvsWhNV1pAd4MVfHr6fesyLP+oTAxm3mgNULE+lHorgYPV+6h+BhuwhlF10VZ6R1uLk0xdEVvfp/3idn0xC2LX1gKKQg4ZWfMB13/hcsOJZqcQzEHfBNsOG5h8jYH6Rra85Oz+bpNUjzz6Ug==
+ bh=z2RhfzEpMTgZKIc0vHH8nb4wFzha+nweFgIh+MZtkro=;
+ b=mYMyFUUve6HEaSz6eLA7gxO+XaJ/867wu3RngqP5qUTmTsnnjaGHWfYyc6p2DHhWkX74/wbHP4ETf/TI506nZ5y27lVCPM6pqmaD4QTnRGy6Xws6lvmqScCqNCp823HvcZwTh93D/+eshxumePvzKhd+0b2KMqJfAwHm6CvIXkvEOG72WhudcfMvBOkUEyBJgtthpJU5wX7XYBB+AuU0num2LQ4WhRzHsK0VBGepyUkuMj6ZFEBq12Ql9OlfjHO52jQRo+jTiNCr7STrb+hscm9wnI4DlxXQFas/6Sp0LJVEJb58iAVz0ZMSVGtdRoXEaWIHgnxfg2ijYjEjdf5ayQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vJvZ4QzMdhb/lLZaDpx8KRU3rPrTwODkLDDkeLD39D0=;
- b=OidWfKWLGdVkeHWUU6LkBIR+94an3i9b7BsBddlowzNMxAntvAvdjGUhwrq06g6LRsohmm5fzTnqpC9QAmXiGHr7ozJsooayOvaYciTTl3elupsgxTkL6qsW0YDfSwzCPp9vuQfAW+/1Eg2G9/ioJ1jfqKuuFsJRaM+lXPKjXvE=
+ bh=z2RhfzEpMTgZKIc0vHH8nb4wFzha+nweFgIh+MZtkro=;
+ b=F/2AYnRD1jggMKY+smzXd71sdSNwrAAhZuMFbWErPNN/ODlpbAZ6drXHIN1eoCNe7itUupeQn4iCMHrb8t36kcbZAoSUN0RwR7a4O0LYrwjSvRxPB+sbotiYVKWnqHh2pQgIEsR5WJzVcQVtiypR1dQv/zSSfJL+moPKA9iIlnQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vmware.com;
 Received: from BY3PR05MB8081.namprd05.prod.outlook.com (2603:10b6:a03:366::15)
@@ -43,9 +43,9 @@ To:     linux-kernel@vger.kernel.org,
 Cc:     gregkh@linuxfoundation.org, pv-drivers@vmware.com,
         Jorgen Hansen <jhansen@vmware.com>,
         Vishnu Dasa <vdasa@vmware.com>
-Subject: [PATCH 7/8] VMCI: dma dg: add support for DMA datagrams sends
-Date:   Wed,  2 Feb 2022 06:49:09 -0800
-Message-Id: <20220202144910.10349-8-jhansen@vmware.com>
+Subject: [PATCH 8/8] VMCI: dma dg: add support for DMA datagrams receive
+Date:   Wed,  2 Feb 2022 06:49:10 -0800
+Message-Id: <20220202144910.10349-9-jhansen@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220202144910.10349-1-jhansen@vmware.com>
 References: <20220202144910.10349-1-jhansen@vmware.com>
@@ -56,193 +56,279 @@ X-ClientProxiedBy: SJ0PR03CA0362.namprd03.prod.outlook.com
  (2603:10b6:a03:366::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dfc32ec5-e64a-4300-e6be-08d9e65c0572
+X-MS-Office365-Filtering-Correlation-Id: 03f0cfe9-d7ab-4837-eabf-08d9e65c05a9
 X-MS-TrafficTypeDiagnostic: BN6PR05MB2803:EE_
 X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
 X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <BN6PR05MB2803D189B773913E2D694BC5DA279@BN6PR05MB2803.namprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <BN6PR05MB28031D770A553E8CBBE4F4DDDA279@BN6PR05MB2803.namprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Fyc8UxgGdr131qMTIB5RFt6cQGsGfG1XX8MeIRFsgY4e8pfILD6i0LNnEHe+cvCYZmYIqBjZ5OyK9bTe2sKUhG1leYUAgBOpeskIj2Is+6T8xJdvdRpx0NT8XL+KiFONZUXByR83xoiYZ88hYjs8NTITv/rkVI2Gs+qlCty5AMs5qsQIK5UDLnvrrnzGhB/PxqckJxeNID7GNXRlSs9tIc0JaWyPXw/A8vgvVlVP78xJu4tiRqsx8OOVRDguEB4/4m+M/LfAvURRYSeJRQZRen0fTHQ8In1nqubLLulK8tUm1o+TC0d1WbXwMfZ/UqrUubRt8fhEQvrHOOeHSWhY0B+rTdlHezfvZGF55mehLAsSnuX6huA6dx9TUouT2wOTNxcG5Kfh1i0Lkd2tMyG3oPl4dNhZ/PIKK7E8X9Z6Vx0qHvq6QPa6TJ8YanLdlDSCUPXPHC7AJzfhIlQaTSHsBpXQ93rM/0/QjqAPiJQtT1J2egKWNQsjn5//LcexqkAxrcMJ/VcWsXhHyol0+04KcgD2IYS+Y4WgQjAV6e7g5G6dmfgC8II5UKf+u0iWqaSelvoSLUhIYtDmDdBUANQNriUBQ25tVMsi+bFN0QWnrdr+OYBrtTCZ0LbHWm5oKn/D0pll1BA1af/DtchCP+HWmWOriQ1FfPbKwmHl7jgf4NxJ7ddS9XLE88FQKOOeIP+YTF6g7NVEJUo5rC+Squ1bMA==
+X-Microsoft-Antispam-Message-Info: 1unI0x8DMwvqX4xLs2sRYSFiymShWKMDNx6HZ0vqT6wPVRTXDm2cI9XziD7yaKkVjvLln+MoECEtw73srmTCuid7ns0KlpHkuBnToOwItbTBJjR+6zd1ZpVcrmb2YHVUsvpPNgtugnsLKqZO/nYK8CyVJmeC8JbwdIVBD9TI5swery76vgWxPsHvJ0vR/Uc1lVuOJ0KdDIRT/7+nyVvM3/M37T2d5lCovLu8vivOTRYKHDVLyCuJeZqSOnf03bNF5w83DL4vFQG0sgwn3VxYoWXFHOy9yZ74y+I+c4muTtACHD5qJf7sYrLoQVKyxBc4Wg+5WGlBAKIcKDogI5KCnkPR1LsMTLOGsKmFdzddAqVs//qT1T8QjtKHB07unXKfBQcnaHQJZArK+S96mTyQlsQy7bigJ76PtMLeFy25bTCpfM0/Q7INPSeSGY1q26EUHTVVOUgTf/U4JnH+87qUwnzklYfcpCX3JZmsI1JnUm9ztbQAuaEOSZUYxkgvax4jZAD1TVeJ8WSJBSaJ4vGue0L2sZLsOj2C93S2XE9LdZchxLlV5wNIeQowRs5d3tKeoRCpTs3HN7ukJEZajTbBGwiC5XoOjoNT87TUARH7YhzZot2PEU6hFmIOG45Z5JkAypb6meFrOTKMHm4IK5etsPusK4m7Qd1bwEnQoQGEcXTz2w32iaz12AvTdJOi2jSjCOioXT59J3ydqbY7m1uXWw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8081.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(316002)(6512007)(38100700002)(38350700002)(5660300002)(2616005)(8676002)(8936002)(54906003)(4326008)(66476007)(66556008)(66946007)(83380400001)(107886003)(508600001)(6486002)(86362001)(1076003)(36756003)(186003)(6506007)(26005)(2906002)(6666004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j0wh3MsHjDXKim2tdQ2Sl/G1Tp9GS9ewMZTGDup9vWgGRm3L7Pk8bd953NVA?=
- =?us-ascii?Q?hmDjHV6McQlb27aH3ShYf+oLb7AFENx6pwtCoO0NhsVerOoAoHsD9qTvAvUh?=
- =?us-ascii?Q?D94z9R6RN6dG9qsO/CT2bS89D/fLptNtw7quQNhcAcaEBJT78GJ0hJP9bsp8?=
- =?us-ascii?Q?YE23ixXXoKSj7+jEOG+5MjEQNFqFVpfxHaZZ2mD/lb5T3X5yxmcX6Uq4Pifi?=
- =?us-ascii?Q?luap/kWTOl0WXv8zvPWyY6Cp/bHlPNO8IvOnsgDTGDRAbXyItToG93Np56Y0?=
- =?us-ascii?Q?Ridgr+j6GN9/QuA4RQqCAnCxyFImp+jlNJHYzi7wSjhvOsYqqft/iy3SH3VH?=
- =?us-ascii?Q?nnLz4EybU4PRLQiYtoPBMkWu2q3vJBQVEgDFzs1fRB+649xy1zbt/MpJvVGH?=
- =?us-ascii?Q?Gra7ykAdWRPCvhGtCqoupXvCybIzEf1JRFlijcQC/+8WLH9gGnUatCeYNpTm?=
- =?us-ascii?Q?PouFqyxItC2ViVIVteXS+SxhKux8odo0uHb9mQh8ALcnoq+XfVfoqIzcH8BX?=
- =?us-ascii?Q?d1z3HsvVgY8WmVlUo8FNn187ySMkSGnMu+dNcv4iw/D1KPdxbPUrizC8xEhi?=
- =?us-ascii?Q?OkDKJjcLuapkW/gN2BSCcbWouwrrLgD3dO5GgtAbrY2AETc/HVtHF9amuvPM?=
- =?us-ascii?Q?l8x5cassU8Wtxcl+F/gL5bVZrxhOwQ8wWHOGCmC7WsJ7ZX1gaJfcwL1yrUNP?=
- =?us-ascii?Q?mr1lyzYS4j6Ii1Rr8v8FvZ4PaMYFeqRrHwayH4dpaKJd4Z7XxnSOYeIzq6nF?=
- =?us-ascii?Q?t3mKXoPOxUY6Gya57OnyYxn1X4Vl+8VlplRKjd1Rqg5UORoQjwEfhgRw9NE7?=
- =?us-ascii?Q?07uuAd4dicv6Yybkm9uu3afXJZKJ27JUfiz7VF4cNJ4QE5kEKAWWj9B3B/9+?=
- =?us-ascii?Q?aLDZQkcr2cvrngDp2a7THuo8VKQBqY0m3Pp/Wzj8f65hROl7AZYMZwe5iYhz?=
- =?us-ascii?Q?vsE1tikGx26aRyR3PlsOdR0Qaya65R2Fd3ASG7GXX+c7cZUwyeus4ufwe5Bo?=
- =?us-ascii?Q?EnQH7mX2pTRCchKxbnkpdLzTgIpzl5OTDTXLN3kVykV0C2cRe3A15D6OziC1?=
- =?us-ascii?Q?WMdctuekgefFJ3Sb1ZThwEIz58K8HalyI5iGxu8iw4pP7IXqUlqAvv0hw4qN?=
- =?us-ascii?Q?6Qo1ZTUCwmFlyg6a1GAEVRbcNARXp2b54y/xogOoKcHvn1AZnVSpqJ7lNUlP?=
- =?us-ascii?Q?yoXFhYU1SUfq4Vju8HnQ7Vyk0k2deW7nVKQaotRzUA6fxIe0y+QVetTyTm3y?=
- =?us-ascii?Q?ErxdapI8Jq3RSahIGndjyYuAnXJwS2arszlB1+z7gtgR8DR5HWzna4p+xeMD?=
- =?us-ascii?Q?bo7abuKGhErRCtxyUJerPQ/rjZXindqDTpvIr1f6Ul1xuh2sgNGTrShIYOFZ?=
- =?us-ascii?Q?aSHbgjs+vJVN7sRTXfpGECcYWl5dcumQtCCtjh4JvVxILbxWwXCsizkqDnVO?=
- =?us-ascii?Q?28RQH56Gj6ZUtPRmAaezO2Tsl7ET/dIWaO861Rd+Guyja9xwLF4PZbBv8ucP?=
- =?us-ascii?Q?MmaPtnEcw057X4FYQtnpsU4GJfY5FripVLmzASYGVDHYgro1txzfx1kh4YdX?=
- =?us-ascii?Q?nGOZZ0K+f4l53/N4v/uXbiREFWImxZq6pl7CViNmb3iXGMRoUBakwgaQI/0J?=
- =?us-ascii?Q?F7t6+sfaq713zzo5OM6vyW0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?42JnyS7MLB4ahNxhIGc+iMtupQc2E7sbmhTzmNm/MhLySNmXzLPxHuH6h9BF?=
+ =?us-ascii?Q?8cgfxl8k3ijq7F3f0Trr46syPFsbgDs8N5aipnEcH4+Y5MnrZInYsh7CFCy2?=
+ =?us-ascii?Q?o7JR15gFj29Z9tZi0vpHIuCNRAlCitP0LfDvMKKPnl2dp1+93cO7/DMUnKrh?=
+ =?us-ascii?Q?rpiDRafdLtgbnaqg4JwnbvwVvi9y/w4vOzZ5bj/ATV402tc6Vh4RtxJr166+?=
+ =?us-ascii?Q?ISzCDUpzUYB/xwViyV3LSy7Xe8NPGcl7oD2G58Q4kCnRPV2WhvBCXVFSgxzA?=
+ =?us-ascii?Q?GmZVpRUi1XM3oIKOuVlnSZ3+PC8B7U54aO1e9SmZ9Yllj1zvKoQLxh4blWBN?=
+ =?us-ascii?Q?FxdxQGOpEFJNN2XbchbTXYBheOkGQJYfGyS8AcZUOiWoemGMyvRqBgyR223K?=
+ =?us-ascii?Q?2vWkXdZgLF70j5do5EVUoL30pu3pvY20bF7v1xiQTF2lOvcrk1NR6Tv9hdMB?=
+ =?us-ascii?Q?kpobnq/eU7WsyfuchPtKVVtfW76D9F360DGv5tAHC63si7I4kFy8somVt4KF?=
+ =?us-ascii?Q?DHSkQvVCjGEkDFRzef+7XxuXeDaPLnnl+snQxDr3HHKyINBtX7OQOezRMet9?=
+ =?us-ascii?Q?pbrVIqqKRMrVkKfgpcUjQ+H28r8xM7ScRFDkSWe1ZhoVVzEv0afzQBk/8eUq?=
+ =?us-ascii?Q?EP4oUH4FIuqEyX/P0By/j/2ZJSWXEpaDMuU/irQsON5XaQKayMjHSJAxHspm?=
+ =?us-ascii?Q?53VFVyEols8NGPlB/gbrFe9yMphjJFgWuQRQ0IxKoyF9d9aS3nt62xW7jZc1?=
+ =?us-ascii?Q?5Wt1kv5IHRA+ydakOEpVc3e5EolOSeQ7YEyCpiuHSlZneIGisTgkoBUTs5kb?=
+ =?us-ascii?Q?BzeHzZrjXdZnV4XAczuFsQUvYJvgQLjrKlY8WPjkCcTg6rW7+sab3ZbZbFdP?=
+ =?us-ascii?Q?3dFi4LJpTBScfdt/6ao1RDa7SWTNJhaVtpqPMZmOvfvRlIOmFzEsU8lrm5IF?=
+ =?us-ascii?Q?aLcSqzqMWufEjTfQ4wscFNAiuTzVSLgQVvaq+6ATa5UkndBofYtzbLqRALXM?=
+ =?us-ascii?Q?nbFDicEybs2TTeFALGnN3SwSKqZ2qR8+bm3KrYXf/dnz2l9PtLg55JyAMEh0?=
+ =?us-ascii?Q?YB+e5aRO25fz89C+yuZRqVWzYAM7Aw8JaO7kGKaR7izfxtmGhfRvaBUBEjEo?=
+ =?us-ascii?Q?PKjZZZke2m1u7kNjDuKv7wwnKC1uJZQNNe/Y1ZoucwYBiij2U/Gs6g+Qnne1?=
+ =?us-ascii?Q?RDGjym8ox24DsmrdJ9giqVk65h/Xjy5htY8PRlh8kBDJajZ5SThN39LJlFxG?=
+ =?us-ascii?Q?L7aJ6tcudlCceVV4En2yRQB9AlkXGSAr8nj4mxCByDlN0uEJM/0yTcsfw1sH?=
+ =?us-ascii?Q?WO/v3FOvdKcikh7fmrevmudIeH5ACVPY+fiKNQspswu9vqj78NJDh2BqUvBf?=
+ =?us-ascii?Q?ZfDSLCgZDya7CCnlWhDhfQvGcRB4eJJLAq5MWNabwnXv+Yl6IGe7XUJahQg/?=
+ =?us-ascii?Q?Y7Hs+9VqcXk0CL485s0zAB6/LoNIEoE2OBiaTkLsi479nS30CYC/hYNVpJdy?=
+ =?us-ascii?Q?X1Vgx1rwpvKMM1igKUrnKTbtcy2TyFUttZyaensRvs3D0LWI5vs6+iRDVhGf?=
+ =?us-ascii?Q?h6OAx8Jm6/p5hhXaBIeBP9Ihkzc5ANu2N96fDVD9VQNUXGRkhMJ/oKeDHm12?=
+ =?us-ascii?Q?Yw+mumCOJgmdknoZcUcikTo=3D?=
 X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfc32ec5-e64a-4300-e6be-08d9e65c0572
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03f0cfe9-d7ab-4837-eabf-08d9e65c05a9
 X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8081.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 14:55:15.4943
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 14:55:15.9161
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: woJqPWgh14EqXIG7tz1eESOUeT3NmIxpbvZgUmkb0fIHG4VLBOan/lpWkYT4QRFAs+nuz9WUlmY+5ROCeLriTQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fq280KUsipfhCdeQoTwxZ0DVVPhcVvpWMp+hu61pDY893U8mtX2E3lQcfvCqDZq242gAYXG6JJ02hl7rIYHl1g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR05MB2803
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DMA based send operation from the transmit buffer instead of the
-iowrite8_rep based datagram send when DMA datagrams are supported.
+Use the DMA based receive operation instead of the ioread8_rep
+based datagram receive when DMA datagrams are supported.
 
-The outgoing datagram is sent as inline data in the VMCI transmit
-buffer. Once the header has been configured, the send is initiated
-by writing the lower 32 bit of the buffer base address to the
-VMCI_DATA_OUT_LOW_ADDR register. Only then will the device process
-the header and the datagram itself. Following that, the driver busy
-waits (it isn't possible to sleep on the send path) for the header
-busy flag to change - indicating that the send is complete.
+In the receive operation, configure the header to point to the
+page aligned VMCI_MAX_DG_SIZE part of the receive buffer
+using s/g configuration for the header. This ensures that the
+existing dispatch routine can be used with little modification.
+Initiate the receive by writing the lower 32 bit of the buffer
+to the VMCI_DATA_IN_LOW_ADDR register, and wait for the busy
+flag to be changed by the device using a wait queue.
+
+The existing dispatch routine for received  datagrams is reused
+for the DMA datagrams with a few modifications:
+- the receive buffer is always the maximum size for DMA datagrams
+  (IO ports would try with a shorter buffer first to reduce
+  overhead of the ioread8_rep operation).
+- for DMA datagrams, datagrams are provided contiguous in the
+  buffer as opposed to IO port datagrams, where they can start
+  on any page boundary
 
 Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
 Signed-off-by: Jorgen Hansen <jhansen@vmware.com>
 ---
- drivers/misc/vmw_vmci/vmci_guest.c | 44 ++++++++++++++++++++++++++++--
- include/linux/vmw_vmci_defs.h      | 34 +++++++++++++++++++++++
- 2 files changed, 76 insertions(+), 2 deletions(-)
+ drivers/misc/vmw_vmci/vmci_guest.c | 103 ++++++++++++++++++++++-------
+ 1 file changed, 79 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/misc/vmw_vmci/vmci_guest.c b/drivers/misc/vmw_vmci/vmci_guest.c
-index d0acb686b464..ca73a1913404 100644
+index ca73a1913404..2bcfa292772d 100644
 --- a/drivers/misc/vmw_vmci/vmci_guest.c
 +++ b/drivers/misc/vmw_vmci/vmci_guest.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel.h>
- #include <linux/mm.h>
- #include <linux/module.h>
-+#include <linux/processor.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-@@ -114,6 +115,46 @@ void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+@@ -58,6 +58,7 @@ struct vmci_guest_device {
+ 
+ 	struct tasklet_struct datagram_tasklet;
+ 	struct tasklet_struct bm_tasklet;
++	struct wait_queue_head inout_wq;
+ 
+ 	void *data_buffer;
+ 	dma_addr_t data_buffer_base;
+@@ -115,6 +116,36 @@ void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
  		iowrite32(val, dev->iobase + reg);
  }
  
-+int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
++static void vmci_read_data(struct vmci_guest_device *vmci_dev,
++			   void *dest, size_t size)
 +{
-+	int result;
-+
-+	if (dev->mmio_base != NULL) {
-+		struct vmci_data_in_out_header *buffer_header = dev->tx_buffer;
-+		u8 *dg_out_buffer = (u8 *)(buffer_header + 1);
-+
-+		if (VMCI_DG_SIZE(dg) > VMCI_MAX_DG_SIZE)
-+			return VMCI_ERROR_INVALID_ARGS;
-+
++	if (vmci_dev->mmio_base == NULL)
++		ioread8_rep(vmci_dev->iobase + VMCI_DATA_IN_ADDR,
++			    dest, size);
++	else {
 +		/*
-+		 * Initialize send buffer with outgoing datagram
-+		 * and set up header for inline data. Device will
-+		 * not access buffer asynchronously - only after
-+		 * the write to VMCI_DATA_OUT_LOW_ADDR.
++		 * For DMA datagrams, the data_buffer will contain the header on the
++		 * first page, followed by the incoming datagram(s) on the following
++		 * pages. The header uses an S/G element immediately following the
++		 * header on the first page to point to the data area.
 +		 */
-+		memcpy(dg_out_buffer, dg, VMCI_DG_SIZE(dg));
-+		buffer_header->opcode = 0;
-+		buffer_header->size = VMCI_DG_SIZE(dg);
-+		buffer_header->busy = 1;
++		struct vmci_data_in_out_header *buffer_header = vmci_dev->data_buffer;
++		struct vmci_sg_elem *sg_array = (struct vmci_sg_elem *)(buffer_header + 1);
++		size_t buffer_offset = dest - vmci_dev->data_buffer;
 +
-+		vmci_write_reg(dev, lower_32_bits(dev->tx_buffer_base),
-+			       VMCI_DATA_OUT_LOW_ADDR);
++		buffer_header->opcode = 1;
++		buffer_header->size = 1;
++		buffer_header->busy = 0;
++		sg_array[0].addr = vmci_dev->data_buffer_base + buffer_offset;
++		sg_array[0].size = size;
 +
-+		/* Caller holds a spinlock, so cannot block. */
-+		spin_until_cond(buffer_header->busy == 0);
++		vmci_write_reg(vmci_dev, lower_32_bits(vmci_dev->data_buffer_base),
++			       VMCI_DATA_IN_LOW_ADDR);
 +
-+		result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
-+		if (result == VMCI_SUCCESS)
-+			result = (int)buffer_header->result;
-+	} else {
-+		iowrite8_rep(dev->iobase + VMCI_DATA_OUT_ADDR,
-+			     dg, VMCI_DG_SIZE(dg));
-+		result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
++		wait_event(vmci_dev->inout_wq, buffer_header->busy == 1);
 +	}
-+
-+	return result;
 +}
 +
- /*
-  * VM to hypervisor call mechanism. We use the standard VMware naming
-  * convention since shared code is calling this function as well.
-@@ -139,8 +180,7 @@ int vmci_send_datagram(struct vmci_datagram *dg)
- 	spin_lock_irqsave(&vmci_dev_spinlock, flags);
+ int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
+ {
+ 	int result;
+@@ -260,15 +291,17 @@ static int vmci_check_host_caps(struct pci_dev *pdev)
+ }
  
- 	if (vmci_dev_g) {
--		iowrite8_rep(vmci_dev_g->iobase + VMCI_DATA_OUT_ADDR,
--			     dg, VMCI_DG_SIZE(dg));
-+		vmci_write_data(vmci_dev_g, dg);
- 		result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
- 	} else {
- 		result = VMCI_ERROR_UNAVAILABLE;
-diff --git a/include/linux/vmw_vmci_defs.h b/include/linux/vmw_vmci_defs.h
-index 8bc37d8244a8..6fb663b36f72 100644
---- a/include/linux/vmw_vmci_defs.h
-+++ b/include/linux/vmw_vmci_defs.h
-@@ -110,6 +110,40 @@ enum {
- #define VMCI_MMIO_ACCESS_OFFSET        ((size_t)(128 * 1024))
- #define VMCI_MMIO_ACCESS_SIZE          ((size_t)(64 * 1024))
- 
-+/*
-+ * For VMCI devices supporting the VMCI_CAPS_DMA_DATAGRAM capability, the
-+ * sending and receiving of datagrams can be performed using DMA to/from
-+ * a driver allocated buffer.
-+ * Sending and receiving will be handled as follows:
-+ * - when sending datagrams, the driver initializes the buffer where the
-+ *   data part will refer to the outgoing VMCI datagram, sets the busy flag
-+ *   to 1 and writes the address of the buffer to VMCI_DATA_OUT_HIGH_ADDR
-+ *   and VMCI_DATA_OUT_LOW_ADDR. Writing to VMCI_DATA_OUT_LOW_ADDR triggers
-+ *   the device processing of the buffer. When the device has processed the
-+ *   buffer, it will write the result value to the buffer and then clear the
-+ *   busy flag.
-+ * - when receiving datagrams, the driver initializes the buffer where the
-+ *   data part will describe the receive buffer, clears the busy flag and
-+ *   writes the address of the buffer to VMCI_DATA_IN_HIGH_ADDR and
-+ *   VMCI_DATA_IN_LOW_ADDR. Writing to VMCI_DATA_IN_LOW_ADDR triggers the
-+ *   device processing of the buffer. The device will copy as many available
-+ *   datagrams into the buffer as possible, and then sets the busy flag.
-+ *   When the busy flag is set, the driver will process the datagrams in the
-+ *   buffer.
-+ */
-+struct vmci_data_in_out_header {
-+	uint32_t busy;
-+	uint32_t opcode;
-+	uint32_t size;
-+	uint32_t rsvd;
-+	uint64_t result;
-+};
-+
-+struct vmci_sg_elem {
-+	uint64_t addr;
-+	uint64_t size;
-+};
-+
  /*
-  * We have a fixed set of resource IDs available in the VMX.
-  * This allows us to have a very simple implementation since we statically
+- * Reads datagrams from the data in port and dispatches them. We
+- * always start reading datagrams into only the first page of the
+- * datagram buffer. If the datagrams don't fit into one page, we
+- * use the maximum datagram buffer size for the remainder of the
+- * invocation. This is a simple heuristic for not penalizing
+- * small datagrams.
++ * Reads datagrams from the device and dispatches them. For IO port
++ * based access to the device, we always start reading datagrams into
++ * only the first page of the datagram buffer. If the datagrams don't
++ * fit into one page, we use the maximum datagram buffer size for the
++ * remainder of the invocation. This is a simple heuristic for not
++ * penalizing small datagrams. For DMA-based datagrams, we always
++ * use the maximum datagram buffer size, since there is no performance
++ * penalty for doing so.
+  *
+  * This function assumes that it has exclusive access to the data
+- * in port for the duration of the call.
++ * in register(s) for the duration of the call.
+  */
+ static void vmci_dispatch_dgs(unsigned long data)
+ {
+@@ -276,23 +309,41 @@ static void vmci_dispatch_dgs(unsigned long data)
+ 	u8 *dg_in_buffer = vmci_dev->data_buffer;
+ 	struct vmci_datagram *dg;
+ 	size_t dg_in_buffer_size = VMCI_MAX_DG_SIZE;
+-	size_t current_dg_in_buffer_size = PAGE_SIZE;
++	size_t current_dg_in_buffer_size;
+ 	size_t remaining_bytes;
++	bool is_io_port = vmci_dev->mmio_base == NULL;
+ 
+ 	BUILD_BUG_ON(VMCI_MAX_DG_SIZE < PAGE_SIZE);
+ 
+-	ioread8_rep(vmci_dev->iobase + VMCI_DATA_IN_ADDR,
+-		    vmci_dev->data_buffer, current_dg_in_buffer_size);
++	if (!is_io_port) {
++		/* For mmio, the first page is used for the header. */
++		dg_in_buffer += PAGE_SIZE;
++
++		/*
++		 * For DMA-based datagram operations, there is no performance
++		 * penalty for reading the maximum buffer size.
++		 */
++		current_dg_in_buffer_size = VMCI_MAX_DG_SIZE;
++	} else {
++		current_dg_in_buffer_size = PAGE_SIZE;
++	}
++	vmci_read_data(vmci_dev, dg_in_buffer, current_dg_in_buffer_size);
+ 	dg = (struct vmci_datagram *)dg_in_buffer;
+ 	remaining_bytes = current_dg_in_buffer_size;
+ 
++	/*
++	 * Read through the buffer until an invalid datagram header is
++	 * encountered. The exit condition for datagrams read through
++	 * VMCI_DATA_IN_ADDR is a bit more complicated, since a datagram
++	 * can start on any page boundary in the buffer.
++	 */
+ 	while (dg->dst.resource != VMCI_INVALID_ID ||
+-	       remaining_bytes > PAGE_SIZE) {
++	       (is_io_port && remaining_bytes > PAGE_SIZE)) {
+ 		unsigned dg_in_size;
+ 
+ 		/*
+-		 * When the input buffer spans multiple pages, a datagram can
+-		 * start on any page boundary in the buffer.
++		 * If using VMCI_DATA_IN_ADDR, skip to the next page
++		 * as a datagram can start on any page boundary.
+ 		 */
+ 		if (dg->dst.resource == VMCI_INVALID_ID) {
+ 			dg = (struct vmci_datagram *)roundup(
+@@ -342,11 +393,10 @@ static void vmci_dispatch_dgs(unsigned long data)
+ 					current_dg_in_buffer_size =
+ 					    dg_in_buffer_size;
+ 
+-				ioread8_rep(vmci_dev->iobase +
+-						VMCI_DATA_IN_ADDR,
+-					vmci_dev->data_buffer +
++				vmci_read_data(vmci_dev,
++					       dg_in_buffer +
+ 						remaining_bytes,
+-					current_dg_in_buffer_size -
++					       current_dg_in_buffer_size -
+ 						remaining_bytes);
+ 			}
+ 
+@@ -384,10 +434,8 @@ static void vmci_dispatch_dgs(unsigned long data)
+ 				current_dg_in_buffer_size = dg_in_buffer_size;
+ 
+ 			for (;;) {
+-				ioread8_rep(vmci_dev->iobase +
+-						VMCI_DATA_IN_ADDR,
+-					vmci_dev->data_buffer,
+-					current_dg_in_buffer_size);
++				vmci_read_data(vmci_dev, dg_in_buffer,
++					       current_dg_in_buffer_size);
+ 				if (bytes_to_skip <= current_dg_in_buffer_size)
+ 					break;
+ 
+@@ -404,8 +452,7 @@ static void vmci_dispatch_dgs(unsigned long data)
+ 		if (remaining_bytes < VMCI_DG_HEADERSIZE) {
+ 			/* Get the next batch of datagrams. */
+ 
+-			ioread8_rep(vmci_dev->iobase + VMCI_DATA_IN_ADDR,
+-				    vmci_dev->data_buffer,
++			vmci_read_data(vmci_dev, dg_in_buffer,
+ 				    current_dg_in_buffer_size);
+ 			dg = (struct vmci_datagram *)dg_in_buffer;
+ 			remaining_bytes = current_dg_in_buffer_size;
+@@ -463,8 +510,11 @@ static irqreturn_t vmci_interrupt(int irq, void *_dev)
+ 			icr &= ~VMCI_ICR_NOTIFICATION;
+ 		}
+ 
+-		if (icr & VMCI_ICR_DMA_DATAGRAM)
++
++		if (icr & VMCI_ICR_DMA_DATAGRAM) {
++			wake_up_all(&dev->inout_wq);
+ 			icr &= ~VMCI_ICR_DMA_DATAGRAM;
++		}
+ 
+ 		if (icr != 0)
+ 			dev_warn(dev->dev,
+@@ -497,6 +547,10 @@ static irqreturn_t vmci_interrupt_bm(int irq, void *_dev)
+  */
+ static irqreturn_t vmci_interrupt_dma_datagram(int irq, void *_dev)
+ {
++	struct vmci_guest_device *dev = _dev;
++
++	wake_up_all(&dev->inout_wq);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -586,6 +640,7 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
+ 		     vmci_dispatch_dgs, (unsigned long)vmci_dev);
+ 	tasklet_init(&vmci_dev->bm_tasklet,
+ 		     vmci_process_bitmap, (unsigned long)vmci_dev);
++	init_waitqueue_head(&vmci_dev->inout_wq);
+ 
+ 	if (mmio_base != NULL) {
+ 		vmci_dev->tx_buffer = dma_alloc_coherent(&pdev->dev, VMCI_DMA_DG_BUFFER_SIZE,
 -- 
 2.25.1
 

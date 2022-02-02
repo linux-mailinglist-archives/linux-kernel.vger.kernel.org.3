@@ -2,68 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC494A6DE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF62B4A6DF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245481AbiBBJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:36:28 -0500
-Received: from mga02.intel.com ([134.134.136.20]:23217 "EHLO mga02.intel.com"
+        id S245507AbiBBJiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:38:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:26712 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233108AbiBBJg1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:36:27 -0500
+        id S244330AbiBBJiP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:38:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643794587; x=1675330587;
+  t=1643794695; x=1675330695;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aGOR40E//2wKW+FbAQsqESY03jgYlxNctka/YDN7FLE=;
-  b=EM1DF3SVoMev8MwxrfiKW/oVMBuawXrI0KBPia1CvV8scuvi+1JUipY/
-   vB4ghhKll/GxAmlP2LEX9D3xgmcERmOAD2OD3hmU4nV9M2Z88d34Ij62C
-   kRKx7YP9+6hD8YF8OP17eU7P/EVvxhbbMzq4D0F3Ur9Xc6hjnkyc0GzYc
-   1/1WyIu7Jk7RNYDKK/Uzf7Lu3zskLBIcd/gGH2R9osfMYJglSGksuTL/Y
-   DtVCs5T4yQEBaZY3OGL1zEOBwKKwFEhzXEHcpVHvKQ52YeJid2ROPg7YX
-   fFrK6XKxcyQ8I735sBV7mKanGqAeD4NBQg5pplm6furxBTx6gH/TbqqTu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235277853"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=waV+W+APtRrgdjuIriXoLF/Fm1T3LJnmBVTLBRl9yaQ=;
+  b=T92+RyzyXQKbiC+M3CUBzmBPSHWeAk5J+ydhXLZNEbsK+SAeOHUP9/1q
+   q6UCAA8n8Zak8xf2s65qs/fYKaqTpXHeqa395n1WbbsVmLgF1NWhE5iHv
+   BcWL0kWWmA8G56z9PLwXz7lRFbGB2de212rzyBvsPhH1QHsGMuUF79E/E
+   GQsARm2MREwlod7bfxC+MKmiuYjKlDNILxowE0iNDo4IHboF+J5jKehoh
+   IiL+7bVzrqmq7SnF/XZnd8TJ5c06u6ggR1G7ngfezRPTcgh9VoGHdQcot
+   YrhZpMMJ9VgVVSldAYdV/2cn4roel84wYmKbddnyVsjxiopYOb9foEqiE
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="246711444"
 X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="235277853"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:26 -0800
+   d="scan'208";a="246711444"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:38:15 -0800
 X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="630863516"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:36:23 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 02 Feb 2022 11:36:21 +0200
-Date:   Wed, 2 Feb 2022 11:36:21 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Replace acpi_bus_get_device()
-Message-ID: <YfpQlQ6CH5eoRjuD@lahna>
-References: <1883502.PYKUYFuaPT@kreacher>
+   d="scan'208";a="538179312"
+Received: from gkatwal-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.122.110])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:38:14 -0800
+Date:   Wed, 2 Feb 2022 01:38:14 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, srinivas.kandagatla@linaro.org,
+        gregkh@linuxfoundation.org, sumit.semwal@linaro.org,
+        daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
+        tzimmermann@suse.de, linux-media@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Subject: Re: [PATCH v2] dma-buf-map: Rename to iosys-map
+Message-ID: <20220202093814.i5z2nmlunrwm2n6c@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220202091134.3565514-1-lucas.demarchi@intel.com>
+ <514cdee2-655e-7e52-d6a5-a7176ee603cc@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <1883502.PYKUYFuaPT@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <514cdee2-655e-7e52-d6a5-a7176ee603cc@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 08:12:30PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Feb 02, 2022 at 10:25:28AM +0100, Christian König wrote:
+>Am 02.02.22 um 10:11 schrieb Lucas De Marchi:
+>>[SNIP]
+>>diff --git a/MAINTAINERS b/MAINTAINERS
+>>index d03ad8da1f36..112676f11792 100644
+>>--- a/MAINTAINERS
+>>+++ b/MAINTAINERS
+>>@@ -5675,7 +5675,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+>>  F:	Documentation/driver-api/dma-buf.rst
+>>  F:	drivers/dma-buf/
+>>  F:	include/linux/*fence.h
+>
+>Oh, that is not correct to begin with.
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+right, include/linux/dma-fence*
 
-Let me know if you want me to pick this up.
+>
+>>-F:	include/linux/dma-buf*
+>
+>That here should probably be changed to point directly to 
+>include/linux/dma-buf.h, but that can come later on.
+
+thanks for catching that. I will change it on next version and add your
+(and any additional) ack.
+
+Lucas De Marchi
+
+>
+>Feel free to add an Acked-by: Christian König 
+><christian.koenig@amd.com> to the patch.
+>
+>If nobody objects I'm going to push it drm-misc-next and provide a 
+>follow up to cleanup the MAINTAINERS file a bit more.
+>
+>Regards,
+>Christian.
+>
+>>  F:	include/linux/dma-resv.h
+>>  K:	\bdma_(?:buf|fence|resv)\b
+>>@@ -9976,6 +9975,13 @@ F:	include/linux/iova.h
+>>  F:	include/linux/of_iommu.h
+>>  F:	include/uapi/linux/iommu.h
+>>+IOSYS-MAP HELPERS
+>>+M:	Thomas Zimmermann <tzimmermann@suse.de>
+>>+L:	dri-devel@lists.freedesktop.org
+>>+S:	Maintained
+>>+T:	git git://anongit.freedesktop.org/drm/drm-misc
+>>+F:	include/linux/iosys-map.h
+>>+
+>

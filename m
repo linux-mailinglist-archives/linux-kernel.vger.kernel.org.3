@@ -2,112 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD4B4A6C6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4364A6C77
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240531AbiBBHqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiBBHqT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:46:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA2FC061714
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 23:46:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4ED61791
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FDFC340F0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643787977;
-        bh=EU8FY4hoqMKIUTQTA8fc+OQEccHtNTc7RoeXbnU6SfU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BuItHP8NJ3VXtkbWynb6fL58D8vI14aAtJOQqeabKt7MMEAa72AK+CFGNnQpytpqo
-         zFiUgmkWRZwrf+q28zKBsQLk7jmQrzQM181d1WJP8fgVRSKWoI6WrXEWZWglrKZWOV
-         RAMx+H0Gk2GcXw+CM1rNZ3vaWETts5L1TloD9L9nLWC78H2yPxqw+SNhznVBi4WqWd
-         R+pDLwhuRMSKW4SIG4WerhpMJaNTxq3V2dTOdfavMqJr3SmPknXwzrTMeme+5L4Ubv
-         d8oy6KhT/l9Usz/yfFoH4HdrAlEewUPvRtOpZ//S3/h2Lx5rp3Ti0GS5RfOEV494yi
-         C4WY1WoRqkgwQ==
-Received: by mail-oi1-f170.google.com with SMTP id q186so38213710oih.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 23:46:17 -0800 (PST)
-X-Gm-Message-State: AOAM531doDIRJSB7C+pML4T+65i1aUpG/2DP2YRv0L1zBYxwrIC3LUwK
-        qXYSZOkisirwznbaVkiaYuNEdEG+pIRh+61p4sk=
-X-Google-Smtp-Source: ABdhPJzP2OU6GD384wgiKPZ/tJqOrgrct7yj4Y0w9RqPGWR+zWghE43jcZK7xTpWygr/3VJ2kMrKTBbSZAzGiVkKOW8=
-X-Received: by 2002:aca:f03:: with SMTP id 3mr3702970oip.102.1643787976652;
- Tue, 01 Feb 2022 23:46:16 -0800 (PST)
+        id S241076AbiBBHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:48:52 -0500
+Received: from verein.lst.de ([213.95.11.211]:33198 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240572AbiBBHsv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 02:48:51 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0D24367373; Wed,  2 Feb 2022 08:48:47 +0100 (CET)
+Date:   Wed, 2 Feb 2022 08:48:46 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     guoren@kernel.org
+Cc:     palmer@dabbelt.com, arnd@arndb.de, anup@brainfault.org,
+        gregkh@linuxfoundation.org, liush@allwinnertech.com,
+        wefu@redhat.com, drew@beagleboard.org, wangjunqiang@iscas.ac.cn,
+        hch@lst.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V5 06/21] asm-generic: compat: Cleanup duplicate
+ definitions
+Message-ID: <20220202074846.GA18398@lst.de>
+References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-7-guoren@kernel.org>
 MIME-Version: 1.0
-References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com>
- <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org> <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
- <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
-In-Reply-To: <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 2 Feb 2022 08:46:00 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
-Message-ID: <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
-Subject: Re: Kconfig CONFIG_FB dependency regression
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Bing Yuan <Bing.Yuan@synopsys.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201150545.1512822-7-guoren@kernel.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 1:14 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-> Fabio Estevam wrote:
-> > On Tue, Feb 1, 2022 at 8:06 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >> On 2/1/22 15:01, Thinh Nguyen wrote:
-> >>> Hi,
-> >>>
-> >>> One of our test setups is unable to boot (stuck at initramfs). Git
-> >>> bisection points to the commit below:
-> >>>
-> >>> f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
-> >>>
-> >>> Reverting this patch resolves the issue. This issue persists in mainline
-> >>> also. Unfortunately there isn't any meaningful log. Hopefully someone
-> >>> can give some insight as to what could be the issue and revert/fix this
-> >>> issue.
-> >>
-> >> Hi,
-> >> Did you enable DRM_FBDEV_EMULATION?
->
-> I did not enable it.
->
-> >> Please provide the failing .config file.
-> >
-> > Does selecting CONFIG_FB=y help?
-> >
->
-> On the config that has the issue, this isn't set. After reverting the
-> commit above, this was set. Maybe this is what's needed? I need to test it.
+Looks good,
 
-CONFIG_FB should not normally be needed for booting, so unless
-you have a graphical application in your initramfs that requires the /dev/fb0
-device to work, it is not supposed to make a difference.
-
-Are there any other differences in your .config before and after the patch?
-It's possible that you use some other driver that in turn depends on
-CONFIG_FB. Does your machine have any graphical output device?
-If yes, which driver do you use?
-
-You may also want to make sure that you have 9d6366e743f3 ("drm:
-fb_helper: improve CONFIG_FB dependency") in your kernel, which
-fixes a minor problem with my original patch.
-
-         Arnd
+Reviewed-by: Christoph Hellwig <hch@lst.de>

@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30434A7834
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C0B4A783D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346756AbiBBSrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S1346770AbiBBSt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346751AbiBBSrD (ORCPT
+        with ESMTP id S1346631AbiBBStz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:47:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEDC06173B;
-        Wed,  2 Feb 2022 10:47:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7494361924;
-        Wed,  2 Feb 2022 18:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6679FC004E1;
-        Wed,  2 Feb 2022 18:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643827621;
-        bh=mBEDkji8JCmpzgtRJ5DMy3ZN8wH4LrWa0MpCxfoCfXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J+KrxYLQSUe0x+kG6UILvvDSncCJDWkO3sFXCKBveYaqtaKXNWGAhZaQaZq9HJRKY
-         7dYljhXz2CtXXA0onqZI4o3qNd9XCx3beakUgmNHS7HWSYJkdmvHHQ1fE2yhPZu5Y+
-         J9KtCRti8rIH2ksrgjuMUqEQS46WNxZVBFwxir1Rzip8zMcK9oUF2kgj8zdkmv+RQm
-         q9kEKkS4jot6gXxsIZ3sdrQARzfIVUxXxRjUj4g8ZUDLfWCnWHVhixtm6EADB/GgEb
-         0y0h+doNRhPH5wj/C11uQWvWlVPZRtaSfh5OuFnNhn/t+Zi94Us787VV7KFXVo/AA3
-         oqkuHl+pvTKFQ==
-Date:   Wed, 2 Feb 2022 18:46:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     madvenka@linux.microsoft.com
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
- args to unwind()
-Message-ID: <YfrRoA63/UOXTJc0@sirena.org.uk>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-7-madvenka@linux.microsoft.com>
+        Wed, 2 Feb 2022 13:49:55 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FF3C061714;
+        Wed,  2 Feb 2022 10:49:55 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id y8so66086qtn.8;
+        Wed, 02 Feb 2022 10:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=VTOPnaRquWicISMRZD83cjOQfdkXCxYB8Ac7cHDsTWs=;
+        b=HOGlJ2+27xL5/WqxZJdwbp7tuNHB36A0n0ah5gbe2JaqwLe6kVXWNbHx47yMO+j51x
+         fPTa6ZTGRy8Dzk9PLpGA5X3sDbNQXspYP6nSzZqzzwtDSnZcwM9QXQQz3Ai6SwHowsdH
+         mzplefphGpL2xJGlKs6rUevuGCVHhqLiEIfyuk4LQJ4kOPRAAuatau+gN4AYIK0kZ0l0
+         HcpT2KMNmVvC+E39EiBvqtDTtq8xzKS74fTjw8B9MfN6+za7P4s8Vli16oJlQ628izLi
+         juEG/Ot8g6dvQRKzO+8DCSD4CEgMJZuWhCvqIOF7AIojYxpI7IRHl8J6+iaCvWi7+H5a
+         eJ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VTOPnaRquWicISMRZD83cjOQfdkXCxYB8Ac7cHDsTWs=;
+        b=s484Ftw6yHX9+ngYzS64rijkPmaCzTMTAeykvzCdHG7BMTbD2Ib711powpRg92SqEP
+         REUTWVKruAR8cTQ8RVNMlbR9M2JF6OHGWEsWGX+3iDqpV6u+qQD0bcoylMRirZqQCd7i
+         vgicVUNW5UxLb2mxh7ltrgRquaCswMxbRt4SIwNLNBuqidr6wKxaOigbskx6AnGH3RkQ
+         YTl2Pn0a75YuV2YsJRnWxrwSn4TcIFhWYA9cWlh8sDDY+ODVTMDjzypSIV4agvMX1WHO
+         SMo/KcXN8N3IGKxLZoDNLP0AD1Hlf132KVJKflS467QEmd2HUXR+aZID29cLOSMlATl7
+         EJIw==
+X-Gm-Message-State: AOAM5323VMxWksBNVfkGtZN2eGFSieQDwX8pXxOn9Aaw3nNSwSmiyOMF
+        CCqqam16y5pczZsv2VbBKsFatsow6GC3AeilXQ8=
+X-Google-Smtp-Source: ABdhPJyNh4rrva9Cl9WwnJRevXEYp1kCMhFJpdL0zn7uL+gxD+3diJFsD4DsVeW3oAB+6T9DgGwsQ/BKN7HxE8V81WU=
+X-Received: by 2002:ac8:5c49:: with SMTP id j9mr18334765qtj.297.1643827794431;
+ Wed, 02 Feb 2022 10:49:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="njCht9jCwRKJ+dPv"
-Content-Disposition: inline
-In-Reply-To: <20220117145608.6781-7-madvenka@linux.microsoft.com>
-X-Cookie: Quack!
+References: <20211009221711.2315352-1-robimarko@gmail.com> <163890036783.24891.8718291787865192280.kvalo@kernel.org>
+ <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com>
+ <09a27912-9ea4-fe75-df72-41ba0fa5fd4e@gmail.com> <CAOX2RU6qaZ7NkeRe1bukgH6OxXOPvJS=z9PRp=UYAxMfzwD2oQ@mail.gmail.com>
+ <EC2778B3-B957-4F3F-B299-CC18805F8381@slashdirt.org>
+In-Reply-To: <EC2778B3-B957-4F3F-B299-CC18805F8381@slashdirt.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 2 Feb 2022 19:49:43 +0100
+Message-ID: <CAOX2RU7FOdSuo2Jgo0i=8e-4bJwq7ahvQxLzQv_zNCz2HCTBwA@mail.gmail.com>
+Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF selection
+To:     Thibaut <hacks@slashdirt.org>
+Cc:     Christian Lamparter <chunkeey@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, kvalo@codeaurora.org,
+        davem@davemloft.net, kuba@kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kalle,
 
---njCht9jCwRKJ+dPv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What is your opinion on this?
+I would really love to see this get merged as we are having more and
+more devices that are impacted without it.
 
-On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrot=
-e:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->=20
-> Rename the arguments to unwind() for better consistency. Also, use the
-> typedef stack_trace_consume_fn for the consume_entry function as it is
-> already defined in linux/stacktrace.h.
+Regards,
+Robert
 
-Consistency with...?  But otherwise:
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---njCht9jCwRKJ+dPv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH60Z8ACgkQJNaLcl1U
-h9CRVAf/e7AUjvtw9CpStQl88F9xMn8uBVroK2T5X0IIX6ev12GrMUMGHNt9qioZ
-VdPU8CbLEzkj0NTQNGiQTQpbu6UmhVqpwyCMgOmE9/Bf75xeb2p72XY1U03kDa36
-ZxPVma74wWOyyo26AnMDYoTrA3li0NQdFVXS2y9MUQeiRKc6xhloS4bj24TluSbr
-5S9ln91rxiXG8IxpmwK/XXSVT//SrNcPMiuMiHYefcKwZtcadH/iBNmXW8qj0MQY
-TwAlOnRItDBGA9lfLNBqGqKM77wMDHzCU9WIxyz5/vq09+B+gHTvSEp5LTTcpmO0
-mcjCjwzOfs2hs+Hl9uzmaYj93BDajg==
-=E+Wb
------END PGP SIGNATURE-----
-
---njCht9jCwRKJ+dPv--
+On Fri, 17 Dec 2021 at 13:25, Thibaut <hacks@slashdirt.org> wrote:
+>
+>
+>
+> > Le 17 d=C3=A9c. 2021 =C3=A0 13:06, Robert Marko <robimarko@gmail.com> a=
+ =C3=A9crit :
+> >
+> > On Wed, 8 Dec 2021 at 15:07, Christian Lamparter <chunkeey@gmail.com> w=
+rote:
+> >>
+> >> Isn't the only user of this the non-upstreamable rb_hardconfig
+> >> mikrotik platform driver?
+>
+> The driver could be upstreamed if desirable.
+> Yet I think it=E2=80=99s quite orthogonal to having the possibility to dy=
+namically load a different BDF via API 1 for each available radio, which be=
+fore this patch couldn=E2=80=99t be done and is necessary for this particul=
+ar hardware.
+>
+> >> So, in your case the devices in question
+> >> needs to setup a detour through the userspace firmware (helper+scripts=
+)
+> >> to pull on the sysfs of that mikrotik platform driver? Wouldn't it
+> >> be possible to do this more directly?
+> >
+> > Yes, its the sole current user as its the only vendor shipping the BDF
+> > as part of the
+> > factory data and not like a userspace blob.
+> >
+> > I don't see how can it be more direct, its the same setup as when
+> > getting pre-cal
+> > data for most devices currently.
+>
+> Indeed, not sure how it could be more direct than it already is. I=E2=80=
+=99m open to suggestions though.
+>
+> > I am adding Thibaut who is the author of the platform driver.
+>
+> Best,
+> Thibaut

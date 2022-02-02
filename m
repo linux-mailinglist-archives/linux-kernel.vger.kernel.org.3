@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20AB4A723A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6EF4A723C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiBBNwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S235164AbiBBNwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344587AbiBBNuY (ORCPT
+        with ESMTP id S1344632AbiBBNuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Feb 2022 08:50:24 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271E7C061751
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:50:17 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so6959141pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:50:17 -0800 (PST)
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20504C061756
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:50:19 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id v3so18378453pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:50:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TnJY4R7pNFq+r1c9Hai8pZCAxCplMW9W4uneml+9vI4=;
-        b=oWAUpCfdpiugCygrTgIA9X8C/lV3LzbqgqOMRZO7X7MfSgx4XOx/FBGQjiEP1bNdkV
-         P2XpD8hAcBq+sHWNb0+VbeAN7xU9Cuc9a+imNhgeUIjXLwNyKzYfeDgonqpaKz5oGpI2
-         UFpiuHKEjD3JbhenDiu1XBlBW/6fU2qYI2Fko=
+        bh=r6U16I5h4NQIjHAoaMFFGHeoaBszozzi/qTuoY6Zxwc=;
+        b=mW+92Gk+2VySYb/AfQ9MCdHff8aHAQmOwUwW4znhKb8lsVxKFTjYUvLHGRGAeAoufe
+         ClXBe4+x/DLP2gWSqwN5azWWea5MVH52cj+FPbJB4BU6Wm9i2loDIkA2YT/eNy9PQi8L
+         pFXuGZf780EuBWYfwCRlCbCHOJpKEtlPfVy+o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TnJY4R7pNFq+r1c9Hai8pZCAxCplMW9W4uneml+9vI4=;
-        b=AF4v6cE4epJEHGSpnKhPSRFwIC1Z4GTUNq/4/RQTR0OlOXOoJUPJnQilaM8PHO2qWW
-         L3b7badIt6U9HqjRes5fP0zNLYAChSDwQYKICLYAX0OYTwPQVyp+dzWRmHI04xfPlXDL
-         ifNovDJE+Va98gojnGxP4XPFhjjCsIqzuZZ7/VaSW9Z3Fgr6gyY3HeAXRQ5AHw4y1kGP
-         n5xyqAKTkkRDlPLlc4KsL71e9REkEBv9bmDxhpI9GqeJq1lSRJl3rmJBLiLE6v+XDEIU
-         rnlfn/FfZdR5a8lLPCcOktTMbk8RNuhkXF3rYZFrlY35DcKLZ7uOZvRlw0JA0balUdQF
-         z7Sg==
-X-Gm-Message-State: AOAM531+mRS4YSf/THwy6LKczmiXEeAk+xLJcbQFgj9OI/vOoNuHY/lE
-        hCqq5R2lef4MtLCiHQnBpMBp4Q==
-X-Google-Smtp-Source: ABdhPJzr0WbMa8H3fmltc1g6gtQpUKUFkIR/O0axG2tZ5a2Jx5HPYVY+Zgn++LYql9+AsJykPkGzBA==
-X-Received: by 2002:a17:90a:601:: with SMTP id j1mr8278507pjj.192.1643809816732;
-        Wed, 02 Feb 2022 05:50:16 -0800 (PST)
+        bh=r6U16I5h4NQIjHAoaMFFGHeoaBszozzi/qTuoY6Zxwc=;
+        b=Y7+sD9NsfwG5g22Kc56Br7Uq3yP1QpxloDscKiLMeSLXjsEOcsMZfhipmMldtLb47i
+         VACPkeM3fc0SmwLaiNFZzWyzRqQhp+WHsNpj2lW53lWyO7ID3UW2o/A2Hy+8T+ROhjrq
+         eDFdeVUsLgVxDUxDH5wmuwqJ9NVC7KcAX+S1H5ct569troJFnCrrG78oLsR+pMi0fH2h
+         WP05nlZl3Zahlqt4pKg7/aCB1XnDCJlE4ij8koTJ+uuZKQt247ib62oDm5Z8y+JlZmsO
+         Avy1D+LR4JACTHL0Aikz7IpG9zY6Ij5+QwycEIVuW6IyfIUQAIltDQISYfyYGF/90Soe
+         MTMA==
+X-Gm-Message-State: AOAM532U55rn13ReTVuBP07qVnz4xaxvZutpN7NOvltcIuYPglva2bj0
+        8koGuT8+y3LLsA5JA0A2cS0B4Q==
+X-Google-Smtp-Source: ABdhPJxpwUACsdmtBArNe8Uc2yPifRus+Qkti7/z+fL5OuoV24IhqhLUkZIBSHII1LdUHWVjcaw8Qw==
+X-Received: by 2002:aa7:9f1b:: with SMTP id g27mr30524486pfr.30.1643809818708;
+        Wed, 02 Feb 2022 05:50:18 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:78b5:214c:c81:b9aa])
-        by smtp.gmail.com with ESMTPSA id w19sm27335684pfu.47.2022.02.02.05.50.14
+        by smtp.gmail.com with ESMTPSA id w19sm27335684pfu.47.2022.02.02.05.50.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 05:50:16 -0800 (PST)
+        Wed, 02 Feb 2022 05:50:18 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -54,9 +54,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Miles Chen <miles.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 19/31] clk: mediatek: Add mtk_clk_simple_remove()
-Date:   Wed,  2 Feb 2022 21:48:22 +0800
-Message-Id: <20220202134834.690675-20-wenst@chromium.org>
+Subject: [PATCH v2 20/31] clk: mediatek: mtk: Clean up included headers
+Date:   Wed,  2 Feb 2022 21:48:23 +0800
+Message-Id: <20220202134834.690675-21-wenst@chromium.org>
 X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
 In-Reply-To: <20220202134834.690675-1-wenst@chromium.org>
 References: <20220202134834.690675-1-wenst@chromium.org>
@@ -66,64 +66,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit c58cd0e40ffa ("clk: mediatek: Add mtk_clk_simple_probe() to
-simplify clock providers"), a generic probe function was added to
-simplify clk drivers that only needed to support clk gates. However due
-to the lack of unregister APIs, a corresponding remove function was not
-added.
+Some included headers aren't actually used anywhere, while other headers
+with the declaration of functions and structures aren't directly
+included.
 
-Now that the unregister APIs have been implemented, add aforementioned
-remove function to make it complete.
+Get rid of the unused ones, and add the ones that should be included
+directly.
+
+On the header side, replace headers that are included purely for data
+structure definitions with forward declarations. This decreases the
+amount of preprocessing and compilation effort required for each
+inclusion.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- drivers/clk/mediatek/clk-mtk.c | 15 +++++++++++++++
- drivers/clk/mediatek/clk-mtk.h |  1 +
- 2 files changed, 16 insertions(+)
+ drivers/clk/mediatek/clk-mtk.c | 13 ++++++-------
+ drivers/clk/mediatek/clk-mtk.h | 12 ++++++------
+ 2 files changed, 12 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
-index 869e6ae55c82..f108786caeda 100644
+index f108786caeda..5618c84e4e08 100644
 --- a/drivers/clk/mediatek/clk-mtk.c
 +++ b/drivers/clk/mediatek/clk-mtk.c
-@@ -374,6 +374,8 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
- 	if (r)
- 		goto free_data;
+@@ -4,17 +4,16 @@
+  * Author: James Liao <jamesjj.liao@mediatek.com>
+  */
  
-+	platform_set_drvdata(pdev, clk_data);
-+
- 	return r;
+-#include <linux/of.h>
+-#include <linux/of_address.h>
++#include <linux/bitops.h>
++#include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
+-#include <linux/slab.h>
+-#include <linux/delay.h>
+-#include <linux/clkdev.h>
+-#include <linux/module.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
  
- free_data:
-@@ -381,4 +383,17 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
- 	return r;
- }
- 
-+int mtk_clk_simple_remove(struct platform_device *pdev)
-+{
-+	const struct mtk_clk_desc *mcd = of_device_get_match_data(&pdev->dev);
-+	struct clk_onecell_data *clk_data = platform_get_drvdata(pdev);
-+	struct device_node *node = pdev->dev.of_node;
-+
-+	of_clk_del_provider(node);
-+	mtk_clk_unregister_gates(mcd->clks, mcd->num_clks, clk_data);
-+	mtk_free_clk_data(clk_data);
-+
-+	return 0;
-+}
-+
- MODULE_LICENSE("GPL");
+ #include "clk-mtk.h"
+ #include "clk-gate.h"
 diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index 3c3a934f53cd..4fa658f5d934 100644
+index 4fa658f5d934..7f902581a115 100644
 --- a/drivers/clk/mediatek/clk-mtk.h
 +++ b/drivers/clk/mediatek/clk-mtk.h
-@@ -202,5 +202,6 @@ struct mtk_clk_desc {
- };
+@@ -7,19 +7,19 @@
+ #ifndef __DRV_CLK_MTK_H
+ #define __DRV_CLK_MTK_H
  
- int mtk_clk_simple_probe(struct platform_device *pdev);
-+int mtk_clk_simple_remove(struct platform_device *pdev);
+-#include <linux/regmap.h>
+-#include <linux/bitops.h>
+ #include <linux/clk-provider.h>
+-#include <linux/platform_device.h>
+-
+-struct clk;
+-struct clk_onecell_data;
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/spinlock.h>
++#include <linux/types.h>
  
- #endif /* __DRV_CLK_MTK_H */
+ #define MAX_MUX_GATE_BIT	31
+ #define INVALID_MUX_GATE_BIT	(MAX_MUX_GATE_BIT + 1)
+ 
+ #define MHZ (1000 * 1000)
+ 
++struct platform_device;
++
+ struct mtk_fixed_clk {
+ 	int id;
+ 	const char *name;
 -- 
 2.35.0.rc2.247.g8bbb082509-goog
 

@@ -2,89 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028464A7299
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2A4A7277
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344762AbiBBOCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:02:39 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:41196 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344740AbiBBOCf (ORCPT
+        id S1344562AbiBBOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230213AbiBBOAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:02:35 -0500
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 212BA9Ua019056;
-        Wed, 2 Feb 2022 15:00:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=x/cihyvrH/Vo/S1qjQOeKWSVuT1WeZROMAX2rBN9Khk=;
- b=77Ad28hmdKbvaYmdG0RIUA3oiIgAPbiCnL/xgdHFeHDxgAV6xJTe/cUesbVrA80P0nmj
- rX+qxtZEih5PZw7RuujPA0n8P2Sw/L9JRzeiQx0FRRRmTgPRMP8V4iF2jzCeflt8pEp1
- l2/cEdILJDRP1ofpUrraJyR8Q5AjlezSLWY35/tT91pVRjZ8R94AZWmNmYxhFKvVCxHF
- JeB79GQUs3zL3SlnfwlK35PzbvFF6HSDYS66qi69VynZKIMDC7ZNtZtLL21Gvf+UoUKe
- cvTWM4FpAvLGCHMaeg6KvnKk1NvTTG6zMBz5sWrHXhIW5+MI8LbeGotlZSZl0W0R6Lug 4w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3dyrujgv7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Feb 2022 15:00:13 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8E34210002A;
-        Wed,  2 Feb 2022 15:00:12 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8238D21F0D0;
-        Wed,  2 Feb 2022 15:00:12 +0100 (CET)
-Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 2 Feb 2022 15:00:12
- +0100
-From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>, <alexandre.torgue@foss.st.com>
-Subject: [PATCH v3 3/3] ARM: dts: stm32: Enable EXTI on stm32mp13
-Date:   Wed, 2 Feb 2022 15:00:05 +0100
-Message-ID: <20220202140005.860-4-alexandre.torgue@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220202140005.860-1-alexandre.torgue@foss.st.com>
-References: <20220202140005.860-1-alexandre.torgue@foss.st.com>
+        Wed, 2 Feb 2022 09:00:24 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2719BC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:00:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id z4so40899576lft.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RfWPagEh50UG5AQsw4YG/NPcNcgAiuaDDHKAvh28Pfo=;
+        b=gWuBXj+qXx0RfDEcvw60W9ulUvSlUlHE8bFwjkCfpL4a47/GFof5cDKoPsXVQOVdfv
+         EoO/yOcOEOxWxZ+MjVdX7iyZPFgVwM02RaYqc2bEldH7dNpAk8Gz7W8FP+iIox80alGi
+         ki+u1RmCp17bDsTFYcmQTQih55MQLrYSwxFrcA4IxoD4E9dIIAwpfYriXo1sCRgdWBYN
+         Xaaq1tg/2s9jh+qpLM4o79OewjUhdEwvIJoUI42zNqiwAcbE0jU17Q/h7u1dRGdK/dUc
+         1zc/YOEkzjGJLcIWNOwDw5RydsIi2qQrrtwGpClnqtKYbpzyMK8KHPOjxihh0nCbMYXH
+         ue4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RfWPagEh50UG5AQsw4YG/NPcNcgAiuaDDHKAvh28Pfo=;
+        b=tMHQF7JK2W8pq/FT9+Li6VU5cWOrGUs3wex5DsD35oVORcvui+FTPQn1s4FUth5G5h
+         fDv+yL6chSoE5oa+Pxonsgw5pvzOOqRwi99trtcisuX5p4FB5W5jNDVrczJpr34ELc4R
+         kwYsq4+UVyDa7cbGg1koBe8jYqdwIziLFytG23zc8p45ocTXLaiIGwnIV+wbNouILUfx
+         Q+Hxj5tqFWN7L2E5oB2+UMjVXDCObzMQXGBP+KGscovp9pRxeJwum6vwi7oftWHwR639
+         dJ7enlIlWPmL0HQeSff7O263y2LaKy0DLJ7CECOFPrqXU7ynajuCCgzfyeWT+TPdD1EB
+         Znjg==
+X-Gm-Message-State: AOAM531NQXADGdkOxGvf3RvAfTU9I2pIZRtuu0Zu5xaBUpayGcSHIeol
+        uaFFuhNU/iHMRGfRNnU6Dg9NsjmfOwTJ5VIk17gN8Q==
+X-Google-Smtp-Source: ABdhPJyStv54EPifbmyjjo5mPhJzT0KvmzQ4l/aBbOIzs2lV1jYzKtxILnikfpnxSP/qWf4MckalpLs8F3T1He52QnI=
+X-Received: by 2002:a05:6512:2342:: with SMTP id p2mr23187896lfu.382.1643810422358;
+ Wed, 02 Feb 2022 06:00:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-02_06,2022-02-01_01,2021-12-02_01
+References: <20220202091134.3565514-1-lucas.demarchi@intel.com>
+ <514cdee2-655e-7e52-d6a5-a7176ee603cc@amd.com> <20220202093814.i5z2nmlunrwm2n6c@ldmartin-desk2>
+In-Reply-To: <20220202093814.i5z2nmlunrwm2n6c@ldmartin-desk2>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Wed, 2 Feb 2022 19:30:10 +0530
+Message-ID: <CAO_48GGeZqzAMEBfspWAR5N1RWh0QAdQFSxgyhrPQHiE3ooJsA@mail.gmail.com>
+Subject: Re: [PATCH v2] dma-buf-map: Rename to iosys-map
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, srinivas.kandagatla@linaro.org,
+        gregkh@linuxfoundation.org, daniel.vetter@ffwll.ch,
+        airlied@linux.ie, lyude@redhat.com, tzimmermann@suse.de,
+        linux-media@vger.kernel.org, nouveau@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As EXTI/GIC mapping has changed between STM32MP15 and STM32MP13, a new
-compatible is needed to choose mp13 mapping table in stm32-exti driver.
+Hello Lucas,
 
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+On Wed, 2 Feb 2022 at 15:08, Lucas De Marchi <lucas.demarchi@intel.com> wro=
+te:
+>
+> On Wed, Feb 02, 2022 at 10:25:28AM +0100, Christian K=C3=B6nig wrote:
+> >Am 02.02.22 um 10:11 schrieb Lucas De Marchi:
+> >>[SNIP]
+> >>diff --git a/MAINTAINERS b/MAINTAINERS
+> >>index d03ad8da1f36..112676f11792 100644
+> >>--- a/MAINTAINERS
+> >>+++ b/MAINTAINERS
+> >>@@ -5675,7 +5675,6 @@ T:      git git://anongit.freedesktop.org/drm/drm=
+-misc
+> >>  F:  Documentation/driver-api/dma-buf.rst
+> >>  F:  drivers/dma-buf/
+> >>  F:  include/linux/*fence.h
+> >
+> >Oh, that is not correct to begin with.
+>
+> right, include/linux/dma-fence*
+>
+> >
+> >>-F:   include/linux/dma-buf*
+> >
+> >That here should probably be changed to point directly to
+> >include/linux/dma-buf.h, but that can come later on.
+>
+> thanks for catching that. I will change it on next version and add your
+> (and any additional) ack.
+>
+> Lucas De Marchi
+>
+> >
+> >Feel free to add an Acked-by: Christian K=C3=B6nig
+> ><christian.koenig@amd.com> to the patch.
+> >
+> >If nobody objects I'm going to push it drm-misc-next and provide a
+> >follow up to cleanup the MAINTAINERS file a bit more.
+Thank you for the patch; apologies for not being able to respond
+earlier (was out due to covid, just getting back slowly).
 
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index 86126dc0d898..c249dbe64354 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -115,6 +115,13 @@
- 			status = "disabled";
- 		};
- 
-+		exti: interrupt-controller@5000d000 {
-+			compatible = "st,stm32mp13-exti", "syscon";
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			reg = <0x5000d000 0x400>;
-+		};
-+
- 		syscfg: syscon@50020000 {
- 			compatible = "st,stm32mp157-syscfg", "syscon";
- 			reg = <0x50020000 0x400>;
--- 
-2.17.1
+With Christian's suggestions, looks good to me as well - feel free to add a=
+n
+Acked-by: Sumit Semwal <sumit.semwal@linaro.org> to the same.
 
+> >
+> >Regards,
+> >Christian.
+Best,
+Sumit.
+
+> >
+> >>  F:  include/linux/dma-resv.h
+> >>  K:  \bdma_(?:buf|fence|resv)\b
+> >>@@ -9976,6 +9975,13 @@ F:     include/linux/iova.h
+> >>  F:  include/linux/of_iommu.h
+> >>  F:  include/uapi/linux/iommu.h
+> >>+IOSYS-MAP HELPERS
+> >>+M:   Thomas Zimmermann <tzimmermann@suse.de>
+> >>+L:   dri-devel@lists.freedesktop.org
+> >>+S:   Maintained
+> >>+T:   git git://anongit.freedesktop.org/drm/drm-misc
+> >>+F:   include/linux/iosys-map.h
+> >>+
+> >

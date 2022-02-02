@@ -2,133 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3404A6B15
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:51:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3DD4A6B16
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 05:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244660AbiBBEv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 23:51:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42098 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiBBEv1 (ORCPT
+        id S244671AbiBBEzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 23:55:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43394 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231474AbiBBEzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 23:51:27 -0500
+        Tue, 1 Feb 2022 23:55:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3AE6170A;
-        Wed,  2 Feb 2022 04:51:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603D8C004E1;
-        Wed,  2 Feb 2022 04:51:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7162DB83004
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 04:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E0BC004E1;
+        Wed,  2 Feb 2022 04:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643777486;
-        bh=jAsmf+yg+yTEjfozNxKTPJAkY11OeZStMsb+udKaqnM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qkm/nWUO6J9yVevumHHkYMrdh/l/btpaE1dGYxWOqAUHmlhoJcNPsQ5znOEC80PWS
-         FEAHHyBFTD2uIpsTj/b5qgkmp1h+h8VoII7oyMXQQ+qoLwhEE5lRv6t8UQdtBYRDEk
-         AyS6nh8FIhwkaAmFX7S5CGEPR3ChGscERPZZ2WtB143oympV9iOnhqXtH0jTsoG1U/
-         vNcoZfYlctdF2sjUgW7b+aYlx8t4lSoeKkKDdZk7yepCtTqg9lrJmttZ9oKPQyORwX
-         5Z+fmwlVJzeIAUkRD+7pw3bFDmCiJEWyaoyyACqMQyOO8K/0ADts0VbyMpsrtdDlFv
-         kH2+5ANxQE4Qg==
-Date:   Tue, 1 Feb 2022 20:51:25 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        andrew@lunn.ch, leon@kernel.org
-Subject: Re: [PATCH v16, 2/2] net: Add dm9051 driver
-Message-ID: <20220201205125.54a28bca@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220129164346.5535-3-josright123@gmail.com>
-References: <20220129164346.5535-1-josright123@gmail.com>
-        <20220129164346.5535-3-josright123@gmail.com>
+        s=k20201202; t=1643777714;
+        bh=XwJaCShSwfH5sUypl3mVPJmMLknAuPNwmsKJBoJ3K7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l53eRnbTOHtOIl87HxJ0fIUEbZFEF3nbNs30UPYwdgQZ/mOlV7zGTcyVpWXf3fg++
+         ubdqtY61/YMpn0+YCMyih46gjv7CES7/EX+N+ysvjedqNDHuCVx2SMn+4ithxMYERU
+         iUuUZL2RtzHvWtOpwSrFm27U8dST7Ft+IG+2uxwuExHlX+UnBQV8gAOyexmLLGWDPd
+         C/rZ0rzJNRvSDnHgmwkTbHht7I0im2TSTC6y33F0woxPHIb5yyKXPQb20aYKoidIRJ
+         pyMRu6cJWtkVSOKFxNolkbjHUj72gN7WpRJ47HSkOnPrLF2aqON+V6rEsBepEi7N7l
+         pV5EGrFzXxhAg==
+Date:   Wed, 2 Feb 2022 10:25:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] phy: cadence: Sierra: Add support for skipping
+ configuration
+Message-ID: <YfoOrjnuilYIJSqV@matsya>
+References: <20220128072642.29188-1-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128072642.29188-1-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Jan 2022 00:43:46 +0800 Joseph CHAMG wrote:
-> +		rdptr = skb_put(skb, rxlen - 4);
-> +		ret = regmap_noinc_read(db->regmap_dm, DM_SPI_MRCMD, rdptr, rxlen);
-> +		if (ret) {
+On 28-01-22, 12:56, Aswath Govindraju wrote:
+> In some cases, a single SerDes instance can be shared between two different
+> processors, each using a separate link. In these cases, the SerDes
+> configuration is done in an earlier boot stage. Therefore, add support to
+> skip reconfiguring, if it is was already configured beforehand.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+> 
+> Changes since v1:
+> - Removed redundant braces
+> - Corrected the logic for skipping multilink configuration
+> - Corrected the order in failure path
+> 
+>  drivers/phy/cadence/phy-cadence-sierra.c | 82 ++++++++++++++++--------
+>  1 file changed, 57 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
+> index e265647e29a2..6b917f7bddbe 100644
+> --- a/drivers/phy/cadence/phy-cadence-sierra.c
+> +++ b/drivers/phy/cadence/phy-cadence-sierra.c
+> @@ -370,6 +370,7 @@ struct cdns_sierra_phy {
+>  	int nsubnodes;
+>  	u32 num_lanes;
+>  	bool autoconf;
+> +	int already_configured;
 
-should be counted as rx_error
+where is this set and is set based on..?
 
-> +			dev_kfree_skb(skb);
-> +			return ret;
-> +		}
+>  	struct clk_onecell_data clk_data;
+>  	struct clk *output_clks[CDNS_SIERRA_OUTPUT_CLOCKS];
+>  };
+> @@ -517,7 +518,7 @@ static int cdns_sierra_phy_init(struct phy *gphy)
+>  	int i, j;
+>  
+>  	/* Initialise the PHY registers, unless auto configured */
+> -	if (phy->autoconf || phy->nsubnodes > 1)
+> +	if (phy->autoconf || phy->already_configured || phy->nsubnodes > 1)
+>  		return 0;
+>  
+>  	clk_set_rate(phy->input_clks[CMN_REFCLK_DIG_DIV], 25000000);
+> @@ -646,6 +647,18 @@ static const struct phy_ops ops = {
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> +static int cdns_sierra_noop_phy_on(struct phy *gphy)
+> +{
+> +	usleep_range(5000, 10000);
 > +
-> +		ret = regmap_write(db->regmap_dm, DM9051_ISR, 0xff); /* to stop mrcmd */
-> +		if (ret)
-> +			return ret;
-
-leaks skb, also should be counted as rx_error
-
-> +		skb->protocol = eth_type_trans(skb, db->ndev);
-> +		if (db->ndev->features & NETIF_F_RXCSUM)
-> +			skb_checksum_none_assert(skb);
-> +		netif_rx_ni(skb);
-> +		db->ndev->stats.rx_bytes += rxlen;
-> +		db->ndev->stats.rx_packets++;
-> +		scanrr++;
-> +	} while (!ret);
-> +
-> +	return scanrr;
+> +	return 0;
 > +}
 > +
-> +/* transmit a packet,
-> + * return value,
-> + *   0 - succeed
-> + *  -ETIMEDOUT - timeout error
-> + */
-> +static int dm9051_single_tx(struct board_info *db, u8 *buff, unsigned int len)
-> +{
-> +	int ret;
+> +static const struct phy_ops noop_ops = {
+> +	.power_on	= cdns_sierra_noop_phy_on,
+> +	.owner		= THIS_MODULE,
+> +};
 > +
-> +	ret = dm9051_map_xmitpoll(db);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_noinc_write(db->regmap_dm, DM_SPI_MWCMD, buff, len);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_bulk_write(db->regmap_dmbulk, DM9051_TXPLL, &len, 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return regmap_write(db->regmap_dm, DM9051_TCR, TCR_TXREQ);
-> +}
-> +
-> +static int dm9051_loop_tx(struct board_info *db)
-> +{
-> +	struct net_device *ndev = db->ndev;
-> +	int ntx = 0;
-> +	int ret;
-> +
-> +	while (!skb_queue_empty(&db->txq)) {
-> +		struct sk_buff *skb;
-> +
-> +		skb = skb_dequeue(&db->txq);
-> +		if (skb) {
-> +			ntx++;
-> +			ret = dm9051_single_tx(db, skb->data, skb->len);
-> +			dev_kfree_skb(skb);
-> +			if (ret < 0)
-> +				return 0;
-
-Should be counted as tx error?
-
-> +			ndev->stats.tx_bytes += skb->len;
-> +			ndev->stats.tx_packets++;
-> +		}
-> +
-> +		if (netif_queue_stopped(ndev) &&
-> +		    (skb_queue_len(&db->txq) < DM9051_TX_QUE_LO_WATER))
-> +			netif_wake_queue(ndev);
+>  static u8 cdns_sierra_pll_mux_get_parent(struct clk_hw *hw)
+>  {
+>  	struct cdns_sierra_pll_mux *mux = to_cdns_sierra_pll_mux(hw);
+> @@ -1118,13 +1131,6 @@ static int cdns_sierra_phy_get_clocks(struct cdns_sierra_phy *sp,
+>  	struct clk *clk;
+>  	int ret;
+>  
+> -	clk = devm_clk_get_optional(dev, "phy_clk");
+> -	if (IS_ERR(clk)) {
+> -		dev_err(dev, "failed to get clock phy_clk\n");
+> -		return PTR_ERR(clk);
+> -	}
+> -	sp->input_clks[PHY_CLK] = clk;
+> -
+>  	clk = devm_clk_get_optional(dev, "cmn_refclk_dig_div");
+>  	if (IS_ERR(clk)) {
+>  		dev_err(dev, "cmn_refclk_dig_div clock not found\n");
+> @@ -1160,17 +1166,33 @@ static int cdns_sierra_phy_get_clocks(struct cdns_sierra_phy *sp,
+>  	return 0;
+>  }
+>  
+> -static int cdns_sierra_phy_enable_clocks(struct cdns_sierra_phy *sp)
+> +static int cdns_sierra_phy_clk(struct cdns_sierra_phy *sp)
+>  {
+> +	struct device *dev = sp->dev;
+> +	struct clk *clk;
+>  	int ret;
+>  
+> +	clk = devm_clk_get_optional(dev, "phy_clk");
+> +	if (IS_ERR(clk)) {
+> +		dev_err(dev, "failed to get clock phy_clk\n");
+> +		return PTR_ERR(clk);
 > +	}
+> +	sp->input_clks[PHY_CLK] = clk;
 > +
-> +	return ntx;
+>  	ret = clk_prepare_enable(sp->input_clks[PHY_CLK]);
+>  	if (ret)
+>  		return ret;
+>  
+> +	return 0;
+> +}
+> +
+> +static int cdns_sierra_phy_enable_clocks(struct cdns_sierra_phy *sp)
+> +{
+> +	int ret;
+> +
+>  	ret = clk_prepare_enable(sp->output_clks[CDNS_SIERRA_PLL_CMNLC]);
+>  	if (ret)
+> -		goto err_pll_cmnlc;
+> +		return ret;
+>  
+>  	ret = clk_prepare_enable(sp->output_clks[CDNS_SIERRA_PLL_CMNLC1]);
+>  	if (ret)
+> @@ -1181,9 +1203,6 @@ static int cdns_sierra_phy_enable_clocks(struct cdns_sierra_phy *sp)
+>  err_pll_cmnlc1:
+>  	clk_disable_unprepare(sp->output_clks[CDNS_SIERRA_PLL_CMNLC]);
+>  
+> -err_pll_cmnlc:
+> -	clk_disable_unprepare(sp->input_clks[PHY_CLK]);
+> -
+>  	return ret;
+>  }
+>  
+> @@ -1191,7 +1210,8 @@ static void cdns_sierra_phy_disable_clocks(struct cdns_sierra_phy *sp)
+>  {
+>  	clk_disable_unprepare(sp->output_clks[CDNS_SIERRA_PLL_CMNLC1]);
+>  	clk_disable_unprepare(sp->output_clks[CDNS_SIERRA_PLL_CMNLC]);
+> -	clk_disable_unprepare(sp->input_clks[PHY_CLK]);
+> +	if (!sp->already_configured)
+> +		clk_disable_unprepare(sp->input_clks[PHY_CLK]);
+>  }
+>  
+>  static int cdns_sierra_phy_get_resets(struct cdns_sierra_phy *sp,
+> @@ -1382,22 +1402,30 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = cdns_sierra_phy_get_resets(sp, dev);
+> -	if (ret)
+> -		goto unregister_clk;
+> -
+>  	ret = cdns_sierra_phy_enable_clocks(sp);
+>  	if (ret)
+>  		goto unregister_clk;
+>  
+> -	/* Enable APB */
+> -	reset_control_deassert(sp->apb_rst);
+> +	regmap_field_read(sp->pma_cmn_ready, &sp->already_configured);
+> +
+> +	if (!sp->already_configured) {
+> +		ret = cdns_sierra_phy_clk(sp);
+> +		if (ret)
+> +			goto clk_disable;
+> +
+> +		ret = cdns_sierra_phy_get_resets(sp, dev);
+> +		if (ret)
+> +			goto clk_disable;
+> +
+> +		/* Enable APB */
+> +		reset_control_deassert(sp->apb_rst);
+> +	}
+>  
+>  	/* Check that PHY is present */
+>  	regmap_field_read(sp->macro_id_type, &id_value);
+>  	if  (sp->init_data->id_value != id_value) {
+>  		ret = -EINVAL;
+> -		goto clk_disable;
+> +		goto ctrl_assert;
+>  	}
+>  
+>  	sp->autoconf = of_property_read_bool(dn, "cdns,autoconf");
+> @@ -1433,8 +1461,10 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>  
+>  		sp->num_lanes += sp->phys[node].num_lanes;
+>  
+> -		gphy = devm_phy_create(dev, child, &ops);
+> -
+> +		if (!sp->already_configured)
+> +			gphy = devm_phy_create(dev, child, &ops);
+> +		else
+> +			gphy = devm_phy_create(dev, child, &noop_ops);
+>  		if (IS_ERR(gphy)) {
+>  			ret = PTR_ERR(gphy);
+>  			of_node_put(child);
+> @@ -1455,7 +1485,7 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* If more than one subnode, configure the PHY as multilink */
+> -	if (!sp->autoconf && sp->nsubnodes > 1) {
+> +	if (!sp->already_configured && !sp->autoconf && sp->nsubnodes > 1) {
+>  		ret = cdns_sierra_phy_configure_multilink(sp);
+>  		if (ret)
+>  			goto put_control;
+> @@ -1473,9 +1503,11 @@ static int cdns_sierra_phy_probe(struct platform_device *pdev)
+>  put_control:
+>  	while (--node >= 0)
+>  		reset_control_put(sp->phys[node].lnk_rst);
+> +ctrl_assert:
+> +	if (!sp->already_configured)
+> +		reset_control_assert(sp->apb_rst);
+>  clk_disable:
+>  	cdns_sierra_phy_disable_clocks(sp);
+> -	reset_control_assert(sp->apb_rst);
+>  unregister_clk:
+>  	cdns_sierra_clk_unregister(sp);
+>  	return ret;
+> -- 
+> 2.17.1
 
+-- 
+~Vinod

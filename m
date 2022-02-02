@@ -2,173 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A9D4A6D70
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B354A6D73
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245141AbiBBJDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:03:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46067 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242242AbiBBJDN (ORCPT
+        id S245277AbiBBJDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:03:40 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54584 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237719AbiBBJDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:03:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643792592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBpysxXu/y6O0XEmjrfAdxp73GcDGPjpjHECrtLEYho=;
-        b=MClnfuxlWdR3xk3fK7ptu7qnElJw54QWU0bdH8Q60FQlM7URs2AtmuqsLSr87Co6+rIaTN
-        wYLTcowHbk512YXOiL7uwvUfAakMNTEnTMytqCxYR7hIp4ydEBB43UFo0TWA5Cd8E56gVd
-        Gxzqk7PYSz1oBDHUQkJ6iRWTRqGNKR8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-28-QlDfjWwXPMOCCecQPsaprw-1; Wed, 02 Feb 2022 04:03:11 -0500
-X-MC-Unique: QlDfjWwXPMOCCecQPsaprw-1
-Received: by mail-ed1-f69.google.com with SMTP id v15-20020a50a44f000000b004094f4a8f3bso10092509edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 01:03:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tBpysxXu/y6O0XEmjrfAdxp73GcDGPjpjHECrtLEYho=;
-        b=w2QkbKhfkrSU5UPpMaAw96yxUvSq6NbpAUkWqgZfF2gUu8blv2ImRyDyilKxTzRnsF
-         7q1R8Xb6VZ9V256X6hK9Wp0LiEwrmATwVcywdHR6xtP/RUAg6+UUxp6sBGQhvW+6QsBZ
-         sNZGBySOaNr0JuDEqpFNZX/f5CGrQY7gvA4Y6C5wRWXyG15CT2LuyGxxjwNRcDSKV9Ca
-         8BM5+u2xFsB/gZCvvcacPCPCIAanAEKevS13OssyouW06fg8J+CWXNwB1C7NyQMCnq84
-         y5mq4o2f61ZENzj0tiTZNT4jAtVgOqr+q/1NswDOWjxqaVj5xX3M4zuldasmRcT53E8n
-         m7HA==
-X-Gm-Message-State: AOAM531VmYDE66TzwoElU1/Cdme3IDsPEk9yhCzYy6z95cRSbim8HdCz
-        91rYxufkkw/WFjKeXlxM0lJd4Cl+19ICUiVL4woOAnPK4y7wzqn1t8Y12oHWAY2m3kjDL/ByOJa
-        52w3UfOvSiIdUcF9nKE7503ug
-X-Received: by 2002:a50:fb8d:: with SMTP id e13mr7042912edq.334.1643792590612;
-        Wed, 02 Feb 2022 01:03:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJycrgETHA1TUmaiILhylhEXqD3m5+a4ptG3yUIOx5s8nbaaTUWPlikogxZT5CXm57xkq9MSjg==
-X-Received: by 2002:a50:fb8d:: with SMTP id e13mr7042880edq.334.1643792590349;
-        Wed, 02 Feb 2022 01:03:10 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id a6sm15414917ejs.214.2022.02.02.01.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 01:03:09 -0800 (PST)
-Date:   Wed, 2 Feb 2022 10:03:07 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v7 00/10] fprobe: Introduce fprobe function entry/exit
- probe
-Message-ID: <YfpIy+/Pqlw5EcZk@krava>
-References: <164360522462.65877.1891020292202285106.stgit@devnote2>
- <YfnKIyTwi+F3IPdI@krava>
- <CAEf4BzYRJuTLJc=Z9P-p3BtuKu_74MtA2MyrY_ceBxofuKuzHQ@mail.gmail.com>
+        Wed, 2 Feb 2022 04:03:38 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id C0FAC1F44279
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1643792617;
+        bh=ViQMSZyem2MB0mucYiFAcZf2AlB+Sx22LpjdHO5YXF0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=b1RRKral5pgotlT6/jsPB+u1VgcTZt1FRG7f2Er6wgkECZsykAIVxS2Nun0z4mTeo
+         q/7Kkirv9qIpyJBbD/SOYgFQifaE/65xIkE09at9DlJO/IoM6q+S59z6BrWr7JhhgF
+         EiuW2pLioSCLXtKvwlYFbQbohL8u5aa58DrXHDoBacOP0c6ipDEKOTYd+L1KUi10OA
+         xRkwKskoXoTGTe1YmhFRaarO1tH/wPe3DeLIT4KEwx7RP2FU0wNGyHHROw7Phf3erO
+         buErqVINDQhsx9hyD8w9sJrRd7WnkDUZQKtHJrhWNwLr9NO+3VxKGzxm4qq1tvJr4n
+         0w9chva8H2eLw==
+Message-ID: <91fff43a-c85d-2934-b54b-67ffe6fc2f29@collabora.com>
+Date:   Wed, 2 Feb 2022 10:03:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYRJuTLJc=Z9P-p3BtuKu_74MtA2MyrY_ceBxofuKuzHQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 3/3] remoteproc: mtk_scp: Use dev_err_probe() where
+ possible
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     bjorn.andersson@linaro.org, matthias.bgg@gmail.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220124120915.41292-1-angelogioacchino.delregno@collabora.com>
+ <20220124120915.41292-3-angelogioacchino.delregno@collabora.com>
+ <20220201183612.GC2490199@p14s>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220201183612.GC2490199@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 04:09:05PM -0800, Andrii Nakryiko wrote:
-> On Tue, Feb 1, 2022 at 4:02 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Mon, Jan 31, 2022 at 02:00:24PM +0900, Masami Hiramatsu wrote:
-> > > Hi,
-> > >
-> > > Here is the 7th version of fprobe. This version fixes unregister_fprobe()
-> > > ensures that exit_handler is not called after returning from the
-> > > unregister_fprobe(), and fixes some comments and documents.
-> > >
-> > > The previous version is here[1];
-> > >
-> > > [1] https://lore.kernel.org/all/164338031590.2429999.6203979005944292576.stgit@devnote2/T/#u
-> > >
-> > > This series introduces the fprobe, the function entry/exit probe
-> > > with multiple probe point support. This also introduces the rethook
-> > > for hooking function return as same as the kretprobe does. This
-> > > abstraction will help us to generalize the fgraph tracer,
-> > > because we can just switch to it from the rethook in fprobe,
-> > > depending on the kernel configuration.
-> > >
-> > > The patch [1/10] is from Jiri's series[2].
-> > >
-> > > [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
-> > >
-> > > And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
-> > > if user wants to share the same code (or share a same resource) on the
-> > > fprobe and the kprobes.
-> >
-> > hi,
-> > it works fine for bpf selftests, but when I use it through bpftrace
-> > to attach more probes with:
-> >
-> >   # ./src/bpftrace -e 'kprobe:ksys_* { }'
-> >   Attaching 27 probes
-> >
-> > I'm getting stalls like:
-> >
-> > krava33 login: [  988.574069] INFO: task bpftrace:4137 blocked for more than 122 seconds.
-> > [  988.577577]       Not tainted 5.16.0+ #89
-> > [  988.580173] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > [  988.585538] task:bpftrace        state:D stack:    0 pid: 4137 ppid:  4123 flags:0x00004004
-> > [  988.589869] Call Trace:
-> > [  988.591312]  <TASK>
-> > [  988.592577]  __schedule+0x3a8/0xd30
-> > [  988.594469]  ? wait_for_completion+0x84/0x110
-> > [  988.596753]  schedule+0x4e/0xc0
-> > [  988.598480]  schedule_timeout+0xed/0x130
-> > [  988.600524]  ? rcu_read_lock_sched_held+0x12/0x70
-> > [  988.602901]  ? lock_release+0x253/0x4a0
-> > [  988.604935]  ? lock_acquired+0x1b7/0x410
-> > [  988.607041]  ? trace_hardirqs_on+0x1b/0xe0
-> > [  988.609202]  wait_for_completion+0xae/0x110
-> > [  988.613762]  __wait_rcu_gp+0x127/0x130
-> > [  988.615787]  synchronize_rcu_tasks_generic+0x46/0xa0
-> > [  988.618329]  ? call_rcu_tasks+0x20/0x20
-> > [  988.620600]  ? rcu_tasks_pregp_step+0x10/0x10
-> > [  988.623232]  ftrace_shutdown.part.0+0x174/0x210
-> > [  988.625820]  unregister_ftrace_function+0x37/0x60
-> > [  988.628480]  unregister_fprobe+0x2d/0x50
-> > [  988.630928]  bpf_link_free+0x4e/0x70
-> > [  988.633126]  bpf_link_release+0x11/0x20
-> > [  988.635249]  __fput+0xae/0x270
-> > [  988.637022]  task_work_run+0x5c/0xa0
-> > [  988.639016]  exit_to_user_mode_prepare+0x251/0x260
-> > [  988.641294]  syscall_exit_to_user_mode+0x16/0x50
-> > [  988.646249]  do_syscall_64+0x48/0x90
-> > [  988.648218]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > [  988.650787] RIP: 0033:0x7f9079e95fbb
-> > [  988.652761] RSP: 002b:00007ffd474fa3b0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> > [  988.656718] RAX: 0000000000000000 RBX: 00000000011bf8d0 RCX: 00007f9079e95fbb
-> > [  988.660110] RDX: 0000000000000000 RSI: 00007ffd474fa3b0 RDI: 0000000000000019
-> > [  988.663512] RBP: 00007ffd474faaf0 R08: 0000000000000000 R09: 000000000000001a
-> > [  988.666673] R10: 0000000000000064 R11: 0000000000000293 R12: 0000000000000001
-> > [  988.669770] R13: 00000000004a19a1 R14: 00007f9083428c00 R15: 00000000008c02d8
-> > [  988.672601]  </TASK>
-> > [  988.675763] INFO: lockdep is turned off.
-> >
-> > I have't investigated yet, any idea?
-> >
+Il 01/02/22 19:36, Mathieu Poirier ha scritto:
+> Hi Angelo,
 > 
-> Do you happen to have a CPU count that's not a power of 2? Check if
-> you have [0] in your tree, it might be that.
+> On Mon, Jan 24, 2022 at 01:09:15PM +0100, AngeloGioacchino Del Regno wrote:
+>> Simplify the probe function, where possible, by using dev_err_probe().
+>> While at it, as to increase human readability, also remove some
+>> unnecessary forced void pointer casts that were previously used in
+>> error checking.
 > 
->   [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a773abf72eb0cac008743891068ca6edecc44683
+> I am in favour of all 3 patches (please add a cover letter next time) but weary
+> about testing - do you have access to a Mediatek platform to try this on or
+> is it purely theoretical?
+> 
+> I would definitely feel better to see a "Tested-by" tag by someone out there
+> with access to the HW.
+> 
+> Thanks,
+> Mathieu
+> 
 
-yes, that helped, thanks
+Hello Mathieu,
 
-jirka
+I have multiple MediaTek platforms and I always test on all of them before
+pushing such commits upstream, so, even though this kind of patch is trivial,
+this is *not* purely theoretical and I confirm that this was successfully tested.
 
+Regards,
+Angelo
+
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/remoteproc/mtk_scp.c | 28 ++++++++++++----------------
+>>   1 file changed, 12 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+>> index e40706b0e015..dcddb33e9997 100644
+>> --- a/drivers/remoteproc/mtk_scp.c
+>> +++ b/drivers/remoteproc/mtk_scp.c
+>> @@ -757,10 +757,8 @@ static int scp_probe(struct platform_device *pdev)
+>>   	int ret, i;
+>>   
+>>   	rproc = devm_rproc_alloc(dev, np->name, &scp_ops, fw_name, sizeof(*scp));
+>> -	if (!rproc) {
+>> -		dev_err(dev, "unable to allocate remoteproc\n");
+>> -		return -ENOMEM;
+>> -	}
+>> +	if (!rproc)
+>> +		return dev_err_probe(dev, -ENOMEM, "unable to allocate remoteproc\n");
+>>   
+>>   	scp = (struct mtk_scp *)rproc->priv;
+>>   	scp->rproc = rproc;
+>> @@ -770,21 +768,20 @@ static int scp_probe(struct platform_device *pdev)
+>>   
+>>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+>>   	scp->sram_base = devm_ioremap_resource(dev, res);
+>> -	if (IS_ERR((__force void *)scp->sram_base)) {
+>> -		dev_err(dev, "Failed to parse and map sram memory\n");
+>> -		return PTR_ERR((__force void *)scp->sram_base);
+>> -	}
+>> +	if (IS_ERR(scp->sram_base))
+>> +		return dev_err_probe(dev, PTR_ERR(scp->sram_base),
+>> +				     "Failed to parse and map sram memory\n");
+>> +
+>>   	scp->sram_size = resource_size(res);
+>>   	scp->sram_phys = res->start;
+>>   
+>>   	/* l1tcm is an optional memory region */
+>>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
+>>   	scp->l1tcm_base = devm_ioremap_resource(dev, res);
+>> -	if (IS_ERR((__force void *)scp->l1tcm_base)) {
+>> -		ret = PTR_ERR((__force void *)scp->l1tcm_base);
+>> +	if (IS_ERR(scp->l1tcm_base)) {
+>> +		ret = PTR_ERR(scp->l1tcm_base);
+>>   		if (ret != -EINVAL) {
+>> -			dev_err(dev, "Failed to map l1tcm memory\n");
+>> -			return ret;
+>> +			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
+>>   		}
+>>   	} else {
+>>   		scp->l1tcm_size = resource_size(res);
+>> @@ -792,10 +789,9 @@ static int scp_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
+>> -	if (IS_ERR((__force void *)scp->reg_base)) {
+>> -		dev_err(dev, "Failed to parse and map cfg memory\n");
+>> -		return PTR_ERR((__force void *)scp->reg_base);
+>> -	}
+>> +	if (IS_ERR(scp->reg_base))
+>> +		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
+>> +				     "Failed to parse and map cfg memory\n");
+>>   
+>>   	ret = scp->data->scp_clk_get(scp);
+>>   	if (ret)
+>> -- 
+>> 2.33.1
+>>
+
+
+-- 
+AngeloGioacchino Del Regno
+Software Engineer
+
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718

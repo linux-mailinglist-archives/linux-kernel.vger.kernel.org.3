@@ -2,236 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C624A6DAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A6C4A6DBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245433AbiBBJUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiBBJUA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:20:00 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2D4C061714;
-        Wed,  2 Feb 2022 01:20:00 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id u6so39252086lfm.10;
-        Wed, 02 Feb 2022 01:20:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version;
-        bh=i3bI40vwmRUOXQ/5yPC1vgbVQNyge9b1o2bXN5vtiy0=;
-        b=bop666ZeVkePlwCxVAzz7iNSvscG9BYAY6BH7Pua4OxvqqucMwlMaWwLz+GDxeW6mJ
-         wzrhImgUcWXnA9kTtdn4/Ca48zGz6WL1klu0tErPsEqJTdfmEauGsRSoMIhf22hQyBXP
-         efQEpoQJJBZAGUv6jX7t2YG9hmponN+P9zO/2ELqULb1MadAGbdnGm2glPxjh2Lu/BSK
-         vU/e7oug04F8cKFWbGVeahXyNvPLvUXDyIdw3dLH5A8bi8DH55NkNk/5sJGq/KRBgw6v
-         Um64p6eDqrRSBQ5wi6r2+OYWzmxCMNd5IR1Jw1EISXbqu0G2JJ8yrO4Xdp8fufP/xskx
-         ckvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version;
-        bh=i3bI40vwmRUOXQ/5yPC1vgbVQNyge9b1o2bXN5vtiy0=;
-        b=5UzNfzw/HkRr4q/OtlFkvVEfGt/NYQlPE7Rck+fZqhjya3Xee7G3fHPedrJaeavPhO
-         voOVbe7NifPm1XhjkMxmKrLR2dGKF4dn9R3ZRszkClC0ILWJKl6x8dXxBIvZ16/Z+Nxn
-         8HoEnhyFoH36B3aUSpiiCW+KIfL3AKEqSAhJ5AUxHrU0qRIH6pF+U0igPm+um6KH6DnV
-         QfAubBjqKCX0DplOv/KCvVped7J+Y+ic+Nqr6aovuycNQftrvWHJzGK5lLVYhYPyvpZY
-         hSM1ZxnbslnxufcbzW52n+tLM7Qp5sfhid/uFahflricv8yVqdZfUcROxo7wpAuzKi6c
-         7roA==
-X-Gm-Message-State: AOAM532eNpbyzQg+GWgjgOIw6F1RBzyUGz0zBsHZeTLyQxv1nZpvI4QQ
-        38MxZHoBDwa3NLLAWMmJ1uU=
-X-Google-Smtp-Source: ABdhPJyvkUDp2Sj5MAQ/FWWvGJdlwySOdTfRtRXyMiuB52dnyzbGpN7Fta6vvTeF+uAFpb3Vy7DldQ==
-X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr21770588lfg.219.1643793598385;
-        Wed, 02 Feb 2022 01:19:58 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id m10sm4455747lfk.119.2022.02.02.01.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 01:19:58 -0800 (PST)
-Date:   Wed, 2 Feb 2022 11:19:54 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Noralf =?UTF-8?B?VHLDuG5uZXM=?= <noralf@tronnes.org>,
-        David Airlie <airlied@linux.ie>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Message-ID: <20220202111954.6ee9a10c@eldfell>
-In-Reply-To: <CAMuHMdX_uyEznHy5vYwS8Q=+bBKPddeJa41KTWi4Fwh3tjX+zQ@mail.gmail.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
-        <tIMIWqepcZGntnez-1ss4Kn4K8btXnzDRL7EWd19-745WK90YIC19E_4di9RNvB3gtx-PzWEjBEGQLPNJE_x0T1yyyaWFCoFcCiG4StR9RU=@emersion.fr>
-        <wuXPJN-K-rvjoV51c4EBmTBScov8rcJTPoYmlfHe04_-4wD1khVxo9HnUsP7UFd5m4AkzGSw2hXe_c77jbSRhjEJ0JZIYwuvuIkcv_KsR-Y=@emersion.fr>
-        <CAMuHMdXKZ=BkvVqdpiNPNJgxm9SzQ3Z0n4SqV2-4oPRveybd6g@mail.gmail.com>
-        <qmhzv6kqs6QdAOP3bNB39glOpc8eeJ6flgjfjcaBniT-shDKZkxo5uB71weGOUKxPE6dq_WBhtHmY5vMmuYwqMoHgtMWnX0ESE5R1Y5g5F8=@emersion.fr>
-        <CAKMK7uGPuhrDf8fdDgfuPt5rzO30Rm54T7GvWb203NRbVoVDgw@mail.gmail.com>
-        <b0788b3d-9c77-0e96-0969-380d21663909@redhat.com>
-        <20220201124208.39c31e59@eldfell>
-        <CAMuHMdX_uyEznHy5vYwS8Q=+bBKPddeJa41KTWi4Fwh3tjX+zQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S245442AbiBBJX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:23:26 -0500
+Received: from foss.arm.com ([217.140.110.172]:46202 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234114AbiBBJXZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:23:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 949B71FB;
+        Wed,  2 Feb 2022 01:23:24 -0800 (PST)
+Received: from [10.57.10.145] (unknown [10.57.10.145])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DB623F40C;
+        Wed,  2 Feb 2022 01:23:17 -0800 (PST)
+Message-ID: <74a4a56f-539e-c51b-d90b-d2d6f55a34a3@arm.com>
+Date:   Wed, 2 Feb 2022 09:23:16 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TjcVZakJniwKJRBiAnOmgzx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 00/12] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Content-Language: en-GB
+To:     "Nakajima, Jun" <jun.nakajima@intel.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        KVM list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <3326f57a-169d-8eb8-2b8b-0379c33ba7a5@arm.com>
+ <08A0882C-2E35-4CFD-9176-FCB6665D1F3E@intel.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <08A0882C-2E35-4CFD-9176-FCB6665D1F3E@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/TjcVZakJniwKJRBiAnOmgzx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Jun,
 
-On Tue, 1 Feb 2022 12:07:07 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On 02/02/2022 02:28, Nakajima, Jun wrote:
+> 
+>> On Jan 28, 2022, at 8:47 AM, Steven Price <steven.price@arm.com> wrote:
+>>
+>> On 18/01/2022 13:21, Chao Peng wrote:
+>>> This is the v4 of this series which try to implement the fd-based KVM
+>>> guest private memory. The patches are based on latest kvm/queue branch
+>>> commit:
+>>>
+>>>  fea31d169094 KVM: x86/pmu: Fix available_event_types check for
+>>>               REF_CPU_CYCLES event
+>>>
+>>> Introduction
+>>> ------------
+>>> In general this patch series introduce fd-based memslot which provides
+>>> guest memory through memory file descriptor fd[offset,size] instead of
+>>> hva/size. The fd can be created from a supported memory filesystem
+>>> like tmpfs/hugetlbfs etc. which we refer as memory backing store. KVM
+>>> and the the memory backing store exchange callbacks when such memslot
+>>> gets created. At runtime KVM will call into callbacks provided by the
+>>> backing store to get the pfn with the fd+offset. Memory backing store
+>>> will also call into KVM callbacks when userspace fallocate/punch hole
+>>> on the fd to notify KVM to map/unmap secondary MMU page tables.
+>>>
+>>> Comparing to existing hva-based memslot, this new type of memslot allows
+>>> guest memory unmapped from host userspace like QEMU and even the kernel
+>>> itself, therefore reduce attack surface and prevent bugs.
+>>>
+>>> Based on this fd-based memslot, we can build guest private memory that
+>>> is going to be used in confidential computing environments such as Intel
+>>> TDX and AMD SEV. When supported, the memory backing store can provide
+>>> more enforcement on the fd and KVM can use a single memslot to hold both
+>>> the private and shared part of the guest memory. 
+>>
+>> This looks like it will be useful for Arm's Confidential Compute
+>> Architecture (CCA) too - in particular we need a way of ensuring that
+>> user space cannot 'trick' the kernel into accessing memory which has
+>> been delegated to a realm (i.e. protected guest), and a memfd seems like
+>> a good match.
+> 
+> Good to hear that it will be useful for ARM’s CCA as well.
+> 
+>>
+>> Some comments below.
+>>
+>>> mm extension
+>>> ---------------------
+>>> Introduces new F_SEAL_INACCESSIBLE for shmem and new MFD_INACCESSIBLE
+>>> flag for memfd_create(), the file created with these flags cannot read(),
+>>> write() or mmap() etc via normal MMU operations. The file content can
+>>> only be used with the newly introduced memfile_notifier extension.
+>>
+>> For Arm CCA we are expecting to seed the realm with an initial memory
+>> contents (e.g. kernel and initrd) which will then be measured before
+>> execution starts. The 'obvious' way of doing this with a memfd would be
+>> to populate parts of the memfd then seal it with F_SEAL_INACCESSIBLE.
+> 
+> As far as I understand, we have the same problem with TDX, where a guest TD (Trust Domain) starts in private memory. We seed the private memory typically with a guest firmware, and the initial image (plaintext) is copied to somewhere in QEMU memory (from disk, for example) for that purpose; this location is not associated with the target GPA.
+> 
+> Upon a (new) ioctl from QEMU, KVM requests the TDX Module to copy the pages to private memory (by encrypting) specifying the target GPA, using a TDX interface function (TDH.MEM.PAGE.ADD). The actual pages for the private memory is allocated by the callbacks provided by the backing store during the “copy” operation.
+> 
+> We extended the existing KVM_MEMORY_ENCRYPT_OP (ioctl) for the above. 
 
-> Hi Pekka,
->=20
-> On Tue, Feb 1, 2022 at 11:42 AM Pekka Paalanen <ppaalanen@gmail.com> wrot=
-e:
-> > On Tue, 1 Feb 2022 10:49:03 +0100
-> > Javier Martinez Canillas <javierm@redhat.com> wrote: =20
-> > > On 2/1/22 09:38, Daniel Vetter wrote: =20
-> > > > On Tue, Feb 1, 2022 at 9:34 AM Simon Ser <contact@emersion.fr> wrot=
-e: =20
-> > > >> On Tuesday, February 1st, 2022 at 09:26, Geert Uytterhoeven <geert=
-@linux-m68k.org> wrote: =20
-> > > >>> What's the story with the Rn formats?
-> > > >>>
-> > > >>> The comments say "n bpp Red", while this is a monochrome (even
-> > > >>> inverted) display? =20
-> > > >>
-> > > >> I don't think the color matters that much. "Red" was picked just b=
-ecause it was
-> > > >> an arbitrary color, to make the difference with e.g. C8. Or am I m=
-istaken? =20
-> > > >
-> > > > The red comes from gl, where with shaders it really doesn't matter
-> > > > what meaning you attach to channels, but really just how many you
-> > > > have. So 2-channel formats are called RxGx, 3-channel RxGxBx,
-> > > > 4-channel RxGxBxAx and single-channel Rx. And we use drm_fourcc for
-> > > > interop in general, hence why these exist.
-> > > >
-> > > > We should probably make a comment that this really isn't a red chan=
-nel
-> > > > when used for display it's a greyscale/intensity format. Aside from
-> > > > that documentation gap I think reusing Rx formats for
-> > > > greyscale/intensity for display makes perfect sense.
-> > > > -Daniel =20
-> > >
-> > > To sump up the conversation in the #dri-devel channel, these drivers
-> > > should support the following formats:
-> > >
-> > > 1) Dx (Daniel suggested that for darkness, but inverted mono) =20
-> >
-> > Did you consider format C1 instead? =20
->=20
-> That would be a 2-color display, which is not necessarily black
-> and white. Cfr. Amiga or Atari bit planes with bpp=3D1.
-> That's why fbdev has separate visuals for monochrome.
+Ok, so if I understand correctly QEMU would do something along the lines of:
 
-Yes, that is exactly what I was aiming at: to draft a plan for panels
-that have a fixed and arbitrary palette. From the discussions I
-understood that the panel in question here requires somehow reversed
-colors ("inverted mono"), which didn't really sound to be like "normal
-monochrome".
+1. Use memfd_create(...MFD_INACCESSIBLE) to allocate private memory for
+the guest.
 
-> > I have no idea how this would map to fbdev API though. =20
->=20
->     #define FB_VISUAL_MONO01                0       /* Monochr.
-> 1=3DBlack 0=3DWhite */
->     #define FB_VISUAL_MONO10                1       /* Monochr.
-> 1=3DWhite 0=3DBlack */
->     #define FB_VISUAL_TRUECOLOR             2       /* True color   */
->=20
-> The above is RGB (or grayscale, see below).
->=20
->     #define FB_VISUAL_PSEUDOCOLOR           3       /* Pseudo color
-> (like atari) */
->=20
-> Palette
->=20
->     #define FB_VISUAL_DIRECTCOLOR           4       /* Direct color */
->=20
-> Usually used as RGB with gamma correction, but the actual hardware
-> is more flexible.
->=20
->     #define FB_VISUAL_STATIC_PSEUDOCOLOR    5       /* Pseudo color reado=
-nly */
->=20
-> Fixed palette
->=20
-> And:
->=20
->     struct fb_var_screeninfo {
->             ...
->             __u32 grayscale;                /* 0 =3D color, 1 =3D graysca=
-le,    */
+2. ftruncate/fallocate the memfd to back the appropriate areas of the memfd.
 
-DRM has pixel formats, but no visuals so far. Maybe it needs to grow
-the concept of visuals in some form? However, care should be taken to
-not clash with existing colorimetry features. I would hope that the
-colorimetry feature set could be extended to cover the above as well.
-Well, only if there would be any users for it.
+3. Create a memslot in KVM pointing to the memfd
 
-My silly attempt with Cx formats (e.g. DRM_FORMAT_C8) was a stab in that
-direction, but maybe not flexible enough for the above.
+4. Load the 'guest firmware' (kernel/initrd or similar) into VMM memory
 
-If on the other hand the panel is "grayscale" but with an arbitrary
-color (white, green, orange or other on black), the IRC consensus seems
-to be that one should use Rx formats (e.g. DRM_FORMAT_R8) for it,
-regardless of the actual color. That would convey that the pixel value
-has a monotonic (increasing) mapping to brightness, unlike with
-paletted formats. I agree with this, but wonder how reversed brightness
-should be dealt with - or just have the driver invert the pixel values
-before sending them to display?
+5. Use the KVM_MEMORY_ENCRYPT_OP to request the 'guest firmware' be
+copied into the private memory. The ioctl would temporarily pin the
+pages and ask the TDX module to copy (& encrypt) the data into the
+private memory, unpinning after the copy.
 
-Cx formats with a read-only palette could be used to represent
-"grayscale" and "reversed grayscale" too, but people seem to think that
-is too complicated to analyse and use for KMS userspace.
+6. QEMU can then free the unencrypted copy of the guest firmware.
 
-Other #dri-devel IRC mumblings were about maybe adding a DRM pixel
-format for grayscale or intensity or luminance so that one would not
-need to use "red" color channel for something that doesn't look red.
-That is, do not use Cx formats because those produce completely
-arbitrary colors, and do not use Rx formats because the display is not
-redscale. Personally I'd be fine with Rx formats.
+>>
+>> However as things stand it's not possible to set the INACCESSIBLE seal
+>> after creating a memfd (F_ALL_SEALS hasn't been updated to include it).
+>>
+>> One potential workaround would be for arm64 to provide a custom KVM
+>> ioctl to effectively memcpy() into the guest's protected memory which
+>> would only be accessible before the guest has started. The drawback is
+>> that it requires two copies of the data during guest setup.
+> 
+> So, the guest pages are not encrypted in the realm?
 
+The pages are likely to be encrypted, but architecturally it doesn't
+matter - the hardware prevents the 'Normal World' accessing the pages
+when they are assigned to the realm. Encryption is only necessary to
+protect against hardware attacks (e.g. bus snooping).
+
+> I think you could do the same thing, i.e. KVM copies the pages to the realm, where pages are allocated by the backing store. But, yes, it will have two copies of the data at that time unless encrypted. .
+
+I'm not sure I follow the "unless encrypted" part of that.
+
+>>
+>> Do you think things could be relaxed so the F_SEAL_INACCESSIBLE flag
+>> could be set after a memfd has been created (and partially populated)?
+>>
+> 
+> I think F_SEAL_INACCESSIBLE could be deferred to the point where measurement of the initial image is done (we call “build-time” measurement in TDX). For example, if we add a callback to activate F_SEAL_INACCESSIBLE and KVM calls it before such the measurement time, does that work for you?
+
+Yes, if it's possible to defer setting the F_SEAL_INACCESSIBLE then it
+should be possible for QEMU to load the initial 'guest firmware'
+straight into the memfd. Then to launch the guest the trusted component
+only needs to protect and measure the populated pages - there's no need
+to copy the data from one set of pages to another. This removes the need
+to have two copies of the initial image in memory at the point of measuring.
 
 Thanks,
-pq
 
---Sig_/TjcVZakJniwKJRBiAnOmgzx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmH6TLoACgkQI1/ltBGq
-qqekGQ/+Ks4uYS99DrsJhQBLzuFgiXUFSHH47XE5z/Hzo6GBRNxPRdut+JR4Vtf7
-lkm78vXqRfjJ/c1RE7WBlsdtfgeuOQXOLPWbBSk9eVfakspywcQ/QFFxT/2nH4Sy
-dFdAoFy7esX2KkKmtg8QoQBfS9XjWvqcetBqu5p6mcJGpHSMhynVsY+exWV7636W
-4VJLlTdKYIg+hv67Ndc54ovi63uncyhZ2fNkVkdcdc4kvmvE2fI0aWdxDB4HW1hK
-ZZtWMksvm2Wn8FOuNn9/H7/pUlHYc+8FdjafnLwooy1cYdV//mOuVmLhcjxxp7Pz
-dLfWBnRyf2IJEi7hxvdLM+wZdESEkFrdIa1xQ1qb46xPmyCOgOeZEX8GtcN1r0ol
-cuabTfs5BcGTl9Vf22XUSssducV+pNS9nW5YAraJH0V6DL7x1+4s+Sa6C60COK4T
-/05Zv7JxUpyaK8iu/vRl2oa3zQGrzFxGV68Rw3R5U/EevRpuqgKWvwmYE+Aahkjl
-HwGwf5BlIUyUF+GtG3HhUGNHIWCIhTg4Q143Rr4GPjdrHMs2QeBvZ1Lc2L2j7ilX
-5HD1LvPcKRcO9QTkQToXeK/LI6fTlGDgxLHbLkb5cVdQIQfHzaM/mnIw9gsolcTT
-WTXX/oDlDG2mlAwPCCwctWGdm7Au1B7XtCdESpXkST/BWlMoHfg=
-=e/GB
------END PGP SIGNATURE-----
-
---Sig_/TjcVZakJniwKJRBiAnOmgzx--
+Steve

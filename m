@@ -2,154 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EFF4A7538
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED244A7545
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbiBBQB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345652AbiBBQBy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:01:54 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60044C06173D;
-        Wed,  2 Feb 2022 08:01:54 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso19870103ott.7;
-        Wed, 02 Feb 2022 08:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3g3d/0nNM/m7x4mgsz4tjhBAFiZS3Vbf1uUerpVJ9lQ=;
-        b=HhEE3lXB3iuVMezioKIcOChf5uZ2cD2tvUqJN6GkjOCS3ozVUiatdlZdgtgWNMOFfF
-         2aURaeU2R0RcuAg4rZcpV9kYDv+/9WKwld5EmmBQ6yioLNzOE8EuwMBhWIblFWY1WP8S
-         rJQ9jzlFspluGUbx44Ly+y1rSiwE40HqYsFzc3nb3T9etw8krT1xtVVwOC5u9k0utLcR
-         X6m7XAfhHJFv9iEN1Pkgsc0Nvl1GJomgBYxG0ULxrS83xo8xHhCIOE8ZA0sPl7w9uJux
-         lTcjclx1IpfsCTqPsPCDtsHXiiwG+HH26wdaCA3H0KuhXpas1yW5AR1tLt+/OfOLDMCW
-         m1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3g3d/0nNM/m7x4mgsz4tjhBAFiZS3Vbf1uUerpVJ9lQ=;
-        b=OUItOVDmNE6rsSXIZfhraM4x6qHjn1REpjXX6cswodNKSSX/fSzs5SWDBUyNqoJqR2
-         5FEGlWbypmbttRcTD1y8V0EQOgPxj700QnqeSs54TFe69gDPHL4+NTz9v9pyds/IdToY
-         MoiWvfTwcyc/Lt/kU0ytMuKgt+BEOjCphHhUNde+wQhcmaZ3Hl4Zl45FKC0r6T+6DNCz
-         s2rjZsP/CWSHb3S12JI/fpihZSYotgMkQmtuMiiBFoG1fVnHTA+U4hXnPgL+N/R1hksh
-         cwwS8CVzirUtk9HHRyZosCe7SZ28nHR/BdmSCYgUu9fA7Fpa3zCn9+KVl/5x+eQVpzZ9
-         RfbQ==
-X-Gm-Message-State: AOAM530W2kVLdDiCK7dpigEAVWNVVvDT4T8yb66BXed+kQRhtkxe8psd
-        Zf9v+UVIqljw6uibRdWHnWQ=
-X-Google-Smtp-Source: ABdhPJxTHKS5tENSR0d5oDDjMuzEHVOaTuUWMM5EdaXwgaSD2f8PtvvrrvRd6VGXmoGdjH4Lq/nLLA==
-X-Received: by 2002:a9d:72d6:: with SMTP id d22mr16613935otk.237.1643817712222;
-        Wed, 02 Feb 2022 08:01:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v10sm15990946oto.53.2022.02.02.08.01.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 08:01:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 08:01:49 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy@kernel.org>,
-        Matteo Croce <mcroce@microsoft.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
-Message-ID: <20220202160149.GA2322037@roeck-us.net>
-References: <20220130183653.491292-1-keescook@chromium.org>
+        id S1345642AbiBBQCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:02:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:39676 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232626AbiBBQCj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:02:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E7FA11D4;
+        Wed,  2 Feb 2022 08:02:39 -0800 (PST)
+Received: from e121896.Emea.Arm.com (e121896.Emea.Arm.com [10.32.36.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A6E5C3F73B;
+        Wed,  2 Feb 2022 08:02:36 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     mathieu.poirier@linaro.org, coresight@lists.linaro.org
+Cc:     suzuki.poulose@arm.com, leo.yan@linaro.com, mike.leach@linaro.org,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/15] Make ETM register accesses consistent with sysreg.h
+Date:   Wed,  2 Feb 2022 16:02:10 +0000
+Message-Id: <20220202160226.37858-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130183653.491292-1-keescook@chromium.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
-> Add a simple test for strlen() functionality, including using it as a
-> constant expression.
-> 
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Peter Rosin <peda@axentia.se>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I'll be taking this as part of my Clang FORTIFY_SOURCE series.
-> ---
->  lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/lib/test_string.c b/lib/test_string.c
-> index 9dfd6f52de92..59994f552c48 100644
-> --- a/lib/test_string.c
-> +++ b/lib/test_string.c
-> @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
->  	return 0;
->  }
->  
-> +/*
-> + * Unlike many other string functions, strlen() can be used in
-> + * static initializers when string lengths are known at compile
-> + * time. (i.e. Under these conditions, strlen() is a constant
-> + * expression.) Make sure it can be used this way.
-> + */
-> +static const int strlen_ce = strlen("tada, a constant expression");
-> +
+While working on the branch broadcast change I found it difficult to search
+for usages of registers and fields because of the magic numbers. I also
+found it difficult to decide which style to make new code in because of the
+varying ones used.
 
-This results in:
+There was also a code review comment from Suzuki about replacing a magic
+number so I'm proposing to refactor as many as possible into the style used
+in sysreg.h which seems to be the new and most consistently used method.
+For example it was used in the SPE and TRBE drivers.
 
-lib/test_string.c:188:30: error: initializer element is not constant
-  188 | static const int strlen_ce = strlen("tada, a constant expression");
+This isn't an exhaustive refactor, but it does get all the basic accesses.
+There are a couple of odd other cases remaining, mainly in the ETM3x code.
+These can be found by searching for BMVAL.
 
-for several of my tests. I don't think you can mandate that a compiler
-implements this.
+There is one compromise to ensure this is a complete no-op and has
+binary equivalence with the old version. I needed to keep two register
+accesses here, where something like etmidr0 & TRCIDR0_INSTP0_LOAD_STORE
+would be better:
 
-Guenter
+  -	if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
+  -		drvdata->instrp0 = true;
+  -	else
+  -		drvdata->instrp0 = false;
+  -
+  +	drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
+  +			      (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
 
-> +static __init int strlen_selftest(void)
-> +{
-> +	/* String length ruler:         123456789012345 */
-> +	static const char normal[]   = "I am normal";
-> +	static const char *ptr       = "where do I go?";
-> +	static const char trailing[] = "hidden NULLs\0\0\0";
-> +	static const char leading[]  = "\0\0hidden text";
-> +
-> +	if (strlen(normal) != 11)
-> +		return 0x100001;
-> +	if (strlen(ptr++) != 14)
-> +		return 0x100002;
-> +	if (strlen(ptr++) != 13)
-> +		return 0x100003;
-> +	if (strlen(trailing) != 12)
-> +		return 0x100004;
-> +	if (strlen(leading) != 0)
-> +		return 0x100005;
-> +	if (strlen_ce != 27)
-> +		return 0x100006;
-> +
-> +	return 0;
-> +}
-> +
->  static __exit void string_selftest_remove(void)
->  {
->  }
-> @@ -212,6 +244,11 @@ static __init int string_selftest_init(void)
->  	if (subtest)
->  		goto fail;
->  
-> +	test = 5;
-> +	subtest = strlen_selftest();
-> +	if (subtest)
-> +		goto fail;
-> +
->  	pr_info("String selftests succeeded\n");
->  	return 0;
->  fail:
-> -- 
-> 2.30.2
-> 
+I think this change fixes quite a few issues like:
+
+ * Some registers aren't referred to by name but a different variable name.
+   For example eventctrl1 in mode_store() where TRCEVENTCTL1R isn't
+   mentioned in that function.
+
+ * Some bits aren't referred to by the name in the manual, even in the
+   comments. For example TRCCONFIGR.RS only occurs as /* bit[12], Return
+   stack enable bit */.
+
+ * Some bits in the same register are referred to either as magic numbers
+   or the publicly exported config macros, neiher of which are consistent
+   with any other register accesses. For example
+
+   config->cfg |= BIT(11);
+   config->cfg |= BIT(ETM4_CFG_BIT_CTXTID);
+   
+ * Some fields are already partially referred to in the sysfs.h style way:
+   TRCVICTLR_EXLEVEL_... etc. But other fields in the same register are not
+   
+ * Some fields are magic numbers that are repeated many times in different
+   functions. For example vinst_ctrl |= BIT(9)
+
+ * Some fields were referred to by magic numbers, even when there were
+   already existing #defines. For example ETMTECR1_INC_EXC
+
+ * Another benefit is that the #defines could be automatically checked
+   against the reference manual because the style is uniform.
+
+Testing
+=======
+
+To test this I used gcc-11 which doesn't have a quirk about changing
+register widths in some cases (as in w -> x). I also used elf_diff which
+showed me exactly where I'd made a mistake when I did
+(https://github.com/noseglasses/elf_diff). But now that there is no
+difference, objdump and diff also work for validation.
+
+  make CC=gcc-11 modules
+  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm4x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko)
+  diff <(objdump -d drivers/hwtracing/coresight/coresight.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight.ko)
+
+And for ETM3x (doesn't need gcc 11):
+
+  make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  modules
+  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm3x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm3x.ko)
+
+When there are no differences, the diff output looks like this with only
+the filename listed:
+
+  < drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
+  ---
+  > ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
+
+Applies to coresight/next 30d1f1c71b
+
+James Clark (15):
+  coresight: Make ETM4x TRCIDR0 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR2 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR3 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR4 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR5 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCCONFIGR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCEVENTCTL1R register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCSTALLCTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCVICTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM3x ETMTECR1 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCACATRn register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCSSCCRn and TRCSSCSRn register accesses
+    consistent with sysreg.h
+  coresight: Make ETM4x TRCSSPCICRn register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCBBCTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCRSCTLRn register accesses consistent with
+    sysreg.h
+
+ .../coresight/coresight-etm3x-core.c          |   2 +-
+ .../coresight/coresight-etm3x-sysfs.c         |   2 +-
+ .../coresight/coresight-etm4x-core.c          | 135 +++++--------
+ .../coresight/coresight-etm4x-sysfs.c         | 178 +++++++++---------
+ drivers/hwtracing/coresight/coresight-etm4x.h | 159 ++++++++++++++--
+ drivers/hwtracing/coresight/coresight-priv.h  |   1 +
+ 6 files changed, 283 insertions(+), 194 deletions(-)
+
+-- 
+2.28.0
+

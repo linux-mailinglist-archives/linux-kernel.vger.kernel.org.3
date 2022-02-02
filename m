@@ -2,92 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44A64A6A96
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A941C4A6A99
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 04:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244062AbiBBDko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 22:40:44 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:46048 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243770AbiBBDkm (ORCPT
+        id S244069AbiBBDmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 22:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243201AbiBBDmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 22:40:42 -0500
-Received: by mail-oi1-f169.google.com with SMTP id m9so37350911oia.12;
-        Tue, 01 Feb 2022 19:40:42 -0800 (PST)
+        Tue, 1 Feb 2022 22:42:00 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E41C061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 19:42:00 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so4701030pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 19:42:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hkM0INNT5ToyPpz8o/c48ueKP4pJusE9J4xkc01YiWo=;
+        b=X2rRfZsKiwEgkCuMlhd9dh+eCA+LMtVK77jTFgjKml4w3Qi9/213ObL3zGVZ6XOqPF
+         D65XXGjhA7nhGgmBnNDBewQm9OVTrNX1p6fTceSyirCHVY/5E+4qpHkokXHv1Vc7uOXD
+         XgMKUpOJ5IcHgF2pnQvLvHS7QS71OiSIqhw6g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=6M/HoWEUP68v359RfQJWkPc7thFvVcT0dU0JkzkDdHE=;
-        b=mGA8ZiiUCt/DzKQl6X8vJbpeFALKKYrrdUjwUyNdgfWVMb6FvobDiFLrQzoK9LshP0
-         R7WYyQZlv0QYF8DJylxEKKf20TkJJYd3zXQYYVFnF0qMxotdnbu5QWyjnoweDPnfeWGM
-         KhGiVBcb9gSlKhfD5nsiHL2m1eaV7E7X8Yhm6n09kU5QiyAs0pq6IIhItMcYlxsKkNWf
-         PO4yeC/HkcD/D3gx4B7CXVoyoLiJRIpB+uVPGtmYlJZgPn8fRCdzFhG/SWZLstiGP0QA
-         KPwa1+jwmDByDRQulSbpCSJ5znOUCGXpQWcVnFV/eUq5OZNhqtm2rT6ATRVvF+9C+JHQ
-         stgg==
-X-Gm-Message-State: AOAM53075SsIn76jMO2WlNfu1T4MSgDu5JhRO5ALd7CkvDIobfEH6uln
-        gx2cWVqQKKcpldtm4j/xNw==
-X-Google-Smtp-Source: ABdhPJxZJ5hzAwugv6TPI/S5uWds3EorF/S9+nvGDzjtLgkzhIj2pDzP4wI2Mlw8TmD8orNaV5ZusQ==
-X-Received: by 2002:a05:6808:14c1:: with SMTP id f1mr3424374oiw.129.1643773242362;
-        Tue, 01 Feb 2022 19:40:42 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l19sm10925400ooa.7.2022.02.01.19.40.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hkM0INNT5ToyPpz8o/c48ueKP4pJusE9J4xkc01YiWo=;
+        b=qkwf6os/EnANN7vqF4VZprU6cEgCcY2vqatzQ6BpblXKejPcUHQ0VEfmWKRmhhS+xg
+         Dzw6W4g1IaSci8XsI6AITLLmQpwSrrG1Ppx30Zrnr4VTtrTg31dgKK0gUT6MyBV7QOPk
+         dESeODBVSLoneWAUSq4wHRhLK7jSaBv78QLlP3vobRV3YKOx4aTf6IMZvrQj1SjjZ7F6
+         5/Gw720hYFECi9Nf8/bGBlY0kqgk8Xf9eMIToX7fsOm/mC+idfTSXzVcyjdxafugmaU7
+         S8kvKTmFbQ+BSEE4nPG+qGffHWGr/DtEomGm/bueBN9BhIAMJSzpIMzxerxLAInQYKvs
+         yaog==
+X-Gm-Message-State: AOAM5327A10yr3zEHbUZSLkjkizJSnR9WxxJl4XbVrXj1jSv8V+7ULkh
+        NgaXS9ExWqkuyd6I1qmHHaEMezqIsdHX4g==
+X-Google-Smtp-Source: ABdhPJwRsgcqGZ9GY7sviAxBjq2ieSkncT1SGrK8qo7Nog3t3dYzkennuudFjLIrCT5Nr0O8ONUJdQ==
+X-Received: by 2002:a17:90b:1881:: with SMTP id mn1mr5953137pjb.236.1643773320175;
+        Tue, 01 Feb 2022 19:42:00 -0800 (PST)
+Received: from google.com ([2401:fa00:8f:203:9ae0:cb9f:b05e:ec])
+        by smtp.gmail.com with ESMTPSA id i127sm7462698pfg.142.2022.02.01.19.41.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 19:40:41 -0800 (PST)
-Received: (nullmailer pid 1397926 invoked by uid 1000);
-        Wed, 02 Feb 2022 03:40:40 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Cristian Pop <cristian.pop@analog.com>
-Cc:     devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        robh+dt@kernel.org
-In-Reply-To: <20220201162351.53520-1-cristian.pop@analog.com>
-References: <20220201162351.53520-1-cristian.pop@analog.com>
-Subject: Re: [PATCH v2 1/2] dt:bindings:iio:frequency: Add ADMV4420 doc
-Date:   Tue, 01 Feb 2022 21:40:40 -0600
-Message-Id: <1643773240.843870.1397925.nullmailer@robh.at.kernel.org>
+        Tue, 01 Feb 2022 19:41:59 -0800 (PST)
+Date:   Wed, 2 Feb 2022 12:41:54 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
+        "ribalda@chromium.org" <ribalda@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple
+ T2-attached FaceTime HD Camera
+Message-ID: <Yfn9glTzki60IRFy@google.com>
+References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
+ <9BD1D373-F588-44EE-AFC0-3D691B4134DA@live.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9BD1D373-F588-44EE-AFC0-3D691B4134DA@live.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Feb 2022 18:23:50 +0200, Cristian Pop wrote:
-> Add device tree bindings for the ADMV4420 K band downconverter.
-> 
-> Signed-off-by: Cristian Pop <cristian.pop@analog.com>
-> ---
-> changes in v2:
->  - Fix indentation
->  - Remove '|', there is no formatting to persevere
->  - Add plank line before 'properties:'
->  - replace '_' with '-' in property names
->  .../bindings/iio/frequency/adi,admv4420.yaml  | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml
-> 
+On (22/01/31 09:12), Aditya Garg wrote:
+> > On 26-Jan-2022, at 4:07 PM, Aditya Garg <gargaditya08@live.com> wrote:
+> > 
+> > From: Paul Pawlowski <paul@mrarm.io>
+> > 
+> > Adds the requisite device id to support detection of the Apple FaceTime
+> > HD webcam exposed over the T2 BCE VHCI interface.
+> > 
+> > Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
+> > Signed-off-by: Paul Pawlowski <paul@mrarm.io>
+> > Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
+> > Signed-off-by: Aditya Garg <gargaditya08@live.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I'm not the maintainer, but the patch looks OK to me
+FWIW
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/iio/frequency/adi,admv4420.yaml:13:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/frequency/adi,admv4420.example.dt.yaml: admv4420@0: adi,lo-freq-hz: 'anyOf' conditional failed, one must be fixed:
-	16743700000 is greater than the maximum of 4294967295
-	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/property-units.yaml
+Laurent, Ricardo, any thoughts?
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1587310
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> > drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
+> > 1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > index 7c007426e..88dc9e7aa 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] = {
+> > 	  .bInterfaceProtocol	= 0,
+> > 	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
+> > 					| UVC_QUIRK_BUILTIN_ISIGHT) },
+> > +	/* Apple FaceTime HD Camera (Built-In) */
+> > +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		= 0x05ac,
+> > +	  .idProduct		= 0x8514,
+> > +	  .bInterfaceClass	= USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	= 1,
+> > +	  .bInterfaceProtocol	= 0,
+> > +	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_def },
+> > 	/* Apple Built-In iSight via iBridge */
+> > 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
+> > 				| USB_DEVICE_ID_MATCH_INT_INFO,

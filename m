@@ -2,134 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8809D4A6FAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4A84A6FB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343786AbiBBLME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiBBLMC (ORCPT
+        id S243971AbiBBLOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:14:24 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54368 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229667AbiBBLOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:12:02 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BDBC06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:12:02 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bu18so39873331lfb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:12:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WowO/tbBN3GmrEExtkfItSPMYGr3cW8sawMMl7HgwRs=;
-        b=Ki7UBLEWceEgRkfHsxjilLw1gR6tQ8CpS1Tg7mAJDBKSXFbfEyA38UjP2Yhlow49IC
-         ty+tq4RdOraeZymEoliHNo1njGTay9iCfW0hrCpNg2Hh/hA/WMfTPILoQvrgJkAbm+wq
-         ImcJHUclBiftxNxSpPPqYmp9W4ceyQrxv114GGa5t2KUjdBDBLMD/zpJzK4NLyUjFZgT
-         D9pJ291zEH4TPHYuDMuYM5qPtgWS07uKbGNRdDRSYbl+lRDBhgOYP7cLo5dKWoL3qThc
-         s9oTLqr+wayFfAmek0bgiw7uzuwUNhy+eqjZVe003WCLmI8b15p7Mu5Sr6UFsnLd37Mx
-         1MRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WowO/tbBN3GmrEExtkfItSPMYGr3cW8sawMMl7HgwRs=;
-        b=nhqqcMaSDIj2980vuxyzUf+Sx6aYc3+RilWmXlLUmMiBIKnonLPzCju9E3SV4QI+Wn
-         mc8RQFGirz4CIG/V4Egu5ZJpcKKEUQ52ia5uvytWmb5ha4kY67E79ahvLlvfc4RV/ovj
-         k3J9qeVzy5BV+DkvrHd1UBRSC1dLMyCDTEM4O7QmNSy5NVv5uYNCAHW8fZo02azPQlXZ
-         /XAK9fVntuNfTBrobjohaHdR1QDqyEPM5hyANVXJnlrRlsxrikdRdlng7dIHNLtgUsJb
-         hBRZxq2ZXEtYz6fA5HR+vMX/LhtsekEKovz8+isrjEJY90hiPN/UyW4WQJw9WfVztlG4
-         lS6w==
-X-Gm-Message-State: AOAM5323ALm8Skksu+tLXgVXRv55UVQDF9P+KHtzfmku34ec1xxWTqoX
-        hfWhRPzkTw+0KWmDl5LjmmZdbA==
-X-Google-Smtp-Source: ABdhPJzoVKGNC+ExaA03bZR1aySv64t3gjKX6TLygqnlu+9A3J0QrBXVTKdXgTFqcG41WMKwf+xPvA==
-X-Received: by 2002:a05:6512:1043:: with SMTP id c3mr22674272lfb.103.1643800320805;
-        Wed, 02 Feb 2022 03:12:00 -0800 (PST)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id u21sm2433153ljo.81.2022.02.02.03.12.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 03:12:00 -0800 (PST)
-Date:   Wed, 2 Feb 2022 12:11:59 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vladimir Barinov <vladimir.barinov@cogentembedded.com>
-Subject: Re: [PATCH] media: rcar-vin: require master VIN only for CSI source
-Message-ID: <Yfpm/7p/O4WPpx3m@oden.dyn.berto.se>
-References: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
+        Wed, 2 Feb 2022 06:14:20 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 212B44ph032379;
+        Wed, 2 Feb 2022 11:13:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=5lQDaG9EdKlRA9jkh47xSZs6ypUAV9t1nCGeUqGMcKw=;
+ b=pYzDZ/fJ2nujrTLp2vUgJuXcP4A7pjFGLffAwsZKLEku/7iLKWuPam7zKzMn9ZLJcctM
+ NlWbQvRhJ2P5KYcL9Y4rRkAV2XSYXcS52pjDKCry/mIlTAffJ1pguIiemVta5kXvCBdx
+ jLWOIAypnzQps5Ho5LlBqiBKc77GLadJQzfDCeRRHq0h03rF/8m1UQ3QtQyDvSVldg4Y
+ /uP1yC4tLJuRvnge5AlmYbbeXE9lxTnQwtydXrWtbUV3DJgYsYdWd0bo7ABsdRVl2JYu
+ 5cJeg8NKH4rpiRaiFm1+TweoR1DswG48cf+WYXjbEJLpwocgmtve6Nio6ocjppTkxsAe AA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dynuakrr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 11:13:58 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2129vNAM014702;
+        Wed, 2 Feb 2022 11:13:57 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dynuakrqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 11:13:57 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 212B8iKO005434;
+        Wed, 2 Feb 2022 11:13:56 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01dal.us.ibm.com with ESMTP id 3dvw7c3rj4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 11:13:56 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 212BDs4B8847910
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Feb 2022 11:13:54 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB4F528058;
+        Wed,  2 Feb 2022 11:13:54 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8776128059;
+        Wed,  2 Feb 2022 11:13:50 +0000 (GMT)
+Received: from [9.65.240.79] (unknown [9.65.240.79])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Feb 2022 11:13:50 +0000 (GMT)
+Message-ID: <7daea93d-4b35-b98c-af11-afc6c74de4c7@linux.ibm.com>
+Date:   Wed, 2 Feb 2022 13:13:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220202104700.3329055-1-nikita.yoush@cogentembedded.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v7 2/5] efi/libstub: Reserve confidential computing secret
+ area
+Content-Language: en-US
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+ <20220201124413.1093099-3-dovmurik@linux.ibm.com>
+ <20220202084104.zkhnclpxigct4tf6@sirius.home.kraxel.org>
+From:   Dov Murik <dovmurik@linux.ibm.com>
+In-Reply-To: <20220202084104.zkhnclpxigct4tf6@sirius.home.kraxel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Q47oDXObYtIOMU7GW9lW5VwVzYwzpoIm
+X-Proofpoint-GUID: zMrqZQQrQJbQYNVlr-c_dAvHVonlrwtM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-02_05,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=999 spamscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020059
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikita,
 
-Thanks for your work.
 
-On 2022-02-02 13:47:00 +0300, Nikita Yushchenko wrote:
-> Hardware limitations on VINs that can be used at the same time cover only
-> CSI data source. For parallel source, any single VIN can work.
+On 02/02/2022 10:41, Gerd Hoffmann wrote:
+> On Tue, Feb 01, 2022 at 12:44:10PM +0000, Dov Murik wrote:
+>> Some older firmware declare the confidential computing secret area as
+>> EFI_BOOT_SERVICES_DATA region.  Fix this up by treating this memory
+>> region as EFI_RESERVED_TYPE, as it should be.
+>>
+>> If that memory region is already EFI_RESERVED_TYPE then this has no
+>> effect on the E820 map.
 > 
-> This patch moves check for master VIN availability in
-> rvin_csi2_link_notify() below processing the parallel case.
-> 
-> This fixes media-ctl usage on KF board when both CSI and parallel cameras
-> are in use on the same system. In such a setup, VINs 0-3 are used for
-> CSI cameras and VIN5 is used for parallel camera.
-
-I agree this issue needs to be addressed and I think the use-case is 
-covered in the patch 1/3 in the VIN routing series [1]. I don't have 
-access to King Fisher hardware so I can't test it, if you do could you 
-test that series and see if it fix the issue?
-
-1. [PATCH v3 0/3] media: rcar-{csi2,vin}: Move to full Virtual Channel routing per CSI-2 IP
-   https://lore.kernel.org/linux-renesas-soc/20220124124858.571363-4-niklas.soderlund+renesas@ragnatech.se/T/
-
-> 
-> Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> ---
->  drivers/media/platform/rcar-vin/rcar-core.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> index 0186ae235113..038ee187f95a 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> @@ -826,11 +826,6 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
->  	vin = container_of(vdev, struct rvin_dev, vdev);
->  	master_id = rvin_group_id_to_master(vin->id);
->  
-> -	if (WARN_ON(!group->vin[master_id])) {
-> -		ret = -ENODEV;
-> -		goto out;
-> -	}
-> -
->  	/* Build a mask for already enabled links. */
->  	for (i = master_id; i < master_id + 4; i++) {
->  		if (!group->vin[i])
-> @@ -878,6 +873,11 @@ static int rvin_csi2_link_notify(struct media_link *link, u32 flags,
->  		goto out;
->  	}
->  
-> +	if (WARN_ON(!group->vin[master_id])) {
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
->  	channel = rvin_group_csi_pad_to_channel(link->source->index);
->  	mask_new = mask & rvin_csi2_get_mask(vin, csi_id, channel);
->  	vin_dbg(vin, "Try link change mask: 0x%x new: 0x%x\n", mask, mask_new);
-> -- 
-> 2.30.2
+> Hmm, sure we actually want merge this?  I suspect by the time this
+> landed in an upstream kernel "older firmware" isn't much of a problem
+> any more.
 > 
 
--- 
-Kind Regards,
-Niklas Söderlund
+When we originally wrote this patch the OVMF fix was not yet upstream
+(and currently it is still not part of an official edk2 stable tag/release).
+
+But I agree that as time goes by, the need for this fix is diminishing.
+
+I'll consider dropping this patch entirely in the next round.
+
+Thanks,
+-Dov

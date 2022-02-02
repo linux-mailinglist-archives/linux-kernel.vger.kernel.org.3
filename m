@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2494F4A6ECA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490BC4A6ECD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245739AbiBBKfA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 05:35:00 -0500
-Received: from aposti.net ([89.234.176.197]:47018 "EHLO aposti.net"
+        id S1343557AbiBBKfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:35:04 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:51348 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbiBBKe7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:34:59 -0500
-Date:   Wed, 02 Feb 2022 10:34:39 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v12 8/9] MIPS: DTS: CI20: fix how ddc power is enabled
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Message-Id: <RPAO6R.YM0J1CDEYDMG@crapouillou.net>
-In-Reply-To: <5a46a4784de0d2ecda16a4923037a3027dc00a45.1643632014.git.hns@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
-        <5a46a4784de0d2ecda16a4923037a3027dc00a45.1643632014.git.hns@goldelico.com>
+        id S245260AbiBBKfD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 05:35:03 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5C3801EC057F;
+        Wed,  2 Feb 2022 11:34:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643798097;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=vkWy2p/ndu/o+uwPBWE2Sx+Zio2CCup5AcxLwBsCKIo=;
+        b=E1DiM/jmMmw1faOLJ+9vk08hJobgmK5QJeCOlv8fr+flGhrwsbAcAscgJzGskCs2KvjGAc
+        U2AY2ZAy16oscISuR2Hisdaix+fzOE/3vUIwykutoG/w3sY+XqGz+3asWHM3HUbZr4xwTd
+        pycMsV51BhescBJgCvgq/nIwy0PSTNw=
+Date:   Wed, 2 Feb 2022 11:34:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 15/43] x86/sev: Register GHCB memory when SEV-SNP is
+ active
+Message-ID: <YfpeSErxB9KHOd7m@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-16-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-16-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 28, 2022 at 11:17:36AM -0600, Brijesh Singh wrote:
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 24df739c9c05..b86b48b66a44 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -41,7 +41,7 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
+>   * Needs to be in the .data section because we need it NULL before bss is
+>   * cleared
+>   */
+> -static struct ghcb __initdata *boot_ghcb;
+> +static struct ghcb *boot_ghcb __section(".data");
+>  
+>  /* Bitmap of SEV features supported by the hypervisor */
+>  static u64 sev_hv_features __ro_after_init;
+> @@ -161,55 +161,6 @@ void noinstr __sev_es_ist_exit(void)
+>  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
+>  }
+>  
+> -/*
+> - * Nothing shall interrupt this code path while holding the per-CPU
+> - * GHCB. The backup GHCB is only for NMIs interrupting this path.
+> - *
+> - * Callers must disable local interrupts around it.
+> - */
+> -static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
 
+That move doesn't look like it's needed anymore, does it?
 
-Le lun., janv. 31 2022 at 13:26:54 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Originally we proposed a new hdmi-5v-supply regulator reference
-> for CI20 device tree but that was superseded by a better idea to use
-> the already defined "ddc-en-gpios" property of the "hdmi-connector".
-> 
-> Since "MIPS: DTS: CI20: Add DT nodes for HDMI setup" has already
-> been applied to v5.17-rc1, we add this on top.
-> 
-> Fixes: ae1b8d2c2de9 ("MIPS: DTS: CI20: Add DT nodes for HDMI setup")
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+I mean, it builds even without it.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+-- 
+Regards/Gruss,
+    Boris.
 
-Cheers,
--Paul
-
-> ---
->  arch/mips/boot/dts/ingenic/ci20.dts | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
-> b/arch/mips/boot/dts/ingenic/ci20.dts
-> index 3e336b3dbb109..ab6e3dc0bc1d0 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -83,6 +83,8 @@ hdmi_out: connector {
->  		label = "HDMI OUT";
->  		type = "a";
-> 
-> +		ddc-en-gpios = <&gpa 25 GPIO_ACTIVE_HIGH>;
-> +
->  		port {
->  			hdmi_con: endpoint {
->  				remote-endpoint = <&dw_hdmi_out>;
-> @@ -114,17 +116,6 @@ otg_power: fixedregulator@2 {
->  		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
->  		enable-active-high;
->  	};
-> -
-> -	hdmi_power: fixedregulator@3 {
-> -		compatible = "regulator-fixed";
-> -
-> -		regulator-name = "hdmi_power";
-> -		regulator-min-microvolt = <5000000>;
-> -		regulator-max-microvolt = <5000000>;
-> -
-> -		gpio = <&gpa 25 0>;
-> -		enable-active-high;
-> -	};
->  };
-> 
->  &ext {
-> @@ -576,8 +567,6 @@ &hdmi {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pins_hdmi_ddc>;
-> 
-> -	hdmi-5v-supply = <&hdmi_power>;
-> -
->  	ports {
->  		#address-cells = <1>;
->  		#size-cells = <0>;
-> --
-> 2.33.0
-> 
-
-
+https://people.kernel.org/tglx/notes-about-netiquette

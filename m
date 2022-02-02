@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1302C4A7375
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F4C4A73AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345115AbiBBOni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:43:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S1345176AbiBBOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345074AbiBBOna (ORCPT
+        with ESMTP id S1345090AbiBBOvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:43:30 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E725C061714;
-        Wed,  2 Feb 2022 06:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xufQ1Q9+1ygsCDJZkQhhHAWRleHJVLLr4QMMU3vcj5Y=; b=oOIEYjuILakE8XqGmGL6SEPV+T
-        k3Z1T7J1Ni4TDwlzj9JH+w9eKYjh7JvxasFf6ZJvIa1yph2ueVL7S4jDGsdYSN9mZ3IcgWkHFaLYg
-        5NgkC7K5e+UqFO0+2x1Gwk8mNXl9ip5gkrlIxJ1PbFckCa8t2JQJE4Hu5IgScl4LFXPizKTY00Fgd
-        K2eEWXOMF6GJyrBZPoZPeNdjl1ITT+Z0Wu8qEw3CwTR0OPepSXztO4T1QFIA/FlvBlj8n6JjwZSic
-        PKN89hiqv0IjCAfwi3Y2kZrGCfE8XR3WGmv/BEIG9EnNWxYkZyB/nqi8XkLqJbnQsJxT8N80DSrny
-        ehaJ2xrQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFGqk-006Dr6-1S; Wed, 02 Feb 2022 14:43:10 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A2626984C61; Wed,  2 Feb 2022 15:43:08 +0100 (CET)
-Date:   Wed, 2 Feb 2022 15:43:08 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-Message-ID: <20220202144308.GB20638@worktop.programming.kicks-ass.net>
-References: <20220117085307.93030-1-likexu@tencent.com>
- <20220117085307.93030-3-likexu@tencent.com>
+        Wed, 2 Feb 2022 09:51:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AA6C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:51:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A438060C72
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:51:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAFDC340ED;
+        Wed,  2 Feb 2022 14:51:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643813495;
+        bh=drlEPGUjV+wPgfhl3A9RyJ1fkmiImQJzXyfMAKyI8dw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KPfsp/oc70GAMbFCN18GnJ5AlJ2si4ALVO0wwc/Hzlx/zrqbKU+uq5gPe9eDEpUQq
+         trckAS1zVW2ZS17l8Z0NPAsuZ+6wokqoVrbf7qXqyqyCFUsRd1qrF7E8sdlq457tfz
+         PzS7kRRhN1GjjkjtsBwplntH3cOR4hTTl7W0icBRH2S4HwF9bhdoL/v8D2VZPkLpzW
+         ttwsyx8Y/L2wTUrS/LGpgFCeA+KJDgzLK6sl7e3suERhmjTzDph6IMPBc4eiFKCBXD
+         UoAeZQsxTe8I9joV6zWG+Oh5AWGM+BNWZch2Uy13C11JWfrGNWUYl56usHug6L8gg1
+         PGVnloVRq+DMA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Subject: [PATCH] mfd: sprd: Add SPI device ID table
+Date:   Wed,  2 Feb 2022 14:43:36 +0000
+Message-Id: <20220202144336.16514-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220117085307.93030-3-likexu@tencent.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1362; h=from:subject; bh=drlEPGUjV+wPgfhl3A9RyJ1fkmiImQJzXyfMAKyI8dw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBh+ph89YzD2kVtiXi3TpVrYLRvh/ceF/6wLXZ5po6y ahB0mnKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYfqYfAAKCRAk1otyXVSH0JamB/ 4sCYFn05WkuStYCsPNLWC7z+b9cQYL9H4ffXLumfYpMcOjhfINAbTzfy7ZLQplk0HCtrBk6PSTlK+5 OgLAktXOAFTy46XuebBnhH3HsDO+wGZ63s3zoJoyxoe29n4cotw8bNS9NVGz5YSoGp6s7YXcZxAwlu 2ybNMnaTgpZL7+9qYRtZbiAasX7HqUft+QrDJHNplCVjpgHnhdGNUG30YJI7/yxw2ln6w5WzQcFD+W c7d39gnn/BOnD7pqgUbeY68TkkLtc6riauu85LYIIESLXd2cyYFfjodfytGY6IYF9Bz7wFaXnF0bxX 4JqTDy5nH7+b24O9s7zt6+93lzYyoE
+X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 04:53:06PM +0800, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Currently, we have [intel|knc|p4|p6]_perfmon_event_map on the Intel
-> platforms and amd_[f17h]_perfmon_event_map on the AMD platforms.
-> 
-> Early clumsy KVM code or other potential perf_event users may have
-> hard-coded these perfmon_maps (e.g., arch/x86/kvm/svm/pmu.c), so
-> it would not make sense to program a common hardware event based
-> on the generic "enum perf_hw_id" once the two tables do not match.
-> 
-> Let's provide an interface for callers outside the perf subsystem to get
-> the counter config based on the perfmon_event_map currently in use,
-> and it also helps to save bytes.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/events/core.c            | 9 +++++++++
->  arch/x86/include/asm/perf_event.h | 2 ++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 38b2c779146f..751048f4cc97 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -693,6 +693,15 @@ void x86_pmu_disable_all(void)
->  	}
->  }
->  
-> +u64 perf_get_hw_event_config(int perf_hw_id)
-> +{
-> +	if (perf_hw_id < x86_pmu.max_events)
-> +		return x86_pmu.event_map(perf_hw_id);
-> +
-> +	return 0;
-> +}
+Currently autoloading for SPI devices does not use the DT ID table, it uses
+SPI modalises. Supporting OF modalises is going to be difficult if not
+impractical, an attempt was made but has been reverted, so ensure that
+module autoloading works for this driver by adding a SPI device ID table.
 
-Where does perf_hw_id come from? Does this need to be
-array_index_nospec() ?
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+---
 
-> +EXPORT_SYMBOL_GPL(perf_get_hw_event_config);
+Rebased onto v5.17-rc1.
 
-Urgh... hate on kvm being a module again. We really need something like
-EXPORT_SYMBOL_KVM() or something.
+ drivers/mfd/sprd-sc27xx-spi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
+diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
+index 55d2c31bdfb2..864031eccd4c 100644
+--- a/drivers/mfd/sprd-sc27xx-spi.c
++++ b/drivers/mfd/sprd-sc27xx-spi.c
+@@ -239,6 +239,12 @@ static int sprd_pmic_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(sprd_pmic_pm_ops, sprd_pmic_suspend, sprd_pmic_resume);
+ 
++static const struct spi_device_id sprd_pmic_spi_ids[] = {
++	{ .name = "sc2731", .driver_data = (unsigned long)&sc2731_data },
++	{},
++};
++MODULE_DEVICE_TABLE(spi, sprd_pmic_spi_ids);
++
+ static const struct of_device_id sprd_pmic_match[] = {
+ 	{ .compatible = "sprd,sc2731", .data = &sc2731_data },
+ 	{ .compatible = "sprd,sc2730", .data = &sc2730_data },
+-- 
+2.30.2
 
->  struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
->  {
->  	return static_call(x86_pmu_guest_get_msrs)(nr);
-> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-> index 8fc1b5003713..d1e325517b74 100644
-> --- a/arch/x86/include/asm/perf_event.h
-> +++ b/arch/x86/include/asm/perf_event.h
-> @@ -492,9 +492,11 @@ static inline void perf_check_microcode(void) { }
->  
->  #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
->  extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
-> +extern u64 perf_get_hw_event_config(int perf_hw_id);
->  extern int x86_perf_get_lbr(struct x86_pmu_lbr *lbr);
->  #else
->  struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
-> +u64 perf_get_hw_event_config(int perf_hw_id);
-
-I think Paolo already spotted this one.
-
->  static inline int x86_perf_get_lbr(struct x86_pmu_lbr *lbr)
->  {
->  	return -1;
-> -- 
-> 2.33.1
-> 

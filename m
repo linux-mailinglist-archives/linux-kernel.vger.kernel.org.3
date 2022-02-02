@@ -2,96 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABCB4A6BE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A86C64A6BF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 07:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiBBGw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 01:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S244881AbiBBGyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 01:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244780AbiBBGwk (ORCPT
+        with ESMTP id S244723AbiBBGwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 01:52:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A047EC061772;
-        Tue,  1 Feb 2022 22:38:02 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 260032F3;
-        Wed,  2 Feb 2022 07:37:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643783879;
-        bh=r7oPY8EgqItgv6YCn6zBalF5PLzzR/lsj6VuIS++Yos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FLOCGme6aMq06je0Lu1485Xqfm7daGDbIMPkjYd6z2/1J38MsLOKvWawioFIFgMhN
-         DxkYmPPDtx8NiDxJRBYB5+7Z6dVAIqn+OwMRmZg/ualZvvPOG4QKZwwU9p6hIMLScy
-         yhqIUNDQ4ewYg1lhLkXzT4ypXKUrMotK3DV1XZJc=
-Date:   Wed, 2 Feb 2022 08:37:35 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "sergey.senozhatsky@gmail.com" <sergey.senozhatsky@gmail.com>,
-        "ribalda@chromium.org" <ribalda@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "paul@mrarm.io" <paul@mrarm.io>, Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH RESEND] media: uvcvideo: Add support for Apple
- T2-attached FaceTime HD Camera
-Message-ID: <Yfomr83ol/1iGRSv@pendragon.ideasonboard.com>
-References: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
+        Wed, 2 Feb 2022 01:52:37 -0500
+Received: from mail-io1-xd46.google.com (mail-io1-xd46.google.com [IPv6:2607:f8b0:4864:20::d46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28152C061776
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 22:43:19 -0800 (PST)
+Received: by mail-io1-xd46.google.com with SMTP id z28-20020a056602081c00b00611596ef96fso14555007iow.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 22:43:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=TNl+o4xe1hTSGSvtmbeiUvDNfb+TUX8jFchFwMWN6ps=;
+        b=suMtiqVhrerIGYGXjgBinxZtAmROooSxmJTNgp8vUgPk/iyhAq3lWOrr/rAhiWUnSe
+         6QKh4PmIaa0NWETfFAUE0H/Ktv7dOqPGKh44JrlDmxwWdbgryNfoZjVi846r1lBuyqDC
+         8pdnfbvreJBs2PnV1/JZd1Z7KxtSqz137xuDGwnBLe7O2Us4w16SnDnaFFFrf2rXSEeO
+         ulpssxz6RUK4sVX5DPdMrXMP0wJt3jshbSYgzElHfma4sev4HNlcV9LIlOL1/3xg/OO2
+         LWUtVDFabwaPyVjsrUFTowcDTEp3aBaBdLRFfXPogyAlEUm5ff6XSewgAm26cxHVGCr4
+         rjRw==
+X-Gm-Message-State: AOAM530V7ZaSCBMupoUdnnolS/r3ZB1iic2FZAwcm5We8wMOfC3Z8awU
+        CI3wNCEbVLun47GjVMC0V08sjraOnUssRAECA7SZ4Jvb0dEN
+X-Google-Smtp-Source: ABdhPJxLyTp4zvyNH5kn1riAtyec1TsAvt6pgM0F8yYgyD4oCSh8hCZcROoVSXz/WFzKpwy0lvOD4IdQFRrXqAyp9PtOMIKcD68b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <527C2E71-12E2-45D1-9B50-5A413B6920A1@live.com>
+X-Received: by 2002:a92:cbcf:: with SMTP id s15mr16752186ilq.161.1643784197922;
+ Tue, 01 Feb 2022 22:43:17 -0800 (PST)
+Date:   Tue, 01 Feb 2022 22:43:17 -0800
+In-Reply-To: <00000000000027db6705d6e6e88a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034665005d7035599@google.com>
+Subject: Re: [syzbot] possible deadlock in ___neigh_create
+From:   syzbot <syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com>
+To:     daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        roopa@nvidia.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aditya,
+syzbot has found a reproducer for the following issue on:
 
-Thank you for the patch, and sorry for the late reply.
+HEAD commit:    e4d2763f9aaf Merge branch 'lan966x-ptp'
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b941f0700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e029d3b2ccd4c91a
+dashboard link: https://syzkaller.appspot.com/bug?extid=5239d0e1778a500d477a
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16f9a76c700000
 
-On Wed, Jan 26, 2022 at 10:37:13AM +0000, Aditya Garg wrote:
-> From: Paul Pawlowski <paul@mrarm.io>
-> 
-> Adds the requisite device id to support detection of the Apple FaceTime
-> HD webcam exposed over the T2 BCE VHCI interface.
-> 
-> Tested-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Signed-off-by: Paul Pawlowski <paul@mrarm.io>
-> Signed-off-by: Aun-Ali Zaidi <admin@kodeit.net>
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> ---
->  drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index 7c007426e..88dc9e7aa 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2848,6 +2848,15 @@ static const struct usb_device_id uvc_ids[] = {
->  	  .bInterfaceProtocol	= 0,
->  	  .driver_info		= UVC_INFO_QUIRK(UVC_QUIRK_PROBE_MINMAX
->  					| UVC_QUIRK_BUILTIN_ISIGHT) },
-> +	/* Apple FaceTime HD Camera (Built-In) */
-> +	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-> +				| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor		= 0x05ac,
-> +	  .idProduct		= 0x8514,
-> +	  .bInterfaceClass	= USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass	= 1,
-> +	  .bInterfaceProtocol	= 0,
-> +	  .driver_info		= (kernel_ulong_t)&uvc_quirk_probe_def },
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5239d0e1778a500d477a@syzkaller.appspotmail.com
 
-Have you tested that the device doesn't work without this quirk ?
+============================================
+WARNING: possible recursive locking detected
+5.17.0-rc1-syzkaller-00547-ge4d2763f9aaf #0 Not tainted
+--------------------------------------------
+kworker/1:5/3747 is trying to acquire lock:
+ffffffff8d4ddef0 (&tbl->lock){+.-.}-{2:2}, at: ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
 
->  	/* Apple Built-In iSight via iBridge */
->  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
->  				| USB_DEVICE_ID_MATCH_INT_INFO,
+but task is already holding lock:
+ffffffff8d4ddef0 (&tbl->lock){+.-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
 
--- 
-Regards,
+other info that might help us debug this:
+ Possible unsafe locking scenario:
 
-Laurent Pinchart
+       CPU0
+       ----
+  lock(&tbl->lock);
+  lock(&tbl->lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+5 locks held by kworker/1:5/3747:
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:631 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:658 [inline]
+ #0: ffff888010c65d38 ((wq_completion)events_power_efficient){+.+.}-{0:0}, at: process_one_work+0x890/0x1650 kernel/workqueue.c:2278
+ #1: ffffc90002d1fdb8 ((work_completion)(&(&tbl->managed_work)->work)){+.+.}-{0:0}, at: process_one_work+0x8c4/0x1650 kernel/workqueue.c:2282
+ #2: ffffffff8d4ddef0 (&tbl->lock){+.-.}-{2:2}, at: neigh_managed_work+0x35/0x250 net/core/neighbour.c:1572
+ #3: ffffffff8bb83ae0 (rcu_read_lock){....}-{1:2}, at: ip6_nd_hdr net/ipv6/ndisc.c:466 [inline]
+ #3: ffffffff8bb83ae0 (rcu_read_lock){....}-{1:2}, at: ndisc_send_skb+0x84b/0x17f0 net/ipv6/ndisc.c:502
+ #4: ffffffff8bb83a80 (rcu_read_lock_bh){....}-{1:2}, at: lwtunnel_xmit_redirect include/net/lwtunnel.h:95 [inline]
+ #4: ffffffff8bb83a80 (rcu_read_lock_bh){....}-{1:2}, at: ip6_finish_output2+0x2ad/0x14f0 net/ipv6/ip6_output.c:112
+
+stack backtrace:
+CPU: 1 PID: 3747 Comm: kworker/1:5 Not tainted 5.17.0-rc1-syzkaller-00547-ge4d2763f9aaf #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events_power_efficient neigh_managed_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2956 [inline]
+ check_deadlock kernel/locking/lockdep.c:2999 [inline]
+ validate_chain kernel/locking/lockdep.c:3788 [inline]
+ __lock_acquire.cold+0x149/0x3ab kernel/locking/lockdep.c:5027
+ lock_acquire kernel/locking/lockdep.c:5639 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+ __raw_write_lock_bh include/linux/rwlock_api_smp.h:202 [inline]
+ _raw_write_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:334
+ ___neigh_create+0x9e1/0x2990 net/core/neighbour.c:652
+ ip6_finish_output2+0x1070/0x14f0 net/ipv6/ip6_output.c:123
+ __ip6_finish_output net/ipv6/ip6_output.c:191 [inline]
+ __ip6_finish_output+0x61e/0xe90 net/ipv6/ip6_output.c:170
+ ip6_finish_output+0x32/0x200 net/ipv6/ip6_output.c:201
+ NF_HOOK_COND include/linux/netfilter.h:296 [inline]
+ ip6_output+0x1e4/0x530 net/ipv6/ip6_output.c:224
+ dst_output include/net/dst.h:451 [inline]
+ NF_HOOK include/linux/netfilter.h:307 [inline]
+ ndisc_send_skb+0xa99/0x17f0 net/ipv6/ndisc.c:508
+ ndisc_send_ns+0x3a9/0x840 net/ipv6/ndisc.c:650
+ ndisc_solicit+0x2cd/0x4f0 net/ipv6/ndisc.c:742
+ neigh_probe+0xc2/0x110 net/core/neighbour.c:1040
+ __neigh_event_send+0x37d/0x1570 net/core/neighbour.c:1201
+ neigh_event_send include/net/neighbour.h:470 [inline]
+ neigh_managed_work+0x162/0x250 net/core/neighbour.c:1574
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+

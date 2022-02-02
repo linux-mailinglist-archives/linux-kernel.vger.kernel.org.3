@@ -2,72 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FCA4A799E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037824A799B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347155AbiBBUjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:39:10 -0500
-Received: from mga17.intel.com ([192.55.52.151]:52961 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229750AbiBBUjJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:39:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643834349; x=1675370349;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZRAsFGkDwvuNHIE8mt8h9GrgNbl6DLRauQUTsEbmS54=;
-  b=Em2KZKVam0FZuF93rPw4bF+UiaGBiwakhhQaaSt1wr8mv4NzMDHDmJt+
-   o8jUOEsr4a47Y5zvbpkkDA9791sO/ciI8ZVr7PPW7GLPryXcKipULv5+9
-   9ZCCgQUh9Mo6p/istyctJhJQOsw0j6oS1rYuu4ctieZ1/b+3Yzr8UaC8v
-   XRSDDffaItJLStLqUzKKMcshPW4zWVTLopj9VYNg+htSyGk7Z8sYY7OHU
-   LfdS1+36MqtJMPlyhpuP+O1i6M7Ag1RTcLfvdky1DaOq2mlg92ftjAHkb
-   DvvLSrJvI92vt9zjd2WTPp0gDVhQQn21bzvL2RP8ohlWmLsAKukBE+F2+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228670792"
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="228670792"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:39:08 -0800
-X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="480243563"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 12:39:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFMOC-000Cmw-6N;
-        Wed, 02 Feb 2022 22:38:04 +0200
-Date:   Wed, 2 Feb 2022 22:38:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Subject: Re: [PATCH v1 1/1] iio: trigger: stm32-timer: Make use of device
- properties
-Message-ID: <Yfrrq83cVOt8bC9i@smile.fi.intel.com>
-References: <20220202175815.54100-1-andriy.shevchenko@linux.intel.com>
+        id S1347150AbiBBUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:39:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28897 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229750AbiBBUjA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 15:39:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643834339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S9TZGGpkY8ClrJIAqOZuOM+ORZH1aSNITt2XNgVBP98=;
+        b=VXgoRQihhlYCQL59KD9VLYLj9AcKn0LIEmqlpYcMJCOGo0qAs/kfCYlUw+evOUvh/OSVqe
+        sc1wahaqIutotE9/GMPPtJ1/WtKqyivPx9b6ekVuZLYENsJc7hffLYVRegVfPvMfYJtukP
+        Dhbh9/44ly79Mw08aHmL08cB2/im9AU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-RBE7rWeDNaKCSpXrFXqccQ-1; Wed, 02 Feb 2022 15:38:56 -0500
+X-MC-Unique: RBE7rWeDNaKCSpXrFXqccQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C9733835B66;
+        Wed,  2 Feb 2022 20:38:54 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.19.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C693D56F66;
+        Wed,  2 Feb 2022 20:38:53 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     intel-wired-lan@lists.osuosl.org, lihong.yang@intel.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] ice: change "can't set link" message to dbg level
+Date:   Wed,  2 Feb 2022 15:38:49 -0500
+Message-Id: <b25f9e524c404820b310c73012507c8e65a2ef97.1643834329.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202175815.54100-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 07:58:15PM +0200, Andy Shevchenko wrote:
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
+In the case where the link is owned by manageability, the firmware is
+not allowed to set the link state, so an error code is returned.
+This however is non-fatal and there is nothing the operator can do,
+so instead of confusing the operator with messages they can do nothing
+about hide this message behind the debug log level.
 
-Missed OF drop,
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 0c187cf04fcf..2c6dad56a48d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -4117,7 +4117,7 @@ int ice_set_link(struct ice_vsi *vsi, bool ena)
+ 	 */
+ 	if (status == -EIO) {
+ 		if (hw->adminq.sq_last_status == ICE_AQ_RC_EMODE)
+-			dev_warn(dev, "can't set link to %s, err %d aq_err %s. not fatal, continuing\n",
++			dev_dbg(dev, "can't set link to %s, err %d aq_err %s. not fatal, continuing\n",
+ 				 (ena ? "ON" : "OFF"), status,
+ 				 ice_aq_str(hw->adminq.sq_last_status));
+ 	} else if (status) {
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.27.0
 

@@ -2,179 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134644A6E4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34594A6E4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245698AbiBBJ7R convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Feb 2022 04:59:17 -0500
-Received: from aposti.net ([89.234.176.197]:39124 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229741AbiBBJ7Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:59:16 -0500
-Date:   Wed, 02 Feb 2022 09:59:01 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v12 3/9] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh@kernel.org>
-Message-Id: <D29O6R.3788L9G5J66L@crapouillou.net>
-In-Reply-To: <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
-        <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
+        id S245702AbiBBJ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:59:27 -0500
+Received: from relay039.a.hostedemail.com ([64.99.140.39]:33832 "EHLO
+        relay5.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229741AbiBBJ7Y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:59:24 -0500
+Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay12.hostedemail.com (Postfix) with ESMTP id 41606120372;
+        Wed,  2 Feb 2022 09:59:23 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id 80BC22B;
+        Wed,  2 Feb 2022 09:59:07 +0000 (UTC)
+Message-ID: <b7f445008e9921f41df36077a7e28562675e8417.camel@perches.com>
+Subject: Re: [PATCH RESEND v2] scripts/checkpatch.pl: remove _deferred and
+ _deferred_once false warning
+From:   Joe Perches <joe@perches.com>
+To:     maninder1.s@samsung.com, "apw@canonical.com" <apw@canonical.com>,
+        "dwaipayanray1@gmail.com" <dwaipayanray1@gmail.com>,
+        "lukas.bulwahn@gmail.com" <lukas.bulwahn@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vaneet Narang <v.narang@samsung.com>
+Date:   Wed, 02 Feb 2022 01:59:21 -0800
+In-Reply-To: <20220202095225epcms5p271da4783d86cb7c51d12d80f097aea44@epcms5p2>
+References: <4ee87d70d5348949787b2d747f90ecffa3119d0b.camel@perches.com>
+         <20220202071405.1872044-1-maninder1.s@samsung.com>
+         <CGME20220202071414epcas5p1d329ae4f76c281c1f8f7f07bfb36a919@epcms5p2>
+         <20220202095225epcms5p271da4783d86cb7c51d12d80f097aea44@epcms5p2>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 80BC22B
+X-Spam-Status: No, score=0.32
+X-Stat-Signature: 83dafdtptao487u8pnz4gt1xg3nxk94h
+X-Rspamd-Server: rspamout06
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+lUGzFSr7Pg8vY7XOFeKjB1HBlTbeI2XE=
+X-HE-Tag: 1643795947-725066
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
-
-Le lun., janv. 31 2022 at 13:26:49 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Sam Ravnborg <sam@ravnborg.org>
+On Wed, 2022-02-02 at 15:22 +0530, Maninder Singh wrote:
+> Hi,
 > 
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> Based on .txt binding from Zubair Lutfullah Kakakhel
 > 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
->  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 83 
-> +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 
-> Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> > >  printk_deferred and printk_deferred_once requires LOGLEVEL in argument,
+> > >  but checkpatch.pl reports it as warning:
+>  
+> > When did that occur?  Please reference the specific commit.
+> > When printk_sched (now printk_deferred) was created it did not
+> > allow KERN_<LEVEL>.
+>  
+> > see commit 3ccf3e830615 ("printk/sched: Introduce special printk_sched() for those awkward moments")
+>  
+> I think with below commit:
 > 
-> diff --git 
-> a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml 
-> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> new file mode 100644
-> index 0000000000000..5a2767308c0ab
-> --- /dev/null
-> +++ 
-> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: 
-> http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
-> +
-> +maintainers:
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys 
-> DesignWare HDMI 1.4
-> +  TX controller IP with accompanying PHY IP.
-> +
-> +allOf:
-> +  - $ref: synopsys,dw-hdmi.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ingenic,jz4780-dw-hdmi
-> +
-> +  reg-io-width:
-> +    const: 4
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Input from LCD controller output.
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Link to the HDMI connector.
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - ports
-> +  - reg-io-width
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
-> +
-> +    hdmi: hdmi@10180000 {
-> +        compatible = "ingenic,jz4780-dw-hdmi";
-> +        reg = <0x10180000 0x8000>;
-> +        reg-io-width = <4>;
-> +        ddc-i2c-bus = <&i2c4>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <3>;
-> +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
-> +        clock-names = "iahb", "isfr";
-> +        hdmi-5v-supply = <&hdmi_power>;
-
-Where is this property defined?
-
-Cheers,
--Paul
-
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            hdmi_in: port@0 {
-> +                reg = <0>;
-> +                dw_hdmi_in: endpoint {
-> +                    remote-endpoint = <&jz4780_lcd_out>;
-> +                };
-> +            };
-> +            hdmi_out: port@1 {
-> +                reg = <1>;
-> +                dw_hdmi_out: endpoint {
-> +                    remote-endpoint = <&hdmi_con>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --
-> 2.33.0
+> 98e35f5894cf208084688ec0c7bb7b713efc997f (printk: git rid of [sched_delayed] message for printk_deferred)
 > 
+> earlier it was passing hardcoded KERN_WARNING to all printk_deferred messages, but now it switched
+> to normal printk behavior.
+> 
+> -       if (in_sched)
+> -               text_len = scnprintf(text, sizeof(textbuf),
+> -                                    KERN_WARNING "[sched_delayed] ");
+> -
+> -       text_len += vscnprintf(text + text_len,
+> -                              sizeof(textbuf) - text_len, fmt, args);
+> +       text_len = vscnprintf(text, sizeof(textbuf), fmt, args);
+> 
+> 
+> I did not search that earlier, because we were fixing some issue in our local module code with printk_deferred
+> and then checkatch reported the issues, so thought of fixing it, becaue without level
+> pritk_deferred messages was shifted to default loglevel as done by normal printk.
+> 
+> So I thought it was designed to pass loglevel from starting stage and checjpatch reports falsely.
+> but seems checkpatch needs to fixed with that commit itself, because earlier it was not required to pass loglevel.
+
+Most of that should be in the commit message.
 
 

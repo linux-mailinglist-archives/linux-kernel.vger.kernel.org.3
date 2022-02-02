@@ -2,127 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998884A7AC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D4B4A7ACB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbiBBWIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbiBBWIn (ORCPT
+        id S1347792AbiBBWJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:09:26 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:35260 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347783AbiBBWJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:08:43 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF99C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:08:43 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id n10so1443800edv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:08:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HlraHmNgdumj40y+Vxj8nJOCtHX98SAfTtbNfZ64dtc=;
-        b=yWO2Xpa2CCWLLJb5WHskpjn5ZNPJ/SJ+AOhMyUg5xDbi75ZZhWweuQFle7wYLU4M8D
-         fvyHZSTOE+nAgE9ATzz7pArYZV4gxHZhHzKlHiDXUgXFcOlYCojCjCGlpirLz4MGUhDQ
-         MURclDksMefKRG8nXCl9XVfWTzeD20uzS6M/EzsF1ljdSgzEkmr5DpjVVq8Ca+rTUe9q
-         WhXFwcSNP/efg0S9o+bEOQmnIFtWelEWRhlr7iJYNcAodLqZS+583KP/lhXLlKnZRQE9
-         TWPsmQyj4c+34zeOudEqMi4j9H0RPJn03T1e7v2bD0xzjLD6PGOE6adR1FZsuuyFnYBM
-         zfXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HlraHmNgdumj40y+Vxj8nJOCtHX98SAfTtbNfZ64dtc=;
-        b=du2PvfTxU2CSL0CMvguQut7U45RtIi1il9YUyCEZnAFHzz8p/IfQ+96hcMMUIdm2nE
-         k9+FpogRtvRZKb0evs2tmm/qCoWkSDWw1VecIR5/3tV4t19xoks3IIENb5NFXHO2GS2d
-         jwkejbzUZoaSEuKnwx17HbqwAPhjdmYMBGOQEZ6I/CwxMQqwwUqxwSET2836Wd+IPaaa
-         3RDh3SvT9Wmhobyi4giskzuC0BPqHlgQjah0W5i/Ntlik2jXSzN7WugqQ8rOsI3jsHIY
-         ZZuSKru/w7sd7Ex5b48g3PZwP7RL1iVMwujn+LUX/QK9h08PpP/AlS15US0tHGtMpWYu
-         iNDg==
-X-Gm-Message-State: AOAM533u1FQ5oLL3ee1pzOn4j8l5WaNNpkZIdfngnJTc7jlaSxFNF8sU
-        Uy1+N7yu4f3XiUu1Vds+dvHpLB9VGRYfuU6OB3QcjOj+BiI=
-X-Google-Smtp-Source: ABdhPJxU13IvMNJB9CLX9RID5RdpALDQmWnXhxjxw3ECF0QxhrvMFXS5K8yqGKyoBUl9QipAitnbbCsrxrqrphUFvGs=
-X-Received: by 2002:a05:6402:50cf:: with SMTP id h15mr25388003edb.102.1643839721825;
- Wed, 02 Feb 2022 14:08:41 -0800 (PST)
+        Wed, 2 Feb 2022 17:09:24 -0500
+Received: from [IPV6:2a01:e0a:169:7140:7139:eada:2ff6:73dd] (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4BFED88;
+        Wed,  2 Feb 2022 23:09:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643839763;
+        bh=B9oDbt2z9C14wXkGktdRk4p2miimMmr23DAbnrJ2nt4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jJTmO88YWWWJMAZ8EtAEFvgXAV3V4f8GBWUP/CKVBBBVDT0rVGDPErUjYMuMMIjtp
+         14ApsJGlYe2gKX043bMq0yBIX5TGZ5jtKWhcYK1vvcPjlfolvFjEX5Nmlyv47gpw/b
+         YwgvZsOkaziwXYqeiOc/RycINa/QgXUAqUJ/Lhd4=
+Message-ID: <9bce4322-881e-06a7-d6a4-431b1417ced5@ideasonboard.com>
+Date:   Wed, 2 Feb 2022 23:09:20 +0100
 MIME-Version: 1.0
-References: <20220129005429.754727-1-bjorn.andersson@linaro.org>
- <20220129005429.754727-2-bjorn.andersson@linaro.org> <20220202111833.ibeq3udj37dkfv6l@SoMainline.org>
- <Yfrj7DnXET6fT3BX@ripper>
-In-Reply-To: <Yfrj7DnXET6fT3BX@ripper>
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-Date:   Wed, 2 Feb 2022 16:08:29 -0600
-Message-ID: <CAOCOHw7LS=NALXzHMN6LauEqrjDk2y27VoQtaT4tkHJiYxM7MQ@mail.gmail.com>
-Subject: Re: [PATCH v11 2/2] leds: Add driver for Qualcomm LPG
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Uwe Kleine-K?nig" <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Satya Priya Kakitapalli <c_skakit@qti.qualcomm.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH v3 03/11] media: dt-bindings: media: Add bindings for
+ bcm2835-unicam
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com
+References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220202175639.149681-4-jeanmichel.hautbois@ideasonboard.com>
+ <cfa2f751-2988-c372-4bcb-30080efed587@i2se.com>
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+In-Reply-To: <cfa2f751-2988-c372-4bcb-30080efed587@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 2:04 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Wed 02 Feb 03:18 PST 2022, Marijn Suijten wrote:
->
-> > On 2022-01-28 16:54:29, Bjorn Andersson wrote:
-> > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > > with their output being routed to various other components, such as
-> > > current sinks or GPIOs.
-> > >
-> > > Each LPG instance can operate on fixed parameters or based on a shared
-> > > lookup-table, altering the duty cycle over time. This provides the means
-> > > for hardware assisted transitions of LED brightness.
-> > >
-> > > A typical use case for the fixed parameter mode is to drive a PWM
-> > > backlight control signal, the driver therefor allows each LPG instance
-> > > to be exposed to the kernel either through the LED framework or the PWM
-> > > framework.
-> > >
-> > > A typical use case for the LED configuration is to drive RGB LEDs in
-> > > smartphones etc, for which the driver support multiple channels to be
-> > > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > > generators will be synchronized, to allow for multi-color patterns.
-> > >
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >
-> > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >
-> > There may still be some things to improve based on whether lo_pause
-> > works in non-ping-pong mode - to alleviate the requirement for the first
-> > delta_t to be at most 512ms - but this patch should not be delayed much
-> > longer and that's perhaps for a followup patch.  Same for my request for
-> > documentation and examples which at the same time serve as some form of
-> > tests to see if everything works as desired.
-> >
->
-> I've been considering lopause to be the value before we start the
-> pattern, but I think you're right in that it denotes how long we should
-> hold the first value.
->
-> So I think it might make sense in the predefined "<value> <delay> <value>
-> <delay>" scheme to use first <delay> as to calculate lo-pause. I think
-> it has to be calculated, because the first value will iiuc be held
-> for (lopause + 1) * delay ms.
->
-> > I also vaguely remember other (downstream) drivers to support more than
-> > 512ms per step by (drastically?) changing PWM period, but not sure how
-> > that worked again nor if it was reliable.
-> >
->
-> Thinking about it again, while 512 is the 9th bit, we should be able to
-> represent [0..1023] with 9 bits...
->
+Hi Stefan,
 
-Sorry, my mind was elsewhere as I wrote that. [0..511] is what we got.
+On 02/02/2022 19:33, Stefan Wahren wrote:
+> Hi Jean-Michel,
+> 
+> please drop the first "media:" before dt-bindings.
+> 
+> Am 02.02.22 um 18:56 schrieb Jean-Michel Hautbois:
+>> Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+>> camera interface. Also add a MAINTAINERS entry for it.
+>>
+>> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+>> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+>> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+>> ---
+>> Dave: I assumed you were the maintainer for this file, as I based it on the
+>> bcm2835-unicam.txt file. Are  you happy to be added directly as the
+>> maintainer, or should this be specified as "Raspberry Pi Kernel
+>> Maintenance <kernel-list@raspberrypi.com>"
+>> ---
+>>   .../bindings/media/brcm,bcm2835-unicam.yaml   | 107 ++++++++++++++++++
+>>   MAINTAINERS                                   |   7 ++
+>>   2 files changed, 114 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+>> new file mode 100644
+>> index 000000000000..5bf41a8834fa
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+>> @@ -0,0 +1,107 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom BCM283x Camera Interface (Unicam)
+>> +
+>> +maintainers:
+>> +  - Dave Stevenson <dave.stevenson@raspberrypi.com>
+>> +
+>> +description: |-
+>> +  The Unicam block on BCM283x SoCs is the receiver for either
+>> +  CSI-2 or CCP2 data from image sensors or similar devices.
+>> +
+>> +  The main platform using this SoC is the Raspberry Pi family of boards.
+>> +  On the Pi the VideoCore firmware can also control this hardware block,
+>> +  and driving it from two different processors will cause issues.
+>> +  To avoid this, the firmware checks the device tree configuration
+>> +  during boot. If it finds device tree nodes starting by csi then
+>> +  it will stop the firmware accessing the block, and it can then
+>> +  safely be used via the device tree binding.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: brcm,bcm2835-unicam
+>> +
+>> +  reg:
+>> +    maxItems: 2
+> I would be nice to have reg-names here similar to the clocks.
 
-Regards,
-Bjorn
+Sure, I just don't know what the names are ;-).
+
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Clock for the camera.
+>> +      - description: Clock for the vpu.
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: lp
+>> +      - const: vpu
+>> +
+>> +  power-domains:
+>> +    items:
+>> +      - description: Unicam power domain
+>> +
+>> +  num-data-lanes:
+>> +    items:
+>> +      - enum: [ 2, 4 ]
+>> +
+>> +  port:
+>> +    additionalProperties: false
+>> +    $ref: /schemas/graph.yaml#/$defs/port-base
+>> +
+>> +    properties:
+>> +      endpoint:
+>> +        $ref: /schemas/media/video-interfaces.yaml#
+>> +        unevaluatedProperties: false
+>> +
+>> +        properties:
+>> +          data-lanes: true
+>> +          link-frequencies: true
+>> +
+>> +        required:
+>> +          - data-lanes
+>> +          - link-frequencies
+>> +
+>> +    required:
+>> +      - endpoint
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - clocks
+>> +  - clock-names
+>> +  - power-domains
+>> +  - num-data-lanes
+>> +  - port
+>> +
+>> +additionalProperties: False
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/bcm2835.h>
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/power/raspberrypi-power.h>
+>> +    csi1: csi@7e801000 {
+>> +        compatible = "brcm,bcm2835-unicam";
+>> +        reg = <0x7e801000 0x800>,
+>> +              <0x7e802004 0x4>;
+>> +        interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+>> +        clocks = <&clocks BCM2835_CLOCK_CAM1>,
+>> +                 <&firmware_clocks 4>;
+>> +        clock-names = "lp", "vpu";
+>> +        power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
+>> +        num-data-lanes = <2>;
+>> +        port {
+>> +                csi1_ep: endpoint {
+>> +                        remote-endpoint = <&imx219_0>;
+>> +                        data-lanes = <1 2>;
+>> +                        link-frequencies = /bits/ 64 <456000000>;
+>> +                };
+>> +        };
+>> +    };
+>> +...
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index a0770a861ca4..29344ea86847 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -3670,6 +3670,13 @@ N:	bcm113*
+>>   N:	bcm216*
+>>   N:	kona
+>>   
+>> +BROADCOM BCM2835 CAMERA DRIVER
+>> +M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+>> +L:	linux-media@vger.kernel.org
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+>> +F:	arch/arm/boot/dts/bcm283x*
+>> +
+> 
+> I suggest to make the MAINTAINERS changes a single separate patch
+> instead of small incremental changes.
+
+I can make it a separate patch, indeed.
+
+> 
+> Best regards
+> 
+>>   BROADCOM BCM47XX MIPS ARCHITECTURE
+>>   M:	Hauke Mehrtens <hauke@hauke-m.de>
+>>   M:	Rafał Miłecki <zajec5@gmail.com>
+> 

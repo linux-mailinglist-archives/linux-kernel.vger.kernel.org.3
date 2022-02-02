@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8CC4A7394
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AD14A739C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345104AbiBBOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S1345132AbiBBOuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242306AbiBBOtv (ORCPT
+        with ESMTP id S1345125AbiBBOuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:49:51 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470AEC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 06:49:51 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id q8so25613126oiw.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 06:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RqpgNSQqEtvHDhtnLQpmx4vhCkM9OOPAYGCYwN/UpUA=;
-        b=ABpJD8ClxeKSd60j9HNanNhLdkhkcGR6JgMCxv9C9NF9SyXyOofNQr1kSDq2TBfkDz
-         9BzwLvHlk0StPgaF7r5NYoVEg0/vgjoQZIA+zkhvgAcv4gxqER9nDaYjx37jFV8/dFBf
-         zLC880EnBvtuSeH7MuN4QD8Bi5xHD7c3UKO0pNYoycyTJBRNU3NLxzPmk2zexOizaWus
-         XP42NQJzMffcO62LtfYx017tx+hN31+VDJkdYDz9b85+iqTcsc2XXNBcwHrDx+OweCdW
-         lGKajBieBwDhgx5WYARzW0WogpCcFSx+HByAUq5idX+pl3r+5aUTijvEdkk1h1WWYoPR
-         xKSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RqpgNSQqEtvHDhtnLQpmx4vhCkM9OOPAYGCYwN/UpUA=;
-        b=bvI5d0HPImmXtAmS9pY9HxagWwk3MxxkOfkCitkbIpQantVoiAjUCQLserGLI2hWSp
-         mi++GVbPCgFZY2eUVZ4VKkMauI9f0R8ObOlJnOo4YjlJn5w35zwLprdv8BhsXk95T4/1
-         BogT1slvygW50lug5JyL1HLqibnttpy7Rsf+5LUebfLMq31FuTQbitdwsalrwtYlh/Fn
-         tHfTCOaSb4i9ZI8dVCJOwgMyb4/4fSiJS245s+sprfYCLr1jQYqL86qzwkT3byq2H1wN
-         ZfyYoO3ypHwuIph+OrIoIGw0ZooLx52MJxU2UPCN9zdNhvJHqeqsi1Xlc9S5xBGM1W+h
-         g52g==
-X-Gm-Message-State: AOAM5327v1Rqw8UedbVb7gyH8xSFrhAhaw/EkuGNeqT5m1miojYoDcR8
-        FuIOT9fLUG0Wjl/XjqWr2bxjy6hO/tkP71/+gzzEuQ==
-X-Google-Smtp-Source: ABdhPJxfI3zeLQ82ebGntwsMBQogioG4IwPuBvXRXbKc9toTzCugtUBpEDYfxQYd62QKGYxc6fRtiLhzvugCS3v4GvY=
-X-Received: by 2002:a05:6808:1901:: with SMTP id bf1mr4642177oib.197.1643813390322;
- Wed, 02 Feb 2022 06:49:50 -0800 (PST)
+        Wed, 2 Feb 2022 09:50:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DF9C061714;
+        Wed,  2 Feb 2022 06:50:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FF1760B8A;
+        Wed,  2 Feb 2022 14:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6D90C340EB;
+        Wed,  2 Feb 2022 14:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643813414;
+        bh=0Lyfnvij/5gGncnyr/u8/K/FKzma9y5FVY7+KvpdqYU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kSgA/pLlVzBlhNR3sJHpGtbGlC0b906kH97WxYgg5pg0O+8TBAvJ2BU1YE3Wf19kw
+         UbUOMVeDScgQ87NKGiGTOtUYI6Uqdim/J5l1u/xttfKPcr45gIgBnnXVGJz8pllP7V
+         1bX9HAn7IRjgi6wBxDCb574xguSqrNOHk8Zvf3axoLn5VxmDwA447XYf+HTmt6+hU2
+         Cnle9lrkzTmmpvrhZL4dsfPZId7gI360rN0fdRALGjh3LmFy5oXM6ygck/F0Wdi0pt
+         dHroxvmZZWY5xZStfQjanqDEr7jb9ILOfJ0eHGrmGO0kyE6tXmNASmpY8zTKzYbMLy
+         6OcJS5oCi286A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7BFFE5D07E;
+        Wed,  2 Feb 2022 14:50:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <0000000000000a9b7d05d6ee565f@google.com> <0000000000004cc7f905d709f0f6@google.com>
-In-Reply-To: <0000000000004cc7f905d709f0f6@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 2 Feb 2022 15:49:38 +0100
-Message-ID: <CANpmjNPL-12uWHk+EDPdz=6rs2+n2zJWX1zMAbsfUm=dbZJ4qQ@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Write in ringbuf_map_alloc
-To:     syzbot <syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, andreyknvl@google.com,
-        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, glider@google.com,
-        hotforest@gmail.com, houtao1@huawei.com, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        sfr@canb.auug.org.au, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next PATCH v8 00/16] Add support for qca8k mdio rw in Ethernet
+ packet
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164381341380.24396.15212921424557438012.git-patchwork-notify@kernel.org>
+Date:   Wed, 02 Feb 2022 14:50:13 +0000
+References: <20220202000335.19296-1-ansuelsmth@gmail.com>
+In-Reply-To: <20220202000335.19296-1-ansuelsmth@gmail.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 15:36, syzbot
-<syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com> wrote:
->
-> syzbot has bisected this issue to:
->
-> commit c34cdf846c1298de1c0f7fbe04820fe96c45068c
-> Author: Andrey Konovalov <andreyknvl@google.com>
-> Date:   Wed Feb 2 01:04:27 2022 +0000
->
->     kasan, vmalloc: unpoison VM_ALLOC pages after mapping
+Hello:
 
-Is this a case of a new bug surfacing due to KASAN improvements? But
-it's not quite clear to me why this commit.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Andrey, any thoughts?
+On Wed,  2 Feb 2022 01:03:19 +0100 you wrote:
+> Hi, this is ready but require some additional test on a wider userbase.
+> 
+> The main reason for this is that we notice some routing problem in the
+> switch and it seems assisted learning is needed. Considering mdio is
+> quite slow due to the indirect write using this Ethernet alternative way
+> seems to be quicker.
+> 
+> [...]
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=128cb900700000
-> start commit:   6abab1b81b65 Add linux-next specific files for 20220202
-> git tree:       linux-next
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=118cb900700000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=168cb900700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b8d8750556896349
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5ad567a418794b9b5983
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1450d9f0700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=130ef35bb00000
->
-> Reported-by: syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com
-> Fixes: c34cdf846c12 ("kasan, vmalloc: unpoison VM_ALLOC pages after mapping")
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Here is the summary with links:
+  - [net-next,v8,01/16] net: dsa: provide switch operations for tracking the master state
+    https://git.kernel.org/netdev/net-next/c/295ab96f478d
+  - [net-next,v8,02/16] net: dsa: replay master state events in dsa_tree_{setup,teardown}_master
+    https://git.kernel.org/netdev/net-next/c/e83d56537859
+  - [net-next,v8,03/16] net: dsa: tag_qca: convert to FIELD macro
+    https://git.kernel.org/netdev/net-next/c/6b0458299297
+  - [net-next,v8,04/16] net: dsa: tag_qca: move define to include linux/dsa
+    https://git.kernel.org/netdev/net-next/c/3ec762fb13c7
+  - [net-next,v8,05/16] net: dsa: tag_qca: enable promisc_on_master flag
+    https://git.kernel.org/netdev/net-next/c/101c04c3463b
+  - [net-next,v8,06/16] net: dsa: tag_qca: add define for handling mgmt Ethernet packet
+    https://git.kernel.org/netdev/net-next/c/c2ee8181fddb
+  - [net-next,v8,07/16] net: dsa: tag_qca: add define for handling MIB packet
+    https://git.kernel.org/netdev/net-next/c/18be654a4345
+  - [net-next,v8,08/16] net: dsa: tag_qca: add support for handling mgmt and MIB Ethernet packet
+    https://git.kernel.org/netdev/net-next/c/31eb6b4386ad
+  - [net-next,v8,09/16] net: dsa: qca8k: add tracking state of master port
+    https://git.kernel.org/netdev/net-next/c/cddbec19466a
+  - [net-next,v8,10/16] net: dsa: qca8k: add support for mgmt read/write in Ethernet packet
+    https://git.kernel.org/netdev/net-next/c/5950c7c0a68c
+  - [net-next,v8,11/16] net: dsa: qca8k: add support for mib autocast in Ethernet packet
+    https://git.kernel.org/netdev/net-next/c/5c957c7ca78c
+  - [net-next,v8,12/16] net: dsa: qca8k: add support for phy read/write with mgmt Ethernet
+    https://git.kernel.org/netdev/net-next/c/2cd548566384
+  - [net-next,v8,13/16] net: dsa: qca8k: move page cache to driver priv
+    https://git.kernel.org/netdev/net-next/c/4264350acb75
+  - [net-next,v8,14/16] net: dsa: qca8k: cache lo and hi for mdio write
+    https://git.kernel.org/netdev/net-next/c/2481d206fae7
+  - [net-next,v8,15/16] net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet
+    https://git.kernel.org/netdev/net-next/c/90386223f44e
+  - [net-next,v8,16/16] net: dsa: qca8k: introduce qca8k_bulk_read/write function
+    https://git.kernel.org/netdev/net-next/c/4f3701fc5998
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

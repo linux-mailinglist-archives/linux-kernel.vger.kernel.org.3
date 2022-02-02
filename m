@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 523774A69C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F2C4A69D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 03:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243760AbiBBCBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 21:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243752AbiBBCBL (ORCPT
+        id S243769AbiBBCCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 21:02:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46182 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242899AbiBBCC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 21:01:11 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E70C06173D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 18:01:11 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id u11-20020a25ab0b000000b0061a3e951dceso6564967ybi.15
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 18:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=q1oi/RXvkD8Dq7uJmeyWkylsnr5bf/ofiDPgwV3XBxs=;
-        b=HxhJFx8m1xXWPSkOOlyIHZ6TrBS88zHq/VAT9Azm8OrGOXPZ9brzpZt4GDmYgOJy5d
-         ynIOdFCljbEHCcUOgSq9oY6YBG5ym7KHqVPEvqeLPOvSDDelPg+wpmLbl7w+c1e1tUfz
-         zzoKk/HVz+AOO/D8kD1g0E3cghS3LbDh588/FaPOBvMytF3sr93ri6+p0AEEHJexUu2q
-         hIQT6OliOYVL+oHVbUo1X8dX3Cwh744nCTUT30tFFRnxC5XkOVyX9VOjZcNPmqFSMiCi
-         C3A4uhN+FsT2AEv6udiM3Cib0xVhFo7fiC74QvwT5yC88rcxCP4xT4vwK63dV4piNsaq
-         roVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=q1oi/RXvkD8Dq7uJmeyWkylsnr5bf/ofiDPgwV3XBxs=;
-        b=UrF66UkyElzBHjxjrv+MVKnyPgIu14TbKiXmmtf3IJ+Ul7BOCQGCQpThDLqMdRX4cF
-         gcJzobxVMo2pzId2vQM7Sp3VMNwjfAi/E43gFiktzxjlfy/eevIaiT2Io9kBO4/9ogWw
-         5/eC0hVfEVjUuwUI5oSVA216BecwrpOlawLhlsCFcrzhwkZ/dTiwDpLLQKEfYCHbA2xM
-         Pqj36mLXTVeN+knALbJzeBlkhgJNVJYLpb/utXao4I4EdPFIaT7+81TlhZ8zhSIRqvUN
-         3IMzZFot965OnuBBLBSfiaOSQhI7wUOPLa74yXBwoZDFzJ5+0/mp8bxxekAJmG16k4xk
-         PGnA==
-X-Gm-Message-State: AOAM531teNk7Y8j1NdaXz+aAg0StUORO+aZpvHwzELI2vJKeabRXNZtj
-        2TwURRrnykAGYIAnseCocxO4wSetdE0R
-X-Google-Smtp-Source: ABdhPJwEpwwsb0wPv1uBzyjNY2EpARcBgOMHZ0zvO/DbYf2KSjn9bDzFDRksVosNRbsKOee80RK5err37Kpz
-X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:57dc:f744:660d:72d])
- (user=rajatja job=sendgmr) by 2002:a25:e5c7:: with SMTP id
- c190mr29691167ybh.175.1643767270447; Tue, 01 Feb 2022 18:01:10 -0800 (PST)
-Date:   Tue,  1 Feb 2022 18:01:03 -0800
-In-Reply-To: <20220202020103.2149130-1-rajatja@google.com>
-Message-Id: <20220202020103.2149130-2-rajatja@google.com>
-Mime-Version: 1.0
-References: <20220202020103.2149130-1-rajatja@google.com>
-X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH v2 2/2] dt-bindings: Document "UntrustedDevice" property for
- PCI devices
-From:   Rajat Jain <rajatja@google.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Tue, 1 Feb 2022 21:02:28 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE2A0B82FE6;
+        Wed,  2 Feb 2022 02:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588E1C340FA;
+        Wed,  2 Feb 2022 02:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643767344;
+        bh=Lu17CtWHMQyIMd+r/gZ3QnCD3blDyX01IGU77gYzPwo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rVuAgKNepQhlXkSgJ4nOfKqdZ1m2QgRk9ZkvH8SvfvWkeorNEQdY83E2n5eXKfc79
+         VCuJEViT4M9HIVIMPr3BsvqjoERHgklnIISy31sSuU4uK2OLJWs1IQstgOysSW8fQ3
+         A4+TDqM4i+9dG2f1hGh94TQRtV9FMnT0rwP8iPWmKTMSzCFTVSM/jumBKMQgjTroNE
+         +jwQ76K54dK8UrZ95Lj5eu9y4l1FTA2KToTqrC9gowaW+jPXRuZTVpoBs8+clZOz6I
+         Yl2FZr99TUgkOSak2L7h6irEIbDEWdhFCcdReiCBHO2TFXtVzEQRwjOz0Twz2ZkMOl
+         aMu8vburo8Amg==
+Received: by mail-ua1-f43.google.com with SMTP id c36so16481553uae.13;
+        Tue, 01 Feb 2022 18:02:24 -0800 (PST)
+X-Gm-Message-State: AOAM533gOtoCWxjkxw3H551eW3dWJnj2JZR1x01so7aWkCrxNCCP8d8W
+        g9ZTJWEKPD1ZzUgYkQXEwUpfci/uF2ujM3xPrps=
+X-Google-Smtp-Source: ABdhPJzjbMxJZrbhxn6pmM0yG+DXrY57H4w+bp7CFApaAn/IyFQRMevzGEcLPsnqGd8f9H2BAFJtp6v6SwrSYMY64Dg=
+X-Received: by 2002:a67:e0d9:: with SMTP id m25mr10551317vsl.51.1643767343232;
+ Tue, 01 Feb 2022 18:02:23 -0800 (PST)
+MIME-Version: 1.0
+References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-16-guoren@kernel.org>
+In-Reply-To: <20220201150545.1512822-16-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 2 Feb 2022 10:02:12 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSpz94OBM_Ob92MdGOHt7p2akPS0Jco9B0rC0XJToh0eg@mail.gmail.com>
+Message-ID: <CAJF2gTSpz94OBM_Ob92MdGOHt7p2akPS0Jco9B0rC0XJToh0eg@mail.gmail.com>
+Subject: Re: [PATCH V5 15/21] riscv: compat: Add hw capability check for elf
+To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Rajat Jain <rajatja@google.com>
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new "UntrustedDevice" property for PCI devices. This property
-is optional and can be applied to any PCI device.
+On Tue, Feb 1, 2022 at 11:07 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Detect hardware COMPAT (32bit U-mode) capability in rv64. If not
+> support COMPAT mode in hw, compat_elf_check_arch would return
+> false by compat_binfmt_elf.c
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/riscv/include/asm/elf.h |  3 ++-
+>  arch/riscv/kernel/process.c  | 32 ++++++++++++++++++++++++++++++++
+>  2 files changed, 34 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> index aee40040917b..3a4293dc7229 100644
+> --- a/arch/riscv/include/asm/elf.h
+> +++ b/arch/riscv/include/asm/elf.h
+> @@ -40,7 +40,8 @@
+>   * elf64_hdr e_machine's offset are different. The checker is
+>   * a little bit simple compare to other architectures.
+>   */
+> -#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+> +extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
+> +#define compat_elf_check_arch  compat_elf_check_arch
+>
+>  #define CORE_DUMP_USE_REGSET
+>  #define ELF_EXEC_PAGESIZE      (PAGE_SIZE)
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index 1a666ad299b4..758847cba391 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -83,6 +83,38 @@ void show_regs(struct pt_regs *regs)
+>                 dump_backtrace(regs, NULL, KERN_DEFAULT);
+>  }
+>
+> +#ifdef CONFIG_COMPAT
+> +static bool compat_mode_support __read_mostly;
+> +
+> +bool compat_elf_check_arch(Elf32_Ehdr *hdr)
+> +{
+> +       if (compat_mode_support && (hdr->e_machine == EM_RISCV))
+> +               return true;
+> +       else
+> +               return false;
+> +}
+> +
+> +static int compat_mode_detect(void)
+Forgot __init, here
 
-Signed-off-by: Rajat Jain <rajatja@google.com>
----
-v2: Initial version (added documentation based on comments)
-v1: Does not exist.
+> +{
+> +       unsigned long tmp = csr_read(CSR_STATUS);
+> +
+> +       csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
+> +
+> +       if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
+> +               pr_info("riscv: 32bit compat mode detect failed\n");
+> +               compat_mode_support = false;
+> +       } else {
+> +               compat_mode_support = true;
+> +               pr_info("riscv: 32bit compat mode detected\n");
+> +       }
+> +
+> +       csr_write(CSR_STATUS, tmp);
+> +
+> +       return 0;
+> +}
+> +arch_initcall(compat_mode_detect);
+> +#endif
+> +
+>  void start_thread(struct pt_regs *regs, unsigned long pc,
+>         unsigned long sp)
+>  {
+> --
+> 2.25.1
+>
 
- Documentation/devicetree/bindings/pci/pci.txt | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/pci/pci.txt b/Documentation/devicetree/bindings/pci/pci.txt
-index 6a8f2874a24d..bc1ba10f51e1 100644
---- a/Documentation/devicetree/bindings/pci/pci.txt
-+++ b/Documentation/devicetree/bindings/pci/pci.txt
-@@ -82,3 +82,38 @@ pcie@10000000 {
- 		external-facing;
- 	};
- };
-+
-+PCI Device Properties
-+---------------------
-+Following optional properties may be present for any PCI device:
-+
-+- UntrustedDevice:
-+   When present, this property is an indicator that this PCI device (and
-+   any downstream devices) are to be treated as untrusted by the kernel.
-+   The kernel can, for example, use this information to isolate such
-+   devices using a strict DMA protection via the IOMMU.
-+
-+   Example device tree node:
-+	pcie@0008 {
-+		/* PCI device 00:01.0 is an untrusted device */
-+		reg = <0x00000800 0 0 0 0>;
-+		UntrustedDevice = <1>;
-+	};
-+
-+   Example ACPI node:
-+	Scope (\_SB.PCI0.WFA3)
-+	    {
-+	        Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
-+	        {
-+	            ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301") /* Device
-+	Properties for _DSD */,
-+	            Package (0x01)
-+	            {
-+	                Package (0x02)
-+	                {
-+	                    "UntrustedDevice",
-+	                    One
-+	                }
-+	            }
-+	        })
-+	    }
 -- 
-2.35.0.rc2.247.g8bbb082509-goog
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0766C4A7911
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652234A791C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbiBBT5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S242966AbiBBT7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:59:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiBBT53 (ORCPT
+        with ESMTP id S237391AbiBBT67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:57:29 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11717C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:57:29 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id q22so665068ljh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 11:57:28 -0800 (PST)
+        Wed, 2 Feb 2022 14:58:59 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D70C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 11:58:59 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i65so209190pfc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 11:58:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3CIuft7MFInnh1xqsvdSm7aJQ1m6iJ5S3C53p3CCUHc=;
-        b=T+H7wnmd7kfHJC8X6vmZGalF+103bfBAMVkRiADef73+EKFKl9I+0ZlOTqDGdHCbH8
-         Q1oEbfCllEYRsp1prWpBrTlb+wDNxqeKUCEiyHGRfzjNO5kIqgYkyrw4wwd8RflWRmTf
-         Dkk3ZXyyLRzNW7qPpijDbsy8MZ3iQPAwtclg2Ct3ARAa0hPaa+nPn4DYtTVDW5uKy4P9
-         UJ0Px0+NhrQOFwDsqscBS8Tx2i0jbB/YL7rF42aizdgvyxaUYlDt/jxwHDk7l3Sl+pwb
-         zUwh9fKqC3w8wLR2xhFRNELmJ5MgyIReJLSwXta04u6CnM18+RljvoLA+vzD1Bn4h5AJ
-         dN0Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=f3tBDDMz1Cl7wSR0qYXsf1pk6gj1XoAYJtYA02SWsWc=;
+        b=ERt7l2GrHpmbR9DfZcfO/4G0u2ftbECA90n/T2MYtJcF7KHFBaulB2Y3elqwXaErj1
+         SgvMX6enKgKi6ipwi3GMJOLq7A0vUuj+OsY4FTRYGfXeeKMbMo5SyR8KcChUElrIWjP9
+         IpVaglb+4cq+qD6XUS4B5zEK/B8IayPMTqhDakgUHyry0Qxa2ItcvneZnv5x2qc46k/8
+         A4UpBr5ygkm0tyA0ul4/XSajfr/oc0EOYQuT0FLTZsqNS6z0Bm7NgJmChV/kC881wVL1
+         R62PgB5ZIfasDbZ0uRPC0crSVv72woWDxTwCwfMvG3Yi3hUIqeHQq7rAUtZ0br6HfozV
+         89eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3CIuft7MFInnh1xqsvdSm7aJQ1m6iJ5S3C53p3CCUHc=;
-        b=tA1L8IoA1gEJffyiN+0uAQMwppUmwyRuIJRWzE8Fa26RJq7wrB5TNDOP9wfNhdxmAS
-         6CoqqZu6mqqSYAamANU+1e4vuy5iRBW2LeH/x0Cek0D7MXjmm3f8ExaOxHaCg641TBAA
-         ErBDlVblkPw070Rld/XhzBU0rnbZNySQLhAjOgVGoTq5tOFJJDjMH1W9NpnHaIivkq6R
-         nhpdrpQzssMamC81iiL/jOVLGJFU4t0VX1ERyPCw8hueJgy3x3HN77wUklVLc94Om/4x
-         1YHbDZRbLqbEoOrIq1U4L+IRcnnZP9rDWb0+LjyxbHrJ6Zqy+LDz4sUPyahMbyzraRTk
-         EpaA==
-X-Gm-Message-State: AOAM531JldYLnWvQiX/GQ1uWXHhwNWhxj2SDdeohdSFjA0Z/y2j8iaGJ
-        2jkqc3SSY+1F9XdHCAHD3Ch0lP4C/WI=
-X-Google-Smtp-Source: ABdhPJy6YqLj2e3pYrZsKt8LhaB5KzLWfvsSR0JWSNWS0CYNQ1l6b/Lka0LlJ0u8hGKE8GE3PaWlDw==
-X-Received: by 2002:a2e:97cf:: with SMTP id m15mr20067068ljj.316.1643831847205;
-        Wed, 02 Feb 2022 11:57:27 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id a2sm3967086lfl.246.2022.02.02.11.57.26
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=f3tBDDMz1Cl7wSR0qYXsf1pk6gj1XoAYJtYA02SWsWc=;
+        b=Pk3/jfUVZ9vuyi4Cd39vtcooxFh+WbYRx9Wi/fB5IzQiJqvd70lwY9o5Yu9HmxIdRt
+         RJInKJGbx/qW4Dv1n9OlVzAYE8njO9Pahg/2X7eKiuaR/Qphv5qN8qISfmvutqlRygap
+         Y3FLuJGnuQEV16IvBohBi1agLE1Z44pw7a8fxppQdFDoWYNu5mCsqlCFo+ndhZML2IaF
+         h9dGbQftUzHlliBcKEhBchNRJIBw6DDmAfEp7/ClGYwsyuJqyahGnb+RK2//SjW9+984
+         1I02PQHxq+olHzwARrCEtYy8T0H6MUZwEzh4IAvR+7CQYQyjhfYPGUyBefd2dJUcLbDW
+         ay8w==
+X-Gm-Message-State: AOAM532qitVrkzqNkAA3tuU6ZLXPPvSL5Aht59Gp1eNALqFGMFh7+P29
+        9oyhucCbp9dMwqB4m8UbCgY7fw==
+X-Google-Smtp-Source: ABdhPJz4O1XMyNrRMSsccUAwZX/YKxQmjX8hl66qxIZUzVjXNWSKEFQOBJlAS5f+CRg6eHpU2klvjw==
+X-Received: by 2002:a63:6586:: with SMTP id z128mr26035966pgb.103.1643831939129;
+        Wed, 02 Feb 2022 11:58:59 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id nu15sm8160658pjb.5.2022.02.02.11.58.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 11:57:26 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 567C95A0020; Wed,  2 Feb 2022 22:57:25 +0300 (MSK)
-Date:   Wed, 2 Feb 2022 22:57:25 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH] kcmp: Comment get_file_raw_ptr() RCU usage
-Message-ID: <YfriJS+kgoGbaMmz@grain>
-References: <20220202151734.10418-1-jandryuk@gmail.com>
- <YfrC/fQvQ1nkIJNJ@grain>
- <CAKf6xpsfDpEpjSjYbGU5fQOxqjccbu3CAXTxpcKggKYu6qEfNA@mail.gmail.com>
+        Wed, 02 Feb 2022 11:58:58 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, kernel-team@android.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-oxnas@groups.io, linux-renesas-soc@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 1/2] drivers: bus: simple-pm-bus: Add support for
+ probing simple bus only devices
+In-Reply-To: <7hee4mmo2s.fsf@baylibre.com>
+References: <20210929000735.585237-1-saravanak@google.com>
+ <20210929000735.585237-2-saravanak@google.com>
+ <7hk0efmfzo.fsf@baylibre.com>
+ <CAGETcx_YEUxEBSBnzFaBxW=9=jO6BO0GuThaMGF+JPkDeC-ivw@mail.gmail.com>
+ <7hee4mmo2s.fsf@baylibre.com>
+Date:   Wed, 02 Feb 2022 11:58:58 -0800
+Message-ID: <7hpmo5kpkt.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKf6xpsfDpEpjSjYbGU5fQOxqjccbu3CAXTxpcKggKYu6qEfNA@mail.gmail.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 02:48:48PM -0500, Jason Andryuk wrote:
-> On Wed, Feb 2, 2022 at 12:44 PM Cyrill Gorcunov <gorcunov@gmail.com> wrote:
-> >
-> > On Wed, Feb 02, 2022 at 10:17:34AM -0500, Jason Andryuk wrote:
-> > > This usage of RCU appears wrong since the pointer is passed outside the
-> > > RCU region.  However, it is not dereferenced, so it is "okay".  Leave a
-> > > comment for the next reader.
-> > >
-> > > Without a reference, these comparisons are racy, but even with their use
-> > > inside an RCU region, the result could go stale.
-> > >
-> > > Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
-> > > ---
-> > > I was looking for examples of task_lookup_fd_rcu()/files_lookup_fd_rcu()
-> > > and found this.  It differed from the example given in
-> > > Documentation/filesystems/files.rst, so I was initially confused.  A
-> > > comment seemed appropriate to avoid confusion.
-> > >
-> > >  kernel/kcmp.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > >
-> > > diff --git a/kernel/kcmp.c b/kernel/kcmp.c
-> > > index 5353edfad8e1..4fb23f242e0f 100644
-> > > --- a/kernel/kcmp.c
-> > > +++ b/kernel/kcmp.c
-> > > @@ -63,6 +63,9 @@ get_file_raw_ptr(struct task_struct *task, unsigned int idx)
-> > >  {
-> > >       struct file *file;
-> > >
-> > > +     /* This RCU locking is only present to silence warnings.  The pointer
-> > > +      * value is only used for comparison and not dereferenced, so it is
-> > > +      * acceptable. */
-> > >       rcu_read_lock();
-> > >       file = task_lookup_fd_rcu(task, idx);
-> > >       rcu_read_unlock();
-> >
-> > They are not wrong, this is just such a bit weird semantics where
-> > we fetch the pointers and strictly speaking map them into numbers
-> > set to compare. But I agree that such tricks might confuse. How about
-> >
-> >         /*
-> >          * Fetching file pointers inside RCU read-lock section
-> >          * and reuse them as plain numbers is done in a sake
-> >          * of speed. But make sure never dereference them after.
-> >          */
-> 
-> I would tweak it a little to "Fetch file pointers inside RCU read-lock
-> section, but skip additional locking for speed.  The pointer values
-> will be used as integers, and must not be dereferenced."
+Kevin Hilman <khilman@baylibre.com> writes:
 
-Up to you. Initially I use _raw_ptr suffix in function name trying to
-point out that the pointer obtained should not be considered in any
-way except a natural number. So I'm fine with any comment which helps
-readability.
+> Saravana Kannan <saravanak@google.com> writes:
+>
+>> On Mon, Jan 31, 2022 at 7:18 PM Kevin Hilman <khilman@baylibre.com> wrote:
+>>>
+>>> Hi Saravana,
+>>>
+>>> Saravana Kannan <saravanak@google.com> writes:
+>>>
+>>> > fw_devlink could end up creating device links for bus only devices.
+>>> > However, bus only devices don't get probed and can block probe() or
+>>> > sync_state() [1] call backs of other devices. To avoid this, probe these
+>>> > devices using the simple-pm-bus driver.
+>>> >
+>>> > However, there are instances of devices that are not simple buses (they get
+>>> > probed by their specific drivers) that also list the "simple-bus" (or other
+>>> > bus only compatible strings) in their compatible property to automatically
+>>> > populate their child devices. We still want these devices to get probed by
+>>> > their specific drivers. So, we make sure this driver only probes devices
+>>> > that are only buses.
+>>> >
+>>> > [1] - https://lore.kernel.org/lkml/CAPDyKFo9Bxremkb1dDrr4OcXSpE0keVze94Cm=zrkOVxHHxBmQ@mail.gmail.com/
+>>> > Fixes: c442a0d18744 ("driver core: Set fw_devlink to "permissive" behavior by default")
+>>> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>> > Tested-by: Saravana Kannan <saravanak@google.com>
+>>> > Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>
+>>> This patch landed in stable/linux-5.10.y as commit d5f13bbb5104 and it
+>>> broke suspend/resume on at least one TI AM335x board I'm testing on:
+>>> upstream dts: arch/arm/boot/dts/am335x-icev2.dts, upstream defconfig:
+>>> arch/arm/configs/omap2plus_defconfig.
+>>>
+>>> Bisecting between vanilla v5.10 (good) and stable/linux-5.10.y (bad)
+>>> pointed me to this patch, and I confirmed that reverting just this patch
+>>> on top of stable/linux-5.10.y makes it work again.
+>>>
+>>> Also interesting, this same platform works fine on vanilla v5.15, which
+>>> also includes this patch.  That suggests that either 1) this patch
+>>> should not have been backported to v5.10 stable or 2) there are some
+>>> other dependencies that are missing in v5.10.
+>>>
+>>> Since vanilla v5.10 works fine, I'm leaning towards (1), but if you have
+>>> any ideas for deps that need backporting, I'm happy to try.
+>>
+>> Oh wow! I didn't realize I made so many changes AFTER 5.10! Unless I'm
+>> doing something wrong with my git commands.
+>> $ git log v5.10..v5.15 --oneline -- drivers/of/property.c
+>> $ git log v5.10..v5.15 --oneline --author=saravanak -- drivers/base/
+>>
+>> If you don't think I got my git command completely wrong, yeah, way
+>> too many patches are missing on 5.10. I'd go with the option of
+>> dropping this patch on 5.10.
+>
+> I agree.  Could you submit a revert for v5.10 stable?  As the patch
+> author, it's probably better if it comes from you.
 
-> 
-> One other idea I had was to switch the return value to "void *".  That
-> way it isn't a struct file, and it isn't readily dereference-able.
-> But I wasn't sure if that would be overkill.  What do you think?
+Nevermind, I'm impatient and submitted a revert to stable[1] :)
 
-Lets better stick with a comment I think. Thanks!
+Kevin
+
+[1] https://lore.kernel.org/stable/20220202195705.3598798-1-khilman@baylibre.com/

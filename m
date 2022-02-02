@@ -2,176 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58374A7AB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBC34A7AB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiBBVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 16:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S1347754AbiBBWCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239665AbiBBVzy (ORCPT
+        with ESMTP id S1347744AbiBBWCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 16:55:54 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921A6C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 13:55:54 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id b12-20020a9d754c000000b0059eb935359eso767373otl.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 13:55:54 -0800 (PST)
+        Wed, 2 Feb 2022 17:02:51 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1B8C06173D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:02:51 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so950714pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:02:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=2HuhD4BMwOpT0StEKJZI/a0PbP6Mi96M+kUVshgnr/o=;
-        b=aNCJxs4oY7GADhu6PAbbAp8A3qFy94oEH52OJrJAf6y5xuX9bcFTi3Q/ZTVLF3kSd3
-         SFFRG/WRM+gt8VKGmjxGvJEZgZf61SvDFC7Qm8QdaQCALQvpVYr8om6Qxxn87U7+Uk7G
-         XAuUzLEAZ57FPAjhfAPjkvFQhkxRfnK4jcltQ/LkbVw9+02CITJ1hcyAQd3Lfm+U4VdL
-         PavKxgRCOB4YHWSBZYO09eWdXIaS/F8FBpjEz8fWJOCcyUR37QchAHXvSLMuw57FG4zu
-         dpubgHPp9tT0zJPh0SoAJs5V5NwIDsyTG0xdsmJbIQ5BpLkDqH/XpbQ6gNS0sQpRPQGG
-         f2Tg==
+        bh=ECaOy1T2k4+rTCdYBSi87MWLS+gUoT2Ik7Zjco3xvDE=;
+        b=OEMBwPrvQNPtg00fqc58e+O7P+ks/6XVgwHTnL4WGfVFPWsXrZ60raAX5RLwekwDjI
+         ZaN4hs9hqL64qKDcH1iqR6kyK1tjPr/755d0v/BUj3Hmt7WHxlowHaIhfGumew3ENKXW
+         tW2/pYjZPh/28hmP12Tyd0CLDdAXLGDyX2Fyw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=2HuhD4BMwOpT0StEKJZI/a0PbP6Mi96M+kUVshgnr/o=;
-        b=AvbQzAw9JgN4Aa7c5bJ39ptKZrjQUcMF4NR6nNkxtbGL9u/qO7fLVgVMwtxO2M4CPU
-         S7TJEYMJdMYx5fVvg4pC0yI05p1maZlrKJjlRFgnnEcjcErI5tnWy1AaRZ46ut4EcvZW
-         Q7YcwHhrzsVjHCp0y0hnomdNfFShPqVtxGARUx5/tueUM6leU4EhlrwDN3z/ZJzBYyOm
-         N12k8f/hTVjHcLlDfGKLhwCm0kpRNTDasU3nMhD2KA9cO9C+qSjzImUnJFx5cf3r8U3M
-         /VI6qii/UfiyU1DQQ3XCSs3KAKacPqXS5BtMsV0zN+GaaPYO+Ccq+k9T8zeKg/+pKxoa
-         ibsQ==
-X-Gm-Message-State: AOAM531zQF0hsEIks3JcA9CzlSdT6S/Cvf1sZu9XaP2hV4KapwB4u3b7
-        U1O3mqJ6k2nZ7AyrGY885yNi/g==
-X-Google-Smtp-Source: ABdhPJw0rMjfqQN4DfYNpGSTiQviBwFuellzRA/PGvVSnJLYJLZ2E5dqc5U7wnfsrlGuC9Wv3cU+wg==
-X-Received: by 2002:a05:6830:3145:: with SMTP id c5mr5977160ots.380.1643838953582;
-        Wed, 02 Feb 2022 13:55:53 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id a19sm15587772otf.27.2022.02.02.13.55.52
+        bh=ECaOy1T2k4+rTCdYBSi87MWLS+gUoT2Ik7Zjco3xvDE=;
+        b=20wvR2L48W3Gl3IIkTFPWG4E7SWthu+Nvd32kdunmPJDNKYa5n8fYZM6e8dFfRknn9
+         JXqO9FPeJvgF030cVHjyJfnxMcYZJbmC/bzmaOBhWIURWn3GRLQtsYuXTWlvwj5PDhwL
+         zsU5bQp6c/iO3F+k9Pz1qA8VALCpf4y3TjR9PsaxnIxNzD13MN/4o+ftBOuuDMFf9wQa
+         6Q4HKjEoAAqJUMnBT13vHeIOHk90AwhmO+i10v9WeMyDwYr6c81mv8wODECsdWr8D46r
+         284fnsCu0TTUWOiKMpFsEJpoQLATCEmQdRPJ258uxc6hTsLSpW2UTmc4d3gztxiC2yS3
+         Edsw==
+X-Gm-Message-State: AOAM5322dXKyXhEk6XYMPSaUti3VJQq42sYktZiR4GahPMxj+5ISckCn
+        y2qIuf1JCtgyO7PWtZO20oPniNKzd5we8g==
+X-Google-Smtp-Source: ABdhPJzNmSeKdn9TfTjv7P+ZuQp13MUOT0sY08UE2HypvMu3QGzZpnSBshzGXR/ynD7EMIbzNUbq3w==
+X-Received: by 2002:a17:903:183:: with SMTP id z3mr33174467plg.127.1643839370759;
+        Wed, 02 Feb 2022 14:02:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a13sm27967620pfv.97.2022.02.02.14.02.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 13:55:52 -0800 (PST)
-Date:   Wed, 2 Feb 2022 13:56:10 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-Subject: Re: [PATCH v10 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <Yfr9+jvGIyB2ynMS@ripper>
-References: <20211010043912.136640-1-bjorn.andersson@linaro.org>
- <20211010043912.136640-2-bjorn.andersson@linaro.org>
- <YXL0DyyPkS4/wfB7@ripper>
- <20211027211928.tjybwy2lokj6eoun@SoMainline.org>
- <YfSPYkbTXMOUGKkG@yoga>
- <20220202110305.gbow3e3stolb67v5@SoMainline.org>
+        Wed, 02 Feb 2022 14:02:50 -0800 (PST)
+Date:   Wed, 2 Feb 2022 14:02:49 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
+Message-ID: <202202021320.ED0050E32@keescook>
+References: <20210818081118.1667663-1-keescook@chromium.org>
+ <20210818081118.1667663-5-keescook@chromium.org>
+ <20220202160903.GA2337834@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202110305.gbow3e3stolb67v5@SoMainline.org>
+In-Reply-To: <20220202160903.GA2337834@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 02 Feb 03:03 PST 2022, Marijn Suijten wrote:
-
-> On 2022-01-28 18:50:42, Bjorn Andersson wrote:
-> > On Wed 27 Oct 16:19 CDT 2021, Marijn Suijten wrote:
+On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
+> On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
+> > With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
+> > coverage, it is now possible to enable -Warray-bounds. Since both
+> > GCC and Clang include -Warray-bounds in -Wall, we just need to stop
+> > disabling it.
 > > 
-> > > Hi Bjorn,
-> > > 
-> > > On 2021-10-22 10:25:35, Bjorn Andersson wrote:
-> > > > On Sat 09 Oct 21:39 PDT 2021, Bjorn Andersson wrote:
-> > > > 
-> > > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > > > > with their output being routed to various other components, such as
-> > > > > current sinks or GPIOs.
-> > > > > 
-> > > > > Each LPG instance can operate on fixed parameters or based on a shared
-> > > > > lookup-table, altering the duty cycle over time. This provides the means
-> > > > > for hardware assisted transitions of LED brightness.
-> > > > > 
-> > > > > A typical use case for the fixed parameter mode is to drive a PWM
-> > > > > backlight control signal, the driver therefor allows each LPG instance
-> > > > > to be exposed to the kernel either through the LED framework or the PWM
-> > > > > framework.
-> > > > > 
-> > > > > A typical use case for the LED configuration is to drive RGB LEDs in
-> > > > > smartphones etc, for which the driver support multiple channels to be
-> > > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > > > > generators will be synchronized, to allow for multi-color patterns.
-> > > > > 
-> > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > > ---
-> > > > 
-> > > > Any feedback on this?
-> > > 
-> > > I asked in #linux-msm whether anything is wrong with the patterns,
-> > > since my Sony Discovery (sdm630 with a pm660l) blinks way quicker on a
-> > > pattern that's supposed to stay on for 1s and off for 1s:
-> > > 
-> > >     echo "0 1000 255 1000" > /sys/class/leds/rgb\:status/hw_pattern
-> > > 
-> > > It however seems to be broken in the same way on an older version now
-> > > (this might be v9 or v8) which I don't remember to be the case.  Can you
-> > > double-check if this is all working fine on your side?  If so, I'll have
-> > > to find some time to debug it on my end.
-> > > 
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > Cc: linux-kbuild@vger.kernel.org
+> > Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  Makefile | 1 -
+> >  1 file changed, 1 deletion(-)
 > > 
-> > I had missed the fact that LPG_RAMP_DURATION_REG is two registers for
-> > msg and lsb, for a total of 9 bits of duration. So what you saw was
-> > probably ticking at 232ms.
-> > 
-> > Note though that the pattern uses the last time as "high pause", so I
-> > expect that you should have seen 232 ms of off, followed by 464ms of
-> > light.
+> > diff --git a/Makefile b/Makefile
+> > index a4aca01a4835..af22b83cede7 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+> >  
+> >  # We'll want to enable this eventually, but it's not going away for 5.7 at least
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
+> > -KBUILD_CFLAGS += -Wno-array-bounds
+> >  KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+> >  
+> >  # Another good warning that we'll want to enable eventually
 > 
-> Visual inspection seems to confirm those numbers indeed!
+> alpha:defconfig:
 > 
-> > I've fixed this for v11, both rejecting invalid input and writing out
-> > all 9 bits.
-> 
-> Doesn't that 512ms limit, together with using only the last value for
-> hi_pause (and not the first value for lo_pause) force users to write
-> patterns in a certain way which is not easily conveyed to the caller
-> except by reading the comment in the driver?  I'd guess lo_pause can be
-> used even if not in ping-pong mode, it should just hold at the first
-> value for the given duration?
-> 
-> (That said hw_pattern is anyway already riddled with device-specific
-> information, such as only having one `delta_t` which functions as the
-> step size for every entry, and with the change above would need to be
-> sourced from another step that's not the first.)
-> 
+> In function '__memset',
+>     inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
+>       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> In function '__memset',
+>     inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
+> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+>    37 |                         return __builtin_memset(s, c, n);
 
-Perhaps we should clarify the single delta_t by requiring all those
-delta_t to be the same, rather than ignoring their value.
+Ugh, these all appear to be the same "gcc thinks a literal is an offset
+from NULL" problem Arnd described:
 
-I.e. we make the ping-pong pattern:
+https://lore.kernel.org/linux-hardening/CAK8P3a1CT+-3J7Ufv9TQwRiV4i_+FF=-+phwSjWafyGuPfG+AA@mail.gmail.com
 
-<value> <lopause+t> ... <value[N/2-1]> <t> <value[N/2]> <hipause+t> <value[N/2-1]> <t> ... <value> <t>
+What's annoying is that these values, if stored in a variable, aren't
+treated that way:
+https://pastebin.ubuntu.com/p/ZjZR2tzRpx/
 
-And for non-ping-pong:
+I guess having a common way to convert from an integer (or literal) into
+a void * that GCC doesn't freak out about would be generally nice.
 
-<value> <lopause+t> <value> <t> ... <value> <t> <value> <hipause + t>
+-Kees
 
-
-What do you think?
-
-> Bit of a stretch, but perhaps worth noting anyway: should this be
-> written in documentation somewhere, together with pattern examples and
-> their desired outcome to function as testcases too?
-> 
-
-There's a comment in lpg_pattern_set() where I tried to capture this.
-
-I don't think it's worth documenting the behavior/structure away from
-the driver. But let's make sure it's captured properly there.
-
-Regards,
-Bjorn
+-- 
+Kees Cook

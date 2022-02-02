@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F644A7A15
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9843A4A7A1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 22:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347479AbiBBVN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 16:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiBBVNz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 16:13:55 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C304C061714;
-        Wed,  2 Feb 2022 13:13:55 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id y8so424948qtn.8;
-        Wed, 02 Feb 2022 13:13:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aKbhLaruFzJihRr6tuHWqUwiyv5AacGBfXx3Ff7B0io=;
-        b=SYedvhKztxYN6/73vqzNbvu0Qr5H5hpvoKUwVsBTwGsvFLq1GKGs5oF77oWeMy1gtR
-         17RhhPxDJRo/NdyISTDSIRI84kFh9x1D7x5M2AFL5lE4MbIwN3H7z+rCsPHiyXGLgutB
-         Tv9wbPZUtLpfcFYANRdDAlsIWXzVX0fG6Y9i+o+HIHoGPAH19h5yjZuuf/vpf/29MY7x
-         zEjRwyoQgzUhTwtVQhyLkWZfXCY6FaS+wcfgnU2DXEB8UtrVj4x2FbPE4Cq2RHXf38Np
-         FgBiMBqrAM74b+jQIv1f0AhXr3LqMAiDrUex57Ze6sVUDvkISJAHqSu6eYdWwUrlFL1X
-         s8nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aKbhLaruFzJihRr6tuHWqUwiyv5AacGBfXx3Ff7B0io=;
-        b=0PDyigdySpBSHsn7i3U8JBMyUg1cRmmkC5bqOp5BnpC90s3Z7NuCjTbI+g8ri8LtkE
-         LcRJYh/GJmOSQhqCGg87Un1uG7xI1nP5WhFnKbp+ePXE/ZGGpu2t0vuzBUNT18xma8LL
-         oJikVmp1utAatxkJI4Rxp3lsMg8J1Rv4DXERUTJv+32dhcV+Vb3wQG1rzCuAKusMlvOk
-         VvwT/UtG9wvMjz7uuZ/tHGmwA0sW0zLuAUyrRtVlkheTpeANYLKN7CBi36qR2AuemiCD
-         pik9uWzIfzRkcP/MCNCXn9emrZ6vuZlN/C0aRwS85XZMnfFqL3vKNFAyy8JceqXifOu8
-         HOwA==
-X-Gm-Message-State: AOAM531lF61k0/Up7lG0BMX/SEqvDgxtrzcUdrlA5X8egw7OqvbTXCVP
-        FEA0ku8ZkE5UUXwZOcnORXJqEXgpxqA=
-X-Google-Smtp-Source: ABdhPJxFYaSprVyP6Y01tg0cALKPhGKkbkgEwLvuLUBcJPUVAI8RstL1ZwH9nCGZN7X25+ma9ES2aw==
-X-Received: by 2002:ac8:7d55:: with SMTP id h21mr24439359qtb.331.1643836434380;
-        Wed, 02 Feb 2022 13:13:54 -0800 (PST)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id w4sm13542192qko.123.2022.02.02.13.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 13:13:53 -0800 (PST)
-Date:   Wed, 2 Feb 2022 16:13:51 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     jic23@kernel.org, andy.shevchenko@gmail.com, lars@metafoo.de,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v13 02/11] iio: afe: rescale: add INT_PLUS_{MICRO,NANO}
- support
-Message-ID: <Yfr0D3MabWcGLOde@shaak>
-References: <20220130161101.1067691-1-liambeguin@gmail.com>
- <20220130161101.1067691-3-liambeguin@gmail.com>
- <8347a069-c36c-cb30-a0be-5b38f3c59b32@axentia.se>
+        id S239968AbiBBVSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 16:18:31 -0500
+Received: from mga02.intel.com ([134.134.136.20]:60397 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232071AbiBBVS3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 16:18:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643836709; x=1675372709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pKbwTf351WMGvUo20IwzPN+wwoLePreHupAdfPbGkZg=;
+  b=Mnid2m3zeoEGpqZW45YRe+fZcplPdn+32XrFmoUxLB3E506ED9KlOEry
+   h5Ak705jv1oKzkriZ479OkKWk88Re73O5ua1pdxIEbgg6gk1b413pR3J4
+   kZBUTDt9NfFigeyR6enKXxMNE4sPlYgUW2Kn2wazSEVlXeZjhtSHUrHw7
+   SC/wvmcyyjEL8B2l5V4ihncz3bdo5GvozbcBFPst3YVs8gy5Z3ItAvThK
+   4iNUKb1Yf84tOyZS22hnLTdtWWnsS/xLk016wDXwTXoQ0c4aH2nj33ImF
+   qzTQaxhXb5dnRoPJnnWW4kIfMvOxyw2D3dZfnhilHiyyV//3zj8VSn5Ys
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="235421865"
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="235421865"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 13:18:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
+   d="scan'208";a="699059022"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 02 Feb 2022 13:18:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFN1H-000V8n-0Q; Wed, 02 Feb 2022 21:18:27 +0000
+Date:   Thu, 3 Feb 2022 05:18:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
+        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>
+Subject: Re: [PATCH 2/8] VMCI: dma dg: add MMIO access to registers
+Message-ID: <202202030509.ZJep87ms-lkp@intel.com>
+References: <20220202144910.10349-3-jhansen@vmware.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8347a069-c36c-cb30-a0be-5b38f3c59b32@axentia.se>
+In-Reply-To: <20220202144910.10349-3-jhansen@vmware.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
-On Wed, Feb 02, 2022 at 06:04:25PM +0100, Peter Rosin wrote:
-> Hi!
-> 
-> On 2022-01-30 17:10, Liam Beguin wrote:
-> > Some ADCs use IIO_VAL_INT_PLUS_{NANO,MICRO} scale types.
-> > Add support for these to allow using the iio-rescaler with them.
-> > 
-> > Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-> > Reviewed-by: Peter Rosin <peda@axentia.se>
-> > ---
-> >  drivers/iio/afe/iio-rescale.c | 35 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 35 insertions(+)
-> > 
-> > diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
-> > index 65832dd09249..f833eb38f8bb 100644
-> > --- a/drivers/iio/afe/iio-rescale.c
-> > +++ b/drivers/iio/afe/iio-rescale.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/property.h>
-> > +#include <linux/units.h>
-> 
-> This include should be moved to the first patch that uses stuff from
-> it.
+Hi Jorgen,
 
-Some defines are used a bit further down in mult
+I love your patch! Perhaps something to improve:
 
-(copied back from the original message):
-> >	case IIO_VAL_INT_PLUS_NANO:
-> >	case IIO_VAL_INT_PLUS_MICRO:
-> >		mult = scale_type == IIO_VAL_INT_PLUS_NANO ? GIGA : MEGA;
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Cheers,
-> Peter
-> 
-> *snip*
+url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220203/202202030509.ZJep87ms-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/f2afd39bab80c2e42ac789f6d949d779411df928
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+        git checkout f2afd39bab80c2e42ac789f6d949d779411df928
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
 
-Cheers,
-Liam
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got char * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/misc/vmw_vmci/vmci_guest.c:96:45: sparse:     got char *
+>> drivers/misc/vmw_vmci/vmci_guest.c:93:14: sparse: sparse: symbol 'vmci_read_reg' was not declared. Should it be static?
+>> drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got char * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/misc/vmw_vmci/vmci_guest.c:103:44: sparse:     got char *
+>> drivers/misc/vmw_vmci/vmci_guest.c:100:6: sparse: sparse: symbol 'vmci_write_reg' was not declared. Should it be static?
+>> drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char *mmio_base @@     got void [noderef] __iomem * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse:     expected char *mmio_base
+   drivers/misc/vmw_vmci/vmci_guest.c:473:27: sparse:     got void [noderef] __iomem *
+
+Please review and possibly fold the followup patch.
+
+vim +96 drivers/misc/vmw_vmci/vmci_guest.c
+
+    92	
+  > 93	unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
+    94	{
+    95		if (dev->mmio_base != NULL)
+  > 96			return readl(dev->mmio_base + reg);
+    97		return ioread32(dev->iobase + reg);
+    98	}
+    99	
+ > 100	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
+   101	{
+   102		if (dev->mmio_base != NULL)
+ > 103			writel(val, dev->mmio_base + reg);
+   104		else
+   105			iowrite32(val, dev->iobase + reg);
+   106	}
+   107	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

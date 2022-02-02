@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BD74A72FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF524A7306
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242506AbiBBO0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:26:37 -0500
-Received: from foss.arm.com ([217.140.110.172]:34440 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237320AbiBBO0f (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:26:35 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D13A0ED1;
-        Wed,  2 Feb 2022 06:26:34 -0800 (PST)
-Received: from [10.57.68.47] (unknown [10.57.68.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02D393F718;
-        Wed,  2 Feb 2022 06:26:32 -0800 (PST)
-Message-ID: <6f0e58dc-4b81-d819-13e3-9e0f79ba279c@arm.com>
-Date:   Wed, 2 Feb 2022 14:26:28 +0000
+        id S1344937AbiBBO1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:27:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59336 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237320AbiBBO1S (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:27:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29FA1B83104;
+        Wed,  2 Feb 2022 14:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28731C340EB;
+        Wed,  2 Feb 2022 14:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643812035;
+        bh=Py5hbDI7QFg9kVgjWXWbp00X8G2g7PgLmwuqyEPZHcE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y6WNv3ThAYd/x/EDjfwGovlFMA408t9XdMxIed4ZEGXGGpud+xxJI10oeC77BeuxT
+         a8D20GPdAXdKobH+GNm/wjm4/k84/hKbkkVpcr/8Ain/mfz3ouSWBV/HxVZpE3aTDh
+         8oTVBs/oGBCEGCGFlwtdEbxD2NsOsDGuRcNMDL38Y0IoqkriqecZJrcpI7TO7OCcu0
+         BfKet0eHIx60TX4k7cyj770tBbY09hCqcDa1Xh5eeE0wTqxiYyxAjUG++Ios4P0O0f
+         PRf6TuUm6Qf5Eq9CHvgVAI4MlGgFRGGs81AWgSF1iDDxccoxLJaxdZw+bBui1IESoC
+         76Phn4iNqZyiA==
+Date:   Wed, 2 Feb 2022 19:57:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, hsinyi@chromium.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] dt-bindings: phy: Add compatible for Mediatek
+ MT8186
+Message-ID: <YfqUwO16KxmBE7vP@matsya>
+References: <20220128062050.23978-1-allen-kh.cheng@mediatek.com>
+ <20220128062050.23978-6-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v10 2/6] dt-bindings: gpio: logicvc: Add a compatible with
- major version only
-Content-Language: en-GB
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
- <20220120150024.646714-3-paul.kocialkowski@bootlin.com>
- <CACRpkdbnEKeDNmFCuUCLaySs6AtD9MPtxV+9JDxKuXvTs9iMVQ@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CACRpkdbnEKeDNmFCuUCLaySs6AtD9MPtxV+9JDxKuXvTs9iMVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220128062050.23978-6-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-30 00:46, Linus Walleij wrote:
-> On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
-> <paul.kocialkowski@bootlin.com> wrote:
+On 28-01-22, 14:20, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 > 
->> There are lots of different versions of the logicvc block and it
->> makes little sense to list them all in compatibles since all versions
->> with the same major are found to be register-compatible.
-> 
-> The reason we try to be precise is because sometime, long after the driver
-> has been merged and maintained for a few years, a bug is discovered
-> in a specific version of the silicon.
-> 
-> What happens is that a fix is applied on all silicon whether it is needed
-> or not.
-> 
-> If you have the precise silicon compatible, you can avoid this and target
-> only a specific version.
+> This commit adds dt-binding documentation of T-Phy for Mediatek MT8186 SoC
+> Platform.
 
-Indeed, the better approach would be something like:
+Applied, thanks
 
-   compatible:
-     oneOf:
-       - items:
-           - enum:
-               - foo,bar-v1.0
-               - foo,bar,v1.1
-           - const: foo,bar-v1
-       - items:
-           - enum:
-               - foo,bar-v2.0
-           - const: foo,bar-v2
-
-That way the DTs are future-proof, while drivers can still match on only 
-the less-specific strings until a need arises. Plus it avoids the 
-problem that if an existing OS that only understands "foo,bar-v1.0" is 
-given a new DT with only "foo,bar-v1" for v1.0 hardware it won't be able 
-to use the device, even though it's *functionally* capable of doing so.
-
-However, from skimming patch #5, it looks possible that none of these 
-changes are needed at all. If LOGICVC_IP_VERSION_REG tells you the exact 
-revision, and is always present (as the unconditional reading of it 
-implies), then the only reason for adding new compatibles would be if, 
-say, v5 has more clocks from v4 and you want the binding to enforce 
-that; otherwise, newer versions are literally compatible with the 
-currently-defined binding and therefore should continue to bind against 
-the existing string(s) to maximise forward- and backward-compatibility. 
-Sure, it's not the prettiest thing for a "generic" compatible to be 
-based on an oddly-specific version number that doesn't necessarily match 
-the actual software-discoverable version, but what's done is done and 
-that's the cost of ABI.
-
-Cheers,
-Robin.
-
-(also, nitpick for that part of patch #5 since I'm here: please include 
-linux/bitfield.h rather than reinventing FIELD_GET() locally)
+-- 
+~Vinod

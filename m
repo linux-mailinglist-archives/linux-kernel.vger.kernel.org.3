@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C65E4A6F8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835EC4A6F98
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiBBLGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S243012AbiBBLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236708AbiBBLGj (ORCPT
+        with ESMTP id S229552AbiBBLIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:06:39 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF2CC06173E;
-        Wed,  2 Feb 2022 03:06:39 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C5E0E1EC0513;
-        Wed,  2 Feb 2022 12:06:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643799993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=T5KarsviFxcdPdr91Ju50bIXrFx/Ww52H/WmFLJHWWk=;
-        b=oXHB2bMIYcC69Z2LEdY0Kp3e4q+aUB7LWsYhNn3wevkRodEY2WCg1LuVEpeNDtxTrfzab8
-        ct1X+4H0PojDxi5drGWWg6PRjOminwTVFtJA8ySyvP9PR9gy2fZC7eyO03NzYf5MlVpIpz
-        ttux2IT7OMBSjaXoLcwcmTzaun8uLjI=
-Date:   Wed, 2 Feb 2022 12:06:29 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 17/43] x86/kernel: Make the .bss..decrypted section
- shared in RMP table
-Message-ID: <YfpltcR7IqhP5KTq@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-18-brijesh.singh@amd.com>
+        Wed, 2 Feb 2022 06:08:11 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876F9C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 03:08:11 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id z18so7915607ilp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 03:08:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KvwP2pq0A69XLEtJRHQeT2K6fCrFL3jZAy9726cRZ/o=;
+        b=hkqcAskloSPcrI90jAiwlBCksVcgOjKlFwsucBqi2eYnoWM21moZyBpPgJZ2Xrm0Hd
+         pHAJYXSQZIBL8mbYzQFC59iVtLwvbHwLCgjJkw2aYGLyCF+AtQF7qcLxUvcPhU6i68hU
+         gYg0UVCo/wSNJrPZJr0TQh3Qlu6UwG2vGdV9uh8q22V2i6+O3tWLV9l7bpszGXrzzovf
+         VIxz33W0z2qTWPHNQDb1AMIDAqW+k1i+EyfL6Axy0eeh5oSMXA5T0eMJlGDXB2rPOIHQ
+         Q1Kn7C5pwmn/LatVJ9WCYsGLFluu6my88RVOd0QFA5llO69NciKTYbwEpxySXt7ODtRA
+         W8qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KvwP2pq0A69XLEtJRHQeT2K6fCrFL3jZAy9726cRZ/o=;
+        b=GVq7CG33e/73sLF4s5AGDsIPE06efbcblIw5IF9Awhavc33LgeJ6PA9cXij3G526Aq
+         wQexMnl8A7b/3mqLlBi1rkmyYQ4Frx1sFzitvXMIwXLjeTuPvb1EfIZWrNVraf2/+bGp
+         z5df6ir/EBd7dp84hZe5+cfJmmWNhTFAdSDlBLHYkzPlP8oOYAt0/aTkNPC8GUzsdN1p
+         2EAziVSrQltG3mRS3ZnNqH1RSAMoWy4tMs/wdIAlJUQUSWtt9k7w1KBXs0SPaG6kqC0N
+         Wd+xyMtzzcvuKZLXJ334rISJrgj2yWuGaxEAR7d3/zTZDdt5sBBK0k88JmqRY+m9ieYd
+         Bjxw==
+X-Gm-Message-State: AOAM532Yosf04nSKWjdqd4lkCQuUUezB0frBlVihH9P4mwBvJQcmzzTp
+        ZqaVkbR/1drM/oUidKFLMorPeSZ24StvCCAuozMkwnWtmR29tg==
+X-Google-Smtp-Source: ABdhPJxvcnLnLL44YJGu9Hx6EDcJ3di6PMIRblKZuakSdFXT0QwOZsAXIX4XpbxJvvDNsWPbd6t+//aY4zx6dFeQpLw=
+X-Received: by 2002:a05:6e02:1a4f:: with SMTP id u15mr6037825ilv.245.1643800090714;
+ Wed, 02 Feb 2022 03:08:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-18-brijesh.singh@amd.com>
+References: <00000000000038779505d5d8b372@google.com>
+In-Reply-To: <00000000000038779505d5d8b372@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Wed, 2 Feb 2022 12:07:59 +0100
+Message-ID: <CANp29Y7WjwXwgxPrNq0XXjXPu+wGFqTreh9gry=O6aE7+cKpLQ@mail.gmail.com>
+Subject: Re: [syzbot] riscv/fixes boot error: can't ssh into the instance
+To:     linux-riscv@lists.infradead.org,
+        kasan-dev <kasan-dev@googlegroups.com>, palmer@dabbelt.com,
+        alexandre.ghiti@canonical.com
+Cc:     syzbot <syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:38AM -0600, Brijesh Singh wrote:
-> The encryption attribute for the .bss..decrypted section is cleared in the
-> initial page table build. This is because the section contains the data
-> that need to be shared between the guest and the hypervisor.
-> 
-> When SEV-SNP is active, just clearing the encryption attribute in the
-> page table is not enough. The page state need to be updated in the RMP
-> table.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Hello,
+
+syzbot has already not been able to fuzz its RISC-V instance for 97
+days now because the compiled kernel cannot boot. I bisected the issue
+to the following commit:
+
+commit 54c5639d8f507ebefa814f574cb6f763033a72a5
+Author: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Fri Oct 29 06:59:27 2021 +0200
+
+    riscv: Fix asan-stack clang build
+
+Apparently, the problem appears on GCC-built RISC-V kernels with KASAN
+enabled. In the previous message syzbot mentions
+"riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU
+Binutils for Debian) 2.35.2", but the issue also reproduces finely on
+a newer GCC compiler: "riscv64-linux-gnu-gcc (Debian 11.2.0-10)
+11.2.0, GNU ld (GNU Binutils for Debian) 2.37".
+For convenience, I also duplicate the .config file from the bot's
+message: https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+
+Can someone with KASAN and RISC-V expertise please take a look?
+
+--
+Best Regards,
+Aleksandr
+
+
+On Tue, Jan 18, 2022 at 11:26 AM syzbot
+<syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    f6f7fbb89bf8 riscv: dts: sifive unmatched: Link the tmp451..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1095f85bb00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=522544a2e0ef2a7d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=330a558d94b58f7601be
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+330a558d94b58f7601be@syzkaller.appspotmail.com
+>
+>
+>
 > ---
->  arch/x86/kernel/head64.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> index 8075e91cff2b..1239bc104cda 100644
-> --- a/arch/x86/kernel/head64.c
-> +++ b/arch/x86/kernel/head64.c
-> @@ -143,7 +143,21 @@ static unsigned long sme_postprocess_startup(struct boot_params *bp, pmdval_t *p
->  	if (sme_get_me_mask()) {
->  		vaddr = (unsigned long)__start_bss_decrypted;
->  		vaddr_end = (unsigned long)__end_bss_decrypted;
-> +
->  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
-> +			/*
-> +			 * When SEV-SNP is active then transition the page to
-> +			 * shared in the RMP table so that it is consistent with
-> +			 * the page table attribute change.
-> +			 *
-> +			 * At this point, kernel is running in identity mapped mode.
-> +			 * The __start_bss_decrypted is a regular kernel address. The
-> +			 * early_snp_set_memory_shared() requires a valid virtual
-> +			 * address, so use __pa() against __start_bss_decrypted to
-> +			 * get valid virtual address.
-> +			 */
-
-How's that?
-
-                        /*
-                         * On SNP, transition the page to shared in the RMP table so that
-                         * it is consistent with the page table attribute change.
-                         *
-                         * __start_bss_decrypted has a virtual address in the high range
-                         * mapping (kernel .text). PVALIDATE, by way of
-                         * early_snp_set_memory_shared(), requires a valid virtual
-                         * address but the kernel is currently running off of the identity
-                         * mapping so use __pa() to get a *currently* valid virtual address.
-                         */
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000038779505d5d8b372%40google.com.

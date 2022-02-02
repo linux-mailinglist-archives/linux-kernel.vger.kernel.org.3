@@ -2,216 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62694A706B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5299F4A7070
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 13:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344052AbiBBL7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:59:22 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.101]:36795 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiBBL7U (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:59:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643803145;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=pZc3k2e6gytwmznM0Uuw5dl3AVAzNWITlIrFh3iYiJs=;
-    b=EGdniJJxXbqCy9Pn3hBHZErt73L65URr7vHPaRv2hPxj07lhRJs4o6iHlOmNNrFCh2
-    cvEnXNYPyoEyt+Dnq12lUztkpALMJu4HGN6smhw6RZktaXuz5Qw8iyxNr8lnXwBebPDB
-    Kvf1Cmim4OWdVYiMGYr/UMFtfGxAfP+4gQUw8Jg7HTMEIdaTFE0k1s+mhwHkFqahbwIF
-    +Lwl3/TyEWaTa1VfNtGmXl0afyeHJJBSB6Y0Ba3rGTfvXPb7X+jDgDYcqQAq3+WAe93m
-    xanNTLrsORBIH/fbecOu2KA1LU+qX8vvmFrsIkr6D258lxZxLRTfjl8srD3pf9J0duOB
-    eUBQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDCocQ=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y12Bx49lf
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 2 Feb 2022 12:59:04 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v12 3/9] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <D29O6R.3788L9G5J66L@crapouillou.net>
-Date:   Wed, 2 Feb 2022 12:59:03 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <89CF4AD2-F147-4A06-B630-5422DB6AAFE9@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
- <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
- <D29O6R.3788L9G5J66L@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        id S1344054AbiBBMBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 07:01:34 -0500
+Received: from mout.gmx.net ([212.227.17.22]:58157 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229848AbiBBMBb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:01:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643803278;
+        bh=DG0I89u/xoEtET/fIjlaMIIbu9UDAXTghXDfdeYsOrQ=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=fU4Ais4GGYiQEV+WI/7iBj5fZhROPD3gkNTFRYD4Mv83dEb/88qNAjva0rl9WeCaP
+         +rvekP35tpXY9qbvfpreIL8DRGCAchTMjmAFRRw5EcMVo8AVM1Jrw85m6QIbGOI87v
+         g+dYyJ8JMVd4E1xt+nd7dX+GGLTVE2nQuByyO6jg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRmjq-1mlzAS2jBS-00THUq; Wed, 02
+ Feb 2022 13:01:18 +0100
+Date:   Wed, 2 Feb 2022 13:01:16 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Subject: Re: [PATCH v5 0/9] Nuvoton WPCM450 pinctrl and GPIO driver
+Message-ID: <YfpyjDBH83FE7r4o@latitude>
+References: <20220129115228.2257310-1-j.neuschaefer@gmx.net>
+ <CACRpkdYEigGHkoGfBg15tFXadgpXUAjDOnw7ePXhmvHJqPEJXw@mail.gmail.com>
+ <YfZkis8M81Ejpagq@latitude>
+ <CACPK8XdFXRQf3MpPh3z=EMAKtnQSHL+iwwMCVYc5dP9DfQEN+Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yUAS+izAGfHMhGZS"
+Content-Disposition: inline
+In-Reply-To: <CACPK8XdFXRQf3MpPh3z=EMAKtnQSHL+iwwMCVYc5dP9DfQEN+Q@mail.gmail.com>
+X-Provags-ID: V03:K1:YWqsdi+eBk6zLt0DaPphq9cAs1M4Jyld/+a8Ne9Qv2A65ipmJM9
+ gBqcjVV1uCHTMUg2FSopPkMYcU9kVVCdv23cAmQK4hSYFeq8AwkzXB3S3eXrC67EX5CoFYF
+ sCL6s748R5Jdl0w+NrAzcp3l+OooUcjYusrOGo6ffitEC5Ff9PEP5cjtu0KOVz1PnqWIzdF
+ IuVtC7xCR7DJUMHk56Euw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vny+rQ3ZSLM=:hUza3+afPJJCbjITS1BZVL
+ iXLt5zOx2s2qxb1WeRMOhA6IRPLd32AVKrKv78ScFI1uYGDrjQh/djRSeKO9meZbq2Am4wK2Z
+ 6cIwauVX1HTDpjheE6Dv3A5JU6GaobR0+x9lHXhYKyO0vewHjbYURhmfVfiCw2/bXtNR40rFk
+ i8PYjxaOQ6CTXlvsq5yHOt+6vU7jwqe2fdPGzzq8dzjspBsTy3iO3X7cj6DibK1bU/e/IbTce
+ 375EbZrNzu39AH4djXPlaJ9iH5O/4xahxEnljKPav6ez+0BiWKvo3q3mViFHSLI9ofnSCNrje
+ HRqGob4g9/GwBhKdr0576Q+WcYH8o98w0r3Q4sYr3dK6JMwOT53fSoOxs4vi7xq+XhSjarMQW
+ 5C1Qr1JJs0cd9/A5f8szFMvR9dUwBruI3n5FBwD9D1QvwD2u8W5b4kLTzbF/2Y6c+nrx1i3Nx
+ bIRKTsYq++1j+wY8baxTqJSfkYI85qUfjTwf3b4ZFoyDsEOjpE8cquWTgAe2kLb8at8MRZ22W
+ YnJbVFb+nPs9AR6OL1Iupj/87ylwmUaa6wtb+WBjArIe7Tmpg2NxKtTmyCkPuVrUvxVzR6Xst
+ hFeEIm9df3OooHr8vFoz1U+pM7ogQIf5LCqTot4CRqPAOu4V1r4LdQNUwl2NjMVKdMD7EHBgx
+ Tl/T+6ZJPI6B4nWpTTFOWgBhEIePRCIrgdFLgIsf0ZMfu/orfXXRTqws2UAeSaDgxRo5Fjglk
+ R18SOKpPxQKkJkFnHIz435v2uGc9/V9o9gIGI78PhOiYPa/3YQODzPNQVjRC+4R1ATHEAxwOV
+ /HWCEUxHqx3OuG75EXXfZuiu7q7fKjOpNJIG4hMaocS2oaumWP7XkW4oq0JC4S1FVXq3Ushf1
+ J02osc8ftZcwv3posAIpXvyoaW3hL219yEDi2FKBI85AMPjJ30K3C45mtnAXLogdUhmB7F7nx
+ cjDZTgNjvQ2zttOBML+zj0vFHkMm44rQgCgpXkZwqgxno+ezSeRgbf9zvdXxAVvCFMKLHX0ui
+ ngrTcTR29c2rMMo+6/+Rr+pBq/gMrIgMzaltuRLUrYUHGAwWnLUpDw9XoskMBHCAdb+EfxlJ0
+ pGbyVn1tE6r2Iw=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
 
-> Am 02.02.2022 um 10:59 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> Le lun., janv. 31 2022 at 13:26:49 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> From: Sam Ravnborg <sam@ravnborg.org>
->> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
->> Based on .txt binding from Zubair Lutfullah Kakakhel
->> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: devicetree@vger.kernel.org
->> ---
->> .../display/bridge/ingenic,jz4780-hdmi.yaml   | 83 =
-+++++++++++++++++++
->> 1 file changed, 83 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
->> diff --git =
-a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
-l =
-b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
-l
->> new file mode 100644
->> index 0000000000000..5a2767308c0ab
->> --- /dev/null
->> +++ =
-b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
-l
->> @@ -0,0 +1,83 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: =
-http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
->> +
->> +maintainers:
->> +  - H. Nikolaus Schaller <hns@goldelico.com>
->> +
->> +description: |
->> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys =
-DesignWare HDMI 1.4
->> +  TX controller IP with accompanying PHY IP.
->> +
->> +allOf:
->> +  - $ref: synopsys,dw-hdmi.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    const: ingenic,jz4780-dw-hdmi
->> +
->> +  reg-io-width:
->> +    const: 4
->> +
->> +  clocks:
->> +    maxItems: 2
->> +
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +
->> +    properties:
->> +      port@0:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +        description: Input from LCD controller output.
->> +
->> +      port@1:
->> +        $ref: /schemas/graph.yaml#/properties/port
->> +        description: Link to the HDMI connector.
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +  - ports
->> +  - reg-io-width
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
->> +
->> +    hdmi: hdmi@10180000 {
->> +        compatible =3D "ingenic,jz4780-dw-hdmi";
->> +        reg =3D <0x10180000 0x8000>;
->> +        reg-io-width =3D <4>;
->> +        ddc-i2c-bus =3D <&i2c4>;
->> +        interrupt-parent =3D <&intc>;
->> +        interrupts =3D <3>;
->> +        clocks =3D <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
->> +        clock-names =3D "iahb", "isfr";
->> +        hdmi-5v-supply =3D <&hdmi_power>;
->=20
-> Where is this property defined?
+--yUAS+izAGfHMhGZS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It was (not) is defined in v11... So forgot to remove it from the =
-example.
-HDMI power is now defined at the connector.
+On Tue, Feb 01, 2022 at 11:42:11PM +0000, Joel Stanley wrote:
+> On Tue, 1 Feb 2022 at 13:05, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.=
+net> wrote:
+> >
+> > On Sun, Jan 30, 2022 at 02:50:25AM +0100, Linus Walleij wrote:
+> > > On Sat, Jan 29, 2022 at 12:57 PM Jonathan Neusch=C3=A4fer
+> > > <j.neuschaefer@gmx.net> wrote:
+> > >
+> > > > This is version 5 of the WPCM450 pinctrl/GPIO driver patchset.
+>=20
+> > > Which patches do you expect to be applied to the pin control tree?
+> >
+> > These two:
+> >
+> > [PATCH v5 4/9] dt-bindings: pinctrl: Add Nuvoton WPCM450
+> > [PATCH v5 5/9] pinctrl: nuvoton: Add driver for WPCM450
+> >
+> > and the rest can go through Joel Stanley's BMC tree, I think.
+>=20
+> Seems reasonable. I assume you're sending a v6 to fix some of the warning=
+s?
 
-Thanks,
-Nikolaus
+No, the warnings are fairly independent of this patchset, it's just that
+the adjacent pinctrl-npcm7xx driver started to be built by the bot, due
+to my Kconfig change. I'll fix them in a separate patchset.
 
->=20
-> Cheers,
-> -Paul
->=20
->> +
->> +        ports {
->> +            #address-cells =3D <1>;
->> +            #size-cells =3D <0>;
->> +            hdmi_in: port@0 {
->> +                reg =3D <0>;
->> +                dw_hdmi_in: endpoint {
->> +                    remote-endpoint =3D <&jz4780_lcd_out>;
->> +                };
->> +            };
->> +            hdmi_out: port@1 {
->> +                reg =3D <1>;
->> +                dw_hdmi_out: endpoint {
->> +                    remote-endpoint =3D <&hdmi_con>;
->> +                };
->> +            };
->> +        };
->> +    };
->> +
->> +...
->> --
->> 2.33.0
->=20
->=20
 
+Jonathan
+
+--yUAS+izAGfHMhGZS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH6ckMACgkQCDBEmo7z
+X9uopA//dcZaTmjymc48RpOuC9ck8TQlUVQmUtcW8EHdRYgWGKlmjgmgcnHf/8pB
+c3ZyzpYD/Amm594bUvNR8du8Ew/E6GO+MtL1iDL8I9rbQ67vzNnX74oT2wRcZ/pW
+kSoSamv1pFgLnVoI4twifrvZXhw5kqrT0pZbjofikXFMF0RbYhs7AMWzz6thqrPv
+EvLOvKbaVLhduQ/tz1E3pKlHfZ1JaIqpNgaJGj5y3+ScUavPaeJ2Gmvw16fnvCOg
+rFmMevibWKOiqed3TRweyU0UBpeThWIvAWwkruwojZGAi5wlk1lpbDJj8l9xqx9l
+V1hwC1rF9VCVshkB4BBaUFPEDp85LoncbIIHSttKDMviCdO2PyR8xXPnPyGOczaA
+MV/CdkaO81DaqnHiIlJ/1gPRD53wfpBt9M9X+vv2xZte3fKfLhokfwq3a2zlyqt/
+tZq15BViGD+OSsQzQ8X3/odUMJ09k+ym0X5VUbHpzIMM04IS2Ys42c83nWyqh4Uv
+5LQHC7BfvkNt8wxKp6hxdcEp+4gL098nk0uB4luRI1AGkqh/PFML3fonNRPuQvCo
+Akq0BejtptUnpdxjRW6WQydQSLVBYCVmqfw8R8lW+MTqC8VWTakNAap+JjeL08Al
+RBkv8tUMvkeUgPkW9bqMGl57LK0YL4WfNciLe1VIjopJlUy4ZwU=
+=MUta
+-----END PGP SIGNATURE-----
+
+--yUAS+izAGfHMhGZS--

@@ -2,710 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD274A7B19
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C1B4A7B1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347883AbiBBWaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232942AbiBBWav (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:30:51 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6FDC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:30:51 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id a28so1978853lfl.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oeuN5nd5sq6g5h5kT6DxOO52vYM7snUvZf34D33iGTI=;
-        b=vXUn8kpoZw8UmD1RhsSSCQ/pfnzF2VChF8L2U0ZX5kkhC4f2utHAerdQTgrX0ict39
-         qGHJVIvP2coBKhn+Wnmi+pdPXoHTqB3FsXPaXMErEEvcDjoafPWLpLhUxhKQvWWxGNUE
-         nOnd+n4qGER2c1tO02zhrn+Noo1uwkfhiQiD+hek7QeyiY1IcFLfuTQPU7rQ1VQlE1FD
-         qmii+7hK4KYSmkFBOKC+V9v76f821qSFCOwD/w5m2AE4rvNcEYVpgvDYj03mvKr9TBjI
-         Z0NKnueTgj39ULxl0mnSHcvxCYmS8OjIccbNux3mRJwllVQlxTH7JDLEpcLDBz59Hjre
-         TOfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oeuN5nd5sq6g5h5kT6DxOO52vYM7snUvZf34D33iGTI=;
-        b=Y9VMnbjHJprGCWS/0F2XAwmIKXsms94hlnBFvw1wYB++J68O/XR7LSFN+9xq93JA+c
-         nVJkeZCJo76eN7qBqYq9/LvU1l1Unl1QnRtOOIRiat35jfaZdXuJ+pJX+msXEKYtbAh2
-         Erh04aD9zDdgcsuqgg9nM3VkLwfwvNzPJR1C2VpM1yU5sTemxX+8Io/Ac8iXZR9rAOfK
-         0kp4NXQOO50XUUlleTFMj+bNCU/MmbMiYtssmksPtl6NQjgPcW+WJxe0nhmrpEcmFuvZ
-         vnPjnIiyAqDZM94xnGXBDDMnHDWY/hzXv0Oz12DnYfKWp0kHtx8WDgFDnjdfvHVXUJk7
-         b3Hw==
-X-Gm-Message-State: AOAM530Rq2aup1yOZsbY8a0QO+AtwzL6WymXeazlG5ypQViw4Z988FQU
-        6XzRw1Ao9N2uJ0nuKYQGVJsrgQ==
-X-Google-Smtp-Source: ABdhPJw8Z91O0MKM9mzo0U2vtlZs5kDlQnZox4xpRJw9zxL1muB7Vc2kW6T0vX4Fvh/USCf+HyoViA==
-X-Received: by 2002:a05:6512:39c2:: with SMTP id k2mr23589534lfu.586.1643841049367;
-        Wed, 02 Feb 2022 14:30:49 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id cf32sm3292397lfb.133.2022.02.02.14.30.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 14:30:48 -0800 (PST)
-Message-ID: <e510b1a3-b1a2-179b-7aac-5d59b329b494@linaro.org>
-Date:   Thu, 3 Feb 2022 01:30:47 +0300
+        id S1347910AbiBBWb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:31:29 -0500
+Received: from mail-bn1nam07on2074.outbound.protection.outlook.com ([40.107.212.74]:49568
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347893AbiBBWb1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 17:31:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hAlJp/QbRTnAvrMW9DV5oQwrXG+l7IewrlcrHnN9DO6elhBOGCetWyKhXLSEqmYVli2ILevjaGUHRxjlBhuntNCc9EnOyuZXij18qaWpYg9GzbToH9LVSlIVapYJWPuqt2UAVt4GS4dMBzVUph1vguaf8xcOqeoIVoYxxhEfN7wOy5x8ewXYwpiBr2/hZ47Xn1GhB4HbrKiyYNygB6O0TpaG7loByApCbYKOJNCU/ASXiD+Sjz12CBHEozXVnbQiQrAqxLQsI6O0iA3Gecgb4yretalLheevWKuT582Wjm/2xudeE3o3+LgDdc5UkoaRjeBbGBdy2HIosaFkWyCtjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0L5tr4wqo+yxUwjp3z/jSrPTJVD8frvwDisOJk3qWo4=;
+ b=f63Pa4Zbe28QxM0CFjfR5eeKA6yOyWenmBwlITJDWyo6QFHtrZr3GNFFZjCOyyzrkkWaFRzJwReMnVF6tRZIOfpDfQ+4JeSysJUoV+IDT1bKA8fE3pN1Wv5Mz0906x1smtm/K6p2H4xCnGQkGMJmdExG562XiN5b2W5qtkZ2GWDDQIW0dB/n88ZNR6LGfOgDsEEtu1wWN84t20r+cwMnLp+WDL06HFOjJF50kZgIQevIgigIBcPCuL+WdfufB4zTjtmKTcFVt6dOjjrkj8fM2um4q3jtLlRvS9b80Hd/gVWivJAS907ocRMjNznniRK59r1nGcJgNtwylTrJMJitwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0L5tr4wqo+yxUwjp3z/jSrPTJVD8frvwDisOJk3qWo4=;
+ b=fw8gEBDjoln64RhuQnDTKoh0wqXLhhphTEITrJ7j8v5MKpGl+pd3S2p/Cootpmudu4WBzMdzyVbazwPU2WRfPEZ6RgG01PVKI4+wza2Kuuo1aEHVYooRnoVrcM1YteUIXrJ0WnNkRgHjE+qu+FsYPRSSBDrpvmq9PW+Fkle2Gas=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com (2603:10b6:805:6f::22)
+ by CH2PR12MB4294.namprd12.prod.outlook.com (2603:10b6:610:a9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.15; Wed, 2 Feb
+ 2022 22:31:22 +0000
+Received: from SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817]) by SN6PR12MB2718.namprd12.prod.outlook.com
+ ([fe80::500e:b264:8e8c:1817%4]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
+ 22:31:22 +0000
+Message-ID: <5a8ac0f6-74ee-b2a4-6871-2f928b5084cd@amd.com>
+Date:   Wed, 2 Feb 2022 16:31:59 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Cc:     brijesh.singh@amd.com, the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, Tony Luck <tony.luck@intel.com>,
+        Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCH v9 42/43] virt: sevguest: Add support to derive key
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-43-brijesh.singh@amd.com>
+ <CAMkAt6p-kEJXJxHcqay+eoMnTDCGj7tZXVDYwrovB3VkXCbYRg@mail.gmail.com>
+From:   Brijesh Singh <brijesh.singh@amd.com>
+In-Reply-To: <CAMkAt6p-kEJXJxHcqay+eoMnTDCGj7tZXVDYwrovB3VkXCbYRg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0162.namprd11.prod.outlook.com
+ (2603:10b6:806:1bb::17) To SN6PR12MB2718.namprd12.prod.outlook.com
+ (2603:10b6:805:6f::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] drm/msm/dp: add wide bus support
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, aravindh@codeaurora.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1643761824-25858-1-git-send-email-quic_khsieh@quicinc.com>
- <04ac6556-310b-206b-5341-ccf846959f16@linaro.org>
- <b675ae63-e89d-ebb6-a6d4-3cfe054697fb@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <b675ae63-e89d-ebb6-a6d4-3cfe054697fb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8e878da1-a3d3-499e-867d-08d9e69bbd87
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4294:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB429456105D1FF7F34C94F62FE5279@CH2PR12MB4294.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dl14B8Li3eRBG77HQSMYdCF09kYK/0sPFTyzpR174oVVx2cPdkxYOfF1AxsJkAAKmWshF9WY3nPzoQAbvRhDoFHuHFG9GglAHmvfBkPXYeS/w1luvRkGOgnPxKDrGaCosy0u2hGexsNnAoS6Q2zfsMEOevklKexi6u1Sq36LoHZ2ZExn5NtWJwqjF1w0Qg0JRVSDnJYURetLLH+djDJ9tD4JlcAJvmKPdDlAIasnHzVH9DzGOAGRI/wwWMzCLPxpRTw+QryBDFpQEesB9YuGJ9zHyLYEE2zBCV7+vAhiHPJvjdrnji3ZpXtCPokiwNdmi1VxObLkSX6MT1orh9CnMh0pRL2xmlNybafRDO4MT9eeyxwqQhqEHodhJZ8h1FzIrOF+PsOYmPtDZbP2hyz5g3O9XZ37mpYrrlMlWm7/A+8+XFRGPIi+IFeuepL+ZYiSdMwhWYZ8ArC84Q6s/oMDvHSCKYyTSjsezWL5uVDlXRY1bakVv+RfaEOcWw1yVgeylp0v+OqbnQ/HKacNzBQ2SsNnvbvai9tjxUVoTdCDGip6ZYqAXa/Ni3AjxNaJGaXQa58zSrvJmyz37r7OLdp7fVdQR63uC+J+3zFXvzNXWtCMGV5AOJriQJBSpXypayVJCPwdVqJf5EWaFmCiuU1eyK+AqQN/AHE0nKJGB+hYI0UH4cWa8UvgBsRwPPqv+TqwvRghv0+EwD/23HKQ90Bdwq9f6e3eUOxs4HC3DTYB7nk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2718.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6916009)(26005)(6506007)(6666004)(7416002)(54906003)(316002)(5660300002)(44832011)(186003)(6512007)(2616005)(53546011)(7406005)(508600001)(6486002)(31686004)(36756003)(8676002)(8936002)(66556008)(4326008)(38100700002)(66476007)(83380400001)(66946007)(86362001)(2906002)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzhSdWdFR1puZjBKeFIyTm56UVFyMFhQaWEyelJKaUtBT1FRWXhPblJRazdV?=
+ =?utf-8?B?RHJLaXhZZXJld3FOa1JRSnpnenJJaVhZQ3pXVjFyOHRaU2pVUWVJbFJlTmRK?=
+ =?utf-8?B?bFFMaVEycll3UUhtVFVnejlXNHlHa2IxNm84VWN6TVhVN0I1ZzdkZEsyK3Nv?=
+ =?utf-8?B?YVlZNGs2NW90U0lUZUkzVy9YN2txenBVTVc3ejlLcC9zQ0w5dENrNGtPZHdu?=
+ =?utf-8?B?dzBLSHMvOFlnUXY4ZVdSVC81UDNzYmUvbndkWXRITy8xdXQ5d0ZGZkdPRHRJ?=
+ =?utf-8?B?T0YwTWxtWkNySUtJZlJUZ25wL2pyYktrZmYvUTd1cE1jUGRsUWtuTysrdGZu?=
+ =?utf-8?B?dmZUQVQxWmNoam1JbFExa09BTzRCUTZzcXpEKzFvOXZkRDBxQlpuNDJLVlcv?=
+ =?utf-8?B?VHZUMWVseGpUVXhqNVBNUTRkS051by9vNlNQK0UrS3BkOWxQUytVajdjcEd6?=
+ =?utf-8?B?UWlaT3Zjby9KTkl5WTIzMlRCL0d0dUxrdjZ0dVl3MTZiZXAyY01PUG01TGpu?=
+ =?utf-8?B?MDlZZlRDK1Zpa2RuTXRYYStNNGcwNG9oSlFPWXJ6cmxjUEdWenlCR3BkcmFO?=
+ =?utf-8?B?NG55R0ZtY0N6Z1JWaUszNEcwTmd4VXU0Sm05YlBnQTBzRjhkL3ZraDNxRWU4?=
+ =?utf-8?B?L2xNbE5OUUN2K1MzbG4zT0tJMG9mYzBxbE5YdkxvSzBkem1yMFpZYjZuK0J2?=
+ =?utf-8?B?SThxeU5KZnY0cytPVThaR2p2aWZZbWorMUl2RkJzbGNXV3pVV0tEdkhtZ212?=
+ =?utf-8?B?V213YmlWK05yaEhKcXhUREZDUG1HZkY3bVcyL3Y1Z1kwaTI2dHBmN1piWjla?=
+ =?utf-8?B?dUd0ZnI1SWR5SGdDZ2pjei9KWmZwN0N0NFpWdVhsemN3MUtlQnNYNk9ndzlQ?=
+ =?utf-8?B?dUg2cGtYcE81RkFyam94Q2NKdmFNeWYrZTYyRGdLaWloWVJ0YTMydGc4ZTNy?=
+ =?utf-8?B?OWEyZXBIOGM5ajVmZkhtejIwVTFnRTFVa0ljbEpzanRWTU0zcCtNMGRKOGNI?=
+ =?utf-8?B?ZGM5Z3RDZW52UU9OUFl4Um9SNGlGa1VqTi9oTERMV1hkWTJ4RXNYQ3dGaUky?=
+ =?utf-8?B?T2Z2UjFpM21DVElxTFFWbUVGcVZWbU1keldYQldJd0l4M1ZRMjhOelVmRDVx?=
+ =?utf-8?B?eno4MGtuNVB2VmE3OTNzVGN2K3NRZmxaRiszTVM2MUVnRFF1VkF3K3JZN21s?=
+ =?utf-8?B?bzg4UzhYV0pSNzAyQTBuZlQ2M0piclh3VnRqaW42bGtNSWoxTngvQVBVM0l3?=
+ =?utf-8?B?RUxldlhzMnA1T09tYngzVlBDVUw0T0M5NE40UjhSUUc3TGNzaDdNUTlMM2c2?=
+ =?utf-8?B?NnlKQVZPdXpLelJ4c3RBK0dweFdPdENyS2tXUnhnTWZCS1dOOGFrRmwxUDN5?=
+ =?utf-8?B?Smk2OUxuU0MyQ2ZKV0hGSUhKRkovdHZFbG5aTVlDd1NXUWY1cUVtTUtLNTFz?=
+ =?utf-8?B?b25kOVl6ME8wQVMwb1E2ODFwd0pGc2ZUUS9qdEhzVyt6QWgzdnZFZ1hsRVV0?=
+ =?utf-8?B?NVc5eEhzaG1uRVZPczE2dkRlbFVGNTlSYVhhcU5nRmh4QjZTbWx2Q3hOUWVp?=
+ =?utf-8?B?QUhmcWZPbFJUUjhvTzd0K1VWaVpEUWtIcHNjdEJiN3FJMW9pWk9jMTJHa0xw?=
+ =?utf-8?B?dW9sYnMrZGVtV2JrSG1FdjJqMVMxNHJJU003UTFEL2hCR0dlMFduemQybUZ1?=
+ =?utf-8?B?WktsZTR0UDJoZm5QMGdFT2xZVFhpVjg0TDZENjJiUXg4eUFXV28rYWdwN0Jy?=
+ =?utf-8?B?d1ZHNG44WDkxMlZra0RhdmNtaWdLQStRdUI3Y2kwSFFtaTlmK2Q5SThhS2Vt?=
+ =?utf-8?B?bGF1cmdTYmNXQkthcWt6MDdkQmdSZUlUQ1IxVVU4NTR6Nkx2a0VXc0pjYnlw?=
+ =?utf-8?B?MUJ6bk40a1l3Yk9pZjEvazVFeUdmbHFXZ3NaamNsT2RLL1ovdUlhcG1DL1V1?=
+ =?utf-8?B?RnlDRXI5a0RSS3B0QkRwUUxqZDVhWG9rTnJDVXAyOFlzOTd4V29qemZNVzN1?=
+ =?utf-8?B?TXMzYThLZ1hlMlZYQzlLT0VlVGlqYm1IcnhFVHlhd2p6TlBOc09QT3VCeWht?=
+ =?utf-8?B?Rlk1YS83T1R3bUVoY0xRZlhtSlgzVDMvR1BCNEhpUW5XazVvSUpWYUhGSXg0?=
+ =?utf-8?B?dVc3bUZpYWJ5RFY4djFiV1BnYnNlR3VlMVR6T0M5Z1NBakQybSt0Nk9qNUJV?=
+ =?utf-8?Q?24zoLRMskRO7yeWaEDNSc0E=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e878da1-a3d3-499e-867d-08d9e69bbd87
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2718.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 22:31:22.5605
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jUNufQTI5gWdmzPUzw371FsFdVLH80SfdYOjKEcoi89bT1tSWjgts23VPMrPkxMi6OmeoocAAol6+KzBlgJpBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4294
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2022 20:49, Kuogee Hsieh wrote:
-> 
-> On 2/2/2022 1:56 AM, Dmitry Baryshkov wrote:
->> On 02/02/2022 03:30, Kuogee Hsieh wrote:
->>> Normally, mdp will push one pixel of data per pixel clock to
->>> interface to display. Wide bus feature will increase bus
->>> width from 32 bits to 64 bits so that it can push two
->>> pixel of data per pixel clock to interface to display.
->>> This feature is pre requirement to support 4k resolution
->>> since it will reduce pixel clock rate to half of original
->>> rate. Hence pixel clock rate used to drive 4k panel will
->>> not exceed limitation.
+
+On 2/1/22 2:39 PM, Peter Gonda wrote:
+> On Fri, Jan 28, 2022 at 10:19 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
+>> The SNP_GET_DERIVED_KEY ioctl interface can be used by the SNP guest to
+>> ask the firmware to provide a key derived from a root key. The derived
+>> key may be used by the guest for any purposes it chooses, such as a
+>> sealing key or communicating with the external entities.
 >>
->> Bjorn question is still valid. Why is this required for the 4k panels? 
->> For which clock frequencies/chipsets?
-> 
-> less clock rate will use less power.
-> 
-> Please let me know exactly which info you are looking for.
-
-I'm trying to make sense from the commit message ('pre requirement to 
-support 4k resolutions') and Bjorn using 4k monitor w/o this patch.
-
-Also I'm trying to understand, when should it be used and which imact 
-will it have.
-
-> 
-> 
+>> See SEV-SNP firmware spec for more information.
 >>
->>>
->>> changes in v2:
->>> -- remove compression related code from timing
->>> -- remove op_info from  struct msm_drm_private
->>> -- remove unnecessary wide_bus_en variables
->>> -- pass wide_bus_en into timing configuration by struct msm_dp
->>>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  8 ++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
->>>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 99 
->>> ++++++++++++++--------
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
->>>   drivers/gpu/drm/msm/dp/dp_catalog.c                | 15 +++-
->>>   drivers/gpu/drm/msm/dp/dp_catalog.h                |  2 +-
->>>   drivers/gpu/drm/msm/dp/dp_ctrl.c                   | 13 ++-
->>>   drivers/gpu/drm/msm/dp/dp_ctrl.h                   |  1 +
->>>   drivers/gpu/drm/msm/dp/dp_display.c                | 11 +++
->>>   drivers/gpu/drm/msm/dp/dp_display.h                | 21 -----
->>>   drivers/gpu/drm/msm/dp/dp_panel.c                  |  4 +-
->>>   drivers/gpu/drm/msm/dp/dp_panel.h                  |  2 +-
->>>   drivers/gpu/drm/msm/msm_drv.h                      | 25 ++++++
->>>   14 files changed, 154 insertions(+), 65 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> index 1e648db..7bbdfb9 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>> @@ -217,6 +217,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
->>>       15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
->>>   };
->>>   +
->>> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
->>> +{
->>> +    struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
->>> +
->>> +    return dpu_enc->dp->wide_bus_en;
->>> +}
->>> +
->>>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong 
->>> *hw_pp, unsigned bpc)
->>>   {
->>>       struct dpu_hw_dither_cfg dither_cfg = { 0 };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> index e241914..0d73550 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
->>> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder 
->>> *drm_enc);
->>>    */
->>>   int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
->>>   +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
->>> +
->>>   #endif /* __DPU_ENCODER_H__ */
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> index ddd9d89..b72c33b 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
->>> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
->>>           timing->v_back_porch += timing->v_front_porch;
->>>           timing->v_front_porch = 0;
->>>       }
->>> +
->>> +    timing->wide_bus_en = 
->>> dpu_encoder_is_widebus_enabled(phys_enc->parent);
->>> +
->>> +    /*
->>> +     * for DP, divide the horizonal parameters by 2 when
->>> +     * widebus is enabled
->>> +     */
->>> +    if (timing->wide_bus_en) {
->>> +        timing->width = timing->width >> 1;
->>> +        timing->xres = timing->xres >> 1;
->>> +        timing->h_back_porch = timing->h_back_porch >> 1;
->>> +        timing->h_front_porch = timing->h_front_porch >> 1;
->>> +        timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
->>> +    }
->>>   }
->>>     static u32 get_horizontal_total(const struct intf_timing_params 
->>> *timing)
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> index 116e2b5..35d4aaa 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
->>> @@ -33,6 +33,7 @@
->>>   #define INTF_TP_COLOR1                  0x05C
->>>   #define INTF_CONFIG2                    0x060
->>>   #define INTF_DISPLAY_DATA_HCTL          0x064
->>> +#define INTF_ACTIVE_DATA_HCTL           0x068
->>>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
->>>   #define INTF_FRAME_COUNT                0x0AC
->>>   #define   INTF_LINE_COUNT               0x0B0
->>> @@ -90,68 +91,95 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>>       u32 hsync_period, vsync_period;
->>>       u32 display_v_start, display_v_end;
->>>       u32 hsync_start_x, hsync_end_x;
->>> +    u32 hsync_data_start_x, hsync_data_end_x;
->>>       u32 active_h_start, active_h_end;
->>>       u32 active_v_start, active_v_end;
->>>       u32 active_hctl, display_hctl, hsync_ctl;
->>>       u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
->>>       u32 panel_format;
->>> -    u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
->>> +    u32 intf_cfg, intf_cfg2 = 0;
->>> +    u32 display_data_hctl = 0, active_data_hctl = 0;
->>> +    u32 data_width;
->>> +    bool dp_intf = false;
->>>         /* read interface_cfg */
->>>       intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
->>> +
->>> +    if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
->>> +        dp_intf = true;
->>> +
->>>       hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
->>>       p->h_front_porch;
->>>       vsync_period = p->vsync_pulse_width + p->v_back_porch + 
->>> p->height +
->>>       p->v_front_porch;
->>>         display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
->>> -    hsync_period) + p->hsync_skew;
->>> +            hsync_period) + p->hsync_skew;
+>> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> Reviewed-by: Peter Gonda <pgonda@google.com>
+>
+>> ---
+>>  Documentation/virt/coco/sevguest.rst  | 17 ++++++++++
+>>  drivers/virt/coco/sevguest/sevguest.c | 45 +++++++++++++++++++++++++++
+>>  include/uapi/linux/sev-guest.h        | 17 ++++++++++
+>>  3 files changed, 79 insertions(+)
 >>
->> Whitespace changes should be in a separate patch
+>> diff --git a/Documentation/virt/coco/sevguest.rst b/Documentation/virt/coco/sevguest.rst
+>> index 47ef3b0821d5..aafc9bce9aef 100644
+>> --- a/Documentation/virt/coco/sevguest.rst
+>> +++ b/Documentation/virt/coco/sevguest.rst
+>> @@ -72,6 +72,23 @@ On success, the snp_report_resp.data will contains the report. The report
+>>  contain the format described in the SEV-SNP specification. See the SEV-SNP
+>>  specification for further details.
 >>
->>>       display_v_end = ((vsync_period - p->v_front_porch) * 
->>> hsync_period) +
->>> -    p->hsync_skew - 1;
->>> +            p->hsync_skew - 1;
->>> +
->>> +    hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>>         hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
->>>       hsync_end_x = hsync_period - p->h_front_porch - 1;
->>>   -    if (p->width != p->xres) {
->>> -        active_h_start = hsync_start_x;
->>> -        active_h_end = active_h_start + p->xres - 1;
->>> -    } else {
->>> -        active_h_start = 0;
->>> -        active_h_end = 0;
->>> -    }
->>> +    /*
->>> +     * DATA_HCTL_EN controls data timing which can be different from
->>> +     * video timing. It is recommended to enable it for all cases, 
->>> except
->>> +     * if compression is enabled in 1 pixel per clock mode
->>> +     */
->>> +    if (p->wide_bus_en)
->>> +        intf_cfg2 |= BIT(4);
->>>   -    if (p->height != p->yres) {
->>> -        active_v_start = display_v_start;
->>> -        active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>> -    } else {
->>> -        active_v_start = 0;
->>> -        active_v_end = 0;
->>> -    }
->>> +    if (p->wide_bus_en)
->>> +        intf_cfg2 |= BIT(0);
->>>   -    if (active_h_end) {
->>> -        active_hctl = (active_h_end << 16) | active_h_start;
->>> -        intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
->>> -    } else {
->>> -        active_hctl = 0;
->>> -    }
->>> +    /*
->>> +     * If widebus is disabled:
->>> +     * For uncompressed stream, the data is valid for the entire active
->>> +     * window period.
->>> +     * For compressed stream, data is valid for a shorter time period
->>> +     * inside the active window depending on the compression ratio.
->>> +     *
->>> +     * If widebus is enabled:
->>> +     * For uncompressed stream, data is valid for only half the active
->>> +     * window, since the data rate is doubled in this mode.
->>> +     * p->width holds the adjusted width for DP but unadjusted width 
->>> for DSI
->>> +     * For compressed stream, data validity window needs to be 
->>> adjusted for
->>> +     * compression ratio and then further halved.
->>> +     */
->>> +    data_width = p->width;
->>> +
->>> +    if (!dp_intf && p->wide_bus_en)
->>> +        data_width = p->width >> 1;
->>> +    else
->>> +        data_width = p->width;
->>>   -    if (active_v_end)
->>> -        intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
->>> +    hsync_data_start_x = hsync_start_x;
->>> +    hsync_data_end_x =  hsync_start_x + data_width - 1;
->>>   -    hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
->>>       display_hctl = (hsync_end_x << 16) | hsync_start_x;
->>> +    display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
->>>   -    if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
->>> -        active_h_start = hsync_start_x;
->>> -        active_h_end = active_h_start + p->xres - 1;
->>> -        active_v_start = display_v_start;
->>> -        active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>> -
->>> +    if (dp_intf) {
->>> +        // DP timing adjustment
->>>           display_v_start += p->hsync_pulse_width + p->h_back_porch;
->>> +        display_v_end   -= p->h_front_porch;
->>> +    }
->>> +
->>> +    active_h_start = hsync_start_x;
->>> +    active_h_end = active_h_start + p->xres - 1;
->>> +
->>> +    active_v_start = display_v_start;
->>> +    active_v_end = active_v_start + (p->yres * hsync_period) - 1;
->>>   -        active_hctl = (active_h_end << 16) | active_h_start;
->>> +    intf_cfg |= BIT(29);    /* ACTIVE_H_ENABLE */
->>> +    intf_cfg |= BIT(30);    /* ACTIVE_V_ENABLE */
->>
->> This makes ACTIVE_H_ENABLE/ACTIVE_V_ENABLE to be always enabled, while 
->> currently they are enabled conditionally. Could you please comment on 
->> this? Ideally, as you seem to be changing the way we calculate timings,
->> I'd ask to split this part into several patches:
->>  - Change current approach w/o adding wide_bus_en
->>  - Introduce wide_bus_en on top of that.
->>
-> no, it did not change calculate timing. instead it just add extra 
-> variables to accommodate newly registers
+>> +2.2 SNP_GET_DERIVED_KEY
+>> +-----------------------
+>> +:Technology: sev-snp
+>> +:Type: guest ioctl
+>> +:Parameters (in): struct snp_derived_key_req
+>> +:Returns (out): struct snp_derived_key_resp on success, -negative on error
+>> +
+>> +The SNP_GET_DERIVED_KEY ioctl can be used to get a key derive from a root key.
+> derived from ...
+>
+>> +The derived key can be used by the guest for any purpose, such as sealing keys
+>> +or communicating with external entities.
+> Question: How would this be used to communicate with external
+> entities? Reading Section 7.2 it seems like we could pick the VCEK and
+> have no guest specific inputs and we'd get the same derived key as we
+> would on another guest on the same platform with, is that correct?
 
-Well, that's why I asked you to split widebus_en into a separate patch here.
-I clearly see changes in the way e.g. active_v_end is calculated. You 
-have removed all non-DP cases.
+That could work. This method is using the idea that the guests would derive identical keys removing the need for a complex key establishment protocol. 
 
->> Also, while you are reworking this piece of code, could you please add 
->> defines for existing and new intf_cfg/etc BIT(n) values used here?
-> 
-> This is generic function code used by android (down stream) and chrome 
-> (up stream).
-> 
-> We like to have both use same timing function.
+However, it's probably better to approach this slightly differently. The derived key can be used to produce a persistent guest identity key that can be recovered across instances. That key can sign an key establishment exchange (e.g. an ephemeral ECDH key) for establishing trusted channels with remote parties.
 
-Then the changes should be described clearly.
+Further, that identity key could be signed by a centralized CA. A way to approach that could be placing the fingerprint of the identity key into the REPORT_DATA parameter of the attestation request message. The attestation report will come back signed by the security processor and will contain the fingerprint. A CSR to the CA can be accompanied by the attestation report to prove the key came from the guest described in the attestation report. 
 
-> 
->> They are specified in comments, but I think a common consensus is to 
->> use defines instead.
-> 
->>
->>> +
->>> +    active_hctl = (active_h_end << 16) | active_h_start;
->>> +
->>> +    if (dp_intf)
->>>           display_hctl = active_hctl;
->>> -    }
->>>         den_polarity = 0;
->>>       if (ctx->cap->type == INTF_HDMI) {
->>> @@ -204,6 +232,9 @@ static void 
->>> dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
->>>       DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
->>>       DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
->>>       DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
->>> +    DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
->>> +    DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
->>> +    DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
->>>   }
->>>     static void dpu_hw_intf_enable_timing_engine(
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> index 3568be8..e4a518a 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
->>> @@ -30,6 +30,8 @@ struct intf_timing_params {
->>>       u32 border_clr;
->>>       u32 underflow_clr;
->>>       u32 hsync_skew;
->>> +
->>> +    bool wide_bus_en;
->>>   };
->>>     struct intf_prog_fetch {
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c 
->>> b/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> index 64f0b26..462596f 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
->>> @@ -739,10 +739,11 @@ u32 dp_catalog_ctrl_read_phy_pattern(struct 
->>> dp_catalog *dp_catalog)
->>>   }
->>>     /* panel related catalog functions */
->>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog)
->>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool 
->>> wide_bus_en)
->>>   {
->>>       struct dp_catalog_private *catalog = container_of(dp_catalog,
->>>                   struct dp_catalog_private, dp_catalog);
->>> +    u32 reg;
->>>         dp_write_link(catalog, REG_DP_TOTAL_HOR_VER,
->>>                   dp_catalog->total);
->>> @@ -751,7 +752,17 @@ int dp_catalog_panel_timing_cfg(struct 
->>> dp_catalog *dp_catalog)
->>>       dp_write_link(catalog, REG_DP_HSYNC_VSYNC_WIDTH_POLARITY,
->>>                   dp_catalog->width_blanking);
->>>       dp_write_link(catalog, REG_DP_ACTIVE_HOR_VER, 
->>> dp_catalog->dp_active);
->>> -    dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, 0);
->>> +
->>> +    reg = dp_read_p0(catalog, MMSS_DP_INTF_CONFIG);
->>> +
->>> +    if (wide_bus_en)
->>> +        reg |= BIT(4);
->>> +    else
->>> +        reg &= ~BIT(4);
->>
->> Could you please add a symbolic name for this bit?
-> I though linux does not have this requirement as window?
+If the guest does not require keys or secrets to be persisted, or if the guest has other means for persisting keys or secrets, the derivation messages are not necessary. It's an optional security primitive for guests to use.
 
-It does not. However there is a strong suggestion to do so.
+thanks
 
->>
->>> +
->>> +    DRM_DEBUG_DP("wide_bus_en=%d reg=%x\n", wide_bus_en, reg);
->>> +
->>> +    dp_write_p0(catalog, MMSS_DP_INTF_CONFIG, reg);
->>>       return 0;
->>>   }
->>>   diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h 
->>> b/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> index 7dea101..78e22ad 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
->>> @@ -115,7 +115,7 @@ void dp_catalog_ctrl_send_phy_pattern(struct 
->>> dp_catalog *dp_catalog,
->>>   u32 dp_catalog_ctrl_read_phy_pattern(struct dp_catalog *dp_catalog);
->>>     /* DP Panel APIs */
->>> -int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog);
->>> +int dp_catalog_panel_timing_cfg(struct dp_catalog *dp_catalog, bool 
->>> wide_bus_en);
->>>   void dp_catalog_dump_regs(struct dp_catalog *dp_catalog);
->>>   void dp_catalog_panel_tpg_enable(struct dp_catalog *dp_catalog,
->>>                   struct drm_display_mode *drm_mode);
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c 
->>> b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> index 245e1b9..1c4cf9d 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->>> @@ -154,7 +154,7 @@ static void dp_ctrl_config_ctrl(struct 
->>> dp_ctrl_private *ctrl)
->>>       dp_catalog_ctrl_config_ctrl(ctrl->catalog, config);
->>>   }
->>>   -static void dp_ctrl_configure_source_params(struct dp_ctrl_private 
->>> *ctrl)
->>> +static void dp_ctrl_configure_source_params(struct dp_ctrl_private 
->>> *ctrl, bool wide_bus_en)
->>>   {
->>>       u32 cc, tb;
->>>   @@ -167,7 +167,7 @@ static void 
->>> dp_ctrl_configure_source_params(struct dp_ctrl_private *ctrl)
->>>           ctrl->panel->dp_mode.bpp);
->>>       cc = dp_link_get_colorimetry_config(ctrl->link);
->>>       dp_catalog_ctrl_config_misc(ctrl->catalog, cc, tb);
->>> -    dp_panel_timing_cfg(ctrl->panel);
->>> +    dp_panel_timing_cfg(ctrl->panel, wide_bus_en);
->>>   }
->>>     /*
->>> @@ -1796,6 +1796,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>       int ret = 0;
->>>       bool mainlink_ready = false;
->>>       struct dp_ctrl_private *ctrl;
->>> +    u32 pixel_rate_orig;
->>>         if (!dp_ctrl)
->>>           return -EINVAL;
->>> @@ -1804,6 +1805,10 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>         ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->>>   +    pixel_rate_orig = ctrl->dp_ctrl.pixel_rate;
->>> +    if (dp_ctrl->wide_bus_en)
->>> +        ctrl->dp_ctrl.pixel_rate >>= 1;
->>> +
->>>       DRM_DEBUG_DP("rate=%d, num_lanes=%d, pixel_rate=%d\n",
->>>           ctrl->link->link_params.rate,
->>>           ctrl->link->link_params.num_lanes, ctrl->dp_ctrl.pixel_rate);
->>> @@ -1839,11 +1844,11 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>>        */
->>>       reinit_completion(&ctrl->video_comp);
->>>   -    dp_ctrl_configure_source_params(ctrl);
->>> +    dp_ctrl_configure_source_params(ctrl, dp_ctrl->wide_bus_en);
->>>         dp_catalog_ctrl_config_msa(ctrl->catalog,
->>>           ctrl->link->link_params.rate,
->>> -        ctrl->dp_ctrl.pixel_rate, dp_ctrl_use_fixed_nvid(ctrl));
->>> +        pixel_rate_orig, dp_ctrl_use_fixed_nvid(ctrl));
->>>         dp_ctrl_setup_tr_unit(ctrl);
->>>   diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h 
->>> b/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> index 2433edb..4dff44d 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
->>> @@ -17,6 +17,7 @@ struct dp_ctrl {
->>>       bool orientation;
->>>       atomic_t aborted;
->>>       u32 pixel_rate;
->>> +    bool wide_bus_en;
->>>   };
->>>     int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->>> b/drivers/gpu/drm/msm/dp/dp_display.c
->>> index 1d7f82e..5a0f5a3 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->>> @@ -843,6 +843,8 @@ static int dp_display_enable(struct 
->>> dp_display_private *dp, u32 data)
->>>           return 0;
->>>       }
->>>   +    dp->ctrl->wide_bus_en = dp_display->wide_bus_en;
->>> +
->>>       rc = dp_ctrl_on_stream(dp->ctrl);
->>>       if (!rc)
->>>           dp_display->power_on = true;
->>> @@ -974,6 +976,8 @@ int dp_display_get_modes(struct msm_dp *dp,
->>>           dp->connector, dp_mode);
->>>       if (dp_mode->drm_mode.clock)
->>>           dp->max_pclk_khz = dp_mode->drm_mode.clock;
->>> +
->>> +    DRM_DEBUG_DP("id=%d wide_bus_en=%d\n", dp_display->id, 
->>> dp->wide_bus_en);
->>>       return ret;
->>>   }
->>>   @@ -1506,6 +1510,13 @@ int msm_dp_modeset_init(struct msm_dp 
->>> *dp_display, struct drm_device *dev,
->>>         priv->bridges[priv->num_bridges++] = dp_display->bridge;
->>>   +    if (dp_display->connector_type  == 
->>> DRM_MODE_CONNECTOR_DisplayPort) {
->>> +        dp_display->wide_bus_en = true;
->>
->> This makes wide_bus always enabled. However earlier you stated that it 
->> is not supported for some of earlier generations.
->>
-> are we expect this code to support msm8996 and other  older chipsets too?
-
-msm8998 is on the way. Hopefully it can be merged in this cycle. I don't 
-think DP has been tested with this platform, however we should not make 
-it overcomplicated. Compare this with the DPU driver, which has 
-capabilities for optional features even if the hardware baseline 
-supports all of them.
-
-> 
-> Currently we  want to enable wide bus feature for all DPs.
-
-Is wide bus supported on e.g. sdm845? From your previous answer I had 
-another impression:
-
- >> Are these registers present on all supported hardware (like sdm845)?
- >> Does msm8998 support them? msm8996?
- >
- > no, i  think they are start from sm8250 (Kona).
-
-
-> 
-> Or should we derive wide_bus_en from dtsi as first patch?
-
-If it is a platform feature that you'd like to enable by default for all 
-supporting platforms, it can be listed in struct msm_dp_config.
-
-> 
-> 
->>
->>> +        dp_display->compression_en = false;
->>
->> compression_en is not defined anywhere.
->>
->>> +    }
->>
->>> +
->>> +    DRM_DEBUG_DP("id=%d wide_bus_en=%d\n", dp_priv->id, 
->>> dp_display->wide_bus_en);
->>> +
->>>       return 0;
->>>   }
->>>   diff --git a/drivers/gpu/drm/msm/dp/dp_display.h 
->>> b/drivers/gpu/drm/msm/dp/dp_display.h
->>> index e3adcd5..2eb11d0 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
->>> @@ -7,29 +7,8 @@
->>>   #define _DP_DISPLAY_H_
->>>     #include "dp_panel.h"
->>> -#include <sound/hdmi-codec.h>
->>>   #include "disp/msm_disp_snapshot.h"
->>>   -struct msm_dp {
->>> -    struct drm_device *drm_dev;
->>> -    struct device *codec_dev;
->>> -    struct drm_bridge *bridge;
->>> -    struct drm_connector *connector;
->>> -    struct drm_encoder *encoder;
->>> -    struct drm_bridge *panel_bridge;
->>> -    bool is_connected;
->>> -    bool audio_enabled;
->>> -    bool power_on;
->>> -    unsigned int connector_type;
->>> -
->>> -    hdmi_codec_plugged_cb plugged_cb;
->>> -
->>> -    u32 max_pclk_khz;
->>> -
->>> -    u32 max_dp_lanes;
->>> -    struct dp_audio *dp_audio;
->>> -};
->>> -
->>
->> NO. Let struct msm_dp be private.
-> 
-> them wide_bus_en can not be derived from msm_dp  at dpu_encoder.c
-> 
-> in that case, we have to define msm_op_info as first patch and pass it 
-> into dpu_encoder.c through msm_dp.
-> 
-> any better suggestion?
-
-if (dpu_enc->disp_info.intf_type == INTF_DP || 
-dpu_enc->disp_info.intf_type == INTF_EDP)
-     dpu_enc->wide_bus_enabled = msm_dp_get_widebus_enabled(priv->dp[i]);
-
-> 
-> 
->>
->>>   int dp_display_set_plugged_cb(struct msm_dp *dp_display,
->>>           hdmi_codec_plugged_cb fn, struct device *codec_dev);
->>>   int dp_display_validate_mode(struct msm_dp *dp_display, u32 
->>> mode_pclk_khz);
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c 
->>> b/drivers/gpu/drm/msm/dp/dp_panel.c
->>> index 71db10c..71deb1e 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
->>> @@ -353,7 +353,7 @@ void dp_panel_dump_regs(struct dp_panel *dp_panel)
->>>       dp_catalog_dump_regs(catalog);
->>>   }
->>>   -int dp_panel_timing_cfg(struct dp_panel *dp_panel)
->>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en)
->>>   {
->>>       u32 data, total_ver, total_hor;
->>>       struct dp_catalog *catalog;
->>> @@ -404,7 +404,7 @@ int dp_panel_timing_cfg(struct dp_panel *dp_panel)
->>>         catalog->dp_active = data;
->>>   -    dp_catalog_panel_timing_cfg(catalog);
->>> +    dp_catalog_panel_timing_cfg(catalog, wide_bus_en);
->>>       panel->panel_on = true;
->>>         return 0;
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.h 
->>> b/drivers/gpu/drm/msm/dp/dp_panel.h
->>> index 9023e5b..5ec341a 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_panel.h
->>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.h
->>> @@ -57,7 +57,7 @@ struct dp_panel {
->>>     int dp_panel_init_panel_info(struct dp_panel *dp_panel);
->>>   int dp_panel_deinit(struct dp_panel *dp_panel);
->>> -int dp_panel_timing_cfg(struct dp_panel *dp_panel);
->>> +int dp_panel_timing_cfg(struct dp_panel *dp_panel, bool wide_bus_en);
->>>   void dp_panel_dump_regs(struct dp_panel *dp_panel);
->>>   int dp_panel_read_sink_caps(struct dp_panel *dp_panel,
->>>           struct drm_connector *connector);
->>> diff --git a/drivers/gpu/drm/msm/msm_drv.h 
->>> b/drivers/gpu/drm/msm/msm_drv.h
->>> index d7574e6..84fb89e 100644
->>> --- a/drivers/gpu/drm/msm/msm_drv.h
->>> +++ b/drivers/gpu/drm/msm/msm_drv.h
->>> @@ -25,6 +25,8 @@
->>>   #include <linux/sizes.h>
->>>   #include <linux/kthread.h>
->>>   +#include <sound/hdmi-codec.h>
->>> +
->>>   #include <drm/drm_atomic.h>
->>>   #include <drm/drm_atomic_helper.h>
->>>   #include <drm/drm_plane_helper.h>
->>> @@ -134,6 +136,29 @@ struct msm_drm_thread {
->>>       struct kthread_worker *worker;
->>>   };
->>>   +struct msm_dp {
->>> +    struct drm_device *drm_dev;
->>> +    struct device *codec_dev;
->>> +    struct drm_bridge *bridge;
->>> +    struct drm_connector *connector;
->>> +    struct drm_encoder *encoder;
->>> +    struct drm_bridge *panel_bridge;
->>> +    bool is_connected;
->>> +    bool audio_enabled;
->>> +    bool power_on;
->>> +    unsigned int connector_type;
->>> +
->>> +    hdmi_codec_plugged_cb plugged_cb;
->>> +
->>> +    bool wide_bus_en;
->>> +    bool compression_en;
->>> +
->>> +    u32 max_pclk_khz;
->>> +
->>> +    u32 max_dp_lanes;
->>> +    struct dp_audio *dp_audio;
->>> +};
->>> +
->>>   struct msm_drm_private {
->>>         struct drm_device *dev;
->>
->>
-
-
--- 
-With best wishes
-Dmitry

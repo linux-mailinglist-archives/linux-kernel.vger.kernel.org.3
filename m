@@ -2,93 +2,415 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 842D24A6919
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7439E4A691C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243155AbiBBAMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243127AbiBBAMB (ORCPT
+        id S243203AbiBBANC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:13:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57886 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243373AbiBBAM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:12:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6924FC06173B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:12:01 -0800 (PST)
+        Tue, 1 Feb 2022 19:12:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30042B82FD6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 00:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71DFC340EB;
-        Wed,  2 Feb 2022 00:11:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29A5A61520;
+        Wed,  2 Feb 2022 00:12:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFA9C340EB;
+        Wed,  2 Feb 2022 00:12:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643760719;
-        bh=X+nYR+cvnx5SpctX3+Nw/zOkWXwkurskp2po44UAB9Q=;
+        s=k20201202; t=1643760776;
+        bh=eK7RrEe6x5KYHO+ICUNYViwytxw03TGumLdm6KZYGjk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gkyfeQwrn7Y6sjTSxx6e/a0yllyoA1A+TGLXGsqcaP0+RRs+vjjQoTzxJAmAMps89
-         LGLzbx24pqScgly/iuO6FeyzMFucjA2NN3qnDKFJmDQQYOuHiHvOMp83wKq+Kfw74W
-         8fTKrkfPs6H0TnOFiFF7aOoDvVxVR0foKLi6xKho2G9ABC1yD0v723CUsRZ1S6HxqQ
-         5ELokvWiNDQBGkI1iWThf6aQ1vKMXIzExh8ehKtSkGran6L0dVePDf9VFA/htLpRbz
-         zhuNFDdEJtLgqucPMU7P25zFQlz6asjpA9sHsH9AdfrcSfT/8+nBY3YK7OVVjaUXR8
-         E6vxRWoPGck2w==
+        b=RQWao8PXF3DWRd9376XfQouWvnxMfhoFfNUgR8PzyoXHuQBP+6Lc7sbgx5uF8nJH2
+         6Q65WoojIyBrG0+qRlTGJkELndggI5MRs87h4wxOoZzldYuF1eszfjyBt15tnWiwfS
+         6FAUCtHvS3sHAJ0zd0yMdKJIHxuncmYDF93KE+pHVUiuEY2UcoW7iw7rLkuej5CfSi
+         HO8GTMa7dLvonOQYMfD0VwBijn8uRPL8zItBwRdbixHj2YurS9Ut2dNkaFoc9Xpn7l
+         N6y4qQd5i7qywcG5yGa2ZDfC3GMyIPy5WfCKZbCCuTOJCCrCga4Z51JL7UGYto1ByE
+         gGB26eEgMLtpA==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CA95040466; Tue,  1 Feb 2022 21:11:56 -0300 (-03)
-Date:   Tue, 1 Feb 2022 21:11:56 -0300
+        id 90D8E40466; Tue,  1 Feb 2022 21:12:54 -0300 (-03)
+Date:   Tue, 1 Feb 2022 21:12:54 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH 0/3] Handle chroot tasks properly (v1)
-Message-ID: <YfnMTIsKMLAnbF8P@kernel.org>
-References: <20220128203950.3371061-1-namhyung@kernel.org>
- <2db9fab4-0aff-b8b0-5012-13556ea496af@linux.intel.com>
- <CAM9d7ciUqaZ02AV4xiknhyAKx0U-4GYKNGJWCa0P=5_CdpxoLg@mail.gmail.com>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] perf symbols: Remove demangle-rust files as superfluous
+Message-ID: <YfnMhsF2/z0FUaWz@kernel.org>
+References: <20220201185054.1041917-1-german.gomez@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAM9d7ciUqaZ02AV4xiknhyAKx0U-4GYKNGJWCa0P=5_CdpxoLg@mail.gmail.com>
+In-Reply-To: <20220201185054.1041917-1-german.gomez@arm.com>
 X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Feb 01, 2022 at 12:01:49PM -0800, Namhyung Kim escreveu:
-> On Mon, Jan 31, 2022 at 5:16 PM Andi Kleen <ak@linux.intel.com> wrote:
-> > On 1/28/2022 12:39 PM, Namhyung Kim wrote:
+Em Tue, Feb 01, 2022 at 06:50:53PM +0000, German Gomez escreveu:
+> Demangling of Rust legacy symbols has been working through libbfd for
+> some time now, making these files no longer needed, so remove them.
 
-> > > I found that perf tools don't work well with tasks in a chroot.  The
-> > > filenames in MMAP record are from the root directory of the task so
-> > > it's different than what it sees from outside.
+Can this be made dependent of the versions of the components that
+provide this feature?
 
-> > While that's a real problem, and for chroot it can be fixed, it's much
-> > more complicated for the more complex container namespace case with
-> > custom mounts, including loop back, etc.
+- Arnaldo
  
-> Probably.  Note that perf tool can handle namespaces (to some extent)
-> but missed chroot support.  I have a bug report because of this issue.
-> Let's fix the simple case first.
- 
-> > It seems it really need some kind of agent to handle all cases. For
-> > example the agent could understand container metadata formats and then
-> > do the right thing.
+> Signed-off-by: German Gomez <german.gomez@arm.com>
+> ---
+> Before and after the commit:
 > 
-> Sounds like a good idea for a long term solution.
+> $ perf record rustc
+> $ perf report
+> 
+> 2.98%  rustc    rustc                                [.] <std::collections::hash::map::DefaultHasher as core::hash::Hasher>::write
+> 2.77%  rustc    rustc                                [.] std::collections::hash::map::HashMap<K,V,S>::entry
+> 2.09%  rustc    rustc                                [.] <<toml::value::Value as serde::de::Deserialize>::deserialize::ValueVisitor as serde::de::Visitor>::visit_map
+> 2.05%  rustc    rustc                                [.] <toml::de::MapVisitor as serde::de::MapAccess>::next_key_seed
+> 1.52%  rustc    rustc                                [.] std::collections::hash::map::HashMap<K,V,S>::get
+> 0.59%  rustc    rustc                                [.] <toml::de::MapVisitor as serde::de::MapAccess>::next_value_seed
+> ---
+>  tools/perf/util/Build           |   1 -
+>  tools/perf/util/demangle-rust.c | 269 --------------------------------
+>  tools/perf/util/demangle-rust.h |   8 -
+>  tools/perf/util/symbol-elf.c    |   7 -
+>  4 files changed, 285 deletions(-)
+>  delete mode 100644 tools/perf/util/demangle-rust.c
+>  delete mode 100644 tools/perf/util/demangle-rust.h
+> 
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 2a403cefc..e59788ef6 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -193,7 +193,6 @@ perf-$(CONFIG_LIBCAP) += cap.o
+>  
+>  perf-y += demangle-ocaml.o
+>  perf-y += demangle-java.o
+> -perf-y += demangle-rust.o
+>  
+>  ifdef CONFIG_JITDUMP
+>  perf-$(CONFIG_LIBELF) += jitdump.o
+> diff --git a/tools/perf/util/demangle-rust.c b/tools/perf/util/demangle-rust.c
+> deleted file mode 100644
+> index a659fc69f..000000000
+> --- a/tools/perf/util/demangle-rust.c
+> +++ /dev/null
+> @@ -1,269 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -#include <string.h>
+> -#include "debug.h"
+> -
+> -#include "demangle-rust.h"
+> -
+> -/*
+> - * Mangled Rust symbols look like this:
+> - *
+> - *     _$LT$std..sys..fd..FileDesc$u20$as$u20$core..ops..Drop$GT$::drop::hc68340e1baa4987a
+> - *
+> - * The original symbol is:
+> - *
+> - *     <std::sys::fd::FileDesc as core::ops::Drop>::drop
+> - *
+> - * The last component of the path is a 64-bit hash in lowercase hex, prefixed
+> - * with "h". Rust does not have a global namespace between crates, an illusion
+> - * which Rust maintains by using the hash to distinguish things that would
+> - * otherwise have the same symbol.
+> - *
+> - * Any path component not starting with a XID_Start character is prefixed with
+> - * "_".
+> - *
+> - * The following escape sequences are used:
+> - *
+> - *     ","  =>  $C$
+> - *     "@"  =>  $SP$
+> - *     "*"  =>  $BP$
+> - *     "&"  =>  $RF$
+> - *     "<"  =>  $LT$
+> - *     ">"  =>  $GT$
+> - *     "("  =>  $LP$
+> - *     ")"  =>  $RP$
+> - *     " "  =>  $u20$
+> - *     "'"  =>  $u27$
+> - *     "["  =>  $u5b$
+> - *     "]"  =>  $u5d$
+> - *     "~"  =>  $u7e$
+> - *
+> - * A double ".." means "::" and a single "." means "-".
+> - *
+> - * The only characters allowed in the mangled symbol are a-zA-Z0-9 and _.:$
+> - */
+> -
+> -static const char *hash_prefix = "::h";
+> -static const size_t hash_prefix_len = 3;
+> -static const size_t hash_len = 16;
+> -
+> -static bool is_prefixed_hash(const char *start);
+> -static bool looks_like_rust(const char *sym, size_t len);
+> -static bool unescape(const char **in, char **out, const char *seq, char value);
+> -
+> -/*
+> - * INPUT:
+> - *     sym: symbol that has been through BFD-demangling
+> - *
+> - * This function looks for the following indicators:
+> - *
+> - *  1. The hash must consist of "h" followed by 16 lowercase hex digits.
+> - *
+> - *  2. As a sanity check, the hash must use between 5 and 15 of the 16 possible
+> - *     hex digits. This is true of 99.9998% of hashes so once in your life you
+> - *     may see a false negative. The point is to notice path components that
+> - *     could be Rust hashes but are probably not, like "haaaaaaaaaaaaaaaa". In
+> - *     this case a false positive (non-Rust symbol has an important path
+> - *     component removed because it looks like a Rust hash) is worse than a
+> - *     false negative (the rare Rust symbol is not demangled) so this sets the
+> - *     balance in favor of false negatives.
+> - *
+> - *  3. There must be no characters other than a-zA-Z0-9 and _.:$
+> - *
+> - *  4. There must be no unrecognized $-sign sequences.
+> - *
+> - *  5. There must be no sequence of three or more dots in a row ("...").
+> - */
+> -bool
+> -rust_is_mangled(const char *sym)
+> -{
+> -	size_t len, len_without_hash;
+> -
+> -	if (!sym)
+> -		return false;
+> -
+> -	len = strlen(sym);
+> -	if (len <= hash_prefix_len + hash_len)
+> -		/* Not long enough to contain "::h" + hash + something else */
+> -		return false;
+> -
+> -	len_without_hash = len - (hash_prefix_len + hash_len);
+> -	if (!is_prefixed_hash(sym + len_without_hash))
+> -		return false;
+> -
+> -	return looks_like_rust(sym, len_without_hash);
+> -}
+> -
+> -/*
+> - * A hash is the prefix "::h" followed by 16 lowercase hex digits. The hex
+> - * digits must comprise between 5 and 15 (inclusive) distinct digits.
+> - */
+> -static bool is_prefixed_hash(const char *str)
+> -{
+> -	const char *end;
+> -	bool seen[16];
+> -	size_t i;
+> -	int count;
+> -
+> -	if (strncmp(str, hash_prefix, hash_prefix_len))
+> -		return false;
+> -	str += hash_prefix_len;
+> -
+> -	memset(seen, false, sizeof(seen));
+> -	for (end = str + hash_len; str < end; str++)
+> -		if (*str >= '0' && *str <= '9')
+> -			seen[*str - '0'] = true;
+> -		else if (*str >= 'a' && *str <= 'f')
+> -			seen[*str - 'a' + 10] = true;
+> -		else
+> -			return false;
+> -
+> -	/* Count how many distinct digits seen */
+> -	count = 0;
+> -	for (i = 0; i < 16; i++)
+> -		if (seen[i])
+> -			count++;
+> -
+> -	return count >= 5 && count <= 15;
+> -}
+> -
+> -static bool looks_like_rust(const char *str, size_t len)
+> -{
+> -	const char *end = str + len;
+> -
+> -	while (str < end)
+> -		switch (*str) {
+> -		case '$':
+> -			if (!strncmp(str, "$C$", 3))
+> -				str += 3;
+> -			else if (!strncmp(str, "$SP$", 4)
+> -					|| !strncmp(str, "$BP$", 4)
+> -					|| !strncmp(str, "$RF$", 4)
+> -					|| !strncmp(str, "$LT$", 4)
+> -					|| !strncmp(str, "$GT$", 4)
+> -					|| !strncmp(str, "$LP$", 4)
+> -					|| !strncmp(str, "$RP$", 4))
+> -				str += 4;
+> -			else if (!strncmp(str, "$u20$", 5)
+> -					|| !strncmp(str, "$u27$", 5)
+> -					|| !strncmp(str, "$u5b$", 5)
+> -					|| !strncmp(str, "$u5d$", 5)
+> -					|| !strncmp(str, "$u7e$", 5))
+> -				str += 5;
+> -			else
+> -				return false;
+> -			break;
+> -		case '.':
+> -			/* Do not allow three or more consecutive dots */
+> -			if (!strncmp(str, "...", 3))
+> -				return false;
+> -			/* Fall through */
+> -		case 'a' ... 'z':
+> -		case 'A' ... 'Z':
+> -		case '0' ... '9':
+> -		case '_':
+> -		case ':':
+> -			str++;
+> -			break;
+> -		default:
+> -			return false;
+> -		}
+> -
+> -	return true;
+> -}
+> -
+> -/*
+> - * INPUT:
+> - *     sym: symbol for which rust_is_mangled(sym) returns true
+> - *
+> - * The input is demangled in-place because the mangled name is always longer
+> - * than the demangled one.
+> - */
+> -void
+> -rust_demangle_sym(char *sym)
+> -{
+> -	const char *in;
+> -	char *out;
+> -	const char *end;
+> -
+> -	if (!sym)
+> -		return;
+> -
+> -	in = sym;
+> -	out = sym;
+> -	end = sym + strlen(sym) - (hash_prefix_len + hash_len);
+> -
+> -	while (in < end)
+> -		switch (*in) {
+> -		case '$':
+> -			if (!(unescape(&in, &out, "$C$", ',')
+> -					|| unescape(&in, &out, "$SP$", '@')
+> -					|| unescape(&in, &out, "$BP$", '*')
+> -					|| unescape(&in, &out, "$RF$", '&')
+> -					|| unescape(&in, &out, "$LT$", '<')
+> -					|| unescape(&in, &out, "$GT$", '>')
+> -					|| unescape(&in, &out, "$LP$", '(')
+> -					|| unescape(&in, &out, "$RP$", ')')
+> -					|| unescape(&in, &out, "$u20$", ' ')
+> -					|| unescape(&in, &out, "$u27$", '\'')
+> -					|| unescape(&in, &out, "$u5b$", '[')
+> -					|| unescape(&in, &out, "$u5d$", ']')
+> -					|| unescape(&in, &out, "$u7e$", '~'))) {
+> -				pr_err("demangle-rust: unexpected escape sequence");
+> -				goto done;
+> -			}
+> -			break;
+> -		case '_':
+> -			/*
+> -			 * If this is the start of a path component and the next
+> -			 * character is an escape sequence, ignore the
+> -			 * underscore. The mangler inserts an underscore to make
+> -			 * sure the path component begins with a XID_Start
+> -			 * character.
+> -			 */
+> -			if ((in == sym || in[-1] == ':') && in[1] == '$')
+> -				in++;
+> -			else
+> -				*out++ = *in++;
+> -			break;
+> -		case '.':
+> -			if (in[1] == '.') {
+> -				/* ".." becomes "::" */
+> -				*out++ = ':';
+> -				*out++ = ':';
+> -				in += 2;
+> -			} else {
+> -				/* "." becomes "-" */
+> -				*out++ = '-';
+> -				in++;
+> -			}
+> -			break;
+> -		case 'a' ... 'z':
+> -		case 'A' ... 'Z':
+> -		case '0' ... '9':
+> -		case ':':
+> -			*out++ = *in++;
+> -			break;
+> -		default:
+> -			pr_err("demangle-rust: unexpected character '%c' in symbol\n",
+> -				*in);
+> -			goto done;
+> -		}
+> -
+> -done:
+> -	*out = '\0';
+> -}
+> -
+> -static bool unescape(const char **in, char **out, const char *seq, char value)
+> -{
+> -	size_t len = strlen(seq);
+> -
+> -	if (strncmp(*in, seq, len))
+> -		return false;
+> -
+> -	**out = value;
+> -
+> -	*in += len;
+> -	*out += 1;
+> -
+> -	return true;
+> -}
+> diff --git a/tools/perf/util/demangle-rust.h b/tools/perf/util/demangle-rust.h
+> deleted file mode 100644
+> index 2fca618b1..000000000
+> --- a/tools/perf/util/demangle-rust.h
+> +++ /dev/null
+> @@ -1,8 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __PERF_DEMANGLE_RUST
+> -#define __PERF_DEMANGLE_RUST 1
+> -
+> -bool rust_is_mangled(const char *str);
+> -void rust_demangle_sym(char *str);
+> -
+> -#endif /* __PERF_DEMANGLE_RUST */
+> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+> index 31cd59a2b..3ed0bef81 100644
+> --- a/tools/perf/util/symbol-elf.c
+> +++ b/tools/perf/util/symbol-elf.c
+> @@ -14,7 +14,6 @@
+>  #include "symsrc.h"
+>  #include "demangle-ocaml.h"
+>  #include "demangle-java.h"
+> -#include "demangle-rust.h"
+>  #include "machine.h"
+>  #include "vdso.h"
+>  #include "debug.h"
+> @@ -258,12 +257,6 @@ static char *demangle_sym(struct dso *dso, int kmodule, const char *elf_name)
+>  			demangled = java_demangle_sym(elf_name, JAVA_DEMANGLE_NORET);
+>  		}
+>  	}
+> -	else if (rust_is_mangled(demangled))
+> -		/*
+> -		    * Input to Rust demangling is the BFD-demangled
+> -		    * name which it Rust-demangles in place.
+> -		    */
+> -		rust_demangle_sym(demangled);
+>  
+>  	return demangled;
+>  }
+> -- 
+> 2.25.1
 
-I think build ids are the way to go and would be really happy to have
-arguments against it to be properly spelled out so we can harvest
-documentation.
-
-Its really difficult to associate a mmap to a backing storage, its race
-prone, so having something that uniquely identifies the contents at the
-time of mmap placement hugely desirable.
-
-We seem to have that in most cases, and there is discussion about what
-to do to the cases where parsing the ELF headers when that area is not
-in memory, so there is hope that the buildid for an exec VMA will be
-always available.
+-- 
 
 - Arnaldo

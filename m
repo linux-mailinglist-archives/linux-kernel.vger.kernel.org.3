@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03094A7391
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ABB4A7399
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345100AbiBBOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:49:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:46050 "EHLO mga14.intel.com"
+        id S1345121AbiBBOuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:50:09 -0500
+Received: from mga11.intel.com ([192.55.52.93]:31380 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230320AbiBBOtk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:49:40 -0500
+        id S230423AbiBBOuI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:50:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643813380; x=1675349380;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MlpXwYUsP8OZHFzcIf4w9cLw00WD3PvSuuMMjVMEj94=;
-  b=LfwAXZWnjZ9k4d3sfT41hgc9ZHP1Y5tPs6uv8hsJSEXDcMcJwrQ3/54c
-   rbaXht7YwwXGqX9KWjjurqog77iQt+fymrtK0lxmY8pz3YYQlBFyASOOS
-   yNRNPOEnMymf8nbozW2quRe1FkXw+h23NijF4DwRrTf7ESCofKoHydYXO
-   +qBRDvkW3ov4rErI/eW6qEJbhIK7ibJWHwre7TUr+iBcVQnrONngCpoun
-   y8ak6dw787j6/2zdebAStilj+AiFaBYQyoDERazflCQhElaKavcm4KH3P
-   f8bHx+p9eMmd/lsrSBNcTcyqvecmlu5ifYeg6idMKbQSiebC7cmuqoBFz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248147944"
+  t=1643813408; x=1675349408;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0Yo3RSdxZoSESUoiGGWNuInvhxAPd9fHeAO96RDn9zc=;
+  b=fx9HzchkzrXcJoj74o28dRb4ycH3GfTmAy7Y/VmSBbAux0B9dQTYZooa
+   l+aDUjE4jUIbVgqisgNtqe6rPnjfqdny6OblmMkBQdXVhHd41DtDf3Mr5
+   U4/lWMiSQkmJjl4p3QCvzTLYqOYqvHBFurCctIojbFCNs3EwY2dskztKU
+   9FIcTv9Kjt7PqW5AZ9mx4WGQtcAercpckWUCQz89RHV3CbmPmQMtgUnD0
+   QkjdUHqF7tZLJapABSaQ+lUqUQMECP7VJTZys5EpQiO9I3KHV6z16P54q
+   lagbtasNGoF2Fk6zSenCLRul8sqN+SAJ2q3aBC/nbYlReWZum3R9cnq9d
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="245523275"
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="248147944"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:49:40 -0800
+   d="scan'208";a="245523275"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:50:03 -0800
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="523516195"
+   d="scan'208";a="538275520"
 Received: from mwnuczyn-mobl.ger.corp.intel.com (HELO localhost) ([10.249.137.160])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:49:29 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:49:49 -0800
 From:   Iwona Winiarska <iwona.winiarska@intel.com>
 To:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -55,215 +55,69 @@ Cc:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         David Muller <d.mueller@elsoft.ch>,
         Dave Hansen <dave.hansen@intel.com>,
         Billy Tsai <billy_tsai@aspeedtech.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>
-Subject: [PATCH v7 00/13] Introduce PECI subsystem
-Date:   Wed,  2 Feb 2022 15:48:25 +0100
-Message-Id: <20220202144838.163875-1-iwona.winiarska@intel.com>
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 01/13] dt-bindings: Add generic bindings for PECI
+Date:   Wed,  2 Feb 2022 15:48:26 +0100
+Message-Id: <20220202144838.163875-2-iwona.winiarska@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220202144838.163875-1-iwona.winiarska@intel.com>
+References: <20220202144838.163875-1-iwona.winiarska@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Platform Environment Control Interface (PECI) is a communication
-interface between Intel processors and management controllers (e.g.
-Baseboard Management Controller, BMC).
+Add device tree bindings for the PECI controller.
 
-This series adds a PECI subsystem and introduces drivers which run in
-the Linux instance on the management controller (not the main Intel
-processor) and is intended to be used by the OpenBMC [1], a Linux
-distribution for BMC devices.
-The information exposed over PECI (like processor and DIMM
-temperature) refers to the Intel processor and can be consumed by
-daemons running on the BMC to, for example, display the processor
-temperature in its web interface.
-
-The PECI bus is collection of code that provides interface support
-between PECI devices (that actually represent processors) and PECI
-controllers (such as the "peci-aspeed" controller) that allow to
-access physical PECI interface. PECI devices are bound to PECI
-drivers that provides access to PECI services. This series introduces
-a generic "peci-cpu" driver that exposes hardware monitoring "cputemp"
-and "dimmtemp" using the auxiliary bus.
-
-Exposing "raw" PECI to userspace, either to write userspace drivers or
-for debug/testing purpose was left out of this series to encourage
-writing kernel drivers instead, but may be pursued in the future.
-
-Introducing PECI to upstream Linux was already attempted before [2].
-Since it's been over a year since last revision, and the series
-changed quite a bit in the meantime, I've decided to start from v1.
-
-I would also like to give credit to everyone who helped me with
-different aspects of preliminary review:
-- Pierre-Louis Bossart,
-- Tony Luck, 
-- Andy Shevchenko,
-- Dave Hansen.
-
-[1] https://github.com/openbmc/openbmc
-[2] https://lore.kernel.org/openbmc/20191211194624.2872-1-jae.hyun.yoo@linux.intel.com/
-
-Changes v6 -> v7:
-* Fixed Kconfig warnings (lkp@intel.com)
-
-Changes v5 -> v6:
-* Added missing COMMON_CLK selection (lkp@intel.com)
-* Fixed WARN_ON always evaluated to true (lkp@intel.com)
-* Clean interrupt status unconditionally (Joel)
-* Replaced memcpy_toio()/memcpy_fromio() with writel()/readl() to
-  avoid issues when submitting unaligned PECI commands
-
-Changes v4 -> v5:
-* Added clk_aspeed_peci to express controller programming using common
-  clock framework (Billy)
-* Modified peci-aspeed DTS schema to match clock changes (Billy)
-* Added workaround for peci-aspeed controller hang (Billy)
-* Removed unnecessary "else after return" (Guenter)
-
-Changes v3 -> v4:
-* Fixed an issue where peci doesn't work after host shutdown (Zev)
-* Replaced kill_device() with peci_device_del_lock (Greg)
-* Fixed dts_valid() parameter type (Guenter)
-* Removed Jae from MAINTAINERS file (Jae)
-
-Changes v2 -> v3:
-
-* Dropped x86/cpu patches (Boris)
-* Dropped pr_fmt() for PECI module (Dan)
-* Fixed releasing peci controller device flow (Dan) 
-* Improved peci-aspeed commit-msg and Kconfig help (Dan)
-* Fixed aspeed_peci_xfer() to use the proper spin_lock function (Dan) 
-* Wrapped print_hex_dump_bytes() in CONFIG_DYNAMIC_DEBUG (Dan)
-* Removed debug status logs from aspeed_peci_irq_handler() (Dan)
-* Renamed functions using devres to start with "devm" (Dan)
-* Changed request to be allocated on stack in peci_detect (Dan)
-* Removed redundant WARN_ON on invalid PECI addr (Dan)
-* Changed peci_device_create() to use device_initialize() + device_add() pattern (Dan)
-* Fixed peci_device_destroy() to use kill_device() avoiding double-free (Dan)
-* Renamed functions that perform xfer using "peci_xfer_*" prefix (Dan) 
-* Renamed peci_request_data_dib(temp) -> peci_request_dib(temp)_read (Dan)
-* Fixed thermal margin readings for older Intel processors (Zev) 
-* Misc hwmon simplifications (Guenter)
-* Used BIT_PER_TYPE to verify macro value constrains (Guenter)
-* Improved WARN_ON message to print chan_rank_max and idx_dimm_max (Guenter)
-* Improved dimmtemp to not reattempt probe if no dimms are populated
-
-Changes v1 -> v2:
-
-Biggest changes when it comes to diffstat are locking in HWMON
-(I decided to clean things up a bit while adding it), switching to
-devres usage in more places and exposing sysfs interface in separate patch.
-
-* Moved extending X86 ARCHITECTURE MAINTAINERS earlier in series (Dan)
-* Removed "default n" for GENERIC_LIB_X86 (Dan)
-* Added vendor prefix for peci-aspeed specific properties (Rob)
-* Refactored PECI to use devres consistently (Dan)
-* Added missing sysfs documentation and excluded adding peci-sysfs to
-  separate patch (Dan)
-* Used module_init() instead of subsys_init() for peci module initialization (Dan)
-* Removed redundant struct peci_device member (Dan)
-* Improved PECI Kconfig help (Randy/Dan)
-* Fixed/removed log messages (Dan, Guenter)
-* Refactored peci-cputemp and peci-dimmtemp and added missing locks (Guenter)
-* Removed unused dev_set_drvdata() in peci-cputemp and peci-dimmtemp (Guenter)
-* Fixed used types, names, fixed broken and added additional comments
-  to peci-hwmon (Guenter, Zev)
-* Refactored peci-dimmtemp to not return -ETIMEDOUT (Guenter)
-* Added sanity check for min_peci_revision in peci-hwmon drivers (Zev)
-* Added assert for DIMM_NUMS_MAX and additional warning in peci-dimmtemp (Zev)
-* Fixed macro names in peci-aspeed (Zev)
-* Refactored peci-aspeed sanitizing properties to a single helper function (Zev)
-* Fixed peci_cpu_device_ids definition for Broadwell Xeon D (David)
-* Refactor peci_request to use a single allocation (Zev)
-* Used min_t() to improve code readability (Zev)
-* Added macro for PECI_RDENDPTCFG_MMIO_WR_LEN_BASE and fixed adev type
-  array name to more descriptive (Zev)
-* Fixed peci-hwmon commit-msg and documentation (Zev)
-
-Thanks
--Iwona
-
-Iwona Winiarska (11):
-  dt-bindings: Add generic bindings for PECI
-  dt-bindings: Add bindings for peci-aspeed
-  ARM: dts: aspeed: Add PECI controller nodes
-  peci: Add core infrastructure
-  peci: Add device detection
-  peci: Add sysfs interface for PECI bus
-  peci: Add support for PECI device drivers
-  peci: Add peci-cpu driver
-  hwmon: peci: Add cputemp driver
-  hwmon: peci: Add dimmtemp driver
-  docs: Add PECI documentation
-
-Jae Hyun Yoo (2):
-  peci: Add peci-aspeed controller driver
-  docs: hwmon: Document PECI drivers
-
- Documentation/ABI/testing/sysfs-bus-peci      |  16 +
- .../devicetree/bindings/peci/peci-aspeed.yaml |  72 ++
- .../bindings/peci/peci-controller.yaml        |  33 +
- Documentation/hwmon/index.rst                 |   2 +
- Documentation/hwmon/peci-cputemp.rst          |  90 +++
- Documentation/hwmon/peci-dimmtemp.rst         |  57 ++
- Documentation/index.rst                       |   1 +
- Documentation/peci/index.rst                  |  16 +
- Documentation/peci/peci.rst                   |  51 ++
- MAINTAINERS                                   |  26 +
- arch/arm/boot/dts/aspeed-g4.dtsi              |  11 +
- arch/arm/boot/dts/aspeed-g5.dtsi              |  11 +
- arch/arm/boot/dts/aspeed-g6.dtsi              |  11 +
- drivers/Kconfig                               |   3 +
- drivers/Makefile                              |   1 +
- drivers/hwmon/Kconfig                         |   2 +
- drivers/hwmon/Makefile                        |   1 +
- drivers/hwmon/peci/Kconfig                    |  31 +
- drivers/hwmon/peci/Makefile                   |   7 +
- drivers/hwmon/peci/common.h                   |  58 ++
- drivers/hwmon/peci/cputemp.c                  | 592 ++++++++++++++++
- drivers/hwmon/peci/dimmtemp.c                 | 630 ++++++++++++++++++
- drivers/peci/Kconfig                          |  36 +
- drivers/peci/Makefile                         |  10 +
- drivers/peci/controller/Kconfig               |  18 +
- drivers/peci/controller/Makefile              |   3 +
- drivers/peci/controller/peci-aspeed.c         | 599 +++++++++++++++++
- drivers/peci/core.c                           | 236 +++++++
- drivers/peci/cpu.c                            | 343 ++++++++++
- drivers/peci/device.c                         | 252 +++++++
- drivers/peci/internal.h                       | 136 ++++
- drivers/peci/request.c                        | 482 ++++++++++++++
- drivers/peci/sysfs.c                          |  82 +++
- include/linux/peci-cpu.h                      |  40 ++
- include/linux/peci.h                          | 112 ++++
- 35 files changed, 4071 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-peci
- create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
+Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+---
+ .../bindings/peci/peci-controller.yaml        | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/peci/peci-controller.yaml
- create mode 100644 Documentation/hwmon/peci-cputemp.rst
- create mode 100644 Documentation/hwmon/peci-dimmtemp.rst
- create mode 100644 Documentation/peci/index.rst
- create mode 100644 Documentation/peci/peci.rst
- create mode 100644 drivers/hwmon/peci/Kconfig
- create mode 100644 drivers/hwmon/peci/Makefile
- create mode 100644 drivers/hwmon/peci/common.h
- create mode 100644 drivers/hwmon/peci/cputemp.c
- create mode 100644 drivers/hwmon/peci/dimmtemp.c
- create mode 100644 drivers/peci/Kconfig
- create mode 100644 drivers/peci/Makefile
- create mode 100644 drivers/peci/controller/Kconfig
- create mode 100644 drivers/peci/controller/Makefile
- create mode 100644 drivers/peci/controller/peci-aspeed.c
- create mode 100644 drivers/peci/core.c
- create mode 100644 drivers/peci/cpu.c
- create mode 100644 drivers/peci/device.c
- create mode 100644 drivers/peci/internal.h
- create mode 100644 drivers/peci/request.c
- create mode 100644 drivers/peci/sysfs.c
- create mode 100644 include/linux/peci-cpu.h
- create mode 100644 include/linux/peci.h
 
+diff --git a/Documentation/devicetree/bindings/peci/peci-controller.yaml b/Documentation/devicetree/bindings/peci/peci-controller.yaml
+new file mode 100644
+index 000000000000..bbc3d3f3a929
+--- /dev/null
++++ b/Documentation/devicetree/bindings/peci/peci-controller.yaml
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/peci/peci-controller.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Generic Device Tree Bindings for PECI
++
++maintainers:
++  - Iwona Winiarska <iwona.winiarska@intel.com>
++
++description:
++  PECI (Platform Environment Control Interface) is an interface that provides a
++  communication channel from Intel processors and chipset components to external
++  monitoring or control devices.
++
++properties:
++  $nodename:
++    pattern: "^peci-controller(@.*)?$"
++
++  cmd-timeout-ms:
++    description:
++      Command timeout in units of ms.
++
++additionalProperties: true
++
++examples:
++  - |
++    peci-controller@1e78b000 {
++      reg = <0x1e78b000 0x100>;
++      cmd-timeout-ms = <500>;
++    };
++...
 -- 
 2.34.1
 

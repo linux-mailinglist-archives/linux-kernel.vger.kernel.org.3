@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B504A7257
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFAA4A7254
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiBBNyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:54:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30581 "EHLO
+        id S232633AbiBBNyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:54:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34751 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344616AbiBBNyE (ORCPT
+        by vger.kernel.org with ESMTP id S1344679AbiBBNyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:54:04 -0500
+        Wed, 2 Feb 2022 08:54:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643810044;
+        s=mimecast20190719; t=1643810049;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jBnKFQ30kOdAO0O49lD07YWI/2GEebyH6rvvven/zqI=;
-        b=BW5QoziwiXa/flqH8owlwPDHDyuClNMlLpnrYvkVtcMTzx78cgKd5RxLIBJK3Aps0BTo5g
-        VisC80HJZaFoo1FuN2mEGBEy3Lw8sAbkdKa7/o9VNviAcqLmM2xve85sySuLGNaLYwp1wJ
-        PIJDo83uuyU1EQCvEJpBYp/tXZCCAPE=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=gqIBYhSED2KiLRiPVvQEcn95LWAaRUgov7svs5RNRz4=;
+        b=Hu0l9O7ZHMS+sNZB3UsrrjPCVNpGtHd0VKhxdOYKbyv5Yi0f73V0nmPsetPrx/CKtNmhcT
+        eLIQZxTFSuOO+wbdWs0VimFQQpVUg1i0Ly1oP0QjGN1qXiBX+vfe9Myj0UmItWbB+2BkLO
+        jGnp8Bq7TIgi28atfiSpcmkuaiLDZ70=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-426-JvUGRzKzOLuIEG9Iy0TQYg-1; Wed, 02 Feb 2022 08:54:01 -0500
-X-MC-Unique: JvUGRzKzOLuIEG9Iy0TQYg-1
-Received: by mail-ej1-f69.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so8103664ejw.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:54:00 -0800 (PST)
+ us-mta-267-cXZrbyTHOoqgUg9rjesszw-1; Wed, 02 Feb 2022 08:54:09 -0500
+X-MC-Unique: cXZrbyTHOoqgUg9rjesszw-1
+Received: by mail-ej1-f72.google.com with SMTP id lb14-20020a170907784e00b006aa178894fcso8177906ejc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:54:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jBnKFQ30kOdAO0O49lD07YWI/2GEebyH6rvvven/zqI=;
-        b=YUAY0f+OP9Ozcd6W8mP3sEd6mzuW4wX21mbXuXggd3LJdUDwSdFSWrSw309Z+4Qdmy
-         slUTdQXhS3rJaFZKbLmUw/VFiPv/NszjnEREgbOd8gTTQvcpxRdsUvp1FiUNadskBi63
-         RgG26NnQsA5txR/XU2A6S4/mpePWU3ciulke6efoeHNw7AYrs0jW5jDbVsKAlO3eNwJm
-         whE7Wfd8HZ0A0kxdNa2F6ft6Y46C2OXPcchjst8S786UgK63Z0CfWef7ErQto2Vni2s+
-         QXoZ0uq1fHL5wD3JSmcTQyOVf+N0ec7JTna/v5wRuN+Wfm3Cx485zuEEnMnrlmh+WCeg
-         PAyw==
-X-Gm-Message-State: AOAM531wr8Hzx047TEh/JQF52UagtT+bwFfNTXjlzwPh2/zad2fmD1Fh
-        yEllpUYGEzz7bGcM5RcOBSjVjlCb0tL94MBmop9yoAA3/RYehfCY2q7ILqfE9NstsToxX+5GigI
-        Gui7WoJbswvpwxbmfLDb9F1jD
-X-Received: by 2002:a50:bb0a:: with SMTP id y10mr8988219ede.441.1643810039919;
-        Wed, 02 Feb 2022 05:53:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwpHD34n0QXTYfKs783CZ7B9M9fR7e6UeoB6pLhcbQSrQnEbVZssHdo7gWyGcK97/TJlR+epw==
-X-Received: by 2002:a50:bb0a:: with SMTP id y10mr8988201ede.441.1643810039727;
-        Wed, 02 Feb 2022 05:53:59 -0800 (PST)
+        bh=gqIBYhSED2KiLRiPVvQEcn95LWAaRUgov7svs5RNRz4=;
+        b=6nxIvAUtK1uK9E/O6BrtxZTk18p9KNeYNOrzHC2iTHcjebnAc+J97Z7qBet5TYbAoK
+         Aq5OboQQjIxuKOzLwcXY2s5m84+ayhDJR4aAi6fys2t5B3oOBTxPYqbAKOthxAFtiIUK
+         7KMSGloXoBKE1p4JYIblpkm2x+T3Medzyayk/HSOXoY6J4GwXdN3qbNmvPGyALCsviFA
+         R5W/5cFxrSaal02GUqOIXXZ/XrvePFrBFFHXw5sgP51bv/7OdMnbHxxZRpXqK9ECYZQP
+         TwkGYgmpRoJMG8PP5CKs+ft84xb0iOPm6/5ZaPfd8fveyerGsvGZk6Dml5spazNVwtoJ
+         iuXw==
+X-Gm-Message-State: AOAM532r6dBuQa4TovI/jQxLrngiOJV0BQcKACpnktLLILO4uclGAymC
+        hkkKfKiLQGQhaf6RwHvM12nqWKmG6MU4pAXzzZ5V4Gzv2ZabCIL+1UZKIFc6lHAS8tlmZo4wsB9
+        zjhuK8EEti0RrFRr1tX4boC7l
+X-Received: by 2002:a05:6402:509:: with SMTP id m9mr29640223edv.237.1643810046235;
+        Wed, 02 Feb 2022 05:54:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwcUwK13/nY2kcApXDzGsFhV/cZCeMZ9htyubnhs5SDp70e98r81NKwfnOABmoL6EkvsLeXhg==
+X-Received: by 2002:a05:6402:509:: with SMTP id m9mr29640200edv.237.1643810046059;
+        Wed, 02 Feb 2022 05:54:06 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id f4sm15819702ejh.93.2022.02.02.05.53.58
+        by smtp.gmail.com with ESMTPSA id s7sm15703501ejo.212.2022.02.02.05.54.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 05:53:59 -0800 (PST)
+        Wed, 02 Feb 2022 05:54:05 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         KP Singh <kpsingh@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Jiri Olsa <olsajiri@gmail.com>
-Subject: [PATCH 4/8] libbpf: Add libbpf__kallsyms_parse function
-Date:   Wed,  2 Feb 2022 14:53:29 +0100
-Message-Id: <20220202135333.190761-5-jolsa@kernel.org>
+Subject: [PATCH 5/8] libbpf: Add bpf_link_create support for multi kprobes
+Date:   Wed,  2 Feb 2022 14:53:30 +0100
+Message-Id: <20220202135333.190761-6-jolsa@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220202135333.190761-1-jolsa@kernel.org>
 References: <20220202135333.190761-1-jolsa@kernel.org>
@@ -78,124 +78,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the kallsyms parsing in internal libbpf__kallsyms_parse
-function, so it can be used from other places.
-
-It will be used in following changes.
+Adding new kprobe struct in bpf_link_create_opts object
+to pass multi kprobe data to link_create attr API.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/libbpf.c          | 62 ++++++++++++++++++++-------------
- tools/lib/bpf/libbpf_internal.h |  5 +++
- 2 files changed, 43 insertions(+), 24 deletions(-)
+ tools/lib/bpf/bpf.c | 7 +++++++
+ tools/lib/bpf/bpf.h | 9 ++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1b0936b016d9..7d595cfd03bc 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -7165,12 +7165,10 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
- 	return 0;
- }
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 418b259166f8..98156709a96c 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -853,6 +853,13 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		if (!OPTS_ZEROED(opts, perf_event))
+ 			return libbpf_err(-EINVAL);
+ 		break;
++	case BPF_TRACE_FPROBE:
++		attr.link_create.fprobe.syms = OPTS_GET(opts, fprobe.syms, 0);
++		attr.link_create.fprobe.addrs = OPTS_GET(opts, fprobe.addrs, 0);
++		attr.link_create.fprobe.cnt = OPTS_GET(opts, fprobe.cnt, 0);
++		attr.link_create.fprobe.flags = OPTS_GET(opts, fprobe.flags, 0);
++		attr.link_create.fprobe.bpf_cookies = OPTS_GET(opts, fprobe.bpf_cookies, 0);
++		break;
+ 	default:
+ 		if (!OPTS_ZEROED(opts, flags))
+ 			return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index c2e8327010f9..114e828ae027 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -413,10 +413,17 @@ struct bpf_link_create_opts {
+ 		struct {
+ 			__u64 bpf_cookie;
+ 		} perf_event;
++		struct {
++			__u64 syms;
++			__u64 addrs;
++			__u32 cnt;
++			__u32 flags;
++			__u64 bpf_cookies;
++		} fprobe;
+ 	};
+ 	size_t :0;
+ };
+-#define bpf_link_create_opts__last_field perf_event
++#define bpf_link_create_opts__last_field fprobe.bpf_cookies
  
--static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+int libbpf__kallsyms_parse(void *arg, kallsyms_cb_t cb)
- {
- 	char sym_type, sym_name[500];
- 	unsigned long long sym_addr;
--	const struct btf_type *t;
--	struct extern_desc *ext;
- 	int ret, err = 0;
- 	FILE *f;
- 
-@@ -7189,35 +7187,51 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
- 		if (ret != 3) {
- 			pr_warn("failed to read kallsyms entry: %d\n", ret);
- 			err = -EINVAL;
--			goto out;
-+			break;
- 		}
- 
--		ext = find_extern_by_name(obj, sym_name);
--		if (!ext || ext->type != EXT_KSYM)
--			continue;
--
--		t = btf__type_by_id(obj->btf, ext->btf_id);
--		if (!btf_is_var(t))
--			continue;
--
--		if (ext->is_set && ext->ksym.addr != sym_addr) {
--			pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx\n",
--				sym_name, ext->ksym.addr, sym_addr);
--			err = -EINVAL;
--			goto out;
--		}
--		if (!ext->is_set) {
--			ext->is_set = true;
--			ext->ksym.addr = sym_addr;
--			pr_debug("extern (ksym) %s=0x%llx\n", sym_name, sym_addr);
--		}
-+		err = cb(arg, sym_addr, sym_type, sym_name);
-+		if (err)
-+			break;
- 	}
- 
--out:
- 	fclose(f);
- 	return err;
- }
- 
-+static int kallsyms_cb(void *arg, unsigned long long sym_addr,
-+		       char sym_type, const char *sym_name)
-+{
-+	struct bpf_object *obj = arg;
-+	const struct btf_type *t;
-+	struct extern_desc *ext;
-+
-+	ext = find_extern_by_name(obj, sym_name);
-+	if (!ext || ext->type != EXT_KSYM)
-+		return 0;
-+
-+	t = btf__type_by_id(obj->btf, ext->btf_id);
-+	if (!btf_is_var(t))
-+		return 0;
-+
-+	if (ext->is_set && ext->ksym.addr != sym_addr) {
-+		pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx\n",
-+			sym_name, ext->ksym.addr, sym_addr);
-+		return -EINVAL;
-+	}
-+	if (!ext->is_set) {
-+		ext->is_set = true;
-+		ext->ksym.addr = sym_addr;
-+		pr_debug("extern (ksym) %s=0x%llx\n", sym_name, sym_addr);
-+	}
-+	return 0;
-+}
-+
-+static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+{
-+	return libbpf__kallsyms_parse(obj, kallsyms_cb);
-+}
-+
- static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
- 			    __u16 kind, struct btf **res_btf,
- 			    struct module_btf **res_mod_btf)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index bc86b82e90d1..fb3b07d401df 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -449,6 +449,11 @@ __s32 btf__find_by_name_kind_own(const struct btf *btf, const char *type_name,
- 
- extern enum libbpf_strict_mode libbpf_mode;
- 
-+typedef int (*kallsyms_cb_t)(void *arg, unsigned long long sym_addr,
-+			     char sym_type, const char *sym_name);
-+
-+int libbpf__kallsyms_parse(void *arg, kallsyms_cb_t cb);
-+
- /* handle direct returned errors */
- static inline int libbpf_err(int ret)
- {
+ LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
+ 			       enum bpf_attach_type attach_type,
 -- 
 2.34.1
 

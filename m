@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88514A78EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3FF4A78EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 20:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346984AbiBBTtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 14:49:53 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:44944 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346967AbiBBTtw (ORCPT
+        id S241778AbiBBTuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 14:50:37 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:44018 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346977AbiBBTue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 14:49:52 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnim6127964;
-        Wed, 2 Feb 2022 13:49:44 -0600
+        Wed, 2 Feb 2022 14:50:34 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 212JoSCj069396;
+        Wed, 2 Feb 2022 13:50:28 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643831384;
-        bh=DIp43XSAMx2adaN2x1pPnNwrO9YL3U19pEVY50lVnro=;
+        s=ti-com-17Q1; t=1643831428;
+        bh=PDV41FIeSzz6CCLPpJKxpTZ+EEr1ZsxD91v3CVrekpw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=pucDKKT/IHoySA4FMMY4TPFqqm+CfSuAt+ZSx2+GbqLgZRKfRN2+U0HY2xQpG0Xpw
-         rbAwEYyz4Bh6Cwj0yUSK91GEdUsTvL6RuAomnUMx0zRiR96guIY5k8nCmdP0kp7iP2
-         qbtAtkLZDyVEHUUY3E67fBNbuUyyLVt1bD6iwiCo=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JnioI083004
+        b=Byts02izTV24QPqQMvm1o8HQgFwAlPuhRXuVHdTQwuSTrSpon3CwGUodX5Rf8Ja2c
+         Kx10LjFBxnsOyB7F+q01zlk8J/m9Ehk9rx2dFqhLyh76s6oWtXHYiabA79zi6+p9N+
+         3FDnO835o+5SZvlIiKiVwBeOpNQGT/d2NfubiI0o=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 212JoSDs004660
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Feb 2022 13:49:44 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 2 Feb 2022 13:50:28 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
- Feb 2022 13:49:44 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:50:28 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 2 Feb 2022 13:49:44 -0600
+ Frontend Transport; Wed, 2 Feb 2022 13:50:28 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212Jnh1j042364;
-        Wed, 2 Feb 2022 13:49:43 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 212JoSHW004263;
+        Wed, 2 Feb 2022 13:50:28 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-CC:     Nishanth Menon <nm@ti.com>, <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-Date:   Wed, 2 Feb 2022 13:49:43 -0600
-Message-ID: <164383137177.1624.10089341781660907242.b4-ty@ti.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        <maz@kernel.org>, <ssantosh@kernel.org>, <kristo@kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH] firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL is not defined
+Date:   Wed, 2 Feb 2022 13:50:27 -0600
+Message-ID: <164383139483.1725.16513553485038742707.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220105180323.8563-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <e6c3cb793e1a6a2a0ae2528d5a5650dfe6a4b6ff.1640276505.git.christophe.jaillet@wanadoo.fr>
+References: <e6c3cb793e1a6a2a0ae2528d5a5650dfe6a4b6ff.1640276505.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,25 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lad Prabhakar,
+Hi Christophe JAILLET,
 
-On Wed, 5 Jan 2022 18:03:22 +0000, Lad Prabhakar wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
+On Thu, 23 Dec 2021 17:23:00 +0100, Christophe JAILLET wrote:
+> Remove an extra ";" which breaks compilation.
 > 
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional().
 > 
-> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] soc: ti: smartreflex: Use platform_get_irq_optional() to get the interrupt
-      commit: 001d7c83704bc98c28cc6444d2e7518d12ed029f
+[1/1] firmware: ti_sci: Fix compilation failure when CONFIG_TI_SCI_PROTOCOL is not defined
+      commit: 043cfff99a18933fda2fb2e163daee73cc07910b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

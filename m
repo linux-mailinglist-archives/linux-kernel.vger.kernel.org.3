@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8C84A7423
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AB24A7426
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244329AbiBBO7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:59:47 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:39231 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345293AbiBBO7H (ORCPT
+        id S240743AbiBBPAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345317AbiBBPAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:59:07 -0500
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Feb 2022 10:00:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB060C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:00:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 1AFE722453;
-        Wed,  2 Feb 2022 15:59:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1643813946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yIv4VTb5VdcS3L6sdsDDVGx9xtU3Q9aCaHFNOFlKMl4=;
-        b=IzDaFxdXy13k7GZxY4ID+OVShStO3QiiP1gNKzG19NZ4M2AmoAmC1yqNGRO13n5OUT+QiD
-        bvXimhKt540pTmk5ziVXRNqHvS0egaaeerKftJ4BQbsJa8qd89kSQTlC4lkT4JNJmYQGEs
-        J+QBcy//hW2N8kNR9LehmQAdkbSceR4=
-From:   Michael Walle <michael@walle.cc>
-To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v1 14/14] mtd: spi-nor: renumber flags
-Date:   Wed,  2 Feb 2022 15:58:53 +0100
-Message-Id: <20220202145853.4187726-15-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220202145853.4187726-1-michael@walle.cc>
-References: <20220202145853.4187726-1-michael@walle.cc>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A641AB83118
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:00:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64614C004E1;
+        Wed,  2 Feb 2022 14:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643814000;
+        bh=tD/khbOVNufPcC6Di2abvTiRxrIVfIxefQCq92Qvzmc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QK7S66uegOZ/bjXgelI2EE2+UtC3hyNcUlv0fKucGq6UJInT94Gw0i02cYTU9ilDk
+         ghyxiGw1H3luwrzVK8tRZth8xzjEvZZCoXJu8ubSWVrLdcQxBSh+tJ+F0KndM8FfKM
+         D43p3bFi7PI2D9cXKL55ImnDpRa2BunoZAbzl6tp7d5Ii5QJ3ev0D/Cuh7pbqtLD3L
+         8T8dxmjP2dUyLhTS9I1rXFBBCsMD0euZI8ZP46Qdwi9SPaJYgdw76fByVR6n5MzHhU
+         pK2amGesJGGmPaiivbNjPI4W4u7k4ycgQaHsLznsv2RD2DIq+iel+l1KTjmYhdfz/C
+         afxF7XK9e+GBA==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: [PATCH] sched/preempt: Tell about PREEMPT_DYNAMIC on kernel headers
+Date:   Wed,  2 Feb 2022 15:59:54 +0100
+Message-Id: <20220202145954.458370-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we have deleted some flag, lets renumber them so there are no holes.
+Displaying "PREEMPT" on kernel headers when CONFIG_PREEMPT_DYNAMIC=y
+can be misleading for anybody involved in remote debugging because it
+is then not guaranteed that there is an actual preemption behaviour. It
+depends on default Kconfig or boot defined choices.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+Therefore, tell about PREEMPT_DYNAMIC on static kernel headers and leave
+the search for the actual preemption behaviour to browsing dmesg.
+
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
 ---
- drivers/mtd/spi-nor/core.h | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ init/Makefile       |  3 ++-
+ scripts/mkcompile_h | 15 +++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 2130a96e2044..b7fd760e3b47 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -12,20 +12,20 @@
- #define SPI_NOR_MAX_ID_LEN	6
+diff --git a/init/Makefile b/init/Makefile
+index 06326e304384..d82623d7fc8e 100644
+--- a/init/Makefile
++++ b/init/Makefile
+@@ -31,7 +31,8 @@ quiet_cmd_compile.h = CHK     $@
+       cmd_compile.h = \
+ 	$(CONFIG_SHELL) $(srctree)/scripts/mkcompile_h $@	\
+ 	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT_BUILD)"	\
+-	"$(CONFIG_PREEMPT_RT)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
++	"$(CONFIG_PREEMPT_DYNAMIC)" "$(CONFIG_PREEMPT_RT)" \
++	"$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
  
- enum spi_nor_option_flags {
--	SNOR_F_HAS_SR_TB	= BIT(1),
--	SNOR_F_NO_OP_CHIP_ERASE	= BIT(2),
--	SNOR_F_BROKEN_RESET	= BIT(5),
--	SNOR_F_4B_OPCODES	= BIT(6),
--	SNOR_F_HAS_4BAIT	= BIT(7),
--	SNOR_F_HAS_LOCK		= BIT(8),
--	SNOR_F_HAS_16BIT_SR	= BIT(9),
--	SNOR_F_NO_READ_CR	= BIT(10),
--	SNOR_F_HAS_SR_TB_BIT6	= BIT(11),
--	SNOR_F_HAS_4BIT_BP      = BIT(12),
--	SNOR_F_HAS_SR_BP3_BIT6  = BIT(13),
--	SNOR_F_IO_MODE_EN_VOLATILE = BIT(14),
--	SNOR_F_SOFT_RESET	= BIT(15),
--	SNOR_F_SWP_IS_VOLATILE	= BIT(16),
-+	SNOR_F_HAS_SR_TB	= BIT(0),
-+	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-+	SNOR_F_BROKEN_RESET	= BIT(2),
-+	SNOR_F_4B_OPCODES	= BIT(3),
-+	SNOR_F_HAS_4BAIT	= BIT(4),
-+	SNOR_F_HAS_LOCK		= BIT(5),
-+	SNOR_F_HAS_16BIT_SR	= BIT(6),
-+	SNOR_F_NO_READ_CR	= BIT(7),
-+	SNOR_F_HAS_SR_TB_BIT6	= BIT(8),
-+	SNOR_F_HAS_4BIT_BP      = BIT(9),
-+	SNOR_F_HAS_SR_BP3_BIT6  = BIT(10),
-+	SNOR_F_IO_MODE_EN_VOLATILE = BIT(11),
-+	SNOR_F_SOFT_RESET	= BIT(12),
-+	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
- };
+ include/generated/compile.h: FORCE
+ 	$(call cmd,compile.h)
+diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
+index 6a2a04d92f42..f4d6ca3c6fd7 100755
+--- a/scripts/mkcompile_h
++++ b/scripts/mkcompile_h
+@@ -5,9 +5,10 @@ TARGET=$1
+ ARCH=$2
+ SMP=$3
+ PREEMPT=$4
+-PREEMPT_RT=$5
+-CC_VERSION="$6"
+-LD=$7
++PREEMPT_DYNAMIC=$5
++PREEMPT_RT=$6
++CC_VERSION="$7"
++LD=$8
  
- struct spi_nor_read_command {
+ # Do not expand names
+ set -f
+@@ -41,7 +42,13 @@ fi
+ UTS_VERSION="#$VERSION"
+ CONFIG_FLAGS=""
+ if [ -n "$SMP" ] ; then CONFIG_FLAGS="SMP"; fi
+-if [ -n "$PREEMPT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT"; fi
++if [ -n "$PREEMPT" ] ; then
++	if [ -n "$PREEMPT_DYNAMIC" ] ; then
++		CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_DYNAMIC";
++	else
++		CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT";
++	fi
++fi
+ if [ -n "$PREEMPT_RT" ] ; then CONFIG_FLAGS="$CONFIG_FLAGS PREEMPT_RT"; fi
+ 
+ # Truncate to maximum length
 -- 
-2.30.2
+2.25.1
 

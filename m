@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BEE4A6F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C65E4A6F8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 12:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239252AbiBBLHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 06:07:17 -0500
-Received: from mga18.intel.com ([134.134.136.126]:37287 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229552AbiBBLHQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 06:07:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643800036; x=1675336036;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IUN0B8wCPrd5whIz0ndsi5oEOD4UtnfCc7PBqv0ehBQ=;
-  b=hk9vZF99v6mtiQwvlMA8+YqtMVmu29mppypR1dXcDry4bN/fHIK8J5Z+
-   FlEKlW/rqe5dWukGyYGaL5RDsgLTSK3FyiAqNqUSjkqfy7K+tOpw95NKL
-   IKfhkd02lByzI0tsZpBeOrMor9ErilyMHmVNOr1cRUFhEZw5AZmCyiGEu
-   vxAQtCYjFC645bwmntrjwzAbnbT+sQDCi7Y5bw25wIbZCfq08ovGA7Dlw
-   0onufqzJmRRP1seaR3/mB5TCdvs6OMWo6KWZz8vZRZe0BfIgjqhrZh4UJ
-   qa5eOC3qhkMgL1/UH3SZ2wgLv0Pxzwuy9AzLW75BMb5M/VmWbSaLjfqr3
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="231463039"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="231463039"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 03:07:16 -0800
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="676400854"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 03:07:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFDSj-0003No-Bi;
-        Wed, 02 Feb 2022 13:06:09 +0200
-Date:   Wed, 2 Feb 2022 13:06:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Peter Robinson <pbrobinson@gmail.com>
-Subject: Re: [PATCH 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
- displays
-Message-ID: <YfploeCM6C5y3Imj@smile.fi.intel.com>
-References: <20220131201225.2324984-1-javierm@redhat.com>
- <YfhM97cVH3+lJKg0@ravnborg.org>
- <Yfj/XGRRDNABsLPm@smile.fi.intel.com>
- <f8d71acb-5c8b-ac4e-0c32-38eb66af04c3@redhat.com>
- <CAMuHMdVP6ER119r2KAegjZes1a=KWZ47z6j=kgQ0oNx1oeUJ+w@mail.gmail.com>
- <51f54519-bb8b-f108-1c1e-4fed101ca5ef@redhat.com>
- <CAMuHMdVwUfv7pXhPazsgG6t=X=aVtDQkFUk_=mUuFH8Fscx8wg@mail.gmail.com>
- <abf63995-a529-1e80-18c3-df473a3e7a9c@redhat.com>
- <YfmaqUBqCrgp0QdO@ravnborg.org>
- <e552caec-5136-f4b2-12dc-23b182ab8af6@redhat.com>
+        id S239104AbiBBLGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 06:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236708AbiBBLGj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 06:06:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF2CC06173E;
+        Wed,  2 Feb 2022 03:06:39 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C5E0E1EC0513;
+        Wed,  2 Feb 2022 12:06:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643799993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=T5KarsviFxcdPdr91Ju50bIXrFx/Ww52H/WmFLJHWWk=;
+        b=oXHB2bMIYcC69Z2LEdY0Kp3e4q+aUB7LWsYhNn3wevkRodEY2WCg1LuVEpeNDtxTrfzab8
+        ct1X+4H0PojDxi5drGWWg6PRjOminwTVFtJA8ySyvP9PR9gy2fZC7eyO03NzYf5MlVpIpz
+        ttux2IT7OMBSjaXoLcwcmTzaun8uLjI=
+Date:   Wed, 2 Feb 2022 12:06:29 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 17/43] x86/kernel: Make the .bss..decrypted section
+ shared in RMP table
+Message-ID: <YfpltcR7IqhP5KTq@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-18-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e552caec-5136-f4b2-12dc-23b182ab8af6@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20220128171804.569796-18-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 09:38:51AM +0100, Javier Martinez Canillas wrote:
-> On 2/1/22 21:40, Sam Ravnborg wrote:
+On Fri, Jan 28, 2022 at 11:17:38AM -0600, Brijesh Singh wrote:
+> The encryption attribute for the .bss..decrypted section is cleared in the
+> initial page table build. This is because the section contains the data
+> that need to be shared between the guest and the hypervisor.
+> 
+> When SEV-SNP is active, just clearing the encryption attribute in the
+> page table is not enough. The page state need to be updated in the RMP
+> table.
+> 
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kernel/head64.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 8075e91cff2b..1239bc104cda 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -143,7 +143,21 @@ static unsigned long sme_postprocess_startup(struct boot_params *bp, pmdval_t *p
+>  	if (sme_get_me_mask()) {
+>  		vaddr = (unsigned long)__start_bss_decrypted;
+>  		vaddr_end = (unsigned long)__end_bss_decrypted;
+> +
+>  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+> +			/*
+> +			 * When SEV-SNP is active then transition the page to
+> +			 * shared in the RMP table so that it is consistent with
+> +			 * the page table attribute change.
+> +			 *
+> +			 * At this point, kernel is running in identity mapped mode.
+> +			 * The __start_bss_decrypted is a regular kernel address. The
+> +			 * early_snp_set_memory_shared() requires a valid virtual
+> +			 * address, so use __pa() against __start_bss_decrypted to
+> +			 * get valid virtual address.
+> +			 */
 
-...
+How's that?
 
-> Peter Robinson suggested to
-> make the driver mutually exclusive and add !FB_SSD1307 in the config symbol.
-
-And how will distros choose "the right" option in this case?
-What to do when I wan to see a regression and I want to change drivers w/o
-recompilation?
-
-NAK from me to that proposal.
+                        /*
+                         * On SNP, transition the page to shared in the RMP table so that
+                         * it is consistent with the page table attribute change.
+                         *
+                         * __start_bss_decrypted has a virtual address in the high range
+                         * mapping (kernel .text). PVALIDATE, by way of
+                         * early_snp_set_memory_shared(), requires a valid virtual
+                         * address but the kernel is currently running off of the identity
+                         * mapping so use __pa() to get a *currently* valid virtual address.
+                         */
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette

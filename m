@@ -2,152 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA624A76D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299154A76DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 18:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242685AbiBBR2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 12:28:25 -0500
-Received: from mail-dm6nam08on2078.outbound.protection.outlook.com ([40.107.102.78]:56929
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229588AbiBBR2X (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 12:28:23 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PZPtAmdAqoStTJ7NC5rbXd4cfUdHilh99bfscc3DAkkPi5salfAdZhbvzoLl8NT2+LXzw9B2vW2NdlNGENfCHjeADKr0gIf8X3inZvH0LVfOqAErDZUeI/KuecLuQXz/dP3+LQTpwhEHK2eTFRqRM25G34p0v8CvgaJz4GJ1LZKJA1HocE1NcGKFGsozOhII11wTw68csbCEkx+UKobo/xrPwLAC3bRLPdfOyeJgILpeGMc8Iq5XrSyDrMaFS5mGN1pcm3Q4fYwEFYxFG0wavB6dOnz1Ow0C8nbUl/9nLEKDLLOeemmMC+ItumY7+ye3Bw9fPmlskIx6JDIXc//HNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EyWDAk54qqiEQMhQDyIoYwm6klf4P4e3MEWGlvNJvSQ=;
- b=cKFxEnzLDX2lfKKXu79rli7wHJ0L0fWEVSHCkv5mJ7o5NfTCH1JkCdDvie9wnr6/fw1MF3qlAwYPz4oiGbZpT0RknMJIKNTZGS2+vw32nES1bBurxcq+AL2OAiERs2zJ7UZHnsztiHSnr9Mi+nufKq4PBcBqCMv9dYwbzedDqUTQ1yco//hhKTNnCPBPjh/oiNuwYLi5TTUeibIjsqcUo700R+ESMZSkWenAAl3TaDDYRo4PBVSd7Vy2EHPoCx18KoRYy+f2NkYnK4voxB3b53JhHosT6+OlMGoiGalcEke/IHAGQQyhjZxIRh+InZQPi8+xzoYP75dvsIOOtiZTpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EyWDAk54qqiEQMhQDyIoYwm6klf4P4e3MEWGlvNJvSQ=;
- b=iy7kD0VCwx4euFv+5RR38NqjMSQUloJ1ZYZGr63FRTlJj2fXJLH2rEnINojkovRCkcL4q2VOxtTp963JiMfFJN6Jc2CTb7zwoOXMQXdvksBx0hALdU2IlnmFnB/pBwKZB3qfDvCoS4iEyUGaPJNQTFSRfsU0tMk7Ji8dNGXXNrg=
-Received: from BN6PR1401CA0018.namprd14.prod.outlook.com
- (2603:10b6:405:4b::28) by MN2PR12MB4207.namprd12.prod.outlook.com
- (2603:10b6:208:1d9::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
- 2022 17:28:20 +0000
-Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:4b:cafe::f0) by BN6PR1401CA0018.outlook.office365.com
- (2603:10b6:405:4b::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11 via Frontend
- Transport; Wed, 2 Feb 2022 17:28:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Wed, 2 Feb 2022 17:28:19 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 2 Feb
- 2022 11:28:18 -0600
-Date:   Wed, 2 Feb 2022 11:28:01 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
-        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v9 05/43] x86/compressed/64: Detect/setup SEV/SME
- features earlier in boot
-Message-ID: <20220202172801.4plsgy5ispu2bi7c@amd.com>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-6-brijesh.singh@amd.com>
- <Yfl3FaTGPxE7qMCq@zn.tnic>
- <20220201203507.goibbaln6dxyoogv@amd.com>
- <YfmmBykN2s0HsiAJ@zn.tnic>
- <20220202005212.a3fnn6i76ko6u6t5@amd.com>
- <YfogFFOoHvCV+/2Y@zn.tnic>
+        id S1346267AbiBBRae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 12:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229588AbiBBRad (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 12:30:33 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68099C061714;
+        Wed,  2 Feb 2022 09:30:33 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id d1so18912208plh.10;
+        Wed, 02 Feb 2022 09:30:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xdhYsHsZ6GcM52cBZ3hWzm8M2TNSQxqnbArcpF/Qhc0=;
+        b=Rxg1nA2ZyobRs5qmnZTUqWBxhRyiOJ42MD4WC/Io+/7Gr4kBmnc3l9W8V+Ep8DrdHE
+         LeEsDe/3e8OxEwFlluZKIo8/Z9WPuwHZcuWYSnk4y0CfXSAcw8q1GxOnPPp0OPZbxrIR
+         ElQE2fUQddaaYcZB0xDrnPIx3VLSGN6G30AEN/ua7fov82YJz12vVjRDU9uNbeUZe/+m
+         2VAoHJE4J1FW/wOOTRSd/Jl4mpDGPFWJ2ZanK6maolOmAYlnecdanqZgrkRpOCnWK9yH
+         4CnRc1ptW9MPKZW0t8Z4V6+f1MccGBVfhJ1mJBCvz9PsdZzCjrPhhLD9sOS8PrPoF1KP
+         TCnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xdhYsHsZ6GcM52cBZ3hWzm8M2TNSQxqnbArcpF/Qhc0=;
+        b=S57PWEGa8XCkRaw17GVVmGy9YA5VZX7oHYtaa/SN/TYJSJrGBOfDbcSgdqBD4+gnfk
+         balDrcHTkBlPVyNvHg+GjTc8g0kw0oUOF5tuEtoHoLEcfepoEnL3t7KadRCfB1ryNrXg
+         /evzOOjaZBWZGU+/pJHZ5VjOHpDn8MsIdV/pQcgI4M6wBn4nreSQLzbUvwX1uFaj0mYi
+         FrWYzaBRoSMCkp10fYmu5BmcirNsIgb2EgHtDB85tKCr2UdNtxeNMEjkmwnjzKXVm7gS
+         dpXnb8TIB+xVR4JKir34IRkbWUgK3SGN4NYZlL0IG3Te2+Pw5pFkodQxxxtzk8hrYUcy
+         yXqg==
+X-Gm-Message-State: AOAM531JoKCQ/LoFFhLfeimo3lMCQmYCCPfs5IDdn+5P9wQt2AcaFlqR
+        zCN2dhuXkKi3YLi1k4JxehP6RVORQRfml5auL44=
+X-Google-Smtp-Source: ABdhPJxcsPfujm5y+1c1M83Izh2Yn3yGyxpc3DaPP0XfcEntiK/9RcjH+hkRDRBa1ODded2xnwRB5fQ880bd0rWu95M=
+X-Received: by 2002:a17:90b:1e41:: with SMTP id pi1mr9065420pjb.62.1643823032844;
+ Wed, 02 Feb 2022 09:30:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YfogFFOoHvCV+/2Y@zn.tnic>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 62bee106-c2e2-4269-136a-08d9e67167c7
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4207:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB420744992AB681F813DD3BA695279@MN2PR12MB4207.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2958;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9cP6IXXLhASjZrHYzhjg/hsYwk6NdNoAit6a2tIfzMOknRM5NuYetOes+qSY1prZIeGI3bHpTK1Gzb+nXpKrDU9nQvr3r6CsRIxMa8sucIjUcYd0q9zizPo7HPqrGL7w1wsMemVtRAP4LjVLgavW0E5whTXHMtQ0RjWcc3iwj08Z8QXmRd7VfjHV575akDMrHAm0PSFsbobNgrZwZkvZwRy74FXUH02YkqRGK53/puHPe9JRYXIsmqTzhc2De7rQvpX8myw61ORJDZUNMIf3U3VOzsx3+HyO7Wt3ANfNygcMk3I6+R0YJN7oeu0HmC+NvrND/vpay2wcQl1jR2rsfzTF/RabRTOSUGDcP85pmIDRJcmGBmv08KHP/TX7Clqi6D2eAJdYgwyC7J3gcK2C89NmvBXPHbvTMBHaH+ICEpmqFvBSWn9Xeji21X1bRqMSgozfBJQIlt2iKxS6/ewfontkuw+3ajU6xES6QCbwp1d1zgZts3HomxV48qLcfnP1LvyTQ83E7cAMnqEwVIUvVyNv0P9wCfP/YqmT29rTDbqXN6ZQfdq0afGy4MZxVCYQWxdPeaY3tWR/iv5dw3g/Ucy83S6zLG2piw59ZWEtJf377rM4jid7Xz1w227Dy1fYA/AAy3fJAnhX0sVOae15QLUDPbMKLQK3YIySAoM41qApdDYk4abaTLeSakLAlliEgYG4Xmf/TB8MqWjlxzl4qA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(47076005)(54906003)(6916009)(7406005)(36860700001)(82310400004)(5660300002)(316002)(508600001)(7416002)(70206006)(6666004)(70586007)(26005)(186003)(356005)(44832011)(1076003)(16526019)(4326008)(8676002)(336012)(426003)(2906002)(8936002)(2616005)(40460700003)(81166007)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 17:28:19.5647
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62bee106-c2e2-4269-136a-08d9e67167c7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4207
+References: <20220202135333.190761-1-jolsa@kernel.org> <CAADnVQ+hTWbvNgnvJpAeM_-Ui2-G0YSM3QHB9G2+2kWEd4-Ymw@mail.gmail.com>
+ <Yfq+PJljylbwJ3Bf@krava>
+In-Reply-To: <Yfq+PJljylbwJ3Bf@krava>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 2 Feb 2022 09:30:21 -0800
+Message-ID: <CAADnVQKeTB=UgY4Gf-46EBa8rwWTu2wvi7hEj2sdVTALGJ0JEg@mail.gmail.com>
+Subject: Re: [PATCH 0/8] bpf: Add fprobe link
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 07:09:24AM +0100, Borislav Petkov wrote:
-> On Tue, Feb 01, 2022 at 06:52:12PM -0600, Michael Roth wrote:
-> > Since the kernel proper rdmsr()/wrmsr() definitions are getting pulled in via
-> > misc.h, I have to use a different name to avoid compiler errors. For now I've
-> > gone with rd_msr()/wr_msr(), but no problem changing those if needed.
-> 
-> Does that fix it too?
-> 
-> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-> index 16ed360b6692..346c46d072c8 100644
-> --- a/arch/x86/boot/compressed/misc.h
-> +++ b/arch/x86/boot/compressed/misc.h
-> @@ -21,7 +21,6 @@
->  
->  #include <linux/linkage.h>
->  #include <linux/screen_info.h>
-> -#include <linux/elf.h>
->  #include <linux/io.h>
->  #include <asm/page.h>
->  #include <asm/boot.h>
-> ---
-> 
-> This is exactly what I mean with a multi-year effort of untangling what
-> has been mindlessly mixed in over the years...
+On Wed, Feb 2, 2022 at 9:24 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Wed, Feb 02, 2022 at 09:09:53AM -0800, Alexei Starovoitov wrote:
+> > On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > hi,
+> > > this patchset adds new link type BPF_LINK_TYPE_FPROBE that attaches kprobe
+> > > program through fprobe API [1] instroduced by Masami.
+> >
+> > No new prog type please.
+> > I thought I made my reasons clear earlier.
+> > It's a multi kprobe. Not a fprobe or any other name.
+> > The kernel internal names should not leak into uapi.
+> >
+>
+> well it's not new prog type, it's new link type that allows
+> to attach kprobe program to multiple functions
+>
+> the original change used BPF_LINK_TYPE_RAW_KPROBE, which did not
+> seem to fit anymore, so I moved to FPROBE, because that's what
+> it is ;-)
 
-Indeed... it looks like linux/{elf,io,efi,acpi}.h all end up pulling in
-kernel proper's rdmsr()/wrmsr() definitions, and pulling them out ends up
-breaking a bunch of other stuff, so I think we might be stuck using a
-different name like rd_msr()/wr_msr() in the meantime.
+Now I don't like the fprobe name even more.
+Why invent new names? It's an ftrace interface.
+
+> but if you don't want new name in uapi we could make this more
+> obvious with link name:
+>   BPF_LINK_TYPE_MULTI_KPROBE
+>
+> and bpf_attach_type:
+>   BPF_TRACE_MULTI_KPROBE
+
+I'd rather get rid of fprobe name first.

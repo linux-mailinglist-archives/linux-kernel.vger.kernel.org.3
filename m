@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E984A694F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B6D4A6953
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 01:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243505AbiBBArZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Feb 2022 19:47:25 -0500
-Received: from mga14.intel.com ([192.55.52.115]:19069 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231265AbiBBArX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Feb 2022 19:47:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643762843; x=1675298843;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Jm+v7AhBx35H/68NrlWBCe4U7A2AsXxzK3bKc1V7OFI=;
-  b=JeX1295iRcWGkALaxvZ5wsqj3MDP4PDnAUcwS+Sk+HO66sJkgptG+VOb
-   DaDZLMeqY2+UtZje+hoGVk07Ef0YJc2ib67gBd5o+PRcrNdIw9IfGIeoU
-   TBNIpcnO2s7uL9PJe1nlGJ0MxDRiiiGd2iZwAJKROmwQ+7drON1fBIYRx
-   K/vYvwVQfCO5p0qsdXdPT/gvxIP9Gd+gNG/24t7BLZJFZ56t4yYBPjcIW
-   GRWhsb+E2GRHev/wYtwCWc9mS9xrKlB8LnfcKQw77wnx5kSqv2kaRMj4T
-   SifqO4KtROrQgzQNzyMGoeIo78dCD+B1L317O9QihjAPnrAln1ioq51us
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="248048196"
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="248048196"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 16:47:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,335,1635231600"; 
-   d="scan'208";a="538049421"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Feb 2022 16:47:20 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nF3nr-000Tte-VM; Wed, 02 Feb 2022 00:47:19 +0000
-Date:   Wed, 2 Feb 2022 08:47:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
-Cc:     kbuild-all@lists.01.org, GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
-        Bhagavathi Perumal S <quic_bperumal@quicinc.com>,
-        Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
-        Pradeep Kumar Chitrapu <quic_pradeepc@quicinc.com>,
-        P Praneesh <quic_ppranees@quicinc.com>,
-        Ramya Gnanasekar <quic_rgnanase@quicinc.com>,
-        Sriram R <quic_srirrama@quicinc.com>
-Subject: [ammarfaizi2-block:kvalo/ath/ath12k-bringup 275/275]
- drivers/net/wireless/ath/ath12k/debugfs.c:250:13: warning: assignment to
- 'void *' from 'int' makes pointer from integer without a cast
-Message-ID: <202202020835.JgAG7kJa-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S243214AbiBBAuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Feb 2022 19:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238381AbiBBAt7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 1 Feb 2022 19:49:59 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498CDC06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 16:49:59 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id o194-20020a62cdcb000000b004c9d2b4bfd8so9919990pfg.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 16:49:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=g6pUKH4WYbWgbDwKBU0IMA28eYRiLDk9vkLPEbdpMnw=;
+        b=i6JiUALu1FJfRzDuhQAUfNtgTJ+zakIybzPqhobpinojJGET1wdn+8w02g/1G8c/H0
+         7QiDU6eahxRSKVG3t2E+6wnV4blltOS12NFn0qEn3cTBzKBdZm4FSw4t5yT52CSuQX8E
+         lXLrFH9oXa6Pki+a22egJUg8qRAHrTul1SgjAb1wUYTyEoE6HBAZtD+0GTr0+5gYVt7U
+         5nzJewN75+ggCxUb7KSEUmXMOAQ/ZiJrnlrWyWJ+napeTa7EiMoh1Gim19or+92uhDWW
+         AUMctQKhwgDXukqrxVdGb9WjcJc7tJSeTUJou6BVURmtfUUhsX9NY7opH+tSveXGbRIp
+         wMJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=g6pUKH4WYbWgbDwKBU0IMA28eYRiLDk9vkLPEbdpMnw=;
+        b=SwqcIHioEvdDDFXOM8BSwp+q8LZO/g5UzTp2RzpYsJRhL8SlMJ9KvmLtpjT1w5xMN+
+         MJVoYnvi7kUDCJwQ74hcsUhKCWN6uabxl+PcT2jDt7VccTN3Aavygg5ymspJc6jcitwg
+         qL4wExE6jMrWQUV3pYCeCL8ZBH7DIlf0/j04f/X00Na6rdhsPCQOQeR9gBB7gHc8Nk1S
+         qhOliWP4l+iOq0GhIWFdbNZk3sqsRC5lR2zhvWWGWDIL+tvTRBasd192ICLUby+1+fZl
+         hkl/oYZr9SoV+uWHFkHD3PC2FaVAcmtJNGmu9uk8HNOsQDgJCgRtlrheqbunrfEdOymZ
+         n9QA==
+X-Gm-Message-State: AOAM531TFCA3ZbbtM6uLr5lwffnt+/MrFVJJIMojwjbbqzuQQPNn0mPV
+        G9nCl4CRiD5p/HXeFALa3E+0K9C+cMg=
+X-Google-Smtp-Source: ABdhPJwlOwN/0H3aP3IPT+BMUXP+/p+nmyTa05iEyOcuehJZ4qfPcXwrDRkyY7xiTPbyi6tBdy0W4Scx52c=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:ecc5:: with SMTP id
+ a5mr29153463plh.54.1643762998560; Tue, 01 Feb 2022 16:49:58 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  2 Feb 2022 00:49:40 +0000
+Message-Id: <20220202004945.2540433-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH v2 0/5] x86: uaccess CMPXCHG + KVM bug fixes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/ath12k-bringup
-head:   f40abb4788a2a3868606a29d99583421e0874350
-commit: f40abb4788a2a3868606a29d99583421e0874350 [275/275] ath12k: New driver for Qualcomm 11be hw family
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220202/202202020835.JgAG7kJa-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f40abb4788a2a3868606a29d99583421e0874350
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/ath12k-bringup
-        git checkout f40abb4788a2a3868606a29d99583421e0874350
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/ath/ath12k/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/wireless/ath/ath12k/debugfs.c: In function 'ath12k_open_pdev_stats':
-   drivers/net/wireless/ath/ath12k/debugfs.c:250:15: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
-     250 |         buf = vmalloc(ATH12K_FW_STATS_BUF_SIZE);
-         |               ^~~~~~~
-         |               kvmalloc
->> drivers/net/wireless/ath/ath12k/debugfs.c:250:13: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     250 |         buf = vmalloc(ATH12K_FW_STATS_BUF_SIZE);
-         |             ^
-   drivers/net/wireless/ath/ath12k/debugfs.c:275:9: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
-     275 |         vfree(buf);
-         |         ^~~~~
-         |         kvfree
-   drivers/net/wireless/ath/ath12k/debugfs.c: In function 'ath12k_open_vdev_stats':
-   drivers/net/wireless/ath/ath12k/debugfs.c:321:13: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     321 |         buf = vmalloc(ATH12K_FW_STATS_BUF_SIZE);
-         |             ^
-   drivers/net/wireless/ath/ath12k/debugfs.c: In function 'ath12k_open_bcn_stats':
-   drivers/net/wireless/ath/ath12k/debugfs.c:400:13: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     400 |         buf = vmalloc(ATH12K_FW_STATS_BUF_SIZE);
-         |             ^
-   cc1: some warnings being treated as errors
+Peter, please take a look at unsafe_try_cmpxchg_user() to make sure it
+(a) still looks right and (b) works for your use case.  I added explicit
+casts to play nice with clang and sparse, as well as a __chk_user_ptr()
+given the use of __force.
 
 
-vim +250 drivers/net/wireless/ath/ath12k/debugfs.c
+Add uaccess macros for doing CMPXCHG on userspace addresses and use the
+macros to fix KVM bugs by replacing flawed code that maps memory into the
+kernel address space without proper mmu_notifier protection (or with
+broken pfn calculations in one case).
 
-   234	
-   235	static int ath12k_open_pdev_stats(struct inode *inode, struct file *file)
-   236	{
-   237		struct ath12k *ar = inode->i_private;
-   238		struct ath12k_base *ab = ar->ab;
-   239		struct stats_request_params req_param;
-   240		void *buf = NULL;
-   241		int ret;
-   242	
-   243		mutex_lock(&ar->conf_mutex);
-   244	
-   245		if (ar->state != ATH12K_STATE_ON) {
-   246			ret = -ENETDOWN;
-   247			goto err_unlock;
-   248		}
-   249	
- > 250		buf = vmalloc(ATH12K_FW_STATS_BUF_SIZE);
-   251		if (!buf) {
-   252			ret = -ENOMEM;
-   253			goto err_unlock;
-   254		}
-   255	
-   256		req_param.pdev_id = ar->pdev->pdev_id;
-   257		req_param.vdev_id = 0;
-   258		req_param.stats_id = WMI_REQUEST_PDEV_STAT;
-   259	
-   260		ret = ath12k_debugfs_fw_stats_request(ar, &req_param);
-   261		if (ret) {
-   262			ath12k_warn(ab, "failed to request fw pdev stats: %d\n", ret);
-   263			goto err_free;
-   264		}
-   265	
-   266		ath12k_wmi_fw_stats_fill(ar, &ar->debug.fw_stats, req_param.stats_id,
-   267					 buf);
-   268	
-   269		file->private_data = buf;
-   270	
-   271		mutex_unlock(&ar->conf_mutex);
-   272		return 0;
-   273	
-   274	err_free:
-   275		vfree(buf);
-   276	
-   277	err_unlock:
-   278		mutex_unlock(&ar->conf_mutex);
-   279		return ret;
-   280	}
-   281	
+Add yet another Kconfig for guarding asm_volatile_goto() to workaround a
+clang-13 bug.  I've verified the test passes on gcc versions of arm64,
+PPC, RISC-V, and s390x that also pass the CC_HAS_ASM_GOTO_OUTPUT test.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Patches 1-4 are tagged for stable@ as patches 3 and 4 (mostly 3) need a
+backportable fix, and doing CMPXCHG on the userspace address is the
+simplest fix from a KVM perspective.
+
+v2:
+  - Explicitly cast with (__force u<size> *) to fix clang+i386
+    compilation woes and sparse warnings. [kernel test robot]
+  - Rework i386's CMPXCHG8B to force use of ECX for the error path so that
+    clang doesn't run out of input/output GPRs...
+  - Document that gcc also has/had troubles, and note the clang and gcc
+    versions that (should) work with tied outputs. [Nick]
+  - Collect tags [Nick, Tadeusz]
+
+v1: https://lore.kernel.org/all/20220201010838.1494405-1-seanjc@google.com
+
+Peter Zijlstra (1):
+  x86/uaccess: Implement macros for CMPXCHG on user addresses
+
+Sean Christopherson (4):
+  Kconfig: Add option for asm goto w/ tied outputs to workaround
+    clang-13 bug
+  KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits
+  KVM: x86: Use __try_cmpxchg_user() to emulate atomic accesses
+  KVM: x86: Bail to userspace if emulation of atomic user access faults
+
+ arch/x86/include/asm/uaccess.h | 142 +++++++++++++++++++++++++++++++++
+ arch/x86/kvm/mmu/paging_tmpl.h |  45 +----------
+ arch/x86/kvm/x86.c             |  35 ++++----
+ init/Kconfig                   |   5 ++
+ 4 files changed, 162 insertions(+), 65 deletions(-)
+
+
+base-commit: 26291c54e111ff6ba87a164d85d4a4e134b7315c
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
+

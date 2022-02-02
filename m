@@ -2,343 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE90F4A79A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D4B4A79AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 21:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347259AbiBBUnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 15:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S242082AbiBBUnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 15:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347254AbiBBUnA (ORCPT
+        with ESMTP id S1347202AbiBBUnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 15:43:00 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7411C06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 12:42:59 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id m4so1023423ejb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 12:42:59 -0800 (PST)
+        Wed, 2 Feb 2022 15:43:19 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D932BC061714;
+        Wed,  2 Feb 2022 12:43:19 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id s18so566954ioa.12;
+        Wed, 02 Feb 2022 12:43:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Fk2q4Q0zld5x4Xvk+uJDZE7KsH5E8yoaj60l2KU2+a4=;
-        b=jnB+G/V5FAbLKQ9muBuKcGhiioXz0GWOmUTcj89hosGNXwksEQ7UmnAfbFLtzy4Pip
-         MABUcjlIVYDZwrCBBlMglAJdX2fGKSKRaHVpxghArTXGJW9XvSBHXyGzldoZTnC49Epd
-         j/bGMsHQKX5X3Jg/qYvdOv1a/2j59qBCnO44bABZFeFu/JKAKr3GlEuuZcExfL/QhnrK
-         /qDB2pVoVc2Rel5cB9ACmJtHEv8wz2zOxKl15y+qaiArQh5jMKkCKYdbP/pRC0+00qiW
-         03pAUY4tPZposmcrqMfqihBwwy5NqtE7B2bnZQI4lQ2ood/XlWeRwd2yVpzfsLTx4krZ
-         OKVw==
+         :cc;
+        bh=qyB3mZFViRKtoK+ZaB1dzKFHtCmielRBwsqk/DQ2WJQ=;
+        b=mUVp+yHnfU+Ky+xnhzeuAas2HJgzIGVaqSkvPow3NXucLX1B/su2vti0ba/qw8x581
+         2/jI+nwO+Oe2ECIk6ak3NofPP0IzJVvCUwEwqZSitjN+154j8mH2c+XKO/xTXM0T/SuJ
+         li6I5HcI/xFwePbFHt8CDVUQOQ5UPkyp1pMrC7Q7sldI3q/WxSxPBg176xjV1IlNmFuG
+         Fg5CNrKqWDIFfoVeV9sQTq76VKtLRaRzXQwjy7U+o1jfKpx5qjp2iT9dLSL9FOXdgRtR
+         nYVYCqRapRJjZBDC5/6VCuymW1Z93T0uiWSgCnvFLeDHwJtYIvqdORtLt/9WnE7tEv55
+         D3eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Fk2q4Q0zld5x4Xvk+uJDZE7KsH5E8yoaj60l2KU2+a4=;
-        b=BCqu2xnjwLhruQTVsTlNvON5UI3GudvI5zZhwcye4JBPW71I5Jw4CABZLLO21q4/h7
-         hlKo/b3iedhIf8psZeB9P+6rgL1eWP0V85H6WHMLlCnw/ZT7VT231B/72iTJybQt7sNp
-         5OEdj7Fkf0fsbYE59K49x+QFemOt2ROGfvcD1o84067bXKoqZMqxERYQIQTl1IVm2K9/
-         1dZR1TF1YNkfiHqKsl/eeVG5dqEfopB2FgF3XncEF+xbRnadWp4ZzbY56YmtPQJWJcYa
-         C5ZGmNosaC1TPSCLQuqhncnMrxF+rTGAVdrQkxxomcjPy/eW+g5b4ZO+RxVrn7J9k8OH
-         dT1w==
-X-Gm-Message-State: AOAM533ydojZWGwhqeEEQpqXLCK7BtygXZ1a294Mj8HdIamMHHrXy2X3
-        m9RoV0riI+Xek1VWYm6g9NwslUJKHN3HMLjF3eRD9QuytFX9O/Hc
-X-Google-Smtp-Source: ABdhPJzoM+LWmMajgtTaAqRNhWJ5PQ6McP9nKnF+R2oYhUZ2xZ03SMwgimWNES4XP02ajcmRyy9O+9O/InNnd4PEMUw=
-X-Received: by 2002:a17:906:9b87:: with SMTP id dd7mr22427499ejc.758.1643834578053;
- Wed, 02 Feb 2022 12:42:58 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=qyB3mZFViRKtoK+ZaB1dzKFHtCmielRBwsqk/DQ2WJQ=;
+        b=BwqH1klse1OxjqgS7wO1MElFwa57K76DnSdBG47W8BqlfCZ6EFYWvFCSrd/fYwM04j
+         qnH2YMNNIO2kJ1kB1Ex4EcwvmcZCu8V8L6F0EVPMfvP/2rwAnI9tDTOGg1TRbZzqWIx2
+         Arzw5FDJKOm3Hw9RoyMVcYbYmd/R0Z08g+f4xrlzDd3CBi2RqODjMBCdry5AIBoq/4as
+         RsN2pxzs/x8jf+Qak7PcKnIfMudcJ5U45wn0xLpjqDmz8Wwdh3KemKyOE7cOvZJLNiF2
+         OnY8HAaAS4RlwIuCucyneVh9pFkNt5BIMnj+k+8I9vLLFkBU5xhYgMaU0qs37HQytjLI
+         2Leg==
+X-Gm-Message-State: AOAM531B4WBdcWJiHB82G8pyUrfxzmUUvXRs6jdB6ryZcTI2sokEABQo
+        U5OVPZX3xgkCQsRGuurJxg0NLs222P61C/YInGo=
+X-Google-Smtp-Source: ABdhPJxbh04iyraHpojKt0cv3EVon4gjDwj/u225RgUEcwWEObau8d+RmMB1Zz2hYQM4ttUVK06007shVtOG+Jithqs=
+X-Received: by 2002:a05:6638:382a:: with SMTP id i42mr15171407jav.256.1643834599082;
+ Wed, 02 Feb 2022 12:43:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201015518.3118404-1-wonchung@google.com> <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
-In-Reply-To: <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Wed, 2 Feb 2022 12:42:47 -0800
-Message-ID: <CAOvb9ygyupib4cMXhcdeZmgNZmyaCmaTF98MHae+irY5ruZ1Qw@mail.gmail.com>
-Subject: Re: [PATCH v4] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220131204357.1133674-1-keescook@chromium.org>
+In-Reply-To: <20220131204357.1133674-1-keescook@chromium.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 2 Feb 2022 21:43:08 +0100
+Message-ID: <CANiq72m+3UKC+PskuGYu_c_u1Ua-=bvkHi9Gess-59+pqXdSwA@mail.gmail.com>
+Subject: Re: [PATCH] linux/const.h: Explain how __is_constexpr() works
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heikki,
+On Mon, Jan 31, 2022 at 9:43 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> + * - The conditional operator ("... ? ... : ...") returns the type of the
+> + *   operand that isn't a null pointer constant. This behavior is the
 
-Thank you for the review!
+Perhaps clarify that this happens only if it fits that case? ...
 
-On Wed, Feb 2, 2022 at 12:19 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Won,
->
-> On Tue, Feb 01, 2022 at 01:55:18AM +0000, Won Chung wrote:
-> > When ACPI table includes _PLD fields for a device, create a new
-> > directory (pld) in sysfs to share _PLD fields.
->
-> I think you need to explain what needs this information in user space.
->
-> > Signed-off-by: Won Chung <wonchung@google.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-bus-acpi | 107 +++++++++++++++++++++++
-> >  drivers/acpi/device_sysfs.c              |  55 ++++++++++++
-> >  include/acpi/acpi_bus.h                  |   1 +
-> >  3 files changed, 163 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/A=
-BI/testing/sysfs-bus-acpi
-> > index 58abacf59b2a..b8b71c8f3cfd 100644
-> > --- a/Documentation/ABI/testing/sysfs-bus-acpi
-> > +++ b/Documentation/ABI/testing/sysfs-bus-acpi
-> > @@ -96,3 +96,110 @@ Description:
-> >               hardware, if the _HRV control method is present.  It is m=
-ostly
-> >               useful for non-PCI devices because lspci can list the har=
-dware
-> >               version for PCI devices.
-> > +
-> > +What:                /sys/bus/acpi/devices/.../pld/
-> > +Date:                Feb, 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             This directory contains the output of the device object's=
- _PLD
-> > +             control method, if present. This information provides det=
-ails
-> > +             on physical location of a device.
-> > +
-> > +What:                /sys/bus/acpi/devices/.../pld/revision
-> > +Date:                Feb, 2022
-> > +Contact:     Won Chung <wonchung@google.com>
-> > +Description:
-> > +             The current revision is 0x2.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/group_token
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Unique numerical value identifying a group.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/group_position
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Identifies this device connection point=E2=80=99s positio=
-n in the group.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/user_visible
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set if the device connection point can be seen by the use=
-r
-> > +             without disassembly.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/dock
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set if the device connection point resides in a docking s=
-tation
-> > +             or port replicator.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/bay
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set if describing a device in a bay or if device connecti=
-on
-> > +             point is a bay.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/lid
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Set if this device connection point resides on the lid of
-> > +             laptop system.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/panel
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes which panel surface of the system=E2=80=99s hou=
-sing the
-> > +             device connection point resides on:
-> > +             0 - Top
-> > +             1 - Bottom
-> > +             2 - Left
-> > +             3 - Right
-> > +             4 - Front
-> > +             5 - Back
-> > +             6 - Unknown (Vertical Position and Horizontal Position wi=
-ll be
-> > +             ignored)
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/vertical_position
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             0 - Upper
-> > +             1 - Center
-> > +             2 - Lower
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/horizontal_position
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             ACPI specification does not define horizontal position fi=
-eld.
-> > +             Can be used as either
-> > +             0 - Left
-> > +             1 - Center
-> > +             2 - Right
-> > +             or
-> > +             0 - Leftmost
-> > +             and higher numbers going toward the right.
-> > +
-> > +What:           /sys/bus/acpi/devices/.../pld/shape
-> > +Date:           Feb, 2022
-> > +Contact:        Won Chung <wonchung@google.com>
-> > +Description:
-> > +             Describes the shape of the device connection point.
-> > +             0 - Round
-> > +             1 - Oval
-> > +             2 - Square
-> > +             3 - Vertical Rectangle
-> > +             4 - Horizontal Rectangle
-> > +             5 - Vertical Trapezoid
-> > +             6 - Horizontal Trapezoid
-> > +             7 - Unknown - Shape rendered as a Rectangle with dotted l=
-ines
-> > +             8 - Chamfered
-> > +             15:9 - Reserved
-> > +
-> > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> > index d5d6403ba07b..610be93635a0 100644
-> > --- a/drivers/acpi/device_sysfs.c
-> > +++ b/drivers/acpi/device_sysfs.c
-> > @@ -509,6 +509,49 @@ static ssize_t status_show(struct device *dev, str=
-uct device_attribute *attr,
-> >  }
-> >  static DEVICE_ATTR_RO(status);
-> >
-> > +#define DEV_ATTR_PLD_PROP(prop) \
-> > +     static ssize_t prop##_show(struct device *dev, struct device_attr=
-ibute *attr, \
-> > +             char *buf) \
-> > +{ \
-> > +     struct acpi_device *acpi_dev =3D to_acpi_device(dev); \
-> > +     if (acpi_dev->pld =3D=3D NULL) \
-> > +             return -EIO; \
-> > +     return sprintf(buf, "%u\n", acpi_dev->pld->prop); \
-> > +}; \
->
-> Ah, you are storing the _PLD below. Before there were concerns about
-> the memory that the cached _PLD information would consume. Another way
-> of doing this would be to just always evaluate the _PLD here.
->
-> Rafael needs to comment on this. My personal opinion is that let's
-> just store the thing.
->
+> + * - If (x) is an integer constant expression, then the "* 0l" resolves it
+> + *   into a null pointer constant, which forces the conditional operator
+> + *   to return the type of the last operand: "(int *)".
+> + * - If (x) is not an integer constant expression, then the type of the
+> + *   conditional operator is from the first operand: "(void *)".
 
-By "always evaluate the _PLD here", you mean something like
-  acpi_get_physical_device_location(dev->handle, &pld)
-for every _PLD field, right?
+... i.e. this one happens because it is specified as returning a
+pointer to void (one could read it as returning the type of the first
+operand).
 
-I will wait for Rafael's comment on this.
+What about something like:
 
-> > +static DEVICE_ATTR_RO(prop)
-> > +
-> > +DEV_ATTR_PLD_PROP(revision);
-> > +DEV_ATTR_PLD_PROP(group_token);
-> > +DEV_ATTR_PLD_PROP(group_position);
-> > +DEV_ATTR_PLD_PROP(user_visible);
-> > +DEV_ATTR_PLD_PROP(dock);
-> > +DEV_ATTR_PLD_PROP(bay);
-> > +DEV_ATTR_PLD_PROP(lid);
-> > +DEV_ATTR_PLD_PROP(panel);
-> > +DEV_ATTR_PLD_PROP(vertical_position);
-> > +DEV_ATTR_PLD_PROP(horizontal_position);
-> > +DEV_ATTR_PLD_PROP(shape);
-> > +
-> > +static struct attribute *dev_attr_pld[] =3D {
-> > +     &dev_attr_revision.attr,
-> > +     &dev_attr_group_token.attr,
-> > +     &dev_attr_group_position.attr,
-> > +     &dev_attr_user_visible.attr,
-> > +     &dev_attr_dock.attr,
-> > +     &dev_attr_bay.attr,
-> > +     &dev_attr_lid.attr,
-> > +     &dev_attr_panel.attr,
-> > +     &dev_attr_vertical_position.attr,
-> > +     &dev_attr_horizontal_position.attr,
-> > +     &dev_attr_shape.attr,
-> > +     NULL,
-> > +};
-> > +
-> > +static struct attribute_group dev_attr_pld_group =3D {
-> > +     .name =3D "pld",
-> > +     .attrs =3D dev_attr_pld,
-> > +};
-> > +
-> >  /**
-> >   * acpi_device_setup_files - Create sysfs attributes of an ACPI device=
-.
-> >   * @dev: ACPI device object.
-> > @@ -595,6 +638,16 @@ int acpi_device_setup_files(struct acpi_device *de=
-v)
-> >                                                   &dev_attr_real_power_=
-state);
-> >       }
-> >
-> > +     if (acpi_has_method(dev->handle, "_PLD")) {
-> > +             status =3D acpi_get_physical_device_location(dev->handle,
-> > +                     &dev->pld);
-> > +             if (ACPI_FAILURE(status))
-> > +                     goto end;
-> > +             result =3D device_add_group(&dev->dev, &dev_attr_pld_grou=
-p);
-> > +             if (result)
-> > +                     goto end;
-> > +     }
->
-> You probable want to store the pld in acpi_store_pld_crc(). Perhaps
-> also rename that function to just acpi_store_pld() at the same time.
->
-> Here you just want to create the sysfs group.
->
+  - The behavior (including its return type) of the conditional
+operator ("... ? ... : ...") depends on the kind of expressions given
+for the second and third operands. This is the central mechanism of
+the macro.
+  - If (x) is an integer constant expression, then the "* 0l" resolves
+it into a null pointer constant. When one operand is a null pointer
+constant and the other is a pointer, the conditional operator returns
+the type of the pointer operand; that is, "int *".
+  - If (x) is not an integer constant expression, then that operand is
+a pointer to void (but not a null pointer constant). When one operand
+is a pointer to void and the other a pointer to an object type, the
+conditional operator returns a "void *" type.
 
-Got it. I will send v5 with this change.
-
-> >       acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
-> >
-> >  end:
-> > @@ -645,4 +698,6 @@ void acpi_device_remove_files(struct acpi_device *d=
-ev)
-> >               device_remove_file(&dev->dev, &dev_attr_status);
-> >       if (dev->handle)
-> >               device_remove_file(&dev->dev, &dev_attr_path);
-> > +     if (acpi_has_method(dev->handle, "_PLD"))
-> > +             device_remove_group(&dev->dev, &dev_attr_pld_group);
-> >  }
-> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> > index ca88c4706f2b..929e726a666b 100644
-> > --- a/include/acpi/acpi_bus.h
-> > +++ b/include/acpi/acpi_bus.h
-> > @@ -381,6 +381,7 @@ struct acpi_device {
-> >       struct acpi_hotplug_context *hp;
-> >       struct acpi_driver *driver;
-> >       const struct acpi_gpio_mapping *driver_gpios;
-> > +     struct acpi_pld_info *pld;
-> >       void *driver_data;
-> >       struct device dev;
-> >       unsigned int physical_node_count;
-> > --
->
-> thanks,
->
-> --
-> heikki
-
-Thank you,
-Won
+Cheers,
+Miguel

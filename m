@@ -2,97 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF644A7638
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D3B4A763F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346028AbiBBQyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:54:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:40508 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231706AbiBBQyE (ORCPT
+        id S1346042AbiBBQzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:55:16 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34178 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231706AbiBBQzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:54:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643820843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DPqXXCSvtXWPYnKF39SzZCno/APupEDKEIyaUUkXZKc=;
-        b=NiJ/10STi4hnZiI3pRYqmgT2tilamIlD9Ri/LCgiyt7qp0KLAwh0k+DiERJ8+NJQt5U4U9
-        aVzeZxWxEI81zNcP0AJcS+2atObDwNVUVY1JdynBHoMPyCecRO1C2y4tHtPlX97IbciUsD
-        mi9sZ0pIRb+JB9OhCIkhk5JTB9Y6Sno=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-QeDFCgTcO02K7x1KW0bJ2A-1; Wed, 02 Feb 2022 11:53:58 -0500
-X-MC-Unique: QeDFCgTcO02K7x1KW0bJ2A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 2 Feb 2022 11:55:01 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BF45118C89CC;
-        Wed,  2 Feb 2022 16:53:55 +0000 (UTC)
-Received: from [10.22.34.202] (unknown [10.22.34.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 05AF3753D0;
-        Wed,  2 Feb 2022 16:53:52 +0000 (UTC)
-Message-ID: <4ba66abe-5c6d-26a7-f11c-c3b8514bfb34@redhat.com>
-Date:   Wed, 2 Feb 2022 11:53:52 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D83161776
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 16:55:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E46C004E1;
+        Wed,  2 Feb 2022 16:54:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643820900;
+        bh=+Mw3UqSA9RW9lVv7cMeO4kcmAotMs1Y2FfPXU4FBX0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MLDcYJAZvsv0XjxsuicWh3967mYmwunkokbmM+LwLId1hMsSp9rl1N3omNdCRHynH
+         BXyvlTGymC3VchPCaetwp6qPoimzewJphziaYPKVoMe7RBiYK7aBEwXg79ysMnq1by
+         4YIxFZe1wIiKqNoQvUoR+Lea7Qga6Ai4DA7mAkmFJkafEfDSvyXEflnnfVunelFB8M
+         W8UnHi+FVqr2zmpCDBRw1TJkIwsiRYJXog7IVacvNlpd0zDWp/ctF/3gRU+/maemd7
+         kEmmGNuEx7RUhG2h0KO2KEeV4FC6natUldJrgVB9m5DQj8W9NPGFCLTFy3Tr4s1KDy
+         YkX+82ZIKJoxA==
+Date:   Wed, 2 Feb 2022 09:54:55 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Yannick Fertre <yannick.fertre@foss.st.com>
+Cc:     Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] drm/stm: ltdc: add support of ycbcr pixel formats
+Message-ID: <Yfq3XwozrxYaFhgD@dev-arch.archlinux-ax161>
+References: <20211215214843.20703-1-yannick.fertre@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 4/4] mm/page_owner: Record task command name
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>,
-        Rafael Aquini <aquini@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-References: <20220131192308.608837-5-longman@redhat.com>
- <20220131220328.622162-1-longman@redhat.com>
- <YflRjeoC0jbzArDG@dhcp22.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YflRjeoC0jbzArDG@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215214843.20703-1-yannick.fertre@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yannick,
 
-On 2/1/22 10:28, Michal Hocko wrote:
-> Cc Vlastimil
->
-> On Mon 31-01-22 17:03:28, Waiman Long wrote:
->> The page_owner information currently includes the pid of the calling
->> task. That is useful as long as the task is still running. Otherwise,
->> the number is meaningless. To have more information about the allocating
->> tasks that had exited by the time the page_owner information is
->> retrieved, we need to store the command name of the task.
->>
->> Add a new comm field into page_owner structure to store the command name
->> and display it when the page_owner information is retrieved.
-> I completely agree that pid is effectivelly useless (if not misleading)
-> but is comm really telling all that much to compensate for the
-> additional storage required for _each_ page in the system?
+On Wed, Dec 15, 2021 at 10:48:43PM +0100, Yannick Fertre wrote:
+> This patch adds the following YCbCr input pixel formats on the latest
+> LTDC hardware version:
+> 
+> 1 plane  (co-planar)  : YUYV, YVYU, UYVY, VYUY
+> 2 planes (semi-planar): NV12, NV21
+> 3 planes (full-planar): YU12=I420=DRM YUV420, YV12=DRM YVU420
+> 
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
 
-Yes, it does add an extra 16 bytes per page overhead. The command name 
-can be useful if one want to find out which userspace command is 
-responsible for a problematic page allocation. Maybe we can remove pid 
-from page_owner to save 8 bytes as you also agree that this number is 
-not that useful.
+<snip>
+
+> +static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fmt)
+> +{
+> +	struct ltdc_device *ldev = plane_to_ltdc(plane);
+> +	struct drm_plane_state *state = plane->state;
+> +	u32 lofs = plane->index * LAY_OFS;
+> +	u32 val;
+> +
+> +	switch (drm_pix_fmt) {
+> +	case DRM_FORMAT_YUYV:
+> +		val = (YCM_I << 4) | LxPCR_YF | LxPCR_CBF;
+> +		break;
+> +	case DRM_FORMAT_YVYU:
+> +		val = (YCM_I << 4) | LxPCR_YF;
+> +		break;
+> +	case DRM_FORMAT_UYVY:
+> +		val = (YCM_I << 4) | LxPCR_CBF;
+> +		break;
+> +	case DRM_FORMAT_VYUY:
+> +		val = (YCM_I << 4);
+> +		break;
+> +	case DRM_FORMAT_NV12:
+> +		val = (YCM_SP << 4) | LxPCR_CBF;
+> +		break;
+> +	case DRM_FORMAT_NV21:
+> +		val = (YCM_SP << 4);
+> +		break;
+> +	case DRM_FORMAT_YUV420:
+> +	case DRM_FORMAT_YVU420:
+> +		val = (YCM_FP << 4);
+> +		break;
+> +	default:
+> +		/* RGB or not a YCbCr supported format */
+> +		break;
+> +	}
+> +
+> +	/* Enable limited range */
+> +	if (state->color_range == DRM_COLOR_YCBCR_LIMITED_RANGE)
+> +		val |= LxPCR_YREN;
+> +
+> +	/* enable ycbcr conversion */
+> +	val |= LxPCR_YCEN;
+> +
+> +	regmap_write(ldev->regmap, LTDC_L1PCR + lofs, val);
+> +}
+
+This patch as commit 484e72d3146b ("drm/stm: ltdc: add support of ycbcr
+pixel formats") in -next introduced the following clang warning:
+
+drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+        default:
+        ^~~~~~~
+drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+        val |= LxPCR_YCEN;
+        ^~~
+drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+        u32 val;
+               ^
+                = 0
+1 warning generated.
+
+Would it be okay to just return in the default case (maybe with a
+message about an unsupported format?) or should there be another fix?
 
 Cheers,
-Longman
-

@@ -2,199 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0274A6CC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C2A4A6CCA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244360AbiBBIO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:14:26 -0500
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:64022 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbiBBIOX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:14:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1643789662; x=1675325662;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vSETh49OX7xj5hAtW3QKd1iO/5P1xFYjPHj+NFETVXw=;
-  b=jq6CK+WFJFyr0Cd9QzOpOCxCle/9UeaiZOClxBE8Yrt8vATKeCp/NOKm
-   xSfsjeaR3HJoAZ95YajmKisdFONDCr2QQwKPMpUv90A0KvLUT6h8tibU2
-   nLs4qc8/UeX8cBQvLjsZfwZ+KtoJpM7plea9HFTM0kXvs/e38luWbUmyx
-   3vOmcgO99NiiHBxNWfDJsvm3gOsLIvXZsQeIwc+DfEbqenvgeiYVzsZQv
-   xji9tgOAW7iXigh6n4JbKd/J8Htwauhpgm1ClRHW61zb58yxXbPgOHwGw
-   urQY4LjbISta+g4yXY6lqKEW3+wgQPmqFY6dzm1tn2wLV+ixjdJffrvYn
+        id S242966AbiBBITT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:19:19 -0500
+Received: from mga12.intel.com ([192.55.52.136]:54667 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231628AbiBBITR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 03:19:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643789957; x=1675325957;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8FUTnB+neOfsiAnGwSfgWEkpPzljgOQLUdu2mTTAd70=;
+  b=DIEN2TWSRhKH4fLn9vBpa8L8kKMkx0ferOO6+OJJnFAMj6dZPgjWG7HE
+   9bLsAa3vhF5pwaj6cUedRmxnJ4+8A3/6FAt7zw3Dg/aPvUqfJbhDrQcli
+   WWYNQyhdSrzdDqyjdlqW//EYXTbKQ0xwybzDFvlXQgsInjX1FX/kNFckY
+   xebsjPiT55lnRbExuYSZ41rKJi93j/Ops3ewByHRJZxa9AphR4UfUPLRg
+   9nUTTF1TCkDhwRtwhAlPq2istDHgBio1LZb8umR8O1OKyQBOVSlka3GEW
+   CGZDgzEPjd4+H1iHshYRYHIbvKEy0hA3NURLF1uAhjpk/+M05s9As58qd
    A==;
-X-IronPort-AV: E=Sophos;i="5.88,336,1635177600"; 
-   d="scan'208";a="196763868"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Feb 2022 16:14:22 +0800
-IronPort-SDR: +nvOfNHAJkXOHu3R7AyQpo4admHPVF19vMu1qHUkKPo1kOtiC1KRUxXRP+8wW/vWZ9scUmguzr
- r8s5QABwJpwjhxP/GPnu2UYb1zGmiETX7CB6CIYKCrQARBs7JvD/dv7rZtcDlQpyxCz9NoBlg9
- 2g7LFGv56B/kFz86kB0IxOCsEzRadvmw/LV0Ygkoa/8jizN3mmWzx3KjptjtP7zFYYFShFQqnp
- lDr7mf6w21LNw6Xpmy7HRwZOZA2HcsNYMvVdTpGpNcHuG4gTvHCAA310icEV+CsAWXhPY0YktT
- 8lY3ncyILS3FVo9qoBKNyELW
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2022 23:47:32 -0800
-IronPort-SDR: s0O91tj68mycCHiG83FqERzUBAFpTdJxy+GIp30rRuVaT7LiAKti4T9zYodb9R2Gu+frWyTx2m
- /Fd6yhGbnEAtLk3xM0E2o9grRJPQoa7/3pTeRn97q0hJ6RNogvO/oL5FDORYpcqUBSXh9MPsxy
- 4gpBbyCiBKi1ORr3UgC2SGwLaTVt1v6qBk/yJ91+l3Q5iDestgxyhGxjJN/UsduGEnxAf5zTQC
- vgZkVD/zsz/wg9Yg4wjLfVgicArOvmDG5UWAPm8L8aTL3CPzbfqVW8lZwuYWEPbBLpnQW61kMD
- 8no=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 00:14:23 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JpZMf67vbz1SVnx
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 00:14:22 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1643789662; x=1646381663; bh=vSETh49OX7xj5hAtW3QKd1iO/5P1xFYjPHj
-        +NFETVXw=; b=ACJs15QDEwXJNVvHkp+cgX2gNOuqTvYL6dS9FzHX/8T81b/6RwJ
-        5aWy5y6XeIXTcv+a66FwNOgyAbEG0rJLAKhmfWes+CcV+M/EtjP4BkTMRRLaltKD
-        lUi3xT0Sl/XRRdgADUsrmbSQk5DJjP73MmLCLJHfoO4aHzFJPE+lYMAIBXNsaoLh
-        BazYdVW3lVeByzfdVS0axR4wcK9t7eFWXi6ew4KytzDTG1rWdwOlTs/f0E8atBLY
-        cB7nfhwgbBv12UbOnQYjY/LgVv3nV4Y9j8aJMhkY/jdcakMGcEy6rbKUM8aPM47/
-        319oYvobQVEEAV4YvGgG1zGhKIulhOhSNwA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wr0-jP9aWRQK for <linux-kernel@vger.kernel.org>;
-        Wed,  2 Feb 2022 00:14:22 -0800 (PST)
-Received: from [10.225.163.62] (unknown [10.225.163.62])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JpZMd6Js8z1RvlN;
-        Wed,  2 Feb 2022 00:14:21 -0800 (PST)
-Message-ID: <3437ffcb-68b5-04e5-acd5-b3857fbf1be7@opensource.wdc.com>
-Date:   Wed, 2 Feb 2022 17:14:20 +0900
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="227838065"
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="227838065"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 00:19:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
+   d="scan'208";a="676365354"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 02 Feb 2022 00:19:14 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 02 Feb 2022 10:19:13 +0200
+Date:   Wed, 2 Feb 2022 10:19:13 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Won Chung <wonchung@google.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] ACPI: device_sysfs: Add sysfs support for _PLD
+Message-ID: <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
+References: <20220201015518.3118404-1-wonchung@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3] ata: ahci: Skip 200 ms debounce delay for Marvell
- 88SE9235
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220201071229.6418-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220201015518.3118404-1-wonchung@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 16:12, Paul Menzel wrote:
-> The 200 ms delay before debouncing the PHY in `sata_link_resume()` is
-> not needed for the Marvell 88SE9235.
->=20
->     $ lspci -nn -s 0021:0e:00.0
->     0021:0e:00.0 SATA controller [0106]: Marvell Technology Group Ltd. =
-88SE9235 PCIe 2.0 x2 4-port SATA 6 Gb/s Controller [1b4b:9235] (rev 11)
->=20
-> So, remove it. Tested on IBM S822LC with current Linux 5.17-rc1:
->=20
-> Currently, without this patch (with 200 ms delay), device probe for ata=
-1
-> takes 485 ms:
->=20
->     [    3.358158] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3fe881000100 irq 39
->     [    3.358175] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3fe881000180 irq 39
->     [    3.358191] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3fe881000200 irq 39
->     [    3.358207] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3fe881000280 irq 39
->     [=E2=80=A6]
->     [    3.677542] ata3: SATA link down (SStatus 0 SControl 300)
->     [    3.677719] ata4: SATA link down (SStatus 0 SControl 300)
->     [    3.839242] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    3.839828] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY26=
-5IBM, BE33, max UDMA/133
->     [    3.840029] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (dep=
-th 32), AA
->     [    3.841796] ata2.00: configured for UDMA/133
->     [    3.843231] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    3.844083] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY26=
-5IBM, BE33, max UDMA/133
->     [    3.844313] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (dep=
-th 32), AA
->     [    3.846043] ata1.00: configured for UDMA/133
->=20
-> With this patch (no delay) device probe for ata1 takes 273 ms:
->=20
->     [    3.624259] ata1: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3f e881000100 irq 39
->     [    3.624436] ata2: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3f e881000180 irq 39
->     [    3.624452] ata3: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3f e881000200 irq 39
->     [    3.624468] ata4: SATA max UDMA/133 abar m2048@0x3fe881000000 po=
-rt 0x3f e881000280 irq 39
->     [=E2=80=A6]
->     [    3.731966] ata3: SATA link down (SStatus 0 SControl 300)
->     [    3.732069] ata4: SATA link down (SStatus 0 SControl 300)
->     [    3.897448] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    3.897678] ata2: SATA link up 6.0 Gbps (SStatus 133 SControl 30=
-0)
->     [    3.898140] ata1.00: ATA-10: ST1000NX0313         00LY266 00LY26=
-5IBM, BE33, max UDMA/133
->     [    3.898175] ata2.00: ATA-10: ST1000NX0313         00LY266 00LY26=
-5IBM, BE33, max UDMA/133
->     [    3.898287] ata1.00: 1953525168 sectors, multi 0: LBA48 NCQ (dep=
-th 32), AA
->     [    3.898349] ata2.00: 1953525168 sectors, multi 0: LBA48 NCQ (dep=
-th 32), AA
->     [    3.900070] ata1.00: configured for UDMA/133
->     [    3.900166] ata2.00: configured for UDMA/133
->=20
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Hi Won,
+
+On Tue, Feb 01, 2022 at 01:55:18AM +0000, Won Chung wrote:
+> When ACPI table includes _PLD fields for a device, create a new
+> directory (pld) in sysfs to share _PLD fields.
+
+I think you need to explain what needs this information in user space.
+
+> Signed-off-by: Won Chung <wonchung@google.com>
 > ---
-> v2: address comments for commit message (but forgot v2 tag)
-> v3: resend with v3 tag in subject line/commit message summary
->=20
->  drivers/ata/ahci.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-> index ab5811ef5a53..edca4e8fd44e 100644
-> --- a/drivers/ata/ahci.c
-> +++ b/drivers/ata/ahci.c
-> @@ -582,6 +582,8 @@ static const struct pci_device_id ahci_pci_tbl[] =3D=
- {
->  	  .driver_data =3D board_ahci_yes_fbs },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9230),
->  	  .driver_data =3D board_ahci_yes_fbs },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_MARVELL_EXT, 0x9235),
-> +	  .driver_data =3D board_ahci_no_debounce_delay },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0642), /* highpoint rocketraid 642L=
- */
->  	  .driver_data =3D board_ahci_yes_fbs },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_TTI, 0x0645), /* highpoint rocketraid 644L=
- */
+>  Documentation/ABI/testing/sysfs-bus-acpi | 107 +++++++++++++++++++++++
+>  drivers/acpi/device_sysfs.c              |  55 ++++++++++++
+>  include/acpi/acpi_bus.h                  |   1 +
+>  3 files changed, 163 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/testing/sysfs-bus-acpi
+> index 58abacf59b2a..b8b71c8f3cfd 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-acpi
+> +++ b/Documentation/ABI/testing/sysfs-bus-acpi
+> @@ -96,3 +96,110 @@ Description:
+>  		hardware, if the _HRV control method is present.  It is mostly
+>  		useful for non-PCI devices because lspci can list the hardware
+>  		version for PCI devices.
+> +
+> +What:		/sys/bus/acpi/devices/.../pld/
+> +Date:		Feb, 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		This directory contains the output of the device object's _PLD
+> +		control method, if present. This information provides details
+> +		on physical location of a device.
+> +
+> +What:		/sys/bus/acpi/devices/.../pld/revision
+> +Date:		Feb, 2022
+> +Contact:	Won Chung <wonchung@google.com>
+> +Description:
+> +		The current revision is 0x2.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/group_token
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Unique numerical value identifying a group.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/group_position
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Identifies this device connection point’s position in the group.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/user_visible
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if the device connection point can be seen by the user
+> +		without disassembly.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/dock
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if the device connection point resides in a docking station
+> +		or port replicator.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/bay
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if describing a device in a bay or if device connection
+> +		point is a bay.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/lid
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Set if this device connection point resides on the lid of
+> +		laptop system.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/panel
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes which panel surface of the system’s housing the
+> +		device connection point resides on:
+> +		0 - Top
+> +		1 - Bottom
+> +		2 - Left
+> +		3 - Right
+> +		4 - Front
+> +		5 - Back
+> +		6 - Unknown (Vertical Position and Horizontal Position will be
+> +		ignored)
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/vertical_position
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		0 - Upper
+> +		1 - Center
+> +		2 - Lower
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/horizontal_position
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		ACPI specification does not define horizontal position field.
+> +		Can be used as either
+> +		0 - Left
+> +		1 - Center
+> +		2 - Right
+> +		or
+> +		0 - Leftmost
+> +		and higher numbers going toward the right.
+> +
+> +What:           /sys/bus/acpi/devices/.../pld/shape
+> +Date:           Feb, 2022
+> +Contact:        Won Chung <wonchung@google.com>
+> +Description:
+> +		Describes the shape of the device connection point.
+> +		0 - Round
+> +		1 - Oval
+> +		2 - Square
+> +		3 - Vertical Rectangle
+> +		4 - Horizontal Rectangle
+> +		5 - Vertical Trapezoid
+> +		6 - Horizontal Trapezoid
+> +		7 - Unknown - Shape rendered as a Rectangle with dotted lines
+> +		8 - Chamfered
+> +		15:9 - Reserved
+> +
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index d5d6403ba07b..610be93635a0 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -509,6 +509,49 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(status);
+>  
+> +#define DEV_ATTR_PLD_PROP(prop) \
+> +	static ssize_t prop##_show(struct device *dev, struct device_attribute *attr, \
+> +		char *buf) \
+> +{ \
+> +	struct acpi_device *acpi_dev = to_acpi_device(dev); \
+> +	if (acpi_dev->pld == NULL) \
+> +		return -EIO; \
+> +	return sprintf(buf, "%u\n", acpi_dev->pld->prop); \
+> +}; \
 
-Applied to for-5.18 with commit title and message changes. The title is n=
-ow:
+Ah, you are storing the _PLD below. Before there were concerns about
+the memory that the cached _PLD information would consume. Another way
+of doing this would be to just always evaluate the _PLD here.
 
-ata: ahci: Add support for Marvell 88SE9235 adapter
+Rafael needs to comment on this. My personal opinion is that let's
+just store the thing.
 
-Since it is exactly what this patch is doing by adding a PCI ID.
+> +static DEVICE_ATTR_RO(prop)
+> +
+> +DEV_ATTR_PLD_PROP(revision);
+> +DEV_ATTR_PLD_PROP(group_token);
+> +DEV_ATTR_PLD_PROP(group_position);
+> +DEV_ATTR_PLD_PROP(user_visible);
+> +DEV_ATTR_PLD_PROP(dock);
+> +DEV_ATTR_PLD_PROP(bay);
+> +DEV_ATTR_PLD_PROP(lid);
+> +DEV_ATTR_PLD_PROP(panel);
+> +DEV_ATTR_PLD_PROP(vertical_position);
+> +DEV_ATTR_PLD_PROP(horizontal_position);
+> +DEV_ATTR_PLD_PROP(shape);
+> +
+> +static struct attribute *dev_attr_pld[] = {
+> +	&dev_attr_revision.attr,
+> +	&dev_attr_group_token.attr,
+> +	&dev_attr_group_position.attr,
+> +	&dev_attr_user_visible.attr,
+> +	&dev_attr_dock.attr,
+> +	&dev_attr_bay.attr,
+> +	&dev_attr_lid.attr,
+> +	&dev_attr_panel.attr,
+> +	&dev_attr_vertical_position.attr,
+> +	&dev_attr_horizontal_position.attr,
+> +	&dev_attr_shape.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group dev_attr_pld_group = {
+> +	.name = "pld",
+> +	.attrs = dev_attr_pld,
+> +};
+> +
+>  /**
+>   * acpi_device_setup_files - Create sysfs attributes of an ACPI device.
+>   * @dev: ACPI device object.
+> @@ -595,6 +638,16 @@ int acpi_device_setup_files(struct acpi_device *dev)
+>  						    &dev_attr_real_power_state);
+>  	}
+>  
+> +	if (acpi_has_method(dev->handle, "_PLD")) {
+> +		status = acpi_get_physical_device_location(dev->handle,
+> +			&dev->pld);
+> +		if (ACPI_FAILURE(status))
+> +			goto end;
+> +		result = device_add_group(&dev->dev, &dev_attr_pld_group);
+> +		if (result)
+> +			goto end;
+> +	}
 
-The comments about the 200ms debounce delay not being needed is kept as
-a description of how this new adapter support is defined, using the
-board_ahci_no_debounce_delay board definition.
+You probable want to store the pld in acpi_store_pld_crc(). Perhaps
+also rename that function to just acpi_store_pld() at the same time.
 
-Thanks !
+Here you just want to create the sysfs group.
 
---=20
-Damien Le Moal
-Western Digital Research
+>  	acpi_expose_nondev_subnodes(&dev->dev.kobj, &dev->data);
+>  
+>  end:
+> @@ -645,4 +698,6 @@ void acpi_device_remove_files(struct acpi_device *dev)
+>  		device_remove_file(&dev->dev, &dev_attr_status);
+>  	if (dev->handle)
+>  		device_remove_file(&dev->dev, &dev_attr_path);
+> +	if (acpi_has_method(dev->handle, "_PLD"))
+> +		device_remove_group(&dev->dev, &dev_attr_pld_group);
+>  }
+> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> index ca88c4706f2b..929e726a666b 100644
+> --- a/include/acpi/acpi_bus.h
+> +++ b/include/acpi/acpi_bus.h
+> @@ -381,6 +381,7 @@ struct acpi_device {
+>  	struct acpi_hotplug_context *hp;
+>  	struct acpi_driver *driver;
+>  	const struct acpi_gpio_mapping *driver_gpios;
+> +	struct acpi_pld_info *pld;
+>  	void *driver_data;
+>  	struct device dev;
+>  	unsigned int physical_node_count;
+> -- 
+
+thanks,
+
+-- 
+heikki

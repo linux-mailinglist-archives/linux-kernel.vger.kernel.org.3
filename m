@@ -2,65 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636F24A6D0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA094A6D11
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 09:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244583AbiBBIkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 03:40:55 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43240 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiBBIky (ORCPT
+        id S245060AbiBBIlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 03:41:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28276 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245036AbiBBIlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 03:40:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Feb 2022 03:41:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643791271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fFr35wABT1Ag+M7eB8Ldl2IgucK7WzY17RANVrytmIU=;
+        b=M3VMxzHI2Rpi+ouJTSux81Abr/bynxySqIe4ACQUzZnBsNISlpdzXuR8o2EMiNGI+QzwOI
+        f3m7/qwMaamzHt+A2LQd5fyfwDdOv7raYZREy6n/5gIFaspKO29h+j/qOApCUQNAtDWaUY
+        fMDDowSXw5Ucp00VYxNrbl/HIA6otjU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-73-3oBYIt5vNsyzynImwyx0gw-1; Wed, 02 Feb 2022 03:41:08 -0500
+X-MC-Unique: 3oBYIt5vNsyzynImwyx0gw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCE52604F5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2C4C004E1
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 08:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643791253;
-        bh=BsJqPHr1a1QERpDYDjRxAe2utZwlVtAoE7GZWIK1xF4=;
-        h=From:To:Subject:Date:From;
-        b=Gyyj5IeC5IVLOcs17EBVsZpaJZ+hBpFtu+e7zc+sRGWC9UEb40pTF7lJAweNkTz//
-         qZi6Dfa6iNewYEPutgWN+QEXWPtTK/Ctt4Pgn6a2OegJEbY8gH8X+2/lf+BNIG5Uad
-         dHamDgPGNVJaR64TO8O7C2tqJsJUMT4RXpi7slRC5mg351Eww8VYWdtgLOWJf+pI0d
-         L+q0gWmklPW9+l9luLmIWgLCM5hTdQ9s64RdRHpSesQEXXCwJaJ5MvQtdtNlerDDWY
-         FddCPweqUmmirx0ngHNqgHuj3+j8LtzyDW1yNCGPWtYkd9bsUWt2ermRUiKZoWJvRZ
-         73B85bdG0CMqg==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Subject: [PATCH] habanalabs: add missing include of vmalloc.h
-Date:   Wed,  2 Feb 2022 10:40:49 +0200
-Message-Id: <20220202084049.3184758-1-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1DA3846861;
+        Wed,  2 Feb 2022 08:41:06 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.193.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CC2BE16A5A;
+        Wed,  2 Feb 2022 08:41:05 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 20C131800397; Wed,  2 Feb 2022 09:41:04 +0100 (CET)
+Date:   Wed, 2 Feb 2022 09:41:04 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/5] efi/libstub: Reserve confidential computing
+ secret area
+Message-ID: <20220202084104.zkhnclpxigct4tf6@sirius.home.kraxel.org>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+ <20220201124413.1093099-3-dovmurik@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201124413.1093099-3-dovmurik@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use of vfree(), vmalloc_user(), vmalloc() and remap_vmalloc_range()
-requires this include in some architectures.
+On Tue, Feb 01, 2022 at 12:44:10PM +0000, Dov Murik wrote:
+> Some older firmware declare the confidential computing secret area as
+> EFI_BOOT_SERVICES_DATA region.  Fix this up by treating this memory
+> region as EFI_RESERVED_TYPE, as it should be.
+> 
+> If that memory region is already EFI_RESERVED_TYPE then this has no
+> effect on the E820 map.
 
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/common/memory.c | 1 +
- 1 file changed, 1 insertion(+)
+Hmm, sure we actually want merge this?  I suspect by the time this
+landed in an upstream kernel "older firmware" isn't much of a problem
+any more.
 
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index 348daac621ee..7bd4cae87a54 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -11,6 +11,7 @@
- 
- #include <linux/uaccess.h>
- #include <linux/slab.h>
-+#include <linux/vmalloc.h>
- #include <linux/pci-p2pdma.h>
- 
- MODULE_IMPORT_NS(DMA_BUF);
--- 
-2.25.1
+take care,
+  Gerd
 

@@ -2,150 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557CA4A7BB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAE04A7BBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 00:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348090AbiBBXdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 18:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348078AbiBBXdP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 18:33:15 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B966C061714;
-        Wed,  2 Feb 2022 15:33:15 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso980169ott.7;
-        Wed, 02 Feb 2022 15:33:15 -0800 (PST)
+        id S1348096AbiBBXd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 18:33:57 -0500
+Received: from mx2.ucr.edu ([138.23.62.3]:65387 "EHLO mx2.ucr.edu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344512AbiBBXd4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 18:33:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1643844836; x=1675380836;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uavpFDxmGoKjrnyH0fVmnFMq2r7aGr052ubiJDv8DR8=;
+  b=ZsxCq6VOaQejAGfXqnHIWmlwIuEB4pxItn+JB1W4ncCaPhZ2r2IBXdh4
+   2kZteC8ShzrpOIU9vHkDHQ7n2Bdn2sldRgIKGJQmkfp7sV3d3Et63NvKO
+   8pszNq3npGUncSCLRbHO63Rcedsyob3CCFOpEYOHZtp0wVFJtbvKZ3/mx
+   INZ9pL0UhkI62EGNbEmqa77Gg2ZpX3mNDJGO5yAfsJWFHtPVuE6BgkbI5
+   bZUj951b8czRPlvVmXulBRxA66yzhYIcPdpO/ZaT0ethyWvPV+mXAxqWi
+   PeoS+8BnJ9menTwL4hSSOuKjjfgvUo6H9UMKIO+ioZCVdiEa17R8+a0/O
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="217252391"
+Received: from mail-pl1-f198.google.com ([209.85.214.198])
+  by smtp2.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Feb 2022 15:33:56 -0800
+Received: by mail-pl1-f198.google.com with SMTP id k7-20020a170902ba8700b0014c7e2870d4so156434pls.21
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 15:33:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/6Cf3W9mkudiHFUznEhVCKbOqbQxkWdOxnCU/ygpF28=;
-        b=TWaEs79JtjrcHTSbcrAqPmFzFOOWnARfpwzPp2C5rcZCCDU3n1/MaPIHrcmUI9y0gb
-         3BMP1lLY574eEgpFQrd8i6DEYYdh5A+AW2XUqCH/IHsnGbFbW8OGQMXStI2OSSEeNtnC
-         2uDg2DUSa7Lho9RKJhIrCDYX76O78hlROcVy4v6YUKMMtvpNwh2nLT30uHlYJiRH7AzS
-         Renh+llJVBBHKSdqelhdavlknNKWPUPZLkmbX5olI92+ek1EnkuVf3RW/4z4TmwshOJX
-         1rUWCsOpUjvI5UjKeKR2QmD1I/U3iw93wQm3B950LOMR3jSQXL17hZURwqicshn6WFkY
-         PjYA==
+        d=ucr.edu; s=rmail;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LoPhiSf2j9AFlf81eKG6xH4TR1F1QmboBbxydv3xQ7Y=;
+        b=xDmZHe7b0lAJqRV03cgiwQiq8aVyFS9aT+B3OaOw+dR+d9mfsO5WhWIS1hey9PxQ/8
+         pnHAutlDAUGni9R+QOz9ct54DuHYBVVF5lAGy+MaQvBMrHnR7tpJyTD+Ji0/d05HnW3U
+         zPGVsGrgSzCJ8Zj7ELBZ7A+GpZsIoy7zxD5Ms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/6Cf3W9mkudiHFUznEhVCKbOqbQxkWdOxnCU/ygpF28=;
-        b=kuTFmWhyRy+AK/EKS+dKtRdSYYX+6hBBHgWbdDses5jlRpoRJ6QhzVO0uwUGW2g2bC
-         am7e1tIHnq7h+kbh0+CGjBnZTxjEu6xB+74RlfTzOjwPP6+S3+eCyfKicCwaJ5AbnYDE
-         AprA1cy7+g+pJ+0oHAfTRxWZjMsdPnU9MEK3UPZilXTv4RkiS+w4C11ljDu2RKqK9OgG
-         VYfCarjex1o5osY9AEguvYNWkZYhByCyuBhrZVtg+L3UaCO5sXPlKgQvK3nNOttcEdeK
-         oaaGAJsf3Vq0Q/ufme6ZAXL4Dlt1+Fz4DDIF7gm676kpVp+4vQPVe8Jh9bre30CedtX5
-         TsPg==
-X-Gm-Message-State: AOAM531S3lXmMyUwAAflJXwHMpkxNumAznRtXDcWdg+dLtu1LcFfq7gq
-        76n722Jd+JXjagARu/4MLt8=
-X-Google-Smtp-Source: ABdhPJxOgmXoa6PCzUc7JfZNj++eKlj2RApzxbX5R+TNdRwnor8TLrUrfkCNVsoYb2zA/cflqexsBA==
-X-Received: by 2002:a9d:1f0:: with SMTP id e103mr14998061ote.234.1643844794500;
-        Wed, 02 Feb 2022 15:33:14 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y4sm19010868otj.22.2022.02.02.15.33.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 15:33:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <cbf0cf07-2350-ed23-f6be-b2686c6a0cea@roeck-us.net>
-Date:   Wed, 2 Feb 2022 15:33:11 -0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LoPhiSf2j9AFlf81eKG6xH4TR1F1QmboBbxydv3xQ7Y=;
+        b=jdP8oQItgXvc1RcoGYY0QSx9OBdkEI/bnTzPwux52gGlogdY1Z+DFRupCVJzLevtjw
+         R2Z2OO3/hG74SwlRq7I6nTV4yuNvTq9sheGUYtq0W+SAuq1GTFlK59ns1hDFsXv4TYEg
+         rTrQ2q/7dJqS2+e0yiNvc73li0rTll6Pj7ZPPRjDg5TMw9deXtmRlbW/cjwU6DaL3Ipg
+         3D6kDc6s6rXZUgkclIZ2TVf3ioXhGaKpbhm1IW9Qd5hoLMl2MI46k4QeF+MPjmDO/JuS
+         OOIlT5xdjGZqS+OurHkER7wkFSlM7RbtNdE2zLs+1tel6Uko8OTYLhUzCT4AYYseJKSN
+         PMvA==
+X-Gm-Message-State: AOAM533UYTnUMgyljpC0Jkt6hYdblRKktxmmWN9z9QFfcWQ4b3Q5+Ik1
+        aK2E3+ok0pyIH00sJ6bFkYCPEAKVn5nYrYfTEvEwpvNzfbDA7FXB+FJC3MKMkV6oZ63A11y2sa3
+        NMI1GqmYtDHr/oBiSkCn4/oNXAw==
+X-Received: by 2002:a17:90b:3841:: with SMTP id nl1mr10901898pjb.50.1643844835691;
+        Wed, 02 Feb 2022 15:33:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwKw43I55RvXKUF5Oc0gQfOIu6GaU+jb9Uz6QfMkQXdHo2WKNl3sIP6kqSgU/6tvpMjh2bLug==
+X-Received: by 2002:a17:90b:3841:: with SMTP id nl1mr10901883pjb.50.1643844835458;
+        Wed, 02 Feb 2022 15:33:55 -0800 (PST)
+Received: from kq.cs.ucr.edu (kq.cs.ucr.edu. [169.235.27.223])
+        by smtp.googlemail.com with ESMTPSA id s2sm26380387pgq.38.2022.02.02.15.33.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 15:33:55 -0800 (PST)
+From:   Yizhuo Zhai <yzhai003@ucr.edu>
+Cc:     Yizhuo Zhai <yzhai003@ucr.edu>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] fbdev: fbmem: Fix the implicit type casting
+Date:   Wed,  2 Feb 2022 15:33:58 -0800
+Message-Id: <20220202233402.1477864-1-yzhai003@ucr.edu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <83e46d8d-ec7a-6cbd-010e-7f50f88dcf96@I-love.SAKURA.ne.jp>
+References: <83e46d8d-ec7a-6cbd-010e-7f50f88dcf96@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
-References: <20210818081118.1667663-1-keescook@chromium.org>
- <20210818081118.1667663-5-keescook@chromium.org>
- <20220202160903.GA2337834@roeck-us.net> <202202021254.5A1FD4FFBF@keescook>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <202202021254.5A1FD4FFBF@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 12:56, Kees Cook wrote:
-> On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
->> On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
->>> With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
->>> coverage, it is now possible to enable -Warray-bounds. Since both
->>> GCC and Clang include -Warray-bounds in -Wall, we just need to stop
->>> disabling it.
->>>
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Masahiro Yamada <masahiroy@kernel.org>
->>> Cc: linux-kbuild@vger.kernel.org
->>> Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>> ---
->>>   Makefile | 1 -
->>>   1 file changed, 1 deletion(-)
->>>
->>> diff --git a/Makefile b/Makefile
->>> index a4aca01a4835..af22b83cede7 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
->>>   
->>>   # We'll want to enable this eventually, but it's not going away for 5.7 at least
->>>   KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
->>> -KBUILD_CFLAGS += -Wno-array-bounds
->>>   KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
->>>   
->>>   # Another good warning that we'll want to enable eventually
->>
->> alpha:defconfig:
->>
->> In function '__memset',
->>      inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
->> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->>     37 |                         return __builtin_memset(s, c, n);
->>        |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
->> In function '__memset',
->>      inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
->> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->>     37 |                         return __builtin_memset(s, c, n);
->>        |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
->> In function '__memset',
->>      inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
->> ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
->>     37 |                         return __builtin_memset(s, c, n);
-> 
-> Thanks! I'll take a look. Every instance of the "[0, 0]" bounds means
-> the compiler believes there's a way for the destination to be determined
-> at compile-time to be NULL.
-> 
->> xtensa:allmodconfig:
->> --------------
->> Error log:
->> In file included from include/linux/uaccess.h:11,
->>                   from include/linux/sched/task.h:11,
->>                   from arch/xtensa/kernel/process.c:21:
->> arch/xtensa/kernel/process.c: In function 'copy_thread':
->> arch/xtensa/kernel/process.c:262:52: error: array subscript 53 is above array bounds of 'long unsigned int[16]'
-> 
-> I assume this is a weird cast. I will also check this one out.
-> 
+In function do_fb_ioctl(), the "arg" is the type of unsigned long,
+and in "case FBIOBLANK:" this argument is casted into an int before
+passig to fb_blank(). In fb_blank(), the comparision
+if (blank > FB_BLANK_POWERDOWN) would be bypass if the original
+"arg" is a large number, which is possible because it comes from
+the user input. Fix this by adding the check before the function
+call.
 
-                                 int callinc = (regs->areg[0] >> 30) & 3;
-                                 int caller_ars = XCHAL_NUM_AREGS - callinc * 4;
-                                 put_user(regs->areg[caller_ars+1],
-                                          ^^^^^^^^^^^^^^^^^^^^^^^^
-                                          (unsigned __user*)(usp - 12));
+Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+---
+ drivers/video/fbdev/core/fbmem.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I think the problem is that XCHAL_NUM_AREGS can be up to 64,
-but the size of struct pt_regs->areg[] is fixed to 16.
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 0fa7ede94fa6..d5dec24c4d16 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1162,6 +1162,11 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+ 	case FBIOBLANK:
+ 		console_lock();
+ 		lock_fb_info(info);
++		if (arg > FB_BLANK_POWERDOWN) {
++			unlock_fb_info(info);
++			console_unlock();
++			return -EINVAL;
++		}
+ 		ret = fb_blank(info, arg);
+ 		/* might again call into fb_blank */
+ 		fbcon_fb_blanked(info, arg);
+-- 
+2.25.1
 
-Guenter

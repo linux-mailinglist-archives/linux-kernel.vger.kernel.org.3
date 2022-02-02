@@ -2,219 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D4B4A7ACB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8F24A7AD6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347792AbiBBWJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:09:26 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:35260 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347783AbiBBWJY (ORCPT
+        id S1347814AbiBBWKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347799AbiBBWKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:09:24 -0500
-Received: from [IPV6:2a01:e0a:169:7140:7139:eada:2ff6:73dd] (unknown [IPv6:2a01:e0a:169:7140:7139:eada:2ff6:73dd])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C4BFED88;
-        Wed,  2 Feb 2022 23:09:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643839763;
-        bh=B9oDbt2z9C14wXkGktdRk4p2miimMmr23DAbnrJ2nt4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jJTmO88YWWWJMAZ8EtAEFvgXAV3V4f8GBWUP/CKVBBBVDT0rVGDPErUjYMuMMIjtp
-         14ApsJGlYe2gKX043bMq0yBIX5TGZ5jtKWhcYK1vvcPjlfolvFjEX5Nmlyv47gpw/b
-         YwgvZsOkaziwXYqeiOc/RycINa/QgXUAqUJ/Lhd4=
-Message-ID: <9bce4322-881e-06a7-d6a4-431b1417ced5@ideasonboard.com>
-Date:   Wed, 2 Feb 2022 23:09:20 +0100
+        Wed, 2 Feb 2022 17:10:09 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E73C06173B;
+        Wed,  2 Feb 2022 14:10:09 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id 200so989560qki.2;
+        Wed, 02 Feb 2022 14:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
+        b=fcP42zsjJKBRLsCCLNxeBAvGoAUH+RgY1jYrpOhhT8bMHr7+15EWYSucDQfP1oORdR
+         v8va2D+TIvGEUfFpYyk+KAAnpvrPj2Do2UURxQqDM2NZ0yrVKHV/Tmvmi8VnHPqEl5Sj
+         FzsjYO1CSUmsISBtPa5x3zIEsUBOu9RZDDuPyg2QqPpe+3i2ouYdl1b7XJc+7Yz287oe
+         n4Ll3sdxxGbRuNPqe8Va40e5cgmVlDZI5fIN6fBWjGY94knmRKOKljCldyrgDLu4eqFI
+         61yZGnSZcmCnvpc5Ppek75k/hWgHufZ8NwnxWp4bgKiaLrzdRDurexHwqhp4Nqyni8AG
+         h/rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=Rr5xR3phcMmOtciTLGMao2x+J3LzUpf33KP5PgsG6mw=;
+        b=C65pH2rY/pHA4/UDlbE1AUvm+emU4zTl6GaizZbzr+Fh/rvc/8XlEKFYQ/8VxXMcjQ
+         BmtafWC6iCpmqVuiZtDjXjFUlkCPyp9tYtOr4OTczSuIQI4bm2uluGhfuuO/K+vWkAYG
+         cdnZwllIAFIdM5tutCsBgVIsiDA6SEhg8zPWgi5uBrsMtvaswkVj1GZIK6OQUjqh4n+L
+         m7hxSWM89ijjSe8fBzEgH6ZaObRsv5QxVZg8ZNOpJ2x7SQKVPgu6sBcelO2oGLzmfYmN
+         YuFCxLVN8k/DsnM62FtrFMLgTm0iTVpinTdyqXeYETiQNKIF5rQ33xURA2TiDZUYxWTo
+         jwVQ==
+X-Gm-Message-State: AOAM532SVVHVa1PIRrbf07l6oATCpnGr0hBEKCAMYp8zxgLDbbS+zNWj
+        t7vHb6vsHErwe1lSfKyiSQ==
+X-Google-Smtp-Source: ABdhPJwRpKyRhMilcGtomGensbv6thBpUXpxVK7cAkdNeBk0lqsREJF6QVbIyABhwvxgVYCy4DCMsQ==
+X-Received: by 2002:a37:4648:: with SMTP id t69mr21000172qka.702.1643839808031;
+        Wed, 02 Feb 2022 14:10:08 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id o13sm7298868qtv.36.2022.02.02.14.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 14:10:07 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:c4e6:e49c:6958:ac58])
+        by serve.minyard.net (Postfix) with ESMTPSA id 68539181297;
+        Wed,  2 Feb 2022 22:10:06 +0000 (UTC)
+Date:   Wed, 2 Feb 2022 16:10:05 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     "Verdun, Jean-Marie" <verdun@hpe.com>
+Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Richard Weinberger <richard@nod.at>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [Openipmi-developer] [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <20220202221005.GD2091156@minyard.net>
+Reply-To: minyard@acm.org
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+ <20220202175635.GC2091156@minyard.net>
+ <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH v3 03/11] media: dt-bindings: media: Add bindings for
- bcm2835-unicam
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com
-References: <20220202175639.149681-1-jeanmichel.hautbois@ideasonboard.com>
- <20220202175639.149681-4-jeanmichel.hautbois@ideasonboard.com>
- <cfa2f751-2988-c372-4bcb-30080efed587@i2se.com>
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-In-Reply-To: <cfa2f751-2988-c372-4bcb-30080efed587@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <3E9905F2-1576-4826-ADC2-85796DE0F4DB@hpe.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
-
-On 02/02/2022 19:33, Stefan Wahren wrote:
-> Hi Jean-Michel,
+On Wed, Feb 02, 2022 at 06:14:57PM +0000, Verdun, Jean-Marie wrote:
+> > This is far too big for a single patch.  It needs to be broken into
+> > functional chunks that can be reviewed individually.  Each driver and
+> > each device tree change along with it's accompanying code need to be
+> > done in individual patches.  The way it is it can't be reviewed in any
+> > sane manner.
 > 
-> please drop the first "media:" before dt-bindings.
+> > -corey
 > 
-> Am 02.02.22 um 18:56 schrieb Jean-Michel Hautbois:
->> Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
->> camera interface. Also add a MAINTAINERS entry for it.
->>
->> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
->> Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
->> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
->> ---
->> Dave: I assumed you were the maintainer for this file, as I based it on the
->> bcm2835-unicam.txt file. Are  you happy to be added directly as the
->> maintainer, or should this be specified as "Raspberry Pi Kernel
->> Maintenance <kernel-list@raspberrypi.com>"
->> ---
->>   .../bindings/media/brcm,bcm2835-unicam.yaml   | 107 ++++++++++++++++++
->>   MAINTAINERS                                   |   7 ++
->>   2 files changed, 114 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> new file mode 100644
->> index 000000000000..5bf41a8834fa
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> @@ -0,0 +1,107 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Broadcom BCM283x Camera Interface (Unicam)
->> +
->> +maintainers:
->> +  - Dave Stevenson <dave.stevenson@raspberrypi.com>
->> +
->> +description: |-
->> +  The Unicam block on BCM283x SoCs is the receiver for either
->> +  CSI-2 or CCP2 data from image sensors or similar devices.
->> +
->> +  The main platform using this SoC is the Raspberry Pi family of boards.
->> +  On the Pi the VideoCore firmware can also control this hardware block,
->> +  and driving it from two different processors will cause issues.
->> +  To avoid this, the firmware checks the device tree configuration
->> +  during boot. If it finds device tree nodes starting by csi then
->> +  it will stop the firmware accessing the block, and it can then
->> +  safely be used via the device tree binding.
->> +
->> +properties:
->> +  compatible:
->> +    const: brcm,bcm2835-unicam
->> +
->> +  reg:
->> +    maxItems: 2
-> I would be nice to have reg-names here similar to the clocks.
-
-Sure, I just don't know what the names are ;-).
-
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: Clock for the camera.
->> +      - description: Clock for the vpu.
->> +
->> +  clock-names:
->> +    items:
->> +      - const: lp
->> +      - const: vpu
->> +
->> +  power-domains:
->> +    items:
->> +      - description: Unicam power domain
->> +
->> +  num-data-lanes:
->> +    items:
->> +      - enum: [ 2, 4 ]
->> +
->> +  port:
->> +    additionalProperties: false
->> +    $ref: /schemas/graph.yaml#/$defs/port-base
->> +
->> +    properties:
->> +      endpoint:
->> +        $ref: /schemas/media/video-interfaces.yaml#
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          data-lanes: true
->> +          link-frequencies: true
->> +
->> +        required:
->> +          - data-lanes
->> +          - link-frequencies
->> +
->> +    required:
->> +      - endpoint
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +  - power-domains
->> +  - num-data-lanes
->> +  - port
->> +
->> +additionalProperties: False
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/bcm2835.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/power/raspberrypi-power.h>
->> +    csi1: csi@7e801000 {
->> +        compatible = "brcm,bcm2835-unicam";
->> +        reg = <0x7e801000 0x800>,
->> +              <0x7e802004 0x4>;
->> +        interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
->> +        clocks = <&clocks BCM2835_CLOCK_CAM1>,
->> +                 <&firmware_clocks 4>;
->> +        clock-names = "lp", "vpu";
->> +        power-domains = <&power RPI_POWER_DOMAIN_UNICAM1>;
->> +        num-data-lanes = <2>;
->> +        port {
->> +                csi1_ep: endpoint {
->> +                        remote-endpoint = <&imx219_0>;
->> +                        data-lanes = <1 2>;
->> +                        link-frequencies = /bits/ 64 <456000000>;
->> +                };
->> +        };
->> +    };
->> +...
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index a0770a861ca4..29344ea86847 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -3670,6 +3670,13 @@ N:	bcm113*
->>   N:	bcm216*
->>   N:	kona
->>   
->> +BROADCOM BCM2835 CAMERA DRIVER
->> +M:	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
->> +L:	linux-media@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
->> +F:	arch/arm/boot/dts/bcm283x*
->> +
+> Thanks for your feedback. We are getting a little bit lost here, as our plan was to submit initial
 > 
-> I suggest to make the MAINTAINERS changes a single separate patch
-> instead of small incremental changes.
+> - bindings
+> - dts for SoC and 1 board
+> - initial platform init code
+> 
+> Then drivers code avoiding to send many dts updates which might complexify the review. We wanted to send all drivers code to relevant reviewers by tomorrow.
+> 
+> So, what you are asking ( do not worry I am not trying to negotiate, I just want to avoid English misunderstandings as I am French) is to send per driver
+> 
+> - binding
+> - dts update
+> - driver code
+> 
+> For each driver through different submission (with each of them containing the 3 associated parts) ?
 
-I can make it a separate patch, indeed.
+Arnd gave an excellent explaination for this.
+
+To be clear, you need to split out changes to individual subsystems and
+submit those to the maintainers for that subsystem and not send them to
+everyone.  That way you reduce sending emails to people who don't need
+to see them.
+
+Once you have a set of patches for a subsystem, you can submit them as one
+set.  That is generally preferred.  The "git send-email" or "git
+format-patch" tools are generally what we use, they let you compose a
+header message where you can give an overall explaination, then it sends
+the individual changes as followup messages to the header message.
+
+-corey
 
 > 
-> Best regards
+> What shall be the initial one in our case as we are introducing a platform ? An empty dts infrastructure and then we make it grow one step at a time ?
 > 
->>   BROADCOM BCM47XX MIPS ARCHITECTURE
->>   M:	Hauke Mehrtens <hauke@hauke-m.de>
->>   M:	Rafał Miłecki <zajec5@gmail.com>
+> vejmarie
 > 
+> ﻿
+>  
+> 
+> 
+> _______________________________________________
+> Openipmi-developer mailing list
+> Openipmi-developer@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/openipmi-developer

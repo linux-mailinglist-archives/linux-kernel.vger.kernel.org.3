@@ -2,374 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450CD4A718B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F884A7195
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 14:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344328AbiBBN24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 08:28:56 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:58812 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiBBN2z (ORCPT
+        id S236439AbiBBN3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 08:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229829AbiBBN3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 08:28:55 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0B39421102;
-        Wed,  2 Feb 2022 13:28:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643808534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T9XXKwvO24uMBewNpHPFTTO8vC3ThEEYknt9VQhf7zc=;
-        b=panfiLd3pE3lvM74jfkQcq32ueoWnfhWSDyFpAWLm6LbYxYjqrBKj8KsZ2v+ihOVwrQkQ8
-        W2ULOW8Fy85/k8YCvNsILQDg77A35H3K0/nLR2VULwhiOAXGdTsXmWR7ctG1i1Slg2h4T3
-        G1zuX2CIzu/RwbE2PzJqmqcX2QOJQLo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643808534;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T9XXKwvO24uMBewNpHPFTTO8vC3ThEEYknt9VQhf7zc=;
-        b=5og7yd6fKpXswHyNUsIDOEWoAv7YOJCYyjUe3YdLj5ATHR3ZKegbOKWXGW9c3TgKo5pADf
-        J36Arpt+zlnYtDCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE48E13E48;
-        Wed,  2 Feb 2022 13:28:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id u2bmORWH+mHBSAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 02 Feb 2022 13:28:53 +0000
-Message-ID: <aaf56d4b-8554-e677-119e-9d23c921fe0a@suse.de>
-Date:   Wed, 2 Feb 2022 14:28:53 +0100
+        Wed, 2 Feb 2022 08:29:32 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CFBC061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 05:29:32 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id z7so28931655ljj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 05:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ut1heMlmneP+6IiHVYaCsRV+iQnMtY/plsON5gFnw/s=;
+        b=pSxMvG+egIt4WW80jF9dDVL3Z8lG/xgxzcN3gE1P+6SGJWoI6nsWsoHQEl+4+ug4UX
+         gOar1xx+mu87pvf4RiobK4x+KVC1BJ0rMGMqGoKBLxkSpfVs45nt0jEUavC6xXXffZGS
+         3a77UePfRjq+OPgpZjJkUwohMc5aUQDULSqqZwagYfF0RicMliSE9QWN0Hrn0IuXxiAt
+         c9ViyFifNmmf1QaV6qNZXiz2p1HT/DmQ2aV8i4BCX+OIXIhGarMZzkeX/thOFYt3BPi1
+         X8hme+1Sv7Cr9o2AxrucOVRe6/pynI7ogzarWIANwAiNk6dOQAL3W7orgc2jNEDuDVzJ
+         upnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ut1heMlmneP+6IiHVYaCsRV+iQnMtY/plsON5gFnw/s=;
+        b=bi+SL0x1b9CjWMqtx+5BD9xUAuOMPFwZbwptnujrGOicxO7EZGKgYVASNSkkvpqxv9
+         NG9kP4BSMohLF1K807ZJ99+iNYYFJePeMeSCbskFzlOTtbziZ6buJoRO2iUJpSqGleB0
+         MnkFx2rSgVYBiEZ/cinmCRIh+vfe2LrZqmYU6xpBqubw85otpPWXRXTaP95EJTnvsjIR
+         RpV1q0MMglnc3bowzUGnNCxJu1yvpMyLMY/bKWInz7CjUubOJRIZmhH/Xb3ADC5PSSLF
+         YNmVf/r3778b9hLehytTboLXBjEH6oJW2evzBlj0pjaK5aIhzCgdK6xfeJiOOz4xh8MD
+         VR+A==
+X-Gm-Message-State: AOAM533CnOT+ZUn5ihr0RyLpULwKT3NJfwGWopS1MlLYyn+NNUhScA8w
+        scAet5scJJq9HFHw3vsRr7raegKy5fmkM3PYy9llxviaNSL5kQ==
+X-Google-Smtp-Source: ABdhPJx5vsaf3f2A8imbwwx+BlfgfCJf+ICQ65e5a/dtBqayDqwZfU1QHrHiSP/evaTJiDLlffNcX5TPkt9HUMaKhUw=
+X-Received: by 2002:a05:651c:a0b:: with SMTP id k11mr15027229ljq.266.1643808570290;
+ Wed, 02 Feb 2022 05:29:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Keith Busch <kbusch@kernel.org>, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        colyli@suse.de
-References: <20220201190128.3075065-1-kbusch@kernel.org>
- <20220201190128.3075065-8-kbusch@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCHv2 7/7] nvme: add support for enhanced metadata
-In-Reply-To: <20220201190128.3075065-8-kbusch@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220131110307.1684739-1-mchitale@ventanamicro.com>
+ <CAAhSdy2wX7Re4yepV7ReNQazF9jb-eqSUDE7rLCarr3iUchzkQ@mail.gmail.com> <B04F937F-6FC8-42F5-9D6B-7EF1148F9646@jrtc27.com>
+In-Reply-To: <B04F937F-6FC8-42F5-9D6B-7EF1148F9646@jrtc27.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Wed, 2 Feb 2022 18:59:18 +0530
+Message-ID: <CAK9=C2WPmH4snAH1Ft4jNoaNuLRQ9dEuYm_K4ePVHdS9wkBYPA@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: make CY, TM, and IR counters accessible in
+ VU mode
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     Anup Patel <anup@brainfault.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 20:01, Keith Busch wrote:
-> NVM Express ratified TP 4069 defines new protection information formats.
-> Implement support for the CRC64 guard tags.
-> 
-> Since the block layer doesn't support variable length reference tags,
-> driver support for the Storage Tag space is not supported at this time.
-> 
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
-> ---
-> v1->v2:
-> 
->    Added support for PRACT
-> 
->    Fixed endian conversion
-> 
->   drivers/nvme/host/core.c | 164 +++++++++++++++++++++++++++++++++------
->   drivers/nvme/host/nvme.h |   4 +-
->   include/linux/nvme.h     |  53 +++++++++++--
->   3 files changed, 190 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index b3eabf6a08b9..0f2ea2a4c718 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -882,6 +882,30 @@ static blk_status_t nvme_setup_discard(struct nvme_ns *ns, struct request *req,
->   	return BLK_STS_OK;
->   }
->   
-> +static inline void nvme_set_ref_tag(struct nvme_ns *ns, struct nvme_command *cmnd,
-> +				    struct request *req)
-> +{
-> +	u32 upper, lower;
-> +	u64 ref48;
-> +
-> +	/* both rw and write zeroes share the same reftag format */
-> +	switch (ns->guard_type) {
-> +	case NVME_NVM_NS_16B_GUARD:
-> +		cmnd->rw.reftag = cpu_to_le32(t10_pi_ref_tag(req));
-> +		break;
-> +	case NVME_NVM_NS_64B_GUARD:
-> +		ref48 = nvme_pi_extended_ref_tag(req);
-> +		lower = lower_32_bits(ref48);
-> +		upper = upper_32_bits(ref48);
-> +
-> +		cmnd->rw.reftag = cpu_to_le32(lower);
-> +		cmnd->rw.cdw3 = cpu_to_le32(upper);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
->   static inline blk_status_t nvme_setup_write_zeroes(struct nvme_ns *ns,
->   		struct request *req, struct nvme_command *cmnd)
->   {
-> @@ -903,8 +927,7 @@ static inline blk_status_t nvme_setup_write_zeroes(struct nvme_ns *ns,
->   		switch (ns->pi_type) {
->   		case NVME_NS_DPS_PI_TYPE1:
->   		case NVME_NS_DPS_PI_TYPE2:
-> -			cmnd->write_zeroes.reftag =
-> -				cpu_to_le32(t10_pi_ref_tag(req));
-> +			nvme_set_ref_tag(ns, cmnd, req);
->   			break;
->   		}
->   	}
-> @@ -931,7 +954,8 @@ static inline blk_status_t nvme_setup_rw(struct nvme_ns *ns,
->   	cmnd->rw.opcode = op;
->   	cmnd->rw.flags = 0;
->   	cmnd->rw.nsid = cpu_to_le32(ns->head->ns_id);
-> -	cmnd->rw.rsvd2 = 0;
-> +	cmnd->rw.cdw2 = 0;
-> +	cmnd->rw.cdw3 = 0;
->   	cmnd->rw.metadata = 0;
->   	cmnd->rw.slba = cpu_to_le64(nvme_sect_to_lba(ns, blk_rq_pos(req)));
->   	cmnd->rw.length = cpu_to_le16((blk_rq_bytes(req) >> ns->lba_shift) - 1);
-> @@ -965,7 +989,7 @@ static inline blk_status_t nvme_setup_rw(struct nvme_ns *ns,
->   					NVME_RW_PRINFO_PRCHK_REF;
->   			if (op == nvme_cmd_zone_append)
->   				control |= NVME_RW_APPEND_PIREMAP;
-> -			cmnd->rw.reftag = cpu_to_le32(t10_pi_ref_tag(req));
-> +			nvme_set_ref_tag(ns, cmnd, req);
->   			break;
->   		}
->   	}
-> @@ -1619,33 +1643,58 @@ int nvme_getgeo(struct block_device *bdev, struct hd_geometry *geo)
->   }
->   
->   #ifdef CONFIG_BLK_DEV_INTEGRITY
-> -static void nvme_init_integrity(struct gendisk *disk, u16 ms, u8 pi_type,
-> +static void nvme_init_integrity(struct gendisk *disk, struct nvme_ns *ns,
->   				u32 max_integrity_segments)
->   {
->   	struct blk_integrity integrity = { };
->   
-> -	switch (pi_type) {
-> +	switch (ns->pi_type) {
->   	case NVME_NS_DPS_PI_TYPE3:
-> -		integrity.profile = &t10_pi_type3_crc;
-> -		integrity.tag_size = sizeof(u16) + sizeof(u32);
-> -		integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +		switch (ns->guard_type) {
-> +		case NVME_NVM_NS_16B_GUARD:
-> +			integrity.profile = &t10_pi_type3_crc;
-> +			integrity.tag_size = sizeof(u16) + sizeof(u32);
-> +			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +			break;
-> +		case NVME_NVM_NS_64B_GUARD:
-> +			integrity.profile = &nvme_pi_type1_crc64;
-> +			integrity.tag_size = sizeof(u16) + 6;
-> +			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +			break;
-> +		default:
-> +			integrity.profile = NULL;
-> +			break;
-> +		}
->   		break;
->   	case NVME_NS_DPS_PI_TYPE1:
->   	case NVME_NS_DPS_PI_TYPE2:
-> -		integrity.profile = &t10_pi_type1_crc;
-> -		integrity.tag_size = sizeof(u16);
-> -		integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +		switch (ns->guard_type) {
-> +		case NVME_NVM_NS_16B_GUARD:
-> +			integrity.profile = &t10_pi_type1_crc;
-> +			integrity.tag_size = sizeof(u16);
-> +			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +			break;
-> +		case NVME_NVM_NS_64B_GUARD:
-> +			integrity.profile = &nvme_pi_type1_crc64;
-> +			integrity.tag_size = sizeof(u16);
+On Wed, Feb 2, 2022 at 6:49 PM Jessica Clarke <jrtc27@jrtc27.com> wrote:
+>
+> On 2 Feb 2022, at 11:14, Anup Patel <anup@brainfault.org> wrote:
+> >
+> > On Mon, Jan 31, 2022 at 4:33 PM Mayuresh Chitale
+> > <mchitale@ventanamicro.com> wrote:
+> >>
+> >> Those applications that run in VU mode and access the time CSR cause
+> >> a virtual instruction trap as Guest kernel currently does not
+> >> initialize the scounteren CSR.
+> >>
+> >> To fix this, we should make CY, TM, and IR counters accessibile
+> >> by default in VU mode (similar to OpenSBI).
+> >>
+> >> Fixes: a33c72faf2d73 ("RISC-V: KVM: Implement VCPU create, init and
+> >> destroy functions")
+> >> Cc:stable@vger.kernel.org
+> >> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> >
+> > Thanks, I have queued this for fixes.
+>
+> The formatting is clearly wrong...
 
-Is that correct? Shouldn't it be '8' like in the above case?
+I have updated this in my fixes queue.
 
-> +			integrity.flags |= BLK_INTEGRITY_DEVICE_CAPABLE;
-> +			break;
-> +		default:
-> +			integrity.profile = NULL;
-> +			break;
-> +		}
->   		break;
->   	default:
->   		integrity.profile = NULL;
->   		break;
->   	}
-> -	integrity.tuple_size = ms;
-> +
-> +	integrity.tuple_size = ns->ms;
->   	blk_integrity_register(disk, &integrity);
->   	blk_queue_max_integrity_segments(disk->queue, max_integrity_segments);
->   }
->   #else
-> -static void nvme_init_integrity(struct gendisk *disk, u16 ms, u8 pi_type,
-> +static void nvme_init_integrity(struct gendisk *disk, struct nvme_ns *ns,
->   				u32 max_integrity_segments)
->   {
->   }
-> @@ -1722,17 +1771,75 @@ static int nvme_setup_streams_ns(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
->   	return 0;
->   }
->   
-> -static int nvme_configure_metadata(struct nvme_ns *ns, struct nvme_id_ns *id)
-> +static int nvme_init_ms(struct nvme_ns *ns, struct nvme_id_ns *id)
->   {
-> +	bool first = id->dps & NVME_NS_DPS_PI_FIRST;
-> +	unsigned lbaf = nvme_lbaf_index(id->flbas);
->   	struct nvme_ctrl *ctrl = ns->ctrl;
-> +	struct nvme_command c = { };
-> +	struct nvme_id_ns_nvm *nvm;
-> +	int ret = 0;
-> +	u32 elbaf;
-> +
-> +	ns->pi_size = 0;
-> +	ns->ms = le16_to_cpu(id->lbaf[lbaf].ms);
-> +	if (!(ctrl->ctratt & NVME_CTRL_ATTR_ELBAS)) {
-> +		ns->pi_size = sizeof(struct t10_pi_tuple);
-> +		ns->guard_type = NVME_NVM_NS_16B_GUARD;
-> +		goto set_pi;
-> +	}
->   
-> -	ns->ms = le16_to_cpu(id->lbaf[id->flbas & NVME_NS_FLBAS_LBA_MASK].ms);
-> -	if (id->dps & NVME_NS_DPS_PI_FIRST ||
-> -	    ns->ms == sizeof(struct t10_pi_tuple))
-> +	nvm = kzalloc(sizeof(*nvm), GFP_KERNEL);
-> +	if (!nvm)
-> +		return -ENOMEM;
-> +
-> +	c.identify.opcode = nvme_admin_identify;
-> +	c.identify.nsid = cpu_to_le32(ns->head->ns_id);
-> +	c.identify.cns = NVME_ID_CNS_CS_NS;
-> +	c.identify.csi = NVME_CSI_NVM;
-> +
-> +	ret = nvme_submit_sync_cmd(ns->ctrl->admin_q, &c, nvm, sizeof(*nvm));
-> +	if (ret)
-> +		goto free_data;
-> +
-> +	elbaf = le32_to_cpu(nvm->elbaf[lbaf]);
-> +
-> +	/* no support for storage tag formats right now */
-> +	if (nvme_elbaf_sts(elbaf))
-> +		goto free_data;
-> +
-> +	ns->guard_type = nvme_elbaf_guard_type(elbaf);
-> +	switch (ns->guard_type) {
-> +	case NVME_NVM_NS_64B_GUARD:
-> +		ns->pi_size = sizeof(struct nvme_crc64_pi_tuple);
-> +		break;
-> +	case NVME_NVM_NS_16B_GUARD:
-> +		ns->pi_size = sizeof(struct t10_pi_tuple);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +free_data:
-> +	kfree(nvm);
-> +set_pi:
-> +	if (ns->pi_size && (first || ns->ms == ns->pi_size))
->   		ns->pi_type = id->dps & NVME_NS_DPS_PI_MASK;
->   	else
->   		ns->pi_type = 0;
->   
-> +	return ret;
-> +}
-> +
-> +static int nvme_configure_metadata(struct nvme_ns *ns, struct nvme_id_ns *id)
-> +{
-> +	struct nvme_ctrl *ctrl = ns->ctrl;
-> +	int ret;
-> +
-> +	ret = nvme_init_ms(ns, id);
-> +	if (ret)
-> +		return ret;
-> +
->   	ns->features &= ~(NVME_NS_METADATA_SUPPORTED | NVME_NS_EXT_LBAS);
->   	if (!ns->ms || !(ctrl->ops->flags & NVME_F_METADATA_SUPPORTED))
->   		return 0;
-> @@ -1850,7 +1957,7 @@ static void nvme_update_disk_info(struct gendisk *disk,
->   	if (ns->ms) {
->   		if (IS_ENABLED(CONFIG_BLK_DEV_INTEGRITY) &&
->   		    (ns->features & NVME_NS_METADATA_SUPPORTED))
-> -			nvme_init_integrity(disk, ns->ms, ns->pi_type,
-> +			nvme_init_integrity(disk, ns,
->   					    ns->ctrl->max_integrity_segments);
->   		else if (!nvme_ns_has_pi(ns))
->   			capacity = 0;
-> @@ -1905,7 +2012,7 @@ static void nvme_set_chunk_sectors(struct nvme_ns *ns, struct nvme_id_ns *id)
->   
->   static int nvme_update_ns_info(struct nvme_ns *ns, struct nvme_id_ns *id)
->   {
-> -	unsigned lbaf = id->flbas & NVME_NS_FLBAS_LBA_MASK;
-> +	unsigned lbaf = nvme_lbaf_index(id->flbas);
->   	int ret;
->   
->   	blk_mq_freeze_queue(ns->disk->queue);
-> @@ -2252,20 +2359,27 @@ static int nvme_configure_timestamp(struct nvme_ctrl *ctrl)
->   	return ret;
->   }
->   
-> -static int nvme_configure_acre(struct nvme_ctrl *ctrl)
-> +static int nvme_configure_host_options(struct nvme_ctrl *ctrl)
->   {
->   	struct nvme_feat_host_behavior *host;
-> +	u8 acre = 0, lbafee = 0;
->   	int ret;
->   
->   	/* Don't bother enabling the feature if retry delay is not reported */
-> -	if (!ctrl->crdt[0])
-> +	if (ctrl->crdt[0])
-> +		acre = NVME_ENABLE_ACRE;
-> +	if (ctrl->ctratt & NVME_CTRL_ATTR_ELBAS)
-> +		lbafee = NVME_ENABLE_LBAFEE;
-> +
-> +	if (!acre && !lbafee)
->   		return 0;
->   
->   	host = kzalloc(sizeof(*host), GFP_KERNEL);
->   	if (!host)
->   		return 0;
->   
-> -	host->acre = NVME_ENABLE_ACRE;
-> +	host->acre = acre;
-> +	host->lbafee = lbafee;
->   	ret = nvme_set_features(ctrl, NVME_FEAT_HOST_BEHAVIOR, 0,
->   				host, sizeof(*host), NULL);
->   	kfree(host);
-> @@ -3104,7 +3218,7 @@ int nvme_init_ctrl_finish(struct nvme_ctrl *ctrl)
->   	if (ret < 0)
->   		return ret;
->   
-> -	ret = nvme_configure_acre(ctrl);
-> +	ret = nvme_configure_host_options(ctrl);
->   	if (ret < 0)
->   		return ret;
->   
+>
+> > Regards,
+> > Anup
+> >
+> >> ---
+> >> arch/riscv/kvm/vcpu.c | 4 ++++
+> >> 1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> >> index 0c5239e05721..caaf824347b9 100644
+> >> --- a/arch/riscv/kvm/vcpu.c
+> >> +++ b/arch/riscv/kvm/vcpu.c
+> >> @@ -90,6 +90,7 @@ int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
+> >> int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >> {
+> >>        struct kvm_cpu_context *cntx;
+> >> +       struct kvm_vcpu_csr *reset_csr = &vcpu->arch.guest_reset_csr;
+> >>
+> >>        /* Mark this VCPU never ran */
+> >>        vcpu->arch.ran_atleast_once = false;
+> >> @@ -106,6 +107,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >>        cntx->hstatus |= HSTATUS_SPVP;
+> >>        cntx->hstatus |= HSTATUS_SPV;
+> >>
+> >> +       /* By default, make CY, TM, and IR counters accessible in VU mode */
+> >> +       reset_csr->scounteren=0x7;
+>
+> ... here
 
-This could be made into a separate patch, is it's not directly related 
-to PI support.
+Same as above, I have updated this my queue as well.
 
-Cheers,
+Thanks,
+Anup
 
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+>
+> Jess
+>
+> >> +
+> >>        /* Setup VCPU timer */
+> >>        kvm_riscv_vcpu_timer_init(vcpu);
+> >>
+> >> --
+> >> 2.25.1
+> >>
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>

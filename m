@@ -2,380 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F374A75A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D99D4A75A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 17:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236150AbiBBQTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 11:19:10 -0500
-Received: from mail.zju.edu.cn ([61.164.42.155]:56268 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230078AbiBBQTJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 11:19:09 -0500
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgDX34fnrvph4n+QAQ--.673S2;
-        Thu, 03 Feb 2022 00:18:53 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     dan.carpenter@oracle.com
-Cc:     linux-hams@vger.kernel.org, jreuter@yaina.de, ralf@linux-mips.org,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [Fixes] ax25: add refcount in ax25_dev to avoid UAF bugs
-Date:   Thu,  3 Feb 2022 00:18:46 +0800
-Message-Id: <20220202161846.26198-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgDX34fnrvph4n+QAQ--.673S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4UWryxXr15GFW8CFy3Jwb_yoWDJFWDpF
-        WjkFWrArWktF47Ars5Wr4xGF1YyryIq39rXr17uF1Ikw1rJ3s8JF18tryUtry3GrWfAr18
-        X34DXr45Ar48CF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4
-        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8E
-        rcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/
+        id S1345802AbiBBQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 11:19:48 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:8910 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230078AbiBBQTo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 11:19:44 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 212AXuEq028273;
+        Wed, 2 Feb 2022 08:19:33 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=O2ypQy06D8d1fwnU6n/8FzoRwjuAoe1Etk5yRumMdSs=;
+ b=UZ0f+WqtXJezwcyWXC+ljcU8h+4n66ArX6qcaZH5b7H5Qd9bdmSj2D1rE76OJckjMiim
+ NXWWpyNZybiRYGa3dkyR9WjTNbdKZYNfEQkmuU3wDjWQOX2R/HGnpZ77QFTRDYHJcqe9
+ ne15TVXYMSPM/Gy+orYgLWz0Tzrc2dFHSjI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dyrahsx1n-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 02 Feb 2022 08:19:32 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Feb 2022 08:19:31 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PbPtIPqHbz58pouIPs2A9NIB3td+o/7N/0Ko58ulDAhyfksF+acwbCEbdepi6WOwwAzUX/KIt5g9jF9XtRzHgYIGHsdxGDH3PGKT51qMIckoJj76GAw9K5bN6iNwDU6bydE2Nyvk7YxvmhXHEfqE0hIAP4GKaqIy2yElfjJEixwrweDvyMP1B6Hny73TaSQ9ZtMWF/hVjBjew0fEOItLBSVIJkvNLHfeJM6q2F3HzFAU1jvNg4RC+kdodP42tlGCCV1gWdduc+vnP+xmF/vJX1l8seHy/GDLBWA9Dw5KxVF9lea3iawOF9IwZZ75HePP1Fpe2SqhhcAc5E5qa1DKfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O2ypQy06D8d1fwnU6n/8FzoRwjuAoe1Etk5yRumMdSs=;
+ b=glIY1EcvP/BiaVn0+gVPlAKOh3zUfxMpJXzU5XZjs3Ht1XkiHru77nc4M1sYbaSytfzXFOyE2l3Cm/yCQjBtgN2Mw2FND/29bebBQjMj/ucL0o+XKK2VZrAmyUkuuVJTBPXp4Y6m1qtidPacFBsFQ2wOOmiMyBPgxv5ETwm66rVrajdHVcsSJiFoUOaWaD6ISdx2l25GxAkPJ0Jn7nyom0j8Q1bHqbPOAQsimYH/iglGDAY0yDSTPKDCa6rc5CVb3eauOBQluHceHnQg/tDXYvW5ClWNCWBq2NW4Ww7s/LL84IUvOCKJJ23s8raeo8L+igCtUMDIV6NMzBlB2Oakrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
+ by MN2PR15MB2990.namprd15.prod.outlook.com (2603:10b6:208:f2::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 2 Feb
+ 2022 16:19:30 +0000
+Received: from BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2]) by BYAPR15MB4136.namprd15.prod.outlook.com
+ ([fe80::d4ac:5796:5198:ecd2%3]) with mapi id 15.20.4930.022; Wed, 2 Feb 2022
+ 16:19:30 +0000
+Date:   Wed, 2 Feb 2022 08:19:26 -0800
+From:   Roman Gushchin <guro@fb.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexander Egorenkov <egorenar@linux.ibm.com>,
+        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>, <cgroups@vger.kernel.org>
+Subject: Re: [PATCH RESEND] mm: memcg: synchronize objcg lists with a
+ dedicated spinlock
+Message-ID: <YfqvDvvyFcoXHzRe@carbon.dhcp.thefacebook.com>
+References: <Yfm1IHmoGdyUR81T@carbon.dhcp.thefacebook.com>
+ <49447f71-bb84-8e1d-e0cb-c9e482d3459b@arm.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <49447f71-bb84-8e1d-e0cb-c9e482d3459b@arm.com>
+X-ClientProxiedBy: MWHPR1401CA0016.namprd14.prod.outlook.com
+ (2603:10b6:301:4b::26) To BYAPR15MB4136.namprd15.prod.outlook.com
+ (2603:10b6:a03:96::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 04fab4b6-39fc-46de-944f-08d9e667ca35
+X-MS-TrafficTypeDiagnostic: MN2PR15MB2990:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR15MB2990C8EC49484C31B0C24DE7BE279@MN2PR15MB2990.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wmv24z5j/H0Bz4QzymzOnTRhrpU4+FqFa7DPFv+dF8P0BZlcdf1zCk09kOfMLxYBh9WnkvQFVYQsE8/51n9wxsPQzozIvdR73l0OaFqLLO07IdaGVTVCnEQQEd8azzbk2aV3UUDlkbgUd2ef88NcUaASOld7KAoqG/7yTxMtruiZKaXfeHXz5ZH1GvRNUC4tdvJABttDj77QnBAclHdLmjmOT8C61AuchjkDDvLmjlEtxOGvOIhVAh9Vvy948mvaWVnuDCJWkG0tO1d0BiXFg4fZYvKBpN74n1CLUQ00YpEkxeLI7d7XCA/lvHOVS64UblZyIA8THsfyLc8mceESPCDv2MENsR/CPDjfgtcjFvdGDTQMDkVKrvb71k7uE65gmo+mZAF5M1Z3sLd4uGhMg/hRE3WbichL9gDS1/kk5Qa5vHXQQHZkzbtfGeoSh5U4pg+RAYTSj9cNe63PhLegcc2OtLV/cq/vz9kN5D3NKL9kEbr45iWnQXRfzM8k25uz4et5qa83llC48l4GquPi/4nl+O4lXSpmkS9y8jJm8ZkCmsvwHar2U4FaGB+SRyOmBaGbdnlnTuAzWXhyt8uqK7FZmAjo4T+/w36OidSUO89tJKxBjZCHBf0DYLoguCSI6vUVgwfNLGoW9LI1gDdumA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(186003)(7416002)(2906002)(5660300002)(8936002)(54906003)(86362001)(6512007)(8676002)(6916009)(508600001)(4326008)(66556008)(66476007)(66946007)(316002)(6486002)(53546011)(52116002)(6666004)(38100700002)(9686003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iqgLE8sWx4wI7pJoMIN3XRFVcyV63Y2gm57lTy1WFJ9N0SAYyFxsx/TNv/ag?=
+ =?us-ascii?Q?303+lynqgq4k7DJl3eR2GcSyyBFsoHUA2Bn2rmpTtq+tKarY70PJkrwvSYpK?=
+ =?us-ascii?Q?9tKd1awSuTErEJedTk6bCtwUCVFvZVWfLvcUeTKCi+mh4+6F0YQnzSG7s4Jz?=
+ =?us-ascii?Q?fEbJu9Hddkn2hzIZWOB22C914g1ja7TRumYRN7gXz441AncuGhOLrAgji+0Y?=
+ =?us-ascii?Q?T8kvrUQI2PTjqIADiFs4sjckcS3S2IhyZib/eYtGlzq1umSuSZdOJMggvgsF?=
+ =?us-ascii?Q?BD7Z2sWLKyMAi+17d485wtB1i46JNUPhZq+bXypV1mZc0ZyKgnY5+wz0UaPg?=
+ =?us-ascii?Q?TR70t7shlCiNinwXZW5S3CVO3ZZUf4YMGVGtGIj4itih5svy9wB/UsRZMYWa?=
+ =?us-ascii?Q?sc1+JX89TZdrKdyrRZl8vik6fZk94QsB4S08cBVDil8EpVg9AqCqzkf5HBfN?=
+ =?us-ascii?Q?K9AQEX9F4jqBoeuA5PxxMvxRb0dRqfUVFhEW+zKQVYQNDCxMpc06a55RGlqz?=
+ =?us-ascii?Q?TmqamB9Z5DcY+XeUxMtGpUR2q2IXKSRtXW+MwT8j5EoUBOBtSj0yQmMTHstq?=
+ =?us-ascii?Q?Z3EG+mvfaY+qTHKdOpTZlhPt9s7dA1m1Oj6e+I4MHgz6izXYJ3uaJ8IqV+N0?=
+ =?us-ascii?Q?pZLNfZL+vY8LY6AMfQDL8yFGsc887c/1dhAupOXXmiNJxH1cba+MOOHneq7q?=
+ =?us-ascii?Q?1WVTMM1nLUH9xpt4a3Rs5MzHz10DfKuWgLercx67V5vimg7EPCIYPk0HyvWA?=
+ =?us-ascii?Q?ySJDPylTeo24F2KesBWHfcMVozWrBlem4ImqLe+IcDAJVVBan3jdrJ7CdxFE?=
+ =?us-ascii?Q?SGu3EEV2ObZvz7sb5HWTKEwv7BZF4jitHQrb7ZjNc/DK2b7giebLW7A0eZrO?=
+ =?us-ascii?Q?Omu1lkt+GZbeuzI16UbTBzSRq5uSKFPW1ScEfEx1OgUpAmM4KFN6DSX/UBRd?=
+ =?us-ascii?Q?UUXSW75cqg6SrF1Pqc5CWfRSXBN05yZiUgwOEukC7UrVeKjFBZVfU94C2mAs?=
+ =?us-ascii?Q?kF5VMs087D/sIOssUy3ZridS1p6WZiThrRbAvr5fX/WigrDiBb6zWaYhzcyx?=
+ =?us-ascii?Q?TXztZb86mYqvtf+IvQm+LPlBLvBSSKAW06/Cm7iLOkZULIMjML71K+GovX4W?=
+ =?us-ascii?Q?GQYkwORXc8BTcJudISFvLScBYPMUs2M+38VqSzqDaQZzo46dlbi8pWm88XQx?=
+ =?us-ascii?Q?s3mWGzuWMLUBgUEOTTerIEkRw/QHUz5AWAIocIw9GTKaQEG8sXCQvhXRItyx?=
+ =?us-ascii?Q?4dR+yD3aoR5Gx9YmMstyvUu1KHAQdyvc/y/uMc9dcAPplPdHR7bhMj9hAvIC?=
+ =?us-ascii?Q?BfTZmtPzbhGQsyQr9sX0OxPNAaHPBWZ8DGgQDQoHQSEcpKFhGZfOquyEzMst?=
+ =?us-ascii?Q?wybad4R2irsqu2/eIRTx3Fo+uTMboBBDDRJz13ztVcS1PfoMeGS2Dt9RRmB1?=
+ =?us-ascii?Q?2VNzVk5C5J+zHUxBRGNlAp8knywYcaYRBVXsJ9RBmcoMnov0NUU+LGfXsq1o?=
+ =?us-ascii?Q?6DVcHvzzX3o7fNvPHTOgmCqT25DxZ1enYPM28y5rnIS//AmnSqGTSKRBGnQ1?=
+ =?us-ascii?Q?Gz9D3EuQ3qLOhURs4x4lvJm64tLePN8xJp/nunNN?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04fab4b6-39fc-46de-944f-08d9e667ca35
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2022 16:19:29.9883
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OCAMDVea71eyReIqtTslTN/o5OvUN++kT8RCqzAvDbyg+0SuO7w3d04gfXc3YHAa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2990
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: 6x7TjkZEdCL19eusfLx4eafCLMX3TqKD
+X-Proofpoint-ORIG-GUID: 6x7TjkZEdCL19eusfLx4eafCLMX3TqKD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-02_07,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=402 bulkscore=0 malwarescore=0 mlxscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020091
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we dereference ax25_dev after we call kfree(ax25_dev) in
-ax25_dev_device_down(), it will lead to concurrency UAF bugs.
-There are eight syscall functions suffer from UAF bugs, include
-ax25_bind(), ax25_release(), ax25_connect(), ax25_ioctl(),
-ax25_getname(), ax25_sendmsg(), ax25_getsockopt() and
-ax25_info_show().
+On Wed, Feb 02, 2022 at 09:58:15AM -0600, Jeremy Linton wrote:
+> On 2/1/22 16:33, Roman Gushchin wrote:
+> > Alexander reported a circular lock dependency revealed by the mmap1
+> > ltp test:
+> >    LOCKDEP_CIRCULAR (suite: ltp, case: mtest06 (mmap1))
+> >            WARNING: possible circular locking dependency detected
+> >            5.17.0-20220113.rc0.git0.f2211f194038.300.fc35.s390x+debug #1 Not tainted
+> >            ------------------------------------------------------
+> >            mmap1/202299 is trying to acquire lock:
+> >            00000001892c0188 (css_set_lock){..-.}-{2:2}, at: obj_cgroup_release+0x4a/0xe0
+> >            but task is already holding lock:
+> >            00000000ca3b3818 (&sighand->siglock){-.-.}-{2:2}, at: force_sig_info_to_task+0x38/0x180
+> >            which lock already depends on the new lock.
+> >            the existing dependency chain (in reverse order) is:
+> >            -> #1 (&sighand->siglock){-.-.}-{2:2}:
+> >                   __lock_acquire+0x604/0xbd8
+> >                   lock_acquire.part.0+0xe2/0x238
+> >                   lock_acquire+0xb0/0x200
+> >                   _raw_spin_lock_irqsave+0x6a/0xd8
+> >                   __lock_task_sighand+0x90/0x190
+> >                   cgroup_freeze_task+0x2e/0x90
+> >                   cgroup_migrate_execute+0x11c/0x608
+> >                   cgroup_update_dfl_csses+0x246/0x270
+> >                   cgroup_subtree_control_write+0x238/0x518
+> >                   kernfs_fop_write_iter+0x13e/0x1e0
+> >                   new_sync_write+0x100/0x190
+> >                   vfs_write+0x22c/0x2d8
+> >                   ksys_write+0x6c/0xf8
+> >                   __do_syscall+0x1da/0x208
+> >                   system_call+0x82/0xb0
+> >            -> #0 (css_set_lock){..-.}-{2:2}:
+> >                   check_prev_add+0xe0/0xed8
+> >                   validate_chain+0x736/0xb20
+> >                   __lock_acquire+0x604/0xbd8
+> >                   lock_acquire.part.0+0xe2/0x238
+> >                   lock_acquire+0xb0/0x200
+> >                   _raw_spin_lock_irqsave+0x6a/0xd8
+> >                   obj_cgroup_release+0x4a/0xe0
+> >                   percpu_ref_put_many.constprop.0+0x150/0x168
+> >                   drain_obj_stock+0x94/0xe8
+> >                   refill_obj_stock+0x94/0x278
+> >                   obj_cgroup_charge+0x164/0x1d8
+> >                   kmem_cache_alloc+0xac/0x528
+> >                   __sigqueue_alloc+0x150/0x308
+> >                   __send_signal+0x260/0x550
+> >                   send_signal+0x7e/0x348
+> >                   force_sig_info_to_task+0x104/0x180
+> >                   force_sig_fault+0x48/0x58
+> >                   __do_pgm_check+0x120/0x1f0
+> >                   pgm_check_handler+0x11e/0x180
+> >            other info that might help us debug this:
+> >             Possible unsafe locking scenario:
+> >                   CPU0                    CPU1
+> >                   ----                    ----
+> >              lock(&sighand->siglock);
+> >                                           lock(css_set_lock);
+> >                                           lock(&sighand->siglock);
+> >              lock(css_set_lock);
+> >             *** DEADLOCK ***
+> >            2 locks held by mmap1/202299:
+> >             #0: 00000000ca3b3818 (&sighand->siglock){-.-.}-{2:2}, at: force_sig_info_to_task+0x38/0x180
+> >             #1: 00000001892ad560 (rcu_read_lock){....}-{1:2}, at: percpu_ref_put_many.constprop.0+0x0/0x168
+> >            stack backtrace:
+> >            CPU: 15 PID: 202299 Comm: mmap1 Not tainted 5.17.0-20220113.rc0.git0.f2211f194038.300.fc35.s390x+debug #1
+> >            Hardware name: IBM 3906 M04 704 (LPAR)
+> >            Call Trace:
+> >             [<00000001888aacfe>] dump_stack_lvl+0x76/0x98
+> >             [<0000000187c6d7be>] check_noncircular+0x136/0x158
+> >             [<0000000187c6e888>] check_prev_add+0xe0/0xed8
+> >             [<0000000187c6fdb6>] validate_chain+0x736/0xb20
+> >             [<0000000187c71e54>] __lock_acquire+0x604/0xbd8
+> >             [<0000000187c7301a>] lock_acquire.part.0+0xe2/0x238
+> >             [<0000000187c73220>] lock_acquire+0xb0/0x200
+> >             [<00000001888bf9aa>] _raw_spin_lock_irqsave+0x6a/0xd8
+> >             [<0000000187ef6862>] obj_cgroup_release+0x4a/0xe0
+> >             [<0000000187ef6498>] percpu_ref_put_many.constprop.0+0x150/0x168
+> >             [<0000000187ef9674>] drain_obj_stock+0x94/0xe8
+> >             [<0000000187efa464>] refill_obj_stock+0x94/0x278
+> >             [<0000000187eff55c>] obj_cgroup_charge+0x164/0x1d8
+> >             [<0000000187ed8aa4>] kmem_cache_alloc+0xac/0x528
+> >             [<0000000187bf2eb8>] __sigqueue_alloc+0x150/0x308
+> >             [<0000000187bf4210>] __send_signal+0x260/0x550
+> >             [<0000000187bf5f06>] send_signal+0x7e/0x348
+> >             [<0000000187bf7274>] force_sig_info_to_task+0x104/0x180
+> >             [<0000000187bf7758>] force_sig_fault+0x48/0x58
+> >             [<00000001888ae160>] __do_pgm_check+0x120/0x1f0
+> >             [<00000001888c0cde>] pgm_check_handler+0x11e/0x180
+> >            INFO: lockdep is turned off.
+> > 
+> > In this example a slab allocation from __send_signal() caused a
+> > refilling and draining of a percpu objcg stock, resulted in a
+> > releasing of another non-related objcg. Objcg release path requires
+> > taking the css_set_lock, which is used to synchronize objcg lists.
+> > 
+> > This can create a circular dependency with the sighandler lock,
+> > which is taken with the locked css_set_lock by the freezer code
+> > (to freeze a task).
+> > 
+> > In general it seems that using css_set_lock to synchronize objcg lists
+> > makes any slab allocations and deallocation with the locked
+> > css_set_lock and any intervened locks risky.
+> > 
+> > To fix the problem and make the code more robust let's stop using
+> > css_set_lock to synchronize objcg lists and use a new dedicated
+> > spinlock instead.
+> > 
+> > Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> > Signed-off-by: Roman Gushchin <guro@fb.com>
+> > Reported-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> > Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> > Reviewed-by: Waiman Long <longman@redhat.com>
+> > Cc: Tejun Heo <tj@kernel.org>
+> > Cc: Johannes Weiner <hannes@cmpxchg.org>
+> > Cc: Shakeel Butt <shakeelb@google.com>
+> > Cc: Jeremy Linton <jeremy.linton@arm.com>
+> > Cc: cgroups@vger.kernel.org
+> > ---
+> >   include/linux/memcontrol.h |  5 +++--
+> >   mm/memcontrol.c            | 10 +++++-----
+> >   2 files changed, 8 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > index b72d75141e12..0abbd685703b 100644
+> > --- a/include/linux/memcontrol.h
+> > +++ b/include/linux/memcontrol.h
+> > @@ -219,7 +219,7 @@ struct obj_cgroup {
+> >   	struct mem_cgroup *memcg;
+> >   	atomic_t nr_charged_bytes;
+> >   	union {
+> > -		struct list_head list;
+> > +		struct list_head list; /* protected by objcg_lock */
+> >   		struct rcu_head rcu;
+> >   	};
+> >   };
+> > @@ -315,7 +315,8 @@ struct mem_cgroup {
+> >   #ifdef CONFIG_MEMCG_KMEM
+> >   	int kmemcg_id;
+> >   	struct obj_cgroup __rcu *objcg;
+> > -	struct list_head objcg_list; /* list of inherited objcgs */
+> > +	/* list of inherited objcgs, protected by objcg_lock */
+> > +	struct list_head objcg_list;
+> >   #endif
+> >   	MEMCG_PADDING(_pad2_);
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 09d342c7cbd0..36e9f38c919d 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -254,7 +254,7 @@ struct mem_cgroup *vmpressure_to_memcg(struct vmpressure *vmpr)
+> >   }
+> >   #ifdef CONFIG_MEMCG_KMEM
+> > -extern spinlock_t css_set_lock;
+> > +static DEFINE_SPINLOCK(objcg_lock);
+> >   bool mem_cgroup_kmem_disabled(void)
+> >   {
+> > @@ -298,9 +298,9 @@ static void obj_cgroup_release(struct percpu_ref *ref)
+> >   	if (nr_pages)
+> >   		obj_cgroup_uncharge_pages(objcg, nr_pages);
+> > -	spin_lock_irqsave(&css_set_lock, flags);
+> > +	spin_lock_irqsave(&objcg_lock, flags);
+> >   	list_del(&objcg->list);
+> > -	spin_unlock_irqrestore(&css_set_lock, flags);
+> > +	spin_unlock_irqrestore(&objcg_lock, flags);
+> >   	percpu_ref_exit(ref);
+> >   	kfree_rcu(objcg, rcu);
+> > @@ -332,7 +332,7 @@ static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
+> >   	objcg = rcu_replace_pointer(memcg->objcg, NULL, true);
+> > -	spin_lock_irq(&css_set_lock);
+> > +	spin_lock_irq(&objcg_lock);
+> >   	/* 1) Ready to reparent active objcg. */
+> >   	list_add(&objcg->list, &memcg->objcg_list);
+> > @@ -342,7 +342,7 @@ static void memcg_reparent_objcgs(struct mem_cgroup *memcg,
+> >   	/* 3) Move already reparented objcgs to the parent's list */
+> >   	list_splice(&memcg->objcg_list, &parent->objcg_list);
+> > -	spin_unlock_irq(&css_set_lock);
+> > +	spin_unlock_irq(&objcg_lock);
+> >   	percpu_ref_kill(&objcg->refcnt);
+> >   }
+> > 
+> 
+> Thanks for taking care of this. Since it looks the same as my patch aside
+> from the fact that I also defensivly converted the list_del to a
+> list_del_rcu.
+> 
+> 
+> Reviewed-by: Jeremy Linton <jeremy.linton@arm.com>
+> 
+> and
+> 
+> Tested-by: Jeremy Linton <jeremy.linton@arm.com>
+> 
 
-One of the concurrency UAF can be shown as below:
-
-  (USE)                       |    (FREE)
-                              |  ax25_device_event
-                              |    ax25_dev_device_down
-ax25_bind                     |    ...
-  ...                         |      kfree(ax25_dev)
-  ax25_fillin_cb()            |    ...
-    ax25_fillin_cb_from_dev() |
-  ...                         |
-
-The root cause of UAF bugs is that kfree(ax25_dev) in
-ax25_dev_device_down() is not protected by any locks.
-When ax25_dev, which there are still pointers point to,
-is released, the concurrency UAF bug will happen.
-
-This patch introduces refcount into ax25_dev in order to
-guarantee that there are no pointers point to it when ax25_dev
-is released.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- include/net/ax25.h    | 12 ++++++++++++
- net/ax25/af_ax25.c    | 20 ++++++++++++++++----
- net/ax25/ax25_dev.c   | 33 +++++++++++++++++++++++++++------
- net/ax25/ax25_route.c | 27 ++++++++++++++++++++++-----
- 4 files changed, 77 insertions(+), 15 deletions(-)
-
-diff --git a/include/net/ax25.h b/include/net/ax25.h
-index 526e4958919..1a38b1ad529 100644
---- a/include/net/ax25.h
-+++ b/include/net/ax25.h
-@@ -239,6 +239,7 @@ typedef struct ax25_dev {
- #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
- 	ax25_dama_info		dama;
- #endif
-+	refcount_t		refcount;
- } ax25_dev;
- 
- typedef struct ax25_cb {
-@@ -293,6 +294,17 @@ static __inline__ void ax25_cb_put(ax25_cb *ax25)
- 	}
- }
- 
-+static inline void ax25_dev_hold(ax25_dev *ax25_dev)
-+{
-+	refcount_inc(&ax25_dev->refcount);
-+}
-+
-+static inline void ax25_dev_put(ax25_dev *ax25_dev)
-+{
-+	if (refcount_dec_and_test(&ax25_dev->refcount))
-+		kfree(ax25_dev);
-+}
-+
- static inline __be16 ax25_type_trans(struct sk_buff *skb, struct net_device *dev)
- {
- 	skb->dev      = dev;
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 44a8730c26a..7463bbd4e63 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -91,6 +91,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
- 			s->ax25_dev = NULL;
-+			ax25_dev_put(ax25_dev);
- 			release_sock(sk);
- 			ax25_disconnect(s, ENETUNREACH);
- 			spin_lock_bh(&ax25_list_lock);
-@@ -358,21 +359,31 @@ static int ax25_ctl_ioctl(const unsigned int cmd, void __user *arg)
- 	if (copy_from_user(&ax25_ctl, arg, sizeof(ax25_ctl)))
- 		return -EFAULT;
- 
--	if ((ax25_dev = ax25_addr_ax25dev(&ax25_ctl.port_addr)) == NULL)
-+	ax25_dev = ax25_addr_ax25dev(&ax25_ctl.port_addr);
-+	if (ax25_dev == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -ENODEV;
-+	}
- 
--	if (ax25_ctl.digi_count > AX25_MAX_DIGIS)
-+	if (ax25_ctl.digi_count > AX25_MAX_DIGIS) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
--	if (ax25_ctl.arg > ULONG_MAX / HZ && ax25_ctl.cmd != AX25_KILL)
-+	if (ax25_ctl.arg > ULONG_MAX / HZ && ax25_ctl.cmd != AX25_KILL) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
- 	digi.ndigi = ax25_ctl.digi_count;
- 	for (k = 0; k < digi.ndigi; k++)
- 		digi.calls[k] = ax25_ctl.digi_addr[k];
- 
--	if ((ax25 = ax25_find_cb(&ax25_ctl.source_addr, &ax25_ctl.dest_addr, &digi, ax25_dev->dev)) == NULL)
-+	ax25 = ax25_find_cb(&ax25_ctl.source_addr, &ax25_ctl.dest_addr, &digi, ax25_dev->dev);
-+	if (ax25 == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -ENOTCONN;
-+	}
- 
- 	switch (ax25_ctl.cmd) {
- 	case AX25_KILL:
-@@ -439,6 +450,7 @@ static int ax25_ctl_ioctl(const unsigned int cmd, void __user *arg)
- 	  }
- 
- out_put:
-+	ax25_dev_put(ax25_dev);
- 	ax25_cb_put(ax25);
- 	return ret;
- 
-diff --git a/net/ax25/ax25_dev.c b/net/ax25/ax25_dev.c
-index 256fadb94df..77d9aa2ccab 100644
---- a/net/ax25/ax25_dev.c
-+++ b/net/ax25/ax25_dev.c
-@@ -37,6 +37,7 @@ ax25_dev *ax25_addr_ax25dev(ax25_address *addr)
- 	for (ax25_dev = ax25_dev_list; ax25_dev != NULL; ax25_dev = ax25_dev->next)
- 		if (ax25cmp(addr, (const ax25_address *)ax25_dev->dev->dev_addr) == 0) {
- 			res = ax25_dev;
-+			ax25_dev_hold(ax25_dev);
- 		}
- 	spin_unlock_bh(&ax25_dev_lock);
- 
-@@ -56,6 +57,7 @@ void ax25_dev_device_up(struct net_device *dev)
- 		return;
- 	}
- 
-+	refcount_set(&ax25_dev->refcount, 1);
- 	dev->ax25_ptr     = ax25_dev;
- 	ax25_dev->dev     = dev;
- 	dev_hold_track(dev, &ax25_dev->dev_tracker, GFP_ATOMIC);
-@@ -83,6 +85,7 @@ void ax25_dev_device_up(struct net_device *dev)
- 	spin_lock_bh(&ax25_dev_lock);
- 	ax25_dev->next = ax25_dev_list;
- 	ax25_dev_list  = ax25_dev;
-+	ax25_dev_hold(ax25_dev);
- 	spin_unlock_bh(&ax25_dev_lock);
- 
- 	ax25_register_dev_sysctl(ax25_dev);
-@@ -111,21 +114,23 @@ void ax25_dev_device_down(struct net_device *dev)
- 			s->forward = NULL;
- 
- 	if ((s = ax25_dev_list) == ax25_dev) {
-+		ax25_dev_put(ax25_dev_list);
- 		ax25_dev_list = s->next;
- 		spin_unlock_bh(&ax25_dev_lock);
- 		dev->ax25_ptr = NULL;
- 		dev_put_track(dev, &ax25_dev->dev_tracker);
--		kfree(ax25_dev);
-+		ax25_dev_put(ax25_dev);
- 		return;
- 	}
- 
- 	while (s != NULL && s->next != NULL) {
- 		if (s->next == ax25_dev) {
-+			ax25_dev_put(s->next);
- 			s->next = ax25_dev->next;
- 			spin_unlock_bh(&ax25_dev_lock);
- 			dev->ax25_ptr = NULL;
- 			dev_put_track(dev, &ax25_dev->dev_tracker);
--			kfree(ax25_dev);
-+			ax25_dev_put(ax25_dev);
- 			return;
- 		}
- 
-@@ -133,31 +138,47 @@ void ax25_dev_device_down(struct net_device *dev)
- 	}
- 	spin_unlock_bh(&ax25_dev_lock);
- 	dev->ax25_ptr = NULL;
-+	ax25_dev_put(ax25_dev);
- }
- 
- int ax25_fwd_ioctl(unsigned int cmd, struct ax25_fwd_struct *fwd)
- {
- 	ax25_dev *ax25_dev, *fwd_dev;
- 
--	if ((ax25_dev = ax25_addr_ax25dev(&fwd->port_from)) == NULL)
-+	ax25_dev = ax25_addr_ax25dev(&fwd->port_from);
-+	if (ax25_dev == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
- 	switch (cmd) {
- 	case SIOCAX25ADDFWD:
--		if ((fwd_dev = ax25_addr_ax25dev(&fwd->port_to)) == NULL)
-+		fwd_dev = ax25_addr_ax25dev(&fwd->port_to);
-+		if (fwd_dev == NULL) {
-+			ax25_dev_put(fwd_dev);
-+			ax25_dev_put(ax25_dev);
- 			return -EINVAL;
--		if (ax25_dev->forward != NULL)
-+		}
-+		if (ax25_dev->forward != NULL) {
-+			ax25_dev_put(ax25_dev);
- 			return -EINVAL;
-+		}
- 		ax25_dev->forward = fwd_dev->dev;
-+		ax25_dev_put(fwd_dev);
-+		ax25_dev_put(ax25_dev);
- 		break;
- 
- 	case SIOCAX25DELFWD:
--		if (ax25_dev->forward == NULL)
-+		if (ax25_dev->forward == NULL) {
-+			ax25_dev_put(ax25_dev);
- 			return -EINVAL;
-+		}
- 		ax25_dev->forward = NULL;
-+		ax25_dev_put(ax25_dev);
- 		break;
- 
- 	default:
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
- 	}
- 
-diff --git a/net/ax25/ax25_route.c b/net/ax25/ax25_route.c
-index d0b2e094bd5..7fe7a83b2a3 100644
---- a/net/ax25/ax25_route.c
-+++ b/net/ax25/ax25_route.c
-@@ -75,10 +75,15 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 	ax25_dev *ax25_dev;
- 	int i;
- 
--	if ((ax25_dev = ax25_addr_ax25dev(&route->port_addr)) == NULL)
-+	ax25_dev = ax25_addr_ax25dev(&route->port_addr);
-+	if (ax25_dev == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
--	if (route->digi_count > AX25_MAX_DIGIS)
-+	}
-+	if (route->digi_count > AX25_MAX_DIGIS) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
- 	write_lock_bh(&ax25_route_lock);
- 
-@@ -91,6 +96,7 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 			if (route->digi_count != 0) {
- 				if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
- 					write_unlock_bh(&ax25_route_lock);
-+					ax25_dev_put(ax25_dev);
- 					return -ENOMEM;
- 				}
- 				ax25_rt->digipeat->lastrepeat = -1;
-@@ -101,6 +107,7 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 				}
- 			}
- 			write_unlock_bh(&ax25_route_lock);
-+			ax25_dev_put(ax25_dev);
- 			return 0;
- 		}
- 		ax25_rt = ax25_rt->next;
-@@ -108,6 +115,7 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 
- 	if ((ax25_rt = kmalloc(sizeof(ax25_route), GFP_ATOMIC)) == NULL) {
- 		write_unlock_bh(&ax25_route_lock);
-+		ax25_dev_put(ax25_dev);
- 		return -ENOMEM;
- 	}
- 
-@@ -120,6 +128,7 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 		if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
- 			write_unlock_bh(&ax25_route_lock);
- 			kfree(ax25_rt);
-+			ax25_dev_put(ax25_dev);
- 			return -ENOMEM;
- 		}
- 		ax25_rt->digipeat->lastrepeat = -1;
-@@ -132,6 +141,7 @@ static int __must_check ax25_rt_add(struct ax25_routes_struct *route)
- 	ax25_rt->next   = ax25_route_list;
- 	ax25_route_list = ax25_rt;
- 	write_unlock_bh(&ax25_route_lock);
-+	ax25_dev_put(ax25_dev);
- 
- 	return 0;
- }
-@@ -147,8 +157,11 @@ static int ax25_rt_del(struct ax25_routes_struct *route)
- 	ax25_route *s, *t, *ax25_rt;
- 	ax25_dev *ax25_dev;
- 
--	if ((ax25_dev = ax25_addr_ax25dev(&route->port_addr)) == NULL)
-+	ax25_dev = ax25_addr_ax25dev(&route->port_addr);
-+	if (ax25_dev == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
- 	write_lock_bh(&ax25_route_lock);
- 
-@@ -173,7 +186,7 @@ static int ax25_rt_del(struct ax25_routes_struct *route)
- 		}
- 	}
- 	write_unlock_bh(&ax25_route_lock);
--
-+	ax25_dev_put(ax25_dev);
- 	return 0;
- }
- 
-@@ -183,8 +196,11 @@ static int ax25_rt_opt(struct ax25_route_opt_struct *rt_option)
- 	ax25_dev *ax25_dev;
- 	int err = 0;
- 
--	if ((ax25_dev = ax25_addr_ax25dev(&rt_option->port_addr)) == NULL)
-+	ax25_dev = ax25_addr_ax25dev(&rt_option->port_addr);
-+	if (ax25_dev == NULL) {
-+		ax25_dev_put(ax25_dev);
- 		return -EINVAL;
-+	}
- 
- 	write_lock_bh(&ax25_route_lock);
- 
-@@ -215,6 +231,7 @@ static int ax25_rt_opt(struct ax25_route_opt_struct *rt_option)
- 
- out:
- 	write_unlock_bh(&ax25_route_lock);
-+	ax25_dev_put(ax25_dev);
- 	return err;
- }
- 
--- 
-2.17.1
-
+Thank you!

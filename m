@@ -2,65 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2E84A77EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2AD4A77F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 19:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343641AbiBBS2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 13:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233830AbiBBS2q (ORCPT
+        id S1346645AbiBBSap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 13:30:45 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:56588 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346674AbiBBSam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 13:28:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95560C061714;
-        Wed,  2 Feb 2022 10:28:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DHt+NoiQ/xSDzcu85V4cS/XqDEmzCog6ySkjKbfn9Y4=; b=Pc3z+/fGMsWFz6LsSLIIQE5noH
-        /S4+fwoYEH0STHqc5Vh9NnnAMQBL07imdXuFR+SlwylTbKodsNxhP1pZb3tp5bCXn19LzDITTKcxB
-        cQlQhPLSrCxeywyWBe+ajFd4uB40UM3qdNMAPxmMDdvinodcuT+Ht9LsP5DYBK81MYUEaxV6oRQc4
-        cNRR7p3wDwukXXid0UOM8DAEOUHQuQapC60F0vFAdw/vJyYkW1FjqtG4SxJXbUOrMRNYS/OdXxHNX
-        r/94W6wRKoMP0UBjr26/YURhqnOfzagiNzzKT4gm1is+U63mxHPiwfmxyp6IyE0EMSZaMGJdCD3eU
-        5AvLNsew==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFKMk-00FbFv-Pl; Wed, 02 Feb 2022 18:28:26 +0000
-Date:   Wed, 2 Feb 2022 18:28:26 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     dan.j.williams@intel.com, jack@suse.cz, viro@zeniv.linux.org.uk,
-        akpm@linux-foundation.org, apopple@nvidia.com, shy828301@gmail.com,
-        rcampbell@nvidia.com, hughd@google.com, xiyuyang19@fudan.edu.cn,
-        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
-        hch@infradead.org, linux-fsdevel@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com
-Subject: Re: [PATCH v2 3/6] mm: page_vma_mapped: support checking if a pfn is
- mapped into a vma
-Message-ID: <YfrNSvttbQgLKKwj@casper.infradead.org>
-References: <20220202143307.96282-1-songmuchun@bytedance.com>
- <20220202143307.96282-4-songmuchun@bytedance.com>
+        Wed, 2 Feb 2022 13:30:42 -0500
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 69D1A20B8010;
+        Wed,  2 Feb 2022 10:30:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69D1A20B8010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1643826642;
+        bh=saUwzlBmQw7hsfFOi/x4+4YXpypfM/v+QZi+szh+Erk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g8MLyghpydSh+CK2jMQTSrXhsn//Y0c3uHtI/JQefyjy58xhROhlmQrjZM3kM1tH8
+         Nj59sVqulm+8CNGgUfF6SansldHxSUlzRcQnXiMNvPphufNatgsCGLsO0Eun7REomJ
+         CukH/nVDGQmitpfRzs2XB7JW37cWN7xMluwbQgns=
+Received: by mail-pj1-f41.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso315718pjt.3;
+        Wed, 02 Feb 2022 10:30:42 -0800 (PST)
+X-Gm-Message-State: AOAM531ItDtPZosOnTrlddhw/opomMedyzjlj+LjZizRYJrxZcCddJiZ
+        qqoZwIvszodGZILnfKOeApRbqHWhYuRzhOcgUSk=
+X-Google-Smtp-Source: ABdhPJyaFGsEEw9s97c2y9b6fB5mOpP0F8wWqK9mIrPFi3+1JqlEmjNySdCFNgf4wyMGxTNADv+bHRIMmcgAhdP5ZmU=
+X-Received: by 2002:a17:90b:4c92:: with SMTP id my18mr9483017pjb.15.1643826641822;
+ Wed, 02 Feb 2022 10:30:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202143307.96282-4-songmuchun@bytedance.com>
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
+ <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+ <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+ <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
+ <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+ <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
+ <177da568-8410-36d6-5f95-c5792ba47d62@fb.com> <CAADnVQJZvgpo-VjUCBL8YZy8J+s7O0mv5FW+5sx8NK84Lm6FUQ@mail.gmail.com>
+ <CAFnufp3ybOFMY=ObZFvbmr+c70CPUrL2uYp1oZQmffQBTyVy_A@mail.gmail.com>
+ <CAADnVQ+cvD2rwa-hRQP8agj8=SXuun3dv-PZpK5=kJ2Ea_0KCg@mail.gmail.com>
+ <CAFnufp3MHW9su8pouUqg__DToSHEx=HZccrpR49hSdsuEnpW0g@mail.gmail.com> <CAADnVQL8D0cBixtqnOok621gfXnBs4sZSTSTKBodrtRzwBFsHQ@mail.gmail.com>
+In-Reply-To: <CAADnVQL8D0cBixtqnOok621gfXnBs4sZSTSTKBodrtRzwBFsHQ@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Wed, 2 Feb 2022 19:30:05 +0100
+X-Gmail-Original-Message-ID: <CAFnufp0FTgQ0s_8E5ve+qad4ALMqFatzBK7_OeHSPBskHfqbiw@mail.gmail.com>
+Message-ID: <CAFnufp0FTgQ0s_8E5ve+qad4ALMqFatzBK7_OeHSPBskHfqbiw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 10:33:04PM +0800, Muchun Song wrote:
-> page_vma_mapped_walk() is supposed to check if a page is mapped into a vma.
-> However, not all page frames (e.g. PFN_DEV) have a associated struct page
-> with it. There is going to be some duplicate codes similar with this function
-> if someone want to check if a pfn (without a struct page) is mapped into a
-> vma. So add support for checking if a pfn is mapped into a vma. In the next
-> patch, the dax will use this new feature.
+On Sat, Jan 29, 2022 at 2:11 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Jan 28, 2022 at 4:36 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+> >
+> > On Fri, Jan 28, 2022 at 9:09 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Fri, Jan 28, 2022 at 10:51 AM Matteo Croce
+> > > <mcroce@linux.microsoft.com> wrote:
+> > > >
+> > > > On Fri, Jan 28, 2022 at 6:31 AM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, Dec 20, 2021 at 10:34 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > > >
+> > > > > >
+> > > > > > https://reviews.llvm.org/D116063 improved the error message as below
+> > > > > > to make it a little bit more evident what is the problem:
+> > > > > >
+> > > > > > $ clang -target bpf -O2 -g -c bug.c
+> > > > > >
+> > > > > > fatal error: error in backend: SubroutineType not supported for
+> > > > > > BTF_TYPE_ID_REMOTE reloc
+> > > > >
+> > > > > Hi Matteo,
+> > > > >
+> > > > > Are you still working on a test?
+> > > > > What's a timeline to repost the patch set?
+> > > > >
+> > > > > Thanks!
+> > > >
+> > > > Hi Alexei,
+> > > >
+> > > > The change itself is ready, I'm just stuck at writing a test which
+> > > > will effectively calls __bpf_core_types_are_compat() with some
+> > > > recursion.
+> > > > I guess that I have to generate a BTF_KIND_FUNC_PROTO type somehow, so
+> > > > __bpf_core_types_are_compat() is called again to check the prototipe
+> > > > arguments type.
+> > > > I tried with these two, with no luck:
+> > > >
+> > > > // 1
+> > > > typedef int (*func_proto_typedef)(struct sk_buff *);
+> > > > bpf_core_type_exists(func_proto_typedef);
+> > > >
+> > > > // 2
+> > > > void func_proto(int, unsigned int);
+> > > > bpf_core_type_id_kernel(func_proto);
+> > > >
+> > > > Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
+> > >
+> > > What do you mean 'no luck'?
+> > > Have you tried what progs/test_core_reloc_type_id.c is doing?
+> > > typedef int (*func_proto_typedef)(long);
+> > > bpf_core_type_id_kernel(func_proto_typedef);
+> > >
+> > > Without macros:
+> > > typedef int (*func_proto_typedef)(long);
+> > >
+> > > int test() {
+> > >    return __builtin_btf_type_id(*(typeof(func_proto_typedef) *)0, 1);
+> > > }
+> > > int test2() {
+> > >    return __builtin_preserve_type_info(*(typeof(func_proto_typedef) *)0, 0);
+> > > }
+> > >
+> > >
+> > > compiles fine and generates relos.
+> >
+> > Yes, I tried that one.
+> > We reach bpf_core_apply_relo_insn() but not bpf_core_spec_match(),
+> > since cands->len is 0.
+> >
+> > [   16.424821] bpf_core_apply_relo_insn:1202 cands->len: 0
+> >
+> > That's a very simple raw_tracepoint/sys_enter program:
+>
+> Did you forget to attach it ?
+>
+> If it's doing bpf_core_type_id_kernel(func_proto_typedef)
+> then, of course, cands->len will be zero.
+> You need to add this typedef to bpf_testmod first.
+> Then use two typedef flavors: func_proto_typedef___match
+> and func_proto_typedef___doesnt_match
+> with matching and mismatching prototypes, so
+> both can call into bpf_core_types_are_compat() and
+> return different results.
+> Then build on top to test recursion.
 
-I'm coming to more or less the same solution for fixing the bug in
-page_mapped_in_vma().  If you call it with a head page, it will look
-for any page in the THP instead of the precise page.  I think we can do
-a fairly significant simplification though, so I'm going to go off
-and work on that next ...
+Hi,
 
+I'm able to trigger __bpf_core_types_are_compat() recursion now.
+What do you think to generate also a prototype which needs 3 recursion
+calls, thus invalid, and check that it returns error?
+e.g.
+
+typedef int (*func_proto_typedef)(long);
+typedef int (*func_proto_typedef___of)(func_proto_typedef);
+
+func_proto_typedef funcp = NULL;
+func_proto_typedef___of funcp_of = NULL;
+
+this gives:
+
+[  190.875387] bpf_core_apply_relo_insn:1200 cands->len: 3
+[  190.875435] __bpf_core_types_are_compat:6798 level: 2
+[  190.875479] __bpf_core_types_are_compat:6798 level: 1
+[  190.875506] bpf_core_types_are_compat:6896: ret: 0
+[  190.875541] __bpf_core_types_are_compat:6798 level: 2
+[  190.875570] __bpf_core_types_are_compat:6798 level: 1
+[  190.875599] bpf_core_types_are_compat:6896: ret: 0
+[  190.875629] __bpf_core_types_are_compat:6798 level: 2
+[  190.875659] __bpf_core_types_are_compat:6798 level: 1
+[  190.875686] bpf_core_types_are_compat:6896: ret: -22
+failed to open and/or load BPF object
+
+-- 
+per aspera ad upstream

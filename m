@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53634A7B41
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756A84A7B44
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 23:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346730AbiBBWpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 17:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiBBWpx (ORCPT
+        id S1347933AbiBBWsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 17:48:15 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:41912 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236338AbiBBWsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 17:45:53 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7449CC06173D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 14:45:53 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id d18so560773plg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:45:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=H7zbzRyY9Da/STc4vt48OkAmzI/OTmAZO0rZ642KCMk=;
-        b=BbHdOQN/AoSNG8i91JOVSdCdQGh7BexAGYWzaHZKLIeA5qvJHHQiBA/woN30MmXKi8
-         qTfmgay7z2E3On34KkTeYrtn9nH7KiEDwp/FglL69mluebgPqmRclzYqgnYqnC4tBCI6
-         qQEM5tfVcFDbUN3iEy9R4viHy5s0xPmofKk5w=
+        Wed, 2 Feb 2022 17:48:13 -0500
+Received: by mail-il1-f199.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso505736ilk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 14:48:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H7zbzRyY9Da/STc4vt48OkAmzI/OTmAZO0rZ642KCMk=;
-        b=7fFieNq9iuVO7NeQauf/OvrZsq0dV+WCL/6sjNVr1K1rXK9FuG1RqoehnVYGEf5b0J
-         UxFJr+fi3hHcM7/OfeNmqj/2ge8jW8v4SjCxk5RQ+ogf4E0MOAtqCtSzxmdyU60Jmxrg
-         jdOVwkqnOOdlZgrN42xYcFN5NLA9bM1vYncVUh1fpT2ekp5X32wqNLj7JdpV8F58ISuz
-         tqkjN9WDaAyP+Ezr8Su3SfUBSISxSpMHMjghqYvTOFV6pleRhwMgTyY+yLuFK8ME5uUF
-         UYDJJsAuVds4hQXFQfPeNsj1J5tb0YOkm5ZQU34vf+d5D4EmSVcXWH6+ApzTM3Zwzs53
-         nANg==
-X-Gm-Message-State: AOAM531B432DAQ5qZxiKifF5jCny3j/0hp0yTdChddQBUSEaeYEfXu9m
-        /TI714RFqnmPiaqHe2CaS7YV0Q==
-X-Google-Smtp-Source: ABdhPJxWkM+CtlP3GH9ZlUHtGQjXTAlxv5Z4iGsCejHngxl/I/zbl+t7pma9OD1I8e76r0KSBH1MJw==
-X-Received: by 2002:a17:90a:f0ce:: with SMTP id fa14mr10513942pjb.212.1643841952977;
-        Wed, 02 Feb 2022 14:45:52 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:c0cb:3065:aa0:d6c9])
-        by smtp.gmail.com with UTF8SMTPSA id c11sm27304571pfv.76.2022.02.02.14.45.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 14:45:52 -0800 (PST)
-Date:   Wed, 2 Feb 2022 14:45:51 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        pmaliset@codeaurora.org, quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        sibis@codeaurora.org, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 06/14] arm64: dts: qcom: sc7280: Fix sort order of
- dp_hot_plug_det / pcie1_clkreq_n
-Message-ID: <YfsJn7M9b44TvNjV@google.com>
-References: <20220202212348.1391534-1-dianders@chromium.org>
- <20220202132301.v3.6.I874c6f2a62b7922a33e10d390a8983219a76250b@changeid>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=wPRVy6cCZjxIGaY7GW0QhGPoF6HyxL4xHm0Y75S1HfY=;
+        b=70bC9MKAQzqd2TvBKKJDF8QZvcm9A4LD3YcOcZntx8rEcvEWM0KgRHEGSwQ+ASO77k
+         IMeYQg9mVpM7JekTaaof9AvO4hFg6u/gatei+hqKovPJ/e5MCNwMaeJyXlgtRRXttQ5r
+         49c6GGzuyxYdJX6UPlYHApmcuIC9q79MT2pFH6DR6DU+W8HQyFTBpfMaqhjrgzETabNN
+         ZOfubwD3LnKCn7UXU1kiyzLvYXJU0Qni5MyceUaDWlEZD9t672+RZoT913LDDkjNfCzw
+         hbfHCYGywFjCanb1hqLo19riFi2ccovRADYrTYJ/+c/u/MERz1hBJEkpdSgDtpBsvYuk
+         yhbg==
+X-Gm-Message-State: AOAM5331mbFCBgaFKdgIdWSynrwhB44SS5e3xVPgVzRqf9YMHezS+54p
+        vh0Mj0hrWpsDZQUbBTNJ3RPA8NavN0h1vPo64NNMJPZIdiTy
+X-Google-Smtp-Source: ABdhPJxazeG/KSFW4yUcasmzMOdmC/DL0bFZExqauOUeXy/hnReM+RRSSGklrexPTcyyuAPHnKRqalDWqVAqFarV3Dxl2/1VlXzE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220202132301.v3.6.I874c6f2a62b7922a33e10d390a8983219a76250b@changeid>
+X-Received: by 2002:a92:d68a:: with SMTP id p10mr3673258iln.85.1643842093461;
+ Wed, 02 Feb 2022 14:48:13 -0800 (PST)
+Date:   Wed, 02 Feb 2022 14:48:13 -0800
+In-Reply-To: <000000000000df66a505d68df8d1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000c37d105d710d0e1@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Write in bpf_prog_test_run_xdp
+From:   syzbot <syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com>
+To:     alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        hawk@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, lorenzo@kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, toke@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 01:23:40PM -0800, Douglas Anderson wrote:
-> The two nodes were mis-sorted. Reorder. This is a no-op change.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+syzbot has bisected this issue to:
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+commit 1c194998252469cad00a08bd9ef0b99fd255c260
+Author: Lorenzo Bianconi <lorenzo@kernel.org>
+Date:   Fri Jan 21 10:09:58 2022 +0000
+
+    bpf: introduce frags support to bpf_prog_test_run_xdp()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15a1e914700000
+start commit:   000fe940e51f sfc: The size of the RX recycle ring should b..
+git tree:       net-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17a1e914700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a1e914700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e029d3b2ccd4c91a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6d70ca7438345077c549
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14c08cc8700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1258f610700000
+
+Reported-by: syzbot+6d70ca7438345077c549@syzkaller.appspotmail.com
+Fixes: 1c1949982524 ("bpf: introduce frags support to bpf_prog_test_run_xdp()")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

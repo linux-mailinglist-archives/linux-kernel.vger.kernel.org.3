@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EFB4A6F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F804A6F1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbiBBKqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232486AbiBBKqV (ORCPT
+        id S234732AbiBBKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:46:30 -0500
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:11672 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234418AbiBBKqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:46:21 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7502CC061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:46:21 -0800 (PST)
-Date:   Wed, 02 Feb 2022 10:46:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643798778;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=spmioq/DvRD9SjqstyVhDvpbJBBDNB3IdHCwD7XgX0w=;
-        b=spqa/T1xdyOgDZFRF84tR9Y4kh2OELrkTJucZcgwSluj1YJZeeGAaTC2+2Q8LAwwKHo/+l
-        +a4BFNoLChBwQZeG7L8wGTw+s6e45epF45970uQiwmn9WF2UEOi29VCcpcGVmI9w4cNYGw
-        fmo8pj2eJVRVa9dkR5PPptY7kWOsb/afyKTZ/mxyQYW75dAjgQ+89rcHeZpowcCMhNrvnM
-        VYvi/KIn7m2HWjOtX5VTYoElLrhX1vQEFAEEmf7FxflQJy/HhVCfIS1bc9Cqf5nzG3rt7P
-        hXoA7/4R0y4KnR6E0EHXkiaPW9UQpGWiKmot+opGHxzBeJD4ad0dasl0rcLW/g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643798778;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=spmioq/DvRD9SjqstyVhDvpbJBBDNB3IdHCwD7XgX0w=;
-        b=xOrTs/+ANNqBOQMINODsaHAsPU0n/Fv6Jt3FtfkV6MvcgrFuEGEzYesuhNhXw+EIsxxCbO
-        ygHnntGekeAbN5DQ==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/gic-v3-its: Skip HP notifier
- when no ITS is registered
-Cc:     Steev Klimaszewski <steev@kali.org>, Marc Zyngier <maz@kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        tglx@linutronix.de
-In-Reply-To: <20220202103454.2480465-1-maz@kernel.org>
-References: <20220202103454.2480465-1-maz@kernel.org>
+        Wed, 2 Feb 2022 05:46:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1643798785; x=1675334785;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6k7tE3M6bpnJHQHnhJCh/DCDGRD7sVYF5zWLizvvIyY=;
+  b=Qcr4y2hhSNTBg/PsN1RXPJ/A+XiH/kfnK3Fr/JkjAHgtsevx8Yq1p0/y
+   K0ROq4uf3CoKh+sEGVoaJ2SPRFRoQmp7K7zu646OeO54TldUSrDybqKdN
+   F6j/JyhVVzX39eGfapWHV0IHBWMtb7y2UZwGSBxnOCFKChoa+2byILk68
+   UKyDlGlbVDRoOA7ezHCsRt31HpUxSVgbawvka+p4R1EPnE0+MgGBYRmtR
+   qsGOCcVWE2WFKlWQj2u2TktSiXNEOgpGl3kCIZzwwWmLx+xYyoJnZq6Xx
+   7tFExL4fDepMBBx4t5J1zfjGiJ1qNXT2+4opa7dF8KKrsse0brqd0UXWD
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,336,1635177600"; 
+   d="scan'208";a="303864284"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Feb 2022 18:46:25 +0800
+IronPort-SDR: EVbCUULnnt4pRJMd3ahkceTYs3qaiJmIZe+qE2oxTrHSZ7wbbjjTApHmi5GxGRCb/TCUte29NN
+ 0JdC9yS02pDff4M51VAwmuuP+yuV93OqdmtpWjIHWbcGtb8dwnXKtHyeZY6H2VOWvgSd8nkSWc
+ anr7hT65XfsHjrtjNL6ua+pfHCv+AqJGSNCoFPdOSYzwWjPqdL9OzOG0AOOW8Iim6pNEUO8XOP
+ Sgz+wZKPVlU+kF6YTfIMUX9w6DQzW+uO6jStMw7pI28Qz2/jnp5SYXo4o6QkFK9QJ5ah1xxjuw
+ MzHjD7beiYiJpbTUI6Gchgxn
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 02:19:35 -0800
+IronPort-SDR: gw+BHpJuLCxmUBNKmRu5v3tFvpfWfDUPsCBiaIMH1cTJZv+zmSEoBY+wNnbuZ0k2A33Az1qeH4
+ olBiH301MW59dU+GUKf2gypDa22D27gKUZPI76Y9bFghzqKD0dnIMmn8H8UX0T2CM0uazZm1Of
+ xCGyA2zCrJcZ29lPfOvGUSy40vufk3P8vUJgtFaffAKt9yACnng0XNjHVBmrvfJWvWMFnA9NCc
+ 6Z9AQ6phyCMcbD2Vojv896YiMmg+KEjVay8rALw3rHi9m6Rh0KJKwQaizzoyqxwQFb7HezSSZj
+ 4fk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 02:46:26 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jpdl52SJxz1SHwl
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:46:25 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1643798784; x=1646390785; bh=6k7tE3M6bpnJHQHnhJCh/DCDGRD7sVYF5zW
+        LizvvIyY=; b=Xi88hxJNWip64lmBn8x6HoOeVthH818CFRxVaCnDn8mgkRPaZgb
+        GFmn0hAJpD/CUOTOWiCcPI6NVcs+60OBFUkXygG3cGdlPTtDnOueL9C3lJgVhjyC
+        Bx10geEuzaoLMONAjHmOt7H1ba2816Rp5KSaryC6S/zUOs1HyrV0eeuXg9gWZVM4
+        hVuUhL6tqs978ud++ixMb63wir16MeuLVHgyHZ46Y0tmtBEt1z0YAjspJUDf5YlA
+        fdXf7pYV6aZiES5+1jUOtj/nZ5T48vJhrsXo7DStb1sEiv7GLAV4XroURnsut5Je
+        Y1hmmlDYg/ANxWhbqlD9IniYHe7jAJ/2kVQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id M8e6XZ-71IiS for <linux-kernel@vger.kernel.org>;
+        Wed,  2 Feb 2022 02:46:24 -0800 (PST)
+Received: from [10.225.163.62] (unknown [10.225.163.62])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jpdl36PLqz1RvlN;
+        Wed,  2 Feb 2022 02:46:23 -0800 (PST)
+Message-ID: <c49abe7a-bc95-a692-29d3-eb37ee6f2e1b@opensource.wdc.com>
+Date:   Wed, 2 Feb 2022 19:46:22 +0900
 MIME-Version: 1.0
-Message-ID: <164379877697.16921.16506772484261500072.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] dt-bindings: ata: convert ata/cortina,gemini-sata-bridge
+ to yaml
+Content-Language: en-US
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220129204004.1009571-1-clabbe@baylibre.com>
+ <CACRpkdb9R-BwdVzyeaQOjagsQU=2-06VNqKPG9fMa7C93eDC7A@mail.gmail.com>
+ <2b0fa854-16e7-3d0b-a04a-971249646fab@opensource.wdc.com>
+ <bc80cd49-c95e-6b9a-1210-7d3832766b02@gmail.com>
+ <5a1d66d3-d3c2-ab77-f874-c3d6b10a0d2b@opensource.wdc.com>
+ <d16a1be7-d856-f6b7-5a1a-9f09f42195ee@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <d16a1be7-d856-f6b7-5a1a-9f09f42195ee@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On 2/2/22 18:24, Sergei Shtylyov wrote:
+> On 2/2/22 1:56 AM, Damien Le Moal wrote:
+> 
+>>>>> Thanks for doing this Corentin!
+>>>>>
+>>>>> On Sat, Jan 29, 2022 at 9:40 PM Corentin Labbe <clabbe@baylibre.com> wrote:
+>>>>>
+>>>>>> This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+>>>>>>
+>>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>>>>>
+>>>>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>>>>
+>>>>> Knowing that drivers/ata is a bit sparsely maintained I suggest that Rob apply
+>>>>> this patch when he feels it looks good.
+>>>>
+>>>> What do you mean ? I am doing my best here to maintain ata !
+>>>> But I definitely do not have all the hardware supported for testing :)
+>>>
+>>>    I can probably help reviewing the PATA drivers if you want, just like Bart Z. did.
+>>> But I don't have much of the PATA hardware (what I have is in my old PCs I haven't
+>>> booted in a long while)...
+>>
+>> More reviews are always welcome ! Thanks !
+> 
+>    How about me submitting an "official" PATA reviewer entry in MAINTAINERS?
 
-Commit-ID:     eba1e44beef88aa722f07755f79f604cd5d92290
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/eba1e44beef88aa722f07755f79f604cd5d92290
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Wed, 02 Feb 2022 10:34:54 
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Wed, 02 Feb 2022 10:43:10 
+Sure. That works for me.
 
-irqchip/gic-v3-its: Skip HP notifier when no ITS is registered
+> 
+> [...]
+> 
+> MBR, Sergey
 
-We have some systems out there that have both LPI support and an
-ITS, but that don't expose the ITS in their firmware tables
-(either because it is broken or because they run under a hypervisor
-that hides it...).
 
-Is such a configuration, we still register the HP notifier to free
-the allocated tables if needed, resulting in a warning as there is
-no memory to free (nothing was allocated the first place).
-
-Fix it by keying the HP notifier on the presence of at least one
-sucessfully probed ITS.
-
-Fixes: d23bc2bc1d63 ("irqchip/gic-v3-its: Postpone LPI pending table freeing and memreserve")
-Reported-by: Steev Klimaszewski <steev@kali.org>
-Tested-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Link: https://lore.kernel.org/r/20220202103454.2480465-1-maz@kernel.org
----
- drivers/irqchip/irq-gic-v3-its.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 9e93ff2..cd77297 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -5517,6 +5517,9 @@ int __init its_lpi_memreserve_init(void)
- 	if (!efi_enabled(EFI_CONFIG_TABLES))
- 		return 0;
- 
-+	if (list_empty(&its_nodes))
-+		return 0;
-+
- 	gic_rdists->cpuhp_memreserve_state = CPUHP_INVALID;
- 	state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
- 				  "irqchip/arm/gicv3/memreserve:online",
+-- 
+Damien Le Moal
+Western Digital Research

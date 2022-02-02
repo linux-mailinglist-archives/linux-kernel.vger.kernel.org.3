@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E34A6C62
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD4B4A6C6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 08:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239034AbiBBHhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 02:37:53 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38776 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiBBHhw (ORCPT
+        id S240531AbiBBHqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 02:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234558AbiBBHqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:37:52 -0500
+        Wed, 2 Feb 2022 02:46:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA2FC061714
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Feb 2022 23:46:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B02E6178D;
-        Wed,  2 Feb 2022 07:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79825C004E1;
-        Wed,  2 Feb 2022 07:37:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4ED61791
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FDFC340F0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 07:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643787471;
-        bh=7Zag7dWQmRrl03hXTb84l3LTObjja6xIUoq+LfZuQXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ttC/UT8kEhBhnoU8XxjcM+p0HX+TJ8ZQD46rgIV95aQ62WZkyTz2SCPAD8aVNNPfd
-         4y7xCYEmK+ZfPA61pTFl/sPSnTMlkF55i7nwGo9tGjsiiFSX4wcyKiRELSf+Q8mlGJ
-         owSoa28EIL1M7x8JHcOINTehR6vQlheRxUr7IIwBnFyiKIlr80xn1pY4O5KmIWJXDZ
-         8RyTbYPZQa42Joj4T5iGucj+EvoGd81De984eK0epLrIWjmbwgl7AIGdz0jrDL22GR
-         kYFTRLX7vyfZKTO5TceTnUIfAy/CwPH7+hSedDh48ijxSe8XSXDgT31hzBzgiaXaTu
-         3wLM+EmzJYSTQ==
-Date:   Wed, 2 Feb 2022 09:37:41 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: Re: [PATCH] mm: Merge pte_mkhuge() call into arch_make_huge_pte()
-Message-ID: <Yfo0xR30H5jf3BsN@kernel.org>
-References: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
- <YfoiLdboxJAxKi6Y@kernel.org>
- <76605ef1-f2fe-8682-1eb7-2323f0b9bbaa@csgroup.eu>
+        s=k20201202; t=1643787977;
+        bh=EU8FY4hoqMKIUTQTA8fc+OQEccHtNTc7RoeXbnU6SfU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BuItHP8NJ3VXtkbWynb6fL58D8vI14aAtJOQqeabKt7MMEAa72AK+CFGNnQpytpqo
+         zFiUgmkWRZwrf+q28zKBsQLk7jmQrzQM181d1WJP8fgVRSKWoI6WrXEWZWglrKZWOV
+         RAMx+H0Gk2GcXw+CM1rNZ3vaWETts5L1TloD9L9nLWC78H2yPxqw+SNhznVBi4WqWd
+         R+pDLwhuRMSKW4SIG4WerhpMJaNTxq3V2dTOdfavMqJr3SmPknXwzrTMeme+5L4Ubv
+         d8oy6KhT/l9Usz/yfFoH4HdrAlEewUPvRtOpZ//S3/h2Lx5rp3Ti0GS5RfOEV494yi
+         C4WY1WoRqkgwQ==
+Received: by mail-oi1-f170.google.com with SMTP id q186so38213710oih.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Feb 2022 23:46:17 -0800 (PST)
+X-Gm-Message-State: AOAM531doDIRJSB7C+pML4T+65i1aUpG/2DP2YRv0L1zBYxwrIC3LUwK
+        qXYSZOkisirwznbaVkiaYuNEdEG+pIRh+61p4sk=
+X-Google-Smtp-Source: ABdhPJzP2OU6GD384wgiKPZ/tJqOrgrct7yj4Y0w9RqPGWR+zWghE43jcZK7xTpWygr/3VJ2kMrKTBbSZAzGiVkKOW8=
+X-Received: by 2002:aca:f03:: with SMTP id 3mr3702970oip.102.1643787976652;
+ Tue, 01 Feb 2022 23:46:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <76605ef1-f2fe-8682-1eb7-2323f0b9bbaa@csgroup.eu>
+References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com>
+ <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org> <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
+ <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
+In-Reply-To: <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 2 Feb 2022 08:46:00 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
+Message-ID: <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
+Subject: Re: Kconfig CONFIG_FB dependency regression
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        John Youn <John.Youn@synopsys.com>,
+        Bing Yuan <Bing.Yuan@synopsys.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 06:25:31AM +0000, Christophe Leroy wrote:
-> 
-> 
-> Le 02/02/2022 à 07:18, Mike Rapoport a écrit :
-> > On Wed, Feb 02, 2022 at 11:08:06AM +0530, Anshuman Khandual wrote:
-> >> Each call into pte_mkhuge() is invariably followed by arch_make_huge_pte().
-> >> Instead arch_make_huge_pte() can accommodate pte_mkhuge() at the beginning.
-> >> This updates generic fallback stub for arch_make_huge_pte() and available
-> >> platforms definitions. This makes huge pte creation much cleaner and easier
-> >> to follow.
-> > 
-> > Won't it break architectures that don't define arch_make_huge_pte()?
-> 
-> It shouldn't, see below
+On Wed, Feb 2, 2022 at 1:14 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> Fabio Estevam wrote:
+> > On Tue, Feb 1, 2022 at 8:06 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> >>
+> >> On 2/1/22 15:01, Thinh Nguyen wrote:
+> >>> Hi,
+> >>>
+> >>> One of our test setups is unable to boot (stuck at initramfs). Git
+> >>> bisection points to the commit below:
+> >>>
+> >>> f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
+> >>>
+> >>> Reverting this patch resolves the issue. This issue persists in mainline
+> >>> also. Unfortunately there isn't any meaningful log. Hopefully someone
+> >>> can give some insight as to what could be the issue and revert/fix this
+> >>> issue.
+> >>
+> >> Hi,
+> >> Did you enable DRM_FBDEV_EMULATION?
+>
+> I did not enable it.
+>
+> >> Please provide the failing .config file.
+> >
+> > Does selecting CONFIG_FB=y help?
+> >
+>
+> On the config that has the issue, this isn't set. After reverting the
+> commit above, this was set. Maybe this is what's needed? I need to test it.
 
-Right, overlooked that.
- 
-> >> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> >> index d1897a69c540..52c462390aee 100644
-> >> --- a/include/linux/hugetlb.h
-> >> +++ b/include/linux/hugetlb.h
-> >> @@ -754,7 +754,7 @@ static inline void arch_clear_hugepage_flags(struct page *page) { }
-> >>   static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift,
-> >>   				       vm_flags_t flags)
-> >>   {
-> >> -	return entry;
-> >> +	return pte_mkhuge(entry);
-> >>   }
-> >>   #endif
-> >>   
+CONFIG_FB should not normally be needed for booting, so unless
+you have a graphical application in your initramfs that requires the /dev/fb0
+device to work, it is not supposed to make a difference.
 
--- 
-Sincerely yours,
-Mike.
+Are there any other differences in your .config before and after the patch?
+It's possible that you use some other driver that in turn depends on
+CONFIG_FB. Does your machine have any graphical output device?
+If yes, which driver do you use?
+
+You may also want to make sure that you have 9d6366e743f3 ("drm:
+fb_helper: improve CONFIG_FB dependency") in your kernel, which
+fixes a minor problem with my original patch.
+
+         Arnd

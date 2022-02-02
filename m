@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0753D4A7279
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1924A727A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 15:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240101AbiBBOBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 09:01:10 -0500
-Received: from mga02.intel.com ([134.134.136.20]:20731 "EHLO mga02.intel.com"
+        id S231871AbiBBOBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 09:01:34 -0500
+Received: from mga18.intel.com ([134.134.136.126]:48933 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230213AbiBBOBJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 09:01:09 -0500
+        id S233516AbiBBOBb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 09:01:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643810469; x=1675346469;
+  t=1643810491; x=1675346491;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=BVLR4R6agZi5mVRsS/hmDlvwLWMSe5BBSlWfL7V3KdM=;
-  b=PLSiXKIt9nbyJbWtaqNrIxkwjMlmDWxdVLxf+vzNxJMhJRaKAeGW43Yc
-   RhzUw22+QWnIYXloa9kzt22JF9Sf0aE4ldqcHHyk1Jak2KeJm2eOggePc
-   PybNS0r8QT3KfmWoSVTsUzuQfpxHdnZn5z4jFIFFG+XzLbUGofFmkJEWB
-   5KQ6iNTvJUbAw1YUzk6R/+Cc8q1X2X9xUvO2wyrUTbg/QNk4ljDYwu9fg
-   9ATSOFSFjuDLaHQoCdqaCobqP7H/k/LcP3pRpQJiBO8fkzsXIaDmE2LxE
-   ZhnybLK2QHkFhhuKdoR12tUx2/G2M/+zloecbnL9c2bThUXD3gqBhwBTG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="235316496"
+  bh=K7N1GFCB5zNcemeI73NcdwqJvcAi8ucQK9KZRladVo8=;
+  b=biinX49wS9CflFDEjpDjk4A8frxX+TbdOWAVwj3thvrh86qe6WMrMdpO
+   VgMKPW5u4LmP8Bi/Ffh/7H2RmVXOfRafz28GB+tPq6CtUd+4BDFpU+ik6
+   3U6F58MMyrS5U+5ndf2vj/zLaxcWlGSgmlqa8FyONrQTGXavOSUMnFSaT
+   6gkK74vphb2XLINpGYMWQIJpeWQb9trm4//Zrclq/wb7k5rHdyFgXY2D+
+   844Njr/Fq4gjp+G5QnBWnXt4D7QHKOY6CrkM86t5HMPl8m1RwTf/dH9Zs
+   7Tnn9ymsWdMXHyJlmb8nCYudZxltHHUtBoBWYcJPZo+nHJaKPcwbEU51D
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="231489017"
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="235316496"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:01:03 -0800
+   d="scan'208";a="231489017"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 06:01:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,337,1635231600"; 
-   d="scan'208";a="771447096"
+   d="scan'208";a="620154563"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Feb 2022 06:01:02 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Feb 2022 06:01:02 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nFGBx-000Ufo-Rv; Wed, 02 Feb 2022 14:01:01 +0000
-Date:   Wed, 02 Feb 2022 22:00:34 +0800
+        id 1nFGBx-000Ufj-Q4; Wed, 02 Feb 2022 14:01:01 +0000
+Date:   Wed, 02 Feb 2022 22:00:45 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 8194b9a5e4a00eb738b15093d67d9aee9cf0ba96
-Message-ID: <61fa8e82.Sr2/z9sAxUwzgbun%lkp@intel.com>
+Subject: [paulmck-rcu:dev.2022.02.01a] BUILD SUCCESS
+ 5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d
+Message-ID: <61fa8e8d.kYYJZ9KLF6EIAfMo%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -52,12 +52,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 8194b9a5e4a00eb738b15093d67d9aee9cf0ba96  tools/memory-model: Explain syntactic and semantic dependencies
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.01a
+branch HEAD: 5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d  fixup! EXP rcu: Add polled expedited grace-period primitives
 
-elapsed time: 723m
+elapsed time: 724m
 
-configs tested: 179
+configs tested: 180
 configs skipped: 3
 
 The following configs have been built successfully.
@@ -84,6 +84,7 @@ m68k                       m5475evb_defconfig
 m68k                             allmodconfig
 powerpc                      ppc40x_defconfig
 mips                      maltasmvp_defconfig
+arc                              alldefconfig
 sh                             sh03_defconfig
 powerpc                     rainier_defconfig
 arm                             rpc_defconfig
@@ -103,10 +104,10 @@ sh                           se7705_defconfig
 sh                                  defconfig
 mips                        vocore2_defconfig
 m68k                        mvme147_defconfig
+sh                           se7343_defconfig
 mips                           ip32_defconfig
 sh                            migor_defconfig
 arm                        multi_v7_defconfig
-sh                           se7343_defconfig
 powerpc                      tqm8xx_defconfig
 arm                     eseries_pxa_defconfig
 um                             i386_defconfig
@@ -206,12 +207,16 @@ x86_64                          rhel-8.3-func
 x86_64                                  kexec
 
 clang tested configs:
-riscv                randconfig-c006-20220130
+riscv                randconfig-c006-20220201
 x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220201
+mips                 randconfig-c004-20220201
+i386                          randconfig-c001
+arm                  randconfig-c002-20220201
+riscv                randconfig-c006-20220130
 arm                  randconfig-c002-20220130
 powerpc              randconfig-c003-20220130
 mips                 randconfig-c004-20220130
-i386                          randconfig-c001
 arm                     davinci_all_defconfig
 arm                       mainstone_defconfig
 powerpc               mpc834x_itxgp_defconfig
@@ -239,9 +244,6 @@ i386                 randconfig-a014-20220131
 i386                 randconfig-a012-20220131
 i386                 randconfig-a015-20220131
 i386                 randconfig-a016-20220131
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
 riscv                randconfig-r042-20220131
 hexagon              randconfig-r045-20220130
 hexagon              randconfig-r045-20220131

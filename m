@@ -2,186 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B94E4A6F2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D63524A6F32
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 11:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245001AbiBBKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 05:49:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiBBKtt (ORCPT
+        id S245607AbiBBKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 05:53:17 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:46036 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229831AbiBBKxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 05:49:49 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA33CC06173B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 02:49:48 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso4268226wmj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 02:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HmG5+Yu9O6od++yLotKOilZ6kU5LO8ItbTpwXZnjXzM=;
-        b=Bw9eiTOjuBjMKvR+UYDafmsvNZN/Hfgiphr9P6vtkA83pmVqhYWj8LkXr+jG1KFt+r
-         sW91uLIfnzaK2VfaDvrf850XZFaZ5eZOu1MC6oBSEqQp439d+c9c/0r5Dp67cYC8ApKi
-         F2oECG5HXJegxapkbREus+ECYvAZDGu1IUI/WWYZck9uYN+b2PFiNSfAhhDKP50diL9k
-         iEYwCti3vPX91Gfg4Ol9wAftdaKoVPBXK1fhEbbBymPrvUNPN/kh6st/JBEk9hRnGvwO
-         bT1R4tBfMjr0zdaGyrUTCKkqju8GJkk/PvozP09KQo+2buiQ+Wle1/VXwtKjwLoglZxU
-         7oDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HmG5+Yu9O6od++yLotKOilZ6kU5LO8ItbTpwXZnjXzM=;
-        b=6+RK7lC+5G5rrtadaURW1v/hpzXknasWnjk8fUpXzfHWqzuc6gbTfOLyB4wU4kbG4w
-         UjAauWbs2hm1NGneXp5I7Pk2LSYyLAavrluALO0MILCtSHQ6LsTCZeGmv30pUo6uDlKf
-         hXag5cA/7ZJqdvS3SKSFLiVmwyc7EhRn3oWfWG1/XXCuVAmzV/8FaSLC6GBFeU5JQ1FY
-         vwBimXd5TyAf32XNry93nBmfOTZXjCnx4KoeaJ+/Ddkj4tTZlzXALEpLvXhL8nq3BUAP
-         iqZOKEJ/0XAcYo904/tOU+JXo+ETYJXbTGHqGFQqLNoysNn4idtvOiVNY79VmwVLQ/YP
-         b2hw==
-X-Gm-Message-State: AOAM533opiTxmLTYABpioehm7a92i7jXwGp8apGRuzGQDNf/H3DVzQso
-        V9jZ3MSfXPq9h9wIuKWMWU8HcuBvDeTnUA==
-X-Google-Smtp-Source: ABdhPJz3S34pUq6FStibNUeHVXuQu+iN3m0Ion+p0J/kYJgHHL1rk88XSWm+Nl2LvumF85kg1DbTOQ==
-X-Received: by 2002:a7b:c21a:: with SMTP id x26mr5507051wmi.74.1643798987229;
-        Wed, 02 Feb 2022 02:49:47 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id f16sm5668548wmg.28.2022.02.02.02.49.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 02:49:46 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH] gpiolib: make struct comments into real kernel docs
-Date:   Wed,  2 Feb 2022 11:49:37 +0100
-Message-Id: <20220202104937.146827-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        Wed, 2 Feb 2022 05:53:13 -0500
+Date:   Wed, 02 Feb 2022 10:53:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643799192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JltA6AnJ+s3tMFBXvcHISP0tXOyve+uqNVjA76OKQlg=;
+        b=jZnxoIwTkE2CeJrIQcx/Ya9ZjgV0aUxl3uWwFa21W1gv4Z5IfBJoxQvRZAAW2HXqpUw8TC
+        v3wKwx0TefyAVmV38BaiWxjAWK1VK4TKKP7sDyx/ZeLl8Z+MPc1jTAzuYZIWf3EUJHuciG
+        jZQkOLW9W5JsvzrkQot0n2WzmfDy6DWk2aRx7ODqDyS1e9m/CKSnWJYqPvqIhL1dAuG59w
+        qXCVAlpaHUEfVJobwzPuX6SJXiyonJ/zXB8skX1vy03Zk/hVX99a8UxYbijFXQQzN+wwUZ
+        oqckMF+zhsw8MsMnbrqmTGgkkqCdbjctF8u44OhmsIeZtIJtd624PfX8g109Fw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643799192;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JltA6AnJ+s3tMFBXvcHISP0tXOyve+uqNVjA76OKQlg=;
+        b=TJJtkDi5qtjzQXRtKrj8+FVEKuX/C+b07QkYhF3+4Ldg+0cxDASuZ8easULi441QJ/lEa7
+        PkP0SoIKqcJmLTBw==
+From:   "irqchip-bot for Guo Ren" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irqchip/sifive-plic: Add missing
+ thead,c900-plic match string
+Cc:     Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup@brainfault.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+In-Reply-To: <20220130135634.1213301-3-guoren@kernel.org>
+References: <20220130135634.1213301-3-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-ID: <164379919119.16921.10020352967794973731.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have several comments that start with '/**' but don't conform to the
-kernel doc standard. Add proper detailed descriptions for the affected
-definitions and move the docs from the forward declarations to the
-struct definitions where applicable.
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Commit-ID:     1d4df649cbb4b26d19bea38ecff4b65b10a1bbca
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/1d4df649cbb4b26d19bea38ecff4b65b10a1bbca
+Author:        Guo Ren <guoren@linux.alibaba.com>
+AuthorDate:    Sun, 30 Jan 2022 21:56:34 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 02 Feb 2022 10:49:29 
+
+irqchip/sifive-plic: Add missing thead,c900-plic match string
+
+The thead,c900-plic has been used in opensbi to distinguish
+PLIC [1]. Although PLICs have the same behaviors in Linux,
+they are different hardware with some custom initializing in
+firmware(opensbi).
+
+Qute opensbi patch commit-msg by Samuel:
+
+  The T-HEAD PLIC implementation requires setting a delegation bit
+  to allow access from S-mode. Now that the T-HEAD PLIC has its own
+  compatible string, set this bit automatically from the PLIC driver,
+  instead of reaching into the PLIC's MMIO space from another driver.
+
+[1]: https://github.com/riscv-software-src/opensbi/commit/78c2b19218bd62653b9fb31623a42ced45f38ea6
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Samuel Holland <samuel@sholland.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220130135634.1213301-3-guoren@kernel.org
 ---
- drivers/gpio/gpiolib.h        | 31 +++++++++++++++++++++++++++++++
- include/linux/gpio/consumer.h | 35 ++++++++++++++++-------------------
- 2 files changed, 47 insertions(+), 19 deletions(-)
+ drivers/irqchip/irq-sifive-plic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 30bc3f80f83e..0025701b7641 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -72,6 +72,20 @@ struct gpio_device {
- /* gpio suffixes used for ACPI and device tree lookup */
- static __maybe_unused const char * const gpio_suffixes[] = { "gpios", "gpio" };
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index 259065d..09cc982 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -398,3 +398,4 @@ out_free_priv:
  
-+/**
-+ * struct gpio_array - Opaque descriptor for a structure of GPIO array attributes
-+ *
-+ * @desc:		Array of pointers to the GPIO descriptors
-+ * @size:		Number of elements in desc
-+ * @chip:		Parent GPIO chip
-+ * @get_mask:		Get mask used in fastpath.
-+ * @set_mask:		Set mask used in fastpath.
-+ * @invert_mask:	Invert mask used in fastpath.
-+ *
-+ * This structure is attached to struct gpiod_descs obtained from
-+ * gpiod_get_array() and can be passed back to get/set array functions in order
-+ * to activate fast processing path if applicable.
-+ */
- struct gpio_array {
- 	struct gpio_desc	**desc;
- 	unsigned int		size;
-@@ -96,6 +110,23 @@ int gpiod_set_array_value_complex(bool raw, bool can_sleep,
- extern spinlock_t gpio_lock;
- extern struct list_head gpio_devices;
- 
-+
-+/**
-+ * struct gpio_desc - Opaque descriptor for a GPIO
-+ *
-+ * @gdev:		Pointer to the parent GPIO device
-+ * @flags:		Binary descriptor flags
-+ * @label:		Name of the consumer
-+ * @name:		Line name
-+ * @hog:		Pointer to the device node that hogs this line (if any)
-+ * @debounce_period_us:	Debounce period in microseconds
-+ *
-+ * These are obtained using gpiod_get() and are preferable to the old
-+ * integer-based handles.
-+ *
-+ * Contrary to integers, a pointer to a gpio_desc is guaranteed to be valid
-+ * until the GPIO is released.
-+ */
- struct gpio_desc {
- 	struct gpio_device	*gdev;
- 	unsigned long		flags;
-diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-index 3ad67b4a72be..3ffb054fafbd 100644
---- a/include/linux/gpio/consumer.h
-+++ b/include/linux/gpio/consumer.h
-@@ -8,27 +8,16 @@
- #include <linux/err.h>
- 
- struct device;
--
--/**
-- * Opaque descriptor for a GPIO. These are obtained using gpiod_get() and are
-- * preferable to the old integer-based handles.
-- *
-- * Contrary to integers, a pointer to a gpio_desc is guaranteed to be valid
-- * until the GPIO is released.
-- */
- struct gpio_desc;
--
--/**
-- * Opaque descriptor for a structure of GPIO array attributes.  This structure
-- * is attached to struct gpiod_descs obtained from gpiod_get_array() and can be
-- * passed back to get/set array functions in order to activate fast processing
-- * path if applicable.
-- */
- struct gpio_array;
- 
- /**
-- * Struct containing an array of descriptors that can be obtained using
-- * gpiod_get_array().
-+ * struct gpio_descs - Struct containing an array of descriptors that can be
-+ *                     obtained using gpiod_get_array()
-+ *
-+ * @info:	Pointer to the opaque gpio_array structure
-+ * @ndescs:	Number of held descriptors
-+ * desc:	Array of pointers to GPIO descriptors
-  */
- struct gpio_descs {
- 	struct gpio_array *info;
-@@ -43,8 +32,16 @@ struct gpio_descs {
- #define GPIOD_FLAGS_BIT_NONEXCLUSIVE	BIT(4)
- 
- /**
-- * Optional flags that can be passed to one of gpiod_* to configure direction
-- * and output value. These values cannot be OR'd.
-+ * enum gpiod_flags - Optional flags that can be passed to one of gpiod_* to
-+ *                    configure direction and output value. These values
-+ *                    cannot be OR'd.
-+ *
-+ * @GPIOD_ASIS:			Don't change the direction
-+ * @GPIOD_IN:			Set lines to input mode
-+ * @GPIOD_OUT_LOW:		Set lines to output and drive them low
-+ * @GPIOD_OUT_HIGH:		Set lines to output and drive them high
-+ * @GPIOD_OUT_LOW_OPEN_DRAIN:	Set lines to open-drain output and drive them low
-+ * @GPIOD_OUT_HIGH_OPEN_DRAIN:	Set lines to open-drain output and drive them high
-  */
- enum gpiod_flags {
- 	GPIOD_ASIS	= 0,
--- 
-2.30.1
-
+ IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+ IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy systems */
++IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init); /* for firmware driver */

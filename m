@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D26A4A7459
+	by mail.lfdr.de (Postfix) with ESMTP id 6B54B4A745A
 	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 16:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235187AbiBBPNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 10:13:36 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51516
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345350AbiBBPNb (ORCPT
+        id S238779AbiBBPNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 10:13:38 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40976
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345376AbiBBPNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 10:13:31 -0500
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        Wed, 2 Feb 2022 10:13:32 -0500
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4EBA83F1FD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:13:30 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3842A407C6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 15:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643814810;
-        bh=nSYzIJyZPz2XWQqi86zTvNcY5aJPlKdbCVEXTZ9ouQg=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+        s=20210705; t=1643814811;
+        bh=duSAVgvelNICvdKrcx93NtKcQsfey6iTKnfcyqiY3yY=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=Q6/Zi8v38A5nGqqs8tLqcUMTTX6K4k5BhYBU1pHfbHk/T3pdlGhVZnhNaFAJjYmYQ
-         +86Z2HmbU4P9nSHQmAv1DHMQRleNDYpBNFsQErxziTJmZc8itaVnfXPe7vOPP9dPlA
-         C6jNAarr8HOYDmoE0IwWI+45kuiBRhPfbD3niPDzQZSoPs1TAuXoQO8XPhBzQ+Uywi
-         R/XugEcE7FUZfC3UmV0X1jrApCaRtf1ZQQoZ5L36oi2kAaBNP8cE0a706vwfofJORf
-         d23MXD2VlxK6cKHm/VPLw1hjm2bTLzFB0OGL/9FnnSKIy/OmfYdzs1zGdPZ187o++j
-         XuqF0oBF97c/Q==
-Received: by mail-wr1-f69.google.com with SMTP id x4-20020adfbb44000000b001d83e815683so6897612wrg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:13:30 -0800 (PST)
+        b=Glw3FTXzWUWX+Qx+Y5dsWBc6dTEGpgNCoHy3GNWFfFmhhOWrjdZBsGZ9TJ1BKeAJ6
+         KFZ6/Z7nvcDVhS7m8S1BMwmloW+6bwGTOPynzJW5qPdo4Ek+oex0aKvJ6p40it17kU
+         PGpPdg8hTfQIeGsnIQOR6fFI20kp1cPQFmB7wK2FfFYbSmmwVBxP3SjMopLT7ZNYEh
+         6GcTUwBdtSJ2Cd0S96J6gEhY4XZtG1TFreSJmKbHZM6w9YQCkmWW8jAnNnCxeAvqV3
+         ibT2aIDWZzF4SBfXT8f3rhndFvp9mjQPVC1HeIicMMVuOQMSahWKB0ue6pK7Jf7+BX
+         2+isMMI2k5cCQ==
+Received: by mail-wr1-f72.google.com with SMTP id a6-20020adfbc46000000b001d7370ace6eso6938491wrh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 07:13:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nSYzIJyZPz2XWQqi86zTvNcY5aJPlKdbCVEXTZ9ouQg=;
-        b=dC2P9/CUWmqsxHHz9MOy9Uwq2hPQCkcHY0Rd9Odwf9kjni/fEngmRbzB6FHosLZFRK
-         UJAmGJTkgkt4LxXvNAcxnQZHxd/qx6edDBJw3BjbHDi6XbAql5YW7P2cFf5Wqnsedatk
-         78J0++wkLdTmi2xq62UHFbZZUHURJtv31UOYETioWZLS0yClnp7BJrrgL67v8JftVtbj
-         DPdPR6rcqqzs2MCsOgpBSh8n+DQc7EB2tSOZyB9Shg+48xFg+0dIctlBw8DQ2D66Eatz
-         8XD5KLBY5MVFwV57B06h5J9uyAF/zdjS6ShHUa0ZeFru0BrZUGJkt47wN7p9lT4/2DF2
-         2Zow==
-X-Gm-Message-State: AOAM531c6IBXSO1I3rtXw6qGE0qfCm0NH8cOLnqkcCnTL0eF3khqLseh
-        TqDBKkg0hJdnMYzDB4GVQbNMQFFsvuy/S+Om07qGO4dtLLYtYx9Aft6ipY9V0q6ODutlr0Sn9hb
-        i4WC7ur8MglopZsyReavBDPrBlq/Z5VC8kOZmGFVaNA==
-X-Received: by 2002:a05:6000:178b:: with SMTP id e11mr25081189wrg.69.1643814809917;
-        Wed, 02 Feb 2022 07:13:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwTzqdewy2j5IuYcrsXFVmbNlFRf9Nk9fBxctV3KCf8V1DiAcSfc4A5lOmWKc6NeRLaHh1/Vg==
-X-Received: by 2002:a05:6000:178b:: with SMTP id e11mr25081162wrg.69.1643814809637;
-        Wed, 02 Feb 2022 07:13:29 -0800 (PST)
+        bh=duSAVgvelNICvdKrcx93NtKcQsfey6iTKnfcyqiY3yY=;
+        b=8SJyCEgC4RiUrUb92Mom+4M7smHC7KbYUDRhGcExbIzu1aws4Bv5hNTCD6Y+3IeOdr
+         6B9QTAEDKkF7pq7d6VIvChdhY8f5xzFPNEpSu0ujajE+GU/pqeaKEYfA9V8bYgKRs09b
+         JJwsLRvrtHmdSl2Wy+vU6n6WbQM6/6ItVjB89Ao6BG2FmL73qA704pAFS79P8iYtrv/S
+         8Ec8qOrPwBoyXa5e669FIybNqrdLLtzggQJ4g8eS6uIB2ihytX0SoDJFsANa8FfcNwCA
+         74hLovfVlRie3coqbZCU9PChGQECAMctPVdE2Xd+xoHusVys/Dp0/dcJkwYiKWElJihi
+         N95w==
+X-Gm-Message-State: AOAM531zw+BHyWcjywhhcHwt7y8MBg26qJKr+tp1p62yTe3Da7yxR4l0
+        PR7u7iHDFvAu3XXjtRtp+dMZWFmD9G/1h4HjMvREMi8Lsok+qmMAueTRfo8Gxm/qeBgnkaF67jc
+        G3n1aXRZPa2Ry1wGW8UIfiPTnPC5K+I2PRyDwpRPkOQ==
+X-Received: by 2002:a5d:5986:: with SMTP id n6mr25028462wri.574.1643814810950;
+        Wed, 02 Feb 2022 07:13:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcQvlGtuGDsOAUNuOny5cBjriPqSZIg0IJGHnbFOwypEQNWRpEICVNmvDV+loDy3xq4zaoPw==
+X-Received: by 2002:a5d:5986:: with SMTP id n6mr25028444wri.574.1643814810787;
+        Wed, 02 Feb 2022 07:13:30 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id p7sm5098872wmq.20.2022.02.02.07.13.28
+        by smtp.gmail.com with ESMTPSA id p7sm5098872wmq.20.2022.02.02.07.13.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 07:13:29 -0800 (PST)
+        Wed, 02 Feb 2022 07:13:30 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -64,10 +64,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-serial@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 1/3] dt-bindings: serial: samsung_uart: Document Exynos5433 compatible
-Date:   Wed,  2 Feb 2022 16:13:08 +0100
-Message-Id: <20220202151310.285561-2-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 2/3] mfd: exynos-lpass: Drop unneeded syscon.h include
+Date:   Wed,  2 Feb 2022 16:13:09 +0100
+Message-Id: <20220202151310.285561-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220202151310.285561-1-krzysztof.kozlowski@canonical.com>
 References: <20220202151310.285561-1-krzysztof.kozlowski@canonical.com>
@@ -77,36 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the Exynos5433 UART compatible, supported since commit
-31ec77aca72e ("serial: samsung: Add the support for Exynos5433 SoC").
+syscon regmap is not used since commit addebf1588ab ("mfd: exynos-lpass:
+Remove pad retention control").
 
+Fixes: addebf1588ab ("mfd: exynos-lpass: Remove pad retention control")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mfd/exynos-lpass.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-index 2940afb874b3..6aceba4a5f79 100644
---- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-@@ -26,6 +26,7 @@ properties:
-           - samsung,s3c6400-uart
-           - samsung,s5pv210-uart
-           - samsung,exynos4210-uart
-+          - samsung,exynos5433-uart
-           - samsung,exynos850-uart
- 
-   reg:
-@@ -111,6 +112,7 @@ allOf:
-             enum:
-               - apple,s5l-uart
-               - samsung,exynos4210-uart
-+              - samsung,exynos5433-uart
-     then:
-       properties:
-         clocks:
+diff --git a/drivers/mfd/exynos-lpass.c b/drivers/mfd/exynos-lpass.c
+index 99bd0e73c19c..166cd21088cd 100644
+--- a/drivers/mfd/exynos-lpass.c
++++ b/drivers/mfd/exynos-lpass.c
+@@ -15,7 +15,6 @@
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+-#include <linux/mfd/syscon.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
 -- 
 2.32.0
 

@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF62B4A6DF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F8A4A6DF3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Feb 2022 10:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245507AbiBBJiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 04:38:20 -0500
-Received: from mga04.intel.com ([192.55.52.120]:26712 "EHLO mga04.intel.com"
+        id S245518AbiBBJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 04:39:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:47022 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244330AbiBBJiP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 04:38:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643794695; x=1675330695;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=waV+W+APtRrgdjuIriXoLF/Fm1T3LJnmBVTLBRl9yaQ=;
-  b=T92+RyzyXQKbiC+M3CUBzmBPSHWeAk5J+ydhXLZNEbsK+SAeOHUP9/1q
-   q6UCAA8n8Zak8xf2s65qs/fYKaqTpXHeqa395n1WbbsVmLgF1NWhE5iHv
-   BcWL0kWWmA8G56z9PLwXz7lRFbGB2de212rzyBvsPhH1QHsGMuUF79E/E
-   GQsARm2MREwlod7bfxC+MKmiuYjKlDNILxowE0iNDo4IHboF+J5jKehoh
-   IiL+7bVzrqmq7SnF/XZnd8TJ5c06u6ggR1G7ngfezRPTcgh9VoGHdQcot
-   YrhZpMMJ9VgVVSldAYdV/2cn4roel84wYmKbddnyVsjxiopYOb9foEqiE
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10245"; a="246711444"
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="246711444"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:38:15 -0800
-X-IronPort-AV: E=Sophos;i="5.88,336,1635231600"; 
-   d="scan'208";a="538179312"
-Received: from gkatwal-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.122.110])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 01:38:14 -0800
-Date:   Wed, 2 Feb 2022 01:38:14 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, srinivas.kandagatla@linaro.org,
-        gregkh@linuxfoundation.org, sumit.semwal@linaro.org,
-        daniel.vetter@ffwll.ch, airlied@linux.ie, lyude@redhat.com,
-        tzimmermann@suse.de, linux-media@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-Subject: Re: [PATCH v2] dma-buf-map: Rename to iosys-map
-Message-ID: <20220202093814.i5z2nmlunrwm2n6c@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220202091134.3565514-1-lucas.demarchi@intel.com>
- <514cdee2-655e-7e52-d6a5-a7176ee603cc@amd.com>
+        id S244735AbiBBJi5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 04:38:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7BA61FB;
+        Wed,  2 Feb 2022 01:38:56 -0800 (PST)
+Received: from [10.163.43.221] (unknown [10.163.43.221])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 202483F40C;
+        Wed,  2 Feb 2022 01:38:52 -0800 (PST)
+Subject: Re: [PATCH] mm: Merge pte_mkhuge() call into arch_make_huge_pte()
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <1643780286-18798-1-git-send-email-anshuman.khandual@arm.com>
+ <a969f100-02fb-63f7-4469-b3c8e23d8cfb@csgroup.eu>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <59ec5352-77eb-4c95-731e-100bcfa7003a@arm.com>
+Date:   Wed, 2 Feb 2022 15:08:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+In-Reply-To: <a969f100-02fb-63f7-4469-b3c8e23d8cfb@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <514cdee2-655e-7e52-d6a5-a7176ee603cc@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 10:25:28AM +0100, Christian König wrote:
->Am 02.02.22 um 10:11 schrieb Lucas De Marchi:
->>[SNIP]
->>diff --git a/MAINTAINERS b/MAINTAINERS
->>index d03ad8da1f36..112676f11792 100644
->>--- a/MAINTAINERS
->>+++ b/MAINTAINERS
->>@@ -5675,7 +5675,6 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
->>  F:	Documentation/driver-api/dma-buf.rst
->>  F:	drivers/dma-buf/
->>  F:	include/linux/*fence.h
->
->Oh, that is not correct to begin with.
 
-right, include/linux/dma-fence*
 
->
->>-F:	include/linux/dma-buf*
->
->That here should probably be changed to point directly to 
->include/linux/dma-buf.h, but that can come later on.
+On 2/2/22 11:50 AM, Christophe Leroy wrote:
+> 
+> Le 02/02/2022 Ã  06:38, Anshuman Khandual a Ã©critÂ :
+>> Each call into pte_mkhuge() is invariably followed by arch_make_huge_pte().
+>> Instead arch_make_huge_pte() can accommodate pte_mkhuge() at the beginning.
+>> This updates generic fallback stub for arch_make_huge_pte() and available
+>> platforms definitions. This makes huge pte creation much cleaner and easier
+>> to follow.
+> I think it is a good cleanup. I always wonder why commit d9ed9faac283 
+> ("mm: add new arch_make_huge_pte() method for tile support") didn't move 
+> the pte_mkhuge() into arch_make_huge_pte().
 
-thanks for catching that. I will change it on next version and add your
-(and any additional) ack.
++1
 
-Lucas De Marchi
+> 
+> When I implemented arch_make_huge_pte() for powerpc 8xx, in one case 
+> arch_make_huge_pte() have to undo the things done by pte_mkhuge(), see below
+> 
+> As a second step we could probably try to get rid of pte_mkhuge() 
+> completely, at least in the core.
 
->
->Feel free to add an Acked-by: Christian König 
-><christian.koenig@amd.com> to the patch.
->
->If nobody objects I'm going to push it drm-misc-next and provide a 
->follow up to cleanup the MAINTAINERS file a bit more.
->
->Regards,
->Christian.
->
->>  F:	include/linux/dma-resv.h
->>  K:	\bdma_(?:buf|fence|resv)\b
->>@@ -9976,6 +9975,13 @@ F:	include/linux/iova.h
->>  F:	include/linux/of_iommu.h
->>  F:	include/uapi/linux/iommu.h
->>+IOSYS-MAP HELPERS
->>+M:	Thomas Zimmermann <tzimmermann@suse.de>
->>+L:	dri-devel@lists.freedesktop.org
->>+S:	Maintained
->>+T:	git git://anongit.freedesktop.org/drm/drm-misc
->>+F:	include/linux/iosys-map.h
->>+
->
+Sure.
+
+> 
+>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Cc: "David S. Miller" <davem@davemloft.net>
+>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linuxppc-dev@lists.ozlabs.org
+>> Cc: sparclinux@vger.kernel.org
+>> Cc: linux-mm@kvack.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> 
+>> ---
+>>   arch/arm64/mm/hugetlbpage.c                      | 1 +
+>>   arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h | 1 +
+>>   arch/sparc/mm/hugetlbpage.c                      | 1 +
+>>   include/linux/hugetlb.h                          | 2 +-
+>>   mm/hugetlb.c                                     | 3 +--
+>>   mm/vmalloc.c                                     | 1 -
+>>   6 files changed, 5 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+>> index ffb9c229610a..228226c5fa80 100644
+>> --- a/arch/arm64/mm/hugetlbpage.c
+>> +++ b/arch/arm64/mm/hugetlbpage.c
+>> @@ -347,6 +347,7 @@ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags)
+>>   {
+>>   	size_t pagesize = 1UL << shift;
+>>   
+>> +	entry = pte_mkhuge(entry);
+>>   	if (pagesize == CONT_PTE_SIZE) {
+>>   		entry = pte_mkcont(entry);
+>>   	} else if (pagesize == CONT_PMD_SIZE) {
+>> diff --git a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+>> index 64b6c608eca4..e41e095158c7 100644
+>> --- a/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+>> +++ b/arch/powerpc/include/asm/nohash/32/hugetlb-8xx.h
+>> @@ -70,6 +70,7 @@ static inline pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags
+>>   {
+>>   	size_t size = 1UL << shift;
+>>   
+>> +	entry = pte_mkhuge(entry);
+> Could drop that and replace the below by:
+> 
+> 	if (size == SZ_16K)
+> 		return __pte(pte_val(entry) | _PAGE_SPS);
+> 	else
+> 		return __pte(pte_val(entry) | _PAGE_SPS | _PAGE_HUGE);
+> 	
+> 
+
+Sure, will change as stated above.

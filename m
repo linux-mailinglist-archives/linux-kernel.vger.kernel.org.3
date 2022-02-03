@@ -2,932 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3014A809A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B7E4A809C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349583AbiBCIrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 03:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349585AbiBCIq6 (ORCPT
+        id S1349595AbiBCIsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 03:48:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52924 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236486AbiBCIsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 03:46:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75195C061744;
-        Thu,  3 Feb 2022 00:46:56 -0800 (PST)
+        Thu, 3 Feb 2022 03:48:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 070FD61824;
-        Thu,  3 Feb 2022 08:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8588DC340E4;
-        Thu,  3 Feb 2022 08:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643878015;
-        bh=terefOdznh8svwO6PkvvfOTrAucddNdTwXi5TqqKMBw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HffgtanLiKE7pSAQQOjmuJ3TQExQvOWnRezni4qvUb7fE+40LCELEgf+9TXKkMMVp
-         qfZOUutbFccmR8oGSotMYgDaFP3YdjJ3uilEIrfyAGe6AFSOxARYUjoE8LmLHKgOpT
-         1bE6DKAaqfEwBhPY3hgLiaxVDDAkCBiayQ3oTEhw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 4.4.302
-Date:   Thu,  3 Feb 2022 09:46:50 +0100
-Message-Id: <164387713713082@kroah.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <1643877137240249@kroah.com>
-References: <1643877137240249@kroah.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6259AB82123;
+        Thu,  3 Feb 2022 08:48:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E439C340ED;
+        Thu,  3 Feb 2022 08:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643878090;
+        bh=2RvxwIXewVqUiQsEoqVxqDX1h4wCU24XEcOF+56nXrE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=egrT+nOhloto3D9Uqnvju5HE1V6IPHJnPF4DWZ3xXsXrS+/9ppMKvz0czcdCupvV1
+         REHDO1nbktXikgrmu76pyAXWaAQrNNNFcXyTwNYqnxX/niOE1LPUoEJBNx+agbsR6t
+         DucjQTPNFuOhbIr1FbSFk0fGgHzVjIA/baj1aJnEZvoyNO8ixOTy0svHJC8Z4qkJFx
+         pI2odo9CWfBRm2teD43eK1aMyyxmN2f0fh2VKiLFTKH545XU7XmVGeITYb3rxIGUo8
+         1ZHW6AetVL6acnJNEcbVx3PXvYcH23quOp1aUfnasMN2Bh5Zb6HuueZXOQOmCPL4ws
+         ka/l/6Pr9r0kw==
+Received: by mail-wr1-f50.google.com with SMTP id j16so3460883wrd.8;
+        Thu, 03 Feb 2022 00:48:10 -0800 (PST)
+X-Gm-Message-State: AOAM532kSkoQPnb8Ilh3b5hT1HMP7tYFBl8k1L8aK/bW3vsPY8jZWUfs
+        tlB6L8JR4JFns0OVkXvUMyqGimwMWABDnDvZIdU=
+X-Google-Smtp-Source: ABdhPJwuYbTm5I3bOEP0YBdvSIm+JjofZiEIsfZsJN7L0Ga8w5CT+xxwkiNMpU5RVbANdC7DLiIldsBGULQIs1oNKck=
+X-Received: by 2002:a05:6000:1c9:: with SMTP id t9mr28912070wrx.550.1643878088339;
+ Thu, 03 Feb 2022 00:48:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220203083658.559803-1-arnd@kernel.org>
+In-Reply-To: <20220203083658.559803-1-arnd@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 3 Feb 2022 09:47:56 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG5W4nTXP5fXLmWhNfsQ_WigKbhdZz5yh1MNqE_VcD1TA@mail.gmail.com>
+Message-ID: <CAMj1kXG5W4nTXP5fXLmWhNfsQ_WigKbhdZz5yh1MNqE_VcD1TA@mail.gmail.com>
+Subject: Re: [PATCH] [v2] ARM: sa1100/assabet: move dmabounce hack to ohci driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index 3bf23154499e..2a03be868d10 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,6 +1,6 @@
- VERSION = 4
- PATCHLEVEL = 4
--SUBLEVEL = 301
-+SUBLEVEL = 302
- EXTRAVERSION =
- NAME = Blurry Fish Butt
- 
-diff --git a/arch/s390/hypfs/hypfs_vm.c b/arch/s390/hypfs/hypfs_vm.c
-index 44feac38ccfc..7f53e40597f9 100644
---- a/arch/s390/hypfs/hypfs_vm.c
-+++ b/arch/s390/hypfs/hypfs_vm.c
-@@ -19,6 +19,7 @@
- 
- static char local_guest[] = "        ";
- static char all_guests[] = "*       ";
-+static char *all_groups = all_guests;
- static char *guest_query;
- 
- struct diag2fc_data {
-@@ -61,10 +62,11 @@ static int diag2fc(int size, char* query, void *addr)
- 
- 	memcpy(parm_list.userid, query, NAME_LEN);
- 	ASCEBC(parm_list.userid, NAME_LEN);
--	parm_list.addr = (unsigned long) addr ;
-+	memcpy(parm_list.aci_grp, all_groups, NAME_LEN);
-+	ASCEBC(parm_list.aci_grp, NAME_LEN);
-+	parm_list.addr = (unsigned long)addr;
- 	parm_list.size = size;
- 	parm_list.fmt = 0x02;
--	memset(parm_list.aci_grp, 0x40, NAME_LEN);
- 	rc = -1;
- 
- 	diag_stat_inc(DIAG_STAT_X2FC);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8dce61ca934b..910100257df9 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4417,13 +4417,6 @@ static int emulator_write_std(struct x86_emulate_ctxt *ctxt, gva_t addr, void *v
- 	if (!system && kvm_x86_ops->get_cpl(vcpu) == 3)
- 		access |= PFERR_USER_MASK;
- 
--	/*
--	 * FIXME: this should call handle_emulation_failure if X86EMUL_IO_NEEDED
--	 * is returned, but our callers are not ready for that and they blindly
--	 * call kvm_inject_page_fault.  Ensure that they at least do not leak
--	 * uninitialized kernel stack memory into cr2 and error code.
--	 */
--	memset(exception, 0, sizeof(*exception));
- 	return kvm_write_guest_virt_helper(addr, val, bytes, vcpu,
- 					   access, exception);
- }
-@@ -4431,6 +4424,13 @@ static int emulator_write_std(struct x86_emulate_ctxt *ctxt, gva_t addr, void *v
- int kvm_write_guest_virt_system(struct kvm_vcpu *vcpu, gva_t addr, void *val,
- 				unsigned int bytes, struct x86_exception *exception)
- {
-+	/*
-+	 * FIXME: this should call handle_emulation_failure if X86EMUL_IO_NEEDED
-+	 * is returned, but our callers are not ready for that and they blindly
-+	 * call kvm_inject_page_fault.  Ensure that they at least do not leak
-+	 * uninitialized kernel stack memory into cr2 and error code.
-+	 */
-+	memset(exception, 0, sizeof(*exception));
- 	return kvm_write_guest_virt_helper(addr, val, bytes, vcpu,
- 					   PFERR_WRITE_MASK, exception);
- }
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 24d45fc7716c..c9853626cec4 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -286,7 +286,7 @@ static int msm_init_vram(struct drm_device *dev)
- 		ret = of_address_to_resource(node, 0, &r);
- 		if (ret)
- 			return ret;
--		size = r.end - r.start;
-+		size = r.end - r.start + 1;
- 		DRM_INFO("using VRAM carveout: %lx@%pa\n", size, &r.start);
- 	} else
- #endif
-diff --git a/drivers/gpu/drm/radeon/ci_dpm.c b/drivers/gpu/drm/radeon/ci_dpm.c
-index 8e1bf9ed8eff..c8baa06773df 100644
---- a/drivers/gpu/drm/radeon/ci_dpm.c
-+++ b/drivers/gpu/drm/radeon/ci_dpm.c
-@@ -776,12 +776,6 @@ bool ci_dpm_vblank_too_short(struct radeon_device *rdev)
- 	u32 vblank_time = r600_dpm_get_vblank_time(rdev);
- 	u32 switch_limit = pi->mem_gddr5 ? 450 : 300;
- 
--	/* disable mclk switching if the refresh is >120Hz, even if the
--        * blanking period would allow it
--        */
--	if (r600_dpm_get_vrefresh(rdev) > 120)
--		return true;
--
- 	/* disable mclk switching if the refresh is >120Hz, even if the
-         * blanking period would allow it
-         */
-diff --git a/drivers/hwmon/lm90.c b/drivers/hwmon/lm90.c
-index 420f34127262..6f6f173aca6f 100644
---- a/drivers/hwmon/lm90.c
-+++ b/drivers/hwmon/lm90.c
-@@ -265,7 +265,7 @@ static const struct lm90_params lm90_params[] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT
- 		  | LM90_HAVE_BROKEN_ALERT,
- 		.alert_alarms = 0x7c,
--		.max_convrate = 8,
-+		.max_convrate = 7,
- 	},
- 	[lm86] = {
- 		.flags = LM90_HAVE_OFFSET | LM90_HAVE_REM_LIMIT_EXT,
-diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
-index 323b86b38b3a..6cd2ae95e21e 100644
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -586,11 +586,6 @@ static const struct dmi_system_id i8042_dmi_forcemux_table[] __initconst = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-CS"),
- 		},
--	}, {
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
--			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
--		},
- 	},
- 	{ }
- };
-@@ -677,6 +672,12 @@ static const struct dmi_system_id i8042_dmi_noselftest_table[] = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "Z450LA"),
- 		},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
-+		},
-+	},
- 	{ }
- };
- static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
-diff --git a/drivers/media/i2c/tc358743.c b/drivers/media/i2c/tc358743.c
-index 546cd995ab29..c3befb3f5dcd 100644
---- a/drivers/media/i2c/tc358743.c
-+++ b/drivers/media/i2c/tc358743.c
-@@ -241,7 +241,7 @@ static void i2c_wr16(struct v4l2_subdev *sd, u16 reg, u16 val)
- 
- static void i2c_wr16_and_or(struct v4l2_subdev *sd, u16 reg, u16 mask, u16 val)
- {
--	i2c_wrreg(sd, reg, (i2c_rdreg(sd, reg, 1) & mask) | val, 1);
-+	i2c_wrreg(sd, reg, (i2c_rdreg(sd, reg, 2) & mask) | val, 2);
- }
- 
- static u32 i2c_rd32(struct v4l2_subdev *sd, u16 reg)
-diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-index f7630cf581cd..fd622021748f 100644
---- a/drivers/s390/scsi/zfcp_fc.c
-+++ b/drivers/s390/scsi/zfcp_fc.c
-@@ -518,6 +518,8 @@ static void zfcp_fc_adisc_handler(void *data)
- 		goto out;
- 	}
- 
-+	/* re-init to undo drop from zfcp_fc_adisc() */
-+	port->d_id = ntoh24(adisc_resp->adisc_port_id);
- 	/* port is good, unblock rport without going through erp */
- 	zfcp_scsi_schedule_rport_register(port);
-  out:
-@@ -531,6 +533,7 @@ static int zfcp_fc_adisc(struct zfcp_port *port)
- 	struct zfcp_fc_req *fc_req;
- 	struct zfcp_adapter *adapter = port->adapter;
- 	struct Scsi_Host *shost = adapter->scsi_host;
-+	u32 d_id;
- 	int ret;
- 
- 	fc_req = kmem_cache_zalloc(zfcp_fc_req_cache, GFP_ATOMIC);
-@@ -555,7 +558,15 @@ static int zfcp_fc_adisc(struct zfcp_port *port)
- 	fc_req->u.adisc.req.adisc_cmd = ELS_ADISC;
- 	hton24(fc_req->u.adisc.req.adisc_port_id, fc_host_port_id(shost));
- 
--	ret = zfcp_fsf_send_els(adapter, port->d_id, &fc_req->ct_els,
-+	d_id = port->d_id; /* remember as destination for send els below */
-+	/*
-+	 * Force fresh GID_PN lookup on next port recovery.
-+	 * Must happen after request setup and before sending request,
-+	 * to prevent race with port->d_id re-init in zfcp_fc_adisc_handler().
-+	 */
-+	port->d_id = 0;
-+
-+	ret = zfcp_fsf_send_els(adapter, d_id, &fc_req->ct_els,
- 				ZFCP_FC_CTELS_TMO);
- 	if (ret)
- 		kmem_cache_free(zfcp_fc_req_cache, fc_req);
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 573aeec7a02b..66f7f89aa0ee 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -79,7 +79,7 @@ static int bnx2fc_bind_pcidev(struct bnx2fc_hba *hba);
- static void bnx2fc_unbind_pcidev(struct bnx2fc_hba *hba);
- static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
- 				  struct device *parent, int npiv);
--static void bnx2fc_destroy_work(struct work_struct *work);
-+static void bnx2fc_port_destroy(struct fcoe_port *port);
- 
- static struct bnx2fc_hba *bnx2fc_hba_lookup(struct net_device *phys_dev);
- static struct bnx2fc_interface *bnx2fc_interface_lookup(struct net_device
-@@ -855,9 +855,6 @@ static void bnx2fc_indicate_netevent(void *context, unsigned long event,
- 				__bnx2fc_destroy(interface);
- 		}
- 		mutex_unlock(&bnx2fc_dev_lock);
--
--		/* Ensure ALL destroy work has been completed before return */
--		flush_workqueue(bnx2fc_wq);
- 		return;
- 
- 	default:
-@@ -1148,8 +1145,8 @@ static int bnx2fc_vport_destroy(struct fc_vport *vport)
- 	mutex_unlock(&n_port->lp_mutex);
- 	bnx2fc_free_vport(interface->hba, port->lport);
- 	bnx2fc_port_shutdown(port->lport);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- 	return 0;
- }
- 
-@@ -1457,7 +1454,6 @@ static struct fc_lport *bnx2fc_if_create(struct bnx2fc_interface *interface,
- 	port->lport = lport;
- 	port->priv = interface;
- 	port->get_netdev = bnx2fc_netdev;
--	INIT_WORK(&port->destroy_work, bnx2fc_destroy_work);
- 
- 	/* Configure fcoe_port */
- 	rc = bnx2fc_lport_config(lport);
-@@ -1582,8 +1578,8 @@ static void __bnx2fc_destroy(struct bnx2fc_interface *interface)
- 	bnx2fc_interface_cleanup(interface);
- 	bnx2fc_stop(interface);
- 	list_del(&interface->list);
-+	bnx2fc_port_destroy(port);
- 	bnx2fc_interface_put(interface);
--	queue_work(bnx2fc_wq, &port->destroy_work);
- }
- 
- /**
-@@ -1624,15 +1620,12 @@ netdev_err:
- 	return rc;
- }
- 
--static void bnx2fc_destroy_work(struct work_struct *work)
-+static void bnx2fc_port_destroy(struct fcoe_port *port)
- {
--	struct fcoe_port *port;
- 	struct fc_lport *lport;
- 
--	port = container_of(work, struct fcoe_port, destroy_work);
- 	lport = port->lport;
--
--	BNX2FC_HBA_DBG(lport, "Entered bnx2fc_destroy_work\n");
-+	BNX2FC_HBA_DBG(lport, "Entered %s, destroying lport %p\n", __func__, lport);
- 
- 	bnx2fc_if_destroy(lport);
- }
-@@ -2469,9 +2462,6 @@ static void bnx2fc_ulp_exit(struct cnic_dev *dev)
- 			__bnx2fc_destroy(interface);
- 	mutex_unlock(&bnx2fc_dev_lock);
- 
--	/* Ensure ALL destroy work has been completed before return */
--	flush_workqueue(bnx2fc_wq);
--
- 	bnx2fc_ulp_stop(hba);
- 	/* unregister cnic device */
- 	if (test_and_clear_bit(BNX2FC_CNIC_REGISTERED, &hba->reg_with_cnic))
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 9b2beada2ff3..d2ff11d524c0 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -329,6 +329,7 @@ static struct tty_driver *gsm_tty_driver;
- #define GSM1_ESCAPE_BITS	0x20
- #define XON			0x11
- #define XOFF			0x13
-+#define ISO_IEC_646_MASK	0x7F
- 
- static const struct tty_port_operations gsm_port_ops;
- 
-@@ -547,7 +548,8 @@ static int gsm_stuff_frame(const u8 *input, u8 *output, int len)
- 	int olen = 0;
- 	while (len--) {
- 		if (*input == GSM1_SOF || *input == GSM1_ESCAPE
--		    || *input == XON || *input == XOFF) {
-+		    || (*input & ISO_IEC_646_MASK) == XON
-+		    || (*input & ISO_IEC_646_MASK) == XOFF) {
- 			*output++ = GSM1_ESCAPE;
- 			*output++ = *input++ ^ GSM1_ESCAPE_BITS;
- 			olen++;
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index db66e533319e..43f15ac54f0d 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -5404,8 +5404,30 @@ static struct pci_device_id serial_pci_tbl[] = {
- 	{	PCI_VENDOR_ID_INTASHIELD, PCI_DEVICE_ID_INTASHIELD_IS400,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,    /* 135a.0dc0 */
- 		pbn_b2_4_115200 },
-+	/* Brainboxes Devices */
- 	/*
--	 * BrainBoxes UC-260
-+	* Brainboxes UC-101
-+	*/
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0BA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-235/246
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0AA1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-257
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0861,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-260/271/701/756
- 	 */
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0D21,
- 		PCI_ANY_ID, PCI_ANY_ID,
-@@ -5413,7 +5435,81 @@ static struct pci_device_id serial_pci_tbl[] = {
- 		pbn_b2_4_115200 },
- 	{	PCI_VENDOR_ID_INTASHIELD, 0x0E34,
- 		PCI_ANY_ID, PCI_ANY_ID,
--		 PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		PCI_CLASS_COMMUNICATION_MULTISERIAL << 8, 0xffff00,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-268
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0841,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-275/279
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0881,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_8_115200 },
-+	/*
-+	 * Brainboxes UC-302
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x08E1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-310
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08C1,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-313
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x08A3,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-320/324
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A61,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_1_115200 },
-+	/*
-+	 * Brainboxes UC-346
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0B02,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-357
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A81,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0A83,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_2_115200 },
-+	/*
-+	 * Brainboxes UC-368
-+	 */
-+	{	PCI_VENDOR_ID_INTASHIELD, 0x0C41,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
-+		pbn_b2_4_115200 },
-+	/*
-+	 * Brainboxes UC-420/431
-+	 */
-+	{       PCI_VENDOR_ID_INTASHIELD, 0x0921,
-+		PCI_ANY_ID, PCI_ANY_ID,
-+		0, 0,
- 		pbn_b2_4_115200 },
- 	/*
- 	 * Perle PCI-RAS cards
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index f89d1f79be18..83d3645ac2ef 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -279,7 +279,7 @@ static void stm32_start_tx(struct uart_port *port)
- {
- 	struct circ_buf *xmit = &port->state->xmit;
- 
--	if (uart_circ_empty(xmit))
-+	if (uart_circ_empty(xmit) && !port->x_char)
- 		return;
- 
- 	stm32_set_bits(port, USART_CR1, USART_CR1_TXEIE | USART_CR1_TE);
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 3e0c1ff3a688..a6f1eda264da 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1642,6 +1642,13 @@ int usb_hcd_submit_urb (struct urb *urb, gfp_t mem_flags)
- 		urb->hcpriv = NULL;
- 		INIT_LIST_HEAD(&urb->urb_list);
- 		atomic_dec(&urb->use_count);
-+		/*
-+		 * Order the write of urb->use_count above before the read
-+		 * of urb->reject below.  Pairs with the memory barriers in
-+		 * usb_kill_urb() and usb_poison_urb().
-+		 */
-+		smp_mb__after_atomic();
-+
- 		atomic_dec(&urb->dev->urbnum);
- 		if (atomic_read(&urb->reject))
- 			wake_up(&usb_kill_urb_queue);
-@@ -1751,6 +1758,13 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
-+	/*
-+	 * Order the write of urb->use_count above before the read
-+	 * of urb->reject below.  Pairs with the memory barriers in
-+	 * usb_kill_urb() and usb_poison_urb().
-+	 */
-+	smp_mb__after_atomic();
-+
- 	if (unlikely(atomic_read(&urb->reject)))
- 		wake_up(&usb_kill_urb_queue);
- 	usb_put_urb(urb);
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 8c4bfd42f785..693f352b8e07 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -686,6 +686,12 @@ void usb_kill_urb(struct urb *urb)
- 	if (!(urb && urb->dev && urb->ep))
- 		return;
- 	atomic_inc(&urb->reject);
-+	/*
-+	 * Order the write of urb->reject above before the read
-+	 * of urb->use_count below.  Pairs with the barriers in
-+	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
-+	 */
-+	smp_mb__after_atomic();
- 
- 	usb_hcd_unlink_urb(urb, -ENOENT);
- 	wait_event(usb_kill_urb_queue, atomic_read(&urb->use_count) == 0);
-@@ -727,6 +733,12 @@ void usb_poison_urb(struct urb *urb)
- 	if (!urb)
- 		return;
- 	atomic_inc(&urb->reject);
-+	/*
-+	 * Order the write of urb->reject above before the read
-+	 * of urb->use_count below.  Pairs with the barriers in
-+	 * __usb_hcd_giveback_urb() and usb_hcd_submit_urb().
-+	 */
-+	smp_mb__after_atomic();
- 
- 	if (!urb->dev || !urb->ep)
- 		return;
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 52895c462d7d..3357ceef0b01 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -2155,6 +2155,16 @@ UNUSUAL_DEV(  0x2027, 0xa001, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_euscsi_init,
- 		US_FL_SCM_MULT_TARG ),
- 
-+/*
-+ * Reported by DocMAX <mail@vacharakis.de>
-+ * and Thomas Weißschuh <linux@weissschuh.net>
-+ */
-+UNUSUAL_DEV( 0x2109, 0x0715, 0x9999, 0x9999,
-+		"VIA Labs, Inc.",
-+		"VL817 SATA Bridge",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- UNUSUAL_DEV( 0x2116, 0x0320, 0x0001, 0x0001,
- 		"ST",
- 		"2A",
-diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-index 2c39c1c81196..b709c51c9f9e 100644
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -260,10 +260,6 @@ int udf_expand_file_adinicb(struct inode *inode)
- 	char *kaddr;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
- 	int err;
--	struct writeback_control udf_wbc = {
--		.sync_mode = WB_SYNC_NONE,
--		.nr_to_write = 1,
--	};
- 
- 	WARN_ON_ONCE(!mutex_is_locked(&inode->i_mutex));
- 	if (!iinfo->i_lenAlloc) {
-@@ -307,8 +303,10 @@ int udf_expand_file_adinicb(struct inode *inode)
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
- 	/* from now on we have normal address_space methods */
- 	inode->i_data.a_ops = &udf_aops;
-+	set_page_dirty(page);
-+	unlock_page(page);
- 	up_write(&iinfo->i_data_sem);
--	err = inode->i_data.a_ops->writepage(page, &udf_wbc);
-+	err = filemap_fdatawrite(inode->i_mapping);
- 	if (err) {
- 		/* Restore everything back so that we don't lose data... */
- 		lock_page(page);
-@@ -320,6 +318,7 @@ int udf_expand_file_adinicb(struct inode *inode)
- 		unlock_page(page);
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_IN_ICB;
- 		inode->i_data.a_ops = &udf_adinicb_aops;
-+		iinfo->i_lenAlloc = inode->i_size;
- 		up_write(&iinfo->i_data_sem);
- 	}
- 	page_cache_release(page);
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 401a404b64b9..78864ffaf0d7 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -2055,6 +2055,7 @@ struct packet_type {
- 					 struct net_device *);
- 	bool			(*id_match)(struct packet_type *ptype,
- 					    struct sock *sk);
-+	struct net		*af_packet_net;
- 	void			*af_packet_priv;
- 	struct list_head	list;
- };
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 5c9de851a919..869fd7a13612 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -353,19 +353,18 @@ static inline void ip_select_ident_segs(struct net *net, struct sk_buff *skb,
- {
- 	struct iphdr *iph = ip_hdr(skb);
- 
-+	/* We had many attacks based on IPID, use the private
-+	 * generator as much as we can.
-+	 */
-+	if (sk && inet_sk(sk)->inet_daddr) {
-+		iph->id = htons(inet_sk(sk)->inet_id);
-+		inet_sk(sk)->inet_id += segs;
-+		return;
-+	}
- 	if ((iph->frag_off & htons(IP_DF)) && !skb->ignore_df) {
--		/* This is only to work around buggy Windows95/2000
--		 * VJ compression implementations.  If the ID field
--		 * does not change, they drop every other packet in
--		 * a TCP stream using header compression.
--		 */
--		if (sk && inet_sk(sk)->inet_daddr) {
--			iph->id = htons(inet_sk(sk)->inet_id);
--			inet_sk(sk)->inet_id += segs;
--		} else {
--			iph->id = 0;
--		}
-+		iph->id = 0;
- 	} else {
-+		/* Unfortunately we need the big hammer to get a suitable IPID */
- 		__ip_select_ident(net, iph, segs);
- 	}
- }
-diff --git a/kernel/power/wakelock.c b/kernel/power/wakelock.c
-index 1896386e16bb..78e354b1c593 100644
---- a/kernel/power/wakelock.c
-+++ b/kernel/power/wakelock.c
-@@ -38,23 +38,19 @@ ssize_t pm_show_wakelocks(char *buf, bool show_active)
- {
- 	struct rb_node *node;
- 	struct wakelock *wl;
--	char *str = buf;
--	char *end = buf + PAGE_SIZE;
-+	int len = 0;
- 
- 	mutex_lock(&wakelocks_lock);
- 
- 	for (node = rb_first(&wakelocks_tree); node; node = rb_next(node)) {
- 		wl = rb_entry(node, struct wakelock, node);
- 		if (wl->ws.active == show_active)
--			str += scnprintf(str, end - str, "%s ", wl->name);
-+			len += sysfs_emit_at(buf, len, "%s ", wl->name);
- 	}
--	if (str > buf)
--		str--;
--
--	str += scnprintf(str, end - str, "\n");
-+	len += sysfs_emit_at(buf, len, "\n");
- 
- 	mutex_unlock(&wakelocks_lock);
--	return (str - buf);
-+	return len;
- }
- 
- #if CONFIG_PM_WAKELOCKS_LIMIT > 0
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 05ccd2bcd9e4..a557543ad29f 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -4940,6 +4940,11 @@ static void hci_le_adv_report_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 		struct hci_ev_le_advertising_info *ev = ptr;
- 		s8 rssi;
- 
-+		if (ptr > (void *)skb_tail_pointer(skb) - sizeof(*ev)) {
-+			bt_dev_err(hdev, "Malicious advertising data.");
-+			break;
-+		}
-+
- 		if (ev->length <= HCI_MAX_AD_LENGTH &&
- 		    ev->data + ev->length <= skb_tail_pointer(skb)) {
- 			rssi = ev->data[ev->length];
-@@ -4951,11 +4956,6 @@ static void hci_le_adv_report_evt(struct hci_dev *hdev, struct sk_buff *skb)
- 		}
- 
- 		ptr += sizeof(*ev) + ev->length + 1;
--
--		if (ptr > (void *) skb_tail_pointer(skb) - sizeof(*ev)) {
--			bt_dev_err(hdev, "Malicious advertising data. Stopping processing");
--			break;
--		}
- 	}
- 
- 	hci_dev_unlock(hdev);
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 4a95c89d8506..621329cb668a 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -2285,10 +2285,6 @@ static int set_link_security(struct sock *sk, struct hci_dev *hdev, void *data,
- 
- 	BT_DBG("request for %s", hdev->name);
- 
--	if (!IS_ENABLED(CONFIG_BT_HS))
--		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_HS,
--				       MGMT_STATUS_NOT_SUPPORTED);
--
- 	status = mgmt_bredr_support(hdev);
- 	if (status)
- 		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_LINK_SECURITY,
-@@ -2438,6 +2434,10 @@ static int set_hs(struct sock *sk, struct hci_dev *hdev, void *data, u16 len)
- 
- 	BT_DBG("request for %s", hdev->name);
- 
-+	if (!IS_ENABLED(CONFIG_BT_HS))
-+		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_HS,
-+				       MGMT_STATUS_NOT_SUPPORTED);
-+
- 	status = mgmt_bredr_support(hdev);
- 	if (status)
- 		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_HS, status);
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 3e131dc5f0e5..549ee0de456f 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -737,21 +737,21 @@ static struct bcm_op *bcm_find_op(struct list_head *ops, canid_t can_id,
- static void bcm_remove_op(struct bcm_op *op)
- {
- 	if (op->tsklet.func) {
--		while (test_bit(TASKLET_STATE_SCHED, &op->tsklet.state) ||
--		       test_bit(TASKLET_STATE_RUN, &op->tsklet.state) ||
--		       hrtimer_active(&op->timer)) {
--			hrtimer_cancel(&op->timer);
-+		do {
- 			tasklet_kill(&op->tsklet);
--		}
-+			hrtimer_cancel(&op->timer);
-+		} while (test_bit(TASKLET_STATE_SCHED, &op->tsklet.state) ||
-+			 test_bit(TASKLET_STATE_RUN, &op->tsklet.state) ||
-+			 hrtimer_active(&op->timer));
- 	}
- 
- 	if (op->thrtsklet.func) {
--		while (test_bit(TASKLET_STATE_SCHED, &op->thrtsklet.state) ||
--		       test_bit(TASKLET_STATE_RUN, &op->thrtsklet.state) ||
--		       hrtimer_active(&op->thrtimer)) {
--			hrtimer_cancel(&op->thrtimer);
-+		do {
- 			tasklet_kill(&op->thrtsklet);
--		}
-+			hrtimer_cancel(&op->thrtimer);
-+		} while (test_bit(TASKLET_STATE_SCHED, &op->thrtsklet.state) ||
-+			 test_bit(TASKLET_STATE_RUN, &op->thrtsklet.state) ||
-+			 hrtimer_active(&op->thrtimer));
- 	}
- 
- 	if ((op->frames) && (op->frames != &op->sframe))
-diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-index 2bf83299600a..ef7170adee84 100644
---- a/net/core/net-procfs.c
-+++ b/net/core/net-procfs.c
-@@ -207,12 +207,23 @@ static const struct file_operations softnet_seq_fops = {
- 	.release = seq_release,
- };
- 
--static void *ptype_get_idx(loff_t pos)
-+static void *ptype_get_idx(struct seq_file *seq, loff_t pos)
- {
-+	struct list_head *ptype_list = NULL;
- 	struct packet_type *pt = NULL;
-+	struct net_device *dev;
- 	loff_t i = 0;
- 	int t;
- 
-+	for_each_netdev_rcu(seq_file_net(seq), dev) {
-+		ptype_list = &dev->ptype_all;
-+		list_for_each_entry_rcu(pt, ptype_list, list) {
-+			if (i == pos)
-+				return pt;
-+			++i;
-+		}
-+	}
-+
- 	list_for_each_entry_rcu(pt, &ptype_all, list) {
- 		if (i == pos)
- 			return pt;
-@@ -233,22 +244,40 @@ static void *ptype_seq_start(struct seq_file *seq, loff_t *pos)
- 	__acquires(RCU)
- {
- 	rcu_read_lock();
--	return *pos ? ptype_get_idx(*pos - 1) : SEQ_START_TOKEN;
-+	return *pos ? ptype_get_idx(seq, *pos - 1) : SEQ_START_TOKEN;
- }
- 
- static void *ptype_seq_next(struct seq_file *seq, void *v, loff_t *pos)
- {
-+	struct net_device *dev;
- 	struct packet_type *pt;
- 	struct list_head *nxt;
- 	int hash;
- 
- 	++*pos;
- 	if (v == SEQ_START_TOKEN)
--		return ptype_get_idx(0);
-+		return ptype_get_idx(seq, 0);
- 
- 	pt = v;
- 	nxt = pt->list.next;
-+	if (pt->dev) {
-+		if (nxt != &pt->dev->ptype_all)
-+			goto found;
-+
-+		dev = pt->dev;
-+		for_each_netdev_continue_rcu(seq_file_net(seq), dev) {
-+			if (!list_empty(&dev->ptype_all)) {
-+				nxt = dev->ptype_all.next;
-+				goto found;
-+			}
-+		}
-+
-+		nxt = ptype_all.next;
-+		goto ptype_all;
-+	}
-+
- 	if (pt->type == htons(ETH_P_ALL)) {
-+ptype_all:
- 		if (nxt != &ptype_all)
- 			goto found;
- 		hash = 0;
-@@ -277,7 +306,8 @@ static int ptype_seq_show(struct seq_file *seq, void *v)
- 
- 	if (v == SEQ_START_TOKEN)
- 		seq_puts(seq, "Type Device      Function\n");
--	else if (pt->dev == NULL || dev_net(pt->dev) == seq_file_net(seq)) {
-+	else if ((!pt->af_packet_net || net_eq(pt->af_packet_net, seq_file_net(seq))) &&
-+		 (!pt->dev || net_eq(dev_net(pt->dev), seq_file_net(seq)))) {
- 		if (pt->type == htons(ETH_P_ALL))
- 			seq_puts(seq, "ALL ");
- 		else
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 477540b3d320..efd4410a7358 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -155,12 +155,19 @@ int ip_build_and_send_pkt(struct sk_buff *skb, const struct sock *sk,
- 	iph->daddr    = (opt && opt->opt.srr ? opt->opt.faddr : daddr);
- 	iph->saddr    = saddr;
- 	iph->protocol = sk->sk_protocol;
--	if (ip_dont_fragment(sk, &rt->dst)) {
-+	/* Do not bother generating IPID for small packets (eg SYNACK) */
-+	if (skb->len <= IPV4_MIN_MTU || ip_dont_fragment(sk, &rt->dst)) {
- 		iph->frag_off = htons(IP_DF);
- 		iph->id = 0;
- 	} else {
- 		iph->frag_off = 0;
--		__ip_select_ident(net, iph, 1);
-+		/* TCP packets here are SYNACK with fat IPv4/TCP options.
-+		 * Avoid using the hashed IP ident generator.
-+		 */
-+		if (sk->sk_protocol == IPPROTO_TCP)
-+			iph->id = (__force __be16)prandom_u32();
-+		else
-+			__ip_select_ident(net, iph, 1);
- 	}
- 
- 	if (opt && opt->opt.optlen) {
-diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-index 24ce13a79665..65dbe1784d02 100644
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -709,6 +709,7 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
- 	int ret = -EINVAL;
- 	int chk_addr_ret;
- 
-+	lock_sock(sk);
- 	if (sk->sk_state != TCP_CLOSE || addr_len < sizeof(struct sockaddr_in))
- 		goto out;
- 	chk_addr_ret = inet_addr_type(sock_net(sk), addr->sin_addr.s_addr);
-@@ -721,7 +722,9 @@ static int raw_bind(struct sock *sk, struct sockaddr *uaddr, int addr_len)
- 		inet->inet_saddr = 0;  /* Use device */
- 	sk_dst_reset(sk);
- 	ret = 0;
--out:	return ret;
-+out:
-+	release_sock(sk);
-+	return ret;
- }
- 
- /*
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index 80f88df280d7..d3811c7adaed 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -917,12 +917,12 @@ int ip6_tnl_xmit_ctl(struct ip6_tnl *t,
- 			ldev = dev_get_by_index_rcu(net, p->link);
- 
- 		if (unlikely(!ipv6_chk_addr(net, laddr, ldev, 0)))
--			pr_warn("%s xmit: Local address not yet configured!\n",
--				p->name);
-+			pr_warn_ratelimited("%s xmit: Local address not yet configured!\n",
-+					    p->name);
- 		else if (!ipv6_addr_is_multicast(raddr) &&
- 			 unlikely(ipv6_chk_addr(net, raddr, NULL, 0)))
--			pr_warn("%s xmit: Routing loop! Remote address found on this node!\n",
--				p->name);
-+			pr_warn_ratelimited("%s xmit: Routing loop! Remote address found on this node!\n",
-+					    p->name);
- 		else
- 			ret = 1;
- 		rcu_read_unlock();
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index eac6f7eea7b5..9208bc179302 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -1709,6 +1709,7 @@ static int fanout_add(struct sock *sk, u16 id, u16 type_flags)
- 		match->prot_hook.dev = po->prot_hook.dev;
- 		match->prot_hook.func = packet_rcv_fanout;
- 		match->prot_hook.af_packet_priv = match;
-+		match->prot_hook.af_packet_net = read_pnet(&match->net);
- 		match->prot_hook.id_match = match_fanout_group;
- 		list_add(&match->list, &fanout_list);
- 	}
-@@ -3167,6 +3168,7 @@ static int packet_create(struct net *net, struct socket *sock, int protocol,
- 		po->prot_hook.func = packet_rcv_spkt;
- 
- 	po->prot_hook.af_packet_priv = sk;
-+	po->prot_hook.af_packet_net = sock_net(sk);
- 
- 	if (proto) {
- 		po->prot_hook.type = proto;
+On Thu, 3 Feb 2022 at 09:38, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The sa1111 platform is one of the two remaining users of the old Arm
+> specific "dmabounce" code, which is an earlier implementation of the
+> generic swiotlb.
+>
+> Linus Walleij submitted a patch that removes dmabounce support from
+> the ixp4xx, and I had a look at the other user, which is the sa1111
+> companion chip.
+>
+> Looking at how dmabounce is used, I could narrow it down to one driver
+> one three machines:
+>
+>  - dmabounce is only initialized on assabet/neponset, jornada720 and
+>    badge4, which are the platforms that have an sa1111 and support
+>    DMA on it.
+>
+>  - All three of these suffer from "erratum #7" that requires only
+>    doing DMA to half the memory sections based on one of the address
+>    lines, in addition, the neponset also can't DMA to the RAM that
+>    is connected to sa1111 itself.
+>
+>  - the pxa lubbock machine also has sa1111, but does not support DMA
+>    on it and does not set dmabounce.
+>
+>  - only the OHCI and audio devices on sa1111 support DMA, but as
+>    there is no audio driver for this hardware, only OHCI remains.
+>
+> In the OHCI code, I noticed that two other platforms already have
+> a local bounce buffer support in the form of the "local_mem"
+> allocator. Specifically, TMIO and SM501 use this on a few other ARM
+> boards with 16KB or 128KB of local SRAM that can be accessed from the
+> OHCI and from the CPU.
+>
+> While this is not the same problem as on sa1111, I could not find a
+> reason why we can't re-use the existing implementation but replace the
+> physical SRAM address mapping with a locally allocated DMA buffer.
+>
+> There are two main downsides:
+>
+>  - rather than using a dynamically sized pool, this buffer needs
+>    to be allocated at probe time using a fixed size. Without
+>    having any idea of what it should be, I picked a size of
+>    64KB, which is between what the other two OHCI front-ends use
+>    in their SRAM. If anyone has a better idea what that size
+>    is reasonable, this can be trivially changed.
+>
+
+I suppose this is a problem if the driver falls back to ordinary DRAM
+once the allocation runs out?
+
+>  - Previously, only USB transfers to unaddressable memory needed
+>    to go through the bounce buffer, now all of them do, which may
+>    impact runtime performance for USB endpoints that do a lot of
+>    transfers.
+>
+> On the upside, the local_mem support uses write-combining buffers,
+> which should be a bit faster for transfers to the device compared to
+> normal uncached coherent memory as used in dmabounce.
+>
+
+Talking from past experience using this trick on a NXP ARM9 SoC ~10
+years ago, using on-chip SRAM for USB DMA likely results in a
+significant performance boost, even without write combining, although
+the exact scenario obviously matters.
+
+
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Cc: linux-usb@vger.kernel.org
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> Changes in v2:
+>
+>  - drop check for assabet, as bounce buffers are required on
+>    all sa1100 machines
+>  - select CONFIG_ZONE_DMA again
+>  - update comments and changelog text based on discussion
+> ---
+>  arch/arm/common/Kconfig        |  2 +-
+>  arch/arm/common/sa1111.c       | 64 ----------------------------------
+>  drivers/usb/core/hcd.c         | 17 +++++++--
+>  drivers/usb/host/ohci-sa1111.c | 25 +++++++++++++
+>  4 files changed, 40 insertions(+), 68 deletions(-)
+>
+> diff --git a/arch/arm/common/Kconfig b/arch/arm/common/Kconfig
+> index c8e198631d41..bc158fd227e1 100644
+> --- a/arch/arm/common/Kconfig
+> +++ b/arch/arm/common/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  config SA1111
+>         bool
+> -       select DMABOUNCE if !ARCH_PXA
+> +       select ZONE_DMA if ARCH_SA1100
+>
+>  config DMABOUNCE
+>         bool
+> diff --git a/arch/arm/common/sa1111.c b/arch/arm/common/sa1111.c
+> index 7df003b149c6..a00915883f78 100644
+> --- a/arch/arm/common/sa1111.c
+> +++ b/arch/arm/common/sa1111.c
+> @@ -1391,70 +1391,9 @@ void sa1111_driver_unregister(struct sa1111_driver *driver)
+>  }
+>  EXPORT_SYMBOL(sa1111_driver_unregister);
+>
+> -#ifdef CONFIG_DMABOUNCE
+> -/*
+> - * According to the "Intel StrongARM SA-1111 Microprocessor Companion
+> - * Chip Specification Update" (June 2000), erratum #7, there is a
+> - * significant bug in the SA1111 SDRAM shared memory controller.  If
+> - * an access to a region of memory above 1MB relative to the bank base,
+> - * it is important that address bit 10 _NOT_ be asserted. Depending
+> - * on the configuration of the RAM, bit 10 may correspond to one
+> - * of several different (processor-relative) address bits.
+> - *
+> - * This routine only identifies whether or not a given DMA address
+> - * is susceptible to the bug.
+> - *
+> - * This should only get called for sa1111_device types due to the
+> - * way we configure our device dma_masks.
+> - */
+> -static int sa1111_needs_bounce(struct device *dev, dma_addr_t addr, size_t size)
+> -{
+> -       /*
+> -        * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
+> -        * User's Guide" mentions that jumpers R51 and R52 control the
+> -        * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
+> -        * SDRAM bank 1 on Neponset). The default configuration selects
+> -        * Assabet, so any address in bank 1 is necessarily invalid.
+> -        */
+> -       return (machine_is_assabet() || machine_is_pfs168()) &&
+> -               (addr >= 0xc8000000 || (addr + size) >= 0xc8000000);
+> -}
+> -
+> -static int sa1111_notifier_call(struct notifier_block *n, unsigned long action,
+> -       void *data)
+> -{
+> -       struct sa1111_dev *dev = to_sa1111_device(data);
+> -
+> -       switch (action) {
+> -       case BUS_NOTIFY_ADD_DEVICE:
+> -               if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL) {
+> -                       int ret = dmabounce_register_dev(&dev->dev, 1024, 4096,
+> -                                       sa1111_needs_bounce);
+> -                       if (ret)
+> -                               dev_err(&dev->dev, "failed to register with dmabounce: %d\n", ret);
+> -               }
+> -               break;
+> -
+> -       case BUS_NOTIFY_DEL_DEVICE:
+> -               if (dev->dev.dma_mask && dev->dma_mask < 0xffffffffUL)
+> -                       dmabounce_unregister_dev(&dev->dev);
+> -               break;
+> -       }
+> -       return NOTIFY_OK;
+> -}
+> -
+> -static struct notifier_block sa1111_bus_notifier = {
+> -       .notifier_call = sa1111_notifier_call,
+> -};
+> -#endif
+> -
+>  static int __init sa1111_init(void)
+>  {
+>         int ret = bus_register(&sa1111_bus_type);
+> -#ifdef CONFIG_DMABOUNCE
+> -       if (ret == 0)
+> -               bus_register_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+> -#endif
+>         if (ret == 0)
+>                 platform_driver_register(&sa1111_device_driver);
+>         return ret;
+> @@ -1463,9 +1402,6 @@ static int __init sa1111_init(void)
+>  static void __exit sa1111_exit(void)
+>  {
+>         platform_driver_unregister(&sa1111_device_driver);
+> -#ifdef CONFIG_DMABOUNCE
+> -       bus_unregister_notifier(&sa1111_bus_type, &sa1111_bus_notifier);
+> -#endif
+>         bus_unregister(&sa1111_bus_type);
+>  }
+>
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 3c7c64ff3c0a..8417baedc89c 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1260,7 +1260,8 @@ void usb_hcd_unlink_urb_from_ep(struct usb_hcd *hcd, struct urb *urb)
+>  EXPORT_SYMBOL_GPL(usb_hcd_unlink_urb_from_ep);
+>
+>  /*
+> - * Some usb host controllers can only perform dma using a small SRAM area.
+> + * Some usb host controllers can only perform dma using a small SRAM area,
+> + * or have restrictions on addressable DRAM.
+>   * The usb core itself is however optimized for host controllers that can dma
+>   * using regular system memory - like pci devices doing bus mastering.
+>   *
+> @@ -3095,8 +3096,18 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+>         if (IS_ERR(hcd->localmem_pool))
+>                 return PTR_ERR(hcd->localmem_pool);
+>
+> -       local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+> -                                 size, MEMREMAP_WC);
+> +       /*
+> +        * if a physical SRAM address was passed, map it, otherwise
+> +        * allocate system memory as a buffer.
+> +        */
+> +       if (phys_addr)
+> +               local_mem = devm_memremap(hcd->self.sysdev, phys_addr,
+> +                                         size, MEMREMAP_WC);
+> +       else
+> +               local_mem = dmam_alloc_attrs(hcd->self.sysdev, size, &dma,
+> +                                            GFP_KERNEL,
+> +                                            DMA_ATTR_WRITE_COMBINE);
+> +
+>         if (IS_ERR(local_mem))
+>                 return PTR_ERR(local_mem);
+>
+> diff --git a/drivers/usb/host/ohci-sa1111.c b/drivers/usb/host/ohci-sa1111.c
+> index 137f66f6977f..0da2badf0658 100644
+> --- a/drivers/usb/host/ohci-sa1111.c
+> +++ b/drivers/usb/host/ohci-sa1111.c
+> @@ -206,6 +206,31 @@ static int ohci_hcd_sa1111_probe(struct sa1111_dev *dev)
+>                 goto err1;
+>         }
+>
+> +       /*
+> +        * According to the "Intel StrongARM SA-1111 Microprocessor Companion
+> +        * Chip Specification Update" (June 2000), erratum #7, there is a
+> +        * significant bug in the SA1111 SDRAM shared memory controller.  If
+> +        * an access to a region of memory above 1MB relative to the bank base,
+> +        * it is important that address bit 10 _NOT_ be asserted. Depending
+> +        * on the configuration of the RAM, bit 10 may correspond to one
+> +        * of several different (processor-relative) address bits.
+> +        *
+> +        * Section 4.6 of the "Intel StrongARM SA-1111 Development Module
+> +        * User's Guide" mentions that jumpers R51 and R52 control the
+> +        * target of SA-1111 DMA (either SDRAM bank 0 on Assabet, or
+> +        * SDRAM bank 1 on Neponset). The default configuration selects
+> +        * Assabet, so any address in bank 1 is necessarily invalid.
+> +        *
+> +        * As a workaround, use a bounce buffer in addressable memory
+> +        * as local_mem, relying on ZONE_DMA to provide an area that
+> +        * fits within the above constraints.
+> +        *
+> +        * SZ_64K is an estimate for what size this might need.
+> +        */
+> +       ret = usb_hcd_setup_local_mem(hcd, 0, 0, SZ_64K);
+> +       if (ret)
+> +               goto err1;
+> +
+>         if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+>                 dev_dbg(&dev->dev, "request_mem_region failed\n");
+>                 ret = -EBUSY;
+> --
+> 2.29.2
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

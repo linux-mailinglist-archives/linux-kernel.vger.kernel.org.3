@@ -2,247 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EE84A8AEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559614A8AA7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353380AbiBCRwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:52:44 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59048 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353193AbiBCRup (ORCPT
+        id S1353064AbiBCRuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232884AbiBCRuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:50:45 -0500
-Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:5173:4d3f:4ddc:2012])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 12B9F146B;
-        Thu,  3 Feb 2022 18:50:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643910628;
-        bh=1wew0xz3FDofJ1z2KNawqOvlFkfqv3LlOfRyVoho2bo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GxV5MrEgBHo7HJUIao1e3nBicIEipUjsji/YaRoL3352wCCWMSeig16vinUDeZaL4
-         fSvlFYrKEsiQAzOjB12y8UO4/9W+IpG80Q5ZNRf2M8JsFVZhoNW2JezQtQr2641FYa
-         AP0zbuRUvrVL+l6pAxsd8vMk4jwnC3gUhAr8guz0=
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-To:     jeanmichel.hautbois@ideasonboard.com
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
-        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: [RFC PATCH v4 08/12] media: imx219: Switch from open to init_cfg
-Date:   Thu,  3 Feb 2022 18:50:05 +0100
-Message-Id: <20220203175009.558868-9-jeanmichel.hautbois@ideasonboard.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
-References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
+        Thu, 3 Feb 2022 12:50:11 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99A5C061714;
+        Thu,  3 Feb 2022 09:50:10 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id w25so7599855edt.7;
+        Thu, 03 Feb 2022 09:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
+        b=ByMXCyiJMiEqRQ+FEL4KhRZcgt0woCBUqDhuf335ndRQUq+VVT0KBKC9ARSbobSlow
+         EhlODK+uE5wAZ78xmgHSvNH3HMfUjoO0l7XCBapQlmHaJ4R0tzNKmZjU39DUqtECBY/Y
+         lMMUqORd3U+s37MGuvTrdwUTQEvpZMQqyYq5I6Zz2KMnaz00VF1LVxpQlyOUKsRnS5kP
+         r8MJGff6CNUi4ITPpoGJR9yE2qo+Ab6J3w+9WRhODjhiYkkxpOFDrWil94dAK9UMGmql
+         bwej8hONl1blIKeOO6uF7dclZG3RdUdixRL/O2xwKq9s/IBtKambkPYVOplcFFV5ybb8
+         AQSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
+        b=ieDV4GtgbpMD++wnF8fNHhIikO75PGRjjEJvTIdtRZw9++ga+kjgtngxzwmc7TbG7p
+         j2PxSArZcMTRcnTxy5RzIKZzUOPAIkDB913XNgUm6NSQn7jPFUcWzWsBNnkXLHPYelNf
+         lvREbx05LM4e9FebWOT/QKMK6pLn4I07QS3xp4vrGMNxmbeE2RXWlzK7AZ80H/0C6fOg
+         6jDGpiCFNjkyldCwfMUUn74+o7o84Klh1oelnASiHkJwNpsnnOm29/a5N5ea4/Zt/dpG
+         Hbd/F7rcQstinfDGoWadC0dWu8MrRS7UFl19ppOasN1nXqAScGsWLEuNH7W2Uk1bRsNQ
+         sHXg==
+X-Gm-Message-State: AOAM532zF0rPE61OUz0JUagTfvbDOP2SINpcMAccihEKWrkAG6tAfhAw
+        1Hnq3A2BE/Snds2MEbENS+o=
+X-Google-Smtp-Source: ABdhPJzdxlCUVDtjmB3ENX5mKOqOonAT9GMGhVa+oTeOAuEEbGMNDuDWfBrWS+tw0rV3CDLh3UnogQ==
+X-Received: by 2002:a05:6402:1612:: with SMTP id f18mr14801649edv.454.1643910609310;
+        Thu, 03 Feb 2022 09:50:09 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id h8sm22578309edk.14.2022.02.03.09.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 09:50:08 -0800 (PST)
+Date:   Thu, 3 Feb 2022 18:50:05 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>
+Cc:     devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
+        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        mperttunen@nvidia.com, robh+dt@kernel.org
+Subject: Re: [PATCH v3 0/4] Add I2C and PWM support for T234
+Message-ID: <YfwVzVHZ6SQhKpLF@orome>
+References: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ruUbb3Ly1noXTLRH"
+Content-Disposition: inline
+In-Reply-To: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
+User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the init_cfg pad level operation instead of the internal subdev
-open operation to set default formats on the pads.
-While at it, make the imx219_pad_ops more easier to read.
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
----
- drivers/media/i2c/imx219.c | 138 +++++++++++++++++++++----------------
- 1 file changed, 80 insertions(+), 58 deletions(-)
+--ruUbb3Ly1noXTLRH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index 74dba5e61201..b68d35046725 100644
---- a/drivers/media/i2c/imx219.c
-+++ b/drivers/media/i2c/imx219.c
-@@ -118,6 +118,10 @@
- #define IMX219_PIXEL_ARRAY_WIDTH	3280U
- #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
- 
-+/* Embedded metadata stream structure */
-+#define IMX219_EMBEDDED_LINE_WIDTH 16384
-+#define IMX219_NUM_EMBEDDED_LINES 1
-+
- struct imx219_reg {
- 	u16 address;
- 	u8 val;
-@@ -668,51 +672,6 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
- 	return imx219_mbus_formats[i];
- }
- 
--static void imx219_set_default_format(struct imx219 *imx219)
--{
--	struct v4l2_mbus_framefmt *fmt;
--
--	fmt = &imx219->fmt;
--	fmt->code = MEDIA_BUS_FMT_SRGGB10_1X10;
--	fmt->colorspace = V4L2_COLORSPACE_SRGB;
--	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
--	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
--							  fmt->colorspace,
--							  fmt->ycbcr_enc);
--	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
--	fmt->width = supported_modes[0].width;
--	fmt->height = supported_modes[0].height;
--	fmt->field = V4L2_FIELD_NONE;
--}
--
--static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
--{
--	struct imx219 *imx219 = to_imx219(sd);
--	struct v4l2_mbus_framefmt *try_fmt =
--		v4l2_subdev_get_try_format(sd, fh->state, 0);
--	struct v4l2_rect *try_crop;
--
--	mutex_lock(&imx219->mutex);
--
--	/* Initialize try_fmt */
--	try_fmt->width = supported_modes[0].width;
--	try_fmt->height = supported_modes[0].height;
--	try_fmt->code = imx219_get_format_code(imx219,
--					       MEDIA_BUS_FMT_SRGGB10_1X10);
--	try_fmt->field = V4L2_FIELD_NONE;
--
--	/* Initialize try_crop rectangle. */
--	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
--	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
--	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
--	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
--	try_crop->height = IMX219_PIXEL_ARRAY_HEIGHT;
--
--	mutex_unlock(&imx219->mutex);
--
--	return 0;
--}
--
- static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
- {
- 	struct imx219 *imx219 =
-@@ -802,6 +761,76 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
- 	.s_ctrl = imx219_set_ctrl,
- };
- 
-+static void imx219_init_formats(struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_mbus_framefmt *format;
-+
-+	format = v4l2_state_get_stream_format(state, 0, 0);
-+	format->code = imx219_mbus_formats[0];
-+	format->width = supported_modes[0].width;
-+	format->height = supported_modes[0].height;
-+	format->field = V4L2_FIELD_NONE;
-+	format->colorspace = V4L2_COLORSPACE_RAW;
-+
-+	if (state->routing.routes[1].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
-+		format = v4l2_state_get_stream_format(state, 0, 1);
-+		format->code = MEDIA_BUS_FMT_METADATA_8;
-+		format->width = IMX219_EMBEDDED_LINE_WIDTH;
-+		format->height = 1;
-+		format->field = V4L2_FIELD_NONE;
-+		format->colorspace = V4L2_COLORSPACE_DEFAULT;
-+	}
-+}
-+
-+static int _imx219_set_routing(struct v4l2_subdev *sd,
-+			       struct v4l2_subdev_state *state)
-+{
-+	struct v4l2_subdev_route routes[] = {
-+		{
-+			.source_pad = 0,
-+			.source_stream = 0,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
-+				 V4L2_SUBDEV_ROUTE_FL_SOURCE |
-+				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		},
-+		{
-+			.source_pad = 0,
-+			.source_stream = 1,
-+			.flags = V4L2_SUBDEV_ROUTE_FL_SOURCE |
-+				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-+		}
-+	};
-+
-+	struct v4l2_subdev_krouting routing = {
-+		.num_routes = ARRAY_SIZE(routes),
-+		.routes = routes,
-+	};
-+
-+	int ret;
-+
-+	ret = v4l2_subdev_set_routing(sd, state, &routing);
-+	if (ret)
-+		return ret;
-+
-+	imx219_init_formats(state);
-+
-+	return 0;
-+}
-+
-+static int imx219_init_cfg(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *state)
-+{
-+	int ret;
-+
-+	v4l2_subdev_lock_state(state);
-+
-+	ret = _imx219_set_routing(sd, state);
-+
-+	v4l2_subdev_unlock_state(state);
-+
-+	return ret;
-+}
-+
- static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_state *sd_state,
- 				 struct v4l2_subdev_mbus_code_enum *code)
-@@ -1255,11 +1284,12 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
- };
- 
- static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
--	.enum_mbus_code = imx219_enum_mbus_code,
--	.get_fmt = imx219_get_pad_format,
--	.set_fmt = imx219_set_pad_format,
--	.get_selection = imx219_get_selection,
--	.enum_frame_size = imx219_enum_frame_size,
-+	.init_cfg		= imx219_init_cfg,
-+	.enum_mbus_code		= imx219_enum_mbus_code,
-+	.get_fmt		= imx219_get_pad_format,
-+	.set_fmt		= imx219_set_pad_format,
-+	.get_selection		= imx219_get_selection,
-+	.enum_frame_size	= imx219_enum_frame_size,
- };
- 
- static const struct v4l2_subdev_ops imx219_subdev_ops = {
-@@ -1268,10 +1298,6 @@ static const struct v4l2_subdev_ops imx219_subdev_ops = {
- 	.pad = &imx219_pad_ops,
- };
- 
--static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
--	.open = imx219_open,
--};
--
- /* Initialize control handlers */
- static int imx219_init_controls(struct imx219 *imx219)
- {
-@@ -1520,7 +1546,6 @@ static int imx219_probe(struct i2c_client *client)
- 		goto error_power_off;
- 
- 	/* Initialize subdev */
--	imx219->sd.internal_ops = &imx219_internal_ops;
- 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
- 			    V4L2_SUBDEV_FL_HAS_EVENTS;
- 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-@@ -1528,9 +1553,6 @@ static int imx219_probe(struct i2c_client *client)
- 	/* Initialize source pad */
- 	imx219->pad.flags = MEDIA_PAD_FL_SOURCE;
- 
--	/* Initialize default format */
--	imx219_set_default_format(imx219);
--
- 	ret = media_entity_pads_init(&imx219->sd.entity, 1, &imx219->pad);
- 	if (ret) {
- 		dev_err(dev, "failed to init entity pads: %d\n", ret);
--- 
-2.32.0
+On Mon, Jan 24, 2022 at 04:48:13PM +0530, Akhil R wrote:
+> The patchset contains driver and devicetree changes to support I2C and
+> PWM for Tegra234
+>=20
+> v2->v3:
+>   * Sorted clock and reset based on ID
+> v1->v2:
+>   * Reverted changes in i2c-tegra.c. using tegra194_i2c_hw for tegra234
+>     as the values are compatible.
+>=20
+> Akhil R (4):
+>   dt-bindings: Add headers for Tegra234 I2C
+>   arm64: tegra: Add Tegra234 I2C devicetree nodes
+>   dt-bindings: Add headers for Tegra234 PWM
+>   arm64: tegra: Add Tegra234 PWM devicetree nodes
+>=20
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi   | 133 +++++++++++++++++++++++=
+++++++
+>  include/dt-bindings/clock/tegra234-clock.h |  35 +++++++-
+>  include/dt-bindings/reset/tegra234-reset.h |  16 ++++
+>  3 files changed, 183 insertions(+), 1 deletion(-)
 
+Applied, thanks.
+
+Thierry
+
+--ruUbb3Ly1noXTLRH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmH8Fc0ACgkQ3SOs138+
+s6GGCg/8CfokZvYlAjOMxpDQHvkgL6CKcSSOuY1KlwkyLC39mJ/NqFzh8rQO7YFe
+9YxInRWkjk0Kjf7uzyQMYIozXS6V+zdqmaPLPCvNyh6wgGlkc4IOuSshJQIyo8V5
+rAHjLtrJvdiw395TQn89XhXPPledVwYfjqE/jfRiVF9ZFhdwkkOmzdcznhPuFBrT
+Ud5fsxhidf8msw6GgEc9CJEwkWM2QIFhx5lZnPh0dMgqNs8DfNzMTYGdc+VjFvYP
+Yxo4TlMqurS4A/qr0a4mFG4FwNcKQEc1W5nNSlJQ8K8psiEk6lO1/MB87G01/uLe
+HYGhXLmo/ZtClcHjNsGuyiFJeevat+nZQd0JizmcCwcqX2zyhnCpRtgW/4dzXP1q
+f4cXtz+SkFuWJ1XXmyI30TySCOBcYPcN/xYE2jUma4lOJzRLhSO31Zdj26Q6pv38
+gKtxBJ37cEv8ON8fVx/mGWbnYgw/H0QMjbavajUJxSoDwh0j9X736mcsIKSX6/PK
+MSfaIuxvOi5gc3hPmVqgg4LO1k76dR3dLESq81fuplGWZROwoyuD8nIpENaH8/bS
+vH6eMoHiFICbNEaV/T73Wr4g8GCY5rQa8gPOp73rQC++7JT6CpOX8CtHDMojnf7R
+X8qR+wQi6uPqwa0BIFMBXlN+D2HioRJY3CUdKqileg2HFgWycuc=
+=v0Xn
+-----END PGP SIGNATURE-----
+
+--ruUbb3Ly1noXTLRH--

@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C6D4A86F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291624A86F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351443AbiBCOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:49:05 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:41000 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350956AbiBCOtD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:49:03 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        id S1351453AbiBCOtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234290AbiBCOtg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:49:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C7FC061714;
+        Thu,  3 Feb 2022 06:49:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E2581EC04C1;
-        Thu,  3 Feb 2022 15:48:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643899737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=8Uqs/kDYfVg3f/Ym3U30Di60DX4+d07g0nCPI6xr98c=;
-        b=I6PKS7BacJGlT/KI4poYSn2BpUX1slO9EeirJdDS14JDZbpjYTIpqWLyq2hec4YYO2NvZe
-        7nsdiDc2CmdIXExbPmAyXRksSI7R5Lig6hT0K3n72EZD3T7Uial6gNkDrsV5bCOs7KVMVS
-        ozn/Ezuh1BH2/3CW1eB1Dh43WeDOXVE=
-Date:   Thu, 3 Feb 2022 15:48:57 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 25/43] x86/compressed/acpi: Move EFI system table
- lookup to helper
-Message-ID: <YfvrWdZUwyonZJS8@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-26-brijesh.singh@amd.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 624DC61A59;
+        Thu,  3 Feb 2022 14:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659F7C340E4;
+        Thu,  3 Feb 2022 14:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643899775;
+        bh=nBs8x83HOyc90AXXdJAiJ28Z/9QQ+iZ+wHguEiy9lbA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gt0ZMon045DzkMA/0uwsOIqFumU1zpGVCqNpCJDGV08lBXSmcxVtvIb6hiCDsP762
+         8CdbApLvUb51MvX5JiQFAi7PwBsEi1BrGIhAiNHJomoP+8kZXL5yUo15sMmYIsQ6dB
+         rnZdqJC5OUeWIdnxe3PfM1RyzzPQGBQqZIsbp/gM=
+Date:   Thu, 3 Feb 2022 15:49:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Joseph Bao <joseph.bao@intel.com>
+Subject: Re: [PATCH 5.16 0873/1039] PCI: pciehp: Use
+ down_read/write_nested(reset_lock) to fix lockdep errors
+Message-ID: <YfvreKic+pYli+YK@kroah.com>
+References: <20220124184154.642601971@linuxfoundation.org>
+ <20220125122323.GA1597465@bhelgaas>
+ <Ye/wPpOrCfmKYCEj@kroah.com>
+ <20220202193613.GB18800@wunner.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-26-brijesh.singh@amd.com>
+In-Reply-To: <20220202193613.GB18800@wunner.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:46AM -0600, Brijesh Singh wrote:
-> diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-> index daa73efdc7a5..bf99768cd229 100644
-> --- a/arch/x86/boot/compressed/efi.c
-> +++ b/arch/x86/boot/compressed/efi.c
-> @@ -48,3 +48,32 @@ enum efi_type efi_get_type(struct boot_params *boot_params)
->  
->  	return et;
->  }
-> +
-> +/*
+On Wed, Feb 02, 2022 at 08:36:13PM +0100, Lukas Wunner wrote:
+> On Tue, Jan 25, 2022 at 01:42:38PM +0100, Greg Kroah-Hartman wrote:
+> > On Tue, Jan 25, 2022 at 06:23:23AM -0600, Bjorn Helgaas wrote:
+> > > On Mon, Jan 24, 2022 at 07:44:22PM +0100, Greg Kroah-Hartman wrote:
+> > > > From: Hans de Goede <hdegoede@redhat.com>
+> > > > 
+> > > > commit 085a9f43433f30cbe8a1ade62d9d7827c3217f4d upstream.
+> > > 
+> > > I would hold off on backporting the pciehp changes until we resolve
+> > > this regression in v5.17-rc1:
+> > > 
+> > >   https://bugzilla.kernel.org/show_bug.cgi?id=215525
+> > 
+> > Thanks, I will drop it from all queues now.  If it gets resolved, please
+> > email stable@vger and we will be glad to add it back, along with the
+> > fix.
+> 
+> This turned out not to be an actual regression.  According to Bjorn,
+> "it was arguably a bug that it *did* work before", see:
+> 
+> https://lore.kernel.org/linux-pci/20220202164308.GA17822@bhelgaas/
+> 
+> Also, the culprit was not pciehp, but rather a change to _OSC handling
+> for VMD devices in commit 04b12ef163d1.
+> 
+> Thus, please consider re-adding these upstream commits to the stable queues:
+> 
+>   085a9f43433f30cbe8a1ade62d9d7827c3217f4d  (5.16, 5.15, 5.10)
 
-/**
+Already in the 5.10.94 5.15.17 5.16.3 releases :)
 
-kernel-doc comment pls.
+>   23584c1ed3e15a6f4bfab8dc5a88d94ab929ee12  (5.16, 5.15, 5.10, 5.4)
 
-> + * efi_get_system_table - Given boot_params, retrieve the physical address of
-> + *                        EFI system table.
-> + *
-> + * @boot_params:        pointer to boot_params
-> + *
-> + * Return: EFI system table address on success. On error, return 0.
-> + */
-> +unsigned long efi_get_system_table(struct boot_params *boot_params)
+Now queued up, thanks.
 
-... *bp) - as before.
-
-Please go through all those functions taking in struct boot_params ptr.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h

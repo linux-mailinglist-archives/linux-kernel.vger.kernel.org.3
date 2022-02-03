@@ -2,498 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFF94A845D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229234A8461
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350672AbiBCM6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:58:50 -0500
-Received: from dresden.studentenwerk.mhn.de ([141.84.225.229]:33758 "EHLO
-        email.studentenwerk.mhn.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240386AbiBCM6t (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:58:49 -0500
-Received: from mailhub.studentenwerk.mhn.de (mailhub.studentenwerk.mhn.de [127.0.0.1])
-        by email.studentenwerk.mhn.de (Postfix) with ESMTPS id 4JqJdN07kqzRhSn;
-        Thu,  3 Feb 2022 13:58:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwm.de; s=stwm-20170627;
-        t=1643893128;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8+sWsu3byeESpRpt+l3Dcsl97eMc4ECHZHYdP6yl+EA=;
-        b=KEJvKdHKF6zz0fc2RGN8IAW6goThp/BTRe+gaVw0kmXOQW+IVNpBN1AzJA0+E1zOt3QooO
-        v9wc+b+J8ZThzECSQEsISEIPHQDawMQ3gvxCIg1JJ2mTWPa+cw6wS7DvkX+fJZ23weJb2y
-        fT3dZjgzjEKcYuksxLWWplhXH/Gi2SWqt+/nCu8V5FSdUrOMg5GiAl34eUrGA7Bnki5p38
-        TOx3WMCvsKLjUluzsXvYD5NGAhMBiQpqUQEcuh16vaXb6zhk0yA2V4+O2m4MvCekJ3kC6+
-        14QvG3r047ZpxAMNsJ6u6xdnSvoqt5u8Mpe52SS0T919fXSo5uYUS5OzbOxYGQ==
+        id S1350678AbiBCNBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:01:41 -0500
+Received: from mail-dm6nam10on2060.outbound.protection.outlook.com ([40.107.93.60]:23777
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236030AbiBCNBk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:01:40 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X1JdfwX0tG5TForll+YXGAMpKTqvrt7kfoD4AwIEkD+mE0H+oqCJwwJmSpzShGhlybXKnYmeeTRHI0YCp0DIbkXmqrK0HzMOfYt/w5SdW2QxC1GbymkedZBPKMw3D1dV/UIx2JYtG1IFRwlNsZbreJ2D2PA87itKCHOB3GomX9OUv83ENxhOr/nZZ1GjJV+e/olZZCnTzm1CkPrpGZn9USBTemPFxAkByNjRio54ni6j73Ya/ger2YWyODCAg+eW+8mXMxY16dAKTTp0iORG73kDbtrQ4XgbxUYl9eoxbXafv+kcVBFIQhEgjsEmiAp5nAObKVEWKCRmL8mdk+HF4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0gIgtvzUZdD0p0FwgfMRi0yTcewzHVnSoqIKjziEG0s=;
+ b=Mkr/4auNXvhX+QP5KC+0/UGEbxkPlvlVB8AMo+YSCFZdoFIhwagBvd9Ic+Q0x0nEYWuNBk1ivWm7uUBnWtq7FIV29ZilXLiN5iLO50e7RbYbv3ts3wd76Tbn8rBPy8W/XotzuKSStWs8RDK67RU1agdq6rNVGGcV/8MlwU+FUNEA6L4t2NgkW+f1q+HI9e8biSTFNlfaQW+UjnHY3g8VccsT7k+/yocTDcPGVxnYamJ2O2G8hvJQZlAzitwAP0zxo+NakYYKftH4yHOar5OCaBRxsUlTReMu+334yOJFORrw3a6m1hTGZFPYO2sa+RfWl9PDOMk6i7L21wyA2p4usw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0gIgtvzUZdD0p0FwgfMRi0yTcewzHVnSoqIKjziEG0s=;
+ b=Q2AJuCnsp8HncfYDkElBLx6+fo5uLlQQzVzRNa0u5U36E3aAnpW5heaXE/579uznmSM2U4wNhW1vFPbytyid0jggnvVX746b3Bv+soQ42y86hK77539T/dCPrhmNYz0qdxuoDeTwr4+SKwJg1VPJxem53cAj/FRL81V9TcdT3H/ne6nnXmbostb6z8wBmCtC8ypOA3WKRCS0wec/oZtZ/sxtyCb5lxVeY0bgRtgBPZvle6fKJm8m4d1t+dtMqoVMoAFoscLbWIEJLW4TqETubw9rPj58TMlrJ0Zb3eIKRICOJhYVDtYjI118fvVQ6Dk30u7oyJ4hAJf4Bb0UXz0vrA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by MN2PR12MB3775.namprd12.prod.outlook.com (2603:10b6:208:159::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
+ 2022 13:01:38 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
+ 13:01:38 +0000
+Date:   Thu, 3 Feb 2022 09:01:37 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Peter Xu <peterx@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: Weird code with change "mm/gup: clean up follow_pfn_pte()
+ slightly"
+Message-ID: <20220203130137.GZ1786498@nvidia.com>
+References: <CAKXUXMxFK9bo8jDoRZbQ0r2j-JwAGg3Xc5cpAcLaHfwHddJ7ew@mail.gmail.com>
+ <6d38ed2a-72cb-3eb6-5af1-caee61d94005@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d38ed2a-72cb-3eb6-5af1-caee61d94005@nvidia.com>
+X-ClientProxiedBy: BL1PR13CA0245.namprd13.prod.outlook.com
+ (2603:10b6:208:2ba::10) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Date:   Thu, 03 Feb 2022 13:59:07 +0100
-From:   Wolfgang Walter <linux@stwm.de>
-To:     Johannes Berg <johannes.berg@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Luca Coelho <luciano.coelho@intel.com>
-Subject: Fwd: Re: 5.15.17: general protection fault when loading iwlwifi as
- module and no firmware available
-In-Reply-To: <YfrC0cIceum+M8n3@kroah.com>
-References: <099995b11936073c8d6b7a28c07ccd95@stwm.de>
- <YflV56eA7Y7tr01u@kroah.com> <2a95df6a3e9c929f51cd1c7942a0ea03@stwm.de>
- <YfrC0cIceum+M8n3@kroah.com>
-Message-ID: <9ede6782c3869dd51596caa6fba99efa@stwm.de>
-X-Sender: linux@stwm.de
-Organization: =?UTF-8?Q?Studentenwerk_M=C3=BCnchen?=
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8ee1c8fc-29a6-4cf7-e3e5-08d9e71550af
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3775:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB37755496A20CC7975D372873C2289@MN2PR12MB3775.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:595;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hpjGoseHqm6bL7nwxdN+yEfcP/KvEDMG2voiMy9iycDmUGQNuHk4218DTDiGfZD2WDOp5OA4P1t693MrClaqsu5Lr9T2QhE/kLZtgEB13vPEQcj1tRZ/CPwF+mKrPR9+DTXLYR7311rZ5Q/PL2anp9m1SlGi5LJ4v+hXpzYJA1QM17fCyHcxmPzIWdainVVrCHSy881ULKLtMw9jz/3i5IuENyoYueVKgLfs1PEZFD5yTHwN38sjtKT7U0smzgCVaakArv/loJu8Ptuz2wQlPqf+UPfEWMFgfggQsuJjucmXt6ztpZugvq87/QKvqPR0Yfq7b69WBj+9yFJJPN1n/4aiu0M57VZW5yENy5YrYl4YIKIsYtd//16PfBw8iVQ16hmpTaVGbJZDYCsAQUWf/gpi0tIE5zU3COPXNl+VhlSiyD4Zzfan4Y7r4Wg4LvElWwTJZRXCF27JA9ORYZfVTg3Jm9LQu5Q6Xz+Wx2oq9WLaNKX60ypDvQdTweT+wevj1faxRDIomG0P1oeG6gF9KaeNW6pgQL4JJSV7bVEcqY7PInCDrTkBGvrzqpG1dXegmc80J/7Z7LSDaKq21R5PXouzbEXh8jTBx4jnLepg/VZ8qaKPRUj9nWn9izKOOYWSp7C+CfVOVUZgcOfQn17VBQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(6862004)(316002)(36756003)(2616005)(8936002)(83380400001)(186003)(6486002)(1076003)(26005)(4326008)(66946007)(6512007)(38100700002)(66476007)(66556008)(53546011)(33656002)(6506007)(2906002)(6636002)(37006003)(86362001)(54906003)(4744005)(7416002)(5660300002)(508600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hFvQfYNAuPa1Ssf/vSu1qFj/cfZuWC2K14Nd6VljzOE1DREiFOEygQUiaM7R?=
+ =?us-ascii?Q?uS9XJaJMAQJ2oH+VIkozFrG7QA6Clh4Pxy5SB/IH1kE+UD2082M5H7uKZ1kY?=
+ =?us-ascii?Q?l6IsoZlUEYTftK3+O6ZjFddOPdfXQwfhkEwIBU3jZaHQVLHcdcjPClBLSNGv?=
+ =?us-ascii?Q?xPossRD0n9hfJLvrSN8fsFUbytw1IrUkclBpQTHalfP4CQ0HhbNB4lw5Et2V?=
+ =?us-ascii?Q?jin3GDWaByA+nOalKK5bQ3BaSFOn8NXKF86ggz1yswz7U2DXYD1UyaDhCSCk?=
+ =?us-ascii?Q?2LMAzHGRrr59zzadYXgbe8bmqeqsBoP/TZ1vqN1Sj6xJh+7GiRELhLnK8I9B?=
+ =?us-ascii?Q?h8g6VC8Nj94MepkA4mbvSHgX/g/76HF6T93N5AcGrvs+dK/CduKbr4nw0Xe9?=
+ =?us-ascii?Q?ceKBs0wp01EoX2DX1GZtt6D0hvuFrz+a0ARHHe/c9XXBcMzOD6N3Y7p7x8H+?=
+ =?us-ascii?Q?N/ly+UF3TASDAUxjcBuKR9tBZdsXsBsoAkCtBkJ/uD2+ydHolx4Tvg6YBOuf?=
+ =?us-ascii?Q?vy6aFWZKcMCbx1K51rIuHTUtIV0hxLaueWpLviYSWKmCdK359BERhz1EdKzm?=
+ =?us-ascii?Q?WNMliIcX8VwIPGifVMX/K6K3IGEVMANIE3FHMAO57oO+8rae0rR3jblIi8DI?=
+ =?us-ascii?Q?vvG2OHJpfzCHP+EtPbDwjElvkPH7/oktGyMkdTBDXp37BY8Psi0w/6yg0/7p?=
+ =?us-ascii?Q?oTbrCUCiZpeyUggJXQ/y6wZjVZcMnofmLg2aPm5rFSNlnMrEts+0/lvLOP+Q?=
+ =?us-ascii?Q?atg45pAMQXr9u+KrKtabYr52A24F7Fk38ovhDrhYlWss3OyLqcdnPNpsBnEA?=
+ =?us-ascii?Q?PvTPiiSGtm9pQJlvuefoUI2TkhEkWiPKdXukDdnIYI2FwgRzgQf3vSdqkmkp?=
+ =?us-ascii?Q?7PNuu04ixCotPBS0QWXC634orqQzt/iY2mAhJy7ngu8J/liiAzQVsP8pHbLL?=
+ =?us-ascii?Q?giMUladghw0Scy6SS5KsnhitbmD1v/xyZBq418hARW3TkS0cOY5V5IzfcWKT?=
+ =?us-ascii?Q?FYVeFyWSRQPE+fsIfXTjuXql2wg9zhS/eDUJexeVIp4JDuQH3bs7TbWqBvYH?=
+ =?us-ascii?Q?8tR/QgEUSTyx4osf6hCudVgKQQXZ6CDMHzg+gboV+5AuBxkmBQSbLS5Lf1nm?=
+ =?us-ascii?Q?fWLU45r5c+ckGA6oSGgLxIdqhP5R/8MvVJ7NabiP7yorT6hiiRmcUTt6o7ig?=
+ =?us-ascii?Q?+oPbPpYiX0Of9SueO2Iae0NGLSoSwWa+5zZ+4J4gwzc7soRoX2NuDAhMbDex?=
+ =?us-ascii?Q?JHkjVqiDc9wZuEzE9uRKhReO925VjwSPLardUn9HPRgbB7y/0CP2a2LPIu16?=
+ =?us-ascii?Q?vPlPUqsMfU7PkbopDXJucufhlhidnmlYBDIg/mjyRS23rQIv9cru3RpFYTk2?=
+ =?us-ascii?Q?zHhf/pTTjEPPFgRQUC5eOaevgQEIEiEaScvjUvNQjvUIiu+4l0DPs+17FJwg?=
+ =?us-ascii?Q?tIJ+dwNVU7476jcKRLO+rifngAllh7BQZ23a2v+Roh/LAXuqJ3uFxRnnPhbI?=
+ =?us-ascii?Q?46y2duRX/BmGKnVS5TejQT6sa/e7N4XqUmSpZ67oD9ztectM7uvc0Hrhu+ur?=
+ =?us-ascii?Q?95SAAAGpQSg5D6C98UM=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ee1c8fc-29a6-4cf7-e3e5-08d9e71550af
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:01:38.4763
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nf9laW/eqtf5A2ERymuR2drngwifNwsCfgRJF+1G9S4goq78lUw5N4gvMJ/vYJKl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3775
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-we found a regression in 5.15.17. When iwlwifi is loaded as a moduleand 
-it cannot load a firmware it crashes:
-
-
-===================================================================
-Jan 28 19:05:01 kistchen kernel: [    5.415151] Intel(R) Wireless WiFi 
-driver for Linux
-Jan 28 19:05:01 kistchen kernel: [    5.425600] iwlwifi 0000:04:00.0: 
-Direct firmware load for iwlwifi-3160-17.ucode failed with error -2
-Jan 28 19:05:01 kistchen kernel: [    5.425616] iwlwifi 0000:04:00.0: no 
-suitable firmware found!
-Jan 28 19:05:01 kistchen kernel: [    5.425704] iwlwifi 0000:04:00.0: 
-iwlwifi-3160-17 is required
-Jan 28 19:05:01 kistchen kernel: [    5.425786] iwlwifi 0000:04:00.0: 
-check 
-git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-Jan 28 19:05:01 kistchen kernel: [    5.426226] general protection 
-fault, probably for non-canonical address 0xd8e6d895001008: 0000 [#1] 
-PREEMPT SMP PTI
-Jan 28 19:05:01 kistchen kernel: [    5.426324] CPU: 1 PID: 45 Comm: 
-kworker/1:1 Not tainted 5.15.17-aladebian64.all+1.2 #1
-Jan 28 19:05:01 kistchen kernel: [    5.426411] Hardware name: ZOTAC 
-XXXXXX/XXXXXX, BIOS B301P017 04/06/2016
-Jan 28 19:05:01 kistchen kernel: [    5.426493] Workqueue: events 
-request_firmware_work_func
-Jan 28 19:05:01 kistchen kernel: [    5.426587] RIP: 
-0010:kfree+0x61/0x170
-Jan 28 19:05:01 kistchen kernel: [    5.426670] Code: 80 48 01 e8 0f 82 
-21 01 00 00 48 c7 c2 00 00 00 80 48 2b 15 01 f8 ee 00 48 01 d0 48 c1 e8 
-0c 48 c1 e0 06 48 03 05 df f7 ee 00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 
-48 0f 45 c1 48 8b 48 08 48 8d 51
-Jan 28 19:05:01 kistchen kernel: [    5.426772] RSP: 
-0018:ffffa54e002b3ce8 EFLAGS: 00010007
-Jan 28 19:05:01 kistchen kernel: [    5.426853] RAX: 00d8e6d895001000 
-RBX: 0000000000000206 RCX: 0000000000000000
-Jan 28 19:05:01 kistchen kernel: [    5.426937] RDX: 00007425c0000000 
-RSI: ffffffffc0fd6ea6 RDI: 36415f5f0004000f
-Jan 28 19:05:01 kistchen kernel: [    5.427019] RBP: 36415f5f0004000f 
-R08: ffffffffa80427c0 R09: ffffa54e002b3be0
-Jan 28 19:05:01 kistchen kernel: [    5.427102] R10: 0000000000000000 
-R11: 0000000000000000 R12: ffff8bdae10e6ab8
-Jan 28 19:05:01 kistchen kernel: [    5.427184] R13: ffff8bdae10e6800 
-R14: ffff8bdac256c400 R15: ffff8bdc37cb5905
-Jan 28 19:05:01 kistchen kernel: [    5.427267] FS:  
-0000000000000000(0000) GS:ffff8bdc37c80000(0000) knlGS:0000000000000000
-Jan 28 19:05:01 kistchen kernel: [    5.427354] CS:  0010 DS: 0000 ES: 
-0000 CR0: 0000000080050033
-Jan 28 19:05:01 kistchen kernel: [    5.427446] CR2: 00007f934935c6f4 
-CR3: 00000001077e2000 CR4: 00000000001006e0
-Jan 28 19:05:01 kistchen kernel: [    5.427541] Call Trace:
-Jan 28 19:05:01 kistchen kernel: [    5.427630]  <TASK>
-Jan 28 19:05:01 kistchen kernel: [    5.427727]  
-iwl_dealloc_ucode+0x36/0x110 [iwlwifi]
-Jan 28 19:05:01 kistchen kernel: [    5.427873]  
-iwl_req_fw_callback+0x2d1/0x2330 [iwlwifi]
-Jan 28 19:05:01 kistchen kernel: [    5.428006]  ? 
-___cache_free+0x31/0x4b0
-Jan 28 19:05:01 kistchen kernel: [    5.428108]  ? 
-_request_firmware+0x3ff/0x780
-Jan 28 19:05:01 kistchen kernel: [    5.428205]  ? kfree+0xa9/0x170
-Jan 28 19:05:01 kistchen kernel: [    5.428298]  ? 
-_request_firmware+0x3ff/0x780
-Jan 28 19:05:01 kistchen kernel: [    5.428391]  
-request_firmware_work_func+0x4d/0x90
-Jan 28 19:05:01 kistchen kernel: [    5.428486]  
-process_one_work+0x1e8/0x3c0
-Jan 28 19:05:01 kistchen kernel: [    5.428581]  
-worker_thread+0x50/0x3b0
-Jan 28 19:05:01 kistchen kernel: [    5.428672]  ? 
-process_one_work+0x3c0/0x3c0
-Jan 28 19:05:01 kistchen kernel: [    5.428763]  kthread+0x141/0x170
-Jan 28 19:05:01 kistchen kernel: [    5.428856]  ? 
-set_kthread_struct+0x40/0x40
-Jan 28 19:05:01 kistchen kernel: [    5.428948]  ret_from_fork+0x22/0x30
-Jan 28 19:05:01 kistchen kernel: [    5.429044]  </TASK>
-Jan 28 19:05:01 kistchen kernel: [    5.429130] Modules linked in: 
-ums_realtek(+) iwlwifi(+) snd_hda_intel uas usb_storage snd_intel_dspcfg 
-sha512_ssse3 ttm snd_intel_sdw_acpi snd_hda_codec snd_hda_core 
-sha512_generic aesni_intel(+) drm_kms_helper snd_hwdep crypto_simd 
-intel_xhci_usb_role_switch cryptd sg roles cec snd_pcm intel_cstate 
-snd_timer mei_txe at24 snd iTCO_wdt rc_core cfg80211 intel_pmc_bxt 
-pcspkr soundcore ctr iTCO_vendor_support mei i2c_algo_bit watchdog drbg 
-ansi_cprng ecdh_generic(+) rfkill ecc pwm_lpss_platform pwm_lpss 
-intel_int0002_vgpio button drm fuse configfs ip_tables x_tables autofs4 
-ext4 crc32c_generic crc16 mbcache jbd2 sd_mod t10_pi crc_t10dif 
-crct10dif_generic ahci libahci xhci_pci sdhci_pci cqhci crct10dif_pclmul 
-crct10dif_common libata r8169 i2c_i801 crc32_pclmul xhci_hcd realtek 
-mdio_devres crc32c_intel i2c_smbus lpc_ich sdhci libphy scsi_mod usbcore 
-usb_common scsi_common mmc_core fan i2c_hid_acpi i2c_hid video hid
-Jan 28 19:05:01 kistchen kernel: [    5.429595] ---[ end trace 
-aea59d2f4abcc392 ]---
-Jan 28 19:05:01 kistchen kernel: [    5.429688] RIP: 
-0010:kfree+0x61/0x170
-Jan 28 19:05:01 kistchen kernel: [    5.429783] Code: 80 48 01 e8 0f 82 
-21 01 00 00 48 c7 c2 00 00 00 80 48 2b 15 01 f8 ee 00 48 01 d0 48 c1 e8 
-0c 48 c1 e0 06 48 03 05 df f7 ee 00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 
-48 0f 45 c1 48 8b 48 08 48 8d 51
-Jan 28 19:05:01 kistchen kernel: [    5.429920] RSP: 
-0018:ffffa54e002b3ce8 EFLAGS: 00010007
-Jan 28 19:05:01 kistchen kernel: [    5.430012] RAX: 00d8e6d895001000 
-RBX: 0000000000000206 RCX: 0000000000000000
-Jan 28 19:05:01 kistchen kernel: [    5.430107] RDX: 00007425c0000000 
-RSI: ffffffffc0fd6ea6 RDI: 36415f5f0004000f
-Jan 28 19:05:01 kistchen kernel: [    5.430201] RBP: 36415f5f0004000f 
-R08: ffffffffa80427c0 R09: ffffa54e002b3be0
-Jan 28 19:05:01 kistchen kernel: [    5.430296] R10: 0000000000000000 
-R11: 0000000000000000 R12: ffff8bdae10e6ab8
-Jan 28 19:05:01 kistchen kernel: [    5.430392] R13: ffff8bdae10e6800 
-R14: ffff8bdac256c400 R15: ffff8bdc37cb5905
-Jan 28 19:05:01 kistchen kernel: [    5.430489] FS:  
-0000000000000000(0000) GS:ffff8bdc37c80000(0000) knlGS:0000000000000000
-Jan 28 19:05:01 kistchen kernel: [    5.430603] CS:  0010 DS: 0000 ES: 
-0000 CR0: 0000000080050033
-Jan 28 19:05:01 kistchen kernel: [    5.430700] CR2: 00007f934935c6f4 
-CR3: 00000001077e2000 CR4: 00000000001006e0
-===================================================================
-
-Providing a firmware file (or blacklisting iwlwifi of course) fixes ist. 
-5.15.16 does not crash.
-
-I bisected it down to e23f075d77987de4215c8e0696f28bcc707506f7 in 
-stable:
-
-
-e23f075d77987de4215c8e0696f28bcc707506f7 is the first bad commit
-commit e23f075d77987de4215c8e0696f28bcc707506f7
-Author: Johannes Berg <johannes.berg@intel.com>
-Date:   Fri Dec 10 11:12:42 2021 +0200
-
-     iwlwifi: fix leaks/bad data after failed firmware load
-
-     [ Upstream commit ab07506b0454bea606095951e19e72c282bfbb42 ]
-
-     If firmware load fails after having loaded some parts of the
-     firmware, e.g. the IML image, then this would leak. For the
-     host command list we'd end up running into a WARN on the next
-     attempt to load another firmware image.
-
-     Fix this by calling iwl_dealloc_ucode() on failures, and make
-     that also clear the data so we start fresh on the next round.
-
-     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-     Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-     Link: 
-https://lore.kernel.org/r/iwlwifi.20211210110539.1f742f0eb58a.I1315f22f6aa632d94ae2069f85e1bca5e734dce0@changeid
-     Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-     Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-  drivers/net/wireless/intel/iwlwifi/iwl-drv.c | 8 ++++++++
-  1 file changed, 8 insertions(+)
-
-
-I reverted this patch (and also the following one, 
-58d53fe49a5dfbd9204c6d605bff4c99f7549256, so the blamed patch reverted 
-cleanly) in 5.15.17. The general protection fault then disappeared.
-
-
-
-I also tested 5.17-rc2. It also shows the above general protection 
-fault:
-
-
-==================================================================================
-
-[   54.627048] CPU: 2 PID: 61 Comm: kworker/2:1 Not tainted 5.17.0-rc2 
-#11
-[   54.627120] Hardware name: ZOTAC XXXXXX/XXXXXX, BIOS B301P017 
-04/06/2016
-[   54.627191] Workqueue: events request_firmware_work_func
-[   54.627258] RIP: 0010:kfree+0x61/0x170
-[   54.627305] Code: 80 48 01 e8 0f 82 14 01 00 00 48 c7 c2 00 00 00 80 
-48 2b 15 81 d2 ee 00 48 01 d0 48 c1 e8 0c 48 c1 e0 06 48 03 05 5f d2 ee 
-00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 48 0f 45 c1 48 8b 10 80 e6 02 0f
-[   54.627492] RSP: 0018:ffff97bb80337ce8 EFLAGS: 00010007
-[   54.627549] RAX: 00d8e3f509001000 RBX: 0000000000000206 RCX: 
-ffffdca084258d07
-[   54.627624] RDX: 000075c2c0000000 RSI: ffffffffc12ba0a6 RDI: 
-36415f5f0004000f
-[   54.627698] RBP: 36415f5f0004000f R08: ffffffff96243740 R09: 
-ffff97bb80337bf8
-[   54.627772] R10: 0000000000000000 R11: 0000000000000000 R12: 
-ffff8a3dc3c622b8
-[   54.627846] R13: ffff8a3f37d36900 R14: 0000000000000000 R15: 
-ffff8a3dc3c62000
-[   54.627920] FS:  0000000000000000(0000) GS:ffff8a3f37d00000(0000) 
-knlGS:0000000000000000
-[   54.628004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   54.628066] CR2: 00007f202174e6f4 CR3: 00000001b3010000 CR4: 
-00000000001006e0
-[   54.628141] Call Trace:
-[   54.628173]  <TASK>
-[   54.628207]  iwl_dealloc_ucode+0x36/0x110 [iwlwifi]
-[   54.628298]  iwl_req_fw_callback+0x2b9/0x2420 [iwlwifi]
-[   54.628377]  ? ___cache_free+0x31/0x4d0
-[   54.628429]  ? _request_firmware+0x514/0x760
-[   54.628481]  ? kfree+0xa3/0x170
-[   54.628520]  ? _request_firmware+0x514/0x760
-[   54.628571]  request_firmware_work_func+0x4d/0x90
-[   54.628628]  process_one_work+0x1e5/0x3b0
-[   54.628678]  ? rescuer_thread+0x370/0x370
-[   54.628724]  worker_thread+0x50/0x3a0
-[   54.628768]  ? rescuer_thread+0x370/0x370
-[   54.628814]  kthread+0xe7/0x110
-[   54.628855]  ? kthread_complete_and_exit+0x20/0x20
-[   54.628911]  ret_from_fork+0x22/0x30
-[   54.628959]  </TASK>
-[   54.628987] Modules linked in: iwlwifi cfg80211 snd_hda_codec_hdmi 
-snd_hda_codec_realtek snd_hda_codec_generic ledtrig_audio intel_rapl_msr 
-intel_rapl_common intel_powerclamp coretemp kvm_intel ums_realtek kvm 
-mei_pxp irqbypass mei_hdcp uas usb_storage intel_xhci_usb_role_switch 
-roles ghash_clmulni_intel hci_uart btusb btqca btrtl btbcm btintel btmtk 
-aesni_intel crypto_simd cryptd snd_hda_intel i915 snd_intel_dspcfg 
-snd_intel_sdw_acpi bluetooth evdev intel_cstate snd_hda_codec at24 
-snd_hda_core snd_hwdep iTCO_wdt snd_pcm ttm intel_pmc_bxt 
-iTCO_vendor_support pcspkr watchdog drm_kms_helper mei_txe snd_timer snd 
-jitterentropy_rng cec sg rc_core soundcore sha512_ssse3 i2c_algo_bit mei 
-sha512_generic ctr drbg ansi_cprng pwm_lpss_platform pwm_lpss 
-ecdh_generic intel_int0002_vgpio rfkill button ecc drm fuse configfs 
-ip_tables x_tables autofs4 ext4 crc32c_generic crc16 mbcache jbd2 
-hid_generic usbhid sd_mod t10_pi crc_t10dif crct10dif_generic xhci_pci 
-r8169 xhci_hcd ahci crct10dif_pclmul
-[   54.629118]  sdhci_pci crct10dif_common libahci realtek crc32_pclmul 
-cqhci crc32c_intel mdio_devres libata sdhci scsi_mod scsi_common usbcore 
-mmc_core usb_common fan libphy i2c_i801 i2c_smbus lpc_ich i2c_hid_acpi 
-i2c_hid video hid
-[   54.630194] ---[ end trace 0000000000000000 ]---
-[   54.630246] RIP: 0010:kfree+0x61/0x170
-[   54.630296] Code: 80 48 01 e8 0f 82 14 01 00 00 48 c7 c2 00 00 00 80 
-48 2b 15 81 d2 ee 00 48 01 d0 48 c1 e8 0c 48 c1 e0 06 48 03 05 5f d2 ee 
-00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 48 0f 45 c1 48 8b 10 80 e6 02 0f
-[   54.630484] RSP: 0018:ffff97bb80337ce8 EFLAGS: 00010007
-[   54.630542] RAX: 00d8e3f509001000 RBX: 0000000000000206 RCX: 
-ffffdca084258d07
-[   54.630616] RDX: 000075c2c0000000 RSI: ffffffffc12ba0a6 RDI: 
-36415f5f0004000f
-[   54.630690] RBP: 36415f5f0004000f R08: ffffffff96243740 R09: 
-ffff97bb80337bf8
-[   54.630765] R10: 0000000000000000 R11: 0000000000000000 R12: 
-ffff8a3dc3c622b8
-[   54.630839] R13: ffff8a3f37d36900 R14: 0000000000000000 R15: 
-ffff8a3dc3c62000
-[   54.630914] FS:  0000000000000000(0000) GS:ffff8a3f37d00000(0000) 
-knlGS:0000000000000000
-[   54.630999] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   54.631059] CR2: 00007f202174e6f4 CR3: 00000001b3010000 CR4: 
-00000000001006e0
-==================================================================================
-
-
-
-
--------- Originalnachricht --------
-Betreff: Re: 5.15.17: general protection fault when loading iwlwifi as 
-module and no firmware available
-Datum: 2022-02-02 18:43
-Von: Greg KH <gregkh@linuxfoundation.org>
-An: Wolfgang Walter <linux@stwm.de>
-Kopie: stable@vger.kernel.org
-
-On Wed, Feb 02, 2022 at 03:44:48PM +0100, Wolfgang Walter wrote:
-> Am 2022-02-01 16:46, schrieb Greg KH:
-> > On Tue, Feb 01, 2022 at 04:31:29PM +0100, Wolfgang Walter wrote:
-> > > Hello,
-> > >
-> > > we found a regression in 5.15.17. When iwlwifi is loaded as a module
-> > > and it
-> > > cannot load a firmware it crashes:
-> > >
-> > > ===================================================================
-> > > Jan 28 19:05:01 kistchen kernel: [    5.415151] Intel(R) Wireless WiFi
-> > > driver for Linux
-> > > Jan 28 19:05:01 kistchen kernel: [    5.425600] iwlwifi
-> > > 0000:04:00.0: Direct
-> > > firmware load for iwlwifi-3160-17.ucode failed with error -2
-> > > Jan 28 19:05:01 kistchen kernel: [    5.425616] iwlwifi
-> > > 0000:04:00.0: no
-> > > suitable firmware found!
-> > > Jan 28 19:05:01 kistchen kernel: [    5.425704] iwlwifi 0000:04:00.0:
-> > > iwlwifi-3160-17 is required
-> > > Jan 28 19:05:01 kistchen kernel: [    5.425786] iwlwifi
-> > > 0000:04:00.0: check
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426226] general protection
-> > > fault,
-> > > probably for non-canonical address 0xd8e6d895001008: 0000 [#1]
-> > > PREEMPT SMP
-> > > PTI
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426324] CPU: 1 PID: 45 Comm:
-> > > kworker/1:1 Not tainted 5.15.17-aladebian64.all+1.2 #1
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426411] Hardware name: ZOTAC
-> > > XXXXXX/XXXXXX, BIOS B301P017 04/06/2016
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426493] Workqueue: events
-> > > request_firmware_work_func
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426587] RIP:
-> > > 0010:kfree+0x61/0x170
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426670] Code: 80 48 01 e8 0f
-> > > 82 21
-> > > 01 00 00 48 c7 c2 00 00 00 80 48 2b 15 01 f8 ee 00 48 01 d0 48 c1 e8
-> > > 0c 48
-> > > c1 e0 06 48 03 05 df f7 ee 00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 48
-> > > 0f 45 c1
-> > > 48 8b 48 08 48 8d 51
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426772] RSP:
-> > > 0018:ffffa54e002b3ce8
-> > > EFLAGS: 00010007
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426853] RAX:
-> > > 00d8e6d895001000 RBX:
-> > > 0000000000000206 RCX: 0000000000000000
-> > > Jan 28 19:05:01 kistchen kernel: [    5.426937] RDX:
-> > > 00007425c0000000 RSI:
-> > > ffffffffc0fd6ea6 RDI: 36415f5f0004000f
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427019] RBP:
-> > > 36415f5f0004000f R08:
-> > > ffffffffa80427c0 R09: ffffa54e002b3be0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427102] R10:
-> > > 0000000000000000 R11:
-> > > 0000000000000000 R12: ffff8bdae10e6ab8
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427184] R13:
-> > > ffff8bdae10e6800 R14:
-> > > ffff8bdac256c400 R15: ffff8bdc37cb5905
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427267] FS:
-> > > 0000000000000000(0000)
-> > > GS:ffff8bdc37c80000(0000) knlGS:0000000000000000
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427354] CS:  0010 DS: 0000
-> > > ES: 0000
-> > > CR0: 0000000080050033
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427446] CR2:
-> > > 00007f934935c6f4 CR3:
-> > > 00000001077e2000 CR4: 00000000001006e0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427541] Call Trace:
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427630]  <TASK>
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427727]
-> > > iwl_dealloc_ucode+0x36/0x110 [iwlwifi]
-> > > Jan 28 19:05:01 kistchen kernel: [    5.427873]
-> > > iwl_req_fw_callback+0x2d1/0x2330 [iwlwifi]
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428006]  ?
-> > > ___cache_free+0x31/0x4b0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428108]  ?
-> > > _request_firmware+0x3ff/0x780
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428205]  ? kfree+0xa9/0x170
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428298]  ?
-> > > _request_firmware+0x3ff/0x780
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428391]
-> > > request_firmware_work_func+0x4d/0x90
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428486]
-> > > process_one_work+0x1e8/0x3c0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428581]
-> > > worker_thread+0x50/0x3b0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428672]  ?
-> > > process_one_work+0x3c0/0x3c0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428763]  kthread+0x141/0x170
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428856]  ?
-> > > set_kthread_struct+0x40/0x40
-> > > Jan 28 19:05:01 kistchen kernel: [    5.428948]
-> > > ret_from_fork+0x22/0x30
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429044]  </TASK>
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429130] Modules linked in:
-> > > ums_realtek(+) iwlwifi(+) snd_hda_intel uas usb_storage
-> > > snd_intel_dspcfg
-> > > sha512_ssse3 ttm snd_intel_sdw_acpi snd_hda_codec snd_hda_core
-> > > sha512_generic aesni_intel(+) drm_kms_helper snd_hwdep crypto_simd
-> > > intel_xhci_usb_role_switch cryptd sg roles cec snd_pcm intel_cstate
-> > > snd_timer mei_txe at24 snd iTCO_wdt rc_core cfg80211 intel_pmc_bxt
-> > > pcspkr
-> > > soundcore ctr iTCO_vendor_support mei i2c_algo_bit watchdog drbg
-> > > ansi_cprng
-> > > ecdh_generic(+) rfkill ecc pwm_lpss_platform pwm_lpss
-> > > intel_int0002_vgpio
-> > > button drm fuse configfs ip_tables x_tables autofs4 ext4
-> > > crc32c_generic
-> > > crc16 mbcache jbd2 sd_mod t10_pi crc_t10dif crct10dif_generic ahci
-> > > libahci
-> > > xhci_pci sdhci_pci cqhci crct10dif_pclmul crct10dif_common libata
-> > > r8169
-> > > i2c_i801 crc32_pclmul xhci_hcd realtek mdio_devres crc32c_intel
-> > > i2c_smbus
-> > > lpc_ich sdhci libphy scsi_mod usbcore usb_common scsi_common
-> > > mmc_core fan
-> > > i2c_hid_acpi i2c_hid video hid
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429595] ---[ end trace
-> > > aea59d2f4abcc392 ]---
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429688] RIP:
-> > > 0010:kfree+0x61/0x170
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429783] Code: 80 48 01 e8 0f
-> > > 82 21
-> > > 01 00 00 48 c7 c2 00 00 00 80 48 2b 15 01 f8 ee 00 48 01 d0 48 c1 e8
-> > > 0c 48
-> > > c1 e0 06 48 03 05 df f7 ee 00 <48> 8b 50 08 48 8d 4a ff 83 e2 01 48
-> > > 0f 45 c1
-> > > 48 8b 48 08 48 8d 51
-> > > Jan 28 19:05:01 kistchen kernel: [    5.429920] RSP:
-> > > 0018:ffffa54e002b3ce8
-> > > EFLAGS: 00010007
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430012] RAX:
-> > > 00d8e6d895001000 RBX:
-> > > 0000000000000206 RCX: 0000000000000000
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430107] RDX:
-> > > 00007425c0000000 RSI:
-> > > ffffffffc0fd6ea6 RDI: 36415f5f0004000f
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430201] RBP:
-> > > 36415f5f0004000f R08:
-> > > ffffffffa80427c0 R09: ffffa54e002b3be0
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430296] R10:
-> > > 0000000000000000 R11:
-> > > 0000000000000000 R12: ffff8bdae10e6ab8
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430392] R13:
-> > > ffff8bdae10e6800 R14:
-> > > ffff8bdac256c400 R15: ffff8bdc37cb5905
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430489] FS:
-> > > 0000000000000000(0000)
-> > > GS:ffff8bdc37c80000(0000) knlGS:0000000000000000
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430603] CS:  0010 DS: 0000
-> > > ES: 0000
-> > > CR0: 0000000080050033
-> > > Jan 28 19:05:01 kistchen kernel: [    5.430700] CR2:
-> > > 00007f934935c6f4 CR3:
-> > > 00000001077e2000 CR4: 00000000001006e0
-> > > ===================================================================
-> > >
-> > > Providing a firmware file (or blacklisting iwlwifi of course) fixes
-> > > ist.
-> > > 5.15.16 does not crash.
-> >
-> > Can you do 'git bisect' to track down the offending commit?
-> >
-> > And does 5.16.y work for you?  How about 5.17-rc2?
-> >
-> > thanks,
-> >
-> > greg k-h
+On Thu, Feb 03, 2022 at 12:38:33AM -0800, John Hubbard wrote:
+> On 2/2/22 22:27, Lukas Bulwahn wrote:
+> > Dear John,
+> > 
+> > Your change "mm/gup: clean up follow_pfn_pte() slightly" (see Link),
+> > visible in linux-next as commit 05fef840b5c6 ("mm/gup: clean up
+> > follow_pfn_pte() slightly"), is somehow weird.
 > 
-> I tested 5.17-rc2. It also shows the above general protection fault:
+> Well. That sounds like something to be avoided. :)
+> 
+> > 
+> > In the new branch if (pages), you set page = ERR_PTR(-EFAULT) and goto
+> > out. However, at the label out, the value of page is not used, but the
+> > return uses the variables i and ret.
+> 
+> Yes, I think that the complaint is accurate. The intent of this code is
+> to return either number of pages so far (i) or ret (which should be zero
+> in this case), because we are just stopping early, rather than calling
+> this an actual error.
 
-Great!  Please contact the authors of the commit you found, and the
-wireless developer mailing list and they can work to resolve this.
+IIRC GUP shouldn't return 0, it should return an error code, not zero.
 
-thanks,
-
-greg k-h
-
-
-Regards,
--- 
-Wolfgang Walter
-Studentenwerk München
-Anstalt des öffentlichen Rechts
+Jason

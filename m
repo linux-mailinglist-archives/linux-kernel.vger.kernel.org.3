@@ -2,110 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FD94A8194
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17844A8197
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243117AbiBCJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:39:29 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:60580 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiBCJj2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:39:28 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 477D51F399;
-        Thu,  3 Feb 2022 09:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1643881167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Zxs99KhY7Z80rmqy9T0r2Wloivv626xyeItNWOxOh6g=;
-        b=mTv36Ulmy4BZGoIMzk5mc52HrZmW/XGjmaO8ThyRM1gJJ5Bx60p9CZg4qUU+Jzd2+yZs+n
-        UTzdNtx7rF5Dg0W7tId7+h4c4ghMWt4NnGOyf/HCE3HBNM3cn7/6E+NXbVRsZfJ3bF7ciW
-        iLtqgxZ+VUY6g9aUmaLQ/gfY5QexsFc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1643881167;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=Zxs99KhY7Z80rmqy9T0r2Wloivv626xyeItNWOxOh6g=;
-        b=ZGCJ21jwW4VVe/xJzlPLDapssHgVo9GR0PRJXRzpapvDSUWHkyYFUNn9dhIr+lpHzh3X47
-        JuOzJEMjqlvvp0DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD2DB13B7F;
-        Thu,  3 Feb 2022 09:39:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2J07NM6i+2F7PgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 03 Feb 2022 09:39:26 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch, lyude@redhat.com, linus.walleij@linaro.org,
-        dianders@chromium.org, ardb@kernel.org, naresh.kamboju@linaro.org
-Cc:     rdunlap@infradead.org, arnd@arndb.de,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
-Date:   Thu,  3 Feb 2022 10:39:22 +0100
-Message-Id: <20220203093922.20754-1-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.34.1
+        id S243127AbiBCJkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:40:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:34502 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233414AbiBCJkb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 04:40:31 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BBA7113E;
+        Thu,  3 Feb 2022 01:40:30 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 532033F40C;
+        Thu,  3 Feb 2022 01:40:28 -0800 (PST)
+Subject: Re: [PATCH v4] sched/fair: Fix fault in reweight_entity
+To:     Tadeusz Struk <tadeusz.struk@linaro.org>, peterz@infradead.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+References: <20220125193403.778497-1-tadeusz.struk@linaro.org>
+ <20220127205623.1258029-1-tadeusz.struk@linaro.org>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <dc241a1f-74c2-3db6-e932-04b653e469bb@arm.com>
+Date:   Thu, 3 Feb 2022 10:40:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <20220127205623.1258029-1-tadeusz.struk@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported in [1], DRM_PANEL_EDP depends on DRM_DP_HELPER. Select
-the option to fix the build failure. The error message is shown
-below.
+On 27/01/2022 21:56, Tadeusz Struk wrote:
+> Syzbot found a GPF in reweight_entity. This has been bisected to commit
+> 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> 
+> There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
+> within a thread group that causes a null-ptr-deref in reweight_entity()
+> in CFS. The scenario is that the main process spawns number of new
+> threads, which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
+> For each of the new threads the copy_process() gets invoked, which adds
+> the new task_struct and calls sched_post_fork() for it.
+> 
+> In the above scenario there is a possibility that setpriority(PRIO_PGRP)
+> and set_one_prio() will be called for a thread in the group that is just
+> being created by copy_process(), and for which the sched_post_fork() has
+> not been executed yet. This will trigger a null pointer dereference in
+> reweight_entity(), as it will try to access the run queue pointer, which
+> hasn't been set. This results it a crash as shown below:
+> 
+> KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
+> CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
+> RIP: 0010:reweight_entity+0x15d/0x440
+> RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
+> Call Trace:
+> <TASK>
+> reweight_task+0xde/0x1c0
+> set_load_weight+0x21c/0x2b0
+> set_user_nice.part.0+0x2d1/0x519
+> set_user_nice.cold+0x8/0xd
+> set_one_prio+0x24f/0x263
+> __do_sys_setpriority+0x2d3/0x640
+> __x64_sys_setpriority+0x84/0x8b
+> do_syscall_64+0x35/0xb0
+> entry_SYSCALL_64_after_hwframe+0x44/0xae
+> </TASK>
+> ---[ end trace 9dc80a9d378ed00a ]---
+> 
+> Before the mentioned change the cfs_rq pointer for the task  has been
+> set in sched_fork(), which is called much earlier in copy_process(),
+> before the new task is added to the thread_group.
+> Now it is done in the sched_post_fork(), which is called after that.
+> To fix the issue the remove the update_load param from the
+> update_load param() function and call reweight_task() only if the task
+> flag doesn't have the TASK_NEW flag set.
+> 
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Zhang Qiao <zhangqiao22@huawei.com>
+> Cc: stable@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
+> Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
+> Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> ---
+> Changes in v4:
+> - Removed the update_load param from set_load_weight() and call
+>   reweight_task() based on the TASK_NEW flag
+> 
+> Changes in v3:
+> - Removed the new check and changed the update_load condition from
+>   always true to true if p->state != TASK_NEW
+> 
+> Changes in v2:
+> - Added a check in set_user_nice(), and return from there if the task
+>   is not fully setup instead of returning from reweight_entity()
+> ---
+>  kernel/sched/core.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 848eaa0efe0e..a0ef4670e695 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1214,10 +1214,12 @@ int tg_nop(struct task_group *tg, void *data)
+>  }
+>  #endif
+>  
+> -static void set_load_weight(struct task_struct *p, bool update_load)
+> +static void set_load_weight(struct task_struct *p)
+>  {
+>  	int prio = p->static_prio - MAX_RT_PRIO;
+>  	struct load_weight *load = &p->se.load;
+> +	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
 
-  arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in function
-    `panel_edp_probe': panel-edp.c:(.text+0xb74): undefined reference to
-    `drm_panel_dp_aux_backlight'
-  make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
+nit-pick: reverse fir tree order
 
-The issue has been reported before, when DisplayPort helpers were
-hidden behind the option CONFIG_DRM_KMS_HELPER. [2]
+cat Documentation/process/maintainer-tip.rst | grep -A 10 "Variable
+declarations"
 
-v2:
-	* fix and expand commit description (Arnd)
+I was able to recreate the initial issue with the reproducer on arm64
+Juno-r0 with CONFIG_CGROUP_SCHED=y .
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: adb9d5a2cc77 ("drm/dp: Move DisplayPort helpers into separate helper module")
-Fixes: 5f04e7ce392d ("drm/panel-edp: Split eDP panels out of panel-simple")
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Link: https://lore.kernel.org/dri-devel/CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com/ # [1]
-Link: https://lore.kernel.org/all/20211117062704.14671-1-rdunlap@infradead.org/ # [2]
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
----
- drivers/gpu/drm/panel/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-index 434c2861bb40..0aec5a10b064 100644
---- a/drivers/gpu/drm/panel/Kconfig
-+++ b/drivers/gpu/drm/panel/Kconfig
-@@ -106,6 +106,7 @@ config DRM_PANEL_EDP
- 	depends on PM
- 	select VIDEOMODE_HELPERS
- 	select DRM_DP_AUX_BUS
-+	select DRM_DP_HELPER
- 	help
- 	  DRM panel driver for dumb eDP panels that need at most a regulator and
- 	  a GPIO to be powered up. Optionally a backlight can be attached so
--- 
-2.34.1
-
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>

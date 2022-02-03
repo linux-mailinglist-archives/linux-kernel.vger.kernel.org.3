@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1444A88DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 741944A88DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352372AbiBCQoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S1352391AbiBCQo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352359AbiBCQoP (ORCPT
+        with ESMTP id S1352381AbiBCQoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:44:15 -0500
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204CC06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:44:14 -0800 (PST)
-Received: by mail-ua1-x92a.google.com with SMTP id b37so6161625uad.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:44:14 -0800 (PST)
+        Thu, 3 Feb 2022 11:44:21 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E175C06173E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:44:21 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id j185so2091414vkc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:44:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=eclypsium.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yjdK5U5Da9cqL6OL8NEqAW4tX/0WDFOVYE3N0Y7mjjg=;
-        b=RnHSE2ec2sy3mA4qRJGiuwYWc3KmdYerQlEAtmAWqgljRdYp/FHmkV11qBJPmqY4hI
-         9PJJnVDjSOhF+R0a/Be7S6KXoosBDsqd0/nw2NkuWgQ6aA0W7R38t390QoRmY4vua4kr
-         snytvlWjEUY9Fkyf5CjPalbYvWzn/RbuGow8QXySbzQ0cJD0P5xAS/Fepm7M+sX8rulM
-         3vDcgzZd/fiJW/CQT8T9xOiDYDlyDqAL0XKfr+adDMFfSMHCNg5taonwfHtBBKIPm8rx
-         t78P10CyuzuchirzZch6Vf17N4vuzDmRNAf6D5vEB2RYot5cPpubKjh4jBIHTO239Zct
-         rzRA==
+        bh=2VGMhr11GA+eGLRm5CsL28eo528BHkwYTiIF+ncvNsE=;
+        b=IAiLk5cjQwcE3yLS3aO2GBCqcyaetSmqrMvYHWmRcTBrX/70H06j9PR2aE3QGP81gN
+         G6QDkvipCsGgjSUtRGArhWJu9iDWKOYWnm+NZ0aqk4cri2wqtuUQX+b9q3EK3qLf7feX
+         OImmnQkBiMNjk2/7Ue9/B8Qdinvi+e/rlfFOS1vMUliTuXgm65EiqOAZE9CaQY4tGH/U
+         /17cWo3icgYBFxnClGbVhoptcy+1QRAjpqIMCkUQhjxF94o8InjEYUfRnEDRxY6mI8V3
+         60dkSPCH/hnp20RoME00w3RlqarwXBsRUPrQ7hYsR3fup3yBWAysWmRuspyPg2EBrkB9
+         r+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yjdK5U5Da9cqL6OL8NEqAW4tX/0WDFOVYE3N0Y7mjjg=;
-        b=mCOp6k0ZpWRcHAg/afztT70ap9cG2YHti3lc5cXVIxWakGaqgBPVgwhBMn5Qe+HQe5
-         96H309MDfjIxNKtBljCvoOJ3Cec5Hm1unZJrdcf2vxizI7R7AR3/tdE7E/4cBx8QS1C3
-         n0MCtddsKsK0eqzFNTViVYMWVGONtrY2bNzvAIVSnu6AvAzfOtF/W6d43ZxmHGCFkf/u
-         zg+irZ/VV3od+ZSxER/Dba0n0DENUozYiZmXqkaCtVQOdHPIAQelpDX8RmmMoIsYmV2O
-         XEfKvCMBOnpIMjYiLYEp12Cp8cFph31wp05ubTixkRbUqBsVu6D5gB5f6D6u6F9URfjn
-         2RXA==
-X-Gm-Message-State: AOAM530oV9VkgVRTG77gfEF3ZrIohYBtTfkcRmIV20zCQUmxgNvJ3sWC
-        KDo85p24CD8JEHNu/4a1SCThzTJRufiXp4prLiswQGryp/Fjk9yX6JDgrhxzVxCqgmuWvnSCAOI
-        yD3Yf30YuEHiQsRJWUmocz408b8cJdZEBV3wJh5nuM0rM9M4LtqYkupMy/FIH4ekibWQLkU/bVf
-        Tsmf3/ZPydWHmN0nPz
-X-Google-Smtp-Source: ABdhPJxfw66WC7p5te/X+pajwCMpJVrLZDihaKaoVnPruFsPWW9RLMsUn/DfHzIlf64y+VH5gAesjA==
-X-Received: by 2002:a05:6102:f08:: with SMTP id v8mr14207630vss.3.1643906653209;
-        Thu, 03 Feb 2022 08:44:13 -0800 (PST)
+        bh=2VGMhr11GA+eGLRm5CsL28eo528BHkwYTiIF+ncvNsE=;
+        b=YS+cW0eBxZ5N+ZlC6ceMgAh9qyTsVrDBJTJiDCvvtV4fwnpXfMYzJz2cbLkvsEq+sA
+         TdpfatTJXBLQP4W9sn2rRPZxy3/jIIBu6S84leW+U534+bf2qIuwQ8bm4nXUG1x0yU6m
+         wc1cVQNCkbk1p3Ie7E+BLPhYx/QuZKbPogyPL+tUHkiSZBUNV2FNIEcuvoCcxt/Fj3wn
+         jZVSbAyMWiYXZRMEg8DEe6baS3MqpgOFlVss2NyuojDFgajin74H0Kr4aLM6bRuohfcg
+         HUL0tQVAiMKDAMxxJojBqNA5KQCzJ3G+w9Q2HGAHPrSZQtHCcn8L8Rb6IqNQ0DSLnJdF
+         ChLA==
+X-Gm-Message-State: AOAM531Fyrc4YMSYtZT/cPPbpUN7lPEzcZATy2SSugLMiRXZ32+Wdq6M
+        e8ZvplfirMyiWqzy1zObq9XVI2OFLEDxOp6IgbQ9esIbbLs/DPPGexF60zE7Ziz8CW9iRz70aet
+        eiQt3azTPrndjn+WmHo8PUHoGp0rLpNemgdUjkjPTJ0E2ZAsRKrqVSc/4mmUL1hcDxF4lBHE3Vv
+        +UPKrssL+EV643HETY
+X-Google-Smtp-Source: ABdhPJzsOFFOqxgDzTCzuaTzUcSCoJoy32VcScNJTJMZP7zNyU9OfyuKOow2hpJD7GfcAiCruPNRVA==
+X-Received: by 2002:a05:6122:c90:: with SMTP id ba16mr15282992vkb.39.1643906660499;
+        Thu, 03 Feb 2022 08:44:20 -0800 (PST)
 Received: from localhost (host8.190-224-49.telecom.net.ar. [190.224.49.8])
-        by smtp.gmail.com with ESMTPSA id u70sm3653044vsu.10.2022.02.03.08.44.09
+        by smtp.gmail.com with ESMTPSA id s11sm6623102vke.47.2022.02.03.08.44.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 08:44:12 -0800 (PST)
+        Thu, 03 Feb 2022 08:44:20 -0800 (PST)
 From:   Martin Fernandez <martin.fernandez@eclypsium.com>
 To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, linux-mm@kvack.org
@@ -61,9 +61,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
         alison.schofield@intel.com, keescook@chromium.org,
         Martin Fernandez <martin.fernandez@eclypsium.com>
-Subject: [PATCH v6 4/6] x86/e820: Tag e820_entry with crypto capabilities
-Date:   Thu,  3 Feb 2022 13:43:26 -0300
-Message-Id: <20220203164328.203629-5-martin.fernandez@eclypsium.com>
+Subject: [PATCH v6 5/6] x86/efi: Tag e820_entries as crypto capable from EFI memmap
+Date:   Thu,  3 Feb 2022 13:43:27 -0300
+Message-Id: <20220203164328.203629-6-martin.fernandez@eclypsium.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
 References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
@@ -73,290 +73,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new enum for crypto capabilities.
+Add a function to iterate over the EFI Memory Map and mark the regions
+tagged with EFI_MEMORY_CPU_CRYPTO in the e820_table; and call it from
+efi_init if add_efi_memmap is disabled.
 
-Add a new member in e820_entry to hold whether an entry is able to do
-hardware memory encryption or not.
+Also modify do_add_efi_memmap to mark the regions there.
 
-Add a new function e820__range_set_crypto_capable to mark all the
-entries in a range of addresses as encryptable. This will be called
-when initializing EFI.
-
-Change e820__update_table to handle merging and overlap problems
-taking into account crypto_capable.
+If add_efi_memmap is false, also check that the e820_table has enough
+size to (possibly) store also the EFI memmap.
 
 Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
 ---
- arch/x86/include/asm/e820/api.h   |   1 +
- arch/x86/include/asm/e820/types.h |  12 +++-
- arch/x86/kernel/e820.c            | 114 ++++++++++++++++++++++++++++--
- 3 files changed, 119 insertions(+), 8 deletions(-)
+ arch/x86/platform/efi/efi.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
-index e8f58ddd06d9..4b3b01fafdd1 100644
---- a/arch/x86/include/asm/e820/api.h
-+++ b/arch/x86/include/asm/e820/api.h
-@@ -17,6 +17,7 @@ extern bool e820__mapped_all(u64 start, u64 end, enum e820_type type);
- extern void e820__range_add   (u64 start, u64 size, enum e820_type type);
- extern u64  e820__range_update(u64 start, u64 size, enum e820_type old_type, enum e820_type new_type);
- extern u64  e820__range_remove(u64 start, u64 size, enum e820_type old_type, bool check_type);
-+extern u64  e820__range_set_crypto_capable(u64 start, u64 size);
- 
- extern void e820__print_table(char *who);
- extern int  e820__update_table(struct e820_table *table);
-diff --git a/arch/x86/include/asm/e820/types.h b/arch/x86/include/asm/e820/types.h
-index 314f75d886d0..aef03c665f5e 100644
---- a/arch/x86/include/asm/e820/types.h
-+++ b/arch/x86/include/asm/e820/types.h
-@@ -46,6 +46,11 @@ enum e820_type {
- 	E820_TYPE_RESERVED_KERN	= 128,
- };
- 
-+enum e820_crypto_capabilities {
-+	E820_NOT_CRYPTO_CAPABLE	= 0,
-+	E820_CRYPTO_CAPABLE	= 1,
-+};
-+
- /*
-  * A single E820 map entry, describing a memory range of [addr...addr+size-1],
-  * of 'type' memory type:
-@@ -53,9 +58,10 @@ enum e820_type {
-  * (We pack it because there can be thousands of them on large systems.)
-  */
- struct e820_entry {
--	u64			addr;
--	u64			size;
--	enum e820_type		type;
-+	u64				addr;
-+	u64				size;
-+	enum e820_type			type;
-+	enum e820_crypto_capabilities	crypto_capable;
- } __attribute__((packed));
- 
- /*
-diff --git a/arch/x86/kernel/e820.c b/arch/x86/kernel/e820.c
-index 89b78c6b345b..098882d02120 100644
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@ -163,7 +163,9 @@ int e820__get_entry_type(u64 start, u64 end)
- /*
-  * Add a memory region to the kernel E820 map.
-  */
--static void __init __e820__range_add(struct e820_table *table, u64 start, u64 size, enum e820_type type)
-+static void __init __e820__range_add(struct e820_table *table, u64 start,
-+				     u64 size, enum e820_type type,
-+				     enum e820_crypto_capabilities crypto_capable)
- {
- 	int x = table->nr_entries;
- 
-@@ -176,12 +178,13 @@ static void __init __e820__range_add(struct e820_table *table, u64 start, u64 si
- 	table->entries[x].addr = start;
- 	table->entries[x].size = size;
- 	table->entries[x].type = type;
-+	table->entries[x].crypto_capable = crypto_capable;
- 	table->nr_entries++;
- }
- 
- void __init e820__range_add(u64 start, u64 size, enum e820_type type)
- {
--	__e820__range_add(e820_table, start, size, type);
-+	__e820__range_add(e820_table, start, size, type, E820_NOT_CRYPTO_CAPABLE);
- }
- 
- static void __init e820_print_type(enum e820_type type)
-@@ -211,6 +214,8 @@ void __init e820__print_table(char *who)
- 			e820_table->entries[i].addr + e820_table->entries[i].size - 1);
- 
- 		e820_print_type(e820_table->entries[i].type);
-+		if (e820_table->entries[i].crypto_capable == E820_CRYPTO_CAPABLE)
-+			pr_cont("; crypto-capable");
- 		pr_cont("\n");
- 	}
- }
-@@ -327,6 +332,7 @@ int __init e820__update_table(struct e820_table *table)
- 	unsigned long long last_addr;
- 	u32 new_nr_entries, overlap_entries;
- 	u32 i, chg_idx, chg_nr;
-+	enum e820_crypto_capabilities current_crypto, last_crypto;
- 
- 	/* If there's only one memory region, don't bother: */
- 	if (table->nr_entries < 2)
-@@ -367,6 +373,7 @@ int __init e820__update_table(struct e820_table *table)
- 	new_nr_entries = 0;	 /* Index for creating new map entries */
- 	last_type = 0;		 /* Start with undefined memory type */
- 	last_addr = 0;		 /* Start with 0 as last starting address */
-+	last_crypto = E820_NOT_CRYPTO_CAPABLE;
- 
- 	/* Loop through change-points, determining effect on the new map: */
- 	for (chg_idx = 0; chg_idx < chg_nr; chg_idx++) {
-@@ -388,13 +395,19 @@ int __init e820__update_table(struct e820_table *table)
- 		 * 1=usable, 2,3,4,4+=unusable)
- 		 */
- 		current_type = 0;
-+		current_crypto = E820_CRYPTO_CAPABLE;
- 		for (i = 0; i < overlap_entries; i++) {
-+			if (overlap_list[i]->crypto_capable < current_crypto)
-+				current_crypto = overlap_list[i]->crypto_capable;
-+
- 			if (overlap_list[i]->type > current_type)
- 				current_type = overlap_list[i]->type;
+diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+index 147c30a81f15..3efa1c620c75 100644
+--- a/arch/x86/platform/efi/efi.c
++++ b/arch/x86/platform/efi/efi.c
+@@ -184,6 +184,8 @@ static void __init do_add_efi_memmap(void)
  		}
  
- 		/* Continue building up new map based on this information: */
--		if (current_type != last_type || e820_nomerge(current_type)) {
-+		if (current_type != last_type ||
-+		    current_crypto != last_crypto ||
-+		    e820_nomerge(current_type)) {
- 			if (last_type != 0)	 {
- 				new_entries[new_nr_entries].size = change_point[chg_idx]->addr - last_addr;
- 				/* Move forward only if the new size was non-zero: */
-@@ -406,9 +419,12 @@ int __init e820__update_table(struct e820_table *table)
- 			if (current_type != 0)	{
- 				new_entries[new_nr_entries].addr = change_point[chg_idx]->addr;
- 				new_entries[new_nr_entries].type = current_type;
-+				new_entries[new_nr_entries].crypto_capable = current_crypto;
-+
- 				last_addr = change_point[chg_idx]->addr;
- 			}
- 			last_type = current_type;
-+			last_crypto = current_crypto;
- 		}
+ 		e820__range_add(start, size, e820_type);
++		if (md->attribute & EFI_MEMORY_CPU_CRYPTO)
++			e820__range_set_crypto_capable(start, size);
  	}
- 
-@@ -505,6 +521,19 @@ struct e820_type_updater_data {
- 	enum e820_type new_type;
- };
- 
-+/**
-+ * e820_crypto_updater_data - Helper type for
-+ * __e820__range_update_crypto().
-+ * @crypto_capable: crypto_capable parameter of
-+ * __e820__range_update_crypto().
-+ *
-+ * This is intended to be used as the @data argument for the
-+ * e820_entry_updater callbacks.
-+ */
-+struct e820_crypto_updater_data {
-+	enum e820_crypto_capabilities crypto_capable;
-+};
-+
- /**
-  * __e820__handle_intersected_range_update() - Helper function for
-  * __e820__handle_range_update().
-@@ -615,7 +644,8 @@ __e820__handle_range_update(struct e820_table *table,
- 				 * of the current entry
- 				 */
- 				__e820__range_add(table, end, entry_end - end,
--						  entry->type);
-+						  entry->type,
-+						  entry->crypto_capable);
- 
- 				updated_size += size;
- 			} else {
-@@ -656,7 +686,7 @@ static void __init type_updater__new(struct e820_table *table, u64 new_start,
- 		(struct e820_type_updater_data *)data;
- 
- 	__e820__range_add(table, new_start, new_size,
--			  type_updater_data->new_type);
-+			  type_updater_data->new_type, original->crypto_capable);
+ 	e820__update_table(e820_table);
+ }
+@@ -441,6 +443,34 @@ static int __init efi_config_init(const efi_config_table_type_t *arch_tables)
+ 	return ret;
  }
  
- static u64 __init __e820__range_update(struct e820_table *table, u64 start,
-@@ -686,6 +716,62 @@ static u64 __init __e820__range_update(struct e820_table *table, u64 start,
- 	return __e820__handle_range_update(table, start, size, &updater, &data);
- }
- 
-+static bool __init crypto_updater__should_update(const struct e820_entry *entry,
-+						 const void *data)
++static void __init efi_mark_e820_regions_as_crypto_capable(void)
 +{
-+	struct e820_crypto_updater_data *crypto_updater_data =
-+		(struct e820_crypto_updater_data *)data;
++	efi_memory_desc_t *md;
 +
-+	return crypto_updater_data->crypto_capable != entry->crypto_capable;
++	/*
++	 * Calling e820__range_set_crypto_capable several times
++	 * creates a bunch of entries in the E820 table. They probably
++	 * will get merged when calling update_table but we need the
++	 * space there anyway
++	 */
++	if (efi.memmap.nr_map + e820_table->nr_entries >= E820_MAX_ENTRIES) {
++		pr_err_once("E820 table is not large enough to fit EFI memmap; not marking entries as crypto capable\n");
++		return;
++	}
++
++	for_each_efi_memory_desc(md) {
++		if (md->attribute & EFI_MEMORY_CPU_CRYPTO)
++			e820__range_set_crypto_capable(md->phys_addr,
++						       md->num_pages << EFI_PAGE_SHIFT);
++	}
++
++	/*
++	 * We added and modified regions so it's good to update the
++	 * table to merge/sort
++	 */
++	e820__update_table(e820_table);
 +}
 +
-+static void __init crypto_updater__update(struct e820_entry *entry,
-+					  const void *data)
-+{
-+	struct e820_crypto_updater_data *crypto_updater_data =
-+		(struct e820_crypto_updater_data *)data;
-+
-+	entry->crypto_capable = crypto_updater_data->crypto_capable;
-+}
-+
-+static void __init crypto_updater__new(struct e820_table *table, u64 new_start,
-+				       u64 new_size,
-+				       const struct e820_entry *original,
-+				       const void *data)
-+{
-+	struct e820_crypto_updater_data *crypto_updater_data =
-+		(struct e820_crypto_updater_data *)data;
-+
-+	__e820__range_add(table, new_start, new_size, original->type,
-+			  crypto_updater_data->crypto_capable);
-+}
-+
-+static u64 __init
-+__e820__range_update_crypto(struct e820_table *table, u64 start, u64 size,
-+			    enum e820_crypto_capabilities crypto_capable)
-+{
-+	struct e820_entry_updater updater = {
-+		.should_update = crypto_updater__should_update,
-+		.update = crypto_updater__update,
-+		.new = crypto_updater__new
-+	};
-+
-+	struct e820_crypto_updater_data data = {
-+		.crypto_capable = crypto_capable,
-+	};
-+
-+	printk(KERN_DEBUG "e820: crypto update [mem %#018Lx-%#018Lx]", start,
-+	       start + size - 1);
-+	pr_cont(" ==> ");
-+	if (crypto_capable == E820_CRYPTO_CAPABLE)
-+		pr_cont("crypto capable");
-+	else
-+		pr_cont("not crypto capable");
-+	pr_cont("\n");
-+
-+	return __e820__handle_range_update(table, start, size, &updater, &data);
-+}
-+
- static bool __init remover__should_update(const struct e820_entry *entry,
- 					  const void *data)
+ void __init efi_init(void)
  {
-@@ -782,6 +868,22 @@ static u64 __init e820__range_update_kexec(u64 start, u64 size,
- 	return __e820__range_update(e820_table_kexec, start, size, old_type, new_type);
- }
+ 	if (IS_ENABLED(CONFIG_X86_32) &&
+@@ -494,6 +524,13 @@ void __init efi_init(void)
+ 	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+ 	efi_clean_memmap();
  
-+/**
-+ * e820__range_set_crypto_capable() - Set %E820_CRYPTO_CAPABLE to a
-+ * given range of addresses in e820_table.
-+ * @start: Start of the range.
-+ * @size: Size of the range.
-+ *
-+ * Set %E820_CRYPTO_CAPABLE to [@start, @start + @size) in e820_table.
-+ *
-+ * Return: The size updated.
-+ */
-+u64 __init e820__range_set_crypto_capable(u64 start, u64 size)
-+{
-+	return __e820__range_update_crypto(e820_table, start, size,
-+					   E820_CRYPTO_CAPABLE);
-+}
++	/*
++	 * If add_efi_memmap then there is no need to mark the regions
++	 * again
++	 */
++	if (!add_efi_memmap)
++		efi_mark_e820_regions_as_crypto_capable();
 +
- void __init e820__update_table_print(void)
- {
- 	if (e820__update_table(e820_table))
-@@ -1505,6 +1607,8 @@ void __init e820__memblock_setup(void)
- 			continue;
- 
- 		memblock_add(entry->addr, entry->size);
-+		if (entry->crypto_capable == E820_CRYPTO_CAPABLE)
-+			memblock_mark_crypto_capable(entry->addr, entry->size);
- 	}
- 
- 	/* Throw away partial pages: */
+ 	if (efi_enabled(EFI_DBG))
+ 		efi_print_memmap();
+ }
 -- 
 2.30.2
 

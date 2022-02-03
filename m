@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A904A8E48
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BFF4A8DDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354230AbiBCUgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S1354718AbiBCUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354297AbiBCUde (ORCPT
+        with ESMTP id S1354665AbiBCUci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:33:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF15C06174A;
-        Thu,  3 Feb 2022 12:33:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DED4761A04;
-        Thu,  3 Feb 2022 20:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9E1C340EB;
-        Thu,  3 Feb 2022 20:33:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920382;
-        bh=SeiQ8rRzQyBwPXJWscgWn7Gf9uDRWBYWJf02DAfTknA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nhd3Vmefoot7nfOVf5u9xgHshOyJ5pdrcWO1pTFCgSV7JwZhiD44uBMFolDwm12wF
-         Z+pYBFv/ZzTIA36OheD3GMundpwXSXXsu+IKmi2vNSyDEg0Zn1RMe3s8FIoMeufKFs
-         PIdRbyug+CNUgUosFoX2ahcghjCbO/0xC3vXxCTgFaZoudYIlDXcEs+rWg1x0cv1gX
-         XUszZ5gl7hxcsGtxArjv26/88AWAHqzoB+N8l3wZ9fNtec1Ibbg4yW8ewoSlyjazyy
-         QyKwGDzcrBPyJLtrboUggoCPikP2qjfd7DFG0peC8xasT6w5mDtg0G8sPn8teD3xvt
-         Ake/bYG4jm/qw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Olga Kornievskaia <kolga@netapp.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        linux-nfs@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 10/41] NFSv4 handle port presence in fs_location server string
-Date:   Thu,  3 Feb 2022 15:32:14 -0500
-Message-Id: <20220203203245.3007-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
-References: <20220203203245.3007-1-sashal@kernel.org>
+        Thu, 3 Feb 2022 15:32:38 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA42C0613E8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:32:29 -0800 (PST)
+Received: from dslb-188-096-149-005.188.096.pools.vodafone-ip.de ([188.96.149.5] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nFimJ-0004W7-KH; Thu, 03 Feb 2022 21:32:27 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 2/4] staging: r8188eu: remove dead code for tx power tracking
+Date:   Thu,  3 Feb 2022 21:32:15 +0100
+Message-Id: <20220203203217.252156-3-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220203203217.252156-1-martin@kaiser.cx>
+References: <20220203203217.252156-1-martin@kaiser.cx>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+The odm_TXPowerTrackingCallback_ThermalMeter_8188E contains code
+for OFDM paths A and B. It seems that path B is not used, is2t is
+always false. Remove resulting dead code.
 
-[ Upstream commit a8d54baba7c65db2d3278873def61f8d3753d766 ]
-
-An fs_location attribute returns a string that can be ipv4, ipv6,
-or DNS name. An ip location can have a port appended to it and if
-no port is present a default port needs to be set. If rpc_pton()
-fails to parse, try calling rpc_uaddr2socaddr() that can convert
-an universal address.
-
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- fs/nfs/nfs4_fs.h       |  2 +-
- fs/nfs/nfs4namespace.c | 17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ drivers/staging/r8188eu/hal/HalPhyRf_8188e.c | 52 +-------------------
+ 1 file changed, 2 insertions(+), 50 deletions(-)
 
-diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
-index 0eb8e5d2ec395..f8672a34fd635 100644
---- a/fs/nfs/nfs4_fs.h
-+++ b/fs/nfs/nfs4_fs.h
-@@ -282,7 +282,7 @@ int nfs4_submount(struct fs_context *, struct nfs_server *);
- int nfs4_replace_transport(struct nfs_server *server,
- 				const struct nfs4_fs_locations *locations);
- size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
--			     size_t salen, struct net *net);
-+			     size_t salen, struct net *net, int port);
- /* nfs4proc.c */
- extern int nfs4_handle_exception(struct nfs_server *, int, struct nfs4_exception *);
- extern int nfs4_async_handle_error(struct rpc_task *task,
-diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
-index f1ed4f60a7f33..3680c8da510c9 100644
---- a/fs/nfs/nfs4namespace.c
-+++ b/fs/nfs/nfs4namespace.c
-@@ -165,15 +165,20 @@ static int nfs4_validate_fspath(struct dentry *dentry,
- }
+diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+index db87eaafb72f..8bdd02271203 100644
+--- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
++++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
+@@ -102,12 +102,11 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
+ 	u8 ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
+ 	u8 ThermalValue_AVG_count = 0;
+ 	u32 ThermalValue_AVG = 0;
+-	s32 ele_A = 0, ele_D, TempCCk, X, value32;
++	s32 ele_A = 0, ele_D, TempCCk, X;
+ 	s32 Y, ele_C = 0;
+ 	s8 OFDM_index[2], CCK_index = 0;
+ 	s8 OFDM_index_old[2] = {0, 0}, CCK_index_old = 0;
+ 	u32 i = 0, j = 0;
+-	bool is2t = false;
  
- size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
--			     size_t salen, struct net *net)
-+			     size_t salen, struct net *net, int port)
- {
- 	ssize_t ret;
+ 	u8 OFDM_min_index = 6, rf; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
+ 	s8 OFDM_index_mapping[2][index_mapping_NUM_88E] = {
+@@ -139,10 +138,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
  
- 	ret = rpc_pton(net, string, len, sa, salen);
- 	if (ret == 0) {
--		ret = nfs_dns_resolve_name(net, string, len, sa, salen);
--		if (ret < 0)
--			ret = 0;
-+		ret = rpc_uaddr2sockaddr(net, string, len, sa, salen);
-+		if (ret == 0) {
-+			ret = nfs_dns_resolve_name(net, string, len, sa, salen);
-+			if (ret < 0)
-+				ret = 0;
-+		}
-+	} else if (port) {
-+		rpc_set_port(sa, port);
- 	}
- 	return ret;
- }
-@@ -328,7 +333,7 @@ static int try_location(struct fs_context *fc,
- 			nfs_parse_server_name(buf->data, buf->len,
- 					      &ctx->nfs_server.address,
- 					      sizeof(ctx->nfs_server._address),
--					      fc->net_ns);
-+					      fc->net_ns, 0);
- 		if (ctx->nfs_server.addrlen == 0)
- 			continue;
+ 	ThermalValue = (u8)rtl8188e_PHY_QueryRFReg(Adapter, RF_PATH_A, RF_T_METER_88E, 0xfc00); /* 0x42: RF Reg[15:10] 88E */
  
-@@ -496,7 +501,7 @@ static int nfs4_try_replacing_one_location(struct nfs_server *server,
- 			continue;
+-	if (is2t)
+-		rf = 2;
+-	else
+-		rf = 1;
++	rf = 1;
  
- 		salen = nfs_parse_server_name(buf->data, buf->len,
--						sap, addr_bufsize, net);
-+						sap, addr_bufsize, net, 0);
- 		if (salen == 0)
- 			continue;
- 		rpc_set_port(sap, NFS_PORT);
+ 	if (ThermalValue) {
+ 		/* Query OFDM path A default setting */
+@@ -155,17 +151,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
+ 			}
+ 		}
+ 
+-		/* Query OFDM path B default setting */
+-		if (is2t) {
+-			ele_D = rtl8188e_PHY_QueryBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord) & bMaskOFDM_D;
+-			for (i = 0; i < OFDM_TABLE_SIZE_92D; i++) {	/* find the index */
+-				if (ele_D == (OFDMSwingTable[i] & bMaskOFDM_D)) {
+-					OFDM_index_old[1] = (u8)i;
+-					break;
+-				}
+-			}
+-		}
+-
+ 		/* Query CCK default setting From 0xa24 */
+ 		TempCCk = dm_odm->RFCalibrateInfo.RegA24;
+ 
+@@ -309,39 +294,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
+ 					/*  2012/04/23 MH According to Luke's suggestion, we can not write BB digital */
+ 					/*  to increase TX power. Otherwise, EVM will be bad. */
+ 				}
+-
+-				if (is2t) {
+-					ele_D = (OFDMSwingTable[(u8)OFDM_index[1]] & 0xFFC00000) >> 22;
+-
+-					/* new element A = element D x X */
+-					X = dm_odm->RFCalibrateInfo.IQKMatrixRegSetting.Value[0][4];
+-					Y = dm_odm->RFCalibrateInfo.IQKMatrixRegSetting.Value[0][5];
+-
+-					if (X != 0) {
+-						if ((X & 0x00000200) != 0)	/* consider minus */
+-							X = X | 0xFFFFFC00;
+-						ele_A = ((X * ele_D) >> 8) & 0x000003FF;
+-
+-						/* new element C = element D x Y */
+-						if ((Y & 0x00000200) != 0)
+-							Y = Y | 0xFFFFFC00;
+-						ele_C = ((Y * ele_D) >> 8) & 0x00003FF;
+-
+-						/* wtite new elements A, C, D to regC88 and regC9C, element B is always 0 */
+-						value32 = (ele_D << 22) | ((ele_C & 0x3F) << 16) | ele_A;
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, value32);
+-
+-						value32 = (ele_C & 0x000003C0) >> 6;
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XDTxAFE, bMaskH4Bits, value32);
+-
+-						value32 = ((X * ele_D) >> 7) & 0x01;
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT(28), value32);
+-					} else {
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, OFDMSwingTable[(u8)OFDM_index[1]]);
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XDTxAFE, bMaskH4Bits, 0x00);
+-						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT(28), 0x00);
+-					}
+-				}
+ 			}
+ 		}
+ 
 -- 
-2.34.1
+2.30.2
 

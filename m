@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681004A89DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD44A89E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352798AbiBCRWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:22:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S1352799AbiBCRZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238144AbiBCRWK (ORCPT
+        with ESMTP id S231916AbiBCRZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:22:10 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC83C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:22:10 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id m7so3080805pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LtlBUMv0CPKdCeI0pe7fbcz2gG9lHor4afW1JFe9U1w=;
-        b=aXjzcKxbBqnD+78aS6PayfL7S71+4AwGIy38eEkV5uFCjECMB+HiKa/EVf84XNsgVE
-         j4SQj0J07YItloUzVhckSNw5cKagoOg3C8hQ5/ro6gmJL5tMqeynO/d6UDFPgv/r2OGf
-         eCGF7y+Aw0HqR1JUNrFG+jmjbvWm9U4j3B/sM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LtlBUMv0CPKdCeI0pe7fbcz2gG9lHor4afW1JFe9U1w=;
-        b=g5KEhE27cyHatdKOSoMeTHFQQWQf100dAfXKgD1xKN9D+6fpaz44ghK+M+Y7sF/IXe
-         90juGt4vGtdopmAWaLc1VCyjg5Eho56EQsC7LUN8JQTBBuvHQKZfxLbQjkpZDwmfwd7D
-         lddyDGgaMvnGUrc5TqALxvnv2bbZBZRQpWNxJOBGTEfDI7fcLSugMVqGV4V3qPSzuV4D
-         8FArQ6aXVaVhCVG7rgtr2QdsevBZgKubVMOnAHsaNM5vodm4CRDS95T092I3Hke0ppyR
-         ebPNFcTGb5y8gsNxIoXSfkkYr9q5cmwLrZz3VJuOHYRkD0WcIPIdGtsw+AGJz8JzkcVf
-         yplQ==
-X-Gm-Message-State: AOAM53213ZyqY1hr5yDH3dKSzKKDHIsnvaUk855wlI3DUn6p0fnL2qdv
-        PoyJMqrbFp9wAy/SGTp8cnGHqw==
-X-Google-Smtp-Source: ABdhPJyIo07frE3OhbxA2nH+n/rIIuqX3s5VuPRNYWhKC2DGG6WboOZGCRrMSLfSoFqI6Kzg3Y7Utg==
-X-Received: by 2002:a17:90a:2fc5:: with SMTP id n5mr14831024pjm.69.1643908929710;
-        Thu, 03 Feb 2022 09:22:09 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:c0cb:3065:aa0:d6c9])
-        by smtp.gmail.com with UTF8SMTPSA id n42sm29220330pfv.29.2022.02.03.09.22.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 09:22:09 -0800 (PST)
-Date:   Thu, 3 Feb 2022 09:22:07 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        pmaliset@codeaurora.org, quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        sibis@codeaurora.org, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 10/14] arm64: dts: qcom: sc7280: Move dp_hot_plug_det
- pull from SoC dtsi file
-Message-ID: <YfwPP/u2kWwWEHzC@google.com>
-References: <20220202212348.1391534-1-dianders@chromium.org>
- <20220202132301.v3.10.Id346b23642f91e16d68d75f44bcdb5b9fbd155ea@changeid>
+        Thu, 3 Feb 2022 12:25:08 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC69C061714;
+        Thu,  3 Feb 2022 09:25:08 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 32E1181F0B;
+        Thu,  3 Feb 2022 18:25:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1643909104;
+        bh=m+N3MoX1/LE+15s/+NTNTKxRDOY/z4DDw+htkzNgE3M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bjoCLfODyyae88W21rRnORrVj+1mQQh9CW3ha4R4Gvo6vqM6j7YWesMa/Y5/pCFMy
+         DHhx4WHz5jChtGRckwKV3B/SkN+ta4efiguIbI3OXY+KAw2xGbZJgLolGYvJA3s/ab
+         J5GN164KC1qhxoLbox4UW1kyhTmRkcA0CnIna3Z0us1J0l5DeKMr1pHLQ7MCvG/tSD
+         vi/fvJmH7/myw2w23DIG+nSxGrTRf+vFS0Efnk+2MmuazgRKOpgXZ5CZlfLTyUHUL+
+         vs8KISFPwmT6r87KyjfHLMdnL9K/XRMnQGsmyobopttpgnIrpKMLzGl7MFPgtlfync
+         iW2TNft8rPn6g==
+Message-ID: <0b0cdffe-b4cc-e125-f3ea-4ece582f806b@denx.de>
+Date:   Thu, 3 Feb 2022 18:25:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220202132301.v3.10.Id346b23642f91e16d68d75f44bcdb5b9fbd155ea@changeid>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 16/16] ARM: dts: stm32: keep uart nodes behavior on
+ stm32mp15xx-dhcor-avenger96
+Content-Language: en-US
+To:     Erwan Le Ray <erwan.leray@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marcin Sloniewski <marcin.sloniewski@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220203171114.10888-1-erwan.leray@foss.st.com>
+ <20220203171114.10888-17-erwan.leray@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20220203171114.10888-17-erwan.leray@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 01:23:44PM -0800, Douglas Anderson wrote:
-> Pulls should be in the board files, not in the SoC dtsi
-> file. Remove. Even though the sc7280 boards don't currently refer to
-> dp_hot_plug_det, let's re-add the pulls there just to keep this as a
-> no-op change. If boards don't need this / don't want it later then we
-> can remove it from them.
+On 2/3/22 18:11, Erwan Le Ray wrote:
+> DMA configuration is added to uart nodes in stm32mp15x device tree.
+> Delete uart4 DMA property in stm32mp15xx-dhcor-avenger96 board device
+> tree to keep console in irq mode, as DMA support for console has been
+> removed from the driver by commit e359b4411c28 ("serial: stm32: fix
+> threaded interrupt handling").
+> Delete also usart2 and uart7 DMA property to keep current behavior.
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+> index 6885948f3024..61e17f44ce81 100644
+> --- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+> @@ -376,6 +376,8 @@
+>   	label = "LS-UART1";
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&uart4_pins_b>;
+> +	/delete-property/dmas;
+> +	/delete-property/dma-names;
+>   	status = "okay";
+>   };
+>   
+> @@ -385,6 +387,8 @@
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&uart7_pins_a>;
+>   	uart-has-rtscts;
+> +	/delete-property/dmas;
+> +	/delete-property/dma-names;
+>   	status = "okay";
+>   };
+>   
+> @@ -394,6 +398,8 @@
+>   	pinctrl-0 = <&usart2_pins_a>;
+>   	pinctrl-1 = <&usart2_sleep_pins_a>;
+>   	st,hw-flow-ctrl;
+> +	/delete-property/dmas;
+> +	/delete-property/dma-names;
+>   	status = "okay";
+>   
+>   	bluetooth {
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Maybe you can squash all the DHSOM board changes into a single patch ?
+
+That said, the change is fine on DHSOM.

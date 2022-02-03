@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EA94A87D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312524A87DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbiBCPjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:39:48 -0500
-Received: from mga03.intel.com ([134.134.136.65]:59850 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351945AbiBCPjY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:39:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643902764; x=1675438764;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7mRbriesMnc5y9jim1krZpY4CvguXRL9C3UcMNNveDg=;
-  b=hB8+6qrbbAXoX/kggvGMkn36g3Z7mHGgQ06IwPAJ7j3WIhAKaSSHnJqI
-   qCexT8DfMpoYnUXh/opC9KxmtC0n+ceaQ1/ovuG+XmphTwJSTJWmlfRPq
-   WJSnsmKqGJ/k4H7GrSpeGpJBq8zeXBhP393FveW8Arkz61zgv11HZNnVY
-   mFIXfBKtD5xxNgyRtiKVvmsw8CMq7Eq2AsrQzvBmK7EXsakSavMpfEJ0k
-   OEMxWE1mEfP9Lm77FAaclyF6ZvHTmBrngImsJzM8Wtu6d729cwwLq8yIy
-   mWHR6uET1tBsp8gS8xy4fOg4dA9VBgUy3rR8yXkbdHhtYhKNrGPJyDJ31
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248119025"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="248119025"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:39:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="583821356"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Feb 2022 07:39:18 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFeCb-000WI2-SS; Thu, 03 Feb 2022 15:39:17 +0000
-Date:   Thu, 3 Feb 2022 23:38:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Darren Powell <darren.powell@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [agd5f:drm-next 243/250]
- drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning:
- variable 'ret' set but not used
-Message-ID: <202202032303.GcRtJxzw-lkp@intel.com>
+        id S242438AbiBCPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:40:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37034 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236351AbiBCPkK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:40:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE83D60A3C;
+        Thu,  3 Feb 2022 15:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2AE2BC340EF;
+        Thu,  3 Feb 2022 15:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643902809;
+        bh=Br/3WjvrKdzq3PB9D4aLMn0T+U57lrXHHcW39P5tUts=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JzaMi8sNwqB7QcCbitL7bZA5aBhoTWbXeWZLxc2QNIAgI1ZhEHNvAIK5KfCgjFRWC
+         N890u4YcLt71yf2oF+rDJ4f1ReAwRaEZVCWj/caV7drYQ/AVCnQCLEe45Xz/zVBYtr
+         DzKbjUokhB4mCpRJeLWK6+EjUFNoo7rPoaWo4lEr8MhBjf9uhrkPDL1cAqmnXu+/XD
+         lTFfPT+UE6UiFM+WjULv6GO1vNYOPky8X3pMq73/Pyu9bsSd/+PVzydlbDgxXwYPsl
+         zC9EmANEwAzdftzuMkWY7Oo3IxSyQkiK1G/qk4ZzYNKJ6z9PK9iu+DG4O8kV5oC6Jp
+         Tw7Cc3ndMvqWw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10E1FE5D08C;
+        Thu,  3 Feb 2022 15:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] tools/resolve_btfids: Do not print any commands when building
+ silently
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164390280906.30354.18316430842630830286.git-patchwork-notify@kernel.org>
+Date:   Thu, 03 Feb 2022 15:40:09 +0000
+References: <20220201212503.731732-1-nathan@kernel.org>
+In-Reply-To: <20220201212503.731732-1-nathan@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   53593d1be00c441585cb4fec41a756b8e586b710
-commit: 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4 [243/250] amdgpu/pm: Implement new API function "emit" that accepts buffer base and write offset
-config: i386-randconfig-a011-20220131 (https://download.01.org/0day-ci/archive/20220203/202202032303.GcRtJxzw-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add agd5f https://gitlab.freedesktop.org/agd5f/linux.git
-        git fetch --no-tags agd5f drm-next
-        git checkout 5d64f9bbb6281a5a89a2266b9d39daa1fca1d6b4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/
+Hello:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-All warnings (new ones prefixed by >>):
+On Tue,  1 Feb 2022 14:25:04 -0700 you wrote:
+> When building with 'make -s', there is some output from resolve_btfids:
+> 
+> $ make -sj"$(nproc)" oldconfig prepare
+>   MKDIR     .../tools/bpf/resolve_btfids/libbpf/
+>   MKDIR     .../tools/bpf/resolve_btfids//libsubcmd
+>   LINK     resolve_btfids
+> 
+> [...]
 
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:2277:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-           int ret = 0;
-               ^
-   1 warning generated.
+Here is the summary with links:
+  - tools/resolve_btfids: Do not print any commands when building silently
+    https://git.kernel.org/bpf/bpf/c/7f3bdbc3f131
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-vim +/ret +2277 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c
-
-  2272	
-  2273	static int smu_emit_ppclk_levels(void *handle, enum pp_clock_type type, char *buf, int *offset)
-  2274	{
-  2275		struct smu_context *smu = handle;
-  2276		enum smu_clk_type clk_type;
-> 2277		int ret = 0;
-  2278	
-  2279		clk_type = smu_convert_to_smuclk(type);
-  2280		if (clk_type == SMU_CLK_COUNT)
-  2281			return -EINVAL;
-  2282	
-  2283		if (!smu->pm_enabled || !smu->adev->pm.dpm_enabled)
-  2284			return -EOPNOTSUPP;
-  2285	
-  2286		if (!smu->ppt_funcs->emit_clk_levels)
-  2287			ret = -ENOENT;
-  2288	
-  2289		return smu->ppt_funcs->emit_clk_levels(smu, clk_type, buf, offset);
-  2290	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

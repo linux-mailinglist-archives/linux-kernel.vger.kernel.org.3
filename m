@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B594A858A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E7F4A858D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350888AbiBCNub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:50:31 -0500
-Received: from mail-ot1-f42.google.com ([209.85.210.42]:42766 "EHLO
-        mail-ot1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiBCNu3 (ORCPT
+        id S1350905AbiBCNue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:50:34 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:38570 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240877AbiBCNub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:50:29 -0500
-Received: by mail-ot1-f42.google.com with SMTP id p3-20020a0568301d4300b005a7a702f921so2597968oth.9;
-        Thu, 03 Feb 2022 05:50:28 -0800 (PST)
+        Thu, 3 Feb 2022 08:50:31 -0500
+Received: by mail-oi1-f174.google.com with SMTP id u13so4164315oie.5;
+        Thu, 03 Feb 2022 05:50:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=khn0J1hGAEdgTf0rLlD9FQl4Wvx4sGaRcMim5y9NL1k=;
-        b=6v2fagG5lOut6gdt3sEIu27emYze0nCnPXxS6rzD7/FPAW/+41pU7e9ecmoTvJQQwS
-         72yYbkQP4kNeXYmc5lcQ48V9NTqmeX0lryym0evEtnzeAUWyzz/zdO/gs2RUrpBWQYIE
-         LrsBeJ2MGiprOCcLX9sMhPaoxxXl1k430lpwATsE1dI2JnX7EfMfyTwlkc4v5osF5M3Q
-         z9z26O5joUG8jxs/9vv4QiAhuN3ZWWHzSzfFMRkB70cng5dYGULvm+cYPLDFCwZwPfSz
-         7Wi0nYFTJcQhVE8C7ISFE9Ma5Leg3URimvguuZW1NtptOpbwEDoV0LWghvWNszWVI/CN
-         KuzA==
-X-Gm-Message-State: AOAM533GcPHSTVnBofT871boP8CU/ES6LnSJnBUld+olBl3iu10IdR//
-        /IPyvEYAibGg2iTiGlOvOw==
-X-Google-Smtp-Source: ABdhPJwKmyOWRZGgG04p/R4KZWXS9KHFic5PfhAh6Tfhysew+fQ5Xn3lrLECULCTnXJOMAVrI+cltw==
-X-Received: by 2002:a9d:469:: with SMTP id 96mr19751529otc.342.1643896228509;
-        Thu, 03 Feb 2022 05:50:28 -0800 (PST)
+        bh=xOMR2ZZkrEs2A9siePkmd/O1P6JtjHeXZOx/YTCMPaw=;
+        b=5a9f6DUBb3tNxB72MjCU2r4qM4ebnwhWDrw12fYAqIcsUgMxaZIp3FL6r09WPFkN5P
+         uYmQZPLtlmq8S97m6IqMRwlkczhLZEWYzpErSDBMVHm9EB2rErYYqDG4OLI4Jt/XWNOw
+         WgiepgpWIcEzDJPN9FNtX+V5sWIt2ARDLwrpb5D62izXFl8TYbvu04l9e84GjnFwng00
+         0ALwr2cZfnTvXsloNILCxXsFTkGe/MXNEcPXd7FIq2tTQOtdGEosPyFTs1qoxOYd2hlN
+         YMyvmTA2WU29F3YqAr2P6NO9sQVNmTzzk8jdB66mETRg3C+vHE7EffVrvfDu1LtyQn6H
+         8i6w==
+X-Gm-Message-State: AOAM533Cu0BgWBwfI1MJ+tFEv1LwM/AkLEQsK84sVGPS8cze3QI94gjG
+        DkSMtf+AAwueM3hE03IoPA==
+X-Google-Smtp-Source: ABdhPJwrAaj+h4ToZSivyMAtRx9hbnjMKYgFG1qOzYFEDJgMxgc7UZ4Vb86wLsVAjfdv+ODcS60jyw==
+X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr7563854oib.40.1643896230398;
+        Thu, 03 Feb 2022 05:50:30 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g4sm18959207otl.1.2022.02.03.05.50.27
+        by smtp.gmail.com with ESMTPSA id k10sm18671534oou.26.2022.02.03.05.50.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 05:50:27 -0800 (PST)
-Received: (nullmailer pid 252331 invoked by uid 1000);
+        Thu, 03 Feb 2022 05:50:29 -0800 (PST)
+Received: (nullmailer pid 252334 invoked by uid 1000);
         Thu, 03 Feb 2022 13:50:26 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Charles Mirabile <cmirabil@redhat.com>
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Serge Schneider <serge@raspberrypi.org>,
-        Mattias Brugger <mbrugger@suse.com>,
-        linux-rpi-kernel@lists.infradead.org,
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Miguel Ojeda <ojeda@kernel.org>, devicetree@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Mwesigwa Guma <mguma@redhat.com>,
-        Lee Jones <lee.jones@linaro.org>, fedora-rpi@googlegroups.com,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220203002521.162878-5-cmirabil@redhat.com>
-References: <20220203002521.162878-1-cmirabil@redhat.com> <20220203002521.162878-5-cmirabil@redhat.com>
-Subject: Re: [PATCH 4/6] dt-bindings: mfd: sensehat: Add Raspberry Pi Sense HAT schema
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <1643855786-23186-2-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1643855786-23186-1-git-send-email-hayashi.kunihiko@socionext.com> <1643855786-23186-2-git-send-email-hayashi.kunihiko@socionext.com>
+Subject: Re: [PATCH 1/3] dt-bindings: PCI: uniphier-ep: Add bindings for NX1 SoC
 Date:   Thu, 03 Feb 2022 07:50:26 -0600
-Message-Id: <1643896226.729154.252330.nullmailer@robh.at.kernel.org>
+Message-Id: <1643896226.748637.252333.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Feb 2022 19:25:19 -0500, Charles Mirabile wrote:
-> This patch adds the device tree bindings for the Sense HAT
-> and each of its children devices in yaml form.
+On Thu, 03 Feb 2022 11:36:24 +0900, Kunihiko Hayashi wrote:
+> Update PCI endpoint binding document for UniPhier NX1 SoC. Add a compatible
+> string, clock and reset lines for the SoC to the document.
 > 
-> Co-developed-by: Mwesigwa Guma <mguma@redhat.com>
-> Signed-off-by: Mwesigwa Guma <mguma@redhat.com>
-> Co-developed-by: Joel Savitz <jsavitz@redhat.com>
-> Signed-off-by: Joel Savitz <jsavitz@redhat.com>
-> Signed-off-by: Charles Mirabile <cmirabil@redhat.com>
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->  .../raspberrypi,sensehat-display.yaml         | 32 +++++++++
->  .../input/raspberrypi,sensehat-joystick.yaml  | 37 ++++++++++
->  .../bindings/mfd/raspberrypi,sensehat.yaml    | 68 +++++++++++++++++++
->  3 files changed, 137 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
->  create mode 100644 Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
->  create mode 100644 Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+>  .../bindings/pci/socionext,uniphier-pcie-ep.yaml   | 22 +++++++++++++++-------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml:2:1: [error] missing document start "---" (document-start)
-./Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml:2:1: [error] missing document start "---" (document-start)
-./Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml:2:1: [error] missing document start "---" (document-start)
+./Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml:24:9: [warning] too many spaces after hyphen (hyphens)
+./Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml:25:9: [warning] too many spaces after hyphen (hyphens)
 
 dtschema/dtc warnings/errors:
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1587831
+See https://patchwork.ozlabs.org/patch/1587871
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

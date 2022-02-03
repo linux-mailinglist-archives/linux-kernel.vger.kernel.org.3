@@ -2,188 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87314A7CEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A8F4A7CED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348599AbiBCAeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237009AbiBCAe2 (ORCPT
+        id S237009AbiBCAer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:34:47 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:45058 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348600AbiBCAep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:34:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C825C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 16:34:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE94260F7B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 00:34:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E27C004E1;
-        Thu,  3 Feb 2022 00:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643848467;
-        bh=8QJX3qWr6cqhCXTKj08PfczEVgPWtJbtujEQFQSTzTg=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=P9dDhMyuDKw4BfJaI2cgCqYs/xc+RmHzPsjhvPI5ruprCpjbIelZomXaPm0QVoldk
-         QOpoXz5MPVqDqKai56YyANF5+7so3kfVzp2nRMnIV8iKkP5b286gSMHN26/0/9QuRh
-         FRPwr/tN4bVOSrT3wVipk1h2T3slgVrM9tQOa5zaWJveD0RKOv/5vqi1nLkOxQSOE/
-         Zinple0mtRTybAb+NkxL6kGZA8+B9fSwsnx4KJg3zgVc6azyD/qwrOkeUFU/JVeTqD
-         tK7B8yPtKcUz6nbdZwqAIMhvZIlhmgschGXBG1Dv8OInyYG138Todgl8+qQvCUuxe0
-         GW5VOMES9twOA==
-Date:   Wed, 2 Feb 2022 16:34:25 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH v2] f2fs: add a way to limit roll forward recovery time
-Message-ID: <YfsjEb2ii3eyPzng@google.com>
-References: <20220127214102.2040254-1-jaegeuk@kernel.org>
+        Wed, 2 Feb 2022 19:34:45 -0500
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4FACC20B6C61;
+        Wed,  2 Feb 2022 16:34:44 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4FACC20B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1643848485;
+        bh=TjbaCOX1e+7kp6KBiMIW8p0ZetHxMvPlcN36NQSGfd8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OG2cZ3FvG/7uQ//KPclVZf3jhyGwkIT5ljzlF1WNcH6aZbAg3BwMcPW2ABT0w+LSY
+         FttKV2YwhAqg/erVC/bVzcWNjEN4xop5Pz5rZFgUjBNOUsM5erWh3K9Ya8/4IFn/90
+         cxZIjo+GEM0Cc0wWvwTjs5lTeTdwdlIW8v1xf1vM=
+Message-ID: <48b17c52-58d6-0df5-a50b-35a8ea408998@linux.microsoft.com>
+Date:   Wed, 2 Feb 2022 18:34:43 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127214102.2040254-1-jaegeuk@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YfrRoA63/UOXTJc0@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YfrRoA63/UOXTJc0@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a sysfs entry to call checkpoint during fsync() in order to avoid
-long elapsed time to run roll-forward recovery when booting the device.
-Default value doesn't enforce the limitation which is same as before.
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
-v2 from v1:
- - make the default w/o enforcement
 
- Documentation/ABI/testing/sysfs-fs-f2fs | 6 ++++++
- fs/f2fs/checkpoint.c                    | 1 +
- fs/f2fs/f2fs.h                          | 3 +++
- fs/f2fs/node.c                          | 2 ++
- fs/f2fs/node.h                          | 3 +++
- fs/f2fs/recovery.c                      | 4 ++++
- fs/f2fs/sysfs.c                         | 2 ++
- 7 files changed, 21 insertions(+)
+On 2/2/22 12:46, Mark Brown wrote:
+> On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Rename the arguments to unwind() for better consistency. Also, use the
+>> typedef stack_trace_consume_fn for the consume_entry function as it is
+>> already defined in linux/stacktrace.h.
+> 
+> Consistency with...?  But otherwise:
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 87d3884c90ea..ce8103f522cb 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -567,3 +567,9 @@ Contact:	"Daeho Jeong" <daehojeong@google.com>
- Description:	You can set the trial count limit for GC urgent high mode with this value.
- 		If GC thread gets to the limit, the mode will turn back to GC normal mode.
- 		By default, the value is zero, which means there is no limit like before.
-+
-+What:		/sys/fs/f2fs/<disk>/max_roll_forward_node_blocks
-+Date:		January 2022
-+Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
-+Description:	Controls max # of node block writes to be used for roll forward
-+		recovery. This can limit the roll forward recovery time.
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index deeda95688f0..57a2d9164bee 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -1543,6 +1543,7 @@ static int do_checkpoint(struct f2fs_sb_info *sbi, struct cp_control *cpc)
- 	/* update user_block_counts */
- 	sbi->last_valid_block_count = sbi->total_valid_block_count;
- 	percpu_counter_set(&sbi->alloc_valid_block_count, 0);
-+	percpu_counter_set(&sbi->rf_node_block_count, 0);
- 
- 	/* Here, we have one bio having CP pack except cp pack 2 page */
- 	f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_CP_META_IO);
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 63c90416364b..6ddb98ff0b7c 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -913,6 +913,7 @@ struct f2fs_nm_info {
- 	nid_t max_nid;			/* maximum possible node ids */
- 	nid_t available_nids;		/* # of available node ids */
- 	nid_t next_scan_nid;		/* the next nid to be scanned */
-+	nid_t max_rf_node_blocks;	/* max # of nodes for recovery */
- 	unsigned int ram_thresh;	/* control the memory footprint */
- 	unsigned int ra_nid_pages;	/* # of nid pages to be readaheaded */
- 	unsigned int dirty_nats_ratio;	/* control dirty nats ratio threshold */
-@@ -1684,6 +1685,8 @@ struct f2fs_sb_info {
- 	atomic_t nr_pages[NR_COUNT_TYPE];
- 	/* # of allocated blocks */
- 	struct percpu_counter alloc_valid_block_count;
-+	/* # of node block writes as roll forward recovery */
-+	struct percpu_counter rf_node_block_count;
- 
- 	/* writeback control */
- 	atomic_t wb_sync_req[META];	/* count # of WB_SYNC threads */
-diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-index 93512f8859d5..0d9883457579 100644
---- a/fs/f2fs/node.c
-+++ b/fs/f2fs/node.c
-@@ -1782,6 +1782,7 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
- 
- 			if (!atomic || page == last_page) {
- 				set_fsync_mark(page, 1);
-+				percpu_counter_inc(&sbi->rf_node_block_count);
- 				if (IS_INODE(page)) {
- 					if (is_inode_flag_set(inode,
- 								FI_DIRTY_INODE))
-@@ -3218,6 +3219,7 @@ static int init_node_manager(struct f2fs_sb_info *sbi)
- 	nm_i->ram_thresh = DEF_RAM_THRESHOLD;
- 	nm_i->ra_nid_pages = DEF_RA_NID_PAGES;
- 	nm_i->dirty_nats_ratio = DEF_DIRTY_NAT_RATIO_THRESHOLD;
-+	nm_i->max_rf_node_blocks = DEF_RF_NODE_BLOCKS;
- 
- 	INIT_RADIX_TREE(&nm_i->free_nid_root, GFP_ATOMIC);
- 	INIT_LIST_HEAD(&nm_i->free_nid_list);
-diff --git a/fs/f2fs/node.h b/fs/f2fs/node.h
-index 18b98cf0465b..4c1d34bfea78 100644
---- a/fs/f2fs/node.h
-+++ b/fs/f2fs/node.h
-@@ -31,6 +31,9 @@
- /* control total # of nats */
- #define DEF_NAT_CACHE_THRESHOLD			100000
- 
-+/* control total # of node writes used for roll-fowrad recovery */
-+#define DEF_RF_NODE_BLOCKS			0
-+
- /* vector size for gang look-up from nat cache that consists of radix tree */
- #define NATVEC_SIZE	64
- #define SETVEC_SIZE	32
-diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
-index 10d152cfa58d..1c8041fd854e 100644
---- a/fs/f2fs/recovery.c
-+++ b/fs/f2fs/recovery.c
-@@ -53,9 +53,13 @@ extern struct kmem_cache *f2fs_cf_name_slab;
- bool f2fs_space_for_roll_forward(struct f2fs_sb_info *sbi)
- {
- 	s64 nalloc = percpu_counter_sum_positive(&sbi->alloc_valid_block_count);
-+	u32 rf_node = percpu_counter_sum_positive(&sbi->rf_node_block_count);
- 
- 	if (sbi->last_valid_block_count + nalloc > sbi->user_block_count)
- 		return false;
-+	if (NM_I(sbi)->max_rf_node_blocks &&
-+			rf_node >= NM_I(sbi)->max_rf_node_blocks)
-+		return false;
- 	return true;
- }
- 
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index 281bc0133ee6..47efcf233afd 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -732,6 +732,7 @@ F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ssr_sections, min_ssr_sections);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ram_thresh, ram_thresh);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ra_nid_pages, ra_nid_pages);
- F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, dirty_nats_ratio, dirty_nats_ratio);
-+F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, max_roll_forward_node_blocks, max_rf_node_blocks);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_victim_search, max_victim_search);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, migration_granularity, migration_granularity);
- F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, dir_level, dir_level);
-@@ -855,6 +856,7 @@ static struct attribute *f2fs_attrs[] = {
- 	ATTR_LIST(ram_thresh),
- 	ATTR_LIST(ra_nid_pages),
- 	ATTR_LIST(dirty_nats_ratio),
-+	ATTR_LIST(max_roll_forward_node_blocks),
- 	ATTR_LIST(cp_interval),
- 	ATTR_LIST(idle_interval),
- 	ATTR_LIST(discard_idle_interval),
--- 
-2.35.0.rc2.247.g8bbb082509-goog
+Naming consistency. E.g., the name consume_entry is used in a lot of places.
+This code used to use fn() instead of consume_entry(). arch_stack_walk()
+names the argument to consume_entry as cookie. This code calls it data
+instead of cookie. That is all. It is minor in nature. But I thought I might
+as well make it conform while I am at it.
 
+Madhavan

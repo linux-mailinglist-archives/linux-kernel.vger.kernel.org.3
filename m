@@ -2,147 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12D14A9148
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D324A914B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243572AbiBCXod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S1356065AbiBCXvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241226AbiBCXob (ORCPT
+        with ESMTP id S234998AbiBCXvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:44:31 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8D8C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 15:44:30 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id u24so9395831eds.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 15:44:30 -0800 (PST)
+        Thu, 3 Feb 2022 18:51:09 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CC9C061714;
+        Thu,  3 Feb 2022 15:51:09 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id g18so7747710wrb.6;
+        Thu, 03 Feb 2022 15:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AmSNhDG6FW6yzlPpCdGKepqD+t+GFrCkOSovI2o4uvI=;
-        b=A/uDj8h0TiRQQH5mrt6TQPc7Y0azsfr7kb4qI+LVJLLCIDOWDLgOVwRohllzo5rrBM
-         CG8Kamrm7loe3c0ameljz4bFqOr7sxayOW1rPAn1UKBNZvmmWfVQewc8ecFDhYWp7IGY
-         MkMjo/8uJtaGlIPCHPDzS5S0rZLqI/3/YCIIQrmV9rQeJrKMBxRuddxkEiEBqkhJIK53
-         EoD2PuMhMpJgRI4sMzORjEZ9mK9WNlSsc+nN3lxtJn/92xGkVVA+BdNMfMwYBembFmn6
-         Q1rSzs8uiS8ZXk4qLq1MQP+m6YxXHxzHFwZyq/+3G/bTvcQI1tMLeDTAt96B87dK+3cz
-         kk4w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cFvNszLfG0+0qKre9tbScLSSKrwdfrj78+DdDXq9mDI=;
+        b=JqVTCCJq7KWz5f6HxIWSXG7e62uDfhZcj1Yz59rRzX0qkbRAzFKuRIlH75WpcNR4pj
+         AJiXILlQWzpnn9PmkIG8ve8VrJlyuR7QcSCVWcn9aq4zTdxw7hpVQBhvrjDYHrgcAg7/
+         D/5LvogMIzluPX0Q5vw2y3JpeNnSlp6LZKjeFZZVvtdH1L7ngMOidM9AYNAsYiaLaa7J
+         +4l/+j3n9dJj0bUEsVgD7HUVjD8COgL6tnuqkiPfvmdTgbEKr9IXoJtKIV983U2QLDWG
+         UTzPJTHlPXcnPv96yRJu3QXgd2yK9T3ZUa61MHJGXQP5YbRyIv9B2gONypxr4ESBQmk5
+         oXUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AmSNhDG6FW6yzlPpCdGKepqD+t+GFrCkOSovI2o4uvI=;
-        b=guHZTrzsTnhC4tAA7SJrzeapr6bKtx6IVG60MAP1oZ6TqoPv8LfN5yIDANwK7gDlVP
-         WfmcaMSZK1zRJu+hGm87YqCCFrNozAwQFSNXc3MHuoygT1UvIoIbPeEAo3toz1fi67FR
-         HiWqJr+yWXQGuOZfPnuB0KiXzaVesa10kChWJFfQCv7vGcfz9rUD8jPd/PYKQGn97hn5
-         JRBHxIH99HJLeagEXhy8sdkGKhYv68ZAMdWXJEm6ovgMZUK4ENYTBGoM5PW0CUlnn0Zz
-         rfgLzm3+9AxM+6uU0j8Z6KrShII9PTzvHAuKk24mHQ4BYy79hHH9p4CcU1zibpycqLrp
-         azbw==
-X-Gm-Message-State: AOAM531YrseBYsiB050tVFqCXH4iCX3VtvmYLxUnRN4YZa9LUHgI2gll
-        JAY4VjEb2QdvKW/XkkkJ1PuQbqUtEwxJund/xwPE
-X-Google-Smtp-Source: ABdhPJxGEVmy+RObrcV0WQWV29B0TcmCAkYfMWGOM+Q9bEEISBaNbVM2Z5RBpMjztX8L3SEpdMZRdHZ0sHH6jJrCBQ8=
-X-Received: by 2002:aa7:dcc9:: with SMTP id w9mr550521edu.434.1643931869390;
- Thu, 03 Feb 2022 15:44:29 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cFvNszLfG0+0qKre9tbScLSSKrwdfrj78+DdDXq9mDI=;
+        b=cKXls4yebt8cbd8kwBOUXsNrKftX5spPZgCvzzroMH0biOa3jaVYqZ9JeYPTErZi5d
+         B4Yl64I7fi29h9Vt/XpPHcnd7AGYbNsANVYdfgh3SDrnsfx2MTLZI7V0xaQoUdbWYecA
+         jfVwTuI6Npeuee7N5p5+2ukcWbVkwOe4CNAWtiHOHYZEqnwwU1rqKKcdkcP2T+dR4DIL
+         Dya6pKVFDTdbj75MaT3AMl+JZdx54X3wvEN0sdruP5NAaVFxXqIGtArKVFFRiIutyS5X
+         wOORF3yhly+Yx9zhUZ+KDpC6D/OLDD+/c4DxATymQncD7efZj4/w7EpCf98r+CYmCrei
+         S7Dg==
+X-Gm-Message-State: AOAM533ZNGf1qftdMDIqTx41NlzUWVd/XUgoOgDtDecMDqeL1jre2WxM
+        EjhDyT+YXj3RKPTs6rKD5FA=
+X-Google-Smtp-Source: ABdhPJw61InZ1aA5ZPF/4dX7pXw72KV1uZt17uGDN0qEMoG4lHGV/t9GugGdC9c+nyFYazP+N2lHQA==
+X-Received: by 2002:a5d:4f08:: with SMTP id c8mr243365wru.710.1643932267674;
+        Thu, 03 Feb 2022 15:51:07 -0800 (PST)
+Received: from [192.168.8.198] ([85.255.232.204])
+        by smtp.gmail.com with ESMTPSA id f6sm245084wrj.26.2022.02.03.15.51.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 15:51:07 -0800 (PST)
+Message-ID: <03ee875d-03fd-d538-7a03-7cbde98d5b78@gmail.com>
+Date:   Thu, 3 Feb 2022 23:46:03 +0000
 MIME-Version: 1.0
-References: <4df50e95-6173-4ed1-9d08-3c1c4abab23f@gmail.com>
- <CAHC9VhSjTqT-4TMxBnQOQHkj+djONihfeoPVyy1egrZY2t10XA@mail.gmail.com>
- <c8a616e4-26a6-af51-212c-31dca0e265cd@gmail.com> <CAHC9VhQTZdeNOx3AXdoc9LXUzDk5n7wyGBX-tV-ZaovhPAdWwQ@mail.gmail.com>
- <e85dd38b-ef7b-ed7e-882e-124cdf942c44@gmail.com> <CAHC9VhROuJtvNHuVaR6pEekNFacH3Tywx58_hn1f5Mwk+kjC8g@mail.gmail.com>
- <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com>
-In-Reply-To: <b7e55304-d114-bcbe-08d2-b54828121a01@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 3 Feb 2022 18:44:18 -0500
-Message-ID: <CAHC9VhSdgD4Nfaxbnnn4r-OK8koSZ7+zQoPShDbGi9PvkJFpng@mail.gmail.com>
-Subject: Re: [PATCH] SELinux: Always allow FIOCLEX and FIONCLEX
-To:     Demi Marie Obenour <demiobenour@gmail.com>
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 2/4] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+Content-Language: en-US
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        axboe@kernel.dk, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203233439.845408-1-usama.arif@bytedance.com>
+ <20220203233439.845408-3-usama.arif@bytedance.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20220203233439.845408-3-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 5:13 AM Demi Marie Obenour <demiobenour@gmail.com> wrote:
-> On 2/1/22 12:26, Paul Moore wrote:
-> > On Sat, Jan 29, 2022 at 10:40 PM Demi Marie Obenour
-> > <demiobenour@gmail.com> wrote:
-> >> On 1/26/22 17:41, Paul Moore wrote:
-> >>> On Tue, Jan 25, 2022 at 5:50 PM Demi Marie Obenour
-> >>> <demiobenour@gmail.com> wrote:
-> >>>> On 1/25/22 17:27, Paul Moore wrote:
-> >>>>> On Tue, Jan 25, 2022 at 4:34 PM Demi Marie Obenour
-> >>>>> <demiobenour@gmail.com> wrote:
-> >>>>>>
-> >>>>>> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
-> >>>>>> always allows too.  Furthermore, a failed FIOCLEX could result in a file
-> >>>>>> descriptor being leaked to a process that should not have access to it.
-> >>>>>>
-> >>>>>> Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
-> >>>>>> ---
-> >>>>>>  security/selinux/hooks.c | 5 +++++
-> >>>>>>  1 file changed, 5 insertions(+)
-> >>>>>
-> >>>>> I'm not convinced that these two ioctls should be exempt from SELinux
-> >>>>> policy control, can you explain why allowing these ioctls with the
-> >>>>> file:ioctl permission is not sufficient for your use case?  Is it a
-> >>>>> matter of granularity?
-> >>>>
-> >>>> FIOCLEX and FIONCLEX are applicable to *all* file descriptors, not just
-> >>>> files.  If I want to allow them with SELinux policy, I have to grant
-> >>>> *:ioctl to all processes and use xperm rules to determine what ioctls
-> >>>> are actually allowed.  That is incompatible with existing policies and
-> >>>> needs frequent maintenance when new ioctls are added.
-> >>>>
-> >>>> Furthermore, these ioctls do not allow one to do anything that cannot
-> >>>> already be done by fcntl(F_SETFD), and (unless I have missed something)
-> >>>> SELinux unconditionally allows that.  Therefore, blocking these ioctls
-> >>>> does not improve security, but does risk breaking userspace programs.
-> >>>> The risk is especially great because in the absence of SELinux, I
-> >>>> believe FIOCLEX and FIONCLEX *will* always succeed, and userspace
-> >>>> programs may rely on this.  Worse, if a failure of FIOCLEX is ignored,
-> >>>> a file descriptor can be leaked to a child process that should not have
-> >>>> access to it, but which SELinux allows access to.  Userspace
-> >>>> SELinux-naive sandboxes are one way this could happen.  Therefore,
-> >>>> blocking FIOCLEX may *create* a security issue, and it cannot solve one.
-> >>>
-> >>> I can see you are frustrated with my initial take on this, but please
-> >>> understand that excluding an operation from the security policy is not
-> >>> something to take lightly and needs discussion.  I've added the
-> >>> SELinux refpolicy list to this thread as I believe their input would
-> >>> be helpful here.
-> >>
-> >> Absolutely it is not something that should be taken lightly, though I
-> >> strongly believe it is correct in this case.  Is one of my assumptions
-> >> mistaken?
-> >
-> > My concern is that there is a distro/admin somewhere which is relying
-> > on their SELinux policy enforcing access controls on these ioctls and
-> > removing these controls would cause them a regression.
->
-> I obviously do not have visibility into all systems, but I suspect that
-> nobody is actually relying on this.  Setting and clearing CLOEXEC via
-> fcntl is not subject to SELinux restrictions, so blocking FIOCLEX
-> and FIONCLEX can be trivially bypassed unless fcntl(F_SETFD) is
-> blocked by seccomp or another LSM.  Clearing close-on-exec can also be
-> implemented with dup2(), and setting it can be implemented with dup3()
-> and F_DUPFD_CLOEXEC (which SELinux also allows).  In short, I believe
-> that unconditionally allowing FIOCLEX and FIONCLEX may fix real-world
-> problems, and that it is highly unlikely that anyone is relying on the
-> current behavior.
+On 2/3/22 23:34, Usama Arif wrote:
+> This is done by creating a new RCU data structure (io_ev_fd) as part of
+> io_ring_ctx that holds the eventfd_ctx.
+> 
+> The function io_eventfd_signal is executed under rcu_read_lock with a
+> single rcu_dereference to io_ev_fd so that if another thread unregisters
+> the eventfd while io_eventfd_signal is still being executed, the
+> eventfd_signal for which io_eventfd_signal was called completes
+> successfully.
+> 
+> The process of registering/unregistering eventfd is done under a lock
+> so multiple threads don't enter a race condition while
+> registering/unregistering eventfd.
+> 
+> With the above approach ring quiesce can be avoided which is much more
+> expensive then using RCU lock. On the system tested, io_uring_reigster with
+> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
+> before with ring quiesce.
+> 
+> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+> ---
+>   fs/io_uring.c | 116 ++++++++++++++++++++++++++++++++++++++++----------
+>   1 file changed, 93 insertions(+), 23 deletions(-)
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 21531609a9c6..51602bddb9a8 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -326,6 +326,13 @@ struct io_submit_state {
+>   	struct blk_plug		plug;
+>   };
+>   
+> +struct io_ev_fd {
+> +	struct eventfd_ctx	*cq_ev_fd;
+> +	struct io_ring_ctx	*ctx;
+> +	struct rcu_head		rcu;
+> +	bool 			unregistering;
+> +};
+> +
+>   struct io_ring_ctx {
+>   	/* const or read-mostly hot data */
+>   	struct {
+> @@ -399,7 +406,8 @@ struct io_ring_ctx {
+>   	struct {
+>   		unsigned		cached_cq_tail;
+>   		unsigned		cq_entries;
+> -		struct eventfd_ctx	*cq_ev_fd;
+> +		struct io_ev_fd	__rcu	*io_ev_fd;
+> +		struct mutex		ev_fd_lock;
+>   		struct wait_queue_head	cq_wait;
+>   		unsigned		cq_extra;
+>   		atomic_t		cq_timeouts;
+> @@ -1448,6 +1456,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+>   	xa_init_flags(&ctx->io_buffers, XA_FLAGS_ALLOC1);
+>   	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
+>   	mutex_init(&ctx->uring_lock);
+> +	mutex_init(&ctx->ev_fd_lock);
+>   	init_waitqueue_head(&ctx->cq_wait);
+>   	spin_lock_init(&ctx->completion_lock);
+>   	spin_lock_init(&ctx->timeout_lock);
+> @@ -1726,13 +1735,32 @@ static inline struct io_uring_cqe *io_get_cqe(struct io_ring_ctx *ctx)
+>   	return &rings->cqes[tail & mask];
+>   }
+>   
+> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
+> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+>   {
+> -	if (likely(!ctx->cq_ev_fd))
+> -		return false;
+> +	struct io_ev_fd *ev_fd;
+> +
+> +	/* Return quickly if ctx->io_ev_fd doesn't exist */
+> +	if (likely(!rcu_dereference_raw(ctx->io_ev_fd)))
+> +		return;
+> +
+> +	rcu_read_lock();
+> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
+> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
+> +
+> +	/*
+> +	 * Check again if ev_fd exists incase an io_eventfd_unregister call completed between
+> +	 * the NULL check of ctx->io_ev_fd at the start of the function and rcu_read_lock.
+> +	 */
+> +	if (unlikely(!ev_fd))
+> +		goto out;
+>   	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+> -		return false;
+> -	return !ctx->eventfd_async || io_wq_current_is_worker();
+> +		goto out;
+> +
+> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
+> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
+> +
+> +out:
+> +	rcu_read_unlock();
+>   }
+>   
+>   /*
+> @@ -1751,8 +1779,7 @@ static void io_cqring_ev_posted(struct io_ring_ctx *ctx)
+>   	 */
+>   	if (wq_has_sleeper(&ctx->cq_wait))
+>   		wake_up_all(&ctx->cq_wait);
+> -	if (io_should_trigger_evfd(ctx))
+> -		eventfd_signal(ctx->cq_ev_fd, 1);
+> +	io_eventfd_signal(ctx);
+>   }
+>   
+>   static void io_cqring_ev_posted_iopoll(struct io_ring_ctx *ctx)
+> @@ -1764,8 +1791,7 @@ static void io_cqring_ev_posted_iopoll(struct io_ring_ctx *ctx)
+>   		if (waitqueue_active(&ctx->cq_wait))
+>   			wake_up_all(&ctx->cq_wait);
+>   	}
+> -	if (io_should_trigger_evfd(ctx))
+> -		eventfd_signal(ctx->cq_ev_fd, 1);
+> +	io_eventfd_signal(ctx);
+>   }
+>   
+>   /* Returns true if there are no backlogged entries after the flush */
+> @@ -9353,34 +9379,76 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+>   
+>   static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+>   {
+> +	struct io_ev_fd *ev_fd;
+>   	__s32 __user *fds = arg;
+> -	int fd;
+> +	int fd, ret;
+>   
+> -	if (ctx->cq_ev_fd)
+> -		return -EBUSY;
+> +	mutex_lock(&ctx->ev_fd_lock);
+> +	ret = -EBUSY;
+> +	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
+> +	if (ev_fd) {
+> +		/*
+> +		 * If ev_fd exists, there are 2 possibilities:
+> +		 * - The rcu_callback to io_eventfd_put hasn't finished while unregistering
+> +		 * (hence ev_fd->unregistering is true) and io_eventfd_register
+> +		 * can continue and overwrite ctx->io_ev_fd with the new eventfd.
+> +		 * - Or io_eventfd_register has been called on an io_uring that has
+> +		 * already registered a valid eventfd in which case return -EBUSY.
+> +		 */
+> +		if(!ev_fd->unregistering)
+> +			goto out;
+> +	}
+>   
+> +	ret = -EFAULT;
+>   	if (copy_from_user(&fd, fds, sizeof(*fds)))
+> -		return -EFAULT;
+> +		goto out;
+>   
+> -	ctx->cq_ev_fd = eventfd_ctx_fdget(fd);
+> -	if (IS_ERR(ctx->cq_ev_fd)) {
+> -		int ret = PTR_ERR(ctx->cq_ev_fd);
+> +	ret = -ENOMEM;
+> +	ev_fd = kmalloc(sizeof(*ev_fd), GFP_KERNEL);
+> +	if (!ev_fd)
+> +		goto out;
+>   
+> -		ctx->cq_ev_fd = NULL;
+> -		return ret;
+> +	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+> +	if (IS_ERR(ev_fd->cq_ev_fd)) {
+> +		ret = PTR_ERR(ev_fd->cq_ev_fd);
+> +		kfree(ev_fd);
+> +		goto out;
+>   	}
+> +	ev_fd->ctx = ctx;
+> +	ev_fd->unregistering = false;
+>   
+> -	return 0;
+> +	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> +	ret = 0;
+> +
+> +out:
+> +	mutex_unlock(&ctx->ev_fd_lock);
+> +	return ret;
+> +}
+> +
+> +static void io_eventfd_put(struct rcu_head *rcu)
+> +{
+> +	struct io_ev_fd *ev_fd = container_of(rcu, struct io_ev_fd, rcu);
+> +	struct io_ring_ctx *ctx = ev_fd->ctx;
+> +
+> +	eventfd_ctx_put(ev_fd->cq_ev_fd);
+> +	kfree(ev_fd);
+> +	rcu_assign_pointer(ctx->io_ev_fd, NULL);
+>   }
 
-I understand your point, but I remain concerned about making a kernel
-change for something that can be addressed via policy.  I'm also
-concerned that in the nine days this thread has been on both the mail
-SELinux developers and refpolicy lists no one other than you and I
-have commented on this patch.  In order to consider this patch
-further, I'm going to need to see comments from others, preferably
-those with a background in supporting SELinux policy.
+Emm, it happens after the grace period, so you have a gap where a
+request may read a freed eventfd... What I think you wanted to do
+is more like below:
 
-Also, while I'm sure you are already well aware of this, I think it is
-worth mentioning that SELinux does apply access controls when file
-descriptors are inherited across an exec() boundary.
+
+io_eventfd_put() {
+	evfd = ...;
+	eventfd_ctx_put(evfd->evfd);
+	kfree(io_ev_fd);
+}
+
+register() {
+	mutex_lock();
+	ev_fd = rcu_deref();
+	if (ev_fd) {
+		rcu_assign_pointer(ctx->evfd, NULL);
+		call_rcu(&ev_fd->evfd, io_eventfd_put);
+	}
+	mutex_unlock();
+}
+
+
+Note, there's no need in ->unregistering. I also doubt you need
+->ev_fd_lock, how about just using already taken ->uring_lock?
 
 -- 
-paul-moore.com
+Pavel Begunkov

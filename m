@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DEC4A831C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0364A8322
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350207AbiBCL2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiBCL2i (ORCPT
+        id S1350221AbiBCL31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 06:29:27 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60342 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350214AbiBCL30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 06:28:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC4C061714;
-        Thu,  3 Feb 2022 03:28:38 -0800 (PST)
+        Thu, 3 Feb 2022 06:29:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEA19B8339D;
-        Thu,  3 Feb 2022 11:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDEFC340E4;
-        Thu,  3 Feb 2022 11:28:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E7316160E;
+        Thu,  3 Feb 2022 11:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8283AC340F7;
+        Thu,  3 Feb 2022 11:29:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643887715;
-        bh=COBWLwcvaTKIWzrOUANpuFO9WSzhU9FhS0VUHIshlV4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KX4egKwcJHnFYFMcluZjjHnbkdk1/gVrGHQHLahtyR3oV2gFSQSskLLiR6xgRoy8Z
-         X+nA7fl5bITNU3brrXT7HvyrL/ncs1/2xOwr8EGf+Dzy7k228bLkzWaFqCOnNMBVQQ
-         vZUIMXUQLdDmL33jTUg7cCn2NWMi7xB6UGyG/T7Sdt7aJ6mKK9Sd/b1FK5FWzvgq+Y
-         mY3stX9tHGzc/whzQfnKrFQRfG2J0sy/ac4u2qfBlStBpkhan8sCw5zEMKx6KG7cen
-         pBN9KQtNRULx9zjr+Y9pJ18U6Ea+9NaM1HUaSa7Cdv6AIklINZUrgfDvCysGm/bPsv
-         WElpX3oY6h8Cg==
-Date:   Thu, 3 Feb 2022 11:28:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     David Collins <quic_collinsd@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-Subject: Re: [RESEND PATCH 1/2] dt-bindings: firmware: arm,scmi: define
- support for name based regulators
-Message-ID: <Yfu8XulvWQbpQoBR@sirena.org.uk>
-References: <cover.1643069954.git.quic_collinsd@quicinc.com>
- <fcd130891cc1d52cb09b8bfc866ab7ef1ce3b2a1.1643069954.git.quic_collinsd@quicinc.com>
- <YfREsxeSSX2pbALf@sirena.org.uk>
- <8355035c-6d90-adfd-c4e1-7bb37a2d8055@quicinc.com>
- <YfrBharI91QYkPR1@sirena.org.uk>
- <532aa931-2471-8fb3-0db4-7ab8a60333e8@quicinc.com>
+        s=k20201202; t=1643887765;
+        bh=8O9T7JmkE8AXDR3qQnEgCe/VXdmEMAvfBxnpPNQJxN0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nyIoXkt3yDlGi6V+mFTwFjWtCJ1qhppOXzJeGQ0zaUBdBqy707RByZCUu8nH2qc0T
+         gskXco++UZSS/9OrUPwE+cCF/2wit5SGjWfHBx4Ko4IdAQNLgI4/RRjSxAlOp/4zpU
+         0vPrr0XBesTRIJYMH8U2Jmt0KQl91wu4lIvOWHoLRmI7pxxXqVwhJIMw6dY6WmF5Jg
+         8qgc5poMtTkUs03bSx6PoTs+64D6q4ciRddKvA7JLEUXe9c7kmoSyZmgm42mVyJ4V4
+         98NFsP/5M1uJGoHFugdSywIKYrfna0BWTwO6Gy5XFpaEH2cB1G+ch+YaGAho/rrfSd
+         yxGuO7kui/uLA==
+Received: by mail-pf1-f171.google.com with SMTP id e6so1970380pfc.7;
+        Thu, 03 Feb 2022 03:29:25 -0800 (PST)
+X-Gm-Message-State: AOAM532G5lJOQ0Hxl2BQCZHDh3lltUzrNaLsntHNXyQWIrKx+EpMQeAb
+        IjOG0mka9ifYSwbrr15uJW8NCaGgIXJ5LSVRl7Y=
+X-Google-Smtp-Source: ABdhPJwoFuDj2HLj9lqRkYYZvnAwBed7td2ZuLF3KmfMMGpv5YNS6lWDbYq2E79fj85vH3vrNIbVtmvMaaoFHYgLh58=
+X-Received: by 2002:a05:6a00:2343:: with SMTP id j3mr33414155pfj.7.1643887764872;
+ Thu, 03 Feb 2022 03:29:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FHEHOoLIGiZXymy0"
-Content-Disposition: inline
-In-Reply-To: <532aa931-2471-8fb3-0db4-7ab8a60333e8@quicinc.com>
-X-Cookie: Prices higher in Alaska and Hawaii.
+References: <20220203082546.3099-1-15330273260@189.cn> <20220203082546.3099-2-15330273260@189.cn>
+ <CAJKOXPfCjx6UoLK6LgXBZCfixxq8k7E-RFXb8i-chyXc39WEoQ@mail.gmail.com> <20220203110751.GE1978@kadam>
+In-Reply-To: <20220203110751.GE1978@kadam>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 3 Feb 2022 12:29:11 +0100
+X-Gmail-Original-Message-ID: <CAJKOXPeLS+PZBCvEOeazc8N5w1D=WeO_D45yEazu-XQQeHNohQ@mail.gmail.com>
+Message-ID: <CAJKOXPeLS+PZBCvEOeazc8N5w1D=WeO_D45yEazu-XQQeHNohQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display controller
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 3 Feb 2022 at 12:08, Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Thu, Feb 03, 2022 at 09:53:35AM +0100, Krzysztof Kozlowski wrote:
+> > > diff --git a/drivers/gpu/drm/lsdc/lsdc_connector.c b/drivers/gpu/drm/lsdc/lsdc_connector.c
+> > > new file mode 100644
+> > > index 000000000000..ae5fc0c90961
+> > > --- /dev/null
+> > > +++ b/drivers/gpu/drm/lsdc/lsdc_connector.c
+> > > @@ -0,0 +1,443 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * Copyright 2020 Loongson Corporation
+> > > + *
+> > > + * Permission is hereby granted, free of charge, to any person obtaining a
+> > > + * copy of this software and associated documentation files (the
+> > > + * "Software"), to deal in the Software without restriction, including
+> > > + * without limitation the rights to use, copy, modify, merge, publish,
+> > > + * distribute, sub license, and/or sell copies of the Software, and to
+> > > + * permit persons to whom the Software is furnished to do so, subject to
+> > > + * the following conditions:
+> > > + *
+> > > + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> > > + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> > > + * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+> > > + * THE COPYRIGHT HOLDERS, AUTHORS AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM,
+> > > + * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+> > > + * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+> > > + * USE OR OTHER DEALINGS IN THE SOFTWARE.
+> > > + *
+> > > + * The above copyright notice and this permission notice (including the
+> > > + * next paragraph) shall be included in all copies or substantial portions
+> > > + * of the Software.
+> >
+> > This does not look like compliant with GPL-2.0. You cannot call a
+> > license GPL-2.0 and restrict it with some other provisions.
+>
+> That's the MIT license.  It's not the GPL-2.0 license but it is
+> compliant.
 
---FHEHOoLIGiZXymy0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It's compliant when included as "OR" for example in SPDX tag. The
+current solution - SPDX and MIT license text - is not the proper way
+to describe this. Otherwise one could argue that both licenses apply
+at the same time and one has to fulfill both of them, which is
+ridiculous. There is a SPDX tag for the proper case - GPL or MIT.
 
-On Wed, Feb 02, 2022 at 04:09:43PM -0800, David Collins wrote:
-> On 2/2/22 9:38 AM, Mark Brown wrote:
-
-> > This seems like a scenario where the DT should be being generated at
-> > runtime along with the virtualisation of the platform?  TBH a setup
-> > where this is an issue feels like it's asking for trouble.
-
-> I'm not familiar with runtime device tree generation.  Could you please
-> point to an example of it or documentation for it?  How would this
-> handle kernel devices on the VM side which need a phandle to an
-> scmi-regulator DT subnode in order to get a pointer to the corresponding
-> regulator device at runtime via devm_regulator_get()?
-
-I believe qemu does this for the virt machine.  I'm not sure what you're
-seeing as particularly complex about generating regulator links in
-particular though?
-
---FHEHOoLIGiZXymy0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH7vF0ACgkQJNaLcl1U
-h9DDlQf/YzYI3j06uft9Q3I/6yHQsgA1u1k5QKi5P1/6CCVe1u9jdfsaqOkfERqv
-9ccQrebFf9XObnh7/UjdJmQn9+QrDN9iWRah/6relqDKvVBZY8dtsRVhPNnDhr9w
-U+GBwujVRrY/F6mVxK2wst8PqsWlxpf8BC12NY52c7fKgF8cm54mEUVNpIBrAGun
-9eGAl5GqqfFw0a1FlS3eCzDUmv1ptqI+DWXanrUQLhLejUpfiVwLxQmFqXkOitL5
-6uH+oZ8/xYYOHS37NK4nXzVY+uonIvw5AghpXC0c3cGHGqHjTGE6AVlDfkG+9jGW
-leW8W1h5fAeK60ebJ7sOibX+OoIU/w==
-=xs8h
------END PGP SIGNATURE-----
-
---FHEHOoLIGiZXymy0--
+Best regards,
+Krzysztof

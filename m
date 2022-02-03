@@ -2,153 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B144A90A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2D94A90AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355817AbiBCW0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S1353237AbiBCW2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiBCW0f (ORCPT
+        with ESMTP id S229910AbiBCW2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:26:35 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42FC061714;
-        Thu,  3 Feb 2022 14:26:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=UNDKBN8Hpv7lUpDkOhgTISxY3WTMMGezTKV040MGm+E=;
-        t=1643927195; x=1645136795; b=LGVrzj7cbNfu68AwH/jdL1nBWOT464hHv3aOERipsGFYCFJ
-        TzKjZw8ghYJcC3tSacveW23zGe5PtyMIkETCouwh5UBMT3yHaP1O6BxQF4czjl32bINMy9oLTGTI7
-        7KPte1axqvTOzFDM3Y7cqbpxKWbshEFPAC1yN8JATYe9WVsEJYdduZcht9MjAQOzfraqi77M5l/uN
-        JFYYCk9N36/H9E70Pzphdl2K0GDvOLFWmIOtE0GBisGK5f+nqUFAWWSPp0kAfb3PmDA8yd9HOSn+b
-        ys5p5YYAOFth/F8LBOyzc2wmOKe6Ny1tw5fOKtcrMxdZz62ua31UkzNVBPiNhhWw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nFkYd-00EG1v-Gb;
-        Thu, 03 Feb 2022 23:26:27 +0100
-Message-ID: <8a955cdeba84bf1febb2fe558ae09456115478db.camel@sipsolutions.net>
-Subject: Re: [PATCH v3 0/8] rtw88: prepare locking for SDIO support
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Pkshih <pkshih@realtek.com>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "kvalo@codeaurora.org" <kvalo@codeaurora.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ed Swierk <eswierk@gh.st>
-Date:   Thu, 03 Feb 2022 23:26:26 +0100
-In-Reply-To: <CAFBinCDjfKK3+WOXP2xbcAK-KToWof+kSzoxYztqRcc=7T1eyg@mail.gmail.com>
-References: <20220108005533.947787-1-martin.blumenstingl@googlemail.com>
-         <423f474e15c948eda4db5bc9a50fd391@realtek.com>
-         <CAFBinCBVEndU0t-6d5atE31OFYHzPyk7pOe78v0XrrFWcBec9w@mail.gmail.com>
-         <5ef8ab4f78e448df9f823385d0daed88@realtek.com>
-         <CAFBinCDjfKK3+WOXP2xbcAK-KToWof+kSzoxYztqRcc=7T1eyg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Thu, 3 Feb 2022 17:28:46 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A95C061714;
+        Thu,  3 Feb 2022 14:28:46 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id w7so5184692ioj.5;
+        Thu, 03 Feb 2022 14:28:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S/15KBLqn1+gI3LiLP1R73ftno+g+PTM/BnKtRnTzes=;
+        b=XeoOMW8rz2plGCJkP1Hq+gvOdXCxElLRsfLFbRPK1MKqE/qKO1Gg1LfogwnVY39AIL
+         Hp0Z/TuETiLGIi4Cyztdknx8aZnxSYpQP20zyiQ/nMRWYFZlali2sFcLeXMgG9UcB6Nx
+         W5NNbNmj73WLAQ801WQDpaAIZWIJV/0w9piukfFSo7dkwJOiTv51SKaQs205OjPBkznF
+         g6tXIeZby0omLzXyv7o5py0JuQdMYRx6WZFx25G326xHGWOiWqnO2q81rdrelaAYwyUj
+         RsXH9qVMJEHV0ldMd0W4YRasZ3/3VVC9ALUfrOqITkoT2Ip9qdxfhCHfYMTAeGkoj9WR
+         ANWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S/15KBLqn1+gI3LiLP1R73ftno+g+PTM/BnKtRnTzes=;
+        b=AgzftuPm7eoz5mVtRMpoOZrL6UwcjgCiNksp442ggIsZa+7rk3o9ws5ZDjVF+jOM/K
+         4kueroiP9Gefam1rCkFhw6AN3TbI5OtgPSFnQlWZ4uKF+ewUd0uEdb0j8PeT22ZovDEy
+         uRkDsdwSlvtfifVI0o8i4eOYSKlL1k3Ku/yquBEgexYqOm0HOj8OR5iKrHPOLq8iCuWf
+         zB6eBgJF07v840E359hVDywXuRnQQGbv21g3/Lh+os/PWmmPkYaaPZQyd7ExS4z/R1hs
+         I9sckrDvRBiCz95qJEqMTpKgpCLfhfPMbKv59vJLalRH/WDgKTm4xeVKEVafM7CO6i7/
+         694w==
+X-Gm-Message-State: AOAM533uK/rGGEk1hjkP2I5J0cbFdGYDQA+6SPxNRm60/hS2d0pcRya5
+        E7uBK/O7gpyNxTqhjtFVpSX5diZsQtQEBesWBb7hmsi2
+X-Google-Smtp-Source: ABdhPJzZsdNJOjt+GX0Uuga8TdJsl6rG51vnNyjJrvbrD8awrY/QTkKIEqJcSIPuFjmMEXqn2jQ0mRXAlR2waIbxok4=
+X-Received: by 2002:a05:6602:2b10:: with SMTP id p16mr63882iov.44.1643927325471;
+ Thu, 03 Feb 2022 14:28:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+References: <20220202003033.704951-1-keescook@chromium.org>
+ <20220202003033.704951-5-keescook@chromium.org> <CAKwvOdkvd=2DcwEpQWBtS3p-hKB6Rvp4YXB4k+81Me6E5H+mqQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkvd=2DcwEpQWBtS3p-hKB6Rvp4YXB4k+81Me6E5H+mqQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 3 Feb 2022 23:28:34 +0100
+Message-ID: <CANiq72m1QtGK6_UC0Bkcuu2UK1wKgsrg7wOrSj10bLM+sLceMQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4 v5] fortify: Add Clang support
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-security-module <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Feb 3, 2022 at 11:13 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Sorry, I just noticed this line (already) uses a mix of open coding
+> __attribute__ and not. Would you mind also please changing the open
+> coded gnu_inline to simply __gnu_inline to make the entire line
+> consistent?
 
-Sorry, I kind of saw this fly by, read over it and wasn't sure I should
-take a closer look, and then promptly forgot about it ...
++1
 
-> > So, I think the easiest way is to maintains the vif/sta lists in driver when
-> > ::{add,remove }_interface/::sta_{add,remove}, and hold rtwdev->mutex lock to
-> > access these lists. But, Johannes pointed out this is not a good idea [1].
-
-> Thank you for this detailed explanation! I appreciate that you took
-> the time to clearly explain this.
-> 
-> For the sta use-case I thought about adding a dedicated rwlock
-> (include/linux/rwlock.h) for rtw_dev->mac_id_map.
-
-You can't sleep under an rwlock either though? Wasn't that the point?
-
-> rtw_sta_{add,remove} would take a write-lock.
-> rtw_iterate_stas() takes the read-lock (the lock would be acquired
-> before calling into ieee80211_iterate_...). Additionally
-> rtw_iterate_stas() needs to check if the station is still valid
-> according to mac_id_map - if not: skip/ignore it for that iteration.
-
-All of that "still valid" seems fragile though, IMHO. Hard to reason
-that it's not racy or prone to use-after-free situations.
-
-IIUC, you're trying to iterate interfaces and stations in a sleepable
-context, but you're worried about deadlocks with locking in mac80211, if
-ieee80211_iterate_interfaces() or ieee80211_iterate_stations() take
-locks that we already hold due to coming into the code from mac80211? Or
-about ABBA deadlocks arising from this?
-
-IMHO you should still do it, and just be careful about the locking. I'd
-be happy to add APIs for e.g. ieee80211_iterate_stations_locked() when
-you know you already hold local->sta_mtx, though whether or not that can
-even happen today in any callbacks I don't know, haven't audited it, but
-it shouldn't be that hard to audit the path(s) you want to create?
-Unless you need this in some very frequently called function ...
-
-
-Now all of this is potentially also (and just as) error prone as doing
-your own iteration machinery, however, my longer-term plan is to unify
-the locking more. Now that we're no longer relying on the RTNL so much,
-I'm planning to see if we couldn't get rid of most locks in mac80211.
-The thing is, that most of the time we're doing all this fine-grained
-locking ... under the wdev->mtx, so it's entirely pointless, and in fact
-just a bunch of extra work.
-
-So now that from cfg80211 perspective we have everything running under
-wdev lock, I think we could in mac80211 just remove all the locks and
-take the wdev lock in all the async workers. We already do in many I
-guess, or we take local->mtx which is kind of equivalent anyway.
-
-The question is then if we keep wdev->mtx at all, and I'm not really
-sure about that yet. There are arguments both ways, and maybe that means
-we'd move some things under there rather than under the overall mutex.
-One of the strongest arguments for this is probably that mac80211
-doesn't really do anything expensive (there aren't really any expensive
-calculations in it), so most time spent is in drivers ... and guess
-what, drivers mostly just have their own global lock they take for
-everything, which makes sense since they need to talk to the device or
-firmware.
-
-However we answer that question though, and I'm trending towards
-removing the wdev/sdata locks, I (now) think all the mutexes that we
-have at the 'local' level in mac80211 are fairly much pointless.
-
-In essence then, with some work in the stack, we could basically have
-all calls (apart from TX) into the drivers done with the wiphy->mtx
-held, at which point drivers don't even really need their own lock (they
-can acquire wiphy_lock() too in workers). Then this whole thing really
-all collapses down to being able to do the iteration, just having to
-ensure you wiphy_lock() your calls that aren't coming from mac80211 in
-the first place.
-
-I really think that's the medium-term strategy, and any help would be
-welcome. I'm not sure I can dedicate time to this soon, and the RTNL
-rework took I think over a year after I started thinking about it, so I
-guess we'll see...
-
-We can do this incrementally btw, like remove local->mtx now and use
-wiphy_lock() in its place, then remove local->sta_mtx, local->iface_mtx,
-one by one. The RTNL rework was one of the major stepping stones to this
-I think, because it ensured a consistent handling of the wiphy_lock() in
-cfg80211.
-
-I realize this doesn't help you in the short term, but if you do a lot
-of complicated things now, it'll also be hard to get rid of. If you use
-the normal iteration functions now it'll be harder to reason about now,
-but will sort of automatically become easier once the lock redux work I
-outlined above starts. And like I said, any help welcome :)
-
-johannes
+Cheers,
+Miguel

@@ -2,83 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76A04A7F1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F604A7F22
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbiBCFaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 00:30:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40618 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiBCFaK (ORCPT
+        id S236603AbiBCFjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 00:39:10 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:55263 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234559AbiBCFjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 00:30:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Feb 2022 00:39:09 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D08CF61518;
-        Thu,  3 Feb 2022 05:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A5BCC340ED;
-        Thu,  3 Feb 2022 05:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643866209;
-        bh=L9vBEUjwBOia/wbBGPnSEDGQZPDW1csQNMlCjD1v4EI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ul1JF4w1TzQ1bB7pRAfhiI/u7YnHa5zXeVB3pb2Cle+Dr6L4NwrtVIfb78wcF/lJd
-         yVCtTEY+vcQsHLcGNLvaAqaIceoC25RmTsbt12FsTzi0U0zYPY9vpTYBPMXLdxZGhQ
-         RQ+gGKhZvhq1Sx43nUGY74rW7kjLUj0gxnJK1EOkKFTeGaEadHpCaqbsr/mJEh8i1h
-         oowaFzEhRJLFH8FJ8+b4KKP8v9HctQk2vD+cat4zlbVpdOmURP52H4qHG77fnVVeuA
-         7xjAALb5WS5Yvm+VNlPf87t90mETZcNMRWmTaVvYPHl5Qy0y7SfTtM+oqIJp7zXiFo
-         3a+lTa02+xBbQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 249DEE6BB3D;
-        Thu,  3 Feb 2022 05:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jq6sz71xZz4xmk;
+        Thu,  3 Feb 2022 16:39:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1643866745;
+        bh=5ypoksyewD1/1A0wIikcTAQpbuRBIVCFLpLku2DM1UQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rMj6cjmEUS8Wn69koaMHGmWtpyj6ZO2nAuoyXA+oWiHfj2yhSyVXHPcjxkz5zmpZD
+         WdOsbHhM5IN8Sxx+y5AE3lyjCEc+r5KfaNZza81P6gEszI/6eIqJvUMkHlMNrCqRMu
+         MD3TSoNfM8O0TEuisU+c7WgVCaJ0RpIOaxUzrqSEcepCdb37tklQLk/xwJqw3N68Zc
+         ulZFnLmU1XaXdjsexrU4b+S2Ms2cXvBTRrkylee8pfYCCllBETW7Tbn5AerQ5uFqCQ
+         6bgj65lt4gPCXOpWLgub/FKbqZZkFeTJz7NSunJt46xMtkybfJYQqzJUkDijOk7idk
+         3YDBVgFFETn3w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH v2 5/5] powerpc: Select
+ ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and 8xx
+In-Reply-To: <YfsVhcpVTW0+YCl5@bombadil.infradead.org>
+References: <cover.1643282353.git.christophe.leroy@csgroup.eu>
+ <a20285472ad0a0a13a1d93c4707180be5b4fa092.1643282353.git.christophe.leroy@csgroup.eu>
+ <YfsVhcpVTW0+YCl5@bombadil.infradead.org>
+Date:   Thu, 03 Feb 2022 16:39:02 +1100
+Message-ID: <87h79gmrux.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] net: ipa: support variable RX buffer size
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164386620914.2374.12939383239153154522.git-patchwork-notify@kernel.org>
-Date:   Thu, 03 Feb 2022 05:30:09 +0000
-References: <20220201153737.601149-1-elder@linaro.org>
-In-Reply-To: <20220201153737.601149-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Luis Chamberlain <mcgrof@kernel.org> writes:
+> On Thu, Jan 27, 2022 at 11:28:12AM +0000, Christophe Leroy wrote:
+>> book3s/32 and 8xx have a separate area for allocating modules,
+>> defined by MODULES_VADDR / MODULES_END.
+>> 
+>> On book3s/32, it is not possible to protect against execution
+>> on a page basis. A full 256M segment is either Exec or NoExec.
+>> The module area is in an Exec segment while vmalloc area is
+>> in a NoExec segment.
+>> 
+>> In order to protect module data against execution, select
+>> ARCH_WANTS_MODULES_DATA_IN_VMALLOC.
+>> 
+>> For the 8xx (and possibly other 32 bits platform in the future),
+>> there is no such constraint on Exec/NoExec protection, however
+>> there is a critical distance between kernel functions and callers
+>> that needs to remain below 32Mbytes in order to avoid costly
+>> trampolines. By allocating data outside of module area, we
+>> increase the chance for module text to remain within acceptable
+>> distance from kernel core text.
+>> 
+>> So select ARCH_WANTS_MODULES_DATA_IN_VMALLOC for 8xx as well.
+>> 
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>
+> Cc list first and then the SOB.
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Just delete the Cc: list, it's meaningless.
 
-On Tue,  1 Feb 2022 09:37:35 -0600 you wrote:
-> Specify the size of receive buffers used for RX endpoints in the
-> configuration data, rather than using 8192 bytes for all of them.
-> Increase the size of the AP receive buffer for the modem to 32KB.
-> 
-> 					-Alex
-> 
-> Alex Elder (2):
->   net: ipa: define per-endpoint receive buffer size
->   net: ipa: set IPA v4.11 AP<-modem RX buffer size to 32KB
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/2] net: ipa: define per-endpoint receive buffer size
-    https://git.kernel.org/netdev/net-next/c/ed23f02680ca
-  - [net-next,2/2] net: ipa: set IPA v4.11 AP<-modem RX buffer size to 32KB
-    https://git.kernel.org/netdev/net-next/c/33230aeb2ef4
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+cheers

@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C024A7E73
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702AC4A7E77
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349233AbiBCDtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:49:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348594AbiBCDtK (ORCPT
+        id S1349243AbiBCDwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:52:36 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:60491 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238270AbiBCDwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 22:49:10 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9D6C061714;
-        Wed,  2 Feb 2022 19:49:08 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id y84so1752727iof.0;
-        Wed, 02 Feb 2022 19:49:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cH+JefUkNgMOJwGnoWzmYzTDgAaIN5IwlvQkAxTpPBk=;
-        b=hNwPLhL+2AMOsSEb5mgiypBw1Sx5dmSSUrkrMIBfqqN1H6/ZH+hujkzXclyLAJ8LJo
-         wiWZLo1JrwTgf9jcafQAlmcsC73bbe4cNRjooMJBRD2mzTdJn2+JV1L3qodAvLWxWn5T
-         Vr/SJfKkAxFagd/IOdhuWr0DuLB7hwGb6Wp2u+jVVwOkQE+VI24No/eLeN92q/58K2NY
-         cAy1kElsuDFjj3lK2x2Gw08cvIXl93/UIBtvuG2KiZz+jmI6rf9og0nokdDHHlbN5RK0
-         xFvcxguQ1L0pIiBOlgxCyM5vlVUK7oU9YVKvyYPCjmj8WcwwWY2Lxkrxm8+OWd5ZEhoE
-         pH0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cH+JefUkNgMOJwGnoWzmYzTDgAaIN5IwlvQkAxTpPBk=;
-        b=0MXH5KW1F1ZeiDmHLwRusmIDz+YU3xkef+XjoGPelqEukUDimhaULmai9ia72mWiFH
-         bH+DNwU7nm1qrZbcEKYZ0NRlCJmaY84LD7fBHeYM4v/h8Skz3YsNE8aakN5/HHrqKqpR
-         /vgiKlgrSE+YsVHT5wGecYz8h0sQuKaNRXGd8z+zpMoWJOmUGBHWGP0Sm8eRY1rbdhsX
-         tnstGYIZmy6OvNr7Vhxkjsyu9MtrwFlDeOOs5TLQrlbSYkTAegwFnJXGVODOZYr0N3Dr
-         stN2icL3znSzZQQxEi090eTgn+MtG9aOWgRXBCel152CkAKRy+a7ed0OvZ6gppos0A42
-         +9lQ==
-X-Gm-Message-State: AOAM530k4z4s/muh6u0RL5WuNjrTG1Qff+y/qkHlxtOlxHzrdzuUsgoF
-        HgfJ6Y56m1x2Ps6YOuGTqSfSd1Z/UyrwcEWzjj0=
-X-Google-Smtp-Source: ABdhPJwYxfXG3TFpo+sC0YB0Lv4N3eZ1fDN9qaIptbgVQWAFBiSRaVVmL5hU2sS21b5pN65p9xNG2xRh5XnH+if00xU=
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr16884736iow.133.1643860144934;
- Wed, 02 Feb 2022 19:49:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
- <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
- <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net> <CAB95QASv2nY6kttOw1rwReUuucfpSgoByA6yrAbuQPRcTUQJBQ@mail.gmail.com>
- <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net>
-In-Reply-To: <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 3 Feb 2022 04:48:53 +0100
-Message-ID: <CAB95QARyz_sp9MoMsakfAK+PRBnVVnyOQzm2ZwJwwLE5vvAUFg@mail.gmail.com>
-Subject: Re: [ASUS EC Sensors v8 0/3]
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
+        Wed, 2 Feb 2022 22:52:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jq4W24fQDz4xcl;
+        Thu,  3 Feb 2022 14:52:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1643860352;
+        bh=/Pfql7CY6zwkVLAHshlAFb3ts0aQsbL6x17I166/5KI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=syW/ju1lzaswpGav7Z30yj30jeTyhgODBXeyOd4SIZRlCJiF8rgJ8fvUchci6dYMV
+         Opbi2pZpD3QULnz172fsHcGBUGp7Phea45IJwzxoe4zUL2JuQy36TTUuzwUIMisAkP
+         uKGMleQCRpIqtJuAJW9LFOVcPVqIoLLxrwujMXBR+igD9ZiBMIn1GN747ebCPUaEUa
+         jVKHUvIXQLH9WLugcvFAiRy1akoesXBDuZ7E+En2qchsTt4Jxbt23W4UUyD7Tl+0Jy
+         RflXRPUhD3q5qkevJ9x68hGYN/okt6108or/UDLu4PdNGZJbO0DGLv8NRaeRlzzDfH
+         4e4r3CYCeZbqQ==
+Date:   Thu, 3 Feb 2022 14:52:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm-current tree with the bpf-next
+ tree
+Message-ID: <20220203145229.13dd25e9@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Fs/cnTjeiqDNuK302s6W=T2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Oleksandr sent an informal one already.
-> >
->
-> He wrote:
->
-> "Given minor changes against v7, I think my "Tested-by:" should have been preserved."
->
-> which doesn't mean he tested again, only that in his opinion
-> the tags should have been preserved.
+--Sig_/Fs/cnTjeiqDNuK302s6W=T2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oleksandre, could you, please, let us know did you actually test the
-v8 code and if so provide us with the Tested-by: tag?
+Hi all,
 
-> That means that I am left with either accepting the series without any
-> Tested-by: and/or Reviewed-by: tags, or I have to wait for some. I guess
-> you are telling me that I won't get any additional tags, so I'll have to
-> go in myself and have a closer look. I'll try to do that in the next week
-> or two.
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-Thank you, I understand now. If Oleksandr does not reply in a few days
-I will send the update with another board
-(fully duplicating information for its base variant), tested by a
-Libre Hardware Monitor user.
+  lib/Kconfig.debug
 
-Best regards,
-Eugene
+between commit:
+
+  42d9b379e3e1 ("lib/Kconfig.debug: Allow BTF + DWARF5 with pahole 1.21+")
+
+from the bpf-next tree and commit:
+
+  e11ef20106b7 ("Kconfig.debug: make DEBUG_INFO selectable from a choice")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc lib/Kconfig.debug
+index f15dd96028b5,efc1a1908e04..000000000000
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@@ -317,6 -339,7 +339,7 @@@ config DEBUG_INFO_BT
+  	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
+  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
+  	depends on BPF_SYSCALL
+ -	depends on !DEBUG_INFO_DWARF5
+++	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >=3D 121
+  	help
+  	  Generate deduplicated BTF type information from DWARF debug info.
+  	  Turning this on expects presence of pahole tool, which will convert
+
+--Sig_/Fs/cnTjeiqDNuK302s6W=T2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH7UX0ACgkQAVBC80lX
+0GyIbgf/VJOzAy08G7IWfqLcIuzm27iae0UGXbwUO1lYHVv2BQM+3OotO6Fsiz9H
+VM87r6F/OHtBXF5ERbNQWjlocRuA9HTWp6kSHruhr9g3858A3akFySFOQzDzyKRU
+FN5hQoIFML4QP/Cd3wi/T8vVuM2pGdFlpRYkHjk7N7xeXSNNAYPWt39RmK2nFUgW
+WEIPyJhm30UxiVSOasCAK45UAvRzT+ZcMNWbSbP0sxPnHkIsuFMszAvNyotTqDVN
+ZbU/MT61uQAdJ4jRfTk/6qMLWmF7Fw0Py3TVKmWb3LRKkZfTx0JX/MHw2ud0TsAb
+mBB1dZBN4m5pzPOiIaU08EOyJXYTjQ==
+=Nn+L
+-----END PGP SIGNATURE-----
+
+--Sig_/Fs/cnTjeiqDNuK302s6W=T2--

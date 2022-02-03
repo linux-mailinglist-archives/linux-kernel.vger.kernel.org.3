@@ -2,75 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BF24A891D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8734A8923
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbiBCQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:53:45 -0500
-Received: from mail-pj1-f42.google.com ([209.85.216.42]:33317 "EHLO
-        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiBCQxn (ORCPT
+        id S240440AbiBCQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233754AbiBCQ4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:53:43 -0500
-Received: by mail-pj1-f42.google.com with SMTP id cq9-20020a17090af98900b001b8262fe2d5so4291182pjb.0;
-        Thu, 03 Feb 2022 08:53:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1tNWfA/BVq4Pu1brgQQg4f3LF0dBzZzJ2dAGAeOLqHU=;
-        b=5t2iNKY3+lJnRzJ10/4094uGxw8wFiGq73W61LsZisxIsUe7O/o92BTkb6UOjaw96O
-         SW91Vy5cBSlzFwxf8RB6n4qwAqkHAbBCpmA0E8zT/kcUAyA38iRFqx4KJ/s9inQEjFdn
-         rpn6ngtjcKl9JpZHhxLQhtGJ3u1M6CqrLbKLarfRdh6xpX6h1f4gBQnSXgUqBLn+qJdE
-         GPvE3WVYmRgpXmZHEIeTuP3zxQj+IM0QXbgrPj514QgG9PVG6ZDcOtBY78RxC1RqYQ18
-         QBSeVEU6YE5cBqDq/MafUBMYdMweXk91dJAflVxVa0qlQD7pEjgd51BnlZSq3AchtpVo
-         ZyTw==
-X-Gm-Message-State: AOAM533Iz9q0bznZ+HzClLu4Q4o1jCXIBcdx8eyF5PdBMBunwQaWcNIa
-        SwEhr8mgrJGtRNPX3dcmRnqK07o8r7WC8A==
-X-Google-Smtp-Source: ABdhPJz+d63k2s99MW2oUwmpMARz0qQsAzk0eI0/7mWE/6YWan2johV6nwuipVWV6RGsUrE/Pg5Ipg==
-X-Received: by 2002:a17:90a:ba89:: with SMTP id t9mr14653181pjr.21.1643907223251;
-        Thu, 03 Feb 2022 08:53:43 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id r7sm2417544pjp.2.2022.02.03.08.53.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 08:53:42 -0800 (PST)
-Message-ID: <54be0878-a7da-cc8a-3efc-1bb0c53caf47@acm.org>
-Date:   Thu, 3 Feb 2022 08:53:40 -0800
+        Thu, 3 Feb 2022 11:56:22 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902CFC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:56:21 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DFB55C0004;
+        Thu,  3 Feb 2022 16:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1643907379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W0jSBYJYNVVKk+rv6PFxNqt0J0d+Gm942h0iR17woVA=;
+        b=NgKC8vmwilXSNLQ/4Q+vBS+ywB596sC4eiVr2h3VOOkc1u13TPr1JZzOLcwUOK0w8/ihSL
+        XLp5e7XzXxQwgKwgCSUjoTCA2rZ3T0ssFSeFXQXfRW5pnp4VMzTOyOQUDTdjLtZCi7gVUV
+        RX7FAU/nSGOcQ+7v6W0plDXMGXtCU2X5A+wAHwqhbQuB1iCclhUrm9g/clkm17Ag6pV0Jz
+        dobw3W7CXiVXhxObkM8RlkA19lQ8duduJ1EKUwPcIsYNZgPGtfRhA6MWQ/uxjiOg7lV9an
+        MTpRE8uOVpzlXzL8ZI7MucW/d2TcoDSiBUXdhjyNDSYSvgypZ7OOYBJqb+t/UA==
+Date:   Thu, 3 Feb 2022 17:56:16 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>,
+        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
+Subject: Re: [RFC PATCH] mtd: tests: Fix eraseblock read speed
+ miscalculation for lower partition sizes
+Message-ID: <20220203175616.14f85dc1@xps13>
+In-Reply-To: <20220203132434.25769-1-amit.kumar-mahapatra@xilinx.com>
+References: <20220203132434.25769-1-amit.kumar-mahapatra@xilinx.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] scsi: ufs: disable auto hibern8 while entering suspend
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        'Hoyoung SEO' <hy50.seo@samsung.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        asutoshd@codeaurora.org, cang@codeaurora.org,
-        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
-Cc:     'kernel test robot' <lkp@intel.com>
-References: <CGME20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b@epcas2p1.samsung.com>
- <20220124180637.160524-1-hy50.seo@samsung.com>
- <40986ecb6c81812a1e1ab24d93e46eda75974c4e.camel@mediatek.com>
- <12a201d81892$c8123d40$5836b7c0$@samsung.com>
- <066101d818ca$5dba71f0$192f55d0$@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <066101d818ca$5dba71f0$192f55d0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 22:50, Alim Akhtar wrote:
-> I am not sure, if this problem is generic and faced by all other UFS vendors.
-> If not, how about having a vendor specific call back for your platform only?
-> Just a thought.
+Hi Amit,
 
-I agree with the above. Since the code change does not follow from the 
-spec, it should be guarded with a check for a new quirk flag.
++Cc: David, who's maintaining the tools. Please keep him in the
+recipients list!
+
+amit.kumar-mahapatra@xilinx.com wrote on Thu, 3 Feb 2022 18:54:34 +0530:
+
+> While calculating speed during  mtd_speedtest, the time interval
+> (i.e., start - finish) is rounded off to the nearest milliseconds by
+> ignoring the fractional part. This leads to miscalculation of speed.
+> The miscalculation is more visible while running speed test on small
+> partition sizes(i.e., when partition size is equal to eraseblock size or
+> twice the eraseblock size) at higher spi frequencies.
+>=20
+> For e.g., while calculating eraseblock read speed for a mtd partition with
+> size equal to the eraseblock size(i.e., 64KiB) the eraseblock read time
+> interval comes out to be 966490 nanosecond. This is then converted to
+> millisecond(i.e., 0.966 msec.). The integer part (i.e., 0 msec) of the
+> value is considered and the fractional part (i.e., 0.966) is ignored,for
+> calculating the eraseblock read speed. So the reported eraseblock read
+> speed is 0 KiB/s, which is incorrect.
+>=20
+> There are two approaches to fix this issue.
+>=20
+> First approach will be to keep the time interval in millisecond. and round
+> up the integer value, with this approach the 0.966msec time interval in t=
+he
+> above example will be rounded up to 1msec and this value is used for
+> calculating the speed. Downside of this approach is that the reported spe=
+ed
+> is still not accurate.
+>=20
+> Second approach will be to convert the time interval to microseconds
+> instead of milliseconds, with this approach the 966490 nanosecond time
+> interval in the above example will be converted t0 966.490usec and this
+> value is used for calculating the speed. As compared to the current
+> implementation and the suggested First approach, this approach will report
+> a more accurate speed. Downside of this approach is that, in future if the
+> mtd size is too large then the u64 variable, that holds the number of
+> bytes, might overflow.
+>=20
+> In this patch we have gone with the second approach as this reports a more
+> accurate speed. With this approach the eraseblock read speed in the above
+> example comes out to be 132505 KiB/s when the spi clock is configured at
+> 150Mhz.
+>=20
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+> ---
+> BRANCH: mtd/next
+> ---
+>  drivers/mtd/tests/speedtest.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/mtd/tests/speedtest.c b/drivers/mtd/tests/speedtest.c
+> index 93e76648f676..2b76e7750c68 100644
+> --- a/drivers/mtd/tests/speedtest.c
+> +++ b/drivers/mtd/tests/speedtest.c
+> @@ -161,13 +161,13 @@ static inline void stop_timing(void)
+>  static long calc_speed(void)
+>  {
+>  	uint64_t k;
+> -	long ms;
+> +	long us;
+
+Should this be an explicit 64-bit value? And unsigned?
+unsigned long long int or uint64_t? I believe we are now 1000x closer
+to the 4GiB limit so we might need to enlarge this variable.
+
+> =20
+> -	ms =3D ktime_ms_delta(finish, start);
+> -	if (ms =3D=3D 0)
+> +	us =3D ktime_us_delta(finish, start);
+> +	if (us =3D=3D 0)
+>  		return 0;
+> -	k =3D (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000;
+> -	do_div(k, ms);
+> +	k =3D (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000000;
+> +	do_div(k, us);
+>  	return k;
+>  }
+> =20
+
+Otherwise lgtm!
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
 
 Thanks,
-
-Bart.
+Miqu=C3=A8l

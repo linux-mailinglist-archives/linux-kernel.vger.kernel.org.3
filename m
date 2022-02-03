@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9A44A8C00
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A251E4A8C0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353620AbiBCSzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:55:19 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:51954 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbiBCSzS (ORCPT
+        id S1353625AbiBCS5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:57:38 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:36807 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234035AbiBCS5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:55:18 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9F02821136;
-        Thu,  3 Feb 2022 18:55:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643914517; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+zZ5QPQnn/PzBqqi/3+iDyk+WbF7qUGCzewb/ZOF+E=;
-        b=DQvbzdAEC7l89QmuI/HKHmz/v3YSQSdHYd6aglas8c704+e0RFCg7AIuFz59wFAe32YA1o
-        ZcbhCCpbyikEV9pkejCHflTDgMVVgRidDe/WzOVJd6kdmgzVdofo0bZBDbwcc1BxtiRAI3
-        9dqFyBG/k90XpjRxen2VhAFOFdpN2Ck=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643914517;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+zZ5QPQnn/PzBqqi/3+iDyk+WbF7qUGCzewb/ZOF+E=;
-        b=NF7OnzrwsYmd9pNrszcm3zFnJAI9WKrybhaOrQxHiWTTEyE38W4M0odtux42AkH4DBWYKP
-        rKwyQBZLrKKGSHBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7C988139FE;
-        Thu,  3 Feb 2022 18:55:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sv+bHRUl/GHpZQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 03 Feb 2022 18:55:17 +0000
-Message-ID: <78c631c3-d316-b77c-0e24-e08d5214710d@suse.cz>
-Date:   Thu, 3 Feb 2022 19:55:17 +0100
+        Thu, 3 Feb 2022 13:57:37 -0500
+Received: by mail-yb1-f170.google.com with SMTP id c6so11869277ybk.3;
+        Thu, 03 Feb 2022 10:57:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EpyDkyG4xB8jSiDotXaela/62CttDlFOZPwhGEx9NZw=;
+        b=eb94PvEyfTUZtS9bR7I5hbXxYxFSc+FuwSLv0LbhFds/KTd+1sFuhAKrMtJmt0u+Fv
+         kW+s3ZATGz9Qzyo5g6jdM3ITINRyMjLbI+ltFaGQIeHCqhxy1vUZCS/qiLwrWq+hO2e2
+         Bz8KVGpVqJ6AKZueZcpanNiy7AKGo9sSYYb3ONRQ84R/CJJjR9AXBYbU04m1d/XnmwqX
+         WNbLLL+3mxTD3xZcndxoWf2gSk1uuHFB6yKmcc1Kq9PJEL/S3p4fJE3KbYD/dKARfPrE
+         tghjo5UBIvAblJDifjQQFgYpLlCdtu2LOJSH843mhyGEE3syYwaeLE/m/2/ByP78zn7V
+         kmRA==
+X-Gm-Message-State: AOAM531nmNmkeR0BHVl1TeXefB6EWU/jLbzgTvf5pO2O+0QnNf4fRorG
+        Cn1x0VU/zbEyMkBVUbx9nK/MrrMxII8uwfwPN69SlapF
+X-Google-Smtp-Source: ABdhPJz0kFA/+2Su2AVIgcBW2zIragRHga6XXbhsgGUI/eIIrqm+rIyx8I+hh8apo+8f+MITfnz7WjBPV4hP3PVweK4=
+X-Received: by 2002:a0d:d782:: with SMTP id z124mr5513446ywd.28.1643914656415;
+ Thu, 03 Feb 2022 10:57:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] mm: vmscan: remove deadlock due to throttling failing to
- make progress
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Mel Gorman <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hugh Dickins <hughd@google.com>, Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220203100326.GD3301@suse.de>
- <2472c281-436c-d5f5-61d8-e5192e912ff1@suse.cz>
-In-Reply-To: <2472c281-436c-d5f5-61d8-e5192e912ff1@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com> <CAJZ5v0gcK10TiVbc8+j1pVN+T2p3EZHEK9Ga2=2ZxeGd=iVkhw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gcK10TiVbc8+j1pVN+T2p3EZHEK9Ga2=2ZxeGd=iVkhw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Feb 2022 19:57:25 +0100
+Message-ID: <CAJZ5v0j7+xkYOGB8kLxGwwD3ReaXt4oMRK-D-5t2zKeMxd-CYA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] Thermal: Introduce the Hardware Feedback Interface
+ for thermal and performance management
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 19:53, Vlastimil Babka wrote:
-> On 2/3/22 11:03, Mel Gorman wrote:
->> A soft lockup bug in kcompactd was reported in a private bugzilla with
->> the following visible in dmesg;
->> 
->> [15980.045209][   C33] watchdog: BUG: soft lockup - CPU#33 stuck for 26s! [kcompactd0:479]
->> [16008.044989][   C33] watchdog: BUG: soft lockup - CPU#33 stuck for 52s! [kcompactd0:479]
->> [16036.044768][   C33] watchdog: BUG: soft lockup - CPU#33 stuck for 78s! [kcompactd0:479]
->> [16064.044548][   C33] watchdog: BUG: soft lockup - CPU#33 stuck for 104s! [kcompactd0:479]
->> 
->> The machine had 256G of RAM with no swap and an earlier failed allocation
->> indicated that node 0 where kcompactd was run was potentially
->> unreclaimable;
->> 
->> Node 0 active_anon:29355112kB inactive_anon:2913528kB active_file:0kB
->>   inactive_file:0kB unevictable:64kB isolated(anon):0kB isolated(file):0kB
->>   mapped:8kB dirty:0kB writeback:0kB shmem:26780kB shmem_thp:
->>   0kB shmem_pmdmapped: 0kB anon_thp: 23480320kB writeback_tmp:0kB
->>   kernel_stack:2272kB pagetables:24500kB all_unreclaimable? yes
->> 
->> Vlastimil Babka investigated a crash dump and found that a task migrating pages
->> was trying to drain PCP lists;
->> 
->> PID: 52922  TASK: ffff969f820e5000  CPU: 19  COMMAND: "kworker/u128:3"
->>  #0 [ffffaf4e4f4c3848] __schedule at ffffffffb840116d
->>  #1 [ffffaf4e4f4c3908] schedule at ffffffffb8401e81
->>  #2 [ffffaf4e4f4c3918] schedule_timeout at ffffffffb84066e8
->>  #3 [ffffaf4e4f4c3990] wait_for_completion at ffffffffb8403072
->>  #4 [ffffaf4e4f4c39d0] __flush_work at ffffffffb7ac3e4d
->>  #5 [ffffaf4e4f4c3a48] __drain_all_pages at ffffffffb7cb707c
->>  #6 [ffffaf4e4f4c3a80] __alloc_pages_slowpath.constprop.114 at ffffffffb7cbd9dd
->>  #7 [ffffaf4e4f4c3b60] __alloc_pages at ffffffffb7cbe4f5
->>  #8 [ffffaf4e4f4c3bc0] alloc_migration_target at ffffffffb7cf329c
->>  #9 [ffffaf4e4f4c3bf0] migrate_pages at ffffffffb7cf6d15
->>  10 [ffffaf4e4f4c3cb0] migrate_to_node at ffffffffb7cdb5aa
->>  11 [ffffaf4e4f4c3da8] do_migrate_pages at ffffffffb7cdcf26
->>  12 [ffffaf4e4f4c3e88] cpuset_migrate_mm_workfn at ffffffffb7b859d2
->>  13 [ffffaf4e4f4c3e98] process_one_work at ffffffffb7ac45f3
->>  14 [ffffaf4e4f4c3ed8] worker_thread at ffffffffb7ac47fd
->>  15 [ffffaf4e4f4c3f10] kthread at ffffffffb7acbdc6
->>  16 [ffffaf4e4f4c3f50] ret_from_fork at ffffffffb7a047e2
->> 
->> The root of the problem is that kcompact0 is not rescheduling on a CPU
->> while a task that has isolated a large number of the pages from the
->> LRU is waiting on kcompact0 to reschedule so the pages can be released.
->> While shrink_inactive_list() only loops once around too_many_isolated,
->> reclaim can continue without rescheduling if sc->skipped_deactivate ==
->> 1 which could happen if there was no file LRU and the inactive anon list
->> was not low.
->> 
->> Debugged-by: Vlastimil Babka <vbabka@suse.cz>
->> Signed-off-by: Mel Gorman <mgorman@suse.de>
-> 
-> Fixes: d818fca1cac3 ("mm/vmscan: throttle reclaim and compaction when too
-> may pages are isolated")
+On Sun, Jan 30, 2022 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
+> <ricardo.neri-calderon@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > This is v5 of this patchset after having incorporated the feedback from
+> > reviewers. Please find v1, v2, v3, and v4 in [1], [2], [3], and [4],
+> > respectively.
+> >
+> > The Intel Hardware Feedback Interface (HFI) [5] provides information about
+> > the performance and energy efficiency of each CPU in the system. It uses a
+> > table that is shared between hardware and the operating system. The
+> > contents of the table may be updated as a result of changes in the
+> > operating conditions of the system (e.g., reaching a thermal limit) or the
+> > action of external factors (e.g., changes in the thermal design power).
+> >
+> > The information that HFI provides are specified as numeric, unit-less
+> > capabilities relative to other CPUs in the system. These capabilities have
+> > a range of [0-255] where higher numbers represent higher capabilities.
+> > Energy efficiency and performance are reported in separate capabilities.
+> > If either the performance or energy capabilities efficiency of a CPU are 0,
+> > the hardware recommends to not schedule any tasks on such CPU for
+> > performance, energy efficiency or thermal reasons, respectively.
+> >
+> > The kernel or user space may use the information from the HFI to modify
+> > task placement and/or adjust power limits. This patchset focuses on the
+> > user space. The thermal notification framework is extended to relay
+> > updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
+> > to certain CPUs and/or offline CPUs whose capabilities are zero.
+> >
+> > The frequency of HFI updates is specific to each processor model. On some
+> > systems, there is just a single HFI update at boot. On other systems, there
+> > may be updates every tens of milliseconds. In order to not overwhelm
+> > userspace with too many updates, they are limited to one update every
+> > CONFIG_HZ jiffies.
+> >
+> > Thanks and BR,
+> > Ricardo
+> >
+> > [1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
+> > [2]. https://lore.kernel.org/lkml/20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com/
+> > [3]. https://lore.kernel.org/lkml/20220106025059.25847-8-ricardo.neri-calderon@linux.intel.com/
+> > [4]. https://lore.kernel.org/lkml/20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com/
+> > [5]. https://www.intel.com/sdm
+> >
+> > Changes since v4:
+> >  ++ Unchanged patches: 1, 2.
+> >  * Reworded description hfi_instance::hdr and hfi_instance::data.
+> >    (Patch 3; Srinivas)
+> >  * Call intel_hfi_online() before enabling the thermal vector at the
+> >    local APIC is enabled. This makes sure that a CPU has an associated
+> >    HFI instance when an HFI event happens. Reworded the commit message to
+> >    reflect this change. (Patch 4; Srinivas)
+> >  * Set hfi_instances to NULL if we fail to allocate memory for
+> >    hfi_instance::cpus. (Patch 4; Srinivas)
+> >  * Delayed initialization of local variables until after the check for a
+> >    non-NULL hfi_instances in intel_hfi_online(). (Patch 4; Srinivas)
+> >  * Optimized the error path in init_hfi_init() to not needlessly
+> >    free the memory of cpumasks that have not been allocated. (Patch 4;
+> >    Srinivas)
+> >  * Removed pointless checks for X86_FEATURE_HFI in
+> >    intel_hfi_[on|off]line(). It is sufficient to check for a non-NULL
+> >    hfi_instances or a CPU's hfi_instance. (Patch 4)
+> >  * Added a dedicated (i.e., not system_wq) workqueue to process HFI updates.
+> >    Reworded commit message accordingly. (Patch 5; Rafael)
+> >  * Repurposed comment on possibly receiving an HFI event with a NULL
+> >    hfi_cpu_info::instance. Patch 4 fixed this potential issue. Instead,
+> >    add a debug statement. (Patch 5; Srinivas)
+> >  * Wrapped check for NULL hfi_cpu_info::instance in the unlikely macro.
+> >    (Patch 5; Srinivas)
+> >  * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
+> >    (Patch 6; Rafael)
+> >  * Removed automatic variable ret from
+> >    thermal_genl_event_cpu_capability_change() and instead always return
+> >    -EMSGSIZE on error. (Patch 6; Rafael)
+> >  * Reworked parsing of HFI capabilities into chunks of
+> >    HFI_MAX_THERM_NOTIFY_COUNT CPUs at a time to reduce the time
+> >    we spend with interrupts disabled. (Patch7; Srinivas)
+> >  * Protected hfi_instance::cpus when iterating over them. (Patch 7;
+> >    Rafael)
+>
+> All patches in the series look good to me now, so I will be queuing it
+> up for 5.18 unless there are any objections or concerns.
 
-And Cc: stable for 5.16.y sake
-
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-
-
+The series has been applied as 5.18 material, thanks!

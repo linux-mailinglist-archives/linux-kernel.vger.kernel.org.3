@@ -2,140 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5208C4A85A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 092EB4A85A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350949AbiBCN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:59:49 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:32866 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232957AbiBCN7r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:59:47 -0500
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EEF591EC04C1;
-        Thu,  3 Feb 2022 14:59:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1643896782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gHYp8xZFp20UiBgydZl6yyeC9rXQ4/WmPw7B1KUrZ3Y=;
-        b=F3DWJD4vb6hzZvkSuWqaVmu8sCwHciUGt8M/Ok8fVbwRXVyGNDmimooqpo32Z0fQSpgTY8
-        M8AYV53sTY+yLoY10GWxHj/vztieS9gU69zP+GbdvTfQjgOwKDBGvK7RAOHWnCyhI4rAiv
-        5t3F3bhvzv/NuW7CdEtLjIX8Mga3NPc=
-Date:   Thu, 3 Feb 2022 14:59:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v9 22/43] x86/sev: Move MSR-based VMGEXITs for CPUID to
- helper
-Message-ID: <YfvfyAJU9QKcaF4d@zn.tnic>
-References: <20220128171804.569796-1-brijesh.singh@amd.com>
- <20220128171804.569796-23-brijesh.singh@amd.com>
+        id S1350953AbiBCOBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232957AbiBCOA7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:00:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26999C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CG7qhRTZqFuGbV5KI21kTvEgW0iKHq6T7r1QvRxD/2M=; b=eW+lm/XgE3echvTFXo9YykT+Jb
+        aLS0JyHij9OJeRzd2cYEU3K5iuPvKXoD01Ye7n7tdf25z+hJk1M+ZPIb0fQ7YudqWZF+pOjfjuyjH
+        J6bNvWp8r+NSkwsROi7U/vxuzahTka5HBgedkmhZUZlgdm9wifsNoHQTRfPMz3eMJXbLxVwegWMju
+        jDa++Z8ubTXt52cFO1HVN/dyusGtGZTCXLnmcCk/63yci45VhbEMJLxv5cwFa58rZ0cOyESJbOHS7
+        wPiA//K8IkHtMeBzj1XXcr7pdX+c63F9B7GOnXu4zkZbmU1wrEE7p0njSGEt5u3QI9/jWB4Jaz9jk
+        083LxB9A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFcfD-001VeD-Nr; Thu, 03 Feb 2022 14:00:43 +0000
+Date:   Thu, 3 Feb 2022 06:00:43 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        David Hildenbrand <david@redhat.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jan Kara <jack@suse.cz>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v3 1/4] mm: Fix invalid page pointer returned with
+ FOLL_PIN gups
+Message-ID: <YfvgC5Y9mTb3vKlV@infradead.org>
+References: <20220203093232.572380-1-jhubbard@nvidia.com>
+ <20220203093232.572380-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220128171804.569796-23-brijesh.singh@amd.com>
+In-Reply-To: <20220203093232.572380-2-jhubbard@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 11:17:43AM -0600, Brijesh Singh wrote:
-> From: Michael Roth <michael.roth@amd.com>
+On Thu, Feb 03, 2022 at 01:32:29AM -0800, John Hubbard wrote:
+> From: Peter Xu <peterx@redhat.com>
 > 
-> This code will also be used later for SEV-SNP-validated CPUID code in
-> some cases, so move it to a common helper.
+> Alex reported invalid page pointer returned with pin_user_pages_remote() from
+> vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for batched
+> pinning with struct vfio_batch").  This problem breaks NVIDIA vfio mdev.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-
-unless he really doesn't want to be the "suggestor" :)
-
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/kernel/sev-shared.c | 62 +++++++++++++++++++++---------------
->  1 file changed, 36 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-> index 3aaef1a18ffe..633f1f93b6e1 100644
-> --- a/arch/x86/kernel/sev-shared.c
-> +++ b/arch/x86/kernel/sev-shared.c
-> @@ -194,6 +194,36 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
->  	return verify_exception_info(ghcb, ctxt);
->  }
->  
-> +static int __sev_cpuid_hv(u32 func, int reg_idx, u32 *reg)
-> +{
-> +	u64 val;
-> +
-> +	if (!reg)
-> +		return 0;
-
-I don't know what that's supposed to catch? In case callers are
-interested only in some subset of the CPUID leaf?
-
-Meh, I guess...
-
-> +	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, reg_idx));
-> +	VMGEXIT();
-> +	val = sev_es_rd_ghcb_msr();
-> +	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
-> +		return -EIO;
-> +
-> +	*reg = (val >> 32);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sev_cpuid_hv(u32 func, u32 *eax, u32 *ebx, u32 *ecx, u32 *edx)
-> +{
-> +	int ret;
-> +
-> +	ret = __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, eax);
-> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, ebx);
-> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, ecx);
-> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, edx);
-
-You can format that this way:
-
-        ret =         __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, eax);
-        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, ebx);
-        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, ecx);
-        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, edx);
-
-
-and then it is visible at a quick glance what this does, due to the
-regularity.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+There still isn't any nvidia vfio mdev driver in the tree, so this
+changelog stilldoesn't make sense.

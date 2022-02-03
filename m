@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312344A8A2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 886614A8A2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345881AbiBCRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:33:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S1352955AbiBCRdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352887AbiBCRdK (ORCPT
+        with ESMTP id S1352891AbiBCRdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Feb 2022 12:33:10 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBC3C061741
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:33:09 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 192so2814703pfz.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:33:09 -0800 (PST)
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FCDC061748
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:33:10 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id h14so2755513plf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:33:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7h+kMvQchz+AoPV2FM/vL8Y/TYyKtPcf9ypfobGVKnY=;
-        b=PHy4GgqKpjDxG02rHl/MQY3sUK0g6wb+yt12jn0BJL3wTgec8qbxCcOLpeY8npY3tJ
-         f5bUpglH+1Lcih7Owe7h6mc+V2wgnaPXoxNzDSpJkjjPC8MpArsbk3zKcS5po8sZ/mqZ
-         rhisk/Go7s/ywjgh9ORXvF2xjK2YnW6ewPR+o=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=MUiPfv0b7HtsA+1Jcxd4DfVz2PUbbY6hEsnvf5ttu8A=;
+        b=jQX8gcsSwOP/KkAMh84nBim4wKeykymorf6yx9m/h38b779HWbddx6xXTzDoKpAb75
+         nVQ5JeWLhwZae6+zxQb2tpP83N409i3WWRcHX5vCKkFgiXL9NyftIiPvIL+qIe2+zKrY
+         6kxji9nYmzRSU+WUV+bq9onehswNvGSwRL7vw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7h+kMvQchz+AoPV2FM/vL8Y/TYyKtPcf9ypfobGVKnY=;
-        b=Wiswjm1Qf7uhnIGx0UZo1an22UB3OPVC8POyAW65uBEWDLdIsTXQw5VoUX4oFSikzC
-         xLdVZWOc4TKLdtnNTf/UTVSezL+ofC/ziJOFfnR1gHc2Zu2bguxwpD1UN++Ugksr6OUF
-         3E+YBAtPBWDQu65FUjfPSJhwL12euzUl05F2t8wDPrufuRSkKR91AimaNrAMPGE6+l2i
-         FnNu8utPePCAc3TFYkxLm5lhZzRVUMkelehA+gHkHQ1O0KkRpJHerEtqKxcx6aO+y4B5
-         lhuaMRprMowx1TGj7kqk0EI+lQ6WiruaDODZ8bECp+go5BjK1PPmzC9dZuJaRhfMQNMp
-         UITw==
-X-Gm-Message-State: AOAM530g9+CHZSswJsJ+VYdCzWIq4CK/mGcbFLDtazwi7uvamcyUG07C
-        GkxNRqncO3PUGp32URybWxmwZQ==
-X-Google-Smtp-Source: ABdhPJwNmj59YXqdNUHNYF4RM/G9wDOf8BdoHn/6oXxpaxjIRG7bKOmSHWfVPScDu5yKFlstKRswQQ==
-X-Received: by 2002:a05:6a00:a92:: with SMTP id b18mr34480193pfl.3.1643909589411;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MUiPfv0b7HtsA+1Jcxd4DfVz2PUbbY6hEsnvf5ttu8A=;
+        b=dh98l3f7YDkja1s+1UyNgY168R52+WAaMMxFMJQJPswQ0Y3qDFGXQOxytanjGTYeC7
+         tf9oWOYunoS4NOg7hcGXiafjdQKqunjT8CgJIiULaMeQa7/1d7tBUNCR4vHGzotrMCd5
+         x9QXe80v+DOJ90B1MqDAXrrEZjNlT19LZy5ekEEYJsF3/uG6rVecqc7VpLdiIk/5vaWX
+         hNancWE/dsNQTjXGXXYcab5RTSzrAOVz+1Z6SNQUvZm/cRk2yMkzZRJC+zIaH3oY61Kw
+         ed9lokyOzlHGK5WV62STQKTfvqGyrag8N65Uly5GsvMLBDWLrX270yfrB6PSWxUAdyNG
+         pWEg==
+X-Gm-Message-State: AOAM532gmwzZvIAxsaAQ3KufMxWvY3MRY2Iyzdfw69htUsiN7dj/RV3c
+        smWiqiNfBa3I/YIAz2N8SuxehQ==
+X-Google-Smtp-Source: ABdhPJwm1hJ64GoD9Ys8S1VDk2Ymu61lFup/+cIM4lzAuJOKaqXIk0DUkZSlFidJmOUh9Hqg1vGtlw==
+X-Received: by 2002:a17:902:7d97:: with SMTP id a23mr36351894plm.92.1643909589655;
         Thu, 03 Feb 2022 09:33:09 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 16sm10408471pje.34.2022.02.03.09.33.08
+        by smtp.gmail.com with ESMTPSA id lb3sm11414786pjb.47.2022.02.03.09.33.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:33:08 -0800 (PST)
+        Thu, 03 Feb 2022 09:33:09 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
         George Burgess IV <gbiv@google.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v6 0/4] fortify: Add Clang support
-Date:   Thu,  3 Feb 2022 09:33:03 -0800
-Message-Id: <20220203173307.1033257-1-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v6 1/4] Compiler Attributes: Add __pass_object_size for Clang
+Date:   Thu,  3 Feb 2022 09:33:04 -0800
+Message-Id: <20220203173307.1033257-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220203173307.1033257-1-keescook@chromium.org>
+References: <20220203173307.1033257-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1239; h=from:subject; bh=6kU6WanqjoBPUumm/P0DvF5FKzthc4ynpCb/btOBAdk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh/BHRWQf7TUvbj1C/Ib0Gdow2yvtEVBucC0+3VRD2 B0yc7OqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfwR0QAKCRCJcvTf3G3AJpdyD/ 4jg/g7Yj98s2up2vl0ZR7m+fFMN8uft6bejiXjvARJHiq1H2nxrebunUyFzS8StdQW1ArE2bFvmY0T 4UXLOHeE+/6H8khSaH6zVAfRUBdNMYv7RB3CMpEVwtXFMdP/TJ89AdjTSTbW4SGNVzr4ST7Az1KFs2 NNWYxlIbiiojEN5I8cXiGcQxeSgZbYnESgc98CwSMyB6p4eOEeB762wtdyLGlvJtSnBIzFj0MB8B1A u8feBDXEtB2OW+Ju/QJlGxPrCN0Fi8yxsDimOW9mlsN+VNBwMmeXHXfuHugOh2+Ra10HkwNEYbQgu1 sXq0h630uFPu88FyD+ZRTgW006NKoDKTXZcH7lYfgbVtdHaTck+PLoho/dbonKjAqtv2lX9A00oZb4 5oglVB8K9smuN6vOFDpthWwS2zYBr2276G9qYRGMTbceg7I7pBT9xGemd3Gza2tXJ55J9wnAI/dxxe t8wH+1VG7C5B2NmyjYsmkOmlNXy+46XDMj+JNICXVvdZIGxRi1Lpo0BXO6np9toxkt1wJxNzsaOIxa lmZ93r4GnD4jOsHW4HToMQbvhsxCP4QADD/TFsm98fOYEZu3bb31UgnUz8YRhOFD8iVD6qguoBa6sm GGLQn8DVHVt9VELW67gV7oNGwfsuCs9SAJHjVOEzjx9FXgYAJohdp43/ISEA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1990; h=from:subject; bh=4kvv64bSH/70KUK07qLc8wQXlhwvQ6HObY6O2DORONc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh/BHSjG3rQ/CXubaKddHLMHMFjiyYRstsDgXydL47 wn/JpEeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYfwR0gAKCRCJcvTf3G3AJh/yEA CxCjO7ReiNJg3LHPAqDhDOOCqIutYxL53os7hP2tTYD942c2cdT1Qu6VZNnwNRaRUNPiuo+UcKUgzX MqClYq+59CuiJr4gfKJyN0ixxXMuC7YEghZpE2sJnWSGRaRI7XUDjlDnYtdn9sW48QUDfr0cySO4Fd xJ7lY93vsK51fYyRcCGNX0+AGfqa+Q6I0vORoo1WnyhRh50sSfETEEtXM4H8FDqZ8f0fnldWuZKc1N NotoKcD3pvIe5pKTWWxvTyxe9vc1wQtbyWevg/uFVx35supMhYFgHlAxCO4A7in5wBKwH+SBB56x2B 5aV8yQ17ZpKOyLfb8KZG7ZD7mIpOWcsoFaRF8wNTanonUyRuDlToGhRaskCPAjaIXvpeZub+BJGczy 4/Q8LOoJHGu8KQqKNvmDbzZp0xtvatffWwty+zBcBukYxgauzeA9MJdeEJ5HsZFEKKcCJa35indnoB s1SsYtjfMlnlajZ2Tpd43Ys1Ir+mOcbe4mY/j0FuY5cjzit3HBuMv0afU1cgqwsYDx46hwwNJQJ5ce QH5fBHLI7oxky0aDplTKbq/41yqQiH0Z3FQASlOZHVhKkdln4gGoSGrDFP9vuu90k7Gcfph47fcleZ F/8Tc9qTDACdqzb08XSs6+if8D6I8LClaqvaXkPkvAYuEhQ8fHYxSOBSJ8RA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In order to gain greater visibility to type information when using
+__builtin_object_size(), Clang has a function attribute "pass_object_size"
+that will make size information available for marked arguments in
+a function by way of implicit additional function arguments that are
+then wired up the __builtin_object_size().
 
-This has been updated from feedback on the v5 series. Builds correctly with Clang 12.0.1
-too now. :)
+This is needed to implement FORTIFY_SOURCE in Clang, as a workaround
+to Clang's __builtin_object_size() having limited visibility[1] into types
+across function calls (even inlines).
 
-Thanks!
+Since any usage must also be const, include it in the macro.
 
-v1: https://lore.kernel.org/linux-hardening/20210727205855.411487-61-keescook@chromium.org/
-v2: https://lore.kernel.org/linux-hardening/20210818060533.3569517-64-keescook@chromium.org/
-v3: https://lore.kernel.org/linux-hardening/20211213223331.135412-18-keescook@chromium.org/
-v4: https://lore.kernel.org/linux-hardening/20220130182204.420775-1-keescook@chromium.org/
-v5: https://lore.kernel.org/linux-hardening/20220202003033.704951-1-keescook@chromium.org/
-v6:
- - clean up comments in attributes (ojeda)
- - moved const into pass_object_size macro
- - adjusted Clang version to 12.0.1 (ndesaulniers)
- - cleaned up Clang comments (ndesaulniers)
+This attribute has an additional benefit that it can be used even on
+non-inline functions to gain argument size information.
 
-Kees Cook (4):
-  Compiler Attributes: Add __pass_object_size for Clang
-  Compiler Attributes: Add __overloadable for Clang
-  Compiler Attributes: Add __diagnose_as for Clang
-  fortify: Add Clang support
+[1] https://github.com/llvm/llvm-project/issues/53516
 
- include/linux/compiler_attributes.h | 39 +++++++++++++++++++
- include/linux/fortify-string.h      | 58 +++++++++++++++++++++--------
- security/Kconfig                    |  3 +-
- 3 files changed, 83 insertions(+), 17 deletions(-)
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/compiler_attributes.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index 37e260020221..4ce370094e3a 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -263,6 +263,20 @@
+  */
+ #define __packed                        __attribute__((__packed__))
+ 
++/*
++ * Note: the "type" argument should match any __builtin_object_size(p, type) usage.
++ *
++ * Optional: not supported by gcc.
++ * Optional: not supported by icc.
++ *
++ * clang: https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-pass-dynamic-object-size
++ */
++#if __has_attribute(__pass_object_size__)
++# define __pass_object_size(type)	const __attribute__((__pass_object_size__(type)))
++#else
++# define __pass_object_size(type)
++#endif
++
+ /*
+  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-pure-function-attribute
+  */
 -- 
 2.30.2
 

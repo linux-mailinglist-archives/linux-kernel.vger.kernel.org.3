@@ -2,210 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4968F4A8BBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E1A4A8BCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353077AbiBCShF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239905AbiBCShE (ORCPT
+        id S234080AbiBCSkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:40:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31783 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353007AbiBCSkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:37:04 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E53EC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:37:04 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id f8so2984591pgf.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vzZUhs+LvlRcv0A+Ri6qvyj7oWe7wjman1xGhk401Ro=;
-        b=f2PMz7JEUoXN9aqJmBJlduYN3ABzpb5WPq4s9IdL2ZyLCNggfy7ctONKqgxe1rt6C5
-         Nv2gnFfoJJ3EQtAWTFApijfxF4tTPOGe8wcWlThL6MK3bjS2ITAbpOukmLkrUVP//H9c
-         BbD8p7HzMSLMV5YBetgfFQgJU/yIW/MsISDNwe+/M5m0tzOa/C3lkn8103/BCZfTyy8O
-         gUVQ/41ndMMRpkrxu6xMSf5F4l1PVL5ocF7yQy4wKdcND9byEA7uZnNq6S2At2k4xrUG
-         B+TfzpwzL8qgXeQ2/QzetfcKqxe0p6uNCIrdB/wl1v9p4u/ZNzqKF2rnwUsSTurPY4M+
-         uyVg==
+        Thu, 3 Feb 2022 13:40:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643913631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=di4FajHoZmn68gaJnUS8pnDPTefePlaVCP34o2CQYSk=;
+        b=IJjiHOdjPFi3kNEn5ciqWzU4qQa1jYUsFiWdqTQ67/ywjvlFsUfZ6/ls1UbV2cMdUtnJs8
+        D0c07h2y91tfZe0p8rvhON15JJ23XEuK2eA1YE1+OYO41B6+878VzwYzfYPmKl/IozFUR6
+        f1yTRY/TCgT85OqtRLRRs8V+lKOBl6k=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-hgdAbdb9MPu3RGV_KBe2mQ-1; Thu, 03 Feb 2022 13:40:30 -0500
+X-MC-Unique: hgdAbdb9MPu3RGV_KBe2mQ-1
+Received: by mail-ej1-f72.google.com with SMTP id i21-20020a1709063c5500b006b4c7308c19so1534839ejg.14
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:40:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vzZUhs+LvlRcv0A+Ri6qvyj7oWe7wjman1xGhk401Ro=;
-        b=IP6Z0UVaKq9BoPtktYvB3jyowH2/hGu86hpj4IGJuWLlrEGdv8f+bhA86sX1F8DPq0
-         60sQCWhVio9AJiOfxEVOwSRja74v1mvpKqyQRSb6+33CXOwLAqtTyXKNUJN9uSvKHsJl
-         CMVN6xWhpSwP3EoL7qC2YAz+nJgGYzfmRHhaUs4dtndJ7l0BLOpbPA8vbqDQKABudv0w
-         IDivfSm6aCSNkEMVpXY5UKlftmHEDcfv0GFVQ2+MV5sFdqubAVhWTKRHE3HynPoV3Yw1
-         d+/nLwUqOSZKg3MYl5jLZcQbRYQClvXGcoaYRTfKzmDCkOZseXHXi5iv3GDSHuVu4Ns7
-         4sFg==
-X-Gm-Message-State: AOAM530ML48W/9PNgEfL2VcGnIQnGF+JlC48oQLSbxRewYvHBAlD5qPd
-        Kv6PlXjdBH9fVGC1u9g20d5Z7Q==
-X-Google-Smtp-Source: ABdhPJxknTdG19mZXvMk18istJ7ki/4RPtCUMeJmi/D0pr22BTygxcdPXcMdwRjfOjjOyEwA+ZLlYA==
-X-Received: by 2002:a63:710c:: with SMTP id m12mr28808753pgc.591.1643913423798;
-        Thu, 03 Feb 2022 10:37:03 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id mh1sm11806612pjb.29.2022.02.03.10.37.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 10:37:02 -0800 (PST)
-Date:   Thu, 3 Feb 2022 11:37:00 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     kishon@ti.com, vigneshr@ti.com, s-anna@ti.com,
-        bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Puranjay Mohan <p-mohan@ti.com>
-Subject: Re: [PATCH 1/2] remoteproc: Introduce deny_sysfs_ops flag
-Message-ID: <20220203183700.GB2982815@p14s>
-References: <1643638312-3912-1-git-send-email-p-mohan@ti.com>
- <1643638312-3912-2-git-send-email-p-mohan@ti.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=di4FajHoZmn68gaJnUS8pnDPTefePlaVCP34o2CQYSk=;
+        b=eBawVRtYMPWK0Gg14kE6XZbaU213P0RZcXoW7aZfROBUWC/czBCKe01B7NJwQ5fld2
+         pZ7omuW3RN0iU3JwZGBnohmHO3i6De7yrrzmA9X3RF6AHfwUGeD6tBYVdf/B4RMGkNvK
+         BNnE6RdJ47bV8eDs02db6U7dmSCDl/iQBjkp2K7DzQHDqAxWxCHcdtG4ju70wAKOD4WG
+         8PeQgLZKJgU75o8H3BO4KTV9z7/rwegF+dTha8B7E7AfT/keolG+P/FZGH+IcfYFbk8M
+         +JqrIT1L0NOgi94dcwkXKoCc3XP8vKIMnjPJZcaP/Ux7byLP3dOiiizMgn6uy3Bj4mu3
+         KlLA==
+X-Gm-Message-State: AOAM5334SJQhHNwL+9fZrHs65yeLJdLvjncZaNpilnml94hLRtgKrYur
+        GWHgfKzLSUY6WKdUXHs41zYKI9JrW5EHyakDJCkxQcWMSAihjwNqHM99HHBPfXCo3Lmn5BDLOXs
+        dykQFoqvcr9sCfAHhddl/BIoF82oy1RzjLRanNmofmNsax/5a8Hm/8OQ1oY3Z3GczL91y1c+gQe
+        +f
+X-Received: by 2002:a17:907:9620:: with SMTP id gb32mr30134977ejc.436.1643913629094;
+        Thu, 03 Feb 2022 10:40:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJygj6by+fjqx6dVgIa48/Eqf3NwrHdB9it2DxvG7W7p4qjr+p2zgu0sIQixhzKyeiCs3nAdqQ==
+X-Received: by 2002:a17:907:9620:: with SMTP id gb32mr30134957ejc.436.1643913628774;
+        Thu, 03 Feb 2022 10:40:28 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id x31sm22783949ede.26.2022.02.03.10.40.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:40:28 -0800 (PST)
+Message-ID: <745fc750-cd52-af1e-4e5e-0644ff3be007@redhat.com>
+Date:   Thu, 3 Feb 2022 19:40:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1643638312-3912-2-git-send-email-p-mohan@ti.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5/5] KVM: x86: allow defining return-0 static calls
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     seanjc@google.com, Peter Zijlstra <peterz@infradead.org>
+References: <20220202181813.1103496-1-pbonzini@redhat.com>
+ <20220202181813.1103496-6-pbonzini@redhat.com>
+In-Reply-To: <20220202181813.1103496-6-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Puranjay,
+On 2/2/22 19:18, Paolo Bonzini wrote:
+> A few vendor callbacks are only used by VMX, but they return an integer
+> or bool value.  Introduce KVM_X86_OP_RET0 for them: a NULL value in
+> struct kvm_x86_ops will be changed to __static_call_return0.
 
-On Mon, Jan 31, 2022 at 07:41:51PM +0530, Puranjay Mohan wrote:
-> The remoteproc framework provides sysfs interfaces for changing
-> the firmware name and for starting/stopping a remote processor
-> through the sysfs files 'state' and 'firmware'. The 'recovery'
-> sysfs file can also be used similarly to control the error recovery
-> state machine of a remoteproc. These interfaces are currently
-> allowed irrespective of how the remoteprocs were booted (like
-> remoteproc self auto-boot, remoteproc client-driven boot etc).
-> These interfaces can adversely affect a remoteproc and its clients
-> especially when a remoteproc is being controlled by a remoteproc
-> client driver(s). Also, not all remoteproc drivers may want to
-> support the sysfs interfaces by default.
-> 
-> Add support to deny the sysfs state/firmware/recovery change by
-> introducing a state flag 'deny_sysfs_ops' that the individual
-> remoteproc drivers can set based on their usage needs. The default
-> behavior is to allow the sysfs operations as before.
-> 
-> Implement attribute_group->is_visible() to hide the sysfs
-> state/firmware/recovery entries when deny_sysfs_ops flag is set.
-> 
+This also needs EXPORT_SYMBOL_GPL(__static_call_ret0).  Peter, any 
+objections?
 
-The address in the "To:" field of this email doesn't match the one in the SoB,
-Something that makes checkpatch angry.
+Paolo
 
-> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  drivers/remoteproc/remoteproc_sysfs.c | 18 +++++++++++++++++-
->  include/linux/remoteproc.h            |  2 ++
->  2 files changed, 19 insertions(+), 1 deletion(-)
+>   arch/x86/include/asm/kvm-x86-ops.h | 13 +++++++------
+>   arch/x86/include/asm/kvm_host.h    |  4 ++++
+>   arch/x86/kvm/svm/avic.c            |  5 -----
+>   arch/x86/kvm/svm/svm.c             | 26 --------------------------
+>   arch/x86/kvm/x86.c                 |  2 +-
+>   5 files changed, 12 insertions(+), 38 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-> index ea8b89f97d7b..4a41abdd1f7b 100644
-> --- a/drivers/remoteproc/remoteproc_sysfs.c
-> +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> @@ -230,6 +230,21 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(name);
->  
-> +static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
-> +			       int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct rproc *rproc = to_rproc(dev);
-> +	umode_t mode = attr->mode;
-> +
-> +	if (rproc->deny_sysfs_ops && (attr == &dev_attr_recovery.attr ||
-> +				      attr == &dev_attr_firmware.attr ||
-> +				      attr == &dev_attr_state.attr))
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 843bd9efd2ae..89fa5dd21f34 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -13,7 +13,7 @@ BUILD_BUG_ON(1)
+>   KVM_X86_OP(hardware_enable)
+>   KVM_X86_OP(hardware_disable)
+>   KVM_X86_OP(hardware_unsetup)
+> -KVM_X86_OP(cpu_has_accelerated_tpr)
+> +KVM_X86_OP_RET0(cpu_has_accelerated_tpr)
+>   KVM_X86_OP(has_emulated_msr)
+>   KVM_X86_OP(vcpu_after_set_cpuid)
+>   KVM_X86_OP(vm_init)
+> @@ -76,15 +76,15 @@ KVM_X86_OP(check_apicv_inhibit_reasons)
+>   KVM_X86_OP(refresh_apicv_exec_ctrl)
+>   KVM_X86_OP_NULL(hwapic_irr_update)
+>   KVM_X86_OP_NULL(hwapic_isr_update)
+> -KVM_X86_OP_NULL(guest_apic_has_interrupt)
+> +KVM_X86_OP_RET0(guest_apic_has_interrupt)
+>   KVM_X86_OP(load_eoi_exitmap)
+>   KVM_X86_OP(set_virtual_apic_mode)
+>   KVM_X86_OP_NULL(set_apic_access_page_addr)
+>   KVM_X86_OP(deliver_interrupt)
+>   KVM_X86_OP_NULL(sync_pir_to_irr)
+> -KVM_X86_OP(set_tss_addr)
+> -KVM_X86_OP(set_identity_map_addr)
+> -KVM_X86_OP(get_mt_mask)
+> +KVM_X86_OP_RET0(set_tss_addr)
+> +KVM_X86_OP_RET0(set_identity_map_addr)
+> +KVM_X86_OP_RET0(get_mt_mask)
+>   KVM_X86_OP(load_mmu_pgd)
+>   KVM_X86_OP(has_wbinvd_exit)
+>   KVM_X86_OP(get_l2_tsc_offset)
+> @@ -102,7 +102,7 @@ KVM_X86_OP_NULL(vcpu_unblocking)
+>   KVM_X86_OP_NULL(pi_update_irte)
+>   KVM_X86_OP_NULL(pi_start_assignment)
+>   KVM_X86_OP_NULL(apicv_post_state_restore)
+> -KVM_X86_OP_NULL(dy_apicv_has_pending_interrupt)
+> +KVM_X86_OP_RET0(dy_apicv_has_pending_interrupt)
+>   KVM_X86_OP_NULL(set_hv_timer)
+>   KVM_X86_OP_NULL(cancel_hv_timer)
+>   KVM_X86_OP(setup_mce)
+> @@ -126,3 +126,4 @@ KVM_X86_OP(vcpu_deliver_sipi_vector)
+>   
+>   #undef KVM_X86_OP
+>   #undef KVM_X86_OP_NULL
+> +#undef KVM_X86_OP_RET0
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 61faeb57889c..e7e5bd9a984d 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1540,6 +1540,7 @@ extern struct kvm_x86_ops kvm_x86_ops;
+>   #define KVM_X86_OP(func) \
+>   	DECLARE_STATIC_CALL(kvm_x86_##func, *(((struct kvm_x86_ops *)0)->func));
+>   #define KVM_X86_OP_NULL KVM_X86_OP
+> +#define KVM_X86_OP_RET0 KVM_X86_OP
+>   #include <asm/kvm-x86-ops.h>
+>   
+>   static inline void kvm_ops_static_call_update(void)
+> @@ -1548,6 +1549,9 @@ static inline void kvm_ops_static_call_update(void)
+>   	static_call_update(kvm_x86_##func, kvm_x86_ops.func);
+>   #define KVM_X86_OP(func) \
+>   	WARN_ON(!kvm_x86_ops.func); KVM_X86_OP_NULL(func)
+> +#define KVM_X86_OP_RET0(func) \
+> +	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
+> +			   (typeof(kvm_x86_ops.func)) __static_call_return0);
+>   #include <asm/kvm-x86-ops.h>
+>   }
+>   
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index b49ee6f34fe7..c82457793fc8 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -707,11 +707,6 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+>   	return 0;
+>   }
+>   
+> -bool avic_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu)
+> -{
+> -	return false;
+> -}
+> -
+>   static void svm_ir_list_del(struct vcpu_svm *svm, struct amd_iommu_pi_data *pi)
+>   {
+>   	unsigned long flags;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index ab50d73b1e2e..5f75f50b861c 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -3479,16 +3479,6 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+>   	svm->vmcb->save.rflags |= (X86_EFLAGS_TF | X86_EFLAGS_RF);
+>   }
+>   
+> -static int svm_set_tss_addr(struct kvm *kvm, unsigned int addr)
+> -{
+> -	return 0;
+> -}
+> -
+> -static int svm_set_identity_map_addr(struct kvm *kvm, u64 ident_addr)
+> -{
+> -	return 0;
+> -}
+> -
+>   static void svm_flush_tlb_current(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -3863,11 +3853,6 @@ static int __init svm_check_processor_compat(void)
+>   	return 0;
+>   }
+>   
+> -static bool svm_cpu_has_accelerated_tpr(void)
+> -{
+> -	return false;
+> -}
+> -
+>   /*
+>    * The kvm parameter can be NULL (module initialization, or invocation before
+>    * VM creation). Be sure to check the kvm parameter before using it.
+> @@ -3890,11 +3875,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+>   	return true;
+>   }
+>   
+> -static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> -{
+> -	return 0;
+> -}
+> -
+>   static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -4470,7 +4450,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.hardware_unsetup = svm_hardware_unsetup,
+>   	.hardware_enable = svm_hardware_enable,
+>   	.hardware_disable = svm_hardware_disable,
+> -	.cpu_has_accelerated_tpr = svm_cpu_has_accelerated_tpr,
+>   	.has_emulated_msr = svm_has_emulated_msr,
+>   
+>   	.vcpu_create = svm_vcpu_create,
+> @@ -4542,10 +4521,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.load_eoi_exitmap = avic_load_eoi_exitmap,
+>   	.apicv_post_state_restore = avic_apicv_post_state_restore,
+>   
+> -	.set_tss_addr = svm_set_tss_addr,
+> -	.set_identity_map_addr = svm_set_identity_map_addr,
+> -	.get_mt_mask = svm_get_mt_mask,
+> -
+>   	.get_exit_info = svm_get_exit_info,
+>   
+>   	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
+> @@ -4570,7 +4545,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>   	.nested_ops = &svm_nested_ops,
+>   
+>   	.deliver_interrupt = svm_deliver_interrupt,
+> -	.dy_apicv_has_pending_interrupt = avic_dy_apicv_has_pending_interrupt,
+>   	.pi_update_irte = avic_pi_update_irte,
+>   	.setup_mce = svm_setup_mce,
+>   
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index a527cffd0a2b..2daca3dd128a 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -129,6 +129,7 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+>   	DEFINE_STATIC_CALL_NULL(kvm_x86_##func,			     \
+>   				*(((struct kvm_x86_ops *)0)->func));
+>   #define KVM_X86_OP_NULL KVM_X86_OP
+> +#define KVM_X86_OP_RET0 KVM_X86_OP
+>   #include <asm/kvm-x86-ops.h>
+>   EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
+>   EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
+> @@ -12057,7 +12058,6 @@ void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+>   static inline bool kvm_guest_apic_has_interrupt(struct kvm_vcpu *vcpu)
+>   {
+>   	return (is_guest_mode(vcpu) &&
+> -			kvm_x86_ops.guest_apic_has_interrupt &&
+>   			static_call(kvm_x86_guest_apic_has_interrupt)(vcpu));
+>   }
+>   
 
-I toyed with this solution for a little while.  I think the use case is valid
-but hiding the above options will also result in a system that is difficult to
-use (and debug) because they convey important information.
-
-I suggest introducing a new kernel configuration options to make the attributes
-of the rproc_devgroup return -EINVAL when it is set.  So in remoteproc_sysfs.c
-do something like:
-
-#if CONFIG_REMOTEPROC_SYSFS_RO
-static bool option_is_read_only()
-{
-        return true;
-}
-#else
-static bool option_is_read_only()
-{
-        return false;
-}
-#endif
-
-[...]
-
-static ssize_t recovery_store(struct device *dev,
-			      struct device_attribute *attr,
-			      const char *buf, size_t count)
-{
-	struct rproc *rproc = to_rproc(dev);
-
-        if (option_is_read_only())
-                return -EINVAL;
-
-	if (sysfs_streq(buf, "enabled")) {
-		/* change the flag and begin the recovery process if needed */
-		rproc->recovery_disabled = false;
-		rproc_trigger_recovery(rproc);
-	} else if (sysfs_streq(buf, "disabled")) {
-		rproc->recovery_disabled = true;
-	} else if (sysfs_streq(buf, "recover")) {
-		/* begin the recovery process without changing the flag */
-		rproc_trigger_recovery(rproc);
-	} else {
-		return -EINVAL;
-	}
-
-	return count;
-}
-
-Thanks,
-Mathieu
-
-> +		mode = 0;
-> +
-> +	return mode;
-> +}
-> +
->  static struct attribute *rproc_attrs[] = {
->  	&dev_attr_coredump.attr,
->  	&dev_attr_recovery.attr,
-> @@ -240,7 +255,8 @@ static struct attribute *rproc_attrs[] = {
->  };
->  
->  static const struct attribute_group rproc_devgroup = {
-> -	.attrs = rproc_attrs
-> +	.attrs = rproc_attrs,
-> +	.is_visible = rproc_is_visible,
->  };
->  
->  static const struct attribute_group *rproc_devgroups[] = {
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index e0600e1e5c17..3849c66ce38f 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -523,6 +523,7 @@ struct rproc_dump_segment {
->   * @table_sz: size of @cached_table
->   * @has_iommu: flag to indicate if remote processor is behind an MMU
->   * @auto_boot: flag to indicate if remote processor should be auto-started
-> + * @deny_sysfs_ops: flag to not permit sysfs operations on state, firmware and recovery
->   * @dump_segments: list of segments in the firmware
->   * @nb_vdev: number of vdev currently handled by rproc
->   * @elf_class: firmware ELF class
-> @@ -562,6 +563,7 @@ struct rproc {
->  	size_t table_sz;
->  	bool has_iommu;
->  	bool auto_boot;
-> +	bool deny_sysfs_ops;
->  	struct list_head dump_segments;
->  	int nb_vdev;
->  	u8 elf_class;
-> -- 
-> 2.24.3
-> 

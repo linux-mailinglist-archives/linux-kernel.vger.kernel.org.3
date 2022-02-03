@@ -2,72 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26CE4A7F3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB81C4A7F3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238162AbiBCGPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 01:15:15 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:53188 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiBCGPN (ORCPT
+        id S240023AbiBCGPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 01:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238302AbiBCGPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 01:15:13 -0500
-Received: by mail-il1-f197.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso1069685ilu.19
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 22:15:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1dk1fe22wAQD96KMpTrh1aJpCo8V8K5F5v+cSSPRAoo=;
-        b=lqzcpO4fvoECGBjhEoZsvhqx4FNdE2F5xrnJ2ywkGAK0icOEkkst/J9bfU0eXbpGRl
-         Rq/TsZAT4JBTIRoGCnNuOVxNzkWe2PmQ7jYsWye8YiTA/YceCujjbGdeUjrs18GtOzR+
-         keocwKKcu1X2MEOhpP+sh6qbCgoKYu/39yQIxhAnG8teC8BOVQVpGViQoloVSbBr/SQb
-         /qcR/ZKHBFKwyrpnp+QM0fMqzv7hlwvH2nappUf+adXxgtmkcLnxS0MAtNECoeknAh05
-         xwNz7iiNxEvs5TOAyZwh1a0mF97uYHyawzswI1bfkBsPgepWkwKPlCHRC9SUHDJscGmD
-         ZP7g==
-X-Gm-Message-State: AOAM530xAb6kDwi26xlcxLEydgvIzk6tYyw+VvtqSBQiFHwO8oMPTzu/
-        HOPPl3vQniwLWstUPjOuVOW2OeyNb8nKCrAJj8fbcEojh9Fv
-X-Google-Smtp-Source: ABdhPJwG5KmUUYwacPuZ2fehr/MclNnEH3Zo1f357gXYPZfwm4VEsErIU/AlluZcFnV9djQq5ZDsqkgJgfxLeg23qz1oe7oFwDex
-MIME-Version: 1.0
-X-Received: by 2002:a02:710c:: with SMTP id n12mr18306379jac.67.1643868913131;
- Wed, 02 Feb 2022 22:15:13 -0800 (PST)
-Date:   Wed, 02 Feb 2022 22:15:13 -0800
-In-Reply-To: <00000000000061d7eb05d7057144@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009fe31405d7170e81@google.com>
-Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
-From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, lorenzo@kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, toke@redhat.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 3 Feb 2022 01:15:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33E1C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 22:15:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C234B83331
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F1B9C340E4;
+        Thu,  3 Feb 2022 06:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643868931;
+        bh=0W3MXm7AhCQh+fkNw/0vWeS15IdVWVGV0elLE0piY4I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sPEFibGakjMHOgLqN2u6qZnycBP6DWHjEHexjxhoWMeevZ1h8KjrKilAjCrw80pdz
+         KaXYdMpKqhc/bv/GKIABhaM+vyi13X/TMS0YfxRXQj/q0XZVlscVqXD+HXRD0iN55p
+         sRahFcMn3Nbp9i7d483idkELmWTWh8alOyRDrm/39wAQvhYdXwKmjyVZPXI6vnVYkT
+         RWpoXAHGs882Q0eDIW1gy+ID4yP59gk62A0bJYoj4KKtAiKlzUV4RzgbiHrpYKRLN2
+         hapGe/jy7HWa768GvT4pYrAXQLGforXOx45HyO+gGicZt/bjmts0EztU0jZf9fHSg1
+         o2IVjTyoyzrBQ==
+Date:   Thu, 3 Feb 2022 15:15:27 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [jolsa-perf:bpf/fprobe_link 3/10] include/linux/fprobe.h:20:33:
+ error: field 'ops' has incomplete type
+Message-Id: <20220203151527.70ae91707dcf69f1e3d276e6@kernel.org>
+In-Reply-To: <202202031105.OEGj0FZz-lkp@intel.com>
+References: <202202031105.OEGj0FZz-lkp@intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hi Jiri,
 
-commit 1c194998252469cad00a08bd9ef0b99fd255c260
-Author: Lorenzo Bianconi <lorenzo@kernel.org>
-Date:   Fri Jan 21 10:09:58 2022 +0000
+This may happen if CONFIG_FUNCTION_TRACER=n. Let me fix it.
 
-    bpf: introduce frags support to bpf_prog_test_run_xdp()
+Thank you,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16d81634700000
-start commit:   000fe940e51f sfc: The size of the RX recycle ring should b..
-git tree:       net-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=15d81634700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=11d81634700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e029d3b2ccd4c91a
-dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12a719cc700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15851cec700000
 
-Reported-by: syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com
-Fixes: 1c1949982524 ("bpf: introduce frags support to bpf_prog_test_run_xdp()")
+On Thu, 3 Feb 2022 11:20:41 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/fprobe_link
+> head:   f35f5b111d32e11c2201dcbfa5e3c8c0560a0a43
+> commit: 5292dedae3df76ecaa8b83f3a440172a78fff570 [3/10] bpf: Add support to attach kprobe program with fprobe
+> config: arc-randconfig-r043-20220130 (https://download.01.org/0day-ci/archive/20220203/202202031105.OEGj0FZz-lkp@intel.com/config)
+> compiler: arc-elf-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=5292dedae3df76ecaa8b83f3a440172a78fff570
+>         git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+>         git fetch --no-tags jolsa-perf bpf/fprobe_link
+>         git checkout 5292dedae3df76ecaa8b83f3a440172a78fff570
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/bpf/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from kernel/bpf/syscall.c:35:
+> >> include/linux/fprobe.h:20:33: error: field 'ops' has incomplete type
+>       20 |         struct ftrace_ops       ops;
+>          |                                 ^~~
+> 
+> 
+> vim +/ops +20 include/linux/fprobe.h
+> 
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26   9  
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  10  /**
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  11   * struct fprobe - ftrace based probe.
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  12   * @ops: The ftrace_ops.
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  13   * @nmissed: The counter for missing events.
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  14   * @flags: The status flag.
+> 806149decce8b0 Masami Hiramatsu 2022-01-26  15   * @rethook: The rethook data structure. (internal data)
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  16   * @entry_handler: The callback function for function entry.
+> 806149decce8b0 Masami Hiramatsu 2022-01-26  17   * @exit_handler: The callback function for function exit.
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  18   */
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  19  struct fprobe {
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26 @20  	struct ftrace_ops	ops;
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  21  	unsigned long		nmissed;
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  22  	unsigned int		flags;
+> 806149decce8b0 Masami Hiramatsu 2022-01-26  23  	struct rethook		*rethook;
+> 806149decce8b0 Masami Hiramatsu 2022-01-26  24  
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  25  	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+> 806149decce8b0 Masami Hiramatsu 2022-01-26  26  	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  27  };
+> 8249a1c232ade1 Masami Hiramatsu 2022-01-26  28  
+> 
+> :::::: The code at line 20 was first introduced by commit
+> :::::: 8249a1c232ade17392af10f640a79a5200744474 fprobe: Add ftrace based probe APIs
+> 
+> :::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
+> :::::: CC: Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

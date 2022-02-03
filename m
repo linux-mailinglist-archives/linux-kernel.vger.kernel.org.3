@@ -2,109 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E104A802E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C77D4A803C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349457AbiBCIPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 03:15:21 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:33709 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238509AbiBCIPT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 03:15:19 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 338C132020DA;
-        Thu,  3 Feb 2022 03:15:18 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 03 Feb 2022 03:15:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=hQLqEoOkiqPgXibgOKaXEAezpzBwTePKZNPS6u
-        0twQ8=; b=VwnXJ4ESF8BR0H5DNQxp4WTHPKIsCqkv/YDsQKhLUXwupzjXHN4Gui
-        b0tsVSWf10YYeTeOKBirvlXFPcpMAp63miVlmWq09qpaGZ65b3DfH5PlxF7JVTt+
-        KD7pqnAxQxD+s433xn8VUn/GdMwJ2+7s/ET//VC/mRI5Z6T6xddpfNM7WgasyuyR
-        VDRsb5fu7V3fbHW6w2ZlKd/DzIlxDKLuLFQ55LuRwlpeZ0MyHi30cPiPtjtJjgGJ
-        NbHEVoZ8cPXGZFQHdTuzgiHhcPZfwRKzV5KN+xfukfZjsN15/aOtPhCXFTdwP91v
-        8/Cqw5na8pwJ+KVUqsYSKjX0I4bpda/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=hQLqEoOkiqPgXibgO
-        KaXEAezpzBwTePKZNPS6u0twQ8=; b=SDm3nCUQF9g/4CANZhRMkingGGuQJyXfd
-        ggG5dzSi0P2BuhjLmG5hxuxIj3ZaxIUO1kgX+F+rFvguoS1qIGbjCysxPDs0fg2g
-        bBN8vBkpsN4rqts9uf5jdNJ/eDx8hlTMaohP3zmrLmKSu7NRRGZYH+5irKevQyFD
-        8E+5aNfK0SaQtp6/aiu46OX0NgFc6hiilBQwYL0+hWMMhMKm08NSIPHgLFrJmt13
-        noHr0Gz9rl2zTLr/KUDvJW5n3WVNjLshYG/yil30ztH4MOxP3Uz12HVoAKOzD/CV
-        sazo1Yoo3BKVo30WbzBlV2bNdLXBuwIqmc3KFHqYYLp/AQ1K+vxpg==
-X-ME-Sender: <xms:FY_7YcZ9cDMhrgW7sI8hDp-vjgNRxCdO3RcWe63mQqKFMmwEQHoI1g>
-    <xme:FY_7YXaNY-aHpsNMO9BXadMhOY6573SI1rYXq-294zuvjulRcFJARLudO8O-Db5xb
-    feUuWa5KBwOAtOS2eA>
-X-ME-Received: <xmr:FY_7YW-Xoz3ws8mpyM4dc4BsRUpyvkgReAgrLhE8PM5OEQVPXdAo5wMBbuZS1hirO1z35fTXOuxCM-atiWQu3n5pJfb-dCnEgCZ6oDs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdduudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:FY_7YWqg7FllDXCoHFiOv2EttQxbZyxPqtAzqRK3ankYDrXdx9FHkw>
-    <xmx:FY_7YXpN2-szHFNXteYmBd1pVXL2n8TpDHTgtMSzjS_4BHtTCipKlA>
-    <xmx:FY_7YUQ1Wi2LylOX-JVgSbhs2SWGe_y0Tdhgy-NOSyFEVwO6NiL_RQ>
-    <xmx:FY_7Ybc5s2OIuhL5vjv7435v0jn3_AJdyrzKQx75lsiZECYeoi8cbA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Feb 2022 03:15:16 -0500 (EST)
-Date:   Thu, 3 Feb 2022 09:15:15 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: mmc: sunxi: Add D1 MMC and eMMC
- compatibles
-Message-ID: <20220203081515.xxizvo65b2sm2aob@houat>
-References: <20220203015112.12008-1-samuel@sholland.org>
+        id S1349479AbiBCIT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 03:19:28 -0500
+Received: from mout.gmx.net ([212.227.15.15]:54997 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234410AbiBCIT1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 03:19:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643876317;
+        bh=8QRoItm8omsMVdEaP3c/pODPywpQ2eOKleZqsOez2Vo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=cu/v/Ma7spwnj+wH7C8sz1lPDUjR2lipbEswfkuDZG2vMF5IuDBl2NgtBkAY994OD
+         /UKBtAj4hP+cx84vSgQ/9U7LVuWXl4dp67bf99/C/zAswSz4SVDZFOqKftmik/tNyk
+         z9KaBrzmBTZQ1uoosyMr4pQ2mt/Sz1WHQbAsw8ew=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.137]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MacSe-1mdRLj32N8-00c80p; Thu, 03
+ Feb 2022 09:18:37 +0100
+Message-ID: <d323261d-b123-27e5-b629-559ca892163d@gmx.de>
+Date:   Thu, 3 Feb 2022 09:18:30 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="louvw55igjxjbwah"
-Content-Disposition: inline
-In-Reply-To: <20220203015112.12008-1-samuel@sholland.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v6] fbdev: fbmem: Fix the implicit type casting
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>, Yizhuo Zhai <yzhai003@ucr.edu>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <f3b28143-5f59-ad77-f2b8-6274a6edbfdc@roeck-us.net>
+ <20220202235811.1621017-1-yzhai003@ucr.edu> <Yft4qf3Hw7ntxc98@ravnborg.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <Yft4qf3Hw7ntxc98@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bvXI+KtYNuoWC5NwXxyZCtdEipYA2eZZ70kwjxYtUwIXa6YSPlw
+ jmqCPkmKkKIf9wCJyPONgzy8nMk6WWQYsEJ0L/ruLrlYf+K6P/4/htUX7Yv8SgyY56MXJHP
+ 9RpY+ds4r6TIZPijag+ROIb7FR/y++csUlbSRkgK5lPX5AFGFxQk+75i5EKHUvFryIIUVIu
+ xq7rcePYya+YVR9D+5iJQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:y9NmY3jX87o=:i9tMbCsrG4C0ba3HptrnWR
+ UpS3Hq9caJN1q7XfZfgNikjP0I7UY43QXbb1a3eE42QehKYHyKrAqzNFqPiI7IR63ln+dhZ/r
+ NLk5ndR4XKc5vSYt/am66WP9VgWQBV5wySdH8j0wc5m9z2H6V6kEEey7vAJijkYtZ2mM9Fq4B
+ tk74k/flB6dqQu75VVCzhONiX5/sJOZFPz0qsCCD9p/KN2YtTRstRW3J0Ne70s0MNwxPs1QAB
+ EXL8gvfeRrgbhPg1/q63jUr8OQr791rF07tZfGn9ySZKaW2/jtWOCmNTpaZeIjPm0R4WB3DMV
+ H2l9Asg9aOtsxGDsjtGYY5/chH4LGkFx9wyfgdpovOj1Yd/rkdGiXZ/hhvaiLKz5LFtOOmmmG
+ u0Z70BaOYD/0nWWcSS7PVobPslR5QJNPClQVGmznrO2fakW612jr2b4k2yGPvP2xhz7UHLTiJ
+ pqkuxfm/XiYpWL4UDZgk3RT3bLRyv5gOboe2m10oYBlhk3FmhoCmVZ+ENrmBWY1Sdc/q5Prmy
+ c1eyO0xhNBdCavhy7D7s9F3/jOLdKJt0KEVM7u3hutlxV65agB6aPgLt+l7MoPvrTFcREGZUq
+ 4vF/8GOuBu1ujuxk2Lo14C1z/F8DvqgaeViQiqI3w30PbUpTqfFhM48K7YqJ4PeOpOeR1DUNa
+ 0KCmtKcuYrqo1U7kW2kWtP9uAtZo7CjzYLzVjQwxSzzpO93UhZCIMM3YHwTt4oeM88tQxz/AS
+ uhYm9tTZsw8rc21enWQ0FvEZ8Uv1NvoBnd8IHZps7NIB2wWsD3vtRQ3OJnBNYjrwD797dDA41
+ wQKuOJNp4M7pQUhw6r3DcQlpKI4VGv+bORVpqHmhkLKp+rAeNk/i1zYP8jTItfNyZfCBIeBcR
+ Dr+Ta8UMYL2bhhfvjWOqPW8Pil3nWoLymaE/mYbhcNzJqyKTj5SwSRKRklIILfTOX7t9Kw4RZ
+ IW+BfdCQLssDlcSOhsQVnVGqH3hXBehs9ZfnbeNlUt0IQmZ0kvAVH9W/Ayi5IpgRU57COw7Jf
+ 5thPrXV2rG7crDFuaVBLIBaz5Cu4xmCgB8OcWMH3bz7yLn+Rndw6zAwln///+iZy1Lc35RHSk
+ g8hfb7mHD8crdQ=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/3/22 07:39, Sam Ravnborg wrote:
+> Hi Daniel,
+>
+> I assume you will take this.
+>
+> Patch is:
+> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
---louvw55igjxjbwah
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 02, 2022 at 07:51:10PM -0600, Samuel Holland wrote:
-> D1 contains variants of the usual sunxi MMC controller. The eMMC
-> controller has the same parameters as the A100 eMMC controller. The
-> other controllers have a DMA address shift like on A100, but they have
-> a smaller 13-bit size field, making them a new incompatible variant.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+Acked-by: Helge Deller <deller@gmx.de>
 
-For both patches:
-Acked-by: Maxime Ripard <maxime@cerno.tech>
+Helge
 
-Maxime
+>
+> 	Sam
+>
+> On Wed, Feb 02, 2022 at 03:58:08PM -0800, Yizhuo Zhai wrote:
+>> In function do_fb_ioctl(), the "arg" is the type of unsigned long,
+>> and in "case FBIOBLANK:" this argument is casted into an int before
+>> passig to fb_blank(). In fb_blank(), the comparision
+>> if (blank > FB_BLANK_POWERDOWN) would be bypass if the original
+>> "arg" is a large number, which is possible because it comes from
+>> the user input. Fix this by adding the check before the function
+>> call.
+>>
+>> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+>> ---
+>>  drivers/video/fbdev/core/fbmem.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/cor=
+e/fbmem.c
+>> index 0fa7ede94fa6..13083ad8d751 100644
+>> --- a/drivers/video/fbdev/core/fbmem.c
+>> +++ b/drivers/video/fbdev/core/fbmem.c
+>> @@ -1160,6 +1160,8 @@ static long do_fb_ioctl(struct fb_info *info, uns=
+igned int cmd,
+>>  		ret =3D fbcon_set_con2fb_map_ioctl(argp);
+>>  		break;
+>>  	case FBIOBLANK:
+>> +		if (arg > FB_BLANK_POWERDOWN)
+>> +			return -EINVAL;
+>>  		console_lock();
+>>  		lock_fb_info(info);
+>>  		ret =3D fb_blank(info, arg);
+>> --
+>> 2.25.1
 
---louvw55igjxjbwah
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYfuPEwAKCRDj7w1vZxhR
-xYfFAPkBe/Tzmm4bPDBab5Mm5/QLxg3IwcVe/hd2lOS9+hvhigD9FdTPJehtqcfZ
-Rp8tc58XUgdgQjqZs+lfNG9osyLe8gA=
-=Oc4O
------END PGP SIGNATURE-----
-
---louvw55igjxjbwah--

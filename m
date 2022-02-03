@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4B14A8A6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A634A8A8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353027AbiBCRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353005AbiBCRmj (ORCPT
+        id S236722AbiBCRpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:45:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:57661 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353021AbiBCRp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:42:39 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E174FC06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:42:38 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id v123so2657949wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EyQ3SSZvN2IJcNCZXWQlxMc6hz5l3B9sP2KWMPe8f/s=;
-        b=3GuGRfzx9kqB0UG895aLOKeX7j+CTmBLbeVt0s8w+w/X80aOiW2i7baXC4AfBAFmQ4
-         D1tB6azicXAzvwEvGlC3pKdbBid+AEajWmF6oEVbJi/pJkE4sYhdht9Ta7SvU0yawqFm
-         1hF5EAKCqp3YSyJRG45WVNUJocEyFCK7q/KIFRj2cSQWvHJKSKnkUC7Afhpke/fNdScA
-         3COCmazmdkM0bvLS5JI8jk+XNocl96M8UMiZDdYMXG/5WBxjpkuQq1HxgewwjJn9SVox
-         nLAM+BxxYvOgKF+Jx+Qdr7Ev3sfDrF0C0cDF25/qLWGFb8/ETZf6US/BVw1PczOSrsE5
-         B1fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EyQ3SSZvN2IJcNCZXWQlxMc6hz5l3B9sP2KWMPe8f/s=;
-        b=WDx2iP0ul1SBeOPjOm6rcsWLhj+NZeez8muhd6ptCt+Rf/KA7PqZqtLOPUcHU0LJl6
-         RJRa1vJVwH+Wis4RIwRsXVlDs3uFdq++9+spnl0GnwXOjD2McgUdnLJs/gUi24C7oZm9
-         enyp5v3Du8zLMPUSud0A+XRmmsYkYuYdY6N5iOcE/sbP04vOxAGV//Z30aVwpMWwJJ8F
-         i4Ubnry5oetCk8f/Q5y6pGG87Jn4ajc3GhkfUsXI76/dSxknJ+sdooyvT6c69HQsbUpM
-         DzqoL89mk2IZUaU5+rzemuUW7TIAq3921zTG/wzn7j/s8nyt19RImV7Uv/IlloXvWCY0
-         IJiA==
-X-Gm-Message-State: AOAM5301n0t0OmuEGW0IxZHbWlavOPDYnVbYxD/KJAFsAmphCgbghrUY
-        tQnmsRvYzpVLHcxYXB19hFYPIA==
-X-Google-Smtp-Source: ABdhPJyaLdjanXXFwYVTxWDdtkErYlNoQ4Fef9RB65qhOxqkbqONihRA2B0rm4QDzbvASTKnqAH4mw==
-X-Received: by 2002:a05:600c:3229:: with SMTP id r41mr11396464wmp.181.1643910157535;
-        Thu, 03 Feb 2022 09:42:37 -0800 (PST)
-Received: from ?IPv6:2a02:6b6d:f804:0:28c2:5854:c832:e580? ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
-        by smtp.gmail.com with ESMTPSA id t5sm21575649wrw.92.2022.02.03.09.42.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 09:42:37 -0800 (PST)
-Subject: Re: [External] Re: [PATCH 1/2] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203151153.574032-1-usama.arif@bytedance.com>
- <20220203151153.574032-2-usama.arif@bytedance.com>
- <87fca94e-3378-edbb-a545-a6ed8319a118@kernel.dk>
- <62f59304-1a0e-1047-f474-94097cb8b13e@bytedance.com>
- <da09cb46-9d60-71a3-a758-46d082989bae@kernel.dk>
-From:   Usama Arif <usama.arif@bytedance.com>
-Message-ID: <b80ee8ae-2150-ac96-ccf5-0905f313751f@bytedance.com>
-Date:   Thu, 3 Feb 2022 17:42:36 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 3 Feb 2022 12:45:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643910327;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y0HNmgxmLxNYUa/mu5DTm3vHFzk7CSUGWJbL+LbLOPA=;
+        b=dblI8eQwlUwE+CxCgKbQCTd7a/z9Jj7eSNGLpnkZlaan1aMtE5lytj6ZIa1BVaGseAs6Da
+        Aza8ZSf0XoXtZ2KpbXAE58EhHLQ3i1heYaC/siXZkkyBsPrwibRx0PFm0Jq/KTa2wJL53t
+        zyst6aln3qWfmwHHJ1Q0uxg/Td1IVrE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-107-R4gKHM00NCun__whOSiC9A-1; Thu, 03 Feb 2022 12:45:23 -0500
+X-MC-Unique: R4gKHM00NCun__whOSiC9A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7F1671091DA1;
+        Thu,  3 Feb 2022 17:45:21 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.33.211])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 31E5F4CEC7;
+        Thu,  3 Feb 2022 17:45:20 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     intel-wired-lan@lists.osuosl.org, lihong.yang@intel.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ice: change "can't set link" message to dbg level
+Date:   Thu,  3 Feb 2022 12:45:16 -0500
+Message-Id: <cfb30f5c84364c8eff96c0a3ea0231e5dfda17e4.1643910316.git.jtoppins@redhat.com>
+In-Reply-To: <b25f9e524c404820b310c73012507c8e65a2ef97.1643834329.git.jtoppins@redhat.com>
+References: <b25f9e524c404820b310c73012507c8e65a2ef97.1643834329.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <da09cb46-9d60-71a3-a758-46d082989bae@kernel.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the case where the link is owned by manageability, the firmware is
+not allowed to set the link state, so an error code is returned.
+This however is non-fatal and there is nothing the operator can do,
+so instead of confusing the operator with messages they can do nothing
+about hide this message behind the debug log level.
 
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ drivers/net/ethernet/intel/ice/ice_lib.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 03/02/2022 16:58, Jens Axboe wrote:
-> On 2/3/22 9:49 AM, Usama Arif wrote:
->>> One thing that both mine and your version suffers from is if someone
->>> does an eventfd unregister, and then immediately does an eventfd
->>> register. If the rcu grace period hasn't passed, we'll get -EBUSY on
->>> trying to do that, when I think the right behavior there would be to
->>> wait for the grace period to pass.
->>>
->>> I do think we need to handle that gracefully, spurious -EBUSY is
->>> impossible for an application to deal with.
->>
->> I don't think my version would suffer from this as its protected by
->> locks? The mutex_unlock on ev_fd_lock in unregister happens only after
->> the call_rcu. And the mutex is locked in io_eventfd_register at the
->> start, so wouldnt get the -EBUSY if there is a register immediately
->> after unregister?
-> 
-> The call_rcu() just registers it for getting the callback when the grace
-> period has passed, it doesn't mean it's done by the time it returns.
-> Hence there's definitely a window where you can enter
-> io_uring_register() with the callback still being pending, and you'd get
-> -EBUSY from that.
-> 
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 0c187cf04fcf..81b152133d11 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -4117,9 +4117,9 @@ int ice_set_link(struct ice_vsi *vsi, bool ena)
+ 	 */
+ 	if (status == -EIO) {
+ 		if (hw->adminq.sq_last_status == ICE_AQ_RC_EMODE)
+-			dev_warn(dev, "can't set link to %s, err %d aq_err %s. not fatal, continuing\n",
+-				 (ena ? "ON" : "OFF"), status,
+-				 ice_aq_str(hw->adminq.sq_last_status));
++			dev_dbg(dev, "can't set link to %s, err %d aq_err %s. not fatal, continuing\n",
++				(ena ? "ON" : "OFF"), status,
++				ice_aq_str(hw->adminq.sq_last_status));
+ 	} else if (status) {
+ 		dev_err(dev, "can't set link to %s, err %d aq_err %s\n",
+ 			(ena ? "ON" : "OFF"), status,
+-- 
+2.27.0
 
-Does using synchronize_rcu make sense? I have sent v3 with how that 
-would look. I have kept cq_ev_fd under io_ev_fd as it will be useful in 
-patch 3 when eventfd_async is added.
-
-Thanks,
-Usama

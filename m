@@ -2,106 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C394A8820
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224454A8826
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiBCP4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:56:31 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:48340 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238210AbiBCP43 (ORCPT
+        id S1352057AbiBCP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352046AbiBCP6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:56:29 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 213FuGqB101083;
-        Thu, 3 Feb 2022 09:56:16 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643903776;
-        bh=Toar8XQdGaRCOJTQWgbWo4IklEUbtuLsEEHm1375h9s=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=uugpJAdno1/N/dQ7mLmQyX0IwyanKSZ2mHancxIP6M2awl2U4osWDxEDwBqAyjMaR
-         daxSDEzQzNa7GLna9wL543MzxchGWud32mgXYufhHiLoP6uPqprH5hEfjPIYubCmQI
-         mJCyQ7UjkLfxZOhAkithcK+OeMwxeH79Zi2qfR8Q=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 213FuGZS087435
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Feb 2022 09:56:16 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 3
- Feb 2022 09:56:15 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 3 Feb 2022 09:56:15 -0600
-Received: from [10.249.37.221] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 213FuFQO019479;
-        Thu, 3 Feb 2022 09:56:15 -0600
-Message-ID: <123d2444-9f61-7d9c-66d4-7e981dbc945f@ti.com>
-Date:   Thu, 3 Feb 2022 09:56:15 -0600
+        Thu, 3 Feb 2022 10:58:04 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614DDC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:58:04 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id z131so2583169pgz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 07:58:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HoSzVnw2BnmdPeyLBLFwLkiFu/WEUrSX1fW/APCKZOY=;
+        b=cd2BV91+mMMbRvTFi52N/AXl2Le0Z0r6nq7Hwm0XkcwA/V+wvhI3IYR4r9pu3PZhNx
+         znnMByx9ZZbC3Ow7+Y1R1QaXxxrZpP2xutoU8bqJV+vh2zmxqkDT8fS21QPjbRb9ZqIs
+         sXilpaCWjpil5pQ4l3CMpRhXlSz172P/vWX3nUKtkIAlzXMQHLnNH4EX/M6FPCDRA6lz
+         trMymVwtJFAzZwduDXkWVWY2dnGBPrmtj50N2d5a/xHs8f4kcyqk/0r4R0gB0WPxnS+T
+         gnL/71n2sSn6OBuXhbiRmvT5ZFlzFhILAdGGf3j3j4SUHp6ljLoGOzgRPHDTWLo6souz
+         uVmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HoSzVnw2BnmdPeyLBLFwLkiFu/WEUrSX1fW/APCKZOY=;
+        b=3JpsZr4/RPthw318fllpOvh9geskrO+OTBF+5qeNhpzlOEYim223IPGet8dJSbDrSd
+         30qZ7qnOqUrU+mB212zGZ8fIAtT80UuDIC3iHDUGBsU2UBhRBF7QbmmrcLEyi60Gof6S
+         tmO9B12V1/OrT2GNwfsli2z8JT3KOx18aKfWm5BICXmMOOz5+WLR5uiqgKuX39B6CZHa
+         tgCFP+CpM3qcfiymEH+rMJQ8zi7cp4YnBrrrFL6qbo4P1bDD/8/SVkcAY0SET2v5KRFl
+         Gcw8XKa6XDqqXJIp1OrT2iPUAwvgcvPCCPuzyNJkisYYLs6Of9qljY0Mm143aeZ3rMUP
+         oyPA==
+X-Gm-Message-State: AOAM532XmwrbTlTDCAZBxFM/P9/5Qr98GflF5daTdQV3qdJ4osOG6eXU
+        IC/o9dfFwys5jZaP5iDpAIC74TaWlMQ1FZqYCmeqeg==
+X-Google-Smtp-Source: ABdhPJxswvJSQIq4vfMmqBKuKgFZf3co3KEwJmX9wgxoDzi5W34ig4hBca0frXKnmRvOtV8LKHrtEJubdOtroz07tTY=
+X-Received: by 2002:a05:6a00:728:: with SMTP id 8mr34691382pfm.27.1643903883627;
+ Thu, 03 Feb 2022 07:58:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] clocksource/drivers/timer-ti-dm: fix regression from
- errata i940 fix
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        Drew Fustini <dfustini@baylibre.com>
-CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keerthy <j-keerthy@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>, <khilman@baylibre.com>
-References: <20220202212554.1316032-1-dfustini@baylibre.com>
- <Yft723A/i3J1ZftC@atomide.com>
-From:   Suman Anna <s-anna@ti.com>
-In-Reply-To: <Yft723A/i3J1ZftC@atomide.com>
+References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch>
+In-Reply-To: <YfspazpWoKuHEwPU@lunn.ch>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 3 Feb 2022 07:57:52 -0800
+Message-ID: <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Drew,
+On Wed, Feb 2, 2022 at 5:01 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > As a person responsible for boot firmware through kernel for a set of
+> > boards I continue to do the following to keep Linux from mucking with
+> > various PHY configurations:
+> > - remove PHY reset pins from Linux DT's to keep Linux from hard resetting PHY's
+> > - disabling PHY drivers
+> >
+> > What are your thoughts about this?
+>
+> Hi Tim
+>
+> I don't like the idea that the bootloader is controlling the hardware,
+> not linux.
+>
+> There are well defined ways for telling Linux how RGMII delays should
+> be set, and most PHY drivers do this. Any which don't should be
+> extended to actually set the delay as configured.
 
-On 2/3/22 00:53, Tony Lindgren wrote:
-> * Drew Fustini <dfustini@baylibre.com> [220202 23:26]:
->> I modified the errata fix to use timer 15 and 16 instead which resolves
->> the timer conflict.
-> 
-> Makes sens to me, just one nit below.
-> 
->> Note: I am keeping the device tree and driver change together in one
->> patch as that is how the original errata fix commit was structured.
-> 
-> Yes.. The old dtb handling for the timer driver causes this dependency
-> unfortunately.
+Andrew,
 
-Can you also add the cyclictest info to the commit log when you repost v2?
+I agree with the goal of having PHY drivers and dt-bindings in Linux
+to configure everything but in the case I mention in the other thread
+adding rgmii delay configuration which sets a default if a new dt
+binding is missing is wrong in my opinion as it breaks backward
+compatibility. If a new dt binding is missing then I feel that the
+register fields those bindings act on should not be changed.
 
-regards
-Suman
+>
+> LEDs are trickier. There is a slow on going effort to allow PHY LEDs
+> to be configured as standard Linux LEDs. That should result in a DT
+> binding which can be used to configure LEDs from DT.
 
-> 
->> --- a/drivers/clocksource/timer-ti-dm-systimer.c
->> +++ b/drivers/clocksource/timer-ti-dm-systimer.c
->> @@ -695,9 +695,9 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
->>  		return 0;
->>  	}
->>  
->> -	if (pa == 0x48034000)		/* dra7 dmtimer3 */
->> +	if (pa == 0x4882C000)           /* dra7 dmtimer15 */
->>  		return dmtimer_percpu_timer_init(np, 0);
->> -	else if (pa == 0x48036000)	/* dra7 dmtimer4 */
->> +	else if (pa == 0x4882E000)      /* dra7 dmtimer16 */
->>  		return dmtimer_percpu_timer_init(np, 1);
->>  
->>  	return 0;
-> 
-> Linux use lower case hex number typically :)
-> 
-> With that, please feel free to add:
-> 
-> Reviewed-by: Tony Lindgren <tony@atomide.com>
+Can you point me to something I can look at? PHY LED bindings don't at
+all behave like normal LED's as they are blinked internally depending
+on a large set of rules that differ per PHY.
 
+>
+> You probably are going to have more and more issues if you think the
+> bootloader is controlling the hardware, so you really should stop
+> trying to do that.
+>
+
+Trust me, I would love to stop trying to hide PHY config from Linux.
+It's painful to bump to a new kernel and find something broken. In
+this case I found that my LED configuration broke and in the other
+patch I found that my RGMII delays broke.
+
+Completely off topic, but due to the chip shortage we have had to
+redesign many of our boards with different PHY's that now have
+different bindings for RGMII delays so I have to add multiple PHY
+configurations to DT's if I am going to support the use of PHY
+drivers. What is your suggestion there? Using DT overlays I suppose is
+the right approach.
+
+Tim

@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DA54A8019
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0514A4A8018
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349050AbiBCIAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 03:00:47 -0500
+        id S243948AbiBCIAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 03:00:42 -0500
 Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:59011 "EHLO
         alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242985AbiBCIAf (ORCPT
+        by vger.kernel.org with ESMTP id S243764AbiBCIAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Feb 2022 03:00:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -17,11 +17,11 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1643875235; x=1675411235;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wjPKbnmsqRoXsfCoe3W7rEroDQtHnYf1Mhc0u4qe2qE=;
-  b=QMQw2dZSZclpEMgHlEgkrSEOPvng6qLi4TQlxjnfXjoEig8lQL6u2WYX
-   qW+0nADKxwIxCbThTiwrUpRtLXmwMx8N6VtutK8+kP1SVDLAGptYhmDeY
-   EdXlBr0sC5a6S649J904EENnPQ0hhtKJUnQ2mWtMfJUysfyjqv4/eCT89
-   o=;
+  bh=qxnGpZbD0kpPes3OMo1bth+EcSxHpnt3Lvs3J3lXJps=;
+  b=ob61RYbJgaT5CGpfWLTIVHD4IYyUlg0GfTryeCeYLJErQhjGrqdg9LZS
+   FAlih3FT1B+BS9OdTw0MbCQ8M1LD+FcYrnK2QCUFVaKbW4Yzo7yvHsoIX
+   C9l+oS8wePDluAKkWL5IoWCbr5uXVnEV/DNxs+rZO62HgZiMoLCvuD2YQ
+   Q=;
 Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
   by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Feb 2022 00:00:34 -0800
 X-QCInternal: smtphost
@@ -30,7 +30,7 @@ Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 00:00:33 -0800
+ 15.2.922.19; Thu, 3 Feb 2022 00:00:34 -0800
 Received: from wcheng-linux.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -40,9 +40,9 @@ To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <quic_jackp@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
         Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [RFC PATCH 2/3] usb: dwc3: gadget: Wait for ep0 xfers to complete during dequeue
-Date:   Thu, 3 Feb 2022 00:00:16 -0800
-Message-ID: <20220203080017.27339-3-quic_wcheng@quicinc.com>
+Subject: [RFC PATCH 3/3] usb: dwc3: Issue core soft reset before enabling run/stop
+Date:   Thu, 3 Feb 2022 00:00:17 -0800
+Message-ID: <20220203080017.27339-4-quic_wcheng@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220203080017.27339-1-quic_wcheng@quicinc.com>
 References: <20220203080017.27339-1-quic_wcheng@quicinc.com>
@@ -56,202 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the request being dequeued is currently active, then the current
-logic is to issue a stop transfer command, and allow the command
-completion to cleanup the cancelled list.  The DWC3 controller will
-run into endxfer command timeouts if there is an ongoing EP0
-transaction.  If this is the case, wait for the EP0 completion event
-before proceeding to retry the endxfer command again.
+It is recommended by the Synopsis databook to issue a DCTL.CSftReset
+when reconnecting from a device-initiated disconnect routine.  This
+resolves issues with enumeration during fast composition switching
+cases, which result in an unknown device on the host.
 
 Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 ---
- drivers/usb/dwc3/core.h   |  5 +++++
- drivers/usb/dwc3/ep0.c    |  2 ++
- drivers/usb/dwc3/gadget.c | 47 +++++++++++++++++++++++++++++++++------
- 3 files changed, 47 insertions(+), 7 deletions(-)
+ drivers/usb/dwc3/core.c   |  4 +---
+ drivers/usb/dwc3/core.h   |  2 ++
+ drivers/usb/dwc3/gadget.c | 11 +++++++++++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f4c09951b517..d128c7f22b01 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -115,8 +115,6 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+ 	dwc->current_dr_role = mode;
+ }
+ 
+-static int dwc3_core_soft_reset(struct dwc3 *dwc);
+-
+ static void __dwc3_set_mode(struct work_struct *work)
+ {
+ 	struct dwc3 *dwc = work_to_dwc(work);
+@@ -261,7 +259,7 @@ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type)
+  * dwc3_core_soft_reset - Issues core soft reset and PHY reset
+  * @dwc: pointer to our context structure
+  */
+-static int dwc3_core_soft_reset(struct dwc3 *dwc)
++int dwc3_core_soft_reset(struct dwc3 *dwc)
+ {
+ 	u32		reg;
+ 	int		retries = 1000;
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index a124694c0038..d418ed55a566 100644
+index d418ed55a566..e15b83a6f094 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -733,6 +733,7 @@ struct dwc3_ep {
- #define DWC3_EP_FIRST_STREAM_PRIMED	BIT(10)
- #define DWC3_EP_PENDING_CLEAR_STALL	BIT(11)
- #define DWC3_EP_TXFIFO_RESIZED		BIT(12)
-+#define DWC3_EP_PENDING_DEQUEUE		BIT(13)
+@@ -1527,6 +1527,8 @@ bool dwc3_has_imod(struct dwc3 *dwc);
+ int dwc3_event_buffers_setup(struct dwc3 *dwc);
+ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
  
- 	/* This last one is specific to EP0 */
- #define DWC3_EP0_DIR_IN			BIT(31)
-@@ -1267,6 +1268,7 @@ struct dwc3 {
- 	unsigned		delayed_status:1;
- 	unsigned		ep0_bounced:1;
- 	unsigned		ep0_expect_in:1;
-+	unsigned		ep_dequeue_pending:1;
- 	unsigned		has_hibernation:1;
- 	unsigned		sysdev_is_parent:1;
- 	unsigned		has_lpm_erratum:1;
-@@ -1548,6 +1550,7 @@ int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
- void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc);
- void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
- void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
-+int dwc3_gadget_check_ep_dequeue(struct dwc3 *dwc);
- #else
- static inline int dwc3_gadget_init(struct dwc3 *dwc)
- { return 0; }
-@@ -1574,6 +1577,8 @@ static inline void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
- static inline void dwc3_ep0_end_control_data(struct dwc3 *dwc,
- 					     struct dwc3_ep *dep)
- { }
-+static inline int dwc3_gadget_check_ep_dequeue(struct dwc3 *dwc)
-+{ return 0; }
- #endif
- 
- #if IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index eb677b888610..cc3339e4308f 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -243,6 +243,7 @@ void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
- 
- 	dwc->ep0state = EP0_SETUP_PHASE;
- 	complete(&dwc->ep0_in_setup);
-+	dwc3_gadget_check_ep_dequeue(dwc);
- 	if (dwc->softconnect)
- 		dwc3_ep0_out_start(dwc);
- }
-@@ -925,6 +926,7 @@ static void dwc3_ep0_complete_status(struct dwc3 *dwc,
- 
- 	dwc->ep0state = EP0_SETUP_PHASE;
- 	complete(&dwc->ep0_in_setup);
-+	dwc3_gadget_check_ep_dequeue(dwc);
- 	if (dwc->softconnect)
- 		dwc3_ep0_out_start(dwc);
- }
++int dwc3_core_soft_reset(struct dwc3 *dwc);
++
+ #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+ int dwc3_host_init(struct dwc3 *dwc);
+ void dwc3_host_exit(struct dwc3 *dwc);
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 19b8d837e9d0..1efa30907d42 100644
+index 1efa30907d42..94cfbe32da8d 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -654,7 +654,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
- 	return dwc3_send_gadget_ep_cmd(dep, DWC3_DEPCMD_SETEPCONFIG, &params);
- }
- 
--static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-+static int dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 		bool interrupt);
- 
- /**
-@@ -1081,6 +1081,31 @@ static int dwc3_gadget_ep_enable(struct usb_ep *ep,
- 	return ret;
- }
- 
-+int dwc3_gadget_check_ep_dequeue(struct dwc3 *dwc)
-+{
-+	struct dwc3_ep *dep;
-+	int ret = 0;
-+	int i;
-+
-+	if (!dwc->ep_dequeue_pending)
-+		return 0;
-+
-+	for (i = 0; i < dwc->num_eps; i++) {
-+		dep = dwc->eps[i];
-+		if (dep->flags & DWC3_EP_PENDING_DEQUEUE) {
-+			ret = dwc3_stop_active_transfer(dep, false, true);
-+			if (ret)
-+				goto exit;
-+
-+			dep->flags &= ~DWC3_EP_PENDING_DEQUEUE;
-+		}
-+	}
-+
-+	dwc->ep_dequeue_pending = 0;
-+exit:
-+	return ret;
-+}
-+
- static int dwc3_gadget_ep_disable(struct usb_ep *ep)
- {
- 	struct dwc3_ep			*dep;
-@@ -2020,10 +2045,6 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 	list_for_each_entry(r, &dep->started_list, list) {
- 		if (r == req) {
- 			struct dwc3_request *t;
--
--			/* wait until it is processed */
--			dwc3_stop_active_transfer(dep, true, true);
--
- 			/*
- 			 * Remove any started request if the transfer is
- 			 * cancelled.
-@@ -2032,6 +2053,12 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 				dwc3_gadget_move_cancelled_request(r,
- 						DWC3_REQUEST_STATUS_DEQUEUED);
- 
-+			ret = dwc3_stop_active_transfer(dep, false, true);
-+			if (ret == -ETIMEDOUT) {
-+				dep->flags |= DWC3_EP_PENDING_DEQUEUE;
-+				dwc->ep_dequeue_pending = 1;
-+			}
-+
- 			dep->flags &= ~DWC3_EP_WAIT_TRANSFER_COMPLETE;
- 
- 			goto out;
-@@ -2306,6 +2333,7 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
- 			continue;
- 
- 		dwc3_remove_requests(dwc, dep);
-+		dep->flags &= ~DWC3_EP_PENDING_DEQUEUE;
- 	}
- }
- 
-@@ -2702,6 +2730,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
- 	dwc->ep0state = EP0_SETUP_PHASE;
- 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
- 	dwc->delayed_status = false;
-+	dwc->ep_dequeue_pending = 0;
- 	dwc3_ep0_out_start(dwc);
- 
- 	dwc3_gadget_enable_irq(dwc);
-@@ -3420,6 +3449,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
- 	if (dep->stream_capable)
- 		dep->flags |= DWC3_EP_IGNORE_NEXT_NOSTREAM;
- 
-+	dep->flags &= ~DWC3_EP_PENDING_DEQUEUE;
- 	dep->flags &= ~DWC3_EP_END_TRANSFER_PENDING;
- 	dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
- 	dwc3_gadget_ep_cleanup_cancelled_requests(dep);
-@@ -3596,7 +3626,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
- 	}
- }
- 
--static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
-+static int dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	bool interrupt)
- {
- 	struct dwc3_gadget_ep_cmd_params params;
-@@ -3607,7 +3637,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 
- 	if (!(dep->flags & DWC3_EP_TRANSFER_STARTED) ||
- 	    (dep->flags & DWC3_EP_END_TRANSFER_PENDING))
--		return;
-+		return 0;
- 
- 	/*
- 	 * NOTICE: We are violating what the Databook says about the
-@@ -3658,6 +3688,8 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 				dwc3_ep0_out_start(dwc);
- 				goto retry;
- 			}
-+		} else {
-+			return ret;
+@@ -2572,6 +2572,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 						dwc->ev_buf->length;
  		}
+ 	} else {
++		/*
++		 * In the Synopsis DesignWare Cores USB3 Databook Rev. 1.90a
++		 * Section 4.1.9, it specifies that for a reconnect after a
++		 * device-initiated disconnect requires a core soft reset
++		 * (DCTL.CSftRst) before enabling the run/stop bit.
++		 */
++		spin_unlock_irqrestore(&dwc->lock, flags);
++		dwc3_core_soft_reset(dwc);
++		spin_lock_irqsave(&dwc->lock, flags);
++
++		dwc3_event_buffers_setup(dwc);
+ 		__dwc3_gadget_start(dwc);
  	}
- 	dep->resource_index = 0;
-@@ -3666,6 +3698,7 @@ static void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
- 	else
- 		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-+	return ret;
- }
  
- static void dwc3_clear_stall_all_ep(struct dwc3 *dwc)

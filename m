@@ -2,103 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A2F4A8910
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BF24A891D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352433AbiBCQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352419AbiBCQvK (ORCPT
+        id S243412AbiBCQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:53:45 -0500
+Received: from mail-pj1-f42.google.com ([209.85.216.42]:33317 "EHLO
+        mail-pj1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236276AbiBCQxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:51:10 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A68C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:51:10 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id q186so4939235oih.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:51:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protocubo.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SWhhT8jFmnU2pjoM0/QnnyBc9JunG/+wIXj29Er2ODU=;
-        b=AwjURXAsePvPFZJhH+OSnGku4Vh9TFmYnIeoBQS/eEW0NXTgZ51DGx2kTm0Y4ot/xd
-         gPVzs77zllpgmtphMo3F0Kt43MqBp/ijLPe6VLm08OyItdSeSpuWT0Kn3mWoW9AUoLuI
-         9ZVSeEXWTev6q3diuxhfjcVlJE+3TEeyHHixxxj7Z0kyhLr7qP6L1J3Ib1+4E/A1hrdV
-         mef4TxbI390vqGSuvz6CFMaehZo5HxOwBKUT1oL5Vht1ofz1CIXEGhws+KzoAh60BO/T
-         XO/fCkCSb/QS9/UtaDWtCXo0SG4HFKi3JU+TBL4QqtVz4ONl8IY23qKd/Y3BoPqcWjae
-         KXfw==
+        Thu, 3 Feb 2022 11:53:43 -0500
+Received: by mail-pj1-f42.google.com with SMTP id cq9-20020a17090af98900b001b8262fe2d5so4291182pjb.0;
+        Thu, 03 Feb 2022 08:53:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=SWhhT8jFmnU2pjoM0/QnnyBc9JunG/+wIXj29Er2ODU=;
-        b=WH0rMmXdweFBeXfQGmNQdzRI6PBQ4PfG/6X/YvoR2jh433v+2mvxQNkWdnFnMgoXOn
-         Ld6sVCjNHn1ZC4UPnk/cvB3emzPLEtarA5rAmyTMaOO4QBuXTRriAMJwl8w5MspKydkt
-         tzh7Ykc1y4wjDvH5wPgAk8ruZF0NK5Ne8WK41aXdIFnCWV0xPpHd8+BJ+JiqXGeuo2sp
-         GqW5hmjuF/9mYPcgPYdDVIqSbYdsVUmgV6J7MN3BQwKPVrw64amP3dXREghG6E1pNMLn
-         kpsD3MlJ/rjLrJqrblNGPvlTqnmOmq7fR4MttiIhjrBmF0gLe+XM3/sbTI8xo7YYmIhz
-         hqjQ==
-X-Gm-Message-State: AOAM533hNPGq1pxrUtFtsElNb44d1HKeV7IluUYaOdiYnpXrZYXCG9GZ
-        NhM/IY104DSUCIJU6QCCdkIezQ==
-X-Google-Smtp-Source: ABdhPJxaT3cPRcpsyD4k8sjJlFVMFrC3zLlGRYIIRXfr/snRsI8zExSxkR8BniB4Y0vzhsjpPg07pQ==
-X-Received: by 2002:a05:6808:14c1:: with SMTP id f1mr7988292oiw.12.1643907069791;
-        Thu, 03 Feb 2022 08:51:09 -0800 (PST)
-Received: from calvin.localdomain ([186.205.28.163])
-        by smtp.gmail.com with ESMTPSA id t20sm18348318oov.35.2022.02.03.08.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 08:51:09 -0800 (PST)
-From:   Jonas Malaco <jonas@protocubo.io>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonas Malaco <jonas@protocubo.io>, stable@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] eeprom: ee1004: limit i2c reads to I2C_SMBUS_BLOCK_MAX
-Date:   Thu,  3 Feb 2022 13:49:52 -0300
-Message-Id: <20220203165024.47767-1-jonas@protocubo.io>
-X-Mailer: git-send-email 2.35.1
+        bh=1tNWfA/BVq4Pu1brgQQg4f3LF0dBzZzJ2dAGAeOLqHU=;
+        b=5t2iNKY3+lJnRzJ10/4094uGxw8wFiGq73W61LsZisxIsUe7O/o92BTkb6UOjaw96O
+         SW91Vy5cBSlzFwxf8RB6n4qwAqkHAbBCpmA0E8zT/kcUAyA38iRFqx4KJ/s9inQEjFdn
+         rpn6ngtjcKl9JpZHhxLQhtGJ3u1M6CqrLbKLarfRdh6xpX6h1f4gBQnSXgUqBLn+qJdE
+         GPvE3WVYmRgpXmZHEIeTuP3zxQj+IM0QXbgrPj514QgG9PVG6ZDcOtBY78RxC1RqYQ18
+         QBSeVEU6YE5cBqDq/MafUBMYdMweXk91dJAflVxVa0qlQD7pEjgd51BnlZSq3AchtpVo
+         ZyTw==
+X-Gm-Message-State: AOAM533Iz9q0bznZ+HzClLu4Q4o1jCXIBcdx8eyF5PdBMBunwQaWcNIa
+        SwEhr8mgrJGtRNPX3dcmRnqK07o8r7WC8A==
+X-Google-Smtp-Source: ABdhPJz+d63k2s99MW2oUwmpMARz0qQsAzk0eI0/7mWE/6YWan2johV6nwuipVWV6RGsUrE/Pg5Ipg==
+X-Received: by 2002:a17:90a:ba89:: with SMTP id t9mr14653181pjr.21.1643907223251;
+        Thu, 03 Feb 2022 08:53:43 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id r7sm2417544pjp.2.2022.02.03.08.53.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 08:53:42 -0800 (PST)
+Message-ID: <54be0878-a7da-cc8a-3efc-1bb0c53caf47@acm.org>
+Date:   Thu, 3 Feb 2022 08:53:40 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] scsi: ufs: disable auto hibern8 while entering suspend
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        'Hoyoung SEO' <hy50.seo@samsung.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        asutoshd@codeaurora.org, cang@codeaurora.org,
+        bhoon95.kim@samsung.com, kwmad.kim@samsung.com
+Cc:     'kernel test robot' <lkp@intel.com>
+References: <CGME20220125062155epcas2p15da28303164091b1bf5a00dcf99fe59b@epcas2p1.samsung.com>
+ <20220124180637.160524-1-hy50.seo@samsung.com>
+ <40986ecb6c81812a1e1ab24d93e46eda75974c4e.camel@mediatek.com>
+ <12a201d81892$c8123d40$5836b7c0$@samsung.com>
+ <066101d818ca$5dba71f0$192f55d0$@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <066101d818ca$5dba71f0$192f55d0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit effa453168a7 ("i2c: i801: Don't silently correct invalid transfer
-size") revealed that ee1004_eeprom_read() did not properly limit how
-many bytes to read at once.
+On 2/2/22 22:50, Alim Akhtar wrote:
+> I am not sure, if this problem is generic and faced by all other UFS vendors.
+> If not, how about having a vendor specific call back for your platform only?
+> Just a thought.
 
-In particular, i2c_smbus_read_i2c_block_data_or_emulated() takes the
-length to read as an u8.  If count == 256 after taking into account the
-offset and page boundary, the cast to u8 overflows.  And this is common
-when user space tries to read the entire EEPROM at once.
+I agree with the above. Since the code change does not follow from the 
+spec, it should be guarded with a check for a new quirk flag.
 
-To fix it, limit each read to I2C_SMBUS_BLOCK_MAX (32) bytes, already
-the maximum length i2c_smbus_read_i2c_block_data_or_emulated() allows.
+Thanks,
 
-Fixes: effa453168a7 ("i2c: i801: Don't silently correct invalid transfer size")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jonas Malaco <jonas@protocubo.io>
----
- drivers/misc/eeprom/ee1004.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
-index bb9c4512c968..9fbfe784d710 100644
---- a/drivers/misc/eeprom/ee1004.c
-+++ b/drivers/misc/eeprom/ee1004.c
-@@ -114,6 +114,9 @@ static ssize_t ee1004_eeprom_read(struct i2c_client *client, char *buf,
- 	if (offset + count > EE1004_PAGE_SIZE)
- 		count = EE1004_PAGE_SIZE - offset;
- 
-+	if (count > I2C_SMBUS_BLOCK_MAX)
-+		count = I2C_SMBUS_BLOCK_MAX;
-+
- 	return i2c_smbus_read_i2c_block_data_or_emulated(client, offset, count, buf);
- }
- 
-
-base-commit: 88808fbbead481aedb46640a5ace69c58287f56a
--- 
-2.35.1
-
+Bart.

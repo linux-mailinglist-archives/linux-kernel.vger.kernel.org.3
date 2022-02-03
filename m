@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2D24A8692
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348594A8693
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351359AbiBCOew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:34:52 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:53656 "EHLO
+        id S1351484AbiBCOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:34:58 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:53664 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351242AbiBCOdr (ORCPT
+        with ESMTP id S1351362AbiBCOds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:33:47 -0500
-Date:   Thu, 03 Feb 2022 14:33:45 -0000
+        Thu, 3 Feb 2022 09:33:48 -0500
+Date:   Thu, 03 Feb 2022 14:33:46 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643898826;
+        s=2020; t=1643898827;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+hsAogLYT/KWinGplMf4pimQaZWNeQd/iHgKX3h6tuc=;
-        b=V4O2ZIKvYbROpgCn8n5ryeXysm34btIDvd5bjl23sG2e8m4+CGiGxm3myu3bQTgwcRhrUX
-        hLaexfAsHnPe+nARgmoBaMXN7dNylzjX6Nqj4Ui657xNrk9SF70F3Kyl6k6tJ9MfczbAP1
-        SpMTZnc6UIeM0X183KkZO6PfIa2YzDA6TVAJ5ENYACFgPSYSmimSyf8X9A+yEWSWi2v+HL
-        3n7tG9i224JZOjdNHhAVINWH6Ro5vNR/Bzd4yIp7ZZxe9MbO2RPlo2tIsnMZvYTMNBgpI8
-        yUqO/Y7w711EiQ/Pk0AawXu/y9XpRMTP4zn++EcPWuyFDrywyo26JW+63gKY5Q==
+        bh=R44uwkv7g4zfdo4eZg6/5vut+o9kvuWC0I6fZ0LM2bw=;
+        b=rleyOzZfiv1+7X7edaMydvCXq1Wb4aYAydBKhTwIKiOH3KXH+QuVAvrFQFAY7zlqAGYxBi
+        XPoLuDG4zXRrfg+rG05FBmRDneXnV77C85f6WrdwHR/d21r5JC4ziNMJUcBeWrg3xKW7Ht
+        BXahzS62FqOonkVz/xPOVUnUfWP6DQWr5GCTKBfFcDbfIQPPY+Wry0ITU9HrKQfLa49QCC
+        KBB0qPXT/cTDoYf/XurNKBzH0Bwc6THCu9NnNRt7jlVhZt0FzA5bJwimbFmFaTJMlos2kq
+        iDL9WSf9mK5L/WkzzU3dsDK5eYJXYYeXsAyJb4Dz9gAB0toPRrUS2frzk6d1MA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643898826;
+        s=2020e; t=1643898827;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+hsAogLYT/KWinGplMf4pimQaZWNeQd/iHgKX3h6tuc=;
-        b=KHTc5aWsJalmEtcgKNZV3OmO8beVxaDqrVix25+dQUbGkBuQg6gU3Q1hXp4OkmkrRacLmi
-        /AkD4RvsXHb4uEAA==
+        bh=R44uwkv7g4zfdo4eZg6/5vut+o9kvuWC0I6fZ0LM2bw=;
+        b=c+xF8oqhQRTj9H6+c7W9mOE8kra3B6Vnv8Ycy7waPe+6G0YKXQSRIzSdjk0a6UiLxy+9gR
+        dzusQfh/xsevblDQ==
 From:   "tip-bot2 for Mathieu Desnoyers" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] selftests/rseq: Fix ppc32 offsets by using long
- rather than off_t
+Subject: [tip: sched/core] selftests/rseq: Fix ppc32 missing instruction
+ selection "u" and "x" for load/store
 Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220124171253.22072-11-mathieu.desnoyers@efficios.com>
-References: <20220124171253.22072-11-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20220124171253.22072-10-mathieu.desnoyers@efficios.com>
+References: <20220124171253.22072-10-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Message-ID: <164389882555.16921.12530085917050460497.tip-bot2@tip-bot2>
+Message-ID: <164389882630.16921.3992027943592142683.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,170 +59,192 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     26dc8a6d8e11552f3b797b5aafe01071ca32d692
-Gitweb:        https://git.kernel.org/tip/26dc8a6d8e11552f3b797b5aafe01071ca32d692
+Commit-ID:     de6b52a21420a18dc8a36438d581efd1313d5fe3
+Gitweb:        https://git.kernel.org/tip/de6b52a21420a18dc8a36438d581efd1313d5fe3
 Author:        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-AuthorDate:    Mon, 24 Jan 2022 12:12:48 -05:00
+AuthorDate:    Mon, 24 Jan 2022 12:12:47 -05:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Wed, 02 Feb 2022 13:11:36 +01:00
 
-selftests/rseq: Fix ppc32 offsets by using long rather than off_t
+selftests/rseq: Fix ppc32 missing instruction selection "u" and "x" for load/store
 
-The semantic of off_t is for file offsets. We mean to use it as an
-offset from a pointer. We really expect it to fit in a single register,
-and not use a 64-bit type on 32-bit architectures.
+Building the rseq basic test  with
+gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.12)
+Target: powerpc-linux-gnu
 
-Fix runtime issues on ppc32 where the offset is always 0 due to
-inconsistency between the argument type (off_t -> 64-bit) and type
-expected by the inline assembler (32-bit).
+leads to these errors:
+
+/tmp/ccieEWxU.s: Assembler messages:
+/tmp/ccieEWxU.s:118: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:118: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:121: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:121: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:626: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:626: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:629: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:629: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:735: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:735: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:738: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:738: Error: junk at end of line: `,8'
+/tmp/ccieEWxU.s:741: Error: syntax error; found `,', expected `('
+/tmp/ccieEWxU.s:741: Error: junk at end of line: `,8'
+Makefile:581: recipe for target 'basic_percpu_ops_test.o' failed
+
+Based on discussion with Linux powerpc maintainers and review of
+the use of the "m" operand in powerpc kernel code, add the missing
+%Un%Xn (where n is operand number) to the lwz, stw, ld, and std
+instructions when used with "m" operands.
+
+Using "WORD" to mean either a 32-bit or 64-bit type depending on
+the architecture is misleading. The term "WORD" really means a
+32-bit type in both 32-bit and 64-bit powerpc assembler. The intent
+here is to wrap load/store to intptr_t into common macros for both
+32-bit and 64-bit.
+
+Rename the macros with a RSEQ_ prefix, and use the terms "INT"
+for always 32-bit type, and "LONG" for architecture bitness-sized
+type.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220124171253.22072-11-mathieu.desnoyers@efficios.com
+Link: https://lkml.kernel.org/r/20220124171253.22072-10-mathieu.desnoyers@efficios.com
 ---
- tools/testing/selftests/rseq/basic_percpu_ops_test.c | 2 +-
- tools/testing/selftests/rseq/param_test.c            | 2 +-
- tools/testing/selftests/rseq/rseq-arm.h              | 2 +-
- tools/testing/selftests/rseq/rseq-arm64.h            | 2 +-
- tools/testing/selftests/rseq/rseq-mips.h             | 2 +-
- tools/testing/selftests/rseq/rseq-ppc.h              | 2 +-
- tools/testing/selftests/rseq/rseq-s390.h             | 2 +-
- tools/testing/selftests/rseq/rseq-skip.h             | 2 +-
- tools/testing/selftests/rseq/rseq-x86.h              | 6 +++---
- 9 files changed, 11 insertions(+), 11 deletions(-)
+ tools/testing/selftests/rseq/rseq-ppc.h | 55 ++++++++++++------------
+ 1 file changed, 28 insertions(+), 27 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/basic_percpu_ops_test.c b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-index b953a52..517756a 100644
---- a/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-+++ b/tools/testing/selftests/rseq/basic_percpu_ops_test.c
-@@ -167,7 +167,7 @@ struct percpu_list_node *this_cpu_list_pop(struct percpu_list *list,
- 	for (;;) {
- 		struct percpu_list_node *head;
- 		intptr_t *targetptr, expectnot, *load;
--		off_t offset;
-+		long offset;
- 		int ret, cpu;
- 
- 		cpu = rseq_cpu_start();
-diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
-index cc2cfc1..335c290 100644
---- a/tools/testing/selftests/rseq/param_test.c
-+++ b/tools/testing/selftests/rseq/param_test.c
-@@ -549,7 +549,7 @@ struct percpu_list_node *this_cpu_list_pop(struct percpu_list *list,
- 	for (;;) {
- 		struct percpu_list_node *head;
- 		intptr_t *targetptr, expectnot, *load;
--		off_t offset;
-+		long offset;
- 		int ret;
- 
- 		cpu = rseq_cpu_start();
-diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
-index 5f567b3..ae476af 100644
---- a/tools/testing/selftests/rseq/rseq-arm.h
-+++ b/tools/testing/selftests/rseq/rseq-arm.h
-@@ -217,7 +217,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
-diff --git a/tools/testing/selftests/rseq/rseq-arm64.h b/tools/testing/selftests/rseq/rseq-arm64.h
-index d0f2b7f..7806817 100644
---- a/tools/testing/selftests/rseq/rseq-arm64.h
-+++ b/tools/testing/selftests/rseq/rseq-arm64.h
-@@ -259,7 +259,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
-diff --git a/tools/testing/selftests/rseq/rseq-mips.h b/tools/testing/selftests/rseq/rseq-mips.h
-index 6df5427..0d1d925 100644
---- a/tools/testing/selftests/rseq/rseq-mips.h
-+++ b/tools/testing/selftests/rseq/rseq-mips.h
-@@ -222,7 +222,7 @@ error2:
- 
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
 diff --git a/tools/testing/selftests/rseq/rseq-ppc.h b/tools/testing/selftests/rseq/rseq-ppc.h
-index 87befda..aa18c0e 100644
+index c4ba137..87befda 100644
 --- a/tools/testing/selftests/rseq/rseq-ppc.h
 +++ b/tools/testing/selftests/rseq/rseq-ppc.h
-@@ -270,7 +270,7 @@ error2:
+@@ -47,10 +47,13 @@ do {									\
  
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
+ #ifdef __PPC64__
  
-diff --git a/tools/testing/selftests/rseq/rseq-s390.h b/tools/testing/selftests/rseq/rseq-s390.h
-index 9927021..0f523b3 100644
---- a/tools/testing/selftests/rseq/rseq-s390.h
-+++ b/tools/testing/selftests/rseq/rseq-s390.h
-@@ -198,7 +198,7 @@ error2:
+-#define STORE_WORD	"std "
+-#define LOAD_WORD	"ld "
+-#define LOADX_WORD	"ldx "
+-#define CMP_WORD	"cmpd "
++#define RSEQ_STORE_LONG(arg)	"std%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
++#define RSEQ_STORE_INT(arg)	"stw%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
++#define RSEQ_LOAD_LONG(arg)	"ld%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
++#define RSEQ_LOAD_INT(arg)	"lwz%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
++#define RSEQ_LOADX_LONG		"ldx "							/* From base register ("b" constraint) */
++#define RSEQ_CMP_LONG		"cmpd "
++#define RSEQ_CMP_LONG_INT	"cmpdi "
+ 
+ #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
+ 			start_ip, post_commit_offset, abort_ip)			\
+@@ -89,10 +92,13 @@ do {									\
+ 
+ #else /* #ifdef __PPC64__ */
+ 
+-#define STORE_WORD	"stw "
+-#define LOAD_WORD	"lwz "
+-#define LOADX_WORD	"lwzx "
+-#define CMP_WORD	"cmpw "
++#define RSEQ_STORE_LONG(arg)	"stw%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* To memory ("m" constraint) */
++#define RSEQ_STORE_INT(arg)	RSEQ_STORE_LONG(arg)					/* To memory ("m" constraint) */
++#define RSEQ_LOAD_LONG(arg)	"lwz%U[" __rseq_str(arg) "]%X[" __rseq_str(arg) "] "	/* From memory ("m" constraint) */
++#define RSEQ_LOAD_INT(arg)	RSEQ_LOAD_LONG(arg)					/* From memory ("m" constraint) */
++#define RSEQ_LOADX_LONG		"lwzx "							/* From base register ("b" constraint) */
++#define RSEQ_CMP_LONG		"cmpw "
++#define RSEQ_CMP_LONG_INT	"cmpwi "
+ 
+ #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,				\
+ 			start_ip, post_commit_offset, abort_ip)			\
+@@ -125,7 +131,7 @@ do {									\
+ 		RSEQ_INJECT_ASM(1)						\
+ 		"lis %%r17, (" __rseq_str(cs_label) ")@ha\n\t"			\
+ 		"addi %%r17, %%r17, (" __rseq_str(cs_label) ")@l\n\t"		\
+-		"stw %%r17, %[" __rseq_str(rseq_cs) "]\n\t"			\
++		RSEQ_STORE_INT(rseq_cs) "%%r17, %[" __rseq_str(rseq_cs) "]\n\t"	\
+ 		__rseq_str(label) ":\n\t"
+ 
+ #endif /* #ifdef __PPC64__ */
+@@ -136,7 +142,7 @@ do {									\
+ 
+ #define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)			\
+ 		RSEQ_INJECT_ASM(2)						\
+-		"lwz %%r17, %[" __rseq_str(current_cpu_id) "]\n\t"		\
++		RSEQ_LOAD_INT(current_cpu_id) "%%r17, %[" __rseq_str(current_cpu_id) "]\n\t" \
+ 		"cmpw cr7, %[" __rseq_str(cpu_id) "], %%r17\n\t"		\
+ 		"bne- cr7, " __rseq_str(label) "\n\t"
+ 
+@@ -153,25 +159,25 @@ do {									\
+  * 	RSEQ_ASM_OP_* (else): doesn't have hard-code registers(unless cr7)
   */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
+ #define RSEQ_ASM_OP_CMPEQ(var, expect, label)					\
+-		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
+-		CMP_WORD "cr7, %%r17, %[" __rseq_str(expect) "]\n\t"		\
++		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"		\
++		RSEQ_CMP_LONG "cr7, %%r17, %[" __rseq_str(expect) "]\n\t"		\
+ 		"bne- cr7, " __rseq_str(label) "\n\t"
  
-diff --git a/tools/testing/selftests/rseq/rseq-skip.h b/tools/testing/selftests/rseq/rseq-skip.h
-index 72750b5..7b53dac 100644
---- a/tools/testing/selftests/rseq/rseq-skip.h
-+++ b/tools/testing/selftests/rseq/rseq-skip.h
-@@ -13,7 +13,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ #define RSEQ_ASM_OP_CMPNE(var, expectnot, label)				\
+-		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
+-		CMP_WORD "cr7, %%r17, %[" __rseq_str(expectnot) "]\n\t"		\
++		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"		\
++		RSEQ_CMP_LONG "cr7, %%r17, %[" __rseq_str(expectnot) "]\n\t"		\
+ 		"beq- cr7, " __rseq_str(label) "\n\t"
+ 
+ #define RSEQ_ASM_OP_STORE(value, var)						\
+-		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t"
++		RSEQ_STORE_LONG(var) "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t"
+ 
+ /* Load @var to r17 */
+ #define RSEQ_ASM_OP_R_LOAD(var)							\
+-		LOAD_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
++		RSEQ_LOAD_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"
+ 
+ /* Store r17 to @var */
+ #define RSEQ_ASM_OP_R_STORE(var)						\
+-		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"
++		RSEQ_STORE_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"
+ 
+ /* Add @count to r17 */
+ #define RSEQ_ASM_OP_R_ADD(count)						\
+@@ -179,11 +185,11 @@ do {									\
+ 
+ /* Load (r17 + voffp) to r17 */
+ #define RSEQ_ASM_OP_R_LOADX(voffp)						\
+-		LOADX_WORD "%%r17, %[" __rseq_str(voffp) "], %%r17\n\t"
++		RSEQ_LOADX_LONG "%%r17, %[" __rseq_str(voffp) "], %%r17\n\t"
+ 
+ /* TODO: implement a faster memcpy. */
+ #define RSEQ_ASM_OP_R_MEMCPY() \
+-		"cmpdi %%r19, 0\n\t" \
++		RSEQ_CMP_LONG_INT "%%r19, 0\n\t" \
+ 		"beq 333f\n\t" \
+ 		"addi %%r20, %%r20, -1\n\t" \
+ 		"addi %%r21, %%r21, -1\n\t" \
+@@ -191,16 +197,16 @@ do {									\
+ 		"lbzu %%r18, 1(%%r20)\n\t" \
+ 		"stbu %%r18, 1(%%r21)\n\t" \
+ 		"addi %%r19, %%r19, -1\n\t" \
+-		"cmpdi %%r19, 0\n\t" \
++		RSEQ_CMP_LONG_INT "%%r19, 0\n\t" \
+ 		"bne 222b\n\t" \
+ 		"333:\n\t" \
+ 
+ #define RSEQ_ASM_OP_R_FINAL_STORE(var, post_commit_label)			\
+-		STORE_WORD "%%r17, %[" __rseq_str(var) "]\n\t"			\
++		RSEQ_STORE_LONG(var) "%%r17, %[" __rseq_str(var) "]\n\t"			\
+ 		__rseq_str(post_commit_label) ":\n\t"
+ 
+ #define RSEQ_ASM_OP_FINAL_STORE(value, var, post_commit_label)			\
+-		STORE_WORD "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t" \
++		RSEQ_STORE_LONG(var) "%[" __rseq_str(value) "], %[" __rseq_str(var) "]\n\t" \
+ 		__rseq_str(post_commit_label) ":\n\t"
  
  static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	return -1;
+@@ -743,9 +749,4 @@ error2:
+ #endif
  }
-diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
-index 1d9fa05..0ee6c04 100644
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -172,7 +172,7 @@ error2:
-  */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
  
-@@ -286,7 +286,7 @@ error1:
-  *  *pval += inc;
-  */
- static inline __attribute__((always_inline))
--int rseq_offset_deref_addv(intptr_t *ptr, off_t off, intptr_t inc, int cpu)
-+int rseq_offset_deref_addv(intptr_t *ptr, long off, intptr_t inc, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
-@@ -750,7 +750,7 @@ error2:
-  */
- static inline __attribute__((always_inline))
- int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
--			       off_t voffp, intptr_t *load, int cpu)
-+			       long voffp, intptr_t *load, int cpu)
- {
- 	RSEQ_INJECT_C(9)
- 
+-#undef STORE_WORD
+-#undef LOAD_WORD
+-#undef LOADX_WORD
+-#undef CMP_WORD
+-
+ #endif /* !RSEQ_SKIP_FASTPATH */

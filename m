@@ -2,146 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17844A8197
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2E94A819F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243127AbiBCJkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:40:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:34502 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233414AbiBCJkb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:40:31 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BBA7113E;
-        Thu,  3 Feb 2022 01:40:30 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 532033F40C;
-        Thu,  3 Feb 2022 01:40:28 -0800 (PST)
-Subject: Re: [PATCH v4] sched/fair: Fix fault in reweight_entity
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>, peterz@infradead.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-References: <20220125193403.778497-1-tadeusz.struk@linaro.org>
- <20220127205623.1258029-1-tadeusz.struk@linaro.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <dc241a1f-74c2-3db6-e932-04b653e469bb@arm.com>
-Date:   Thu, 3 Feb 2022 10:40:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230206AbiBCJl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232632AbiBCJl4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 04:41:56 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06943C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 01:41:56 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id y17so1658408ilm.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 01:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=tbvkki+FG495UMDGj8YGsaWwULlaLlKMQ8n4Ft7eZtk=;
+        b=Xk6NSuxbh/ts1EazWy/mmK48uY9h3N5K2j81dJrp0q7e2D+WOxQpUr+OF/dyJEPaM3
+         oWUgk6/DhbiM1WhBrUA7LqGdrs7VWRENQZaFSH3elkhGJ5Kl4cEqwvKk4dWtXJbHGHE5
+         7TCLGj0tK9cbIuCyzpu5SM1Cc94Cx+QSrmaZNhCki3kWca+ojMkXhM8iI7KMVbAx8UhA
+         bpcNLQA8ZlyGwpr3SJqzbJo+NaARLtu5MmcDmUQmP3M11IgBL6SSjWLUGddNUXixmiQE
+         IpYjcmZenknwOdf3MZ0LmUKKl/0SrMRketVmmvLRAEx+o03REa17Fun09gd8UU74ywsi
+         v0JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=tbvkki+FG495UMDGj8YGsaWwULlaLlKMQ8n4Ft7eZtk=;
+        b=lHNsEL2hGGpdQ6Cjbpv5NkLtM27wzgRBEyOApItpG+s+AinnEbJ0AbkYcua8SHpDeK
+         VfWmCv5mkn0ko+r+vW+E6gD2f19fP5NSnFydrEfi+veZ/GH3R1EH+5+MWmiDgELVJOtu
+         HtfvKYj0MQpMdmiKXiGCKJHdKzmobB2hFO5ZUvdx8x14vfF/HKsdFFAH2jLCE4qdWHJx
+         HdbU9EczoLfIHhQnzHV4G8b0JpbwvrnhUkBxLfp/XCH8/kEzMmNEVmrX7Fb2amwvfRYo
+         Y+a2V1FWZbIc32vlRYPNi21q8/2p1IfPS6iUtGz+4QbX6513pg0wvA/oMNdos80bLFPW
+         pz6w==
+X-Gm-Message-State: AOAM532OVo+1NPTWhDhbacMVqhhMl69YtqOzF3sy4tVcjdJu+y7K7Isv
+        qMp3fPEi+9pr8bxQorNfUMpQni11UdoBlZXdRzY=
+X-Google-Smtp-Source: ABdhPJxrRxMJqgI9yYekqHiKf39JZDf/P+X/k3FxdSY98u0MNhk36VeUmr4KLSpoDb4G/8Sr7Uk5nZpBf6AS6DuS5i4=
+X-Received: by 2002:a92:3609:: with SMTP id d9mr5894482ila.282.1643881315335;
+ Thu, 03 Feb 2022 01:41:55 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220127205623.1258029-1-tadeusz.struk@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6602:14d2:0:0:0:0 with HTTP; Thu, 3 Feb 2022 01:41:54
+ -0800 (PST)
+Reply-To: m223443d@gmail.com
+From:   michael <m223441d@gmail.com>
+Date:   Thu, 3 Feb 2022 09:41:54 +0000
+Message-ID: <CANJxbPZGH21Ma7baqGG4UL4EhPTah9Q8c=JJJrC24arHHNgbog@mail.gmail.com>
+Subject: I need your cooperation.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2022 21:56, Tadeusz Struk wrote:
-> Syzbot found a GPF in reweight_entity. This has been bisected to commit
-> 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-> 
-> There is a race between sched_post_fork() and setpriority(PRIO_PGRP)
-> within a thread group that causes a null-ptr-deref in reweight_entity()
-> in CFS. The scenario is that the main process spawns number of new
-> threads, which then call setpriority(PRIO_PGRP, 0, -20), wait, and exit.
-> For each of the new threads the copy_process() gets invoked, which adds
-> the new task_struct and calls sched_post_fork() for it.
-> 
-> In the above scenario there is a possibility that setpriority(PRIO_PGRP)
-> and set_one_prio() will be called for a thread in the group that is just
-> being created by copy_process(), and for which the sched_post_fork() has
-> not been executed yet. This will trigger a null pointer dereference in
-> reweight_entity(), as it will try to access the run queue pointer, which
-> hasn't been set. This results it a crash as shown below:
-> 
-> KASAN: null-ptr-deref in range [0x00000000000000a0-0x00000000000000a7]
-> CPU: 0 PID: 2392 Comm: reduced_repro Not tainted 5.16.0-11201-gb42c5a161ea3
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-> RIP: 0010:reweight_entity+0x15d/0x440
-> RSP: 0018:ffffc900035dfcf8 EFLAGS: 00010006
-> Call Trace:
-> <TASK>
-> reweight_task+0xde/0x1c0
-> set_load_weight+0x21c/0x2b0
-> set_user_nice.part.0+0x2d1/0x519
-> set_user_nice.cold+0x8/0xd
-> set_one_prio+0x24f/0x263
-> __do_sys_setpriority+0x2d3/0x640
-> __x64_sys_setpriority+0x84/0x8b
-> do_syscall_64+0x35/0xb0
-> entry_SYSCALL_64_after_hwframe+0x44/0xae
-> </TASK>
-> ---[ end trace 9dc80a9d378ed00a ]---
-> 
-> Before the mentioned change the cfs_rq pointer for the task  has been
-> set in sched_fork(), which is called much earlier in copy_process(),
-> before the new task is added to the thread_group.
-> Now it is done in the sched_post_fork(), which is called after that.
-> To fix the issue the remove the update_load param from the
-> update_load param() function and call reweight_task() only if the task
-> flag doesn't have the TASK_NEW flag set.
-> 
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Zhang Qiao <zhangqiao22@huawei.com>
-> Cc: stable@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Link: https://syzkaller.appspot.com/bug?id=9d9c27adc674e3a7932b22b61c79a02da82cbdc1
-> Fixes: 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an invalid sched_task_group")
-> Reported-by: syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
-> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-> ---
-> Changes in v4:
-> - Removed the update_load param from set_load_weight() and call
->   reweight_task() based on the TASK_NEW flag
-> 
-> Changes in v3:
-> - Removed the new check and changed the update_load condition from
->   always true to true if p->state != TASK_NEW
-> 
-> Changes in v2:
-> - Added a check in set_user_nice(), and return from there if the task
->   is not fully setup instead of returning from reweight_entity()
-> ---
->  kernel/sched/core.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 848eaa0efe0e..a0ef4670e695 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1214,10 +1214,12 @@ int tg_nop(struct task_group *tg, void *data)
->  }
->  #endif
->  
-> -static void set_load_weight(struct task_struct *p, bool update_load)
-> +static void set_load_weight(struct task_struct *p)
->  {
->  	int prio = p->static_prio - MAX_RT_PRIO;
->  	struct load_weight *load = &p->se.load;
-> +	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
+Dear Friend,
 
-nit-pick: reverse fir tree order
+With due respect, I need your cooperation in transferring the sum of
+$11.3million to your account where this money can be shared between
+us. The money has been here in our bank lying dormant for years
+without anybody coming for the claim.
 
-cat Documentation/process/maintainer-tip.rst | grep -A 10 "Variable
-declarations"
+I want to release the money to you as the beneficiary, so that we can
+use it to secure the future of our both families and to support the
+orphans. By indicating your interest, I will send you the full details
+on how the business will be executed.
 
-I was able to recreate the initial issue with the reproducer on arm64
-Juno-r0 with CONFIG_CGROUP_SCHED=y .
+Please respond urgently and delete if you are not interested.
 
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Best regards,
+Michael Doku.

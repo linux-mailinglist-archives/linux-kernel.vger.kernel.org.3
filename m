@@ -2,150 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9084A8982
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1194A8988
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352639AbiBCRKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S1352575AbiBCRLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352572AbiBCRJr (ORCPT
+        with ESMTP id S1346667AbiBCRLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:09:47 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F7DC06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:09:46 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id y17so2674833ilm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:09:46 -0800 (PST)
+        Thu, 3 Feb 2022 12:11:08 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C000C06173B;
+        Thu,  3 Feb 2022 09:11:06 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ka4so10752688ejc.11;
+        Thu, 03 Feb 2022 09:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YVeOmvrDZv3hJhW6Jsr2R6/Y4bCLC3bv8VO35vQkvl0=;
-        b=Sb4qc8l3d6fQWal2+nYncDQdeid9w3iJdshg8xNvNmQ4F//S3vBoRXD26En58ipbPo
-         flL859XADrQx9pKN8Fb/GpOOZUfnf9NU5/iRRCma9rMXw994X/c3opxOJd3evH47XII3
-         T3iBsCsTcP3WZeKrU87xqe+D4lxJgFmfL2TTABvTsj+RpgSbxKEcmRZhb+zuneWMluLw
-         Xv2MXEL2Gp6uAsjYiZFmegoeXMHlura4ysUAl5wpYogmlxq0SWOf0pw0c5CxCrq7rb9j
-         w0hbl3o3FJU+/NPDtukSpF/nXxZf3ACDksHVonvoJnjhuCdXjwVlkYo2Pdapl2FJZECj
-         FORA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sovBYQAcoAyRD+IIp48jmZd62dc3/cLT/aahzL7f+PY=;
+        b=UjJ6eCdCr1s35/Zo6xyKw4ExVCZWsabyMSRJPkW67/rmaNf6eywVd5fYWuVKjzsZ1a
+         hkEqLCHF//sbgceQvWe/DKmEw1ETKhUbrxKLa5NwHqHyzskqYVDomlaQlVp4I2u0d+tp
+         1Zv0nQ7fTHzczJUWhlhsUyE+skpdhD+D5Tikriz0fV1/DmZ6/SJKpNrSBM1puEVLULiV
+         Iuy8E3nZTM0q/d98bV6q4+HXzeHVDwEjORppIh2FXwNtl3a4dLSQz98FpBa8GfsrEwFV
+         /XHfVa4XimsgNOZqgQkeqnCAObuEufllNAee3Qx2GZLIhcibJyVaajFCD4my587rkZBz
+         jcUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YVeOmvrDZv3hJhW6Jsr2R6/Y4bCLC3bv8VO35vQkvl0=;
-        b=ELRNEuGeX5kHIZfpddFLyhDg7MDk79uWTtZUuy2fIK26PPLd74iaRSEuw+M+jRC9Hz
-         aZmfG/chNyss8fBZ+/OMMLYKtjS8SlOI/pgTa95pL8g+uWiIaXOJ5FXJ6iGdkFSBoijh
-         8Slr4t1kCg/y1zhspOok0S+aV/JZe47OpoOHCAkzZskNws/O3yQKCQIjCieCoaWQAR/x
-         5r1cDpCxslMzjZsGH4BQdKLjOQ00jUpNhg1mIJxvpC90QkbYiByANRsBIL5LZvXimNsh
-         17B3rDJowjP4cSEnoZaQOnsCVN0DUlRskX+7RfX+l5pKhIp58TilyUM3Mg+gy+gCF8/J
-         i45g==
-X-Gm-Message-State: AOAM5319tYPQ/M6vVlpVffxD0blIgiyLnYB6kObBQ+iHlAxrtRVJVxNy
-        8W2QK2FAzBGzNM2UtHa0aTXWgA==
-X-Google-Smtp-Source: ABdhPJzhqZlmD4YUH2TSGjEPaJJqyZwSZV111h2PXgaPokJLksR9esJgPnzvFD5Bx9/RrLdLwBGoeQ==
-X-Received: by 2002:a05:6e02:15c8:: with SMTP id q8mr21128743ilu.19.1643908186272;
-        Thu, 03 Feb 2022 09:09:46 -0800 (PST)
-Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id m12sm21869671iow.54.2022.02.03.09.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:09:45 -0800 (PST)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 10/10] net: ipa: determine replenish doorbell differently
-Date:   Thu,  3 Feb 2022 11:09:27 -0600
-Message-Id: <20220203170927.770572-11-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220203170927.770572-1-elder@linaro.org>
-References: <20220203170927.770572-1-elder@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sovBYQAcoAyRD+IIp48jmZd62dc3/cLT/aahzL7f+PY=;
+        b=CoMTD7P1jo6myrtiRPozkSS4Hc0Ir+q7D4Acs0wJ58MEOI54uNJgRXGDyqu7wV0A+/
+         cckJjyhxAHufpwJ/dwbSmvEfEq4l9kK0NmRGoDRA33w4M3PnCU+kMPAO+S8ZlOQIofxr
+         x8Rv1Ri4o7EuWpoLmOsdJREml1GNOic6hsP4N9pA3Q+oP0IRYSxlVDm9iSBWzNj8IrZc
+         /hfDbr5E0hQV5Ua8G/YWoEqjyxP0CG5fZkPQwrXusxKFsLYLnw3PXB+lYPCkPXPZyUD/
+         gwmtCDr2o7tML4MHgvSSOL0hXz5ZZ/0VefuAI0km0RAl+k/C4n5If6/sUIETdV44pk7P
+         OvCg==
+X-Gm-Message-State: AOAM531Oce6xEIeEnKJsvXuLQC3rpu47coCI6qcOMHCV+Ut44W4ypGKH
+        aD5Pw/NQbddxKhLYAuHH2Jc=
+X-Google-Smtp-Source: ABdhPJx3sYSUxiXz5lyDAeE53N1p30al3RfLZxJr/EGh4DnCjrKY+oKW+E0n7MmYR6U2CYbraG/Jug==
+X-Received: by 2002:a17:907:868f:: with SMTP id qa15mr32261051ejc.518.1643908264487;
+        Thu, 03 Feb 2022 09:11:04 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f4d:2b00:71d8:a0a4:4bb5:bafa? (p200300ea8f4d2b0071d8a0a44bb5bafa.dip0.t-ipconnect.de. [2003:ea:8f4d:2b00:71d8:a0a4:4bb5:bafa])
+        by smtp.googlemail.com with ESMTPSA id u3sm17315462ejz.99.2022.02.03.09.11.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 09:11:03 -0800 (PST)
+Message-ID: <84f17973-96c3-6513-ca4f-20750c896e6b@gmail.com>
+Date:   Thu, 3 Feb 2022 18:10:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] eeprom: ee1004: limit i2c reads to I2C_SMBUS_BLOCK_MAX
+Content-Language: en-US
+To:     Jonas Malaco <jonas@protocubo.io>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20220203165024.47767-1-jonas@protocubo.io>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20220203165024.47767-1-jonas@protocubo.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than tracking the number of receive buffer transactions that
-have been submitted without a doorbell, just track the total number
-of transactions that have been issued.  Then ring the doorbell when
-that number modulo the replenish batch size is 0.
+On 03.02.2022 17:49, Jonas Malaco wrote:
+> Commit effa453168a7 ("i2c: i801: Don't silently correct invalid transfer
+> size") revealed that ee1004_eeprom_read() did not properly limit how
+> many bytes to read at once.
+> 
+> In particular, i2c_smbus_read_i2c_block_data_or_emulated() takes the
+> length to read as an u8.  If count == 256 after taking into account the
+> offset and page boundary, the cast to u8 overflows.  And this is common
+> when user space tries to read the entire EEPROM at once.
+> 
+> To fix it, limit each read to I2C_SMBUS_BLOCK_MAX (32) bytes, already
+> the maximum length i2c_smbus_read_i2c_block_data_or_emulated() allows.
+> 
+> Fixes: effa453168a7 ("i2c: i801: Don't silently correct invalid transfer size")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jonas Malaco <jonas@protocubo.io>
+> ---
+>  drivers/misc/eeprom/ee1004.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
+> index bb9c4512c968..9fbfe784d710 100644
+> --- a/drivers/misc/eeprom/ee1004.c
+> +++ b/drivers/misc/eeprom/ee1004.c
+> @@ -114,6 +114,9 @@ static ssize_t ee1004_eeprom_read(struct i2c_client *client, char *buf,
+>  	if (offset + count > EE1004_PAGE_SIZE)
+>  		count = EE1004_PAGE_SIZE - offset;
+>  
+> +	if (count > I2C_SMBUS_BLOCK_MAX)
+> +		count = I2C_SMBUS_BLOCK_MAX;
+> +
+>  	return i2c_smbus_read_i2c_block_data_or_emulated(client, offset, count, buf);
+>  }
+>  
+> 
+> base-commit: 88808fbbead481aedb46640a5ace69c58287f56a
 
-The effect is roughly the same, but the new count is slightly more
-interesting, and this approach will someday allow the replenish
-batch size to be tuned at runtime.
-
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_endpoint.c | 12 ++++++++----
- drivers/net/ipa/ipa_endpoint.h |  4 ++--
- 2 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index a236edf5bf068..888e94278a84f 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -25,7 +25,8 @@
- 
- #define atomic_dec_not_zero(v)	atomic_add_unless((v), -1, 0)
- 
--#define IPA_REPLENISH_BATCH	16
-+/* Hardware is told about receive buffers once a "batch" has been queued */
-+#define IPA_REPLENISH_BATCH	16		/* Must be non-zero */
- 
- /* The amount of RX buffer space consumed by standard skb overhead */
- #define IPA_RX_BUFFER_OVERHEAD	(PAGE_SIZE - SKB_MAX_ORDER(NET_SKB_PAD, 0))
-@@ -1086,14 +1087,15 @@ static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint)
- 		return;
- 
- 	while ((trans = ipa_endpoint_trans_alloc(endpoint, 1))) {
-+		bool doorbell;
-+
- 		if (ipa_endpoint_replenish_one(endpoint, trans))
- 			goto try_again_later;
- 
--		if (++endpoint->replenish_ready == IPA_REPLENISH_BATCH)
--			endpoint->replenish_ready = 0;
- 
- 		/* Ring the doorbell if we've got a full batch */
--		gsi_trans_commit(trans, !endpoint->replenish_ready);
-+		doorbell = !(++endpoint->replenish_count % IPA_REPLENISH_BATCH);
-+		gsi_trans_commit(trans, doorbell);
- 	}
- 
- 	clear_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags);
-@@ -1863,6 +1865,8 @@ u32 ipa_endpoint_init(struct ipa *ipa, u32 count,
- 	enum ipa_endpoint_name name;
- 	u32 filter_map;
- 
-+	BUILD_BUG_ON(!IPA_REPLENISH_BATCH);
-+
- 	if (!ipa_endpoint_data_valid(ipa, count, data))
- 		return 0;	/* Error */
- 
-diff --git a/drivers/net/ipa/ipa_endpoint.h b/drivers/net/ipa/ipa_endpoint.h
-index 9a37f9387f011..12fd5b16c18eb 100644
---- a/drivers/net/ipa/ipa_endpoint.h
-+++ b/drivers/net/ipa/ipa_endpoint.h
-@@ -65,7 +65,7 @@ enum ipa_replenish_flag {
-  * @evt_ring_id:	GSI event ring used by the endpoint
-  * @netdev:		Network device pointer, if endpoint uses one
-  * @replenish_flags:	Replenishing state flags
-- * @replenish_ready:	Number of replenish transactions without doorbell
-+ * @replenish_count:	Total number of replenish transactions committed
-  * @replenish_work:	Work item used for repeated replenish failures
-  */
- struct ipa_endpoint {
-@@ -84,7 +84,7 @@ struct ipa_endpoint {
- 
- 	/* Receive buffer replenishing for RX endpoints */
- 	DECLARE_BITMAP(replenish_flags, IPA_REPLENISH_COUNT);
--	u32 replenish_ready;
-+	u64 replenish_count;
- 	struct delayed_work replenish_work;		/* global wq */
- };
- 
--- 
-2.32.0
-
+Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>

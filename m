@@ -2,118 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534424A7FEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819654A7FF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349413AbiBCHji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 02:39:38 -0500
-Received: from muru.com ([72.249.23.125]:45812 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230204AbiBCHjh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 02:39:37 -0500
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 411DD80EE;
-        Thu,  3 Feb 2022 07:39:21 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-omap@vger.kernel.org, Tero Kristo <kristo@kernel.org>
-Subject: [PATCHv2] dt-bindings: clock: Add binding for TI clksel
-Date:   Thu,  3 Feb 2022 09:39:29 +0200
-Message-Id: <20220203073929.59296-1-tony@atomide.com>
-X-Mailer: git-send-email 2.35.1
+        id S1349425AbiBCHmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 02:42:14 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42900
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241953AbiBCHmK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 02:42:10 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB1074019A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643874129;
+        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=prjLCJpZBMzeFlAnt1Q3ZRFf7aCbx5PsJ08g/iKbO3OC6wcUqpUqU3dPnXe2UhPVW
+         3VtDaPDja5UFB+Jinv/PElCW4zpu/XWGzvwN63MEDUaw+3OQ+5SnGlEYZjLmXoodEk
+         JOQw+tal7CoJGyMpCxfzDVAqU5No4yeVo8CwwK5Vf16pIEufwOq2WdtWz7TgEL3Mig
+         RSSTSTGJSh8N4Q48bVwTqkEaipOIorwAd85P4gi5k37qeDoCTKugvexnQ0iYqNPbrJ
+         TFgyew37GBJQ/1zYay1WMaaQsvcQh7VyMQw6O9hTk5Z9o7k+jesJHCCxoOYc8KUxpE
+         etD8CKYXdfCwg==
+Received: by mail-ed1-f69.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so1010305edb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 23:42:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
+        b=fvADogSAXsQJrkeTyNTb8WnqZhuqvEinXenr4IdK4xwGVLALS+k1ldcdJvSqGyIRQT
+         4R0wuJxBDOV0gLcbWt4V8uZBduJlWrJp2ePkMy49KNza1GmQbtR80Sg9VfCLCNeWljhD
+         u2/d5O3IuyEURewDdqyvSp+DvkyzDOwqbeLNUw5QMouQ1xqz89fTSYgLjtLgavPZC6BF
+         r8+mDsaJfT0GNAJ/ox7qQet9butHNPruxXQZQTJ8LmfMMf7VRfhwZR3lTku+bDCpgKiv
+         drOu5I34+b0PNJmM8cTA1huLCxBM1j/uQlXRXviKsMqhptUQbJKn86CbeIB1q/XPgN94
+         Z92w==
+X-Gm-Message-State: AOAM53343/ZH5FEaH4C4SBOp9o+eMTx4p2XS6QaGtXaPOmCzGgHz9RNO
+        ZfztiOQeDU9bv4i+M93HyraUW6Q0bLhG18h7NOY2JrmNhcrwlDhHIzLRyIlzwX1tlXMlfsCSau2
+        1DubWuX9xaD5fDHP+K6+0wRvBL3PM/EYU7yr0+JrEIQ==
+X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156931wrx.70.1643874119534;
+        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwInkGYx0bCKYBNdkDDYX+ptQNyAD6vMUiS8CqzI/xYfseOfTNCURA5lpsX4JtSbcPIAvyzjw==
+X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156886wrx.70.1643874119363;
+        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
+Received: from [192.168.0.80] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id t18sm19832712wri.34.2022.02.02.23.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 23:41:58 -0800 (PST)
+Message-ID: <1d549a00-b9f5-d60f-2d5b-798e92139f86@canonical.com>
+Date:   Thu, 3 Feb 2022 08:41:56 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to prepare for fixing lots of devicetree unique_unit_address
-warnings for the TI clock nodes, let's add a binding for the TI clksel
-clocks. This allows us to move the overlapping reg properties for the
-component clocks to be children of the related clksel nodes. And with
-that we need the reg property only for the parent clksel node making
-the reg property unique like it should be.
+On 02/02/2022 17:52, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> GXP is the name of the HPE SoC.
+> This SoC is used to implement BMC features of HPE servers
+> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
+> It does support many features including:
+> 	ARMv7 architecture, and it is based on a Cortex A9 core
+> 	Use an AXI bus to which
+> 		a memory controller is attached, as well as
+>                  multiple SPI interfaces to connect boot flash,
+>                  and ROM flash, a 10/100/1000 Mac engine which
+>                  supports SGMII (2 ports) and RMII
+> 		Multiple I2C engines to drive connectivity with a host infrastructure
+> 		A video engine which support VGA and DP, as well as
+>                  an hardware video encoder
+> 		Multiple PCIe ports
+> 		A PECI interface, and LPC eSPI
+> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
+> 		A GPIO engine
+> This Patch Includes:
+> 	Documentation for device tree bindings
+> 	Device Tree Bindings
+> 	GXP Timer Support
+> 	GXP Architecture Support
+> 
 
-We want to set #clock-cells = <2> in case we ever start parsing ranges
-of clkcsel instances directly using a clksel driver rather than using the
-existing component clock drivers and child nodes.
+1. Please version your patchses and document the changes under ---.
 
-And before the devicetree files can be updated, we need to update the
-TI clock drivers to get the IO address from the parent clksel node.
+2. With your v1 I responded what has to be separate patch. This was
+totally ignored here, so no. You have to follow this.
 
-Cc: Tero Kristo <kristo@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
+3. Please run checkpatch and be sure there are no warnings.
 
-Changes since V1:
+4. Bindings in dtschema, not in text.
 
-- Set additionalProperties to type object as suggested by Rob
+Best regards,
+Krzysztof
 
-- Changed #clock-cells to 2 for parsing ranges of clksel instances
-
-- Updated patch description for more info on why this is needed
-
- .../bindings/clock/ti/ti,clksel.yaml          | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
-new file mode 100644
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/ti/ti,clksel.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Binding for TI clksel clock
-+
-+maintainers:
-+  - Tony Lindgren <tony@atomide.com>
-+
-+description: |
-+  The TI CLKSEL clocks consist of consist of input clock mux bits, and in some
-+  cases also has divider, multiplier and gate bits.
-+
-+properties:
-+  compatible:
-+    const: ti,clksel
-+
-+  reg:
-+    maxItems: 1
-+    description: The CLKSEL register range
-+
-+  '#address-cells':
-+    enum: [ 0, 1, 2 ]
-+
-+  '#size-cells':
-+    enum: [ 0, 1, 2 ]
-+
-+  ranges: true
-+
-+  "#clock-cells":
-+    const: 2
-+    description: The CLKSEL register and bit offset
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+
-+additionalProperties:
-+  type: object
-+
-+examples:
-+  - |
-+    clksel_gfx_fclk: clock@52c {
-+      compatible = "ti,clksel";
-+      reg = <0x25c 0x4>;
-+      #clock-cells = <2>;
-+    };
-+...
--- 
-2.35.1
+Best regards,
+Krzysztof

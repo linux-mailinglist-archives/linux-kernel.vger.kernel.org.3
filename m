@@ -2,81 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA2F4A9010
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1896F4A9013
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354102AbiBCVjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:39:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50641 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230422AbiBCVji (ORCPT
+        id S1355299AbiBCVlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 16:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355169AbiBCVk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:39:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643924378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+aX6flYCGlec8MUmzayK91nF9NO+GezhygAiZUc4qds=;
-        b=XDdmpiKbXyceFjFUG9OEyj4QKgjEh2jzCK94RUP+xTl15s2QxgrSXKeagBmd/jgT5xywfW
-        wQb3jnsaMiL9PqA61K63rC1j5nlArHUc4LM96eV/rOZ3VsNxLprmmaJDcoQeuUucrbH6Pr
-        s2PKujrDKuCO60SquntVEpfplTHFF0I=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-64-hrEpxLcuO3CKJXlV6-jxNQ-1; Thu, 03 Feb 2022 16:39:37 -0500
-X-MC-Unique: hrEpxLcuO3CKJXlV6-jxNQ-1
-Received: by mail-qv1-f72.google.com with SMTP id gg10-20020a056214252a00b0041eeb1c2684so3620215qvb.21
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:39:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+aX6flYCGlec8MUmzayK91nF9NO+GezhygAiZUc4qds=;
-        b=4eNrKnjIRTbzNm3qi7L6AyR3vOGWqFOFZGhLjanTNDEXA1eMecK8L0BKPwubnKhivH
-         1IDelS5qczwzFCTq6agN7dwv7x2unrQlMpHnsn611Gs49ouoFuY+eGOcTMLB/SKBTW1k
-         bh3ylhdi2N0dCZyym3uVx9gYe8BYkRw3LksYpxQ6x2Ijxlm2Bt0UWPees2m/nUKr9DEJ
-         Ieg1b6t3g0xdIzmYAkBS/M7xEh8X7uPFGPz8lj+9P8mWY0oW2FA4VuB3h828eYjY27dO
-         X27+S2G5LR/Jzv1qwF34J7FTNWJyRolhYo95e8lr0voMQtFDbzmRMkztNQjeIohrmUT2
-         y0VQ==
-X-Gm-Message-State: AOAM533HV54ZQM0Ze6kdhxScy0NxxE74a5g+1isDdQIZi9vl9zPX5avi
-        aCtZIbPa0EqojGeELt7N9Ah2fA8P5+SYQshyHgpJaJMzVV4wwd7IEGbuxhKy4lOYsKW9UOtqaav
-        PBH6LHRdWExrgj3mHHchrpHeF
-X-Received: by 2002:a05:622a:1aa0:: with SMTP id s32mr86330qtc.145.1643924377050;
-        Thu, 03 Feb 2022 13:39:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyuJzUTTqRgkam6YpJQj0YsDVjx8yNmuoFMgpLG51XVIvp7iv7xlN6IdGc1fnZzDvFnEuKkIA==
-X-Received: by 2002:a05:622a:1aa0:: with SMTP id s32mr86319qtc.145.1643924376896;
-        Thu, 03 Feb 2022 13:39:36 -0800 (PST)
-Received: from fedora (modemcable200.11-22-96.mc.videotron.ca. [96.22.11.200])
-        by smtp.gmail.com with ESMTPSA id u17sm22096qkp.90.2022.02.03.13.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 13:39:36 -0800 (PST)
-Date:   Thu, 3 Feb 2022 16:39:34 -0500
-From:   Adrien Thierry <athierry@redhat.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-serial@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH] serial: 8250_bcm2835aux: Add ACPI support
-Message-ID: <YfxLlkQsHEb2qbjW@fedora>
-References: <20220201185001.926338-1-athierry@redhat.com>
- <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
+        Thu, 3 Feb 2022 16:40:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB486C061714;
+        Thu,  3 Feb 2022 13:40:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F700B835AE;
+        Thu,  3 Feb 2022 21:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7D7C340F0;
+        Thu,  3 Feb 2022 21:40:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643924456;
+        bh=kFckNU1ZizTo6xCiEOr5zJellumfmnajUCSZP4HD5Oc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WE1Cke65LfqrirHXfptPY6xOvi4enWXoi0rucjD4XbRpUWX3joZ+Po/rRQpDbCTKs
+         8rwMDw4lT8PwXeOqkK1EsGEkmy+XLddce/JArzQyAOrsF495dWcsk+MCuZQSqnwFhd
+         hrJN9zDRD5YBo3AK3WUprhKjVa9NflTaQbFvGhSHfzBLDbDNoyCdnLGjblRcgzYqnS
+         6/kUQ3sZh4Ydf6nj5lJsvXFxR+mrJGFHh4P7y/h4ONf2tcIit0cputMhg3tYSpD7gw
+         P6SQ55MytaKfymYfkAdrABe140V4s9oGJsuxlE2AWe3pzdW3xa+ZW7YntOZ+IsGy9H
+         kiD7i4UWH5JJA==
+Received: by mail-ej1-f46.google.com with SMTP id j2so12672684ejk.6;
+        Thu, 03 Feb 2022 13:40:56 -0800 (PST)
+X-Gm-Message-State: AOAM533vKA9aj88xAiVmX8S5QNcREFm1COJ8Xu7qLH1P3q/ZV4q9ipp5
+        0Ql4xod7MtnHCc/npewb3ugDiNkHGLNUEQc9Gw==
+X-Google-Smtp-Source: ABdhPJyVD5aUcVjFLsHVEhlkVnpzGqjhjJUUAmPUcPuSXmQIPKMo74wBtJ3E3QwaERBvdayXJrtV8GD2WyBC7VqzoJY=
+X-Received: by 2002:a17:907:7f1a:: with SMTP id qf26mr25008004ejc.20.1643924454599;
+ Thu, 03 Feb 2022 13:40:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <412a456d-7294-a124-8a01-f052915348b4@gmail.com>
+References: <20220203211150.2912192-1-frowand.list@gmail.com>
+In-Reply-To: <20220203211150.2912192-1-frowand.list@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Feb 2022 15:40:42 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
+Message-ID: <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] of: unittest: print pass messages at same loglevel as fail
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Florian for your feedback! I have submitted a v2 with the changes
-you required.
+On Thu, Feb 3, 2022 at 3:12 PM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> Printing the devicetree unittest pass message for each passed test
+> creates much console verbosity.  The existing pass messages are
+> printed at loglevel KERN_DEBUG so they will not print by default.
+>
+> Change default to print the pass messages at the same loglevel as
+> the fail messages.
+>
+> The test community expects either a pass or a fail message for each
+> test in a test suite.  The messages are typically post-processed to
+> report pass/fail results.
+>
+> Suppressing printing the pass message for each individual test is
+> available via the kernel command line parameter unittest.hide_pass.
+>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+>  drivers/of/unittest.c                           | 17 ++++++++++++++++-
+>  2 files changed, 20 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9..045455f9b7e1 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5997,6 +5997,10 @@
+>                         Note that genuine overcurrent events won't be
+>                         reported either.
+>
+> +       unittest.hide_pass
 
-Adrien
+Can we rename the module name to include 'dt' so we're not taking a
+generic name.
 
+> +                       Disable printing individual drivers/of/unittest test
+> +                       pass messages.
+> +
+>         unknown_nmi_panic
+>                         [X86] Cause panic on unknown NMI.
+>
+> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> index 70992103c07d..2cfbdc6b29ac 100644
+> --- a/drivers/of/unittest.c
+> +++ b/drivers/of/unittest.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/errno.h>
+>  #include <linux/hashtable.h>
+>  #include <linux/libfdt.h>
+> +#include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_fdt.h>
+> @@ -32,6 +33,19 @@
+>
+>  #include "of_private.h"
+>
+> +MODULE_LICENSE("GPL v2");
+> +static bool hide_pass;
+> +
+> +static int __init hide_pass_setup(char *str)
+> +{
+> +       hide_pass = true;
+> +       return 0;
+> +}
+> +
+> +early_param("hide_pass", hide_pass_setup);
+> +module_param(hide_pass, bool, 0);
+> +MODULE_PARM_DESC(hide_pass, "Disable printing individual of unittest pass messages");
+> +
+>  static struct unittest_results {
+>         int passed;
+>         int failed;
+> @@ -44,7 +58,8 @@ static struct unittest_results {
+>                 pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
+>         } else { \
+>                 unittest_results.passed++; \
+> -               pr_debug("pass %s():%i\n", __func__, __LINE__); \
+> +               if (!hide_pass) \
+> +                       pr_err("pass %s():%i\n", __func__, __LINE__); \
+
+Would 'PASS' be better here to align with FAIL?
+
+If we make this info level, then you can filter with dmesg and also
+seems to be aligned with what kunit does.
+
+
+Rob

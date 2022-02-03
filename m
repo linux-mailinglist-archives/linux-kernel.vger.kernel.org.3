@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE8F4A8F46
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2140E4A8F25
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355963AbiBCUoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356541AbiBCUly (ORCPT
+        id S1354859AbiBCUmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:42:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40182 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354976AbiBCUii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:41:54 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87432C0613B2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:37:54 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id l27so3699009lfe.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 12:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+VrxapYZdFw5zNLlkG7gwQPQd4MEqlLeWHHaNG101EE=;
-        b=iCzeaUDYVxkrKStctnh8zTlYnJAAnFTeTA+LUgTna1b2xHj7nYwsZzrWUq+lpOMu83
-         hFYTUH1t2BGH0R0K84qzSGj7WZfSb0zOJ2HX2O59nvLkeAlgQkjs9bUMrtHGXFVhvmdc
-         qbDBPiIfo/AIUQsTRKQ2xTIEHF3zDJM1D3Yzqtk4pigP8J+2t0QRhWVAfLHGALrVdDfB
-         4I78e9t1ZCyXsLUOqKmlUn0qY2tsP1rPnrag0+pKS/h0LkzxSWvPQ4BYmVAPzXL3YLyk
-         +epwFz/vCNK8khzRX+jNkDsGrbrZDaLCjSyTMAQUzHPPvzoQLjMbxNsKu2AjBSyTbvm8
-         Qkeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+VrxapYZdFw5zNLlkG7gwQPQd4MEqlLeWHHaNG101EE=;
-        b=2HP68It7MRHKkpEoZdlfHN2R01wlNdAO/L3Sqw+Nc20hoBnSEzCfze8ufLc4eD64Xl
-         bWl9ofS52j5O/ddDPcafeeWkR1aVmJNXkEhf+WdX2cmws38Oa5ZJdnCT0KxttVzx5hGU
-         GHJcCd0Fd7KNv3c+Z+bPiqHQi8FSYpUOwBKbYIMQx6PiWfB7YJP1y0CkvhkfenF3ouhT
-         NBJWfQFrvkl8QxOmvauFV5wFkjz+5Mi0jqPeR3uYT7JrbpSq4bJqL+R9eiWy+gRK2ZsI
-         GXBbLcVbjJ2PDexhn1IvM+CPR7HyFZXA79LE8+4nYXNuF+9EwY3G4FqCG6HhQTk6/yYM
-         HPzw==
-X-Gm-Message-State: AOAM532E//wDhCpzMTpl2MDMzYMq7I5bX+cye6TRJALnvJv9l8g8FICj
-        NVAS50/rL2KUrmFFYLKis8EV4QdgyRpj4KbOkugUPA==
-X-Google-Smtp-Source: ABdhPJyEO7toB9Xk7e12MVsMQizH8I6uc0Z/+GxXMZU3C+7qqlJE+19v8i3RwheJW1fHMv6ZQfY04Q/j+HvgjnlzS2w=
-X-Received: by 2002:a05:6512:3c96:: with SMTP id h22mr28020130lfv.489.1643920672718;
- Thu, 03 Feb 2022 12:37:52 -0800 (PST)
+        Thu, 3 Feb 2022 15:38:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B4EBB83556;
+        Thu,  3 Feb 2022 20:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A26C340E8;
+        Thu,  3 Feb 2022 20:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643920716;
+        bh=KqcRBHHZvoZzX9kbACzClvmZ6/tlvG8DciwPkL4BxwI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KM4Xmum1FCnpD4sw+PrpUF+HZMlMh6m/nUxGUmj9x0BzQ48I4YhbWcKSGU99z03fR
+         f41gwPWIbjCScpGJsluIHmNjI6PyOQJWSFejosCCiFbcw0cNhG4tqwtuqXXHenx1pJ
+         v7+SmoqKOQNxY1LTeue3GnhG8ZJxRwiTv6zbjS1kEr2gyRPOks9MKSN8SGpTdiw+R7
+         KSVllhlGGG1voFY02n26yg0tdsfToVFfMgffUlyCABOMIa0TXbKbCXZPYK6Co8gCni
+         YFM7ulAMkTJXZXWYcTmX8kGlmfg99DmXaP+nC3jS5nFgNf+kYYFOyQxEXlmLPQNvxO
+         0n5U3otQcouIw==
+Date:   Thu, 3 Feb 2022 14:38:33 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Liguang Zhang <zhangliguang@linux.alibaba.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Amey Narkhede <ameynarkhede03@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: pciehp: clear cmd_busy bit when Command Completed
+ in polling mode
+Message-ID: <20220203203833.GA113163@bhelgaas>
 MIME-Version: 1.0
-References: <20220203173307.1033257-1-keescook@chromium.org> <20220203173307.1033257-5-keescook@chromium.org>
-In-Reply-To: <20220203173307.1033257-5-keescook@chromium.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 3 Feb 2022 12:37:41 -0800
-Message-ID: <CAKwvOdk0UMAaw2j9OmjXN0Jc6FBOhfMP3JmSqMps2_MQFQLq-g@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] fortify: Add Clang support
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203190731.GA24120@wunner.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Enable FORTIFY_SOURCE support for Clang:
->
-> Use the new __pass_object_size and __overloadable attributes so
-> that Clang will have appropriate visibility into argument sizes such
-> that __builtin_object_size(p, 1) will behave correctly. Additional
-> details here:
->     https://github.com/llvm/llvm-project/issues/53516
->     https://github.com/ClangBuiltLinux/linux/issues/1401
->
-> When available, use the new __diagnose_as attribute to make sure no
-> compile-time diagnostic warnings are lost due to the effectively renamed
-> string functions.
+On Thu, Feb 03, 2022 at 08:07:31PM +0100, Lukas Wunner wrote:
+> Hi Bjorn,
+> 
+> the below patch is marked "Changes Requested" in patchwork:
+> 
+> https://patchwork.kernel.org/project/linux-pci/patch/20211111054258.7309-1-zhangliguang@linux.alibaba.com/
+> 
+> I think that might be erroneous because the patch is correct,
+> I've provided a Reviewed-by and no change requests are recorded
+> in patchwork or the mailing list archive.
+> 
+> If you've got a few minutes to spare, could you double-check the
+> state in patchwork and provide Liguang Zhang with the changes you'd
+> want (if any)?
 
-Consider adding something along the lines of the following to the
-above paragraph:
-Without diagnose_as, compile time error messages won't be as precise
-as they could be, but at least users of older toolchains will have
-fortified routines. That is more valuable, but certainly a tradeoff.
+Thanks for reminding me about this.  I don't remember why I marked it
+"changes requested" but I often do that if there's been significant
+discussion.  In this case you also provided additional information
+(Fixes tag, bugzilla link, commit log elaboration) that should be
+included.  Given that, I would typically wait for the author to repost
+it and incorporate the additional information.
 
->
-> Redefine strlen() as a macro that tests for being a constant expression
-> so that strlen() can still be used in static initializers, which was
-> lost when adding __pass_object_size and __overloadable.
+But I applied it to pci/hotplug with the commit log below.
 
-I'd like to see `const` changes explicit in 4/4; I suspect that's
-_why_ __overloadable is even needed? If so, then a comment here about
-that wouldn't hurt.
+commit 92912b175178 ("PCI: pciehp: Clear cmd_busy bit in polling mode")
+Author: Liguang Zhang <zhangliguang@linux.alibaba.com>
+Date:   Thu Nov 11 13:42:58 2021 +0800
 
-Having const be more explicit in the signature will make it more
-obvious why the definition cannot modify the parameter.
-
-
--- 
-Thanks,
-~Nick Desaulniers
+    PCI: pciehp: Clear cmd_busy bit in polling mode
+    
+    Writes to a Downstream Port's Slot Control register are PCIe hotplug
+    "commands."  If the Port supports Command Completed events, software must
+    wait for a command to complete before writing to Slot Control again.
+    
+    pcie_do_write_cmd() sets ctrl->cmd_busy when it writes to Slot Control.  If
+    software notification is enabled, i.e., PCI_EXP_SLTCTL_HPIE and
+    PCI_EXP_SLTCTL_CCIE are set, ctrl->cmd_busy is cleared by pciehp_isr().
+    
+    But when software notification is disabled, as it is when pcie_init()
+    powers off an empty slot, pcie_wait_cmd() uses pcie_poll_cmd() to poll for
+    command completion, and it neglects to clear ctrl->cmd_busy, which leads to
+    spurious timeouts:
+    
+      pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x01c0 (issued 2264 msec ago)
+      pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x05c0 (issued 2288 msec ago)
+    
+    Clear ctrl->cmd_busy in pcie_poll_cmd() when it detects a Command Completed
+    event (PCI_EXP_SLTSTA_CC).
+    
+    [bhelgaas: commit log]
+    Fixes: a5dd4b4b0570 ("PCI: pciehp: Wait for hotplug command completion where necessary")
+    Link: https://lore.kernel.org/r/20211111054258.7309-1-zhangliguang@linux.alibaba.com
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=215143
+    Link: https://lore.kernel.org/r/20211126173309.GA12255@wunner.de
+    Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+    Reviewed-by: Lukas Wunner <lukas@wunner.de>
+    Cc: stable@vger.kernel.org	# v4.19+

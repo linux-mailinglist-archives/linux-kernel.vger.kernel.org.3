@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0E74A8C28
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE8B4A8C23
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353658AbiBCTF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353655AbiBCTF0 (ORCPT
+        id S1353650AbiBCTEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:04:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21842 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237541AbiBCTEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:05:26 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142EC061714;
-        Thu,  3 Feb 2022 11:05:25 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id v123so2826469wme.2;
-        Thu, 03 Feb 2022 11:05:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CwFIDxLrsJY5AT/tU5NARbAaRxrN82m4ae2GxSdsQ8c=;
-        b=nQb97wY9KEcqxWpoyLJkJ/f/hNH57GFALTHstDZYp7pVASl19cJlmJ/lGL7F9mPHon
-         RuOPXG4wrlMeKMrGq+acrZFv1P0p6MtCTPO1J+w3gztVPOO8TwjPS2qk6TQHOoxG9wQE
-         EGoa1aqhfMqUKC80+2bA9MXZp6Q+JcMMsnetT/32OHdWZup/WfWZwJ7H5B3MHL9Oz3V2
-         jVSF6Kf3NC3Itebp140aD6q9EoqJa78HmmARAojzGnnSyXvQaNPNaQRnb6uTABkB8a3S
-         HVoJjIULRpncUjUZ5EM+BwMgalCXojb7sjrS4BejbYtBItcLg7wmDcEH4m5KS6ZtNs69
-         65DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CwFIDxLrsJY5AT/tU5NARbAaRxrN82m4ae2GxSdsQ8c=;
-        b=eVPkBu82U2td41C3gAM7q26lrPGcACQdqhyaCmSkO2w3jca/b4aN5IFRaODROgKUCC
-         o3FnDez5grlMnao8Irs7t+cBgQYs2CzVihYtdO+FClNJCS98MtoVt9Z7zXXagB8nNQ6L
-         gysCrS0XFFy6PXkVsnGNG1fmW0FdKdheUyVEHdAXjftExYE2q7QvVL+hrYpocSksVXPj
-         iccC7T1xHNvhog5FlCof/WF0EzbqRuzKPrPE9yUhCkjM7fjiJmJgdksYsfm8Q/V2GoOt
-         GCaVjMEnsNnoCpJT/Z1AgedIf6q2UyzFp55XKBOQQx8r9YBufOovTHG+jFXEVJVdYCpI
-         t5Rg==
-X-Gm-Message-State: AOAM5319rJdH2oZyFMjlFVjHz905/aIErl5vMhodsLqn6JR8sKnm8l8G
-        Cc6Ilz/rZKhTdijUP61+LH0ajUYzj8g=
-X-Google-Smtp-Source: ABdhPJxw3howmYa64wn51amImpugj21NG7NCDymxGM6GE3AdaHpKKB0wdJXfPAUsWPBDY4+F1uoZkA==
-X-Received: by 2002:a05:600c:3ce:: with SMTP id z14mr11389567wmd.128.1643915124287;
-        Thu, 03 Feb 2022 11:05:24 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.232.204])
-        by smtp.gmail.com with ESMTPSA id j19sm9226678wmq.17.2022.02.03.11.05.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 11:05:23 -0800 (PST)
-Message-ID: <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
-Date:   Thu, 3 Feb 2022 19:00:39 +0000
+        Thu, 3 Feb 2022 14:04:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643915061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8WFk5VazJGj78aF3vcRFOwWn7//j5v/p/zsICay1c+U=;
+        b=OmCKu02w5dUeLpKhZoqXqtl4B04ntFeX4HXfTwitkdTUYU6O3llgreP79mxem9eSQWvJgc
+        7fNIPj8OHRkwPK62ZTDvkQ0Ho+gnvQszVWo9JUa5t4TQmo3GqrX51crqoRhD3pqLwaFE1k
+        lYhg2GOxIqHna57DIIBjnrfGnvXXS4s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-544-1_xSlXEUNfiENHGx0Rm0IQ-1; Thu, 03 Feb 2022 14:04:18 -0500
+X-MC-Unique: 1_xSlXEUNfiENHGx0Rm0IQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A074518B613D;
+        Thu,  3 Feb 2022 19:04:15 +0000 (UTC)
+Received: from [10.22.8.80] (unknown [10.22.8.80])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 747A75D6BA;
+        Thu,  3 Feb 2022 19:03:59 +0000 (UTC)
+Message-ID: <3f042edb-3769-afea-17a7-899578cd5c69@redhat.com>
+Date:   Thu, 3 Feb 2022 14:03:58 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 3/4] mm/page_owner: Print memcg information
 Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203174108.668549-1-usama.arif@bytedance.com>
- <20220203174108.668549-3-usama.arif@bytedance.com>
- <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
- <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
- <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
+References: <20220131192308.608837-5-longman@redhat.com>
+ <20220202203036.744010-4-longman@redhat.com>
+ <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 18:29, Jens Axboe wrote:
-> On 2/3/22 11:26 AM, Usama Arif wrote:
->> Hmm, maybe i didn't understand you and Pavel correctly. Are you
->> suggesting to do the below diff over patch 3? I dont think that would be
->> correct, as it is possible that just after checking if ctx->io_ev_fd is
->> present unregister can be called by another thread and set ctx->io_ev_fd
->> to NULL that would cause a NULL pointer exception later? In the current
->> patch, the check of whether ev_fd exists happens as the first thing
->> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
-> 
-> They are cheap, but they are still noticeable at high requests/sec
-> rates. So would be best to avoid them.
-> 
-> And yes it's obviously racy, there's the potential to miss an eventfd
-> notification if it races with registering an eventfd descriptor. But
-> that's not really a concern, as if you register with inflight IO
-> pending, then that always exists just depending on timing. The only
-> thing I care about here is that it's always _safe_. Hence something ala
-> what you did below is totally fine, as we're re-evaluating under rcu
-> protection.
+On 2/3/22 07:46, Michal Hocko wrote:
+> On Wed 02-02-22 15:30:35, Waiman Long wrote:
+> [...]
+>> +#ifdef CONFIG_MEMCG
+>> +	unsigned long memcg_data;
+>> +	struct mem_cgroup *memcg;
+>> +	bool online;
+>> +	char name[80];
+>> +
+>> +	rcu_read_lock();
+>> +	memcg_data = READ_ONCE(page->memcg_data);
+>> +	if (!memcg_data)
+>> +		goto out_unlock;
+>> +
+>> +	if (memcg_data & MEMCG_DATA_OBJCGS)
+>> +		ret += scnprintf(kbuf + ret, count - ret,
+>> +				"Slab cache page\n");
+>> +
+>> +	memcg = page_memcg_check(page);
+>> +	if (!memcg)
+>> +		goto out_unlock;
+>> +
+>> +	online = (memcg->css.flags & CSS_ONLINE);
+>> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
+> Is there any specific reason to use another buffer allocated on the
+> stack? Also 80B seems too short to cover NAME_MAX.
+>
+> Nothing else jumped at me.
 
-Indeed, the patch doesn't have any formal guarantees for propagation
-to already inflight requests, so this extra unsynchronised check
-doesn't change anything.
+I suppose we can print directly into kbuf with cgroup_name(), but using 
+a separate buffer is easier to read and understand. 79 characters should 
+be enough for most cgroup names. Some auto-generated names with some 
+kind of embedded uuids may be longer than that, but the random sequence 
+of hex digits that may be missing do not convey much information for 
+identification purpose. We can always increase the buffer length later 
+if it turns out to be an issue.
 
-I'm still more сurious why we need RCU and extra complexity when
-apparently there is no use case for that. If it's only about
-initial initialisation, then as I described there is a much
-simpler approach.
+Cheers,
+Longman
 
--- 
-Pavel Begunkov

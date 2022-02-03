@@ -2,122 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224454A8826
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78C74A882F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352057AbiBCP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352046AbiBCP6E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:58:04 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614DDC06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:58:04 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id z131so2583169pgz.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 07:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HoSzVnw2BnmdPeyLBLFwLkiFu/WEUrSX1fW/APCKZOY=;
-        b=cd2BV91+mMMbRvTFi52N/AXl2Le0Z0r6nq7Hwm0XkcwA/V+wvhI3IYR4r9pu3PZhNx
-         znnMByx9ZZbC3Ow7+Y1R1QaXxxrZpP2xutoU8bqJV+vh2zmxqkDT8fS21QPjbRb9ZqIs
-         sXilpaCWjpil5pQ4l3CMpRhXlSz172P/vWX3nUKtkIAlzXMQHLnNH4EX/M6FPCDRA6lz
-         trMymVwtJFAzZwduDXkWVWY2dnGBPrmtj50N2d5a/xHs8f4kcyqk/0r4R0gB0WPxnS+T
-         gnL/71n2sSn6OBuXhbiRmvT5ZFlzFhILAdGGf3j3j4SUHp6ljLoGOzgRPHDTWLo6souz
-         uVmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HoSzVnw2BnmdPeyLBLFwLkiFu/WEUrSX1fW/APCKZOY=;
-        b=3JpsZr4/RPthw318fllpOvh9geskrO+OTBF+5qeNhpzlOEYim223IPGet8dJSbDrSd
-         30qZ7qnOqUrU+mB212zGZ8fIAtT80UuDIC3iHDUGBsU2UBhRBF7QbmmrcLEyi60Gof6S
-         tmO9B12V1/OrT2GNwfsli2z8JT3KOx18aKfWm5BICXmMOOz5+WLR5uiqgKuX39B6CZHa
-         tgCFP+CpM3qcfiymEH+rMJQ8zi7cp4YnBrrrFL6qbo4P1bDD/8/SVkcAY0SET2v5KRFl
-         Gcw8XKa6XDqqXJIp1OrT2iPUAwvgcvPCCPuzyNJkisYYLs6Of9qljY0Mm143aeZ3rMUP
-         oyPA==
-X-Gm-Message-State: AOAM532XmwrbTlTDCAZBxFM/P9/5Qr98GflF5daTdQV3qdJ4osOG6eXU
-        IC/o9dfFwys5jZaP5iDpAIC74TaWlMQ1FZqYCmeqeg==
-X-Google-Smtp-Source: ABdhPJxswvJSQIq4vfMmqBKuKgFZf3co3KEwJmX9wgxoDzi5W34ig4hBca0frXKnmRvOtV8LKHrtEJubdOtroz07tTY=
-X-Received: by 2002:a05:6a00:728:: with SMTP id 8mr34691382pfm.27.1643903883627;
- Thu, 03 Feb 2022 07:58:03 -0800 (PST)
+        id S1352064AbiBCP7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:59:13 -0500
+Received: from mga07.intel.com ([134.134.136.100]:14238 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231251AbiBCP7L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:59:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643903951; x=1675439951;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r3LklpumRSCVRPZ1iWKibE5YvEFhUlEi5fqm7ahAhq4=;
+  b=FrSXgMvraotO1tc/SjEpM1PP8aQQ/V58Fc9mLfoSn8q8zY1FsF0xxElr
+   s+rIE/9XeQD+w7iWo9Tz760Nz1rqeKZpK+3AoIX9DqKciqMcwxHnDd/QH
+   klraeQAdBfP06pBuLHfdkWvgdzCwAN0CVdR3BEP7+6NZOifaHFtToP2qB
+   sJzJGIxiLetSeLiyA4dE1pqEyzWj0f20VE2OWnp3CUHgolOcz9YbF/zrD
+   GAO8qB81zbOLl6s3ONyT04TI1as+KKLBoxjb1r63cKG5BsBwU+FEuDETB
+   6t/ER+8Pvb/H3L2iWfDiFB0Y4o5kjEsx9s7qYE4eFE8Gowz61zsItTg6n
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311477491"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="311477491"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:59:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="676807120"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 03 Feb 2022 07:59:09 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 1482E18D; Thu,  3 Feb 2022 17:59:23 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v1 1/3] iio: imu: inv_mpu6050: Drop wrong use of ACPI_PTR()
+Date:   Thu,  3 Feb 2022 17:59:18 +0200
+Message-Id: <20220203155920.18586-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
- <YfspazpWoKuHEwPU@lunn.ch>
-In-Reply-To: <YfspazpWoKuHEwPU@lunn.ch>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 3 Feb 2022 07:57:52 -0800
-Message-ID: <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 5:01 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> > As a person responsible for boot firmware through kernel for a set of
-> > boards I continue to do the following to keep Linux from mucking with
-> > various PHY configurations:
-> > - remove PHY reset pins from Linux DT's to keep Linux from hard resetting PHY's
-> > - disabling PHY drivers
-> >
-> > What are your thoughts about this?
->
-> Hi Tim
->
-> I don't like the idea that the bootloader is controlling the hardware,
-> not linux.
->
-> There are well defined ways for telling Linux how RGMII delays should
-> be set, and most PHY drivers do this. Any which don't should be
-> extended to actually set the delay as configured.
+ACPI_PTR() is more harmful than helpful. For example, in this case
+if CONFIG_ACPI=n, the ID table left unused which is not what we want.
 
-Andrew,
+Instead of adding ifdeffery or attribute here and there, drop ACPI_PTR().
 
-I agree with the goal of having PHY drivers and dt-bindings in Linux
-to configure everything but in the case I mention in the other thread
-adding rgmii delay configuration which sets a default if a new dt
-binding is missing is wrong in my opinion as it breaks backward
-compatibility. If a new dt binding is missing then I feel that the
-register fields those bindings act on should not be changed.
+Fixes: 3b3870646642 ("iio: imu: inv_mpu6050: Mark acpi match table as maybe unused")
+Fixes: fd64df16f40e ("iio: imu: inv_mpu6050: Add SPI support for MPU6000")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c | 7 +++----
+ drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
->
-> LEDs are trickier. There is a slow on going effort to allow PHY LEDs
-> to be configured as standard Linux LEDs. That should result in a DT
-> binding which can be used to configure LEDs from DT.
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+index fe03707ec2d3..ccb06d9af760 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+@@ -3,11 +3,11 @@
+ * Copyright (C) 2012 Invensense, Inc.
+ */
+ 
+-#include <linux/acpi.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/i2c.h>
+ #include <linux/iio/iio.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/property.h>
+@@ -249,11 +249,10 @@ static const struct of_device_id inv_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, inv_of_match);
+ 
+-static const struct acpi_device_id __maybe_unused inv_acpi_match[] = {
++static const struct acpi_device_id inv_acpi_match[] = {
+ 	{"INVN6500", INV_MPU6500},
+ 	{ },
+ };
+-
+ MODULE_DEVICE_TABLE(acpi, inv_acpi_match);
+ 
+ static struct i2c_driver inv_mpu_driver = {
+@@ -262,7 +261,7 @@ static struct i2c_driver inv_mpu_driver = {
+ 	.id_table	=	inv_mpu_id,
+ 	.driver = {
+ 		.of_match_table = inv_of_match,
+-		.acpi_match_table = ACPI_PTR(inv_acpi_match),
++		.acpi_match_table = inv_acpi_match,
+ 		.name	=	"inv-mpu6050-i2c",
+ 		.pm     =       &inv_mpu_pmops,
+ 	},
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
+index 6800356b25fb..44b4f74b9256 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c
+@@ -2,8 +2,8 @@
+ /*
+ * Copyright (C) 2015 Intel Corporation Inc.
+ */
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/acpi.h>
+ #include <linux/of.h>
+ #include <linux/property.h>
+ #include <linux/spi/spi.h>
+@@ -148,7 +148,7 @@ static struct spi_driver inv_mpu_driver = {
+ 	.id_table	=	inv_mpu_id,
+ 	.driver = {
+ 		.of_match_table = inv_of_match,
+-		.acpi_match_table = ACPI_PTR(inv_acpi_match),
++		.acpi_match_table = inv_acpi_match,
+ 		.name	=	"inv-mpu6000-spi",
+ 		.pm     =       &inv_mpu_pmops,
+ 	},
+-- 
+2.34.1
 
-Can you point me to something I can look at? PHY LED bindings don't at
-all behave like normal LED's as they are blinked internally depending
-on a large set of rules that differ per PHY.
-
->
-> You probably are going to have more and more issues if you think the
-> bootloader is controlling the hardware, so you really should stop
-> trying to do that.
->
-
-Trust me, I would love to stop trying to hide PHY config from Linux.
-It's painful to bump to a new kernel and find something broken. In
-this case I found that my LED configuration broke and in the other
-patch I found that my RGMII delays broke.
-
-Completely off topic, but due to the chip shortage we have had to
-redesign many of our boards with different PHY's that now have
-different bindings for RGMII delays so I have to add multiple PHY
-configurations to DT's if I am going to support the use of PHY
-drivers. What is your suggestion there? Using DT overlays I suppose is
-the right approach.
-
-Tim

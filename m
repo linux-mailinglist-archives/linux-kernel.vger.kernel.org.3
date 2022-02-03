@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6014E4A88AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C015C4A88AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352262AbiBCQgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352254AbiBCQgm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:36:42 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C164C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:36:42 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id j2so10853380ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:36:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=X8SSPf/mraiWro8suMcSqfz+VF8p4sGwr/CfpUCuIGY=;
-        b=bkKzAI072p7AqmVFdvgKsK0FnezlalYWZwnV/macVP3CZ/cvwb4SW0vGtjIupJRjVm
-         zSPaAsLCggEyYVFrUbfh1LfbEakL8xAA3C+CbNEUcmSNiS7avvTu+kk8RcSEY9XM0yU4
-         qj86zaZZy/y/JqHsqv1mgWskcfeeq7uiZB0pngk9/ySmC2ONxStu3Q9L7AClTbOzozpq
-         oBYAg5sH6CLcix+F0i87ayv7/uJS8WgU/+sqewVEJJ50bo0/7lDQq3/aWIcmDZZPuSRQ
-         jJd5KgGtlI4O0v8hG35cFNZSgYJ0+ZPWbaPLCk/FA7/3qaEDjDhTTP0YHemdF5cVu5w4
-         GUqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=X8SSPf/mraiWro8suMcSqfz+VF8p4sGwr/CfpUCuIGY=;
-        b=I+oJxfq5pXvDqx5GzTuDFUZJ7z2aPuTb6gANh9G2zjB16jsNjDgXdqlLpWKJ3J0QQr
-         dgT33wajhTp6LuyvcLCCLmaWfjcqyrWFeNGoRE4Z9jo8xKM3uV8Ln7TySL5Sayu2Phi/
-         CKcDlNFMJB/jLo5YJfFHG3ddmCxbnphX0cX02m8QhCB0wj74PvTzwZT6dfgsfGa4Ifd7
-         LKArTPgxe6+qp4c858Cv2K8dyq4w3zLgevVQc8ofZYFWTyfj4s7H/wHD9z0VlmHdFtfc
-         kbFKIxxlOpb710Iwlm4j0cV7/0XrQqopQhkGIPyvDFk10LMqlvP4KHcZo9yfACFIEj62
-         3CDw==
-X-Gm-Message-State: AOAM533T1DFx1QxW72LzQFoYujmzmHeAJvMxYukzKnxQgGUpmdtAquYc
-        xmE2THEF4z4syMS7qIGjZGtqyT+Adsqj9WbUhkcvNQ==
-X-Google-Smtp-Source: ABdhPJzBB62u5yYirteberd0CnVV5WELDHeZjWtcpEt+y1J7bjeHeVMwD2pW5t1aZ7XlloYssMx+zNSK8nHO+tpgRjU=
-X-Received: by 2002:a25:5143:: with SMTP id f64mr49828104ybb.520.1643906201370;
- Thu, 03 Feb 2022 08:36:41 -0800 (PST)
+        id S244419AbiBCQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:37:34 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:41184 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234433AbiBCQhd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:37:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EEdnBGZvqaQpfo8tguZMww3Zd/NVN+gqcVWHywSpMlU=; b=OainZRUfP+rJ4YLRUYs67ZGGlc
+        QWb+WFl8+g38zJkZAiahunkjAsCHh4IpWaHyK8jhL9D6aLcXfF4Mykw0452tMRElJrgcgWeN6y71m
+        fiPOy/tVtaDW8wMowXeh0/HKCMEy271HOBWcrrlaeZfYzKWeelXIHmK0J9Wzsg4Qh9K8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nFf6k-0048vh-UF; Thu, 03 Feb 2022 17:37:18 +0100
+Date:   Thu, 3 Feb 2022 17:37:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led
+ functions
+Message-ID: <YfwEvgerYddIUp1V@lunn.ch>
+References: <20210421055047.22858-1-ms@dev.tdt.de>
+ <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch>
+ <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220202235049.8051-1-samuel@sholland.org> <20220202235049.8051-4-samuel@sholland.org>
-In-Reply-To: <20220202235049.8051-4-samuel@sholland.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 3 Feb 2022 17:36:30 +0100
-Message-ID: <CACRpkdahv_0+TW-8eYT-_FjCN1-bJXU1xU+qKRPxMpeqsXRMaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] iio: accel: st_accel: Add support for Silan SC7A20
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Denis Ciocca <denis.ciocca@st.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 12:50 AM Samuel Holland <samuel@sholland.org> wrote:
+> Andrew,
+> 
+> I agree with the goal of having PHY drivers and dt-bindings in Linux
+> to configure everything but in the case I mention in the other thread
+> adding rgmii delay configuration which sets a default if a new dt
+> binding is missing is wrong in my opinion as it breaks backward
+> compatibility. If a new dt binding is missing then I feel that the
+> register fields those bindings act on should not be changed.
 
-> This chip appears to be register-compatible with the LIS2DH. The new
-> description is a copy of the LIS2DH's description with a different WAI
-> value.
->
-> Datasheet: http://linux-chenxing.org/silan/SC7A20-SilanMicroelectronics.p=
-df
-> Datasheet: http://www.siitek.com.cn/Upfiles/down/SC7A20=E8=AF=B4=E6=98=8E=
-=E4=B9=A6_0.92(=E6=99=BA=E8=83=BD=E7=A9=BF=E6=88=B4).pdf
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->
-> Changes in v2:
->  - Add a comment about the WAI value
->  - Update commit messages
+I would like that understand this specific case in more detail.  We
+have seen a few cases were the DT is broken, yet works. This is often
+caused by having a wrong phy-mode, which historically the PHY driver
+was ignoring. Then support for honouring the phy-mode was added to the
+PHY driver, and all the boards with broken DT files actually break.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+So it could be that is what has happened here. Or it could be the
+driver is plan wrong. If i understand correctly, you say it is adding
+a default delay of 2ns. That would be correct for a phy-mode of
+rgmii-id, but wrong for a phy-mode of rgmii.
 
-Yours,
-Linus Walleij
+> > LEDs are trickier. There is a slow on going effort to allow PHY LEDs
+> > to be configured as standard Linux LEDs. That should result in a DT
+> > binding which can be used to configure LEDs from DT.
+> 
+> Can you point me to something I can look at? PHY LED bindings don't at
+> all behave like normal LED's as they are blinked internally depending
+> on a large set of rules that differ per PHY.
+
+Yes, this is what is slowing the work done, agreeing on details like
+this, and how the user space API would actually work. In the end, i
+suspect a subset of LED modes will be supported, covering the common
+blink patterns.
+
+> Completely off topic, but due to the chip shortage we have had to
+> redesign many of our boards with different PHY's that now have
+> different bindings for RGMII delays so I have to add multiple PHY
+> configurations to DT's if I am going to support the use of PHY
+> drivers. What is your suggestion there? Using DT overlays I suppose is
+> the right approach.
+
+I would try to only use phy-mode, and avoid all PHY specific tweaks.
+So long as the track lengths don't change too much on your redesign,
+and are kept about the same length, the standard 2ns delay should
+work.
+
+	Andrew

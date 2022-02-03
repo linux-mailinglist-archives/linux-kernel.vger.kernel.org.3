@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E614A836B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB874A8377
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350353AbiBCMAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiBCMAH (ORCPT
+        id S1350375AbiBCMBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 07:01:32 -0500
+Received: from smtpbguseast2.qq.com ([54.204.34.130]:33861 "EHLO
+        smtpbguseast2.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229724AbiBCMBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:00:07 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E64C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 04:00:07 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id r8so4850334uaj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 04:00:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WadOTv4fHD97vmRjgv+dPh0onajRQzxP4bZOYDKu81U=;
-        b=jGNpQiapVrDLV2n99CgnSbZHZLbQI+3QZntc8nXorg1ZCMJHXzZ094DZYOciZDDdgU
-         zQKyxkSrWJi4aTReB8HO8pMpGpT4ehnMD8eT7EkIN7v7C31qE4vqebthlxj3Hu3kNcAY
-         xd/hj5Mu54sArNmb5DxZ4w0f0XXYPuqsOD3sgdu6Y1rbHZ8XIemR+7E3JNUVWiyxzuIA
-         NUQoR2Kp701TNkbI9/X4cOg9w/ZaEmo/8umouCQkXt8bX+459o4qFmPC5wy1/nmhiFEt
-         CiG4MYFpQFT0VIaWOFF6oEBDuXL0TjDNPve7MY1ixb8YPNh706B7+PU36YNJgmuaWCJL
-         PxDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WadOTv4fHD97vmRjgv+dPh0onajRQzxP4bZOYDKu81U=;
-        b=2aKC7xfjNZWSVVa0eJ3EZBjt9GWaEsQrJufVZiWlAS6StryQlvhA/pdGcKEtYzCBKJ
-         I2pLQ9pF0GCJxO71+qxu0ytShGqRnY5+PNk2G2STfmcVBB124Qc1VJAHjSep90sTTHAG
-         VC6Dyua7WoXIzT9JmAMEuKDBM6BBGFnJN1HU/WLkOXe2diTjmDpL7dZHNl/fxOt6KlqT
-         8cbiLregop2u/dFs9bUY9Gep0fyQd8hfPu/OcJe6Odtkf6AGTh9jh7xQGlXgM/fIG4LC
-         0BQ9nDvxtCPdjDKQF05FjJDTgt6TIGVV2zrBaXjGNoGcxcLwuD9uZRszwJbF9zni5u4r
-         hsDw==
-X-Gm-Message-State: AOAM530Da9PYDbjurjQY5p2/RUzpOFkwnqzfFG55/Q6/CEYyzxhER9Jb
-        Y7iZirjcRH3HdoBzSJgkD4lqD9f0PZuzcSkOxnKCNZwiOpI=
-X-Google-Smtp-Source: ABdhPJz4E7U8ZVySsxa2gqBXDIJGQIBwyT7Lr6pkjggNJbLInIIWkKQlgfxQP8Jw8BG7LPr0DBHqYE73+qyobJnmaXk=
-X-Received: by 2002:a67:b00e:: with SMTP id z14mr13142826vse.57.1643889606736;
- Thu, 03 Feb 2022 04:00:06 -0800 (PST)
+        Thu, 3 Feb 2022 07:01:31 -0500
+X-QQ-mid: bizesmtp9t1643889682tzvd3pmrb
+Received: from localhost.localdomain.localdoma (unknown [202.96.137.248])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 03 Feb 2022 20:00:42 +0800 (CST)
+X-QQ-SSF: 01400000008000C0M000000A0000000
+X-QQ-FEAT: Mx1dxJbW4IVte//7n6tjVzHo+e1xtN7io7frxiWOysPyN2n85VaiNT+PuqEHt
+        wIYNrjevUdMZNCeKMQECpLDi0Qlc0zr5zLC8Ys4XZan1eIBSIAR2YZpEFTWQ7pVfaMITGhg
+        kW9De0CSaeL1rL1YvsJkDRTOiSaAoeCz8D9tfvW/om3TGtxc/zK4pOWKDk/Fdd0odXQJfrm
+        rWnfev8qwyIbv+s/7e/eN8fMgEEcgZ829YY23WijoHr+ScGWrrl5WwrhVKecpmEHmxHFvZY
+        43sV7+pN2lIqzL4R7ebODQaUYtVWmoSLciLcYtMn+2BBnBGiWBgQMR1WxO0LyelZWI0j+HI
+        Y78gGwSjAuuLjcH0oc=
+X-QQ-GoodBg: 2
+From:   Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+Subject: [PATCH] mm/page_owner.c: record task name of process
+Date:   Thu,  3 Feb 2022 20:00:40 +0800
+Message-Id: <20220203120040.2338-1-caoyixuan2019@email.szu.edu.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220202024137.2516438-1-Liam.Howlett@oracle.com> <20220202024137.2516438-16-Liam.Howlett@oracle.com>
-In-Reply-To: <20220202024137.2516438-16-Liam.Howlett@oracle.com>
-From:   Mark Hemment <markhemm@googlemail.com>
-Date:   Thu, 3 Feb 2022 11:59:54 +0000
-Message-ID: <CANe_+Ui4tud5pnBx81qG-4V-pgO5XQX-rc9rXQWMCi6qqY5bew@mail.gmail.com>
-Subject: Re: [PATCH v5 15/70] kernel/fork: Use maple tree for dup_mmap()
- during forking
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign1
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 03:23, Liam Howlett <liam.howlett@oracle.com> wrote:
->
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
->
-> The maple tree was already tracking VMAs in this function by an earlier
-> commit, but the rbtree iterator was being used to iterate the list.
-> Change the iterator to use a maple tree native iterator and switch to
-> the maple tree advanced API to avoid multiple walks of the tree during
-> insert operations.  Unexport the now-unused vma_store() function.
->
-> We track whether we need to free the VMAs and tree nodes through RCU
-> (ie whether there have been multiple threads that can see the mm_struct
-> simultaneously; by pthread(), ptrace() or looking at /proc/$pid/maps).
-> This setting is sticky because it's too tricky to decide when it's safe
-> to exit RCU mode.
->
-> For performance reasons we bulk allocate the maple tree nodes.  The node
-> calculations are done internally to the tree and use the VMA count and
-> assume the worst-case node requirements.  The VM_DONT_COPY flag does
-> not allow for the most efficient copy method of the tree and so a bulk
-> loading algorithm is used.
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  include/linux/mm.h       |  2 --
->  include/linux/sched/mm.h | 13 +++++++++++++
->  kernel/fork.c            | 35 +++++++++++++++++++++++++++++------
->  3 files changed, 42 insertions(+), 8 deletions(-)
-....
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 51a7971651ef..8ea683fcefcd 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -377,6 +377,16 @@ void vm_area_free(struct vm_area_struct *vma)
->         kmem_cache_free(vm_area_cachep, vma);
->  }
->
-> +void mm_set_in_rcu(struct mm_struct *mm)
-> +{
-> +       if (!mt_in_rcu(&mm->mm_mt))
-> +               return;
-> +       mmap_write_lock(mm);
-> +       mm->mm_mt.ma_flags |= MT_FLAGS_USE_RCU;
-> +       mmap_write_unlock(mm);
-> +}
-> +EXPORT_SYMBOL(mm_set_in_rcu);
+I think in tracing page allocation behavior,
+It is useful to record the task name of the process.
 
-The mt_in_rcu() test looks wrong (inverted).
-mt_in_rcu() returns true only when MT_FLAGS_USE_RCU is set, so this
-flag will never set here.
-All callers of mm_set_in_rcu() check mt_in_rcu() so the test here
-could be removed.
+Although the current Page Owner has recorded the process ID,
+When the process exits,
+It is difficult to distinguish the specific function of this process,
+This brings some inconvenience to debugging memory problems.
 
-Cheers,
-Mark
+Therefore, add the task name information to the Page Owner,
+So that users can clearly understand the task name of the process.
+At the same time, with this information,
+We can use tools/vm/page_owner_sort.c,
+Provides more output modes for Page Owner.
+
+Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+---
+ mm/page_owner.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 99e360df9465..a8d666cd13ac 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -29,6 +29,7 @@ struct page_owner {
+ 	u64 ts_nsec;
+ 	u64 free_ts_nsec;
+ 	pid_t pid;
++	char task_name[TASK_COMM_LEN];
+ };
+ 
+ static bool page_owner_enabled = false;
+@@ -163,6 +164,7 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+ 		page_owner->gfp_mask = gfp_mask;
+ 		page_owner->last_migrate_reason = -1;
+ 		page_owner->pid = current->pid;
++		strcpy(page_owner->task_name, current->comm);
+ 		page_owner->ts_nsec = local_clock();
+ 		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
+ 		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
+@@ -229,6 +231,7 @@ void __folio_copy_owner(struct folio *newfolio, struct folio *old)
+ 		old_page_owner->last_migrate_reason;
+ 	new_page_owner->handle = old_page_owner->handle;
+ 	new_page_owner->pid = old_page_owner->pid;
++	strcpy(new_page_owner->task_name, old_page_owner->task_name);
+ 	new_page_owner->ts_nsec = old_page_owner->ts_nsec;
+ 	new_page_owner->free_ts_nsec = old_page_owner->ts_nsec;
+ 
+@@ -339,9 +342,10 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+ 		return -ENOMEM;
+ 
+ 	ret = snprintf(kbuf, count,
+-			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
++			"Page allocated via order %u, mask %#x(%pGg), pid %d, task_name [%s], ts %llu ns, free_ts %llu ns\n",
+ 			page_owner->order, page_owner->gfp_mask,
+ 			&page_owner->gfp_mask, page_owner->pid,
++			page_owner->task_name,
+ 			page_owner->ts_nsec, page_owner->free_ts_nsec);
+ 
+ 	if (ret >= count)
+@@ -415,9 +419,10 @@ void __dump_page_owner(const struct page *page)
+ 	else
+ 		pr_alert("page_owner tracks the page as freed\n");
+ 
+-	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, ts %llu, free_ts %llu\n",
++	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, task_name [%s], ts %llu, free_ts %llu\n",
+ 		 page_owner->order, migratetype_names[mt], gfp_mask, &gfp_mask,
+-		 page_owner->pid, page_owner->ts_nsec, page_owner->free_ts_nsec);
++		 page_owner->pid, page_owner->task_name,
++		 page_owner->ts_nsec, page_owner->free_ts_nsec);
+ 
+ 	handle = READ_ONCE(page_owner->handle);
+ 	if (!handle)
+@@ -629,3 +634,4 @@ static int __init pageowner_init(void)
+ 	return 0;
+ }
+ late_initcall(pageowner_init)
++
+-- 
+2.31.1
+
+
+

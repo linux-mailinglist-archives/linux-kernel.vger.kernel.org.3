@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FCA4A8FEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAC84A8FF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbiBCVaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S1355146AbiBCVap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 16:30:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344822AbiBCVaF (ORCPT
+        with ESMTP id S1355102AbiBCVac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:30:05 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3E4C06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:30:05 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id m10so6197938oie.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:30:05 -0800 (PST)
+        Thu, 3 Feb 2022 16:30:32 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1E9C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:30:31 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id l25so7487621wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:30:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=rkTzeavTVwFkxzAS4iEW6aIk8hmO+bZZIXQ3Z1hc49o=;
-        b=aosHpZuq8uiinuv5XH+lUVb1LGaBayOF8tU7fh9FmPgsKZi5XRDan352WhIptDRocn
-         sXinzmGW5mtd+mkDCJDQ8l5PU+P9VR7RHE4VaaF+PryB+vMkjSkf0vSB6YNnVv6Cjeo/
-         LylUwwNfj+kyop4E8j/uiVNNFsGaEIDmJuXf8=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=eLtxMu1DHbPYv+1+Wx6o1hY4eDgPaiS8O9Bropk6P00=;
+        b=jjqQp65RwA4C4mc/Rti9l3uCj4mwjs/uHYqOgjHGkKlkz2gTrMHZFVgvr5hKtddl5h
+         d3FXIeaog2lxw7qEA83v6yihnmz+9eJsO9inTJgrKSnXqZ2cbYz7YwsIV2DpBp64Rnz/
+         S0uyL72Z0I4CkJrhG+wOefosqiWkcsLh+JPJP+6ihcyKagrlWTrjCSGx9hdXMZjS6Ddu
+         2ORKQ6s8lpE/v7t724o3LKQe+w06DZGEBnuv92XYs50FMN41zE9tlJnRYGeoEWZMFfvR
+         vjzStaWrUdLzepgiNi35s/UJ6cHpXPDT5kzxmIAjmDtL3GdRh5SA8LxUeMTs8baDMR5A
+         zJiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=rkTzeavTVwFkxzAS4iEW6aIk8hmO+bZZIXQ3Z1hc49o=;
-        b=KR+B1f3fLlOkSkyyJxGKbeW2kg3O6oTobpZ5VRldjxMMk1vSOxJ0lnR0K+uzUHQXW+
-         JQHv7I2zC1y3M/CoV0YE7jpm/Ps0sVZ90koBuH61L2g1C0L5lQsOEn6K5r6+IgFVoe8U
-         Bbtu8iIHxez0aoNvzxMIFkqPt422DKbIJ06TnLlDbnDnypXjIWT38KVTPA6zIbobVxSF
-         qBz83yMi6CYryM7nrEnFByweO6cnNGMkLLAZBTTa027e2nipYNJvg5Ipv5/QHxF8Cixx
-         aZMxFjcb7g/Jhrhn4a1QFjI3GFaoxL/dQuVkt+HFE2VrJBlL90oQjkc76dKj2tQHST1A
-         dEMQ==
-X-Gm-Message-State: AOAM532LzXygc5fSEwES2+CgRmQSkNFkvrgKO5/kSDw6QywkBLMk/2aQ
-        FCXEiz6Z6Z/GZhLmMvtGGb9+XW87/+qIjx03j85NZQ==
-X-Google-Smtp-Source: ABdhPJwrU6oEtqZrhwLNPFXnJxYbf/FCpwiKJ1jVB9W6oPnpSgtkV35IBS7X/R4Rc8PXhe742p8eefh1QgM6qFcmFo0=
-X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr8710371oib.40.1643923804731;
- Thu, 03 Feb 2022 13:30:04 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Feb 2022 21:30:04 +0000
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=eLtxMu1DHbPYv+1+Wx6o1hY4eDgPaiS8O9Bropk6P00=;
+        b=TfC4fDqslWuq32nnz4rMz4U75Y4YzRsTX7yD+ajSCVkuEw2Q0g/yd+ilUkIPfqU4Iz
+         pq0yyqjSzghs2cMFGbPcqZsubFCgfrl4phKcUECjZfIsXpAE4J0cZbk9kF1uiJ199m90
+         7Dkzrv+yxUY3zO09bQNT4x3b8tx2hSreHuBXFybGdXGr6Iokdyi67Dqt8iuVHD7r8TF3
+         /6eC1PZdk0ZVbLDvylf/kXHySEb6SmhGBOU3HHph3NfsEQeoDkL0PFJ6JY7qkfBJpoZH
+         0+XbDXimvVYW/e3zYylF94Ozox+mkFIwjXQellpSQwXMMYXWJGt0ACDv/FSSvxp6ixdQ
+         w16Q==
+X-Gm-Message-State: AOAM530hb3pPY6Nm5enzQr9byJkxGVSAGF0zvJJk4IAqQw8claL4ZPkE
+        CniSei6lTA5hBvEftv4r2PDOzzgA2gPcfA==
+X-Google-Smtp-Source: ABdhPJwHtOk3wiYJFKk7sUHXuUR2ebt4vGP9JIISgADFGAnzeBo/VN70wErvywJhnD+BM0wGe++xmA==
+X-Received: by 2002:a5d:5344:: with SMTP id t4mr30658226wrv.311.1643923830346;
+        Thu, 03 Feb 2022 13:30:30 -0800 (PST)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id h8sm1945498wre.89.2022.02.03.13.30.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 13:30:29 -0800 (PST)
+Message-ID: <3e4c648f-0869-2e99-35d4-46c883ed2cdc@gmail.com>
+Date:   Thu, 3 Feb 2022 21:30:28 +0000
 MIME-Version: 1.0
-In-Reply-To: <20220202132301.v3.7.Ic84bb69c45be2fccf50e3bd17b845fe20eec624c@changeid>
-References: <20220202212348.1391534-1-dianders@chromium.org> <20220202132301.v3.7.Ic84bb69c45be2fccf50e3bd17b845fe20eec624c@changeid>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Feb 2022 21:30:04 +0000
-Message-ID: <CAE-0n507mWRJTNu2zG=nwXFfaPX3KBm6DKDQPD8HBsHGd1HhYA@mail.gmail.com>
-Subject: Re: [PATCH v3 07/14] arm64: dts: qcom: sc7280: Add edp_out port and
- HPD lines
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     pmaliset@codeaurora.org, mka@chromium.org,
-        quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        sibis@codeaurora.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] media: i2c: Fix pixel array positions in ov8865
+Content-Language: en-US
+From:   Daniel Scally <djrscally@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, paul.kocialkowski@bootlin.com,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+References: <20220203212303.633399-1-djrscally@gmail.com>
+In-Reply-To: <20220203212303.633399-1-djrscally@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2022-02-02 13:23:41)
-> Like dp_out, we should have defined edp_out in sc7280.dtsi so we don't
-> need to do this in the board files.
->
-> Like dp_hot_plug_det, we should define edp_hot_plug_det in
-> sc7280.dtsi.
->
-> We should set the default pinctrl for edp_hot_plug_det in
-> sc7280.dtsi. NOTE: this is _unlike_ the dp_hot_plug_det. It is
-> reasonable that in some boards the dedicated DP Hot Plug Detect will
-> not be hooked up in favor of Type C mechanisms. This is unlike eDP
-> where the Hot Plug Detect line (which functions as "panel ready" in
-> eDP) is highly likely to be used by boards.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+Sorry all, missed media...let me resend this.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+On 03/02/2022 21:23, Daniel Scally wrote:
+> The ov8865's datasheet gives the pixel array as 3296x2528, and the
+> active portion as the centre 3264x2448. This makes for a top offset
+> of 40 and a left offset of 16, not 32 and 80.
+>
+> Fixes: acd25e220921 ("media: i2c: Add .get_selection() support to ov8865")
+>
+> Reported-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> Signed-off-by: Daniel Scally <djrscally@gmail.com>
+> ---
+>  drivers/media/i2c/ov8865.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
+> index d9d016cfa9ac..53e21ae8e886 100644
+> --- a/drivers/media/i2c/ov8865.c
+> +++ b/drivers/media/i2c/ov8865.c
+> @@ -457,8 +457,8 @@
+>  
+>  #define OV8865_NATIVE_WIDTH			3296
+>  #define OV8865_NATIVE_HEIGHT			2528
+> -#define OV8865_ACTIVE_START_TOP			32
+> -#define OV8865_ACTIVE_START_LEFT		80
+> +#define OV8865_ACTIVE_START_TOP			40
+> +#define OV8865_ACTIVE_START_LEFT		16
+>  #define OV8865_ACTIVE_WIDTH			3264
+>  #define OV8865_ACTIVE_HEIGHT			2448
+>  

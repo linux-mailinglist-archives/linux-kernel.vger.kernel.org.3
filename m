@@ -2,176 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B924A82D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9864A82DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349894AbiBCLEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:04:44 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3328 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236576AbiBCLEn (ORCPT
+        id S1350124AbiBCLEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 06:04:52 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:11730 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349926AbiBCLEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 06:04:43 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 213AiCOh013287;
-        Thu, 3 Feb 2022 11:04:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BbPHxKoric5q4pnCkk+2NcaC2f0C46PrlPGRhayIQPg=;
- b=KoDbaFth/X6OZ5d1Od2Sn02UXI2/UzesyMFpSqv9p0lpmV+zpWmJgkgTeNhAlCkoG1fC
- 4w513HClOPgv8JWawuq0Lo9LcS2eNaJ6B0KRII/o4zhMIG0jvV34w/q1u1o89HwtkCfY
- e4bSE1VIE7Asa+mD/82+1Gu13GtC/3J3nf8z+PVtGiwH1/Q61jH4QGwjTxGxlrHGVZvQ
- jB3VWBFGhoQBKUVcgMKkCAbAOYijN3W3LmO2+7H9l3ER9PuqHACy8PyU/KRJOrrmSkxs
- gw5qJ947D4SWl4sF80qhu8hD4ck8AT5zHPoFc1ZEMq8mg2khPSDSdftInS2uxI3w4yVC sg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dyvexmuvw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Feb 2022 11:04:13 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2139qoGJ032495;
-        Thu, 3 Feb 2022 11:04:13 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3dyvexmuvf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Feb 2022 11:04:13 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 213B2i0L000440;
-        Thu, 3 Feb 2022 11:04:12 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02dal.us.ibm.com with ESMTP id 3dvw7c7nfx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Feb 2022 11:04:12 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 213B456W32965110
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Feb 2022 11:04:05 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 371EF28064;
-        Thu,  3 Feb 2022 11:04:05 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05AB928060;
-        Thu,  3 Feb 2022 11:03:59 +0000 (GMT)
-Received: from [9.65.240.79] (unknown [9.65.240.79])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Feb 2022 11:03:59 +0000 (GMT)
-Message-ID: <815ba487-a6c1-0daa-aead-a7f3a52df2a1@linux.ibm.com>
-Date:   Thu, 3 Feb 2022 13:03:58 +0200
+        Thu, 3 Feb 2022 06:04:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643886285; x=1675422285;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=B23bwCifTvnTSgm2vpuE0fXZNAIZiLoV40AZh39t7EE=;
+  b=NMJ3vsBjsr+/eppArlWQbCAVR078xGlpw9mWIBvkMUn039vYtAbpd33n
+   oC8dYoUl5ws3z5C5tcKdLTeshSpigWFqHJRsMhtbB9Ut40X2FfINDiCjN
+   di3IhMF3eLGBItkjOH4ySaMm+I22XT/C1pj+ZB1rKVnLquSwGFs3rv+/F
+   4=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 Feb 2022 03:04:44 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 03:04:44 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 3 Feb 2022 03:04:44 -0800
+Received: from [10.216.62.64] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 3 Feb 2022
+ 03:04:40 -0800
+Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
+ rx macros and external codecs
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <dianders@chromium.org>, <judyhsiao@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <rohitkr@codeaurora.org>,
+        <srinivas.kandagatla@linaro.org>
+CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1641208380-15510-1-git-send-email-quic_srivasam@quicinc.com>
+ <1641208380-15510-2-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n523iE-rkSKNvZaF8+qOezEQLo-hAhhMcRoHs9kVa0iLZg@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+Message-ID: <b21bf403-053f-bd21-94ff-5c5cfb6eaacf@quicinc.com>
+Date:   Thu, 3 Feb 2022 16:34:37 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v7 4/5] efi: Load efi_secret module if EFI secret area is
- populated
-Content-Language: en-US
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
- <20220201124413.1093099-5-dovmurik@linux.ibm.com>
- <20220202084723.ushasiekb3cxami4@sirius.home.kraxel.org>
- <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
- <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
- <cb548aa2-1ac3-46e7-91e4-f57a4fd63754@linux.ibm.com>
- <20220203061615.wwembqmmpmg77iyj@sirius.home.kraxel.org>
-From:   Dov Murik <dovmurik@linux.ibm.com>
-In-Reply-To: <20220203061615.wwembqmmpmg77iyj@sirius.home.kraxel.org>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAE-0n523iE-rkSKNvZaF8+qOezEQLo-hAhhMcRoHs9kVa0iLZg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: trqepfqvgRVlBjWR4INAX6e7ekuRrq62
-X-Proofpoint-GUID: 4inEO94yDJbCDJmeSB782KtEUjr6ZfJ4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-03_03,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 phishscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202030070
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 03/02/2022 8:16, Gerd Hoffmann wrote:
->   Hi,
-> 
->>> I think the module should fail noisily.  See above for autoload.  In
->>> case the module is loaded (either manually by the admin, or because
->>> efi.coco_secret != EFI_INVALID_TABLE_ADDR) and it can't actually load
->>> the secrets we want know why ...
+On 1/6/2022 1:45 AM, Stephen Boyd wrote:
+Thanks for Your time Stephen!!!
+> Quoting Srinivasa Rao Mandadapu (2022-01-03 03:12:58)
+>> SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
+>> codecs like WCD938x, max98360a using soundwire masters and i2s bus.
+>> Add these nodes for sc7280 based platforms audio use case.
+>> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
 >>
->> Note that the AmdSev build of OVMF always publishes
->> LINUX_EFI_COCO_SECRET_TABLE_GUID in the EFI table.  Even when
->> LAUNCH_SECRET was not executed.  In such cases the secret area will be
->> empty.
-> 
-> Hmm, ok.  Why?  I assume the secret area is filled by the host and ovmf
-> doesn't even look at it?
-> 
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280-crd.dts  |   4 ++
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  52 ++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 113 +++++++++++++++++++++++++++++++
+>>   3 files changed, 169 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> index cd2755c..035cca9 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> @@ -72,6 +72,10 @@ ap_ts_pen_1v8: &i2c13 {
+>>          pins = "gpio51";
+>>   };
+>>
+>> +&wcd938x {
+>> +       qcom,us-euro-gpios = <&tlmm 81 0>;
+> Why is this a qcom prefix vs. a standard foo-gpios property?
+Okay. will remove qcom.
+>
+>> +};
+>> +
+>>   &tlmm {
+>>          tp_int_odl: tp-int-odl {
+>>                  pins = "gpio7";
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> index ddeb508..94614c9 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> @@ -636,3 +636,55 @@
+>>                  bias-pull-up;
+>>          };
+>>   };
+>> +
+>> +&swr0 {
+>> +       wcd_rx: wcd938x-rx{
+> space before { please
+>
+> Also, are these speakers or amps or something like that? I'd expect the
+> node name to be more generic.
+Okay. Will change accordingly.
+>
+>> +               compatible = "sdw20217010d00";
+>> +               reg = <0 4>;
+>> +               #sound-dai-cells = <1>;
+>> +               qcom,rx-port-mapping = <1 2 3 4 5>;
+>> +       };
+>> +};
+>> +
+>> +&swr1 {
+>> +       wcd_tx: wcd938x-tx{
+>> +               compatible = "sdw20217010d00";
+>> +               reg = <0 3>;
+>> +               #sound-dai-cells = <1>;
+>> +               qcom,tx-port-mapping = <1 2 3 4>;
+>> +       };
+>> +};
+>> +
+>> +&soc {
+>> +       max98360a: audio-codec-0 {
+> This shouldn't be a child of the soc node.
+Okay. Will move it to root node.
+>
+>> +               compatible = "maxim,max98360a";
+>> +               pinctrl-names = "default";
+>> +               pinctrl-0 = <&amp_en>;
+>> +               sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
+>> +               #sound-dai-cells = <0>;
+>> +       };
+>> +
+>> +       wcd938x: codec {
+> Same comment.
+Okay.
+>
+>> +               compatible = "qcom,wcd9380-codec";
+>> +               #sound-dai-cells = <1>;
+>> +
+>> +               reset-gpios = <&tlmm 83 0>;
+>> +
+>> +               qcom,rx-device = <&wcd_rx>;
+>> +               qcom,tx-device = <&wcd_tx>;
+>> +
+>> +               vdd-rxtx-supply = <&vreg_l18b_1p8>;
+>> +               vdd-io-supply = <&vreg_l18b_1p8>;
+>> +               vdd-buck-supply = <&vreg_l17b_1p8>;
+>> +               vdd-mic-bias-supply = <&vreg_bob>;
+>> +
+>> +               qcom,micbias1-microvolt = <1800000>;
+>> +               qcom,micbias2-microvolt = <1800000>;
+>> +               qcom,micbias3-microvolt = <1800000>;
+>> +               qcom,micbias4-microvolt = <1800000>;
+>> +
+>> +               qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000 500000 500000 500000>;
+>> +               qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
+>> +               qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
+>> +       };
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 6233f2c..c0d9de3 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1744,6 +1744,119 @@
+>>                          #clock-cells = <1>;
+>>                  };
+>>
+>> +               rxmacro: rxmacro@3200000 {
+> What is rxmacro? Maybe 'soundwire'?
+No. it's not soundwire. it's digital codec macro internal to LPASS.
+>
+>> +                       pinctrl-names = "default";
+>> +                       pinctrl-0 = <&rx_swr_active>;
+>> +                       compatible = "qcom,sc7280-lpass-rx-macro";
+>> +                       reg = <0 0x3200000 0 0x1000>;
+>> +
+>> +                       clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
+>> +                                       <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
+>> +                                       <&vamacro>;
+>> +                       clock-names = "mclk", "npl", "fsgen";
+>> +                       #clock-cells = <0>;
+>> +                       clock-frequency = <9600000>;
+>> +                       clock-output-names = "mclk";
+>> +                       #sound-dai-cells = <1>;
+>> +               };
+>> +
+>> +               /* rx macro */
+>> +               swr0: soundwire-controller@3210000 {
+> Is 'controller' redundant? i.e. soundwire is always a controller? Maybe
+> 'soundwire' is better
+Okay. will remove controller.
+>
+>> +                       reg = <0 0x3210000 0 0x2000>;
+>> +                       compatible = "qcom,soundwire-v1.6.0";
+>> +                       interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
+>> +                       clocks = <&rxmacro>;
+>> +                       clock-names = "iface";
+>> +                       label = "RX";
+>> +
+>> +                       qcom,din-ports = <0>;
+>> +                       qcom,dout-ports = <5>;
+>> +                       qcom,swrm-hctl-reg = <0x032a90a0>;
+>> +
+>> +                       qcom,ports-word-length =        /bits/ 8 <0x01 0x07 0x04 0xFF 0xFF>;
+>> +                       qcom,ports-sinterval-low =      /bits/ 8 <0x03 0x3F 0x1F 0x03 0x03>;
+>> +                       qcom,ports-offset1 =            /bits/ 8 <0x00 0x00 0x0B 0x01 0x01>;
+>> +                       qcom,ports-offset2 =            /bits/ 8 <0x00 0x00 0x0B 0x00 0x00>;
+>> +                       qcom,ports-lane-control =       /bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
+>> +                       qcom,ports-block-pack-mode =    /bits/ 8 <0xFF 0x00 0x01 0xFF 0xFF>;
+>> +                       qcom,ports-hstart =             /bits/ 8 <0xFF 0x03 0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-hstop =              /bits/ 8 <0xFF 0x06 0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-block-group-count =  /bits/ 8 <0xFF 0xFF 0xFF 0xFF 0x00>;
+> Why is this bit stuff in DT vs. in the device driver?
 
-Exactly.  OVMF just reserves this area, and puts its address+size in the
-EFI config table.  It doesn't care about its format and usage.
+This is soundwire ports configuration and is followed in 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sm8250.dtsi?h=v5.17-rc2
 
-There are currently two "users" for the actual data in this memory area:
-
-1. grub's efisecret module (which reads the disk passphrase from an
-entry in the secret area)
-2. linux's efi_secret module (which we're discussing here)
-
-
-
->> If we keep only the 'efi.coco_secret != EFI_INVALID_TABLE_ADDR' check,
->> we'll get errors from efi_secret for every VM launch that doesn't
->> undergo LAUNCH_SECRET.  I don't think that's good.
-> 
-> Well, if that is a common case the module could either print nothing or
-> log KERN_INFO level instead of KERN_ERROR.
-> 
-
-What if the user doesn't inject a secret and doesn't include the
-efi_secret module at all in the initrd?  request_module("efi_secret")
-will fail.
-
-I can ignore the error code of request_module("efi_secret") but that
-feels bad.
-
-
-
->> If we *do* want to check that the area starts with
->> EFI_SECRET_TABLE_HEADER_GUID (like I think we should), we need all the
->> checks before that, like checking that the area is big enough, and that
->> all the memremap()s succeed -- before actually comparing the
->> header_guid.  The checks are basically prerequisites for calling
->> efi_guidcmp() safely.
-> 
-> It is still not fully clear to me why you want do that check twice.
-> 
-
-I want to load the module only if secrets were injected by the Guest
-Owner.
-
-Again, I'm open to ideas on how to de-duplicate these early checks, if
-that's important.
-
-
--Dov
+>
+>> +
+>> +                       #sound-dai-cells = <1>;
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +
+>> +               txmacro: txmacro@3220000 {
+>> +                       pinctrl-names = "default";
+>> +                       pinctrl-0 = <&tx_swr_active>;
+>> +                       compatible = "qcom,sc7280-lpass-tx-macro";
+>> +                       reg = <0 0x3220000 0 0x1000>;
+>> +
+>> +                       clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
+>> +                                        <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
+>> +                                        <&vamacro>;
+> Please align the clocks here so the < starts on the same column.
+Okay.
+>
+>> +                       clock-names = "mclk", "npl", "fsgen";
+>> +
+>> +                       #clock-cells = <0>;
+>> +                       clock-frequency = <9600000>;
+>> +                       clock-output-names = "mclk";
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <2>;
+>> +                       #sound-dai-cells = <1>;
+>> +               };
+>> +
+>> +               /* tx macro */
+> Do we need these comments? Please remove them as they're practically
+> useless.
+Okay. Will remove it.
+>
+>> +               swr1: soundwire-controller@3230000 {
+>> +                       reg = <0 0x3230000 0 0x2000>;
+>> +                       compatible = "qcom,soundwire-v1.6.0";
+>> +
+>> +                       interrupts-extended =
+>> +                                       <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
+>> +                                       <&pdc 130 IRQ_TYPE_LEVEL_HIGH>;
+>> +                       interrupt-names = "swr_master_irq", "swr_wake_irq";
+>> +                       clocks = <&txmacro>;
+>> +                       clock-names = "iface";
+>> +                       label = "TX";
+>> +
+>> +                       qcom,din-ports = <3>;
+>> +                       qcom,dout-ports = <0>;
+>> +                       qcom,swrm-hctl-reg = <0x032a90a8>;
+> This looks like some common register location for soundwire oops bits.
+> Is it another device? Or maybe it's a common register base that needs to
+> be a syscon?
+We are in discussion on this, how to handle it appropriately. Will 
+change accordingly after design concluded.
+>
+>> +
+>> +                       qcom,ports-sinterval-low =      /bits/ 8 <0x01 0x03 0x03>;
+>> +                       qcom,ports-offset1 =            /bits/ 8 <0x01 0x00 0x02>;
+>> +                       qcom,ports-offset2 =            /bits/ 8 <0x00 0x00 0x00>;
+>> +                       qcom,ports-hstart =             /bits/ 8 <0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-hstop =              /bits/ 8 <0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-word-length =        /bits/ 8 <0xFF 0x0 0xFF>;
+>> +                       qcom,ports-block-pack-mode =    /bits/ 8 <0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-block-group-count =  /bits/ 8 <0xFF 0xFF 0xFF>;
+>> +                       qcom,ports-lane-control =       /bits/ 8 <0x00 0x01 0x00>;
+>> +                       qcom,port-offset = <1>;
+>> +
+>> +                       #sound-dai-cells = <1>;
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <0>;
+>> +               };
+>> +
+>> +               vamacro: codec@3370000 {
+>> +                       compatible = "qcom,sc7280-lpass-va-macro";
+>> +                       pinctrl-0 = <&dmic01_active>;
+>> +                       pinctrl-names = "default";
+>> +
+>> +                       vdd-micb-supply = <&vreg_bob>;
+> The supplies need to be set in the board file, no the soc file as they
+> can be different depending on what the hardware engineer wires to the
+> pins on the SoC.
+Okay. Will move it to board specific file.
+>
+>> +                       reg = <0 0x3370000 0 0x1000>;
+>> +                       clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
+>> +                                       <&lpass_audiocc LPASS_AUDIO_CC_RX_MCLK_CLK>;
+>> +                       clock-names = "mclk", "macro";
+>> +
+>> +                       #clock-cells = <0>;
+>> +                       clock-frequency = <9600000>;
+>> +                       clock-output-names = "fsgen";
+>> +                       #sound-dai-cells = <1>;
+>> +               };
+>> +
+>>                  lpass_tlmm: pinctrl@33c0000 {
+>>                          compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+>>                          reg = <0 0x33c0000 0x0 0x20000>,
+>> --
+>> 2.7.4
+>>

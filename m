@@ -2,95 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70684A88E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA954A88EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352412AbiBCQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352386AbiBCQoh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:44:37 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FDEC061714;
-        Thu,  3 Feb 2022 08:44:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jThIhFNBrb3xj2YQLkczkGqkTy9wIvQP7gVhgnzkrew=; b=zGqOR7+LqSrG510WGhf1Ch1m+Q
-        zInXDUP+4zUsUrFPitgFSW+BwbHex8XmIlJT7thj0wp4BGrUyfHA+/mkPSu8CAYR2a8B7LsJpIVbA
-        N5gpuO+O7H3tPq8CUi8kGBhgqdRTkcgxmXICWE+dL+up2T1R+KeuuXYuzT7Gp4Cuf1mw3+s6E46yj
-        lg6bKHZlj4VFjSRnTYgs2sGXT/CoQbquXe3QK9Wwygp0lxg2M8kzhI/PcsZALiYg8Eqq511/Xxd+m
-        yInasAcEDOvhjUF3etd1bOFnYK37Zl3SlsnaKMYrH5FZyOWqqY69AUQdLoYSsrGcGv+5TW1HIoyo+
-        JgXhnVbQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57016)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nFfDf-0002s5-AV; Thu, 03 Feb 2022 16:44:27 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nFfDc-00049q-6H; Thu, 03 Feb 2022 16:44:24 +0000
-Date:   Thu, 3 Feb 2022 16:44:24 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yannick Vignon <yannick.vignon@oss.nxp.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sebastien.laveze@oss.nxp.com, Vladimir Oltean <olteanv@gmail.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, mingkai.hu@nxp.com,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Yannick Vignon <yannick.vignon@nxp.com>
-Subject: Re: [PATCH net] net: stmmac: ensure PTP time register reads are
- consistent
-Message-ID: <YfwGaD06/3W1UFQ+@shell.armlinux.org.uk>
-References: <20220203160025.750632-1-yannick.vignon@oss.nxp.com>
- <YfwCnV2TV8fznZ33@shell.armlinux.org.uk>
- <13dc6f72-8ef4-6990-1c67-2b92c6894e87@oss.nxp.com>
+        id S1352423AbiBCQpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:45:52 -0500
+Received: from mail-dm6nam12on2059.outbound.protection.outlook.com ([40.107.243.59]:48385
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229579AbiBCQpt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:45:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fcf5L1O482YC3KSKA/SfKptdTPGBmUfrboKW6UtJmxxvv8Smo668yZw9M/RUP6snev+tLsuUrbTI0cjX4S1l5vTvk62t0jSK0XGLoBjL7TZEhgoIRtfkU45FaF+Km3lKoWQoJU2UrpaYaF0HvsvLX7Py6F6y/4oRo/yy8zl80YTjLmOwW3L8ycuZGiQ+dpg9A95R6yY2v14sAJXy8i+A0ZNzwm4iSnZI0v1rRkjwqK7eLe7wj0p64RJgIKk9hKnU5FNALqLKigeUXCklK7G7zLuhhaSKyDX57IZWdUIBHgv+m4LdEzwEj9WsGnED1mPZFUewriYIQuk36T7n0I69Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EPXd+aIf5W7FbaQ4J9y/rSH7rfR0DoPweK6GLzu7um8=;
+ b=Bz/+ALyBCbK3Z+y0G5+xv76Zmyv30mCoLWLPu4aZUz4P/Lbd3mnLNsgbdI3lRq3H0n3RdAj8RXUvx4jqErwSCd8KPi5XA1wPtkSq6ZYrvP27v0+1RhqbIA/9iN8fkmqSYWUkPOdB7j5sJS4nGRLy2IycRDYqz4i2snZBKVw4rxDm0Aw4kc+y+69m5GxpqaJH2bqADKehTId87G/7bXo/eAPfPu3wcfewH6IqZpWsNFcI1+XZBnvMi6/MeXWy30rgSpQCn/H6QpFLEEA23G6/3Z7Dp5po9Xy5GNetyzarRnWgPQ9GB31zG+AXKqkk/g49PVHXZ5vsJa4/4yqo+OnbNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EPXd+aIf5W7FbaQ4J9y/rSH7rfR0DoPweK6GLzu7um8=;
+ b=rzR7QM5VK0950mR1JsEySZMYMYsy5n/cWzCAUAf6sMPUAfYkF/PNNX42ZvQFUl2MUiK7jW7hB329WLVcSEJHdYTI28eTXQTRaHxsukFQjDN2UX+KwrpCZ8Jl+/KL+Ny0LM0NFOZ3gX6HYGZNptWvLpUOXaa3QAic0VNhtCu0MJU=
+Received: from DM5PR17CA0070.namprd17.prod.outlook.com (2603:10b6:3:13f::32)
+ by CH0PR12MB5329.namprd12.prod.outlook.com (2603:10b6:610:d4::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
+ 2022 16:45:47 +0000
+Received: from DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:13f:cafe::16) by DM5PR17CA0070.outlook.office365.com
+ (2603:10b6:3:13f::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14 via Frontend
+ Transport; Thu, 3 Feb 2022 16:45:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT059.mail.protection.outlook.com (10.13.172.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Thu, 3 Feb 2022 16:45:45 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Feb
+ 2022 10:45:45 -0600
+Date:   Thu, 3 Feb 2022 10:44:43 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
+        <marcorr@google.com>, <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Venu Busireddy <venu.busireddy@oracle.com>
+Subject: Re: [PATCH v9 23/43] KVM: x86: Move lookup of indexed CPUID leafs to
+ helper
+Message-ID: <20220203164443.byaxr4fu2vlvh4d2@amd.com>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-24-brijesh.singh@amd.com>
+ <Yfvx0Rq8Tydyr/RO@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <13dc6f72-8ef4-6990-1c67-2b92c6894e87@oss.nxp.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <Yfvx0Rq8Tydyr/RO@zn.tnic>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 59963bf5-d951-4c45-ae39-08d9e734a007
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5329:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB53290F5DF085F8B35EFEAE6195289@CH0PR12MB5329.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mwdPCPrfJvBHrozr0Sgb8ZBehs1F9mj9KPTTrxlIBoWwL9YkyTWedSNff+iPpVNgaQe0meGpBcjEEQSDZ/rG5ALntGbmIy6UJysP5g8opBsfLszbNueIB3NhxxImAEipnR2V7FvF3vlwn9kxhZ1NgZ9o+QUgHv8UWL4qYeNCrJ4y14oczbMxwxgH4ldqNDmf0n/QhdBFcn8o/gflchrT2bNU1lHe/djtbPwT+cD3j5QworbLn9NXPdeZDfIU1pEnKT+kWvcoMn8fc6EKOhUm8SFwlgRGu4uYltwM3xBTuzVUQuCnaGPFNn6SKllpmhReu1L9Y72xT9a2Yxj61PJL7xaoDP8oY70cfDqN6ZQ1zb9CplB7y+T4ceQgU0t9Hs7M4jAMRIbbjAbtFPd/KSS2UBn1XWa29PuHIz+7kn2m2M6l73hl+ArB5a1VwaaIpqE4BdulAI9GCKYq9eYy1c4QYB/YwP9GfwTFxSTJpDxR5yI7azFXvfvCJnxeCzDK6/5yVB0njtE0uBhx22LASpkjrYbQdKpVCFa+kzg0HsUWiHeaiMc3L/B+urlQmYduFDTyvbVWwnWAF1iANUV9kkuwhsWEppvQIl2VZ0ptzqWLOmRYYzMH4H5VtVVmAPZgbFwz3F2Kwl4Li/GyS6vBbuqUgKSHYpMXk6wi1sQ4KVjvYl3j+VDNu1cp0yYby4xGSd72w9BFx1dnedb4wY/FCNJaWLAhMRF5pPHh6vf/GKJk9W/MCESyPvQAH4b/zeeJYBNdH5MaHsLLbxff5fmfRg+V8bjnZVRVMfsOh8VMO+X5uxfnM7RxZVMZK2HtNPy/SvXP4BC3iXeMHwE91NIPXSH7Ew==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(508600001)(2906002)(36860700001)(6916009)(40460700003)(82310400004)(45080400002)(44832011)(86362001)(54906003)(7416002)(7406005)(5660300002)(36756003)(83380400001)(186003)(47076005)(316002)(8676002)(1076003)(70586007)(2616005)(8936002)(70206006)(16526019)(81166007)(426003)(336012)(4326008)(26005)(966005)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 16:45:45.7559
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59963bf5-d951-4c45-ae39-08d9e734a007
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5329
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 05:38:10PM +0100, Yannick Vignon wrote:
-> On 2/3/2022 5:28 PM, Russell King (Oracle) wrote:
-> > On Thu, Feb 03, 2022 at 05:00:25PM +0100, Yannick Vignon wrote:
-> > > From: Yannick Vignon <yannick.vignon@nxp.com>
-> > > 
-> > > Even if protected from preemption and interrupts, a small time window
-> > > remains when the 2 register reads could return inconsistent values,
-> > > each time the "seconds" register changes. This could lead to an about
-> > > 1-second error in the reported time.
+On Thu, Feb 03, 2022 at 04:16:33PM +0100, Borislav Petkov wrote:
+> On Fri, Jan 28, 2022 at 11:17:44AM -0600, Brijesh Singh wrote:
+> > From: Michael Roth <michael.roth@amd.com>
 > > 
-> > Have you checked whether the hardware protects against this (i.o.w. the
-> > hardware latches the PTP_STSR value when PTP_STNSR is read, or vice
-> > versa? Several PTP devices I've looked at do this to allow consistent
-> > reading.
+> > Determining which CPUID leafs have significant ECX/index values is
+> > also needed by guest kernel code when doing SEV-SNP-validated CPUID
+> > lookups. Move this to common code to keep future updates in sync.
 > > 
+> > Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
+> > Signed-off-by: Michael Roth <michael.roth@amd.com>
+> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> > ---
+> >  arch/x86/include/asm/cpuid.h | 38 ++++++++++++++++++++++++++++++++++++
+> >  arch/x86/kvm/cpuid.c         | 19 ++----------------
+> >  2 files changed, 40 insertions(+), 17 deletions(-)
+> >  create mode 100644 arch/x86/include/asm/cpuid.h
+> > 
+> > diff --git a/arch/x86/include/asm/cpuid.h b/arch/x86/include/asm/cpuid.h
+> > new file mode 100644
+> > index 000000000000..00408aded67c
+> > --- /dev/null
+> > +++ b/arch/x86/include/asm/cpuid.h
+> > @@ -0,0 +1,38 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Kernel-based Virtual Machine driver for Linux cpuid support routines
+> > + *
+> > + * derived from arch/x86/kvm/x86.c
+> > + * derived from arch/x86/kvm/cpuid.c
+> > + *
+> > + * Copyright 2011 Red Hat, Inc. and/or its affiliates.
+> > + * Copyright IBM Corporation, 2008
+> > + */
 > 
-> It doesn't. I was able to observe inconsistent values doing reads in either
-> order, and we had already observed the issue with that same IP on another
-> device (Cortex-M based, not running Linux). It's not easy to reproduce, the
-> time window is small, but it's there.
+> I have no clue what you're trying to achieve by copying the copyright of
+> the file this comes from. As dhansen properly points out, those lines
+> in that function come from other folks/companies too so why even bother
+> with this?
 
-Okay, thanks.
+I think Dave's main concern was that I'd added an AMD copyright banner
+to a new file that was mostly derived from acpi.c. I thought we had some
+agreement on simply adopting the file-wide copyright banner of whatever
+source file the new one was derived from, since dropping an existing
+copyright seemed similarly in bad taste, but if it's sufficient to lean
+on git for getting a more accurate picture of copyright sources then
+that sounds good to me and I'll adopt that for the next spin if there
+are no objections.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+  https://lore.kernel.org/linux-efi/16afaa00-06a9-dc58-6c59-3d1dfb819009@amd.com/T/#m88a765b6090ec794872f73bf0ee6642fd39db947
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+(In the case of acpi.c it happened to not have a file-wide copyright banner
+so things were a little more straightforward for the acpi.c->efi.c movement)
+
+> 
+> git history holds the correct and full copyright anyway...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7CMichael.Roth%40amd.com%7C189a90d4aa3e459f7d7908d9e7282f9c%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637794982059320697%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=T95Les9sx71RFXYAImDag9%2FclmImsnjMbzPkOvIsbbY%3D&amp;reserved=0

@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C7E4A7D59
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14234A7D4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348810AbiBCBLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:11:08 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:40036 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348666AbiBCBLF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:11:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5hB4xZfLGfPF68sFnaphimiyN3Dvoyj649Ifdg6NzMk=; b=2650jDKWUISCHWTrw+2qSb29hf
-        Eg0kIWNamRCUEsMC3LfeWZNitulODz/nCXrDMPmXFPMUE72VH61hPSx5uwNVoOZnrOvRJe9UHfori
-        IRhH/NKpS6Y8uLmfet+KJgbH4rzTYuyCthmjEIni6imLGrzK8nnQnLlUntVfmlaQkEJ0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nFQdR-0042dQ-Py; Thu, 03 Feb 2022 02:10:05 +0100
-Date:   Thu, 3 Feb 2022 02:10:05 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <YfsrbcgPb5de3Bvw@lunn.ch>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
+        id S1348661AbiBCBKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230029AbiBCBKx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 20:10:53 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7604C061714;
+        Wed,  2 Feb 2022 17:10:52 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id m9so1613839oia.12;
+        Wed, 02 Feb 2022 17:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a3Qhn4eAu2Il3cIcOwXujSLNjbmBj+pQdEvnqK4x3Zc=;
+        b=nPE0AJIWxu/3upqr5txI2VOUL4BjAC+1PUALQuJh0xUJhMxFpmXNZvFLpSScOZdmcI
+         qGJNIuDJMsf/tvDzp5v2UpcPGIxYti8JEc8BvugK7ePDwtKIedqATkCalAT2eIU5Gl3+
+         4voA2/dggPY+37ELHbo3Zleh/xwUCzs9xyQPRYEQh4BUEfbEc979qpC0FOX/mPwHkaLY
+         TJ3t4/tM4/a9Z5KuKjANzCEMG7mEcrSqfstxqSlbgHXjBFFOLKdYu5ofWv5CNiZZNkuG
+         DpFb1z0mFlCaisGxqs6+jSF9jZkZQ5sjmpgTxAFMqz+CWJS/F/U88UOO6GJpeBSEMIkL
+         QwBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a3Qhn4eAu2Il3cIcOwXujSLNjbmBj+pQdEvnqK4x3Zc=;
+        b=RuYCMwG0ABO2VaJkhDCWb8OChyAf3QJcGCeVvNdtVztsHIRYY6Zzq6Aopt+Zfe6YsB
+         gyJbnSwPwHh5vm7MooVMwKHc1plb6TApOSmB5uIOF8NKU2msHGAL6TqquCw8TWJT31ts
+         sPtjUHD7/FEyZLOGkPV+/eTQOINpSQA9lJa5M+kyePVxjhCJdWeziuOtoDtImSqgazbX
+         pIa4oopk/HpIzFTpuIebjbADFD7/46DokJNhWAlrjPD22kV5tcJULlaOIj9rDhRdKY8d
+         dq3MSm6vy6J2O2x71pK1vBfdjK2OLr3ODVP6+N8wTmv6ySw1J8GTsqNWEtY8MwdCVaAE
+         OKnQ==
+X-Gm-Message-State: AOAM532iK/RnNx7BIuocLz12zP/oGrV1DcBYHz4Amw8XX2I1Tv4X1yfQ
+        iafkFdCepXo/RAaMJlCAGYk7oyJC9OqPOg==
+X-Google-Smtp-Source: ABdhPJyjN33e4o0Zy3SjGTxDrxD1Q/VHo6inAaOniTodZNiauKvTpoDBmUCsEeFzNsq0Lx3difjwow==
+X-Received: by 2002:a05:6808:1782:: with SMTP id bg2mr6385022oib.235.1643850651826;
+        Wed, 02 Feb 2022 17:10:51 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bf15sm3485395oib.32.2022.02.02.17.10.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Feb 2022 17:10:51 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
+Date:   Wed, 2 Feb 2022 17:10:49 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [ASUS EC Sensors v8 0/3]
+Content-Language: en-US
+To:     Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
+ <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  .../bindings/display/hpe,gxp-thumbnail.txt    |  21 +
->  .../devicetree/bindings/gpio/hpe,gxp-gpio.txt |  16 +
->  .../devicetree/bindings/i2c/hpe,gxp-i2c.txt   |  19 +
->  .../bindings/ipmi/hpegxp-kcs-bmc-cfg.txt      |  13 +
->  .../bindings/ipmi/hpegxp-kcs-bmc.txt          |  21 +
+On 2/2/22 15:58, Eugene Shalygin wrote:
+> On Mon, 24 Jan 2022 at 02:57, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+>>
+>> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
+>> an implementation that does not use WMI but queries the embedded
+>> controller directly.
+> 
+> Günter, I would like to add support for one more board model. What
+> should I do? Another version update or could you, please, merge this
+> patchset already?
+> 
+> Thank you,
+> Eugene
 
-Hi Nick
+I was waiting for someone to send me a Tested-by: for the series,
+since you dropped the previous feedback. Presumably that means that
+the changes from previous versions warrants another round of testing
+and/or review.
 
-In addiiton to the other feedback also given, for new bindings you
-should be using yaml, not txt. You then gain validation of the
-bindings.
-
-	Andrew
-
+Guenter

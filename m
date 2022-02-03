@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DD54A879C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C8A4A87A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351790AbiBCPXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:23:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26155 "EHLO
+        id S235142AbiBCPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:23:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43583 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231181AbiBCPXT (ORCPT
+        by vger.kernel.org with ESMTP id S1351856AbiBCPXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:23:19 -0500
+        Thu, 3 Feb 2022 10:23:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643901798;
+        s=mimecast20190719; t=1643901810;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FyaICBNYXFogXQpGuOXvlvkFpwrbiEbZFhG8GrBvphk=;
-        b=F07RxNi0SjZh2ANuhrls5fm7sqOcOObbOCVsHcZ95Q5jH3BBjPgA6FPl/+3s+92Qyfkhqx
-        c9hDRHu6BaJxG9SoFXv7ol9CFvF6iqFAs23yl0RXRuFFiElCsUI3nX6agPAkUz9QuCErLi
-        IoQaq5lEXCMNnthE8WNQMNM7Q+kwbPs=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hSeQIZ/CtCE+d0vB+jizfse1LNxVSYoWhLdejmi7nC0=;
+        b=RrP7Oz/LWFR9TSQrEfVSKMwBJWTgkrMqccWJRXCBVmkGCxiOF7P8V2SiualnRvbCvyrdqm
+        IlVWY9xWOPqvY3AvGyoEVpfbc5drckvKtw3MMaAJ4pcgyo9/LCRb+8PPrN7pt4fC50J0Ls
+        m37j2OlDVtubtWzXZv1V0KIxm3HqQ5I=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-8-gxxQFHh2MraLoSyhY3zw3w-1; Thu, 03 Feb 2022 10:23:17 -0500
-X-MC-Unique: gxxQFHh2MraLoSyhY3zw3w-1
-Received: by mail-qt1-f197.google.com with SMTP id w25-20020ac84d19000000b002d2966d66a8so2165621qtv.18
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=FyaICBNYXFogXQpGuOXvlvkFpwrbiEbZFhG8GrBvphk=;
-        b=zJuBpvf4nc2nSOj27pkR1FQONi4B1V9fn7JTtcMLqEoKJ28mteIpyZdKwjYyinygre
-         KKlxOlSEjjiY0APPqlvMI8bb8qBKaZj8vwU7APf1fkomSkbEElxedyfoe37YE1w934Yj
-         r0RCSeH9E7TY0FgK7dGy+41kRe39VwFFcMfls7ALFcx3ME+fDKB3o5c7hbwNl6rwL72m
-         33PJfPs6rI4jfqoMowe6iXdcbliaSy2wcSud8dBG4DGuOr7YFzvvG6A8jkefhjyE9F9v
-         Z43LLp+u+nC+uykCkcGdss+nVwkZ8Y25u5LEg5r8gXnehWV7RMlSk5BSqRniWA1vv8bl
-         MTqg==
-X-Gm-Message-State: AOAM532KkQ6l3UDqRSYJPyijFCubsTTF4cjjfwChu1VRn42IOrYvZ6mL
-        fr/l80CyIiDrULBWquxbyImgrNir50jBgyNpQhpffrTRSb/oUasoMNu7oNz21g/TNfuDGNHfDV5
-        BL2qFs2QutnpLEfEi2E6f+LXP
-X-Received: by 2002:a05:6214:767:: with SMTP id f7mr31309315qvz.32.1643901797238;
-        Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzKoZK62v8/DrZws5sOsM70Uxo6BwdmPV1YiNBPk723GMaQhV5IIhjTr/Mj5MVVcyOlC4yv6g==
-X-Received: by 2002:a05:6214:767:: with SMTP id f7mr31309297qvz.32.1643901797012;
-        Thu, 03 Feb 2022 07:23:17 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id w22sm9746568qtk.7.2022.02.03.07.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 07:23:16 -0800 (PST)
-From:   trix@redhat.com
-To:     airlied@redhat.com, tzimmermann@suse.de, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        maxime@cerno.tech
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/ast: fix using freed memory
-Date:   Thu,  3 Feb 2022 07:23:05 -0800
-Message-Id: <20220203152305.1846862-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+ us-mta-158-7Tkyf_ElOHip_BSdOCUVyA-1; Thu, 03 Feb 2022 10:23:27 -0500
+X-MC-Unique: 7Tkyf_ElOHip_BSdOCUVyA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A065583DB83;
+        Thu,  3 Feb 2022 15:23:25 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.210])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8373384A3C;
+        Thu,  3 Feb 2022 15:23:24 +0000 (UTC)
+Date:   Thu, 3 Feb 2022 10:23:22 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
+Message-ID: <Yfvzaudy0hOduSMc@lorien.usersys.redhat.com>
+References: <20220203033103.773030-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203033103.773030-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Wed, Feb 02, 2022 at 10:31:03PM -0500 Waiman Long wrote:
+> It was found that a "suspicious RCU usage" lockdep warning was issued
+> with the rcu_read_lock() call in update_sibling_cpumasks().  It is
+> because the update_cpumasks_hier() function may sleep. So we have
+> to release the RCU lock, call update_cpumasks_hier() and reacquire
+> it afterward.
+> 
+> Also add a percpu_rwsem_assert_held() in update_sibling_cpumasks()
+> instead of stating that in the comment.
+> 
+> Fixes: 4716909cc5c5 ("cpuset: Track cpusets that use parent's effective_cpus")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  kernel/cgroup/cpuset.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index dc653ab26e50..b147acece984 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -1522,10 +1522,15 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+>  	struct cpuset *sibling;
+>  	struct cgroup_subsys_state *pos_css;
+>  
+> +	percpu_rwsem_assert_held(&cpuset_rwsem);
+> +
+>  	/*
+>  	 * Check all its siblings and call update_cpumasks_hier()
+>  	 * if their use_parent_ecpus flag is set in order for them
+>  	 * to use the right effective_cpus value.
+> +	 *
+> +	 * The update_cpumasks_hier() function may sleep. So we have to
+> +	 * release the RCU read lock before calling it.
+>  	 */
+>  	rcu_read_lock();
+>  	cpuset_for_each_child(sibling, pos_css, parent) {
+> @@ -1533,8 +1538,13 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+>  			continue;
+>  		if (!sibling->use_parent_ecpus)
+>  			continue;
+> +		if (!css_tryget_online(&sibling->css))
+> +			continue;
+>  
+> +		rcu_read_unlock();
+>  		update_cpumasks_hier(sibling, tmp);
+> +		rcu_read_lock();
+> +		css_put(&sibling->css);
+>  	}
+>  	rcu_read_unlock();
+>  }
+> -- 
+> 2.27.0
+> 
 
-clang static analysis reports this problem
-ast_mode.c:1235:3: warning: Use of memory after it is freed
-  drm_connector_update_edid_property(&ast_connector->base, edid);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This looks good. Thanks Waiman.
 
-The second condition on
+Tested-by: Phil Auld <pauld@redhat.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
 
-  if (!flags && ast_connector->i2c)
 
-Means that the edid is not always set.  If the previous block
-fails the freed edid value will be used.  So set edid to NULL
-after freeing.
-
-Fixes: 55dc449a7c60 ("drm/ast: Handle failed I2C initialization gracefully")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/ast/ast_mode.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index ab52efb15670e..9131dc8a1a2fc 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -1224,10 +1224,12 @@ static int ast_get_modes(struct drm_connector *connector)
- 			return -ENOMEM;
- 
- 		flags = ast_dp501_read_edid(connector->dev, (u8 *)edid);
--		if (flags)
-+		if (flags) {
- 			ast->dp501_maxclk = ast_get_dp501_max_clk(connector->dev);
--		else
-+		} else {
- 			kfree(edid);
-+			edid = NULL;
-+		}
- 	}
- 	if (!flags && ast_connector->i2c)
- 		edid = drm_get_edid(connector, &ast_connector->i2c->adapter);
+Cheers,
+Phil
 -- 
-2.26.3
 

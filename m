@@ -2,149 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1896F4A9013
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8E54A9018
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355299AbiBCVlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S1355330AbiBCVmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 16:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355169AbiBCVk7 (ORCPT
+        with ESMTP id S235128AbiBCVmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:40:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB486C061714;
-        Thu,  3 Feb 2022 13:40:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F700B835AE;
-        Thu,  3 Feb 2022 21:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7D7C340F0;
-        Thu,  3 Feb 2022 21:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643924456;
-        bh=kFckNU1ZizTo6xCiEOr5zJellumfmnajUCSZP4HD5Oc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WE1Cke65LfqrirHXfptPY6xOvi4enWXoi0rucjD4XbRpUWX3joZ+Po/rRQpDbCTKs
-         8rwMDw4lT8PwXeOqkK1EsGEkmy+XLddce/JArzQyAOrsF495dWcsk+MCuZQSqnwFhd
-         hrJN9zDRD5YBo3AK3WUprhKjVa9NflTaQbFvGhSHfzBLDbDNoyCdnLGjblRcgzYqnS
-         6/kUQ3sZh4Ydf6nj5lJsvXFxR+mrJGFHh4P7y/h4ONf2tcIit0cputMhg3tYSpD7gw
-         P6SQ55MytaKfymYfkAdrABe140V4s9oGJsuxlE2AWe3pzdW3xa+ZW7YntOZ+IsGy9H
-         kiD7i4UWH5JJA==
-Received: by mail-ej1-f46.google.com with SMTP id j2so12672684ejk.6;
-        Thu, 03 Feb 2022 13:40:56 -0800 (PST)
-X-Gm-Message-State: AOAM533vKA9aj88xAiVmX8S5QNcREFm1COJ8Xu7qLH1P3q/ZV4q9ipp5
-        0Ql4xod7MtnHCc/npewb3ugDiNkHGLNUEQc9Gw==
-X-Google-Smtp-Source: ABdhPJyVD5aUcVjFLsHVEhlkVnpzGqjhjJUUAmPUcPuSXmQIPKMo74wBtJ3E3QwaERBvdayXJrtV8GD2WyBC7VqzoJY=
-X-Received: by 2002:a17:907:7f1a:: with SMTP id qf26mr25008004ejc.20.1643924454599;
- Thu, 03 Feb 2022 13:40:54 -0800 (PST)
+        Thu, 3 Feb 2022 16:42:06 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606D8C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:42:06 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso3669877otv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:42:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=1BxE8YrTuPNLTocALV6/dOU/1D5W0XfJUbvbeKGiPBo=;
+        b=I9qwWeSwwd9Ufz80dvJWBpyNEbwUjhW9GdJMAXk1Nhrun9bh0tqq5mhj+AZWC8THbH
+         kVDXVjlvQo+5HCNVYEVxTvRRPKRUwt6wE3j7EI6kdNfK/SFpkMwiZB6uaw5cR3G+/xJB
+         RbeiLr1nzW2EwVeppn2XLmELRCDM7Q9av0WAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=1BxE8YrTuPNLTocALV6/dOU/1D5W0XfJUbvbeKGiPBo=;
+        b=Ef8/VUlVmJL2Id/kl0sNRMUsCzgnAZb5vpdJqVqScbYKbE1QCHEUNlH9Hiqcdz/kwn
+         tA+E08Y26Oy/JfhcCa1TK3XZDTJxivWsDiwYcQaiUZtDRVdQI+uf/icxZxvHezwV5Qf7
+         bfNcd94N/0vY8x7+fzH6nKuA4BpyXaTVnCQIlTuVbie2M47CT3NdObPaB7jW/2n2QLP/
+         xx/qSQWiOORjHI2AN1aLtbvQOWI1MZd8reJkYWPO5k6b2FbKjw67PeZVY2y6TM/UPlWt
+         Dux6B9pqKSL6ye5sTQfHjVAuDLBeck49bStwLH0r2Za2Z4KMl+So4/N1i6TNhbB4T0or
+         j1Mg==
+X-Gm-Message-State: AOAM533j6ZDBrNaHtR6KP1ceWOedYvW3BvMq6eg/iADbx+GB7w6AxZ7Y
+        NtaYooxS8xnZNjBRoWKl/Q9dwRhAq+ilDrHf53mteg==
+X-Google-Smtp-Source: ABdhPJyDxej66/Vt63TI6nQJctzlFybAxj0ayifCcZGw+L0kXIomsk8EMooLGggnX21HzTuDw9+EZ5yGVUvwNda0wVg=
+X-Received: by 2002:a9d:6f06:: with SMTP id n6mr39642otq.159.1643924525682;
+ Thu, 03 Feb 2022 13:42:05 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 3 Feb 2022 21:42:05 +0000
 MIME-Version: 1.0
-References: <20220203211150.2912192-1-frowand.list@gmail.com>
-In-Reply-To: <20220203211150.2912192-1-frowand.list@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 3 Feb 2022 15:40:42 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
-Message-ID: <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] of: unittest: print pass messages at same loglevel as fail
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220202132301.v3.9.I5f367dcce8107f2186b2aad4aef0dfcfafa034b9@changeid>
+References: <20220202212348.1391534-1-dianders@chromium.org> <20220202132301.v3.9.I5f367dcce8107f2186b2aad4aef0dfcfafa034b9@changeid>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 3 Feb 2022 21:42:05 +0000
+Message-ID: <CAE-0n51N4wB7aTRbZR3zh3hjz56vdkFNwOSuKjU7n9gd_JDcvA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/14] arm64: dts: qcom: sc7280: Disable pull from pcie1_clkreq
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     pmaliset@codeaurora.org, mka@chromium.org,
+        quic_rjendra@quicinc.com,
+        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        sibis@codeaurora.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 3:12 PM <frowand.list@gmail.com> wrote:
->
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> Printing the devicetree unittest pass message for each passed test
-> creates much console verbosity.  The existing pass messages are
-> printed at loglevel KERN_DEBUG so they will not print by default.
->
-> Change default to print the pass messages at the same loglevel as
-> the fail messages.
->
-> The test community expects either a pass or a fail message for each
-> test in a test suite.  The messages are typically post-processed to
-> report pass/fail results.
->
-> Suppressing printing the pass message for each individual test is
-> available via the kernel command line parameter unittest.hide_pass.
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
->  drivers/of/unittest.c                           | 17 ++++++++++++++++-
->  2 files changed, 20 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f5a27f067db9..045455f9b7e1 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5997,6 +5997,10 @@
->                         Note that genuine overcurrent events won't be
->                         reported either.
->
-> +       unittest.hide_pass
+Quoting Douglas Anderson (2022-02-02 13:23:43)
+> I believe that the PCIe clkreq pin is an output. That means we
+> shouldn't have a pull enabled for it. Turn it off.
 
-Can we rename the module name to include 'dt' so we're not taking a
-generic name.
+It sounds like it's a request from the PCI device to the PCI phy that
+the clk should be on. I googled pcie clkreq open drain and this pdf[1]
+says
 
-> +                       Disable printing individual drivers/of/unittest test
-> +                       pass messages.
-> +
->         unknown_nmi_panic
->                         [X86] Cause panic on unknown NMI.
->
-> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> index 70992103c07d..2cfbdc6b29ac 100644
-> --- a/drivers/of/unittest.c
-> +++ b/drivers/of/unittest.c
-> @@ -12,6 +12,7 @@
->  #include <linux/errno.h>
->  #include <linux/hashtable.h>
->  #include <linux/libfdt.h>
-> +#include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_address.h>
->  #include <linux/of_fdt.h>
-> @@ -32,6 +33,19 @@
->
->  #include "of_private.h"
->
-> +MODULE_LICENSE("GPL v2");
-> +static bool hide_pass;
-> +
-> +static int __init hide_pass_setup(char *str)
-> +{
-> +       hide_pass = true;
-> +       return 0;
-> +}
-> +
-> +early_param("hide_pass", hide_pass_setup);
-> +module_param(hide_pass, bool, 0);
-> +MODULE_PARM_DESC(hide_pass, "Disable printing individual of unittest pass messages");
-> +
->  static struct unittest_results {
->         int passed;
->         int failed;
-> @@ -44,7 +58,8 @@ static struct unittest_results {
->                 pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
->         } else { \
->                 unittest_results.passed++; \
-> -               pr_debug("pass %s():%i\n", __func__, __LINE__); \
-> +               if (!hide_pass) \
-> +                       pr_err("pass %s():%i\n", __func__, __LINE__); \
+"The CLKREQ# signal is an open drain, active low signal that is driven
+low by the PCI Express M.2 add-I Card function to request that the PCI
+Express reference clock be available (active clock state) in order to
+allow the PCI Express interface to send/receive data"
 
-Would 'PASS' be better here to align with FAIL?
+so presumably if there isn't an external pull on the signal the open
+drain feature will not work and the PCIe device won't be able to drive
+it low.
 
-If we make this info level, then you can filter with dmesg and also
-seems to be aligned with what kunit does.
-
-
-Rob
+[1] https://advdownload.advantech.com/productfile/PIS/96FD80-P512-LIS/Product%20-%20Datasheet/96FD80-P512-LIS_datasheet20180110154919.pdf

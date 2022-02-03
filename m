@@ -2,96 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14234A7D4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CB44A7D5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348661AbiBCBKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S1348666AbiBCBL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiBCBKx (ORCPT
+        with ESMTP id S1347916AbiBCBLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:10:53 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7604C061714;
-        Wed,  2 Feb 2022 17:10:52 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id m9so1613839oia.12;
-        Wed, 02 Feb 2022 17:10:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a3Qhn4eAu2Il3cIcOwXujSLNjbmBj+pQdEvnqK4x3Zc=;
-        b=nPE0AJIWxu/3upqr5txI2VOUL4BjAC+1PUALQuJh0xUJhMxFpmXNZvFLpSScOZdmcI
-         qGJNIuDJMsf/tvDzp5v2UpcPGIxYti8JEc8BvugK7ePDwtKIedqATkCalAT2eIU5Gl3+
-         4voA2/dggPY+37ELHbo3Zleh/xwUCzs9xyQPRYEQh4BUEfbEc979qpC0FOX/mPwHkaLY
-         TJ3t4/tM4/a9Z5KuKjANzCEMG7mEcrSqfstxqSlbgHXjBFFOLKdYu5ofWv5CNiZZNkuG
-         DpFb1z0mFlCaisGxqs6+jSF9jZkZQ5sjmpgTxAFMqz+CWJS/F/U88UOO6GJpeBSEMIkL
-         QwBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a3Qhn4eAu2Il3cIcOwXujSLNjbmBj+pQdEvnqK4x3Zc=;
-        b=RuYCMwG0ABO2VaJkhDCWb8OChyAf3QJcGCeVvNdtVztsHIRYY6Zzq6Aopt+Zfe6YsB
-         gyJbnSwPwHh5vm7MooVMwKHc1plb6TApOSmB5uIOF8NKU2msHGAL6TqquCw8TWJT31ts
-         sPtjUHD7/FEyZLOGkPV+/eTQOINpSQA9lJa5M+kyePVxjhCJdWeziuOtoDtImSqgazbX
-         pIa4oopk/HpIzFTpuIebjbADFD7/46DokJNhWAlrjPD22kV5tcJULlaOIj9rDhRdKY8d
-         dq3MSm6vy6J2O2x71pK1vBfdjK2OLr3ODVP6+N8wTmv6ySw1J8GTsqNWEtY8MwdCVaAE
-         OKnQ==
-X-Gm-Message-State: AOAM532iK/RnNx7BIuocLz12zP/oGrV1DcBYHz4Amw8XX2I1Tv4X1yfQ
-        iafkFdCepXo/RAaMJlCAGYk7oyJC9OqPOg==
-X-Google-Smtp-Source: ABdhPJyjN33e4o0Zy3SjGTxDrxD1Q/VHo6inAaOniTodZNiauKvTpoDBmUCsEeFzNsq0Lx3difjwow==
-X-Received: by 2002:a05:6808:1782:: with SMTP id bg2mr6385022oib.235.1643850651826;
-        Wed, 02 Feb 2022 17:10:51 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bf15sm3485395oib.32.2022.02.02.17.10.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 17:10:51 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
-Date:   Wed, 2 Feb 2022 17:10:49 -0800
+        Wed, 2 Feb 2022 20:11:24 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7FFC061714;
+        Wed,  2 Feb 2022 17:11:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hOhBEfGKJL5dh/rxk/8eoA7ifF1eXVxecJDpKir0EBg=; b=WbqtMNLydw8158tplU3bFDJ3z6
+        Lbswcon7/7iW3KzzgNBMWBDSzH7m0equSARWFZNekgjXa+0pRMQKVeVQkAXSrTYfH5iRCE2M+Q/1c
+        +YhLpXx6VcjD7fCM3X3tVQvAlKWDn5K6KhK7tlzpE48HGH9BiWJPs2QWZljsakjZ8rQaIrYO/GPr8
+        i5tOsis+fpqQreFeksBrJFYW/VYoBT0XxKqdj+FJC1Qxh5wt4RhkOS8VXbG6dcyFYzCiGLyItNeSf
+        ugIbEdyeky+QIRKGf76aTPl6OZUnV+3gTqsMkscQRnLlQdJ8TKsRb4Uof0ZdoDd8J7au6RCQ+534x
+        L4XaPScg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFQee-00HHqw-AI; Thu, 03 Feb 2022 01:11:20 +0000
+Date:   Wed, 2 Feb 2022 17:11:20 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Tejun Heo <tj@kernel.org>, Aaron Tomlin <atomlin@redhat.com>
+Cc:     Igor Pylypiv <ipylypiv@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Changyuan Lyu <changyuanl@google.com>
+Subject: Re: [PATCH] Revert "module, async: async_synchronize_full() on
+ module init iff async is used"
+Message-ID: <YfsruBT19o3j0KD2@bombadil.infradead.org>
+References: <20220127233953.2185045-1-ipylypiv@google.com>
+ <YflxP28HlVrrNBU2@slm.duckdns.org>
+ <Yfly0P4e84373mGF@slm.duckdns.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [ASUS EC Sensors v8 0/3]
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
- <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yfly0P4e84373mGF@slm.duckdns.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 15:58, Eugene Shalygin wrote:
-> On Mon, 24 Jan 2022 at 02:57, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
->>
->> This patchset replaces the HWMON asus_wmi_ec_sensors driver with
->> an implementation that does not use WMI but queries the embedded
->> controller directly.
+On Tue, Feb 01, 2022 at 07:50:08AM -1000, Tejun Heo wrote:
+> On Tue, Feb 01, 2022 at 07:43:27AM -1000, Tejun Heo wrote:
+> > That's quite a walk down the memory lane and I agree with your analysis. The
+> > PF_USED_ASYNC is redundant for correctness with the removal of synchrnous
+> > loading from iosched path and the WARN_ON guarantees that nothing in kernel
+> > is creating a similar situation.
+> > 
+> > Acked-by: Tejun Heo <tj@kernel.org>
 > 
-> Günter, I would like to add support for one more board model. What
-> should I do? Another version update or could you, please, merge this
-> patchset already?
-> 
-> Thank you,
-> Eugene
+> BTW, I can route this through workqueue tree but -mm or going to Linus's
+> tree directly might be a better option. Any opinions?
 
-I was waiting for someone to send me a Tested-by: for the series,
-since you dropped the previous feedback. Presumably that means that
-the changes from previous versions warrants another round of testing
-and/or review.
+FWIW, although I was not working on modules when the reverted commit was
+merged, my take on this is concern for a regression, much more than
+others. However I do agree that async probe can help for any slowdown,
+and the idea was that folks would eventually strive slowly to make more
+and more modules default to async probe as they can verify that's fine.
 
-Guenter
+With that said,
+
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+
+And I'd prefer this go through Linus' tree since this is a fix and
+can be merged already. That would help with Aaron's kernel/module.c
+refactor work (no functional changes) too as that will soon slice and
+dice that to a kernel/module/*.c files.
+
+ Luis

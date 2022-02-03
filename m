@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F824A8D35
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5291D4A8D36
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354041AbiBCU2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:28:13 -0500
-Received: from mga02.intel.com ([134.134.136.20]:26035 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234566AbiBCU2K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:28:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643920090; x=1675456090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tB1HUyQO+nYJafkdVgFOWJU/qrAWAD/qIqDemUlXcmw=;
-  b=Ig+Fydl95U4qgkPd5rGKioFwlq97gvZ4JcmbGpzhtvw2GV2emKikCQR7
-   //zY9uJvAniyuYd3CcOfuBIZyrSwxMkBHnYdHUxWTP/4oBESXD916Qb4E
-   57PuRATvrFN2R/VE6e9hlHuCr8ykUjPZU9AQyak/ol1PNNJbyY98WNquo
-   8odWnwLkswQVhn9DnbgIXdY2C0jIw84gFhwlXAeYX6aOn9yfE9y12W48S
-   JCo3F36ViBxZlG5oXvYAgOUa8RNuXJALL50lsUrN6qawg7GKC7z2ugIEw
-   oYroElvuox5qSNQ3+od49kfTpDawkBEKGNPcNRZIdyn1+Iiz2q/vCQMCI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="235646203"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="235646203"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:28:10 -0800
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="524069910"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:28:10 -0800
-Date:   Thu, 3 Feb 2022 12:28:10 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V6 01/10] PCI: Add vendor ID for the PCI SIG
-Message-ID: <20220203202810.GX785175@iweiny-DESK2.sc.intel.com>
-Mail-Followup-To: Bjorn Helgaas <helgaas@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20220201071952.900068-2-ira.weiny@intel.com>
- <20220203171112.GA103601@bhelgaas>
+        id S1354048AbiBCU24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234566AbiBCU2z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 15:28:55 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BB3C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:28:54 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id t7so5562136ljc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 12:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dE4PlMp2a1dru6Yvr00TjP4LGifoJOnJbdvY7D0qQXE=;
+        b=izHSx7DC4nrqxIgxZRJkLP9jOC0nX6OfOCw+aiU4VxfU9p5iz1d7bXgrw5YhlDziGm
+         AD6Zm0kby2e8DxyVhgQ8XNP0oOpOYLl92qCaXWrYGTPukz9i49rNYFd/t1e9gR5SlE2y
+         uS3F4L4tKzV42KA7Lr2MPHcS4xw2HI0EFg3MQJhbiqQMYaGbpq0jCm0tKZSM+Zx+tHCg
+         Zof8dEsghHqoIZUdw92oCH5W9rejr813ucYe6ddVV715SkDVYUCHFkc3wiPfJ9BsfsHv
+         X9Xu+5i6cAArxarL7kIkWKLSBOQ9zY3kePqnlfv/rOjQEjQTdjukJLT+Kb+RjMtUptJu
+         uyFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dE4PlMp2a1dru6Yvr00TjP4LGifoJOnJbdvY7D0qQXE=;
+        b=WMB2uhXnA2ojTPrap+UgyexbtJK6dOaprNxSgHhkU4qeRPu9odGYE2A6XyvMjhsR8L
+         whWOGHbcoIop+fOJtik0mrmHeAau1ET4su+elSxpEtyEbmDNuzsELSJ3CRxRYI+sRx1y
+         dwEC5akY9FqIqTArydt773o2zENtrkO5dW59b9Ar8XgpHAuUdZqKQC8GAsrlO/p6OPq7
+         +0MbN1EVqLEd0FZ+t6XOs/l5bMqPUGQpYKREDbllA5AMbzmHebgPCikH0Cr2tRNjlIpI
+         uW3vG7ZwuAWyM+w0F2G0dPs4uDndmHVsZiX6wlW/qM+VAoik0BZTZg5vg7zGZirRnBt7
+         v/Tw==
+X-Gm-Message-State: AOAM530ddUyKMHOY9lUlisP2LuRyaKgf8qpcl+i3hgu84D6CZfQrO+iU
+        Bemuv4ev7b+9vHyv9N8TgOGwekYhlTcXJNt9JJJMYg==
+X-Google-Smtp-Source: ABdhPJy0aTO74XJaMQm8cnUoj9YZULLzzNoEu5Fotpi4riNes6buUASDKHj9PbVaIvqx9IzWIEvDToQ7m/JIp7ytPXg=
+X-Received: by 2002:a05:651c:3c7:: with SMTP id f7mr19348599ljp.62.1643920132893;
+ Thu, 03 Feb 2022 12:28:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203171112.GA103601@bhelgaas>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+References: <20220203173307.1033257-1-keescook@chromium.org> <20220203173307.1033257-4-keescook@chromium.org>
+In-Reply-To: <20220203173307.1033257-4-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Feb 2022 12:28:41 -0800
+Message-ID: <CAKwvOdm7LUUotbk+mQbzXR6=UC+oEBNtq_mQbCUt0arqAbw43Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] Compiler Attributes: Add __diagnose_as for Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        George Burgess IV <gbiv@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 11:11:12AM -0600, Bjorn Helgaas wrote:
-> On Mon, Jan 31, 2022 at 11:19:43PM -0800, ira.weiny@intel.com wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > This ID is used in DOE headers to identify protocols that are defined
-> > within the PCI Express Base Specification.
-> > 
-> > Specified in Table 7-x2 of the Data Object Exchange ECN (approved 12 March
-> > 2020) available from https://members.pcisig.com/wg/PCI-SIG/document/14143
-> 
-> Please update this citation to PCIe r6.0, sec 6.30.1.1, table 6-32.
+On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Clang will perform various compile-time diagnostics on uses of various
+> functions (e.g. simple bounds-checking on strcpy(), etc). These
+> diagnostics can be assigned to other functions (for example, new
+> implementations of the string functions under CONFIG_FORTIFY_SOURCE)
+> using the "diagnose_as_builtin" attribute. This allows those functions
+> to retain their compile-time diagnostic warnings.
+>
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Done.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  include/linux/compiler_attributes.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index dc3bf2a6e1c9..df9c7e5e8818 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -100,6 +100,19 @@
+>  # define __copy(symbol)
+>  #endif
+>
+> +/*
+> + * Optional: not supported by gcc
+> + * Optional: only supported since clang >= 14.0
+> + * Optional: not supported by icc
+> + *
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#diagnose_as_builtin
+> + */
+> +#if __has_attribute(__diagnose_as_builtin__)
+> +# define __diagnose_as(builtin...)     __attribute__((__diagnose_as_builtin__(builtin)))
+> +#else
+> +# define __diagnose_as(builtin...)
+> +#endif
+> +
+>  /*
+>   * Don't. Just don't. See commit 771c035372a0 ("deprecate the '__deprecated'
+>   * attribute warnings entirely and for good") for more information.
+> --
+> 2.30.2
+>
+
+
+-- 
 Thanks,
-Ira
-
-> 
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > ---
-> >  include/linux/pci_ids.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> > index 011f2f1ea5bb..849f514cd7db 100644
-> > --- a/include/linux/pci_ids.h
-> > +++ b/include/linux/pci_ids.h
-> > @@ -149,6 +149,7 @@
-> >  #define PCI_CLASS_OTHERS		0xff
-> >  
-> >  /* Vendors and devices.  Sort key: vendor first, device next. */
-> > +#define PCI_VENDOR_ID_PCI_SIG		0x0001
-> >  
-> >  #define PCI_VENDOR_ID_LOONGSON		0x0014
-> >  
-> > -- 
-> > 2.31.1
-> > 
+~Nick Desaulniers

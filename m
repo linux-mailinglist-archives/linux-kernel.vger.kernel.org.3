@@ -2,54 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4B94A824D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68A54A8250
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbiBCK2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 05:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiBCK2x (ORCPT
+        id S1349450AbiBCKaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:30:03 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:34640 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231725AbiBCKaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:28:53 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A0A3C061714;
-        Thu,  3 Feb 2022 02:28:53 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id DCAE592009C; Thu,  3 Feb 2022 11:28:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id D684B92009B;
-        Thu,  3 Feb 2022 10:28:50 +0000 (GMT)
-Date:   Thu, 3 Feb 2022 10:28:50 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Gleixner <tglx@linutronix.de>
-cc:     Nikolai Zhubr <zhubr.2@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@kernel.org>,
-        Michal Necasek <mnecasek@yahoo.com>, x86@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] x86/PCI: Improve $PIR and add $IRT PIRQ routing
- support
-In-Reply-To: <87sft1vano.ffs@tglx>
-Message-ID: <alpine.DEB.2.21.2202031028220.34636@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2201021821480.56863@angie.orcam.me.uk> <87sft1vano.ffs@tglx>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 3 Feb 2022 05:30:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643884201; x=1675420201;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1TXPyy/kpZBNxO1tbtGx3iBoVnJzfJ227qS4/tBvr18=;
+  b=LYJZ6XT+Hd0/9mScnCjCfZWzcX34xsA+MSAoIuY4EvOvv5CRs4tkBQLP
+   FL96IaQCZLClIyzDu0AJffAkQAEKYzkHqOOXP/TUapxTC6+zV9yCuTCxY
+   s4H70GI58T3ny3RYgoBa08eRILQxTSQ1vo1vEs2iANe0tTWPwo+tBICuv
+   yKKwaPKU8eamOoyXHsHNDlGAjkD/yerc4s1QnAHZZeVlCFEZDl2Y16TNo
+   4DUKZ6i/H/Imlpj30bp+Lqf6XlLqosDYFHabP/HszoGRr5HSCoS4frNVe
+   nlF5/kMiCIXAXQsj9KniYAXovTTtL/HF5iK4CIkb78ywm28gtxvKMUfm/
+   g==;
+IronPort-SDR: KptEahQXKMdnpFose7f1Df66KQBgN5k2e7W95KLW+AC4ubFgizza4MgTI+t5MrZ24ksmbfM/w1
+ F68uLGKNQG6XHcStLBz+aPNh7uL5GEAtdkYyqVjYOmE6ca+EP42zwUSWue4JN9rPA7DHGLuugo
+ LJWgr4dp/Z4NBtlHxGRml6/x9DVELeVMXtxm5h0XiHG2fnTs+oQVQUTAej+OccO7oxIxNY0QWj
+ hLS8s1OkI606jg6a4WaC/Rkg81utatMXOWKT7J/cKPt1f1yyrd9D7I3RdG4n0Ydag2ut8pLOzP
+ xwO4ms0GBCABQaEFHUvGAKYw
+X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
+   d="scan'208";a="84547385"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Feb 2022 03:30:00 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 3 Feb 2022 03:30:01 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 3 Feb 2022 03:29:59 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>
+Subject: [PATCH net] net: sparx5: Fix get_stat64 crash in tcpdump
+Date:   Thu, 3 Feb 2022 11:29:00 +0100
+Message-ID: <20220203102900.528987-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022, Thomas Gleixner wrote:
+This problem was found with Sparx5 when the tcpdump tool requests the
+do_get_stats64 (sparx5_get_stats64) statistic.
 
-> >  This is a new patch series made around a discrete patch submitted earlier 
-> > on that has gone nowhere, which is now 1/4.  That change handles $PIR
-> > PIRQ
-> 
-> sorry for ignoring this due to stack overflow. I'll go over it later
-> today.
+The portstats pointer was incorrectly incremented when fetching priority
+based statistics.
 
- Great, thanks!
+Fixes: af4b11022e2d (net: sparx5: add ethtool configuration and statistics support)
+Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
+---
+ drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Maciej
+diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c b/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
+index 59783fc46a7b..10b866e9f726 100644
+--- a/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
++++ b/drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.c
+@@ -1103,7 +1103,7 @@ void sparx5_get_stats64(struct net_device *ndev,
+ 	stats->tx_carrier_errors = portstats[spx5_stats_tx_csense_cnt];
+ 	stats->tx_window_errors = portstats[spx5_stats_tx_late_coll_cnt];
+ 	stats->rx_dropped = portstats[spx5_stats_ana_ac_port_stat_lsb_cnt];
+-	for (idx = 0; idx < 2 * SPX5_PRIOS; ++idx, ++stats)
++	for (idx = 0; idx < 2 * SPX5_PRIOS; ++idx)
+ 		stats->rx_dropped += portstats[spx5_stats_green_p0_rx_port_drop
+ 					       + idx];
+ 	stats->tx_dropped = portstats[spx5_stats_tx_local_drop];
+-- 
+2.35.1
+

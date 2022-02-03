@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BFF4A8DDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35C94A8E23
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354718AbiBCUdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S1354890AbiBCUfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354665AbiBCUci (ORCPT
+        with ESMTP id S1352611AbiBCUde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:32:38 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA42C0613E8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:32:29 -0800 (PST)
-Received: from dslb-188-096-149-005.188.096.pools.vodafone-ip.de ([188.96.149.5] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nFimJ-0004W7-KH; Thu, 03 Feb 2022 21:32:27 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/4] staging: r8188eu: remove dead code for tx power tracking
-Date:   Thu,  3 Feb 2022 21:32:15 +0100
-Message-Id: <20220203203217.252156-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220203203217.252156-1-martin@kaiser.cx>
-References: <20220203203217.252156-1-martin@kaiser.cx>
+        Thu, 3 Feb 2022 15:33:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5692C06174E;
+        Thu,  3 Feb 2022 12:33:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D0361ACF;
+        Thu,  3 Feb 2022 20:33:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63B9C340E8;
+        Thu,  3 Feb 2022 20:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643920384;
+        bh=gGkLfyr40uJZuMOzHhJ5bCp3liAMaPtfJXeg3XdSmYM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YbaF1adnFc+miLSnZCqZLRSjempgAWne6VimYbPmCCcDFBkA439R51AB+pfdWZp5W
+         Td0LluLIRIyonX77Q015Ycj5sKQOeDUiCmi/cBKPLXD7x+d4+nxr7oIzMikjM61qE4
+         MSr8CCvT7CC2hv4wI2DmQJLrZaTOPTu0rZg+b2PQ0hm85HRX2A9sCoCiTAwRq8DS3i
+         BT9+g6IzWwuGWa0uOL3bILy/a2ILVHsENZQovFPmqaUTRz55tOn7E4Sgz/CP7UYFns
+         xug5FPs8M9e57rAOoi3RT8tfd6DvXfbnQd3gI8Zkcowy3SVi9tpAFO6Ae4UH9ceFSe
+         NIkjk6c5Mh9GA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>,
+        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
+        chuck.lever@oracle.com, davem@davemloft.net, kuba@kernel.org,
+        linux-nfs@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 11/41] SUNRPC allow for unspecified transport time in rpc_clnt_add_xprt
+Date:   Thu,  3 Feb 2022 15:32:15 -0500
+Message-Id: <20220203203245.3007-11-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
+References: <20220203203245.3007-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The odm_TXPowerTrackingCallback_ThermalMeter_8188E contains code
-for OFDM paths A and B. It seems that path B is not used, is2t is
-always false. Remove resulting dead code.
+From: Olga Kornievskaia <kolga@netapp.com>
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+[ Upstream commit b8a09619a56334414cbd7f935a0796240d0cc07e ]
+
+If the supplied argument doesn't specify the transport type, use the
+type of the existing rpc clnt and its existing transport.
+
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/hal/HalPhyRf_8188e.c | 52 +-------------------
- 1 file changed, 2 insertions(+), 50 deletions(-)
+ net/sunrpc/clnt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-index db87eaafb72f..8bdd02271203 100644
---- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-+++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-@@ -102,12 +102,11 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
- 	u8 ThermalValue = 0, delta, delta_LCK, delta_IQK, offset;
- 	u8 ThermalValue_AVG_count = 0;
- 	u32 ThermalValue_AVG = 0;
--	s32 ele_A = 0, ele_D, TempCCk, X, value32;
-+	s32 ele_A = 0, ele_D, TempCCk, X;
- 	s32 Y, ele_C = 0;
- 	s8 OFDM_index[2], CCK_index = 0;
- 	s8 OFDM_index_old[2] = {0, 0}, CCK_index_old = 0;
- 	u32 i = 0, j = 0;
--	bool is2t = false;
+diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
+index f056ff9314442..5da1d7e8468a5 100644
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -2903,7 +2903,7 @@ int rpc_clnt_add_xprt(struct rpc_clnt *clnt,
+ 	unsigned long connect_timeout;
+ 	unsigned long reconnect_timeout;
+ 	unsigned char resvport, reuseport;
+-	int ret = 0;
++	int ret = 0, ident;
  
- 	u8 OFDM_min_index = 6, rf; /* OFDM BB Swing should be less than +3.0dB, which is required by Arthur */
- 	s8 OFDM_index_mapping[2][index_mapping_NUM_88E] = {
-@@ -139,10 +138,7 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
+ 	rcu_read_lock();
+ 	xps = xprt_switch_get(rcu_dereference(clnt->cl_xpi.xpi_xpswitch));
+@@ -2917,8 +2917,11 @@ int rpc_clnt_add_xprt(struct rpc_clnt *clnt,
+ 	reuseport = xprt->reuseport;
+ 	connect_timeout = xprt->connect_timeout;
+ 	reconnect_timeout = xprt->max_reconnect_timeout;
++	ident = xprt->xprt_class->ident;
+ 	rcu_read_unlock();
  
- 	ThermalValue = (u8)rtl8188e_PHY_QueryRFReg(Adapter, RF_PATH_A, RF_T_METER_88E, 0xfc00); /* 0x42: RF Reg[15:10] 88E */
- 
--	if (is2t)
--		rf = 2;
--	else
--		rf = 1;
-+	rf = 1;
- 
- 	if (ThermalValue) {
- 		/* Query OFDM path A default setting */
-@@ -155,17 +151,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
- 			}
- 		}
- 
--		/* Query OFDM path B default setting */
--		if (is2t) {
--			ele_D = rtl8188e_PHY_QueryBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord) & bMaskOFDM_D;
--			for (i = 0; i < OFDM_TABLE_SIZE_92D; i++) {	/* find the index */
--				if (ele_D == (OFDMSwingTable[i] & bMaskOFDM_D)) {
--					OFDM_index_old[1] = (u8)i;
--					break;
--				}
--			}
--		}
--
- 		/* Query CCK default setting From 0xa24 */
- 		TempCCk = dm_odm->RFCalibrateInfo.RegA24;
- 
-@@ -309,39 +294,6 @@ odm_TXPowerTrackingCallback_ThermalMeter_8188E(
- 					/*  2012/04/23 MH According to Luke's suggestion, we can not write BB digital */
- 					/*  to increase TX power. Otherwise, EVM will be bad. */
- 				}
--
--				if (is2t) {
--					ele_D = (OFDMSwingTable[(u8)OFDM_index[1]] & 0xFFC00000) >> 22;
--
--					/* new element A = element D x X */
--					X = dm_odm->RFCalibrateInfo.IQKMatrixRegSetting.Value[0][4];
--					Y = dm_odm->RFCalibrateInfo.IQKMatrixRegSetting.Value[0][5];
--
--					if (X != 0) {
--						if ((X & 0x00000200) != 0)	/* consider minus */
--							X = X | 0xFFFFFC00;
--						ele_A = ((X * ele_D) >> 8) & 0x000003FF;
--
--						/* new element C = element D x Y */
--						if ((Y & 0x00000200) != 0)
--							Y = Y | 0xFFFFFC00;
--						ele_C = ((Y * ele_D) >> 8) & 0x00003FF;
--
--						/* wtite new elements A, C, D to regC88 and regC9C, element B is always 0 */
--						value32 = (ele_D << 22) | ((ele_C & 0x3F) << 16) | ele_A;
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, value32);
--
--						value32 = (ele_C & 0x000003C0) >> 6;
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XDTxAFE, bMaskH4Bits, value32);
--
--						value32 = ((X * ele_D) >> 7) & 0x01;
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT(28), value32);
--					} else {
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XBTxIQImbalance, bMaskDWord, OFDMSwingTable[(u8)OFDM_index[1]]);
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_XDTxAFE, bMaskH4Bits, 0x00);
--						rtl8188e_PHY_SetBBReg(Adapter, rOFDM0_ECCAThreshold, BIT(28), 0x00);
--					}
--				}
- 			}
- 		}
- 
++	if (!xprtargs->ident)
++		xprtargs->ident = ident;
+ 	xprt = xprt_create_transport(xprtargs);
+ 	if (IS_ERR(xprt)) {
+ 		ret = PTR_ERR(xprt);
 -- 
-2.30.2
+2.34.1
 

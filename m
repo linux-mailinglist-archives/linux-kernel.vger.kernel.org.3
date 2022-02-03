@@ -2,96 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAAB4A8BDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 441A64A8BE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353563AbiBCStN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:49:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56233 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344973AbiBCStN (ORCPT
+        id S1353573AbiBCStQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353565AbiBCStO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:49:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643914152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xvwI014RI3T9gp2AWaO1azWgkMohE5MRNXNJ2U28y3Q=;
-        b=CGwYX2/ytROtX0a4EVA7ZzbZ/H0TVDn2l8l+6e6eWp6VvHvhSlfD+6fZTiE8LSU56PLCXs
-        Jh6bLs0cNRXZS3JD3S81CkWx5MTzs4p1TfMr4atA4lQ93H1knhNS5g+fLLRp9+DAyBdJW9
-        6ls4IOzNC3D6e63JxfyoRhBNLBwDWNA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-6-TvIIpLhHMeCEUxZNTdvVjw-1; Thu, 03 Feb 2022 13:49:09 -0500
-X-MC-Unique: TvIIpLhHMeCEUxZNTdvVjw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B78531091DA2;
-        Thu,  3 Feb 2022 18:49:05 +0000 (UTC)
-Received: from [10.22.8.80] (unknown [10.22.8.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB2844CED8;
-        Thu,  3 Feb 2022 18:49:02 +0000 (UTC)
-Message-ID: <42cca916-d4c8-daa1-4a91-60738c499c89@redhat.com>
-Date:   Thu, 3 Feb 2022 13:49:02 -0500
+        Thu, 3 Feb 2022 13:49:14 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D593C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:49:14 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id x6so2881759ilg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yi3egB09pFMWmxHf611BRU+6JQL5GH8GclXypo1awkA=;
+        b=FOEUsa6cMLCKHgbftb7PdZxjMzaJLyhqXu6zE6/HGBcw8UJivONwkKRHJFIpKG+4Cp
+         5EAmoc5HXHDkp83ffol1bLsFixng5fqDrZltIRRmYBTGNu4Qp852viJt229/q1C7oIP1
+         QTT40oAxbDZZ9/Z8IJG8kW8p8XHWcvLRMV2mq4knwnCDoBzfVG+TFoc+G/5Bi2V3oNN1
+         83QK+vwB9In+wtpEKYYAg4R8pxdjSdNop27G7bzxPLlddks+j/MOfPiYg409nMtC7sFW
+         7vy18PnE3zDHNlH4CFTB2hAeTITqVooJMPS0CVv95WOnspP411cmJIAGf4fiM4jrUrUE
+         U5cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yi3egB09pFMWmxHf611BRU+6JQL5GH8GclXypo1awkA=;
+        b=4W/3sCj+V8wF9Lc3jehuy2+LEa7PUP4VOooRIDBibzcYBYJGpxMayVwZts8NKaYMUJ
+         DajJCtC/5grhnTZIOlE3r4QGm8RhjPV772Vovjcs1SxTwrW6XbRDZWWBTIoARq+qSDtQ
+         Tp6KMxhDATnB8VrYHoOhY1LHoeH+55YbLrX7BBVPQptDe2ZxNenCsk1SQC537hDx9Vrl
+         ViiaV1cSkBqOb7otYsi3YOkvClYJsU7lRc8ruQFkH3DHTCPdWPMiB+Trrp1sigVMV/CP
+         sjDxInBWp3NplEi8d+1UjetvK9cpQLSROI+wWC/rJVdVxpiWuJzIJokYDg6eu2RM34aa
+         lVIg==
+X-Gm-Message-State: AOAM531RTK8GjIVu8sxNRvuNEkxRunCK9re1sarPZWm2FYt9yrAVUUAN
+        D513pWCLC3iEug3IdM/7Nk7w6Q==
+X-Google-Smtp-Source: ABdhPJxywet9ivYWSQd29dwPDGsnX7LDLyVALsSiuN7w1UFAK+QVCH6KFeaNVsIG+kc7Qf70PKeZvA==
+X-Received: by 2002:a05:6e02:1545:: with SMTP id j5mr21032614ilu.318.1643914153612;
+        Thu, 03 Feb 2022 10:49:13 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id f4sm11634988iow.53.2022.02.03.10.49.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:49:13 -0800 (PST)
+Subject: Re: [PATCH v4 2/3] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203182441.692354-1-usama.arif@bytedance.com>
+ <20220203182441.692354-3-usama.arif@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <8369e0be-f922-ba6b-ceed-24886ebcdb78@kernel.dk>
+Date:   Thu, 3 Feb 2022 11:49:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 2/4] mm/page_owner: Use scnprintf() to avoid excessive
- buffer overrun check
+In-Reply-To: <20220203182441.692354-3-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-References: <20220131192308.608837-5-longman@redhat.com>
- <20220202203036.744010-3-longman@redhat.com>
- <5c03fa31-35a5-4cbc-6b0e-872d5db82a41@suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <5c03fa31-35a5-4cbc-6b0e-872d5db82a41@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 10:46, Vlastimil Babka wrote:
-> On 2/2/22 21:30, Waiman Long wrote:
->> The snprintf() function can return a length greater than the given
->> input size. That will require a check for buffer overrun after each
->> invocation of snprintf(). scnprintf(), on the other hand, will never
->> return a greater length. By using scnprintf() in selected places, we
->> can avoid some buffer overrun checks except after stack_depot_snprint()
->> and after the last snprintf().
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> Acked-by: David Rientjes <rientjes@google.com>
->> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Looks like this will work, but note that if the purpose of patch 1/4 was
-> that after the first scnprintf() that overflows the following calls will be
-> short-cut thanks to passing the size as 0, AFAICS that won't work. Because
-> scnprintf() returns the number without trailing zero, 'ret' will be 'count -
-> 1' after the overflow, so 'count - ret' will be 1, never 0.
+On 2/3/22 11:24 AM, Usama Arif wrote:
+> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
+> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+>  {
+> -	if (likely(!ctx->cq_ev_fd))
+> -		return false;
+> +	struct io_ev_fd *ev_fd;
+> +
+> +	rcu_read_lock();
+> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
+> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
+> +
+> +	if (likely(!ev_fd))
+> +		goto out;
+>  	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+> -		return false;
+> -	return !ctx->eventfd_async || io_wq_current_is_worker();
+> +		goto out;
+> +
+> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
+> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
+> +
+> +out:
+> +	rcu_read_unlock();
+>  }
 
-Yes, I am aware of that. Patch 1 is just a micro-optimization for the 
-very rare case.
+This still needs what we discussed in v3, something ala:
 
-Cheers,
-Longman
+/*
+ * This will potential race with eventfd registration, but that's
+ * always going to be the case if there is IO inflight while an eventfd
+ * descriptor is being registered.
+ */
+if (!rcu_dereference_raw(ctx->io_ev_fd))
+	return;
 
+rcu_read_lock();
+...
+
+which I think is cheap enough and won't hit sparse complaints. The
+
+> @@ -9353,35 +9370,70 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+>  
+>  static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+>  {
+> +	struct io_ev_fd *ev_fd;
+>  	__s32 __user *fds = arg;
+> -	int fd;
+> +	int fd, ret;
+>  
+> -	if (ctx->cq_ev_fd)
+> -		return -EBUSY;
+> +	mutex_lock(&ctx->ev_fd_lock);
+> +	ret = -EBUSY;
+> +	if (rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock))) {
+> +		rcu_barrier();
+> +		if(rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock)))
+> +			goto out;
+> +	}
+
+I wonder if we can get away with assigning ctx->io_ev_fd to NULL when we
+do the call_rcu(). The struct itself will remain valid as long as we're
+under rcu_read_lock() protection, so I think we'd be fine? If we do
+that, then we don't need any rcu_barrier() or synchronize_rcu() calls,
+as we can register a new one while the previous one is still being
+killed.
+
+Hmm?
+
+>  static int io_eventfd_unregister(struct io_ring_ctx *ctx)
+>  {
+> -	if (ctx->cq_ev_fd) {
+> -		eventfd_ctx_put(ctx->cq_ev_fd);
+> -		ctx->cq_ev_fd = NULL;
+> -		return 0;
+> +	struct io_ev_fd *ev_fd;
+> +	int ret;
+> +
+> +	mutex_lock(&ctx->ev_fd_lock);
+> +	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
+> +	if (ev_fd) {
+> +		call_rcu(&ev_fd->rcu, io_eventfd_put);
+> +		ret = 0;
+> +		goto out;
+>  	}
+> +	ret = -ENXIO;
+>  
+> -	return -ENXIO;
+> +out:
+> +	mutex_unlock(&ctx->ev_fd_lock);
+> +	return ret;
+>  }
+
+I also think that'd be cleaner without the goto:
+
+{
+	struct io_ev_fd *ev_fd;
+	int ret;
+
+	mutex_lock(&ctx->ev_fd_lock);
+	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+					lockdep_is_held(&ctx->ev_fd_lock));
+	if (ev_fd) {
+		call_rcu(&ev_fd->rcu, io_eventfd_put);
+		mutex_unlock(&ctx->ev_fd_lock);
+		return 0;
+	}
+
+	mutex_unlock(&ctx->ev_fd_lock);
+	return -ENXIO;
+}
+
+-- 
+Jens Axboe
 

@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BA14A90D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FD94A90E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355869AbiBCWs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S1355895AbiBCWv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355853AbiBCWs0 (ORCPT
+        with ESMTP id S231437AbiBCWv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:48:26 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A559C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:48:26 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id z18so3397546ilp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MLeChxYmYY5CUkxIxxVQrUV/lZd8hpfLh1+m+EJdz0A=;
-        b=XLOhNwHh+boGaAV3W7r97PDAFTDcLi4JGFZLgJc2Qd/1FU9gvyg3Fcw9m0X+fIXQKk
-         zBvIYQTU5X3EB/zOf2yGC4FhcznkTvthPIgpIBLZlKE8zG24NOmZadIzqOQgfot4Diii
-         HT+qY7Pzd7GjUX37pD7Zywo7der0xmyNRyMCg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MLeChxYmYY5CUkxIxxVQrUV/lZd8hpfLh1+m+EJdz0A=;
-        b=chdJnpRilzfFWSA+jJW6eCR7llXb5md1laBUGQ1cC7yE0ldwsLNoznujqkBxZYD3ut
-         ENLyUzeFrT7IOhQNWtDFJClrc5NgZ/ZDSMiPcDSCngG4S6H2N5dCQGYBUfGH31AkPN26
-         1jnjUdmzkW1kv9/ceq/SB8jS8s9rV0H9TAbLm+Ai1daJCm9TadUf+JwhVi6uNkZCrTWK
-         Jt0F2n2aGxBYmmkt0CJaIPkZUiPiLK3GdR6wm3j0+NYEpAQVqGOLiqn0twTRosQA6a4I
-         mMUVgxLgIOfPOZdsnAbET5jCHv89PTw0qAe70JCHjsUQy99/Ddk4lJ46fBoVPbipA5Bx
-         Go6w==
-X-Gm-Message-State: AOAM532RGZEcgYbgGSWtQPoSi7QX78qlm17Tak21OjPV+IvHmOpZ1GzA
-        JENoKUPeEy4Est0VW34QT9dmPw==
-X-Google-Smtp-Source: ABdhPJwG0qE6zCH0vXbQKCtjs5jTysF5RevrnOV/ZHA12Y76M1wQ67IBTPApS+cF1n/5neNLjk1w8w==
-X-Received: by 2002:a92:d387:: with SMTP id o7mr139128ilo.26.1643928505787;
-        Thu, 03 Feb 2022 14:48:25 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id x4sm127153ilv.2.2022.02.03.14.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 14:48:25 -0800 (PST)
-Subject: Re: kselftest tree on kernelci.org
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        "kernelci@groups.io" <kernelci@groups.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
- <ece6ea91-c44b-0bea-c4a2-ec099fa94881@linuxfoundation.org>
- <bc705b2c-b2d7-c80f-7020-ee52a2aeb061@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8813e862-c280-c6c6-abc5-b62b372ff34a@linuxfoundation.org>
-Date:   Thu, 3 Feb 2022 15:48:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 3 Feb 2022 17:51:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5301C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:51:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZcWmCjftMje6QUzmfxLgopEqLhjGvW7/TE+Stk0ikcA=; b=hbswCc/puNjCQD9dPyW5LfyrwC
+        OZJU5ivfVNcqoKdwI2EtnH7R18DUjYwr+NtmWAGtdsX8/hErXhLvIJ0nBeN/B9L4BrSTNLXbF0Ko6
+        uYAth3Pja9q+PVCnRxqypfn6W0BISkfE9GLapzz+slJCKmjYpXibcJOLFq2jRHNnlfpPjuoRzuhh6
+        sUk8Fox1UV8KyMtSu+mV1uW5M2aTXDNXutv13Z8sgi7+8mSu1petFrXie11I5VBRfB+vibN1OTPbn
+        1dxtR5bf3CkLy/hLZdP1s7l5Iuw/nw1lXLEH+MDtnj66ptFlFSaRrmlhJCg0G8uD9PFlSGtYkQuDC
+        nyK0HBpQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFkwm-0033I0-Hl; Thu, 03 Feb 2022 22:51:24 +0000
+Date:   Thu, 3 Feb 2022 14:51:24 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
+        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [RFC PATCH 3/5] firmware_loader: Split fw_sysfs support from
+ fallback
+Message-ID: <YfxcbHuFjL3xem/0@bombadil.infradead.org>
+References: <20220203213053.360190-1-russell.h.weight@intel.com>
+ <20220203213053.360190-4-russell.h.weight@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <bc705b2c-b2d7-c80f-7020-ee52a2aeb061@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203213053.360190-4-russell.h.weight@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 11:19 AM, Guillaume Tucker wrote:
-> On 02/02/2022 15:23, Shuah Khan wrote:
->> Hi Guillaume,
->>
-
+On Thu, Feb 03, 2022 at 02:30:50PM -0700, Russ Weight wrote:
+> In preparation for sharing the "loading" and "data" sysfs nodes with the
+> new firmware upload support, split out sysfs functionality from fallback.c
+> and fallback.h into fw_sysfs.c and fw_sysfs.h. This includes the firmware
+> class driver code that is associated with the sysfs files and the
+> fw_fallback_config support for the timeout sysfs node.
 > 
-> I see these 4 branches (fixes, next, kunit, kunit-fixes) are all
-> merged into linux-next.  So it seems like the best thing to do
-> would be to cover them with a very lightweight number of builds and
-> tests focused on what they are about: only run kselftest on the
-> fixes and next branches, and only KUnit on kunit and kunit-fixes.
-> At the moment, KUnit is not run by kernelci.org (coming soon) so I
-> think we could just add the next branch for kselftest.  Then
-> linux-next will be tested with maximum coverage anyway so if
-> something subtle gets missed with the early tests it should get
-> caught the following day at the latest with linux-next.
+> CONFIG_FW_LOADER_SYSFS is created and is selected by
+> CONFIG_FW_LOADER_USER_HELPER in order to include fw_sysfs.o in
+> firmware_class-objs.
 > 
->>> Many things could potentially be done with arbitrary builds and
->>> tests etc.  These are some initial suggestions.  How does this
->>> sound?
->>
-
-Sounds good to me. The things that tend to break are:
-
-- test builds at times due to seemingly innocuous changes to fix
-   static analysis warnings. build test is good for catching these
--
-
->> Sounds great to me. Since selftest patches flow through various
->> subsystem trees, having kernelci keep an eye is great. This would
->> be another pair of eyes in addition to occasional tests I run and
->> Linaro (LKTP) monitoring next.
->>
->> How often do you send reports - I will watch out for them. Thanks
->> again for taking the initiative to add kselftest to kernelci.
+> This is mostly just a code reorganization. There are a few symbols that
+> change in scope, and these can be identified by looking at the header
+> file changes. A few white-space warnings from checkpatch are also
+> addressed in this patch.
 > 
-> Builds and tests are run every time a new revision is detected on
-> the branches being monitored.  Then when they complete, a report
-> is sent.  It can take a while, but with a small number of builds
-> you could get results within an hour.  We could get the reports
-> sent to the linux-kselftest mailing list and your own address if
-> you want.
-> 
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> ---
+>  drivers/base/firmware_loader/Kconfig    |   4 +
+>  drivers/base/firmware_loader/Makefile   |   1 +
+>  drivers/base/firmware_loader/fallback.c | 430 ------------------------
+>  drivers/base/firmware_loader/fallback.h |  46 +--
+>  drivers/base/firmware_loader/fw_sysfs.c | 413 +++++++++++++++++++++++
+>  drivers/base/firmware_loader/fw_sysfs.h |  94 ++++++
 
-Please send it to my email address as well.
+Nit: please just use sysfs.[ch]. The directory already implies its for
+firmware.
 
-> Also this configuration is all under source control on GitHub so
-> feel free to make changes to it in the future as you see fit.
-> 
-
-Will do.
-
-thanks,
--- Shuah
-
+  Luis

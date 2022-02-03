@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306A44A86A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7544A8687
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbiBCOfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        id S1351490AbiBCOeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351308AbiBCOdg (ORCPT
+        with ESMTP id S1351316AbiBCOdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:33:36 -0500
+        Thu, 3 Feb 2022 09:33:39 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB657C061744;
-        Thu,  3 Feb 2022 06:33:32 -0800 (PST)
-Date:   Thu, 03 Feb 2022 14:33:30 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFEDC061759;
+        Thu,  3 Feb 2022 06:33:33 -0800 (PST)
+Date:   Thu, 03 Feb 2022 14:33:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643898811;
+        s=2020; t=1643898812;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=76aaEtLvtb96qbgKQMJWMnfLkp3YrTCJLKcwmf6pAwU=;
-        b=js++n0NRJen2XGkBHgvAIHdPTPkhRBUPWKZQ6vo3CNctLpSU4HmHjCBV3GpZs0arOaB9fS
-        GYiiC1gEbtWPFRBq/AIfqc1YKJr8jzeZP2m4CKjtz7+eLjj3RYm69G+zS5T72vn91jjQq3
-        yHzhXrdLsEJLtTs7KTrRnFz7pEJjETAfYeDvJn6qBOH5rIlFlYTg6t6IoifInB9N2+0Lt4
-        MbNMtBmxGuBx3K97aM/BqCYAnwcuyTtKVWZz1vnj9WmneoA6p5jwO1uKyZX3yetCJuQQw3
-        R5DMuprW9ZGmFIeo5axO+VFAoP3QB2xoIMF6MNjbXFrZFs/71NO/zUKPNwLZlw==
+        bh=kUieBjPAjigjONKTAJDQBNIgs0qLYIuK8USmxllI2tI=;
+        b=OmGvdtubOQzc7W42ldtjPB26bEeyESlMwyXZ3BDh1hT7EJADlcreJPaVqUk0zHJSMpYEXA
+        GpN/wQG7v6ny96lBivG+OXQnDD5Q7kCtne58SyHrnnsWs0knGTyeFRFZgC2S5rVxQpXt51
+        Ll3sif/3bJLd+uKa1JtMTNl6bYpiEJiKkdxoec62ygiCC2z+/y+GHfYo5/zfpgBcUlnF+E
+        V9MdQ/T72CheighAiG0kVmXCdO7/alpTksnv0YdUgvTdBV4uwhf/Id5CTnNe8WhxhEil59
+        tpZIxN8Oy9ECDmGhmVxBtHU9JqX8+HDEQa8QuFumj9zOuCEY3s4BgvCx7YlSJw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643898811;
+        s=2020e; t=1643898812;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=76aaEtLvtb96qbgKQMJWMnfLkp3YrTCJLKcwmf6pAwU=;
-        b=sNpNRFUq4K3w3ba6E1VU39MVmUf7JwZjdcBCMRpYXElFdawS8Dll0sFkaKavMR8gPYCeqp
-        h4WUoZB7tdI7/iBQ==
-From:   "tip-bot2 for Adrian Hunter" <tip-bot2@linutronix.de>
+        bh=kUieBjPAjigjONKTAJDQBNIgs0qLYIuK8USmxllI2tI=;
+        b=ioqv1fZggJB6/elCEP4zSbbiL+kn2FEY41wxf/vJq5f7suSGcR+NajZzwWMsZDvkQ3W0po
+        iBbg6eftXolhSrAQ==
+From:   "tip-bot2 for Tristan Hume" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] x86: Share definition of __is_canonical_address()
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220131072453.2839535-3-adrian.hunter@intel.com>
-References: <20220131072453.2839535-3-adrian.hunter@intel.com>
+Subject: [tip: perf/urgent] perf/x86/intel/pt: Fix crash with stop filters in
+ single-range mode
+Cc:     Tristan Hume <tristan@thume.ca>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Adrian Hunter <adrian.hunter@intel.com>, stable@kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220127220806.73664-1-tristan@thume.ca>
+References: <20220127220806.73664-1-tristan@thume.ca>
 MIME-Version: 1.0
-Message-ID: <164389881004.16921.2715409372429832557.tip-bot2@tip-bot2>
+Message-ID: <164389881167.16921.8753176904617913417.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,165 +61,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     1fb85d06ad6754796cd1b920639ca9d8840abefd
-Gitweb:        https://git.kernel.org/tip/1fb85d06ad6754796cd1b920639ca9d8840abefd
-Author:        Adrian Hunter <adrian.hunter@intel.com>
-AuthorDate:    Mon, 31 Jan 2022 09:24:50 +02:00
+Commit-ID:     1d9093457b243061a9bba23543c38726e864a643
+Gitweb:        https://git.kernel.org/tip/1d9093457b243061a9bba23543c38726e864a643
+Author:        Tristan Hume <tristan@thume.ca>
+AuthorDate:    Thu, 27 Jan 2022 17:08:06 -05:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 02 Feb 2022 13:11:42 +01:00
+CommitterDate: Wed, 02 Feb 2022 13:11:40 +01:00
 
-x86: Share definition of __is_canonical_address()
+perf/x86/intel/pt: Fix crash with stop filters in single-range mode
 
-Reduce code duplication by moving canonical address code to a common header
-file.
+Add a check for !buf->single before calling pt_buffer_region_size in a
+place where a missing check can cause a kernel crash.
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Fixes a bug introduced by commit 670638477aed ("perf/x86/intel/pt:
+Opportunistically use single range output mode"), which added a
+support for PT single-range output mode. Since that commit if a PT
+stop filter range is hit while tracing, the kernel will crash because
+of a null pointer dereference in pt_handle_status due to calling
+pt_buffer_region_size without a ToPA configured.
+
+The commit which introduced single-range mode guarded almost all uses of
+the ToPA buffer variables with checks of the buf->single variable, but
+missed the case where tracing was stopped by the PT hardware, which
+happens when execution hits a configured stop filter.
+
+Tested that hitting a stop filter while PT recording successfully
+records a trace with this patch but crashes without this patch.
+
+Fixes: 670638477aed ("perf/x86/intel/pt: Opportunistically use single range output mode")
+Signed-off-by: Tristan Hume <tristan@thume.ca>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220131072453.2839535-3-adrian.hunter@intel.com
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: stable@kernel.org
+Link: https://lkml.kernel.org/r/20220127220806.73664-1-tristan@thume.ca
 ---
- arch/x86/events/intel/pt.c  | 14 ++------------
- arch/x86/include/asm/page.h | 10 ++++++++++
- arch/x86/kvm/emulate.c      |  4 ++--
- arch/x86/kvm/x86.c          |  2 +-
- arch/x86/kvm/x86.h          |  7 +------
- arch/x86/mm/maccess.c       |  7 +------
- 6 files changed, 17 insertions(+), 27 deletions(-)
+ arch/x86/events/intel/pt.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 0ebcf9a..93676a5 100644
+index 7f406c1..2d33bba 100644
 --- a/arch/x86/events/intel/pt.c
 +++ b/arch/x86/events/intel/pt.c
-@@ -1350,20 +1350,10 @@ static void pt_addr_filters_fini(struct perf_event *event)
- }
- 
- #ifdef CONFIG_X86_64
--static u64 canonical_address(u64 vaddr, u8 vaddr_bits)
--{
--	return ((s64)vaddr << (64 - vaddr_bits)) >> (64 - vaddr_bits);
--}
--
--static u64 is_canonical_address(u64 vaddr, u8 vaddr_bits)
--{
--	return canonical_address(vaddr, vaddr_bits) == vaddr;
--}
--
- /* Clamp to a canonical address greater-than-or-equal-to the address given */
- static u64 clamp_to_ge_canonical_addr(u64 vaddr, u8 vaddr_bits)
- {
--	return is_canonical_address(vaddr, vaddr_bits) ?
-+	return __is_canonical_address(vaddr, vaddr_bits) ?
- 	       vaddr :
- 	       -BIT_ULL(vaddr_bits - 1);
- }
-@@ -1371,7 +1361,7 @@ static u64 clamp_to_ge_canonical_addr(u64 vaddr, u8 vaddr_bits)
- /* Clamp to a canonical address less-than-or-equal-to the address given */
- static u64 clamp_to_le_canonical_addr(u64 vaddr, u8 vaddr_bits)
- {
--	return is_canonical_address(vaddr, vaddr_bits) ?
-+	return __is_canonical_address(vaddr, vaddr_bits) ?
- 	       vaddr :
- 	       BIT_ULL(vaddr_bits - 1) - 1;
- }
-diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-index 4d5810c..9cc82f3 100644
---- a/arch/x86/include/asm/page.h
-+++ b/arch/x86/include/asm/page.h
-@@ -71,6 +71,16 @@ static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
- extern bool __virt_addr_valid(unsigned long kaddr);
- #define virt_addr_valid(kaddr)	__virt_addr_valid((unsigned long) (kaddr))
- 
-+static __always_inline u64 __canonical_address(u64 vaddr, u8 vaddr_bits)
-+{
-+	return ((s64)vaddr << (64 - vaddr_bits)) >> (64 - vaddr_bits);
-+}
-+
-+static __always_inline u64 __is_canonical_address(u64 vaddr, u8 vaddr_bits)
-+{
-+	return __canonical_address(vaddr, vaddr_bits) == vaddr;
-+}
-+
- #endif	/* __ASSEMBLY__ */
- 
- #include <asm-generic/memory_model.h>
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 5719d8c..40da8c7 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -665,7 +665,7 @@ static inline u8 ctxt_virt_addr_bits(struct x86_emulate_ctxt *ctxt)
- static inline bool emul_is_noncanonical_address(u64 la,
- 						struct x86_emulate_ctxt *ctxt)
- {
--	return get_canonical(la, ctxt_virt_addr_bits(ctxt)) != la;
-+	return !__is_canonical_address(la, ctxt_virt_addr_bits(ctxt));
- }
- 
- /*
-@@ -715,7 +715,7 @@ static __always_inline int __linearize(struct x86_emulate_ctxt *ctxt,
- 	case X86EMUL_MODE_PROT64:
- 		*linear = la;
- 		va_bits = ctxt_virt_addr_bits(ctxt);
--		if (get_canonical(la, va_bits) != la)
-+		if (!__is_canonical_address(la, va_bits))
- 			goto bad;
- 
- 		*max_size = min_t(u64, ~0u, (1ull << va_bits) - la);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 74b53a1..197209f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1735,7 +1735,7 @@ static int __kvm_set_msr(struct kvm_vcpu *vcpu, u32 index, u64 data,
- 		 * value, and that something deterministic happens if the guest
- 		 * invokes 64-bit SYSENTER.
+@@ -897,8 +897,9 @@ static void pt_handle_status(struct pt *pt)
+ 		 * means we are already losing data; need to let the decoder
+ 		 * know.
  		 */
--		data = get_canonical(data, vcpu_virt_addr_bits(vcpu));
-+		data = __canonical_address(data, vcpu_virt_addr_bits(vcpu));
- 		break;
- 	case MSR_TSC_AUX:
- 		if (!kvm_is_supported_user_return_msr(MSR_TSC_AUX))
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 635b75f..fc4b68a 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -211,14 +211,9 @@ static inline u8 vcpu_virt_addr_bits(struct kvm_vcpu *vcpu)
- 	return kvm_read_cr4_bits(vcpu, X86_CR4_LA57) ? 57 : 48;
- }
- 
--static inline u64 get_canonical(u64 la, u8 vaddr_bits)
--{
--	return ((int64_t)la << (64 - vaddr_bits)) >> (64 - vaddr_bits);
--}
--
- static inline bool is_noncanonical_address(u64 la, struct kvm_vcpu *vcpu)
- {
--	return get_canonical(la, vcpu_virt_addr_bits(vcpu)) != la;
-+	return !__is_canonical_address(la, vcpu_virt_addr_bits(vcpu));
- }
- 
- static inline void vcpu_cache_mmio_info(struct kvm_vcpu *vcpu,
-diff --git a/arch/x86/mm/maccess.c b/arch/x86/mm/maccess.c
-index 92ec176..5a53c2c 100644
---- a/arch/x86/mm/maccess.c
-+++ b/arch/x86/mm/maccess.c
-@@ -4,11 +4,6 @@
- #include <linux/kernel.h>
- 
- #ifdef CONFIG_X86_64
--static __always_inline u64 canonical_address(u64 vaddr, u8 vaddr_bits)
--{
--	return ((s64)vaddr << (64 - vaddr_bits)) >> (64 - vaddr_bits);
--}
--
- bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
- {
- 	unsigned long vaddr = (unsigned long)unsafe_src;
-@@ -19,7 +14,7 @@ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
- 	 * we also need to include the userspace guard page.
- 	 */
- 	return vaddr >= TASK_SIZE_MAX + PAGE_SIZE &&
--	       canonical_address(vaddr, boot_cpu_data.x86_virt_bits) == vaddr;
-+	       __is_canonical_address(vaddr, boot_cpu_data.x86_virt_bits);
- }
- #else
- bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
+-		if (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries) ||
+-		    buf->output_off == pt_buffer_region_size(buf)) {
++		if (!buf->single &&
++		    (!intel_pt_validate_hw_cap(PT_CAP_topa_multiple_entries) ||
++		     buf->output_off == pt_buffer_region_size(buf))) {
+ 			perf_aux_output_flag(&pt->handle,
+ 			                     PERF_AUX_FLAG_TRUNCATED);
+ 			advance++;

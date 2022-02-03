@@ -2,108 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685A64A82BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F254A82C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347758AbiBCKyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 05:54:43 -0500
-Received: from foss.arm.com ([217.140.110.172]:38640 "EHLO foss.arm.com"
+        id S1348901AbiBCK4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:56:10 -0500
+Received: from foss.arm.com ([217.140.110.172]:38744 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234932AbiBCKym (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:54:42 -0500
+        id S243664AbiBCK4J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 05:56:09 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC45C11D4;
-        Thu,  3 Feb 2022 02:54:41 -0800 (PST)
-Received: from [10.57.89.13] (unknown [10.57.89.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 889DD3F774;
-        Thu,  3 Feb 2022 02:54:40 -0800 (PST)
-Message-ID: <3df77ddd-31df-c2d8-7aac-e21c7ba48f1e@arm.com>
-Date:   Thu, 3 Feb 2022 10:54:39 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B6BC11D4;
+        Thu,  3 Feb 2022 02:56:09 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.39.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB6DD3F774;
+        Thu,  3 Feb 2022 02:56:06 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] PCI: Small improvements for pci-bridge-emul and mvebu
+Date:   Thu,  3 Feb 2022 10:56:00 +0000
+Message-Id: <164388574160.14310.5659554004338344602.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220104153529.31647-1-pali@kernel.org>
+References: <20211221141455.30011-1-pali@kernel.org> <20220104153529.31647-1-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH 01/15] coresight: Make ETM4x TRCIDR0 register accesses
- consistent with sysreg.h
-To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202160226.37858-1-james.clark@arm.com>
- <20220202160226.37858-2-james.clark@arm.com>
- <41b08fa5-6333-48e8-4727-2082c001e148@arm.com>
- <da8768ba-fb10-e2d5-fdcf-2b3c6b9c6b18@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <da8768ba-fb10-e2d5-fdcf-2b3c6b9c6b18@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2022 10:40, James Clark wrote:
+On Tue, 4 Jan 2022 16:35:18 +0100, Pali Rohár wrote:
+> This patch series contains small improvements for pci-bridge-emul and
+> mvebu drivers. This patch series is based on top of the patches:
+> https://lore.kernel.org/linux-pci/20211125124605.25915-1-pali@kernel.org/
+> (which are now in pci/mvebu branch)
 > 
+> In V2 was added comment into code explaining PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
+> and PCI_BRIDGE_EMUL_NO_IO_FORWARD flags.
 > 
-> On 02/02/2022 17:05, Suzuki K Poulose wrote:
->> Hi James
->>
->> Thanks for taking this tedious task of cleaning the code and making
->> this robust and readable.
->>
->> One minor comment below.
->>
->> On 02/02/2022 16:02, James Clark wrote:
->>> This is a no-op change for style and consistency and has no effect on the
->>> binary produced by gcc-11.
->>>
->>> Signed-off-by: James Clark <james.clark@arm.com>
->>> ---
->>>    .../coresight/coresight-etm4x-core.c          | 37 +++++--------------
->>>    drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
->>>    drivers/hwtracing/coresight/coresight-priv.h  |  1 +
->>>    3 files changed, 27 insertions(+), 28 deletions(-)
->>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> index bf18128cf5de..8aefee4e72fd 100644
->>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>> @@ -1091,41 +1091,22 @@ static void etm4_init_arch_data(void *info)
->>>        etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
->>>          /* INSTP0, bits[2:1] P0 tracing support field */
->>> -    if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
->>> -        drvdata->instrp0 = true;
->>> -    else
->>> -        drvdata->instrp0 = false;
->>> -
->>> +    drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
->>> +                  (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
->>
->> I don't understand this check. For ETMv4, here is what I find in the spec (ARM IHI 0064C)
->>
->> P0 tracing support field. The permitted values are:
->> 0b00  Tracing of load and store instructions as P0 elements is not
->>        supported.
->> 0b11  Tracing of load and store instructions as P0 elements is
->>        supported, so TRCCONFIGR.INSTP0 is supported.
->>
->> All other values are reserved.
->>
->> So the check could simply be :
->>
->>      drvdata->instrp0 = (REG_VAL(emtidr0, TRCIDR0_INSTP0) == 0b11;
-> 
-> Yes I can make this change, but it does make the compiler emit a slightly different binary
-> so we can't rely on that to check the refactor is ok.
-> 
-> Should I change it in this commit or stick it on the very end? Probably the end is best
-> in case I have to do any rebases and I still need to validate there are no mistakes.
+> [...]
 
-I would say, fix the existing check first and then convert to use the
-updated symbols.
+Applied to pci/mvebu, thanks!
 
-That way we could queue the fix separately and you may be able to rebase
-your next version on the updated tree ?
+[01/11] MAINTAINERS: Add Pali Rohár as pci-mvebu.c maintainer
+        https://git.kernel.org/lpieralisi/pci/c/e621e106a1
+[02/11] PCI: pci-bridge-emul: Make struct pci_bridge_emul_ops as const
+        https://git.kernel.org/lpieralisi/pci/c/64a70f521e
+[03/11] PCI: pci-bridge-emul: Rename PCI_BRIDGE_EMUL_NO_PREFETCHABLE_BAR to PCI_BRIDGE_EMUL_NO_PREFMEM_FORWARD
+        https://git.kernel.org/lpieralisi/pci/c/d3f332b568
+[04/11] PCI: pci-bridge-emul: Add support for new flag PCI_BRIDGE_EMUL_NO_IO_FORWARD
+        https://git.kernel.org/lpieralisi/pci/c/05241c1365
+[05/11] PCI: mvebu: Add help string for CONFIG_PCI_MVEBU option
+        https://git.kernel.org/lpieralisi/pci/c/7f09a4b195
+[06/11] PCI: mvebu: Remove duplicate nports assignment
+        https://git.kernel.org/lpieralisi/pci/c/7a02acdb5d
+[07/11] PCI: mvebu: Set PCI_BRIDGE_EMUL_NO_IO_FORWARD when IO is unsupported
+        https://git.kernel.org/lpieralisi/pci/c/5c88ed7985
+[08/11] PCI: mvebu: Properly initialize vendor, device and revision of emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/16038ebb0f
+[09/11] PCI: mvebu: Update comment for PCI_EXP_LNKCAP register on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/d76a6ed096
+[10/11] PCI: mvebu: Update comment for PCI_EXP_LNKCTL register on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/c94ea32c0d
+[11/11] PCI: mvebu: Fix reporting Data Link Layer Link Active on emulated bridge
+        https://git.kernel.org/lpieralisi/pci/c/c3bd7dc553
 
-
-Cheers
-Suzuki
+Thanks,
+Lorenzo

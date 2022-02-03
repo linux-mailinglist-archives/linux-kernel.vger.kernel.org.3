@@ -2,130 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D9D4A7F30
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252464A7F31
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiBCFyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 00:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbiBCFys (ORCPT
+        id S236633AbiBCFzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 00:55:43 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51590 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236537AbiBCFzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 00:54:48 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A10FC061714;
-        Wed,  2 Feb 2022 21:54:48 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so1884608pjb.1;
-        Wed, 02 Feb 2022 21:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IWVpefFKL0PIV/uUOyn0pPa+4jE5LjZtlNg3t7Gg5XE=;
-        b=SHs/QpUZGOZOLclol1bemwO7a+CWpDslvF98/XmlWVsU3ypx6ZR0tX4/RRW2xODhkw
-         OdxZ0rGgo0YfcKILf7XF+jW5UVaM+e21G732gCCK8ad/5ehAqQKK8ckg4xkujjFw7mrn
-         BY2ttnA3me91+3WpgSvkTcfgW2zD6bsznS5HjlOjaI6W8JNcqKVpjk56kfHihVyG5480
-         ox1jrOlTKTaI5GfjkYzTNndZGqBxTnCtYs9/GGHC4UHkGrKYct5jEdazNSRV+EEdMi5o
-         kAViKnUw5+PpcJFLWUKUjCNNToNTzXInwfRJY6g9dm8CS8aAbgZwi0Ixv+n3E5HdKj56
-         UN2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IWVpefFKL0PIV/uUOyn0pPa+4jE5LjZtlNg3t7Gg5XE=;
-        b=tv47GYx7xjQp51ky5MKpMI3ZSnpii9zYcFL6ZVbneVoS+xEUzTigCdBoka2qODPAld
-         wADCblpiyaQAMMvRygSEn11G21uhLKtuytRqetEuNC1WJd7EwB/7jeYYIkhycPesJXgf
-         PbAbdMU12OdrY9xD5eVVYjsh4firjS2zSEbdx4bhc7GHjJPxTQlV8qbvTzGRHYe1eq5s
-         Bq8Um4cgT1DcRB8qacDI2uzKL+SwmJ8oYkeXWpaErn6C0FLjZDAcerhweFswZzs6IlJS
-         7uUG4zcSHc0xLwkR/ai4Ne1BPeBJNn5qY6585tPsA1Sj4HYtxEXy8umDou/W1NQk0aEA
-         43TQ==
-X-Gm-Message-State: AOAM532V4dtfkEc8xiqMc4tuxjVC+IUsGA0xn/NxueXOgH3O6cEoQJY1
-        PkaKmsUwTQiAEGFE5saNQAHQPmgV9gIfn1EbD4k=
-X-Google-Smtp-Source: ABdhPJwEdKnUI2k3rZuN7nFyqG2IDxNgM2QKJpelrBwdfzGWY+Z3H8ZxovgpBNVl87sG7bpz+B4kh4CliiJrrSE51r0=
-X-Received: by 2002:a17:902:8490:: with SMTP id c16mr33766136plo.129.1643867687641;
- Wed, 02 Feb 2022 21:54:47 -0800 (PST)
+        Thu, 3 Feb 2022 00:55:42 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2135tXVE030887;
+        Wed, 2 Feb 2022 23:55:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1643867733;
+        bh=JD/mD2wLKgToLdLuGwh6h0fFTpWKbSM/tDxw4N2Xe04=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=CslY0Mmho/NklB4Be1zldSHxH4hX/1YOqfIdjozXRmSAWoLG5F/RskIxgFrRoJJHj
+         pB2TksB2iTlKmfv3oaBNY6qpqPTIwZb4phsMva9MmCypUNb5zs57siyAwlFb6N5HIL
+         CO76fqhZsHVKhOSTBZd+QtY3+EPkcgSP/63Nmwos=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2135tWg0014908
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Feb 2022 23:55:33 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 2
+ Feb 2022 23:55:32 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 2 Feb 2022 23:55:32 -0600
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2135tT1E101255;
+        Wed, 2 Feb 2022 23:55:30 -0600
+Subject: Re: [PATCH v2] phy: cadence: Sierra: Add support for skipping
+ configuration
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20220128072642.29188-1-a-govindraju@ti.com>
+ <YfqT444YoGBIturt@matsya> <1d5c41a8-24aa-3cfb-fff0-c2695102aa91@ti.com>
+ <YfseaJADVocxqnOu@matsya>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <3444e347-2603-6f5b-94de-09642c41fc27@ti.com>
+Date:   Thu, 3 Feb 2022 11:25:29 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <YeBEAavbBh/MnbEF@bombadil.infradead.org> <20220117065452.83894-1-vimal.agrawal@sophos.com>
- <Yfrncd3voPOB7PdB@bombadil.infradead.org>
-In-Reply-To: <Yfrncd3voPOB7PdB@bombadil.infradead.org>
-From:   Vimal Agrawal <avimalin@gmail.com>
-Date:   Thu, 3 Feb 2022 11:24:36 +0530
-Message-ID: <CALkUMdTeyfv7aPeQZMXjNK67Buuw6uiVWU0iMQajuGU9TSKm+Q@mail.gmail.com>
-Subject: Re: [PATCH v3] kernel/module.c: heuristic enhancement in case symbols
- are missing e.g. when INSTALL_MOD_STRIP= "--strip-unneeded" is used
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Vimal Agrawal <vimal.Agrawal@sophos.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jan Beulich <JBeulich@suse.com>, Jeff Mahoney <jeffm@suse.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-kbuild@vger.kernel.org,
-        jeyu@kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YfseaJADVocxqnOu@matsya>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luis,
+Hi Vinod,
 
-> Try:
->
-> modules: add heuristic when stripping unneeded symbols
->
-> Then please describe in your commit log that on OpenWrt the
-> INSTALL_MOD_STRIP="--strip-unneeded" at kernel/module install
-> time, and so modules are stripped of unneeded symbols.
-Yes, Thanks, I will send the updated patch shortly.
+On 03/02/22 5:44 am, Vinod Koul wrote:
+> On 02-02-22, 20:14, Aswath Govindraju wrote:
+>> Hi Vinod,
+>>
+>> On 02/02/22 7:53 pm, Vinod Koul wrote:
+>>> On 28-01-22, 12:56, Aswath Govindraju wrote:
+>>>> In some cases, a single SerDes instance can be shared between two different
+>>>> processors, each using a separate link. In these cases, the SerDes
+>>>> configuration is done in an earlier boot stage. Therefore, add support to
+>>>> skip reconfiguring, if it is was already configured beforehand.
+>>>
+>>> This fails to apply, pls rebase and resend
+>>>
+>>
+>> On rebasing, I am seeing no difference in the patch and I am able to
+>> apply it on top of linux-next/master commit 6abab1b81b65. May I know if
+>> there is any other branch that I would need to rebase this patch on top of?
+> 
+> It should be based on phy-next which is at
+> 1f1b0c105b19ac0d90975e2569040da1216489b7 now
+> 
 
-> Sorry but for some reason this is not working on my end, but then
-> again I'm not able to get the stripped out results you see either.
-> So it could be I just have too many debugging options enabled
-> that makes INSTALL_MOD_STRIP="--strip-unneeded" not really do
-> much. I don't know if that is possible but I will have to try
-> to reduce my build options to test.
+I have posted a respin of this patch after rebasing it on top of
+phy-next. One aspect that is not clear to me is, phy-next branch does
+not have the following commit which is present in linux-next master,
 
-Yes, there could be some dependencies due to other debug options and
-it may not be able to strip it to a good extent.
+29afbd769ca3 phy: cadence: Sierra: fix error handling bugs in probe()
 
-Are you trying with changes in test_module.c?
-I was able to reproduce it easily on ubuntu 21.10 with following patch:
+When the respin of this patch(v3) is merged with linux-next/master
+wouldn't it cause merge-conflicts?
 
-diff --git a/lib/test_module.c b/lib/test_module.c
-index debd19e35198..53578e7a34d7 100644
---- a/lib/test_module.c
-+++ b/lib/test_module.c
-@@ -14,10 +14,25 @@
- #include <linux/module.h>
- #include <linux/printk.h>
+May I know how would this be handled?
 
-+static void test_module_warn_start(int x)
-+{
-+        if (x) WARN_ON_ONCE(1);
-+}
-+
-+static void __init test_module_warn_init(int x)
-+{
-+        if (x) WARN_ON_ONCE(1);
-+}
-+
-+
- static int __init test_module_init(void)
- {
-  pr_warn("Hello, world\n");
-+        printk("address of test_module_warn_int is %px\n",
-test_module_warn_init);
-+        printk("address of test_module_warn_start is %px\n",
-test_module_warn_start);
+Link to v3:
+- https://patchwork.kernel.org/project/linux-phy/list/?series=610903
 
-+ test_module_warn_init(1);
-+ test_module_warn_start(1);
-  return 0;
- }
-
-After building this module, I used the following command to strip it:
-> strip --strip-unneeded test_module.ko
-and then loaded the stripped .ko using insmod.
-
-Vimal
+Thanks,
+Aswath

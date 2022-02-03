@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2EE4A912D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2A74A9130
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356000AbiBCXcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:32:51 -0500
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:40661 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238196AbiBCXcu (ORCPT
+        id S1356006AbiBCXeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238196AbiBCXen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:32:50 -0500
-Received: by mail-qt1-f175.google.com with SMTP id v5so4325231qto.7;
-        Thu, 03 Feb 2022 15:32:50 -0800 (PST)
+        Thu, 3 Feb 2022 18:34:43 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B6BC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 15:34:42 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id j25so7343568wrb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 15:34:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jg2HQIwBrRe3o77m7am+d1x3dh2EVdYu2F2MEWZU1To=;
+        b=oxpxJKZmkfxOsupANpn/hBsE8u2+0gQLCxhBzZHrrHvJp5zvPWw9Y+2g08Z2QUzigM
+         hS7hQ+QlZpNBVXviMyMJaGLRq6Wkddyg517Yg61DM06iUmQaie4GcGE/Kzwv4U1MQ7uO
+         XILqwqUGj/0f40BCqnjUrDvKFBvaNzlVemnlyYvVU9J/mqewsneqwcb4fmQzjl98FjVS
+         KgKoQ4LDKstNTpt2uV36BKBQxQgAG3+byrB2sTu4kRVikoeoxQZZzHZe+dTypKOZOKpp
+         X0uyMbqaR2xvDlCz9SXwAyqIC7k9UzOcnFXo/07HKqAUz0B2uIuATJwMkyf2+9W8ze+z
+         Fmgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lgYpmcza1wXVQl4qbo8bJCu4YvrZ/+INkQLGcdeKuAc=;
-        b=6AQQkgcea/bIUxx9cM4H9UFj6oJsCk0Oc6tL5pMn/waAop+oooWKpJFm35AHQ67wHI
-         8MuxgZACs6cpSpZ9mIY9qmgp960onSm3jfFL0/iBu+tHI1VDEgG+vuIHtsc4NkRukWcL
-         uvpi3meoURKz45E9DOf9XG4JLTHDsTA7/7Tt+QxgT/6BuK24usv7nrPVXpeiZR+FIPg1
-         eaVvlZdHAqGOuhlnOubwiciWffb9ZnL8dooES9OEFiVKG9cBK4abET07wnUL76KBIjXy
-         ukVVpg9xxC2JMOzvoU2u/Z3k46LSGpvgZeP4Ad5NmG6R81/l1kduNZQp+O4cHHRJFCNc
-         vFCg==
-X-Gm-Message-State: AOAM531A+tHJefPDBIgKnzsrLboVdGAeUin/EvNNowqF0BMBn2Pqv6TE
-        TdsXI3zjjDHjWVheqSUImLQnSocPUSap4Q==
-X-Google-Smtp-Source: ABdhPJyKIAEBjvo3JiReMJ56ZoPw0Uoh2nFeoCFY6j/MDcfdQ1lJ9LxrJ8YykAVxA0s1AdIR1dhZ3g==
-X-Received: by 2002:ac8:5a0b:: with SMTP id n11mr366810qta.648.1643931169243;
-        Thu, 03 Feb 2022 15:32:49 -0800 (PST)
-Received: from localhost (fwdproxy-ash-016.fbsv.net. [2a03:2880:20ff:10::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g20sm181745qko.27.2022.02.03.15.32.48
+        bh=Jg2HQIwBrRe3o77m7am+d1x3dh2EVdYu2F2MEWZU1To=;
+        b=3sKcPnDhl6PfiK5wiFFsjBfmIzIM2dVuO9/IISl0lAMKBhML5ORiUCYNo4X0YGcdeQ
+         jj1mn3leVRCSBca0klUgnSOZAdvyG1FT6wPE39KYiM1a08uhr27+ztpxYfcD00GwB+ac
+         JCOKtXan2RFTtiftRWJ+KAUvYoA9Wmca3OX9T0STAvoancJV+8Smzi0AMzdhIrHjpT98
+         Z6BpMhfWFCCAf0jOvysDb72daZxNetLaMu9HciG4lra0ekRTJ7ucMqHVYxyNKFXvnfeq
+         NT2e9HRs4/TtZv8A2zzpPd2PUDwByIKuT7cg/jFfFj40KrPCvRcKKVKvXbD86k43RLlX
+         kQ/g==
+X-Gm-Message-State: AOAM530+YbVmsFe/BRoRye/0Q28R1L/jX3uDzqS7V3IgP2WNVR0cH2TY
+        yKXyUbA07KdAkPXjb6jb2MSPjQ==
+X-Google-Smtp-Source: ABdhPJxJYFmnJnN1g4G/SIpauCA4iLH3fVj/+kjjIPTG6YgrA4z3lwyzs37Y1EIVmgB/WtR8Ds1jkw==
+X-Received: by 2002:a5d:6da4:: with SMTP id u4mr183208wrs.611.1643931281591;
+        Thu, 03 Feb 2022 15:34:41 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
+        by smtp.gmail.com with ESMTPSA id j15sm148494wmq.19.2022.02.03.15.34.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 15:32:48 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Cc:     void@manifault.com, kernel-team@fb.com
-Subject: [PATCH] livepatch: Skip livepatch tests if ftrace cannot be configured
-Date:   Thu,  3 Feb 2022 15:32:07 -0800
-Message-Id: <20220203233205.1554034-1-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 03 Feb 2022 15:34:41 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v5 0/4] io_uring: remove ring quiesce in io_uring_register
+Date:   Thu,  3 Feb 2022 23:34:35 +0000
+Message-Id: <20220203233439.845408-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-livepatch has a set of selftests that are used to validate the behavior of
-the livepatching subsystem.  One of the testcases in the livepatch
-testsuite is test-ftrace.sh, which among other things, validates that
-livepatching gracefully fails when ftrace is disabled.  In the event that
-ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
-will fail later due to it unexpectedly successfully loading the
-test_klp_livepatch module.
+For opcodes relating to registering/unregistering eventfds, this is done by
+creating a new RCU data structure (io_ev_fd) as part of io_ring_ctx that
+holds the eventfd_ctx, with reads to the structure protected by
+rcu_read_lock and writes (register/unregister calls) protected by a mutex.
 
-While the livepatch selftests are careful to remove any of the livepatch
-test modules between testcases to avoid this situation, ftrace may still
-fail to be disabled if another trace is active on the system that was
-enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
-that use trampolines will cause this test to fail due to the trampoline
-being implemented with register_ftrace_direct().  The following is an
-example of such a trace:
+With the above approach ring quiesce can be avoided which is much more
+expensive then using RCU lock. On the system tested, io_uring_reigster with
+IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
+before with ring quiesce.
 
-tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
-(call_direct_funcs+0x0/0x30)
-        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
+The second patch creates the RCU protected data structure and removes ring
+quiesce for IORING_REGISTER_EVENTFD and IORING_UNREGISTER_EVENTFD.
 
-In order to make the test more resilient to system state that is out of its
-control, this patch adds a check to set_ftrace_enabled() to skip the tests
-if the sysctl invocation fails.
+The third patch builds on top of the second patch and removes ring quiesce
+for IORING_REGISTER_EVENTFD_ASYNC.
 
-Signed-off-by: David Vernet <void@manifault.com>
+The fourth patch completely removes ring quiesce from io_uring_register,
+as IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS dont need
+them.
+
 ---
- tools/testing/selftests/livepatch/functions.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+v4->v5:
+- Remove ring quiesce completely from io_uring_register (Pavel Begunkov)
+- Replaced rcu_barrier with unregistering flag (Jens Axboe)
+- Created a faster check for ctx->io_ev_fd in io_eventfd_signal and cleaned up
+io_eventfd_unregister (Jens Axboe)
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 846c7ed71556..6857fdcb6b45 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -78,6 +78,12 @@ function set_ftrace_enabled() {
- 	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
- 		 sysctl kernel.ftrace_enabled 2>&1)
- 	echo "livepatch: $result" > /dev/kmsg
-+	# Skip the test if ftrace is busy.  This can happen under normal system
-+	# conditions if a trace is marked as permament.
-+	if [[ "$result" == *"Device or resource busy"* ]]; then
-+		skip "failed to set kernel.ftrace_enabled=$1"
-+	fi
-+
- }
- 
- function cleanup() {
+v3->v4:
+- Switch back to call_rcu and use rcu_barrier incase io_eventfd_register fails
+to make sure all rcu callbacks have finished.
+
+v2->v3:
+- Switched to using synchronize_rcu from call_rcu in io_eventfd_unregister.
+
+v1->v2:
+- Added patch to remove eventfd from tracepoint (Patch 1) (Jens Axboe)
+- Made the code of io_should_trigger_evfd as part of io_eventfd_signal (Jens Axboe)
+
+Usama Arif (4):
+  io_uring: remove trace for eventfd
+  io_uring: avoid ring quiesce while registering/unregistering eventfd
+  io_uring: avoid ring quiesce for IORING_REGISTER_EVENTFD_ASYNC
+  io_uring: remove ring quiesce for io_uring_register
+
+ fs/io_uring.c                   | 202 ++++++++++++++++----------------
+ include/trace/events/io_uring.h |  13 +-
+ 2 files changed, 107 insertions(+), 108 deletions(-)
+
 -- 
-2.30.2
+2.25.1
 

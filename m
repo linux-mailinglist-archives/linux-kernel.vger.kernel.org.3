@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301144A8A37
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCF14A8A4F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242823AbiBCRgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
+        id S1352963AbiBCRlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbiBCRgt (ORCPT
+        with ESMTP id S233583AbiBCRlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:36:49 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82125C061714;
-        Thu,  3 Feb 2022 09:36:49 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id s6so2718695plg.12;
-        Thu, 03 Feb 2022 09:36:49 -0800 (PST)
+        Thu, 3 Feb 2022 12:41:13 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF66C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:41:13 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id l35-20020a05600c1d2300b0034d477271c1so2259743wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:41:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5I5a2aleiUaHSVG05eSin+O0+2GmadoXbT1CBpGVmVg=;
-        b=YDwf9xGAGoiZuHSers3gN6OILdgsP9eLyNRCH8J26MT2gnOeZKqba+PbqExN6UOHs6
-         /jc5670/4mCF/Odu5BZjQpeFseTMLNsg7dtnSt47OrDxtGNWnuCfYn/bO5s9BbPzdXIz
-         PFuDU+YNZIwf6ijsPZ3cHipUwkTm5SQ+EEZh00cIiscgkVKA/sejW/oZMfYUectIiZo9
-         FNPZOrFvtM/r2VhvsYl05rqbVr46nHdiiXW3YTP97j+TaOJ6NSeXjDj2pA2f7dqsEeH/
-         +QX1PqtRtAs+1gKXk2+FHXequc0mosXqGGMnsbjNEPdJGsRb0X5fXJY6Xl4OUNFXTXSX
-         DMKg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xd4DGUq9kw+BfMNHUHiY9oIyyvEkpc0zUEM7H44Lzxw=;
+        b=0a8Wi66hKFd4gzwxxrTzgOyaolxmgnD5w8kDd5YSm7hJnlvkZ9e0k+TW3guNhdvgX8
+         imhCo/OrBK1U8K5HlkHiqGxUQB5X0wg3ilb7xpQI+ZWICoQfF2qCJVhtmwS22eh4yB+p
+         aQg2TQO6Wy4c6tLFkGqxTPyRXRbs+Vv/CChNaf5qy2xr2dOb+uICIzD8p3wiC7fDWP8X
+         LOUwo5UuSer8fZw9+QN4mn8Tmyy5BnH1SJ4mK6RZvmr6Onfk0o3qyvMiGQdE/ysjH2+m
+         kvcWfnxRW0Uk9EDLHPiVwpwib1zYRRWY9UE33peC8T/RtAx2kmmnVFyOefsGLt17rxjd
+         ouWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5I5a2aleiUaHSVG05eSin+O0+2GmadoXbT1CBpGVmVg=;
-        b=20fxrEiHJ8tR7dMT+isiXnjFAS2gbOzVzWbyIRIxcEMe6ieziKomA0bi/LfaEVKkfr
-         z8mmQyTzEVJWQmthAhf1XTv+PGRWQsCC8j5YO3TVyUXKMhK8VZs2IADHXFa0TuAQCuqq
-         MncfE6H/QcLaAZ02OPnX0qlCNZYDAyX9xQUCNF+vzCDCNEIyQsqZtQD/z1p/wHuH6Qt0
-         e9Jfh9y6sBASspfhFSxo6Ub22PE05YB0dzbeyecJp1GyY2W42eDImcrUYQYgp3IUED+x
-         uvxWE0sge2di8J58r8mMjrkqKqpZhFWGb196FjP+sCkjLqDfJ0XIzOAK7XOfc24PBaXg
-         RXgA==
-X-Gm-Message-State: AOAM5302l6NOwmzI8uKTW7TTUN5Rft+QtO5IOPn+h7PaVhx/5YxTIkte
-        Imnr7aDuJIYz7634krwmtsxXWmtAATsdmknOX+8=
-X-Google-Smtp-Source: ABdhPJxYcrN4bvEQR+zrWc1ogjgqtyMArTJR/wnAUtNmwp9bx3XLZzgrs74tmsW6jlgG+l8ba92xQ/XeVftoXlgmr5s=
-X-Received: by 2002:a17:90b:4ac6:: with SMTP id mh6mr15271610pjb.138.1643909808921;
- Thu, 03 Feb 2022 09:36:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xd4DGUq9kw+BfMNHUHiY9oIyyvEkpc0zUEM7H44Lzxw=;
+        b=VzzWmMOPdev+Lv2KEVph+2weRJ2g3+FyIFdQmLwAqo7cxDU0XSObhzphyxduYUrX+v
+         bbGo3LKP5V8RyqGX+UE0S/Dwp9F1JLsVgRliAMbUUiutiu5Cv7AdLSpzb4eKekIXCbkt
+         SGzE3XjukTAXOI2ZGiJZeo/bGUoRYkhz0eFDj72SuT2AUQbb6QzNe2ln+HDJ3mA9IMcE
+         1UXX+isugnQNgfMpS23ASAZGRa6G5h4iTPMb/aw8JoDHVItCyKLvFZ3di9yH5Nj/bGOf
+         OLdGrnv7s0IOvbc1IYlDPEMn1wHCE6msdwygyoVcYilmnAEGGvCBkKMarpIQQ0ODBiho
+         O47g==
+X-Gm-Message-State: AOAM531O8AhLUPGBhxhn5wjlK3OYs2N5LZHWbCrFL9S8gfnv3A2JnyKj
+        WppyuemuVYNnzreZbM1jK8E8zg==
+X-Google-Smtp-Source: ABdhPJzVT1OY/XzCqUg2UtiNztthnmGyprdElBBn0f8cMpgmct1ulBSwVBM9qhJwo/QKj3s/er6nVA==
+X-Received: by 2002:a05:600c:348f:: with SMTP id a15mr11167648wmq.154.1643910072284;
+        Thu, 03 Feb 2022 09:41:12 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
+        by smtp.gmail.com with ESMTPSA id r2sm10166178wmq.24.2022.02.03.09.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 09:41:11 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v3 0/3] io_uring: avoid ring quiesce in io_uring_register for eventfd opcodes
+Date:   Thu,  3 Feb 2022 17:41:05 +0000
+Message-Id: <20220203174108.668549-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220202211328.176481-1-mcroce@linux.microsoft.com> <20220202211328.176481-3-mcroce@linux.microsoft.com>
-In-Reply-To: <20220202211328.176481-3-mcroce@linux.microsoft.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 3 Feb 2022 09:36:38 -0800
-Message-ID: <CAADnVQ+PpCHnQoTxJ2V0305SnSmftngyGGaq1m71ai0KS1jZ9w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: test maximum recursion
- depth for bpf_core_types_are_compat()
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 1:13 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->
-> From: Matteo Croce <mcroce@microsoft.com>
->
-> bpf_core_types_are_compat() was limited to 2 recursion levels, which are
-> enough to parse a function prototype.
-> Add a test which checks the existence of a function prototype, so to
-> test the bpf_core_types_are_compat() code path.
->
-> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
-> ---
->  .../selftests/bpf/bpf_testmod/bpf_testmod.c        |  3 +++
->  tools/testing/selftests/bpf/progs/core_kern.c      | 14 ++++++++++++++
->  2 files changed, 17 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> index 595d32ab285a..a457071a7751 100644
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -13,6 +13,9 @@
->  #define CREATE_TRACE_POINTS
->  #include "bpf_testmod-events.h"
->
-> +typedef int (*func_proto_typedef)(long);
-> +func_proto_typedef funcp = NULL;
-> +
->  DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
->
->  noinline void
-> diff --git a/tools/testing/selftests/bpf/progs/core_kern.c b/tools/testing/selftests/bpf/progs/core_kern.c
-> index 13499cc15c7d..bfea86b42563 100644
-> --- a/tools/testing/selftests/bpf/progs/core_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/core_kern.c
-> @@ -101,4 +101,18 @@ int balancer_ingress(struct __sk_buff *ctx)
->         return 0;
->  }
->
-> +typedef int (*func_proto_typedef___match)(long);
-> +typedef void (*func_proto_typedef___doesnt_match)(char*);
-> +
-> +int out[2];
-> +
-> +SEC("raw_tracepoint/sys_enter")
-> +int core_relo_recur_limit(void *ctx)
-> +{
-> +       out[0] = bpf_core_type_exists(func_proto_typedef___match);
-> +       out[1] = bpf_core_type_exists(func_proto_typedef___doesnt_match);
+This is done by creating a new RCU data structure (io_ev_fd) as part of
+io_ring_ctx that holds the eventfd_ctx, with reads to the structure protected
+by rcu_read_lock and writes (register/unregister calls) protected by a mutex.
 
-How does it test it?
-The kernel code could be a nop and there will be no failure in this "test".
-Please make it real.
-Also add tests that exercise the limit of recursion.
-One that goes over and fails and another that is right at the limit
-and passes.
+With the above approach ring quiesce can be avoided which is much more
+expensive then using RCU lock. On the system tested, io_uring_reigster with
+IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
+before with ring quiesce.
+
+The first patch creates the RCU protected data structure and removes ring
+quiesce for IORING_REGISTER_EVENTFD and IORING_UNREGISTER_EVENTFD.
+
+The second patch builds on top of the first patch and removes ring quiesce
+for IORING_REGISTER_EVENTFD_ASYNC.
+
+---
+v2->v3:
+- Switched to using synchronize_rcu from call_rcu in io_eventfd_unregister
+
+v1->v2:
+- Added patch to remove eventfd from tracepoint (Patch 1) (Jens Axboe)
+- Made the code of io_should_trigger_evfd as part of io_eventfd_signal (Jens Axboe)
+
+Usama Arif (3):
+  io_uring: remove trace for eventfd
+  io_uring: avoid ring quiesce while registering/unregistering eventfd
+  io_uring: avoid ring quiesce for IORING_REGISTER_EVENTFD_ASYNC
+
+ fs/io_uring.c                   | 114 ++++++++++++++++++++++----------
+ include/trace/events/io_uring.h |  13 ++--
+ 2 files changed, 83 insertions(+), 44 deletions(-)
+
+-- 
+2.25.1
+

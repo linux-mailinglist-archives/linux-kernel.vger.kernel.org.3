@@ -2,579 +2,795 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142254A855C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3644A8565
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350894AbiBCNiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:38:07 -0500
-Received: from mout.gmx.net ([212.227.15.15]:55237 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235297AbiBCNiA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:38:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643895471;
-        bh=ZgtVvxzUB1nMPgqoLUJyvsXl+0HSis5vpYVwljbMF1Y=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iItWsQTLBJ4ONnKw46VQu1LCPgN3Ibb/9lZ3KmkF3cfihQODrt3MBScXQabUhBPUI
-         W847W1fo1LY0qQ6xLON8mDaYZGF2YeXI3ImWDIWbKErQ9dh3SfpXoTlZqsyY4hJXI5
-         TyvzprYFTMgLwUH2tIIOv6y8FK8CW+4RK7L57XKc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([185.66.193.41]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ycr-1nCaAP3CSh-0032tF; Thu, 03
- Feb 2022 14:37:50 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-gpio@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        kernel test robot <lkp@intel.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH v2 2/2] pinctrl: nuvoton: npcm7xx: Rename DS() macro to DSTR()
-Date:   Thu,  3 Feb 2022 14:37:36 +0100
-Message-Id: <20220203133736.246397-3-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203133736.246397-1-j.neuschaefer@gmx.net>
-References: <20220203133736.246397-1-j.neuschaefer@gmx.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:bGSgyWUC/ROYPs9zyQSODAdhoEuyboOmi971MBKWjXD8NqoO0mr
- eOBuqA67rVP5GWDMLALI10Aoeq07EdcJKpxecEQ3XCkGYWjoNqqTGznWk1iO9fs2BXcDRbK
- dpnuyUrOnRhRS1tg2m8y3gwDdeyI/0D9kUjkQnwQrClEJkH45eW1R8YJi+lvB6OkEZgJhxc
- TX/JlS4kEILDoFVBKnj5g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NdVELxhnDqA=:900bO13cTRRWMw5jiYWtwV
- acS7uMfI8x5bqY8zHTK6kh9uWNKxlbzPSMPYVX4bTyE69qJePpKPPshltXHIh3J3/PmgwU2nG
- dOD/D+/ciJsvmHBfXb9cR9cjYOMZckQg6vDzTZzozDfevvlu/qNF6sZX9/tP1rAcP+r3gmf/A
- Xkf5xOdLEs79Hfco4qTed3sNy458RoiVWzQSiM/tcUChb65FEqw/Pr9WRiRqII4Mm2d6t1a3f
- zmA1hW2czVQCzaCxQdyqZa6rWCZvvr+Zt3tIP4nBB9QVxeIHQu5KeiqM1yUWsqGl8FRROCJ+J
- BsoYgHbJVTzRhFPB2jcjw/cdbHMII3ivbTjWSsG5rYBES9L7WHDzvjSNV1dk6JZo+yIQNwsZG
- hkLdECBbn3zoGWvnmk97CxK3V5nEsFDzAU+LAqdwuS/4DyJhnOC6ViNoa8cZ6qElEIyVQiHfz
- pfRS7mAgyUOncs1lkPFWaMEPr6PDbLOz9B5jPYZFpJfYfaoivvE/unjX3N9aY6qTeLMQaZ+Wl
- xyaw9vCH+TqKOQfCs6aVRHA3oDDw4vpoU6JkBhoFvDn2hu/l+JvVQMyXSeP8kBeoD2oi1ZDDa
- h7z6cl/xvdJi7wWubqj2Qu+JDvOjvR0t3bdK9FE7UanvXTWeZRmMbIPhC7Y5ME0mm/LzPqL4t
- sjVXhu3EYNfG0jhs2RHHsXQaveAgIYVzRbhIWUysFmIV6A0EkrjKkjWpBSvMId0CdsfpvO5+Z
- kWAfALBFr2OK6BGRmv7jBbqImTIL4vn7odI/5yTwcVxcYQzfCny3ynET2WsYiiBYMDpNa6kki
- k8Kdi5BbKqeAcq5StBFXKtUREZrj5qVYl5TnsmJlAFfFPFmA87uNDD31ekQ2+SmkfYglMzNHi
- vA6dnueYmmj9RcotYJuENnvtBy07WC0b6gdEdxWvWs1at8QM07Kyv8tUR/fN/TeepLCA/icf1
- Ojr9XiRnfH/723RjoUpSimt8MTYQfT14B9CXD3thiaQsv64zwbdUaQS0lXn//tjzFb8Zyh8Ec
- wIOYtBD0erHuvHxDNBqM2JtcYwAKeacnm2jRuwaT1AlqIOvE/vwaOVPIlLItXlP7hDWyukJ9+
- 4BLMxRz/V/3o2s=
+        id S238693AbiBCNjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231362AbiBCNjo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:39:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F3CC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 05:39:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E84A8B833DB
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:39:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F853C340E4;
+        Thu,  3 Feb 2022 13:39:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643895581;
+        bh=FTgpAebOl3Jd2u4x6/Bq7PN0pDlcldAUTbjw+AcX7sE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=lmN5QgHmCf+GwLkOnMwKjF9ARD3EFYUIAtLkXelvNHVXISLGJV9pPlks1haPfY3if
+         01pBOIkeEf+OL749SUqgD1ppHy/Z6sE7juNBhqWEf9n7EAEuU7IPJzOFof2NPOSGfi
+         KtN7BSChe/6LqdzY7eZ4N1X2OHdNiXYnnTpHc3RsgfwdSfkpK9myp9x+hsQ1356xsn
+         6jtsLndXBiq8oKGea2HZ654h0m0GkHg2n3MFuoAHCzF8uyFGkdnc1/Dp8O9lsXlJxC
+         HWUHmrfEw0GeGCV2e9ril6GuyHoIHE1rsnik8/fuyN5bMoMWRBKCfju6bnA89c2p4P
+         dZ6duZg9ln3/Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     Pedro Demarchi Gomes <pedrodemargomes@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon: Add option to monitor only writes
+Date:   Thu,  3 Feb 2022 13:39:38 +0000
+Message-Id: <20220203133938.1696-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220203131237.298090-1-pedrodemargomes@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The name "DS" is defined in arch/x86/um/shared/sysdep/ptrace_64.h,
-which results in a compiler warning when build-testing on ARCH=3Dum.
-Rename this driver's "DS" macro to DSTR so avoid this collision.
+Hi Pedro,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 3b588e43ee5c7 ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driv=
-er")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-=2D--
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 158 +++++++++++-----------
- 1 file changed, 79 insertions(+), 79 deletions(-)
 
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/n=
-uvoton/pinctrl-npcm7xx.c
-index 705576e03e334..4ec5646c01c7f 100644
-=2D-- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-@@ -905,7 +905,7 @@ static struct npcm7xx_func npcm7xx_funcs[] =3D {
- #define DRIVE_STRENGTH_HI_SHIFT		12
- #define DRIVE_STRENGTH_MASK		0x0000FF00
+Thank you for this patch!
 
--#define DS(lo, hi)	(((lo) << DRIVE_STRENGTH_LO_SHIFT) | \
-+#define DSTR(lo, hi)	(((lo) << DRIVE_STRENGTH_LO_SHIFT) | \
- 			 ((hi) << DRIVE_STRENGTH_HI_SHIFT))
- #define DSLO(x)		(((x) >> DRIVE_STRENGTH_LO_SHIFT) & 0xF)
- #define DSHI(x)		(((x) >> DRIVE_STRENGTH_HI_SHIFT) & 0xF)
-@@ -925,31 +925,31 @@ struct npcm7xx_pincfg {
- static const struct npcm7xx_pincfg pincfg[] =3D {
- 	/*		PIN	  FUNCTION 1		   FUNCTION 2		  FUNCTION 3	    FLAGS */
- 	NPCM7XX_PINCFG(0,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  0),
--	NPCM7XX_PINCFG(1,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  DS(8, 12)),
--	NPCM7XX_PINCFG(2,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  DS(8, 12)),
-+	NPCM7XX_PINCFG(1,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  DSTR(8, 12)),
-+	NPCM7XX_PINCFG(2,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  DSTR(8, 12)),
- 	NPCM7XX_PINCFG(3,	 iox1, MFSEL1, 30,	  none, NONE, 0,	none, NONE, 0,	   =
-  0),
- 	NPCM7XX_PINCFG(4,	 iox2, MFSEL3, 14,	 smb1d, I2CSEGSEL, 7,	none, NONE, 0=
-,	     SLEW),
- 	NPCM7XX_PINCFG(5,	 iox2, MFSEL3, 14,	 smb1d, I2CSEGSEL, 7,	none, NONE, 0=
-,	     SLEW),
- 	NPCM7XX_PINCFG(6,	 iox2, MFSEL3, 14,	 smb2d, I2CSEGSEL, 10,  none, NONE,=
- 0,       SLEW),
- 	NPCM7XX_PINCFG(7,	 iox2, MFSEL3, 14,	 smb2d, I2CSEGSEL, 10,  none, NONE,=
- 0,       SLEW),
--	NPCM7XX_PINCFG(8,      lkgpo1, FLOCKR1, 4,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(9,      lkgpo2, FLOCKR1, 8,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(10,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12)),
--	NPCM7XX_PINCFG(11,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12)),
-+	NPCM7XX_PINCFG(8,      lkgpo1, FLOCKR1, 4,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(9,      lkgpo2, FLOCKR1, 8,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(10,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12)),
-+	NPCM7XX_PINCFG(11,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12)),
- 	NPCM7XX_PINCFG(12,	 gspi, MFSEL1, 24,	 smb5b, I2CSEGSEL, 19,  none, NONE=
-, 0,	     SLEW),
- 	NPCM7XX_PINCFG(13,	 gspi, MFSEL1, 24,	 smb5b, I2CSEGSEL, 19,  none, NONE=
-, 0,	     SLEW),
- 	NPCM7XX_PINCFG(14,	 gspi, MFSEL1, 24,	 smb5c, I2CSEGSEL, 20,	none, NONE,=
- 0,	     SLEW),
- 	NPCM7XX_PINCFG(15,	 gspi, MFSEL1, 24,	 smb5c, I2CSEGSEL, 20,	none, NONE,=
- 0,	     SLEW),
--	NPCM7XX_PINCFG(16,     lkgpo0, FLOCKR1, 0,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(17,      pspi2, MFSEL3, 13,     smb4den, I2CSEGSEL, 23,  =
-none, NONE, 0,       DS(8, 12)),
--	NPCM7XX_PINCFG(18,      pspi2, MFSEL3, 13,	 smb4b, I2CSEGSEL, 14,  none,=
- NONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(19,      pspi2, MFSEL3, 13,	 smb4b, I2CSEGSEL, 14,  none,=
- NONE, 0,	     DS(8, 12)),
-+	NPCM7XX_PINCFG(16,     lkgpo0, FLOCKR1, 0,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(17,      pspi2, MFSEL3, 13,     smb4den, I2CSEGSEL, 23,  =
-none, NONE, 0,       DSTR(8, 12)),
-+	NPCM7XX_PINCFG(18,      pspi2, MFSEL3, 13,	 smb4b, I2CSEGSEL, 14,  none,=
- NONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(19,      pspi2, MFSEL3, 13,	 smb4b, I2CSEGSEL, 14,  none,=
- NONE, 0,	     DSTR(8, 12)),
- 	NPCM7XX_PINCFG(20,	smb4c, I2CSEGSEL, 15,    smb15, MFSEL3, 8,      none,=
- NONE, 0,	     0),
- 	NPCM7XX_PINCFG(21,	smb4c, I2CSEGSEL, 15,    smb15, MFSEL3, 8,      none,=
- NONE, 0,	     0),
- 	NPCM7XX_PINCFG(22,      smb4d, I2CSEGSEL, 16,	 smb14, MFSEL3, 7,      no=
-ne, NONE, 0,	     0),
- 	NPCM7XX_PINCFG(23,      smb4d, I2CSEGSEL, 16,	 smb14, MFSEL3, 7,      no=
-ne, NONE, 0,	     0),
--	NPCM7XX_PINCFG(24,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12)),
--	NPCM7XX_PINCFG(25,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12)),
-+	NPCM7XX_PINCFG(24,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12)),
-+	NPCM7XX_PINCFG(25,	 ioxh, MFSEL3, 18,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12)),
- 	NPCM7XX_PINCFG(26,	 smb5, MFSEL1, 2,	  none, NONE, 0,	none, NONE, 0,	   =
-  0),
- 	NPCM7XX_PINCFG(27,	 smb5, MFSEL1, 2,	  none, NONE, 0,	none, NONE, 0,	   =
-  0),
- 	NPCM7XX_PINCFG(28,	 smb4, MFSEL1, 1,	  none, NONE, 0,	none, NONE, 0,	   =
-  0),
-@@ -965,12 +965,12 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(39,	smb3b, I2CSEGSEL, 11,	  none, NONE, 0,	none, NONE, 0,=
-	     SLEW),
- 	NPCM7XX_PINCFG(40,	smb3b, I2CSEGSEL, 11,	  none, NONE, 0,	none, NONE, 0,=
-	     SLEW),
- 	NPCM7XX_PINCFG(41,  bmcuart0a, MFSEL1, 9,         none, NONE, 0,	none, N=
-ONE, 0,	     0),
--	NPCM7XX_PINCFG(42,  bmcuart0a, MFSEL1, 9,         none, NONE, 0,	none, N=
-ONE, 0,	     DS(2, 4) | GPO),
-+	NPCM7XX_PINCFG(42,  bmcuart0a, MFSEL1, 9,         none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(2, 4) | GPO),
- 	NPCM7XX_PINCFG(43,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,  bmcuart1,=
- MFSEL3, 24,    0),
- 	NPCM7XX_PINCFG(44,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,  bmcuart1,=
- MFSEL3, 24,    0),
- 	NPCM7XX_PINCFG(45,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,	none, NONE=
-, 0,	     0),
--	NPCM7XX_PINCFG(46,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,	none, NONE=
-, 0,	     DS(2, 8)),
--	NPCM7XX_PINCFG(47,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,	none, NONE=
-, 0,	     DS(2, 8)),
-+	NPCM7XX_PINCFG(46,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,	none, NONE=
-, 0,	     DSTR(2, 8)),
-+	NPCM7XX_PINCFG(47,      uart1, MFSEL1, 10,	 jtag2, MFSEL4, 0,	none, NONE=
-, 0,	     DSTR(2, 8)),
- 	NPCM7XX_PINCFG(48,	uart2, MFSEL1, 11,   bmcuart0b, MFSEL4, 1,      none,=
- NONE, 0,	     GPO),
- 	NPCM7XX_PINCFG(49,	uart2, MFSEL1, 11,   bmcuart0b, MFSEL4, 1,      none,=
- NONE, 0,	     0),
- 	NPCM7XX_PINCFG(50,	uart2, MFSEL1, 11,	  none, NONE, 0,        none, NONE=
-, 0,	     0),
-@@ -980,8 +980,8 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(54,	uart2, MFSEL1, 11,	  none, NONE, 0,        none, NONE=
-, 0,	     0),
- 	NPCM7XX_PINCFG(55,	uart2, MFSEL1, 11,	  none, NONE, 0,        none, NONE=
-, 0,	     0),
- 	NPCM7XX_PINCFG(56,	r1err, MFSEL1, 12,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
--	NPCM7XX_PINCFG(57,       r1md, MFSEL1, 13,        none, NONE, 0,        =
-none, NONE, 0,       DS(2, 4)),
--	NPCM7XX_PINCFG(58,       r1md, MFSEL1, 13,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(2, 4)),
-+	NPCM7XX_PINCFG(57,       r1md, MFSEL1, 13,        none, NONE, 0,        =
-none, NONE, 0,       DSTR(2, 4)),
-+	NPCM7XX_PINCFG(58,       r1md, MFSEL1, 13,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(2, 4)),
- 	NPCM7XX_PINCFG(59,	smb3d, I2CSEGSEL, 13,	  none, NONE, 0,	none, NONE, 0,=
-	     0),
- 	NPCM7XX_PINCFG(60,	smb3d, I2CSEGSEL, 13,	  none, NONE, 0,	none, NONE, 0,=
-	     0),
- 	NPCM7XX_PINCFG(61,      uart1, MFSEL1, 10,	  none, NONE, 0,	none, NONE, =
-0,     GPO),
-@@ -1004,19 +1004,19 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(77,    fanin13, MFSEL2, 13,        none, NONE, 0,	none, N=
-ONE, 0,	     0),
- 	NPCM7XX_PINCFG(78,    fanin14, MFSEL2, 14,        none, NONE, 0,	none, N=
-ONE, 0,	     0),
- 	NPCM7XX_PINCFG(79,    fanin15, MFSEL2, 15,        none, NONE, 0,	none, N=
-ONE, 0,	     0),
--	NPCM7XX_PINCFG(80,	 pwm0, MFSEL2, 16,        none, NONE, 0,	none, NONE, =
-0,	     DS(4, 8)),
--	NPCM7XX_PINCFG(81,	 pwm1, MFSEL2, 17,        none, NONE, 0,	none, NONE, =
-0,	     DS(4, 8)),
--	NPCM7XX_PINCFG(82,	 pwm2, MFSEL2, 18,        none, NONE, 0,	none, NONE, =
-0,	     DS(4, 8)),
--	NPCM7XX_PINCFG(83,	 pwm3, MFSEL2, 19,        none, NONE, 0,	none, NONE, =
-0,	     DS(4, 8)),
--	NPCM7XX_PINCFG(84,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(85,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(86,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(80,	 pwm0, MFSEL2, 16,        none, NONE, 0,	none, NONE, =
-0,	     DSTR(4, 8)),
-+	NPCM7XX_PINCFG(81,	 pwm1, MFSEL2, 17,        none, NONE, 0,	none, NONE, =
-0,	     DSTR(4, 8)),
-+	NPCM7XX_PINCFG(82,	 pwm2, MFSEL2, 18,        none, NONE, 0,	none, NONE, =
-0,	     DSTR(4, 8)),
-+	NPCM7XX_PINCFG(83,	 pwm3, MFSEL2, 19,        none, NONE, 0,	none, NONE, =
-0,	     DSTR(4, 8)),
-+	NPCM7XX_PINCFG(84,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(85,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(86,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(87,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     0),
- 	NPCM7XX_PINCFG(88,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     0),
- 	NPCM7XX_PINCFG(89,         r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,	     0),
- 	NPCM7XX_PINCFG(90,      r2err, MFSEL1, 15,        none, NONE, 0,        =
-none, NONE, 0,       0),
--	NPCM7XX_PINCFG(91,       r2md, MFSEL1, 16,	  none, NONE, 0,        none,=
- NONE, 0,	     DS(2, 4)),
--	NPCM7XX_PINCFG(92,       r2md, MFSEL1, 16,	  none, NONE, 0,        none,=
- NONE, 0,	     DS(2, 4)),
-+	NPCM7XX_PINCFG(91,       r2md, MFSEL1, 16,	  none, NONE, 0,        none,=
- NONE, 0,	     DSTR(2, 4)),
-+	NPCM7XX_PINCFG(92,       r2md, MFSEL1, 16,	  none, NONE, 0,        none,=
- NONE, 0,	     DSTR(2, 4)),
- 	NPCM7XX_PINCFG(93,    ga20kbc, MFSEL1, 17,	 smb5d, I2CSEGSEL, 21,  none,=
- NONE, 0,	     0),
- 	NPCM7XX_PINCFG(94,    ga20kbc, MFSEL1, 17,	 smb5d, I2CSEGSEL, 21,  none,=
- NONE, 0,	     0),
- 	NPCM7XX_PINCFG(95,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL1=
-, 26,    0),
-@@ -1062,34 +1062,34 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(133,	smb10, MFSEL4, 13,	  none, NONE, 0,	none, NONE, 0,	 =
-    0),
- 	NPCM7XX_PINCFG(134,	smb11, MFSEL4, 14,	  none, NONE, 0,	none, NONE, 0,	 =
-    0),
- 	NPCM7XX_PINCFG(135,	smb11, MFSEL4, 14,	  none, NONE, 0,	none, NONE, 0,	 =
-    0),
--	NPCM7XX_PINCFG(136,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(137,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(138,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(139,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(140,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(136,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(137,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(138,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(139,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(140,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(141,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    0),
--	NPCM7XX_PINCFG(142,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(142,	  sd1, MFSEL3, 12,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(143,       sd1, MFSEL3, 12,      sd1pwr, MFSEL4, 5,      =
-none, NONE, 0,       0),
--	NPCM7XX_PINCFG(144,	 pwm4, MFSEL2, 20,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(4, 8)),
--	NPCM7XX_PINCFG(145,	 pwm5, MFSEL2, 21,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(4, 8)),
--	NPCM7XX_PINCFG(146,	 pwm6, MFSEL2, 22,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(4, 8)),
--	NPCM7XX_PINCFG(147,	 pwm7, MFSEL2, 23,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(4, 8)),
--	NPCM7XX_PINCFG(148,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(149,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(150,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(151,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(152,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(144,	 pwm4, MFSEL2, 20,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(4, 8)),
-+	NPCM7XX_PINCFG(145,	 pwm5, MFSEL2, 21,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(4, 8)),
-+	NPCM7XX_PINCFG(146,	 pwm6, MFSEL2, 22,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(4, 8)),
-+	NPCM7XX_PINCFG(147,	 pwm7, MFSEL2, 23,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(4, 8)),
-+	NPCM7XX_PINCFG(148,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(149,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(150,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(151,	 mmc8, MFSEL3, 11,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(152,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(153,     mmcwp, FLOCKR1, 24,       none, NONE, 0,	none, N=
-ONE, 0,	     0),  /* Z1/A1 */
--	NPCM7XX_PINCFG(154,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(154,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(155,     mmccd, MFSEL3, 25,      mmcrst, MFSEL4, 6,      =
-none, NONE, 0,       0),  /* Z1/A1 */
--	NPCM7XX_PINCFG(156,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(157,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(158,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(159,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DS(8, 12) | SLEW),
--
--	NPCM7XX_PINCFG(160,    clkout, MFSEL1, 21,        none, NONE, 0,        =
-none, NONE, 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(161,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL=
-1, 26,    DS(8, 12)),
--	NPCM7XX_PINCFG(162,    serirq, NONE, 0,           gpio, MFSEL1, 31,	none=
-, NONE, 0,	     DS(8, 12)),
-+	NPCM7XX_PINCFG(156,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(157,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(158,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(159,	  mmc, MFSEL3, 10,	  none, NONE, 0,	none, NONE, 0,	 =
-    DSTR(8, 12) | SLEW),
-+
-+	NPCM7XX_PINCFG(160,    clkout, MFSEL1, 21,        none, NONE, 0,        =
-none, NONE, 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(161,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL=
-1, 26,    DSTR(8, 12)),
-+	NPCM7XX_PINCFG(162,    serirq, NONE, 0,           gpio, MFSEL1, 31,	none=
-, NONE, 0,	     DSTR(8, 12)),
- 	NPCM7XX_PINCFG(163,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL=
-1, 26,    0),
- 	NPCM7XX_PINCFG(164,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL=
-1, 26,    SLEWLPC),
- 	NPCM7XX_PINCFG(165,	  lpc, NONE, 0,		  espi, MFSEL4, 8,      gpio, MFSEL=
-1, 26,    SLEWLPC),
-@@ -1102,25 +1102,25 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(172,	 smb6, MFSEL3, 1,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(173,	 smb7, MFSEL3, 2,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(174,	 smb7, MFSEL3, 2,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
--	NPCM7XX_PINCFG(175,	pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      none=
-, NONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(176,     pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      =
-none, NONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(177,     pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      =
-none, NONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(178,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(179,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(180,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DS(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(175,	pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      none=
-, NONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(176,     pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      =
-none, NONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(177,     pspi1, MFSEL3, 4,       faninx, MFSEL3, 3,      =
-none, NONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(178,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(179,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(180,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   DSTR(8, 12) | SLEW),
- 	NPCM7XX_PINCFG(181,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(182,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
--	NPCM7XX_PINCFG(183,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(184,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DS(8, 12) | SLEW | GPO),
--	NPCM7XX_PINCFG(185,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DS(8, 12) | SLEW | GPO),
--	NPCM7XX_PINCFG(186,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DS(8, 12)),
--	NPCM7XX_PINCFG(187,   spi3cs1, MFSEL4, 17,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12)),
--	NPCM7XX_PINCFG(188,  spi3quad, MFSEL4, 20,     spi3cs2, MFSEL4, 18,     =
-none, NONE, 0,    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(189,  spi3quad, MFSEL4, 20,     spi3cs3, MFSEL4, 19,     =
-none, NONE, 0,    DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(190,      gpio, FLOCKR1, 20,   nprd_smi, NONE, 0,	none, N=
-ONE, 0,	     DS(2, 4)),
--	NPCM7XX_PINCFG(191,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  DS(8, 12)),  /* XX */
--
--	NPCM7XX_PINCFG(192,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  DS(8, 12)),  /* XX */
-+	NPCM7XX_PINCFG(183,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(184,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DSTR(8, 12) | SLEW | GPO),
-+	NPCM7XX_PINCFG(185,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DSTR(8, 12) | SLEW | GPO),
-+	NPCM7XX_PINCFG(186,     spi3, MFSEL4, 16,	  none, NONE, 0,	none, NONE, 0=
-,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(187,   spi3cs1, MFSEL4, 17,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12)),
-+	NPCM7XX_PINCFG(188,  spi3quad, MFSEL4, 20,     spi3cs2, MFSEL4, 18,     =
-none, NONE, 0,    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(189,  spi3quad, MFSEL4, 20,     spi3cs3, MFSEL4, 19,     =
-none, NONE, 0,    DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(190,      gpio, FLOCKR1, 20,   nprd_smi, NONE, 0,	none, N=
-ONE, 0,	     DSTR(2, 4)),
-+	NPCM7XX_PINCFG(191,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  DSTR(8, 12)),  /* XX */
-+
-+	NPCM7XX_PINCFG(192,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  DSTR(8, 12)),  /* XX */
- 	NPCM7XX_PINCFG(193,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(194,	smb0b, I2CSEGSEL, 0,	  none, NONE, 0,	none, NONE, 0,=
-	     0),
- 	NPCM7XX_PINCFG(195,	smb0b, I2CSEGSEL, 0,	  none, NONE, 0,	none, NONE, 0,=
-	     0),
-@@ -1131,11 +1131,11 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(200,        r2, MFSEL1, 14,        none, NONE, 0,        =
-none, NONE, 0,       0),
- 	NPCM7XX_PINCFG(201,	   r1, MFSEL3, 9,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(202,	smb0c, I2CSEGSEL, 1,	  none, NONE, 0,	none, NONE, 0,=
-	     0),
--	NPCM7XX_PINCFG(203,    faninx, MFSEL3, 3,         none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12)),
-+	NPCM7XX_PINCFG(203,    faninx, MFSEL3, 3,         none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12)),
- 	NPCM7XX_PINCFG(204,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     SLEW),
- 	NPCM7XX_PINCFG(205,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     SLEW),
--	NPCM7XX_PINCFG(206,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     DS(4, 8)),
--	NPCM7XX_PINCFG(207,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     DS(4, 8)),
-+	NPCM7XX_PINCFG(206,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     DSTR(4, 8)),
-+	NPCM7XX_PINCFG(207,	  ddc, NONE, 0,           gpio, MFSEL3, 22,	none, NO=
-NE, 0,	     DSTR(4, 8)),
- 	NPCM7XX_PINCFG(208,       rg2, MFSEL4, 24,         ddr, MFSEL3, 26,     =
-none, NONE, 0,       0),
- 	NPCM7XX_PINCFG(209,       rg2, MFSEL4, 24,         ddr, MFSEL3, 26,     =
-none, NONE, 0,       0),
- 	NPCM7XX_PINCFG(210,       rg2, MFSEL4, 24,         ddr, MFSEL3, 26,     =
-none, NONE, 0,       0),
-@@ -1147,20 +1147,20 @@ static const struct npcm7xx_pincfg pincfg[] =3D {
- 	NPCM7XX_PINCFG(216,   rg2mdio, MFSEL4, 23,         ddr, MFSEL3, 26,     =
-none, NONE, 0,       0),
- 	NPCM7XX_PINCFG(217,   rg2mdio, MFSEL4, 23,         ddr, MFSEL3, 26,     =
-none, NONE, 0,       0),
- 	NPCM7XX_PINCFG(218,     wdog1, MFSEL3, 19,        none, NONE, 0,	none, N=
-ONE, 0,	     0),
--	NPCM7XX_PINCFG(219,     wdog2, MFSEL3, 20,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(4, 8)),
-+	NPCM7XX_PINCFG(219,     wdog2, MFSEL3, 20,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(4, 8)),
- 	NPCM7XX_PINCFG(220,	smb12, MFSEL3, 5,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(221,	smb12, MFSEL3, 5,	  none, NONE, 0,	none, NONE, 0,	  =
-   0),
- 	NPCM7XX_PINCFG(222,     smb13, MFSEL3, 6,         none, NONE, 0,	none, N=
-ONE, 0,	     0),
- 	NPCM7XX_PINCFG(223,     smb13, MFSEL3, 6,         none, NONE, 0,	none, N=
-ONE, 0,	     0),
+On Thu, 3 Feb 2022 10:12:36 -0300 Pedro Demarchi Gomes <pedrodemargomes@gmail.com> wrote:
 
- 	NPCM7XX_PINCFG(224,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     SLEW),
--	NPCM7XX_PINCFG(225,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DS(8, 12) | SLEW | GPO),
--	NPCM7XX_PINCFG(226,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DS(8, 12) | SLEW | GPO),
--	NPCM7XX_PINCFG(227,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(228,   spixcs1, MFSEL4, 28,        none, NONE, 0,	none, N=
-ONE, 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(229,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(230,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DS(8, 12) | SLEW),
--	NPCM7XX_PINCFG(231,    clkreq, MFSEL4, 9,         none, NONE, 0,        =
-none, NONE, 0,	     DS(8, 12)),
-+	NPCM7XX_PINCFG(225,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DSTR(8, 12) | SLEW | GPO),
-+	NPCM7XX_PINCFG(226,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DSTR(8, 12) | SLEW | GPO),
-+	NPCM7XX_PINCFG(227,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(228,   spixcs1, MFSEL4, 28,        none, NONE, 0,	none, N=
-ONE, 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(229,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(230,	 spix, MFSEL4, 27,        none, NONE, 0,	none, NONE,=
- 0,	     DSTR(8, 12) | SLEW),
-+	NPCM7XX_PINCFG(231,    clkreq, MFSEL4, 9,         none, NONE, 0,        =
-none, NONE, 0,	     DSTR(8, 12)),
- 	NPCM7XX_PINCFG(253,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  GPI), /* SDHC1 power */
- 	NPCM7XX_PINCFG(254,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  GPI), /* SDHC2 power */
- 	NPCM7XX_PINCFG(255,	 none, NONE, 0,		  none, NONE, 0,	none, NONE, 0,	   =
-  GPI), /* DACOSEL */
-=2D-
-2.34.1
+> When "writes" is written to /sys/kernel/debug/damon/counter_type damon will
+> monitor only writes.
 
+I think this would be better to be implemented as another monitoring primitive
+based on the virtual address space monitoring primitives, e.g., vaddr-writes?
+Then the implementation would be simpler and changes to other files will be
+minimized.  For the user space interface, we could use a prefix to target_ids
+debugfs file.  For example,
+
+    # echo "vaddr-writes $(pidof workload)" > $debugfs/damon/target_ids
+
+
+> This patch also adds the actions mergeable and unmergeable to damos schemes.
+> These actions are used by KSM as explained in [1].
+
+Please do that in a separate patch, and also update the document
+(Documentation/admin-guide/mm/damon/usage.rst).  And, what's the expected usage
+of the action and benefits?
+
+
+Thanks,
+SJ
+
+> 
+> [1] https://www.kernel.org/doc/html/latest/admin-guide/mm/ksm.html#controlling-ksm-with-madvise
+> 
+> Signed-off-by: Pedro Demarchi Gomes <pedrodemargomes@gmail.com>
+> ---
+>  include/linux/damon.h        | 13 ++++++
+>  include/trace/events/damon.h | 10 ++--
+>  mm/damon/core.c              | 91 +++++++++++++++++++++++++-----------
+>  mm/damon/dbgfs.c             | 72 +++++++++++++++++++++++++++-
+>  mm/damon/prmtv-common.c      | 88 ++++++++++++++++++++++++++++++++++
+>  mm/damon/prmtv-common.h      |  5 ++
+>  mm/damon/vaddr.c             | 80 ++++++++++++++++++++++++++++---
+>  7 files changed, 318 insertions(+), 41 deletions(-)
+> 
+> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> index b4d4be3cc987..9efe89bbcec8 100644
+> --- a/include/linux/damon.h
+> +++ b/include/linux/damon.h
+> @@ -44,11 +44,13 @@ struct damon_region {
+>  	struct damon_addr_range ar;
+>  	unsigned long sampling_addr;
+>  	unsigned int nr_accesses;
+> +	unsigned int nr_writes;
+>  	struct list_head list;
+>  
+>  	unsigned int age;
+>  /* private: Internal value for age calculation. */
+>  	unsigned int last_nr_accesses;
+> +	unsigned int last_nr_writes;
+>  };
+>  
+>  /**
+> @@ -88,6 +90,8 @@ enum damos_action {
+>  	DAMOS_PAGEOUT,
+>  	DAMOS_HUGEPAGE,
+>  	DAMOS_NOHUGEPAGE,
+> +	DAMOS_MERGEABLE,
+> +	DAMOS_UNMERGEABLE,
+>  	DAMOS_STAT,		/* Do nothing but only record the stat */
+>  };
+>  
+> @@ -185,6 +189,11 @@ struct damos_watermarks {
+>  	bool activated;
+>  };
+>  
+> +enum damos_counter_type {
+> +	DAMOS_NUMBER_ACCESSES,
+> +	DAMOS_NUMBER_WRITES,
+> +};
+> +
+>  /**
+>   * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
+>   * @min_sz_region:	Minimum size of target regions.
+> @@ -223,6 +232,9 @@ struct damos {
+>  	unsigned long max_sz_region;
+>  	unsigned int min_nr_accesses;
+>  	unsigned int max_nr_accesses;
+> +	unsigned int min_nr_writes;
+> +	unsigned int max_nr_writes;
+> +	enum damos_counter_type counter_type;
+>  	unsigned int min_age_region;
+>  	unsigned int max_age_region;
+>  	enum damos_action action;
+> @@ -386,6 +398,7 @@ struct damon_ctx {
+>  	struct damon_primitive primitive;
+>  	struct damon_callback callback;
+>  
+> +	enum damos_counter_type counter_type;
+>  	unsigned long min_nr_regions;
+>  	unsigned long max_nr_regions;
+>  	struct list_head adaptive_targets;
+> diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
+> index 2f422f4f1fb9..45573f421707 100644
+> --- a/include/trace/events/damon.h
+> +++ b/include/trace/events/damon.h
+> @@ -11,17 +11,17 @@
+>  
+>  TRACE_EVENT(damon_aggregated,
+>  
+> -	TP_PROTO(struct damon_target *t, struct damon_region *r,
+> +	TP_PROTO(struct damon_ctx *c, struct damon_target *t, struct damon_region *r,
+>  		unsigned int nr_regions),
+>  
+> -	TP_ARGS(t, r, nr_regions),
+> +	TP_ARGS(c, t, r, nr_regions),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(unsigned long, target_id)
+>  		__field(unsigned int, nr_regions)
+>  		__field(unsigned long, start)
+>  		__field(unsigned long, end)
+> -		__field(unsigned int, nr_accesses)
+> +		__field(unsigned int, nr)
+>  	),
+>  
+>  	TP_fast_assign(
+> @@ -29,12 +29,12 @@ TRACE_EVENT(damon_aggregated,
+>  		__entry->nr_regions = nr_regions;
+>  		__entry->start = r->ar.start;
+>  		__entry->end = r->ar.end;
+> -		__entry->nr_accesses = r->nr_accesses;
+> +		__entry->nr = c->counter_type == DAMOS_NUMBER_WRITES ? r->nr_writes : r->nr_accesses;
+>  	),
+>  
+>  	TP_printk("target_id=%lu nr_regions=%u %lu-%lu: %u",
+>  			__entry->target_id, __entry->nr_regions,
+> -			__entry->start, __entry->end, __entry->nr_accesses)
+> +			__entry->start, __entry->end, __entry->nr)
+>  );
+>  
+>  #endif /* _TRACE_DAMON_H */
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index e92497895202..e827231366db 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -45,10 +45,12 @@ struct damon_region *damon_new_region(unsigned long start, unsigned long end)
+>  	region->ar.start = start;
+>  	region->ar.end = end;
+>  	region->nr_accesses = 0;
+> +	region->nr_writes = 0;
+>  	INIT_LIST_HEAD(&region->list);
+>  
+>  	region->age = 0;
+>  	region->last_nr_accesses = 0;
+> +	region->last_nr_writes = 0;
+>  
+>  	return region;
+>  }
+> @@ -89,7 +91,7 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t)
+>  
+>  struct damos *damon_new_scheme(
+>  		unsigned long min_sz_region, unsigned long max_sz_region,
+> -		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
+> +		unsigned int min_nr, unsigned int max_nr,
+>  		unsigned int min_age_region, unsigned int max_age_region,
+>  		enum damos_action action, struct damos_quota *quota,
+>  		struct damos_watermarks *wmarks)
+> @@ -101,8 +103,10 @@ struct damos *damon_new_scheme(
+>  		return NULL;
+>  	scheme->min_sz_region = min_sz_region;
+>  	scheme->max_sz_region = max_sz_region;
+> -	scheme->min_nr_accesses = min_nr_accesses;
+> -	scheme->max_nr_accesses = max_nr_accesses;
+> +	scheme->max_nr_writes = max_nr;
+> +	scheme->min_nr_writes = min_nr;
+> +	scheme->min_nr_accesses = min_nr;
+> +	scheme->max_nr_accesses = max_nr;
+>  	scheme->min_age_region = min_age_region;
+>  	scheme->max_age_region = max_age_region;
+>  	scheme->action = action;
+> @@ -221,6 +225,7 @@ struct damon_ctx *damon_new_ctx(void)
+>  	ctx->sample_interval = 5 * 1000;
+>  	ctx->aggr_interval = 100 * 1000;
+>  	ctx->primitive_update_interval = 60 * 1000 * 1000;
+> +	ctx->counter_type = DAMOS_NUMBER_ACCESSES;
+>  
+>  	ktime_get_coarse_ts64(&ctx->last_aggregation);
+>  	ctx->last_primitive_update = ctx->last_aggregation;
+> @@ -535,9 +540,11 @@ static void kdamond_reset_aggregated(struct damon_ctx *c)
+>  		struct damon_region *r;
+>  
+>  		damon_for_each_region(r, t) {
+> -			trace_damon_aggregated(t, r, damon_nr_regions(t));
+> +			trace_damon_aggregated(c, t, r, damon_nr_regions(t));
+>  			r->last_nr_accesses = r->nr_accesses;
+>  			r->nr_accesses = 0;
+> +			r->last_nr_writes = r->nr_writes;
+> +			r->nr_writes = 0;
+>  		}
+>  	}
+>  }
+> @@ -546,21 +553,27 @@ static void damon_split_region_at(struct damon_ctx *ctx,
+>  		struct damon_target *t, struct damon_region *r,
+>  		unsigned long sz_r);
+>  
+> -static bool __damos_valid_target(struct damon_region *r, struct damos *s)
+> +static bool __damos_valid_target(struct damon_ctx *ctx, struct damon_region *r, struct damos *s)
+>  {
+>  	unsigned long sz;
+> -
+>  	sz = r->ar.end - r->ar.start;
+> -	return s->min_sz_region <= sz && sz <= s->max_sz_region &&
+> -		s->min_nr_accesses <= r->nr_accesses &&
+> -		r->nr_accesses <= s->max_nr_accesses &&
+> -		s->min_age_region <= r->age && r->age <= s->max_age_region;
+> +
+> +	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
+> +		return s->min_sz_region <= sz && sz <= s->max_sz_region &&
+> +			s->min_nr_writes <= r->nr_writes &&
+> +			r->nr_writes <= s->max_nr_writes &&
+> +			s->min_age_region <= r->age && r->age <= s->max_age_region;
+> +	else
+> +		return s->min_sz_region <= sz && sz <= s->max_sz_region &&
+> +			s->min_nr_accesses <= r->nr_accesses &&
+> +			r->nr_accesses <= s->max_nr_accesses &&
+> +			s->min_age_region <= r->age && r->age <= s->max_age_region;
+>  }
+>  
+>  static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
+>  		struct damon_region *r, struct damos *s)
+>  {
+> -	bool ret = __damos_valid_target(r, s);
+> +	bool ret = __damos_valid_target(c, r, s);
+>  
+>  	if (!ret || !s->quota.esz || !c->primitive.get_scheme_score)
+>  		return ret;
+> @@ -707,7 +720,7 @@ static void kdamond_apply_schemes(struct damon_ctx *c)
+>  		memset(quota->histogram, 0, sizeof(quota->histogram));
+>  		damon_for_each_target(t, c) {
+>  			damon_for_each_region(r, t) {
+> -				if (!__damos_valid_target(r, s))
+> +				if (!__damos_valid_target(c, r, s))
+>  					continue;
+>  				score = c->primitive.get_scheme_score(
+>  						c, t, r, s);
+> @@ -738,13 +751,18 @@ static void kdamond_apply_schemes(struct damon_ctx *c)
+>  /*
+>   * Merge two adjacent regions into one region
+>   */
+> -static void damon_merge_two_regions(struct damon_target *t,
+> +static void damon_merge_two_regions(struct damon_ctx *c, struct damon_target *t,
+>  		struct damon_region *l, struct damon_region *r)
+>  {
+>  	unsigned long sz_l = sz_damon_region(l), sz_r = sz_damon_region(r);
+>  
+> -	l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
+> +	if (c->counter_type == DAMOS_NUMBER_WRITES)
+> +		l->nr_writes = (l->nr_writes * sz_l + r->nr_writes * sz_r) /
+>  			(sz_l + sz_r);
+> +	else
+> +		l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
+> +				(sz_l + sz_r);
+> +
+>  	l->age = (l->age * sz_l + r->age * sz_r) / (sz_l + sz_r);
+>  	l->ar.end = r->ar.end;
+>  	damon_destroy_region(r, t);
+> @@ -759,23 +777,39 @@ static void damon_merge_two_regions(struct damon_target *t,
+>   * thres	'->nr_accesses' diff threshold for the merge
+>   * sz_limit	size upper limit of each region
+>   */
+> -static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
+> +static void damon_merge_regions_of(struct damon_ctx *c, struct damon_target *t, unsigned int thres,
+>  				   unsigned long sz_limit)
+>  {
+>  	struct damon_region *r, *prev = NULL, *next;
+>  
+> -	damon_for_each_region_safe(r, next, t) {
+> -		if (diff_of(r->nr_accesses, r->last_nr_accesses) > thres)
+> -			r->age = 0;
+> -		else
+> -			r->age++;
+> -
+> -		if (prev && prev->ar.end == r->ar.start &&
+> -		    diff_of(prev->nr_accesses, r->nr_accesses) <= thres &&
+> -		    sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
+> -			damon_merge_two_regions(t, prev, r);
+> -		else
+> -			prev = r;
+> +	if (c->counter_type == DAMOS_NUMBER_WRITES) {
+> +		damon_for_each_region_safe(r, next, t) {
+> +			if (diff_of(r->nr_writes, r->last_nr_writes) > thres)
+> +				r->age = 0;
+> +			else
+> +				r->age++;
+> +
+> +			if (prev && prev->ar.end == r->ar.start &&
+> +				diff_of(prev->nr_writes, r->nr_writes) <= thres &&
+> +				sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
+> +				damon_merge_two_regions(c, t, prev, r);
+> +			else
+> +				prev = r;
+> +		}
+> +	} else {
+> +		damon_for_each_region_safe(r, next, t) {
+> +			if (diff_of(r->nr_accesses, r->last_nr_accesses) > thres)
+> +				r->age = 0;
+> +			else
+> +				r->age++;
+> +
+> +			if (prev && prev->ar.end == r->ar.start &&
+> +				diff_of(prev->nr_accesses, r->nr_accesses) <= thres &&
+> +				sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
+> +				damon_merge_two_regions(c, t, prev, r);
+> +			else
+> +				prev = r;
+> +		}
+>  	}
+>  }
+>  
+> @@ -796,7 +830,7 @@ static void kdamond_merge_regions(struct damon_ctx *c, unsigned int threshold,
+>  	struct damon_target *t;
+>  
+>  	damon_for_each_target(t, c)
+> -		damon_merge_regions_of(t, threshold, sz_limit);
+> +		damon_merge_regions_of(c, t, threshold, sz_limit);
+>  }
+>  
+>  /*
+> @@ -819,6 +853,7 @@ static void damon_split_region_at(struct damon_ctx *ctx,
+>  
+>  	new->age = r->age;
+>  	new->last_nr_accesses = r->last_nr_accesses;
+> +	new->last_nr_writes = r->last_nr_writes;
+>  
+>  	damon_insert_region(new, r, damon_next_region(r), t);
+>  }
+> diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+> index ad65436756af..6cf2501148f5 100644
+> --- a/mm/damon/dbgfs.c
+> +++ b/mm/damon/dbgfs.c
+> @@ -166,6 +166,8 @@ static bool damos_action_valid(int action)
+>  	case DAMOS_PAGEOUT:
+>  	case DAMOS_HUGEPAGE:
+>  	case DAMOS_NOHUGEPAGE:
+> +	case DAMOS_MERGEABLE:
+> +	case DAMOS_UNMERGEABLE:
+>  	case DAMOS_STAT:
+>  		return true;
+>  	default:
+> @@ -477,6 +479,66 @@ static ssize_t dbgfs_init_regions_read(struct file *file, char __user *buf,
+>  	return len;
+>  }
+>  
+> +static ssize_t dbgfs_counter_type_write(struct file *file,
+> +		const char __user *buf, size_t count, loff_t *ppos)
+> +{
+> +	struct damon_ctx *ctx = file->private_data;
+> +	char *kbuf;
+> +	ssize_t ret;
+> +
+> +	mutex_lock(&ctx->kdamond_lock);
+> +	if (ctx->kdamond) {
+> +		mutex_unlock(&ctx->kdamond_lock);
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +	ret = count;
+> +	kbuf = user_input_str(buf, count, ppos);
+> +	if (IS_ERR(kbuf))
+> +		return PTR_ERR(kbuf);
+> +
+> +	if (!strncmp(kbuf, "writes\n", count))
+> +		ctx->counter_type = DAMOS_NUMBER_WRITES;
+> +	else
+> +		ctx->counter_type = DAMOS_NUMBER_ACCESSES;
+> +
+> +	mutex_unlock(&ctx->kdamond_lock);
+> +out:
+> +	kfree(kbuf);
+> +	return ret;
+> +}
+> +
+> +static ssize_t dbgfs_counter_type_read(struct file *file, char __user *buf,
+> +		size_t count, loff_t *ppos)
+> +{
+> +	struct damon_ctx *ctx = file->private_data;
+> +	char *kbuf;
+> +	ssize_t len;
+> +
+> +	kbuf = kmalloc(count, GFP_KERNEL | __GFP_NOWARN);
+> +	if (!kbuf)
+> +		return -ENOMEM;
+> +
+> +	mutex_lock(&ctx->kdamond_lock);
+> +	if (ctx->kdamond) {
+> +		mutex_unlock(&ctx->kdamond_lock);
+> +		len = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
+> +		len = scnprintf(kbuf, count, "writes");
+> +	else
+> +		len = scnprintf(kbuf, count, "accesses");
+> +	mutex_unlock(&ctx->kdamond_lock);
+> +	len = simple_read_from_buffer(buf, count, ppos, kbuf, len);
+> +
+> +out:
+> +	kfree(kbuf);
+> +	return len;
+> +}
+> +
+> +
+>  static int add_init_region(struct damon_ctx *c,
+>  			 unsigned long target_id, struct damon_addr_range *ar)
+>  {
+> @@ -636,12 +698,18 @@ static const struct file_operations kdamond_pid_fops = {
+>  	.read = dbgfs_kdamond_pid_read,
+>  };
+>  
+> +static const struct file_operations counter_type_fops = {
+> +	.open = damon_dbgfs_open,
+> +	.read = dbgfs_counter_type_read,
+> +	.write = dbgfs_counter_type_write,
+> +};
+> +
+>  static void dbgfs_fill_ctx_dir(struct dentry *dir, struct damon_ctx *ctx)
+>  {
+>  	const char * const file_names[] = {"attrs", "schemes", "target_ids",
+> -		"init_regions", "kdamond_pid"};
+> +		"init_regions", "kdamond_pid", "counter_type"};
+>  	const struct file_operations *fops[] = {&attrs_fops, &schemes_fops,
+> -		&target_ids_fops, &init_regions_fops, &kdamond_pid_fops};
+> +		&target_ids_fops, &init_regions_fops, &kdamond_pid_fops, &counter_type_fops};
+>  	int i;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(file_names); i++)
+> diff --git a/mm/damon/prmtv-common.c b/mm/damon/prmtv-common.c
+> index 92a04f5831d6..09ba2b5b895e 100644
+> --- a/mm/damon/prmtv-common.c
+> +++ b/mm/damon/prmtv-common.c
+> @@ -9,6 +9,8 @@
+>  #include <linux/page_idle.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/rmap.h>
+> +#include <linux/swap.h>
+> +#include <linux/swapops.h>
+>  
+>  #include "prmtv-common.h"
+>  
+> @@ -58,6 +60,92 @@ void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
+>  	put_page(page);
+>  }
+>  
+> +static inline bool pte_is_pinned(struct vm_area_struct *vma, unsigned long addr, pte_t pte)
+> +{
+> +	struct page *page;
+> +
+> +	if (!pte_write(pte))
+> +		return false;
+> +	if (!is_cow_mapping(vma->vm_flags))
+> +		return false;
+> +	if (likely(!test_bit(MMF_HAS_PINNED, &vma->vm_mm->flags)))
+> +		return false;
+> +	page = vm_normal_page(vma, addr, pte);
+> +	if (!page)
+> +		return false;
+> +	return page_maybe_dma_pinned(page);
+> +}
+> +
+> +static inline void clear_soft_dirty_pmd(struct vm_area_struct *vma,
+> +		unsigned long addr, pmd_t *pmdp)
+> +{
+> +	pmd_t old, pmd = *pmdp;
+> +
+> +	if (pmd_present(pmd)) {
+> +		/* See comment in change_huge_pmd() */
+> +		old = pmdp_invalidate(vma, addr, pmdp);
+> +		if (pmd_dirty(old))
+> +			pmd = pmd_mkdirty(pmd);
+> +		if (pmd_young(old))
+> +			pmd = pmd_mkyoung(pmd);
+> +
+> +		pmd = pmd_wrprotect(pmd);
+> +		pmd = pmd_clear_soft_dirty(pmd);
+> +
+> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+> +	} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
+> +		pmd = pmd_swp_clear_soft_dirty(pmd);
+> +		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
+> +	}
+> +}
+> +
+> +static inline void clear_soft_dirty(struct vm_area_struct *vma,
+> +		unsigned long addr, pte_t *pte)
+> +{
+> +	/*
+> +	 * The soft-dirty tracker uses #PF-s to catch writes
+> +	 * to pages, so write-protect the pte as well. See the
+> +	 * Documentation/admin-guide/mm/soft-dirty.rst for full description
+> +	 * of how soft-dirty works.
+> +	 */
+> +	pte_t ptent = *pte;
+> +
+> +	if (pte_present(ptent)) {
+> +		pte_t old_pte;
+> +
+> +		if (pte_is_pinned(vma, addr, ptent))
+> +			return;
+> +		old_pte = ptep_modify_prot_start(vma, addr, pte);
+> +		ptent = pte_wrprotect(old_pte);
+> +		ptent = pte_clear_soft_dirty(ptent);
+> +		ptep_modify_prot_commit(vma, addr, pte, old_pte, ptent);
+> +	} else if (is_swap_pte(ptent)) {
+> +		ptent = pte_swp_clear_soft_dirty(ptent);
+> +		set_pte_at(vma->vm_mm, addr, pte, ptent);
+> +	}
+> +}
+> +
+> +void damon_pmd_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
+> +		pmd_t *pmd)
+> +{
+> +	vma->vm_flags &= ~VM_SOFTDIRTY;
+> +	vma_set_page_prot(vma);
+> +
+> +	if (pmd_soft_dirty(*pmd))
+> +		clear_soft_dirty_pmd(vma, addr, pmd);
+> +
+> +}
+> +
+> +void damon_ptep_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
+> +		pte_t *pte)
+> +{
+> +	vma->vm_flags &= ~VM_SOFTDIRTY;
+> +	vma_set_page_prot(vma);
+> +
+> +	if (pte_soft_dirty(*pte))
+> +		clear_soft_dirty(vma, addr, pte);
+> +}
+> +
+>  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> diff --git a/mm/damon/prmtv-common.h b/mm/damon/prmtv-common.h
+> index 61f27037603e..03847d149f0e 100644
+> --- a/mm/damon/prmtv-common.h
+> +++ b/mm/damon/prmtv-common.h
+> @@ -13,6 +13,11 @@
+>  
+>  struct page *damon_get_page(unsigned long pfn);
+>  
+> +void damon_ptep_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
+> +		pte_t *pte);
+> +void damon_pmd_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
+> +		pmd_t *pmd);
+> +
+>  void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
+>  void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+>  
+> diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+> index 20a9a9d69eb1..a7d9c9563d1d 100644
+> --- a/mm/damon/vaddr.c
+> +++ b/mm/damon/vaddr.c
+> @@ -368,6 +368,44 @@ void damon_va_update(struct damon_ctx *ctx)
+>  	}
+>  }
+>  
+> +static int damon_clean_soft_dirty_pmd_entry(pmd_t *pmd, unsigned long addr,
+> +		unsigned long next, struct mm_walk *walk)
+> +{
+> +	pte_t *pte;
+> +	spinlock_t *ptl;
+> +
+> +	if (pmd_huge(*pmd)) {
+> +		ptl = pmd_lock(walk->mm, pmd);
+> +		if (pmd_huge(*pmd)) {
+> +			damon_pmd_clean_soft_dirty(walk->vma, addr, pmd);
+> +			spin_unlock(ptl);
+> +			return 0;
+> +		}
+> +		spin_unlock(ptl);
+> +	}
+> +
+> +	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
+> +		return 0;
+> +	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
+> +	if (!pte_present(*pte))
+> +		goto out;
+> +	damon_ptep_clean_soft_dirty(walk->vma, addr, pte);
+> +out:
+> +	pte_unmap_unlock(pte, ptl);
+> +	return 0;
+> +}
+> +
+> +static const struct mm_walk_ops damon_clean_soft_dirty_ops = {
+> +	.pmd_entry = damon_clean_soft_dirty_pmd_entry,
+> +};
+> +
+> +static void damon_va_clean_soft_dirty(struct mm_struct *mm, unsigned long addr)
+> +{
+> +	mmap_read_lock(mm);
+> +	walk_page_range(mm, addr, addr + 1, &damon_clean_soft_dirty_ops, NULL);
+> +	mmap_read_unlock(mm);
+> +}
+> +
+>  static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  		unsigned long next, struct mm_walk *walk)
+>  {
+> @@ -415,7 +453,10 @@ static void damon_va_prepare_access_check(struct damon_ctx *ctx,
+>  {
+>  	r->sampling_addr = damon_rand(r->ar.start, r->ar.end);
+>  
+> -	damon_va_mkold(mm, r->sampling_addr);
+> +	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
+> +		damon_va_clean_soft_dirty(mm, r->sampling_addr);
+> +	else
+> +		damon_va_mkold(mm, r->sampling_addr);
+>  }
+>  
+>  void damon_va_prepare_access_checks(struct damon_ctx *ctx)
+> @@ -437,6 +478,7 @@ void damon_va_prepare_access_checks(struct damon_ctx *ctx)
+>  struct damon_young_walk_private {
+>  	unsigned long *page_sz;
+>  	bool young;
+> +	bool dirty;
+>  };
+>  
+>  static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+> @@ -463,6 +505,10 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  			*priv->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
+>  			priv->young = true;
+>  		}
+> +		if (pmd_soft_dirty(*pmd)) {
+> +			*priv->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
+> +			priv->dirty = true;
+> +		}
+>  		put_page(page);
+>  huge_out:
+>  		spin_unlock(ptl);
+> @@ -485,6 +531,10 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+>  		*priv->page_sz = PAGE_SIZE;
+>  		priv->young = true;
+>  	}
+> +	if (pte_soft_dirty(*pte)) {
+> +		*priv->page_sz = PAGE_SIZE;
+> +		priv->dirty = true;
+> +	}
+>  	put_page(page);
+>  out:
+>  	pte_unmap_unlock(pte, ptl);
+> @@ -496,16 +546,19 @@ static const struct mm_walk_ops damon_young_ops = {
+>  };
+>  
+>  static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
+> -		unsigned long *page_sz)
+> +		unsigned long *page_sz, bool *dirty)
+>  {
+>  	struct damon_young_walk_private arg = {
+>  		.page_sz = page_sz,
+>  		.young = false,
+> +		.dirty = false,
+>  	};
+>  
+>  	mmap_read_lock(mm);
+>  	walk_page_range(mm, addr, addr + 1, &damon_young_ops, &arg);
+>  	mmap_read_unlock(mm);
+> +
+> +	*dirty = arg.dirty;
+>  	return arg.young;
+>  }
+>  
+> @@ -522,18 +575,23 @@ static void damon_va_check_access(struct damon_ctx *ctx,
+>  	static unsigned long last_addr;
+>  	static unsigned long last_page_sz = PAGE_SIZE;
+>  	static bool last_accessed;
+> +	static bool last_written;
+>  
+>  	/* If the region is in the last checked page, reuse the result */
+>  	if (mm == last_mm && (ALIGN_DOWN(last_addr, last_page_sz) ==
+>  				ALIGN_DOWN(r->sampling_addr, last_page_sz))) {
+>  		if (last_accessed)
+>  			r->nr_accesses++;
+> +		if (last_written)
+> +			r->nr_writes++;
+>  		return;
+>  	}
+>  
+> -	last_accessed = damon_va_young(mm, r->sampling_addr, &last_page_sz);
+> +	last_accessed = damon_va_young(mm, r->sampling_addr, &last_page_sz, &last_written);
+>  	if (last_accessed)
+>  		r->nr_accesses++;
+> +	if (last_written)
+> +		r->nr_writes++;
+>  
+>  	last_mm = mm;
+>  	last_addr = r->sampling_addr;
+> @@ -544,7 +602,7 @@ unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
+>  	struct damon_target *t;
+>  	struct mm_struct *mm;
+>  	struct damon_region *r;
+> -	unsigned int max_nr_accesses = 0;
+> +	unsigned int max_nr = 0;
+>  
+>  	damon_for_each_target(t, ctx) {
+>  		mm = damon_get_mm(t);
+> @@ -552,12 +610,15 @@ unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
+>  			continue;
+>  		damon_for_each_region(r, t) {
+>  			damon_va_check_access(ctx, mm, r);
+> -			max_nr_accesses = max(r->nr_accesses, max_nr_accesses);
+> +			if (ctx->counter_type == DAMOS_NUMBER_WRITES)
+> +				max_nr = max(r->nr_writes, max_nr);
+> +			else
+> +				max_nr = max(r->nr_accesses, max_nr);
+>  		}
+>  		mmput(mm);
+>  	}
+>  
+> -	return max_nr_accesses;
+> +	return max_nr;
+>  }
+>  
+>  /*
+> @@ -597,6 +658,7 @@ static int damos_madvise(struct damon_target *target, struct damon_region *r,
+>  
+>  	ret = do_madvise(mm, PAGE_ALIGN(r->ar.start),
+>  			PAGE_ALIGN(r->ar.end - r->ar.start), behavior);
+> +
+>  	mmput(mm);
+>  out:
+>  	return ret;
+> @@ -624,6 +686,12 @@ int damon_va_apply_scheme(struct damon_ctx *ctx, struct damon_target *t,
+>  	case DAMOS_NOHUGEPAGE:
+>  		madv_action = MADV_NOHUGEPAGE;
+>  		break;
+> +	case DAMOS_MERGEABLE:
+> +		madv_action = MADV_MERGEABLE;
+> +		break;
+> +	case DAMOS_UNMERGEABLE:
+> +		madv_action = MADV_UNMERGEABLE;
+> +		break;
+>  	case DAMOS_STAT:
+>  		return 0;
+>  	default:
+> -- 
+> 2.25.1

@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C404A8644
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612404A8648
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351223AbiBCOdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:33:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:25102 "EHLO
+        id S1351240AbiBCOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:33:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35753 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242938AbiBCOdH (ORCPT
+        by vger.kernel.org with ESMTP id S1351200AbiBCOdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:33:07 -0500
+        Thu, 3 Feb 2022 09:33:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643898787;
+        s=mimecast20190719; t=1643898788;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Csg0k3JN5nLMfOor1DtTmLyZk4+42tuFkOSOtb2Gq2o=;
-        b=bfNqQQskQMH1q3OWIBZW9K/aNcrayHIhmas789FrOFSb6OwID0OaDirdcPrm3tB+7TLF+h
-        CvF2NWsZI++Uwx2JrHBTESeHyvDhUB2b6lr5EmVwH1MEUBL8OowFjmft2sgXRZUlUgTBG+
-        7iNzI1IsLnC1cgP3lZuy4z6i7cNdKTM=
+        bh=scDj/oJvhoJAgdPIlS5IhQpZrZh8PkiSfRjw1220pU4=;
+        b=JjUPvkDqGe0uHI3vrxUbQ9CcHruddfP+H51F+nGG+kRgGwYsiLfJmj/Or/UX7iotqsUNDd
+        tAZ9GYKvdbwl3StheEDwy+ApSx5wvG/qOPF2qVH27eRCMxI/8Auu4Hnb5WybsDSorD+Ctv
+        1irasEobnZoOFanIxYLe4tGp3GtNdMU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-7emSeU2TP1qlj38pePhVeQ-1; Thu, 03 Feb 2022 09:33:02 -0500
-X-MC-Unique: 7emSeU2TP1qlj38pePhVeQ-1
+ us-mta-54-u1EhqJpxPUueTUC7IY4Siw-1; Thu, 03 Feb 2022 09:33:05 -0500
+X-MC-Unique: u1EhqJpxPUueTUC7IY4Siw-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74FE318C89DA;
-        Thu,  3 Feb 2022 14:33:00 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 360261091DA6;
+        Thu,  3 Feb 2022 14:33:03 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0638E7D5B2;
-        Thu,  3 Feb 2022 14:32:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C4E437D4D0;
+        Thu,  3 Feb 2022 14:33:00 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -48,9 +48,9 @@ To:     Jiri Kosina <jikos@kernel.org>,
 Cc:     linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v2 03/12] HID: core: split data fetching from processing in hid_input_field()
-Date:   Thu,  3 Feb 2022 15:32:17 +0100
-Message-Id: <20220203143226.4023622-4-benjamin.tissoires@redhat.com>
+Subject: [PATCH v2 04/12] HID: input: tag touchscreens as such if the physical is not there
+Date:   Thu,  3 Feb 2022 15:32:18 +0100
+Message-Id: <20220203143226.4023622-5-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
 References: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -60,188 +60,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a preparatory patch for being able to process the usages
-out of order. We split the retrieval of the data in a separate function
-and also split out the processing of the usages depending if the field
-is an array or a variable.
-
-No functional changes from this patch.
+Some devices (Elan, Synaptics...) are sometimes not setting a physical
+in their finger collections. hid-input will consider them to be pen
+devices, leading to some wrong behavior in user space.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 ---
- drivers/hid/hid-core.c | 96 +++++++++++++++++++++++++++++++++---------
- include/linux/hid.h    |  3 +-
- 2 files changed, 79 insertions(+), 20 deletions(-)
+ drivers/hid/hid-input.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index fad4dbdf6391..34188d7ac0f7 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -1544,13 +1544,12 @@ static inline int hid_array_value_is_valid(struct hid_field *field,
- }
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 112901d2d8d2..d2562497a726 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -828,10 +828,31 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 			break;
  
- /*
-- * Analyse a received field, and fetch the data from it. The field
-- * content is stored for next report processing (we do differential
-- * reporting to the layer).
-+ * Fetch the field from the data. The field content is stored for next
-+ * report processing (we do differential reporting to the layer).
-  */
--
--static void hid_input_field(struct hid_device *hid, struct hid_field *field,
--			    __u8 *data, int interrupt)
-+static void hid_input_fetch_field(struct hid_device *hid,
-+				  struct hid_field *field,
-+				  __u8 *data)
- {
- 	unsigned n;
- 	unsigned count = field->report_count;
-@@ -1561,6 +1560,7 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
+ 		case 0x32: /* InRange */
+-			switch (field->physical & 0xff) {
+-			case 0x21: map_key(BTN_TOOL_MOUSE); break;
+-			case 0x22: map_key(BTN_TOOL_FINGER); break;
+-			default: map_key(BTN_TOOL_PEN); break;
++			switch (field->physical) {
++			case HID_DG_PUCK:
++				map_key(BTN_TOOL_MOUSE);
++				break;
++			case HID_DG_FINGER:
++				map_key(BTN_TOOL_FINGER);
++				break;
++			default:
++				/*
++				 * If the physical is not given,
++				 * rely on the application.
++				 */
++				if (!field->physical) {
++					switch (field->application) {
++					case HID_DG_TOUCHSCREEN:
++					case HID_DG_TOUCHPAD:
++						map_key_clear(BTN_TOOL_FINGER);
++						break;
++					default:
++						map_key_clear(BTN_TOOL_PEN);
++					}
++				} else {
++					map_key(BTN_TOOL_PEN);
++				}
++				break;
+ 			}
+ 			break;
  
- 	value = field->new_value;
- 	memset(value, 0, count * sizeof(__s32));
-+	field->ignored = false;
- 
- 	for (n = 0; n < count; n++) {
- 
-@@ -1572,21 +1572,56 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
- 		/* Ignore report if ErrorRollOver */
- 		if (!(field->flags & HID_MAIN_ITEM_VARIABLE) &&
- 		    hid_array_value_is_valid(field, value[n]) &&
--		    field->usage[value[n] - min].hid == HID_UP_KEYBOARD + 1)
-+		    field->usage[value[n] - min].hid == HID_UP_KEYBOARD + 1) {
-+			field->ignored = true;
- 			return;
-+		}
- 	}
-+}
- 
--	for (n = 0; n < count; n++) {
-+/*
-+ * Process a received variable field.
-+ */
- 
--		if (HID_MAIN_ITEM_VARIABLE & field->flags) {
--			hid_process_event(hid,
--					  field,
--					  &field->usage[n],
--					  value[n],
--					  interrupt);
--			continue;
--		}
-+static void hid_input_var_field(struct hid_device *hid,
-+				struct hid_field *field,
-+				int interrupt)
-+{
-+	unsigned int count = field->report_count;
-+	__s32 *value = field->new_value;
-+	unsigned int n;
-+
-+	for (n = 0; n < count; n++)
-+		hid_process_event(hid,
-+				  field,
-+				  &field->usage[n],
-+				  value[n],
-+				  interrupt);
-+
-+	memcpy(field->value, value, count * sizeof(__s32));
-+}
- 
-+/*
-+ * Process a received array field. The field content is stored for
-+ * next report processing (we do differential reporting to the layer).
-+ */
-+
-+static void hid_input_array_field(struct hid_device *hid,
-+				  struct hid_field *field,
-+				  int interrupt)
-+{
-+	unsigned int n;
-+	unsigned int count = field->report_count;
-+	__s32 min = field->logical_minimum;
-+	__s32 *value;
-+
-+	value = field->new_value;
-+
-+	/* ErrorRollOver */
-+	if (field->ignored)
-+		return;
-+
-+	for (n = 0; n < count; n++) {
- 		if (hid_array_value_is_valid(field, field->value[n]) &&
- 		    search(value, field->value[n], count))
- 			hid_process_event(hid,
-@@ -1607,6 +1642,31 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
- 	memcpy(field->value, value, count * sizeof(__s32));
- }
- 
-+/*
-+ * Analyse a received report, and fetch the data from it. The field
-+ * content is stored for next report processing (we do differential
-+ * reporting to the layer).
-+ */
-+static void hid_process_report(struct hid_device *hid,
-+			       struct hid_report *report,
-+			       __u8 *data,
-+			       int interrupt)
-+{
-+	unsigned int a;
-+	struct hid_field *field;
-+
-+	for (a = 0; a < report->maxfield; a++) {
-+		field = report->field[a];
-+
-+		hid_input_fetch_field(hid, field, data);
-+
-+		if (field->flags & HID_MAIN_ITEM_VARIABLE)
-+			hid_input_var_field(hid, field, interrupt);
-+		else
-+			hid_input_array_field(hid, field, interrupt);
-+	}
-+}
-+
- /*
-  * Output the field into the report.
-  */
-@@ -1768,7 +1828,6 @@ int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
- 	struct hid_report_enum *report_enum = hid->report_enum + type;
- 	struct hid_report *report;
- 	struct hid_driver *hdrv;
--	unsigned int a;
- 	u32 rsize, csize = size;
- 	u8 *cdata = data;
- 	int ret = 0;
-@@ -1804,8 +1863,7 @@ int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
- 	}
- 
- 	if (hid->claimed != HID_CLAIMED_HIDRAW && report->maxfield) {
--		for (a = 0; a < report->maxfield; a++)
--			hid_input_field(hid, report->field[a], cdata, interrupt);
-+		hid_process_report(hid, report, cdata, interrupt);
- 		hdrv = hid->driver;
- 		if (hdrv && hdrv->report)
- 			hdrv->report(hid, report);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 3fbfe0986659..cf79eb3da465 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -342,7 +342,7 @@ struct hid_item {
-  * HID device quirks.
-  */
- 
--/* 
-+/*
-  * Increase this if you need to configure more HID quirks at module load time
-  */
- #define MAX_USBHID_BOOT_QUIRKS 4
-@@ -483,6 +483,7 @@ struct hid_field {
- 	__s32     physical_maximum;
- 	__s32     unit_exponent;
- 	unsigned  unit;
-+	bool      ignored;		/* this field is ignored in this event */
- 	struct hid_report *report;	/* associated report */
- 	unsigned index;			/* index into report->field[] */
- 	/* hidinput data */
 -- 
 2.33.1
 

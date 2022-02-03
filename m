@@ -2,116 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C8A4A7CDF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418074A7CE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240733AbiBCA2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiBCA2g (ORCPT
+        id S1348572AbiBCA3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:29:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:49480 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229976AbiBCA3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:28:36 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D28C061714;
-        Wed,  2 Feb 2022 16:28:35 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id s18so1189975ioa.12;
-        Wed, 02 Feb 2022 16:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jdtk8UC2KDvFAfWxVTu60U5ncTIHp4dRqG8Pp1F6Se0=;
-        b=pna34lSVqp/u41It8n/Fo5fhhDVwanvK/Lo9P1ktvW5tmybhz5Hr5o7fyaM83d3wqh
-         6/vKbCy5lg6nx9v2EEURDMxfmtVlnL0z3InQlFacvthbuxIeh/KXnCwBzwbIA00e0ZHi
-         rUHvG9B2ITbJCis8Hb9pmf0XSVgNoG9E91nKsmxfWeosHA0KpVCkNm+zWoINipET2kBl
-         cmgBPyjgRSK+SNrs9vrM7/6SjEehdwwiAdt/lqUskoZxK5PtCCZMUz1q1IxoLXwKiqs3
-         GgIbUzktGkF5/ZMKQsTqaSCBgbpQBbV58T69Z8VlbAb2q+RBLoKBTA8nKgimp6E97Wh7
-         dVBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jdtk8UC2KDvFAfWxVTu60U5ncTIHp4dRqG8Pp1F6Se0=;
-        b=hFpyS7vNS/LXosEFMGM67vxnnzH4wUmesAigbzghLre9G7AIolVzuyV6zUivrq7rwX
-         4EUc6nThaRyPkQFExcXVSHdMUGg1Yi8xmOzsQUXV7ZhBuIxFRpCNF/RVGoKVZjmHHp7s
-         k1XfCiq+wfmL+4+NJdDgxjahAEDnBVr8uIoNkSRGduEFCQoF2aXE/eBD0Afc0tWmfTbV
-         icSxU83WUlCM7isKf+bLXYvny10JaYsrrJOWodaVzE0dIszDIJeV5JOK1JA7YzyzavLp
-         Z7VvQj8+cd+3kDSalMJFCDl00KQf0Ee7YmCmuKpMfhaCYG1TfhOY/WcfONYwVLI6X77C
-         iVLw==
-X-Gm-Message-State: AOAM532ze2SgWZojGVNuKVt7CVNuVjbzAwMzt8R3GVn3rhcbao2M3WVp
-        mSVAZJxSU4lVP7MntBwW92CGkFvfbUCltJi42ro=
-X-Google-Smtp-Source: ABdhPJxUvqr9og1U18lvfIf6cbS9/L/voRkEv9GAQUq+kRmHVEcMZPDe6S6csVaamV5zAeoL1fe1XCurvR9XKJDXLGk=
-X-Received: by 2002:a6b:ea08:: with SMTP id m8mr17362901ioc.172.1643848115331;
- Wed, 02 Feb 2022 16:28:35 -0800 (PST)
+        Wed, 2 Feb 2022 19:29:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5C0460F70;
+        Thu,  3 Feb 2022 00:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DAFC004E1;
+        Thu,  3 Feb 2022 00:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643848188;
+        bh=qbauBxRZfFJXJcEvFeOVzCSZEL6mvF1hBgdnTbdFeI8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kGoMuLq8TOLnaZPtZaJWBw63kgW2ytM5niYrgefeCG7FKn4V6YysUgbS6L2NOUKRC
+         kbj7w+KQtcZiBa0BXa+0mnuYyAVrqzuwJjyTEkKyhA8U3jf3xGL8rSlPz4SVqjB8ZT
+         fNqc7XpWFFSdQlQBLglww+EJXWgUbKCqzdCkqRC/O04GcecpqmvWFG4BvzgKpMd0rz
+         QfvEII4p0jZvFbGOi5/37fvBVZi3R0+/BPvWEoo0J7QcUvQbrSaMMc72iZbBjFu2mC
+         C0hOLaO4K2aOGZMysjurlwzjaDBIm4/VN6g4C2ZB6u7hfbCO3GeQXqUzz9qd1QFXrR
+         IdVmyY7Yt9XMQ==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: qcom: sm8450: add interconnect nodes
+Date:   Thu,  3 Feb 2022 05:59:36 +0530
+Message-Id: <20220203002936.3009402-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220131204357.1133674-1-keescook@chromium.org>
- <6641e01b86374ce197020d57c65ae3b3@AcuMS.aculab.com> <311c9ca5-e2d4-22fb-0299-d47f84470677@prevas.dk>
- <91f0956687b341a9861f467aafe6dc4d@AcuMS.aculab.com>
-In-Reply-To: <91f0956687b341a9861f467aafe6dc4d@AcuMS.aculab.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Feb 2022 01:28:24 +0100
-Message-ID: <CANiq72nkwKVGODWn1Ri_he+MOzp=Cw_L+3+2TX0UP_3=K0n5pA@mail.gmail.com>
-Subject: Re: [PATCH] linux/const.h: Explain how __is_constexpr() works
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 11:42 PM David Laight <David.Laight@aculab.com> wrote:
->
-> The compiler needs to find a 'compatible type' either for:
->         (void *)x       and     (int *)8
-> or for:
->         (void *)0       and     (int *)8
->
-> In the former it is 'void *' and the latter 'int *' because the (void *)0
-> is NULL and thus a valid 'int *' pointer.
+And the various interconnect nodes found in SM8450 SoC and use it for
+UFS controller.
 
-I think you are trying to come up with an explanation of how it works
-based on compiler outputs (it makes sense to think that the compiler
-has to find some reasonable "common" type). But the conditional
-operator works case-by-case, slightly differently depending on what
-kind of operands you give.
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
 
-In the two cases involved, there is no "finding a compatible type" /
-promotions going on -- the standard gives explicitly that it is a
-pointer to void (former case), and the type of the other operand
-(latter case). The value is still decided by the condition.
+Changes in v2:
+	- Fix the mc_virt node
+	- Add clk_virt node
+	- Rebase to rc1
 
-e.g. https://godbolt.org/z/zzE8dc7Ye
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 85 ++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-0 ?          void pointer (1) : pointer to object type (42) = (void *) 0x2a
-1 ?          void pointer (1) : pointer to object type (42) = (void *) 0x1
-0 ? null pointer constant (0) : pointer                (42) = ( int *) 0x2a
-1 ? null pointer constant (0) : pointer                (42) = ( int *) (nil)
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 10c25ad2d0c7..ccc67918c46a 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -8,6 +8,7 @@
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/power/qcom-rpmpd.h>
++#include <dt-bindings/interconnect/qcom,sm8450.h>
+ #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+ 
+ / {
+@@ -250,6 +251,18 @@ scm: scm {
+ 		};
+ 	};
+ 
++	clk_virt: interconnect@0 {
++		compatible = "qcom,sm8450-clk-virt";
++		#interconnect-cells = <2>;
++		qcom,bcm-voters = <&apps_bcm_voter>;
++	};
++
++	mc_virt: interconnect@1 {
++		compatible = "qcom,sm8450-mc-virt";
++		#interconnect-cells = <2>;
++		qcom,bcm-voters = <&apps_bcm_voter>;
++	};
++
+ 	memory@a0000000 {
+ 		device_type = "memory";
+ 		/* We expect the bootloader to fill in the size */
+@@ -620,6 +633,54 @@ i2c14: i2c@a98000 {
+ 			};
+ 		};
+ 
++		config_noc: interconnect@1500000 {
++			compatible = "qcom,sm8450-config-noc";
++			reg = <0 0x01500000 0 0x1c000>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
++		system_noc: interconnect@1680000 {
++			compatible = "qcom,sm8450-system-noc";
++			reg = <0 0x01680000 0 0x1e200>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
++		pcie_noc: interconnect@16c0000 {
++			compatible = "qcom,sm8450-pcie-anoc";
++			reg = <0 0x016c0000 0 0xe280>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
++		aggre1_noc: interconnect@16e0000 {
++			compatible = "qcom,sm8450-aggre1-noc";
++			reg = <0 0x016e0000 0 0x1c080>;
++			#interconnect-cells = <2>;
++			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
++		aggre2_noc: interconnect@1700000 {
++			compatible = "qcom,sm8450-aggre2-noc";
++			reg = <0 0x01700000 0 0x31080>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++			clocks = <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
++				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
++				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
++				 <&rpmhcc RPMH_IPA_CLK>;
++		};
++
++		mmss_noc: interconnect@1740000 {
++			compatible = "qcom,sm8450-mmss-noc";
++			reg = <0 0x01740000 0 0x1f080>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
+ 		tcsr_mutex: hwlock@1f40000 {
+ 			compatible = "qcom,tcsr-mutex";
+ 			reg = <0x0 0x01f40000 0x0 0x40000>;
+@@ -988,6 +1049,13 @@ cpufreq_hw: cpufreq@17d91000 {
+ 			#freq-domain-cells = <1>;
+ 		};
+ 
++		gem_noc: interconnect@19100000 {
++			compatible = "qcom,sm8450-gem-noc";
++			reg = <0 0x19100000 0 0xbb800>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
+ 		ufs_mem_hc: ufshc@1d84000 {
+ 			compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
+ 				     "jedec,ufs-2.0";
+@@ -1004,6 +1072,9 @@ ufs_mem_hc: ufshc@1d84000 {
+ 
+ 			iommus = <&apps_smmu 0xe0 0x0>;
+ 
++			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
++					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
++			interconnect-names = "ufs-ddr", "cpu-ufs";
+ 			clock-names =
+ 				"core_clk",
+ 				"bus_aggr_clk",
+@@ -1102,6 +1173,20 @@ usb_1_dwc3: usb@a600000 {
+ 				phy-names = "usb2-phy", "usb3-phy";
+ 			};
+ 		};
++
++		nsp_noc: interconnect@320c0000 {
++			compatible = "qcom,sm8450-nsp-noc";
++			reg = <0 0x320c0000 0 0x10000>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
++
++		lpass_ag_noc: interconnect@3c40000 {
++			compatible = "qcom,sm8450-lpass-ag-noc";
++			reg = <0 0x3c40000 0 0x17200>;
++			#interconnect-cells = <2>;
++			qcom,bcm-voters = <&apps_bcm_voter>;
++		};
+ 	};
+ 
+ 	timer {
+-- 
+2.31.1
 
-> In any case suggesting that it is based on the value before the ? is bogus.
-
-What Rasmus was saying is that which value is selected still depends
-on the condition, because the last paragraph of the explanation in the
-commit is wrong. It should be something like:
-
-  - The ultimate comparison to "sizeof(int)" reduces to either:
-        sizeof(int) == sizeof(*(int *)0)  (x was a constant expression)
-        sizeof(int) == sizeof(*(void *)0) (x was not a constant expression)
-
-Cheers,
-Miguel

@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5F34A8399
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76C14A839C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343548AbiBCMKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:10:46 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:37358 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236936AbiBCMKp (ORCPT
+        id S1349104AbiBCMLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 07:11:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46315 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346392AbiBCMLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:10:45 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 12B3821100;
-        Thu,  3 Feb 2022 12:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643890244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 3 Feb 2022 07:11:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643890290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=osIhrdtOjjmkFFphcb83Nczt+7vGIRa7d6OObVoINEs=;
-        b=VhapAhebHkYqVU+ErQEcL6KulK37k5BjSG1CLIDdCh/yTExSO04ZuZymV71zPilFsdgOfA
-        wF2ZIVe+bnEC36RO81mRv65injO9CyFWPGm8vITJPbRh2wAkyrrqLKGNBjicMVuBQXTMT+
-        eB52FxaQGUmLUFtnHKdRV5Tx2v81Fyg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643890244;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=osIhrdtOjjmkFFphcb83Nczt+7vGIRa7d6OObVoINEs=;
-        b=nnKKymePe6Gbn1kwuKkf/SJxV5DxbzCLpIFF/YkxH57g/HA2GqJLuip3Rn+iSZxEe0CZM6
-        Tqir+aIs1KACZyDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=1GA7e6azQ71Q/Pk7PvNK6H2CwoTwPPyoDKVlcVN5cKI=;
+        b=gkqLq/GTYg6BwfSm+5WurRNZXa6jNeKP9BdN4K/GawHZgUZL8ikfXnTOdmyv1Zge6zI7jb
+        GnRy3AGd1VZUTCa59AJUvnbgbjxJxX3KR+kW75bSE5qj0U3MAaB+sZ9fp3O948dAkCS5hm
+        U6Iq9pglNeonwtlkdmgsOaG6DyZcthk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-449-n9p20QooOgCo9jBaiAHZ_w-1; Thu, 03 Feb 2022 07:11:26 -0500
+X-MC-Unique: n9p20QooOgCo9jBaiAHZ_w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C178913BAD;
-        Thu,  3 Feb 2022 12:10:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lDJtLkPG+2GBDgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 03 Feb 2022 12:10:43 +0000
-Message-ID: <91fb8637-6550-dc37-a95b-df7812b02b0a@suse.cz>
-Date:   Thu, 3 Feb 2022 13:10:43 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 049A02F44;
+        Thu,  3 Feb 2022 12:11:23 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.193.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F35456F16B;
+        Thu,  3 Feb 2022 12:11:18 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 620E518000B2; Thu,  3 Feb 2022 13:11:17 +0100 (CET)
+Date:   Thu, 3 Feb 2022 13:11:17 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dov Murik <dovmurik@linux.ibm.com>
+Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Scull <ascull@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Lenny Szubowicz <lszubowi@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
+        Jim Cadden <jcadden@ibm.com>,
+        Daniele Buono <dbuono@linux.vnet.ibm.com>,
+        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/5] efi: Load efi_secret module if EFI secret area is
+ populated
+Message-ID: <20220203121117.aedtaxspnm5mbqhj@sirius.home.kraxel.org>
+References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
+ <20220201124413.1093099-5-dovmurik@linux.ibm.com>
+ <20220202084723.ushasiekb3cxami4@sirius.home.kraxel.org>
+ <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
+ <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
+ <cb548aa2-1ac3-46e7-91e4-f57a4fd63754@linux.ibm.com>
+ <20220203061615.wwembqmmpmg77iyj@sirius.home.kraxel.org>
+ <815ba487-a6c1-0daa-aead-a7f3a52df2a1@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v4 4/4] mm/page_owner: Record task command name
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>, Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-References: <20220131192308.608837-5-longman@redhat.com>
- <20220131220328.622162-1-longman@redhat.com>
- <YflRjeoC0jbzArDG@dhcp22.suse.cz>
- <4ba66abe-5c6d-26a7-f11c-c3b8514bfb34@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <4ba66abe-5c6d-26a7-f11c-c3b8514bfb34@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <815ba487-a6c1-0daa-aead-a7f3a52df2a1@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 17:53, Waiman Long wrote:
-> 
-> On 2/1/22 10:28, Michal Hocko wrote:
->> Cc Vlastimil
->>
->> On Mon 31-01-22 17:03:28, Waiman Long wrote:
->>> The page_owner information currently includes the pid of the calling
->>> task. That is useful as long as the task is still running. Otherwise,
->>> the number is meaningless. To have more information about the allocating
->>> tasks that had exited by the time the page_owner information is
->>> retrieved, we need to store the command name of the task.
->>>
->>> Add a new comm field into page_owner structure to store the command name
->>> and display it when the page_owner information is retrieved.
->> I completely agree that pid is effectivelly useless (if not misleading)
->> but is comm really telling all that much to compensate for the
->> additional storage required for _each_ page in the system?
-> 
-> Yes, it does add an extra 16 bytes per page overhead. The command name can
-> be useful if one want to find out which userspace command is responsible for
-> a problematic page allocation. Maybe we can remove pid from page_owner to
-> save 8 bytes as you also agree that this number is not that useful.
+  Hi,
 
-Pid could be used to correlate command instances (not perfectly if reuse
-happens), but command name could have a higher chance to be useful. In my
-experience the most useful were the stacktraces and gfp/order etc. anyway.
-So I wouldn't be opposed replacing pid with comm. The mild size increase
-should be acceptable, this is an opt-in feature for debugging sessions with
-known tradeoff for memory and cpu overhead for the extra info.
-
-> Cheers,
-> Longman
+> >> If we keep only the 'efi.coco_secret != EFI_INVALID_TABLE_ADDR' check,
+> >> we'll get errors from efi_secret for every VM launch that doesn't
+> >> undergo LAUNCH_SECRET.  I don't think that's good.
+> > 
+> > Well, if that is a common case the module could either print nothing or
+> > log KERN_INFO level instead of KERN_ERROR.
 > 
+> What if the user doesn't inject a secret and doesn't include the
+> efi_secret module at all in the initrd?  request_module("efi_secret")
+> will fail.
+> 
+> I can ignore the error code of request_module("efi_secret") but that
+> feels bad.
+
+Looking at the error code returned by request_module should help to
+figure what happened (module load failed / no secret present / something
+else).
+
+But, yes, module load errors are harmless in case there is no secret
+present in the first place.  Hmm, tricky.  I don't see a way to solve
+that without duplicating the checks.
+
+I withdraw my objections.
+
+Reviewed-by: Gerd Hoffmann <kraxel@redhat.com>
+
+take care,
+  Gerd
 

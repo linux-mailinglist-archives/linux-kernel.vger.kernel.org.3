@@ -2,158 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2614A8AE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C974A8AB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353301AbiBCRwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:52:10 -0500
-Received: from mail-bn8nam12on2083.outbound.protection.outlook.com ([40.107.237.83]:9307
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1353130AbiBCRug (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:50:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a15spsYnkd3GpKAN6Gf0iCp2oZNSN5/QJo6oIe7xmfoO3XwdrnSJsnyjsVIWsxJ5AJA1TwYiLQSiKKNE3VOLfyyiKJZNl0FeIECjoleq4JqcXnpSRjwGrbWNfJOM0UHuWRh3R/rvn/lG36z4zUYkAQZ35zsdHg0/jmGxbXkvC5DpHjScw0KE7t85Azk17zfDqv6JjvElKyQsphi4ONj+G6opxxG6RuN4kvyz2jYzA56y/DuFWLGG8V3V1IhOyudObhegu/bPRRF0fp1pSoWpseTzD4PSBZjpZslzZk2toZbKTYRAlRxSf1DEeLyvVcpxmKNMrhw8e33+MahVxKS81A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I8q72zyNt/6inybY3OwfW6Uw+5CoELZtmwbgqCYs0Nw=;
- b=hyC6xAJBaZezBMuyneqUgN83jbCRtwTdpB2oe2etF8dFuo98erdo3WjuDJSfkEGulJCTxdpQ9Qs1G1ib/7lBI1d4T7z1Mots6rssQkH9DGPsFWzxmrlrp4Z0u1qW/auzs6HMeQp93eLmtDykKPMe+i6ERrO3QXv/hR3tYigEiyh53f+hyxhtI/2mUM3cziasqmFsT1scCjooZ19NzxHGEVlESIch8Lh2/teqb85bY7PdLPh45R5vo8mFaL2zssvFdje2YPve4WSQmuyBKOJzobYuyXo95NwXfaUhAxx5DjLVyY4kaEyNy+JcGE1GPWdvhC9svj6Vw2PtoycYdbFW/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I8q72zyNt/6inybY3OwfW6Uw+5CoELZtmwbgqCYs0Nw=;
- b=Vrm6m7Bzlffd5NvjypPRHbTPuLQvx7rthDEgHIaTM8ipuTgbVNjRqZiSI6+laQFaEToIvg29ZBOhuWibb3rag1PV+a5UwLpJVNHVoHuWE1A8QlED3G4YCiH6hUmqo7W8zGtB8vC4n0pjJIiH+HBRV3XbXUHRT1ZGSiDDIM7ftmU=
-Received: from MW4PR04CA0326.namprd04.prod.outlook.com (2603:10b6:303:82::31)
- by DM6PR12MB2988.namprd12.prod.outlook.com (2603:10b6:5:3d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Thu, 3 Feb
- 2022 17:50:32 +0000
-Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:82:cafe::39) by MW4PR04CA0326.outlook.office365.com
- (2603:10b6:303:82::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Thu, 3 Feb 2022 17:50:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4951.12 via Frontend Transport; Thu, 3 Feb 2022 17:50:32 +0000
-Received: from node-bp128-r03d.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Feb
- 2022 11:50:29 -0600
-From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
-To:     <linux-edac@vger.kernel.org>, <x86@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <mingo@redhat.com>,
-        <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>
-Subject: [PATCH v7 12/12] EDAC/amd64: Add fixed UMC to CS mapping
-Date:   Thu, 3 Feb 2022 11:49:42 -0600
-Message-ID: <20220203174942.31630-13-nchatrad@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220203174942.31630-1-nchatrad@amd.com>
-References: <20220203174942.31630-1-nchatrad@amd.com>
+        id S1353081AbiBCRu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:50:28 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:58972 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238989AbiBCRu0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 12:50:26 -0500
+Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:5173:4d3f:4ddc:2012])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 111BC5D;
+        Thu,  3 Feb 2022 18:50:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643910624;
+        bh=7y7ErRCqRvGjBiW6scFiMS9GmFfGY4Ox4SOCKmH+PC4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QsHQWK7szICcFXtroyOVpWdhTbqIUoTSSvOIK0GXq0wjK8MJP5h3Q74jNyjsdmo6R
+         WMXZFTiVL5RdHKOwTE/R+Hxyjqscld1tANckwwDO4E+Lqxu14EfCHsfx3OzGQywUY8
+         64jIeJPdMJN6AgaqBHH2lmJJEJsnICxjd9gKhvTI=
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+To:     jeanmichel.hautbois@ideasonboard.com
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
+        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
+Subject: [RFC PATCH v4 00/12] Add support for BCM2835 camera interface (unicam)
+Date:   Thu,  3 Feb 2022 18:49:57 +0100
+Message-Id: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e317c230-d95b-49b5-2b6e-08d9e73dac83
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2988:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB2988A1ADB7F4DB00A6FC32ECE8289@DM6PR12MB2988.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:561;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xIBPVE+x9LofRxAREc9lqqHc0UyT72L8SkuN84EoB9Z+VV4qhk5KQ7696oDUTWmFTGOn/UJnwVA+MjFFRt38HosrTX7o/JMq7c02PhprgXEbMgS/oQZtXRBRQ5A2257qsbh85UWUZdf/EXC1v1iLpWtnR3xaps4M5opn+fmb+jSp7B7gNbwxnbzWAXggrdEMT1Js0JvfFwoMqRiwceSLeKjs3qR9dV36JILHJ8opzr8EMUuliFV7iBEf4fHL1fN2aT7vnxl1fuFnu6dxNVB3XYRrnY4iDW9p51LASDspf8tNR4+ONWNR40eT8XZX/9SvB5D4WMux8IMH0s0QClfC+vbHUMPzSLJgqYy722KVsQbyCz/6gHxcc90R7elAbyFr6f2L+2hILeGcFsr6qUhI1vW2gySGaCDh2oMeI66m9ZrSQJtlvLkMKb7cRLZpamem2reiGgxg34PEjsu6DG533XTCgdXqEoOz35rIpD0f1S4NFZrH1X4eFkqjtACyzIdHz63jRbN8PltUZQiUQmG3TkzJcuKeQWTbc9CJuVYhnM/gAMnFijWiB/PzN8M/6fJNzKEBeU1bMrYCBUvHVAS0I4LxHjMpB3FvSLrGUoqlF7QEMSUmf/pQX+GIDSBpkeMs+0nEFborT/JHd4gPkXq+xEz29H0vr8gaT4rcbk/WLKcNPXgEUgObKqLiOG+NUwcnJY2IFtH0zgH0ML5TF3ru6HFj7lTYaG+Z7vgvzJGbzXzs+hFpoj502RtQPR5eatUjr9I9HvAnyGwOCZvMDD/N57r8LdOlKjs7xKQZOfebGZE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(70206006)(70586007)(4326008)(47076005)(7696005)(8676002)(40460700003)(81166007)(508600001)(36756003)(82310400004)(966005)(36860700001)(356005)(8936002)(83380400001)(316002)(2906002)(1076003)(6666004)(54906003)(2616005)(16526019)(426003)(336012)(110136005)(186003)(26005)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 17:50:32.1059
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e317c230-d95b-49b5-2b6e-08d9e73dac83
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2988
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yazen Ghannam <yazen.ghannam@amd.com>
+Hello !
 
-GPU memory address mapping entries in Aldebaran will enable on which
-channel the error occurred.
+This patch series adds the BCM2835 CCP2/CSI2 camera interface named
+unicam. This driver is already used in the out-of-tree linux-rpi
+repository [1], and this work aims to support it in mainline.
 
-Aldebaran has 2 dies and are enumerated alternatively
- * die0's are enumerated as node 2, 4, 6 and 8
- * die1's are enumerated as node 1, 3, 5 and 7
+The series is based on top of:
+- Rebased on top of 5.16 Tomi Valkeinen's multiplexed stream work, on
+  his multistream/work branch [2] which has been submitted as v10 at the
+  time of this writing. The objective is to demonstrate the use of
+  multiplexed streams on a real world widely used example as well as
+  supporting unicam mainline.
+- The "Add 12bit and 14bit luma-only formats" series [3] is partly
+  applied (the Y10P format bug) the new formats are now part of this
+  series.
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
----
-Link:
-v3->v7:
-* Split and fixed UMC to CS mapping from patch 33 in v3.
-  https://patchwork.kernel.org/project/linux-edac/patch/20211028175728.121452-34-yazen.ghannam@amd.com/
+The series is made of 12 patches:
+- 1/12 and 2/12 introduce the new formats needed for the unicam driver
+- 3/12 introduces dt-bindings documentation
+- 4/12 adds the MAINTAINERS entry
+- 5/12 adds the driver support in media/platform
+- 6/12 introduces the csi nodes in the bcm2711 file, in a disabled state
+- 7/12 to 11/12 modifies imx219 driver to make it use the multiplexed
+  streams API
+- 12/12 is the imx219 dtsi file tested on my RPi 4b with the mainline
+  dtb and not the downstream dtb anymore. *This patch is not intended to
+be applied*.
 
- drivers/edac/amd64_edac.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+All those patches are in my tree [4].
 
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 6e0d617fd95f..e0f9f3a4fff8 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -1540,6 +1540,36 @@ static u16 get_dst_fabric_id_df35(struct addr_ctx *ctx)
- 	return ctx->reg_limit_addr & 0xFFF;
- }
- 
-+/* UMC to CS mapping for Aldebaran die[0]s */
-+u8 umc_to_cs_mapping_aldebaran_die0[] = { 28, 20, 24, 16, 12, 4, 8, 0,
-+					 6, 30, 2, 26, 22, 14, 18, 10,
-+					 19, 11, 15, 7, 3, 27, 31, 23,
-+					 9, 1, 5, 29, 25, 17, 21, 13};
-+
-+/* UMC to CS mapping for Aldebaran die[1]s */
-+u8 umc_to_cs_mapping_aldebaran_die1[] = { 19, 11, 15, 7, 3, 27, 31, 23,
-+					9, 1, 5, 29, 25, 17, 21, 13,
-+					28, 20, 24, 16, 12, 4, 8, 0,
-+					6, 30, 2, 26, 22, 14, 18, 10};
-+
-+int get_umc_to_cs_mapping(struct addr_ctx *ctx)
-+{
-+	if (ctx->inst_id >= sizeof(umc_to_cs_mapping_aldebaran_die0))
-+		return -EINVAL;
-+
-+	/*
-+	 * Aldebaran has 2 dies and are enumerated alternatively
-+	 * die0's are enumerated as node 2, 4, 6 and 8
-+	 * die1's are enumerated as node 1, 3, 5 and 7
-+	 */
-+	if (ctx->nid % 2)
-+		ctx->inst_id = umc_to_cs_mapping_aldebaran_die1[ctx->inst_id];
-+	else
-+		ctx->inst_id = umc_to_cs_mapping_aldebaran_die0[ctx->inst_id];
-+
-+	return 0;
-+}
-+
- static int get_cs_fabric_id_df35(struct addr_ctx *ctx)
- {
- 	u16 nid = ctx->nid;
+Patch 5/12 comes from the linux-rpi work [1] with substantial
+modifications:
+- Removed the non-mc API which is deprecated, and not needed upstream
+- Moved from one video node with two source pads (image and embedded) to
+  two video nodes
+- Added a subdev between the sensor and the video nodes to properly
+  route the streams
+- Added support for multiplexed streams API
+
+In order to test it, one will need a RPi board and the camv2 (imx219)
+sensor.  An updated v4l-utils is also needed [5] to have support for
+multiplexed streams.
+
+v4l2-compliance passes on both video devices, without streaming testing
+though with one exception: as the colorspace support is removed in v3,
+we now have:
+
+test VIDIOC_G_FMT: OK
+  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
+	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+test VIDIOC_TRY_FMT: FAIL
+  fail: v4l2-test-formats.cpp(363): colorspace >= 0xff
+  fail: v4l2-test-formats.cpp(465): testColorspace(!node->is_io_mc,
+	pix.pixelformat, pix.colorspace, pix.ycbcr_enc, pix.quantization)
+test VIDIOC_S_FMT: FAIL
+
+This series since its v2 does integrate the device tree nodes into the
+upstream BCM2835 or BCM2711 device tree support.
+
+In order to properly configure the media pipeline, it is needed to call
+the usual ioctls, and configure routing in order to send the embedded
+data from the sensor to the "unicam-embedded" device node :
+
+```
+media=0
+media-ctl -d${media} -l "'imx219 2-0010':0->'unicam-subdev':0 [1]"
+media-ctl -d${media} -l "'unicam-subdev':1->'unicam-image':0 [1]"
+media-ctl -d${media} -v -R "'unicam-subdev' [0/0->1/0[1],0/1->2/0[1]]"
+media-ctl -d${media} -V "'imx219 2-0010':0/0 [fmt:SRGGB10_1X10/3280x2464 field:none]"
+v4l2-ctl -d0 --set-fmt-video width=3280,height=2464,pixelformat='pRAA',field=none
+media-ctl -d${media} -v -V "'imx219 2-0010':0/1 [fmt:METADATA_8/16384x1 field:none]"
+media-ctl -d${media} -p
+```
+
+Be sure to configure the routes before setting the format, as s_routing
+resets the default format.
+
+The media-ctl topology is:
+```
+pi@raspberrypi:~ $ media-ctl -d${media} -p
+Media controller API version 5.16.0
+
+Media device information
+------------------------
+driver          unicam
+model           unicam
+serial          
+bus info        platform:fe801000.csi
+hw revision     0x0
+driver version  5.16.0
+
+Device topology
+- entity 1: unicam-subdev (3 pads, 3 links, 2 routes)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev0
+	routes:
+		0/0 -> 1/0 [ACTIVE]
+		0/1 -> 2/0 [ACTIVE]
+	pad0: Sink
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
+		[stream:1 fmt:METADATA_8/16384x1 field:none]
+		<- "imx219 2-0010":0 [ENABLED,IMMUTABLE]
+	pad1: Source
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw]
+		-> "unicam-image":0 [ENABLED,IMMUTABLE]
+	pad2: Source
+		[stream:0 fmt:METADATA_8/16384x1 field:none]
+		-> "unicam-embedded":0 [ENABLED,IMMUTABLE]
+
+- entity 5: imx219 2-0010 (1 pad, 1 link, 2 routes)
+            type V4L2 subdev subtype Sensor flags 0
+            device node name /dev/v4l-subdev1
+	routes:
+		0/0 -> 0/0 [ACTIVE, IMMUTABLE, SOURCE]
+		0/0 -> 0/1 [ACTIVE, SOURCE]
+	pad0: Source
+		[stream:0 fmt:SRGGB10_1X10/3280x2464 field:none colorspace:raw
+		crop.bounds:(8,8)/3280x2464
+		crop:(8,8)/3280x2464]
+		[stream:1 fmt:METADATA_8/16384x1 field:none
+		crop.bounds:(8,8)/3280x2464
+		crop:(8,8)/3280x2464]
+		-> "unicam-subdev":0 [ENABLED,IMMUTABLE]
+
+- entity 9: unicam-image (1 pad, 1 link, 0 route)
+            type Node subtype V4L flags 1
+            device node name /dev/video0
+	pad0: Sink
+		<- "unicam-subdev":1 [ENABLED,IMMUTABLE]
+
+- entity 15: unicam-embedded (1 pad, 1 link, 0 route)
+             type Node subtype V4L flags 0
+             device node name /dev/video1
+	pad0: Sink
+		<- "unicam-subdev":2 [ENABLED,IMMUTABLE]
+
+```
+
+Then a frame can be capture with yavta:
+`yavta --capture=1 /dev/video0 -F/tmp/test-#.bin`
+
+In v3, capture on the metadata node (/dev/video1 in my case) can't be
+started if capture on image node (/dev/video0) is not already started.
+This can be tested using yavta, letting it capture frames indefinitely
+and start another yavta instance on the /dev/video1 node.
+
+
+Side note:
+My tree [4] also includes a backport for the unicam-isp drivers, it is
+then possible, and it has been successfully tested, to use libcamera and
+qcam to display the camera output.
+
+[1]: https://github.com/raspberrypi/linux/tree/rpi-5.15.y
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/tomba/linux.git/log/?h=multistream/work
+[3]: https://patchwork.linuxtv.org/project/linux-media/list/?series=7099
+[4]: https://github.com/jhautbois/linux-rpi/tree/jmh/unicam-multiplexed-streams
+[5]: https://github.com/jhautbois/v4l-utils/tree/jmh/tomi-multiplexed-streams
+
+Jean-Michel Hautbois (12):
+  media: v4l: Add V4L2-PIX-FMT-Y12P format
+  media: v4l: Add V4L2-PIX-FMT-Y14P format
+  dt-bindings: media: Add bindings for bcm2835-unicam
+  media: MAINTAINERS: add bcm2835 unicam driver
+  media: bcm2835-unicam: Add support for CCP2/CSI2 camera interface
+  ARM: dts: bcm2711: Add unicam CSI nodes
+  media: imx219: Rename mbus codes array
+  media: imx219: Switch from open to init_cfg
+  media: imx219: Introduce the set_routing operation
+  media: imx219: use a local v4l2_subdev to simplify reading
+  media: imx219: Add support for the V4L2 subdev active state
+  media: bcm283x: Include the imx219 node
+
+ .../bindings/media/brcm,bcm2835-unicam.yaml   |  110 +
+ .../media/v4l/pixfmt-yuv-luma.rst             |   44 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |    1 +
+ arch/arm/boot/dts/bcm2711-rpi.dtsi            |   15 +
+ arch/arm/boot/dts/bcm2711.dtsi                |   16 +
+ arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi     |  102 +
+ drivers/media/i2c/imx219.c                    |  344 ++-
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    2 +
+ drivers/media/platform/bcm2835/Kconfig        |   21 +
+ drivers/media/platform/bcm2835/Makefile       |    3 +
+ .../media/platform/bcm2835/bcm2835-unicam.c   | 2586 +++++++++++++++++
+ .../media/platform/bcm2835/vc4-regs-unicam.h  |  253 ++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    2 +
+ include/uapi/linux/videodev2.h                |    2 +
+ 16 files changed, 3362 insertions(+), 148 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+ create mode 100644 arch/arm/boot/dts/bcm283x-rpi-imx219.dtsi
+ create mode 100644 drivers/media/platform/bcm2835/Kconfig
+ create mode 100644 drivers/media/platform/bcm2835/Makefile
+ create mode 100644 drivers/media/platform/bcm2835/bcm2835-unicam.c
+ create mode 100644 drivers/media/platform/bcm2835/vc4-regs-unicam.h
+
 -- 
-2.25.1
+2.32.0
 

@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7964A8D2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A074D4A8D2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354031AbiBCUZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:25:49 -0500
-Received: from mga05.intel.com ([192.55.52.43]:27029 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238135AbiBCUZr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:25:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643919947; x=1675455947;
-  h=message-id:date:mime-version:to:references:from:subject:
-   in-reply-to:content-transfer-encoding;
-  bh=maUXWdLOoB+ER0fN6/9ymU9n/nzG5qy41XOrszB4bGA=;
-  b=LUdiFAl1ix00sNqlsMTpeHvSPAe5n+X77YTyJ0XBV9n2+u74yYpQ+qzY
-   CZt1Mpy4Y7LFDQ0TWGB1+no8XQjrUWAVK8UV4OqfOPhnrD0BikV/mcG3G
-   8in8wSX3glmoAnpQUHwPReRJx67QeOpcCy0xrxRS5GUInYMSztIMoG3t5
-   etOUJayCh8Zv7mSOjb4Wpwac9KQbsEEI8i9CWg14z6aJ1XNMRG+AGaGiY
-   ZTdulRSuz4WFNEjTYXz4To0h4Dw1gk7LO2NTYtxkzUH5gPg73vMqSSNdj
-   QmffYDYaGPlRHTbgjWG1xcRjnEu3MkFb7nR5PQBuE+3puseU515+NihkB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="334615061"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="334615061"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:25:47 -0800
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="535331874"
-Received: from oshoron-mobl.amr.corp.intel.com (HELO [10.209.125.125]) ([10.209.125.125])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:25:46 -0800
-Message-ID: <e313b068-b5d6-dbc4-9894-02d759d2fe55@intel.com>
-Date:   Thu, 3 Feb 2022 12:25:43 -0800
+        id S1354033AbiBCU0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236293AbiBCU03 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 15:26:29 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02FBC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:26:28 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id a28so8385620lfl.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 12:26:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3oi0WT6RtKYSCLVVcErN1iJ2hhuFG+VqgwHQjpgyVFs=;
+        b=Mm52phJLNfjcK4ovXq4DsaG3QHiwJomSpW1FBRJS7+EIygSIgR+8+Qt2oh1fIrTcgo
+         O9iHBnuNuft30SObwRl7eNJqy6H2fnWlwqO3XdreGjOYOA+YgbOEVnI8OCh2ZN4BlFo4
+         mk2AlVTaTVCeIG8ityYF9mthVuflkz6V+ZKCwGFo95FG1yo+Y7pOueVTW+OmEtiQrmth
+         zHOob3/aUidTR+XrYAtwwEURcBuTFGTEX3F9sTN3rL+g+cT0rWp1aBLBh8eUfxvReqz6
+         Kq23PWEjmuaRyQuz7VLcQCjvtegaTyjP+Irm6fF8CvBl/2S6I5nGVikD0lHaICoiXdKK
+         DUAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3oi0WT6RtKYSCLVVcErN1iJ2hhuFG+VqgwHQjpgyVFs=;
+        b=7cZn7SxGhV4/2Xq3VBoFQxcUb9By/RNUrWSlLAnjrwSf+PjvGjGGqI51vFkk440Hrm
+         /7wYEDgbhKJcYZkfHniSfijzusoeGc4MqPDt2sL28ePS39wSM62OU4hhzCvrHZlvzLo7
+         BxZof/X5BfvSYJt3b+S/4kY0TWXIobwTGS9PfhEYg4Y3/qh8ovx6tcvvHCZo+JzFVnKK
+         N0TURt0qJ7yzcOFq3D4D59/gLFcs8I6jVO4pZvUd7InKlbybzbgtjz1MOcQEzdPkbXxF
+         aKRKtfdK4e2GrtCh4BaWxK9slOoKvTVbDBhkwN9Ra8sxnlsB1AkGFVMyeVma7dtsnho6
+         KBXQ==
+X-Gm-Message-State: AOAM533lDc7Clw9zslmQdqgy4b7XjTwVPgO6FV0i93IuBT+u0EKw1pHm
+        veAZQO0sSW+rKSEVnTCLg0e83fgD1k+DUEomMfZaHxJ8BzE=
+X-Google-Smtp-Source: ABdhPJwGX975SvZnco4SUKPWlUpkyOX2+VfEHMxaO8GXGqai82myWhS4bR9uSWdSt+Ib4rMIxpNgB7rcdFzNsoAXY3g=
+X-Received: by 2002:a19:6449:: with SMTP id b9mr28110189lfj.82.1643919986917;
+ Thu, 03 Feb 2022 12:26:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Babu Moger <babu.moger@amd.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-References: <20220203194308.2469117-1-jmattson@google.com>
- <20220203194308.2469117-2-jmattson@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 2/2] x86/cpufeatures: Add macros for Intel's new fast rep
- string features
-In-Reply-To: <20220203194308.2469117-2-jmattson@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220203173307.1033257-1-keescook@chromium.org> <20220203173307.1033257-3-keescook@chromium.org>
+In-Reply-To: <20220203173307.1033257-3-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Feb 2022 12:26:15 -0800
+Message-ID: <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
+Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        George Burgess IV <gbiv@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 11:43, Jim Mattson wrote:
-> Even if no one else cares, these features should be exposed to kvm
-> guests, and the code for the KVM_GET_SUPPORTED_CPUID ioctl is more
-> readable if the bits have corresponding X86_FEATURE macros.
+On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> In order for FORTIFY_SOURCE to use __pass_object_size on an "inline
+> extern" function, as all the fortified string functions are, the functions
 
-I went digging around KVM_GET_SUPPORTED_CPUID and didn't see any obvious
-unreadable things resulting from not having these defines.  Maybe I'm
-looking in the wrong spot.  Do you have a slightly more specific pointer?
+s/inline extern/extern inline/
 
-> +#define X86_FEATURE_FZRM		(12*32+10) /* Fast zero-length REP MOVSB */
-> +#define X86_FEATURE_FSRS		(12*32+11) /* Fast short REP STOSB */
-> +#define X86_FEATURE_FSRC		(12*32+12) /* Fast short REP {CMPSB,SCASB} */
+Yes, they're the same thing, but it sounds backwards when I read it.
 
-If the use really is for inside the kernel, maybe we should hide them
-from cpuinfo:
+> must be marked as being overloadable (i.e. different prototypes).
+> This allows the __pass_object_size versions to take precedence.
 
-#define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+Is this because of the `const` additions to the function signatures?
 
+-- 
+Thanks,
+~Nick Desaulniers

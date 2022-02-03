@@ -2,134 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6254A7E2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315414A7E31
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349113AbiBCDAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:00:43 -0500
-Received: from mga05.intel.com ([192.55.52.43]:32012 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349076AbiBCDAl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 22:00:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643857241; x=1675393241;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QbvTnnL+MRgF7Ucp//VgqN8FR2m3aWIH1m8CeU1thsE=;
-  b=Nf0u/w1w/bTTOegM4btugLC0sfCuKmS7tdj0DizTXXHd7ePfbpMui39P
-   sOc6PHhDxcifE8h/k/d875+/yTMpJ9aa4GTfT1/mrG8Ez+/L2Yss6CwOB
-   zLGfk7q15Kt+zYHZXZHNATm8fHok3n9gPHkOecdqBnfacD9raNZvmqO2a
-   dkxBz40NG3lxI2sOvDiWjuml2DBWPVy7vL4TPEc/YF+fW6czzndVYduV4
-   lOfd/cf85Yz2rwzWwj/vkoJv1fKSd9zPe/zttrXbexMqqTxVObHXhtHmK
-   8RV9ArBu5SLc82p6x6UCPlLXgpXbQy7i7BczRN5ulZ2waL6Bx5M+T0GTJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="334424833"
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="334424833"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 19:00:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="483094058"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 19:00:39 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFSMQ-000VTg-SX; Thu, 03 Feb 2022 03:00:38 +0000
-Date:   Thu, 3 Feb 2022 11:00:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.02.01a 77/103]
- kernel/rcu/srcutree.c:424:5: error: 'struct srcu_struct' has no member named
- 'srcu_size_state'
-Message-ID: <202202031012.PzmEcyQ4-lkp@intel.com>
+        id S1349147AbiBCDCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349126AbiBCDCN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 22:02:13 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F0FC06173D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 19:02:13 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u11so964485plh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 19:02:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fi4i69yyHlW9dNLZasSOsCzYr8hNca983K/7O4yLzcY=;
+        b=gldBUpRszuUXxkfZKfanjJFZnzVNJdYwINvQKMPFH0e/fo+gWPnTSWpOq7RuW2N2VU
+         vGTFobykSKv2bO9aM/jttCa/gxjfr2iHhNxBe/o+zWpeth73uKzz4Um0U/Vp88+RQGJs
+         g0HIMIEMLHg/XZbUOYfjrG4tbIxsM2YZDBBtk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fi4i69yyHlW9dNLZasSOsCzYr8hNca983K/7O4yLzcY=;
+        b=Y9dr2nRMoeN+OLYZp0kWmFFXxVmjVKsn/zBKjiE2uqLFoAcLpnCsXcMyjknUI5T2/X
+         jDLe4LL8VEyTN6GdidEpIwLcD+NwmYqVoFzSK+wziaK3XyxG8hORUJQrPIesaS7eWZ7U
+         MxHHyLO6mfKp76Lg8ixXLanBq/lv7/CPFRY73QRVhMmf+jB618YmMDHT5LMz/hXA1+GM
+         s1uAGIgxPAZ9hzbjvFnoJkbwDxvyEjyei8/y2o5ZRfl68R86+3s14WwD0VHfJ5BS1mxZ
+         rr2iLyjsQ2/chDA8F6P0ZREy3WX8TKjSUj21FtF1jcR4IxfVJMU4d9zoPIy/3Cas0t2p
+         UPEw==
+X-Gm-Message-State: AOAM532Eo41dNyWDW+xAYiGOQ+IiTpKBmtI6oSfQ3d/sJR5ujGNsFg4j
+        9PifClhUT+0T15AP2to9TnmLnA==
+X-Google-Smtp-Source: ABdhPJz1PHmuumehqVMBhGYb0YO27H24hrHGlvXarpEvxEgjLLdf68YQR3qgsnZX28P1KOAcokVCVg==
+X-Received: by 2002:a17:90a:e2ca:: with SMTP id fr10mr11469589pjb.51.1643857332940;
+        Wed, 02 Feb 2022 19:02:12 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n22sm27145613pfu.77.2022.02.02.19.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 19:02:12 -0800 (PST)
+Date:   Wed, 2 Feb 2022 19:02:11 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/5] Makefile: Enable -Warray-bounds
+Message-ID: <202202021901.ED81570F@keescook>
+References: <20210818081118.1667663-1-keescook@chromium.org>
+ <20210818081118.1667663-5-keescook@chromium.org>
+ <20220202160903.GA2337834@roeck-us.net>
+ <202202021409.2AA6A4246@keescook>
+ <5ce016f8-fb4b-ef50-c543-886b4cfda225@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5ce016f8-fb4b-ef50-c543-886b4cfda225@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.02.01a
-head:   5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d
-commit: efbdb910e14b15835266c55ad4d891dde0792aed [77/103] srcu: Dynamically allocate srcu_node array
-config: i386-randconfig-a004-20211220 (https://download.01.org/0day-ci/archive/20220203/202202031012.PzmEcyQ4-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/efbdb910e14b15835266c55ad4d891dde0792aed
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.02.01a
-        git checkout efbdb910e14b15835266c55ad4d891dde0792aed
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Wed, Feb 02, 2022 at 03:21:49PM -0800, Guenter Roeck wrote:
+> On 2/2/22 14:11, Kees Cook wrote:
+> > On Wed, Feb 02, 2022 at 08:09:03AM -0800, Guenter Roeck wrote:
+> > > On Wed, Aug 18, 2021 at 01:11:17AM -0700, Kees Cook wrote:
+> > > > With the recent fixes for flexible arrays and expanded FORTIFY_SOURCE
+> > > > coverage, it is now possible to enable -Warray-bounds. Since both
+> > > > GCC and Clang include -Warray-bounds in -Wall, we just need to stop
+> > > > disabling it.
+> > > > 
+> > > > Cc: Arnd Bergmann <arnd@arndb.de>
+> > > > Cc: Masahiro Yamada <masahiroy@kernel.org>
+> > > > Cc: linux-kbuild@vger.kernel.org
+> > > > Co-developed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > > > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > >   Makefile | 1 -
+> > > >   1 file changed, 1 deletion(-)
+> > > > 
+> > > > diff --git a/Makefile b/Makefile
+> > > > index a4aca01a4835..af22b83cede7 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1072,7 +1072,6 @@ KBUILD_CFLAGS += $(call cc-disable-warning, stringop-truncation)
+> > > >   # We'll want to enable this eventually, but it's not going away for 5.7 at least
+> > > >   KBUILD_CFLAGS += $(call cc-disable-warning, zero-length-bounds)
+> > > > -KBUILD_CFLAGS += -Wno-array-bounds
+> > > >   KBUILD_CFLAGS += $(call cc-disable-warning, stringop-overflow)
+> > > >   # Another good warning that we'll want to enable eventually
+> > > 
+> > > alpha:defconfig:
+> > > 
+> > > In function '__memset',
+> > >      inlined from '__bad_pagetable' at arch/alpha/mm/init.c:79:2:
+> > > ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+> > >     37 |                         return __builtin_memset(s, c, n);
+> > >        |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > In function '__memset',
+> > >      inlined from '__bad_page' at arch/alpha/mm/init.c:86:2:
+> > > ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+> > >     37 |                         return __builtin_memset(s, c, n);
+> > >        |                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+> > > In function '__memset',
+> > >      inlined from 'paging_init' at arch/alpha/mm/init.c:256:2:
+> > > ./arch/alpha/include/asm/string.h:37:32: error: '__builtin_memset' offset [0, 8191] is out of the bounds [0, 0] [-Werror=array-bounds]
+> > >     37 |                         return __builtin_memset(s, c, n);
+> > 
+> > Ah! With Arnd and Nathan's help, I saw:
+> > https://lore.kernel.org/all/20210912160149.2227137-3-linux@roeck-us.net/
+> 
+> Guilty as charged. Sorry, I didn't try to analyze the problem,
+> or I might have noticed (and saved you some work).
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+No worries! It manifests as a completely different warning. It just
+happens to come from the same internal diagnostics info, I think. :)
 
-Note: the ammarfaizi2-block/paulmck/linux-rcu/dev.2022.02.01a HEAD 5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d builds fine.
-      It only hurts bisectability.
+I was just delighted to see it already had a solution!
 
-All errors (new ones prefixed by >>):
+-Kees
 
-   kernel/rcu/srcutree.c: In function 'cleanup_srcu_struct':
->> kernel/rcu/srcutree.c:424:5: error: 'struct srcu_struct' has no member named 'srcu_size_state'
-     424 |  ssp->srcu_size_state = SRCU_SIZE_SMALL;
-         |     ^~
->> kernel/rcu/srcutree.c:424:25: error: 'SRCU_SIZE_SMALL' undeclared (first use in this function)
-     424 |  ssp->srcu_size_state = SRCU_SIZE_SMALL;
-         |                         ^~~~~~~~~~~~~~~
-   kernel/rcu/srcutree.c:424:25: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +424 kernel/rcu/srcutree.c
-
-   387	
-   388	/**
-   389	 * cleanup_srcu_struct - deconstruct a sleep-RCU structure
-   390	 * @ssp: structure to clean up.
-   391	 *
-   392	 * Must invoke this after you are finished using a given srcu_struct that
-   393	 * was initialized via init_srcu_struct(), else you leak memory.
-   394	 */
-   395	void cleanup_srcu_struct(struct srcu_struct *ssp)
-   396	{
-   397		int cpu;
-   398	
-   399		if (WARN_ON(!srcu_get_delay(ssp)))
-   400			return; /* Just leak it! */
-   401		if (WARN_ON(srcu_readers_active(ssp)))
-   402			return; /* Just leak it! */
-   403		flush_delayed_work(&ssp->work);
-   404		for_each_possible_cpu(cpu) {
-   405			struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
-   406	
-   407			del_timer_sync(&sdp->delay_work);
-   408			flush_work(&sdp->work);
-   409			if (WARN_ON(rcu_segcblist_n_cbs(&sdp->srcu_cblist)))
-   410				return; /* Forgot srcu_barrier(), so just leak it! */
-   411		}
-   412		if (WARN_ON(rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) != SRCU_STATE_IDLE) ||
-   413		    WARN_ON(rcu_seq_current(&ssp->srcu_gp_seq) != ssp->srcu_gp_seq_needed) ||
-   414		    WARN_ON(srcu_readers_active(ssp))) {
-   415			pr_info("%s: Active srcu_struct %p read state: %d gp state: %lu/%lu\n",
-   416				__func__, ssp, rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)),
-   417				rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
-   418			return; /* Caller forgot to stop doing call_srcu()? */
-   419		}
-   420		free_percpu(ssp->sda);
-   421		ssp->sda = NULL;
-   422		kfree(ssp->node);
-   423		ssp->node = NULL;
- > 424		ssp->srcu_size_state = SRCU_SIZE_SMALL;
-   425	}
-   426	EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
-   427	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Kees Cook

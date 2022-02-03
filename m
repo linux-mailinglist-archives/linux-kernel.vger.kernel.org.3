@@ -2,183 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06364A8B9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25854A8B9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353488AbiBCS0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S1353486AbiBCS06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbiBCS0o (ORCPT
+        with ESMTP id S1353422AbiBCS0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:26:44 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBFEC06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:26:43 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id u15so6743744wrt.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:26:43 -0800 (PST)
+        Thu, 3 Feb 2022 13:26:52 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A37C061714;
+        Thu,  3 Feb 2022 10:26:52 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id j16so2876845plx.4;
+        Thu, 03 Feb 2022 10:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZWI0+x1zjRdNZd4hSHdWsF4M1u/QYwQfZKbKt9HgHN4=;
-        b=CIZgAFLya2oubgyuO1IEyvirg9Km0oHON+oACRu7wZ/jCnd+q7F5JydvsOhv0qZAqV
-         JkaddLV6bjn41QTYlWd3U6eTLuSnQpTQ8FPlp3DlMiuzfgiQVXE4s/pPcsCD526uSpyw
-         TlbvcCjOC7PdH99QmZ0mwry+zRxJItoiKCO0yaCaIShoxWgTw/RtRsNKlmixi8qzHoXU
-         2/CaEubGCNQg7lRtfipGA99TgzEt370fA5uhtX0bQMx8xIDYgsIxLPxcGn7aZOkYHZ4+
-         4gNYpvQo7ROABvLeVnXihtVr2aCO4ra16Tjx6WStOA8p/hcmRVEROrKw+l1mnkh02LLJ
-         cESg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+UWTZfIIw6vBphVS0iDa4Bn1P/iiOtii+RT3gDvcpYM=;
+        b=BYVa0XPN9/C0GZnne6WH3u6IsaHNRvy9BVtpAcuKv9xat71+KvfUBNbjAJHFkieKgR
+         HWmAia3EJJs2FJmlABVLY4d4Y/MOfE9SAQg9GQ+LcYa2MZUb5za360O8O2iwhaP3wqBp
+         wzVVWJm6RAQ1pDIiak3XcdzeYPw3e36pzd1Wqpxhed/8+cWsZyFwqlb2+j7e1bsOUHXL
+         Tx1I2d6JBuz5n64i9/AgkmCiFmxv1Kx+m9fH7kojdO/KCePWpACA0AOZLbriE5pzGu5A
+         wpz3QLpCsh64qwG9PR2ZJy6/cG+jQbT3vZqYhB2xBTr6JtiX+5PTQfAf5Bod7ZmWYy6+
+         jVqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ZWI0+x1zjRdNZd4hSHdWsF4M1u/QYwQfZKbKt9HgHN4=;
-        b=7dGmp42rksT6kZCwv/Nvs/I6l4ltSe3DM5bjqIeKjEND22wU5YJEwaE4xaoRtk0X3m
-         hoXMhNIMz3yBC+CDyCPrhX9GlLh+rzXlbOOaTjDeH1WK7auwMPPphkWie5nSs+d0Hcxi
-         PP3GiBptoVXcbUMok+dWi+rtIqN+WdP7D+syvX1n/ntRMrEhouHsykpCWi5yrre2fwcf
-         FwfrWJFe1yvxOC7Jsp04LId10BwkXYF7jilVMIqPZsBH7oI1nu2D5Dn/G0xadzwN2NOP
-         LgKckFTTYdCBppO9u3ReBm8AglldGC6pZMsxn18JXpJpZP7swieJEWPziUIDLQw9SPXX
-         X1UA==
-X-Gm-Message-State: AOAM5310+2GroowMu0S3oQaO5k4Li+JJ+6mPeU2ziw85IjbVX2x6RC8P
-        F88ILDDLp0lMvZr4BliNcT6n/A==
-X-Google-Smtp-Source: ABdhPJzgY1E3Db9HP3QjZL8LbCqVu2j+/FSXE1GJbMCMq+V3z/8fHgHSWoPUpwF2xytTvVs5u6B33g==
-X-Received: by 2002:adf:e846:: with SMTP id d6mr21729812wrn.539.1643912802404;
-        Thu, 03 Feb 2022 10:26:42 -0800 (PST)
-Received: from ?IPv6:2a02:6b6d:f804:0:28c2:5854:c832:e580? ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
-        by smtp.gmail.com with ESMTPSA id bh19sm2088001wmb.1.2022.02.03.10.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 10:26:42 -0800 (PST)
-Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203174108.668549-1-usama.arif@bytedance.com>
- <20220203174108.668549-3-usama.arif@bytedance.com>
- <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
-From:   Usama Arif <usama.arif@bytedance.com>
-Message-ID: <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
-Date:   Thu, 3 Feb 2022 18:26:41 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=+UWTZfIIw6vBphVS0iDa4Bn1P/iiOtii+RT3gDvcpYM=;
+        b=r1eFAGNVrTVpPE2NmnAFySLBAI64WaHzsaV8ZNss/dwfF1nIv7+9Xftckx7UvR6K2x
+         IyApgLsoH8mBaZvaxHCbF6TIf4dzejP8ZSN7OUpnVJ0k4oo16kOcblm3lue35sczbgaR
+         WIAbrOcka80rnFxjTyeXjao6JCIev/w4pguMEOJmn7czoQfHUBvL+owL7xdqq/NxLIKB
+         T/UsId6e7pfDDyFj9cJrruzGut8WQzbYwuzPC07DcCaMLp+AXFDbD+N49nfAUonIc18v
+         /J60dwVsMulHLObYOOf2upPRnYnrrk0njDwnoL5X6mb2LoWjhxFyVZuDUWAOHJD08TXH
+         93+w==
+X-Gm-Message-State: AOAM533xtQRpehTMSJgk2f+m64NtHqL4c078rhT6nE+5MNWkv+Z7NS/r
+        sihVoOyooWC+X9HL7UVIXL/bMkzcXdM=
+X-Google-Smtp-Source: ABdhPJwFrnT0GD9Knf86flQ/HlmQ+/ihBU+UI6Vq1wWQtHAK2sUfoWQxcVY+WtxiiEEhpH2+6QtSow==
+X-Received: by 2002:a17:902:ec86:: with SMTP id x6mr37289585plg.96.1643912811831;
+        Thu, 03 Feb 2022 10:26:51 -0800 (PST)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id l13sm37418602pgs.16.2022.02.03.10.26.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 10:26:46 -0800 (PST)
+From:   Yang Shi <shy828301@gmail.com>
+To:     kirill.shutemov@linux.intel.com, jannh@google.com,
+        willy@infradead.org, david@redhat.com, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+Date:   Thu,  3 Feb 2022 10:26:41 -0800
+Message-Id: <20220203182641.824731-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-In-Reply-To: <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The syzbot reported the below BUG:
 
+kernel BUG at include/linux/page-flags.h:785!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4392 Comm: syz-executor560 Not tainted 5.16.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ page_mapcount include/linux/mm.h:837 [inline]
+ smaps_account+0x470/0xb10 fs/proc/task_mmu.c:466
+ smaps_pte_entry fs/proc/task_mmu.c:538 [inline]
+ smaps_pte_range+0x611/0x1250 fs/proc/task_mmu.c:601
+ walk_pmd_range mm/pagewalk.c:128 [inline]
+ walk_pud_range mm/pagewalk.c:205 [inline]
+ walk_p4d_range mm/pagewalk.c:240 [inline]
+ walk_pgd_range mm/pagewalk.c:277 [inline]
+ __walk_page_range+0xe23/0x1ea0 mm/pagewalk.c:379
+ walk_page_vma+0x277/0x350 mm/pagewalk.c:530
+ smap_gather_stats.part.0+0x148/0x260 fs/proc/task_mmu.c:768
+ smap_gather_stats fs/proc/task_mmu.c:741 [inline]
+ show_smap+0xc6/0x440 fs/proc/task_mmu.c:822
+ seq_read_iter+0xbb0/0x1240 fs/seq_file.c:272
+ seq_read+0x3e0/0x5b0 fs/seq_file.c:162
+ vfs_read+0x1b5/0x600 fs/read_write.c:479
+ ksys_read+0x12d/0x250 fs/read_write.c:619
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7faa2af6c969
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007faa2aefd288 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00007faa2aff4418 RCX: 00007faa2af6c969
+RDX: 0000000000002025 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00007faa2aff4410 R08: 00007faa2aefd700 R09: 0000000000000000
+R10: 00007faa2aefd700 R11: 0000000000000246 R12: 00007faa2afc20ac
+R13: 00007fff7e6632bf R14: 00007faa2aefd400 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 24ec93ff95e4ac3d ]---
+RIP: 0010:PageDoubleMap include/linux/page-flags.h:785 [inline]
+RIP: 0010:__page_mapcount+0x2d2/0x350 mm/util.c:744
+Code: e8 d3 16 d1 ff 48 c7 c6 c0 00 b6 89 48 89 ef e8 94 4e 04 00 0f 0b e8 bd 16 d1 ff 48 c7 c6 60 01 b6 89 48 89 ef e8 7e 4e 04 00 <0f> 0b e8 a7 16 d1 ff 48 c7 c6 a0 01 b6 89 4c 89 f7 e8 68 4e 04 00
+RSP: 0018:ffffc90002b6f7b8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888019619d00 RSI: ffffffff81a68c12 RDI: 0000000000000003
+RBP: ffffea0001bdc2c0 R08: 0000000000000029 R09: 00000000ffffffff
+R10: ffffffff8903e29f R11: 00000000ffffffff R12: 00000000ffffffff
+R13: 00000000ffffea00 R14: ffffc90002b6fb30 R15: ffffea0001bd8001
+FS:  00007faa2aefd700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff7e663318 CR3: 0000000018c6e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-On 03/02/2022 17:56, Jens Axboe wrote:
-> On 2/3/22 10:41 AM, Usama Arif wrote:
->> @@ -1726,13 +1732,24 @@ static inline struct io_uring_cqe *io_get_cqe(struct io_ring_ctx *ctx)
->>   	return &rings->cqes[tail & mask];
->>   }
->>   
->> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
->> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
->>   {
->> -	if (likely(!ctx->cq_ev_fd))
->> -		return false;
->> +	struct io_ev_fd *ev_fd;
->> +
->> +	rcu_read_lock();
->> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
->> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
->> +
->> +	if (likely(!ev_fd))
->> +		goto out;
->>   	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
->> -		return false;
->> -	return !ctx->eventfd_async || io_wq_current_is_worker();
->> +		goto out;
->> +
->> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
->> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
->> +
->> +out:
->> +	rcu_read_unlock();
->>   }
-> 
-> Like Pavel pointed out, we still need the fast path (of not having an
-> event fd registered at all) to just do the cheap check and not need rcu
-> lock/unlock. Outside of that, I think this looks fine.
-> 
+The reproducer was trying to reading /proc/$PID/smaps when calling
+MADV_FREE at the mean time.  MADV_FREE may split THPs if it is called
+for partial THP.  It may trigger the below race:
 
-Hmm, maybe i didn't understand you and Pavel correctly. Are you 
-suggesting to do the below diff over patch 3? I dont think that would be 
-correct, as it is possible that just after checking if ctx->io_ev_fd is 
-present unregister can be called by another thread and set ctx->io_ev_fd 
-to NULL that would cause a NULL pointer exception later? In the current 
-patch, the check of whether ev_fd exists happens as the first thing 
-after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
+         CPU A                         CPU B
+         -----                         -----
+smaps walk:                      MADV_FREE:
+page_mapcount()
+  PageCompound()
+                                 split_huge_page()
+  page = compound_head(page)
+  PageDoubleMap(page)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 25ed86533910..0cf282fba14d 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1736,12 +1736,13 @@ static void io_eventfd_signal(struct io_ring_ctx 
-*ctx)
-  {
-         struct io_ev_fd *ev_fd;
+When calling PageDoubleMap() this page is not a tail page of THP anymore
+so the BUG is triggered.
 
-+       if (likely(!ctx->io_ev_fd))
-+               return;
+This could be fixed by elevated refcount of the page before calling
+mapcount, but it prevents from counting migration entries, and it seems
+overkilling because the race just could happen when PMD is split so all
+PTE entries of tail pages are actually migration entries, and
+smaps_account() does treat migration entries as mapcount == 1 as Kirill
+pointed out.
+
+Add a new parameter for smaps_account() to tell this entry is migration
+entry then skip calling page_mapcount().  Don't skip getting mapcount for
+device private entries since they do track references with mapcount.
+
+Pagemap also has the similar issue although it was not reported.  Fixed
+it as well.
+
+Fixes: e9b61f19858a ("thp: reintroduce split_huge_page()")
+Reported-by: syzbot+1f52b3a18d5633fa7f82@syzkaller.appspotmail.com
+Acked-by: David Hildenbrand <david@redhat.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+v4: * s/Treated/Treat per David
+    * Collected acked-by tag from David
+v3: * Fixed the fix tag, the one used by v2 was not accurate
+    * Added comment about the risk calling page_mapcount() per David
+    * Fix pagemap
+v2: * Added proper fix tag per Jann Horn
+    * Rebased to the latest linus's tree
+
+ fs/proc/task_mmu.c | 38 ++++++++++++++++++++++++++++++--------
+ 1 file changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 18f8c3acbb85..bc2f46033231 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -440,7 +440,8 @@ static void smaps_page_accumulate(struct mem_size_stats *mss,
+ }
+ 
+ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+-		bool compound, bool young, bool dirty, bool locked)
++		bool compound, bool young, bool dirty, bool locked,
++		bool migration)
+ {
+ 	int i, nr = compound ? compound_nr(page) : 1;
+ 	unsigned long size = nr * PAGE_SIZE;
+@@ -467,8 +468,15 @@ static void smaps_account(struct mem_size_stats *mss, struct page *page,
+ 	 * page_count(page) == 1 guarantees the page is mapped exactly once.
+ 	 * If any subpage of the compound page mapped with PTE it would elevate
+ 	 * page_count().
++	 *
++	 * The page_mapcount() is called to get a snapshot of the mapcount.
++	 * Without holding the page lock this snapshot can be slightly wrong as
++	 * we cannot always read the mapcount atomically.  It is not safe to
++	 * call page_mapcount() even with PTL held if the page is not mapped,
++	 * especially for migration entries.  Treat regular migration entries
++	 * as mapcount == 1.
+ 	 */
+-	if (page_count(page) == 1) {
++	if ((page_count(page) == 1) || migration) {
+ 		smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
+ 			locked, true);
+ 		return;
+@@ -517,6 +525,7 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(vma, addr, *pte);
+@@ -536,8 +545,11 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 			} else {
+ 				mss->swap_pss += (u64)PAGE_SIZE << PSS_SHIFT;
+ 			}
+-		} else if (is_pfn_swap_entry(swpent))
++		} else if (is_pfn_swap_entry(swpent)) {
++			if (is_migration_entry(swpent))
++				migration = true;
+ 			page = pfn_swap_entry_to_page(swpent);
++		}
+ 	} else {
+ 		smaps_pte_hole_lookup(addr, walk);
+ 		return;
+@@ -546,7 +558,8 @@ static void smaps_pte_entry(pte_t *pte, unsigned long addr,
+ 	if (!page)
+ 		return;
+ 
+-	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte), locked);
++	smaps_account(mss, page, false, pte_young(*pte), pte_dirty(*pte),
++		      locked, migration);
+ }
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -557,6 +570,7 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	struct vm_area_struct *vma = walk->vma;
+ 	bool locked = !!(vma->vm_flags & VM_LOCKED);
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pmd_present(*pmd)) {
+ 		/* FOLL_DUMP will return -EFAULT on huge zero page */
+@@ -564,8 +578,10 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 	} else if (unlikely(thp_migration_supported() && is_swap_pmd(*pmd))) {
+ 		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+ 
+-		if (is_migration_entry(entry))
++		if (is_migration_entry(entry)) {
++			migration = true;
+ 			page = pfn_swap_entry_to_page(entry);
++		}
+ 	}
+ 	if (IS_ERR_OR_NULL(page))
+ 		return;
+@@ -577,7 +593,9 @@ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		/* pass */;
+ 	else
+ 		mss->file_thp += HPAGE_PMD_SIZE;
+-	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd), locked);
 +
-         rcu_read_lock();
-         /* rcu_dereference ctx->io_ev_fd once and use it for both for 
-checking and eventfd_signal */
-         ev_fd = rcu_dereference(ctx->io_ev_fd);
++	smaps_account(mss, page, true, pmd_young(*pmd), pmd_dirty(*pmd),
++		      locked, migration);
+ }
+ #else
+ static void smaps_pmd_entry(pmd_t *pmd, unsigned long addr,
+@@ -1378,6 +1396,7 @@ static pagemap_entry_t pte_to_pagemap_entry(struct pagemapread *pm,
+ {
+ 	u64 frame = 0, flags = 0;
+ 	struct page *page = NULL;
++	bool migration = false;
+ 
+ 	if (pte_present(pte)) {
+ 		if (pm->show_pfn)
+@@ -1399,13 +1418,14 @@ static pagemap_entry_t pte_to_pagemap_entry(struct pagemapread *pm,
+ 			frame = swp_type(entry) |
+ 				(swp_offset(entry) << MAX_SWAPFILES_SHIFT);
+ 		flags |= PM_SWAP;
++		migration = is_migration_entry(entry);
+ 		if (is_pfn_swap_entry(entry))
+ 			page = pfn_swap_entry_to_page(entry);
+ 	}
+ 
+ 	if (page && !PageAnon(page))
+ 		flags |= PM_FILE;
+-	if (page && page_mapcount(page) == 1)
++	if (page && !migration && page_mapcount(page) == 1)
+ 		flags |= PM_MMAP_EXCLUSIVE;
+ 	if (vma->vm_flags & VM_SOFTDIRTY)
+ 		flags |= PM_SOFT_DIRTY;
+@@ -1421,6 +1441,7 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 	spinlock_t *ptl;
+ 	pte_t *pte, *orig_pte;
+ 	int err = 0;
++	bool migration = false;
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 	ptl = pmd_trans_huge_lock(pmdp, vma);
+@@ -1461,11 +1482,12 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 			if (pmd_swp_uffd_wp(pmd))
+ 				flags |= PM_UFFD_WP;
+ 			VM_BUG_ON(!is_pmd_migration_entry(pmd));
++			migration = is_migration_entry(entry);
+ 			page = pfn_swap_entry_to_page(entry);
+ 		}
+ #endif
+ 
+-		if (page && page_mapcount(page) == 1)
++		if (page && !migration && page_mapcount(page) == 1)
+ 			flags |= PM_MMAP_EXCLUSIVE;
+ 
+ 		for (; addr != end; addr += PAGE_SIZE) {
+-- 
+2.26.3
 
--       if (likely(!ev_fd))
--               goto out;
-         if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
-                 goto out;
-
-
-
-
->>   static int io_eventfd_unregister(struct io_ring_ctx *ctx)
->>   {
->> -	if (ctx->cq_ev_fd) {
->> -		eventfd_ctx_put(ctx->cq_ev_fd);
->> -		ctx->cq_ev_fd = NULL;
->> -		return 0;
->> +	struct io_ev_fd *ev_fd;
->> +	int ret;
->> +
->> +	mutex_lock(&ctx->ev_fd_lock);
->> +	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
->> +	if (!ev_fd) {
->> +		ret = -ENXIO;
->> +		goto out;
->>   	}
->> +	synchronize_rcu();
->> +	eventfd_ctx_put(ev_fd->cq_ev_fd);
->> +	kfree(ev_fd);
->> +	rcu_assign_pointer(ctx->io_ev_fd, NULL);
->> +	ret = 0;
->>   
->> -	return -ENXIO;
->> +out:
->> +	mutex_unlock(&ctx->ev_fd_lock);
->> +	return ret;
->>   }
-> 
-> synchronize_rcu() can take a long time, and I think this is in the wrong
-> spot. It should be on the register side, IFF we need to expedite the
-> completion of a previous event fd unregistration. If we do it that way,
-> at least it'll only happen if it's necessary. What do you think?
-> 
-
-
-How about the approach in v4? so switching back to call_rcu as in v2 and 
-if ctx->io_ev_fd is NULL then we call rcu_barrier to make sure all rcu 
-callbacks are finished and check for NULL again.
-
-Thanks!
-Usama

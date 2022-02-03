@@ -2,280 +2,786 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33214A8513
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7334A84E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350748AbiBCNSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:18:44 -0500
-Received: from mail-bn1nam07on2061.outbound.protection.outlook.com ([40.107.212.61]:24580
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1350752AbiBCNSY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:18:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gstoB7+jDGPz9/GA0zhfoRIxsF1gAE4Lec6ptYnAuTQHwV5gqhIorskxxg8hcaIKDoMPsQVi5rrZMT30Y7e5B/gyynd2q3xyUe1GjZbV+e0QSEzE2cQjYmzRX2zJ+hVTeSl9YnEAjLmTyyhoS3+6YkuqBfqE2Y5Jgnd3BHCOKbc80zKbfxMzPTqy+uAHYmDtapvSSD1JEfQPc/kr3swHA104DygB2Hr27FKvsqOTZ8TREYA44ZkblAlKiQ3+jFA9ZY1bySpvj6MFcPW4drT/GwVggpaihMknEPDGb0xDyfRtUOqTzz+qMqajgyR1uAR/3jrQQkM7lo0rAClkM96V9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sqaNNrLFEItfAG9TaMhVmhko7hLU/217VuUIGzjMkh4=;
- b=JpCCWW9x95TNiUHtZ20L9H0nsB3YLJkS1PAyNvHPzgnoKORQy04adYcv+RSHDjKpZQ2DAQmGpBoOwX8yh7ZjyefZnPos2Vy+CohuuWpqcj/bdgF7gsKmFudi/AUb4WxGYVwJO+9Hqd31lyJ9M6rrYU+/sy7m/lyHRlFrO+ZCKbZoerxfXe5x+YUrraGYcmVa+ZgatIcGlKkkJboX63Ugo9NvMQZxY9sMIKgGgAHqQqjvJ3LgrtU7LNv4gVMpVjaCLG5rFf9Pu2h2lHH+5OH4nMwVOJBZWvJG9AiIskFqTlJM/QuUjHPSgRkKp6/Ucv1i9ZwxXsnmSPvZuD0Ak5uiUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sqaNNrLFEItfAG9TaMhVmhko7hLU/217VuUIGzjMkh4=;
- b=BeZ/EVBtL8yYhu2x9hzW2jWY8zAdqpWmWVN4HhdAcztYKVxencLM2d3DBe2XXWpX/WZmXbEUfhtiCKP8G7U41+ISvuRey+FaT2NnO02Ud/xGy+Mk7l2BzXOvkayMQM9O7+958xMKFqfP7lCFJtYGRagbqkQgYl1GNRb116enS4o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from BY3PR05MB8081.namprd05.prod.outlook.com (2603:10b6:a03:366::15)
- by MN2PR05MB7150.namprd05.prod.outlook.com (2603:10b6:208:18b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.5; Thu, 3 Feb
- 2022 13:18:18 +0000
-Received: from BY3PR05MB8081.namprd05.prod.outlook.com
- ([fe80::304c:2b94:4f26:a581]) by BY3PR05MB8081.namprd05.prod.outlook.com
- ([fe80::304c:2b94:4f26:a581%3]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
- 13:18:18 +0000
-From:   Jorgen Hansen <jhansen@vmware.com>
-To:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     gregkh@linuxfoundation.org, pv-drivers@vmware.com,
-        Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: [PATCH v2 6/8] VMCI: dma dg: allocate send and receive buffers for DMA datagrams
-Date:   Thu,  3 Feb 2022 05:12:35 -0800
-Message-Id: <20220203131237.3380-7-jhansen@vmware.com>
+        id S1350712AbiBCNNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347799AbiBCNNV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:13:21 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6D2C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 05:13:21 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so1442016ooo.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 05:13:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1NG9qud1LpaSOVSQkpnHko+6K/HJr+ErHRZPqMtGVU=;
+        b=hLT6n8MMx784Gy81FKXkW2EMnPjpoNPQgm4PQUZCiFZvAvVdslEENx8Py9Zy3IP8BI
+         W9cd9oiTC1l7imttsMxLJTKjlIbqDTVLHdWL9hP5zKwUp9GWe5xRerqT2zBlXtg4DX4x
+         P6Mgx/tf8ZZBiSB3reeUeKJ5XoDIUZKWo1W9D3+THh56NXywdvmhh8/CSWvtgGq2jq6C
+         Xx36DEhpfOXvkpTwujxxwXj+eYQCSnqdoEQx1/zFUo3BMRUgLFZZLwFOMFi9eog15IIZ
+         gJl+9z8Zzb2tAfw22dFhkwwwP5dCW78uYSY5ZiOBu7MATYZ64W6aCT113y+BW5QrH8QT
+         1U+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1NG9qud1LpaSOVSQkpnHko+6K/HJr+ErHRZPqMtGVU=;
+        b=6W7mJvo1HiY3WjEiETK/6wVIPANLVkvRcNMI8FWRzl7ZIHipdi1YSHVCxBHGhujlsc
+         bnPJ7fWzRYZfhq4hR0deXvMAzAQD2eNiBVFquOjJNKXFMOecczeJrVUGYN5UmBmFC7xt
+         1wLlsupFmWN7OEuDeoAjwhfJofJKmwFX2HpBYo/2otJDnT2LwgjYdiQ9nzx+iPIXimci
+         8IKRHE10eh98NxVaAZPEesKJPrB1obU99O8aS5tr0tx7G96wRBBGXsgc9j1SMJRxi39e
+         oZcSFLFRu3M+OsvTHvTPU8sGwEPO132Sehu43XJCfDpJnGQ72VK8rbpWANjtbYGBLlES
+         d60w==
+X-Gm-Message-State: AOAM533ErRE8nABtAqfM0OLeeDUismEPLzSRoJnXVBIYirqEr93zIwfk
+        NRqr/KF24yVNteAeAfts+JA=
+X-Google-Smtp-Source: ABdhPJw606awtxkHoaAQoMDNkwgrOoN9kSTAdyPIExCnKxwSn/7RBLxmhGiiS+4Vyxas89WUbwE3MA==
+X-Received: by 2002:a05:6870:d8ae:: with SMTP id dv46mr198000oab.228.1643894000683;
+        Thu, 03 Feb 2022 05:13:20 -0800 (PST)
+Received: from localhost.localdomain ([179.223.196.228])
+        by smtp.gmail.com with ESMTPSA id n12sm16665537oop.5.2022.02.03.05.13.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 05:13:20 -0800 (PST)
+From:   Pedro Demarchi Gomes <pedrodemargomes@gmail.com>
+Cc:     Pedro Demarchi Gomes <pedrodemargomes@gmail.com>,
+        SeongJae Park <sj@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/damon: Add option to monitor only writes
+Date:   Thu,  3 Feb 2022 10:12:36 -0300
+Message-Id: <20220203131237.298090-1-pedrodemargomes@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220203131237.3380-1-jhansen@vmware.com>
-References: <20220203131237.3380-1-jhansen@vmware.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0068.namprd07.prod.outlook.com
- (2603:10b6:a03:60::45) To BY3PR05MB8081.namprd05.prod.outlook.com
- (2603:10b6:a03:366::15)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a3b2594c-ae57-40f4-6967-08d9e717a375
-X-MS-TrafficTypeDiagnostic: MN2PR05MB7150:EE_
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <MN2PR05MB7150993A0749261B74DAF0BFDA289@MN2PR05MB7150.namprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rbpInloZBwK040l/54yo9SQr0F5j+CPsY8q5w+q/QN532kyu6tBSV+wxB9LaS9zbmPvAwx9TpCKGh7qmPmqiRwo8xFUh3lTAI4DpwU38Rss3rlVQqlypIvL4UBlN8ZnvdSCEFSDDkgR6Mnu4f5HXhFKBM20WPGyCq6CtjfcrXYrZGexOdkYeak7GH/SQjuKQm+aPTuvQ76AAVdJ3uL84xQlDaD7cH+PgXhZV8Ub+/5rC7ErhR9DVYV3i04TVsQFrwJSH4g51ZywCU/MCJ/LPAMFweQI2+KCxtbmZ/pQWQ3wLwQmWsAUANUQYyvIXGsuV6irAejdDwasYBwnUuEiQtKyk+/80tERoDFYyoaIkJBhOGqECrPnbFBtwMARWUdGAFEFIqIN1Jw5YvE2aAfRizmP83NUs0lkthxpknrDHqjTL8b1kkXILoml3CjKh552jxDXtiMwYulyPARvXgYOJTuXba+LdEbbd16IeNmvUmDcLHJs4LKc0qQv587KbvcZj6oBSlFpfYV2N018VChrlFxrvSYsA6i80JSNfajYhtYRKZt/0r53nqIqjsT1ikAuY69Fzp7mIVjLRF53lvS+SILARmB2f68ap6Sy+QlgxFmhMIs5N6FzKeOVwbd0I0OcJ8I2XWI2O/74lePLbMcw1GAbVmWPuMqk4DtYB1q3czBVqdRjl2SGag3psenwCX7YJT154n3DamxQTVQRgLlAN6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8081.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(8936002)(66556008)(8676002)(66476007)(5660300002)(4326008)(38350700002)(2616005)(52116002)(66946007)(36756003)(38100700002)(186003)(6506007)(26005)(2906002)(1076003)(83380400001)(107886003)(316002)(6666004)(54906003)(86362001)(6512007)(508600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bA7hjOjBSfPBINrscZ5LxevtCfUd2wfaXSWoF26TV5uiqgKtlYKJem5ha+6V?=
- =?us-ascii?Q?n7u9hk0tFAjjGf582K2BS/EymP0/npQrij51OcDveeUXTHgghEU5tf+W27Ww?=
- =?us-ascii?Q?aEv5mKg/KUivlAE38A64Gqu5XPiDwHKKLWELer/noExfVqghnTLqbYsu+DNY?=
- =?us-ascii?Q?/jb85OmyMUbT55ocnj/t3n1RdLiVSf6V0nwqezAxgS3b0BDBzpuGJQsnoETu?=
- =?us-ascii?Q?uR7KTx8TjRH9NvOyXa+QxsKeFnZDBXd6ruqMx8/OiLv4JsyeNDa7+O6e/1v9?=
- =?us-ascii?Q?OHWTUIoELtzB/nhA4Niywf3MqDilCHharMnTBRFmdAmFh6hV6WcxxeFmxbrr?=
- =?us-ascii?Q?U35B4x+nEwpTP8AHHROlZyMUt3sNc3xCQOSCtoZxu+BTj1+TpnMEeG5gRuvS?=
- =?us-ascii?Q?7r+NrIL+H/GfeJcbnX7te0Ddaf/7+2y2gTDZklDDWII2xfcSdj0UmO7M5ZK/?=
- =?us-ascii?Q?KJEwqySaJV/qjM1PpqTbzO+Rqg2DGlc6cpt4MiP0SzdZ0mEVdb5JqoKj3laM?=
- =?us-ascii?Q?POKlflRN7fZvehe3Xvi9pOhHozZDY59U5tPeLbFhnbkaBMMw+cMC6qX4faTV?=
- =?us-ascii?Q?PQeN+5lOx+4zOaEB9C+ykrozTDfsIY0VrcfDx877ImGtXcF7zrGvrUvy6zpH?=
- =?us-ascii?Q?qNOJdXlX7SDDFTF5lXXNsx+EWZfbiy5sr7zfRg6a7UU+ZBkB2+cpaP00+YTq?=
- =?us-ascii?Q?naOeEFhdiBhGG2HsWC4oIU5qJVAbGVtRE30sjW85Wa4ERc+NAT8hitosBDml?=
- =?us-ascii?Q?lsLE/EKaio6p8LwfwhvdEFLi66a1uQ/Aqb9LY9F/08BZu+MtC1zzyClxL6xa?=
- =?us-ascii?Q?z9oAf8x1UfGcDYHbpFCv+dLpaQ0GPz2sxa2oTCHmAUGBx27x9jPgfAwDB1cV?=
- =?us-ascii?Q?3ir6qAxlvG6KDBkOtGUNlVnqy0FNQJZc2cYWvYbzDkHiGR90ClJKqKpZvSfI?=
- =?us-ascii?Q?i4rQqtWyKJhD3eeu1sLYYMJVDtkMHEYRfgikrFsrrhHuLfdcvpQQiqsE5j5b?=
- =?us-ascii?Q?IF5vq71AMfeb1oj6205zPjv5AKZBN22on2Ti9JI0TNVZmq9MOp8nDNakSAKV?=
- =?us-ascii?Q?4AGxEbq9zdfsIk5cmtwr1CjrT2x+SR2h/zBuNrB6P/3SS1Vjz9B9BGjwXJUW?=
- =?us-ascii?Q?XPmLeYOt1LO2i10KE7DpU7xVaWv59TcKHvd8fYHZ9V76i2Wt7q9JINx8IH+i?=
- =?us-ascii?Q?zr9j4/RVI7pNOFIjPsO+iBtr4VN98yDggyYk+8Xojk33ul00mCPtfw0QFWF/?=
- =?us-ascii?Q?c9jhx0Ch/cYmKoMFS4HbS0AgbV65Tu0nJeVXqWKYXbUYBd+g+JBiYTB2DCRY?=
- =?us-ascii?Q?tyJ9NbdV++sETQ5YKTQz2LIjGIa9mqGyTZHgN0nj+wQqXco0RNw5MgBjHXag?=
- =?us-ascii?Q?fRyo0UF5eTAf0lNP7Qy5snNh7/rdcudUrqrQJq5JqI4lwN1K1gFpKFOSKHWk?=
- =?us-ascii?Q?KAkK5yafeookBHKDYy6hbOLr65iwapHwkI8TcPp8uwMWMh/31AbVr5MglNq6?=
- =?us-ascii?Q?ACP5hHR46spiXd4ynzkyxpOI+5z/yVQ5wSqYrB3SVYT96tfngtcrcvOFtnik?=
- =?us-ascii?Q?8yl+L72kboXRSOX7qGfE2k/tcHb+GR6Kr4YnPMgC+VBCD94PDujgAjiKHwLA?=
- =?us-ascii?Q?rAH4DjhHzTffEULtJblompk=3D?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3b2594c-ae57-40f4-6967-08d9e717a375
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8081.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:18:16.4467
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z4Ni7WW5dcO4/GssJghYl1S1rgxDUtFgqxxLOxF6oObpxz0K1I+n253llO/FpGVYu/v9xAG3lua6CNSbrkiAjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB7150
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If DMA datagrams are used, allocate send and receive buffers
-in coherent DMA memory.
+When "writes" is written to /sys/kernel/debug/damon/counter_type damon will monitor only writes.
+This patch also adds the actions mergeable and unmergeable to damos schemes. These actions are used by KSM as explained in [1].
 
-This is done in preparation for the send and receive datagram
-operations, where the buffers are used for the exchange of data
-between driver and device.
+[1] https://www.kernel.org/doc/html/latest/admin-guide/mm/ksm.html#controlling-ksm-with-madvise
 
-Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
-Signed-off-by: Jorgen Hansen <jhansen@vmware.com>
+Signed-off-by: Pedro Demarchi Gomes <pedrodemargomes@gmail.com>
 ---
- drivers/misc/vmw_vmci/vmci_guest.c | 66 ++++++++++++++++++++++++++----
- include/linux/vmw_vmci_defs.h      |  4 ++
- 2 files changed, 63 insertions(+), 7 deletions(-)
+ include/linux/damon.h        | 13 ++++++
+ include/trace/events/damon.h | 10 ++--
+ mm/damon/core.c              | 91 +++++++++++++++++++++++++-----------
+ mm/damon/dbgfs.c             | 72 +++++++++++++++++++++++++++-
+ mm/damon/prmtv-common.c      | 88 ++++++++++++++++++++++++++++++++++
+ mm/damon/prmtv-common.h      |  5 ++
+ mm/damon/vaddr.c             | 80 ++++++++++++++++++++++++++++---
+ 7 files changed, 318 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/misc/vmw_vmci/vmci_guest.c b/drivers/misc/vmw_vmci/vmci_guest.c
-index 0920fbc6b64f..c207ca2ca42e 100644
---- a/drivers/misc/vmw_vmci/vmci_guest.c
-+++ b/drivers/misc/vmw_vmci/vmci_guest.c
-@@ -31,6 +31,12 @@
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index b4d4be3cc987..9efe89bbcec8 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -44,11 +44,13 @@ struct damon_region {
+ 	struct damon_addr_range ar;
+ 	unsigned long sampling_addr;
+ 	unsigned int nr_accesses;
++	unsigned int nr_writes;
+ 	struct list_head list;
  
- #define VMCI_UTIL_NUM_RESOURCES 1
- 
-+/*
-+ * Datagram buffers for DMA send/receive must accommodate at least
-+ * a maximum sized datagram and the header.
-+ */
-+#define VMCI_DMA_DG_BUFFER_SIZE (VMCI_MAX_DG_SIZE + PAGE_SIZE)
-+
- static bool vmci_disable_msi;
- module_param_named(disable_msi, vmci_disable_msi, bool, 0);
- MODULE_PARM_DESC(disable_msi, "Disable MSI use in driver - (default=0)");
-@@ -53,6 +59,9 @@ struct vmci_guest_device {
- 	struct tasklet_struct bm_tasklet;
- 
- 	void *data_buffer;
-+	dma_addr_t data_buffer_base;
-+	void *tx_buffer;
-+	dma_addr_t tx_buffer_base;
- 	void *notification_bitmap;
- 	dma_addr_t notification_base;
+ 	unsigned int age;
+ /* private: Internal value for age calculation. */
+ 	unsigned int last_nr_accesses;
++	unsigned int last_nr_writes;
  };
-@@ -451,6 +460,24 @@ static irqreturn_t vmci_interrupt_dma_datagram(int irq, void *_dev)
- 	return IRQ_HANDLED;
+ 
+ /**
+@@ -88,6 +90,8 @@ enum damos_action {
+ 	DAMOS_PAGEOUT,
+ 	DAMOS_HUGEPAGE,
+ 	DAMOS_NOHUGEPAGE,
++	DAMOS_MERGEABLE,
++	DAMOS_UNMERGEABLE,
+ 	DAMOS_STAT,		/* Do nothing but only record the stat */
+ };
+ 
+@@ -185,6 +189,11 @@ struct damos_watermarks {
+ 	bool activated;
+ };
+ 
++enum damos_counter_type {
++	DAMOS_NUMBER_ACCESSES,
++	DAMOS_NUMBER_WRITES,
++};
++
+ /**
+  * struct damos - Represents a Data Access Monitoring-based Operation Scheme.
+  * @min_sz_region:	Minimum size of target regions.
+@@ -223,6 +232,9 @@ struct damos {
+ 	unsigned long max_sz_region;
+ 	unsigned int min_nr_accesses;
+ 	unsigned int max_nr_accesses;
++	unsigned int min_nr_writes;
++	unsigned int max_nr_writes;
++	enum damos_counter_type counter_type;
+ 	unsigned int min_age_region;
+ 	unsigned int max_age_region;
+ 	enum damos_action action;
+@@ -386,6 +398,7 @@ struct damon_ctx {
+ 	struct damon_primitive primitive;
+ 	struct damon_callback callback;
+ 
++	enum damos_counter_type counter_type;
+ 	unsigned long min_nr_regions;
+ 	unsigned long max_nr_regions;
+ 	struct list_head adaptive_targets;
+diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
+index 2f422f4f1fb9..45573f421707 100644
+--- a/include/trace/events/damon.h
++++ b/include/trace/events/damon.h
+@@ -11,17 +11,17 @@
+ 
+ TRACE_EVENT(damon_aggregated,
+ 
+-	TP_PROTO(struct damon_target *t, struct damon_region *r,
++	TP_PROTO(struct damon_ctx *c, struct damon_target *t, struct damon_region *r,
+ 		unsigned int nr_regions),
+ 
+-	TP_ARGS(t, r, nr_regions),
++	TP_ARGS(c, t, r, nr_regions),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(unsigned long, target_id)
+ 		__field(unsigned int, nr_regions)
+ 		__field(unsigned long, start)
+ 		__field(unsigned long, end)
+-		__field(unsigned int, nr_accesses)
++		__field(unsigned int, nr)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -29,12 +29,12 @@ TRACE_EVENT(damon_aggregated,
+ 		__entry->nr_regions = nr_regions;
+ 		__entry->start = r->ar.start;
+ 		__entry->end = r->ar.end;
+-		__entry->nr_accesses = r->nr_accesses;
++		__entry->nr = c->counter_type == DAMOS_NUMBER_WRITES ? r->nr_writes : r->nr_accesses;
+ 	),
+ 
+ 	TP_printk("target_id=%lu nr_regions=%u %lu-%lu: %u",
+ 			__entry->target_id, __entry->nr_regions,
+-			__entry->start, __entry->end, __entry->nr_accesses)
++			__entry->start, __entry->end, __entry->nr)
+ );
+ 
+ #endif /* _TRACE_DAMON_H */
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index e92497895202..e827231366db 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -45,10 +45,12 @@ struct damon_region *damon_new_region(unsigned long start, unsigned long end)
+ 	region->ar.start = start;
+ 	region->ar.end = end;
+ 	region->nr_accesses = 0;
++	region->nr_writes = 0;
+ 	INIT_LIST_HEAD(&region->list);
+ 
+ 	region->age = 0;
+ 	region->last_nr_accesses = 0;
++	region->last_nr_writes = 0;
+ 
+ 	return region;
+ }
+@@ -89,7 +91,7 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t)
+ 
+ struct damos *damon_new_scheme(
+ 		unsigned long min_sz_region, unsigned long max_sz_region,
+-		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
++		unsigned int min_nr, unsigned int max_nr,
+ 		unsigned int min_age_region, unsigned int max_age_region,
+ 		enum damos_action action, struct damos_quota *quota,
+ 		struct damos_watermarks *wmarks)
+@@ -101,8 +103,10 @@ struct damos *damon_new_scheme(
+ 		return NULL;
+ 	scheme->min_sz_region = min_sz_region;
+ 	scheme->max_sz_region = max_sz_region;
+-	scheme->min_nr_accesses = min_nr_accesses;
+-	scheme->max_nr_accesses = max_nr_accesses;
++	scheme->max_nr_writes = max_nr;
++	scheme->min_nr_writes = min_nr;
++	scheme->min_nr_accesses = min_nr;
++	scheme->max_nr_accesses = max_nr;
+ 	scheme->min_age_region = min_age_region;
+ 	scheme->max_age_region = max_age_region;
+ 	scheme->action = action;
+@@ -221,6 +225,7 @@ struct damon_ctx *damon_new_ctx(void)
+ 	ctx->sample_interval = 5 * 1000;
+ 	ctx->aggr_interval = 100 * 1000;
+ 	ctx->primitive_update_interval = 60 * 1000 * 1000;
++	ctx->counter_type = DAMOS_NUMBER_ACCESSES;
+ 
+ 	ktime_get_coarse_ts64(&ctx->last_aggregation);
+ 	ctx->last_primitive_update = ctx->last_aggregation;
+@@ -535,9 +540,11 @@ static void kdamond_reset_aggregated(struct damon_ctx *c)
+ 		struct damon_region *r;
+ 
+ 		damon_for_each_region(r, t) {
+-			trace_damon_aggregated(t, r, damon_nr_regions(t));
++			trace_damon_aggregated(c, t, r, damon_nr_regions(t));
+ 			r->last_nr_accesses = r->nr_accesses;
+ 			r->nr_accesses = 0;
++			r->last_nr_writes = r->nr_writes;
++			r->nr_writes = 0;
+ 		}
+ 	}
+ }
+@@ -546,21 +553,27 @@ static void damon_split_region_at(struct damon_ctx *ctx,
+ 		struct damon_target *t, struct damon_region *r,
+ 		unsigned long sz_r);
+ 
+-static bool __damos_valid_target(struct damon_region *r, struct damos *s)
++static bool __damos_valid_target(struct damon_ctx *ctx, struct damon_region *r, struct damos *s)
+ {
+ 	unsigned long sz;
+-
+ 	sz = r->ar.end - r->ar.start;
+-	return s->min_sz_region <= sz && sz <= s->max_sz_region &&
+-		s->min_nr_accesses <= r->nr_accesses &&
+-		r->nr_accesses <= s->max_nr_accesses &&
+-		s->min_age_region <= r->age && r->age <= s->max_age_region;
++
++	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
++		return s->min_sz_region <= sz && sz <= s->max_sz_region &&
++			s->min_nr_writes <= r->nr_writes &&
++			r->nr_writes <= s->max_nr_writes &&
++			s->min_age_region <= r->age && r->age <= s->max_age_region;
++	else
++		return s->min_sz_region <= sz && sz <= s->max_sz_region &&
++			s->min_nr_accesses <= r->nr_accesses &&
++			r->nr_accesses <= s->max_nr_accesses &&
++			s->min_age_region <= r->age && r->age <= s->max_age_region;
  }
  
-+static void vmci_free_dg_buffers(struct vmci_guest_device *vmci_dev)
-+{
-+	if (vmci_dev->mmio_base != NULL) {
-+		if (vmci_dev->tx_buffer != NULL)
-+			dma_free_coherent(vmci_dev->dev,
-+					  VMCI_DMA_DG_BUFFER_SIZE,
-+					  vmci_dev->tx_buffer,
-+					  vmci_dev->tx_buffer_base);
-+		if (vmci_dev->data_buffer != NULL)
-+			dma_free_coherent(vmci_dev->dev,
-+					  VMCI_DMA_DG_BUFFER_SIZE,
-+					  vmci_dev->data_buffer,
-+					  vmci_dev->data_buffer_base);
+ static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
+ 		struct damon_region *r, struct damos *s)
+ {
+-	bool ret = __damos_valid_target(r, s);
++	bool ret = __damos_valid_target(c, r, s);
+ 
+ 	if (!ret || !s->quota.esz || !c->primitive.get_scheme_score)
+ 		return ret;
+@@ -707,7 +720,7 @@ static void kdamond_apply_schemes(struct damon_ctx *c)
+ 		memset(quota->histogram, 0, sizeof(quota->histogram));
+ 		damon_for_each_target(t, c) {
+ 			damon_for_each_region(r, t) {
+-				if (!__damos_valid_target(r, s))
++				if (!__damos_valid_target(c, r, s))
+ 					continue;
+ 				score = c->primitive.get_scheme_score(
+ 						c, t, r, s);
+@@ -738,13 +751,18 @@ static void kdamond_apply_schemes(struct damon_ctx *c)
+ /*
+  * Merge two adjacent regions into one region
+  */
+-static void damon_merge_two_regions(struct damon_target *t,
++static void damon_merge_two_regions(struct damon_ctx *c, struct damon_target *t,
+ 		struct damon_region *l, struct damon_region *r)
+ {
+ 	unsigned long sz_l = sz_damon_region(l), sz_r = sz_damon_region(r);
+ 
+-	l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
++	if (c->counter_type == DAMOS_NUMBER_WRITES)
++		l->nr_writes = (l->nr_writes * sz_l + r->nr_writes * sz_r) /
+ 			(sz_l + sz_r);
++	else
++		l->nr_accesses = (l->nr_accesses * sz_l + r->nr_accesses * sz_r) /
++				(sz_l + sz_r);
++
+ 	l->age = (l->age * sz_l + r->age * sz_r) / (sz_l + sz_r);
+ 	l->ar.end = r->ar.end;
+ 	damon_destroy_region(r, t);
+@@ -759,23 +777,39 @@ static void damon_merge_two_regions(struct damon_target *t,
+  * thres	'->nr_accesses' diff threshold for the merge
+  * sz_limit	size upper limit of each region
+  */
+-static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
++static void damon_merge_regions_of(struct damon_ctx *c, struct damon_target *t, unsigned int thres,
+ 				   unsigned long sz_limit)
+ {
+ 	struct damon_region *r, *prev = NULL, *next;
+ 
+-	damon_for_each_region_safe(r, next, t) {
+-		if (diff_of(r->nr_accesses, r->last_nr_accesses) > thres)
+-			r->age = 0;
+-		else
+-			r->age++;
+-
+-		if (prev && prev->ar.end == r->ar.start &&
+-		    diff_of(prev->nr_accesses, r->nr_accesses) <= thres &&
+-		    sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
+-			damon_merge_two_regions(t, prev, r);
+-		else
+-			prev = r;
++	if (c->counter_type == DAMOS_NUMBER_WRITES) {
++		damon_for_each_region_safe(r, next, t) {
++			if (diff_of(r->nr_writes, r->last_nr_writes) > thres)
++				r->age = 0;
++			else
++				r->age++;
++
++			if (prev && prev->ar.end == r->ar.start &&
++				diff_of(prev->nr_writes, r->nr_writes) <= thres &&
++				sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
++				damon_merge_two_regions(c, t, prev, r);
++			else
++				prev = r;
++		}
 +	} else {
-+		vfree(vmci_dev->data_buffer);
++		damon_for_each_region_safe(r, next, t) {
++			if (diff_of(r->nr_accesses, r->last_nr_accesses) > thres)
++				r->age = 0;
++			else
++				r->age++;
++
++			if (prev && prev->ar.end == r->ar.start &&
++				diff_of(prev->nr_accesses, r->nr_accesses) <= thres &&
++				sz_damon_region(prev) + sz_damon_region(r) <= sz_limit)
++				damon_merge_two_regions(c, t, prev, r);
++			else
++				prev = r;
++		}
+ 	}
+ }
+ 
+@@ -796,7 +830,7 @@ static void kdamond_merge_regions(struct damon_ctx *c, unsigned int threshold,
+ 	struct damon_target *t;
+ 
+ 	damon_for_each_target(t, c)
+-		damon_merge_regions_of(t, threshold, sz_limit);
++		damon_merge_regions_of(c, t, threshold, sz_limit);
+ }
+ 
+ /*
+@@ -819,6 +853,7 @@ static void damon_split_region_at(struct damon_ctx *ctx,
+ 
+ 	new->age = r->age;
+ 	new->last_nr_accesses = r->last_nr_accesses;
++	new->last_nr_writes = r->last_nr_writes;
+ 
+ 	damon_insert_region(new, r, damon_next_region(r), t);
+ }
+diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+index ad65436756af..6cf2501148f5 100644
+--- a/mm/damon/dbgfs.c
++++ b/mm/damon/dbgfs.c
+@@ -166,6 +166,8 @@ static bool damos_action_valid(int action)
+ 	case DAMOS_PAGEOUT:
+ 	case DAMOS_HUGEPAGE:
+ 	case DAMOS_NOHUGEPAGE:
++	case DAMOS_MERGEABLE:
++	case DAMOS_UNMERGEABLE:
+ 	case DAMOS_STAT:
+ 		return true;
+ 	default:
+@@ -477,6 +479,66 @@ static ssize_t dbgfs_init_regions_read(struct file *file, char __user *buf,
+ 	return len;
+ }
+ 
++static ssize_t dbgfs_counter_type_write(struct file *file,
++		const char __user *buf, size_t count, loff_t *ppos)
++{
++	struct damon_ctx *ctx = file->private_data;
++	char *kbuf;
++	ssize_t ret;
++
++	mutex_lock(&ctx->kdamond_lock);
++	if (ctx->kdamond) {
++		mutex_unlock(&ctx->kdamond_lock);
++		ret = -EBUSY;
++		goto out;
++	}
++	ret = count;
++	kbuf = user_input_str(buf, count, ppos);
++	if (IS_ERR(kbuf))
++		return PTR_ERR(kbuf);
++
++	if (!strncmp(kbuf, "writes\n", count))
++		ctx->counter_type = DAMOS_NUMBER_WRITES;
++	else
++		ctx->counter_type = DAMOS_NUMBER_ACCESSES;
++
++	mutex_unlock(&ctx->kdamond_lock);
++out:
++	kfree(kbuf);
++	return ret;
++}
++
++static ssize_t dbgfs_counter_type_read(struct file *file, char __user *buf,
++		size_t count, loff_t *ppos)
++{
++	struct damon_ctx *ctx = file->private_data;
++	char *kbuf;
++	ssize_t len;
++
++	kbuf = kmalloc(count, GFP_KERNEL | __GFP_NOWARN);
++	if (!kbuf)
++		return -ENOMEM;
++
++	mutex_lock(&ctx->kdamond_lock);
++	if (ctx->kdamond) {
++		mutex_unlock(&ctx->kdamond_lock);
++		len = -EBUSY;
++		goto out;
++	}
++
++	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
++		len = scnprintf(kbuf, count, "writes");
++	else
++		len = scnprintf(kbuf, count, "accesses");
++	mutex_unlock(&ctx->kdamond_lock);
++	len = simple_read_from_buffer(buf, count, ppos, kbuf, len);
++
++out:
++	kfree(kbuf);
++	return len;
++}
++
++
+ static int add_init_region(struct damon_ctx *c,
+ 			 unsigned long target_id, struct damon_addr_range *ar)
+ {
+@@ -636,12 +698,18 @@ static const struct file_operations kdamond_pid_fops = {
+ 	.read = dbgfs_kdamond_pid_read,
+ };
+ 
++static const struct file_operations counter_type_fops = {
++	.open = damon_dbgfs_open,
++	.read = dbgfs_counter_type_read,
++	.write = dbgfs_counter_type_write,
++};
++
+ static void dbgfs_fill_ctx_dir(struct dentry *dir, struct damon_ctx *ctx)
+ {
+ 	const char * const file_names[] = {"attrs", "schemes", "target_ids",
+-		"init_regions", "kdamond_pid"};
++		"init_regions", "kdamond_pid", "counter_type"};
+ 	const struct file_operations *fops[] = {&attrs_fops, &schemes_fops,
+-		&target_ids_fops, &init_regions_fops, &kdamond_pid_fops};
++		&target_ids_fops, &init_regions_fops, &kdamond_pid_fops, &counter_type_fops};
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(file_names); i++)
+diff --git a/mm/damon/prmtv-common.c b/mm/damon/prmtv-common.c
+index 92a04f5831d6..09ba2b5b895e 100644
+--- a/mm/damon/prmtv-common.c
++++ b/mm/damon/prmtv-common.c
+@@ -9,6 +9,8 @@
+ #include <linux/page_idle.h>
+ #include <linux/pagemap.h>
+ #include <linux/rmap.h>
++#include <linux/swap.h>
++#include <linux/swapops.h>
+ 
+ #include "prmtv-common.h"
+ 
+@@ -58,6 +60,92 @@ void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
+ 	put_page(page);
+ }
+ 
++static inline bool pte_is_pinned(struct vm_area_struct *vma, unsigned long addr, pte_t pte)
++{
++	struct page *page;
++
++	if (!pte_write(pte))
++		return false;
++	if (!is_cow_mapping(vma->vm_flags))
++		return false;
++	if (likely(!test_bit(MMF_HAS_PINNED, &vma->vm_mm->flags)))
++		return false;
++	page = vm_normal_page(vma, addr, pte);
++	if (!page)
++		return false;
++	return page_maybe_dma_pinned(page);
++}
++
++static inline void clear_soft_dirty_pmd(struct vm_area_struct *vma,
++		unsigned long addr, pmd_t *pmdp)
++{
++	pmd_t old, pmd = *pmdp;
++
++	if (pmd_present(pmd)) {
++		/* See comment in change_huge_pmd() */
++		old = pmdp_invalidate(vma, addr, pmdp);
++		if (pmd_dirty(old))
++			pmd = pmd_mkdirty(pmd);
++		if (pmd_young(old))
++			pmd = pmd_mkyoung(pmd);
++
++		pmd = pmd_wrprotect(pmd);
++		pmd = pmd_clear_soft_dirty(pmd);
++
++		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
++	} else if (is_migration_entry(pmd_to_swp_entry(pmd))) {
++		pmd = pmd_swp_clear_soft_dirty(pmd);
++		set_pmd_at(vma->vm_mm, addr, pmdp, pmd);
 +	}
 +}
 +
- /*
-  * Most of the initialization at module load time is done here.
-  */
-@@ -520,11 +547,27 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	tasklet_init(&vmci_dev->bm_tasklet,
- 		     vmci_process_bitmap, (unsigned long)vmci_dev);
- 
--	vmci_dev->data_buffer = vmalloc(VMCI_MAX_DG_SIZE);
-+	if (mmio_base != NULL) {
-+		vmci_dev->tx_buffer = dma_alloc_coherent(&pdev->dev, VMCI_DMA_DG_BUFFER_SIZE,
-+							 &vmci_dev->tx_buffer_base,
-+							 GFP_KERNEL);
-+		if (!vmci_dev->tx_buffer) {
-+			dev_err(&pdev->dev,
-+				"Can't allocate memory for datagram tx buffer\n");
-+			return -ENOMEM;
-+		}
++static inline void clear_soft_dirty(struct vm_area_struct *vma,
++		unsigned long addr, pte_t *pte)
++{
++	/*
++	 * The soft-dirty tracker uses #PF-s to catch writes
++	 * to pages, so write-protect the pte as well. See the
++	 * Documentation/admin-guide/mm/soft-dirty.rst for full description
++	 * of how soft-dirty works.
++	 */
++	pte_t ptent = *pte;
 +
-+		vmci_dev->data_buffer = dma_alloc_coherent(&pdev->dev, VMCI_DMA_DG_BUFFER_SIZE,
-+							   &vmci_dev->data_buffer_base,
-+							   GFP_KERNEL);
-+	} else {
-+		vmci_dev->data_buffer = vmalloc(VMCI_MAX_DG_SIZE);
++	if (pte_present(ptent)) {
++		pte_t old_pte;
++
++		if (pte_is_pinned(vma, addr, ptent))
++			return;
++		old_pte = ptep_modify_prot_start(vma, addr, pte);
++		ptent = pte_wrprotect(old_pte);
++		ptent = pte_clear_soft_dirty(ptent);
++		ptep_modify_prot_commit(vma, addr, pte, old_pte, ptent);
++	} else if (is_swap_pte(ptent)) {
++		ptent = pte_swp_clear_soft_dirty(ptent);
++		set_pte_at(vma->vm_mm, addr, pte, ptent);
 +	}
- 	if (!vmci_dev->data_buffer) {
- 		dev_err(&pdev->dev,
- 			"Can't allocate memory for datagram buffer\n");
--		return -ENOMEM;
-+		error = -ENOMEM;
-+		goto err_free_data_buffers;
- 	}
- 
- 	pci_set_master(pdev);	/* To enable queue_pair functionality. */
-@@ -542,7 +585,7 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	if (!(capabilities & VMCI_CAPS_DATAGRAM)) {
- 		dev_err(&pdev->dev, "Device does not support datagrams\n");
- 		error = -ENXIO;
--		goto err_free_data_buffer;
-+		goto err_free_data_buffers;
- 	}
- 	caps_in_use = VMCI_CAPS_DATAGRAM;
- 
-@@ -586,7 +629,7 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 			dev_err(&pdev->dev,
- 				"Missing capability: VMCI_CAPS_DMA_DATAGRAM\n");
- 			error = -ENXIO;
--			goto err_free_data_buffer;
-+			goto err_free_data_buffers;
- 		}
- 	}
- 
-@@ -602,6 +645,12 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 		vmci_write_reg(vmci_dev, PAGE_SHIFT, VMCI_GUEST_PAGE_SHIFT);
- 		page_shift = vmci_read_reg(vmci_dev, VMCI_GUEST_PAGE_SHIFT);
- 		dev_info(&pdev->dev, "Using page shift %d\n", page_shift);
++}
 +
-+		/* Configure the high order parts of the data in/out buffers. */
-+		vmci_write_reg(vmci_dev, upper_32_bits(vmci_dev->data_buffer_base),
-+			       VMCI_DATA_IN_HIGH_ADDR);
-+		vmci_write_reg(vmci_dev, upper_32_bits(vmci_dev->tx_buffer_base),
-+			       VMCI_DATA_OUT_HIGH_ADDR);
- 	}
- 
- 	/* Set up global device so that we can start sending datagrams */
-@@ -755,8 +804,8 @@ static int vmci_guest_probe_device(struct pci_dev *pdev,
- 	vmci_dev_g = NULL;
- 	spin_unlock_irq(&vmci_dev_spinlock);
- 
--err_free_data_buffer:
--	vfree(vmci_dev->data_buffer);
-+err_free_data_buffers:
-+	vmci_free_dg_buffers(vmci_dev);
- 
- 	/* The rest are managed resources and will be freed by PCI core */
- 	return error;
-@@ -814,7 +863,10 @@ static void vmci_guest_remove_device(struct pci_dev *pdev)
- 				  vmci_dev->notification_base);
- 	}
- 
--	vfree(vmci_dev->data_buffer);
-+	vmci_free_dg_buffers(vmci_dev);
++void damon_pmd_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
++		pmd_t *pmd)
++{
++	vma->vm_flags &= ~VM_SOFTDIRTY;
++	vma_set_page_prot(vma);
 +
-+	if (vmci_dev->mmio_base != NULL)
-+		pci_iounmap(pdev, vmci_dev->mmio_base);
++	if (pmd_soft_dirty(*pmd))
++		clear_soft_dirty_pmd(vma, addr, pmd);
++
++}
++
++void damon_ptep_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
++		pte_t *pte)
++{
++	vma->vm_flags &= ~VM_SOFTDIRTY;
++	vma_set_page_prot(vma);
++
++	if (pte_soft_dirty(*pte))
++		clear_soft_dirty(vma, addr, pte);
++}
++
+ void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr)
+ {
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+diff --git a/mm/damon/prmtv-common.h b/mm/damon/prmtv-common.h
+index 61f27037603e..03847d149f0e 100644
+--- a/mm/damon/prmtv-common.h
++++ b/mm/damon/prmtv-common.h
+@@ -13,6 +13,11 @@
  
- 	/* The rest are managed resources and will be freed by PCI core */
+ struct page *damon_get_page(unsigned long pfn);
+ 
++void damon_ptep_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
++		pte_t *pte);
++void damon_pmd_clean_soft_dirty(struct vm_area_struct *vma, unsigned long addr,
++		pmd_t *pmd);
++
+ void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr);
+ void damon_pmdp_mkold(pmd_t *pmd, struct mm_struct *mm, unsigned long addr);
+ 
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 20a9a9d69eb1..a7d9c9563d1d 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -368,6 +368,44 @@ void damon_va_update(struct damon_ctx *ctx)
+ 	}
  }
-diff --git a/include/linux/vmw_vmci_defs.h b/include/linux/vmw_vmci_defs.h
-index 2b70c024dacb..8bc37d8244a8 100644
---- a/include/linux/vmw_vmci_defs.h
-+++ b/include/linux/vmw_vmci_defs.h
-@@ -21,6 +21,10 @@
- #define VMCI_CAPS_ADDR          0x18
- #define VMCI_RESULT_LOW_ADDR    0x1c
- #define VMCI_RESULT_HIGH_ADDR   0x20
-+#define VMCI_DATA_OUT_LOW_ADDR  0x24
-+#define VMCI_DATA_OUT_HIGH_ADDR 0x28
-+#define VMCI_DATA_IN_LOW_ADDR   0x2c
-+#define VMCI_DATA_IN_HIGH_ADDR  0x30
- #define VMCI_GUEST_PAGE_SHIFT   0x34
  
- /* Max number of devices. */
++static int damon_clean_soft_dirty_pmd_entry(pmd_t *pmd, unsigned long addr,
++		unsigned long next, struct mm_walk *walk)
++{
++	pte_t *pte;
++	spinlock_t *ptl;
++
++	if (pmd_huge(*pmd)) {
++		ptl = pmd_lock(walk->mm, pmd);
++		if (pmd_huge(*pmd)) {
++			damon_pmd_clean_soft_dirty(walk->vma, addr, pmd);
++			spin_unlock(ptl);
++			return 0;
++		}
++		spin_unlock(ptl);
++	}
++
++	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
++		return 0;
++	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte_present(*pte))
++		goto out;
++	damon_ptep_clean_soft_dirty(walk->vma, addr, pte);
++out:
++	pte_unmap_unlock(pte, ptl);
++	return 0;
++}
++
++static const struct mm_walk_ops damon_clean_soft_dirty_ops = {
++	.pmd_entry = damon_clean_soft_dirty_pmd_entry,
++};
++
++static void damon_va_clean_soft_dirty(struct mm_struct *mm, unsigned long addr)
++{
++	mmap_read_lock(mm);
++	walk_page_range(mm, addr, addr + 1, &damon_clean_soft_dirty_ops, NULL);
++	mmap_read_unlock(mm);
++}
++
+ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		unsigned long next, struct mm_walk *walk)
+ {
+@@ -415,7 +453,10 @@ static void damon_va_prepare_access_check(struct damon_ctx *ctx,
+ {
+ 	r->sampling_addr = damon_rand(r->ar.start, r->ar.end);
+ 
+-	damon_va_mkold(mm, r->sampling_addr);
++	if (ctx->counter_type == DAMOS_NUMBER_WRITES)
++		damon_va_clean_soft_dirty(mm, r->sampling_addr);
++	else
++		damon_va_mkold(mm, r->sampling_addr);
+ }
+ 
+ void damon_va_prepare_access_checks(struct damon_ctx *ctx)
+@@ -437,6 +478,7 @@ void damon_va_prepare_access_checks(struct damon_ctx *ctx)
+ struct damon_young_walk_private {
+ 	unsigned long *page_sz;
+ 	bool young;
++	bool dirty;
+ };
+ 
+ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+@@ -463,6 +505,10 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 			*priv->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
+ 			priv->young = true;
+ 		}
++		if (pmd_soft_dirty(*pmd)) {
++			*priv->page_sz = ((1UL) << HPAGE_PMD_SHIFT);
++			priv->dirty = true;
++		}
+ 		put_page(page);
+ huge_out:
+ 		spin_unlock(ptl);
+@@ -485,6 +531,10 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		*priv->page_sz = PAGE_SIZE;
+ 		priv->young = true;
+ 	}
++	if (pte_soft_dirty(*pte)) {
++		*priv->page_sz = PAGE_SIZE;
++		priv->dirty = true;
++	}
+ 	put_page(page);
+ out:
+ 	pte_unmap_unlock(pte, ptl);
+@@ -496,16 +546,19 @@ static const struct mm_walk_ops damon_young_ops = {
+ };
+ 
+ static bool damon_va_young(struct mm_struct *mm, unsigned long addr,
+-		unsigned long *page_sz)
++		unsigned long *page_sz, bool *dirty)
+ {
+ 	struct damon_young_walk_private arg = {
+ 		.page_sz = page_sz,
+ 		.young = false,
++		.dirty = false,
+ 	};
+ 
+ 	mmap_read_lock(mm);
+ 	walk_page_range(mm, addr, addr + 1, &damon_young_ops, &arg);
+ 	mmap_read_unlock(mm);
++
++	*dirty = arg.dirty;
+ 	return arg.young;
+ }
+ 
+@@ -522,18 +575,23 @@ static void damon_va_check_access(struct damon_ctx *ctx,
+ 	static unsigned long last_addr;
+ 	static unsigned long last_page_sz = PAGE_SIZE;
+ 	static bool last_accessed;
++	static bool last_written;
+ 
+ 	/* If the region is in the last checked page, reuse the result */
+ 	if (mm == last_mm && (ALIGN_DOWN(last_addr, last_page_sz) ==
+ 				ALIGN_DOWN(r->sampling_addr, last_page_sz))) {
+ 		if (last_accessed)
+ 			r->nr_accesses++;
++		if (last_written)
++			r->nr_writes++;
+ 		return;
+ 	}
+ 
+-	last_accessed = damon_va_young(mm, r->sampling_addr, &last_page_sz);
++	last_accessed = damon_va_young(mm, r->sampling_addr, &last_page_sz, &last_written);
+ 	if (last_accessed)
+ 		r->nr_accesses++;
++	if (last_written)
++		r->nr_writes++;
+ 
+ 	last_mm = mm;
+ 	last_addr = r->sampling_addr;
+@@ -544,7 +602,7 @@ unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
+ 	struct damon_target *t;
+ 	struct mm_struct *mm;
+ 	struct damon_region *r;
+-	unsigned int max_nr_accesses = 0;
++	unsigned int max_nr = 0;
+ 
+ 	damon_for_each_target(t, ctx) {
+ 		mm = damon_get_mm(t);
+@@ -552,12 +610,15 @@ unsigned int damon_va_check_accesses(struct damon_ctx *ctx)
+ 			continue;
+ 		damon_for_each_region(r, t) {
+ 			damon_va_check_access(ctx, mm, r);
+-			max_nr_accesses = max(r->nr_accesses, max_nr_accesses);
++			if (ctx->counter_type == DAMOS_NUMBER_WRITES)
++				max_nr = max(r->nr_writes, max_nr);
++			else
++				max_nr = max(r->nr_accesses, max_nr);
+ 		}
+ 		mmput(mm);
+ 	}
+ 
+-	return max_nr_accesses;
++	return max_nr;
+ }
+ 
+ /*
+@@ -597,6 +658,7 @@ static int damos_madvise(struct damon_target *target, struct damon_region *r,
+ 
+ 	ret = do_madvise(mm, PAGE_ALIGN(r->ar.start),
+ 			PAGE_ALIGN(r->ar.end - r->ar.start), behavior);
++
+ 	mmput(mm);
+ out:
+ 	return ret;
+@@ -624,6 +686,12 @@ int damon_va_apply_scheme(struct damon_ctx *ctx, struct damon_target *t,
+ 	case DAMOS_NOHUGEPAGE:
+ 		madv_action = MADV_NOHUGEPAGE;
+ 		break;
++	case DAMOS_MERGEABLE:
++		madv_action = MADV_MERGEABLE;
++		break;
++	case DAMOS_UNMERGEABLE:
++		madv_action = MADV_UNMERGEABLE;
++		break;
+ 	case DAMOS_STAT:
+ 		return 0;
+ 	default:
 -- 
 2.25.1
 

@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328704A8AEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EE84A8AEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353518AbiBCRwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:52:47 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:59002 "EHLO
+        id S1353380AbiBCRwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:52:44 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59048 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353191AbiBCRup (ORCPT
+        with ESMTP id S1353193AbiBCRup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Feb 2022 12:50:45 -0500
 Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:5173:4d3f:4ddc:2012])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 900911447;
-        Thu,  3 Feb 2022 18:50:27 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 12B9F146B;
+        Thu,  3 Feb 2022 18:50:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643910627;
-        bh=wgv85acUrshpXd7kh0STF4RCGXeDk6NtpmEK6eEeSyI=;
+        s=mail; t=1643910628;
+        bh=1wew0xz3FDofJ1z2KNawqOvlFkfqv3LlOfRyVoho2bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FfvXOHfRe67ExkkCa7Mi8eVOUefcmVamQg9emxP/F0gipcxtB25ke7RTfQHely22h
-         8x3tXB7xbVbUDe0OI4Lu9YSKF0+7w6Exji3DSpp15VD1f57AZoCWirzjxuo0u/XQiQ
-         KjbWj72REes4Vh1NG6xYmO0OEM0WFKU+mv1uJUtQ=
+        b=GxV5MrEgBHo7HJUIao1e3nBicIEipUjsji/YaRoL3352wCCWMSeig16vinUDeZaL4
+         fSvlFYrKEsiQAzOjB12y8UO4/9W+IpG80Q5ZNRf2M8JsFVZhoNW2JezQtQr2641FYa
+         AP0zbuRUvrVL+l6pAxsd8vMk4jwnC3gUhAr8guz0=
 From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 To:     jeanmichel.hautbois@ideasonboard.com
 Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
@@ -31,9 +31,9 @@ Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
         lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
         robh@kernel.org, tomi.valkeinen@ideasonboard.com,
         nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
-Subject: [RFC PATCH v4 07/12] media: imx219: Rename mbus codes array
-Date:   Thu,  3 Feb 2022 18:50:04 +0100
-Message-Id: <20220203175009.558868-8-jeanmichel.hautbois@ideasonboard.com>
+Subject: [RFC PATCH v4 08/12] media: imx219: Switch from open to init_cfg
+Date:   Thu,  3 Feb 2022 18:50:05 +0100
+Message-Id: <20220203175009.558868-9-jeanmichel.hautbois@ideasonboard.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
 References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
@@ -43,82 +43,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The imx219 is using the name codes[] for the mbus format which is not
-easy to read and know what it means. Change it to imx219_mbus_formats.
+Use the init_cfg pad level operation instead of the internal subdev
+open operation to set default formats on the pads.
+While at it, make the imx219_pad_ops more easier to read.
 
 Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
 ---
- drivers/media/i2c/imx219.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/i2c/imx219.c | 138 +++++++++++++++++++++----------------
+ 1 file changed, 80 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index e10af3f74b38..74dba5e61201 100644
+index 74dba5e61201..b68d35046725 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -429,7 +429,7 @@ static const char * const imx219_supply_name[] = {
-  * - v flip
-  * - h&v flips
-  */
--static const u32 codes[] = {
-+static const u32 imx219_mbus_formats[] = {
- 	MEDIA_BUS_FMT_SRGGB10_1X10,
- 	MEDIA_BUS_FMT_SGRBG10_1X10,
- 	MEDIA_BUS_FMT_SGBRG10_1X10,
-@@ -655,17 +655,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
+@@ -118,6 +118,10 @@
+ #define IMX219_PIXEL_ARRAY_WIDTH	3280U
+ #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
  
- 	lockdep_assert_held(&imx219->mutex);
- 
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == code)
- 			break;
- 
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
- 
- 	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
- 	    (imx219->hflip->val ? 1 : 0);
- 
--	return codes[i];
-+	return imx219_mbus_formats[i];
++/* Embedded metadata stream structure */
++#define IMX219_EMBEDDED_LINE_WIDTH 16384
++#define IMX219_NUM_EMBEDDED_LINES 1
++
+ struct imx219_reg {
+ 	u16 address;
+ 	u8 val;
+@@ -668,51 +672,6 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
+ 	return imx219_mbus_formats[i];
  }
  
- static void imx219_set_default_format(struct imx219 *imx219)
-@@ -808,11 +808,11 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+-static void imx219_set_default_format(struct imx219 *imx219)
+-{
+-	struct v4l2_mbus_framefmt *fmt;
+-
+-	fmt = &imx219->fmt;
+-	fmt->code = MEDIA_BUS_FMT_SRGGB10_1X10;
+-	fmt->colorspace = V4L2_COLORSPACE_SRGB;
+-	fmt->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt->colorspace);
+-	fmt->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true,
+-							  fmt->colorspace,
+-							  fmt->ycbcr_enc);
+-	fmt->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt->colorspace);
+-	fmt->width = supported_modes[0].width;
+-	fmt->height = supported_modes[0].height;
+-	fmt->field = V4L2_FIELD_NONE;
+-}
+-
+-static int imx219_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+-{
+-	struct imx219 *imx219 = to_imx219(sd);
+-	struct v4l2_mbus_framefmt *try_fmt =
+-		v4l2_subdev_get_try_format(sd, fh->state, 0);
+-	struct v4l2_rect *try_crop;
+-
+-	mutex_lock(&imx219->mutex);
+-
+-	/* Initialize try_fmt */
+-	try_fmt->width = supported_modes[0].width;
+-	try_fmt->height = supported_modes[0].height;
+-	try_fmt->code = imx219_get_format_code(imx219,
+-					       MEDIA_BUS_FMT_SRGGB10_1X10);
+-	try_fmt->field = V4L2_FIELD_NONE;
+-
+-	/* Initialize try_crop rectangle. */
+-	try_crop = v4l2_subdev_get_try_crop(sd, fh->state, 0);
+-	try_crop->top = IMX219_PIXEL_ARRAY_TOP;
+-	try_crop->left = IMX219_PIXEL_ARRAY_LEFT;
+-	try_crop->width = IMX219_PIXEL_ARRAY_WIDTH;
+-	try_crop->height = IMX219_PIXEL_ARRAY_HEIGHT;
+-
+-	mutex_unlock(&imx219->mutex);
+-
+-	return 0;
+-}
+-
+ static int imx219_set_ctrl(struct v4l2_ctrl *ctrl)
  {
- 	struct imx219 *imx219 = to_imx219(sd);
+ 	struct imx219 *imx219 =
+@@ -802,6 +761,76 @@ static const struct v4l2_ctrl_ops imx219_ctrl_ops = {
+ 	.s_ctrl = imx219_set_ctrl,
+ };
  
--	if (code->index >= (ARRAY_SIZE(codes) / 4))
-+	if (code->index >= (ARRAY_SIZE(imx219_mbus_formats) / 4))
- 		return -EINVAL;
++static void imx219_init_formats(struct v4l2_subdev_state *state)
++{
++	struct v4l2_mbus_framefmt *format;
++
++	format = v4l2_state_get_stream_format(state, 0, 0);
++	format->code = imx219_mbus_formats[0];
++	format->width = supported_modes[0].width;
++	format->height = supported_modes[0].height;
++	format->field = V4L2_FIELD_NONE;
++	format->colorspace = V4L2_COLORSPACE_RAW;
++
++	if (state->routing.routes[1].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
++		format = v4l2_state_get_stream_format(state, 0, 1);
++		format->code = MEDIA_BUS_FMT_METADATA_8;
++		format->width = IMX219_EMBEDDED_LINE_WIDTH;
++		format->height = 1;
++		format->field = V4L2_FIELD_NONE;
++		format->colorspace = V4L2_COLORSPACE_DEFAULT;
++	}
++}
++
++static int _imx219_set_routing(struct v4l2_subdev *sd,
++			       struct v4l2_subdev_state *state)
++{
++	struct v4l2_subdev_route routes[] = {
++		{
++			.source_pad = 0,
++			.source_stream = 0,
++			.flags = V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
++				 V4L2_SUBDEV_ROUTE_FL_SOURCE |
++				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		},
++		{
++			.source_pad = 0,
++			.source_stream = 1,
++			.flags = V4L2_SUBDEV_ROUTE_FL_SOURCE |
++				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
++		}
++	};
++
++	struct v4l2_subdev_krouting routing = {
++		.num_routes = ARRAY_SIZE(routes),
++		.routes = routes,
++	};
++
++	int ret;
++
++	ret = v4l2_subdev_set_routing(sd, state, &routing);
++	if (ret)
++		return ret;
++
++	imx219_init_formats(state);
++
++	return 0;
++}
++
++static int imx219_init_cfg(struct v4l2_subdev *sd,
++			   struct v4l2_subdev_state *state)
++{
++	int ret;
++
++	v4l2_subdev_lock_state(state);
++
++	ret = _imx219_set_routing(sd, state);
++
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
+ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
+ 				 struct v4l2_subdev_state *sd_state,
+ 				 struct v4l2_subdev_mbus_code_enum *code)
+@@ -1255,11 +1284,12 @@ static const struct v4l2_subdev_video_ops imx219_video_ops = {
+ };
  
- 	mutex_lock(&imx219->mutex);
--	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
-+	code->code = imx219_get_format_code(imx219, imx219_mbus_formats[code->index * 4]);
- 	mutex_unlock(&imx219->mutex);
+ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+-	.enum_mbus_code = imx219_enum_mbus_code,
+-	.get_fmt = imx219_get_pad_format,
+-	.set_fmt = imx219_set_pad_format,
+-	.get_selection = imx219_get_selection,
+-	.enum_frame_size = imx219_enum_frame_size,
++	.init_cfg		= imx219_init_cfg,
++	.enum_mbus_code		= imx219_enum_mbus_code,
++	.get_fmt		= imx219_get_pad_format,
++	.set_fmt		= imx219_set_pad_format,
++	.get_selection		= imx219_get_selection,
++	.enum_frame_size	= imx219_enum_frame_size,
+ };
  
- 	return 0;
-@@ -908,14 +908,14 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
+ static const struct v4l2_subdev_ops imx219_subdev_ops = {
+@@ -1268,10 +1298,6 @@ static const struct v4l2_subdev_ops imx219_subdev_ops = {
+ 	.pad = &imx219_pad_ops,
+ };
  
- 	mutex_lock(&imx219->mutex);
+-static const struct v4l2_subdev_internal_ops imx219_internal_ops = {
+-	.open = imx219_open,
+-};
+-
+ /* Initialize control handlers */
+ static int imx219_init_controls(struct imx219 *imx219)
+ {
+@@ -1520,7 +1546,6 @@ static int imx219_probe(struct i2c_client *client)
+ 		goto error_power_off;
  
--	for (i = 0; i < ARRAY_SIZE(codes); i++)
--		if (codes[i] == fmt->format.code)
-+	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-+		if (imx219_mbus_formats[i] == fmt->format.code)
- 			break;
--	if (i >= ARRAY_SIZE(codes))
-+	if (i >= ARRAY_SIZE(imx219_mbus_formats))
- 		i = 0;
+ 	/* Initialize subdev */
+-	imx219->sd.internal_ops = &imx219_internal_ops;
+ 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+ 			    V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+@@ -1528,9 +1553,6 @@ static int imx219_probe(struct i2c_client *client)
+ 	/* Initialize source pad */
+ 	imx219->pad.flags = MEDIA_PAD_FL_SOURCE;
  
- 	/* Bayer order varies with flips */
--	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-+	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
- 
- 	mode = v4l2_find_nearest_size(supported_modes,
- 				      ARRAY_SIZE(supported_modes),
+-	/* Initialize default format */
+-	imx219_set_default_format(imx219);
+-
+ 	ret = media_entity_pads_init(&imx219->sd.entity, 1, &imx219->pad);
+ 	if (ret) {
+ 		dev_err(dev, "failed to init entity pads: %d\n", ret);
 -- 
 2.32.0
 

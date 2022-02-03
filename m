@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E7F4A858D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C955B4A8591
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350905AbiBCNue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:50:34 -0500
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:38570 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240877AbiBCNub (ORCPT
+        id S1350914AbiBCNx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:53:56 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:59932 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240877AbiBCNxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:50:31 -0500
-Received: by mail-oi1-f174.google.com with SMTP id u13so4164315oie.5;
-        Thu, 03 Feb 2022 05:50:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=xOMR2ZZkrEs2A9siePkmd/O1P6JtjHeXZOx/YTCMPaw=;
-        b=5a9f6DUBb3tNxB72MjCU2r4qM4ebnwhWDrw12fYAqIcsUgMxaZIp3FL6r09WPFkN5P
-         uYmQZPLtlmq8S97m6IqMRwlkczhLZEWYzpErSDBMVHm9EB2rErYYqDG4OLI4Jt/XWNOw
-         WgiepgpWIcEzDJPN9FNtX+V5sWIt2ARDLwrpb5D62izXFl8TYbvu04l9e84GjnFwng00
-         0ALwr2cZfnTvXsloNILCxXsFTkGe/MXNEcPXd7FIq2tTQOtdGEosPyFTs1qoxOYd2hlN
-         YMyvmTA2WU29F3YqAr2P6NO9sQVNmTzzk8jdB66mETRg3C+vHE7EffVrvfDu1LtyQn6H
-         8i6w==
-X-Gm-Message-State: AOAM533Cu0BgWBwfI1MJ+tFEv1LwM/AkLEQsK84sVGPS8cze3QI94gjG
-        DkSMtf+AAwueM3hE03IoPA==
-X-Google-Smtp-Source: ABdhPJwrAaj+h4ToZSivyMAtRx9hbnjMKYgFG1qOzYFEDJgMxgc7UZ4Vb86wLsVAjfdv+ODcS60jyw==
-X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr7563854oib.40.1643896230398;
-        Thu, 03 Feb 2022 05:50:30 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id k10sm18671534oou.26.2022.02.03.05.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 05:50:29 -0800 (PST)
-Received: (nullmailer pid 252334 invoked by uid 1000);
-        Thu, 03 Feb 2022 13:50:26 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <1643855786-23186-2-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1643855786-23186-1-git-send-email-hayashi.kunihiko@socionext.com> <1643855786-23186-2-git-send-email-hayashi.kunihiko@socionext.com>
-Subject: Re: [PATCH 1/3] dt-bindings: PCI: uniphier-ep: Add bindings for NX1 SoC
-Date:   Thu, 03 Feb 2022 07:50:26 -0600
-Message-Id: <1643896226.748637.252333.nullmailer@robh.at.kernel.org>
+        Thu, 3 Feb 2022 08:53:53 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A187F1F3AF;
+        Thu,  3 Feb 2022 13:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643896432; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VPcGj79vup/xftEUTwDECNujdK5ZRlnSHT2lp1q2f9M=;
+        b=14WdU8eCrNFqgKv2TI0sjyolRoRpgevK923gOQnPYL6/lZ1M1/ySFE4j/sy1fu/aXUhxBG
+        j15kJa5Kgh/XM2Gn4vwtFcwBg1Zq+589YyRJkZ3s/fSziAbl0e/2vq19ZHtwUTu2bzCq0e
+        a/WF6SJw7LLOwNsu7w20LdRR194iWqU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643896432;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VPcGj79vup/xftEUTwDECNujdK5ZRlnSHT2lp1q2f9M=;
+        b=J14NvFaplAkr+hhdnT45sk/xOh2p+jXRGapbEmn5XpIiTRt57pPiktXxBRd63Hbu0XiGme
+        sG30JcQwr/UTkhCw==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7B376A3B81;
+        Thu,  3 Feb 2022 13:53:52 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 31CF2A05B6; Thu,  3 Feb 2022 14:53:52 +0100 (CET)
+Date:   Thu, 3 Feb 2022 14:53:52 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        David Hildenbrand <david@redhat.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jan Kara <jack@suse.cz>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v3 2/4] mm/gup: clean up follow_pfn_pte() slightly
+Message-ID: <20220203135352.55f35pztwmdx2rhk@quack3.lan>
+References: <20220203093232.572380-1-jhubbard@nvidia.com>
+ <20220203093232.572380-3-jhubbard@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203093232.572380-3-jhubbard@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 03 Feb 2022 11:36:24 +0900, Kunihiko Hayashi wrote:
-> Update PCI endpoint binding document for UniPhier NX1 SoC. Add a compatible
-> string, clock and reset lines for the SoC to the document.
+On Thu 03-02-22 01:32:30, John Hubbard wrote:
+> Regardless of any FOLL_* flags, get_user_pages() and its variants should
+> handle PFN-only entries by stopping early, if the caller expected
+> **pages to be filled in.
 > 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> This makes for a more reliable API, as compared to the previous approach
+> of skipping over such entries (and thus leaving them silently
+> unwritten).
+> 
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->  .../bindings/pci/socionext,uniphier-pcie-ep.yaml   | 22 +++++++++++++++-------
->  1 file changed, 15 insertions(+), 7 deletions(-)
+>  mm/gup.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 65575ae3602f..cad3f28492e3 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -439,10 +439,6 @@ static struct page *no_page_table(struct vm_area_struct *vma,
+>  static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+>  		pte_t *pte, unsigned int flags)
+>  {
+> -	/* No page to get reference */
+> -	if (flags & (FOLL_GET | FOLL_PIN))
+> -		return -EFAULT;
+> -
+>  	if (flags & FOLL_TOUCH) {
+>  		pte_t entry = *pte;
+>  
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This will also modify the error code returned from follow_page(). A quick
+audit shows that at least the user in mm/migrate.c will propagate this
+error code to userspace and I'm not sure the change in error code will not
+break something... EEXIST is a bit strange error code to get from
+move_pages(2).
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml:24:9: [warning] too many spaces after hyphen (hyphens)
-./Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml:25:9: [warning] too many spaces after hyphen (hyphens)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1587871
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

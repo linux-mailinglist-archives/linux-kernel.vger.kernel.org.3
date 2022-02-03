@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CDB4A8803
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D6F4A87FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351976AbiBCPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:49:15 -0500
-Received: from mga05.intel.com ([192.55.52.43]:63034 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344816AbiBCPtO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:49:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643903354; x=1675439354;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=0vgO5gWthy3+FtdvuKnnN01Iq2gWepBMDOv33Ni2GVk=;
-  b=I/24nSw4VY0v5lHrIrYkK/46FrRmGrBD44GJrA0bT9KAEyoISVxGGCai
-   beIdSMSRJDOkB38UhjRfs4dFmstf6V11IvjeAGhoetQWXy5DY4r5yXUzR
-   +xk2VvUtEVMd22jU2fF1OP/lKmcDYeJFmrz8Z67aaZxVkfqMLkXR4FqVF
-   uHac5amy/TLnG+X/nBzq6MVEzL+v3WsN1HUz5EOa+Q0jOS1wcZA8kMeT6
-   bIhd++Ayw0Mq4EEMC1g+asG+hq/Toy8Y+4s0a1WxeWZh6Hg66CEPoUozY
-   MqVC1Xkp/8STxhaU24PCNaJOc35seXhnek+POrwwMNhpLYfZWJnYfzzSi
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="334528030"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="334528030"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:49:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="498171842"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:49:12 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFeLD-000SjZ-O0;
-        Thu, 03 Feb 2022 17:48:11 +0200
-Date:   Thu, 3 Feb 2022 17:48:11 +0200
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     "Ma, Jianpeng" <jianpeng.ma@intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Why not use kvcalloc in bitmap_zalloc/bitmap_alloc?
-Message-ID: <Yfv5OxhDdfLHETkt@smile.fi.intel.com>
-References: <BN7PR11MB26099D11661A8D4D968CC646FDA90@BN7PR11MB2609.namprd11.prod.outlook.com>
+        id S1351945AbiBCPsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238679AbiBCPsU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:48:20 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96472C061714;
+        Thu,  3 Feb 2022 07:48:20 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id r144so3725270iod.9;
+        Thu, 03 Feb 2022 07:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WLH1O+Vnbs8udHEehPW8PKl/Vsqp6/y9M/lwajCfmXg=;
+        b=O2CfoR+Kidy6Oil62L7eIH2efozt64sP75j6rrjblHbD93lfalaDPECmKMSLR1bMRI
+         MyATwiK8Iq8ewDJjL9wop/yWJRNXHiz+mJrQzvj/rLk2NFXEmmVyCEkcg+achzY/Ujzq
+         rBdpvZRBfpcjJDd2ziUgr3b7rDzDcNBZjr0Gp//MfAvWdMpIeAIpoAiu88IHAI0ldyRG
+         j42emqwxOa9uI2aqBdX7uWycKCXtCy+lxyp3ULgGou70LGIa8eRS1fabpdxJaLNt4Z9c
+         EqohgOdJ2zBGkWXIvlpxH3JWAuZYbjnKP6TLYl5zqR+gElcmUBERluM5d1nIYiV/h6cr
+         sCxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WLH1O+Vnbs8udHEehPW8PKl/Vsqp6/y9M/lwajCfmXg=;
+        b=kbPlJ2uUhEOa4MCgi5/Tb3MOArMunrCJbx1nfLnal99dDid1n4Dlg8Ocw325aE40gg
+         RPdAAn9o9c9HKMUqh4FlyNWwOTB+BEOTTaiTKt4V8vSqBP8ZJbbNx4YAfnYbb8unuW5x
+         aT7ZHTSiLiYTCP4bo5I9qo+/HbHlUtbednGOKdMEhJ4Tfb/m3dWDhhXTgbxMXmiOvihl
+         iYEDLwZaQPZuvJe959DZnvc1aoResWHz8okEZgOPq5XS4ToZIr/qyVSfcI+8oLW8jeD0
+         ilZxxIGyFCgzMIDzMjovx25OwhzYkqONKps5jnuaW6PI1zYGeJT5sNcIhOA8lhjxKqw4
+         0K4g==
+X-Gm-Message-State: AOAM5323rKQDo+13iY+vy/UrqY1rAOPtbsay+jKSaTtq31UV/uxieU4K
+        Euo8ltYcPleFCsogSmNsrJgTuBM4m4Q=
+X-Google-Smtp-Source: ABdhPJytHT2ainnjTy8kuwJMbb9XvCK+xi9KdImDjah1yKuXQ7fyHkvMjlJDtILNHjHCwvaKCySTwA==
+X-Received: by 2002:a6b:4e18:: with SMTP id c24mr18972137iob.179.1643903300006;
+        Thu, 03 Feb 2022 07:48:20 -0800 (PST)
+Received: from ?IPV6:2601:282:800:dc80:8870:ce19:2c7:3513? ([2601:282:800:dc80:8870:ce19:2c7:3513])
+        by smtp.googlemail.com with ESMTPSA id o7sm8800664ilt.63.2022.02.03.07.48.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 07:48:19 -0800 (PST)
+Message-ID: <e34e03db-9764-4728-9f6a-df85659c5089@gmail.com>
+Date:   Thu, 3 Feb 2022 08:48:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <BN7PR11MB26099D11661A8D4D968CC646FDA90@BN7PR11MB2609.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH RFC 1/4] net: skb: use line number to trace dropped skb
+Content-Language: en-US
+To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        edumazet@google.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        imagedong@tencent.com, joao.m.martins@oracle.com,
+        joe.jin@oracle.com
+References: <20220203153731.8992-1-dongli.zhang@oracle.com>
+ <20220203153731.8992-2-dongli.zhang@oracle.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220203153731.8992-2-dongli.zhang@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 01:02:30AM +0000, Ma, Jianpeng wrote:
-> Hi Andy:
->      Currently, I want to use bitmap_zalloc. But because I need large space(pages > 1024). So met the following message.
->      From the code, I know bitmap_zalloc use kmalloc.  To fix this problem, I change the code use "kvcalloc(BITS_TO_LONGS(ns->pages_total), sizeof(unsigned long), GFP_KERNEL);"
->      Because you introduced bitmap_zalloc, so I wanted to know why use kvcalloc in bitmap_zalloc?  Are there other considerations？
+On 2/3/22 8:37 AM, Dongli Zhang wrote:
+> Sometimes the kernel may not directly call kfree_skb() to drop the sk_buff.
+> Instead, it "goto drop" and call kfree_skb() at 'drop'. This make it
+> difficult to track the reason that the sk_buff is dropped.
+> 
+> The commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()") has
+> introduced the kfree_skb_reason() to help track the reason. However, we may
+> need to define many reasons for each driver/subsystem.
+> 
+> To avoid introducing so many new reasons, this is to use line number
+> ("__LINE__") to trace where the sk_buff is dropped. As a result, the reason
+> will be generated automatically.
+> 
 
-+Cc: maintainer and mailing list
+I don't agree with this approach. It is only marginally better than the
+old kfree_skb that only gave the instruction pointer. That tells you the
+function that dropped the packet, but not why the packet is dropped.
+Adding the line number only makes users have to consult the source code.
 
-> 2114 Jan 12 08:44:46 ceph kernel: [19770.801510] Modules linked in: test_nvm(E+) bcache(E) crc64 btrfs blake2b_generic xor zstd_compress raid6_pq ufs qnx4 hfsplus hfs minix ntfs msdos jfs intel_rapl_msr intel_rapl_common dax_pmem_compat  device_dax nd_pmem dax_pmem_core nd_btt skx_edac ipmi_ssif x86_pkg_temp_thermal binfmt_misc intel_powerclamp coretemp crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel crypto_simd cryptd glue_helper nls_iso8859_1 raplxfs intel_cstate libcrc32c input_leds efi_pstore ast drm_vram_helper drm_ttm_helper ttm drm_kms_helper cec drm i2c_algo_bit fb_sys_fops syscopyarea sysfillrect sysimgblt switchtec lpc_ich mei_me mei ioatdma acpi_ipmi ipmi_si ipmi_devintf ipmi_msghandler nfit acpi_pad acpi_power_meter mac_hid sch_fq_codel parport_pc ppdev lp parport ip_tables x_tables autofs4 hid_generic usbhid hid ixgbe megaraid_sas xfrm_algo i40e dca mdio nvme nvme_core ahci libahci wmi [last unloaded: bcache]
->  2115 Jan 12 08:44:46 ceph kernel: [19770.801568] CPU: 72 PID: 74351 Comm: insmod Tainted: G            E     5.10.0-rc5+ #1
->  2116 Jan 12 08:44:46 ceph kernel: [19770.801569] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0008.031920191559 03/19/2019
->  2117 Jan 12 08:44:46 ceph kernel: [19770.801572] RIP: 0010:__alloc_pages_nodemask+0x297/0x330
->  2118 Jan 12 08:44:46 ceph kernel: [19770.801574] Code: 08 44 89 f9 44 89 ea 4c 89 f6 e8 54 96 fc ff e9 4c ff ff ff e8 fa 17 fc ff 48 89 c7 e9 b8 fe ff ff 41 81 e4 00 20 00 00 75 a7 <0f> 0b eb a3 31 c0 e9 1b fe ff ff 65 48 8b 04 25 c0 7b       01 00 8b 40
->  2119 Jan 12 08:44:46 ceph kernel: [19770.801575] RSP: 0018:ffffb2afcd4e39d8 EFLAGS: 00010246
->  2120 Jan 12 08:44:46 ceph kernel: [19770.801577] RAX: 0000000000000000 RBX: 0000000000000dc0 RCX: 0000000000000000
->  2121 Jan 12 08:44:46 ceph kernel: [19770.801578] RDX: 0000000000000001 RSI: 000000000000000b RDI: 0000000000040dc0
->  2122 Jan 12 08:44:46 ceph kernel: [19770.801579] RBP: ffffb2afcd4e3a30 R08: ffffffffb29c83c8 R09: 0000000000000000
->  2123 Jan 12 08:44:46 ceph kernel: [19770.801580] R10: 0000000000000000 R11: fefefefefefefeff R12: 0000000000000000
->  2124 Jan 12 08:44:46 ceph kernel: [19770.801581] R13: ffffffffb29c83c8 R14: 000000000000000b R15: 0000000000000000
->  2125 Jan 12 08:44:46 ceph kernel: [19770.801583] FS:  00007f24f731b540(0000) GS:ffff89abc1800000(0000) knlGS:0000000000000000
->  2126 Jan 12 08:44:46 ceph kernel: [19770.801584] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  2127 Jan 12 08:44:46 ceph kernel: [19770.801585] CR2: 00007f24f6e9f450 CR3: 00000040fc79e004 CR4: 00000000007706e0
->  2128 Jan 12 08:44:46 ceph kernel: [19770.801586] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  2129 Jan 12 08:44:46 ceph kernel: [19770.801587] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  2130 Jan 12 08:44:46 ceph kernel: [19770.801588] PKRU: 55555554
->  2131 Jan 12 08:44:46 ceph kernel: [19770.801589] Call Trace:
->  2132 Jan 12 08:44:46 ceph kernel: [19770.801598]  alloc_pages_current+0x87/0xe0
->  2133 Jan 12 08:44:46 ceph kernel: [19770.801602]  kmalloc_order+0x2c/0x90
->  2134 Jan 12 08:44:46 ceph kernel: [19770.801604]  kmalloc_order_trace+0x1d/0x80
->  2135 Jan 12 08:44:46 ceph kernel: [19770.801608]  __kmalloc+0x271/0x300
->  2136 Jan 12 08:44:46 ceph kernel: [19770.801612]  bitmap_zalloc+0x1d/0x20
->  2137 Jan 12 08:44:46 ceph kernel: [19770.801630]  bch_register_namespace+0x387/0x4e0 [bcache]
->  2138 Jan 12 08:44:46 ceph kernel: [19770.801636]  ? __wake_up_common_lock+0x8a/0xc0
->  2139 Jan 12 08:44:46 ceph kernel: [19770.801639]  ? 0xffffffffc04e3000
->  2140 Jan 12 08:44:46 ceph kernel: [19770.801641]  test_nvm_init+0x2f/0x1000 [test_nvm]
->  2141 Jan 12 08:44:46 ceph kernel: [19770.801646]  ? netlink_broadcast_filtered+0x13e/0x480
->  2142 Jan 12 08:44:46 ceph kernel: [19770.801649]  ? _cond_resched+0x19/0x30
->  2143 Jan 12 08:44:46 ceph kernel: [19770.801651]  ? unmap_kernel_range_noflush+0x2e7/0x360
->  2144 Jan 12 08:44:46 ceph kernel: [19770.801653]  ? free_pcp_prepare+0x80/0x160
->  2145 Jan 12 08:44:46 ceph kernel: [19770.801654]  ? 0xffffffffc04e3000
->  2146 Jan 12 08:44:46 ceph kernel: [19770.801658]  do_one_initcall+0x48/0x1d0
->  2147 Jan 12 08:44:46 ceph kernel: [19770.801659]  ? _cond_resched+0x19/0x30
->  2148 Jan 12 08:44:46 ceph kernel: [19770.801661]  ? kmem_cache_alloc_trace+0x153/0x2b0
->  2149 Jan 12 08:44:46 ceph kernel: [19770.801664]  do_init_module+0x62/0x240
->  2150 Jan 12 08:44:46 ceph kernel: [19770.801666]  load_module+0x28a0/0x2c50
->  2151 Jan 12 08:44:46 ceph kernel: [19770.801672]  ? security_kernel_post_read_file+0x5c/0x70
->  2152 Jan 12 08:44:46 ceph kernel: [19770.801674]  __do_sys_finit_module+0xc2/0x120
->  2153 Jan 12 08:44:46 ceph kernel: [19770.801676]  ? __do_sys_finit_module+0xc2/0x120
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+When I watch drop monitor for kfree_skb I want to know *why* the packet
+was dropped, not the line number in the source code. e.g., dropmon
+showing OTHERHOST means too many packets are sent to this host (e.g.,
+hypervisor) that do not belong to the host or the VMs running on it, or
+packets have invalid checksum (IP, TCP, UDP). Usable information by
+everyone, not just someone with access to the source code for that
+specific kernel.
 

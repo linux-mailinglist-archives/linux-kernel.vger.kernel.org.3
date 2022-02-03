@@ -2,164 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC6E4A7E47
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F344A7E49
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349186AbiBCDP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S1349196AbiBCDP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbiBCDPz (ORCPT
+        with ESMTP id S1348307AbiBCDPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Feb 2022 22:15:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCB1C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 19:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=T8bNH9fL4HTNLFcbm/NljfXqh0eT/3CzmsIE177pSnI=; b=n/xSt0MdUbZxJg954Oxg8G0yzz
-        My+XNLZEgmIIuimUoq5ush3+t+uSH1sAmtWtVm11n8XcNWCxSfMrkf7cel7FF9enxhFOl0jV/CM+e
-        qV08qYdtpro2Ctm4iZfKHiRIfMRIYqON1OYy22//5x+iY7qI5CAzP6cXQbVc2qdkgzr/yfPa8zEtS
-        UUlCOaRsTbcYGfARsqVA2JcmAZgLcYnMAcj1eY1Yxf0f1Ua70xpBuFD5VqOQnmHpKx3Jou+ECFGjb
-        mCu8yEbZ+FN3cDDGpydHRll2Cdl3UEZ7Fw+cf0O+QT15RyeWuc68fe1gu+0ciD+PyPq6Q1Xkljm1w
-        9tOhOXwg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFSb0-00HRUX-JR; Thu, 03 Feb 2022 03:15:42 +0000
-Message-ID: <582f032f-e04c-aade-4d18-514fb7e2d848@infradead.org>
-Date:   Wed, 2 Feb 2022 19:15:36 -0800
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544A7C06173E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 19:15:55 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id e28so1055856pfj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 19:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hBU4JFbPBzxehHqfaF4K5jjXVFa9V7j6ayn4pyPjLaM=;
+        b=kqJ580ShflAK7PUZHi/P2jKpyhV4HdvOAkzRMDOXphgVHJDXjkbbfkesDFRNxf0+qJ
+         tJ1MxkONvRpYPTFo3q2EezC9wXVqZ0szg12Y9gzBHLK9ON4Gr6Avap52/jirLO0zgDkp
+         7G5Likj54d31ySNRMCJLMPvTdkvi06Kl5pdtU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hBU4JFbPBzxehHqfaF4K5jjXVFa9V7j6ayn4pyPjLaM=;
+        b=IOJ2gMt3L3zTB9kNioyxA7vJtHtx8DJk7ADa2ensKPkaeLhTktKKE0aQtFCrCzOS3a
+         Mf+4VGUc1iqkmc2MnGIlYEXU6RVr8ezjesQeAiD46Ndv19JJCJjcaVLTMXQPvNqddUK2
+         ZYLx/KTQNMogIkrg71MNj0vkuWiuji6+BYgEmphUqoYe3V6ly0lI6SaPI3iRCqm5tFYK
+         P5DXXLxhGswdZ/QxIK6O0X2AVqTKhSBE3657sRosvMOCbX+iMJez9vLbpRVzmvSjpUAG
+         OqWcf+gi+TB0xf1OWjvJlNNLW1GOvIRSzaDVtXPioHFmQ6RYPBtlGcSzIsJSvYW4xd6l
+         2IpQ==
+X-Gm-Message-State: AOAM532EfwQRtQhi2uFgNlTEmup3HW5k/Fl6Ei0E8ZTw77ldO0i87cYw
+        anVrg4zRdxSQwHm09quBFeL8UM9qfuOHYw==
+X-Google-Smtp-Source: ABdhPJz/3irb1Mvta4DMVHkwV3P0zPfm1aoio/loPBUWG0M3eXDB+5Sxu3J3QxmOSYOFPFttFvqOKg==
+X-Received: by 2002:a63:5f44:: with SMTP id t65mr26353024pgb.587.1643858154753;
+        Wed, 02 Feb 2022 19:15:54 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a38sm26562425pfx.46.2022.02.02.19.15.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 19:15:54 -0800 (PST)
+Date:   Wed, 2 Feb 2022 19:15:53 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 4/4 v5] fortify: Add Clang support
+Message-ID: <202202021909.F46DE164@keescook>
+References: <20220202003033.704951-1-keescook@chromium.org>
+ <20220202003033.704951-5-keescook@chromium.org>
+ <CAKwvOdm1O+cKn5C86C2cB7hUCupv+Mf0w1d1pcaUNniYvc5jEw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Kconfig CONFIG_FB dependency regression
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        John Youn <John.Youn@synopsys.com>,
-        Bing Yuan <Bing.Yuan@synopsys.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <6fc4a81f-1a13-bff9-7b2e-d5bec382cb42@synopsys.com>
- <9bab4777-3034-b789-fdf6-ca8d7e6a8c35@infradead.org>
- <CAOMZO5Aa4WxuadfoFGwwyYyD4UGPm-E258xTWU3-ozp_hwG-7g@mail.gmail.com>
- <d8981e2a-4f61-72bb-e5cc-bf4ded29c08a@synopsys.com>
- <CAK8P3a3ELrSC=KX6cr8UnP6kkJN0AXeAE4EG4oUY=Zz7gG_dgg@mail.gmail.com>
- <b44de208-6d5f-3fcd-0e36-f05745297747@synopsys.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <b44de208-6d5f-3fcd-0e36-f05745297747@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdm1O+cKn5C86C2cB7hUCupv+Mf0w1d1pcaUNniYvc5jEw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Wed, Feb 02, 2022 at 01:22:09PM -0800, Nick Desaulniers wrote:
+> On Tue, Feb 1, 2022 at 4:30 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > --- a/security/Kconfig
+> > +++ b/security/Kconfig
+> > @@ -179,7 +179,7 @@ config FORTIFY_SOURCE
+> >         depends on ARCH_HAS_FORTIFY_SOURCE
+> >         # https://bugs.llvm.org/show_bug.cgi?id=50322
+> >         # https://bugs.llvm.org/show_bug.cgi?id=41459
+> > -       depends on !CC_IS_CLANG
+> > +       depends on !CC_IS_CLANG || CLANG_VERSION >= 130000
+> 
+> Are these comments still relevant, and is the clang version still correct?
 
-On 2/2/22 15:55, Thinh Nguyen wrote:
-> Arnd Bergmann wrote:
->> On Wed, Feb 2, 2022 at 1:14 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->>> Fabio Estevam wrote:
->>>> On Tue, Feb 1, 2022 at 8:06 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>>>>
->>>>> On 2/1/22 15:01, Thinh Nguyen wrote:
->>>>>> Hi,
->>>>>>
->>>>>> One of our test setups is unable to boot (stuck at initramfs). Git
->>>>>> bisection points to the commit below:
->>>>>>
->>>>>> f611b1e7624c ("drm: Avoid circular dependencies for CONFIG_FB")
->>>>>>
->>>>>> Reverting this patch resolves the issue. This issue persists in mainline
->>>>>> also. Unfortunately there isn't any meaningful log. Hopefully someone
->>>>>> can give some insight as to what could be the issue and revert/fix this
->>>>>> issue.
->>>>>
->>>>> Hi,
->>>>> Did you enable DRM_FBDEV_EMULATION?
->>>
->>> I did not enable it.
->>>
->>>>> Please provide the failing .config file.
->>>>
->>>> Does selecting CONFIG_FB=y help?
->>>>
->>>
->>> On the config that has the issue, this isn't set. After reverting the
->>> commit above, this was set. Maybe this is what's needed? I need to test it.
->>
->> CONFIG_FB should not normally be needed for booting, so unless
->> you have a graphical application in your initramfs that requires the /dev/fb0
->> device to work, it is not supposed to make a difference.
->>
-> 
-> I'm not sure, but it seems like the setup we have isn't the only one
-> that needed it. Fabio also noted that the imx_v6_v7_defconfig also needs
-> to have CONFIG_FB set.
-> 
->> Are there any other differences in your .config before and after the patch?
->> It's possible that you use some other driver that in turn depends on
->> CONFIG_FB. Does your machine have any graphical output device?
->> If yes, which driver do you use?
-> 
-> I don't have the answer to those questions yet. Need more investigation.
-> I'm new to this particular test setup.
-> 
->>
->> You may also want to make sure that you have 9d6366e743f3 ("drm:
->> fb_helper: improve CONFIG_FB dependency") in your kernel, which
->> fixes a minor problem with my original patch.
->>
->>          Arnd
-> 
-> The issue also occurs in mainline, which has your minor fix commit
-> above. The revert isn't clean for the latest kernel version. I also have
-> to revert some of the changes along with CONFIG_FB. The revert looks
-> more like this for the latest kernel:
-> 
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index b1f22e457fd0..7cbc733a8569 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -118,8 +118,9 @@ config DRM_DEBUG_MODESET_LOCK
-> 
->  config DRM_FBDEV_EMULATION
->         bool "Enable legacy fbdev support for your modesetting driver"
-> -       depends on DRM_KMS_HELPER
-> -       depends on FB=y || FB=DRM_KMS_HELPER
-> +       depends on DRM
-> +       select DRM_KMS_HELPER
-> +       select FB
->         select FB_CFB_FILLRECT
->         select FB_CFB_COPYAREA
->         select FB_CFB_IMAGEBLIT
-> 
-> 
-> 
-> I attached the configs for kernel v5.17-rc1. The "bad" config is without
-> any revert, the "good" config is with the change above.
+Oh, good call. I thought the version was still correct (more below),
+but yes, the comments need adjusting.
 
-I took bad.config with kernel 5.17-rc1 and then manually set/enabled:
+> In https://lore.kernel.org/llvm/CANiq72n1d7ouKNi+pbsy7chsg0DfCXxez27qqtS9XE1n3m5=8Q@mail.gmail.com/
+> Miguel notes that diagnose_as only exists in clang-14+.  If this
+> series relies on diagnose_as, then should this version check be for
+> clang-14+ rather than clang-13+?
 
-CONFIG_FB
-CONFIG_FB_EFI
-CONFIG_FB_MODE_HELPERS
-CONFIG_FB_TILEBLITTING
-CONFIG_LOGO
+It doesn't rely on it; this is just taking advantage of an improvement.
 
-and I got very close to your good.config file.
-Can you do the same and see if it works for you?
-If so, then we can decide what to do about it.
+> https://bugs.llvm.org/show_bug.cgi?id=50322 is still open, but doesn't
+> signify why there's a version check. It makes sense if there's no
+> version check, but I'm not sure it's still relevant to this Kconfig
+> option after your series.
 
+With __overloadable, this probably ended up going away.
 
-thanks.
+> https://bugs.llvm.org/show_bug.cgi?id=41459 was fixed in clang-13, but
+> it was also backported to the clang 12.0.1 release.  Is it still
+> relevant if we're gated on diagnose_as from clang-14?
+
+Ah-ha! I missed that this got backported. Looks like 12.0.1 and later
+have this fixed. That's excellent!
+
+> Perhaps a single comment, about the diagnose_as attribute or a link to
+> https://reviews.llvm.org/rGbc5f2d12cadce765620efc56a1ca815221db47af or
+> whatever, and updating the version check to be against clang-14 would
+> be more precise?
+
+Yup, I will rework this after double-checking 12.0.1 builds.
+
+Thanks!
+
 -- 
-~Randy
+Kees Cook

@@ -2,103 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1273B4A812C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76CC4A8138
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349710AbiBCJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:10:12 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:58241 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiBCJKK (ORCPT
+        id S1349718AbiBCJLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:11:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31255 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231533AbiBCJLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:10:10 -0500
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2ADA51C0016;
-        Thu,  3 Feb 2022 09:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643879405;
+        Thu, 3 Feb 2022 04:11:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643879485;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N5lFeotoLzTN5kCN0UM+WEZDckbMzPiWVfyj9sOa7LI=;
-        b=ZOIluF2DX5KOz3bnJVXHYCmozea5vI/W4iBTqlpnHvyTR3mIuocbVB3d27hmOysdZ4AbcP
-        4eXM6CEqPyPHn2nyvaHGlzEw5nZXLdsv/1Sx2EbhM0ecF1y38Mxm59FlAOfk4JH+iEjz7g
-        MUJoF+wIiCn3wYzlAgkNEy7xLRish8FnMyPSuCOG2UI+4r/cGjFQzzBn4PD1r2DExf7bEm
-        eyGPnXiiWiAeMALQ0naaIJiwIpgPusky8PZUJnJY9qfJMtUc98lvUJkbBprkha10g8lxTr
-        aI9F7eJ1lWb7xneGSUT7kdgwaf/JJN7x1BjxG0qAwEzlai+1555sGnQjdw3/dA==
-Date:   Thu, 3 Feb 2022 10:10:01 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v10 3/6] gpio: logicvc: Support compatible with major
- version only
-Message-ID: <Yfub6cdC3eSzKtX+@aptenodytes>
-References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
- <20220120150024.646714-4-paul.kocialkowski@bootlin.com>
- <CACRpkdZnw-Tf2eQwO+LZRW4UacR09qWRWct00=XLb4pfa-N3=g@mail.gmail.com>
+        bh=/58po+BfL52bHfuX8VFbmVWh0rB49LU1gYEqu53DFas=;
+        b=Msc0hYHLjpdgzLmaxkphXq3PT4FUnFK89QoGaBs/5OwcbVKSFNMR0wrN+umdIq/2sIsx5J
+        9+UwnvNQPKOxLi2OA6k9mbIoI9MkPO3QoVnnW+YBgoMCduZX/wrZUfrtlkLijqcRXwRVqT
+        0z1pEgPoHDn7Vv8CmWA5tmiDqXJU5Yg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-tH2PoFKPP0eu8qVlj8LTDw-1; Thu, 03 Feb 2022 04:11:24 -0500
+X-MC-Unique: tH2PoFKPP0eu8qVlj8LTDw-1
+Received: by mail-wm1-f72.google.com with SMTP id n22-20020a05600c3b9600b00352d3f6a850so504187wms.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 01:11:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=/58po+BfL52bHfuX8VFbmVWh0rB49LU1gYEqu53DFas=;
+        b=lUv2eTAed1b2hDdB3T/Dbqwa1WOpB7n9m5uaHGes7yvLQJYw80P/NR8wK+MYZVZhzd
+         DcEf74gQsvSI7dPfRGvzyp33CLWFgZJeya3mceINnvyX8sMl7TzJtsGHEBzUdGUG4uNR
+         pU4t8EyCIqaQynO00giZofqHoAJafJ0pT+hnUXNwBl+7+KQ4PHQSHhnaYm4qcYJxODLO
+         N90GvftJS7sYloMAjbUTKxCreiXHkV5/MUFkLjP6tFZxMFcDGME1pkWBb84RA6Btto1c
+         kz/bVifCM3WpM1puwHfh4fTdUgska/v5LqlSdr43lQuMU6+bFkq9p2SOmNxC4Qm2x3QB
+         /p+A==
+X-Gm-Message-State: AOAM531Urjq5NAmTZCMVyqgPvMy9LuAyuv2km1RLzYw1VHZH1Y4As0st
+        q4jIjiRFURmzuXDjrV+WL2Ng6R549wyd6fTQMCN2ShmETUB1eBhXel+60A80H1SXJ+VWq0RgLls
+        c5jk11l/xM9wlrydJ+xyAfJQC
+X-Received: by 2002:a5d:47ad:: with SMTP id 13mr8490539wrb.297.1643879482965;
+        Thu, 03 Feb 2022 01:11:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz+3SRdxeQdSNv7XiOESyiAr0upmNMnhYME5IoV5vujVSXnJz7EcsFHCzY/4CmLcExB5jcOQw==
+X-Received: by 2002:a5d:47ad:: with SMTP id 13mr8490511wrb.297.1643879482706;
+        Thu, 03 Feb 2022 01:11:22 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f11:9700:838c:3860:6500:5284? (p200300d82f119700838c386065005284.dip0.t-ipconnect.de. [2003:d8:2f11:9700:838c:3860:6500:5284])
+        by smtp.gmail.com with ESMTPSA id u1sm1551145wrs.47.2022.02.03.01.11.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 01:11:22 -0800 (PST)
+Message-ID: <15ad305f-a147-4a9c-35e5-bb0a868499ad@redhat.com>
+Date:   Thu, 3 Feb 2022 10:11:21 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H7ecIFcTJbb7eHUD"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdZnw-Tf2eQwO+LZRW4UacR09qWRWct00=XLb4pfa-N3=g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/6] mm: handle uninitialized numa nodes gracefully
+Content-Language: en-US
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Nico Pache <npache@redhat.com>,
+        Rafael Aquini <raquini@redhat.com>
+References: <20220127085305.20890-1-mhocko@kernel.org>
+ <20220127085305.20890-3-mhocko@kernel.org> <YfKgE5hTgbaBeaMa@kernel.org>
+ <YfKwjAlPW2kJUv5w@dhcp22.suse.cz> <20220201024119.2ailcw4rp5thambz@master>
+ <YfkDXYhGjAvAKKeU@dhcp22.suse.cz> <20220203002116.akpk5um5nkpeflve@master>
+ <YfuC6IaasxcnAdGl@kernel.org>
+ <c67e5fc0-95dd-1659-3a81-f23cf0be9c08@redhat.com>
+ <YfubhocKKKWgKlEq@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YfubhocKKKWgKlEq@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03.02.22 10:08, Mike Rapoport wrote:
+> On Thu, Feb 03, 2022 at 09:27:16AM +0100, David Hildenbrand wrote:
+>> On 03.02.22 08:23, Mike Rapoport wrote:
+>>> On Thu, Feb 03, 2022 at 12:21:16AM +0000, Wei Yang wrote:
+>>>> On Tue, Feb 01, 2022 at 10:54:37AM +0100, Michal Hocko wrote:
+>>>>> On Tue 01-02-22 02:41:19, Wei Yang wrote:
+>>>>>> On Thu, Jan 27, 2022 at 03:47:40PM +0100, Michal Hocko wrote:
+>>>>>> [...]
+>>>>>>>>> +			/*
+>>>>>>>>> +			 * not marking this node online because we do not want to
+>>>>>>>>> +			 * confuse userspace by sysfs files/directories for node
+>>>>>>>>> +			 * without any memory attached to it (see topology_init)
+>>>>>>>>> +			 * The pgdat will get fully initialized when a memory is
+>>>>>>>>> +			 * hotpluged into it by hotadd_init_pgdat
+>>>>>>>>> +			 */
+>>>>>>
+>>>>>> Hmm... which following step would mark the node online? On x86, the node is
+>>>>>> onlined in alloc_node_date(). This is not onlined here.
+>>>>>
+>>>>> The comment tries to explain that this happens during the memory
+>>>>> hotplug. Or maybe I have missed your question?
+>>>>>
+>>>>
+>>>> I am not sure for others, while the comment confused me a little.
+>>>>
+>>>> Currently in kernel, there are two situations for node online:
+>>>>
+>>>>   * during memory hotplug
+>>>>   * during sys-init
+>>>>
+>>>> For memory hotplug, we allocate pgdat and online node. And current hot-add
+>>>> process has already put them in two steps:
+>>>>
+>>>>   1. __try_online_node()
+>>>>   2. node_set_online()
+>>>>
+>>>> So emphasize "not online" node here, confuse me a little. It is a natural
+>>>> thing to not online node until it has memory.
+>>>>
+>>>> But from another point of view, the comment here is reasonable. During
+>>>> sys-init, we online node at the same time when creating pgdat. And even for
+>>>> memory-less node on x86, we online them too.
+>>>>
+>>>> Well, this is all about the comment. I have tried to grab may head but not
+>>>> come up with a better idea.
+>>>>
+>>>> Or maybe this is just my personal feeling, don't bother if no-one else feel
+>>>> like this.
+>>>
+>>> I shuffled the words a bit, maybe this sounds better not only to me :)
+>>>
+>>> /*
+>>>  * We do not want to confuse userspace by sysfs files/directories for node
+>>>  * without any memory attached to it, so this node is not marked as
+>>>  * N_MEMORY and not marked online so that topology_init() won't create
+>>>  * sysfs hierarchy for this node.  The pgdat will get fully initialized by
+>>>  * hotadd_init_pgdat() when memory is hotpluged into this node
+>>>  */
+>>>
+>>
+>> Note that the topology_init() part might change soon [1] so maybe we
+>> want to rephrase that to "so that no sysfs hierarchy will be created via
+>> register_one_node() for this node." right away.
+> 
+> Heh, this will be your responsibility to update the comment here when you
+> post non-RFC version ;-)
 
---H7ecIFcTJbb7eHUD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm usually sending patches against Linus' tree. And I'll post non-RFC
+most probably today (after testing on aarch64) ;)
 
-Hi,
+So I'd appreciate if we could just phrase it more generically, as I
+tried. But of course, we can try making my life harder ;)
 
-On Sun 30 Jan 22, 01:43, Linus Walleij wrote:
-> On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
-> <paul.kocialkowski@bootlin.com> wrote:
->=20
-> > Support the newly-introduced common compatible for version 3.
-> >
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
->=20
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->=20
-> Are there dependencies between the GPIO patches and the rest?
-> Doesn't look like that.
-> Can Bartosz just merge the GPIO stuff to the GPIO tree?
+-- 
+Thanks,
 
-Yeah I think it's independent, no dependencies.
+David / dhildenb
 
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---H7ecIFcTJbb7eHUD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmH7m+kACgkQ3cLmz3+f
-v9FX2Af+MEyBnFYeHifMWfbhY7+pW3K+hTxA0/C2hO9QSoxWVliuCnniIMbx4Zjv
-7IvyG1LHidWJk0jROw3BX3L872C0pdHTxmea38KZHIG1ustZAQMe47i5EpRdFM1S
-QqBqhZuHtW67qijINPtXBx0vbPDTpiHVFa5F70cBNsaEW2/erdP1TT1LjoHIEx58
-B9uLpQHtoI/lDiv5toafFaGv+ut3YeC6ZVw8xT/54mm/tUSM3P2qcTu+jEyZbYl6
-EFW93rTK+q+aONuM80bXZyS1FeMDX535w9tCg7aDQmiUUf7My5Bamt6A0Rr+cQve
-ZY+YSwuQ87Mgv8HrwLj648dmkHPNnQ==
-=1K2m
------END PGP SIGNATURE-----
-
---H7ecIFcTJbb7eHUD--

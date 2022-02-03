@@ -2,100 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01E44A82A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D074A82AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiBCKrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 05:47:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:38186 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230516AbiBCKrW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:47:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3FD98113E;
-        Thu,  3 Feb 2022 02:47:22 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 434513F774;
-        Thu,  3 Feb 2022 02:47:21 -0800 (PST)
-Date:   Thu, 3 Feb 2022 10:47:13 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/4] Broadcom STB PM PSCI extensions
-Message-ID: <YfuysSBnZbnMF4OC@FVFF77S0Q05N>
-References: <20220122035421.4086618-1-f.fainelli@gmail.com>
+        id S245105AbiBCKtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:49:32 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:40092 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230016AbiBCKtb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 05:49:31 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 831C61F399;
+        Thu,  3 Feb 2022 10:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643885369; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a6gXtaxF4sUpqNbpvqW3e+eeQ67Q3V181j1MpX5xCXw=;
+        b=HaY3A8a7CHu+p6SkQfzXFxoRVgaixyso1zTY8l10onfr+4M1WM6Keh9Ypvjdw1ey18+Cq8
+        Pz48XGKgBpP8Ki2zWHuhHY1Gy46s/PE0MAZ4LbmxhJWmPuIQIKdMYbozDUo4+Q7MCpXRpB
+        UgCTlfrM191QhW6/Am1jz3JKp4une/4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643885369;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a6gXtaxF4sUpqNbpvqW3e+eeQ67Q3V181j1MpX5xCXw=;
+        b=4EJKGBft4bAsvWMXkRCyg9VCRvMq2sAKI0INSYlhae42A7n/QFT0juKBfObRurO+3478Iw
+        wdlekzqTUvDT8pBQ==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7AACFA3B85;
+        Thu,  3 Feb 2022 10:49:27 +0000 (UTC)
+Date:   Thu, 3 Feb 2022 11:49:26 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 3/6] kexec_file: Don't opencode appended signature
+ verification.
+Message-ID: <20220203104926.GA3113@kunlun.suse.cz>
+References: <cover.1641900831.git.msuchanek@suse.de>
+ <7834eb187ef67cd88fc67f10e831130e3717d776.1641900831.git.msuchanek@suse.de>
+ <YfBafIXgnLzf0QMb@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220122035421.4086618-1-f.fainelli@gmail.com>
+In-Reply-To: <YfBafIXgnLzf0QMb@bombadil.infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 07:54:17PM -0800, Florian Fainelli wrote:
-> Hi all,
+Hello,
 
-Hi Florian,
+thanks for the review.
 
-> This patch series contains the Broadcom STB PSCI extensions which adds
-> some additional functions on top of the existing standard PSCI interface
-> which is the reason for having the driver implement a custom
-> suspend_ops.
-
-I *really* don't like the idea of having non-standard PSCI extensions, because
-it somewhat defeats the point of PSCI being a standard, and opens the door for
-the zoo of mechanisms we had on 32-bit.
-
-I think this needs a fair amount more explanation and justification.
-
-> These platforms have traditionally supported a mode that is akin to
-> ACPI's S2 with the CPU in WFI and all of the chip being clock gated
-> which is entered with "echo standby > /sys/power/state". Additional a
-> true suspend to DRAM as defined in ACPI by S3 is implemented with "echo
-> mem > /sys/power/state".
-
-Why isn't a combination of CPU_SUSPEND and SYSTEM_SUSPEND sufficient here?
-
-What specifically *can't* you do with standard PSCI calls?
-
-> These platforms also may have an external Broadcom PMIC chip which can
-> cause the SoC to be powercycled assuming that we communicate that intent
-> via a vendor specific PSCI SYSTEM_RESET2.
+On Tue, Jan 25, 2022 at 12:15:56PM -0800, Luis Chamberlain wrote:
+> On Tue, Jan 11, 2022 at 12:37:45PM +0100, Michal Suchanek wrote:
+> > diff --git a/include/linux/verification.h b/include/linux/verification.h
+> > index a655923335ae..32db9287a7b0 100644
+> > --- a/include/linux/verification.h
+> > +++ b/include/linux/verification.h
+> > @@ -60,5 +60,8 @@ extern int verify_pefile_signature(const void *pebuf, unsigned pelen,
+> >  				   enum key_being_used_for usage);
+> >  #endif
+> >  
+> > +int verify_appended_signature(const void *data, unsigned long *len,
+> > +			      struct key *trusted_keys, const char *what);
+> > +
 > 
-> Since it is desirable to get any new functionality added to the kernel
-> to be loadable as a module as part of shipping said products in a Google
-> Kernel Image (GKI) environment, we need to export a couple of symbols from
-> drivers/firmware/psci/psci.c.
+> Looks very non-module specific.
 
-I really don't want to export the guts of psci.c.
+Which it is now that the same signature format is used for kernels.
 
-Thanks,
-Mark.
+> 
+> > diff --git a/kernel/module_signing.c b/kernel/module_signing.c
+> > index 8723ae70ea1f..30149969f21f 100644
+> > --- a/kernel/module_signing.c
+> > +++ b/kernel/module_signing.c
+> > @@ -14,32 +14,38 @@
+> >  #include <crypto/public_key.h>
+> >  #include "module-internal.h"
+> >  
+> > -/*
+> > - * Verify the signature on a module.
+> > +/**
+> > + * verify_appended_signature - Verify the signature on a module with the
+> > + * signature marker stripped.
+> > + * @data: The data to be verified
+> > + * @len: Size of @data.
+> > + * @trusted_keys: Keyring to use for verification
+> > + * @what: Informational string for log messages
+> >   */
+> > -int mod_verify_sig(const void *mod, struct load_info *info)
+> > +int verify_appended_signature(const void *data, unsigned long *len,
+> > +			      struct key *trusted_keys, const char *what)
+> >  {
+> > -	struct module_signature ms;
+> > -	size_t sig_len, modlen = info->len;
+> > +	struct module_signature *ms;
+> 
+> There goes the abstraction, so why not make this clear where we re-use
+> the struct module_signature for various things and call it as it is,
+> verify_mod_appended_signature() or some such?
 
-> Thanks for your feedback.
-> 
-> Florian Fainelli (4):
->   firmware: psci: Export a couple of suspend symbols
->   soc: bcm: brcmstb: Make legacy PM code depend on !ARM_PSCI_FW
->   soc: bcm: brcmstb: Added support for PSCI system suspend operations
->   Documentation: ABI: Document Broadcom STB PSCI firmware files
-> 
->  .../ABI/testing/sysfs-firmware-brcmstb        |  16 +
->  drivers/firmware/psci/psci.c                  |   9 +-
->  drivers/soc/bcm/brcmstb/Kconfig               |   4 +-
->  drivers/soc/bcm/brcmstb/pm/Makefile           |   3 +
->  drivers/soc/bcm/brcmstb/pm/pm-psci.c          | 315 ++++++++++++++++++
->  include/linux/psci.h                          |   2 +
->  include/linux/soc/brcmstb/brcmstb-smccc.h     |  84 +++++
->  7 files changed, 430 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-firmware-brcmstb
->  create mode 100644 drivers/soc/bcm/brcmstb/pm/pm-psci.c
->  create mode 100644 include/linux/soc/brcmstb/brcmstb-smccc.h
-> 
-> -- 
-> 2.25.1
-> 
+It sounds like the abstraction is actually improved by callers no longer
+dealing with struct module_signature when verifying signature on a
+kernel. That is the structure is misnamed but it is now hidden behind
+an abstraction.
+
+Or am I missing something?
+
+Thanks
+
+Michal

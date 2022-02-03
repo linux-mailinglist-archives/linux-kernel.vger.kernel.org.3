@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1D54A9119
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B044A911B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355958AbiBCXUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S1355969AbiBCXVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiBCXUD (ORCPT
+        with ESMTP id S233188AbiBCXV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:20:03 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932DC061714;
-        Thu,  3 Feb 2022 15:20:03 -0800 (PST)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AC3A83F710;
-        Fri,  4 Feb 2022 00:20:01 +0100 (CET)
-Date:   Fri, 4 Feb 2022 00:20:00 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Satya Priya Kakitapalli <c_skakit@qti.qualcomm.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v11 2/2] leds: Add driver for Qualcomm LPG
-Message-ID: <20220203232000.btb2qt7t6rmmnayw@SoMainline.org>
-References: <20220129005429.754727-1-bjorn.andersson@linaro.org>
- <20220129005429.754727-2-bjorn.andersson@linaro.org>
- <20220202111833.ibeq3udj37dkfv6l@SoMainline.org>
- <Yfrj7DnXET6fT3BX@ripper>
- <CAOCOHw7LS=NALXzHMN6LauEqrjDk2y27VoQtaT4tkHJiYxM7MQ@mail.gmail.com>
+        Thu, 3 Feb 2022 18:21:29 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B93C061714;
+        Thu,  3 Feb 2022 15:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=cUD7tLHcV6IQh2o2twU3Pkvh/VRccN5GmyjQGBHH8gg=; b=j1hcRYjsbe7oRcBGHgM831q9BS
+        g5Kwi6MjCaAlAn+ZuetCnbRFamGfQaj/eT6TDqaLll/f5dFfphrUtZr1tLg/GxuRC7MyVyDEKtmPz
+        ynTuxtfVulgVc1D3i8ft92FbL481k1OFD72xbi77SU/Hk0lIXyyRSqf9Jytejx0Ss/mhUg7WR/n4Z
+        75LmXHxjhXpuDSTZ6kHcEk1LT1/9+n3ih6bBnj1Oa7MKmv4BXNQDF+ypAI+k5d7zyh/kruU3MrmrR
+        9xnrKYGhuv1Sx0h3pieinb1B/R2+kvPKuLleLz5Jo8P1KB8DoDx6bItLqfVcxkSCyGNZghb63Ef2P
+        z3TZ/nJw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFlPf-006f0z-KZ; Thu, 03 Feb 2022 23:21:17 +0000
+Message-ID: <3ff7c232-ebf7-9e70-cdc4-b8c96945152f@infradead.org>
+Date:   Thu, 3 Feb 2022 15:21:08 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOCOHw7LS=NALXzHMN6LauEqrjDk2y27VoQtaT4tkHJiYxM7MQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220202145437.2dd20b71@canb.auug.org.au>
+ <20220203150645.9e41e470422eed26d4d77790@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220203150645.9e41e470422eed26d4d77790@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-02 16:08:29, Bjorn Andersson wrote:
-> On Wed, Feb 2, 2022 at 2:04 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > On Wed 02 Feb 03:18 PST 2022, Marijn Suijten wrote:
-> >
-> > > On 2022-01-28 16:54:29, Bjorn Andersson wrote:
-> > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
-> > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
-> > > > with their output being routed to various other components, such as
-> > > > current sinks or GPIOs.
-> > > >
-> > > > Each LPG instance can operate on fixed parameters or based on a shared
-> > > > lookup-table, altering the duty cycle over time. This provides the means
-> > > > for hardware assisted transitions of LED brightness.
-> > > >
-> > > > A typical use case for the fixed parameter mode is to drive a PWM
-> > > > backlight control signal, the driver therefor allows each LPG instance
-> > > > to be exposed to the kernel either through the LED framework or the PWM
-> > > > framework.
-> > > >
-> > > > A typical use case for the LED configuration is to drive RGB LEDs in
-> > > > smartphones etc, for which the driver support multiple channels to be
-> > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
-> > > > generators will be synchronized, to allow for multi-color patterns.
-> > > >
-> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > >
-> > > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > >
-> > > There may still be some things to improve based on whether lo_pause
-> > > works in non-ping-pong mode - to alleviate the requirement for the first
-> > > delta_t to be at most 512ms - but this patch should not be delayed much
-> > > longer and that's perhaps for a followup patch.  Same for my request for
-> > > documentation and examples which at the same time serve as some form of
-> > > tests to see if everything works as desired.
-> > >
-> >
-> > I've been considering lopause to be the value before we start the
-> > pattern, but I think you're right in that it denotes how long we should
-> > hold the first value.
-> >
-> > So I think it might make sense in the predefined "<value> <delay> <value>
-> > <delay>" scheme to use first <delay> as to calculate lo-pause. I think
-> > it has to be calculated, because the first value will iiuc be held
-> > for (lopause + 1) * delay ms.
 
-As mentioned in v10 that seems like a great idea, as long as we can
-carefully validate and communicate these numbers to the user; both
-through documentation and kernel error messages when values are
-ultimately rejected.
 
-Again, perhaps it might be better to postpone this to a separate
-patchset as to not block the use of LPG for backlights which is arguably
-more important than some fancy phone notification led patterns.
-
-> > > I also vaguely remember other (downstream) drivers to support more than
-> > > 512ms per step by (drastically?) changing PWM period, but not sure how
-> > > that worked again nor if it was reliable.
-> > >
-> >
-> > Thinking about it again, while 512 is the 9th bit, we should be able to
-> > represent [0..1023] with 9 bits...
-> >
+On 2/3/22 15:06, Andrew Morton wrote:
+> On Wed, 2 Feb 2022 14:54:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > 
-> Sorry, my mind was elsewhere as I wrote that. [0..511] is what we got.
+>> Hi all,
+>>
+>> After merging the akpm-current tree, today's linux-next build (htmldocs)
+>> produced this warning:
+>>
+>> Documentation/admin-guide/sysctl/kernel.rst:603: WARNING: Malformed table.
+>> Text in column margin in table line 2.
+>>
+>> = =================================
+>> 0x0 NUMA_BALANCING_DISABLED
+>> 0x1 NUMA_BALANCING_NORMAL
+>> 0x2 NUMA_BALANCING_MEMORY_TIERING
+>> = =================================
+>>
+>> Introduced by commit
+>>
+>>   49ec6eb41c49 ("NUMA balancing: optimize page placement for memory tiering system")
+> 
+> I assume this fixes?  (With gratuitous grammar fixes)
+> 
 
-Yes, 9 bits in total and BIT(8) being the highest settable ^^
+Looks good.
 
-- Marijn
+ --- a/Documentation/admin-guide/sysctl/kernel.rst~numa-balancing-optimize-page-placement-for-memory-tiering-system-fix
+> +++ a/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -595,14 +595,14 @@ Documentation/admin-guide/kernel-paramet
+>  numa_balancing
+>  ==============
+>  
+> -Enables/disables and configure automatic page fault based NUMA memory
+> -balancing.  Memory is moved automatically to nodes that access it
+> -often.  The value to set can be the result to OR the following,
+> +Enables/disables and configures automatic page fault based NUMA memory
+> +balancing.  Memory is moved automatically to nodes that access it often. 
+> +The value to set can be the result of ORing the following,
+
+except for that ending comma...
+
+>  
+>  = =================================
+> -0x0 NUMA_BALANCING_DISABLED
+> -0x1 NUMA_BALANCING_NORMAL
+> -0x2 NUMA_BALANCING_MEMORY_TIERING
+> +0 NUMA_BALANCING_DISABLED
+> +1 NUMA_BALANCING_NORMAL
+> +2 NUMA_BALANCING_MEMORY_TIERING
+>  = =================================
+>  
+>  Or NUMA_BALANCING_NORMAL to optimize page placement among different
+> _
+> 
+
+Thanks.
+-- 
+~Randy

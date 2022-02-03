@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A504A8C61
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E204A8C7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353752AbiBCTWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S244488AbiBCTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353745AbiBCTWF (ORCPT
+        with ESMTP id S232146AbiBCTdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:22:05 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696EC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:22:05 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id p15so11813216ejc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:22:04 -0800 (PST)
+        Thu, 3 Feb 2022 14:33:38 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E852C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:33:38 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id me13so11904645ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:33:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=YnamjwK8jac8VMGcddEQMuZZzkDqdQtjPGT5HOzqnyA=;
-        b=dZBRrD1sg7XDLYXmoaWYGCuuxOZbQmxERTngTz23xxfweSixACEGf+QcYQSNv7f7VG
-         fFc89935UFYKIdky/sB3SOKdzrwp3gPryih05ZjqvaVj29WHTlFads7HSrt6L+OdH+gE
-         StXpIJrNeZ56OKwgOVmgLQSCBHuVsgAEsv4/ESBRATUJ8/dQYcRl/mswRrW44UZI7Bta
-         /3vkKIa/0GENSNLZVHMfnufFbPSPV1HveGDYHdAbUgvTUWeHBdO8qccGdlfMO3zLnSev
-         XcfQcOxJahg3raWFGyAAFy216c1Asm3cZO0v5Bzj+kym7jxE+IvadrQEC86u8PEcQn3P
-         QCzg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UKKVvcG+cC8bIALBnZZmaV3K37giZ1xa1O6hFf3r9uc=;
+        b=Jkx2j0PYyKcGzbdzVprIgIK3c9UJTJU023+j8kMn6bFfwe79YvJheTw9qL5ryIRa80
+         Lh9b7BpjrwhgQhd2J7+B1U+ZMFnZoZUWM9Ajp0Ad4vzpkBa6lrGGNVz1nkoLZyKgapv5
+         0hx1nJz7ou0M7Q+16jCAsq70x2y43qYOvrTMY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=YnamjwK8jac8VMGcddEQMuZZzkDqdQtjPGT5HOzqnyA=;
-        b=cK2u+5NJVYHm+ov+bkZ4m0MglGJWx2I2Pj+jc1uj1Ecbwk3ya5GeYdO/ZC2KWzuFiS
-         kruv43/aiRRGZ5h5Yub6LQhscGyGE9y0oObXN46hUy1deHh7VgQO3RAByHIFsCJPniJ1
-         kv8HWYdDMvLNizgxrZVYONU/S1QO17mleVMoRxv57lNjVZchGo/1kUqqfwk6ePouFY/D
-         Vd2mL78e/KcM1AYmQ0vDjBIQ6/0Qd+wwF+/WkfVxuVERCvxA7AYyYYdA9+AK8o+8V1qr
-         6fUhBerWQ5uO0XbOly6F+1MYQt4H8nj9OERt6DVUKwJdyOtUkDGKJ+4UhCGtrZm8A7cZ
-         UXoQ==
-X-Gm-Message-State: AOAM5326tkdGrXIxsUMF3lgghQbb0i+3xtGWQCGUMGZm/y3cFdUuEceV
-        xJk+YQS4U14XIOj4z95KLx4=
-X-Google-Smtp-Source: ABdhPJzZGzBzocy0s6F8V3moHy8ukluUcy4G5rEs15hnduJD0mG3YyohXcWOILgzp3+ExFEmiRjUKQ==
-X-Received: by 2002:a17:907:3e9b:: with SMTP id hs27mr30799212ejc.72.1643916123500;
-        Thu, 03 Feb 2022 11:22:03 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e069597fe2fbbbc37c063.dip0.t-ipconnect.de. [2003:c7:8f4e:695:97fe:2fbb:bc37:c063])
-        by smtp.gmail.com with ESMTPSA id lc22sm17055801ejc.74.2022.02.03.11.22.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 11:22:03 -0800 (PST)
-Date:   Thu, 3 Feb 2022 20:22:01 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Forest Bond <forest@alittletooquiet.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: vt6656: Fix crash when WLAN is turned off
-Message-ID: <20220203192201.GA18509@matrix-ESPRIMO-P710>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UKKVvcG+cC8bIALBnZZmaV3K37giZ1xa1O6hFf3r9uc=;
+        b=clKj+N+rwbPXeNTJdvyINyUkIs8uwXxYAfKaKb+bnj33VmcPMwbISsff6JM2/ejsl5
+         dyo15XnStYQl1irki7k2zGBAKlR1jBbO0DUdto1uqE8PUyESqT/pDGaqdiBMQHz3ckG6
+         InX9vpLZSmrjdJ5/5tM/uuoUIk1Qn1ehoe4u7OFHoIkWriHOOHb/lmAzr54sesqTD5hz
+         hPsp+9PutQEkubFJDNAcEzsIVCshWAvFLDxOxfRXUJdZVNFRNvX1gR4jpnr7WGXZZs6C
+         Wn5qukID0NWGb57Wp1Yx+b4XbrTRqovEMF0iJRltMIIRVh28ZREIm6yOzWqVDpwUGDU+
+         PgoQ==
+X-Gm-Message-State: AOAM532NhhdrguRU3qcwPRYtk4LRs5KCkeQjQ0ccF+D8KDPxA4pn/wBI
+        fLOKHKRmawlr8tyI/+0yeyKcp1xrMB9yNe01
+X-Google-Smtp-Source: ABdhPJyDivUXhhHPafXa3StNHYFdEHquccUbwYeFHJHMHockwJuDupRnuFroVwn1EYkHpThukJEs/w==
+X-Received: by 2002:a17:907:d8a:: with SMTP id go10mr31569505ejc.242.1643916816685;
+        Thu, 03 Feb 2022 11:33:36 -0800 (PST)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id cr8sm22490965edb.47.2022.02.03.11.33.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 11:33:36 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id a13so7002871wrh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:33:35 -0800 (PST)
+X-Received: by 2002:adf:d087:: with SMTP id y7mr29738280wrh.274.1643916815565;
+ Thu, 03 Feb 2022 11:33:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220202001918.4104428-1-keescook@chromium.org>
+In-Reply-To: <20220202001918.4104428-1-keescook@chromium.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 3 Feb 2022 11:33:19 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whkwveB2HDOibk+chAWhpm8LyGBVVjZmV4CAeEdnezZ0w@mail.gmail.com>
+Message-ID: <CAHk-=whkwveB2HDOibk+chAWhpm8LyGBVVjZmV4CAeEdnezZ0w@mail.gmail.com>
+Subject: Re: [PATCH] gcc-plugins/stackleak: Use noinstr in favor of notrace
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Popov <alex.popov@linux.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stop submitting urbs before calling usb_kill_urb() and usb_free_urb().
+I was going to apply your patch, but then I read your note:
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/vt6656/usbpipe.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On Tue, Feb 1, 2022 at 4:19 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Is it correct to exclude .noinstr.text here? That means any functions called in
+> there will have their stack utilization untracked. This doesn't seem right to me,
+> though. Shouldn't stackleak_track_stack() just be marked noinstr instead?
 
-diff --git a/drivers/staging/vt6656/usbpipe.c b/drivers/staging/vt6656/usbpipe.c
-index 7f45734390f6..d505b4b69ba4 100644
---- a/drivers/staging/vt6656/usbpipe.c
-+++ b/drivers/staging/vt6656/usbpipe.c
-@@ -230,7 +230,9 @@ static void vnt_start_interrupt_urb_complete(struct urb *urb)
- 	else
- 		vnt_int_process_data(priv);
- 
--	status = usb_submit_urb(priv->interrupt_urb, GFP_ATOMIC);
-+	if (!test_bit(DEVICE_FLAGS_DISCONNECTED, &priv->flags))
-+		status = usb_submit_urb(priv->interrupt_urb, GFP_ATOMIC);
-+
- 	if (status)
- 		dev_dbg(&priv->usb->dev, "Submit int URB failed %d\n", status);
- }
--- 
-2.25.1
+... and yes, it seems like stackleak_track_stack() should just be
+'noinstr' just like you made stackleak_erase().
 
+So I've dropped the patch to see what happens.
+
+If you decide this is the right patch after all, you can just re-send it.
+
+                 Linus

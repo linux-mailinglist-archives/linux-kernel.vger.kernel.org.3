@@ -2,158 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EC14A8B1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 079874A8B23
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346743AbiBCSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:01:26 -0500
-Received: from mail-eopbgr90050.outbound.protection.outlook.com ([40.107.9.50]:40096
-        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230127AbiBCSBY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:01:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TSCnBrdRhoZbptdAD9a7nBF1cm8YEnNKZweTQL0LcbedofagXmeUvMwa7dn91fqv4wmWPlrO/A4VQq7yBS1n78738Ro3sUyU/pmzDujVyDnapoVLz+PEm6cD5ZK6Sq7X1F6R7lQ0V+w9l332I+pO8+wPu05GY8CGDjTtfuVa5XyrjPFn0998uWquf/EVCtDd/rag92ZvbzSga9JPDBuq28v2ArtODBrl96HnBHyJrZEwwDFB05mzg78aYv6jeOTHYg/aH9TD9tHLb03S4tVL3llqOdVr461a5hj/1yW4oNeBF9k6BTzAc+8YKk9MwS1+6sFWXI2MUeoGZvjtrEaCmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cEk+m/KUDNFoyBHqkWRjzZNZUFvm5WEDVg3vzxAyoec=;
- b=cj/+pZRYGR75mxhaSHSsilNLYxyHBmvvnsDnTrT+BmxxZXMxOqjgcN5UzqxPrxWMjZbJ7wtJwSEzIQtAs5gqEj4PniDEpVn+AamsxTU8i3MqYZQN2O9H+6LezI0eLVRJ+tbGxnEWjNKUriApP4ujyv/vly5nCKZsQaln1VVx4qqnm2668MKhTZVxfKHO+qgXPaHoIqqgtq7zyH3QsaMf1AWucPVPomA99y0WeHwlnWECRfAqHFnHM2umsvS2S8xDnhdbcFQ8RSQJg+BpIqAGg4tX201VNJlwyznhzqH2urNKMZQtGeg4Ipv3y5hRMCXmBmeuGRQ527zkQL5HZ6uAbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAYP264MB4375.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:116::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
- 2022 18:01:21 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4951.014; Thu, 3 Feb 2022
- 18:01:21 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Michal Suchanek <msuchanek@suse.de>
-CC:     "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>
-Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
-Thread-Topic: [RFC PATCH v4 00/13] module: core code clean up
-Thread-Index: AQHYGJPj0SgwpYxqsU+2qmwMGXXo0qyCHvGA
-Date:   Thu, 3 Feb 2022 18:01:21 +0000
-Message-ID: <1ae3a950-8c1e-a212-e557-8f112a16457d@csgroup.eu>
-References: <20220130213214.1042497-1-atomlin@redhat.com>
- <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
-In-Reply-To: <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 064b2eb8-db7d-449a-baf0-08d9e73f2f9a
-x-ms-traffictypediagnostic: PAYP264MB4375:EE_
-x-microsoft-antispam-prvs: <PAYP264MB43759EF8E7DA1A6AFEEE0BD0ED289@PAYP264MB4375.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DOYhU9A+jFNnz6N4D1OMoYQJBQdNCd4/YDxiavWBNzVpdkYJyqCUaiByYzus9V1JfP+UUqCi2m0l8LVAet8AXeIr1c1NN75WOK2bRTIyCB/YH9p6CDZmGL7eh2VSh/0y1USyq7+BzsumdKeZ7KgB904cN7fVx57FuuVRYO5x4JlQca5JFS5CG5XdRu+YpXEr0GqzjdrZAygCXUpln1q0nle+d4Y2od1D0rASrxI+rM0gBReJ2HU43BYIjYM2bmQuj+F7kFRcXVO8E3ZoHAjykGyFKnUBEf4u5BbRmVewyJwcpYRENvEE1G8bg42WOA9/mtluQH1MlYsh9xpViGxANq0/6KyLDw3V6d7142lPtAAxO9xNOVxnSlImcnots4tyvOphlEuxzi/ZhXY1BDXWTYhlvItdZF1CZ5eNRe6kiMwecYxFCs5eVu255hxMbdn/L4ZawVDL1r6vSLYtgfgCmP/j8PbMuPRVsEID0A5Q7zCtmdZD7mdpe9NhWgliQlClqTHDT6R6I7HpwxHzw5nHywesszgOZY3ft2mA0WJfkt6aNAyo9pjyNzNMBZIu9OudaJKlsKZz/KY/zXMWQnJXnu6qMiMlPgIKrFXVh+tFUkXes8Q7NGnuQwSyP6i+OXIYZmFvez1pptd4IzJGInRpKb9IrO+qAjVD34nNcaqZ5sjyxKbIijXXUOYKH6+rleMhzrCFTCFXOvsLiRLZJzN+vW3jfORtoA/811qcg3fwec81rhf991XqSHLcOMLqjA+mSM7CjGHX2CL/hRvfYQda2Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(38070700005)(122000001)(186003)(66574015)(86362001)(38100700002)(31696002)(8676002)(8936002)(31686004)(66556008)(66476007)(66446008)(4326008)(66946007)(76116006)(110136005)(316002)(54906003)(91956017)(36756003)(5660300002)(2906002)(44832011)(6486002)(508600001)(6506007)(7416002)(6512007)(71200400001)(64756008)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWlKQ3d1citFK3NUc3NKQ2JhWW9zT1ZIOTMwQ2xTdERxZjhYZ01TMnVPQkxW?=
- =?utf-8?B?NFgvN3pjUmowazVGdmZQL0thNUw1RDZZUGs1L1N3aGc1OFQySFlOYnJpa3My?=
- =?utf-8?B?enpxNTBYcUttWG9IM2UzNStrUXQ3KzlXcHJVS3FNc0JGSjVmR0ZTemZvMUxv?=
- =?utf-8?B?OVFrTG5Ob2s1VXpRczZPOGRVMllKQnNIOGFnY2o4cnNETFZFUUVxYUxham1a?=
- =?utf-8?B?RVcxY1JQUFRYR1QzdHJ2SGdObkw2TWgxUkJ3alo5UGRJNUk0b2lnQXBNQkov?=
- =?utf-8?B?M3NHMmFlRWlwU3phU2tDWlFmQ2tFZzMyMnhsVXRjK3RmWlVWb0hrTUlwT21Y?=
- =?utf-8?B?eWZIS2pocmdQZUZIQlZwOTMyQXFqdjFnSWkybWF0VFZ4UmtiVlBmYkt2YS9M?=
- =?utf-8?B?c3hXYVFhQUxmSkhsT21pOU1aQTh6YWZYT0Z3QWxHK3M1aGpvNXY3SmliRm1T?=
- =?utf-8?B?SnJKaFhJZng3THJRMWd0djdKY1puRk4zcWpUbzhrL1A4aDcvZU16SldPckU1?=
- =?utf-8?B?YnVLblAvS2d1dlc2dDRMN2pwRXJaejBocmVUR2tOa0wxM1dkQnViVG0zdWtl?=
- =?utf-8?B?UEowTWM5TENzalBXZWc4M0o5QnRKcU1uZ2NGbGxuVU5OUW9yZ1ZFWlAvN2sy?=
- =?utf-8?B?dVpPN3RjS2VPT0w0WStLRW5PMmtNcXNPU2ZRQzZUc2doTU9paS9GZTR0Sjhp?=
- =?utf-8?B?ZmlUbkY1M0QySEtHYlJNYUFQN2lKNXNHTkwzU2VOWW84WkxLZU41QUpGRjJK?=
- =?utf-8?B?cE8yaUlIQlM2UU1uc2xOa2s0S0NoWlMvUXFvaVJHcHhRaXAvbG1ISkptTVJw?=
- =?utf-8?B?V3puRTErYVVpZnFyOXFmQk90a3pWQlAwbzFrZ3kzMFQrTlpUUGs2WmIrOXhH?=
- =?utf-8?B?ejZya2pHWlBWR1JmUEF2R1oxWWdiS05UUG1TWDRGR0p0QlZ4UEdhSDM0OC95?=
- =?utf-8?B?RE13c2xYTjlHRzl3anV3b3dtZWIvQ1N3eUpyVTBGTDdMNXl1TWxYOXdMaHpV?=
- =?utf-8?B?bE9zc0J0VG5uQmxCdThodFNsK0tlTWd0eDRSUk5PTktSa3dSN0NwYjg5ekww?=
- =?utf-8?B?cXB3WEJIdG4yMDhXMXdKWlc4djg3ck9JbFpBUU5iekU3bklCNlpGT0NzTjcx?=
- =?utf-8?B?akJ2ZlhidDRvZDFBT0tWNk0zNFBxU1ErN3lCZjJOdTgvbmFmSDQveVBJUUEy?=
- =?utf-8?B?NUNwNmpwNDdaR0VZYndKRHVWVDEwazFLZ0hPa3hiMmJJQzJPWkRoWXhNelVF?=
- =?utf-8?B?cDkyV0dJV2prTmdsZ2IzL1BaZnRtSlhuVlQ3SWhnL3Z5UFhRbDVGcmZ4T2pE?=
- =?utf-8?B?SCtBL3ltVHJtSjNjVlprNUVTZzN2NDlQUFRIU1ZtQTFRUGIweWZ6cmJEbEgw?=
- =?utf-8?B?ZDE0cUhKZWExWXBXVDF3VjRWTTRPTmswb3NYK2d3U3hKa2hKNTVFNXRHclJo?=
- =?utf-8?B?a25JSGZ0VitxYnpXMkxTVzdWbUttVktCYUdJNksvdEdGWUh6Y2tFUC9PK3Er?=
- =?utf-8?B?VnVJcXp4V3pZUXRhZE1jeDdQUXZKNnFjNys5YmFqaE5mdnd6QnBsT2VTQUVx?=
- =?utf-8?B?ZFo1YzJzdncrRE1uR01oU3dxQ1FvbUdHZUhtVjlkRi9TeWVidGYwL3diYUEv?=
- =?utf-8?B?MEh5TVZ0aDFieEZPV2twM05DN3VMM0ROYjZDR2x2NFJhT09NRkMvdHBsUWda?=
- =?utf-8?B?M05mSEI1b3BsYThiZnEyU1FZZjRjZ1dPRyt6YnRhMXNqUGxqYmpkMXdXNHhH?=
- =?utf-8?B?eWlEcFZaMjA5U1Njck5xZVMwWXo2T0cwWUNhVkszMVJ5Z0QyZk9nZCs0MTds?=
- =?utf-8?B?RGZGZVVsTTNlMEJlbWtPaVZ6OHpwTEhqNlpBMnZKUEVrTDRUL1NiRS9nQ0d5?=
- =?utf-8?B?ekVjeVlBRStVWmtTSjhNUE5HSDV3d3Y0UXJEZ3creGwySzNwaElCNTNyUGsy?=
- =?utf-8?B?WG5hRTUyUjlIalBPYkhvRzJYUGJvVDRkUndqellXNlpkL0R5S0dBVGEremhV?=
- =?utf-8?B?bENWL1M5MUo1b0JFcjZHbHZ4Z3BOTVhzY0k1ZHZkeTc5TTJGQ0pwa1phNmJO?=
- =?utf-8?B?UFFHOHllVExKbklUYkY3Vzhuc25uVi9ueDl3Ymd6S01aQTM4a1hENlVnUlpx?=
- =?utf-8?B?YTVKWHBGeFNDalB5Z0QvZkVmdlZTNEpkbHRvZGZhWFN0K1JMdzN2bVRkcUoy?=
- =?utf-8?B?Z254OCs2YjVZdDYyRkphc2dJOWowVDduQk9kQkgrSDYrLzRWMmpPWk15MlJs?=
- =?utf-8?Q?Q9iIkX94DEHjguieBdGkY/t2ObGpxEV2/Hwk2OYzP8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <27E6AB1841577B4B81F961A6503F379E@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S1352934AbiBCSD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:03:26 -0500
+Received: from mout.gmx.net ([212.227.17.21]:43235 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230127AbiBCSDX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 13:03:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643911394;
+        bh=rcMALiVU94EBHgGtOoSbUxeTTuHQfsZj0+PxVfDuuX4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=arXjvE5ZJI5QP7F8DIrSdNNhk7JJaIq1AH7P8wYttBl+4F+yWk7JhsTPPGxzqrcx2
+         qdFy7dzWoVT6VmSakEK3jW7RWZyazkk6gXri1klCOiBc/bMs4Q8gxZv7OqWYwszTqG
+         nk+belRqzl5VPVf+b/S2H4FssZsbzogjip1E39mo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.128.137]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2O2Q-1nCvpX49rq-003yH7; Thu, 03
+ Feb 2022 19:03:14 +0100
+Message-ID: <7c41f8e2-8018-0984-a734-70ba321d7b48@gmx.de>
+Date:   Thu, 3 Feb 2022 19:03:12 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 064b2eb8-db7d-449a-baf0-08d9e73f2f9a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2022 18:01:21.5709
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0hbyIgEBuWi7SBMT56Zp/Qc2qjnR6rPdhGSdcWrBaFYgCHj3ZcB6A0ykzuQ5ORDEnRVY03KdHNypkZ4St9Uff0Fw6Rm89jfurNqy12T+614=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB4375
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [deller-parisc:5.17-vdso-mini-3 1/1]
+ arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: bad or irreducible
+ absolute expression
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202202032200.IMpqlhlW-lkp@intel.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202202032200.IMpqlhlW-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:5Knd8m93h7yJmDkV+FbSXfWhw6eL72kf4YN0sqBw7c9VNVByZJe
+ wLuHhhCV51QYMH/LyACjJMGDY59TZ7/GbIORdhk4ufoWgJybdeyJXZrgPlfawgJKwaS5N5i
+ ZLJlgYnM5d4O9/BDzqPCbt3Ea//mHbjiN8jAeRTfDdH5s6ROuHHeyAnAbYCgGLkOLaNKePu
+ IsQiR/1hi1dHGmYrOkJYQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7fz1rZn7HsU=:jCdzYwbthAQ9+3t8WkiJoA
+ 8Vzrp+d2w2BxtIScnNQlfLjpIStFvzPX6UrO/xgktid9mXFXeLWfUFLyAgLoAbO4zMg4MVjs3
+ LpphACjoxLpK0CUHUxPScIry8reKDPAAvsizM9EH0mJVRnKa4DkkkUsCJx6LCm35jpLDkgjEC
+ voUmqJzC/qBvQGQyunvJ11cZKtpGFLb5a3LdLNewcA7MbbH7i+67dWKlze+sRE6VbcIxZmMyX
+ L8YeA3KeI5RSQKklbksGREyqC8MCBADz1rBj49PCPjsodCf7B4sVB+kcRkIKxe+dIguRWYn52
+ Fw4gY77FdHGFVX99Q2+SKilwi3RvqyzShqnH83zR2uBe4bDOXctIwC/FinEkyUZGfqeUkaZfA
+ Yumn2/NLh/KsAdPFxQrSmXguQqlka2K9TjlHZs9jKat21oC6x+EZ27MUiItSUa8QGU3GUibgp
+ 1vjesti7yS2QLRN5SywRKxYdRW4SsfeR0G1ugmxPu3ybVmGqyqMHv1LQ1+RsrZ/K4+w98jL/y
+ NF9v30vZNmUTXpeEwKOIzpHmF5asxmJSVU2NRoJrckaEzBX45B+h6X7llYI3g8umqVKrz2kzo
+ RoGHXrcnKeEVKKmwjCfURS+qswyFkTxK0sSs60RqNdPeeUhzM51NfI5Jl8HkXvsazbbA9wfup
+ G3+ltzd9DpGJTY1QqqoNq8FESLge1v0m6lvlpxvd0JEoHFkRJCfdIO0K9vMVZmsKkiMMIRU9I
+ fUlCrKIIwUl1qRKETZK/o1vuysRgm+1NUhUIrcTHAUIcEffQvRQu+JgG7O/J0/B1b166ITPOQ
+ ecK3QLYHKlJUfhuMNJ28CFmd7cZgnvaLivNKZiLtkUVPZAg88AGxcmuIW4bcrJdKWG4a7trcJ
+ TU3JB1pwazoyyT8uldmpbns8bjUI6TIY3R12W1H6cwZlBp4Jgvch7lO7Qj1AtIyi/qVHrNfJa
+ vRA00FgOlKVQsqQuBIXxi3CmAmVMBSKymRncyXFThtcbl+ldPusSeGwH5vg0IeXvD2/E/xuvS
+ k7Xg8WBvYZ5IWUg3GfNM2+k4VVMF0GK6NYhFZySAJuqaN39AKZCCBqSGgLNbmGu9FctOGAfLu
+ FdAVqKKx6ALbaM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDAzLzAyLzIwMjIgw6AgMDE6MjAsIEx1aXMgQ2hhbWJlcmxhaW4gYSDDqWNyaXTCoDoN
-Cj4gT24gU3VuLCBKYW4gMzAsIDIwMjIgYXQgMDk6MzI6MDFQTSArMDAwMCwgQWFyb24gVG9tbGlu
-IHdyb3RlOg0KPj4gSGkgTHVpcywNCj4+DQo+PiBBcyBwZXIgeW91ciBzdWdnZXN0aW9uIFsxXSwg
-dGhpcyBpcyBhbiBhdHRlbXB0IHRvIHJlZmFjdG9yIGFuZCBzcGxpdA0KPj4gb3B0aW9uYWwgY29k
-ZSBvdXQgb2YgY29yZSBtb2R1bGUgc3VwcG9ydCBjb2RlIGludG8gc2VwYXJhdGUgY29tcG9uZW50
-cy4NCj4+IFRoaXMgdmVyc2lvbiBpcyBiYXNlZCBvbiBicmFuY2ggbWNncm9mL21vZHVsZXMtbmV4
-dCBzaW5jZSBhOTdhYzhjYjI0YTMvb3INCj4+IG1vZHVsZXMtNS4xNy1yYzEuIFBsZWFzZSBsZXQg
-bWUga25vdyB5b3VyIHRob3VnaHRzLg0KPj4NCj4+IENoYW5nZXMgc2luY2UgdjEgWzJdOg0KPiAN
-Cg0KSSBoYXZlIGFub3RoZXIgY29tbWVudDogSSB0aGluayBwYXRjaCA1IHNob3VsZCBiZSBkcm9w
-cGVkLg0KDQpIYXZpbmcgc29tZXRoaW5nIGJlaGF2ZSBiYXNlZCBvbiBhIENPTkZJR19BUkNIX0hB
-U19TT01FVEhJTkcgaXRlbSBpcyANCndyb25nLiBJdCBpcyBub3QgYmVjYXVzZSBhIHBsYXRlZm9y
-bSBzZWxlY3RzIA0KQ09ORklHX0FSQ0hfSEFTX1NUUklDVF9NT0RVTEVfUldYIHRoYXQgdGhlIG1v
-ZHVsZSBjb3JlIHNob3VsZCBiZWhhdmUgDQpkaWZmZXJlbnRlbHkgdGhhbiB3aXRoIG90aGVyIHBs
-YXRmb3JtcyBhcyBmYXIgYXMgdGhlIHVzZXIgaGFzIG5vdCANCnNlbGVjdGVkIENPTkZJR19TVFJJ
-Q1RfTU9EVUxFX1JXWC4NCg0KQW5kIHRoZSB0b3BpYyBoZXJlIGlzIHdyb25nLiBJdCBpcyBhIGNv
-aW5jaWRlbmNlIGlmIG1ha2luZyB0aGF0IHN0dWZmIA0KZGVwZW5kIG9uIENPTkZJR19BUkNIX0hB
-U19TVFJJQ1RfTU9EVUxFX1JXWCB3b3Jrcy4gVGhpcyBpcyBqdXN0IGJlY2F1c2UgDQp0aGUgb25s
-eSBhcmNoaXRlY3R1cmVzIHRoYXQgZG8gdGhlIG1vZHVsZSBhbGxvY2F0aW9uIHdpdGhvdXQgRXhl
-YyBmbGFnIA0KYXJlIGFyY2hpdGVjdHVyZXMgdGhhdCBoYXZlIGFsc28gc2VsZWN0ZWQgDQpDT05G
-SUdfQVJDSF9IQVNfU1RSSUNUX01PRFVMRV9SV1guIEJ1dCBpdCBzaG91bGQgYWxzbyB3b3JrIG9u
-IG90aGVyIA0KYXJjaGl0ZWN0dXJlcy4NCg0KSSBkb24ndCBrbm93IGV4YWN0bHkgd2hhdCB3YXMg
-dGhlIG1vdGl2YXRpb24gZm9yIGNvbW1pdCA5MzY1MWY4MGRjYjYgDQooIm1vZHVsZXM6IGZpeCBj
-b21waWxlIGVycm9yIGlmIGRvbid0IGhhdmUgc3RyaWN0IG1vZHVsZSByd3giKSBhdCB0aGUgDQpm
-aXJzdCBwbGFjZSBidXQgaXQgaXMganVzdCB3cm9uZyBhbmQgd2Ugc2hvdWxkIGZpeCBpdC4NCg0K
-bW9kdWxlX2VuYWJsZV94KCkgc2hvdWxkIHdvcmsganVzdCBmaW5lIHJlZ2FyZGxlc3Mgb2YgDQpD
-T05GSUdfQVJDSF9IQVNfU1RSSUNUX01PRFVMRV9SV1guDQoNClRoYW5rcw0KQ2hyaXN0b3BoZQ==
+On 2/3/22 15:37, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-li=
+nux.git 5.17-vdso-mini-3
+> head:   62c208e2c93066ee050644384bb12ca1d0b2bdb1
+> commit: 62c208e2c93066ee050644384bb12ca1d0b2bdb1 [1/1] parisc: Add initi=
+al vDSO support
+> config: parisc-generic-64bit_defconfig (https://download.01.org/0day-ci/=
+archive/20220203/202202032200.IMpqlhlW-lkp@intel.com/config)
+> compiler: hppa64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sb=
+in/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-=
+linux.git/commit/?id=3D62c208e2c93066ee050644384bb12ca1d0b2bdb1
+>         git remote add deller-parisc https://git.kernel.org/pub/scm/linu=
+x/kernel/git/deller/parisc-linux.git
+>         git fetch --no-tags deller-parisc 5.17-vdso-mini-3
+>         git checkout 62c208e2c93066ee050644384bb12ca1d0b2bdb1
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cr=
+oss O=3Dbuild_dir ARCH=3Dparisc prepare
+
+
+Please drop the "ARCH=3Dparisc" in this prepare command, so this is suffic=
+ient:
+
+	COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-11.2.0 make.cross O=3Db=
+uild_dir       prepare
+
+
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconfli=
+cts-sr]
+>    scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconfl=
+icts-rr]
+
+>    arch/parisc/kernel/vdso64/Makefile:30: FORCE prerequisite is missing
+
+
+Since I'm not a GNU make/Makefile expert, I currently don't know how to pr=
+event this
+"FORCE prerequisite is missing" warning.
+Any help is welcome here :-)
+
+Helge
+
+
+
+
+
+>    arch/parisc/kernel/vdso32/restart_syscall.S: Assembler messages:
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: bad or irreduci=
+ble absolute expression
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: junk at end of =
+line, first unrecognized character is `:'
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:26: Error: no such instruc=
+tion: `ldw 0(%sp),%r31'
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:29: Error: no such instruc=
+tion: `be 0x100(%sr2,%r0)'
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:30: Error: no such instruc=
+tion: `ldi 0,%r20'
+>>> arch/parisc/kernel/vdso32/restart_syscall.S:32: Error: .cfi_endproc wi=
+thout corresponding .cfi_startproc
+>    arch/parisc/kernel/vdso32/sigtramp.S: Assembler messages:
+>>> arch/parisc/kernel/vdso32/sigtramp.S:39: Error: unknown pseudo-op: `.p=
+roc'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:40: Error: unknown pseudo-op: `.c=
+allinfo'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:41: Error: unknown pseudo-op: `.e=
+ntry'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:44: Error: no such instruction: `=
+ldi 0,%r25'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:45: Error: no such instruction: `=
+ldi 173,%r20'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:46: Error: no such instruction: `=
+ble 0x100(%sr2,%r0)'
+>    arch/parisc/kernel/vdso32/sigtramp.S:49: Error: no such instruction: =
+`ldi 1,%r25'
+>    arch/parisc/kernel/vdso32/sigtramp.S:50: Error: no such instruction: =
+`ldi 173,%r20'
+>    arch/parisc/kernel/vdso32/sigtramp.S:51: Error: no such instruction: =
+`ble 0x100(%sr2,%r0)'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:54: Error: unknown pseudo-op: `.e=
+xit'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:55: Error: unknown pseudo-op: `.p=
+rocend'
+>>> arch/parisc/kernel/vdso32/sigtramp.S:76: Error: unknown pseudo-op: `.s=
+tringz'
+>    make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kern=
+el/vdso32/restart_syscall.o] Error 1
+>    make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kern=
+el/vdso32/sigtramp.o] Error 1
+>    make[2]: Target 'include/generated/vdso32-offsets.h' not remade becau=
+se of errors.
+>    make[1]: *** [arch/parisc/Makefile:188: vdso_prepare] Error 2
+>    make[1]: Target 'prepare' not remade because of errors.
+>    make: *** [Makefile:219: __sub-make] Error 2
+>    make: Target 'prepare' not remade because of errors.
+>
+>
+> vim +16 arch/parisc/kernel/vdso32/restart_syscall.S
+>
+>     13
+>     14		.text
+>     15
+>   > 16	ENTRY_CFI(__kernel_restart_syscall)
+>     17		/*
+>     18		 * Setup a trampoline to restart the syscall
+>     19		 * with __NR_restart_syscall
+>     20		 */
+>     21
+>     22		/* load return pointer */
+>     23	#if defined(__VDSO64__)
+>     24		ldd	0(%sp), %r31
+>     25	#elif defined(__VDSO32__)
+>   > 26		ldw	0(%sp), %r31
+>     27	#endif
+>     28
+>   > 29		be	0x100(%sr2, %r0)
+>   > 30		ldi	__NR_restart_syscall, %r20
+>     31
+>   > 32	ENDPROC_CFI(__kernel_restart_syscall)
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>
+

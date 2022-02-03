@@ -2,222 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9824A7E20
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B704A7E17
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349029AbiBCCyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 21:54:20 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:49804 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233002AbiBCCyS (ORCPT
+        id S1347742AbiBCCpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 21:45:32 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:34797 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233002AbiBCCpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 21:54:18 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2363F40399;
-        Thu,  3 Feb 2022 02:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1643856858; bh=g58bStwD3wwhMbv9tdPnGGYBBNUPbE5jQLMDDh8xYjY=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=SCk25dcr0ginbnWHhLxUc3cAmVpIOByAx9ZwF4/bHhgUD/RZRT0J99h+pDhESB+eF
-         Egg1p8jlioMT60GiIAZXWxFbE7MsNwktZIzXVcvWhyMd7GyJi6KsOpYDeQNHvuOBuY
-         RgyXyGX+wZkfADrOHFCVz8MPBF8RLM20reMrGFmXIco15DbfnBlp7b4EiVRhVTFYOf
-         Vxk2tOMylzQmNNVPTweL3sJjb29naCi0OeyYUuv3yy2MjOymYcxsMyqr/jyc6AWy5K
-         LUG6PGBQo6TB0OEdN58e6KFqje97+5IqnZvEkNUFtw+KKCxxvmRDRebaDVI/pACepC
-         BLpeGeP6tJCFQ==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id A14CFA0070;
-        Thu,  3 Feb 2022 02:54:17 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 1BD5E4004F;
-        Thu,  3 Feb 2022 02:54:17 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="hFhshdR0";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=huPT0IIWElVajEhkDWHqWPaX4fnTiuovBqRJLDrwOdSf7bq3JUdBnzDMs1byP++kU7qx/qnfamUeBs3ARzhWHZ7irWCfn73uCGuXcOXsxpPq/BDCZLmvVgf9SJ7KkY/FAMQ4qXhFJf8a6uIovJ7zD95qploLZV/1f16UyskSuJOjV+dJZJXZE5lToQFjL+qtnvY2f5oDx01NmRiBNdyjOnFrUa8os9mDG+YdEK4n2xHj8hkhGFk6YrX3Qn3G2ICyJYzLDAHsiZVVFF/mFSxF8nc4w444bI3uleN/chqCWnNAd9tbYsxTpo7/6sAz0gE8rgjR0piMYV12namZj953qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g58bStwD3wwhMbv9tdPnGGYBBNUPbE5jQLMDDh8xYjY=;
- b=mfuKX7X1XAOnt4rWDB7Pg7Ae4TkwnqjFacnxs0ySYx7zuwEbJTIjtI/WdHh02RDJDKoieMmq3S6dJLlnGQcVcRaJutdeEKwi674J84OQVSpFuHEf9dN6JCkdyKSp1ojVfGgEi6WHp9raGK7DD3dDcmPBRtWcR88CqrhliX3Esc4atK4Y+I4/xLSwbDJDpDBnWJA5OSlAL6f5+d95aJtkyKNBUjjs1NJUsLQz5fODzUnI2o4W1MxQ7qiVGG3jt26saHCwPOX4eiZ88NuidIxXUv3yUYmrikH8QNLCh0/dR9r/yieP4Dwrw768yY27T7C4JkrLqUuN5z+7xi3//S9iQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g58bStwD3wwhMbv9tdPnGGYBBNUPbE5jQLMDDh8xYjY=;
- b=hFhshdR0aUlXtIKRYw6zKyhOiyJuWpz0WwgINlXvN9Q80k1BTnGmh5a/hfQFMCaKigMAgJbOudaQxQOQv3Z+xQBUhENBxQQAlRZ8vygFXavKFIxWS44ClSE3thnZk+S5mEjlAymwVBemjXCxLUtAhsCz1g8efMlTl2+481uju/s=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by BN8PR12MB3330.namprd12.prod.outlook.com (2603:10b6:408:43::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.17; Thu, 3 Feb
- 2022 02:54:14 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::c5f4:5df4:b5bf:b13e]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::c5f4:5df4:b5bf:b13e%3]) with mapi id 15.20.4930.022; Thu, 3 Feb 2022
- 02:54:13 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
-Thread-Topic: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
-Thread-Index: AQHYFtfE0uDHnqoRTUCfYSch4bkt3ayBJPaA
-Date:   Thu, 3 Feb 2022 02:54:13 +0000
-Message-ID: <e0e36d42-5479-fd8c-3868-384161031738@synopsys.com>
-References: <20220131192102.4115473-1-andrew.smirnov@gmail.com>
-In-Reply-To: <20220131192102.4115473-1-andrew.smirnov@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2904f0bf-af12-42d6-c347-08d9e6c0761e
-x-ms-traffictypediagnostic: BN8PR12MB3330:EE_
-x-microsoft-antispam-prvs: <BN8PR12MB3330C08F2CB920B12DD2CF80AA289@BN8PR12MB3330.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fvLjrhW0A75rsFMXvOYfm8HB2k89P/nELz52E7xAEX78jbPMaL9pllLk2Z6vJv0UKDmOIHQsba1ohybdZFJqCU6C2+GLXjxjrvQntHNm2Yqr3cxent1mFnUeovhPBC8kxVecJWSUG1kMyg6jfrP3EalLi7RWXm94yEzKIek/SAsNxL47fvm8o5gQJaSSjIVCfIAjb9JzZxvpOuWGvRDAA0IrXXkdQZ9YbbJRDHicb5NcP2aZcPXgCB6a8QwKL0llpg9QRPfsh6MVf9umDn5pADMVJIb8ACyRKLkuZM7xkiEjjQIGhWCBLg3uIIdx71DHwrht/tNZDg9SASx1Aa1XOGqOQs11I/o3d05/EEXtEk7ssCnCfDejI9Ty/ED0sPWCFblK4KEK7KbOxNhI/om26fOWzeWTyUb1Y/nLlJ9CDm5OSqAXoDKAPDyReVvv+SYdu6sGTXfNZlgiU9chcxRlfBmS2wBl3O7tLwSuaHSe6LDI89iWwu+1GIbxibNuScsHKi5jVbB/dL1CiO1HTIFKWhdiKDqNmRjnw3729ixExChAaT1UMfj7beE/YpmnnSZLhgcSswHZ6Y3PX2kADKB7h36T8HJ8aCKTOUDf4SNJu1oNxjnSutxsVef/Fd0+gPDEZO8FGmyH5KFLsiDLUytrewm+LBjUVDL9urnredoxRZsUrRSzsQpDltvjgYOh2aa6VdfcoUIVL3XaeG5deqkCWWkom9Xrj7iUpICDgUWQgUMbInRC+UUwdvYRrw9m24iYCYbqclsp60OgO6RaUYGWog==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(31686004)(31696002)(86362001)(6486002)(36756003)(54906003)(38070700005)(316002)(110136005)(122000001)(38100700002)(508600001)(8936002)(186003)(83380400001)(2906002)(4326008)(8676002)(71200400001)(66476007)(64756008)(66446008)(5660300002)(2616005)(6512007)(76116006)(26005)(66946007)(66556008)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Zzg5M0NIWVdZQkwvV1k5VCt0cmwyQitFeDYwWnU3SFVCem0vNEsxcUpudkZI?=
- =?utf-8?B?Z2d1VTd5U3lrd20rL1VwdkE4aDA4VEhNSUp2YS9HMEdOcWFIcWlXOVhjcGpn?=
- =?utf-8?B?eXNONjhZZmE5OGdQcDdwcmQ3cU1HYjlLcENIeEl5ZlZOb2NwQkdISXlNUHor?=
- =?utf-8?B?eWE5N0NPQmdwTENVNDh0d2JMZ1kxL1pBKzZUTUhzYnNDM0JsdTFTTUlyempZ?=
- =?utf-8?B?MTBQWEFpcEdNelR6bXBPQXFWR2NseEliQ0MwNmdDYi8zOW1pdXhyREtIQThF?=
- =?utf-8?B?eG1aK0ZxaWhvQ0F6M2tnd25qSzZKWmg2Y1M0dEdkSng5WlN0bVZ4T2s3SlR2?=
- =?utf-8?B?QlJEZE51Yi9KVWN1OVhJYmEvdzNXSURjRWx3MDZVL2VlWTJzSGFOSUM3ZTJC?=
- =?utf-8?B?ZEp2SEt1c3VyQ1hoMXRFdVZjU1k1SGJVQWtrWHFUQzd4ckUzSlNEdkd4cnZU?=
- =?utf-8?B?K2FSYnI2cXhjUmVrWGVqVlRZT2hCWE4yd25ZbXYxMEYxQnF4YS9zQ09sOFdP?=
- =?utf-8?B?dVlNNzRPVlZnQVBlRk51YW5KNUU5KzRac2FiZ0loL0ovRS94STlvbGcvY2Fm?=
- =?utf-8?B?R2gxQm9VNVg3WEQ1SFBPRGNNcnlVVVVIb2U1T2ErcnBUeE1nbDVJVU5BN0ZW?=
- =?utf-8?B?ZnZPKzJIT3EwdjZqQi9SN2Qva0Uwc3hDS2tSQWtIMnJla3B6UjluaTI1VW42?=
- =?utf-8?B?WHFvOXBsYTZsaFFWK2pFNjIxYmgxbjQvamFVcXJ0SmRISjQ1YnUxU2VzaW1V?=
- =?utf-8?B?bG1CZWU4RFUrMkFBRTMvcmFid1JxMUtRbDhSdW43Z3dBZFZPdFE5OWFwQTlP?=
- =?utf-8?B?ZENUNXR3RXNoRGJ3Z1V1OVNUemdNNWYvUXdYd1AxcEwyUVJ3QU5oZ0N4WllQ?=
- =?utf-8?B?SzFKR3lYMDJ4TjBRRnlNVWpqYStUdFphOWZ4eWJqNDdBUXp4M29MMDg5cldX?=
- =?utf-8?B?bGx0MUlIUWFrOHluQXliK0tEcmFzNDBSTkJVK280T0lVeHZHejl6TUJKTDI2?=
- =?utf-8?B?ajBEd0dhbndOUVFTa0Uzd2NlUnJMQWhZM0lSNlNKOFlYMHJEaTNnOUxsaVc4?=
- =?utf-8?B?SkFNenhLMGJKcStaYUdrdEJyLzdFQmlta3pQbGNBUEJZVWNuaFNROGlkR1dn?=
- =?utf-8?B?cXk2YlZFWkw4cVVSZWhLaFdLTStjVjd2aHhwb0JQc0tNOGNpdkU4THBVUmhZ?=
- =?utf-8?B?b3VGNjl6dGQ1a3FxUlhVbE5McUxFK3lwd3JPaUZtbUpnUWR4WHFhNmQ2ZEZl?=
- =?utf-8?B?ZnIzS0JvbURWVWlPeDZIL1M2cE1UeGZ0UnFCbjV0UjdpQUF4T1NmRjk1YXE3?=
- =?utf-8?B?aGg1cTlkanZlaUd0ekUweUJoOXpJL1FpSUx5ZnE5THFQbHA3cjhKRGZFOWow?=
- =?utf-8?B?T2d3VGZ2dlRHTzdEaEVDd1RqUGYxMTJvY3JBWVJUTDFLQUg5bkozWlBkSUQ0?=
- =?utf-8?B?RmhVL2xSM0dOWk53UWZHTUFTbUphZS9nY0Q5RCs1VVVHZlR5Z0RPRWhSWUxC?=
- =?utf-8?B?cENyWUtBM25xV2xhZ3VkemY4VnlCbFEyaHZTZGJUaWFBdC83OTJSUlRTL3E3?=
- =?utf-8?B?TVpYOXR2KzdoTEZpZzRCS2RIc01LU3lmQnhJOXFQV2w2d3pyNG1mazFndVVT?=
- =?utf-8?B?cExUUU91K1hxc3R4ZTBLc2xoaHd4RFdCYU1oNlVvU1ZSSFZNMkNUSUxYUmQ1?=
- =?utf-8?B?aVJRLzFWYXlqNnkrNjBKNzRNdGprSW1aU1U0dzhhT3g5ZjBuZHgwcEtUT0R5?=
- =?utf-8?B?Y1p0VkluR0syblZOcXlsa3Y4a2gvRFU5TzVCWEdqSis2RTZ6Y2hUU0EveDhP?=
- =?utf-8?B?dW1nWG91bDduclRrd1RUakw3eFBOc2V3N0FZN1NoMkRVUGZTK0FVcEhMVW1q?=
- =?utf-8?B?d08wV2J4YnNERjFJQVoyOHRzMUtsN3lRb1FZdHBubWxBK1RrSzdJL1JuaFd0?=
- =?utf-8?B?S3lWUHhudUZGcXpRN0NEMDhxWVJreVJkUGZzS3BYRGpScHhYRTdwd3g5aXFW?=
- =?utf-8?B?V2tXZ0h1OUw1bVRWWlBKNEZYYXo0ZlY3NUkrSlFLZDRGV0IwT2ZKSVZDYkQw?=
- =?utf-8?B?bm05cGRVS0FuaURSZ05Ya2V1cW0reE5IdGNGVXpsc0NDMFlENHlJN3g1d3dP?=
- =?utf-8?B?NFhvL2kvNnlla0VhcVlzUjYxZC9ZRzVLQUROUk9WaXpZQ1VuUXlnMGRIaVRH?=
- =?utf-8?B?V1E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9273064B5F723243A78AC1B197CB832F@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 2 Feb 2022 21:45:30 -0500
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220203024529epoutp02c1019834935ba1b5a710051c51f3d33f~QJp8zqEyD0743807438epoutp02U
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 02:45:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220203024529epoutp02c1019834935ba1b5a710051c51f3d33f~QJp8zqEyD0743807438epoutp02U
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1643856329;
+        bh=LTMx0mvoTh7gsldxW1ELZHlFxhkhF5WWa60fzIk8E7k=;
+        h=Date:Subject:To:From:In-Reply-To:References:From;
+        b=tL3/76ezFVuw51yj/KspCnSx1sXvx4vqoq3PgDwTpdJa0tUnoWd2Ababs8xkqkC3G
+         CffoSqw74ZBlTSxXL2w92nbmLgsicmAYKhURDjjKh7W2QAbUXk77HzXOLa4Vy4fLRN
+         N3XdEt0zfJReJ7Zc4tFz1JVmXxA8rTQixsnZpQb0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220203024528epcas1p43e630f8cfcc2a02b75bcee3ed700cef9~QJp8G2Ye53213532135epcas1p4K;
+        Thu,  3 Feb 2022 02:45:28 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.237]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jq31b4GtNz4x9Px; Thu,  3 Feb
+        2022 02:45:23 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F1.64.64085.3C14BF16; Thu,  3 Feb 2022 11:45:23 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220203024523epcas1p49abd1129eeb53bbf48c9933f23060282~QJp3MG5kt2091920919epcas1p4d;
+        Thu,  3 Feb 2022 02:45:23 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220203024523epsmtrp28a7e26c1d45f9ee51b1dc8e15f07562d~QJp3LNTo_2773627736epsmtrp2w;
+        Thu,  3 Feb 2022 02:45:23 +0000 (GMT)
+X-AuditID: b6c32a35-9c3ff7000000fa55-06-61fb41c36050
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        15.58.08738.3C14BF16; Thu,  3 Feb 2022 11:45:23 +0900 (KST)
+Received: from [10.113.221.211] (unknown [10.113.221.211]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220203024522epsmtip204196f5f1c1c26fb95e31826b9737847~QJp2lyW8s2085620856epsmtip2d;
+        Thu,  3 Feb 2022 02:45:22 +0000 (GMT)
+Message-ID: <0813963b-db28-f931-cf28-771b2141ee1c@samsung.com>
+Date:   Thu, 3 Feb 2022 11:57:12 +0900
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2904f0bf-af12-42d6-c347-08d9e6c0761e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2022 02:54:13.8847
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fyEJg+Yw5l6f7G1EAerTkWhMNm/HuYySqu0JKs667J5oL7zsWDZq7Dc07tjA/8KmPHkG+x9TtejLmu9inblrcQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3330
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/exynos: fimd: add BGR support for exynos4/5
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        Joonyoung Shim <jy0922.shim@samsung.com>,
+        Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Inki Dae <inki.dae@samsung.com>
+In-Reply-To: <20220129220153.GA33165@adroid>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmge5hx9+JBo/eKFj0njvJZPF/20Rm
+        iytf37NZvLh3kcVi49sfTBZnm96wW2x6fI3V4vKuOWwWM87vY7I4828qi8WMyS/ZHLg9ZjX0
+        snns/baAxWPnrLvsHtu/PWD1uN99nMlj85J6j74tqxg9Pm+SC+CIyrbJSE1MSS1SSM1Lzk/J
+        zEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpUSaEsMacUKBSQWFyspG9nU5Rf
+        WpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd0Tl5H3PBI82KW39PMDYw
+        nlHsYuTkkBAwkWjefJWti5GLQ0hgB6PE3W9rmCGcT4wS6059YIdwPjNK7H67jg2mZVrXN0aI
+        xC5GicMv9zBBOO8ZJdY+nskMUsUrYCexvO0lI4jNIqAicef2P3aIuKDEyZlPWEBsUYEIiZdH
+        /jKB2MICLhJzFh0GizMLiEvcejIfbKiIwElmiQf3JoENZRNQlZi44j7YGZwCOhJnD3xngmiQ
+        l2jeOhvscAmBHRwSM3eeZoW41UXi679eFghbWOLV8S3sELaUxOd3e9kgGiYzSty5voIFwpkB
+        9NDP64wQVcYS+5dOBlrBAbRCU2L9Ln2IsKLEzt9zGSE280m8+9rDClIiIcAr0dEmBFGiJHHs
+        4g2oKRISF5ZMhIadh8SPY+fAbhMSqJdY2HeVeQKjwiykgJmFFACzkPw2C+GIBYwsqxjFUguK
+        c9NTiw0LDOERnpyfu4kRnI61THcwTnz7Qe8QIxMH4yFGCQ5mJRHevQu/JwrxpiRWVqUW5ccX
+        leakFh9iNAVGz0RmKdHkfGBGyCuJNzSxNDAxMzI2sTA0M1QS51017XSikEB6YklqdmpqQWoR
+        TB8TB6dUA1PovN512xaaXrdbvW1Jj7dnUrPX9NerTW/+W32GedYb7u4T/K363GopswyOd/fV
+        KzEX+xhfX7X5uuf65ya323+ckO+tctwbEX7v56P9vSc59Oau+hn5ypj1hEd97eZjJr0Vbx57
+        Fs0+lfxd+Iv8l2X31INO/DJr6KvLjiwNn8Dy0vmo096XC99Xic9Z+dR+7Vmx87PLUhXSw5PP
+        rtm5xqhRqm3mc7bPQedL9e7377Kp/KAh8PTT7WmxnDGPlzH+2ft3f/+evl9HKwIXXhZ9yJh6
+        u/m09cJET1ebx12CVnVL12vGXZHfV2Ji7HUi8EQmR2X6IoXNDpb/XnRkffUNELpi9mh6av/m
+        P8ee+Rmd6pNSYinOSDTUYi4qTgQAVn7erFAEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupikeLIzCtJLcpLzFFi42LZdlhJXvew4+9Eg6kT2S16z51ksvi/bSKz
+        xZWv79ksXty7yGKx8e0PJouzTW/YLTY9vsZqcXnXHDaLGef3MVmc+TeVxWLG5JdsDtwesxp6
+        2Tz2flvA4rFz1l12j+3fHrB63O8+zuSxeUm9R9+WVYwenzfJBXBEcdmkpOZklqUW6dslcGV0
+        Tt7HXPBIs+LW3xOMDYxnFLsYOTkkBEwkpnV9Y+xi5OIQEtjBKNG88jFTFyMHUEJCYstWDghT
+        WOLw4WKIkreMEqcWLWcF6eUVsJNY3vaSEcRmEVCRuHP7HztEXFDi5MwnLCC2qECERNuyKcwg
+        trCAi8ScRYfB4swC4hK3nsxnAhkqInCaWWLihZVgg4QE6iVOT14NVsQmoCoxccV9NhCbU0BH
+        4uyB72C3MQuoS6yfJwQxR16ieets5gmMgrOQrJ6FZMUshI5ZSDoWMLKsYpRMLSjOTc8tNiww
+        ykst1ytOzC0uzUvXS87P3cQIji4trR2Me1Z90DvEyMTBeIhRgoNZSYR378LviUK8KYmVValF
+        +fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw7TKYNMNy99tfObFSP+Rv
+        508RSnPf75H10euah3VIu8nfRh7x/y22Uwqf8/2f6buIMWq9gs+izY9yf3ExK2/0M7k7VTWe
+        v9DUkCMqw073gmbN+oucN20uOz6fPV1rp85+tolhi95MrDgS47hx7uXaA/oS5kViHHvEjnHL
+        xhZPEzYPX3LQI2KCi96Wz0rKav/X3705XWaWvmF7ybWftkclU89xJd3uEp8UbOXTOeN6aRPH
+        oWUq7GrN+3c3fUopXuqtPnvPYrNTXMdnZOx7d+N79JyHPbsnKTPMWrGFQ91MtCLBdm/eU/XK
+        laqB6v7/M04c2dqaseDHiTVqW75GqP1hOjR99zYZ4den5rrNXsW9T4mlOCPRUIu5qDgRAPSd
+        y2YdAwAA
+X-CMS-MailID: 20220203024523epcas1p49abd1129eeb53bbf48c9933f23060282
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566
+References: <CGME20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566@epcas1p2.samsung.com>
+        <20220129220153.GA33165@adroid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QW5kcmV5IFNtaXJub3Ygd3JvdGU6DQo+IEl0IGlzIG5lY2Vzc2FyeSB0aGF0Og0KPiANCj4gICAg
-Uk9MRV9TV0lUQ0ggJiYgZGV2aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkd2MtPmRldiwgInVzYi1y
-b2xlLXN3aXRjaCIpDQo+IA0KPiBpcyB0cnVlIGluIG9yZGVyIGZvciBkd2MzX2dldF9kcl9tb2Rl
-KCkgdG8gX25vdF8gZm9yY2UgdXMgZnJvbSBPVEcgdG8NCj4gUEVSSVBIRVJBTCBtb2RlIGhlcmU6
-DQo+IA0KPiAgICBpZiAobW9kZSA9PSBVU0JfRFJfTU9ERV9PVEcgJiYNCj4gICAgICAgICghSVNf
-RU5BQkxFRChDT05GSUdfVVNCX1JPTEVfU1dJVENIKSB8fA0KPiAgICAgICAgICFkZXZpY2VfcHJv
-cGVydHlfcmVhZF9ib29sKGR3Yy0+ZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpICYmDQo+IAkhRFdD
-M19WRVJfSVNfUFJJT1IoRFdDMywgMzMwQSkpDQo+IAltb2RlID0gVVNCX0RSX01PREVfUEVSSVBI
-RVJBTDsNCj4gDQo+IGFuZCBkd2MzX2RyZF9pbml0KCkgdG8gYmUgY2FsbGVkIGxhdGVyIGluIGR3
-YzNfY29yZV9pbml0X21vZGUoKS4gU28sDQo+IHRvIGF2b2lkIGFsd2F5cyBpZ25vcmluZyBleHRj
-b24gZGV2aWNlIHJldHVybmVkIGJ5IGR3YzNfZ2V0X2V4dGNvbigpDQo+IGNoYW5nZSBkd2MzX2Ry
-ZF9pbml0KCkgdG8gY2hlY2sgYW5kIHVzZSBpdCBmaXJzdCwgYmVmb3JlIGNoZWNraW5nIGlmDQo+
-IGR3YzNfc2V0dXBfcm9sZV9zd2l0Y2goKSBzaG91bGQgYmUgY2FsbGVkLg0KPiANCj4gQ2M6IEZl
-bGlwZSBCYWxiaSA8YmFsYmlAa2VybmVsLm9yZz4NCj4gQ2M6IFRoaW5oIE5ndXllbiA8dGhpbmhu
-QHN5bm9wc3lzLmNvbT4NCj4gQ2M6IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGxp
-bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU2lnbmVkLW9mZi1ieTogQW5kcmV5IFNtaXJu
-b3YgPGFuZHJldy5zbWlybm92QGdtYWlsLmNvbT4NCj4gLS0tDQo+IA0KPiBIb3BlZnVsbHkgSSBk
-aWRuJ3QgbWlzcyBzb21ldGhpbmcgaW1wb3J0YW50IG1ha2luZyB0aGlzIHBhdGNoDQo+IHVubmVj
-ZXNzYXJ5LiBEb24ndCBrbm93IGlmIHRoaXMgaXMgYSBnb29kIHNvbHV0aW9uIG9yIG5vdCwgcGFy
-dCBvZiBtZQ0KPiB0aGlua3MgdGhhbiBtYXliZSBjaGFuZ2luZyB0aGUgYWZvcmVtZW50aW9uZWQg
-Y29kZSBpbg0KPiBkd2MzX2dldF9kcl9tb2RlKCkgdG8gYWNjb3VudCBmb3IgZXh0Y29uIHdvcHVs
-ZCBiZQ0KPiBzaW1wbGVyL2JldHRlci4gSGFwcHkgdG8gcmV3b3JrIHRoaXMuDQoNClRoZSBkcml2
-ZXIgZWl0aGVyIHVzZSBleHRjb24gb3IgdXNiLXJvbGUtc3dpdGNoLiBJdCBkb2Vzbid0IG1ha2Ug
-c2Vuc2UgdG8NCmVuYWJsZSB1c2Itcm9sZS1zd2l0Y2ggZm9yIGV4dGNvbiBqdXN0IHNvIHRoZSBk
-cml2ZXIgZG9lc24ndCBkZWZhdWx0DQp0aGUgZHJfbW9kZSB0byBwZXJpcGhlcmFsLg0KDQpQZXJo
-YXBzLCB0aGlzIGlzIHdoYXQgeW91J3JlIGxvb2tpbmcgZm9yPyAoY29kZSBpcyBub3QgdGVzdGVk
-KQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMgYi9kcml2ZXJzL3VzYi9k
-d2MzL2NvcmUuYw0KaW5kZXggYmZmZDcxOWI4YjUyLi5hNTIzMzFlYTdhMGQgMTAwNjQ0DQotLS0g
-YS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KKysrIGIvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMN
-CkBAIC04Niw3ICs4Niw3IEBAIHN0YXRpYyBpbnQgZHdjM19nZXRfZHJfbW9kZShzdHJ1Y3QgZHdj
-MyAqZHdjKQ0KICAgICAgICAgICAgICAgICAqIG1vZGUuIElmIHRoZSBjb250cm9sbGVyIHN1cHBv
-cnRzIERSRCBidXQgdGhlIGRyX21vZGUgaXMgbm90DQogICAgICAgICAgICAgICAgICogc3BlY2lm
-aWVkIG9yIHNldCB0byBPVEcsIHRoZW4gc2V0IHRoZSBtb2RlIHRvIHBlcmlwaGVyYWwuDQogICAg
-ICAgICAgICAgICAgICovDQotICAgICAgICAgICAgICAgaWYgKG1vZGUgPT0gVVNCX0RSX01PREVf
-T1RHICYmDQorICAgICAgICAgICAgICAgaWYgKG1vZGUgPT0gVVNCX0RSX01PREVfT1RHICYmICFk
-d2MtPmVkZXYgJiYNCiAgICAgICAgICAgICAgICAgICAgKCFJU19FTkFCTEVEKENPTkZJR19VU0Jf
-Uk9MRV9TV0lUQ0gpIHx8DQogICAgICAgICAgICAgICAgICAgICAhZGV2aWNlX3Byb3BlcnR5X3Jl
-YWRfYm9vbChkd2MtPmRldiwgInVzYi1yb2xlLXN3aXRjaCIpKSAmJg0KICAgICAgICAgICAgICAg
-ICAgICAhRFdDM19WRVJfSVNfUFJJT1IoRFdDMywgMzMwQSkpDQpAQCAtMTcxNSw2ICsxNzE1LDEz
-IEBAIHN0YXRpYyBpbnQgZHdjM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-ICAgICAgICAgICAgICAgIGdvdG8gZXJyMjsNCiAgICAgICAgfQ0KIA0KKyAgICAgICBkd2MtPmVk
-ZXYgPSBkd2MzX2dldF9leHRjb24oZHdjKTsNCisgICAgICAgaWYgKElTX0VSUihkd2MtPmVkZXYp
-KSB7DQorICAgICAgICAgICAgICAgcmV0ID0gUFRSX0VSUihkd2MtPmVkZXYpOw0KKyAgICAgICAg
-ICAgICAgIGRldl9lcnIoZHdjLT5kZXYsICJmYWlsZWQgdG8gZ2V0IGV4dGNvbiAlZFxuIiwgcmV0
-KTsNCisgICAgICAgICAgICAgICBnb3RvIGVycjM7DQorICAgICAgIH0NCisNCiAgICAgICAgcmV0
-ID0gZHdjM19nZXRfZHJfbW9kZShkd2MpOw0KICAgICAgICBpZiAocmV0KQ0KICAgICAgICAgICAg
-ICAgIGdvdG8gZXJyMzsNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2RyZC5jIGIvZHJp
-dmVycy91c2IvZHdjMy9kcmQuYw0KaW5kZXggNjMwODljN2ZiNTMwLi5kMDJmY2ZkYzc0ZGIgMTAw
-NjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2RyZC5jDQorKysgYi9kcml2ZXJzL3VzYi9kd2Mz
-L2RyZC5jDQpAQCAtNTg1LDE2ICs1ODUsNyBAQCBpbnQgZHdjM19kcmRfaW5pdChzdHJ1Y3QgZHdj
-MyAqZHdjKQ0KIHsNCiAgICAgICAgaW50IHJldCwgaXJxOw0KIA0KLSAgICAgICBkd2MtPmVkZXYg
-PSBkd2MzX2dldF9leHRjb24oZHdjKTsNCi0gICAgICAgaWYgKElTX0VSUihkd2MtPmVkZXYpKQ0K
-LSAgICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKGR3Yy0+ZWRldik7DQotDQotICAgICAgIGlm
-IChST0xFX1NXSVRDSCAmJg0KLSAgICAgICAgICAgZGV2aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChk
-d2MtPmRldiwgInVzYi1yb2xlLXN3aXRjaCIpKSB7DQotICAgICAgICAgICAgICAgcmV0ID0gZHdj
-M19zZXR1cF9yb2xlX3N3aXRjaChkd2MpOw0KLSAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKQ0K
-LSAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCi0gICAgICAgfSBlbHNlIGlmIChk
-d2MtPmVkZXYpIHsNCisgICAgICAgaWYgKGR3Yy0+ZWRldikgew0KICAgICAgICAgICAgICAgIGR3
-Yy0+ZWRldl9uYi5ub3RpZmllcl9jYWxsID0gZHdjM19kcmRfbm90aWZpZXI7DQogICAgICAgICAg
-ICAgICAgcmV0ID0gZXh0Y29uX3JlZ2lzdGVyX25vdGlmaWVyKGR3Yy0+ZWRldiwgRVhUQ09OX1VT
-Ql9IT1NULA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAm
-ZHdjLT5lZGV2X25iKTsNCkBAIC02MDQsNiArNTk1LDExIEBAIGludCBkd2MzX2RyZF9pbml0KHN0
-cnVjdCBkd2MzICpkd2MpDQogICAgICAgICAgICAgICAgfQ0KIA0KICAgICAgICAgICAgICAgIGR3
-YzNfZHJkX3VwZGF0ZShkd2MpOw0KKyAgICAgICB9IGVsc2UgaWYgKFJPTEVfU1dJVENIICYmDQor
-ICAgICAgICAgICAgICAgICAgZGV2aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkd2MtPmRldiwgInVz
-Yi1yb2xlLXN3aXRjaCIpKSB7DQorICAgICAgICAgICAgICAgcmV0ID0gZHdjM19zZXR1cF9yb2xl
-X3N3aXRjaChkd2MpOw0KKyAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKQ0KKyAgICAgICAgICAg
-ICAgICAgICAgICAgcmV0dXJuIHJldDsNCiAgICAgICAgfSBlbHNlIHsNCiAgICAgICAgICAgICAg
-ICBkd2MzX3NldF9wcnRjYXAoZHdjLCBEV0MzX0dDVExfUFJUQ0FQX09URyk7DQogDQoNCg==
+Hi Martin.
+
+Thanks for your contribution,
+Inki Dae
+
+22. 1. 30. 07:01에 Martin Jücker 이(가) 쓴 글:
+> In the downstream kernels for exynos4 and exynos5 devices, there is an
+> undocumented register that controls the order of the RGB output. It can
+> be set to either normal order or reversed, which enables BGR support for
+> those SoCs.
+> 
+> This patch enables the BGR support for all the SoCs that were found to
+> have at least one device with this logic in the corresponding downstream
+> kernels.
+> 
+> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
+> ---
+>  drivers/gpu/drm/exynos/exynos_drm_fimd.c | 42 ++++++++++++++++++++++--
+>  include/video/samsung_fimd.h             |  4 +++
+>  2 files changed, 44 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/exynos/exynos_drm_fimd.c b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+> index c735e53939d8..cb632360c968 100644
+> --- a/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+> +++ b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
+> @@ -109,6 +109,7 @@ struct fimd_driver_data {
+>  	unsigned int has_dp_clk:1;
+>  	unsigned int has_hw_trigger:1;
+>  	unsigned int has_trigger_per_te:1;
+> +	unsigned int has_bgr_support:1;
+>  };
+>  
+>  static struct fimd_driver_data s3c64xx_fimd_driver_data = {
+> @@ -138,6 +139,7 @@ static struct fimd_driver_data exynos4_fimd_driver_data = {
+>  	.lcdblk_bypass_shift = 1,
+>  	.has_shadowcon = 1,
+>  	.has_vtsel = 1,
+> +	.has_bgr_support = 1,
+>  };
+>  
+>  static struct fimd_driver_data exynos5_fimd_driver_data = {
+> @@ -149,6 +151,7 @@ static struct fimd_driver_data exynos5_fimd_driver_data = {
+>  	.has_vidoutcon = 1,
+>  	.has_vtsel = 1,
+>  	.has_dp_clk = 1,
+> +	.has_bgr_support = 1,
+>  };
+>  
+>  static struct fimd_driver_data exynos5420_fimd_driver_data = {
+> @@ -162,6 +165,7 @@ static struct fimd_driver_data exynos5420_fimd_driver_data = {
+>  	.has_vtsel = 1,
+>  	.has_mic_bypass = 1,
+>  	.has_dp_clk = 1,
+> +	.has_bgr_support = 1,
+>  };
+>  
+>  struct fimd_context {
+> @@ -226,6 +230,18 @@ static const uint32_t fimd_formats[] = {
+>  	DRM_FORMAT_ARGB8888,
+>  };
+>  
+> +static const uint32_t fimd_extended_formats[] = {
+> +	DRM_FORMAT_C8,
+> +	DRM_FORMAT_XRGB1555,
+> +	DRM_FORMAT_XBGR1555,
+> +	DRM_FORMAT_RGB565,
+> +	DRM_FORMAT_BGR565,
+> +	DRM_FORMAT_XRGB8888,
+> +	DRM_FORMAT_XBGR8888,
+> +	DRM_FORMAT_ARGB8888,
+> +	DRM_FORMAT_ABGR8888,
+> +};
+> +
+>  static const unsigned int capabilities[WINDOWS_NR] = {
+>  	0,
+>  	EXYNOS_DRM_PLANE_CAP_WIN_BLEND | EXYNOS_DRM_PLANE_CAP_PIX_BLEND,
+> @@ -673,21 +689,25 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
+>  		val |= WINCONx_BYTSWP;
+>  		break;
+>  	case DRM_FORMAT_XRGB1555:
+> +	case DRM_FORMAT_XBGR1555:
+>  		val |= WINCON0_BPPMODE_16BPP_1555;
+>  		val |= WINCONx_HAWSWP;
+>  		val |= WINCONx_BURSTLEN_16WORD;
+>  		break;
+>  	case DRM_FORMAT_RGB565:
+> +	case DRM_FORMAT_BGR565:
+>  		val |= WINCON0_BPPMODE_16BPP_565;
+>  		val |= WINCONx_HAWSWP;
+>  		val |= WINCONx_BURSTLEN_16WORD;
+>  		break;
+>  	case DRM_FORMAT_XRGB8888:
+> +	case DRM_FORMAT_XBGR8888:
+>  		val |= WINCON0_BPPMODE_24BPP_888;
+>  		val |= WINCONx_WSWP;
+>  		val |= WINCONx_BURSTLEN_16WORD;
+>  		break;
+>  	case DRM_FORMAT_ARGB8888:
+> +	case DRM_FORMAT_ABGR8888:
+>  	default:
+>  		val |= WINCON1_BPPMODE_25BPP_A1888;
+>  		val |= WINCONx_WSWP;
+> @@ -695,6 +715,18 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
+>  		break;
+>  	}
+>  
+> +	switch (pixel_format) {
+> +	case DRM_FORMAT_XBGR1555:
+> +	case DRM_FORMAT_XBGR8888:
+> +	case DRM_FORMAT_ABGR8888:
+> +	case DRM_FORMAT_BGR565:
+> +		writel(WIN_RGB_ORDER_REVERSE, ctx->regs + WIN_RGB_ORDER(win));
+> +		break;
+> +	default:
+> +		writel(WIN_RGB_ORDER_FORWARD, ctx->regs + WIN_RGB_ORDER(win));
+> +		break;
+> +	}
+> +
+>  	/*
+>  	 * Setting dma-burst to 16Word causes permanent tearing for very small
+>  	 * buffers, e.g. cursor buffer. Burst Mode switching which based on
+> @@ -1074,8 +1106,14 @@ static int fimd_bind(struct device *dev, struct device *master, void *data)
+>  	ctx->drm_dev = drm_dev;
+>  
+>  	for (i = 0; i < WINDOWS_NR; i++) {
+> -		ctx->configs[i].pixel_formats = fimd_formats;
+> -		ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
+> +		if (ctx->driver_data->has_bgr_support) {
+> +			ctx->configs[i].pixel_formats = fimd_extended_formats;
+> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_extended_formats);
+> +		} else {
+> +			ctx->configs[i].pixel_formats = fimd_formats;
+> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
+> +		}
+> +
+>  		ctx->configs[i].zpos = i;
+>  		ctx->configs[i].type = fimd_win_types[i];
+>  		ctx->configs[i].capabilities = capabilities[i];
+> diff --git a/include/video/samsung_fimd.h b/include/video/samsung_fimd.h
+> index c4a93ce1de48..e6966d187591 100644
+> --- a/include/video/samsung_fimd.h
+> +++ b/include/video/samsung_fimd.h
+> @@ -476,6 +476,10 @@
+>   * 1111		-none-	 -none-   -none-   -none-    -none-
+>  */
+>  
+> +#define WIN_RGB_ORDER(_win)			(0x2020 + ((_win) * 4))
+> +#define WIN_RGB_ORDER_FORWARD			(0 << 11)
+> +#define WIN_RGB_ORDER_REVERSE			(1 << 11)
+> +
+>  /* FIMD Version 8 register offset definitions */
+>  #define FIMD_V8_VIDTCON0	0x20010
+>  #define FIMD_V8_VIDTCON1	0x20014

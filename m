@@ -2,207 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5144A8C79
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE814A8C7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiBCTdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S237137AbiBCTeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiBCTd3 (ORCPT
+        with ESMTP id S229913AbiBCTeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:33:29 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E0FC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:33:29 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so6356379pjy.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:33:29 -0800 (PST)
+        Thu, 3 Feb 2022 14:34:19 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B3C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:34:19 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id m7so3410497pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:34:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HA6cR0nEJDsnEGV7RaetJNIMdyMuEqKH+709PhZfTEM=;
-        b=X59QHLk2MCZ/rRU+oxC0IDOR+8Ik3wA6oGbIJYWcd4+Sw1Zc3EgOmjAa1HdIN/8WxL
-         xgiLxfe02uFZGdE00XxZLAJIlR8vg035g7teKJOKPg6p79oyEh1TvdVgwasdHzaT839v
-         GkbvTnvWCFfbRCLGxa0UmPTxux3SOHQk6LZ4n2wt7wZdj64SGut72cOenfO/p4EFBwuX
-         9/dpjnVgNCgqKvh7SBiU9XE9JCj70QvObhxXADJ3JBeeODqIAIgje8s5vr1QjIuwyFj6
-         jebwCYoHWlKSk2QzyaOD1KNV8dlzgvY+LCwlXppcs1+ExGswZWrKff9v5MK832ZCpTSA
-         +g+w==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=1yp4kqXHLuiLSqZJRwSaK9VqxvJiqPmh4FLRt4gaE6c=;
+        b=oh+rD1BBWj6nZo4mM+w89x7gnRjPNXMwmfHiyif6JrV+sl7MWrpJbDD7iC7H64kYHy
+         cMuGHW91sRyI7wRbMxbWgFNTlIWscvM6WhK4w4YylVZdgu+/6XXlWK51KrgZS8v4wg/Q
+         P766DYpDmyujEJAVzDY5EvvdHcngIzrN0Kgf54A+nybzCKm2ijlZW+e8axpZYZxXN9UF
+         /t1fm5OTQw564OlSMxGPBdSFqKZCpWuTZKECZeqpFhUsCo1Z7jCme7M0gGyJ885mKvld
+         8fV0seCdVAKmoGx6aPd4/BFhCdSKpwRYPlKdVYmtReUZdZvza/r2N7fAUJj6DvtKC5NI
+         qeDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=HA6cR0nEJDsnEGV7RaetJNIMdyMuEqKH+709PhZfTEM=;
-        b=giMjg+0FwEoBti8ycUGQWcmYtNKnzs1AV0lvoHxcKc5FDb5IZDJM8QitAKhAywfPAi
-         yDIxjJWdDJttehDGLY9fDOyZhfTmrsWq26pJaKDDhPjEGrN0KDnGe7AmLkyq3fcOz4Ri
-         GgENa2dWgUpHct6PNA1tGjkKAnscBmGAkILwnLqWa/uWkVL7UKuj/hkx/Db1WeUPZyAI
-         xM7S+N3Grl2EU6ki913T8wsjKssaOlnsnHKeCRXVjX/eVZMAhVs8423uPyPPB3h7gI6E
-         DrjvcTihzxLn9HpUsuKV9DOgDvyZ0CqMB8NqnYoreKWPuU5pAUAZOkO701fKXTqYulGW
-         Naig==
-X-Gm-Message-State: AOAM531sZuVuTxhxLQRQPGcXfy9aDMyhHdmiop/Cy/o41D4OXpQ8/hQ1
-        G8Os+PBBU2OxcS4t4ODgAF4=
-X-Google-Smtp-Source: ABdhPJzX77nVuTx7JfL6dbwmVusLGqFgugAEeb3xPrs5GgivQvdwTHB9qDVu6ZOedgwWgtHEzMFWTA==
-X-Received: by 2002:a17:902:ecc2:: with SMTP id a2mr36255795plh.12.1643916809134;
-        Thu, 03 Feb 2022 11:33:29 -0800 (PST)
-Received: from [10.230.2.160] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id nm14sm10700616pjb.32.2022.02.03.11.33.27
+        bh=1yp4kqXHLuiLSqZJRwSaK9VqxvJiqPmh4FLRt4gaE6c=;
+        b=gIXuqgnF9CseVNz4Ok4zqbUURalSX917sRRwtghIyLfJaO6myCQAqMZZeyxVbZI/+q
+         VZ8Vxif2Oh1ELqboDcLsvXwQZN/GyCe6lV1odrIcDuLVC3l/jAJi+tmeucKvS1q2IXO5
+         TLE9xcdTyP5AsUwTw9YUH6Pd/z+wCqAOIb/o+9gAtrSTYgysUDkI/IpmOsKdSFkooRSd
+         s+sQx/JbltiJWeM3S9oBOIe+JW58txilAOkIYmojpztifkKhdv50pb/TrDdURLvh7j31
+         PlJ1V1wmSECKKwi6ErTQsmaN8rriu2k7JdXGhD0f+hq9yGb9dJiBLEYf1YQ6fq98kT6m
+         T/IA==
+X-Gm-Message-State: AOAM5306SHlOPNh9XqdP92DDHa1gJ4q3q8YeGJW41wCyaIdz7EfDpVHM
+        sHimyGDfSqFyPFlRGDIonpLw+A==
+X-Google-Smtp-Source: ABdhPJxq3RgpBzF3w+fMQY/uFmlnbTzwDOeri6WFurMEfduTH0hqoKHRCTo1Vsszuc3DQwPWuLVOAg==
+X-Received: by 2002:a17:90a:f485:: with SMTP id bx5mr15515778pjb.46.1643916858692;
+        Thu, 03 Feb 2022 11:34:18 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id v20sm30222852pfu.155.2022.02.03.11.34.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 11:33:28 -0800 (PST)
-Message-ID: <06f84f27-973d-1dae-e2c3-3fda4e368331@gmail.com>
-Date:   Thu, 3 Feb 2022 11:33:26 -0800
+        Thu, 03 Feb 2022 11:34:17 -0800 (PST)
+Message-ID: <2941defc-54cf-e482-80b0-68405beec4fa@linaro.org>
+Date:   Thu, 3 Feb 2022 11:34:17 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 0/4] Broadcom STB PM PSCI extensions
+Subject: Re: [PATCH] io_uring: prevent io_put_identity() from freeing a static
+ identity
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220122035421.4086618-1-f.fainelli@gmail.com>
- <20220203111435.e3eblv47ljkwkvwf@bogus>
- <34938793-cecc-2ad8-a4eb-81bb278ce9b5@gmail.com>
- <20220203185221.aw7kayj6qklmh5is@bogus>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220203185221.aw7kayj6qklmh5is@bogus>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, io-uring@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        syzbot+6055980d041c8ac23307@syzkaller.appspotmail.com
+References: <20211104012120.729261-1-tadeusz.struk@linaro.org>
+ <dd53f11a-ae6f-79af-2ea2-8091d1c4f15e@linaro.org>
+ <2cd473d4-734d-95e2-4f3f-d793d065c449@linaro.org>
+In-Reply-To: <2cd473d4-734d-95e2-4f3f-d793d065c449@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/3/2022 10:52 AM, Sudeep Holla wrote:
-> Correction: it is known as "freeze" rather than "idle" in terms of values
-> as per /sys/power/state. Sorry for referring it as "idle" and creating any
-> confusion.
-> 
-> On Thu, Feb 03, 2022 at 09:36:28AM -0800, Florian Fainelli wrote:
->>
->>
->> On 2/3/2022 3:14 AM, Sudeep Holla wrote:
->>> On Fri, Jan 21, 2022 at 07:54:17PM -0800, Florian Fainelli wrote:
->>>> Hi all,
->>>>
->>>> This patch series contains the Broadcom STB PSCI extensions which adds
->>>> some additional functions on top of the existing standard PSCI interface
->>>> which is the reason for having the driver implement a custom
->>>> suspend_ops.
->>>>
->>>> These platforms have traditionally supported a mode that is akin to
->>>> ACPI's S2 with the CPU in WFI and all of the chip being clock gated
->>>> which is entered with "echo standby > /sys/power/state". Additional a
->>>> true suspend to DRAM as defined in ACPI by S3 is implemented with "echo
->>>> mem > /sys/power/state".
+On 12/15/21 12:27, Tadeusz Struk wrote:
+> On 11/15/21 08:38, Tadeusz Struk wrote:
+>> On 11/3/21 18:21, Tadeusz Struk wrote:
+>>> Note: this applies to 5.10 stable only. It doesn't trigger on anything
+>>> above 5.10 as the code there has been substantially reworked. This also
+>>> doesn't apply to any stable kernel below 5.10 afaict.
 >>>
->>> How different is the above "standby" state compare to the standard "idle"
->>> (a.k.a suspend-to-idle which is different from system-to-ram/S3) ?
->>
->> There are a few differences:
->>
->> - s2idle does not power gate the secondary CPUs
->>
-> 
-> Not sure what you mean by that ? S2I takes CPUs to deepest idle state.
-> If you want shallower states, one possible option is the disable deeper
-> states from the userspace.
-
-What I mean is that we do not get to call PSCI CPU_OFF here so the CPUs 
-are idle, but not power gated. Those CPUs do not have any other idle 
-state other than WFI because the HW designers sort of forgot or rather 
-did not know that wiring up the ARM GIC power controller back to the 
-power gating logic of the CPU was a good idea.
-
-> 
->> - s2idle requires the use of in-band interrupts for wake-up
->>
-> 
-> I am not sure if that is true. S2I behaves very similar to S2R except it
-> has low wake latency as all secondaries CPUs are not hotplugged out.
-
-OK, the fact that secondary CPUs are not hot-plugged could be remedied 
-by doing this ahead of entering s2idle by user-space so this is not a 
-valid argument from me anymore.
-
-> 
->> The reasons for implementing "standby" are largely two fold:
->>
->> - we need to achieve decent power savings (typically below 0.5W for the
->> whole system while allowing Wake-on-WLAN, GPIO, RTC, infrared, etc.)
->>
-> 
-> I fail to understand how that is a problem from S2I. It is probably worth
-> checking if there are any unnecessary IRQF_NO_SUSPEND users. Check section
-> IRQF_NO_SUSPEND and enable_irq_wake() in [1]. I don't see any issues other
-> wise in terms of unnecessary/spurious wakeup by in-band(to be precise
-> no-wake up) interrupts.
-
-I don't think your hyperlink referenced by [1] was provided, but my 
-quick testing with:
-
-echo s2idle > /sys/power/mem_sleep
-echo mem > /sys/power/state
-
-appears to work to some extent when I use peripherals that can generate 
-in-band interrupts.
-
-It looks like we have s2idle_ops that allows a platform to override some 
-of the operations before/after entering s2idle, however the actual 
-s2idle idle loop is still within the kernel, so we will not call into 
-the ARM Trusted Firmware and engage the power management state machine.
-
-This means that there will not be any of the clock gating that only the 
-hardware state machine is capable of performing, the DRAM controller as 
-a result will not enter self refresh power down, and in addition the 
-side band wake-up interrupts will not be activate because the interrupt 
-controller that aggregates them only outputs to the ARM GIC when the 
-state machine has been engaged.
-
-Essentially, what we need for our systems is a controlled system entry 
-with semantics similar if not identical to that of S2R but with a 
-shallower state that does not cut the power to 90% of the SoC (unlike 
-S2R) such that we have a quicker suspend and resume latency. Years ago 
-when we only had MIPS-based and 32-bit ARM SoCs, we did come up with 
-using "standby" (see drivers/soc/bcm/brcmstb/pm/*) and we naturally 
-mapped that when we switched over to ARMv8 capable devices.
-
-> 
->> - we have a security subsystem that requires the CPUs to be either power
->> gated or idle in order the hardware state machine that lets the system enter
->> such a state and allows the out of band interrupts from being wake-up
->> sources
->>
-> 
-> It should work unless I have completely misunderstood how S2I works.
-> 
->>> Suspend to idle takes all the CPUs to lowest possible power state instead
->>> of cpu-hotplug in S2R. Also I assume some userspace has to identify when
->>> to enter "standby" vs "mem" right ? I am trying to see how addition of
->>> "idle" changes that(if it does). Sorry for too many questions.
+>>> Syzbot found a bug: KASAN: invalid-free in io_dismantle_req
+>>> https://syzkaller.appspot.com/bug?id=123d9a852fc88ba573ffcb2dbcf4f9576c3b0559
+>>>
+>>> The test submits bunch of io_uring writes and exits, which then triggers
+>>> uring_task_cancel() and io_put_identity(), which in some corner cases,
+>>> tries to free a static identity. This causes a panic as shown in the
+>>> trace below:
+>>>
+>>>   BUG: KASAN: double-free or invalid-free in kfree+0xd5/0x310
+>>>   CPU: 0 PID: 4618 Comm: repro Not tainted 5.10.76-05281-g4944ec82ebb9-dirty #17
+>>>   Call Trace:
+>>>    dump_stack_lvl+0x1b2/0x21b
+>>>    print_address_description+0x8d/0x3b0
+>>>    kasan_report_invalid_free+0x58/0x130
+>>>    ____kasan_slab_free+0x14b/0x170
+>>>    __kasan_slab_free+0x11/0x20
+>>>    slab_free_freelist_hook+0xcc/0x1a0
+>>>    kfree+0xd5/0x310
+>>>    io_dismantle_req+0x9b0/0xd90
+>>>    io_do_iopoll+0x13a4/0x23e0
+>>>    io_iopoll_try_reap_events+0x116/0x290
+>>>    io_uring_cancel_task_requests+0x197d/0x1ee0
+>>>    io_uring_flush+0x170/0x6d0
+>>>    filp_close+0xb0/0x150
+>>>    put_files_struct+0x1d4/0x350
+>>>    exit_files+0x80/0xa0
+>>>    do_exit+0x6d9/0x2390
+>>>    do_group_exit+0x16a/0x2d0
+>>>    get_signal+0x133e/0x1f80
+>>>    arch_do_signal+0x7b/0x610
+>>>    exit_to_user_mode_prepare+0xaa/0xe0
+>>>    syscall_exit_to_user_mode+0x24/0x40
+>>>    do_syscall_64+0x3d/0x70
+>>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>>
+>>>   Allocated by task 4611:
+>>>    ____kasan_kmalloc+0xcd/0x100
+>>>    __kasan_kmalloc+0x9/0x10
+>>>    kmem_cache_alloc_trace+0x208/0x390
+>>>    io_uring_alloc_task_context+0x57/0x550
+>>>    io_uring_add_task_file+0x1f7/0x290
+>>>    io_uring_create+0x2195/0x3490
+>>>    __x64_sys_io_uring_setup+0x1bf/0x280
+>>>    do_syscall_64+0x31/0x70
+>>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>>
+>>>   The buggy address belongs to the object at ffff88810732b500
+>>>    which belongs to the cache kmalloc-192 of size 192
+>>>   The buggy address is located 88 bytes inside of
+>>>    192-byte region [ffff88810732b500, ffff88810732b5c0)
+>>>   Kernel panic - not syncing: panic_on_warn set ...
+>>>
+>>> This issue bisected to this commit:
+>>> commit 186725a80c4e ("io_uring: fix skipping disabling sqo on exec")
+>>>
+>>> Simple reverting the offending commit doesn't work as it hits some
+>>> other, related issues like:
+>>>
+>>> /* sqo_dead check is for when this happens after cancellation */
+>>> WARN_ON_ONCE(ctx->sqo_task == current && !ctx->sqo_dead &&
+>>>          !xa_load(&tctx->xa, (unsigned long)file));
+>>>
+>>>   ------------[ cut here ]------------
+>>>   WARNING: CPU: 1 PID: 5622 at fs/io_uring.c:8960 io_uring_flush+0x5bc/0x6d0
+>>>   Modules linked in:
+>>>   CPU: 1 PID: 5622 Comm: repro Not tainted 5.10.76-05281-g4944ec82ebb9-dirty #16
+>>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-6.fc35 
+>>> 04/01/2014
+>>>   RIP: 0010:io_uring_flush+0x5bc/0x6d0
+>>>   Call Trace:
+>>>   filp_close+0xb0/0x150
+>>>   put_files_struct+0x1d4/0x350
+>>>   reset_files_struct+0x88/0xa0
+>>>   bprm_execve+0x7f2/0x9f0
+>>>   do_execveat_common+0x46f/0x5d0
+>>>   __x64_sys_execve+0x92/0xb0
+>>>   do_syscall_64+0x31/0x70
+>>>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>>
+>>> Changing __io_uring_task_cancel() to call io_disable_sqo_submit() directly,
+>>> as the comment suggests, only if __io_uring_files_cancel() is not executed
+>>> seems to fix the issue.
+>>>
+>>> Cc: Jens Axboe <axboe@kernel.dk>
+>>> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+>>> Cc: <io-uring@vger.kernel.org>
+>>> Cc: <linux-fsdevel@vger.kernel.org>
+>>> Cc: <linux-kernel@vger.kernel.org>
+>>> Cc: <stable@vger.kernel.org>
+>>> Reported-by: syzbot+6055980d041c8ac23307@syzkaller.appspotmail.com
+>>> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+>>> ---
+>>>   fs/io_uring.c | 21 +++++++++++++++++----
+>>>   1 file changed, 17 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/fs/io_uring.c b/fs/io_uring.c
+>>> index 0736487165da..fcf9ffe9b209 100644
+>>> --- a/fs/io_uring.c
+>>> +++ b/fs/io_uring.c
+>>> @@ -8882,20 +8882,18 @@ void __io_uring_task_cancel(void)
+>>>       struct io_uring_task *tctx = current->io_uring;
+>>>       DEFINE_WAIT(wait);
+>>>       s64 inflight;
+>>> +    int canceled = 0;
+>>>       /* make sure overflow events are dropped */
+>>>       atomic_inc(&tctx->in_idle);
+>>> -    /* trigger io_disable_sqo_submit() */
+>>> -    if (tctx->sqpoll)
+>>> -        __io_uring_files_cancel(NULL);
+>>> -
+>>>       do {
+>>>           /* read completions before cancelations */
+>>>           inflight = tctx_inflight(tctx);
+>>>           if (!inflight)
+>>>               break;
+>>>           __io_uring_files_cancel(NULL);
+>>> +        canceled = 1;
+>>>           prepare_to_wait(&tctx->wait, &wait, TASK_UNINTERRUPTIBLE);
+>>> @@ -8909,6 +8907,21 @@ void __io_uring_task_cancel(void)
+>>>           finish_wait(&tctx->wait, &wait);
+>>>       } while (1);
+>>> +    /*
+>>> +     * trigger io_disable_sqo_submit()
+>>> +     * if not already done by __io_uring_files_cancel()
+>>> +     */
+>>> +    if (tctx->sqpoll && !canceled) {
+>>> +        struct file *file;
+>>> +        unsigned long index;
+>>> +
+>>> +        xa_for_each(&tctx->xa, index, file) {
+>>> +            struct io_ring_ctx *ctx = file->private_data;
+>>> +
+>>> +            io_disable_sqo_submit(ctx);
+>>> +        }
+>>> +    }
+>>> +
+>>>       atomic_dec(&tctx->in_idle);
+>>>       io_uring_remove_task_files(tctx);
 >>>
 >>
->> Right that user-space in our case is either custom (like RDK, or completely
->> custom), or is Android. For Android it looks like we are carrying a patch
->> that makes "mem" de-generate into "standby" but this is largely because we
->> had historically problems with "mem" that are being addressed (completely
->> orthogonal).
+>> Hi,
+>> Any comments on this one? It needs to be ACK'ed by the maintainer before
+>> it is applied to 5.10 stable.
 >>
 > 
-> Thanks for the info.
+> This still triggers on 5.10.85. Anyone want to have a look?
 > 
->> I did not consider it as a viable option at the time, but if we were to
->> implement "standby" in drivers/firmware/psci/psci.c would that be somewhat
->> acceptable?
->>
-> 
-> We have been pointing anyone needing standby so far to S2I and so far no one
-> has shouted that it doesn't suffice. Let me know what is missing.
-> 
+
+Any last call? Nobody cares about 5.10 anymore?
 
 -- 
-Florian
+Thanks,
+Tadeusz

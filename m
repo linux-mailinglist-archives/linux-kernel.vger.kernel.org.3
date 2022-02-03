@@ -2,90 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B39B4A862D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F884A863B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351167AbiBCO1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:27:33 -0500
-Received: from foss.arm.com ([217.140.110.172]:49602 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238689AbiBCO1c (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:27:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F10761063;
-        Thu,  3 Feb 2022 06:27:31 -0800 (PST)
-Received: from [10.57.89.13] (unknown [10.57.89.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20853F774;
-        Thu,  3 Feb 2022 06:27:30 -0800 (PST)
-Message-ID: <8d2fc78e-f061-daa1-b266-ef84d5dd316f@arm.com>
-Date:   Thu, 3 Feb 2022 14:27:29 +0000
+        id S1351183AbiBCOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:32:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33837 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351159AbiBCOco (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:32:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643898764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=egIsbiIb1ZlNhNb4hCbsTFlrt0lfVor171N2GRt1Ifc=;
+        b=RlIjvuSGPDR9M8kivIxUIw4xiedJlzFh5Fef2i3axo2HfYFqpDpdYD6v1xKR5JoAn9jI3o
+        AfjONA89enr3TmduCuwVsq2Tr5wA1q3FkrjNNT22bkeEdJh4VlT2EYyDipCGcq/9mO+TGA
+        mwKJudGEzN3A8TtBb3OtKuxLo/vkjuw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-448-57np-K2gOqKEZ8Jj3ep6zA-1; Thu, 03 Feb 2022 09:32:41 -0500
+X-MC-Unique: 57np-K2gOqKEZ8Jj3ep6zA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A020835B4B;
+        Thu,  3 Feb 2022 14:32:39 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.192.114])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 17BF57D5B4;
+        Thu,  3 Feb 2022 14:32:30 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?Ahelenia=20Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Ping Cheng <pinglinux@gmail.com>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Jason Gerecke <killertofu@gmail.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>
+Cc:     linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH v2 00/12] HID: fix for generic input processing
+Date:   Thu,  3 Feb 2022 15:32:14 +0100
+Message-Id: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH 02/15] coresight: Make ETM4x TRCIDR2 register accesses
- consistent with sysreg.h
-To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202160226.37858-1-james.clark@arm.com>
- <20220202160226.37858-3-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220202160226.37858-3-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2022 16:02, James Clark wrote:
-> This is a no-op change for style and consistency and has no effect on the
-> binary produced by gcc-11.
-> 
-> Signed-off-by: James Clark <james.clark@arm.com>
+Hi,
 
+this is the v2 of my series which reworks the HID report processing.
 
-> ---
->   drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
->   drivers/hwtracing/coresight/coresight-etm4x.h      | 7 +++++++
->   2 files changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 8aefee4e72fd..4abe5444234e 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -1111,11 +1111,11 @@ static void etm4_init_arch_data(void *info)
->   	/* maximum size of resources */
->   	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
->   	/* CIDSIZE, bits[9:5] Indicates the Context ID size */
-> -	drvdata->ctxid_size = BMVAL(etmidr2, 5, 9);
-> +	drvdata->ctxid_size = REG_VAL(etmidr2, TRCIDR2_CIDSIZE);
->   	/* VMIDSIZE, bits[14:10] Indicates the VMID size */
-> -	drvdata->vmid_size = BMVAL(etmidr2, 10, 14);
-> +	drvdata->vmid_size = REG_VAL(etmidr2, TRCIDR2_VMIDSIZE);
->   	/* CCSIZE, bits[28:25] size of the cycle counter in bits minus 12 */
-> -	drvdata->ccsize = BMVAL(etmidr2, 25, 28);
-> +	drvdata->ccsize = REG_VAL(etmidr2, TRCIDR2_CCSIZE);
->   
->   	etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
->   	/* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 2bd8ad953b8e..a95df5686b4b 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -147,6 +147,13 @@
->   #define TRCIDR0_TSSIZE_SHIFT			24
->   #define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
->   
-> +#define TRCIDR2_CIDSIZE_SHIFT			5
-> +#define TRCIDR2_CIDSIZE_MASK			GENMASK(4, 0)
-> +#define TRCIDR2_VMIDSIZE_SHIFT			10
-> +#define TRCIDR2_VMIDSIZE_MASK			GENMASK(4, 0)
-> +#define TRCIDR2_CCSIZE_SHIFT			25
-> +#define TRCIDR2_CCSIZE_MASK			GENMASK(3, 0)
-> +
+I took Ping's comments into account, and amended my MR with the
+regression tests[0].
+More specifically, the tests (and thus this new version of the series)
+enforces that only one BTN_TOOL_* event gets forwarded between each
+EV_SYN frame, and that BTN_TOUCH are properly translated too.
 
-Looks good to me. I have confirmed the above changes matches the spec.
+This also magivally solved some worrying transitions we had in the
+pen state machine where the pen was jumping from "eraser" to "in
+contact". This new behavior enforces a "out-of-range" state in the
+middle, making it easier for userspace to understand now.
 
-Suzuki
+Again, tests are welcome :)
+
+Cheers,
+Benjamin
+
+[0] https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/127
+
+Benjamin Tissoires (12):
+  HID: core: statically allocate read buffers
+  HID: core: de-duplicate some code in hid_input_field()
+  HID: core: split data fetching from processing in hid_input_field()
+  HID: input: tag touchscreens as such if the physical is not there
+  HID: input: rework spaghetti code with switch statements
+  HID: input: move up out-of-range processing of input values
+  HID: compute an ordered list of input fields to process
+  HID: core: for input reports, process the usages by priority list
+  HID: input: enforce Invert usage to be processed before InRange
+  HID: input: remove the need for HID_QUIRK_INVERT
+  HID: input: accommodate priorities for slotted devices
+  Input: docs: add more details on the use of BTN_TOOL
+
+ Documentation/input/event-codes.rst |   6 +-
+ drivers/hid/hid-core.c              | 280 ++++++++++++++++++---
+ drivers/hid/hid-input.c             | 364 ++++++++++++++++++++++------
+ include/linux/hid.h                 |  23 +-
+ 4 files changed, 568 insertions(+), 105 deletions(-)
+
+-- 
+2.33.1
+

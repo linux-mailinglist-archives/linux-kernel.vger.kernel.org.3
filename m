@@ -2,106 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2E54A89D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E534A89D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242831AbiBCRVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        id S1352787AbiBCRVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:21:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241746AbiBCRVO (ORCPT
+        with ESMTP id S237876AbiBCRVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:21:14 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556CEC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:21:14 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id n17so4116081iod.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:21:14 -0800 (PST)
+        Thu, 3 Feb 2022 12:21:37 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0662C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:21:37 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so3633893pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:21:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=VLUJVkHtiDVjnh0cllUK8cbQhBtjL1Sy34TnRnPctPA=;
-        b=Fi1YVqTEFSAwg/Q9K6CgojrClKOOg30iOpLVeid/yHCPvIA6Dx7e0RJg7cUGgOdBFv
-         OkianAdHcv5hdtEK5ilna3YTtPX7T6kGSXINDw1LHuIQxPdckVRZPox8U+YTMS+KAeov
-         icSfjzMX7WqclhD3TuHpk7LOUmsn6tJHOBtxN1zXAYBV3SnLTjOUaSfKG5E0OwT3uRAS
-         EEZbSc+n1aww7eESwCLZwr9F6E0jc3EMmtoY/moyvD+JFNKHdwoAQTWP9qTeu/C5m1Lu
-         2A9lhP8YeG3y5iwi9KZhMm67RBG48hQwSgImVuKn4UonV5JcwU2raaTq8VXhHphjDuzl
-         RZzA==
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=ZGyDTcBC5eFc5kbinFdbfWPBrR+a2FQv5Vy9d1MpBUNDLg5e0Yt0uTkNFyZYRZi4m3
+         IVuP7IC7Qk3RLqu52zHO0CY5umPdsbHseZjVRWkrcIp6r+cUIbW1sSeMPa0NSIfHmhGi
+         h3Uvb7aQa4/npd9Xr5C10sPg7M8x1qM7g6RnzBDFAbLakuCOZMJlgP79DtSq4wxO2ARQ
+         JrpqwhDNJpC5GsIF6RVTdmb8cUlu184PtQUiR9YKyCji34zSLekhSIXqG+HKBZga68d2
+         UecaS4HVYn04hOwGrSaGypRoXPZppY07u1OwjVHHlgmZnr8ZgQdpSf5X9hMplC7MybID
+         SsJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=VLUJVkHtiDVjnh0cllUK8cbQhBtjL1Sy34TnRnPctPA=;
-        b=evg4itG4aMhiXEkpnyYjL28BXR6hRlndYLouejQ8AEpqvDi+3NyEeXHrjfCIxMXYA6
-         iXM/FCSOQGPpzhg+k9ZvcV69s3RkuHqfY9g6N5LnScZ1sKU9A4jskkKu6y+V7j86vNus
-         oem6Qbd0hYzT+0BpSgLbhrjHv42uEJdBU16AOpCAbD+ksiEF0BFdqB20AJH62xlZwzpn
-         cV3V0ZONO8Jp8R3SEawxowcr1sjBy5m7qAVN/s65XDb+N73McPn0VaX7MpmoRFcQEOmU
-         17wNwLAcev9ICF6EpHslYxxTd2FZiCJpYTl7ZpIEbBZHaTklv6mySLM5yXP30ClI4Ihn
-         JaRQ==
-X-Gm-Message-State: AOAM532Pl+e5nybFn76ay6pmx5OdrJ0E4ESR/X1Wfuavnb6toBan6AvJ
-        afasx9PcIs1xUNwzOWOJH1i5d7uMuuaoeVWye+g=
-X-Google-Smtp-Source: ABdhPJw0FT5jobI66wACI9pVYHVzQgl0dJMYUss2ob0f5XvXhl6AQ4lfiEmG89E89bAmgmeznyTgeS2z7YLY5DGExGU=
-X-Received: by 2002:a05:6602:15c8:: with SMTP id f8mr19094822iow.35.1643908872891;
- Thu, 03 Feb 2022 09:21:12 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:cc;
+        bh=24EFpZU5AMMCntdM+3YfQ+A/kKth8PZ34wiS7rq1lOE=;
+        b=pmczkYdAw2xS/K1FdlqxMJD9K+AUGkyITEzDwkB3nBeJ2cJLDCsMkJSRudu2dnJMKu
+         Jo2b+1ozNZg6mhDEZCl20KTtUegCHEp4jOCtqNIimnvxc8/oh27o+3Lkq0lGKxxBddFt
+         e1Cq4I+FFSw7W6WVPZl1+T6YVQckqm15H+RQjMNY3tR62maoJStrMXumJgNe/uEDopzN
+         rmX+5x6zktXVyMNRU9vgO47GlFsYB8rUxK15iAFUs2TQruzfCXeaMxmhsmnOkhksD+Vr
+         HQaPKKVlPT/3PdVK5WSomI/kdXasin0jqmSwcEzlLXDmaHzFMq/bmlXNOR0Y06/uusQS
+         cbFQ==
+X-Gm-Message-State: AOAM531E4gf7tJizeivpHKRlkanWXO+XTTWek+PFWp9IvyvTwLKUasaS
+        /+ATC+8cs2LVMTezlXQHWPQoFvS+ABG3z0/RH8Y=
+X-Received: by 2002:a17:903:230e:: with SMTP id d14mt32940420plh.4.1643908897292;
+ Thu, 03 Feb 2022 09:21:37 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1651:0:0:0:0 with HTTP; Thu, 3 Feb 2022 09:21:12
+Received: by 2002:a05:6a10:8e86:0:0:0:0 with HTTP; Thu, 3 Feb 2022 09:21:36
  -0800 (PST)
-Reply-To: jesspayne72@gmail.com
-From:   Jess Payne <abdoulayesalle23@gmail.com>
-Date:   Thu, 3 Feb 2022 09:21:12 -0800
-Message-ID: <CAJbrH2CK1uQcY5C0oi5KBm=Qrj=cfu75JzpAOVYK8nUa9RgZrw@mail.gmail.com>
-Subject: =?UTF-8?B?5oiR6ZyA6KaB5L2g55qE5biu5YqpL0kgbmVlZCB5b3VyIGFzc2lzdGFuY2Uu?=
-To:     undisclosed-recipients:;
+Reply-To: israelbarney287@gmail.com
+In-Reply-To: <CAGMjROeX5-miyfUzKy+K4mavQH0ofoVGwWTeF_gFcZ7nGaxuUw@mail.gmail.com>
+References: <CAGMjROdbfJBaUg3+McSRKXj7mH6XD6qpLkLHenVGdZBo9Ms4ug@mail.gmail.com>
+ <CAGMjROfYyesJDzL00Ly+yEfJwpSJk5VKo7npOWuQqorAvtA0ag@mail.gmail.com>
+ <CAGMjROdHxorieEbCm0DXhHoJWoj02Hy7-r+jTGiLF9OZoYhn3g@mail.gmail.com>
+ <CAGMjROfyO67vKU9KFckq_JSmsS=y39KK9yWD0q26zYug_fNoOg@mail.gmail.com>
+ <CAGMjROfzfvJ8xeaEscACcw1jfAL2ZDdo0Sns_FHvboaFUL+dvA@mail.gmail.com>
+ <CAGMjROffspibi9gVRwJBbnq+0V9+6-BEqf-26DtY7eYgMsetTw@mail.gmail.com>
+ <CAGMjROcM+aqHLhGFfihECFCLAU-8BP0Qe4wL0LLMdnYZS=HVsg@mail.gmail.com>
+ <CAGMjROcB28nLqD-Yc-v4XtcvK5hvnHkaKOzHD70dM+GEFmdkVQ@mail.gmail.com>
+ <CAGMjROd9Ekdkqfftx7wvKnpL=HmQfjct8KGnQEbVaSc8um4yaw@mail.gmail.com>
+ <CAGMjROd=sKW0yXrxV4k_JZLm1nbhKoLZKksX1oTbb-TeZb1WGA@mail.gmail.com>
+ <CAGMjROeXEZcjbj=ZcuVowqA7-0hDKaBgoBbj9h_eZy2xBm+M4w@mail.gmail.com>
+ <CAGMjROeZ8k91xEGh-d6J4pkn28jKDTgn3+hxGjSw_qQgdN+Zkw@mail.gmail.com>
+ <CAGMjROfxeO55_0qwKnFyaSRpOJn3aaHUhz3LOPKVeVzA7sWbkA@mail.gmail.com>
+ <CAGMjROfZgX7nysDqW+dPxkE3=gumhH4xOMnsOqgjYaYr0M_8Cg@mail.gmail.com>
+ <CAGMjROdsB8RKVojU5E33whXc-tAYEAgV9sT9ttV8Vd3mP=27gA@mail.gmail.com>
+ <CAGMjROd4n8=SFfChJv0wA3JzPLZAbF4-7i=L+FF4-KdCOT-QyQ@mail.gmail.com>
+ <CAGMjROdSWOdS9VsJ7f28qunkgocURMR+x9ya6LVo0bRv1Yy0Sw@mail.gmail.com>
+ <CAGMjROfxxv4Ne7wk6zFTe3OH1WPGEb8i95anORAp8Dd1tD2wbw@mail.gmail.com>
+ <CAGMjROeS49yFUyogOaaGY+73BwGcs+pMpxRpe6nbgBR0fq6Y3A@mail.gmail.com>
+ <CAGMjROfeuBWFHZ_ZiD8M_G=WXZPi0_RQ73WNbpjrpbUjyphFYw@mail.gmail.com>
+ <CAGMjROdbXD4kZ=8i9qhko+mAVy-k-MquuKhgZE0KdKSuZOkumg@mail.gmail.com>
+ <CAGMjROcuX+XybAqLYMW2xHVDGe4Hoj8iWiu3V2V1c4+mNb+xKA@mail.gmail.com>
+ <CAGMjROcvva71FWA9y9wpjs+pSwDhYknF7UgKTQbQfSzzAfOEjg@mail.gmail.com>
+ <CAGMjROd-W+28N_0uPSN1yb84BVpiV0MzE2X56LuL=rPkdSmoLw@mail.gmail.com>
+ <CAGMjROcdQpbkgCpqtztV1njF9NM2zavYPVpQ9YGiwa_dQEy+iQ@mail.gmail.com>
+ <CAGMjROe_D-ugYq6SObs2E=o6qhrwt6mysTmaxKiiEGm2VM2csg@mail.gmail.com>
+ <CAGMjROfRBSDdLFde-YCH9KU3e+UbPOuSWivJL4b-1o5mQ81BaA@mail.gmail.com>
+ <CAGMjROd3d8UFkVzj0APuvON5d-Uj1SOzP16hR_V8i3opnhA8_w@mail.gmail.com>
+ <CAGMjROev0BVtjq2uCaR18Y4poSX4-22ysQft2LAqPT-44tKKNg@mail.gmail.com>
+ <CAGMjROfcf3jH9he5Kr3apZPXD9K95_LRJEVibEpgqQuEgdPxrw@mail.gmail.com>
+ <CAGMjROdqRZUB1Fb-pq4_-9iCJ+0jDmLOvbaxPz_8h3mMj9Zp2g@mail.gmail.com>
+ <CAGMjROfKDNya_a36vMuW2z39N42XagMdQJxdUo1h4RymPODaig@mail.gmail.com>
+ <CAGMjROepizBPo4vMQx-oRiC=e0YWnFr+e=o-dHHp_38_G6uR5Q@mail.gmail.com>
+ <CAGMjROcRo7zBoxAn8gCJfQAgiKR6jDemRtsDFXva_9UMkkb-dw@mail.gmail.com>
+ <CAGMjROd7E0eBdavwRchL_yZdiArJ32__s_vJeSnFN02A8h4UxQ@mail.gmail.com>
+ <CAGMjROf6v=E1AGqq08F62Mh_gJW+mUuyrJpx855nnmMnqiR+HQ@mail.gmail.com>
+ <CAGMjROeFQLA1kh=7y7ZH03UMdXQ4YA5N0tNhox2QnhWfw0cNYw@mail.gmail.com>
+ <CAGMjROfi7BmnPyNAqniXLqs3oLPyNtCmZxBGbj4asE1T+hFJow@mail.gmail.com>
+ <CAGMjROeijDU-yzk02v5468r+RRVBHmdYWDjiO4ruzbmLiO9Sog@mail.gmail.com>
+ <CAGMjROc_Xg7e=tBXp4XccwsLY9bmVXWaWD+-MqALsbtDKjH2XA@mail.gmail.com>
+ <CAGMjROfKiXVYc7dFJqjr-Hi77_6EzfU0+a757EB_p5PuEf4h3w@mail.gmail.com>
+ <CAGMjROcTv1g7QkfhcxKiwHu80cHtT7rHQPtzyacHNcvG93HHkg@mail.gmail.com>
+ <CAGMjROcKTth1nA6y0cDHfR65369GX2FGndDeanZ9GmHJMJp0UA@mail.gmail.com>
+ <CAGMjROd8K+ftxS6oVbbH9Xim2oizbDfuG2MFJqaZQ=b2cCAedg@mail.gmail.com>
+ <CAGMjROcBoCVZ86uSGjPN1J2WBfdG4pBBi2X4v2H8tn9Z7RT_vA@mail.gmail.com>
+ <CAGMjROf0EszoqhbqnRQg8Qtv3-bMUvxeDysYX0trJa5BwD9cjA@mail.gmail.com>
+ <CAGMjROeKZxAX18+NUKrrXskXYWqp6yY9_04CumX5NBMtc37DZQ@mail.gmail.com>
+ <CAGMjROfpSTLbFXT4vEmuJMfxReemxiGR0G60i3X1=04U5o157Q@mail.gmail.com>
+ <CAGMjROdQDBSL7SxvRm6bm_f+Q-e91oYv3QU=HbWgA3jBuUHAwQ@mail.gmail.com>
+ <CAGMjROebg34H618e7hJc04Tc3xL6EwDUiU3eJ7y7FBFR31qnqg@mail.gmail.com>
+ <CAGMjROdJm5RG+vzhJWSOb_99wBd-azuy7Tzy3kGYvJ3d6Nn9aw@mail.gmail.com>
+ <CAGMjROd9-iidk0MbVM3hTgUqQ-u-WMEckfnTQ=JgvocK9pLR7Q@mail.gmail.com>
+ <CAGMjROdjzGVho8d2sPj1vyBM5oBDonzVyzR8kbcLj-ys7KSvog@mail.gmail.com>
+ <CAGMjROcexGGxQtbJD9CtV9+sjXqUtJUhT0xnm9RUgVNoBXBs2A@mail.gmail.com>
+ <CAGMjROeA+a1jQvAv-sJCwkr2jH-3W7Mrx1nCmeTriHjuT95s-Q@mail.gmail.com>
+ <CAGMjROf7xx73c59SaXUBLFb8tFHD44mSXk1SwQsF7r_kjOytgw@mail.gmail.com>
+ <CAGMjROcFOqVPgQm1821-21n8xcPDKXSpdaejZk-Sndr-rDWqNQ@mail.gmail.com>
+ <CAGMjROf_7bUkdTLNgkK1As8ExUAvX5R+tiv5tMqcw-+8aRGE8Q@mail.gmail.com>
+ <CAGMjROe2_Az1Np-6+XHbJ_9QreRPrmUKF6-_F2UN4xjGQTSi+g@mail.gmail.com>
+ <CAGMjROfsic-11WsOrKY=etNnNXe0+An9XraWEQ_Lqt9YP_ObnQ@mail.gmail.com>
+ <CAGMjROctnuUYMuv6O2beD=EpwGNTMZ5Xqz5xRityRSWDuJV=fg@mail.gmail.com>
+ <CAGMjROdCO6FVyzWF1LKwhEWwOkcH7wgwxNpASHtfDxUr56kt4A@mail.gmail.com>
+ <CAGMjROcev+iutELTXx6wMkaSj=AKgSvi=mXKmF6esnToHkvmww@mail.gmail.com>
+ <CAGMjROcaECsL4mB2y=f31wrRfmqNNLqhjkuJ61Xn69+t2-HZ4g@mail.gmail.com>
+ <CAGMjROfv8AuML_0FfUBL7UUaVog1YLwRPtcEUpRMCPkdX4ReAQ@mail.gmail.com>
+ <CAGMjROfwpUcYnuKpTkOtJwBwYrXsYW0_NHPgzbmz3LW-0tbiXg@mail.gmail.com>
+ <CAGMjROcfByGKoYPXCQO7hjfN91pMgbY+wz4+Ux-zbAhPLf2JZA@mail.gmail.com>
+ <CAGMjROf3-j76fxAb7aqYWVE-u+00nwU7HxOA4mv8o_BmgQ6yFw@mail.gmail.com>
+ <CAGMjROfL3RvR4RU=7qW7UjUiEg8s5Vd7FKrS9g+46shj6OafKQ@mail.gmail.com>
+ <CAGMjROdHkA0oTykwtP2rDj1953K5UX0ERUY=6n79VxCo+P=ikA@mail.gmail.com>
+ <CAGMjROfoXgApNk9He3gff+REZ4bzpFCD6mz0nt3wXFCz6dUnPw@mail.gmail.com>
+ <CAGMjROfBr_uQt2GJUh2wFHhpemc-aMkgFNYnSzCKKnC9cmuPpg@mail.gmail.com>
+ <CAGMjROf61wbVgypF7ohTSgvY6mVHevZ9mu=YkVLUs709rdzpew@mail.gmail.com>
+ <CAGMjROfnmvZd-iw5gLUZJsQsZLjxjDE31J4JZ+cSXi+n7YV6rg@mail.gmail.com>
+ <CAGMjROcu2Y8dpppSbSbw1aGirc_pLLhkX2rDy+j04+Y=a-XQ7Q@mail.gmail.com>
+ <CAGMjROeC9ektS3t+TH4p5foQ2e8-iPwRBGEA8nX2PGQa5LoCCA@mail.gmail.com>
+ <CAGMjROfVLBE96pr3EpSihjpaRvsQaT4zFYtoMXagK-XWmuxs3A@mail.gmail.com>
+ <CAGMjROdhcwAncM3ta02R10R23RZjuxAgGMpSgrmTj6rNnW1EHg@mail.gmail.com>
+ <CAGMjROdgRLPGKt=08ViobpT-rc6XSh0fd3XRVMVaFzzo-CYszA@mail.gmail.com>
+ <CAGMjROd3E1ZrXJTEiyCfe3o4ATUdB3C1ysA78f-AiqE4ydKQtA@mail.gmail.com>
+ <CAGMjROfAbikPMm-FpPJcdKx6YGRbtE9kRo7OWSaKwAh-a1uA0Q@mail.gmail.com>
+ <CAGMjROf_a6apRFGnP0U81io-F5LWEQ9-mAd4YtkRrcOEsWPYnA@mail.gmail.com>
+ <CAGMjROeJNtrC5hzgapLwCbzb3=N1=KPrasJGbOBjF3A==J0=-Q@mail.gmail.com>
+ <CAGMjROdv9cK2zL=O7DddX567SDzxGYVS3ooqcWYPNmz7Wz40uA@mail.gmail.com>
+ <CAGMjROei=8YViiH4Eaakds8RiojgVmhrVN=hA8R409m8Xrp9hQ@mail.gmail.com>
+ <CAGMjROcKcM69cwsgD=u0Um+Y090n3f4nmu-gk8k6imd62eoZzA@mail.gmail.com>
+ <CAGMjROfXP7DVKpNN+Ozd7AojThaMODEOc8H9hZJB=cvgnuWiAg@mail.gmail.com>
+ <CAGMjROf8wGMVNPfCfQWLTOHd6B+WdVyb0-QyvJ3GXU0Q9pduLQ@mail.gmail.com>
+ <CAGMjROcKD84UW9rt9QL8OL9ONLmO38h3uW8-pbAUHN1jY8nddA@mail.gmail.com>
+ <CAGMjROfO68LkYH3ZH=W-Pp5j61FO-2nJ6jjm_+HFs_Ev_0a1bg@mail.gmail.com>
+ <CAGMjROf6ZXKHcoOXXg3z1F8ZvEvj9paWnPK_yGN5_tOJHjC1tQ@mail.gmail.com> <CAGMjROeX5-miyfUzKy+K4mavQH0ofoVGwWTeF_gFcZ7nGaxuUw@mail.gmail.com>
+From:   israel barney <sylvabou2018@gmail.com>
+Date:   Thu, 3 Feb 2022 18:21:36 +0100
+Message-ID: <CAGMjROeczga45GJwYWL85QYsUs8a9JUg=u9AT-LBpHFQamMRww@mail.gmail.com>
+Subject: Greetings
+Cc:     israelbarney287@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5oiR5biM5pyb5L2g6IO955CG6Kej6L+Z5p2h5L+h5oGv77yM5Zug5Li65oiR5q2j5Zyo5L2/55So
-57+76K+R57uZ5L2g5YaZ5L+h44CCDQoNCuaIkeaYr+adsOilv8K35L2p5oGp5Lit5aOr5aSr5Lq6
-44CCDQoNCuWcqOe+juWbvemZhuWGm+eahOWGm+S6i+mDqOmXqOOAgue+juWbve+8jOS4gOWQjeS4
-reWjq++8jDMyIOWyge+8jOaIkeWNlei6q++8jOadpeiHque+juWbveeUsOe6s+ilv+W3nuWFi+WI
-qeWkq+WFsO+8jOebruWJjempu+aJjuWcqOWIqeavlOS6muePreWKoOilv++8jOS4juaBkOaAluS4
-u+S5ieS9nOaImOOAguaIkeeahOWNleS9jeaYr+esrDTmiqTnkIbpmJ/nrKw3ODLml4XmlK/mj7To
-kKXjgIINCg0K5oiR5piv5LiA5Liq5YWF5ruh54ix5b+D44CB6K+a5a6e5ZKM5rex5oOF55qE5Lq6
-77yM5YW35pyJ6Imv5aW955qE5bm96buY5oSf77yM5oiR5Zac5qyi57uT6K+G5paw5pyL5Y+L5bm2
-5LqG6Kej5LuW5Lus55qE55Sf5rS75pa55byP77yM5oiR5Zac5qyi55yL5Yiw5aSn5rW355qE5rOi
-5rab5ZKM5bGx6ISJ55qE576O5Li95Lul5Y+K5aSn6Ieq54S25omA5oul5pyJ55qE5LiA5YiH5o+Q
-5L6b44CC5b6I6auY5YW06IO95pu05aSa5Zyw5LqG6Kej5oKo77yM5oiR6K6k5Li65oiR5Lus5Y+v
-5Lul5bu656uL6Imv5aW955qE5ZWG5Lia5Y+L6LCK44CCDQoNCuaIkeS4gOebtOW+iOS4jeW8gOW/
-g++8jOWboOS4uuWHoOW5tOadpeeUn+a0u+WvueaIkeS4jeWFrOW5s++8m+aIkeWcqCAyMQ0K5bKB
-5pe25aSx5Y675LqG54i25q+N44CC5oiR54i25Lqy55qE5ZCN5a2X5piv5biV54m56YeM5pav5L2p
-5oGp5ZKM5oiR55qE5q+N5Lqy546b5Li95L2p5oGp44CC5rKh5pyJ5Lq65biu5Yqp5oiR77yM5L2G
-5oiR5b6I6auY5YW05oiR57uI5LqO5Zyo576O5Yab5Lit5om+5Yiw5LqG6Ieq5bex44CCDQoNCuaI
-kee7k+WpmueUn+S6huS4gOS4quWtqeWtkO+8jOS9huS7luWOu+S4luS6hu+8jOWcqOaIkeS4iOWk
-q+W8gOWni+iDjOWPm+aIkeWQjuS4jeS5he+8jOaIkeS4jeW+l+S4jeaUvuW8g+WpmuWnu+OAgg0K
-DQrmiJHkuZ/lvojlubjov5DlnKjmiJHnmoTlm73lrrbnvo7lm73lkozliKnmr5Tkuprnj63liqDo
-pb/ov5nph4zmi6XmnInmiJHnlJ/mtLvkuK3pnIDopoHnmoTkuIDliIfvvIzkvYbmsqHmnInkurrn
-u5nmiJHlu7rorq7jgILmiJHpnIDopoHkuIDkuKror5rlrp7nmoTkurrmnaXkv6Hku7vvvIzku5bk
-uZ/kvJrlu7rorq7miJHlpoLkvZXmipXotYTmiJHnmoTpkrHjgILlm6DkuLrmiJHmmK/miJHniLbm
-r43lnKjku5bku6zmrbvliY3nlJ/kuIvnmoTllK/kuIDkuIDkuKrlpbPlranjgIINCg0K5oiR5LiN
-6K6k6K+G5L2g77yM5L2G5oiR6K6k5Li65pyJ5LiA5Liq5Y+v5Lul5L+h5Lu755qE5aW95Lq677yM
-5Y+v5Lul5bu656uL55yf5q2j55qE5L+h5Lu75ZKM6Imv5aW955qE5ZWG5Lia5Y+L6LCK77yM5aaC
-5p6c5L2g55yf55qE5pyJ5LiA5Liq6K+a5a6e55qE5ZCN5a2X77yM5oiR5Lmf5pyJ5LiA5Lqb5LqL
-5oOF6KaB5ZKM5L2g5YiG5Lqr55u45L+h44CC5Zyo5L2g6Lqr5LiK77yM5Zug5Li65oiR6ZyA6KaB
-5L2g55qE5biu5Yqp44CC5oiR5oul5pyJ5oiR5Zyo5Yip5q+U5Lqa54+t5Yqg6KW/6LWa5Yiw55qE
-5oC76aKd77yINDcwDQrkuIfnvo7lhYPvvInjgILmiJHlsIblnKjkuIvkuIDlsIHnlLXlrZDpgq7k
-u7bkuK3lkYror4nkvaDmiJHmmK/lpoLkvZXlgZrliLDnmoTvvIzkuI3opoHmg4rmhYzvvIzlroPk
-u6zmmK/ml6Dpo47pmannmoTvvIzmiJHov5jlnKjkuI4gUmVkDQrmnInogZTns7vnmoTkurrpgZPk
-uLvkuYnljLvnlJ/nmoTluK7liqnkuIvlsIbov5nnrJTpkrHlrZjlhaXkuobkuIDlrrbpk7booYzj
-gILmiJHluIzmnJvkvaDku6XmiJHnmoTlj5fnm4rkurrouqvku73mjqXlj5fln7rph5HvvIzlubbl
-nKjmiJHlnKjov5nph4zlrozmiJDlkI7lpqXlloTkv53nrqHlroPvvIzlubbojrflvpfmiJHnmoTl
-hpvkuovpgJrooYzor4HvvIzku6Xkvr/lnKjkvaDnmoTlm73lrrbkuI7kvaDkvJrpnaLvvJvkuI3o
-poHlrrPmgJXpk7booYzkvJrpgJrov4fnlLXmsYflsIbotYTph5Hovaznu5nmgqjvvIzov5nlr7nm
-iJHku6zmnaXor7TlronlhajkuJTlv6vmjbfjgIINCg0K56yU6K6wO+aIkeS4jeefpemBk+aIkeS7
-rOimgeWcqOi/memHjOW+heWkmuS5heWSjOaIkeeahOWRvei/kO+8jOWboOS4uuaIkeWcqOi/memH
-jOW5uOWFjeS6juS4pOasoeeCuOW8ueiireWHu++8jOi/meWvvOiHtOaIkeWvu+aJvuS4gOS4quWA
-vOW+l+S/oei1lueahOS6uuadpeW4ruWKqeaIkeaOpeaUtuWSjOaKlei1hOWfuumHke+8jOWboOS4
-uuaIkeWwhuadpeWIsOS9oOeahOWbveWutuWHuui6q+aKlei1hO+8jOW8gOWni+aWsOeUn+a0u++8
-jOS4jeWGjeW9k+WFteOAgg0KDQrlpoLmnpzmgqjmhL/mhI/osKjmhY7lpITnkIbvvIzor7flm57l
-pI3miJHjgILmiJHkvJrlkYror4nkvaDmjqXkuIvmnaXnmoTmtYHnqIvvvIzlubbnu5nkvaDlj5Hp
-gIHmm7TlpJrlhbPkuo7ln7rph5HlrZjlhaXpk7booYznmoTkv6Hmga/jgILku6Xlj4rpk7booYzl
-sIblpoLkvZXluK7liqnmiJHku6zpgJrov4fnlLXmsYflsIbotYTph5Hovaznp7vliLDmgqjnmoTl
-m73lrrbjgILoi6XmnInlhbTotqPor7fogZTns7vmnKzkurrjgIINCg==
+Good Day My Good Friend.
+
+I am deeply sorry if I have in any manner disturbed your privacy.
+Please forgive this unusual manner of contacting you, there is
+absolutely going to be a great doubt and distrust in your heart in
+respect for this email. There is no way for me to know whether I will
+be properly understood, but it is my duty to write and reach out to
+you as a person of transparency, honesty and high caliber. I'll
+introduce myself once again, I am Mr. Israel Barney, from Togo Republic. I
+am also the Branch Bank Manager of Biatogo Bank, I was also the
+Account Manager of my late client Mrs. Anna Who might or might
+not be related to you.
+
+She traveled down to china on the 28th of December 2019 on a five
+weeks business trip and after the successful transaction in china, she
+flew back, not knowing she has been infected with the deadly
+Coronavirus (COVID-19). And she sadly passed away on March 20th 2020.
+She left the sum of $3.2 Million (Three Million, Two Hundred Thousand
+United States Dollars) in our financial institute (Bank), she
+specifically confided in me told me that "no one else knows about her
+funds in our bank" that the funds was for a project before she passed
+away while she was ill. And down here in our country at this present
+day, once anyone passes away, after 1 Year if no relatives of the late
+the customer doesn't come to claim the funds/assets, it'll be recycled, and
+reported to the Central Bank where the greedy government will then
+want to have their hands on the funds.
+
+That's where you come in, since you bear the same surnames with her, I
+want you to stand as her next of kin since no one else knows about
+this funds in our bank besides me, and i don't think anyone will be
+coming for it. I promise you that if you agree to assist in claiming
+this funds from my Bank, we'll not bridge the law in any way because
+I'll be your eyes and ears here in the Bank.
+
+After all is settled we'll share the fund $3.2 Million 50% equally or
+rather invest on whatever we choose. So I would really like to know
+what you have to say in regards to my proposal.
+
+Thanks
+Mr. Israel Barney.

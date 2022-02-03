@@ -2,153 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9DC4A8284
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 638024A8289
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiBCKkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 05:40:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39743 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234197AbiBCKkN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:40:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643884813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iF9IVWvlzL/qClpscwHGHUc/fyfoMXfsUMhqjE8f3MA=;
-        b=R1nvdHSaLvkdKaIGyX39mL56ptAEv7yPTh8q/yiMRyUch8IGUTwacEyVITBl5UTYCxgzjC
-        a0VxmHSjG9y/T9ZnoO4/TWXu/slwRMKb8smv6L5QI1L/aW7aHNTjAMszx094mYhhT1cq+b
-        gtwWP+Jgvahf1F3EelKnHRJa199XYWA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-492-T5aJJ9_nMWSVIBsd1lD-rg-1; Thu, 03 Feb 2022 05:40:12 -0500
-X-MC-Unique: T5aJJ9_nMWSVIBsd1lD-rg-1
-Received: by mail-ed1-f72.google.com with SMTP id q10-20020a5085ca000000b0040e3ecf0ec2so1224504edh.14
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 02:40:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iF9IVWvlzL/qClpscwHGHUc/fyfoMXfsUMhqjE8f3MA=;
-        b=8FYdbnsgWOC7X6pX1vqIjR0G2d0f7MCxPfTtyECYmXn+DQV1uzCH37VjjA7jkhsDri
-         /U8i4Z5oDwYQ/teV3cW+h+qOr0jrns89POEbomYGdRl3Qr2X/E0P+kVxBsdcTUO7aTjH
-         Aent1fczHhOyjAEDxeo7db/nHSCQhqsue7AHpYrzdlTkk9LPLINGG+wxfIMkcdf7fbpX
-         GUjgyEWxMP/tZ9pIdad9l2cUEpfpACVVu88RV2RnZTqR3qN8Gbw4saPoIhF4YE7oYylI
-         S29bdPVfk/EVWjngyHulo/hf/Lwu3gtbuIVnm5/duLk78Cv80Y7TqzwCPJ7LW+NNUt4g
-         WJDw==
-X-Gm-Message-State: AOAM533jyP/HxSPexWDElavxhrSVgl/kYpTP6j3R3X9lBEFpv3sCMC7n
-        T3lmTlTZfpAqmZIEPf1ffCBgVKclSlUU26UPHlfUPQe1WkHjD+I0wfTumkBr6/uONk1qv3Ib1jY
-        ZdYRqzJnYQyjAzgpT2W6D+Xoq
-X-Received: by 2002:a17:907:d0d:: with SMTP id gn13mr29254567ejc.266.1643884810981;
-        Thu, 03 Feb 2022 02:40:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw38e8yKQ+50WABfgP/CdNnYgCDcDWAlrfBiwh9rs0Aw8aLmugQyqOluCm0HXTr4XjDcT5YtQ==
-X-Received: by 2002:a17:907:d0d:: with SMTP id gn13mr29254556ejc.266.1643884810787;
-        Thu, 03 Feb 2022 02:40:10 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id f18sm16599860ejh.97.2022.02.03.02.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 02:40:10 -0800 (PST)
-Message-ID: <11cec5e6-e3b9-ca5b-7b21-da9eff82c24e@redhat.com>
-Date:   Thu, 3 Feb 2022 11:40:09 +0100
+        id S236250AbiBCKk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:40:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:37780 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231717AbiBCKk0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 05:40:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93FDC113E;
+        Thu,  3 Feb 2022 02:40:26 -0800 (PST)
+Received: from [10.57.13.234] (unknown [10.57.13.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AF363F40C;
+        Thu,  3 Feb 2022 02:40:25 -0800 (PST)
+Message-ID: <da8768ba-fb10-e2d5-fdcf-2b3c6b9c6b18@arm.com>
+Date:   Thu, 3 Feb 2022 10:40:23 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] platform: surface: Replace acpi_bus_get_device()
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 01/15] coresight: Make ETM4x TRCIDR0 register accesses
+ consistent with sysreg.h
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>
-References: <5805278.lOV4Wx5bFT@kreacher>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <5805278.lOV4Wx5bFT@kreacher>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        mathieu.poirier@linaro.org, coresight@lists.linaro.org
+Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220202160226.37858-1-james.clark@arm.com>
+ <20220202160226.37858-2-james.clark@arm.com>
+ <41b08fa5-6333-48e8-4727-2082c001e148@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <41b08fa5-6333-48e8-4727-2082c001e148@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 1/26/22 20:41, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+On 02/02/2022 17:05, Suzuki K Poulose wrote:
+> Hi James
 > 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
+> Thanks for taking this tedious task of cleaning the code and making
+> this robust and readable.
 > 
-> No intentional functional impact.
+> One minor comment below.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/surface/surface3-wmi.c        |   12 ++++--------
->  drivers/platform/surface/surface_acpi_notify.c |    3 ++-
->  2 files changed, 6 insertions(+), 9 deletions(-)
+> On 02/02/2022 16:02, James Clark wrote:
+>> This is a no-op change for style and consistency and has no effect on the
+>> binary produced by gcc-11.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>   .../coresight/coresight-etm4x-core.c          | 37 +++++--------------
+>>   drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
+>>   drivers/hwtracing/coresight/coresight-priv.h  |  1 +
+>>   3 files changed, 27 insertions(+), 28 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> index bf18128cf5de..8aefee4e72fd 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> @@ -1091,41 +1091,22 @@ static void etm4_init_arch_data(void *info)
+>>       etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+>>         /* INSTP0, bits[2:1] P0 tracing support field */
+>> -    if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
+>> -        drvdata->instrp0 = true;
+>> -    else
+>> -        drvdata->instrp0 = false;
+>> -
+>> +    drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
+>> +                  (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
 > 
-> Index: linux-pm/drivers/platform/surface/surface3-wmi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/surface/surface3-wmi.c
-> +++ linux-pm/drivers/platform/surface/surface3-wmi.c
-> @@ -116,15 +116,11 @@ static acpi_status s3_wmi_attach_spi_dev
->  					    void *data,
->  					    void **return_value)
->  {
-> -	struct acpi_device *adev, **ts_adev;
-> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
-> +	struct acpi_device **ts_adev = data;
->  
-> -	if (acpi_bus_get_device(handle, &adev))
-> -		return AE_OK;
-> -
-> -	ts_adev = data;
-> -
-> -	if (strncmp(acpi_device_bid(adev), SPI_TS_OBJ_NAME,
-> -	    strlen(SPI_TS_OBJ_NAME)))
-> +	if (!adev || strncmp(acpi_device_bid(adev), SPI_TS_OBJ_NAME,
-> +			     strlen(SPI_TS_OBJ_NAME)))
->  		return AE_OK;
->  
->  	if (*ts_adev) {
-> Index: linux-pm/drivers/platform/surface/surface_acpi_notify.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/surface/surface_acpi_notify.c
-> +++ linux-pm/drivers/platform/surface/surface_acpi_notify.c
-> @@ -770,7 +770,8 @@ static acpi_status san_consumer_setup(ac
->  		return AE_OK;
->  
->  	/* Ignore ACPI devices that are not present. */
-> -	if (acpi_bus_get_device(handle, &adev) != 0)
-> +	adev = acpi_fetch_acpi_dev(handle);
-> +	if (!adev)
->  		return AE_OK;
->  
->  	san_consumer_dbg(&pdev->dev, handle, "creating device link\n");
+> I don't understand this check. For ETMv4, here is what I find in the spec (ARM IHI 0064C)
+> 
+> P0 tracing support field. The permitted values are:
+> 0b00  Tracing of load and store instructions as P0 elements is not
+>       supported.
+> 0b11  Tracing of load and store instructions as P0 elements is
+>       supported, so TRCCONFIGR.INSTP0 is supported.
+> 
+> All other values are reserved.
+> 
+> So the check could simply be :
+> 
+>     drvdata->instrp0 = (REG_VAL(emtidr0, TRCIDR0_INSTP0) == 0b11;
+
+Yes I can make this change, but it does make the compiler emit a slightly different binary
+so we can't rely on that to check the refactor is ok.
+
+Should I change it in this commit or stick it on the very end? Probably the end is best
+in case I have to do any rebases and I still need to validate there are no mistakes.
+
+> 
+> That said, I think this is all dead code on ETMv4 as we never support
+> data tracing on A class. May be there will be a use with R class in the
+> future.
 > 
 > 
+>>       /* TRCBB, bit[5] Branch broadcast tracing support bit */
+>> -    if (BMVAL(etmidr0, 5, 5))
+>> -        drvdata->trcbb = true;
+>> -    else
+>> -        drvdata->trcbb = false;
+>> -
+>> +    drvdata->trcbb = !!(etmidr0 & TRCIDR0_TRCBB);
+>>       /* TRCCOND, bit[6] Conditional instruction tracing support bit */
+>> -    if (BMVAL(etmidr0, 6, 6))
+>> -        drvdata->trccond = true;
+>> -    else
+>> -        drvdata->trccond = false;
+>> -
+>> +    drvdata->trccond = !!(etmidr0 & TRCIDR0_TRCCOND);
+>>       /* TRCCCI, bit[7] Cycle counting instruction bit */
+>> -    if (BMVAL(etmidr0, 7, 7))
+>> -        drvdata->trccci = true;
+>> -    else
+>> -        drvdata->trccci = false;
+>> -
+>> +    drvdata->trccci = !!(etmidr0 & TRCIDR0_TRCCCI);
+>>       /* RETSTACK, bit[9] Return stack bit */
+>> -    if (BMVAL(etmidr0, 9, 9))
+>> -        drvdata->retstack = true;
+>> -    else
+>> -        drvdata->retstack = false;
+>> -
+>> +    drvdata->retstack = !!(etmidr0 & TRCIDR0_RETSTACK);
+>>       /* NUMEVENT, bits[11:10] Number of events field */
+>> -    drvdata->nr_event = BMVAL(etmidr0, 10, 11);
+>> +    drvdata->nr_event = REG_VAL(etmidr0, TRCIDR0_NUMEVENT);
+>>       /* QSUPP, bits[16:15] Q element support field */
+>> -    drvdata->q_support = BMVAL(etmidr0, 15, 16);
+>> +    drvdata->q_support = REG_VAL(etmidr0, TRCIDR0_QSUPP);
+>>       /* TSSIZE, bits[28:24] Global timestamp size field */
+>> -    drvdata->ts_size = BMVAL(etmidr0, 24, 28);
+>> +    drvdata->ts_size = REG_VAL(etmidr0, TRCIDR0_TSSIZE);
+>>         /* maximum size of resources */
+>>       etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+>> index 3c4d69b096ca..2bd8ad953b8e 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+>> @@ -130,6 +130,23 @@
+>>     #define TRCRSR_TA            BIT(12)
+>>   +/*
+>> + * Bit positions of registers that are defined above, in the sysreg.h style
+>> + * of _MASK, _SHIFT and BIT().
+>> + */
+>> +#define TRCIDR0_INSTP0_SHIFT            1
+>> +#define TRCIDR0_INSTP0_MASK            GENMASK(1, 0)
+>> +#define TRCIDR0_TRCBB                BIT(5)
+>> +#define TRCIDR0_TRCCOND                BIT(6)
+>> +#define TRCIDR0_TRCCCI                BIT(7)
+>> +#define TRCIDR0_RETSTACK            BIT(9)
+>> +#define TRCIDR0_NUMEVENT_SHIFT            10
+>> +#define TRCIDR0_NUMEVENT_MASK            GENMASK(1, 0)
+>> +#define TRCIDR0_QSUPP_SHIFT            15
+>> +#define TRCIDR0_QSUPP_MASK            GENMASK(1, 0)
+>> +#define TRCIDR0_TSSIZE_SHIFT            24
+>> +#define TRCIDR0_TSSIZE_MASK            GENMASK(4, 0)
+>> +
 > 
+> Cross checked the spec, and they look correct.
+> 
+>>   /*
+>>    * System instructions to access ETM registers.
+>>    * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
+>> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+>> index ff1dd2092ac5..e22fa6184c6d 100644
+>> --- a/drivers/hwtracing/coresight/coresight-priv.h
+>> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+>> @@ -36,6 +36,7 @@
+>>     #define TIMEOUT_US        100
+>>   #define BMVAL(val, lsb, msb)    ((val & GENMASK(msb, lsb)) >> lsb)
+>> +#define REG_VAL(val, name)    ((val & (name##_MASK << name##_SHIFT)) >> name##_SHIFT)
+> 
+> super minor nit: s/name/field ?
 
+Will change and add a comment.
+
+Thanks for the review.
+
+> 
+>>     #define ETM_MODE_EXCL_KERN    BIT(30)
+>>   #define ETM_MODE_EXCL_USER    BIT(31)
+> 

@@ -2,176 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761414A7F67
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF5B4A7F6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344086AbiBCGub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 01:50:31 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:51116 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiBCGu2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 01:50:28 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        id S233309AbiBCGur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 01:50:47 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:57642 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231599AbiBCGuq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 01:50:46 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D6E7C1F398;
-        Thu,  3 Feb 2022 06:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643871027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1942n+vtW/VdqlOdcFNaQCCIWriMC0N8GhwC/HIvrAo=;
-        b=Zn8MSUdUuXmerFBTYpg/TvWMR4Gt1nA6yI8isYfwGZb/ReZLZgUWcEW+ELbsVrvY61vH/6
-        Md8mTjaZjATynsDOfv3nlRLvnEVe3XkJBK7Gan0XLtvrm2D9RJRbUmblf6TcSxWJ/wll2x
-        DYezKPbqA4auxUo6uL5/IQHLC+c5cQA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 770D91330C;
-        Thu,  3 Feb 2022 06:50:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GCgWGzN7+2EGaAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 03 Feb 2022 06:50:27 +0000
-Message-ID: <91fc3a98-1bc4-74be-9567-0880af12765f@suse.com>
-Date:   Thu, 3 Feb 2022 07:50:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] xen/x2apic: enable x2apic mode when supported for HVM
-Content-Language: en-US
-To:     Roger Pau Monne <roger.pau@citrix.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 31F5D1EC052A;
+        Thu,  3 Feb 2022 07:50:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643871040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NgVVgxFrnWWDzRBeIt1G+nS4mvlLadpwFtGpi1OsBDY=;
+        b=W7PkXA4BWOfHL2epgzq64IxceglUapTsm9fVBcMxiZeVngOLhvuPVR+DGq/C1Pu2OClb4D
+        mLamS3Mf82FSRYNmXEKHrC7/Lkw3EEJRfL/mxplBkopLWeX0BwQFM6cYmYgg/RlwQWvLDH
+        n23VNqfMU2hBhj/hclxRdcF/wWaAdWQ=
+Date:   Thu, 3 Feb 2022 07:50:35 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org
-References: <a34aff19-4530-7f44-c849-4b3eb2aa3d00@oracle.com>
- <20220121090146.13697-1-roger.pau@citrix.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220121090146.13697-1-roger.pau@citrix.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------aLfNpwznLJzQ7dZU0wTISsif"
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 20/43] x86/sev: Use SEV-SNP AP creation to start
+ secondary CPUs
+Message-ID: <Yft7O06d+iNPGCuL@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-21-brijesh.singh@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-21-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------aLfNpwznLJzQ7dZU0wTISsif
-Content-Type: multipart/mixed; boundary="------------fdm2Uc58iwQWkMjO0RCl8H0d";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Roger Pau Monne <roger.pau@citrix.com>, linux-kernel@vger.kernel.org
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- xen-devel@lists.xenproject.org
-Message-ID: <91fc3a98-1bc4-74be-9567-0880af12765f@suse.com>
-Subject: Re: [PATCH] xen/x2apic: enable x2apic mode when supported for HVM
-References: <a34aff19-4530-7f44-c849-4b3eb2aa3d00@oracle.com>
- <20220121090146.13697-1-roger.pau@citrix.com>
-In-Reply-To: <20220121090146.13697-1-roger.pau@citrix.com>
+On Fri, Jan 28, 2022 at 11:17:41AM -0600, Brijesh Singh wrote:
+> @@ -822,6 +842,236 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
+>  	pvalidate_pages(vaddr, npages, true);
+>  }
+>  
+> +static int snp_set_vmsa(void *va, bool vmsa)
+> +{
+> +	u64 attrs;
+> +
+> +	/*
+> +	 * Running at VMPL0 allows the kernel to change the VMSA bit for a page
+> +	 * using the RMPADJUST instruction. However, for the instruction to
+> +	 * succeed it must target the permissions of a lesser privileged
 
---------------fdm2Uc58iwQWkMjO0RCl8H0d
-Content-Type: multipart/mixed; boundary="------------PfFntwV0FJxIGINPPVj5Lmze"
+"lesser privileged/higher number VMPL level"
 
---------------PfFntwV0FJxIGINPPVj5Lmze
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+so that it is perfectly clear what this means.
 
-T24gMjEuMDEuMjIgMTA6MDEsIFJvZ2VyIFBhdSBNb25uZSB3cm90ZToNCj4gVGhlcmUncyBu
-byBwb2ludCBpbiBkaXNhYmxpbmcgeDJBUElDIG1vZGUgd2hlbiBydW5uaW5nIGFzIGEgWGVu
-IEhWTQ0KPiBndWVzdCwganVzdCBlbmFibGUgaXQgd2hlbiBhdmFpbGFibGUuDQo+IA0KPiBS
-ZW1vdmUgc29tZSB1bm5lZWRlZCB3cmFwcGluZyBhcm91bmQgdGhlIGRldGVjdGlvbiBmdW5j
-dGlvbnMsIGFuZA0KPiBzaW1wbHkgcHJvdmlkZSBhIHhlbl94MmFwaWNfYXZhaWxhYmxlIGhl
-bHBlciB0aGF0J3MgYSB3cmFwcGVyIGFyb3VuZA0KPiB4MmFwaWNfc3VwcG9ydGVkLg0KPiAN
-Cj4gU2lnbmVkLW9mZi1ieTogUm9nZXIgUGF1IE1vbm7DqSA8cm9nZXIucGF1QGNpdHJpeC5j
-b20+DQoNClB1c2hlZCB0byB4ZW4vdGlwLmdpdCBmb3ItbGludXMtNS4xN2ENCg0KDQpKdWVy
-Z2VuDQo=
---------------PfFntwV0FJxIGINPPVj5Lmze
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+> +	 * VMPL level, so use VMPL1 (refer to the RMPADJUST instruction in the
+> +	 * AMD64 APM Volume 3).
+> +	 */
+> +	attrs = 1;
+> +	if (vmsa)
+> +		attrs |= RMPADJUST_VMSA_PAGE_BIT;
+> +
+> +	return rmpadjust((unsigned long)va, RMP_PG_SIZE_4K, attrs);
+> +}
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+...
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
-oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
-kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
-1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
-BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
-N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
-PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
-FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
-UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
-vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
-+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
-qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
-tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
-Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
-CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
-RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
-8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
-BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
-SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
-nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
-AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
-Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
-hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
-w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
-VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
-OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
-/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
-c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
-F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
-k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
-wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
-5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
-TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
-N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
-AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
-0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
-Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
-we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
-v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
-Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
-534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
-b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
-yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
-suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> +static int wakeup_cpu_via_vmgexit(int apic_id, unsigned long start_ip)
+> +{
+> +	struct sev_es_save_area *cur_vmsa, *vmsa;
+> +	struct ghcb_state state;
+> +	unsigned long flags;
+> +	struct ghcb *ghcb;
+> +	u8 sipi_vector;
+> +	int cpu, ret;
+> +	u64 cr4;
+> +
+> +	/*
+> +	 * SNP-SNP AP creation requires that the hypervisor must support SEV-SNP
+	   ^^^^^^^
 
---------------PfFntwV0FJxIGINPPVj5Lmze--
+See what I mean? :-)
 
---------------fdm2Uc58iwQWkMjO0RCl8H0d--
+That marketing has brainwashed y'all.
 
---------------aLfNpwznLJzQ7dZU0wTISsif
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> +	 * feature. The SEV-SNP feature check is already performed, so just check
+> +	 * for the AP_CREATION feature flag.
+> +	 */
 
------BEGIN PGP SIGNATURE-----
+Let's clean this one:
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmH7ezIFAwAAAAAACgkQsN6d1ii/Ey/W
-cwf/XTOZpxy5askUaUkKFp10Y+CsYPag6GEYsp3sxO74cpXz154NJNJDJarSY3ECmy8HU5xxX7EQ
-3nBaBniu4BoIHrbAyRpw18fgI5XYADMbJQFJI9C/7z+wCJXFqbRSUw/oUSU++6n7avCEQRERJKJN
-gG50cgbQE4Zg+/RvFC0VhBX8uMdSebSim2vi9nq5UIGbOZgZO/a+G3ZdBh93R2kG7OfMQeknFP3E
-IYgRgYb2o183+V7LXcT+yZ/aUU9dVVO0SiZAyMrahB21DhOxD3jQLTADJAVFpN6Ifq3ce3U52FNn
-adBE0Q5kL5lwyBy8jDx/JHL3bib7QkpYJc7M+xxhLA==
-=Uq/7
------END PGP SIGNATURE-----
+	/*
+	 * The hypervisor SNP feature support check has happened earlier, just check
+	 * the AP_CREATION one here.
+	 */
 
---------------aLfNpwznLJzQ7dZU0wTISsif--
+
+> +	if (!(sev_hv_features & GHCB_HV_FT_SNP_AP_CREATION))
+> +		return -EOPNOTSUPP;
+> +
+> +	/*
+> +	 * Verify the desired start IP against the known trampoline start IP
+> +	 * to catch any future new trampolines that may be introduced that
+> +	 * would require a new protected guest entry point.
+> +	 */
+> +	if (WARN_ONCE(start_ip != real_mode_header->trampoline_start,
+> +		      "Unsupported SEV-SNP start_ip: %lx\n", start_ip))
+> +		return -EINVAL;
+> +
+> +	/* Override start_ip with known protected guest start IP */
+> +	start_ip = real_mode_header->sev_es_trampoline_start;
+
+Yah, I'd like to get rid of that ->sev_es_trampoline_start and use the
+normal ->trampoline_start. TDX is introducing a third one even and
+they're all mutually-exclusive u32 values.
+
+...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

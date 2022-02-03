@@ -2,179 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8DD4A8889
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFE64A888D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352194AbiBCQ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:27:18 -0500
-Received: from mga03.intel.com ([134.134.136.65]:65493 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234500AbiBCQ1P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:27:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643905635; x=1675441635;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=J04TgQrgQo+RUYfQTdaDuYPqbczBPf69h8/g5tvPcrY=;
-  b=KcWmlBApp3OQSGKX8lg47vx8G50Ir/kDI4ayMedCAtq6d9vpjKtMHYhu
-   HNk4E1Cb30RHpCsRU9hznp4Un7XBqD3YYnn2h/zXd8wzwK2hP1SHT+DdL
-   pI3JrTgZTIMvV5JqkUZWCyQAuCAH2VA6Fxy5DJwmKPa+MA2X29n3u8mzS
-   ry7AHZzLLophBZIr3x8j7rRVYORgSdrRrXYsL11a4iM3poqULCiKg1BjW
-   8SgeDozmsKttEqtbKqJ8JSI3CEjqVsrCqHZ6Cmictd/QW74f3bzYqJTPW
-   Bfwthg75YKTwXYHoGICOShCJtJP6nblNqVkVDxM5X9E9f4q8MlsPYI6N/
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248132588"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="248132588"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 08:27:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="599958201"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Feb 2022 08:27:13 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 1786D18D; Thu,  3 Feb 2022 18:27:27 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH v2 1/1] iio: chemical: atlas-ezo-sensor: Make use of device properties
-Date:   Thu,  3 Feb 2022 18:27:25 +0200
-Message-Id: <20220203162725.63979-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        id S1352206AbiBCQ2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352198AbiBCQ2g (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:28:36 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D14C061714;
+        Thu,  3 Feb 2022 08:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=i43avDuz3XN6MDj44KkNBxrK6u4IdlfhJ1/qr9Rvu44=; b=RwFuIYqzBWh4oefkUpUmAE2BlC
+        kqQEvY+nOkk10oBkT4kEinV481nqR0Z+zdWAA6LEw7PUeCHSplvR4+feBV5SkwbANrsG6fQDPimVM
+        XdEansvs/WOvyfdx6z4GsxJGlPkuwfwRBxcCl25wbLQl8Hm471bSIPmMeKU3WHCNtTYi+XGFUJZ/j
+        yAJp0pOwO0dowDWoXGcU7MEUH0CaQ+VC2a/geYpH+Dn0UnlcU/Jr3Nc0V2MlHIiV7YnhvxOdJJa14
+        pyr+0BYpTMsKG4DnxATGFfzR5Pco1l2JPIpk4GkG50mCyqeZfWWA4FaPB7DtpETIBZxDFOQtcY5Nv
+        i6ANGUaQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57014)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nFey4-0002qb-7d; Thu, 03 Feb 2022 16:28:20 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nFexx-00048c-FZ; Thu, 03 Feb 2022 16:28:13 +0000
+Date:   Thu, 3 Feb 2022 16:28:13 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Yannick Vignon <yannick.vignon@oss.nxp.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sebastien.laveze@oss.nxp.com, Vladimir Oltean <olteanv@gmail.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, mingkai.hu@nxp.com,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Yannick Vignon <yannick.vignon@nxp.com>
+Subject: Re: [PATCH net] net: stmmac: ensure PTP time register reads are
+ consistent
+Message-ID: <YfwCnV2TV8fznZ33@shell.armlinux.org.uk>
+References: <20220203160025.750632-1-yannick.vignon@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203160025.750632-1-yannick.vignon@oss.nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+On Thu, Feb 03, 2022 at 05:00:25PM +0100, Yannick Vignon wrote:
+> From: Yannick Vignon <yannick.vignon@nxp.com>
+> 
+> Even if protected from preemption and interrupts, a small time window
+> remains when the 2 register reads could return inconsistent values,
+> each time the "seconds" register changes. This could lead to an about
+> 1-second error in the reported time.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed castings and qualifiers (LKP)
- drivers/iio/chemical/atlas-ezo-sensor.c | 44 +++++++++++--------------
- 1 file changed, 20 insertions(+), 24 deletions(-)
+Have you checked whether the hardware protects against this (i.o.w. the
+hardware latches the PTP_STSR value when PTP_STNSR is read, or vice
+versa? Several PTP devices I've looked at do this to allow consistent
+reading.
 
-diff --git a/drivers/iio/chemical/atlas-ezo-sensor.c b/drivers/iio/chemical/atlas-ezo-sensor.c
-index b1bacfe3c3ce..3f3ea479b474 100644
---- a/drivers/iio/chemical/atlas-ezo-sensor.c
-+++ b/drivers/iio/chemical/atlas-ezo-sensor.c
-@@ -6,25 +6,21 @@
-  * Author: Matt Ranostay <matt.ranostay@konsulko.com>
-  */
- 
--#include <linux/module.h>
- #include <linux/init.h>
- #include <linux/delay.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/property.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
--#include <linux/of_device.h>
-+
- #include <linux/iio/iio.h>
- 
- #define ATLAS_EZO_DRV_NAME		"atlas-ezo-sensor"
- #define ATLAS_INT_TIME_IN_MS		950
- #define ATLAS_INT_HUM_TIME_IN_MS	350
- 
--enum {
--	ATLAS_CO2_EZO,
--	ATLAS_O2_EZO,
--	ATLAS_HUM_EZO,
--};
--
- struct atlas_ezo_device {
- 	const struct iio_chan_spec *channels;
- 	int num_channels;
-@@ -33,7 +29,7 @@ struct atlas_ezo_device {
- 
- struct atlas_ezo_data {
- 	struct i2c_client *client;
--	struct atlas_ezo_device *chip;
-+	const struct atlas_ezo_device *chip;
- 
- 	/* lock to avoid multiple concurrent read calls */
- 	struct mutex lock;
-@@ -81,17 +77,17 @@ static const struct iio_chan_spec atlas_hum_ezo_channels[] = {
- };
- 
- static struct atlas_ezo_device atlas_ezo_devices[] = {
--	[ATLAS_CO2_EZO] = {
-+	[0] = {
- 		.channels = atlas_co2_ezo_channels,
- 		.num_channels = 1,
- 		.delay = ATLAS_INT_TIME_IN_MS,
- 	},
--	[ATLAS_O2_EZO] = {
-+	[1] = {
- 		.channels = atlas_o2_ezo_channels,
- 		.num_channels = 1,
- 		.delay = ATLAS_INT_TIME_IN_MS,
- 	},
--	[ATLAS_HUM_EZO] = {
-+	[2] = {
- 		.channels = atlas_hum_ezo_channels,
- 		.num_channels = 1,
- 		.delay = ATLAS_INT_HUM_TIME_IN_MS,
-@@ -184,17 +180,17 @@ static const struct iio_info atlas_info = {
- };
- 
- static const struct i2c_device_id atlas_ezo_id[] = {
--	{ "atlas-co2-ezo", ATLAS_CO2_EZO },
--	{ "atlas-o2-ezo", ATLAS_O2_EZO },
--	{ "atlas-hum-ezo", ATLAS_HUM_EZO },
-+	{ "atlas-co2-ezo", (kernel_ulong_t)&atlas_ezo_devices[0] },
-+	{ "atlas-o2-ezo", (kernel_ulong_t)&atlas_ezo_devices[1] },
-+	{ "atlas-hum-ezo", (kernel_ulong_t)&atlas_ezo_devices[2] },
- 	{}
- };
- MODULE_DEVICE_TABLE(i2c, atlas_ezo_id);
- 
- static const struct of_device_id atlas_ezo_dt_ids[] = {
--	{ .compatible = "atlas,co2-ezo", .data = (void *)ATLAS_CO2_EZO, },
--	{ .compatible = "atlas,o2-ezo", .data = (void *)ATLAS_O2_EZO, },
--	{ .compatible = "atlas,hum-ezo", .data = (void *)ATLAS_HUM_EZO, },
-+	{ .compatible = "atlas,co2-ezo", .data = &atlas_ezo_devices[0], },
-+	{ .compatible = "atlas,o2-ezo", .data = &atlas_ezo_devices[1], },
-+	{ .compatible = "atlas,hum-ezo", .data = &atlas_ezo_devices[2], },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, atlas_ezo_dt_ids);
-@@ -202,20 +198,20 @@ MODULE_DEVICE_TABLE(of, atlas_ezo_dt_ids);
- static int atlas_ezo_probe(struct i2c_client *client,
- 		       const struct i2c_device_id *id)
- {
-+	const struct atlas_ezo_device *chip;
- 	struct atlas_ezo_data *data;
--	struct atlas_ezo_device *chip;
--	const struct of_device_id *of_id;
- 	struct iio_dev *indio_dev;
- 
- 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
- 	if (!indio_dev)
- 		return -ENOMEM;
- 
--	of_id = of_match_device(atlas_ezo_dt_ids, &client->dev);
--	if (!of_id)
--		chip = &atlas_ezo_devices[id->driver_data];
-+	if (dev_fwnode(&client->dev))
-+		chip = device_get_match_data(&client->dev);
- 	else
--		chip = &atlas_ezo_devices[(unsigned long)of_id->data];
-+		chip = (const struct atlas_ezo_device *)id->driver_data;
-+	if (!chip)
-+		return -EINVAL;
- 
- 	indio_dev->info = &atlas_info;
- 	indio_dev->name = ATLAS_EZO_DRV_NAME;
 -- 
-2.34.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

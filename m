@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35C94A8E23
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2DA4A8DE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354890AbiBCUfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S1354940AbiBCUeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:34:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352611AbiBCUde (ORCPT
+        with ESMTP id S1354668AbiBCUci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:33:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5692C06174E;
-        Thu,  3 Feb 2022 12:33:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D0361ACF;
-        Thu,  3 Feb 2022 20:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63B9C340E8;
-        Thu,  3 Feb 2022 20:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920384;
-        bh=gGkLfyr40uJZuMOzHhJ5bCp3liAMaPtfJXeg3XdSmYM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YbaF1adnFc+miLSnZCqZLRSjempgAWne6VimYbPmCCcDFBkA439R51AB+pfdWZp5W
-         Td0LluLIRIyonX77Q015Ycj5sKQOeDUiCmi/cBKPLXD7x+d4+nxr7oIzMikjM61qE4
-         MSr8CCvT7CC2hv4wI2DmQJLrZaTOPTu0rZg+b2PQ0hm85HRX2A9sCoCiTAwRq8DS3i
-         BT9+g6IzWwuGWa0uOL3bILy/a2ILVHsENZQovFPmqaUTRz55tOn7E4Sgz/CP7UYFns
-         xug5FPs8M9e57rAOoi3RT8tfd6DvXfbnQd3gI8Zkcowy3SVi9tpAFO6Ae4UH9ceFSe
-         NIkjk6c5Mh9GA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Olga Kornievskaia <kolga@netapp.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>,
-        trond.myklebust@hammerspace.com, anna.schumaker@netapp.com,
-        chuck.lever@oracle.com, davem@davemloft.net, kuba@kernel.org,
-        linux-nfs@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 11/41] SUNRPC allow for unspecified transport time in rpc_clnt_add_xprt
-Date:   Thu,  3 Feb 2022 15:32:15 -0500
-Message-Id: <20220203203245.3007-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
-References: <20220203203245.3007-1-sashal@kernel.org>
+        Thu, 3 Feb 2022 15:32:38 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB3C0617A3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:32:31 -0800 (PST)
+Received: from dslb-188-096-149-005.188.096.pools.vodafone-ip.de ([188.96.149.5] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1nFimK-0004W7-NP; Thu, 03 Feb 2022 21:32:28 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 3/4] staging: r8188eu: remove constant parameter of odm_ConfigRFReg_8188E
+Date:   Thu,  3 Feb 2022 21:32:16 +0100
+Message-Id: <20220203203217.252156-4-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220203203217.252156-1-martin@kaiser.cx>
+References: <20220203203217.252156-1-martin@kaiser.cx>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+The only caller of odm_ConfigRFReg_8188E sets RF_PATH to RF_PATH_A.
+Remove this parameter and use RF_PATH_A inside the function.
 
-[ Upstream commit b8a09619a56334414cbd7f935a0796240d0cc07e ]
-
-If the supplied argument doesn't specify the transport type, use the
-type of the existing rpc clnt and its existing transport.
-
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- net/sunrpc/clnt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/hal/odm_RegConfig8188E.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
-index f056ff9314442..5da1d7e8468a5 100644
---- a/net/sunrpc/clnt.c
-+++ b/net/sunrpc/clnt.c
-@@ -2903,7 +2903,7 @@ int rpc_clnt_add_xprt(struct rpc_clnt *clnt,
- 	unsigned long connect_timeout;
- 	unsigned long reconnect_timeout;
- 	unsigned char resvport, reuseport;
--	int ret = 0;
-+	int ret = 0, ident;
+diff --git a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
+index 5fb5a88314ed..9059f2533b0b 100644
+--- a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
++++ b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
+@@ -4,8 +4,7 @@
+ #include "../include/drv_types.h"
  
- 	rcu_read_lock();
- 	xps = xprt_switch_get(rcu_dereference(clnt->cl_xpi.xpi_xpswitch));
-@@ -2917,8 +2917,11 @@ int rpc_clnt_add_xprt(struct rpc_clnt *clnt,
- 	reuseport = xprt->reuseport;
- 	connect_timeout = xprt->connect_timeout;
- 	reconnect_timeout = xprt->max_reconnect_timeout;
-+	ident = xprt->xprt_class->ident;
- 	rcu_read_unlock();
+ static void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
+-				  u32 Data, enum rf_radio_path RF_PATH,
+-				  u32 RegAddr)
++				  u32 Data, u32 RegAddr)
+ {
+ 	if (Addr == 0xffe) {
+ 		msleep(50);
+@@ -20,7 +19,7 @@ static void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
+ 	} else if (Addr == 0xf9) {
+ 		udelay(1);
+ 	} else {
+-		rtl8188e_PHY_SetRFReg(pDM_Odm->Adapter, RF_PATH, RegAddr, bRFRegOffsetMask, Data);
++		rtl8188e_PHY_SetRFReg(pDM_Odm->Adapter, RF_PATH_A, RegAddr, bRFRegOffsetMask, Data);
+ 		/*  Add 1us delay between BB/RF register setting. */
+ 		udelay(1);
+ 	}
+@@ -31,7 +30,7 @@ void odm_ConfigRF_RadioA_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Data
+ 	u32  content = 0x1000; /*  RF_Content: radioa_txt */
+ 	u32 maskforPhySet = (u32)(content & 0xE000);
  
-+	if (!xprtargs->ident)
-+		xprtargs->ident = ident;
- 	xprt = xprt_create_transport(xprtargs);
- 	if (IS_ERR(xprt)) {
- 		ret = PTR_ERR(xprt);
+-	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, RF_PATH_A, Addr | maskforPhySet);
++	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, Addr | maskforPhySet);
+ }
+ 
+ void odm_ConfigMAC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u8 Data)
 -- 
-2.34.1
+2.30.2
 

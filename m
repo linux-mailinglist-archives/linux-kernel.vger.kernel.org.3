@@ -2,123 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE0E4A883D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7314A883F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352026AbiBCQDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:03:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S1352116AbiBCQDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiBCQC5 (ORCPT
+        with ESMTP id S239458AbiBCQDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:02:57 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5588BC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:02:56 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id m90so6041506uam.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:02:56 -0800 (PST)
+        Thu, 3 Feb 2022 11:03:01 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8BC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:03:01 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so10489993pjq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:03:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yQV3gPl1yDUBgxhny6R2vDhSuqKPXgGrUGZ3acHuiKk=;
-        b=f/Gne2cEJE032CfqiT7wIXCMdEMeDWaNJaLR0uJbv/ll95V4w9Muj9+2Dt+ZFGTzIK
-         ZT0l0HlLnM5cR4zkia5kROkDaIeFVJXpm5sjYGPQpxHGVfBJo4PQwkCFB+YE5/OqxFKR
-         WbKW8TcLvT38g0muYFRVMgWjPY5EBGj2/a5/onaMv3+av491P+ABP/UovecDJkMIxIK6
-         TVSo/g+g4mHE+K06lvS0qQobDByynd+Njzk9WMCQQ0WDF053NsNl67QNSqrDUIfunIaK
-         4kZ3IHjk2ZCYsnFVjDyoaDKaWhI0/GeWokBMv3cSnVDCXpcu3F3RvxJSvR0JCLau8HtS
-         dyqA==
+        bh=yY2bzUZwNMPnhcHR5z5MDI7i8ZyrF+lUHnqiNuxus8c=;
+        b=rBrEb5yFwDlLbCMeQHwcMbA5BugUu4J0lSxvTjnezQM5GlT60pVaRMvYto2/kU6ylX
+         0mfrW41j4MDoEJ3RygMmvcXlI+XXxDE7ZSHfQFBcr3V/8ld08Oetk2lHB4a+8dJzNHVb
+         RD68p3HHU5qnrrgdTnP7bUwHGcYlPsp48c0Tzf9tot8yr8Bd81+7nNPRxRUeOx9TxS0l
+         TGdMwOljRECCoyVe251txOzmx2z0CbRa5jrXuObXsZP9HPaqhyNLsZWtIn4TZUqjjvkd
+         YCaAyAOLzGXWkkIo7kEdM+wd16a6IlvER8M9IH7KHq9xRso0n2Nxo54mdzQVMTYRhbTG
+         Rcww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yQV3gPl1yDUBgxhny6R2vDhSuqKPXgGrUGZ3acHuiKk=;
-        b=f7HmBFQna+YIwz3Sz49qODuOZuJx2Qx2L7MXwV3PCtn3CsxXVP1YQi823eXvD/PqKT
-         fphh3fgs8YClGBW8cIncoxGz1L32+aUDDUrMzgaebWIMIDLiTP9LQsqHTVIOBzyffueI
-         wbIeYzsLYtYzV7dl4wwOS9D1EccNfSDtAw+dsfJJw13tAcYv5rVJ61o/cYtE3+/Y4wuI
-         280g+06txF+HNGBvIvkZnG8dHx6d8KpkbXWnlqob6NCN5EP/+qFZ9PRIjiJ0R132OapW
-         t6QVWgzzmY0puwjtpxdg5hQ3w49yh6Og84W4rVNmB0mnnX6bET/oq+aq0Uit82Bnf5bT
-         rZyw==
-X-Gm-Message-State: AOAM530ugnqzYkzfITiJmHuM3Jq6nqFcfEdM/jBd9Y6wnMoYTv2AKvP5
-        dtgc4F+Aqn1izcRt2rv3Rdk/GjfLOrljSyRI1VfNChDYNHw=
-X-Google-Smtp-Source: ABdhPJyhBbjRx1aCHhjU2k8YsIrOTaKsE/26P0h7qLgq7eQonjXjzD0pD9bIMm0zB/xqXcpOBnsVgM90Bnk9OZjiSv8=
-X-Received: by 2002:ab0:6398:: with SMTP id y24mr8266775uao.92.1643904175454;
- Thu, 03 Feb 2022 08:02:55 -0800 (PST)
+        bh=yY2bzUZwNMPnhcHR5z5MDI7i8ZyrF+lUHnqiNuxus8c=;
+        b=a1mamNhnjzBW7Kxs1SUESbKRCfQYeieMPnbZ7JU00bsdVkKJkmtXRzeCinKoVNNaVO
+         GmJ0jHM7xIji6DMj41FJIjBJ5mTrcv3gWP8aF/xqMMZ83iRdAITzs6WWC7MlH8GH3fag
+         3t4JkIE05pf4zfc5TsYJl1iO1iKUJjQhb3h1yupc4jJkxrOm+HKzDb40kDGIAam/L+bM
+         gXouHd5bOTCcAhIpgNgJuYPE8RYrCcgIbV9zhTncqMtL6183ejMnirkxr2yNv43lUgg5
+         48k2AYGjLuEgvEIvrsVb7PdGUaRTDRm6o3SIpZxkAk1nL1xNnAWry6XgLZXs7C2LzPPe
+         S6ew==
+X-Gm-Message-State: AOAM530oSmh1vtlvDbRQVmrO3hV1KES3NuAJYDFduQKGreqWJx4o41bJ
+        Ricn+J25mkHDYMkGwWBmpaQAxZFwQgQPY8q+qaoLjsHOrdQ=
+X-Google-Smtp-Source: ABdhPJzooFfrIJpspgvK+mD3sLc09TgikOJ/KOjspt7+1jKiKLjJ8/kyHE9SR60SqWoTD5QUDunJVoE58D/iwdpatVw=
+X-Received: by 2002:a17:90b:380f:: with SMTP id mq15mr14643628pjb.66.1643904181104;
+ Thu, 03 Feb 2022 08:03:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20220202024137.2516438-1-Liam.Howlett@oracle.com> <20220202024137.2516438-8-Liam.Howlett@oracle.com>
-In-Reply-To: <20220202024137.2516438-8-Liam.Howlett@oracle.com>
-From:   Mark Hemment <markhemm@googlemail.com>
-Date:   Thu, 3 Feb 2022 16:02:43 +0000
-Message-ID: <CANe_+UhTyOr2SPc=SMhK=7t8Uw+HvehdTw1Ti1XGcLfJ_=BMjA@mail.gmail.com>
-Subject: Re: [PATCH v5 07/70] Maple Tree: Add new data structure
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch> <c732e1ce-8c9c-b947-8d4b-78903920a5b2@gmail.com>
+In-Reply-To: <c732e1ce-8c9c-b947-8d4b-78903920a5b2@gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 3 Feb 2022 08:02:49 -0800
+Message-ID: <CAJ+vNU1Urkd4A8BdvP7H9W_H2DDOH2_khXesh49KzWoVqjk_iw@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Martin Schiller <ms@dev.tdt.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Feb 2022 at 02:42, Liam Howlett <liam.howlett@oracle.com> wrote:
+On Wed, Feb 2, 2022 at 7:12 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
 >
-> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
 >
-> The maple tree is an RCU-safe range based B-tree designed to use modern
-> processor cache efficiently.  There are a number of places in the kernel
-> that a non-overlapping range-based tree would be beneficial, especially
-> one with a simple interface.  The first user that is covered in this
-> patch set is the vm_area_struct, where three data structures are
-> replaced by the maple tree: the augmented rbtree, the vma cache, and the
-> linked list of VMAs in the mm_struct.  The long term goal is to reduce
-> or remove the mmap_sem contention.
 >
-> The tree has a branching factor of 10 for non-leaf nodes and 16 for leaf
-> nodes.  With the increased branching factor, it is significantly shorter than
-> the rbtree so it has fewer cache misses.  The removal of the linked list
-> between subsequent entries also reduces the cache misses and the need to pull
-> in the previous and next VMA during many tree alterations.
+> On 2/2/2022 5:01 PM, Andrew Lunn wrote:
+> >> As a person responsible for boot firmware through kernel for a set of
+> >> boards I continue to do the following to keep Linux from mucking with
+> >> various PHY configurations:
+> >> - remove PHY reset pins from Linux DT's to keep Linux from hard resetting PHY's
+> >> - disabling PHY drivers
+> >>
+> >> What are your thoughts about this?
+> >
+> > Hi Tim
+> >
+> > I don't like the idea that the bootloader is controlling the hardware,
+> > not linux.
 >
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  Documentation/core-api/index.rst              |    1 +
->  Documentation/core-api/maple_tree.rst         |  196 +
->  MAINTAINERS                                   |   12 +
->  include/linux/maple_tree.h                    |  673 ++
->  include/trace/events/maple_tree.h             |  123 +
->  lib/Kconfig.debug                             |    9 +
->  lib/Makefile                                  |    3 +-
->  lib/maple_tree.c                              | 6943 +++++++++++++++++
->  tools/testing/radix-tree/.gitignore           |    2 +
->  tools/testing/radix-tree/Makefile             |   13 +-
->  tools/testing/radix-tree/generated/autoconf.h |    1 +
->  tools/testing/radix-tree/linux/maple_tree.h   |    7 +
->  tools/testing/radix-tree/maple.c              |   59 +
->  .../radix-tree/trace/events/maple_tree.h      |    3 +
->  14 files changed, 8042 insertions(+), 3 deletions(-)
->  create mode 100644 Documentation/core-api/maple_tree.rst
->  create mode 100644 include/linux/maple_tree.h
->  create mode 100644 include/trace/events/maple_tree.h
->  create mode 100644 lib/maple_tree.c
->  create mode 100644 tools/testing/radix-tree/linux/maple_tree.h
->  create mode 100644 tools/testing/radix-tree/maple.c
->  create mode 100644 tools/testing/radix-tree/trace/events/maple_tree.h
+> This is really trying to take advantage of the boot loader setting
+> things up in a way that Linux can play dumb by using the Generic PHY
+> driver and being done with it. This works... until it stops, which
+> happens very very quickly in general. The perfect counter argument to
+> using the Generic PHY driver is when your system implements a low power
+> mode where the PHY loses its power/settings, comes up from suspend and
+> the strap configuration is insufficient and the boot loader is not part
+> of the resume path *prior* to Linux. In that case Linux needs to restore
+> the settings, but it needs a PHY driver for that.
 
-...
-> +Allocating Nodes
-> +----------------
-> +
-> +Allocations are usually handled internally to the tree, however if allocations
-> +need to occur before a write occurs then calling mas_entry_count() will
-> +allocate the worst-case number of needed nodes to insert the provided number of
-> +ranges.  This also causes the tree to enter mass insertion mode.  Once
-> +insertions are complete calling mas_destroy() on the maple state will free the
-> +unused allocations.
+Florian,
 
-mas_entry_count() has been renamed to mas_expected_entries().
-(Note: test code is still using mas_entry_count()).
+That makes sense - I'm always trying to figure out what the advantage
+of using some of these PHY drivers really is vs disabling them.
 
-Cheers,
-Mark
+>
+> If your concern Tim is with minimizing the amount of time the link gets
+> dropped and re-established, then there is not really much that can be
+> done that is compatible with Linux setting things up, short of
+> minimizing the amount of register writes that do need the "commit phase"
+> via BMCR.RESET.
+
+No, my reasoning has nothing to do with link time - I have just run
+into several cases where some new change in a PHY driver blatantly
+either resets the PHY reverting to pin-strapping config which is wrong
+(happend to me with DP83867 but replacing the 'reset' to a 'restart'
+solved that) or imposes some settings without dt bindings to guide it
+(this case with the LEDs) or imposes some settings based on 'new'
+dt-bindings which I was simply not aware of (a lesser issue as dt
+bindings can be added to resolve it).
+
+>
+> I do agree that blindly imposing LED settings that are different than
+> those you want is not great, and should be remedied. Maybe you can
+> comment this part out in your downstream tree for a while until the LED
+> binding shows up (we have never been so close I am told).
+
+or disable the driver in defconfig, or blacklist the module if I want
+to do it via rootfs.
+
+Can you point me to something I can look at for these new LED bindings
+that are being worked on?
+
+Best Regards,
+
+Tim

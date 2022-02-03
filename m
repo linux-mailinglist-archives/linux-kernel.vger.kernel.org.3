@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0D94A7CDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C8A4A7CDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348593AbiBCA0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:26:20 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:43984 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348574AbiBCA0Q (ORCPT
+        id S240733AbiBCA2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229976AbiBCA2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:26:16 -0500
-Received: from [192.168.254.32] (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 70FA820B6C61;
-        Wed,  2 Feb 2022 16:26:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 70FA820B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1643847976;
-        bh=GGoSp90VTjyMWOeMVVC3jBavAQVQGNTVyNovIst1D2Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E+YEKDvEwBTjUv2SBbMXyGJiVHHBvGevwPhn3+T4Y2RBYljudgf4oLnEr272wgT91
-         IDLRgWsU491Yn13OlOx/B6G3/Ao3kmPUaNNbJNOnQSj7trCORzqnxVOpStJJJbwtHX
-         FUFvr3uUEO/xt+oeu+Mt8qJp5udjIaQffwYeR204=
-Message-ID: <bb9c0f6f-7f80-9d76-8bfe-7a2a82fa3544@linux.microsoft.com>
-Date:   Wed, 2 Feb 2022 18:26:14 -0600
+        Wed, 2 Feb 2022 19:28:36 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D28C061714;
+        Wed,  2 Feb 2022 16:28:35 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id s18so1189975ioa.12;
+        Wed, 02 Feb 2022 16:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jdtk8UC2KDvFAfWxVTu60U5ncTIHp4dRqG8Pp1F6Se0=;
+        b=pna34lSVqp/u41It8n/Fo5fhhDVwanvK/Lo9P1ktvW5tmybhz5Hr5o7fyaM83d3wqh
+         6/vKbCy5lg6nx9v2EEURDMxfmtVlnL0z3InQlFacvthbuxIeh/KXnCwBzwbIA00e0ZHi
+         rUHvG9B2ITbJCis8Hb9pmf0XSVgNoG9E91nKsmxfWeosHA0KpVCkNm+zWoINipET2kBl
+         cmgBPyjgRSK+SNrs9vrM7/6SjEehdwwiAdt/lqUskoZxK5PtCCZMUz1q1IxoLXwKiqs3
+         GgIbUzktGkF5/ZMKQsTqaSCBgbpQBbV58T69Z8VlbAb2q+RBLoKBTA8nKgimp6E97Wh7
+         dVBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jdtk8UC2KDvFAfWxVTu60U5ncTIHp4dRqG8Pp1F6Se0=;
+        b=hFpyS7vNS/LXosEFMGM67vxnnzH4wUmesAigbzghLre9G7AIolVzuyV6zUivrq7rwX
+         4EUc6nThaRyPkQFExcXVSHdMUGg1Yi8xmOzsQUXV7ZhBuIxFRpCNF/RVGoKVZjmHHp7s
+         k1XfCiq+wfmL+4+NJdDgxjahAEDnBVr8uIoNkSRGduEFCQoF2aXE/eBD0Afc0tWmfTbV
+         icSxU83WUlCM7isKf+bLXYvny10JaYsrrJOWodaVzE0dIszDIJeV5JOK1JA7YzyzavLp
+         Z7VvQj8+cd+3kDSalMJFCDl00KQf0Ee7YmCmuKpMfhaCYG1TfhOY/WcfONYwVLI6X77C
+         iVLw==
+X-Gm-Message-State: AOAM532ze2SgWZojGVNuKVt7CVNuVjbzAwMzt8R3GVn3rhcbao2M3WVp
+        mSVAZJxSU4lVP7MntBwW92CGkFvfbUCltJi42ro=
+X-Google-Smtp-Source: ABdhPJxUvqr9og1U18lvfIf6cbS9/L/voRkEv9GAQUq+kRmHVEcMZPDe6S6csVaamV5zAeoL1fe1XCurvR9XKJDXLGk=
+X-Received: by 2002:a6b:ea08:: with SMTP id m8mr17362901ioc.172.1643848115331;
+ Wed, 02 Feb 2022 16:28:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v13 04/11] arm64: Split unwind_init()
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-5-madvenka@linux.microsoft.com>
- <YfrQ80PE8Nhg8lx3@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YfrQ80PE8Nhg8lx3@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220131204357.1133674-1-keescook@chromium.org>
+ <6641e01b86374ce197020d57c65ae3b3@AcuMS.aculab.com> <311c9ca5-e2d4-22fb-0299-d47f84470677@prevas.dk>
+ <91f0956687b341a9861f467aafe6dc4d@AcuMS.aculab.com>
+In-Reply-To: <91f0956687b341a9861f467aafe6dc4d@AcuMS.aculab.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 3 Feb 2022 01:28:24 +0100
+Message-ID: <CANiq72nkwKVGODWn1Ri_he+MOzp=Cw_L+3+2TX0UP_3=K0n5pA@mail.gmail.com>
+Subject: Re: [PATCH] linux/const.h: Explain how __is_constexpr() works
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Kees Cook <keescook@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Martin Uecker <Martin.Uecker@med.uni-goettingen.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 2, 2022 at 11:42 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> The compiler needs to find a 'compatible type' either for:
+>         (void *)x       and     (int *)8
+> or for:
+>         (void *)0       and     (int *)8
+>
+> In the former it is 'void *' and the latter 'int *' because the (void *)0
+> is NULL and thus a valid 'int *' pointer.
 
+I think you are trying to come up with an explanation of how it works
+based on compiler outputs (it makes sense to think that the compiler
+has to find some reasonable "common" type). But the conditional
+operator works case-by-case, slightly differently depending on what
+kind of operands you give.
 
-On 2/2/22 12:44, Mark Brown wrote:
-> On Mon, Jan 17, 2022 at 08:56:01AM -0600, madvenka@linux.microsoft.com wrote:
-> 
->> +/*
->> + * TODO: document requirements here.
->> + */
->> +static inline void unwind_init_from_regs(struct unwind_state *state,
->> +					 struct pt_regs *regs)
-> 
->> +/*
->> + * TODO: document requirements here.
->> + *
->> + * Note: this is always inlined, and we expect our caller to be a noinline
->> + * function, such that this starts from our caller's caller.
->> + */
->> +static __always_inline void unwind_init_from_current(struct unwind_state *state)
-> 
->> +/*
->> + * TODO: document requirements here.
->> + *
->> + * The caller guarantees that the task is not running.
->> + */
->> +static inline void unwind_init_from_task(struct unwind_state *state,
->> +					 struct task_struct *task)
-> 
-> Other than the obvious gap this looks good to me.  For _current() I
-> don't think we've got any particular requirements other than what's
-> documented.  For the others I think the main thing is that trying to
-> walk the stack of a task that is actively executing is going to be a bad
-> idea so we should say that the task shouldn't be running, but in general
-> given that one of the main use cases is printing diagnostics on error
-> we shouldn't have too many *requirements* for calling these.
+In the two cases involved, there is no "finding a compatible type" /
+promotions going on -- the standard gives explicitly that it is a
+pointer to void (former case), and the type of the other operand
+(latter case). The value is still decided by the condition.
 
-OK. For now, I will remove the TODO comment from individual functions.
-I will add only a common general comment above all 3 helpers that
-additional requirements may be documented as seen fit. And, I will
-add that the task must not be running in other-directed cases.
+e.g. https://godbolt.org/z/zzE8dc7Ye
 
-Madhavan
+0 ?          void pointer (1) : pointer to object type (42) = (void *) 0x2a
+1 ?          void pointer (1) : pointer to object type (42) = (void *) 0x1
+0 ? null pointer constant (0) : pointer                (42) = ( int *) 0x2a
+1 ? null pointer constant (0) : pointer                (42) = ( int *) (nil)
+
+> In any case suggesting that it is based on the value before the ? is bogus.
+
+What Rasmus was saying is that which value is selected still depends
+on the condition, because the last paragraph of the explanation in the
+commit is wrong. It should be something like:
+
+  - The ultimate comparison to "sizeof(int)" reduces to either:
+        sizeof(int) == sizeof(*(int *)0)  (x was a constant expression)
+        sizeof(int) == sizeof(*(void *)0) (x was not a constant expression)
+
+Cheers,
+Miguel

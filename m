@@ -2,132 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A6A4A86B6
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3724A86B4
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiBCOii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:38:38 -0500
-Received: from mga01.intel.com ([192.55.52.88]:20395 "EHLO mga01.intel.com"
+        id S235135AbiBCOi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:38:58 -0500
+Received: from foss.arm.com ([217.140.110.172]:50262 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229483AbiBCOig (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:38:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643899116; x=1675435116;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6occSEmEjfPwgizjiWjKtfv0+RPp90I8rXYOrwiIbWU=;
-  b=KR9rodA2kz6xbNc82YrAeyayLNg91TXFw4XSF0OpaHasxa2F+9A7FpK3
-   KD8frpnAbwz1eNCQ+FzCyFu8e0qdS+zp99fyBslxjDt21dDfi1YyVIs7p
-   nnNa/Qqg9ZXMXUNwxaydGhWmr5dn6Wa6CEohcsWDho0mtSUYzglFewVGQ
-   vDE0mw03kutW+4yVTXen6SRdGgS0lMUfiLIUtHf8xA5qdjlLBHxPRRBll
-   a28QcsppC96IMmkYzqf0+0S0dwi8Scs6+QbN7TSZ9II1oHcyRol8WFIBz
-   oB09Bht5jI3jAGW/+VtEC6C1c5Q54Xa2xCMqAnWrEc3spna7AD4t1yIM6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="272650273"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="272650273"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 06:38:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="483255743"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2022 06:38:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFdFY-000WF4-3t; Thu, 03 Feb 2022 14:38:16 +0000
-Date:   Thu, 3 Feb 2022 22:37:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Helge Deller <deller@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [deller-parisc:5.17-vdso-mini-3 1/1]
- arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: bad or irreducible
- absolute expression
-Message-ID: <202202032200.IMpqlhlW-lkp@intel.com>
+        id S234953AbiBCOi5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:38:57 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D41D31063;
+        Thu,  3 Feb 2022 06:38:56 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EDA273F774;
+        Thu,  3 Feb 2022 06:38:55 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     arnd@arndb.de, boqun.feng@gmail.com, mark.rutland@arm.com,
+        peterz@infradead.org, will@kernel.org
+Subject: [PATCH] atomics: fix atomic64_{read_acquire,set_release} fallbacks
+Date:   Thu,  3 Feb 2022 14:38:48 +0000
+Message-Id: <20220203143848.3934515-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git 5.17-vdso-mini-3
-head:   62c208e2c93066ee050644384bb12ca1d0b2bdb1
-commit: 62c208e2c93066ee050644384bb12ca1d0b2bdb1 [1/1] parisc: Add initial vDSO support
-config: parisc-generic-64bit_defconfig (https://download.01.org/0day-ci/archive/20220203/202202032200.IMpqlhlW-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/commit/?id=62c208e2c93066ee050644384bb12ca1d0b2bdb1
-        git remote add deller-parisc https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
-        git fetch --no-tags deller-parisc 5.17-vdso-mini-3
-        git checkout 62c208e2c93066ee050644384bb12ca1d0b2bdb1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
+Arnd reports that on 32-bit architectures, the fallbacks for
+atomic64_read_acquire and atomic64_set_release() are broken as they use
+smp_load_acquire() and smp_store_release() respectively, which do not
+work on types larger than the native word size.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Since those contain compiletime_assert_atomic_type(), any attempt to use
+those fallbacks will result in a build-time error. e.g. with the
+following added to arch/arm/kernel/setup.c:
 
-All errors (new ones prefixed by >>):
+| void test_atomic64(atomic64_t *v)
+| {
+|        atomic64_set_release(v, 5);
+|        atomic64_read_acquire(v);
+| }
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   arch/parisc/kernel/vdso64/Makefile:30: FORCE prerequisite is missing
-   arch/parisc/kernel/vdso32/restart_syscall.S: Assembler messages:
->> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: bad or irreducible absolute expression
->> arch/parisc/kernel/vdso32/restart_syscall.S:16: Error: junk at end of line, first unrecognized character is `:'
->> arch/parisc/kernel/vdso32/restart_syscall.S:26: Error: no such instruction: `ldw 0(%sp),%r31'
->> arch/parisc/kernel/vdso32/restart_syscall.S:29: Error: no such instruction: `be 0x100(%sr2,%r0)'
->> arch/parisc/kernel/vdso32/restart_syscall.S:30: Error: no such instruction: `ldi 0,%r20'
->> arch/parisc/kernel/vdso32/restart_syscall.S:32: Error: .cfi_endproc without corresponding .cfi_startproc
-   arch/parisc/kernel/vdso32/sigtramp.S: Assembler messages:
->> arch/parisc/kernel/vdso32/sigtramp.S:39: Error: unknown pseudo-op: `.proc'
->> arch/parisc/kernel/vdso32/sigtramp.S:40: Error: unknown pseudo-op: `.callinfo'
->> arch/parisc/kernel/vdso32/sigtramp.S:41: Error: unknown pseudo-op: `.entry'
->> arch/parisc/kernel/vdso32/sigtramp.S:44: Error: no such instruction: `ldi 0,%r25'
->> arch/parisc/kernel/vdso32/sigtramp.S:45: Error: no such instruction: `ldi 173,%r20'
->> arch/parisc/kernel/vdso32/sigtramp.S:46: Error: no such instruction: `ble 0x100(%sr2,%r0)'
-   arch/parisc/kernel/vdso32/sigtramp.S:49: Error: no such instruction: `ldi 1,%r25'
-   arch/parisc/kernel/vdso32/sigtramp.S:50: Error: no such instruction: `ldi 173,%r20'
-   arch/parisc/kernel/vdso32/sigtramp.S:51: Error: no such instruction: `ble 0x100(%sr2,%r0)'
->> arch/parisc/kernel/vdso32/sigtramp.S:54: Error: unknown pseudo-op: `.exit'
->> arch/parisc/kernel/vdso32/sigtramp.S:55: Error: unknown pseudo-op: `.procend'
->> arch/parisc/kernel/vdso32/sigtramp.S:76: Error: unknown pseudo-op: `.stringz'
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kernel/vdso32/restart_syscall.o] Error 1
-   make[2]: *** [arch/parisc/kernel/vdso32/Makefile:34: arch/parisc/kernel/vdso32/sigtramp.o] Error 1
-   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
-   make[1]: *** [arch/parisc/Makefile:188: vdso_prepare] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+The compiler will complain as follows:
 
+| In file included from <command-line>:
+| In function 'arch_atomic64_set_release',
+|     inlined from 'test_atomic64' at ./include/linux/atomic/atomic-instrumented.h:669:2:
+| ././include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_9' declared with attribute error: Need native word sized stores/loads for atomicity.
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |                                      ^
+| ././include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
+|   327 |    prefix ## suffix();    \
+|       |    ^~~~~~
+| ././include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |  ^~~~~~~~~~~~~~~~~~~
+| ././include/linux/compiler_types.h:349:2: note: in expansion of macro 'compiletime_assert'
+|   349 |  compiletime_assert(__native_word(t),    \
+|       |  ^~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:133:2: note: in expansion of macro 'compiletime_assert_atomic_type'
+|   133 |  compiletime_assert_atomic_type(*p);    \
+|       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+|   164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+|       |                                                       ^~~~~~~~~~~~~~~~~~~
+| ./include/linux/atomic/atomic-arch-fallback.h:1270:2: note: in expansion of macro 'smp_store_release'
+|  1270 |  smp_store_release(&(v)->counter, i);
+|       |  ^~~~~~~~~~~~~~~~~
+| make[2]: *** [scripts/Makefile.build:288: arch/arm/kernel/setup.o] Error 1
+| make[1]: *** [scripts/Makefile.build:550: arch/arm/kernel] Error 2
+| make: *** [Makefile:1831: arch/arm] Error 2
 
-vim +16 arch/parisc/kernel/vdso32/restart_syscall.S
+Fix this by only using smp_load_acquire() and smp_store_release() for
+native atomic types, and otherwise falling back to the regular barriers
+necessary for acquire/release semantics, as we do in the more generic
+acquire and release fallbacks.
 
-    13	
-    14		.text
-    15	
-  > 16	ENTRY_CFI(__kernel_restart_syscall)
-    17		/*
-    18		 * Setup a trampoline to restart the syscall
-    19		 * with __NR_restart_syscall
-    20		 */
-    21	
-    22		/* load return pointer */
-    23	#if defined(__VDSO64__)
-    24		ldd	0(%sp), %r31
-    25	#elif defined(__VDSO32__)
-  > 26		ldw	0(%sp), %r31
-    27	#endif
-    28	
-  > 29		be	0x100(%sr2, %r0)
-  > 30		ldi	__NR_restart_syscall, %r20
-    31	
-  > 32	ENDPROC_CFI(__kernel_restart_syscall)
+For the example above this works as expected on 32-bit, e.g.
 
+| <test_atomic64>:
+|         dmb     ish
+|         mov     r2, #5
+|         mov     r3, #0
+|         strd    r2, [r0]
+|         ldrd    r2, [r0]
+|         dmb     ish
+|         bx      lr
+
+... and also on 64-bit, e.g.
+
+| <test_atomic64>:
+|         bti     c
+|         paciasp
+|         mov     x1, #0x5
+|         stlr    x1, [x0]
+|         ldar    x0, [x0]
+|         autiasp
+|         ret
+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/atomic/atomic-arch-fallback.h | 38 ++++++++++++++++++---
+ scripts/atomic/fallbacks/read_acquire       | 11 +++++-
+ scripts/atomic/fallbacks/set_release        |  7 +++-
+ 3 files changed, 49 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a3dba31df01e..8dfb03317f2a 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -151,7 +151,16 @@
+ static __always_inline int
+ arch_atomic_read_acquire(const atomic_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	int ret;
++
++	if (__native_word(atomic_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic_read_acquire arch_atomic_read_acquire
+ #endif
+@@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
+ static __always_inline void
+ arch_atomic_set_release(atomic_t *v, int i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ #define arch_atomic_set_release arch_atomic_set_release
+ #endif
+@@ -1258,7 +1272,16 @@ arch_atomic_dec_if_positive(atomic_t *v)
+ static __always_inline s64
+ arch_atomic64_read_acquire(const atomic64_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	s64 ret;
++
++	if (__native_word(atomic64_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic64_read_acquire arch_atomic64_read_acquire
+ #endif
+@@ -1267,7 +1290,12 @@ arch_atomic64_read_acquire(const atomic64_t *v)
+ static __always_inline void
+ arch_atomic64_set_release(atomic64_t *v, s64 i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic64_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ #define arch_atomic64_set_release arch_atomic64_set_release
+ #endif
+@@ -2358,4 +2386,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
++// ba488b6398359cb776d457971f30cef78d0d36dc
+diff --git a/scripts/atomic/fallbacks/read_acquire b/scripts/atomic/fallbacks/read_acquire
+index 803ba7561076..7b8b87143c0c 100755
+--- a/scripts/atomic/fallbacks/read_acquire
++++ b/scripts/atomic/fallbacks/read_acquire
+@@ -2,6 +2,15 @@ cat <<EOF
+ static __always_inline ${ret}
+ arch_${atomic}_read_acquire(const ${atomic}_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	${int} ret;
++
++	if (__native_word(${atomic}_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ EOF
+diff --git a/scripts/atomic/fallbacks/set_release b/scripts/atomic/fallbacks/set_release
+index 86ede759f24e..5f692db3ce29 100755
+--- a/scripts/atomic/fallbacks/set_release
++++ b/scripts/atomic/fallbacks/set_release
+@@ -2,6 +2,11 @@ cat <<EOF
+ static __always_inline void
+ arch_${atomic}_set_release(${atomic}_t *v, ${int} i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(${atomic}_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ EOF
+-- 
+2.30.2
+

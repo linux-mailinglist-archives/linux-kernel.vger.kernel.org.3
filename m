@@ -2,161 +2,450 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C5A4A8848
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585EC4A884B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352122AbiBCQEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiBCQEM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:04:12 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96631C061714;
-        Thu,  3 Feb 2022 08:04:12 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id w17so1991505vko.9;
-        Thu, 03 Feb 2022 08:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YBZ2wparna3Zx34qvS7RUa2hwfBOoSUSLIksmifzJxw=;
-        b=lGDmMLDDj0X+xf6sPnCXPrAiJV1cVWiavadEErcOSlsli+/EFqCGnY5rpEoHnP4+C1
-         T5lnVlDYeevBYc553v0ixQNSNveLdv52TkRLn+WG5+3WR0TheVrJemHlTz3nNh8MKZsM
-         Qkza9fcaI7ViDTP6U44iQQkPinwFzKzyWyxE80E6ANYv92ZT7ep3Bs8Q/B29Xjhvk+jS
-         z9ZAuu3oLJ8DkRHDdp8VxF55Gv0KtjjUPZwD42TtZ1iSP/U0R211+oKsTbPUdSnWNi/J
-         slWZOImAiTzm24jkgvR6wW9OeQMNAYa0XHWN7laNlaTo849EW1R0csL5+K4OP3LEiW/s
-         aJHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YBZ2wparna3Zx34qvS7RUa2hwfBOoSUSLIksmifzJxw=;
-        b=sJ+OyIl6HgWVV6+Yf2oZ+75lALiEyX7KtSysqCwYo7QLbTCCs1iSSk/Y/tr6uB8JuD
-         v5N60kLSHbbH+SjsIXzGe5GEfZGYja0oHTyzH+UQpDYgim8pPWI+Yvo46tZKAz5CPq8I
-         iCDrJ6AUWEzJ4KfUAgdVBH4Bwjn8RNcjg7NP0xB5GAOQ8lUTyh0YUkrFEiiA9XqjH/T4
-         hyAvLFlr1Rm3ZEwmK6RXUuCRyk+uYJ962G/hctUm9n1wnrBtukHbzpFH0ipK1DZWWnqP
-         wYEJRGOuj0xxfveOVFD2Fv7pct2RLABQUm+4dv3p+4XiYSAK2/xb71C2HQK+yE7qAtR5
-         qI1g==
-X-Gm-Message-State: AOAM533CYMHtY5bFwKfkhPyWJIaFXc/Iliqfy+XoUsGaVyvb4ISM63d6
-        vyo86sOnhUEWyaFkacmEj/jmBq3HIrYn3e20d2H3tczGcUxTLs8n
-X-Google-Smtp-Source: ABdhPJxNApdLiqDTOyLTpw9gxwighCzodqhc55izY3tKhISrqNjjwO9KjSGQ3y4hw7IzBAueNkU/Uzhgvkl80cbOYTo=
-X-Received: by 2002:a05:6122:91b:: with SMTP id j27mr15048192vka.32.1643904251677;
- Thu, 03 Feb 2022 08:04:11 -0800 (PST)
+        id S1352129AbiBCQE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:04:26 -0500
+Received: from ptr.189.cn ([183.61.185.102]:13125 "EHLO 189.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229993AbiBCQEY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:04:24 -0500
+HMM_SOURCE_IP: 10.64.8.41:45850.886286331
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id B0734100199;
+        Fri,  4 Feb 2022 00:04:20 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 2637270b75c940a69ca20338fa5b705f for maxime@cerno.tech;
+        Fri, 04 Feb 2022 00:04:21 CST
+X-Transaction-ID: 2637270b75c940a69ca20338fa5b705f
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
+Date:   Fri, 4 Feb 2022 00:04:19 +0800
 MIME-Version: 1.0
-References: <20220202214455.15753-1-davispuh@gmail.com> <20220202214455.15753-2-davispuh@gmail.com>
- <iltw2hyu.fsf@damenly.su>
-In-Reply-To: <iltw2hyu.fsf@damenly.su>
-From:   =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-Date:   Thu, 3 Feb 2022 18:04:00 +0200
-Message-ID: <CAOE4rSxt6bcFNnWCw7nyPUZ5T5fAXDy0rmGUvavnQQW3kqXAwA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] btrfs: prevent copying too big compressed lzo segment
-To:     Su Yue <l@damenly.su>
-Cc:     BTRFS <linux-btrfs@vger.kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20220203085851.yqstkfgt4dz7rcnw@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ceturtd., 2022. g. 3. febr., plkst. 15:33 =E2=80=94 lietot=C4=81js Su Yue
-(<l@damenly.su>) rakst=C4=ABja:
->
->
-> On Wed 02 Feb 2022 at 23:44, D=C4=81vis Mos=C4=81ns <davispuh@gmail.com>
-> wrote:
->
-> > Compressed length can be corrupted to be a lot larger than
-> > memory
-> > we have allocated for buffer.
-> > This will cause memcpy in copy_compressed_segment to write
-> > outside
-> > of allocated memory.
-> >
-> > This mostly results in stuck read syscall but sometimes when
-> > using
-> > btrfs send can get #GP
-> >
-> > kernel: general protection fault, probably for non-canonical
-> > address 0x841551d5c1000: 0000 [#1] PREEMPT SMP NOPTI
-> > kernel: CPU: 17 PID: 264 Comm: kworker/u256:7 Tainted: P
-> > OE     5.17.0-rc2-1 #12
-> > kernel: Workqueue: btrfs-endio btrfs_work_helper [btrfs]
-> > kernel: RIP: 0010:lzo_decompress_bio
-> > (./include/linux/fortify-string.h:225 fs/btrfs/lzo.c:322
-> > fs/btrfs/lzo.c:394) btrfs
-> > Code starting with the faulting instruction
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >    0:*  48 8b 06                mov    (%rsi),%rax
-> >    <-- trapping instruction
-> >    3:   48 8d 79 08             lea    0x8(%rcx),%rdi
-> >    7:   48 83 e7 f8             and    $0xfffffffffffffff8,%rdi
-> >    b:   48 89 01                mov    %rax,(%rcx)
-> >    e:   44 89 f0                mov    %r14d,%eax
-> >   11:   48 8b 54 06 f8          mov    -0x8(%rsi,%rax,1),%rdx
-> > kernel: RSP: 0018:ffffb110812efd50 EFLAGS: 00010212
-> > kernel: RAX: 0000000000001000 RBX: 000000009ca264c8 RCX:
-> > ffff98996e6d8ff8
-> > kernel: RDX: 0000000000000064 RSI: 000841551d5c1000 RDI:
-> > ffffffff9500435d
-> > kernel: RBP: ffff989a3be856c0 R08: 0000000000000000 R09:
-> > 0000000000000000
-> > kernel: R10: 0000000000000000 R11: 0000000000001000 R12:
-> > ffff98996e6d8000
-> > kernel: R13: 0000000000000008 R14: 0000000000001000 R15:
-> > 000841551d5c1000
-> > kernel: FS:  0000000000000000(0000) GS:ffff98a09d640000(0000)
-> > knlGS:0000000000000000
-> > kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > kernel: CR2: 00001e9f984d9ea8 CR3: 000000014971a000 CR4:
-> > 00000000003506e0
-> > kernel: Call Trace:
-> > kernel:  <TASK>
-> > kernel: end_compressed_bio_read (fs/btrfs/compression.c:104
-> > fs/btrfs/compression.c:1363 fs/btrfs/compression.c:323) btrfs
-> > kernel: end_workqueue_fn (fs/btrfs/disk-io.c:1923) btrfs
-> > kernel: btrfs_work_helper (fs/btrfs/async-thread.c:326) btrfs
-> > kernel: process_one_work (./arch/x86/include/asm/jump_label.h:27
-> > ./include/linux/jump_label.h:212
-> > ./include/trace/events/workqueue.h:108 kernel/workqueue.c:2312)
-> > kernel: worker_thread (./include/linux/list.h:292
-> > kernel/workqueue.c:2455)
-> > kernel: ? process_one_work (kernel/workqueue.c:2397)
-> > kernel: kthread (kernel/kthread.c:377)
-> > kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
-> > kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
-> > kernel:  </TASK>
-> >
-> > Signed-off-by: D=C4=81vis Mos=C4=81ns <davispuh@gmail.com>
-> > ---
-> >  fs/btrfs/lzo.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
-> > index 31319dfcc9fb..ebaa5083f2ae 100644
-> > --- a/fs/btrfs/lzo.c
-> > +++ b/fs/btrfs/lzo.c
-> > @@ -383,6 +383,13 @@ int lzo_decompress_bio(struct list_head
-> > *ws, struct compressed_bio *cb)
-> >               kunmap(cur_page);
-> >               cur_in +=3D LZO_LEN;
-> >
-> > +             if (seg_len > WORKSPACE_CBUF_LENGTH) {
-> > +                     // seg_len shouldn't be larger than we
-> > have allocated for workspace->cbuf
-> >
-> Makes sense.
-> Is the corrupted lzo compressed extent produced by a normal fs or
-> crafted manually? If it is from a normal fs, something insane
-> happened
-> in extent compressed path.
->
 
-Happened normally, but in 2016 year. It's RAID1 where HBA dropped out
-some disks and some sectors didn't got written, so most likely that
-section contains previous unrelated data.
+
+>> diff --git a/drivers/gpu/drm/lsdc/Makefile b/drivers/gpu/drm/lsdc/Makefile
+>> new file mode 100644
+>> index 000000000000..342990654478
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/lsdc/Makefile
+>> @@ -0,0 +1,15 @@
+>> +#
+>> +# Makefile for the lsdc drm device driver.
+>> +#
+>> +
+>> +lsdc-y := \
+>> +	lsdc_drv.o \
+>> +	lsdc_crtc.o \
+>> +	lsdc_irq.o \
+>> +	lsdc_plane.o \
+>> +	lsdc_pll.o \
+>> +	lsdc_i2c.o \
+>> +	lsdc_encoder.o \
+>> +	lsdc_connector.o
+>> +
+>> +obj-$(CONFIG_DRM_LSDC) += lsdc.o
+>> diff --git a/drivers/gpu/drm/lsdc/lsdc_connector.c b/drivers/gpu/drm/lsdc/lsdc_connector.c
+>> new file mode 100644
+>> index 000000000000..ae5fc0c90961
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/lsdc/lsdc_connector.c
+>> @@ -0,0 +1,443 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * Copyright 2020 Loongson Corporation
+>> + *
+>> + * Permission is hereby granted, free of charge, to any person obtaining a
+>> + * copy of this software and associated documentation files (the
+>> + * "Software"), to deal in the Software without restriction, including
+>> + * without limitation the rights to use, copy, modify, merge, publish,
+>> + * distribute, sub license, and/or sell copies of the Software, and to
+>> + * permit persons to whom the Software is furnished to do so, subject to
+>> + * the following conditions:
+>> + *
+>> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+>> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+>> + * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+>> + * THE COPYRIGHT HOLDERS, AUTHORS AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM,
+>> + * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+>> + * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+>> + * USE OR OTHER DEALINGS IN THE SOFTWARE.
+>> + *
+>> + * The above copyright notice and this permission notice (including the
+>> + * next paragraph) shall be included in all copies or substantial portions
+>> + * of the Software.
+>> + */
+> That's the MIT license, yet you claim the driver to be licensed under
+> the GPLv2 or later?
+
+I just copy then paste it blindly, sorry about that.
+I do not know the difference, we want open the source anyway.
+I will correct it in next version, thanks.
+
+>> +
+>> +/*
+>> + * Authors:
+>> + *      Sui Jingfeng <suijingfeng@loongson.cn>
+>> + */
+>> +
+>> +#include <drm/drm_print.h>
+>> +#include <drm/drm_edid.h>
+>> +#include <drm/drm_probe_helper.h>
+>> +#include <drm/drm_atomic_helper.h>
+>> +#include <drm/drm_crtc_helper.h>
+>> +#include <drm/drm_connector.h>
+>> +
+>> +#include <video/videomode.h>
+>> +#include <video/of_display_timing.h>
+>> +
+>> +#include "lsdc_drv.h"
+>> +#include "lsdc_i2c.h"
+>> +#include "lsdc_connector.h"
+>> +
+>> +
+>> +static int lsdc_get_modes_from_edid(struct drm_connector *connector)
+>> +{
+>> +	struct drm_device *ddev = connector->dev;
+>> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
+>> +	struct edid *edid_p = (struct edid *)lconn->edid_data;
+>> +	int num = drm_add_edid_modes(connector, edid_p);
+>> +
+>> +	if (num)
+>> +		drm_connector_update_edid_property(connector, edid_p);
+>> +
+>> +	drm_dbg_kms(ddev, "%d modes added\n", num);
+>> +
+>> +	return num;
+>> +}
+>> +
+>> +
+>> +static int lsdc_get_modes_from_timings(struct drm_connector *connector)
+>> +{
+>> +	struct drm_device *ddev = connector->dev;
+>> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
+>> +	struct display_timings *disp_tim = lconn->disp_tim;
+>> +	unsigned int num = 0;
+>> +	unsigned int i;
+>> +
+>> +	for (i = 0; i < disp_tim->num_timings; i++) {
+>> +		const struct display_timing *dt = disp_tim->timings[i];
+>> +		struct drm_display_mode *mode;
+>> +		struct videomode vm;
+>> +
+>> +		videomode_from_timing(dt, &vm);
+>> +		mode = drm_mode_create(ddev);
+>> +		if (!mode) {
+>> +			drm_err(ddev, "failed to add mode %ux%u\n",
+>> +					dt->hactive.typ, dt->vactive.typ);
+>> +			continue;
+>> +		}
+>> +
+>> +		drm_display_mode_from_videomode(&vm, mode);
+>> +
+>> +		mode->type |= DRM_MODE_TYPE_DRIVER;
+>> +
+>> +		if (i == disp_tim->native_mode)
+>> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+>> +
+>> +		drm_mode_probed_add(connector, mode);
+>> +		num++;
+>> +	}
+>> +
+>> +	drm_dbg_kms(ddev, "%d modes added\n", num);
+>> +
+>> +	return num;
+>> +}
+>> +
+>> +
+>> +static int lsdc_get_modes_from_ddc(struct drm_connector *connector,
+>> +				   struct i2c_adapter *ddc)
+>> +{
+>> +	unsigned int num = 0;
+>> +	struct edid *edid;
+>> +
+>> +	edid = drm_get_edid(connector, ddc);
+>> +	if (edid) {
+>> +		drm_connector_update_edid_property(connector, edid);
+>> +		num = drm_add_edid_modes(connector, edid);
+>> +		kfree(edid);
+>> +	}
+>> +
+>> +	return num;
+>> +}
+>> +
+>> +
+>> +static int lsdc_get_modes(struct drm_connector *connector)
+>> +{
+>> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
+>> +	unsigned int num = 0;
+>> +
+>> +	if (lconn->has_edid)
+>> +		return lsdc_get_modes_from_edid(connector);
+>> +
+>> +	if (lconn->has_disp_tim)
+>> +		return lsdc_get_modes_from_timings(connector);
+>> +
+>> +	if (IS_ERR_OR_NULL(lconn->ddc) == false)
+>> +		return lsdc_get_modes_from_ddc(connector, lconn->ddc);
+>> +
+>> +	if (connector->connector_type == DRM_MODE_CONNECTOR_VIRTUAL) {
+>> +		num = drm_add_modes_noedid(connector,
+>> +				     connector->dev->mode_config.max_width,
+>> +				     connector->dev->mode_config.max_height);
+>> +
+>> +		drm_set_preferred_mode(connector, 1024, 768);
+>> +
+>> +		return num;
+>> +	}
+>> +
+>> +
+>> +	/*
+>> +	 * In case we cannot retrieve the EDIDs (broken or missing i2c
+>> +	 * bus), fallback on the XGA standards, because we are for board
+>> +	 * bringup.
+>> +	 */
+>> +	num = drm_add_modes_noedid(connector, 1920, 1200);
+>> +
+>> +	/* And prefer a mode pretty much anyone can handle */
+>> +	drm_set_preferred_mode(connector, 1024, 768);
+>> +
+>> +	return num;
+>> +
+>> +}
+>> +
+>> +
+>> +static enum drm_connector_status
+>> +lsdc_connector_detect(struct drm_connector *connector, bool force)
+>> +{
+>> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
+>> +
+>> +	if (lconn->has_edid == true)
+>> +		return connector_status_connected;
+>> +
+>> +	if (lconn->has_disp_tim == true)
+>> +		return connector_status_connected;
+>> +
+>> +	if (IS_ERR_OR_NULL(lconn->ddc) == false)
+>> +		return drm_probe_ddc(lconn->ddc);
+>> +
+>> +	if (lconn->ddc && drm_probe_ddc(lconn->ddc))
+>> +		return connector_status_connected;
+>> +
+>> +	if (connector->connector_type == DRM_MODE_CONNECTOR_VIRTUAL)
+>> +		return connector_status_connected;
+>> +
+>> +	if ((connector->connector_type == DRM_MODE_CONNECTOR_DVIA) ||
+>> +	    (connector->connector_type == DRM_MODE_CONNECTOR_DVID) ||
+>> +	    (connector->connector_type == DRM_MODE_CONNECTOR_DVII))
+>> +		return connector_status_disconnected;
+>> +
+>> +	if ((connector->connector_type == DRM_MODE_CONNECTOR_HDMIA) ||
+>> +	    (connector->connector_type == DRM_MODE_CONNECTOR_HDMIB))
+>> +		return connector_status_disconnected;
+>> +
+>> +	return connector_status_unknown;
+>> +}
+>> +
+>> +
+>> +/*
+>> + * @connector: point to the drm_connector structure
+>> + *
+>> + * Clean up connector resources
+>> + */
+>> +static void lsdc_connector_destroy(struct drm_connector *connector)
+>> +{
+>> +	struct drm_device *ddev = connector->dev;
+>> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
+>> +
+>> +	if (lconn) {
+>> +		if (lconn->ddc)
+>> +			lsdc_destroy_i2c(connector->dev, lconn->ddc);
+>> +
+>> +		drm_info(ddev, "destroying connector%u\n", lconn->index);
+>> +
+>> +		devm_kfree(ddev->dev, lconn);
+>> +	}
+>> +
+>> +	drm_connector_cleanup(connector);
+>> +}
+>> +
+>> +
+>> +static const struct drm_connector_helper_funcs lsdc_connector_helpers = {
+>> +	.get_modes = lsdc_get_modes,
+>> +};
+>> +
+>> +/*
+>> + * These provide the minimum set of functions required to handle a connector
+>> + *
+>> + * Control connectors on a given device.
+>> + *
+>> + * Each CRTC may have one or more connectors attached to it.
+>> + * The functions below allow the core DRM code to control
+>> + * connectors, enumerate available modes, etc.
+>> + */
+>> +static const struct drm_connector_funcs lsdc_connector_funcs = {
+>> +	.dpms = drm_helper_connector_dpms,
+>> +	.detect = lsdc_connector_detect,
+>> +	.fill_modes = drm_helper_probe_single_connector_modes,
+>> +	.destroy = lsdc_connector_destroy,
+>> +	.reset = drm_atomic_helper_connector_reset,
+>> +	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+>> +	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+>> +};
+>> +
+>> +
+>> +/* Get the simple EDID data from the device tree
+>> + * the length must be EDID_LENGTH, since it is simple.
+>> + *
+>> + * @np: device node contain edid data
+>> + * @edid_data: where the edid data to store to
+>> + */
+>> +static bool lsdc_get_edid_from_dtb(struct device_node *np,
+>> +				   unsigned char *edid_data)
+>> +{
+>> +	int length;
+>> +	const void *prop;
+>> +
+>> +	if (np == NULL)
+>> +		return false;
+>> +
+>> +	prop = of_get_property(np, "edid", &length);
+>> +	if (prop && (length == EDID_LENGTH)) {
+>> +		memcpy(edid_data, prop, EDID_LENGTH);
+>> +		return true;
+>> +	}
+>> +
+>> +	return false;
+>> +}
+> You don't have a device tree binding for that driver, this is something
+> that is required. And it's not clear to me why you'd want EDID in the
+> DTB?
+
+1) It is left to the end user of this driver.
+
+The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
+which don't have DDC support either, doing this way allow them put a
+EDID property into the dc device node in the DTS. Then the entire system works.
+Note those panel usually support only one display mode.
+
+2) That is for the display controller in ls2k1000 SoC.
+
+Currently, the upstream kernel still don't have GPIO, PWM and I2C driver support
+for LS2K1000 SoC.
+
+How dose you read EDID from the monitor without a I2C driver?
+
+without reading EDID the device tree support, the screen just black,
+the lsdc driver just stall. With reading EDID from device tree support
+we do not need a i2c driver to light up the monitor.
+
+This make lsdc drm driver work on various ls2k1000 development board
+before I2C driver and GPIO driver and PWM backlight driver is upstream.
+
+I have many local private dts with the bindings, those local change just can not
+upstream at this time, below is an example.
+
+3) Again, doing this way is for graphic environment bring up.
+
+&lsdc {
+
+     output-ports = <&dvo0 &dvo1>;
+     #address-cells = <1>;
+     #size-cells = <0>;
+     dvo0: dvo@0 {
+         reg = <0>;
+
+         connector = "dpi-connector";
+         encoder = "none";
+         status = "ok";
+
+         display-timings {
+             native-mode = <&mode_0_1024x600_60>;
+
+             mode_0_1024x600_60: panel-timing@0 {
+                 clock-frequency = <51200000>;
+                 hactive = <1024>;
+                 vactive = <600>;
+                 hsync-len = <4>;
+                 hfront-porch = <160>;
+                 hback-porch = <156>;
+                 vfront-porch = <11>;
+                 vback-porch = <23>;
+                 vsync-len = <1>;
+             };
+
+             mode_1_800x480_60: panel-timing@1 {
+                 clock-frequency = <30066000>;
+                 hactive = <800>;
+                 vactive = <480>;
+                 hfront-porch = <50>;
+                 hback-porch = <70>;
+                 hsync-len = <50>;
+                 vback-porch = <0>;
+                 vfront-porch = <0>;
+                 vsync-len = <50>;
+             };
+         };
+     };
+
+     dvo1: dvo@1 {
+         reg = <1>;
+
+         connector = "hdmi-connector";
+         type = "a";
+         encoder = "sil9022";
+
+         edid = [ 00 ff ff ff ff ff ff 00 1e 6d 54 5b 0b cc 04 00
+              02 1c 01 03 6c 30 1b 78 ea 31 35 a5 55 4e a1 26
+              0c 50 54 a5 4b 00 71 4f 81 80 95 00 b3 00 a9 c0
+              81 00 81 c0 90 40 02 3a 80 18 71 38 2d 40 58 2c
+              45 00 e0 0e 11 00 00 1e 00 00 00 fd 00 38 4b 1e
+              53 0f 00 0a 20 20 20 20 20 20 00 00 00 fc 00 4c
+              47 20 46 55 4c 4c 20 48 44 0a 20 20 00 00 00 ff
+              00 38 30 32 4e 54 43 5a 39 38 33 37 39 0a 00 35 ];
+
+         status = "ok";
+     };
+};
+
+

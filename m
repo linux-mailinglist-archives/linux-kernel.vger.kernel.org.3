@@ -2,127 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844284A907F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A174A9085
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355711AbiBCWMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S1355723AbiBCWNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:13:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236807AbiBCWM3 (ORCPT
+        with ESMTP id S236807AbiBCWNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:12:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAA8C061714;
-        Thu,  3 Feb 2022 14:12:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C76EB835E2;
-        Thu,  3 Feb 2022 22:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46C8C340E8;
-        Thu,  3 Feb 2022 22:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643926346;
-        bh=revw8UU7WFNKrOaFkz6WeTO23/dbXftr0dSdennufEU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nsH11JP3yUbjj2MS/VR9+/Dq9JnXhVensr12oyT0HBBQDSJlQRFFcwcYNLD5wQUR3
-         ZPPo2yeT3VvLOa+lzwyRTsjjDVdeYbgQHp0MzwRRSZVqdSFmsOkl1FifJGRgPNIHlE
-         oMVWanLVkSnb2E9aesTO468MS19Iy4YrEWdw3KTs=
-Date:   Thu, 3 Feb 2022 14:12:26 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     kirill.shutemov@linux.intel.com, jannh@google.com,
-        willy@infradead.org, david@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for
- migration entry
-Message-Id: <20220203141226.d510a9fe3fb1f55fc75926e5@linux-foundation.org>
-In-Reply-To: <20220203182641.824731-1-shy828301@gmail.com>
-References: <20220203182641.824731-1-shy828301@gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Thu, 3 Feb 2022 17:13:47 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A50C06173D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:13:46 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id z7so5955181ljj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:13:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2xJKejqFUEH0gH02bsrJyrmiS9uC9eYI5/u6Jxv0S8E=;
+        b=H24z7FjJDol5wBZEbnN2Imdyd1onGd0cFpHlfJZfyL+uWUtNi2aoFXif9gUr+4s3Xv
+         uBmskidnVWURLL+YtWHTjHZ9PJG9hKcRd7yQhsPw58FBd4qf0Q4eTR/0/1f4tOtdnCu1
+         fDPqQqRoSiBLnGmelyqJmyFNGGvecWyqTLD4PXP1wAafPBiLwFGWOmNe+uuU6wMO8cfJ
+         MRPioqayInupF70/CODAACEA0JvTFoJTv+OByl6ZVBfaxCQpBYUO/HI2TkIH1YBncuQK
+         Lzw6UWJ7iq3T2kAX32oz66qtHCL6s7tKSB94chdxTr8WF7WpolWrLPftMc0su3IMkMdb
+         /jUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2xJKejqFUEH0gH02bsrJyrmiS9uC9eYI5/u6Jxv0S8E=;
+        b=cTXRCQOLd4PIgL+klOEJpc/2bk8GtKOAXGaaU6SFaWQ45pdzOCBcWzhPYqt5vFeHC6
+         D0sNNOoaQo0SUTRuzzjpc0ab2QYwj0JAbG6l+i4pgUT6boF6STJMTFc6UhN1MY0CcbkS
+         xghHsefpRen2431+vhEPqLpfI1dI0H5kzbPXgoBtcG7DzTzM9qUq+EEuWhDkwACBjnzU
+         BXK8HwofLmLUG+nbzrp4pZSRdc/r+RgEVNLfmRsOWXl8wjmnsQkqm3IvrAetnPurx3bG
+         dAhzgnFn1HOOdoBeTJ6idvmDIakR3bsKDUMTatggqcwUDf7+wZVRR4JDOcgr9vpTM/jb
+         c4aQ==
+X-Gm-Message-State: AOAM531cbCvUSvLI8FMDdj70KrrQSZl83wYdVkBVbS0Gpc0Wb+Xv2CRc
+        4kTMftSfKmwmroDKNYBXwVFqrl7Snti7B862Ee4N7w==
+X-Google-Smtp-Source: ABdhPJwukk4FfgGCE9DXGX12jyqxMhXq20QnpHOQ5CsAHRtiMZ0ck8ImUh9oBxHNeO9V4ehDak2Z2QOHbbWezu5b8SI=
+X-Received: by 2002:a05:651c:1305:: with SMTP id u5mr27111lja.339.1643926424857;
+ Thu, 03 Feb 2022 14:13:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20220202003033.704951-1-keescook@chromium.org> <20220202003033.704951-5-keescook@chromium.org>
+In-Reply-To: <20220202003033.704951-5-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Feb 2022 14:13:33 -0800
+Message-ID: <CAKwvOdkvd=2DcwEpQWBtS3p-hKB6Rvp4YXB4k+81Me6E5H+mqQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4 v5] fortify: Add Clang support
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  3 Feb 2022 10:26:41 -0800 Yang Shi <shy828301@gmail.com> wrote:
+On Tue, Feb 1, 2022 at 4:30 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index c45159dbdaa1..5482536d3197 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -2,7 +2,9 @@
+>  #ifndef _LINUX_FORTIFY_STRING_H_
+>  #define _LINUX_FORTIFY_STRING_H_
+>
+> -#define __FORTIFY_INLINE extern __always_inline __attribute__((gnu_inline))
+> +#include <linux/const.h>
+> +
+> +#define __FORTIFY_INLINE extern __always_inline __attribute__((gnu_inline)) __overloadable
 
-> v4: * s/Treated/Treat per David
->     * Collected acked-by tag from David
-> v3: * Fixed the fix tag, the one used by v2 was not accurate
->     * Added comment about the risk calling page_mapcount() per David
->     * Fix pagemap
-> v2: * Added proper fix tag per Jann Horn
->     * Rebased to the latest linus's tree
-
-The v2->v4 delta shows changes which aren't described above?
-
---- a/fs/proc/task_mmu.c~fs-proc-task_mmuc-dont-read-mapcount-for-migration-entry-v4
-+++ a/fs/proc/task_mmu.c
-@@ -469,9 +469,12 @@ static void smaps_account(struct mem_siz
- 	 * If any subpage of the compound page mapped with PTE it would elevate
- 	 * page_count().
- 	 *
--	 * Treated regular migration entries as mapcount == 1 without reading
--	 * mapcount since calling page_mapcount() for migration entries is
--	 * racy against THP splitting.
-+	 * The page_mapcount() is called to get a snapshot of the mapcount.
-+	 * Without holding the page lock this snapshot can be slightly wrong as
-+	 * we cannot always read the mapcount atomically.  It is not safe to
-+	 * call page_mapcount() even with PTL held if the page is not mapped,
-+	 * especially for migration entries.  Treat regular migration entries
-+	 * as mapcount == 1.
- 	 */
- 	if ((page_count(page) == 1) || migration) {
- 		smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
-@@ -1393,6 +1396,7 @@ static pagemap_entry_t pte_to_pagemap_en
- {
- 	u64 frame = 0, flags = 0;
- 	struct page *page = NULL;
-+	bool migration = false;
- 
- 	if (pte_present(pte)) {
- 		if (pm->show_pfn)
-@@ -1414,13 +1418,14 @@ static pagemap_entry_t pte_to_pagemap_en
- 			frame = swp_type(entry) |
- 				(swp_offset(entry) << MAX_SWAPFILES_SHIFT);
- 		flags |= PM_SWAP;
-+		migration = is_migration_entry(entry);
- 		if (is_pfn_swap_entry(entry))
- 			page = pfn_swap_entry_to_page(entry);
- 	}
- 
- 	if (page && !PageAnon(page))
- 		flags |= PM_FILE;
--	if (page && page_mapcount(page) == 1)
-+	if (page && !migration && page_mapcount(page) == 1)
- 		flags |= PM_MMAP_EXCLUSIVE;
- 	if (vma->vm_flags & VM_SOFTDIRTY)
- 		flags |= PM_SOFT_DIRTY;
-@@ -1436,6 +1441,7 @@ static int pagemap_pmd_range(pmd_t *pmdp
- 	spinlock_t *ptl;
- 	pte_t *pte, *orig_pte;
- 	int err = 0;
-+	bool migration = false;
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- 	ptl = pmd_trans_huge_lock(pmdp, vma);
-@@ -1476,11 +1482,12 @@ static int pagemap_pmd_range(pmd_t *pmdp
- 			if (pmd_swp_uffd_wp(pmd))
- 				flags |= PM_UFFD_WP;
- 			VM_BUG_ON(!is_pmd_migration_entry(pmd));
-+			migration = is_migration_entry(entry);
- 			page = pfn_swap_entry_to_page(entry);
- 		}
- #endif
- 
--		if (page && page_mapcount(page) == 1)
-+		if (page && !migration && page_mapcount(page) == 1)
- 			flags |= PM_MMAP_EXCLUSIVE;
- 
- 		for (; addr != end; addr += PAGE_SIZE) {
-_
-
+Sorry, I just noticed this line (already) uses a mix of open coding
+__attribute__ and not. Would you mind also please changing the open
+coded gnu_inline to simply __gnu_inline to make the entire line
+consistent?
+-- 
+Thanks,
+~Nick Desaulniers

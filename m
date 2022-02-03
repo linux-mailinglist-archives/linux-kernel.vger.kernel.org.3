@@ -2,158 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72D74A8759
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9E14A875E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351711AbiBCPMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239467AbiBCPMJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:12:09 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42FC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:12:09 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id f80-20020a1c1f53000000b0035399b8bedcso7094125wmf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 07:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rvWCTnK7RIGRGIa+VtDlo4Iv+yq/+Lu9evG31SQz/yM=;
-        b=aW2ldL8OrNHngGrqChyY1ky0oKQbCrh9+FJ5S95lS+kjaw7Ym5fHIhG1ooDDMy2EG3
-         aVlN2KW7PlYjaf6Mjypd7qOZi6lqyqn1m12PkW5BNNCNRGPo1tZJIky1EuBeeb178tgN
-         ApGjkm0vMph1dYj0p0SEWiy3DW+6pof1wBe9Mn+8PB66yFy7QDEpXwfjoF4vHpCn2bOz
-         HaCygIYmbIQSTrQ84JGvaxCagkwh5EfXLYVO8JPvM+NH/VKVvrK/mRtFch87ogTwkrNm
-         2aodA6WlZqikQpgmboDZosh5pJ3d4w46nIH6iZ0zFLFV6zfqNeSNt/3xYN7r6uXQb0GT
-         +4JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rvWCTnK7RIGRGIa+VtDlo4Iv+yq/+Lu9evG31SQz/yM=;
-        b=BAtCw0KACLUdd9Z/FIsfuVm+1g6GHt9OnHhKTcAE9JwkOPLbZb7ODkiuNqls3D0y9r
-         NQ+QmVZcHD/G+zbO0Fipt0ubThNsrlSMZszOdiZrElJW2oV9pf/BJzxNb3ApzW54ysa9
-         ZFaxQ5vimd0O8q7Nk/+JctGmHo0hsjkt0A703smCuHz4dOdewzhCl+OqhIrSWyxZ5txQ
-         84Geza1pm4/aN544C5m99UKPoHJfKclucOw/J4fsxZBRSMVDTmysqDvz1oeqUB8oKqSm
-         B/hdTTsUJ3/ZArKMOwP/t7rWOmrcW6TUyGmJsrnAoRbycmypaBTzssWoMDNksJJBHpMM
-         FNsg==
-X-Gm-Message-State: AOAM532Qo2UmqOXVLQWEre1XOGIuINq8ts1E8/2blScOY99uvbYhoZ8N
-        724N/dPk9uKqywypy9DFFKd3qQ==
-X-Google-Smtp-Source: ABdhPJwGqRQozSjn+lIsgMN0YR+bp/BBm28F1i1av7MLxP9PAKwUk51QlDUZ++M1LdLsc3DB92sdOw==
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr10799974wmq.44.1643901128011;
-        Thu, 03 Feb 2022 07:12:08 -0800 (PST)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
-        by smtp.gmail.com with ESMTPSA id m14sm25793665wrp.4.2022.02.03.07.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 07:12:07 -0800 (PST)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH 2/2] io_uring: avoid ring quiesce for IORING_REGISTER_EVENTFD_ASYNC
-Date:   Thu,  3 Feb 2022 15:11:53 +0000
-Message-Id: <20220203151153.574032-3-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220203151153.574032-1-usama.arif@bytedance.com>
-References: <20220203151153.574032-1-usama.arif@bytedance.com>
+        id S239467AbiBCPNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:13:30 -0500
+Received: from mga17.intel.com ([192.55.52.151]:34517 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234323AbiBCPNZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:13:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643901205; x=1675437205;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=HvrAzmdR09sq861C3G6Eh3De6Gkmg08YRy47I4Cm4/Q=;
+  b=WxMRoEIOgoJZ6bOma8jruYOGCR1zc/3G0EZI3NUsWS/YllqLvhaG5eRO
+   tFQaJapWtdwmqeBWql3m8Y0+QKJBLaYsYPeSgk+mSAX8gfV1gzODr35z0
+   Htyhwel4SjOuUH2bGRD8pGAFykas8aa0nRCh+qhUCvShExsBSUGELNDPk
+   yL6gw4nfVvi8BvLp7zoTNoHbMq72uf6A8k98ipUgiOmTsFrxJzzpPJqyc
+   yQu8Nwl4FnZCjrSzFSXh7TKd5PZ5UACy0yAEu9gMP3w+pa5ggKrcRFuRJ
+   BfzLabjRFiKmUxVIM4SK+6zGhVdUDwnNwOAqO11iXlD+ZdxTzBDHz27Vo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228812985"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="228812985"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:13:25 -0800
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="483265297"
+Received: from oshoron-mobl.amr.corp.intel.com (HELO [10.209.125.125]) ([10.209.125.125])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:13:24 -0800
+Message-ID: <ef32b70f-dcaa-f642-b322-4ef7928e58e5@intel.com>
+Date:   Thu, 3 Feb 2022 07:13:22 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, knsathya@kernel.org, pbonzini@redhat.com,
+        sdeep@vmware.com, seanjc@google.com, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-2-kirill.shutemov@linux.intel.com>
+ <87fsp2z8p8.ffs@tglx> <20220201231459.2doc4iaibmuua4qk@black.fi.intel.com>
+ <20220203003209.bi6i4llc4jeouuh6@treble>
+ <20220203140943.wwi2hk3h3wzsjmdv@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv2 01/29] x86/tdx: Detect running as a TDX guest in early
+ boot
+In-Reply-To: <20220203140943.wwi2hk3h3wzsjmdv@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is done using the RCU data structure (io_ev_fd). eventfd_async
-is moved from io_ring_ctx to io_ev_fd which is RCU protected hence
-avoiding ring quiesce which is much more expensive than an RCU lock.
-io_should_trigger_evfd is already under rcu_read_lock so there is
-no extra RCU read-side critical section needed.
+On 2/3/22 06:09, Kirill A. Shutemov wrote:
+> I just realized that we have moved tdx_early_init() back and forth few
+> times for this reason. Ughh..
 
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- fs/io_uring.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index f07cfbb387a6..30ac08ad6810 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -329,6 +329,7 @@ struct io_submit_state {
- struct io_ev_fd {
- 	struct eventfd_ctx	*cq_ev_fd;
- 	struct io_ring_ctx	*ctx;
-+	unsigned int		eventfd_async: 1;
- 	struct rcu_head		rcu;
- };
- 
-@@ -341,7 +342,6 @@ struct io_ring_ctx {
- 		unsigned int		flags;
- 		unsigned int		compat: 1;
- 		unsigned int		drain_next: 1;
--		unsigned int		eventfd_async: 1;
- 		unsigned int		restricted: 1;
- 		unsigned int		off_timeout_used: 1;
- 		unsigned int		drain_active: 1;
-@@ -1740,7 +1740,7 @@ static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx, struct io_ev_
- 		return false;
- 	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
- 		return false;
--	return !ctx->eventfd_async || io_wq_current_is_worker();
-+	return !ev_fd->eventfd_async || io_wq_current_is_worker();
- }
- 
- static void io_eventfd_signal(struct io_ring_ctx *ctx)
-@@ -9372,7 +9372,8 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
- 	return done ? done : err;
- }
- 
--static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
-+static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
-+			       unsigned int eventfd_async)
- {
- 	struct io_ev_fd *ev_fd;
- 	__s32 __user *fds = arg;
-@@ -9399,6 +9400,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
- 		goto out;
- 	}
- 	ev_fd->ctx = ctx;
-+	ev_fd->eventfd_async = eventfd_async;
- 
- 	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
- 	ret = 0;
-@@ -11014,6 +11016,7 @@ static bool io_register_op_must_quiesce(int op)
- 	case IORING_UNREGISTER_FILES:
- 	case IORING_REGISTER_FILES_UPDATE:
- 	case IORING_REGISTER_EVENTFD:
-+	case IORING_REGISTER_EVENTFD_ASYNC:
- 	case IORING_UNREGISTER_EVENTFD:
- 	case IORING_REGISTER_PROBE:
- 	case IORING_REGISTER_PERSONALITY:
-@@ -11114,17 +11117,16 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 		ret = io_register_files_update(ctx, arg, nr_args);
- 		break;
- 	case IORING_REGISTER_EVENTFD:
--	case IORING_REGISTER_EVENTFD_ASYNC:
- 		ret = -EINVAL;
- 		if (nr_args != 1)
- 			break;
--		ret = io_eventfd_register(ctx, arg);
--		if (ret)
-+		ret = io_eventfd_register(ctx, arg, 0);
-+		break;
-+	case IORING_REGISTER_EVENTFD_ASYNC:
-+		ret = -EINVAL;
-+		if (nr_args != 1)
- 			break;
--		if (opcode == IORING_REGISTER_EVENTFD_ASYNC)
--			ctx->eventfd_async = 1;
--		else
--			ctx->eventfd_async = 0;
-+		ret = io_eventfd_register(ctx, arg, 1);
- 		break;
- 	case IORING_UNREGISTER_EVENTFD:
- 		ret = -EINVAL;
--- 
-2.25.1
-
+Can you flesh out the changelogs so we don't continue to repeat history,
+please?

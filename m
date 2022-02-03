@@ -2,258 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2614A82CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFD84A82D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349550AbiBCLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:00:00 -0500
-Received: from mga09.intel.com ([134.134.136.24]:16919 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235192AbiBCK77 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:59:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643885999; x=1675421999;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9aJqvw8SN3hrJ1kfCpnrOtDl1FVBaSYTL4PXDTJCgEo=;
-  b=kIhJ6l56UB86JXK4wrbh/NArnn9efCKXFPkHi28FDRXrF9YYC99noplr
-   +tLLHYxL1FbX6YgAbjS524s9jhjmbscmbUYOXtWofMbADN6bjT1ARPaZY
-   cDj2Px18MhAEEGvJCrRXw6Zk/t0eqPhq3hxEZ7HNmMiMF5MmXFBsGV5GK
-   isEnCtQmMbIHugWiAWuDuz/Jnfy3J59w8BZNVtqBPeX48fnr7NA/6ZMXU
-   3/yBfMC9+PFdupsr2zA65jvcBYxVLnhyVNLeKBn3w7YdJ2dWx/XtPSm6Z
-   5icVrTE15+7iRs73sRVLJVpY++S8hJwRnAmFhZsva407tKqUwll+IFLiQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="247886928"
+        id S1349760AbiBCLBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 06:01:07 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:29238 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240363AbiBCLBE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 06:01:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1643886064; x=1675422064;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=hE4XZmV/JC+5JwsToWxM3BjNYM0wmpjZF/Cmk+aMFtw=;
+  b=NZUbh2MFFzEDmcGb7IXK0N+apj17Rg+Aj6YiRUAEhjmv35/8p4gnXX6I
+   FegJt9T980hgwAwGNiMlFLDIvfyTttvm3JRU/rD21n55dkqKXBGDjTDS7
+   HYBmrQnF0vP69uyNlQ35j9gXqTY9iDzXEhiQ1/ddfl4XE8HNX4ZyOcI15
+   bRtqtSbAb2WAcfpKDUNssQe6bxTspDyrmURk4d4dZgOnRw2lw9h9b4ILu
+   T7/B6U5ox7vCYShSd7UvWxjTjAq8DqG9GqPgWog9CXOTTkPWAXYnmLpJa
+   j+1WsSx9TrEnBNxzaL7qXWlpfTk7BM6Gv1FO5JA+ctS0gNlcyAtYN9kje
+   g==;
+IronPort-SDR: 2jYRUjc9vCN6qxX54I0w7vTetHEQM1wRNLtNRUXDqgObU6IBBQjNYb/Apina53wH05AyiwY4zj
+ jbDn8QFl9lEDJR4/g0coclWyPQEi+aulheMF5H1DKbsPVbZR25MBhC5L0d7gcd6aQnR/0GWPpS
+ o299dvgs/OTQ67aDzNxZGVt/amEzZAEudcsXJcz92+zvRXm8UMbsVAjcxTUjLdyUiKkotsK/3r
+ lA19HiYghRmjcG4hXTvmHo188TG7djbFBERNgNlNnRjtCEF47SN9I8WD6/1HRoMrFNHm0xkbNi
+ zG0=
 X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="247886928"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 02:59:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="498100589"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 03 Feb 2022 02:59:56 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7BE2330A; Thu,  3 Feb 2022 13:00:10 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: [PATCH v2 1/1] iio: frequency: adf4350: Make use of device properties
-Date:   Thu,  3 Feb 2022 13:00:06 +0200
-Message-Id: <20220203110006.4291-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+   d="scan'208";a="160964886"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Feb 2022 04:01:01 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 3 Feb 2022 04:01:01 -0700
+Received: from rob-dk-mpu02.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 3 Feb 2022 04:00:59 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>
+CC:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] clk: at91: clk-master: remove dead code
+Date:   Thu, 3 Feb 2022 13:02:02 +0200
+Message-ID: <20220203110202.18329-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+Commit facb87ad7560 ("clk: at91: sama7g5: remove prescaler part of master
+clock") removed the master clock's prescaler from clock tree of SAMA7G5
+as it has been discovered that there is a hardware bug when trying to
+change it at run-time (bug is described in description of
+commit facb87ad7560 ("clk: at91: sama7g5: remove prescaler part of master
+clock")). This was previously changed at CPUFreq driver request. Thus, with
+commit facb87ad7560 ("clk: at91: sama7g5: remove prescaler part of master
+clock") there is no need of code that handles run-time changes of master
+clock's prescaler, thus remove this code.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
-v2: fixed typo (lkp)
- drivers/iio/frequency/adf4350.c | 103 +++++++++++++-------------------
- 1 file changed, 42 insertions(+), 61 deletions(-)
+ drivers/clk/at91/at91rm9200.c  |   3 +-
+ drivers/clk/at91/at91sam9260.c |   3 +-
+ drivers/clk/at91/at91sam9g45.c |   3 +-
+ drivers/clk/at91/at91sam9n12.c |   3 +-
+ drivers/clk/at91/at91sam9rl.c  |   3 +-
+ drivers/clk/at91/at91sam9x5.c  |   3 +-
+ drivers/clk/at91/clk-master.c  | 117 ++-------------------------------
+ drivers/clk/at91/dt-compat.c   |   3 +-
+ drivers/clk/at91/pmc.h         |   2 +-
+ drivers/clk/at91/sam9x60.c     |   3 +-
+ drivers/clk/at91/sama5d2.c     |   3 +-
+ drivers/clk/at91/sama5d3.c     |   3 +-
+ drivers/clk/at91/sama5d4.c     |   3 +-
+ 13 files changed, 18 insertions(+), 134 deletions(-)
 
-diff --git a/drivers/iio/frequency/adf4350.c b/drivers/iio/frequency/adf4350.c
-index 3d9eba716b69..9af20a51540d 100644
---- a/drivers/iio/frequency/adf4350.c
-+++ b/drivers/iio/frequency/adf4350.c
-@@ -7,17 +7,18 @@
+diff --git a/drivers/clk/at91/at91rm9200.c b/drivers/clk/at91/at91rm9200.c
+index fff4fdda974f..b174f727a8ef 100644
+--- a/drivers/clk/at91/at91rm9200.c
++++ b/drivers/clk/at91/at91rm9200.c
+@@ -143,8 +143,7 @@ static void __init at91rm9200_pmc_setup(struct device_node *np)
+ 					   parent_names,
+ 					   &at91rm9200_master_layout,
+ 					   &rm9200_mck_characteristics,
+-					   &rm9200_mck_lock, CLK_SET_RATE_GATE,
+-					   INT_MIN);
++					   &rm9200_mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
  
- #include <linux/device.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/property.h>
- #include <linux/slab.h>
- #include <linux/sysfs.h>
- #include <linux/spi/spi.h>
- #include <linux/regulator/consumer.h>
- #include <linux/err.h>
--#include <linux/module.h>
- #include <linux/gcd.h>
- #include <linux/gpio/consumer.h>
- #include <asm/div64.h>
- #include <linux/clk.h>
--#include <linux/of.h>
+diff --git a/drivers/clk/at91/at91sam9260.c b/drivers/clk/at91/at91sam9260.c
+index 79802f864ee5..11550e50cd9f 100644
+--- a/drivers/clk/at91/at91sam9260.c
++++ b/drivers/clk/at91/at91sam9260.c
+@@ -419,8 +419,7 @@ static void __init at91sam926x_pmc_setup(struct device_node *np,
+ 					   parent_names,
+ 					   &at91rm9200_master_layout,
+ 					   data->mck_characteristics,
+-					   &at91sam9260_mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &at91sam9260_mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
  
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-@@ -381,10 +382,8 @@ static const struct iio_info adf4350_info = {
- 	.debugfs_reg_access = &adf4350_reg_access,
+diff --git a/drivers/clk/at91/at91sam9g45.c b/drivers/clk/at91/at91sam9g45.c
+index 7ed984f8058c..8c9344451f46 100644
+--- a/drivers/clk/at91/at91sam9g45.c
++++ b/drivers/clk/at91/at91sam9g45.c
+@@ -154,8 +154,7 @@ static void __init at91sam9g45_pmc_setup(struct device_node *np)
+ 					   parent_names,
+ 					   &at91rm9200_master_layout,
+ 					   &mck_characteristics,
+-					   &at91sam9g45_mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &at91sam9g45_mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/at91sam9n12.c b/drivers/clk/at91/at91sam9n12.c
+index 63cc58944b00..0bb19400d199 100644
+--- a/drivers/clk/at91/at91sam9n12.c
++++ b/drivers/clk/at91/at91sam9n12.c
+@@ -181,8 +181,7 @@ static void __init at91sam9n12_pmc_setup(struct device_node *np)
+ 					   parent_names,
+ 					   &at91sam9x5_master_layout,
+ 					   &mck_characteristics,
+-					   &at91sam9n12_mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &at91sam9n12_mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/at91sam9rl.c b/drivers/clk/at91/at91sam9rl.c
+index 4d4faf6c61d8..b992137bab02 100644
+--- a/drivers/clk/at91/at91sam9rl.c
++++ b/drivers/clk/at91/at91sam9rl.c
+@@ -123,8 +123,7 @@ static void __init at91sam9rl_pmc_setup(struct device_node *np)
+ 					   parent_names,
+ 					   &at91rm9200_master_layout,
+ 					   &sam9rl_mck_characteristics,
+-					   &sam9rl_mck_lock, CLK_SET_RATE_GATE,
+-					   INT_MIN);
++					   &sam9rl_mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/at91sam9x5.c b/drivers/clk/at91/at91sam9x5.c
+index bd8007b4f3e0..3857db2e144b 100644
+--- a/drivers/clk/at91/at91sam9x5.c
++++ b/drivers/clk/at91/at91sam9x5.c
+@@ -201,8 +201,7 @@ static void __init at91sam9x5_pmc_setup(struct device_node *np,
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 4,
+ 					   parent_names,
+ 					   &at91sam9x5_master_layout,
+-					   &mck_characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &mck_characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/clk-master.c b/drivers/clk/at91/clk-master.c
+index b2d0a7f4f7f9..164e2959c7cf 100644
+--- a/drivers/clk/at91/clk-master.c
++++ b/drivers/clk/at91/clk-master.c
+@@ -374,85 +374,6 @@ static void clk_sama7g5_master_best_diff(struct clk_rate_request *req,
+ 	}
+ }
+ 
+-static int clk_master_pres_determine_rate(struct clk_hw *hw,
+-					  struct clk_rate_request *req)
+-{
+-	struct clk_master *master = to_clk_master(hw);
+-	struct clk_rate_request req_parent = *req;
+-	const struct clk_master_characteristics *characteristics =
+-							master->characteristics;
+-	struct clk_hw *parent;
+-	long best_rate = LONG_MIN, best_diff = LONG_MIN;
+-	u32 pres;
+-	int i;
+-
+-	if (master->chg_pid < 0)
+-		return -EOPNOTSUPP;
+-
+-	parent = clk_hw_get_parent_by_index(hw, master->chg_pid);
+-	if (!parent)
+-		return -EOPNOTSUPP;
+-
+-	for (i = 0; i <= MASTER_PRES_MAX; i++) {
+-		if (characteristics->have_div3_pres && i == MASTER_PRES_MAX)
+-			pres = 3;
+-		else
+-			pres = 1 << i;
+-
+-		req_parent.rate = req->rate * pres;
+-		if (__clk_determine_rate(parent, &req_parent))
+-			continue;
+-
+-		clk_sama7g5_master_best_diff(req, parent, req_parent.rate,
+-					     &best_diff, &best_rate, pres);
+-		if (!best_diff)
+-			break;
+-	}
+-
+-	return 0;
+-}
+-
+-static int clk_master_pres_set_rate(struct clk_hw *hw, unsigned long rate,
+-				    unsigned long parent_rate)
+-{
+-	struct clk_master *master = to_clk_master(hw);
+-	unsigned long flags;
+-	unsigned int pres, mckr, tmp;
+-	int ret;
+-
+-	pres = DIV_ROUND_CLOSEST(parent_rate, rate);
+-	if (pres > MASTER_PRES_MAX)
+-		return -EINVAL;
+-
+-	else if (pres == 3)
+-		pres = MASTER_PRES_MAX;
+-	else if (pres)
+-		pres = ffs(pres) - 1;
+-
+-	spin_lock_irqsave(master->lock, flags);
+-	ret = regmap_read(master->regmap, master->layout->offset, &mckr);
+-	if (ret)
+-		goto unlock;
+-
+-	mckr &= master->layout->mask;
+-	tmp = (mckr >> master->layout->pres_shift) & MASTER_PRES_MASK;
+-	if (pres == tmp)
+-		goto unlock;
+-
+-	mckr &= ~(MASTER_PRES_MASK << master->layout->pres_shift);
+-	mckr |= (pres << master->layout->pres_shift);
+-	ret = regmap_write(master->regmap, master->layout->offset, mckr);
+-	if (ret)
+-		goto unlock;
+-
+-	while (!clk_master_ready(master))
+-		cpu_relax();
+-unlock:
+-	spin_unlock_irqrestore(master->lock, flags);
+-
+-	return ret;
+-}
+-
+ static unsigned long clk_master_pres_recalc_rate(struct clk_hw *hw,
+ 						 unsigned long parent_rate)
+ {
+@@ -539,13 +460,6 @@ static void clk_master_pres_restore_context(struct clk_hw *hw)
+ 		pr_warn("MCKR PRES was not configured properly by firmware!\n");
+ }
+ 
+-static void clk_master_pres_restore_context_chg(struct clk_hw *hw)
+-{
+-	struct clk_master *master = to_clk_master(hw);
+-
+-	clk_master_pres_set_rate(hw, master->pms.rate, master->pms.parent_rate);
+-}
+-
+ static const struct clk_ops master_pres_ops = {
+ 	.prepare = clk_master_prepare,
+ 	.is_prepared = clk_master_is_prepared,
+@@ -555,25 +469,13 @@ static const struct clk_ops master_pres_ops = {
+ 	.restore_context = clk_master_pres_restore_context,
  };
  
--#ifdef CONFIG_OF
- static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
- {
--	struct device_node *np = dev->of_node;
- 	struct adf4350_platform_data *pdata;
- 	unsigned int tmp;
- 
-@@ -392,101 +391,83 @@ static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
- 	if (!pdata)
- 		return NULL;
- 
--	snprintf(&pdata->name[0], SPI_NAME_SIZE - 1, "%pOFn", np);
-+	snprintf(pdata->name, sizeof(pdata->name), "%pfw", dev_fwnode(dev));
- 
- 	tmp = 10000;
--	of_property_read_u32(np, "adi,channel-spacing", &tmp);
-+	device_property_read_u32(dev, "adi,channel-spacing", &tmp);
- 	pdata->channel_spacing = tmp;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,power-up-frequency", &tmp);
-+	device_property_read_u32(dev, "adi,power-up-frequency", &tmp);
- 	pdata->power_up_frequency = tmp;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,reference-div-factor", &tmp);
-+	device_property_read_u32(dev, "adi,reference-div-factor", &tmp);
- 	pdata->ref_div_factor = tmp;
- 
--	pdata->ref_doubler_en = of_property_read_bool(np,
--			"adi,reference-doubler-enable");
--	pdata->ref_div2_en = of_property_read_bool(np,
--			"adi,reference-div2-enable");
-+	pdata->ref_doubler_en = device_property_read_bool(dev, "adi,reference-doubler-enable");
-+	pdata->ref_div2_en = device_property_read_bool(dev, "adi,reference-div2-enable");
- 
- 	/* r2_user_settings */
--	pdata->r2_user_settings = of_property_read_bool(np,
--			"adi,phase-detector-polarity-positive-enable") ?
--			ADF4350_REG2_PD_POLARITY_POS : 0;
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,lock-detect-precision-6ns-enable") ?
--			ADF4350_REG2_LDP_6ns : 0;
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,lock-detect-function-integer-n-enable") ?
--			ADF4350_REG2_LDF_INT_N : 0;
-+	pdata->r2_user_settings = 0;
-+	if (device_property_read_bool(dev, "adi,phase-detector-polarity-positive-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_PD_POLARITY_POS;
-+	if (device_property_read_bool(dev, "adi,lock-detect-precision-6ns-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_LDP_6ns;
-+	if (device_property_read_bool(dev, "adi,lock-detect-function-integer-n-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_LDF_INT_N;
- 
- 	tmp = 2500;
--	of_property_read_u32(np, "adi,charge-pump-current", &tmp);
-+	device_property_read_u32(dev, "adi,charge-pump-current", &tmp);
- 	pdata->r2_user_settings |= ADF4350_REG2_CHARGE_PUMP_CURR_uA(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,muxout-select", &tmp);
-+	device_property_read_u32(dev, "adi,muxout-select", &tmp);
- 	pdata->r2_user_settings |= ADF4350_REG2_MUXOUT(tmp);
- 
--	pdata->r2_user_settings |= of_property_read_bool(np,
--			"adi,low-spur-mode-enable") ?
--			ADF4350_REG2_NOISE_MODE(0x3) : 0;
-+	if (device_property_read_bool(dev, "adi,low-spur-mode-enable"))
-+		pdata->r2_user_settings |= ADF4350_REG2_NOISE_MODE(0x3);
- 
- 	/* r3_user_settings */
- 
--	pdata->r3_user_settings = of_property_read_bool(np,
--			"adi,cycle-slip-reduction-enable") ?
--			ADF4350_REG3_12BIT_CSR_EN : 0;
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,charge-cancellation-enable") ?
--			ADF4351_REG3_CHARGE_CANCELLATION_EN : 0;
+-static const struct clk_ops master_pres_ops_chg = {
+-	.prepare = clk_master_prepare,
+-	.is_prepared = clk_master_is_prepared,
+-	.determine_rate = clk_master_pres_determine_rate,
+-	.recalc_rate = clk_master_pres_recalc_rate,
+-	.get_parent = clk_master_pres_get_parent,
+-	.set_rate = clk_master_pres_set_rate,
+-	.save_context = clk_master_pres_save_context,
+-	.restore_context = clk_master_pres_restore_context_chg,
+-};
 -
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,anti-backlash-3ns-enable") ?
--			ADF4351_REG3_ANTI_BACKLASH_3ns_EN : 0;
--	pdata->r3_user_settings |= of_property_read_bool(np,
--			"adi,band-select-clock-mode-high-enable") ?
--			ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH : 0;
-+	pdata->r3_user_settings = 0;
-+	if (device_property_read_bool(dev, "adi,cycle-slip-reduction-enable"))
-+		pdata->r3_user_settings |= ADF4350_REG3_12BIT_CSR_EN;
-+	if (device_property_read_bool(dev, "adi,charge-cancellation-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_CHARGE_CANCELLATION_EN;
-+	if (device_property_read_bool(dev, "adi,anti-backlash-3ns-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_ANTI_BACKLASH_3ns_EN;
-+	if (device_property_read_bool(dev, "adi,band-select-clock-mode-high-enable"))
-+		pdata->r3_user_settings |= ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,12bit-clk-divider", &tmp);
-+	device_property_read_u32(dev, "adi,12bit-clk-divider", &tmp);
- 	pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,clk-divider-mode", &tmp);
-+	device_property_read_u32(dev, "adi,clk-divider-mode", &tmp);
- 	pdata->r3_user_settings |= ADF4350_REG3_12BIT_CLKDIV_MODE(tmp);
- 
- 	/* r4_user_settings */
- 
--	pdata->r4_user_settings = of_property_read_bool(np,
--			"adi,aux-output-enable") ?
--			ADF4350_REG4_AUX_OUTPUT_EN : 0;
--	pdata->r4_user_settings |= of_property_read_bool(np,
--			"adi,aux-output-fundamental-enable") ?
--			ADF4350_REG4_AUX_OUTPUT_FUND : 0;
--	pdata->r4_user_settings |= of_property_read_bool(np,
--			"adi,mute-till-lock-enable") ?
--			ADF4350_REG4_MUTE_TILL_LOCK_EN : 0;
-+	pdata->r4_user_settings = 0;
-+	if (device_property_read_bool(dev, "adi,aux-output-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_EN;
-+	if (device_property_read_bool(dev, "adi,aux-output-fundamental-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_FUND;
-+	if (device_property_read_bool(dev, "adi,mute-till-lock-enable"))
-+		pdata->r4_user_settings |= ADF4350_REG4_MUTE_TILL_LOCK_EN;
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,output-power", &tmp);
-+	device_property_read_u32(dev, "adi,output-power", &tmp);
- 	pdata->r4_user_settings |= ADF4350_REG4_OUTPUT_PWR(tmp);
- 
- 	tmp = 0;
--	of_property_read_u32(np, "adi,aux-output-power", &tmp);
-+	device_property_read_u32(dev, "adi,aux-output-power", &tmp);
- 	pdata->r4_user_settings |= ADF4350_REG4_AUX_OUTPUT_PWR(tmp);
- 
- 	return pdata;
- }
--#else
--static
--struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
--{
--	return NULL;
--}
--#endif
- 
- static int adf4350_probe(struct spi_device *spi)
+ static struct clk_hw * __init
+ at91_clk_register_master_internal(struct regmap *regmap,
+ 		const char *name, int num_parents,
+ 		const char **parent_names,
+ 		const struct clk_master_layout *layout,
+ 		const struct clk_master_characteristics *characteristics,
+-		const struct clk_ops *ops, spinlock_t *lock, u32 flags,
+-		int chg_pid)
++		const struct clk_ops *ops, spinlock_t *lock, u32 flags)
  {
-@@ -496,7 +477,7 @@ static int adf4350_probe(struct spi_device *spi)
- 	struct clk *clk = NULL;
- 	int ret;
+ 	struct clk_master *master;
+ 	struct clk_init_data init;
+@@ -599,7 +501,6 @@ at91_clk_register_master_internal(struct regmap *regmap,
+ 	master->layout = layout;
+ 	master->characteristics = characteristics;
+ 	master->regmap = regmap;
+-	master->chg_pid = chg_pid;
+ 	master->lock = lock;
  
--	if (spi->dev.of_node) {
-+	if (dev_fwnode(&spi->dev)) {
- 		pdata = adf4350_parse_dt(&spi->dev);
- 		if (pdata == NULL)
- 			return -EINVAL;
-@@ -625,7 +606,7 @@ MODULE_DEVICE_TABLE(spi, adf4350_id);
- static struct spi_driver adf4350_driver = {
- 	.driver = {
- 		.name	= "adf4350",
--		.of_match_table = of_match_ptr(adf4350_of_match),
-+		.of_match_table = adf4350_of_match,
- 	},
- 	.probe		= adf4350_probe,
- 	.remove		= adf4350_remove,
+ 	if (ops == &master_div_ops_chg) {
+@@ -628,19 +529,13 @@ at91_clk_register_master_pres(struct regmap *regmap,
+ 		const char **parent_names,
+ 		const struct clk_master_layout *layout,
+ 		const struct clk_master_characteristics *characteristics,
+-		spinlock_t *lock, u32 flags, int chg_pid)
++		spinlock_t *lock)
+ {
+-	const struct clk_ops *ops;
+-
+-	if (flags & CLK_SET_RATE_GATE)
+-		ops = &master_pres_ops;
+-	else
+-		ops = &master_pres_ops_chg;
+-
+ 	return at91_clk_register_master_internal(regmap, name, num_parents,
+ 						 parent_names, layout,
+-						 characteristics, ops,
+-						 lock, flags, chg_pid);
++						 characteristics,
++						 &master_pres_ops,
++						 lock, CLK_SET_RATE_GATE);
+ }
+ 
+ struct clk_hw * __init
+@@ -661,7 +556,7 @@ at91_clk_register_master_div(struct regmap *regmap,
+ 	hw = at91_clk_register_master_internal(regmap, name, 1,
+ 					       &parent_name, layout,
+ 					       characteristics, ops,
+-					       lock, flags, -EINVAL);
++					       lock, flags);
+ 
+ 	if (!IS_ERR(hw) && safe_div) {
+ 		master_div = to_clk_master(hw);
+diff --git a/drivers/clk/at91/dt-compat.c b/drivers/clk/at91/dt-compat.c
+index ca2dbb65b9df..8ca8bcacf66d 100644
+--- a/drivers/clk/at91/dt-compat.c
++++ b/drivers/clk/at91/dt-compat.c
+@@ -392,8 +392,7 @@ of_at91_clk_master_setup(struct device_node *np,
+ 
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", num_parents,
+ 					   parent_names, layout,
+-					   characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto out_free_characteristics;
+ 
+diff --git a/drivers/clk/at91/pmc.h b/drivers/clk/at91/pmc.h
+index 3a1bf6194c28..efe4975bddc3 100644
+--- a/drivers/clk/at91/pmc.h
++++ b/drivers/clk/at91/pmc.h
+@@ -175,7 +175,7 @@ at91_clk_register_master_pres(struct regmap *regmap, const char *name,
+ 			      int num_parents, const char **parent_names,
+ 			      const struct clk_master_layout *layout,
+ 			      const struct clk_master_characteristics *characteristics,
+-			      spinlock_t *lock, u32 flags, int chg_pid);
++			      spinlock_t *lock);
+ 
+ struct clk_hw * __init
+ at91_clk_register_master_div(struct regmap *regmap, const char *name,
+diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
+index 5c264185f261..9ea4ce501bad 100644
+--- a/drivers/clk/at91/sam9x60.c
++++ b/drivers/clk/at91/sam9x60.c
+@@ -271,8 +271,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
+ 	parent_names[2] = "pllack_divck";
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 3,
+ 					   parent_names, &sam9x60_master_layout,
+-					   &mck_characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &mck_characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
+index f479e39e3bb2..cfd0f5e23b99 100644
+--- a/drivers/clk/at91/sama5d2.c
++++ b/drivers/clk/at91/sama5d2.c
+@@ -242,8 +242,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 4,
+ 					   parent_names,
+ 					   &at91sam9x5_master_layout,
+-					   &mck_characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &mck_characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/sama5d3.c b/drivers/clk/at91/sama5d3.c
+index 339d0f382ff0..7e93c6edf305 100644
+--- a/drivers/clk/at91/sama5d3.c
++++ b/drivers/clk/at91/sama5d3.c
+@@ -175,8 +175,7 @@ static void __init sama5d3_pmc_setup(struct device_node *np)
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 4,
+ 					   parent_names,
+ 					   &at91sam9x5_master_layout,
+-					   &mck_characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &mck_characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
+diff --git a/drivers/clk/at91/sama5d4.c b/drivers/clk/at91/sama5d4.c
+index 4af75b1e39e9..1a14a9bce308 100644
+--- a/drivers/clk/at91/sama5d4.c
++++ b/drivers/clk/at91/sama5d4.c
+@@ -190,8 +190,7 @@ static void __init sama5d4_pmc_setup(struct device_node *np)
+ 	hw = at91_clk_register_master_pres(regmap, "masterck_pres", 4,
+ 					   parent_names,
+ 					   &at91sam9x5_master_layout,
+-					   &mck_characteristics, &mck_lock,
+-					   CLK_SET_RATE_GATE, INT_MIN);
++					   &mck_characteristics, &mck_lock);
+ 	if (IS_ERR(hw))
+ 		goto err_free;
+ 
 -- 
-2.34.1
+2.32.0
 

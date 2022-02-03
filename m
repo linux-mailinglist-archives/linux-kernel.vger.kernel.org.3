@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08B4A7DDA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 450274A7DE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349028AbiBCCSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 21:18:10 -0500
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:43337 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349021AbiBCCSD (ORCPT
+        id S1348961AbiBCCUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 21:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231708AbiBCCUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 21:18:03 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 8BFB72B001C0;
-        Wed,  2 Feb 2022 21:18:01 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 02 Feb 2022 21:18:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=maCEeMW114688LGhZUXh1aNyGAyiVI
-        HXt4rdxe/VoDw=; b=F+f5FK5qTyyMNgna3BSpVupfP0HYFclzdKXQKrMVVA+a4P
-        j6+Vg/yo/jrfjO+uaIOrzkaGOx3vTCpe3Kk/BlY1oK/hQr6coWQc5jijJAS//vQ7
-        BnsBfCeSUeY6Le8JvQX7oh4hn2AbjqKO6x9nDInlVmxXYygCQHVglsQ9H/7whKDl
-        v3D0zfgAp4KH4UC5IjqAkjrWngLFe4lz/k6bPRyhdkOm09wB3F/1IGVpEGMwXiOV
-        Cn8kSXMVetdrrKA5Y4XyKuBrJSoV8mjTZnOkSQzycZ9/pb7IpeFt+nJyZGY4nWE7
-        QgQ527H6S46yNgE+9aQtb0GlUDpGfWyYOu8ZZ8JA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=maCEeM
-        W114688LGhZUXh1aNyGAyiVIHXt4rdxe/VoDw=; b=YVZe1VLXX/Fug6Q6vVzQdl
-        2R13W8v2rmw24HtGJjF9i0R7rNXlkjU+4MpRaD05ffvyyyrIAQ7lhiqioGZ+xFk1
-        B3KgN8j0p+Ho6Yijv2OEUbP4uDZQmB0XV86o4mN7hhrkdlcWSGlvWjtz5wCtxWDu
-        9xXaQDZkTXjVBXUh99UlE0VGeRiPzVyA1oWsDFFcb/HKm3cTwnHkjpy534nnYpTT
-        Kj0ehBpfGnWMLNJmkK5eTcyNDKwHd8Xi5fgbTCUJADNM48FfrT0eag0rerYZdLbT
-        xMeO0z5wTKffC1JBcXT/idK8QFl60sWC56zOnV4DIDVxKc1mwosGvXbeO4rWk9Yw
-        ==
-X-ME-Sender: <xms:WDv7YYKL2jNz8tJ2C_1X-hpsf2Y7kEYwzuT3MtX5TneCnmGrc4xyDQ>
-    <xme:WDv7YYJOMg0YzG1e_zXzW60gl1Xt3XklaAWVg7aDqpZVAk3qcaPeFkZuvHO7W1Zrl
-    YfnMETI0UY8A3DHkQ>
-X-ME-Received: <xmr:WDv7YYuRLOTEAv-8HCQ-0qrP0FMfhNHdubhkojehTEX-K9_x-j8k28DREsFq5dh2J-sFiIOOmHnayS1VjB6s8CEVoUgbwWiQOz0JjOPDcT8Oj3QgS-7KFWPbYPxnTuIU1zNzhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdeggecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
-    jeehueeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:WTv7YVZGxCxTxui2FqdkoinOZUFanasEzrdy-eKTu1nXMdOsr6ISPQ>
-    <xmx:WTv7Yfb6Tg5a-pyKqGiDdUdS25Mw7I_yo2PWhQd1bDVh9o5uGQKqFw>
-    <xmx:WTv7YRB7yDxskKrWEkHIdWuGnC-jiz_fqBpkfl_fdiTS7oQE34SOng>
-    <xmx:WTv7YbquHLHHS8c6QCMF8feKGk63iSBQM8Q37KsDElQRENH0vBrzS0uQDJU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Feb 2022 21:18:00 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 6/6] [DO NOT MERGE] clk: sunxi-ng: sun6i-rtc: Add support for H6
-Date:   Wed,  2 Feb 2022 20:17:36 -0600
-Message-Id: <20220203021736.13434-7-samuel@sholland.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220203021736.13434-1-samuel@sholland.org>
-References: <20220203021736.13434-1-samuel@sholland.org>
+        Wed, 2 Feb 2022 21:20:40 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C04C061714;
+        Wed,  2 Feb 2022 18:20:40 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id n15so2685694uaq.5;
+        Wed, 02 Feb 2022 18:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tWvcpRyL+bk3Xxu49uwybu4k8QPczRdqaC57dr6g/JM=;
+        b=SEi/OKvcrBc9qFDvZIBqAaQXwyFe/aBBjMQ/D/fXPqsKqwaqJ0WZ/W8Pwnm0HEoHfu
+         kYoqExEfyxPLioE9hMsbC8lEK1y55FIUSYAr2OdfCpERm6WN03Ey6VNFuSZLtK0Hi+iC
+         5QlTljl2NvT+JZjlmNSgba1c+pAAgrijGM0lCNRST1yfdlQtu+ox+d7b3kbl8C34ezYC
+         rTBR8RFzYm/ONejmB2hjA/5o/5JwqalninyC2HvPS9eMoFU6VNBfJvrFbL/HQAXQYHa0
+         Xt4i6KCt1olYgrvgMwCuGjkUmriy7i1ic0DKU8/2y1PBsTKXmD1ElOxbPG1BU5l243xe
+         /RxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tWvcpRyL+bk3Xxu49uwybu4k8QPczRdqaC57dr6g/JM=;
+        b=ymTaBqWhaS1DrlG1RukOtF/yF0bko02oBdv0j6kW/YdX/Q8R681s5okqdTuVVGesxY
+         ATkZcd3JtiQGt2npyl1S4lIzvljDFYuaaj4TLNfnlVPjg4jkkcVcrIHcO3q2CjTBUAnz
+         oD8jPEBASj9X8fpfKOqOvc56Jdac0ebEfZictgNy8LKz21MYCps32bFM8dXgImCQ1s7y
+         ITMikr+jhCL5kFxHQ9ErBpGtWB6Gj1rdN0a3AaSRFxj1Zgfv1mZgyCBLq/IgyK2RRUC/
+         ohblbecYjFsaixzOAinWxW+xMmyqt5XFWcjq2RUHpjkm4d/nOViJCVkIDJ6ztYcgwijC
+         6iyw==
+X-Gm-Message-State: AOAM5300U9x3goSMXB9QSv+YVMOZSo9qV+G75/hvDSBaChB05CKRK5qO
+        gGp1fwX50spA9msqpSeCe6RadgzY1VUeU72rlYA=
+X-Google-Smtp-Source: ABdhPJwD7hVjiKofWegP6ZZsLhWTmXz9k3fWDttPfDYs4unrIUMHCuO2GXKyG+Sixkk3szRYjrugagxk2U97bZ4CLjw=
+X-Received: by 2002:a05:6102:38d1:: with SMTP id k17mr12641123vst.50.1643854839175;
+ Wed, 02 Feb 2022 18:20:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de> <YfJ6lhZMAEmetdad@kroah.com>
+ <20220127112305.GC9150@pengutronix.de> <YfKCTG7N86yy74q+@kroah.com>
+ <20220127120039.GE9150@pengutronix.de> <YfKcYXjfhVKUKfzY@kroah.com>
+In-Reply-To: <YfKcYXjfhVKUKfzY@kroah.com>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Thu, 3 Feb 2022 05:20:34 +0300
+Message-ID: <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from device tree
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-H6 supports IOSC calibration and an ext-osc32k input. Unlike newer SoCs,
-it has a single parent for its fanout clock.
+Hello Greg,
 
-Add support for H6 in the CCU driver, replacing the support in the
-existing early OF clock provider.
+if I may be allowed, I would like to make a couple of points about
+specifying network interface names in DT. As in previous mail, not to
+defend this particular patch, but to talk about names assignment in
+general.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+I may be totally wrong, so consider my words as a request for
+discussion. I have been thinking about an efficient way for network
+device names assignment for routers with a fixed configuration and
+have always come to a conclusion that DT is a good place for names
+storage. Recent DSA capability to assign names from labels and this
+patch by Oleksij show that I am not alone.
 
-Changes in v3:
- - Rebase example on top of driver changes, and drop the second example.
+On Fri, Jan 28, 2022 at 3:34 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> And again, pick your names in userspace, embedded is not "special" here.
 
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 15 +++++++++++++++
- drivers/rtc/rtc-sun6i.c              | 17 -----------------
- 2 files changed, 15 insertions(+), 17 deletions(-)
+Embedded is not a special case, but fixed configuration is.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index a39670a7c446..712fda22efd5 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -295,6 +295,10 @@ static const struct sunxi_ccu_desc sun6i_rtc_ccu_desc = {
- 	.hw_clks	= &sun6i_rtc_ccu_hw_clks,
- };
- 
-+static const struct clk_parent_data sun50i_h6_osc32k_fanout_parents[] = {
-+	{ .hw = &osc32k_clk.common.hw },
-+};
-+
- static const struct clk_parent_data sun50i_h616_osc32k_fanout_parents[] = {
- 	{ .hw = &osc32k_clk.common.hw },
- 	{ .fw_name = "pll-32k" },
-@@ -307,6 +311,13 @@ static const struct clk_parent_data sun50i_r329_osc32k_fanout_parents[] = {
- 	{ .hw = &osc24M_32k_clk.common.hw }
- };
- 
-+static const struct sun6i_rtc_match_data sun50i_h6_rtc_ccu_data = {
-+	.have_ext_osc32k	= true,
-+	.have_iosc_calibration	= true,
-+	.osc32k_fanout_parents	= sun50i_h6_osc32k_fanout_parents,
-+	.osc32k_fanout_nparents	= ARRAY_SIZE(sun50i_h6_osc32k_fanout_parents),
-+};
-+
- static const struct sun6i_rtc_match_data sun50i_h616_rtc_ccu_data = {
- 	.have_iosc_calibration	= true,
- 	.rtc_32k_single_parent	= true,
-@@ -321,6 +332,10 @@ static const struct sun6i_rtc_match_data sun50i_r329_rtc_ccu_data = {
- };
- 
- static const struct of_device_id sun6i_rtc_ccu_match[] = {
-+	{
-+		.compatible	= "allwinner,sun50i-h6-rtc",
-+		.data		= &sun50i_h6_rtc_ccu_data,
-+	},
- 	{
- 		.compatible	= "allwinner,sun50i-h616-rtc",
- 		.data		= &sun50i_h616_rtc_ccu_data,
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 35b34d14a1db..1a875a32357d 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -364,23 +364,6 @@ CLK_OF_DECLARE_DRIVER(sun8i_h3_rtc_clk, "allwinner,sun8i-h3-rtc",
- CLK_OF_DECLARE_DRIVER(sun50i_h5_rtc_clk, "allwinner,sun50i-h5-rtc",
- 		      sun8i_h3_rtc_clk_init);
- 
--static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
--	.rc_osc_rate = 16000000,
--	.fixed_prescaler = 32,
--	.has_prescaler = 1,
--	.has_out_clk = 1,
--	.export_iosc = 1,
--	.has_losc_en = 1,
--	.has_auto_swt = 1,
--};
--
--static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
--{
--	sun6i_rtc_clk_init(node, &sun50i_h6_rtc_data);
--}
--CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
--		      sun50i_h6_rtc_clk_init);
--
- /*
-  * The R40 user manual is self-conflicting on whether the prescaler is
-  * fixed or configurable. The clock diagram shows it as fixed, but there
+> You can do persistant network device names in a very trivial shell
+> script if needed, we used to do it that way 18 years ago :)
+
+Network device name is not a solely userspace entity. It is part of
+the interface between the kernel and userspace software.
+
+Sure, persistent names can be established with a userspace script. But
+this implies the device renaming, which is a complex and race prone
+task. Once I even found a comment in the kernel code that only network
+devices could be renamed and this is a headache. As for userspace, it
+is possible to workaround the device renaming issues. But this
+requires a lot of code in many programs and sometimes even special
+conventions on a programs interaction. E.g. consider a case where a
+service would like to bind to a network interface, which is in the
+middle of renaming by udev. On the other hand, we have the kernel that
+could provide predictable names from the beginning for all software on
+a host. So this is a desired option.
+
+As for DT, this is an excellent database with perfectly established
+relations to hardware configuration. And if we try to implement a
+userspace storage with the network device names, then we will just
+duplicate the DT in the userspace, as already was mentioned by
+Oleksij. To me, implementation of a names database in userspace looks
+more like reinventing the  DT (wheel) than adding device names to the
+DT.
+
+To summarize, we (developers of embedded software) have two related needs:
+1) the need for persistent names provided by the kernel,
+2) using the DT as a source of persistent names for (1).
+
+Greg, what do you think about device names storing in DeviceTree in
+the above context? Does it still make no sense?
+
 -- 
-2.33.1
-
+Sergey

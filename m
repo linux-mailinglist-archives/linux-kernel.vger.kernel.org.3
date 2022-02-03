@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635C84A908C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 724174A9091
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355744AbiBCWQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S1355755AbiBCWSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiBCWQN (ORCPT
+        with ESMTP id S1350718AbiBCWSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:16:13 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBCCC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:16:13 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id d5so3700002pjk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:16:13 -0800 (PST)
+        Thu, 3 Feb 2022 17:18:04 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E251DC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:18:03 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id z5so3430260plg.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:18:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wF+Jmn9gWJUkdL4XKjJ8vgJJWNKU35vvnzSuRc8PN5Q=;
-        b=GGo6gaJFMbgYTTuGPg8+xxapDAKK1AoJPtWyitET8UeYCT6aw6rlXQznUev0bDTH4v
-         jsx724Annkq9eT47mBVels5GSoDInWT/A5LzW+i0QXCMIqJ1/RBic72KcDMO98zZoa/t
-         aUli26OT4FBXcyU7lbIkrKfF8ZCuFL8FDnUHnZjc1U71+nCy9wTxEzt8oLIHkN7EMW5C
-         z5Cv8jT3S6RHrn8PVrmJmjkTUfFfw1OLrlbc2ye9GMOpJHKKO3phXXAu7V5PjdK1Hrns
-         8B5t5Xk69ub/jqvcqTnPSkaqMOVpGcyf7F7v3GhyLRNhE8+W6Tj5Gv3HzIwdc6rK/sTi
-         8B9w==
+        bh=CI+TrdL82OQQxeiluz+GiOaNTL5TYAX8y0U9DtiXimQ=;
+        b=tcx4lyXHkmXI8kYXLylx8fONteuzxJoULKgubqIec2UYSgXZdnaCQ5vSsNJxdrnaFw
+         kh2HQXLTbOHQEziZwax9cnp63U7LX0PfoxyUSCarrDOniCikZp7qJpNutGG+2GJwprVE
+         JDiR5XV175E1hQODy/bOyuqgYyRD243YIKFsC93H+IVOm8e2JWPU+vJ8MX9p/5hMNi4A
+         JYuSvAj4CkeD6UW5AAE0Hs31+BKBD1OEaotI7S9LEsdE6Xz1axmXxIWvv3PmByB0jTO/
+         mYgdvw9ZJwFAhENqS2jrKnK7E2L4X/O/I/Dn8VwnoRpXUhVsW3KK1op5rr5GGmdbs/fU
+         s6hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=wF+Jmn9gWJUkdL4XKjJ8vgJJWNKU35vvnzSuRc8PN5Q=;
-        b=HBwBaxToqdLWH1+J3R0ttKxbmkOdb0n4ZGqoDlPKnnYE6SXAyIxVGJ1qvIAYy+piQW
-         31p7anGHpP/js9uAPLHf74t7NICRjkBWvUFJFIXqySY5krA2vxAZ9Tr5uyA6Wa9Q9BqK
-         1VblAViAs2xOD4Zz5IsqMoldsGuXOOBt9ts4edTDlkhPuE0M2iJQ+slOx4+IXuF3XFxY
-         Nmf/sNfCLly/rIvXHRxibEKKWUws8at0FKVddFTnF44FdFN/93JM3QKCjKafYo996vLF
-         qdyroSldDtPXEijgGqnwlhJ1MMFGquV1W3/8Ji2GLvH5Ww4PFg8a3DrRprPY73HFok/7
-         o55A==
-X-Gm-Message-State: AOAM530SQ/Yy4esvYce/nplQFHwYMID5U+Ee/H2Sd2mdqWiu7z/Gu/VL
-        Mwe6CO2+1+Mf2wS4XRpeuSG63g==
-X-Google-Smtp-Source: ABdhPJzgWKRvlrq0OdVAtkNHPx6X+C7JYM4nQdSwb4xDp0WcsTw4OCO71XeMPI+YqLKOIbe+NDOXVw==
-X-Received: by 2002:a17:902:db02:: with SMTP id m2mr22417plx.136.1643926572417;
-        Thu, 03 Feb 2022 14:16:12 -0800 (PST)
+        bh=CI+TrdL82OQQxeiluz+GiOaNTL5TYAX8y0U9DtiXimQ=;
+        b=kej1LADNNWpbVuhpGoOXdh+BMSOq48gU2W/bFci1DtWFrlxulHznSoG4OZHqv4Xx3g
+         PJBxiFNvrBWa5cnoIk8rhVGZICaKmyeZq6FkieZuq4EX61V3XEdbX0D0E6Z5wCrubDsH
+         nc87cjcJVivkYoR7MXbhwaInTYPs/K1rEdJOhvcCA/ugGDmsfk1sk7IrvJe6bwijlqHs
+         CEHqiwNBVRbxFHHV0tzDcoqjIg0KFtjeQBpPfEZxAH0HeBrEtbi99hUvaVZ35VtT6m6X
+         TrlPsaMXScFwni6WjEjbCDJkYEkB3+cCKZvTMMNuLlCmLphSOikXYYvYSukA0TbKAx1g
+         a/Nw==
+X-Gm-Message-State: AOAM531uCAZlxCT48o+VSu/1jt38/wgVjApHGYNOgHsP7+2YvVYcJGJU
+        cyqMZhQOEFjVSNKUqyXAgzXILQ==
+X-Google-Smtp-Source: ABdhPJwXPgkPlEYDhOLaV+ilqpTCRlmFVIHbATHY+StH+kzmMg/O7EXJ6gXmw0AHbPqAXoh/bCtDSQ==
+X-Received: by 2002:a17:90a:f418:: with SMTP id ch24mr21788pjb.154.1643926683237;
+        Thu, 03 Feb 2022 14:18:03 -0800 (PST)
 Received: from ?IPv6:2600:380:7677:2608:7e4f:2c76:b02e:3fbc? ([2600:380:7677:2608:7e4f:2c76:b02e:3fbc])
-        by smtp.gmail.com with ESMTPSA id j4sm10095pfc.217.2022.02.03.14.16.11
+        by smtp.gmail.com with ESMTPSA id d12sm31782pgk.29.2022.02.03.14.18.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 14:16:12 -0800 (PST)
+        Thu, 03 Feb 2022 14:18:02 -0800 (PST)
 Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
  registering/unregistering eventfd
 To:     Pavel Begunkov <asml.silence@gmail.com>,
@@ -62,15 +62,14 @@ References: <20220203174108.668549-1-usama.arif@bytedance.com>
  <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
  <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
  <a5992789-6b0b-f3a8-0a24-e00add2a005a@kernel.dk>
- <fc97036f-26a3-afb1-180f-30aa89d3cc01@bytedance.com>
- <a2939109-5f97-ff56-df53-0a56ba12e268@gmail.com>
+ <fc5a2421-f775-8195-39df-8e4bcda38af1@gmail.com>
 From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <582c8c6f-cbcf-f8d7-4976-e70d0d51c42d@kernel.dk>
-Date:   Thu, 3 Feb 2022 15:16:10 -0700
+Message-ID: <b06201e7-98dd-a087-cdf4-1a4ea45767f0@kernel.dk>
+Date:   Thu, 3 Feb 2022 15:18:00 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <a2939109-5f97-ff56-df53-0a56ba12e268@gmail.com>
+In-Reply-To: <fc5a2421-f775-8195-39df-8e4bcda38af1@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -78,99 +77,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 2:47 PM, Pavel Begunkov wrote:
-> On 2/3/22 19:54, Usama Arif wrote:
->> On 03/02/2022 19:06, Jens Axboe wrote:
->>> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
->>>> On 2/3/22 18:29, Jens Axboe wrote:
->>>>> On 2/3/22 11:26 AM, Usama Arif wrote:
->>>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
->>>>>> suggesting to do the below diff over patch 3? I dont think that would be
->>>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
->>>>>> present unregister can be called by another thread and set ctx->io_ev_fd
->>>>>> to NULL that would cause a NULL pointer exception later? In the current
->>>>>> patch, the check of whether ev_fd exists happens as the first thing
->>>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
->>>>>
->>>>> They are cheap, but they are still noticeable at high requests/sec
->>>>> rates. So would be best to avoid them.
->>>>>
->>>>> And yes it's obviously racy, there's the potential to miss an eventfd
->>>>> notification if it races with registering an eventfd descriptor. But
->>>>> that's not really a concern, as if you register with inflight IO
->>>>> pending, then that always exists just depending on timing. The only
->>>>> thing I care about here is that it's always _safe_. Hence something ala
->>>>> what you did below is totally fine, as we're re-evaluating under rcu
->>>>> protection.
+On 2/3/22 12:43 PM, Pavel Begunkov wrote:
+> On 2/3/22 19:06, Jens Axboe wrote:
+>> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
+>>> On 2/3/22 18:29, Jens Axboe wrote:
+>>>> On 2/3/22 11:26 AM, Usama Arif wrote:
+>>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
+>>>>> suggesting to do the below diff over patch 3? I dont think that would be
+>>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
+>>>>> present unregister can be called by another thread and set ctx->io_ev_fd
+>>>>> to NULL that would cause a NULL pointer exception later? In the current
+>>>>> patch, the check of whether ev_fd exists happens as the first thing
+>>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
 >>>>
->>>> Indeed, the patch doesn't have any formal guarantees for propagation
->>>> to already inflight requests, so this extra unsynchronised check
->>>> doesn't change anything.
+>>>> They are cheap, but they are still noticeable at high requests/sec
+>>>> rates. So would be best to avoid them.
 >>>>
->>>> I'm still more сurious why we need RCU and extra complexity when
->>>> apparently there is no use case for that. If it's only about
->>>> initial initialisation, then as I described there is a much
->>>> simpler approach.
+>>>> And yes it's obviously racy, there's the potential to miss an eventfd
+>>>> notification if it races with registering an eventfd descriptor. But
+>>>> that's not really a concern, as if you register with inflight IO
+>>>> pending, then that always exists just depending on timing. The only
+>>>> thing I care about here is that it's always _safe_. Hence something ala
+>>>> what you did below is totally fine, as we're re-evaluating under rcu
+>>>> protection.
 >>>
->>> Would be nice if we could get rid of the quiesce code in general, but I
->>> haven't done a check to see what'd be missing after this...
+>>> Indeed, the patch doesn't have any formal guarantees for propagation
+>>> to already inflight requests, so this extra unsynchronised check
+>>> doesn't change anything.
 >>>
+>>> I'm still more сurious why we need RCU and extra complexity when
+>>> apparently there is no use case for that. If it's only about
+>>> initial initialisation, then as I described there is a much
+>>> simpler approach.
 >>
->> I had checked! I had posted below in in reply to v1 (https://lore.kernel.org/io-uring/02fb0bc3-fc38-b8f0-3067-edd2a525ef29@gmail.com/T/#m5ac7867ac61d86fe62c099be793ffe5a9a334976), but i think it got missed! Copy-pasting here for reference:
+>> Would be nice if we could get rid of the quiesce code in general, but I
+>> haven't done a check to see what'd be missing after this...
 > 
-> May have missed it then, apologies
+> Ok, I do think full quiesce is worth keeping as don't think all
+> registered parts need dynamic update. E.g. zc notification dynamic
+> reregistation doesn't make sense and I'd rather rely on existing
+> straightforward mechanisms than adding extra bits, even if it's
+> rsrc_nodes. That's not mentioning unnecessary extra overhead.
 > 
->> "
->> I see that if we remove ring quiesce from the the above 3 opcodes, then
->> only IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS is
->> left for ring quiesce. I just had a quick look at those, and from what i
->> see we might not need to enter ring quiesce in
->> IORING_REGISTER_ENABLE_RINGS as the ring is already disabled at that point?
->> And for IORING_REGISTER_RESTRICTIONS if we do a similar approach to
->> IORING_REGISTER_EVENTFD, i.e. wrap ctx->restrictions inside an RCU
->> protected data structure, use spin_lock to prevent multiple
->> io_register_restrictions calls at the same time, and use read_rcu_lock
->> in io_check_restriction, then we can remove ring quiesce from
->> io_uring_register altogether?
->>
->> My usecase only uses IORING_REGISTER_EVENTFD, but i think entering ring
->> quiesce costs similar in other opcodes. If the above sounds reasonable,
->> please let me know and i can send patches for removing ring quiesce for
->> io_uring_register.
->> "
->>
->> Let me know if above makes sense, i can add patches on top of the current patchset, or we can do it after they get merged.
->>
->> As for why, quiesce state is very expensive. its making io_uring_register the most expensive syscall in my usecase (~15ms) compared to ~0.1ms now with RCU, which is why i started investigating this. And this patchset avoids ring quiesce for 3 of the opcodes, so it would generally be quite helpful if someone does registers and unregisters eventfd multiple times.
-> 
-> I agree that 15ms for initial setup is silly and it has to be
-> reduced. However, I'm trying weight the extra complexity against
-> potential benefits of _also_ optimising [de,re]-registration
-> 
-> Considering that you only register it one time at the beginning,
-> we risk adding a yet another feature that nobody is going to ever
-> use. This doesn't give me a nice feeling, well, unless you do
-> have a use case.
+> btw, I wouldn't say this eventfd specific sync is much simpler than
+> the whole full quiesce.
 
-It's not really a new feature, it's just making the existing one not
-suck quite as much...
+It's easier to understand though, as it follows the usual rules of
+RCU which are used throughout the kernel.
 
-> To emphasise, I'm comparing 15->0.1 improvement for only initial
-> registration (which is simpler) vs 15->0.1 for both registration
-> and unregistration.
-
-reg+unreg should be way faster too, if done properly with the assignment
-tricks.
-
-> fwiw, it alters userpace visible behaviour in either case, shouldn't
-> be as important here but there is always a chance to break userspace
-
-It doesn't alter userspace behavior, if the registration works like I
-described with being able to assign a new one while the old one is being
-torn down.
-
-Or do you mean wrt inflight IO? I don't think the risk is very high
-there, to be honest.
+On quiesce in general, my curiosity was around whether we'd ever
+get to the point where all register handlers are marked as not
+needing quisce, and it seems it isn't that far off.
 
 -- 
 Jens Axboe

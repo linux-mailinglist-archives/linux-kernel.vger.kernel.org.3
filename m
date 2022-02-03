@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF964A8F78
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA30B4A8FBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241724AbiBCU7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:59:36 -0500
-Received: from cavan.codon.org.uk ([176.126.240.207]:59828 "EHLO
-        cavan.codon.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiBCU7e (ORCPT
+        id S1352650AbiBCVWt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Feb 2022 16:22:49 -0500
+Received: from 200-35-77-146.static.telcel.net.ve ([200.35.77.146]:3697 "EHLO
+        svmailsar00.saren.gob.ve" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232544AbiBCVWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:59:34 -0500
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 1588440A55; Thu,  3 Feb 2022 20:59:33 +0000 (GMT)
-Date:   Thu, 3 Feb 2022 20:59:33 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Aditya Garg <gargaditya08@live.com>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH 5.10 011/100] efi: runtime: avoid EFIv2 runtime services
- on Apple x86 machines
-Message-ID: <20220203205933.GA27367@srcf.ucam.org>
-References: <20220131105220.424085452@linuxfoundation.org>
- <20220131105220.835281614@linuxfoundation.org>
- <20220203205223.GA19153@duo.ucw.cz>
+        Thu, 3 Feb 2022 16:22:47 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by svmailsar00.saren.gob.ve (Postfix) with ESMTP id 1DE1119BDC0;
+        Thu,  3 Feb 2022 15:45:47 -0400 (-04)
+Received: from svmailsar00.saren.gob.ve ([127.0.0.1])
+        by localhost (svmailsar00.saren.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id GUTJKcuVzWmW; Thu,  3 Feb 2022 15:45:46 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by svmailsar00.saren.gob.ve (Postfix) with ESMTP id C929519C346;
+        Thu,  3 Feb 2022 15:45:46 -0400 (-04)
+X-Virus-Scanned: amavisd-new at saren.gob.ve
+Received: from svmailsar00.saren.gob.ve ([127.0.0.1])
+        by localhost (svmailsar00.saren.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fnSJm94laBO7; Thu,  3 Feb 2022 15:45:46 -0400 (-04)
+Received: from [100.76.143.90] (unknown [106.202.86.85])
+        by svmailsar00.saren.gob.ve (Postfix) with ESMTPSA id A3EEA19BDC0;
+        Thu,  3 Feb 2022 15:45:37 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203205223.GA19153@duo.ucw.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?b?QVRFTkNJw5NO?=
+To:     Recipients <siglas@saren.gob.ve>
+From:   Sistemas administrador <siglas@saren.gob.ve>
+Date:   Fri, 04 Feb 2022 02:12:30 +0530
+Reply-To: sistemassadmins@mail2engineer.com
+Message-Id: <20220203194537.A3EEA19BDC0@svmailsar00.saren.gob.ve>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 09:52:23PM +0100, Pavel Machek wrote:
+ATENCIÓN;
 
-> This problem is not 64-bit specific, right? Should it depend on
-> CONFIG_X86, instead?
+Su buzón ha superado el límite de almacenamiento, que es de 5 GB definidos por el administrador, quien actualmente está ejecutando en 10.9GB, no puede ser capaz de enviar o recibir correo nuevo hasta que vuelva a validar su buzón de correo electrónico. Para revalidar su buzón de correo, envíe la siguiente información a continuación:
 
-Only 64-bit systems are affected (the one 32-bit generation of Apple 
-hardware implementing EFI only claims 1.10 support), and 32-bit kernels 
-can't make 64-bit UEFI runtime calls, so I think it's correct to make it 
-64-bit only.
+nombre:
+Nombre de usuario:
+contraseña:
+Confirmar contraseña:
+E-mail:
+teléfono:
+
+Si usted no puede revalidar su buzón, el buzón se deshabilitará!
+
+Disculpa las molestias.
+Código de verificación: es:75439@2022
+Correo Soporte Técnico © 2022
+
+¡gracias
+Sistemas administrador

@@ -2,111 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B044A911B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349DC4A9126
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355969AbiBCXVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S1355987AbiBCX0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiBCXV3 (ORCPT
+        with ESMTP id S1355983AbiBCX0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:21:29 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B93C061714;
-        Thu,  3 Feb 2022 15:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=cUD7tLHcV6IQh2o2twU3Pkvh/VRccN5GmyjQGBHH8gg=; b=j1hcRYjsbe7oRcBGHgM831q9BS
-        g5Kwi6MjCaAlAn+ZuetCnbRFamGfQaj/eT6TDqaLll/f5dFfphrUtZr1tLg/GxuRC7MyVyDEKtmPz
-        ynTuxtfVulgVc1D3i8ft92FbL481k1OFD72xbi77SU/Hk0lIXyyRSqf9Jytejx0Ss/mhUg7WR/n4Z
-        75LmXHxjhXpuDSTZ6kHcEk1LT1/9+n3ih6bBnj1Oa7MKmv4BXNQDF+ypAI+k5d7zyh/kruU3MrmrR
-        9xnrKYGhuv1Sx0h3pieinb1B/R2+kvPKuLleLz5Jo8P1KB8DoDx6bItLqfVcxkSCyGNZghb63Ef2P
-        z3TZ/nJw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFlPf-006f0z-KZ; Thu, 03 Feb 2022 23:21:17 +0000
-Message-ID: <3ff7c232-ebf7-9e70-cdc4-b8c96945152f@infradead.org>
-Date:   Thu, 3 Feb 2022 15:21:08 -0800
+        Thu, 3 Feb 2022 18:26:44 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A75C061714;
+        Thu,  3 Feb 2022 15:26:44 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id k18so7991367wrg.11;
+        Thu, 03 Feb 2022 15:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=myVtROYgMKE1wZAdyLUyq1uGnyhk8OXwXD/l2iqY7sw=;
+        b=k37bXsanbVrjOlLv4wC/AL6qV941j3a0RvFnpqvUUBbhUw3j0z00u1LTEVo1WnPWmj
+         Aigl0CZLcs06jqA6X3kB7begqSBivKkxA8kXy77fkvZWg0AQLJQhJLalkTANXhr9yFft
+         h1ff4RtHvkZgiFszHPk59XHelYWiz5v634gjKOQAj9LyiwWTctoY6WyEFZQfpUqHyorE
+         d+f2Vog1hmnHyojNVvmfz7otrvviQ0LCoogAc+UdcL2GCijcffZntNtGrj92gHVwDOPH
+         MkUpOjs+INdSTBqhkgJeiTr+vMv8d7YT7rfU8VVBMQJEy3bVE/hLVmj33eAgu8v+ZSRk
+         RsbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=myVtROYgMKE1wZAdyLUyq1uGnyhk8OXwXD/l2iqY7sw=;
+        b=fiFTvBt/8VkXRnlEjny6AYFthaxv8gyYWZwC8V8Dlg61++hlO1IjzRbF764FXtSh8K
+         NRwqXoH3u4Q6jze3UZemvPBWG92wy77j9uanigbHF+4T5Jel09H05r7trLvPpiQLJ0oc
+         MqvEU9GZk8CQxAhui4L7Ovjs20waHuxaGB7Rijn1/6QSd/UCgjkSmzgOhhD8Qg/OLRwr
+         ZDAF7dYd3jUpdEY5X50lwAUP6VUaNOvrV60YqWGeveq/GcJRuvFqWUJhbsYlWLznr4hg
+         hzjt+upvTFflV3oSXKJ8omRxdl/2XSxDTpoirL5MJTZCkkGax6JHxGpJiBOIHri0mXEd
+         6ohw==
+X-Gm-Message-State: AOAM531GnKfA5CKrvfFhmW4eVA1ix96GN1ePZKAsKskHVzETGcq/FrZh
+        UAJoVDMjWrxnFJwoE5etqtQ=
+X-Google-Smtp-Source: ABdhPJwzGTdqmsldZcdMUarsFpmwzYrK9XBhdJLM6+BLH5WHBw6etuBseYorYuEzeMq2sZ1lC5s0ww==
+X-Received: by 2002:a5d:500c:: with SMTP id e12mr177221wrt.193.1643930802640;
+        Thu, 03 Feb 2022 15:26:42 -0800 (PST)
+Received: from [192.168.8.198] ([85.255.232.204])
+        by smtp.gmail.com with ESMTPSA id p2sm120572wmc.33.2022.02.03.15.26.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 15:26:42 -0800 (PST)
+Message-ID: <2104dd91-676b-84af-3005-a40c996b9403@gmail.com>
+Date:   Thu, 3 Feb 2022 23:21:41 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
+ Thunderbird/91.5.0
+Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
 Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220202145437.2dd20b71@canb.auug.org.au>
- <20220203150645.9e41e470422eed26d4d77790@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220203150645.9e41e470422eed26d4d77790@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Jens Axboe <axboe@kernel.dk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203174108.668549-1-usama.arif@bytedance.com>
+ <20220203174108.668549-3-usama.arif@bytedance.com>
+ <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
+ <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
+ <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
+ <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
+ <a5992789-6b0b-f3a8-0a24-e00add2a005a@kernel.dk>
+ <fc97036f-26a3-afb1-180f-30aa89d3cc01@bytedance.com>
+ <a2939109-5f97-ff56-df53-0a56ba12e268@gmail.com>
+ <582c8c6f-cbcf-f8d7-4976-e70d0d51c42d@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <582c8c6f-cbcf-f8d7-4976-e70d0d51c42d@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/3/22 15:06, Andrew Morton wrote:
-> On Wed, 2 Feb 2022 14:54:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On 2/3/22 22:16, Jens Axboe wrote:
+> On 2/3/22 2:47 PM, Pavel Begunkov wrote:
+>> On 2/3/22 19:54, Usama Arif wrote:
+>>> On 03/02/2022 19:06, Jens Axboe wrote:
+>>>> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
+>>>>> On 2/3/22 18:29, Jens Axboe wrote:
+>>>>>> On 2/3/22 11:26 AM, Usama Arif wrote:
+>>>>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
+>>>>>>> suggesting to do the below diff over patch 3? I dont think that would be
+>>>>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
+>>>>>>> present unregister can be called by another thread and set ctx->io_ev_fd
+>>>>>>> to NULL that would cause a NULL pointer exception later? In the current
+>>>>>>> patch, the check of whether ev_fd exists happens as the first thing
+>>>>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
+>>>>>>
+>>>>>> They are cheap, but they are still noticeable at high requests/sec
+>>>>>> rates. So would be best to avoid them.
+>>>>>>
+>>>>>> And yes it's obviously racy, there's the potential to miss an eventfd
+>>>>>> notification if it races with registering an eventfd descriptor. But
+>>>>>> that's not really a concern, as if you register with inflight IO
+>>>>>> pending, then that always exists just depending on timing. The only
+>>>>>> thing I care about here is that it's always _safe_. Hence something ala
+>>>>>> what you did below is totally fine, as we're re-evaluating under rcu
+>>>>>> protection.
+>>>>>
+>>>>> Indeed, the patch doesn't have any formal guarantees for propagation
+>>>>> to already inflight requests, so this extra unsynchronised check
+>>>>> doesn't change anything.
+>>>>>
+>>>>> I'm still more сurious why we need RCU and extra complexity when
+>>>>> apparently there is no use case for that. If it's only about
+>>>>> initial initialisation, then as I described there is a much
+>>>>> simpler approach.
+>>>>
+>>>> Would be nice if we could get rid of the quiesce code in general, but I
+>>>> haven't done a check to see what'd be missing after this...
+>>>>
+>>>
+>>> I had checked! I had posted below in in reply to v1 (https://lore.kernel.org/io-uring/02fb0bc3-fc38-b8f0-3067-edd2a525ef29@gmail.com/T/#m5ac7867ac61d86fe62c099be793ffe5a9a334976), but i think it got missed! Copy-pasting here for reference:
+>>
+>> May have missed it then, apologies
+>>
+>>> "
+>>> I see that if we remove ring quiesce from the the above 3 opcodes, then
+>>> only IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS is
+>>> left for ring quiesce. I just had a quick look at those, and from what i
+>>> see we might not need to enter ring quiesce in
+>>> IORING_REGISTER_ENABLE_RINGS as the ring is already disabled at that point?
+>>> And for IORING_REGISTER_RESTRICTIONS if we do a similar approach to
+>>> IORING_REGISTER_EVENTFD, i.e. wrap ctx->restrictions inside an RCU
+>>> protected data structure, use spin_lock to prevent multiple
+>>> io_register_restrictions calls at the same time, and use read_rcu_lock
+>>> in io_check_restriction, then we can remove ring quiesce from
+>>> io_uring_register altogether?
+>>>
+>>> My usecase only uses IORING_REGISTER_EVENTFD, but i think entering ring
+>>> quiesce costs similar in other opcodes. If the above sounds reasonable,
+>>> please let me know and i can send patches for removing ring quiesce for
+>>> io_uring_register.
+>>> "
+>>>
+>>> Let me know if above makes sense, i can add patches on top of the current patchset, or we can do it after they get merged.
+>>>
+>>> As for why, quiesce state is very expensive. its making io_uring_register the most expensive syscall in my usecase (~15ms) compared to ~0.1ms now with RCU, which is why i started investigating this. And this patchset avoids ring quiesce for 3 of the opcodes, so it would generally be quite helpful if someone does registers and unregisters eventfd multiple times.
+>>
+>> I agree that 15ms for initial setup is silly and it has to be
+>> reduced. However, I'm trying weight the extra complexity against
+>> potential benefits of _also_ optimising [de,re]-registration
+>>
+>> Considering that you only register it one time at the beginning,
+>> we risk adding a yet another feature that nobody is going to ever
+>> use. This doesn't give me a nice feeling, well, unless you do
+>> have a use case.
 > 
->> Hi all,
->>
->> After merging the akpm-current tree, today's linux-next build (htmldocs)
->> produced this warning:
->>
->> Documentation/admin-guide/sysctl/kernel.rst:603: WARNING: Malformed table.
->> Text in column margin in table line 2.
->>
->> = =================================
->> 0x0 NUMA_BALANCING_DISABLED
->> 0x1 NUMA_BALANCING_NORMAL
->> 0x2 NUMA_BALANCING_MEMORY_TIERING
->> = =================================
->>
->> Introduced by commit
->>
->>   49ec6eb41c49 ("NUMA balancing: optimize page placement for memory tiering system")
+> It's not really a new feature, it's just making the existing one not
+> suck quite as much...
+
+Does it matter when nobody uses it? My point is that does not.
+
+
+>> To emphasise, I'm comparing 15->0.1 improvement for only initial
+>> registration (which is simpler) vs 15->0.1 for both registration
+>> and unregistration.
 > 
-> I assume this fixes?  (With gratuitous grammar fixes)
+> reg+unreg should be way faster too, if done properly with the assignment
+> tricks.
 > 
-
-Looks good.
-
- --- a/Documentation/admin-guide/sysctl/kernel.rst~numa-balancing-optimize-page-placement-for-memory-tiering-system-fix
-> +++ a/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -595,14 +595,14 @@ Documentation/admin-guide/kernel-paramet
->  numa_balancing
->  ==============
->  
-> -Enables/disables and configure automatic page fault based NUMA memory
-> -balancing.  Memory is moved automatically to nodes that access it
-> -often.  The value to set can be the result to OR the following,
-> +Enables/disables and configures automatic page fault based NUMA memory
-> +balancing.  Memory is moved automatically to nodes that access it often. 
-> +The value to set can be the result of ORing the following,
-
-except for that ending comma...
-
->  
->  = =================================
-> -0x0 NUMA_BALANCING_DISABLED
-> -0x1 NUMA_BALANCING_NORMAL
-> -0x2 NUMA_BALANCING_MEMORY_TIERING
-> +0 NUMA_BALANCING_DISABLED
-> +1 NUMA_BALANCING_NORMAL
-> +2 NUMA_BALANCING_MEMORY_TIERING
->  = =================================
->  
->  Or NUMA_BALANCING_NORMAL to optimize page placement among different
-> _
+>> fwiw, it alters userpace visible behaviour in either case, shouldn't
+>> be as important here but there is always a chance to break userspace
 > 
+> It doesn't alter userspace behavior, if the registration works like I
+> described with being able to assign a new one while the old one is being
+> torn down.
+> 
+> Or do you mean wrt inflight IO? I don't think the risk is very high
+> there, to be honest.
 
-Thanks.
+Right, if somebody tries such a trick it'll be pretty confusing to
+get randomly firing eventfd, though it's rather a marginal case.
+
 -- 
-~Randy
+Pavel Begunkov

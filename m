@@ -2,83 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E3E4A8409
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28954A840A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244555AbiBCMqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:46:32 -0500
-Received: from mail-wr1-f42.google.com ([209.85.221.42]:43722 "EHLO
-        mail-wr1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiBCMq3 (ORCPT
+        id S1350619AbiBCMqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 07:46:34 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:53134 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233627AbiBCMqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:46:29 -0500
-Received: by mail-wr1-f42.google.com with SMTP id v13so4792363wrv.10;
-        Thu, 03 Feb 2022 04:46:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8u9eHIF4FM+XVVNXPbgpQAD1FxfIZHgwuCKElrkP4VM=;
-        b=mE5xaII+om5/G9NqnkVstDlun0nlZLaVYMNKYozN1WqYK7KQWBH4Rm87dnCaFO64/G
-         tI0MTBgFoFFFkjmgg/ExwliPwAYBN7TfkhcHGQ8TmBi17LFIu6m5pBOC1D53HU8gWAUJ
-         c/ckWUnq3VbDcLnaNuPxqmqABBlsE/3MyP6jszLI4eVGEcIiI2qdy5HPDbJ3jELR2NN8
-         Eb5qAF/JyUKHHimYy5Q5Rv89sujKXleRFeV51GBJKZ5oR6rCBj7zDkYaMXqI98NEsdC1
-         5mTUVatG0E9KsEFg2BtSp6rYaMcROWFYuzR69dz+Km8QmO98zvKQdChs9j2Ay7MDhrFj
-         WP8w==
-X-Gm-Message-State: AOAM530NQUC2X44u3fBh7i/IiIh3h2cHR7i0emmeGVKPMkm3RA9IFiM/
-        YMDuYt4VBya9tWHVnx+4jn0=
-X-Google-Smtp-Source: ABdhPJwZjap83JL9qi+x/rcy598UBJE2x6pY7qJokWQKHx3Qvzh1isOW/kC1lndB/1IDCSWEC5wOUA==
-X-Received: by 2002:a5d:590c:: with SMTP id v12mr27167443wrd.714.1643892388692;
-        Thu, 03 Feb 2022 04:46:28 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l10sm1934225wry.79.2022.02.03.04.46.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 04:46:28 -0800 (PST)
-Date:   Thu, 3 Feb 2022 12:46:27 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     longli@linuxonhyperv.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        paekkaladevi@microsoft.com, Long Li <longli@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [Patch v4] PCI: hv: Fix NUMA node assignment when kernel boots
- with custom NUMA topology
-Message-ID: <20220203124627.qudi3mmmyv4aee5w@liuwe-devbox-debian-v2>
-References: <1643247814-15184-1-git-send-email-longli@linuxonhyperv.com>
- <20220203124246.GA25305@lpieralisi>
+        Thu, 3 Feb 2022 07:46:33 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9E94E1F399;
+        Thu,  3 Feb 2022 12:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643892392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WD0KsuFGAKxwPJ8TEDz3MZAplll7b1MiXcSJo4CExx4=;
+        b=CQmLudPTvW4RaIzlWaw2EchZq5DbsHcpikxLxdiNyQzFdoT3+nVxC9O6xi3q9rw27Ye6Lp
+        7ygFDsjVCbZNeC2UEUGl9dY/9Gcry845qVzIqZPWuHDHO0NJgA4S862fpTyluqIeFsoRn4
+        p7lD24R7/HNiHwa1VlivOZxKVRNMnAQ=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2F23CA3B92;
+        Thu,  3 Feb 2022 12:46:32 +0000 (UTC)
+Date:   Thu, 3 Feb 2022 13:46:31 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH v4 3/4] mm/page_owner: Print memcg information
+Message-ID: <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
+References: <20220131192308.608837-5-longman@redhat.com>
+ <20220202203036.744010-4-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220203124246.GA25305@lpieralisi>
+In-Reply-To: <20220202203036.744010-4-longman@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 12:42:46PM +0000, Lorenzo Pieralisi wrote:
-> On Wed, Jan 26, 2022 at 05:43:34PM -0800, longli@linuxonhyperv.com wrote:
-> > From: Long Li <longli@microsoft.com>
-> > 
-> > When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
-> > driver should only set an online NUMA node on the device. This can happen
-> > during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
-> > 
-> > This patch also fixes the case where kernel is booting with "numa=off".
-> > 
-> > Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
-> > Signed-off-by: Long Li <longli@microsoft.com>
-> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> > ---
-> > Change log:
-> > v2: use numa_map_to_online_node() to assign a node to device (suggested by
-> > Michael Kelly <mikelley@microsoft.com>)
-> > v3: add "Fixes" and check for num_possible_nodes()
-> > v4: fix commit message format
-> > 
-> >  drivers/pci/controller/pci-hyperv.c | 13 +++++++++++--
-> >  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
-> Feel free to pick it up:
-> 
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On Wed 02-02-22 15:30:35, Waiman Long wrote:
+[...]
+> +#ifdef CONFIG_MEMCG
+> +	unsigned long memcg_data;
+> +	struct mem_cgroup *memcg;
+> +	bool online;
+> +	char name[80];
+> +
+> +	rcu_read_lock();
+> +	memcg_data = READ_ONCE(page->memcg_data);
+> +	if (!memcg_data)
+> +		goto out_unlock;
+> +
+> +	if (memcg_data & MEMCG_DATA_OBJCGS)
+> +		ret += scnprintf(kbuf + ret, count - ret,
+> +				"Slab cache page\n");
+> +
+> +	memcg = page_memcg_check(page);
+> +	if (!memcg)
+> +		goto out_unlock;
+> +
+> +	online = (memcg->css.flags & CSS_ONLINE);
+> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
 
-Thanks Lorenzo.
+Is there any specific reason to use another buffer allocated on the
+stack? Also 80B seems too short to cover NAME_MAX.
+
+Nothing else jumped at me.
+-- 
+Michal Hocko
+SUSE Labs

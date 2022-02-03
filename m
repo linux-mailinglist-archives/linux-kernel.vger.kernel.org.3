@@ -2,125 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEF84A882E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD884A881D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352086AbiBCP7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:59:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbiBCP7h (ORCPT
+        id S1352035AbiBCP4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:56:05 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4668 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238210AbiBCP4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:59:37 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C69C061714;
-        Thu,  3 Feb 2022 07:59:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v13so5885009wrv.10;
-        Thu, 03 Feb 2022 07:59:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=+dl81ox9oLOsNstIVpWsT45Px3A+yIV/7i1ehqaDn+Y=;
-        b=jJRD9ovHm/6cgRNueQkqcsMQvaS0BPUQ0d77VlPILGy+vnI071ln2LB+ZcLtXtTGFe
-         NwDa+bci7eqbkiT6EilNkuZ5Oj1/Iw6PoMjcY6D9b40A7YdyCkaqi1MuH2SSV4qxL8x8
-         0WefZ/Epn26eZ8AwVZ7vsVL3Po23hByayQbj0E6BPmF9UY1IjdMZMNULMXK6vhtrvEhk
-         pw91dCRzmR0nFvNmTGoB23eubtkt91m/yeKcOKYsGOddm/Gw86K1h0kJ0sEc6neiOcKo
-         8lIUWcPxF0PzAu9je7SIDOlNQYN/KH1xDymDQuCe/G91aZkGLNkuS18XVMwNMHJPRWCO
-         A1SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=+dl81ox9oLOsNstIVpWsT45Px3A+yIV/7i1ehqaDn+Y=;
-        b=YSO7wdQKZ/x/qJ3X9xbuCfOYHyybK+/yQPfIDCSyErxotOrLFZgtM7ol0CEOKb85Sm
-         vpRA2rsFSHQurM239mp2zNQVoD78zgxbF+mxTGF9k+ps+C6g2IwPEAvExQRFaamcBbvb
-         xHaBKSTSH0S7fVQq05H3e7Ld1KgQdRDYpuWggBbve0NTyUQH+jZrGSy9aFslOpr385eT
-         LiXbBkN1xuPCPRUynfWfl8dI4w675FJYKSTQu3USrho7SjYrHmU2ML/wRzpjXRX0uOq2
-         9oCrQif/dRczAvKlW8+oQnVtr1+r/zaiLn1KifutMWCuqVIGXOrPlx0397XaWtk5Y0zw
-         Z6wg==
-X-Gm-Message-State: AOAM533Z0uT/8/vqdC4EmwJZ8VTm3Kr6bI+CkHfGTbUcq1dO1spP1aXX
-        l2nOJpee+0hs8LFgZRJ1VRU=
-X-Google-Smtp-Source: ABdhPJz4mcMO5VCu7emIg7Vqh7PQEV38Ck+n/XjSj7JuEF67UyNWFH5e7rbXhGvOPMDAZQEJmXqFIA==
-X-Received: by 2002:a5d:570a:: with SMTP id a10mr29965757wrv.449.1643903975849;
-        Thu, 03 Feb 2022 07:59:35 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.232.204])
-        by smtp.gmail.com with ESMTPSA id l10sm20431426wrz.20.2022.02.03.07.59.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 07:59:35 -0800 (PST)
-Message-ID: <02fb0bc3-fc38-b8f0-3067-edd2a525ef29@gmail.com>
-Date:   Thu, 3 Feb 2022 15:55:09 +0000
+        Thu, 3 Feb 2022 10:56:00 -0500
+Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JqNY72zWQz67MpP;
+        Thu,  3 Feb 2022 23:55:23 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 3 Feb 2022 16:55:58 +0100
+Received: from [10.47.89.50] (10.47.89.50) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 3 Feb
+ 2022 15:55:50 +0000
+Message-ID: <098f988e-1f12-c412-3111-60393dfe0f0b@huawei.com>
+Date:   Thu, 3 Feb 2022 15:55:22 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [External] Re: [RFC] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-Content-Language: en-US
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     Usama Arif <usama.arif@bytedance.com>,
-        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220202155923.4117285-1-usama.arif@bytedance.com>
- <86ae792e-d138-112e-02bb-ab70e3c2a147@kernel.dk>
- <7df1059c-6151-29c8-9ed5-0bc0726c362d@kernel.dk>
- <1494b8f0-2f48-0aa1-214c-a02bbc4b05eb@bytedance.com>
- <6cce16d3-e2ca-ca1e-1209-e6e243241231@gmail.com>
-In-Reply-To: <6cce16d3-e2ca-ca1e-1209-e6e243241231@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 00/16] scsi: libsas and users: Factor out LLDD TMF code
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
+        <chenxiang66@hisilicon.com>, <Ajish.Koshy@microchip.com>
+CC:     <yanaijie@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <Viswas.G@microchip.com>
+References: <1643110372-85470-1-git-send-email-john.garry@huawei.com>
+ <1893d9ef-042b-af3b-74ea-dd4d0210c493@opensource.wdc.com>
+ <14df160f-c0f2-cc9f-56d4-8eda67969e0b@huawei.com>
+ <a8fae323-1877-058a-b03e-d175a725213f@opensource.wdc.com>
+ <a2de1656-b1ec-2fb7-caab-657e27dacb48@huawei.com>
+ <49da4d80-5cc3-35c3-ccaa-6def8165eb65@huawei.com>
+ <59a198a8-1d87-bc09-d2d8-2d495ed74c16@opensource.wdc.com>
+In-Reply-To: <59a198a8-1d87-bc09-d2d8-2d495ed74c16@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.89.50]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 15:44, Pavel Begunkov wrote:
-> On 2/3/22 15:14, Usama Arif wrote:
->> On 02/02/2022 19:18, Jens Axboe wrote:
->>> On 2/2/22 9:57 AM, Jens Axboe wrote:
->>>> On 2/2/22 8:59 AM, Usama Arif wrote:
->>>>> Acquire completion_lock at the start of __io_uring_register before
->>>>> registering/unregistering eventfd and release it at the end. Hence
->>>>> all calls to io_cqring_ev_posted which adds to the eventfd counter
->>>>> will finish before acquiring the spin_lock in io_uring_register, and
->>>>> all new calls will wait till the eventfd is registered. This avoids
->>>>> ring quiesce which is much more expensive than acquiring the
->>>>> spin_lock.
->>>>>
->>>>> On the system tested with this patch, io_uring_reigster with
->>>>> IORING_REGISTER_EVENTFD takes less than 1ms, compared to 15ms before.
+On 03/02/2022 09:44, Damien Le Moal wrote:
+
+Hi Damien,
+
+>>>> [  385.102073] sas: Enter sas_scsi_recover_host busy: 1 failed: 1
+>>>> [  385.108026] sas: sas_scsi_find_task: aborting task 0x000000007068ed73
+>>>> [  405.561099] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+
+Contrary to mentioning TMF in the log, this is not a TMF but rather an 
+internal abort timing out. I don't think that this should ever happen. 
+This command should just abort pending IO commands in the controller and 
+not send anything to the target. So for this to timeout means a HW fault 
+or driver bug. And I did not touch this code for pm8001.
+
+>>>> timeout.
+>>>> [  405.568236] sas: sas_scsi_find_task: task 0x000000007068ed73 is
+>>>> aborted
+>>>> [  405.574930] sas: sas_eh_handle_sas_errors: task 0x000000007068ed73 is
+>>>> aborted
+>>>> [  411.192602] ata21.00: qc timeout (cmd 0xec)
+>>>> [  431.672122] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+>>>> timeout.
+>>>> [  431.679282] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>>>> [  431.685544] ata21.00: revalidation failed (errno=-5)
+>>>> [  441.911948] ata21.00: qc timeout (cmd 0xec)
+>>>> [  462.391545] pm80xx0:: pm8001_exec_internal_task_abort  757:TMF task
+>>>> timeout.
+>>>> [  462.398696] ata21.00: failed to IDENTIFY (I/O error, err_mask=0x4)
+>>>> [  462.404992] ata21.00: revalidation failed (errno=-5)
+>>>> [  492.598769] ata21.00: qc timeout (cmd 0xec)
+>>>> ...
 >>>>
->>>> This seems like optimizing for the wrong thing, so I've got a few
->>>> questions. Are you doing a lot of eventfd registrations (and
->>>> unregister) in your workload? Or is it just the initial pain of
->>>> registering one? In talking to Pavel, he suggested that RCU might be a
->>>> good use case here, and I think so too. That would still remove the
->>>> need to quiesce, and the posted side just needs a fairly cheap rcu
->>>> read lock/unlock around it.
->>>
->>> Totally untested, but perhaps can serve as a starting point or
->>> inspiration.
->>>
+
+Do you have a fuller dmesg with my series?
+
+...
+
+>> }
+>> - res = -TMF_RESP_FUNC_FAILED;
+>> + res = TMF_RESP_FUNC_FAILED;
 >>
->> Hi,
+>> That's effectively the same as what I have in this series in
+>> sas_execute_tmf().
 >>
->> Thank you for the replies and comments. My usecase registers only one eventfd at the start.
+>> However your testing is a SATA device, which I'll check further.
+> This did not help. Still seeing 100% reproducible hangs.
+
+OK, but I think that we should also have this change as the mainline 
+codes looks broken to be begin with:
+
+--->8 ---
+
+[PATCH] scsi: libsas: Handle all errors in sas_scsi_find_task()
+
+LLDD TMFs callbacks may return linux or other error codes instead of TMF
+codes. This may cause problems in sas_scsi_find_task() ->
+.lldd_query_task(), as only TMF codes are handled there. As such, we may
+not return a task_disposition type. Function sas_eh_handle_sas_errors() 
+only handles that type, and may exit error
+handling early for unrecognised types.
+
+So use TASK_ABORT_FAILED for non-TMF types returned from
+.lldd_query_task(), on the assumption that the command may still be 
+alive and error handling should be escalated.
+
+Signed-off-by: John Garry <john.garry@huawei.com>
+
+diff --git a/drivers/scsi/libsas/sas_scsi_host.c 
+b/drivers/scsi/libsas/sas_scsi_host.c
+index 53d8b7ede0cd..02274f471308 100644
+--- a/drivers/scsi/libsas/sas_scsi_host.c
++++ b/drivers/scsi/libsas/sas_scsi_host.c
+@@ -316,8 +316,11 @@ static enum task_disposition 
+sas_scsi_find_task(struct sas_task *task)
+  				pr_notice("%s: task 0x%p failed to abort\n",
+  					  __func__, task);
+  				return TASK_ABORT_FAILED;
++			default:
++				pr_notice("%s: task 0x%p result code %d not handled, assuming 
+failed\n",
++					  __func__, task, res);
++				return TASK_ABORT_FAILED;
+  			}
+-
+  		}
+  	}
+  	return res;
+
+---8< ----
+
 > 
-> Then it's overkill. Update io_register_op_must_quiesce(), set ->cq_ev_fd
-> on registration with WRITE_ONCE(), read it in io_cqring_ev_posted* with
-> READ_ONCE() and you're set.
+> I did a lot of testing/digging today, 
 
-Actually needs smp_store_release/smp_load_acquire
+Thanks for the effort!
 
+ > and the hang cause seems to be
+ > missing task completions.
+> At random, a task times out as its completion
 
-> There is a caveat, ->cq_ev_fd won't be immediately visible to already
-> inflight requests, but we can say it's the responsibility of the
-> userspace to wait for a grace period, i.e. for all inflight requests
-> submitted before registration io_cqring_ev_posted* might or might not
-> see updated ->cq_ev_fd, which works perfectly if there was no requests
-> in the first place. Of course it changes the behaviour so will need
-> a new register opcode.
+That sounds fimilar to my general issue running this driver on an arm64 
+host...
+
+> does not come, and subsequent abort trial for the task fail, revalidate
+> fails
+
+I assume SMP IOs fail if revalidation fails - if this is the case, then 
+the controller seems to be in bad state.
+
+> and the device is dropped (capacity goes to 0). But at that point,
+> doing rmmod/modprobe to reset the device does not work. sync cache
+> command issued at rmmod time never completes. I end up needing to power
+> cycle the machine every time...
 > 
+> No clue about the root cause yet, but it definitely seem to be related
+> to NCQ/high QD operation. If I force my tests to use non-NCQ commands,
+> everything is fine and the tests run to completion without any issue.
+> 
+> I wonder if their is a tag management bug somewhere...
 
--- 
-Pavel Begunkov
+Maybe. Not sure.
+
+On a related point, Hannes' change here could avoid it:
+
+https://lore.kernel.org/linux-scsi/20210222132405.91369-32-hare@suse.de/
+
+> 
+> I did stumble on something very ugly in libsas too: sas_ata_qc_issue()
+> drops and retake the ata port lock. No other ATA driver do that since
+> the ata completion also take that lock. The ata port lock is taken
+> before ata_qc_issue() is called with IRQ disabled (spin_lock_irqsave()).
+> So doing a spin_unlock()/spin_lock() in sas_ata_qc_issue() (called from
+> ata_qc_issue()) seems like a very bad idea. I removed that and
+> everything work the same way (the lld execute does not sleep). But that
+> did not solve the hang problem.
+
+I would need to check why this is done again. Before my time...
+
+> 
+> Of note is this is all with your libsas patches applied. Without the
+> patches, I have KASAN screaming at me about use-after-free in completion
+> context. With your patches, KASAN is silent.
+> 
+> Another thing: this driver does not allow changing the max qd... Very
+> annoying.
+> 
+> echo 1 > /sys/block/sdX/device/queue_depth
+> 
+> has no effect. QD stays at 32 for an ATA drive. Need to look into that too.
+
+I had a look at this. It seems that we fail in 
+__ata_change_queue_depth() -> ata_scsi_find_dev() returning NULL.
+
+Thanks again for your effort, I will continue to look.
+
+john

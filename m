@@ -2,62 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FE84A7E55
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B714A7E57
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349158AbiBCDai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:30:38 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:50846 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231626AbiBCDah (ORCPT
+        id S1349199AbiBCDb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:31:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28007 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348776AbiBCDbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 22:30:37 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V3Tur6c_1643859034;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3Tur6c_1643859034)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 03 Feb 2022 11:30:35 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] mm/fs: fix boolreturn.cocci warning
-Date:   Thu,  3 Feb 2022 11:30:33 +0800
-Message-Id: <20220203033033.52214-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 2 Feb 2022 22:31:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643859083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Wc8dl729Kfw/oo6FN8HrQApuGc0MHf1g6N7P5YsZBDw=;
+        b=TLykYhZVj7FNobL2O6fu4dDn5ZtPmDi37eSnNdbtjQzjQesr4NQX3DKGiDjljD/XGPH3Us
+        5WcCh1/p1KwOEXjk9CxvN7iHfMsDq2Kf1G7KCwfcOb+5y7kTli8hYmYJex/vHe+7qr+ETa
+        AP68YjvNgK3RNpTpECQk+yKzgfJv7WE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-380-JeR_pqIVP4G6vqxcweJlNA-1; Wed, 02 Feb 2022 22:31:20 -0500
+X-MC-Unique: JeR_pqIVP4G6vqxcweJlNA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A7938015C6;
+        Thu,  3 Feb 2022 03:31:19 +0000 (UTC)
+Received: from llong.com (unknown [10.22.34.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2450156F63;
+        Thu,  3 Feb 2022 03:31:18 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Phil Auld <pauld@redhat.com>, Waiman Long <longman@redhat.com>
+Subject: [PATCH] cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
+Date:   Wed,  2 Feb 2022 22:31:03 -0500
+Message-Id: <20220203033103.773030-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return statement in function returning bool should use true/false
-instead of 1/0.
+It was found that a "suspicious RCU usage" lockdep warning was issued
+with the rcu_read_lock() call in update_sibling_cpumasks().  It is
+because the update_cpumasks_hier() function may sleep. So we have
+to release the RCU lock, call update_cpumasks_hier() and reacquire
+it afterward.
 
-Eliminate the following coccicheck warning:
-./drivers/block/drbd/drbd_req.c:912:9-10: WARNING: return of 0/1 in
-function 'remote_due_to_read_balancing' with return type bool
+Also add a percpu_rwsem_assert_held() in update_sibling_cpumasks()
+instead of stating that in the comment.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Fixes: 4716909cc5c5 ("cpuset: Track cpusets that use parent's effective_cpus")
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- drivers/block/drbd/drbd_req.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/cgroup/cpuset.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/block/drbd/drbd_req.c b/drivers/block/drbd/drbd_req.c
-index 2e5fb7e442e3..c8448379bbcd 100644
---- a/drivers/block/drbd/drbd_req.c
-+++ b/drivers/block/drbd/drbd_req.c
-@@ -909,7 +909,7 @@ static bool remote_due_to_read_balancing(struct drbd_device *device, sector_t se
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index dc653ab26e50..b147acece984 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1522,10 +1522,15 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+ 	struct cpuset *sibling;
+ 	struct cgroup_subsys_state *pos_css;
  
- 	switch (rbm) {
- 	case RB_CONGESTED_REMOTE:
--		return 0;
-+		return false;
- 	case RB_LEAST_PENDING:
- 		return atomic_read(&device->local_cnt) >
- 			atomic_read(&device->ap_pending_cnt) + atomic_read(&device->rs_pending_cnt);
++	percpu_rwsem_assert_held(&cpuset_rwsem);
++
+ 	/*
+ 	 * Check all its siblings and call update_cpumasks_hier()
+ 	 * if their use_parent_ecpus flag is set in order for them
+ 	 * to use the right effective_cpus value.
++	 *
++	 * The update_cpumasks_hier() function may sleep. So we have to
++	 * release the RCU read lock before calling it.
+ 	 */
+ 	rcu_read_lock();
+ 	cpuset_for_each_child(sibling, pos_css, parent) {
+@@ -1533,8 +1538,13 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
+ 			continue;
+ 		if (!sibling->use_parent_ecpus)
+ 			continue;
++		if (!css_tryget_online(&sibling->css))
++			continue;
+ 
++		rcu_read_unlock();
+ 		update_cpumasks_hier(sibling, tmp);
++		rcu_read_lock();
++		css_put(&sibling->css);
+ 	}
+ 	rcu_read_unlock();
+ }
 -- 
-2.20.1.7.g153144c
+2.27.0
 

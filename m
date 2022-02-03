@@ -2,133 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724174A9091
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 749E64A9094
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355755AbiBCWSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S1355762AbiBCWTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350718AbiBCWSE (ORCPT
+        with ESMTP id S229910AbiBCWTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:18:04 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E251DC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:18:03 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id z5so3430260plg.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:18:03 -0800 (PST)
+        Thu, 3 Feb 2022 17:19:13 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA9EC061714;
+        Thu,  3 Feb 2022 14:19:13 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id j2so12918778ejk.6;
+        Thu, 03 Feb 2022 14:19:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CI+TrdL82OQQxeiluz+GiOaNTL5TYAX8y0U9DtiXimQ=;
-        b=tcx4lyXHkmXI8kYXLylx8fONteuzxJoULKgubqIec2UYSgXZdnaCQ5vSsNJxdrnaFw
-         kh2HQXLTbOHQEziZwax9cnp63U7LX0PfoxyUSCarrDOniCikZp7qJpNutGG+2GJwprVE
-         JDiR5XV175E1hQODy/bOyuqgYyRD243YIKFsC93H+IVOm8e2JWPU+vJ8MX9p/5hMNi4A
-         JYuSvAj4CkeD6UW5AAE0Hs31+BKBD1OEaotI7S9LEsdE6Xz1axmXxIWvv3PmByB0jTO/
-         mYgdvw9ZJwFAhENqS2jrKnK7E2L4X/O/I/Dn8VwnoRpXUhVsW3KK1op5rr5GGmdbs/fU
-         s6hA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GOu/1THglDVeJl3U7MMSrfyxTvyCi8aFtyQJKOPt1yo=;
+        b=Bkxytx1rYCwS7T3hdaz6quufzPxCnjE+wsE5ldbaUW5t8fCGwpg505DKUwCU7oEcWu
+         6Apaly4e9E/MpN0+MVpfHbPNW4lCkJUnWXeIkflNFURTUP5FGMGs+B/8rb5G8hK748L+
+         7x9qH2FoOoewr/gQQoNh+LNcw+eZv21u3BKkhYK6YQwGSu5TulCA7ZLace6IcmTfnI/L
+         tnJlip18l6nXRLWAnzbn+iDSG63aeQH0NPEn/XSoVbSb2PkhE5MGs8exnVYgn5Uxb1k/
+         gbHmrmSLGke6jdHWI8B0KagLzMm+Ytgpi1QW+JJJKbEzT/lEnCL35tiQJaWea8VmWcOm
+         7xNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CI+TrdL82OQQxeiluz+GiOaNTL5TYAX8y0U9DtiXimQ=;
-        b=kej1LADNNWpbVuhpGoOXdh+BMSOq48gU2W/bFci1DtWFrlxulHznSoG4OZHqv4Xx3g
-         PJBxiFNvrBWa5cnoIk8rhVGZICaKmyeZq6FkieZuq4EX61V3XEdbX0D0E6Z5wCrubDsH
-         nc87cjcJVivkYoR7MXbhwaInTYPs/K1rEdJOhvcCA/ugGDmsfk1sk7IrvJe6bwijlqHs
-         CEHqiwNBVRbxFHHV0tzDcoqjIg0KFtjeQBpPfEZxAH0HeBrEtbi99hUvaVZ35VtT6m6X
-         TrlPsaMXScFwni6WjEjbCDJkYEkB3+cCKZvTMMNuLlCmLphSOikXYYvYSukA0TbKAx1g
-         a/Nw==
-X-Gm-Message-State: AOAM531uCAZlxCT48o+VSu/1jt38/wgVjApHGYNOgHsP7+2YvVYcJGJU
-        cyqMZhQOEFjVSNKUqyXAgzXILQ==
-X-Google-Smtp-Source: ABdhPJwXPgkPlEYDhOLaV+ilqpTCRlmFVIHbATHY+StH+kzmMg/O7EXJ6gXmw0AHbPqAXoh/bCtDSQ==
-X-Received: by 2002:a17:90a:f418:: with SMTP id ch24mr21788pjb.154.1643926683237;
-        Thu, 03 Feb 2022 14:18:03 -0800 (PST)
-Received: from ?IPv6:2600:380:7677:2608:7e4f:2c76:b02e:3fbc? ([2600:380:7677:2608:7e4f:2c76:b02e:3fbc])
-        by smtp.gmail.com with ESMTPSA id d12sm31782pgk.29.2022.02.03.14.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 14:18:02 -0800 (PST)
-Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203174108.668549-1-usama.arif@bytedance.com>
- <20220203174108.668549-3-usama.arif@bytedance.com>
- <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
- <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
- <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
- <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
- <a5992789-6b0b-f3a8-0a24-e00add2a005a@kernel.dk>
- <fc5a2421-f775-8195-39df-8e4bcda38af1@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <b06201e7-98dd-a087-cdf4-1a4ea45767f0@kernel.dk>
-Date:   Thu, 3 Feb 2022 15:18:00 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GOu/1THglDVeJl3U7MMSrfyxTvyCi8aFtyQJKOPt1yo=;
+        b=YrC7ojW6Lg0IeKrhyqiLX7a4LQsRbwxlZ+jFvx49teaj40BqtLUV/yHZT9QVsUwBfU
+         Yy2iDIUpUKNil1AmzCbczGMDGSGNeQQellEeurdQ/Z7ip5Mlzolnt6fZ3iajMk1RfeZF
+         vFpzReHtvoz/utEYFh1w9YGI6JBArudycQlPRvhhx3i+XkVPY/0k4kUxNqtvbXVbtfDF
+         CDUN2lFo5MoIAei4/leh9JHcwFsKAffK5CNjDtOTyikHQeo7aBqaGQe0UpzvN2i6o5Gy
+         NOfb9ldm98edPJlDkkEUyNYKnpNOU9pAzujOWwXWfE9b0R5uBIAcVxLA5zxYCuJclR5G
+         hMHQ==
+X-Gm-Message-State: AOAM531DBCpm+tf+5QsFH2Rg6F/LM550Aazzbn9NqeZZDUPcliCOWz40
+        PLR/yGBpHI7WwsRe7Gf1pnQl6sz6ljY+GKzo06uG2XcMagU=
+X-Google-Smtp-Source: ABdhPJxI8SMxBz0kZoZ/OkQC6HVudR43k5HUeEvEqSyhCy3Q02/zu7na+zZTa14XBq/mhwevczEjO49BPLpith+IgMs=
+X-Received: by 2002:a17:907:6e1a:: with SMTP id sd26mr22848ejc.270.1643926751588;
+ Thu, 03 Feb 2022 14:19:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <fc5a2421-f775-8195-39df-8e4bcda38af1@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220203182641.824731-1-shy828301@gmail.com> <20220203141226.d510a9fe3fb1f55fc75926e5@linux-foundation.org>
+In-Reply-To: <20220203141226.d510a9fe3fb1f55fc75926e5@linux-foundation.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 3 Feb 2022 14:18:56 -0800
+Message-ID: <CAHbLzkpb2Bs8buDOAGCt7hpjy2824HfK3RsTHM+gbzmZ1wvKRA@mail.gmail.com>
+Subject: Re: [v4 PATCH] fs/proc: task_mmu.c: don't read mapcount for migration entry
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jann Horn <jannh@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 12:43 PM, Pavel Begunkov wrote:
-> On 2/3/22 19:06, Jens Axboe wrote:
->> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
->>> On 2/3/22 18:29, Jens Axboe wrote:
->>>> On 2/3/22 11:26 AM, Usama Arif wrote:
->>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
->>>>> suggesting to do the below diff over patch 3? I dont think that would be
->>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
->>>>> present unregister can be called by another thread and set ctx->io_ev_fd
->>>>> to NULL that would cause a NULL pointer exception later? In the current
->>>>> patch, the check of whether ev_fd exists happens as the first thing
->>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
->>>>
->>>> They are cheap, but they are still noticeable at high requests/sec
->>>> rates. So would be best to avoid them.
->>>>
->>>> And yes it's obviously racy, there's the potential to miss an eventfd
->>>> notification if it races with registering an eventfd descriptor. But
->>>> that's not really a concern, as if you register with inflight IO
->>>> pending, then that always exists just depending on timing. The only
->>>> thing I care about here is that it's always _safe_. Hence something ala
->>>> what you did below is totally fine, as we're re-evaluating under rcu
->>>> protection.
->>>
->>> Indeed, the patch doesn't have any formal guarantees for propagation
->>> to already inflight requests, so this extra unsynchronised check
->>> doesn't change anything.
->>>
->>> I'm still more сurious why we need RCU and extra complexity when
->>> apparently there is no use case for that. If it's only about
->>> initial initialisation, then as I described there is a much
->>> simpler approach.
->>
->> Would be nice if we could get rid of the quiesce code in general, but I
->> haven't done a check to see what'd be missing after this...
-> 
-> Ok, I do think full quiesce is worth keeping as don't think all
-> registered parts need dynamic update. E.g. zc notification dynamic
-> reregistation doesn't make sense and I'd rather rely on existing
-> straightforward mechanisms than adding extra bits, even if it's
-> rsrc_nodes. That's not mentioning unnecessary extra overhead.
-> 
-> btw, I wouldn't say this eventfd specific sync is much simpler than
-> the whole full quiesce.
+On Thu, Feb 3, 2022 at 2:12 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Thu,  3 Feb 2022 10:26:41 -0800 Yang Shi <shy828301@gmail.com> wrote:
+>
+> > v4: * s/Treated/Treat per David
+> >     * Collected acked-by tag from David
+> > v3: * Fixed the fix tag, the one used by v2 was not accurate
+> >     * Added comment about the risk calling page_mapcount() per David
+> >     * Fix pagemap
+> > v2: * Added proper fix tag per Jann Horn
+> >     * Rebased to the latest linus's tree
+>
+> The v2->v4 delta shows changes which aren't described above?
 
-It's easier to understand though, as it follows the usual rules of
-RCU which are used throughout the kernel.
+They are.
 
-On quiesce in general, my curiosity was around whether we'd ever
-get to the point where all register handlers are marked as not
-needing quisce, and it seems it isn't that far off.
+v4: * s/Treated/Treat per David
+      * Collected acked-by tag from David
+v3: * Fixed the fix tag, the one used by v2 was not accurate
+      * Added comment about the risk calling page_mapcount() per David
+      * Fix pagemap
 
--- 
-Jens Axboe
-
+>
+> --- a/fs/proc/task_mmu.c~fs-proc-task_mmuc-dont-read-mapcount-for-migration-entry-v4
+> +++ a/fs/proc/task_mmu.c
+> @@ -469,9 +469,12 @@ static void smaps_account(struct mem_siz
+>          * If any subpage of the compound page mapped with PTE it would elevate
+>          * page_count().
+>          *
+> -        * Treated regular migration entries as mapcount == 1 without reading
+> -        * mapcount since calling page_mapcount() for migration entries is
+> -        * racy against THP splitting.
+> +        * The page_mapcount() is called to get a snapshot of the mapcount.
+> +        * Without holding the page lock this snapshot can be slightly wrong as
+> +        * we cannot always read the mapcount atomically.  It is not safe to
+> +        * call page_mapcount() even with PTL held if the page is not mapped,
+> +        * especially for migration entries.  Treat regular migration entries
+> +        * as mapcount == 1.
+>          */
+>         if ((page_count(page) == 1) || migration) {
+>                 smaps_page_accumulate(mss, page, size, size << PSS_SHIFT, dirty,
+> @@ -1393,6 +1396,7 @@ static pagemap_entry_t pte_to_pagemap_en
+>  {
+>         u64 frame = 0, flags = 0;
+>         struct page *page = NULL;
+> +       bool migration = false;
+>
+>         if (pte_present(pte)) {
+>                 if (pm->show_pfn)
+> @@ -1414,13 +1418,14 @@ static pagemap_entry_t pte_to_pagemap_en
+>                         frame = swp_type(entry) |
+>                                 (swp_offset(entry) << MAX_SWAPFILES_SHIFT);
+>                 flags |= PM_SWAP;
+> +               migration = is_migration_entry(entry);
+>                 if (is_pfn_swap_entry(entry))
+>                         page = pfn_swap_entry_to_page(entry);
+>         }
+>
+>         if (page && !PageAnon(page))
+>                 flags |= PM_FILE;
+> -       if (page && page_mapcount(page) == 1)
+> +       if (page && !migration && page_mapcount(page) == 1)
+>                 flags |= PM_MMAP_EXCLUSIVE;
+>         if (vma->vm_flags & VM_SOFTDIRTY)
+>                 flags |= PM_SOFT_DIRTY;
+> @@ -1436,6 +1441,7 @@ static int pagemap_pmd_range(pmd_t *pmdp
+>         spinlock_t *ptl;
+>         pte_t *pte, *orig_pte;
+>         int err = 0;
+> +       bool migration = false;
+>
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>         ptl = pmd_trans_huge_lock(pmdp, vma);
+> @@ -1476,11 +1482,12 @@ static int pagemap_pmd_range(pmd_t *pmdp
+>                         if (pmd_swp_uffd_wp(pmd))
+>                                 flags |= PM_UFFD_WP;
+>                         VM_BUG_ON(!is_pmd_migration_entry(pmd));
+> +                       migration = is_migration_entry(entry);
+>                         page = pfn_swap_entry_to_page(entry);
+>                 }
+>  #endif
+>
+> -               if (page && page_mapcount(page) == 1)
+> +               if (page && !migration && page_mapcount(page) == 1)
+>                         flags |= PM_MMAP_EXCLUSIVE;
+>
+>                 for (; addr != end; addr += PAGE_SIZE) {
+> _
+>

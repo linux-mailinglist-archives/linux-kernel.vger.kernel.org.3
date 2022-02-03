@@ -2,128 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCB64A8D02
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3914A8D07
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353963AbiBCULx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S1353970AbiBCUMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353955AbiBCULv (ORCPT
+        with ESMTP id S1350957AbiBCUMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:11:51 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B76C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:11:51 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id d18-20020a9d51d2000000b005a09728a8c2so3541586oth.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 12:11:51 -0800 (PST)
+        Thu, 3 Feb 2022 15:12:12 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70D1C061714;
+        Thu,  3 Feb 2022 12:12:12 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id h23so3169173pgk.11;
+        Thu, 03 Feb 2022 12:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7el1iFQDw4bHHjq5GbbbknZQamZCeqFF7QzUeFeozJ0=;
-        b=dxb0q5nkfXvISVc9sPcKq2w/gk1eSvVgCJc1YOjrTgiYh8lBGVZ8thOYRegARgW3I6
-         NO7rhGSMTy+P7UIUJHIHdySpPuj9fMKknuNZUJs40YQU0Kj4m+ktNKmtu5c+DQky6ap+
-         KkDM/w0J7XaC82zVm7czGssiNXvXrkvUdD4Y1dZaSj9FAl2fJ78A3ds0fPxev+qhoXFI
-         8CtfiEMlvsnHuEV97IrqL8882YdNb4oDpp1lsNTQLdRUQ6t0xhwfaIR7k1mUJmwY4l8u
-         n7/HD/34mSMweYM6ftG5FzUVzUBk/Hhnc3RvUz7WE74gl6a4+dKmqNZZyxbilnWmO8sM
-         v5Jw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+W+KjPt40snWKlcOiz5y4VMLU8RQSblS+FRo+YklbYo=;
+        b=arM4wXQPQIqbNWzf3MS/S5hCXTZ94hUMEZQXR6L1SLSmdVpz+75kk+ZCtb3v4LxFdZ
+         UiSohRLVcAdA1PjlhICP6pI+GgLwFfkCxbPEAOCZtqBLeVW0gpUnBJhMicjwtXoGG06e
+         rOXtcGsvJzMA16ZhhFDccLMDJZdvJXqueBEOdupvpU48ExrLOqNWYYWWEhaah8V4qJt3
+         xAFx++Cq3mauE8mVV7y03mZBlvp0HLCUOIFEUbNsKADNpTiKPk4lJZpoWvPcAwJfibD9
+         EY/9zgItTo/d0qpoh3QeR7RuRmrD/ydRJe1D6y8X43bLoRNplh9XCEGKx2mXNLKpSDty
+         qQyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7el1iFQDw4bHHjq5GbbbknZQamZCeqFF7QzUeFeozJ0=;
-        b=FMCfPIGeDQjjJycWBaQKV5fw87IQEOPFErvk3lYqyj/kUa+2EKVJnvBCu0DNnnzqOl
-         uL21wHuY9+/OyUGbTQLUNXPogezwE8GpqWluusj9KBo3Ed3v+9ReYQ5YOPvuSXdxsB30
-         PByW2ihcBRq12SVgoh7kwjtQaDx2QVogTMIYp3ZmcxqVnVXnO61WMcULSrD5+JZ/slIC
-         1gpKcOIffIQXbx5gS6C9YYaEIBHYLnV63sBvv2SBzLha+Q+6B7yoPbkBDWsRfZa1P604
-         lvUe2r3nmQENI93zSO+TnZ0aYPL8CwzlZ24+HgTKoq5PojYLxGwo5z2mHDQ1pUZikrtX
-         YY+Q==
-X-Gm-Message-State: AOAM531NsUZqx1xlYJQZ9oB+gl/m6gySEWJ5YGcoGvaE0tLx8+q5jS2B
-        q2QdWYOtp/a6SMo9tK5E1avMpQ==
-X-Google-Smtp-Source: ABdhPJwr83W1t/xwMOlJe8FBsx6hO1Xt7rfdTgFMXYNKaiWJ7C3HscknLVwS6Wset6fIMEmwaHPDGQ==
-X-Received: by 2002:a9d:68cb:: with SMTP id i11mr19654712oto.256.1643919110741;
-        Thu, 03 Feb 2022 12:11:50 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id a8sm11458735otj.47.2022.02.03.12.11.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+W+KjPt40snWKlcOiz5y4VMLU8RQSblS+FRo+YklbYo=;
+        b=Vn9Hky3hVd7K6RFRLPV9jL70dqfaezAQiZf/qSYg4+lNTBujdGzgPkvhovX3vPwIrk
+         41cF5pE+BCnZcOrb7hf1PLRVxHNw6tfqWHMw7+tWgMDWui8Z1I5Q98etg25oni/Qdi0k
+         g2gLE+LkBBuzNDODmd9sBtl8/ft0lC1LQpWg44EvWk1DancQEk8SyRQJ7DkkPJCpo3dN
+         y0V8z1L1Gb6OL0MKRaF7faToEDuh/Um3+H6/DGoAq9dFNxQe0zrBRi37bV8edGvCm8uu
+         GWNCjoT0+c4EmBdfGwTc6trAb6M/OVfIzvU5/jwd+ESuNboUY521Oh/QblXYGhmF0F8c
+         9KjQ==
+X-Gm-Message-State: AOAM533P/9fALbbi4/tEby2adka8crOa8gGZ1Jhsvdp884n/RkVR4Vjn
+        BpCBMEU/xGPgDGjVC3nO5ys=
+X-Google-Smtp-Source: ABdhPJywdOnD4uSlYBz32VRAwgXrN+9+mf99fmcszDbGJqPcxZdavp8IH+fWAcKgOh+Hrk7WwPqE6w==
+X-Received: by 2002:a05:6a00:158c:: with SMTP id u12mr35425442pfk.18.1643919132308;
+        Thu, 03 Feb 2022 12:12:12 -0800 (PST)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id nh18sm10727293pjb.18.2022.02.03.12.12.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 12:11:50 -0800 (PST)
-Date:   Thu, 3 Feb 2022 14:11:48 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Alex Elder <elder@linaro.org>, Jakub Kicinski <kuba@kernel.org>,
-        "Gross, Andy" <agross@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Evan Green <evgreen@chromium.org>, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, Alex Elder <elder@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: add IPA qcom,qmp property
-Message-ID: <Yfw3BJLrRdY6sd5u@builder.lan>
-References: <20220201140723.467431-1-elder@linaro.org>
- <20220202210638.07b83d41@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <eb09c869-c5c6-4be8-5265-072849f1ecd0@linaro.org>
- <CAL_JsqLMit=e6vdum-xm1uxfCZcoJsTFe_S3k-QyVbvJPfNHew@mail.gmail.com>
+        Thu, 03 Feb 2022 12:12:10 -0800 (PST)
+From:   Yang Shi <shy828301@gmail.com>
+To:     axboe@kernel.dk, hch@infradead.org, chaitanyak@nvidia.com,
+        rostedt@goodmis.org, xiyou.wangcong@gmail.com
+Cc:     shy828301@gmail.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [v6 PATCH] block: introduce block_rq_error tracepoint
+Date:   Thu,  3 Feb 2022 12:12:07 -0800
+Message-Id: <20220203201207.1075933-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLMit=e6vdum-xm1uxfCZcoJsTFe_S3k-QyVbvJPfNHew@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Feb 08:44 CST 2022, Rob Herring wrote:
+Currently, rasdaemon uses the existing tracepoint block_rq_complete
+and filters out non-error cases in order to capture block disk errors.
 
-> On Thu, Feb 3, 2022 at 5:27 AM Alex Elder <elder@linaro.org> wrote:
-> >
-> > On 2/2/22 11:06 PM, Jakub Kicinski wrote:
-> > > On Tue,  1 Feb 2022 08:07:23 -0600 Alex Elder wrote:
-> > >> At least three platforms require the "qcom,qmp" property to be
-> > >> specified, so the IPA driver can request register retention across
-> > >> power collapse.  Update DTS files accordingly.
-> > >>
-> > >> Signed-off-by: Alex Elder <elder@linaro.org>
-> > >> ---
-> > >>
-> > >> Dave, Jakub, please let Bjorn take this through the Qualcomm tree.
-> > >
-> > > I don't know much about DT but the patch defining the property is
-> > > targeting net - will it not cause validation errors? Or Bjorn knows
-> > > to wait for the fixes to propagate? Or it doesn't matter? :)
-> >
-> > It might matter sometimes, but in this case it does not.
-> >
-> > If the DT property is present but never referenced by the
-> > code, it doesn't matter.
-> >
-> > The code in this patch looks up the DT property, and its
-> > behavior is affected by whether the property is there
-> > or not.  If it's not there, it's treated as an error
-> > that can be safely ignored.
-> >
-> > In the case this fix is actually needed, we'll need
-> > both the code present and DT property defined.  If
-> > the code is there but not the property, it's OK, but
-> > the bug won't be fixed quite yet.
-> 
-> If there's only one possible node that qcom,qmp points to, you can
-> just get the node by its compatible (of_find_compatible_node()). Then
-> you don't need a DT update to make things work. Of course, this
-> doesn't work too well if there are 10 possible compatibles without a
-> common fallback compatible.
-> 
+But there are a few problems with this approach:
 
-In one of the latest platforms there's two QMP instances, so we decided
-to make the reference explicit to prepare for the introduction of that.
+1. Even kernel trace filter could do the filtering work, there is
+   still some overhead after we enable this tracepoint.
 
-So I intend to pick this patch through the qcom tree.
+2. The filter is merely based on errno, which does not align with kernel
+   logic to check the errors for print_req_error().
 
-And we don't need to synchronize it with the net-changes; the two
-changes can go independently and only when they are both in place will
-the change take effect and the issue resolved.
+3. block_rq_complete only provides dev major and minor to identify
+   the block device, it is not convenient to use in user-space.
 
-Regards,
-Bjorn
+So introduce a new tracepoint block_rq_error just for the error case.
+With this patch, rasdaemon could switch to block_rq_error.
+
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+The v3 patch was submitted in Feb 2020, and Steven reviewed the patch, but
+it was not merged to upstream. See
+https://lore.kernel.org/lkml/20200203053650.8923-1-xiyou.wangcong@gmail.com/.
+
+The problems fixed by that patch still exist and we do need it to make
+disk error handling in rasdaemon easier. So this resurrected it and
+continued the version number.
+
+v5 --> v6:
+ * Removed disk name per Christoph and Chaitanya
+ * Kept errno since I didn't find any other block tracepoints print blk
+   status code and userspace (i.e. rasdaemon) does expect errno.
+v4 --> v5:
+ * Report the actual block layer status code instead of the errno per
+   Christoph Hellwig.
+v3 --> v4:
+ * Rebased to v5.17-rc1.
+ * Collected reviewed-by tag from Steven.
+
+ block/blk-mq.c               |  4 +++-
+ include/trace/events/block.h | 39 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index f3bf3358a3bb..4ca72ea917d4 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -789,8 +789,10 @@ bool blk_update_request(struct request *req, blk_status_t error,
+ #endif
+ 
+ 	if (unlikely(error && !blk_rq_is_passthrough(req) &&
+-		     !(req->rq_flags & RQF_QUIET)))
++		     !(req->rq_flags & RQF_QUIET))) {
++		trace_block_rq_error(req, error, nr_bytes);
+ 		blk_print_req_error(req, error);
++	}
+ 
+ 	blk_account_io_completion(req, nr_bytes);
+ 
+diff --git a/include/trace/events/block.h b/include/trace/events/block.h
+index 27170e40e8c9..8c0bb06e16b8 100644
+--- a/include/trace/events/block.h
++++ b/include/trace/events/block.h
+@@ -144,6 +144,45 @@ TRACE_EVENT(block_rq_complete,
+ 		  __entry->nr_sector, __entry->error)
+ );
+ 
++/**
++ * block_rq_error - block IO operation error reported by device driver
++ * @rq: block operations request
++ * @error: status code
++ * @nr_bytes: number of completed bytes
++ *
++ * The block_rq_error tracepoint event indicates that some portion
++ * of operation request has failed as reported by the device driver.
++ */
++TRACE_EVENT(block_rq_error,
++
++	TP_PROTO(struct request *rq, blk_status_t error, unsigned int nr_bytes),
++
++	TP_ARGS(rq, error, nr_bytes),
++
++	TP_STRUCT__entry(
++		__field(  dev_t,	dev			)
++		__field(  sector_t,	sector			)
++		__field(  unsigned int,	nr_sector		)
++		__field(  int,		error			)
++		__array(  char,		rwbs,	RWBS_LEN	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	   = rq->q->disk ? disk_devt(rq->q->disk) : 0;
++		__entry->sector    = blk_rq_pos(rq);
++		__entry->nr_sector = nr_bytes >> 9;
++		__entry->error     = blk_status_to_errno(error);
++
++		blk_fill_rwbs(__entry->rwbs, rq->cmd_flags);
++	),
++
++	TP_printk("%d,%d %s %llu + %u [%d]",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->rwbs,
++		  (unsigned long long)__entry->sector,
++		  __entry->nr_sector, __entry->error)
++);
++
+ DECLARE_EVENT_CLASS(block_rq,
+ 
+ 	TP_PROTO(struct request *rq),
+-- 
+2.26.3
+

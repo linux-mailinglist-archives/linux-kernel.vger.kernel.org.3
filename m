@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891174A8603
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C3A4A8609
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351088AbiBCOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235184AbiBCOSd (ORCPT
+        id S1351110AbiBCOUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:20:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55648 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235184AbiBCOUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:18:33 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD75C061714;
-        Thu,  3 Feb 2022 06:18:32 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id p15so9310021ejc.7;
-        Thu, 03 Feb 2022 06:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dhJnZ8FiFenFf/QVcZDF5PExKtMBcbR901XeUZhtQpE=;
-        b=FSyeyUghSHrnm3Ukzc9OuvivZXPnQfVk2Lfi1hhAJ5wwsk2d5DBMSvSz6Uho7/7c+/
-         9SfCDCqkFqXXx2BW6DSA1Kaeh91bKeVXSnqGl5VywPWALVB3XsD6wBEiAlx1TiRgDkgD
-         NoY0LZ8YT/QLoArkyMPRSH0I9mWEvgCgFInoWEssiWzRsR9+L8qsNEfrlJYRUIT2UjEo
-         4OgR73RRfI4m8cvmQwWAIBmSKj5s1IrwPWBPm77lCGUks/l4ixqh8TLd69OI2NUpFJou
-         3z6KVhmzsP1hd6RO9sM+WABpCJd2TW6hojc2UlWD5Fjidm9FZ6MXllqrT2H3D+6//cZA
-         Igdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dhJnZ8FiFenFf/QVcZDF5PExKtMBcbR901XeUZhtQpE=;
-        b=FJWWnXMVm1QnYRnt8ek/A2siPCz/nQm9Ol434qOvJn/u57R7U0bTI/nCEu4YAd7ZmM
-         oFl1QVRksuaV+YQVbxuF3skmqUfMa6WPoJjjBEBU3/O4GZBggcees+wuOvO7beH/WJTu
-         XC40FXBrI/mGAGbfyetrPNJYdXXAEKDdNVrhRiLazMvtZJ6ToeiVJEZyHlnZrO5TjCjP
-         Y9QTUOlZhU8S6q9Rf7ql+EyX+cAyFaUDzamWhGF3E6FZQKcCIH2ngnuwW0lRmH8CaWDU
-         oR8WvMcdCv1fC31aK76b+QjE9B4/P/HhkwRIpbrCTyqFlhnUIy0+9YtNsgDA1vKlFZgZ
-         mwtQ==
-X-Gm-Message-State: AOAM531NVh7srDlcnB52c+qKlPCkKn7HcgDEmg75Dz0GvXC7hRRvfiXM
-        rx2jjCUT9312XbMoxZuuaeBAB2P1c5PQOqEtwpsX5OTnHmQhcw==
-X-Google-Smtp-Source: ABdhPJwuIUg9TosbjJM4Qn4asT3/1NvGEHIVjromCf+JHFUQmLOIEe2LKK64aHHmj3b6N93AX17tBNoTR5JAjEAsAXo=
-X-Received: by 2002:a17:906:c14d:: with SMTP id dp13mr30033151ejc.132.1643897911125;
- Thu, 03 Feb 2022 06:18:31 -0800 (PST)
+        Thu, 3 Feb 2022 09:20:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E673E6195E;
+        Thu,  3 Feb 2022 14:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FF0C340E4;
+        Thu,  3 Feb 2022 14:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643898048;
+        bh=2K348VVBG3EKLps4xUCnPyJaENsvksstznkGipAYxcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ir5Pqa/efkNbEd5D7nv1SqhVwnPhocstxD3uwQg3haSqEGtUCsyeP08LZggEwvO/a
+         aQiOtcFL3agtdM8tHaFAZltYKRqsXZEoXpIKdxgXPZuic0YCZ9kZXE99XXQtr1gTMY
+         P3r+Q/Y/ygMYBfEAufBxubScuxMBaC4+4er9hUOQ=
+Date:   Thu, 3 Feb 2022 15:20:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
+ device tree
+Message-ID: <YfvkvO37IsoVNiV9@kroah.com>
+References: <20220127104905.899341-1-o.rempel@pengutronix.de>
+ <20220127104905.899341-5-o.rempel@pengutronix.de>
+ <YfJ6lhZMAEmetdad@kroah.com>
+ <20220127112305.GC9150@pengutronix.de>
+ <YfKCTG7N86yy74q+@kroah.com>
+ <20220127120039.GE9150@pengutronix.de>
+ <YfKcYXjfhVKUKfzY@kroah.com>
+ <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
+ <YfvS3F6kHUyxs6D0@lunn.ch>
 MIME-Version: 1.0
-References: <20220203133736.246397-1-j.neuschaefer@gmx.net> <20220203133736.246397-2-j.neuschaefer@gmx.net>
-In-Reply-To: <20220203133736.246397-2-j.neuschaefer@gmx.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 3 Feb 2022 16:16:56 +0200
-Message-ID: <CAHp75VfrygdyjgQJ7iRnGL-CELCQ+6D30r5aWwitCTUJvGVf_g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] pinctrl: nuvoton: npcm7xx: Use %zd printk format
- for ARRAY_SIZE()
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        kernel test robot <lkp@intel.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YfvS3F6kHUyxs6D0@lunn.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 3:37 PM Jonathan Neusch=C3=A4fer
-<j.neuschaefer@gmx.net> wrote:
->
-> When compile-testing on 64-bit architectures, GCC complains about the
-> mismatch of types between the %d format specifier and value returned by
-> ARRAY_LENGTH(). Use %zd, which is correct everywhere.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 3b588e43ee5c7 ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO dri=
-ver")
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+On Thu, Feb 03, 2022 at 02:04:28PM +0100, Andrew Lunn wrote:
+> On Thu, Feb 03, 2022 at 05:20:34AM +0300, Sergey Ryazanov wrote:
+> > Hello Greg,
+> > 
+> > if I may be allowed, I would like to make a couple of points about
+> > specifying network interface names in DT. As in previous mail, not to
+> > defend this particular patch, but to talk about names assignment in
+> > general.
+> > 
+> > I may be totally wrong, so consider my words as a request for
+> > discussion. I have been thinking about an efficient way for network
+> > device names assignment for routers with a fixed configuration and
+> > have always come to a conclusion that DT is a good place for names
+> > storage. Recent DSA capability to assign names from labels and this
+> > patch by Oleksij show that I am not alone.
+> 
+> DSA doing this is not recent. The first patch implementing DSA in 2008
+> had the ability to set the interface names. This was long before the
+> idea that userspace should set interface names became the 'correct'
+> way to do this.
 
-...
+udev came out in 2003, and we had the goal of having userspace do all of
+the device naming way back then, so DSA was late to the game :)
 
-> -       dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups)=
-);
-> +       dev_dbg(npcm->dev, "group size: %zd\n", ARRAY_SIZE(npcm7xx_groups=
-));
+thanks,
 
-Dunno how it's slipped away, but the proper specifier is %zu. I guess
-that's what I also mentioned in reply to LKP's report.
-
---=20
-With Best Regards,
-Andy Shevchenko
+greg k-h

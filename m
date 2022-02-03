@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930894A81C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE344A81CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245180AbiBCJt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbiBCJt0 (ORCPT
+        id S1349848AbiBCJte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:49:34 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42528 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235666AbiBCJt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:49:26 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785AEC061714;
-        Thu,  3 Feb 2022 01:49:26 -0800 (PST)
+        Thu, 3 Feb 2022 04:49:27 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 9FA791F45309
+        with ESMTPSA id C764A1F45307
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1643881765;
-        bh=bARkQo56/z3a4a3bVjDzMfuLx9fNoMUA9cghljgNxIA=;
+        s=mail; t=1643881766;
+        bh=uXlE7ZgmZCPiQSZDSfYjZ//saRDp/ZdLtxVuwjRJSJA=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MpKhToUkeJcSvFz8cPFyQ4Wt1GAorxTEX493fgXevU490mCnLvOkdLcp2uyJRs+eO
-         uEWdQI9R+k++tgmZkxuu1v3IRyIKm4hzPeGY9/KuiA3RAV0iVTVads5nK6/kEDwGdT
-         YWMr7pr3mdel95IoU/oN18yUrtWuNsmNGJxJll44PIX9hVA/kcj9H5dJ+KkHG4FLPS
-         kKY3IxEyq79R8Wn0lvfnPpfeKDXeMvYESa/yLdt4jyZTK/eqQAu5tnTMyd/zdZ4NSm
-         I3qDNf4Dmm29kl2+krXfHDCMvYw9Wr2gckPCWPjD9UXut0rP0tazQHxDAYhJwtqdf5
-         OoBauzrgmiUtA==
-Message-ID: <1496895b-2f50-d52a-293e-cac81928056c@collabora.com>
-Date:   Thu, 3 Feb 2022 10:47:37 +0100
+        b=CtFlxPYcpoKjtHove7Yb+rDAGLttgOlB6mjh3TmkVVSroXN/40MSFrlD41LL3XCWC
+         F3FDebKHc7tXHGnaH6pQefXWGAJBrojavanmRs/hG7Q5Ybs8On/1rFxzIpe+ZXhpS4
+         f9A3avD8j9+Ubqo3K3jVb0g4fGCmlhL+06lwbwnAqRfA0ws7v/C6h1b1/X0PADntiz
+         d5D5hXl2KvU9mEQ6A0VDI73rQ9ezh0HeMmW03dZhYeM1my9BnJ7PzD8G/zli1DlFVa
+         X8uEdnLr1CO13TkbWmY8e47o14A6S2RWP89TvIc6n6jtkLrM2oCYiHulm+pBjMxB83
+         eflLXzIerSXdw==
+Message-ID: <9b9a639b-aba2-74d3-62af-70812ced735c@collabora.com>
+Date:   Thu, 3 Feb 2022 10:47:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH v2 23/31] clk: mediatek: mux: Reverse check for existing
- clk to reduce nesting level
+Subject: Re: [PATCH v2 21/31] clk: mediatek: cpumux: Implement error handling
+ in register API
 Content-Language: en-US
 To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -44,10 +41,10 @@ Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20220202134834.690675-1-wenst@chromium.org>
- <20220202134834.690675-24-wenst@chromium.org>
+ <20220202134834.690675-22-wenst@chromium.org>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220202134834.690675-24-wenst@chromium.org>
+In-Reply-To: <20220202134834.690675-22-wenst@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -55,16 +52,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 02/02/22 14:48, Chen-Yu Tsai ha scritto:
-> The clk registration code here currently does:
+> The cpumux clk type registration function does not stop or return errors
+> if any clk failed to be registered, nor does it implement an error
+> handling path. This may result in a partially working device if any
+> step failed.
 > 
->      if (IS_ERR_OR_NULL(clk_data->clks[mux->id])) {
->              ... do clk registration ...
->      }
-> 
-> This extra level of nesting wastes screen real estate.
-> 
-> Reduce the nesting level by reversing the conditional shown above.
-> Other than that, functionality is not changed.
+> Make the register function return proper error codes, and bail out if
+> errors occur. Proper cleanup, i.e. unregister any clks that were
+> successfully registered, is done in the new error path.
 > 
 > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > Reviewed-by: Miles Chen <miles.chen@mediatek.com>

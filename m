@@ -2,326 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475824A8B77
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3514A8B75
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353361AbiBCSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353359AbiBCSVI (ORCPT
+        id S1353383AbiBCSVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:21:22 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:49830 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237991AbiBCSVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:21:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE927C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:21:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8358B8354A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 18:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB84FC340E8;
-        Thu,  3 Feb 2022 18:21:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FF2v8H0/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643912464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kgXVFuAHuZCZud90Xrzq5IGOKmlQZtQBi1Vk/Xc/BHc=;
-        b=FF2v8H0/HlsHVIWXr8qDV2lPgzBt/uouhbHj4LbH+DAgRJhTZg9RO0fY1SkQHfydeEViDB
-        c5ZFX3iTVcPHuBHcCa+hXBKFOhclkLHqseGr8k6enmXz2jdQ/1fAd051xu/DwxmvOz7K48
-        jI1EuLWCUmMxO81zKPohCcAaZxwNSdo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 49215380 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 3 Feb 2022 18:21:03 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: [PATCH 2/2] random: use linear min-entropy accumulation crediting
-Date:   Thu,  3 Feb 2022 19:20:45 +0100
-Message-Id: <20220203182045.35904-2-Jason@zx2c4.com>
-In-Reply-To: <20220203182045.35904-1-Jason@zx2c4.com>
-References: <20220203182045.35904-1-Jason@zx2c4.com>
+        Thu, 3 Feb 2022 13:21:20 -0500
+Received: by mail-il1-f198.google.com with SMTP id i28-20020a056e021d1c00b002bdb4d7a848so735171ila.16
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:21:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=YJwkvjDZtoFvou/XeL//kDGHxyur+FvYXZqDkXgxerQ=;
+        b=P5SIfmWkWNaCodNwG2r9Df4rHvcfASAeyaLJBtLZ6ekQ/BD04haK2QNme6NNNa0FDy
+         G0gKzDuYpigls5TsxN8nPxEYjXTjmDo5KQ5HFJtGbI23lkxBd1b4v9eXsHjKuCFfpBk2
+         OlAxtANURV9MoX6U2XC66s/HiY+8kZKtuUqp1fJwe+QJTlMmIXjraI/j/VY/Takd64O2
+         7Fx2zhEzn/DKqBfFZlZAvlTsz53yKbnoxYMuJficpEruWPs77wClpvltshZVKY8yMNaL
+         hp9sabtmz3MkqeX0HXVIrhptPghzYI19q+bFq01K57oMvCkrEUaRoMuu6+cquwkKdVg/
+         62yw==
+X-Gm-Message-State: AOAM533/MblVukXLh9hFyagJmd88nvMqz30G85eNI8lbm+6XKISwXIkS
+        5uJ2LZFfohQHpmzM4Jz92MU+wZT0NSMyWFCm66adG0LOGGLB
+X-Google-Smtp-Source: ABdhPJyX2fKmFCd+QpNNJ3kd0vnZJd34rXvJtqwsbLa0MTjeKF92b4+SnnvvoY3CvoJUKH+z26sehsf+A1AwCasi5Sew25ZGEGeZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:d387:: with SMTP id o7mr21518039ilo.26.1643912480285;
+ Thu, 03 Feb 2022 10:21:20 -0800 (PST)
+Date:   Thu, 03 Feb 2022 10:21:20 -0800
+In-Reply-To: <0000000000008c32e305d6d8e802@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006de93f05d721334b@google.com>
+Subject: Re: [syzbot] general protection fault in submit_bio_checks
+From:   syzbot <syzbot+2b3f18414c37b42dcc94@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, axboe@kernel.dk,
+        bpf@vger.kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-30e37ec516ae ("random: account for entropy loss due to overwrites")
-assumed that adding new entropy to the LFSR pool probabilistically
-cancelled out old entropy there, so entropy was credited asymptotically,
-approximating Shannon entropy of independent sources (rather than a
-stronger min-entropy notion) using 1/8th fractional bits and replacing
-a constant 2-2/√𝑒 term (~0.786938) with 3/4 (0.75) to slightly
-underestimate it. This wasn't superb, but it was perhaps better than
-nothing, so that's what was done. Which entropy specifically was being
-cancelled out and how much precisely each time is hard to tell, though
-as I showed with the attack code in my previous commit, a motivated
-adversary with sufficient information can actually cancel out
-everything.
+syzbot has found a reproducer for the following issue on:
 
-Since we're no longer using an LFSR for entropy accumulation, this
-probabilistic cancellation is no longer relevant. Rather, we're now
-using a computational hash function as the accumulator and we've
-switched to working in the random oracle model, from which we can now
-revisit the question of min-entropy accumulation, which is done in
-detail in <https://eprint.iacr.org/2019/198>.
+HEAD commit:    2d3d8c7643a5 Add linux-next specific files for 20220203
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c0c8dc700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27a9abf2c11167c7
+dashboard link: https://syzkaller.appspot.com/bug?extid=2b3f18414c37b42dcc94
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14635480700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10eb2d14700000
 
-Consider a long input bit string that is built by concatenating various
-smaller independent input bit strings. Each one of these inputs has a
-designated min-entropy, which is what we're passing to
-credit_entropy_bits(h). When we pass the concatenation of these to a
-random oracle, it means that an adversary trying to receive back the
-same reply as us would need to become certain about each part of the
-concatenated bit string we passed in, which means becoming certain about
-all of those h values. That means we can estimate the accumulation by
-simply adding up the h values in calls to credit_entropy_bits(h);
-there's no probabilistic cancellation at play like there was said to be
-for the LFSR. Incidentally, this is also what other entropy accumulators
-based on computational hash functions do as well.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2b3f18414c37b42dcc94@syzkaller.appspotmail.com
 
-So this commit replaces credit_entropy_bits(h) with essentially `total =
-min(POOL_BITS, total + h)`, done with a cmpxchg loop as before.
-
-What if we're wrong and the above is nonsense? It's not, but let's
-assume we don't want the actual _behavior_ of the code to change much.
-Currently that behavior is not extracting from the input pool until it
-has 128 bits of entropy in it. With the old algorithm, we'd hit that
-magic 128 number after roughly 256 calls to credit_entropy_bits(1). So,
-we can retain more or less the old behavior by waiting to extract from
-the input pool until it hits 256 bits of entropy using the new code. For
-people concerned about this change, it means that there's not that much
-practical behavioral change. And for folks actually trying to model
-the behavior rigorously, it means that we have an even higher margin
-against attacks.
-
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 112 +++++++-----------------------------------
- 1 file changed, 19 insertions(+), 93 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 260ef3d18846..a1c681a616a6 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -358,17 +358,9 @@
- 
- /* #define ADD_INTERRUPT_BENCH */
- 
--enum poolinfo {
-+enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
--	POOL_BITSHIFT = ilog2(POOL_BITS),
--	POOL_MIN_BITS = POOL_BITS / 2,
--
--	/* To allow fractional bits to be tracked, the entropy_count field is
--	 * denominated in units of 1/8th bits. */
--	POOL_ENTROPY_SHIFT = 3,
--#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
--	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
--	POOL_MIN_FRACBITS = POOL_MIN_BITS << POOL_ENTROPY_SHIFT
-+	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
- };
- 
- /*
-@@ -541,66 +533,18 @@ static void process_random_ready_list(void)
- static void credit_entropy_bits(int nbits)
- {
- 	int entropy_count, orig;
--	int nfrac = nbits << POOL_ENTROPY_SHIFT;
--
--	/* Ensure that the multiplication can avoid being 64 bits wide. */
--	BUILD_BUG_ON(2 * (POOL_ENTROPY_SHIFT + POOL_BITSHIFT) > 31);
- 
- 	if (!nbits)
- 		return;
- 
--retry:
--	entropy_count = orig = READ_ONCE(input_pool.entropy_count);
--	if (nfrac < 0) {
--		/* Debit */
--		entropy_count += nfrac;
--	} else {
--		/*
--		 * Credit: we have to account for the possibility of
--		 * overwriting already present entropy.	 Even in the
--		 * ideal case of pure Shannon entropy, new contributions
--		 * approach the full value asymptotically:
--		 *
--		 * entropy <- entropy + (pool_size - entropy) *
--		 *	(1 - exp(-add_entropy/pool_size))
--		 *
--		 * For add_entropy <= pool_size/2 then
--		 * (1 - exp(-add_entropy/pool_size)) >=
--		 *    (add_entropy/pool_size)*0.7869...
--		 * so we can approximate the exponential with
--		 * 3/4*add_entropy/pool_size and still be on the
--		 * safe side by adding at most pool_size/2 at a time.
--		 *
--		 * The use of pool_size-2 in the while statement is to
--		 * prevent rounding artifacts from making the loop
--		 * arbitrarily long; this limits the loop to log2(pool_size)*2
--		 * turns no matter how large nbits is.
--		 */
--		int pnfrac = nfrac;
--		const int s = POOL_BITSHIFT + POOL_ENTROPY_SHIFT + 2;
--		/* The +2 corresponds to the /4 in the denominator */
--
--		do {
--			unsigned int anfrac = min(pnfrac, POOL_FRACBITS / 2);
--			unsigned int add =
--				((POOL_FRACBITS - entropy_count) * anfrac * 3) >> s;
--
--			entropy_count += add;
--			pnfrac -= anfrac;
--		} while (unlikely(entropy_count < POOL_FRACBITS - 2 && pnfrac));
--	}
--
--	if (WARN_ON(entropy_count < 0)) {
--		pr_warn("negative entropy/overflow: count %d\n", entropy_count);
--		entropy_count = 0;
--	} else if (entropy_count > POOL_FRACBITS)
--		entropy_count = POOL_FRACBITS;
--	if (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig)
--		goto retry;
-+	do {
-+		entropy_count = orig = READ_ONCE(input_pool.entropy_count);
-+		entropy_count = min(POOL_BITS, entropy_count + nbits);
-+	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
- 
--	trace_credit_entropy_bits(nbits, entropy_count >> POOL_ENTROPY_SHIFT, _RET_IP_);
-+	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
- 
--	if (crng_init < 2 && entropy_count >= POOL_MIN_FRACBITS)
-+	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
- 		crng_reseed(&primary_crng, true);
- }
- 
-@@ -863,7 +807,7 @@ static void crng_reseed(struct crng_state *crng, bool use_input_pool)
- 		int entropy_count;
- 		do {
- 			entropy_count = READ_ONCE(input_pool.entropy_count);
--			if (entropy_count < POOL_MIN_FRACBITS)
-+			if (entropy_count < POOL_MIN_BITS)
- 				return;
- 		} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
- 		extract_entropy(buf.key, sizeof(buf.key));
-@@ -1086,7 +1030,7 @@ void add_input_randomness(unsigned int type, unsigned int code,
- 	last_value = value;
- 	add_timer_randomness(&input_timer_state,
- 			     (type << 4) ^ code ^ (code >> 4) ^ value);
--	trace_add_input_randomness(POOL_ENTROPY_BITS());
-+	trace_add_input_randomness(input_pool.entropy_count);
- }
- EXPORT_SYMBOL_GPL(add_input_randomness);
- 
-@@ -1184,7 +1128,7 @@ void add_disk_randomness(struct gendisk *disk)
- 		return;
- 	/* first major is 1, so we get >= 0x200 here */
- 	add_timer_randomness(disk->random, 0x100 + disk_devt(disk));
--	trace_add_disk_randomness(disk_devt(disk), POOL_ENTROPY_BITS());
-+	trace_add_disk_randomness(disk_devt(disk), input_pool.entropy_count);
- }
- EXPORT_SYMBOL_GPL(add_disk_randomness);
- #endif
-@@ -1209,7 +1153,7 @@ static void extract_entropy(void *buf, size_t nbytes)
- 	} block;
- 	size_t i;
- 
--	trace_extract_entropy(nbytes, POOL_ENTROPY_BITS());
-+	trace_extract_entropy(nbytes, input_pool.entropy_count);
- 
- 	for (i = 0; i < ARRAY_SIZE(block.rdrand); ++i) {
- 		if (!arch_get_random_long(&block.rdrand[i]))
-@@ -1558,9 +1502,9 @@ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
- {
- 	int ret;
- 
--	nbytes = min_t(size_t, nbytes, INT_MAX >> (POOL_ENTROPY_SHIFT + 3));
-+	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
- 	ret = extract_crng_user(buf, nbytes);
--	trace_urandom_read(8 * nbytes, 0, POOL_ENTROPY_BITS());
-+	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
- 	return ret;
- }
- 
-@@ -1599,7 +1543,7 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
- 	mask = 0;
- 	if (crng_ready())
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	if (POOL_ENTROPY_BITS() < random_write_wakeup_bits)
-+	if (input_pool.entropy_count < random_write_wakeup_bits)
- 		mask |= EPOLLOUT | EPOLLWRNORM;
- 	return mask;
- }
-@@ -1654,8 +1598,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 	switch (cmd) {
- 	case RNDGETENTCNT:
- 		/* inherently racy, no point locking */
--		ent_count = POOL_ENTROPY_BITS();
--		if (put_user(ent_count, p))
-+		if (put_user(input_pool.entropy_count, p))
- 			return -EFAULT;
- 		return 0;
- 	case RNDADDTOENTCNT:
-@@ -1806,23 +1749,6 @@ static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
- 	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
- }
- 
--/*
-- * Return entropy available scaled to integral bits
-- */
--static int proc_do_entropy(struct ctl_table *table, int write, void *buffer,
--			   size_t *lenp, loff_t *ppos)
--{
--	struct ctl_table fake_table;
--	int entropy_count;
--
--	entropy_count = *(int *)table->data >> POOL_ENTROPY_SHIFT;
--
--	fake_table.data = &entropy_count;
--	fake_table.maxlen = sizeof(entropy_count);
--
--	return proc_dointvec(&fake_table, write, buffer, lenp, ppos);
--}
--
- static int sysctl_poolsize = POOL_BITS;
- extern struct ctl_table random_table[];
- struct ctl_table random_table[] = {
-@@ -1835,10 +1761,10 @@ struct ctl_table random_table[] = {
- 	},
- 	{
- 		.procname	= "entropy_avail",
-+		.data		= &input_pool.entropy_count,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0444,
--		.proc_handler	= proc_do_entropy,
--		.data		= &input_pool.entropy_count,
-+		.proc_handler	= proc_dointvec,
- 	},
- 	{
- 		.procname	= "write_wakeup_threshold",
-@@ -2034,7 +1960,7 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
- 	 */
- 	wait_event_interruptible_timeout(random_write_wait,
- 			!system_wq || kthread_should_stop() ||
--			POOL_ENTROPY_BITS() <= random_write_wakeup_bits,
-+			input_pool.entropy_count <= random_write_wakeup_bits,
- 			CRNG_RESEED_INTERVAL);
- 	mix_pool_bytes(buffer, count);
- 	credit_entropy_bits(entropy);
--- 
-2.35.0
+BTRFS info (device loop0): disk space caching is enabled
+BTRFS info (device loop0): has skinny extents
+BTRFS info (device loop0): enabling ssd optimizations
+general protection fault, probably for non-canonical address 0xdffffc000000002f: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000178-0x000000000000017f]
+CPU: 0 PID: 3586 Comm: syz-executor095 Not tainted 5.17.0-rc2-next-20220203-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:blk_throtl_bio block/blk-throttle.h:175 [inline]
+RIP: 0010:submit_bio_checks+0x7c0/0x1bf0 block/blk-core.c:765
+Code: 08 3c 03 0f 8e 4a 11 00 00 48 b8 00 00 00 00 00 fc ff df 44 8b 6d 10 41 83 e5 01 4a 8d bc 2b 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 09 11 00 00
+RSP: 0018:ffffc9000293f278 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff83d5d9de RDI: 000000000000017d
+RBP: ffff888014fbd300 R08: ffffffff8a044f00 R09: 0000000000000000
+R10: ffffffff83d5d9d0 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000fffffffe R15: ffff88801a2be93c
+FS:  0000555555975300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9789f79668 CR3: 00000000145d1000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __submit_bio+0xaf/0x360 block/blk-core.c:802
+ __submit_bio_noacct_mq block/blk-core.c:881 [inline]
+ submit_bio_noacct block/blk-core.c:907 [inline]
+ submit_bio_noacct+0x6c9/0x8a0 block/blk-core.c:896
+ submit_bio block/blk-core.c:968 [inline]
+ submit_bio+0x1ea/0x430 block/blk-core.c:926
+ write_dev_flush fs/btrfs/disk-io.c:4243 [inline]
+ barrier_all_devices fs/btrfs/disk-io.c:4293 [inline]
+ write_all_supers+0x3038/0x4440 fs/btrfs/disk-io.c:4388
+ btrfs_commit_transaction+0x1be3/0x3180 fs/btrfs/transaction.c:2362
+ btrfs_commit_super+0xc1/0x100 fs/btrfs/disk-io.c:4562
+ close_ctree+0x314/0xccc fs/btrfs/disk-io.c:4671
+ btrfs_fill_super fs/btrfs/super.c:1400 [inline]
+ btrfs_mount_root.cold+0xb1/0x162 fs/btrfs/super.c:1744
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ fc_mount fs/namespace.c:1016 [inline]
+ vfs_kern_mount.part.0+0xd3/0x170 fs/namespace.c:1046
+ vfs_kern_mount+0x3c/0x60 fs/namespace.c:1033
+ btrfs_mount+0x234/0xa60 fs/btrfs/super.c:1804
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3012 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3342
+ do_mount fs/namespace.c:3355 [inline]
+ __do_sys_mount fs/namespace.c:3563 [inline]
+ __se_sys_mount fs/namespace.c:3540 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3540
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7ff53f71fd8a
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeaf8661f8 EFLAGS: 00000282 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffeaf866250 RCX: 00007ff53f71fd8a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007ffeaf866210
+RBP: 00007ffeaf866210 R08: 00007ffeaf866250 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000282 R12: 0000000020000f50
+R13: 0000000000000003 R14: 0000000000000004 R15: 000000000000008e
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:blk_throtl_bio block/blk-throttle.h:175 [inline]
+RIP: 0010:submit_bio_checks+0x7c0/0x1bf0 block/blk-core.c:765
+Code: 08 3c 03 0f 8e 4a 11 00 00 48 b8 00 00 00 00 00 fc ff df 44 8b 6d 10 41 83 e5 01 4a 8d bc 2b 7c 01 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 09 11 00 00
+RSP: 0018:ffffc9000293f278 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 000000000000002f RSI: ffffffff83d5d9de RDI: 000000000000017d
+RBP: ffff888014fbd300 R08: ffffffff8a044f00 R09: 0000000000000000
+R10: ffffffff83d5d9d0 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000001 R14: 00000000fffffffe R15: ffff88801a2be93c
+FS:  0000555555975300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fab1d1bfe28 CR3: 00000000145d1000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	08 3c 03             	or     %bh,(%rbx,%rax,1)
+   3:	0f 8e 4a 11 00 00    	jle    0x1153
+   9:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  10:	fc ff df
+  13:	44 8b 6d 10          	mov    0x10(%rbp),%r13d
+  17:	41 83 e5 01          	and    $0x1,%r13d
+  1b:	4a 8d bc 2b 7c 01 00 	lea    0x17c(%rbx,%r13,1),%rdi
+  22:	00
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 09 11 00 00    	jne    0x1149
 

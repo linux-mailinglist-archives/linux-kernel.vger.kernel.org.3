@@ -2,75 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE524A8A93
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589C34A8A94
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352958AbiBCRrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S1353063AbiBCRre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234988AbiBCRrM (ORCPT
+        with ESMTP id S1353051AbiBCRra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:47:12 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBA7C061714;
-        Thu,  3 Feb 2022 09:47:12 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id 9so4251976iou.2;
-        Thu, 03 Feb 2022 09:47:12 -0800 (PST)
+        Thu, 3 Feb 2022 12:47:30 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A020BC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:47:29 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id a13so6484602wrh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:47:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OdOUOSrNjs8WGrwM3cNkf3QDO2RSIWw0of1a994x9is=;
-        b=qUet28M/qXwcV735iKonPeQ+jqwhVlbPrZ5v9ERd6dwm84VFOR8zYyWA97AbVMMPpk
-         mdNSsJygXfKzrKCP78dj12yoxV745szFny0DHcntoUkwt943/a7cO5dorUahC/6IJ00/
-         ozJYiM3vgpSfxlYM/OlXUbNnO+TbLiwEhq9atmoz8mPx/dFEuC7imBFdF93rzQ2iavnc
-         Zb8ehMoGhPEzYOD10JM9BHrsRaoX0IBGcMMlLaUBs6P50tFW8STe4WeFavBqkIoahEYh
-         rNUldx7DrdAwacU7fFK/lB/bGzTvCGaywBPCTkO4Uiu5e0hOd+XFUoZxrZsTLX3igbPw
-         8hHg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=znrMKNBSHwt+8IF1HzGLf7jCvuakzuIz97mrn0VfQe4=;
+        b=JKxxG0M/WmTjYUFgUOM0/taTapCtvV5FzO6Rv1QN+oZhkFb4tAutRK2wDWZbUlMRxq
+         F7QK4ZjqnR4SQ2BWzbfM4XhLvTkCNiW8RiGXG1O0J6y4MOTV8EI9kXXHeG1TUR72+1vY
+         8b4JetAjwbbCgcwNo0RAZlstnSp01CopodmD3Uo4uH+EOD8m36EMBjDC4oALOBkqiYAR
+         vKgRUZUqXz4PlsCowoYfB6x9UvIfxFN3hL6g9m0UAf6lW8zG/NzBhbX1l2AnAOZDvEKv
+         qWnGzIcYL5jy1lZ7AyjNVRGGTFKM3EPMDmLnaHfP73xfOj4qV70IY7B5RWVTaVIWMG3G
+         m/Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OdOUOSrNjs8WGrwM3cNkf3QDO2RSIWw0of1a994x9is=;
-        b=kx2t0gv3+SVPXUoIkYm8DJAliV7PDlIr+yt2yBcnXcISxbYYrOem524h/xFEoLXs4P
-         3jT04p/ktEAYp9SVEpMZKfoi8jAmXo+dGmLk+P6QQViyeXyFUx45o9TLJtj8Dc+57ks1
-         n29nQtY1XROqniVa5mTYtL8jtDOl14qmbzVk+wIRsbnB8IV/Lop1z0cr7AtfBYaoBS1a
-         sgSWY0kgDvbEFKS7/Ip08u1vb5PpgJuK7XLeKJ8y6/RAQfcT4f/rPodiWjPbdGJM467R
-         Uq/hyodjMHE/WQou7ryMcio+PWWL2r2L0bmYW6BVHavYKybSoO4IwU+OW+Pp9or2/aCx
-         gP8A==
-X-Gm-Message-State: AOAM532hqXW00q1c0JI+eZDtiU98L2VPosYFa8IkwxCGDR8w+49EHZkX
-        SIIqlY4mGaQBb0eXXm0AkWampNLXkiKBLU7tj6YlA4ff
-X-Google-Smtp-Source: ABdhPJx52ZDGvyoTS5OSrCU01ffJy15/Go+Qu53BiKESGtTam0tj+EOKusrFAbEcqE/fXnAA6wgsovfQDjukEOXBLsk=
-X-Received: by 2002:a5d:941a:: with SMTP id v26mr18767908ion.64.1643910432327;
- Thu, 03 Feb 2022 09:47:12 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=znrMKNBSHwt+8IF1HzGLf7jCvuakzuIz97mrn0VfQe4=;
+        b=bxN0EQFZ47uLw0xCCpb8iwnGoPi3K+CckL9v7j/By/EylAExRGGksBfT7onoxiSwr2
+         JkwBMxTMMKtNbk4JRgE+6TGyT2wBrHJPABeJRGswZv02kssKRqCdttwkPZWbkGUCdBxx
+         nnCW109xTEHqCN0DALmLBw8VKNDPjAvUBi5u5cl//6oT38dkE213oAY7BZ2xPhpNsbEt
+         rjeCbPGXYlBOO8nL/kMWTqx421yz6WK+sW/ts395oKwePRsENZKCdjbYP65deMEUTuv+
+         N482IElygRrCWkVEZhLLoVYk4mLheNSuWH0MVv/LBar/b+9QRvC4b3WRahsYxKUlnUvq
+         h4vg==
+X-Gm-Message-State: AOAM533CZGBFRqGA3CGmjEBq94afKoUZnpUuQU0z31AXtL52zgJahMGl
+        dRll4cinUrXJ/5g6d4gc69bLxA==
+X-Google-Smtp-Source: ABdhPJxaMocHiPYFyIi2qLgsf/YM7iw1VmTOkuhEQYkZ/daIxL0KzWIbd+foVuT9R5jkU86H+UdFAQ==
+X-Received: by 2002:adf:dcc9:: with SMTP id x9mr29421769wrm.591.1643910448288;
+        Thu, 03 Feb 2022 09:47:28 -0800 (PST)
+Received: from ?IPv6:2a02:6b6d:f804:0:28c2:5854:c832:e580? ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
+        by smtp.gmail.com with ESMTPSA id u7sm7794525wml.7.2022.02.03.09.47.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 09:47:27 -0800 (PST)
+Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        axboe@kernel.dk, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203151153.574032-1-usama.arif@bytedance.com>
+ <20220203151153.574032-2-usama.arif@bytedance.com>
+ <f8ff62bf-4435-5da3-949a-fd337a9dfaf7@gmail.com>
+From:   Usama Arif <usama.arif@bytedance.com>
+Message-ID: <5df97fbf-cea5-c740-ae62-d75cb9390a0d@bytedance.com>
+Date:   Thu, 3 Feb 2022 17:47:27 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220203173307.1033257-1-keescook@chromium.org>
-In-Reply-To: <20220203173307.1033257-1-keescook@chromium.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Feb 2022 18:47:01 +0100
-Message-ID: <CANiq72mnF5qxfHGoDmvueMY7n2us9ZtA-u3igCJ+QjcbfKMP=g@mail.gmail.com>
-Subject: Re: [PATCH v6 0/4] fortify: Add Clang support
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        George Burgess IV <gbiv@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f8ff62bf-4435-5da3-949a-fd337a9dfaf7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 6:33 PM Kees Cook <keescook@chromium.org> wrote:
->
-> This has been updated from feedback on the v5 series. Builds correctly with Clang 12.0.1
-> too now. :)
 
-Looks fine to me! Thanks for the changes. I assume you are taking these, so:
 
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+On 03/02/2022 15:48, Pavel Begunkov wrote:
+> On 2/3/22 15:11, Usama Arif wrote:
+>> This is done by creating a new RCU data structure (io_ev_fd) as part of
+>> io_ring_ctx that holds the eventfd_ctx.
+>>
+>> The function io_eventfd_signal is executed under rcu_read_lock with a
+>> single rcu_dereference to io_ev_fd so that if another thread unregisters
+>> the eventfd while io_eventfd_signal is still being executed, the
+>> eventfd_signal for which io_eventfd_signal was called completes
+>> successfully.
+>>
+>> The process of registering/unregistering eventfd is done under a lock
+>> so multiple threads don't enter a race condition while
+>> registering/unregistering eventfd.
+>>
+>> With the above approach ring quiesce can be avoided which is much more
+>> expensive then using RCU lock. On the system tested, io_uring_reigster 
+>> with
+>> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 
+>> 15ms
+>> before with ring quiesce.
+>>
+>> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+>> ---
+>>   fs/io_uring.c | 103 +++++++++++++++++++++++++++++++++++++++-----------
+>>   1 file changed, 80 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/fs/io_uring.c b/fs/io_uring.c
+>> index 2e04f718319d..f07cfbb387a6 100644
+>> --- a/fs/io_uring.c
+>> +++ b/fs/io_uring.c
+>> @@ -326,6 +326,12 @@ struct io_submit_state {
+>>       struct blk_plug        plug;
+>>   };
+> 
+>> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
+>> +static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx, 
+>> struct io_ev_fd *ev_fd)
+>>   {
+>> -    if (likely(!ctx->cq_ev_fd))
+>> +    if (likely(!ev_fd))
+>>           return false;
+>>       if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+>>           return false;
+>>       return !ctx->eventfd_async || io_wq_current_is_worker();
+>>   }
+>> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+>> +{
+>> +    struct io_ev_fd *ev_fd;
+>> +
+>> +    rcu_read_lock();
+> 
+> Please always think about the fast path, which is not set eventfd.
+> We don't want extra overhead here.
+> 
 
-Cheers,
-Miguel
+I guess this should be ok now from v3?
+
+Thanks,
+Usama
+> if (ctx->ev_fd) {
+>      rcu_read_lock();
+>          ev_fd = rcu_deref(...);
+>          ...
+>          rcu_read_unlock();
+> }
+> 

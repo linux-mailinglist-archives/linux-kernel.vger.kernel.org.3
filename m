@@ -2,141 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8734A8923
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FE14A892A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240440AbiBCQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S1352463AbiBCQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiBCQ4W (ORCPT
+        with ESMTP id S233754AbiBCQ7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:56:22 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902CFC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:56:21 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DFB55C0004;
-        Thu,  3 Feb 2022 16:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1643907379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W0jSBYJYNVVKk+rv6PFxNqt0J0d+Gm942h0iR17woVA=;
-        b=NgKC8vmwilXSNLQ/4Q+vBS+ywB596sC4eiVr2h3VOOkc1u13TPr1JZzOLcwUOK0w8/ihSL
-        XLp5e7XzXxQwgKwgCSUjoTCA2rZ3T0ssFSeFXQXfRW5pnp4VMzTOyOQUDTdjLtZCi7gVUV
-        RX7FAU/nSGOcQ+7v6W0plDXMGXtCU2X5A+wAHwqhbQuB1iCclhUrm9g/clkm17Ag6pV0Jz
-        dobw3W7CXiVXhxObkM8RlkA19lQ8duduJ1EKUwPcIsYNZgPGtfRhA6MWQ/uxjiOg7lV9an
-        MTpRE8uOVpzlXzL8ZI7MucW/d2TcoDSiBUXdhjyNDSYSvgypZ7OOYBJqb+t/UA==
-Date:   Thu, 3 Feb 2022 17:56:16 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <git@xilinx.com>,
-        David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Subject: Re: [RFC PATCH] mtd: tests: Fix eraseblock read speed
- miscalculation for lower partition sizes
-Message-ID: <20220203175616.14f85dc1@xps13>
-In-Reply-To: <20220203132434.25769-1-amit.kumar-mahapatra@xilinx.com>
-References: <20220203132434.25769-1-amit.kumar-mahapatra@xilinx.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 3 Feb 2022 11:59:00 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC071C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:59:00 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id d3so2603698ilr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hnNStLLfw2FHaWSpq9EzzqFXeWS4HqySix/xq3cDScY=;
+        b=4j1Iez5JQ1Zsf2GFZrvfuEys0VR/h8RdRwkREyilwcCkxUKp7HB0hPuvVlsqqMLqoX
+         zB5NOXdK1Ow5sov9DmbCt05U1OqnOQ+WLPNClqSbb0fEZck+bJYxq0Drp0oZjXIe9mw+
+         l/JBPjsfHZKn5biUnP/zrjJ2moSK4/k0TkACb2zIaoeb1tfYyOByrT7bdJzzgmlc4YcC
+         e0GCm1vNVQcUtTPTzc1lR2tirQIh/KX21Yl2evZLTqphzEvWHXruLM9jhhQiFI0phlhA
+         j01Ay2SXhYkZydTxWWq2F4MFS2mXGfWW505SENj/ZaTWhT63csc0Bnc0bP90luaangHj
+         7iHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hnNStLLfw2FHaWSpq9EzzqFXeWS4HqySix/xq3cDScY=;
+        b=dpyEo1LcIC+rNqnIuDZL78Ble/Sz1FE3/RDuL4fxl8YC3qFAL3Tm8WbVrfTGedvcbL
+         rlCKYIvHq8tzwxC59IEWZE5A1g8OvLgE/ew9zSxJ/Ovl0rNy7LFDVjTShJt8sQkeCSBl
+         XEPQiGKMBp+1uYh0ZxVzLbtg+YKDynosk2kmY/+swRgGAn+tZxRDHTuFmtKDrZF+Q7mN
+         G+YUj3yG7wAuINvoGvVjDrHvLCqimB8LztEhhkybLaxJEK/klICWaOY1P6bOFjewdjn5
+         v/RSS6TXEG0gA04A1CquEZPTZVhtlaSkjgFmHi9BSZX0MjGYVjjN0rePbkRlmrYBqrDg
+         USDw==
+X-Gm-Message-State: AOAM532v71Riw2Fa/tTj66dljWHsOTPOLq4mAvYulNeW8vQ4ngM17nDw
+        813LLSmVxZ3arN2iI2wL/Vbcuw==
+X-Google-Smtp-Source: ABdhPJzKmxT5Y5LoG8Sy1lHouAvCO5GCoizaJw7fx+OSIxC3Wbyl+G5aCiuv6pFMkg0S0CnrYdJg5A==
+X-Received: by 2002:a05:6e02:b46:: with SMTP id f6mr19730584ilu.235.1643907539828;
+        Thu, 03 Feb 2022 08:58:59 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id k11sm22816858iob.23.2022.02.03.08.58.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 08:58:59 -0800 (PST)
+Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203151153.574032-1-usama.arif@bytedance.com>
+ <20220203151153.574032-2-usama.arif@bytedance.com>
+ <87fca94e-3378-edbb-a545-a6ed8319a118@kernel.dk>
+ <62f59304-1a0e-1047-f474-94097cb8b13e@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <da09cb46-9d60-71a3-a758-46d082989bae@kernel.dk>
+Date:   Thu, 3 Feb 2022 09:58:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <62f59304-1a0e-1047-f474-94097cb8b13e@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Amit,
+On 2/3/22 9:49 AM, Usama Arif wrote:
+>> One thing that both mine and your version suffers from is if someone
+>> does an eventfd unregister, and then immediately does an eventfd
+>> register. If the rcu grace period hasn't passed, we'll get -EBUSY on
+>> trying to do that, when I think the right behavior there would be to
+>> wait for the grace period to pass.
+>>
+>> I do think we need to handle that gracefully, spurious -EBUSY is
+>> impossible for an application to deal with.
+> 
+> I don't think my version would suffer from this as its protected by 
+> locks? The mutex_unlock on ev_fd_lock in unregister happens only after 
+> the call_rcu. And the mutex is locked in io_eventfd_register at the 
+> start, so wouldnt get the -EBUSY if there is a register immediately 
+> after unregister?
 
-+Cc: David, who's maintaining the tools. Please keep him in the
-recipients list!
+The call_rcu() just registers it for getting the callback when the grace
+period has passed, it doesn't mean it's done by the time it returns.
+Hence there's definitely a window where you can enter
+io_uring_register() with the callback still being pending, and you'd get
+-EBUSY from that.
 
-amit.kumar-mahapatra@xilinx.com wrote on Thu, 3 Feb 2022 18:54:34 +0530:
+-- 
+Jens Axboe
 
-> While calculating speed during  mtd_speedtest, the time interval
-> (i.e., start - finish) is rounded off to the nearest milliseconds by
-> ignoring the fractional part. This leads to miscalculation of speed.
-> The miscalculation is more visible while running speed test on small
-> partition sizes(i.e., when partition size is equal to eraseblock size or
-> twice the eraseblock size) at higher spi frequencies.
->=20
-> For e.g., while calculating eraseblock read speed for a mtd partition with
-> size equal to the eraseblock size(i.e., 64KiB) the eraseblock read time
-> interval comes out to be 966490 nanosecond. This is then converted to
-> millisecond(i.e., 0.966 msec.). The integer part (i.e., 0 msec) of the
-> value is considered and the fractional part (i.e., 0.966) is ignored,for
-> calculating the eraseblock read speed. So the reported eraseblock read
-> speed is 0 KiB/s, which is incorrect.
->=20
-> There are two approaches to fix this issue.
->=20
-> First approach will be to keep the time interval in millisecond. and round
-> up the integer value, with this approach the 0.966msec time interval in t=
-he
-> above example will be rounded up to 1msec and this value is used for
-> calculating the speed. Downside of this approach is that the reported spe=
-ed
-> is still not accurate.
->=20
-> Second approach will be to convert the time interval to microseconds
-> instead of milliseconds, with this approach the 966490 nanosecond time
-> interval in the above example will be converted t0 966.490usec and this
-> value is used for calculating the speed. As compared to the current
-> implementation and the suggested First approach, this approach will report
-> a more accurate speed. Downside of this approach is that, in future if the
-> mtd size is too large then the u64 variable, that holds the number of
-> bytes, might overflow.
->=20
-> In this patch we have gone with the second approach as this reports a more
-> accurate speed. With this approach the eraseblock read speed in the above
-> example comes out to be 132505 KiB/s when the spi clock is configured at
-> 150Mhz.
->=20
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-> ---
-> BRANCH: mtd/next
-> ---
->  drivers/mtd/tests/speedtest.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/mtd/tests/speedtest.c b/drivers/mtd/tests/speedtest.c
-> index 93e76648f676..2b76e7750c68 100644
-> --- a/drivers/mtd/tests/speedtest.c
-> +++ b/drivers/mtd/tests/speedtest.c
-> @@ -161,13 +161,13 @@ static inline void stop_timing(void)
->  static long calc_speed(void)
->  {
->  	uint64_t k;
-> -	long ms;
-> +	long us;
-
-Should this be an explicit 64-bit value? And unsigned?
-unsigned long long int or uint64_t? I believe we are now 1000x closer
-to the 4GiB limit so we might need to enlarge this variable.
-
-> =20
-> -	ms =3D ktime_ms_delta(finish, start);
-> -	if (ms =3D=3D 0)
-> +	us =3D ktime_us_delta(finish, start);
-> +	if (us =3D=3D 0)
->  		return 0;
-> -	k =3D (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000;
-> -	do_div(k, ms);
-> +	k =3D (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000000;
-> +	do_div(k, us);
->  	return k;
->  }
-> =20
-
-Otherwise lgtm!
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-
-Thanks,
-Miqu=C3=A8l

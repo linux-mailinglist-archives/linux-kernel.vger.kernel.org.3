@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AFD4A7F84
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1FC4A7F86
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347075AbiBCGz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 01:55:58 -0500
-Received: from mga17.intel.com ([192.55.52.151]:36155 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231330AbiBCGz4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 01:55:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643871356; x=1675407356;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eyI2/R+yROaV0RHfck1nac7STRkahOPVD6wvBxM7ZBo=;
-  b=oGrMXImeBi3EAod0Wtgin+22lBhF04RBSn8Bbj4T+T0kHXTrJA+Od+99
-   89xRCh9Nv99uQToFrTgy/Fkvb2oVsEewpaelH3VX+JdWriRpU36qi9+WD
-   fEVLn+6BF7STGWZFDDXDWGY94I2vkNMu5dKqjySXgvLRtK6uOUfSwLLYR
-   Fc1dLB88Ff00evdvsoK0NDph3myj/9/DLS1ky+4jw/6o5fqM5inGpKReA
-   WgjtZ0zKAu8OhD2CmtwFEQz+lrOe2SRJg2nxgiObu3KwUlysxDKawpxL4
-   MAJNur1+mf4wtplkk3AItsIDPHxs2N9/297jRBgOjnKcrgPzu1qKdIpF9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="228740302"
-X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="228740302"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 22:55:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="523788602"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 02 Feb 2022 22:55:54 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFW25-000Vm1-Ma; Thu, 03 Feb 2022 06:55:53 +0000
-Date:   Thu, 3 Feb 2022 14:55:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mhiramat:kprobes/fprobe 7/10] arch/x86/kernel/rethook.c:14:23:
- warning: no previous prototype for function
- 'arch_rethook_trampoline_callback'
-Message-ID: <202202031451.vmQ3ciMx-lkp@intel.com>
+        id S1347967AbiBCG65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 01:58:57 -0500
+Received: from mail-eopbgr120071.outbound.protection.outlook.com ([40.107.12.71]:5280
+        "EHLO FRA01-PR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229550AbiBCG64 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 01:58:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W2ucP7DKUMu/P9CFwH6cl1/ZHfu8lqdtQBcTJCVqWLTdCEg/kiYM2sX4ciZQzb1J4Nzp9CLv0vSmPFasIJCibFIDUBtaJyIv4qLeSKYS67q5SlBlPFv1gZpeb0SG5zyEPuos4QLp0tumK6HY6m6wLdRloCcIvxl3d2qM0eGxqaz665XO2CVYCG67NOZ995VLuGdBaN4h8oMZxHuovxjyCr+XBEnjlyy5zxlhOA/po5BR1BdO7ziYPXwmPq0UA8mp8QkQm3SJsVW89WJM7oI/wYDksAwAvnPabVLshRpLcp1hOJS29YPzZBsKPbvPMsrDb4o/kfLXYR69BsTvEHLKgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A6MrWBQvLM0nclGedBbkKHr/ZmXT1xUaFjvlVlLhrz0=;
+ b=UZ+3WKQhQtA7YGhSVtSoGNh2Fz5PYC5gOwLxdb0wrLn+ArsgE0E/EJlb3dwR1n92rR3p2KLkY38nXb6VoKz08d2n7PZJEyFHsl2rjgVY3Uid2bIEsGM3MV0DQifOQ0nLsF7rIKiK8fGC0Y24gnjssTrSg2pzidHCk6FAxNQ54blklRAl28uo6eiZgKOO9UMp+1r+3zajsGxh9ezmvfwI+l0UHxT7+/mYE1TIbmQ7vcy7QEricau9osgQkSnxqNNcdk1itLEq7Ldp+IUrB+GNadO/CEUoc12SQ49KDzjzbClcqVUtG/hmNsLJfFRh7vTpB8aYEKBZcx/3s9oKjIgSCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB3474.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:26::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
+ 2022 06:58:54 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
+ 06:58:53 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 3/6] modules: Introduce data_layout
+Thread-Topic: [PATCH v3 3/6] modules: Introduce data_layout
+Thread-Index: AQHYFTHy2PWsHrGmbE6uWGTz7rHarqyA9H0AgAB4IYA=
+Date:   Thu, 3 Feb 2022 06:58:53 +0000
+Message-ID: <afa2c3be-3c08-5c0b-1cdf-2bb843498cbb@csgroup.eu>
+References: <cover.1643475473.git.christophe.leroy@csgroup.eu>
+ <230bfd896f24ca7a9281783aaa8c0ebfebd0bc7e.1643475473.git.christophe.leroy@csgroup.eu>
+ <YfsYaDyqrFyVypkv@bombadil.infradead.org>
+In-Reply-To: <YfsYaDyqrFyVypkv@bombadil.infradead.org>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3f39808b-33e8-4148-c773-08d9e6e2a416
+x-ms-traffictypediagnostic: MR1P264MB3474:EE_
+x-microsoft-antispam-prvs: <MR1P264MB34746923BC13A5421A19921CED289@MR1P264MB3474.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:1079;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T+xr+TGmpepQqunVFT6p5mql5fdjsJ1ZThk82gO2vRoLO46NAzm5xGykd5A65QqOh8qsbD04igzSHGq94WQogaiiEBeb1JsoU0nWQTWXDHeyNErhpYKqdfcaEZatU3ywwqOJBaibshTtZ1KpDP60wIiP99MrrLk73jA7RxgCvFPHaAfNHHBJVuTN92txEqkK8SSVoXjwZkMTlCsnqWV7781/mL3miaDkNWiS3FK9GDOvBvWVrXnTPvtRt2jnf+NHx1hupP/EFLxnv+Iciwu87Aa+0/o6o6ADu4cK/OK1QBn1Kk8aah7JLJM482/t8J86XH2nUxu6SobQz1StAmqW+Ms+PyB0b6U0e139bdUcDRbPH1ef356B47fSEKECinUCAqy4xswFsojFIXNdBECgbB8AIjgBQPIXgUuE28jRjqLU7Uj7OTcLAomztWIictlFH44+lkKU0czaF5B5/UwkgGfq03zAuOh6WSan4Z7id8J0hAuenm4WDXQa/OqwgNVR1+blzsAgY+bnAAJDstxdaYYMK7QK7Yd8nZ6SX/W3xD5X8bbVMkm8vXEwmqZoHDe5m0gEOtuqr0+szikZN4pDh+7+S5dKsdoib7ZTUeQPZB9bo+Mzmb/MOEugXAWinDoLCe5vwi0gvkEzzzxwP63qVRSqed5hRoTSbakeudIDWsrP+Ye/LLVf6t5J0JW22dSAEN7YpgnlEaRx8jCYw7y44KXIlcLlR/tBs0pQ77hfASzHej0PzxQ7LlPFkNiuxnvAeZ4R+jYScMtYZouhU2haTw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(91956017)(6506007)(186003)(8676002)(66476007)(66556008)(66946007)(66446008)(64756008)(8936002)(76116006)(86362001)(6512007)(4326008)(26005)(31696002)(44832011)(5660300002)(2906002)(122000001)(36756003)(66574015)(2616005)(508600001)(54906003)(316002)(6916009)(38070700005)(38100700002)(6486002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWw0VkdMS0x0OFBmM2hmVFg5RjZLbTJuUW1Hb2RVMjZ5Q2VPbnMzMlNKOGdI?=
+ =?utf-8?B?T0pnazh4eDhQakRmUzY3Ly94RW9vRzAzTVVKL1ZHTWpFSXRhWUdmZVlqVzlw?=
+ =?utf-8?B?N0tsWnpiM3JiTWxoYWZJdHB6eFZLcmhER1VQT0xPVkJ4UjJ2VFA0ZHIxYnVk?=
+ =?utf-8?B?Tmx0eEdqVGdGUVFSZElac242UjdGZjF1aFZrbmxkRVRNK1Z6VzlWRkd6dURC?=
+ =?utf-8?B?OHk5QmQ2cEVRN0hianl1MTZDa0ROQktxb01mRVQ1elBaMlJzd1FuSGFJUSsy?=
+ =?utf-8?B?ck8xcHZuVFRXUHprdXd1aDNhVCtNUEdiSmpzZ3VJeS9qeGozeW9HNW52ajZW?=
+ =?utf-8?B?ZVdDd3doa3huZ29nOHc3VnVaUmJ1QkhjV2c3dUFZcFNpYXFObXRpK0cwQkZQ?=
+ =?utf-8?B?UkdxcjdiNWFqUFhLSTRqRG95bEFMUnZKeGJPL1k2eTJGOUIrU1dpTEdaS2xj?=
+ =?utf-8?B?em0wSXJBcThNL2RpdmtKbkZBU0VoMStGWHF0d0xFYzFFb0k3SFRBUkthdzdm?=
+ =?utf-8?B?THRxY3F3ZVZrRzhMbkNBc3lhTzcvUTY3MDZyczhhVkN3eVhpRkhZeVMxb3Zu?=
+ =?utf-8?B?dDNHZ2sxY3FHUWNrZHlIaVJPaW5vcUpZcmxkTWhiUFZpMS9ZNzExejRTcitP?=
+ =?utf-8?B?WEM2T1JFbGw0WWlZbmswMlhGOWNTSG1nc1JqUy9NYy9MSG9iR1VYcVYxTXpE?=
+ =?utf-8?B?WjVYVlc2SzdiZjRkU0kwcndpN0ljUG5PQ2xNYmhUR2hHVnBDR1pENXphRlcx?=
+ =?utf-8?B?djU2RDhLRjhXZmNUQjlYOTZYazVGYkM0aW9SRWNqcjFNeTBFb2VnZHQ2QVlQ?=
+ =?utf-8?B?T3d3RUdjczlmSkRQcFZubWpmakhZN0lPOUVySTc3Ukp3VFBFcGh5Ly8zVncw?=
+ =?utf-8?B?QWxMait5cGROckNIQVhQcG51WGxmenJCdHpnQ3NveVJlRWh6T1lWTVl6YmVy?=
+ =?utf-8?B?bGhqbHdQQm43aFhnbFZrUmtQRVdoRThyMHg2WG9UTG9zcTVWVjYvMVJBSUxK?=
+ =?utf-8?B?Q1hYMTkrL2ZnYmlQanJ5TTdPZDRKMy92WWJNTXdnZFIxUGRmU01FTEpudjRJ?=
+ =?utf-8?B?eU80eTdUQjJBbnpBaGlURE55Y3lBS1JxT2l3R0NZSm84dFV3MFQ3V0FmNE1x?=
+ =?utf-8?B?b1YrbndacHpJRnZHdVlLSGlYdWJ4ZnBVSmtxRG9aYW5yWmV5alhlTm1Zd1hV?=
+ =?utf-8?B?WFpGVWFhM0JTZHpTRUNqZEtJaHM5bzloR1lrcHA4UEg2TzJhK3pLcFpOM2RX?=
+ =?utf-8?B?b1EyV0NQcEdkbFNDSzE4d3g2UEVHRjB4eVZ1cTh5cGl4azJvOE5vdnpZRGZo?=
+ =?utf-8?B?RHljM3VxOFpkNk9HZFlaaEpSVXFkbGYxSGxXUzUzT1lxYlBCam04UVNLaUkz?=
+ =?utf-8?B?d0g4Nm40UFJDTTI2bXZUNzZSNzk3UW8vbWc5VG11VVJJRHNqbk9saTE2Yktx?=
+ =?utf-8?B?UHpVUHlvN3FseGg3SVZlZldweGN6SzZ6MXprUHh5ay9zSE56N2VSMUMyUHR6?=
+ =?utf-8?B?aXBmaHljT0pDczU1WFk5a0tiZmlzSGxOd3lRdHpvUUFOcDZ0aGFMN0JtRFlV?=
+ =?utf-8?B?emgwZC9IRmMzblZsWWZNYzJQSGNyWmR2bUtpR2FZVVYzRXZkVS9aMFU0ZXZu?=
+ =?utf-8?B?WS93RmRodUt3VkpHVW0ra1orUVRFVmkxaHNkZldNM1JtR1hqN2w5RUVWR05v?=
+ =?utf-8?B?SVl0aWp5Y2NJRHFQcExRTldOUmwxa2dtajNFWlMzSVFXSE1Kek11b08yb1BO?=
+ =?utf-8?B?TnBxWVRIQ2VvSjQ4SldrNGhnbGZ2YWRzOUVDZDZLTnVQeTY3NU5ieVoyekxP?=
+ =?utf-8?B?di9aaFlxOUtkTVZVY1FUZmVlNVBWMGdmc1BEaVFCbG9XcTd3clc1ZGJ0R3Yv?=
+ =?utf-8?B?NXdudEQrRFhUdHNMc2c1aXJEY3VOeldoT1N4Nkd0anJ6TG5pUTVPekxHaVk5?=
+ =?utf-8?B?MkNwSThSdFhHSnpSUmVCa1haKytGaHBpODV5OStjWmszWG54Y2Jhcnd5Ui8r?=
+ =?utf-8?B?UEExYitsQUhEZHowemRpdUU2bzdCOTB1KzVEQUtwU2Q0eHdTSUdLZFNWdlF1?=
+ =?utf-8?B?NC8vMmx5Vnk4elA5bXgyRG92elA4dTNRNlAwNzBYRkNBOVlCeHRneXJGMlJ3?=
+ =?utf-8?B?bG1KMW5HaG1UQzJJTjlxc2tVTXlrUFRtZXA5YkdLM01wVHlmeGJEc25lZ0pM?=
+ =?utf-8?B?d1V4anhwWkYxbDF5MjdsejBNYTNPanhXZVNHN01ocU9mTmNvMis5WEVXVXpS?=
+ =?utf-8?Q?Tx2TrDah2Rz7cK6b5X7nR66rQh125eG3arYRRDqrq0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9C5A3E745B372F41AF387F73BC4FF018@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f39808b-33e8-4148-c773-08d9e6e2a416
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2022 06:58:53.8338
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: u+7ncscTHXjjIRs912cMjHJ5lj6i0ZLpVPWtbg48N22jdhcgXrIYxnhEMJsmGczacAL2J19FYvabTodjw5nH/Wl+uwzB3N5iElvkBgaOb0U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB3474
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
-head:   1f4f90c86628a76e7eac24ab732db49fc3a961d6
-commit: 806149decce8b0870024d2676b46bb3d295c38b3 [7/10] fprobe: Add exit_handler support
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202031451.vmQ3ciMx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/commit/?id=806149decce8b0870024d2676b46bb3d295c38b3
-        git remote add mhiramat https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git
-        git fetch --no-tags mhiramat kprobes/fprobe
-        git checkout 806149decce8b0870024d2676b46bb3d295c38b3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kernel/rethook.c:14:23: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-                         ^
-   arch/x86/kernel/rethook.c:14:18: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-                    ^
-                    static 
-   1 warning generated.
-
-
-vim +/arch_rethook_trampoline_callback +14 arch/x86/kernel/rethook.c
-
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  10  
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  11  /*
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  12   * Called from arch_rethook_trampoline
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  13   */
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26 @14  __used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  15  {
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  16  	unsigned long *frame_pointer;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  17  
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  18  	/* fixup registers */
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  19  	regs->cs = __KERNEL_CS;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  20  #ifdef CONFIG_X86_32
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  21  	regs->gs = 0;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  22  #endif
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  23  	regs->ip = (unsigned long)&arch_rethook_trampoline;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  24  	regs->orig_ax = ~0UL;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  25  	regs->sp += sizeof(long);
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  26  	frame_pointer = &regs->sp + 1;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  27  
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  28  	/*
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  29  	 * The return address at 'frame_pointer' is recovered by the
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  30  	 * arch_rethook_fixup_return() which called from this
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  31  	 * rethook_trampoline_handler().
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  32  	 */
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  33  	rethook_trampoline_handler(regs, (unsigned long)frame_pointer);
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  34  
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  35  	/*
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  36  	 * Copy FLAGS to 'pt_regs::sp' so that arch_rethook_trapmoline()
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  37  	 * can do RET right after POPF.
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  38  	 */
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  39  	regs->sp = regs->flags;
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  40  }
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  41  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-9de3b995c35eb6 Masami Hiramatsu 2022-01-26  42  
-
-:::::: The code at line 14 was first introduced by commit
-:::::: 9de3b995c35eb68273cf462f30663340ee47f8d6 rethook: x86: Add rethook x86 implementation
-
-:::::: TO: Masami Hiramatsu <mhiramat@kernel.org>
-:::::: CC: Masami Hiramatsu <mhiramat@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+DQoNCkxlIDAzLzAyLzIwMjIgw6AgMDA6NDgsIEx1aXMgQ2hhbWJlcmxhaW4gYSDDqWNyaXTCoDoN
+Cj4gT24gU2F0LCBKYW4gMjksIDIwMjIgYXQgMDU6MDI6MDdQTSArMDAwMCwgQ2hyaXN0b3BoZSBM
+ZXJveSB3cm90ZToNCj4+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlLmMgYi9rZXJuZWwvbW9k
+dWxlLmMNCj4+IGluZGV4IDE2M2UzMmUzOTA2NC4uMTFmNTFlMTdmYjlmIDEwMDY0NA0KPj4gLS0t
+IGEva2VybmVsL21vZHVsZS5jDQo+PiArKysgYi9rZXJuZWwvbW9kdWxlLmMNCj4+IEBAIC04MSw2
+ICs4MSw4IEBADQo+PiAgIC8qIElmIHRoaXMgaXMgc2V0LCB0aGUgc2VjdGlvbiBiZWxvbmdzIGlu
+IHRoZSBpbml0IHBhcnQgb2YgdGhlIG1vZHVsZSAqLw0KPj4gICAjZGVmaW5lIElOSVRfT0ZGU0VU
+X01BU0sgKDFVTCA8PCAoQklUU19QRVJfTE9ORy0xKSkNCj4+ICAgDQo+PiArI2RlZmluZQlkYXRh
+X2xheW91dCBjb3JlX2xheW91dA0KPj4gKw0KPj4gICAvKg0KPj4gICAgKiBNdXRleCBwcm90ZWN0
+czoNCj4+ICAgICogMSkgTGlzdCBvZiBtb2R1bGVzIChhbHNvIHNhZmVseSByZWFkYWJsZSB3aXRo
+IHByZWVtcHRfZGlzYWJsZSksDQo+PiBAQCAtMjQ1MSw3ICsyNDU0LDEwIEBAIHN0YXRpYyB2b2lk
+IGxheW91dF9zZWN0aW9ucyhzdHJ1Y3QgbW9kdWxlICptb2QsIHN0cnVjdCBsb2FkX2luZm8gKmlu
+Zm8pDQo+PiAgIAkJCSAgICB8fCBzLT5zaF9lbnRzaXplICE9IH4wVUwNCj4+ICAgCQkJICAgIHx8
+IG1vZHVsZV9pbml0X2xheW91dF9zZWN0aW9uKHNuYW1lKSkNCj4+ICAgCQkJCWNvbnRpbnVlOw0K
+Pj4gLQkJCXMtPnNoX2VudHNpemUgPSBnZXRfb2Zmc2V0KG1vZCwgJm1vZC0+Y29yZV9sYXlvdXQu
+c2l6ZSwgcywgaSk7DQo+PiArCQkJaWYgKG0pDQo+PiArCQkJCXMtPnNoX2VudHNpemUgPSBnZXRf
+b2Zmc2V0KG1vZCwgJm1vZC0+ZGF0YV9sYXlvdXQuc2l6ZSwgcywgaSk7DQo+PiArCQkJZWxzZQ0K
+Pj4gKwkJCQlzLT5zaF9lbnRzaXplID0gZ2V0X29mZnNldChtb2QsICZtb2QtPmNvcmVfbGF5b3V0
+LnNpemUsIHMsIGkpOw0KPj4gICAJCQlwcl9kZWJ1ZygiXHQlc1xuIiwgc25hbWUpOw0KPiANCj4g
+SHVoIHdoeSBpcyB0aGlzIGJyYW5jaGluZyBoZXJlLCBnaXZlbiB5b3UganVzdCB1c2VkIG1vZC0+
+ZGF0YV9sYXlvdXQgaW4NCj4gYWxsIG90aGVyIGFyZWFzPw0KDQpUaGUgbW9kdWxlIHRleHQgcmVt
+YWlucyBpbiBjb3JlX2xheW91dCwgc28gdGhlIHRleHQgc2VjdGlvbiBzdGlsbCBuZWVkcyANCmNv
+cmVfbGF5b3V0LiBJbiB0aGUgbWFza3NbXVtdIHRhYmxlLCBpdCBjb3JyZXNwb25kcyB0byB0aGUg
+Zmlyc3QgbGluZSwgDQp3aGljaCBoYXMgZmxhZyAgU0hGX0VYRUNJTlNUUi4gSW4gdGhlIGxvb3Ag
+dGhhdCdzIHdoZW4gJ20nIGlzIDAuDQoNCkluIHRoZSBmb2xsb3dpbmcgc3dpdGNoL2Nhc2UsIGNh
+c2UgMCBzdGlsbCB1c2VzIGNvcmVfbGF5b3V0Lg0KDQo+IA0KPj4gQEAgLTM0NjgsNiArMzQ3NCw4
+IEBAIHN0YXRpYyBpbnQgbW92ZV9tb2R1bGUoc3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9h
+ZF9pbmZvICppbmZvKQ0KPj4gICAJCWlmIChzaGRyLT5zaF9lbnRzaXplICYgSU5JVF9PRkZTRVRf
+TUFTSykNCj4+ICAgCQkJZGVzdCA9IG1vZC0+aW5pdF9sYXlvdXQuYmFzZQ0KPj4gICAJCQkJKyAo
+c2hkci0+c2hfZW50c2l6ZSAmIH5JTklUX09GRlNFVF9NQVNLKTsNCj4+ICsJCWVsc2UgaWYgKCEo
+c2hkci0+c2hfZmxhZ3MgJiBTSEZfRVhFQ0lOU1RSKSkNCj4+ICsJCQlkZXN0ID0gbW9kLT5kYXRh
+X2xheW91dC5iYXNlICsgc2hkci0+c2hfZW50c2l6ZTsNCj4+ICAgCQllbHNlDQo+PiAgIAkJCWRl
+c3QgPSBtb2QtPmNvcmVfbGF5b3V0LmJhc2UgKyBzaGRyLT5zaF9lbnRzaXplOw0KPj4gICANCj4g
+DQo+IExpa2V3aXNlIGhlcmUuDQoNClNhbWUgaGVyZSwgdGhlIHNlY3Rpb24gd2l0aCBmbGFnIFNI
+Rl9FWEVDSU5TVFIgaXMgYSB0ZXh0IHNlY3Rpb24sIGl0IA0Kc3RheXMgaW4gY29yZV9sYXlvdXQu
+DQoNCkNocmlzdG9waGU=

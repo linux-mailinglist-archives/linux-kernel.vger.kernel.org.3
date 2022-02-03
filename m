@@ -2,159 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD314A8B76
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD8E4A8B7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353413AbiBCSVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S1353044AbiBCSWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237251AbiBCSVc (ORCPT
+        with ESMTP id S233836AbiBCSWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:21:32 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC353C061714;
-        Thu,  3 Feb 2022 10:21:31 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id j23so7761042edp.5;
-        Thu, 03 Feb 2022 10:21:31 -0800 (PST)
+        Thu, 3 Feb 2022 13:22:52 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678AFC061714;
+        Thu,  3 Feb 2022 10:22:52 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id u6so7725370lfm.10;
+        Thu, 03 Feb 2022 10:22:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WR+RiPWCz8woMHz0rrpxrXp6fOQnDhJlz/ACklspUA4=;
-        b=GsoTadMTlBcpQlSz5sziqzSKSqRnBnonO1VY+c/FN0QTkXnZUIQsKGPLvGV6Kyaqxe
-         MCnJLORE7zcvwB+q19sV9NUAjsgltc7Sj38M4CdNF4/lms6OeEQm738yqUf9X2yZwX9r
-         FssMPt+GACqUF/vXWDgojDCO3d4LN0BwJ39rY7I3HG0kFcOtAZ8q7CvK4HCWN6zOzhmm
-         6BbV1ZXnlqekZnycnVHA9ZqXCw3YElng/QkqRMnDzvl/dwlH5JLJyHB0de6w5kIauX+K
-         Ajqfp6ISWB0gJe0LL/z6t2kD/KKW8MtgDQKYP+Vvohz/MNct9kUqHxbHHL9xlZyLFSCA
-         ApwQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bng1VAntY/a3MWNMO6+RyoYVA2d8DbBn++5DPIHqtuE=;
+        b=oUvg3YIN+C0100TFCoV/mVO86/Yq4luRNsxS6SFksfs2C5x06U7fRzh0nfJCu2979d
+         Yo6Cx8hO0BldiQfZQsUOR9xbBocmoaYRNuJ9rCM5YNkLNGFD+2E3uYMiNc8byQixijs7
+         DX0uCXEY8A0PRyMIkh9Bq/RBmLlu7w5e5TWv1m7x/G1uAC2iPFedObhXYVN54UCMOwVp
+         ZnrZFAoKsG/7Z/1GQU0uLo7o36gqNmMtbgsaGQ6LZuZSlPFW+QmLPWO3tZN1CbcvlW/Z
+         xKk4yx1pHU62LGb4FGzUkNQyTk2AeWo5DSYd49sDLdlJO4UhrzAlqxy+JRbc8LHxgS8M
+         pZow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WR+RiPWCz8woMHz0rrpxrXp6fOQnDhJlz/ACklspUA4=;
-        b=X+EjRpWEMKpohpBWsw86hgJlhRoWDLlfnP7y6hbnlk9XHBYWZkNLuEocG5RES8uSMw
-         XLsJRsGZMDC2wSFFgItko2DbwVM+lSV7kJM7y7Z9gu0duWTp7rx6mGNkhzdbSAO+yrNk
-         dyjjjaSgK0Gcn9ee7yO9X/Hu6CjHGSqg2wIkgHwBLBXB/ztpeVpNxfWQTkocP4qxMNin
-         dodyCuEKRAcyAviWq8Jm5nC2UzXm8TiqBgRPi8TL/+LLnlJBYMbhuZyqLM2KZIwS3uhH
-         wV1pJLjVLXCY1dv+5ozQ9sRBke/2aSGVIvX0kQnLBeC6PaKnZVUV+oEeTeJuv6Q6GctP
-         Mfng==
-X-Gm-Message-State: AOAM533fx5gdK8PssxfaWRASMm6+wBHwMDZkgoy7T3UD/bAE93gpcBdM
-        JpwItuRNxL54D00YCozlieo=
-X-Google-Smtp-Source: ABdhPJym+tFe9X+Y8nRB0U6ro0l2N3yaWajWA25OkoR8U25X3BfW2j5lNav6a5q8GkXbswG7qumztA==
-X-Received: by 2002:a50:ed16:: with SMTP id j22mr37212118eds.114.1643912490237;
-        Thu, 03 Feb 2022 10:21:30 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id gh14sm16957780ejb.38.2022.02.03.10.21.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 10:21:29 -0800 (PST)
-Date:   Thu, 3 Feb 2022 20:21:28 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 00/16] Add support for qca8k mdio rw in Ethernet
- packet
-Message-ID: <20220203182128.z6xflse7fezccvhx@skbuf>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <YfaZrsewBMhqr0Db@Ansuel-xps.localdomain>
- <a8244311-175d-79d3-d61b-c7bb99ffdfb7@gmail.com>
- <YfwX8YDDygBEsyo3@Ansuel-xps.localdomain>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bng1VAntY/a3MWNMO6+RyoYVA2d8DbBn++5DPIHqtuE=;
+        b=Mh3Xu1w77z8CAVhHAgpzOG5SPP5n/cdvMw5tiPLZL2zIg45u9KAJNbRCtQojxuYw23
+         w8/YCf7ZOnX4MZG8FuiOH6l3TLjBQ6pC36NPUg3kgv2iVhJ+Ry84Hb+tG5trRNse+74e
+         /QVxeqzQUiK5QVyncUEz7KitCAmjVwKUlWIbM0kzNeD5xMks8FzNF4CUUuh+OaRh6hxI
+         pH37AZx8NweQZuOppTxpIM7oEJG0Br/lEvajYqOSVhFzbZj/DLXulTqmmE0pFyEbSgSG
+         X0GZq6ksFGt1xq8UGeI7cksj9zhhCPTLWNr75sRffiD5hOjiVgxW4TFIpyDgWoZEqlTH
+         HI8g==
+X-Gm-Message-State: AOAM531XnA3+eWTMSfveJh0MMeHwCZxklTzn1rJQ/HQSD87jgExd2qgG
+        aJY+sLPyqPKrmKSpWITk/gg=
+X-Google-Smtp-Source: ABdhPJyV14em01gGXmQXgKKTGilU91Wd86iUbuo0lyi5ZsD93O/rCDbCKeIysAnznWdx7ZJ2Ek8c7A==
+X-Received: by 2002:ac2:4e08:: with SMTP id e8mr27847098lfr.266.1643912570622;
+        Thu, 03 Feb 2022 10:22:50 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id s16sm4319314lfp.197.2022.02.03.10.22.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:22:50 -0800 (PST)
+Message-ID: <d6d70e52-a984-d973-f3bb-f70f1a4ce95d@gmail.com>
+Date:   Thu, 3 Feb 2022 21:22:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfwX8YDDygBEsyo3@Ansuel-xps.localdomain>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v18 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1643729199-19161-1-git-send-email-akhilrajeev@nvidia.com>
+ <1643729199-19161-3-git-send-email-akhilrajeev@nvidia.com>
+ <3feaa359-31bb-bb07-75d7-2a39c837a7a2@gmail.com>
+ <DM5PR12MB18509939C17ABEB5EEA825FFC0289@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <DM5PR12MB18509939C17ABEB5EEA825FFC0289@DM5PR12MB1850.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 06:59:13PM +0100, Ansuel Smith wrote:
-> On Sun, Jan 30, 2022 at 09:07:16AM -0800, Florian Fainelli wrote:
-> > On 1/30/2022 5:59 AM, Ansuel Smith wrote:
-> > > Hi,
-> > > sorry for the delay in sending v8, it's ready but I'm far from home and
-> > > I still need to check some mdio improvement with pointer handling.
-> > > 
-> > > Anyway I have some concern aboutall the skb alloc.
-> > > I wonder if that part can be improved at the cost of some additional
-> > > space used.
-> > > 
-> > > The idea Is to use the cache stuff also for the eth skb (or duplicate
-> > > it?) And use something like build_skb and recycle the skb space
-> > > everytime...
-> > > This comes from the fact that packet size is ALWAYS the same and it
-> > > seems stupid to allocate and free it everytime. Considering we also
-> > > enforce a one way transaction (we send packet and we wait for response)
-> > > this makes the allocation process even more stupid.
-> > > 
-> > > So I wonder if we would have some perf improvement/less load by
-> > > declaring the mgmt eth space and build an skb that always use that
-> > > preallocate space and just modify data.
-> > > 
-> > > I would really love some feedback considering qca8k is also used in very
-> > > low spec ath79 device where we need to reduce the load in every way
-> > > possible. Also if anyone have more ideas on how to improve this to make
-> > > it less heavy cpu side, feel free to point it out even if it would
-> > > mean that my implemenation is complete sh*t.
-> > > 
-> > > (The use of caching the address would permit us to reduce the write to
-> > > this preallocated space even more or ideally to send the same skb)
-> > 
-> > I would say first things first: get this patch series included since it is
-> > very close from being suitable for inclusion in net-next. Then you can
-> > profile the I/O accesses over the management Ethernet frames and devise a
-> > strategy to optimize them to make as little CPU cycles intensive as
-> > possible.
-> >
-> 
-> Don't know if it's correct to continue this disccusion here.
-> 
-> > build_skb() is not exactly a magic bullet that will solve all performance
-> > problems, you still need the non-data portion of the skb to be allocated,
-> > and also keep in mind that you need tail room at the end of the data buffer
-> > in order for struct skb_shared_info to be written. This means that the
-> > hardware is not allowed to write at the end of the data buffer, or you must
-> > reduce the maximum RX length accordingly to prevent that. Your frames are
-> > small enough here this is unlikely to be an issue.
-> > 
-> 
-> I did some test with a build_skb() implemenation and I just discovered
-> that It wouldn't work... Problem of build_skb() is that the driver will
-> release the data and that's exactly what I want to skip (one allocated
-> memory space that is reused for every skb)
-> 
-> Wonder if it would be acceptable to allocate a skb when master became
-> operational and use always that.
-> When this preallocated skb has to be used, the required data is changed
-> and the users of the skb is increased so that it's not free. In theory
-> all the skb shared data and head should be the same as what changes of
-> the packet is just the data and nothing else.
-> It looks like an hack but that is the only way I found to skip the
-> skb_free when the packet is processed. (increasing the skb users)
->
-> > Since the MDIO layer does not really allow more than one outstanding
-> > transaction per MDIO device at a time, you might be just fine with just have
-> > a front and back skb set of buffers and alternating between these two.
-> 
-> Another way as you suggested would be have 2 buffer and use build_skb to
-> use build the sbk around the allocated buffer. But still my main concern
-> is if the use of manually increasing the skb user is accepted to skip
-> any skb free from happening.
-> 
-> Hope I'm not too annoying with these kind of question.
+03.02.2022 06:44, Akhil R пишет:
+>> But why do you need to pause at all here and can't use
+>> tegra_dma_stop_client() even if pause is supported?
+> The recommended method to terminate a transfer in
+> between is to pause the channel first and then disable it.
+> This is more graceful and stable for the hardware.
+> stop_client() is more abrupt, though it does the job.
 
-To my knowledge, when you call dev_queue_xmit(), the skb is no longer
-yours, end of story, it doesn't matter whether you increase the refcount
-on it or not. The DSA master may choose to do whatever it wishes with
-that buffer after its TX completion interrupt fires: it may not call
-napi_consume_skb() but directly recycle that buffer in its pool of RX
-buffers, as part of some weird buffer recycling scheme. So you'll think
-that the buffer is yours, but it isn't, because the driver hasn't
-returned it to the allocator, and your writes for the next packet may be
-concurrent with some RX DMA transactions. I don't have a mainline
-example to give you, but I've seen the pattern, and I don't think it's
-illegal (although of course, I stand to be corrected if necessary).
+If there is no real practical difference, then I'd use the common method
+only. This will make code cleaner and simpler a tad.

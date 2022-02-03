@@ -2,151 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C35A4A8518
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED894A851D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbiBCNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:21:13 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:46621 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229601AbiBCNVL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:21:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1643894470;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fgEqoVzvk+pCK5XKar6b4PrK5+z8/ItBRkwYJwPDhb0=;
-        b=h2a+p6iD3exwGCmS4pztUsN6cAlT5P8kUBxo8FpLBBcOzgGfoYFel/xae6yHgtXj3MXb+O
-        EXFQCR+g8PZYFSOAS3Nt0nUIYn+DIP6DjSWp8P37BKw2Sr5VxmbnuMyAWY/EJwvZMI+fT5
-        +ELbzMFF74Vju0EA24VpmUmlu1Gw00o=
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
- (mail-db8eur05lp2112.outbound.protection.outlook.com [104.47.17.112]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-34-8VvdXfsNMAaGJvqAp_82mw-2; Thu, 03 Feb 2022 14:21:09 +0100
-X-MC-Unique: 8VvdXfsNMAaGJvqAp_82mw-2
+        id S1350772AbiBCNVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:21:33 -0500
+Received: from mail-bn7nam10on2047.outbound.protection.outlook.com ([40.107.92.47]:45857
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1344590AbiBCNVa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:21:30 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UjyyWJoJTp0mqZY5v9BmXRJuu3V7yPYgYflveF/LEuQiO7IhUOkS8rzXag5Q0skAELV7EC9wpDvatj0nh28VgqmXBAGfswwG9Z724ddCteiRuB58nH6CRDfvLysS859IUdl8M9vKHODoa0ahEsqxl0YO2FjyxEuT+/wBBAqR5a+xjiP/r6Bz7e94oYexPiQY1/i5HICZdSM2pxcenCc3Ktp1lPr32P2DnsjrgRHlTodlY8yuVCQa7yGJpkoPf/0wkKMbSn1x9hVgde57vzn+R0GhnJqkL1YuPkKNGOUflRQv8ZzGVm8KH9q89+Fr3pYN1h2Y2aa/0GOmxLN57FuB8A==
+ b=EHjh2CQGvC6EbpywAa4sUSg8tuPYFvsjytUngW9RDp6XPbSsHDPMjw6U9s934k/fEgiAnumuh4LGGOPzdxMffcY2hA7pt6M8bwgHaQj0iBA/H8dBhvAzPG/5xoylLYvL8n0AL4o6KpoIE9wQiaQATInvhCOK6c6b2YCh0uZaXe7ikrOMOalOAweXJglJ7JWTsMAsowBpovoaM/BUPsgL2b4TE6O+lP1Cd05iXiedsALRZ6A6EWdWYVNgfuTOIiBEPhFICOgkl398qXYHdLyrtD2pPe4stLMp1fASlO7wkEzB6hzlAQkSHKWljzAvtw6Iopztj/In1Kvtlv6Xop7ZNQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nZ76lkzxbtrGWQUl9oPhyy4zIRYiWVp+9EZXD6sbLQs=;
- b=oV/4Xpa+ENVPofxvWYXyie/xZF398RdofP+JMAMWqUo2eGFs6Cnpy+0KCROhKe56nONgPZbbEcpy2u1ncmejcXzSaDDlqwmbsnntKcQm4KQ1EYTTPePliZjviQuSf+nK0Gm/OEoBgy1Hd9hD4YeMkvEji2hRLuONYrGyAlXfisG/sYa+Z0MLsyXII6ab58ENmmJWmRB6Vwlitp7p7CXLcdVOX9M8jvU6KjHVw1KoTIIbME+UPKv/WrN+fpUQJC46TAIGhNuk3DBP3+RQ2/eyeUHhQJyrJ3p+jckXrIX2wj6/MBMxkfuPixqvHryrdxAMLXdx5umbOSh4FR5f2F5NTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by PAXPR04MB8350.eurprd04.prod.outlook.com (2603:10a6:102:1ce::6) with
+ bh=DUInhKcED0K1hqwNBeq8MsvASFjArpcbrnoYbYtvtpU=;
+ b=WZrE6uILPhTmw+abqmQe/AInBgY9Yxb4KIio8CzNupA3bKLna4zi1JfgqnsPD88ZZLj0oXuB8IUTZdI4hZQU0qM2CSkNMkwIgpKE6ZroWIVq8TpLIiJtcKSbrMmp1sF6dO73p86qhkN29gJGHGebMihWw0a1DALj3r314d0DNvDCK9XafX/4d/yQKhGb4o0ENqSl5XFJAiyvv35dy0Gf4XqRjYN1t1sEbkTPV5zXe0l3Q4lN3u7V4gEGT+ZtwAyTFM5senqontVNsoADr/ET4xrT1c0svJb9/Qk0gkPpQfikY4YNI97Oie8XsSY2nuSn7wXZEt1ZtMe05qjllmnHrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=bootlin.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DUInhKcED0K1hqwNBeq8MsvASFjArpcbrnoYbYtvtpU=;
+ b=tG0e/BmzLOTcYWrLo7eXQqvMvYOCnjAJj9pdC9OGjqWP89KulmDkpNCIyBHDDrhbOIJoi1HWdEmore/PAnR0CWBm2So1/r/0k+SRdBt+BtCguauoqstJTKvEE3fvVjEy0ztjBjY8A9jgXbiV/3/Sb1QW982QjCaawaDqqguFTb8=
+Received: from DS7PR03CA0173.namprd03.prod.outlook.com (2603:10b6:5:3b2::28)
+ by SA1PR02MB8559.namprd02.prod.outlook.com (2603:10b6:806:1fa::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
- 2022 13:21:06 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::24bf:3192:1d1c:4115]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::24bf:3192:1d1c:4115%3]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
- 13:21:06 +0000
-Message-ID: <eef8994a-6bda-8f72-c299-b3f133301f30@suse.com>
-Date:   Thu, 3 Feb 2022 14:21:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH net-next v1 1/4] dt-bindings: net: add schema for ASIX USB
- Ethernet controllers
-Content-Language: en-US
-To:     Greg KH <greg@kroah.com>, Oleksij Rempel <o.rempel@pengutronix.de>
-CC:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <20220127104905.899341-2-o.rempel@pengutronix.de>
- <YfJ7JXrqEEybRLCi@kroah.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <YfJ7JXrqEEybRLCi@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM6PR08CA0038.eurprd08.prod.outlook.com
- (2603:10a6:20b:c0::26) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
+ 2022 13:21:28 +0000
+Received: from DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:3b2:cafe::82) by DS7PR03CA0173.outlook.office365.com
+ (2603:10b6:5:3b2::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Thu, 3 Feb 2022 13:21:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT004.mail.protection.outlook.com (10.13.5.122) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Thu, 3 Feb 2022 13:21:28 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 3 Feb 2022 05:21:22 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 3 Feb 2022 05:21:22 -0800
+Envelope-to: git@xilinx.com,
+ miquel.raynal@bootlin.com,
+ richard@nod.at,
+ vigneshr@ti.com,
+ linux-mtd@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.18] (port=53848 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
+        id 1nFc37-0006TT-QJ; Thu, 03 Feb 2022 05:21:22 -0800
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>
+Subject: [RFC PATCH] mtd: tests: Fix eraseblock read speed miscalculation for lower partition sizes
+Date:   Thu, 3 Feb 2022 18:51:19 +0530
+Message-ID: <20220203132119.25684-1-amit.kumar-mahapatra@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 314dabac-8d32-44b6-28c8-08d9e71808cf
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8350:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-Microsoft-Antispam-PRVS: <PAXPR04MB8350BF7A8DFF5027AAEFC6F5C7289@PAXPR04MB8350.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Office365-Filtering-Correlation-Id: cd001a19-096c-4623-d1f3-08d9e71815d4
+X-MS-TrafficTypeDiagnostic: SA1PR02MB8559:EE_
+X-Microsoft-Antispam-PRVS: <SA1PR02MB85592CFBF79C243746B3AF1ABA289@SA1PR02MB8559.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TDTiD/qNmCBwTRN++3TyJ/XlIXAyyX+hYuBNawXcxJfiju0CfQYYJRAHBz/V0R7qh6+J9X/jjlR1DBS7CoUuKi0igLYWvJ6uSgbaHHbkc4oVd5Lj3S90WXS0n/0EIc3KThsqh2zbLBI3I3XozhAM41Zufih63wEPshd1vQCo3ty2hLIf0F7jGXwPGjWy/f3qaRW9KZ9dic/pJAae5HJ+zAPveleozFwkuy+sPJfCKUTYQ7O8XNmMz6GQVvCNAaPC2PrD93/tibQ0fSV9FcqF9nSVDsQXzAaFVMV/LnIKAHGvpdMRbxMFnmszc5cEEDMx0LNeDBB4V0vFIlpwAnnOIKiBwLgcx/x2xL0FAWZAOCmoMuGw5alqwsCa4hOVB8XSUy/9ZCXvhj3k9O6yXc4IVIndnPjF6YjzzY7XW+AQ1FldlCZ5OzaDx/+eEZBU7lnoGne/oTuPHEHKPQo9qMwZf1BEChI6G7y5BfwiaCATtcjDniTC/+gNwJhRnE/x+ErhpX2+5RoiY6o6OM2DJgqluO085fu9zq2hC8d+DZZ5ESQ4i2p79UvnlaE2wbG9I6/S/QcNvTXb7Yho+lV0JuJ4dvps51sLcNi/OL6m/4ebSkIxUpnhZJaZaI5j/Y0B1Y3aBB58xqaKukrZePaOaFDndFSo/a96lKq/uuR8Qco5BtAYiiXjbnIS1hT/zN/6KYUhbiWDV1gmpRtfeiU10AgQHCYfkiGqtjhW9AZNCo2ZnaWhOeKtgx6PpGzni+/kBfo1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(316002)(508600001)(2616005)(86362001)(110136005)(54906003)(53546011)(31696002)(6506007)(8936002)(186003)(66946007)(7416002)(6486002)(66476007)(66556008)(36756003)(38100700002)(8676002)(31686004)(2906002)(4326008)(5660300002)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CJD1Ln/hFW/3q6AH+1DHT7JDrHUv4aTyyJZa/+82TOjCso3gRDu3shbPfoC+?=
- =?us-ascii?Q?GfQbujRkgVqePQ00RNMbrPDNxVSltkSMIMX1YaUK5ZUOC3Y8L0IeTXP1JIcA?=
- =?us-ascii?Q?8p+eDh+fQRnIXx4oZz12oO1ORrTOKeDeYNNB9bZMl87RcAMJ/5Tlk/57zk7p?=
- =?us-ascii?Q?OKc4M0706pwK56UkGV8CxqvWCOmuuFkXaPk1jCQfERQdst4FV+zfMHzhvoJK?=
- =?us-ascii?Q?jzKPLy7DSW1SSAe6TrTp5Vz7tnU08jTtYMelyNedkVE/SlBOJAXXxj2pcBN7?=
- =?us-ascii?Q?lmwySPvpdq6xF1V+cGx3A9gGVNP9wVObVfLNkcXfV1nam3yyN3cx/PpU1TQl?=
- =?us-ascii?Q?EQdXcmZzZTpvdtckI+m9LPC6jhFV7HpNxNJlEdXL6mK9bJZtk//Fs34iZDEe?=
- =?us-ascii?Q?xNH/ptGFeQ1sqp7DQvAXt3bbsQtOVNXsXtYwIMSsUUmBPxylHdzP9CJzTNOk?=
- =?us-ascii?Q?LLW2nfbXTAEk+np8X0UWvbqq7g0XSnPZDwYIsdAnz+YZI4m7W/m8qbil5DLn?=
- =?us-ascii?Q?kyeu1ZQk5aFXTn/NDZz2AuWOVOUXLxG0J8UiWq1MlICOxGWaYiYMqGYC/Nmk?=
- =?us-ascii?Q?gegBXt8c64PhinBu46NawBNlNkjZFVcPq/B4xJWJKqHsxsDy9PaD7FxTK+/b?=
- =?us-ascii?Q?ZsmrEHNcgruEOQaazM8d6S/Zk6v60g5vXupbYwOzNudXiRtA+pjAIct973bR?=
- =?us-ascii?Q?BDaAaMyJuiJrpInI5d004lJhNFjgVP+Y9QhlVufNxUEXVX+XcHAiSUZjFtfE?=
- =?us-ascii?Q?9gBpdaURsFuLeWzhrHHlpu4bd4vukxLsM1dn3FZk/d6LR1fa++2rx9yC9wg/?=
- =?us-ascii?Q?32oSKbYr6h+99RQaAxNBsONuXNzzJRS+PoLofKQpH7ViaPtF486CXu7reGzq?=
- =?us-ascii?Q?ChP71yAIc4ZL/snlSg2EuLIGShX5YwOUj0zP5YYE1Em3rAo88k/7+JVOyFru?=
- =?us-ascii?Q?k4o870fkM6jKTbH9LeRyYWNyL66Ez8yqFzUDd9VfaOYJjWXpcS8zFqP1aAMM?=
- =?us-ascii?Q?84ZZJAQk69844hkg8qBfeANjM0aPGNvPm0KQ4nDRNIa2yTfv6p18BViz17d6?=
- =?us-ascii?Q?VTGEuYyzNmXxlTpMegTkvPuJzczzPRLPsr9EPaZBGWuQDc6KR7w04YOVdty7?=
- =?us-ascii?Q?HI9uAR0+jnfOkvudXBYVHgKrOpzx6Y/Gnij91y79q5X2qfeLy6rtdqN1ZoVb?=
- =?us-ascii?Q?cRqtSFBN06tdZtwQSy4Ym0wZUYdIBAG7CCtTeEGes6r1Pqj6U3fmr4UU225F?=
- =?us-ascii?Q?lZbUY/RLVa+kD4eZBtXaqTd24yDmuv9OvejaKLcIr0XuZApRxDXllUcdCrR7?=
- =?us-ascii?Q?kV9admix8cZZcQp89++dOiaSP1uAqVRj2HziL0+irgCi9BzAjL5CZgzM5dcr?=
- =?us-ascii?Q?aitxXdSZCGHWMUO3PIZ4Lc/Zu2ejF5o9/uIR4IOjIaalwpSQpOVZc0HjVn+h?=
- =?us-ascii?Q?O1pbeCALpPmnyNz9BD8mdoJy4CYbOnuJmSl4YYexkjNkOiZRGXBXcAK5HE0O?=
- =?us-ascii?Q?g6TMrJxMMls+8kYenhsn6gFz9leP/1npcADQtwEFHnr3EiSXRZjfWwVFUPXm?=
- =?us-ascii?Q?1BahCIYy7A+UHqjfEifmw1OrsrMlqlsCaKwmQGzEyDi4LzBBwjtM6vCd8uEq?=
- =?us-ascii?Q?ps+P7nb5/4t/mXDv6CrBh8Q9j5r0eKdOD8yhAD1EJEgeO0q0Xrsca+OKepRR?=
- =?us-ascii?Q?G3vAqTBQywL8cikslMzsIhuUgh4=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 314dabac-8d32-44b6-28c8-08d9e71808cf
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:21:06.3911
+X-Microsoft-Antispam-Message-Info: bdV09Tn/1FP2fbWymu2SUIqbscoZVYK9vAH64u6OiC7s32YlQQ2koM264/Z8JmVm/FLz8U5DAwasZPAdYpljlD1B5B3r11uHWLMy75bl6Ei3wAWqUwh4BzstkxB8i66IIcwJCA11m9NG1kE2PXlvpX9gH8p55O4xGnvuCY0QBSvkDb3tMJoOqwQMpdKntPkqDTm5Xgk8Uluhml8SgsCOd/ZNRiPv9EvZ+G9EyqPv7gaMz7/IfnhCo7djXBJIC5bSya6RP34+1qdJMHUJ4aXop3MDKE8CScekl499vzrbqHLo3R/g6CPEm6L2kk5SiJEyneu7F0IPKNc1NL9v7RQac2DWBCQhp5IT/jGbv2sUXCfHqy8lQdKDX3bKt9rup6lnjJPSKszzDqRL1v7dPdhmQfMXOgdsAhyRCC18O8aIfOENqEgqKRC93t7PjBF4GtcvQ2IjKDZmeBBKGrYND+ISPHzx264y6LIq/ed8WP2NNNEXBYiuqL2pF3fJqOKzFlEOkm9jq1Dpogne1s68IWIHFzpCVZabinBlm1V7sH9IqZjvS+tXpxeIUhZk3ValxnZ3n10qCM/oQOp8xmLLHVKJMGmeWJbXB2sjwOb8P8JCRuPaFgpi3SSLxz7BXryOdIwu8SKAmB0WkCAnllvq4FGCdmheu+s++3AfQC5ddAl2iBrWQJoKBPfUhURB4s0D5rb1vRNSbUnJDTn9I0nT0ZcKZQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(36756003)(7696005)(8936002)(40460700003)(2906002)(1076003)(5660300002)(47076005)(83380400001)(186003)(26005)(36860700001)(426003)(336012)(70586007)(7636003)(2616005)(107886003)(54906003)(110136005)(70206006)(316002)(508600001)(4326008)(356005)(82310400004)(9786002)(8676002)(6666004)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:21:28.0198
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cIlpUtJxIodquPmGoGy6YbvOz8AUf21kGOtgJk5odggf2ihxpBkIVtb1eCwmHSEvBaWJArellGTBWHtbRN8OVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8350
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd001a19-096c-4623-d1f3-08d9e71815d4
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8559
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While calculating speed during  mtd_speedtest, the time interval
+(i.e., start - finish) is rounded off to the nearest milliseconds by
+ignoring the fractional part. This leads to miscalculation of speed.
+The miscalculation is more visible while running speed test on small
+partition sizes(i.e., when partition size is equal to eraseblock size or
+twice the eraseblock size) at higher spi frequencies.
 
-On 27.01.22 11:59, Greg KH wrote:
-> On Thu, Jan 27, 2022 at 11:49:02AM +0100, Oleksij Rempel wrote:
->> Create initial schema for ASIX USB Ethernet controllers and import all
->> currently supported USB IDs form drivers/net/usb/asix_devices.c
-> Again, you are setting yourself to play a game you are always going to
-> loose and be behind on.  This is not acceptable, sorry.
+For e.g., while calculating eraseblock read speed for a mtd partition with
+size equal to the eraseblock size(i.e., 64KiB) the eraseblock read time
+interval comes out to be 966490 nanosecond. This is then converted to
+millisecond(i.e., 0.966 msec.). The integer part (i.e., 0 msec) of the
+value is considered and the fractional part (i.e., 0.966) is ignored,for
+calculating the eraseblock read speed. So the reported eraseblock read
+speed is 0 KiB/s, which is incorrect.
 
-Hi,
+There are two approaches to fix this issue.
 
-having checked the DSA subsystem, it looks to me like
-the "label" tag is quite common for those setups.
-I am afraid we cannot tell the DSA people how to build switches.
+First approach will be to keep the time interval in millisecond. and round
+up the integer value, with this approach the 0.966msec time interval in the
+above example will be rounded up to 1msec and this value is used for
+calculating the speed. Downside of this approach is that the reported speed
+is still not accurate.
 
-The question then becomes whether switches using USB
-internally should be different from other switches.
-I'd answer that question in the negative.
+Second approach will be to convert the time interval to microseconds
+instead of milliseconds, with this approach the 966490 nanosecond time
+interval in the above example will be converted t0 966.490usec and this
+value is used for calculating the speed. As compared to the current
+implementation and the suggested First approach, this approach will report
+a more accurate speed. Downside of this approach is that, in future if the
+mtd size is too large then the u64 variable, that holds the number of
+bytes, might overflow.
 
-=C2=A0=C2=A0=C2=A0 Regards
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 Oliver
+In this patch we have gone with the second approach as this reports a more
+accurate speed. With this approach the eraseblock read speed in the above
+example comes out to be 132505 KiB/s when the spi clock is configured at
+150Mhz.
+
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+---
+ drivers/mtd/tests/speedtest.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/mtd/tests/speedtest.c b/drivers/mtd/tests/speedtest.c
+index 93e76648f676..2b76e7750c68 100644
+--- a/drivers/mtd/tests/speedtest.c
++++ b/drivers/mtd/tests/speedtest.c
+@@ -161,13 +161,13 @@ static inline void stop_timing(void)
+ static long calc_speed(void)
+ {
+ 	uint64_t k;
+-	long ms;
++	long us;
+ 
+-	ms = ktime_ms_delta(finish, start);
+-	if (ms == 0)
++	us = ktime_us_delta(finish, start);
++	if (us == 0)
+ 		return 0;
+-	k = (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000;
+-	do_div(k, ms);
++	k = (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000000;
++	do_div(k, us);
+ 	return k;
+ }
+ 
+-- 
+2.17.1
 

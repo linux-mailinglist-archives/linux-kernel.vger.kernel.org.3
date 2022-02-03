@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AF44A895B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133D4A8980
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352560AbiBCRJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38382 "EHLO
+        id S1352720AbiBCRK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242220AbiBCRJn (ORCPT
+        with ESMTP id S1352545AbiBCRJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:09:43 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AE0C061741
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:09:37 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id r144so4047687iod.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:09:37 -0800 (PST)
+        Thu, 3 Feb 2022 12:09:44 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4227C06174E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:09:38 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id i1so2658607ils.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:09:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Xl48elVtzdvJ/g20NXNECeobi1xogdrDqiancn7eDUY=;
-        b=U+FRSTLhO8mv9K7+OqQpUKavuTqHUH23ppB7lEYSWgSmZEFzlvgloHdoSwAlrwAr9L
-         a4AWeGKv1MyTq/ZSOo+LRgWDrySNDTtucHLZYW+NaHzdxnwmht4GO0xUdm1T1TnusRS0
-         /4NhgQbIdv4dFVWXXuvgZbp/rnxIaKyF8Au4GJ5qnZf069Dgx5YkI419tN7cOjbU7fyp
-         lbogSwjz1tBePgY69Ui2uRN3K7eqbAClKdNQNBzSkQZM9AG7zLpErL8jkJzHNGj5TGwt
-         44iQyfrJwBRwWnjIEThSVm301yfZryebgKKDvKZMeALrGv7Eumt3CakBxuRWiRJpHgBl
-         d7oA==
+        bh=1KdZcajVjZgu+pEXQdk/RqI6U+J/OtZyImbF73oIsC8=;
+        b=KVWM6AxxBaFX120lVv/FXvzsCdVidVZoQu+22yzFauzaZQF1Pg1OdEpW31fiL681Sr
+         A7xzZzpI+hh5O7jcnoPyIu8eSkZVNzCheS42OQ7v/WIYCyjv9ykLe6r0JIvgxyOETkol
+         DTDRgTu4YPvUcs7/Jpg73VQobIfJxuDpVLmL4Pgmi3F46B8OWBUm3VUrZnNRlkWI6TUq
+         +cXGeiEFgxq2V4E1kxeh+cH/ePUL8FHRjMOcwJRUD4PndHvTZMctDK8L2lDVavCIhl52
+         jWOyACDSFQJjZu/0ZwJ2XBd5pUxyICq2teLbH7zwRk0jjrg2kI2jWsUo/q6KiP91FZEX
+         YhdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xl48elVtzdvJ/g20NXNECeobi1xogdrDqiancn7eDUY=;
-        b=l44OYvQ9dRJ1vsWuQ7vTn/wtY4oV+oht9HCYy8jcwBHq4W8ZLQ/3aRLZ59Z7cSLJXP
-         g69E4AKuMdRjpjZXkQ1Ks40/yJgVvGRf9sHAWWOTWMbuzWtM1nskG/iRudF0CmrKc+HT
-         Fykf0FfXPcCu3bE0IiiCW1TcLRi3xqP2/5Ujmpl+pRBFRAXfEDqlMjd99cLp/0ZW57UO
-         xFzM4JkuT7iYduWP9RjXTTPdHHiIYj0u1YyXlwItJu7Rinc6kGojBgH2V7vr78xu+heA
-         W64FO0YwA/garP7btw1XgnP7ARJRUxFlOp1g0I+aTgTEwntH3f2eSP59FWZJtG9bCbRM
-         MeMw==
-X-Gm-Message-State: AOAM533BVQvj0jMs79zMP26XxLtPudM9WUvkT6kPWEA0rnW3ZntbqCVn
-        PJoUpbFaXR/8ihM5ysEHKfB7Dw==
-X-Google-Smtp-Source: ABdhPJzS6Tz0bFFNqMgE95uK21ifG3uUZr+k0LR8EqBX+XSLVF2jB35xfAjRzp1HetpD5mkTuczwvg==
-X-Received: by 2002:a05:6602:1512:: with SMTP id g18mr11947586iow.121.1643908176951;
-        Thu, 03 Feb 2022 09:09:36 -0800 (PST)
+        bh=1KdZcajVjZgu+pEXQdk/RqI6U+J/OtZyImbF73oIsC8=;
+        b=d40cvTBjXd/rQaKIfQZ6rInflibw6ejhfzInV39fGnGCU6I0UyNxUJ6xybPRt4b3K7
+         yo9r//ASGfx1Oots0drNoYqHHVrFjNK3qjEZnbz83BT3f1x2g25TvSovdYfZNClrSZyh
+         0A/GWK3S0i2jarYtomQqx14bRm+90mKefLvce8kMB0ASz8Jz9uwNK6Sqtl9toZPzsRxT
+         eNPsEZtz4GnPTYUHWtabbT+cBxHx6sHdvV3g6wT7+yMdXQoxkOcvNTnbo1tm/i4mSYbU
+         LSSpP8CgHn1sgYPiNZ2kTsswA1cQjwxlRV99Hg8LuMalwe29fnaBa7AQp1LSCUrGmdUL
+         Gp5A==
+X-Gm-Message-State: AOAM533mlNG+26QTVdVz/OjlSVTI24VuuNgir4NkxoTLwpFH9A1CojJE
+        ruXAq1gAe+G647qFkCkZMr4alA==
+X-Google-Smtp-Source: ABdhPJyZ6j2FHUvUiFHZhhEM1xkxbWU88BM9dMz889OeLePYeoqwj8yUiVMMWjVT1AuBOM0Y7HVQoA==
+X-Received: by 2002:a05:6e02:2185:: with SMTP id j5mr4789378ila.298.1643908178290;
+        Thu, 03 Feb 2022 09:09:38 -0800 (PST)
 Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id m12sm21869671iow.54.2022.02.03.09.09.35
+        by smtp.gmail.com with ESMTPSA id m12sm21869671iow.54.2022.02.03.09.09.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:09:36 -0800 (PST)
+        Thu, 03 Feb 2022 09:09:37 -0800 (PST)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
@@ -55,9 +55,9 @@ Cc:     bjorn.andersson@linaro.org, mka@chromium.org, evgreen@chromium.org,
         jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
         netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 03/10] net: ipa: increment backlog in replenish caller
-Date:   Thu,  3 Feb 2022 11:09:20 -0600
-Message-Id: <20220203170927.770572-4-elder@linaro.org>
+Subject: [PATCH net-next 04/10] net: ipa: decide on doorbell in replenish loop
+Date:   Thu,  3 Feb 2022 11:09:21 -0600
+Message-Id: <20220203170927.770572-5-elder@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220203170927.770572-1-elder@linaro.org>
 References: <20220203170927.770572-1-elder@linaro.org>
@@ -67,106 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three spots call ipa_endpoint_replenish(), and just one of those
-requests that the backlog be incremented after completing the
-replenish operation.
-
-Instead, have the caller increment the backlog, and get rid of the
-add_one argument to ipa_endpoint_replenish().
+Decide whether the doorbell should be signaled when committing a
+replenish transaction in the main replenish loop, rather than in
+ipa_endpoint_replenish_one().  This is a step to facilitate the
+next patch.
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/ipa_endpoint.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+ drivers/net/ipa/ipa_endpoint.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index f8dbd43949e16..060a025d70ec6 100644
+index 060a025d70ec6..274cf1c30b593 100644
 --- a/drivers/net/ipa/ipa_endpoint.c
 +++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -1084,7 +1084,6 @@ static int ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint)
- /**
-  * ipa_endpoint_replenish() - Replenish endpoint receive buffers
-  * @endpoint:	Endpoint to be replenished
-- * @add_one:	Whether this is replacing a just-consumed buffer
-  *
-  * The IPA hardware can hold a fixed number of receive buffers for an RX
-  * endpoint, based on the number of entries in the underlying channel ring
-@@ -1093,24 +1092,17 @@ static int ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint)
-  * an endpoint can be disabled, in which case buffers are not queued to
-  * the hardware.
-  */
--static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint, bool add_one)
-+static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint)
- {
- 	struct gsi *gsi;
- 	u32 backlog;
--	int delta;
- 
--	if (!test_bit(IPA_REPLENISH_ENABLED, endpoint->replenish_flags)) {
--		if (add_one)
--			atomic_inc(&endpoint->replenish_backlog);
-+	if (!test_bit(IPA_REPLENISH_ENABLED, endpoint->replenish_flags))
- 		return;
--	}
- 
--	/* If already active, just update the backlog */
--	if (test_and_set_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags)) {
--		if (add_one)
--			atomic_inc(&endpoint->replenish_backlog);
-+	/* Skip it if it's already active */
-+	if (test_and_set_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags))
- 		return;
--	}
- 
- 	while (atomic_dec_not_zero(&endpoint->replenish_backlog))
- 		if (ipa_endpoint_replenish_one(endpoint))
-@@ -1118,17 +1110,13 @@ static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint, bool add_one)
- 
- 	clear_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags);
- 
--	if (add_one)
--		atomic_inc(&endpoint->replenish_backlog);
--
- 	return;
- 
- try_again_later:
- 	clear_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags);
- 
- 	/* The last one didn't succeed, so fix the backlog */
--	delta = add_one ? 2 : 1;
--	backlog = atomic_add_return(delta, &endpoint->replenish_backlog);
-+	backlog = atomic_inc_return(&endpoint->replenish_backlog);
- 
- 	/* Whenever a receive buffer transaction completes we'll try to
- 	 * replenish again.  It's unlikely, but if we fail to supply even
-@@ -1152,7 +1140,7 @@ static void ipa_endpoint_replenish_enable(struct ipa_endpoint *endpoint)
- 	/* Start replenishing if hardware currently has no buffers */
- 	max_backlog = gsi_channel_tre_max(gsi, endpoint->channel_id);
- 	if (atomic_read(&endpoint->replenish_backlog) == max_backlog)
--		ipa_endpoint_replenish(endpoint, false);
-+		ipa_endpoint_replenish(endpoint);
+@@ -1036,10 +1036,10 @@ static void ipa_endpoint_status(struct ipa_endpoint *endpoint)
+ 	iowrite32(val, ipa->reg_virt + offset);
  }
  
- static void ipa_endpoint_replenish_disable(struct ipa_endpoint *endpoint)
-@@ -1167,7 +1155,7 @@ static void ipa_endpoint_replenish_work(struct work_struct *work)
- 
- 	endpoint = container_of(dwork, struct ipa_endpoint, replenish_work);
- 
--	ipa_endpoint_replenish(endpoint, false);
-+	ipa_endpoint_replenish(endpoint);
- }
- 
- static void ipa_endpoint_skb_copy(struct ipa_endpoint *endpoint,
-@@ -1372,7 +1360,8 @@ static void ipa_endpoint_rx_complete(struct ipa_endpoint *endpoint,
+-static int ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint)
++static int
++ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint, bool doorbell)
  {
+ 	struct gsi_trans *trans;
+-	bool doorbell = false;
  	struct page *page;
+ 	u32 buffer_size;
+ 	u32 offset;
+@@ -1064,11 +1064,6 @@ static int ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint)
+ 		goto err_free_pages;
+ 	trans->data = page;	/* transaction owns page now */
  
--	ipa_endpoint_replenish(endpoint, true);
-+	ipa_endpoint_replenish(endpoint);
-+	atomic_inc(&endpoint->replenish_backlog);
+-	if (++endpoint->replenish_ready == IPA_REPLENISH_BATCH) {
+-		doorbell = true;
+-		endpoint->replenish_ready = 0;
+-	}
+-
+ 	gsi_trans_commit(trans, doorbell);
  
- 	if (trans->cancelled)
+ 	return 0;
+@@ -1104,9 +1099,17 @@ static void ipa_endpoint_replenish(struct ipa_endpoint *endpoint)
+ 	if (test_and_set_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags))
  		return;
+ 
+-	while (atomic_dec_not_zero(&endpoint->replenish_backlog))
+-		if (ipa_endpoint_replenish_one(endpoint))
++	while (atomic_dec_not_zero(&endpoint->replenish_backlog)) {
++		bool doorbell;
++
++		if (++endpoint->replenish_ready == IPA_REPLENISH_BATCH)
++			endpoint->replenish_ready = 0;
++
++		/* Ring the doorbell if we've got a full batch */
++		doorbell = !endpoint->replenish_ready;
++		if (ipa_endpoint_replenish_one(endpoint, doorbell))
+ 			goto try_again_later;
++	}
+ 
+ 	clear_bit(IPA_REPLENISH_ACTIVE, endpoint->replenish_flags);
+ 
 -- 
 2.32.0
 

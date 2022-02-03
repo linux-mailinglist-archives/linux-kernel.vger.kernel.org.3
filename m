@@ -2,186 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441A64A8BE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A0C4A8BF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353573AbiBCStQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353565AbiBCStO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:49:14 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D593C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:49:14 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id x6so2881759ilg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yi3egB09pFMWmxHf611BRU+6JQL5GH8GclXypo1awkA=;
-        b=FOEUsa6cMLCKHgbftb7PdZxjMzaJLyhqXu6zE6/HGBcw8UJivONwkKRHJFIpKG+4Cp
-         5EAmoc5HXHDkp83ffol1bLsFixng5fqDrZltIRRmYBTGNu4Qp852viJt229/q1C7oIP1
-         QTT40oAxbDZZ9/Z8IJG8kW8p8XHWcvLRMV2mq4knwnCDoBzfVG+TFoc+G/5Bi2V3oNN1
-         83QK+vwB9In+wtpEKYYAg4R8pxdjSdNop27G7bzxPLlddks+j/MOfPiYg409nMtC7sFW
-         7vy18PnE3zDHNlH4CFTB2hAeTITqVooJMPS0CVv95WOnspP411cmJIAGf4fiM4jrUrUE
-         U5cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yi3egB09pFMWmxHf611BRU+6JQL5GH8GclXypo1awkA=;
-        b=4W/3sCj+V8wF9Lc3jehuy2+LEa7PUP4VOooRIDBibzcYBYJGpxMayVwZts8NKaYMUJ
-         DajJCtC/5grhnTZIOlE3r4QGm8RhjPV772Vovjcs1SxTwrW6XbRDZWWBTIoARq+qSDtQ
-         Tp6KMxhDATnB8VrYHoOhY1LHoeH+55YbLrX7BBVPQptDe2ZxNenCsk1SQC537hDx9Vrl
-         ViiaV1cSkBqOb7otYsi3YOkvClYJsU7lRc8ruQFkH3DHTCPdWPMiB+Trrp1sigVMV/CP
-         sjDxInBWp3NplEi8d+1UjetvK9cpQLSROI+wWC/rJVdVxpiWuJzIJokYDg6eu2RM34aa
-         lVIg==
-X-Gm-Message-State: AOAM531RTK8GjIVu8sxNRvuNEkxRunCK9re1sarPZWm2FYt9yrAVUUAN
-        D513pWCLC3iEug3IdM/7Nk7w6Q==
-X-Google-Smtp-Source: ABdhPJxywet9ivYWSQd29dwPDGsnX7LDLyVALsSiuN7w1UFAK+QVCH6KFeaNVsIG+kc7Qf70PKeZvA==
-X-Received: by 2002:a05:6e02:1545:: with SMTP id j5mr21032614ilu.318.1643914153612;
-        Thu, 03 Feb 2022 10:49:13 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id f4sm11634988iow.53.2022.02.03.10.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 10:49:13 -0800 (PST)
-Subject: Re: [PATCH v4 2/3] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203182441.692354-1-usama.arif@bytedance.com>
- <20220203182441.692354-3-usama.arif@bytedance.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <8369e0be-f922-ba6b-ceed-24886ebcdb78@kernel.dk>
-Date:   Thu, 3 Feb 2022 11:49:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1353582AbiBCSxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:53:10 -0500
+Received: from foss.arm.com ([217.140.110.172]:36530 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233247AbiBCSxK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 13:53:10 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7B24147A;
+        Thu,  3 Feb 2022 10:53:09 -0800 (PST)
+Received: from bogus (unknown [10.57.41.150])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A0423F774;
+        Thu,  3 Feb 2022 10:53:08 -0800 (PST)
+Date:   Thu, 3 Feb 2022 18:52:21 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/4] Broadcom STB PM PSCI extensions
+Message-ID: <20220203185221.aw7kayj6qklmh5is@bogus>
+References: <20220122035421.4086618-1-f.fainelli@gmail.com>
+ <20220203111435.e3eblv47ljkwkvwf@bogus>
+ <34938793-cecc-2ad8-a4eb-81bb278ce9b5@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220203182441.692354-3-usama.arif@bytedance.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34938793-cecc-2ad8-a4eb-81bb278ce9b5@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 11:24 AM, Usama Arif wrote:
-> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
-> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
->  {
-> -	if (likely(!ctx->cq_ev_fd))
-> -		return false;
-> +	struct io_ev_fd *ev_fd;
-> +
-> +	rcu_read_lock();
-> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
-> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
-> +
-> +	if (likely(!ev_fd))
-> +		goto out;
->  	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
-> -		return false;
-> -	return !ctx->eventfd_async || io_wq_current_is_worker();
-> +		goto out;
-> +
-> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
-> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
-> +
-> +out:
-> +	rcu_read_unlock();
->  }
+Correction: it is known as "freeze" rather than "idle" in terms of values
+as per /sys/power/state. Sorry for referring it as "idle" and creating any
+confusion.
 
-This still needs what we discussed in v3, something ala:
+On Thu, Feb 03, 2022 at 09:36:28AM -0800, Florian Fainelli wrote:
+> 
+> 
+> On 2/3/2022 3:14 AM, Sudeep Holla wrote:
+> > On Fri, Jan 21, 2022 at 07:54:17PM -0800, Florian Fainelli wrote:
+> > > Hi all,
+> > > 
+> > > This patch series contains the Broadcom STB PSCI extensions which adds
+> > > some additional functions on top of the existing standard PSCI interface
+> > > which is the reason for having the driver implement a custom
+> > > suspend_ops.
+> > > 
+> > > These platforms have traditionally supported a mode that is akin to
+> > > ACPI's S2 with the CPU in WFI and all of the chip being clock gated
+> > > which is entered with "echo standby > /sys/power/state". Additional a
+> > > true suspend to DRAM as defined in ACPI by S3 is implemented with "echo
+> > > mem > /sys/power/state".
+> > 
+> > How different is the above "standby" state compare to the standard "idle"
+> > (a.k.a suspend-to-idle which is different from system-to-ram/S3) ?
+> 
+> There are a few differences:
+> 
+> - s2idle does not power gate the secondary CPUs
+>
 
-/*
- * This will potential race with eventfd registration, but that's
- * always going to be the case if there is IO inflight while an eventfd
- * descriptor is being registered.
- */
-if (!rcu_dereference_raw(ctx->io_ev_fd))
-	return;
+Not sure what you mean by that ? S2I takes CPUs to deepest idle state.
+If you want shallower states, one possible option is the disable deeper
+states from the userspace.
 
-rcu_read_lock();
-...
+> - s2idle requires the use of in-band interrupts for wake-up
+>
 
-which I think is cheap enough and won't hit sparse complaints. The
+I am not sure if that is true. S2I behaves very similar to S2R except it
+has low wake latency as all secondaries CPUs are not hotplugged out.
 
-> @@ -9353,35 +9370,70 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
->  
->  static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
->  {
-> +	struct io_ev_fd *ev_fd;
->  	__s32 __user *fds = arg;
-> -	int fd;
-> +	int fd, ret;
->  
-> -	if (ctx->cq_ev_fd)
-> -		return -EBUSY;
-> +	mutex_lock(&ctx->ev_fd_lock);
-> +	ret = -EBUSY;
-> +	if (rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock))) {
-> +		rcu_barrier();
-> +		if(rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock)))
-> +			goto out;
-> +	}
+> The reasons for implementing "standby" are largely two fold:
+>
+> - we need to achieve decent power savings (typically below 0.5W for the
+> whole system while allowing Wake-on-WLAN, GPIO, RTC, infrared, etc.)
+>
 
-I wonder if we can get away with assigning ctx->io_ev_fd to NULL when we
-do the call_rcu(). The struct itself will remain valid as long as we're
-under rcu_read_lock() protection, so I think we'd be fine? If we do
-that, then we don't need any rcu_barrier() or synchronize_rcu() calls,
-as we can register a new one while the previous one is still being
-killed.
+I fail to understand how that is a problem from S2I. It is probably worth
+checking if there are any unnecessary IRQF_NO_SUSPEND users. Check section
+IRQF_NO_SUSPEND and enable_irq_wake() in [1]. I don't see any issues other
+wise in terms of unnecessary/spurious wakeup by in-band(to be precise
+no-wake up) interrupts.
 
-Hmm?
+> - we have a security subsystem that requires the CPUs to be either power
+> gated or idle in order the hardware state machine that lets the system enter
+> such a state and allows the out of band interrupts from being wake-up
+> sources
+>
 
->  static int io_eventfd_unregister(struct io_ring_ctx *ctx)
->  {
-> -	if (ctx->cq_ev_fd) {
-> -		eventfd_ctx_put(ctx->cq_ev_fd);
-> -		ctx->cq_ev_fd = NULL;
-> -		return 0;
-> +	struct io_ev_fd *ev_fd;
-> +	int ret;
-> +
-> +	mutex_lock(&ctx->ev_fd_lock);
-> +	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
-> +	if (ev_fd) {
-> +		call_rcu(&ev_fd->rcu, io_eventfd_put);
-> +		ret = 0;
-> +		goto out;
->  	}
-> +	ret = -ENXIO;
->  
-> -	return -ENXIO;
-> +out:
-> +	mutex_unlock(&ctx->ev_fd_lock);
-> +	return ret;
->  }
+It should work unless I have completely misunderstood how S2I works.
 
-I also think that'd be cleaner without the goto:
+> > Suspend to idle takes all the CPUs to lowest possible power state instead
+> > of cpu-hotplug in S2R. Also I assume some userspace has to identify when
+> > to enter "standby" vs "mem" right ? I am trying to see how addition of
+> > "idle" changes that(if it does). Sorry for too many questions.
+> > 
+> 
+> Right that user-space in our case is either custom (like RDK, or completely
+> custom), or is Android. For Android it looks like we are carrying a patch
+> that makes "mem" de-generate into "standby" but this is largely because we
+> had historically problems with "mem" that are being addressed (completely
+> orthogonal).
+>
 
-{
-	struct io_ev_fd *ev_fd;
-	int ret;
+Thanks for the info.
 
-	mutex_lock(&ctx->ev_fd_lock);
-	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
-					lockdep_is_held(&ctx->ev_fd_lock));
-	if (ev_fd) {
-		call_rcu(&ev_fd->rcu, io_eventfd_put);
-		mutex_unlock(&ctx->ev_fd_lock);
-		return 0;
-	}
+> I did not consider it as a viable option at the time, but if we were to
+> implement "standby" in drivers/firmware/psci/psci.c would that be somewhat
+> acceptable?
+>
 
-	mutex_unlock(&ctx->ev_fd_lock);
-	return -ENXIO;
-}
+We have been pointing anyone needing standby so far to S2I and so far no one
+has shouted that it doesn't suffice. Let me know what is missing.
 
 -- 
-Jens Axboe
+Regards,
+Sudeep
 
+[1] Documentation/power/suspend-and-interrupts.rst

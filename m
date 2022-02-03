@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB65C4A7ECF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057864A7ED5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 06:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236529AbiBCFC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 00:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiBCFCv (ORCPT
+        id S234137AbiBCFE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 00:04:28 -0500
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:51456 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231772AbiBCFE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 00:02:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F48C061714;
-        Wed,  2 Feb 2022 21:02:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D6126172F;
-        Thu,  3 Feb 2022 05:02:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 482F5C340E8;
-        Thu,  3 Feb 2022 05:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643864569;
-        bh=hZtw8q9Ky8oUcxWVNf0TNaZ+8gLjnD87p8CNwMecU4c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NjUOV9tNw8woaqHr10JY6495xL//ic8tAu2TfN6SVMWn3yvd9jxQnCfgY8JAFq6zE
-         /Eyo7WtQxphgDO0MYdtAb+hFRIOpXc38vUtmLk4ApFqyNdWFaGER/8kXAD59kUQvi1
-         BPR/fzmVsx/rHZb5iDDmZZOEDR0dQeqcIAOboy0HezKrh33wAghZNT2gN9BsUDzNg8
-         xHw9+8vjl1dIGUgNdRV6Qt537wA5ikM7XBru0aB01PEQe/M7b6hWkrmukAbozTNdm1
-         GFyaFld7v5EVMgGfdHaIkqGf7VQeAq38y1wpb5am4KjmqcuA+jVFhMnFnccmyUjxDu
-         eqO/ic/rRkXvw==
-Date:   Wed, 2 Feb 2022 21:02:48 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, agross@kernel.org, mka@chromium.org,
-        evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] net: ipa: request IPA register values be
- retained
-Message-ID: <20220202210248.6e3f92ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220201140412.467233-3-elder@linaro.org>
-References: <20220201140412.467233-1-elder@linaro.org>
-        <20220201140412.467233-3-elder@linaro.org>
+        Thu, 3 Feb 2022 00:04:26 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V3UBAbC_1643864663;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V3UBAbC_1643864663)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Feb 2022 13:04:24 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     daniel@ffwll.ch
+Cc:     airlied@linux.ie, Xinhui.Pan@amd.com, christian.koenig@amd.com,
+        alexander.deucher@amd.com, Felix.Kuehling@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/amdkfd: Fix resource_size.cocci warning
+Date:   Thu,  3 Feb 2022 13:04:21 +0800
+Message-Id: <20220203050421.39285-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Feb 2022 08:04:12 -0600 Alex Elder wrote:
-> Fixes: 2775cbc5afeb6 ("net: ipa: rename "ipa_clock.c"")
+Use resource_size function on resource object instead of explicit
+computation.
 
-The Fixes tag should point at the place the code was introduced, 
-even if it moved or otherwise the patch won't apply as far back.
+Eliminate the following coccicheck warning:
+./drivers/gpu/drm/amd/amdkfd/kfd_migrate.c:978:11-14: ERROR: Missing
+resource_size with res
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+index 8430f6475723..d4287a39be56 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+@@ -975,7 +975,7 @@ int svm_migrate_init(struct amdgpu_device *adev)
+ 		pgmap->type = 0;
+ 		if (pgmap->type == MEMORY_DEVICE_PRIVATE)
+ 			devm_release_mem_region(adev->dev, res->start,
+-						res->end - res->start + 1);
++						resource_size(res));
+ 		return PTR_ERR(r);
+ 	}
+ 
+-- 
+2.20.1.7.g153144c
+

@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1B84A8B28
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406744A8B2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353112AbiBCSFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S1353183AbiBCSFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 13:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiBCSFc (ORCPT
+        with ESMTP id S238019AbiBCSFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 13:05:32 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B74C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:05:31 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id a28so7650212lfl.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:05:31 -0800 (PST)
+        Thu, 3 Feb 2022 13:05:49 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8BEC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:05:49 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so10757695pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 10:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ipt2A0IXpQfKpDIz03O3RwhnKF2tn41jUPb/HJacuM8=;
-        b=MJi5/d+KoCqbmk+cXUF+GdR3XZj7eLtgHTq5lk3rJenGtsKNizLO2iu5RMBRHHN2ER
-         8yAbAHuYS3y6nAr/BrciSzmu/8Bs8QIQms6jdE/VAvcpk64v5jc0K6vIRAU36RxTK1hT
-         ISK6lANOW7Cd6oMBF/T4r7mJTRk0jt5/DRnSqltQ5LGAQV0bB0dTvNiGu7/I5qtMZRR/
-         VvOuP09s0xsKDYlXL3dRcsrNlWUyUSLhdupD32pJR3be4fEjo6P1knKd/EAuzY7yT18U
-         8dWabiFoPGK96jctxpPXDmu1E+X6JnvhvBZ8WPm0naw1n8HOH41EkUstQtt0iKbsV2U1
-         3D0A==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HlhPGWE5bdGNLYD2rLHTqQvYoa01TULW+puGjVO5vSQ=;
+        b=VtLsiCCk158cnWh1hhk4hcAu7akeN1un0UoiIYtmE5BUwwcvATGuybGt4H+8Rx5GTd
+         1z3bqgJ50552OdIa0vByKWASS/00Y3E5FSjIQC/+0ni8LCjdGYD1Viv+5Wlp+OGXaqcz
+         tDShm8qyl098X8w2HGMlTAzsi2yYmIPJOOhYw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ipt2A0IXpQfKpDIz03O3RwhnKF2tn41jUPb/HJacuM8=;
-        b=AVJ29D/AB7Rav7wNzutO+TsBj4tnadt9oyrnMuJeF1pFoqAMePMEZcmyWG1np/9hYp
-         qNGGvAvdf2Gwvgcjwxw5Js0+UO5YDB9g9t5I9TKeYPBUVTcNU7kaNS1OCVgvNAo2lkXc
-         dr4yKi/6yUvjY6XWrT4ckLNIWI2QtbGpdlVGvPY6NOl2GIyDkHh7AuX7fgB27zd92H2N
-         La85NFgb1HVwyUrb7BeF3vOBwfeoCygpZGZ1IRxQj7gAOgIJYRYN+qbZZW3yKowPINQQ
-         Cobokw2sUbhTCS+Th57+YdMpNvUjmJPFJZ4cd5qDzmcgXKMETUJemNiYjf6SPEwl7r57
-         WjFQ==
-X-Gm-Message-State: AOAM530TRQnsuQaxv82Z0nnQicGxEaBPjWbcJ00D/NZOe/QMQjyBawgj
-        QaiHqoxUZRiySzCankRepxkzK3XqkoTBPTrzLLHNUA==
-X-Google-Smtp-Source: ABdhPJwV99UF8F8qYyuvCbCl0dqNkyzz05skhf6O8nRDYtALIgW3K2RkSMtH+xyVAf0PeBl56TaUKg9JQxja6cRGzJ8=
-X-Received: by 2002:a05:6512:344b:: with SMTP id j11mr27396831lfr.171.1643911529822;
- Thu, 03 Feb 2022 10:05:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HlhPGWE5bdGNLYD2rLHTqQvYoa01TULW+puGjVO5vSQ=;
+        b=TH6O56wzDsWYop2HYrhc3X8Pu5u6e1lL0XBNiglL6piZK2QLcsTIDTzAH7kI7FTGuF
+         7TRyJukmP4g3bxCtNV5zE0zbbzr6fSrSCVBorSYBlufREmOpI28XDGaIz1b+iaj7CZj+
+         gUpQ8EcHLcQMzEBfA+eAL6pubL/DYlR1YoIvGj3T6FBibAAN9Hrz+9m2DEpRkPh4Ulef
+         phngd2Pu0iItkXS2cNqT8xugWYwTCdfon2H+DqaZRpo/1h80DH1ryqOkEH3csVA+bl8z
+         aYUh4iD8NBzxub9u9/3bdlYiL0P589bOoWBUJgKxxbrMy5u9ENq0aDM98VygR4+jOeAH
+         7Jqg==
+X-Gm-Message-State: AOAM5323MRAHD/xR2I6CFuQhBh1V/gFumIxd3QXZbRGNdrAJBPZ5xxPY
+        pu/sNEWp1SzfgU1Siwuwl365sg==
+X-Google-Smtp-Source: ABdhPJz1UINvG9Evq//eD92215fo53RODE2NVBvGZPKEMKJbnw7X1TLafReBfjtN0hTRcqLS5mbWtw==
+X-Received: by 2002:a17:902:ed82:: with SMTP id e2mr36674770plj.55.1643911548721;
+        Thu, 03 Feb 2022 10:05:48 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:c0cb:3065:aa0:d6c9])
+        by smtp.gmail.com with UTF8SMTPSA id 19sm10327466pjb.42.2022.02.03.10.05.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 10:05:48 -0800 (PST)
+Date:   Thu, 3 Feb 2022 10:05:46 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        pmaliset@codeaurora.org, quic_rjendra@quicinc.com,
+        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        sibis@codeaurora.org, swboyd@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 12/14] arm64: dts: qcom: sc7280: Add herobrine-r1
+Message-ID: <YfwZeq7VQpFO8yPH@google.com>
+References: <20220202212348.1391534-1-dianders@chromium.org>
+ <20220202132301.v3.12.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
 MIME-Version: 1.0
-References: <20220201222845.3640041-1-jeffreyji@google.com> <20220202205916.58f4a592@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220202205916.58f4a592@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Brian Vazquez <brianvv@google.com>
-Date:   Thu, 3 Feb 2022 10:05:17 -0800
-Message-ID: <CAMzD94SNEPACnp+uniXVgRDWr9oukj-xnAoqyQQCE77GH_kqdg@mail.gmail.com>
-Subject: Re: [PATCH v6 net-next] net-core: add InMacErrors counter
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jeffrey Ji <jeffreyjilinux@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jeffreyji <jeffreyji@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220202132301.v3.12.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 8:59 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue,  1 Feb 2022 22:28:45 +0000 Jeffrey Ji wrote:
-> > From: jeffreyji <jeffreyji@google.com>
-> >
-> > Increment InMacErrors counter when packet dropped due to incorrect dest
-> > MAC addr.
-> >
-> > An example when this drop can occur is when manually crafting raw
-> > packets that will be consumed by a user space application via a tap
-> > device. For testing purposes local traffic was generated using trafgen
-> > for the client and netcat to start a server
-> >
-> > example output from nstat:
-> > \~# nstat -a | grep InMac
-> > Ip6InMacErrors                  0                  0.0
-> > IpExtInMacErrors                1                  0.0
->
-> I had another thing and this still doesn't sit completely well
-> with me :(
->
-> Shouldn't we count those drops as skb->dev->rx_dropped?
-> Commonly NICs will do such filtering and if I got it right
-> in struct rtnl_link_stats64 kdoc - report them as rx_dropped.
-> It'd be inconsistent if on a physical interface we count
-> these as rx_dropped and on SW interface (or with promisc enabled
-> etc.) in the SNMP counters.
-> Or we can add a new link stat that NICs can use as well.
->
-> In fact I'm not sure this is really a IP AKA L3 statistic,
-> it's the L2 address that doesn't match.
->
->
-> If everyone disagrees - should we at least rename the MIB counter
-> similarly to the drop reason? Experience shows that users call for
-> help when they see counters with Error in their name, I'd vote for
-> IpExtInDropOtherhost or some such. The statistic should also be
-> documented in Documentation/networking/snmp_counter.rst
+On Wed, Feb 02, 2022 at 01:23:46PM -0800, Douglas Anderson wrote:
+> Add the new herobrine-r1. Note that this is pretty much a re-design
+> compared to herobrine-r0 so we don't attempt any dtsi to share stuff
+> between them.
+> 
+> This patch attempts to define things at 3 levels:
+> 
+> 1. The Qcard level. Herobrine includes a Qcard PCB and the Qcard PCB
+>    is supposed to be the same (modulo stuffing options) across
+>    multiple boards, so trying to define what's there hopefully makes
+>    sense. NOTE that newer "CRD" boards from Qualcomm also use
+>    Qcard. When support for CRD3 is added hopefully it can use the
+>    Qcard include (and perhaps we should even evaluate it using
+>    herobrine.dtsi?)
+> 2. The herobrine "baseboard" level. Right now most stuff is here with
+>    the exception of things that we _know_ will be different per
+>    board. We know that not all boards will have the same set of eMMC,
+>    nvme, and SD. We also know that the exact pin names are likely to
+>    be different.
+> 3. The actual "board" level, AKA herobrine-rev1.
+> 
+> NOTES:
+> - This boots to command prompt. We're still waiting on the PWM driver.
+> - This assumes LTE for now. Once it's clear how WiFi-only SKUs will
+>   work we expect some small changes.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Changing the Name to IpExtInDropOtherhost and adding the documentation
-makes sense to me. What do others think? I'd like to get more feedback
-before Jeffrey sends another version.
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

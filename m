@@ -2,137 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F524A9087
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635C84A908C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355730AbiBCWOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:14:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51816 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236807AbiBCWOx (ORCPT
+        id S1355744AbiBCWQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233578AbiBCWQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:14:53 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28107B835A3
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 22:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA14C340E8;
-        Thu,  3 Feb 2022 22:14:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643926490;
-        bh=a08cA2+MvMzPCszfm3boTtzcuffOYv1km28NtJz8sG8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dYCi/VhBr0fVuCdQkd4nwCNOvOQfWLN+1bXH3NPgXAFIv4+p7Z4Bgpp+uEoT1zHar
-         Zv3nS+kTO1oxFQyZtDQmPLBzoIP8sNvOkLc2yRji2M6jRKjxANXPhL7P08IpLgaEoD
-         XqGKC4lg7rUQgtZWus7+QIQWApl0RQkpKmJHmYgFvzKUd0Spk/3qlDrGuTi7B8PhUh
-         e7yNu9ABV1FdnI34Dtslg5JlfXnDWkF84yeWAzY2izrAF6klpnis0irs7a3quVwF/k
-         upI221r2qSfUExeQ1GaDRladup/0n8fEwSiqmUdOpRmQjMbxjQOJzfGZNAcs5wtMIe
-         rAG3HQjtPc5dw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 96E7A5C08B7; Thu,  3 Feb 2022 14:14:50 -0800 (PST)
-Date:   Thu, 3 Feb 2022 14:14:50 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev.2022.02.01a 77/103]
- kernel/rcu/srcutree.c:424:5: error: 'struct srcu_struct' has no member named
- 'srcu_size_state'
-Message-ID: <20220203221450.GS4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202202031012.PzmEcyQ4-lkp@intel.com>
+        Thu, 3 Feb 2022 17:16:13 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBCCC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:16:13 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id d5so3700002pjk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wF+Jmn9gWJUkdL4XKjJ8vgJJWNKU35vvnzSuRc8PN5Q=;
+        b=GGo6gaJFMbgYTTuGPg8+xxapDAKK1AoJPtWyitET8UeYCT6aw6rlXQznUev0bDTH4v
+         jsx724Annkq9eT47mBVels5GSoDInWT/A5LzW+i0QXCMIqJ1/RBic72KcDMO98zZoa/t
+         aUli26OT4FBXcyU7lbIkrKfF8ZCuFL8FDnUHnZjc1U71+nCy9wTxEzt8oLIHkN7EMW5C
+         z5Cv8jT3S6RHrn8PVrmJmjkTUfFfw1OLrlbc2ye9GMOpJHKKO3phXXAu7V5PjdK1Hrns
+         8B5t5Xk69ub/jqvcqTnPSkaqMOVpGcyf7F7v3GhyLRNhE8+W6Tj5Gv3HzIwdc6rK/sTi
+         8B9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wF+Jmn9gWJUkdL4XKjJ8vgJJWNKU35vvnzSuRc8PN5Q=;
+        b=HBwBaxToqdLWH1+J3R0ttKxbmkOdb0n4ZGqoDlPKnnYE6SXAyIxVGJ1qvIAYy+piQW
+         31p7anGHpP/js9uAPLHf74t7NICRjkBWvUFJFIXqySY5krA2vxAZ9Tr5uyA6Wa9Q9BqK
+         1VblAViAs2xOD4Zz5IsqMoldsGuXOOBt9ts4edTDlkhPuE0M2iJQ+slOx4+IXuF3XFxY
+         Nmf/sNfCLly/rIvXHRxibEKKWUws8at0FKVddFTnF44FdFN/93JM3QKCjKafYo996vLF
+         qdyroSldDtPXEijgGqnwlhJ1MMFGquV1W3/8Ji2GLvH5Ww4PFg8a3DrRprPY73HFok/7
+         o55A==
+X-Gm-Message-State: AOAM530SQ/Yy4esvYce/nplQFHwYMID5U+Ee/H2Sd2mdqWiu7z/Gu/VL
+        Mwe6CO2+1+Mf2wS4XRpeuSG63g==
+X-Google-Smtp-Source: ABdhPJzgWKRvlrq0OdVAtkNHPx6X+C7JYM4nQdSwb4xDp0WcsTw4OCO71XeMPI+YqLKOIbe+NDOXVw==
+X-Received: by 2002:a17:902:db02:: with SMTP id m2mr22417plx.136.1643926572417;
+        Thu, 03 Feb 2022 14:16:12 -0800 (PST)
+Received: from ?IPv6:2600:380:7677:2608:7e4f:2c76:b02e:3fbc? ([2600:380:7677:2608:7e4f:2c76:b02e:3fbc])
+        by smtp.gmail.com with ESMTPSA id j4sm10095pfc.217.2022.02.03.14.16.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 14:16:12 -0800 (PST)
+Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203174108.668549-1-usama.arif@bytedance.com>
+ <20220203174108.668549-3-usama.arif@bytedance.com>
+ <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
+ <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
+ <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
+ <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
+ <a5992789-6b0b-f3a8-0a24-e00add2a005a@kernel.dk>
+ <fc97036f-26a3-afb1-180f-30aa89d3cc01@bytedance.com>
+ <a2939109-5f97-ff56-df53-0a56ba12e268@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <582c8c6f-cbcf-f8d7-4976-e70d0d51c42d@kernel.dk>
+Date:   Thu, 3 Feb 2022 15:16:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202031012.PzmEcyQ4-lkp@intel.com>
+In-Reply-To: <a2939109-5f97-ff56-df53-0a56ba12e268@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 11:00:18AM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev.2022.02.01a
-> head:   5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d
-> commit: efbdb910e14b15835266c55ad4d891dde0792aed [77/103] srcu: Dynamically allocate srcu_node array
-> config: i386-randconfig-a004-20211220 (https://download.01.org/0day-ci/archive/20220203/202202031012.PzmEcyQ4-lkp@intel.com/config)
-> compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/ammarfaizi2/linux-block/commit/efbdb910e14b15835266c55ad4d891dde0792aed
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev.2022.02.01a
->         git checkout efbdb910e14b15835266c55ad4d891dde0792aed
->         # save the config file to linux build tree
->         mkdir build_dir
->         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 2/3/22 2:47 PM, Pavel Begunkov wrote:
+> On 2/3/22 19:54, Usama Arif wrote:
+>> On 03/02/2022 19:06, Jens Axboe wrote:
+>>> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
+>>>> On 2/3/22 18:29, Jens Axboe wrote:
+>>>>> On 2/3/22 11:26 AM, Usama Arif wrote:
+>>>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
+>>>>>> suggesting to do the below diff over patch 3? I dont think that would be
+>>>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
+>>>>>> present unregister can be called by another thread and set ctx->io_ev_fd
+>>>>>> to NULL that would cause a NULL pointer exception later? In the current
+>>>>>> patch, the check of whether ev_fd exists happens as the first thing
+>>>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
+>>>>>
+>>>>> They are cheap, but they are still noticeable at high requests/sec
+>>>>> rates. So would be best to avoid them.
+>>>>>
+>>>>> And yes it's obviously racy, there's the potential to miss an eventfd
+>>>>> notification if it races with registering an eventfd descriptor. But
+>>>>> that's not really a concern, as if you register with inflight IO
+>>>>> pending, then that always exists just depending on timing. The only
+>>>>> thing I care about here is that it's always _safe_. Hence something ala
+>>>>> what you did below is totally fine, as we're re-evaluating under rcu
+>>>>> protection.
+>>>>
+>>>> Indeed, the patch doesn't have any formal guarantees for propagation
+>>>> to already inflight requests, so this extra unsynchronised check
+>>>> doesn't change anything.
+>>>>
+>>>> I'm still more сurious why we need RCU and extra complexity when
+>>>> apparently there is no use case for that. If it's only about
+>>>> initial initialisation, then as I described there is a much
+>>>> simpler approach.
+>>>
+>>> Would be nice if we could get rid of the quiesce code in general, but I
+>>> haven't done a check to see what'd be missing after this...
+>>>
+>>
+>> I had checked! I had posted below in in reply to v1 (https://lore.kernel.org/io-uring/02fb0bc3-fc38-b8f0-3067-edd2a525ef29@gmail.com/T/#m5ac7867ac61d86fe62c099be793ffe5a9a334976), but i think it got missed! Copy-pasting here for reference:
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> May have missed it then, apologies
 > 
-> Note: the ammarfaizi2-block/paulmck/linux-rcu/dev.2022.02.01a HEAD 5721fe42e5e76b24e5a37c4fb5a4807cd4eb925d builds fine.
->       It only hurts bisectability.
+>> "
+>> I see that if we remove ring quiesce from the the above 3 opcodes, then
+>> only IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS is
+>> left for ring quiesce. I just had a quick look at those, and from what i
+>> see we might not need to enter ring quiesce in
+>> IORING_REGISTER_ENABLE_RINGS as the ring is already disabled at that point?
+>> And for IORING_REGISTER_RESTRICTIONS if we do a similar approach to
+>> IORING_REGISTER_EVENTFD, i.e. wrap ctx->restrictions inside an RCU
+>> protected data structure, use spin_lock to prevent multiple
+>> io_register_restrictions calls at the same time, and use read_rcu_lock
+>> in io_check_restriction, then we can remove ring quiesce from
+>> io_uring_register altogether?
+>>
+>> My usecase only uses IORING_REGISTER_EVENTFD, but i think entering ring
+>> quiesce costs similar in other opcodes. If the above sounds reasonable,
+>> please let me know and i can send patches for removing ring quiesce for
+>> io_uring_register.
+>> "
+>>
+>> Let me know if above makes sense, i can add patches on top of the current patchset, or we can do it after they get merged.
+>>
+>> As for why, quiesce state is very expensive. its making io_uring_register the most expensive syscall in my usecase (~15ms) compared to ~0.1ms now with RCU, which is why i started investigating this. And this patchset avoids ring quiesce for 3 of the opcodes, so it would generally be quite helpful if someone does registers and unregisters eventfd multiple times.
 > 
-> All errors (new ones prefixed by >>):
+> I agree that 15ms for initial setup is silly and it has to be
+> reduced. However, I'm trying weight the extra complexity against
+> potential benefits of _also_ optimising [de,re]-registration
 > 
->    kernel/rcu/srcutree.c: In function 'cleanup_srcu_struct':
-> >> kernel/rcu/srcutree.c:424:5: error: 'struct srcu_struct' has no member named 'srcu_size_state'
->      424 |  ssp->srcu_size_state = SRCU_SIZE_SMALL;
->          |     ^~
-> >> kernel/rcu/srcutree.c:424:25: error: 'SRCU_SIZE_SMALL' undeclared (first use in this function)
->      424 |  ssp->srcu_size_state = SRCU_SIZE_SMALL;
->          |                         ^~~~~~~~~~~~~~~
->    kernel/rcu/srcutree.c:424:25: note: each undeclared identifier is reported only once for each function it appears in
+> Considering that you only register it one time at the beginning,
+> we risk adding a yet another feature that nobody is going to ever
+> use. This doesn't give me a nice feeling, well, unless you do
+> have a use case.
 
-Good catch!
+It's not really a new feature, it's just making the existing one not
+suck quite as much...
 
-Folded the fix into the commit with attribution, thank you!
+> To emphasise, I'm comparing 15->0.1 improvement for only initial
+> registration (which is simpler) vs 15->0.1 for both registration
+> and unregistration.
 
-							Thanx, Paul
+reg+unreg should be way faster too, if done properly with the assignment
+tricks.
 
-> vim +424 kernel/rcu/srcutree.c
-> 
->    387	
->    388	/**
->    389	 * cleanup_srcu_struct - deconstruct a sleep-RCU structure
->    390	 * @ssp: structure to clean up.
->    391	 *
->    392	 * Must invoke this after you are finished using a given srcu_struct that
->    393	 * was initialized via init_srcu_struct(), else you leak memory.
->    394	 */
->    395	void cleanup_srcu_struct(struct srcu_struct *ssp)
->    396	{
->    397		int cpu;
->    398	
->    399		if (WARN_ON(!srcu_get_delay(ssp)))
->    400			return; /* Just leak it! */
->    401		if (WARN_ON(srcu_readers_active(ssp)))
->    402			return; /* Just leak it! */
->    403		flush_delayed_work(&ssp->work);
->    404		for_each_possible_cpu(cpu) {
->    405			struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
->    406	
->    407			del_timer_sync(&sdp->delay_work);
->    408			flush_work(&sdp->work);
->    409			if (WARN_ON(rcu_segcblist_n_cbs(&sdp->srcu_cblist)))
->    410				return; /* Forgot srcu_barrier(), so just leak it! */
->    411		}
->    412		if (WARN_ON(rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) != SRCU_STATE_IDLE) ||
->    413		    WARN_ON(rcu_seq_current(&ssp->srcu_gp_seq) != ssp->srcu_gp_seq_needed) ||
->    414		    WARN_ON(srcu_readers_active(ssp))) {
->    415			pr_info("%s: Active srcu_struct %p read state: %d gp state: %lu/%lu\n",
->    416				__func__, ssp, rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)),
->    417				rcu_seq_current(&ssp->srcu_gp_seq), ssp->srcu_gp_seq_needed);
->    418			return; /* Caller forgot to stop doing call_srcu()? */
->    419		}
->    420		free_percpu(ssp->sda);
->    421		ssp->sda = NULL;
->    422		kfree(ssp->node);
->    423		ssp->node = NULL;
->  > 424		ssp->srcu_size_state = SRCU_SIZE_SMALL;
->    425	}
->    426	EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
->    427	
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> fwiw, it alters userpace visible behaviour in either case, shouldn't
+> be as important here but there is always a chance to break userspace
+
+It doesn't alter userspace behavior, if the registration works like I
+described with being able to assign a new one while the old one is being
+torn down.
+
+Or do you mean wrt inflight IO? I don't think the risk is very high
+there, to be honest.
+
+-- 
+Jens Axboe
+

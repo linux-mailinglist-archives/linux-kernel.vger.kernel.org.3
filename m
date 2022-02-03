@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72554A7D68
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96774A7D6C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348829AbiBCBZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:25:10 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:38279 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348823AbiBCBZI (ORCPT
+        id S1348242AbiBCBgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:36:01 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:39125 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230005AbiBCBgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:25:08 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 69E9B32021CC;
-        Wed,  2 Feb 2022 20:25:07 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 02 Feb 2022 20:25:08 -0500
+        Wed, 2 Feb 2022 20:36:00 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 02F75580154;
+        Wed,  2 Feb 2022 20:36:00 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 02 Feb 2022 20:36:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=AevhwIhzctfagAB5U4J4UU0yjjC/vB
-        20Pt8LxBdPjqw=; b=SoI1Iap0kg5DH8pjGkOStDAglC0ynFXMGiH2hX112YUxn7
-        kWuDK2XniRnuzHKyYaIRfJBuFlnlj9fbyYU39MUkFPN0vgWpSYo/EzUvPL2WTh6e
-        tXGSUjCIuMOimjsx329ZtHmZY2yzbgb0qbBvxzHnrINOE0ex/DYXjIbrP8pD45o3
-        XTc+DI5aHTLrb8evz60je6i5ouhj01OMceMwPDGgshVwKVFHhtKM2HjN9r7xo1XG
-        TU5RuMLVi6/krotkzUUkNK2Z/PQBj7tQC+LWjNT5e1d9qsdetrNZrp57OOM7uDPj
-        AJSxTUopzlYjYb9KPrCM69rTHPe83/qpaj6+n6OQ==
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=Qg+6QTBkQeTFg6Q74FfxB2eWEkNPeUaZvFHDYsYpOA8=; b=mP52N
+        t/jnmr68xzmfUO1scROUNiQH3QFkPlRgUt4G9Hi1DDLrJHTBRvWmYdVGD5Zue87N
+        PCP7E/Zf1eA9hD2BF61czHJ/QeGpNHbNuSPev4XRUAkGXKdNcUIbHNK5KF0KqPRD
+        vOouQzyXDpK89Y4JKgMDMxrimsaUf4RDedpMmlvk81b5+NRotm3Ci1RpJqRvKuxl
+        QHAZcHj2RCfl4HxQyeIXxen6yaqxWFA9g0s4Waevk/wMacDnH/9jfToR7BqB3c9u
+        nl0pTHWq1M0CMkOjluIheasrMQ4CdahuQq8VSbIQccZf2d+RQxRQ29Zgt9sqo519
+        lasjDCrxcRSpjfUKA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=AevhwI
-        hzctfagAB5U4J4UU0yjjC/vB20Pt8LxBdPjqw=; b=XEvDaKT45a0R+MqooJA8Vj
-        4hwdcaTH6cSZnvPD5QE7IFubfsrbCjXLryjC3l/Khgms7lcHZrM/yiKdt5YQwzP5
-        +H0LMlX5wgilchrxnSd3cLdGt5YjRyIAUbkmnfYgmhKLrmsPjb3a4zoVrQLAeeuc
-        mNIaDxZSc4tNKoLiS1qFKOpwKR+YMTzCkTeGx9d7Bn/FBZ3fejyj6/UO4UkmuK8A
-        kE6U1UncVqPORijI7u+aC6SI6uhEllHTUD/RdWYjS1a3smKxcS5PkOcum1qrDUL2
-        hnKX7mxrdCc+IA7jv/n13brMsj3sDNr5dJfpnJ9j2NhuDTydCIhF0ZPZTTlTqPBQ
-        ==
-X-ME-Sender: <xms:8i77YcXMVVSbe4d-7PYjEzxlMB5KNULrbzHPAikDQNlkfy364PB55Q>
-    <xme:8i77YQlKE-JTQahHukdO3RXWKyPd8nrYb7z28n47zVsaewiYXUtIBjMCPH5qa88_P
-    hjx_-oIM1oROoxkxA>
-X-ME-Received: <xmr:8i77YQb0ZpzlysXUpop-1ohTEurAWE4MBz_T1VsuZ5cq1KuVbvLQRDpYhxlGC3dynJU9e-MiuA2faA8_x_I1uui8xGzFtbVQBwjeyWZS67qpadgmGEGrFukhK8-_a086nmZnDQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdeffecutefuodetggdotefrodftvf
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=Qg+6QTBkQeTFg6Q74FfxB2eWEkNPe
+        UaZvFHDYsYpOA8=; b=NIu90/v4jVboGtH60eMoXpGmXybfEvPMjYru1LmQX6MO0
+        fb4Q3lP4FEjIYt0rmq3nx+azVIIt8XGf1qHrfzyS/CBde8ukhOT2CzIyjYwQfyiV
+        FC+vLZrbz/XlZFilaGLkJ40GovUmho7gQt3vah1Sfuv9vRCsdtgwdg98jbMJvs1O
+        yQXxi++1yKP5RgeHclto5gzhKVk/wuGrRUyBAnxEEJwz68lZgExch0LPrVxp5Fyo
+        BOOjE84dccSsjlIwCojd/e2wSbKRcSkj9PWojTsu7n/f8rmOrZGquq6fDxj3dyAp
+        73wuxzC+LaNH36pzwHp9USCdHG/5zpOgZGSzzzP2A==
+X-ME-Sender: <xms:fzH7YWF9NufSY-fEn5MJ3oVbqJOsdVfXnL9mtpI9VF6qW3fTSEKquA>
+    <xme:fzH7YXWkOmIGnwAYFwihYaYwxPzIm32fvNbHMVhFyCxj13XoWy6dCK7vKDhVyQlD4
+    FZaumVYKXsGcVIvKA>
+X-ME-Received: <xmr:fzH7YQJ89YuB-uQx_Iwly8k7kG0WdpwEyKpD-am9tQsy87oPjrfA-qzFpACVXIjDPj4eFewnnQEMt262znM6bO8YerkgB5SbDl3O0TELiK91_qcVxma0LneMuxNYzUYJmnIprA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdefiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
-    jeehueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:8i77YbW2foVvPJ-c9b8JV8q_YZ7x7tbwDNGkBh7Ct7Zig9vFN7uyXA>
-    <xmx:8i77YWktOlCyncBk5v7Drm68wmFyLMBD4xYChXMML_id2ARQO8leSA>
-    <xmx:8i77YQdIRNlSuVh6c2iqJFIFyOj95mYrJLiEKl63WwQMqdEFdr4zpA>
-    <xmx:8i77YQ7qco6BW-cLT5b8QXXeFSM4mqCURhBDckHWcjRHl2AqtVPLwQ>
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
+    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:fzH7YQEFq3d8oJKJJG15aNiFD5TlP4Bp0E0DdtNzgqur1YfjIYmi2w>
+    <xmx:fzH7YcXLf1GIDECDr36G2KW07qHsZjBzdrndlTcRCYdyAEpHEDAgkQ>
+    <xmx:fzH7YTNd_7TcXmR3xzlRqa8ipjGbOtAXSLBOOx8oaW7D6UwaIsDNkg>
+    <xmx:fzH7YbMiQ42IvO24h935gxQkQqGNpON-2E3pXsDeuaKNl6vsVfBHPQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Feb 2022 20:25:06 -0500 (EST)
+ 2 Feb 2022 20:35:58 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 2/2] nvmem: sunxi_sid: Add support for D1 variant
-Date:   Wed,  2 Feb 2022 19:25:01 -0600
-Message-Id: <20220203012502.10661-2-samuel@sholland.org>
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH 1/4] dt-bindings: phy: Add compatible for D1 USB PHY
+Date:   Wed,  2 Feb 2022 19:35:54 -0600
+Message-Id: <20220203013558.11490-1-samuel@sholland.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220203012502.10661-1-samuel@sholland.org>
-References: <20220203012502.10661-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 has a smaller eFuse block than some other recent SoCs, and it no
-longer requires a workaround to read the eFuse data.
+D1 features one OTG port and one host port, like the A64 SoC, so its
+USB PHY supports the same set of properties. Add the new compatible to
+the existing binding.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/nvmem/sunxi_sid.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
-index 275b9155e473..5750e1f4bcdb 100644
---- a/drivers/nvmem/sunxi_sid.c
-+++ b/drivers/nvmem/sunxi_sid.c
-@@ -184,6 +184,11 @@ static const struct sunxi_sid_cfg sun8i_h3_cfg = {
- 	.need_register_readout = true,
- };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+index 078af52b16ed..0fa4b32b097e 100644
+--- a/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+@@ -15,7 +15,9 @@ properties:
+     const: 1
  
-+static const struct sunxi_sid_cfg sun20i_d1_cfg = {
-+	.value_offset = 0x200,
-+	.size = 0x100,
-+};
-+
- static const struct sunxi_sid_cfg sun50i_a64_cfg = {
- 	.value_offset = 0x200,
- 	.size = 0x100,
-@@ -200,6 +205,7 @@ static const struct of_device_id sunxi_sid_of_match[] = {
- 	{ .compatible = "allwinner,sun7i-a20-sid", .data = &sun7i_a20_cfg },
- 	{ .compatible = "allwinner,sun8i-a83t-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-sid", .data = &sun8i_h3_cfg },
-+	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun20i_d1_cfg },
- 	{ .compatible = "allwinner,sun50i-a64-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h5-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h6-sid", .data = &sun50i_h6_cfg },
+   compatible:
+-    const: allwinner,sun50i-a64-usb-phy
++    enum:
++      - allwinner,sun20i-d1-usb-phy
++      - allwinner,sun50i-a64-usb-phy
+ 
+   reg:
+     items:
 -- 
 2.33.1
 

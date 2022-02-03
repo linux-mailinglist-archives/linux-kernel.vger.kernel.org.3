@@ -2,141 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589C34A8A94
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7214A8AB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353063AbiBCRre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353051AbiBCRra (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:47:30 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A020BC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:47:29 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a13so6484602wrh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=znrMKNBSHwt+8IF1HzGLf7jCvuakzuIz97mrn0VfQe4=;
-        b=JKxxG0M/WmTjYUFgUOM0/taTapCtvV5FzO6Rv1QN+oZhkFb4tAutRK2wDWZbUlMRxq
-         F7QK4ZjqnR4SQ2BWzbfM4XhLvTkCNiW8RiGXG1O0J6y4MOTV8EI9kXXHeG1TUR72+1vY
-         8b4JetAjwbbCgcwNo0RAZlstnSp01CopodmD3Uo4uH+EOD8m36EMBjDC4oALOBkqiYAR
-         vKgRUZUqXz4PlsCowoYfB6x9UvIfxFN3hL6g9m0UAf6lW8zG/NzBhbX1l2AnAOZDvEKv
-         qWnGzIcYL5jy1lZ7AyjNVRGGTFKM3EPMDmLnaHfP73xfOj4qV70IY7B5RWVTaVIWMG3G
-         m/Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=znrMKNBSHwt+8IF1HzGLf7jCvuakzuIz97mrn0VfQe4=;
-        b=bxN0EQFZ47uLw0xCCpb8iwnGoPi3K+CckL9v7j/By/EylAExRGGksBfT7onoxiSwr2
-         JkwBMxTMMKtNbk4JRgE+6TGyT2wBrHJPABeJRGswZv02kssKRqCdttwkPZWbkGUCdBxx
-         nnCW109xTEHqCN0DALmLBw8VKNDPjAvUBi5u5cl//6oT38dkE213oAY7BZ2xPhpNsbEt
-         rjeCbPGXYlBOO8nL/kMWTqx421yz6WK+sW/ts395oKwePRsENZKCdjbYP65deMEUTuv+
-         N482IElygRrCWkVEZhLLoVYk4mLheNSuWH0MVv/LBar/b+9QRvC4b3WRahsYxKUlnUvq
-         h4vg==
-X-Gm-Message-State: AOAM533CZGBFRqGA3CGmjEBq94afKoUZnpUuQU0z31AXtL52zgJahMGl
-        dRll4cinUrXJ/5g6d4gc69bLxA==
-X-Google-Smtp-Source: ABdhPJxaMocHiPYFyIi2qLgsf/YM7iw1VmTOkuhEQYkZ/daIxL0KzWIbd+foVuT9R5jkU86H+UdFAQ==
-X-Received: by 2002:adf:dcc9:: with SMTP id x9mr29421769wrm.591.1643910448288;
-        Thu, 03 Feb 2022 09:47:28 -0800 (PST)
-Received: from ?IPv6:2a02:6b6d:f804:0:28c2:5854:c832:e580? ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
-        by smtp.gmail.com with ESMTPSA id u7sm7794525wml.7.2022.02.03.09.47.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 09:47:27 -0800 (PST)
-Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        axboe@kernel.dk, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203151153.574032-1-usama.arif@bytedance.com>
- <20220203151153.574032-2-usama.arif@bytedance.com>
- <f8ff62bf-4435-5da3-949a-fd337a9dfaf7@gmail.com>
-From:   Usama Arif <usama.arif@bytedance.com>
-Message-ID: <5df97fbf-cea5-c740-ae62-d75cb9390a0d@bytedance.com>
-Date:   Thu, 3 Feb 2022 17:47:27 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1353138AbiBCRug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:50:36 -0500
+Received: from mail-dm6nam11on2045.outbound.protection.outlook.com ([40.107.223.45]:43872
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232884AbiBCRu0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 12:50:26 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HakDJi6+XWsPREuVkP/ufuB3/NtiDBGdt1IJ0mnn+pSM0oc3l5ROnwSvU8Nn05UddkhrrzPIxDlyw0eV97+Inut9Ah/3qVlg2Fop7AS6ca9nj97MRhlo7+AX3YgLv5FIY1kpUTv9VywkFMKNfHLS9YYyugKBTO4NchPoDh7FHlOGVu+iWG76Yt4AxgOI+jlKz/eLASX58bKQZ3TjWG7Fdw2QKAuLz74fjODVKZekGkMSuGhgGnBScgIrQzqTvgv7PKRLBoYkn5gebSdUT5B0uHvHfvnsgX6kEJfmtgbJxEE/BC6t1p/8VBzgiamAc69g2gHJMt7uaVI71bcg4ul1DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F+B27CHrmeFJSZnWsREzmJFTYJc+DrmQm/zVxxgNRhM=;
+ b=BfGRwSfnRFQ74+vNqCBgD6gCJenLD/bwreEj9O3vHZq7/RWuMkqi6x0HB1Yb8S+cFgYehsrdk2iRwuRDOwknK7gMdPgfbqDe1uPKMQHVeJVtBuppK5UMMt92mG2ozwANbZeJF/rTf4P0SMnjKGn4cCSyGryouT7PIBNRM2+usQBeP3W1UqUe/j6ln3vshGogAFMAOmIm7GxFxmrcRgzrtGB0ikK3HDvmVO03ldJsEIgY84MefQhF0++4URlgC6ZrDjPvAYghAUnRdD/LgIpTzCgkhBxnjrx7ooAz+6pQ+gX7T9CAx+xlYgcCsppW52EIi0xZ3jsI8kx91FIF+mD3fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F+B27CHrmeFJSZnWsREzmJFTYJc+DrmQm/zVxxgNRhM=;
+ b=Ye0UgyCVZVxT+f2V3Mg3aAnXbFxYeuYR1GnzLW1PB0DEGwb6y3foU+05TEd45CjEzS2AV8R5l/JTfXtZAXaJsos76LOSHHuS1Kll+Qk5XV2FfxBPMxsWHAP5uV4ZrsSVf63F8pZQ7mTxzjzJtC0WiCkqf7EaX6WtgacwZTXl4+A=
+Received: from MW4PR02CA0023.namprd02.prod.outlook.com (2603:10b6:303:16d::16)
+ by MN2PR12MB3232.namprd12.prod.outlook.com (2603:10b6:208:ab::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.18; Thu, 3 Feb
+ 2022 17:50:24 +0000
+Received: from CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:16d:cafe::d) by MW4PR02CA0023.outlook.office365.com
+ (2603:10b6:303:16d::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Thu, 3 Feb 2022 17:50:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT007.mail.protection.outlook.com (10.13.174.131) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Thu, 3 Feb 2022 17:50:23 +0000
+Received: from node-bp128-r03d.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Feb
+ 2022 11:50:22 -0600
+From:   Naveen Krishna Chatradhi <nchatrad@amd.com>
+To:     <linux-edac@vger.kernel.org>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bp@alien8.de>, <mingo@redhat.com>,
+        <mchehab@kernel.org>, <yazen.ghannam@amd.com>,
+        Muralidhara M K <muralimk@amd.com>
+Subject: [PATCH v7 00/12] x86/edac/amd64: Add support for GPU nodes
+Date:   Thu, 3 Feb 2022 11:49:30 -0600
+Message-ID: <20220203174942.31630-1-nchatrad@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <f8ff62bf-4435-5da3-949a-fd337a9dfaf7@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: db6d6583-b686-4d8a-58cd-08d9e73da755
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3232:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB323253FEE68AFC041A4CEBD0E8289@MN2PR12MB3232.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4m307VG4Pz9O6tBrRyCYOp9tkcWkS/1cvcDQ3IAGiQMk9IoezueRLUXgiQJp7nKEBYio+/mNtuf/KAEYirmHXMCUHR/+1qEOaw/pgusHMQ3km4ylQyZLVSushHT/VyfTXKNrwsZ4Z3/k56UQxKxkcqPD5xeCAQEco+LRoBv4vxT0W82X50UNAoxv0f04Kfp0qjMXh63EVQE7P0LS04rJJc5CD5w0EM1zUaxaQ+y07nn3AGj61sxRl4ToC0vWVwH5uApsiy7pVeW705OxjJsavtLsmerq6qX2jJ8+O+JxZGR+2uU1MxKPsxy05kdXfUP+vbyNvjA9UA/ITrSh2jYjBW/DBiqYaq3wwabcunAL7WMb2cOc314LVsoCQ89c4Sf3DCrqDNNF1NShChltnkQs7uhyglYd0z6iBOj/pPf+OkErnxw3wzLM9hEfJGzjRbaHW+lR77giA5Lboh0EAevNAAd7SL2KH7QcPpUiTxB+qV3JPktkiCkKopusybaz8/W8vtDkAyl/GolP1KNpW/UbXh1/k+7Vxs4uLgPGtaXpEcltI7VxinI2RncbPOMZQCfPp18LFmlRO9Kk1bJU3BpT/99APakQ10VrEC6MkdBv/6U2MW7jS1NETrwmYPPAZfSnGJ5bq+Y/0TXVveqVOaeww7QiXze33j/sBudYWM9N6cwjjwdieFOMoGmuAmzHSj6IFLbSXCfZOhgwx3VslZf+EWXNPaI1RW912DHo9L6tvppkgMFgv0lhLFepC1mtMlZxs9fCSGWhnm0D1nn8f8N7QGmBtyGhRzyVIhjkltL2LMs=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(6666004)(47076005)(40460700003)(70206006)(36756003)(5660300002)(508600001)(70586007)(7696005)(966005)(316002)(8936002)(54906003)(4326008)(8676002)(110136005)(336012)(1076003)(2616005)(82310400004)(26005)(356005)(426003)(186003)(36860700001)(83380400001)(81166007)(2906002)(16526019)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 17:50:23.4170
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: db6d6583-b686-4d8a-58cd-08d9e73da755
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT007.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3232
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Muralidhara M K <muralimk@amd.com>
+
+On heterogeneous systems made up of AMD CPUs and GPUs, where the
+data fabrics of CPUs and GPUs are connected directly via custom links.
+UMC MCA banks on GPUs can be viewed similar to the UMCs banks on the CPUs.
+Hence, memory errors on GPU UMCs can be reported via edac framework.
+
+This patchset applies on top of the following series
+[v4,00/24] AMD MCA Address Translation Updates
+https://patchwork.kernel.org/project/linux-edac/cover/20220127204115.384161-1-yazen.ghannam@amd.com/
+
+Each patch was build tested individually. The entire set was
+tested for address translation and error counts on GPU
+memory.
+
+This patchset does the following
+1. edac.rst:
+   a. Add Documentation support for heterogeneous systems
+
+2. amd_nb.c:
+   a. Add support for northbridges on Aldebaran GPU nodes
+   b. export AMD node map details to be used by edac and mce modules
+	
+3. mce_amd module:
+   a. Identify the node ID where the error is and map the node id
+      to linux enumerated node id.
+
+4. Modifies the amd64_edac module
+   a. Refactor the code, define new family op routines and use
+      struct amd64_pvt. Making struct fam_type obsolete.
+   b. Enumerate UMCs and HBMs on the GPU nodes
+
+5. DF3.5 Address translation support
+   a. Support Data Fabric 3.5 Address translation
+   b. Fixed UMC to CS mapping for errors
 
 
-On 03/02/2022 15:48, Pavel Begunkov wrote:
-> On 2/3/22 15:11, Usama Arif wrote:
->> This is done by creating a new RCU data structure (io_ev_fd) as part of
->> io_ring_ctx that holds the eventfd_ctx.
->>
->> The function io_eventfd_signal is executed under rcu_read_lock with a
->> single rcu_dereference to io_ev_fd so that if another thread unregisters
->> the eventfd while io_eventfd_signal is still being executed, the
->> eventfd_signal for which io_eventfd_signal was called completes
->> successfully.
->>
->> The process of registering/unregistering eventfd is done under a lock
->> so multiple threads don't enter a race condition while
->> registering/unregistering eventfd.
->>
->> With the above approach ring quiesce can be avoided which is much more
->> expensive then using RCU lock. On the system tested, io_uring_reigster 
->> with
->> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 
->> 15ms
->> before with ring quiesce.
->>
->> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
->> ---
->>   fs/io_uring.c | 103 +++++++++++++++++++++++++++++++++++++++-----------
->>   1 file changed, 80 insertions(+), 23 deletions(-)
->>
->> diff --git a/fs/io_uring.c b/fs/io_uring.c
->> index 2e04f718319d..f07cfbb387a6 100644
->> --- a/fs/io_uring.c
->> +++ b/fs/io_uring.c
->> @@ -326,6 +326,12 @@ struct io_submit_state {
->>       struct blk_plug        plug;
->>   };
-> 
->> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
->> +static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx, 
->> struct io_ev_fd *ev_fd)
->>   {
->> -    if (likely(!ctx->cq_ev_fd))
->> +    if (likely(!ev_fd))
->>           return false;
->>       if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
->>           return false;
->>       return !ctx->eventfd_async || io_wq_current_is_worker();
->>   }
->> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
->> +{
->> +    struct io_ev_fd *ev_fd;
->> +
->> +    rcu_read_lock();
-> 
-> Please always think about the fast path, which is not set eventfd.
-> We don't want extra overhead here.
-> 
+Muralidhara M K (6):
+  EDAC/amd64: edac.rst: Add Doc support for heterogeneous systems
+  x86/amd_nb: Add support for northbridges on Aldebaran
+  EDAC/amd64: Move struct fam_type variables into amd64_pvt structure
+  EDAC/amd64: Define dynamic family ops routines
+  EDAC/amd64: Add AMD heterogeneous family 19h Model 30h-3fh
+  EDAC/amd64: Add address translation support for DF3.5
 
-I guess this should be ok now from v3?
+Naveen Krishna Chatradhi (3):
+  EDAC/mce_amd: Extract node id from MCA_IPID
+  EDAC/amd64: Enumerate Aldebaran GPU nodes by adding family ops
+  EDAC/amd64: Add Family ops to update GPU csrow and channel info
 
-Thanks,
-Usama
-> if (ctx->ev_fd) {
->      rcu_read_lock();
->          ev_fd = rcu_deref(...);
->          ...
->          rcu_read_unlock();
-> }
-> 
+Yazen Ghannam (3):
+  EDAC/amd64: Add check for when to add DRAM base and hole
+  EDAC/amd64: Save the number of block instances
+  EDAC/amd64: Add fixed UMC to CS mapping
+
+ Documentation/driver-api/edac.rst |    9 +
+ arch/x86/include/asm/amd_nb.h     |    9 +
+ arch/x86/kernel/amd_nb.c          |  149 ++-
+ drivers/edac/amd64_edac.c         | 1450 ++++++++++++++++++++---------
+ drivers/edac/amd64_edac.h         |  203 +++-
+ drivers/edac/mce_amd.c            |   23 +-
+ include/linux/pci_ids.h           |    1 +
+ 7 files changed, 1345 insertions(+), 499 deletions(-)
+
+-- 
+2.25.1
+

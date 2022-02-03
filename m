@@ -2,132 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFBC4A88E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70684A88E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352368AbiBCQoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S1352412AbiBCQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352379AbiBCQo1 (ORCPT
+        with ESMTP id S1352386AbiBCQoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:44:27 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43125C06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:44:27 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id a24so6167503uat.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:44:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/7hWGiKDX/+3TtHvDCLSMJlu4NmyHYy7nVm6Glu5jcs=;
-        b=Eu44Mg8zNIVsl+UBg0lHCou2bGR731muhWBsGIFlH7Qlfig/tH9EjGG7LhYDeVUgL2
-         yBKfPclwTyg18UZrOiqfuJ89i8XybLNqTaYSX/a4KtBkhWzz5k8noCv5qKrQnf7pz9gC
-         cU9EIuCV0fRK8UzYYfyJ83sxVUdyV2whm2zfukAd37PEkif+0OQrFVjVtJRfk/NpB5kF
-         aTGPNskbxUyxI7LLEMPrnqlI95zdXOWkLpELHRbx4BnCz2oqk41Y/TO4YHXrNBFYCbhD
-         etxqFqFShnXPHvrKvugW+xoT0rdqJ0frp0xn6PltLCnhV9Fkya4hBOscS61TtYtWobdj
-         h4pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/7hWGiKDX/+3TtHvDCLSMJlu4NmyHYy7nVm6Glu5jcs=;
-        b=45PS7qrBzUkkItOzyf/BfNZy1pZmK9BgA82vJd3quiSE/D6yEm4AqJxeWvjF1yMZxY
-         LDpoApJOmJ18XxGcrfrVkawOekzZ6X9yw+whGSjb5b5K6diTyJqXycSLoEKMxb2RgS2k
-         DcU6JcutenCESOtkNmPeRofiCUVflY09K+Xj41Nlh8TwHg5fGHMhHtv31U+kpcTiZuAu
-         UEnSqz5NDTsQEyyg/9/gV8+7FgSyFlLOmToA5+Y3pc5zZJAvMO0vy/mu1Hu0vdsP1LpJ
-         fy2ORC2X5/2iYPdM3MFRXE9x4nZnsXrVbfFDcHiqFf0SjBgmjq+NwkfnylKOJeci1kQ9
-         Sk3Q==
-X-Gm-Message-State: AOAM5308MbIiUm9lDQkMy7fR9W9misNgh9OwXbnBGCX5SpJmbk2B5q7x
-        d8vsyqg9OGYXwKesNC14mOKGalyy80w81AuWxChbNKh6JSH/nlTbkuF03eUYwR6xGGF7fSMV57o
-        K1ibnwtTZ4o6lQBmjjq26SzvGKAfvy/CK3yHXKuE9ZS2k0zfxQx3z49q5mITvdawX5pZRZNsIy1
-        oFFh9rd79txpLpKgP5
-X-Google-Smtp-Source: ABdhPJx2HB4OlovRK80h8tYU9Mdgc8buyu05GDejH1rOLWTHA+JswrW0YVKJpoDXnPTHBnmidcJ4GQ==
-X-Received: by 2002:a67:fd55:: with SMTP id g21mr14698421vsr.86.1643906666202;
-        Thu, 03 Feb 2022 08:44:26 -0800 (PST)
-Received: from localhost (host8.190-224-49.telecom.net.ar. [190.224.49.8])
-        by smtp.gmail.com with ESMTPSA id m185sm6362545vke.30.2022.02.03.08.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 08:44:26 -0800 (PST)
-From:   Martin Fernandez <martin.fernandez@eclypsium.com>
-To:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org,
-        Martin Fernandez <martin.fernandez@eclypsium.com>
-Subject: [PATCH v6 6/6] drivers/node: Show in sysfs node's crypto capabilities
-Date:   Thu,  3 Feb 2022 13:43:28 -0300
-Message-Id: <20220203164328.203629-7-martin.fernandez@eclypsium.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
-References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+        Thu, 3 Feb 2022 11:44:37 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FDEC061714;
+        Thu,  3 Feb 2022 08:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jThIhFNBrb3xj2YQLkczkGqkTy9wIvQP7gVhgnzkrew=; b=zGqOR7+LqSrG510WGhf1Ch1m+Q
+        zInXDUP+4zUsUrFPitgFSW+BwbHex8XmIlJT7thj0wp4BGrUyfHA+/mkPSu8CAYR2a8B7LsJpIVbA
+        N5gpuO+O7H3tPq8CUi8kGBhgqdRTkcgxmXICWE+dL+up2T1R+KeuuXYuzT7Gp4Cuf1mw3+s6E46yj
+        lg6bKHZlj4VFjSRnTYgs2sGXT/CoQbquXe3QK9Wwygp0lxg2M8kzhI/PcsZALiYg8Eqq511/Xxd+m
+        yInasAcEDOvhjUF3etd1bOFnYK37Zl3SlsnaKMYrH5FZyOWqqY69AUQdLoYSsrGcGv+5TW1HIoyo+
+        JgXhnVbQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57016)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nFfDf-0002s5-AV; Thu, 03 Feb 2022 16:44:27 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nFfDc-00049q-6H; Thu, 03 Feb 2022 16:44:24 +0000
+Date:   Thu, 3 Feb 2022 16:44:24 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Yannick Vignon <yannick.vignon@oss.nxp.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        sebastien.laveze@oss.nxp.com, Vladimir Oltean <olteanv@gmail.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, mingkai.hu@nxp.com,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Yannick Vignon <yannick.vignon@nxp.com>
+Subject: Re: [PATCH net] net: stmmac: ensure PTP time register reads are
+ consistent
+Message-ID: <YfwGaD06/3W1UFQ+@shell.armlinux.org.uk>
+References: <20220203160025.750632-1-yannick.vignon@oss.nxp.com>
+ <YfwCnV2TV8fznZ33@shell.armlinux.org.uk>
+ <13dc6f72-8ef4-6990-1c67-2b92c6894e87@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13dc6f72-8ef4-6990-1c67-2b92c6894e87@oss.nxp.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Show in each node in sysfs if its memory is able to do be encrypted by
-the CPU, ie. if all its memory is marked with EFI_MEMORY_CPU_CRYPTO in
-the EFI memory map.
+On Thu, Feb 03, 2022 at 05:38:10PM +0100, Yannick Vignon wrote:
+> On 2/3/2022 5:28 PM, Russell King (Oracle) wrote:
+> > On Thu, Feb 03, 2022 at 05:00:25PM +0100, Yannick Vignon wrote:
+> > > From: Yannick Vignon <yannick.vignon@nxp.com>
+> > > 
+> > > Even if protected from preemption and interrupts, a small time window
+> > > remains when the 2 register reads could return inconsistent values,
+> > > each time the "seconds" register changes. This could lead to an about
+> > > 1-second error in the reported time.
+> > 
+> > Have you checked whether the hardware protects against this (i.o.w. the
+> > hardware latches the PTP_STSR value when PTP_STNSR is read, or vice
+> > versa? Several PTP devices I've looked at do this to allow consistent
+> > reading.
+> > 
+> 
+> It doesn't. I was able to observe inconsistent values doing reads in either
+> order, and we had already observed the issue with that same IP on another
+> device (Cortex-M based, not running Linux). It's not easy to reproduce, the
+> time window is small, but it's there.
 
-Signed-off-by: Martin Fernandez <martin.fernandez@eclypsium.com>
----
- Documentation/ABI/testing/sysfs-devices-node | 10 ++++++++++
- drivers/base/node.c                          | 10 ++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-devices-node
+Okay, thanks.
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-node b/Documentation/ABI/testing/sysfs-devices-node
-new file mode 100644
-index 000000000000..0d1fd86c9faf
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-devices-node
-@@ -0,0 +1,10 @@
-+What:		/sys/devices/system/node/nodeX/crypto_capable
-+Date:		February 2022
-+Contact:	Martin Fernandez <martin.fernandez@eclypsium.com>
-+Users:		fwupd (https://fwupd.org)
-+Description:
-+		This value is 1 if all system memory in this node is
-+		marked with EFI_MEMORY_CPU_CRYPTO, indicating that the
-+		system memory is capable of being protected with the
-+		CPU’s memory cryptographic capabilities. It is 0
-+		otherwise.
-\ No newline at end of file
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 87acc47e8951..dabaed997ecd 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -560,11 +560,21 @@ static ssize_t node_read_distance(struct device *dev,
- }
- static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
- 
-+static ssize_t crypto_capable_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct pglist_data *pgdat = NODE_DATA(dev->id);
-+
-+	return sysfs_emit(buf, "%d\n", pgdat->crypto_capable);
-+}
-+static DEVICE_ATTR_RO(crypto_capable);
-+
- static struct attribute *node_dev_attrs[] = {
- 	&dev_attr_meminfo.attr,
- 	&dev_attr_numastat.attr,
- 	&dev_attr_distance.attr,
- 	&dev_attr_vmstat.attr,
-+	&dev_attr_crypto_capable.attr,
- 	NULL
- };
- 
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+
 -- 
-2.30.2
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

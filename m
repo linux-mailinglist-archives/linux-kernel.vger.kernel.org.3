@@ -2,60 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C9B4A8C3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5368E4A8C44
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353704AbiBCTJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
+        id S1353713AbiBCTMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353676AbiBCTJV (ORCPT
+        with ESMTP id S1353676AbiBCTMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:09:21 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8B29C061714;
-        Thu,  3 Feb 2022 11:09:20 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id BBF1F92009C; Thu,  3 Feb 2022 20:09:19 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B4C4E92009B;
-        Thu,  3 Feb 2022 19:09:19 +0000 (GMT)
-Date:   Thu, 3 Feb 2022 19:09:19 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Brent Spillner <spillner@acm.org>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, tglx@linutronix.de,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] x86/PCI: Improve log message when IRQ cannot be
- identified
-In-Reply-To: <CAGwJgaNcWA9bP4LjJRSefUhQ0eUM5xYWz8MMg7NjXgHB3+jMCQ@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2202031858490.34636@angie.orcam.me.uk>
-References: <CAGwJgaMDJH-rhsc9+_vj1vjj6XLigvqVYLdu-6TgrDNxGpTubA@mail.gmail.com> <20220202224239.GA49678@bhelgaas> <CAGwJgaNcWA9bP4LjJRSefUhQ0eUM5xYWz8MMg7NjXgHB3+jMCQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 3 Feb 2022 14:12:14 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8438CC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:12:14 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id d3so2932156ilr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:12:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KHa5Z8+68bn7uZrutpzvRnuaK8kqTA9LB4xk56iIo78=;
+        b=yQzTR2zzEeoMC6bmKrWEE8wKGlKLH7RL8pwP7TAhzFIfyTXzVPCNsx/62P+2Obl36E
+         TAKMe1TN46PpkB2UPgNikVo4XJp7V+hMV2dEGmw0j+Nt1SOHoD8FLIFaw1lnyZp6eq5j
+         GgX/xI2Me8WuBaLnAD+Dd+tF2hjgZ0qIHMNn79IuxiqLvmbC1HNl25yLfB7UYA6OWEpU
+         m+/dv+ihxHm/nObleL5XZPVVX0yp8h24SKpSBtB7V2HM4x7NZcLYFyaCzMGRa1gfZYDb
+         ++biIfyGzV5tBQFeGmAtEAF/sCGryzl4VnLNYYXSJBxImc5CJTtcNZ79Pj+vigWzjZN1
+         zXug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KHa5Z8+68bn7uZrutpzvRnuaK8kqTA9LB4xk56iIo78=;
+        b=CaCWj7Pw8G0Yyo2EBmj/mTQpQwpLCX0b3fkZOeArgdZzgWGgK+h6NY6YU7nIbwm9DT
+         M1zMKAHLXt+27uV/QQcAMVUz23LZTYsiKQU4Oe3kmQ/W7ijsICEq4YwIxH2f2nIyevUA
+         tnvd5F9rquUIk3MSwTXibCAMSZnWNcj5/YL+AvZnDsLR9bxozIzxLW8WyyOVQ0e5WWJm
+         71ZQGW0Z3M0FVF7DSOt/yX6EVXAU/A2RGujKLEajYKsRQ1fQYWpX8vaB7i+kIQYvgfaZ
+         u+iIxBgpYqWzYUj8xeQpxZ745tbKpA3Dkp5PNBxePnxBMkaiuWAhfvzj0FxzHJkbA2DT
+         mRkg==
+X-Gm-Message-State: AOAM530+sUlKdmq3Uy1AeYupKpolqeF3ucAphPwVMPc2jRavVGjbpb5k
+        gpZnZVjTr4W6Vyr67deJQEx2M6E6CaFZpQ==
+X-Google-Smtp-Source: ABdhPJzMD+DNONLaLZPjq9r8IOLB6GrCNlR/V3V/Emu7U7QW4F4CR1iw7alDrKXsJmlfHLFvDaZVOg==
+X-Received: by 2002:a05:6e02:1908:: with SMTP id w8mr20292289ilu.56.1643915533759;
+        Thu, 03 Feb 2022 11:12:13 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id e17sm22248182ilm.67.2022.02.03.11.12.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 11:12:13 -0800 (PST)
+Subject: Re: [External] Re: [PATCH v4 2/3] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203182441.692354-1-usama.arif@bytedance.com>
+ <20220203182441.692354-3-usama.arif@bytedance.com>
+ <8369e0be-f922-ba6b-ceed-24886ebcdb78@kernel.dk>
+ <d390f325-0f5b-a321-841d-36ac873358f9@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <11e423ca-4272-86cf-8d51-2620094cfe29@kernel.dk>
+Date:   Thu, 3 Feb 2022 12:12:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <d390f325-0f5b-a321-841d-36ac873358f9@bytedance.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Feb 2022, Brent Spillner wrote:
-
-> > If your system has ACPI, I think "pci=biosirq" and "acpi=noirq" are at
-> > best distractions from finding the real problem.
+On 2/3/22 12:05 PM, Usama Arif wrote:
 > 
-> ...except when the cause is indeed buggy ACPI firmware, which is
-> presumably the only reason these options exist in the first place.
+> 
+> On 03/02/2022 18:49, Jens Axboe wrote:
+>> On 2/3/22 11:24 AM, Usama Arif wrote:
+>>> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
+>>> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+>>>   {
+>>> -	if (likely(!ctx->cq_ev_fd))
+>>> -		return false;
+>>> +	struct io_ev_fd *ev_fd;
+>>> +
+>>> +	rcu_read_lock();
+>>> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
+>>> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
+>>> +
+>>> +	if (likely(!ev_fd))
+>>> +		goto out;
+>>>   	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+>>> -		return false;
+>>> -	return !ctx->eventfd_async || io_wq_current_is_worker();
+>>> +		goto out;
+>>> +
+>>> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
+>>> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
+>>> +
+>>> +out:
+>>> +	rcu_read_unlock();
+>>>   }
+>>
+>> This still needs what we discussed in v3, something ala:
+>>
+>> /*
+>>   * This will potential race with eventfd registration, but that's
+>>   * always going to be the case if there is IO inflight while an eventfd
+>>   * descriptor is being registered.
+>>   */
+>> if (!rcu_dereference_raw(ctx->io_ev_fd))
+>> 	return;
+>>
+>> rcu_read_lock();
+> 
+> Hmm, so i am not so worried about the registeration, but actually 
+> worried about unregisteration.
+> If after the check and before the rcu_read_lock, the eventfd is 
+> unregistered won't we get a NULL pointer exception at 
+> eventfd_signal(ev_fd->cq_ev_fd, 1)?
 
- The former is really for us missing a PIRQ router or for a BIOS missing a 
-$PIR table.  I have been posting patches recently to add support for some 
-of such systems identified.  Those are all pre-ACPI, possibly long before, 
-i.e. early to late 1990s (486 and P5/P54C Pentium and similar systems), 
-and I think the option was added before we had ACPI support too.  I have a 
-couple of pre-ACPI x86 systems too, which are quirky to say the least even 
-though they were the quality systems of the time from reputable vendors.
+You need to check it twice, that's a hard requirement. The first racy
+check is safe because we don't care if we miss a notification, once
+inside rcu_read_lock() it needs to be done properly of course. Like you
+do below, that's how it should be done.
 
- FWIW,
+>> I wonder if we can get away with assigning ctx->io_ev_fd to NULL when we
+>> do the call_rcu(). The struct itself will remain valid as long as we're
+>> under rcu_read_lock() protection, so I think we'd be fine? If we do
+>> that, then we don't need any rcu_barrier() or synchronize_rcu() calls,
+>> as we can register a new one while the previous one is still being
+>> killed.
+>>
+>> Hmm?
+>>
+> 
+> We would have to remove the check that ctx->io_ev_fd != NULL. That we 
+> would also result in 2 successive calls to io_eventfd_register without 
+> any unregister in between being successful? Which i dont think is the 
+> right behaviour?
+> 
+> I think the likelihood of hitting the rcu_barrier itself is quite low, 
+> so probably the cost is low as well.
 
-  Maciej
+Yeah it might very well be. To make what I suggested work, we'd need a
+way to mark the io_ev_fd as going away. Which would be feasible, as we
+know the memory will remain valid for us to check. So it could
+definitely work, you'd just need a check for that.
+
+> Thanks, will do that this in the next patchset with the above 
+> io_eventfd_signal changes if those look ok as well?
+
+The code you pasted looked good. Consider the "is unregistration in
+progress" suggestion as well, as it would be nice to avoid any kind of
+rcu synchronization if at all possible.
+
+-- 
+Jens Axboe
+

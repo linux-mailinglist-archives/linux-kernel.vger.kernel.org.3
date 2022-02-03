@@ -2,68 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B622E4A871F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6FC4A8723
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351574AbiBCO5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S1351582AbiBCO6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiBCO5W (ORCPT
+        with ESMTP id S236285AbiBCO6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:57:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFE3C061714;
-        Thu,  3 Feb 2022 06:57:21 -0800 (PST)
+        Thu, 3 Feb 2022 09:58:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4A8C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:57:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9040561A53;
-        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 037F9C340E4;
-        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87F9AB8347E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:57:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C5AC340E4;
+        Thu,  3 Feb 2022 14:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643900241;
-        bh=rZqRbsG2l7ER8PFv8mXrGg1IyiTqFVzh6i0XCds10/c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CyeAvlunIjmxlw7af6EGCKOXyafIBzE5ZlthWSpob7BKB1n47luYuI4G/AMgd1Asp
-         7GWSq+uKeuzatCBhcqT/WoaiQ69CSkzCCiVEifeYv1sA6J+RMqyo2nAZcSxfj1TMpa
-         dcXvIORgX3jtXu0MZs18jjzRuwuFJB8LJmMsA7dfjmGh9voOtIEAYfmIK6j/xf2h2m
-         W+sUc7As/pNH/GEgCKXp19ck4tpLg1JKBfNmgelGWIJjYx0ku15ylrVd6WpxzndZpB
-         Df1u6B+4cPRPKjfT5BS+gPbqfo+dS8F6f07iqaa7sz0DMJ46i61xtiEW8lC5iEiiyb
-         ugiTbhlFKgwSA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E83A0E5D08C;
-        Thu,  3 Feb 2022 14:57:20 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220203085602.GA5364@alpha.franken.de>
-References: <20220203085602.GA5364@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220203085602.GA5364@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
-X-PR-Tracked-Commit-Id: 2161ba070999a709f975910b6b9ad6b51cd6f120
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d394bb77dd0bd20b125459da25fdac00a853be28
-Message-Id: <164390024094.8873.8664251448338199732.pr-tracker-bot@kernel.org>
-Date:   Thu, 03 Feb 2022 14:57:20 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        s=k20201202; t=1643900277;
+        bh=Ks22gSDrqIChyIuOe9jWB9tU+82I1HQzBzexKQlVy+8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JiUudjs7lQELou29GEr4Y4qUOJ4Iq1wQIofGnGMVh96xtnGl2EJqKneLGsCkOTKA9
+         Vo9BG5fq69h6dcO3Qw/ahzAo7ZjjenKpHhizHDR34CJt1l/rlIqtywMNf2E/gSYAlX
+         dulwcQMyLD04D6QiOdbyZ932Xbt2QuYeqkWUsvUgtCCwYQ2dzRfPEhmucGEXRCW9rC
+         k/cJHweuE4GUA1p/ecYFGI9EDziHQABlhYa1KJR1QdtD0Q+zET0kxJ6pevGG2jhDcb
+         BhLeFhW8AMBJSNdze9p8UW6GssNQTWEmHao/L/zjQWfTerolD5AvIVo+5aH+/O69EL
+         AymmI2cRK/o1Q==
+Message-ID: <86a175d3-c438-505b-1dbc-4ef6e8b5adcb@kernel.org>
+Date:   Thu, 3 Feb 2022 22:57:51 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] f2fs: fix to avoid potential deadlock
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        Jing Xia <jing.xia@unisoc.com>
+References: <20220127054449.24711-1-chao@kernel.org>
+ <YfMVxzdhat01ca7m@google.com>
+ <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
+ <YfSMMpj2GrYXAJK2@google.com>
+ <51be77f1-6e85-d46d-d0d3-c06d2055a190@kernel.org>
+ <Yfs1KRgwgzSOvocR@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yfs1KRgwgzSOvocR@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 3 Feb 2022 09:56:02 +0100:
+On 2022/2/3 9:51, Jaegeuk Kim wrote:
+> On 01/29, Chao Yu wrote:
+>> On 2022/1/29 8:37, Jaegeuk Kim wrote:
+>>> On 01/28, Chao Yu wrote:
+>>>> On 2022/1/28 5:59, Jaegeuk Kim wrote:
+>>>>> On 01/27, Chao Yu wrote:
+>>>>>> Quoted from Jing Xia's report, there is a potential deadlock may happen
+>>>>>> between kworker and checkpoint as below:
+>>>>>>
+>>>>>> [T:writeback]				[T:checkpoint]
+>>>>>> - wb_writeback
+>>>>>>     - blk_start_plug
+>>>>>> bio contains NodeA was plugged in writeback threads
+>>>>>
+>>>>> I'm still trying to understand more precisely. So, how is it possible to
+>>>>> have bio having node write in this current context?
+>>>>
+>>>> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
+>>>> during writebacking node_inode's data page (which should be node page)?
+>>>
+>>> Wasn't that added into a different task->plug?
+>>
+>> I'm not sure I've got your concern correctly...
+>>
+>> Do you mean NodeA and other IOs from do_writepages() were plugged in
+>> different local plug variables?
+> 
+> I think so.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
+I guess block plug helper says it doesn't allow to use nested plug, so there
+is only one plug in kworker thread?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d394bb77dd0bd20b125459da25fdac00a853be28
+void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
+{
+	struct task_struct *tsk = current;
 
-Thank you!
+	/*
+	 * If this is a nested plug, don't actually assign it.
+	 */
+	if (tsk->plug)
+		return;
+...
+}
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>>> 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+>>>>>> 					 - f2fs_write_data_pages
+>>>>>> 					  - f2fs_write_single_data_page -- write last dirty page
+>>>>>> 					   - f2fs_do_write_data_page
+>>>>>> 					    - set_page_writeback  -- clear page dirty flag and
+>>>>>> 					    PAGECACHE_TAG_DIRTY tag in radix tree
+>>>>>> 					    - f2fs_outplace_write_data
+>>>>>> 					     - f2fs_update_data_blkaddr
+>>>>>> 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+>>>>>> 					   - inode_dec_dirty_pages
+>>>>>>     - writeback_sb_inodes
+>>>>>>      - writeback_single_inode
+>>>>>>       - do_writepages
+>>>>>>        - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+>>>>>>         - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+>>>>>>      - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+>>>>>>     - blk_finish_plug
+>>>>>>
+>>>>>> Let's try to avoid deadlock condition by forcing unplugging previous bio via
+>>>>>> blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+>>>>>> due to valid sbi->wb_sync_req[DATA/NODE].
+>>>>>>
+>>>>>> Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+>>>>>> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+>>>>>> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+>>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
+>>>>>> ---
+>>>>>>     fs/f2fs/data.c | 6 +++++-
+>>>>>>     fs/f2fs/node.c | 6 +++++-
+>>>>>>     2 files changed, 10 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>>> index 76d6fe7b0c8f..932a4c81acaf 100644
+>>>>>> --- a/fs/f2fs/data.c
+>>>>>> +++ b/fs/f2fs/data.c
+>>>>>> @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+>>>>>>     	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+>>>>>>     	if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>     		atomic_inc(&sbi->wb_sync_req[DATA]);
+>>>>>> -	else if (atomic_read(&sbi->wb_sync_req[DATA]))
+>>>>>> +	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
+>>>>>> +		/* to avoid potential deadlock */
+>>>>>> +		if (current->plug)
+>>>>>> +			blk_finish_plug(current->plug);
+>>>>>>     		goto skip_write;
+>>>>>> +	}
+>>>>>>     	if (__should_serialize_io(inode, wbc)) {
+>>>>>>     		mutex_lock(&sbi->writepages);
+>>>>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+>>>>>> index 556fcd8457f3..69c6bcaf5aae 100644
+>>>>>> --- a/fs/f2fs/node.c
+>>>>>> +++ b/fs/f2fs/node.c
+>>>>>> @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
+>>>>>>     	if (wbc->sync_mode == WB_SYNC_ALL)
+>>>>>>     		atomic_inc(&sbi->wb_sync_req[NODE]);
+>>>>>> -	else if (atomic_read(&sbi->wb_sync_req[NODE]))
+>>>>>> +	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
+>>>>>> +		/* to avoid potential deadlock */
+>>>>>> +		if (current->plug)
+>>>>>> +			blk_finish_plug(current->plug);
+>>>>>>     		goto skip_write;
+>>>>>> +	}
+>>>>>>     	trace_f2fs_writepages(mapping->host, wbc, NODE);
+>>>>>> -- 
+>>>>>> 2.32.0

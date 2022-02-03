@@ -2,74 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EDE4A7D61
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7058B4A7D63
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348678AbiBCBRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S1348816AbiBCBSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234817AbiBCBRL (ORCPT
+        with ESMTP id S234817AbiBCBSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:17:11 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE142C061714;
-        Wed,  2 Feb 2022 17:17:10 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id 9so1377176iou.2;
-        Wed, 02 Feb 2022 17:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Atk87UBrLdgJ/4opBYK4rxjaslsdOKBSpYu0KC0YsxQ=;
-        b=otKYisaXlGcz6Z+IV/RDvJswEORs8zuCZGzmillZ+Zb/fiLNDV9t1G9FhhkakI6nln
-         Y12baMMsBYY3pBpxARbr621JzMC57kHB2MWCgy51vGcJIkPOSRihGRtafd3cMUEavSFE
-         SZTN78p4FuksM/PQoOhgKsInnr6OiQIFxbIjLSBx0wUS6DqhkB2w9QrlZ4MziRLn2sRN
-         YBgZ9RsnJEmsS7rjnpmZWBsshvsb3GoIOMX8r0fV2zOcMe5VGYC6JtMiVD8RYDCL1eHp
-         sn8WiZqeUjIEy9TmXJW6PQAOBIspoxpAADIEc62QEjnxvzEh+/HSFeDfZtIc4nRXCSSK
-         o1Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Atk87UBrLdgJ/4opBYK4rxjaslsdOKBSpYu0KC0YsxQ=;
-        b=l6cru0REZ1ZVuj8fP5I61eG137wHxyG24Dji3tWTJZcnb/g/nKF5UBhjW6yJkv/hvK
-         nqJS7018w+DCyyTDtpJtQWdELQcR8OKVER9Hk8S02DZsns4cj5tOjCHGE2/cm8tM5LjI
-         aw0JKt6/AiZ0HfELFim/mz+bdsH/x1lJsWNceJx8fo3uQZjxbUzfzDMdE6p/us6oCD61
-         PT7BGTOQ3KJ/rRk14xCZruEr+H5GCpJgfrcHJvEHPxbMSpfyiEPl5zRaYOeVoWFiMVkA
-         M85AmN/H2ms97wcy7/n1WQb7DPfQad01zNZCIvbQ6n7G3h+n0145JsGGdMXVqTMYRXuf
-         hjWQ==
-X-Gm-Message-State: AOAM532cAGjuUBdli55e9z2s83R3l8YBs5zyfeTyFS6HUfX+yd5yUs4R
-        W2zeYlvJ8UczioQuGI6Ah8eXhsAZQGRUhM74NN+7uqw1RzO8KQ==
-X-Google-Smtp-Source: ABdhPJzP1d5MTNCIbxdxeWkhhxKtbUS8oBKU49hnYPvQ4DUOcFHpVqqnduIWHedeyefiLTXlR4S0ukZzbZtp5W3uWAk=
-X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr16680190iow.133.1643851030433;
- Wed, 02 Feb 2022 17:17:10 -0800 (PST)
+        Wed, 2 Feb 2022 20:18:10 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D43DC061714;
+        Wed,  2 Feb 2022 17:18:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mJU2H5U0ZcOcPwMNnUPSpSU79DaLOwiDWUjkvLctXEM=; b=hUWT+V8HJQPlcDLLdldM3+sEDt
+        8qqkCKpWwDyRMcku4wEXF+brknScwvtcglKT7KJlfrUm58mKfQa6ROQuzhDr5cVk2Qn/AC4FvdFzS
+        s7bAaALKKc6gg/pVCnnmihuKZ/eA5kLFomRSksc0xrJmdmDAc081eai4j40piCYRLmx+emPETQQ2Q
+        Sc6pfbT/eVSjdfSGduHXJ6YOm4QYQ7I7bvLsZrAcHRoIQEAlH3t3qaLgvNJvwAF2XyZ/slvuOa+4K
+        wPT8gU3zS6Eq7TFfvb53Jus+9AppLj00XLdSoR1RMdbLj5cDaWNofsyWTPfKGqL8zbauMnSEnQXsS
+        hbLzedMw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFQkz-00HI1W-BW; Thu, 03 Feb 2022 01:17:53 +0000
+Date:   Wed, 2 Feb 2022 17:17:53 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     tangmeng <tangmeng@uniontech.com>, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
+Message-ID: <YfstQeOpZuQzBmZJ@bombadil.infradead.org>
+References: <20220131102214.2284-1-tangmeng@uniontech.com>
+ <87wnicssth.ffs@tglx>
 MIME-Version: 1.0
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
- <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com> <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
-In-Reply-To: <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Thu, 3 Feb 2022 02:16:59 +0100
-Message-ID: <CAB95QASv2nY6kttOw1rwReUuucfpSgoByA6yrAbuQPRcTUQJBQ@mail.gmail.com>
-Subject: Re: [ASUS EC Sensors v8 0/3]
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Denis Pauk <pauk.denis@gmail.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Jean Delvare <jdelvare@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wnicssth.ffs@tglx>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I was waiting for someone to send me a Tested-by: for the series,
+On Thu, Feb 03, 2022 at 01:21:46AM +0100, Thomas Gleixner wrote:
+> In other words, invite everyone to add random sysctls as they see fit
+> w/o a central review authority.
 
-Oleksandr sent an informal one already.
+Everyone already can do that already. We can't stop that.
 
-> since you dropped the previous feedback.
+> That's not an improvement at all. Quite
+> the contrary.
 
-Does it mean it is possible to update patches while keeping it?
+The idea is to move them to the respective subsystem / driver.
 
-Eugene
+To be clear the argument put forwards to move sysctls out of one file
+was not started by tangmeng but by me and that work is already mostly
+merged for at least all the fs stuff. The rest of the patches coming
+through is help to move the other stuff to other areas.
+
+The truth is kernel/sysctl.c as of the last 2 kernel releases before
+*was* huge and it can lead to tons of conflicts when doing merges.
+This makes it hard to maintain and even review changes.
+
+*Today* all filesystem syctls now get reviewed by fs folks. They are
+all tidied up there.
+
+In the future x86 folks can review their sysctls. But for no reason
+should I have to review every single knob. That's not scalable.
+
+> That aside, I'm tired of this because this is now at V5 and you still
+> failed to fix the fallout reported by the 0-day infrastructure vs. this
+> part of the patch:
+> 
+> > +static int __init timer_sysctl_init(void)
+> > +{
+> > +	register_sysctl_init("kernel", timer_sysctl);
+> > +	return 0;
+> > +}
+> 
+>     kernel/time/timer.c: In function 'timer_sysctl_init':
+>  >> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
+>       284 |         register_sysctl_init("kernel", timer_sysctl);
+> 	  |         ^~~~~~~~~~~~~~~~~~~~
+> 
+
+That's an issue with the patch being tested on a tree where that
+routine is not present?
+
+  Luis

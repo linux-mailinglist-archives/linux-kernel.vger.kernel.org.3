@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E224A8A53
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC0B4A8A54
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352981AbiBCRlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S1352972AbiBCRlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239435AbiBCRlO (ORCPT
+        with ESMTP id S1352962AbiBCRlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:41:14 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D7C06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:41:14 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso2258681wms.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:41:14 -0800 (PST)
+        Thu, 3 Feb 2022 12:41:15 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F67C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 09:41:15 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 83so1445392wmc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 09:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=m/kvsV2Fw6mBqvpDjxp3WYmDCchAjKBAAZ5SIZ3OfkM=;
-        b=HSHMAONT3deohB+I/1UzVSnGmWqMvf0TxOrRDOPXl8HIJP1aLazsZcbqKflRKAvb2A
-         R2z/8/lvXFscxa41tBF8xizb6oVHc6dxTYqNI80uIyYqKkXZGOoZ2he5zeWTk0Ld3XYE
-         tJJPFb2EPPL+r/6FT2s4ofAZb1kJCKsXQ1GU7uJx4shOWROF9uNmf/AZu8bamDoehVPq
-         s/YegMHV0i9lzc+3r3tTXZsCbmj1ImMa2BqCAukz/lPEs7X8z2JWkEJFAvT/CAWIj1cX
-         5s4dGh9HV8r7TOZt4cjo5xbqm6eNQiTd6ogQyCQelxppN67Y2b8ELsu7B+X+tYZr9jji
-         nyHg==
+        bh=aQIq64tbZTT3r2lCTTr4R6nk7XQ2BemxKkJ9jTfWYWY=;
+        b=J9b3Mh2dhIqNB/LNgDXyEUo+TLMDSnIbwyIsvwGHbK21Tz9yzTQiFM88EIUzsDtnyw
+         +kJIL+/UhIAEh12lAuaWX5nXKdl392Nay9xMHSMN8FWT3NVstd0zl2UJTnCUzgUG2Fmy
+         fUJOyYZYBsT1EYfs5pN255zXG0DaCG57y55c53U4aBE1VsGXjEewIBrt2tb0WaZXLmrJ
+         o4JUxew5KFCFSoMEgrc20fMp7LcGDet+FIrpdMM3AkYkNyMiZY3LBDV/DPRh6Wn99ADO
+         j8WNjeNvIyaLLfYcHxX5EXNUywoCyCJnpzV64g43lDER990XZ2zi8yQLhK66Ab1u/m6l
+         rMZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m/kvsV2Fw6mBqvpDjxp3WYmDCchAjKBAAZ5SIZ3OfkM=;
-        b=p9EMG6rqQhvBuYTo+LL8gKxTyX+nP7b+w8WuwQ9JEe3BRs3K933WkdTiMjzRupHq1D
-         J3xOHYvBT/1eeIICf7wB4dbvIl/S1W14m/9MD1te/FBNrslDNi2gK9V/pCDwV0ijZe2/
-         hh5t1Km0dvJdXvDhlpeVTPk8cNcBD4rEKh3T1FLOyVMZP0jgzPTqvVHOGGNNriObTQyG
-         BoJbeG8GJ7uFfvpmQhguubOxr0pA4u7ZQqB9iC2ap0mLa2sL1CuD7NXs8ZQ+I7WRyIS1
-         p2CEzNHgUhGwsOVH4RRAYdB/3vyxkCI40VA3LO7yy0kFsi25Q3Yv/JeDHDrSCchi6OXv
-         mLEA==
-X-Gm-Message-State: AOAM53280DLdXgU6EBv/hyLdzx51RLxahgwRm5wX8CKDxqcwRzkvPOmP
-        OVg0097pSbqWyAI+nncQ+otJg1oU6CiNyg==
-X-Google-Smtp-Source: ABdhPJwWFRMw0lDUQQC1/c9xp6DLHWvF0Qfeqznn5fUQXhGw/hQhtPgHachc3tQSajCxF+5JhCLOQQ==
-X-Received: by 2002:a05:600c:218:: with SMTP id 24mr11612148wmi.95.1643910073272;
-        Thu, 03 Feb 2022 09:41:13 -0800 (PST)
+        bh=aQIq64tbZTT3r2lCTTr4R6nk7XQ2BemxKkJ9jTfWYWY=;
+        b=sISBRi84erIGY0O8GekI+qmP2/iPeEW4zOpHwgi1QJtetZpy8yukIFr+Fauvs7Y7FQ
+         AOju5MXq4ZDMnwfSjB3C4pHGBdcdLc5YBgyJt5Clquz1mwr+f69IOaVQkCvxoF9JelG1
+         G36+xg1gI/bLb9nAyXKh2pIwKJ6h3TxP1ygg7NQnPo9bSpTwfodDVHSlVFJw5KIEK2Av
+         MX4cSIBbfnJd9P+gSdgEXw2kGIAJAQ8x7Axa6VeEBHfAu492E/uSY2kcp6uwMJEy4jlu
+         wxomr9LypZCg7nIAwz1mf38h96XzdvjA6jTBXgROWk2EuFOmHyPj+p6Ff3bQ9ZpCW3Lx
+         NKYA==
+X-Gm-Message-State: AOAM530t/58DmhXGVBbATBXwFNQTWk2PtG7U+18ZLCK7KmC4NAPmew0+
+        zbimEo2OuLZ9U7Gz0PiI9CBdkw==
+X-Google-Smtp-Source: ABdhPJwZvfTpAjDtXMHfz+Tu1VG07UcHqWgt8rGdJH5n89L9VDk4GhL25DuWPfFzuC0OQb3pPCbGag==
+X-Received: by 2002:a05:600c:3ac5:: with SMTP id d5mr10996921wms.107.1643910074221;
+        Thu, 03 Feb 2022 09:41:14 -0800 (PST)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
-        by smtp.gmail.com with ESMTPSA id r2sm10166178wmq.24.2022.02.03.09.41.12
+        by smtp.gmail.com with ESMTPSA id r2sm10166178wmq.24.2022.02.03.09.41.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:41:12 -0800 (PST)
+        Thu, 03 Feb 2022 09:41:13 -0800 (PST)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
         linux-kernel@vger.kernel.org
 Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v3 1/3] io_uring: remove trace for eventfd
-Date:   Thu,  3 Feb 2022 17:41:06 +0000
-Message-Id: <20220203174108.668549-2-usama.arif@bytedance.com>
+Subject: [PATCH v3 2/3] io_uring: avoid ring quiesce while registering/unregistering eventfd
+Date:   Thu,  3 Feb 2022 17:41:07 +0000
+Message-Id: <20220203174108.668549-3-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220203174108.668549-1-usama.arif@bytedance.com>
 References: <20220203174108.668549-1-usama.arif@bytedance.com>
@@ -64,84 +64,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The information on whether eventfd is registered is not very useful
-and would result in the tracepoint being enclosed in an rcu_readlock
-in a later patch that tries to avoid ring quiesce for registering
-eventfd.
+This is done by creating a new RCU data structure (io_ev_fd) as part of
+io_ring_ctx that holds the eventfd_ctx.
 
-Suggested-by: Jens Axboe <axboe@kernel.dk>
+The function io_eventfd_signal is executed under rcu_read_lock with a
+single rcu_dereference to io_ev_fd so that if another thread unregisters
+the eventfd while io_eventfd_signal is still being executed, the
+eventfd_signal for which io_eventfd_signal was called completes
+successfully.
+
+The process of registering/unregistering eventfd is done under a lock
+so multiple threads don't enter a race condition while
+registering/unregistering eventfd.
+
+With the above approach ring quiesce can be avoided which is much more
+expensive then using RCU lock. On the system tested, io_uring_reigster with
+IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
+before with ring quiesce.
+
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- fs/io_uring.c                   |  3 +--
- include/trace/events/io_uring.h | 13 +++++--------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ fs/io_uring.c | 91 +++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 66 insertions(+), 25 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 2e04f718319d..21531609a9c6 100644
+index 21531609a9c6..47d48020ae27 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -11171,8 +11171,7 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
- 	mutex_lock(&ctx->uring_lock);
- 	ret = __io_uring_register(ctx, opcode, arg, nr_args);
- 	mutex_unlock(&ctx->uring_lock);
--	trace_io_uring_register(ctx, opcode, ctx->nr_user_files, ctx->nr_user_bufs,
--							ctx->cq_ev_fd != NULL, ret);
-+	trace_io_uring_register(ctx, opcode, ctx->nr_user_files, ctx->nr_user_bufs, ret);
- out_fput:
- 	fdput(f);
- 	return ret;
-diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_uring.h
-index 7346f0164cf4..098beda7601a 100644
---- a/include/trace/events/io_uring.h
-+++ b/include/trace/events/io_uring.h
-@@ -57,10 +57,9 @@ TRACE_EVENT(io_uring_create,
-  * @opcode:		describes which operation to perform
-  * @nr_user_files:	number of registered files
-  * @nr_user_bufs:	number of registered buffers
-- * @cq_ev_fd:		whether eventfs registered or not
-  * @ret:		return code
-  *
-- * Allows to trace fixed files/buffers/eventfds, that could be registered to
-+ * Allows to trace fixed files/buffers, that could be registered to
-  * avoid an overhead of getting references to them for every operation. This
-  * event, together with io_uring_file_get, can provide a full picture of how
-  * much overhead one can reduce via fixing.
-@@ -68,16 +67,15 @@ TRACE_EVENT(io_uring_create,
- TRACE_EVENT(io_uring_register,
+@@ -326,6 +326,10 @@ struct io_submit_state {
+ 	struct blk_plug		plug;
+ };
  
- 	TP_PROTO(void *ctx, unsigned opcode, unsigned nr_files,
--			 unsigned nr_bufs, bool eventfd, long ret),
-+			 unsigned nr_bufs, long ret),
++struct io_ev_fd {
++	struct eventfd_ctx	*cq_ev_fd;
++};
++
+ struct io_ring_ctx {
+ 	/* const or read-mostly hot data */
+ 	struct {
+@@ -399,7 +403,8 @@ struct io_ring_ctx {
+ 	struct {
+ 		unsigned		cached_cq_tail;
+ 		unsigned		cq_entries;
+-		struct eventfd_ctx	*cq_ev_fd;
++		struct io_ev_fd	__rcu	*io_ev_fd;
++		struct mutex		ev_fd_lock;
+ 		struct wait_queue_head	cq_wait;
+ 		unsigned		cq_extra;
+ 		atomic_t		cq_timeouts;
+@@ -1448,6 +1453,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	xa_init_flags(&ctx->io_buffers, XA_FLAGS_ALLOC1);
+ 	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
+ 	mutex_init(&ctx->uring_lock);
++	mutex_init(&ctx->ev_fd_lock);
+ 	init_waitqueue_head(&ctx->cq_wait);
+ 	spin_lock_init(&ctx->completion_lock);
+ 	spin_lock_init(&ctx->timeout_lock);
+@@ -1726,13 +1732,24 @@ static inline struct io_uring_cqe *io_get_cqe(struct io_ring_ctx *ctx)
+ 	return &rings->cqes[tail & mask];
+ }
  
--	TP_ARGS(ctx, opcode, nr_files, nr_bufs, eventfd, ret),
-+	TP_ARGS(ctx, opcode, nr_files, nr_bufs, ret),
+-static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
++static void io_eventfd_signal(struct io_ring_ctx *ctx)
+ {
+-	if (likely(!ctx->cq_ev_fd))
+-		return false;
++	struct io_ev_fd *ev_fd;
++
++	rcu_read_lock();
++	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
++	ev_fd = rcu_dereference(ctx->io_ev_fd);
++
++	if (likely(!ev_fd))
++		goto out;
+ 	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+-		return false;
+-	return !ctx->eventfd_async || io_wq_current_is_worker();
++		goto out;
++
++	if (!ctx->eventfd_async || io_wq_current_is_worker())
++		eventfd_signal(ev_fd->cq_ev_fd, 1);
++
++out:
++	rcu_read_unlock();
+ }
  
- 	TP_STRUCT__entry (
- 		__field(  void *,	ctx			)
- 		__field(  unsigned,	opcode		)
- 		__field(  unsigned,	nr_files	)
- 		__field(  unsigned,	nr_bufs		)
--		__field(  bool,		eventfd		)
- 		__field(  long,		ret			)
- 	),
+ /*
+@@ -1751,8 +1768,7 @@ static void io_cqring_ev_posted(struct io_ring_ctx *ctx)
+ 	 */
+ 	if (wq_has_sleeper(&ctx->cq_wait))
+ 		wake_up_all(&ctx->cq_wait);
+-	if (io_should_trigger_evfd(ctx))
+-		eventfd_signal(ctx->cq_ev_fd, 1);
++	io_eventfd_signal(ctx);
+ }
  
-@@ -86,14 +84,13 @@ TRACE_EVENT(io_uring_register,
- 		__entry->opcode		= opcode;
- 		__entry->nr_files	= nr_files;
- 		__entry->nr_bufs	= nr_bufs;
--		__entry->eventfd	= eventfd;
- 		__entry->ret		= ret;
- 	),
+ static void io_cqring_ev_posted_iopoll(struct io_ring_ctx *ctx)
+@@ -1764,8 +1780,7 @@ static void io_cqring_ev_posted_iopoll(struct io_ring_ctx *ctx)
+ 		if (waitqueue_active(&ctx->cq_wait))
+ 			wake_up_all(&ctx->cq_wait);
+ 	}
+-	if (io_should_trigger_evfd(ctx))
+-		eventfd_signal(ctx->cq_ev_fd, 1);
++	io_eventfd_signal(ctx);
+ }
  
- 	TP_printk("ring %p, opcode %d, nr_user_files %d, nr_user_bufs %d, "
--			  "eventfd %d, ret %ld",
-+			  "ret %ld",
- 			  __entry->ctx, __entry->opcode, __entry->nr_files,
--			  __entry->nr_bufs, __entry->eventfd, __entry->ret)
-+			  __entry->nr_bufs, __entry->ret)
- );
+ /* Returns true if there are no backlogged entries after the flush */
+@@ -9353,35 +9368,59 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
  
- /**
+ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+ {
++	struct io_ev_fd *ev_fd;
+ 	__s32 __user *fds = arg;
+-	int fd;
++	int fd, ret;
+ 
+-	if (ctx->cq_ev_fd)
+-		return -EBUSY;
++	mutex_lock(&ctx->ev_fd_lock);
++	ret = -EBUSY;
++	if (rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock)))
++		goto out;
+ 
++	ret = -EFAULT;
+ 	if (copy_from_user(&fd, fds, sizeof(*fds)))
+-		return -EFAULT;
++		goto out;
+ 
+-	ctx->cq_ev_fd = eventfd_ctx_fdget(fd);
+-	if (IS_ERR(ctx->cq_ev_fd)) {
+-		int ret = PTR_ERR(ctx->cq_ev_fd);
++	ret = -ENOMEM;
++	ev_fd = kmalloc(sizeof(*ev_fd), GFP_KERNEL);
++	if (!ev_fd)
++		goto out;
+ 
+-		ctx->cq_ev_fd = NULL;
+-		return ret;
++	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
++	if (IS_ERR(ev_fd->cq_ev_fd)) {
++		ret = PTR_ERR(ev_fd->cq_ev_fd);
++		kfree(ev_fd);
++		goto out;
+ 	}
+ 
+-	return 0;
++	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
++	ret = 0;
++
++out:
++	mutex_unlock(&ctx->ev_fd_lock);
++	return ret;
+ }
+ 
+ static int io_eventfd_unregister(struct io_ring_ctx *ctx)
+ {
+-	if (ctx->cq_ev_fd) {
+-		eventfd_ctx_put(ctx->cq_ev_fd);
+-		ctx->cq_ev_fd = NULL;
+-		return 0;
++	struct io_ev_fd *ev_fd;
++	int ret;
++
++	mutex_lock(&ctx->ev_fd_lock);
++	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
++	if (!ev_fd) {
++		ret = -ENXIO;
++		goto out;
+ 	}
++	synchronize_rcu();
++	eventfd_ctx_put(ev_fd->cq_ev_fd);
++	kfree(ev_fd);
++	rcu_assign_pointer(ctx->io_ev_fd, NULL);
++	ret = 0;
+ 
+-	return -ENXIO;
++out:
++	mutex_unlock(&ctx->ev_fd_lock);
++	return ret;
+ }
+ 
+ static void io_destroy_buffers(struct io_ring_ctx *ctx)
+@@ -10960,6 +10999,8 @@ static bool io_register_op_must_quiesce(int op)
+ 	case IORING_REGISTER_FILES:
+ 	case IORING_UNREGISTER_FILES:
+ 	case IORING_REGISTER_FILES_UPDATE:
++	case IORING_REGISTER_EVENTFD:
++	case IORING_UNREGISTER_EVENTFD:
+ 	case IORING_REGISTER_PROBE:
+ 	case IORING_REGISTER_PERSONALITY:
+ 	case IORING_UNREGISTER_PERSONALITY:
 -- 
 2.25.1
 

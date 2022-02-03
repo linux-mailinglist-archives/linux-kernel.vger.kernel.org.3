@@ -2,75 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52B84A8DF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B36D74A8E2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355001AbiBCUeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:34:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S1355277AbiBCUfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354500AbiBCUci (ORCPT
+        with ESMTP id S233705AbiBCUdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:32:38 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B749C0617A7
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:32:32 -0800 (PST)
-Received: from dslb-188-096-149-005.188.096.pools.vodafone-ip.de ([188.96.149.5] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1nFimL-0004W7-TF; Thu, 03 Feb 2022 21:32:29 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 4/4] staging: r8188eu: remove constant variable eRFPath
-Date:   Thu,  3 Feb 2022 21:32:17 +0100
-Message-Id: <20220203203217.252156-5-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220203203217.252156-1-martin@kaiser.cx>
-References: <20220203203217.252156-1-martin@kaiser.cx>
+        Thu, 3 Feb 2022 15:33:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BD8C061795;
+        Thu,  3 Feb 2022 12:33:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 934CD61B0F;
+        Thu,  3 Feb 2022 20:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49982C340F4;
+        Thu,  3 Feb 2022 20:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643920389;
+        bh=1M2WJ0LX7TAAjDwL4gYcineyz/ebR0L2eize8IzicgQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mqsm890PtTB2zTkn5hDD+KrahHHK6b7ucCvUAOMmVdrtk2sG2IxdJWkjeppBEKEB4
+         K0h4xdkviQDr+V0P5vWg3q3+EzfXN+B+lJx8wKN7S3AEbAQfGk9Eki34xmTSros66s
+         pZ+TnLDdWuOsXHJnO+BqV75/yik6EBzVJp7yn/npUXLnRtiCfdT15DsRg1d9E5HN3T
+         lVbusa2jlISPsAnlyJtw8scK6L/HVLdbBTfu8xXkb9gOVHSZYwj++m5jiERNNS2Pbr
+         j4hFlFKZEyVuGAfsjqwXTNaxaQbfOaNDhCBcpdLTgu2mvbV0JyDvJ2vktvjCLu/6zo
+         COUS+PHUGJa+w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sander Vanheule <sander@svanheule.net>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        tglx@linutronix.de
+Subject: [PATCH AUTOSEL 5.15 14/41] irqchip/realtek-rtl: Service all pending interrupts
+Date:   Thu,  3 Feb 2022 15:32:18 -0500
+Message-Id: <20220203203245.3007-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
+References: <20220203203245.3007-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the _PHY_SwChnl8192C function, eRFPath is always zero. Remove the
-variable and use 0 in the code. Replace (enum rf_radio_path)0 with
-RF_PATH_A.
+From: Sander Vanheule <sander@svanheule.net>
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+[ Upstream commit 960dd884ddf5621ae6284cd3a42724500a97ae4c ]
+
+Instead of only servicing the lowest pending interrupt line, make sure
+all pending SoC interrupts are serviced before exiting the chained
+handler. This adds a small overhead if only one interrupt is pending,
+but should prevent rapid re-triggering of the handler.
+
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/5082ad3cb8b4eedf55075561b93eff6570299fe1.1641739718.git.sander@svanheule.net
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-realtek-rtl.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index 8279768201b7..6e26359bdda7 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -712,7 +712,6 @@ void PHY_SetBWMode8188E(struct adapter *Adapter, enum ht_channel_width Bandwidth
- 
- static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
+diff --git a/drivers/irqchip/irq-realtek-rtl.c b/drivers/irqchip/irq-realtek-rtl.c
+index fd9f275592d29..1500278fa82d5 100644
+--- a/drivers/irqchip/irq-realtek-rtl.c
++++ b/drivers/irqchip/irq-realtek-rtl.c
+@@ -76,16 +76,20 @@ static void realtek_irq_dispatch(struct irq_desc *desc)
  {
--	u8 eRFPath = 0;
- 	u32 param1, param2;
- 	struct hal_data_8188e *pHalData = &Adapter->haldata;
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_domain *domain;
+-	unsigned int pending;
++	unsigned long pending;
++	unsigned int soc_int;
  
-@@ -725,8 +724,8 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
- 	/* s2. RF dependent command - CmdID_RF_WriteReg, param1=RF_CHNLBW, param2=channel */
- 	param1 = RF_CHNLBW;
- 	param2 = channel;
--	pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | param2);
--	rtl8188e_PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
-+	pHalData->RfRegChnlVal[0] = ((pHalData->RfRegChnlVal[0] & 0xfffffc00) | param2);
-+	rtl8188e_PHY_SetRFReg(Adapter, RF_PATH_A, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[0]);
- }
+ 	chained_irq_enter(chip, desc);
+ 	pending = readl(REG(RTL_ICTL_GIMR)) & readl(REG(RTL_ICTL_GISR));
++
+ 	if (unlikely(!pending)) {
+ 		spurious_interrupt();
+ 		goto out;
+ 	}
++
+ 	domain = irq_desc_get_handler_data(desc);
+-	generic_handle_domain_irq(domain, __ffs(pending));
++	for_each_set_bit(soc_int, &pending, 32)
++		generic_handle_domain_irq(domain, soc_int);
  
- void PHY_SwChnl8188E(struct adapter *Adapter, u8 channel)
+ out:
+ 	chained_irq_exit(chip, desc);
 -- 
-2.30.2
+2.34.1
 

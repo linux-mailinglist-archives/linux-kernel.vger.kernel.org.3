@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC82C4A81F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2320C4A81FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbiBCJv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:51:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32772 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237370AbiBCJvy (ORCPT
+        id S1349955AbiBCJwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:52:40 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33594 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234483AbiBCJwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:51:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643881914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 3 Feb 2022 04:52:37 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5D1101F3A8;
+        Thu,  3 Feb 2022 09:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643881956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QK7QeelnBgMuLDC5Mt99kveOzip384EfbthyE/YqvhQ=;
-        b=cCi7cc/R323hupEPnQRY/c6n/xKl8eqdslc8iYdSnzX5wHEWNSggnpcDWDeSutJFxMcgwK
-        RYaeGm/kWdP27FojTmd29XghPT3I56dYxFCB/O7ztHZ/h2AsB7xEkgdb63x0/rDdMLZXbS
-        hVDCFfO/IlS/qsoTy3I8GHUJOaelD4s=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-Eq2KUWZAMTSAPSdIke71YQ-1; Thu, 03 Feb 2022 04:51:52 -0500
-X-MC-Unique: Eq2KUWZAMTSAPSdIke71YQ-1
-Received: by mail-ed1-f69.google.com with SMTP id q10-20020a5085ca000000b0040e3ecf0ec2so1160703edh.14
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 01:51:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=QK7QeelnBgMuLDC5Mt99kveOzip384EfbthyE/YqvhQ=;
-        b=FuUFrw7/sn2vHBn+f4wsUKOOvivsRayU+LIlWcB2XgHcn0t+ZbIMIn2GWPX9lccnX4
-         8z2aP6/QnrVFBElCxTLeOGQsaboR81ICpby/v1UWXi9HKc5J3GGWnxvLkkaodhjju0hz
-         VK8vPF5R3SRt4BcihMKzPWBp8OuFXu/29hNmHJ1Ziq48LtapXLG90cm+D1kQ9YFxae30
-         ycsnHTm8y9qh+CwaEXxmJXqnuyD4smv0zSLsoQFPg7NL2Svi2ALKIAzphgHUFbPnnzdD
-         9WgtcTZ1bEVLV8082MeNrbytBB6AtzHWZ7Rr4j4brUT1oXnfcpYDdHk9MfVNe3HCfQlS
-         LD6Q==
-X-Gm-Message-State: AOAM533iD01qLnx+HeoRIi9TMDD5ItMgSx/miJtu+gCrIz4mPsFeNTLa
-        umDef0dzokKD6UVdWrMSWiaDHOUJBuO9d7Cq1Ejlpl+Y2r4l48DjiBr/AiyVENdxzkPEPTbia7O
-        Ion/aFGDymxeixA6yawZhrV8TAPCJr8DJIPGmwjzL73bAP4RrkPEUjQtrDbCOxqXyJPWQNYHqvt
-        Gc
-X-Received: by 2002:aa7:c6c8:: with SMTP id b8mr34787600eds.392.1643881911563;
-        Thu, 03 Feb 2022 01:51:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy/idJWteG3a2i4lVifO74FtI/xr/NVTP5oo/QwQcQFsQSvQVVdEMI4k/TDJkIvwi541lQNJw==
-X-Received: by 2002:aa7:c6c8:: with SMTP id b8mr34787584eds.392.1643881911408;
-        Thu, 03 Feb 2022 01:51:51 -0800 (PST)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id bx18sm18752074edb.93.2022.02.03.01.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 01:51:50 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Vineeth Pillai <viremana@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] KVM: SVM: nSVM: Implement Enlightened MSR-Bitmap
- for Hyper-V-on-KVM
-In-Reply-To: <429afd81-7bef-8ead-6ca4-12671378d581@redhat.com>
-References: <20220202095100.129834-1-vkuznets@redhat.com>
- <429afd81-7bef-8ead-6ca4-12671378d581@redhat.com>
-Date:   Thu, 03 Feb 2022 10:51:49 +0100
-Message-ID: <87czk4b7m2.fsf@redhat.com>
+        bh=bLOn4HAXkPZHEb9tPDyeDY1N8Gi6hOouq8FDKvgLLrw=;
+        b=Wg8dB8Jrnul5bNu/F+Z9RTMleIZS4ejELJXXHwcvzi/A5roCngF5IlLfz+TAtpTMhgKWql
+        Ff+vsH1PcdEkGhzlTAZEF8l3Q1RF+Zd3q+Y9rezHMlISAq5IleCBD90P3UHr46+7hJM0YG
+        UYAkOiG42fN7Kkt3jlkL4rXoT++zXRA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643881956;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bLOn4HAXkPZHEb9tPDyeDY1N8Gi6hOouq8FDKvgLLrw=;
+        b=/rn9Z+Zp9bAlNUNPoHB6h6DoQjrLD6qHN8x+dY2IpVEqrioQG4WuBLjuB5MJ7TeDNxx0Nn
+        0B29IMRiHSHd6fAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3077713B7F;
+        Thu,  3 Feb 2022 09:52:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id A17ICuSl+2G+RQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 03 Feb 2022 09:52:36 +0000
+Message-ID: <13e0466d-d9ec-0efd-f7df-107940636a85@suse.cz>
+Date:   Thu, 3 Feb 2022 10:52:35 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Content-Language: en-US
+To:     Mike Rapoport <rppt@linux.ibm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        SeongJae Park <sj@kernel.org>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <fbad2233-207e-6b66-890b-ef1b1f97fdad@gmail.com>
+ <Yft92aSYi9QIfKNf@linux.ibm.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: Updated git tree for MM patches??
+In-Reply-To: <Yft92aSYi9QIfKNf@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+On 2/3/22 08:01, Mike Rapoport wrote:
+> On Wed, Feb 02, 2022 at 04:21:38PM -0800, Florian Fainelli wrote:
+>> Hi Andrew, Johannes,
+>> 
+>> The MAINTAINERS file for MEMORY MANAGEMENT lists the following git tree:
+>> 
+>> git://github.com/hnaz/linux-mm.git
+>> 
+>> however it does not look like it has been updated in the past 5 months or so
+>> as master still points to 5.17-rc7-mm1
+>> 
+>> Is there another git tree that other memory management related subsystems
+>> use for development?
+> 
+> AFAIK, hnaz/linux-mm was the only git mirror of mmotm series.
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+IIRC Michal Hocko also used to maintain one, in a different way, but that
+was given up even longer ago.
 
-> On 2/2/22 10:50, Vitaly Kuznetsov wrote:
-...
->>    KVM: nSVM: Implement Enlightened MSR-Bitmap feature
-...
->
-> Queued, thanks.
+linux-next seems to maintain its branch that's merged to the final next like
+this:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/?h=akpm
+but that means getting the whole of next, not just mmotm. Maybe the branch
+'akpm-current/current' could be also exposed separately?
 
-While writing a selftest for the feature, I've discovered an embarassing
-bug: in nested_svm_vmrun_msrpm() I check bit number instead of bit
-mask. It worked in testing by pure luck, it seems genuine Hyper-V sets
-some other clean fields simultaneously.
+> I keep a tree for memblock, but it follows Linus' tree rather than mmotm.
+> I think Vlastimil's slab tree does the same.
 
-Would it be possible to squash the attached patch in? Thanks!
-
-I'll be sending out selftests shortly.
-
--- 
-Vitaly
-
-
---=-=-=
-Content-Type: text/x-patch
-Content-Disposition: inline;
- filename=0001-KVM-nSVM-Fix-the-check-for-VMCB_HV_NESTED_ENLIGHTENM.patch
-
-From cfb538876ccc59dade7cadde553863bea8312f90 Mon Sep 17 00:00:00 2001
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-Date: Thu, 3 Feb 2022 10:22:30 +0100
-Subject: [PATCH] KVM: nSVM: Fix the check for VMCB_HV_NESTED_ENLIGHTENMENTS
- bin in nested_svm_vmrun_msrpm()
-
-VMCB_HV_NESTED_ENLIGHTENMENTS (VMCB_SW) is a bit number, not a bit mask.
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/svm/nested.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index 7b26a4b518f7..7acf4f2aa445 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -188,7 +188,7 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
- 	if (!svm->nested.force_msr_bitmap_recalc &&
- 	    kvm_hv_hypercall_enabled(&svm->vcpu) &&
- 	    hve->hv_enlightenments_control.msr_bitmap &&
--	    (svm->nested.ctl.clean & VMCB_HV_NESTED_ENLIGHTENMENTS))
-+	    (svm->nested.ctl.clean & BIT(VMCB_HV_NESTED_ENLIGHTENMENTS)))
- 		goto set_msrpm_base_pa;
- 
- 	if (!(vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_MSR_PROT)))
--- 
-2.34.1
-
-
---=-=-=--
-
+Yeah as that's how development should be done in general, the trees should
+be independent if possible.

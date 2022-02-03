@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912E34A905B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E62B4A9067
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355606AbiBCV7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S1355642AbiBCWBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:01:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355569AbiBCV7F (ORCPT
+        with ESMTP id S230230AbiBCWBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:59:05 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74665C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:59:05 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so3742788otp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:59:05 -0800 (PST)
+        Thu, 3 Feb 2022 17:01:20 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB4BC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:01:19 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id z7so5919626ljj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:01:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=jApEEKPPEesUGF7pUKn75jeWUbjNZyZyCRrMteIrvwg=;
-        b=Buy290N/yQvLU8Quc992ySg6dNM0zHWEK7NjrpKMoURh7Zi2P4pDQBLMy5ZF06YVJI
-         WXOPsT11G8Sl9HFXZ17cKvsCz/oAtyhfCf3Qh35aU/V3yzY4t8XBiKujF/2ZGrnGWNpj
-         V+gFahIHlPBBtj8BTksC7stbGOpSDLFtQaBds=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cOwd+xKfDb+D7R22x2j6Xg0Pm7V5Bcnv8frM7DHB9xc=;
+        b=qKsj1zmJmC2rY8CmZCR0DCeZljuwB+1GIt7MSX+2QKBdlC2+BViC4sUv1bjz5ARufw
+         hJgAlA/W4VOwD6dAz3cHxdqo7tBWIYVnoir/9uEY224JYvoyNYLfxkYCx8LyzlfWz0lA
+         bj31FK2mXLBjF7KKOSt5d8+XdN4eQ6vQwe8cbZUvYeASzTIjousJwPMWo1ceQWFEifz0
+         sVSNqXr9PtiOpb8QJ9UpuG+xpjgzreUqj3WoFo37jx3fu+SR9LUVMg08PpgM6nJ3Rahb
+         13vOkA6Tt+t2kuHqc82flfDTgP2Au9cVCbB4Fx8fzUAbzP562SCKrRoGzHhqkIp3zKbs
+         tlzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=jApEEKPPEesUGF7pUKn75jeWUbjNZyZyCRrMteIrvwg=;
-        b=qiuZnwM9ss5mfWuNGR+bqUbXwLCCGBhqIGy1sCZsvwiTFHvvxyLyRhQxVjQHL7xn/W
-         pEho/CY0URRMZEpwi9a1B6xHAHCJSAcBIbm4I2K4WizWvWCgCcodiPIVcufD0Zk2vvWd
-         rpIwuX1i9uprkSSGAa/3Mjtal5Hd5CfB2Isk4pFR8Y5BCep9y6+EY5uaRWh+OfRuswaO
-         MQ7ZE5rDEpSnctfGWtoQvrfay4kcGzEwwi+q64iclRnjqSg9phr5b+NAI8lfBiT3ntLK
-         FL3vQBkNPzXRMb/3dyWfezJ54keNOj9EHBsSJRv0KZZuOUgfh6ajxK6YoEAkDA1znbOC
-         BV9A==
-X-Gm-Message-State: AOAM530Fcuwj2CUyJLw+tCMdFeS99O1Tt81vRLFpOf447B3WBvyHPila
-        uH99yLj9Ec1oHturmJCAOnMuyVE41LLgsZrDdcwn96K73W0=
-X-Google-Smtp-Source: ABdhPJw0gK+pVS0/00IuIsk2vMvTkFbxMoaFsmgKDmLqthmZ5xXaB4S5bfTjw8W60l+XU1f3BuTSYn6xf0cE0lrnaio=
-X-Received: by 2002:a9d:6f06:: with SMTP id n6mr63202otq.159.1643925544771;
- Thu, 03 Feb 2022 13:59:04 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Feb 2022 21:59:04 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cOwd+xKfDb+D7R22x2j6Xg0Pm7V5Bcnv8frM7DHB9xc=;
+        b=oqTQx52UeA21Fi1fSGG8YQKqLcSUpaFldTon/dW3/YOUrrjw8K65Oh/4pdwC2GLjm5
+         Dr8chMiSoQ4ceFi9Mq/Vnj2lzpAomJf5Vv9uS+yyyz5eTQBrs4YTgkZW6nA3nfPjendK
+         LeK+zxUCU/Ai3B2OfN/6Iwq6rhuS18OI5rtlCYzR5Qy+ZHdl9kALZ7hgRvSszV8ZKs0F
+         Fapv2k9Xx5ZpVAYna6IzVPuRaWeWl6NQG2/tzlGoKAx/Q/n3GSU+IQpmfMGQgjmDS2s5
+         djotljSTCAM7umx9cicikCqDAFnMOYTz8Y//2iDDcDU+5FeumUBAHcihpzVVMNwAsNZp
+         Nu/A==
+X-Gm-Message-State: AOAM532Ajoby+i29CcMB1S9jtabnPgMf4kYkiVJEf0UNDqe9FflHLL/i
+        +UbABSj2RWSDpm/wFNbgC8Dt5NO5f/V10IqoH0vr0A==
+X-Google-Smtp-Source: ABdhPJzYUKomEFSrUBdXf5Ui2PKnaYfgpYNBueMKfPHNY8RPYyDrGoF0s3abGsoFXIZCiigrqziNFDooOPrV64adGU0=
+X-Received: by 2002:a05:651c:3c7:: with SMTP id f7mr27644ljp.62.1643925677879;
+ Thu, 03 Feb 2022 14:01:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=UKKZaHHz3-idahLg-ey3xmSZWKeTVVipzpZNQAkUVKmQ@mail.gmail.com>
-References: <20220202212348.1391534-1-dianders@chromium.org>
- <20220202132301.v3.9.I5f367dcce8107f2186b2aad4aef0dfcfafa034b9@changeid>
- <CAE-0n51N4wB7aTRbZR3zh3hjz56vdkFNwOSuKjU7n9gd_JDcvA@mail.gmail.com> <CAD=FV=UKKZaHHz3-idahLg-ey3xmSZWKeTVVipzpZNQAkUVKmQ@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Feb 2022 21:59:04 +0000
-Message-ID: <CAE-0n50Xb2qwDDOCaLwZPr5-YES3gYyA+7218=EXa4ZSJuFGjw@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] arm64: dts: qcom: sc7280: Disable pull from pcie1_clkreq
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Prasad Malisetty <pmaliset@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <20220203173307.1033257-2-keescook@chromium.org> <CAKwvOdmzdQ+X2BsUbuVBWzFtaE2Vst4=ihNNR=LmOdozqQ5Ukg@mail.gmail.com>
+ <202202031247.4F3AC598@keescook>
+In-Reply-To: <202202031247.4F3AC598@keescook>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 3 Feb 2022 14:01:06 -0800
+Message-ID: <CAKwvOdnUHFi=1+9VxsfwxNAkTFEytg5FV=Aii7awSx+ioRaQbQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] Compiler Attributes: Add __pass_object_size for Clang
+To:     Kees Cook <keescook@chromium.org>
+Cc:     George Burgess IV <gbiv@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Doug Anderson (2022-02-03 13:53:09)
-> Hi,
+On Thu, Feb 3, 2022 at 12:58 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> On Thu, Feb 3, 2022 at 1:42 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> On Thu, Feb 03, 2022 at 12:18:24PM -0800, Nick Desaulniers wrote:
+> > On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > In order to gain greater visibility to type information when using
+> > > __builtin_object_size(), Clang has a function attribute "pass_object_=
+size"
+> > > that will make size information available for marked arguments in
+> > > a function by way of implicit additional function arguments that are
+> > > then wired up the __builtin_object_size().
+> > >
+> > > This is needed to implement FORTIFY_SOURCE in Clang, as a workaround
+> > > to Clang's __builtin_object_size() having limited visibility[1] into =
+types
+> > > across function calls (even inlines).
+> > >
+> > > Since any usage must also be const, include it in the macro.
 > >
-> > Quoting Douglas Anderson (2022-02-02 13:23:43)
-> > > I believe that the PCIe clkreq pin is an output. That means we
-> > > shouldn't have a pull enabled for it. Turn it off.
+> > I think it might be helpful to quote the docs
+> > (https://clang.llvm.org/docs/AttributeReference.html#pass-object-size-p=
+ass-dynamic-object-size)
 > >
-> > It sounds like it's a request from the PCI device to the PCI phy that
-> > the clk should be on. I googled pcie clkreq open drain and this pdf[1]
-> > says
+> > >> Additionally, any parameter that pass_object_size is applied to must=
+ be marked const at its function=E2=80=99s definition.
 > >
-> > "The CLKREQ# signal is an open drain, active low signal that is driven
-> > low by the PCI Express M.2 add-I Card function to request that the PCI
-> > Express reference clock be available (active clock state) in order to
-> > allow the PCI Express interface to send/receive data"
+> > One thing that's concerning to me is though:
 > >
-> > so presumably if there isn't an external pull on the signal the open
-> > drain feature will not work and the PCIe device won't be able to drive
-> > it low.
+> > >> It is an error to take the address of a function with pass_object_si=
+ze on any of its parameters.
 > >
-> > [1] https://advdownload.advantech.com/productfile/PIS/96FD80-P512-LIS/Product%20-%20Datasheet/96FD80-P512-LIS_datasheet20180110154919.pdf
+> > Surely the kernel has indirect calls to some of these functions
+> > somewhere? Is that just an issue for C++ name-mangling perhaps?
 >
-> Yeah, I had some trouble figuring this out too, so if someone knows
-> better than me then I'm more than happy to take advice here. I thought
-> I had found something claiming that "clkreq" was an output and on the
-> schematic I have from Qualcomm it shows an arrow going out from the
-> SoC for this signal indicating that it's an output from the SoC. Of
-> course, those arrows are notoriously wrong but at least it's one piece
-> of evidence that someone thought this was an output from the SoC.
->
-> Hrm, but I just checked the sc7280 "datasheet" which claims that this
-> is an input. Sigh.
->
-> I guess the options are:
-> * If we're sure this is an input to the SoC then I think we should
-> remove the drive-strength, right?
-> * If we don't know then I guess we can leave both?
+> AFAIU, this shouldn't be a problem for any of these. Nothing is trying
+> to take memcpy, memset, etc by address. The macro-ified version of this
+> change proved that out. :)
 
-I'll wait for qcom folks to confirm. Maybe it's bidirectional because it
-is an open drain signal. I'm showing my cards that I'm no PCIe expert :)
+I thought Sami had found a location where memcpy was invoked
+indirectly as part of his kcfi work? Maybe I'm misremembering.
 
->
->
-> In any case, for now we can just drop this patch?
->
-
-Sounds good to me. It needs to be resolved through for herobrine-r1?
+https://github.com/samitolvanen/linux/commit/46a777fb35784a8c6daf13d67de8bf=
+b5148adc2a#diff-a27660992abdf360d01deac6364db31836d0d98b5d9573b7fc10a6785a6=
+69975R16
+--=20
+Thanks,
+~Nick Desaulniers

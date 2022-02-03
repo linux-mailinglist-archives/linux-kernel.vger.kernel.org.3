@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CB44A7D5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EDE4A7D61
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348666AbiBCBL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S1348678AbiBCBRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:17:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347916AbiBCBLY (ORCPT
+        with ESMTP id S234817AbiBCBRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:11:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7FFC061714;
-        Wed,  2 Feb 2022 17:11:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hOhBEfGKJL5dh/rxk/8eoA7ifF1eXVxecJDpKir0EBg=; b=WbqtMNLydw8158tplU3bFDJ3z6
-        Lbswcon7/7iW3KzzgNBMWBDSzH7m0equSARWFZNekgjXa+0pRMQKVeVQkAXSrTYfH5iRCE2M+Q/1c
-        +YhLpXx6VcjD7fCM3X3tVQvAlKWDn5K6KhK7tlzpE48HGH9BiWJPs2QWZljsakjZ8rQaIrYO/GPr8
-        i5tOsis+fpqQreFeksBrJFYW/VYoBT0XxKqdj+FJC1Qxh5wt4RhkOS8VXbG6dcyFYzCiGLyItNeSf
-        ugIbEdyeky+QIRKGf76aTPl6OZUnV+3gTqsMkscQRnLlQdJ8TKsRb4Uof0ZdoDd8J7au6RCQ+534x
-        L4XaPScg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFQee-00HHqw-AI; Thu, 03 Feb 2022 01:11:20 +0000
-Date:   Wed, 2 Feb 2022 17:11:20 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Tejun Heo <tj@kernel.org>, Aaron Tomlin <atomlin@redhat.com>
-Cc:     Igor Pylypiv <ipylypiv@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changyuan Lyu <changyuanl@google.com>
-Subject: Re: [PATCH] Revert "module, async: async_synchronize_full() on
- module init iff async is used"
-Message-ID: <YfsruBT19o3j0KD2@bombadil.infradead.org>
-References: <20220127233953.2185045-1-ipylypiv@google.com>
- <YflxP28HlVrrNBU2@slm.duckdns.org>
- <Yfly0P4e84373mGF@slm.duckdns.org>
+        Wed, 2 Feb 2022 20:17:11 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE142C061714;
+        Wed,  2 Feb 2022 17:17:10 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id 9so1377176iou.2;
+        Wed, 02 Feb 2022 17:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Atk87UBrLdgJ/4opBYK4rxjaslsdOKBSpYu0KC0YsxQ=;
+        b=otKYisaXlGcz6Z+IV/RDvJswEORs8zuCZGzmillZ+Zb/fiLNDV9t1G9FhhkakI6nln
+         Y12baMMsBYY3pBpxARbr621JzMC57kHB2MWCgy51vGcJIkPOSRihGRtafd3cMUEavSFE
+         SZTN78p4FuksM/PQoOhgKsInnr6OiQIFxbIjLSBx0wUS6DqhkB2w9QrlZ4MziRLn2sRN
+         YBgZ9RsnJEmsS7rjnpmZWBsshvsb3GoIOMX8r0fV2zOcMe5VGYC6JtMiVD8RYDCL1eHp
+         sn8WiZqeUjIEy9TmXJW6PQAOBIspoxpAADIEc62QEjnxvzEh+/HSFeDfZtIc4nRXCSSK
+         o1Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Atk87UBrLdgJ/4opBYK4rxjaslsdOKBSpYu0KC0YsxQ=;
+        b=l6cru0REZ1ZVuj8fP5I61eG137wHxyG24Dji3tWTJZcnb/g/nKF5UBhjW6yJkv/hvK
+         nqJS7018w+DCyyTDtpJtQWdELQcR8OKVER9Hk8S02DZsns4cj5tOjCHGE2/cm8tM5LjI
+         aw0JKt6/AiZ0HfELFim/mz+bdsH/x1lJsWNceJx8fo3uQZjxbUzfzDMdE6p/us6oCD61
+         PT7BGTOQ3KJ/rRk14xCZruEr+H5GCpJgfrcHJvEHPxbMSpfyiEPl5zRaYOeVoWFiMVkA
+         M85AmN/H2ms97wcy7/n1WQb7DPfQad01zNZCIvbQ6n7G3h+n0145JsGGdMXVqTMYRXuf
+         hjWQ==
+X-Gm-Message-State: AOAM532cAGjuUBdli55e9z2s83R3l8YBs5zyfeTyFS6HUfX+yd5yUs4R
+        W2zeYlvJ8UczioQuGI6Ah8eXhsAZQGRUhM74NN+7uqw1RzO8KQ==
+X-Google-Smtp-Source: ABdhPJzP1d5MTNCIbxdxeWkhhxKtbUS8oBKU49hnYPvQ4DUOcFHpVqqnduIWHedeyefiLTXlR4S0ukZzbZtp5W3uWAk=
+X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr16680190iow.133.1643851030433;
+ Wed, 02 Feb 2022 17:17:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfly0P4e84373mGF@slm.duckdns.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
+ <CAB95QASxE8Z_z046mnOBD1Zk1oeg=xB-wS+J8Oeuj=akm8171Q@mail.gmail.com> <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
+In-Reply-To: <c613f73b-9c91-9aad-e367-87b9d8b17530@roeck-us.net>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Thu, 3 Feb 2022 02:16:59 +0100
+Message-ID: <CAB95QASv2nY6kttOw1rwReUuucfpSgoByA6yrAbuQPRcTUQJBQ@mail.gmail.com>
+Subject: Re: [ASUS EC Sensors v8 0/3]
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Jean Delvare <jdelvare@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 07:50:08AM -1000, Tejun Heo wrote:
-> On Tue, Feb 01, 2022 at 07:43:27AM -1000, Tejun Heo wrote:
-> > That's quite a walk down the memory lane and I agree with your analysis. The
-> > PF_USED_ASYNC is redundant for correctness with the removal of synchrnous
-> > loading from iosched path and the WARN_ON guarantees that nothing in kernel
-> > is creating a similar situation.
-> > 
-> > Acked-by: Tejun Heo <tj@kernel.org>
-> 
-> BTW, I can route this through workqueue tree but -mm or going to Linus's
-> tree directly might be a better option. Any opinions?
+> I was waiting for someone to send me a Tested-by: for the series,
 
-FWIW, although I was not working on modules when the reverted commit was
-merged, my take on this is concern for a regression, much more than
-others. However I do agree that async probe can help for any slowdown,
-and the idea was that folks would eventually strive slowly to make more
-and more modules default to async probe as they can verify that's fine.
+Oleksandr sent an informal one already.
 
-With that said,
+> since you dropped the previous feedback.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Does it mean it is possible to update patches while keeping it?
 
-And I'd prefer this go through Linus' tree since this is a fix and
-can be merged already. That would help with Aaron's kernel/module.c
-refactor work (no functional changes) too as that will soon slice and
-dice that to a kernel/module/*.c files.
-
- Luis
+Eugene

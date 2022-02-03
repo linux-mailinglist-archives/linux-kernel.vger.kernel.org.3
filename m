@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566CA4A898B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4451D4A89B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbiBCRLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:11:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:44118 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352733AbiBCRLQ (ORCPT
+        id S1352656AbiBCRQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:16:38 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:58142 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235640AbiBCRQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:11:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82324B8350F;
-        Thu,  3 Feb 2022 17:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09989C340E8;
-        Thu,  3 Feb 2022 17:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643908274;
-        bh=0T1PX8l3N5+kpFJQ2G3e1jvblpArQwCSGcG+5Ha2rW8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pT+7q6bbM5mpD1l386q6kNXft6lRRzlAvvqXVMD4LCNn/CbwgDiLB9PiKvFWVevAv
-         9aGjtPtyklCPRRZJ8Xcl7oBPf9+x14Q8KqhtNwVrALB1cSk2G7BLSL2WZORA4djUkZ
-         GhJEwAspdhRrLXpVt1Jm2xN3XtWhEzVNyT+Y/2BNTpKuQgMtkZ8KNsWfkvpxN6tawO
-         shlB49dHKNOTAWvl5JDsYgEaMBVdMZZwhauK6Wh4fWfAKxY4byYDWmcU/GPXCc5H6b
-         HM8FqWVLznEMjoVay+WeAsdCvkW1MTUxeW6vXWJo/BB8QqHEGATLEfeZe4Q+8vn9EJ
-         T9CJTqanVsfdw==
-Date:   Thu, 3 Feb 2022 11:11:12 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V6 01/10] PCI: Add vendor ID for the PCI SIG
-Message-ID: <20220203171112.GA103601@bhelgaas>
+        Thu, 3 Feb 2022 12:16:37 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 213EsL5D031121;
+        Thu, 3 Feb 2022 18:14:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=bNewtDOux22Vg0tKo/Kl1HXb+nF5M7XnXURfnckhyzg=;
+ b=idCgXZ30lVFffF94+OEOmaZDvQZMyIs5mMs7935/QDUcqKh/izxz6Re/5dpPtp8eWTvV
+ ErvRjUZL2wtQKjAtijGunzJ3PCBtFPaX1CKh8ztcYSw0ZChB54ftBQEGbGNstq6Az4RD
+ zrgv4S1Z4ZknkdZn2zxF0tA4bvtKCS2ydgE/8TRA3TwA2DvFEZA+JY4In7lLCGqyPMG0
+ R2/heSBRWZBGa8sfsmtxqrl9lAt/+hBjYQsSLXvCbRnOMlG7JxlHMRbj4RMo1VllGbwj
+ H8TIPTV0Z/uorD6xf3t4Mu/UhV2IIWdIUl6zUD74zdwyTNjMqJmNMMIUedeBjZ5Dbl7U 9g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e01qkcyp4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Feb 2022 18:14:26 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6445B10002A;
+        Thu,  3 Feb 2022 18:14:26 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5D51E22F7AA;
+        Thu,  3 Feb 2022 18:14:26 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 3 Feb 2022 18:14:26
+ +0100
+From:   Erwan Le Ray <erwan.leray@foss.st.com>
+To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Erwan Le Ray <erwan.leray@foss.st.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marek Vasut <marex@denx.de>,
+        Marcin Sloniewski <marcin.sloniewski@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 15/16] ARM: dts: stm32: keep uart4 behavior on stm32mp15xx-dhcom-som
+Date:   Thu, 3 Feb 2022 18:11:13 +0100
+Message-ID: <20220203171114.10888-16-erwan.leray@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220203171114.10888-1-erwan.leray@foss.st.com>
+References: <20220203171114.10888-1-erwan.leray@foss.st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201071952.900068-2-ira.weiny@intel.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-03_06,2022-02-03_01,2021-12-02_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:19:43PM -0800, ira.weiny@intel.com wrote:
-> From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> This ID is used in DOE headers to identify protocols that are defined
-> within the PCI Express Base Specification.
-> 
-> Specified in Table 7-x2 of the Data Object Exchange ECN (approved 12 March
-> 2020) available from https://members.pcisig.com/wg/PCI-SIG/document/14143
+DMA configuration is added to uart nodes in stm32mp15x device tree.
+Delete uart4 DMA property in stm32mp15xx-dhcom-som board device tree
+to keep console in irq mode, as DMA support for console has been
+removed from the driver by commit e359b4411c28 ("serial: stm32: fix
+threaded interrupt handling").
 
-Please update this citation to PCIe r6.0, sec 6.30.1.1, table 6-32.
+Signed-off-by: Erwan Le Ray <erwan.leray@foss.st.com>
 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  include/linux/pci_ids.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 011f2f1ea5bb..849f514cd7db 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -149,6 +149,7 @@
->  #define PCI_CLASS_OTHERS		0xff
->  
->  /* Vendors and devices.  Sort key: vendor first, device next. */
-> +#define PCI_VENDOR_ID_PCI_SIG		0x0001
->  
->  #define PCI_VENDOR_ID_LOONGSON		0x0014
->  
-> -- 
-> 2.31.1
-> 
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index 8c41f819f776..3cd729e29699 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -521,5 +521,7 @@
+ &uart4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart4_pins_a>;
++	/delete-property/dmas;
++	/delete-property/dma-names;
+ 	status = "okay";
+ };
+-- 
+2.17.1
+

@@ -2,271 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B704A7E17
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF134A7E25
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347742AbiBCCpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 21:45:32 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:34797 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiBCCpa (ORCPT
+        id S1349097AbiBCDAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:00:08 -0500
+Received: from mailout3.samsung.com ([203.254.224.33]:44161 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349085AbiBCDAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 21:45:30 -0500
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220203024529epoutp02c1019834935ba1b5a710051c51f3d33f~QJp8zqEyD0743807438epoutp02U
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 02:45:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220203024529epoutp02c1019834935ba1b5a710051c51f3d33f~QJp8zqEyD0743807438epoutp02U
+        Wed, 2 Feb 2022 22:00:07 -0500
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220203030005epoutp0305afd1b2432342864093e0e053d1b419~QJ2s2pAwX1330613306epoutp03Y
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 03:00:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220203030005epoutp0305afd1b2432342864093e0e053d1b419~QJ2s2pAwX1330613306epoutp03Y
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643856329;
-        bh=LTMx0mvoTh7gsldxW1ELZHlFxhkhF5WWa60fzIk8E7k=;
-        h=Date:Subject:To:From:In-Reply-To:References:From;
-        b=tL3/76ezFVuw51yj/KspCnSx1sXvx4vqoq3PgDwTpdJa0tUnoWd2Ababs8xkqkC3G
-         CffoSqw74ZBlTSxXL2w92nbmLgsicmAYKhURDjjKh7W2QAbUXk77HzXOLa4Vy4fLRN
-         N3XdEt0zfJReJ7Zc4tFz1JVmXxA8rTQixsnZpQb0=
+        s=mail20170921; t=1643857205;
+        bh=VPY4xdN3+juw2xsjAU/pfTNAW2G+JR2rcqmTvV+0eMM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=seTrRcx+PQilVr8sakAzUc5VzEULKt3W2ZXdcMNPRCL8v+R862S82I7eJkTPs4NG/
+         dUErtQVkkoOuVFpKyObEhwO9u7oqV3tEMBo1HY+MYqL7N3GU7NWEE083J9vsh9l5Rx
+         s0PaTBGPJ43Blh8txtUl6Or7Y13zupBedEFgwToc=
 Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20220203024528epcas1p43e630f8cfcc2a02b75bcee3ed700cef9~QJp8G2Ye53213532135epcas1p4K;
-        Thu,  3 Feb 2022 02:45:28 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.237]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jq31b4GtNz4x9Px; Thu,  3 Feb
-        2022 02:45:23 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F1.64.64085.3C14BF16; Thu,  3 Feb 2022 11:45:23 +0900 (KST)
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220203030004epcas2p42133066e8262f1f2628339641fb21205~QJ2sVK9Hs0692106921epcas2p4H;
+        Thu,  3 Feb 2022 03:00:04 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Jq3LT5XF0z4x9Q7; Thu,  3 Feb
+        2022 03:00:01 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BA.7F.12141.1354BF16; Thu,  3 Feb 2022 12:00:01 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220203024523epcas1p49abd1129eeb53bbf48c9933f23060282~QJp3MG5kt2091920919epcas1p4d;
-        Thu,  3 Feb 2022 02:45:23 +0000 (GMT)
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220203030000epcas2p2a924a55a5ae60e8685cd62b66a5482f3~QJ2oj0KxE3170731707epcas2p2Y;
+        Thu,  3 Feb 2022 03:00:00 +0000 (GMT)
 Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220203024523epsmtrp28a7e26c1d45f9ee51b1dc8e15f07562d~QJp3LNTo_2773627736epsmtrp2w;
-        Thu,  3 Feb 2022 02:45:23 +0000 (GMT)
-X-AuditID: b6c32a35-9c3ff7000000fa55-06-61fb41c36050
+        20220203030000epsmtrp2d3b728a1b532a692c4639552d85004c0~QJ2ojBa3x0412104121epsmtrp2v;
+        Thu,  3 Feb 2022 03:00:00 +0000 (GMT)
+X-AuditID: b6c32a48-d73ff70000002f6d-6c-61fb4531b2a6
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        15.58.08738.3C14BF16; Thu,  3 Feb 2022 11:45:23 +0900 (KST)
-Received: from [10.113.221.211] (unknown [10.113.221.211]) by
+        01.59.08738.0354BF16; Thu,  3 Feb 2022 12:00:00 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220203024522epsmtip204196f5f1c1c26fb95e31826b9737847~QJp2lyW8s2085620856epsmtip2d;
-        Thu,  3 Feb 2022 02:45:22 +0000 (GMT)
-Message-ID: <0813963b-db28-f931-cf28-771b2141ee1c@samsung.com>
-Date:   Thu, 3 Feb 2022 11:57:12 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/exynos: fimd: add BGR support for exynos4/5
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
-        Joonyoung Shim <jy0922.shim@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Inki Dae <inki.dae@samsung.com>
-In-Reply-To: <20220129220153.GA33165@adroid>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLJsWRmVeSWpSXmKPExsWy7bCmge5hx9+JBo/eKFj0njvJZPF/20Rm
-        iytf37NZvLh3kcVi49sfTBZnm96wW2x6fI3V4vKuOWwWM87vY7I4828qi8WMyS/ZHLg9ZjX0
-        snns/baAxWPnrLvsHtu/PWD1uN99nMlj85J6j74tqxg9Pm+SC+CIyrbJSE1MSS1SSM1Lzk/J
-        zEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpUSaEsMacUKBSQWFyspG9nU5Rf
-        WpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCd0Tl5H3PBI82KW39PMDYw
-        nlHsYuTkkBAwkWjefJWti5GLQ0hgB6PE3W9rmCGcT4wS6059YIdwPjNK7H67jg2mZVrXN0aI
-        xC5GicMv9zBBOO8ZJdY+nskMUsUrYCexvO0lI4jNIqAicef2P3aIuKDEyZlPWEBsUYEIiZdH
-        /jKB2MICLhJzFh0GizMLiEvcejIfbKiIwElmiQf3JoENZRNQlZi44j7YGZwCOhJnD3xngmiQ
-        l2jeOhvscAmBHRwSM3eeZoW41UXi679eFghbWOLV8S3sELaUxOd3e9kgGiYzSty5voIFwpkB
-        9NDP64wQVcYS+5dOBlrBAbRCU2L9Ln2IsKLEzt9zGSE280m8+9rDClIiIcAr0dEmBFGiJHHs
-        4g2oKRISF5ZMhIadh8SPY+fAbhMSqJdY2HeVeQKjwiykgJmFFACzkPw2C+GIBYwsqxjFUguK
-        c9NTiw0LDOERnpyfu4kRnI61THcwTnz7Qe8QIxMH4yFGCQ5mJRHevQu/JwrxpiRWVqUW5ccX
-        leakFh9iNAVGz0RmKdHkfGBGyCuJNzSxNDAxMzI2sTA0M1QS51017XSikEB6YklqdmpqQWoR
-        TB8TB6dUA1PovN512xaaXrdbvW1Jj7dnUrPX9NerTW/+W32GedYb7u4T/K363GopswyOd/fV
-        KzEX+xhfX7X5uuf65ya323+ckO+tctwbEX7v56P9vSc59Oau+hn5ypj1hEd97eZjJr0Vbx57
-        Fs0+lfxd+Iv8l2X31INO/DJr6KvLjiwNn8Dy0vmo096XC99Xic9Z+dR+7Vmx87PLUhXSw5PP
-        rtm5xqhRqm3mc7bPQedL9e7377Kp/KAh8PTT7WmxnDGPlzH+2ft3f/+evl9HKwIXXhZ9yJh6
-        u/m09cJET1ebx12CVnVL12vGXZHfV2Ji7HUi8EQmR2X6IoXNDpb/XnRkffUNELpi9mh6av/m
-        P8ee+Rmd6pNSYinOSDTUYi4qTgQAVn7erFAEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupikeLIzCtJLcpLzFFi42LZdlhJXvew4+9Eg6kT2S16z51ksvi/bSKz
-        xZWv79ksXty7yGKx8e0PJouzTW/YLTY9vsZqcXnXHDaLGef3MVmc+TeVxWLG5JdsDtwesxp6
-        2Tz2flvA4rFz1l12j+3fHrB63O8+zuSxeUm9R9+WVYwenzfJBXBEcdmkpOZklqUW6dslcGV0
-        Tt7HXPBIs+LW3xOMDYxnFLsYOTkkBEwkpnV9Y+xi5OIQEtjBKNG88jFTFyMHUEJCYstWDghT
-        WOLw4WKIkreMEqcWLWcF6eUVsJNY3vaSEcRmEVCRuHP7HztEXFDi5MwnLCC2qECERNuyKcwg
-        trCAi8ScRYfB4swC4hK3nsxnAhkqInCaWWLihZVgg4QE6iVOT14NVsQmoCoxccV9NhCbU0BH
-        4uyB72C3MQuoS6yfJwQxR16ieets5gmMgrOQrJ6FZMUshI5ZSDoWMLKsYpRMLSjOTc8tNiww
-        ykst1ytOzC0uzUvXS87P3cQIji4trR2Me1Z90DvEyMTBeIhRgoNZSYR378LviUK8KYmVValF
-        +fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUw7TKYNMNy99tfObFSP+Rv
-        508RSnPf75H10euah3VIu8nfRh7x/y22Uwqf8/2f6buIMWq9gs+izY9yf3ExK2/0M7k7VTWe
-        v9DUkCMqw073gmbN+oucN20uOz6fPV1rp85+tolhi95MrDgS47hx7uXaA/oS5kViHHvEjnHL
-        xhZPEzYPX3LQI2KCi96Wz0rKav/X3705XWaWvmF7ybWftkclU89xJd3uEp8UbOXTOeN6aRPH
-        oWUq7GrN+3c3fUopXuqtPnvPYrNTXMdnZOx7d+N79JyHPbsnKTPMWrGFQ91MtCLBdm/eU/XK
-        laqB6v7/M04c2dqaseDHiTVqW75GqP1hOjR99zYZ4den5rrNXsW9T4mlOCPRUIu5qDgRAPSd
-        y2YdAwAA
-X-CMS-MailID: 20220203024523epcas1p49abd1129eeb53bbf48c9933f23060282
+        20220203030000epsmtip211817ea3a30b2a4872c0a5bbd3251215~QJ2oZxh5g0268002680epsmtip2B;
+        Thu,  3 Feb 2022 03:00:00 +0000 (GMT)
+From:   Daehwan Jung <dh10.jung@samsung.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list),
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>,
+        Daehwan Jung <dh10.jung@samsung.com>
+Subject: [PATCH 0/3] support USB offload feature
+Date:   Thu,  3 Feb 2022 11:57:31 +0900
+Message-Id: <1643857054-112415-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7bCmha6h6+9Eg/UtbBZ3FkxjsnhyZBG7
+        RfPi9WwW1/+8Z7Rof36BzeLyrjlsFouWtTJbNG+awmoxc62yA6fH5b5eJo8Fm0o9Fu95yeSx
+        f+4ado++LasYPT5vkgtgi8q2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvM
+        TbVVcvEJ0HXLzAG6SUmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1ya
+        l66Xl1piZWhgYGQKVJiQnfFxjmDBf4GK1gMzmRsYJ/B1MXJySAiYSMxZ1snUxcjFISSwg1Fi
+        zo5LUM4nRom+/nZmCOczo8Sre+fYYVqud9+DSuxilHiyYzJUyw9GiTW/v7N0MXJwsAloSXxf
+        yAjSICIQJ7G0E2Iss8BUJomOWfdYQBLCAgYSryZeZAaxWQRUJe7/f8cEYvMKuEnM+riQFWKb
+        nMTNc51g2yQE9rFLbHv2BeoMF4mn/fuZIGxhiVfHt0DFpSQ+v9vLBmEXS+z61MoE0dzAKNH4
+        4AQzRMJYYtazdkaQS5kFNCXW79IHMSUElCWO3AK7jVmAT6Lj8F92iDCvREebEESjssT0yxOg
+        TpOUOPj6HNRAD4mOB71gtpBArETrvjfsExhlZyHMX8DIuIpRLLWgODc9tdiowAQeScn5uZsY
+        wclMy2MH4+y3H/QOMTJxMB5ilOBgVhLh3bvwe6IQb0piZVVqUX58UWlOavEhRlNgeE1klhJN
+        zgem07ySeEMTSwMTMzNDcyNTA3MlcV6vlA2JQgLpiSWp2ampBalFMH1MHJxSDUwRi6/vrBZ3
+        WZRb73um4bzYsTkv50+ZzNwyP+JCTG6xGOPTa4/nn9T8fm7xNDHl9HPTl/Fwza7rOfxpbtCU
+        +xXB+/5Psr65x5dBecMyncuBgbv2pLH9mxH1sIjf//HKI10szcvalTtbGFNm3/M8fXpic4PE
+        PNXF+++bzl38oUpG8OG/veItd/Xt0p5Kr+j6ofL+6YyfbHnX5y0Jqzzfcql5z7+ghrD1f1Ot
+        mppOeH6oif+/knW3TGJ2HXedV9RT30YbnjS3KL/IL1bSP7Jk6tqcGnXXhDG/5jj97V/nnL3T
+        VKPyY5yWFpcvWdj1f+JE+ds3Le6+WvPz6yf/91l9f09O7J+ZxdvXlufz9V+kdymXEktxRqKh
+        FnNRcSIAKuRkg+8DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmluLIzCtJLcpLzFFi42LZdlhJXtfA9XeiwZbfBhZ3FkxjsnhyZBG7
+        RfPi9WwW1/+8Z7Rof36BzeLyrjlsFouWtTJbNG+awmoxc62yA6fH5b5eJo8Fm0o9Fu95yeSx
+        f+4ado++LasYPT5vkgtgi+KySUnNySxLLdK3S+DK+DhHsOC/QEXrgZnMDYwT+LoYOTkkBEwk
+        rnffY+5i5OIQEtjBKNH7/zAjREJSYuncG+wQtrDE/ZYjrBBF3xglTu6+AJTg4GAT0JL4vhCs
+        XkQgTmLF5T0sIDXMArOZJDYfvw6WEBYwkHg18SIziM0ioCpx//87JhCbV8BNYtbHhawQC+Qk
+        bp7rZJ7AyLOAkWEVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZweGlp7WDcs+qD3iFG
+        Jg7GQ4wSHMxKIrx7F35PFOJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFq
+        EUyWiYNTqoFpi5G85k7xlbuPySh9y1W8VxliWhC/XFvoufmP4Dqj9EMz1mvMXmT8OnJ53+TJ
+        EXorz02fOKtgsme7jbaKX9Tdq+lbjrBN2WmTWZbHqe3A37As9tvTI0cl2dyj9/M7TdEXk1u6
+        1fayuaX176bHmoWK5805728+4x4Zel/XelvnmYdlSyUjxcUzp7Ilvg+YFsIR5b2m6H1Rz5VL
+        DEKHr/onyeaX86hHGnz51xsrHV0bdtHiyWIu3bKFMjbTNi2szfH4y8QRc1vGsVTxsepEhkzX
+        E9Wm3ou6jN8zuj7sNej2cTu3ctX7y108dnIZok7xfjVCE6ac31IomPBrS1lt8AKrh7oTKv5k
+        HeaZLSmyVomlOCPRUIu5qDgRAGWiudGeAgAA
+X-CMS-MailID: 20220203030000epcas2p2a924a55a5ae60e8685cd62b66a5482f3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566
-References: <CGME20220129220203epcas1p25b1704191dd7babfb8d5b8dc6704d566@epcas1p2.samsung.com>
-        <20220129220153.GA33165@adroid>
+X-CMS-RootMailID: 20220203030000epcas2p2a924a55a5ae60e8685cd62b66a5482f3
+References: <CGME20220203030000epcas2p2a924a55a5ae60e8685cd62b66a5482f3@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin.
+This patchset is for USB offload feature, which makes Co-processor to use
+some memories of xhci. Especially it's useful for USB Audio scenario.
+Audio stream would get shortcut because Co-processor directly write/read
+data in xhci memories. It could get speed-up using faster memory like SRAM.
+That's why this also gives vendors flexibilty of memory management.
+Below pathches have been merged in AOSP kernel(android12-5.10) and I put
+together and split into 3 patches.
 
-Thanks for your contribution,
-Inki Dae
+ANDROID: usb: host: fix slab-out-of-bounds in xhci_vendor_get_ops
+ANDROID: usb: export built-in tracepoint functions
+ANDROID: usb: host: Use old init scheme when hook unavailable
+ANDROID: usb: host: free the offload TR by vendor hook
+ANDROID: usb: host: xhci: provide function prototype for xhci_address_device
+ANDROID: usb: host: add bus_suspend/bus_resume to xhci overrides
+ANDROID: usb: host: add address_device to xhci overrides
+ANDROID: usb: host: add max packet parameter on alloc_transfer_ring hook
+ANDROID: usb: host: add xhci hooks for vendor specific container context
+ANDROID: usb: host: export xhci symbols for ring management
+ANDROID: usb: host: export additional xhci symbols for ring management
+FROMLIST: usb: xhci-plat: add xhci_plat_priv_overwrite
+FROMLIST: usb: host: export symbols for xhci hooks usage
+FROMLIST: usb: host: add xhci hooks for USB offload
 
-22. 1. 30. 07:01에 Martin Jücker 이(가) 쓴 글:
-> In the downstream kernels for exynos4 and exynos5 devices, there is an
-> undocumented register that controls the order of the RGB output. It can
-> be set to either normal order or reversed, which enables BGR support for
-> those SoCs.
-> 
-> This patch enables the BGR support for all the SoCs that were found to
-> have at least one device with this logic in the corresponding downstream
-> kernels.
-> 
-> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
-> ---
->  drivers/gpu/drm/exynos/exynos_drm_fimd.c | 42 ++++++++++++++++++++++--
->  include/video/samsung_fimd.h             |  4 +++
->  2 files changed, 44 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/exynos/exynos_drm_fimd.c b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
-> index c735e53939d8..cb632360c968 100644
-> --- a/drivers/gpu/drm/exynos/exynos_drm_fimd.c
-> +++ b/drivers/gpu/drm/exynos/exynos_drm_fimd.c
-> @@ -109,6 +109,7 @@ struct fimd_driver_data {
->  	unsigned int has_dp_clk:1;
->  	unsigned int has_hw_trigger:1;
->  	unsigned int has_trigger_per_te:1;
-> +	unsigned int has_bgr_support:1;
->  };
->  
->  static struct fimd_driver_data s3c64xx_fimd_driver_data = {
-> @@ -138,6 +139,7 @@ static struct fimd_driver_data exynos4_fimd_driver_data = {
->  	.lcdblk_bypass_shift = 1,
->  	.has_shadowcon = 1,
->  	.has_vtsel = 1,
-> +	.has_bgr_support = 1,
->  };
->  
->  static struct fimd_driver_data exynos5_fimd_driver_data = {
-> @@ -149,6 +151,7 @@ static struct fimd_driver_data exynos5_fimd_driver_data = {
->  	.has_vidoutcon = 1,
->  	.has_vtsel = 1,
->  	.has_dp_clk = 1,
-> +	.has_bgr_support = 1,
->  };
->  
->  static struct fimd_driver_data exynos5420_fimd_driver_data = {
-> @@ -162,6 +165,7 @@ static struct fimd_driver_data exynos5420_fimd_driver_data = {
->  	.has_vtsel = 1,
->  	.has_mic_bypass = 1,
->  	.has_dp_clk = 1,
-> +	.has_bgr_support = 1,
->  };
->  
->  struct fimd_context {
-> @@ -226,6 +230,18 @@ static const uint32_t fimd_formats[] = {
->  	DRM_FORMAT_ARGB8888,
->  };
->  
-> +static const uint32_t fimd_extended_formats[] = {
-> +	DRM_FORMAT_C8,
-> +	DRM_FORMAT_XRGB1555,
-> +	DRM_FORMAT_XBGR1555,
-> +	DRM_FORMAT_RGB565,
-> +	DRM_FORMAT_BGR565,
-> +	DRM_FORMAT_XRGB8888,
-> +	DRM_FORMAT_XBGR8888,
-> +	DRM_FORMAT_ARGB8888,
-> +	DRM_FORMAT_ABGR8888,
-> +};
-> +
->  static const unsigned int capabilities[WINDOWS_NR] = {
->  	0,
->  	EXYNOS_DRM_PLANE_CAP_WIN_BLEND | EXYNOS_DRM_PLANE_CAP_PIX_BLEND,
-> @@ -673,21 +689,25 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
->  		val |= WINCONx_BYTSWP;
->  		break;
->  	case DRM_FORMAT_XRGB1555:
-> +	case DRM_FORMAT_XBGR1555:
->  		val |= WINCON0_BPPMODE_16BPP_1555;
->  		val |= WINCONx_HAWSWP;
->  		val |= WINCONx_BURSTLEN_16WORD;
->  		break;
->  	case DRM_FORMAT_RGB565:
-> +	case DRM_FORMAT_BGR565:
->  		val |= WINCON0_BPPMODE_16BPP_565;
->  		val |= WINCONx_HAWSWP;
->  		val |= WINCONx_BURSTLEN_16WORD;
->  		break;
->  	case DRM_FORMAT_XRGB8888:
-> +	case DRM_FORMAT_XBGR8888:
->  		val |= WINCON0_BPPMODE_24BPP_888;
->  		val |= WINCONx_WSWP;
->  		val |= WINCONx_BURSTLEN_16WORD;
->  		break;
->  	case DRM_FORMAT_ARGB8888:
-> +	case DRM_FORMAT_ABGR8888:
->  	default:
->  		val |= WINCON1_BPPMODE_25BPP_A1888;
->  		val |= WINCONx_WSWP;
-> @@ -695,6 +715,18 @@ static void fimd_win_set_pixfmt(struct fimd_context *ctx, unsigned int win,
->  		break;
->  	}
->  
-> +	switch (pixel_format) {
-> +	case DRM_FORMAT_XBGR1555:
-> +	case DRM_FORMAT_XBGR8888:
-> +	case DRM_FORMAT_ABGR8888:
-> +	case DRM_FORMAT_BGR565:
-> +		writel(WIN_RGB_ORDER_REVERSE, ctx->regs + WIN_RGB_ORDER(win));
-> +		break;
-> +	default:
-> +		writel(WIN_RGB_ORDER_FORWARD, ctx->regs + WIN_RGB_ORDER(win));
-> +		break;
-> +	}
-> +
->  	/*
->  	 * Setting dma-burst to 16Word causes permanent tearing for very small
->  	 * buffers, e.g. cursor buffer. Burst Mode switching which based on
-> @@ -1074,8 +1106,14 @@ static int fimd_bind(struct device *dev, struct device *master, void *data)
->  	ctx->drm_dev = drm_dev;
->  
->  	for (i = 0; i < WINDOWS_NR; i++) {
-> -		ctx->configs[i].pixel_formats = fimd_formats;
-> -		ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
-> +		if (ctx->driver_data->has_bgr_support) {
-> +			ctx->configs[i].pixel_formats = fimd_extended_formats;
-> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_extended_formats);
-> +		} else {
-> +			ctx->configs[i].pixel_formats = fimd_formats;
-> +			ctx->configs[i].num_pixel_formats = ARRAY_SIZE(fimd_formats);
-> +		}
-> +
->  		ctx->configs[i].zpos = i;
->  		ctx->configs[i].type = fimd_win_types[i];
->  		ctx->configs[i].capabilities = capabilities[i];
-> diff --git a/include/video/samsung_fimd.h b/include/video/samsung_fimd.h
-> index c4a93ce1de48..e6966d187591 100644
-> --- a/include/video/samsung_fimd.h
-> +++ b/include/video/samsung_fimd.h
-> @@ -476,6 +476,10 @@
->   * 1111		-none-	 -none-   -none-   -none-    -none-
->  */
->  
-> +#define WIN_RGB_ORDER(_win)			(0x2020 + ((_win) * 4))
-> +#define WIN_RGB_ORDER_FORWARD			(0 << 11)
-> +#define WIN_RGB_ORDER_REVERSE			(1 << 11)
-> +
->  /* FIMD Version 8 register offset definitions */
->  #define FIMD_V8_VIDTCON0	0x20010
->  #define FIMD_V8_VIDTCON1	0x20014
+Below are owners of patches.
+
+Howard Yen <howardyen@google.com>
+Jack Pham <jackp@codeaurora.org>
+Puma Hsu <pumahsu@google.com>
+J. Avila <elavila@google.com>
+chihhao.chen <chihhao.chen@mediatek.com>)
+
+Daehwan Jung (3):
+  usb: host: export symbols for xhci hooks usage
+  usb: host: add xhci hooks for USB offload
+  usb: host: add some to xhci overrides for USB offload
+
+ drivers/usb/host/xhci-hub.c  |   7 ++
+ drivers/usb/host/xhci-mem.c  | 160 ++++++++++++++++++++++++++++++-----
+ drivers/usb/host/xhci-plat.c |  43 +++++++++-
+ drivers/usb/host/xhci-plat.h |   8 ++
+ drivers/usb/host/xhci-ring.c |  22 ++++-
+ drivers/usb/host/xhci.c      | 104 ++++++++++++++++++++++-
+ drivers/usb/host/xhci.h      |  52 ++++++++++++
+ 7 files changed, 368 insertions(+), 28 deletions(-)
+
+-- 
+2.31.1
+

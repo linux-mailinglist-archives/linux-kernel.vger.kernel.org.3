@@ -2,84 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DB24A859E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7C94A859F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350936AbiBCN6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:58:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbiBCN6X (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:58:23 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36395C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 05:58:23 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id z19so6073963lfq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 05:58:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=J5ajnrFHB2Itynjvb8zArw+50BJi/x0Eej9kTRNExuQ=;
-        b=hPwDZRyjA9txtxuG+5/cTuFGbSUc2fcWxGgS1ejgy07ob3tcGH200w0Aqj/q3x4Dl7
-         lc+zXOvZQyLgh/xP+nnIe/dnJfaTWhwTG20PXsa5Z2Z9/BN3qtCE/unCOC4VVpxk95ti
-         xdf88IG+x3gl9AbrSHVKgvcMv2MEJXxiE83DIDneZINppKaHKkG7fbVGchzlYl6i/9Aj
-         Jb8P9TTHKKlT2PVJhhehQa7RQgeZXwn+VHMugpK3TSyuu1DMLJ+LbKlOKgZVaqagVQpK
-         ASks1OPp9LZga9EhyfU+9cqxsW3pmMgl5tqJO4xjcVRJSN8suWjxwx95+JQUDz7RXx+n
-         9bdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=J5ajnrFHB2Itynjvb8zArw+50BJi/x0Eej9kTRNExuQ=;
-        b=W1PsK0Tqzde+lhoJdH0DCUSF3B+1bxDKCuQwfULa/zM25NCo3eBwfb29DyJGesVOfZ
-         39Z9BW60UFC+DY+M8P6CxAiHDm47y6Xbs1ZxpV/SBpU2jrBrKMuODVrO92hPyutDvWZR
-         jp1+ZTFW7NvrUyMVgbchOsjBv6tiIfYebiwPGTzPGzpn2S1mFMWj1tjerWQwNo3apAG8
-         HQ0avFiBWdK1dYr/UeVvf72BxWhh+xmi/wmjQQ61suzPyT1FzTJ53fcLXMjH6SIpy6Ar
-         oem1AraLV9ArqaugaeBYKN7vY04+Nk9RiLO4JE9izldIRQMRSaKejsaoqk+fxfrB572v
-         KSFQ==
-X-Gm-Message-State: AOAM530brkGsG6Av7g/TypjFqyMohdnXE/61alBLP+b1uIufXhvg34ZP
-        2wN0nfe8aufRQDZMqlpasPE=
-X-Google-Smtp-Source: ABdhPJyuhFv/OFce48B1/qo4kUyUlmpXlBHEkqfwAjcb3ui8pvzKNu1ezVfGSF/a/3pLJdY7P0XJyQ==
-X-Received: by 2002:a05:6512:33cf:: with SMTP id d15mr26471232lfg.544.1643896701426;
-        Thu, 03 Feb 2022 05:58:21 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id z15sm3532246ljm.64.2022.02.03.05.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 05:58:20 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 8602A5A0020; Thu,  3 Feb 2022 16:58:19 +0300 (MSK)
-Date:   Thu, 3 Feb 2022 16:58:19 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Jason Andryuk <jandryuk@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Subject: Re: [PATCH v2] kcmp: Comment get_file_raw_ptr() RCU usage
-Message-ID: <Yfvfe+TmR1WIuj/U@grain>
-References: <20220203133134.6949-1-jandryuk@gmail.com>
+        id S1350942AbiBCN6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:58:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:48154 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232957AbiBCN6d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:58:33 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A38A2B;
+        Thu,  3 Feb 2022 05:58:33 -0800 (PST)
+Received: from [10.57.89.13] (unknown [10.57.89.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBC8A3F774;
+        Thu,  3 Feb 2022 05:58:31 -0800 (PST)
+Message-ID: <cf29155c-fbb3-518f-a82e-bb8e52e0f8a4@arm.com>
+Date:   Thu, 3 Feb 2022 13:58:29 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203133134.6949-1-jandryuk@gmail.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH 02/15] coresight: Make ETM4x TRCIDR2 register accesses
+ consistent with sysreg.h
+To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org
+Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220202160226.37858-1-james.clark@arm.com>
+ <20220202160226.37858-3-james.clark@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220202160226.37858-3-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 08:31:34AM -0500, Jason Andryuk wrote:
-> This usage of RCU appears wrong since the pointer is passed outside the
-> RCU region.  However, it is only used as a number and not dereferenced,
-> so it is okay.  Leave a comment for the next reader.
+On 02/02/2022 16:02, James Clark wrote:
+> This is a no-op change for style and consistency and has no effect on the
+> binary produced by gcc-11.
 > 
-> Without a reference, these comparisons are racy, but even with their use
-> inside an RCU region, the result could go stale.
+> Signed-off-by: James Clark <james.clark@arm.com>
+
+
+> ---
+>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
+>   drivers/hwtracing/coresight/coresight-etm4x.h      | 7 +++++++
+>   2 files changed, 10 insertions(+), 3 deletions(-)
 > 
-> Signed-off-by: Jason Andryuk <jandryuk@gmail.com>
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 8aefee4e72fd..4abe5444234e 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -1111,11 +1111,11 @@ static void etm4_init_arch_data(void *info)
+>   	/* maximum size of resources */
+>   	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
+>   	/* CIDSIZE, bits[9:5] Indicates the Context ID size */
+> -	drvdata->ctxid_size = BMVAL(etmidr2, 5, 9);
+> +	drvdata->ctxid_size = REG_VAL(etmidr2, TRCIDR2_CIDSIZE);
+>   	/* VMIDSIZE, bits[14:10] Indicates the VMID size */
+> -	drvdata->vmid_size = BMVAL(etmidr2, 10, 14);
+> +	drvdata->vmid_size = REG_VAL(etmidr2, TRCIDR2_VMIDSIZE);
+>   	/* CCSIZE, bits[28:25] size of the cycle counter in bits minus 12 */
+> -	drvdata->ccsize = BMVAL(etmidr2, 25, 28);
+> +	drvdata->ccsize = REG_VAL(etmidr2, TRCIDR2_CCSIZE);
+>   
+>   	etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
+>   	/* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+> index 2bd8ad953b8e..a95df5686b4b 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+> @@ -147,6 +147,13 @@
+>   #define TRCIDR0_TSSIZE_SHIFT			24
+>   #define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
+>   
+> +#define TRCIDR2_CIDSIZE_SHIFT			5
+> +#define TRCIDR2_CIDSIZE_MASK			GENMASK(4, 0)
+> +#define TRCIDR2_VMIDSIZE_SHIFT			10
+> +#define TRCIDR2_VMIDSIZE_MASK			GENMASK(4, 0)
+> +#define TRCIDR2_CCSIZE_SHIFT			25
+> +#define TRCIDR2_CCSIZE_MASK			GENMASK(3, 0)
+> +
 
-Looks ok to me, thanks a lot! I should put somthing similar a way
-earlier when this code been developed. I must confess I'm not a big
-fan of merging comments-only commits (since they affect git history),
-but since it brings more understanding into what the code is doing
+Looks good to me. I have confirmed the above changes matches the spec.
 
-Acked-by: Cyrill Gorcunov <gorcunov@gmail.com>
+Suzuki

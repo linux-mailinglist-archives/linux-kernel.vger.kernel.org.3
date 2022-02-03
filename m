@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0BA4A8CA7
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDF74A8CA6
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353831AbiBCToP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S1353845AbiBCToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiBCToM (ORCPT
+        with ESMTP id S1353828AbiBCToN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:44:12 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FDEC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:44:12 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id h11-20020a170902eecb00b0014cc91d4bc4so1753750plb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:44:12 -0800 (PST)
+        Thu, 3 Feb 2022 14:44:13 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD27C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:44:13 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id f1-20020a170902ab8100b0014cb6c5b6a2so1755983plr.18
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:44:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to;
-        bh=uIZzaMpM3HaDO6cWITwTjwY2xcC3K/nMvFelzMai3xA=;
-        b=Ttqw71MHgVKBj7jy1G2Cj+63M6I140I9QXq68KD+Kwmblnvhsp8wOlp4SO36CiaGLG
-         tthhK9NFZY5xi2cAMwwu/Jvol5881pe1lKcEy/jMn63qXhBQlCGlwIGeEIU42FB64B2Z
-         NP6ADMBXiQR6Sgj+KnEwgCmEu5eE0hzweeDYkuXRvaZVRAXflhbu9Ko9rP98C3qkiH4G
-         qgGOmIIJpQbs6WGt+XWp2mJvNjm7as9hsz9ajFzMKwREQtZ9I+UHyqtZE/E+82TF3Mpr
-         S6u0PtBZNQFNRBstpXQNDqUKmcvXjrhud3HYXe82vY7G2/jxuKOuXFY/Z/E8u4Pl6l1H
-         VKrw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to;
+        bh=LyDIgi01ztBZeHVT+kJLlc/orBiiEVzwDL/6sC1TQxs=;
+        b=MmyW1Jy2+00swY71fuBbBWYtQ36QkBate/qU1BG9S33IaXHWIHwfXQ9qeGrQVFpNdX
+         uE16+pM98laPjTL/vSnvroYV5LM75/rAZOsg/m9VJDbqaKb6Kxw8bYE/tjnwgMGyItxY
+         uI3ZeJiMASBVWqvMiSGaK/eKuUe1+m3obiGR1cpH7Lwop3/88ALXEM9o5dOXwfiuNA+F
+         Vx5jL01bGrLtkOEhXSDybJR7yr15Yx2h6T5iLKU/mxZKF7YKGIAATDFxBMx72xzTncQc
+         LIYYKA3in9xHCkTec3BS4X3vFkNQCOIOQDXdu5ZTsA4DY2KXYK0h4nq+bF4vqvO2cCRg
+         htiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to;
-        bh=uIZzaMpM3HaDO6cWITwTjwY2xcC3K/nMvFelzMai3xA=;
-        b=UQW3yjaFjGT4MrwHlnQasRT61Qkm2W028X5LeFEeEFPIdZSUWUWFPhA1bTfk1rAWIi
-         iKSqLUGrvmICJdsgQq2SMR4JmAZXufr9dHCJ66AfCJP0D9M8rO7XIEQnxpGLSYixCUca
-         X7HnEpwhAN6QAU+Yl/L3+uW6NfidVGzl9hb5Kxinx4BC1k3FVPxDb2cIWvb4r5T18+6J
-         nFHCSPhyZ6G00IDiPPf+vX/l1ttlkc2rYt4ek08QMqBEGsQ7HQdwdGPBpoSO241B7y2F
-         YvM4u+rRQA2SInQUJDpTgni8D6uE3cB2c/c9y6a0rsb5ASORgUoH1cA8qjWEpsJ6t4Wm
-         TLfQ==
-X-Gm-Message-State: AOAM530ttOrbU2wnxf7mKw/dIGJxLE03++n2nlmkvejUBo5fUXstWIHI
-        A6qSiX9zmhD0WYSx3t01ocPKG0teBNEuoA==
-X-Google-Smtp-Source: ABdhPJyhIykDGjitD7LHrige2sCD5gYPRuCHIMF/kbnhDe/kHDnRP/dUFMGoJ/W7uFDqUvvRChF8UH3gnzB2/A==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to;
+        bh=LyDIgi01ztBZeHVT+kJLlc/orBiiEVzwDL/6sC1TQxs=;
+        b=HX5t8bcG0+sdrd8UVee9OPijtu+P2Fxg9fUCjeHf2o2NxsmA1TP+wg58/qDtr96+na
+         MvIDgt/jvX75U9a3F0tyA+YKJoZFfK2MD4SvjTZGORE0530rXF7QOfKAjMOGIf3kdmjv
+         6aQJZdHdj8sy1XmvdpbdXHfeMuvPE9GhOUOew/pUMzjtqvWFlpnQuldDgYbn4z4YOvL0
+         /5h8wccPQHolc/OYSiudB8aCLH0U+ma0ufQ1km6HpXo6Cdp6AcvVfR7H2P9DPX1B7hUq
+         JDzN1IOFq+QJ0kovbB79Z3XApD4EMHe+jcVsq9v52wzoOyG2pOMj6mFlFV4QfWHTns5B
+         rBRg==
+X-Gm-Message-State: AOAM531y2zizBIfmxPqhKvJ4rfxFOR5B2ljgbMMp1b1wowjpn+swfdur
+        E5ZciyUTb4epCc4D1JH0ngBGfO8RHoewNQ==
+X-Google-Smtp-Source: ABdhPJy48beIej93m9oHIOWXK4L3a/d+/GG19hiatQ3TYGLHQdXde238qNuGdb71IYvPh9Hg0ijkTWLA3IN2rg==
 X-Received: from tortoise.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1a0d])
- (user=jmattson job=sendgmr) by 2002:a17:90b:4c0c:: with SMTP id
- na12mr14616417pjb.140.1643917451702; Thu, 03 Feb 2022 11:44:11 -0800 (PST)
-Date:   Thu,  3 Feb 2022 11:43:07 -0800
-Message-Id: <20220203194308.2469117-1-jmattson@google.com>
+ (user=jmattson job=sendgmr) by 2002:a17:902:ec86:: with SMTP id
+ x6mr37592346plg.96.1643917453271; Thu, 03 Feb 2022 11:44:13 -0800 (PST)
+Date:   Thu,  3 Feb 2022 11:43:08 -0800
+In-Reply-To: <20220203194308.2469117-1-jmattson@google.com>
+Message-Id: <20220203194308.2469117-2-jmattson@google.com>
 Mime-Version: 1.0
+References: <20220203194308.2469117-1-jmattson@google.com>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH 1/2] x86/cpufeatures: Put the AMX macros in the word 18 block
+Subject: [PATCH 2/2] x86/cpufeatures: Add macros for Intel's new fast rep
+ string features
 From:   Jim Mattson <jmattson@google.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -69,38 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These macros are for bits in CPUID.(EAX=7,ECX=0):EDX, not for bits in
-CPUID(EAX=7,ECX=1):EAX. Put them with their brethren.
+Even if no one else cares, these features should be exposed to kvm
+guests, and the code for the KVM_GET_SUPPORTED_CPUID ioctl is more
+readable if the bits have corresponding X86_FEATURE macros.
 
 Signed-off-by: Jim Mattson <jmattson@google.com>
 ---
- arch/x86/include/asm/cpufeatures.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/cpufeatures.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index da872b6f8d8b..d7b51ddc8db3 100644
+index d7b51ddc8db3..138a50bc7bbd 100644
 --- a/arch/x86/include/asm/cpufeatures.h
 +++ b/arch/x86/include/asm/cpufeatures.h
-@@ -299,9 +299,6 @@
+@@ -299,6 +299,9 @@
  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
--#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
--#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
--#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
++#define X86_FEATURE_FZRM		(12*32+10) /* Fast zero-length REP MOVSB */
++#define X86_FEATURE_FSRS		(12*32+11) /* Fast short REP STOSB */
++#define X86_FEATURE_FSRC		(12*32+12) /* Fast short REP {CMPSB,SCASB} */
  
  /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
  #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
-@@ -391,6 +388,9 @@
- #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
- #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
- #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
-+#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
-+#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
- #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
- #define X86_FEATURE_ARCH_CAPABILITIES	(18*32+29) /* IA32_ARCH_CAPABILITIES MSR (Intel) */
 -- 
 2.35.0.263.gb82422642f-goog
 

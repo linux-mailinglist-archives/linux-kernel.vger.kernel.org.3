@@ -2,112 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FC24A7F40
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F764A7F48
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240647AbiBCGQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 01:16:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20998 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237581AbiBCGQ1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 01:16:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643868987;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qol4FKjmV5kyybqxOmO1rEWopOD7vMCwFa3iVh2RSaE=;
-        b=Q5DRFrhL5P+bHqGr/LRWNHVLgyKebiG4rEC8nHLrNfpsYmgubLfUQpi2HKbnDKh4oCzTII
-        d7qjW6gFR0r3hF7RnYAtrx8+KAUBqpp+n/TVtjiR9aJ1ABNcAJ3e01WIj7o7sA4s6ZK/gv
-        Ngn9iKgO8b7EcupGaCjl5C/j9eIzAdo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-DUscOsTDNXewyeL3p7AHiw-1; Thu, 03 Feb 2022 01:16:21 -0500
-X-MC-Unique: DUscOsTDNXewyeL3p7AHiw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 85FCA1091DA1;
-        Thu,  3 Feb 2022 06:16:18 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.193.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 355884BC40;
-        Thu,  3 Feb 2022 06:16:17 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 5CE6C1800605; Thu,  3 Feb 2022 07:16:15 +0100 (CET)
-Date:   Thu, 3 Feb 2022 07:16:15 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Dov Murik <dovmurik@linux.ibm.com>
-Cc:     linux-efi@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Andrew Scull <ascull@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
-        Lenny Szubowicz <lszubowi@redhat.com>,
-        Peter Gonda <pgonda@google.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@linux.ibm.com>,
-        Jim Cadden <jcadden@ibm.com>,
-        Daniele Buono <dbuono@linux.vnet.ibm.com>,
-        linux-coco@lists.linux.dev, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 4/5] efi: Load efi_secret module if EFI secret area is
- populated
-Message-ID: <20220203061615.wwembqmmpmg77iyj@sirius.home.kraxel.org>
-References: <20220201124413.1093099-1-dovmurik@linux.ibm.com>
- <20220201124413.1093099-5-dovmurik@linux.ibm.com>
- <20220202084723.ushasiekb3cxami4@sirius.home.kraxel.org>
- <c7604c39-d6ca-f3b9-b1d8-fd0362216717@linux.ibm.com>
- <20220202143128.jgadmr7tzetlobt7@sirius.home.kraxel.org>
- <cb548aa2-1ac3-46e7-91e4-f57a4fd63754@linux.ibm.com>
+        id S239005AbiBCG0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 01:26:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:53246 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234224AbiBCG0F (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 01:26:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2252B113E;
+        Wed,  2 Feb 2022 22:26:05 -0800 (PST)
+Received: from [10.163.44.35] (unknown [10.163.44.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5D933F774;
+        Wed,  2 Feb 2022 22:26:02 -0800 (PST)
+Subject: Re: [PATCH] coresight: trbe: Move check for kernelspace unmapped at
+ EL0 to probe
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org
+References: <20220201122212.3009461-1-sudeep.holla@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <01a43ba2-a633-f215-a688-2bda293b5a47@arm.com>
+Date:   Thu, 3 Feb 2022 11:55:58 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb548aa2-1ac3-46e7-91e4-f57a4fd63754@linux.ibm.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <20220201122212.3009461-1-sudeep.holla@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
 
-> > I think the module should fail noisily.  See above for autoload.  In
-> > case the module is loaded (either manually by the admin, or because
-> > efi.coco_secret != EFI_INVALID_TABLE_ADDR) and it can't actually load
-> > the secrets we want know why ...
+
+On 2/1/22 5:52 PM, Sudeep Holla wrote:
+> Currently with the check present in the module initialisation, it shouts
+> on all the systems irrespective of presence of coresight trace buffer
+> extensions.
+
+IIUC a system with CONFIG_CORESIGHT_TRBE enabled but without a TRBE DT
+i.e "arm,trace-buffer-extension" complains about kernel space unmapping
+at EL0 (even though it does not even really have TRBE HW to initialize).
+
 > 
-> Note that the AmdSev build of OVMF always publishes
-> LINUX_EFI_COCO_SECRET_TABLE_GUID in the EFI table.  Even when
-> LAUNCH_SECRET was not executed.  In such cases the secret area will be
-> empty.
+> Similar to Arm SPE perf driver, move the check for kernelspace unmapping
+> when running at EL0 to the device probe instead of module initialisation.
 
-Hmm, ok.  Why?  I assume the secret area is filled by the host and ovmf
-doesn't even look at it?
+Makes sense.
 
-> If we keep only the 'efi.coco_secret != EFI_INVALID_TABLE_ADDR' check,
-> we'll get errors from efi_secret for every VM launch that doesn't
-> undergo LAUNCH_SECRET.  I don't think that's good.
+> 
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: coresight@lists.linaro.org
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/hwtracing/coresight/coresight-trbe.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+> index 276862c07e32..3fe2ce1ba5bf 100644
+> --- a/drivers/hwtracing/coresight/coresight-trbe.c
+> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
+> @@ -1423,6 +1423,11 @@ static int arm_trbe_device_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	int ret;
+>  
 
-Well, if that is a common case the module could either print nothing or
-log KERN_INFO level instead of KERN_ERROR.
+Could you please add a similar comment like SPE driver regarding how
+the TRBE buffer will be inaccessible, if kernel gets unmapped at EL0
+and trace capture will terminate.
 
-> If we *do* want to check that the area starts with
-> EFI_SECRET_TABLE_HEADER_GUID (like I think we should), we need all the
-> checks before that, like checking that the area is big enough, and that
-> all the memremap()s succeed -- before actually comparing the
-> header_guid.  The checks are basically prerequisites for calling
-> efi_guidcmp() safely.
-
-It is still not fully clear to me why you want do that check twice.
-
-take care,
-  Gerd
-
+> +	if (arm64_kernel_unmapped_at_el0()) {
+> +		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+>  	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+>  	if (!drvdata)
+>  		return -ENOMEM;
+> @@ -1484,11 +1489,6 @@ static int __init arm_trbe_init(void)
+>  {
+>  	int ret;
+>  
+> -	if (arm64_kernel_unmapped_at_el0()) {
+> -		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
+> -		return -EOPNOTSUPP;
+> -	}
+> -
+>  	ret = platform_driver_register(&arm_trbe_driver);
+>  	if (!ret)
+>  		return 0;
+> 

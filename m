@@ -2,102 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B714A7E57
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CB64A7E5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349199AbiBCDb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:31:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28007 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348776AbiBCDbY (ORCPT
+        id S1349204AbiBCDgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:36:22 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:39829 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231993AbiBCDgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 22:31:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643859083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Wc8dl729Kfw/oo6FN8HrQApuGc0MHf1g6N7P5YsZBDw=;
-        b=TLykYhZVj7FNobL2O6fu4dDn5ZtPmDi37eSnNdbtjQzjQesr4NQX3DKGiDjljD/XGPH3Us
-        5WcCh1/p1KwOEXjk9CxvN7iHfMsDq2Kf1G7KCwfcOb+5y7kTli8hYmYJex/vHe+7qr+ETa
-        AP68YjvNgK3RNpTpECQk+yKzgfJv7WE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-380-JeR_pqIVP4G6vqxcweJlNA-1; Wed, 02 Feb 2022 22:31:20 -0500
-X-MC-Unique: JeR_pqIVP4G6vqxcweJlNA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A7938015C6;
-        Thu,  3 Feb 2022 03:31:19 +0000 (UTC)
-Received: from llong.com (unknown [10.22.34.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2450156F63;
-        Thu,  3 Feb 2022 03:31:18 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Phil Auld <pauld@redhat.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH] cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
-Date:   Wed,  2 Feb 2022 22:31:03 -0500
-Message-Id: <20220203033103.773030-1-longman@redhat.com>
+        Wed, 2 Feb 2022 22:36:21 -0500
+Received: by mail-il1-f199.google.com with SMTP id w14-20020a92db4e000000b002bc0fb4892cso888918ilq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 19:36:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=7x6rKhaHmrAEYlIz/NCtXjuxWLWqRjW+skTvrls9++k=;
+        b=fRALhvrbs8A+qdyHwDindsCL4zKmfmIFs35Lv71EIrZFdMZLPzomjx2j4HptLw0WJA
+         Apny6w7AxBfU1I0nidv3qv2grhWguLXTEo+pbxDHcAceM0KG4H8HgMnUdHyiVXkafU5Q
+         4HaYewQnfCxLAHEpbKyaG0+QmOeRewalgfOcurnEmIXiPUWCq9I7ubkQ+zitYRNDl/lA
+         05Z1d4g5hNwDXzFLP3P40si9xP3LLL9K3Y+bj+fDmqUQpAADRCX/RNGtABMo/tB1mKai
+         0gt7x/eZbCIwNqbM8RdkxKY0JSRNS+Y6HgwC/Kjqa/pMWtkL+kMF+ji95OfesfOSO4k5
+         gLBQ==
+X-Gm-Message-State: AOAM531CD9WaFQMFr+DuUdGB2qRtMD7rcyUxHO7BBnwalMRftQfQ84X7
+        hZ5oEI24JVqj70Hg17EOWMC2lbVxaj57Be2h3luHVZfMimYk
+X-Google-Smtp-Source: ABdhPJzZj1jMw6FAE6SvyayY5zdvayzSv5dg6luJoFgPyYb9thhsd7mbyIirTGhOCU69O6NNT0jIFBW7XgAFoaYYGIIlhZ5vZDyD
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Received: by 2002:a02:711e:: with SMTP id n30mr16461827jac.235.1643859381164;
+ Wed, 02 Feb 2022 19:36:21 -0800 (PST)
+Date:   Wed, 02 Feb 2022 19:36:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000079a24b05d714d69f@google.com>
+Subject: [syzbot] general protection fault in btf_decl_tag_resolve
+From:   syzbot <syzbot+53619be9444215e785ed@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was found that a "suspicious RCU usage" lockdep warning was issued
-with the rcu_read_lock() call in update_sibling_cpumasks().  It is
-because the update_cpumasks_hier() function may sleep. So we have
-to release the RCU lock, call update_cpumasks_hier() and reacquire
-it afterward.
+Hello,
 
-Also add a percpu_rwsem_assert_held() in update_sibling_cpumasks()
-instead of stating that in the comment.
+syzbot found the following issue on:
 
-Fixes: 4716909cc5c5 ("cpuset: Track cpusets that use parent's effective_cpus")
-Signed-off-by: Waiman Long <longman@redhat.com>
+HEAD commit:    b7892f7d5cb2 tools: Ignore errors from `which' when search..
+git tree:       bpf
+console output: https://syzkaller.appspot.com/x/log.txt?x=13181634700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5044676c290190f2
+dashboard link: https://syzkaller.appspot.com/bug?extid=53619be9444215e785ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16454914700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceb884700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+53619be9444215e785ed@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 3592 Comm: syz-executor914 Not tainted 5.16.0-syzkaller-11424-gb7892f7d5cb2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
+RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
+Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
+RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
+RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
+R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
+R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
+FS:  00005555556fd300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f98c38b8220 CR3: 0000000019537000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btf_resolve+0x251/0x1020 kernel/bpf/btf.c:4198
+ btf_check_all_types kernel/bpf/btf.c:4239 [inline]
+ btf_parse_type_sec kernel/bpf/btf.c:4280 [inline]
+ btf_parse kernel/bpf/btf.c:4513 [inline]
+ btf_new_fd+0x19fe/0x2370 kernel/bpf/btf.c:6047
+ bpf_btf_load kernel/bpf/syscall.c:4039 [inline]
+ __sys_bpf+0x1cbb/0x5970 kernel/bpf/syscall.c:4679
+ __do_sys_bpf kernel/bpf/syscall.c:4738 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4736 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4736
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd57f202099
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe9e5eb898 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd57f202099
+RDX: 0000000000000020 RSI: 0000000020000000 RDI: 0000000000000012
+RBP: 00007fd57f1c6080 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fd57f1c6110
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
+RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
+Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
+RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
+RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
+R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
+R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
+FS:  00005555556fd300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000000 CR3: 0000000019537000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	c1 ea 03             	shr    $0x3,%edx
+   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   7:	0f 85 90 01 00 00    	jne    0x19d
+   d:	48 8b 1b             	mov    (%rbx),%rbx
+  10:	e8 b7 c9 e6 ff       	callq  0xffe6c9cc
+  15:	48 8d 7b 04          	lea    0x4(%rbx),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
+  2e:	48 89 f8             	mov    %rdi,%rax
+  31:	83 e0 07             	and    $0x7,%eax
+  34:	83 c0 03             	add    $0x3,%eax
+  37:	38 d0                	cmp    %dl,%al
+  39:	7c 08                	jl     0x43
+  3b:	84 d2                	test   %dl,%dl
+  3d:	0f                   	.byte 0xf
+  3e:	85 2b                	test   %ebp,(%rbx)
+
+
 ---
- kernel/cgroup/cpuset.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index dc653ab26e50..b147acece984 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1522,10 +1522,15 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
- 	struct cpuset *sibling;
- 	struct cgroup_subsys_state *pos_css;
- 
-+	percpu_rwsem_assert_held(&cpuset_rwsem);
-+
- 	/*
- 	 * Check all its siblings and call update_cpumasks_hier()
- 	 * if their use_parent_ecpus flag is set in order for them
- 	 * to use the right effective_cpus value.
-+	 *
-+	 * The update_cpumasks_hier() function may sleep. So we have to
-+	 * release the RCU read lock before calling it.
- 	 */
- 	rcu_read_lock();
- 	cpuset_for_each_child(sibling, pos_css, parent) {
-@@ -1533,8 +1538,13 @@ static void update_sibling_cpumasks(struct cpuset *parent, struct cpuset *cs,
- 			continue;
- 		if (!sibling->use_parent_ecpus)
- 			continue;
-+		if (!css_tryget_online(&sibling->css))
-+			continue;
- 
-+		rcu_read_unlock();
- 		update_cpumasks_hier(sibling, tmp);
-+		rcu_read_lock();
-+		css_put(&sibling->css);
- 	}
- 	rcu_read_unlock();
- }
--- 
-2.27.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

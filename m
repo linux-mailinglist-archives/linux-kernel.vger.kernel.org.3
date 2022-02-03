@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A833D4A818B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FD94A8194
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:39:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349757AbiBCJfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:35:11 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:51924 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiBCJfI (ORCPT
+        id S243117AbiBCJj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:39:29 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:60580 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230408AbiBCJj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:35:08 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643880907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4niGU0MsRpZHoaPG3ycpTgf3GT1iqYBqPQhEgMj1fg=;
-        b=0deUg20vq2mbgKBr4VvIlYVyP9ZU64oP5pRbhlEBMCFP1y4uPecyB7KplTDbjGIZB/nUrm
-        Qfc7AwsRnnmQ05lFrKmfoVkjHeEW+qKtp7MaLfJQ2DvHqqrN5NechgPuN/MNkhDVEvEjzR
-        BxwVyg9DT9brSWUROBc5DJ/oxKQxceHRujWRgE3Ri1Ua3p65BxJlthNrQZxw1YXPJGeeEz
-        Q32X91IIR4GTy9MWODnpt+tPjQWZmVwo/C/1xWfYnX1tkp0CG5cr/lVOQNNU7eXX2ZZp2a
-        e8Cwj1ek67ZJMcYHND+fdo0fl+XOFMCXQJSvwXDO6ePuaDRrDj5ucqwiIQuWIQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643880907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4niGU0MsRpZHoaPG3ycpTgf3GT1iqYBqPQhEgMj1fg=;
-        b=MAxLSLRBTTV0ilKIuy2fIp3BpvJN7QHQoa7UpaqG/hhe/eeJST2DfcPH9NakwnNhWjh+8d
-        J2vJY5ocA6QZjhCA==
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     tangmeng <tangmeng@uniontech.com>, keescook@chromium.org,
-        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
-In-Reply-To: <YfstQeOpZuQzBmZJ@bombadil.infradead.org>
-References: <20220131102214.2284-1-tangmeng@uniontech.com>
- <87wnicssth.ffs@tglx> <YfstQeOpZuQzBmZJ@bombadil.infradead.org>
-Date:   Thu, 03 Feb 2022 10:35:06 +0100
-Message-ID: <87r18ks379.ffs@tglx>
+        Thu, 3 Feb 2022 04:39:28 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 477D51F399;
+        Thu,  3 Feb 2022 09:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643881167; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Zxs99KhY7Z80rmqy9T0r2Wloivv626xyeItNWOxOh6g=;
+        b=mTv36Ulmy4BZGoIMzk5mc52HrZmW/XGjmaO8ThyRM1gJJ5Bx60p9CZg4qUU+Jzd2+yZs+n
+        UTzdNtx7rF5Dg0W7tId7+h4c4ghMWt4NnGOyf/HCE3HBNM3cn7/6E+NXbVRsZfJ3bF7ciW
+        iLtqgxZ+VUY6g9aUmaLQ/gfY5QexsFc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643881167;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Zxs99KhY7Z80rmqy9T0r2Wloivv626xyeItNWOxOh6g=;
+        b=ZGCJ21jwW4VVe/xJzlPLDapssHgVo9GR0PRJXRzpapvDSUWHkyYFUNn9dhIr+lpHzh3X47
+        JuOzJEMjqlvvp0DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD2DB13B7F;
+        Thu,  3 Feb 2022 09:39:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2J07NM6i+2F7PgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 03 Feb 2022 09:39:26 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, lyude@redhat.com, linus.walleij@linaro.org,
+        dianders@chromium.org, ardb@kernel.org, naresh.kamboju@linaro.org
+Cc:     rdunlap@infradead.org, arnd@arndb.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+Date:   Thu,  3 Feb 2022 10:39:22 +0100
+Message-Id: <20220203093922.20754-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02 2022 at 17:17, Luis Chamberlain wrote:
-> On Thu, Feb 03, 2022 at 01:21:46AM +0100, Thomas Gleixner wrote:
-> *Today* all filesystem syctls now get reviewed by fs folks. They are
-> all tidied up there.
->
-> In the future x86 folks can review their sysctls. But for no reason
-> should I have to review every single knob. That's not scalable.
+As reported in [1], DRM_PANEL_EDP depends on DRM_DP_HELPER. Select
+the option to fix the build failure. The error message is shown
+below.
 
-Fair enough, but can we please have a changelog which explains the
-rationale to the people who have not been part of that discussion and
-decision.
+  arm-linux-gnueabihf-ld: drivers/gpu/drm/panel/panel-edp.o: in function
+    `panel_edp_probe': panel-edp.c:(.text+0xb74): undefined reference to
+    `drm_panel_dp_aux_backlight'
+  make[1]: *** [/builds/linux/Makefile:1222: vmlinux] Error 1
 
->> That aside, I'm tired of this because this is now at V5 and you still
->> failed to fix the fallout reported by the 0-day infrastructure vs. this
->> part of the patch:
->> 
->> > +static int __init timer_sysctl_init(void)
->> > +{
->> > +	register_sysctl_init("kernel", timer_sysctl);
->> > +	return 0;
->> > +}
->> 
->>     kernel/time/timer.c: In function 'timer_sysctl_init':
->>  >> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
->>       284 |         register_sysctl_init("kernel", timer_sysctl);
->> 	  |         ^~~~~~~~~~~~~~~~~~~~
->> 
->
-> That's an issue with the patch being tested on a tree where that
-> routine is not present?
+The issue has been reported before, when DisplayPort helpers were
+hidden behind the option CONFIG_DRM_KMS_HELPER. [2]
 
-From the report:
+v2:
+	* fix and expand commit description (Arnd)
 
-  ...
-  [also build test ERROR on linus/master
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Fixes: adb9d5a2cc77 ("drm/dp: Move DisplayPort helpers into separate helper module")
+Fixes: 5f04e7ce392d ("drm/panel-edp: Split eDP panels out of panel-simple")
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Link: https://lore.kernel.org/dri-devel/CA+G9fYvN0NyaVkRQmA1O6rX7H8PPaZrUAD7=RDy33QY9rUU-9g@mail.gmail.com/ # [1]
+Link: https://lore.kernel.org/all/20211117062704.14671-1-rdunlap@infradead.org/ # [2]
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: dri-devel@lists.freedesktop.org
+---
+ drivers/gpu/drm/panel/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Linus tree has this interface. So that's not the problem.
-
-Hint #1: The interfaxce is not available unconditionally
-
-Hint #2: The 0-day reports provide the config file which exposes the
-         fail
-
-Let me know if you need more hints. :)
-
-Thanks,
-
-        tglx
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 434c2861bb40..0aec5a10b064 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -106,6 +106,7 @@ config DRM_PANEL_EDP
+ 	depends on PM
+ 	select VIDEOMODE_HELPERS
+ 	select DRM_DP_AUX_BUS
++	select DRM_DP_HELPER
+ 	help
+ 	  DRM panel driver for dumb eDP panels that need at most a regulator and
+ 	  a GPIO to be powered up. Optionally a backlight can be attached so
+-- 
+2.34.1
 

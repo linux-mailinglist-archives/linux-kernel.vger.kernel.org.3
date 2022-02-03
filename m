@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FE14A892A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420724A8935
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352463AbiBCQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbiBCQ7A (ORCPT
+        id S238654AbiBCRFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:05:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57384 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229671AbiBCRFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:59:00 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC071C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:59:00 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id d3so2603698ilr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:59:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hnNStLLfw2FHaWSpq9EzzqFXeWS4HqySix/xq3cDScY=;
-        b=4j1Iez5JQ1Zsf2GFZrvfuEys0VR/h8RdRwkREyilwcCkxUKp7HB0hPuvVlsqqMLqoX
-         zB5NOXdK1Ow5sov9DmbCt05U1OqnOQ+WLPNClqSbb0fEZck+bJYxq0Drp0oZjXIe9mw+
-         l/JBPjsfHZKn5biUnP/zrjJ2moSK4/k0TkACb2zIaoeb1tfYyOByrT7bdJzzgmlc4YcC
-         e0GCm1vNVQcUtTPTzc1lR2tirQIh/KX21Yl2evZLTqphzEvWHXruLM9jhhQiFI0phlhA
-         j01Ay2SXhYkZydTxWWq2F4MFS2mXGfWW505SENj/ZaTWhT63csc0Bnc0bP90luaangHj
-         7iHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hnNStLLfw2FHaWSpq9EzzqFXeWS4HqySix/xq3cDScY=;
-        b=dpyEo1LcIC+rNqnIuDZL78Ble/Sz1FE3/RDuL4fxl8YC3qFAL3Tm8WbVrfTGedvcbL
-         rlCKYIvHq8tzwxC59IEWZE5A1g8OvLgE/ew9zSxJ/Ovl0rNy7LFDVjTShJt8sQkeCSBl
-         XEPQiGKMBp+1uYh0ZxVzLbtg+YKDynosk2kmY/+swRgGAn+tZxRDHTuFmtKDrZF+Q7mN
-         G+YUj3yG7wAuINvoGvVjDrHvLCqimB8LztEhhkybLaxJEK/klICWaOY1P6bOFjewdjn5
-         v/RSS6TXEG0gA04A1CquEZPTZVhtlaSkjgFmHi9BSZX0MjGYVjjN0rePbkRlmrYBqrDg
-         USDw==
-X-Gm-Message-State: AOAM532v71Riw2Fa/tTj66dljWHsOTPOLq4mAvYulNeW8vQ4ngM17nDw
-        813LLSmVxZ3arN2iI2wL/Vbcuw==
-X-Google-Smtp-Source: ABdhPJzKmxT5Y5LoG8Sy1lHouAvCO5GCoizaJw7fx+OSIxC3Wbyl+G5aCiuv6pFMkg0S0CnrYdJg5A==
-X-Received: by 2002:a05:6e02:b46:: with SMTP id f6mr19730584ilu.235.1643907539828;
-        Thu, 03 Feb 2022 08:58:59 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id k11sm22816858iob.23.2022.02.03.08.58.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 08:58:59 -0800 (PST)
-Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203151153.574032-1-usama.arif@bytedance.com>
- <20220203151153.574032-2-usama.arif@bytedance.com>
- <87fca94e-3378-edbb-a545-a6ed8319a118@kernel.dk>
- <62f59304-1a0e-1047-f474-94097cb8b13e@bytedance.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <da09cb46-9d60-71a3-a758-46d082989bae@kernel.dk>
-Date:   Thu, 3 Feb 2022 09:58:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 3 Feb 2022 12:05:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 76938615C7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 17:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2D3C340E8;
+        Thu,  3 Feb 2022 17:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643907908;
+        bh=KAuyN28aHSSH4Wt23WCzBB6asTr7zUVNWJAlCLXhRrw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V2P/u9iN8VRZcYiM4QHl5VZsOa/q7K1IXmhiQK57+jlOXpSYMdQvBCLuiQ5pQeLi0
+         kpukXkKTOgDSf0CVG2YFLFi28T5qY9wa6HA8ZlqdfJIOPF2fP7pEgOowFwTpDr0gXP
+         iN8ovOV01u377c30OnocsSIjKfY5Wq3vlanW+WBfVl35gGMcFdqwGK5AXVnYYW4d79
+         5BF//LEj1AXFLh0XtQ8uL9F15KXKhgA7g/f7un4J+EB0tSIEKpOlWLZvqUReqz1OZ3
+         1txXidBzvYMSF4G3S3sUFcoP1dmy3LHXWdrTWAArRQor2aJ6O1IWaYqGE4s28BA4e5
+         a5SmUwPNlIO2A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nFfXe-005CWE-Ko; Thu, 03 Feb 2022 17:05:06 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH] clocksource/drivers/arm_arch_timer: Use event stream scaling when available
+Date:   Thu,  3 Feb 2022 17:05:02 +0000
+Message-Id: <20220203170502.2694422-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <62f59304-1a0e-1047-f474-94097cb8b13e@bytedance.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, tglx@linutronix.de, kernel-team@android.com, mark.rutland@arm.com, daniel.lezcano@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 9:49 AM, Usama Arif wrote:
->> One thing that both mine and your version suffers from is if someone
->> does an eventfd unregister, and then immediately does an eventfd
->> register. If the rcu grace period hasn't passed, we'll get -EBUSY on
->> trying to do that, when I think the right behavior there would be to
->> wait for the grace period to pass.
->>
->> I do think we need to handle that gracefully, spurious -EBUSY is
->> impossible for an application to deal with.
-> 
-> I don't think my version would suffer from this as its protected by 
-> locks? The mutex_unlock on ev_fd_lock in unregister happens only after 
-> the call_rcu. And the mutex is locked in io_eventfd_register at the 
-> start, so wouldnt get the -EBUSY if there is a register immediately 
-> after unregister?
+With FEAT_ECV and the 1GHz counter, it is pretty likely that the
+event stream divider doesn't fit in the field that holds the
+divider value (we only have 4 bits to describe counter bits [15:0]
 
-The call_rcu() just registers it for getting the callback when the grace
-period has passed, it doesn't mean it's done by the time it returns.
-Hence there's definitely a window where you can enter
-io_uring_register() with the callback still being pending, and you'd get
--EBUSY from that.
+Thankfully, FEAT_ECV also provides a scaling mechanism to switch
+the field to cover counter bits [23:8] instead.
 
+Enable this on arm64 when ECV is available (32bit doesn't have
+any detection infrastructure and is unlikely to be run on an
+ARMv8.6 system anyway).
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/clocksource/arm_arch_timer.c | 13 +++++++++++--
+ include/clocksource/arm_arch_timer.h |  1 +
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index 1ecd52f903b8..9ab8221ee3c6 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -880,10 +880,19 @@ static void __arch_timer_setup(unsigned type,
+ 	clockevents_config_and_register(clk, arch_timer_rate, 0xf, max_delta);
+ }
+ 
+-static void arch_timer_evtstrm_enable(int divider)
++static void arch_timer_evtstrm_enable(unsigned int divider)
+ {
+ 	u32 cntkctl = arch_timer_get_cntkctl();
+ 
++#ifdef CONFIG_ARM64
++	/* ECV is likely to require a large divider. Use the EVNTIS flag. */
++	if (cpus_have_const_cap(ARM64_HAS_ECV) && divider > 15) {
++		cntkctl |= ARCH_TIMER_EVT_INTERVAL_SCALE;
++		divider -= 8;
++	}
++#endif
++
++	divider = min(divider, 15U);
+ 	cntkctl &= ~ARCH_TIMER_EVT_TRIGGER_MASK;
+ 	/* Set the divider and enable virtual event stream */
+ 	cntkctl |= (divider << ARCH_TIMER_EVT_TRIGGER_SHIFT)
+@@ -912,7 +921,7 @@ static void arch_timer_configure_evtstream(void)
+ 		lsb++;
+ 
+ 	/* enable event stream */
+-	arch_timer_evtstrm_enable(max(0, min(lsb, 15)));
++	arch_timer_evtstrm_enable(max(0, lsb));
+ }
+ 
+ static void arch_counter_set_user_access(void)
+diff --git a/include/clocksource/arm_arch_timer.h b/include/clocksource/arm_arch_timer.h
+index e715bdb720d5..057c8964aefb 100644
+--- a/include/clocksource/arm_arch_timer.h
++++ b/include/clocksource/arm_arch_timer.h
+@@ -56,6 +56,7 @@ enum arch_timer_spi_nr {
+ #define ARCH_TIMER_EVT_TRIGGER_MASK	(0xF << ARCH_TIMER_EVT_TRIGGER_SHIFT)
+ #define ARCH_TIMER_USR_VT_ACCESS_EN	(1 << 8) /* virtual timer registers */
+ #define ARCH_TIMER_USR_PT_ACCESS_EN	(1 << 9) /* physical timer registers */
++#define ARCH_TIMER_EVT_INTERVAL_SCALE	(1 << 17) /* EVNTIS in the ARMv8 ARM */
+ 
+ #define ARCH_TIMER_EVT_STREAM_PERIOD_US	100
+ #define ARCH_TIMER_EVT_STREAM_FREQ				\
 -- 
-Jens Axboe
+2.34.1
 

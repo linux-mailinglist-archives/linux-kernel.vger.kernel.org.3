@@ -2,69 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A8F4A7CED
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D7E4A7CF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237009AbiBCAer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:34:47 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:45058 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348600AbiBCAep (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:34:45 -0500
-Received: from [192.168.254.32] (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4FACC20B6C61;
-        Wed,  2 Feb 2022 16:34:44 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4FACC20B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1643848485;
-        bh=TjbaCOX1e+7kp6KBiMIW8p0ZetHxMvPlcN36NQSGfd8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OG2cZ3FvG/7uQ//KPclVZf3jhyGwkIT5ljzlF1WNcH6aZbAg3BwMcPW2ABT0w+LSY
-         FttKV2YwhAqg/erVC/bVzcWNjEN4xop5Pz5rZFgUjBNOUsM5erWh3K9Ya8/4IFn/90
-         cxZIjo+GEM0Cc0wWvwTjs5lTeTdwdlIW8v1xf1vM=
-Message-ID: <48b17c52-58d6-0df5-a50b-35a8ea408998@linux.microsoft.com>
-Date:   Wed, 2 Feb 2022 18:34:43 -0600
+        id S1348614AbiBCAgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:36:40 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:39928 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235935AbiBCAgi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 19:36:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ttsIhF/ph2eBwd0E85uNu2nSTC/noJxE0o8Desy50mU=; b=tqPk2kfziTJbUX6cUB8YgqjijY
+        YLuHg5J6mY2hM9UTfTlr1jFrI6bnUXBVIohKe5j5DTLsaHigD5oUeZ6ajAoZBcMT3TwrZILPVbEVh
+        MNgJwBC9rmaIPuWRf+i79gQKLuWbi/b2bf9qUxLv/7Rna7xdvPj/wKmfUbsFlrAEZX5c=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nFQ6s-0042PT-S2; Thu, 03 Feb 2022 01:36:26 +0100
+Date:   Thu, 3 Feb 2022 01:36:26 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Joseph CHAMG <josright123@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, joseph_chang@davicom.com.tw,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        leon@kernel.org
+Subject: Re: [PATCH v16, 2/2] net: Add dm9051 driver
+Message-ID: <Yfsjigm19BtSfZcD@lunn.ch>
+References: <20220129164346.5535-1-josright123@gmail.com>
+ <20220129164346.5535-3-josright123@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
- args to unwind()
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-7-madvenka@linux.microsoft.com>
- <YfrRoA63/UOXTJc0@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YfrRoA63/UOXTJc0@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129164346.5535-3-josright123@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> +static int dm9051_update_fcr(struct board_info *db)
+> +{
+> +	u8 fcr = 0;
+> +	int ret;
+> +
+> +	if (db->pause.rx_pause)
+> +		fcr |= FCR_BKPM | FCR_FLCE;
+> +	if (db->pause.tx_pause)
+> +		fcr |= FCR_TXPEN;
+> +
+> +	ret = regmap_update_bits(db->regmap_dm, DM9051_FCR, 0xff, fcr);
+
+Is 0xff correct here? You only seem interested in FCR_BKPM, FCR_FLCE,
+FCR_TXPEN so i would of expected a value based around those.
+
+> +	if (ret)
+> +		netif_err(db, drv, db->ndev, "%s: error %d update bits reg %02x\n",
+> +			  __func__, ret, DM9051_FCR);
+> +	return ret;
+> +}
+> +
+> +static int dm9051_set_fcr(struct board_info *db)
+> +{
+> +	u8 fcr = 0;
+> +	int ret;
+> +
+> +	if (db->pause.rx_pause)
+> +		fcr |= FCR_BKPM | FCR_FLCE;
+> +	if (db->pause.tx_pause)
+> +		fcr |= FCR_TXPEN;
+> +
+> +	ret = regmap_write(db->regmap_dm, DM9051_FCR, fcr);
+> +	if (ret)
+> +		netif_err(db, drv, db->ndev, "%s: error %d write reg %02x\n",
+> +			  __func__, ret, DM9051_FCR);
+> +	return ret;
+
+I guess you can combine this code somehow, make one call the other?
+
+> +static int dm9051_mdio_register(struct board_info *db)
+> +{
+> +	struct spi_device *spi = db->spidev;
+> +	int ret;
+> +
+> +	db->mdiobus = devm_mdiobus_alloc(&spi->dev);
+> +	if (!db->mdiobus)
+> +		return -ENOMEM;
+> +
+> +	db->mdiobus->priv = db;
+> +	db->mdiobus->read = dm9051_mdiobus_read;
+> +	db->mdiobus->write = dm9051_mdiobus_write;
+> +	db->mdiobus->name = "dm9051-mdiobus";
+> +	db->mdiobus->phy_mask = (u32)~GENMASK(1, 1);
+> +	db->mdiobus->parent = &spi->dev;
+> +	snprintf(db->mdiobus->id, MII_BUS_ID_SIZE,
+> +		 "dm9051-%s.%u", dev_name(&spi->dev), spi->chip_select);
+> +
+> +	ret = devm_mdiobus_register(&spi->dev, db->mdiobus);
+> +	if (ret)
+> +		dev_err(&spi->dev, "Could not register MDIO bus\n");
+> +
+> +	return 0;
+
+You should return ret here, since an error might of occurred.
+
+> +static void dm9051_handle_link_change(struct net_device *ndev)
+> +{
+> +	struct board_info *db = to_dm9051_board(ndev);
+> +	int lcl_adv, rmt_adv;
+> +
+> +	phy_print_status(db->phydev);
+> +
+> +	/* only write pause settings to mac. since mac and phy are integrated
+> +	 * together, such as link state, speed and duplex are sync already
+> +	 */
+> +	if (db->phydev->link) {
+> +		if (db->pause.autoneg == AUTONEG_ENABLE) {
+> +			lcl_adv = linkmode_adv_to_mii_adv_t(db->phydev->advertising);
+> +			rmt_adv = linkmode_adv_to_mii_adv_t(db->phydev->lp_advertising);
+> +
+> +			if (lcl_adv & rmt_adv & ADVERTISE_PAUSE_CAP) {
+> +				db->pause.rx_pause = true;
+> +				db->pause.tx_pause = true;
+> +			}
+
+Please look at phydev->pause. It gives you the resolved value, you
+don't need to work it out for yourself.  phydev->asym_pause tells you
+about asymmetric pause, but you hardware does not support that, so you
+don't need it.
 
 
-On 2/2/22 12:46, Mark Brown wrote:
-> On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Rename the arguments to unwind() for better consistency. Also, use the
->> typedef stack_trace_consume_fn for the consume_entry function as it is
->> already defined in linux/stacktrace.h.
-> 
-> Consistency with...?  But otherwise:
+> +static int dm9051_set_pauseparam(struct net_device *ndev,
+> +				 struct ethtool_pauseparam *pause)
+> +{
+> +	struct board_info *db = to_dm9051_board(ndev);
+> +
+> +	db->pause = *pause;
+> +
+> +	if (pause->autoneg == AUTONEG_DISABLE) {
+> +		db->phydev->autoneg = AUTONEG_DISABLE;
 
-Naming consistency. E.g., the name consume_entry is used in a lot of places.
-This code used to use fn() instead of consume_entry(). arch_stack_walk()
-names the argument to consume_entry as cookie. This code calls it data
-instead of cookie. That is all. It is minor in nature. But I thought I might
-as well make it conform while I am at it.
+As i said before, ksetting is used to change this, not pause. Please
+don't set phydev->autoneg like this.
 
-Madhavan
+> +		return dm9051_update_fcr(db);
+> +	}
+> +
+> +	db->phydev->autoneg = AUTONEG_ENABLE;
+
+Nor here.
+
+> +	phy_set_sym_pause(db->phydev, pause->rx_pause, pause->tx_pause,
+> +			  pause->autoneg);
+> +	phy_start_aneg(db->phydev);
+> +	return 0;
+> +}
+
+> +static irqreturn_t dm9051_rx_threaded_irq(int irq, void *pw)
+> +{
+> +	struct board_info *db = pw;
+> +	int result, result_tx;
+> +
+> +	mutex_lock(&db->spi_lockm);
+> +	if (netif_carrier_ok(db->ndev)) {
+
+Why is carrier relevant here? Maybe the device is trying to give you
+the last packets before the carrier went down?
+
+It is also interesting that you don't look at the interrupt service
+register. Often you need to clear the interrupt by reading the
+interrupt service register.
+
+> +		result = regmap_write(db->regmap_dm, DM9051_IMR, IMR_PAR); /* disable int */
+> +		if (result)
+> +			goto spi_err;
+> +
+> +		do {
+> +			result = dm9051_loop_rx(db); /* threaded irq rx */
+> +			if (result < 0)
+> +				goto spi_err;
+> +			result_tx = dm9051_loop_tx(db); /* more tx better performance */
+> +			if (result_tx < 0)
+> +				goto spi_err;
+> +		} while (result > 0);
+> +
+> +		result = regmap_write(db->regmap_dm, DM9051_IMR, db->imr_all); /* enable int */
+> +		if (result)
+> +			goto spi_err;
+> +	}
+> +spi_err:
+> +	mutex_unlock(&db->spi_lockm);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+
+  Andrew

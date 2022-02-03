@@ -2,72 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98EA4A8359
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3CA4A8358
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350339AbiBCLyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:54:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:41706 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348023AbiBCLx6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S242156AbiBCLx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 3 Feb 2022 06:53:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA8EB1396;
-        Thu,  3 Feb 2022 03:53:57 -0800 (PST)
-Received: from e121896.arm.com (unknown [10.57.13.234])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4978C3F774;
-        Thu,  3 Feb 2022 03:53:56 -0800 (PST)
-From:   James Clark <james.clark@arm.com>
-To:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] coresight: no-op refactor to make INSTP0 check more idiomatic
-Date:   Thu,  3 Feb 2022 11:53:35 +0000
-Message-Id: <20220203115336.119735-2-james.clark@arm.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20220203115336.119735-1-james.clark@arm.com>
-References: <20220203115336.119735-1-james.clark@arm.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231605AbiBCLx4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 06:53:56 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49707C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 03:53:56 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so9775791pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 03:53:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vbzi3fankqPmSVkF0HyJbIAmlqbeSY/pVqmGMKJwLJk=;
+        b=pc58NPAZa3q9fcA8NX1O7NkuWR6f8yxUDU8PA3ghuG09G6aKqYPvh//tJc0tjAyzmy
+         Qo2sb3rRDNCa+JMVh8SacAjZ7tWyaEhDMLSW5MyBtd35UPLr//YzKLm/Y0ZBaXBtZ8ek
+         OyOSkYQtSFIYOyuW00wbvMpk96FUDBkOhtrzlBUnKD0viFZFcc2ATRnVFKrosvR2oHRY
+         liuHGiml+xvFwjedACesMlxh7xTOXq9Mmw8erU/QXjhnZpOP8OVbJZC8ZNBMndXkp1Jo
+         8eDC89DZV+xfc5+FY7Q3bxVWi2yGidFrzRW4vc31Kv4ZfuQ79F54CkvOC8dZPtGDoBzr
+         Dv5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Vbzi3fankqPmSVkF0HyJbIAmlqbeSY/pVqmGMKJwLJk=;
+        b=KdT3YwmpvWFcXqiyx6CD8dBFMtzqX1CfsRp7hRXQpVt8ZtVFvkwlZiRwsQZJ/NASxf
+         iR7XWJTdoaaRYEtnW2WlCeaVri5MZ5R7R1y/wjXhFGLaPEHdZ7+EFeE8lL+2ZscjUdBC
+         tsW+qTQmxlCrh6abHxqPYjM+QNMSZvPje4P42agJY0gQSVQbTyTslnXdU5ROOmhvNcZ5
+         RgxZxGKeN9CDuO4ef8mEpZZPK5i46RyHWqaQELXDYb6rVTwy2ZzuvJzhF6++qX+kDE1D
+         cxzvIXwrlFSAKnZrF007V1S7PliIKCCVn11xNutLtKv9YYSIiYUG5EI3wsXghRk9E5vd
+         n40Q==
+X-Gm-Message-State: AOAM5336X+iRJbnd58xQGkLX0n/HV0RjCyh8vrddJWg3paDCUXS45bc2
+        +dWX17QCODti+KA0MDr0Nbc=
+X-Google-Smtp-Source: ABdhPJwUN0BUpDlgp6c08hsp752MSFhAFyo6awcZ0a7owxfYBlbD/uFPHQjHzo63O3ZbwHKc143c7w==
+X-Received: by 2002:a17:902:ecd1:: with SMTP id a17mr35603421plh.28.1643889235521;
+        Thu, 03 Feb 2022 03:53:55 -0800 (PST)
+Received: from voyager.lan ([45.124.203.14])
+        by smtp.gmail.com with ESMTPSA id mp22sm9586389pjb.28.2022.02.03.03.53.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 03:53:54 -0800 (PST)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     Arnd Bergmann <arnd@arndb.de>, Andrew Jeffery <andrew@aj.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org
+Subject: [PATCH v2 0/3] firmware: Add boot information to sysfs
+Date:   Thu,  3 Feb 2022 22:23:41 +1030
+Message-Id: <20220203115344.267159-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spec says this:
+v2 reworks the series to put the sysfs properties in the core, and
+optionally show them with the is_visible() callback.
 
-  P0 tracing support field. The permitted values are:
-      0b00  Tracing of load and store instructions as P0 elements is not
-            supported.
-      0b11  Tracing of load and store instructions as P0 elements is
-            supported, so TRCCONFIGR.INSTP0 is supported.
+This is the second iteration of this idea. The first used socinfo
+custom attribute groups, but Arnd suggested we make this something
+standardised under /sys/firmware instead:
 
-            All other values are reserved.
+ http://lore.kernel.org/all/CAK8P3a3MRf0aGt1drkgsuZyBbeoy+S7Ha18SBM01q+3f33oL+Q@mail.gmail.com
 
-The value we are looking for is 0b11 so simplify this. The double read
-and && was a bit obfuscated.
+Some ARM systems have a firmware that provides a hardware root of
+trust. It's useful for the system to know how this root of trust has
+been configured, so provide a standardised interface that expose this
+information to userspace.
 
-Suggested-by: Suzuki Poulose <suzuki.poulose@arm.com>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- drivers/hwtracing/coresight/coresight-etm4x-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is implemented as a sysfs attribute group registration in the
+driver core, with platforms populating values obtained from firmware at
+kernel boot time.
 
-diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-index bf18128cf5de..e2eebd865241 100644
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@ -1091,7 +1091,7 @@ static void etm4_init_arch_data(void *info)
- 	etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
- 
- 	/* INSTP0, bits[2:1] P0 tracing support field */
--	if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
-+	if (BMVAL(etmidr0, 1, 2) == 0b11)
- 		drvdata->instrp0 = true;
- 	else
- 		drvdata->instrp0 = false;
+Patch 2 provides a user of the properties on an ARM system.
+
+Patch 3 is new in v2 and is an example of populating bootinfo with the
+EFI secure boot status.
+
+Joel Stanley (3):
+  firmware: Add boot information to sysfs
+  ARM: aspeed: Add secure boot controller support
+  x86/setup: Populate bootinfo with secure boot status
+
+ .../ABI/testing/sysfs-firmware-bootinfo       | 43 +++++++++
+ arch/x86/kernel/setup.c                       |  6 ++
+ drivers/base/firmware.c                       | 90 +++++++++++++++++++
+ drivers/soc/aspeed/aspeed-socinfo.c           | 46 +++++++++-
+ include/linux/firmware_bootinfo.h             | 22 +++++
+ 5 files changed, 206 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-bootinfo
+ create mode 100644 include/linux/firmware_bootinfo.h
+
 -- 
-2.28.0
+2.34.1
 

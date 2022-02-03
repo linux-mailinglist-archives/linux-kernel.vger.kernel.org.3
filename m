@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D984A8FD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF754A8FD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354994AbiBCV0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:26:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
+        id S1355007AbiBCV01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 16:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbiBCV0B (ORCPT
+        with ESMTP id S232038AbiBCV0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:26:01 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA614C061714;
-        Thu,  3 Feb 2022 13:26:00 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id m11so8787374edi.13;
-        Thu, 03 Feb 2022 13:26:00 -0800 (PST)
+        Thu, 3 Feb 2022 16:26:25 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5BDC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:26:25 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id z131so3303200pgz.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qSedLl6huFit38vknN8k5h+0pAfo5CN6zPDzj3GSbuQ=;
-        b=b1QRm24e5W46pwSgaZgEIef9zPC0H7nASIrVS2gX10c9zlGIKiqCt/s4y+3RGV4UwC
-         KxU1CAa0w6rbhp1cOlYfu2ECrYVKibICHFIZPnTH/VM048PZdrxuEr+OVfyhF/TbHllE
-         jaesglKgoA5Qzco5j3w+mcd4UvmXxoDyTTzssD5wTGZbltqkpCPd+FB1ohXWWXhBwvLH
-         oXQ7WjYiQ7OGf3i+krGCDW54QPp1WQv9NmxAqKPEWnuB6iFtunc7+yoE80L1APBWGNVQ
-         Xem5kA3iYtKbje+s0P3x34b6aq2sOYgXWLHEnBbixz36u85JLeFEvnRlPLS1PVGonEPf
-         7dIw==
+        bh=JASYD2iL88ww2VWiUy6p02bfS5gw49UYGWcRXn9TON4=;
+        b=iYVxoyFTip+1szHQnapGMLpfm1HpkZCS0F8LwwRGj4D71zzSt9sXh5Iwd4RuKKP11H
+         Yj3fWwcgCkZnmFN0llcGYr9GH3/NLLqM/nDtsVQQWeuilNDl/3qGQJxVZFK6foe38G+q
+         7eVyS7b9Xjh9tlEIj7X+Ai36ykoogRqJHndCA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qSedLl6huFit38vknN8k5h+0pAfo5CN6zPDzj3GSbuQ=;
-        b=VTxLokH7swM89LcQajgRoMQUPmreSAI0E4RoavaYvxNwVIr+4Xi2XuGzgO6qoek/Wj
-         RwIPoF51vm+C9xEk4L5YzoKZtxlvsTT8orH2IQ8BjFnb9n8mPL44E0YUXaAACqNNSEVX
-         J050LrKjYS7fvS3OjOoQSHEwbTrstU4KynCUCDQ2wgDyV1wGOlWTNPkDw9uhZLNW41w1
-         fMTb8MJ6kdBpqd+Lhyp15H5jWDGQ5jAcEyXvmoGRkIO3nt43uR79AKkAJUYWbiQOi+6m
-         dUBsQzWg4VE/SfzGrdibuepxRDuc3P5oxP0azPI2nf5zzQ9D6DlwYe6klEX0Q13/vimd
-         atqw==
-X-Gm-Message-State: AOAM5303Ad923d0NRZeXSfCpOkdMZ2N5juhQYBNlxZ4PbGA0bfXAd1Ti
-        WYuNUGdtjEKhvtwyyWu4uAH5MY/ILjY=
-X-Google-Smtp-Source: ABdhPJxUz0AgGUBHTzi7oCJ5XCmE5O2dUd8FVaM9IMyplvMq9VntN+9o+qYBSb3lpJGFvbModdI6Fg==
-X-Received: by 2002:a05:6402:1caa:: with SMTP id cz10mr43289edb.435.1643923559099;
-        Thu, 03 Feb 2022 13:25:59 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id r13sm10435ejy.205.2022.02.03.13.25.57
+        bh=JASYD2iL88ww2VWiUy6p02bfS5gw49UYGWcRXn9TON4=;
+        b=1PbGccZ2DfvJDCJE/93DZ5xvuAbOJ4s1n98q0LtlN+2nVPEXntmuFxUH5BVsfSkoWJ
+         QQZnXD4XpdhE33HkNbd9UHdCKur7HsBVjEXFKeDg9SLxs9wsQ3paliIbBEdNPFutp9LV
+         j+7cFbKLRjOzefuTs0EAimHxke23ssKRm9DN56kk8/sdSnWOjCJzUSrhVZDKv5P3Avxt
+         JFE5yVb3JThn0V3gx/UrSV4MvFUGRHkUZjtk6UMoKVoe7piX6bOYXSOKbBlZ4XzZRZUB
+         27uHCHN5oA5F/OP5rq/yvTMoBdzMkwAsitVUgDP1yKvU98YurgBjf6Oei3ItuyH85CSd
+         o/7w==
+X-Gm-Message-State: AOAM533MmU7NREVLOUfmcNvCmKyRgSddhLr9SqANOGcJu0UdJfFwShn8
+        /rnWyHPuha01uH68QnZcUVCazQ==
+X-Google-Smtp-Source: ABdhPJwWuqRwP0hYVRhNUuz+baJ0lKHKyif+Egk+Hd+0tQEMtNyxjnxOCHOr92bBrL3+sc3d63mJJg==
+X-Received: by 2002:a63:5460:: with SMTP id e32mr7925pgm.330.1643923585032;
+        Thu, 03 Feb 2022 13:26:25 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h11sm18750621pfe.214.2022.02.03.13.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 13:25:58 -0800 (PST)
-Date:   Thu, 3 Feb 2022 23:25:57 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH v7 00/16] Add support for qca8k mdio rw in Ethernet
- packet
-Message-ID: <20220203212557.unupodfyfdcb24tk@skbuf>
-References: <20220123013337.20945-1-ansuelsmth@gmail.com>
- <YfaZrsewBMhqr0Db@Ansuel-xps.localdomain>
- <a8244311-175d-79d3-d61b-c7bb99ffdfb7@gmail.com>
- <YfwX8YDDygBEsyo3@Ansuel-xps.localdomain>
- <20220203182128.z6xflse7fezccvhx@skbuf>
- <20220203121027.7a6ea0f8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Thu, 03 Feb 2022 13:26:24 -0800 (PST)
+Date:   Thu, 3 Feb 2022 13:26:24 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        George Burgess IV <gbiv@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] fortify: Add Clang support
+Message-ID: <202202031313.4A68EA9DB3@keescook>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <20220203173307.1033257-5-keescook@chromium.org>
+ <CAKwvOdk0UMAaw2j9OmjXN0Jc6FBOhfMP3JmSqMps2_MQFQLq-g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220203121027.7a6ea0f8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAKwvOdk0UMAaw2j9OmjXN0Jc6FBOhfMP3JmSqMps2_MQFQLq-g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 12:10:27PM -0800, Jakub Kicinski wrote:
-> On Thu, 3 Feb 2022 20:21:28 +0200 Vladimir Oltean wrote:
-> > To my knowledge, when you call dev_queue_xmit(), the skb is no longer
-> > yours, end of story, it doesn't matter whether you increase the refcount
-> > on it or not. The DSA master may choose to do whatever it wishes with
-> > that buffer after its TX completion interrupt fires: it may not call
-> > napi_consume_skb() but directly recycle that buffer in its pool of RX
-> > buffers, as part of some weird buffer recycling scheme. So you'll think
-> > that the buffer is yours, but it isn't, because the driver hasn't
-> > returned it to the allocator, and your writes for the next packet may be
-> > concurrent with some RX DMA transactions. I don't have a mainline
-> > example to give you, but I've seen the pattern, and I don't think it's
-> > illegal (although of course, I stand to be corrected if necessary).
->
-> Are we talking about holding onto the Tx skb here or also recycling
-> the Rx one? Sorry for another out of context comment in advance..
+On Thu, Feb 03, 2022 at 12:37:41PM -0800, Nick Desaulniers wrote:
+> On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Enable FORTIFY_SOURCE support for Clang:
+> >
+> > Use the new __pass_object_size and __overloadable attributes so
+> > that Clang will have appropriate visibility into argument sizes such
+> > that __builtin_object_size(p, 1) will behave correctly. Additional
+> > details here:
+> >     https://github.com/llvm/llvm-project/issues/53516
+> >     https://github.com/ClangBuiltLinux/linux/issues/1401
+> >
+> > When available, use the new __diagnose_as attribute to make sure no
+> > compile-time diagnostic warnings are lost due to the effectively renamed
+> > string functions.
+> 
+> Consider adding something along the lines of the following to the
+> above paragraph:
+> Without diagnose_as, compile time error messages won't be as precise
+> as they could be, but at least users of older toolchains will have
+> fortified routines. That is more valuable, but certainly a tradeoff.
 
-We're talking about the possibility that the DSA master holds onto the
-TX skb, for the purpose of saving a netdev_alloc_skb() call later in the
-RX path.
+Sure, I've changed it to:
 
-> AFAIK in theory shared skbs are supposed to be untouched or unshared
-> explicitly by the driver on Tx. pktgen takes advantage of it.
-> We have IFF_TX_SKB_SHARING.
->
-> In practice everyone gets opted into SKB_SHARING because ether_setup()
-> sets the flag. A lot of drivers are not aware of the requirement and
-> will assume full ownership (and for example use skb->cb[]) :/
->
-> I don't think there is any Tx completion -> Rx pool recycling scheme
-> inside the drivers (if that's what you described).
+When available, use the new __diagnose_as attribute to make sure no
+compile-time diagnostic warnings are lost due to the effectively renamed
+string functions. Without __diagnose_as, Clang's compile time diagnostic
+messages won't be as precise as they could be, but at least users of
+older toolchains will have fortified routines.
 
-You made me go look again at commit acb600def211 ("net: remove skb
-recycling"), a revert of which is still carried in some vendor kernels.
-So there was a skb_is_recycleable() function with this check:
+how's that read for you?
 
-	if (skb_shared(skb))
-		return false;
+> > Redefine strlen() as a macro that tests for being a constant expression
+> > so that strlen() can still be used in static initializers, which was
+> > lost when adding __pass_object_size and __overloadable.
+> 
+> I'd like to see `const` changes explicit in 4/4; I suspect that's
+> _why_ __overloadable is even needed? If so, then a comment here about
+> that wouldn't hurt.
+> 
+> Having const be more explicit in the signature will make it more
+> obvious why the definition cannot modify the parameter.
 
-which means that yes, my argument is basically invalid, skb_get() in DSA
-will protect against skb recycling.
+Mostly I wanted to minimize further changes to this area when building
+with GCC because of all the corner cases that keep popping up, and avoid
+tweaking the prototypes any harder. :)
 
-I know Ansuel is using OpenWRT, so not a stranger to vendor kernels &
-network drivers. My comment wasn't as much a hard NACK as it was a word
-of caution. DSA allows pairing any switch driver to any host controller
-driver. If somebody hits the jackpot (probably won't be me, won't be
-Ansuel), it won't be exactly fun for them until they figure out what's
-going on, with the symptoms being random data corruption during switch
-register access. But after I revisited the exact situation, I don't have
-an example that proves to be problematic.
+-- 
+Kees Cook

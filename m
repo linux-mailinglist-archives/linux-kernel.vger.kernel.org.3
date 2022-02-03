@@ -2,128 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A2B4A7C8C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE4B4A7CA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348415AbiBCAPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:15:01 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:44811 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242074AbiBCAPA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:15:00 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jpzh24y84z4xQp;
-        Thu,  3 Feb 2022 11:14:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643847299;
-        bh=u8fbPciKwFuGj4n2Rl4Owe3OAhv38CDvSa1vfAmR/Yk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iBcLluiJrpmHOFvXyj0bVZkyKxcnzNUwdCVSYYd+uPRxL+ckAbUiq+nXjlEqAhwDo
-         aXn3bcJL7xAYXTz4ESwBd6s2HZrf4nS4HO6PT3wOPXI2LxNJLXHONE0zerXcoj6sN1
-         tVETfdL/PCTt52evs+iW2/p+8jv2ltYALrlNMuGq9ZbbYHg8s/+IyYa/zU+6FI16ws
-         6tUn1UuSbGhaXF2+kwn0+Hg8KWB/P5brMoHyZZ2gOlPWJ+IEJWYB0c4cCLW6tKT80/
-         2KPBux1k9Nhmlzmx052cRHG1Zgod6+ATWpiiWoQV+sUqd97BnTsGxEH+V3hRTJsSB1
-         GGSq9xqpp8uJA==
-Date:   Thu, 3 Feb 2022 11:14:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>
-Subject: linux-next: manual merge of the drm-intel-gt tree with the
- drm-intel tree
-Message-ID: <20220203111457.3d07043f@canb.auug.org.au>
+        id S1348448AbiBCASk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:18:40 -0500
+Received: from mga01.intel.com ([192.55.52.88]:64452 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233081AbiBCASh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 19:18:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643847517; x=1675383517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gshEpsZSJ7uuSyPCXlwkOTrGJ3TT3qAZaZ3s4pjWvEY=;
+  b=VYNz/nGaRYVxFSSCePINrTywiry5G8deMIm8PgFF/HQJ/JhB9/pRnYDJ
+   WUj7WekqKdeSaI2K6WcuTkmykpW4uYE+ujHAwBzFpYuZYXs/QStqijGid
+   LvP5Ns9UgHtQdFfX0uoXGpi4nmI9oaE2fnqOQyGVcgk+FsDba0ps7XA2f
+   QcAryWiitIGu47UtFWJo7ZiIVpVHhf9rCIh+c5LqKuNf6nkHBxryW4pqQ
+   DoR7iAACEIctzV1wDGY+mu0G3ypkSh9YU/nQQM6hLfH0PP6nmlO3eiate
+   w1SeDjHMAdHubt8cuGMixoAUriSR05sFb29sU6psj1nDG9Ns0oG7onJOI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="272535988"
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="272535988"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 16:18:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
+   d="scan'208";a="483051021"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Feb 2022 16:18:35 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFPpa-000VJh-GG; Thu, 03 Feb 2022 00:18:34 +0000
+Date:   Thu, 3 Feb 2022 08:18:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
+        pv-drivers@vmware.com, Jorgen Hansen <jhansen@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>
+Subject: Re: [PATCH 6/8] VMCI: dma dg: allocate send and receive buffers for
+ DMA datagrams
+Message-ID: <202202030713.SJ9T0zv6-lkp@intel.com>
+References: <20220202144910.10349-7-jhansen@vmware.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ypLkd865E+Pc8V6nfundl_B";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202144910.10349-7-jhansen@vmware.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ypLkd865E+Pc8V6nfundl_B
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Jorgen,
 
-Hi all,
+I love your patch! Perhaps something to improve:
 
-Today's linux-next merge of the drm-intel-gt tree got a conflict in:
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-  drivers/gpu/drm/i915/i915_reg.h
+url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
+config: i386-randconfig-s002 (https://download.01.org/0day-ci/archive/20220203/202202030713.SJ9T0zv6-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/a5ca330527cc5a2ed5eba621707076ab15d856e5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
+        git checkout a5ca330527cc5a2ed5eba621707076ab15d856e5
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
 
-between commit:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  0d6419e9c855 ("drm/i915: Move GT registers to their own header file")
 
-from the drm-intel tree and commit:
+sparse warnings: (new ones prefixed by >>)
+   drivers/misc/vmw_vmci/vmci_guest.c:105:45: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got char * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:105:45: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/misc/vmw_vmci/vmci_guest.c:105:45: sparse:     got char *
+   drivers/misc/vmw_vmci/vmci_guest.c:102:14: sparse: sparse: symbol 'vmci_read_reg' was not declared. Should it be static?
+   drivers/misc/vmw_vmci/vmci_guest.c:112:44: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got char * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:112:44: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/misc/vmw_vmci/vmci_guest.c:112:44: sparse:     got char *
+   drivers/misc/vmw_vmci/vmci_guest.c:109:6: sparse: sparse: symbol 'vmci_write_reg' was not declared. Should it be static?
+   drivers/misc/vmw_vmci/vmci_guest.c:514:27: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected char *mmio_base @@     got void [noderef] __iomem * @@
+   drivers/misc/vmw_vmci/vmci_guest.c:514:27: sparse:     expected char *mmio_base
+   drivers/misc/vmw_vmci/vmci_guest.c:514:27: sparse:     got void [noderef] __iomem *
+>> drivers/misc/vmw_vmci/vmci_guest.c:869:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem * @@     got char *mmio_base @@
+   drivers/misc/vmw_vmci/vmci_guest.c:869:43: sparse:     expected void [noderef] __iomem *
+   drivers/misc/vmw_vmci/vmci_guest.c:869:43: sparse:     got char *mmio_base
 
-  270677026261 ("drm/i915/dg2: Add Wa_14015227452")
+vim +869 drivers/misc/vmw_vmci/vmci_guest.c
 
-from the drm-intel-gt tree.
+   813	
+   814	static void vmci_guest_remove_device(struct pci_dev *pdev)
+   815	{
+   816		struct vmci_guest_device *vmci_dev = pci_get_drvdata(pdev);
+   817		int vmci_err;
+   818	
+   819		dev_dbg(&pdev->dev, "Removing device\n");
+   820	
+   821		atomic_dec(&vmci_num_guest_devices);
+   822	
+   823		vmci_qp_guest_endpoints_exit();
+   824	
+   825		vmci_err = vmci_event_unsubscribe(ctx_update_sub_id);
+   826		if (vmci_err < VMCI_SUCCESS)
+   827			dev_warn(&pdev->dev,
+   828				 "Failed to unsubscribe from event (type=%d) with subscriber (ID=0x%x): %d\n",
+   829				 VMCI_EVENT_CTX_ID_UPDATE, ctx_update_sub_id, vmci_err);
+   830	
+   831		spin_lock_irq(&vmci_dev_spinlock);
+   832		vmci_dev_g = NULL;
+   833		vmci_pdev = NULL;
+   834		spin_unlock_irq(&vmci_dev_spinlock);
+   835	
+   836		dev_dbg(&pdev->dev, "Resetting vmci device\n");
+   837		vmci_write_reg(vmci_dev, VMCI_CONTROL_RESET, VMCI_CONTROL_ADDR);
+   838	
+   839		/*
+   840		 * Free IRQ and then disable MSI/MSI-X as appropriate.  For
+   841		 * MSI-X, we might have multiple vectors, each with their own
+   842		 * IRQ, which we must free too.
+   843		 */
+   844		if (vmci_dev->exclusive_vectors) {
+   845			free_irq(pci_irq_vector(pdev, 1), vmci_dev);
+   846			if (vmci_dev->mmio_base != NULL)
+   847				free_irq(pci_irq_vector(pdev, 2), vmci_dev);
+   848		}
+   849		free_irq(pci_irq_vector(pdev, 0), vmci_dev);
+   850		pci_free_irq_vectors(pdev);
+   851	
+   852		tasklet_kill(&vmci_dev->datagram_tasklet);
+   853		tasklet_kill(&vmci_dev->bm_tasklet);
+   854	
+   855		if (vmci_dev->notification_bitmap) {
+   856			/*
+   857			 * The device reset above cleared the bitmap state of the
+   858			 * device, so we can safely free it here.
+   859			 */
+   860	
+   861			dma_free_coherent(&pdev->dev, PAGE_SIZE,
+   862					  vmci_dev->notification_bitmap,
+   863					  vmci_dev->notification_base);
+   864		}
+   865	
+   866		vmci_free_dg_buffers(vmci_dev);
+   867	
+   868		if (vmci_dev->mmio_base != NULL)
+ > 869			pci_iounmap(pdev, vmci_dev->mmio_base);
+   870	
+   871		/* The rest are managed resources and will be freed by PCI core */
+   872	}
+   873	
 
-I fixed it up (I used the former version and then added the following
-merge fix patch) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
-It would be nice if you synced up these 2 trees (by merging one into
-the other) as I am carrying several merge fix patches due to the
-splitting up of i915_reg.h.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 3 Feb 2022 11:09:02 +1100
-Subject: [PATCH] fix up for "drm/i915: Move GT registers to their own heade=
-r file"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/gpu/drm/i915/gt/intel_gt_regs.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h b/drivers/gpu/drm/i915=
-/gt/intel_gt_regs.h
-index 16d98ebee687..a6f0220c2e9f 100644
---- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-+++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-@@ -1482,6 +1482,7 @@ enum {
-=20
- #define GEN9_ROW_CHICKEN4				_MMIO(0xe48c)
- #define   GEN12_DISABLE_GRF_CLEAR			REG_BIT(13)
-+#define   XEHP_DIS_BBL_SYSPIPE				REG_BIT(11)
- #define   GEN12_DISABLE_TDL_PUSH			REG_BIT(9)
- #define   GEN11_DIS_PICK_2ND_EU				REG_BIT(7)
- #define   GEN12_DISABLE_HDR_PAST_PAYLOAD_HOLD_FIX	REG_BIT(4)
---=20
-2.34.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ypLkd865E+Pc8V6nfundl_B
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmH7HoEACgkQAVBC80lX
-0GzlgwgAg4MAsHpb9BK8WcXrVM8oADz9LQ8rr+U7jsWhYXKifduojy/uC8dVcOVU
-3xA3+09tK6UXfIf6lvifuu8RQQzR4uzQDCDfiC6IyEaJK51lfDy7KLT4YoX0Bj5G
-ROSNxhDNzHaw0NQ3XZbB+KKqKAa28ZtlPcmVokWpXUdzN7qOQFrJrqpYqhbCVjg9
-iTbQOVGnbo5JcoM70wo4jf7yhhTUgMFUMbO8Bs+3jjdRlzRy2W3iXR6hkpmFMSWA
-qYKIc+CZB51ysV1cx3BnFqzzvwpD2ALQYrkaQxSqPCvNNU2Wx/9RMCj7O5hV6wzk
-583esL8RTLV576vyNTf3y5vB9NFc6g==
-=ttY0
------END PGP SIGNATURE-----
-
---Sig_/ypLkd865E+Pc8V6nfundl_B--
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

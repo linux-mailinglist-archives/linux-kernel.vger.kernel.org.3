@@ -2,191 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0F44A8C95
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BE24A8C9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353812AbiBCTjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:39:10 -0500
-Received: from mail.efficios.com ([167.114.26.124]:53884 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351152AbiBCTjD (ORCPT
+        id S1353806AbiBCTjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353818AbiBCTjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:39:03 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 21E5F3922F0;
-        Thu,  3 Feb 2022 14:39:03 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id V8qni8_NtTrb; Thu,  3 Feb 2022 14:39:02 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 9CD46392554;
-        Thu,  3 Feb 2022 14:39:02 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9CD46392554
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643917142;
-        bh=NkCVjM+S9iEg/gRamTSXlL2ZBMGnYHhG/cpmn7pzdsM=;
-        h=From:To:Date:Message-Id;
-        b=MhDDK80RT36WG1XoAAwAKV0qp9r4pnYO/IKxmAT4yshXw70TYanYPZBXgMqHMcazy
-         wVOEzuPbl9rl03/UA+lEV2j1xV2CQWotELHKjiN0yJINlQSp13fAfAh/7vcnxArEeK
-         NYgk5myGEND+pZZoTnnfJ8ffTtGWTRe54gloKfZd7DtvK4hCPTfC1yvTyjI0wSVAlp
-         AwVZ+n6jHGPpENlpRZYD7IEfD9OTLbC7VuO3b2WJ3pO5BBPekFzKUJYbRZ0wt9D6ya
-         QobUTyyaW1Y8+6ooI3mYiLzMfeJOHlT+E+/NF+LzItRDj8pex4w5+f1ZKad+G0Exgy
-         Gn9Iubqeqbkkg==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6NLaHQ_j6_1f; Thu,  3 Feb 2022 14:39:02 -0500 (EST)
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by mail.efficios.com (Postfix) with ESMTPSA id 534763925AC;
-        Thu,  3 Feb 2022 14:39:02 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        libc-coord@lists.openwall.com,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH 3/3] rseq: extend struct rseq with numa node id
-Date:   Thu,  3 Feb 2022 14:38:53 -0500
-Message-Id: <20220203193853.21511-3-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220203193853.21511-1-mathieu.desnoyers@efficios.com>
-References: <20220203193853.21511-1-mathieu.desnoyers@efficios.com>
+        Thu, 3 Feb 2022 14:39:17 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B94FC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:39:17 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id k92-20020a17090a3ee500b001b7f89d8ab5so4611982pjc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ejpLrWVX9GOVqNzPyB3Ntlcxx6B++bVOxcTZPfjRPDM=;
+        b=i5BnQt9PMTql7bmkuSjJZmVciGJFwFrLYd2ESpv+K9+CWXuaLHaTU2hf3StWLCi2H7
+         y0If7uONfLmjiUadR4hVVUwhOAp83x59jMOlAfiBzX09fuTrR0gmIrGqlNSs7E0xOAvr
+         iao7CwfrSFsvE/Ce46uIhm06FUm8Hz+4WbpZ8Gqmzp1A3xa1RtiLyrOZvFCiDDYTckAH
+         jXDq3QNDrPdj6AFZK9nRql/+GFIsDBBVq2Nu+fMqvc228xtbOkXvAchqN8scTRazZURO
+         opf22qMQ9AXuMyR0zjGaHiGrBawCwDmDJCmNK8cZTdyX5ajVcKzSj6WW9BphFJR5VdNa
+         aB9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ejpLrWVX9GOVqNzPyB3Ntlcxx6B++bVOxcTZPfjRPDM=;
+        b=MsDYuas6XkV1Ew0r9V8cvXUGNhFC3GIkjiQGjsE4V4SVny6BIPKVsy7cPKkQNRvs9h
+         VDE2FZlYWmaFujTEOTciZdP6SDPL6u5I5VVdP/SG1/P9ULU+WYReuBj30H0NQCXvhBus
+         zdcg7vbzSmPknYgvKNlqNqoayioyVGs16fPP03wUZHDp6qe9QQmbFA7qRDwpMXav2kNf
+         Ec6kUCKL2jYQ2JS/b5r7LxD6gwweHSnYpeXRv4IQtMXOZr2Gq5U88VgbvkUHKi6E/cfq
+         k8cBEBcjH6/wn5k9CgpGehT2N2dpkfazPHQBd52QIKsFBL+0g1zEzk3eZTDEvcHlMxOm
+         5Lfw==
+X-Gm-Message-State: AOAM5315pLQjXXeyq4wOaXFKZE69r3TH1WLWwTFbrPOkwkN20CA8TsKK
+        vGbVTbvV3gc2WzMeIBGyN5UoXjzdfNcL4VKQ
+X-Google-Smtp-Source: ABdhPJxnaH9Im4E14cXfMftsLRc4WRLaoPVtXjvD+GPI8pyu7gpRajMDJJ4WLPuG+aMtbreX1oiEi78UEhU9FR2Q
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:90b:360e:: with SMTP id
+ ml14mr145pjb.1.1643917156253; Thu, 03 Feb 2022 11:39:16 -0800 (PST)
+Date:   Thu,  3 Feb 2022 19:38:56 +0000
+Message-Id: <20220203193856.972500-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH v2] memcg: add per-memcg total kernel memory stat
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shakeel Butt <shakeelb@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding the NUMA node id to struct rseq is a straightforward thing to do,
-and a good way to figure out if anything in the user-space ecosystem
-prevents extending struct rseq.
+Currently memcg stats show several types of kernel memory:
+kernel stack, page tables, sock, vmalloc, and slab.
+However, there are other allocations with __GFP_ACCOUNT
+(or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
+in any of those stats, a few examples are:
+- various kvm allocations (e.g. allocated pages to create vcpus)
+- io_uring
+- tmp_page in pipes during pipe_write()
+- bpf ringbuffers
+- unix sockets
 
-This NUMA node id field allows memory allocators such as tcmalloc to
-take advantage of fast access to the current NUMA node id to perform
-NUMA-aware memory allocation.
+Keeping track of the total kernel memory is essential for the ease of
+migration from cgroup v1 to v2 as there are large discrepancies between
+v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
+in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
+allocations is an impractical maintenance burden as there a lot of those
+all over the kernel code, with more use cases likely to show up in the
+future.
 
-It can also be useful for implementing fast-paths for NUMA-aware
-user-space mutexes.
+Therefore, add a "kernel" memcg stat that is analogous to kmem
+page counter, with added benefits such as using rstat infrastructure
+which aggregates stats more efficiently. Additionally, this provides a
+lighter alternative in case the legacy kmem is deprecated in the future
 
-It also allows implementing getcpu(2) purely in user-space.
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/trace/events/rseq.h |  4 +++-
- include/uapi/linux/rseq.h   |  8 ++++++++
- kernel/rseq.c               | 19 +++++++++++++------
- 3 files changed, 24 insertions(+), 7 deletions(-)
+Changelog since v1:
+- Moved "kernel" stat ahead of other subset kernel stats.
+- Renamed mem_cgroup_kmem_record() to memcg_account_kmem(), following
+  Johannes's review to avoid the line wrap, but keeping a memcg_ prefix
+  to stay consistent with other static functions in the file.
+- Fixed a build error when CONFIG_MEMCG_KMEM is not set (added an empty
+  version if the config is not set).
+---
+ Documentation/admin-guide/cgroup-v2.rst |  5 +++++
+ include/linux/memcontrol.h              |  1 +
+ mm/memcontrol.c                         | 27 +++++++++++++++++++------
+ 3 files changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/include/trace/events/rseq.h b/include/trace/events/rseq.h
-index a04a64bc1a00..6bd442697354 100644
---- a/include/trace/events/rseq.h
-+++ b/include/trace/events/rseq.h
-@@ -16,13 +16,15 @@ TRACE_EVENT(rseq_update,
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 5aa368d165da..69d7a6983f78 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1301,6 +1301,11 @@ PAGE_SIZE multiple when read back.
+ 		Amount of memory used to cache filesystem data,
+ 		including tmpfs and shared memory.
  
- 	TP_STRUCT__entry(
- 		__field(s32, cpu_id)
-+		__field(s32, node_id)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->cpu_id = raw_smp_processor_id();
-+		__entry->node_id = cpu_to_node(raw_smp_processor_id());
- 	),
- 
--	TP_printk("cpu_id=%d", __entry->cpu_id)
-+	TP_printk("cpu_id=%d node_id=%d", __entry->cpu_id, __entry->node_id)
- );
- 
- TRACE_EVENT(rseq_ip_fixup,
-diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-index 05d3c4cdeb40..1cb90a435c5c 100644
---- a/include/uapi/linux/rseq.h
-+++ b/include/uapi/linux/rseq.h
-@@ -131,6 +131,14 @@ struct rseq {
- 	 */
- 	__u32 flags;
- 
-+	/*
-+	 * Restartable sequences node_id field. Updated by the kernel. Read by
-+	 * user-space with single-copy atomicity semantics. This field should
-+	 * only be read by the thread which registered this data structure.
-+	 * Aligned on 32-bit. Contains the current NUMA node ID.
-+	 */
-+	__u32 node_id;
++	  kernel (npn)
++		Amount of total kernel memory, including
++		(kernel_stack, pagetables, percpu, vmalloc, slab) in
++		addition to other kernel memory use cases.
 +
- 	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 46dc5c2ce2b7..cb7d8a5afc82 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -84,15 +84,17 @@
-  *   F1. <failure>
-  */
+ 	  kernel_stack
+ 		Amount of memory allocated to kernel stacks.
  
--static int rseq_update_cpu_id(struct task_struct *t)
-+static int rseq_update_cpu_node_id(struct task_struct *t)
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index b72d75141e12..fa51986365a4 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -34,6 +34,7 @@ enum memcg_stat_item {
+ 	MEMCG_SOCK,
+ 	MEMCG_PERCPU_B,
+ 	MEMCG_VMALLOC,
++	MEMCG_KMEM,
+ 	MEMCG_NR_STAT,
+ };
+ 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 09d342c7cbd0..c61dc03a3333 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1371,6 +1371,7 @@ struct memory_stat {
+ static const struct memory_stat memory_stats[] = {
+ 	{ "anon",			NR_ANON_MAPPED			},
+ 	{ "file",			NR_FILE_PAGES			},
++	{ "kernel",			MEMCG_KMEM			},
+ 	{ "kernel_stack",		NR_KERNEL_STACK_KB		},
+ 	{ "pagetables",			NR_PAGETABLE			},
+ 	{ "percpu",			MEMCG_PERCPU_B			},
+@@ -2114,6 +2115,7 @@ static DEFINE_MUTEX(percpu_charge_mutex);
+ static void drain_obj_stock(struct obj_stock *stock);
+ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+ 				     struct mem_cgroup *root_memcg);
++static void memcg_account_kmem(struct mem_cgroup *memcg, int nr_pages);
+ 
+ #else
+ static inline void drain_obj_stock(struct obj_stock *stock)
+@@ -2124,6 +2126,9 @@ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
  {
--	u32 cpu_id = raw_smp_processor_id();
- 	struct rseq __user *rseq = t->rseq;
-+	u32 cpu_id = raw_smp_processor_id();
-+	u32 node_id = cpu_to_node(cpu_id);
+ 	return false;
+ }
++static void memcg_account_kmem(struct mem_cgroup *memcg, int nr_pages)
++{
++}
+ #endif
  
- 	if (!user_write_access_begin(rseq, t->rseq_len))
- 		goto efault;
- 	unsafe_put_user(cpu_id, &rseq->cpu_id_start, efault_end);
- 	unsafe_put_user(cpu_id, &rseq->cpu_id, efault_end);
-+	unsafe_put_user(node_id, &rseq->node_id, efault_end);
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally updated only if
-@@ -108,9 +110,9 @@ static int rseq_update_cpu_id(struct task_struct *t)
- 	return -EFAULT;
+ /**
+@@ -2979,6 +2984,18 @@ static void memcg_free_cache_id(int id)
+ 	ida_simple_remove(&memcg_cache_ida, id);
  }
  
--static int rseq_reset_rseq_cpu_id(struct task_struct *t)
-+static int rseq_reset_rseq_cpu_node_id(struct task_struct *t)
- {
--	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED;
-+	u32 cpu_id_start = 0, cpu_id = RSEQ_CPU_ID_UNINITIALIZED, node_id = 0;
++static void memcg_account_kmem(struct mem_cgroup *memcg, int nr_pages)
++{
++	mod_memcg_state(memcg, MEMCG_KMEM, nr_pages);
++	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys)) {
++		if (nr_pages > 0)
++			page_counter_charge(&memcg->kmem, nr_pages);
++		else
++			page_counter_uncharge(&memcg->kmem, -nr_pages);
++	}
++}
++
++
+ /*
+  * obj_cgroup_uncharge_pages: uncharge a number of kernel pages from a objcg
+  * @objcg: object cgroup to uncharge
+@@ -2991,8 +3008,7 @@ static void obj_cgroup_uncharge_pages(struct obj_cgroup *objcg,
  
- 	/*
- 	 * Reset cpu_id_start to its initial state (0).
-@@ -124,6 +126,11 @@ static int rseq_reset_rseq_cpu_id(struct task_struct *t)
- 	 */
- 	if (put_user(cpu_id, &t->rseq->cpu_id))
- 		return -EFAULT;
-+	/*
-+	 * Reset node_id to its initial state (0).
-+	 */
-+	if (put_user(node_id, &t->rseq->node_id))
-+		return -EFAULT;
- 	/*
- 	 * Additional feature fields added after ORIG_RSEQ_SIZE
- 	 * need to be conditionally reset only if
-@@ -306,7 +313,7 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
- 		if (unlikely(ret < 0))
- 			goto error;
+ 	memcg = get_mem_cgroup_from_objcg(objcg);
+ 
+-	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+-		page_counter_uncharge(&memcg->kmem, nr_pages);
++	memcg_account_kmem(memcg, -nr_pages);
+ 	refill_stock(memcg, nr_pages);
+ 
+ 	css_put(&memcg->css);
+@@ -3018,8 +3034,7 @@ static int obj_cgroup_charge_pages(struct obj_cgroup *objcg, gfp_t gfp,
+ 	if (ret)
+ 		goto out;
+ 
+-	if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+-		page_counter_charge(&memcg->kmem, nr_pages);
++	memcg_account_kmem(memcg, nr_pages);
+ out:
+ 	css_put(&memcg->css);
+ 
+@@ -6801,8 +6816,8 @@ static void uncharge_batch(const struct uncharge_gather *ug)
+ 		page_counter_uncharge(&ug->memcg->memory, ug->nr_memory);
+ 		if (do_memsw_account())
+ 			page_counter_uncharge(&ug->memcg->memsw, ug->nr_memory);
+-		if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && ug->nr_kmem)
+-			page_counter_uncharge(&ug->memcg->kmem, ug->nr_kmem);
++		if (ug->nr_kmem)
++			memcg_account_kmem(ug->memcg, -ug->nr_kmem);
+ 		memcg_oom_recover(ug->memcg);
  	}
--	if (unlikely(rseq_update_cpu_id(t)))
-+	if (unlikely(rseq_update_cpu_node_id(t)))
- 		goto error;
- 	return;
  
-@@ -353,7 +360,7 @@ SYSCALL_DEFINE4(rseq, struct rseq __user *, rseq, u32, rseq_len,
- 			return -EINVAL;
- 		if (current->rseq_sig != sig)
- 			return -EPERM;
--		ret = rseq_reset_rseq_cpu_id(current);
-+		ret = rseq_reset_rseq_cpu_node_id(current);
- 		if (ret)
- 			return ret;
- 		current->rseq = NULL;
 -- 
-2.17.1
+2.35.0.rc2.247.g8bbb082509-goog
 

@@ -2,211 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9FA4A8815
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E22A4A8818
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352015AbiBCPxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:53:41 -0500
-Received: from mail.efficios.com ([167.114.26.124]:35182 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239753AbiBCPxk (ORCPT
+        id S1352025AbiBCPzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352020AbiBCPzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:53:40 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 08112390D23;
-        Thu,  3 Feb 2022 10:53:40 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id b7R6ljw7HSO1; Thu,  3 Feb 2022 10:53:39 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 5E81C390BCD;
-        Thu,  3 Feb 2022 10:53:39 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 5E81C390BCD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1643903619;
-        bh=/8wVYthViEyRys4kgMvHu8UD3IzJeS/ZOiKEPGOloZw=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ZZiJR0hhbxAZ82ZsI9KT9a6uORRBezuLQPNIT4/YxjYbKKtM5vO2ejTKwMm/zUarZ
-         z4ZUH/Z5Fzn+Pq/08vQE8LW6RxcAcm0t+WWcdohS83mEnxtiDznGILJ6xj/0hE9QqM
-         rkbyLqprq/U2fa4qXXy4cwOoitXTqAK6aiTieSXR8vZdHT6nNWaGbegjvrZIwNef6u
-         GYamXGViEobnjleunolsa5oMbQ9lKNikAJtx9PiOcn8Q7Mx1E6Rp63GeNvM2AsDG10
-         2ZpsOhH+hyXjrofDfLwS6YcwG06Z7jHI96O4+OIr9AA8gi5oga/IUWAKhVcDcUVmim
-         9j6CHyyf2y0fA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KjRa12abZ1Nl; Thu,  3 Feb 2022 10:53:39 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 4BE65390BC7;
-        Thu,  3 Feb 2022 10:53:39 -0500 (EST)
-Date:   Thu, 3 Feb 2022 10:53:39 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Florian Weimer <fw@deneb.enyo.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        carlos <carlos@redhat.com>, Peter Oskolkov <posk@posk.io>
-Message-ID: <1685571268.31788.1643903619178.JavaMail.zimbra@efficios.com>
-In-Reply-To: <1285409089.26848.1643765557716.JavaMail.zimbra@efficios.com>
-References: <20220201192540.10439-1-mathieu.desnoyers@efficios.com> <20220201192540.10439-2-mathieu.desnoyers@efficios.com> <87bkzqz75q.fsf@mid.deneb.enyo.de> <1075473571.25688.1643746930751.JavaMail.zimbra@efficios.com> <87sft2xr7w.fsf@mid.deneb.enyo.de> <1339477886.25835.1643750440726.JavaMail.zimbra@efficios.com> <87o83qxok9.fsf@mid.deneb.enyo.de> <1285409089.26848.1643765557716.JavaMail.zimbra@efficios.com>
-Subject: Re: [RFC PATCH 2/3] rseq: extend struct rseq with per thread group
- vcpu id
+        Thu, 3 Feb 2022 10:55:07 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320C7C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:55:07 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id n17so3775493iod.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 07:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sNxBcrnUzMIqHhDfzP2wiPhO1LoLqeoF7Jw2MZ9+MNI=;
+        b=oKHMRWDWO0uGRxpVvliCE8uKRp8QOZHl4qPxYXGRGM2akzNqOnrN8kSmQ3zrtiftxE
+         Nb56OxJ9Tu/5uNdkvsfloi8ki/QwgOhVvAcS4lLf/wo5M/XyeD9c+SwW+gQIOZiy67G1
+         ZI6/356KT2o+m+Y7pUw7k6+IqAngr+QsPk2vEESqLsF1wC9VE7lLPGUwMCvM6+thB2Pl
+         P92N5dZarZIQR3ovhsE8uWqIhgpTKqq1dLo1FF5htqanKnZh7p0HWAbLkVZIrpAHcPmC
+         RUmVJjzwIzOOtIdhv/lAh07Ht8J9Of+eBYRy/i/ez5GNuWQ7HsPYEY/BuuVtQiGzULHz
+         JN+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sNxBcrnUzMIqHhDfzP2wiPhO1LoLqeoF7Jw2MZ9+MNI=;
+        b=VUo+PAl2SivjyQxd9HqvMi9X60M96HpE6J9MXkm1u1+1pfcmwNVUYl8VZdGQnIO/P3
+         nosjJlgVfhXK5AXVulEEaijNCQlQ3KI+KRz4Uf1ZFue+2dvtoZzOaCpY4e2YkIbalwBx
+         BexGCVk8u/kWcGNgNm6xVnOpWqCNT8bI7+9J2htnWm0z4AbvsH3lgECnO4WSpZIR+53Z
+         C3Be92d+kmdftIbp1W1b0DVB3j7l+vmGxLHn2HI4zyLM2l0mFrBOt26K2Mq1ySskYZIq
+         MGXvKp6zOAJrlIF4t7GjylzGXrQg9iCdQy+UCmuaqj5vcoCgZhnXAsKZTqnDpQmn7aPw
+         bPng==
+X-Gm-Message-State: AOAM531h1h7YWxVTdMEI7JLST2KmAY6mDHInwzoLL4m0tq+W1m+AcKWj
+        UcOegxMtJ24N0/SIwz7x2UZKhQ==
+X-Google-Smtp-Source: ABdhPJw0vFrYXi+FK6KhD3n0kq9KqfDAEN9+uHFtqE6XmXlnJX79rnuA283Hhm1zbsLV2/cCEZA4nw==
+X-Received: by 2002:a6b:310b:: with SMTP id j11mr18545878ioa.149.1643903706529;
+        Thu, 03 Feb 2022 07:55:06 -0800 (PST)
+Received: from [192.168.1.30] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id m13sm733822ilh.18.2022.02.03.07.55.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 07:55:06 -0800 (PST)
+Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203151153.574032-1-usama.arif@bytedance.com>
+ <20220203151153.574032-2-usama.arif@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <87fca94e-3378-edbb-a545-a6ed8319a118@kernel.dk>
+Date:   Thu, 3 Feb 2022 08:55:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20220203151153.574032-2-usama.arif@bytedance.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4203)
-Thread-Topic: rseq: extend struct rseq with per thread group vcpu id
-Thread-Index: C6NWYE2w3ULPRtwNBg28J/VU9Te00jWeL08W
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Feb 1, 2022, at 8:32 PM, Mathieu Desnoyers mathieu.desnoyers@effic=
-ios.com wrote:
+On 2/3/22 8:11 AM, Usama Arif wrote:
+> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+> +{
+> +	struct io_ev_fd *ev_fd;
+> +
+> +	rcu_read_lock();
+> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
+> +
+> +	if (!io_should_trigger_evfd(ctx, ev_fd))
+> +		goto out;
+> +
+> +	eventfd_signal(ev_fd->cq_ev_fd, 1);
+> +out:
+> +	rcu_read_unlock();
+> +}
 
-> ----- On Feb 1, 2022, at 4:30 PM, Florian Weimer fw@deneb.enyo.de wrote:
->=20
->> * Mathieu Desnoyers:
->>=20
->>> ----- On Feb 1, 2022, at 3:32 PM, Florian Weimer fw@deneb.enyo.de wrote=
-:
->>> [...]
->>>>=20
->>>>>> Is the switch really useful?  I suspect it's faster to just write as
->>>>>> much as possible all the time.  The switch should be well-predictabl=
-e
->>>>>> if running uniform userspace, but still =E2=80=A6
->>>>>
->>>>> The switch ensures the kernel don't try to write to a memory area bey=
-ond
->>>>> the rseq size which has been registered by user-space. So it seems to=
- be
->>>>> useful to ensure we don't corrupt user-space memory. Or am I missing =
-your
->>>>> point ?
->>>>=20
->>>> Due to the alignment, I think you'd only ever see 32 and 64 bytes for
->>>> now?
->>>
->>> Yes, but I would expect the rseq registration arguments to have a rseq_=
-len
->>> of offsetofend(struct rseq, tg_vcpu_id) when userspace wants the tg_vcp=
-u_id
->>> feature to be supported (but not the following features).
->>=20
->> But if rseq is managed by libc, it really has to use the full size
->> unconditionally.  I would even expect that eventually, the kernel only
->> supports the initial 32, maybe 64 for a few early extension, and the
->> size indicated by the auxiliary vector.
->>=20
->> Not all of that area would be ABI, some of it would be used by the
->> vDSO only and opaque to userspace application (with applications/libcs
->> passing __rseq_offset as an argument to these functions).
->>=20
->=20
-> I think one aspect leading to our misunderstanding here is the distinctio=
-n
-> between the size of the rseq area _allocation_, and the offset after the =
-last
-> field supported by the given kernel.
->=20
-> With this in mind, let's state a bit more clearly our expected aux. vecto=
-r
-> extensibility scheme.
->=20
-> With CONFIG_RSEQ=3Dy, the kernel would pass the following information thr=
-ough
-> the ELF auxv:
->=20
-> - rseq allocation size (auxv_rseq_alloc_size),
-> - rseq allocation alignment (auxv_rseq_alloc_align),
-> - offset after the end of the last rseq field supported by this kernel
-> (auxv_rseq_offset_end),
->=20
-> We always have auxv_rseq_alloc_size >=3D auxv_rseq_offset_end.
->=20
-> I would expect libc to use this information to allocate a memory area
-> at least auxv_rseq_alloc_size in size, with an alignment respecting
-> auxv_rseq_alloc_align. It would use a value >=3D auvx_rseq_alloc_size
-> as rseq_len argument for the rseq registration.
->=20
-> But I would expect libc to use the auxv_rseq_offset_end value to populate
-> __rseq_size,
-> so rseq users can rely on this to check whether the fields they are tryin=
-g to
-> access
-> is indeed populated by the kernel.
->=20
-> Of course, the kernel would still allow the original 32-byte rseq_len arg=
-ument
-> for the rseq registration, so the original ABI still works. It would howe=
-ver
-> reject any rseq registration with size smaller than auxv_rseq_alloc_size =
-(other
-> than the 32-byte special-case).
->=20
-> Is that in line with what you have in mind ? Do we really need to expose =
-those 3
-> auxv variables independently or can we somehow remove auxv_rseq_alloc_siz=
-e and
-> use auxv_rseq_offset_end as a min value for allocation instead ?
+Would be cleaner as:
 
-After giving all this some more thoughts, I think we can extend struct rseq
-cleanly without adding any "padding1" fields at the end of the existing str=
-ucture
-(which would be effectively wasting very useful hot cache line space).
+static void io_eventfd_signal(struct io_ring_ctx *ctx)
+{
+	struct io_ev_fd *ev_fd;
 
-Here is what I have in mind:
+	rcu_read_lock();
+	ev_fd = rcu_dereference(ctx->io_ev_fd);
 
-We consider separately the "size" and the "feature_size" of the rseq struct=
-ure.
+	if (io_should_trigger_evfd(ctx, ev_fd))
+		eventfd_signal(ev_fd->cq_ev_fd, 1);
 
-- The "size" is really the size for memory allocation (includes padding),
-- The "feature_size" is the offset after the last supported feature field.
+	rcu_read_unlock();
+}
 
-So for the original struct rseq, size=3D32 bytes and feature_size=3D20 byte=
-s
-(offsetofend(struct rseq, flags)).
+and might be worth considering pulling in the io_should_trigger_evfd()
+code rather than have it be a separate helper now with just the one
+caller.
 
-The kernel can expose this "supported rseq feature size" value through the =
-ELF auxiliary
-vector (with a new AT_RSEQ_FEATURE_SIZE). It would also expose a new AT_RSE=
-Q_ALIGN for the
-minimal allocation alignment required by the kernel. Those can be queried b=
-y user-space
-through getauxval(3).
+> @@ -9353,35 +9374,67 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+>  
+>  static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+>  {
+> +	struct io_ev_fd *ev_fd;
+>  	__s32 __user *fds = arg;
+> -	int fd;
+> +	int fd, ret;
+>  
+> -	if (ctx->cq_ev_fd)
+> -		return -EBUSY;
+> +	mutex_lock(&ctx->ev_fd_lock);
+> +	ret = -EBUSY;
+> +	if (rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock)))
+> +		goto out;
+>  
+> +	ret = -EFAULT;
+>  	if (copy_from_user(&fd, fds, sizeof(*fds)))
+> -		return -EFAULT;
+> +		goto out;
+>  
+> -	ctx->cq_ev_fd = eventfd_ctx_fdget(fd);
+> -	if (IS_ERR(ctx->cq_ev_fd)) {
+> -		int ret = PTR_ERR(ctx->cq_ev_fd);
+> +	ret = -ENOMEM;
+> +	ev_fd = kmalloc(sizeof(*ev_fd), GFP_KERNEL);
+> +	if (!ev_fd)
+> +		goto out;
+>  
+> -		ctx->cq_ev_fd = NULL;
+> -		return ret;
+> +	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+> +	if (IS_ERR(ev_fd->cq_ev_fd)) {
+> +		ret = PTR_ERR(ev_fd->cq_ev_fd);
+> +		kfree(ev_fd);
+> +		goto out;
+>  	}
+> +	ev_fd->ctx = ctx;
+>  
+> -	return 0;
+> +	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+> +	ret = 0;
+> +
+> +out:
+> +	mutex_unlock(&ctx->ev_fd_lock);
+> +	return ret;
+> +}
 
-glibc can add a new const unsigned int __rseq_feature_size symbol in a futu=
-re release which
-will support extended rseq structures. This is the symbol I expect rseq use=
-rs to check
-at least once in the program's lifetime before they try to access rseq fiel=
-ds beyond
-the originally populated 20 bytes.
+One thing that both mine and your version suffers from is if someone
+does an eventfd unregister, and then immediately does an eventfd
+register. If the rcu grace period hasn't passed, we'll get -EBUSY on
+trying to do that, when I think the right behavior there would be to
+wait for the grace period to pass.
 
-The rseq_len argument passed to sys_rseq would really be the allocated size=
- for the rseq
-area (as it is today, considering that the kernel expects sizeof(struct rse=
-q)). Typically,
-I would expect glibc to take the rseq feature_size value and round it up to=
- a value which
-is a multiple of the AT_RSEQ_ALIGN. That allocation size would be used to p=
-opulate
-__rseq_size.
+I do think we need to handle that gracefully, spurious -EBUSY is
+impossible for an application to deal with.
 
-Am I missing something ?
+> @@ -11171,8 +11226,10 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
+>  	mutex_lock(&ctx->uring_lock);
+>  	ret = __io_uring_register(ctx, opcode, arg, nr_args);
+>  	mutex_unlock(&ctx->uring_lock);
+> +	rcu_read_lock();
+>  	trace_io_uring_register(ctx, opcode, ctx->nr_user_files, ctx->nr_user_bufs,
+> -							ctx->cq_ev_fd != NULL, ret);
+> +				rcu_dereference(ctx->io_ev_fd) != NULL, ret);
+> +	rcu_read_unlock();
+>  out_fput:
+>  	fdput(f);
+>  	return ret;
 
-Thanks,
+We should probably just modify that tracepoint, kill that ev_fd argument
+(it makes very little sense).
 
-Mathieu
+-- 
+Jens Axboe
 
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com

@@ -2,153 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C93F4A88B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0AD4A88B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352278AbiBCQiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:38:19 -0500
-Received: from mail-am6eur05on2057.outbound.protection.outlook.com ([40.107.22.57]:51717
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234433AbiBCQiR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:38:17 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mq/sGgWLRFESHf1HPdgT/bW0y4QaIuU72T+U44ApmVJCezNsioPSTNf5H6GTbfcLUQau2M+T3blj97h9+/qEG2RqPw/LSxRKEoIjWiEPdTA9qagGEuyJp/r0pZ/n7etGSFot4t3MqxedJS/iq2T8C1QmH0nNKU1Y36Zxk06g8+gdJWWs5HW3VdQUAvUaQ1wDTMnTfKYZouuFWnCoVWTmSEqFaOHXXdEaYl5hWaisbmLfLbwXuHBK8nqz39t25WTDpygxsONzTVoKeKBNNjmGALgbbJCyOKhEM6RFxzbtjUP0DpkbOu3GR/DNCwInZFxRwbrCmTEgDCnUkxEWR1H+/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L8RACJM7i/Dy3Uz6v9T0PdsF81dAlzyQWVf6hC938TE=;
- b=bOzwL+ofHyOMu0fx0mmeN2oO0dYaFh2lX7q1RmHPItCEuN5Uu/H50ODQosci60uDJ+VAc7UtjKpJxl5CZaif6FeSZnCrmITXblyAMlUxulKQybWDbxLCPLAb02zUzXUASP+mwQ4vQ9iRK6WefyJBL2gFXHvL43WoYN9vTnI6Sg+tEmCBEdnl20D67E6LM86/Sokadc2L6d5FkkigIysX683B69h7mOcrvZFZxRd0lgdaN46yqmERnev+fbyOQkzFRsZonAPspa/fAEOifphxAHGqXCASvNDaR0eoJKRXbvGViMXKoDItkDiywdH9Z77vVsEOKCY8GhJ95PgpQigQqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L8RACJM7i/Dy3Uz6v9T0PdsF81dAlzyQWVf6hC938TE=;
- b=ePWlooXtJF6TNxetPWOJv9SN9FTZymrx8NBdLazrlvFx15loyY2txJOwHiFJmFY9JlPzZeyzQc0qeqw7wLYD050DttNHQ1xD2KT8xpTkpk9DGz6Y9HUtUOTf1uEQkPmT0RFtdaLBycfIq1nmW+YznAgcK72CrMFhBvXvkhSGw9g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU2PR04MB8807.eurprd04.prod.outlook.com (2603:10a6:10:2e2::23)
- by AM0PR04MB4372.eurprd04.prod.outlook.com (2603:10a6:208:74::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
- 2022 16:38:15 +0000
-Received: from DU2PR04MB8807.eurprd04.prod.outlook.com
- ([fe80::9484:131d:7309:bd02]) by DU2PR04MB8807.eurprd04.prod.outlook.com
- ([fe80::9484:131d:7309:bd02%5]) with mapi id 15.20.4951.012; Thu, 3 Feb 2022
- 16:38:15 +0000
-Message-ID: <13dc6f72-8ef4-6990-1c67-2b92c6894e87@oss.nxp.com>
-Date:   Thu, 3 Feb 2022 17:38:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH net] net: stmmac: ensure PTP time register reads are
- consistent
-Content-Language: en-GB
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rayagond Kokatanur <rayagond@vayavyalabs.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sebastien.laveze@oss.nxp.com, Vladimir Oltean <olteanv@gmail.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, mingkai.hu@nxp.com,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Yannick Vignon <yannick.vignon@nxp.com>
-References: <20220203160025.750632-1-yannick.vignon@oss.nxp.com>
- <YfwCnV2TV8fznZ33@shell.armlinux.org.uk>
-From:   Yannick Vignon <yannick.vignon@oss.nxp.com>
-In-Reply-To: <YfwCnV2TV8fznZ33@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR10CA0042.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:150::22) To DU2PR04MB8807.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::23)
+        id S1352286AbiBCQkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238360AbiBCQkL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:40:11 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659C5C061714;
+        Thu,  3 Feb 2022 08:40:11 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id jx6so10742965ejb.0;
+        Thu, 03 Feb 2022 08:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=P+k76d9mntDtvQ5ykXCopjCMascZgXwQkHaeBDTB718=;
+        b=IaYmrqUyvOkYDcKoPaS1ykOstS1qbI7zl14cC0zM1ZIHK23VrsWuwph6TEGSDpDkJ/
+         fThTdncde8bFWYMVXE6Ih5Wqk01/1mB5cQfsP2kN8m60HDVBYgo2rHixof1Oy/1EeNxc
+         N173yUdGAlkqGpzwbmXpRkm/QCfh5p6QccSxNUUrLd9ziUeJ4a6Oi+pj673ZxDcIWs9K
+         vIc19VKoZwOOb4px7X7P2bonUnbPzt0FVSAlFEWjfXrTGN9CClmycYZ9HlTK8Kv5Hb+e
+         /2l0f7DMSBXe6LbFSXXEYTOnAXumHXFzylvac0ZVfvaf2soN90O5OhVh//JaKmYU9ooB
+         TcVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=P+k76d9mntDtvQ5ykXCopjCMascZgXwQkHaeBDTB718=;
+        b=yCHoLYtVA5sd4mhZnfkf85ugCMvGqTZR/NtXMqwhLUvGBWHqIZwyPMCxdkpCyrOksJ
+         uMnC9oe+0me4MBGP7j43eXZ2dqMhgDUeHYjq5o8O5wxN1qXzyz6g9yd04nGoH/rtKcI1
+         1JHHk5JAA22b/T82DcdQJsBwwOo/1tUvqjY03XfmFvsFxSvoWGfWekHJx/V7mtjoacOD
+         SIXsmwJQfXG4BlhkrOd7Ibvs9NozlY5Gvq5N0/D7evT76NTvmncLngdnmp6N7et/Vj2w
+         vwMBMP6WFOZB8jFm77HTSHXIxdVoOtzgqRBRD9txadRhAnZO+vLB/ngcDmAHVBK4VCqe
+         KR+A==
+X-Gm-Message-State: AOAM531tDc2ZREkY3wpY9uSapVZzAuzM6NI4jHkbKaDJfuxW65RwdF0z
+        O8xgkjFFx4xJd/sqXZ3X+/c=
+X-Google-Smtp-Source: ABdhPJyHG8ZPumAxoJ6CThiSAo1Dkxrv/gxaWt3f/7CwA+j8WMPyQl67AgjPh4M5TyJa/seqLVQ/Wg==
+X-Received: by 2002:a17:906:3d72:: with SMTP id r18mr29952408ejf.111.1643906409762;
+        Thu, 03 Feb 2022 08:40:09 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id rv9sm16734935ejb.216.2022.02.03.08.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 08:40:08 -0800 (PST)
+Date:   Thu, 3 Feb 2022 18:40:07 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of
+ standalone ports
+Message-ID: <20220203164007.ynzmkchlrlw3yrii@skbuf>
+References: <20220131154655.1614770-1-tobias@waldekranz.com>
+ <20220131154655.1614770-2-tobias@waldekranz.com>
+ <20220201170634.wnxy3s7f6jnmt737@skbuf>
+ <87a6fabbtb.fsf@waldekranz.com>
+ <20220201201141.u3qhhq75bo3xmpiq@skbuf>
+ <8735l2b7ui.fsf@waldekranz.com>
+ <20220203135606.z37vulus7rjimx5y@skbuf>
+ <20220203170104.1cca571d@thinkpad>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bbc26de3-0260-49ba-7f0b-08d9e733932a
-X-MS-TrafficTypeDiagnostic: AM0PR04MB4372:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB437272E1A26084B9B003A85BD2289@AM0PR04MB4372.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jEQtqBJ2hBlqCCqNH9+j6ZGLMbioPTDYZReo9mgUWcuZgCe4y69lT6oMSMLNqUsM+68gy3gBMGTeII5QNQRuTr1ky0ZYbJdSqVRRBvebHyfFcllJve7hDgoxXWJA0RPSDJ+K6M+uIOOg4AclRJ/WoCa44RAEbPfJMwcEtwz2y6/kp1ia9do73jKMzpLDKk1MiJ+EK0tZPunm6PJs8c04WtUzWtTC4Y1hosPu/Div2k6FhbxdhxYZQhdbq4gfgXZDDTV6GT5hL0wRFJ+D2TmA8l1PGoZ7N9ne2fnX5l1qoPOWToCTjIh+C8mwDC79awvRRntlnMEyxCEBmSoLh7HefqsbDUt8o4jv1wAJApnFQF42YbNULodOcxNKTpY6CeLyBStdRP3yOoZspBcuO08RritS2o7VoB+k3tC6azyqSmqJLUFUYRPlNwEj0PXArrYBL+d0voXcA+tjugwoRMfBRJmAtG1Vq2JJRa1Ja+3EXCxWPHprluNQjPeT7N5dvOEsp1xVXTf60fYCn0kee199btJM+T1HPuOQZsve2Gl/PH0lfUvwYr1serVxPU6hPJv54V3lIntP//tWLMknu5SQhjhVBfuiQPYiVx+OhQQPd5gAF0y7lpMM25YuuTYL/kbld9wRbW0e7XhHZa4G4MRNQ2ELtGAc2kMjGX1kbf3sMgFMVdyPK8bd87S2OKqqDH8vhyxUAn/5ZqUemX3GcpGkeMJPx7LQpCkPDVlf9xRaloPBfM3U/cRpSfyqcE6Kdkh+ED39u5TFcJaB1V1zdSmqfw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8807.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2616005)(508600001)(31686004)(2906002)(31696002)(83380400001)(6486002)(316002)(26005)(54906003)(6916009)(5660300002)(53546011)(7416002)(6512007)(4744005)(86362001)(8676002)(38100700002)(8936002)(66946007)(4326008)(6666004)(6506007)(44832011)(66556008)(66476007)(52116002)(38350700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDNHUmRYU0dBZ2F0b09kRGlXV1lsQzlCeEU3Yy81c1VyZ1k0dUZYb2JNRkNs?=
- =?utf-8?B?U1ZOMEttNzlBSkpyd29xZGVLUkNZWTVEbTZVNjlDY05qY1BHMzhYeFlkcFRx?=
- =?utf-8?B?dVk1dlJ5aXNhMTl2dTY2aGNrZWRZdHJTYmdyOFFhUFo2cVIzOVdmakhQUTFr?=
- =?utf-8?B?NnNBbytlREZIWmlaQmpmbm1EOWhTWkZ6Q0FIdWRTR1FCN1B4SERKcTdMN1FU?=
- =?utf-8?B?aEhZbVhkSjgzZk8xRXppYzZvYXh1b21oVEMxbEd5eXhOZHFsbW9Salk5OFhT?=
- =?utf-8?B?OUovZWNEOGJRRmJQbEhGNU9EaFRlTWdscVdiZUtzTnlhamloU0JQT3ZYVURC?=
- =?utf-8?B?d21taVVneTFuTUNsOFVWbFpwMTlvb0NrblNyS0phVjJwWkkvMjhYT1JReVRT?=
- =?utf-8?B?MXhoVEZVRGJtNXYvSlZ5VDIweW5tK1JMUWRDR3ltc0puRTEwVS81S0pSRXJ0?=
- =?utf-8?B?ZzR3NDVJQ0FxVFhsTEVoUmovZDlJR1dTWHRmRjBuN2lXeStxVkF6STh0T28x?=
- =?utf-8?B?LytxYnUrSlpPTXZLbVgxd1VWdXBQbVIxMytubWhOcXRSOC9xUlY3YWVRL0Ja?=
- =?utf-8?B?UERTbXR1RjAwU05XcCtZdXdheDBaakg5bzIrWUNWajhIRjFiS2hBczJ2TWxt?=
- =?utf-8?B?cFEvb2hHL0tGQ3NWbytjWDJXM0srSWQ4dEV1MkRoeUthVFkySnlLeVpnajRt?=
- =?utf-8?B?bkhJL3hOc3M3R3hKcmVVQ0lBZU5QaGo3NzRTd2UrT0piNFFiQWxoc3JLQ2JJ?=
- =?utf-8?B?RnQxejEzWUhPYmk3U25lMDhmM1FhNFhPaU5yRDRUclZxQW4xUzI0aW1aR2Ft?=
- =?utf-8?B?NmI2ZmpkT1kwam5ueS8vTWRxcHhkRTd4UWVrczI0eEZ2bXRHd3hJcXdPcFhk?=
- =?utf-8?B?TkNoY01NZStwcU5QNTM3TTUrSEwrY2pQTWZIVUpTcXJjZ0ozTzJVMHBiRWxG?=
- =?utf-8?B?QWEwZ1hZd0RSY1dzaTR4NXNDZHdDc2xxSjkxUngweFVtMWpwVUhCd2lna2J6?=
- =?utf-8?B?ODVFNDR3djBXYm00Y0g5b1VwWWJGREJ3VDJsWHl0bi9PY1ltSHA1K3VCaUxi?=
- =?utf-8?B?SGlvY2VJV2JENlFxTTM0RmY2dzFtOHQ4TVFCVXh0d3lKK3VMb2pVSUR1TDJv?=
- =?utf-8?B?R2dEUDZaK21WWWUxbWlrdkxtcHRYUkcremVsS2FCaEdIZE1acTFuMjcva3dT?=
- =?utf-8?B?QVdUU29Lb0JiSzBwayt6ZWwrK1QxemMwVFVBVVFIQmN0enN2dW5PUFdtSHNH?=
- =?utf-8?B?VGViZzBEcVBZT285Z0VnY1dHUXdZQVI2SEVpdXQ3K3VxUFl5L2pTcUEyTW9s?=
- =?utf-8?B?cXlHN0FpckxRMy96dzB2cFA0azUvc1ZEYXo5b0h5Q3ZNV1JuNzdKdjZhTTBo?=
- =?utf-8?B?T1JHdUw5OEdiYyt1MUxYalcwemcrckpaYWVSQ2NLRHJxcWZRSWZOQzNDaWpE?=
- =?utf-8?B?QzJnODgwMW1SZVRHWSswNHB5dXhGUisyR3RBZTBsWm1yQ0pQaDZHZXp5NU9Q?=
- =?utf-8?B?QVJOWU13eithbWVqQVI5ZGljR0ZPbVRaK0pQRFB6MTlrcUE2YzhIeTAvQ3J5?=
- =?utf-8?B?UXJFTTdRSFB0VnRvMzZDbzRsdjA1NndsNGxTeGw4dWtZWHhiRXpVa2F4R2d3?=
- =?utf-8?B?Z0RzamhhRlgzbkI4TXNZMU9hYkRGcGRRNkhEZmJHQXB4UnhxZVpHUTlEQkhw?=
- =?utf-8?B?QlpDRTdnT1psdHZ0WVlBRjB4Z3N1aVZGaFBwQWtLSThMYW0xRkY5cmZBVU1w?=
- =?utf-8?B?cHF0aWtiTTZleDN5VjVTSThwY3NMTkplYTd5QmtUMFpJR0taWU9wQmdRcVVX?=
- =?utf-8?B?SEsvc0tsTzhTZFFIWExLMWN6TlA2QjJjVmtRWGFXRlVoOUN0NVVrQWdaTDZv?=
- =?utf-8?B?UkVZaEFJT1AyM0RJcGxXVWg1cXQxaDMyZFdyWW5RWXFwV3dSbzRsdEVoRFBp?=
- =?utf-8?B?dlVBd2Q0UFFScXAyVUI3ODRraDlveW8yaTgxYjZYcFhxSE41eVNCanZRVkkw?=
- =?utf-8?B?WXdZSjFHeU5FMWVqdy9LVXI0K0QzcDVva1lwRUJuYWFjUGlIWjA1bUM4a3ZU?=
- =?utf-8?B?NjhWbUo3dVlTT0FpbEdMOGg3UnJGanN1NGxIRjRWbVdiUWsxOTRRL3Jmd013?=
- =?utf-8?B?d0lYZTVObFRibnJ1WjdZS0U2TkJNZ29VREUvSHY3YkJTZmxsQjB0eXBacm01?=
- =?utf-8?Q?ewRocjRIqe+3Mu8S0qUNuTg=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbc26de3-0260-49ba-7f0b-08d9e733932a
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8807.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 16:38:15.4014
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nUwZel7gRKetFzlBtNrXGuEJT81TZhcabvbgQlGO8DGQMOmMNdsDPuHLUTDb3Q3mRsvq7jZQdDnPTyBe5b/MGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4372
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220203170104.1cca571d@thinkpad>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/2022 5:28 PM, Russell King (Oracle) wrote:
-> On Thu, Feb 03, 2022 at 05:00:25PM +0100, Yannick Vignon wrote:
->> From: Yannick Vignon <yannick.vignon@nxp.com>
->>
->> Even if protected from preemption and interrupts, a small time window
->> remains when the 2 register reads could return inconsistent values,
->> each time the "seconds" register changes. This could lead to an about
->> 1-second error in the reported time.
+On Thu, Feb 03, 2022 at 05:01:04PM +0100, Marek Behún wrote:
+> On Thu, 3 Feb 2022 15:56:06 +0200
+> Vladimir Oltean <olteanv@gmail.com> wrote:
 > 
-> Have you checked whether the hardware protects against this (i.o.w. the
-> hardware latches the PTP_STSR value when PTP_STNSR is read, or vice
-> versa? Several PTP devices I've looked at do this to allow consistent
-> reading.
+> > On Tue, Feb 01, 2022 at 10:22:13PM +0100, Tobias Waldekranz wrote:
+> > > No worries. I have recently started using get_maintainers.pl to auto
+> > > generate the recipient list, with the result that the cover is only sent
+> > > to the list. Ideally I would like send-email to use the union of all
+> > > recipients for the cover letter, but I haven't figured that one out yet.  
+> > 
+> > Maybe auto-generating isn't the best solution? Wait until you need to
+> > post a link to https://patchwork.kernel.org/project/netdevbpf/, and
+> > get_maintainers.pl will draw in all the BPF maintainers for you...
+> > The union appears when you run get_maintainer.pl on multiple patch
+> > files. I typically run get_maintainer.pl on *.patch, and adjust the
+> > git-send-email list from there.
+> > 
+> > > I actually gave up on getting my mailinglists from my email provider,
+> > > now I just download it directly from lore. I hacked together a script
+> > > that will scrape a public-inbox repo and convert it to a Maildir:
+> > > 
+> > > https://github.com/wkz/notmuch-lore
+> > > 
+> > > As you can tell from the name, it is tailored for plugging into notmuch,
+> > > but the guts are pretty generic.  
+> > 
+> > Thanks, I set that up, it's syncing right now, I'm also going to compare
+> > the size of the git tree vs the maildir I currently have.
 > 
+> Hi Vladimir, please let me know the results.
+> Marek
 
-It doesn't. I was able to observe inconsistent values doing reads in 
-either order, and we had already observed the issue with that same IP on 
-another device (Cortex-M based, not running Linux). It's not easy to 
-reproduce, the time window is small, but it's there.
+Sure, it's still syncing, at 19GB currently. Please remind me next week
+if I forget to check on it.

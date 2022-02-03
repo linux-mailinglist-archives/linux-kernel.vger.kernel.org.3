@@ -2,113 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0AD4A88B6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978824A88C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352286AbiBCQkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
+        id S1352297AbiBCQl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:41:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbiBCQkL (ORCPT
+        with ESMTP id S1352291AbiBCQlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:40:11 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659C5C061714;
-        Thu,  3 Feb 2022 08:40:11 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id jx6so10742965ejb.0;
-        Thu, 03 Feb 2022 08:40:11 -0800 (PST)
+        Thu, 3 Feb 2022 11:41:25 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5C7C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:41:25 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h12so2920121pjq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=P+k76d9mntDtvQ5ykXCopjCMascZgXwQkHaeBDTB718=;
-        b=IaYmrqUyvOkYDcKoPaS1ykOstS1qbI7zl14cC0zM1ZIHK23VrsWuwph6TEGSDpDkJ/
-         fThTdncde8bFWYMVXE6Ih5Wqk01/1mB5cQfsP2kN8m60HDVBYgo2rHixof1Oy/1EeNxc
-         N173yUdGAlkqGpzwbmXpRkm/QCfh5p6QccSxNUUrLd9ziUeJ4a6Oi+pj673ZxDcIWs9K
-         vIc19VKoZwOOb4px7X7P2bonUnbPzt0FVSAlFEWjfXrTGN9CClmycYZ9HlTK8Kv5Hb+e
-         /2l0f7DMSBXe6LbFSXXEYTOnAXumHXFzylvac0ZVfvaf2soN90O5OhVh//JaKmYU9ooB
-         TcVw==
+        bh=1evXhfpbBKElbnPFpb9YOErw3xinbR29/m37zDfFiAw=;
+        b=S/UAP0f153LFonp1hCXbIVWAfYmrYBM8A9I4S4MSqcNaBK/XGFbffMh95ZGYIZ02J2
+         J30wn/NHcxDB9DTV6U1ItVXuLRqx+8GWqMlsxpvlKrDFs01zr0cJYjALOlGuFxEsxc2I
+         SsWacMJDXRmANGCDAQkwxE9ivNqKuc+pELREQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=P+k76d9mntDtvQ5ykXCopjCMascZgXwQkHaeBDTB718=;
-        b=yCHoLYtVA5sd4mhZnfkf85ugCMvGqTZR/NtXMqwhLUvGBWHqIZwyPMCxdkpCyrOksJ
-         uMnC9oe+0me4MBGP7j43eXZ2dqMhgDUeHYjq5o8O5wxN1qXzyz6g9yd04nGoH/rtKcI1
-         1JHHk5JAA22b/T82DcdQJsBwwOo/1tUvqjY03XfmFvsFxSvoWGfWekHJx/V7mtjoacOD
-         SIXsmwJQfXG4BlhkrOd7Ibvs9NozlY5Gvq5N0/D7evT76NTvmncLngdnmp6N7et/Vj2w
-         vwMBMP6WFOZB8jFm77HTSHXIxdVoOtzgqRBRD9txadRhAnZO+vLB/ngcDmAHVBK4VCqe
-         KR+A==
-X-Gm-Message-State: AOAM531tDc2ZREkY3wpY9uSapVZzAuzM6NI4jHkbKaDJfuxW65RwdF0z
-        O8xgkjFFx4xJd/sqXZ3X+/c=
-X-Google-Smtp-Source: ABdhPJyHG8ZPumAxoJ6CThiSAo1Dkxrv/gxaWt3f/7CwA+j8WMPyQl67AgjPh4M5TyJa/seqLVQ/Wg==
-X-Received: by 2002:a17:906:3d72:: with SMTP id r18mr29952408ejf.111.1643906409762;
-        Thu, 03 Feb 2022 08:40:09 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id rv9sm16734935ejb.216.2022.02.03.08.40.08
+        bh=1evXhfpbBKElbnPFpb9YOErw3xinbR29/m37zDfFiAw=;
+        b=GaUNpGLhnao4pc4n2VUIwbkukJqblpO3yKDJUKCz8KBeqfJr2zfjZwFg3BpSWGEOj5
+         KNwqeiiRuTD43LUXvcAkTLO/XXBynY9AS4tzuLP49i8FoEt8vZS0BLVv5fLkcGq+YapF
+         3DvweoHmW/5D/KY1szQODAQ2LF/VWgdCn2OHSwwBvhbD3a9umFKH5T28ZIxgMzikkQbz
+         3/d8SXDOWnnd5vvLbeJJahMYfwVJgkGcMIhfK3Sa8yL4eRIuf32Bg/XdSNVGLMTfwEuQ
+         X38LNsL96Ta9hiecX0zkPbmi8imEO+wl7IsmN2vg2R+Yn0Qfw/eXw4GlQVny7nKMukqz
+         gXBg==
+X-Gm-Message-State: AOAM532UQHefke3ybJHLnje6NNicySpS4enEvQwQ6RmlM4JeA1QqPdxL
+        TwqB9tg/WPZJzhUJyh2ayCU9tw==
+X-Google-Smtp-Source: ABdhPJzMqsctX1naiJ7QdADWrvnbSgaWNfF861ADFSzgLjkBcEQ0An+n3G1dZLDGYZsYZmDRJlHqEw==
+X-Received: by 2002:a17:902:8f8e:: with SMTP id z14mr24281634plo.28.1643906485287;
+        Thu, 03 Feb 2022 08:41:25 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d20sm3234791pfu.9.2022.02.03.08.41.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 08:40:08 -0800 (PST)
-Date:   Thu, 3 Feb 2022 18:40:07 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of
- standalone ports
-Message-ID: <20220203164007.ynzmkchlrlw3yrii@skbuf>
-References: <20220131154655.1614770-1-tobias@waldekranz.com>
- <20220131154655.1614770-2-tobias@waldekranz.com>
- <20220201170634.wnxy3s7f6jnmt737@skbuf>
- <87a6fabbtb.fsf@waldekranz.com>
- <20220201201141.u3qhhq75bo3xmpiq@skbuf>
- <8735l2b7ui.fsf@waldekranz.com>
- <20220203135606.z37vulus7rjimx5y@skbuf>
- <20220203170104.1cca571d@thinkpad>
+        Thu, 03 Feb 2022 08:41:24 -0800 (PST)
+Date:   Thu, 3 Feb 2022 08:41:24 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy@kernel.org>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
+Message-ID: <202202030840.74FCB6868@keescook>
+References: <20220130183653.491292-1-keescook@chromium.org>
+ <20220202160149.GA2322037@roeck-us.net>
+ <202202021237.487D3DE73@keescook>
+ <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net>
+ <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220203170104.1cca571d@thinkpad>
+In-Reply-To: <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 05:01:04PM +0100, Marek Behún wrote:
-> On Thu, 3 Feb 2022 15:56:06 +0200
-> Vladimir Oltean <olteanv@gmail.com> wrote:
+On Thu, Feb 03, 2022 at 09:04:22AM +0100, Geert Uytterhoeven wrote:
+> Hi Günter,
 > 
-> > On Tue, Feb 01, 2022 at 10:22:13PM +0100, Tobias Waldekranz wrote:
-> > > No worries. I have recently started using get_maintainers.pl to auto
-> > > generate the recipient list, with the result that the cover is only sent
-> > > to the list. Ideally I would like send-email to use the union of all
-> > > recipients for the cover letter, but I haven't figured that one out yet.  
-> > 
-> > Maybe auto-generating isn't the best solution? Wait until you need to
-> > post a link to https://patchwork.kernel.org/project/netdevbpf/, and
-> > get_maintainers.pl will draw in all the BPF maintainers for you...
-> > The union appears when you run get_maintainer.pl on multiple patch
-> > files. I typically run get_maintainer.pl on *.patch, and adjust the
-> > git-send-email list from there.
-> > 
-> > > I actually gave up on getting my mailinglists from my email provider,
-> > > now I just download it directly from lore. I hacked together a script
-> > > that will scrape a public-inbox repo and convert it to a Maildir:
-> > > 
-> > > https://github.com/wkz/notmuch-lore
-> > > 
-> > > As you can tell from the name, it is tailored for plugging into notmuch,
-> > > but the guts are pretty generic.  
-> > 
-> > Thanks, I set that up, it's syncing right now, I'm also going to compare
-> > the size of the git tree vs the maildir I currently have.
+> On Thu, Feb 3, 2022 at 12:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 2/2/22 12:52, Kees Cook wrote:
+> > > On Wed, Feb 02, 2022 at 08:01:49AM -0800, Guenter Roeck wrote:
+> > >> On Sun, Jan 30, 2022 at 10:36:53AM -0800, Kees Cook wrote:
+> > >>> Add a simple test for strlen() functionality, including using it as a
+> > >>> constant expression.
+> > >>>
+> > >>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > >>> Cc: Peter Rosin <peda@axentia.se>
+> > >>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> > >>> ---
+> > >>> I'll be taking this as part of my Clang FORTIFY_SOURCE series.
+> > >>> ---
+> > >>>   lib/test_string.c | 37 +++++++++++++++++++++++++++++++++++++
+> > >>>   1 file changed, 37 insertions(+)
+> > >>>
+> > >>> diff --git a/lib/test_string.c b/lib/test_string.c
+> > >>> index 9dfd6f52de92..59994f552c48 100644
+> > >>> --- a/lib/test_string.c
+> > >>> +++ b/lib/test_string.c
+> > >>> @@ -179,6 +179,38 @@ static __init int strnchr_selftest(void)
+> > >>>     return 0;
+> > >>>   }
+> > >>>
+> > >>> +/*
+> > >>> + * Unlike many other string functions, strlen() can be used in
+> > >>> + * static initializers when string lengths are known at compile
+> > >>> + * time. (i.e. Under these conditions, strlen() is a constant
+> > >>> + * expression.) Make sure it can be used this way.
+> > >>> + */
+> > >>> +static const int strlen_ce = strlen("tada, a constant expression");
+> > >>> +
+> > >>
+> > >> This results in:
+> > >>
+> > >> lib/test_string.c:188:30: error: initializer element is not constant
+> > >>    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> > >>
+> > >> for several of my tests. I don't think you can mandate that a compiler
+> > >> implements this.
+> > >
+> > > Which tests?
+> > >
+> >
+> > Some examples:
+> >
+> > Build reference: next-20220202
+> > Compiler version: m68k-linux-gcc (GCC) 11.2.0
+> >
+> > Building m68k:defconfig ... failed
+> > --------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > Building mips:malta_defconfig:nocd:smp:net,e1000:initrd ... failed
+> > ------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >   static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > Building i386:q35:Broadwell:defconfig:smp:ata:net,rtl8139:hd ... failed
+> > ------------
+> > Error log:
+> > lib/test_string.c:188:30: error: initializer element is not constant
+> >    188 | static const int strlen_ce = strlen("tada, a constant expression");
+> >
+> > i386 and is defconfig + CONFIG_STRING_SELFTEST=y; mips is
+> > malta_defconfig + CONFIG_STRING_SELFTEST=y. All use gcc 11.2.
+> >
+> > There may be more, but there are so many failures in -next right now
+> > that I may be missing some.
+> >
+> > > This property of strlen() is already required by our builds (this is how
+> > > I tripped over it). For example:
+> > >
+> > > drivers/firmware/xilinx/zynqmp-debug.c:
+> > >
+> > > #define PM_API(id)               {id, #id, strlen(#id)}
+> > > static struct pm_api_info pm_api_list[] = {
+> > >          PM_API(PM_GET_API_VERSION),
+> > >          PM_API(PM_QUERY_DATA),
+> > > };
+> >
+> > I do not think that it is a C standard that strlen() on a constant string
+> > must be compile-time evaluated and result in a constant.
 > 
-> Hi Vladimir, please let me know the results.
-> Marek
+> Not if -ffreestanding, which is what several architectures are
+> using nowadays, to a.o. prevent gcc from replacing calls to stdlib
+> functions to other stdlib functions (e.g. strncat() -> strlen() +
+> store, strncmp() -> strcmp()), which breaks linking if the latter is
+> only provided inline.
+> 
+> > Anyway, key difference, I think, is the presence of an architecture-specific
+> > version of strlen(), or the maybe non-presence of __HAVE_ARCH_STRLEN,
+> > or the definition of strlen() in include/linux/fortify-string.h.
+> 
+> It works after dropping -ffreestanding.
 
-Sure, it's still syncing, at 19GB currently. Please remind me next week
-if I forget to check on it.
+Ah-ha, thanks for the clue here. I'll see if there is some way to
+detect this (or, I guess, drop the patch). I don't like that this
+requirement depends on the architecture, so I'd rather it behave the
+same everywhere. Hmm
+
+-- 
+Kees Cook

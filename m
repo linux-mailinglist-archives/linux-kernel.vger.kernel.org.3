@@ -2,147 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F6B4A8620
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD304A8622
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351137AbiBCOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:23:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53754 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235184AbiBCOXC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:23:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643898181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KaIydMUtYXzd2SdOD8PDJArEvRtbHzDDweqUKY1MfnQ=;
-        b=YTFXv0qwWtgFLiQ53Fo+D0LbUF7nNlPVLA6xA1FCZZEp3zWlskosiC02Od55AaV1uBZpOD
-        lcTy6OXRng3bqxmo6LJCdyDuTPIGUu5uDx1Cofrq1HcyqpZbcPuCwZG8RmTv5BNAnS85yv
-        yeHA4hEi+pZPah3dR+c3jYUKllr1K74=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-412-DUGw1u8XPvWtKckVhsXHNA-1; Thu, 03 Feb 2022 09:23:00 -0500
-X-MC-Unique: DUGw1u8XPvWtKckVhsXHNA-1
-Received: by mail-pl1-f198.google.com with SMTP id f9-20020a170902684900b0014cd6059ecdso1285201pln.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 06:23:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KaIydMUtYXzd2SdOD8PDJArEvRtbHzDDweqUKY1MfnQ=;
-        b=wTPUNHHww+St4HHMmKO6vfxYsD2r6ncVE+U/bKaBRp8Yj4RdCcs8H9g31Vwt9BuGNd
-         4q9nLqqxpFTnuQjeY9fM6nUN0V4eXrFhxNgdNNllyZyhz6tBOCIvqRrTYwWBYW+iPoju
-         QTH+hnAheIP+u7TW36ebAtq1Rs0In2yXFScu/H32HiB+j3mYWdMT8VMDuH7aDZeo3uGn
-         2KD5OvbWvqIW7mP4H5S5r+hwM3cNWiJXYNTSDBanwxuOpFtYCUycRicdBLc+o2QVsKJu
-         QJsx6SzQLH56Bufklmuiz7yEm0IDdJS3PZWbswS55vBKo/29amHfsOig0ZvVSoOSbVdY
-         zlXA==
-X-Gm-Message-State: AOAM5305Pr8ppPj2vNHxnG8raQMS8A/+Hf8yJJ0wCspfP5Z57pIh4ysa
-        y5oEdFoIZLumi6r8B/fVqPVHKdcDT4OhJBHGAcWQT667cMuNnmV3tlSsWVadeQ7GjfiWxWzuPPf
-        0oXykXmNi/qJxCoXU828EkinSTL2GrMahx6VtWgGs
-X-Received: by 2002:a05:6a00:1345:: with SMTP id k5mr34765648pfu.29.1643898179528;
-        Thu, 03 Feb 2022 06:22:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyZXxOdPymMvq1/lvAi1LJJClXBajE6Ea91PyTd6v6mwww44IhsHlYvPtJvqmSVUJmQnIxRjS4A+EFXsMLOvTc=
-X-Received: by 2002:a05:6a00:1345:: with SMTP id k5mr34765625pfu.29.1643898179225;
- Thu, 03 Feb 2022 06:22:59 -0800 (PST)
+        id S1351111AbiBCOXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:23:12 -0500
+Received: from foss.arm.com ([217.140.110.172]:49354 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351158AbiBCOXF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:23:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9A5A1FB;
+        Thu,  3 Feb 2022 06:23:04 -0800 (PST)
+Received: from [10.57.68.47] (unknown [10.57.68.47])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 915293F774;
+        Thu,  3 Feb 2022 06:23:03 -0800 (PST)
+Message-ID: <f44d2e01-b6cb-5f22-f651-f4dd7ced166f@arm.com>
+Date:   Thu, 3 Feb 2022 14:22:59 +0000
 MIME-Version: 1.0
-References: <20220118072628.1617172-1-dmitry.torokhov@gmail.com>
- <nycvar.YFH.7.76.2202021456020.11721@cbobk.fhfr.pm> <CAO-hwJJ08vfMTEhU03VEef8Ejx=Ts+akUwGMKTUGqMWwOK3QoA@mail.gmail.com>
-In-Reply-To: <CAO-hwJJ08vfMTEhU03VEef8Ejx=Ts+akUwGMKTUGqMWwOK3QoA@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 3 Feb 2022 15:22:47 +0100
-Message-ID: <CAO-hwJK8O+yYMxCdx6DFd9cpF6McW4KC+uERQ6EsTY14JVr5-g@mail.gmail.com>
-Subject: Re: [PATCH 00/12] i2c-hid: fixes for unnumbered reports and other improvements
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Angela Czubak <acz@semihalf.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2 1/3] firmware: Add boot information to sysfs
+Content-Language: en-GB
+To:     Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org
+References: <20220203115344.267159-1-joel@jms.id.au>
+ <20220203115344.267159-2-joel@jms.id.au>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220203115344.267159-2-joel@jms.id.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 6:59 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Wed, Feb 2, 2022 at 2:56 PM Jiri Kosina <jikos@kernel.org> wrote:
-> >
-> > On Mon, 17 Jan 2022, Dmitry Torokhov wrote:
-> >
-> > > Hi,
-> > >
-> > > This series came about after I reviewed Angela's patch that fixed issues
-> > > with incorrect handling of high-numbered reports (15 and above) in
-> > > i2c-hid driver:
-> > >
-> > > - it appears to me that the driver did not handle unnumbered reports
-> > >   correctly as the kernel internally expects unnumbered reports to be
-> > >   still prepended with report number 0, but i2c_hid_get_raw_report() and
-> > >   i2c_hid_output_raw_report() only expected report ID to be present for
-> > >   numbered reports.
-> > >
-> > > - the driver tried to consolidate both command handling and sending
-> > >   output reports in __i2c_hid_command() but the rules for different
-> > >   commands vary significantly and because of that the logic was hard to
-> > >   follow and it bled out from __i2c_hid_command() to callers. I decided
-> > >   to introduce a few simple helpers and have the data encoding for
-> > >   individual commands done at the call site. I believe this made it
-> > >   easier to validate the rules and the logic and allowed to remove
-> > >   special handling for the HID descriptor retrieval, among other things.
-> > >
-> > > - the driver does too many copying of data; encoding the data for
-> > >   commands at the call site allowed to only copy data once into the
-> > >   transfer buffers.
-> > >
-> > > I tested this on a couple of Chromebooks with i2c-hid touchscreens, but
-> > > it would be great if other folks tried it out as well.
-> >
-> > Benjamin,
-> >
-> > is this something you could feed into your testing machinery as well? (not
-> > sure whether it's handling i2c-hid specifics).
->
-> Not really. I mean I have a sample touchpad connected on an USB to I2C
-> bridge that I included in the automated tests (though it may be
-> failing in the latest release because I need to update the patch that
-> enables it), but it would probably not catch all the corner cases.
->
-> I can add this series to my local tree and test on my XPS with both
-> and Elan touchpad and a Wacom touchscreen/panel. It will still add a
-> few more tests :)
+On 2022-02-03 11:53, Joel Stanley wrote:
+> Machines often have firmware that perform some action before Linux is
+> loaded. It's useful to know how this firmware is configured, so create a
+> sysfs directory and some properties that a system can choose to expose
+> to describe how the system was started.
+> 
+> Currently the intended use describes five files, relating to hardware
+> root of trust configuration.
+> 
+> These properties are populated by platform code at startup. Using fixed
+> values is suitable as the state that the system booted in will not
+> change after firmware has handed over.
+> 
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> ---
+> v2:
+>   - Rewrite so properties are present in common code and are exposed based
+>     on the is_visible callback.
+>   - Use sysfs_emit
+> ---
+>   .../ABI/testing/sysfs-firmware-bootinfo       | 43 +++++++++
+>   drivers/base/firmware.c                       | 90 +++++++++++++++++++
+>   include/linux/firmware_bootinfo.h             | 22 +++++
+>   3 files changed, 155 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-firmware-bootinfo
+>   create mode 100644 include/linux/firmware_bootinfo.h
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-firmware-bootinfo b/Documentation/ABI/testing/sysfs-firmware-bootinfo
+> new file mode 100644
+> index 000000000000..cd6c42316345
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-firmware-bootinfo
+> @@ -0,0 +1,43 @@
+> +What:		/sys/firmware/bootinfo/*
+> +Date:		Jan 2022
+> +Description:
+> +		A system can expose information about how it was started in
+> +		this directory.
+> +
+> +		This information is agnostic as to the firmware implementation.
+> +
+> +		A system may expose a subset of these properties as applicable.
+> +
+> +
+> +What:		/sys/firmware/bootinfo/secure_boot
+> +Date:		Jan 2022
+> +Description:
+> +		Indicates the system was started with secure boot enabled in
+> +		the firmware.
+> +
+> +
+> +What:		/sys/firmware/bootinfo/abr_image
+> +Date:		Jan 2022
+> +Description:
+> +		Indicates the system was started from the alternate image
+> +		loaded from an Alternate Boot Region. Often this is a result of
+> +		the primary firmware image failing to start the system.
+> +
+> +
+> +What:		/sys/firmware/bootinfo/low_security_key
+> +Date:		Jan 2022
+> +Description:
+> +		Indicates the system's secure boot was verified with a low
+> +		security or development key.
+> +
+> +What:		/sys/firmware/bootinfo/otp_protected
+> +Date:		Jan 2022
+> +Description:
+> +		Indicates the system's boot configuration region is write
+> +		protected and cannot be modified.
+> +
+> +What:		/sys/firmware/bootinfo/uart_boot
+> +Date:		Jan 2022
+> +Description:
+> +		Indicates the system firmware was loaded from a UART instead of
+> +		an internal boot device.
 
-OK, So I applied the series on my development laptop.
-I had to apply it on top of v5.16 and then rebase on top of
-hid.git/for-next because there is a minor conflict.
-
-I changed the register as mentioned in 5/12, and gave it a try.
-Both the Elan touchpad and the Wacom panel on my XPS-13 are behaving
-properly, suspend/resume works also as expected.
-
-Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
-I gave a quick look at the individual patches, they all seem sane to
-me, but haven't dug into enough detail to be able to formally give my
-reviewed-by.
-Note that I have a small comment on patch 2, but if you want to apply
-it nevertheless Jiri (with the change in 5/12) it should be fine.
+I'd be concerned about how well details like "uart_boot" and "abr_image" 
+scale beyond one SoC family from one vendor. The combinatorial explosion 
+of possible boot configurations across Linux-capable SoCs and firmware 
+in general is larger than I'd care to imagine, even before considering 
+that the nuances don't necessarily stop there - e.g. whether a given 
+storage interface is hard-wired or user-accessible is not a fixed 
+property on many SoCs, and even a socketed SD card might be "trusted" if 
+a board is deployed in a product with a sealed enclosure.
 
 Cheers,
-Benjamin
+Robin.
 
-> I'll try to report that tomorrow now that I think I fixed my tablet series.
->
-> Cheers,
-> Benjamin
->
-> >
-> > Thanks!
-> >
-> > --
-> > Jiri Kosina
-> > SUSE Labs
-> >
-
+> diff --git a/drivers/base/firmware.c b/drivers/base/firmware.c
+> index 8dff940e0db9..24b931232eb2 100644
+> --- a/drivers/base/firmware.c
+> +++ b/drivers/base/firmware.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/module.h>
+>   #include <linux/init.h>
+>   #include <linux/device.h>
+> +#include <linux/firmware_bootinfo.h>
+>   
+>   #include "base.h"
+>   
+> @@ -24,3 +25,92 @@ int __init firmware_init(void)
+>   		return -ENOMEM;
+>   	return 0;
+>   }
+> +
+> +/*
+> + * Exposes attributes documented in Documentation/ABI/testing/sysfs-firmware-bootinfo
+> + */
+> +static struct bootinfo bootinfo;
+> +
+> +static ssize_t abr_image_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", bootinfo.abr_image.val);
+> +}
+> +static DEVICE_ATTR_RO(abr_image);
+> +
+> +static ssize_t low_security_key_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", bootinfo.low_security_key.val);
+> +}
+> +static DEVICE_ATTR_RO(low_security_key);
+> +
+> +static ssize_t otp_protected_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", bootinfo.otp_protected.val);
+> +}
+> +static DEVICE_ATTR_RO(otp_protected);
+> +
+> +static ssize_t secure_boot_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", bootinfo.secure_boot.val);
+> +}
+> +static DEVICE_ATTR_RO(secure_boot);
+> +
+> +static ssize_t uart_boot_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", bootinfo.uart_boot.val);
+> +}
+> +static DEVICE_ATTR_RO(uart_boot);
+> +
+> +#define ATTR_ENABLED(a) ((attr == &dev_attr_##a.attr) && bootinfo.a.en)
+> +
+> +static umode_t bootinfo_attr_mode(struct kobject *kobj, struct attribute *attr, int index)
+> +{
+> +	if (ATTR_ENABLED(abr_image))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(otp_protected))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(low_security_key))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(otp_protected))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(low_security_key))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(secure_boot))
+> +		return 0444;
+> +
+> +	if (ATTR_ENABLED(uart_boot))
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct attribute *bootinfo_attrs[] = {
+> +	&dev_attr_abr_image.attr,
+> +	&dev_attr_low_security_key.attr,
+> +	&dev_attr_otp_protected.attr,
+> +	&dev_attr_secure_boot.attr,
+> +	&dev_attr_uart_boot.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group bootinfo_attr_group = {
+> +	.attrs = bootinfo_attrs,
+> +	.is_visible = bootinfo_attr_mode,
+> +};
+> +
+> +int __init firmware_bootinfo_init(struct bootinfo *bootinfo_init)
+> +{
+> +	struct kobject *kobj = kobject_create_and_add("bootinfo", firmware_kobj);
+> +	if (!kobj)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&bootinfo, bootinfo_init, sizeof(bootinfo));
+> +
+> +	return sysfs_create_group(kobj, &bootinfo_attr_group);
+> +}
+> +EXPORT_SYMBOL_GPL(firmware_bootinfo_init);
+> diff --git a/include/linux/firmware_bootinfo.h b/include/linux/firmware_bootinfo.h
+> new file mode 100644
+> index 000000000000..3fe630b061b9
+> --- /dev/null
+> +++ b/include/linux/firmware_bootinfo.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/* Copyright 2022 IBM Corp. */
+> +
+> +#include <linux/sysfs.h>
+> +#include <linux/init.h>
+> +
+> +#define BOOTINFO_SET(b, n, v) b.n.en = true; b.n.val = v
+> +
+> +struct bootinfo_entry {
+> +	bool en;
+> +	bool val;
+> +};
+> +
+> +struct bootinfo {
+> +	struct bootinfo_entry abr_image;
+> +	struct bootinfo_entry low_security_key;
+> +	struct bootinfo_entry otp_protected;
+> +	struct bootinfo_entry secure_boot;
+> +	struct bootinfo_entry uart_boot;
+> +};
+> +
+> +int __init firmware_bootinfo_init(struct bootinfo *bootinfo_init);

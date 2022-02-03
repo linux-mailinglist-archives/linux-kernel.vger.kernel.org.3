@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135D24A8D25
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08F74A8D2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354019AbiBCUYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S1354022AbiBCUZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238135AbiBCUYT (ORCPT
+        with ESMTP id S238135AbiBCUZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:24:19 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB26C061714;
-        Thu,  3 Feb 2022 12:24:18 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id x23so8534159lfc.0;
-        Thu, 03 Feb 2022 12:24:18 -0800 (PST)
+        Thu, 3 Feb 2022 15:25:44 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4039CC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 12:25:44 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id g20so3204658pgn.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 12:25:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Rx0Z3OZF6cdCvnNOFKcvDv4fh1yVj/gL1s1KEoNipV0=;
-        b=q1e/O08IwI8RzNptGiEsgHPC0MgRunmHl07k0HQXYytegHHRqVauUTkdafucC36X+f
-         Gv0dT65WI0X6RF3+NCaSNjlDzu0lJEFyDoekDJbE/m/Ch/sgOhFG2W90CGQ9erhWG7VC
-         jSXgf6KbxYxCxidao1jmYY3kmPYkS8MMk8j2Z+h1Xkq0lYAKzLup5soP85aP1t9WvUOw
-         zp6ae8qYfISWE4/VvOUBZU35ksDftO6ij2d0DMJoVK/x62v/YanFkJFlW0XA4ryfdlLc
-         lQlIrxLbMmf2gzGcTnPWwV/zkqbQnhmcHrBJQMhWpCwiUmreS9hP39FcAGzUQx2Kmp10
-         L2YA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w+LLHTNkjCg8G8mpinMROaqEcNPU0yQi3XK+MfA4g/k=;
+        b=I+xZHAsR/mNWONu8dpx9fGkVLIfWe3cXRpfSSxEUM7vLO2X41zknnLrpYnEz4p5hZ+
+         gPLcMYVaye+rM09VuDz+D1YKggIgy6P7mRmp17K7r+adtDephAGK/KWBpiPqIed0blHP
+         Yo0oHmE/BEkSn35OFUCTr5TOv/uk/HvAVLbmU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Rx0Z3OZF6cdCvnNOFKcvDv4fh1yVj/gL1s1KEoNipV0=;
-        b=SehqcCqtiQh+bDfCDCERfS+tXtVG810FnQf3Q2r4pQW9BQWS3e8PRY1wp4XLS4mxZK
-         fd4SQn5On1xd/LFzjS0Re2nfoXs3npnKaGhmG1Q50cr+xDeGd3x8h5DOQqzgN5qhhbbP
-         /R1qJrLc6Vzj8SqwBxDDbSt7U2QR69XJqulVSN+tvw82g/r5ykS7IdQLMKIfOrINEzqb
-         kal5q8DXc74H242mCOxydU5klthoAdPe24xXZVokVajWWeSsNBHO7lrleoI1ETu9KBn8
-         xP43uQkinKUmyf5hj6LxBrLrC+8x/5acU2PSWKIqQ+Dud7mY9aGS3rux3s0zw2W7g7fS
-         AM8Q==
-X-Gm-Message-State: AOAM531qA+9P6n2rj6xzS2uwnezPwZBEMSihSrlNhlk2lv3mGnGGgXyj
-        soTXOLdxpDj7+I49ZUoYCbE5/O0G/45G9Q==
-X-Google-Smtp-Source: ABdhPJxFpVox1E9TWI44exKhGjHJS2MwhEQ2QcOo/FjH7tH8Y+OKw9kx9t+lSINF1E0/bWMt23niDA==
-X-Received: by 2002:a05:6512:3f8f:: with SMTP id x15mr14461735lfa.363.1643919856967;
-        Thu, 03 Feb 2022 12:24:16 -0800 (PST)
-Received: from netbook-debian ([94.179.41.53])
-        by smtp.gmail.com with ESMTPSA id o17sm3774802lfl.16.2022.02.03.12.24.15
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w+LLHTNkjCg8G8mpinMROaqEcNPU0yQi3XK+MfA4g/k=;
+        b=QyhSwtDrhL0eu0jjdJNxupA9Yw/+eoYUTY4cwj35oO0C5p3v6jil5oogyFkTxXdUBR
+         rPSVbxmaX3OT6PvlJU0JgfoXLtp0PZo2GeadaSq2FHJWZsFIKQVNw72BF353eSpwKRIk
+         EdxNDweTMZLmYIJPnxtHF2FsY0wrxVF+6b8FGBIGtD0/Lbhs72zx2wBzsNjmnSRAAMOn
+         0OUAbJZrak4dLVrXmryocAU+igdZ47xUArp3BY/PPfwfvrCxjiRwWJBTaLamOCEBLzVS
+         C30AR99X/Pk+EZDz4ReL4Z6Wtt+k+1TmM0kVrKQUd844OY06Ud/UmwO7Pg6y8y05SMgy
+         xbiA==
+X-Gm-Message-State: AOAM531kfmWw8X8d7BGEYhHWjgResV5J4xIDdQJlFkX29RBKs48X9YoP
+        uaREbtErIUUH7w96EuDfbzUk/A==
+X-Google-Smtp-Source: ABdhPJxuMUSbjcs7eeh4ZAYGgmCf8XHJfncPDRiBnvq0omOq8R08vFrFhG93FtpinFeN4d+uyewzGg==
+X-Received: by 2002:a63:8641:: with SMTP id x62mr29194205pgd.293.1643919943729;
+        Thu, 03 Feb 2022 12:25:43 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t14sm10426596pjd.6.2022.02.03.12.25.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 12:24:16 -0800 (PST)
-Date:   Thu, 3 Feb 2022 22:24:10 +0200
-From:   Denis Pauk <pauk.denis@gmail.com>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
+        Thu, 03 Feb 2022 12:25:43 -0800 (PST)
+Date:   Thu, 3 Feb 2022 12:25:42 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy@kernel.org>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Nathan Chancellor <nathan@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [ASUS EC Sensors v8 0/3]
-Message-ID: <20220203222310.6a025c5d@netbook-debian>
-In-Reply-To: <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
-References: <20220124015658.687309-1-eugene.shalygin@gmail.com>
-        <7c8f311f-a2e4-584f-eb29-7f0d2a335e8f@roeck-us.net>
-        <CAB95QARyz_sp9MoMsakfAK+PRBnVVnyOQzm2ZwJwwLE5vvAUFg@mail.gmail.com>
-        <8022383.T7Z3S40VBb@natalenko.name>
-        <13a9d0fd-1b2c-b9c1-24a7-ff4fc5f4b8cc@roeck-us.net>
-        <CAB95QATUK+q01TLuubqR9D1fLJM=C6VjxpabnkseQRUvsd-9YA@mail.gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lib/test_string.c: Add test for strlen()
+Message-ID: <202202031221.B83DC87374@keescook>
+References: <20220130183653.491292-1-keescook@chromium.org>
+ <20220202160149.GA2322037@roeck-us.net>
+ <202202021237.487D3DE73@keescook>
+ <5ff18cff-6cfd-1f85-da74-1e5660a1a250@roeck-us.net>
+ <CAMuHMdWssK2=NFc6NO-inQg5dWxZP4Wv41K3J3RqRXThXatovw@mail.gmail.com>
+ <202202030911.4914709E@keescook>
+ <CAMuHMdUBKofPP-6EofE3B7d6k0zv0nPJ7e4pjsznPF==ApJ6qg@mail.gmail.com>
+ <CAKwvOdnJ3w2Jb9tBZ+JnEfviquj2WktemCd833f=_P66a0qVag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnJ3w2Jb9tBZ+JnEfviquj2WktemCd833f=_P66a0qVag@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Feb 2022 21:01:32 +0100
-Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
-
-> > >> Oleksandre, could you, please, let us know did you actually test
-> > >> the v8 code and if so provide us with the Tested-by: tag?  
-> > >
-> > > Yes, I do run this version now, and it works fine for me.
-> > >
-> > > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > >  
+On Thu, Feb 03, 2022 at 11:50:34AM -0800, Nick Desaulniers wrote:
+> On Thu, Feb 3, 2022 at 10:10 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 > >
-> > Ok, based on that I'll apply the series on top of hwmon-next with
-> > your Tested-by:.
-> >  
+> > Hi Kees,
+> >
+> > On Thu, Feb 3, 2022 at 6:15 PM Kees Cook <keescook@chromium.org> wrote:
+> > > On Thu, Feb 03, 2022 at 09:04:22AM +0100, Geert Uytterhoeven wrote:
+> > > > Not if -ffreestanding, which is what several architectures are
+> > > > using nowadays, to a.o. prevent gcc from replacing calls to stdlib
+> > > > functions to other stdlib functions (e.g. strncat() -> strlen() +
+> > > > store, strncmp() -> strcmp()), which breaks linking if the latter is
+> > > > only provided inline.
+> > >
+> > > Hah, for i386:
+> > >
+> > > arch/x86/Makefile
+> > >         # temporary until string.h is fixed
+> > >         KBUILD_CFLAGS += -ffreestanding
+> > >
+> > > This "temporary" is from 2006. ;)\
 > 
-> Great! Thank you both!
+> IIRC I sent a patch removing that. Yeah, Kees even signed off on it.
+> https://lore.kernel.org/lkml/20200817220212.338670-5-ndesaulniers@google.com/#t
+> I still think that's the right way to go, perhaps worth a resend to
+> rekick discussions.
+
+Hah. Yay. I'll go pick this into the memcpy topic branch.  Building x86_64
+and ia32 differently makes no sense (and this solves the head-scratching
+compile-time test failures I was seeing on ia32 too).
+
+> >
+> > And before that, we had it in the main Makefile.
+> >
+> > > 6edfba1b33c7 ("[PATCH] x86_64: Don't define string functions to builtin")
+> > >
+> > > Removing that appears to solve it, and appears to build correctly. I'll
+> > > continue testing.
+> > >
+> > > > It works after dropping -ffreestanding.
+> > >
+> > > I wonder if the other architectures were just copying x86?
+> >
+> > At least on m68k it was added because gcc added new optimizations
+> > that broke if an architecture provides some functions as inline.
+> > As the kernel is not supposed to be linked with the standard C
+> > library, -ffreestanding should be correct, isn't it?
 > 
-> Eugene
+> The kernel does not link against a libc; but it does provide many
+> symbols that libc would provide, with the same or similar enough
+> semantics that I would strongly recommend we _don't_ use
+> -ffreestanding in order to get such libcall optimizations (there are a
+> lot; see https://github.com/llvm/llvm-project/blob/main/llvm/lib/Transforms/Utils/SimplifyLibCalls.cpp
+> for some examples) and simply use -fno-builtin-* when necessary, or
+> fix the kernel implementations individually.
 
-I have also retested code, it works for my case.
+Right, so, I think for x86 it's straight forward. For the other
+architectures it may need more careful checking, so I'm just going
+to drop the new test from the memcpy topic branch, and maybe start a
+"-ffreestanding removal" topic branch so there isn't a cross-dependency
+here.
 
-Tested-by: Denis Pauk <pauk.denis@gmail.com>
-
-What about other B550/X570 boards?
-
-We have such candidates with same WMI methods in nct6775:
-	"ROG STRIX B550-A GAMING",
-	"ROG STRIX B550-E GAMING",
-	"ROG STRIX B550-F GAMING",
-	"ROG STRIX B550-F GAMING (WI-FI)",
-	"ROG STRIX B550-I GAMING",
-
-B550-A does not support asus-wmi-ec-interface("ERROR: Can't get value
-of subfeature fan1_input: I/O error"), but what about others? 
-
-Best regards,
-             Denis.
+-- 
+Kees Cook

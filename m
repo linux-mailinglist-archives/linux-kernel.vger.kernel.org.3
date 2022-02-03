@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819654A7FF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D824A7FFC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349425AbiBCHmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 02:42:14 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:42900
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241953AbiBCHmK (ORCPT
+        id S1349454AbiBCHm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 02:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241953AbiBCHm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 02:42:10 -0500
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EB1074019A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 07:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643874129;
-        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=prjLCJpZBMzeFlAnt1Q3ZRFf7aCbx5PsJ08g/iKbO3OC6wcUqpUqU3dPnXe2UhPVW
-         3VtDaPDja5UFB+Jinv/PElCW4zpu/XWGzvwN63MEDUaw+3OQ+5SnGlEYZjLmXoodEk
-         JOQw+tal7CoJGyMpCxfzDVAqU5No4yeVo8CwwK5Vf16pIEufwOq2WdtWz7TgEL3Mig
-         RSSTSTGJSh8N4Q48bVwTqkEaipOIorwAd85P4gi5k37qeDoCTKugvexnQ0iYqNPbrJ
-         TFgyew37GBJQ/1zYay1WMaaQsvcQh7VyMQw6O9hTk5Z9o7k+jesJHCCxoOYc8KUxpE
-         etD8CKYXdfCwg==
-Received: by mail-ed1-f69.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so1010305edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 23:42:09 -0800 (PST)
+        Thu, 3 Feb 2022 02:42:27 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D9C061714
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 23:42:27 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ah7so5774626ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 23:42:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=H4d18/x9DW9fFkUQRLTf5FZtNJ9nzL2Xd+Q8reG6YOUarU21i2Nz8pUW+Cg2rMpTgV
+         sRgTjnEvWWIoZr9rlQj8sQBoewv6oP5/pB+EU47UBdbXBmGzW217ANcq7nNC78kiXnCc
+         kg+a4yr0MtPoCQQTnZ7F80osUOxsb4mfmZh+AUTInDwMf4dZWt1MC6Aqv/6USNYGnIlx
+         LDC94KFoVm46F1bGteP7tQAnbFbKVmuxcGbpzTYAzqoOch0CIwnS7VTKvPFO6/G6l5zz
+         1YUrC7507S6aR0SMHRTbK603Fk4T/UU7idHRsFdZ9CLLDnx3qSaUP0rdFbwRyoecXCHw
+         9b2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=69oC9K6bP5zXfYZ3RPqGsmz6Po3E4WX3hDMRIgEHu/M=;
-        b=fvADogSAXsQJrkeTyNTb8WnqZhuqvEinXenr4IdK4xwGVLALS+k1ldcdJvSqGyIRQT
-         4R0wuJxBDOV0gLcbWt4V8uZBduJlWrJp2ePkMy49KNza1GmQbtR80Sg9VfCLCNeWljhD
-         u2/d5O3IuyEURewDdqyvSp+DvkyzDOwqbeLNUw5QMouQ1xqz89fTSYgLjtLgavPZC6BF
-         r8+mDsaJfT0GNAJ/ox7qQet9butHNPruxXQZQTJ8LmfMMf7VRfhwZR3lTku+bDCpgKiv
-         drOu5I34+b0PNJmM8cTA1huLCxBM1j/uQlXRXviKsMqhptUQbJKn86CbeIB1q/XPgN94
-         Z92w==
-X-Gm-Message-State: AOAM53343/ZH5FEaH4C4SBOp9o+eMTx4p2XS6QaGtXaPOmCzGgHz9RNO
-        ZfztiOQeDU9bv4i+M93HyraUW6Q0bLhG18h7NOY2JrmNhcrwlDhHIzLRyIlzwX1tlXMlfsCSau2
-        1DubWuX9xaD5fDHP+K6+0wRvBL3PM/EYU7yr0+JrEIQ==
-X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156931wrx.70.1643874119534;
-        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwInkGYx0bCKYBNdkDDYX+ptQNyAD6vMUiS8CqzI/xYfseOfTNCURA5lpsX4JtSbcPIAvyzjw==
-X-Received: by 2002:a05:6000:10cf:: with SMTP id b15mr28156886wrx.70.1643874119363;
-        Wed, 02 Feb 2022 23:41:59 -0800 (PST)
-Received: from [192.168.0.80] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id t18sm19832712wri.34.2022.02.02.23.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Feb 2022 23:41:58 -0800 (PST)
-Message-ID: <1d549a00-b9f5-d60f-2d5b-798e92139f86@canonical.com>
-Date:   Thu, 3 Feb 2022 08:41:56 +0100
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=zOHJbgxEeKcTUS1M3dbg/CCHL8zxNc7o7Y1pwSiNVNQ=;
+        b=WYwwwiuTRKsfrvAaQ/xPe0m07kO/kpGlvG+OQ1n+K3ZTesE0nBPm3XhOIN6TP0VWd8
+         q0yb5nEv1EYzNKNvM8gNqub4CqlXz5deYCcMCD9oFsm9E3q3RkTXC4u6HEodCscdHSbH
+         k0qj6PTGZvD/PQgMBfWu7+WqQVUAZi7RnL7yIHk4HSg8CFN6TIpAE337A6RlRbZqQK3O
+         7Q2YVMxVjMIOsC/qjFm5JxNpxJY+8HQ3fp6XrAfznzlKfloOkgOXwEFGp84ualRQfM6j
+         EZq3oEWa5oYeGSaPlWEvQh/WT3a9rXvWWS4msNqjmNw14P8TF5bmE5ofk/3nXieegkMt
+         HbLg==
+X-Gm-Message-State: AOAM533M/XgN3ilmKo5WCYv3VqW1dh++POkqTDzqr2Y2L7GS+Fk+FA5e
+        DD42vqGr11VseappNijBD6J85DNpNIjoy1ASU+s=
+X-Google-Smtp-Source: ABdhPJxykVbkqhjU2mkMuxfnwe/zzX2QeS3eRKq49FufuYoM/6t1y/8LnTdBuJtjv1E3eBUjkT8rEqhdjeZ6xfYQLlQ=
+X-Received: by 2002:a17:907:3f0d:: with SMTP id hq13mr28478820ejc.358.1643874145680;
+ Wed, 02 Feb 2022 23:42:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Sender: patriciajohnvan@gmail.com
+Received: by 2002:a17:907:2cc3:0:0:0:0 with HTTP; Wed, 2 Feb 2022 23:42:25
+ -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Thu, 3 Feb 2022 07:42:25 +0000
+X-Google-Sender-Auth: pOwLjFOsbBlWbHp3ZC_djVA26dE
+Message-ID: <CAHqodhT93dspd7QwiLqD8xXP9utotKDFk6DxE__v6VYFRep6dg@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2022 17:52, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> GXP is the name of the HPE SoC.
-> This SoC is used to implement BMC features of HPE servers
-> (all ProLiant, Synergy, and many Apollo, and Superdome machines)
-> It does support many features including:
-> 	ARMv7 architecture, and it is based on a Cortex A9 core
-> 	Use an AXI bus to which
-> 		a memory controller is attached, as well as
->                  multiple SPI interfaces to connect boot flash,
->                  and ROM flash, a 10/100/1000 Mac engine which
->                  supports SGMII (2 ports) and RMII
-> 		Multiple I2C engines to drive connectivity with a host infrastructure
-> 		A video engine which support VGA and DP, as well as
->                  an hardware video encoder
-> 		Multiple PCIe ports
-> 		A PECI interface, and LPC eSPI
-> 		Multiple UART for debug purpose, and Virtual UART for host connectivity
-> 		A GPIO engine
-> This Patch Includes:
-> 	Documentation for device tree bindings
-> 	Device Tree Bindings
-> 	GXP Timer Support
-> 	GXP Architecture Support
-> 
+Hello my dear,
 
-1. Please version your patchses and document the changes under ---.
+ I sent this mail praying it will get to you in a good condition of
+health, since I myself are in a very critical health condition in
+which I sleep every night without knowing if I may be alive to see the
+next day. I bring peace and love to you. It is by the grace of God, I
+had no choice than to do what is lawful and right in the sight of God
+for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
+y
+and glory upon my life. I am Mrs. Dina. Howley Mckenna, a widow. I am
+suffering from a long time brain tumor, It has defiled all forms of
+medical treatment, and right now I have about a few months to leave,
+according to medical experts. The situation has gotten complicated
+recently with my inability to hear proper, am communicating with you
+with the help of the chief nurse herein the hospital, from all
+indication my conditions is really deteriorating and it is quite
+obvious that, according to my doctors they have advised me that I may
+not live too long, Because this illness has gotten to a very bad
+stage. I plead that you will not expose or betray this trust and
+confidence that I am about to repose on you for the mutual benefit of
+the orphans and the less privilege. I have some funds I inherited from
+my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
+Having known my condition, I decided to donate this fund to you
+believing that you will utilize it the way i am going to instruct
+herein. I need you to assist me and reclaim this money and use it for
+Charity works therein your country  for orphanages and gives justice
+and help to the poor, needy and widows says The Lord." Jeremiah
+22:15-16.=E2=80=9C and also build schools for less privilege that will be
+named after my late husband if possible and to promote the word of God
+and the effort that the house of God is maintained. I do not want a
+situation where this money will be used in an ungodly manner. That's
+why I'm taking this decision. I'm not afraid of death, so I know where
+I'm going. I accept this decision because I do not have any child who
+will inherit this money after I die.. Please I want your sincerely and
+urgent answer to know if you will be able to execute this project for
+the glory of God, and I will give you more information on how the fund
+will be transferred to your bank account. May the grace, peace, love
+and the truth in the Word of God be with you and all those that you
+love and care for.
 
-2. With your v1 I responded what has to be separate patch. This was
-totally ignored here, so no. You have to follow this.
+I'm waiting for your immediate reply..
 
-3. Please run checkpatch and be sure there are no warnings.
-
-4. Bindings in dtschema, not in text.
-
-Best regards,
-Krzysztof
-
-Best regards,
-Krzysztof
+May God Bless you,
+Mrs. Dina. Howley Mckenna.

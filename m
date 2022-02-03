@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81784A827D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0CA4A8278
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350187AbiBCKgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 05:36:22 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:12391 "EHLO
+        id S1350127AbiBCKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:36:15 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:38630 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350066AbiBCKgK (ORCPT
+        with ESMTP id S1349980AbiBCKgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Feb 2022 05:36:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -17,11 +17,11 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1643884570; x=1675420570;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=ngqJhiJ5tdkhcY5b0/X08HsrS6YJqNRHbW0yKlAp4sU=;
-  b=kuM5ayVEUZGLdLz0+//omhmq9b4mU1GKyfCc3WdkPA1QLl2YWGE7fatc
-   yzSQWYSdsoAf95h4fMU9xO/HpoyIWzbtyHZejWdZKCxK/gTGbWqBcfuje
-   lm9Eo4RQVBO+qfYWOFdy/l2950VlEEAIFF9QQkbgqHZhHDEMmrb/sH6YP
-   8=;
+  bh=ijsmehNMI2+B/KXb/s5HerwlB555lt5C7U7VoLIaUvQ=;
+  b=G8J4PdJLC8PrXWSbQSwid6/B9zH6J9NcKxTLb25oqJJV3ul3iNxla9Nx
+   3jqct0ahtG4p/K2vED2dV3utrB8kXra8/EBCAuoGfqU4hA2LPt00U13/A
+   HlRZbEu9UtKh6aZ5j2Yj5BlavicMSI1dP+pXny11cDR/afgFe+uehzhHq
+   o=;
 Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
   by alexa-out.qualcomm.com with ESMTP; 03 Feb 2022 02:36:09 -0800
 X-QCInternal: smtphost
@@ -30,11 +30,11 @@ Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 02:36:02 -0800
+ 15.2.922.19; Thu, 3 Feb 2022 02:36:07 -0800
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 3 Feb 2022 02:35:58 -0800
+ 15.2.922.19; Thu, 3 Feb 2022 02:36:02 -0800
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
@@ -44,9 +44,9 @@ CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
         <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
         <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
         <quic_schowdhu@quicinc.com>
-Subject: [PATCH V5 5/6] arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
-Date:   Thu, 3 Feb 2022 16:04:34 +0530
-Message-ID: <19f0683c897b4eb73e1c5d6ff3debfffc51050f0.1643880577.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V5 6/6] MAINTAINERS: Add maintainer entry for EUD
+Date:   Thu, 3 Feb 2022 16:04:35 +0530
+Message-ID: <a3f8925e46d88babb22879ab9e7266615ff26d12.1643880577.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1643880577.git.quic_schowdhu@quicinc.com>
 References: <cover.1643880577.git.quic_schowdhu@quicinc.com>
@@ -59,30 +59,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the default dr_mode for usb2 node to "otg" to enable
-role-switch for EUD(Embedded USB Debugger) connector node.
+Add the entry for maintainer for EUD driver
+and other associated files.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280-idp.dts | 4 ++++
- 1 file changed, 4 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-index 9b991ba..f40eaa5 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-@@ -61,6 +61,10 @@
- 	modem-init;
- };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b84e2d5..f86ec0e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7227,6 +7227,14 @@ F:	include/uapi/linux/mdio.h
+ F:	include/uapi/linux/mii.h
+ F:	net/core/of_net.c
  
-+&usb_2_dwc3 {
-+	dr_mode = "otg";
-+};
++QCOM EMBEDDED USB DEBUGGER(EUD)
++M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
++L:	linux-arm-msm@vger.kernel.org
++S:	Maintained
++F:	Documentation/ABI/testing/sysfs-driver-eud
++F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
++F:	drivers/usb/common/qcom_eud.c
 +
- &pmk8350_rtc {
- 	status = "okay";
- };
+ EXEC & BINFMT API
+ R:	Eric Biederman <ebiederm@xmission.com>
+ R:	Kees Cook <keescook@chromium.org>
 -- 
 2.7.4
 

@@ -2,152 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8294A8CB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F17BC4A8CC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiBCTvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S1353878AbiBCTxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiBCTvM (ORCPT
+        with ESMTP id S233153AbiBCTxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:51:12 -0500
+        Thu, 3 Feb 2022 14:53:45 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EBCC061714;
-        Thu,  3 Feb 2022 11:51:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA69C061714;
+        Thu,  3 Feb 2022 11:53:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=ft7cClkc6vBpNUXHJ0m3xjhOU7udO/ZG3yRM4g1vYT4=; b=EERLXhvvt+cUvphZ6I2kMdQwAc
-        gjUUegQLCgS6JEACSczf7sBm1sx0ciVihEcBEg6gWVwkeuOFzmzWE1IIcpdMUUXszGrQuqLXGzihh
-        LeMchQTAwicUQZfUfwK2iMpfkQkiMsn3DWsB1QiR74LXTelFtBWOg1RxqQpd9mrtJf6TSXko8SokG
-        LDqGoCCTv/a3N84VLojdahz+Az++nC/dlh+pCXF7cvWQr73/CSO//N38EjPDx8WMmQQ8IX57cCbyh
-        eJKVSWYNzH5Z7YDCP3hNbckQeEzhtIKKnUKhBOPdzT69CFjUx+fIyWUbbataKpfPiqQS+5XJN4joB
-        +evkUpRQ==;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U4C4OCa1Nvs01R45W3Ay9R6lIjYfrb4U7/RUPw787LQ=; b=3L3r68S46ebKK9cqWNZF8HkI54
+        J8mtXyCYmYNlqaERNHO5V1F29b+IU8JPO4OgbpQDQSUVZXoAw2dAMkUBoa9XyXol+ivw4/4XVfKJn
+        XiBn8mxCoN9vC87Sh2qzN/ikL3VP+ahD3YA+4cSBe3rR57wfXAlYK9CrRARUTS7ciL77+0ZjZKhOO
+        FJzSgm4EXqP6C9vEDj1QifOmMqIEzkclS9YfowjfchaY5zWe+fvWsolVY9NbXQo6wp3Mss2bw3dfb
+        +49iFDJVMH0PZDwbThqWOvc2y8eavytlwbUBp6zUA0htlPJW5DZmbQcSfPRGWBlXVwskwgdX3Hct7
+        ITvV0tIg==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFi8H-002dkz-Se; Thu, 03 Feb 2022 19:51:05 +0000
-Date:   Thu, 3 Feb 2022 11:51:05 -0800
+        id 1nFiAd-002eDE-49; Thu, 03 Feb 2022 19:53:31 +0000
+Date:   Thu, 3 Feb 2022 11:53:31 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, Jessica Yu <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH v3 4/6] modules: Add
- CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-Message-ID: <YfwyKR1xFaApWjRb@bombadil.infradead.org>
-References: <cover.1643475473.git.christophe.leroy@csgroup.eu>
- <b59ed8781ef9af995c5bfa762de1f42fdfc57c74.1643475473.git.christophe.leroy@csgroup.eu>
- <YfsbcXD74BwJ9ci2@bombadil.infradead.org>
- <228849f5-f6a4-eb45-5e1e-a9b3eccb28b3@csgroup.eu>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        tangmeng <tangmeng@uniontech.com>, keescook@chromium.org,
+        yzaikin@google.com, john.stultz@linaro.org, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
+Message-ID: <Yfwyu0N4+f51J9OU@bombadil.infradead.org>
+References: <20220131102214.2284-1-tangmeng@uniontech.com>
+ <87wnicssth.ffs@tglx>
+ <YfstQeOpZuQzBmZJ@bombadil.infradead.org>
+ <87r18ks379.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <228849f5-f6a4-eb45-5e1e-a9b3eccb28b3@csgroup.eu>
+In-Reply-To: <87r18ks379.ffs@tglx>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 07:05:13AM +0000, Christophe Leroy wrote:
+On Thu, Feb 03, 2022 at 10:35:06AM +0100, Thomas Gleixner wrote:
+> On Wed, Feb 02 2022 at 17:17, Luis Chamberlain wrote:
+> > On Thu, Feb 03, 2022 at 01:21:46AM +0100, Thomas Gleixner wrote:
+> > *Today* all filesystem syctls now get reviewed by fs folks. They are
+> > all tidied up there.
+> >
+> > In the future x86 folks can review their sysctls. But for no reason
+> > should I have to review every single knob. That's not scalable.
 > 
+> Fair enough, but can we please have a changelog which explains the
+> rationale to the people who have not been part of that discussion and
+> decision.
+
+Sure thing, tangmeng please update the commit log a bit better.
+
+> >> That aside, I'm tired of this because this is now at V5 and you still
+> >> failed to fix the fallout reported by the 0-day infrastructure vs. this
+> >> part of the patch:
+> >> 
+> >> > +static int __init timer_sysctl_init(void)
+> >> > +{
+> >> > +	register_sysctl_init("kernel", timer_sysctl);
+> >> > +	return 0;
+> >> > +}
+> >> 
+> >>     kernel/time/timer.c: In function 'timer_sysctl_init':
+> >>  >> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
+> >>       284 |         register_sysctl_init("kernel", timer_sysctl);
+> >> 	  |         ^~~~~~~~~~~~~~~~~~~~
+> >> 
+> >
+> > That's an issue with the patch being tested on a tree where that
+> > routine is not present?
 > 
-> Le 03/02/2022 à 01:01, Luis Chamberlain a écrit :
-> > On Sat, Jan 29, 2022 at 05:02:09PM +0000, Christophe Leroy wrote:
-> >> diff --git a/kernel/module.c b/kernel/module.c
-> >> index 11f51e17fb9f..f3758115ebaa 100644
-> >> --- a/kernel/module.c
-> >> +++ b/kernel/module.c
-> >> @@ -81,7 +81,9 @@
-> >>   /* If this is set, the section belongs in the init part of the module */
-> >>   #define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
-> >>   
-> >> +#ifndef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> >>   #define	data_layout core_layout
-> >> +#endif
-> >>   
-> >>   /*
-> >>    * Mutex protects:
-> >> @@ -111,6 +113,12 @@ static struct mod_tree_root {
-> >>   #define module_addr_min mod_tree.addr_min
-> >>   #define module_addr_max mod_tree.addr_max
-> >>   
-> >> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> >> +static struct mod_tree_root mod_data_tree __cacheline_aligned = {
-> >> +	.addr_min = -1UL,
-> >> +};
-> >> +#endif
-> >> +
-> >>   #ifdef CONFIG_MODULES_TREE_LOOKUP
-> >>   
-> >>   /*
-> >> @@ -186,6 +194,11 @@ static void mod_tree_insert(struct module *mod)
-> >>   	__mod_tree_insert(&mod->core_layout.mtn, &mod_tree);
-> >>   	if (mod->init_layout.size)
-> >>   		__mod_tree_insert(&mod->init_layout.mtn, &mod_tree);
-> >> +
-> >> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> >> +	mod->data_layout.mtn.mod = mod;
-> >> +	__mod_tree_insert(&mod->data_layout.mtn, &mod_data_tree);
-> >> +#endif
-> > 
-> > 
-> > kernel/ directory has quite a few files, module.c is the second to
-> > largest file, and it has tons of stuff. Aaron is doing work to
-> > split things out to make code easier to read and so that its easier
-> > to review changes. See:
-> > 
-> > https://lkml.kernel.org/r/20220130213214.1042497-1-atomlin@redhat.com
-> > 
-> > I think this is a good patch example which could benefit from that work.
-> > So I'd much prefer to see that work go in first than this, so to see if
-> > we can make the below changes more compartamentalized.
-> > 
-> > Curious, how much testing has been put into this series?
+> From the report:
 > 
+>   ...
+>   [also build test ERROR on linus/master
 > 
-> I tested the change up to (including) patch 4 to verify it doesn't 
-> introduce regression when not using 
-> CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC,
+> Linus tree has this interface. So that's not the problem.
+> 
+> Hint #1: The interfaxce is not available unconditionally
+> 
+> Hint #2: The 0-day reports provide the config file which exposes the
+>          fail
 
-> Then I tested with patch 5. I first tried with the 'hello world' test 
-> module. After that I loaded several important modules and checked I 
-> didn't get any regression, both with and without STRICT_MODULES_RWX and 
-> I checked the consistency in /proc/vmallocinfo
->   /proc/modules /sys/class/modules/*
-
-I wonder if we have a test for STRICT_MODULES_RWX.
-
-> I also tested with a hacked module_alloc() to force branch trampolines.
-
-So to verify that reducing these trampolines actually helps on an
-architecture? I wonder if we can generalize this somehow to let archs
-verify such strategies can help.
-
-I was hoping for a bit more wider testing, like actually users, etc.
-It does not seem like so. So we can get to that by merging this soon
-into modules-next and having this bleed out issues with linux-next.
-We are in good time to do this now.
-
-The kmod tree has tons of tests:
-
-https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/
-
-Can you use that to verify there are no regressions?
-
-Aaron, Michal, if you can do the same that'd be appreciated.
-
+tangmeng, please fix.
 
   Luis

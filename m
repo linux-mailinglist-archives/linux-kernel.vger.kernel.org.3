@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828204A7CBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE76E4A7CD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348490AbiBCAVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbiBCAVw (ORCPT
+        id S1348529AbiBCAZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:25:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44379 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239246AbiBCAZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:21:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5810BC061714;
-        Wed,  2 Feb 2022 16:21:52 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643847707;
+        Wed, 2 Feb 2022 19:25:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643847943;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tEbNuUaeESsbucNNxWCSNAVotbkzKzn/eOuBs8ycKg0=;
-        b=IMnepHfdalRiGysYHX7LfnKshsG5zdFcG6DYWr7nwEuByFG9qxqYnv7rrSDQFRC54UiNUt
-        mvd1AXERhe64nvhyFI+ahmenkr9hK0A0S8+64Raq7PQDtsjPIROFK0lYgqfFvbW9XkwbzQ
-        BhMSpdcO3/6IcqzlF0u28L2YwIuOYeqxpK6ahSaibD9qPADHldgwKjahrWIVFR2gSuKLiV
-        WT1GHAPXrzjgax1zfOLrqLJxECVk8jjtqTisPcy8vhXZQcCkyvJ150+KipQMIf82n8rtN/
-        CpmCj07Ipp4wybFpiwExkRYBNlKQzP+Dnq1YMagiIQFi75Ml3NqU33WnO8wYnw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643847707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tEbNuUaeESsbucNNxWCSNAVotbkzKzn/eOuBs8ycKg0=;
-        b=ttdkmFz2pO6CB9U65vVYu3aA5mjj/UcMMXrDKsiJED0oOMRdTFbbHgc+Cs8YeGKvx0hHgw
-        z/cTrL+kqOiYo5Aw==
-To:     tangmeng <tangmeng@uniontech.com>, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com, john.stultz@linaro.org,
-        sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v5] kernel/time: move timer sysctls to its own file
-In-Reply-To: <20220131102214.2284-1-tangmeng@uniontech.com>
-References: <20220131102214.2284-1-tangmeng@uniontech.com>
-Date:   Thu, 03 Feb 2022 01:21:46 +0100
-Message-ID: <87wnicssth.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9ZQYqdbCEdIW0rdKYmSkTNvVSn6qBN3RtXQqCV8wMvU=;
+        b=dps7btC5soRI7xF9mQGEQq3w6NzcAOjzuOxQckBLB3iZ4BHO29a2l9raLoseP6iMgnItbe
+        e5DN5QRRUu3Vk7qH+gOvApYRqVPw4DfLg0qRm62IAFhEa17XYpbYRU3f3rl9O6Njn/E2vj
+        heszXzRd+52rpZ2g5xUGhp6myfH5HXU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-519-Vqa5I9KnO1G2j8vtwQWFGg-1; Wed, 02 Feb 2022 19:25:40 -0500
+X-MC-Unique: Vqa5I9KnO1G2j8vtwQWFGg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C85C81054F97;
+        Thu,  3 Feb 2022 00:25:38 +0000 (UTC)
+Received: from cmirabil.remote.csb (unknown [10.22.8.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7C4454EC7F;
+        Thu,  3 Feb 2022 00:25:27 +0000 (UTC)
+From:   Charles Mirabile <cmirabil@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Charles Mirabile <cmirabil@redhat.com>,
+        Serge Schneider <serge@raspberrypi.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Mattias Brugger <mbrugger@suse.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, fedora-rpi@googlegroups.com
+Subject: [PATCH 0/6] Raspberry Pi Sense HAT driver
+Date:   Wed,  2 Feb 2022 19:25:15 -0500
+Message-Id: <20220203002521.162878-1-cmirabil@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tangmeng,
+This patch series adds a set of drivers for operating the Sense HAT
+peripheral device. This board is an add on for the Raspberry Pi that is
+designed to connect using the GPIO connector and communicate via I2C.
 
-On Mon, Jan 31 2022 at 18:22, tangmeng wrote:
-> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-> dishes, this makes it very difficult to maintain.
+It features:
+	- a joystick
+	- an 8x8 RGB LED matrix display
+	- a whole bunch of environmental sensors with their own drivers
+	  (those are already in upstream Linux)
 
-Sorry. That's just a lame argument. What exactly is hard to maintain on
-that file? A large table of ifdeffed sysctl entries which changes once
-in a blue moon is hardly a maintenance problem.
+This is a refactor of the work of Serge Schneider, the author of a
+version of this driver that is currently in the Raspberry Pi downstream
+kernel. We modified his code to make it suitable for upstream Linux.
 
-Aside of that, sysctl.c is a very conveniant way to look up the zoo of
-sysctls which you now spread out all over the source tree.
+A couple of tests are available for the driver in the test folder in
+this repo: https://github.com/underground-software/sensehat.git
+	- sensehat_joystick_test logs the input events from the
+	  joystick to the console
+	- sensehat_display_test displays various solid colors on
+	  the LED panel.
+	- full_sensehat_test displays a single lit cell that can be
+	  moved with the joystick. Pressing the joystick ends the
+	  program.
 
-So you really need to come up with a technical and sensical explanation
-for this change.
+For more information about the Sense HAT, visit:
+https://www.raspberrypi.org/products/sense-hat/
 
-> To help with this maintenance let's start by moving sysctls to places
-> where they actually belong.  The proc sysctl maintainers do not want to
-> know what sysctl knobs you wish to add for your own piece of code, we
-> just care about the core logic.
+Improvements since v5:
+	- The sensehat core driver has been removed and its functionality
+	  is now performed by simply adding the sensehat compatible string
+	  to the simple_mfd_i2c driver.
+	- the subdrivers now read information about their SMB registers and
+	  irqs from their own device tree meaning that these values are now
+	  configurable and no longer hard coded into the driver.
+	- As a result of removing the core driver and making each subdriver
+	  handle its own internal data itself, the drivers have finally become
+	  completely independent and so now it is finally truly possible to
+	  use more than one sensehat or more than one of its sub components
+	  in theory. (though in practice this would require modifying the
+	  firmware on the board).
 
-In other words, invite everyone to add random sysctls as they see fit
-w/o a central review authority. That's not an improvement at all. Quite
-the contrary.
+Fixes since v5:
+	- the joystick has been changed to use BTN_DPAD and BTN_SELECT
+	  instead of the arrow keys and enter, and lots of small issues
+	  with the joystick code have been fixed (thanks to Dmitry
+	  Torokhov for these suggestions)
+	- all forward declarations have been removed from the driver
+	  (thanks to Miguel Ojeda and Stefan Wahren for this suggestion)
+	- the userspace interface of the display driver has been changed to
+	  remove the need to process and copy the data as much before it can
+	  be sent to the device. (thanks to Matthias Brugger for this
+	  suggestion)
+	- fixed issue with interrupt parent property in device tree binding
+	  (thanks to Rob Herring for this suggestion)
 
-That aside, I'm tired of this because this is now at V5 and you still
-failed to fix the fallout reported by the 0-day infrastructure vs. this
-part of the patch:
+charliemirabile (6):
+  drivers/mfd: sensehat: Add Raspberry Pi Sense HAT to simple_mfd_i2c
+  drivers/input/joystick: sensehat: Raspberry Pi Sense HAT joystick
+    driver
+  drivers/auxdisplay: sensehat: Raspberry Pi Sense HAT display driver
+  dt-bindings: mfd: sensehat: Add Raspberry Pi Sense HAT schema
+  MAINTAINERS: Add sensehat driver authors to MAINTAINERS
+  DO NOT MERGE: full sensehat device tree overlay for raspberry pi 4
 
-> +static int __init timer_sysctl_init(void)
-> +{
-> +	register_sysctl_init("kernel", timer_sysctl);
-> +	return 0;
-> +}
+ .../raspberrypi,sensehat-display.yaml         |  32 +++
+ .../input/raspberrypi,sensehat-joystick.yaml  |  37 +++
+ .../bindings/mfd/raspberrypi,sensehat.yaml    |  68 +++++
+ MAINTAINERS                                   |  12 +
+ drivers/auxdisplay/Kconfig                    |   8 +
+ drivers/auxdisplay/Makefile                   |   1 +
+ drivers/auxdisplay/sensehat-display.c         | 264 ++++++++++++++++++
+ drivers/input/joystick/Kconfig                |  11 +
+ drivers/input/joystick/Makefile               |   1 +
+ drivers/input/joystick/sensehat-joystick.c    | 128 +++++++++
+ drivers/mfd/simple-mfd-i2c.c                  |   1 +
+ include/uapi/linux/sensehat.h                 |  28 ++
+ sensehat.dtbs                                 |  56 ++++
+ 13 files changed, 647 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/auxdisplay/raspberrypi,sensehat-display.yaml
+ create mode 100644 Documentation/devicetree/bindings/input/raspberrypi,sensehat-joystick.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/raspberrypi,sensehat.yaml
+ create mode 100644 drivers/auxdisplay/sensehat-display.c
+ create mode 100644 drivers/input/joystick/sensehat-joystick.c
+ create mode 100644 include/uapi/linux/sensehat.h
+ create mode 100644 sensehat.dtbs
 
-    kernel/time/timer.c: In function 'timer_sysctl_init':
- >> kernel/time/timer.c:284:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'timer_sysctl_init'? [-Werror=implicit-function-declaration]
-      284 |         register_sysctl_init("kernel", timer_sysctl);
-	  |         ^~~~~~~~~~~~~~~~~~~~
+-- 
+2.31.1
 
-It's pretty damned obvious why this fails to compile and the 0-day
-reports have all the information you need to reproduce and address this,
-but you prefer to ignore it and just resend yet another incarnation.
-
-Feel free to ignore these reports, but then please do not be surprised
-when I ignore your patches. Our development process is well documented
-and it's not subject to your personal interpretation.
-
-Thanks,
-
-        tglx

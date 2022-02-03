@@ -2,90 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7C94A859F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5208C4A85A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350942AbiBCN6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:58:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:48154 "EHLO foss.arm.com"
+        id S1350949AbiBCN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:59:49 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:32866 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232957AbiBCN6d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:58:33 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A38A2B;
-        Thu,  3 Feb 2022 05:58:33 -0800 (PST)
-Received: from [10.57.89.13] (unknown [10.57.89.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBC8A3F774;
-        Thu,  3 Feb 2022 05:58:31 -0800 (PST)
-Message-ID: <cf29155c-fbb3-518f-a82e-bb8e52e0f8a4@arm.com>
-Date:   Thu, 3 Feb 2022 13:58:29 +0000
+        id S232957AbiBCN7r (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:59:47 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EEF591EC04C1;
+        Thu,  3 Feb 2022 14:59:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643896782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=gHYp8xZFp20UiBgydZl6yyeC9rXQ4/WmPw7B1KUrZ3Y=;
+        b=F3DWJD4vb6hzZvkSuWqaVmu8sCwHciUGt8M/Ok8fVbwRXVyGNDmimooqpo32Z0fQSpgTY8
+        M8AYV53sTY+yLoY10GWxHj/vztieS9gU69zP+GbdvTfQjgOwKDBGvK7RAOHWnCyhI4rAiv
+        5t3F3bhvzv/NuW7CdEtLjIX8Mga3NPc=
+Date:   Thu, 3 Feb 2022 14:59:36 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 22/43] x86/sev: Move MSR-based VMGEXITs for CPUID to
+ helper
+Message-ID: <YfvfyAJU9QKcaF4d@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-23-brijesh.singh@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH 02/15] coresight: Make ETM4x TRCIDR2 register accesses
- consistent with sysreg.h
-To:     James Clark <james.clark@arm.com>, mathieu.poirier@linaro.org,
-        coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202160226.37858-1-james.clark@arm.com>
- <20220202160226.37858-3-james.clark@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220202160226.37858-3-james.clark@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-23-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2022 16:02, James Clark wrote:
-> This is a no-op change for style and consistency and has no effect on the
-> binary produced by gcc-11.
+On Fri, Jan 28, 2022 at 11:17:43AM -0600, Brijesh Singh wrote:
+> From: Michael Roth <michael.roth@amd.com>
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
+> This code will also be used later for SEV-SNP-validated CPUID code in
+> some cases, so move it to a common helper.
 
+Suggested-by: Sean Christopherson <seanjc@google.com>
 
+unless he really doesn't want to be the "suggestor" :)
+
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 > ---
->   drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
->   drivers/hwtracing/coresight/coresight-etm4x.h      | 7 +++++++
->   2 files changed, 10 insertions(+), 3 deletions(-)
+>  arch/x86/kernel/sev-shared.c | 62 +++++++++++++++++++++---------------
+>  1 file changed, 36 insertions(+), 26 deletions(-)
 > 
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 8aefee4e72fd..4abe5444234e 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -1111,11 +1111,11 @@ static void etm4_init_arch_data(void *info)
->   	/* maximum size of resources */
->   	etmidr2 = etm4x_relaxed_read32(csa, TRCIDR2);
->   	/* CIDSIZE, bits[9:5] Indicates the Context ID size */
-> -	drvdata->ctxid_size = BMVAL(etmidr2, 5, 9);
-> +	drvdata->ctxid_size = REG_VAL(etmidr2, TRCIDR2_CIDSIZE);
->   	/* VMIDSIZE, bits[14:10] Indicates the VMID size */
-> -	drvdata->vmid_size = BMVAL(etmidr2, 10, 14);
-> +	drvdata->vmid_size = REG_VAL(etmidr2, TRCIDR2_VMIDSIZE);
->   	/* CCSIZE, bits[28:25] size of the cycle counter in bits minus 12 */
-> -	drvdata->ccsize = BMVAL(etmidr2, 25, 28);
-> +	drvdata->ccsize = REG_VAL(etmidr2, TRCIDR2_CCSIZE);
->   
->   	etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
->   	/* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index 2bd8ad953b8e..a95df5686b4b 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -147,6 +147,13 @@
->   #define TRCIDR0_TSSIZE_SHIFT			24
->   #define TRCIDR0_TSSIZE_MASK			GENMASK(4, 0)
->   
-> +#define TRCIDR2_CIDSIZE_SHIFT			5
-> +#define TRCIDR2_CIDSIZE_MASK			GENMASK(4, 0)
-> +#define TRCIDR2_VMIDSIZE_SHIFT			10
-> +#define TRCIDR2_VMIDSIZE_MASK			GENMASK(4, 0)
-> +#define TRCIDR2_CCSIZE_SHIFT			25
-> +#define TRCIDR2_CCSIZE_MASK			GENMASK(3, 0)
+> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+> index 3aaef1a18ffe..633f1f93b6e1 100644
+> --- a/arch/x86/kernel/sev-shared.c
+> +++ b/arch/x86/kernel/sev-shared.c
+> @@ -194,6 +194,36 @@ enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb, bool set_ghcb_msr,
+>  	return verify_exception_info(ghcb, ctxt);
+>  }
+>  
+> +static int __sev_cpuid_hv(u32 func, int reg_idx, u32 *reg)
+> +{
+> +	u64 val;
 > +
+> +	if (!reg)
+> +		return 0;
 
-Looks good to me. I have confirmed the above changes matches the spec.
+I don't know what that's supposed to catch? In case callers are
+interested only in some subset of the CPUID leaf?
 
-Suzuki
+Meh, I guess...
+
+> +	sev_es_wr_ghcb_msr(GHCB_CPUID_REQ(func, reg_idx));
+> +	VMGEXIT();
+> +	val = sev_es_rd_ghcb_msr();
+> +	if (GHCB_RESP_CODE(val) != GHCB_MSR_CPUID_RESP)
+> +		return -EIO;
+> +
+> +	*reg = (val >> 32);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sev_cpuid_hv(u32 func, u32 *eax, u32 *ebx, u32 *ecx, u32 *edx)
+> +{
+> +	int ret;
+> +
+> +	ret = __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, eax);
+> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, ebx);
+> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, ecx);
+> +	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, edx);
+
+You can format that this way:
+
+        ret =         __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, eax);
+        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, ebx);
+        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, ecx);
+        ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, edx);
+
+
+and then it is visible at a quick glance what this does, due to the
+regularity.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A684A8393
+	by mail.lfdr.de (Postfix) with ESMTP id 448FF4A8392
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiBCMII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:08:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:42786 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229794AbiBCMIG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:08:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80D7511D4;
-        Thu,  3 Feb 2022 04:08:06 -0800 (PST)
-Received: from [10.57.13.234] (unknown [10.57.13.234])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5AE903F774;
-        Thu,  3 Feb 2022 04:08:05 -0800 (PST)
-Message-ID: <83349132-eac4-d05d-ff47-204fa8914922@arm.com>
-Date:   Thu, 3 Feb 2022 12:08:03 +0000
+        id S236587AbiBCMIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 07:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229794AbiBCMIi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 07:08:38 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C91C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 04:08:38 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id b16so4776815uaq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 04:08:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+xYUiL1/dI8fAOExcqcrQPfM5bBJBMlqGF1dPN8Xu7M=;
+        b=eQspLdFmo5bLzpsBd7r1CYb2D4Q9sL2/j664dwJwUYpjvTA//39tbXI1vT8fF6NXOC
+         KMWbSUqEahpnuupz+auUcbjQBFz8D+szV7X0VKfCH+NmMVkIPvpLkKNjJpA/eEl4y4Km
+         S9yyRwX2cvgPPd/1ErQ29GhzIXyLdahed72rnXv0G6S9Kwp5KZx3qp13Ixm5fLveVEJd
+         y0H/j8HzYld8eGOKAsI7Tx5MpxczyuG69p7El8JkfeXVHXciuJM7N5WqVZbuSvw6G6be
+         0G3ZwCun7OmdTkoLM4OnyScjnW+R62w3t09ZxRma30mJYrFwiNEEwbYwtiD2IMEKOxdK
+         mCkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+xYUiL1/dI8fAOExcqcrQPfM5bBJBMlqGF1dPN8Xu7M=;
+        b=ZhfCl+gzquurJwYsrm9nTqfaH6/HonQU/KpDbGUY55kBwqJ9vJv9NJngmkkSozD6EW
+         GG9DAiXA9IkvNtTcqA8Rv281w6H9Bb88uQGCsjPBT2saEanLU7v/StQea1nNm33/s+uZ
+         RzUl6On5EtagOxcc8KVT8K6dES+z7wIFLzGfK8SYOEykkiL7iasM9wjJCVONBjKPq9so
+         crXYnj/rAzLGaw2ZmrOxSlD64ZNFGQZRQsiF4hMWM16vQhh6GJh5wAakFTuDAbNpIQUa
+         GjLSWhNiukGzeRtfLoPRBR5II19n9Awb8MQ2mRWZ9pd4SUnRAOtV4Lr/OwMUX/SfHJRi
+         OAdw==
+X-Gm-Message-State: AOAM531oGb3po4sg6zTNBGjnR/N9PJnuu//VywneaPOk9MKBo5YYpia+
+        maB6d4Nv50OeKJMz5cYbdIoeXt/T7nc+IoJfMYA=
+X-Google-Smtp-Source: ABdhPJwtdfOagc6zgauDjS1hUg9bQ5nC5Fe+Sy2qhjzZy2FWSESY4+L8x3I6a3hk6zmVP6x/50ss2i7VWweJyIcxYbg=
+X-Received: by 2002:a05:6130:315:: with SMTP id ay21mr16140257uab.49.1643890117561;
+ Thu, 03 Feb 2022 04:08:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 01/15] coresight: Make ETM4x TRCIDR0 register accesses
- consistent with sysreg.h
-Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        mathieu.poirier@linaro.org, coresight@lists.linaro.org
-Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
-        Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202160226.37858-1-james.clark@arm.com>
- <20220202160226.37858-2-james.clark@arm.com>
- <41b08fa5-6333-48e8-4727-2082c001e148@arm.com>
- <da8768ba-fb10-e2d5-fdcf-2b3c6b9c6b18@arm.com>
- <3df77ddd-31df-c2d8-7aac-e21c7ba48f1e@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <3df77ddd-31df-c2d8-7aac-e21c7ba48f1e@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220202024137.2516438-1-Liam.Howlett@oracle.com> <20220202024137.2516438-69-Liam.Howlett@oracle.com>
+In-Reply-To: <20220202024137.2516438-69-Liam.Howlett@oracle.com>
+From:   Mark Hemment <markhemm@googlemail.com>
+Date:   Thu, 3 Feb 2022 12:08:25 +0000
+Message-ID: <CANe_+UjtS5_ynjfMfHC_hkb7mAADbsL8UWG7HOwM0aN3Mjn58Q@mail.gmail.com>
+Subject: Re: [PATCH v5 68/70] mm: Remove the vma linked list
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2 Feb 2022 at 02:43, Liam Howlett <liam.howlett@oracle.com> wrote:
+>
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+>
+> Replace any vm_next use with vma_find().
+>
+> Update free_pgtables(), unmap_vmas(), and zap_page_range() to use the
+> maple tree.
+>
+> Use the new free_pgtables() and unmap_vmas() in do_mas_align_munmap().
+> At the same time, alter the loop to be more compact.
+>
+> Now that free_pgtables() and unmap_vmas() take a maple tree as an
+> argument, rearrange do_mas_align_munmap() to use the new tree to hold
+> the vmas to remove.
+>
+> Remove __vma_link_list() and __vma_unlink_list() as they are exclusively
+> used to update the linked list
+>
+> Drop linked list update from __insert_vm_struct().
+>
+> Rework validation of tree as it was depending on the linked list.
+>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+> ---
+>  include/linux/mm.h       |   5 +-
+>  include/linux/mm_types.h |   4 -
+>  kernel/fork.c            |  13 +-
+>  mm/debug.c               |  14 +-
+>  mm/gup.c                 |   2 +-
+>  mm/internal.h            |  10 +-
+>  mm/memory.c              |  33 ++-
+>  mm/mmap.c                | 518 +++++++++++++++++----------------------
+>  mm/nommu.c               |   2 -
+>  mm/util.c                |  40 ---
+>  10 files changed, 264 insertions(+), 377 deletions(-)
+...
+> -static inline int
+> -unlock_range(struct vm_area_struct *start, struct vm_area_struct **tail,
+> -            unsigned long limit)
+> -{
+> -       struct mm_struct *mm = start->vm_mm;
+> -       struct vm_area_struct *tmp = start;
+> -       int count = 0;
+> -
+> -       while (tmp && tmp->vm_start < limit) {
+> -               *tail = tmp;
+> -               count++;
+> -               if (tmp->vm_flags & VM_LOCKED) {
+> -                       mm->locked_vm -= vma_pages(tmp);
+> -                       munlock_vma_pages_all(tmp);
+> -               }
+> -
+> -               tmp = tmp->vm_next;
+> -       }
+> -
+> -       return count;
+> -}
 
+Trivial: Comment in exit_mmap(), for oom-victim case, has a reference
+to this removed function (unlock_range()).
 
-On 03/02/2022 10:54, Suzuki K Poulose wrote:
-> On 03/02/2022 10:40, James Clark wrote:
->>
->>
->> On 02/02/2022 17:05, Suzuki K Poulose wrote:
->>> Hi James
->>>
->>> Thanks for taking this tedious task of cleaning the code and making
->>> this robust and readable.
->>>
->>> One minor comment below.
->>>
->>> On 02/02/2022 16:02, James Clark wrote:
->>>> This is a no-op change for style and consistency and has no effect on the
->>>> binary produced by gcc-11.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>    .../coresight/coresight-etm4x-core.c          | 37 +++++--------------
->>>>    drivers/hwtracing/coresight/coresight-etm4x.h | 17 +++++++++
->>>>    drivers/hwtracing/coresight/coresight-priv.h  |  1 +
->>>>    3 files changed, 27 insertions(+), 28 deletions(-)
->>>>
->>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> index bf18128cf5de..8aefee4e72fd 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> @@ -1091,41 +1091,22 @@ static void etm4_init_arch_data(void *info)
->>>>        etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
->>>>          /* INSTP0, bits[2:1] P0 tracing support field */
->>>> -    if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
->>>> -        drvdata->instrp0 = true;
->>>> -    else
->>>> -        drvdata->instrp0 = false;
->>>> -
->>>> +    drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
->>>> +                  (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
->>>
->>> I don't understand this check. For ETMv4, here is what I find in the spec (ARM IHI 0064C)
->>>
->>> P0 tracing support field. The permitted values are:
->>> 0b00  Tracing of load and store instructions as P0 elements is not
->>>        supported.
->>> 0b11  Tracing of load and store instructions as P0 elements is
->>>        supported, so TRCCONFIGR.INSTP0 is supported.
->>>
->>> All other values are reserved.
->>>
->>> So the check could simply be :
->>>
->>>      drvdata->instrp0 = (REG_VAL(emtidr0, TRCIDR0_INSTP0) == 0b11;
->>
->> Yes I can make this change, but it does make the compiler emit a slightly different binary
->> so we can't rely on that to check the refactor is ok.
->>
->> Should I change it in this commit or stick it on the very end? Probably the end is best
->> in case I have to do any rebases and I still need to validate there are no mistakes.
-> 
-> I would say, fix the existing check first and then convert to use the
-> updated symbols.
-> 
-> That way we could queue the fix separately and you may be able to rebase
-> your next version on the updated tree ?
-
-Good idea, I've resubmitted v2 with that and the other comments you left.
-
-> 
-> 
-> Cheers
-> Suzuki
+Cheers,
+Mark

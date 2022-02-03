@@ -2,84 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2804D4A8472
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3004A84DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350693AbiBCNEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:04:42 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:40760 "EHLO vps0.lunn.ch"
+        id S1350699AbiBCNG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:06:26 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:60373 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236030AbiBCNEl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:04:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=gNZWKIVJLKNO/IJY+cF5TQndrBUPBqO7gHfrucPm70E=; b=VS8tdWHewiArNhUVu6VGqBayCE
-        6h7xECrvPRTVJOY5on5d/h21a7hWmC/n657vSzkE4eWdWBUNblNqgCLGnE3IlOE3A3Ad57uK+qonu
-        cgl/iVYfynfK/gu5rwOril0Ka92vyY18ATTgu7SUFt+dGvAKzzeWegqE2QFGq4m10SKg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nFbmm-004757-1e; Thu, 03 Feb 2022 14:04:28 +0100
-Date:   Thu, 3 Feb 2022 14:04:28 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v1 4/4] usbnet: add support for label from
- device tree
-Message-ID: <YfvS3F6kHUyxs6D0@lunn.ch>
-References: <20220127104905.899341-1-o.rempel@pengutronix.de>
- <20220127104905.899341-5-o.rempel@pengutronix.de>
- <YfJ6lhZMAEmetdad@kroah.com>
- <20220127112305.GC9150@pengutronix.de>
- <YfKCTG7N86yy74q+@kroah.com>
- <20220127120039.GE9150@pengutronix.de>
- <YfKcYXjfhVKUKfzY@kroah.com>
- <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
+        id S229614AbiBCNGY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:06:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643893584; x=1675429584;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z06StxFMGy+m8o+xsY3wZtIwumn4uvS3FLDwZeNIuPI=;
+  b=Ge82OH7qrEbWqIffcaS3tKZ7JCaoiaSgx1o3CcCKB+QZt/BfqYj8lpKG
+   77R8f5zRC2FFgCqQcuKcxoq93cArm3QgKcsK28Aj95KA8wspJGKHp7SmO
+   a+JPUFNHx2fe6QcaN7kxN4Vy64D1vUs1yacb5oDXzilLHtTXUPSnPZ7rG
+   lkyvoF1jrHKKC5iTo34C5I0hUKFtO6KENzqHSEMuDplyH99BFcDuJvmVJ
+   C2mUUePkiDcxr8Yvl3PjTl1YQNZoEdHEu+8dMn+nfNstWUsx+gQyY0doy
+   hKlDAEHKHFqvcpDq9IEdVPHHOhE2xpBKooB+nh9H7lAtHSZE+aN6/Eyhn
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,340,1635199200"; 
+   d="scan'208";a="21880081"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 03 Feb 2022 14:06:23 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 03 Feb 2022 14:06:23 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 03 Feb 2022 14:06:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643893583; x=1675429583;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=z06StxFMGy+m8o+xsY3wZtIwumn4uvS3FLDwZeNIuPI=;
+  b=DMgevesNCdZSNDFtTIuxsNVVwX2fy5RVKurymmUKmuCK5pLP4zDC6qHE
+   4B4cp5wc02d6SN3c52wOZy13fiwSfb+XRs9dxVLI29ubWFKuGwkerwOhg
+   A+0ZcPyhzKmCkHehf+25ayeLdD17vUMYhTfRa2+0k2eI5iTg2sjd+fTM7
+   ncex7MSfXTILoYHhfq+wYnUA+bOswUdiBZxVJAtLd0v2f35Ijac3rxYCQ
+   D/+fYHXtb8xO9ykV6h1DCChbZfoQ5fQ1xO7Zq/S7789+KkRyXSk4TSszH
+   HIdchQgLdOK9KhW8Lmf6Sh4eteOZI1P2WbiQMEBhKkOO18lT9naW6oRDF
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,340,1635199200"; 
+   d="scan'208";a="21880080"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 03 Feb 2022 14:06:23 +0100
+Received: from schifferm-ubuntu (SCHIFFERM-M2.tq-net.de [10.121.201.138])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 97CCE280065;
+        Thu,  3 Feb 2022 14:06:22 +0100 (CET)
+Message-ID: <76703db31c4562dba1301e839c70381cf8e403b3.camel@ew.tq-group.com>
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-am65: disable optional
+ peripherals by default
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>, Nishanth Menon <nm@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 03 Feb 2022 14:06:20 +0100
+In-Reply-To: <e427670b-0570-df33-c114-fd0633ac1d44@siemens.com>
+References: <5beef188724ef42b0c2147ca9bf6e6ca25c75dec.1641900122.git.matthias.schiffer@ew.tq-group.com>
+         <20220202203217.sf2cr4orwl4usvyf@starry>
+         <e427670b-0570-df33-c114-fd0633ac1d44@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHNKnsTY0cV4=V7t0Q3p4-hO5t9MbWWM-X0MJFRKCZ1SG0ucUg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 05:20:34AM +0300, Sergey Ryazanov wrote:
-> Hello Greg,
+On Thu, 2022-02-03 at 12:39 +0100, Jan Kiszka wrote:
+> On 02.02.22 21:32, Nishanth Menon wrote:
+> > On 12:25-20220111, Matthias Schiffer wrote:
+> > > All peripharals that require pinmuxing or other configuration to
+> > > work
+> > > should be disabled by default. Dependent DTS are adjusted
+> > > accordingly.
+> > > 
+> > > The following nodes are now "disabled" according to dtx_diff and
+> > > were not
+> > > overridden to "okay", as they define no pinctrl:
+> > > 
+> > > k3-am654-base-board:
+> > > - mcu_i2c0
+> > > - mcu_spi0..2
+> > > - cal
+> > > - main_i2c3
+> > > - ehrpwm0..5
+> > > - main_uart1..2
+> > > - main_spi1..4
+> > > 
+> > > k3-am65-iot2050*:
+> > > - mci_spi1..2
+> > > - cal
+> > > - ehrpwm0..5
+> > > - main_spi0..4
+> > > 
+> > > Signed-off-by: Matthias Schiffer <
+> > > matthias.schiffer@ew.tq-group.com>
+> > 
+> > Jan: you ok with this series? Please ack.
+> > 
 > 
-> if I may be allowed, I would like to make a couple of points about
-> specifying network interface names in DT. As in previous mail, not to
-> defend this particular patch, but to talk about names assignment in
-> general.
+> Just rebased the still-too-long backlog to our system fully working
+> over 
+> mainline.
+
+Thanks for testing. As noted earlier, I will send a v2 of this patch
+that fixes one more inconsistency.
+
+> Basically looks good, but this might be a regression of the 
+> patch:
 > 
-> I may be totally wrong, so consider my words as a request for
-> discussion. I have been thinking about an efficient way for network
-> device names assignment for routers with a fixed configuration and
-> have always come to a conclusion that DT is a good place for names
-> storage. Recent DSA capability to assign names from labels and this
-> patch by Oleksij show that I am not alone.
+> [    1.810083] OF: /bus@100000/pcie@5600000: phandle pcie-mode@4070
+> needs 1, found 0
+> ...
+> [    1.854840] OF: /bus@100000/pcie@5600000: phandle pcie-devid@210
+> needs 1, found 0
+> 
+> Jan
+> 
 
-DSA doing this is not recent. The first patch implementing DSA in 2008
-had the ability to set the interface names. This was long before the
-idea that userspace should set interface names became the 'correct'
-way to do this.
+That seems to be an older issue, rather than a regression of this
+patch:
 
-The current thinking for routers which don't make use of the DSA
-framework, it to use interface names like swXpY, where X is the switch
-number and Y is the port number. udev can make use of for example
-/sys/class/net/*/phys_port_name to get the pY bit to give the
-interface its full name.
+k3-am65-main.dtsi defines:
 
-	Andrew
+    ti,syscon-pcie-id = <&pcie_devid>;
+    ti,syscon-pcie-mode = <&pcie0_mode>
+
+While according the driver binding docs something like the following is
+expected:
+
+    ti,syscon-pcie-id = <&scm_conf 0x0210>;
+    ti,syscon-pcie-mode = <&scm_conf 0x4060>;
+
+I assume that the k3-am65-main.dtsi section was imported from ti-linux
+without accounting for the mainline driver's different binding.
+
+Matthias
+

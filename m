@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBB34A7FB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B2D4A7FE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 08:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349356AbiBCHYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 02:24:16 -0500
-Received: from mail-4324.protonmail.ch ([185.70.43.24]:22889 "EHLO
-        mail-4324.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242617AbiBCHYM (ORCPT
+        id S1349416AbiBCHfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 02:35:13 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38449 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239925AbiBCHfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 02:24:12 -0500
-Date:   Thu, 03 Feb 2022 07:24:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail2; t=1643873050;
-        bh=Cg4VVZKyYzdKoQN0OKZO+sJINPAqHtXoxzHLdJuIiy8=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc;
-        b=kpaLMmRNDM4NsRUfXN4zBaf9lL4xBbIOxHMQTyumTQiwFteQPFqgKXmHTmzCFjxsV
-         ZXFFbHuRMDyHvZlW2FahfANqu1WKRMsCY5o8PKHwNXe4Rb+z73K+xSJAS4/Pcr7wVo
-         W8jRDpGc23n0w2HtyPo2al4obP9y4pUd7wd0hZ1mQ6hnTeVTO67ZuAZIc6AO8p5Ike
-         psqwnraYOFH3OV+JMiBxhJhoEQsbPaldsBAlqct7AooUQtvhGpoyeMQXBRRQSxt21f
-         OoI71at9kUaVAYaqFue86oFMKAqDUonhsSM8WlAupOEmYRH5Wd4t5vzo7tVXhlzGn5
-         2Gm02GF3BZiYg==
-To:     Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v3 0/7] dt-bindings: Convert multiple Qualcomm OPP and CPUFreq bindings to DT schema
-Message-ID: <20220203072226.51482-1-y.oudjana@protonmail.com>
+        Thu, 3 Feb 2022 02:35:10 -0500
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nFWTW-0007TF-6f; Thu, 03 Feb 2022 08:24:14 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1nFWTT-0005dv-4m; Thu, 03 Feb 2022 08:24:11 +0100
+Date:   Thu, 3 Feb 2022 08:24:11 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     David Lechner <david@lechnology.com>
+Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
+        David Jander <david@protonic.nl>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-iio@vger.kernel.org,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1] counter: interrupt-cnt: add counter_push_event()
+Message-ID: <20220203072411.GA12695@pengutronix.de>
+References: <YZ7tv79LQwLL7h3T@shinobu>
+ <f73650b6-5a08-9ea9-9ecb-c47665ef07b0@lechnology.com>
+ <20211207081602.45b1423c@erd992>
+ <20211208135902.7j3aawytt3jlqgwr@pengutronix.de>
+ <20211208171035.6ad117af@erd992>
+ <Ybmr2kCLScuGZ41h@shinobu>
+ <20211215100853.11f9262d@erd992>
+ <YcaZEKbzRbX982YW@shinobu>
+ <Yfp56WznEMh7rp2O@pengutronix.de>
+ <7a22b7c7-e5ac-7574-9d65-179ab605e4ca@lechnology.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        T_SCC_BODY_TEXT_LINE shortcircuit=no autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Disposition: inline
+In-Reply-To: <7a22b7c7-e5ac-7574-9d65-179ab605e4ca@lechnology.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:04:33 up 54 days, 15:50, 44 users,  load average: 0.23, 0.46,
+ 0.28
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is a compilation of DT schema conversions of multiple Qualcomm
-OPP and CPUFreq bindings:
-- qcom-cpufreq-nvmem (operating-points-v2-kryo-cpu)
-- qcom-opp (operating-points-v2-qcom-level)
-- qcom,cpr
+On Wed, Feb 02, 2022 at 09:17:57AM -0600, David Lechner wrote:
+> On 2/2/22 6:32 AM, Oleksij Rempel wrote:
+> > Hi William,
+> > 
+> > On Sat, Dec 25, 2021 at 01:07:44PM +0900, William Breathitt Gray wrote:
+> > ...
+> > > So the counter_push_event() function interacts with two spinlocks:
+> > > events_list_lock and events_in_lock. The events_list_lock spinlock is
+> > > necessary because userspace can modify the events_list list via the
+> > > counter_enable_events() and counter_disable_events() functions. The
+> > > events_in_lock spinlock is necessary because userspace can modify the
+> > > events kfifo via the counter_events_queue_size_write() function.
+> > > 
+> > > A lockless solution for this might be possible if the driver maintains
+> > > its own circular buffer as you suggest. The driver's IRQ handler can
+> > > write to this circular buffer without calling the counter_push_event()
+> > > function, and then flush the buffer to the Counter character device via
+> > > a userspace write to a "flush_events" sysfs attribute or similar; this
+> > > eliminates the need for the events_in_lock spinlock. The state of the
+> > > events_list list can be captured in the driver's events_configure()
+> > > callback and stored locally in the driver for reference, thus
+> > > eliminating the need for the events_list_lock; interrupts can be
+> > > disabled before the driver's local copy of events_list is modified.
+> > > 
+> > > With only one reader and one writer operating on the driver's buffer,
+> > > you can use the normal kfifo_in and kfifo_out calls for lockless
+> > > operations. Perhaps that is a way forward for this problem.
+> > 
+> > As proof of concept, I implemented the double buffered version with the
+> > sysfs flush_events interface. Currently it feels kind of wired, I use
+> > poll and wait until it timeouts to run the sysfs_flush_counter() to
+> > trigger new data.
+> > 
+> > Here is example:
+> > int main(void)
+> > {
+> > 	ret = sysfs_enable_counter();
+> > 	...
+> > 
+> > 	fd = open("/dev/counter0", O_RDWR);
+> > 	...
+> > 
+> > 	ret = ioctl(fd, COUNTER_ADD_WATCH_IOCTL, watches);
+> > 	...
+> > 
+> > 	ret = ioctl(fd, COUNTER_ENABLE_EVENTS_IOCTL);
+> > 	...
+> > 
+> > 	for (;;) {
+> > 		struct pollfd fds[] = {
+> > 			{
+> > 				.fd = fd,
+> > 				.events = POLLIN,
+> > 			},
+> > 		};
+> > 		ssize_t i;
+> > 
+> > 		/* wait for 10 sec */
+> > 		ret = poll(fds, ARRAY_SIZE(fds), DEFAULT_TIMEOUT_MS);
+> > 		if (ret == -EINTR)
+> > 			continue;
+> > 		else if (ret < 0)
+> > 			return -errno;
+> > 		else if (ret == 0) {
+> > 			sysfs_flush_counter(); <---- request to flush queued events from the driver
+> > 			continue;
+> > 		}
+> > 
+> > 		ret = read(fd, event_data, sizeof(event_data));
+> > 		...
+> > 
+> > 		for (i = 0; i < ret / (ssize_t)sizeof(event_data[0]); i++)
+> > 			/* process event */
+> > 			....
+> > 		}
+> > 	}
+> > 
+> > 	return ret;
+> > }
+> > 
+> > If it is still the only way to go, I'll send kernel patches.
+> > 
+> > Regards,
+> > Oleksij
+> > 
+> 
+> Couldn't the flush be implicit in the `read()` implementation
+> instead of requiring a separate sysfs attribute to trigger it?
 
-Converting each one to DT schema introduces new dt_binding_check and
-dtbs_check errors to the others, so it was better to combine them into
-a series. Some errors were also caused by a couple of device trees having
-OPP tables with names that do not follow opp-v2-base, so these got fixed
-in this series as well. Finally, the lack of MSM8996 compatibles in
-arm/qcom.yaml caused an error in the opp-v2-kryo-cpu example, so they were
-added to the schema as well as to the msm8996-mtp device tree, which only
-had qcom,msm8996-mtp as its compatible.
+Hm...
 
-PATCH 4/7 is a new version of a patch[1] that was sent as part of
-a different series before, and PATCH 7/7 is a new version of a patch[2]
-that was sent alone.
+To detect pulse frequency, I need a burst of sequential time-stamps
+without drops. In case the pulse frequency is higher then the use space
+is able to get it out of FIFO, we will get high number of drops. 
+So, we do not need all time stamps. Only bunch of them without drops in
+the middle.
 
-Changes in v3:
- - Resend with unified version for all patches
+I know, at some frequency we wont be able to collect all pulses any way.
+Internal FIFO is just increasing the max detectable frequency. So, it is
+sort of optimization.
 
-Changes since v1 (PATCH v2 4/7):
- - Split the schema into an OPP schema and a CPUFreq schema.=20
+My current driver version has own FIFO which is filled directly by the
+IRQ handler and user space trigger flush_cb to push all collected
+time stamps. The main question is: how the flush procedure should be
+controlled. We have following options:
 
-Changes since v1 (PATCH v2 7/7):
- - Remove allOf from compatible.
+- Attach it to the read(). The disadvantage: at high frequencies, we
+  wont be able to get a burst with time stamps without drops in the
+  middle
+- Trigger flush from user space. In this case, we make user space a bit
+  more complicated and cant really get all advantages of poll().
+- kernel driver is using own timer to trigger flush. The timer can be
+  configured from user space. The advantage of it, the user space is
+  simple and has full advantage of using poll()
 
-Yassine Oudjana (7):
-  dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
-  arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
-  dt-bindings: opp: qcom-opp: Convert to DT schema
-  dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
-  arm64: dts: qcom: msm8996: Rename cluster OPP tables
-  arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
-  dt-bindings: power: avs: qcom,cpr: Convert to DT schema
-
- .../devicetree/bindings/arm/qcom.yaml         |  16 +-
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 166 ++++
- .../bindings/opp/opp-v2-kryo-cpu.yaml         | 257 ++++++
- .../bindings/opp/opp-v2-qcom-level.yaml       |  60 ++
- .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
- .../devicetree/bindings/opp/qcom-opp.txt      |  19 -
- .../bindings/power/avs/qcom,cpr.txt           | 130 ---
- .../bindings/power/avs/qcom,cpr.yaml          | 160 ++++
- MAINTAINERS                                   |   5 +-
- arch/arm64/boot/dts/qcom/msm8996-mtp.dts      |   2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
- 12 files changed, 666 insertions(+), 953 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-=
-nvmem.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.y=
-aml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level=
-.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufre=
-q.txt
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
- delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.tx=
-t
- create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.ya=
-ml
-
-[1] https://lore.kernel.org/linux-arm-msm/20211014083016.137441-6-y.oudjana=
-@protonmail.com/
-[2] https://lore.kernel.org/linux-arm-msm/20211221133937.173618-1-y.oudjana=
-@protonmail.com/
---=20
-2.34.1
-
-
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

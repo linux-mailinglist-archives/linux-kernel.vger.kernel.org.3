@@ -2,122 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559614A8AA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0176C4A8AE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 18:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353064AbiBCRuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 12:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiBCRuL (ORCPT
+        id S1353341AbiBCRwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 12:52:16 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:59048 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353221AbiBCRus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 12:50:11 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99A5C061714;
-        Thu,  3 Feb 2022 09:50:10 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w25so7599855edt.7;
-        Thu, 03 Feb 2022 09:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
-        b=ByMXCyiJMiEqRQ+FEL4KhRZcgt0woCBUqDhuf335ndRQUq+VVT0KBKC9ARSbobSlow
-         EhlODK+uE5wAZ78xmgHSvNH3HMfUjoO0l7XCBapQlmHaJ4R0tzNKmZjU39DUqtECBY/Y
-         lMMUqORd3U+s37MGuvTrdwUTQEvpZMQqyYq5I6Zz2KMnaz00VF1LVxpQlyOUKsRnS5kP
-         r8MJGff6CNUi4ITPpoGJR9yE2qo+Ab6J3w+9WRhODjhiYkkxpOFDrWil94dAK9UMGmql
-         bwej8hONl1blIKeOO6uF7dclZG3RdUdixRL/O2xwKq9s/IBtKambkPYVOplcFFV5ybb8
-         AQSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DlHF1ezZsVyyLw16v2PxMSWN/nd7gwtKLelkVX/tiX0=;
-        b=ieDV4GtgbpMD++wnF8fNHhIikO75PGRjjEJvTIdtRZw9++ga+kjgtngxzwmc7TbG7p
-         j2PxSArZcMTRcnTxy5RzIKZzUOPAIkDB913XNgUm6NSQn7jPFUcWzWsBNnkXLHPYelNf
-         lvREbx05LM4e9FebWOT/QKMK6pLn4I07QS3xp4vrGMNxmbeE2RXWlzK7AZ80H/0C6fOg
-         6jDGpiCFNjkyldCwfMUUn74+o7o84Klh1oelnASiHkJwNpsnnOm29/a5N5ea4/Zt/dpG
-         Hbd/F7rcQstinfDGoWadC0dWu8MrRS7UFl19ppOasN1nXqAScGsWLEuNH7W2Uk1bRsNQ
-         sHXg==
-X-Gm-Message-State: AOAM532zF0rPE61OUz0JUagTfvbDOP2SINpcMAccihEKWrkAG6tAfhAw
-        1Hnq3A2BE/Snds2MEbENS+o=
-X-Google-Smtp-Source: ABdhPJzdxlCUVDtjmB3ENX5mKOqOonAT9GMGhVa+oTeOAuEEbGMNDuDWfBrWS+tw0rV3CDLh3UnogQ==
-X-Received: by 2002:a05:6402:1612:: with SMTP id f18mr14801649edv.454.1643910609310;
-        Thu, 03 Feb 2022 09:50:09 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id h8sm22578309edk.14.2022.02.03.09.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 09:50:08 -0800 (PST)
-Date:   Thu, 3 Feb 2022 18:50:05 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     devicetree@vger.kernel.org, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        mperttunen@nvidia.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 0/4] Add I2C and PWM support for T234
-Message-ID: <YfwVzVHZ6SQhKpLF@orome>
-References: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
+        Thu, 3 Feb 2022 12:50:48 -0500
+Received: from tatooine.ideasonboard.com (unknown [IPv6:2a01:e0a:169:7140:5173:4d3f:4ddc:2012])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 861C915AF;
+        Thu,  3 Feb 2022 18:50:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1643910628;
+        bh=xQPdfOYaPqm5LqRMzUqsI7qdKioFoUN0FG/TD8WEU2o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vQbbsuH5e9POxqOOKZDs9xFefO2nnoi0snKDVU8UwlB/9iAyDT7iiuop0IGcS+pBG
+         QldlvpM1Dq2t94fvDzgRmR4+2qyBgfA3ohqIVh8HFt1+piSjg7gUtTSTBM5+cnjs89
+         8RU6OG9FLLGRWyOdPbIWzttRSN2JsJpdeK/TAlJo=
+From:   Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+To:     jeanmichel.hautbois@ideasonboard.com
+Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
+        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
+        nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com
+Subject: [RFC PATCH v4 09/12] media: imx219: Introduce the set_routing operation
+Date:   Thu,  3 Feb 2022 18:50:06 +0100
+Message-Id: <20220203175009.558868-10-jeanmichel.hautbois@ideasonboard.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
+References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ruUbb3Ly1noXTLRH"
-Content-Disposition: inline
-In-Reply-To: <1643023097-5221-1-git-send-email-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As we want to use multiplexed streams API, we need to be able to set the
+pad routing. Introduce the set_routing operation.
 
---ruUbb3Ly1noXTLRH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As this operation is required for a multiplexed able sensor, add the
+V4L2_SUBDEV_FL_MULTIPLEXED flag.
 
-On Mon, Jan 24, 2022 at 04:48:13PM +0530, Akhil R wrote:
-> The patchset contains driver and devicetree changes to support I2C and
-> PWM for Tegra234
->=20
-> v2->v3:
->   * Sorted clock and reset based on ID
-> v1->v2:
->   * Reverted changes in i2c-tegra.c. using tegra194_i2c_hw for tegra234
->     as the values are compatible.
->=20
-> Akhil R (4):
->   dt-bindings: Add headers for Tegra234 I2C
->   arm64: tegra: Add Tegra234 I2C devicetree nodes
->   dt-bindings: Add headers for Tegra234 PWM
->   arm64: tegra: Add Tegra234 PWM devicetree nodes
->=20
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi   | 133 +++++++++++++++++++++++=
-++++++
->  include/dt-bindings/clock/tegra234-clock.h |  35 +++++++-
->  include/dt-bindings/reset/tegra234-reset.h |  16 ++++
->  3 files changed, 183 insertions(+), 1 deletion(-)
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+---
+ drivers/media/i2c/imx219.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
+index b68d35046725..7d29cf2b06f8 100644
+--- a/drivers/media/i2c/imx219.c
++++ b/drivers/media/i2c/imx219.c
+@@ -817,6 +817,25 @@ static int _imx219_set_routing(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++static int imx219_set_routing(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *state,
++			      enum v4l2_subdev_format_whence which,
++			      struct v4l2_subdev_krouting *routing)
++{
++	int ret;
++
++	if (routing->num_routes == 0 || routing->num_routes > 2)
++		return -EINVAL;
++
++	v4l2_subdev_lock_state(state);
++
++	ret = _imx219_set_routing(sd, state);
++
++	v4l2_subdev_unlock_state(state);
++
++	return ret;
++}
++
+ static int imx219_init_cfg(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *state)
+ {
+@@ -1289,6 +1308,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
+ 	.get_fmt		= imx219_get_pad_format,
+ 	.set_fmt		= imx219_set_pad_format,
+ 	.get_selection		= imx219_get_selection,
++	.set_routing		= imx219_set_routing,
+ 	.enum_frame_size	= imx219_enum_frame_size,
+ };
+ 
+@@ -1547,7 +1567,8 @@ static int imx219_probe(struct i2c_client *client)
+ 
+ 	/* Initialize subdev */
+ 	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
+-			    V4L2_SUBDEV_FL_HAS_EVENTS;
++			    V4L2_SUBDEV_FL_HAS_EVENTS |
++			    V4L2_SUBDEV_FL_MULTIPLEXED;
+ 	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+ 
+ 	/* Initialize source pad */
+-- 
+2.32.0
 
-Thierry
-
---ruUbb3Ly1noXTLRH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmH8Fc0ACgkQ3SOs138+
-s6GGCg/8CfokZvYlAjOMxpDQHvkgL6CKcSSOuY1KlwkyLC39mJ/NqFzh8rQO7YFe
-9YxInRWkjk0Kjf7uzyQMYIozXS6V+zdqmaPLPCvNyh6wgGlkc4IOuSshJQIyo8V5
-rAHjLtrJvdiw395TQn89XhXPPledVwYfjqE/jfRiVF9ZFhdwkkOmzdcznhPuFBrT
-Ud5fsxhidf8msw6GgEc9CJEwkWM2QIFhx5lZnPh0dMgqNs8DfNzMTYGdc+VjFvYP
-Yxo4TlMqurS4A/qr0a4mFG4FwNcKQEc1W5nNSlJQ8K8psiEk6lO1/MB87G01/uLe
-HYGhXLmo/ZtClcHjNsGuyiFJeevat+nZQd0JizmcCwcqX2zyhnCpRtgW/4dzXP1q
-f4cXtz+SkFuWJ1XXmyI30TySCOBcYPcN/xYE2jUma4lOJzRLhSO31Zdj26Q6pv38
-gKtxBJ37cEv8ON8fVx/mGWbnYgw/H0QMjbavajUJxSoDwh0j9X736mcsIKSX6/PK
-MSfaIuxvOi5gc3hPmVqgg4LO1k76dR3dLESq81fuplGWZROwoyuD8nIpENaH8/bS
-vH6eMoHiFICbNEaV/T73Wr4g8GCY5rQa8gPOp73rQC++7JT6CpOX8CtHDMojnf7R
-X8qR+wQi6uPqwa0BIFMBXlN+D2HioRJY3CUdKqileg2HFgWycuc=
-=v0Xn
------END PGP SIGNATURE-----
-
---ruUbb3Ly1noXTLRH--

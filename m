@@ -2,230 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3724A86B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0644A86BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbiBCOi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:38:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:50262 "EHLO foss.arm.com"
+        id S238856AbiBCOkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:40:12 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:39508 "EHLO mail.skyhub.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234953AbiBCOi5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:38:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D41D31063;
-        Thu,  3 Feb 2022 06:38:56 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EDA273F774;
-        Thu,  3 Feb 2022 06:38:55 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     arnd@arndb.de, boqun.feng@gmail.com, mark.rutland@arm.com,
-        peterz@infradead.org, will@kernel.org
-Subject: [PATCH] atomics: fix atomic64_{read_acquire,set_release} fallbacks
-Date:   Thu,  3 Feb 2022 14:38:48 +0000
-Message-Id: <20220203143848.3934515-1-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
+        id S229558AbiBCOkI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 09:40:08 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0CCAC1EC04C1;
+        Thu,  3 Feb 2022 15:40:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643899203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uRkidV9rm70r65t8zRK5LUK617v6jjX8xXx77Av6a7w=;
+        b=jxAChagwEN26K+oMim082LNKxapBTumZtbjTBfRVFD5daY/HoWixlnEmKTAc2XEdLJT/gU
+        aySeLabM9BOVCerKWItMK/Zad5zUInAVLath7/aGR/VFOb88ZQ2S8iw6kifwf17//YIwtq
+        cXY5uMx2JCARDEOueHU8GEBBhBSbMUA=
+Date:   Thu, 3 Feb 2022 15:39:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 24/43] x86/compressed/acpi: Move EFI detection to
+ helper
+Message-ID: <YfvpPowvlz0reOZ/@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-25-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-25-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd reports that on 32-bit architectures, the fallbacks for
-atomic64_read_acquire and atomic64_set_release() are broken as they use
-smp_load_acquire() and smp_store_release() respectively, which do not
-work on types larger than the native word size.
+On Fri, Jan 28, 2022 at 11:17:45AM -0600, Brijesh Singh wrote:
+> diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
+> new file mode 100644
+> index 000000000000..daa73efdc7a5
+> --- /dev/null
+> +++ b/arch/x86/boot/compressed/efi.c
+> @@ -0,0 +1,50 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Helpers for early access to EFI configuration table.
+> + *
+> + * Originally derived from arch/x86/boot/compressed/acpi.c
+> + */
+> +
+> +#include "misc.h"
+> +#include <linux/efi.h>
+> +#include <asm/efi.h>
 
-Since those contain compiletime_assert_atomic_type(), any attempt to use
-those fallbacks will result in a build-time error. e.g. with the
-following added to arch/arm/kernel/setup.c:
+Yap, it is includes like that which cause this whole decompressor
+include hell. One day...
 
-| void test_atomic64(atomic64_t *v)
-| {
-|        atomic64_set_release(v, 5);
-|        atomic64_read_acquire(v);
-| }
+> +
+> +/**
+> + * efi_get_type - Given boot_params, determine the type of EFI environment.
+> + *
+> + * @boot_params:        pointer to boot_params
+> + *
+> + * Return: EFI_TYPE_{32,64} for valid EFI environments, EFI_TYPE_NONE otherwise.
+> + */
+> +enum efi_type efi_get_type(struct boot_params *boot_params)
 
-The compiler will complain as follows:
+				struct boot_params *bp
 
-| In file included from <command-line>:
-| In function 'arch_atomic64_set_release',
-|     inlined from 'test_atomic64' at ./include/linux/atomic/atomic-instrumented.h:669:2:
-| ././include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_9' declared with attribute error: Need native word sized stores/loads for atomicity.
-|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-|       |                                      ^
-| ././include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
-|   327 |    prefix ## suffix();    \
-|       |    ^~~~~~
-| ././include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
-|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-|       |  ^~~~~~~~~~~~~~~~~~~
-| ././include/linux/compiler_types.h:349:2: note: in expansion of macro 'compiletime_assert'
-|   349 |  compiletime_assert(__native_word(t),    \
-|       |  ^~~~~~~~~~~~~~~~~~
-| ./include/asm-generic/barrier.h:133:2: note: in expansion of macro 'compiletime_assert_atomic_type'
-|   133 |  compiletime_assert_atomic_type(*p);    \
-|       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| ./include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
-|   164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-|       |                                                       ^~~~~~~~~~~~~~~~~~~
-| ./include/linux/atomic/atomic-arch-fallback.h:1270:2: note: in expansion of macro 'smp_store_release'
-|  1270 |  smp_store_release(&(v)->counter, i);
-|       |  ^~~~~~~~~~~~~~~~~
-| make[2]: *** [scripts/Makefile.build:288: arch/arm/kernel/setup.o] Error 1
-| make[1]: *** [scripts/Makefile.build:550: arch/arm/kernel] Error 2
-| make: *** [Makefile:1831: arch/arm] Error 2
+> +{
+> +	struct efi_info *ei;
+> +	enum efi_type et;
+> +	const char *sig;
+> +
+> +	ei = &boot_params->efi_info;
+> +	sig = (char *)&ei->efi_loader_signature;
+> +
+> +	if (!strncmp(sig, EFI64_LOADER_SIGNATURE, 4)) {
+> +		et = EFI_TYPE_64;
+> +	} else if (!strncmp(sig, EFI32_LOADER_SIGNATURE, 4)) {
+> +		et = EFI_TYPE_32;
+> +	} else {
+> +		debug_putstr("No EFI environment detected.\n");
+> +		et = EFI_TYPE_NONE;
+> +	}
+> +
+> +#ifndef CONFIG_X86_64
+> +	/*
+> +	 * Existing callers like acpi.c treat this case as an indicator to
+> +	 * fall-through to non-EFI, rather than an error, so maintain that
+> +	 * functionality here as well.
+> +	 */
+> +	if (ei->efi_systab_hi || ei->efi_memmap_hi) {
+> +		debug_putstr("EFI system table is located above 4GB and cannot be accessed.\n");
+> +		et = EFI_TYPE_NONE;
+> +	}
+> +#endif
+> +
+> +	return et;
+> +}
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 01cc13c12059..a26244c0fe01 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -176,4 +176,20 @@ void boot_stage2_vc(void);
+>  
+>  unsigned long sev_verify_cbit(unsigned long cr3);
+>  
+> +enum efi_type {
+> +	EFI_TYPE_64,
+> +	EFI_TYPE_32,
+> +	EFI_TYPE_NONE,
+> +};
 
-Fix this by only using smp_load_acquire() and smp_store_release() for
-native atomic types, and otherwise falling back to the regular barriers
-necessary for acquire/release semantics, as we do in the more generic
-acquire and release fallbacks.
+Haha, EFI folks will be wondering where in the spec that thing is... :-)))
 
-For the example above this works as expected on 32-bit, e.g.
-
-| <test_atomic64>:
-|         dmb     ish
-|         mov     r2, #5
-|         mov     r3, #0
-|         strd    r2, [r0]
-|         ldrd    r2, [r0]
-|         dmb     ish
-|         bx      lr
-
-... and also on 64-bit, e.g.
-
-| <test_atomic64>:
-|         bti     c
-|         paciasp
-|         mov     x1, #0x5
-|         stlr    x1, [x0]
-|         ldar    x0, [x0]
-|         autiasp
-|         ret
-
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Will Deacon <will@kernel.org>
----
- include/linux/atomic/atomic-arch-fallback.h | 38 ++++++++++++++++++---
- scripts/atomic/fallbacks/read_acquire       | 11 +++++-
- scripts/atomic/fallbacks/set_release        |  7 +++-
- 3 files changed, 49 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
-index a3dba31df01e..8dfb03317f2a 100644
---- a/include/linux/atomic/atomic-arch-fallback.h
-+++ b/include/linux/atomic/atomic-arch-fallback.h
-@@ -151,7 +151,16 @@
- static __always_inline int
- arch_atomic_read_acquire(const atomic_t *v)
- {
--	return smp_load_acquire(&(v)->counter);
-+	int ret;
-+
-+	if (__native_word(atomic_t)) {
-+		ret = smp_load_acquire(&(v)->counter);
-+	} else {
-+		ret = arch_atomic_read(v);
-+		__atomic_acquire_fence();
-+	}
-+
-+	return ret;
- }
- #define arch_atomic_read_acquire arch_atomic_read_acquire
- #endif
-@@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
- static __always_inline void
- arch_atomic_set_release(atomic_t *v, int i)
- {
--	smp_store_release(&(v)->counter, i);
-+	if (__native_word(atomic_t)) {
-+		smp_store_release(&(v)->counter, i);
-+	} else {
-+		__atomic_release_fence();
-+		arch_atomic_set(v, i);
-+	}
- }
- #define arch_atomic_set_release arch_atomic_set_release
- #endif
-@@ -1258,7 +1272,16 @@ arch_atomic_dec_if_positive(atomic_t *v)
- static __always_inline s64
- arch_atomic64_read_acquire(const atomic64_t *v)
- {
--	return smp_load_acquire(&(v)->counter);
-+	s64 ret;
-+
-+	if (__native_word(atomic64_t)) {
-+		ret = smp_load_acquire(&(v)->counter);
-+	} else {
-+		ret = arch_atomic_read(v);
-+		__atomic_acquire_fence();
-+	}
-+
-+	return ret;
- }
- #define arch_atomic64_read_acquire arch_atomic64_read_acquire
- #endif
-@@ -1267,7 +1290,12 @@ arch_atomic64_read_acquire(const atomic64_t *v)
- static __always_inline void
- arch_atomic64_set_release(atomic64_t *v, s64 i)
- {
--	smp_store_release(&(v)->counter, i);
-+	if (__native_word(atomic64_t)) {
-+		smp_store_release(&(v)->counter, i);
-+	} else {
-+		__atomic_release_fence();
-+		arch_atomic_set(v, i);
-+	}
- }
- #define arch_atomic64_set_release arch_atomic64_set_release
- #endif
-@@ -2358,4 +2386,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
- #endif
- 
- #endif /* _LINUX_ATOMIC_FALLBACK_H */
--// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
-+// ba488b6398359cb776d457971f30cef78d0d36dc
-diff --git a/scripts/atomic/fallbacks/read_acquire b/scripts/atomic/fallbacks/read_acquire
-index 803ba7561076..7b8b87143c0c 100755
---- a/scripts/atomic/fallbacks/read_acquire
-+++ b/scripts/atomic/fallbacks/read_acquire
-@@ -2,6 +2,15 @@ cat <<EOF
- static __always_inline ${ret}
- arch_${atomic}_read_acquire(const ${atomic}_t *v)
- {
--	return smp_load_acquire(&(v)->counter);
-+	${int} ret;
-+
-+	if (__native_word(${atomic}_t)) {
-+		ret = smp_load_acquire(&(v)->counter);
-+	} else {
-+		ret = arch_atomic_read(v);
-+		__atomic_acquire_fence();
-+	}
-+
-+	return ret;
- }
- EOF
-diff --git a/scripts/atomic/fallbacks/set_release b/scripts/atomic/fallbacks/set_release
-index 86ede759f24e..5f692db3ce29 100755
---- a/scripts/atomic/fallbacks/set_release
-+++ b/scripts/atomic/fallbacks/set_release
-@@ -2,6 +2,11 @@ cat <<EOF
- static __always_inline void
- arch_${atomic}_set_release(${atomic}_t *v, ${int} i)
- {
--	smp_store_release(&(v)->counter, i);
-+	if (__native_word(${atomic}_t)) {
-+		smp_store_release(&(v)->counter, i);
-+	} else {
-+		__atomic_release_fence();
-+		arch_atomic_set(v, i);
-+	}
- }
- EOF
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

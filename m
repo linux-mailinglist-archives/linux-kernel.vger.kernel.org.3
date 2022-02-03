@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD47D4A913A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2EE4A912D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238780AbiBCXfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344366AbiBCXfA (ORCPT
+        id S1356000AbiBCXcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:32:51 -0500
+Received: from mail-qt1-f175.google.com ([209.85.160.175]:40661 "EHLO
+        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238196AbiBCXcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:35:00 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F736C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 15:35:00 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id y84so5430846iof.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 15:35:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ne0ZORFuDwUgC8aqjM4wX7CGP1Jo0bJOP46NZX2Toec=;
-        b=leTpdfQNd4Zn0saReF9TO/gg+VcdQoP4DjI+kekHOxiXWyfA/GeCtp0hAXnHnMUTA6
-         Looo4GggkZqHbndOQYLS2Va/7moL6leCED9FQ8FGDQjgnCCSnH5ttAfSTRNgYzHKYRfP
-         hSVz7icboF/YLN4P0DwkKx5c1SF7Bb8ts6YM0=
+        Thu, 3 Feb 2022 18:32:50 -0500
+Received: by mail-qt1-f175.google.com with SMTP id v5so4325231qto.7;
+        Thu, 03 Feb 2022 15:32:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ne0ZORFuDwUgC8aqjM4wX7CGP1Jo0bJOP46NZX2Toec=;
-        b=GgioQNAKx8kXUcYy5APlW5PiDXVC/W0Ijw8jiAHG/2iay8Ia0J7ovWrJwbkSWRW0Vg
-         KUtOGad8Sziwna+vmikEyH+JL5sjFLTZCKsGcTLdw9s0IkCpxVwMItvJGPDDv7b5M4dx
-         1qyC4HQ04L4zh6P1qNdNc/F6SEW39rfH8+ecolf6FoRxK6PLHkMacAGMTVVzH/tnBuuw
-         F0zBnDhImVtxWmnv/NxCmPtks0Mz/UuxRfwMpo6eigYf23rpyllraTNbMPYQLhFFtgLA
-         HsfApgIDtHi3b6RA/k6wZp1lAd1p78yPMkm0EZ2N2/NYX47tqTHpUs1rOq/GQ3eDJqaM
-         GBlA==
-X-Gm-Message-State: AOAM5313CzNn/fIOGiXVIpOpPr9sIIUezdFCcMzEQfKfCeST2QSl5vpW
-        Yks19hnmLEKB7kww3l5MBOe0K5gArcGHBw==
-X-Google-Smtp-Source: ABdhPJzIeZNqv4KBAMEGHoihiYJL6cpAiGpD5KaDoPRBH4ZYPf77CpO97T6Bj9nvcKDGY5p5pWz3Xw==
-X-Received: by 2002:a02:7f02:: with SMTP id r2mr154443jac.148.1643931299444;
-        Thu, 03 Feb 2022 15:34:59 -0800 (PST)
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
-        by smtp.gmail.com with ESMTPSA id q9sm103650iop.30.2022.02.03.15.34.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 15:34:59 -0800 (PST)
-Received: by mail-io1-f50.google.com with SMTP id z199so5324116iof.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 15:34:59 -0800 (PST)
-X-Received: by 2002:a05:6638:168d:: with SMTP id f13mr140596jat.44.1643930826719;
- Thu, 03 Feb 2022 15:27:06 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lgYpmcza1wXVQl4qbo8bJCu4YvrZ/+INkQLGcdeKuAc=;
+        b=6AQQkgcea/bIUxx9cM4H9UFj6oJsCk0Oc6tL5pMn/waAop+oooWKpJFm35AHQ67wHI
+         8MuxgZACs6cpSpZ9mIY9qmgp960onSm3jfFL0/iBu+tHI1VDEgG+vuIHtsc4NkRukWcL
+         uvpi3meoURKz45E9DOf9XG4JLTHDsTA7/7Tt+QxgT/6BuK24usv7nrPVXpeiZR+FIPg1
+         eaVvlZdHAqGOuhlnOubwiciWffb9ZnL8dooES9OEFiVKG9cBK4abET07wnUL76KBIjXy
+         ukVVpg9xxC2JMOzvoU2u/Z3k46LSGpvgZeP4Ad5NmG6R81/l1kduNZQp+O4cHHRJFCNc
+         vFCg==
+X-Gm-Message-State: AOAM531A+tHJefPDBIgKnzsrLboVdGAeUin/EvNNowqF0BMBn2Pqv6TE
+        TdsXI3zjjDHjWVheqSUImLQnSocPUSap4Q==
+X-Google-Smtp-Source: ABdhPJyKIAEBjvo3JiReMJ56ZoPw0Uoh2nFeoCFY6j/MDcfdQ1lJ9LxrJ8YykAVxA0s1AdIR1dhZ3g==
+X-Received: by 2002:ac8:5a0b:: with SMTP id n11mr366810qta.648.1643931169243;
+        Thu, 03 Feb 2022 15:32:49 -0800 (PST)
+Received: from localhost (fwdproxy-ash-016.fbsv.net. [2a03:2880:20ff:10::face:b00c])
+        by smtp.gmail.com with ESMTPSA id g20sm181745qko.27.2022.02.03.15.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 15:32:48 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Cc:     void@manifault.com, kernel-team@fb.com
+Subject: [PATCH] livepatch: Skip livepatch tests if ftrace cannot be configured
+Date:   Thu,  3 Feb 2022 15:32:07 -0800
+Message-Id: <20220203233205.1554034-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220202212348.1391534-1-dianders@chromium.org> <20220202132301.v3.12.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
-In-Reply-To: <20220202132301.v3.12.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 3 Feb 2022 15:26:54 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XXFEM4u78qQZoGrdxpSTjdjWQ_01m+af_Xz1j_TNNDJw@mail.gmail.com>
-Message-ID: <CAD=FV=XXFEM4u78qQZoGrdxpSTjdjWQ_01m+af_Xz1j_TNNDJw@mail.gmail.com>
-Subject: Re: [PATCH v3 12/14] arm64: dts: qcom: sc7280: Add herobrine-r1
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Prasad Malisetty <pmaliset@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+livepatch has a set of selftests that are used to validate the behavior of
+the livepatching subsystem.  One of the testcases in the livepatch
+testsuite is test-ftrace.sh, which among other things, validates that
+livepatching gracefully fails when ftrace is disabled.  In the event that
+ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
+will fail later due to it unexpectedly successfully loading the
+test_klp_livepatch module.
 
-On Wed, Feb 2, 2022 at 1:24 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> +&pcie1_clkreq_n {
-> +       bias-disable;
-> +       drive-strength = <2>;
-> +};
+While the livepatch selftests are careful to remove any of the livepatch
+test modules between testcases to avoid this situation, ftrace may still
+fail to be disabled if another trace is active on the system that was
+enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
+that use trampolines will cause this test to fail due to the trampoline
+being implemented with register_ftrace_direct().  The following is an
+example of such a trace:
 
-As per the discussion [1] then maybe the above should be
-`bias-pull-up` instead of `bias-disable`. I'm happy to spin this, have
-it fixed by the maintainer when applied, or do a follow-up patch to
-fix this. Please let me know.
+tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
+(call_direct_funcs+0x0/0x30)
+        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
 
--Doug
+In order to make the test more resilient to system state that is out of its
+control, this patch adds a check to set_ftrace_enabled() to skip the tests
+if the sysctl invocation fails.
 
-[1] https://lore.kernel.org/r/CAD=FV=UKKZaHHz3-idahLg-ey3xmSZWKeTVVipzpZNQAkUVKmQ@mail.gmail.com
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 846c7ed71556..6857fdcb6b45 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -78,6 +78,12 @@ function set_ftrace_enabled() {
+ 	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+ 		 sysctl kernel.ftrace_enabled 2>&1)
+ 	echo "livepatch: $result" > /dev/kmsg
++	# Skip the test if ftrace is busy.  This can happen under normal system
++	# conditions if a trace is marked as permament.
++	if [[ "$result" == *"Device or resource busy"* ]]; then
++		skip "failed to set kernel.ftrace_enabled=$1"
++	fi
++
+ }
+ 
+ function cleanup() {
+-- 
+2.30.2
+

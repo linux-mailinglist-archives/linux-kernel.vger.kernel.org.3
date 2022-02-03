@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5694A86CE
+	by mail.lfdr.de (Postfix) with ESMTP id 687874A86CF
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346788AbiBCOov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:44:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47746 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237556AbiBCOou (ORCPT
+        id S233026AbiBCOpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347434AbiBCOpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:44:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643899489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=II1Fz5tzNmggtt86EVX2Z450qsChAoGg4Dx1YbBn1tA=;
-        b=JF6RJXx3QBUsyF8cgwzQw9y8TR3//fWZGpIPAjqg+Jl94cU2/QvV1XA5jqyuUYXa+garrY
-        7KYm0fsNiHkQ0v8qdznIerD48+q6UZNgvEEX9M1BhtO8vooFLN8NgpJWLbmOTEXlotg9Xr
-        XF68ZHMlvn5okawjv68FoBGmX7T9baQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-KXvs1RxNOaumBa7NeWPmDA-1; Thu, 03 Feb 2022 09:44:46 -0500
-X-MC-Unique: KXvs1RxNOaumBa7NeWPmDA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 3 Feb 2022 09:45:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B060C061714;
+        Thu,  3 Feb 2022 06:45:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BDFF6101F7C2;
-        Thu,  3 Feb 2022 14:44:44 +0000 (UTC)
-Received: from wsfd-netdev64.ntdv.lab.eng.bos.redhat.com (wsfd-netdev64.ntdv.lab.eng.bos.redhat.com [10.19.188.127])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 05B977D57D;
-        Thu,  3 Feb 2022 14:44:43 +0000 (UTC)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf scripting python: expose symbol offset and source information
-Date:   Thu,  3 Feb 2022 09:44:33 -0500
-Message-Id:  <164389947295.382219.17025049915445689710.stgit@wsfd-netdev64.ntdv.lab.eng.bos.redhat.com>
-User-Agent: StGit/0.23
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31193619C5;
+        Thu,  3 Feb 2022 14:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94370C340F0;
+        Thu,  3 Feb 2022 14:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643899500;
+        bh=4X60c9J7dyhyGgFLDNX3tftCODVhTZ8aDgMpH70B4D0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jf2ap6sVW+iM13htQpVRMj6v0TsX63zQhDH0Iid4nvYy+4jUC6LZAF9/hV/9pFvIb
+         57nDKwma+uVjiZTN7uWg1QiG1JxbMlNVHWFm4e+CpZPOvRPOmuai9iIfYlU+kfoInz
+         r/lml87oTUn0Ofm/RSzrn9RAYc2eMEFL3x7n285JgcmN9KOOzwHQt8fif3Of9jso2p
+         dePyU1cfQsnPZdsMiAiCt2O1RWn3diVmPeIvspC90rMUG11zbLJrwGJR4CHB9rE8Hy
+         VCiHl74aBCfKVyeDqFbEL1fpWRDSixT3FjCZDKBeTCNkR3wJzpNKH2fqXw5C6strdF
+         cUzerl3+PNJ5g==
+Received: by mail-ed1-f52.google.com with SMTP id b13so6540367edn.0;
+        Thu, 03 Feb 2022 06:45:00 -0800 (PST)
+X-Gm-Message-State: AOAM532YG8WKpw47io7J9a7lucr76OZaStXkNRoNXt8y3q0Z5IRPXECp
+        zSzcqvVxjN8s4c3ndb1MHNBd8+VB7XS3b5LOOg==
+X-Google-Smtp-Source: ABdhPJw6USRzkUs2MpEdvbFzpbuH5Gg1vUqLb2ph6uvapwZFrBu6VIyITj/70KieoZLN7eeCJZLMyfifbm340ZVUEhI=
+X-Received: by 2002:aa7:d6d4:: with SMTP id x20mr35580598edr.307.1643899498934;
+ Thu, 03 Feb 2022 06:44:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <20220201140723.467431-1-elder@linaro.org> <20220202210638.07b83d41@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <eb09c869-c5c6-4be8-5265-072849f1ecd0@linaro.org>
+In-Reply-To: <eb09c869-c5c6-4be8-5265-072849f1ecd0@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Feb 2022 08:44:47 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLMit=e6vdum-xm1uxfCZcoJsTFe_S3k-QyVbvJPfNHew@mail.gmail.com>
+Message-ID: <CAL_JsqLMit=e6vdum-xm1uxfCZcoJsTFe_S3k-QyVbvJPfNHew@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: add IPA qcom,qmp property
+To:     Alex Elder <elder@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Gross, Andy" <agross@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Evan Green <evgreen@chromium.org>, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, Alex Elder <elder@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change adds the symbol offset to the data exported for each
-call-chain entry. This can not be calculated from the script and
-only the ip value, and no related mmap information.
+On Thu, Feb 3, 2022 at 5:27 AM Alex Elder <elder@linaro.org> wrote:
+>
+> On 2/2/22 11:06 PM, Jakub Kicinski wrote:
+> > On Tue,  1 Feb 2022 08:07:23 -0600 Alex Elder wrote:
+> >> At least three platforms require the "qcom,qmp" property to be
+> >> specified, so the IPA driver can request register retention across
+> >> power collapse.  Update DTS files accordingly.
+> >>
+> >> Signed-off-by: Alex Elder <elder@linaro.org>
+> >> ---
+> >>
+> >> Dave, Jakub, please let Bjorn take this through the Qualcomm tree.
+> >
+> > I don't know much about DT but the patch defining the property is
+> > targeting net - will it not cause validation errors? Or Bjorn knows
+> > to wait for the fixes to propagate? Or it doesn't matter? :)
+>
+> It might matter sometimes, but in this case it does not.
+>
+> If the DT property is present but never referenced by the
+> code, it doesn't matter.
+>
+> The code in this patch looks up the DT property, and its
+> behavior is affected by whether the property is there
+> or not.  If it's not there, it's treated as an error
+> that can be safely ignored.
+>
+> In the case this fix is actually needed, we'll need
+> both the code present and DT property defined.  If
+> the code is there but not the property, it's OK, but
+> the bug won't be fixed quite yet.
 
-In addition, also export the source file and line information, if
-available, to avoid an external lookup if this information is needed.
+If there's only one possible node that qcom,qmp points to, you can
+just get the node by its compatible (of_find_compatible_node()). Then
+you don't need a DT update to make things work. Of course, this
+doesn't work too well if there are 10 possible compatibles without a
+common fallback compatible.
 
-Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
----
- .../util/scripting-engines/trace-event-python.c    |   42 ++++++++++++++------
- 1 file changed, 30 insertions(+), 12 deletions(-)
-
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index e752e1f4a5f0..0f392b4ff663 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -392,6 +392,18 @@ static const char *get_dsoname(struct map *map)
- 	return dsoname;
- }
- 
-+static unsigned long get_offset(struct symbol *sym, struct addr_location *al)
-+{
-+	unsigned long offset;
-+
-+	if (al->addr < sym->end)
-+		offset = al->addr - sym->start;
-+	else
-+		offset = al->addr - al->map->start - sym->start;
-+
-+	return offset;
-+}
-+
- static PyObject *python_process_callchain(struct perf_sample *sample,
- 					 struct evsel *evsel,
- 					 struct addr_location *al)
-@@ -443,6 +455,24 @@ static PyObject *python_process_callchain(struct perf_sample *sample,
- 					_PyUnicode_FromStringAndSize(node->ms.sym->name,
- 							node->ms.sym->namelen));
- 			pydict_set_item_string_decref(pyelem, "sym", pysym);
-+
-+			if (node->ms.map) {
-+				struct map *map = node->ms.map;
-+				struct addr_location node_al;
-+				unsigned long offset;
-+
-+				node_al.addr = map->map_ip(map, node->ip);
-+				node_al.map  = map;
-+				offset = get_offset(node->ms.sym, &node_al);
-+
-+				pydict_set_item_string_decref(
-+					pyelem, "sym_off",
-+					PyLong_FromUnsignedLongLong(offset));
-+			}
-+			if (node->srcline && strcmp(":0", node->srcline))
-+				pydict_set_item_string_decref(
-+					pyelem, "sym_srcline",
-+					_PyUnicode_FromString(node->srcline));
- 		}
- 
- 		if (node->ms.map) {
-@@ -520,18 +550,6 @@ static PyObject *python_process_brstack(struct perf_sample *sample,
- 	return pylist;
- }
- 
--static unsigned long get_offset(struct symbol *sym, struct addr_location *al)
--{
--	unsigned long offset;
--
--	if (al->addr < sym->end)
--		offset = al->addr - sym->start;
--	else
--		offset = al->addr - al->map->start - sym->start;
--
--	return offset;
--}
--
- static int get_symoff(struct symbol *sym, struct addr_location *al,
- 		      bool print_off, char *bf, int size)
- {
-
+Rob

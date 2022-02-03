@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F272E4A835F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9B64A8360
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350334AbiBCLyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:54:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S1350348AbiBCLyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 06:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350332AbiBCLyA (ORCPT
+        with ESMTP id S1350331AbiBCLyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 06:54:00 -0500
+        Thu, 3 Feb 2022 06:54:05 -0500
 Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2146CC06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 03:54:00 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u130so2044645pfc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 03:54:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0AAC061748
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 03:54:03 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id i30so2019129pfk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 03:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dAqSf/tyCwdsZHkiyWbb3eiNXltTa0d1QVuYusLc2f0=;
-        b=lEefzxPqPP58T2ta4bd1mVNE9Swkps/YStQ5ytP+dHpxeWeIBqbiai52u5LlNp6LLi
-         kJIZlf1iyqU6qogMnjxpX3nC87Y4QK2DimNOtC69jLWO/jAsAG9R6LnmAbIperFt2bhh
-         zLAq1VhpMJmNh2OLyjrZEKku+BKuzmdISuiOXPNOs1yxUi6hv24dKotuEP1YiG3MlKWP
-         d04B05m34XKNPG3hP+WhUOYLsVegFC7kKD+kvh0L3z3k31B7HTaM6QTf8UPtyY4x9yvz
-         rIGAOxh+MotKoCfiw8quYHOMCk2arbIcZnIXYpVm173U4puSr4c8GUllSO4F1uFx+m/2
-         bL9w==
+        bh=y24EP6xKeEvQOAjkdyxZutWXu4m6B4k+YDqTIaEEINs=;
+        b=bzyKo9LHZxuywZ/Lpjaf+94nxTw259Cln/iVI82pP+PjBcxhKdD8DexmKafK+gizYv
+         uARgrFIK04qrjpwyvnYXazPXOjeOJHy43FfOC4Bfi/1lcNls/5j7g1zs+4DpTCP5wDhb
+         QtbHk/4RQQuRx2HQx0vPulkcoVyIfq8tKiLjXV4XREQ/rrPS6HqIXCArBuQ4WdS1oko/
+         oCa5nUnENvmUrV+kZ21wuIMIuNfppLYVdwrK848DccuRcOsZh+0IvrfDh5HjhDXXDmru
+         ilhBR4JnSFXIE46L+No+vigF+0dbkXxD3Qem/NmmLGxGxy+ctMxEl4gk7bNrHoQ/u3Oz
+         yPsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=dAqSf/tyCwdsZHkiyWbb3eiNXltTa0d1QVuYusLc2f0=;
-        b=FItwTbMBMzm8E5RGqn5fcrCYkJQX52RawtbEEZP2vBXBcSU448kmN7H19FUUq5u0p6
-         Ggpw9fsVRwMBYFYSPHfH/aB9OvZgB5Mkc/tXBrQHvDu1lV9Lu7iA2fPTko6NTsHhpQh2
-         sTd9mCacs+XoRFRUbUbpH9TOakid3tTKCvc8z1FdGc6arzqUJFkfgijUy3RU5m62dTA6
-         0DDEgCkYluTFPRApqao1RfS8G9+ZYI/f/L7+q93ZwrsQiFnD6T39KQoxTPypYIeDLuwa
-         gt8yJ/6M2QaJSd6rcs+8/dF20jr3HFIqN6U109X9WjyGnopUtV/P+iqU+0bfkwtc+Oox
-         TXTQ==
-X-Gm-Message-State: AOAM5320wo2vONORK6s0nFQGtdkftP+yP0Gz6wgEx1slLV36lDpp1pr9
-        xRAg7cXyr7kddNVDKqWX7Tc=
-X-Google-Smtp-Source: ABdhPJxFEVOWHb3iWJqOFPjq9HC5m+R+EmkHDyHp9hzqEiU5T/OeGD1iK/5rq7whyILLd9P3KudZ8Q==
-X-Received: by 2002:a05:6a00:24c8:: with SMTP id d8mr33627605pfv.60.1643889239499;
-        Thu, 03 Feb 2022 03:53:59 -0800 (PST)
+        bh=y24EP6xKeEvQOAjkdyxZutWXu4m6B4k+YDqTIaEEINs=;
+        b=5135HT8jwb6Um/6ZbRjU/jNPpZQ6GWNzEyhZHGZHsgafzldstb0sdKktFXxinSSwSU
+         DzmHITKboRlWSjN0fiVWewc8HOZbGdsMmhjuQUdJWKFO3S0Zt9yYaUk2LzoGBDyIDLlh
+         Q7ykVw8TzFH5E1yQH+A/zv35asfcJwr58Um5tKno8d5zMOko+MX3KP5d7BZCjXBbuciF
+         QX9AmuFUxy/bwJ7IN5JqPpf6OaMoienJfhYPuGdhNpSS6w5TYJlEhUq6+Bf7TBVDcdeM
+         fXUTZQ32kSOdRhXrOH4lO0LLNCUfUP6HZfhp8EABiDyHMi2EfCYlw4NxwIYFDAKlNa5H
+         m9lA==
+X-Gm-Message-State: AOAM53138IX9IZRqRgUMpaEdM3LPgDal0nm9Sw9uJH3yoVTsl9g96sIw
+        WENBKoI2ehQkjYkrDsvQskU=
+X-Google-Smtp-Source: ABdhPJwtY9ZHwe8+DA5oX4k6u3MXHenJR9U4RjnvG/Nbl5tLA8d1Q7wrRjYWEupqZ5sEJdkknt7Smw==
+X-Received: by 2002:a65:4bc9:: with SMTP id p9mr27620862pgr.168.1643889243359;
+        Thu, 03 Feb 2022 03:54:03 -0800 (PST)
 Received: from voyager.lan ([45.124.203.14])
-        by smtp.gmail.com with ESMTPSA id mp22sm9586389pjb.28.2022.02.03.03.53.55
+        by smtp.gmail.com with ESMTPSA id mp22sm9586389pjb.28.2022.02.03.03.53.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 03:53:58 -0800 (PST)
+        Thu, 03 Feb 2022 03:54:02 -0800 (PST)
 Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
 From:   Joel Stanley <joel@jms.id.au>
 To:     Arnd Bergmann <arnd@arndb.de>, Andrew Jeffery <andrew@aj.id.au>,
@@ -55,9 +55,9 @@ To:     Arnd Bergmann <arnd@arndb.de>, Andrew Jeffery <andrew@aj.id.au>,
         "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org
-Subject: [PATCH v2 1/3] firmware: Add boot information to sysfs
-Date:   Thu,  3 Feb 2022 22:23:42 +1030
-Message-Id: <20220203115344.267159-2-joel@jms.id.au>
+Subject: [PATCH v2 2/3] ARM: aspeed: Add secure boot controller support
+Date:   Thu,  3 Feb 2022 22:23:43 +1030
+Message-Id: <20220203115344.267159-3-joel@jms.id.au>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220203115344.267159-1-joel@jms.id.au>
 References: <20220203115344.267159-1-joel@jms.id.au>
@@ -67,214 +67,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Machines often have firmware that perform some action before Linux is
-loaded. It's useful to know how this firmware is configured, so create a
-sysfs directory and some properties that a system can choose to expose
-to describe how the system was started.
+This reads out the status of the secure boot controller and exposes it
+in sysfs using the bootinfo sysfs api.
 
-Currently the intended use describes five files, relating to hardware
-root of trust configuration.
+An example on a AST2600A3 QEMU model:
 
-These properties are populated by platform code at startup. Using fixed
-values is suitable as the state that the system booted in will not
-change after firmware has handed over.
+ # grep -r . /sys/firmware/bootinfo/*
+ /sys/firmware/bootinfo/abr_image:0
+ /sys/firmware/bootinfo/low_security_key:0
+ /sys/firmware/bootinfo/otp_protected:0
+ /sys/firmware/bootinfo/secure_boot:1
+ /sys/firmware/bootinfo/uart_boot:0
+
+On boot the state of the system according to the secure boot controller
+will be printed:
+
+ [    0.037634] AST2600 secure boot enabled
+
+or
+
+ [    0.037935] AST2600 secure boot disabled
+
+The initialisation is changed from early_initcall to subsys_initcall
+because we need the firmware_kobj to be initialised, and because there's
+no requirement to print this information early.
 
 Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
 v2:
- - Rewrite so properties are present in common code and are exposed based
-   on the is_visible callback.
- - Use sysfs_emit
+   - Rewrite to new bootinfo api
+   - Get rid of unused return values
 ---
- .../ABI/testing/sysfs-firmware-bootinfo       | 43 +++++++++
- drivers/base/firmware.c                       | 90 +++++++++++++++++++
- include/linux/firmware_bootinfo.h             | 22 +++++
- 3 files changed, 155 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-firmware-bootinfo
- create mode 100644 include/linux/firmware_bootinfo.h
+ drivers/soc/aspeed/aspeed-socinfo.c | 46 ++++++++++++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-firmware-bootinfo b/Documentation/ABI/testing/sysfs-firmware-bootinfo
-new file mode 100644
-index 000000000000..cd6c42316345
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-firmware-bootinfo
-@@ -0,0 +1,43 @@
-+What:		/sys/firmware/bootinfo/*
-+Date:		Jan 2022
-+Description:
-+		A system can expose information about how it was started in
-+		this directory.
-+
-+		This information is agnostic as to the firmware implementation.
-+
-+		A system may expose a subset of these properties as applicable.
-+
-+
-+What:		/sys/firmware/bootinfo/secure_boot
-+Date:		Jan 2022
-+Description:
-+		Indicates the system was started with secure boot enabled in
-+		the firmware.
-+
-+
-+What:		/sys/firmware/bootinfo/abr_image
-+Date:		Jan 2022
-+Description:
-+		Indicates the system was started from the alternate image
-+		loaded from an Alternate Boot Region. Often this is a result of
-+		the primary firmware image failing to start the system.
-+
-+
-+What:		/sys/firmware/bootinfo/low_security_key
-+Date:		Jan 2022
-+Description:
-+		Indicates the system's secure boot was verified with a low
-+		security or development key.
-+
-+What:		/sys/firmware/bootinfo/otp_protected
-+Date:		Jan 2022
-+Description:
-+		Indicates the system's boot configuration region is write
-+		protected and cannot be modified.
-+
-+What:		/sys/firmware/bootinfo/uart_boot
-+Date:		Jan 2022
-+Description:
-+		Indicates the system firmware was loaded from a UART instead of
-+		an internal boot device.
-diff --git a/drivers/base/firmware.c b/drivers/base/firmware.c
-index 8dff940e0db9..24b931232eb2 100644
---- a/drivers/base/firmware.c
-+++ b/drivers/base/firmware.c
-@@ -11,6 +11,7 @@
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/device.h>
+diff --git a/drivers/soc/aspeed/aspeed-socinfo.c b/drivers/soc/aspeed/aspeed-socinfo.c
+index 1ca140356a08..dc4dfd3df55f 100644
+--- a/drivers/soc/aspeed/aspeed-socinfo.c
++++ b/drivers/soc/aspeed/aspeed-socinfo.c
+@@ -8,6 +8,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/sys_soc.h>
 +#include <linux/firmware_bootinfo.h>
  
- #include "base.h"
+ static struct {
+ 	const char *name;
+@@ -74,6 +75,47 @@ static const char *siliconid_to_rev(u32 siliconid)
+ 	return "??";
+ }
  
-@@ -24,3 +25,92 @@ int __init firmware_init(void)
- 		return -ENOMEM;
++/* Secure Boot Controller register */
++#define SEC_STATUS		0x14
++#define ABR_IMAGE_SOURCE	BIT(13)
++#define OTP_PROTECTED		BIT(8)
++#define LOW_SEC_KEY		BIT(7)
++#define SECURE_BOOT		BIT(6)
++#define UART_BOOT		BIT(5)
++
++static void __init aspeed_bootinfo_init(void)
++{
++	struct device_node *np;
++	void __iomem *base;
++	struct bootinfo bootinfo = {};
++	u32 reg;
++
++	/* AST2600 only */
++	np = of_find_compatible_node(NULL, NULL, "aspeed,ast2600-sbc");
++	if (!of_device_is_available(np))
++		return;
++
++	base = of_iomap(np, 0);
++	if (!base)
++		of_node_put(np);
++
++	reg = readl(base + SEC_STATUS);
++
++	iounmap(base);
++	of_node_put(np);
++
++	BOOTINFO_SET(bootinfo, abr_image,        reg & ABR_IMAGE_SOURCE);
++	BOOTINFO_SET(bootinfo, low_security_key, reg & LOW_SEC_KEY);
++	BOOTINFO_SET(bootinfo, otp_protected,    reg & OTP_PROTECTED);
++	BOOTINFO_SET(bootinfo, secure_boot,      reg & SECURE_BOOT);
++	/* Invert the bit; as 1 is boot from SPI/eMMC */
++	BOOTINFO_SET(bootinfo, uart_boot,        !(reg & UART_BOOT));
++
++	firmware_bootinfo_init(&bootinfo);
++
++	pr_info("AST2600 secure boot %s\n", (reg & SECURE_BOOT) ? "enabled" : "disabled");
++}
++
+ static int __init aspeed_socinfo_init(void)
+ {
+ 	struct soc_device_attribute *attrs;
+@@ -148,6 +190,8 @@ static int __init aspeed_socinfo_init(void)
+ 			attrs->revision,
+ 			attrs->soc_id);
+ 
++	aspeed_bootinfo_init();
++
  	return 0;
  }
-+
-+/*
-+ * Exposes attributes documented in Documentation/ABI/testing/sysfs-firmware-bootinfo
-+ */
-+static struct bootinfo bootinfo;
-+
-+static ssize_t abr_image_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", bootinfo.abr_image.val);
-+}
-+static DEVICE_ATTR_RO(abr_image);
-+
-+static ssize_t low_security_key_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", bootinfo.low_security_key.val);
-+}
-+static DEVICE_ATTR_RO(low_security_key);
-+
-+static ssize_t otp_protected_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", bootinfo.otp_protected.val);
-+}
-+static DEVICE_ATTR_RO(otp_protected);
-+
-+static ssize_t secure_boot_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", bootinfo.secure_boot.val);
-+}
-+static DEVICE_ATTR_RO(secure_boot);
-+
-+static ssize_t uart_boot_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", bootinfo.uart_boot.val);
-+}
-+static DEVICE_ATTR_RO(uart_boot);
-+
-+#define ATTR_ENABLED(a) ((attr == &dev_attr_##a.attr) && bootinfo.a.en)
-+
-+static umode_t bootinfo_attr_mode(struct kobject *kobj, struct attribute *attr, int index)
-+{
-+	if (ATTR_ENABLED(abr_image))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(otp_protected))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(low_security_key))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(otp_protected))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(low_security_key))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(secure_boot))
-+		return 0444;
-+
-+	if (ATTR_ENABLED(uart_boot))
-+		return 0444;
-+
-+	return 0;
-+}
-+
-+static struct attribute *bootinfo_attrs[] = {
-+	&dev_attr_abr_image.attr,
-+	&dev_attr_low_security_key.attr,
-+	&dev_attr_otp_protected.attr,
-+	&dev_attr_secure_boot.attr,
-+	&dev_attr_uart_boot.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group bootinfo_attr_group = {
-+	.attrs = bootinfo_attrs,
-+	.is_visible = bootinfo_attr_mode,
-+};
-+
-+int __init firmware_bootinfo_init(struct bootinfo *bootinfo_init)
-+{
-+	struct kobject *kobj = kobject_create_and_add("bootinfo", firmware_kobj);
-+	if (!kobj)
-+		return -ENOMEM;
-+
-+	memcpy(&bootinfo, bootinfo_init, sizeof(bootinfo));
-+
-+	return sysfs_create_group(kobj, &bootinfo_attr_group);
-+}
-+EXPORT_SYMBOL_GPL(firmware_bootinfo_init);
-diff --git a/include/linux/firmware_bootinfo.h b/include/linux/firmware_bootinfo.h
-new file mode 100644
-index 000000000000..3fe630b061b9
---- /dev/null
-+++ b/include/linux/firmware_bootinfo.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/* Copyright 2022 IBM Corp. */
-+
-+#include <linux/sysfs.h>
-+#include <linux/init.h>
-+
-+#define BOOTINFO_SET(b, n, v) b.n.en = true; b.n.val = v
-+
-+struct bootinfo_entry {
-+	bool en;
-+	bool val;
-+};
-+
-+struct bootinfo {
-+	struct bootinfo_entry abr_image;
-+	struct bootinfo_entry low_security_key;
-+	struct bootinfo_entry otp_protected;
-+	struct bootinfo_entry secure_boot;
-+	struct bootinfo_entry uart_boot;
-+};
-+
-+int __init firmware_bootinfo_init(struct bootinfo *bootinfo_init);
+-early_initcall(aspeed_socinfo_init);
++subsys_initcall(aspeed_socinfo_init);
 -- 
 2.34.1
 

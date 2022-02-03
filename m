@@ -2,206 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BDE4A8550
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97B84A855B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350781AbiBCNe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:34:56 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:35090 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232242AbiBCNey (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:34:54 -0500
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 213DREYi007910;
-        Thu, 3 Feb 2022 13:34:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=q2200Hfkv25m4xV1NiL+v8ASzRif8xFyXRFn1OsJEUQ=;
- b=vn814JwcFQ23iVM+q6dCPxQtUSDVJNcIPwz2Xd7FC3daudxpsai0j62wVsvsvc750u0v
- ml90XF+2qcJ2S/zlxt0i3/1O+0b1Kg1zE5+v5xTHpH5G/NuGYCQEJ2O12JbEv8Cl6LZb
- GDwf+jMTPouoSPcC2OoYJVut/2MMj2lYdScWDo3ppDvCWNOLjpMFqrowknc0fCVNPQGD
- 5y7IjUizE2k+wT/6+piDbG6EHHpc0qAWH664hKo9aBbp53erOQV0JFxj0+NwTUzHU06I
- mo4BZPd6O6vFGtxHSPFLaeNzPl2mE+RxJpCgkIp6McQmj9l/zQF6Npd7za1nqnjNMiO2 6A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3dxj9vhchq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Feb 2022 13:34:19 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 213DVYwX122570;
-        Thu, 3 Feb 2022 13:34:19 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-        by aserp3020.oracle.com with ESMTP id 3dvwdaa90f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Feb 2022 13:34:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V+fvgFiRYCQnxAog9Mo2k26600pqqRiYQUmN7af510SYw08j4Rocb9sfH4l3Zkm8fGm1uF3csIC2SkH4g23MvcNnkYnfQUxNB04OgksAyMkgBxtuGDPFCCo04cXHZVAVZa+8Qg3cxOLCBp6tLISSUNWeoiCFD7JiqO30+/nhSJiBkDRDPufxn34hwxXJLJeAt/5rsPUDr3+QJy5C2RodhsfaK2vqBIRtkJW1N84OhHADjl/x1F5i2u84sB60xUTy32Tty8EkyKGDFzg0iNPUDwYqVMOYW87GjzIqvC+sEJvpa9d4xKEaLlXMqDVPBWZePgyyE1tWEt1ovQ+Bjx1gDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q2200Hfkv25m4xV1NiL+v8ASzRif8xFyXRFn1OsJEUQ=;
- b=VBLsepscG3h49sweFUtc3S6HMC6BKFRSCYV4BnvcunF2xkoRqLRoWju9jI4DpNbMVL+QCU5hLmYmbsiS+XsSLDbIewk4HNSaV2pg95fXyef3eDJOXYAOj8flexqmiTizDpbGebgX2eBrs8fq3KeEqshVX91iTOH95kg2aFNFKuk/mCbzERwh1lAcx1NVsrxs0n3P9YBQ/ljWO2ihwPSwKcX/qEFuVZf+BYUXcAgRfETmi4rBtLVGu1Y14+02xGKG6cyxnxTjJbP0OlrAzrF+jgtdhlNUnny1U/3D6UncTO7w2oTyUGnHV3o01Y/vvsRM/Aq117asqDxPUNn2Di5Gzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q2200Hfkv25m4xV1NiL+v8ASzRif8xFyXRFn1OsJEUQ=;
- b=GSHrCXxfqoZLPnOZV5rEsrKyPzvtLrbDxB0eIJnLfFWWFgMdL1Te5REsAAvge84PZXEIu+wwZk9OOjNRtF4a+sAI8GW8j5YhAUmkfNli1p94J2WRvzD1LJItqkHcxh8L1RNUhYTP7hOiX9tormEDSGFrRvxgnWeMdzGOcE8mBGY=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by MWHPR10MB1470.namprd10.prod.outlook.com
- (2603:10b6:300:24::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
- 2022 13:34:16 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::e5a5:8f49:7ec4:b7b8%5]) with mapi id 15.20.4930.021; Thu, 3 Feb 2022
- 13:34:16 +0000
-Date:   Thu, 3 Feb 2022 16:34:01 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220203133401.GF1978@kadam>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <CAJKOXPfCjx6UoLK6LgXBZCfixxq8k7E-RFXb8i-chyXc39WEoQ@mail.gmail.com>
- <20220203110751.GE1978@kadam>
- <CAJKOXPeLS+PZBCvEOeazc8N5w1D=WeO_D45yEazu-XQQeHNohQ@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJKOXPeLS+PZBCvEOeazc8N5w1D=WeO_D45yEazu-XQQeHNohQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR1P264CA0085.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:3f::16) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        id S1350873AbiBCNh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:37:58 -0500
+Received: from mout.gmx.net ([212.227.17.21]:52037 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235297AbiBCNh4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:37:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643895467;
+        bh=u9y+mks8ngDf1GYhDR36fTMNzNPuf/4/cUztOBLsHCE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=OAKdgH64vXpeTLR09ctMJKoy3bK4+gsNyugm2h/5Jx3ZWpjXsz+5R1tu8cpUap4zA
+         MR4spQO/By/Ej+DsvNXD3lphM/KqLzQd9XM9xobuGpYsY2+a+f7LRN+mvcYTeA5xml
+         OzJCFLOBNPt19KJ9Gslt5H7w3uSul8UaroPKv990=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([185.66.193.41]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2wGi-1nEVqJ08nE-003JVQ; Thu, 03
+ Feb 2022 14:37:47 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        kernel test robot <lkp@intel.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org
+Subject: [PATCH v2 0/2] Fixing the compile-test warnings in pinctrl-npcm7xx
+Date:   Thu,  3 Feb 2022 14:37:34 +0100
+Message-Id: <20220203133736.246397-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5e44626d-9a3e-47e1-e8da-08d9e719df64
-X-MS-TrafficTypeDiagnostic: MWHPR10MB1470:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR10MB1470BA3CACC13DC0E8AA9B468E289@MWHPR10MB1470.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Nh4fRml3g6QKa1lHGAkkFAsG9KhC/H6PkRwsu1eSeLYhhUCQrXcEHjFoQioRveau+cYe7NDIqfx9nP8Y2wp/ylvqi4f1eUM0QXm0RBMRCefCoxv9JDcdixezzwgLchnQDiNOkyBhLX6adk5Elxar7D4HayAJFjVW7nE3WeP0WRuTwwjAfShf4F1jUblPVyffeRMPWu3nJ/TXR9R61JQNyzWA6VH6K1NUOR911GYNtJYgSKosFZmP884e0LwXhlJT3iqIoFwbR2/6vk+H6YznM1fgjw2LsqmmhUvEcrdRYmz4AhM9jM6duL1ACm3+BYdUqt+9/o98QadlfLf10GMT0yWU4fpFoaIxVj+A95zI8vGu8lZrCn5qHXiQHayr1cuM3kQxk6YqCHiSgLoOjmYzT/HygwMgYKdnFNzxA8SxNJC9q6S7Fd3O6ZCc2xRFwco7o+v87REDXzjx9NDsLfyOA7dm6wEtkqeQ5E0rNRQaw+KDICWPtrWlmacooFLixbvEixo2jO7Ly6nAtPSjA0lf7rwFs2s/6eYo/jMmRYWEnAtLTUvI2l9j4vouGa0kJUgNeffMbPo3Y9TZK9/kiaSFK9rcMB9rSDiHb972EHHChXq0OK9ulSwd+tKxFXdfGP8GbIM43lpjUzZVuky6nX7/e1Nx2eBRRozCWYdSTS2/CdW1UHjy7cLVpqRa16KrJwuL0Vv89E5SNH1Vdv8bRngz2g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(8676002)(83380400001)(66946007)(66556008)(66476007)(508600001)(33716001)(4326008)(26005)(186003)(6486002)(33656002)(1076003)(8936002)(5660300002)(38350700002)(38100700002)(6666004)(6512007)(6506007)(54906003)(7416002)(6916009)(316002)(9686003)(52116002)(44832011)(2906002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IEuK/HHPEAJR0LINNi4rJBpEpo3olhYiI0luiAXEyTo+6Jf7xYJFkl3DRPqd?=
- =?us-ascii?Q?l8Zj+GEEVPEqzYl0IAXyEMbhZmHBbE1/XpfeGXaO8Ngu01Z0myaLgfxs10QC?=
- =?us-ascii?Q?yttIsAtSZ2oRE6vB58/63xK/4brSJuwynwoZzouL7W8jeoZIYHR5O8sGaC9Q?=
- =?us-ascii?Q?dD+d7C6TrghYT280uY5tcD1AOBudfexlm7QPjhHAJNGRuT34RECUx/B5cF5U?=
- =?us-ascii?Q?3HqQxtoJ+7T12Rd00HUvJ0QLz62WfrX11k1nb+vzu5j+F0AoOCL5ul/uLlEN?=
- =?us-ascii?Q?QNBIQSKzX4KuCyl1emccOiqY0iT1uAXivvdwvyhfcxMICWH03mXqVxDki5JA?=
- =?us-ascii?Q?ucA8oWl3TyA1Fx+CA3TxeDzNiLKQRHUy46k19S+f1daiGIkcSAnfxhEx+zrz?=
- =?us-ascii?Q?UkZfQKZCHMALDQTPvENzQXazISX2Or/YKxGziMRMOBLrosbcpavumXz/WFSx?=
- =?us-ascii?Q?rg0YL5OSkGIoBZhdCOLmSUiP2PT1NBAqwh184S+Koiy2G6aSirnTjGdh9y+B?=
- =?us-ascii?Q?CNhWaJOWW0RD9BFi2BgCH9O2+UnYZipLbV9CiJF1XE0qPz5D8uyben0KQ1L8?=
- =?us-ascii?Q?Md/AfJy7j8Lo6GItbD2FCENXup52Wqa4PjLGMyoI4s/5N3lZh/nezSkbBlPO?=
- =?us-ascii?Q?FlSNN7FfHnVqcuxss6hoWQ4dQZACFaIHX9M5GTxYQ7frbuCBabqv4Y5VUK9z?=
- =?us-ascii?Q?/jXD8aRu/oUGAleoyIMeWH3yFzv7+Ky+1sjfOmrgyl6IU1haUAbCuj1YgdCD?=
- =?us-ascii?Q?pLdyyCsaMVarY4JbLGrWZBjvkY72+/dSJhWXh9dHJ6doJkJjPVnRo1LTJtXX?=
- =?us-ascii?Q?bIuZiw00pgyQutpXVHLDG+Q54Dbd0hkavpOib0OuvQYtk3J/Sk0+mwbmK9F+?=
- =?us-ascii?Q?EUzcMYzX/4VYkxmHRsFx5sTWl1GWZ5jU0vgZAszqAH61rvCfT3XfkCnVGa3j?=
- =?us-ascii?Q?vaQja6tmCJQNSnlzCRKfgIkPy84uLhIC7Usbo9QtciZboTGZvb49EP+g61t9?=
- =?us-ascii?Q?bprB5Gkq31EFaEP/qhFEEDQACTc0sJTbIZGcpUV80d8/vyRUgkf2pUQ6ekHp?=
- =?us-ascii?Q?ZJaQZOThXhVgL+YIJ1hpW2EPsLtBUoM7gwghHMWyqsfcFDUXbGSnWbwQvtve?=
- =?us-ascii?Q?/SBSnEGVxDs4fh/9w28AHc5GCu75VE4+R50IvT/AQbuqb4Rjcp/IxaRW1i6E?=
- =?us-ascii?Q?6f9qwt4ATeo11TyFCKgrhN498QOCnhNPmwCN+jvEivLekYfQcp+xX+l6NwjU?=
- =?us-ascii?Q?fLbD/KytwP9PdVrZnLEkiTPxyo+2xsvHd7f1CeHvmv5T/3EzygYPXL+KiXNX?=
- =?us-ascii?Q?02rr6s3W3vRhVetCshhvkhLErwQpWMzQ3QNeNrb+ITy0nR9G0IwTdplbYZ2p?=
- =?us-ascii?Q?Kx6xPgcasghuV+VnS+8oXvtOI4GlkI4yqfjX9qx7PG24uUyQB0+99jOAfN5L?=
- =?us-ascii?Q?cTZ8S1tes2SU2HA1BQObszS8h5ImfFySqAwFziYKy/ogjqA9RK0iKHzXgpFx?=
- =?us-ascii?Q?Mit1o2Jq3bSfEdjyiV3nrqDqjzLV8iOfQZkVekhEl8Oyjm4+beu/+FSc1dGv?=
- =?us-ascii?Q?sK4d5CgqkJT4B5pOaJorxcoetyY33g5QFLlEL2BR8U6cv/rBVgDa3s42mnqn?=
- =?us-ascii?Q?OPgBwfiSegajtCZW9teXkJr6VL8bfbdOLi3GDWTIxELxo8nIgU0foGK3Ur4Z?=
- =?us-ascii?Q?N87UGMBdyAykVTo84YullD+ItzU=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e44626d-9a3e-47e1-e8da-08d9e719df64
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:34:15.9954
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9aKtjRd5bamVbsLAM3A1o2bdpCzMhYzSD0xeyl22QjfVn6KzzJHZUfhVoFVApGO2fGyIeKrmrXhgqg+EBepiompdJ+QQwMTFxGAQt8l0As4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1470
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10246 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202030084
-X-Proofpoint-ORIG-GUID: 1-3INV1221BKvuH5ZQWEj9gqyJP3geXd
-X-Proofpoint-GUID: 1-3INV1221BKvuH5ZQWEj9gqyJP3geXd
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:0aT0emvpYVaUCOFKP7C+AN4Vec4TdX2PrKu3o1wMPvh1dC/4kte
+ 4GNRfWnJJ3MVur9CpBv5rdUB0bNdWVvqvhPnPk8hSpsdjTG2txbKyUVW4ekxWOhlyMEGhw1
+ JAYHfhTWfu7lUeVjaXAoyQrWDofbPb8v/Lgi6jYmdF+sj3ywUwuzfImTak7QnAsL+E3rl4u
+ KY4qHk/8E+MvldTPpBxBg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AoWYerI9Bio=:IyWOuj/3kVSAtTj3JbAulo
+ MtS2CInGW7WEdD1SS4a6u8Hnk1OBtH1EmgflVPOl7uge51WKlOb0dn0dHB9/MOd82Sr/EiJ9h
+ /yOuZkkcJ6JWADX7cOsvz2uENOqMhVpymHZoDMrPjOBwPpI02xbT91BZpJkNhTDqMWdOkNpR5
+ ejvZPaa0gbV4H6aLvuN1SJYrTEw25moCX3nSiKrcrtccAsiSGSpRsOv+F8DhCxS7wR5yao8TZ
+ oXNoEhqPFEXhph2U4vQrpHJRba3bONdMfpsMgD/R6SjXChsJygibnyTfu1S490n9Xy2R4dZ/S
+ OdszHB6HG9lOEMh8WEQ85ZCaVfwYufDYXP6zhoZeuvqfjvD0nqtzkKuIBy9Q/ZwvwdSyEHsxB
+ xB3tuZBWG70LvZybtmKtGWD3G0Qfh09Oy9yTG53PKZHZ5If9LyQme2l9H4CGaAkO2UWb8qxuO
+ lsSLrN3Tbc9XQHS+a30aZ8WHZ99DjfIliIo6sMPU3zLGgauiIe9tsoNQu78NprpDyfx6as8Xm
+ /hXzsmceQEa/jMklGAOiQqNa60oHM1VaLL6+4BLDAWfR2g0b9kkgY7BID0NlHk5y5DUunqPcD
+ +WvZ/nxPGbKRM2lcFZxBhzPNeBZDo7Buf3h6OVcYTVYMDNMQNxMUfPh4cEC4ra5oYWmPSItIT
+ xuXlXavgXsnBaw6o5Po3uLwfihDlu8Y0a7FMcFlOIAXhYU3FfrVD135aCxy9P2R4rCjsH+lSG
+ ob2R5lR3g6BUr7Di3xiPBJQCFxlgTvyTJpsvyNsnWhpplCq0MRyLZBD3pxT8GMlIy9Is0qMui
+ EfDCOOVABtG5906ymV5Djcz0jVBB5oVyygMJUyo1NAmCvqrtM8zG/Wok/9B3D5G6ppAQ6I98F
+ a5zGcj+s50sdasnYbGM67r98RLwPvYl/yOiUEDLKw+abzWQjQRrcK/vnNH3MySW0V2a55XPp5
+ fQuXmRnpS/hzlzvGJ9//lWpOq/wIeu0ZwSjAMFedrGRixoB2ARrJUb8X68Am0ohJa3O8S/TOv
+ aAs8xUWTSazTtWtnQzaglDjsi5RKXcRUho3Yq6ccq1kDHvaSn4gq+xsBLonW/e59s7rnCv6/B
+ xO1u8QUxoUVEK8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 12:29:11PM +0100, Krzysztof Kozlowski wrote:
-> On Thu, 3 Feb 2022 at 12:08, Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > >
-> > > This does not look like compliant with GPL-2.0. You cannot call a
-> > > license GPL-2.0 and restrict it with some other provisions.
-> >
-> > That's the MIT license.  It's not the GPL-2.0 license but it is
-> > compliant.
-> 
-> It's compliant when included as "OR" for example in SPDX tag. The
-> current solution - SPDX and MIT license text - is not the proper way
-> to describe this. Otherwise one could argue that both licenses apply
-> at the same time and one has to fulfill both of them, which is
-> ridiculous. There is a SPDX tag for the proper case - GPL or MIT.
+My "Nuvoton WPCM450 pinctrl and GPIO driver" patchset brought two
+warnings[1] in the pinctrl-npcm7xx to light. This patchset fixes them,
+and now also includes the appropriate "Fixes:" tags.
 
-You're saying a bunch of different things.
+[1]: https://lore.kernel.org/lkml/202201292234.NpSNe4TD-lkp@intel.com/
 
-We both agree that the SPDX text is confusing because it says GPL-2.0+
-but it has the text from the MIT license.
+Jonathan Neusch=C3=A4fer (2):
+  pinctrl: nuvoton: npcm7xx: Use %zd printk format for ARRAY_SIZE()
+  pinctrl: nuvoton: npcm7xx: Rename DS() macro to DSTR()
 
-"This does not look like compliant with GPL-2.0."
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 160 +++++++++++-----------
+ 1 file changed, 80 insertions(+), 80 deletions(-)
 
-Wrong.  The MIT license is compatible with the GPL-2.0.
-
-"You cannot call a license GPL-2.0 and restrict it with some other
-provisions."
-
-Wrong.  The MIT license just says you have to include the No Warranty
-text.  The GPL has it's own list of requirements.  But you can combine
-MIT and GPL code and easily comply with both requirements.  That's what
-"compatible" means in this context.
-
-In the kernel we have MIT licensed code which is dual licensed.  This
-means that someone can take that driver and release it as closed source
-software if they want.
-
-// SPDX-License-Identifier: GPL-2.0 OR MIT
-
-Then we also have code which was originally MIT licensed but now you
-have to comply with the GPL as well.
-
-// SPDX-License-Identifier: (GPL-2.0 WITH Linux-syscall-note) AND MIT
-
-These examples were cut and paste from Documentation/process/license-rules.rst
-
-regards,
-dan carpenter
+=2D-
+2.34.1
 

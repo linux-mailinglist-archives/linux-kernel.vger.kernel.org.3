@@ -2,167 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3504A7D06
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7282D4A7D0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348636AbiBCAtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:49:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:7763 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234893AbiBCAtq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:49:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643849386; x=1675385386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AVze6/yhOpIsiSvcvqZJsPmefQnSYgxJlx13mlvTxVY=;
-  b=b+GPVT1a+mqUqDW1sqfVTVvL6+ZiH1lIv7PlrKQe/o+LXxUG07ASQyk9
-   VrXtIv21meokc0lwqWKKD4ogcXL40vu10RGSgJALBbd36NKoBOS5LBwNw
-   JwY6XXwuPAJlT6PXr6uGjd10R3PIVpmw5rm6C7x+mY43uZOQkNQWDOueF
-   S6AYd2OyL0pYoPvjOdHrFyeTSqZMJ1pj4QWsdFcRgTfefDMnI9HzT1+ge
-   TjldnCiU+RYq1tpKD1OyE8NnXjvU6P3/rT4cbf1MbNKbslrbX0iQsZFO/
-   l6IwTy0sp0wZJO1tWh74rjzRQTEUWerRQhy3n+LtamXOJR039TjNQi7jp
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311357059"
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="311357059"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 16:49:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="631174148"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 02 Feb 2022 16:49:35 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFQJb-000VLl-79; Thu, 03 Feb 2022 00:49:35 +0000
-Date:   Thu, 3 Feb 2022 08:48:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jorgen Hansen <jhansen@vmware.com>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        gregkh@linuxfoundation.org, pv-drivers@vmware.com,
-        Jorgen Hansen <jhansen@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>
-Subject: Re: [PATCH 7/8] VMCI: dma dg: add support for DMA datagrams sends
-Message-ID: <202202030803.BfgZqtfl-lkp@intel.com>
-References: <20220202144910.10349-8-jhansen@vmware.com>
+        id S1348472AbiBCBA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:00:27 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:50129 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230037AbiBCBAY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 20:00:24 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id E3E4A2B001A2;
+        Wed,  2 Feb 2022 20:00:22 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 02 Feb 2022 20:00:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=ghqGX3/+yOOHb2cOr1Jt9KBI+S4cLLds/M5rhcvfosE=; b=bqg5P
+        3LfxBT9QfWHEeZu4P2PeC5KtJQcu477uZdXAKwDzwJ6zuYgmbeof372Lr4nz3KM+
+        7TXIPrDgRyLwGADhiHsHwHp3NTMPd9S1lUR4dhT35qCjPR7O6XZ008FFftbfgAXd
+        C4rHOPwbxNc3tqcECIrF/7bJvvXtYuhWrhY4nKKo3KOZlzq+yoqXMUFQu4svRYvR
+        YNiuIN6eJd4rr+F123RclySMHAFqilbmYdIx85Q9fhKJ0sPZdmtqPiIQOhANb2GL
+        3XZhwzjHzaDAOswYCc8acn5v22HFagluowvb6WAaIZrPA7JDUEK9+chH68CJeP65
+        w+/2ODChvaKQj0CUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=ghqGX3/+yOOHb2cOr1Jt9KBI+S4cL
+        Lds/M5rhcvfosE=; b=JvJGlb5IUQsk0DkjjbQKbnPcKjfpRbTct6esJ0QUjMGCZ
+        R66US/8aSAwOn7VEt3bV1RGYi2i/VdQ0eXT/is3wtFXJ2L35hX2WZ8MCq8JxHhn8
+        X+zpBjvcuBO68LEVO7+eMHhR+4sP9jPUmmKjWahIllTi6OSTj442Xw1cWj7C0FOJ
+        HfHKMb2qC9Uo9zXN4yTKmYkl8jW6nIY0T8Q+CnFHToLRfKOMmP7Z227QMEiC1AgP
+        j1ftJiyKFiTvb7g8d03ek2i3wuqDsYsGzxKC6O3wqE2NGqeDZvL+UzDyo1zo642T
+        /mwTgIgckTUXsN8ifH+UQCj9iOxh5mF3ypUjVGGmA==
+X-ME-Sender: <xms:JSn7YbWoye-gmceZB3uyNr1SnsXC3J_9TH6cUJ9Fv3AD0A8C-tIc7w>
+    <xme:JSn7YTmPQQsq6RGQWZ-y4OZ0FQILEp8w0cvaRQAhiKtQxeGUEEgzNsYn3YM0Wl9jc
+    hO6LNGIvO6MmPh9fg>
+X-ME-Received: <xmr:JSn7YXaJgx98ge3DtOzx24_6B5pquH1CmE-rv6Dj7w0Ded3y7wGSm6vXgrdtpl_3G0I0ts_t69Y0R__sgQc8EBBgYZZB3XTj2vXVj_myvv6NOyP_Y6yqaP_gqn8VF8o1lGCvjQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
+    evohgrshhtrghlqdfhgeduvddqtddvucdludehtddmnecujfgurhephffvufffkffoggfg
+    sedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcujfholhhlrghnugcuoehsrghmuh
+    gvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrghtthgvrhhnpeegffdtvdevgfel
+    jeduveefgfefffejhfdtudeiudejueehtdelgefgjeeuffduueenucffohhmrghinhepug
+    gvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
+    pehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:JSn7YWX3LOq0pdzQnjfyYXRKAsGnQ5kflGk0dzr6Jm2rGFSQQv0Qtw>
+    <xmx:JSn7YVnYyf6mXcTbikgSAQjHEIfnn7WvTGvMs6aedO-6a0wKFbOA4g>
+    <xmx:JSn7YTewQ_Uq4JX0bm6KlsD6VGAlgDOe0hebpfPL-BSrm17FMRbntA>
+    <xmx:Jin7Ybc-EoVj_bUM2RpPx-BjAsaZP8AQsLT3wk5-gTtgouT9e9PgRiAJ1wU>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Feb 2022 20:00:20 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 1/2] dt-bindings: leds: Add Allwinner R329/D1 LED controller
+Date:   Wed,  2 Feb 2022 19:00:18 -0600
+Message-Id: <20220203010020.9924-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202144910.10349-8-jhansen@vmware.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorgen,
+The Allwinner R329 and D1 SoCs contain an LED controller designed to
+drive a series of RGB LED pixels. It supports PIO and DMA transfers, and
+has configurable timing and pixel format.
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on char-misc/char-misc-testing]
-[also build test WARNING on linux/master linus/master v5.17-rc2 next-20220202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 7ab004dbcbee38b8a70798835d3ffcd97a985a5e
-config: i386-randconfig-a013-20220131 (https://download.01.org/0day-ci/archive/20220203/202202030803.BfgZqtfl-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 6b1e844b69f15bb7dffaf9365cd2b355d2eb7579)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/303777a2a8daa11d529827395318bb698ddee57e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jorgen-Hansen/VMCI-dma-dg-Add-support-for-DMA-datagrams/20220202-230034
-        git checkout 303777a2a8daa11d529827395318bb698ddee57e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/misc/vmw_vmci/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/misc/vmw_vmci/vmci_guest.c:103:14: warning: no previous prototype for function 'vmci_read_reg' [-Wmissing-prototypes]
-   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-                ^
-   drivers/misc/vmw_vmci/vmci_guest.c:103:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned int vmci_read_reg(struct vmci_guest_device *dev, u32 reg)
-   ^
-   static 
-   drivers/misc/vmw_vmci/vmci_guest.c:110:6: warning: no previous prototype for function 'vmci_write_reg' [-Wmissing-prototypes]
-   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-        ^
-   drivers/misc/vmw_vmci/vmci_guest.c:110:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   ^
-   static 
->> drivers/misc/vmw_vmci/vmci_guest.c:118:5: warning: no previous prototype for function 'vmci_write_data' [-Wmissing-prototypes]
-   int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
-       ^
-   drivers/misc/vmw_vmci/vmci_guest.c:118:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
-   ^
-   static 
-   3 warnings generated.
-
-
-vim +/vmci_write_data +118 drivers/misc/vmw_vmci/vmci_guest.c
-
-   109	
- > 110	void vmci_write_reg(struct vmci_guest_device *dev, u32 val, u32 reg)
-   111	{
-   112		if (dev->mmio_base != NULL)
-   113			writel(val, dev->mmio_base + reg);
-   114		else
-   115			iowrite32(val, dev->iobase + reg);
-   116	}
-   117	
- > 118	int vmci_write_data(struct vmci_guest_device *dev, struct vmci_datagram *dg)
-   119	{
-   120		int result;
-   121	
-   122		if (dev->mmio_base != NULL) {
-   123			struct vmci_data_in_out_header *buffer_header = dev->tx_buffer;
-   124			u8 *dg_out_buffer = (u8 *)(buffer_header + 1);
-   125	
-   126			if (VMCI_DG_SIZE(dg) > VMCI_MAX_DG_SIZE)
-   127				return VMCI_ERROR_INVALID_ARGS;
-   128	
-   129			/*
-   130			 * Initialize send buffer with outgoing datagram
-   131			 * and set up header for inline data. Device will
-   132			 * not access buffer asynchronously - only after
-   133			 * the write to VMCI_DATA_OUT_LOW_ADDR.
-   134			 */
-   135			memcpy(dg_out_buffer, dg, VMCI_DG_SIZE(dg));
-   136			buffer_header->opcode = 0;
-   137			buffer_header->size = VMCI_DG_SIZE(dg);
-   138			buffer_header->busy = 1;
-   139	
-   140			vmci_write_reg(dev, lower_32_bits(dev->tx_buffer_base),
-   141				       VMCI_DATA_OUT_LOW_ADDR);
-   142	
-   143			/* Caller holds a spinlock, so cannot block. */
-   144			spin_until_cond(buffer_header->busy == 0);
-   145	
-   146			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
-   147			if (result == VMCI_SUCCESS)
-   148				result = (int)buffer_header->result;
-   149		} else {
-   150			iowrite8_rep(dev->iobase + VMCI_DATA_OUT_ADDR,
-   151				     dg, VMCI_DG_SIZE(dg));
-   152			result = vmci_read_reg(vmci_dev_g, VMCI_RESULT_LOW_ADDR);
-   153		}
-   154	
-   155		return result;
-   156	}
-   157	
-
+Acked-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+Changes in v4:
+ - Use "default" instead of "maxItems" for timing properties
+
+Changes in v3:
+ - Removed quotes from enumeration values
+ - Added vendor prefix to timing/format properties
+ - Renamed "format" property to "pixel-format" for clarity
+ - Dropped "vled-supply" as it is unrelated to the controller hardware
+
+Changes in v2:
+ - Fixed typo leading to duplicate t1h-ns property
+ - Removed "items" layer in definition of dmas/dma-names
+ - Replaced uint32 type reference with maxItems in timing properties
+
+ .../leds/allwinner,sun50i-r329-ledc.yaml      | 137 ++++++++++++++++++
+ 1 file changed, 137 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/allwinner,sun50i-r329-ledc.yaml
+
+diff --git a/Documentation/devicetree/bindings/leds/allwinner,sun50i-r329-ledc.yaml b/Documentation/devicetree/bindings/leds/allwinner,sun50i-r329-ledc.yaml
+new file mode 100644
+index 000000000000..3db3fe766e6a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/leds/allwinner,sun50i-r329-ledc.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/leds/allwinner,sun50i-r329-ledc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner R329 LED Controller Bindings
++
++maintainers:
++  - Samuel Holland <samuel@sholland.org>
++
++description:
++  The LED controller found in Allwinner sunxi SoCs uses a one-wire serial
++  interface to drive up to 1024 RGB LEDs.
++
++properties:
++  compatible:
++    oneOf:
++      - const: allwinner,sun50i-r329-ledc
++      - items:
++          - enum:
++              - allwinner,sun20i-d1-ledc
++          - const: allwinner,sun50i-r329-ledc
++
++  reg:
++    maxItems: 1
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  clocks:
++    items:
++      - description: Bus clock
++      - description: Module clock
++
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++
++  resets:
++    maxItems: 1
++
++  dmas:
++    maxItems: 1
++    description: TX DMA channel
++
++  dma-names:
++    const: tx
++
++  interrupts:
++    maxItems: 1
++
++  allwinner,pixel-format:
++    description: Pixel format (subpixel transmission order), default is "grb"
++    enum:
++      - bgr
++      - brg
++      - gbr
++      - grb
++      - rbg
++      - rgb
++
++  allwinner,t0h-ns:
++    default: 336
++    description: Length of high pulse when transmitting a "0" bit
++
++  allwinner,t0l-ns:
++    default: 840
++    description: Length of low pulse when transmitting a "0" bit
++
++  allwinner,t1h-ns:
++    default: 882
++    description: Length of high pulse when transmitting a "1" bit
++
++  allwinner,t1l-ns:
++    default: 294
++    description: Length of low pulse when transmitting a "1" bit
++
++  allwinner,treset-ns:
++    default: 300000
++    description: Minimum delay between transmission frames
++
++patternProperties:
++  "^multi-led@[0-9a-f]+$":
++    type: object
++    $ref: leds-class-multicolor.yaml#
++    properties:
++      reg:
++        minimum: 0
++        maximum: 1023
++        description: Index of the LED in the series (must be contiguous)
++
++    required:
++      - reg
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - resets
++  - dmas
++  - dma-names
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/leds/common.h>
++
++    ledc: led-controller@2008000 {
++      compatible = "allwinner,sun20i-d1-ledc",
++                   "allwinner,sun50i-r329-ledc";
++      reg = <0x2008000 0x400>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++      clocks = <&ccu 12>, <&ccu 34>;
++      clock-names = "bus", "mod";
++      resets = <&ccu 12>;
++      dmas = <&dma 42>;
++      dma-names = "tx";
++      interrupts = <36 IRQ_TYPE_LEVEL_HIGH>;
++
++      multi-led@0 {
++        reg = <0x0>;
++        color = <LED_COLOR_ID_RGB>;
++        function = LED_FUNCTION_INDICATOR;
++      };
++    };
++
++...
+-- 
+2.33.1
+

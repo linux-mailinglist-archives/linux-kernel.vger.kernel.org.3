@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920DF4A8593
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3155A4A8597
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350918AbiBCN4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbiBCN4K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:56:10 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B02C061714;
-        Thu,  3 Feb 2022 05:56:10 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id h7so9176996ejf.1;
-        Thu, 03 Feb 2022 05:56:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s+N0cchWNDKHWOg0SvQ0GRlgi8ukyL5VHO/Wt96Fcbw=;
-        b=ctWN5TdDLzuhnLizq+Ehvu4Nv9cwG2GzBTcbxtqeifXJi1Mpj3hq8ZgNIVkP6VoCaH
-         FjhpU2EcAw0jlc5vSkdocFwsi4UQF/2964Yh834AkEaTBuOmzfk2ECznjNIGYSkAHiay
-         Hqyqbw1sZXNThFWwPOM5XEh9LDmNinVJlJuUwYskOmEc3+qz85Yhp65JKcABjv4kZH9v
-         im+58kAhKuIbI8os8+kqlUBLkLfBmNpKtjRJ+HzKhJBITkiaX7Wf8mpCsjD/m3r1hcyy
-         n2LiFB988su1fcTSc99UMsk4cz2Lng3v68oV/wFW2KQ5oD0n2+UyZQAoKzclyc0whDRJ
-         5Rjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s+N0cchWNDKHWOg0SvQ0GRlgi8ukyL5VHO/Wt96Fcbw=;
-        b=R9RWuQ9aHLoqr0mRzfKxfRvZr4YrfaEiOb2PXkjro7WQhD931ilZp1dXAgYsCvVmBb
-         8z4DWewYK18fDsXLLk+Rvnygr8F9+3ChraLs4E9wfbl2V0LJh9sq6O7YqM+iAdGJg3ax
-         3NYLf9PMUgoYZJdsN41FSLaV3YBov6OG6sJqZ86Y4jjBN04c+/6CSPHUlXgx1sLFziuS
-         +EmsoubPQNQoXvbW2rYX8jMsAzym/367UYxXFhYYarDwwWfGKfqmfPvnV27/6A2aJBNf
-         5E6leW+OdBe3CqN9mJfhQBMGJzEdKFDcgVK5VnULrpRLyggCF4RE2V7pyDnu4CFfQ9Tu
-         gbzg==
-X-Gm-Message-State: AOAM531ozxwo3gvp1zInCeZeQ6X6fHUINAD4T8CZSccLLpbBfCdW1FXR
-        8awKDU5dDN0K4lXdzTBW6fI=
-X-Google-Smtp-Source: ABdhPJxp5S39GhjqcRplc42VQVlMi0FnpJ7CXoJQpHf5QDprdPYA1PNVrBOHycDgjKvkMCo4q01wyQ==
-X-Received: by 2002:a17:907:1c97:: with SMTP id nb23mr29632884ejc.92.1643896568614;
-        Thu, 03 Feb 2022 05:56:08 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id fn3sm16725339ejc.47.2022.02.03.05.56.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 05:56:07 -0800 (PST)
-Date:   Thu, 3 Feb 2022 15:56:06 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/5] net: dsa: mv88e6xxx: Improve isolation of
- standalone ports
-Message-ID: <20220203135606.z37vulus7rjimx5y@skbuf>
-References: <20220131154655.1614770-1-tobias@waldekranz.com>
- <20220131154655.1614770-2-tobias@waldekranz.com>
- <20220201170634.wnxy3s7f6jnmt737@skbuf>
- <87a6fabbtb.fsf@waldekranz.com>
- <20220201201141.u3qhhq75bo3xmpiq@skbuf>
- <8735l2b7ui.fsf@waldekranz.com>
+        id S243099AbiBCN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:56:58 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:54912 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232957AbiBCN44 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:56:56 -0500
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nFcbM-0002C8-Tr; Thu, 03 Feb 2022 14:56:44 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        linux-riscv@lists.infradead.org
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>
+Subject: Re: [PATCH v1 0/2] Provide a fraemework for RISC-V ISA extensions
+Date:   Thu, 03 Feb 2022 14:56:43 +0100
+Message-ID: <1859467.Zi3Bu27KEa@diego>
+In-Reply-To: <CAOnJCULirV30g6ti7QvY40=p_W9+-XG+nAbxiZ4qDZLo28RJ6A@mail.gmail.com>
+References: <20211224211632.1698523-1-atishp@rivosinc.com> <mhng-791652b4-53f0-48e4-a640-f4c418c9926b@palmer-ri-x1c9> <CAOnJCULirV30g6ti7QvY40=p_W9+-XG+nAbxiZ4qDZLo28RJ6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735l2b7ui.fsf@waldekranz.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 10:22:13PM +0100, Tobias Waldekranz wrote:
-> No worries. I have recently started using get_maintainers.pl to auto
-> generate the recipient list, with the result that the cover is only sent
-> to the list. Ideally I would like send-email to use the union of all
-> recipients for the cover letter, but I haven't figured that one out yet.
+Hi Atish,
 
-Maybe auto-generating isn't the best solution? Wait until you need to
-post a link to https://patchwork.kernel.org/project/netdevbpf/, and
-get_maintainers.pl will draw in all the BPF maintainers for you...
-The union appears when you run get_maintainer.pl on multiple patch
-files. I typically run get_maintainer.pl on *.patch, and adjust the
-git-send-email list from there.
-
-> I actually gave up on getting my mailinglists from my email provider,
-> now I just download it directly from lore. I hacked together a script
-> that will scrape a public-inbox repo and convert it to a Maildir:
+Am Samstag, 8. Januar 2022, 03:24:12 CET schrieb Atish Patra:
+> On Fri, Jan 7, 2022 at 1:58 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> >
+> > On Fri, 24 Dec 2021 13:16:30 PST (-0800), atishp@atishpatra.org wrote:
+> > > This series implements a generic framework to parse multi-letter ISA
+> > > extensions. It introduces a new DT node that can be under /cpus or
+> > > individual cpu depends on the platforms with homogeneous or heterogeneous
+> > > harts. This version of the series only allows adds support for homogeneous
+> > > harts as there are no platforms with heterogeneous harts yet. However,
+> > > the DT binding allows both.
+> > >
+> > > The patch also indicates the user space about the available ISA extensions
+> > > via /proc/cpuinfo.
+> > >
+> > > Here is the example output of /proc/cpuinfo:
+> > > (with debug patches in Qemu and Linux kernel)
+> > >
+> > > / # cat /proc/cpuinfo
+> > > processor     : 0
+> > > hart          : 0
+> > > isa           : rv64imafdcsu
+> > > isa-ext               : sstc,sscofpmf
+> > > mmu           : sv48
+> >
+> > IMO this is the wrong way to go.  I get that the ISA string is very
+> > complicated to parse, but we've tried to come up with other
+> > representations of this we've ended up having that interface break when
+> > the ISA string rules eventually change.  We should just stick to the ISA
+> > string for these interfaces, as that's at least something everyone can
+> > agree on because they're defined by the spec.
+> >
 > 
-> https://github.com/wkz/notmuch-lore
+> Fair enough.
 > 
-> As you can tell from the name, it is tailored for plugging into notmuch,
-> but the guts are pretty generic.
+> > That said, we should add the spec versions into this interface.  At
+> > least the user spec version is relevant here, but given that we're
+> > passing through some other priv-level details we might as well pass that
+> > though too.
+> >
+> 
+> Tsukasa already has a version that extends the isa string parsing for
+> multi-letter extensions
+> and versions parsing. We just need to add the ISA bitmap support on top of it.
+> 
+> I will coordinate with Tsukasa to have a complete framework based on
+> string parsing.
+> It would be good to have this series asap as all other series  (perf,
+> svpbmt) will rely on it.
 
-Thanks, I set that up, it's syncing right now, I'm also going to compare
-the size of the git tree vs the maildir I currently have.
+out of curiosity, did this go anywhere yet in terms of the coordinated
+approach you wrote about?
+
+Thanks
+Heiko
+
+

@@ -2,77 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FB24A8153
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0085B4A8160
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346207AbiBCJT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:19:57 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58966 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241226AbiBCJTu (ORCPT
+        id S1347167AbiBCJVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 04:21:17 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:51529 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236784AbiBCJVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:19:50 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 92CF81F3A5;
-        Thu,  3 Feb 2022 09:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1643879989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mMHRl+3oS7jcJj4KDFQJNIuprJqV/MWu3fMSTCqn8qo=;
-        b=ZcVqrc/4khKPD8ZVgO9u5DCNFaUy96KEkOVyjAfro5Ypms3GQLNEbaLeekPTaK3/107gIr
-        2pzmNS0Z0mEs9WK2b97yjWsWFPfZHoKba635V0rtA0NALGwehUGxK6s1U8UmUcggefLFM0
-        8sugCnsz/sp1bjSo6x/aOzaTqKptK8I=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4426CA3B8C;
-        Thu,  3 Feb 2022 09:19:49 +0000 (UTC)
-Date:   Thu, 3 Feb 2022 10:19:48 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Wei Yang <richard.weiyang@gmail.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Nico Pache <npache@redhat.com>,
-        Rafael Aquini <raquini@redhat.com>
-Subject: Re: [PATCH 2/6] mm: handle uninitialized numa nodes gracefully
-Message-ID: <YfueNDJJJIm/1MAy@dhcp22.suse.cz>
-References: <20220127085305.20890-3-mhocko@kernel.org>
- <YfKgE5hTgbaBeaMa@kernel.org>
- <YfKwjAlPW2kJUv5w@dhcp22.suse.cz>
- <20220201024119.2ailcw4rp5thambz@master>
- <YfkDXYhGjAvAKKeU@dhcp22.suse.cz>
- <20220203002116.akpk5um5nkpeflve@master>
- <YfuC6IaasxcnAdGl@kernel.org>
- <c67e5fc0-95dd-1659-3a81-f23cf0be9c08@redhat.com>
- <YfubhocKKKWgKlEq@kernel.org>
- <15ad305f-a147-4a9c-35e5-bb0a868499ad@redhat.com>
+        Thu, 3 Feb 2022 04:21:13 -0500
+Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXop2-1mjjBb19tE-00Y9iS for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022
+ 10:21:11 +0100
+Received: by mail-wm1-f52.google.com with SMTP id k6-20020a05600c1c8600b003524656034cso1379170wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 01:21:11 -0800 (PST)
+X-Gm-Message-State: AOAM532ArfxOsEPqs9LOYDo/6oTeKvYFfyaZIUL+E1NkRhaXcrG4J6Ui
+        0Cb+gqVVMenQJ9AlvjxAPFsRDMBddUTFZeeK7YI=
+X-Google-Smtp-Source: ABdhPJzzGHS040+Ga0s5Uewyaa/jDPD/fj5JRTVbX2eFjm6kLmPkl8rRFjQT8dqAI3jEVH6cV/zk5k8WD1CiDjX4ogQ=
+X-Received: by 2002:a05:600c:2309:: with SMTP id 9mr9597514wmo.82.1643880070927;
+ Thu, 03 Feb 2022 01:21:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <15ad305f-a147-4a9c-35e5-bb0a868499ad@redhat.com>
+References: <20220203091340.20285-1-tzimmermann@suse.de>
+In-Reply-To: <20220203091340.20285-1-tzimmermann@suse.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 3 Feb 2022 10:20:55 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3dYmCfyQV+iPj6KJAKpv8zYCVorDjqpeyVeAz7v7JyaQ@mail.gmail.com>
+Message-ID: <CAK8P3a3dYmCfyQV+iPj6KJAKpv8zYCVorDjqpeyVeAz7v7JyaQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:XHM8TnvLWDi7Z0voRc5CGdjb0zKP3XkptcFDPs90piIOw1gYKyL
+ Y4jqG+IX4oSoXkVZx/NCh3norR++J6W4HuP5KXM7Kl3y1TA2fIXJ0cPE5O8nPN1g9T4cYCU
+ fcryPQst19kstXyEttuFixS/PoyfeRk8WU8srGefIVZ9koyptRg/4q+innlN9IX/C+e9jdf
+ JrbVBFVtzN/MiMgK7FQfQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GxYDRdwi2wk=:Hg5bpc4UFiGRnhdaqH/Iao
+ GUH+aKo7qSOfEgCmyGAqiZ/lKCFiWR55QauLF9hhJ/n/IipS+pQS1gWoZgvOu2eyRloam9wVY
+ Brz5AmWYi+ixo/3RILEarYONv1oArHMx5gKDu4pih1NOh2VVs0CO5IiA9s6Xsh0vaS0eQSzJr
+ +I2klSg896z0c+B+OPP3ffgXZIoju2E0LYIG5n4Ft6746cjo4aGNqqO8+AV9EiUzxTUCPJB2D
+ 8dtj06nY4oNszqeKkBRKP5CQ4mrtRtru2JDYS4sJ1UrHytOF77Yh7lpByKu4VnAPJmbIDKT82
+ xOJJxpA4Fx4QIqbkzltqXDiDvEFjwXW/J4ukn2pkPRGhjpBNj9Yvi+QsEZaHFUfhPF2XbIqma
+ RskkMmlWTzhMVBrHlL3i+pTB/yp0nJHjNjuQ0wd34bVahiYIiN3bfP+LjQIg1BsbEi0NLh1SN
+ GmJR1OcM8Znj+L1nbbcLWIw9fJGBE23PU91/kaHBGVxPcazEvRpa/6/jxALmbeihvCPzoigj4
+ zm+QGi3mAzBN1jwcRxon07HrH993ijJanMGTnVWLeZO8airimsZjIbTnFQmtEk6TndHQ2lavW
+ qzlC7TdGL4xdWWX/FjQRA0K0kMKyjKZysH9uMyCOXse6WRzkXHFjkwa40v4sMw/0V9ZjESEug
+ eCFPgflSW/UTZHjGF8NujNr41IzMvdTCdRFGiS3u4F1aQDtT/aXTijsPqgN/+d8PgmmUOXRiM
+ Ng4VMm7BbYZKeY7WL7mmVEG9L1gSpRf/g7XxZMPz2D5yp0eq8WYhoEIJDEkGNAOpr7KBb4LSD
+ gKLytYowiUekCTnws3Zweag5Q0bWWdWdk1Jpr/nz1RxYLWzseA=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So we will go with the following.
-/*
- * We do not want to confuse userspace by sysfs files/directories for node
- * without any memory attached to it, so this node is not marked as
- * N_MEMORY and not marked online so that no sysfs hierarchy will be
- * created via register_one_node for this node. The pgdat will get fully
- * initialized by hotadd_init_pgdat() when memory is hotpluged into this
- * node
- */
+On Thu, Feb 3, 2022 at 10:13 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> As reported in [1], DRM_PANEL_EDP depends on DRM_DP_HELPER. Select
+> the option to fix the build failure. The issue has been reported
+> before, when DisplayPort helpers where hidden behind the option
+> CONFIG_DRM_KMS_HELPER. [2]
 
-OK?
--- 
-Michal Hocko
-SUSE Labs
+The two links [1] and [2] appear to be missing here, and I would also recommend
+copying the build output into the changelog text for easier reference.
+
+When linking to a bug report, best use 'Link:' tags in below.
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Fixes: adb9d5a2cc77 ("drm/dp: Move DisplayPort helpers into separate helper module")
+> Fixes: 5f04e7ce392d ("drm/panel-edp: Split eDP panels out of panel-simple")
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: dri-devel@lists.freedesktop.org
+> ---
+>  drivers/gpu/drm/panel/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+> index 434c2861bb40..0aec5a10b064 100644
+> --- a/drivers/gpu/drm/panel/Kconfig
+> +++ b/drivers/gpu/drm/panel/Kconfig
+> @@ -106,6 +106,7 @@ config DRM_PANEL_EDP
+>         depends on PM
+>         select VIDEOMODE_HELPERS
+>         select DRM_DP_AUX_BUS
+> +       select DRM_DP_HELPER
+>         help
+>           DRM panel driver for dumb eDP panels that need at most a regulator and
+>           a GPIO to be powered up. Optionally a backlight can be attached so

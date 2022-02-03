@@ -2,177 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36E54A8F98
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85CA4A8F9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 22:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354250AbiBCVJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 16:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S1354286AbiBCVME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 16:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240351AbiBCVJK (ORCPT
+        with ESMTP id S229925AbiBCVMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 16:09:10 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF321C06173E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 13:09:10 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id m10so6118061oie.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 13:09:10 -0800 (PST)
+        Thu, 3 Feb 2022 16:12:02 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7E6C061714;
+        Thu,  3 Feb 2022 13:12:01 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id c189so3119462qkg.11;
+        Thu, 03 Feb 2022 13:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=WlXSPyshRFclLsUmWCIEz+XunV5G/A4UJamN2kRUK+g=;
-        b=X10F6y8TbRqadN5k1/ebOR1L6hzUOz+4NBW3NBUqzfF5y7j48+BuhY3eUBSX2VBVIy
-         7WI8cG2Y1RAqMhtzmZzhCuguH+1m8C2mFBXjdjOcj2wMlzZoWQb3f3cfjas0MBjtNc7A
-         6QqDEzXwtS9S2q1X0kGhEAkRL1GcLV3usIW10=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sCGfu39SAn94Spe1rejvxkF6/fHOWGBQOJK2sA0wSGw=;
+        b=HZf2L+2H3xNRJIC+kL2xGYTSkWZAYaUFRyea/C++NaFTMrpSO5CKcJoybFfm6DV0Ou
+         QrprL76uTjlpOPLhTPdQbIInvoOkwQ0lzNLvJc669LSmAFV3j/mugouJtoyelrozffN0
+         KK5IgoQewroFELhycppMkad9qdaTD8HctE4ZocIQoRLDvQNo0WT0r813eP+uRtShBv70
+         dEYCBsQ34jalpmZHgQBt0v+y2joF5nyIOGrJG43Gfgonylczx5ASS3Ox7UHRkLJ3f4I3
+         WFluCtJT0s79zK19Yvlv8IzOdP2eWDHnbw9WpiycXFwn1/MUQeLvsT0vTOXfBF3s7GOL
+         obFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=WlXSPyshRFclLsUmWCIEz+XunV5G/A4UJamN2kRUK+g=;
-        b=z69MMxH+kjCXFTQX8WjRS6Le/d21CaveiBRj66NBv79z+cxEYgzADuN5jkWFw+XZEW
-         cMjFWNFGNzIhhPKefAAzwRML3NX0v3w4Yi3Z+qSy/Pcv0zREfX497TsD/rhszdVy3me9
-         aPRj9nxhqI/WIq8wblNXt2wF5eZx0zoFKTHv1rGwbEEJoAbvCuUtxBnQ7YYceFqNE9AY
-         VpWy2Qjp3z9qmLP7ti7O47txJoaYFDkKSGPYRhQpw4b0NefRCitKC3SbRRP+ZUr1sn9e
-         VrXRu63oGwsSDiOiD4biQ5u68R2jHdr+tA3raPJ8WcRiTrEB/0xmlX/I6cRVtxbyCguG
-         CzhQ==
-X-Gm-Message-State: AOAM532BsFv6hrqGibqMtD55tMQu2RD7MMShwkU58toFcphnDabck8/Z
-        PN2tbjfBdcyYmNlfAXh2X9ma/9RQ5k7ZPILTTinL6A==
-X-Google-Smtp-Source: ABdhPJzARb38uT6d2OBJyBS0AdfLQIqHnLim6tiJz+2O+5mqhm1zInOUAPKcCGzaQbZSldxLSHXHOX6MP9vYUwTXbZ0=
-X-Received: by 2002:a05:6808:190f:: with SMTP id bf15mr8666309oib.40.1643922550025;
- Thu, 03 Feb 2022 13:09:10 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Feb 2022 21:09:09 +0000
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sCGfu39SAn94Spe1rejvxkF6/fHOWGBQOJK2sA0wSGw=;
+        b=ughVn17pNLfzTSZyxJCvIqVV79t3nNq2QauUyxhajHy3V87vgjo6/5C1HYWVYmrhKH
+         Gl0fxb+C7pU3QOnZtOByMY4CcLl3iahFWgn548ChpEoiY6yQ1aFM6oQ2+Yz+sagIgVfS
+         lS0vhflnz/r+ETEzi2q4/vS4KGxg18ACfR4Qb2LzZSOkFaYbLrEH9WoVWjb1V8AsVcqt
+         IXyAqSGqUY6cDAFxgiBZBrwihaRQ3ULXUD8Nnv05Yyom45grQGGnc1f7vVuEQ2PdURqw
+         thL7N2Sg7Nnqjm2V03g9+SzZ4t3iLj1VEhPJHv9TgJlFodyd/9FFURO6oFHsCc5Gjuxa
+         1tAw==
+X-Gm-Message-State: AOAM533tKLDp3u+XV0tmxDEnwwDs21w8BKiRBn0YcZsZ3gxJW11WclDv
+        N8e5hd4s0nQ36L3mDMbHeoZX9Prkfj4=
+X-Google-Smtp-Source: ABdhPJyZRT7O2oCLVSveP2mr+mdo6IGj1neUVZjOOcr+/1UgneTdnK4Fok78ZNVVBa2rQFjVeI4i8A==
+X-Received: by 2002:a05:620a:103c:: with SMTP id a28mr24653124qkk.417.1643922720920;
+        Thu, 03 Feb 2022 13:12:00 -0800 (PST)
+Received: from localhost.localdomain (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
+        by smtp.gmail.com with ESMTPSA id r2sm23716qta.15.2022.02.03.13.12.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 13:12:00 -0800 (PST)
+From:   frowand.list@gmail.com
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] of: unittest: print pass messages at same loglevel as fail
+Date:   Thu,  3 Feb 2022 15:11:50 -0600
+Message-Id: <20220203211150.2912192-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1643790082-18417-1-git-send-email-quic_pmaliset@quicinc.com>
-References: <1643790082-18417-1-git-send-email-quic_pmaliset@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Feb 2022 21:09:09 +0000
-Message-ID: <CAE-0n51+-+-NRAFbnvZnGH_nq+P7cxyUuSgSD992G=joumMA1A@mail.gmail.com>
-Subject: Re: [PATCH v1] arm64: dts: qcom: sc7280: Fix pcie gpio entries
-To:     Prasad Malisetty <quic_pmaliset@quicinc.com>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, kw@linux.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        robh@kernel.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        manivannan.sadhasivam@linaro.org, dianders@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Prasad Malisetty (2022-02-02 00:21:22)
-> Current gpio's in IDP file are not mapping properly,
-> seeing device timedout failures.
+From: Frank Rowand <frank.rowand@sony.com>
 
-What's the problem exactly?
+Printing the devicetree unittest pass message for each passed test
+creates much console verbosity.  The existing pass messages are
+printed at loglevel KERN_DEBUG so they will not print by default.
 
->
-> Corrected pcie gpio entries in dtsi files.
->
-> Fixes: 4e24d227aa77 ("arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board")
->
-> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 35 ++++++++++++++------------------
->  arch/arm64/boot/dts/qcom/sc7280.dtsi     | 10 ++++++++-
->  2 files changed, 24 insertions(+), 21 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index 78da9ac..84bf9d2 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -243,9 +243,6 @@
->         perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
->
->         vddpe-3v3-supply = <&nvme_3v3_regulator>;
-> -
-> -       pinctrl-names = "default";
-> -       pinctrl-0 = <&pcie1_reset_n>, <&pcie1_wake_n>;
->  };
->
->  &pcie1_phy {
-> @@ -360,6 +357,21 @@
->
->  /* PINCTRL - additions to nodes defined in sc7280.dtsi */
->
-> +&pcie1_reset_n {
-> +       pins = "gpio2";
-> +
-> +       drive-strength = <16>;
+Change default to print the pass messages at the same loglevel as
+the fail messages.
 
-Is drive-strength of 16 actually necessary?
+The test community expects either a pass or a fail message for each
+test in a test suite.  The messages are typically post-processed to
+report pass/fail results.
 
-> +       output-low;
-> +       bias-disable;
-> +};
-> +
-> +&pcie1_wake_n {
-> +       pins = "gpio3";
-> +
-> +       drive-strength = <2>;
-> +       bias-pull-up;
-> +};
-> +
->  &pm7325_gpios {
->         key_vol_up_default: key-vol-up-default {
->                 pins = "gpio6";
-> @@ -436,23 +448,6 @@
->                 function = "gpio";
->         };
->
-> -       pcie1_reset_n: pcie1-reset-n {
-> -               pins = "gpio2";
-> -               function = "gpio";
-> -
-> -               drive-strength = <16>;
-> -               output-low;
-> -               bias-disable;
-> -       };
-> -
-> -       pcie1_wake_n: pcie1-wake-n {
-> -               pins = "gpio3";
-> -               function = "gpio";
-> -
-> -               drive-strength = <2>;
-> -               bias-pull-up;
-> -       };
-> -
->         qup_uart7_sleep_cts: qup-uart7-sleep-cts {
->                 pins = "gpio28";
->                 function = "gpio";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index d4009cc..2e14c37 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -1640,7 +1640,7 @@
->                         phy-names = "pciephy";
->
->                         pinctrl-names = "default";
-> -                       pinctrl-0 = <&pcie1_clkreq_n>;
-> +                       pinctrl-0 = <&pcie1_clkreq_n>, <&pcie1_reset_n>, <&pcie1_wake_n>;
->
->                         iommus = <&apps_smmu 0x1c80 0x1>;
->
-> @@ -3272,6 +3272,14 @@
->                                 bias-pull-up;
->                         };
->
-> +                       pcie1_reset_n: pcie1-reset-n {
-> +                               function = "gpio";
-> +                       };
-> +
-> +                       pcie1_wake_n: pcie1-wake-n {
-> +                               function = "gpio";
-> +                       };
-> +
->                         dp_hot_plug_det: dp-hot-plug-det {
->                                 pins = "gpio47";
->                                 function = "dp_hot";
-> --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
->
+Suppressing printing the pass message for each individual test is
+available via the kernel command line parameter unittest.hide_pass.
+
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+ drivers/of/unittest.c                           | 17 ++++++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f5a27f067db9..045455f9b7e1 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5997,6 +5997,10 @@
+ 			Note that genuine overcurrent events won't be
+ 			reported either.
+ 
++	unittest.hide_pass
++			Disable printing individual drivers/of/unittest test
++			pass messages.
++
+ 	unknown_nmi_panic
+ 			[X86] Cause panic on unknown NMI.
+ 
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index 70992103c07d..2cfbdc6b29ac 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -12,6 +12,7 @@
+ #include <linux/errno.h>
+ #include <linux/hashtable.h>
+ #include <linux/libfdt.h>
++#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_fdt.h>
+@@ -32,6 +33,19 @@
+ 
+ #include "of_private.h"
+ 
++MODULE_LICENSE("GPL v2");
++static bool hide_pass;
++
++static int __init hide_pass_setup(char *str)
++{
++	hide_pass = true;
++	return 0;
++}
++
++early_param("hide_pass", hide_pass_setup);
++module_param(hide_pass, bool, 0);
++MODULE_PARM_DESC(hide_pass, "Disable printing individual of unittest pass messages");
++
+ static struct unittest_results {
+ 	int passed;
+ 	int failed;
+@@ -44,7 +58,8 @@ static struct unittest_results {
+ 		pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
+ 	} else { \
+ 		unittest_results.passed++; \
+-		pr_debug("pass %s():%i\n", __func__, __LINE__); \
++		if (!hide_pass) \
++			pr_err("pass %s():%i\n", __func__, __LINE__); \
+ 	} \
+ 	failed; \
+ })
+-- 
+Frank Rowand <frank.rowand@sony.com>
+

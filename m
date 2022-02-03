@@ -2,203 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398F24A8702
+	by mail.lfdr.de (Postfix) with ESMTP id D745E4A8704
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351520AbiBCOxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S1351562AbiBCOxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiBCOxO (ORCPT
+        with ESMTP id S233409AbiBCOxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:53:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1C0C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:53:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070DEB8346B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:53:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24BCBC340E4;
-        Thu,  3 Feb 2022 14:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643899991;
-        bh=X1TRBfZ/0x3XO/bfgHPMfSGcvTR6DJ72trufGxtCHOw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O3NoQJJ93NrmkaDQetrFa9faQoq21kytPHtbRPQtadT7+efZcAKjsSCcu7MB7xFRK
-         ZdXA5GN2T8o9YYPoNjzwfAeVWPpbnQTHxYYjWdis/Ix4M6RUsXuGSwqKyRLoNgeM6U
-         leNRurklA+VcZlptJuT2LljWPzASfSMcT7uRWLlkZXMhppN/yVHeJo67qjs3mTrbF8
-         8/FNZNBmjYk0LX8tSoROHxB9hCgJ1nTfRstxrPAxU6Mg39Fwfl2dq7DkU+VtK4SBX0
-         d3KXTsoEnK8L4RUS7pvB249IFFcklzKlk7e3br7uG8slGgHldxc55vWuN2bo+lIf85
-         6OdpSXgbIKP8Q==
-Message-ID: <9d450a33-41eb-0caf-aba1-427c5ae547ed@kernel.org>
-Date:   Thu, 3 Feb 2022 22:53:07 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] f2fs: adjust readahead block number during recovery
-Content-Language: en-US
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        Thu, 3 Feb 2022 09:53:18 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B957BC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:53:17 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so10291832pjq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 06:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8qnnOceM2maKM4v0lSRw1xHTuBRgkTs7X+4u4TyFAGI=;
+        b=mT8FyMffjwgFEfqNqfaAAgc08iUgWtx+YD3f3kKE2K+Upcs7PoWqjbbpFft36lFMot
+         LkFLa9Q3+EEppuvpEzQzm6EOG5tB09kXhqabBoTbN9RYqUlMDPBTYB86QbLXjRW8gssh
+         eiVinT+twyHtBQEfeRpzhYD/VG8mJaKn/SDmoQDOpBUCmJ7UzoLi+h/czKtdzhrmnS2r
+         FhpLXur1gQk1lhyINuKNA3lAGDiReE7ADi3PR3erNA2jkrfbRNx6zORBU+fCfW7e/slj
+         HhAFIK24SRSEPmXPRGB9/wMmivMzSk+RmUYzx2suoMZXfQGwHiEa3lr87W8xP7uN5QEM
+         6Hkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8qnnOceM2maKM4v0lSRw1xHTuBRgkTs7X+4u4TyFAGI=;
+        b=q9L29b7jN2iH6ya70/Y39rK6jWbI6McrBBy29EjX6F+CPhd+jMq2Gv/Fsu9fyWIRgm
+         lrhG4rIwlPmNFM10jGqqn+zFp8XXHrqrqSRCxFsH9JSDMYqpAtZ8revpWOS7hdClAMYB
+         8Ye3SQgXG/V8lWSrBOiOi80xHp3kJE5tcoBZRszaIUmjuIZAn4RXdsrmyJSf9vuFJwND
+         AhYSgAYYN1JuttsaaHmGZ/pyJa+50hwMmtwZPKiC58G8+oc0O3qQlZjZaiIHBNre7Quw
+         tNAAI7c5fIziOBpXM4JNfakUqsQ1n+3D/8qn5pnmFLY/p4EJ1GDKzVKta8oqroXvtjxr
+         f92A==
+X-Gm-Message-State: AOAM5311P7NE9mRVmhyLx6XsLZyuGJBKB/fto/IiHXXoSJuM9lMQ1fBw
+        qGUO2wMndKtw78/exTor+w8S
+X-Google-Smtp-Source: ABdhPJxH+6KG3W9j50KVO7amcvvAvn/n7C/+nUlj7xSU1j/h/OoVhmEVNEidAm5IlJgkUZLD+ImB0g==
+X-Received: by 2002:a17:902:bb83:: with SMTP id m3mr35765124pls.114.1643899997166;
+        Thu, 03 Feb 2022 06:53:17 -0800 (PST)
+Received: from thinkpad ([117.217.179.179])
+        by smtp.gmail.com with ESMTPSA id g17sm11817434pfj.148.2022.02.03.06.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 06:53:16 -0800 (PST)
+Date:   Thu, 3 Feb 2022 20:23:09 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Alex Elder <elder@ieee.org>
+Cc:     mhi@lists.linux.dev, hemantk@codeaurora.org, bbhatt@codeaurora.org,
+        quic_jhugo@quicinc.com, vinod.koul@linaro.org,
+        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
+        skananth@codeaurora.org, vpernami@codeaurora.org,
+        vbadigan@codeaurora.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220129082112.1814398-1-chao@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220129082112.1814398-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 06/20] bus: mhi: ep: Add support for registering MHI
+ endpoint client drivers
+Message-ID: <20220203145309.GE6298@thinkpad>
+References: <20211202113553.238011-1-manivannan.sadhasivam@linaro.org>
+ <20211202113553.238011-7-manivannan.sadhasivam@linaro.org>
+ <06628c19-7839-2719-3263-7ab2b4410502@ieee.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06628c19-7839-2719-3263-7ab2b4410502@ieee.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jaegeuk, any comments on this patch?
-
-Thanks,
-
-On 2022/1/29 16:21, Chao Yu wrote:
-> In a fragmented image, entries in dnode block list may locate in
-> incontiguous physical block address space, however, in recovery flow,
-> we will always readahead BIO_MAX_VECS size blocks, so in such case,
-> current readahead policy is low efficient, let's adjust readahead
-> window size dynamically based on consecutiveness of dnode blocks.
+On Wed, Jan 05, 2022 at 06:27:33PM -0600, Alex Elder wrote:
+> On 12/2/21 5:35 AM, Manivannan Sadhasivam wrote:
+> > This commit adds support for registering MHI endpoint client drivers
+> > with the MHI endpoint stack. MHI endpoint client drivers binds to one
+> > or more MHI endpoint devices inorder to send and receive the upper-layer
+> > protocol packets like IP packets, modem control messages, and diagnostics
+> > messages over MHI bus.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/bus/mhi/ep/main.c | 85 +++++++++++++++++++++++++++++++++++++++
+> >   include/linux/mhi_ep.h    | 53 ++++++++++++++++++++++++
+> >   2 files changed, 138 insertions(+)
+> > 
+> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> > index db664360c8ab..ce0f99f22058 100644
+> > --- a/drivers/bus/mhi/ep/main.c
+> > +++ b/drivers/bus/mhi/ep/main.c
+> > @@ -193,9 +193,88 @@ void mhi_ep_unregister_controller(struct mhi_ep_cntrl *mhi_cntrl)
+> >   }
+> >   EXPORT_SYMBOL_GPL(mhi_ep_unregister_controller);
+> > +static int mhi_ep_driver_probe(struct device *dev)
+> > +{
+> > +	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
+> > +	struct mhi_ep_driver *mhi_drv = to_mhi_ep_driver(dev->driver);
+> > +	struct mhi_ep_chan *ul_chan = mhi_dev->ul_chan;
+> > +	struct mhi_ep_chan *dl_chan = mhi_dev->dl_chan;
+> > +
 > 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
->   fs/f2fs/checkpoint.c |  8 ++++++--
->   fs/f2fs/f2fs.h       |  6 +++++-
->   fs/f2fs/recovery.c   | 27 ++++++++++++++++++++++++---
->   3 files changed, 35 insertions(+), 6 deletions(-)
+> Either ul_chan or dl_chan must be set, right?  Check this.
+> Otherwise I think this looks OK.
 > 
-> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> index 57a2d9164bee..203a1577942d 100644
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@ -282,18 +282,22 @@ int f2fs_ra_meta_pages(struct f2fs_sb_info *sbi, block_t start, int nrpages,
->   	return blkno - start;
->   }
->   
-> -void f2fs_ra_meta_pages_cond(struct f2fs_sb_info *sbi, pgoff_t index)
-> +void f2fs_ra_meta_pages_cond(struct f2fs_sb_info *sbi, pgoff_t index,
-> +							unsigned int ra_blocks)
->   {
->   	struct page *page;
->   	bool readahead = false;
->   
-> +	if (ra_blocks == RECOVERY_MIN_RA_BLOCKS)
-> +		return;
-> +
->   	page = find_get_page(META_MAPPING(sbi), index);
->   	if (!page || !PageUptodate(page))
->   		readahead = true;
->   	f2fs_put_page(page, 0);
->   
->   	if (readahead)
-> -		f2fs_ra_meta_pages(sbi, index, BIO_MAX_VECS, META_POR, true);
-> +		f2fs_ra_meta_pages(sbi, index, ra_blocks, META_POR, true);
->   }
->   
->   static int __f2fs_write_meta_page(struct page *page,
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 5af415208488..1fa6b3f98a71 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -590,6 +590,9 @@ enum {
->   /* number of extent info in extent cache we try to shrink */
->   #define EXTENT_CACHE_SHRINK_NUMBER	128
->   
-> +#define RECOVERY_MAX_RA_BLOCKS		BIO_MAX_VECS
-> +#define RECOVERY_MIN_RA_BLOCKS		1
-> +
->   struct rb_entry {
->   	struct rb_node rb_node;		/* rb node located in rb-tree */
->   	union {
-> @@ -3655,7 +3658,8 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
->   					block_t blkaddr, int type);
->   int f2fs_ra_meta_pages(struct f2fs_sb_info *sbi, block_t start, int nrpages,
->   			int type, bool sync);
-> -void f2fs_ra_meta_pages_cond(struct f2fs_sb_info *sbi, pgoff_t index);
-> +void f2fs_ra_meta_pages_cond(struct f2fs_sb_info *sbi, pgoff_t index,
-> +							unsigned int ra_blocks);
->   long f2fs_sync_meta_pages(struct f2fs_sb_info *sbi, enum page_type type,
->   			long nr_to_write, enum iostat_type io_type);
->   void f2fs_add_ino_entry(struct f2fs_sb_info *sbi, nid_t ino, int type);
-> diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
-> index f69b685fb2b2..0b88d0ce284a 100644
-> --- a/fs/f2fs/recovery.c
-> +++ b/fs/f2fs/recovery.c
-> @@ -346,6 +346,19 @@ static int recover_inode(struct inode *inode, struct page *page)
->   	return 0;
->   }
->   
-> +static unsigned int adjust_por_ra_blocks(struct f2fs_sb_info *sbi,
-> +				unsigned int ra_blocks, unsigned int blkaddr,
-> +				unsigned int next_blkaddr)
-> +{
-> +	if (blkaddr + 1 == next_blkaddr)
-> +		ra_blocks = min_t(unsigned int, RECOVERY_MIN_RA_BLOCKS,
-> +							ra_blocks * 2);
-> +	else if (next_blkaddr % sbi->blocks_per_seg)
-> +		ra_blocks = max_t(unsigned int, RECOVERY_MAX_RA_BLOCKS,
-> +							ra_blocks / 2);
-> +	return ra_blocks;
-> +}
-> +
->   static int find_fsync_dnodes(struct f2fs_sb_info *sbi, struct list_head *head,
->   				bool check_only)
->   {
-> @@ -353,6 +366,7 @@ static int find_fsync_dnodes(struct f2fs_sb_info *sbi, struct list_head *head,
->   	struct page *page = NULL;
->   	block_t blkaddr;
->   	unsigned int loop_cnt = 0;
-> +	unsigned int ra_blocks = RECOVERY_MAX_RA_BLOCKS;
->   	unsigned int free_blocks = MAIN_SEGS(sbi) * sbi->blocks_per_seg -
->   						valid_user_blocks(sbi);
->   	int err = 0;
-> @@ -427,11 +441,14 @@ static int find_fsync_dnodes(struct f2fs_sb_info *sbi, struct list_head *head,
->   			break;
->   		}
->   
-> +		ra_blocks = adjust_por_ra_blocks(sbi, ra_blocks, blkaddr,
-> +						next_blkaddr_of_node(page));
-> +
->   		/* check next segment */
->   		blkaddr = next_blkaddr_of_node(page);
->   		f2fs_put_page(page, 1);
->   
-> -		f2fs_ra_meta_pages_cond(sbi, blkaddr);
-> +		f2fs_ra_meta_pages_cond(sbi, blkaddr, ra_blocks);
->   	}
->   	return err;
->   }
-> @@ -707,6 +724,7 @@ static int recover_data(struct f2fs_sb_info *sbi, struct list_head *inode_list,
->   	struct page *page = NULL;
->   	int err = 0;
->   	block_t blkaddr;
-> +	unsigned int ra_blocks = RECOVERY_MAX_RA_BLOCKS;
->   
->   	/* get node pages in the current segment */
->   	curseg = CURSEG_I(sbi, CURSEG_WARM_NODE);
-> @@ -718,8 +736,6 @@ static int recover_data(struct f2fs_sb_info *sbi, struct list_head *inode_list,
->   		if (!f2fs_is_valid_blkaddr(sbi, blkaddr, META_POR))
->   			break;
->   
-> -		f2fs_ra_meta_pages_cond(sbi, blkaddr);
-> -
->   		page = f2fs_get_tmp_page(sbi, blkaddr);
->   		if (IS_ERR(page)) {
->   			err = PTR_ERR(page);
-> @@ -762,9 +778,14 @@ static int recover_data(struct f2fs_sb_info *sbi, struct list_head *inode_list,
->   		if (entry->blkaddr == blkaddr)
->   			list_move_tail(&entry->list, tmp_inode_list);
->   next:
-> +		ra_blocks = adjust_por_ra_blocks(sbi, ra_blocks, blkaddr,
-> +						next_blkaddr_of_node(page));
-> +
->   		/* check next segment */
->   		blkaddr = next_blkaddr_of_node(page);
->   		f2fs_put_page(page, 1);
-> +
-> +		f2fs_ra_meta_pages_cond(sbi, blkaddr, ra_blocks);
->   	}
->   	if (!err)
->   		f2fs_allocate_new_segments(sbi);
+
+done
+
+> 					-Alex
+> 
+> > +	if (ul_chan)
+> > +		ul_chan->xfer_cb = mhi_drv->ul_xfer_cb;
+> > +
+> > +	if (dl_chan)
+> > +		dl_chan->xfer_cb = mhi_drv->dl_xfer_cb;
+> > +
+> > +	return mhi_drv->probe(mhi_dev, mhi_dev->id);
+> > +}
+> 
+> . . .

@@ -2,234 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE814A8C7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FCE4A8C80
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbiBCTeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S232516AbiBCTec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiBCTeT (ORCPT
+        with ESMTP id S1353787AbiBCTe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:34:19 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3B3C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:34:19 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m7so3410497pjk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=1yp4kqXHLuiLSqZJRwSaK9VqxvJiqPmh4FLRt4gaE6c=;
-        b=oh+rD1BBWj6nZo4mM+w89x7gnRjPNXMwmfHiyif6JrV+sl7MWrpJbDD7iC7H64kYHy
-         cMuGHW91sRyI7wRbMxbWgFNTlIWscvM6WhK4w4YylVZdgu+/6XXlWK51KrgZS8v4wg/Q
-         P766DYpDmyujEJAVzDY5EvvdHcngIzrN0Kgf54A+nybzCKm2ijlZW+e8axpZYZxXN9UF
-         /t1fm5OTQw564OlSMxGPBdSFqKZCpWuTZKECZeqpFhUsCo1Z7jCme7M0gGyJ885mKvld
-         8fV0seCdVAKmoGx6aPd4/BFhCdSKpwRYPlKdVYmtReUZdZvza/r2N7fAUJj6DvtKC5NI
-         qeDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=1yp4kqXHLuiLSqZJRwSaK9VqxvJiqPmh4FLRt4gaE6c=;
-        b=gIXuqgnF9CseVNz4Ok4zqbUURalSX917sRRwtghIyLfJaO6myCQAqMZZeyxVbZI/+q
-         VZ8Vxif2Oh1ELqboDcLsvXwQZN/GyCe6lV1odrIcDuLVC3l/jAJi+tmeucKvS1q2IXO5
-         TLE9xcdTyP5AsUwTw9YUH6Pd/z+wCqAOIb/o+9gAtrSTYgysUDkI/IpmOsKdSFkooRSd
-         s+sQx/JbltiJWeM3S9oBOIe+JW58txilAOkIYmojpztifkKhdv50pb/TrDdURLvh7j31
-         PlJ1V1wmSECKKwi6ErTQsmaN8rriu2k7JdXGhD0f+hq9yGb9dJiBLEYf1YQ6fq98kT6m
-         T/IA==
-X-Gm-Message-State: AOAM5306SHlOPNh9XqdP92DDHa1gJ4q3q8YeGJW41wCyaIdz7EfDpVHM
-        sHimyGDfSqFyPFlRGDIonpLw+A==
-X-Google-Smtp-Source: ABdhPJxq3RgpBzF3w+fMQY/uFmlnbTzwDOeri6WFurMEfduTH0hqoKHRCTo1Vsszuc3DQwPWuLVOAg==
-X-Received: by 2002:a17:90a:f485:: with SMTP id bx5mr15515778pjb.46.1643916858692;
-        Thu, 03 Feb 2022 11:34:18 -0800 (PST)
-Received: from [192.168.254.17] ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id v20sm30222852pfu.155.2022.02.03.11.34.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 11:34:17 -0800 (PST)
-Message-ID: <2941defc-54cf-e482-80b0-68405beec4fa@linaro.org>
-Date:   Thu, 3 Feb 2022 11:34:17 -0800
+        Thu, 3 Feb 2022 14:34:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D6C061401;
+        Thu,  3 Feb 2022 11:34:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C485761986;
+        Thu,  3 Feb 2022 19:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA739C340EB;
+        Thu,  3 Feb 2022 19:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643916868;
+        bh=utBZ91xC68wf/1RW1HInTpjbO0Sz/IMNNgG3iiovr04=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N9WGFcikIUFZYmrx0VZQ4hASyFON91A7LZEo9gPiqjcGNQk5M871vBVy1EDZ9lur2
+         pyE5Ej3sPpL+PfAiFCtGFzry3fZa3q1VDoRo/WEiP3fEsfB+50ZmuAR1OK0dpxWR1v
+         ZknSjQBMNQ2dcPVGkGF/0jElu0sRhs2/rlR+mOiHZnZZgEKlxawYvx1YS5r6AGZ0il
+         Sco59xry+Xjof7qNWEjX8zIjpJ4+U8Bh4PGkzOrYr5NsAkNLxaMy281dowgIMtwpUs
+         ZuOVACG0NIXjR3lwCP3aGdO/EQPxZQy9HzH2lj25mSRDxZVP01MbGzQP6afpToNGyk
+         aI3uwybVmgk2Q==
+Date:   Thu, 3 Feb 2022 11:34:26 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Jeffrey Ji <jeffreyjilinux@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Brian Vazquez <brianvv@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, jeffreyji <jeffreyji@google.com>
+Subject: Re: [PATCH v6 net-next] net-core: add InMacErrors counter
+Message-ID: <20220203113426.49c70285@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CANn89iJqQwUVnh3SPZ7j4RGMhEZsBk3uT3wosAbb1aFSzoyS+A@mail.gmail.com>
+References: <20220201222845.3640041-1-jeffreyji@google.com>
+        <20220202205916.58f4a592@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CANn89iJqQwUVnh3SPZ7j4RGMhEZsBk3uT3wosAbb1aFSzoyS+A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] io_uring: prevent io_put_identity() from freeing a static
- identity
-Content-Language: en-US
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, io-uring@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        syzbot+6055980d041c8ac23307@syzkaller.appspotmail.com
-References: <20211104012120.729261-1-tadeusz.struk@linaro.org>
- <dd53f11a-ae6f-79af-2ea2-8091d1c4f15e@linaro.org>
- <2cd473d4-734d-95e2-4f3f-d793d065c449@linaro.org>
-In-Reply-To: <2cd473d4-734d-95e2-4f3f-d793d065c449@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/15/21 12:27, Tadeusz Struk wrote:
-> On 11/15/21 08:38, Tadeusz Struk wrote:
->> On 11/3/21 18:21, Tadeusz Struk wrote:
->>> Note: this applies to 5.10 stable only. It doesn't trigger on anything
->>> above 5.10 as the code there has been substantially reworked. This also
->>> doesn't apply to any stable kernel below 5.10 afaict.
->>>
->>> Syzbot found a bug: KASAN: invalid-free in io_dismantle_req
->>> https://syzkaller.appspot.com/bug?id=123d9a852fc88ba573ffcb2dbcf4f9576c3b0559
->>>
->>> The test submits bunch of io_uring writes and exits, which then triggers
->>> uring_task_cancel() and io_put_identity(), which in some corner cases,
->>> tries to free a static identity. This causes a panic as shown in the
->>> trace below:
->>>
->>>   BUG: KASAN: double-free or invalid-free in kfree+0xd5/0x310
->>>   CPU: 0 PID: 4618 Comm: repro Not tainted 5.10.76-05281-g4944ec82ebb9-dirty #17
->>>   Call Trace:
->>>    dump_stack_lvl+0x1b2/0x21b
->>>    print_address_description+0x8d/0x3b0
->>>    kasan_report_invalid_free+0x58/0x130
->>>    ____kasan_slab_free+0x14b/0x170
->>>    __kasan_slab_free+0x11/0x20
->>>    slab_free_freelist_hook+0xcc/0x1a0
->>>    kfree+0xd5/0x310
->>>    io_dismantle_req+0x9b0/0xd90
->>>    io_do_iopoll+0x13a4/0x23e0
->>>    io_iopoll_try_reap_events+0x116/0x290
->>>    io_uring_cancel_task_requests+0x197d/0x1ee0
->>>    io_uring_flush+0x170/0x6d0
->>>    filp_close+0xb0/0x150
->>>    put_files_struct+0x1d4/0x350
->>>    exit_files+0x80/0xa0
->>>    do_exit+0x6d9/0x2390
->>>    do_group_exit+0x16a/0x2d0
->>>    get_signal+0x133e/0x1f80
->>>    arch_do_signal+0x7b/0x610
->>>    exit_to_user_mode_prepare+0xaa/0xe0
->>>    syscall_exit_to_user_mode+0x24/0x40
->>>    do_syscall_64+0x3d/0x70
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>
->>>   Allocated by task 4611:
->>>    ____kasan_kmalloc+0xcd/0x100
->>>    __kasan_kmalloc+0x9/0x10
->>>    kmem_cache_alloc_trace+0x208/0x390
->>>    io_uring_alloc_task_context+0x57/0x550
->>>    io_uring_add_task_file+0x1f7/0x290
->>>    io_uring_create+0x2195/0x3490
->>>    __x64_sys_io_uring_setup+0x1bf/0x280
->>>    do_syscall_64+0x31/0x70
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>
->>>   The buggy address belongs to the object at ffff88810732b500
->>>    which belongs to the cache kmalloc-192 of size 192
->>>   The buggy address is located 88 bytes inside of
->>>    192-byte region [ffff88810732b500, ffff88810732b5c0)
->>>   Kernel panic - not syncing: panic_on_warn set ...
->>>
->>> This issue bisected to this commit:
->>> commit 186725a80c4e ("io_uring: fix skipping disabling sqo on exec")
->>>
->>> Simple reverting the offending commit doesn't work as it hits some
->>> other, related issues like:
->>>
->>> /* sqo_dead check is for when this happens after cancellation */
->>> WARN_ON_ONCE(ctx->sqo_task == current && !ctx->sqo_dead &&
->>>          !xa_load(&tctx->xa, (unsigned long)file));
->>>
->>>   ------------[ cut here ]------------
->>>   WARNING: CPU: 1 PID: 5622 at fs/io_uring.c:8960 io_uring_flush+0x5bc/0x6d0
->>>   Modules linked in:
->>>   CPU: 1 PID: 5622 Comm: repro Not tainted 5.10.76-05281-g4944ec82ebb9-dirty #16
->>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-6.fc35 
->>> 04/01/2014
->>>   RIP: 0010:io_uring_flush+0x5bc/0x6d0
->>>   Call Trace:
->>>   filp_close+0xb0/0x150
->>>   put_files_struct+0x1d4/0x350
->>>   reset_files_struct+0x88/0xa0
->>>   bprm_execve+0x7f2/0x9f0
->>>   do_execveat_common+0x46f/0x5d0
->>>   __x64_sys_execve+0x92/0xb0
->>>   do_syscall_64+0x31/0x70
->>>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>>
->>> Changing __io_uring_task_cancel() to call io_disable_sqo_submit() directly,
->>> as the comment suggests, only if __io_uring_files_cancel() is not executed
->>> seems to fix the issue.
->>>
->>> Cc: Jens Axboe <axboe@kernel.dk>
->>> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
->>> Cc: <io-uring@vger.kernel.org>
->>> Cc: <linux-fsdevel@vger.kernel.org>
->>> Cc: <linux-kernel@vger.kernel.org>
->>> Cc: <stable@vger.kernel.org>
->>> Reported-by: syzbot+6055980d041c8ac23307@syzkaller.appspotmail.com
->>> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
->>> ---
->>>   fs/io_uring.c | 21 +++++++++++++++++----
->>>   1 file changed, 17 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/fs/io_uring.c b/fs/io_uring.c
->>> index 0736487165da..fcf9ffe9b209 100644
->>> --- a/fs/io_uring.c
->>> +++ b/fs/io_uring.c
->>> @@ -8882,20 +8882,18 @@ void __io_uring_task_cancel(void)
->>>       struct io_uring_task *tctx = current->io_uring;
->>>       DEFINE_WAIT(wait);
->>>       s64 inflight;
->>> +    int canceled = 0;
->>>       /* make sure overflow events are dropped */
->>>       atomic_inc(&tctx->in_idle);
->>> -    /* trigger io_disable_sqo_submit() */
->>> -    if (tctx->sqpoll)
->>> -        __io_uring_files_cancel(NULL);
->>> -
->>>       do {
->>>           /* read completions before cancelations */
->>>           inflight = tctx_inflight(tctx);
->>>           if (!inflight)
->>>               break;
->>>           __io_uring_files_cancel(NULL);
->>> +        canceled = 1;
->>>           prepare_to_wait(&tctx->wait, &wait, TASK_UNINTERRUPTIBLE);
->>> @@ -8909,6 +8907,21 @@ void __io_uring_task_cancel(void)
->>>           finish_wait(&tctx->wait, &wait);
->>>       } while (1);
->>> +    /*
->>> +     * trigger io_disable_sqo_submit()
->>> +     * if not already done by __io_uring_files_cancel()
->>> +     */
->>> +    if (tctx->sqpoll && !canceled) {
->>> +        struct file *file;
->>> +        unsigned long index;
->>> +
->>> +        xa_for_each(&tctx->xa, index, file) {
->>> +            struct io_ring_ctx *ctx = file->private_data;
->>> +
->>> +            io_disable_sqo_submit(ctx);
->>> +        }
->>> +    }
->>> +
->>>       atomic_dec(&tctx->in_idle);
->>>       io_uring_remove_task_files(tctx);
->>>
->>
->> Hi,
->> Any comments on this one? It needs to be ACK'ed by the maintainer before
->> it is applied to 5.10 stable.
->>
+On Thu, 3 Feb 2022 10:13:59 -0800 Eric Dumazet wrote:
+> > I had another thing and this still doesn't sit completely well
+> > with me :(
+> >
+> > Shouldn't we count those drops as skb->dev->rx_dropped?
+> > Commonly NICs will do such filtering and if I got it right
+> > in struct rtnl_link_stats64 kdoc - report them as rx_dropped.
+> > It'd be inconsistent if on a physical interface we count
+> > these as rx_dropped and on SW interface (or with promisc enabled
+> > etc.) in the SNMP counters.  
 > 
-> This still triggers on 5.10.85. Anyone want to have a look?
+> I like to see skb->dev->rx_dropped as a fallback-catch-all bucket
+> for all cases we do not already have a more specific counter.
+
+Indeed, it's a fallback so counting relatively common events like
+unicast filtering into generic "drops" feels wrong. I heard complaints
+that this is non-intuitive and makes debug harder in the past.
+
+> > Or we can add a new link stat that NICs can use as well.  
 > 
+> Yes, this could be done, but we have to be careful about not hitting
+> a single cache line, for the cases we receive floods of such messages
+> on multiqueue NIC.
+> (The single atomic in dev->rx_dropped) is suffering from this issue btw)
 
-Any last call? Nobody cares about 5.10 anymore?
+Even more of a reason to bite the bullet and move from the atomic
+counters to pcpu stats?
 
--- 
-Thanks,
-Tadeusz
+> > In fact I'm not sure this is really a IP AKA L3 statistic,
+> > it's the L2 address that doesn't match.
+> >
+> >
+> > If everyone disagrees - should we at least rename the MIB counter
+> > similarly to the drop reason? Experience shows that users call for
+> > help when they see counters with Error in their name, I'd vote for
+> > IpExtInDropOtherhost or some such. The statistic should also be
+> > documented in Documentation/networking/snmp_counter.rst  
+

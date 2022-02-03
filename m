@@ -2,212 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889A74A7F35
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF53A4A7F37
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 07:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236642AbiBCGHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 01:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S236730AbiBCGKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 01:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236271AbiBCGHA (ORCPT
+        with ESMTP id S235938AbiBCGKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 01:07:00 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5794FC061714;
-        Wed,  2 Feb 2022 22:07:00 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id h125so1462263pgc.3;
-        Wed, 02 Feb 2022 22:07:00 -0800 (PST)
+        Thu, 3 Feb 2022 01:10:04 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D51C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 22:10:04 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id q186so2545353oih.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 22:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oEVq5Aw8C7IrD63fuw2vvXKG01QmH5pZ1I0qXHV9G3I=;
-        b=HghP9cyA6N5u0/1vjJO/prNcLOwbVLhOnjmMiFNCNZHO8qcm3d3ykk84fjihlNqu+1
-         zRFQVQgEi/ov7WNLN6K8aeBBcyv8DawDCUa2RDrgLRJB4+/FPjFmRC2A//MXpQu5eIqy
-         RlpQmB8pwwXjuamiqfveFgpedPDescCPFtC0HGkWDkyZ7XXXv9NPYVt4392EnLpq6H7p
-         oI3RswIIuCo7Wooy1FajqyF4CTweLkNr4WFYRPMwISeYoxYZ1FsI7xX02UuOs4iRW1Yn
-         My2TLS50jru+hEHQdQ2Ksje/Yd7oNFtWy68o0jLu0PuZzMEWOM8ElPWq8v4G6uHKOMWn
-         tjZQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MKmeM+WnoFLvijb23qV4KsBBJEj03nwFt1YSDu6ck9w=;
+        b=rTELHwKDKHUPUfPNLKe26ftWpLHryGiAGNR6VLZhSkOCPZQzOwKalebQHsf7hfdWMr
+         74zLVwiW5GxdfsOkZuFx0XLivm3B0HOHzR4cgC4Gky8Nlqgvb7i6Mm7WLoLrmYEZHVzh
+         IE22ruwfcfznkkpbXejlhOZ7X4REG5riFD3xaJCJrzvukwD07kl08453mXj9Fw5J5Uuh
+         eeHMQB2BFmYLwKpUdY7TDXLf4A1uXEwA8eZg8sSnrFZ+Yh8Ra4ZACimzp7X/ADVA1BDU
+         dWT4ITMFLE7scRSWoXbONeuI5zywvo7RCb6DuPxDfQXXxInux783WBV8f7TRj5BoPhxf
+         vG2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oEVq5Aw8C7IrD63fuw2vvXKG01QmH5pZ1I0qXHV9G3I=;
-        b=t3icDAaVM9IEMdA0+WKSN0YRBqrJtkVCfaaAdwcf2ySgcOX5Gy5ZF9ZRdPx68rSs9R
-         zsYoA/agDtB5p1ZgnPG++6AApE38Z8xyp7c+0E3XKLaLWE5D8Mu3Z1P4DDx4d69ylSuv
-         XLJU19Ww+cCvGBNcJFNpEsC8CA1OFj1L+fmF7EdDpXCYXOSqvw1EHWcIcie2p7FlQ2DZ
-         nvO9qh0xhIo6tdh+7b1dBawolJg59iPifO3pHwQb6xoUtSUcFzKNYri+tquNwtMmFqgc
-         L3uH1YokvE33qkik6wPvQYCFJ6AKjkuv+sG7nFdnKga6T8ESSvN3dgIMxNS0PiizGmoS
-         S+kg==
-X-Gm-Message-State: AOAM531dJ2qErVVPh1GlxBGEYBPWGYvATwWuqhthpltUyv7idibQ5AAP
-        FuTjkILTIaBdPomOeXGBEVQ=
-X-Google-Smtp-Source: ABdhPJyvdnX1ThzBs8PA90WGwirRbfyDzb5GgSYgsOFvMqlv747RzAkLzuTGYm+wi8rTxvVcI8IKig==
-X-Received: by 2002:a63:3189:: with SMTP id x131mr26612065pgx.302.1643868419689;
-        Wed, 02 Feb 2022 22:06:59 -0800 (PST)
-Received: from vimal-VirtualBox.. ([49.207.201.237])
-        by smtp.gmail.com with ESMTPSA id q21sm28818184pfu.104.2022.02.02.22.06.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 22:06:59 -0800 (PST)
-From:   Vimal Agrawal <avimalin@gmail.com>
-X-Google-Original-From: Vimal Agrawal <vimal.agrawal@sophos.com>
-To:     mcgrof@kernel.org
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        hch@infradead.org, masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, JBeulich@suse.com, jeffm@suse.com,
-        sam@ravnborg.org, linux-kbuild@vger.kernel.org, jeyu@kernel.org,
-        avimalin@gmail.com, vimal.agrawal@sophos.com
-Subject: [PATCH v4] modules: add heuristic when stripping unneeded symbols
-Date:   Thu,  3 Feb 2022 11:36:41 +0530
-Message-Id: <20220203060641.119522-1-vimal.agrawal@sophos.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <Yfrncd3voPOB7PdB@bombadil.infradead.org>
-References: <Yfrncd3voPOB7PdB@bombadil.infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MKmeM+WnoFLvijb23qV4KsBBJEj03nwFt1YSDu6ck9w=;
+        b=udEpyQKwPzeORoyCy1HkVPKfnybUvge1y382Ejl+xTAr83oDDWzQAfOQOdCjbC6Ug6
+         QbQAD/Z1GurhcpOozh/jnWEV6UYmlPoc/3CDr7+5Qtk4lgXycsbuu7yJQ3FhuRIPnqnD
+         wEkelrA/Wz+k5G+MH4atZfpi78NVNfHP7Yf0jpKzZOFCFscbKgN4FUB/Vvm3fHVLBXWS
+         jvdaYiVsY7dGEqgaN26Yozy3rzXFnteiMOABBrfQwRb3QqwK1xjsKV1pVv6GvjBxa4Tm
+         6VIILkhkFCnCJEjmrDOYI/HVn5IxI1LYLQafbELYUNQPA5GWmCJtf6ng69qlrvjChSgc
+         xSNg==
+X-Gm-Message-State: AOAM532xg/zxBeW0hWWOaj476OdutglIDMirNi8B7d6W+XzNLq5CfYdX
+        cLMCmF6A/jV/ThgxubMKEI52hPQmq7ytlSUXTZ0Q/A==
+X-Google-Smtp-Source: ABdhPJyb+iak7jAKX3etgUFSk4G3NxcTObpkuNM3U8QnJ1nLiB/+NGh5qZHKdgDivSKvBl1Ybc0YqDbLmjl/dpYodgo=
+X-Received: by 2002:a05:6808:21a5:: with SMTP id be37mr7298797oib.339.1643868603470;
+ Wed, 02 Feb 2022 22:10:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <0000000000000560cc05d4bce058@google.com> <00000000000064159d05d703d683@google.com>
+ <20220203040227.2057-1-hdanton@sina.com>
+In-Reply-To: <20220203040227.2057-1-hdanton@sina.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 3 Feb 2022 07:09:52 +0100
+Message-ID: <CACT4Y+bm+S-_b3saGichr3aA06rvsXyp28og_CONrh5fRhe8Eg@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in hidraw_release
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+953a33deaf38c66a915e@syzkaller.appspotmail.com>,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If kernel modules are stripped off symbols for some reason then stack
-traces in dmesg do not show symbol name for address. It just prints
-absolute address sometimes (if there is no good match with any symbol)
+On Thu, 3 Feb 2022 at 05:02, Hillf Danton <hdanton@sina.com> wrote:
+>
+> On Tue, 01 Feb 2022 23:19:25 -0800
+> > syzbot has found a reproducer for the following issue on:
+> >
+> > HEAD commit:    9f7fb8de5d9b Merge tag 'spi-fix-v5.17-rc2' of git://git.ke..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1653b6cbb00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3e56c9b92aaaee24
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=953a33deaf38c66a915e
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fff530700000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=106469f0700000
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+953a33deaf38c66a915e@syzkaller.appspotmail.com
+> >
+> > ==================================================================
+> > BUG: KASAN: use-after-free in __list_del_entry_valid+0xe0/0xf0 lib/list_debug.c:51
+> > Read of size 8 at addr ffff8880143e8eb0 by task syz-executor753/4862
+> >
+> > CPU: 0 PID: 4862 Comm: syz-executor753 Not tainted 5.17.0-rc2-syzkaller-00039-g9f7fb8de5d9b #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255
+> >  __kasan_report mm/kasan/report.c:442 [inline]
+> >  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+> >  __list_del_entry_valid+0xe0/0xf0 lib/list_debug.c:51
+> >  __list_del_entry include/linux/list.h:134 [inline]
+> >  list_del include/linux/list.h:148 [inline]
+>
+> What is difficult to follow is syzbot instead did not complain at the spin_lock
+> prior to list_del in regard to uaf.
+>
+> Any light on the difficulty is welcome.
 
-This was seen with OpenWrt which uses option INSTALL_MOD_STRIP=
-"--strip-unneeded" at kernel/module build/install time, and so modules
-are stripped off unneeded symbols.
+Hi Hillf,
 
-[245864.699580]  do_nmi+0x12f/0x370
-[245864.699583]  end_repeat_nmi+0x16/0x50
-[245864.699585] RIP: 0010:0xffffffffc06b67ec                           <<<<<<<<
-[245864.699585] RSP: 0000:ffffaaa540cffe48 EFLAGS: 00000097
-[245864.699586] RAX: 0000000000000001 RBX: ffff93357a729000 RCX: 0000000000000001
-[245864.699587] RDX: ffff93357a729050 RSI: 0000000000000000 RDI: ffff93357a729000
-[245864.699588] RBP: ffff9335cf521300 R08: 0000000000000001 R09: 0000000000000004
-[245864.699588] R10: ffffaaa545b23ed0 R11: 0000000000000001 R12: ffffffffc06b61a0
-[245864.699589] R13: ffffaaa540cffe60 R14: ffff9335c77fa3c0 R15: ffff9335cf51d7c0
-[245864.699590]  ? 0xffffffffc06b61a0
-[245864.699592]  ? 0xffffffffc06b67ec                                  <<<<<<<<
-[245864.699593]  ? 0xffffffffc06b67ec
-[245864.699594]  </NMI>
+If you mean these lock/unlock:
 
-Note RIP: 0010:0xffffffffc06b67ec and 0xffffffffc06b67ec printed in above
-stack trace as absolute address. There is no easy way in case box crashes
-as we loose information on load address of specific module.
+spin_lock_irqsave(&hidraw_table[minor]->list_lock, flags);
+list_del(&list->node);
+spin_unlock_irqrestore(&hidraw_table[minor]->list_lock, flags);
 
-This changes the symbol decoding (in kernel/module.c) such that it can
-print offset from start of section (.text or .init.text) in case there
-is no good match with any symbol.
+They seem to operate on a global hidraw_table locks.
+I would assume only this file is corrupted/bad, but the global lock
+table is fine.
 
-It will now decode address in such cases to [module]+ offset/size or
-[module __init]+offset/size depending on where the address lies (in
-core/.text or init/.init.text section of module).
 
-One can use objdump/readelf/nm to find symbols with offset from .init.text
-and .text sections.
-
-steps to reproduce the problem:
--------------------------------
-1. Add WARN_ON_ONCE(1) in module e.g. test_module.c
-2. Build and strip the module using --strip-unneeded option
-3. Load the module and check RIP in dmesg
-
-tests done:
------------
-1. Added WARN_ON_ONE(1) in functions of a module for testing
--------------------------------------------------------------
-[  407.934085] CPU: 0 PID: 2956 Comm: insmod Tainted: G        W   E     5.16.0-rc5-next-20211220+ #2
-[  407.934087] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-[  407.934088] RIP: 0010:[module __init]+0x4/0x7 [test_module]
-[  407.934097] Code: Unable to access opcode bytes at RIP 0xffffffffc07edfda.
-[  407.934098] RSP: 0018:ffffb21440487c20 EFLAGS: 00010202
-[  407.934100] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[  407.934101] RDX: 0000000000000000 RSI: ffffffff9c38e5e1 RDI: 0000000000000001
-[  407.934102] RBP: ffffb21440487c28 R08: 0000000000000000 R09: ffffb21440487a20
-[  407.934103] R10: ffffb21440487a18 R11: ffffffff9c755248 R12: ffffffffc07ee007
-[  407.934104] R13: ffff92a0f1e260b0 R14: 0000000000000000 R15: 0000000000000000
-[  407.934105] FS:  00007f578ebc4400(0000) GS:ffff92a1c0e00000(0000) knlGS:0000000000000000
-[  407.934107] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  407.934108] CR2: ffffffffc07edfda CR3: 00000000063ea006 CR4: 00000000000706f0
-[  407.934113] Call Trace:
-[  407.934114]  <TASK>
-[  407.934116]  ? init_module+0x55/0xff9 [test_module]
-...
-[  407.934232] CPU: 0 PID: 2956 Comm: insmod Tainted: G        W   E     5.16.0-rc5-next-20211220+ #2
-[  407.934234] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-[  407.934242] RIP: 0010:[module]+0x4/0x7 [test_module]
-[  407.934248] Code: Unable to access opcode bytes at RIP 0xffffffffc07e1fda.
-[  407.934249] RSP: 0018:ffffb21440487c20 EFLAGS: 00010202
-[  407.934251] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-[  407.934252] RDX: 0000000000000000 RSI: ffffffff9c38e5e1 RDI: 0000000000000001
-[  407.934253] RBP: ffffb21440487c28 R08: 0000000000000000 R09: ffffb21440487a20
-[  407.934254] R10: ffffb21440487a18 R11: ffffffff9c755248 R12: ffffffffc07ee007
-[  407.934255] R13: ffff92a0f1e260b0 R14: 0000000000000000 R15: 0000000000000000
-[  407.934256] FS:  00007f578ebc4400(0000) GS:ffff92a1c0e00000(0000) knlGS:0000000000000000
-[  407.934257] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  407.934258] CR2: ffffffffc07e1fda CR3: 00000000063ea006 CR4: 00000000000706f0
-[  407.934260] Call Trace:
-[  407.934260]  <TASK>
-[  407.934261]  ? init_module+0x5a/0xff9 [test_module]
-
-note that it is able to decode RIP to an offset from module start or
-init start now.
-
-tested on linux->next (tag next-20211220)
-
-Signed-off-by: Vimal Agrawal <vimal.agrawal@sophos.com>
----
- kernel/module.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/module.c b/kernel/module.c
-index 24dab046e16c..4de15c06e760 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -4270,14 +4270,21 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 					unsigned long *offset)
- {
- 	unsigned int i, best = 0;
--	unsigned long nextval, bestval;
-+	unsigned long baseval, nextval, bestval;
- 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-+	char *module_base_name;
- 
- 	/* At worse, next value is at end of module */
--	if (within_module_init(addr, mod))
-+	if (within_module_init(addr, mod)) {
-+		baseval = (unsigned long)mod->init_layout.base;
- 		nextval = (unsigned long)mod->init_layout.base+mod->init_layout.text_size;
--	else
-+		module_base_name = "[module __init]";
-+
-+	} else {
-+		baseval = (unsigned long)mod->core_layout.base;
- 		nextval = (unsigned long)mod->core_layout.base+mod->core_layout.text_size;
-+		module_base_name = "[module]";
-+	}
- 
- 	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
- 
-@@ -4308,6 +4315,19 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 			nextval = thisval;
- 	}
- 
-+	if ((is_module_text_address(addr) &&
-+		(bestval < baseval || bestval > nextval))) {
-+		/*
-+		 * return MODULE base and offset if we could not find
-+		 * any best match for text address
-+		 */
-+		if (size)
-+			*size = nextval - baseval;
-+		if (offset)
-+			*offset = addr - baseval;
-+		return module_base_name;
-+	}
-+
- 	if (!best)
- 		return NULL;
- 
--- 
-2.32.0
-
+> >  hidraw_release+0xd5/0x370 drivers/hid/hidraw.c:353
+> >  __fput+0x286/0x9f0 fs/file_table.c:311
+> >  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+> >  exit_task_work include/linux/task_work.h:32 [inline]
+> >  do_exit+0xb29/0x2a30 kernel/exit.c:806
+> >  do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+> >  __do_sys_exit_group kernel/exit.c:946 [inline]
+> >  __se_sys_exit_group kernel/exit.c:944 [inline]
+> >  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > RIP: 0033:0x7f4256d1c749
+> > Code: Unable to access opcode bytes at RIP 0x7f4256d1c71f.
+> > RSP: 002b:00007fffddc9a4e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> > RAX: ffffffffffffffda RBX: 00007f4256d913f0 RCX: 00007f4256d1c749
+> > RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+> > RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007fffddc9a560
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f4256d913f0
+> > R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+> >  </TASK>
+> >
+> > Allocated by task 20:
+> >  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+> >  kasan_set_track mm/kasan/common.c:45 [inline]
+> >  set_alloc_info mm/kasan/common.c:436 [inline]
+> >  ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+> >  ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+> >  __kasan_kmalloc+0xa6/0xd0 mm/kasan/common.c:524
+> >  kasan_kmalloc include/linux/kasan.h:270 [inline]
+> >  kmem_cache_alloc_trace+0x1ea/0x4a0 mm/slab.c:3567
+> >  kmalloc include/linux/slab.h:581 [inline]
+> >  kzalloc include/linux/slab.h:715 [inline]
+> >  hidraw_connect+0x4b/0x440 drivers/hid/hidraw.c:543
+> >  hid_connect+0x5be/0xbc0 drivers/hid/hid-core.c:1960
+> >  hid_hw_start drivers/hid/hid-core.c:2059 [inline]
+> >  hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2050
+> >  hid_generic_probe drivers/hid/hid-generic.c:67 [inline]
+> >  hid_generic_probe+0x6d/0x90 drivers/hid/hid-generic.c:56
+> >  hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2380
+> >  call_driver_probe drivers/base/dd.c:517 [inline]
+> >  really_probe+0x245/0xcc0 drivers/base/dd.c:596
+> >  __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
+> >  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
+> >  __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
+> >  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+> >  __device_attach+0x228/0x4a0 drivers/base/dd.c:970
+> >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+> >  device_add+0xc17/0x1ee0 drivers/base/core.c:3405
+> >  hid_add_device+0x344/0x9d0 drivers/hid/hid-core.c:2530
+> >  uhid_device_add_worker+0x36/0x60 drivers/hid/uhid.c:73
+> >  process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+> >  worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+> >  kthread+0x2e9/0x3a0 kernel/kthread.c:377
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> >
+> > Freed by task 4861:
+> >  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+> >  kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+> >  kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+> >  ____kasan_slab_free mm/kasan/common.c:366 [inline]
+> >  ____kasan_slab_free mm/kasan/common.c:328 [inline]
+> >  __kasan_slab_free+0xee/0x130 mm/kasan/common.c:374
+> >  kasan_slab_free include/linux/kasan.h:236 [inline]
+> >  __cache_free mm/slab.c:3437 [inline]
+> >  kfree+0xf6/0x290 mm/slab.c:3794
+> >  drop_ref+0x28f/0x390 drivers/hid/hidraw.c:335
+> >  hidraw_release+0x255/0x370 drivers/hid/hidraw.c:357
+> >  __fput+0x286/0x9f0 fs/file_table.c:311
+> >  task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+> >  exit_task_work include/linux/task_work.h:32 [inline]
+> >  do_exit+0xb29/0x2a30 kernel/exit.c:806
+> >  do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+> >  __do_sys_exit_group kernel/exit.c:946 [inline]
+> >  __se_sys_exit_group kernel/exit.c:944 [inline]
+> >  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> >
+> > The buggy address belongs to the object at ffff8880143e8e00
+> >  which belongs to the cache kmalloc-192 of size 192
+> > The buggy address is located 176 bytes inside of
+> >  192-byte region [ffff8880143e8e00, ffff8880143e8ec0)
+> > The buggy address belongs to the page:
+> > page:ffffea000050fa00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x143e8
+> > flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+> > raw: 00fff00000000200 ffffea000050f188 ffffea000050fc48 ffff888010c40000
+> > raw: 0000000000000000 ffff8880143e8000 0000000100000010 0000000000000000
+> > page dumped because: kasan: bad access detected
+> > page_owner tracks the page as allocated
+> > page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_THISNODE), pid 1, ts 2151082992, free_ts 0
+> >  prep_new_page mm/page_alloc.c:2434 [inline]
+> >  get_page_from_freelist+0xa72/0x2f50 mm/page_alloc.c:4165
+> >  __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5389
+> >  __alloc_pages_node include/linux/gfp.h:572 [inline]
+> >  kmem_getpages mm/slab.c:1378 [inline]
+> >  cache_grow_begin+0x75/0x350 mm/slab.c:2584
+> >  cache_alloc_refill+0x27f/0x380 mm/slab.c:2957
+> >  ____cache_alloc mm/slab.c:3040 [inline]
+> >  ____cache_alloc mm/slab.c:3023 [inline]
+> >  __do_cache_alloc mm/slab.c:3267 [inline]
+> >  slab_alloc mm/slab.c:3308 [inline]
+> >  kmem_cache_alloc_trace+0x380/0x4a0 mm/slab.c:3565
+> >  kmalloc include/linux/slab.h:581 [inline]
+> >  kzalloc include/linux/slab.h:715 [inline]
+> >  call_usermodehelper_setup+0x9d/0x340 kernel/umh.c:365
+> >  kobject_uevent_env+0xf28/0x1600 lib/kobject_uevent.c:614
+> >  kernel_add_sysfs_param kernel/params.c:816 [inline]
+> >  param_sysfs_builtin kernel/params.c:851 [inline]
+> >  param_sysfs_init+0x367/0x43b kernel/params.c:970
+> >  do_one_initcall+0x103/0x650 init/main.c:1300
+> >  do_initcall_level init/main.c:1373 [inline]
+> >  do_initcalls init/main.c:1389 [inline]
+> >  do_basic_setup init/main.c:1408 [inline]
+> >  kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+> >  kernel_init+0x1a/0x1d0 init/main.c:1502
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > page_owner free stack trace missing
+> >
+> > Memory state around the buggy address:
+> >  ffff8880143e8d80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+> >  ffff8880143e8e00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > >ffff8880143e8e80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+> >                                      ^
+> >  ffff8880143e8f00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >  ffff8880143e8f80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+> > ==================================================================
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20220203040227.2057-1-hdanton%40sina.com.

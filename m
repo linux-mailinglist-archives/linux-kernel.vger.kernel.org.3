@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289AE4A880F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290A24A880C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351994AbiBCPxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 10:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240748AbiBCPxD (ORCPT
+        id S1351985AbiBCPwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:52:34 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:51134 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345506AbiBCPwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:53:03 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE843C061714;
-        Thu,  3 Feb 2022 07:53:02 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id e8so5974710wrc.0;
-        Thu, 03 Feb 2022 07:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L4MH3mEGIpUqAyk+yeIpQJQrYpBhpCsBQ0WbxAp18o0=;
-        b=D4CZ7b5pktdL8Fq4Wy0IN9cCGEuDBAFbncb8snMSZ9ZJF1aaI6wO8aeofH0zzMPf0q
-         cfPr5Sx2zFb9l3tiemZlKQL79SnKUxGXMKYpx2tNeZS92wEvAtI3h0FI2ReL7JtILk4K
-         yG8C0lFZAN5002jQJjzdlJ77ba4v7zbevGYwQbtSpcDO69K5mwl/hHQbXFUSPU5TLMW/
-         QQbcK5Xp9SfTCAEqhLSqX538NeglUw9BnWO1DhZ63Zi4lropWN6syOa+4biBE2f59gPy
-         3p6dS2SXmY/s/8pEZqowM6ratizJ//nk8uggYtkhhoM+8yCbc8t73AFe801K0NQktiL5
-         y/ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=L4MH3mEGIpUqAyk+yeIpQJQrYpBhpCsBQ0WbxAp18o0=;
-        b=gCLadajg8SDHNdR81v1zSm5wTu0POHvKzEb/g6mpSkMH+/xvjW5e9QBOsmtGlZupox
-         sWNCkXbU9WxRRs2tMTKQmcIYg65DaDfps3DUoiCSjheCyLaxjnl5pLxH+Xy12ZkM2Rrg
-         ouIJ4RtrJB4bOsfEdKU5U0hrNjATduaLkFZYRz5BK+smvnAzl2vmiLUANjPGfk4wLsT/
-         escKduPKMgcmGOVcVUnYtdTV3uzMOqdQfdAJf+tdUG7DlH9IAYJvERr3NAQ7QJZ/DuQg
-         dWYVqV32bSBtVLrwSyoQhpSwOypSWnrt1rAmLV75KaYjd77OZn8S3cns3N3LaN+fQdQB
-         hJOw==
-X-Gm-Message-State: AOAM533Btsj+ygogKHwtOEtB5ZBxC5P8SzYNuVv4BfEJOSY9cFY+03ES
-        DyFqli7ezb/Wkx6qdtsSH+x33E+Mxjo=
-X-Google-Smtp-Source: ABdhPJxu0158ZLJZgaexjlGDyXNLWjuoedQvcQCXz5bXogN0zjC5jehel87iuPEmXXfQWmWL9trY4w==
-X-Received: by 2002:a5d:64e5:: with SMTP id g5mr22342848wri.541.1643903581560;
-        Thu, 03 Feb 2022 07:53:01 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.232.204])
-        by smtp.gmail.com with ESMTPSA id d2sm20240691wru.40.2022.02.03.07.53.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 07:53:01 -0800 (PST)
-Message-ID: <f8ff62bf-4435-5da3-949a-fd337a9dfaf7@gmail.com>
-Date:   Thu, 3 Feb 2022 15:48:35 +0000
+        Thu, 3 Feb 2022 10:52:31 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EF3311F399;
+        Thu,  3 Feb 2022 15:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643903550; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mwqGB0P7BAikO77P4Cr4FPMD6wz7ALm2SA1ykdiVD4c=;
+        b=bRAvo3BLIj3v7SFT0I1ZjFRRPwQzLw6+P1UBcUoGsNmHOHsMvO21nSmKnc8NWP14j8Anm9
+        ZObOjKjm2gMw3GimS/gQRHbTCUgDU81+T6n3mXqk6y5JMvqMdNsM6j+qB4Hx+j2RXugh9c
+        esP9dGpVMjZ2y+r/17okfHCqiWuVaNA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643903550;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mwqGB0P7BAikO77P4Cr4FPMD6wz7ALm2SA1ykdiVD4c=;
+        b=aW0tglSdjAh8AHokGmM2D73KkeNY6L/4FrbYP8mg41JNl6Mlh0gVj5SyJ8sMmnzMH3uZc6
+        hf3uL/ArCxfdDXAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CCEB613C7C;
+        Thu,  3 Feb 2022 15:52:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ssK0MD76+2G2EQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 03 Feb 2022 15:52:30 +0000
+Message-ID: <b73d9d54-4311-1fd3-43b1-39ffd5d9c160@suse.cz>
+Date:   Thu, 3 Feb 2022 16:52:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] mm/page_owner.c: record task name of process
 Content-Language: en-US
-To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
-        axboe@kernel.dk, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203151153.574032-1-usama.arif@bytedance.com>
- <20220203151153.574032-2-usama.arif@bytedance.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220203151153.574032-2-usama.arif@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+References: <20220203120040.2338-1-caoyixuan2019@email.szu.edu.cn>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220203120040.2338-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 15:11, Usama Arif wrote:
-> This is done by creating a new RCU data structure (io_ev_fd) as part of
-> io_ring_ctx that holds the eventfd_ctx.
+On 2/3/22 13:00, Yixuan Cao wrote:
+> I think in tracing page allocation behavior,
+> It is useful to record the task name of the process.
 > 
-> The function io_eventfd_signal is executed under rcu_read_lock with a
-> single rcu_dereference to io_ev_fd so that if another thread unregisters
-> the eventfd while io_eventfd_signal is still being executed, the
-> eventfd_signal for which io_eventfd_signal was called completes
-> successfully.
+> Although the current Page Owner has recorded the process ID,
+> When the process exits,
+> It is difficult to distinguish the specific function of this process,
+> This brings some inconvenience to debugging memory problems.
 > 
-> The process of registering/unregistering eventfd is done under a lock
-> so multiple threads don't enter a race condition while
-> registering/unregistering eventfd.
+> Therefore, add the task name information to the Page Owner,
+> So that users can clearly understand the task name of the process.
+> At the same time, with this information,
+> We can use tools/vm/page_owner_sort.c,
+> Provides more output modes for Page Owner.
 > 
-> With the above approach ring quiesce can be avoided which is much more
-> expensive then using RCU lock. On the system tested, io_uring_reigster with
-> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
-> before with ring quiesce.
-> 
-> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+
+A patch with the same goal is already part of Waiman's series:
+https://lore.kernel.org/all/20220131192308.608837-5-longman@redhat.com/
+
 > ---
->   fs/io_uring.c | 103 +++++++++++++++++++++++++++++++++++++++-----------
->   1 file changed, 80 insertions(+), 23 deletions(-)
+>  mm/page_owner.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 2e04f718319d..f07cfbb387a6 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -326,6 +326,12 @@ struct io_submit_state {
->   	struct blk_plug		plug;
->   };
->   
-
-> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
-> +static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx, struct io_ev_fd *ev_fd)
->   {
-> -	if (likely(!ctx->cq_ev_fd))
-> +	if (likely(!ev_fd))
->   		return false;
->   	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
->   		return false;
->   	return !ctx->eventfd_async || io_wq_current_is_worker();
->   }
->   
-> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
-> +{
-> +	struct io_ev_fd *ev_fd;
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 99e360df9465..a8d666cd13ac 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -29,6 +29,7 @@ struct page_owner {
+>  	u64 ts_nsec;
+>  	u64 free_ts_nsec;
+>  	pid_t pid;
+> +	char task_name[TASK_COMM_LEN];
+>  };
+>  
+>  static bool page_owner_enabled = false;
+> @@ -163,6 +164,7 @@ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+>  		page_owner->gfp_mask = gfp_mask;
+>  		page_owner->last_migrate_reason = -1;
+>  		page_owner->pid = current->pid;
+> +		strcpy(page_owner->task_name, current->comm);
+>  		page_owner->ts_nsec = local_clock();
+>  		__set_bit(PAGE_EXT_OWNER, &page_ext->flags);
+>  		__set_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
+> @@ -229,6 +231,7 @@ void __folio_copy_owner(struct folio *newfolio, struct folio *old)
+>  		old_page_owner->last_migrate_reason;
+>  	new_page_owner->handle = old_page_owner->handle;
+>  	new_page_owner->pid = old_page_owner->pid;
+> +	strcpy(new_page_owner->task_name, old_page_owner->task_name);
+>  	new_page_owner->ts_nsec = old_page_owner->ts_nsec;
+>  	new_page_owner->free_ts_nsec = old_page_owner->ts_nsec;
+>  
+> @@ -339,9 +342,10 @@ print_page_owner(char __user *buf, size_t count, unsigned long pfn,
+>  		return -ENOMEM;
+>  
+>  	ret = snprintf(kbuf, count,
+> -			"Page allocated via order %u, mask %#x(%pGg), pid %d, ts %llu ns, free_ts %llu ns\n",
+> +			"Page allocated via order %u, mask %#x(%pGg), pid %d, task_name [%s], ts %llu ns, free_ts %llu ns\n",
+>  			page_owner->order, page_owner->gfp_mask,
+>  			&page_owner->gfp_mask, page_owner->pid,
+> +			page_owner->task_name,
+>  			page_owner->ts_nsec, page_owner->free_ts_nsec);
+>  
+>  	if (ret >= count)
+> @@ -415,9 +419,10 @@ void __dump_page_owner(const struct page *page)
+>  	else
+>  		pr_alert("page_owner tracks the page as freed\n");
+>  
+> -	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, ts %llu, free_ts %llu\n",
+> +	pr_alert("page last allocated via order %u, migratetype %s, gfp_mask %#x(%pGg), pid %d, task_name [%s], ts %llu, free_ts %llu\n",
+>  		 page_owner->order, migratetype_names[mt], gfp_mask, &gfp_mask,
+> -		 page_owner->pid, page_owner->ts_nsec, page_owner->free_ts_nsec);
+> +		 page_owner->pid, page_owner->task_name,
+> +		 page_owner->ts_nsec, page_owner->free_ts_nsec);
+>  
+>  	handle = READ_ONCE(page_owner->handle);
+>  	if (!handle)
+> @@ -629,3 +634,4 @@ static int __init pageowner_init(void)
+>  	return 0;
+>  }
+>  late_initcall(pageowner_init)
 > +
-> +	rcu_read_lock();
 
-Please always think about the fast path, which is not set eventfd.
-We don't want extra overhead here.
-
-if (ctx->ev_fd) {
-	rcu_read_lock();
-         ev_fd = rcu_deref(...);
-         ...
-         rcu_read_unlock();
-}
-
--- 
-Pavel Begunkov

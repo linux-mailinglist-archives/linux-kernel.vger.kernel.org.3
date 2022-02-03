@@ -2,195 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418074A7CE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DEF4A7CE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348572AbiBCA3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:29:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:49480 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiBCA3t (ORCPT
+        id S1348553AbiBCAcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:32:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48984 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240845AbiBCAcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:29:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5C0460F70;
-        Thu,  3 Feb 2022 00:29:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0DAFC004E1;
-        Thu,  3 Feb 2022 00:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643848188;
-        bh=qbauBxRZfFJXJcEvFeOVzCSZEL6mvF1hBgdnTbdFeI8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kGoMuLq8TOLnaZPtZaJWBw63kgW2ytM5niYrgefeCG7FKn4V6YysUgbS6L2NOUKRC
-         kbj7w+KQtcZiBa0BXa+0mnuYyAVrqzuwJjyTEkKyhA8U3jf3xGL8rSlPz4SVqjB8ZT
-         fNqc7XpWFFSdQlQBLglww+EJXWgUbKCqzdCkqRC/O04GcecpqmvWFG4BvzgKpMd0rz
-         QfvEII4p0jZvFbGOi5/37fvBVZi3R0+/BPvWEoo0J7QcUvQbrSaMMc72iZbBjFu2mC
-         C0hOLaO4K2aOGZMysjurlwzjaDBIm4/VN6g4C2ZB6u7hfbCO3GeQXqUzz9qd1QFXrR
-         IdVmyY7Yt9XMQ==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: qcom: sm8450: add interconnect nodes
-Date:   Thu,  3 Feb 2022 05:59:36 +0530
-Message-Id: <20220203002936.3009402-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        Wed, 2 Feb 2022 19:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643848335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zUdnXofhKruqRwtlFGwryx43vYxPzya/LNjocML+0+4=;
+        b=a3dZ1XBCf0Ee3Hq3PADlfCF/IHX6rsetN1Kil6uLvEeRKSFliF7/By9hgLdk0ZsTkiGy37
+        I1KQnMGfGynKshGczNY7atTKNvC/DjLKVAJ9x3cmcuWMvfeN4+BZs0SkW5THbqsdTZm4/f
+        30/1cGWgxns5sUYNWwZ2rhcc9utbEhQ=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-490-hxJaVCutMQKPdmJkqdlnDg-1; Wed, 02 Feb 2022 19:32:14 -0500
+X-MC-Unique: hxJaVCutMQKPdmJkqdlnDg-1
+Received: by mail-oi1-f198.google.com with SMTP id bf12-20020a056808190c00b002cf68d61ccfso519174oib.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 16:32:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zUdnXofhKruqRwtlFGwryx43vYxPzya/LNjocML+0+4=;
+        b=z6hQec2tBduTNDOqYVjONDMQVvAW1spYZCWyxmhr9ZFlw7n6TdgZgW7sIY3l2XY1LA
+         VaHV3K8cBQ1eKgMm34pNFgfmi+OKKaSld/ngGyk+pqa8lS2QqDFpTXfva/wXggOlrJcn
+         +tq8xoKo4VnQOhRDIubpyOVoG6TUujwdhklnhF77rvNnSAMXC2JZtnBplWtycC1Gj8dN
+         3IGoU6rdQRdRFlMTFapD6YpylsPibG5HptC/TIyYTYGH0Xh+g56phe30DllIOPku+T/A
+         zPcpq4MN0miFRkdCI9eaTRAFQXPB8IEOi6bw73g13Bm1KPVMcfo65GuWJA6hAo2r3GX9
+         OiMA==
+X-Gm-Message-State: AOAM530sWY+QxpgjZk8t0BVJD4rwjuB13UMBmmtKI0MPgQwskQDuEjhZ
+        31fA6TGq0tjyhoLlID22LSgLlZw01LcW4ggBqLH78cCCH9aI5h60m0QpOVwttpHpYS8DwTWzB3f
+        lJOmdD5GOvsWHzQ8EG6sCO0y8
+X-Received: by 2002:a9d:4c0f:: with SMTP id l15mr17825678otf.104.1643848333778;
+        Wed, 02 Feb 2022 16:32:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJydyjQmPX/pQcaicMIoXeG/UE0kQrS4V8fjExNsAsiXRxSdFmnfZUj9t8iLE/CCHgTkimQZPQ==
+X-Received: by 2002:a9d:4c0f:: with SMTP id l15mr17825658otf.104.1643848333510;
+        Wed, 02 Feb 2022 16:32:13 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id f21sm15999172otq.4.2022.02.02.16.32.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Feb 2022 16:32:12 -0800 (PST)
+Date:   Wed, 2 Feb 2022 16:32:09 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@intel.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 01/29] x86/tdx: Detect running as a TDX guest in early
+ boot
+Message-ID: <20220203003209.bi6i4llc4jeouuh6@treble>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-2-kirill.shutemov@linux.intel.com>
+ <87fsp2z8p8.ffs@tglx>
+ <20220201231459.2doc4iaibmuua4qk@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220201231459.2doc4iaibmuua4qk@black.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-And the various interconnect nodes found in SM8450 SoC and use it for
-UFS controller.
+On Wed, Feb 02, 2022 at 02:14:59AM +0300, Kirill A. Shutemov wrote:
+> On Tue, Feb 01, 2022 at 08:29:55PM +0100, Thomas Gleixner wrote:
+> > Kirill,
+> > 
+> > On Mon, Jan 24 2022 at 18:01, Kirill A. Shutemov wrote:
+> > 
+> > Just a nitpick...
+> > 
+> > > +static bool tdx_guest_detected __ro_after_init;
+> > > +
+> > > +bool is_tdx_guest(void)
+> > > +{
+> > > +	return tdx_guest_detected;
+> > > +}
+> > > +
+> > > +void __init tdx_early_init(void)
+> > > +{
+> > > +	u32 eax, sig[3];
+> > > +
+> > > +	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
+> > > +
+> > > +	if (memcmp(TDX_IDENT, sig, 12))
+> > > +		return;
+> > > +
+> > > +	tdx_guest_detected = true;
+> > > +
+> > > +	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+> > 
+> > So with that we have two ways to detect a TDX guest:
+> > 
+> >    - tdx_guest_detected
+> > 
+> >    - X86_FEATURE_TDX_GUEST
+> > 
+> > Shouldn't X86_FEATURE_TDX_GUEST be good enough?
+> 
+> Right. We have only 3 callers of is_tdx_guest() in cc_platform.c
+> I will replace them with cpu_feature_enabled(X86_FEATURE_TDX_GUEST).
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
+I had the same review comment before.  I was told that cc_platform_has()
+was called before caps have been set up properly, so caps can't be
+relied upon this early.
 
-Changes in v2:
-	- Fix the mc_virt node
-	- Add clk_virt node
-	- Rebase to rc1
+I'm not really convinced that's true.  Yes, early_identify_cpu() --
+which runs after tdx_early_init() -- clears all boot_cpu_data's
+capability bits to zero [*].
 
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 85 ++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+But shortly after that, early_identify_cpu() restores any "forced" caps
+with a call to get_cpu_cap() -> apply_forced_caps().
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 10c25ad2d0c7..ccc67918c46a 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/interconnect/qcom,sm8450.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
- 
- / {
-@@ -250,6 +251,18 @@ scm: scm {
- 		};
- 	};
- 
-+	clk_virt: interconnect@0 {
-+		compatible = "qcom,sm8450-clk-virt";
-+		#interconnect-cells = <2>;
-+		qcom,bcm-voters = <&apps_bcm_voter>;
-+	};
-+
-+	mc_virt: interconnect@1 {
-+		compatible = "qcom,sm8450-mc-virt";
-+		#interconnect-cells = <2>;
-+		qcom,bcm-voters = <&apps_bcm_voter>;
-+	};
-+
- 	memory@a0000000 {
- 		device_type = "memory";
- 		/* We expect the bootloader to fill in the size */
-@@ -620,6 +633,54 @@ i2c14: i2c@a98000 {
- 			};
- 		};
- 
-+		config_noc: interconnect@1500000 {
-+			compatible = "qcom,sm8450-config-noc";
-+			reg = <0 0x01500000 0 0x1c000>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		system_noc: interconnect@1680000 {
-+			compatible = "qcom,sm8450-system-noc";
-+			reg = <0 0x01680000 0 0x1e200>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		pcie_noc: interconnect@16c0000 {
-+			compatible = "qcom,sm8450-pcie-anoc";
-+			reg = <0 0x016c0000 0 0xe280>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre1_noc: interconnect@16e0000 {
-+			compatible = "qcom,sm8450-aggre1-noc";
-+			reg = <0 0x016e0000 0 0x1c080>;
-+			#interconnect-cells = <2>;
-+			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre2_noc: interconnect@1700000 {
-+			compatible = "qcom,sm8450-aggre2-noc";
-+			reg = <0 0x01700000 0 0x31080>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+			clocks = <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
-+				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+				 <&rpmhcc RPMH_IPA_CLK>;
-+		};
-+
-+		mmss_noc: interconnect@1740000 {
-+			compatible = "qcom,sm8450-mmss-noc";
-+			reg = <0 0x01740000 0 0x1f080>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		tcsr_mutex: hwlock@1f40000 {
- 			compatible = "qcom,tcsr-mutex";
- 			reg = <0x0 0x01f40000 0x0 0x40000>;
-@@ -988,6 +1049,13 @@ cpufreq_hw: cpufreq@17d91000 {
- 			#freq-domain-cells = <1>;
- 		};
- 
-+		gem_noc: interconnect@19100000 {
-+			compatible = "qcom,sm8450-gem-noc";
-+			reg = <0 0x19100000 0 0xbb800>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		ufs_mem_hc: ufshc@1d84000 {
- 			compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
- 				     "jedec,ufs-2.0";
-@@ -1004,6 +1072,9 @@ ufs_mem_hc: ufshc@1d84000 {
- 
- 			iommus = <&apps_smmu 0xe0 0x0>;
- 
-+			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
-+					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
-+			interconnect-names = "ufs-ddr", "cpu-ufs";
- 			clock-names =
- 				"core_clk",
- 				"bus_aggr_clk",
-@@ -1102,6 +1173,20 @@ usb_1_dwc3: usb@a600000 {
- 				phy-names = "usb2-phy", "usb3-phy";
- 			};
- 		};
-+
-+		nsp_noc: interconnect@320c0000 {
-+			compatible = "qcom,sm8450-nsp-noc";
-+			reg = <0 0x320c0000 0 0x10000>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		lpass_ag_noc: interconnect@3c40000 {
-+			compatible = "qcom,sm8450-lpass-ag-noc";
-+			reg = <0 0x3c40000 0 0x17200>;
-+			#interconnect-cells = <2>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
- 	};
- 
- 	timer {
+So as far as I can tell, while it's subtle, it should work.  However, it
+should be tested carefully ;-)
+
+
+[ *] The memset() of boot_cpu_data seems unnecessary since it should
+     already be cleared by the compiler when it gets placed in the
+     .data..read_mostly section.
+
 -- 
-2.31.1
+Josh
 

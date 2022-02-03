@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41954A831A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DEC4A831C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 12:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349459AbiBCL1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 06:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S1350207AbiBCL2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 06:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiBCL1w (ORCPT
+        with ESMTP id S238011AbiBCL2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 06:27:52 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8F5C06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 03:27:52 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id d188so2814071iof.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 03:27:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0yHWvoIVyRskwxVvMR4JJwddiDqQA33hRIgPIj2/Ibg=;
-        b=boGuAuKD1DcIUNXyfWoVTikePU9kREHUYw5iQsooZAnLYmyqHRKJlSKAOecd/gSQVb
-         /QIm+Ix3qXzubxkstR5mUGVer9Sf3h2iMv27G1zgZAs5+aYlzOpTYlQroiWBrXo//I3p
-         h+NqasxDe4m90nO15qfwQHdyE6r3Tcvv2JBiuRw3Ud0zZhosizU20KvLN3PNeiMPOO33
-         FfZfyk81GcU2ozzM39C9QXUoSWpQZdvIXde//BcRzxEhBlWSvwDZSnkhdq8FZwzxX52P
-         aSmSM6n58lVN+qh8lsMDHYNhgMr0zYINml23pWGGxNOvi+DzHeZtlHHei1gHn7O3SouC
-         otmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0yHWvoIVyRskwxVvMR4JJwddiDqQA33hRIgPIj2/Ibg=;
-        b=e0hfKgGjikFmW19bEJX5GM0F199h88U/T6HTRr5R4clRl6gTf8gZCFL/5K+XWlaY+v
-         4JhAuCrvirECPOwO6e/h50No62AFw6YdzAsV9vf0FAZ96NEcQlj3hY5WonzbiNQ8eDhW
-         VvY+zkxLufRQM1D4z5PH1PWgRF100rHcn1oayhAfSIbUY8DZRV+44BlP7nxcAQMf6Eoo
-         vRUvtoKKw8ser7q+pSRePiY4f2+0axIAxaaPZTJtx+e5gJ7Y7AvVmE/6rxotOzYJQVD9
-         di+sfKjkjsyxlZ6xOod1d717+650OW1+jvviOXdvmHMuPkBpaQTunRMoBUsXw9+gYwpZ
-         5qTg==
-X-Gm-Message-State: AOAM530rv9EYKMOdeTolueDdJSPWvSzg3dZKOapSp1wWlt6GMOY85b1g
-        tc1mWHofTqZBZayGuev35BZnRw==
-X-Google-Smtp-Source: ABdhPJyAas9HPXykhr7Zmbjkxob3REfXS6IcM5zxfSyHhuUyaIPcwJZMhN0LFpgC2MPGFU0oWlXR1Q==
-X-Received: by 2002:a5e:8406:: with SMTP id h6mr18428130ioj.144.1643887671664;
-        Thu, 03 Feb 2022 03:27:51 -0800 (PST)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id y3sm24576165iov.29.2022.02.03.03.27.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 03:27:51 -0800 (PST)
-Message-ID: <eb09c869-c5c6-4be8-5265-072849f1ecd0@linaro.org>
-Date:   Thu, 3 Feb 2022 05:27:49 -0600
+        Thu, 3 Feb 2022 06:28:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC4C061714;
+        Thu,  3 Feb 2022 03:28:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EEA19B8339D;
+        Thu,  3 Feb 2022 11:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CDEFC340E4;
+        Thu,  3 Feb 2022 11:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643887715;
+        bh=COBWLwcvaTKIWzrOUANpuFO9WSzhU9FhS0VUHIshlV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KX4egKwcJHnFYFMcluZjjHnbkdk1/gVrGHQHLahtyR3oV2gFSQSskLLiR6xgRoy8Z
+         X+nA7fl5bITNU3brrXT7HvyrL/ncs1/2xOwr8EGf+Dzy7k228bLkzWaFqCOnNMBVQQ
+         vZUIMXUQLdDmL33jTUg7cCn2NWMi7xB6UGyG/T7Sdt7aJ6mKK9Sd/b1FK5FWzvgq+Y
+         mY3stX9tHGzc/whzQfnKrFQRfG2J0sy/ac4u2qfBlStBpkhan8sCw5zEMKx6KG7cen
+         pBN9KQtNRULx9zjr+Y9pJ18U6Ea+9NaM1HUaSa7Cdv6AIklINZUrgfDvCysGm/bPsv
+         WElpX3oY6h8Cg==
+Date:   Thu, 3 Feb 2022 11:28:30 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Collins <quic_collinsd@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Subject: Re: [RESEND PATCH 1/2] dt-bindings: firmware: arm,scmi: define
+ support for name based regulators
+Message-ID: <Yfu8XulvWQbpQoBR@sirena.org.uk>
+References: <cover.1643069954.git.quic_collinsd@quicinc.com>
+ <fcd130891cc1d52cb09b8bfc866ab7ef1ce3b2a1.1643069954.git.quic_collinsd@quicinc.com>
+ <YfREsxeSSX2pbALf@sirena.org.uk>
+ <8355035c-6d90-adfd-c4e1-7bb37a2d8055@quicinc.com>
+ <YfrBharI91QYkPR1@sirena.org.uk>
+ <532aa931-2471-8fb3-0db4-7ab8a60333e8@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: qcom: add IPA qcom,qmp property
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
-        davem@davemloft.net, mka@chromium.org, evgreen@chromium.org,
-        cpratapa@codeaurora.org, avuyyuru@codeaurora.org,
-        jponduru@codeaurora.org, subashab@codeaurora.org, elder@kernel.org,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220201140723.467431-1-elder@linaro.org>
- <20220202210638.07b83d41@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220202210638.07b83d41@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FHEHOoLIGiZXymy0"
+Content-Disposition: inline
+In-Reply-To: <532aa931-2471-8fb3-0db4-7ab8a60333e8@quicinc.com>
+X-Cookie: Prices higher in Alaska and Hawaii.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/22 11:06 PM, Jakub Kicinski wrote:
-> On Tue,  1 Feb 2022 08:07:23 -0600 Alex Elder wrote:
->> At least three platforms require the "qcom,qmp" property to be
->> specified, so the IPA driver can request register retention across
->> power collapse.  Update DTS files accordingly.
->>
->> Signed-off-by: Alex Elder <elder@linaro.org>
->> ---
->>
->> Dave, Jakub, please let Bjorn take this through the Qualcomm tree.
-> 
-> I don't know much about DT but the patch defining the property is
-> targeting net - will it not cause validation errors? Or Bjorn knows
-> to wait for the fixes to propagate? Or it doesn't matter? :)
 
-It might matter sometimes, but in this case it does not.
+--FHEHOoLIGiZXymy0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If the DT property is present but never referenced by the
-code, it doesn't matter.
+On Wed, Feb 02, 2022 at 04:09:43PM -0800, David Collins wrote:
+> On 2/2/22 9:38 AM, Mark Brown wrote:
 
-The code in this patch looks up the DT property, and its
-behavior is affected by whether the property is there
-or not.  If it's not there, it's treated as an error
-that can be safely ignored.
+> > This seems like a scenario where the DT should be being generated at
+> > runtime along with the virtualisation of the platform?  TBH a setup
+> > where this is an issue feels like it's asking for trouble.
 
-In the case this fix is actually needed, we'll need
-both the code present and DT property defined.  If
-the code is there but not the property, it's OK, but
-the bug won't be fixed quite yet.
+> I'm not familiar with runtime device tree generation.  Could you please
+> point to an example of it or documentation for it?  How would this
+> handle kernel devices on the VM side which need a phandle to an
+> scmi-regulator DT subnode in order to get a pointer to the corresponding
+> regulator device at runtime via devm_regulator_get()?
 
-					-Alex
+I believe qemu does this for the virt machine.  I'm not sure what you're
+seeing as particularly complex about generating regulator links in
+particular though?
+
+--FHEHOoLIGiZXymy0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmH7vF0ACgkQJNaLcl1U
+h9DDlQf/YzYI3j06uft9Q3I/6yHQsgA1u1k5QKi5P1/6CCVe1u9jdfsaqOkfERqv
+9ccQrebFf9XObnh7/UjdJmQn9+QrDN9iWRah/6relqDKvVBZY8dtsRVhPNnDhr9w
+U+GBwujVRrY/F6mVxK2wst8PqsWlxpf8BC12NY52c7fKgF8cm54mEUVNpIBrAGun
+9eGAl5GqqfFw0a1FlS3eCzDUmv1ptqI+DWXanrUQLhLejUpfiVwLxQmFqXkOitL5
+6uH+oZ8/xYYOHS37NK4nXzVY+uonIvw5AghpXC0c3cGHGqHjTGE6AVlDfkG+9jGW
+leW8W1h5fAeK60ebJ7sOibX+OoIU/w==
+=xs8h
+-----END PGP SIGNATURE-----
+
+--FHEHOoLIGiZXymy0--

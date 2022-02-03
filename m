@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B25E4A8C19
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FAA4A8C1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353632AbiBCTAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiBCTAX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:00:23 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A45C061714;
-        Thu,  3 Feb 2022 11:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=OX4FoFwge+kg5TJRm0dYZgCT8Xpq4pM9n0EVmYcAT3Y=;
-        t=1643914823; x=1645124423; b=Sht9bQq8A0eaWO23tUbDBLoPX1npIW3gL+6LIbnbnVPqHvH
-        OpeHJhm7hTySGQe2ZWpA4U7AZiFmI1NPj0KUjTxgKfFz41rRVW76Mu9iP/c7BPI3/MC6CIJiEhOiY
-        Ho1BVQrjaArJOk32l4NU1BSVpnB9/cFDhMsNgu8PHyRWPBLxhSwmWhJTvtLAT0puaBxRO8LtemCQO
-        qk+uTZfhvycLH2d4A8O6dU7/1yheyt2Cq5P5bAKAStr2/chVOC0QJEzAeYSoztIFRrCI5zYBLDrYD
-        sTsHUj6muPNjFGHP5/rq5ZRCgoDAei50BXXQivB9cll8jpyNRMjlA25sQxvoMu6A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nFhL7-00E6Qj-DW;
-        Thu, 03 Feb 2022 20:00:17 +0100
-Message-ID: <19ea449a9f772f12058785be873c7ea5504a0eb8.camel@sipsolutions.net>
-Subject: Re: AX200 cards broken after firmware cc-a0-67
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Gabriel C <nix.or.die@googlemail.com>,
-        linux-wireless@vger.kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        linux-firmware@vger.kernel.org
-Date:   Thu, 03 Feb 2022 20:00:16 +0100
-In-Reply-To: <CAEJqkgiV1_jXhoxoxVG4EwV7t=cA=j1F+T-LCEuajJN8x25mtQ@mail.gmail.com>
-References: <CAEJqkgiV1_jXhoxoxVG4EwV7t=cA=j1F+T-LCEuajJN8x25mtQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        id S1353644AbiBCTCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:02:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:37978 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237541AbiBCTCN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 14:02:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86753147A;
+        Thu,  3 Feb 2022 11:02:13 -0800 (PST)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5006D3F774;
+        Thu,  3 Feb 2022 11:02:12 -0800 (PST)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        coresight@lists.linaro.org
+Subject: [PATCH v2] coresight: trbe: Move check for kernel page table isolation from EL0 to probe
+Date:   Thu,  3 Feb 2022 19:01:59 +0000
+Message-Id: <20220203190159.3145272-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-03 at 18:58 +0100, Gabriel C wrote:
-> Hello,
-> 
-> I own 3 boxes with AX200 cards, one is a Killer AX1650x, the other two
-> AX200 [8086:2723] (rev 1a).
-> 
-> After commit 4474519a1fd4e7167afae7c5ca2c1b93e17b4d8a in
-> linux-firmware tree, which updates
-> the firmware to cc-a0-67.ucode, all cards are crashing with microcode
-> errors. Firmware  cc-a0-66.ucode
-> is still fine. The kernel doesn't seem to matter, as soon I update the
-> firmware to >=67 ( I tested 68 too ),
-> everything crashes in an endless loop.
-> 
-> I'll attach a dmesg, from 5.17.0-rc2, the same crash happens with 5.16* etc.
-> 
+Currently with the check present in the module initialisation, it shouts
+on all the systems irrespective of presence of coresight trace buffer
+extensions.
 
-> [   18.453176] iwlwifi 0000:03:00.0: 0x00001062 | ADVANCED_SYSASSERT 
+Similar to Arm SPE perf driver, move the check for kernel page table
+isolation from  EL0 to the device probe stage instead of the module
+initialisation so that it complains only on the systems that support TRBE.
 
-So I think this is broadcast filtering again, discussed previously on
-the list. Turn off CONFIG_IWLWIFI_BCAST_FILTERING for now, a fix is in
-the works.
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: coresight@lists.linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/hwtracing/coresight/coresight-trbe.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-johannes
+v1[1]->v2:
+	- Added comment about trace capture being not possible with kernel
+	  page table isolation
+[1] https://lore.kernel.org/r/20220201122212.3009461-1-sudeep.holla@arm.com
+
+diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+index 276862c07e32..3e37a63cb7d2 100644
+--- a/drivers/hwtracing/coresight/coresight-trbe.c
++++ b/drivers/hwtracing/coresight/coresight-trbe.c
+@@ -1423,6 +1423,12 @@ static int arm_trbe_device_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	int ret;
+ 
++	/* Trace capture is not possible with kernel page table isolation */
++	if (arm64_kernel_unmapped_at_el0()) {
++		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
++		return -EOPNOTSUPP;
++	}
++
+ 	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+ 	if (!drvdata)
+ 		return -ENOMEM;
+@@ -1484,11 +1490,6 @@ static int __init arm_trbe_init(void)
+ {
+ 	int ret;
+ 
+-	if (arm64_kernel_unmapped_at_el0()) {
+-		pr_err("TRBE wouldn't work if kernel gets unmapped at EL0\n");
+-		return -EOPNOTSUPP;
+-	}
+-
+ 	ret = platform_driver_register(&arm_trbe_driver);
+ 	if (!ret)
+ 		return 0;
+-- 
+2.25.1
+

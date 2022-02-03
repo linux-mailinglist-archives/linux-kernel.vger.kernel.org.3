@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4ED4A9071
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46574A9065
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355689AbiBCWHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S1355659AbiBCWCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355674AbiBCWHj (ORCPT
+        with ESMTP id S230230AbiBCWCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:07:39 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E9EC061714;
-        Thu,  3 Feb 2022 14:07:38 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id j16so7635116wrd.8;
-        Thu, 03 Feb 2022 14:07:38 -0800 (PST)
+        Thu, 3 Feb 2022 17:02:50 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1685C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:02:50 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id s7so1180420qvb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:02:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VgFLORR4v1ez4B6LMIcDycEWtW4pAhoVBiVCyzb5WgM=;
-        b=jEgbO/JvCr5a80SQ8kHQXwPRi0hsbwshS721x37C04F+7AwLexMUIcFUW5dzoOe/n7
-         S4W4thd/mlO7tzdLq17PUC4hkIo4DE0f58u6YuGPk8IFkiL2no+9ESEPcKLrxH1gp1xU
-         E14lrKxHcKUoQX4hK6fhOzM2JVjN8SR1HqarJ/8zqDXutEtBK0hYrGNuKS+6HsJDFpdg
-         EKAD2Ex5Y4ROhUXAHmYfS0LWrecA4DjtPDThLXae0t3RhseM2muww8uAuSdwUnyYR4dF
-         VENcgl6dMlKyMl0op1IsxdL3isLhFiouSlbyjomQa9g+xrkA3BJRa+SZ/keNPxPONlmW
-         +pLg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=ttyGAnC6DkJUu9yUKghQOutRdQihW4nBSca09uaHzXk=;
+        b=Cd33DZUIgKM4yaIXzO6LrVS9dp49MGwRBuUY0Rl9COdWkyaHgZuCIiXeXiipUmL6VD
+         5zZrPLrmgbSSgE+gJbbXhMiUTtrzepaKUBhP1dH++Pj4yDadya+Yj2/UDK9zCLdPeF6G
+         vdztt3icW5sQXzam6YjHzM3zVciCBLPWZ3Xyc+aoRE26MNTYh6wKs9NWyM3xjTGwflom
+         XucSvXY0boe3sjxrOrr/AKmvXzS8qbvy5xqkWN7IgOXCXp8knTeJ12yIdttqOObx/hvt
+         mSsjv8beqc/dn+UOdCXs3ephzphHQgZ9QCfjphvUAA+nxGmGkVjbUcNZUkjeXzC+7OfU
+         Z3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VgFLORR4v1ez4B6LMIcDycEWtW4pAhoVBiVCyzb5WgM=;
-        b=ktGAgKaGOzjvK4y16eaCrg5euW2pbKgCqyJb4p0QIsfB0lgTJmCSjgHJg/it8IDY40
-         OvTg7NMESqMBKnH951wzLXNb5QuUXCFv2N2wgWtlSdkkGqQNd+tLpJw837ELi0P2kT58
-         xxhSbVNkUyEJoGFRwXgAwQb8FVv4VeVuVAcO/eRiDD62d87PMkdhhNzoVRvNQ44q/Zze
-         F5nCcJeNpT7taQ6UQq0dnn74KeD/qj8NQmd5+p/I3APgjtH1lBt1ztG0Zvq6DxuXVfH+
-         J5zx9825k5x6Nnl13UaPkdRGk9GFvDSMbJP2y1VDD7L23UJgpruNil7Yu1K0RBkTx/CJ
-         MD4Q==
-X-Gm-Message-State: AOAM532pxKtzzEgdp/s6jP7lpGCNClDPi4RF5PCHXmcynit2DzzuCL3C
-        675USNq6adVA+3XcVbcn9rNFMxJ19ig=
-X-Google-Smtp-Source: ABdhPJy2aEjcgSSu9zRsY2TefFfp7/7tsTwkaoZTuXWkk5rb7dHpgttAm7Aeqt7kWy34IQKbqpXx5w==
-X-Received: by 2002:a5d:4d07:: with SMTP id z7mr29911584wrt.327.1643926057033;
-        Thu, 03 Feb 2022 14:07:37 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.232.204])
-        by smtp.gmail.com with ESMTPSA id i94sm52531wri.21.2022.02.03.14.07.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 14:07:36 -0800 (PST)
-Message-ID: <c9e0628b-c9ce-7866-dff9-9a44c51d82b2@gmail.com>
-Date:   Thu, 3 Feb 2022 22:02:43 +0000
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=ttyGAnC6DkJUu9yUKghQOutRdQihW4nBSca09uaHzXk=;
+        b=vIKT/fb5rsZC0ocjOCp/a5c45nP7fDtQEIbw1wKywx2ShivleHjXkfQ8qhnWkSNKVW
+         J4za0YtU4avuUflsMb32qGakI4XU2YyEQGvu2QZkjMchnq/Ce5Kc5JDD+M5sVYXQDsZy
+         HR3P5wYrc1uPMwPFb8IeL7xkUfNTK1WzzRoAfBO5E+deU6HoWVa6ZPbk24oyE1ngLhHu
+         vjaxyXfDdtbuKf7li+kjhXQ0T3W7CMWsxQLl1FNJ4Us9Mc/drFm/+Pnbuo5OpCUk3QQR
+         awsLXeMPt7ojOWrdazEaAR5NwTgs3tjXVoOdFUtUcv3VMbdJ15KjGSupn3Gfja0Hp7YV
+         eFyw==
+X-Gm-Message-State: AOAM533GpSLIsWd4kIV3wcNzxYn9pA4aO3g9w6QRIefqQi8Uvk+/rlx5
+        MbEDjlhmXFohXjGR0ECgd8BpvXWsEO1/gj++rjY=
+X-Google-Smtp-Source: ABdhPJwnWOX+d2y3i59RYH+qkYpZg8A2cnQUetRqdqwMXMOpAmEHX2vHEpquDcSSnVNGxwoHs4gSo/aS7bUr6tkZfFA=
+X-Received: by 2002:a05:6214:caa:: with SMTP id s10mr32538518qvs.88.1643925769737;
+ Thu, 03 Feb 2022 14:02:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [External] Re: [PATCH v3 2/3] io_uring: avoid ring quiesce while
- registering/unregistering eventfd
-Content-Language: en-US
-To:     Usama Arif <usama.arif@bytedance.com>,
-        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203174108.668549-1-usama.arif@bytedance.com>
- <20220203174108.668549-3-usama.arif@bytedance.com>
- <ffa271c7-3f49-2b5a-b67e-3bb1b052ee4e@kernel.dk>
- <877d54b9-5baa-f0b5-23fe-25aef78e37c4@bytedance.com>
- <dc6bb53f-19cc-ee23-2137-6e27396f7d57@kernel.dk>
- <ac5f5152-f9e4-8e83-642b-73c2620ce7c0@gmail.com>
- <a5992789-6b0b-f3a8-0a24-e00add2a005a@kernel.dk>
- <fc97036f-26a3-afb1-180f-30aa89d3cc01@bytedance.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <fc97036f-26a3-afb1-180f-30aa89d3cc01@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ad4:5e8f:0:0:0:0:0 with HTTP; Thu, 3 Feb 2022 14:02:49 -0800 (PST)
+Reply-To: mrsbastienmarion@gmail.com
+From:   Mrs Bastien Marion <ikennaikenna140@gmail.com>
+Date:   Thu, 3 Feb 2022 22:02:49 +0000
+Message-ID: <CAE52L4ui0aETUsUJjk4TAcoxu1G+wxeU1FNuTx-1stn-W5K1=w@mail.gmail.com>
+Subject: Greetings, this is humanitarian work
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 19:54, Usama Arif wrote:
-> On 03/02/2022 19:06, Jens Axboe wrote:
->> On 2/3/22 12:00 PM, Pavel Begunkov wrote:
->>> On 2/3/22 18:29, Jens Axboe wrote:
->>>> On 2/3/22 11:26 AM, Usama Arif wrote:
->>>>> Hmm, maybe i didn't understand you and Pavel correctly. Are you
->>>>> suggesting to do the below diff over patch 3? I dont think that would be
->>>>> correct, as it is possible that just after checking if ctx->io_ev_fd is
->>>>> present unregister can be called by another thread and set ctx->io_ev_fd
->>>>> to NULL that would cause a NULL pointer exception later? In the current
->>>>> patch, the check of whether ev_fd exists happens as the first thing
->>>>> after rcu_read_lock and the rcu_read_lock are extremely cheap i believe.
->>>>
->>>> They are cheap, but they are still noticeable at high requests/sec
->>>> rates. So would be best to avoid them.
->>>>
->>>> And yes it's obviously racy, there's the potential to miss an eventfd
->>>> notification if it races with registering an eventfd descriptor. But
->>>> that's not really a concern, as if you register with inflight IO
->>>> pending, then that always exists just depending on timing. The only
->>>> thing I care about here is that it's always _safe_. Hence something ala
->>>> what you did below is totally fine, as we're re-evaluating under rcu
->>>> protection.
->>>
->>> Indeed, the patch doesn't have any formal guarantees for propagation
->>> to already inflight requests, so this extra unsynchronised check
->>> doesn't change anything.
->>>
->>> I'm still more сurious why we need RCU and extra complexity when
->>> apparently there is no use case for that. If it's only about
->>> initial initialisation, then as I described there is a much
->>> simpler approach.
->>
->> Would be nice if we could get rid of the quiesce code in general, but I
->> haven't done a check to see what'd be missing after this...
->>
-> 
-> I had checked! I had posted below in in reply to v1 (https://lore.kernel.org/io-uring/02fb0bc3-fc38-b8f0-3067-edd2a525ef29@gmail.com/T/#m5ac7867ac61d86fe62c099be793ffe5a9a334976), but i think it got missed! Copy-pasting here for reference:
-> 
-> "
-> I see that if we remove ring quiesce from the the above 3 opcodes, then
-> only IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS is
-> left for ring quiesce. I just had a quick look at those, and from what i
-> see we might not need to enter ring quiesce in
-> IORING_REGISTER_ENABLE_RINGS as the ring is already disabled at that point?
-> And for IORING_REGISTER_RESTRICTIONS if we do a similar approach to
+I'AM SUFFERING FROM CANCER OF THE HEART
 
-IORING_REGISTER_RESTRICTIONS and IORING_REGISTER_ENABLE_RINGS are simpler,
-we can just remove quiesce (i.e. put them into io_register_op_must_quiesce())
-without any extra changes.
+Dear Friend.
 
-TL;DR;
-That's because IORING_SETUP_R_DISABLED prevents submitting requests
-and so there will be no requests until IORING_REGISTER_ENABLE_RINGS is
-called. And IORING_REGISTER_RESTRICTIONS works only before
-IORING_REGISTER_ENABLE_RINGS was called.
+Greetings to you in the name of the Lord God Almighty am Mrs Bastien Marion
+From (Paris) France, but am based in Burkina Faso Africa for eight
+years now as a business woman dealing on gold exportation and cotton
+Sales. But I have been suffering from this deadly disease called
+cancer for long and the doctor just said I have just few weeks to
+live.
 
+I know it will be difficult for you to believe my story now,
+but this is the situation I found myself in, it=E2=80=99s not my desire to =
+be
+on a sick bed today but God knows best,
 
--- 
-Pavel Begunkov
+Now that I am about to end the race like this, without any family
+Members and no child. I have $6.8 Million US DOLLARS in BANK OF AFRICA
+(B.O.A) Burkina Faso it=E2=80=99s all my life savings, I instructed the Ban=
+k
+to give it to St Andrews Missionary and Home Kizito Orphanage in
+Burkina Faso. But my mind is not at rest because i do not trust them,
+I am writing this letter now through the help of my computer beside my
+sick bed.
+
+I will instruct the bank to transfer this fund to you as a foreigner
+but you have to promise me that you will take 40 Percent(%) of the
+total money for your personal use While 60 Percent (%) of the money
+will go to charity, Orphanage and less Privileges" people in the
+street and helping the Needy. I grew up as an Orphan and I don't have
+anybody as my family member, just to Endeavour that the house of God
+is maintained. Am doing this so that God will forgive my sins and
+accept my soul because this sickness has suffered me so much.
+
+As soon as I receive your reply I shall give you the contact of the
+bank and I will also instruct my Bank Manager to issue you an
+authority letter that will prove you the present beneficiary of the
+money in the bank that is if you assure me that you will act
+accordingly as I Stated herein.
+
+I look forward to getting a reply from you.
+
+Thanks and God bless you,
+Mrs Bastien Marion.

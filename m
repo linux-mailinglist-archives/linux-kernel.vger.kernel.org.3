@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115444A90F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A584A90FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355917AbiBCXAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
+        id S1355925AbiBCXGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238236AbiBCXAq (ORCPT
+        with ESMTP id S233999AbiBCXGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:00:46 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1DBC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 15:00:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eWl/5uuKYJVtYEvPeHsPKUjpJ01J9ZAluyOS78lvnbM=; b=0qJlVXX4N2thHrGKKZLoIIQA9T
-        oYFeY4ztX1FOLoHOYfVQQYclewnzajflCJeDprFhTF507nG/BJ0LcKUSatu3dsWXkNfSpUCPw2crR
-        nedVOuQFOJWMxf9nL8CjnGARCAjmrAOuHojpuKs3ybTXxhpXFE+qyFGhex4ouYnNT2H+eX/RapzXI
-        XSUwlfkRH2jUExx3akaVaZhbC0AGu8UXMdcE86jX5E36OM6F0Ulqy9GZ/YZhxy7dRTZJGmoOhOvK+
-        KyC5Jq19rG/UT1OOtx2Rl3SZ510TVhwl9Uqm78QoW2Tr03vsr9ylvcCvzzHlGRbX7DNqtM9vQiP4n
-        /ibt2VbQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nFl5n-0033sS-Dt; Thu, 03 Feb 2022 23:00:43 +0000
-Date:   Thu, 3 Feb 2022 15:00:43 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org, trix@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com, matthew.gerlach@intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
-Subject: Re: [RFC PATCH 0/5] Extend FW framework for user FW uploads
-Message-ID: <Yfxem+AF9lroota0@bombadil.infradead.org>
-References: <20220203213053.360190-1-russell.h.weight@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203213053.360190-1-russell.h.weight@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+        Thu, 3 Feb 2022 18:06:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F120EC061714;
+        Thu,  3 Feb 2022 15:06:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33EA161842;
+        Thu,  3 Feb 2022 23:06:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D384C340E8;
+        Thu,  3 Feb 2022 23:06:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1643929606;
+        bh=bfNOqPpr4dR8k/kHvXYao8BTyZwKIW3jBgPse6WBk1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nMN3VxyIQB60qDyNNZFur24lNBAaNNC/ra/hsl2MO7ogMFDtaB0q5wj/M8EKrNCEI
+         zNhU83ihqSCu1wVWjV+kGfzl4bf8GQmyR3NwdV0RG4IoDIR3oEfDrrZL1cQNZ5/MNC
+         /lUysxSM6H6DMHZkUz9tzj7+F3hAs9Ktzl7Nh3X0=
+Date:   Thu, 3 Feb 2022 15:06:45 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-Id: <20220203150645.9e41e470422eed26d4d77790@linux-foundation.org>
+In-Reply-To: <20220202145437.2dd20b71@canb.auug.org.au>
+References: <20220202145437.2dd20b71@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 02:30:47PM -0700, Russ Weight wrote:
-> Extend the firmware loader subsystem to support a persistent sysfs
-> interface that userspace may use to initiate a firmware update. For
-> example, FPGA based PCIe cards automatically load firmware and FPGA images
-> from local FLASH when the card boots. The images in FLASH may be updated
-> with new images that are uploaded by the user.
-> 
-> A device driver may call fw_upload_register() to expose persistent
-> "loading" and "data" sysfs files at /sys/class/firmare/<NAME>/*. These
-> files are used in the same way as the fallback sysfs "loading" and "data"
-> files. However, when 0 is written to "loading" to complete the write of
-> firmware data, the data is also transferred to the lower-level driver
-> using pre-registered call-back functions. The data transfer is done in
-> the context of a kernel worker thread.
-> 
-> Additional sysfs nodes are added in the same location as "loading" and
-> "data" to monitor the transfer of the image data to the device using
-> callback functions provided by the lower-level device driver and to allow
-> the data transfer to be cancelled.
-> 
-> Example usage:
-> 
-> $ pwd
-> /sys/class/firmware/n3000bmc-sec-update.8
-> $ ls
-> cancel  device  loading  remaining_size  subsystem
-> data    error   power    status          uevent
-> $ echo 1 > loading
-> $ cat /tmp/firmware.bin > data
-> $ echo 0 > loading
-> $ while :; do cat status; cat remaining_size ; sleep 3; done
-> preparing
-> 44590080
-> <--snip-->
-> transferring
-> 44459008
-> transferring
-> 44311552
-> <--snip-->
-> <snip>
-> transferring
-> 173056
-> <--snip-->
-> programming
-> 0
-> <--snip-->
-> idle
-> 0
-> ^C
+On Wed, 2 Feb 2022 14:54:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Nice. Please extend lib/test_firmware.c while at it and try to break
-and ensure your stuff is not regressed with future changes.
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/admin-guide/sysctl/kernel.rst:603: WARNING: Malformed table.
+> Text in column margin in table line 2.
+> 
+> = =================================
+> 0x0 NUMA_BALANCING_DISABLED
+> 0x1 NUMA_BALANCING_NORMAL
+> 0x2 NUMA_BALANCING_MEMORY_TIERING
+> = =================================
+> 
+> Introduced by commit
+> 
+>   49ec6eb41c49 ("NUMA balancing: optimize page placement for memory tiering system")
 
-  Luis
+I assume this fixes?  (With gratuitous grammar fixes)
+
+--- a/Documentation/admin-guide/sysctl/kernel.rst~numa-balancing-optimize-page-placement-for-memory-tiering-system-fix
++++ a/Documentation/admin-guide/sysctl/kernel.rst
+@@ -595,14 +595,14 @@ Documentation/admin-guide/kernel-paramet
+ numa_balancing
+ ==============
+ 
+-Enables/disables and configure automatic page fault based NUMA memory
+-balancing.  Memory is moved automatically to nodes that access it
+-often.  The value to set can be the result to OR the following,
++Enables/disables and configures automatic page fault based NUMA memory
++balancing.  Memory is moved automatically to nodes that access it often. 
++The value to set can be the result of ORing the following,
+ 
+ = =================================
+-0x0 NUMA_BALANCING_DISABLED
+-0x1 NUMA_BALANCING_NORMAL
+-0x2 NUMA_BALANCING_MEMORY_TIERING
++0 NUMA_BALANCING_DISABLED
++1 NUMA_BALANCING_NORMAL
++2 NUMA_BALANCING_MEMORY_TIERING
+ = =================================
+ 
+ Or NUMA_BALANCING_NORMAL to optimize page placement among different
+_
+

@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09454A886B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167CD4A886E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352155AbiBCQNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S1352161AbiBCQOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbiBCQNe (ORCPT
+        with ESMTP id S231744AbiBCQOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:13:34 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D88DC061714;
-        Thu,  3 Feb 2022 08:13:34 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id a8so2619507pfa.6;
-        Thu, 03 Feb 2022 08:13:34 -0800 (PST)
+        Thu, 3 Feb 2022 11:14:45 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90831C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 08:14:45 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id r59so2845267pjg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 08:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=uOJP/dHIjrt3Mk14YimQ7oK5vd7nsEQbU3Iru0dLJMs=;
-        b=DctRaEel5LO3as8bp8Q61ufK6PmYwfRynGpoS9S0XFEZDYYnIvtW5bLY+wBWVVI1pX
-         xt/CFxBrzuvUFyGTTkuJCSbVDUvkUANCQuSpKo5YiAoNeiL9X2IcJB3jxTlQ3aTD/EBy
-         suVMO53T83SDzqZF9CXZRS1wDrXInC6sU01MR99dATKQSO1puIbKbwJk7c0d2l8Tl9mK
-         keVyFE3lpmOedsoGf25+HK7KhvAlouycn9FFw9CAvWwqnA5V9DN4DC2Uk4DALP0xw0q6
-         6IfDFk5Hnz4ZW1LmvdYJI5VUWskhDW/g6cE0zkZahFVCXGLEmm6LRZMIGdxdDwbD0Sjk
-         MO+g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wwptH0NwA9F4hOq9blkkboSBFwlQPyanOSd1yGsHK+Q=;
+        b=zRDntak0+QyTIre1pp+NGE+uPvJykLkpLCUvgZY26o4CUWqRcpXSh2BpL/R3EFeQUD
+         XB4dVMbljPPnLR148xBQPMe/jmwKFSkzZJ5kJ92k0yHO7ufDst/Y7eT3K88eUm5zueG4
+         yt9mOO8DRI3h/VSE+F19s0cUG47BTKC7k1ebhirVv2kFxm+UDLccgoW1eHPN3lJkCq5k
+         h6mIz4x4Bta9v1MdYIbeoD4R9nktlADVTVy8bHo5tVC7fDL45+7Q9lXqyMZUkM1SvHH8
+         tib4q0Pipaoxr3PblfJImsNYxC0LXnkeS8bN8zhmG24U6I62BNq2HU5+G0EwNEunxem8
+         h+4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:content-transfer-encoding;
-        bh=uOJP/dHIjrt3Mk14YimQ7oK5vd7nsEQbU3Iru0dLJMs=;
-        b=CTMvbNY+VsLlpPt7MWQu2i4iPNbmAFxnFCaqxNAsD3b6MuP2JQsEvIRMh+5MhPgpAs
-         eFoq3g2RK9QX833mGn0t/57sMBDi2kBic5ekjIkXvbjtlv438blMb/lHUIl9NGLmU3jT
-         A6w/UnnGK2c0MWItb8SD7qFUsnMNhuQBgkeFGVYbl/TYEcGTEZyDJ6BPEs+7fkqMeHWi
-         gbeqmpgDKx7tatPmv22/uHLwBGWEoYPYU6900RLeECkj23703N0SA6z/NAd9xsbLxSm4
-         Tqjfc6/REyjc+1tZOgZAHaLd3GZY5Q4k98gwmQ6SIXOfNVAKrgXmR6Bzr1lDQvFnxzur
-         N/Gg==
-X-Gm-Message-State: AOAM5334t6GEhff4m68r0AZFkx8hb6WHC9xQwEcYYpmKPHNiIxfluPrk
-        eTs29QvkCnlm51/sIMgYhNNTE43fKiA=
-X-Google-Smtp-Source: ABdhPJzY6Iv7v1e0alBuGwqkZCEeCsz5lA4sryOjz8JZ28oyXPewdL6g3T5H3YgRcXngVBco+P3BdQ==
-X-Received: by 2002:a05:6a00:1a53:: with SMTP id h19mr34733463pfv.65.1643904813831;
-        Thu, 03 Feb 2022 08:13:33 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id s30sm18551263pfw.63.2022.02.03.08.13.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 08:13:33 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 3 Feb 2022 06:13:32 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [GIT PULL] cgroup fixes for v5.17-rc2
-Message-ID: <Yfv/LMxqHSa3s5YS@slm.duckdns.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wwptH0NwA9F4hOq9blkkboSBFwlQPyanOSd1yGsHK+Q=;
+        b=Mb7itQNg4rrSm135qFanuZUIhNRnkzHylJX4ppcUWzd16jG+/rNNc519ujk/iqtapL
+         l0aMNaOa2JavWbrl3MUGKiCk1EwsTjg389d6gBePeKdkvLtnETaJaqvXBry4DRZ7EATT
+         uz1T4WtW4g55c1lnJ7ESAKuuH7yCuh3u1So5NmwvB0HosfNLRm9vdVfSSIxkuPqZZHRC
+         QUowt/cF8hM9Poj/1rx6jKAzpS1OqAVZG66as7UKUlw/1lu/Dp5Kmqinw59cMla44apK
+         ub3JifsCdWtmlW9VHFsJ7PY2FLppc+TWCrqWasGFbJq5uWDOJT422zHidPi/BOFmTGiV
+         P48Q==
+X-Gm-Message-State: AOAM533aBU757a/gW4UVruz43RSE4WIoL6K3a+SafHiM/ETiQhi0XAVJ
+        LGKp+r5sqNi9+bJNV9QdfBxHSA==
+X-Google-Smtp-Source: ABdhPJwB08J2vz0A0gbW0syrGNAlGpamxTzbQJm0c85kqCEQcEjYBCXX1xJIuDp/JFaktfVeqm8xkg==
+X-Received: by 2002:a17:90a:31c5:: with SMTP id j5mr14715146pjf.200.1643904883250;
+        Thu, 03 Feb 2022 08:14:43 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id bj7sm9991089pjb.9.2022.02.03.08.14.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 08:14:42 -0800 (PST)
+Message-ID: <b95078f2-180a-e691-d10b-f19a87575274@linaro.org>
+Date:   Thu, 3 Feb 2022 08:14:41 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] sched/fair: Fix fault in reweight_entity
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>, peterz@infradead.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+af7a719bc92395ee41b3@syzkaller.appspotmail.com
+References: <20220125193403.778497-1-tadeusz.struk@linaro.org>
+ <20220127205623.1258029-1-tadeusz.struk@linaro.org>
+ <dc241a1f-74c2-3db6-e932-04b653e469bb@arm.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <dc241a1f-74c2-3db6-e932-04b653e469bb@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Linus.
+On 2/3/22 01:40, Dietmar Eggemann wrote:
+>> -static void set_load_weight(struct task_struct *p, bool update_load)
+>> +static void set_load_weight(struct task_struct *p)
+>>   {
+>>   	int prio = p->static_prio - MAX_RT_PRIO;
+>>   	struct load_weight *load = &p->se.load;
+>> +	bool update_load = !(READ_ONCE(p->__state) & TASK_NEW);
+> nit-pick: reverse fir tree order
+> 
+> cat Documentation/process/maintainer-tip.rst | grep -A 10 "Variable
+> declarations"
+> 
+> I was able to recreate the initial issue with the reproducer on arm64
+> Juno-r0 with CONFIG_CGROUP_SCHED=y .
+> 
+> Reviewed-by: Dietmar Eggemann<dietmar.eggemann@arm.com>
 
-cgroup fixes for v5.17-rc2 including:
-
-* Eric's fix for a long standing cgroup1 permission issue where it only
-  checks for uid 0 instead of CAP which inadvertently allows unprivileged
-  userns roots to modify release_agent userhelper.
-
-* Fixes for the fallouts from Waiman's recent cpuset work.
-
-Thanks.
-
-The following changes since commit daadb3bd0e8d3e317e36bc2c1542e86c528665e5:
-
-  Merge tag 'locking_core_for_v5.17_rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2022-01-11 17:24:45 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git for-5.17-fixes
-
-for you to fetch changes up to 2bdfd2825c9662463371e6691b1a794e97fa36b4:
-
-  cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning (2022-02-03 05:59:01 -1000)
-
-----------------------------------------------------------------
-Eric W. Biederman (1):
-      cgroup-v1: Require capabilities to set release_agent
-
-Michal Koutný (1):
-      cgroup/cpuset: Make child cpusets restrict parents on v1 hierarchy
-
-Tianchen Ding (1):
-      cpuset: Fix the bug that subpart_cpus updated wrongly in update_cpumask()
-
-Waiman Long (1):
-      cgroup/cpuset: Fix "suspicious RCU usage" lockdep warning
-
- kernel/cgroup/cgroup-v1.c | 14 ++++++++++
- kernel/cgroup/cpuset.c    | 65 +++++++++++++++++++++++++++++++++++++----------
- 2 files changed, 65 insertions(+), 14 deletions(-)
+Thanks for reviewing. I will send a v5 soon.
 
 -- 
-tejun
+Thanks,
+Tadeusz

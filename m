@@ -2,118 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EE04A8863
+	by mail.lfdr.de (Postfix) with ESMTP id B5E054A8865
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 17:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239418AbiBCQM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 11:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243578AbiBCQMW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:12:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C7BC061714;
-        Thu,  3 Feb 2022 08:12:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 82451CE205D;
-        Thu,  3 Feb 2022 16:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A7BC340EF;
-        Thu,  3 Feb 2022 16:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643904738;
-        bh=tHVZdpOeaDUJxjE7UYVAKrIDf5NQfx3p8v5KExnPRz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NRtSFsbtCY6tw10trp0cRyK09ca2gwiH/rIdXiTLJzjOGCzluAwBbkC/FOneKXb4m
-         wyu4NLQe1771JC36tpnNVoatGhSIQBdAMx4NcHdmEH51GeEvrvf93g1McL0a8Jhjaj
-         DfNlgXSmy9+Z626IupK/gzi9yYKOyVLgRAddCvd61yiEhYPS0ltjVAd3HmAkDgXhZA
-         XH2tEtfQ0aPHT7W4E1jbkjBuIWG9J6a2mPnLw1mOU8wsFu14bGHddJw6OpXodxsDX9
-         WpVAI0ZTszicK8BqmkjzHK/QUy3gvA1cpgwneme6SvipZ9tDTww+vwcWixC/vI3gvi
-         hNdmx75bfd68Q==
-Date:   Thu, 3 Feb 2022 21:42:10 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Parthiban Nallathambi <pn@denx.de>,
-        linux-actions@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] clk: actions: Terminate clk_div_table with
- sentinel element
-Message-ID: <20220203161210.GA138829@thinkpad>
-References: <20220203142153.260720-1-j.neuschaefer@gmx.net>
- <20220203142153.260720-2-j.neuschaefer@gmx.net>
+        id S1352149AbiBCQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 11:12:52 -0500
+Received: from foss.arm.com ([217.140.110.172]:54942 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231744AbiBCQMu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 11:12:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E61C113E;
+        Thu,  3 Feb 2022 08:12:50 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0D4C53F40C;
+        Thu,  3 Feb 2022 08:12:48 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     ardb@kernel.org, arnd@arndb.de, boqun.feng@gmail.com,
+        mark.rutland@arm.com, peterz@infradead.org, will@kernel.org
+Subject: [PATCH v2] atomics: fix atomic64_{read_acquire,set_release} fallbacks
+Date:   Thu,  3 Feb 2022 16:12:43 +0000
+Message-Id: <20220203161243.3955547-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220203142153.260720-2-j.neuschaefer@gmx.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 03:21:50PM +0100, Jonathan Neuschäfer wrote:
-> In order that the end of a clk_div_table can be detected, it must be
-> terminated with a sentinel element (.div = 0).
-> 
-> Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
-> Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
-> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-> ---
-> 
-> I'm not so sure about usb3_mac_div_table. Maybe the { 0, 8 } element was
-> meant to be { 0, 0 }? I'd appreciate if someone with access to the
-> datasheet or hardware could verify what's correct.
+Arnd reports that on 32-bit architectures, the fallbacks for
+atomic64_read_acquire() and atomic64_set_release() are broken as they
+use smp_load_acquire() and smp_store_release() respectively, which do
+not work on types larger than the native word size.
 
-USB3 factor table is not documented in the datasheet I have access to. But by
-looking at the value, it looks to be a typo. So please change the last entry.
-With that,
+Since those contain compiletime_assert_atomic_type(), any attempt to use
+those fallbacks will result in a build-time error. e.g. with the
+following added to arch/arm/kernel/setup.c:
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+| void test_atomic64(atomic64_t *v)
+| {
+|        atomic64_set_release(v, 5);
+|        atomic64_read_acquire(v);
+| }
 
-Thanks,
-Mani
+The compiler will complain as follows:
 
-> 
-> v2:
-> - Add Fixes tags
-> ---
->  drivers/clk/actions/owl-s700.c | 1 +
->  drivers/clk/actions/owl-s900.c | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700.c
-> index a2f34d13fb543..617174644f728 100644
-> --- a/drivers/clk/actions/owl-s700.c
-> +++ b/drivers/clk/actions/owl-s700.c
-> @@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] = {
-> 
->  static struct clk_div_table rmii_div_table[] = {
->  	{0, 4},   {1, 10},
-> +	{0, 0},
->  };
-> 
->  /* divider clocks */
-> diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900.c
-> index 790890978424a..f6f49100a865b 100644
-> --- a/drivers/clk/actions/owl-s900.c
-> +++ b/drivers/clk/actions/owl-s900.c
-> @@ -139,8 +139,8 @@ static struct clk_div_table rmii_ref_div_table[] = {
->  };
-> 
->  static struct clk_div_table usb3_mac_div_table[] = {
-> -	{ 1, 2 }, { 2, 3 }, { 3, 4 },
-> -	{ 0, 8 },
-> +	{ 1, 2 }, { 2, 3 }, { 3, 4 }, { 0, 8 },
-> +	{ 0, 0 },
->  };
-> 
->  static struct clk_div_table i2s_div_table[] = {
-> --
-> 2.34.1
-> 
+| In file included from <command-line>:
+| In function 'arch_atomic64_set_release',
+|     inlined from 'test_atomic64' at ./include/linux/atomic/atomic-instrumented.h:669:2:
+| ././include/linux/compiler_types.h:346:38: error: call to '__compiletime_assert_9' declared with attribute error: Need native word sized stores/loads for atomicity.
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |                                      ^
+| ././include/linux/compiler_types.h:327:4: note: in definition of macro '__compiletime_assert'
+|   327 |    prefix ## suffix();    \
+|       |    ^~~~~~
+| ././include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
+|   346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+|       |  ^~~~~~~~~~~~~~~~~~~
+| ././include/linux/compiler_types.h:349:2: note: in expansion of macro 'compiletime_assert'
+|   349 |  compiletime_assert(__native_word(t),    \
+|       |  ^~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:133:2: note: in expansion of macro 'compiletime_assert_atomic_type'
+|   133 |  compiletime_assert_atomic_type(*p);    \
+|       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+| ./include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
+|   164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
+|       |                                                       ^~~~~~~~~~~~~~~~~~~
+| ./include/linux/atomic/atomic-arch-fallback.h:1270:2: note: in expansion of macro 'smp_store_release'
+|  1270 |  smp_store_release(&(v)->counter, i);
+|       |  ^~~~~~~~~~~~~~~~~
+| make[2]: *** [scripts/Makefile.build:288: arch/arm/kernel/setup.o] Error 1
+| make[1]: *** [scripts/Makefile.build:550: arch/arm/kernel] Error 2
+| make: *** [Makefile:1831: arch/arm] Error 2
+
+Fix this by only using smp_load_acquire() and smp_store_release() for
+native atomic types, and otherwise falling back to the regular barriers
+necessary for acquire/release semantics, as we do in the more generic
+acquire and release fallbacks.
+
+For the example above this works as expected on 32-bit, e.g. for arm
+multi_v7_defconfig:
+
+| <test_atomic64>:
+|         push    {r4, r5}
+|         dmb     ish
+|         pldw    [r0]
+|         mov     r2, #5
+|         mov     r3, #0
+|         ldrexd  r4, [r0]
+|         strexd  r4, r2, [r0]
+|         teq     r4, #0
+|         bne     484 <test_atomic64+0x14>
+|         ldrexd  r2, [r0]
+|         dmb     ish
+|         pop     {r4, r5}
+|         bx      lr
+
+... and also on 64-bit, e.g. for arm64 defconfig:
+
+| <test_atomic64>:
+|         bti     c
+|         paciasp
+|         mov     x1, #0x5
+|         stlr    x1, [x0]
+|         ldar    x0, [x0]
+|         autiasp
+|         ret
+
+Reported-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+---
+ include/linux/atomic/atomic-arch-fallback.h | 38 ++++++++++++++++++---
+ scripts/atomic/fallbacks/read_acquire       | 11 +++++-
+ scripts/atomic/fallbacks/set_release        |  7 +++-
+ 3 files changed, 49 insertions(+), 7 deletions(-)
+
+Since v1 [1]:
+* Fix templates to use arch_${atomic}_{read,write}()
+* Update 32-bit sample codegen
+* Correct typo in commit message
+
+[1] https://lore.kernel.org/lkml/20220203143848.3934515-1-mark.rutland@arm.com
+
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a3dba31df01e..6db58d180866 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -151,7 +151,16 @@
+ static __always_inline int
+ arch_atomic_read_acquire(const atomic_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	int ret;
++
++	if (__native_word(atomic_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic_read_acquire arch_atomic_read_acquire
+ #endif
+@@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
+ static __always_inline void
+ arch_atomic_set_release(atomic_t *v, int i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic_set(v, i);
++	}
+ }
+ #define arch_atomic_set_release arch_atomic_set_release
+ #endif
+@@ -1258,7 +1272,16 @@ arch_atomic_dec_if_positive(atomic_t *v)
+ static __always_inline s64
+ arch_atomic64_read_acquire(const atomic64_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	s64 ret;
++
++	if (__native_word(atomic64_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_atomic64_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ #define arch_atomic64_read_acquire arch_atomic64_read_acquire
+ #endif
+@@ -1267,7 +1290,12 @@ arch_atomic64_read_acquire(const atomic64_t *v)
+ static __always_inline void
+ arch_atomic64_set_release(atomic64_t *v, s64 i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(atomic64_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_atomic64_set(v, i);
++	}
+ }
+ #define arch_atomic64_set_release arch_atomic64_set_release
+ #endif
+@@ -2358,4 +2386,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// cca554917d7ea73d5e3e7397dd70c484cad9b2c4
++// 8e2cc06bc0d2c0967d2f8424762bd48555ee40ae
+diff --git a/scripts/atomic/fallbacks/read_acquire b/scripts/atomic/fallbacks/read_acquire
+index 803ba7561076..a0ea1d26e6b2 100755
+--- a/scripts/atomic/fallbacks/read_acquire
++++ b/scripts/atomic/fallbacks/read_acquire
+@@ -2,6 +2,15 @@ cat <<EOF
+ static __always_inline ${ret}
+ arch_${atomic}_read_acquire(const ${atomic}_t *v)
+ {
+-	return smp_load_acquire(&(v)->counter);
++	${int} ret;
++
++	if (__native_word(${atomic}_t)) {
++		ret = smp_load_acquire(&(v)->counter);
++	} else {
++		ret = arch_${atomic}_read(v);
++		__atomic_acquire_fence();
++	}
++
++	return ret;
+ }
+ EOF
+diff --git a/scripts/atomic/fallbacks/set_release b/scripts/atomic/fallbacks/set_release
+index 86ede759f24e..05cdb7f42477 100755
+--- a/scripts/atomic/fallbacks/set_release
++++ b/scripts/atomic/fallbacks/set_release
+@@ -2,6 +2,11 @@ cat <<EOF
+ static __always_inline void
+ arch_${atomic}_set_release(${atomic}_t *v, ${int} i)
+ {
+-	smp_store_release(&(v)->counter, i);
++	if (__native_word(${atomic}_t)) {
++		smp_store_release(&(v)->counter, i);
++	} else {
++		__atomic_release_fence();
++		arch_${atomic}_set(v, i);
++	}
+ }
+ EOF
+-- 
+2.30.2
+

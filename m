@@ -2,271 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1ACD4A8B5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1C74A8B58
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 19:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353333AbiBCSQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 13:16:03 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:12263 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353310AbiBCSQA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1353312AbiBCSQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 3 Feb 2022 13:16:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1643912160; x=1675448160;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=P04UnRBV76MpDpOOK6q6643kAlnLXt09lfQX/PkSX+E=;
-  b=b5GAs4ypYj4piUVQuEYQ01A1DKTQs3KFxSBReYuERvIvozHkvwLILs28
-   RUn82lsA9zDrVIa7mV/Jnouj0mbbaJtHgv72gIUH64ovMHuhC05PvxAZx
-   gjTYAWJYDhaAj5fLJHg3mVOiYcR6DsLXDLP77uvbXqs+eEdXxIaBJQAig
-   s=;
-X-IronPort-AV: E=Sophos;i="5.88,340,1635206400"; 
-   d="scan'208";a="175354490"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 03 Feb 2022 18:15:49 +0000
-Received: from EX13D07EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-54a073b7.us-east-1.amazon.com (Postfix) with ESMTPS id 75E19A28C2;
-        Thu,  3 Feb 2022 18:15:45 +0000 (UTC)
-Received: from dev-dsk-faresx-1b-818bcd8f.eu-west-1.amazon.com (10.43.160.132)
- by EX13D07EUA003.ant.amazon.com (10.43.165.176) with Microsoft SMTP Server
- (TLS) id 15.0.1497.28; Thu, 3 Feb 2022 18:15:39 +0000
-From:   Fares Mehanna <faresx@amazon.de>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <x86@kernel.org>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-sgx@vger.kernel.org>,
-        Fares Mehanna <faresx@amazon.de>
-Subject: [PATCH] KVM: VMX: pass TME information to guests
-Date:   Thu, 3 Feb 2022 18:14:32 +0000
-Message-ID: <20220203181432.34911-1-faresx@amazon.de>
-X-Mailer: git-send-email 2.32.0
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353288AbiBCSP4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 13:15:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34687C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 10:15:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7020B83500
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 18:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E280C340E8;
+        Thu,  3 Feb 2022 18:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643912153;
+        bh=BY3UZV02Xh9Phpvcf/vyWzWl1za0GoBYITY+12OY2kw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n4Qn8EYhsbP3e7GPUom9sYrKL/AYoHQKeoy0sQRJojfA1+H/nlD/IwU0tOCQ3lDsS
+         TjKhyYAgqHhWCQPc2B6bYKH61/FMgjSEWkEeyT88c3t4QTwkRVy7fFpgB3NvF9oe6/
+         vBa1aqhZmA6bgn1D4nGKqaralwRGnD7Rx5OZC+ae6HDTeO9pgSy/ZLdX3bOwyCS7fx
+         S2rjWgc/cfKNCi4QkZMET2M0dORLomhvoUP27SawXqvXaUC3qq/eCSQoCGHl/mhk9z
+         3U9O2uAflljkuQw+bXLuSOTPLPVQ05ZpaDgUjmUXTSDBvHeIwbK+d+J9FRCG1uUFk9
+         a6puoTle2uGkw==
+Date:   Thu, 3 Feb 2022 20:15:43 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        hch@infradead.org, akpm@linux-foundation.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [RFC V1 04/31] powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <Yfwbz5qu20bjFZOP@kernel.org>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+ <1643029028-12710-5-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.43.160.132]
-X-ClientProxiedBy: EX13D11UWB001.ant.amazon.com (10.43.161.53) To
- EX13D07EUA003.ant.amazon.com (10.43.165.176)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643029028-12710-5-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Guests running on IceLake have TME-EN disabled in CPUID, and they can't read TME
-related MSRs [IA32_TME_CAPABILITY, IA32_TME_ACTIVATE, IA32_TME_EXCLUDE_MASK,
-IA32_TME_EXCLUDE_BASE].
+On Mon, Jan 24, 2022 at 06:26:41PM +0530, Anshuman Khandual wrote:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed. While here, this also
+> localizes arch_vm_get_page_prot() as powerpc_vm_get_page_prot().
+> 
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/powerpc/Kconfig               |  1 +
+>  arch/powerpc/include/asm/mman.h    |  3 +-
+>  arch/powerpc/include/asm/pgtable.h | 19 ------------
+>  arch/powerpc/mm/mmap.c             | 47 ++++++++++++++++++++++++++++++
+>  4 files changed, 49 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index b779603978e1..ddb4a3687c05 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -135,6 +135,7 @@ config PPC
+>  	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
+>  	select ARCH_HAS_UACCESS_FLUSHCACHE
+>  	select ARCH_HAS_UBSAN_SANITIZE_ALL
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>  	select ARCH_KEEP_MEMBLOCK
+>  	select ARCH_MIGHT_HAVE_PC_PARPORT
+> diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
+> index 7cb6d18f5cd6..7b10c2031e82 100644
+> --- a/arch/powerpc/include/asm/mman.h
+> +++ b/arch/powerpc/include/asm/mman.h
+> @@ -24,7 +24,7 @@ static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+>  }
+>  #define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
+>  
+> -static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
+> +static inline pgprot_t powerpc_vm_get_page_prot(unsigned long vm_flags)
+>  {
+>  #ifdef CONFIG_PPC_MEM_KEYS
+>  	return (vm_flags & VM_SAO) ?
+> @@ -34,7 +34,6 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
+>  	return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
+>  #endif
+>  }
+> -#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
+>  
+>  static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
+>  {
+> diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
+> index d564d0ecd4cd..3cbb6de20f9d 100644
+> --- a/arch/powerpc/include/asm/pgtable.h
+> +++ b/arch/powerpc/include/asm/pgtable.h
+> @@ -20,25 +20,6 @@ struct mm_struct;
+>  #include <asm/nohash/pgtable.h>
+>  #endif /* !CONFIG_PPC_BOOK3S */
+>  
+> -/* Note due to the way vm flags are laid out, the bits are XWR */
+> -#define __P000	PAGE_NONE
+> -#define __P001	PAGE_READONLY
+> -#define __P010	PAGE_COPY
+> -#define __P011	PAGE_COPY
+> -#define __P100	PAGE_READONLY_X
+> -#define __P101	PAGE_READONLY_X
+> -#define __P110	PAGE_COPY_X
+> -#define __P111	PAGE_COPY_X
+> -
+> -#define __S000	PAGE_NONE
+> -#define __S001	PAGE_READONLY
+> -#define __S010	PAGE_SHARED
+> -#define __S011	PAGE_SHARED
+> -#define __S100	PAGE_READONLY_X
+> -#define __S101	PAGE_READONLY_X
+> -#define __S110	PAGE_SHARED_X
+> -#define __S111	PAGE_SHARED_X
+> -
+>  #ifndef __ASSEMBLY__
+>  
+>  #ifndef MAX_PTRS_PER_PGD
+> diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
+> index c475cf810aa8..7f05e7903bd2 100644
+> --- a/arch/powerpc/mm/mmap.c
+> +++ b/arch/powerpc/mm/mmap.c
+> @@ -254,3 +254,50 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+>  		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
+>  	}
+>  }
+> +
+> +static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return PAGE_NONE;
+> +	case VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_WRITE:
+> +		return PAGE_COPY;
+> +	case VM_READ | VM_WRITE:
+> +		return PAGE_COPY;
+> +	case VM_EXEC:
+> +		return PAGE_READONLY_X;
+> +	case VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_EXEC | VM_WRITE:
+> +		return PAGE_COPY_X;
+> +	case VM_EXEC | VM_READ | VM_WRITE:
+> +		return PAGE_COPY_X;
+> +	case VM_SHARED:
+> +		return PAGE_NONE;
+> +	case VM_SHARED | VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_SHARED | VM_WRITE:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_READ | VM_WRITE:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_EXEC:
+> +		return PAGE_READONLY_X;
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +		return PAGE_SHARED_X;
+> +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
+> +		return PAGE_SHARED_X;
+> +	default:
+> +		BUILD_BUG();
+> +	}
+> +}
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	return __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
+> +	       pgprot_val(powerpc_vm_get_page_prot(vm_flags)));
 
-So guests don't know if they are running with TME enabled or not.
+Any reason to keep powerpc_vm_get_page_prot() rather than open code it
+here?
 
-In this patch, TME information is passed to the guest if the host has `TME-EN`
-enabled in CPUID and TME MSRs are locked and the exclusion range is disabled.
+This applies to other architectures that implement arch_vm_get_page_prot()
+and/or arch_filter_pgprot() as well.
 
-This will guarantee that hardware supports TME, MSRs are locked, so host can't
-change them and exclusion range is disabled, so TME rules apply on all host
-memory.
+> +}
+> +EXPORT_SYMBOL(vm_get_page_prot);
+> -- 
+> 2.25.1
+> 
+> 
 
-In IA32_TME_CAPABILITY and IA32_TME_ACTIVATE we mask out the reserved bits and
-MKTME related bits.
-
-So in IA32_TME_CAPABILITY, we are passing:
-Bit[0]:  Support for AES-XTS 128-bit encryption algorithm
-Bit[2]:  Support for AES-XTS 256-bit encryption algorithm
-Bit[31]: TME encryption bypass supported
-
-And in IA32_TME_ACTIVATE, we are passing:
-Bit[0]:   Lock RO
-Bit[1]:   TME Enable RWL
-Bit[2]:   Key select
-Bit[3]:   Save TME key for Standby
-Bit[4:7]: Encryption Algorithm
-Bit[31]:  TME Encryption Bypass Enable
-
-However IA32_TME_EXCLUDE_MASK and IA32_TME_EXCLUDE_BASE are read by the guest as
-zero, since we will only pass TME information if the exclusion range is
-disabled.
-
-Those information are helpful for the guest to determine if TME is enabled by
-the BIOS or not.
-
-Signed-off-by: Fares Mehanna <faresx@amazon.de>
----
- arch/x86/include/asm/msr-index.h |  6 ++++++
- arch/x86/include/asm/processor.h | 14 ++++++++++++++
- arch/x86/kernel/cpu/intel.c      | 15 +--------------
- arch/x86/kvm/cpuid.c             | 19 ++++++++++++++++++-
- arch/x86/kvm/vmx/vmx.c           | 20 ++++++++++++++++++++
- 5 files changed, 59 insertions(+), 15 deletions(-)
-
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 3faf0f97edb1..908aad1a7cad 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -438,6 +438,12 @@
- #define MSR_RELOAD_PMC0			0x000014c1
- #define MSR_RELOAD_FIXED_CTR0		0x00001309
- 
-+/* Memory encryption MSRs */
-+#define MSR_IA32_TME_CAPABILITY		0x981
-+#define MSR_IA32_TME_ACTIVATE		0x982
-+#define MSR_IA32_TME_EXCLUDE_MASK	0x983
-+#define MSR_IA32_TME_EXCLUDE_BASE	0x984
-+
- /*
-  * AMD64 MSRs. Not complete. See the architecture manual for a more
-  * complete list.
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 2c5f12ae7d04..28387ae7277b 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -863,4 +863,18 @@ bool arch_is_platform_page(u64 paddr);
- #define arch_is_platform_page arch_is_platform_page
- #endif
- 
-+/* Helpers to access TME_ACTIVATE MSR */
-+#define TME_ACTIVATE_LOCKED(x)		((x) & 0x1)
-+#define TME_ACTIVATE_ENABLED(x)		((x) & 0x2)
-+
-+#define TME_ACTIVATE_POLICY(x)		(((x) >> 4) & 0xf)        /* Bits 7:4 */
-+#define TME_ACTIVATE_POLICY_AES_XTS_128	0
-+
-+#define TME_ACTIVATE_KEYID_BITS(x)	(((x) >> 32) & 0xf)     /* Bits 35:32 */
-+
-+#define TME_ACTIVATE_CRYPTO_ALGS(x)	(((x) >> 48) & 0xffff)    /* Bits 63:48 */
-+#define TME_ACTIVATE_CRYPTO_AES_XTS_128	1
-+
-+#define TME_EXCLUSION_ENABLED(x)	((x) & 0x800) /* Bit 11 */
-+
- #endif /* _ASM_X86_PROCESSOR_H */
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 8321c43554a1..46ad006089a3 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -14,6 +14,7 @@
- 
- #include <asm/cpufeature.h>
- #include <asm/msr.h>
-+#include <asm/processor.h>
- #include <asm/bugs.h>
- #include <asm/cpu.h>
- #include <asm/intel-family.h>
-@@ -492,20 +493,6 @@ static void srat_detect_node(struct cpuinfo_x86 *c)
- #endif
- }
- 
--#define MSR_IA32_TME_ACTIVATE		0x982
--
--/* Helpers to access TME_ACTIVATE MSR */
--#define TME_ACTIVATE_LOCKED(x)		(x & 0x1)
--#define TME_ACTIVATE_ENABLED(x)		(x & 0x2)
--
--#define TME_ACTIVATE_POLICY(x)		((x >> 4) & 0xf)	/* Bits 7:4 */
--#define TME_ACTIVATE_POLICY_AES_XTS_128	0
--
--#define TME_ACTIVATE_KEYID_BITS(x)	((x >> 32) & 0xf)	/* Bits 35:32 */
--
--#define TME_ACTIVATE_CRYPTO_ALGS(x)	((x >> 48) & 0xffff)	/* Bits 63:48 */
--#define TME_ACTIVATE_CRYPTO_AES_XTS_128	1
--
- /* Values for mktme_status (SW only construct) */
- #define MKTME_ENABLED			0
- #define MKTME_DISABLED			1
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 28be02adc669..c5a18527f099 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -84,6 +84,22 @@ static inline struct kvm_cpuid_entry2 *cpuid_entry2_find(
- 	return NULL;
- }
- 
-+static bool kvm_tme_supported(void)
-+{
-+	u64 tme_activation, tme_exclusion;
-+
-+	if (!feature_bit(TME))
-+		return false;
-+
-+	if (rdmsrl_safe(MSR_IA32_TME_EXCLUDE_MASK, &tme_exclusion))
-+		return false;
-+	if (rdmsrl_safe(MSR_IA32_TME_ACTIVATE, &tme_activation))
-+		return false;
-+
-+	return TME_ACTIVATE_LOCKED(tme_activation) &&
-+		!TME_EXCLUSION_ENABLED(tme_exclusion);
-+}
-+
- static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
- 			   struct kvm_cpuid_entry2 *entries,
- 			   int nent)
-@@ -508,6 +524,7 @@ static __always_inline void kvm_cpu_cap_mask(enum cpuid_leafs leaf, u32 mask)
- 
- void kvm_set_cpu_caps(void)
- {
-+	unsigned int f_tme = kvm_tme_supported() ? F(TME) : 0;
- #ifdef CONFIG_X86_64
- 	unsigned int f_gbpages = F(GBPAGES);
- 	unsigned int f_lm = F(LM);
-@@ -565,7 +582,7 @@ void kvm_set_cpu_caps(void)
- 		F(AVX512VBMI) | F(LA57) | F(PKU) | 0 /*OSPKE*/ | F(RDPID) |
- 		F(AVX512_VPOPCNTDQ) | F(UMIP) | F(AVX512_VBMI2) | F(GFNI) |
- 		F(VAES) | F(VPCLMULQDQ) | F(AVX512_VNNI) | F(AVX512_BITALG) |
--		F(CLDEMOTE) | F(MOVDIRI) | F(MOVDIR64B) | 0 /*WAITPKG*/ |
-+		f_tme | F(CLDEMOTE) | F(MOVDIRI) | F(MOVDIR64B) | 0 /*WAITPKG*/ |
- 		F(SGX_LC) | F(BUS_LOCK_DETECT)
- 	);
- 	/* Set LA57 based on hardware capability. */
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index aca3ae2a02f3..f8cbf935cfe0 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1913,6 +1913,26 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	case MSR_IA32_DEBUGCTLMSR:
- 		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
- 		break;
-+	case MSR_IA32_TME_CAPABILITY:
-+		if (!guest_cpuid_has(vcpu, X86_FEATURE_TME))
-+			return 1;
-+		if (rdmsrl_safe(MSR_IA32_TME_CAPABILITY, &msr_info->data))
-+			return 1;
-+		msr_info->data &= 0x80000005; /* Bit 0, 2, 31 */
-+		break;
-+	case MSR_IA32_TME_ACTIVATE:
-+		if (!guest_cpuid_has(vcpu, X86_FEATURE_TME))
-+			return 1;
-+		if (rdmsrl_safe(MSR_IA32_TME_ACTIVATE, &msr_info->data))
-+			return 1;
-+		msr_info->data &= 0x800000FF; /* Bits [0-7] and Bit 31 */
-+		break;
-+	case MSR_IA32_TME_EXCLUDE_MASK:
-+	case MSR_IA32_TME_EXCLUDE_BASE:
-+		if (!guest_cpuid_has(vcpu, X86_FEATURE_TME))
-+			return 1;
-+		msr_info->data = 0x0;
-+		break;
- 	default:
- 	find_uret_msr:
- 		msr = vmx_find_uret_msr(vmx, msr_info->index);
 -- 
-2.32.0
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+Sincerely yours,
+Mike.

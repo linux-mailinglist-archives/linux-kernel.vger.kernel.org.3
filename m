@@ -2,154 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CB64A7E5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29874A7E61
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 04:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349204AbiBCDgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 22:36:22 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:39829 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiBCDgV (ORCPT
+        id S1349210AbiBCDhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 22:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235611AbiBCDhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 22:36:21 -0500
-Received: by mail-il1-f199.google.com with SMTP id w14-20020a92db4e000000b002bc0fb4892cso888918ilq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 19:36:21 -0800 (PST)
+        Wed, 2 Feb 2022 22:37:06 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EF0C061714;
+        Wed,  2 Feb 2022 19:37:05 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a13so2268704wrh.9;
+        Wed, 02 Feb 2022 19:37:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mzQ5Ms+rGH8qdglrEgycDWVj4kG2JJqcskoCPStPG3I=;
+        b=ILPt7CLQ75z9wHwxwK1UiSGd62Q+F+Mtd7jkVgHN35VlF+YKCQaXRNFpn67kdolGLj
+         QMVx9XSwkcwvoyJxM8nYdY/ms7EtpAtum9IdP/RCxwTv9RBdy0YIut5IhPYtLE2j5c3f
+         cL56y6QvNuKJAlOVoQb6p7W3xhZkmLMtKO2o/wGPS3vYACfaYdrtgOrXhdAZxvlQ8CNY
+         jP77TN8caf8JXrgb10vflNYsaA6jGx20cmCXW/vTAEBLG3bHlKyXUH0gZZCY/zE50bjx
+         R/UJo3/Jsn1He7GCEw1EZC2hWREJ6mF4Om6vPWTxptrM007Dt20fXzchisOmWRa5+opI
+         g24Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=7x6rKhaHmrAEYlIz/NCtXjuxWLWqRjW+skTvrls9++k=;
-        b=fRALhvrbs8A+qdyHwDindsCL4zKmfmIFs35Lv71EIrZFdMZLPzomjx2j4HptLw0WJA
-         Apny6w7AxBfU1I0nidv3qv2grhWguLXTEo+pbxDHcAceM0KG4H8HgMnUdHyiVXkafU5Q
-         4HaYewQnfCxLAHEpbKyaG0+QmOeRewalgfOcurnEmIXiPUWCq9I7ubkQ+zitYRNDl/lA
-         05Z1d4g5hNwDXzFLP3P40si9xP3LLL9K3Y+bj+fDmqUQpAADRCX/RNGtABMo/tB1mKai
-         0gt7x/eZbCIwNqbM8RdkxKY0JSRNS+Y6HgwC/Kjqa/pMWtkL+kMF+ji95OfesfOSO4k5
-         gLBQ==
-X-Gm-Message-State: AOAM531CD9WaFQMFr+DuUdGB2qRtMD7rcyUxHO7BBnwalMRftQfQ84X7
-        hZ5oEI24JVqj70Hg17EOWMC2lbVxaj57Be2h3luHVZfMimYk
-X-Google-Smtp-Source: ABdhPJzZj1jMw6FAE6SvyayY5zdvayzSv5dg6luJoFgPyYb9thhsd7mbyIirTGhOCU69O6NNT0jIFBW7XgAFoaYYGIIlhZ5vZDyD
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mzQ5Ms+rGH8qdglrEgycDWVj4kG2JJqcskoCPStPG3I=;
+        b=X0Ei7e5DJ1dBCF3s1gfk7PYYYh7/xdsbXcvqF1vksLfLwH6BmHZ5AA0yp/oDANLfvF
+         xjmZmoYrCMCjFIOwxaLRqtCgRSMIGRnrXcvgi4Ithpe0ifRaEFF3QkqAltH/fBwcvjU6
+         3DF9CCh4l6jQXBqyUXTpittDFnF6cHBBG0VpdFOK5O2gZdCbIyRGfZce1493dPV7BBnw
+         lgSu+NLuLTvm8+9eyShHMGCN8A69a7QG0WV8vK7JB4VxTYVa5UohjY1YAyHE7GJWQcK8
+         ax0V55RXNtBTzjMOgXkVtaQxiC/6OI/Ns2DWGzMv4nVKHvGSyDO5fLo+Y99XewKWOI5D
+         1fIw==
+X-Gm-Message-State: AOAM533bLNVN0XzTKIDCWSTnKYSnBOeSKa2qovfUkkEN+801uWIetj/j
+        tOHl6pG7R0HxK9vFsSCCDev+L3ERIyKJkJBUUgBkMw92APw=
+X-Google-Smtp-Source: ABdhPJynktnQe5fOm9DQ5fRqSi5Mf0RiJ9rp/dtmnq0bQ5DW2tUlSt9iIKfpf1niIhYeAQDJtqZLOhzBCk+b9sKCrN4=
+X-Received: by 2002:adf:dcc1:: with SMTP id x1mr26682684wrm.289.1643859424102;
+ Wed, 02 Feb 2022 19:37:04 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:711e:: with SMTP id n30mr16461827jac.235.1643859381164;
- Wed, 02 Feb 2022 19:36:21 -0800 (PST)
-Date:   Wed, 02 Feb 2022 19:36:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000079a24b05d714d69f@google.com>
-Subject: [syzbot] general protection fault in btf_decl_tag_resolve
-From:   syzbot <syzbot+53619be9444215e785ed@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <20220131192102.4115473-1-andrew.smirnov@gmail.com> <e0e36d42-5479-fd8c-3868-384161031738@synopsys.com>
+In-Reply-To: <e0e36d42-5479-fd8c-3868-384161031738@synopsys.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Wed, 2 Feb 2022 19:36:53 -0800
+Message-ID: <CAHQ1cqHUNtO_S5NnmdBmhba5+S8pOArA00G2eBXeWLo5smjPxQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: Prioritize extcon over USB role switching API
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Feb 2, 2022 at 6:54 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> Andrey Smirnov wrote:
+> > It is necessary that:
+> >
+> >    ROLE_SWITCH && device_property_read_bool(dwc->dev, "usb-role-switch")
+> >
+> > is true in order for dwc3_get_dr_mode() to _not_ force us from OTG to
+> > PERIPHERAL mode here:
+> >
+> >    if (mode == USB_DR_MODE_OTG &&
+> >        (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+> >         !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+> >       !DWC3_VER_IS_PRIOR(DWC3, 330A))
+> >       mode = USB_DR_MODE_PERIPHERAL;
+> >
+> > and dwc3_drd_init() to be called later in dwc3_core_init_mode(). So,
+> > to avoid always ignoring extcon device returned by dwc3_get_extcon()
+> > change dwc3_drd_init() to check and use it first, before checking if
+> > dwc3_setup_role_switch() should be called.
+> >
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Thinh Nguyen <thinhn@synopsys.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> > ---
+> >
+> > Hopefully I didn't miss something important making this patch
+> > unnecessary. Don't know if this is a good solution or not, part of me
+> > thinks than maybe changing the aforementioned code in
+> > dwc3_get_dr_mode() to account for extcon wopuld be
+> > simpler/better. Happy to rework this.
+>
+> The driver either use extcon or usb-role-switch. It doesn't make sense to
+> enable usb-role-switch for extcon just so the driver doesn't default
+> the dr_mode to peripheral.
+>
+> Perhaps, this is what you're looking for? (code is not tested)
+>
 
-syzbot found the following issue on:
+Yeah that kind of what I meant by "maybe changing the aforementioned code in
+dwc3_get_dr_mode() to account for extcon wopuld be
+simpler/better." OK let me rework the patch to do that.
 
-HEAD commit:    b7892f7d5cb2 tools: Ignore errors from `which' when search..
-git tree:       bpf
-console output: https://syzkaller.appspot.com/x/log.txt?x=13181634700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5044676c290190f2
-dashboard link: https://syzkaller.appspot.com/bug?extid=53619be9444215e785ed
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16454914700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ceb884700000
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index bffd719b8b52..a52331ea7a0d 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -86,7 +86,7 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
+>                  * mode. If the controller supports DRD but the dr_mode is not
+>                  * specified or set to OTG, then set the mode to peripheral.
+>                  */
+> -               if (mode == USB_DR_MODE_OTG &&
+> +               if (mode == USB_DR_MODE_OTG && !dwc->edev &&
+>                     (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
+>                      !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
+>                     !DWC3_VER_IS_PRIOR(DWC3, 330A))
+> @@ -1715,6 +1715,13 @@ static int dwc3_probe(struct platform_device *pdev)
+>                 goto err2;
+>         }
+>
+> +       dwc->edev = dwc3_get_extcon(dwc);
+> +       if (IS_ERR(dwc->edev)) {
+> +               ret = PTR_ERR(dwc->edev);
+> +               dev_err(dwc->dev, "failed to get extcon %d\n", ret);
+> +               goto err3;
+> +       }
+> +
+>         ret = dwc3_get_dr_mode(dwc);
+>         if (ret)
+>                 goto err3;
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index 63089c7fb530..d02fcfdc74db 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -585,16 +585,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>  {
+>         int ret, irq;
+>
+> -       dwc->edev = dwc3_get_extcon(dwc);
+> -       if (IS_ERR(dwc->edev))
+> -               return PTR_ERR(dwc->edev);
+> -
+> -       if (ROLE_SWITCH &&
+> -           device_property_read_bool(dwc->dev, "usb-role-switch")) {
+> -               ret = dwc3_setup_role_switch(dwc);
+> -               if (ret < 0)
+> -                       return ret;
+> -       } else if (dwc->edev) {
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+53619be9444215e785ed@syzkaller.appspotmail.com
+We probably don't even need to move this around. If "usb-role-switch"
+isn't going to be set then that "if" could go first and not interfere.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 3592 Comm: syz-executor914 Not tainted 5.16.0-syzkaller-11424-gb7892f7d5cb2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
-RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
-Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
-RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
-RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
-R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
-R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
-FS:  00005555556fd300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f98c38b8220 CR3: 0000000019537000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btf_resolve+0x251/0x1020 kernel/bpf/btf.c:4198
- btf_check_all_types kernel/bpf/btf.c:4239 [inline]
- btf_parse_type_sec kernel/bpf/btf.c:4280 [inline]
- btf_parse kernel/bpf/btf.c:4513 [inline]
- btf_new_fd+0x19fe/0x2370 kernel/bpf/btf.c:6047
- bpf_btf_load kernel/bpf/syscall.c:4039 [inline]
- __sys_bpf+0x1cbb/0x5970 kernel/bpf/syscall.c:4679
- __do_sys_bpf kernel/bpf/syscall.c:4738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4736 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4736
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd57f202099
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe9e5eb898 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd57f202099
-RDX: 0000000000000020 RSI: 0000000020000000 RDI: 0000000000000012
-RBP: 00007fd57f1c6080 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fd57f1c6110
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:btf_type_vlen include/linux/btf.h:231 [inline]
-RIP: 0010:btf_decl_tag_resolve+0x83e/0xaa0 kernel/bpf/btf.c:3910
-Code: c1 ea 03 80 3c 02 00 0f 85 90 01 00 00 48 8b 1b e8 b7 c9 e6 ff 48 8d 7b 04 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 2b
-RSP: 0018:ffffc90001b1fa00 EFLAGS: 00010247
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81918c09 RDI: 0000000000000004
-RBP: ffff888015c32000 R08: 0000000000000008 R09: 0000000000000008
-R10: ffffffff81918bb1 R11: 0000000000000001 R12: 0000000000000004
-R13: 0000000000000008 R14: 0000000000000000 R15: 0000000000000005
-FS:  00005555556fd300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 0000000019537000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	c1 ea 03             	shr    $0x3,%edx
-   3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   7:	0f 85 90 01 00 00    	jne    0x19d
-   d:	48 8b 1b             	mov    (%rbx),%rbx
-  10:	e8 b7 c9 e6 ff       	callq  0xffe6c9cc
-  15:	48 8d 7b 04          	lea    0x4(%rbx),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
-  2e:	48 89 f8             	mov    %rdi,%rax
-  31:	83 e0 07             	and    $0x7,%eax
-  34:	83 c0 03             	add    $0x3,%eax
-  37:	38 d0                	cmp    %dl,%al
-  39:	7c 08                	jl     0x43
-  3b:	84 d2                	test   %dl,%dl
-  3d:	0f                   	.byte 0xf
-  3e:	85 2b                	test   %ebp,(%rbx)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> +       if (dwc->edev) {
+>                 dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>                 ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>                                                &dwc->edev_nb);
+> @@ -604,6 +595,11 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>                 }
+>
+>                 dwc3_drd_update(dwc);
+> +       } else if (ROLE_SWITCH &&
+> +                  device_property_read_bool(dwc->dev, "usb-role-switch")) {
+> +               ret = dwc3_setup_role_switch(dwc);
+> +               if (ret < 0)
+> +                       return ret;
+>         } else {
+>                 dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
+>
+>

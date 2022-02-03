@@ -2,109 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE8B4A8C23
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47E04A8C2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 20:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353650AbiBCTEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 14:04:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21842 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237541AbiBCTEV (ORCPT
+        id S1353663AbiBCTFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 14:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353655AbiBCTFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 14:04:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643915061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8WFk5VazJGj78aF3vcRFOwWn7//j5v/p/zsICay1c+U=;
-        b=OmCKu02w5dUeLpKhZoqXqtl4B04ntFeX4HXfTwitkdTUYU6O3llgreP79mxem9eSQWvJgc
-        7fNIPj8OHRkwPK62ZTDvkQ0Ho+gnvQszVWo9JUa5t4TQmo3GqrX51crqoRhD3pqLwaFE1k
-        lYhg2GOxIqHna57DIIBjnrfGnvXXS4s=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-544-1_xSlXEUNfiENHGx0Rm0IQ-1; Thu, 03 Feb 2022 14:04:18 -0500
-X-MC-Unique: 1_xSlXEUNfiENHGx0Rm0IQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A074518B613D;
-        Thu,  3 Feb 2022 19:04:15 +0000 (UTC)
-Received: from [10.22.8.80] (unknown [10.22.8.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 747A75D6BA;
-        Thu,  3 Feb 2022 19:03:59 +0000 (UTC)
-Message-ID: <3f042edb-3769-afea-17a7-899578cd5c69@redhat.com>
-Date:   Thu, 3 Feb 2022 14:03:58 -0500
+        Thu, 3 Feb 2022 14:05:47 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6979DC06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 11:05:46 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id g18so6543044wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 11:05:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ayc+KckUjHogrth329rI08TVrImsvzuWQkvoQQVorg8=;
+        b=su7BwaaLoW/dbPV3DhDrnkjZzLh8b/6lHm9Y8viqivXW5Y797h9vq5hTHNLyru1jZ5
+         BrJlFQp5F2rUN/gM6gTzWovi4vTrAFtE3nAGfUA8eElYTaUARNE1Gojm8/KqRv+2bilq
+         8yiuy6Kj8aamS5/XKK058PD5l4wO8dXR5Cj0Zuzn/6pXvsQcQA2zNyAL4D8VkXZdy3b2
+         vx5JeM+m7LMo3DWy9ZWxmwwb1dLWwi3Ls47ck01CuJi+tkqv4aC84gFHuHbQbmtRwaJZ
+         z589SPk0vIdBQ0sQ2tAm7U64LNSKLNkIN2e8unFNhMvGMEk+O5s3avM8nAXElzmownAW
+         qt2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ayc+KckUjHogrth329rI08TVrImsvzuWQkvoQQVorg8=;
+        b=mNRjQdgpyeYCaCOPtb2sZLMwAcb7RoN/alrXF5mgzRJfLgX1TMJ/UfXiRd3i8lmiu9
+         /CzXYZskXSp7XCwbymRXQA+0WeIHeGCiORHM5L2IUAxhdZfVpPziS9mOo4GBUbsYlsk2
+         SSIeJ8qmEOZEuWowaK9bhG3iNaaqOnyYXQ7DzNSMQI/wkCSAJDPCblHMVgTnG0OYZUgN
+         wvAkBNgzi5h5m7uU3xWcOjVmxRpd6cLOGM7Q2x97Z7S9hmQKMCOUnA9/aqc2pqvfG7Tq
+         YBSyrO92jiEIYcJTPFYk0U+T9Q5bkaJERo8LZHzESOv9F2Tm5m3UCKe3in3ue2W5BuXw
+         hgcA==
+X-Gm-Message-State: AOAM533cShtiyUU8/PTh1WGYKhyrZW5il9ZgPKw/FrVg3icEN6oBKC1Q
+        H+MTbp0VmHLwjd3qV+W1JK7qpw==
+X-Google-Smtp-Source: ABdhPJyrXZArUx3lcTsF9Q6/Aj7bpMcM2ye9IL4/navesPwwS3QKmqJIPTp42tiaQ7hPYW/HKMk0WA==
+X-Received: by 2002:a5d:4390:: with SMTP id i16mr21224387wrq.516.1643915144955;
+        Thu, 03 Feb 2022 11:05:44 -0800 (PST)
+Received: from ?IPv6:2a02:6b6d:f804:0:28c2:5854:c832:e580? ([2a02:6b6d:f804:0:28c2:5854:c832:e580])
+        by smtp.gmail.com with ESMTPSA id p13sm20170322wrx.86.2022.02.03.11.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 11:05:44 -0800 (PST)
+Subject: Re: [External] Re: [PATCH v4 2/3] io_uring: avoid ring quiesce while
+ registering/unregistering eventfd
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220203182441.692354-1-usama.arif@bytedance.com>
+ <20220203182441.692354-3-usama.arif@bytedance.com>
+ <8369e0be-f922-ba6b-ceed-24886ebcdb78@kernel.dk>
+From:   Usama Arif <usama.arif@bytedance.com>
+Message-ID: <d390f325-0f5b-a321-841d-36ac873358f9@bytedance.com>
+Date:   Thu, 3 Feb 2022 19:05:44 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v4 3/4] mm/page_owner: Print memcg information
+In-Reply-To: <8369e0be-f922-ba6b-ceed-24886ebcdb78@kernel.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <guro@fb.com>, Rafael Aquini <aquini@redhat.com>
-References: <20220131192308.608837-5-longman@redhat.com>
- <20220202203036.744010-4-longman@redhat.com>
- <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YfvOp5VXrxy9IW1w@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 07:46, Michal Hocko wrote:
-> On Wed 02-02-22 15:30:35, Waiman Long wrote:
-> [...]
->> +#ifdef CONFIG_MEMCG
->> +	unsigned long memcg_data;
->> +	struct mem_cgroup *memcg;
->> +	bool online;
->> +	char name[80];
+
+
+On 03/02/2022 18:49, Jens Axboe wrote:
+> On 2/3/22 11:24 AM, Usama Arif wrote:
+>> -static inline bool io_should_trigger_evfd(struct io_ring_ctx *ctx)
+>> +static void io_eventfd_signal(struct io_ring_ctx *ctx)
+>>   {
+>> -	if (likely(!ctx->cq_ev_fd))
+>> -		return false;
+>> +	struct io_ev_fd *ev_fd;
 >> +
 >> +	rcu_read_lock();
->> +	memcg_data = READ_ONCE(page->memcg_data);
->> +	if (!memcg_data)
->> +		goto out_unlock;
+>> +	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking and eventfd_signal */
+>> +	ev_fd = rcu_dereference(ctx->io_ev_fd);
 >> +
->> +	if (memcg_data & MEMCG_DATA_OBJCGS)
->> +		ret += scnprintf(kbuf + ret, count - ret,
->> +				"Slab cache page\n");
+>> +	if (likely(!ev_fd))
+>> +		goto out;
+>>   	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+>> -		return false;
+>> -	return !ctx->eventfd_async || io_wq_current_is_worker();
+>> +		goto out;
 >> +
->> +	memcg = page_memcg_check(page);
->> +	if (!memcg)
->> +		goto out_unlock;
+>> +	if (!ctx->eventfd_async || io_wq_current_is_worker())
+>> +		eventfd_signal(ev_fd->cq_ev_fd, 1);
 >> +
->> +	online = (memcg->css.flags & CSS_ONLINE);
->> +	cgroup_name(memcg->css.cgroup, name, sizeof(name));
-> Is there any specific reason to use another buffer allocated on the
-> stack? Also 80B seems too short to cover NAME_MAX.
->
-> Nothing else jumped at me.
+>> +out:
+>> +	rcu_read_unlock();
+>>   }
+> 
+> This still needs what we discussed in v3, something ala:
+> 
+> /*
+>   * This will potential race with eventfd registration, but that's
+>   * always going to be the case if there is IO inflight while an eventfd
+>   * descriptor is being registered.
+>   */
+> if (!rcu_dereference_raw(ctx->io_ev_fd))
+> 	return;
+> 
+> rcu_read_lock();
 
-I suppose we can print directly into kbuf with cgroup_name(), but using 
-a separate buffer is easier to read and understand. 79 characters should 
-be enough for most cgroup names. Some auto-generated names with some 
-kind of embedded uuids may be longer than that, but the random sequence 
-of hex digits that may be missing do not convey much information for 
-identification purpose. We can always increase the buffer length later 
-if it turns out to be an issue.
+Hmm, so i am not so worried about the registeration, but actually 
+worried about unregisteration.
+If after the check and before the rcu_read_lock, the eventfd is 
+unregistered won't we get a NULL pointer exception at 
+eventfd_signal(ev_fd->cq_ev_fd, 1)?
 
-Cheers,
-Longman
+I guess checking for NULL twice would work, so something like this is ok 
+then?
 
+static void io_eventfd_signal(struct io_ring_ctx *ctx)
+{
+	struct io_ev_fd *ev_fd;
+
+	/* Return quickly if ctx->io_ev_fd doesn't exist */
+	if (likely(!rcu_dereference_raw(ctx->io_ev_fd)))
+		return;
+
+	rcu_read_lock();
+	/* rcu_dereference ctx->io_ev_fd once and use it for both for checking 
+and eventfd_signal */
+	ev_fd = rcu_dereference(ctx->io_ev_fd);
+
+	/*
+	 * Check again if ev_fd exists incase an io_eventfd_unregister call 
+completed between
+	 * the NULL check of ctx->io_ev_fd at the start of the function and 
+rcu_read_lock.
+	 */
+	if (unlikely(!ev_fd))
+		goto out;
+	if (READ_ONCE(ctx->rings->cq_flags) & IORING_CQ_EVENTFD_DISABLED)
+		goto out;
+
+	if (!ev_fd->eventfd_async || io_wq_current_is_worker())
+		eventfd_signal(ev_fd->cq_ev_fd, 1);
+
+out:
+	rcu_read_unlock();
+}
+
+
+> ...
+> 
+> which I think is cheap enough and won't hit sparse complaints. The
+> 
+>> @@ -9353,35 +9370,70 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+>>   
+>>   static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg)
+>>   {
+>> +	struct io_ev_fd *ev_fd;
+>>   	__s32 __user *fds = arg;
+>> -	int fd;
+>> +	int fd, ret;
+>>   
+>> -	if (ctx->cq_ev_fd)
+>> -		return -EBUSY;
+>> +	mutex_lock(&ctx->ev_fd_lock);
+>> +	ret = -EBUSY;
+>> +	if (rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock))) {
+>> +		rcu_barrier();
+>> +		if(rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock)))
+>> +			goto out;
+>> +	}
+> 
+> I wonder if we can get away with assigning ctx->io_ev_fd to NULL when we
+> do the call_rcu(). The struct itself will remain valid as long as we're
+> under rcu_read_lock() protection, so I think we'd be fine? If we do
+> that, then we don't need any rcu_barrier() or synchronize_rcu() calls,
+> as we can register a new one while the previous one is still being
+> killed.
+> 
+> Hmm?
+> 
+
+We would have to remove the check that ctx->io_ev_fd != NULL. That we 
+would also result in 2 successive calls to io_eventfd_register without 
+any unregister in between being successful? Which i dont think is the 
+right behaviour?
+
+I think the likelihood of hitting the rcu_barrier itself is quite low, 
+so probably the cost is low as well.
+
+>>   static int io_eventfd_unregister(struct io_ring_ctx *ctx)
+>>   {
+>> -	if (ctx->cq_ev_fd) {
+>> -		eventfd_ctx_put(ctx->cq_ev_fd);
+>> -		ctx->cq_ev_fd = NULL;
+>> -		return 0;
+>> +	struct io_ev_fd *ev_fd;
+>> +	int ret;
+>> +
+>> +	mutex_lock(&ctx->ev_fd_lock);
+>> +	ev_fd = rcu_dereference_protected(ctx->io_ev_fd, lockdep_is_held(&ctx->ev_fd_lock));
+>> +	if (ev_fd) {
+>> +		call_rcu(&ev_fd->rcu, io_eventfd_put);
+>> +		ret = 0;
+>> +		goto out;
+>>   	}
+>> +	ret = -ENXIO;
+>>   
+>> -	return -ENXIO;
+>> +out:
+>> +	mutex_unlock(&ctx->ev_fd_lock);
+>> +	return ret;
+>>   }
+> 
+> I also think that'd be cleaner without the goto:
+> 
+> {
+> 	struct io_ev_fd *ev_fd;
+> 	int ret;
+> 
+> 	mutex_lock(&ctx->ev_fd_lock);
+> 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+> 					lockdep_is_held(&ctx->ev_fd_lock));
+> 	if (ev_fd) {
+> 		call_rcu(&ev_fd->rcu, io_eventfd_put);
+> 		mutex_unlock(&ctx->ev_fd_lock);
+> 		return 0;
+> 	}
+> 
+> 	mutex_unlock(&ctx->ev_fd_lock);
+> 	return -ENXIO;
+> }
+> 
+Thanks, will do that this in the next patchset with the above 
+io_eventfd_signal changes if those look ok as well?

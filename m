@@ -2,64 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B1D4A9112
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1D54A9119
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355860AbiBCXTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:19:14 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43540 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiBCXTO (ORCPT
+        id S1355958AbiBCXUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233188AbiBCXUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:19:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Feb 2022 18:20:03 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932DC061714;
+        Thu,  3 Feb 2022 15:20:03 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C87C561842;
-        Thu,  3 Feb 2022 23:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4669C340E8;
-        Thu,  3 Feb 2022 23:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643930353;
-        bh=QAHuBZ+lX2RUpSHwgEocw6rmoaPtXDKxXRloyq8ZEec=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CjspKTS1bIPfibcKITrREBKeKQlZmkOykOg6E5BXy0zEwtnZIRsD4PFTz6byuzX9r
-         +lFOI56eEYmixY6vm3Qq137KAT2W9/9MD417k/Q5JaOKMvDs+3P27ZGynHSXbyEx35
-         c/dnEzqXOQRUU29oM0utwLQvmRN+owV/pen03xtc=
-Date:   Thu, 3 Feb 2022 15:19:12 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Roman Gushchin <guro@fb.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        <cgroups@vger.kernel.org>
-Subject: Re: [PATCH RESEND] mm: memcg: synchronize objcg lists with a
- dedicated spinlock
-Message-Id: <20220203151912.87d47b82c1bc3f0d56be0e3a@linux-foundation.org>
-In-Reply-To: <Yfm1IHmoGdyUR81T@carbon.dhcp.thefacebook.com>
-References: <Yfm1IHmoGdyUR81T@carbon.dhcp.thefacebook.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id AC3A83F710;
+        Fri,  4 Feb 2022 00:20:01 +0100 (CET)
+Date:   Fri, 4 Feb 2022 00:20:00 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Satya Priya Kakitapalli <c_skakit@qti.qualcomm.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Rob Herring <robh+dt@kernel.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v11 2/2] leds: Add driver for Qualcomm LPG
+Message-ID: <20220203232000.btb2qt7t6rmmnayw@SoMainline.org>
+References: <20220129005429.754727-1-bjorn.andersson@linaro.org>
+ <20220129005429.754727-2-bjorn.andersson@linaro.org>
+ <20220202111833.ibeq3udj37dkfv6l@SoMainline.org>
+ <Yfrj7DnXET6fT3BX@ripper>
+ <CAOCOHw7LS=NALXzHMN6LauEqrjDk2y27VoQtaT4tkHJiYxM7MQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOCOHw7LS=NALXzHMN6LauEqrjDk2y27VoQtaT4tkHJiYxM7MQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 14:33:04 -0800 Roman Gushchin <guro@fb.com> wrote:
+On 2022-02-02 16:08:29, Bjorn Andersson wrote:
+> On Wed, Feb 2, 2022 at 2:04 PM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Wed 02 Feb 03:18 PST 2022, Marijn Suijten wrote:
+> >
+> > > On 2022-01-28 16:54:29, Bjorn Andersson wrote:
+> > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
+> > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
+> > > > with their output being routed to various other components, such as
+> > > > current sinks or GPIOs.
+> > > >
+> > > > Each LPG instance can operate on fixed parameters or based on a shared
+> > > > lookup-table, altering the duty cycle over time. This provides the means
+> > > > for hardware assisted transitions of LED brightness.
+> > > >
+> > > > A typical use case for the fixed parameter mode is to drive a PWM
+> > > > backlight control signal, the driver therefor allows each LPG instance
+> > > > to be exposed to the kernel either through the LED framework or the PWM
+> > > > framework.
+> > > >
+> > > > A typical use case for the LED configuration is to drive RGB LEDs in
+> > > > smartphones etc, for which the driver support multiple channels to be
+> > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
+> > > > generators will be synchronized, to allow for multi-color patterns.
+> > > >
+> > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > >
+> > > Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> > >
+> > > There may still be some things to improve based on whether lo_pause
+> > > works in non-ping-pong mode - to alleviate the requirement for the first
+> > > delta_t to be at most 512ms - but this patch should not be delayed much
+> > > longer and that's perhaps for a followup patch.  Same for my request for
+> > > documentation and examples which at the same time serve as some form of
+> > > tests to see if everything works as desired.
+> > >
+> >
+> > I've been considering lopause to be the value before we start the
+> > pattern, but I think you're right in that it denotes how long we should
+> > hold the first value.
+> >
+> > So I think it might make sense in the predefined "<value> <delay> <value>
+> > <delay>" scheme to use first <delay> as to calculate lo-pause. I think
+> > it has to be calculated, because the first value will iiuc be held
+> > for (lopause + 1) * delay ms.
 
-> Alexander reported a circular lock dependency revealed by the mmap1
-> ltp test:
->   LOCKDEP_CIRCULAR (suite: ltp, case: mtest06 (mmap1))
+As mentioned in v10 that seems like a great idea, as long as we can
+carefully validate and communicate these numbers to the user; both
+through documentation and kernel error messages when values are
+ultimately rejected.
+
+Again, perhaps it might be better to postpone this to a separate
+patchset as to not block the use of LPG for backlights which is arguably
+more important than some fancy phone notification led patterns.
+
+> > > I also vaguely remember other (downstream) drivers to support more than
+> > > 512ms per step by (drastically?) changing PWM period, but not sure how
+> > > that worked again nor if it was reliable.
+> > >
+> >
+> > Thinking about it again, while 512 is the 9th bit, we should be able to
+> > represent [0..1023] with 9 bits...
+> >
 > 
-> ...
->
-> Fixes: bf4f059954dc ("mm: memcg/slab: obj_cgroup API")
+> Sorry, my mind was elsewhere as I wrote that. [0..511] is what we got.
 
-I'm thinking it needs cc:stable.  It sounds unlikely that we'll hit it
-in real life, but lockdep splats are concerning and I expect downstream
-kernel consumers will end up merging this anyway, for this reason.
+Yes, 9 bits in total and BIT(8) being the highest settable ^^
 
+- Marijn

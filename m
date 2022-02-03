@@ -2,121 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E334A9102
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E4F4A910D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 00:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355896AbiBCXMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 18:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1355951AbiBCXOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 18:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238866AbiBCXL6 (ORCPT
+        with ESMTP id S1355941AbiBCXOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 18:11:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A89C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 15:11:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Feb 2022 18:14:01 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4955C061714;
+        Thu,  3 Feb 2022 15:14:00 -0800 (PST)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D70261554
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 23:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE8BC340E8;
-        Thu,  3 Feb 2022 23:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1643929917;
-        bh=y5nr/++kCTv/1eYPXjSUtMA7ZAyuHZosRKaaT4urjdQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o1k8u9wnw7NWbcegn4kKmVKvXftbtsYgvGcVbdhl90catqBDYZn/HC8M7K7F8Z/81
-         k6dPihoih1b5Osg73DZIwTlkO3gpPS1Ok3K5RexrrpYv6PGQ7zNfKuHyEAQEK0ZOXA
-         x8ZXeA83ZDcxastoUUmmY0TiJnlEafJ5MEuZOl98=
-Date:   Thu, 3 Feb 2022 15:11:57 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Justin Forbes <jforbes@redhat.com>,
-        Rafael Aquini <aquini@redhat.com>
-Subject: Re: [PATCH v2] mm/sparsemem: Fix 'mem_section' will never be NULL
- gcc 12 warning
-Message-Id: <20220203151157.659f382c76056d883fa80ec6@linux-foundation.org>
-In-Reply-To: <20220202003550.698768-1-longman@redhat.com>
-References: <20220202003550.698768-1-longman@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 9CE603F7A0;
+        Fri,  4 Feb 2022 00:13:56 +0100 (CET)
+Date:   Fri, 4 Feb 2022 00:13:55 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+Subject: Re: [PATCH v10 2/2] leds: Add driver for Qualcomm LPG
+Message-ID: <20220203231355.i2hasweo7db74rfm@SoMainline.org>
+References: <20211010043912.136640-1-bjorn.andersson@linaro.org>
+ <20211010043912.136640-2-bjorn.andersson@linaro.org>
+ <YXL0DyyPkS4/wfB7@ripper>
+ <20211027211928.tjybwy2lokj6eoun@SoMainline.org>
+ <YfSPYkbTXMOUGKkG@yoga>
+ <20220202110305.gbow3e3stolb67v5@SoMainline.org>
+ <Yfr9+jvGIyB2ynMS@ripper>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yfr9+jvGIyB2ynMS@ripper>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  1 Feb 2022 19:35:50 -0500 Waiman Long <longman@redhat.com> wrote:
+On 2022-02-02 13:56:10, Bjorn Andersson wrote:
+> On Wed 02 Feb 03:03 PST 2022, Marijn Suijten wrote:
+> 
+> > On 2022-01-28 18:50:42, Bjorn Andersson wrote:
+> > > On Wed 27 Oct 16:19 CDT 2021, Marijn Suijten wrote:
+> > > 
+> > > > Hi Bjorn,
+> > > > 
+> > > > On 2021-10-22 10:25:35, Bjorn Andersson wrote:
+> > > > > On Sat 09 Oct 21:39 PDT 2021, Bjorn Andersson wrote:
+> > > > > 
+> > > > > > The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
+> > > > > > PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
+> > > > > > with their output being routed to various other components, such as
+> > > > > > current sinks or GPIOs.
+> > > > > > 
+> > > > > > Each LPG instance can operate on fixed parameters or based on a shared
+> > > > > > lookup-table, altering the duty cycle over time. This provides the means
+> > > > > > for hardware assisted transitions of LED brightness.
+> > > > > > 
+> > > > > > A typical use case for the fixed parameter mode is to drive a PWM
+> > > > > > backlight control signal, the driver therefor allows each LPG instance
+> > > > > > to be exposed to the kernel either through the LED framework or the PWM
+> > > > > > framework.
+> > > > > > 
+> > > > > > A typical use case for the LED configuration is to drive RGB LEDs in
+> > > > > > smartphones etc, for which the driver support multiple channels to be
+> > > > > > ganged up to a MULTICOLOR LED. In this configuration the pattern
+> > > > > > generators will be synchronized, to allow for multi-color patterns.
+> > > > > > 
+> > > > > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > > > ---
+> > > > > 
+> > > > > Any feedback on this?
+> > > > 
+> > > > I asked in #linux-msm whether anything is wrong with the patterns,
+> > > > since my Sony Discovery (sdm630 with a pm660l) blinks way quicker on a
+> > > > pattern that's supposed to stay on for 1s and off for 1s:
+> > > > 
+> > > >     echo "0 1000 255 1000" > /sys/class/leds/rgb\:status/hw_pattern
+> > > > 
+> > > > It however seems to be broken in the same way on an older version now
+> > > > (this might be v9 or v8) which I don't remember to be the case.  Can you
+> > > > double-check if this is all working fine on your side?  If so, I'll have
+> > > > to find some time to debug it on my end.
+> > > > 
+> > > 
+> > > I had missed the fact that LPG_RAMP_DURATION_REG is two registers for
+> > > msg and lsb, for a total of 9 bits of duration. So what you saw was
+> > > probably ticking at 232ms.
+> > > 
+> > > Note though that the pattern uses the last time as "high pause", so I
+> > > expect that you should have seen 232 ms of off, followed by 464ms of
+> > > light.
+> > 
+> > Visual inspection seems to confirm those numbers indeed!
+> > 
+> > > I've fixed this for v11, both rejecting invalid input and writing out
+> > > all 9 bits.
+> > 
+> > Doesn't that 512ms limit, together with using only the last value for
+> > hi_pause (and not the first value for lo_pause) force users to write
+> > patterns in a certain way which is not easily conveyed to the caller
+> > except by reading the comment in the driver?  I'd guess lo_pause can be
+> > used even if not in ping-pong mode, it should just hold at the first
+> > value for the given duration?
+> > 
+> > (That said hw_pattern is anyway already riddled with device-specific
+> > information, such as only having one `delta_t` which functions as the
+> > step size for every entry, and with the change above would need to be
+> > sourced from another step that's not the first.)
+> > 
+> 
+> Perhaps we should clarify the single delta_t by requiring all those
+> delta_t to be the same, rather than ignoring their value.
+> 
+> I.e. we make the ping-pong pattern:
+> 
+> <value> <lopause+t> ... <value[N/2-1]> <t> <value[N/2]> <hipause+t> <value[N/2-1]> <t> ... <value> <t>
+> 
+> And for non-ping-pong:
+> 
+> <value> <lopause+t> <value> <t> ... <value> <t> <value> <hipause + t>
+> 
+> 
+> What do you think?
 
-> The gcc 12 compiler reports a "'mem_section' will never be NULL"
-> warning on the following code:
-> 
->     static inline struct mem_section *__nr_to_section(unsigned long nr)
->     {
->     #ifdef CONFIG_SPARSEMEM_EXTREME
->         if (!mem_section)
->                 return NULL;
->     #endif
->         if (!mem_section[SECTION_NR_TO_ROOT(nr)])
->                 return NULL;
->        :
-> 
-> It happens with both CONFIG_SPARSEMEM_EXTREME on and off. The mem_section
-> definition is
-> 
->     #ifdef CONFIG_SPARSEMEM_EXTREME
->     extern struct mem_section **mem_section;
->     #else
->     extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
->     #endif
-> 
-> In the CONFIG_SPARSEMEM_EXTREME case, mem_section obviously cannot
-> be NULL, but *mem_section can be if memory hasn't been allocated for
-> the dynamic mem_section[] array yet. In the !CONFIG_SPARSEMEM_EXTREME
-> case, mem_section is a static 2-dimensional array and so the check
-> "!mem_section[SECTION_NR_TO_ROOT(nr)]" doesn't make sense.
-> 
-> Fix this warning by checking for "!*mem_section" instead of
-> "!mem_section" and moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-> check up inside the CONFIG_SPARSEMEM_EXTREME block.
-> 
-> ...
->
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1390,11 +1390,9 @@ static inline unsigned long *section_to_usemap(struct mem_section *ms)
->  static inline struct mem_section *__nr_to_section(unsigned long nr)
->  {
->  #ifdef CONFIG_SPARSEMEM_EXTREME
-> -	if (!mem_section)
-> +	if (!*mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
->  		return NULL;
->  #endif
-> -	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-> -		return NULL;
->  	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
->  }
->  extern size_t mem_section_usage_size(void);
+Seems like a good idea, though we'll have to be careful to communicate
+this lopause+t value for the first entry and hipause+t for the
+middle/last (through a dev_err I suppose) in case we reject values that
+don't strictly adhere to this math.
 
-What does the v1->v2 change do?
+> > Bit of a stretch, but perhaps worth noting anyway: should this be
+> > written in documentation somewhere, together with pattern examples and
+> > their desired outcome to function as testcases too?
+> > 
+> 
+> There's a comment in lpg_pattern_set() where I tried to capture this.
+> 
+> I don't think it's worth documenting the behavior/structure away from
+> the driver. But let's make sure it's captured properly there.
 
---- a/include/linux/mmzone.h~mm-sparsemem-fix-mem_section-will-never-be-null-gcc-12-warning-v2
-+++ a/include/linux/mmzone.h
-@@ -1390,11 +1390,9 @@ static inline unsigned long *section_to_
- static inline struct mem_section *__nr_to_section(unsigned long nr)
- {
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!*mem_section)
-+	if (!*mem_section || !mem_section[SECTION_NR_TO_ROOT(nr)])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
- 	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
- }
- extern size_t mem_section_usage_size(void);
-_
+I've seen two other dirvers document the hw_pattern sysfs property under
+Documentation/leds/.  Should be easier to find than a comment inside the
+respective function deep in the kernel source tree I presume?
 
+Quoting Documentation/ABI/testing/sysfs-class-led-trigger-pattern for
+this sysfs property:
+
+    Since different LED hardware can have different semantics of
+    hardware patterns, each driver is expected to provide its own
+    description for the hardware patterns in their documentation
+    file at Documentation/leds/.
+
+Doesn't need to be anything long, copying your inline comment would be a
+great start.  Thanks!
+
+- Marijn

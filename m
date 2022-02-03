@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228F14A7CA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641354A7CB6
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 01:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348439AbiBCASj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 19:18:39 -0500
-Received: from mga07.intel.com ([134.134.136.100]:5723 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231139AbiBCASh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 19:18:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643847517; x=1675383517;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2V7WLsE4s918o+I//9rNfEzJ+J9+iEhI0GaFW6TGdDk=;
-  b=GoAMik7OGtaJwStNj0lN0XmOtSdey3ipbNwH0odrNG62lCBNnRGPvHup
-   TQcW66QBinBQIF0VZCv0smbGtEfr1dOiu8oyGFsSblLP55gTbbvpTlGQ6
-   OGFIknxaUMl8cVOBKh/3AYc6m6RNpAt792UEkyNMForx98O2Vha9QQygC
-   LWaf8W0MFv6DpOggxDsLh4dHjkavkfrG2pauGA9V76bVyng/Dd4vNJeHf
-   sgtpkRQN53vb3e17IJ/FuIAaua9OViGG2lyEz2GjoxrUFL3qv+n7EelIf
-   pyde+30t3oGyw31n5102/5blRacebUJ9HRIjFA1Yh7/iwl1VTT661tMow
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="311352324"
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="311352324"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2022 16:18:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,338,1635231600"; 
-   d="scan'208";a="676614833"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2022 16:18:35 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFPpa-000VJV-CO; Thu, 03 Feb 2022 00:18:34 +0000
-Date:   Thu, 3 Feb 2022 08:18:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Kris Van Hees <kris.van.hees@oracle.com>,
-        Tomas Jedlicka <tomas.jedlicka@oracle.com>,
-        Eugene Loh <eugene.loh@oracle.com>,
-        David Mc Lean <david.mclean@oracle.com>,
-        Vincent Lim <vincent.lim@oracle.com>
-Subject: [oracle-dtrace:v2/5.17-rc2 8/10] <stdin>:1565:2: warning: #warning
- syscall waitfd not implemented
-Message-ID: <202202030843.Dam4hL3o-lkp@intel.com>
+        id S241413AbiBCAUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 19:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231552AbiBCAUs (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 2 Feb 2022 19:20:48 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBFCC061714;
+        Wed,  2 Feb 2022 16:20:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OOrfViPvQd6vr9ujkWDbCGEeKRArHhUsuzeY4LNzfbM=; b=1IkokUMg1aa7gqNGqbkfZhNWiz
+        Qq2ai47LiSPEzoQww1XPI7+Fr3CuAn2xpNlIopkuTHLHg9xLRCU8FwMkfAdVANtCfXb9gnBOademN
+        UCfJpOjl0q7a0s7j6OtOJnfR4Fi6kaLiW016LWUx9wYm1wbGt/6almFI64eBtFiN4QBuAAsr9Ch89
+        Pw+OSzd3Qg1IQJNVm2+kBlPkeha7iJajQgrJI0Vz307Vh+tFtUHcoJb5pFRk/hytQ+oq4y6kHOtjE
+        /gOFC7/ilcQEwWaV8WImpcjHRXfxkZkVy15VWd1CI9V7nrUd/cfaFP0B+aVuXUCueQecS67VN3vhS
+        /pkj5+GQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nFPrd-00H9Oq-3Z; Thu, 03 Feb 2022 00:20:41 +0000
+Date:   Wed, 2 Feb 2022 16:20:41 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Aaron Tomlin <atomlin@redhat.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michal Suchanek <msuchanek@suse.de>
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, atomlin@atomlin.com,
+        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
+        joe@perches.com
+Subject: Re: [RFC PATCH v4 00/13] module: core code clean up
+Message-ID: <Yfsf2SGELhQ71Ovo@bombadil.infradead.org>
+References: <20220130213214.1042497-1-atomlin@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220130213214.1042497-1-atomlin@redhat.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/oracle/dtrace-linux-kernel v2/5.17-rc2
-head:   28b391e36df8679828aedd18dae0ee5526512d4d
-commit: 83f02cf9b0ce18b6a27d34c6a25933791779e807 [8/10] waitfd: new syscall implementing waitpid() over fds
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220203/202202030843.Dam4hL3o-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/oracle/dtrace-linux-kernel/commit/83f02cf9b0ce18b6a27d34c6a25933791779e807
-        git remote add oracle-dtrace https://github.com/oracle/dtrace-linux-kernel
-        git fetch --no-tags oracle-dtrace v2/5.17-rc2
-        git checkout 83f02cf9b0ce18b6a27d34c6a25933791779e807
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 prepare
+On Sun, Jan 30, 2022 at 09:32:01PM +0000, Aaron Tomlin wrote:
+> Hi Luis,
+> 
+> As per your suggestion [1], this is an attempt to refactor and split
+> optional code out of core module support code into separate components.
+> This version is based on branch mcgrof/modules-next since a97ac8cb24a3/or
+> modules-5.17-rc1. Please let me know your thoughts.
+> 
+> Changes since v1 [2]:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for all this work Aaron! Can you drop the RFC prefix,
+rebase onto linus' latest tree (as he already merged my
+modules-next, so his tree is more up to date), and submit again?
 
-All warnings (new ones prefixed by >>):
+I'll then apply this to my modules-next, and then ask Christophe to
+rebase on top of that.
 
->> <stdin>:1565:2: warning: #warning syscall waitfd not implemented [-Wcpp]
---
->> <stdin>:1565:2: warning: #warning syscall waitfd not implemented [-Wcpp]
---
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
->> <stdin>:1565:2: warning: #warning syscall waitfd not implemented [-Wcpp]
+Michal, you'd be up next if you want to go through modules-next.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Aaron, please Cc Christophe and Michal on your next respin.
+
+Thanks!!
+
+  Luis

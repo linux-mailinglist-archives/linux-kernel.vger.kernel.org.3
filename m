@@ -2,113 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BCA4A7D3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98AE4A7D40
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348759AbiBCBHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S1348764AbiBCBIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239803AbiBCBHk (ORCPT
+        with ESMTP id S1348761AbiBCBH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:07:40 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1037CC06173E;
-        Wed,  2 Feb 2022 17:07:40 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id e81so1662733oia.6;
-        Wed, 02 Feb 2022 17:07:40 -0800 (PST)
+        Wed, 2 Feb 2022 20:07:58 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43282C06173B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 17:07:58 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id b2-20020a252e42000000b00619593ff8ddso2786385ybn.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 17:07:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3/2gr7P7TIioSsDPZqtUEHSC/S0NWVJIhuBQUzqg5s8=;
-        b=n9WlvJIYgvnX5s9E2Jwr/ZPDLPuRFfX3txro5PAcZTzBjBh0xUsP8cPSVLQ/pQ6ESt
-         uQ5JMbpx7srsQ1m3zPmv2LdQVFGhqAVMbluoK2+Lu9BjrEg3KnwXdxCDtTCinJQUUg2e
-         OvJg7W9ExztLW0R4M0wsdRENlZTxqVkoGf3qvQXozC4WdGO1hRToBOoOkJrnlhlPbfiZ
-         3NoXmk3WVZvrMV0794ZbVKexYgfoESZPoe5t80LEHEuqShhI//Bltoo8HSBTAFYzlLFM
-         91dn4kzlMX/UrbOyZ9CeVAlpyDonFUmTD2lDGihP31yZM4u9lHywW0Slsk4bu1j+7Lw1
-         SxHw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=WTSM/Ey8czEzcwGcL51YHkWEcToZ/GKdI9Mm0emyAmc=;
+        b=V2vKILSsWMvJ2qw/+k4HIkIrxtEnW+re9aBErBDOdPH+M9Z1/P+/XTVyfbnk+QAlvs
+         gPXT5qlGN8V91uIwlJgQIKvrrq6RZwrIMbVodE2Fw4AukWtaqQUXGxa9/PJtn9Sa/sO+
+         O6VYchWGl1lBrFEYKfC4zXTi0jkI2o6DUQiiTNVz0Q0MM1c4oaKKNcv2u4dArGaS3QDx
+         M+WL0R4iDd6YdDV6GeucvB5jETdQ03sMcdfX1JxD4O/kKzFJ5DgHkmmQgSQNKToeF8Gf
+         b54ce+2HjwPokDuylzA4/xO4N3UHJBT9jll1PxPihnDfiChcwmnXlxHvc5hWsA020rTw
+         +4Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3/2gr7P7TIioSsDPZqtUEHSC/S0NWVJIhuBQUzqg5s8=;
-        b=I9Xg7Qtp1uNvZTFMm10JSAWRY8hrTdv6s5NMCxXOpH0Xc/9CJ7+hLz91V8QmAW77zo
-         0hKy7Q+9Vj9celRJlVO4si/ik8pmN6b45bZHKVMeUDlvnyKmAcex8AaN/3ssUExEQmGT
-         K9iMbGKmViSxK1l69vt602Ij/YojqjDbZGMZEXPQ+Dr0CNqpFl/GpXR8C1ZfFw4jv+6d
-         Ja4XmguKcJpppE4XFw9Q6Nl1S4Zw9Can/x9mlmfRRPymESuGfNOxpMFFsEHlPVUdGxNe
-         dQD/ePPLShSfDzbtfTswrSnvu3uktmGSFVPwlGQOyYlRl1dsC5TSt7CsKmSEvd41aR1O
-         tXKw==
-X-Gm-Message-State: AOAM532NmX5e1ejTePK8PJaMGbrmNA3EbT4J/T2xqhe/u3DssArHQtq8
-        WZBST2pFoOkKlb238OA9Tdw=
-X-Google-Smtp-Source: ABdhPJxv07d1xSlLJoA8oCdawgQbico73dhVB2TOBe+Cu76BVRLpQ2jagVv5QaP8K81yyFA+0SLWsw==
-X-Received: by 2002:a05:6808:d4f:: with SMTP id w15mr6402342oik.42.1643850459390;
-        Wed, 02 Feb 2022 17:07:39 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m26sm15033837ooa.36.2022.02.02.17.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 17:07:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Feb 2022 17:07:37 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yizhuo Zhai <yzhai003@ucr.edu>
-Cc:     Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zheyu Ma <zheyuma97@gmail.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] fbdev: fbmem: Fix the implicit type casting
-Message-ID: <20220203010737.GB2544812@roeck-us.net>
-References: <f3b28143-5f59-ad77-f2b8-6274a6edbfdc@roeck-us.net>
- <20220202235811.1621017-1-yzhai003@ucr.edu>
- <20220202235811.1621017-2-yzhai003@ucr.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202235811.1621017-2-yzhai003@ucr.edu>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=WTSM/Ey8czEzcwGcL51YHkWEcToZ/GKdI9Mm0emyAmc=;
+        b=hpdUx2hoWBilnyh8OaGmQxv/OB29PdaAH1S0kWeHPQKCHIS7WM8cjaH5bpkQVkKALc
+         IwRRrX4k/RoKaWZzHcCSCEXyj/Tpfb3liBPwO5+NkrIj81qUcuEJgvsM2oxtLFKs6kGv
+         BNVpaUUNvPq36Hxdd/1iWPqUx/aiFv7R1gZhtJUftE9FeZFOtN5FsVYGqVjUHqzt9NWi
+         DqqdsHHk9EHbvBDs0eUFu3iNxXpVLGWS0tTx+DUz1nGqAylr122p84ersMxoc0fP7T7z
+         VbYaE4wkPlhgDQPtPoQ2RPyUXGwm6NPuHzi0+KfF4iq7eQw8ktL15n3CyqMsqzFSjbem
+         TQMQ==
+X-Gm-Message-State: AOAM532E75sF/+Kr4pgWCMedft0NQGuZwWCX+PdF89nuMwdCqkk9kynh
+        yDdEfnouc6ijmuiQEgHnhpw33yIAIRUt
+X-Google-Smtp-Source: ABdhPJxksByH6JrfNz5aNFppOFUEclCDmfrNryMqeH5lKtX5axXHHiWG5QnrHZMjzBMj+CZMLiVaQ9cbnoGr
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:adf2:a985:b1bf:dcb8])
+ (user=irogers job=sendgmr) by 2002:a81:18c2:: with SMTP id
+ 185mr2720805ywy.150.1643850477407; Wed, 02 Feb 2022 17:07:57 -0800 (PST)
+Date:   Wed,  2 Feb 2022 17:07:46 -0800
+Message-Id: <20220203010746.610494-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
+Subject: [PATCH] perf metrics: Add literal for system TSC frequency
+From:   Ian Rogers <irogers@google.com>
+To:     vineet.singh@intel.com, perry.taylor@intel.com,
+        caleb.biggers@intel.com, asaf.yaffe@intel.com,
+        kshipra.bopardikar@intel.com,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 03:58:09PM -0800, Yizhuo Zhai wrote:
-> In function do_fb_ioctl(), the "arg" is the type of unsigned long,
-> and in "case FBIOBLANK:" this argument is casted into an int before
-> passig to fb_blank(). In fb_blank(), the comparision
-> if (blank > FB_BLANK_POWERDOWN) would be bypass if the original
-> "arg" is a large number, which is possible because it comes from
-> the user input. Fix this by adding the check before the function
-> call.
-> 
-> Signed-off-by: Yizhuo Zhai <yzhai003@ucr.edu>
+Such a literal is useful to calculate things like the average frequency
+[1]. The TSC frequency isn't exposed by sysfs although some experimental
+drivers look to add it [2]. This change computes the value using the
+frequency in /proc/cpuinfo which is accruate at least on Intel
+processors.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+[1] https://github.com/intel/perfmon-metrics/blob/5ad9ef7056f31075e8178b9f1fb732af183b2c8d/SKX/metrics/perf/skx_metric_perf.json#L11
+[2] https://github.com/trailofbits/tsc_freq_khz
 
-On a side note, change logs would be useful.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/expr.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-Guenter
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index 675f318ce7c1..7ad01ed57025 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -402,6 +402,43 @@ double expr_id_data__source_count(const struct expr_id_data *data)
+ 	return data->val.source_count;
+ }
+ 
++/*
++ * Derive the TSC frequency in Hz from the /proc/cpuinfo, for example:
++ * ...
++ * model name      : Intel(R) Xeon(R) Gold 6154 CPU @ 3.00GHz
++ * ...
++ * will return 3000000000.
++ */
++static double system_tsc_freq(void)
++{
++	double result = NAN;
++	FILE *cpuinfo;
++	char *line = NULL;
++	size_t len = 0;
++
++	cpuinfo = fopen("/proc/cpuinfo", "r");
++	if (!cpuinfo)
++		return NAN;
++
++	while (getline(&line, &len, cpuinfo) > 0) {
++		if (!strncmp(line, "model name", 10)) {
++			char *pos = line + 11;
++
++			while (*pos != '@')
++				pos++;
++			if (sscanf(pos, " %lfGHz", &result) == 1) {
++				result *= 1000000000;
++				goto out;
++			}
++		}
++	}
++
++out:
++	free(line);
++	fclose(cpuinfo);
++	return result;
++}
++
+ double expr__get_literal(const char *literal)
+ {
+ 	static struct cpu_topology *topology;
+@@ -417,6 +454,11 @@ double expr__get_literal(const char *literal)
+ 		goto out;
+ 	}
+ 
++	if (!strcasecmp("#system_tsc_freq", literal)) {
++		result = system_tsc_freq();
++		goto out;
++	}
++
+ 	/*
+ 	 * Assume that topology strings are consistent, such as CPUs "0-1"
+ 	 * wouldn't be listed as "0,1", and so after deduplication the number of
+-- 
+2.35.0.rc2.247.g8bbb082509-goog
 
-> ---
->  drivers/video/fbdev/core/fbmem.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-> index 0fa7ede94fa6..13083ad8d751 100644
-> --- a/drivers/video/fbdev/core/fbmem.c
-> +++ b/drivers/video/fbdev/core/fbmem.c
-> @@ -1160,6 +1160,8 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
->  		ret = fbcon_set_con2fb_map_ioctl(argp);
->  		break;
->  	case FBIOBLANK:
-> +		if (arg > FB_BLANK_POWERDOWN)
-> +			return -EINVAL;
->  		console_lock();
->  		lock_fb_info(info);
->  		ret = fb_blank(info, arg);
-> -- 
-> 2.25.1
-> 

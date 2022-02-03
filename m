@@ -2,178 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6FC4A8723
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2504E4A8729
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 16:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351582AbiBCO6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiBCO6A (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:58:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4A8C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 06:57:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87F9AB8347E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:57:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C5AC340E4;
-        Thu,  3 Feb 2022 14:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643900277;
-        bh=Ks22gSDrqIChyIuOe9jWB9tU+82I1HQzBzexKQlVy+8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JiUudjs7lQELou29GEr4Y4qUOJ4Iq1wQIofGnGMVh96xtnGl2EJqKneLGsCkOTKA9
-         Vo9BG5fq69h6dcO3Qw/ahzAo7ZjjenKpHhizHDR34CJt1l/rlIqtywMNf2E/gSYAlX
-         dulwcQMyLD04D6QiOdbyZ932Xbt2QuYeqkWUsvUgtCCwYQ2dzRfPEhmucGEXRCW9rC
-         k/cJHweuE4GUA1p/ecYFGI9EDziHQABlhYa1KJR1QdtD0Q+zET0kxJ6pevGG2jhDcb
-         BhLeFhW8AMBJSNdze9p8UW6GssNQTWEmHao/L/zjQWfTerolD5AvIVo+5aH+/O69EL
-         AymmI2cRK/o1Q==
-Message-ID: <86a175d3-c438-505b-1dbc-4ef6e8b5adcb@kernel.org>
-Date:   Thu, 3 Feb 2022 22:57:51 +0800
+        id S1351586AbiBCPAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 10:00:17 -0500
+Received: from mga03.intel.com ([134.134.136.65]:53916 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236285AbiBCPAQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:00:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643900416; x=1675436416;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/wqGST5cVZHtdkOvgNEKxHP5ekD0HZLCqxuIjRXXfUE=;
+  b=Ikr6TeJvnQElb7rTRF+w6ascxX74O1eum/CuK/LJrAIA69PDDzhHLtiR
+   /dLsDLjvu4gQ1fQvuvTcwYvgqEUlgrXgKseRMRV0iRRf3f9zLYSxsRa4g
+   C74ziBAcScHert/uyygjM4dYLaStwXmIlyPRcTmZ59MII8CN0cJxrnYI5
+   SMApOo/fPnnobA4Hd3mwSNPFDv0zaTeoUSj1zzdDG6bSLsG0TJnutU9Uj
+   wasSLYC93S0Q3hf9oP/MHwMdfCrEXQFKDN07ZMS4GtjFMvQ1IbFdANfCc
+   Rf5GulX07LHe+M39SHkkN6/LnFSE4mpqi9vFQvazxV3mWd8ZtfokABrAD
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248110077"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="248110077"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:00:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="583810293"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Feb 2022 07:00:13 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 0FD9630A; Thu,  3 Feb 2022 17:00:27 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v1 1/1] serial: 8250_pericom: Revert "Re-enable higher baud rates"
+Date:   Thu,  3 Feb 2022 17:00:26 +0200
+Message-Id: <20220203150026.19087-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] f2fs: fix to avoid potential deadlock
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
-        Jing Xia <jing.xia@unisoc.com>
-References: <20220127054449.24711-1-chao@kernel.org>
- <YfMVxzdhat01ca7m@google.com>
- <e434b0a4-a66a-eebc-cafc-f0bad03c3fa5@kernel.org>
- <YfSMMpj2GrYXAJK2@google.com>
- <51be77f1-6e85-d46d-d0d3-c06d2055a190@kernel.org>
- <Yfs1KRgwgzSOvocR@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Yfs1KRgwgzSOvocR@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/3 9:51, Jaegeuk Kim wrote:
-> On 01/29, Chao Yu wrote:
->> On 2022/1/29 8:37, Jaegeuk Kim wrote:
->>> On 01/28, Chao Yu wrote:
->>>> On 2022/1/28 5:59, Jaegeuk Kim wrote:
->>>>> On 01/27, Chao Yu wrote:
->>>>>> Quoted from Jing Xia's report, there is a potential deadlock may happen
->>>>>> between kworker and checkpoint as below:
->>>>>>
->>>>>> [T:writeback]				[T:checkpoint]
->>>>>> - wb_writeback
->>>>>>     - blk_start_plug
->>>>>> bio contains NodeA was plugged in writeback threads
->>>>>
->>>>> I'm still trying to understand more precisely. So, how is it possible to
->>>>> have bio having node write in this current context?
->>>>
->>>> IMO, after above blk_start_plug(), it may plug some inode's node page in kworker
->>>> during writebacking node_inode's data page (which should be node page)?
->>>
->>> Wasn't that added into a different task->plug?
->>
->> I'm not sure I've got your concern correctly...
->>
->> Do you mean NodeA and other IOs from do_writepages() were plugged in
->> different local plug variables?
-> 
-> I think so.
+UPF_MAGIC_MULTIPLIER is userspace available bit and can be changed
+at any time. There is no sense to rely on it to be always present.
 
-I guess block plug helper says it doesn't allow to use nested plug, so there
-is only one plug in kworker thread?
+This reverts commit b4ccaf5aa2d795ee7f47a6eeb209f3de981e1929.
 
-void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
-{
-	struct task_struct *tsk = current;
+Note, that code was not reliably worked before, hence it implies
+no functional change.
 
-	/*
-	 * If this is a nested plug, don't actually assign it.
-	 */
-	if (tsk->plug)
-		return;
-...
-}
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_pericom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/tty/serial/8250/8250_pericom.c b/drivers/tty/serial/8250/8250_pericom.c
+index 025b055363c3..95ff10f25d58 100644
+--- a/drivers/tty/serial/8250/8250_pericom.c
++++ b/drivers/tty/serial/8250/8250_pericom.c
+@@ -117,7 +117,7 @@ static int pericom8250_probe(struct pci_dev *pdev, const struct pci_device_id *i
+ 	uart.port.private_data = pericom;
+ 	uart.port.iotype = UPIO_PORT;
+ 	uart.port.uartclk = 921600 * 16;
+-	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF | UPF_SHARE_IRQ | UPF_MAGIC_MULTIPLIER;
++	uart.port.flags = UPF_SKIP_TEST | UPF_BOOT_AUTOCONF | UPF_SHARE_IRQ;
+ 	uart.port.set_divisor = pericom_do_set_divisor;
+ 	for (i = 0; i < nr && i < maxnr; i++) {
+ 		unsigned int offset = (i == 3 && nr == 4) ? 0x38 : i * 0x8;
+-- 
+2.34.1
 
-> 
->>
->> Thanks,
->>
->>>
->>>>
->>>> Thanks,
->>>>
->>>>>
->>>>>> 					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
->>>>>> 					 - f2fs_write_data_pages
->>>>>> 					  - f2fs_write_single_data_page -- write last dirty page
->>>>>> 					   - f2fs_do_write_data_page
->>>>>> 					    - set_page_writeback  -- clear page dirty flag and
->>>>>> 					    PAGECACHE_TAG_DIRTY tag in radix tree
->>>>>> 					    - f2fs_outplace_write_data
->>>>>> 					     - f2fs_update_data_blkaddr
->>>>>> 					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
->>>>>> 					   - inode_dec_dirty_pages
->>>>>>     - writeback_sb_inodes
->>>>>>      - writeback_single_inode
->>>>>>       - do_writepages
->>>>>>        - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
->>>>>>         - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
->>>>>>      - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
->>>>>>     - blk_finish_plug
->>>>>>
->>>>>> Let's try to avoid deadlock condition by forcing unplugging previous bio via
->>>>>> blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
->>>>>> due to valid sbi->wb_sync_req[DATA/NODE].
->>>>>>
->>>>>> Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
->>>>>> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
->>>>>> Signed-off-by: Jing Xia <jing.xia@unisoc.com>
->>>>>> Signed-off-by: Chao Yu <chao@kernel.org>
->>>>>> ---
->>>>>>     fs/f2fs/data.c | 6 +++++-
->>>>>>     fs/f2fs/node.c | 6 +++++-
->>>>>>     2 files changed, 10 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>>>>> index 76d6fe7b0c8f..932a4c81acaf 100644
->>>>>> --- a/fs/f2fs/data.c
->>>>>> +++ b/fs/f2fs/data.c
->>>>>> @@ -3174,8 +3174,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
->>>>>>     	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
->>>>>>     	if (wbc->sync_mode == WB_SYNC_ALL)
->>>>>>     		atomic_inc(&sbi->wb_sync_req[DATA]);
->>>>>> -	else if (atomic_read(&sbi->wb_sync_req[DATA]))
->>>>>> +	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
->>>>>> +		/* to avoid potential deadlock */
->>>>>> +		if (current->plug)
->>>>>> +			blk_finish_plug(current->plug);
->>>>>>     		goto skip_write;
->>>>>> +	}
->>>>>>     	if (__should_serialize_io(inode, wbc)) {
->>>>>>     		mutex_lock(&sbi->writepages);
->>>>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
->>>>>> index 556fcd8457f3..69c6bcaf5aae 100644
->>>>>> --- a/fs/f2fs/node.c
->>>>>> +++ b/fs/f2fs/node.c
->>>>>> @@ -2106,8 +2106,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
->>>>>>     	if (wbc->sync_mode == WB_SYNC_ALL)
->>>>>>     		atomic_inc(&sbi->wb_sync_req[NODE]);
->>>>>> -	else if (atomic_read(&sbi->wb_sync_req[NODE]))
->>>>>> +	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
->>>>>> +		/* to avoid potential deadlock */
->>>>>> +		if (current->plug)
->>>>>> +			blk_finish_plug(current->plug);
->>>>>>     		goto skip_write;
->>>>>> +	}
->>>>>>     	trace_f2fs_writepages(mapping->host, wbc, NODE);
->>>>>> -- 
->>>>>> 2.32.0

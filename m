@@ -2,256 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2584A8141
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8464A814E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 10:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiBCJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 04:15:08 -0500
-Received: from mga05.intel.com ([192.55.52.43]:30672 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230504AbiBCJPG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 04:15:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643879706; x=1675415706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=USduWklxZs7IRiW0gmkJ/DmHB0rsBVVMRvWK008NdMo=;
-  b=UDIDUpBvNa93fd5kTPC5lEkJ4EEibJ/39YcMWJvI5hvUqRi6ypXBjNkd
-   +hwK5+3R9C+KmXNyhEGr/dJYsBj/PCi4HLUEjsR51Ik6dBgg8ETXGure6
-   xl9M+MqpEmOp2rydzwQ+zxl9DVLlwUlYFcKGF1FCEYYCYMsC4udYL/d6k
-   0bJ6XFdvL/lZow7pGLkux7aHE/UThlcGvLi59G1pWwr6ejYKu8xHkOqQV
-   9Q61IBc9YkhVLL/KxBlEcc2tfbMV9KSTek2ZPmJPszTA2i02RzP335TzY
-   hJ7mazDwENUGybaUlTRFbsARBVfHuBBIQHYlaqu1tZ1zWoF8eywUYNP2m
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="334464400"
-X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="334464400"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 01:15:05 -0800
-X-IronPort-AV: E=Sophos;i="5.88,339,1635231600"; 
-   d="scan'208";a="523832099"
-Received: from ekabir-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.144.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 01:15:05 -0800
-Date:   Thu, 3 Feb 2022 01:15:04 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, airlied@linux.ie,
-        daniel.vetter@ffwll.ch, linux-doc@vger.kernel.org,
-        christian.koenig@amd.com, srinivas.kandagatla@linaro.org,
-        tzimmermann@suse.de, gregkh@linuxfoundation.org,
-        nouveau@lists.freedesktop.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v3] dma-buf-map: Rename to iosys-map
-Message-ID: <20220203091504.arlmfmwdaluts3ml@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220203085614.3896538-1-lucas.demarchi@intel.com>
+        id S232967AbiBCJTB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Feb 2022 04:19:01 -0500
+Received: from lithops.sigma-star.at ([195.201.40.130]:37448 "EHLO
+        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230259AbiBCJS7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 04:18:59 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id CB4CE614E2C9;
+        Thu,  3 Feb 2022 10:18:57 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ig2hg8HhEsea; Thu,  3 Feb 2022 10:18:57 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 21F80613AFDF;
+        Thu,  3 Feb 2022 10:18:57 +0100 (CET)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6NhwpoOldHN9; Thu,  3 Feb 2022 10:18:57 +0100 (CET)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id EEED3613AFD6;
+        Thu,  3 Feb 2022 10:18:56 +0100 (CET)
+Date:   Thu, 3 Feb 2022 10:18:56 +0100 (CET)
+From:   Richard Weinberger <richard@nod.at>
+To:     =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at>
+In-Reply-To: <20220125104822.8420-5-kernel@kempniu.pl>
+References: <20220125104822.8420-1-kernel@kempniu.pl> <20220125104822.8420-5-kernel@kempniu.pl>
+Subject: Re: [PATCH v3 4/4] mtdchar: add MEMREAD ioctl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220203085614.3896538-1-lucas.demarchi@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF96 (Linux)/8.8.12_GA_3809)
+Thread-Topic: mtdchar: add MEMREAD ioctl
+Thread-Index: 4v2g4Z4lx0v5vFZ8+gLXLp2J71QhHg==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 12:56:14AM -0800, Lucas De Marchi wrote:
->Rename struct dma_buf_map to struct iosys_map and corresponding APIs.
->Over time dma-buf-map grew up to more functionality than the one used by
->dma-buf: in fact it's just a shim layer to abstract system memory, that
->can be accessed via regular load and store, from IO memory that needs to
->be acessed via arch helpers.
->
->The idea is to extend this API so it can fulfill other needs, internal
->to a single driver. Example: in the i915 driver it's desired to share
->the implementation for integrated graphics, which uses mostly system
->memory, with discrete graphics, which may need to access IO memory.
->
->The conversion was mostly done with the following semantic patch:
->
->	@r1@
->	@@
->	- struct dma_buf_map
->	+ struct iosys_map
->
->	@r2@
->	@@
->	(
->	- DMA_BUF_MAP_INIT_VADDR
->	+ IOSYS_MAP_INIT_VADDR
->	|
->	- dma_buf_map_set_vaddr
->	+ iosys_map_set_vaddr
->	|
->	- dma_buf_map_set_vaddr_iomem
->	+ iosys_map_set_vaddr_iomem
->	|
->	- dma_buf_map_is_equal
->	+ iosys_map_is_equal
->	|
->	- dma_buf_map_is_null
->	+ iosys_map_is_null
->	|
->	- dma_buf_map_is_set
->	+ iosys_map_is_set
->	|
->	- dma_buf_map_clear
->	+ iosys_map_clear
->	|
->	- dma_buf_map_memcpy_to
->	+ iosys_map_memcpy_to
->	|
->	- dma_buf_map_incr
->	+ iosys_map_incr
->	)
->
->	@@
->	@@
->	- #include <linux/dma-buf-map.h>
->	+ #include <linux/iosys-map.h>
->
->Then some files had their includes adjusted and some comments were update to
->remove mentions to dma-buf-map.
->
->Since this is not specific to dma-buf anymore, move the documentation to
->the "Bus-Independent Device Accesses" section.
->
->v2:
->  - Squash patches
->
->v3:
->  - Fix wrong removal of dma-buf.h from MAINTAINERS
->  - Move documentation from dma-buf.rst to device-io.rst
->
->Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
->Acked-by: Christian K�nig <christian.koenig@amd.com>
->Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
->---
-> Documentation/driver-api/device-io.rst        |   9 +
-> Documentation/driver-api/dma-buf.rst          |   9 -
-> Documentation/gpu/todo.rst                    |  20 +-
-> MAINTAINERS                                   |   9 +-
-> drivers/dma-buf/dma-buf.c                     |  22 +-
-> drivers/dma-buf/heaps/cma_heap.c              |  10 +-
-> drivers/dma-buf/heaps/system_heap.c           |  10 +-
-> drivers/gpu/drm/ast/ast_drv.h                 |   2 +-
-> drivers/gpu/drm/ast/ast_mode.c                |   8 +-
-> drivers/gpu/drm/drm_cache.c                   |  18 +-
-> drivers/gpu/drm/drm_client.c                  |   9 +-
-> drivers/gpu/drm/drm_fb_helper.c               |  12 +-
-> drivers/gpu/drm/drm_gem.c                     |  12 +-
-> drivers/gpu/drm/drm_gem_cma_helper.c          |   9 +-
-> drivers/gpu/drm/drm_gem_framebuffer_helper.c  |  16 +-
-> drivers/gpu/drm/drm_gem_shmem_helper.c        |  15 +-
-> drivers/gpu/drm/drm_gem_ttm_helper.c          |   4 +-
-> drivers/gpu/drm/drm_gem_vram_helper.c         |  25 +-
-> drivers/gpu/drm/drm_internal.h                |   6 +-
-> drivers/gpu/drm/drm_mipi_dbi.c                |   8 +-
-> drivers/gpu/drm/drm_prime.c                   |   4 +-
-> drivers/gpu/drm/etnaviv/etnaviv_drv.h         |   2 +-
-> drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   8 +-
-> drivers/gpu/drm/gud/gud_pipe.c                |   4 +-
-> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c   |   5 +-
-> drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   8 +-
-> .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |   6 +-
-> .../gpu/drm/i915/gem/selftests/mock_dmabuf.c  |   6 +-
-> drivers/gpu/drm/lima/lima_gem.c               |   3 +-
-> drivers/gpu/drm/lima/lima_sched.c             |   4 +-
-> drivers/gpu/drm/mediatek/mtk_drm_gem.c        |   7 +-
-> drivers/gpu/drm/mediatek/mtk_drm_gem.h        |   5 +-
-> drivers/gpu/drm/mgag200/mgag200_mode.c        |   4 +-
-> drivers/gpu/drm/msm/msm_drv.h                 |   4 +-
-> drivers/gpu/drm/msm/msm_gem_prime.c           |   6 +-
-> drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |  13 +-
-> drivers/gpu/drm/qxl/qxl_display.c             |   8 +-
-> drivers/gpu/drm/qxl/qxl_draw.c                |   6 +-
-> drivers/gpu/drm/qxl/qxl_drv.h                 |  10 +-
-> drivers/gpu/drm/qxl/qxl_object.c              |   8 +-
-> drivers/gpu/drm/qxl/qxl_object.h              |   4 +-
-> drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
-> drivers/gpu/drm/radeon/radeon_gem.c           |   1 +
-> drivers/gpu/drm/rockchip/rockchip_drm_gem.c   |   9 +-
-> drivers/gpu/drm/rockchip/rockchip_drm_gem.h   |   5 +-
-> drivers/gpu/drm/tegra/gem.c                   |  10 +-
-> drivers/gpu/drm/tiny/cirrus.c                 |   8 +-
-> drivers/gpu/drm/tiny/gm12u320.c               |   7 +-
-> drivers/gpu/drm/ttm/ttm_bo_util.c             |  16 +-
-> drivers/gpu/drm/ttm/ttm_resource.c            |  26 +-
-> drivers/gpu/drm/ttm/ttm_tt.c                  |   6 +-
-> drivers/gpu/drm/udl/udl_modeset.c             |   3 +-
-> drivers/gpu/drm/vboxvideo/vbox_mode.c         |   4 +-
-> drivers/gpu/drm/vkms/vkms_composer.c          |   4 +-
-> drivers/gpu/drm/vkms/vkms_drv.h               |   6 +-
-> drivers/gpu/drm/vkms/vkms_plane.c             |   2 +-
-> drivers/gpu/drm/vkms/vkms_writeback.c         |   2 +-
-> drivers/gpu/drm/xen/xen_drm_front_gem.c       |   7 +-
-> drivers/gpu/drm/xen/xen_drm_front_gem.h       |   6 +-
-> .../common/videobuf2/videobuf2-dma-contig.c   |   8 +-
-> .../media/common/videobuf2/videobuf2-dma-sg.c |   9 +-
-> .../common/videobuf2/videobuf2-vmalloc.c      |  11 +-
-> drivers/misc/fastrpc.c                        |   4 +-
-> include/drm/drm_cache.h                       |   6 +-
-> include/drm/drm_client.h                      |   7 +-
-> include/drm/drm_gem.h                         |   6 +-
-> include/drm/drm_gem_atomic_helper.h           |   6 +-
-> include/drm/drm_gem_cma_helper.h              |   6 +-
-> include/drm/drm_gem_framebuffer_helper.h      |   8 +-
-> include/drm/drm_gem_shmem_helper.h            |  12 +-
-> include/drm/drm_gem_ttm_helper.h              |   6 +-
-> include/drm/drm_gem_vram_helper.h             |   9 +-
-> include/drm/drm_prime.h                       |   6 +-
-> include/drm/ttm/ttm_bo_api.h                  |  10 +-
-> include/drm/ttm/ttm_kmap_iter.h               |  10 +-
-> include/drm/ttm/ttm_resource.h                |   6 +-
-> include/linux/dma-buf-map.h                   | 266 ------------------
-> include/linux/dma-buf.h                       |  12 +-
-> include/linux/iosys-map.h                     | 257 +++++++++++++++++
-> 79 files changed, 590 insertions(+), 559 deletions(-)
-> delete mode 100644 include/linux/dma-buf-map.h
-> create mode 100644 include/linux/iosys-map.h
->
->diff --git a/Documentation/driver-api/device-io.rst b/Documentation/driver-api/device-io.rst
->index e9f04b1815d1..f9dede8639c7 100644
->--- a/Documentation/driver-api/device-io.rst
->+++ b/Documentation/driver-api/device-io.rst
->@@ -502,6 +502,15 @@ pcim_iomap()
-> Not using these wrappers may make drivers unusable on certain platforms with
-> stricter rules for mapping I/O memory.
->
->+System/IO memory abstraction
->+----------------------------
+Michał,
 
-Looking at it again, this would render slightly better at the same level
-as others, with "====="
+----- Ursprüngliche Mail -----
+> Von: "Michał Kępień" <kernel@kempniu.pl>
+> An: "Miquel Raynal" <miquel.raynal@bootlin.com>, "richard" <richard@nod.at>, "Vignesh Raghavendra" <vigneshr@ti.com>
+> CC: "Boris Brezillon" <boris.brezillon@collabora.com>, "linux-mtd" <linux-mtd@lists.infradead.org>, "linux-kernel"
+> <linux-kernel@vger.kernel.org>
+> Gesendet: Dienstag, 25. Januar 2022 11:48:22
+> Betreff: [PATCH v3 4/4] mtdchar: add MEMREAD ioctl
 
-Lucas De Marchi
+> +	if (req.start + req.len > mtd->size) {
 
->+
->+.. kernel-doc:: include/linux/iosys-map.h
->+   :doc: overview
->+
->+.. kernel-doc:: include/linux/iosys-map.h
->+   :internal:
->+
-> Public Functions Provided
-> =========================
->
->diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
->index 2cd7db82d9fe..55006678394a 100644
->--- a/Documentation/driver-api/dma-buf.rst
->+++ b/Documentation/driver-api/dma-buf.rst
->@@ -128,15 +128,6 @@ Kernel Functions and Structures Reference
-> .. kernel-doc:: include/linux/dma-buf.h
->    :internal:
->
->-Buffer Mapping Helpers
->-~~~~~~~~~~~~~~~~~~~~~~
->-
->-.. kernel-doc:: include/linux/dma-buf-map.h
->-   :doc: overview
->-
->-.. kernel-doc:: include/linux/dma-buf-map.h
->-   :internal:
->-
-> Reservation Objects
-> -------------------
+I think this can overflow since both req.start and req.len are u64.
+So an evil-doer might bypass this check.
+
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	datbuf_len = min_t(size_t, req.len, mtd->erasesize);
+> +	if (datbuf_len > 0) {
+> +		datbuf = kmalloc(datbuf_len, GFP_KERNEL);
+
+If mtd->erasesize is large (which is not uncommon these days) you might
+request more from kmalloc() than it can serve.
+Maybe kvmalloc() makes more sense?
+
+> +		if (!datbuf) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+> +	}
+> +
+> +	oobbuf_len = min_t(size_t, req.ooblen, mtd->erasesize);
+> +	if (oobbuf_len > 0) {
+> +		oobbuf = kmalloc(oobbuf_len, GFP_KERNEL);
+
+Same.
+
+Thanks,
+//richard

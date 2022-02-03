@@ -2,98 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED244A837F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D0A4A8380
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 13:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiBCMFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 07:05:48 -0500
-Received: from foss.arm.com ([217.140.110.172]:42394 "EHLO foss.arm.com"
+        id S1350397AbiBCMGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 07:06:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:42424 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235558AbiBCMFp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 07:05:45 -0500
+        id S1350391AbiBCMGK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 07:06:10 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9967311D4;
-        Thu,  3 Feb 2022 04:05:44 -0800 (PST)
-Received: from bogus (unknown [10.57.41.150])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BCAD3F774;
-        Thu,  3 Feb 2022 04:05:43 -0800 (PST)
-Date:   Thu, 3 Feb 2022 12:04:56 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org
-Subject: Re: [PATCH] coresight: trbe: Move check for kernelspace unmapped at
- EL0 to probe
-Message-ID: <20220203101111.mx3o5kmo2bkjirn4@bogus>
-References: <20220201122212.3009461-1-sudeep.holla@arm.com>
- <01a43ba2-a633-f215-a688-2bda293b5a47@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB54C11D4;
+        Thu,  3 Feb 2022 04:06:09 -0800 (PST)
+Received: from e121896.arm.com (unknown [10.57.13.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 607573F774;
+        Thu,  3 Feb 2022 04:06:08 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        coresight@lists.linaro.org
+Cc:     leo.yan@linaro.com, mike.leach@linaro.org,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/15] Make ETM register accesses consistent with sysreg.h
+Date:   Thu,  3 Feb 2022 12:05:48 +0000
+Message-Id: <20220203120604.128396-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <01a43ba2-a633-f215-a688-2bda293b5a47@arm.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 11:55:58AM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 2/1/22 5:52 PM, Sudeep Holla wrote:
-> > Currently with the check present in the module initialisation, it shouts
-> > on all the systems irrespective of presence of coresight trace buffer
-> > extensions.
-> 
-> IIUC a system with CONFIG_CORESIGHT_TRBE enabled but without a TRBE DT
-> i.e "arm,trace-buffer-extension" complains about kernel space unmapping
-> at EL0 (even though it does not even really have TRBE HW to initialize).
+Changes since v1:
+  * Change base to "[PATCH 1/1] coresight: no-op refactor to make INSTP0 check more idiomatic"
+  * Change 'name' to 'field' in REG_VAL() macro
+  * Add comment for REG_VAL() macro
 
+While working on the branch broadcast change I found it difficult to search
+for usages of registers and fields because of the magic numbers. I also
+found it difficult to decide which style to make new code in because of the
+varying ones used.
 
-Correct. Basically, this error will be seen on all systems(DT and ACPI) when
-the module is compiled. It really doesn't matter if the system supports TRBE.
+There was also a code review comment from Suzuki about replacing a magic
+number so I'm proposing to refactor as many as possible into the style used
+in sysreg.h which seems to be the new and most consistently used method.
+For example it was used in the SPE and TRBE drivers.
 
-> > 
-> > Similar to Arm SPE perf driver, move the check for kernelspace unmapping
-> > when running at EL0 to the device probe instead of module initialisation.
-> 
-> Makes sense.
->
+This isn't an exhaustive refactor, but it does get all the basic accesses.
+There are a couple of odd other cases remaining, mainly in the ETM3x code.
+These can be found by searching for BMVAL.
 
-Thanks.
+There is one compromise to ensure this is a complete no-op and has
+binary equivalence with the old version. I needed to keep two register
+accesses here, where something like etmidr0 & TRCIDR0_INSTP0_LOAD_STORE
+would be better:
 
-> > 
-> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> > Cc: Mike Leach <mike.leach@linaro.org>
-> > Cc: Leo Yan <leo.yan@linaro.org>
-> > Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> > Cc: coresight@lists.linaro.org
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/hwtracing/coresight/coresight-trbe.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
-> > index 276862c07e32..3fe2ce1ba5bf 100644
-> > --- a/drivers/hwtracing/coresight/coresight-trbe.c
-> > +++ b/drivers/hwtracing/coresight/coresight-trbe.c
-> > @@ -1423,6 +1423,11 @@ static int arm_trbe_device_probe(struct platform_device *pdev)
-> >  	struct device *dev = &pdev->dev;
-> >  	int ret;
-> >  
-> 
-> Could you please add a similar comment like SPE driver regarding how
-> the TRBE buffer will be inaccessible, if kernel gets unmapped at EL0
-> and trace capture will terminate.
->
+  -	if (BMVAL(etmidr0, 1, 1) && BMVAL(etmidr0, 2, 2))
+  -		drvdata->instrp0 = true;
+  -	else
+  -		drvdata->instrp0 = false;
+  -
+  +	drvdata->instrp0 = !!((REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b01) &&
+  +			      (REG_VAL(etmidr0, TRCIDR0_INSTP0) & 0b10));
 
-Sure I can add that. But if the device probe fails, will you be able to even
-start the trace capture, sorry I didn't get what you mean by "trace capture
-will terminate". I assume it must be "trace capture is not possible or not
-allowed" IIUC.
+I think this change fixes quite a few issues like:
+
+ * Some registers aren't referred to by name but a different variable name.
+   For example eventctrl1 in mode_store() where TRCEVENTCTL1R isn't
+   mentioned in that function.
+
+ * Some bits aren't referred to by the name in the manual, even in the
+   comments. For example TRCCONFIGR.RS only occurs as /* bit[12], Return
+   stack enable bit */.
+
+ * Some bits in the same register are referred to either as magic numbers
+   or the publicly exported config macros, neiher of which are consistent
+   with any other register accesses. For example
+
+   config->cfg |= BIT(11);
+   config->cfg |= BIT(ETM4_CFG_BIT_CTXTID);
+   
+ * Some fields are already partially referred to in the sysfs.h style way:
+   TRCVICTLR_EXLEVEL_... etc. But other fields in the same register are not
+   
+ * Some fields are magic numbers that are repeated many times in different
+   functions. For example vinst_ctrl |= BIT(9)
+
+ * Some fields were referred to by magic numbers, even when there were
+   already existing #defines. For example ETMTECR1_INC_EXC
+
+ * Another benefit is that the #defines could be automatically checked
+   against the reference manual because the style is uniform.
+
+Testing
+=======
+
+To test this I used gcc-11 which doesn't have a quirk about changing
+register widths in some cases (as in w -> x). I also used elf_diff which
+showed me exactly where I'd made a mistake when I did
+(https://github.com/noseglasses/elf_diff). But now that there is no
+difference, objdump and diff also work for validation.
+
+  make CC=gcc-11 modules
+  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm4x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko)
+  diff <(objdump -d drivers/hwtracing/coresight/coresight.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight.ko)
+
+And for ETM3x (doesn't need gcc 11):
+
+  make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  modules
+  diff <(objdump -d drivers/hwtracing/coresight/coresight-etm3x.ko) <(objdump -d ../linux2/drivers/hwtracing/coresight/coresight-etm3x.ko)
+
+When there are no differences, the diff output looks like this with only
+the filename listed:
+
+  < drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
+  ---
+  > ../linux2/drivers/hwtracing/coresight/coresight-etm4x.ko:     file format elf64-littleaarch64
+
+Applies to "[PATCH 1/1] coresight: no-op refactor to make INSTP0 check more idiomatic"
+
+James Clark (15):
+  coresight: Make ETM4x TRCIDR0 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR2 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR3 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR4 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCIDR5 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCCONFIGR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCEVENTCTL1R register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCSTALLCTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCVICTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM3x ETMTECR1 register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCACATRn register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCSSCCRn and TRCSSCSRn register accesses
+    consistent with sysreg.h
+  coresight: Make ETM4x TRCSSPCICRn register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCBBCTLR register accesses consistent with
+    sysreg.h
+  coresight: Make ETM4x TRCRSCTLRn register accesses consistent with
+    sysreg.h
+
+ .../coresight/coresight-etm3x-core.c          |   2 +-
+ .../coresight/coresight-etm3x-sysfs.c         |   2 +-
+ .../coresight/coresight-etm4x-core.c          | 134 +++++--------
+ .../coresight/coresight-etm4x-sysfs.c         | 178 +++++++++---------
+ drivers/hwtracing/coresight/coresight-etm4x.h | 159 ++++++++++++++--
+ drivers/hwtracing/coresight/coresight-priv.h  |   5 +
+ 6 files changed, 286 insertions(+), 194 deletions(-)
 
 -- 
-Regards,
-Sudeep
+2.28.0
+

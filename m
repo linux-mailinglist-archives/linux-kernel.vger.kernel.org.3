@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F884A863B
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1F44A863D
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 15:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351183AbiBCOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 09:32:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33837 "EHLO
+        id S1351209AbiBCOcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 09:32:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35164 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351159AbiBCOco (ORCPT
+        by vger.kernel.org with ESMTP id S1351195AbiBCOct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:32:44 -0500
+        Thu, 3 Feb 2022 09:32:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643898764;
+        s=mimecast20190719; t=1643898768;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=egIsbiIb1ZlNhNb4hCbsTFlrt0lfVor171N2GRt1Ifc=;
-        b=RlIjvuSGPDR9M8kivIxUIw4xiedJlzFh5Fef2i3axo2HfYFqpDpdYD6v1xKR5JoAn9jI3o
-        AfjONA89enr3TmduCuwVsq2Tr5wA1q3FkrjNNT22bkeEdJh4VlT2EYyDipCGcq/9mO+TGA
-        mwKJudGEzN3A8TtBb3OtKuxLo/vkjuw=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1nDKkpDSU0sxhq2xLBakc+ahxXjrPTKXfIyEVQpG6nk=;
+        b=Mg8aystXKgsUCtsh+lV8whMHtPuwXsKmzfGMtIryhP9oMnppZnorU3JGp/KqzGw5crAbPk
+        boCtdP7U+Qrs0vvrpCrHun0W5x739dB16eks4gTwFNkcmcvWMbz1RHCQFjcEkmAO/xHdBa
+        fj7ynSO4KfI9wKfhTNfaAGjAp8Dbf9k=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-57np-K2gOqKEZ8Jj3ep6zA-1; Thu, 03 Feb 2022 09:32:41 -0500
-X-MC-Unique: 57np-K2gOqKEZ8Jj3ep6zA-1
+ us-mta-110-pR9MTwd3MCuGzqwKxzjVpg-1; Thu, 03 Feb 2022 09:32:43 -0500
+X-MC-Unique: pR9MTwd3MCuGzqwKxzjVpg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A020835B4B;
-        Thu,  3 Feb 2022 14:32:39 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EAEAD835B4C;
+        Thu,  3 Feb 2022 14:32:41 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17BF57D5B4;
-        Thu,  3 Feb 2022 14:32:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88E3A7D57D;
+        Thu,  3 Feb 2022 14:32:39 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -47,9 +48,11 @@ To:     Jiri Kosina <jikos@kernel.org>,
 Cc:     linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v2 00/12] HID: fix for generic input processing
-Date:   Thu,  3 Feb 2022 15:32:14 +0100
-Message-Id: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
+Subject: [PATCH v2 01/12] HID: core: statically allocate read buffers
+Date:   Thu,  3 Feb 2022 15:32:15 +0100
+Message-Id: <20220203143226.4023622-2-benjamin.tissoires@redhat.com>
+In-Reply-To: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
+References: <20220203143226.4023622-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
@@ -57,48 +60,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is a preparation patch for rethinking the generic processing
+of HID reports.
 
-this is the v2 of my series which reworks the HID report processing.
+We can actually pre-allocate all of our memory instead of dynamically
+allocating/freeing it whenever we parse a report.
 
-I took Ping's comments into account, and amended my MR with the
-regression tests[0].
-More specifically, the tests (and thus this new version of the series)
-enforces that only one BTN_TOOL_* event gets forwarded between each
-EV_SYN frame, and that BTN_TOUCH are properly translated too.
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+---
+ drivers/hid/hid-core.c | 12 +++++-------
+ include/linux/hid.h    |  1 +
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-This also magivally solved some worrying transitions we had in the
-pen state machine where the pen was jumping from "eraser" to "in
-contact". This new behavior enforces a "out-of-range" state in the
-middle, making it easier for userspace to understand now.
-
-Again, tests are welcome :)
-
-Cheers,
-Benjamin
-
-[0] https://gitlab.freedesktop.org/libevdev/hid-tools/-/merge_requests/127
-
-Benjamin Tissoires (12):
-  HID: core: statically allocate read buffers
-  HID: core: de-duplicate some code in hid_input_field()
-  HID: core: split data fetching from processing in hid_input_field()
-  HID: input: tag touchscreens as such if the physical is not there
-  HID: input: rework spaghetti code with switch statements
-  HID: input: move up out-of-range processing of input values
-  HID: compute an ordered list of input fields to process
-  HID: core: for input reports, process the usages by priority list
-  HID: input: enforce Invert usage to be processed before InRange
-  HID: input: remove the need for HID_QUIRK_INVERT
-  HID: input: accommodate priorities for slotted devices
-  Input: docs: add more details on the use of BTN_TOOL
-
- Documentation/input/event-codes.rst |   6 +-
- drivers/hid/hid-core.c              | 280 ++++++++++++++++++---
- drivers/hid/hid-input.c             | 364 ++++++++++++++++++++++------
- include/linux/hid.h                 |  23 +-
- 4 files changed, 568 insertions(+), 105 deletions(-)
-
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index f1aed5bbd000..75e7b8447bf7 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -101,7 +101,7 @@ static struct hid_field *hid_register_field(struct hid_report *report, unsigned
+ 
+ 	field = kzalloc((sizeof(struct hid_field) +
+ 			 usages * sizeof(struct hid_usage) +
+-			 usages * sizeof(unsigned)), GFP_KERNEL);
++			 2 * usages * sizeof(unsigned int)), GFP_KERNEL);
+ 	if (!field)
+ 		return NULL;
+ 
+@@ -109,6 +109,7 @@ static struct hid_field *hid_register_field(struct hid_report *report, unsigned
+ 	report->field[field->index] = field;
+ 	field->usage = (struct hid_usage *)(field + 1);
+ 	field->value = (s32 *)(field->usage + usages);
++	field->new_value = (s32 *)(field->value + usages);
+ 	field->report = report;
+ 
+ 	return field;
+@@ -1541,9 +1542,8 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
+ 	__s32 max = field->logical_maximum;
+ 	__s32 *value;
+ 
+-	value = kmalloc_array(count, sizeof(__s32), GFP_ATOMIC);
+-	if (!value)
+-		return;
++	value = field->new_value;
++	memset(value, 0, count * sizeof(__s32));
+ 
+ 	for (n = 0; n < count; n++) {
+ 
+@@ -1557,7 +1557,7 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
+ 		    value[n] >= min && value[n] <= max &&
+ 		    value[n] - min < field->maxusage &&
+ 		    field->usage[value[n] - min].hid == HID_UP_KEYBOARD + 1)
+-			goto exit;
++			return;
+ 	}
+ 
+ 	for (n = 0; n < count; n++) {
+@@ -1581,8 +1581,6 @@ static void hid_input_field(struct hid_device *hid, struct hid_field *field,
+ 	}
+ 
+ 	memcpy(field->value, value, count * sizeof(__s32));
+-exit:
+-	kfree(value);
+ }
+ 
+ /*
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 7487b0586fe6..3fbfe0986659 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -476,6 +476,7 @@ struct hid_field {
+ 	unsigned  report_count;		/* number of this field in the report */
+ 	unsigned  report_type;		/* (input,output,feature) */
+ 	__s32    *value;		/* last known value(s) */
++	__s32    *new_value;		/* newly read value(s) */
+ 	__s32     logical_minimum;
+ 	__s32     logical_maximum;
+ 	__s32     physical_minimum;
 -- 
 2.33.1
 

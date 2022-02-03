@@ -2,148 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 606174A90CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BA14A90D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 23:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355859AbiBCWqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 17:46:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
+        id S1355869AbiBCWs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 17:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355853AbiBCWqT (ORCPT
+        with ESMTP id S1355853AbiBCWs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 17:46:19 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771BBC06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:46:19 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id g11so3923688qvu.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:46:19 -0800 (PST)
+        Thu, 3 Feb 2022 17:48:26 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A559C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 14:48:26 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id z18so3397546ilp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 14:48:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3uTrKfJl0B2M1t5hjDoYw6LHu5uHngu7A4EsnOQxqAc=;
-        b=Q0e+9JxcmxO28HdGxidRJ+v6cvAU+j0mQY2b5Fh+9itFQ7qAX9ZdfKCVGbwPTrE9Dd
-         3f8XiZMcLs6mzcx3rGTO7ProinxnMnl5KYKxzag/mm2QWawCcdIlX8aLOZ3CIL35CahY
-         rE5LdrLAoHrw7OPuc7vxlsIcKsXgb2zKH0iNVSFV99qznx6g2iYtz8BcyUFLEKLjOGxB
-         irMGqwMxCcOf+LpOmb4NbA/R0uEPqi8ncvZiU+NcrI56uq0vEBMBTtMJqtArx87xMftc
-         b3MF7wA+dD9sfXrHEozBMJedsgwV4c7tJjTGbNMt33eBTEj0YbGhAPSz5XywO0M0YJUd
-         3XPg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=MLeChxYmYY5CUkxIxxVQrUV/lZd8hpfLh1+m+EJdz0A=;
+        b=XLOhNwHh+boGaAV3W7r97PDAFTDcLi4JGFZLgJc2Qd/1FU9gvyg3Fcw9m0X+fIXQKk
+         zBvIYQTU5X3EB/zOf2yGC4FhcznkTvthPIgpIBLZlKE8zG24NOmZadIzqOQgfot4Diii
+         HT+qY7Pzd7GjUX37pD7Zywo7der0xmyNRyMCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3uTrKfJl0B2M1t5hjDoYw6LHu5uHngu7A4EsnOQxqAc=;
-        b=z5dxhJbK1Tl43Gv7g+vXFXbhN+tFxvGBXHlTf6AvTFLKb1o3o2UenIF4EwXRswwm4e
-         wAHkdPX+mer8m9RrfJAJoBPOM0EqASl4WzTsL+swqyYoUkxYxCoTTg1IRRKaCCyozHfy
-         cvltHg4veQusgkxngBeDARXaDCxP1lD3lWnIIJphFhchW5wjgRxGOUP3kVu5G6RK+n8y
-         tBZzYYd1KtrpMFCK3YDtp5u33gDl0Xier8UeRbSaKAVMmWM0zPmWoV9VhchL+btJoy8Y
-         6vGz4QDeozDlch+4X+fs2+8seoZDaorCkBsVCvjlvaQ7q8z9y8izOheDBdjiXKcoteaN
-         PDXg==
-X-Gm-Message-State: AOAM531Da33LQ8P+fEsUWtlRxLcPemo6lAyUalH8a+6bBRJA5nxNFlzI
-        XfZswzOJcp8UIBgrHvM1kwSJbXHB0Nz3BFchDmTz/g==
-X-Google-Smtp-Source: ABdhPJwR4E8NTdjNRS4RPZNKrDIyw+CJNaSmzcK5ZPj2UOO9VoGW18R0etaIXKXfc5AwiT3jTPMJDYd0mj+LX67slXw=
-X-Received: by 2002:a05:6214:2b0c:: with SMTP id jx12mr28089qvb.17.1643928378464;
- Thu, 03 Feb 2022 14:46:18 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=MLeChxYmYY5CUkxIxxVQrUV/lZd8hpfLh1+m+EJdz0A=;
+        b=chdJnpRilzfFWSA+jJW6eCR7llXb5md1laBUGQ1cC7yE0ldwsLNoznujqkBxZYD3ut
+         ENLyUzeFrT7IOhQNWtDFJClrc5NgZ/ZDSMiPcDSCngG4S6H2N5dCQGYBUfGH31AkPN26
+         1jnjUdmzkW1kv9/ceq/SB8jS8s9rV0H9TAbLm+Ai1daJCm9TadUf+JwhVi6uNkZCrTWK
+         Jt0F2n2aGxBYmmkt0CJaIPkZUiPiLK3GdR6wm3j0+NYEpAQVqGOLiqn0twTRosQA6a4I
+         mMUVgxLgIOfPOZdsnAbET5jCHv89PTw0qAe70JCHjsUQy99/Ddk4lJ46fBoVPbipA5Bx
+         Go6w==
+X-Gm-Message-State: AOAM532RGZEcgYbgGSWtQPoSi7QX78qlm17Tak21OjPV+IvHmOpZ1GzA
+        JENoKUPeEy4Est0VW34QT9dmPw==
+X-Google-Smtp-Source: ABdhPJwG0qE6zCH0vXbQKCtjs5jTysF5RevrnOV/ZHA12Y76M1wQ67IBTPApS+cF1n/5neNLjk1w8w==
+X-Received: by 2002:a92:d387:: with SMTP id o7mr139128ilo.26.1643928505787;
+        Thu, 03 Feb 2022 14:48:25 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id x4sm127153ilv.2.2022.02.03.14.48.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Feb 2022 14:48:25 -0800 (PST)
+Subject: Re: kselftest tree on kernelci.org
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <5fd1a35c-f84e-1c6a-4a3a-be76dda97ca3@collabora.com>
+ <ece6ea91-c44b-0bea-c4a2-ec099fa94881@linuxfoundation.org>
+ <bc705b2c-b2d7-c80f-7020-ee52a2aeb061@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8813e862-c280-c6c6-abc5-b62b372ff34a@linuxfoundation.org>
+Date:   Thu, 3 Feb 2022 15:48:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
- <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Thu, 3 Feb 2022 14:46:07 -0800
-Message-ID: <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
- cgroup_view link
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <bc705b2c-b2d7-c80f-7020-ee52a2aeb061@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 10:04 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Feb 01, 2022 at 12:55:34PM -0800, Hao Luo wrote:
-> > +
-> > +SEC("iter/cgroup_view")
-> > +int dump_cgroup_lat(struct bpf_iter__cgroup_view *ctx)
-> > +{
-> > +     struct seq_file *seq = ctx->meta->seq;
-> > +     struct cgroup *cgroup = ctx->cgroup;
-> > +     struct wait_lat *lat;
-> > +     u64 id;
-> > +
-> > +     BPF_SEQ_PRINTF(seq, "cgroup_id: %8lu\n", cgroup->kn->id);
-> > +     lat = bpf_map_lookup_elem(&cgroup_lat, &id);
->
-> Looks like "id = cgroup->kn->id" assignment is missing here?
->
+On 2/3/22 11:19 AM, Guillaume Tucker wrote:
+> On 02/02/2022 15:23, Shuah Khan wrote:
+>> Hi Guillaume,
+>>
 
-Ah, yes. I'll fix it.
+> 
+> I see these 4 branches (fixes, next, kunit, kunit-fixes) are all
+> merged into linux-next.  So it seems like the best thing to do
+> would be to cover them with a very lightweight number of builds and
+> tests focused on what they are about: only run kselftest on the
+> fixes and next branches, and only KUnit on kunit and kunit-fixes.
+> At the moment, KUnit is not run by kernelci.org (coming soon) so I
+> think we could just add the next branch for kselftest.  Then
+> linux-next will be tested with maximum coverage anyway so if
+> something subtle gets missed with the early tests it should get
+> caught the following day at the latest with linux-next.
+> 
+>>> Many things could potentially be done with arbitrary builds and
+>>> tests etc.  These are some initial suggestions.  How does this
+>>> sound?
+>>
 
-> Thanks a lot for this test. It explains the motivation well.
->
-> It seems that the patches 1-4 are there to automatically
-> supply cgroup pointer into bpf_iter__cgroup_view.
->
-> Since user space needs to track good part of cgroup dir opreations
-> can we task it with the job of patches 1-4 as well?
-> It can register notifier for cgroupfs operations and
-> do mkdir in bpffs similarly _and_ parametrize 'view' bpf program
-> with corresponding cgroup_id.
-> Ideally there is no new 'view' program and it's a subset of 'iter'
-> bpf program. They're already parametrizable.
-> When 'iter' is pinned the user space can tell it which object it should
-> iterate on. The 'view' will be an interator of one element and
-> argument to it can be cgroup_id.
-> When user space pins the same 'view' program in a newly created bpffs
-> directory it will parametrize it with a different cgroup_id.
-> At the end the same 'view' program will be pinned in multiple directories
-> with different cgroup_id arguments.
-> This patch 5 will look very much the same, but patches 1-4 will not be
-> necessary.
-> Of course there are races between cgroup create/destroy and bpffs
-> mkdir, prog pin operatiosn, but they will be there regardless.
-> The patch 1-4 approach is not race free either.
+Sounds good to me. The things that tend to break are:
 
-Right. I tried to minimize the races between cgroupfs and bpffs in
-this patchset. The cgroup and kernfs APIs called in this patchset
-guarantee that the cgroup and kernfs objects are alive once get. Some
-states in the objects such as 'id' should be valid at least.
+- test builds at times due to seemingly innocuous changes to fix
+   static analysis warnings. build test is good for catching these
+-
 
-> Will that work?
+>> Sounds great to me. Since selftest patches flow through various
+>> subsystem trees, having kernelci keep an eye is great. This would
+>> be another pair of eyes in addition to occasional tests I run and
+>> Linaro (LKTP) monitoring next.
+>>
+>> How often do you send reports - I will watch out for them. Thanks
+>> again for taking the initiative to add kselftest to kernelci.
+> 
+> Builds and tests are run every time a new revision is detected on
+> the branches being monitored.  Then when they complete, a report
+> is sent.  It can take a while, but with a small number of builds
+> you could get results within an hour.  We could get the reports
+> sent to the linux-kselftest mailing list and your own address if
+> you want.
+> 
 
-Thanks Alexei for the idea.
+Please send it to my email address as well.
 
-The parameterization part sounds good. By 'parametrize', do you mean a
-variable in iter prog (like the 'pid' variable in bpf_iter_task_vma.c
-[1])? or some metadata of the program? I assume it's program's
-metadata. Either parameterizing with cgroup_id or passing cgroup
-object to the prog should work. The problem is at pinning.
+> Also this configuration is all under source control on GitHub so
+> feel free to make changes to it in the future as you see fit.
+> 
 
-In our use case, we can't ask the users who create cgroups to do the
-pinning. Pinning requires root privilege. In our use case, we have
-non-root users who can create cgroup directories and still want to
-read bpf stats. They can't do pinning by themselves. This is why
-inheritance is a requirement for us. With inheritance, they only need
-to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
-operation is required. Patch 1-4 are needed to implement inheritance.
+Will do.
 
-It's also not a good idea in our use case to add a userspace
-privileged process to monitor cgroupfs operations and perform the
-pinning. It's more complex and has a higher maintenance cost and
-runtime overhead, compared to the solution of asking whoever makes
-cgroups to mkdir in bpffs. The other problem is: if there are nodes in
-the data center that don't have the userspace process deployed, the
-stats will be unavailable, which is a no-no for some of our users.
+thanks,
+-- Shuah
 
-[1] tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c

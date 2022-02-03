@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEFA4A7D82
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6C64A7D85
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 02:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348851AbiBCBvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 20:51:16 -0500
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:56569 "EHLO
+        id S1348874AbiBCBvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 20:51:23 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:44063 "EHLO
         wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230436AbiBCBvP (ORCPT
+        by vger.kernel.org with ESMTP id S1348861AbiBCBvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 20:51:15 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 961E42B000B2;
-        Wed,  2 Feb 2022 20:51:14 -0500 (EST)
+        Wed, 2 Feb 2022 20:51:19 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 861152B000B2;
+        Wed,  2 Feb 2022 20:51:18 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 02 Feb 2022 20:51:15 -0500
+  by compute5.internal (MEProxy); Wed, 02 Feb 2022 20:51:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; bh=/7Tz0hzsxmkP1TdALkiiPI8pdw56MShYLYbDn/MtWbM=; b=XzBwH
-        +ZDuLMwhI5NSXa4dlVfvX05vYIrZRRinl63gscPncdSc4TtAULkWtNN2/Tz5jQBk
-        u/EvLHCQJbphoIhjTtvKMAuo0gm+GuSdMqjdp5TAX1AtmNI8Y7u2I3lK2hA/KnjD
-        6eiR+Zx7Mb1659DYM22K7ix/lkFK9Q1I+gKPzzIwR+3JP7syqOY0sH4o0WQHgbPx
-        4v8wXcg24OrYuOYk9XggGHAWlfYE4I/4gyaN+s93MIJ3AifKatyaHOx1UtJq0j5V
-        q0VHJ51S/vP9FwimNH8fFka7G4jm9SNI+9rTzM7EaBp6bSI8MlQbBlmd+slCLtND
-        dPM3gMWxajE6EuqHw==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; bh=oqPS/m8KdcwSEqSZDEqPQcylkLS5Bx
+        Wh5VCZ7RIAJTQ=; b=OPfolPSeFqBN7+2WBft/PzG9Qf+vuXW7fGAtKcdwY7hBt9
+        p//R5NQFO8Kd8XKpS0AzBpPbmh6/857b0+XMTCV0QTKddL/hph82cg8tYOROKOtD
+        m60SGmJRDF1MAX1WvmZUIDJ/Q7keZNxKZmJD569fVCAVt85JLxWeQkqVnBqhpcko
+        qobYSRLY2lz7muP3qb8/cYeZ+Rysek0IdjjVull/WeSeUQTfVWCTEPzlHi4eKCd9
+        ujDvEsqndXQsLQ8Y0LQmT3MHtQBrIQeb15Mx+IlXQe28AcDzx5JNEE8TU14hBQ9X
+        jGuFd+ova53J/nSVYSANOwAxDlj4N8EcjpKNWghg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=/7Tz0hzsxmkP1TdALkiiPI8pdw56M
-        ShYLYbDn/MtWbM=; b=MXGiOOHaxpc5Vr3YJE3nnxX3xoqXZCIz+dqwVw5Jm0plT
-        tFu1cRGglAaoXptjoY6tAzRS/qy//3a9LnG//S51XwO+qP0699AMaRfhTGWs6e8n
-        TkWwfOkjm8ruWPKObQ+tiTUZ9T6t9qYdWodrTWNMjrv6Uodt7+cMzmdzZqxhYjSw
-        2VAplSAKKwA58YnqExVV4xZAydIBoZfcPX1L2WwCFgqCrDxqKVdZ1530jPEm3r+G
-        KWIT6arFvHT/aUFNPNfp5ufeU/Iuxty0wmKOqA3R5EmTfEVXu3afQFAxc0eQ2oym
-        XITlG/ipNnS3YhlVdpfp43FLS/jKgGC3LNPblq+Mw==
-X-ME-Sender: <xms:ETX7YfxU8rakxLKbUQu2yXMuZvJBZ0DMEqQGyAf2DH8B49Ef_uuZgQ>
-    <xme:ETX7YXSzzsXLt9ExghRhVFfrYQL5HYXsfsfhK2dVeYJW9rYl5J2GQw-MRocQcJUjE
-    46Zt5tC3mbEt56XCQ>
-X-ME-Received: <xmr:ETX7YZX4jOzZN8XOBT8lhXh3gJbmKYwieUDSCLE8JdvJtKEHTWdJ5inKK7VhMfNEls4GJ1ESPTahLKyu3db4nF4s_COMC5zEdTMZWyisPNUG4hWji5Q1a5J7FFTSNoCOOi1cHA>
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=oqPS/m
+        8KdcwSEqSZDEqPQcylkLS5BxWh5VCZ7RIAJTQ=; b=gtvImH1Up2Cm+sAJovBnj/
+        u1UwtFmOzaQSgDyS4VgyIE/odakeT1coAhPNQUoP2EbzWRt7I3ZkE4zL71ev9nhn
+        dUUJvB5W55Ze2HYat5SvQcaBJ36KSwWpkPAyvypxdAutC8LnOMc2VtQB3wPEqb0F
+        +b6VzOKqStlEKY4a7W4KMtTFNtPi2zgKCsyn59EkdQOwJviotbdC+SuE2T7VZtL7
+        5rTeMmaRLuHN45HPFJNyeyQmkb/OpBec1U6QcchXLHX/ErkNFu9JvPnDl2qaUVGc
+        On1nyiSF4cd6YpMWnk2aKphBYw053OCCz9HwWKB+1A5XB2ij+awvly5kKtSh5dPw
+        ==
+X-ME-Sender: <xms:FTX7YTo_SHU8P_deJ_Av1PzwDC5Wq4pfe4E5XKDOBqoj1G10VOOPTw>
+    <xme:FTX7Ydoj_7XrQx9ts1UfjuxHm_fjpO7i_MVV5reE3Oru-7FROk-MD6hF_TQkXU5TX
+    EnprktQlZ6Sbu6e4A>
+X-ME-Received: <xmr:FTX7YQN4MMgHIFHj_PlPiz2Z8VgKRunD3oLZspIcBW3NR3relvRUCEEf75ziYjPv2isJL_4ZagaxnHLeovetL2Z1tZpVzN_TKDZv5XFPlhTjQ_BNybX0o6nIbdQLS09Fp5WOfA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdefkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
-    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
-    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
-    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    grmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:ETX7YZghmwOOdWLTccIONMNE5eGDq55aXLlBdJqCFHZxhYZ18u2lQg>
-    <xmx:ETX7YRCin-060C3hMpckjTvkf3OqUHRpGLq4qkDYLrwz0Ig8wG24wQ>
-    <xmx:ETX7YSL9OGDtC_7mv4L30UX8naySd2K9Xyl7JQReTHSj6n-XeQri2A>
-    <xmx:EjX7YVvYm3brRpXZDHBwll5kOaX8Z90hXwI2DiUxTgpNp5aXFYplu-a2dSY>
+    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
+    jeehueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:FTX7YW43HUqixIHZQXzO4FLl7O4CAqVsfUIIfVBl7emb7B_Dx8jiLw>
+    <xmx:FTX7YS4y6Ydi0gAEyVY61HSRB9Sqfzh8wfXQxflBP33xMV1ubrc5BQ>
+    <xmx:FTX7YehNrgg-wlAIjsmlnj4lFLylDepyDvjqWdI1TBTbxvJ_tYx4ww>
+    <xmx:FjX7YbEPx4Y5JR8sZbV4Jxva-xc7G7L5zCMNy3qcVVWcynLtN873KXzazJY>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Feb 2022 20:51:13 -0500 (EST)
+ 2 Feb 2022 20:51:16 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -64,49 +65,55 @@ Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 1/2] dt-bindings: mmc: sunxi: Add D1 MMC and eMMC compatibles
-Date:   Wed,  2 Feb 2022 19:51:10 -0600
-Message-Id: <20220203015112.12008-1-samuel@sholland.org>
+Subject: [PATCH 2/2] mmc: sunxi-mmc: Add D1 MMC variant
+Date:   Wed,  2 Feb 2022 19:51:11 -0600
+Message-Id: <20220203015112.12008-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220203015112.12008-1-samuel@sholland.org>
+References: <20220203015112.12008-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-D1 contains variants of the usual sunxi MMC controller. The eMMC
-controller has the same parameters as the A100 eMMC controller. The
-other controllers have a DMA address shift like on A100, but they have
-a smaller 13-bit size field, making them a new incompatible variant.
+D1's MMC controllers are unique in that they have the DMA address shift
+(like A100) with a 13-bit descriptor size field (like sun4i). Add the
+compatible and parameters for this new variant.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml      | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/mmc/host/sunxi-mmc.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-index 4f62ad6ce50c..94e2c6c4e4b7 100644
---- a/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml
-@@ -24,6 +24,7 @@ properties:
-       - const: allwinner,sun7i-a20-mmc
-       - const: allwinner,sun8i-a83t-emmc
-       - const: allwinner,sun9i-a80-mmc
-+      - const: allwinner,sun20i-d1-mmc
-       - const: allwinner,sun50i-a64-emmc
-       - const: allwinner,sun50i-a64-mmc
-       - const: allwinner,sun50i-a100-emmc
-@@ -49,6 +50,9 @@ properties:
-       - items:
-           - const: allwinner,sun50i-h6-mmc
-           - const: allwinner,sun50i-a64-mmc
-+      - items:
-+          - const: allwinner,sun20i-d1-emmc
-+          - const: allwinner,sun50i-a100-emmc
-       - items:
-           - const: allwinner,sun50i-h616-emmc
-           - const: allwinner,sun50i-a100-emmc
+diff --git a/drivers/mmc/host/sunxi-mmc.c b/drivers/mmc/host/sunxi-mmc.c
+index 2702736a1c57..c62afd212692 100644
+--- a/drivers/mmc/host/sunxi-mmc.c
++++ b/drivers/mmc/host/sunxi-mmc.c
+@@ -1167,6 +1167,14 @@ static const struct sunxi_mmc_cfg sun9i_a80_cfg = {
+ 	.can_calibrate = false,
+ };
+ 
++static const struct sunxi_mmc_cfg sun20i_d1_cfg = {
++	.idma_des_size_bits = 13,
++	.idma_des_shift = 2,
++	.can_calibrate = true,
++	.mask_data0 = true,
++	.needs_new_timings = true,
++};
++
+ static const struct sunxi_mmc_cfg sun50i_a64_cfg = {
+ 	.idma_des_size_bits = 16,
+ 	.clk_delays = NULL,
+@@ -1205,6 +1213,7 @@ static const struct of_device_id sunxi_mmc_of_match[] = {
+ 	{ .compatible = "allwinner,sun7i-a20-mmc", .data = &sun7i_a20_cfg },
+ 	{ .compatible = "allwinner,sun8i-a83t-emmc", .data = &sun8i_a83t_emmc_cfg },
+ 	{ .compatible = "allwinner,sun9i-a80-mmc", .data = &sun9i_a80_cfg },
++	{ .compatible = "allwinner,sun20i-d1-mmc", .data = &sun20i_d1_cfg },
+ 	{ .compatible = "allwinner,sun50i-a64-mmc", .data = &sun50i_a64_cfg },
+ 	{ .compatible = "allwinner,sun50i-a64-emmc", .data = &sun50i_a64_emmc_cfg },
+ 	{ .compatible = "allwinner,sun50i-a100-mmc", .data = &sun50i_a100_cfg },
 -- 
 2.33.1
 

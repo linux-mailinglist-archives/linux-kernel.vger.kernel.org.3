@@ -2,101 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F424A7D9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E904A7D9E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 03:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239880AbiBCCAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Feb 2022 21:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiBCCAc (ORCPT
+        id S1348903AbiBCCBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Feb 2022 21:01:21 -0500
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:35211 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229640AbiBCCBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Feb 2022 21:00:32 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A927C061714
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Feb 2022 18:00:32 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id jx6so3410381ejb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Feb 2022 18:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=lxWBwGKgTWaFZT5siy9MmYF0wpXs3bDIfO+VSmkVhOs=;
-        b=VrvDepaPiHZBFur4A33iJd7uY8YvKRz8K13whFn26G2dh3BG1TB1GYdcf4fivbkGM+
-         FhAZ9/s8ZI3gSAug+BEPoRid87hyp1BFgDfwqFASb80T9nG180nndYiQ/JsQ8f7ThMlf
-         2EOuSaRUI1q/wqV5PFXKWQnyt9NfSRvM8YuSzzgM/xrXsAi4WQqWmUxHXrmmsHBqimJ9
-         GzGQfT7B4m1bfBCuXYu9Q4VApQ7mRu5gXgbwvKEjT7X4CXLavN0xx7f1LKqYaWaFtWGz
-         KpSiNQKz2MoVBo9+81J5QxFkLHOnPvKMHZL5hoh336V5VfvFwt2cEPdKBspMsQ9fVhux
-         XYDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=lxWBwGKgTWaFZT5siy9MmYF0wpXs3bDIfO+VSmkVhOs=;
-        b=HbaNoGfxSpZmY1k2SW7sOJByQr3ZsN36El/VV2s1cfVc9Mzgq5gzHpQT8n8Qjppcl8
-         i3qkF6b0pzYyPdz4fBg1ddoE4Po1OAM4/vk3Kl8xIi0yzYPtWx5A29/1BjTpk2GcWLDH
-         njQkaSOH3pSFv/PASHT0S38g4rGMKvCAR/6fzlLqpJWbSb2c2HSfkWUlIiQKxAjcD7Xe
-         p1Va+e4FWvTmMG0qR1SD4dvR0WezCjQSYHevveASdRq2N5cW2H/mfpLpZxPHy4H6mT6A
-         F27ul2qqvmsGKsxWBbYJYnWqfDI3qy9baEMQUkleM+Qp1ijRVoEDmR9JWGqNlQ7rhes6
-         R1dw==
-X-Gm-Message-State: AOAM531Awu5MTyInh+JgxDMNz1NE6g4aFisXUDrl9lCOKFrJl7InMrAD
-        Zkeuc1W0/mM+/O09rqduQ1c=
-X-Google-Smtp-Source: ABdhPJzvG6IRe7QL1vHJcF2neabtJs69d92CVoL8a7zGs/RBvP33L1IALDJyeVmzuBgEl4AeTKEn+Q==
-X-Received: by 2002:a17:907:c20:: with SMTP id ga32mr27273669ejc.638.1643853630831;
-        Wed, 02 Feb 2022 18:00:30 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id rv28sm15884487ejb.71.2022.02.02.18.00.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 02 Feb 2022 18:00:30 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     akpm@linux-foundation.org, mhocko@suse.com,
-        mgorman@techsingularity.net
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@gmail.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH] mm/page_alloc: add zone to zonelist if populated
-Date:   Thu,  3 Feb 2022 02:00:22 +0000
-Message-Id: <20220203020022.3044-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        Wed, 2 Feb 2022 21:01:20 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id C44542B0009C;
+        Wed,  2 Feb 2022 21:01:18 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 02 Feb 2022 21:01:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=9CK2u6ee+e0QjQkxatovO9y+1G1KA4Gn5dGKWr+mjC4=; b=ZnegH
+        ZQ60vHjqTX4D7uUYXe5eqphy9Hom3Q0OMy2nkIxlMA2DdDrxYZ3DqqefN+nQtUpT
+        yNXkOPQdeKyZP7jhIAJobfZ8FFSZxqNqWrVDqK6cst2uAyFZ3PkpfW8eyZxtejPL
+        FOJgZjEW2/+OiJyTAeMNteQPecTYN4uLWsQA6cVjr4t5oc6dTfzkgNNOiLByxQIz
+        vRWF+AuWVFMDrBvDos1EfIqxc/QQfTfqTUNtErkCPAH6mwpmc3PWWaJIPOjENi8V
+        u2WSTGgtrgaC3ycJRELZlLaEu00TLYU4KBvxr+nhR+XgCBXUz4M99HDTlJ75Ubb1
+        4yxd0S/CMOQRfEhXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=9CK2u6ee+e0QjQkxatovO9y+1G1KA
+        4Gn5dGKWr+mjC4=; b=k+D/h9SjwYCWKitapyjE4CFvr771k8gxw7Y8BIGXhXRSl
+        3BmwxtA+eIgUyRHgv75UY9/Jo0FqzFvrWRN4gkUorKLbDuYzrM3acKPJhmKH134S
+        5z/4aAGAmOfuFc2//n8aEdm/ZjcGElm1p9pd9Ih7/UMsNI/u5KBUmSWM1ZNRbrfw
+        P+WKUvNQsUvrE74X6NkwAnW8bMTI77EYBL3FtoYgk1ESHKTRxV+1WP4Q0P7gVdRx
+        xBaev1c60GKfmA2F93IENygqGpEmSBHdB2FCFgXKHcOeobdS49qDtUwR52THaFzH
+        lqomZuaRuJyFomiG3YKBGitWxLepYkIuGvuRph1eg==
+X-ME-Sender: <xms:bTf7YTWTuuKlb-2J7ORvbqYz83iYnI8dE9FX0V4QiNm_qJo6jtnjFg>
+    <xme:bTf7YblnhByH9vvLtIvCq01RWFgLFs8fnLxUbpQNH37z0LNjbNWItK04uFEnHw9Ns
+    WDCenOTGpa-GHRJoQ>
+X-ME-Received: <xmr:bTf7Yfa3fB2XRQf_x8SZC4o0PrgTEFbYewlgQcpalf5dKPrMETPMx61W2Sbo4NPpttux9Ff4s0XMzJ8HLyKgPTQCaHduwDAExUL4RT4GUaIommUvGy-u2zi7vsIM0ncVj4qmCw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdegudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehiefftdev
+    tdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:bTf7YeXDDMu_6kHYY28fau6Oqk9As0BsFHH-IU1ijs457m3pHLqUGw>
+    <xmx:bTf7YdnqzlUBoXW4aEgGLSOY3k7B_lYhOtW-nqNAKbnT_X_e9XAKRg>
+    <xmx:bTf7YbeQC5-kdjTaVhdNw7qQnWtRB-ASPOqgoIzTa_DSCDoagXD-Tw>
+    <xmx:bjf7YfnzjWVR7i8J84FPAx566rYwrVhpQEMs4t9x_SYoc3USMjfIpoQvK2g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Feb 2022 21:01:16 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Jaroslav Kysela <perex@perex.cz>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-mmc@vger.kernel.org, Samuel Holland <samuel@sholland.org>
+Subject: [PATCH 0/3] ASoC: sun4i-i2s: Support for Allwinner R329 and D1 SoCs
+Date:   Wed,  2 Feb 2022 20:01:12 -0600
+Message-Id: <20220203020116.12279-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During memory hotplug, when online/offline a zone, we need to rebuild
-the zonelist for all nodes. Current behavior would lose a valid zone in
-zonelist since only pick up managed_zone.
+This series extends the sun4i-i2s binding and driver to support some
+newer versions of the hardware. Each instance of the hardwar now has
+multiple input/output pins, and channels can be muxed between them.
+Since so far the driver only supports a "default" linear channel map,
+the driver changes are minimal.
 
-There are two cases for a zone with memory but still !managed.
 
-  * all pages were allocated via memblock
-  * all pages were taken by ballooning / virtio-mem
+Samuel Holland (3):
+  ASoC: dt-bindings: sun4i-i2s: Add compatibles for R329 and D1
+  ASoC: sun4i-i2s: Update registers for more channels
+  ASoC: sun4i-i2s: Add support for the R329/D1 variant
 
-This state maybe temporary, since both of them may release some memory.
-Then it end up with a managed zone not in zonelist.
+ .../sound/allwinner,sun4i-a10-i2s.yaml        |  5 ++
+ sound/soc/sunxi/sun4i-i2s.c                   | 68 +++++++++++++++----
+ 2 files changed, 59 insertions(+), 14 deletions(-)
 
-This is introduced in 'commit 6aa303defb74 ("mm, vmscan: only allocate
-and reclaim from zones with pages managed by the buddy allocator")'.
-This patch restore the behavior.
-
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-CC: Mel Gorman <mgorman@techsingularity.net>
-CC: David Hildenbrand <david@redhat.com>
-Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
----
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index de15021a2887..b433a57ee76f 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6092,7 +6092,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
- 	do {
- 		zone_type--;
- 		zone = pgdat->node_zones + zone_type;
--		if (managed_zone(zone)) {
-+		if (populated_zone(zone)) {
- 			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
- 			check_highest_zone(zone_type);
- 		}
 -- 
 2.33.1
 

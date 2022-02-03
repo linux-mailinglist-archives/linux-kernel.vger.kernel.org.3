@@ -2,95 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134474A851E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B14A14A851F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 14:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350779AbiBCNXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 08:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbiBCNX1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 08:23:27 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1B2C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 05:23:27 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id t14so3869855ljh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 05:23:27 -0800 (PST)
+        id S1350796AbiBCNYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 08:24:49 -0500
+Received: from mail-mw2nam12on2046.outbound.protection.outlook.com ([40.107.244.46]:52576
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235110AbiBCNYr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 08:24:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RGb9f8r1PPTvyXprBiNx4JwlizA5s7O6MPGiEHA7NB0OHeEZxZ4mIAhsBtNIL3Fs/MQQT8g2Ovkzk4unazZyLuuVx5qp+oWFtw3yUljtMXTaVgyXK/Ain5sylVNI5C+UcjQ9vOXcV8jxfBaO/6kTlJo0VYRjnmz1FRGfWsMA630IOTARr/09MuGXe6Ii3TNnKhKV3LwgQwG6b6V9xlkFaoIytH5hDeK22MlGTcGTRb8rE6ocO8oc2bT0HZ8Bu0wNEvs1xv7qu7Vqy/uvQhgBX10wDFbLPyj2apePHjzFaiDowA3fWInx6ay0DPgqb6QHNQLsERzSM69y/vW9arFkJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hh/Bl6mv7SPKvuzzxd+jIVrnqsyQBo3bwkcYhte1I7c=;
+ b=e65oHU3CIlYQWn4N/8trF6QDC16F0RJ8cQHP52fze8N0GeoeMqBAFK2YzJwxAs7dr2AAkAzZWgzuOzc3BWmI2KOp3VxvqF/9SYPBKzbh0MnxEEBs4uNP6PJJtRKf+xp6SEVkuJRv7NdwLkUahQzAm4XR5XTvj1qejo1XaWhvEaGi5yQBGTGwuT/y0IFjTTmZGjewo8ryUJNrVw3Do2vWbnOG+gSM+FA2tiqhgPLc6J+x/heimheBUV4SqRuyX+7P1Rp35oXjhuMfQMcO5b1mAh3Bb8Cf7uRknpPJYh5+RcmgI7vKJ7v2r8DwgOTkWvKt1feWTvREqbrCiaiBUOzlbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=bootlin.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=Ak+COwfE20Lh+wMI8BKPZo4w9eb0zqwsjKIhrR00dVY=;
-        b=yRZR355Mfhbhl7GZ+SdOSUxtvGqB0IXPTh6ytscrhlFCEv43c7EBU/TQ1aGjc2VfOR
-         JuU/u1jM17F0EjWgpYrdnjHMoFIZc0Xs8zvK7uOdj4qoKXJmnVhvw6eYpL2EyVkUmpH5
-         8s7Mf0ExwIO4vY4BBdVZdNpbu/qh1OG/NhwQxSoKCP6m3PUkISixEhJxYfV4hQpv9D3S
-         uFkP+E2X6UK5tA+lmkehEXmg/nV+BTB0Fx/MgzVHDL//DVr7xKOYVWL9679ZH/JK8bba
-         xVnng3bqzF4EZcHpOUwkcWs6Hnc1CnXjASHgichtBvMQpJr4BUc91Ijh3Om16dCIRr+W
-         qSyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=Ak+COwfE20Lh+wMI8BKPZo4w9eb0zqwsjKIhrR00dVY=;
-        b=Nl7DKKWeuiK4hhWFUH6u2fBTU4SFlMPXNUyqZcuDYA6e2DhGucIEBCZUKaTt2eItWn
-         QH8MoKCzJHG6WKj307tgOdw/8fy3uc9m3H4GeV5tnpyZLY2HX5vsNZ/0ZEMF1Mmd7wyt
-         l3UINrr72v7pWonWKkfSUhGZs9zkta5UdRlsDI8GUSeRfipM9VA8Zh1dueF+qAX7iOuA
-         zcKIvGokA9/EZlWlUE6axpdurtAn+bq55M/Ab9CMSbm9kK0xzWwwOGD14+sOnj7kd8HM
-         qtLER7ivZk0WCrsEVMlmEL5ycQrGO659weyYea6mpyDRe3ZsEDpFC9vU/uGGwP8nL2qj
-         /RPQ==
-X-Gm-Message-State: AOAM532l/E1rGygmxc+Ezi8oF0/JQGPKTkj5r8EkEsSYjQDdXurDANfR
-        2HSamOt2iDWQaKoX+SFtVyNSU4RhW+Tf/Q==
-X-Google-Smtp-Source: ABdhPJxTD07obBKqx4ohmhw45P/a5zdsLVVR5rdZko14LhaAA6p7Co6lBa+Vn7lU+WEd9hRq1B8eYQ==
-X-Received: by 2002:a2e:a4dc:: with SMTP id p28mr19960705ljm.367.1643894605785;
-        Thu, 03 Feb 2022 05:23:25 -0800 (PST)
-Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id u18sm4096730lff.139.2022.02.03.05.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 05:23:25 -0800 (PST)
-Date:   Thu, 3 Feb 2022 14:23:23 +0100
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] OP-TEE fix for v5.17
-Message-ID: <20220203132323.GA4132001@jade>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hh/Bl6mv7SPKvuzzxd+jIVrnqsyQBo3bwkcYhte1I7c=;
+ b=alzM+L2Ok6i9+8Ttmg0j8AfEcT28CLnX7JEGMqqpmSRTQb6JxBx8zlN75dwN6K7t8I97r77ea3mHWokBrwL0vO/Kh3DA83GbePRdsoRRKkzGlHAWC+ANEM6TlulUmezUihYMaQuRlRRLHbGK09D+u5tL254OCNsJdxDrvyG9BqQ=
+Received: from DS7PR03CA0133.namprd03.prod.outlook.com (2603:10b6:5:3b4::18)
+ by BL3PR02MB8050.namprd02.prod.outlook.com (2603:10b6:208:359::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 3 Feb
+ 2022 13:24:45 +0000
+Received: from DM3NAM02FT008.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:3b4:cafe::ca) by DS7PR03CA0133.outlook.office365.com
+ (2603:10b6:5:3b4::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Thu, 3 Feb 2022 13:24:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT008.mail.protection.outlook.com (10.13.5.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Thu, 3 Feb 2022 13:24:45 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 3 Feb 2022 05:24:43 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 3 Feb 2022 05:24:43 -0800
+Envelope-to: git@xilinx.com,
+ miquel.raynal@bootlin.com,
+ richard@nod.at,
+ vigneshr@ti.com,
+ linux-mtd@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.18] (port=53850 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
+        id 1nFc6M-0007ZG-P6; Thu, 03 Feb 2022 05:24:43 -0800
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <git@xilinx.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Subject: [RFC PATCH] mtd: tests: Fix eraseblock read speed miscalculation for lower partition sizes
+Date:   Thu, 3 Feb 2022 18:54:34 +0530
+Message-ID: <20220203132434.25769-1-amit.kumar-mahapatra@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8f096885-3f95-4ed8-fb73-08d9e7188b48
+X-MS-TrafficTypeDiagnostic: BL3PR02MB8050:EE_
+X-Microsoft-Antispam-PRVS: <BL3PR02MB805015ED1478A35B50BBB78EBA289@BL3PR02MB8050.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XP/N0vE+AsPTAg9JetRejWB4iL8zR6Z60NzGQtNI2aaaJqJxb8o2ptqTI8oljIkgy4uMV4OBX0sPpYvlq9NI0+mRJINzfp2s0+jWJXYoyiA9bT21WtDz7r2w2OIuOGWd1zg9EEvofCXfGHx854rqG4eanp2qiyz5E5CICQBa+o8LXNO3CX3aE8F+LwJziybL4LXM2iJKIWqGwCW9UHCN2g4MqDxS3ep7hBdObE1xgZaaTBhWCyEgZQXT/na6LDUopN9LVEFALSvdMFq1gXm3ICADB9O8yjxVMh2agpC8F4f55AzcmMHRci6bGnK0q1QYcwnBLetyDTrj5IiJD5Fu+tb4xjuNnLLti2/3WKmLpscFuBlKTz28QqLxKv2PqEbWqNKJ/IoXYWw484zoesyium8ZrH+bgkAK/JYZfxuo07DknXh1zTw0Pc1WGltMido5FCZNYaAJ/nE1ShPaN5JkJc6Lab2Wk/d1uIAZp9vf14bilgkFeTSIR2P7fxVbm1szdIyGuqaJP3qe1zjfpoqGjQ+k8WfpYU4/5FDhXmT7rFYK1DccT/oVfWEnfd4xyDCQ5av9ZjpbpTNkNptyTrrFs/iMnWcQjIVSrJxL0ufWKNpnD8vLL8lArINkUbnOOLMmChMKfm8SZeYe7vzJCMLCHxgOzzv53RLJnvaW77ONnr0DIeMBr6a1YUtCrJg/YvQ1oHpoicLW73W10XRaXfCGOg==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(82310400004)(8676002)(7696005)(316002)(6666004)(54906003)(110136005)(5660300002)(508600001)(7636003)(356005)(9786002)(4326008)(8936002)(70586007)(70206006)(336012)(426003)(83380400001)(40460700003)(36756003)(47076005)(36860700001)(1076003)(186003)(26005)(2906002)(2616005)(107886003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2022 13:24:45.0745
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f096885-3f95-4ed8-fb73-08d9e7188b48
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT008.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB8050
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+While calculating speed during  mtd_speedtest, the time interval
+(i.e., start - finish) is rounded off to the nearest milliseconds by
+ignoring the fractional part. This leads to miscalculation of speed.
+The miscalculation is more visible while running speed test on small
+partition sizes(i.e., when partition size is equal to eraseblock size or
+twice the eraseblock size) at higher spi frequencies.
 
-Please pull this OP-TEE driver fix which decouples driver private shared
-memory objects from the original tee_context. This fixes the root cause of
-a shutdown problem where the driver would dead-lock waiting for tee-supplicant.
+For e.g., while calculating eraseblock read speed for a mtd partition with
+size equal to the eraseblock size(i.e., 64KiB) the eraseblock read time
+interval comes out to be 966490 nanosecond. This is then converted to
+millisecond(i.e., 0.966 msec.). The integer part (i.e., 0 msec) of the
+value is considered and the fractional part (i.e., 0.966) is ignored,for
+calculating the eraseblock read speed. So the reported eraseblock read
+speed is 0 KiB/s, which is incorrect.
 
-Thanks,
-Jens
+There are two approaches to fix this issue.
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+First approach will be to keep the time interval in millisecond. and round
+up the integer value, with this approach the 0.966msec time interval in the
+above example will be rounded up to 1msec and this value is used for
+calculating the speed. Downside of this approach is that the reported speed
+is still not accurate.
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+Second approach will be to convert the time interval to microseconds
+instead of milliseconds, with this approach the 966490 nanosecond time
+interval in the above example will be converted t0 966.490usec and this
+value is used for calculating the speed. As compared to the current
+implementation and the suggested First approach, this approach will report
+a more accurate speed. Downside of this approach is that, in future if the
+mtd size is too large then the u64 variable, that holds the number of
+bytes, might overflow.
 
-are available in the Git repository at:
+In this patch we have gone with the second approach as this reports a more
+accurate speed. With this approach the eraseblock read speed in the above
+example comes out to be 132505 KiB/s when the spi clock is configured at
+150Mhz.
 
-  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-fix-for-v5.17
+Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+---
+BRANCH: mtd/next
+---
+ drivers/mtd/tests/speedtest.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-for you to fetch changes up to aceeafefff736057e8f93f19bbfbef26abd94604:
+diff --git a/drivers/mtd/tests/speedtest.c b/drivers/mtd/tests/speedtest.c
+index 93e76648f676..2b76e7750c68 100644
+--- a/drivers/mtd/tests/speedtest.c
++++ b/drivers/mtd/tests/speedtest.c
+@@ -161,13 +161,13 @@ static inline void stop_timing(void)
+ static long calc_speed(void)
+ {
+ 	uint64_t k;
+-	long ms;
++	long us;
+ 
+-	ms = ktime_ms_delta(finish, start);
+-	if (ms == 0)
++	us = ktime_us_delta(finish, start);
++	if (us == 0)
+ 		return 0;
+-	k = (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000;
+-	do_div(k, ms);
++	k = (uint64_t)goodebcnt * (mtd->erasesize / 1024) * 1000000;
++	do_div(k, us);
+ 	return k;
+ }
+ 
+-- 
+2.17.1
 
-  optee: use driver internal tee_context for some rpc (2022-02-03 13:36:32 +0100)
-
-----------------------------------------------------------------
-OP-TEE fix shutdown problems
-
-----------------------------------------------------------------
-Jens Wiklander (1):
-      optee: use driver internal tee_context for some rpc
-
- drivers/tee/optee/core.c          |  1 +
- drivers/tee/optee/ffa_abi.c       | 77 ++++++++++++++++++++++-----------------
- drivers/tee/optee/optee_private.h |  5 ++-
- drivers/tee/optee/smc_abi.c       | 48 +++++++++---------------
- 4 files changed, 64 insertions(+), 67 deletions(-)

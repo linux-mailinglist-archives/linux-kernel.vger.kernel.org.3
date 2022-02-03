@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F2E4A8D31
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F824A8D35
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 21:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354040AbiBCU1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 15:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236293AbiBCU1g (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 15:27:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B218C061714;
-        Thu,  3 Feb 2022 12:27:36 -0800 (PST)
-Date:   Thu, 03 Feb 2022 20:27:32 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643920053;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A5VjKzhwn0zNRzX5kh/ilzafIOp9ufeGT+DH3BSRAQY=;
-        b=4NhybIwh0zLj686mxIwMtBf1fwN3ApTnDdda1iLANTK0LwCEkv1+x/McYrG6sGeO2Q9bRg
-        Jajcx2ttIG943zdkwiis4LMlie7zxwUJvlbfhgW7ocbU0KiRiLpUY+yr1F4MelpbAk+scJ
-        3vBfFCvFRJi+i1HIRiu6dXb4q6fHIkClSj+ccT1O3ze0dCaacJgvpNwlbHyFTfnWSJqdM3
-        ybF8aplaCnJb4eU7C4ey6lRbyEWUOwV6H8wzKxg9fD6A4/90AgY/ChJ01EmhX5cn6ik7Oh
-        YzHIhDeIY7bIt6zE/OJjK+Z2LcIfhATbOwXN7jlY20EhkCX9OBFGftvveERfww==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643920053;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A5VjKzhwn0zNRzX5kh/ilzafIOp9ufeGT+DH3BSRAQY=;
-        b=G2kFfTDo30AW8f9SuANeYPNUVmxGvsu4jejTQ0sA8Hx9CqB3OIJvp+E9U/ADe4ReUANmLM
-        guFN5uNNh7KSymAw==
-From:   "tip-bot2 for Jim Mattson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/cpufeatures: Put the AMX macros in the word 18 block
-Cc:     Jim Mattson <jmattson@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220203194308.2469117-1-jmattson@google.com>
-References: <20220203194308.2469117-1-jmattson@google.com>
+        id S1354041AbiBCU2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 15:28:13 -0500
+Received: from mga02.intel.com ([134.134.136.20]:26035 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234566AbiBCU2K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 15:28:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643920090; x=1675456090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tB1HUyQO+nYJafkdVgFOWJU/qrAWAD/qIqDemUlXcmw=;
+  b=Ig+Fydl95U4qgkPd5rGKioFwlq97gvZ4JcmbGpzhtvw2GV2emKikCQR7
+   //zY9uJvAniyuYd3CcOfuBIZyrSwxMkBHnYdHUxWTP/4oBESXD916Qb4E
+   57PuRATvrFN2R/VE6e9hlHuCr8ykUjPZU9AQyak/ol1PNNJbyY98WNquo
+   8odWnwLkswQVhn9DnbgIXdY2C0jIw84gFhwlXAeYX6aOn9yfE9y12W48S
+   JCo3F36ViBxZlG5oXvYAgOUa8RNuXJALL50lsUrN6qawg7GKC7z2ugIEw
+   oYroElvuox5qSNQ3+od49kfTpDawkBEKGNPcNRZIdyn1+Iiz2q/vCQMCI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="235646203"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="235646203"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:28:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="524069910"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 12:28:10 -0800
+Date:   Thu, 3 Feb 2022 12:28:10 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 01/10] PCI: Add vendor ID for the PCI SIG
+Message-ID: <20220203202810.GX785175@iweiny-DESK2.sc.intel.com>
+Mail-Followup-To: Bjorn Helgaas <helgaas@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>, linux-kernel@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20220201071952.900068-2-ira.weiny@intel.com>
+ <20220203171112.GA103601@bhelgaas>
 MIME-Version: 1.0
-Message-ID: <164392005238.16921.14502952787568849778.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203171112.GA103601@bhelgaas>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+On Thu, Feb 03, 2022 at 11:11:12AM -0600, Bjorn Helgaas wrote:
+> On Mon, Jan 31, 2022 at 11:19:43PM -0800, ira.weiny@intel.com wrote:
+> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > 
+> > This ID is used in DOE headers to identify protocols that are defined
+> > within the PCI Express Base Specification.
+> > 
+> > Specified in Table 7-x2 of the Data Object Exchange ECN (approved 12 March
+> > 2020) available from https://members.pcisig.com/wg/PCI-SIG/document/14143
+> 
+> Please update this citation to PCIe r6.0, sec 6.30.1.1, table 6-32.
 
-Commit-ID:     ae75fa54228162ecd65341f9780886f21f557cc4
-Gitweb:        https://git.kernel.org/tip/ae75fa54228162ecd65341f9780886f21f557cc4
-Author:        Jim Mattson <jmattson@google.com>
-AuthorDate:    Thu, 03 Feb 2022 11:43:07 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 03 Feb 2022 12:19:39 -08:00
+Done.
 
-x86/cpufeatures: Put the AMX macros in the word 18 block
+Thanks,
+Ira
 
-These macros are for bits in CPUID.(EAX=7,ECX=0):EDX, not for bits in
-CPUID(EAX=7,ECX=1):EAX. Put them with their brethren.
-
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220203194308.2469117-1-jmattson@google.com
----
- arch/x86/include/asm/cpufeatures.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 6db4e29..4cc0ef9 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -299,9 +299,6 @@
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
- #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
--#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
--#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
--#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- 
- /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
- #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
-@@ -392,6 +389,9 @@
- #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
- #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
- #define X86_FEATURE_SPEC_CTRL		(18*32+26) /* "" Speculation Control (IBRS + IBPB) */
-+#define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
-+#define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
-+#define X86_FEATURE_AMX_INT8		(18*32+25) /* AMX int8 Support */
- #define X86_FEATURE_INTEL_STIBP		(18*32+27) /* "" Single Thread Indirect Branch Predictors */
- #define X86_FEATURE_FLUSH_L1D		(18*32+28) /* Flush L1D cache */
- #define X86_FEATURE_ARCH_CAPABILITIES	(18*32+29) /* IA32_ARCH_CAPABILITIES MSR (Intel) */
+> 
+> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > ---
+> >  include/linux/pci_ids.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> > index 011f2f1ea5bb..849f514cd7db 100644
+> > --- a/include/linux/pci_ids.h
+> > +++ b/include/linux/pci_ids.h
+> > @@ -149,6 +149,7 @@
+> >  #define PCI_CLASS_OTHERS		0xff
+> >  
+> >  /* Vendors and devices.  Sort key: vendor first, device next. */
+> > +#define PCI_VENDOR_ID_PCI_SIG		0x0001
+> >  
+> >  #define PCI_VENDOR_ID_LOONGSON		0x0014
+> >  
+> > -- 
+> > 2.31.1
+> > 

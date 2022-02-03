@@ -2,72 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F409D4A8221
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4604A8228
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 11:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350031AbiBCKNp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 3 Feb 2022 05:13:45 -0500
-Received: from lithops.sigma-star.at ([195.201.40.130]:38198 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiBCKNo (ORCPT
+        id S1349792AbiBCKQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 05:16:42 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:53972 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233561AbiBCKQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 05:13:44 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 23CB1613AFDF;
-        Thu,  3 Feb 2022 11:13:43 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DCn2Sc0aGa12; Thu,  3 Feb 2022 11:13:42 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id A46B9614E2C9;
-        Thu,  3 Feb 2022 11:13:42 +0100 (CET)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id N62xb5yN6wDW; Thu,  3 Feb 2022 11:13:42 +0100 (CET)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 6B45D613AFAE;
-        Thu,  3 Feb 2022 11:13:42 +0100 (CET)
-Date:   Thu, 3 Feb 2022 11:13:42 +0100 (CET)
-From:   Richard Weinberger <richard@nod.at>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     =?utf-8?B?TWljaGHFgiBLxJlwaWXFhA==?= <kernel@kempniu.pl>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <340602071.12640.1643883222200.JavaMail.zimbra@nod.at>
-In-Reply-To: <20220203104654.6cb43ea3@xps13>
-References: <20220125104822.8420-1-kernel@kempniu.pl> <20220125104822.8420-5-kernel@kempniu.pl> <1173246756.12597.1643879936765.JavaMail.zimbra@nod.at> <20220203104654.6cb43ea3@xps13>
-Subject: Re: [PATCH v3 4/4] mtdchar: add MEMREAD ioctl
+        Thu, 3 Feb 2022 05:16:41 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2247F210F5;
+        Thu,  3 Feb 2022 10:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1643883400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nMtUiTADLXvATyPy55s5v2jIbp3M1SDdfjBzYLxVQaY=;
+        b=uy2A4dJPId5ZjWCWAB7xzjfv13TBL3uksbYhtD+kKBZhrAucoFYo7wWTV4GGe0bSvNLiZg
+        /TASBHNd2GhHxG8IXnxdCpSOmo6tXKy/zRv5lEnzQFTGOlVqJYjcu5NXWm80JkNcmnW25s
+        2wbAYsBhMPGEqliDZhIuMJnb1yi8F+o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1643883400;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nMtUiTADLXvATyPy55s5v2jIbp3M1SDdfjBzYLxVQaY=;
+        b=vcVcbh2mnYakFOI5KUfh516xdmKnxbolVU4Edct5Wyh+ucnXTTj5p+shSiuZgqtlRy2NAd
+        0gSKvXRm2L/1iWDw==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7694EA3B88;
+        Thu,  3 Feb 2022 10:16:39 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E2601A05B6; Thu,  3 Feb 2022 11:16:38 +0100 (CET)
+Date:   Thu, 3 Feb 2022 11:16:38 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        apopple@nvidia.com, shy828301@gmail.com, rcampbell@nvidia.com,
+        hughd@google.com, xiyuyang19@fudan.edu.cn,
+        kirill.shutemov@linux.intel.com, zwisler@kernel.org,
+        hch@infradead.org, linux-fsdevel@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com
+Subject: Re: [PATCH v2 1/6] mm: rmap: fix cache flush on THP pages
+Message-ID: <20220203101638.5sibdhu4owokhfex@quack3.lan>
+References: <20220202143307.96282-1-songmuchun@bytedance.com>
+ <20220202143307.96282-2-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF96 (Linux)/8.8.12_GA_3809)
-Thread-Topic: mtdchar: add MEMREAD ioctl
-Thread-Index: hZNaN/vnabP7CZbdubDi1iosoXSpeQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202143307.96282-2-songmuchun@bytedance.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "Miquel Raynal" <miquel.raynal@bootlin.com>
->> If mtd->erasesize is large (which is not uncommon these days) you might
->> request more from kmalloc() than it can serve.
->> Maybe kvmalloc() makes more sense?
+On Wed 02-02-22 22:33:02, Muchun Song wrote:
+> The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+> However, it does not cover the full pages in a THP except a head page.
+> Replace it with flush_cache_range() to fix this issue. At least, no
+> problems were found due to this. Maybe because the architectures that
+> have virtual indexed caches is less.
 > 
-> Mmmh, I would really like these buffers dma-able.
+> Fixes: f27176cfc363 ("mm: convert page_mkclean_one() to use page_vma_mapped_walk()")
+> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+
+Looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  mm/rmap.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> I just discovered mtd_kmalloc_up_to(). Would this work?
-
-mtd_kmalloc_up_to() makes sense to be more friendly to the system.
-It tries to get memory without forcing write-back and such.
-But if we're out of continuous memory it won't help much. 
-
-Regarding dma-able, as soon you use something like UBI/UBIFS ontop of it
-the mtd driver has to be able to deal in any way with vmalloc()'ed memory.
-
-Another option would be not working on full erase blocks.
-
-Thanks,
-//richard
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index b0fd9dc19eba..0ba12dc9fae3 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -974,7 +974,8 @@ static bool page_mkclean_one(struct page *page, struct vm_area_struct *vma,
+>  			if (!pmd_dirty(*pmd) && !pmd_write(*pmd))
+>  				continue;
+>  
+> -			flush_cache_page(vma, address, page_to_pfn(page));
+> +			flush_cache_range(vma, address,
+> +					  address + HPAGE_PMD_SIZE);
+>  			entry = pmdp_invalidate(vma, address, pmd);
+>  			entry = pmd_wrprotect(entry);
+>  			entry = pmd_mkclean(entry);
+> -- 
+> 2.11.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

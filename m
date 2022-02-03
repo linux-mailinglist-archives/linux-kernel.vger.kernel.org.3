@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CCF4A8027
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 735A74A8026
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Feb 2022 09:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346397AbiBCINr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 03:13:47 -0500
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:39475 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343625AbiBCINn (ORCPT
+        id S244762AbiBCINl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 03:13:41 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:46103 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231836AbiBCINj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 03:13:43 -0500
-Received: by mail-vk1-f169.google.com with SMTP id n14so1201385vkk.6;
-        Thu, 03 Feb 2022 00:13:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s9uBxzW1iQTkHJWmlNd6eDgXf7Vcz0FCfwe1uYSA3ng=;
-        b=gNDTGZRU1+tLRkopVxR7UmWRP41JCnixcbuTxuTHbQm6qyzK2bTlRvFzPFZd4iziQK
-         q2UnSdEeN7PNoCnSFiQZwpjT9y1dtHM+ZijQCYPBj86Iz8Nf7wXDG2Z41O0u5XV80Je1
-         Pjy0MSYNfP2+uU+CUiM6iOgKCCsZefEWj87YUpeslhFus2oHHuacGzrLLhuZkLZr2V6E
-         NUdJfPOP9kkFCx4Ky+swgENGEweL5dvCDKxVaMn6DoHxakJwusd2vOHmg89mzSAOzrOY
-         6bNae3yVjskCRNFgECT0olzaXXLCWPHM4GCC9MhYwKN187pRSMAvH1mUoBxJKyTeA7uQ
-         yHtA==
-X-Gm-Message-State: AOAM531ZJ8/byTIvx+BKz9ENB55vcH6ymTmY1s5V+07DxOK7bSyLM4y1
-        N1WpXZIvpkH599y/6OjOHUd7GAQ2bPfXmw==
-X-Google-Smtp-Source: ABdhPJznwH3Egm/ej3cjnkX/xVze9JlrbhrTnX2EY3hkqZ8vvDuuyokMG+wRj2qaSLcmCyYspO0/Ug==
-X-Received: by 2002:a05:6122:220d:: with SMTP id bb13mr14009897vkb.33.1643876022722;
-        Thu, 03 Feb 2022 00:13:42 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id j37sm6817703vka.45.2022.02.03.00.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 00:13:42 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id a24so3718165uat.10;
-        Thu, 03 Feb 2022 00:13:42 -0800 (PST)
-X-Received: by 2002:a9f:2c0a:: with SMTP id r10mr13728057uaj.89.1643876022094;
- Thu, 03 Feb 2022 00:13:42 -0800 (PST)
+        Thu, 3 Feb 2022 03:13:39 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B3BED32020F0;
+        Thu,  3 Feb 2022 03:13:37 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 03 Feb 2022 03:13:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=h+F9A27NvIA+GKJCYuxpPOGt5GYFFmLQcgR5pl
+        DO8E8=; b=Cdsyg0Pn3Ab6xErlAntB5MyGCgXAkk+uF09GN826cSXJp1nX39LKSn
+        QnpArFTJMqTf90vRHT5lV7nBTPMKViGa6U9Ca5eTl6lRrC5qOkI5+qDXohCcvuet
+        SZu/A3BzcDV2ID/A8L+Xxt7/92B2cYliI9OJ5XgRlhNatuH0XlgZK0pGHt/G3TRh
+        ZuCm6YNwGCheBVSTUkv2M37YxzxwqX/w1tE0GMqSA1D577Y3IoI18qvL/uf+duPO
+        imVwS5NCmigRFxxqWquEukcEO2Jbbyb3kD+ywJd05tLun7CESMeDpbTlARXY1NTI
+        S6TQRmVh3UlfXo6yatYJqJxQ1ZMXrOkw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=h+F9A27NvIA+GKJCY
+        uxpPOGt5GYFFmLQcgR5plDO8E8=; b=F5AFmheXYgFSOpakvoALGRVa0zVirxzRR
+        k5gmm198NMnClY00YwdSrF8U/CvukeyjO3jFSGbGSNE3eiNASVktWwkONMuj1JXk
+        crbBfwz5/Gp2gMhzst74OeTI9kWnSpPEz0swHxrSgANbwQcq7q/kXWMQZi69E5kF
+        LivQDWE9TPOpqlCuSL4/Mb0kJJDXAl7Jb+ftvFd6O03KVY5+9n4AtJc3t23XPYcy
+        +sKDk1/Z+cxpIlCK+PIh23yxFc7Uvk0IJFi+FliRQtpXoIoNIBRrijsvAkaB4smu
+        gAG0uZEvgN87ErXQECWNDckFLUC3S5gAcwZdgj3itvt3QPXPXNE1g==
+X-ME-Sender: <xms:sI77YcxhL75k8W8K0u04e4pYItRNKXdRVgwHRB9jGO36bUbCaKdfuw>
+    <xme:sI77YQQIEOR0oDxF1FxJxVY89vs-YwmbaWdJrzU5j8h4Mf_Gb3y3vOBIyhO52X2sz
+    IjmyS7APSIFu0-wX3c>
+X-ME-Received: <xmr:sI77YeVZF1UoOeRktb6FzpQFiSfd69_8E7mQBKRgPyRhjUoDWeqjn3QFH0oan7fRFUbVPSyKb3jcYxRXbueXhQhtHLf33T5fuFWt9hw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdduudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:sI77YahwtO8cMS1cPg9153h7U8dRjBbntU9a4j9SNcpsAyYJSlCrAw>
+    <xmx:sI77YeCrLvRZ1BOkBxWuH14FkG8K3uy-dpiV6xAh0aC48g4j6DbZlQ>
+    <xmx:sI77YbIKsRmFJlXWevFcNV-I6BhsqT4FVcpRS_MALk1xuO-2Cyxsbg>
+    <xmx:sY77YUCbWxw9vejeNnCW4z_95HC7isoQxLBb-OvfhHE7zfvD9yzvBA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Feb 2022 03:13:36 -0500 (EST)
+Date:   Thu, 3 Feb 2022 09:13:33 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: nvmem: SID: Add compatible for D1
+Message-ID: <20220203081333.au4iblrlktqixgwk@houat>
+References: <20220203012502.10661-1-samuel@sholland.org>
 MIME-Version: 1.0
-References: <20220202225327.1544295-1-keescook@chromium.org>
-In-Reply-To: <20220202225327.1544295-1-keescook@chromium.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 3 Feb 2022 09:13:30 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVRrD+2zKoHxAaQdDuiK5JFDanbv0SJ91OdWfx+eyekPQ@mail.gmail.com>
-Message-ID: <CAMuHMdVRrD+2zKoHxAaQdDuiK5JFDanbv0SJ91OdWfx+eyekPQ@mail.gmail.com>
-Subject: Re: [PATCH] m68k: cmpxchg: Dereference matching size
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jikoomnds2xtwx5p"
+Content-Disposition: inline
+In-Reply-To: <20220203012502.10661-1-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
 
-On Wed, Feb 2, 2022 at 11:53 PM Kees Cook <keescook@chromium.org> wrote:
-> Similar to the recent arm64 fix[1], avoid overly wide casts in the cmpxchg
-> implementation. Avoid this warning under -Warray-bounds with GCC 11:
->
-> net/sched/cls_tcindex.c: In function 'tcindex_set_parms':
-> ./arch/m68k/include/asm/cmpxchg.h:64:17: warning: array subscript 'volatile struct __xchg_dummy[0]' is partly outside array bounds of 'struct tcf_result[1]' [-Warray-bounds]
->    64 |                 __asm__ __volatile__
->       |                 ^~~~~~~
-> net/sched/cls_tcindex.c:338:27: note: while referencing 'cr'
->   338 |         struct tcf_result cr = {};
->       |                           ^~
->
-> No binary output differences are seen from this change.
->
-> [1] commit 3364c6ce23c6 ("arm64: atomics: lse: Dereference matching size")
->
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+--jikoomnds2xtwx5p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your patch!
+On Wed, Feb 02, 2022 at 07:25:00PM -0600, Samuel Holland wrote:
+> D1 has a SID like other Allwinner SoCs, but with a unique eFuse layout.
+> Add a new compatible string for it.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Maxime Ripard <maxime@cerno.tech>
 
-Do you want me to queue this in the m68k for-v5.18 branch, or do
-you want to take it yourself, together with commit a8712a32665f9b1a
-("Makefile: Enable -Warray-bounds") in linux-next that triggers this?
-In case of the latter:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Maxime
 
-Please let me know. Thanks!
+--jikoomnds2xtwx5p
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYfuOrQAKCRDj7w1vZxhR
+xVwcAQD18T5ARVFWMMXn8UrNE5dT0w2s+SM2DU9z03hLPLFilAD7BAezRRhjaUDk
+fKpizMoqTnZEnuFb6nepiOHApT7MfQ8=
+=fo+u
+-----END PGP SIGNATURE-----
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--jikoomnds2xtwx5p--

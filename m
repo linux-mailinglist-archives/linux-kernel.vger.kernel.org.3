@@ -2,329 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4B04AA2AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4864AA2AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245064AbiBDV5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S245205AbiBDV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiBDV5d (ORCPT
+        with ESMTP id S230180AbiBDV6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:57:33 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E9C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:57:32 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so14300122pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:57:32 -0800 (PST)
+        Fri, 4 Feb 2022 16:58:00 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2FCC06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:57:59 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id o12so23109173eju.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=X5mQ7XgNN+wXIOoyBr6bEPCY6JnyKab78tFOCt/mw8M=;
-        b=f0s53wUDMeWAABIK90/+s023v71c8CXbsCTguKRbhpeoYsrOVMM82VyLxAKX8ZxmIo
-         AqCtBYgDq5jSe5xsU/c9v0Y+gU6II6lJDtPd4t1IdyChIcU29ViSQYdiwzZBzLlGi5JW
-         04qKzUAulgERC3XEWgigCpZJ2AT/Nb53TiWwlo8dJIUzyTepS3FmSOXHxd56VHo2JuuZ
-         3H7hXy49uYsQnXXwClLjACnQwx3u6YhntVqGTvsuH5b+SDxpLVg/qK+zXScBYwiZX47u
-         NYEqMHNsmvs2Yl82NxNU3icz+q3abBPdCe7/o8JYe5tbzLttH0f+HBZGoZaq3+0p++lE
-         MeWg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=4ry+6xT/5Q2RE5BmaT6rGkA3Wtas/JKbSMIBj1k8UiY=;
+        b=CVusU5U6nDWS1JVb0PZvHpmocDCcQhArtVdyzZqA414Xb7FGrqrjH2WoXceqJvju8P
+         DbLvfLlrYLVeStDKM6EmvIYLppiIy4xIIC5aSPIOyAFbClI46pTs5NFtRrbrdcQztdOg
+         Z23r4oLHWDJZ4OZ56ZKPu82iD03qkoLF9CiCG2+mKL02p6AFz1E9JyGjczVCE4LgXZHq
+         e+WV4blAji5axR7MV3E2YpopTBy6ADV87QR16w7z0n3vcHqfr78Q0gwp8VVDrtFFd6fh
+         eiy2/XB4tiV/ZIyRHwNR5ZiSxmqR4GCOejClHPcQdETqcfNR7EQ5GdOQVAR5VhPf2pK/
+         95pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X5mQ7XgNN+wXIOoyBr6bEPCY6JnyKab78tFOCt/mw8M=;
-        b=ZJB2AFEvKx4KLQtdBZGjoqQ5NVy21AwFW3fwNs/HFNckfjtBztTZnMjWf0GPugFZsT
-         cmCb9Z9HiIFQrNoliimTJPMYA/lfXak+yLq1SkNEeXG4rhrKov+S+y23kkN34mdwZgEh
-         HNpnrP5FrxI+PgkhKtRCpQEgnk/rviSlgDtRz3pUIFHuEK+LKhYqwWBFs8rC9SRXb3HX
-         9fgLmdzffRiIC7IP1yf5eNI5hWH39+wJFkpvx2UzmWij0NDQ7IKAtIKbUQggKvEOCmeR
-         UVJs/1zzboWG0OA0Yr793PAi+vOCYLF1OYB1Al9sqsj9RuL5fIKnBrGf12Z/wDLobk70
-         zDyg==
-X-Gm-Message-State: AOAM531clPat4vvyMHNBU4lZgDCj2mAjBmiswNqqlFA6A6cAd0nVw7by
-        WvsbRLYjnJ3VjubkpPXbE84kWVktfNXLgQ==
-X-Google-Smtp-Source: ABdhPJzRWUpM8+rgedAJTRPqUF2/4bzzp5hsVBHxEVWYZwtgYXRoVbAgM5BjDVq5nlLwIs9fyreOyQ==
-X-Received: by 2002:a17:90a:a616:: with SMTP id c22mr1176474pjq.68.1644011851262;
-        Fri, 04 Feb 2022 13:57:31 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id l22sm3562372pfc.191.2022.02.04.13.57.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 13:57:30 -0800 (PST)
-Date:   Fri, 4 Feb 2022 21:57:26 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 10/23] KVM: MMU: split cpu_role from mmu_role
-Message-ID: <Yf2hRltaM1Ezd6SM@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-11-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4ry+6xT/5Q2RE5BmaT6rGkA3Wtas/JKbSMIBj1k8UiY=;
+        b=Kpt7ytTzftgNI/r1nKyYL/DmklDhipQEiUjt8Tsmr5KW7IXoy36yJubKjhLKYtuR3P
+         H6UymivTrozTLv/Y8M5Zo7Hph7x+B3FDnP0Lnx7+dIqqK0qcFAAo+Jz2Rhb27H4SOi2q
+         n8ul7vBqPTZEug4ZZj7eKyyVn+lgMZSLhB2tZ8P+KmhME/itm4/5vJh4MHPD5uraXz4v
+         2bzDqiQAY7XAJS6Ru3Rd+wW+SRsZlqf9r9PK/OpNT9gqZYjvGyZsjfOox7GJwZwT45Hu
+         j/2mZXu8HhoHTNvkIaOrtBN6CPflM7aZneJJSNaLfvs4TylWmdr7SsZE26++RU17bwLG
+         nEuw==
+X-Gm-Message-State: AOAM531fJREYfawFNIAqDWCP6MayWVmEGHzLtzCNOb7Tnm+UTq7d+Szu
+        aU+R3SiavJoNPz8PdcAAwvUxnls5jPnoxQhcGqjruw==
+X-Google-Smtp-Source: ABdhPJyjPtHXPXxgtQ0AVGPTpqG2fXVtIIZm54elBHYCRwA8XbI0pmZ+X2oyzyAMLVWlc0R3MpRSEZkwGBAoxdDOP2c=
+X-Received: by 2002:a17:907:7f1b:: with SMTP id qf27mr792124ejc.114.1644011877513;
+ Fri, 04 Feb 2022 13:57:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-11-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+References: <20220201015518.3118404-1-wonchung@google.com> <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
+ <CAOvb9ygyupib4cMXhcdeZmgNZmyaCmaTF98MHae+irY5ruZ1Qw@mail.gmail.com> <CAJZ5v0hGxYv1xagc+ZQFhvpLpcbs1c1szZZahR7wsDm=i5AcJg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hGxYv1xagc+ZQFhvpLpcbs1c1szZZahR7wsDm=i5AcJg@mail.gmail.com>
+From:   Won Chung <wonchung@google.com>
+Date:   Fri, 4 Feb 2022 13:57:45 -0800
+Message-ID: <CAOvb9yhMgQ_4sDwqYS6ZYhauw3BKOidkp1uMFp6yw9nUWnLjSw@mail.gmail.com>
+Subject: Re: [PATCH v4] ACPI: device_sysfs: Add sysfs support for _PLD
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_50,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 06:57:05AM -0500, Paolo Bonzini wrote:
-> Snapshot the state of the processor registers that govern page walk into
-> a new field of struct kvm_mmu.  This is a more natural representation
-> than having it *mostly* in mmu_role but not exclusively; the delta
-> right now is represented in other fields, such as root_level.  For
-> example, already in this patch we can replace role_regs_to_root_level
-> with the "level" field of the CPU role.
-> 
-> The nested MMU now has only the CPU role; and in fact the new function
-> kvm_calc_cpu_role is analogous to the previous kvm_calc_nested_mmu_role,
-> except that it has role.base.direct equal to CR0.PG.  It is not clear
-> what the code meant by "setting role.base.direct to true to detect bogus
-> usage of the nested MMU".
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |   1 +
->  arch/x86/kvm/mmu/mmu.c          | 100 ++++++++++++++++++++------------
->  arch/x86/kvm/mmu/paging_tmpl.h  |   2 +-
->  3 files changed, 64 insertions(+), 39 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 4ec7d1e3aa36..427ee486309c 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -432,6 +432,7 @@ struct kvm_mmu {
->  	void (*invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa);
->  	hpa_t root_hpa;
->  	gpa_t root_pgd;
-> +	union kvm_mmu_role cpu_role;
->  	union kvm_mmu_role mmu_role;
->  	u8 root_level;
->  	u8 shadow_root_level;
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index dd69cfc8c4f6..f98444e1d834 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -230,7 +230,7 @@ BUILD_MMU_ROLE_REGS_ACCESSOR(efer, lma, EFER_LMA);
->  #define BUILD_MMU_ROLE_ACCESSOR(base_or_ext, reg, name)		\
->  static inline bool __maybe_unused is_##reg##_##name(struct kvm_mmu *mmu)	\
->  {								\
-> -	return !!(mmu->mmu_role. base_or_ext . reg##_##name);	\
-> +	return !!(mmu->cpu_role. base_or_ext . reg##_##name);	\
->  }
->  BUILD_MMU_ROLE_ACCESSOR(ext,  cr0, pg);
->  BUILD_MMU_ROLE_ACCESSOR(base, cr0, wp);
-> @@ -4658,6 +4658,38 @@ static void paging32_init_context(struct kvm_mmu *context)
->  	context->direct_map = false;
->  }
->  
-> +static union kvm_mmu_role
-> +kvm_calc_cpu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
-> +{
-> +	union kvm_mmu_role role = {0};
-> +
-> +	role.base.access = ACC_ALL;
-> +	role.base.smm = is_smm(vcpu);
-> +	role.base.guest_mode = is_guest_mode(vcpu);
-> +	role.base.direct = !____is_cr0_pg(regs);
-> +	if (!role.base.direct) {
-> +		role.base.efer_nx = ____is_efer_nx(regs);
-> +		role.base.cr0_wp = ____is_cr0_wp(regs);
-> +		role.base.smep_andnot_wp = ____is_cr4_smep(regs) && !____is_cr0_wp(regs);
-> +		role.base.smap_andnot_wp = ____is_cr4_smap(regs) && !____is_cr0_wp(regs);
-> +		role.base.has_4_byte_gpte = !____is_cr4_pae(regs);
-> +		role.base.level = role_regs_to_root_level(regs);
-> +
-> +		role.ext.cr0_pg = 1;
-> +		role.ext.cr4_pae = ____is_cr4_pae(regs);
-> +		role.ext.cr4_smep = ____is_cr4_smep(regs);
-> +		role.ext.cr4_smap = ____is_cr4_smap(regs);
-> +		role.ext.cr4_pse = ____is_cr4_pse(regs);
-> +
-> +		/* PKEY and LA57 are active iff long mode is active. */
-> +		role.ext.cr4_pke = ____is_efer_lma(regs) && ____is_cr4_pke(regs);
-> +		role.ext.cr4_la57 = ____is_efer_lma(regs) && ____is_cr4_la57(regs);
-> +		role.ext.efer_lma = ____is_efer_lma(regs);
-> +	}
-> +
-> +	return role;
-> +}
-> +
->  static union kvm_mmu_role kvm_calc_mmu_role_common(struct kvm_vcpu *vcpu,
->  						   const struct kvm_mmu_role_regs *regs)
->  {
-> @@ -4716,13 +4748,16 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
->  			     const struct kvm_mmu_role_regs *regs)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	union kvm_mmu_role new_role =
-> +	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
-> +	union kvm_mmu_role mmu_role =
->  		kvm_calc_tdp_mmu_root_page_role(vcpu, regs);
->  
-> -	if (new_role.as_u64 == context->mmu_role.as_u64)
-> +	if (cpu_role.as_u64 == context->cpu_role.as_u64 &&
-> +	    mmu_role.as_u64 == context->mmu_role.as_u64)
->  		return;
->  
-> -	context->mmu_role.as_u64 = new_role.as_u64;
-> +	context->cpu_role.as_u64 = cpu_role.as_u64;
-> +	context->mmu_role.as_u64 = mmu_role.as_u64;
->  	context->page_fault = kvm_tdp_page_fault;
->  	context->sync_page = nonpaging_sync_page;
->  	context->invlpg = NULL;
-> @@ -4777,13 +4812,15 @@ kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  }
->  
->  static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *context,
-> -				    const struct kvm_mmu_role_regs *regs,
-> -				    union kvm_mmu_role new_role)
-> +				    union kvm_mmu_role cpu_role,
-> +				    union kvm_mmu_role mmu_role)
->  {
-> -	if (new_role.as_u64 == context->mmu_role.as_u64)
-> +	if (cpu_role.as_u64 == context->cpu_role.as_u64 &&
-> +	    mmu_role.as_u64 == context->mmu_role.as_u64)
->  		return;
->  
-> -	context->mmu_role.as_u64 = new_role.as_u64;
-> +	context->cpu_role.as_u64 = cpu_role.as_u64;
-> +	context->mmu_role.as_u64 = mmu_role.as_u64;
->  
->  	if (!is_cr0_pg(context))
->  		nonpaging_init_context(context);
-> @@ -4791,20 +4828,21 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
->  		paging64_init_context(context);
->  	else
->  		paging32_init_context(context);
-> -	context->root_level = role_regs_to_root_level(regs);
-> +	context->root_level = cpu_role.base.level;
->  
->  	reset_guest_paging_metadata(vcpu, context);
-> -	context->shadow_root_level = new_role.base.level;
-> +	context->shadow_root_level = mmu_role.base.level;
->  }
->  
->  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
->  				const struct kvm_mmu_role_regs *regs)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	union kvm_mmu_role new_role =
-> +	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, regs);
-> +	union kvm_mmu_role mmu_role =
->  		kvm_calc_shadow_mmu_root_page_role(vcpu, regs);
->  
-> -	shadow_mmu_init_context(vcpu, context, regs, new_role);
-> +	shadow_mmu_init_context(vcpu, context, cpu_role, mmu_role);
->  
->  	/*
->  	 * KVM uses NX when TDP is disabled to handle a variety of scenarios,
-> @@ -4839,11 +4877,10 @@ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
->  		.cr4 = cr4 & ~X86_CR4_PKE,
->  		.efer = efer,
->  	};
-> -	union kvm_mmu_role new_role;
-> -
-> -	new_role = kvm_calc_shadow_npt_root_page_role(vcpu, &regs);
-> +	union kvm_mmu_role cpu_role = kvm_calc_cpu_role(vcpu, &regs);
-> +	union kvm_mmu_role mmu_role = kvm_calc_shadow_npt_root_page_role(vcpu, &regs);;
->  
-> -	shadow_mmu_init_context(vcpu, context, &regs, new_role);
-> +	shadow_mmu_init_context(vcpu, context, cpu_role, mmu_role);
->  	reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
->  	kvm_mmu_new_pgd(vcpu, nested_cr3);
->  }
-> @@ -4862,7 +4899,6 @@ kvm_calc_shadow_ept_root_page_role(struct kvm_vcpu *vcpu, bool accessed_dirty,
->  	role.base.guest_mode = true;
->  	role.base.access = ACC_ALL;
->  
-> -	/* EPT, and thus nested EPT, does not consume CR0, CR4, nor EFER. */
->  	role.ext.word = 0;
->  	role.ext.execonly = execonly;
->  
-> @@ -4879,7 +4915,9 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
->  		kvm_calc_shadow_ept_root_page_role(vcpu, accessed_dirty,
->  						   execonly, level);
->  
-> -	if (new_role.as_u64 != context->mmu_role.as_u64) {
-> +	if (new_role.as_u64 != context->cpu_role.as_u64) {
-> +		/* EPT, and thus nested EPT, does not consume CR0, CR4, nor EFER. */
-> +		context->cpu_role.as_u64 = new_role.as_u64;
->  		context->mmu_role.as_u64 = new_role.as_u64;
->  
->  		context->shadow_root_level = level;
-> @@ -4913,32 +4951,15 @@ static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
->  	context->inject_page_fault = kvm_inject_page_fault;
->  }
->  
-> -static union kvm_mmu_role
-> -kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
-> -{
-> -	union kvm_mmu_role role;
-> -
-> -	role = kvm_calc_shadow_root_page_role_common(vcpu, regs);
-> -
-> -	/*
-> -	 * Nested MMUs are used only for walking L2's gva->gpa, they never have
-> -	 * shadow pages of their own and so "direct" has no meaning.   Set it
-> -	 * to "true" to try to detect bogus usage of the nested MMU.
-> -	 */
-> -	role.base.direct = true;
-> -	role.base.level = role_regs_to_root_level(regs);
-> -	return role;
-> -}
-> -
->  static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
->  {
-> -	union kvm_mmu_role new_role = kvm_calc_nested_mmu_role(vcpu, regs);
-> +	union kvm_mmu_role new_role = kvm_calc_cpu_role(vcpu, regs);
->  	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
->  
-> -	if (new_role.as_u64 == g_context->mmu_role.as_u64)
-> +	if (new_role.as_u64 == g_context->cpu_role.as_u64)
->  		return;
->  
-> -	g_context->mmu_role.as_u64 = new_role.as_u64;
-> +	g_context->cpu_role.as_u64 = new_role.as_u64;
->  	g_context->get_guest_pgd     = get_cr3;
->  	g_context->get_pdptr         = kvm_pdptr_read;
->  	g_context->inject_page_fault = kvm_inject_page_fault;
-> @@ -4997,6 +5018,9 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  	 * problem is swept under the rug; KVM's CPUID API is horrific and
->  	 * it's all but impossible to solve it without introducing a new API.
->  	 */
-> +	vcpu->arch.root_mmu.cpu_role.base.level = 0;
-> +	vcpu->arch.guest_mmu.cpu_role.base.level = 0;
-> +	vcpu->arch.nested_mmu.cpu_role.base.level = 0;
+On Fri, Feb 4, 2022 at 11:18 AM Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+>
+> On Wed, Feb 2, 2022 at 9:43 PM Won Chung <wonchung@google.com> wrote:
+> >
+> > Hi Heikki,
+> >
+> > Thank you for the review!
+> >
+> > On Wed, Feb 2, 2022 at 12:19 AM Heikki Krogerus
+> > <heikki.krogerus@linux.intel.com> wrote:
+> > >
+> > > Hi Won,
+> > >
+> > > On Tue, Feb 01, 2022 at 01:55:18AM +0000, Won Chung wrote:
+> > > > When ACPI table includes _PLD fields for a device, create a new
+> > > > directory (pld) in sysfs to share _PLD fields.
+> > >
+> > > I think you need to explain what needs this information in user space=
+.
+> > >
+> > > > Signed-off-by: Won Chung <wonchung@google.com>
+> > > > ---
+> > > >  Documentation/ABI/testing/sysfs-bus-acpi | 107 +++++++++++++++++++=
+++++
+> > > >  drivers/acpi/device_sysfs.c              |  55 ++++++++++++
+> > > >  include/acpi/acpi_bus.h                  |   1 +
+> > > >  3 files changed, 163 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentati=
+on/ABI/testing/sysfs-bus-acpi
+> > > > index 58abacf59b2a..b8b71c8f3cfd 100644
+> > > > --- a/Documentation/ABI/testing/sysfs-bus-acpi
+> > > > +++ b/Documentation/ABI/testing/sysfs-bus-acpi
+> > > > @@ -96,3 +96,110 @@ Description:
+> > > >               hardware, if the _HRV control method is present.  It =
+is mostly
+> > > >               useful for non-PCI devices because lspci can list the=
+ hardware
+> > > >               version for PCI devices.
+> > > > +
+> > > > +What:                /sys/bus/acpi/devices/.../pld/
+> > > > +Date:                Feb, 2022
+> > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             This directory contains the output of the device obje=
+ct's _PLD
+> > > > +             control method, if present. This information provides=
+ details
+> > > > +             on physical location of a device.
+> > > > +
+> > > > +What:                /sys/bus/acpi/devices/.../pld/revision
+> > > > +Date:                Feb, 2022
+> > > > +Contact:     Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             The current revision is 0x2.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/group_token
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Unique numerical value identifying a group.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/group_position
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Identifies this device connection point=E2=80=99s pos=
+ition in the group.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/user_visible
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Set if the device connection point can be seen by the=
+ user
+> > > > +             without disassembly.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/dock
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Set if the device connection point resides in a docki=
+ng station
+> > > > +             or port replicator.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/bay
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Set if describing a device in a bay or if device conn=
+ection
+> > > > +             point is a bay.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/lid
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Set if this device connection point resides on the li=
+d of
+> > > > +             laptop system.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/panel
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Describes which panel surface of the system=E2=80=99s=
+ housing the
+> > > > +             device connection point resides on:
+> > > > +             0 - Top
+> > > > +             1 - Bottom
+> > > > +             2 - Left
+> > > > +             3 - Right
+> > > > +             4 - Front
+> > > > +             5 - Back
+> > > > +             6 - Unknown (Vertical Position and Horizontal Positio=
+n will be
+> > > > +             ignored)
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/vertical_position
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             0 - Upper
+> > > > +             1 - Center
+> > > > +             2 - Lower
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/horizontal_position
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             ACPI specification does not define horizontal positio=
+n field.
+> > > > +             Can be used as either
+> > > > +             0 - Left
+> > > > +             1 - Center
+> > > > +             2 - Right
+> > > > +             or
+> > > > +             0 - Leftmost
+> > > > +             and higher numbers going toward the right.
+> > > > +
+> > > > +What:           /sys/bus/acpi/devices/.../pld/shape
+> > > > +Date:           Feb, 2022
+> > > > +Contact:        Won Chung <wonchung@google.com>
+> > > > +Description:
+> > > > +             Describes the shape of the device connection point.
+> > > > +             0 - Round
+> > > > +             1 - Oval
+> > > > +             2 - Square
+> > > > +             3 - Vertical Rectangle
+> > > > +             4 - Horizontal Rectangle
+> > > > +             5 - Vertical Trapezoid
+> > > > +             6 - Horizontal Trapezoid
+> > > > +             7 - Unknown - Shape rendered as a Rectangle with dott=
+ed lines
+> > > > +             8 - Chamfered
+> > > > +             15:9 - Reserved
+> > > > +
+> > > > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysf=
+s.c
+> > > > index d5d6403ba07b..610be93635a0 100644
+> > > > --- a/drivers/acpi/device_sysfs.c
+> > > > +++ b/drivers/acpi/device_sysfs.c
+> > > > @@ -509,6 +509,49 @@ static ssize_t status_show(struct device *dev,=
+ struct device_attribute *attr,
+> > > >  }
+> > > >  static DEVICE_ATTR_RO(status);
+> > > >
+> > > > +#define DEV_ATTR_PLD_PROP(prop) \
+> > > > +     static ssize_t prop##_show(struct device *dev, struct device_=
+attribute *attr, \
+> > > > +             char *buf) \
+> > > > +{ \
+> > > > +     struct acpi_device *acpi_dev =3D to_acpi_device(dev); \
+> > > > +     if (acpi_dev->pld =3D=3D NULL) \
+> > > > +             return -EIO; \
+> > > > +     return sprintf(buf, "%u\n", acpi_dev->pld->prop); \
+> > > > +}; \
+> > >
+> > > Ah, you are storing the _PLD below. Before there were concerns about
+> > > the memory that the cached _PLD information would consume. Another wa=
+y
+> > > of doing this would be to just always evaluate the _PLD here.
+> > >
+> > > Rafael needs to comment on this. My personal opinion is that let's
+> > > just store the thing.
+> > >
+> >
+> > By "always evaluate the _PLD here", you mean something like
+> >   acpi_get_physical_device_location(dev->handle, &pld)
+> > for every _PLD field, right?
+> >
+> > I will wait for Rafael's comment on this.
+>
 
-Will cpu_role.base.level already be 0 if CR0.PG=0 && !tdp_enabled? i.e.
-setting cpu_role.base.level to 0 might not have the desired effect.
+Hi Rafael,
 
-It might not matter in practice since the shadow_mmu_init_context() and
-kvm_calc_mmu_role_common() check both the mmu_role and cpu_role, but does
-make this reset code confusing.
+Thank you for the review.
 
->  	vcpu->arch.root_mmu.mmu_role.base.level = 0;
->  	vcpu->arch.guest_mmu.mmu_role.base.level = 0;
->  	vcpu->arch.nested_mmu.mmu_role.base.level = 0;
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 6bb9a377bf89..b9f472f27077 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -323,7 +323,7 @@ static inline bool FNAME(is_last_gpte)(struct kvm_mmu *mmu,
->  	 * is not reserved and does not indicate a large page at this level,
->  	 * so clear PT_PAGE_SIZE_MASK in gpte if that is the case.
->  	 */
-> -	gpte &= level - (PT32_ROOT_LEVEL + mmu->mmu_role.ext.cr4_pse);
-> +	gpte &= level - (PT32_ROOT_LEVEL + mmu->cpu_role.ext.cr4_pse);
->  #endif
->  	/*
->  	 * PG_LEVEL_4K always terminates.  The RHS has bit 7 set
-> -- 
-> 2.31.1
-> 
-> 
+> So I would like to get back to the very beginning: Do you need full
+> _PLD output to address the issue at hand?
+
+I do not think we need full _PLD output. In fact, the fields I am
+adding are many but not all _PLD fields. To explain reasons behind
+each field added:
+*revision: current pld revision
+*group token and position: like an identifier for the device
+*panel, horizontal position, vertical position: to locate which
+physical device corresponds to this device
+*user visible, dock, bay, lid: to determine if and how the device can
+be located by the user.
+*shape: helps determine connection type
+
+So, for example, let's say there are multiple Type C connectors (C0,
+C1, and C2). We have 2 Type C ports on the left panel and 1 Type C
+port on the right panel of the laptop. We can use PLD fields: panel
+and horizontal position to determine which connector actually
+corresponds to which physical port. Having this information, we can
+determine which specific port (out of three) is doing what. (like
+charging cable connected to the port on the left side of the left
+panel)
+
+The fields that are in _PLD output but not included here are:
+ignore_color, color, width, height, ejectable, OSPM ejection required,
+cabinet_number, card_cage_number, reference, group orientation,
+rotation, order, vertical offset, horizontal offset.
+These are not included because they do not help specify the device to
+which one in specific physical location.
+
+>
+> If so, do you really need it for all devices that have _PLD?
+
+Benson and Prashant, please correct me if I am wrong:
+
+I do not think we need to store PLD for all devices, I think just user
+visible devices to locate them physically. So, I think we can check if
+device_type is ACPI_BUS_TYPE_DEVICE and user_visible pld field is 1.
+Otherwise, I do not think we need to store pld information nor create
+sysfs files.
+What do you think?
+
+>
+> If not, then why waste memory for all that stuff?
+
+If this sounds okay with you, I can make changes and send v6. (This
+comment is on v4 but I already sent v5)
+
+Thank you,
+Won

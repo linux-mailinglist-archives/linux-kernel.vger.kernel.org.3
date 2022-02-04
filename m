@@ -2,145 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EED4A9D22
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB224A9D36
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376656AbiBDQro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 11:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiBDQrn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 11:47:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E691C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 08:47:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFFB26195B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 16:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64B19C004E1;
-        Fri,  4 Feb 2022 16:47:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643993262;
-        bh=9e2Mu0Fu8rbPTnt4SnobAKnyDwsFA10BlghgdqBHmvQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QReL6YHJVX/sOAtDvyDNLcrE80F/N5RSzZ2ji5/EVhZFRsphLCsv74YF09NJnhdex
-         nFQ5gk2Xerc7eFBt1iUKtFs9J/hNftgLfI8YdEXQwQ038ejmRIVHYGDCVzCHRxF754
-         94qgXYLEhU3W76pGpRWcatUqs5ZYKNluQHHF+CPlrbvqM6H+7PoCaLZaunycPx7GZ9
-         0pUFJoYbicAaBC6ZA+nkzxtfCTH/oHrWsyPcn3OYWWyKYgq1Wf8T8THzP5OGLZMXoJ
-         xVYUH6EEK6+RhR872z9C/BXAtHceNVDrk8WQz8ocREZzrFvpiMB5sv/rR7QPss01iV
-         MyNQRWBhavWLQ==
-Date:   Fri, 4 Feb 2022 22:17:37 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Linux Phy <linux-phy@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: Generic phy fixes for v5.17
-Message-ID: <Yf1YqcqUmResNevN@matsya>
+        id S1376683AbiBDQzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 11:55:37 -0500
+Received: from mga05.intel.com ([192.55.52.43]:55315 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376681AbiBDQzc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 11:55:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643993732; x=1675529732;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9ZEwokSiJzGe6/7Tg/mxgO3ihrklpPiE25JjBOkRkN4=;
+  b=YALf4+rICk7ARmRVPeT5PIyQ90Aaagb86gUBug5DwU+ZxOpL5/l7qL/t
+   FzkzP6cnoohvno4LZvMTpA1TfE22yanU1QeBSHdBia2kbAAzcNFv/9ZqZ
+   5BxLk2fPAH31QiKVOiDKCZpjagA1djf+zO6WIFCWibB+n2MngDTq/xSKc
+   B6BkSVNV9rOmxtwjHocjix9gdyWRyJdjy9SXRoXjWhJ55Ca8q5ukeHuIb
+   LXR4oeC/tNAPjH1Qr0COhzRdmWN34fFIIAEbsjchuHDoSbdOAD+UiDz1D
+   e54E7osF3YCzdWsmAEx99flhndIPSluLxpzn17K989o1xKulihQpEfsr2
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="334794771"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="334794771"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 08:55:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="498530837"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 04 Feb 2022 08:55:25 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id E8B9A18D; Fri,  4 Feb 2022 18:55:39 +0200 (EET)
+Date:   Fri, 4 Feb 2022 19:55:39 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     bp@alien8.de, aarcange@redhat.com, ak@linux.intel.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCHv2.1 05/29] x86/tdx: Add HLT support for TDX guests
+Message-ID: <20220204165539.oqw7bj3ri4hzjiy6@black.fi.intel.com>
+References: <YfVU01dBD36H0EIv@zn.tnic>
+ <20220129223021.29417-1-kirill.shutemov@linux.intel.com>
+ <874k5iz3ih.ffs@tglx>
+ <20220202124830.yd4vkmy56j67tyz4@black.fi.intel.com>
+ <875ypxur1n.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6GopgMmcKAvDgyfo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <875ypxur1n.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 02, 2022 at 06:17:08PM +0100, Thomas Gleixner wrote:
+> On Wed, Feb 02 2022 at 15:48, Kirill A. Shutemov wrote:
+> 
+> > On Tue, Feb 01, 2022 at 10:21:58PM +0100, Thomas Gleixner wrote:
+> >> On Sun, Jan 30 2022 at 01:30, Kirill A. Shutemov wrote:
+> >> This really can be simplified:
+> >> 
+> >>         cmpl	$EXIT_REASON_SAFE_HLT, %r11d
+> >>         jne	.Lnohalt
+> >>         movl	$EXIT_REASON_HLT, %r11d
+> >>         sti
+> >> .Lnohalt:
+> >> 	tdcall
+> >> 
+> >> and the below becomes:
+> >> 
+> >> static bool tdx_halt(void)
+> >> {
+> >> 	return !!__tdx_hypercall(EXIT_REASON_HLT, !!irqs_disabled(), 0, 0, 0, NULL);
+> >> }
+> >> 
+> >> void __cpuidle tdx_safe_halt(void)
+> >> {
+> >>         if (__tdx_hypercall(EXIT_REASON_SAFE_HLT, 0, 0, 0, 0, NULL)
+> >>         	WARN_ONCE(1, "HLT instruction emulation failed\n");
+> >> }
+> >> 
+> >> Hmm?
+> >
+> > EXIT_REASON_* are architectural, see SDM vol 3D, appendix C. There's no
+> > EXIT_REASON_SAFE_HLT.
+> >
+> > Do you want to define a synthetic one? Like
+> >
+> > #define EXIT_REASON_SAFE_HLT	0x10000
+> > ?
+> 
+> That was my idea, yes.
+> 
+> > Looks dubious to me, I donno. I worry about possible conflicts with the
+> > spec in the future.
+> 
+> The spec should have a reserved space for such things :)
+> 
+> But you might think about having a in/out struct similar to the module
+> call or just an array of u64.
+> 
+> and the signature would become:
+> 
+> __tdx_hypercall(u64 op, u64 flags, struct inout *args)
+> __tdx_hypercall(u64 op, u64 flags, u64 *args)
+> 
+> and have flag bits:
+> 
+>     HCALL_ISSUE_STI
+>     HCALL_HAS_OUTPUT
+> 
+> Hmm?
 
---6GopgMmcKAvDgyfo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We have two distinct cases: standard hypercalls (defined in GHCI) and KVM
+hypercalls. In the first case R10 is 0 (indicating standard TDVMCALL) and
+R11 defines the operation. For KVM hypercalls R10 encodes the operation
+(KVM hypercalls indexed from 1) and R11 is the first argument. So we
+cannot get away with simple "RDI is op" interface.
 
-Hello Greg,
+And we need to return two values: RAX indicates if TDCALL itself was
+successful and R10 is result of the hypercall. So we cannot easily get
+away without output struct. HCALL_HAS_OUTPUT is not needed.
 
-Please pull to recieve the fixes for v5.17 for Generic phy subsystem.
+I would rather keep assembly side simple: shuffle values from the struct
+to registers and back. C side is resposible for making sense of the
+registers.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+With all this in mind the __tdx_hypercall() will boil down to
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+u64 __tdx_hypercall(struct tdx_hypercall_args *args, u64 flags);
 
-are available in the Git repository at:
+with the only flag HCALL_ISSUE_STI. Is it what you want to see?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-=
-fixes-5.17
+I personally don't see why flag is better than synthetic argument as we
+have now.
 
-for you to fetch changes up to 9a8406ba1a9a2965c27e0db1d7753471d12ee9ff:
-
-  phy: dphy: Correct clk_pre parameter (2022-02-02 10:33:04 +0530)
-
-----------------------------------------------------------------
-phy: fixes for 5.17
-
-Fixes for bunch of drivers:
- - clk params for dphy
- - arg fix for mtk-tphy
- - refcount leak fix for stm32
- - bus width fix for zynqmp
- - sentinel fix ti
- - PHY_BRCM_USB Kconfig fix
- - clk fix for usb phy
-
-----------------------------------------------------------------
-Al Cooper (2):
-      phy: usb: Leave some clocks running during suspend
-      phy: broadcom: Kconfig: Fix PHY_BRCM_USB config option
-
-Dan Carpenter (2):
-      phy: cadence: Sierra: fix error handling bugs in probe()
-      phy: stm32: fix a refcount leak in stm32_usbphyc_pll_enable()
-
-Kishon Vijay Abraham I (1):
-      phy: ti: Fix missing sentinel for clk_div_table
-
-Liu Ying (1):
-      phy: dphy: Correct clk_pre parameter
-
-Robert Hancock (1):
-      phy: xilinx: zynqmp: Fix bus width setting for SGMII
-
-Wan Jiabing (1):
-      phy: phy-mtk-tphy: Fix duplicated argument in phy-mtk-tphy
-
- drivers/gpu/drm/bridge/nwl-dsi.c                 | 12 ++++----
- drivers/phy/amlogic/phy-meson-axg-mipi-dphy.c    |  3 +-
- drivers/phy/broadcom/Kconfig                     |  3 +-
- drivers/phy/broadcom/phy-brcm-usb.c              | 38 ++++++++++++++++++++=
-++++
- drivers/phy/cadence/phy-cadence-sierra.c         | 35 +++++++++++++-------=
---
- drivers/phy/mediatek/phy-mtk-tphy.c              |  2 +-
- drivers/phy/phy-core-mipi-dphy.c                 |  4 +--
- drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c |  3 +-
- drivers/phy/st/phy-stm32-usbphyc.c               |  2 +-
- drivers/phy/ti/phy-j721e-wiz.c                   |  1 +
- drivers/phy/xilinx/phy-zynqmp.c                  | 11 +++----
- 11 files changed, 80 insertions(+), 34 deletions(-)
-
-
---=20
-~Vinod
-
---6GopgMmcKAvDgyfo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmH9WKkACgkQfBQHDyUj
-g0ekWw/9HU/aFfpFSx2VXd40AR6rUYzO25oK36lFlYJb8juxTsNvLsxaeW9wGyzc
-2FQT3pZoqzaagV2Ttuu0k6QkThkGYhpkzSTxZv8uy2qqP+Xmsj1UK+mC9UyH/nm5
-0Mem0XogOuP2mSVy0aGovd4oWaRqQi5WXF3r7rIa4zl2G9eCKODCUIMpUhSo+kaa
-4LqpufbrGOT3iMW5C30wMBaVpxsRUpIJZ12HODmf0P29QH8C1pfiQarkit9i6TI+
-ESlFmg/j1a7F5srDJkkZNa2LWYaO9RF3uUbuUA9cHJJVlVXumM3CimCVxBb3qHW3
-eo0FcoZiOLJorCpg+i/t2R33GjZdyl91EfBO8cpBIhIJsUnEUwBpigX9/lQy+e1d
-Af2I5r/D/o6gPp4FBEA0931zHh2weMNP+Aebtlrs0V+YTM7H7fFR5gween+nz3yV
-Fi+Kh7Xe4T4qq8XYjEMa8xw+C7TkYSUqHqlBEXJTKARjBBmZa+2+0XjsJLxIkz/E
-uL2HFC96iJBn7tds7Su3C2VoGBiSohfe1S1ZnVnB7VTAi5OjJWosDbnXS7g5mYuW
-OReUeTadtSGitokVjJJWlzrSb0/EuwJmPoh+CObPIw3UytnEkujv9RAn1kG9eVD+
-+uE2Gomm+aTsbTo1ITUDW4RCqyc9+GreuBDvr8j1DNLEBMj6NYM=
-=9GyH
------END PGP SIGNATURE-----
-
---6GopgMmcKAvDgyfo--
+-- 
+ Kirill A. Shutemov

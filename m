@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD2C4A9F32
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050944A9F33
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377696AbiBDSf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S1377726AbiBDSgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376652AbiBDSfi (ORCPT
+        with ESMTP id S1377606AbiBDSfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Feb 2022 13:35:38 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EAEC061753
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:35:37 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so5595377oor.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:35:37 -0800 (PST)
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F474C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:35:38 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so5619110oot.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:35:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MBViSbaYzUMB15L/ejiHdGOwZ3+2RejweIu9l4VdsyE=;
-        b=CkCvqKSNlIHRpFB/7/Fs9kGIOpi7OXjL/IKj5SLmqt1ApZXp3akdEXHFMkKO8tpRcm
-         k8nHUUt0Azs+s5hNXXyC5si5K9dBDhebHDgv+4KbipH3+p+FVmkursbYmz0SHHqC2j1g
-         JHecyfnURXCGyBCYJctj8zpwyveKxFRLms49gL7iNf0+epGWK0jOG3Yl4CSAqGXOOxfP
-         AdvCEsqN7KDULUVDKZmjpz3JzGXbAepSUTRZEF5s6Z7DAdzyHyHemPcZ845NiAWijiK5
-         pfGWCtz038dQIMSmkiEAExSjqfLX6GLEQbuBwi54X1Mtj5kdOnaV9B//b1TldxQpVyfd
-         5kqw==
+        bh=zqEj9p/XENdztjP9JvnEudW0qgy+L4tI7wrcK+wUDS4=;
+        b=VlCUdMf4nZkR+xOWCG4KqzAW9lsRXK8gsUptkMgD9hE+2TIUxX/JYJQN1dmRihFw6F
+         wRivUFtNDHNxNaPWlsWFMuQ56xOhggGLS8kzqqcW78/iIBidQdbCNMQ+KozWieKYwGXD
+         i/enA0BYauTlzy04ew2THxJLnW/4LoOX0yWx3yBD224Os7XNX6IRaQD0alF8APP6pKwb
+         5corqced332YC8ScUqRfaN5fwhkuAs+qtlpuTTeHy+7cE20EV/2v21GfCBpL+RCkr6yN
+         +znkrETJUBDkdzsbErLG5cFHGFiU1pU60UBCcsLYH+vvsRqJjNu3bUPCAQCJQIjS0v8P
+         izqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MBViSbaYzUMB15L/ejiHdGOwZ3+2RejweIu9l4VdsyE=;
-        b=n+hettGzvAzCpy5NmxWR5I0msRNmRxAZPI/2Cjitk+TpzFcY5sYRgJmeVg799pO2tL
-         ZPAbr9CF+BkEWjIP6M+3thEZb1JXllywuCuzly0tzhXXN3H+Z7V5d0Jbl3Xlno+qZDbr
-         hhXNk1vMBluKYjiIVGwcJf5q2gaude+X7A/PJovV7SBxqYk3Pmqt+trNmuzbM8bke+4u
-         MaQ6rgf5FVX828AhWqE3+PjG4uaR4JcFCCllxmifgSguy6AaXPjh9IK1F8Q3zDdEW66Q
-         /qJa1FcqPNMkgcsosPSi+WAqTMZ8dEl/AumWhwzD991WUWOKwIFfxlj65kt6lRXAiqkW
-         NJ6g==
-X-Gm-Message-State: AOAM531eHEwdZCTPYPpxLOwKNy137vA8i/qdwZFMoF/hWhxJhXeafbWl
-        lsugqQoOKJwOupIi0Eo7xoNZCdNf6tdn5A==
-X-Google-Smtp-Source: ABdhPJyxh3i2AWtywcvFSpco2TGrSAdcxV99Dtc8riNY5vy7+HbF/ry6utVPf3DujMFwUg2BKLxTWw==
-X-Received: by 2002:a05:6870:e3c3:: with SMTP id y3mr1036426oad.314.1643999737063;
-        Fri, 04 Feb 2022 10:35:37 -0800 (PST)
+        bh=zqEj9p/XENdztjP9JvnEudW0qgy+L4tI7wrcK+wUDS4=;
+        b=Q/O3lPzBl8DZfKNykNtekGIMiUPgSHonOX3y12b62irTfGqnh+e1muSjSvgqDCc6uV
+         jggDwaVs0vbv2wbAekFAY2yBDE87dRKycm8zRXjZLeEtQr4C6G0o6JwQkTJrTQYyPzO0
+         AFiDftQVfSu8XeB4LPCCw8acTk1O9TUHZGZaYBi1Bpwm6WSo7QUCwoSObuZd0pAotbn7
+         oPMIotuClem/JZnEjtZe4927ITSc4sEf6+7XnYN76MkmapuJ4rvE/X2UFrbOoEcCXDE7
+         v8v2DgNfnG+G5RaathnGImU6Jrf8dwQ3bmHaEgUkaoCc7UC7uliKN77mTWUrqkuLCHY8
+         gZpA==
+X-Gm-Message-State: AOAM532NlamCpqGXgh3Jc9ScHBDnYOdLgotaaeCZjUQRvONCWiMbZfVL
+        JuG0ztr0/f7BFdwpr8nR/X/eHw==
+X-Google-Smtp-Source: ABdhPJwrIiXG0pIlxHrIPbxG0yzNBdEDeFjRGHQ5Xdo2/1lI78nif6Yyfuop6B45MwDCqz1O8di4Bg==
+X-Received: by 2002:a4a:2f97:: with SMTP id p145mr80987oop.8.1643999738002;
+        Fri, 04 Feb 2022 10:35:38 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id 100sm1044182oth.75.2022.02.04.10.35.36
+        by smtp.gmail.com with ESMTPSA id 100sm1044182oth.75.2022.02.04.10.35.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:35:36 -0800 (PST)
+        Fri, 04 Feb 2022 10:35:37 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     agross@kernel.org, Xu Wang <vulab@iscas.ac.cn>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH] soc: qcom: apr: Remove redundant 'flush_workqueue()' calls
-Date:   Fri,  4 Feb 2022 12:35:25 -0600
-Message-Id: <164399969245.3386915.3373635838758090178.b4-ty@linaro.org>
+To:     agross@kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH -next RESEND] firmware: qcom: scm: Fix some kernel-doc comments
+Date:   Fri,  4 Feb 2022 12:35:26 -0600
+Message-Id: <164399969245.3386915.10151672354950599865.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220114085019.42904-1-vulab@iscas.ac.cn>
-References: <20220114085019.42904-1-vulab@iscas.ac.cn>
+In-Reply-To: <20211230141245.29444-1-yang.lee@linux.alibaba.com>
+References: <20211230141245.29444-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,18 +66,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 08:50:19 +0000, Xu Wang wrote:
-> 'destroy_workqueue()' already drains the queue before destroying it, so
-> there is no need to flush it explicitly.
+On Thu, 30 Dec 2021 22:12:45 +0800, Yang Li wrote:
+> Fix qcom_scm_call(), qcom_scm_call_atomic,
+> and qcom_scm_cpu_power_down() kernel-doc comment to remove
+> remove warnings found by running scripts/kernel-doc, which
+> is caused by using 'make W=1'.
+> drivers/firmware/qcom_scm.c:191: warning: Function parameter or member
+> 'res' not described in 'qcom_scm_call'
+> drivers/firmware/qcom_scm.c:191: warning: Excess function parameter
+> 'svc_id' description in 'qcom_scm_call'
+> drivers/firmware/qcom_scm.c:191: warning: Excess function parameter
+> 'cmd_id' description in 'qcom_scm_call'
+> drivers/firmware/qcom_scm.c:219: warning: Excess function parameter
+> 'svc_id' description in 'qcom_scm_call_atomic'
+> drivers/firmware/qcom_scm.c:219: warning: Excess function parameter
+> 'cmd_id' description in 'qcom_scm_call_atomic'
+> drivers/firmware/qcom_scm.c:360: warning: Function parameter or member
+> 'flags' not described in 'qcom_scm_cpu_power_down'
 > 
-> Remove the redundant 'flush_workqueue()' calls.
-> 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] soc: qcom: apr: Remove redundant 'flush_workqueue()' calls
-      commit: 4e6ae78ee61957800657d56ba78a10f034de174e
+[1/1] firmware: qcom: scm: Fix some kernel-doc comments
+      commit: a5d32f6d2e59a654036d5a4f59d9202302b23388
 
 Best regards,
 -- 

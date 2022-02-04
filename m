@@ -2,102 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F7F4A915A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03614A915D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356066AbiBDAA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S231827AbiBDABY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:01:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbiBDAA1 (ORCPT
+        with ESMTP id S230428AbiBDABW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:00:27 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66922C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:00:27 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id t7so6217773ljc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:00:27 -0800 (PST)
+        Thu, 3 Feb 2022 19:01:22 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEE5C061714;
+        Thu,  3 Feb 2022 16:01:22 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j5-20020a05600c1c0500b0034d2e956aadso2798590wms.4;
+        Thu, 03 Feb 2022 16:01:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W6vWO5phbqbJOK15XWRuJznkX1ivVtRshDIXGjGnpb4=;
-        b=O8w4WotJ2b6rKmKKBJUWufCSv8dzfdHoarzVcOzZdSr+s/PqUwLyF3Ue2tY/unRIz2
-         t8ScfVaD++YGalUdIVCUijauCnQxT2Mi26HFXWtPcjhBkU/TVYHOxnr3tl4N2OGO+Yzk
-         IYURFJ2SWm7yedjm+OHMjip0qE7cQcTs5iUiaWTI/sImxJIq4tcF/BJN0aCYjL1vSwIM
-         RHLlA6mde4MueRj/hCeQCZwH3riRVeC/F4XnG2hp0lSgf3KXJJzpD2OQNb3uLhbTvuvH
-         /SWuQvQKnSfBpeuhsfmzTs3/rzdpHv3m9h0wwbaUJMzkg60K5QzAfDUsbsJgpL2GrV++
-         lIQA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IAgjzoa8zqymGZnAHUIzsBT6GMaNixaEOKHQOBV23N8=;
+        b=U7C+BhOjdpmQAMXnIW+YmZCLhR1UsCPkWvLtpp5D2RFMx0PZr9dfNn8BtTWQD91bXx
+         Lxqpi6uSPOFrid78L1EUQmke6Z8zBmG4/LfMsOzt3qqlhrYux6rWJvcJkbGLy/WrsRQw
+         odHJGqce9HqjBHOkV2vp/MiH4oSjap8ERVx2xmowPWA13dwBOZUt1HsXyrnt2vujEOta
+         mDm9FuAsiaQs4+T7Qcre89nE7QRNR9V9Y4mEu22B4+/iiAzNry+Mz9Vq3+y56+ZwlmZb
+         swXtTex3HXyCu8nJnE1QRrFsBcyNbwzCVcWHVudjWljjv4anYr4UAlBiUuZwqWkcBrfB
+         Es8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W6vWO5phbqbJOK15XWRuJznkX1ivVtRshDIXGjGnpb4=;
-        b=wVaeCvA/I/D0y3i3oBaCObuk96Zw1THjYiPmvtSlCbMF2nM6S3Y3Q9j6rYZsP2nVhO
-         ryfzNm3zbepmVnAmN1REy8tsZ7h1wYH3djFIPuLGMwRkN+R92t2bP/eALcCk3196tax6
-         KCwhx4IUPzZBfu+FZN4pUfa/gOqVq0Bj6FK1bFEfvmaPFw5bZY0wuAXWluN8CwAhLH79
-         hclFOOZTRn17cbqYEL3tamlxEQ9eZh4r9zCmeEiRiSfebnSR3LuFjdetjqqxfC9kfXv7
-         5a6M2AbwHZwXLc1mHJGGk69g9rWhNfyaC9Of4rNu63i1d2dZPQ4wNWG6j/3HlG/A5dY/
-         D/Uw==
-X-Gm-Message-State: AOAM532y/1npFXiieOTbZwoBSsvFBDbIP2rd+Kw1MWxZlphCNUErvvbx
-        z/RQ/4t0QbDPINsMJMhjSn7OfVyJIP109b0PF2CCXA==
-X-Google-Smtp-Source: ABdhPJwqnKLO1BWi4vxnVtC5ADx5qhgj0i+dCH1oMioRtJ0A+yCanphIAmcv0oK4faOF84+sxzP6HgxOzGH15JBCK84=
-X-Received: by 2002:a05:651c:1249:: with SMTP id h9mr234541ljh.375.1643932825587;
- Thu, 03 Feb 2022 16:00:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IAgjzoa8zqymGZnAHUIzsBT6GMaNixaEOKHQOBV23N8=;
+        b=hhPNpnDIANCYjbONUl0JOxd/INUyZHbbRRZUoVJ7ci4Z1MhhVIvmw6coLmWVLbQq8c
+         GFE0sjt2mWY033mBAPg685tepWJ5rV5d+YX2Bmp0mGu8IeVkUaIjHzbAWbWaVv0OWMYz
+         S3sySidqfQCTdSAWYTbAnFZUsfBYHXEZ9ZkX1rrTZWMeLy3aKQ3j2snQfjNWWlslQseo
+         9nsyJIk2Kt82223pAshx0WYepZ4Qcq/eX7pTYVck3ddezQBAaE8laa6sWNxASIoG6ECy
+         f/SvlOYHqAoBpmmaUg2sNopNrrvo7/lOA4bemYxOHajbWnTzRb5VOM8OyPtwVXuYuOYc
+         flEw==
+X-Gm-Message-State: AOAM531RzkpxOsPk20dDrI75iCOfmyODTcsgsVWHmD5YbwV/IKlcLRCX
+        KohP7hrQMio29PSHH29bSGg=
+X-Google-Smtp-Source: ABdhPJw7LxpEvUuX5Iq+TtllxzXubRorkornP8J9cUVQl5XNwuQ3S71gZBnABz/r4GUmX1CT9+8ihw==
+X-Received: by 2002:a05:600c:1f15:: with SMTP id bd21mr93275wmb.145.1643932880450;
+        Thu, 03 Feb 2022 16:01:20 -0800 (PST)
+Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id 5sm234298wrb.113.2022.02.03.16.01.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 16:01:19 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [RFC PATCH] drivers: net: dsa: qca8k: use build_skb for mgmt eth packet
+Date:   Fri,  4 Feb 2022 01:01:18 +0100
+Message-Id: <20220204000118.26051-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220126025739.2014888-1-jannh@google.com> <87czk5l2i6.fsf@email.froward.int.ebiederm.org>
- <CAG48ez3byq=Cn4xGt5HmLBy9fWBapX9RdF-9JOaAus=rDR2TYQ@mail.gmail.com>
-In-Reply-To: <CAG48ez3byq=Cn4xGt5HmLBy9fWBapX9RdF-9JOaAus=rDR2TYQ@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 4 Feb 2022 00:59:59 +0100
-Message-ID: <CAG48ez1RzO8KrbAv_9kwRCyjS7E3K+adJzdqV6uLqKPoyQmPnw@mail.gmail.com>
-Subject: Re: [PATCH] coredump: Also dump first pages of non-executable ELF libraries
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Bill Messmer <wmessmer@microsoft.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Randy Dunlap <rdunlap@infradead.org>, stable@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 6:43 PM Jann Horn <jannh@google.com> wrote:
->
-> On Wed, Feb 2, 2022 at 4:19 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >
-> > Jann Horn <jannh@google.com> writes:
-> >
-> > > When I rewrote the VMA dumping logic for coredumps, I changed it to
-> > > recognize ELF library mappings based on the file being executable instead
-> > > of the mapping having an ELF header. But turns out, distros ship many ELF
-> > > libraries as non-executable, so the heuristic goes wrong...
-> > >
-> > > Restore the old behavior where FILTER(ELF_HEADERS) dumps the first page of
-> > > any offset-0 readable mapping that starts with the ELF magic.
-> > >
-> > > This fix is technically layer-breaking a bit, because it checks for
-> > > something ELF-specific in fs/coredump.c; but since we probably want to
-> > > share this between standard ELF and FDPIC ELF anyway, I guess it's fine?
-> > > And this also keeps the change small for backporting.
-> >
-> > In light of the conflict with my other changes, and in light of the pain
-> > of calling get_user.
-> >
-> > Is there any reason why the doesn't unconditionally dump all headers?
-> > Something like the diff below?
-> >
-> > I looked in the history and the code was filtering for ELF headers
-> > there already.  I am just thinking this feels like a good idea
-> > regardless of the file format to help verify the file on-disk
-> > is the file we think was mapped.
->
-> Yeah, I guess that's reasonable. The main difference will probably be
-> that the starting pages of some font files, locale files and python
-> libraries will also be logged.
+Use preallocated space and build_skb to recycle the same skb for mgmt
+eth packet. This should reduce the CPU load even more by skipping
+skb allocation for every mgmt eth packet. We increate the skb users with
+skb_get() to prevent the release of the skb so that the space can be
+reused.
 
-Are you planning to turn that into a proper patch and take it through
-your tree, or something like that? If so, we should tell akpm to take
-this one back out...
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/net/dsa/qca8k.c | 158 ++++++++++++++++++++++------------------
+ drivers/net/dsa/qca8k.h |   1 +
+ 2 files changed, 88 insertions(+), 71 deletions(-)
+
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+index 52ec2800dd89..6fc1f2b4bceb 100644
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -233,7 +233,7 @@ static void qca8k_rw_reg_ack_handler(struct dsa_switch *ds, struct sk_buff *skb)
+ 	complete(&mgmt_eth_data->rw_done);
+ }
+ 
+-static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *val,
++static struct sk_buff *qca8k_build_mdio_header(u8 *data, enum mdio_cmd cmd, u32 reg, u32 *val,
+ 					       int priority, unsigned int len)
+ {
+ 	struct qca_mgmt_ethhdr *mgmt_ethhdr;
+@@ -242,10 +242,12 @@ static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *
+ 	u32 *data2;
+ 	u16 hdr;
+ 
+-	skb = dev_alloc_skb(QCA_HDR_MGMT_PKT_LEN);
++	skb = build_skb(data, 0);
+ 	if (!skb)
+ 		return NULL;
+ 
++	skb_reserve(skb, NET_SKB_PAD + QCA_HDR_MGMT_PKT_LEN);
++
+ 	/* Max value for len reg is 15 (0xf) but the switch actually return 16 byte
+ 	 * Actually for some reason the steps are:
+ 	 * 0: nothing
+@@ -260,6 +262,7 @@ static struct sk_buff *qca8k_alloc_mdio_header(enum mdio_cmd cmd, u32 reg, u32 *
+ 
+ 	skb_reset_mac_header(skb);
+ 	skb_set_network_header(skb, skb->len);
++	skb_get(skb);
+ 
+ 	mgmt_ethhdr = skb_push(skb, QCA_HDR_MGMT_HEADER_LEN + QCA_HDR_LEN);
+ 
+@@ -302,20 +305,21 @@ static int qca8k_read_eth(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+ 	bool ack;
+ 	int ret;
+ 
+-	skb = qca8k_alloc_mdio_header(MDIO_READ, reg, NULL,
+-				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
+-	if (!skb)
+-		return -ENOMEM;
+-
+ 	mutex_lock(&mgmt_eth_data->mutex);
+ 
+ 	/* Check mgmt_master if is operational */
+ 	if (!priv->mgmt_master) {
+-		kfree_skb(skb);
+ 		mutex_unlock(&mgmt_eth_data->mutex);
+ 		return -EINVAL;
+ 	}
+ 
++	skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_READ, reg, NULL,
++				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
++	if (!skb) {
++		mutex_unlock(&mgmt_eth_data->mutex);
++		return -ENOMEM;
++	}
++
+ 	skb->dev = priv->mgmt_master;
+ 
+ 	reinit_completion(&mgmt_eth_data->rw_done);
+@@ -354,20 +358,21 @@ static int qca8k_write_eth(struct qca8k_priv *priv, u32 reg, u32 *val, int len)
+ 	bool ack;
+ 	int ret;
+ 
+-	skb = qca8k_alloc_mdio_header(MDIO_WRITE, reg, val,
+-				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
+-	if (!skb)
+-		return -ENOMEM;
+-
+ 	mutex_lock(&mgmt_eth_data->mutex);
+ 
+ 	/* Check mgmt_master if is operational */
+ 	if (!priv->mgmt_master) {
+-		kfree_skb(skb);
+ 		mutex_unlock(&mgmt_eth_data->mutex);
+ 		return -EINVAL;
+ 	}
+ 
++	skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_WRITE, reg, val,
++				      QCA8K_ETHERNET_MDIO_PRIORITY, len);
++	if (!skb) {
++		mutex_unlock(&mgmt_eth_data->mutex);
++		return -ENOMEM;
++	}
++
+ 	skb->dev = priv->mgmt_master;
+ 
+ 	reinit_completion(&mgmt_eth_data->rw_done);
+@@ -952,12 +957,21 @@ qca8k_port_set_status(struct qca8k_priv *priv, int port, int enable)
+ 
+ static int
+ qca8k_phy_eth_busy_wait(struct qca8k_mgmt_eth_data *mgmt_eth_data,
+-			struct sk_buff *read_skb, u32 *val)
++			struct net_device *dev, u32 *val)
+ {
+-	struct sk_buff *skb = skb_copy(read_skb, GFP_KERNEL);
++	struct sk_buff *skb;
++	u32 clear_val = 0;
+ 	bool ack;
+ 	int ret;
+ 
++	skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_READ,
++				      QCA8K_MDIO_MASTER_CTRL, &clear_val,
++				      QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
++	if (!skb)
++		return -ENOMEM;
++
++	skb->dev = dev;
++
+ 	reinit_completion(&mgmt_eth_data->rw_done);
+ 
+ 	/* Increment seq_num and set it in the copy pkt */
+@@ -987,10 +1001,10 @@ static int
+ qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
+ 		      int regnum, u16 data)
+ {
+-	struct sk_buff *write_skb, *clear_skb, *read_skb;
+ 	struct qca8k_mgmt_eth_data *mgmt_eth_data;
+ 	u32 write_val, clear_val = 0, val;
+ 	struct net_device *mgmt_master;
++	struct sk_buff *skb;
+ 	int ret, ret1;
+ 	bool ack;
+ 
+@@ -1010,26 +1024,6 @@ qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
+ 		write_val |= QCA8K_MDIO_MASTER_DATA(data);
+ 	}
+ 
+-	/* Prealloc all the needed skb before the lock */
+-	write_skb = qca8k_alloc_mdio_header(MDIO_WRITE, QCA8K_MDIO_MASTER_CTRL, &write_val,
+-					    QCA8K_ETHERNET_PHY_PRIORITY, sizeof(write_val));
+-	if (!write_skb)
+-		return -ENOMEM;
+-
+-	clear_skb = qca8k_alloc_mdio_header(MDIO_WRITE, QCA8K_MDIO_MASTER_CTRL, &clear_val,
+-					    QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
+-	if (!write_skb) {
+-		ret = -ENOMEM;
+-		goto err_clear_skb;
+-	}
+-
+-	read_skb = qca8k_alloc_mdio_header(MDIO_READ, QCA8K_MDIO_MASTER_CTRL, &clear_val,
+-					   QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
+-	if (!read_skb) {
+-		ret = -ENOMEM;
+-		goto err_read_skb;
+-	}
+-
+ 	/* Actually start the request:
+ 	 * 1. Send mdio master packet
+ 	 * 2. Busy Wait for mdio master command
+@@ -1042,22 +1036,27 @@ qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
+ 	mgmt_master = priv->mgmt_master;
+ 	if (!mgmt_master) {
+ 		mutex_unlock(&mgmt_eth_data->mutex);
+-		ret = -EINVAL;
+-		goto err_mgmt_master;
++		return -EINVAL;
++	}
++
++	skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_WRITE,
++				      QCA8K_MDIO_MASTER_CTRL, &write_val,
++				      QCA8K_ETHERNET_PHY_PRIORITY, sizeof(write_val));
++	if (!skb) {
++		ret = -ENOMEM;
++		goto err;
+ 	}
+ 
+-	read_skb->dev = mgmt_master;
+-	clear_skb->dev = mgmt_master;
+-	write_skb->dev = mgmt_master;
++	skb->dev = mgmt_master;
+ 
+ 	reinit_completion(&mgmt_eth_data->rw_done);
+ 
+ 	/* Increment seq_num and set it in the write pkt */
+ 	mgmt_eth_data->seq++;
+-	qca8k_mdio_header_fill_seq_num(write_skb, mgmt_eth_data->seq);
++	qca8k_mdio_header_fill_seq_num(skb, mgmt_eth_data->seq);
+ 	mgmt_eth_data->ack = false;
+ 
+-	dev_queue_xmit(write_skb);
++	dev_queue_xmit(skb);
+ 
+ 	ret = wait_for_completion_timeout(&mgmt_eth_data->rw_done,
+ 					  QCA8K_ETHERNET_TIMEOUT);
+@@ -1066,35 +1065,43 @@ qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
+ 
+ 	if (ret <= 0) {
+ 		ret = -ETIMEDOUT;
+-		kfree_skb(read_skb);
+-		goto exit;
++		goto err;
+ 	}
+ 
+ 	if (!ack) {
+ 		ret = -EINVAL;
+-		kfree_skb(read_skb);
+-		goto exit;
++		goto err;
+ 	}
+ 
+ 	ret = read_poll_timeout(qca8k_phy_eth_busy_wait, ret1,
+ 				!(val & QCA8K_MDIO_MASTER_BUSY), 0,
+ 				QCA8K_BUSY_WAIT_TIMEOUT * USEC_PER_MSEC, false,
+-				mgmt_eth_data, read_skb, &val);
++				mgmt_eth_data, mgmt_master, &val);
+ 
+ 	if (ret < 0 && ret1 < 0) {
+ 		ret = ret1;
+-		goto exit;
++		goto err;
+ 	}
+ 
+ 	if (read) {
++		skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_READ,
++					      QCA8K_MDIO_MASTER_CTRL, &clear_val,
++					      QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
++		if (!skb) {
++			ret = -ENOMEM;
++			goto err;
++		}
++
++		skb->dev = mgmt_master;
++
+ 		reinit_completion(&mgmt_eth_data->rw_done);
+ 
+ 		/* Increment seq_num and set it in the read pkt */
+ 		mgmt_eth_data->seq++;
+-		qca8k_mdio_header_fill_seq_num(read_skb, mgmt_eth_data->seq);
++		qca8k_mdio_header_fill_seq_num(skb, mgmt_eth_data->seq);
+ 		mgmt_eth_data->ack = false;
+ 
+-		dev_queue_xmit(read_skb);
++		dev_queue_xmit(skb);
+ 
+ 		ret = wait_for_completion_timeout(&mgmt_eth_data->rw_done,
+ 						  QCA8K_ETHERNET_TIMEOUT);
+@@ -1103,44 +1110,43 @@ qca8k_phy_eth_command(struct qca8k_priv *priv, bool read, int phy,
+ 
+ 		if (ret <= 0) {
+ 			ret = -ETIMEDOUT;
+-			goto exit;
++			goto err;
+ 		}
+ 
+ 		if (!ack) {
+ 			ret = -EINVAL;
+-			goto exit;
++			goto err;
+ 		}
+ 
+ 		ret = mgmt_eth_data->data[0] & QCA8K_MDIO_MASTER_DATA_MASK;
+-	} else {
+-		kfree_skb(read_skb);
+ 	}
+-exit:
++
++err:
++	skb = qca8k_build_mdio_header(mgmt_eth_data->mgmt_pkt, MDIO_WRITE,
++				      QCA8K_MDIO_MASTER_CTRL, &clear_val,
++				      QCA8K_ETHERNET_PHY_PRIORITY, sizeof(clear_val));
++	if (!skb) {
++		ret = -ENOMEM;
++		goto exit;
++	}
++
++	skb->dev = mgmt_master;
++
+ 	reinit_completion(&mgmt_eth_data->rw_done);
+ 
+ 	/* Increment seq_num and set it in the clear pkt */
+ 	mgmt_eth_data->seq++;
+-	qca8k_mdio_header_fill_seq_num(clear_skb, mgmt_eth_data->seq);
++	qca8k_mdio_header_fill_seq_num(skb, mgmt_eth_data->seq);
+ 	mgmt_eth_data->ack = false;
+ 
+-	dev_queue_xmit(clear_skb);
++	dev_queue_xmit(skb);
+ 
+ 	wait_for_completion_timeout(&mgmt_eth_data->rw_done,
+ 				    QCA8K_ETHERNET_TIMEOUT);
+-
++exit:
+ 	mutex_unlock(&mgmt_eth_data->mutex);
+ 
+ 	return ret;
+-
+-	/* Error handling before lock */
+-err_mgmt_master:
+-	kfree_skb(read_skb);
+-err_read_skb:
+-	kfree_skb(clear_skb);
+-err_clear_skb:
+-	kfree_skb(write_skb);
+-
+-	return ret;
+ }
+ 
+ static u32
+@@ -2984,15 +2990,25 @@ qca8k_master_change(struct dsa_switch *ds, const struct net_device *master,
+ {
+ 	struct dsa_port *dp = master->dsa_ptr;
+ 	struct qca8k_priv *priv = ds->priv;
++	int skb_size;
+ 
+ 	/* Ethernet MIB/MDIO is only supported for CPU port 0 */
+ 	if (dp->index != 0)
+ 		return;
+ 
++	skb_size = NET_SKB_PAD + QCA_HDR_MGMT_PKT_LEN +
++		   SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
++
+ 	mutex_lock(&priv->mgmt_eth_data.mutex);
+ 	mutex_lock(&priv->mib_eth_data.mutex);
+ 
+-	priv->mgmt_master = operational ? (struct net_device *)master : NULL;
++	if (operational) {
++		priv->mgmt_master = (struct net_device *)master;
++		priv->mgmt_eth_data.mgmt_pkt = kzalloc(skb_size, GFP_KERNEL);
++	} else {
++		priv->mgmt_master = NULL;
++		kfree(priv->mgmt_eth_data.mgmt_pkt);
++	}
+ 
+ 	mutex_unlock(&priv->mib_eth_data.mutex);
+ 	mutex_unlock(&priv->mgmt_eth_data.mutex);
+diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
+index c3d3c2269b1d..d82f2a02f542 100644
+--- a/drivers/net/dsa/qca8k.h
++++ b/drivers/net/dsa/qca8k.h
+@@ -345,6 +345,7 @@ struct qca8k_mgmt_eth_data {
+ 	bool ack;
+ 	u32 seq;
+ 	u32 data[4];
++	u8 *mgmt_pkt;
+ };
+ 
+ struct qca8k_mib_eth_data {
+-- 
+2.34.1
+

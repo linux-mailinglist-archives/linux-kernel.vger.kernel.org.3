@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39544A935A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9704A9360
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237607AbiBDFXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 00:23:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S239081AbiBDFXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 00:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiBDFXG (ORCPT
+        with ESMTP id S238084AbiBDFXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 00:23:06 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A477BC061749;
-        Thu,  3 Feb 2022 21:23:05 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id p15so15773882ejc.7;
-        Thu, 03 Feb 2022 21:23:05 -0800 (PST)
+        Fri, 4 Feb 2022 00:23:13 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93975C06173E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 21:23:13 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id u130so4170175pfc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 21:23:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5D0naLf91S5HixsewYTrKMJ1b16kD1c/WHyD174dJNQ=;
-        b=a42cgaxvkM+BuU2FtW1++CCXkFzaeTORxwxluTTyKVBc877qLghuJsxJ9ccogJrSBi
-         kbwozUtwm1j8swe3cph2H47+TkQL59aohX65dL910gF/rouXzVqxEPZ1r4Ky6veBViys
-         wbpGphaQS30yEmAD961PMfWxoQpYx5R5PqzQ/T4gSe16+3syqMjx0g8BWsP6xLj3iLbf
-         ncROhDlRpG4K4EBgtgUy8Fdg1DF2QpfznGvL9E99Axot75rv+cOjtQ4l91ogl9ul4GLk
-         KMrPvIExTHgXf5Fnt/xVnYN3+y7QPrBz3blqRNmGrWqwLz7Rg6Ua4H66t4uIOKy3n87v
-         qqbQ==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QRfoBad6xaNnxHl59RhSeOObo1h7VnZyGCv6jI7PtEQ=;
+        b=fwyKmh86FlojrU+sd/TBHHZ4viFDON2ToZwJPOhNkKpDr0mbFr4tYNZo9B+ah9HkMJ
+         eC/vGB496MmU85JHlh/wA7cnxT6CWKSIKEYN6RBpJqF+Gg87BRxvkgUaNBpTOeP7XU7v
+         id7fM+Ws+4WgGbSfppglJk/Mu9k+KUKzlgFQY1hKjEuPGWkkH7pXvDIeGF+JcF6XH27I
+         8w9twYyX909qLSaaktr2++ubwjGOP7j/nwROAYSzc4K9FkmnwQxpldgrkmFwB2MDVKN1
+         2kcwbVXFUOa1ih+lNCQjv7PlCFKgmOLQkO0DTT3jDapPfhx3nczdJKDflj6W6aiubI0p
+         E+QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5D0naLf91S5HixsewYTrKMJ1b16kD1c/WHyD174dJNQ=;
-        b=R5S/4RXfhBfuk/PZh5kpMDk8tcP65WpY/Y8H45zGMYfTRokYW8J6AXVU25B29zdlL1
-         I2sW/IcvbMlmuy4hEWCJ5F63LZE1Rglaa6ZbqFpUNgLh6hck9VJqq6SonshsTqEUHe7g
-         uyENVVUYhPS6HBsKfFfQAKmYJ3+N0nr0nOBn4ylULjhUMFFFdHui5Z+ZIPA2eqcaFjDF
-         232z1Pm/rEtfr/erlZ8nf9WmjK6FNCo4GeyL167CYQG4T06BWMghvyTqAgXH2XNcpmMg
-         Avi+yCByoLbyZSjnb75/kRUDQijpehKvc2yAq9CuIQIvjH7zBOBalJcwubesHc80gOd4
-         lqLA==
-X-Gm-Message-State: AOAM532vhNH1zk60TgAUmmYzZ8wGz8LobJUSnkB8aNlKISSH4s831vEp
-        R7KjHni7BLGjfUpXp/kVW+A=
-X-Google-Smtp-Source: ABdhPJyft0UjBbLgL3CvuQU8n42pXi4lndzlDeJhI/0RYQo9bjL/OZGDxDF1/t82duYxELtI7XURkQ==
-X-Received: by 2002:a17:907:213c:: with SMTP id qo28mr1062817ejb.325.1643952184153;
-        Thu, 03 Feb 2022 21:23:04 -0800 (PST)
-Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
-        by smtp.googlemail.com with ESMTPSA id cz6sm394941edb.4.2022.02.03.21.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 21:23:03 -0800 (PST)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: fix documentation index
-Date:   Fri,  4 Feb 2022 06:22:56 +0100
-Message-Id: <20220204052258.556667-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QRfoBad6xaNnxHl59RhSeOObo1h7VnZyGCv6jI7PtEQ=;
+        b=wsqqGl+bEjtIwijOAPofSc34VT0M6gx0fLcVnm8FhzKfnPjLVAx7YIlaqOiBSX6rl9
+         PkR60ndTETEmkrWAKnkkR9yDJIbWsXk4RiPAInVkafT5NTR15Vpe8DVQsjtn/wf/qge8
+         bx0z09yWzhAt3soMKk5IS+cu7oF5wA9BmpUDv+nEE3ACNQyVaRKkZkHLKkgtFhApsLKk
+         CtRQQSKZTzkYQlMztFRVciULiTjTQNsWdSJ5Hrjo/mx+ZOxrAbhWCGLErFo5YeGVB23k
+         OzkTU0YetssKVaV9KsAVe9u/sCDBIj5nQGINQUS5wIfwBRSiAVyzKRiCEJIN2eMsHKVH
+         wI3w==
+X-Gm-Message-State: AOAM532qYSvSvyWQ4ZSuWybMuk1j3nYnRq52kPDHKMf1+aU1j1/6eW20
+        rU1S2nWxLcqnoTqTRyPUrnRlzQ38frd1xEA2Jt0gUQ==
+X-Google-Smtp-Source: ABdhPJwHAc/oiydG42zh/YFy2yhojJMwzDJLfd2gzwA9VgAmUNWeZj1OWMAW4bLiBRXQIgjKFgKxpvZwQ+knnx1pEdw=
+X-Received: by 2002:a05:6a00:1508:: with SMTP id q8mr1395954pfu.3.1643952193051;
+ Thu, 03 Feb 2022 21:23:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220128213150.1333552-1-jane.chu@oracle.com> <20220128213150.1333552-2-jane.chu@oracle.com>
+ <YfqFWjFcdJSwjRaU@infradead.org> <d0fecaaa-8613-92d2-716d-9d462dbd3888@oracle.com>
+ <950a3e4e-573c-2d9f-b277-d1283c7256cd@oracle.com> <YfvbyKdu812To3KY@infradead.org>
+In-Reply-To: <YfvbyKdu812To3KY@infradead.org>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 3 Feb 2022 21:23:00 -0800
+Message-ID: <CAPcyv4g7Vqp6Z2+EXHdv95oqQxfdvPDAnzBiRG2KqobaHzOAsg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/7] mce: fix set_mce_nospec to always unmap the whole page
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jane Chu <jane.chu@oracle.com>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace asus_wmi_ec_sensors with asus_ec_sensors, which should have been
-done in d4b4bb104d12.
+On Thu, Feb 3, 2022 at 5:42 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Wed, Feb 02, 2022 at 11:07:37PM +0000, Jane Chu wrote:
+> > On 2/2/2022 1:20 PM, Jane Chu wrote:
+> > >> Wouldn't it make more sense to move these helpers out of line rather
+> > >> than exporting _set_memory_present?
+> > >
+> > > Do you mean to move
+> > >     return change_page_attr_set(&addr, numpages, __pgprot(_PAGE_PRESENT), 0);
+> > > into clear_mce_nospec() for the x86 arch and get rid of _set_memory_present?
+> > > If so, sure I'll do that.
+> >
+> > Looks like I can't do that.  It's either exporting
+> > _set_memory_present(), or exporting change_page_attr_set().  Perhaps the
+> > former is more conventional?
+>
+> These helpers above means set_mce_nospec and clear_mce_nospec.  If they
+> are moved to normal functions instead of inlines, there is no need to
+> export the internals at all.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- Documentation/hwmon/index.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index df20022c741f..1bad4e6116e4 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -43,7 +43,7 @@ Hardware Monitoring Kernel Drivers
-    asb100
-    asc7621
-    aspeed-pwm-tacho
--   asus_wmi_ec_sensors
-+   asus_ec_sensors
-    asus_wmi_sensors
-    bcm54140
-    bel-pfe
--- 
-2.35.1
-
+Agree, {set,clear}_mce_nospec() can just move to arch/x86/mm/pat/set_memory.c.

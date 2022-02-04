@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C276E4A9EC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB504A9EC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377427AbiBDSPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S1377434AbiBDSPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239558AbiBDSPB (ORCPT
+        with ESMTP id S234994AbiBDSPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:15:01 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC79C061714;
-        Fri,  4 Feb 2022 10:15:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=EoClmycGC2pyssAFQ3Yd/jSMUhwQjb+AViIrm00DoVU=; b=SQdS0bxn/g56/JVHYSjn4rLkwu
-        EwJCCvdwJZI/CKQ+QDAkn+D3r/3FJKUE9z4E+/gXqKT9o+uke0EYvQEBn0kKQUKdp3rHmSMZ+bM1j
-        2r9+oacfSB5vuQ2h/EQZXTggH7uLED+ZmGr2EHyc8hfVcfepn5cQS4HyuXPI0XqnBNNGJxSwg7Qrm
-        7Mp+KVpl8FZlYufRBC7S34jdvI6uqTfZbYdH/sDRNZIG2KlF/1FMwYiEw1ENqUOVatntsPm+p5QU1
-        VFu0OiF3EPa89sr4vV6nEK1zHQaKP447pKrfWQxK7s6ijb+8X5TsAvi8aq26BCObERgPeo1HzqxBJ
-        Jo/NZq1Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57044)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nG36l-000580-1g; Fri, 04 Feb 2022 18:14:55 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nG36j-0005C0-4M; Fri, 04 Feb 2022 18:14:53 +0000
-Date:   Fri, 4 Feb 2022 18:14:53 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-Cc:     andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
-        robh+dt@kernel.org, UNGLinuxDriver@microchip.com,
-        Woojung.Huh@microchip.com, hkallweit1@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 net-next 06/10] net: dsa: microchip: add support for
- phylink management
-Message-ID: <Yf1tHUaecq2DLgcE@shell.armlinux.org.uk>
-References: <20220204174500.72814-1-prasanna.vengateshan@microchip.com>
- <20220204174500.72814-7-prasanna.vengateshan@microchip.com>
+        Fri, 4 Feb 2022 13:15:25 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEFFC061714;
+        Fri,  4 Feb 2022 10:15:25 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id k17so5866838plk.0;
+        Fri, 04 Feb 2022 10:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KL1xeRlYrEyKiQpWUpJFu1HEcEQuRgRLLu/ees9x/jY=;
+        b=B6qbq0LSmC+RnYxT47RXfAuOrHQrre5oUmy/S4/JW/3XjTjQIMcyMo8I1jO/d7ygsO
+         AeWH8bd52LINCdTlzUC29gwhdj6EhNMXqS77OrNefl/7kfuBGBZjd9JZQ1gc5hPQnfcZ
+         ExOMH7tEUvPR5VwrgR1tdR7GDSV+3l6M2xAFWruj+XaBiHgsdob4IinDFidoX1s9R6RP
+         ZSar+NQjod98XsF5CC9yoHu8uKfYZJscBmLR0KTqS4xPjuYWKkpsqWCfkRABRAQ6J/BB
+         OdcZXkvoV41Q+2XiclshyUSlJCSSby5GTk9ost2ZTdFABawSqZK/CszuJwO6U95soqDl
+         oZog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KL1xeRlYrEyKiQpWUpJFu1HEcEQuRgRLLu/ees9x/jY=;
+        b=Jz8163+t9jrrn0iu3MUZDkZ4ZSjs15kY2GygZC+DRsHRnWFCI26DfvG2d1jQSSNhOh
+         jLvOd9Vc8LavjoYY8zlMtfdmq5MlhwJc51NhQ5BJcG7jodFBurQ9mejCVp1leDOU94cm
+         sB7yw3KI5FVrYESV2kdmkaiIO38C5cPpD2oMtSMLioDz8mGf8kd1hdFzQ5n6QlgtUxl5
+         6BrhMM7DpfRdi9SVddvB2GADdxXGXYa1X5j+E34KCuSzDjEhPrrG00OaHXtb9s5v8BWI
+         HVGjie8bHepUgi/1LT0k1kcheo2dS6i6WqtkAegWF6lIhVX2I4hF4NfIO2+jrJVgWXKy
+         vqHg==
+X-Gm-Message-State: AOAM530gSA6sBjwQ83uljzffJhEKYrAyA0zjO5MJDHi2PJ3b7Zo3ybeX
+        wlgKZCOhwhyou62ojxmbSSY=
+X-Google-Smtp-Source: ABdhPJzIZ3jxWQrH3knxOOrWNP8PQG/02Mw+Qr6RiUwKBk5cCpTdFpMmFYqYjRnYu5sy4b+xwl1cQA==
+X-Received: by 2002:a17:902:ea08:: with SMTP id s8mr4522469plg.95.1643998524554;
+        Fri, 04 Feb 2022 10:15:24 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id md18sm2754165pjb.9.2022.02.04.10.15.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 10:15:24 -0800 (PST)
+Message-ID: <dec345c8-24de-55e9-09ac-b1da3f5f68b1@gmail.com>
+Date:   Fri, 4 Feb 2022 10:15:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204174500.72814-7-prasanna.vengateshan@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220204091917.166033635@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Feb 04, 2022 at 11:14:56PM +0530, Prasanna Vengateshan wrote:
-> +static void lan937x_phylink_mac_link_up(struct dsa_switch *ds, int port,
-> +					unsigned int mode,
-> +					phy_interface_t interface,
-> +					struct phy_device *phydev,
-> +					int speed, int duplex,
-> +					bool tx_pause, bool rx_pause)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +
-> +	/* Internal PHYs */
-> +	if (lan937x_is_internal_phy_port(dev, port))
-> +		return;
-> +
-> +	if (phylink_autoneg_inband(mode)) {
-> +		dev_err(ds->dev, "In-band AN not supported!\n");
-> +		return;
-> +	}
 
-No need to check this in the link_up() method - if this were true,
-you've already printed an error in the mac_config() method and this
-one doesn't provide any additional useful information.
+On 2/4/2022 1:22 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.6 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> +
-> +	lan937x_config_interface(dev, port, speed, duplex,
-> +				 tx_pause, rx_pause);
-> +}
-> +
-> +static void lan937x_phylink_get_caps(struct dsa_switch *ds, int port,
-> +				     struct phylink_config *config)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +
-> +	config->mac_capabilities = MAC_100FD;
-> +
-> +	/* internal T1 PHY */
-> +	if (lan937x_is_internal_base_t1_phy_port(dev, port)) {
-> +		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
-> +			  config->supported_interfaces);
-> +	} else {
-> +		/* MII/RMII/RGMII ports */
-> +		if (!lan937x_is_internal_base_tx_phy_port(dev, port)) {
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Please consider:
-
-	} else if (!lan937x_is_internal_base_tx_phy_port(dev, port)) {
-		/* MII/RMII/RGMII ports */
-		...
-	}
-
-to avoid needing two tabs to indent, which probably makes:
-
-> +			config->mac_capabilities |= MAC_100HD | MAC_SYM_PAUSE |
-> +						    MAC_ASYM_PAUSE | MAC_10 |
-> +						    MAC_1000FD;
-
-able to be laid out with the two pause modes first followed by the
-speeds.
-
-> +			phy_interface_set_rgmii(config->supported_interfaces);
-> +
-> +			__set_bit(PHY_INTERFACE_MODE_MII,
-> +				  config->supported_interfaces);
-> +			__set_bit(PHY_INTERFACE_MODE_RMII,
-> +				  config->supported_interfaces);
-> +		}
-> +	}
-
-You seem to be a non-legacy driver in this patch (good!) so please also
-add:
-
-	config->legacy_pre_march2020 = false;
-
-while DSA is transitioned over. Thanks.
-
-> +}
-> +
->  const struct dsa_switch_ops lan937x_switch_ops = {
->  	.get_tag_protocol = lan937x_get_tag_protocol,
->  	.setup = lan937x_setup,
-
-Thanks.
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Florian

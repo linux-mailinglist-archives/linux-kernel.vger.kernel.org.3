@@ -2,209 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1E34A9F34
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:36:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E494A9F4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377765AbiBDSgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:36:07 -0500
-Received: from mail-bn7nam10on2082.outbound.protection.outlook.com ([40.107.92.82]:42017
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1377582AbiBDSft (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:35:49 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CvvG1H88zcjo/ReoCEha5kTd2XtqKHK3NqR8AcRps5/KKMM/bXCGgO2UBkh2E3nCwBU9tevWAe8fzWMrNS4LB5bNMRdTiTuJs/e9GTSJvMBdeHRTwNullcwnDBWCqhCC0Nb/4OESpm3a9+KzHhXZZQiDrxKzFPuBo+ePkA3BRxbZNWX9GM/Fe7/fgMJdDu9GBtzXppNVbZGdVil/n78AH07l7ATys0j/0ZkazDkr42HfVUfdcTrvNo4GUqXESqvDs9yFjhOcgvVg95IH2mvcmdCh3HBL3JDqMhYcAn2noc7MJZvPeeB4unoidM/2rKob6emG6yZrjhv/M2hJflWETg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M1B3pLSPE9kKpLaQTBCPKOHqa+wXGmdJ5XUJrvnKb00=;
- b=X5B5IlVMoQ0QGeGULJSLwK5WqPVCNI5rskIPsJa7YX1A386F84zsKrBltwsGnfrND2XSU02AJbra9z3uboVDKNe9b2b97P/8bwulsVX67+pkhDdAKteRMkrzFWF7lF+K3/GfDX0iwK3JJCfUtsom0BoFSiw6MCv+Y336aJ932qehm5XFAyHqAFHMWmQ9ryc4DluIGxDMy/aqi5pPuNJslMnUx1sRy1DKQUVmtn2XZvOjN7IniHEkw9A/Kk1UJfGLEcCpVu3ZkAPUGz8v9aYyqC9DJaHcMRhs9aMv484r6varapCQErvjzXjWI/0Q2NIXIGlipWfpyF4LF1wWBMihzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1B3pLSPE9kKpLaQTBCPKOHqa+wXGmdJ5XUJrvnKb00=;
- b=J1CST43pVRIUgnsS+6KKuAa8kVgCe0a8EKx9bpAfkPcyXDYybmWBTXBpNItFDhTRiKF6OIluOCl0Hxsy6CRTi54OqTWl4cykov8h6yOy7BJmdoTJWdkaklh0ZrY4N25jt+Yn+Wlfrz+lLCDK9W1MHBoufdW0klnrldbXujGxwaQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BYAPR12MB3079.namprd12.prod.outlook.com (2603:10b6:a03:a9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Fri, 4 Feb
- 2022 18:35:46 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d861:5699:8188:7bd3]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d861:5699:8188:7bd3%3]) with mapi id 15.20.4951.014; Fri, 4 Feb 2022
- 18:35:45 +0000
-Message-ID: <4156d270-b30a-402f-268a-7ce28b1f2237@amd.com>
-Date:   Fri, 4 Feb 2022 19:35:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 02/19] iosys-map: Add offset to iosys_map_memcpy_to()
-Content-Language: en-US
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220204174436.830121-1-lucas.demarchi@intel.com>
- <20220204174436.830121-3-lucas.demarchi@intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220204174436.830121-3-lucas.demarchi@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0016.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::21) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        id S1377634AbiBDSgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377774AbiBDSgL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 13:36:11 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27785C061749
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:36:11 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so6870594pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BcwpZRvksgICTx1+iO/egqqt+NXlQX0ke28GNdK6Yhs=;
+        b=ZDDjrIRGaY9tCU9x5Hpo/VjyRKggTMeszzaUtriyuO9c5JxesdSNU6iwBTilN7ys/O
+         a16l8CQ02GNY1tiDqpe82kuzvqHV6ftE4TK/bnuE6ueUPxNJ5OkDoZgAqOqP4fvThqsQ
+         ioEYAQdu/4dplRlhCtX1z739wgPg6wz5HYzE/3/AGut2M4b7fjmgavl18x4S8j2UtB/1
+         bINTBK7KmC6G+iL2E58cEEqYO72gd+cMYfiaN0xf2o/TJEKxl5LAzPykfG7isdbCFzGk
+         3rU0Ps+obzTk3KaFVmB1rJ64xGuWrryX37moTeo27RZmM5FMw9VP+8/kjgcNngqUmprQ
+         Zi4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BcwpZRvksgICTx1+iO/egqqt+NXlQX0ke28GNdK6Yhs=;
+        b=uzQSPt1XiUfzpU8owUc6afjIsz7CYk2zg6GmIc8iHgYmIFwVt+ZRZ7ZDLDuFQpoYz+
+         C1/8rvQTjV84pUr1MrVjmac4s2obpUV2HVslrw1G5B23DwRZk9I5HkQ2w4yxq+NQFfzL
+         AaO0dRCUHe3B8rqRHVR8816QHuuj3Kmu1Ykcu/ICsVoq2b6RmTSuJHSRd3QB0YHpKyNs
+         qXh7A+n5hLVp30ZfzOA0yYxkWLnRjtS2vhOLOgCi2FQ3Wb1P6D4Qtoibf1RIXu/xDd4X
+         Pn14zHJjidy+l8ZlyxWOvRluDRyevW5j+qoFU0oDcT/npqCq8+5L5Em9btbacYU8NT8Z
+         XzFw==
+X-Gm-Message-State: AOAM533iRXyUeyvJDhgxJZCrulOgzslqh5guUREn4+hze3M20AfcNNBN
+        pjfopzQxsC998qTOKYQ1nQkCwxXTFgbbr1NqtyTVcP0D0NmlBw==
+X-Google-Smtp-Source: ABdhPJzutWjHSYuX4RQzmzkKj/rWcWycTpNewSib0DfMN5FrH9UiynQr2LiqNCbRR6QBchNy8a/UpIVJAJhEt/04nb0=
+X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr4345895plr.132.1643999770584;
+ Fri, 04 Feb 2022 10:36:10 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a773ca1e-2f63-4313-7da9-08d9e80d2821
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3079:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR12MB3079BC91A5EE2F03E5A2F89F83299@BYAPR12MB3079.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eNGevhhXjVZ7erX2NJeb0oNlZzt4/96sUwUsOklK/+a3DyQ9Onk/WPerIHXyuGDxZxUXjrjLdODstSB7AbLmwUyOKh/kexTCCTdSodXkjYTssWK6sISNboOUmfOZDfDwzNKTbrHdNePIsm3s3NKVTQNi2pVSF/zyerc5kixXa5tpTCC7gRbQdTp7zvmSkj1z9fvjGsBMSOnARRE+i72WrEAnPS2Ir9B4f6A4vK//vA0/ICtmrYc0yRcV0NL490xQ9gxkJ087b6pSQ/Ig7HQ+MSsmaFfR4Jcc4wkUOZlmADpNMRq+AIGagLDrHJ759hu6n3k1NWx2azP9s6e7gARZPmna3jBBYbaCSPV2jkx6tj3bhdKZcxnCDGCIMUcsS4bwUeaaB6nQv8K6eEoYu2jwRNb8Yu9ruOl2KRNRFiAhuP4+szNxxyXNG5FzWJlz8v5SEJTe2d0SaFuEqZ/ymVJzOEP3rZ2OMCM7zCPV417MbkVT4rEHYcN0nP252zwaeesuQvm3mqE/u/Kq/7aEE+PqbnlfRJUhwigckg63Yk045eaeHVwLOwcQrgDM4rD3VIrsZ2wIHOUabD68Atc93lKyvUp7FI/2m2fIuGrPVmYdrXthTn/RlCYWybz0ddXxOA3Mk4F/uLJgW0zuELILJ46dOJirJd1k1k+W0j6jkrhb0v3ftbEskAhCih8n23xGOpFTyLeBM/d0/oha8lS67vOXSZOv2f6y41UD78oW88EchLbPMZJD6anJ3jNaAx3d3Oab
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2906002)(5660300002)(7416002)(38100700002)(2616005)(6506007)(316002)(6666004)(6512007)(54906003)(66556008)(8936002)(8676002)(4326008)(66946007)(66476007)(83380400001)(6486002)(36756003)(508600001)(31686004)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dmVUalpZb0JPMlpNMGN4cG9KYUM3WUltQks1K2xmenJ2Z1E4UlYvNHN3SDdF?=
- =?utf-8?B?TGNnYjhhMkd3VEZ3M3RJbkhKRy9wdjI0eEk2eUxMOXY1QzBZbzl1cHNHanlR?=
- =?utf-8?B?cjRranlQZEtVMlhRNkt2WTlFSWNrWFd3eGVqUlc0blRLNlVwd1NTakRXdC81?=
- =?utf-8?B?NW02NFIxQ1dQOXJiSXlBYlZoWEU2YXNQK0N4VHpFSlFCdGg0ckxHWkdxcGFl?=
- =?utf-8?B?WkE0T0R0dWQ4NHlHZURUaCtHWW50QUVnVlV1dUxDUkZpS3loQ1JiQmRqdVFW?=
- =?utf-8?B?VGtpT0xNbEpHYVJBYVBQdUJMSGkxSk03TS8xVXhHcE56TjRVemxXQ3pWVVZ0?=
- =?utf-8?B?UkJUbFhNUDBndVFvYkM3a1c4UDNVaGRIYlhkd2xaY0pCK294SDBJUFVHRTFW?=
- =?utf-8?B?VUhPUWRRSXRCNlBOaEttdTZqTnh5Y3ZBc0RWWjF5VHl3eEFYNnErbWxjVzZm?=
- =?utf-8?B?R1RvLzRvMDNJRnkveDl1bHRKZFc5UzhVK3oyYXM0c2RJbEluQ0hNNzBwREJD?=
- =?utf-8?B?Z3Q0WWtONHR5Uy9PMFJmSm1MUnI1NDU3Z3E2RnZtK292SFFFL211ZVhNNHBm?=
- =?utf-8?B?eEsyZThoMnlnTkNhS0xRRGptckhiQVhjM0JhMHRwWmJRWVFVckZ3U2dKemdX?=
- =?utf-8?B?L3o0Ryt2UXJLZWZPQkR1WkRkYlc3bHdTdGhtcFZMS3N6OUxiUWlMTnY1M05s?=
- =?utf-8?B?ZG44VVN2aTlJdTI0RytzL2dHN1Bpa2xuVmd4eFFkcSsxNndURlh1ZFFQR29D?=
- =?utf-8?B?NWRZZEY1VU5NR0RSWmJFaUFsR0p5aDBIL2FGK1Uva2xweVVqdHYrSHI2QlBK?=
- =?utf-8?B?bXNORFRIeDZ1cFM3S0lDUGozbE9rNXJsZW9LU1drNFNEcC9GUWswbUlieDlT?=
- =?utf-8?B?aEdqZkp6VS90VkhsWXk0K2VkTFlMeU1WbXRvcVN0N1lKTVk5S3JHZ2txL0Yw?=
- =?utf-8?B?Tm1Nc21UTDlMWXNlbWl2M2c4Sjk2b1FTVi9SV1V5MGo3SFVQZmhNU01JMnR5?=
- =?utf-8?B?RlB4MTdOUTlyZHJQNXltRXVJODc5eEx4eXJaZlJybGpZUTY0YW82S2hDZWhy?=
- =?utf-8?B?cG0rV3F2cWZtTkU4Y3pTNXBVU1lDVGV1SjV6S0V2RDhac0tRcUp5V2JxQXNY?=
- =?utf-8?B?bHN3azZNb0xuOGtyYTdrZ0JxVmxIQVptS3B4R0ZRT3JlR2xiTlJhdDZ5K2lS?=
- =?utf-8?B?SFFBVTV1bkdVNEsrbTlwUFE5dCtuR3YwbFZQWkN6TEgwKyt2ZXIydDgrSjhl?=
- =?utf-8?B?UVpwc1Q0Y0ViT2EwTm1UZEtEbWZldGRTR1JSakxOby9KYmgrbFdsL1Z3bXhN?=
- =?utf-8?B?TkhHWnZ2NWlkTVFrcTVLdlVFcE5ObFhwSVVjN3hFR0FNcHBDVG41aVU0NDlU?=
- =?utf-8?B?WGNzOTA1cUdreVh2UFFGWmZLRHJUMDAwVlAzek1vbFRITzN6UzlLVHNuMVNR?=
- =?utf-8?B?dG1wSVlWeXgvQ2dXQ2ZYdEpwUlVRaWY2M1JjQldqdWtJQ1hTeWMvK3FUS0FV?=
- =?utf-8?B?dUthSDk2aElWeUxLVjFLKzAraWdYMlpLN0J6WlAwNVc5Vm9CTExVb0s3L3Fl?=
- =?utf-8?B?WVhLcElJaUFFcjVjbmE4bHNQQXdUYXBWQjJNbUEzQ1JIQzJJb1BhZnd3dmJO?=
- =?utf-8?B?Tm84SnpoYTRDYVVOaUJWK0pjZkFwZFhBODluWWNkd1NRVFhNM01KQUV1Tkxx?=
- =?utf-8?B?VTdWLzZDY1NVQmRPTXAwTlkyVDdiT2ZlMkFNamxFMmxIdDRZNnEzeGxJRzVq?=
- =?utf-8?B?aDQ4ZWxSdm1FRWt3SnE2WVdZWHQzVEk2elFScStkRW90WThaaldVVDN1NFY5?=
- =?utf-8?B?U01SSEZJWnd1cUFWSU1CR2lZNnQ1L202dFBQTTZoZkFJY1ZuTXFqR0FlTnd0?=
- =?utf-8?B?aXBPYWFVc1V3WUt3cTJhbCs1WkFLNmp4Y2hrTExxcGRwR2p0MlZsMHJ4Mmlv?=
- =?utf-8?B?Y0xlU0pibWFnaVlSdnNiSmg4eGZOVk9rZXNudUZjS2hXRzBnNVdwV1UxOG5R?=
- =?utf-8?B?Y1FyNlF3Q1VNMzdtVkluZ1NveEpZS2hMdmdNcGxXL2NpMk5ZZnRmZVc3cU5h?=
- =?utf-8?B?NUZTNmlHalF3bHQ1SnpYemsySUh6YjYrTnlEaXlNRGpuNWVEa1pZY2FoeHFp?=
- =?utf-8?B?bURwNXJad3NKb3JFNkk0dklvSndaV2p6N2JvWGE0MjZENm9yd1RyUldOQ2pp?=
- =?utf-8?Q?Z/OIyXvZkCz+9IK4nPpCyFo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a773ca1e-2f63-4313-7da9-08d9e80d2821
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 18:35:45.7638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lS0gXj+eWx76yTop/GNWdQKeDmxBe6A3ZAOFfjKl9I4LVIQF7F4M8oJEimZnlNx4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3079
+References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-39-ira.weiny@intel.com>
+In-Reply-To: <20220127175505.851391-39-ira.weiny@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 4 Feb 2022 10:35:59 -0800
+Message-ID: <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
+Subject: Re: [PATCH V8 38/44] memremap_pages: Define pgmap_mk_{readwrite|noaccess}()
+ calls
+To:     "Weiny, Ira" <ira.weiny@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 04.02.22 um 18:44 schrieb Lucas De Marchi:
-> In certain situations it's useful to be able to write to an
-> offset of the mapping. Add a dst_offset to iosys_map_memcpy_to().
+On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
 >
-> Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> Cc: Christian König <christian.koenig@amd.com>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> Users will need a way to flag valid access to pages which have been
+> protected with PGMAP protections.  Provide this by defining pgmap_mk_*()
+> accessor functions.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+I find the ambiguous use of "Users" not helpful to set the context. How about:
 
+A thread that wants to access memory protected by PGMAP protections
+must first enable access, and then disable access when it is done.
+
+>
+> pgmap_mk_{readwrite|noaccess}() take a struct page for convenience.
+> They determine if the page is protected by dev_pagemap protections.  If
+> so, they perform the requested operation.
+>
+> In addition, the lower level __pgmap_* functions are exported.  They
+> take the dev_pagemap object directly for internal users who have
+> knowledge of the of the dev_pagemap.
+>
+> All changes in the protections must be through the above calls.  They
+> abstract the protection implementation (currently the PKS api) from the
+> upper layer users.
+>
+> Furthermore, the calls are nestable by the use of a per task reference
+> count.  This ensures that the first call to re-enable protection does
+> not 'break' the last access of the device memory.
+>
+> Access to device memory during exceptions (#PF) is expected only from
+> user faults.  Therefore there is no need to maintain the reference count
+> when entering or exiting exceptions.  However, reference counting will
+> occur during the exception.  Recall that protection is automatically
+> enabled during exceptions by the PKS core.[1]
+>
+> NOTE: It is not anticipated that any code paths will directly nest these
+> calls.  For this reason multiple reviewers, including Dan and Thomas,
+> asked why this reference counting was needed at this level rather than
+> in a higher level call such as kmap_{atomic,local_page}().  The reason
+> is that pgmap_mk_readwrite() could nest with regards to other callers of
+> pgmap_mk_*() such as kmap_{atomic,local_page}().  Therefore push this
+> reference counting to the lower level and just ensure that these calls
+> are nestable.
+
+I still don't think that explains why task struct has a role to play
+here, see below.
+
+Another missing bit of clarification, maybe I missed it, is why are
+the protections toggled between read-write and noaccess. For
+stray-write protection toggling between read-write and read-only is
+sufficient. I can imagine speculative execution and debug rationales
+for noaccess, but those should be called out explicitly.
+
+>
+> [1] https://lore.kernel.org/lkml/20210401225833.566238-9-ira.weiny@intel.com/
+>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>
 > ---
->   drivers/gpu/drm/drm_cache.c     |  2 +-
->   drivers/gpu/drm/drm_fb_helper.c |  2 +-
->   include/linux/iosys-map.h       | 17 +++++++++--------
->   3 files changed, 11 insertions(+), 10 deletions(-)
+> Changes for V8
+>         Split these functions into their own patch.
+>                 This helps to clarify the commit message and usage.
+> ---
+>  include/linux/mm.h    | 34 ++++++++++++++++++++++++++++++++++
+>  include/linux/sched.h |  7 +++++++
+>  init/init_task.c      |  3 +++
+>  mm/memremap.c         | 14 ++++++++++++++
+>  4 files changed, 58 insertions(+)
 >
-> diff --git a/drivers/gpu/drm/drm_cache.c b/drivers/gpu/drm/drm_cache.c
-> index 66597e411764..c3e6e615bf09 100644
-> --- a/drivers/gpu/drm/drm_cache.c
-> +++ b/drivers/gpu/drm/drm_cache.c
-> @@ -218,7 +218,7 @@ static void memcpy_fallback(struct iosys_map *dst,
->   	if (!dst->is_iomem && !src->is_iomem) {
->   		memcpy(dst->vaddr, src->vaddr, len);
->   	} else if (!src->is_iomem) {
-> -		iosys_map_memcpy_to(dst, src->vaddr, len);
-> +		iosys_map_memcpy_to(dst, 0, src->vaddr, len);
->   	} else if (!dst->is_iomem) {
->   		memcpy_fromio(dst->vaddr, src->vaddr_iomem, len);
->   	} else {
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index 238f815cb2a0..bf5cc9a42e5a 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -385,7 +385,7 @@ static void drm_fb_helper_damage_blit_real(struct drm_fb_helper *fb_helper,
->   	iosys_map_incr(dst, offset); /* go to first pixel within clip rect */
->   
->   	for (y = clip->y1; y < clip->y2; y++) {
-> -		iosys_map_memcpy_to(dst, src, len);
-> +		iosys_map_memcpy_to(dst, 0, src, len);
->   		iosys_map_incr(dst, fb->pitches[0]);
->   		src += fb->pitches[0];
->   	}
-> diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
-> index f4186f91caa6..edd7fa3be9e9 100644
-> --- a/include/linux/iosys-map.h
-> +++ b/include/linux/iosys-map.h
-> @@ -220,22 +220,23 @@ static inline void iosys_map_clear(struct iosys_map *map)
->   }
->   
->   /**
-> - * iosys_map_memcpy_to - Memcpy into iosys mapping
-> + * iosys_map_memcpy_to_offset - Memcpy into offset of iosys_map
->    * @dst:	The iosys_map structure
-> + * @dst_offset:	The offset from which to copy
->    * @src:	The source buffer
->    * @len:	The number of byte in src
->    *
-> - * Copies data into a iosys mapping. The source buffer is in system
-> - * memory. Depending on the buffer's location, the helper picks the correct
-> - * method of accessing the memory.
-> + * Copies data into a iosys_map with an offset. The source buffer is in
-> + * system memory. Depending on the buffer's location, the helper picks the
-> + * correct method of accessing the memory.
->    */
-> -static inline void iosys_map_memcpy_to(struct iosys_map *dst, const void *src,
-> -				       size_t len)
-> +static inline void iosys_map_memcpy_to(struct iosys_map *dst, size_t dst_offset,
-> +				       const void *src, size_t len)
->   {
->   	if (dst->is_iomem)
-> -		memcpy_toio(dst->vaddr_iomem, src, len);
-> +		memcpy_toio(dst->vaddr_iomem + dst_offset, src, len);
->   	else
-> -		memcpy(dst->vaddr, src, len);
-> +		memcpy(dst->vaddr + dst_offset, src, len);
->   }
->   
->   /**
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 6e4a2758e3d3..60044de77c54 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1162,10 +1162,44 @@ static inline bool devmap_protected(struct page *page)
+>         return false;
+>  }
+>
+> +void __pgmap_mk_readwrite(struct dev_pagemap *pgmap);
+> +void __pgmap_mk_noaccess(struct dev_pagemap *pgmap);
+> +
+> +static inline bool pgmap_check_pgmap_prot(struct page *page)
+> +{
+> +       if (!devmap_protected(page))
+> +               return false;
+> +
+> +       /*
+> +        * There is no known use case to change permissions in an irq for pgmap
+> +        * pages
+> +        */
+> +       lockdep_assert_in_irq();
+> +       return true;
+> +}
+> +
+> +static inline void pgmap_mk_readwrite(struct page *page)
+> +{
+> +       if (!pgmap_check_pgmap_prot(page))
+> +               return;
+> +       __pgmap_mk_readwrite(page->pgmap);
+> +}
+> +static inline void pgmap_mk_noaccess(struct page *page)
+> +{
+> +       if (!pgmap_check_pgmap_prot(page))
+> +               return;
+> +       __pgmap_mk_noaccess(page->pgmap);
+> +}
+> +
+>  bool pgmap_protection_available(void);
+>
+>  #else
+>
+> +static inline void __pgmap_mk_readwrite(struct dev_pagemap *pgmap) { }
+> +static inline void __pgmap_mk_noaccess(struct dev_pagemap *pgmap) { }
+> +static inline void pgmap_mk_readwrite(struct page *page) { }
+> +static inline void pgmap_mk_noaccess(struct page *page) { }
+> +
+>  static inline bool pgmap_protection_available(void)
+>  {
+>         return false;
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index f5b2be39a78c..5020ed7e67b7 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1492,6 +1492,13 @@ struct task_struct {
+>         struct callback_head            l1d_flush_kill;
+>  #endif
+>
+> +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> +       /*
+> +        * NOTE: pgmap_prot_count is modified within a single thread of
+> +        * execution.  So it does not need to be atomic_t.
+> +        */
+> +       u32                             pgmap_prot_count;
+> +#endif
 
+It's not at all clear why the task struct needs to be burdened with
+this accounting. Given that a devmap instance is needed to manage page
+protections, why not move the nested protection tracking to a percpu
+variable relative to an @pgmap arg? Something like:
+
+void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+{
+       migrate_disable();
+       preempt_disable();
+       if (this_cpu_add_return(pgmap->pgmap_prot_count, 1) == 1)
+               pks_mk_readwrite(PKS_KEY_PGMAP_PROTECTION);
+}
+EXPORT_SYMBOL_GPL(__pgmap_mk_readwrite);
+
+void __pgmap_mk_noaccess(struct dev_pagemap *pgmap)
+{
+       if (!this_cpu_sub_return(pgmap->pgmap_prot_count, 1))
+               pks_mk_noaccess(PKS_KEY_PGMAP_PROTECTION);
+       preempt_enable();
+       migrate_enable();
+}
+EXPORT_SYMBOL_GPL(__pgmap_mk_noaccess);
+
+The naming, which I had a hand in, is not aging well. When I see "mk"
+I expect it to be building some value like a page table entry that
+will be installed later. These helpers are directly enabling and
+disabling access and are meant to be called symmetrically. So I would
+expect symmetric names like:
+
+pgmap_enable_access()
+pgmap_disable_access()
+
+
+>         /*
+>          * New fields for task_struct should be added above here, so that
+>          * they are included in the randomized portion of task_struct.
+> diff --git a/init/init_task.c b/init/init_task.c
+> index 73cc8f03511a..948b32cf8139 100644
+> --- a/init/init_task.c
+> +++ b/init/init_task.c
+> @@ -209,6 +209,9 @@ struct task_struct init_task
+>  #ifdef CONFIG_SECCOMP_FILTER
+>         .seccomp        = { .filter_count = ATOMIC_INIT(0) },
+>  #endif
+> +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> +       .pgmap_prot_count = 0,
+> +#endif
+>  };
+>  EXPORT_SYMBOL(init_task);
+>
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index d3e6f328a711..b75c4f778c59 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -96,6 +96,20 @@ static void devmap_protection_disable(void)
+>         static_branch_dec(&dev_pgmap_protection_static_key);
+>  }
+>
+> +void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+> +{
+> +       if (!current->pgmap_prot_count++)
+> +               pks_mk_readwrite(PKS_KEY_PGMAP_PROTECTION);
+> +}
+> +EXPORT_SYMBOL_GPL(__pgmap_mk_readwrite);
+> +
+> +void __pgmap_mk_noaccess(struct dev_pagemap *pgmap)
+> +{
+> +       if (!--current->pgmap_prot_count)
+> +               pks_mk_noaccess(PKS_KEY_PGMAP_PROTECTION);
+> +}
+> +EXPORT_SYMBOL_GPL(__pgmap_mk_noaccess);
+> +
+>  bool pgmap_protection_available(void)
+>  {
+>         return pks_available();
+> --
+> 2.31.1
+>

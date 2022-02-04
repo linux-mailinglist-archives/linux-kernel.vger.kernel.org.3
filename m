@@ -2,122 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1793E4A9A16
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5545A4A9A19
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358888AbiBDNh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:37:58 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:34457 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiBDNh5 (ORCPT
+        id S1358898AbiBDNiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:38:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229609AbiBDNiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:37:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643981878; x=1675517878;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ins3wjr1yw8GLN2RCWCRKZ7wEA5SACV7Eby0ebdTizI=;
-  b=sWn5O4a4SYHLdOHjcBsJ50RkdQbtMDls8nK6/71RgJBLUnKrgHYE4n9O
-   MDA6tjxJcIbXge9bEqvX50aQRE6quuUMJJpAL9zuwHnRxLibZSIdNeCtP
-   sfhpqtfQtAMmn/+NjNZA2IXO1lmdGchef4FuosqseHhxHPrOU2nyzuvkh
-   92x7b1MdymFb40g/x3FMx39iNyD+jf3KYWNexo6VBzHiuq/c7AX0rW1hY
-   Tgh9ugMLCfgN3FswojdSIWi+hodkaEhlq2Wd+V0i+RMi43fHbwqTbLg6d
-   TygcGbFEasLHsiLVX+caZV6kx7XTljgDerd/5PPnBbhXRXRvaKlDrN4Yw
-   w==;
-IronPort-SDR: GObYwLT3RkKPIG3eW2ryvclkpvDVyYLSnseXNQyBoxcdlZqG7iYDfbA78TqWZlI/fA/V29BBUc
- AO1vAstjEm15yCGEJnzERVSdRfx4UXRfDH9061Yynk3kUry9MZiba8ux1s6wJ83mTNe62aLDVX
- HJRusjsYSsGemgtokY6b+f7YINMnPLo1QS86FSHXDV3fS81yQ0pZOaiAd12U1s2xU9S5DKuTbl
- K44t8qseYgNnwYpnceHMqxGLp6vhAaYLkUdM8ozCgu/HoWi13WB2y7mTQDQlJQk7fnCQZ1jcb/
- +BCHye7jOGWujiJQ9SRRvJh8
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="151967375"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Feb 2022 06:37:58 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Feb 2022 06:37:56 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Feb 2022 06:37:54 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <alexandre.belloni@bootlin.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH] ARM: dts: at91: sama7g5: Add crypto nodes
-Date:   Fri, 4 Feb 2022 15:37:51 +0200
-Message-ID: <20220204133751.498600-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Feb 2022 08:38:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E6AC061714;
+        Fri,  4 Feb 2022 05:38:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4F23B8373A;
+        Fri,  4 Feb 2022 13:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8CC3C004E1;
+        Fri,  4 Feb 2022 13:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643981890;
+        bh=ADsLWrDPUHmAqFOd35u++j4ThxtN9Oz6/99IGv9oiic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iEBVddxxEGZ8Z/cP1AXKMf6eHPQ9U6NMkiaKUe7OdNODPCCunKqCWLvufroq8oqo+
+         IgLv5eRgIdm/TmPaDZ8qWYCU57rA6tK3EIHQqzn5BgEP1BNl/UXF26nhcm5Wcm3Kns
+         /dLBxNDC+S2C+0uUZEianRM9pmGbgYOvQzcGCRuR+Jsyywhf3eMVTaMzjGuZX6NSRn
+         R3DkFb2EXoy6v5eAuyUYxWq2eLHkQ8mwiPMSGb3qf1ccmUtTjBRbhFjhJ2zYtPuQqi
+         Zaxm9eILt6xbeMwAyuMOxYY21i1+ya9QM4ylXTdD6PCs+OnA91cqLXuFafI9zy+XjR
+         oYuJbZz7DegHQ==
+Date:   Fri, 4 Feb 2022 15:37:56 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
+Subject: Re: [PATCH v6 6/6] drivers/node: Show in sysfs node's crypto
+ capabilities
+Message-ID: <Yf0sNKu1vJkIRAA3@kernel.org>
+References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+ <20220203164328.203629-7-martin.fernandez@eclypsium.com>
+ <Yfyx8s9n+CZ6TPgg@kernel.org>
+ <CAKgze5YZF09F3FTwD6kODd2RrWATutcmM5J7-wcLTK32C6aptg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKgze5YZF09F3FTwD6kODd2RrWATutcmM5J7-wcLTK32C6aptg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe and enable the AES, SHA and TDES crypto IPs.
+On Fri, Feb 04, 2022 at 09:27:42AM -0300, Martin Fernandez wrote:
+> On 2/4/22, Mike Rapoport <rppt@kernel.org> wrote:
+> > On Thu, Feb 03, 2022 at 01:43:28PM -0300, Martin Fernandez wrote:
+> >> +Description:
+> >> +		This value is 1 if all system memory in this node is
+> >> +		marked with EFI_MEMORY_CPU_CRYPTO, indicating that the
+> >
+> > It didn't jump at me at previous postings, but other architectures won't
+> > necessary have EFI_MEMORY_CPU_CRYPTO marking crypto-capable memory.
+> >
+> > How about
+> >
+> >   This value is 1 if all system memory in this node is capable of being
+> >   protected with the CPU's memory cryptographic capabilities. It is 0
+> >   otherwise.
+> >   On EFI architectures with value corresponds to EFI_MEMORY_CPU_CRYPTO.
+> >
+> >
+> 
+> Yes, sounds good to me.
+> 
+> Is there other architecture with something similar to this? Or are you
+> thinking on the possibility of such architecture?
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
----
- arch/arm/boot/dts/sama7g5.dtsi | 35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+AFAIU, s390 and powerpc have memory encryption capabilities, I don't know
+the details though. 
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index 7972cb8c2562..1f2731a64139 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -393,6 +393,29 @@ pit64b1: timer@e1804000 {
- 			clock-names = "pclk", "gclk";
- 		};
- 
-+		aes: aes@e1810000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe1810000 0x100>;
-+			interrupts = <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(1)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+			dma-names = "tx", "rx";
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 27>;
-+			clock-names = "aes_clk";
-+			status = "okay";
-+		};
-+
-+		sha: sha@e1814000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe1814000 0x100>;
-+			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(48)>;
-+			dma-names = "tx";
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 83>;
-+			clock-names = "sha_clk";
-+			status = "okay";
-+		};
-+
- 		flx0: flexcom@e1818000 {
- 			compatible = "atmel,sama5d2-flexcom";
- 			reg = <0xe1818000 0x200>;
-@@ -475,6 +498,18 @@ trng: rng@e2010000 {
- 			status = "disabled";
- 		};
- 
-+		tdes@e2014000 {
-+			compatible = "atmel,at91sam9g46-tdes";
-+			reg = <0xe2014000 0x100>;
-+			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(54)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(53)>;
-+			dma-names = "tx", "rx";
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 96>;
-+			clock-names = "tdes_clk";
-+			status = "okay";
-+		};
-+
- 		flx4: flexcom@e2018000 {
- 			compatible = "atmel,sama5d2-flexcom";
- 			reg = <0xe2018000 0x200>;
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.

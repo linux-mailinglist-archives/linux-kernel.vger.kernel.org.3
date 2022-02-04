@@ -2,315 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F2A4A941A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85204A941E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:47:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244764AbiBDGna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 01:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiBDGn3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:43:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D88AC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 22:43:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89EE061BDD
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B707C004E1;
-        Fri,  4 Feb 2022 06:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643957008;
-        bh=/VdwXlVq7dzO5Ru/fFP2SsA88ZZFmo+3IMjz2nvDvI4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tfGAbdc/M1Q78EMOF2bCoeuxSXr50jNlIuVjvkqNWA9gJBlsCC0SXjOXhQtr755kt
-         dHMoDoJnPZUS4Iu6or5isBxmZcvghXvqs94Y27Nw2VDbFvkLsV3gEPjT6tPIYqRes0
-         UcdRRFQJHF9OdWf9FMpD35fJ/op8aiwi/NLeGV9EbEog5bHZtDqhbFQ6sJCDFfyLNB
-         z/GPTKL403O5u9z/HK23GT3QCnTEx8MltTScA+quzWLZM6orK8dbRwzK/54HQUa387
-         h6bL5Kqcm4CUbsCjK2typwo7wy7//O/m32Eb5fVCIJK1yAKgudSDfMUs+uy9hi1WkG
-         XN7HikkReaU2Q==
-Message-ID: <260bf309-9712-9696-49d5-3fe156bc319c@kernel.org>
-Date:   Fri, 4 Feb 2022 14:43:24 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v2] f2fs: introduce F2FS_IPU_DEFRAG to allow file
- defragment in IPU mode
+        id S245128AbiBDGrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 01:47:46 -0500
+Received: from mail-bn8nam12on2079.outbound.protection.outlook.com ([40.107.237.79]:16576
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233514AbiBDGrp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 01:47:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LS19IeB46Ce5vTnQTF5D+Qw7Zg3d6nFV8ZGJVFp/6sJbYuSpJXk8p2zFu4972PnS9jiJTcb/GClHMDBF2KBgEg8IOoIa0icNd11Mn2N565Y6Xl2/A8ZmgVh9n6Y/FChldebBTXcDacFarqgm6IodFeQ9w2vrVTw8FQWEfRIsordvUUfNGNY3pQzwHYy2XEmBPRy6/JR7iKEEQ8iqQpCO0YtPuG6f8orLM0rga0144hsU4CGHsXa3iJTXzAlNjyW/3AVhaY9dz+9q1awSjWQ1evQqawR3K/skP6AWkI0mIjXeyTrUuaA8zedQaQenGunJX8swZzValb04OlX6yShEoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YVl91QntY4ox5L0E3hz1VV1ZaE6wmMmzLgLMnAgKZfI=;
+ b=dCeK2H/NI3c2vfSeIT3QiQ9IQJqkxX6RkFyJzsFyjypDQlB/pu6DYauA5Bq9zJxPNub2FNy/KzIa4hefFbll6fResAeetkQYk86ClocmA1KfWPjNsVpPLumBQvF1cMsoymBHmYq4CjjMwccXKJEjSDBXgNXA+L/Gqr5UzBlxI5igRmI87JZrOZaM8V01crDh0Xvitkw+v+6NA/EdWYtuLefc6uZ9N5NeegL+Sg9DWZJ8HvwTk+H3vc3xLnvgLac3qgT0/JjTWWCzQKJ9vHiEr9AJyFVtmqDTRHCBpdCjMjeBeYTOIwwwZvdd9MkhsODm1cVTyyZ3LxCEj/Ja5uE4kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YVl91QntY4ox5L0E3hz1VV1ZaE6wmMmzLgLMnAgKZfI=;
+ b=eD8efaLsYv0A5SGom1JTP3bdBRrThiama/TTC8Ft+7FAlPcm0Q0XiCxdmOguOQmswNywK53D+KBlozr6tnQMeSGrE9cg9+xQ/fpMILAIr9SiihcjYwxUmrlrJZzimA7KRlefYsYecbpFf48ydEHOfVJn7yXvGZqEajQCB1uiO1ji1BXiZjWNWmsJiz1/jyWuMOmqZg5UY1BlfsKkrCPXNx4YzeCBv8D/a4fkfdON+8ICPEvj9hKbLj0lJ5lykGU1DqEmkmDApnPK9EwI9kyotHvJqo7DyHr6V7Mx3cP+6wcR2IU7MkrMXrANFKlYBLB1C2S3Um6Qnph6UNhywNYkMQ==
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com (2603:10b6:3:108::23)
+ by MWHPR1201MB0174.namprd12.prod.outlook.com (2603:10b6:301:55::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Fri, 4 Feb
+ 2022 06:47:43 +0000
+Received: from DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::94d8:5850:e33d:b133]) by DM5PR12MB1850.namprd12.prod.outlook.com
+ ([fe80::94d8:5850:e33d:b133%4]) with mapi id 15.20.4951.014; Fri, 4 Feb 2022
+ 06:47:43 +0000
+From:   Akhil R <akhilrajeev@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+CC:     Pavan Kunapuli <pkunapuli@nvidia.com>
+Subject: RE: [PATCH v18 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Thread-Topic: [PATCH v18 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Thread-Index: AQHYF4A/XHCT9pN4OEO1Gc8heOMMp6yAaLaAgADG1FCAAPeOgIAAvqrA
+Date:   Fri, 4 Feb 2022 06:47:42 +0000
+Message-ID: <DM5PR12MB18501E2343121A9FEE013F15C0299@DM5PR12MB1850.namprd12.prod.outlook.com>
+References: <1643729199-19161-1-git-send-email-akhilrajeev@nvidia.com>
+ <1643729199-19161-3-git-send-email-akhilrajeev@nvidia.com>
+ <3feaa359-31bb-bb07-75d7-2a39c837a7a2@gmail.com>
+ <DM5PR12MB18509939C17ABEB5EEA825FFC0289@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <d6d70e52-a984-d973-f3bb-f70f1a4ce95d@gmail.com>
+In-Reply-To: <d6d70e52-a984-d973-f3bb-f70f1a4ce95d@gmail.com>
+Accept-Language: en-IN, en-US
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20220204010539.42672-1-chao@kernel.org>
- <YfzD4aTbDW2xKlO9@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YfzD4aTbDW2xKlO9@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 70c374df-0b94-4856-e5de-08d9e7aa3e98
+x-ms-traffictypediagnostic: MWHPR1201MB0174:EE_
+x-microsoft-antispam-prvs: <MWHPR1201MB017402CCE61E18D33824E243C0299@MWHPR1201MB0174.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pajCf+hAnRhHqCtSgGwOocmzCP7bvVI/CxdaSlPT8UXD/52Sdkc5BW9ydwP5S6PMRsIX+3qjKPnCUMkuFcZdIRiNXkqlfRi2QCFW3iwqF5JztxHOAvIeEyH3GjFNZxArGOdpHxT5YkizlYN7jllSdnGdYEDy07T5cEI6KPS9SX8ZsSWotwCl8q3vVvAedgnKlt23Cvbcwn/zTq8ambtPqhpMuffEKzm5zTvlBOAFTwoLGebYdazWhF0OPfXD7PCAFom88ZFeDjRZmmfYoUtJ4AkiufkJLIg3ar6GBT0Hzifk7dsBp1BVKQCO8GhfRO2tpGAz2wyRt9eufVlSYt/6Qaz8lQKwmN7J0UXll6sPz2LZPjZs8s6a15X1hfFK8W2UXlG6C3+L3y9eJMdyUtGYaH4Qpf9xKNt1r2XFGCFXj+Q3rhv0z51NZ699jQN2BPWqbQw9hD8WRb+kvB6i8u5j2vXxOufjS2G1Qx3UQL2uifpIKUMc1V2X94e+THSJHNUWyu9jW6sSpPjTaZQbpL9EBwfdZmkv7gOsg6jsQKyLMtpfsBw6Ris+mqsaEb7T28is1YwxoOI9dvCsm0HPaH+RNtoNlZayxlDJvhZx2+jTX9223mwOaCq6wEEDUM7qAtp69nlIPpZ8fiZWzQ1r74ZvhVaX9alyuf+0F9X9kCMLCatcld6Y9S9g5yApnRW49WuWC0tbRWoFwSS8tTB05v3bXUGkuzNOHdu6UsJHM/mCmNs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1850.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(66476007)(66446008)(316002)(64756008)(921005)(55016003)(86362001)(4744005)(66946007)(66556008)(71200400001)(4326008)(52536014)(26005)(186003)(110136005)(508600001)(76116006)(8676002)(38100700002)(5660300002)(2906002)(6506007)(7696005)(9686003)(38070700005)(83380400001)(122000001)(33656002)(107886003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eDFZeVZWT3daRWMvVDZpb0owZ2tKTTFtbE9sajZsVEFGNlVMS3FFMjhBVE9I?=
+ =?utf-8?B?ak04b1ZVNHorNVZlY2ZBL0hXZzZOQkZ5NTM1Y0ZudXg3dDVwNXU3VUtlQUI4?=
+ =?utf-8?B?Vmp6VktXazJwSkxrRUhZYnRMbklmV1NGSVU3QkFES3RXbXo5UGtMTXJTTGQr?=
+ =?utf-8?B?Z2dJVFNCUUF5ZHYxU1dUSWJkNXFMKzJzTXZYd1JYZGV2VkJKcnZTR3JCQUJj?=
+ =?utf-8?B?WlBvbEZaZENaQWtWUUpPbXV4MzFrNDNidjZoLzU1ek1qbnlHWVFzTnJmYmxi?=
+ =?utf-8?B?VmkxQlYzS1A2SE1MbElIa0xiTnNiKzBqeDFWdGlIYVFrMFFaWStjT3c5N0o5?=
+ =?utf-8?B?THV1NlFCSXd4VTkzZ0NTN1g0UWNpLzJOd3RvOFBOV2RSTnF0TkRSZGRDV1M4?=
+ =?utf-8?B?K2F6S0VjVjhzREU1MHo2SEJvRUxId3NreTFZampzOFdsSDI2RXM5MEwxTlR5?=
+ =?utf-8?B?V3piSTFOMDE2VlpYVlhWMmdVVHc4U2FFMGI3VEhua2xFc0dxenVVdGxXS0J5?=
+ =?utf-8?B?enBSdGZiUTEzMG5raGdiRm41YkxvMkcvdjJJcDc1RzNnQUdZTG8vcjlsUTR0?=
+ =?utf-8?B?MXh0Qmg0L0J4Q2lHVXhzaC8vMnBROWt6dUhqRFpyaStBRVNYT0JJUGJtQUJF?=
+ =?utf-8?B?Qnp1MThvSjVmb1NqZ2szQVZVSkhCZ3U2Vmc1bXJYbXNJTElRcjJDc01wOFlV?=
+ =?utf-8?B?R1BnWU1nRkc0YlZZVERlZWxNd29ocDVPZjg1c3JRNjJSVDY1dE8xeTdpRDdk?=
+ =?utf-8?B?MUhBRmlwckMxMG9ITStWZERMdFYzS3VoN0t2UzQ3RWFSUkRMMVBpd3JIVm12?=
+ =?utf-8?B?Tmx3a0UzdFlNY3NoWVg0VE5FUlFCOUxML3N4eEdYWFhrVVJzSHUwVUkvc1I1?=
+ =?utf-8?B?UDVvYXRvV1JHenJUNS81V3F1S25iemFvNWczMkFrR2l3dzRHZUlWakF0Mkor?=
+ =?utf-8?B?M2J0MmZsYnEveHYyNllnYjF3WENxc3ovUnBEeGhZdmREbjMxSTNCdS90cGpK?=
+ =?utf-8?B?bmxXWjNDQkpDRjdDNEt5djh3WE9USnU1R2RLa3NLc2hCSmtDRjUrRVdpdmxl?=
+ =?utf-8?B?Mm9vRUhadXF5bFZLTzR0VFJxbHlydCt1K1l4cG5LMmJHanVTTHFNaVU4Sjgy?=
+ =?utf-8?B?WlJMV05Sa3lBSXBaQ21NU1M4NS9DU1BIbkduTUtKakRqaFdjeWlobzQ4YVRL?=
+ =?utf-8?B?NlVnMEtST01ubTIyaFpaTWhxMS92c01GT1YvZTh2d2FLYnVLVU1jM0RQRXp1?=
+ =?utf-8?B?MVlaTkR6T095bXRSUExnRnJ5bFNNQ3BvUVo5SGRFbVZ5ZitCbXZ1STM5eVph?=
+ =?utf-8?B?dFhzT1R0R3gxRGVsYjhIZzRRUUdXWE1UUjB4elZMRFVaNE9PTDFQWFpwYmxt?=
+ =?utf-8?B?NWZrOURreFZlb2xhZDhiaitVa1gvQ3VYZTQ1TUJSd2lsZG5WSGtldk5nQUJZ?=
+ =?utf-8?B?MjdjVkJpanNPcHFlZTNuQzlnRnprSGFuRWZFRnA4TVAxNUZ4T2NPQUV0T2lx?=
+ =?utf-8?B?YlRPOVZTc1FoaHR1ME04cCsxQ3Y4RXU3OXJHZjVFQ3Q5Q1ZRZVFBYmc2ekkz?=
+ =?utf-8?B?UHdrMXFidnFPWnB5K2xPRmUwZ21mWEYzT0ptZVdjQW9GZlN5dlI1TDNjcDJi?=
+ =?utf-8?B?d2JDOWpJdE9lNEFhdHBUenhOOHI3RUdPelZEY3k1eDZUOVZMcEZweUxaN0RX?=
+ =?utf-8?B?NjlRR3NKS1lrTk9oazArREJhVlJXcWRwVmJ0bFlveXRDeUtBVmJ4NUFTL3c3?=
+ =?utf-8?B?NjVSMDZTMHlQa3dhM3NGa3I2TjF2aDhMZ0VmdGYxQXJNM3hSSU5UYzF3elVj?=
+ =?utf-8?B?ZEc3NEpYSkVoeU5vNnJWR3hVZTRLcHFEMEpQMEZMb1FRS3hrR3VmS0RnQkxT?=
+ =?utf-8?B?R3JCd3VKVGZtdGF3WGpxV1dwY09scnNGbTRLUFdRYWdlUGgxZjBCRmxxV01B?=
+ =?utf-8?B?QkZTWkZpL1FQZkVCVklVNGhCU1JETmNCTzQ4YWVDU3YvMCtNbStvS0w5aG9M?=
+ =?utf-8?B?c3YvREZMeEdyRkNSRGo2djl3cS9vZlBkK1VrODVpYTJoa0JrNTBPczJQcTlH?=
+ =?utf-8?B?WmNWeGlRWjZFcmhJdFNDWHBCWE94M2xqVVA2Ukd5R0VGbTI3WTREaXovUk1R?=
+ =?utf-8?B?MzZoSXAwTkxzbnRRYkNBUFBEeHVOU3F2d1p1Q3pWbklJU2dDaFdFaEc3Znhj?=
+ =?utf-8?B?NkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1850.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70c374df-0b94-4856-e5de-08d9e7aa3e98
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2022 06:47:42.9362
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ASlOV/30Sxo8RRUe8OQ2EnIbsirzZvFLaaPRK1fbNJUKtvuksG0JK01i5x3pXRuJ+yUpBA1AZbT+jyjFG48Y3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0174
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/4 14:12, Jaegeuk Kim wrote:
-> On 02/04, Chao Yu wrote:
->> Once IPU policy is enabled in some cases:
->> a) f2fs forces to use F2FS_IPU_FORCE in a small-sized volume
->> b) user configures IPU policy via sysfs
->>
->> Then we may fail to defragment file via ioctl due to IPU policy check,
->> it doesn't make sense, let's introduce a new IPU policy to allow OPU
->> during file defragmentation, by default use IPU_DEFRAG instead of
->> IPU_FORCE in small-sized volume for android device.
->>
->> Signed-off-by: Chao Yu <chao@kernel.org>
->> ---
->> v2:
->> - handle F2FS_IPU_DEFRAG before F2FS_IPU_FORCE in check_inplace_update_policy().
->>   Documentation/ABI/testing/sysfs-fs-f2fs |  3 ++-
->>   fs/f2fs/data.c                          | 18 +++++++++++++-----
->>   fs/f2fs/f2fs.h                          |  3 ++-
->>   fs/f2fs/file.c                          | 18 +++++++++++-------
->>   fs/f2fs/segment.h                       |  8 ++++----
->>   fs/f2fs/super.c                         |  2 +-
->>   6 files changed, 33 insertions(+), 19 deletions(-)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
->> index ce8103f522cb..d8abb674ee86 100644
->> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
->> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
->> @@ -55,8 +55,9 @@ Description:	Controls the in-place-update policy.
->>   		0x04  F2FS_IPU_UTIL
->>   		0x08  F2FS_IPU_SSR_UTIL
->>   		0x10  F2FS_IPU_FSYNC
->> -		0x20  F2FS_IPU_ASYNC,
->> +		0x20  F2FS_IPU_ASYNC
->>   		0x40  F2FS_IPU_NOCACHE
->> +		0x80  F2FS_IPU_DEFRAG
-> 
-> How about F2FS_IPU_HONOR_OPU_WRITE?
-
-Looks fine.
-
-> 
->>   		====  =================
->>   
->>   		Refer segment.h for details.
->> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->> index b3c152de4bba..3c0f001e3fe1 100644
->> --- a/fs/f2fs/data.c
->> +++ b/fs/f2fs/data.c
->> @@ -2460,6 +2460,9 @@ static inline bool check_inplace_update_policy(struct inode *inode,
->>   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
->>   	unsigned int policy = SM_I(sbi)->ipu_policy;
->>   
->> +	if (policy & (0x1 << F2FS_IPU_DEFRAG) &&
->> +			is_inode_flag_set(inode, FI_DEFRAG_PROCESS))
->> +		return false;
->>   	if (policy & (0x1 << F2FS_IPU_FORCE))
->>   		return true;
->>   	if (policy & (0x1 << F2FS_IPU_SSR) && f2fs_need_SSR(sbi))
->> @@ -2530,6 +2533,9 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
->>   	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
->>   		return true;
->>   
->> +	if (is_inode_flag_set(inode, FI_DEFRAG_PROCESS))
->> +		return true;
->> +
->>   	if (fio) {
->>   		if (page_private_gcing(fio->page))
->>   			return true;
->> @@ -3154,8 +3160,8 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
->>   			f2fs_available_free_memory(sbi, DIRTY_DENTS))
->>   		goto skip_write;
->>   
->> -	/* skip writing during file defragment */
->> -	if (is_inode_flag_set(inode, FI_DO_DEFRAG))
->> +	/* skip writing in file defragment preparing stage */
->> +	if (is_inode_flag_set(inode, FI_DEFRAG_PREPARE))
->>   		goto skip_write;
->>   
->>   	trace_f2fs_writepages(mapping->host, wbc, DATA);
->> @@ -3729,6 +3735,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->>   	filemap_invalidate_lock(inode->i_mapping);
->>   
->>   	set_inode_flag(inode, FI_ALIGNED_WRITE);
->> +	set_inode_flag(inode, FI_DEFRAG_PROCESS);
->>   
->>   	for (; secidx < end_sec; secidx++) {
->>   		f2fs_down_write(&sbi->pin_sem);
->> @@ -3737,7 +3744,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->>   		f2fs_allocate_new_section(sbi, CURSEG_COLD_DATA_PINNED, false);
->>   		f2fs_unlock_op(sbi);
->>   
->> -		set_inode_flag(inode, FI_DO_DEFRAG);
->> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
->>   
->>   		for (blkofs = 0; blkofs < blk_per_sec; blkofs++) {
->>   			struct page *page;
->> @@ -3754,7 +3761,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->>   			f2fs_put_page(page, 1);
->>   		}
->>   
->> -		clear_inode_flag(inode, FI_DO_DEFRAG);
->> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->>   
->>   		ret = filemap_fdatawrite(inode->i_mapping);
->>   
->> @@ -3765,7 +3772,8 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
->>   	}
->>   
->>   done:
->> -	clear_inode_flag(inode, FI_DO_DEFRAG);
->> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->> +	clear_inode_flag(inode, FI_DEFRAG_PROCESS);
->>   	clear_inode_flag(inode, FI_ALIGNED_WRITE);
->>   
->>   	filemap_invalidate_unlock(inode->i_mapping);
->> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->> index 6ddb98ff0b7c..5af415208488 100644
->> --- a/fs/f2fs/f2fs.h
->> +++ b/fs/f2fs/f2fs.h
->> @@ -737,7 +737,8 @@ enum {
->>   	FI_DROP_CACHE,		/* drop dirty page cache */
->>   	FI_DATA_EXIST,		/* indicate data exists */
->>   	FI_INLINE_DOTS,		/* indicate inline dot dentries */
->> -	FI_DO_DEFRAG,		/* indicate defragment is running */
->> +	FI_DEFRAG_PREPARE,	/* indicate defragment is preparing */
-> 
-> This is used for f2fs_migrate_blocks for swap file. Can we rename to
-> FI_SKIP_WRITES that makes skipping writeback pages?
-
-Sure.
-
-> 
->> +	FI_DEFRAG_PROCESS,	/* indicate defragment is processing */
-> 
-> How about FI_OPU_WRITE?
-
-Looks fine.
-
-> 
->>   	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
->>   	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
->>   	FI_HOT_DATA,		/* indicate file is hot */
->> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->> index 6ccdd6e347e2..3a573125002b 100644
->> --- a/fs/f2fs/file.c
->> +++ b/fs/f2fs/file.c
->> @@ -2559,10 +2559,6 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->>   	bool fragmented = false;
->>   	int err;
->>   
->> -	/* if in-place-update policy is enabled, don't waste time here */
->> -	if (f2fs_should_update_inplace(inode, NULL))
->> -		return -EINVAL;
->> -
->>   	pg_start = range->start >> PAGE_SHIFT;
->>   	pg_end = (range->start + range->len) >> PAGE_SHIFT;
->>   
->> @@ -2570,6 +2566,13 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->>   
->>   	inode_lock(inode);
->>   
->> +	/* if in-place-update policy is enabled, don't waste time here */
->> +	set_inode_flag(inode, FI_DEFRAG_PROCESS);
->> +	if (f2fs_should_update_inplace(inode, NULL)) {
->> +		err = -EINVAL;
->> +		goto out;
->> +	}
->> +
->>   	/* writeback all dirty pages in the range */
->>   	err = filemap_write_and_wait_range(inode->i_mapping, range->start,
->>   						range->start + range->len - 1);
->> @@ -2651,7 +2654,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->>   			goto check;
->>   		}
->>   
->> -		set_inode_flag(inode, FI_DO_DEFRAG);
->> +		set_inode_flag(inode, FI_DEFRAG_PREPARE);
->>   
->>   		idx = map.m_lblk;
->>   		while (idx < map.m_lblk + map.m_len && cnt < blk_per_seg) {
->> @@ -2676,15 +2679,16 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
->>   		if (map.m_lblk < pg_end && cnt < blk_per_seg)
->>   			goto do_map;
->>   
->> -		clear_inode_flag(inode, FI_DO_DEFRAG);
->> +		clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->>   
->>   		err = filemap_fdatawrite(inode->i_mapping);
->>   		if (err)
->>   			goto out;
->>   	}
->>   clear_out:
->> -	clear_inode_flag(inode, FI_DO_DEFRAG);
->> +	clear_inode_flag(inode, FI_DEFRAG_PREPARE);
->>   out:
->> +	clear_inode_flag(inode, FI_DEFRAG_PROCESS);
->>   	inode_unlock(inode);
->>   	if (!err)
->>   		range->len = (u64)total << PAGE_SHIFT;
->> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
->> index 0291cd55cf09..a9373861ab1c 100644
->> --- a/fs/f2fs/segment.h
->> +++ b/fs/f2fs/segment.h
->> @@ -651,7 +651,8 @@ static inline int utilization(struct f2fs_sb_info *sbi)
->>    *                     pages over min_fsync_blocks. (=default option)
->>    * F2FS_IPU_ASYNC - do IPU given by asynchronous write requests.
->>    * F2FS_IPU_NOCACHE - disable IPU bio cache.
->> - * F2FS_IPUT_DISABLE - disable IPU. (=default option in LFS mode)
->> + * F2FS_IPU_DEFRAG - allow OPU during file defragmentation.
->> + * F2FS_IPU_DISABLE - disable IPU. (=default option in LFS mode)
->>    */
->>   #define DEF_MIN_IPU_UTIL	70
->>   #define DEF_MIN_FSYNC_BLOCKS	8
->> @@ -667,6 +668,7 @@ enum {
->>   	F2FS_IPU_FSYNC,
->>   	F2FS_IPU_ASYNC,
->>   	F2FS_IPU_NOCACHE,
->> +	F2FS_IPU_DEFRAG,
->>   };
->>   
->>   static inline unsigned int curseg_segno(struct f2fs_sb_info *sbi,
->> @@ -675,9 +677,7 @@ static inline unsigned int curseg_segno(struct f2fs_sb_info *sbi,
->>   	struct curseg_info *curseg = CURSEG_I(sbi, type);
->>   	return curseg->segno;
->>   }
->> -
->> -static inline unsigned char curseg_alloc_type(struct f2fs_sb_info *sbi,
->> -		int type)
->> +static inline unsigned char curseg_alloc_type(struct f2fs_sb_info *sbi, int type)
-> 
-> Don't do this.
-
-Oops, let me remove this unrelated change.
-
-> 
->>   {
->>   	struct curseg_info *curseg = CURSEG_I(sbi, type);
->>   	return curseg->alloc_type;
->> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
->> index 9af6c20532ec..cc0429279b4c 100644
->> --- a/fs/f2fs/super.c
->> +++ b/fs/f2fs/super.c
->> @@ -3957,7 +3957,7 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
->>   		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
->>   		if (f2fs_block_unit_discard(sbi))
->>   			sm_i->dcc_info->discard_granularity = 1;
->> -		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE;
-> 
-> No, I think we should have both.
-
-Alright.
-
-Thanks,
-
-> 
->> +		sm_i->ipu_policy = 1 << F2FS_IPU_DEFRAG;
->>   	}
->>   
->>   	sbi->readdir_ra = 1;
->> -- 
->> 2.32.0
+PiAwMy4wMi4yMDIyIDA2OjQ0LCBBa2hpbCBSINC/0LjRiNC10YI6DQo+ID4+IEJ1dCB3aHkgZG8g
+eW91IG5lZWQgdG8gcGF1c2UgYXQgYWxsIGhlcmUgYW5kIGNhbid0IHVzZQ0KPiA+PiB0ZWdyYV9k
+bWFfc3RvcF9jbGllbnQoKSBldmVuIGlmIHBhdXNlIGlzIHN1cHBvcnRlZD8NCj4gPiBUaGUgcmVj
+b21tZW5kZWQgbWV0aG9kIHRvIHRlcm1pbmF0ZSBhIHRyYW5zZmVyIGluDQo+ID4gYmV0d2VlbiBp
+cyB0byBwYXVzZSB0aGUgY2hhbm5lbCBmaXJzdCBhbmQgdGhlbiBkaXNhYmxlIGl0Lg0KPiA+IFRo
+aXMgaXMgbW9yZSBncmFjZWZ1bCBhbmQgc3RhYmxlIGZvciB0aGUgaGFyZHdhcmUuDQo+ID4gc3Rv
+cF9jbGllbnQoKSBpcyBtb3JlIGFicnVwdCwgdGhvdWdoIGl0IGRvZXMgdGhlIGpvYi4NCj4gDQo+
+IElmIHRoZXJlIGlzIG5vIHJlYWwgcHJhY3RpY2FsIGRpZmZlcmVuY2UsIHRoZW4gSSdkIHVzZSB0
+aGUgY29tbW9uIG1ldGhvZA0KPiBvbmx5LiBUaGlzIHdpbGwgbWFrZSBjb2RlIGNsZWFuZXIgYW5k
+IHNpbXBsZXIgYSB0YWQuDQpUaGlzIGlzIHRoZSBkb2N1bWVudGVkIHdheSBvZiBjbGVhbiBleGl0
+IGZyb20gYSB0cmFuc2ZlciwgZXNwZWNpYWxseSBmb3INCmN5Y2xpYyB0cmFuc2ZlcnMgd2hlcmUg
+dGhlIERNQSBpcyBjb25maWd1cmVkIGluIGNvbnRpbnVvdXMgbW9kZS4NCkkgZ3Vlc3MgaXQgbWln
+aHQgbm90IGJlIGEgZ29vZCBpZGVhIHRvIGRldmlhdGUgZnJvbSB0aGF0IHVubGVzcyB0aGVyZSBp
+cw0Kc29tZXRoaW5nIGRlbWFuZGluZyBpdCBjb21wdWxzb3JpbHkuDQoNCkkgYWdyZWUgdGhhdCB0
+aGUgY29kZSB3aWxsIGJlIGNsZWFuZXIuIEkgd291bGQgdHJ5IHRvIHNlZSBpZiBJIGNhbiBmaW5k
+IGEgY2xlYW5lcg0Kd2F5IHRvIGRvIHRoaXMuIFBsZWFzZSBkbyBsZXQgbWUga25vdyBpZiB5b3Ug
+aGF2ZSBhbnkgc3VnZ2VzdGlvbi4NCg0KVGhhbmtzLA0KQWtoaWwNCg0K

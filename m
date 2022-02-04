@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3739F4A9FA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A874A9FA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiBDTBg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 14:01:36 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6804 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231397AbiBDTBU (ORCPT
+        id S231656AbiBDTB3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 14:01:29 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37796 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231249AbiBDTBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:01:20 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 214IissQ008485
-        for <linux-kernel@vger.kernel.org>; Fri, 4 Feb 2022 11:01:20 -0800
+        Fri, 4 Feb 2022 14:01:16 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 214IiuMR021816
+        for <linux-kernel@vger.kernel.org>; Fri, 4 Feb 2022 11:01:16 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3e0utmmh6y-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e19gar6bn-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:01:20 -0800
-Received: from twshared7634.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:01:16 -0800
+Received: from twshared6457.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Feb 2022 11:01:19 -0800
+ 15.1.2308.21; Fri, 4 Feb 2022 11:01:10 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id ADC4F296C577D; Fri,  4 Feb 2022 10:58:04 -0800 (PST)
+        id 3B6F3296C578C; Fri,  4 Feb 2022 10:58:07 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
         <iii@linux.ibm.com>, Song Liu <song@kernel.org>
-Subject: [PATCH v9 bpf-next 5/9] x86/alternative: introduce text_poke_copy
-Date:   Fri, 4 Feb 2022 10:57:38 -0800
-Message-ID: <20220204185742.271030-6-song@kernel.org>
+Subject: [PATCH v9 bpf-next 6/9] bpf: introduce bpf_arch_text_copy
+Date:   Fri, 4 Feb 2022 10:57:39 -0800
+Message-ID: <20220204185742.271030-7-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220204185742.271030-1-song@kernel.org>
 References: <20220204185742.271030-1-song@kernel.org>
@@ -41,88 +41,78 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: IHBGZ5hG9UAVfMxJFIp3Xhb1O3ok7I3Z
-X-Proofpoint-GUID: IHBGZ5hG9UAVfMxJFIp3Xhb1O3ok7I3Z
+X-Proofpoint-ORIG-GUID: WYj8XUZumePmpoWpt9gUcmemZrTE8WHQ
+X-Proofpoint-GUID: WYj8XUZumePmpoWpt9gUcmemZrTE8WHQ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-04_07,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 mlxlogscore=385 phishscore=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202040104
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
+ malwarescore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=992
+ impostorscore=0 phishscore=0 suspectscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202040104
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will be used by BPF jit compiler to dump JITed binary to a RX huge
-page, and thus allow multiple BPF programs sharing the a huge (2MB) page.
+This will be used to copy JITed text to RO protected module memory. On
+x86, bpf_arch_text_copy is implemented with text_poke_copy.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+bpf_arch_text_copy returns pointer to dst on success, and ERR_PTR(errno)
+on errors.
+
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- arch/x86/include/asm/text-patching.h |  1 +
- arch/x86/kernel/alternative.c        | 34 ++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 7 +++++++
+ include/linux/bpf.h         | 2 ++
+ kernel/bpf/core.c           | 5 +++++
+ 3 files changed, 14 insertions(+)
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index b7421780e4e9..4cc18ba1b75e 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -44,6 +44,7 @@ extern void text_poke_early(void *addr, const void *opcode, size_t len);
- extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
-+extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
- extern int poke_int3_handler(struct pt_regs *regs);
- extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 36f6fc3e6e69..c13d148f7396 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2412,3 +2412,10 @@ bool bpf_jit_supports_kfunc_call(void)
+ {
+ 	return true;
+ }
++
++void *bpf_arch_text_copy(void *dst, void *src, size_t len)
++{
++	if (text_poke_copy(dst, src, len) == NULL)
++		return ERR_PTR(-EINVAL);
++	return dst;
++}
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 366f88afd56b..ea0d7fd4a410 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2362,6 +2362,8 @@ enum bpf_text_poke_type {
+ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
  
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 5007c3ffe96f..018b61febf0e 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1102,6 +1102,40 @@ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
- 	return __text_poke(addr, opcode, len);
++void *bpf_arch_text_copy(void *dst, void *src, size_t len);
++
+ struct btf_id_set;
+ bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+ 
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e3fe53df0a71..a5ec480f9862 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2440,6 +2440,11 @@ int __weak bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	return -ENOTSUPP;
  }
  
-+/**
-+ * text_poke_copy - Copy instructions into (an unused part of) RX memory
-+ * @addr: address to modify
-+ * @opcode: source of the copy
-+ * @len: length to copy, could be more than 2x PAGE_SIZE
-+ *
-+ * Not safe against concurrent execution; useful for JITs to dump
-+ * new code blocks into unused regions of RX memory. Can be used in
-+ * conjunction with synchronize_rcu_tasks() to wait for existing
-+ * execution to quiesce after having made sure no existing functions
-+ * pointers are live.
-+ */
-+void *text_poke_copy(void *addr, const void *opcode, size_t len)
++void * __weak bpf_arch_text_copy(void *dst, void *src, size_t len)
 +{
-+	unsigned long start = (unsigned long)addr;
-+	size_t patched = 0;
-+
-+	if (WARN_ON_ONCE(core_kernel_text(start)))
-+		return NULL;
-+
-+	mutex_lock(&text_mutex);
-+	while (patched < len) {
-+		unsigned long ptr = start + patched;
-+		size_t s;
-+
-+		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
-+
-+		__text_poke((void *)ptr, opcode + patched, s);
-+		patched += s;
-+	}
-+	mutex_unlock(&text_mutex);
-+	return addr;
++	return ERR_PTR(-ENOTSUPP);
 +}
 +
- static void do_sync_core(void *info)
- {
- 	sync_core();
+ DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ EXPORT_SYMBOL(bpf_stats_enabled_key);
+ 
 -- 
 2.30.2
 

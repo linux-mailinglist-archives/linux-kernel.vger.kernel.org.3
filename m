@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDE44A94AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8304A94AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353533AbiBDHkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 02:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
+        id S1353740AbiBDHmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 02:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353265AbiBDHj6 (ORCPT
+        with ESMTP id S234310AbiBDHmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 02:39:58 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6369EC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 23:39:58 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e81-20020a25d354000000b0061b1a807047so3089244ybf.14
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 23:39:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=RstoDLOU8xGSgPTdarYg+ZaO1KW5kUvQHWgolszBWj0=;
-        b=fATZW+zjvHfuzv98Yy9oqvUh1b2INkd9VYmyI6R/SRfDzrWdlQ3NhAQysUOmHjRWs0
-         TnVkTfIo0ZlK/2zZ7uVUT7EPoPPMFTl304MyADeEUjJUgqW09ZdkPEg0nTBaOGpCZkC/
-         B9SJRuCLwBUXKqYyYDZcjMA86NmMWc+YAO5ZaPrGKY7157NWKHZBFdBeMSgj5PEzmuEq
-         q0ceIXTGIBxQbdTt0HyDLUkg5iclKLj/7QTeTY5G39HEjbKE1oZpYTVemZJBPqMUk4Sf
-         uvZmGS2sOom8zQkmlvYAPS2s4igdrCYR+x6m90KR9fdWpz8F4nD6dbn1P7KqfmH3SshD
-         22Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=RstoDLOU8xGSgPTdarYg+ZaO1KW5kUvQHWgolszBWj0=;
-        b=pr6GMSTyf1P1TKCNG7W8gTfRfeMMY3MKBAzqx5zg6KHp4rnHBkZJB4IkgNoIrVRLKq
-         UGMB2oGCiX4LmjM46zXxqqIWlxsfo+19ybIWR1AuFPU2VB3Fy7ySWEkTNQNga8JlroCJ
-         PsFQ1qCy5DYkDPj2U/9zDqN+O6zB5Gwf38+KJO3Ec2CIX+44MdO5jz0kJOhMXkNvZju3
-         UXI7Cg2ibGUIKkKJPqXl4GqF9EBX6NdGN16KIysOuCa7u/7/Y3l/+SXADWNWOGqal119
-         JeWE/TRG2SumVBND+Cw2HBWuJ1BKRV9FYYvKSEGuXKxYoLtqV80E52azUox0e/lzHewJ
-         ITyQ==
-X-Gm-Message-State: AOAM530QWctpCF8QN73Eaz/XJ62fKxmyadjhaJMSm3/npoJIQY2B5HEB
-        n1a0my1sLoCtNaaUCY9K/qMp3ryqTXoMWrsznxlyhYKdvGM06Nfsr2JoYKc2RLZ8NH9qgjN5xsF
-        jIDTiANnYFzRqWlgs7BHPjKfMR9Kmd6WC4RjImYwbOd1DEwozmqC4J+YlndrPB8DWRi6SD5SJ
-X-Google-Smtp-Source: ABdhPJycy5ohl9mQOP26zCD7ZJsLLpKeKTRYuIz2yVe2Q1kKox2IKobeQv5QO4LMkshooFwCLcQlTl/aULzl
-X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:6ac6:e851:689b:829e])
- (user=eranian job=sendgmr) by 2002:a25:e803:: with SMTP id
- k3mr1663615ybd.571.1643960397346; Thu, 03 Feb 2022 23:39:57 -0800 (PST)
-Date:   Thu,  3 Feb 2022 23:39:40 -0800
-Message-Id: <20220204073940.1258263-1-eranian@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH] perf/arm64: fix mapping for HW_BRANCH_INSTRUCTIONS on PMUv3
-From:   Stephane Eranian <eranian@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, will@kernel.org, ashoks@broadcom.com,
-        mark.rutland@arm.com
+        Fri, 4 Feb 2022 02:42:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E13DC061714;
+        Thu,  3 Feb 2022 23:42:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB4C9B817E5;
+        Fri,  4 Feb 2022 07:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44D0C340EB;
+        Fri,  4 Feb 2022 07:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643960529;
+        bh=Kp4NxRJMhPOrk6yCLmuMuuK4NgUYV4IbJR5q0vDERwg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Mf+Yh0ao1IESxOx9bUslgQDJ/crTGytTfE2ICKsuJBoYFSimt1sHPJzOtRauvpEf4
+         PJniz64kRtHRYhJVOJMdIQzG9lFiDwJ9ymo7nCpSyBbU+CQesxcTiUAOZbtMobgzOP
+         6vNcvrTLykaykyJSEtpk4k+f30zWrMN9dJMDH6ZDDmxCNp9SKCWVgpTrRWy7FudZV0
+         iH7j2nP4shtv0qXNRO2cW62ulfTTPg4crgB64MrHREULX5F8XtmR5cHapwOr1tD/jO
+         meN6bKfdF/t0EA91FCRGB3jIOLcnHnAJc+xsrURKv69Q4yT651siBbU4+va+kZqLo6
+         O9HrNmpRrAhYA==
+Received: by mail-yb1-f172.google.com with SMTP id c6so16316562ybk.3;
+        Thu, 03 Feb 2022 23:42:09 -0800 (PST)
+X-Gm-Message-State: AOAM531J16bhlPBff1eT1aHwvFSa9txZSuU7QpWPLsR6b+lGbJI8x9g7
+        6YFApAk08zoK3NrPaMhMgukVpKvk4mM/pTUF/WU=
+X-Google-Smtp-Source: ABdhPJwSMGxOlip1L6UgkfCgoG8NGTIl8TBqIJgfFKT446WFXImJphA5HC0F8VhEp1CaHrjKKdwxh8bG0ZZzGLnVYTs=
+X-Received: by 2002:a5b:54b:: with SMTP id r11mr1769676ybp.282.1643960528738;
+ Thu, 03 Feb 2022 23:42:08 -0800 (PST)
+MIME-Version: 1.0
+References: <20220201062803.2675204-1-song@kernel.org> <20220201062803.2675204-5-song@kernel.org>
+In-Reply-To: <20220201062803.2675204-5-song@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 3 Feb 2022 23:41:57 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5uG98fPostcQYw9Kk9DTczOw6LJUJRb8NfiDVVgJcHwQ@mail.gmail.com>
+Message-ID: <CAPhsuW5uG98fPostcQYw9Kk9DTczOw6LJUJRb8NfiDVVgJcHwQ@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 4/9] bpf: use prog->jited_len in bpf_prog_ksym_set_addr()
+To:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the existing code, the following command:
+On Mon, Jan 31, 2022 at 10:31 PM Song Liu <song@kernel.org> wrote:
+>
+> Using prog->jited_len is simpler and more accurate than current
+> estimation (header + header->size).
+>
+> Signed-off-by: Song Liu <song@kernel.org>
 
-$ perf stat -e branches sleep 0
- Performance counter stats for 'sleep 0':
-   <not supported>      branches
+Hmm... CI [1] reports error on test_progs 159/tailcalls, and bisect points to
+this one. However, I couldn't figure out why this breaks tail call.
+round_up(PAGE_SIZE) does fix it though. But that won't be accurate, right?
 
-on N1 core (pmuv3).
+Any suggestions on what could be the reason for these failures?
 
-This is due to the fact that the mapping for the generic event is wrong.
-It is using ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED which is not implemented
-on N1 (and most likely on any PMUv3 implementations). However, there is
-another supported event ARMV8_PMUV3_PERFCTR_BR_RETIRED measuring the same
-condition.
+Thanks,
+Song
 
-This patch switches the mapping to ARMV8_PMUV3_PERFCTR_BR_RETIRED so that
-the perf stat command above works.
+[1] https://github.com/kernel-patches/bpf/runs/5060194776?check_suite_focus=true
 
-Signed-off-by: Stephane Eranian <eranian@google.com>
----
- arch/arm64/kernel/perf_event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index cab678ed6618..ec2b98343a0b 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -45,7 +45,7 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
- 	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV8_PMUV3_PERFCTR_INST_RETIRED,
- 	[PERF_COUNT_HW_CACHE_REFERENCES]	= ARMV8_PMUV3_PERFCTR_L1D_CACHE,
- 	[PERF_COUNT_HW_CACHE_MISSES]		= ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
--	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
-+	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_BR_RETIRED,
- 	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
- 	[PERF_COUNT_HW_BUS_CYCLES]		= ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
- 	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
--- 
-2.35.0.263.gb82422642f-goog
-
+> ---
+>  kernel/bpf/core.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 14199228a6f0..e3fe53df0a71 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -537,13 +537,10 @@ long bpf_jit_limit_max __read_mostly;
+>  static void
+>  bpf_prog_ksym_set_addr(struct bpf_prog *prog)
+>  {
+> -       const struct bpf_binary_header *hdr = bpf_jit_binary_hdr(prog);
+> -       unsigned long addr = (unsigned long)hdr;
+> -
+>         WARN_ON_ONCE(!bpf_prog_ebpf_jited(prog));
+>
+>         prog->aux->ksym.start = (unsigned long) prog->bpf_func;
+> -       prog->aux->ksym.end   = addr + hdr->size;
+> +       prog->aux->ksym.end   = prog->aux->ksym.start + prog->jited_len;
+>  }
+>
+>  static void
+> --
+> 2.30.2
+>

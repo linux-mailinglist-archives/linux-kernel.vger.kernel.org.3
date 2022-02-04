@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A54A4A986C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBB84A9877
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358402AbiBDLbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 06:31:04 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:44456 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiBDLbC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 06:31:02 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8CA731C0B79; Fri,  4 Feb 2022 12:31:01 +0100 (CET)
-Date:   Fri, 4 Feb 2022 12:31:01 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
-Message-ID: <20220204113101.GA27184@duo.ucw.cz>
-References: <20220204091914.280602669@linuxfoundation.org>
+        id S234259AbiBDLep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 06:34:45 -0500
+Received: from 8bytes.org ([81.169.241.247]:53978 "EHLO theia.8bytes.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358414AbiBDLen (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 06:34:43 -0500
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 83EDA491; Fri,  4 Feb 2022 12:34:41 +0100 (CET)
+Date:   Fri, 4 Feb 2022 12:34:38 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     iommu@lists.linux-foundation.org, Joerg Roedel <jroedel@suse.de>,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH] iommu/amd: Fix loop timeout issue in
+ iommu_ga_log_enable()
+Message-ID: <Yf0PTlYNn/fmIUZU@8bytes.org>
+References: <20220131161749.4021-1-joro@8bytes.org>
+ <48a674ae-f5cd-fc06-4505-6d863e6dad69@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <48a674ae-f5cd-fc06-4505-6d863e6dad69@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 31, 2022 at 05:06:03PM +0000, John Garry wrote:
+> > diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+> > index dc338acf3338..d2e09d53851f 100644
+> > --- a/drivers/iommu/amd/init.c
+> > +++ b/drivers/iommu/amd/init.c
+> > @@ -834,6 +834,7 @@ static int iommu_ga_log_enable(struct amd_iommu *iommu)
+> >   		status = readl(iommu->mmio_base + MMIO_STATUS_OFFSET);
+> >   		if (status & (MMIO_STATUS_GALOG_RUN_MASK))
+> >   			break;
+> > +		udelay(1);
+> 
+> Maybe readl_relaxed_poll_timeout_atomic() could be used instead
 
---xHFwDpU9dbj6ez1V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I sent another version of this patch which uses
+readl_poll_timeout_atomic(), but it didn't fix the issue. I take this
+approach for now and leave using the helper as a future improvement.
 
-Hi!
+Thanks,
 
-> This is the start of the stable review cycle for the 5.10.97 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any new kernel problems here (but we still
-hit the gmp.h compilation issue):
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---xHFwDpU9dbj6ez1V
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYf0OdQAKCRAw5/Bqldv6
-8niQAJ9Ar396rmFegEPbGsp2eQg1tG+87ACgmGAtHsMQRBjq5XfOlEfjR+WsaPY=
-=/WHp
------END PGP SIGNATURE-----
-
---xHFwDpU9dbj6ez1V--
+	Joerg

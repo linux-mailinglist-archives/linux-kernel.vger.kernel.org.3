@@ -2,419 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DEF4A97D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8427E4A97E0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357764AbiBDKa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 05:30:27 -0500
-Received: from mail-bn8nam11on2063.outbound.protection.outlook.com ([40.107.236.63]:45515
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1357826AbiBDKaZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 05:30:25 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j0N9CS9NIJDYn5IZSm/g8lHmmpbXAHQp3YO+QdCr4bhuBYrBkVU+vosH9mmUdZJCEKFiAKKCMsN8FXNdd28PZZ+xRg5s9qMeFGEWxvKbCp4mILccnECZTps0LsW082kBjzbv/+DYjqY1dJ8+7lLFQaDbQFa3LMSTtUgo7LrI2KTE8HUrSq5AxUZxd8F2jYSQySnkPTSDEQsh6pWBB5zinLaMO5kvVcADIT172diIYU0f2Mq78/I71hYeIjPEP9IcF4DbBiHwOvhotqpGZg4LdMhAS0lN7koCl5AmpC6Y98/xprjewhZtuBt4/2HbJ6//rXOQCjD6jeQoxKCRk7Bg6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T/p20RMc2I4+Itip+d3tq0XxSBl+EGN/YG0SyMbFSyg=;
- b=N7tVrRvuCVUHrZipvj7xO7gvov9P3kbiNRw/+HYD1gCg2GdQOVsPad7q9U/rISZN5s5ordchFia8J/xiE0eTizAgCNJQhPafevIw299hdBAzFxoolOTN26gWCezB0WJ2YGY50WjgK5pvTOMP1l7gde21F9KExp+6lLCQUHa58/Gw+uyHwvMGbMIfyd1ahc4702fOYJIZYQR8kanr8MkJNGj405JvrFJVqiVeTkvmoO5lHmDP+6VcQ7Dx9coLof3qVIMWJQTOGhmsZEnco8Lryt6wbhfTqlwqDTFr5Qb5PQCj6yaGkpiLAGcJJyU1wQxuDqDcPkPyiYArFHs3MxGD1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T/p20RMc2I4+Itip+d3tq0XxSBl+EGN/YG0SyMbFSyg=;
- b=mobIK44NqXbk1ISrTXOa4eEKlD3hFugoMzmbUC61tJZNTRaa89dGeFqMHfJdLHgxlo+sI4LwYTjngVKg69YTBABwDS0LHO622Ew8yeYOPtlqbg51PctyLGN2+2qBTjYQYVrXFTeTiBo+3BzjaZcb9wLKSwzPPZ/RNTkfRUoPVQZpkHP2VesIvjG7PsrUIcejamlS+NSnwUHC/R9JSJEW9FRDmiLca2Xdb/65Y6Gttrb1CN8BUOJtqZd8veUKcT4BNhI/gYbvxApd8g8kuwKjUcjjOH8Q27iY8hPxFX8Wcx7syLT7jP9I3tFen3W8RWAdL48w/3geBPHsEfl9dZkkYw==
-Received: from BN0PR04CA0138.namprd04.prod.outlook.com (2603:10b6:408:ed::23)
- by DM5PR12MB1706.namprd12.prod.outlook.com (2603:10b6:3:10f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Fri, 4 Feb
- 2022 10:30:22 +0000
-Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ed:cafe::68) by BN0PR04CA0138.outlook.office365.com
- (2603:10b6:408:ed::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
- Transport; Fri, 4 Feb 2022 10:30:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4951.12 via Frontend Transport; Fri, 4 Feb 2022 10:30:21 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 4 Feb
- 2022 10:30:20 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Fri, 4 Feb 2022
- 02:30:19 -0800
-Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Fri, 4 Feb 2022 02:30:16 -0800
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     <broonie@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-spi@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>
-CC:     <skomatineni@nvidia.com>, <ldewangan@nvidia.com>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <p.zabel@pengutronix.de>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Subject: [PATCH 6/6] spi: tegra210-quad: combined sequence mode
-Date:   Fri, 4 Feb 2022 15:59:36 +0530
-Message-ID: <1643970576-31503-7-git-send-email-kyarlagadda@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
-References: <1643970576-31503-1-git-send-email-kyarlagadda@nvidia.com>
+        id S1357802AbiBDKcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:32:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:15289 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231259AbiBDKcS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 05:32:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643970738; x=1675506738;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SEicvIAPb5hGpZodOcw1U2NYpLEQGwVOn+uul1O+Xuo=;
+  b=mT7L36YlpfEfGHLOkliCHqIHTHY199ETLEUQ9B0o1/XMB7O3HCp1kjDf
+   Vg+/SzU+6WZLASb8WUHMV2ozHYZFS29qAx5MmDzEBagofiUFHuzaX5492
+   SMe7j9gNXUtp2cvKmkt1YhNoZVj3S4PvUZWFf7GBWsBcrkfgzJExk8kP1
+   rSPQxlExKPBDMi3tuanaYVxSlPwqIUDvrbDBBzcHX8dZPHhmltUpgxEVE
+   zNnh+4kJ4J8yZmLRJIrgYFFP/JhBgxIJJDWqQ6gv8urYO5vimOj4OYnB6
+   0WM+CuSsrR8hU1RWgqGZca6fqBqJHq7URrskeCFcyjeu0lnofqv27vE3Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="247178765"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="247178765"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 02:32:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="539124687"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Feb 2022 02:32:16 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFvt1-000XTh-S5; Fri, 04 Feb 2022 10:32:15 +0000
+Date:   Fri, 4 Feb 2022 18:31:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:pcplists-rcu-drain-v1 1/2] mm/page_alloc.c:1481:30:
+ sparse: sparse: incorrect type in assignment (different modifiers)
+Message-ID: <202202041807.DLd23Ex7-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c4ef3691-e821-4a88-2324-08d9e7c958ed
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1706:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB17064F32DFD2B87BD579B726C3299@DM5PR12MB1706.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bGdlvUG9ZQpIEAfuKsodD/QsMbDVU2rhKesRzgm2LHhMCt3gZT0xJyDYaEt1BdNzHMG79Nxv01HctJHZtuscOIe4v/831pLODkr/Yt88b1D7hHjaK60ODDJx+rVu9I9rsspo8RHAy6P6JBJDrYth/lHPCdYVIqt5Qv1UBGWhTorZwZu5gnOkCsGg/byD28pBAkHH7glsUt+mHyWzyCCIc+47YLW6vmLeejP21Fr2HN9Liylvo2zF8VppDvLuehsjEaG4r5Zb0q0zoQ6mdoRBdYUezygMHcNQ9r+gk0Z9ibGREP3ZNDFhvNJtXASqA6WmoZCvV+8xbdu1cS8UpHdS9C6JWe5yaSY5v3cl6WG1LyAbjOEVUh9R66KS85QBNuBDv8OFfnfQ09d+MH1U8P7GZQNlaaygo13+QQUrtzHthJcsE7uTcRhR0iFfhxhIWQeG1Srvf/ql7TO2W77Vvm4Bkt8fSEimffiq9LjGNhAiZTUEQrSQnxr+lks4AcjYeYq4e2PrI3szCNQfmEYgM2nS5Tmxraqzgu8S/DNbqQUx8DU9Vj3QK83OpYO0AqyUbkdgWJpMRUbmRBYW5gwJjBA0H5fWnKf0pd8k2dsD1eNpmgA+1VPg5otVSL4coWa885/qF4p5ht34hiCF4PlsjGiUlYS4IDxy8ue1qms5JFXsTxGarpkyWFY0wTmgdIgdca5+HPXG/3KJfoGy4Kvukj/q9w==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(2906002)(36860700001)(110136005)(356005)(26005)(36756003)(47076005)(81166007)(5660300002)(82310400004)(186003)(40460700003)(83380400001)(70586007)(8936002)(70206006)(508600001)(4326008)(2616005)(336012)(54906003)(316002)(107886003)(86362001)(6666004)(7696005)(426003)(8676002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 10:30:21.4452
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4ef3691-e821-4a88-2324-08d9e7c958ed
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1706
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add combined sequence mode supported by Tegra QSPI controller.
-For commands which contain cmd, addr, data parts to it,controller
-can accept all 3 transfers at once and xfer avoiding interrupt for each
-transfer. This would improve read & write performance.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git pcplists-rcu-drain-v1
+head:   01b58921eae8d67b3ad6b05e73c2a1dd7106ae28
+commit: eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3 [1/2] mm/page_alloc: Access lists in 'struct per_cpu_pages' indirectly
+config: h8300-randconfig-s032-20220201 (https://download.01.org/0day-ci/archive/20220204/202202041807.DLd23Ex7-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi pcplists-rcu-drain-v1
+        git checkout eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> mm/page_alloc.c:1481:30: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:1481:30: sparse:     expected struct list_head *list
+   mm/page_alloc.c:1481:30: sparse:     got struct list_head [noderef] *
+>> mm/page_alloc.c:3442:40: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct list_head *head @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:3442:40: sparse:     expected struct list_head *head
+   mm/page_alloc.c:3442:40: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:3733:14: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:3733:14: sparse:     expected struct list_head *list
+   mm/page_alloc.c:3733:14: sparse:     got struct list_head [noderef] *
+>> mm/page_alloc.c:3734:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
+   mm/page_alloc.c:3734:15: sparse:     expected int *count
+   mm/page_alloc.c:3734:15: sparse:     got int [noderef] *
+>> mm/page_alloc.c:5356:18: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *pcp_list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:5356:18: sparse:     expected struct list_head *pcp_list
+   mm/page_alloc.c:5356:18: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:5357:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
+   mm/page_alloc.c:5357:15: sparse:     expected int *count
+   mm/page_alloc.c:5357:15: sparse:     got int [noderef] *
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
+   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
+   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
+>> mm/page_alloc.c:7022:47: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:7022:47: sparse:     expected struct list_head *list
+   mm/page_alloc.c:7022:47: sparse:     got struct list_head [noderef] *
+>> mm/page_alloc.c:1466:17: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:1521:9: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3163:13: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3164:42: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3277:29: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3282:37: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3443:9: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3445:13: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c: note: in included file (through include/linux/mm.h):
+   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
+   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
+   mm/page_alloc.c:5971:76: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:6065:76: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:6068:17: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:6068:17: sparse: sparse: dereference of noderef expression
+
+vim +1481 mm/page_alloc.c
+
+  1445	
+  1446	/*
+  1447	 * Frees a number of pages from the PCP lists
+  1448	 * Assumes all pages on list are in same zone.
+  1449	 * count is the number of pages to free.
+  1450	 */
+  1451	static void free_pcppages_bulk(struct zone *zone, int count,
+  1452				       int batch, struct pcplists *lp)
+  1453	{
+  1454		int pindex = 0;
+  1455		int batch_free = 0;
+  1456		int nr_freed = 0;
+  1457		unsigned int order;
+  1458		bool isolated_pageblocks;
+  1459		struct page *page, *tmp;
+  1460		LIST_HEAD(head);
+  1461	
+  1462		/*
+  1463		 * Ensure proper count is passed which otherwise would stuck in the
+  1464		 * below while (list_empty(list)) loop.
+  1465		 */
+> 1466		count = min(lp->count, count);
+  1467		while (count > 0) {
+  1468			struct list_head *list;
+  1469	
+  1470			/*
+  1471			 * Remove pages from lists in a round-robin fashion. A
+  1472			 * batch_free count is maintained that is incremented when an
+  1473			 * empty list is encountered.  This is so more pages are freed
+  1474			 * off fuller lists instead of spinning excessively around empty
+  1475			 * lists
+  1476			 */
+  1477			do {
+  1478				batch_free++;
+  1479				if (++pindex == NR_PCP_LISTS)
+  1480					pindex = 0;
+> 1481				list = &lp->lists[pindex];
+  1482			} while (list_empty(list));
+  1483	
+  1484			/* This is the only non-empty list. Free them all. */
+  1485			if (batch_free == NR_PCP_LISTS)
+  1486				batch_free = count;
+  1487	
+  1488			order = pindex_to_order(pindex);
+  1489			BUILD_BUG_ON(MAX_ORDER >= (1<<NR_PCP_ORDER_WIDTH));
+  1490			do {
+  1491				page = list_last_entry(list, struct page, lru);
+  1492				/* must delete to avoid corrupting pcp list */
+  1493				list_del(&page->lru);
+  1494				nr_freed += 1 << order;
+  1495				count -= 1 << order;
+  1496	
+  1497				if (bulkfree_pcp_prepare(page))
+  1498					continue;
+  1499	
+  1500				/* Encode order with the migratetype */
+  1501				page->index <<= NR_PCP_ORDER_WIDTH;
+  1502				page->index |= order;
+  1503	
+  1504				list_add_tail(&page->lru, &head);
+  1505	
+  1506				/*
+  1507				 * We are going to put the page back to the global
+  1508				 * pool, prefetch its buddy to speed up later access
+  1509				 * under zone->lock. It is believed the overhead of
+  1510				 * an additional test and calculating buddy_pfn here
+  1511				 * can be offset by reduced memory latency later. To
+  1512				 * avoid excessive prefetching due to large count, only
+  1513				 * prefetch buddy for the first pcp->batch nr of pages.
+  1514				 */
+  1515				if (batch) {
+  1516					prefetch_buddy(page);
+  1517					batch--;
+  1518				}
+  1519			} while (count > 0 && --batch_free && !list_empty(list));
+  1520		}
+  1521		lp->count -= nr_freed;
+  1522	
+  1523		/*
+  1524		 * local_lock_irq held so equivalent to spin_lock_irqsave for
+  1525		 * both PREEMPT_RT and non-PREEMPT_RT configurations.
+  1526		 */
+  1527		spin_lock(&zone->lock);
+  1528		isolated_pageblocks = has_isolate_pageblock(zone);
+  1529	
+  1530		/*
+  1531		 * Use safe version since after __free_one_page(),
+  1532		 * page->lru.next will not point to original list.
+  1533		 */
+  1534		list_for_each_entry_safe(page, tmp, &head, lru) {
+  1535			int mt = get_pcppage_migratetype(page);
+  1536	
+  1537			/* mt has been encoded with the order (see above) */
+  1538			order = mt & NR_PCP_ORDER_MASK;
+  1539			mt >>= NR_PCP_ORDER_WIDTH;
+  1540	
+  1541			/* MIGRATE_ISOLATE page should not go to pcplists */
+  1542			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
+  1543			/* Pageblock could have been isolated meanwhile */
+  1544			if (unlikely(isolated_pageblocks))
+  1545				mt = get_pageblock_migratetype(page);
+  1546	
+  1547			__free_one_page(page, page_to_pfn(page), zone, order, mt, FPI_NONE);
+  1548			trace_mm_page_pcpu_drain(page, order, mt);
+  1549		}
+  1550		spin_unlock(&zone->lock);
+  1551	}
+  1552	
+
 ---
- drivers/spi/spi-tegra210-quad.c | 216 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 212 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index c83701b..1c6cec8 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -121,19 +121,45 @@
- #define QSPI_NUM_DUMMY_CYCLE(x)			(((x) & 0xff) << 0)
- #define QSPI_DUMMY_CYCLES_MAX			0xff
- 
-+#define QSPI_CMB_SEQ_CMD			0x19c
-+#define QSPI_COMMAND_VALUE_SET(X)		(((x) & 0xFF) << 0)
-+
-+#define QSPI_CMB_SEQ_CMD_CFG			0x1a0
-+#define QSPI_COMMAND_X1_X2_X4(x)		(((x) & 0x3) << 13)
-+#define QSPI_COMMAND_X1_X2_X4_MASK		(0x03 << 13)
-+#define QSPI_COMMAND_SDR_DDR			BIT(12)
-+#define QSPI_COMMAND_SIZE_SET(x)		(((x) & 0xFF) << 0)
-+
-+#define QSPI_GLOBAL_CONFIG			0X1a4
-+#define QSPI_CMB_SEQ_EN				BIT(0)
-+
-+#define QSPI_CMB_SEQ_ADDR			0x1a8
-+#define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
-+
-+#define QSPI_CMB_SEQ_ADDR_CFG			0x1ac
-+#define QSPI_ADDRESS_X1_X2_X4(x)		(((x) & 0x3) << 13)
-+#define QSPI_ADDRESS_X1_X2_X4_MASK		(0x03 << 13)
-+#define QSPI_ADDRESS_SDR_DDR			BIT(12)
-+#define QSPI_ADDRESS_SIZE_SET(x)		(((x) & 0xFF) << 0)
-+
- #define DATA_DIR_TX				BIT(0)
- #define DATA_DIR_RX				BIT(1)
- 
- #define QSPI_DMA_TIMEOUT			(msecs_to_jiffies(1000))
- #define DEFAULT_QSPI_DMA_BUF_LEN		(64 * 1024)
-+#define CMD_TRANSFER				0
-+#define ADDR_TRANSFER				1
-+#define DATA_TRANSFER				2
- 
- struct tegra_qspi_soc_data {
- 	bool has_dma;
-+	bool cmb_xfer_capable;
- };
- 
- struct tegra_qspi_client_data {
- 	int tx_clk_tap_delay;
- 	int rx_clk_tap_delay;
-+	bool is_cmb_xfer;
- };
- 
- struct tegra_qspi {
-@@ -880,6 +906,7 @@ static int tegra_qspi_start_transfer_one(struct spi_device *spi,
- 
- static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_device *spi)
- {
-+	struct tegra_qspi *tqspi = spi_master_get_devdata(spi->master);
- 	struct tegra_qspi_client_data *cdata;
- 
- 	cdata = devm_kzalloc(&spi->dev, sizeof(*cdata), GFP_KERNEL);
-@@ -890,6 +917,12 @@ static struct tegra_qspi_client_data *tegra_qspi_parse_cdata_dt(struct spi_devic
- 				 &cdata->tx_clk_tap_delay);
- 	device_property_read_u32(&spi->dev, "nvidia,rx-clk-tap-delay",
- 				 &cdata->rx_clk_tap_delay);
-+	if (tqspi->soc_data->cmb_xfer_capable)
-+		cdata->is_cmb_xfer = device_property_read_bool
-+					(&spi->dev,
-+					 "nvidia,cmb-xfer");
-+	else
-+		cdata->is_cmb_xfer = false;
- 
- 	return cdata;
- }
-@@ -912,7 +945,6 @@ static int tegra_qspi_setup(struct spi_device *spi)
- 		cdata = tegra_qspi_parse_cdata_dt(spi);
- 		spi->controller_data = cdata;
- 	}
--
- 	spin_lock_irqsave(&tqspi->lock, flags);
- 
- 	/* keep default cs state to inactive */
-@@ -970,9 +1002,160 @@ static void tegra_qspi_transfer_end(struct spi_device *spi)
- 	tegra_qspi_writel(tqspi, tqspi->def_command1_reg, QSPI_COMMAND1);
- }
- 
--static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi_message *msg)
-+static u32 tegra_qspi_cmd_config(bool is_ddr, u8 bus_width, u8 len)
-+{
-+	u32 cmd_config = 0;
-+
-+	/* Extract Command configuration and value */
-+	if (is_ddr)
-+		cmd_config |= QSPI_COMMAND_SDR_DDR;
-+	else
-+		cmd_config &= ~QSPI_COMMAND_SDR_DDR;
-+
-+	cmd_config |= QSPI_COMMAND_X1_X2_X4(bus_width);
-+	cmd_config |= QSPI_COMMAND_SIZE_SET((len * 8) - 1);
-+
-+	return cmd_config;
-+}
-+
-+static u32 tegra_qspi_addr_config(bool is_ddr, u8 bus_width, u8 len)
-+{
-+	u32 addr_config = 0;
-+
-+	/* Extract Address configuration and value */
-+	is_ddr = 0; //Only SDR mode supported
-+	bus_width = 0; //X1 mode
-+
-+	if (is_ddr)
-+		addr_config |= QSPI_ADDRESS_SDR_DDR;
-+	else
-+		addr_config &= ~QSPI_ADDRESS_SDR_DDR;
-+
-+	addr_config |= QSPI_ADDRESS_X1_X2_X4(bus_width);
-+	addr_config |= QSPI_ADDRESS_SIZE_SET((len * 8) - 1);
-+
-+	return addr_config;
-+}
-+
-+static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
-+					struct spi_message *msg)
-+{
-+	bool is_first_msg = true;
-+	int single_xfer;
-+	struct spi_transfer *xfer;
-+	struct spi_device *spi = msg->spi;
-+	u8 transfer_phase = 0;
-+	u32 cmd1 = 0, dma_ctl = 0;
-+	int ret;
-+	u32 address_value = 0;
-+	u32 cmd_config = 0, addr_config = 0;
-+	u8 cmd_value = 0, len = 0, val = 0;
-+
-+	/* Enable Combined sequence mode */
-+	val = tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-+	val |= QSPI_CMB_SEQ_EN;
-+	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
-+	single_xfer = list_is_singular(&msg->transfers);
-+	/* Process individual transfer list */
-+	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-+		if (transfer_phase == CMD_TRANSFER) {
-+			/* X1 SDR mode */
-+			cmd_config = tegra_qspi_cmd_config(false, 0,
-+							   xfer->len);
-+			cmd_value = *((const u8 *)(xfer->tx_buf));
-+
-+		} else if (transfer_phase == ADDR_TRANSFER) {
-+			len = xfer->len;
-+			/* X1 SDR mode */
-+			addr_config = tegra_qspi_addr_config(false, 0,
-+							     xfer->len);
-+			address_value = *((const u32 *)(xfer->tx_buf));
-+		} else {
-+			/* Program Command, Address value in register */
-+			tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
-+			tegra_qspi_writel(tqspi, address_value,
-+					  QSPI_CMB_SEQ_ADDR);
-+			/* Program Command and Address config in register */
-+			tegra_qspi_writel(tqspi, cmd_config,
-+					  QSPI_CMB_SEQ_CMD_CFG);
-+			tegra_qspi_writel(tqspi, addr_config,
-+					  QSPI_CMB_SEQ_ADDR_CFG);
-+
-+			reinit_completion(&tqspi->xfer_completion);
-+			cmd1 = tegra_qspi_setup_transfer_one(spi, xfer,
-+							     is_first_msg);
-+			ret = tegra_qspi_start_transfer_one(spi, xfer,
-+							    cmd1);
-+
-+			if (ret < 0) {
-+				dev_err(tqspi->dev, "Failed to start transfer-one: %d\n",
-+					ret);
-+				return ret;
-+			}
-+
-+			is_first_msg = false;
-+			ret = wait_for_completion_timeout
-+					(&tqspi->xfer_completion,
-+					QSPI_DMA_TIMEOUT);
-+
-+			if (WARN_ON(ret == 0)) {
-+				dev_err(tqspi->dev, "QSPI Transfer failed with timeout: %d\n",
-+					ret);
-+				if (tqspi->is_curr_dma_xfer &&
-+				    (tqspi->cur_direction & DATA_DIR_TX))
-+					dmaengine_terminate_all
-+						(tqspi->tx_dma_chan);
-+
-+				if (tqspi->is_curr_dma_xfer &&
-+				    (tqspi->cur_direction & DATA_DIR_RX))
-+					dmaengine_terminate_all
-+						(tqspi->rx_dma_chan);
-+
-+				/* Abort transfer by resetting pio/dma bit */
-+				if (!tqspi->is_curr_dma_xfer) {
-+					cmd1 = tegra_qspi_readl
-+							(tqspi,
-+							 QSPI_COMMAND1);
-+					cmd1 &= ~QSPI_PIO;
-+					tegra_qspi_writel
-+							(tqspi, cmd1,
-+							 QSPI_COMMAND1);
-+				} else {
-+					dma_ctl = tegra_qspi_readl
-+							(tqspi,
-+							 QSPI_DMA_CTL);
-+					dma_ctl &= ~QSPI_DMA_EN;
-+					tegra_qspi_writel(tqspi, dma_ctl,
-+							  QSPI_DMA_CTL);
-+				}
-+
-+				/* Reset controller if timeout happens */
-+				device_reset(tqspi->dev);
-+				ret = -EIO;
-+				goto exit;
-+			}
-+
-+			if (tqspi->tx_status ||  tqspi->rx_status) {
-+				dev_err(tqspi->dev, "QSPI Transfer failed\n");
-+				tqspi->tx_status = 0;
-+				tqspi->rx_status = 0;
-+				ret = -EIO;
-+				goto exit;
-+			}
-+		}
-+		msg->actual_length += xfer->len;
-+		transfer_phase++;
-+	}
-+
-+exit:
-+	msg->status = ret;
-+
-+	return ret;
-+}
-+
-+static int tegra_qspi_non_combined_seq_xfer(struct tegra_qspi *tqspi,
-+					    struct spi_message *msg)
- {
--	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
- 	struct spi_device *spi = msg->spi;
- 	struct spi_transfer *transfer;
- 	bool is_first_msg = true;
-@@ -1020,7 +1203,6 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
- 			goto complete_xfer;
- 		}
- 
--		is_first_msg = false;
- 		ret = wait_for_completion_timeout(&tqspi->xfer_completion,
- 						  QSPI_DMA_TIMEOUT);
- 		if (WARN_ON(ret == 0)) {
-@@ -1065,7 +1247,29 @@ static int tegra_qspi_transfer_one_message(struct spi_master *master, struct spi
- 	ret = 0;
- exit:
- 	msg->status = ret;
-+
-+	return ret;
-+}
-+
-+static int tegra_qspi_transfer_one_message(struct spi_master *master,
-+					   struct spi_message *msg)
-+{
-+	struct tegra_qspi *tqspi = spi_master_get_devdata(master);
-+	struct tegra_qspi_client_data *cdata = msg->spi->controller_data;
-+	int ret;
-+	int transfer_count = 0;
-+	struct spi_transfer *transfer;
-+
-+	list_for_each_entry(transfer, &msg->transfers, transfer_list) {
-+		transfer_count++;
-+	}
-+	if (cdata->is_cmb_xfer && transfer_count == 3)
-+		ret = tegra_qspi_combined_seq_xfer(tqspi, msg);
-+	else
-+		ret = tegra_qspi_non_combined_seq_xfer(tqspi, msg);
-+
- 	spi_finalize_current_message(master);
-+
- 	return ret;
- }
- 
-@@ -1199,14 +1403,17 @@ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
- 
- static struct tegra_qspi_soc_data tegra210_qspi_soc_data = {
- 	.has_dma = true,
-+	.cmb_xfer_capable = false,
- };
- 
- static struct tegra_qspi_soc_data tegra186_qspi_soc_data = {
- 	.has_dma = true,
-+	.cmb_xfer_capable = true,
- };
- 
- static struct tegra_qspi_soc_data tegra234_qspi_soc_data = {
- 	.has_dma = false,
-+	.cmb_xfer_capable = true,
- };
- 
- static const struct of_device_id tegra_qspi_of_match[] = {
-@@ -1277,6 +1484,7 @@ static int tegra_qspi_probe(struct platform_device *pdev)
- 	tqspi->dev = &pdev->dev;
- 	spin_lock_init(&tqspi->lock);
- 
-+	tqspi->soc_data = device_get_match_data(&pdev->dev);
- 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	tqspi->base = devm_ioremap_resource(&pdev->dev, r);
- 	if (IS_ERR(tqspi->base))
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

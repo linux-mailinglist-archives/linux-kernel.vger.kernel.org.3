@@ -2,99 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB504A9EC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2F24A9EC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377434AbiBDSPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S1377441AbiBDSPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234994AbiBDSPZ (ORCPT
+        with ESMTP id S1376772AbiBDSPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:15:25 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEFFC061714;
-        Fri,  4 Feb 2022 10:15:25 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id k17so5866838plk.0;
-        Fri, 04 Feb 2022 10:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KL1xeRlYrEyKiQpWUpJFu1HEcEQuRgRLLu/ees9x/jY=;
-        b=B6qbq0LSmC+RnYxT47RXfAuOrHQrre5oUmy/S4/JW/3XjTjQIMcyMo8I1jO/d7ygsO
-         AeWH8bd52LINCdTlzUC29gwhdj6EhNMXqS77OrNefl/7kfuBGBZjd9JZQ1gc5hPQnfcZ
-         ExOMH7tEUvPR5VwrgR1tdR7GDSV+3l6M2xAFWruj+XaBiHgsdob4IinDFidoX1s9R6RP
-         ZSar+NQjod98XsF5CC9yoHu8uKfYZJscBmLR0KTqS4xPjuYWKkpsqWCfkRABRAQ6J/BB
-         OdcZXkvoV41Q+2XiclshyUSlJCSSby5GTk9ost2ZTdFABawSqZK/CszuJwO6U95soqDl
-         oZog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KL1xeRlYrEyKiQpWUpJFu1HEcEQuRgRLLu/ees9x/jY=;
-        b=Jz8163+t9jrrn0iu3MUZDkZ4ZSjs15kY2GygZC+DRsHRnWFCI26DfvG2d1jQSSNhOh
-         jLvOd9Vc8LavjoYY8zlMtfdmq5MlhwJc51NhQ5BJcG7jodFBurQ9mejCVp1leDOU94cm
-         sB7yw3KI5FVrYESV2kdmkaiIO38C5cPpD2oMtSMLioDz8mGf8kd1hdFzQ5n6QlgtUxl5
-         6BrhMM7DpfRdi9SVddvB2GADdxXGXYa1X5j+E34KCuSzDjEhPrrG00OaHXtb9s5v8BWI
-         HVGjie8bHepUgi/1LT0k1kcheo2dS6i6WqtkAegWF6lIhVX2I4hF4NfIO2+jrJVgWXKy
-         vqHg==
-X-Gm-Message-State: AOAM530gSA6sBjwQ83uljzffJhEKYrAyA0zjO5MJDHi2PJ3b7Zo3ybeX
-        wlgKZCOhwhyou62ojxmbSSY=
-X-Google-Smtp-Source: ABdhPJzIZ3jxWQrH3knxOOrWNP8PQG/02Mw+Qr6RiUwKBk5cCpTdFpMmFYqYjRnYu5sy4b+xwl1cQA==
-X-Received: by 2002:a17:902:ea08:: with SMTP id s8mr4522469plg.95.1643998524554;
-        Fri, 04 Feb 2022 10:15:24 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id md18sm2754165pjb.9.2022.02.04.10.15.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 10:15:24 -0800 (PST)
-Message-ID: <dec345c8-24de-55e9-09ac-b1da3f5f68b1@gmail.com>
-Date:   Fri, 4 Feb 2022 10:15:12 -0800
+        Fri, 4 Feb 2022 13:15:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F32C061714;
+        Fri,  4 Feb 2022 10:15:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0314261BA2;
+        Fri,  4 Feb 2022 18:15:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8359C004E1;
+        Fri,  4 Feb 2022 18:15:42 +0000 (UTC)
+Date:   Fri, 4 Feb 2022 13:15:41 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
+Subject: Re: [PATCH 4/4] rtla/osnoise: Fix segmentation fault when failing
+ to enable -t
+Message-ID: <20220204131541.2c47be3f@gandalf.local.home>
+In-Reply-To: <23e7889f-9bb4-f607-630f-6f8f0ef90d3d@kernel.org>
+References: <cover.1643990447.git.bristot@kernel.org>
+        <264ff7941b7551ec0b6e5862e40cf3dd593d0ff0.1643990447.git.bristot@kernel.org>
+        <20220204124426.54d82ce2@gandalf.local.home>
+        <23e7889f-9bb4-f607-630f-6f8f0ef90d3d@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220204091917.166033635@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/4/2022 1:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.6 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, 4 Feb 2022 18:46:59 +0100
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 > 
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> As this is not related to the other patches, could you just ignore this one, so
+> I can re-send alone?
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Sure.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+-- Steve

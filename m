@@ -2,214 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F074E4A9533
+	by mail.lfdr.de (Postfix) with ESMTP id A12754A9532
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357131AbiBDIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:35:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31034 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357033AbiBDIfG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:35:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643963705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ewbjKA3RobEmPNVV+e+ATnicxNeLPCBA7u2EECMhFbw=;
-        b=AqmxeIpLOnirYKYHlclZzv36TeAc2yYv05giHGlacYn2P/O9uBv9G+rqg8XJjw3J2RPMiN
-        JR+oBHLGOzsNjW9k1LVavgXjuu5kYxga/VtCfxqUfeZBbSFRWOe3BY5Llp9CmEz4TgTU3y
-        LqmoT2UpesB/huD8KVNVzNAsxhLaTCc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-K_eFAUNuN6OF8jTUniQNcQ-1; Fri, 04 Feb 2022 03:35:04 -0500
-X-MC-Unique: K_eFAUNuN6OF8jTUniQNcQ-1
-Received: by mail-wr1-f72.google.com with SMTP id e1-20020adfa741000000b001e2e74c3d4eso41701wrd.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 00:35:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=ewbjKA3RobEmPNVV+e+ATnicxNeLPCBA7u2EECMhFbw=;
-        b=TFVXWWuaC/ESgAnxbETQi4X1pmAlvaw/1QueF0vl1WRZxGxD/ytQc2tL3sPd8RtKGj
-         kLXf74pr7CJNlkYg3PY4XqERRs/RtxR3OADu2j3MdHgD0wIEHKoJU6+Y1tlnYx2XIqlS
-         MEWMkYHk9wLskbxhWHu/0UfSzF/8p/lli0cDOhvdc6m46BFQNgvmJz5qEP5xSQg30ouc
-         EvZJcS+bGJfiyN/PkRUGXkgVGTLyicr6FrM2ZKFyy6/5lkcz8JdnvwJ0RyHpCfgfQwu8
-         If/O/ZegGTtyo3qlTEGlyDOa4lj3uKuYs4WveLpkSHSC45iz5Hu/IdCbAuTn7vzhGPfN
-         If5w==
-X-Gm-Message-State: AOAM533OucJzC5gx3RaI3Ydy4i7qjwL9KMKH/QTlWxk+/icr57Zlt110
-        +eKbJsFsccptefkSYUOVY8DejL2E+Mfii96arY3jbX9Ikn3F557loFfwj4dVWz5lg7vzMSPnFXF
-        Fc6XIPgNhasJ6Bd55IjI0ruhA
-X-Received: by 2002:a05:600c:3d89:: with SMTP id bi9mr1320792wmb.18.1643963703137;
-        Fri, 04 Feb 2022 00:35:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzBvUZTIxtC1omsCPEeZauaVUQ6J2EG+VIt2M/0eGF+OUlWBkCIfRYq6sravtSXE+E3rSngbA==
-X-Received: by 2002:a05:600c:3d89:: with SMTP id bi9mr1320766wmb.18.1643963702801;
-        Fri, 04 Feb 2022 00:35:02 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f11:9700:838c:3860:6500:5284? (p200300d82f119700838c386065005284.dip0.t-ipconnect.de. [2003:d8:2f11:9700:838c:3860:6500:5284])
-        by smtp.gmail.com with ESMTPSA id l11sm1428118wry.50.2022.02.04.00.35.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:35:02 -0800 (PST)
-Message-ID: <6a82ea68-6e1e-8f5a-ca89-6744fc896a0b@redhat.com>
-Date:   Fri, 4 Feb 2022 09:35:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
+        id S1357054AbiBDIfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:35:07 -0500
+Received: from mail-mw2nam10on2053.outbound.protection.outlook.com ([40.107.94.53]:57481
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1357031AbiBDIfE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 03:35:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d1q72eUARLkX0pNfJirqeULk3XSUCbiwbNoR5byNZMt9YB1nRUpqvA8BxmIxrlK3idzA1yEYSt4PGXLX7Rpgg1x9Go/wCl/EsVFiUhUCwY8CBvaZ42VAaWLe8JalRyqhcLnd8XvE4YtY/2ZQsgWcpLZfmVLeKUSVP4hB5A8jbLHDZ0X2iUwpu3XbX9/FG/2R8cEe4rOsDeu0VKfUjaoYBHNs7guiB1SERIwU2cTsVzCjSqaEKAAUbAMFWK4CKOx8P8bAGAPuEg/Jpde51tbFn2rdTvb8d5DIJ+dudFUNNPYmWF8jJ7gTj1w1QDirgvo8X/SQeaasKYtrBgFXY2mDmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=55Qi6i9lgMa5b58ovNjWvW+I9NnA+XjuXR8A3Euab10=;
+ b=WSIVSQyKYssVj3WEj56u9S0JHCSf+EwEqY7tV7S888gWFw/viTyZVeo6Cuf8L+b4d2e6MiFyiQ6kxxo6yjKIA0jPBmHwYgMWbdjWLDI5I/nqFZLY40Spf4iieMJZo/xzZVqamrQNa97KnBdlaC6n4cCJPg9pxt0NX7g6f7RksaY3loQrOpGTmnFWxhvWJuhVCZlCYjaJGS5DwBLzfWYO8NEb8wKOVkZoGHmeSyGxG0b6p/8h/UXKpk0fN4K4NWiMDNrMXZ1DaBrDPebl3g3wYiKTIFcInoz0JEa89KjY11dC8ckwX9/2KUx7rWYdsfKs0prpyjg1HTnO6yRXImk9rQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=55Qi6i9lgMa5b58ovNjWvW+I9NnA+XjuXR8A3Euab10=;
+ b=G9ZPGP+H/qbhu3Xt3cWeIjhLP/HqCHhYRtc+K8LuoEPTQi12ctcWd7802AIaT1i4vjdrl30V6dlPfh7pYCJjwPO8/INBQ0Hu9K1k88MSXC1cz1IZgPvR5G2zRNP+Bg6JJP6oUrQuNLyw53YVQeLM6at+4t/yaduOByqHK5koPuOAJPLqlLmRxDRfGkltzfEA8dw7CCE4QL30O1WNENDlfSrs6q/1xqwsCgP0R5vsUXHO/iDW9+CPDGfIXtf5DBpv0fL6YKTewRh8tWeZspENg9eNR8J6TNEEHdVRsfO9g+wZYcWspPg/79XNM+mP/UVKMc3DZbnpX2aCxdMizDZn+g==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by CH0PR12MB5027.namprd12.prod.outlook.com (2603:10b6:610:e2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Fri, 4 Feb
+ 2022 08:35:02 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::846c:d3cd:5a30:c35%5]) with mapi id 15.20.4951.014; Fri, 4 Feb 2022
+ 08:35:02 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Yang Shi <shy828301@gmail.com>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "hch@infradead.org" <hch@infradead.org>
+Subject: Re: [v6 PATCH] block: introduce block_rq_error tracepoint
+Thread-Topic: [v6 PATCH] block: introduce block_rq_error tracepoint
+Thread-Index: AQHYGTpVkG8xOIk86U2gPDuEJ97j3qyCsFwAgABhYwA=
+Date:   Fri, 4 Feb 2022 08:35:02 +0000
+Message-ID: <ff0d4285-471b-7a33-15a5-3ce89443b41a@nvidia.com>
+References: <20220203201207.1075933-1-shy828301@gmail.com>
+ <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
+In-Reply-To: <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220202014034.182008-1-mike.kravetz@oracle.com>
- <20220202014034.182008-2-mike.kravetz@oracle.com>
- <20571829-9d3d-0b48-817c-b6b15565f651@redhat.com>
- <7b174c48-d368-43ba-7eab-13719a0d15ef@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 1/3] mm: enable MADV_DONTNEED for hugetlb mappings
-In-Reply-To: <7b174c48-d368-43ba-7eab-13719a0d15ef@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 89cef032-2263-4635-af9f-08d9e7b93cf8
+x-ms-traffictypediagnostic: CH0PR12MB5027:EE_
+x-microsoft-antispam-prvs: <CH0PR12MB5027B9A58FFBB0C80CB63745A3299@CH0PR12MB5027.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /iNpDB/u4+d3R8dd7WEXafxTj2QHAwRktZA9R2o4Tq43pI2cwRIKl8myYPThKrYHr01FEVFaIxgQzlmmmJZf/EGyGN0QD37Njaay1xemhg3sCgxovfrh96G08xjNtW8HXmL0Chtn55mCjDdf5nHvQz0fOeo8FZakhSPNGN3Y6/xcUcXZf8h9iN2U7iG/zsmVD7rz6CQ7mDSYdmwhs5H7Na9klErPswJfmbONO+nVelsfCeMRAgDcNT+1NsVCH1jUgPdE4xNIwDuERI0ljzP8Y4AhW8onXWh+dnzXpdNlSz193k8HAwvxGkY0hpCv27M14anR8BzAS3oriTLrurRhJQLHLzBg7HBby/FegJ/CpKOpv/2+wLuMCgfeH47L7FquwYVuPSFYGSqgWdWkzKsCm6NyswvJCWvcQr/QuP2p16Muk9RZcf/nwcwu3/Gk1WLLLsEXaN3bHZSVWemRhI8LMplOCjHlSGGNwNd929j+xKcVonbveqw0+GFGd30MW0jRKA0Lnu2DpEx1W+Xbr+khn63latxT5xnkQfSIq6GL2LcLELyUBpgTFeDhJ0IJUtCBGZfm+GutkAmslDzkSWpoLf+EHjsi8O2qpNuE1hM2V5u0ZphuD5U73GxQrKQSzyfXg8v/ESU9AA6mQhLTac32Ls5gV3dyXGRJHJO6ZAFy7Or51EUXHflpPQE13CHeumHgWZVSJKV3A6zC0pllDCvAjmb69AAXjc4yKq0GavYF1rI7gjlxpN9Xl4EgBKG8OIRg9now0rrnIJs3faT5EZFpsQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(5660300002)(186003)(2906002)(2616005)(38100700002)(6916009)(83380400001)(54906003)(36756003)(31686004)(508600001)(4326008)(8676002)(66556008)(66446008)(66946007)(76116006)(71200400001)(122000001)(316002)(86362001)(91956017)(31696002)(8936002)(6512007)(6506007)(6486002)(64756008)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Wm1FWTBObFo2NktWUXFYQmwxbzRwclZPeUVYNm8zWXhHZ2QvazY1Y2hvSjJu?=
+ =?utf-8?B?UDZYRkFQWnJJWWhiLzErbFRtZVJYRENONHpJOGtURTcxbE5kMlZtNVBObTNX?=
+ =?utf-8?B?eXVEcURlOWFPQU1ObkZOK0luQWp4b0IrZUszb2pwVXlqWnN2Mjhrcjl4TElE?=
+ =?utf-8?B?bU1JTVhWUWJUUnFKNjNyTWZTMnFnUmhMelhGbzRrZEZlNEo0aHFRMXBBTnor?=
+ =?utf-8?B?emJrMWcxQ0M4WCt5Q3RvdUFDenNyWGtoSzY2ZXltN2s5OWpQUXBZQ2tjS1cx?=
+ =?utf-8?B?NVJEbndILzlVVHdBajJkV2UrVWZJMldmcjViZVVrQU83a1JoclpZZlJ0ZHlm?=
+ =?utf-8?B?bVFFcmM2VjJsVDU1dER2RWV4cUY3NEZ4YXpFaWdDN1Q1UWZ2aTFNcElOQWR5?=
+ =?utf-8?B?ZEx0UDRtUk8vY2NpK3R6Y3NuTTdMQWhpSzJEZW1XY1gzMFVva3FKOWtneXFI?=
+ =?utf-8?B?dU52aDI2TkthSUZhQWpLOTJlYjR2ZTVSS3lTRzdHRXFRdXUzU3BDUlNRN3BD?=
+ =?utf-8?B?MkQra05aaUZsazdMcVFVdnM4bXEwSzdyYk9PY0RwaWo0MGZLaUFCYjljei9X?=
+ =?utf-8?B?Qjlpbi9hVWsvR2VBNGo0RUpWUDBaeEpFQVFRZHVKMDVRcU92WnJpMTVMbytv?=
+ =?utf-8?B?OUtrWXlPR1N2aTFnaXM1YkNMalFYdmc0aGg1RGMzT1AwdjB0REc4UjhCcUpj?=
+ =?utf-8?B?MVVUaVM3V1BBdStvVzl1QURiYllhSENBWnNBcmJtWkFaNjg1bGdGdnNJYzJ2?=
+ =?utf-8?B?QURqaThBeU4wWlZjdmViR0hxVXlSbGJlaTFOMVZLQjExTmRiRDI4RzA3eG1X?=
+ =?utf-8?B?Zyt4THNSeFgxSzQ0aVJ3ZndwVHRrREdQeDE0azlqWEZVMGFzeWViKzI1b2Fs?=
+ =?utf-8?B?d3JXUnFsdVRCQUF3NlhnOXJnT2lYTDlxN0IxTkxsTExsUmZsSVlsY2ZMTXZy?=
+ =?utf-8?B?aGJkdGtjZWROeG84NGgzMGpJWlFlaTFnbzdSOEpKZ0VKcDJSRVl1WEhMTDFi?=
+ =?utf-8?B?NENCWFFrc1JQaTBDak5uRGhIU2JlUVVqTHkxQURGQ3JvUVhPeERWckZXOTlV?=
+ =?utf-8?B?KzlEY2F5Q0JqeHFBa05Za1VkbXZUc04wZVJua1paekgyOHBTdTl4OHdBUGoz?=
+ =?utf-8?B?UWtPeTBiL3FFL21aRW9qS1k1SWRFM1h1MEVTeXRJbk8yVXhtQTVzUktKbWtG?=
+ =?utf-8?B?Y2s2QnY1c3dCZnNsTC9KRXhPS1Z5TkRGWmtBZEJKTWlPMTZqdVk1NnRQMXFC?=
+ =?utf-8?B?ZjJUdmc4ekY4d0hsMmNqOTJELzNYeG1xYlo0cDBQNUhCaGZKZG43VmJYN2ZH?=
+ =?utf-8?B?NUVhSUdUejY2ZUhCSm1ZZC94Wi8rZWNCMFFUUGZDZ1p6VGFmaEh3ZTJNWE54?=
+ =?utf-8?B?RjZUU0dIUVMrbWwrSVlwNFcza3JYZHNQaVA5eFhQaVM4TG8zMlptZDhZUFA3?=
+ =?utf-8?B?U3Z6MzN0eEx5UVdMQ2ZvUXpFSDB2UlRJNG50S1lsNnNBQnBjRjlZVWxHcHRP?=
+ =?utf-8?B?MjVUdnlzUWZWTkNMZTJibkRwUk1xYk5PNllxeTVLRTlpVDhpQ0R3b1VoWjAv?=
+ =?utf-8?B?dmF4UHM3blM0bkxsRTJFRkpHbUMrcWhlV2JxV3ZYSFhETmhubEE3b3lMZE5l?=
+ =?utf-8?B?emh4Q2tKQ21HbEUzRnl0Mnc5ZVVTbk40OVNYTWhrMlppWjlvT2RVODN6MG1t?=
+ =?utf-8?B?VUhRMkM1MUJmaDVTVjJUT1o4VFRqUXNlc0NtUm0wRWg2UXQ1TGQ1ajAxUEhI?=
+ =?utf-8?B?VUZPV2I5dk5wNXpiRSs4Z0pzMEVGUU1RajN2UndUREV4cnJISFdZWEhQbnVk?=
+ =?utf-8?B?WndBQlNCaWx4eUl6eXJXMkVTeXhCZFdzbkdCTnpPL1B0TzR0MTRCQVIxbmt5?=
+ =?utf-8?B?U3J0RG50U0VWTjg1S3VWV0Y4WmIwSWwwUkwvRkN6cUswS0RjcTZ0dnMxWnJN?=
+ =?utf-8?B?NFlTb3J6dldweUhINHpjVDMveHN6RTJSc2VFdGVlVEdVNDJ0QUFWYnJSMDUz?=
+ =?utf-8?B?VHJxc1FzQi8xb2NoYVNvSUtYUm9VRmFJVm01aU50d0E3dS8ybkx1bVZhRzNI?=
+ =?utf-8?B?WE9oaTJMbmd0MG16RlhXNWxhNDBYa2cyK29WdGVoMG9scWpLUjRJbDJteHFO?=
+ =?utf-8?B?bG4zQ05rMEsrUGZOUTBKUWt2MGVWZElaem8wRkJiR2tyazFOejF3QmRJNnRK?=
+ =?utf-8?Q?m1E6PShNFCvPRzznfiBmp4oprTtD2yXZKB+A6y0BFg6M?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <717FE8E0911CD0429CF6543DABCBDFB4@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89cef032-2263-4635-af9f-08d9e7b93cf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2022 08:35:02.6595
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NgXPWHN06FShqM46AkRmhYvJf+xOckK21aLwk0LYdwF6zZRB+iRVn2F9X3ryfTYvmeVLWyrUb9AEb14VA1nB5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5027
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> +	/*
->>> +	 * start and size (end - start) must be huge page size aligned
->>> +	 * for hugetlb vmas.
->>> +	 */
->>> +	if (is_vm_hugetlb_page(vma)) {
->>> +		struct hstate *h = hstate_vma(vma);
->>> +
->>> +		start = ALIGN_DOWN(start, huge_page_size(h));
->>> +		end = ALIGN(end, huge_page_size(h));
->>
->> So you effectively extend the range silently. IIUC, if someone would zap
->> a 4k range you would implicitly zap a whole 2M page and effectively zero
->> out more data than requested.
->>
->>
->> Looking at do_madvise(), we:
->> (1) reject start addresses that are not page-aligned
->> (2) shrink lengths that are not page-aligned and refuse if it turns 0
-> 
-> I believe length is extended (rounded up) by this line:
-> 	len = PAGE_ALIGN(len_in);
-
-Ah, right. I was confused by the "!len" check below that, but the
-comment explains how this applies to negative values only.
-
-> 
-> but, I see your point.
-> 
->> The man page documents (1) but doesn't really document (2).
->>
->> Naturally I'd have assume that we apply the same logic to huge page
->> sizes and documenting it in the man page accordingly.
->>
->>
->> Why did you decide to extend the range? I'd assume MADV_REMOVE behaves
->> like FALLOC_FL_PUNCH_HOLE:
->>   "Within the specified range, partial filesystem blocks are zeroed, and
->>    whole filesystem blocks are removed from the file.  After a
->>    successful call, subsequent reads from  this  range will return
->>    zeros."
->> So we don't "discard more than requested".
-> 
-> Well.  hugetlbfs does not follow the man page. :(  It does not zero
-> partial blocks.  I assume a filesystem block would be a huge page.
-> Instead it does,
-> 
->         /*
->          * For hole punch round up the beginning offset of the hole and
->          * round down the end.
->          */
->         hole_start = round_up(offset, hpage_size);
->         hole_end = round_down(offset + len, hpage_size);
-
-Okay, so we skip any zeroing and only free completely covered blocks. We
-might want to document that behavior. See below.
-
-> 
-> So, not only is this patch not following the man page.  It is not even
-> following the existing MADV_REMOVE hugetlb code.  Thanks for pointing
-> that out.  Part of my reason for adding this functionality was to make
-> hugetlb be more like 'normal' memory.  I clearly failed.
-
-:)
-
-> 
-> Related comment about madvise man page for PAGE_SIZE MADV_REMOVE.  The man
-> page says.
-> 
->        MADV_REMOVE (since Linux 2.6.16)
->               Free up a given range of pages and its associated backing store.
->               This is equivalent to punching a hole in the corresponding  byte
->               range  of  the backing store (see fallocate(2)).  Subsequent ac‐
->               cesses in the specified address range will see bytes  containing
->               zero.
-> 
-> This may need some clarification.  It says it will free pages.  We know
-> madvise only operates on pages (PAGE_ALIGN(len)).  Yet, the statement about
-> equivalent to a fallocate byte range may lead one to believe that length is
-> treated the same in madvise and fallocate.
-
-Yes
-
-> 
->> I see the following possible alternatives:
->> (a) Fail if the range is not aligned
->> -> Clear semantics
->> (b) Fail if the start is not aligned, shrink the end if required
->> -> Same rules as for PAGE_SIZE
->> (c) Zero out the requested part
->> -> Same semantics as FALLOC_FL_PUNCH_HOLE.
->>
->> My preference would be a), properly documenting it in the man page.
-> 
-> However, a) would make hugetlb behave differently than other memory as
-> len does not need to be aligned.
-> 
-> I would prefer b) as it is more in line with PAGE_SIZE.  But, that does
-> make it different than MADV_REMOVE hugetlb alignment.
-> 
-> I thought this was simple. :)
-
-It really bugs me that it's under-specified what's supposed to happen
-when the length is not aligned.
-
-BUT: in the posix world, "calling posix_madvise() shall not affect the
-semantics of access to memory in the specified range". So we don't care
-too much about if we align up/down, because it wouldn't affect the
-semantics. Especially for MADV_DONTNEED/MADV_REMOVE as implemented by
-Linux this is certainly different and the alignment handling matters.
-
-So I guess especially for MADV_DONTNEED/MADV_REMOVE we need a clear
-specification what's supposed to happen if the length falls into the
-middle of a huge page. We should document alignment handling for
-madvise() in general I assume.
-
-IMHO we should have bailed out right from the start whenever something
-is not properly aligned, but that ship has sailed. So I agree, maybe we
-can make at least hugetlb MADV_DONTNEED obey the same (weird) rules as
-ordinary pages.
-
-So b) would mean, requiring start to be hugepage aligned and aligning-up
-the end. Still feels wrong but at least matches existing semantics.
-
-Hugetlb MADV_REMOVE semantics are unfortunate and we should document the
-exception.
-
--- 
-Thanks,
-
-David / dhildenb
-
+WWFuZywNCg0KPiBRdWVzdGlvbiAxIDotIFdoYXQgcHJldmVudHMgdXMgZnJvbSB1c2luZyB0aGUg
+c2FtZSBmb3JtYXQgZm9yDQo+IGJvdGggYmxrX3JxX2NvbXBsZXRlKCkgYW5kIGJsa19ycV9lcnJv
+cigpID8NCj4gDQo+IFF1ZXN0aW9uIDIgOi0gYXNzdW1pbmcgdGhhdCBibGtfcnFfY29tcGxldGUo
+KSBhbmQgYmxrX3JxX2Vycm9yKCkNCj4gYXJlIHVzaW5nIHNhbWUgZm9ybWF0IHdoeSBjYW4ndCB3
+ZSA6LQ0KPiANCj4gZGVjbGFyZSBERUNMQVJFX0VWRU5UX0NMQVNTKGJsa19ycV9jb21wbGV0aW9u
+Li4uLikNCj4gYW5kIHVzZSB0aGF0IGNsYXNzIGZvciBibGtfcnFfY29tcGxldGUoKSBhbmQgYmxr
+X3JxX2Vycm9yKCkgPw0KPiANCj4gc2luY2UgaWYgSSByZW1lbWJlciBjb3JyZWN0bHkgd2UgbmVl
+ZCB0byBkZWZpbmUgYSBldmVudCBjbGFzcw0KPiBpbnN0ZWFkIG9mIGR1cGxpY2F0aW5nIGEgdHJh
+Y2Vwb2ludCB3aXRoIHNpbWlsYXIgcmVwb3J0aW5nLg0KDQpXaGF0IEkgbWVhbnQgaXMgZm9sbG93
+aW5nIGNvbXBpbGUgdGVzdGVkIHBhdGNoIChhbHRob3VnaCBpdCB3aWxsDQpuZWVkIHRvIHNwbGl0
+IGludG8gYSBwcmVwIHBhdGNoIGluIG9yZGVyIHRvIHBvc3QgaXQpIDotDQoNCmRpZmYgLS1naXQg
+YS9pbmNsdWRlL3RyYWNlL2V2ZW50cy9ibG9jay5oIGIvaW5jbHVkZS90cmFjZS9ldmVudHMvYmxv
+Y2suaA0KaW5kZXggMjcxNzBlNDBlOGM5Li43ZjRkZmJkZjEyYTYgMTAwNjQ0DQotLS0gYS9pbmNs
+dWRlL3RyYWNlL2V2ZW50cy9ibG9jay5oDQorKysgYi9pbmNsdWRlL3RyYWNlL2V2ZW50cy9ibG9j
+ay5oDQpAQCAtMTAwLDE5ICsxMDAsNyBAQCBUUkFDRV9FVkVOVChibG9ja19ycV9yZXF1ZXVlLA0K
+ICAgICAgICAgICAgICAgICAgIF9fZW50cnktPm5yX3NlY3RvciwgMCkNCiAgKTsNCg0KLS8qKg0K
+LSAqIGJsb2NrX3JxX2NvbXBsZXRlIC0gYmxvY2sgSU8gb3BlcmF0aW9uIGNvbXBsZXRlZCBieSBk
+ZXZpY2UgZHJpdmVyDQotICogQHJxOiBibG9jayBvcGVyYXRpb25zIHJlcXVlc3QNCi0gKiBAZXJy
+b3I6IHN0YXR1cyBjb2RlDQotICogQG5yX2J5dGVzOiBudW1iZXIgb2YgY29tcGxldGVkIGJ5dGVz
+DQotICoNCi0gKiBUaGUgYmxvY2tfcnFfY29tcGxldGUgdHJhY2Vwb2ludCBldmVudCBpbmRpY2F0
+ZXMgdGhhdCBzb21lIHBvcnRpb24NCi0gKiBvZiBvcGVyYXRpb24gcmVxdWVzdCBoYXMgYmVlbiBj
+b21wbGV0ZWQgYnkgdGhlIGRldmljZSBkcml2ZXIuICBJZg0KLSAqIHRoZSBAcnEtPmJpbyBpcyAl
+TlVMTCwgdGhlbiB0aGVyZSBpcyBhYnNvbHV0ZWx5IG5vIGFkZGl0aW9uYWwgd29yayB0bw0KLSAq
+IGRvIGZvciB0aGUgcmVxdWVzdC4gSWYgQHJxLT5iaW8gaXMgbm9uLU5VTEwgdGhlbiB0aGVyZSBp
+cw0KLSAqIGFkZGl0aW9uYWwgd29yayByZXF1aXJlZCB0byBjb21wbGV0ZSB0aGUgcmVxdWVzdC4N
+Ci0gKi8NCi1UUkFDRV9FVkVOVChibG9ja19ycV9jb21wbGV0ZSwNCitERUNMQVJFX0VWRU5UX0NM
+QVNTKGJsb2NrX3JxX2NvbXBsZXRpb24sDQoNCiAgICAgICAgIFRQX1BST1RPKHN0cnVjdCByZXF1
+ZXN0ICpycSwgYmxrX3N0YXR1c190IGVycm9yLCB1bnNpZ25lZCBpbnQgDQpucl9ieXRlcyksDQoN
+CkBAIC0xNDQsNiArMTMyLDQxIEBAIFRSQUNFX0VWRU5UKGJsb2NrX3JxX2NvbXBsZXRlLA0KICAg
+ICAgICAgICAgICAgICAgIF9fZW50cnktPm5yX3NlY3RvciwgX19lbnRyeS0+ZXJyb3IpDQogICk7
+DQoNCisvKioNCisgKiBibG9ja19ycV9jb21wbGV0ZSAtIGJsb2NrIElPIG9wZXJhdGlvbiBjb21w
+bGV0ZWQgYnkgZGV2aWNlIGRyaXZlcg0KKyAqIEBycTogYmxvY2sgb3BlcmF0aW9ucyByZXF1ZXN0
+DQorICogQGVycm9yOiBzdGF0dXMgY29kZQ0KKyAqIEBucl9ieXRlczogbnVtYmVyIG9mIGNvbXBs
+ZXRlZCBieXRlcw0KKyAqDQorICogVGhlIGJsb2NrX3JxX2NvbXBsZXRlIHRyYWNlcG9pbnQgZXZl
+bnQgaW5kaWNhdGVzIHRoYXQgc29tZSBwb3J0aW9uDQorICogb2Ygb3BlcmF0aW9uIHJlcXVlc3Qg
+aGFzIGJlZW4gY29tcGxldGVkIGJ5IHRoZSBkZXZpY2UgZHJpdmVyLiAgSWYNCisgKiB0aGUgQHJx
+LT5iaW8gaXMgJU5VTEwsIHRoZW4gdGhlcmUgaXMgYWJzb2x1dGVseSBubyBhZGRpdGlvbmFsIHdv
+cmsgdG8NCisgKiBkbyBmb3IgdGhlIHJlcXVlc3QuIElmIEBycS0+YmlvIGlzIG5vbi1OVUxMIHRo
+ZW4gdGhlcmUgaXMNCisgKiBhZGRpdGlvbmFsIHdvcmsgcmVxdWlyZWQgdG8gY29tcGxldGUgdGhl
+IHJlcXVlc3QuDQorICovDQorREVGSU5FX0VWRU5UKGJsb2NrX3JxX2NvbXBsZXRpb24sIGJsb2Nr
+X3JxX2NvbXBsZXRlLA0KKw0KKyAgICAgICBUUF9QUk9UTyhzdHJ1Y3QgcmVxdWVzdCAqcnEsIGJs
+a19zdGF0dXNfdCBlcnJvciwgdW5zaWduZWQgaW50IA0KbnJfYnl0ZXMpLA0KKw0KKyAgICAgICBU
+UF9BUkdTKHJxLCBlcnJvciwgbnJfYnl0ZXMpDQorKTsNCisNCisvKioNCisgKiBibG9ja19ycV9l
+cnJvciAtIGJsb2NrIElPIG9wZXJhdGlvbiBlcnJvciByZXBvcnRlZCBieSBkZXZpY2UgZHJpdmVy
+DQorICogQHJxOiBibG9jayBvcGVyYXRpb25zIHJlcXVlc3QNCisgKiBAZXJyb3I6IHN0YXR1cyBj
+b2RlDQorICogQG5yX2J5dGVzOiBudW1iZXIgb2YgY29tcGxldGVkIGJ5dGVzDQorICoNCisgKiBU
+aGUgYmxvY2tfcnFfZXJyb3IgdHJhY2Vwb2ludCBldmVudCBpbmRpY2F0ZXMgdGhhdCBzb21lIHBv
+cnRpb24NCisgKiBvZiBvcGVyYXRpb24gcmVxdWVzdCBoYXMgZmFpbGVkIGFzIHJlcG9ydGVkIGJ5
+IHRoZSBkZXZpY2UgZHJpdmVyLg0KKyAqLw0KK0RFRklORV9FVkVOVChibG9ja19ycV9jb21wbGV0
+aW9uLCBibG9ja19ycV9lcnJvciwNCisNCisgICAgICAgVFBfUFJPVE8oc3RydWN0IHJlcXVlc3Qg
+KnJxLCBibGtfc3RhdHVzX3QgZXJyb3IsIHVuc2lnbmVkIGludCANCm5yX2J5dGVzKSwNCisNCisg
+ICAgICAgVFBfQVJHUyhycSwgZXJyb3IsIG5yX2J5dGVzKQ0KKyk7DQorDQogIERFQ0xBUkVfRVZF
+TlRfQ0xBU1MoYmxvY2tfcnEsDQoNCiAgICAgICAgIFRQX1BST1RPKHN0cnVjdCByZXF1ZXN0ICpy
+cSksDQo+IA0KPiAtY2sNCj4gDQo+IA0KDQo=

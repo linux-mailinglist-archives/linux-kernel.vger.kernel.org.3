@@ -2,145 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2E14AA2D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C38A4AA2DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344929AbiBDWHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:07:07 -0500
-Received: from mail-oo1-f53.google.com ([209.85.161.53]:41940 "EHLO
-        mail-oo1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344244AbiBDWHF (ORCPT
+        id S1345124AbiBDWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:08:32 -0500
+Received: from mail-oo1-f51.google.com ([209.85.161.51]:35463 "EHLO
+        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233137AbiBDWIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:07:05 -0500
-Received: by mail-oo1-f53.google.com with SMTP id q145-20020a4a3397000000b002e85c7234b1so6185845ooq.8;
-        Fri, 04 Feb 2022 14:07:05 -0800 (PST)
+        Fri, 4 Feb 2022 17:08:30 -0500
+Received: by mail-oo1-f51.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so6209942ook.2;
+        Fri, 04 Feb 2022 14:08:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QtAEL5mAFjL4SAlOXTLMVCmygT87AT+bBVvDPQA7iq8=;
-        b=2L1/QDwjd80BcphSckslz6W0guF+abZM+o8x/kxuXHjZ3uLWvBUGA3dNwOOoSEB4lv
-         7TOQlSDVjtW5O5YVs2yeVUu6NUzuL8EbrqghH7xsOcuuL8RG8GwHiiR2IJfM/4gWBXPK
-         kEe7Y46liXOoiQYbQX/mNGQwTSkIDYsY5kmGTmTbm+sx/mmCsTvpJPXQkEVvO760oAOM
-         Xw8jw2S7i8ezqkpUr/J8DlGuL2JVBN8yiaCEztKsHGe+QMuTxSmBHvfUp0xPRYqYt8x5
-         CLTBHC+YKHaKp0M+ufNtOat6siD/Cm9QQGp7BmtdEnNbLC8InGYOjVYyly0IjyBsnEUp
-         hgHg==
-X-Gm-Message-State: AOAM531vQPQQf3bg/Q50oKYjEQrbmJkLSbBad6xzol127QFybYE0FoeQ
-        4ZmIYElAYmQqF6IUfPCwKLPNrzYkkg==
-X-Google-Smtp-Source: ABdhPJwKq0cOi2S5q54B2+hEX/owSNnnAWK9Z5jj7EhpiTN5aXIL5Z5T0EzSZ2HjEz4Akkkp6Kk2zg==
-X-Received: by 2002:a05:6870:c7a8:: with SMTP id dy40mr1264985oab.33.1644012424619;
-        Fri, 04 Feb 2022 14:07:04 -0800 (PST)
+        bh=JQ7WYZ4Zqg4HCtyNEPmfKDttwiehHxrZDO82/S7zZVE=;
+        b=jnQhOSC0FhFR83UKDiozz7nYJNNRJEWCOltmX0HUQ4lsxvBnT/imsUvhBm3kRdFNL2
+         0H2q7mVYe+8E4zzPmXel85gKHdffB9IR5wf0tlcEesZfGqGkeANPYNIZYaYyZcATZN0l
+         jFKVQBoPf/5pjgnAHcByYekT8SCA8DV+jgIerSQwSdJnK3SWe+9bB9i5HADpIT7oRFbj
+         +65/v0xyjYR1sZui3bxqciOdYkNcjDlFe8BGn9DyOnnh6LMjKH8dPQ1GmabSHbmEoJJW
+         UE2I8m2qV3JVwLEDYvFV3UBafHs+Dh7qcCkad5v/Fut54cdfNTBeUzQ/aV1YpzcuFACi
+         xJpQ==
+X-Gm-Message-State: AOAM5326sOqab8cFYDu9K7DPSV34yPT3a/wi9VNi8aZi7un8mUQt1IuG
+        h1j7Bk4dgV6n594k/M0I90iP5IQbow==
+X-Google-Smtp-Source: ABdhPJzCR5b4do+sC8vu/Kn5Ig8ZQCwMphWuSpBEn7uPBasp5qvvVQX+Sgl9UoFUkOwZhnxHZ1k+PQ==
+X-Received: by 2002:a4a:ca98:: with SMTP id x24mr322821ooq.43.1644012509912;
+        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a128sm1217586oob.17.2022.02.04.14.07.03
+        by smtp.gmail.com with ESMTPSA id cv13sm1005610oab.7.2022.02.04.14.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:07:03 -0800 (PST)
-Received: (nullmailer pid 3264008 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:07:02 -0000
-Date:   Fri, 4 Feb 2022 16:07:02 -0600
+        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
+Received: (nullmailer pid 3267244 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:08:27 -0000
+Date:   Fri, 4 Feb 2022 16:08:27 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Joseph CHAMG <josright123@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, joseph_chang@davicom.com.tw,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        andrew@lunn.ch, leon@kernel.org
-Subject: Re: [PATCH v17, 1/2] yaml: Add dm9051 SPI network yaml file
-Message-ID: <Yf2jhudUnk4k69TE@robh.at.kernel.org>
-References: <20220202181248.18344-1-josright123@gmail.com>
- <20220202181248.18344-2-josright123@gmail.com>
+To:     Iwona Winiarska <iwona.winiarska@intel.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Muller <d.mueller@elsoft.ch>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Billy Tsai <billy_tsai@aspeedtech.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org,
+        Zev Weiss <zweiss@equinix.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
+        Olof Johansson <olof@lixom.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v7 02/13] dt-bindings: Add bindings for peci-aspeed
+Message-ID: <Yf2j2+QbO9kg0E1E@robh.at.kernel.org>
+References: <20220202144838.163875-1-iwona.winiarska@intel.com>
+ <20220202144838.163875-3-iwona.winiarska@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220202181248.18344-2-josright123@gmail.com>
+In-Reply-To: <20220202144838.163875-3-iwona.winiarska@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 02:12:47AM +0800, Joseph CHAMG wrote:
-> From: JosephCHANG <josright123@gmail.com>
+On Wed, 02 Feb 2022 15:48:27 +0100, Iwona Winiarska wrote:
+> Add device tree bindings for the peci-aspeed controller driver.
 > 
-> This is a new yaml base data file for configure davicom dm9051 with
-> device tree
-
-Please address my comments on v13 that still apply.
-
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Signed-off-by: JosephCHANG <josright123@gmail.com>
+> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
 > ---
->  .../bindings/net/davicom,dm9051.yaml          | 62 +++++++++++++++++++
->  1 file changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+>  .../devicetree/bindings/peci/peci-aspeed.yaml | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/net/davicom,dm9051.yaml b/Documentation/devicetree/bindings/net/davicom,dm9051.yaml
-> new file mode 100644
-> index 000000000000..52e852fef753
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/davicom,dm9051.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/davicom,dm9051.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Davicom DM9051 SPI Ethernet Controller
-> +
-> +maintainers:
-> +  - Joseph CHANG <josright123@gmail.com>
-> +
-> +description: |
-> +  The DM9051 is a fully integrated and cost-effective low pin count single
-> +  chip Fast Ethernet controller with a Serial Peripheral Interface (SPI).
-> +
-> +allOf:
-> +  - $ref: ethernet-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: davicom,dm9051
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  spi-max-frequency:
-> +    maximum: 45000000
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  local-mac-address: true
-> +
-> +  mac-address: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - spi-max-frequency
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Raspberry Pi platform
-> +  - |
-> +    /* for Raspberry Pi with pin control stuff for GPIO irq */
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        ethernet@0 {
-> +            compatible = "davicom,dm9051";
-> +            reg = <0>; /* spi chip select */
-> +            local-mac-address = [00 00 00 00 00 00];
-> +            interrupt-parent = <&gpio>;
-> +            interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> +            spi-max-frequency = <31200000>;
-> +        };
-> +    };
-> -- 
-> 2.20.1
-> 
-> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>

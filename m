@@ -2,135 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443084A9A8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5015E4A9A9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359200AbiBDOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359191AbiBDOBw (ORCPT
+        id S1359228AbiBDOEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:04:55 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4678 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235381AbiBDOEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:01:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E662CC061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:01:51 -0800 (PST)
-Date:   Fri, 4 Feb 2022 15:01:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643983308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cIGjn05QsEEMpX1hWJ4gweSqMP6J0Ol5xFJI7nf6G0=;
-        b=4eMm03kdF74+Hh+eCMctgQ6JuKMFSYPVYw1iMSdejyEoS2mRIj+r7T5D/VtyBl8JHc06LC
-        RsBLpn5IFPIH1WkNUPx2oypHC4auggrP1KSpH7A+ggCvDZEeLXoE/q4+JU2OLkXx/88+ye
-        qX8vvGdVAOiAGW9Tvnh0mM0yBvPShT3CexvEmt1MrrKkCRI2NurWJH3YWOxbcYYHAvXxNn
-        jbo5xJ6OnK5UsJpqlw5KwkENfnGgTZXE5TVhoL8ynh9KVasq5QEV43mPcyMEh32DVolTrJ
-        GNmwVRfL1Y7eYxSqCTgGJ+LWsdJvuzRhkDUO3lbfICy14jCgwusO7mm+YzYTHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643983308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cIGjn05QsEEMpX1hWJ4gweSqMP6J0Ol5xFJI7nf6G0=;
-        b=HS8bgltX7XitUeIHMvlw0MRbnLBRulW0ng4hZGa6Ftx+TwAOkR2XwtUPB7t5ekKJYfFfPa
-        bJWvl+u1bzxRFRAg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v2] random: remove batched entropy locking
-Message-ID: <Yf0xy4kZ2Mn65yp8@linutronix.de>
-References: <CAHmME9pe2BEJV4WiZNHmDmH_XK621Qqr1JCBdgTNZmr4JGBA4w@mail.gmail.com>
- <20220128223548.97807-1-Jason@zx2c4.com>
- <CAHmME9qtjZX2kVNSQqUsTrZv1cdR8y6n3yZS-RnpVCCzX9okcA@mail.gmail.com>
- <Yf0JlXf3ARsBpL9K@linutronix.de>
- <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
+        Fri, 4 Feb 2022 09:04:55 -0500
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jqy2R4j1kz67Xxg;
+        Fri,  4 Feb 2022 22:04:15 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Fri, 4 Feb 2022 15:04:51 +0100
+Received: from localhost (10.47.31.86) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Feb
+ 2022 14:04:51 +0000
+Date:   Fri, 4 Feb 2022 14:04:48 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V6 06/10] cxl/pci: Find the DOE mailbox which supports
+ CDAT
+Message-ID: <20220204140448.00003c23@Huawei.com>
+In-Reply-To: <20220201221841.GO785175@iweiny-DESK2.sc.intel.com>
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+        <20220201071952.900068-7-ira.weiny@intel.com>
+        <20220201184947.5yx4l74nruyoapvr@intel.com>
+        <20220201221841.GO785175@iweiny-DESK2.sc.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.31.86]
+X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-04 14:42:03 [+0100], Jason A. Donenfeld wrote:
-> Hi Sebastian,
-Hi Jason,
+On Tue, 1 Feb 2022 14:18:41 -0800
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-> Please calm down a bit: this patch doesn't minimize the importance of
-> working out a real solution for PREEMPT_RT, and I'm not under the
-> illusion that this one here is the silver bullet. It does, however,
-> have other merits, which may or may not have anything to do with
-> PREEMPT_RT. To reiterate: I am taking your PREEMPT_RT concerns
-> seriously, and I want to come up with a solution to that, which we're
-> working toward more broadly in that other thread.
+> On Tue, Feb 01, 2022 at 10:49:47AM -0800, Widawsky, Ben wrote:
+> > On 22-01-31 23:19:48, ira.weiny@intel.com wrote:  
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > Memory devices need the CDAT data from the device.  This data is read
+> > > from a DOE mailbox which supports the CDAT protocol.
+> > > 
+> > > Search the DOE auxiliary devices for the one which supports the CDAT
+> > > protocol.  Cache that device to be used for future queries.
+> > > 
+> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
 > 
-> Per your feedback on v1, this is no longer marked for stable and no
-> longer purports to fix the PREEMPT_RT issues entirely. Actually, a
-> large motivation for this includes the reason why Andy's original
-> patch was laying around in the first place: we're trying to make this
-> code faster.
-
-The commit in tree you cited is b43db859a36cb553102c9c80431fc44618703bda.
-It does not mention anything regarding faster nor the performance
-improvement and conditions (hoth path, etc). It still has a stable tag.
-
-> I can improve the commit message a bit though.
+> [snip]
 > 
-> On Fri, Feb 4, 2022 at 12:10 PM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
-> > - This splat only occurs with CONFIG_PROVE_RAW_LOCK_NESTING enabled.
+> > >  
+> > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > > index d4ae79b62a14..dcc55c4efd85 100644
+> > > --- a/drivers/cxl/pci.c
+> > > +++ b/drivers/cxl/pci.c
+> > > @@ -536,12 +536,53 @@ static int cxl_dvsec_ranges(struct cxl_dev_state *cxlds)
+> > >  	return rc;
+> > >  }
+> > >  
+> > > +static int cxl_match_cdat_doe_device(struct device *dev, const void *data)
+> > > +{
+> > > +	const struct cxl_dev_state *cxlds = data;
+> > > +	struct auxiliary_device *adev;
+> > > +	struct pci_doe_dev *doe_dev;
+> > > +
+> > > +	/* First determine if this auxiliary device belongs to the cxlds */
+> > > +	if (cxlds->dev != dev->parent)
+> > > +		return 0;  
+> > 
+> > I don't understand auxiliary bus but I'm wondering why it's checking the parent
+> > of the device?  
 > 
-> Right, the commit message for v2 mentions that.
+> auxiliary_find_device() iterates all the auxiliary devices in the system.  This
+> check was a way for the match function to know if the auxiliary device belongs
+> to the cxlds we are interested in...
 > 
-> > - The problem identified by the splat affects only PREEMPT_RT. Non-RT is
-> >   not affected by this.
+> But now that I think about it we could have other auxiliary devices attached
+> which are not DOE...  :-/  So this check is not complete.
 > 
-> Right.
+> FWIW I'm not thrilled with the way auxiliary_find_device() is defined.  And now
+> that I look at it I think the only user of it currently is wrong.  They too
+> have a check like this but it is after another check...  :-/
 > 
-> >
-> > - This patch disables interrupts and invokes extract_crng() which leads
-> >   to other problems.
+> I was hoping to avoid having a list of DOE devices in the cxlds and simply let
+> the auxiliary bus infrastructure do that somehow.  IIRC Jonathan was thinking
+> along the same lines.  I think he actually suggested auxiliary_find_device()...
+
+Ah.. I think I'd been thinking it was scoped to a single parent rather than
+all devices in the system.  Definitely rather horrible.
+Can we do something with device_for_each_child() instead with a match on
+bus type to check its an auxilliary bus device then I guess a name based
+check on whether that is a doe.  etc.
+
+
 > 
-> The existing code, which uses a spinlock, also disables interrupts,
-> right? So this isn't actually regressing in that regard. It just
-> doesn't fix your PREEMPT_RT issue, right?
-
-The existing code uses spin_lock_irqsave() which do not disable on
-PREEMPT_RT. The local_irq_save() on the hand does.
-
-> Or is the issue you see that spinlock_t is a mutex on PREEMPT_RT, so
-> we're disabling interrupts here in a way that we _weren't_ originally,
-> in a PREEMPT_RT context? If that's the case, then I think I see your
-> objection.
-
-Exactly.
- 
-> I wonder if it'd be enough here to disable preemption instead? But
-> then we run into trouble if this is called from an interrupt.
-
-Disabling preemption does not allow to acquire sleeping locks so no win.
-
-> Maybe it'd be best to retain the spinlock_t, which will amount to
-> disabling interrupts on !PREEMPT_RT, since it'll never be contended,
-> but will turn into a mutex on PREEMPT_RT, where it'll do the right
-> thing from an exclusivity perspective. Would this be reasonable?
-
-what does retain the spinlock_t mean since we already have a spinlock_t?
-
-> Andy? Any suggestions?
+> It would be nice if I could have an aux_find_child() or something which
+> iterated the auxiliary devices attached to a particular parent device.  I've
+> just not figured out exactly how to implement that better than what I did here.
 > 
-> Jason
+> >   
+> > > +
+> > > +	adev = to_auxiliary_dev(dev);
+> > > +	doe_dev = container_of(adev, struct pci_doe_dev, adev);
+> > > +
+> > > +	/* If it is one of ours check for the CDAT protocol */
+> > > +	if (pci_doe_supports_prot(doe_dev, PCI_DVSEC_VENDOR_ID_CXL,
+> > > +				  CXL_DOE_PROTOCOL_TABLE_ACCESS))
+> > > +		return 1;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
+> > >  {
+> > >  	struct device *dev = cxlds->dev;
+> > >  	struct pci_dev *pdev = to_pci_dev(dev);
+> > > +	struct auxiliary_device *adev;
+> > > +	int rc;
+> > >  
+> > > -	return pci_doe_create_doe_devices(pdev);
+> > > +	rc = pci_doe_create_doe_devices(pdev);
+> > > +	if (rc)
+> > > +		return rc;
+> > > +
+> > > +	adev = auxiliary_find_device(NULL, cxlds, &cxl_match_cdat_doe_device);
+> > > +
+> > > +	if (adev) {
+> > > +		struct pci_doe_dev *doe_dev = container_of(adev,
+> > > +							   struct pci_doe_dev,
+> > > +							   adev);
+> > > +
+> > > +		/*
+> > > +		 * No reference need be taken.  The DOE device lifetime is
+> > > +		 * longer that the CXL device state lifetime
+> > > +		 */  
+> > 
+> > You're holding a reference to the adev here. Did you mean to drop it?  
+> 
+> Does find device get a reference? ...  Ah shoot I did not see that.
+> 
+> Yea the reference should be dropped somewhere.
+> 
+> Thanks,
+> Ira
+> 
+> >   
+> > > +		cxlds->cdat_doe = doe_dev;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > >  }
+> > >  
+> > >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> > > -- 
+> > > 2.31.1
+> > >   
 
-Sebastian

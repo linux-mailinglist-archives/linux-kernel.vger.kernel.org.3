@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D894AA4AC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7444AA4A5
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378454AbiBDXxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:53:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45760 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378366AbiBDXxc (ORCPT
+        id S1378436AbiBDXxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:53:37 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55808 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378292AbiBDXxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:53:32 -0500
+        Fri, 4 Feb 2022 18:53:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27266B83973;
-        Fri,  4 Feb 2022 23:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B69F9C340F2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5212661CCE;
+        Fri,  4 Feb 2022 23:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BADC340F3;
         Fri,  4 Feb 2022 23:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644018809;
-        bh=Io8OOvJ7kPMPed5CAYEEfGmPgC4ynlJcaTeSoyVPSfk=;
+        bh=6YCDxc9if9WixflkeRLov5G7IDGmcJP5BCW5Y7LJKBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HvNySBPy41L+uE/AP+XKfXsUGiEqyb6EvS/9P6HLdyXgpjXyBfIV0YYNoaIVH58Rz
-         p98ba9dZ1AoeEbEHrXJBsI7b6kjz+cFVYO75jhjJSUiJuN4XGpv94eZYtoLVoUjUWI
-         jRXJuBh8hNGb+jDxKTdYmzWeJgTBtCXv0lv8Wnp/LjkJVuPGVVPf1v0A5Jy7Oiltdk
-         IL6RQfsMazxQsnSztHWdfEwZFh8bS6hIKKAnbZ8EbAbKLIc8b8jqQs+73PUG1Egy0P
-         f49trSNrhjlM5m852TStUkHy1IInkA96Qf+3zEvsuw02KB3NloIvWPGDfD6ky2WJGf
-         ePoBnkn5hLG3A==
+        b=bxcvrbOQEa9zelWGdVI1WCSUBtIUp2FJilBh1uHzj/A2qu06hZVNTMD8iKqEitrY5
+         Zr1ym2xlaWrR+ZNfzRLgU1PwT5vbRXS2uR5Wb6zfMBZvG9KN+OMK7aEzyF6T7T6yPh
+         L0ipUAN40MtDK4kVbFi+ewCtp6cswLJhgtjFi4SKs1YprXzZ7t7cyve68WdGX1Sy4V
+         U1a6IA1kugnSqSMPUXxJ9c1ZeCDkSD37e8V97pKHxl8BH/dAnJBQ2bNAQtpbk2wxRE
+         60wQaDnqc+wPuzbGie6/1eZg0x1XOtHkt3bSkT5rLxW2+JCZ/1lhA2N1WbTI+vRq4G
+         tm/pXf83zpdAw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7AF635C08DD; Fri,  4 Feb 2022 15:53:29 -0800 (PST)
+        id 7CDED5C0992; Fri,  4 Feb 2022 15:53:29 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 4/8] rcutorture: Make rcu_fwd_cb_nodelay be a counter
-Date:   Fri,  4 Feb 2022 15:53:23 -0800
-Message-Id: <20220204235327.2948-4-paulmck@kernel.org>
+Subject: [PATCH rcu 5/8] rcutorture: Add end-of-test check to rcu_torture_fwd_prog() loop
+Date:   Fri,  4 Feb 2022 15:53:24 -0800
+Message-Id: <20220204235327.2948-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220204235321.GA2511@paulmck-ThinkPad-P17-Gen-1>
 References: <20220204235321.GA2511@paulmck-ThinkPad-P17-Gen-1>
@@ -47,86 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Back when only one rcutorture kthread could do forward-progress testing,
-it was just fine for rcu_fwd_cb_nodelay to be a non-atomic bool.  It was
-set at the start of forward-progress testing and cleared at the end.
-But now that there are multiple threads, the value can be cleared while
-one of the threads is still doing forward-progress testing.  This commit
-therefore makes rcu_fwd_cb_nodelay be an atomic counter, replacing the
-WRITE_ONCE() operations with atomic_inc() and atomic_dec().
+The second and subsequent forward-progress kthreads loop waiting for
+the first forward-progress kthread to start the next test interval.
+Unfortunately, if the test ends while one of those kthreads is waiting,
+the test will hang.  This hang occurs because that wait loop fails to
+check for the end of the test.  This commit therefore adds an end-of-test
+check to that wait loop.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcutorture.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/rcu/rcutorture.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index fefc3fa1a9c2a..afe95c6948957 100644
+index afe95c6948957..e99658efd97f4 100644
 --- a/kernel/rcu/rcutorture.c
 +++ b/kernel/rcu/rcutorture.c
-@@ -284,7 +284,7 @@ static atomic_t barrier_cbs_invoked;	/* Barrier callbacks invoked. */
- static wait_queue_head_t *barrier_cbs_wq; /* Coordinate barrier testing. */
- static DECLARE_WAIT_QUEUE_HEAD(barrier_wq);
- 
--static bool rcu_fwd_cb_nodelay;		/* Short rcu_torture_delay() delays. */
-+static atomic_t rcu_fwd_cb_nodelay;	/* Short rcu_torture_delay() delays. */
- 
- /*
-  * Allocate an element from the rcu_tortures pool.
-@@ -387,7 +387,7 @@ rcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
- 	 * period, and we want a long delay occasionally to trigger
- 	 * force_quiescent_state. */
- 
--	if (!READ_ONCE(rcu_fwd_cb_nodelay) &&
-+	if (!atomic_read(&rcu_fwd_cb_nodelay) &&
- 	    !(torture_random(rrsp) % (nrealreaders * 2000 * longdelay_ms))) {
- 		started = cur_ops->get_gp_seq();
- 		ts = rcu_trace_clock_local();
-@@ -1276,7 +1276,7 @@ rcu_torture_writer(void *arg)
- 		boot_ended = rcu_inkernel_boot_has_ended();
- 		stutter_waited = stutter_wait("rcu_torture_writer");
- 		if (stutter_waited &&
--		    !READ_ONCE(rcu_fwd_cb_nodelay) &&
-+		    !atomic_read(&rcu_fwd_cb_nodelay) &&
- 		    !cur_ops->slow_gps &&
- 		    !torture_must_stop() &&
- 		    boot_ended)
-@@ -2290,7 +2290,7 @@ static void rcu_torture_fwd_prog_nr(struct rcu_fwd *rfp,
- 	}
- 
- 	/* Tight loop containing cond_resched(). */
--	WRITE_ONCE(rcu_fwd_cb_nodelay, true);
-+	atomic_inc(&rcu_fwd_cb_nodelay);
- 	cur_ops->sync(); /* Later readers see above write. */
- 	if  (selfpropcb) {
- 		WRITE_ONCE(fcs.stop, 0);
-@@ -2335,7 +2335,7 @@ static void rcu_torture_fwd_prog_nr(struct rcu_fwd *rfp,
- 		destroy_rcu_head_on_stack(&fcs.rh);
- 	}
- 	schedule_timeout_uninterruptible(HZ / 10); /* Let kthreads recover. */
--	WRITE_ONCE(rcu_fwd_cb_nodelay, false);
-+	atomic_dec(&rcu_fwd_cb_nodelay);
- }
- 
- /* Carry out call_rcu() forward-progress testing. */
-@@ -2362,7 +2362,7 @@ static void rcu_torture_fwd_prog_cr(struct rcu_fwd *rfp)
- 		return; /* Can't do call_rcu() fwd prog without ->call. */
- 
- 	/* Loop continuously posting RCU callbacks. */
--	WRITE_ONCE(rcu_fwd_cb_nodelay, true);
-+	atomic_inc(&rcu_fwd_cb_nodelay);
- 	cur_ops->sync(); /* Later readers see above write. */
- 	WRITE_ONCE(rfp->rcu_fwd_startat, jiffies);
- 	stopat = rfp->rcu_fwd_startat + MAX_FWD_CB_JIFFIES;
-@@ -2435,7 +2435,7 @@ static void rcu_torture_fwd_prog_cr(struct rcu_fwd *rfp)
- 	}
- 	schedule_timeout_uninterruptible(HZ); /* Let CBs drain. */
- 	tick_dep_clear_task(current, TICK_DEP_BIT_RCU);
--	WRITE_ONCE(rcu_fwd_cb_nodelay, false);
-+	atomic_dec(&rcu_fwd_cb_nodelay);
- }
- 
- 
+@@ -2515,7 +2515,7 @@ static int rcu_torture_fwd_prog(void *args)
+ 			firsttime = false;
+ 			WRITE_ONCE(rcu_fwd_seq, rcu_fwd_seq + 1);
+ 		} else {
+-			while (READ_ONCE(rcu_fwd_seq) == oldseq)
++			while (READ_ONCE(rcu_fwd_seq) == oldseq && !torture_must_stop())
+ 				schedule_timeout_interruptible(1);
+ 			oldseq = READ_ONCE(rcu_fwd_seq);
+ 		}
 -- 
 2.31.1.189.g2e36527f23
 

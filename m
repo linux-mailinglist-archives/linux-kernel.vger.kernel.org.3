@@ -2,143 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925084A91BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2117A4A91C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356295AbiBDAsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
+        id S1356302AbiBDAxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:53:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiBDAsy (ORCPT
+        with ESMTP id S230386AbiBDAxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:48:54 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F1CC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:48:54 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id h23so3688418pgk.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=OSSThGXk1c14NtbTYKuZLp4HuHXMQO5wwL1SMCrHlsk=;
-        b=NKBt+b0iFwsbOMx48+W3dbmQihfKxJJGpwTkfhRQyMez9seSqqi87tAIEpeKCYrWuU
-         2WDii4Vl16dpExoxWUZGmkVWNidKLtRViBoBZ9cG57usqNIuBHGs5+NTrQIr3+FfXHlG
-         VC7ePHFZ5YlPgb+6MBqrratWnrKWEI99OrpzMpGYG9R6oAVSKlCnIuDdya/x/uUjK7MG
-         iJo6+rJ8GUTOWV2XjPKoh8CHOm4W6JD9eGLJUCp+3gg5+/O+YtvUHzKnjU3NGQDB4NXI
-         MQJhkealoCF83S5BUrsrVAVlR72LRiL7iGNzAFYJJzdlTrzLSXZzs6VeUhCChgu2M3ls
-         6g2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=OSSThGXk1c14NtbTYKuZLp4HuHXMQO5wwL1SMCrHlsk=;
-        b=MPppGYDQ9eRCJTXXjZxZLAxsP5pd/76QlvowI6Q0JM2y2BdN7Dz8sqnX82Aho8Fn+S
-         jhybYuU2RaudGUJPbaSD5dl1zlZi/rfVb6WHsVuzGCqHRRtj0N0P5vqI6Rzg4khPE/1Z
-         fZjvIj/mZcGrswi+WANBvKBtTosTJASNOQUcKZL2keBQ5gB7SjQYX0kiIuAm6s3n2E8e
-         auXuwtAHsGfmcAdiWw5xUcZV/zZ9JYKkkdM5TcsQl0/Fp/ArMWRxsXWmX7h884JJFw4W
-         Sz2lTXV+XYun79/ZVZMlOUam/h8AaCrESgtu4p9mOg4++7J7yrCir59Z9PK/Obam5gm5
-         Tj+Q==
-X-Gm-Message-State: AOAM530LKe8ReBYKWCs8tQqbHRPB5ysUs8BP+G+KYuyyS7TBloss6AgZ
-        6WF0TYn0NV6+foDg+m5dMB1vOA==
-X-Google-Smtp-Source: ABdhPJycE4mPKX3jV7tAeI1NCAnUo4GFHRmG5mxXO7pG+buqSWXhOCDB0bIA5G0IUOPobCygo/qrhQ==
-X-Received: by 2002:a63:6cc5:: with SMTP id h188mr511240pgc.359.1643935734120;
-        Thu, 03 Feb 2022 16:48:54 -0800 (PST)
-Received: from relinquished.localdomain ([2620:10d:c090:400::5:cf6b])
-        by smtp.gmail.com with ESMTPSA id f3sm204538pfe.67.2022.02.03.16.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 16:48:53 -0800 (PST)
-Date:   Thu, 3 Feb 2022 16:48:52 -0800
-From:   Omar Sandoval <osandov@osandov.com>
-To:     =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-Cc:     linux-btrfs@vger.kernel.org, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] btrfs: prevent copying too big compressed lzo segment
-Message-ID: <Yfx39HbTJIM0GRXL@relinquished.localdomain>
-References: <20220202214455.15753-1-davispuh@gmail.com>
- <20220202214455.15753-2-davispuh@gmail.com>
+        Thu, 3 Feb 2022 19:53:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBFDC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:53:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A3DAB83625
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 00:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD2CC340E8;
+        Fri,  4 Feb 2022 00:53:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T3/kD53Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643936020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uKFk+vFcUg3aqrCxmh17gVpNmWGCDQdqig8p98PcVKQ=;
+        b=T3/kD53Q/cO+WsgDkaV3c+mjjX/g1wvbXRRC+3ICPtbX/JvRLjJVs3/vQ5ukfgeC16/e2F
+        030RULvYvXwYnl/MWbvT4trcPyWG4l1PQDLFCwdoaz6AbYIfb/DW0sGxtIgra1SgZtb/mS
+        AD9ZAI2bsicP1dX6mbZ6ni4iAxPOO2g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1986c36f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 4 Feb 2022 00:53:40 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: [PATCH] random: make credit_entropy_bits always safe
+Date:   Fri,  4 Feb 2022 01:53:31 +0100
+Message-Id: <20220204005331.67034-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220202214455.15753-2-davispuh@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 11:44:55PM +0200, Dāvis Mosāns wrote:
-> Compressed length can be corrupted to be a lot larger than memory
-> we have allocated for buffer.
-> This will cause memcpy in copy_compressed_segment to write outside
-> of allocated memory.
-> 
-> This mostly results in stuck read syscall but sometimes when using
-> btrfs send can get #GP
-> 
-> kernel: general protection fault, probably for non-canonical address 0x841551d5c1000: 0000 [#1] PREEMPT SMP NOPTI
-> kernel: CPU: 17 PID: 264 Comm: kworker/u256:7 Tainted: P           OE     5.17.0-rc2-1 #12
-> kernel: Workqueue: btrfs-endio btrfs_work_helper [btrfs]
-> kernel: RIP: 0010:lzo_decompress_bio (./include/linux/fortify-string.h:225 fs/btrfs/lzo.c:322 fs/btrfs/lzo.c:394) btrfs
-> Code starting with the faulting instruction
-> ===========================================
->    0:*  48 8b 06                mov    (%rsi),%rax              <-- trapping instruction
->    3:   48 8d 79 08             lea    0x8(%rcx),%rdi
->    7:   48 83 e7 f8             and    $0xfffffffffffffff8,%rdi
->    b:   48 89 01                mov    %rax,(%rcx)
->    e:   44 89 f0                mov    %r14d,%eax
->   11:   48 8b 54 06 f8          mov    -0x8(%rsi,%rax,1),%rdx
-> kernel: RSP: 0018:ffffb110812efd50 EFLAGS: 00010212
-> kernel: RAX: 0000000000001000 RBX: 000000009ca264c8 RCX: ffff98996e6d8ff8
-> kernel: RDX: 0000000000000064 RSI: 000841551d5c1000 RDI: ffffffff9500435d
-> kernel: RBP: ffff989a3be856c0 R08: 0000000000000000 R09: 0000000000000000
-> kernel: R10: 0000000000000000 R11: 0000000000001000 R12: ffff98996e6d8000
-> kernel: R13: 0000000000000008 R14: 0000000000001000 R15: 000841551d5c1000
-> kernel: FS:  0000000000000000(0000) GS:ffff98a09d640000(0000) knlGS:0000000000000000
-> kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> kernel: CR2: 00001e9f984d9ea8 CR3: 000000014971a000 CR4: 00000000003506e0
-> kernel: Call Trace:
-> kernel:  <TASK>
-> kernel: end_compressed_bio_read (fs/btrfs/compression.c:104 fs/btrfs/compression.c:1363 fs/btrfs/compression.c:323) btrfs
-> kernel: end_workqueue_fn (fs/btrfs/disk-io.c:1923) btrfs
-> kernel: btrfs_work_helper (fs/btrfs/async-thread.c:326) btrfs
-> kernel: process_one_work (./arch/x86/include/asm/jump_label.h:27 ./include/linux/jump_label.h:212 ./include/trace/events/workqueue.h:108 kernel/workqueue.c:2312)
-> kernel: worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2455)
-> kernel: ? process_one_work (kernel/workqueue.c:2397)
-> kernel: kthread (kernel/kthread.c:377)
-> kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
-> kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
-> kernel:  </TASK>
-> 
-> Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
-> ---
->  fs/btrfs/lzo.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/fs/btrfs/lzo.c b/fs/btrfs/lzo.c
-> index 31319dfcc9fb..ebaa5083f2ae 100644
-> --- a/fs/btrfs/lzo.c
-> +++ b/fs/btrfs/lzo.c
-> @@ -383,6 +383,13 @@ int lzo_decompress_bio(struct list_head *ws, struct compressed_bio *cb)
->  		kunmap(cur_page);
->  		cur_in += LZO_LEN;
->  
-> +		if (seg_len > WORKSPACE_CBUF_LENGTH) {
-> +			// seg_len shouldn't be larger than we have allocated for workspace->cbuf
-> +			btrfs_err(fs_info, "unexpectedly large lzo segment len %u", seg_len);
-> +			ret = -EUCLEAN;
-> +			goto out;
-> +		}
-> +
+This is called from various hwgenerator drivers, so rather than having
+one "safe" version for userspace and one "unsafe" version for the
+kernel, just make everything safe; the checks are cheap and sensible to
+have anyway.
 
-Oof, the fact that we weren't checking this is pretty bad... Shouldn't
-we also be checking that seg_len is within the size of the remaining
-input?
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Reported-by: Sultan Alsawaf <sultan@kerneltoast.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 29 +++++++++--------------------
+ 1 file changed, 9 insertions(+), 20 deletions(-)
 
->  		/* Copy the compressed segment payload into workspace */
->  		copy_compressed_segment(cb, workspace->cbuf, seg_len, &cur_in);
->  
-> -- 
-> 2.35.1
-> 
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index a1c681a616a6..7576a8b53c57 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -525,18 +525,15 @@ static void process_random_ready_list(void)
+ 	spin_unlock_irqrestore(&random_ready_list_lock, flags);
+ }
+ 
+-/*
+- * Credit (or debit) the entropy store with n bits of entropy.
+- * Use credit_entropy_bits_safe() if the value comes from userspace
+- * or otherwise should be checked for extreme values.
+- */
+ static void credit_entropy_bits(int nbits)
+ {
+ 	int entropy_count, orig;
+ 
+-	if (!nbits)
++	if (nbits <= 0)
+ 		return;
+ 
++	nbits = min(nbits, POOL_BITS);
++
+ 	do {
+ 		entropy_count = orig = READ_ONCE(input_pool.entropy_count);
+ 		entropy_count = min(POOL_BITS, entropy_count + nbits);
+@@ -548,18 +545,6 @@ static void credit_entropy_bits(int nbits)
+ 		crng_reseed(&primary_crng, true);
+ }
+ 
+-static int credit_entropy_bits_safe(int nbits)
+-{
+-	if (nbits < 0)
+-		return -EINVAL;
+-
+-	/* Cap the value to avoid overflows */
+-	nbits = min(nbits, POOL_BITS);
+-
+-	credit_entropy_bits(nbits);
+-	return 0;
+-}
+-
+ /*********************************************************************
+  *
+  * CRNG using CHACHA20
+@@ -1606,7 +1591,10 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 			return -EPERM;
+ 		if (get_user(ent_count, p))
+ 			return -EFAULT;
+-		return credit_entropy_bits_safe(ent_count);
++		if (ent_count < 0)
++			return -EINVAL;
++		credit_entropy_bits(ent_count);
++		return 0;
+ 	case RNDADDENTROPY:
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+@@ -1619,7 +1607,8 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 		retval = write_pool((const char __user *)p, size);
+ 		if (retval < 0)
+ 			return retval;
+-		return credit_entropy_bits_safe(ent_count);
++		credit_entropy_bits(ent_count);
++		return 0;
+ 	case RNDZAPENTCNT:
+ 	case RNDCLEARPOOL:
+ 		/*
+-- 
+2.35.0
+

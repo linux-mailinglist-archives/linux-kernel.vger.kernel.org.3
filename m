@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B7D4A974F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0E14A9752
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358056AbiBDKAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 05:00:21 -0500
-Received: from mail-vk1-f179.google.com ([209.85.221.179]:37658 "EHLO
-        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235147AbiBDKAU (ORCPT
+        id S1358077AbiBDKAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358064AbiBDKAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 05:00:20 -0500
-Received: by mail-vk1-f179.google.com with SMTP id v192so3375334vkv.4;
-        Fri, 04 Feb 2022 02:00:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0qfMcnOHtfS1bLvkZ8irbT3G/RJ7P/0NHu2x4nFmRtw=;
-        b=2xw2UMpfKiO3WzxCXCh7+reYDrUgvZu9ZTKGMnYTnioClFuf5YnMXuk19YEyiKBWfW
-         nRtTm3q5eBWfnzExPlf8zpYoUjSo4s9cWPvizK4IS7u0IqDauHMtROeVjRuCO/5fDN32
-         9Ky25GWHd7DY/50yN7F7/1oVPvPpewVCNWNRvUmQ01Bc7l/dts5b3lBESmoVIucuuSA7
-         ZFI6j/2LPP9kFTU+gWQSaR/lBnkntbUHR2Qm1DJZdGQj2bxIettJUphjThTpm0aBnYZx
-         r99WeNSOtoBxNKD6gC/v00MX5yda2UVNarRHpC/R1t/Juv4yobKEP1ybpJrbLei6ri+g
-         xJkQ==
-X-Gm-Message-State: AOAM5305xsAT+A6/SlKtjQosR4vVuSpEyW2jGCN6k+kkEMJkA1Z8IrZc
-        O8ukMidOjduMBJRf3pqVVrGplNUh1QF4UA==
-X-Google-Smtp-Source: ABdhPJxs+SX/pZZIfPB2cn5+6xbGmW+ui8LTaVrvuvAtcu06ygFX8AHnIJoUA8DYe23OL9pKVNhoLA==
-X-Received: by 2002:a05:6122:d06:: with SMTP id az6mr742309vkb.22.1643968819243;
-        Fri, 04 Feb 2022 02:00:19 -0800 (PST)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id e1sm296324vsh.19.2022.02.04.02.00.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 02:00:18 -0800 (PST)
-Received: by mail-ua1-f51.google.com with SMTP id p7so9922985uao.6;
-        Fri, 04 Feb 2022 02:00:18 -0800 (PST)
-X-Received: by 2002:a67:5f83:: with SMTP id t125mr528892vsb.68.1643968818566;
- Fri, 04 Feb 2022 02:00:18 -0800 (PST)
+        Fri, 4 Feb 2022 05:00:21 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAEEC06173D;
+        Fri,  4 Feb 2022 02:00:21 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFvO6-0005Ng-6Z; Fri, 04 Feb 2022 11:00:18 +0100
+Message-ID: <9d10a295-e087-fbbf-3714-63c872cc6dd6@leemhuis.info>
+Date:   Fri, 4 Feb 2022 11:00:17 +0100
 MIME-Version: 1.0
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch> <20220131210552.482606-5-daniel.vetter@ffwll.ch>
-In-Reply-To: <20220131210552.482606-5-daniel.vetter@ffwll.ch>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 4 Feb 2022 11:00:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUL=8xay27vvBvbv0iQ0T0oSwMgxMNrLdDmj03ozAM4Gw@mail.gmail.com>
-Message-ID: <CAMuHMdUL=8xay27vvBvbv0iQ0T0oSwMgxMNrLdDmj03ozAM4Gw@mail.gmail.com>
-Subject: Re: [PATCH 04/21] fbcon: delete a few unneeded forward decl
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Du Cheng <ducheng2@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Claudio Suarez <cssk@net-c.es>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
+Content-Language: en-BS
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
+ <20220130163725.GA2792319@roeck-us.net>
+ <20220131100845.GA19252@alpha.franken.de>
+ <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
+In-Reply-To: <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643968821;2f4d6b38;
+X-HE-SMSGID: 1nFvO6-0005Ng-6Z
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 9:50 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
-> I didn't bother with any code movement to fix the others, these just
-> got a bit in the way.
->
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+On 04.02.22 10:26, Thorsten Leemhuis wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Anyway: I no big deal (just makes regression tracking a lot harder), I
+> can tell regzbot manually about the fix:
+> 
+> #regzbot introduced: 50317b636e7184d
 
-Gr{oetje,eeting}s,
+Argh, sorry, stupid me doesn't known how to use his own bot:
 
-                        Geert
+#regzbot introduced: fa62f39dc7e2
+#regzbot fixed-by: 50317b636e7184d
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+:-/ Sorry for the noise.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Ciao, Torsten

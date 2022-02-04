@@ -2,156 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD054A9B86
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700564A9B87
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355195AbiBDO5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:57:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S241015AbiBDO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiBDO5H (ORCPT
+        with ESMTP id S231511AbiBDO5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:57:07 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F193EC061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:57:06 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v190so3289761ybv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SwumegfjcMitZ0X6YmiKd4footM3jVcdRJ4mMFkS/fo=;
-        b=FeSXlIchl3LMLRNfp6XpPBmVxCVn0cWAFIk76DLWuKOvXKUS2+6hHbcgUx4/GB7zxH
-         EjE9TiduTNkDTPRhv5Y+T6YWWg1f9rdj7cbThPdTL05obG+buR5cD6WnKEeskv3Q+2JB
-         VEli8A7Z0wD3AU5KHrQWY8gLaIgZ/JeAvTjGId+PJj6smLgqzHAFDOwz2QoY234Pv+h8
-         sJ2xQRExKQarAGj5LOG/MojCxfTh+n7hcepeB6A1h/AM0LbXqkdOMvjXypYHEzr95S3s
-         j0DsFD4FGaLaIqsUFuuTlct5Bdy721euWkO8uNgep9hG9qC3W0wu62//qtYNKe/303Lb
-         HNzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SwumegfjcMitZ0X6YmiKd4footM3jVcdRJ4mMFkS/fo=;
-        b=qtBktVrdOdAMJy3vI36ItoR5/9A3nyoQk7GT/rZMbbyvKEaMK5odmwLAUpunPHFX83
-         pVl3hY23tyB/bEdo2KnOR1xF2XN4j611VDqAb1CygXXbTvInZEwIF0oGJD5sDqNf0wkM
-         39uC7LkdXIS4Na/hzhJK2YRjipHSJN5uFjfSZOxziUWF5rQCI5I2mi7TV4E8tE6fQY4T
-         baYrrVH/cNK5w2vxEBabtxw81PWYJGP1D5ciJrnswvEfGjLZPBkiKRqF8vrhndY8hp7K
-         aTUZL4kCWa3Np/s8ZfPVnDowy07dt4x8Lvg7nYUtDAs9cDeI4GbMDCAOL+3XwU34Kd+P
-         LJgQ==
-X-Gm-Message-State: AOAM533EPKzp3DjeCzmBsp49GuThPLqPNSYYAiGOVLaKI/SPf54Ct6xE
-        QNwasvWnm1xaETm+1eMfYq4TY8xpPShug3NdLQ9NUA==
-X-Google-Smtp-Source: ABdhPJx0wlgvm3LhvjuHzsZsTbue3KBcLwFrjNrYsuS7hrDIcoqZ1Kg9WQsut6pe6ysBOXbwWB6/jw5FTDPSoyHsbV0=
-X-Received: by 2002:a25:d4c7:: with SMTP id m190mr3092852ybf.375.1643986625183;
- Fri, 04 Feb 2022 06:57:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20220204073940.1258263-1-eranian@google.com> <Yf0Sk5dT4HXviI+M@FVFF77S0Q05N>
-In-Reply-To: <Yf0Sk5dT4HXviI+M@FVFF77S0Q05N>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Fri, 4 Feb 2022 06:56:53 -0800
-Message-ID: <CABPqkBQ9ObFv+gc8Oo5OTuSMduj_jqYqPt98Uks_gGTYtmRg2Q@mail.gmail.com>
-Subject: Re: [PATCH] perf/arm64: fix mapping for HW_BRANCH_INSTRUCTIONS on PMUv3
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, ashoks@broadcom.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 4 Feb 2022 09:57:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F69C061714;
+        Fri,  4 Feb 2022 06:57:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B1C461357;
+        Fri,  4 Feb 2022 14:57:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24ADBC340E9;
+        Fri,  4 Feb 2022 14:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643986667;
+        bh=73kyMla1rARD0eouCsRmwt+XNkfQp2gCtf6K21kLxRU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d3o+jZkCEx+EGHIgqj8zJtf/ominRCuBCnfTnii69KIYijpUajRPwx90Wr2ynm3Aj
+         YA/xLYwUlMdNPMsjEGW66zZAujqmPOYWEMvNAmH3yejDjIBQH3mb+dftZqDMCcjvnh
+         rgBCMXoVn/WAQUSN7dKZIwG2LSK22aFAsdBzYLjevWQZaOAKMtAUU0ifqEZzeuJD51
+         +KTpnN0aqwJ0kMVVb3Ha1c/vnJQ+JUmgKTVqpbNBguM2rHn1ZBwparW3/D4lugoATi
+         8yt5p803VgQF+MC1DmJvo8xzrfrDg5AwVRnedOEXXBLNdwCK34AGtb30GtDo7xDhKG
+         FO1n05Q4AStWA==
+Date:   Fri, 4 Feb 2022 23:57:37 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        masami.hiramatsu.pt@hitachi.com, eranian@google.com
+Subject: Re: [PATCH v2 0/4] Reference count checker and related fixes
+Message-Id: <20220204235737.657675e6e468c367c13fc1b2@kernel.org>
+In-Reply-To: <CAP-5=fVeQ4rzgpD3PS5-147xOp=wp+8U-rkLRqreJ616Vy89rA@mail.gmail.com>
+References: <20220125204602.4137477-1-irogers@google.com>
+        <CAP-5=fXyJeX3b3egcAOfPndmYhakrsdKu7HttnHEH2DKP-6Vxw@mail.gmail.com>
+        <20220128142348.17d51894dbdb35c9a9449567@kernel.org>
+        <CAP-5=fXHudKqO4+0rbO9X3Ny+Cq7+KsHbKf4P8P24SjF0S232Q@mail.gmail.com>
+        <20220129003450.77116209763f7e06d285e654@kernel.org>
+        <CAP-5=fVoP9MAVsj7SdrxRjkr1Jt=XZ7Vf_FAooXA7B2OrC=XMA@mail.gmail.com>
+        <20220130165455.422f26c869bd3579c2d305a7@kernel.org>
+        <CAP-5=fVeQ4rzgpD3PS5-147xOp=wp+8U-rkLRqreJ616Vy89rA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 3:48 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Stephane,
->
-> On Thu, Feb 03, 2022 at 11:39:40PM -0800, Stephane Eranian wrote:
-> > With the existing code, the following command:
-> >
-> > $ perf stat -e branches sleep 0
-> >  Performance counter stats for 'sleep 0':
-> >    <not supported>      branches
-> >
-> > on N1 core (pmuv3).
->
-> This is definitely not ideal. :(
->
-> > This is due to the fact that the mapping for the generic event is wrong.
->
-> I don't think that's quite true; more detail below. This is certainly *messy*
-> though.
->
-> > It is using ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED which is not implemented
-> > on N1 (and most likely on any PMUv3 implementations). However, there is
-> > another supported event ARMV8_PMUV3_PERFCTR_BR_RETIRED measuring the same
-> > condition.
->
-> I have a couple of concerns here:
->
-> 1) Both PC_WRITE_RETIRED and BR_RETIRED are OPTIONAL (though the Arm strongly
->    recommends that BR_RETIRED is implemented), so CPUs may exist which only
->    support one of the two, or both.
->
-That was my fear here.
+On Sun, 30 Jan 2022 09:40:21 -0800
+Ian Rogers <irogers@google.com> wrote:
 
->    So as-is, this patch may break working support for CPUs which have
->    PC_WRITE_RETIRED but not BR_RETIRED.
->
->    IIUC we should be able to detect whether either are implemented by looking
->    at PMCEID, and we could take that into account when mapping the event.
->
-> 2) IIUC (even with ARMv8.6) there is a potential semantic difference between
->    PC_WRITE_RETIRED and BR_RETIRED, in that e.g. PC_WRITE_RETIRED must include
->    exception returns while this is IMPLEMENTATION DEFINED for BR_RETIRED.
->
->    I guess this might not matter all that much given the precise definition of
->    "Software change of the PC" is IMPLEMENTATION DEFINED, but I don't think
->    it's true that the two events count "the same condition", and we should be
->    more explicit about that.
->
-It also depends on the Linux definition for "branches" which I have never seen.
-So all we can do is look at the x86 variants and check on the
-exception return case.
-I will do that.
-
-> > This patch switches the mapping to ARMV8_PMUV3_PERFCTR_BR_RETIRED so that
-> > the perf stat command above works.
+> > > > Hi Ian,
+> > > >
+> > > > Hmm, but such a macro is not usual for C which perf is written in.
+> > > > If I understand correctly, you might want to use memory leak
+> > > > analyzer to detect refcount leak, and that analyzer will show
+> > > > what data structure is leaked.
+> > >
+> > > Firstly, thanks for the conversation - this is really useful to
+> > > improve the code!
 > >
-> > Signed-off-by: Stephane Eranian <eranian@google.com>
-> > ---
-> >  arch/arm64/kernel/perf_event.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > Hi Ian,
 > >
-> > diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-> > index cab678ed6618..ec2b98343a0b 100644
-> > --- a/arch/arm64/kernel/perf_event.c
-> > +++ b/arch/arm64/kernel/perf_event.c
-> > @@ -45,7 +45,7 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
-> >       [PERF_COUNT_HW_INSTRUCTIONS]            = ARMV8_PMUV3_PERFCTR_INST_RETIRED,
-> >       [PERF_COUNT_HW_CACHE_REFERENCES]        = ARMV8_PMUV3_PERFCTR_L1D_CACHE,
-> >       [PERF_COUNT_HW_CACHE_MISSES]            = ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
-> > -     [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]     = ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
-> > +     [PERF_COUNT_HW_BRANCH_INSTRUCTIONS]     = ARMV8_PMUV3_PERFCTR_BR_RETIRED,
->
-> As above, I don't think we can unconditionally make this change, and instead
-> should have the mapping function take PMCEID into account to map the event (or
-> bail out if we don't know a suitable event is implemented).
->
-The PMCEID does contains what's implemented and that it why the event
-disappears on some implementation.
-So instead we could use it to adjust the mapping. Let me try to do
-that instead at least for this event given there is
-a choice of mapping. And yes, if neither of these exist then the event
-does not exist.
-
-There is always the possibility to use an actual event code and that
-bypasses the PMCEID check.
-
-
-> Thanks,
-> Mark.
->
-> >       [PERF_COUNT_HW_BRANCH_MISSES]           = ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
-> >       [PERF_COUNT_HW_BUS_CYCLES]              = ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
-> >       [PERF_COUNT_HW_STALLED_CYCLES_FRONTEND] = ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
-> > --
-> > 2.35.0.263.gb82422642f-goog
+> > You're welcome! This conversation also useful to me to understand
+> > the issue deeper :-)
 > >
+> > > I think in an ideal world we'd somehow educate things like address
+> > > sanitizer of reference counted data structures and they would do a
+> > > better job of tracking gets and puts. The problem is pairing gets and
+> > > puts.
+> >
+> > Agreed. From my experience, pairing gets and puts are hard without
+> > reviewing the source code, since the refcounter is not only used in a
+> > single function, but it is for keeping the object not released until
+> > some long process is finished.
+> >
+> > For example, if the correct pair is like below, funcA-funcD, funcB-funcC,
+> > funcA (get)
+> > funcB (get)
+> > funcC (put)
+> > funcD (put)
+> >
+> > But depending on the execution timing, funcC/funcD can be swapped.
+> > funcA (get)
+> > funcB (get)
+> > funcD (put)
+> > funcC (put)
+> >
+> > And if there is a bug, funcX may get the object by mistake.
+> > funcA (get)
+> > funcX (get)
+> > funcB (get)
+> > funcD (put)
+> > funcC (put)
+> >
+> > Or, funcC() might miss to put.
+> > funcA (get)
+> > funcB (get)
+> > funcD (put)
+> >
+> > In any case, just tracking the get/put, it is hard to know which pair
+> > is not right. I saw these patterns when I debugged it. :(
+> 
+> Yep, I've found this issue too :-) The get is being used for the
+> side-effect of incrementing a reference count rather than for
+> returning the value. This happened in cpumap merge and was easy to fix
+> there.
+> 
+> This problem is possible in general, but I think if it were common we
+> are doomed. I don't think this pattern is common though. In general a
+> reference count is owned by something, the scope of a function or the
+> lifetime of a list. If puts were adhoc then it would mean that one
+> occurring in a function could be doing it for the side effect of
+> freeing on a list. I don't think the code aims to do that. Making the
+> code clean with pairing gets and puts is an issue, like with the
+> cpumap merge change.
+
+Hi Ian,
+Sorry for waiting.
+
+I got the pairing of get/put is not so hard if we use your
+programing pattern. The problem was the posession of the object.
+As you proposed, if we force users to use the returning "token"
+instead of object pointer itself as below;
+
+funcA(obj) {
+  token = get(obj);
+  get_obj(token)->...
+  put(token);
+}
+
+Then it is clear who leaks the token.
+
+ funcA (get-> token1)
+ funcX (get-> token3)
+ funcB (get-> token2)
+ funcD (put-> token2)
+ funcC (put-> token1)
+
+In this case token3 is not freed, thus the funcX's pair is lost.
+Or,
+
+ funcA (get-> token1)
+ funcB (get-> token2)
+ funcD (put-> token2)
+
+In this case funcA's pair is lost.
+
+And if the user access object with the token which already put,
+it can be detected.
+
+
+> 
+> > > In C++ you use RAII types so that the destructor ensures a put -
+> > > this can be complex when using data types like lists where you want to
+> > > move or swap things onto the list, to keep the single pointer
+> > > property. In the C code in Linux we use gotos, similarly to how defer
+> > > is used in Go. Anyway, the ref_tracker that Eric Dumazet added solved
+> > > the get/put pairing problem by adding a cookie that is passed around.
+> >
+> > Cool! I will check the ref_tracker :)
+> >
+> > > The problem with that is that then the cookie becomes part of the API.
+> >
+> > What the cookie is? some pairing function address??
+> 
+> As I understand it, a token to identify a get.
+
+Yeah, I slightly missed that your API will force caller to use the
+returning token instead of object.
+So, what about using token always, instead of wrapping the object
+pointer only when debugging?
+
+I felt uncomfortable about changing the data structure name according
+to the debug macro. Instead, it is better way for me if get() always
+returns a token of the object and users need to convert the
+token to the object. For example;
+
+struct perf_cpu_map {
+...
+};
+
+#ifdef REFCNT_CHECKING
+typedef struct {struct perf_cpu_map *orig;} perf_cpu_map_token_t;
+#else
+typedef unsigned long perf_cpu_map_token_t;	/* actually this is "struct perf_cpu_map *" */
+#endif
+
+perf_cpu_map_token_t perf_cpu_map__get(struct perf_cpu_map *map);
+void perf_cpu_map__put(struct perf_cpu_map_token_t tok);
+
+This explicitly forces users to convert the token to the object
+when using it. Of course if a user uses the object pointer ("map" here)
+directly, the token is not used. But we can check such wrong usage by
+compilation.
+
+[...]
+> > So my question is that we need to pay the cost to use UNWRAP_ macro
+> > on all those object just for finding the "use-after-put" case.
+> > Usually the case that "use-after-put" causes actual problem is very
+> > limited, or it can be "use-after-free".
+> 
+> So the dso->nsinfo case was a use after put once we added in the
+> missing put - it could also be thought of as a double put/free. In
+> general use-after-put is going to show where a strict get-then-put
+> isn't being followed, if we make sure of that property then the
+> reference counting will be accurate.
+
+The double free/put will be detected different way. But indeed the
+use-after-put can be overlooked (I think there actually be the
+case, it should be "use-after-free" but it depends on the timing.)
+
+> 
+> A case that came up previously was maps__find:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/map.c#n974
+> this code retuns a map but without doing a get on it, even though a
+> map is reference counted:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/map.h#n46
+> If we change that code to return a get of the map then we add overhead
+> for simple cases of checking a map is present - you can infer you have
+> a reference count on the map if you have it on the maps. The
+> indirection allows the code to remain as-is, while being able to catch
+> misuse.
+
+I don't think using the UNWRAP_* macro is "remain as-is" ;) but I agree
+with you that can catch the misuse.
+
+IMHO, I rather like using the explicit token. I don't like to see
+"UNWRAP_map(map)->field", but "GET_map(token)->field" is good for me.
+This is because the "map" should be a pointer of data structure (so
+its field can be accessed without any wrapper), but token is just a
+value (so this implies that it must be converted always). 
+In other words, "map->field" looks natural for reviewing, but
+"token->field" looks obviously strange.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

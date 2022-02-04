@@ -2,306 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349864A9D8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44544A9D8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376839AbiBDRSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:18:03 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:50417 "EHLO m43-7.mailgun.net"
+        id S1376856AbiBDRSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:18:51 -0500
+Received: from mga12.intel.com ([192.55.52.136]:3932 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234482AbiBDRSC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:18:02 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1643995082; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
- Subject: Sender; bh=xeHh+pa7fmmtJaUQiZc4mFN9NjxA7Uxxmuyz53pl2r8=; b=XFfHjccbLAH2P0xoaglqp2XHgPCn9ho0W5b4LUZ3h326/9AMhqEH/qo6X40+GngHlWgkoGgY
- ZgKggQz8WE2FX/Q0cDA53kDiGMUnJZ4Gk6NZOT/Wapyd1Eum4bPWnAN7KakNmrG6wFioqHhK
- q2gUfLtzWhTMF1ZM0zCmQL7XLAw=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 61fd5fb342b0db82d20af68b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 04 Feb 2022 17:17:39
- GMT
-Sender: sricharan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 48747C4360C; Fri,  4 Feb 2022 17:17:38 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.104] (unknown [183.82.28.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sricharan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E2448C4338F;
-        Fri,  4 Feb 2022 17:17:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org E2448C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-From:   Sricharan Ramabadhran <sricharan@codeaurora.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>, pragalla@codeaurora.org,
-        ~postmarketos/upstreaming@lists.sr.ht, martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
-        bbhatt@codeaurora.org, hemantk@codeaurora.org
-References: <20220113184427.2259509-1-konrad.dybcio@somainline.org>
- <20220114082718.32a2fc83@xps13> <20220126111613.3ab0021e@xps13>
- <20220126103316.GA212068@thinkpad> <20220126114200.4cc3c21b@xps13>
- <fc80a6e7-bd44-3b3e-fca2-1316a76d65f5@codeaurora.org>
- <a6fcc533-e7cd-7b55-4db0-cec80c07b46a@codeaurora.org>
- <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
- <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
- <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
- <20220201145204.54646475@xps13>
- <d79bf21d-5a90-0074-cef6-896f66e80d28@somainline.org>
- <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
-Message-ID: <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
-Date:   Fri, 4 Feb 2022 22:47:27 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S1349319AbiBDRSv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 12:18:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643995131; x=1675531131;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=H6JsNS4k6lAN+ph09h1fkrO9MV3r0nkNnGhq/yb3Fh8=;
+  b=hpX08MNHsuOqCXVdK5rBmMe+9Uea6FtxIOaTjfqsXvRXk7Vz9JYc/wvY
+   pjUVWWrMbrnU3AfBm6D6/Hr2iGxlu3Ci5zqdzV/ErsRUMObGhKyNaJfIt
+   XEKnB7enNWZ23ajPP+D++k+MmEvQ7epve2eTQyIz8WFAYDVx1CAyqCda2
+   GKNr86V4WBzByYLdYc1l9xhGJV3ZHqeDaEt1kwy5Z8ISjdDtreHxvZTA8
+   T59MV8CnOYjERQt8c5/9w7WZuJkIOKNdlf1vzmdHChDOapKFFmDzMndso
+   +sYeIZMnJSaIF1gZIivj1+LJK6i9zPf+MenNduz9SvYfHsni0c3EjvFU/
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="228376435"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="228376435"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:18:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="584190781"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 04 Feb 2022 09:18:36 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG2EF-000XvO-Oa; Fri, 04 Feb 2022 17:18:35 +0000
+Date:   Sat, 5 Feb 2022 01:18:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [nsaenz-rpi:pcplists-rcu-drain-v1 2/2] mm/page_alloc.c:3245:28:
+ sparse: sparse: incorrect type in assignment (different address spaces)
+Message-ID: <202202050150.PQssjWMS-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git pcplists-rcu-drain-v1
+head:   01b58921eae8d67b3ad6b05e73c2a1dd7106ae28
+commit: 01b58921eae8d67b3ad6b05e73c2a1dd7106ae28 [2/2] mm/page_alloc: Add remote draining support to per-cpu lists
+config: h8300-randconfig-s032-20220201 (https://download.01.org/0day-ci/archive/20220205/202202050150.PQssjWMS-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=01b58921eae8d67b3ad6b05e73c2a1dd7106ae28
+        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
+        git fetch --no-tags nsaenz-rpi pcplists-rcu-drain-v1
+        git checkout 01b58921eae8d67b3ad6b05e73c2a1dd7106ae28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
 
-On 2/2/2022 12:54 PM, Sricharan Ramabadhran wrote:
-> Hi Konrad/Miquel,
->
-> On 2/1/2022 9:21 PM, Konrad Dybcio wrote:
->>
->> On 01/02/2022 14:52, Miquel Raynal wrote:
->>> Hi Konrad,
->>>
->>> konrad.dybcio@somainline.org wrote on Mon, 31 Jan 2022 20:54:12 +0100:
->>>
->>>> On 31/01/2022 15:13, Sricharan Ramabadhran wrote:
->>>>> Hi Konrad,
->>>>>
->>>>> On 1/31/2022 3:39 PM, Konrad Dybcio wrote:
->>>>>> On 28/01/2022 18:50, Sricharan Ramabadhran wrote:
->>>>>>> Hi Konrad,
->>>>>>>
->>>>>>> On 1/28/2022 9:55 AM, Sricharan Ramabadhran wrote:
->>>>>>>> Hi Miquel,
->>>>>>>>
->>>>>>>> On 1/26/2022 4:12 PM, Miquel Raynal wrote:
->>>>>>>>> Hi Mani,
->>>>>>>>>
->>>>>>>>> mani@kernel.org wrote on Wed, 26 Jan 2022 16:03:16 +0530:
->>>>>>>>>> On Wed, Jan 26, 2022 at 11:16:13AM +0100, Miquel Raynal wrote:
->>>>>>>>>>> Hello,
->>>>>>>>>>>
->>>>>>>>>>> miquel.raynal@bootlin.com wrote on Fri, 14 Jan 2022 08:27:18 
->>>>>>>>>>> +0100:
->>>>>>>>>>>> Hi Konrad,
->>>>>>>>>>>>
->>>>>>>>>>>> konrad.dybcio@somainline.org wrote on Thu, 13 Jan 2022 
->>>>>>>>>>>> 19:44:26 >>>>>>>> +0100:
->>>>>>>>>>>>> While I have absolutely 0 idea why and how, running 
->>>>>>>>>>>>> >>>>>>>>> clear_bam_transaction
->>>>>>>>>>>>> when READID is issued makes the DMA totally clog up and 
->>>>>>>>>>>>> refuse >>>>>>>>> to function
->>>>>>>>>>>>> at all on mdm9607. In fact, it is so bad that all the data 
->>>>>>>>>>>>> >>>>>>>>> gets garbled
->>>>>>>>>>>>> and after a short while in the nand probe flow, the CPU 
->>>>>>>>>>>>> >>>>>>>>> decides that
->>>>>>>>>>>>> sepuku is the only option.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Removing _READID from the if condition makes it work like 
->>>>>>>>>>>>> a >>>>>>>>> charm, I can
->>>>>>>>>>>>> read data and mount partitions without a problem.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>>>>>>>>>>>> ---
->>>>>>>>>>>>> This is totally just an observation which took me an 
->>>>>>>>>>>>> inhumane >>>>>>>>> amount of
->>>>>>>>>>>>> debug prints to find.. perhaps there's a better reason 
->>>>>>>>>>>>> behind >>>>>>>>> this, but
->>>>>>>>>>>>> I can't seem to find any answers.. Therefore, this is a 
->>>>>>>>>>>>> BIG RFC!
->>>>>>>>>>>> I'm adding two people from codeaurora who worked a lot on 
->>>>>>>>>>>> this >>>>>>>> driver.
->>>>>>>>>>>> Hopefully they will have an idea :)
->>>>>>>>>>> Sadre, I've spent a significant amount of time reviewing 
->>>>>>>>>>> your >>>>>>> patches,
->>>>>>>>>>> now it's your turn to not take a month to answer to your peers
->>>>>>>>>>> proposals.
->>>>>>>>>>>
->>>>>>>>>>> Please help reviewing this patch.
->>>>>>>>>> Sorry. I was hoping that Qcom folks would chime in as I don't 
->>>>>>>>>> >>>>>> have any idea
->>>>>>>>>> about the mdm9607 platform. It could be that the mail server 
->>>>>>>>>> >>>>>> migration from
->>>>>>>>>> codeaurora to quicinc put a barrier here.
->>>>>>>>>>
->>>>>>>>>> Let me ping them internally.
->>>>>>>>> Oh, ok, I didn't know. Thanks!
->>>>>>>>     Sorry Miquel, somehow we did not get this email in our inbox.
->>>>>>>>     Thanks to Mani for pinging us, we will test this up today 
->>>>>>>> and >>>> get back.
->>>>>>>        While we could not reproduce this issue on our ipq boards 
->>>>>>> (do >>> not have a mdm9607 right now) and
->>>>>>>         issue does not look any obvious.
->>>>>>>        can you please give the debug logs that you did for the 
->>>>>>> above >>> stage by stage ?
->>>>>> I won't have access to the board for about two weeks, sorry.
->>>>>>
->>>>>> When I get to it, I'll surely try to send you the logs, though there
->>>>>>
->>>>>> wasn't much more than just something jumping to who-knows-where
->>>>>>
->>>>>> after clear_bam_transaction was called, resulting in values >> 
->>>>>> associated with
->>>>>>
->>>>>> the NAND being all zeroed out in pr_err/_debug/etc.
->>>>>>
->>>>>      Ok sure. So was the READID command itself failing (or) the > 
->>>>> subsequent one ?
->>>>>     We can check which parameter reset by the 
->>>>> clear_bam_transaction is > causing the
->>>>>     failure.  Meanwhile, looping in Pradeep who has access to the 
->>>>> > board, so in a better
->>>>>     position to debug.
->>>> I'm sorry I have so few details on hand, and no kernel tree (no 
->>>> access to that machine either, for now).
->>>>
->>>>
->>>> I will try to describe to the best of my abilities what I recall.
->>>>
->>>>
->>>> My methodology of making sure things don't go haywire was to print 
->>>> the oob size
->>>>
->>>> of our NAND basically every two lines of code (yes, i was very 
->>>> desperate at one point),
->>>>
->>>> as that was zeroed out when *the bug* happened,
->>> This does look like a pointer error at some point and some kernel data
->>> has been corrupted very badly by the driver.
->>>
->>>> leading to a kernel bug/panic/stall
->>>>
->>>> (can't recall what exactly it was, but it said something along the 
->>>> lines of "no support for
->>>>
->>>> oob size 0" and then it didn't fail graceully, leading to some bad 
->>>> jumps and ultimately
->>>>
->>>> a dead platform..)
->>>>
->>>>
->>>> after hours of digging, I found out that everything goes fine until 
->>>> clear_bam_transaction is called,
->>> Do you remember if this function was called for the first time when
->>> this happened?
->>
->> I think so, if I recall correctly there are no more callers in this 
->> path, as readid is the first nand command executed in flash probe flow.
->>
->>
->>
->>>
->>>> after that gets executed every nand op starts reading all zeroes 
->>>> (for example in JEDEC ID check)
->>>>
->>>> so I added the changes from this patch, and things magically 
->>>> started working... My suspicion is
->>>>
->>>> that the underlying FIFO isn't fully drained (is it a FIFO on 9607? 
->>>> bah, i work on too many socs at once)
->>> I don't see it in the list of supported devices, what's the exact
->>> compatible used?
->>
->> qcom,ipq4019-nand
->>
->>
->>
->>>
->>>> and this function only makes Linux think it is, without actually 
->>>> draining it, and the leftover
->>>>
->>>> commands get executed with some parts of them getting overwritten, 
->>>> resulting in the
->>>>
->>>> famous garbage in - garbage out situation, but that's only a 
->>>> guesstimate..
->>> I would bet for a non allocated bam-ish pointer that is reset to zero
->>> in the clear_bam_transaction() helper.
->>>
->>> Can you get your hands on the board again?
->>
->> Sure, but as I mentioned previously, only in about 2 weeks, I can't 
->> really do any dev before then.. :(
->>
->>
->>
->>> It would be nice to check if the allocation always occurs before use,
->>> and if yes on how much bytes.
->>>
->>> If the pointer is not dangling, then perhaps something else smashes
->>> that pointer.
->>
->>
->> Konrad
->>
->>>
->>>> Do note this somehow worked fine on 5.11 and then broke on 5.12/13. 
->>>> I went as far as replacing most
->>>>
->>>> of the kernel with the updated/downgraded parts via git checkout (i 
->>>> tried many combinations),
->>>>
->>>> to no avail.. I even tried different compilers and optimization 
->>>> levels, thinking it could have been
->>>>
->>>> a codegen issue, but no luck either.
->>>>
->>>>
->>>> I.. do understand this email is a total mess to read, as much as it 
->>>> was to write, but
->>>>
->>>> without access to my code and the machine itself I can't give you 
->>>> solid details, and
->>>>
->>>> the fact this situation is far from ordinary doesn't help either..
->>>>
->>>>
->>>> The latest (ancient, not quite pretty, but probably working if my 
->>>> memory is correct) version of my patches
->>>>
->>>> for the mdm9607 is available at [1], I will push the new revision 
->>>> after I get access to the workstation.
->>>>
->   + few more who have access to the board.
->
->    Going by the description, for kernel corruption, we can try out a 
-> KASAN build.
->    Since you have mentioned it worked till 5.11, you bisected the 
-> driver till 5.11 head and it worked ?
->
-    Tried running a KASAN enabled image on IPQ board, but no luck. 
-Nothing came out.
-    Only if someone with the board can help here, we can proceed
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Regards,
-   Sricharan
+sparse warnings: (new ones prefixed by >>)
+   mm/page_alloc.c:1475:30: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:1475:30: sparse:     expected struct list_head *list
+   mm/page_alloc.c:1475:30: sparse:     got struct list_head [noderef] *
+>> mm/page_alloc.c:3245:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct pcplists [noderef] *lp @@     got struct pcplists [noderef] __rcu * @@
+   mm/page_alloc.c:3245:28: sparse:     expected struct pcplists [noderef] *lp
+   mm/page_alloc.c:3245:28: sparse:     got struct pcplists [noderef] __rcu *
+   mm/page_alloc.c:3250:36: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct pcplists [noderef] *lp @@     got struct pcplists [noderef] __rcu * @@
+   mm/page_alloc.c:3250:36: sparse:     expected struct pcplists [noderef] *lp
+   mm/page_alloc.c:3250:36: sparse:     got struct pcplists [noderef] __rcu *
+   mm/page_alloc.c:3435:40: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct list_head *head @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:3435:40: sparse:     expected struct list_head *head
+   mm/page_alloc.c:3435:40: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:3726:14: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:3726:14: sparse:     expected struct list_head *list
+   mm/page_alloc.c:3726:14: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:3727:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
+   mm/page_alloc.c:3727:15: sparse:     expected int *count
+   mm/page_alloc.c:3727:15: sparse:     got int [noderef] *
+   mm/page_alloc.c:5349:18: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *pcp_list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:5349:18: sparse:     expected struct list_head *pcp_list
+   mm/page_alloc.c:5349:18: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:5350:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
+   mm/page_alloc.c:5350:15: sparse:     expected int *count
+   mm/page_alloc.c:5350:15: sparse:     got int [noderef] *
+   mm/page_alloc.c:5966:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct pcplists [noderef] *lp @@     got struct pcplists [noderef] __rcu * @@
+   mm/page_alloc.c:5966:28: sparse:     expected struct pcplists [noderef] *lp
+   mm/page_alloc.c:5966:28: sparse:     got struct pcplists [noderef] __rcu *
+   mm/page_alloc.c:6064:28: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct pcplists [noderef] *lp @@     got struct pcplists [noderef] __rcu * @@
+   mm/page_alloc.c:6064:28: sparse:     expected struct pcplists [noderef] *lp
+   mm/page_alloc.c:6064:28: sparse:     got struct pcplists [noderef] __rcu *
+>> mm/page_alloc.c:7020:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct pcplists [noderef] __rcu *lp @@     got struct pcplists [noderef] * @@
+   mm/page_alloc.c:7020:17: sparse:     expected struct pcplists [noderef] __rcu *lp
+   mm/page_alloc.c:7020:17: sparse:     got struct pcplists [noderef] *
+>> mm/page_alloc.c:7024:47: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct list_head *list @@     got struct list_head [noderef] __rcu * @@
+   mm/page_alloc.c:7024:47: sparse:     expected struct list_head *list
+   mm/page_alloc.c:7024:47: sparse:     got struct list_head [noderef] __rcu *
+   mm/page_alloc.c:7025:50: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
+   mm/page_alloc.c:7025:50: sparse:     expected struct list_head *list
+   mm/page_alloc.c:7025:50: sparse:     got struct list_head [noderef] *
+   mm/page_alloc.c:1460:17: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:1515:9: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3157:13: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3158:42: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3246:29: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3251:37: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3286:36: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3293:25: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3436:9: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:3438:13: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c: note: in included file (through include/linux/mm.h):
+   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
+   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
+   mm/page_alloc.c:5967:37: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:6065:37: sparse: sparse: dereference of noderef expression
+   mm/page_alloc.c:6069:17: sparse: sparse: dereference of noderef expression
 
+vim +3245 mm/page_alloc.c
+
+  3194	
+  3195	/*
+  3196	 * The implementation of drain_all_pages(), exposing an extra parameter to
+  3197	 * drain on all cpus.
+  3198	 *
+  3199	 * drain_all_pages() is optimized to only execute on cpus where pcplists are
+  3200	 * not empty. The check for non-emptiness can however race with a free to
+  3201	 * pcplist that has not yet increased the lp->count from 0 to 1. Callers
+  3202	 * that need the guarantee that every CPU has drained can disable the
+  3203	 * optimizing racy check.
+  3204	 */
+  3205	static void __drain_all_pages(struct zone *zone, bool force_all_cpus)
+  3206	{
+  3207		struct per_cpu_pages *pcp;
+  3208		struct zone *z;
+  3209		int cpu;
+  3210	
+  3211		/*
+  3212		 * Allocate in the BSS so we won't require allocation in
+  3213		 * direct reclaim path for CONFIG_CPUMASK_OFFSTACK=y
+  3214		 */
+  3215		static cpumask_t cpus_with_pcps;
+  3216	
+  3217		/*
+  3218		 * Do not drain if one is already in progress unless it's specific to
+  3219		 * a zone. Such callers are primarily CMA and memory hotplug and need
+  3220		 * the drain to be complete when the call returns.
+  3221		 */
+  3222		if (unlikely(!mutex_trylock(&pcpu_drain_mutex))) {
+  3223			if (!zone)
+  3224				return;
+  3225			mutex_lock(&pcpu_drain_mutex);
+  3226		}
+  3227	
+  3228		/*
+  3229		 * We don't care about racing with CPU hotplug event
+  3230		 * as offline notification will cause the notified
+  3231		 * cpu to drain that CPU pcps and on_each_cpu_mask
+  3232		 * disables preemption as part of its processing
+  3233		 */
+  3234		for_each_online_cpu(cpu) {
+  3235			bool has_pcps = false;
+  3236			struct pcplists *lp;
+  3237	
+  3238			if (force_all_cpus) {
+  3239				/*
+  3240				 * The lp->count check is racy, some callers need a
+  3241				 * guarantee that no cpu is missed.
+  3242				 */
+  3243				has_pcps = true;
+  3244			} else if (zone) {
+> 3245				lp = READ_ONCE(per_cpu_ptr(zone->per_cpu_pageset, cpu)->lp);
+  3246				if (lp->count)
+  3247					has_pcps = true;
+  3248			} else {
+  3249				for_each_populated_zone(z) {
+  3250					lp = READ_ONCE(per_cpu_ptr(z->per_cpu_pageset, cpu)->lp);
+  3251					if (lp->count) {
+  3252						has_pcps = true;
+  3253						break;
+  3254					}
+  3255				}
+  3256			}
+  3257	
+  3258			if (has_pcps)
+  3259				cpumask_set_cpu(cpu, &cpus_with_pcps);
+  3260			else
+  3261				cpumask_clear_cpu(cpu, &cpus_with_pcps);
+  3262		}
+  3263	
+  3264		if (!force_all_cpus && cpumask_empty(&cpus_with_pcps))
+  3265		       goto exit;
+  3266	
+  3267		for_each_cpu(cpu, &cpus_with_pcps) {
+  3268		       for_each_populated_zone(z) {
+  3269			       if (zone && zone != z)
+  3270				       continue;
+  3271	
+  3272			       pcp = per_cpu_ptr(z->per_cpu_pageset, cpu);
+  3273			       pcp->drain = rcu_replace_pointer(pcp->lp, pcp->drain,
+  3274						       mutex_is_locked(&pcpu_drain_mutex));
+  3275		       }
+  3276		}
+  3277	
+  3278		synchronize_rcu();
+  3279	
+  3280		for_each_cpu(cpu, &cpus_with_pcps) {
+  3281			for_each_populated_zone(z) {
+  3282				unsigned long flags;
+  3283				int count;
+  3284	
+  3285				pcp = per_cpu_ptr(z->per_cpu_pageset, cpu);
+  3286				count = pcp->drain->count;
+  3287				if (!count)
+  3288				       continue;
+  3289	
+  3290				local_irq_save(flags);
+  3291				free_pcppages_bulk(z, count, READ_ONCE(pcp->batch), pcp->drain);
+  3292				local_irq_restore(flags);
+  3293				VM_BUG_ON(pcp->drain->count);
+  3294			}
+  3295		}
+  3296	
+  3297	exit:
+  3298		mutex_unlock(&pcpu_drain_mutex);
+  3299	}
+  3300	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

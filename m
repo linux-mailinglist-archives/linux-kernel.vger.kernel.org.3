@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286D94A9A4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFE94A9A4D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359004AbiBDNtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S1359012AbiBDNuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358974AbiBDNto (ORCPT
+        with ESMTP id S235063AbiBDNuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:49:44 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52F5C061714;
-        Fri,  4 Feb 2022 05:49:43 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id x6so4843745ilg.9;
-        Fri, 04 Feb 2022 05:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDivMS+R3wRgbfvv5KdwSS+OOaGla1Hngqzf/2B/UyM=;
-        b=TdrGjLFiOh3Tsr1dbbQgwstXuPBI8fQpm7mKNCWwmEXxubaeLu40JnPtxuC3wu6Cun
-         ABrFE/nbMaKQ6Xi7CkQS9xBxjVpOCnhx4WEdnntX1pyTEXcL0EdIqOsyTUtdeBhf3YBW
-         ZBYkbWbIdZxKOaglG56lRDF6Y9/AbWENQTzr1bN7P1O8x3YYaTFMMDsdIytuVTZjoFh+
-         k+IHxGWlzM9JXuhdQmcTr1QG5kFb0rNhl2TKzThjBaz+K4//8DDMP1R2IVQcI0Tpjg6S
-         1ULpCnIvEyCealyR5YpaoXlO7aDKOLU8fD79SUHiJ3tbRYxK08cLoTvdSNWHO9W7t6gO
-         hRkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDivMS+R3wRgbfvv5KdwSS+OOaGla1Hngqzf/2B/UyM=;
-        b=Vel4etfpfjWQE9byQm2ixSnlQDD+I3bjeIWpZRNXkBNCepDewf94i67VSM0p5DU9rQ
-         HdqN9SqIHKs+3XZAKdynzAXawmPo+hOI6QSnSy6E5rkChxbumoxA/tF2uePo2xcrRXOR
-         VoazZ6P2tE2m84cgaORsMvQacA+d+fcWTejUKrohogBOvcvRsXPIazaXgFuas5flKY1/
-         ouovGkV9Q6SvEBN/td2Eg2pVYSQketDsWLiI2rg7VWDFQ/Nv6ky+9a4tbbUM9JbAZZvY
-         wpoX6dXAtt75t0dKf7oBFdm96lTS2B/jOWN8GiAdVx/mX7aK24NHxvfOR1wS/BRmU1WI
-         g66Q==
-X-Gm-Message-State: AOAM5327giEbndY7MXtd7zXlFu9Kkwbp7U4by3cfvrzXaGpVP1vSVNB9
-        DuVemE85B376tM4deqh/7RQLP+t2HSTXSJ86DN4=
-X-Google-Smtp-Source: ABdhPJwTBmXQ9PU+NTWkgrnaLoYIM7nlHkfMIVD2BM3G3kLGoxow3Mvcu1IcjLoLDVJF9BhB3y2tlF2BOW3gGqsUBdw=
-X-Received: by 2002:a05:6e02:19c5:: with SMTP id r5mr1455540ill.164.1643982583014;
- Fri, 04 Feb 2022 05:49:43 -0800 (PST)
+        Fri, 4 Feb 2022 08:50:10 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58746C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:50:10 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A37441EC0662;
+        Fri,  4 Feb 2022 14:50:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643982604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oG61hjWt/E+i7OIsspn7nAQezVhhbhg1afVFCFPtmnY=;
+        b=BwEGcIFsfk/C6URpiZbEOrg/423xa+mNsp/WlrmAWys7gk8NAsmAeiz8r1J+zZQBQFd+1B
+        WBtUDGgQitOc7wb/hEgKWJpEroBPOFPDICxYU1AxbZiVOBYUZGW3fmIAV4dDkqHdm2Ra+G
+        qKuGks9dWSWuwo0KgyduwDbT80kcNl4=
+Date:   Fri, 4 Feb 2022 14:49:59 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCHv2 16/29] x86/boot: Add a trampoline for booting APs via
+ firmware handoff
+Message-ID: <Yf0vB+TBR2AjHmV5@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-17-kirill.shutemov@linux.intel.com>
+ <Yfpqk0amEbcyte+w@zn.tnic>
+ <25fec256-7feb-e94d-5e37-3a174b6c6a66@linux.intel.com>
 MIME-Version: 1.0
-References: <20220204052258.556667-1-eugene.shalygin@gmail.com> <40c67c87-3929-b042-0cdd-429bb002d864@roeck-us.net>
-In-Reply-To: <40c67c87-3929-b042-0cdd-429bb002d864@roeck-us.net>
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-Date:   Fri, 4 Feb 2022 14:49:31 +0100
-Message-ID: <CAB95QASywzktCq_vM8esmuSktPErLzKUVsqSTLV-f3sDOoY2bQ@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: fix documentation index
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <25fec256-7feb-e94d-5e37-3a174b6c6a66@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 06:35, Guenter Roeck <linux@roeck-us.net> wrote:
-> I already did that in the original patch, and I undid the removal of
-> asus_wmi_ec_sensors.
+On Fri, Feb 04, 2022 at 03:27:19AM -0800, Kuppuswamy, Sathyanarayanan wrote:
+> trampoline_start and sev_es_trampoline_start are not mutually exclusive.
+> Both are
+> used in arch/x86/kernel/sev.c.
 
-Thank you and sorry for the mistake!
+I know - I've asked Jörg to have a look here.
 
-Regards,
-Eugene
+> But trampoline_start64 can be removed and replaced with trampoline_start.
+> But using
+> _*64 suffix makes it clear that is used for 64 bit(CONFIG_X86_64).
+> 
+> Adding it for clarity seems to be fine to me.
+
+Does it matter if the start IP is the same for all APs? Or do will there
+be a case where you have some APs starting from the 32-bit trampoline
+and some from the 64-bit one, on the same system? (that would be weird
+but what do I know...)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

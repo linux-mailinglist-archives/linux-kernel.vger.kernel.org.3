@@ -2,157 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489464A9BAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A1D4A9BAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359488AbiBDPLk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 10:11:40 -0500
-Received: from mail3.swissbit.com ([176.95.1.57]:58014 "EHLO
-        mail3.swissbit.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241808AbiBDPLj (ORCPT
+        id S1359571AbiBDPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230415AbiBDPL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:11:39 -0500
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id D7736462F66;
-        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id C579A4630E9;
-        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.84-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
-Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
- (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 4 Feb 2022
- 16:11:37 +0100
-Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
- sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
- 15.02.0986.015; Fri, 4 Feb 2022 16:11:37 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCHv2] mmc: block: fix read single on recovery logic
-Thread-Topic: [PATCHv2] mmc: block: fix read single on recovery logic
-Thread-Index: AQHYGdmBQ/DNxxUR20SkEIF4VXs96A==
-Date:   Fri, 4 Feb 2022 15:11:37 +0000
-Message-ID: <bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com>
-References: <5e5f2e45d0a14a55a8b7a9357846114b@hyperstone.com>
- <7c4757cc707740e580c61c39f963a04d@hyperstone.com>
- <CAPDyKFr0YXCwL-8F9M7mkpNzSQpzw6gNUq2zaiJEXj1jNxUbrg@mail.gmail.com>,<5c66833d-4b35-2c76-db54-0306e08843e5@intel.com>,<79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
-In-Reply-To: <79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.154.1.4]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Fri, 4 Feb 2022 10:11:56 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855E0C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 07:11:56 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v186so19735566ybg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 07:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NGiij85XESKLGYtHB2QwMag22hitD2nYvlyTI/Fp3Eg=;
+        b=QFqVjlid6D7zUlaqsEUQdYoPgZMSsX4p5nTs6jeho8vaRLwWAKfvWd/ePLG7zr3dFE
+         mDeczqd/KBEqzrEZWqjh85AnFbowkU7ublaXo5cbRTt8QegMQs3ZY3dYY1WY36urzEiO
+         hmWxVXC12IeuOCxtOEZDE8y9pTR4IKvCSgyQ9SKDLBVlqEQLORdMbTWXlnbTMOwg456U
+         KiCZcvnEuBL7Nj2BfUPPG2Bx4B5gTGBw5t3c1knKQ22RE6yhXls7tEZDK7ztuQxdH2xP
+         wxz3wbmEBOKz8Y8mLQehtyxI2z2sC2hPN95dDPpviCJW0bu43ewU1A+lIkBtxaU4ba8O
+         wkQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NGiij85XESKLGYtHB2QwMag22hitD2nYvlyTI/Fp3Eg=;
+        b=4PqsBvrBrGm0ONnak/8dASa33acF+aN2lmGrjphpwzBRfYe7fq3bNvHS/uYG6wayt+
+         tIH04W70b+cg2aWN/GzcgxlBmh2jqwdAD3v1Q66em6mCfRCisnicJZIo5xd8o909fwaO
+         raiKkF/7yYmYg/F24Am85Vrk5TFfj7Iv2gLzXbwN1dLDprziJ+Gzs0NkPwRfP6U5beM7
+         s3j0blTWpJ7rUZcrrGxWZ3pXQpkv4GXm0EYpLXu4fJqzSfBJI275vwf/SX1y1WKLPONO
+         OhyEfZbAFXvQcH9jLwe4tlTQFKZEqS1sXDOExELHWQhFbpxdTw9I2/+dmxDUThUaXNj9
+         ukww==
+X-Gm-Message-State: AOAM533ZmIQ3loltT3q2Eb9AxkOzDxbx/sPJ0S7Xj+wMUC0vgBg4X/UI
+        OyZGLfOVIndpx4WYQyH7wP5TSPrkW10x66bNX6ZeOv+VPtzv3A==
+X-Google-Smtp-Source: ABdhPJw1P6Mob4RR17orG9LkRVRc2iVXVTP8zYN4s50wkTkEINzjL/pztzbty+jvSxBl+OUZFFeZqVCM2Fp4GTjtDeE=
+X-Received: by 2002:a25:c647:: with SMTP id k68mr3014174ybf.690.1643987515501;
+ Fri, 04 Feb 2022 07:11:55 -0800 (PST)
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-8.6.1018-26696.000
-X-TMASE-Result: 10--2.390400-10.000000
-X-TMASE-MatchedRID: dc8Jy61QoRp0/jNwxBmuZiyKzJY7d2nbunSyiaV8TbOUCwv1X+STMl2d
-        sxCRbuoB8FHDcHdF1rYVKH14MhLRlzdhl84+mwvCqg0gbtLVIa9uchTq5J5u9LytS1u1Z7z6a3A
-        6hcNu8nD0YXQzpNvE/P5nI8KIHQ65o1cymYpfRxUzL6MySEJ0VvmoZ6x4ZgCUoWOuhb6d7SFnby
-        ATPFLi0gR6lC2CDNN4rbzO2egx+l0MJ0ZR1WrjDKiUivh0j2PvS1zwNuiBtITfUZT83lbkENP+k
-        XNq5kuZmL9aborEAKJdllc1XXqB257OrwqWs6vOAZ0lncqeHqF9LQinZ4QefJxSu1RP8S9J+gtH
-        j7OwNO35N/S1zEq4uk4IO6MzPeAE6ceTivttVg2RFE4mEW4/Q0mBbQ9Ebkn1
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 99fe5f0a-56ea-49b9-84f6-c550c9878366-0-0-200-0
+References: <20220203131237.298090-1-pedrodemargomes@gmail.com> <20220203133938.1696-1-sj@kernel.org>
+In-Reply-To: <20220203133938.1696-1-sj@kernel.org>
+From:   Pedro Gomes <pedrodemargomes@gmail.com>
+Date:   Fri, 4 Feb 2022 12:11:44 -0300
+Message-ID: <CACpbsfZN2fExaTReJG1anDQjCd3i24_0wG-oU42dSHD5bAon7A@mail.gmail.com>
+Subject: Re: [PATCH] mm/damon: Add option to monitor only writes
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On reads with MMC_READ_MULTIPLE_BLOCK that fail,
-the recovery handler will use MMC_READ_SINGLE_BLOCK for
-each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
-The logic for this is fixed to never report unsuccessful reads
-as success to the block layer.
+On Thu, Feb 3, 2022 at 10:39 AM SeongJae Park <sj@kernel.org> wrote:
 
-On command error with retries remaining, blk_update_request was
-called with whatever value error was set last to.
-In case it was last set to BLK_STS_OK (default), the read will be
-reported as success, even though there was no data read from the device.
-This could happen on a CRC mismatch for the response,
-a card rejecting the command (e.g. again due to a CRC mismatch).
-In case it was last set to BLK_STS_IOERR, the error is reported correctly,
-but no retries will be attempted.
+> I think this would be better to be implemented as another monitoring primitive
+> based on the virtual address space monitoring primitives, e.g., vaddr-writes?
+> Then the implementation would be simpler and changes to other files will be
+> minimized.  For the user space interface, we could use a prefix to target_ids
+> debugfs file.  For example,
+>
+>     # echo "vaddr-writes $(pidof workload)" > $debugfs/damon/target_ids
 
-Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
-v2:
-  - Do not allow data error retries
-  - Actually retry MMC_READ_SINGLE_RETRIES times instead of
-  MMC_READ_SINGLE_RETRIES-1
+I will do that.
+
+> > This patch also adds the actions mergeable and unmergeable to damos schemes.
+> > These actions are used by KSM as explained in [1].
+>
+> Please do that in a separate patch, and also update the document
+> (Documentation/admin-guide/mm/damon/usage.rst).  And, what's the expected usage
+> of the action and benefits?
+
+The idea is to use this action to all areas that are not written too frequently,
+this way KSM can save more memory without too much overhead.
+But I have to test it better and collect some data to see if it really
+makes sense,
+perhaps it is better to leave this patch for later.
+I would like to know your opinion on this, do you think it makes sense?
 
 
- drivers/mmc/core/block.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 4e61b28a002f..8d718aa56d33 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
- 	struct mmc_card *card = mq->card;
- 	struct mmc_host *host = card->host;
- 	blk_status_t error = BLK_STS_OK;
--	int retries = 0;
- 
- 	do {
- 		u32 status;
- 		int err;
-+		int retries = 0;
- 
--		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-+		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
-+			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
- 
--		mmc_wait_for_req(host, mrq);
-+			mmc_wait_for_req(host, mrq);
- 
--		err = mmc_send_status(card, &status);
--		if (err)
--			goto error_exit;
--
--		if (!mmc_host_is_spi(host) &&
--		    !mmc_ready_for_data(status)) {
--			err = mmc_blk_fix_state(card, req);
-+			err = mmc_send_status(card, &status);
- 			if (err)
- 				goto error_exit;
--		}
- 
--		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
--			continue;
-+			if (!mmc_host_is_spi(host) &&
-+			    !mmc_ready_for_data(status)) {
-+				err = mmc_blk_fix_state(card, req);
-+				if (err)
-+					goto error_exit;
-+			}
- 
--		retries = 0;
-+			if (!mrq->cmd->error)
-+				break;
-+		}
- 
- 		if (mrq->cmd->error ||
- 		    mrq->data->error ||
 -- 
-2.34.1
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
-
+Atenciosamente,
+Pedro Demarchi Gomes.

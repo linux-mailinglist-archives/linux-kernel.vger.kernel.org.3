@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786184AA178
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9524C4AA188
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237737AbiBDU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:57:05 -0500
-Received: from mail-qv1-f42.google.com ([209.85.219.42]:40579 "EHLO
-        mail-qv1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiBDU5F (ORCPT
+        id S239699AbiBDVCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:02:21 -0500
+Received: from mail-io1-f46.google.com ([209.85.166.46]:35751 "EHLO
+        mail-io1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232318AbiBDVCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:57:05 -0500
-Received: by mail-qv1-f42.google.com with SMTP id e20so6329418qvu.7;
-        Fri, 04 Feb 2022 12:57:04 -0800 (PST)
+        Fri, 4 Feb 2022 16:02:20 -0500
+Received: by mail-io1-f46.google.com with SMTP id 9so8979425iou.2;
+        Fri, 04 Feb 2022 13:02:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tOktSJdsPyS4iLL9pxhiI0gDV+7BgjlNV1/kPM9c6Us=;
-        b=F592MT/13X4IBH39Xqhm1qQWGvcKv5KAG8b1RiLgm/qsw8AzGcki0zGjkGRYSsxvqD
-         ExZf3mPZ6QflL6tGune1RnpzLdvMsIrlzrbQEGqb9nhIuZ/YiJB6hxQ6wcs/t3iniBfW
-         AnfY8NhtNv90SvGvzJg6AZaGB2jIei0GuYIOkK2hWRP4zWmM8s1kcKKfy8Vje5d5E5RI
-         vG0oAp4jn5qUApdDsWvxnVN9ecNf6TGOIpctSxJQiMyBgBb0xAVCfX1xyUbJWMmeNfC1
-         ndBawtg4taHaIPZFbyLKw6jmdrNO50v1/6ZvkHpkKSAOZIWzOHMFEWVgUqr2ZwtQKjWj
-         xKeg==
-X-Gm-Message-State: AOAM532/tUrGLtu96EUR4wGHRimwts1B1tPBXp8Tm1ObpW0p2wOlPO12
-        sEVn6lrI2/dDeiUvN6JED468ofXWE78B2A==
-X-Google-Smtp-Source: ABdhPJwIwK6ccRrYu/Hr3BIPks61h8YSYyB+TtDp0At+LYgbbcDKHG43yNs7GBbnJ9tl/6627HEzEw==
-X-Received: by 2002:ad4:5b88:: with SMTP id 8mr988632qvp.1.1644008224046;
-        Fri, 04 Feb 2022 12:57:04 -0800 (PST)
-Received: from localhost (fwdproxy-ash-010.fbsv.net. [2a03:2880:20ff:a::face:b00c])
-        by smtp.gmail.com with ESMTPSA id p134sm1474570qke.29.2022.02.04.12.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 12:57:03 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Cc:     void@manifault.com, kernel-team@fb.com
-Subject: [PATCH v2] livepatch: Skip livepatch tests if ftrace cannot be configured
-Date:   Fri,  4 Feb 2022 12:56:26 -0800
-Message-Id: <20220204205625.2628328-1-void@manifault.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220203233205.1554034-1-void@manifault.com>
-References: <20220203233205.1554034-1-void@manifault.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=io04bmdGVqb9L2Bxd+sAlyc8gW4AQtHE1d41YIHwSP4=;
+        b=f5K09bfB2V8VOpwD5UTblb8pag1oDpq95g5udCLeVRmEgm9kxF7LZcjM56peHbtKtH
+         G8IqQ5dXQ+x+VfP4wKO4+cP9AGvMzJJg76sGrAh3T6kolc95/BDogPEos6MXzO19ONpw
+         ZZQ7c5mu+6qmvVx6k7D38u2l0S40v9Xb9ZQBTuwDWfMteP/HnjynCkw1ax+XAwpbqsOZ
+         WlN46qkLJAVGmHO20CLtarhwIRCf+Hl6GTcb0O1eiTRDNRts7FjhjyuaKFr4mMfXjcJi
+         /5Z+sGVQNBU/XVLAw9y3DD20r1WTp1HbubvyxsGvF+ZDlrDStLCAKhTkrgVnGYZ//dII
+         14XQ==
+X-Gm-Message-State: AOAM533BBBzu68cQeBF6sQdbNRfy3Rw5awiVQNTNTke955tlXaV/q0dn
+        lA14pB/en+fulUKxkH1//XEE6dd9oMQyTJBzdh0=
+X-Google-Smtp-Source: ABdhPJxrFRPQc2dIB/rpJG3OFUuQ3pqcG6UwllwxN96YeNR7QHh9tWGlPWYKr5Z1Fter5IjlcEsyr2Pk7BW+lIpqJYs=
+X-Received: by 2002:a05:6602:158b:: with SMTP id e11mr418853iow.93.1644008539441;
+ Fri, 04 Feb 2022 13:02:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20220204134347.1187749-1-javierm@redhat.com> <20220204134347.1187749-2-javierm@redhat.com>
+ <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+In-Reply-To: <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+From:   Ilia Mirkin <imirkin@alum.mit.edu>
+Date:   Fri, 4 Feb 2022 16:02:08 -0500
+Message-ID: <CAKb7UvgxhLFT4aqYSE+=dpqfuTkvr62tsGmQP5H46mAytaQBRg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] drm/format-helper: Add drm_fb_{xrgb8888,gray8}_to_mono_reversed()
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fbdev <linux-fbdev@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-livepatch has a set of selftests that are used to validate the behavior of
-the livepatching subsystem.  One of the testcases in the livepatch
-testsuite is test-ftrace.sh, which among other things, validates that
-livepatching gracefully fails when ftrace is disabled.  In the event that
-ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
-will fail later due to it unexpectedly successfully loading the
-test_klp_livepatch module.
+On Fri, Feb 4, 2022 at 10:53 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>
+> Hi
+>
+> Am 04.02.22 um 14:43 schrieb Javier Martinez Canillas:
+> > Add support to convert XR24 and 8-bit grayscale to reversed monochrome for
+> > drivers that control monochromatic panels, that only have 1 bit per pixel.
+> >
+> > The drm_fb_gray8_to_mono_reversed() helper was based on the function that
+> > does the same in the drivers/gpu/drm/tiny/repaper.c driver.
+> >
+> > Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> > ---
+> >
+> > (no changes since v1)
+> >
+> >   drivers/gpu/drm/drm_format_helper.c | 80 +++++++++++++++++++++++++++++
+> >   include/drm/drm_format_helper.h     |  7 +++
+> >   2 files changed, 87 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
+> > index 0f28dd2bdd72..cdce4b7c25d9 100644
+> > --- a/drivers/gpu/drm/drm_format_helper.c
+> > +++ b/drivers/gpu/drm/drm_format_helper.c
+> > @@ -584,3 +584,83 @@ int drm_fb_blit_toio(void __iomem *dst, unsigned int dst_pitch, uint32_t dst_for
+> >       return -EINVAL;
+> >   }
+> >   EXPORT_SYMBOL(drm_fb_blit_toio);
+> > +
+> > +static void drm_fb_gray8_to_mono_reversed_line(u8 *dst, const u8 *src, size_t pixels)
+> > +{
+> > +     unsigned int xb, i;
+> > +
+> > +     for (xb = 0; xb < pixels / 8; xb++) {
+>
+> In practice, all mode widths are multiples of 8 because VGA mandated it.
+> So it's ok-ish to assume this here. You should probably at least print a
+> warning somewhere if (pixels % 8 != 0)
 
-While the livepatch selftests are careful to remove any of the livepatch
-test modules between testcases to avoid this situation, ftrace may still
-fail to be disabled if another trace is active on the system that was
-enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
-that use trampolines will cause this test to fail due to the trampoline
-being implemented with register_ftrace_direct().  The following is an
-example of such a trace:
+Not sure if it's relevant, but 1366x768 was a fairly popular laptop
+resolution. There's even a dedicated drm_mode_fixup_1366x768 in
+drm_edid.c. (Would it have killed them to add 2 more horizontal
+pixels? Apparently.)
 
-tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
-(call_direct_funcs+0x0/0x30)
-        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
+Cheers,
 
-In order to make the test more resilient to system state that is out of its
-control, this patch adds a check to set_ftrace_enabled() to skip the tests
-if the sysctl invocation fails.
-
-Signed-off-by: David Vernet <void@manifault.com>
----
-v2:
-  - Fix typo in newly added comment (s/permament/permanent).
-  - Adjust the location of the added newline to be before the new comment
-    rather than that the end of the function.
-  - Make the failure-path check a bit less brittle by checking for the
-    exact expected string, rather than specifically for "Device or resource
-    busy".
-
- tools/testing/selftests/livepatch/functions.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 846c7ed71556..32970324dd7e 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -78,6 +78,12 @@ function set_ftrace_enabled() {
- 	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
- 		 sysctl kernel.ftrace_enabled 2>&1)
- 	echo "livepatch: $result" > /dev/kmsg
-+
-+	# Skip the test if ftrace is busy.  This can happen under normal system
-+	# conditions if a trace is marked as permanent.
-+	if [[ "$result" != "kernel.ftrace_enabled = $1" ]]; then
-+		skip "failed to set kernel.ftrace_enabled=$1"
-+	fi
- }
- 
- function cleanup() {
--- 
-2.30.2
-
+  -ilia

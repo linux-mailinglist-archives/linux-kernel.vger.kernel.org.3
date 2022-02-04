@@ -2,68 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617654A9420
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB86F4A9427
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245252AbiBDGsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 01:48:22 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:41231 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiBDGsW (ORCPT
+        id S245299AbiBDGzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 01:55:02 -0500
+Received: from vmicros1.altlinux.org ([194.107.17.57]:60744 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233514AbiBDGzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:48:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1643957302; x=1675493302;
-  h=from:to:cc:subject:date:message-id;
-  bh=Kt8D96RsK5xOLidpkHnApgmeuBtb1rh/8v+/7rQ1d3M=;
-  b=kUna3YKbfOjLz7F40RbD46PKTtsUyykEOAqrdTZGXPFXB7YrEsjtgpvl
-   mNiFuJBJ6r8Zu0spCmo0PeoKYqh6PWloFz3mhmhFTNqeYPH0++dWFWiEZ
-   OGk7JUFAeD+t+rmTdQFB+ufu3+06T4e68pl+At86Axd06qklvDZwuDwFE
-   g=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 03 Feb 2022 22:48:22 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Feb 2022 22:48:05 -0800
-X-QCInternal: smtphost
-Received: from hu-dikshita-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.13])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 04 Feb 2022 12:17:58 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 484CF3BED; Fri,  4 Feb 2022 12:17:57 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     hverkuil-cisco@xs4all.nl
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vgarodia@codeaurora.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH] Add check for READ ONLY flag
-Date:   Fri,  4 Feb 2022 12:17:48 +0530
-Message-Id: <1643957268-6365-1-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 4 Feb 2022 01:55:01 -0500
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id C3E2672C905;
+        Fri,  4 Feb 2022 09:54:59 +0300 (MSK)
+Received: from boyarsh.office.basealt.ru (unknown [193.43.10.250])
+        by imap.altlinux.org (Postfix) with ESMTPSA id 997514A46F0;
+        Fri,  4 Feb 2022 09:54:59 +0300 (MSK)
+From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
+To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Cc:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>,
+        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com
+Subject: [PATCH] Add ability to disallow idmapped mounts
+Date:   Fri,  4 Feb 2022 09:53:38 +0300
+Message-Id: <20220204065338.251469-1-boyarsh@altlinux.org>
+X-Mailer: git-send-email 2.25.4
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a check for V4L2_CTRL_FLAG_READ_ONLY to avoid request
-testing for such controls.
----
- utils/v4l2-compliance/v4l2-test-buffers.cpp | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Idmapped mounts may have security implications [1] and have
+no knobs to be disallowed at runtime or compile time.
 
-diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index fa8c37c..b8de7af 100644
---- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -2032,7 +2032,8 @@ int testRequests(struct node *node, bool test_streaming)
- 		if (qctrl.type != V4L2_CTRL_TYPE_INTEGER &&
- 		    qctrl.type != V4L2_CTRL_TYPE_BOOLEAN)
- 			continue;
--		if (qctrl.flags & V4L2_CTRL_FLAG_WRITE_ONLY)
-+		if (qctrl.flags & V4L2_CTRL_FLAG_WRITE_ONLY ||
-+		    qctrl.flags & V4L2_CTRL_FLAG_READ_ONLY)
- 			continue;
- 		if (is_vivid && V4L2_CTRL_ID2WHICH(qctrl.id) == V4L2_CTRL_CLASS_VIVID)
- 			continue;
+This patch adds a sysctl and a config option to set its default value.
+
+[1] https://lore.kernel.org/all/m18s7481xc.fsf@fess.ebiederm.org/
+
+Based on work from Alexey Gladkov <legion@kernel.org>.
+
+Signed-off-by: Anton V. Boyarshinov <boyarsh@altlinux.org>
+---
+ Documentation/admin-guide/sysctl/fs.rst | 12 ++++++++++++
+ fs/Kconfig                              |  8 ++++++++
+ fs/namespace.c                          | 21 ++++++++++++++++++++-
+ 3 files changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
+index 2a501c9ddc55..f758c4ae5f66 100644
+--- a/Documentation/admin-guide/sysctl/fs.rst
++++ b/Documentation/admin-guide/sysctl/fs.rst
+@@ -105,6 +105,18 @@ you have some awesome number of simultaneous system users,
+ you might want to raise the limit.
+ 
+ 
++idmap_mounts
++------------
++
++Idmapped mounts may have security implications.
++This knob controls whether creation of idmapped mounts is allowed.
++When set to "1", creation of idmapped mounts is allowed.
++When set to "0", creation of idmapped mounts is not allowed.
++
++The default value is
++* 0, if ``IDMAP_MOUNTS_DEFAULT_OFF`` is enabled in the kernel configuration;
++* 1, otherwise.
++
+ file-max & file-nr
+ ------------------
+ 
+diff --git a/fs/Kconfig b/fs/Kconfig
+index 7a2b11c0b803..d2203ba0183d 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -385,4 +385,12 @@ source "fs/unicode/Kconfig"
+ config IO_WQ
+ 	bool
+ 
++config IDMAP_MOUNTS_DEFAULT_OFF
++       bool "Disallow idmappad mounts by default"
++       help
++         Idmapped mounts may have security implications.
++         Enable this to disallow idmapped mounts by setting
++         the default value of /proc/sys/fs/idmap_mounts to 0.
++
++
+ endmenu
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 40b994a29e90..66501ad75537 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -39,6 +39,10 @@
+ /* Maximum number of mounts in a mount namespace */
+ static unsigned int sysctl_mount_max __read_mostly = 100000;
+ 
++/* Whether idmapped mounts are allowed. */
++static int sysctl_idmap_mounts __read_mostly =
++	IS_ENABLED(CONFIG_IDMAP_MOUNTS_DEFAULT_OFF) ? 0 : 1;
++
+ static unsigned int m_hash_mask __read_mostly;
+ static unsigned int m_hash_shift __read_mostly;
+ static unsigned int mp_hash_mask __read_mostly;
+@@ -3965,7 +3969,13 @@ static int can_idmap_mount(const struct mount_kattr *kattr, struct mount *mnt)
+ 	if (!is_anon_ns(mnt->mnt_ns))
+ 		return -EINVAL;
+ 
+-	return 0;
++	/* So far, there are concerns about the safety of idmaps. */
++	if (!sysctl_idmap_mounts) {
++		pr_warn_once("VFS: idmapped mounts are not allowed.\n");
++		return -EPERM;
++	} else {
++		return 0;
++	}
+ }
+ 
+ static struct mount *mount_setattr_prepare(struct mount_kattr *kattr,
+@@ -4631,6 +4641,15 @@ static struct ctl_table fs_namespace_sysctls[] = {
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ONE,
+ 	},
++	{
++		.procname       = "idmap_mounts",
++		.data           = &sysctl_idmap_mounts,
++		.maxlen         = sizeof(int),
++		.mode           = 0644,
++		.proc_handler   = proc_dointvec_minmax,
++		.extra1         = SYSCTL_ZERO,
++		.extra2         = SYSCTL_ONE,
++	},
+ 	{ }
+ };
+ 
 -- 
-2.7.4
+2.33.0
 

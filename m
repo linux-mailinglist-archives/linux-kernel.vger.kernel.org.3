@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC2A4A91F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F261F4A91F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356408AbiBDBQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 20:16:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43064 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351504AbiBDBQd (ORCPT
+        id S1356501AbiBDBQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 20:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238979AbiBDBQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 20:16:33 -0500
+        Thu, 3 Feb 2022 20:16:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84357C061714;
+        Thu,  3 Feb 2022 17:16:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C641D6198E;
-        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3569AC340ED;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43531B81E57;
+        Fri,  4 Feb 2022 01:16:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12CFDC340E8;
         Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643937392;
-        bh=aB9+D8EG8yLCGwvt9qYMcApSdbrEaj1GWxq4XpQ+TEU=;
+        bh=Cyt3I3EBMavNFow1QRriz9SViu1nkBRsjpVOO+ycS+I=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=dDQEfRpggUC0bKDkEhxvW31nantepBvl4sPJl5A+RwuS7G7M7FtKvEro/hoXDScdP
-         i7CpliCUJTp3+wOpLyzlErM7vvcAmabUXiZs9EhbUFdUwN09Bndsre/gAxiDXnlIMU
-         zMV+IHarp/byQ16sLKi21OKFgB5zcGtAxk780zWJmbpvAXub4eEkkhaljWfj5KfRkf
-         A2zJXmmagu/IZN1Izi43NmVlEZVVVMZ/dWkQFvwHzgcx/5shaId34VMUCVfEEmTyvZ
-         gkaaPn4ZIR92ivhhfotqalgeqkgbCqTaP2NdJfHgP2F/RnoWoa8XMD5oWHjfcHDYnr
-         +DmsPTj5ObxZg==
+        b=X9VAtBBnW8BhgxZ3xzaECd0M5Vw9Zk1Bva5rCUCczmdoG6+rJT/i+ZMa/+UiRUtsj
+         NbBcZngkD4r7Npg/g4x+4ooAjhqRRZBIh2E3tdY5XUa+qxWKwST6D+cCJBQ3de9e37
+         PDhdgjmz5dJ0UXJ3L5onK4vqHQ9xOfiGsawkE5A2AxmQeqddQj43CTLZTvSporBMCZ
+         wlFE640yUF/8fs4gEkR41iFpfPDSyoWQxLAl7rzGf4+wgfc8T/bIJy7+W/KQ379i6B
+         bVmJ5gQVOn1NHi12oQ6gOAqBkMb5rz0UAr1DmRrgm/LhiAr5GLynIdulyHA1zW21Bk
+         pt3ERWVNg7Vdw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22CAAE5869F;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02E73E5D08C;
         Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-Subject: Re: [GIT PULL] Networking for 5.17-rc3
+Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.17-rc3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220204000428.2889873-1-kuba@kernel.org>
-References: <20220204000428.2889873-1-kuba@kernel.org>
+In-Reply-To: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
+References: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220204000428.2889873-1-kuba@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc3
-X-PR-Tracked-Commit-Id: 87563a043cef044fed5db7967a75741cc16ad2b1
+X-PR-Tracked-Message-Id: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
+X-PR-Tracked-Commit-Id: ec049891b2dc16591813eacaddc476b3d27c8c14
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: eb2eb5161cdbd4f0acc574ef1c3ce799b980544b
-Message-Id: <164393739213.12311.5728078063673083709.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 25b20ae8151b3d5289896f4f200ff790d2cdf4bf
+Message-Id: <164393739200.12311.15807559014449375931.pr-tracker-bot@kernel.org>
 Date:   Fri, 04 Feb 2022 01:16:32 +0000
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  3 Feb 2022 16:04:28 -0800:
+The pull request you sent on Thu, 3 Feb 2022 13:35:26 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc3
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/eb2eb5161cdbd4f0acc574ef1c3ce799b980544b
+https://git.kernel.org/torvalds/c/25b20ae8151b3d5289896f4f200ff790d2cdf4bf
 
 Thank you!
 

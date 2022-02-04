@@ -2,119 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481274AA300
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DF14AA30C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348566AbiBDWSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:18:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59640 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348258AbiBDWSL (ORCPT
+        id S1348706AbiBDWVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:21:00 -0500
+Received: from mail-oo1-f41.google.com ([209.85.161.41]:42748 "EHLO
+        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238837AbiBDWU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:18:11 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D388B83705;
-        Fri,  4 Feb 2022 22:18:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE392C004E1;
-        Fri,  4 Feb 2022 22:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644013089;
-        bh=MyTsb1RD4SOHRX3mB93R3YhXVlw0eJEKURFgtMAHxVo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rO7m7wkQgkdIBQRhKwH0on1lfveX3TJg953izhyqmswOQWQrhI8gfS5qhnO28s0ot
-         YBCPbF4beqTdO9rrYdh+QomyZVR39A/O/9RH7UQsiMnovO2sSCkVgkxGlU4Psph+fO
-         x05cs3LJPl3rbfAGDizjxzDBDP5mfaCDURwO4XBtCyEeuqnnxCT9DaZpeYOjJI2tqK
-         GhJj1LmxU0aclKNczIUI11f03VHMwD6UT8S10CQIY2nuXTGTJkl2esJvdU2Zce+mxP
-         onIzRRBLKbuDQfmoprmP6zhIkpSMFEy9KRJwxrIp7k1IQbhd+uoHXeCNiDhwtlqL/x
-         eHPV1qS5n0nDQ==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A . Donenfeld " <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] random: remove use_input_pool parameter from crng_reseed()
-Date:   Fri,  4 Feb 2022 14:17:33 -0800
-Message-Id: <20220204221733.39411-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 4 Feb 2022 17:20:59 -0500
+Received: by mail-oo1-f41.google.com with SMTP id w5-20020a4a9785000000b0030956914befso6210381ooi.9;
+        Fri, 04 Feb 2022 14:20:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=51UcnV8idQFx159Np6IWbNC0MFaAO1dhJYFWbgqko8Y=;
+        b=n616Hfjp5o7S9cTHA+j2/faOFxtjK3VEyp7W5WSNEGmKTaJCazUnDsPpAdLZ14TY+l
+         KJSFS1/q2RRn4UrAcpTAt0ACYeBqneQeOn6BIsPPS++K3Imq4VWTgDn8bhdLg/8UFXxL
+         8AOpKh2qEk0xe4mexhNtLarNUGk22Cp2F/OHvyoD6Xmz3BidDZY5IfDkcDlopeE+OnRR
+         NpVYYhZ2tpuqCaEjMH6bjJHLXI3DS1Gro3j/Tna6b51z3nm+gRE2JATPXDs1DKn2x0CI
+         QO9DTmzHjVXRGNO0DVMy/wjNJyWVmVdauizFQRtIzSonfxbeVYGcxqeGhi8VXNr4QIYu
+         E96A==
+X-Gm-Message-State: AOAM531h7ybrmhKiyt6J+z9Z36u10mSq6uwKwfUc7bIEInFWITEOqLI5
+        T2MJhd1Rl1IwcDzHKncVxQ==
+X-Google-Smtp-Source: ABdhPJwvUqeWoik7ZNFtYmaKADKWiDeedTQlW+VdSFjU9fb9NCAECIy0T20ANVIH1ZXCc5VefSf6RQ==
+X-Received: by 2002:a05:6870:e6d6:: with SMTP id s22mr300999oak.261.1644013259101;
+        Fri, 04 Feb 2022 14:20:59 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w62sm1303039oie.4.2022.02.04.14.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 14:20:58 -0800 (PST)
+Received: (nullmailer pid 3285339 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:20:57 -0000
+Date:   Fri, 4 Feb 2022 16:20:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org, Xin Ji <xji@analogixsemi.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robert Foss <robert.foss@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v6 4/4] dt-bindings: drm/bridge: anx7625: Add aux-bus node
+Message-ID: <Yf2mySxEeH6zru1C@robh.at.kernel.org>
+References: <20220203141023.570180-1-hsinyi@chromium.org>
+ <20220203141023.570180-4-hsinyi@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203141023.570180-4-hsinyi@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Thu, 03 Feb 2022 22:10:23 +0800, Hsin-Yi Wang wrote:
+> List panel under aux-bus node if it's connected to anx7625's aux bus.
+> 
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  .../display/bridge/analogix,anx7625.yaml        | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
 
-The primary_crng is always reseeded from the input_pool, while the NUMA
-crngs are always reseeded from the primary_crng.  Remove the redundant
-'use_input_pool' parameter from crng_reseed() and just directly check
-whether the crng is the primary_crng.
-
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- drivers/char/random.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index e16cf254db15..964bce981235 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -371,7 +371,7 @@ static struct {
- 
- static void extract_entropy(void *buf, size_t nbytes);
- 
--static void crng_reseed(struct crng_state *crng, bool use_input_pool);
-+static void crng_reseed(struct crng_state *crng);
- 
- /*
-  * This function adds bytes into the entropy "pool".  It does not
-@@ -470,7 +470,7 @@ static void credit_entropy_bits(int nbits)
- 	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
- 
- 	if (crng_init < 2 && entropy_count >= POOL_MIN_BITS)
--		crng_reseed(&primary_crng, true);
-+		crng_reseed(&primary_crng);
- }
- 
- /*********************************************************************
-@@ -707,7 +707,7 @@ static int crng_slow_load(const u8 *cp, size_t len)
- 	return 1;
- }
- 
--static void crng_reseed(struct crng_state *crng, bool use_input_pool)
-+static void crng_reseed(struct crng_state *crng)
- {
- 	unsigned long flags;
- 	int i;
-@@ -716,7 +716,7 @@ static void crng_reseed(struct crng_state *crng, bool use_input_pool)
- 		u32 key[8];
- 	} buf;
- 
--	if (use_input_pool) {
-+	if (crng == &primary_crng) {
- 		int entropy_count;
- 		do {
- 			entropy_count = READ_ONCE(input_pool.entropy_count);
-@@ -756,7 +756,7 @@ static void _extract_crng(struct crng_state *crng, u8 out[CHACHA_BLOCK_SIZE])
- 		init_time = READ_ONCE(crng->init_time);
- 		if (time_after(READ_ONCE(crng_global_init_time), init_time) ||
- 		    time_after(jiffies, init_time + CRNG_RESEED_INTERVAL))
--			crng_reseed(crng, crng == &primary_crng);
-+			crng_reseed(crng);
- 	}
- 	spin_lock_irqsave(&crng->lock, flags);
- 	chacha20_block(&crng->state[0], out);
-@@ -1555,7 +1555,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 			return -EPERM;
- 		if (crng_init < 2)
- 			return -ENODATA;
--		crng_reseed(&primary_crng, true);
-+		crng_reseed(&primary_crng);
- 		WRITE_ONCE(crng_global_init_time, jiffies - 1);
- 		return 0;
- 	default:
-
-base-commit: 4bccade22d405309cbc588094f956f4d310e4677
--- 
-2.35.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>

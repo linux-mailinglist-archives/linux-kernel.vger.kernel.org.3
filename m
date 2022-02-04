@@ -2,164 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A9C4AA2E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BE24AA2ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348169AbiBDWMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:12:30 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55660 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346694AbiBDWMU (ORCPT
+        id S238766AbiBDWPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346901AbiBDWPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:12:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBA86199F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354D9C004E1;
-        Fri,  4 Feb 2022 22:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644012739;
-        bh=y1dpcwaROiGNIsdVFNTBw0iucvP+KvehfPTvsCdkpjQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
-         References:From;
-        b=SWtE4mmD/c+3cOTfA0RIAsJqgcEyvo8bSkb0VyNeVB7nE107L5tESG91ZPTWFpOFT
-         bfjocuAZO+SPH6fnT5yNwd0aToSRe2ZK2FYUr3Xm6rKcI0WJdToHC8dMzvAO2zpQ1A
-         KxG8iPIgzXccenq+e4HO958bMcH5r4D5Iu7U4SLdn7UyKhkzbnEaJe4TbbZ+qz8KEY
-         8Vy3YqXirYeqcgoi8dkQjWpDJR3OtcC0TaO6IQhn5HVk32ulTeAcxcRCrzX2ImNjgL
-         JK11Re9uZY0Qk5aEMn/zFhnr+xroiFggkelWmqyOGL9wsqGPNMS2l/hJQWIPBqspyk
-         6xF+gQsLe48Dg==
-From:   Tom Zanussi <zanussi@kernel.org>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 4/4] tracing: Separate hist state updates from hist registration
-Date:   Fri,  4 Feb 2022 16:12:07 -0600
-Message-Id: <211b2cd3e3d7e00f4f8ad45ef8b33063da6a7e05.1644010576.git.zanussi@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1644010575.git.zanussi@kernel.org>
-References: <cover.1644010575.git.zanussi@kernel.org>
-In-Reply-To: <cover.1644010575.git.zanussi@kernel.org>
-References: <cover.1644010575.git.zanussi@kernel.org>
+        Fri, 4 Feb 2022 17:15:15 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAF7C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:15:13 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id c188so9126084iof.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fc9tivpfIRMekzY3db3T+X+KpuiUHIxykgYorNMpzAY=;
+        b=L+fT4PDH2+t16RxVDgAHTAQsmZACpVKJh73Hna2PF28G5x+rSbX9tupHTM+jUmD+yC
+         GgVyrkhP3t0MBbegTuFzfEFfefBpKMy0D2vpVAXNOVP54a6I3tsvehHf/NaKKIBZ/Tdd
+         JB/B6W40iergpQA67eMzBPNMjRJNLxjwvIYY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fc9tivpfIRMekzY3db3T+X+KpuiUHIxykgYorNMpzAY=;
+        b=CAW9dBCFtZgQ3AUrUqIDJB93HwZIR2CdzIDDeamyebgMGmgGOdbZuv2+nPUyl/92m+
+         9OShLNlLU8KQqSMZpcHay6iFBFjzP1zSXPJDhIo6XQROsNWuzcl/PNG0ocj0HuxEBQNo
+         BnumgksATDTaxV42R+UAXW8LEVtiEA4jul8IwVA53C541zWer3AumCLUF3+40gVp7ihx
+         pnqk/e+TObHem/w5IKixvvIhOU1dVmnm6opis4/zUSBuRrueFbgSEafTdVK+kmWDbizp
+         CeaxTulhLuKMefidy8nqUfITqFlWeKVpe8V1q3od1Hp85isUuCo3hqd1NGuO1BPVAjIH
+         mhSA==
+X-Gm-Message-State: AOAM531PFXTrhp2X13FZ0vuDMa5bqwxlQdVNqhQZDUl9rzw8AFUXtS6q
+        GPOUvoLz4EzEOz3PLYh+PDHlNKGLLdPpTQ==
+X-Google-Smtp-Source: ABdhPJwcWoCbOUBPX2mW7GctWSwE7xOxtKymFBpqX2SOEFAU2JcGFAWqK8nRaaMhTmxxGScwCCv72A==
+X-Received: by 2002:a05:6602:1507:: with SMTP id g7mr506099iow.7.1644012912307;
+        Fri, 04 Feb 2022 14:15:12 -0800 (PST)
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com. [209.85.166.51])
+        by smtp.gmail.com with ESMTPSA id 6sm1548613ilg.66.2022.02.04.14.15.09
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 14:15:10 -0800 (PST)
+Received: by mail-io1-f51.google.com with SMTP id 9so9183488iou.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:15:09 -0800 (PST)
+X-Received: by 2002:a02:cc8a:: with SMTP id s10mr527250jap.263.1644012909511;
+ Fri, 04 Feb 2022 14:15:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20220202212348.1391534-1-dianders@chromium.org>
+ <20220202132301.v3.12.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid> <CAD=FV=XXFEM4u78qQZoGrdxpSTjdjWQ_01m+af_Xz1j_TNNDJw@mail.gmail.com>
+In-Reply-To: <CAD=FV=XXFEM4u78qQZoGrdxpSTjdjWQ_01m+af_Xz1j_TNNDJw@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 4 Feb 2022 14:14:58 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VDA_=pW0jHPi=OpLf6xhe_Ln_eUPrCAoTzK_qyvb9XSQ@mail.gmail.com>
+Message-ID: <CAD=FV=VDA_=pW0jHPi=OpLf6xhe_Ln_eUPrCAoTzK_qyvb9XSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] arm64: dts: qcom: sc7280: Add herobrine-r1
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Prasad Malisetty <pmaliset@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>, quic_rjendra@quicinc.com,
+        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
+        kgodara@codeaurora.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hist_register_trigger() handles both new hist registration as well as
-existing hist registration through event_command.reg().
+Hi,
 
-Adding a new function, existing_hist_update_only(), that checks and
-updates existing histograms and exits after doing so allows the
-confusing logic in event_hist_trigger_parse() to be simplified.
+On Thu, Feb 3, 2022 at 3:26 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Wed, Feb 2, 2022 at 1:24 PM Douglas Anderson <dianders@chromium.org> wrote:
+> >
+> > +&pcie1_clkreq_n {
+> > +       bias-disable;
+> > +       drive-strength = <2>;
+> > +};
+>
+> As per the discussion [1] then maybe the above should be
+> `bias-pull-up` instead of `bias-disable`. I'm happy to spin this, have
+> it fixed by the maintainer when applied, or do a follow-up patch to
+> fix this. Please let me know.
 
-Signed-off-by: Tom Zanussi <zanussi@kernel.org>
----
- kernel/trace/trace_events_hist.c | 66 +++++++++++++++++++++++---------
- 1 file changed, 48 insertions(+), 18 deletions(-)
+Breadcrumbs: since most of this series landed but not this patch, I've
+sent a new version with the fixup.
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 28604e17bc73..bc52b03be11a 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -5926,6 +5926,48 @@ static bool hist_trigger_match(struct event_trigger_data *data,
- 	return true;
- }
- 
-+static bool existing_hist_update_only(char *glob,
-+				      struct event_trigger_data *data,
-+				      struct trace_event_file *file)
-+{
-+	struct hist_trigger_data *hist_data = data->private_data;
-+	struct event_trigger_data *test, *named_data = NULL;
-+	bool updated = false;
-+
-+	if (!hist_data->attrs->pause && !hist_data->attrs->cont &&
-+	    !hist_data->attrs->clear)
-+		goto out;
-+
-+	if (hist_data->attrs->name) {
-+		named_data = find_named_trigger(hist_data->attrs->name);
-+		if (named_data) {
-+			if (!hist_trigger_match(data, named_data, named_data,
-+						true))
-+				goto out;
-+		}
-+	}
-+
-+	if (hist_data->attrs->name && !named_data)
-+		goto out;
-+
-+	list_for_each_entry(test, &file->triggers, list) {
-+		if (test->cmd_ops->trigger_type == ETT_EVENT_HIST) {
-+			if (!hist_trigger_match(data, test, named_data, false))
-+				continue;
-+			if (hist_data->attrs->pause)
-+				test->paused = true;
-+			else if (hist_data->attrs->cont)
-+				test->paused = false;
-+			else if (hist_data->attrs->clear)
-+				hist_clear(test);
-+			updated = true;
-+			goto out;
-+		}
-+	}
-+ out:
-+	return updated;
-+}
-+
- static int hist_register_trigger(char *glob,
- 				 struct event_trigger_data *data,
- 				 struct trace_event_file *file)
-@@ -5954,19 +5996,11 @@ static int hist_register_trigger(char *glob,
- 
- 	list_for_each_entry(test, &file->triggers, list) {
- 		if (test->cmd_ops->trigger_type == ETT_EVENT_HIST) {
--			if (!hist_trigger_match(data, test, named_data, false))
--				continue;
--			if (hist_data->attrs->pause)
--				test->paused = true;
--			else if (hist_data->attrs->cont)
--				test->paused = false;
--			else if (hist_data->attrs->clear)
--				hist_clear(test);
--			else {
-+			if (hist_trigger_match(data, test, named_data, false)) {
- 				hist_err(tr, HIST_ERR_TRIGGER_EEXIST, 0);
- 				ret = -EEXIST;
-+				goto out;
- 			}
--			goto out;
- 		}
- 	}
-  new:
-@@ -6005,8 +6039,6 @@ static int hist_register_trigger(char *glob,
- 
- 	if (named_data)
- 		destroy_hist_data(hist_data);
--
--	ret++;
-  out:
- 	return ret;
- }
-@@ -6274,14 +6306,12 @@ static int event_hist_trigger_parse(struct event_command *cmd_ops,
- 		goto out_free;
- 	}
- 
--	ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
--	if (ret)
-+	if (existing_hist_update_only(glob, trigger_data, file))
- 		goto out_free;
--	if (ret == 0) {
--		if (!(attrs->pause || attrs->cont || attrs->clear))
--			ret = -ENOENT;
-+
-+	ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
-+	if (ret < 0)
- 		goto out_free;
--	}
- 
- 	if (get_named_trigger_data(trigger_data))
- 		goto enable;
--- 
-2.17.1
-
+https://lore.kernel.org/r/20220204140550.v4.1.I5604b7af908e8bbe709ac037a6a8a6ba8a2bfa94@changeid/

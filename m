@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3FE4AA119
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2CE4AA11A
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238412AbiBDUUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:20:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S238650AbiBDUUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiBDUUb (ORCPT
+        with ESMTP id S237616AbiBDUUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:20:31 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E37C06174E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:20:27 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id d5so6602927pjk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:20:27 -0800 (PST)
+        Fri, 4 Feb 2022 15:20:34 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB3C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:20:28 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso14113965pjv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:20:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tMoGWwtYjtAOUkhvjOCJhK5Z921yyMCRTQ3P/6tLMeQ=;
-        b=EZQw7V0nciNULmOoKV0u6+j3J4Th8yfFdf2cixYWjKZzUxhmEE9UrcN8ziHQi+Wr/Y
-         +wf98/Jjury9vKO+q8e4YmOheXUMX77em3S3OTeuMbty8gImxuUsR274hlQFr2/m/WPU
-         UBf3vWPDR3jhjm5EpQmVpfa2R6C5q0Xh8a494=
+        bh=j6C39UFn+jrEqEIOvITw0T2gh1RnTm0sOBo49+WVuDA=;
+        b=jGvPAGwayYyRxJU/DyY/MMJwXAGIuoD2BSFjJHICXNMolE12b7ijp2RV+FCiUd7G0X
+         orlr6ZpVrI2eM7+TuN9DaaSbqfcqk+X9nqSp87sAZUeZpXmLVJPxeuV1LqEqNAt4nx5e
+         bs8HiyKzLPBgTC0QjvKrXdIKgKCSCjVKQvm4g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tMoGWwtYjtAOUkhvjOCJhK5Z921yyMCRTQ3P/6tLMeQ=;
-        b=v8BRj8rETAjnGvr5+Yz7qnqhixeNNb1qrnfZ05ygnoQeSKP1nd8jMwwQUpY3m0eKLp
-         IG7hwALY7g9RcWcLT5QDevIEDRQEqAfzdX4fBvRwTMDkso/ZtQsT2abqVXQqIRAIr8HG
-         fGmMp/Bd6kUBKbNffei0Snb9rykmmYdwNnmBGuUmQ8GLjx5n930gAegq6aHOuucBLViK
-         indqyEatO15m0UOX06vyfSp+uCneKOBYB+nZiOrGhoJPI54JktjXxh5OJZQsuXazKwfS
-         Rru1ho0tg7xQGnzyMJfVu0q3aPAB0RAODzg7gIQst+d8qMuHlDnZ4dUdCCGUOGcMzyeQ
-         YSkw==
-X-Gm-Message-State: AOAM533jhloA2U5i+rlq+jAJNMmZjMH0EQIGs6lsrB2w4MKjPYPjyrSG
-        YnwUdV2w1AERPcBpioQvAop1bQ==
-X-Google-Smtp-Source: ABdhPJzwzksZG09mPu3PVdnBmhWKM/mGYwFEmZf3l2C9kovSBF42eZ1ixFuDBFfZMLITTgq3Zy/D7Q==
-X-Received: by 2002:a17:902:e5c3:: with SMTP id u3mr1779787plf.21.1644006026504;
-        Fri, 04 Feb 2022 12:20:26 -0800 (PST)
+        bh=j6C39UFn+jrEqEIOvITw0T2gh1RnTm0sOBo49+WVuDA=;
+        b=3xr3ZoMcuHpTfPyCt7xfsEBZSZbzFBON8nQ+czqHfovEmsltvUxvjAShDPKTI8U6jw
+         QLw3RWcq2Mx2qC8k6E/kDQmeuhdsk67kDsM46X05jY333YY/TuWjZIaXjROgRg/RD2AL
+         aDg2MixaqtQwDDOkOGjfzQTvOyjk8Qv5sNDVNWb6BxaREcJFpkYXXq3Cs1NGMK8YYDiz
+         pqDIiJ4mKDJy5EHdUeVXNnyVObz+elVSGEYtjyAYmNn7qtaBTTWdokySE1YZfr+CmbL0
+         b4yLc+jjkkebx7uVrVfLnx6y22WWdtwmAySpYtTn9/XnS/+CM7ieOxGNMlUICYCkd2pI
+         GQhA==
+X-Gm-Message-State: AOAM533GW1FQdosTIBHtSBIaopq8KkFgse/ky5qgwGfIxUkJo8NR2eJT
+        ezOKCNKdyBtHryaTSCyf5sy1sA==
+X-Google-Smtp-Source: ABdhPJy4fIjcXd5iKfn71Ecib6moONOKAzLwXXPrXvh0pjqlt8nRvQHCfG2u/CfjfwBY300zubxQ1Q==
+X-Received: by 2002:a17:902:d48a:: with SMTP id c10mr4746224plg.139.1644006027577;
+        Fri, 04 Feb 2022 12:20:27 -0800 (PST)
 Received: from smtp.gmail.com ([2620:15c:202:201:1ba2:dd59:3b59:18bc])
-        by smtp.gmail.com with ESMTPSA id q17sm3385561pfk.108.2022.02.04.12.20.25
+        by smtp.gmail.com with ESMTPSA id q17sm3385561pfk.108.2022.02.04.12.20.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 12:20:26 -0800 (PST)
+        Fri, 04 Feb 2022 12:20:27 -0800 (PST)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     benjamin.tissoires@redhat.com,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         "Sean O'Brien" <seobrien@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
         Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: [PATCH 3/5] HID: Extract vivaldi hid feature mapping for use in hid-hammer
-Date:   Fri,  4 Feb 2022 12:20:19 -0800
-Message-Id: <20220204202021.895426-4-swboyd@chromium.org>
+Subject: [PATCH 4/5] HID: google: Add support for vivaldi to hid-hammer
+Date:   Fri,  4 Feb 2022 12:20:20 -0800
+Message-Id: <20220204202021.895426-5-swboyd@chromium.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220204202021.895426-1-swboyd@chromium.org>
 References: <20220204202021.895426-1-swboyd@chromium.org>
@@ -71,12 +71,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to support parsing the HID device in both the vivaldi and the
-hammer drivers so that we can properly expose the function row physmap
-to userspace when a hammer device uses a vivaldi keyboard layout for the
-function row keys. Extract the feature mapping logic from the vivaldi
-driver into the vivaldi-keymap library so we can use it from both
-HID drivers.
+Add support to the hammer driver to parse vivaldi keyboard layouts and
+expose them to userspace. This allows hammer devices to use vivaldi
+function row keys while also supporting the other features this driver
+supports, like the CBAS (chrome base attached switch) and a keyboard
+backlight.
 
 Cc: Jiri Kosina <jikos@kernel.org>
 Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
@@ -85,225 +84,193 @@ Cc: Douglas Anderson <dianders@chromium.org>
 Cc: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/hid/hid-vivaldi.c            | 69 +---------------------
- drivers/input/vivaldi-keymap.c       | 86 ++++++++++++++++++++++++++++
- include/linux/input/vivaldi-keymap.h |  9 +++
- 3 files changed, 97 insertions(+), 67 deletions(-)
+ drivers/hid/Kconfig             |  1 +
+ drivers/hid/hid-google-hammer.c | 95 +++++++++++++++++++++++++--------
+ 2 files changed, 75 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-index 78ae3725bc89..361ba6200387 100644
---- a/drivers/hid/hid-vivaldi.c
-+++ b/drivers/hid/hid-vivaldi.c
-@@ -13,9 +13,6 @@
- #include <linux/module.h>
- #include <linux/sysfs.h>
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 5569a2029dab..070c4c8128e8 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -405,6 +405,7 @@ config HOLTEK_FF
  
--#define HID_VD_FN_ROW_PHYSMAP 0x00000001
--#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
--
- static ssize_t function_row_physmap_show(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
-@@ -60,70 +57,8 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
- 				    struct hid_usage *usage)
+ config HID_GOOGLE_HAMMER
+ 	tristate "Google Hammer Keyboard"
++	select INPUT_VIVALDIFMAP
+ 	depends on USB_HID && LEDS_CLASS && CROS_EC
+ 	help
+ 	Say Y here if you have a Google Hammer device.
+diff --git a/drivers/hid/hid-google-hammer.c b/drivers/hid/hid-google-hammer.c
+index 0403beb3104b..e3dd26ddbd43 100644
+--- a/drivers/hid/hid-google-hammer.c
++++ b/drivers/hid/hid-google-hammer.c
+@@ -15,6 +15,7 @@
+ 
+ #include <linux/acpi.h>
+ #include <linux/hid.h>
++#include <linux/input/vivaldi-keymap.h>
+ #include <linux/leds.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -22,6 +23,7 @@
+ #include <linux/platform_data/cros_ec_proto.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_wakeup.h>
++#include <linux/sysfs.h>
+ #include <asm/unaligned.h>
+ 
+ #include "hid-ids.h"
+@@ -300,6 +302,11 @@ struct hammer_kbd_leds {
+ 	u8 buf[2] ____cacheline_aligned;
+ };
+ 
++struct hammer_drvdata {
++	struct vivaldi_data vdata;
++	struct hammer_kbd_leds leds;
++};
++
+ static int hammer_kbd_brightness_set_blocking(struct led_classdev *cdev,
+ 		enum led_brightness br)
  {
- 	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
--	struct hid_report *report = field->report;
--	int fn_key;
--	int ret;
--	u32 report_len;
--	u8 *report_data, *buf;
--
--	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
--	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
--		return;
--
--	fn_key = (usage->hid & HID_USAGE);
--	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
--		return;
--	if (fn_key > drvdata->num_function_row_keys)
--		drvdata->num_function_row_keys = fn_key;
--
--	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
--	if (!report_data)
--		return;
--
--	report_len = hid_report_len(report);
--	if (!report->id) {
--		/*
--		 * hid_hw_raw_request() will stuff report ID (which will be 0)
--		 * into the first byte of the buffer even for unnumbered
--		 * reports, so we need to account for this to avoid getting
--		 * -EOVERFLOW in return.
--		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
--		 * so we can safely say that we have space for an extra byte.
--		 */
--		report_len++;
--	}
--
--	ret = hid_hw_raw_request(hdev, report->id, report_data,
--				 report_len, HID_FEATURE_REPORT,
--				 HID_REQ_GET_REPORT);
--	if (ret < 0) {
--		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
--			 field->report->id);
--		goto out;
--	}
--
--	if (!report->id) {
--		/*
--		 * Undo the damage from hid_hw_raw_request() for unnumbered
--		 * reports.
--		 */
--		report_data++;
--		report_len--;
--	}
--
--	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
--				   report_len, 0);
--	if (ret) {
--		dev_warn(&hdev->dev, "failed to report feature %d\n",
--			 field->report->id);
--		goto out;
--	}
--
--	drvdata->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
--	    field->value[usage->usage_index];
--
--out:
--	kfree(buf);
-+
-+	vivaldi_hid_feature_mapping(drvdata, hdev, field, usage);
+@@ -337,15 +344,11 @@ static int hammer_kbd_brightness_set_blocking(struct led_classdev *cdev,
+ 	return ret;
  }
  
- static int vivaldi_input_configured(struct hid_device *hdev,
-diff --git a/drivers/input/vivaldi-keymap.c b/drivers/input/vivaldi-keymap.c
-index da6dc4070216..7d472b8126b2 100644
---- a/drivers/input/vivaldi-keymap.c
-+++ b/drivers/input/vivaldi-keymap.c
-@@ -6,6 +6,7 @@
-  */
+-static int hammer_register_leds(struct hid_device *hdev)
++static int hammer_register_leds(struct hammer_drvdata *hdata, struct hid_device *hdev)
+ {
+ 	struct hammer_kbd_leds *kbd_backlight;
+-	int error;
+-
+-	kbd_backlight = kzalloc(sizeof(*kbd_backlight), GFP_KERNEL);
+-	if (!kbd_backlight)
+-		return -ENOMEM;
  
- #include <linux/export.h>
-+#include <linux/hid.h>
- #include <linux/input/vivaldi-keymap.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -36,4 +37,89 @@ ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
++	kbd_backlight = &hdata->leds;
+ 	kbd_backlight->hdev = hdev;
+ 	kbd_backlight->cdev.name = "hammer::kbd_backlight";
+ 	kbd_backlight->cdev.max_brightness = MAX_BRIGHTNESS;
+@@ -356,26 +359,16 @@ static int hammer_register_leds(struct hid_device *hdev)
+ 	/* Set backlight to 0% initially. */
+ 	hammer_kbd_brightness_set_blocking(&kbd_backlight->cdev, 0);
+ 
+-	error = led_classdev_register(&hdev->dev, &kbd_backlight->cdev);
+-	if (error)
+-		goto err_free_mem;
+-
+-	hid_set_drvdata(hdev, kbd_backlight);
+-	return 0;
+-
+-err_free_mem:
+-	kfree(kbd_backlight);
+-	return error;
++	return led_classdev_register(&hdev->dev, &kbd_backlight->cdev);
  }
- EXPORT_SYMBOL_GPL(vivaldi_function_row_physmap_show);
  
-+#if IS_ENABLED(CONFIG_HID)
-+
-+#define HID_VD_FN_ROW_PHYSMAP 0x00000001
-+#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
-+
-+/**
-+ * vivaldi_hid_feature_mapping - Fill out vivaldi keymap data exposed via HID
-+ * @data: The vivaldi function keymap
-+ * @hdev: HID device to parse
-+ * @field: HID field to parse
-+ * @usage: HID usage to parse
-+ */
-+void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
-+				 struct hid_device *hdev,
-+				 struct hid_field *field,
-+				 struct hid_usage *usage)
+ static void hammer_unregister_leds(struct hid_device *hdev)
+ {
+-	struct hammer_kbd_leds *kbd_backlight = hid_get_drvdata(hdev);
++	struct hammer_drvdata *hdata = hid_get_drvdata(hdev);
++	struct hammer_kbd_leds *kbd_backlight = &hdata->leds;
+ 
+-	if (kbd_backlight) {
++	if (kbd_backlight)
+ 		led_classdev_unregister(&kbd_backlight->cdev);
+-		kfree(kbd_backlight);
+-	}
+ }
+ 
+ #define HID_UP_GOOGLEVENDOR	0xffd10000
+@@ -385,6 +378,58 @@ static void hammer_unregister_leds(struct hid_device *hdev)
+ /* HID usage for keyboard backlight (Alphanumeric display brightness) */
+ #define HID_AD_BRIGHTNESS	0x00140046
+ 
++static void hammer_feature_mapping(struct hid_device *hdev,
++				   struct hid_field *field,
++				   struct hid_usage *usage)
 +{
-+	struct hid_report *report = field->report;
-+	int fn_key;
-+	int ret;
-+	u32 report_len;
-+	u8 *report_data, *buf;
++	struct hammer_drvdata *hdata = hid_get_drvdata(hdev);
 +
-+	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
-+	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-+		return;
-+
-+	fn_key = (usage->hid & HID_USAGE);
-+	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
-+		return;
-+	if (fn_key > data->num_function_row_keys)
-+		data->num_function_row_keys = fn_key;
-+
-+	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-+	if (!report_data)
-+		return;
-+
-+	report_len = hid_report_len(report);
-+	if (!report->id) {
-+		/*
-+		 * hid_hw_raw_request() will stuff report ID (which will be 0)
-+		 * into the first byte of the buffer even for unnumbered
-+		 * reports, so we need to account for this to avoid getting
-+		 * -EOVERFLOW in return.
-+		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-+		 * so we can safely say that we have space for an extra byte.
-+		 */
-+		report_len++;
-+	}
-+
-+	ret = hid_hw_raw_request(hdev, report->id, report_data,
-+				 report_len, HID_FEATURE_REPORT,
-+				 HID_REQ_GET_REPORT);
-+	if (ret < 0) {
-+		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
-+			 field->report->id);
-+		goto out;
-+	}
-+
-+	if (!report->id) {
-+		/*
-+		 * Undo the damage from hid_hw_raw_request() for unnumbered
-+		 * reports.
-+		 */
-+		report_data++;
-+		report_len--;
-+	}
-+
-+	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
-+				   report_len, 0);
-+	if (ret) {
-+		dev_warn(&hdev->dev, "failed to report feature %d\n",
-+			 field->report->id);
-+		goto out;
-+	}
-+
-+	data->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
-+	    field->value[usage->usage_index];
-+
-+out:
-+	kfree(buf);
++	vivaldi_hid_feature_mapping(&hdata->vdata, hdev, field, usage);
 +}
-+EXPORT_SYMBOL_GPL(vivaldi_hid_feature_mapping);
-+#endif /* CONFIG_HID */
 +
- MODULE_LICENSE("GPL");
-diff --git a/include/linux/input/vivaldi-keymap.h b/include/linux/input/vivaldi-keymap.h
-index 4023b65e1649..7cf5bc650fed 100644
---- a/include/linux/input/vivaldi-keymap.h
-+++ b/include/linux/input/vivaldi-keymap.h
-@@ -4,6 +4,10 @@
- 
- #include <linux/types.h>
- 
-+struct hid_device;
-+struct hid_field;
-+struct hid_usage;
++static ssize_t function_row_physmap_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	struct hid_device *hdev = to_hid_device(dev);
++	struct hammer_drvdata *hdata = hid_get_drvdata(hdev);
++	struct vivaldi_data *vdata = &hdata->vdata;
 +
- #define VIVALDI_MIN_FN_ROW_KEY	1
- #define VIVALDI_MAX_FN_ROW_KEY	24
- 
-@@ -25,4 +29,9 @@ struct vivaldi_data {
- ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
- 					  char *buf);
- 
-+void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
-+				 struct hid_device *hdev,
-+				 struct hid_field *field,
-+				 struct hid_usage *usage);
++	return vivaldi_function_row_physmap_show(vdata, buf);
++}
 +
- #endif /* _VIVALDI_KEYMAP_H */
++static DEVICE_ATTR_RO(function_row_physmap);
++static struct attribute *hammer_sysfs_attrs[] = {
++	&dev_attr_function_row_physmap.attr,
++	NULL
++};
++
++static umode_t hammer_attr_is_visible(struct kobject *kobj,
++				      struct attribute *attr, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct hid_device *hdev = to_hid_device(dev);
++	struct hammer_drvdata *hdata = hid_get_drvdata(hdev);
++	struct vivaldi_data *vdata = &hdata->vdata;
++
++	if (attr == &dev_attr_function_row_physmap.attr &&
++	    !vdata->num_function_row_keys)
++		return 0;
++
++	return attr->mode;
++}
++
++static const struct attribute_group input_attribute_group = {
++	.is_visible = hammer_attr_is_visible,
++	.attrs = hammer_sysfs_attrs,
++};
++
++static int hammer_input_configured(struct hid_device *hdev,
++				   struct hid_input *hidinput)
++{
++	return sysfs_create_group(&hdev->dev.kobj, &input_attribute_group);
++}
++
+ static int hammer_input_mapping(struct hid_device *hdev, struct hid_input *hi,
+ 				struct hid_field *field,
+ 				struct hid_usage *usage,
+@@ -516,6 +561,12 @@ static int hammer_probe(struct hid_device *hdev,
+ 			const struct hid_device_id *id)
+ {
+ 	int error;
++	struct hammer_drvdata *hdata;
++
++	hdata = devm_kzalloc(&hdev->dev, sizeof(*hdata), GFP_KERNEL);
++	if (!hdata)
++		return -ENOMEM;
++	hid_set_drvdata(hdev, hdata);
+ 
+ 	error = hid_parse(hdev);
+ 	if (error)
+@@ -541,7 +592,7 @@ static int hammer_probe(struct hid_device *hdev,
+ 	}
+ 
+ 	if (hammer_has_backlight_control(hdev)) {
+-		error = hammer_register_leds(hdev);
++		error = hammer_register_leds(hdata, hdev);
+ 		if (error)
+ 			hid_warn(hdev,
+ 				"Failed to register keyboard backlight: %d\n",
+@@ -610,6 +661,8 @@ static struct hid_driver hammer_driver = {
+ 	.id_table = hammer_devices,
+ 	.probe = hammer_probe,
+ 	.remove = hammer_remove,
++	.feature_mapping = hammer_feature_mapping,
++	.input_configured = hammer_input_configured,
+ 	.input_mapping = hammer_input_mapping,
+ 	.event = hammer_event,
+ };
 -- 
 https://chromeos.dev
 

@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F261F4A91F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3DB4A91F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356501AbiBDBQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 20:16:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiBDBQe (ORCPT
+        id S1352971AbiBDBS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 20:18:26 -0500
+Received: from mailbackend.panix.com ([166.84.1.89]:43979 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230291AbiBDBSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 20:16:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84357C061714;
-        Thu,  3 Feb 2022 17:16:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43531B81E57;
-        Fri,  4 Feb 2022 01:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 12CFDC340E8;
-        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643937392;
-        bh=Cyt3I3EBMavNFow1QRriz9SViu1nkBRsjpVOO+ycS+I=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=X9VAtBBnW8BhgxZ3xzaECd0M5Vw9Zk1Bva5rCUCczmdoG6+rJT/i+ZMa/+UiRUtsj
-         NbBcZngkD4r7Npg/g4x+4ooAjhqRRZBIh2E3tdY5XUa+qxWKwST6D+cCJBQ3de9e37
-         PDhdgjmz5dJ0UXJ3L5onK4vqHQ9xOfiGsawkE5A2AxmQeqddQj43CTLZTvSporBMCZ
-         wlFE640yUF/8fs4gEkR41iFpfPDSyoWQxLAl7rzGf4+wgfc8T/bIJy7+W/KQ379i6B
-         bVmJ5gQVOn1NHi12oQ6gOAqBkMb5rz0UAr1DmRrgm/LhiAr5GLynIdulyHA1zW21Bk
-         pt3ERWVNg7Vdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02E73E5D08C;
-        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.17-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-References: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <b82319f7-14d7-6a37-7b11-c53d90cadc4a@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
-X-PR-Tracked-Commit-Id: ec049891b2dc16591813eacaddc476b3d27c8c14
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 25b20ae8151b3d5289896f4f200ff790d2cdf4bf
-Message-Id: <164393739200.12311.15807559014449375931.pr-tracker-bot@kernel.org>
-Date:   Fri, 04 Feb 2022 01:16:32 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+        Thu, 3 Feb 2022 20:18:25 -0500
+Received: from xps-7390.lan (50-233-66-25-static.hfc.comcastbusiness.net [50.233.66.25])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 4Jqd2l0MCDz14j2;
+        Thu,  3 Feb 2022 20:18:22 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+        t=1643937504; bh=0qSjb57vhCpcs7a1tYd3FAFBq9x66ySjnwUDc45qp4c=;
+        h=Date:From:Reply-To:To:cc:Subject:In-Reply-To:References;
+        b=oFD6/tv7fEmiSr2LA6C/RZXXig06qv76DzTC0TlQUJE3bm8IA0oTTlKj0F9xKfzAT
+         p95GF1mMV008D0MZPjWOf+QB3sLZ14ns3lX2lqqL0TE+8NQPtVDy1gt4ivsS3k3190
+         GJhm6sSofgK3I5fLifDH6OsjK1CyI1GIA0jI7R4E=
+Date:   Thu, 3 Feb 2022 17:18:22 -0800 (PST)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     Vidya Sagar <vidyas@nvidia.com>
+cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com,
+        hkallweit1@gmail.com, wangxiongfeng2@huawei.com,
+        mika.westerberg@linux.intel.com, kai.heng.feng@canonical.com,
+        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
+        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
+        sagupta@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        "Kenneth R. Crudup" <kenny@panix.com>
+Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
+In-Reply-To: <708b746c-1715-9d64-5a59-55c9ad81bd0a@nvidia.com>
+Message-ID: <f449b4a-a13-d32d-b7c3-da226aebd30@panix.com>
+References: <20220201123536.12962-1-vidyas@nvidia.com> <8aa96f79-402-4897-424f-64a2c6893de8@panix.com> <2ab59f0d-3ae7-ca5e-6bfc-12bed18813b2@nvidia.com> <38a02915-906f-c53-7e13-6c8710315e7@panix.com> <708b746c-1715-9d64-5a59-55c9ad81bd0a@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 3 Feb 2022 13:35:26 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.17-rc3
+On Wed, 2 Feb 2022, Vidya Sagar wrote:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/25b20ae8151b3d5289896f4f200ff790d2cdf4bf
+> but could you please confirm that you are using the same system as before?
 
-Thank you!
+Yeah, the same Dell XPS 7390 2-in-1 as last year.
+
+I've merged this change into Linus' master and it's been
+suspending/resuming/hibernating with no issues so far. Is there anything else
+you'd like me to test?
+
+	-Kenny
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA

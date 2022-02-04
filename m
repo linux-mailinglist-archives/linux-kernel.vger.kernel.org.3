@@ -2,114 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49F04AA3E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:01:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4212D4AA3E5
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377293AbiBDXBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:01:39 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36734
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352168AbiBDXBi (ORCPT
+        id S1377806AbiBDXCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:02:35 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:40827 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242439AbiBDXCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:01:38 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4C1924003A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644015697;
-        bh=9lqnKWWeY7ck0N4RCu24NCmh00+Npqj5crjtpsswZLI=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=YQOGrUxS3azwsK86LknBbwZr/FoM2ZdPovhc6WIp4MFXhZJQ7tKH4zNMLJPb7oXcX
-         FGu3snd0JlKe0vCy+pnAzLDwQlvsZklLkIRloeduYKfuzEqhDUJvCU2RuoVqoe6hJU
-         n3Kbe+NEUf+ksTE7YwaDTWrUZsDmsv086ujo6fadRAaQMb5o0vf1twLWadQnC9Ay74
-         1wo/d5e38sBN5IAefhW3OS0qi3MjlGWczXpqH62PkgE26OTFNu6L/691uffCkzkB3Y
-         vyEHnztKdMCeqItY6c6521X6Y69IYuiJ3ra+egFPyKOdB4oe/PzMP587cd8fsxwJx4
-         WGKbmKfMCFenA==
-Received: by mail-io1-f69.google.com with SMTP id r4-20020a6b4404000000b00614d5a865f7so5013876ioa.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:01:37 -0800 (PST)
+        Fri, 4 Feb 2022 18:02:34 -0500
+Received: by mail-oi1-f171.google.com with SMTP id q8so10255475oiw.7;
+        Fri, 04 Feb 2022 15:02:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9lqnKWWeY7ck0N4RCu24NCmh00+Npqj5crjtpsswZLI=;
-        b=u2O/NV/C+0G+3ypa14+aZq1AUFtJv78xVRg4dcWw/vx0qdIEtjFpxNwgT75hFH6O/A
-         YKFgwN6pLSvdfzpgoYZZ98nyYbHWXSmiUTQ77xe6fCXAE0vm0E8p7VBZZXiww0g+4kZV
-         H8shxsSNcZw8sUX7m9rxvBu14/Zd6Iztc41POsyr2k8+1ZDNJYiYWhyDIPSVYKt0RVgY
-         ZXLaFKLv09qIrp4iYhNicfqPKpuhYX1MTLJ6jHxI9+KfmmpQ/QMKfNy+6RljTTUs9DGE
-         D183nROVSOLyZUiaxY88pOBFwJLL2ktSSFTV90dW3UC22JnHjiq8RZi+Ru+Bl/LjlnCk
-         04Uw==
-X-Gm-Message-State: AOAM532+NIl4OZ/3XTkXZEwONDPNXljFmoP1efb3Q1IpQThNuG4ujf16
-        7LbaIJtz9MRblFJRQm5s+eWtRjIwv1y2XFhk4KvQQhTpdSU/+UMuSlkRKBs6hel0LMP4r5EggYg
-        Ui/Nstdx95TNNEu/qL4giqUMEHsMxdZM7TSFnJZmYhQ==
-X-Received: by 2002:a05:6638:3399:: with SMTP id h25mr650196jav.166.1644015696037;
-        Fri, 04 Feb 2022 15:01:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzTuofHZlwZ1cYjHU/l2TfOuPfjBnS6ABivT4GOI8HYntDU6F/03yNCBtDFBIhUSTXue1rNcA==
-X-Received: by 2002:a05:6638:3399:: with SMTP id h25mr650188jav.166.1644015695820;
-        Fri, 04 Feb 2022 15:01:35 -0800 (PST)
-Received: from xps13.dannf (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
-        by smtp.gmail.com with ESMTPSA id l13sm1624266ilj.24.2022.02.04.15.01.34
+         :mime-version:content-disposition:in-reply-to;
+        bh=so7WBDjA3xCDjc/S+xxRptDS0jNCba5tDsjIbD3vNJs=;
+        b=XjiOBDvzYDcMrJZDmgNOc7q10fOmDWj5d9rr3UF8ZPuMY5pIWwwPhKkaRy31z6UUQ6
+         f1D6bGt7I/uHTzob4TBLpb/5InEvK/zuOhtugKcgQ3OMfny9YKUMAdHqVzJKpG/Edszq
+         ZRVcDau8efR14b1S4e3hk2QTdmevYGljt9jLHWc+8wY37QK3MsknMWelktp7utFh1kc0
+         +r0EI6S2L9Wyr86lHUqNZuwajpMtwHGyqWIiOyk8lhaGnpibjAaDgl+CqfAQdGzcUhhP
+         DmjQBAU/jDQ9PuiFyR93cPWhWx8q1d60zy0W+7UxuBQ5v8fqqSqSShFE8u0aambh8751
+         gHhw==
+X-Gm-Message-State: AOAM530FwVMCsMIAJeWw3iKgnSm44he5MgxRdnL379Lw2atkzNNhekho
+        6SbYYa8Hi0KPW9OHZWttCQ==
+X-Google-Smtp-Source: ABdhPJw4Mo+JilQCIGEVwlEMmR/R7KpCERHXyFXB8K0h/yrIireDfpOeZwMkC+s/O+oo1VT77exLRw==
+X-Received: by 2002:a05:6808:aa5:: with SMTP id r5mr622455oij.115.1644015754037;
+        Fri, 04 Feb 2022 15:02:34 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x1sm1277327oto.38.2022.02.04.15.02.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 15:01:34 -0800 (PST)
-Date:   Fri, 4 Feb 2022 16:01:32 -0700
-From:   dann frazier <dann.frazier@canonical.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Toan Le <toan@os.amperecomputing.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
-        stable@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
-Message-ID: <Yf2wTLjmcRj+AbDv@xps13.dannf>
-References: <20211129173637.303201-1-robh@kernel.org>
+        Fri, 04 Feb 2022 15:02:33 -0800 (PST)
+Received: (nullmailer pid 3346874 invoked by uid 1000);
+        Fri, 04 Feb 2022 23:02:32 -0000
+Date:   Fri, 4 Feb 2022 17:02:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dougall <dougallj@gmail.com>, kernel-team@android.com
+Subject: Re: [PATCH v4 03/10] dt-bindings: apple,aic: Add affinity
+ description for per-cpu pseudo-interrupts
+Message-ID: <Yf2wiMTUV6XUqWh0@robh.at.kernel.org>
+References: <20220124201231.298961-1-maz@kernel.org>
+ <20220124201231.298961-4-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211129173637.303201-1-robh@kernel.org>
+In-Reply-To: <20220124201231.298961-4-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
-> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
-> broke PCI support on XGene. The cause is the IB resources are now sorted
-> in address order instead of being in DT dma-ranges order. The result is
-> which inbound registers are used for each region are swapped. I don't
-> know the details about this h/w, but it appears that IB region 0
-> registers can't handle a size greater than 4GB. In any case, limiting
-> the size for region 0 is enough to get back to the original assignment
-> of dma-ranges to regions.
+On Mon, Jan 24, 2022 at 08:12:24PM +0000, Marc Zyngier wrote:
+> Some of the FIQ per-cpu pseudo-interrupts are better described with
+> a specific affinity, the most obvious candidate being the CPU PMUs.
+> 
+> Augment the AIC binding to be able to specify that affinity in the
+> interrupt controller node.
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  .../interrupt-controller/apple,aic.yaml       | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> index c7577d401786..d97683eb2c54 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+> @@ -70,6 +70,33 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  affinities:
+> +    type: object
 
-hey Rob!
+       additionalProperties: false
 
-I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
-only during network installs - that I also bisected down to commit
-6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
-hoping that this patch that fixed the issue on Stéphane's X-Gene2
-system would also fix my issue, but no luck. In fact, it seems to just
-makes it fail differently. Reverting both patches is required to get a
-v5.17-rc kernel to boot.
+> +    description:
+> +      FIQ affinity can be expressed as a single "affinities" node,
+> +      containing a set of sub-nodes, one per FIQ with a non-default
+> +      affinity.
+> +    patternProperties:
+> +      "^.+-affinity$":
+> +        type: object
 
-I've collected the following logs - let me know if anything else would
-be useful.
+           additionalProperties: false
 
-1) v5.17-rc2+ (unmodified):
-   http://dannf.org/bugs/m400-no-reverts.log
-   Note that the mlx4 driver fails initialization.
+> +        properties:
+> +          fiq-index:
 
-2) v5.17-rc2+, w/o the commit that fixed Stéphane's system:
-   http://dannf.org/bugs/m400-xgene2-fix-reverted.log
-   Note the mlx4 MSI-X timeout, and later panic.
+apple,fiq-index
 
-3) v5.17-rc2+, w/ both commits reverted (works)
-   http://dannf.org/bugs/m400-both-reverted.log
+With that,
 
-   -dann
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +            description:
+> +              The interrupt number specified as a FIQ, and for which
+> +              the affinity is not the default.
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            maximum: 5
+> +
+> +          cpus:
+> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+> +            description:
+> +              Should be a list of phandles to CPU nodes (as described in
+> +              Documentation/devicetree/bindings/arm/cpus.yaml).
+> +
+> +        required:
+> +          - fiq-index
+> +          - cpus
+> +
+>  required:
+>    - compatible
+>    - '#interrupt-cells'
+> -- 
+> 2.30.2
+> 
+> 

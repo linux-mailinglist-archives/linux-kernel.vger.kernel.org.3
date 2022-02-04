@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CB14AA0BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4624AA0E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240186AbiBDUCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S233869AbiBDUGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236512AbiBDT73 (ORCPT
+        with ESMTP id S238347AbiBDUFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:59:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5578BC06177B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=n98nGVb9Cb+XvLGLcWCumBllUZqlAwFV4o2oMVvKDzc=; b=cOdXsc5mMVDJurAC+imkmuYttX
-        3OQsK0McDFwlZIciCYO6E5DH/6M0d69UVVeEwve9KYcFdsYomkwTXHMooUxJu23oEE5tq22dV5GCk
-        YHU1nqo+L6rTpOCkw+/X6IIn40ciY/QvKg3KTvrCpMU6XlL+gTCIb7hRryxSwLU+Gw9UjRKPz8M/S
-        bLtuJ05gTy+4xt4bVVNjV0D5jI5tgs70cVGawKf3TE26pVLqDhWOsM3Sfft8HbvuZ1lke4y9xybpt
-        AyuawnkdC0aDDayzxFsLPS6D6dyB0SZnyRHwppLdZd3S0IZqGMhNvnMbfbR9KMFGqpvsrjvvwyEmf
-        QMPK21rA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nG4jc-007Ls3-Hy; Fri, 04 Feb 2022 19:59:08 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-mm@kvack.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 75/75] selftests/vm/transhuge-stress: Support file-backed PMD folios
-Date:   Fri,  4 Feb 2022 19:58:52 +0000
-Message-Id: <20220204195852.1751729-76-willy@infradead.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
-References: <20220204195852.1751729-1-willy@infradead.org>
+        Fri, 4 Feb 2022 15:05:42 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E1C06136C;
+        Fri,  4 Feb 2022 12:03:59 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d1so6054481plh.10;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=bLChGjEp7XV+zCb/FoJ9GfumEeTQWfhFGQCoozOt3GnA1ZXGkTjabAXozjimyeJn1E
+         KN2x0h03YqXAJQmemhmLMK7okFXx4aG2gL5N6AWKYUDXP1Ib1G4nAU2XgE3FGJ+wsvjj
+         PGUfpzMeb1mb0aKI88uLnyw5CsZwBhyV0VrhBy5N1s0jJOHsPL2D2O8d7btnmdOFGqnB
+         fx6wlJdnJl1E7gOjFZ6GP52rdS/oQZQLapgi9XCzKIZnrA181p16a+chsTEUl9wSXTyx
+         ETGS8vKjjgZ8YX+HpnxaVfRPSf+gis1Dnajdx/0RKyGQUonpOIhQG957i7ifE5G+xoj1
+         gkHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+08pbFHIVqXtRgCRGwgS5N246tIcG+TXD3qRf9F36iw=;
+        b=DECZBPaF/I52tITQN8euI+K+lUzvWCmjwzOxaEpHL9Ivib970AUYGt385Ex6F+sFEH
+         XlPjB/3XPZ+KREes9/Bk1t4rArdyXQXjINXXF6SWJ5gxo6aErn4NMhT9aFt4yp0qTkUq
+         r8ybgR7fXFarN6dRWpEJgvfrkFVzLK9Bpo7JgGy/S01xduJdBInjpL+cswlAUQUBCxOV
+         GmAb6t1f1ptUJRFjM1vQSg2VWzthFoAJkU9Gy2RzNE+XTjOmbA3xYfeFORrQU+lzJ+FP
+         RELaCe4cdB3TQDdeQDyiBZI10OiMSjfckLKvxRmHE8+vmC0ZB0Y1WXocSQHZIC5Qe7no
+         sv+Q==
+X-Gm-Message-State: AOAM530RWTAaj9eJ8/44Z+J1JHw28QqeAcuK1+2W8ZLJO0E2HEgWClGs
+        5GtQSTT0rnLehFpsFDMlpbBFoJ1f5v8P5g==
+X-Google-Smtp-Source: ABdhPJxOMEo7JDvh78IhN7RDJ9a8jI4xihXjuwfJFEvaRs/On+QYsASo2DZPyYweZMIZSPRYqbB06A==
+X-Received: by 2002:a17:902:c209:: with SMTP id 9mr4714497pll.119.1644005039317;
+        Fri, 04 Feb 2022 12:03:59 -0800 (PST)
+Received: from tong-desktop.local (99-105-211-126.lightspeed.sntcca.sbcglobal.net. [99.105.211.126])
+        by smtp.googlemail.com with ESMTPSA id j18sm3782566pfj.13.2022.02.04.12.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 12:03:58 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tong Zhang <ztong0001@gmail.com>
+Subject: [PATCH] KEYS: trusted: fix crash when TPM/TEE are built as module
+Date:   Fri,  4 Feb 2022 12:03:42 -0800
+Message-Id: <20220204200342.48665-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a -f <filename> option to test PMD folios on files
+when TCG_TPM and TEE are built as module, trusted_key_sources will be an
+empty array, loading it won't do what it is supposed to do and unloading
+it will cause kernel crash.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+To reproduce:
+$ modprobe trusted
+$ modprobe -r trusted
+
+[  173.749423] Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[  173.755268] Backtrace:
+[  173.755378]  cleanup_trusted [trusted] from sys_delete_module+0x15c/0x22c
+[  173.755589]  sys_delete_module from ret_fast_syscall+0x0/0x1c
+
+To fix this issue, we also need to check CONFIG_TCG_TPM_MODULE and
+CONFIG_TEE_MODULE.
+
+Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 ---
- tools/testing/selftests/vm/transhuge-stress.c | 35 +++++++++++++------
- 1 file changed, 24 insertions(+), 11 deletions(-)
+ security/keys/trusted-keys/trusted_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/transhuge-stress.c b/tools/testing/selftests/vm/transhuge-stress.c
-index 5e4c036f6ad3..a03cb3fce1f6 100644
---- a/tools/testing/selftests/vm/transhuge-stress.c
-+++ b/tools/testing/selftests/vm/transhuge-stress.c
-@@ -26,15 +26,17 @@
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+index d5c891d8d353..b3a3b2f2d4a4 100644
+--- a/security/keys/trusted-keys/trusted_core.c
++++ b/security/keys/trusted-keys/trusted_core.c
+@@ -27,10 +27,10 @@ module_param_named(source, trusted_key_source, charp, 0);
+ MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
  
- int pagemap_fd;
-+int backing_fd = -1;
-+int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
-+#define PROT_RW (PROT_READ | PROT_WRITE)
- 
- int64_t allocate_transhuge(void *ptr)
- {
- 	uint64_t ent[2];
- 
- 	/* drop pmd */
--	if (mmap(ptr, HPAGE_SIZE, PROT_READ | PROT_WRITE,
--				MAP_FIXED | MAP_ANONYMOUS |
--				MAP_NORESERVE | MAP_PRIVATE, -1, 0) != ptr)
-+	if (mmap(ptr, HPAGE_SIZE, PROT_RW, MAP_FIXED | mmap_flags,
-+		 backing_fd, 0) != ptr)
- 		errx(2, "mmap transhuge");
- 
- 	if (madvise(ptr, HPAGE_SIZE, MADV_HUGEPAGE))
-@@ -60,6 +62,8 @@ int main(int argc, char **argv)
- 	size_t ram, len;
- 	void *ptr, *p;
- 	struct timespec a, b;
-+	int i = 0;
-+	char *name = NULL;
- 	double s;
- 	uint8_t *map;
- 	size_t map_len;
-@@ -69,13 +73,23 @@ int main(int argc, char **argv)
- 		ram = SIZE_MAX / 4;
- 	else
- 		ram *= sysconf(_SC_PAGESIZE);
-+	len = ram;
-+
-+	while (++i < argc) {
-+		if (!strcmp(argv[i], "-h"))
-+			errx(1, "usage: %s [size in MiB]", argv[0]);
-+		else if (!strcmp(argv[i], "-f"))
-+			name = argv[++i];
-+		else
-+			len = atoll(argv[i]) << 20;
-+	}
- 
--	if (argc == 1)
--		len = ram;
--	else if (!strcmp(argv[1], "-h"))
--		errx(1, "usage: %s [size in MiB]", argv[0]);
--	else
--		len = atoll(argv[1]) << 20;
-+	if (name) {
-+		backing_fd = open(name, O_RDWR);
-+		if (backing_fd == -1)
-+			errx(2, "open %s", name);
-+		mmap_flags = MAP_SHARED;
-+	}
- 
- 	warnx("allocate %zd transhuge pages, using %zd MiB virtual memory"
- 	      " and %zd MiB of ram", len >> HPAGE_SHIFT, len >> 20,
-@@ -86,8 +100,7 @@ int main(int argc, char **argv)
- 		err(2, "open pagemap");
- 
- 	len -= len % HPAGE_SIZE;
--	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_READ | PROT_WRITE,
--			MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE, -1, 0);
-+	ptr = mmap(NULL, len + HPAGE_SIZE, PROT_RW, mmap_flags, backing_fd, 0);
- 	if (ptr == MAP_FAILED)
- 		err(2, "initial mmap");
- 	ptr += HPAGE_SIZE - (uintptr_t)ptr % HPAGE_SIZE;
+ static const struct trusted_key_source trusted_key_sources[] = {
+-#if defined(CONFIG_TCG_TPM)
++#if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+ 	{ "tpm", &trusted_key_tpm_ops },
+ #endif
+-#if defined(CONFIG_TEE)
++#if defined(CONFIG_TEE) || defined(CONFIG_TEE_MODULE)
+ 	{ "tee", &trusted_key_tee_ops },
+ #endif
+ };
 -- 
-2.34.1
+2.25.1
 

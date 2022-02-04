@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB44AA331
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4598B4AA33A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350379AbiBDWgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:36:09 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:37716 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237867AbiBDWgI (ORCPT
+        id S1350989AbiBDWhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:37:19 -0500
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:42799 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233433AbiBDWhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:36:08 -0500
-Received: by mail-oi1-f172.google.com with SMTP id r27so10214895oiw.4;
-        Fri, 04 Feb 2022 14:36:08 -0800 (PST)
+        Fri, 4 Feb 2022 17:37:18 -0500
+Received: by mail-oo1-f54.google.com with SMTP id w5-20020a4a9785000000b0030956914befso6250853ooi.9;
+        Fri, 04 Feb 2022 14:37:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=MqC4XXsfy4OSQxTMHWMiNrSGa1Al6Yednc9CWOuRGdY=;
-        b=b7XaWjDxKYwB50HR91Q8GG3Bpfd7iHh2YnP+gAksQvODVzGv2OGlMxm2eGjpUml/2b
-         uol5+WP2iJow3CymgFznLdV3/XWnpnoBejFiWSojizlUVbJOfqJIT3iFL7wNPGXSLEox
-         eyQYnVvyXWTVv8Vb2+uG13ZU0YoW2POGeOnoagS+oAbkjxBqDeNHtVySRv3nIKZUJRi2
-         h+zvmvOWZzm7JfYY6wUCBDzAAx2jxLboMmrEAavcgESalUr6FBKXUK3rtOFVaQzqup50
-         NNgpp+Ik3L/RGF30ScVz6orNozhYsfEygBDHyvvlATiAJPOKiI1+1HtiO+1rRASZITRq
-         wHPw==
-X-Gm-Message-State: AOAM532cynNQQ8Vf4qtejEzjx+TGXnoHzK0vvG0rrhdJQUkzXT0CQxhN
-        q2q1gF4LaekJ1BKUPod2ZQ==
-X-Google-Smtp-Source: ABdhPJzZc4Y0D4MVbBqCvKn1BX7lOTSIIrCE3xuG5Qvtfu5aTUoCVarqFItKADANNla6kGX1qln9HA==
-X-Received: by 2002:a05:6808:1a86:: with SMTP id bm6mr574161oib.182.1644014167720;
-        Fri, 04 Feb 2022 14:36:07 -0800 (PST)
+        bh=1Xkm+wQR2CLWbK9ZiKadmiL63/Ces5dU1DXtwlkexAk=;
+        b=FYt81DfnK3fJY7ZvdMVR4STrcT7U2uMCKcdeGEg4x+Xz/KrIWQcx9xURQCORntJRAc
+         msv7F5ZRgF3Qpy/9A7SmeIJyzzUrJlxxSXrSckh37gJ+o//msScaRCBy57nVrqHJ48jG
+         QGEyRZlUF9aKNcFXBOGn+Ibihwj47Xq7oE4eFFIEn3zZVpli5JAmCxgo3w19bJtzYE0e
+         KTdYKF9APJXWERIlgwDR0rU2hE/h2F0h7n7YtXAV4upbQSVVqNqnIS6uAD+SPNkuZN7b
+         0BpawghAtr4tFuYlT4CNXlyP6c3xGjNbeYxkRTFA9mqkeDHoDDSYXACMhkc2DZPJVNoG
+         xmOQ==
+X-Gm-Message-State: AOAM5311M7wAe0OzQTNh+ApaUKLM9zYugJq2vP9FfB0yOXM2vjQ4gugo
+        Bf5Ki3QVPIETm9ux8/HrAVRVr7MURg==
+X-Google-Smtp-Source: ABdhPJxyooWnERKMMOe817RvnVcNz3HD2yH1iZf7YhESaOMD+6htuNPS+q5rU09UCiBaA5VXRwqxnQ==
+X-Received: by 2002:a05:6870:e495:: with SMTP id v21mr317265oag.288.1644014237767;
+        Fri, 04 Feb 2022 14:37:17 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e92sm1233655ote.72.2022.02.04.14.36.06
+        by smtp.gmail.com with ESMTPSA id h2sm1215234ots.51.2022.02.04.14.37.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:36:07 -0800 (PST)
-Received: (nullmailer pid 3308882 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:36:06 -0000
-Date:   Fri, 4 Feb 2022 16:36:06 -0600
+        Fri, 04 Feb 2022 14:37:17 -0800 (PST)
+Received: (nullmailer pid 3310469 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:37:16 -0000
+Date:   Fri, 4 Feb 2022 16:37:16 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Fenglin Wu <quic_fenglinw@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, collinsd@codeaurora.org,
-        subbaram@codeaurora.org, tglx@linutronix.de, maz@kernel.org
-Subject: Re: [PATCH v5 08/10] bindings: spmi: spmi-pmic-arb: mark interrupt
- properties as optional
-Message-ID: <Yf2qVi8Xj/iYYRNm@robh.at.kernel.org>
-References: <1643178713-17178-1-git-send-email-quic_fenglinw@quicinc.com>
- <1643178713-17178-9-git-send-email-quic_fenglinw@quicinc.com>
+To:     Rajeev Nandan <quic_rajeevny@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sean@poorly.run, daniel@ffwll.ch,
+        quic_abhinavk@quicinc.com, quic_kalyant@quicinc.com,
+        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org,
+        airlied@linux.ie, jonathan@marek.ca, dmitry.baryshkov@linaro.org,
+        swboyd@chromium.org, freedreno@lists.freedesktop.org,
+        robh+dt@kernel.org, robdclark@gmail.com
+Subject: Re: [v5 1/3] dt-bindings: msm/dsi: Add 10nm dsi phy tuning properties
+Message-ID: <Yf2qnHguXCyWLj4f@robh.at.kernel.org>
+References: <1643573719-32095-1-git-send-email-quic_rajeevny@quicinc.com>
+ <1643573719-32095-2-git-send-email-quic_rajeevny@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643178713-17178-9-git-send-email-quic_fenglinw@quicinc.com>
+In-Reply-To: <1643573719-32095-2-git-send-email-quic_rajeevny@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 02:31:50PM +0800, Fenglin Wu wrote:
-> From: David Collins <collinsd@codeaurora.org>
+On Mon, 31 Jan 2022 01:45:17 +0530, Rajeev Nandan wrote:
+> In most cases, the default values of DSI PHY tuning registers should be
+> sufficient as they are fully optimized. However, in some cases where
+> extreme board parasitics cause the eye shape to degrade, the override
+> bits can be used to improve the signal quality.
 > 
-> Mark all interrupt related properties as optional instead of
-> required.  Some boards do not required PMIC IRQ support and it
-> isn't needed to handle SPMI bus transactions, so specify it as
-> optional.
+> The general guidelines for DSI PHY tuning include:
+> - High and moderate data rates may benefit from the drive strength and
+>   drive level tuning.
+> - Drive strength tuning will affect the output impedance and may be used
+>   for matching optimization.
+> - Drive level tuning will affect the output levels without affecting the
+>   impedance.
 > 
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+> The clock and data lanes have a calibration circuitry feature. The drive
+> strength tuning can be done by adjusting rescode offset for hstop/hsbot,
+> and the drive level tuning can be done by adjusting the LDO output level
+> for the HSTX drive.
+> 
+> Signed-off-by: Rajeev Nandan <quic_rajeevny@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt | 2 ++
->  1 file changed, 2 insertions(+)
+> 
+> Changes in v2:
+>  - More details in the commit text (Stephen Boyd)
+>  - Use human understandable values (Stephen Boyd, Dmitry Baryshkov)
+>  - Do not take values that are going to be unused (Dmitry Baryshkov)
+> 
+> Changes in v3:
+>  - Use "qcom," prefix (Dmitry Baryshkov)
+>  - Remove encoding from phy-drive-ldo-level (Dmitry Baryshkov)
+>  - Use negative values instead of two's complement (Dmitry, Rob Herring)
+> 
+> Changes in v4:
+>  - Fix dt_binding_check error (Rob Herring's bot)
+> 
+> Changes in v5:
+>  - None
+> 
+>  .../bindings/display/msm/dsi-phy-10nm.yaml         | 36 ++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+> 
 
-This will collide with converting it to DT schema[1].
-
-Rob
-
-[1] https://lore.kernel.org/all/20220131172450.2528065-2-vkoul@kernel.org/
+Reviewed-by: Rob Herring <robh@kernel.org>

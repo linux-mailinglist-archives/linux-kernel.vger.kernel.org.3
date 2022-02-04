@@ -2,218 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6647D4AA044
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C494E4AA04A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbiBDTl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:41:29 -0500
-Received: from mail-pl1-f179.google.com ([209.85.214.179]:33513 "EHLO
-        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234517AbiBDTl2 (ORCPT
+        id S234608AbiBDTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:42:40 -0500
+Received: from mail-qt1-f178.google.com ([209.85.160.178]:42879 "EHLO
+        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231869AbiBDTmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:41:28 -0500
-Received: by mail-pl1-f179.google.com with SMTP id k17so6065458plk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:41:28 -0800 (PST)
+        Fri, 4 Feb 2022 14:42:39 -0500
+Received: by mail-qt1-f178.google.com with SMTP id s1so6597077qtw.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:42:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CFMZsF60mL/AvzBP5r7pT0OECNsIa6CFchGR8JtV4T0=;
-        b=HOiF0IuLnq3i8UV+fBUCJFRs4Q4aJV/D1+wwXgLvB57llCkcIRS4p3ObBuIH81IopO
-         kWEtR1ssi8mWxG1BHvyNrV6Mwb/PAdOuKKJMnxIv/AExTjjZCD54OjE4mPip7ee2Laaf
-         qzXvoQjY42iwKVhMF+5BhMBGbyAmtNCKzUJWdSc9Ag6WlhOi7JV0f5ZSVOs+q0k0QU1G
-         DgPB9LQmVxY38GEuBfV7Cn3ncte/NndbXLQIgmsuz3Gawus9gzzUmDFBxXlsahGDVLAc
-         0E4WQlu9m8M8ybnA+HdYytVWRfC9ppyZ3HQG+RgG5tzWNeSUsuKO35mO4zCeUNuTl8GE
-         gKzQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JbC8+naqmMGFLTWyMj3cT1mIuHoa6H6nQOCtbEqKg3M=;
+        b=q7qWg8FNGY9UBDZDBZn99g/etbMeDQ72KcwFlWHN0TnqmhD3NAFtahRpeGCbbcCzeX
+         vPqicZ7LvR7kuPArucxPFhLPulyHjzMKgWixlInSbhgp7E/TE+rvQ2rCUWGeIY4ohHpq
+         3PADSbc3euSF3ZS7pc6Dygap6BMSjIUZ+Z6Xq5T5ODAPp9n7LvFDmiotkrfyUwtpIZhZ
+         g55YSvXqpvJZkR5X68ri41MWT18rAR3RtHis7BDCGJBl4pLz4vIqrxapkDLXA695Y4Sv
+         FbhQTU5BAQ2GnJlQV9C0DAi2S63hQrbffOgaKv54ndUvvNHrIQcN8/eIpif6TYte6JiM
+         uW/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CFMZsF60mL/AvzBP5r7pT0OECNsIa6CFchGR8JtV4T0=;
-        b=CZd9WEbk6j0NcQxINhIY+elzIcoLapvIariAfbg8KG84N3zRaetqBA8t2tJaLT/3s1
-         9ZEX52DEQEnU26uQ+YH7ZdGhzr15mMEG+f3GMs0KjEiXy7ZfcGDLaGbH9CNelnGX8j97
-         b0EHFGvBx6RaU9y/BirkJrDGGyH+Sf+Rkp8ZQYTTJxNB0i/dW5XVlgtj8VyRcV2wV7dc
-         tXUQO6J0A5pxd+inagFJTG1Fh+ItR8tglDBlI57+CKunV/gOteRmKsvK2sYSr+B1oBF4
-         APvDLeYclMZ2D877dzCML6DqkQkPJXmG1B/cPZDXDhDyokhztwKLA7Lgq2Udk0Su1i36
-         uKxQ==
-X-Gm-Message-State: AOAM530bZRwJ5LiwGCb6SVQAJ46IuCunALARRWYt21w1iqiIxoi+uFJn
-        DJdOM+tYthqMXV1i5IrfqPGGpQ==
-X-Google-Smtp-Source: ABdhPJxWkol5aNJtQE2P/r9jH259x9uDSBFAEB4kHn82uLShVjYU7+64EOypAuDoqP1JG7a0BrO+Sg==
-X-Received: by 2002:a17:90b:33cd:: with SMTP id lk13mr4873649pjb.91.1644003687575;
-        Fri, 04 Feb 2022 11:41:27 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id z13sm3537235pfe.20.2022.02.04.11.41.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 11:41:26 -0800 (PST)
-Date:   Fri, 4 Feb 2022 19:41:23 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 09/23] KVM: MMU: remove "bool base_only" arguments
-Message-ID: <Yf2BY7d8TsmNrceY@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-10-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JbC8+naqmMGFLTWyMj3cT1mIuHoa6H6nQOCtbEqKg3M=;
+        b=TbtJGdDeyfr8aDDmgUd9HXGyNk0kCCjKHM4xrhB1SFvgNUPn8Y+1tEp68bwY+p2sJB
+         zUGdLXgh3AfFp1FHG5ySgzj/S61KwnpK2lwGdSqwtMtNP9cj8ms//qBs2IejEaKKEKYi
+         aneXPg+d3LG2YB4sc8um3lxFcNM/UxBjWYP3023RO1taxVD5GB1PIyzUss6bZ4mxmgez
+         wsEOlvfdZMv/CMAyghK0krc6xDfGSr+DoYXoUSCsv4k04Jyo+aYZyaHUBFP7vU0LJCzp
+         ryQcZgRhseOH0IuE2s+jtBJ+e5upsMHMfp3MXro0+uzHEr2uIjmEKyBzDCJHE+FXmecG
+         B4Og==
+X-Gm-Message-State: AOAM532CuG24pre4HOF7b2OYa9J22Vl9rQAx6/CXQRCQNhkggX/V/Y2s
+        mSfVtW6DT2J5md08HY7qccwiXMVzLwz9GauXi190KA==
+X-Google-Smtp-Source: ABdhPJxrv4h/4iWWl4riwPirpNZczdI8YDtShQ2SED6pPsfgef/eYLZ/fRNSmBMe7hD8Ti77VEc6TPDXMN6LKAI4PvA=
+X-Received: by 2002:ac8:58ce:: with SMTP id u14mr425194qta.299.1644003756857;
+ Fri, 04 Feb 2022 11:42:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-10-pbonzini@redhat.com>
+References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
+ <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
+ <CA+khW7jx_4K46gH+tyZZn9ApSYGMqYpxCm0ywmuWdSiogv7dqw@mail.gmail.com>
+ <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
+ <CA+khW7iaCDcpD7JEg9PB-UbYyUuLaEdryhbfaW5tUQ-SUv2sKQ@mail.gmail.com> <CAPhsuW7g+hj1jsFLeHTucZWrq+eB_qwu8bgkd+ObpbktF0t+DA@mail.gmail.com>
+In-Reply-To: <CAPhsuW7g+hj1jsFLeHTucZWrq+eB_qwu8bgkd+ObpbktF0t+DA@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 4 Feb 2022 11:42:25 -0800
+Message-ID: <CA+khW7iW2TRK_RXOJnJVnAApeBHBp+KZRvowdB1wZB=T4jCL+g@mail.gmail.com>
+Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
+To:     Song Liu <song@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Blake Jones <blakejones@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Ian Rogers <irogers@google.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 06:57:04AM -0500, Paolo Bonzini wrote:
-> The argument is always false now that kvm_mmu_calc_root_page_role has
-> been removed.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+On Fri, Feb 4, 2022 at 11:37 AM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Feb 4, 2022 at 11:29 AM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Tue, Jan 25, 2022 at 4:16 PM Song Liu <song@kernel.org> wrote:
+> > >
+> > > On Tue, Jan 25, 2022 at 3:54 PM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > Thanks Song for your suggestion.
+> > > >
+> > > > On Mon, Jan 24, 2022 at 11:08 PM Song Liu <song@kernel.org> wrote:
+> > > > >
+> > > > > On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
+> > > > > >
+> > > > > > Dear BPF experts,
+> > > > > >
+> > > > > > I'm working on collecting some kernel performance data using BPF
+> > > > > > tracing prog. Our performance profiling team wants to associate the
+> > > > > > data with user stack information. One of the requirements is to
+> > > > > > reliably get BuildIDs from bpf_get_stackid() and other similar helpers
+> > > > > > [1].
+> > > > > >
+> > > > > > As part of an early investigation, we found that there are a couple
+> > > > > > issues that make bpf_get_stackid() much less reliable than we'd like
+> > > > > > for our use:
+> > > > > >
+> > > > > > 1. The first page of many binaries (which contains the ELF headers and
+> > > > > > thus the BuildID that we need) is often not in memory. The failure of
+> > > > > > find_get_page() (called from build_id_parse()) is higher than we would
+> > > > > > want.
+> > > > >
+> > > > > Our top use case of bpf_get_stack() is called from NMI, so there isn't
+> > > > > much we can do. Maybe it is possible to improve it by changing the
+> > > > > layout of the binary and the libraries? Specifically, if the text is
+> > > > > also in the first page, it is likely to stay in memory?
+> > > > >
+> > > >
+> > > > We are seeing 30-40% of stack frames not able to get build ids due to
+> > > > this. This is a place where we could improve the reliability of build
+> > > > id.
+> > > >
+> > > > There were a few proposals coming up when we found this issue. One of
+> > > > them is to have userspace mlock the first page. This would be the
+> > > > easiest fix, if it works. Another proposal from Ian Rogers (cc'ed) is
+> > > > to embed build id in vma. This is an idea similar to [1], but it's
+> > > > unclear (at least to me) where to store the string. I'm wondering if
+> > > > we can introduce a sleepable version of bpf_get_stack() if it helps.
+> > > > When a page is not present, sleepable bpf_get_stack() can bring in the
+> > > > page.
+> > >
+> > > I guess it is possible to have different flavors of bpf_get_stack().
+> > > However, I am not sure whether the actual use case could use sleepable
+> > > BPF programs. Our user of bpf_get_stack() is a profiler. The BPF program
+> > > which triggers a perf_event from NMI, where we really cannot sleep.
+> > >
+> > > If we have target use case that could sleep, sleepable bpf_get_stack() sounds
+> > > reasonable to me.
+> > >
+> > > >
+> > > > [1] https://lwn.net/Articles/867818/
+> > > >
+> > > > > > 2. When anonymous huge pages are used to hold some regions of process
+> > > > > > text, build_id_parse() also fails to get a BuildID because
+> > > > > > vma->vm_file is NULL.
+> > > > >
+> > > > > How did the text get in anonymous memory? I guess it is NOT from JIT?
+> > > > > We had a hack to use transparent huge page for application text. The
+> > > > > hack looks like:
+> > > > >
+> > > > > "At run time, the application creates an 8MB temporary buffer and the
+> > > > > hot section of the executable memory is copied to it. The 8MB region in
+> > > > > the executable memory is then converted to a huge page (by way of an
+> > > > > mmap() to anonymous pages and an madvise() to create a huge page), the
+> > > > > data is copied back to it, and it is made executable again using
+> > > > > mprotect()."
+> > > > >
+> > > > > If your case is the same (or similar), it can probably be fixed with
+> > > > > CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
+> > > > >
+> > > >
+> > > > In our use cases, we have text mapped to huge pages that are not
+> > > > backed by files. vma->vm_file could be null or points some fake file.
+> > > > This causes challenges for us on getting build id for these code text.
+> > >
+> > > So, what is the ideal output in these cases? If there isn't a back file, we
+> > > don't really have good build-id for it, right?
+> > >
+> >
+> > Right, I don't have a solution for this case unfortunately. Probably
+> > will just discard the failed frames. :(
+> >
+> > But in the case where the problem is the page not in mem, Song, do you
+> > also see a similar high rate of build id parsing failure in your use
+> > case (30 ~ 40% of frames)? If no, we may have done something wrong on
+> > our side. If yes, is that a problem for your use case?
+>
+> The latest data I found (which is not too recent) is about 3 % missing symbols.
+> I think there must be something different here.
+>
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+Thanks Song! This is interesting. I'll go look at our user cases.
 
-> ---
->  arch/x86/kvm/mmu/mmu.c | 63 +++++++++++++++---------------------------
->  1 file changed, 22 insertions(+), 41 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 42475e4c2a48..dd69cfc8c4f6 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4658,46 +4658,30 @@ static void paging32_init_context(struct kvm_mmu *context)
->  	context->direct_map = false;
->  }
->  
-> -static union kvm_mmu_extended_role kvm_calc_mmu_role_ext(struct kvm_vcpu *vcpu,
-> -							 const struct kvm_mmu_role_regs *regs)
-> -{
-> -	union kvm_mmu_extended_role ext = {0};
-> -
-> -	if (____is_cr0_pg(regs)) {
-> -		ext.cr0_pg = 1;
-> -		ext.cr4_pae = ____is_cr4_pae(regs);
-> -		ext.cr4_smep = ____is_cr4_smep(regs);
-> -		ext.cr4_smap = ____is_cr4_smap(regs);
-> -		ext.cr4_pse = ____is_cr4_pse(regs);
-> -
-> -		/* PKEY and LA57 are active iff long mode is active. */
-> -		ext.cr4_pke = ____is_efer_lma(regs) && ____is_cr4_pke(regs);
-> -		ext.cr4_la57 = ____is_efer_lma(regs) && ____is_cr4_la57(regs);
-> -		ext.efer_lma = ____is_efer_lma(regs);
-> -	}
-> -
-> -	return ext;
-> -}
-> -
->  static union kvm_mmu_role kvm_calc_mmu_role_common(struct kvm_vcpu *vcpu,
-> -						   const struct kvm_mmu_role_regs *regs,
-> -						   bool base_only)
-> +						   const struct kvm_mmu_role_regs *regs)
->  {
->  	union kvm_mmu_role role = {0};
->  
->  	role.base.access = ACC_ALL;
->  	if (____is_cr0_pg(regs)) {
-> +		role.ext.cr0_pg = 1;
->  		role.base.efer_nx = ____is_efer_nx(regs);
->  		role.base.cr0_wp = ____is_cr0_wp(regs);
-> +
-> +		role.ext.cr4_pae = ____is_cr4_pae(regs);
-> +		role.ext.cr4_smep = ____is_cr4_smep(regs);
-> +		role.ext.cr4_smap = ____is_cr4_smap(regs);
-> +		role.ext.cr4_pse = ____is_cr4_pse(regs);
-> +
-> +		/* PKEY and LA57 are active iff long mode is active. */
-> +		role.ext.cr4_pke = ____is_efer_lma(regs) && ____is_cr4_pke(regs);
-> +		role.ext.cr4_la57 = ____is_efer_lma(regs) && ____is_cr4_la57(regs);
-> +		role.ext.efer_lma = ____is_efer_lma(regs);
->  	}
->  	role.base.smm = is_smm(vcpu);
->  	role.base.guest_mode = is_guest_mode(vcpu);
->  
-> -	if (base_only)
-> -		return role;
-> -
-> -	role.ext = kvm_calc_mmu_role_ext(vcpu, regs);
-> -
->  	return role;
->  }
->  
-> @@ -4716,10 +4700,9 @@ static inline int kvm_mmu_get_tdp_level(struct kvm_vcpu *vcpu)
->  
->  static union kvm_mmu_role
->  kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
-> -				const struct kvm_mmu_role_regs *regs,
-> -				bool base_only)
-> +				const struct kvm_mmu_role_regs *regs)
->  {
-> -	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs, base_only);
-> +	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs);
->  
->  	role.base.ad_disabled = (shadow_accessed_mask == 0);
->  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
-> @@ -4734,7 +4717,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
->  	union kvm_mmu_role new_role =
-> -		kvm_calc_tdp_mmu_root_page_role(vcpu, regs, false);
-> +		kvm_calc_tdp_mmu_root_page_role(vcpu, regs);
->  
->  	if (new_role.as_u64 == context->mmu_role.as_u64)
->  		return;
-> @@ -4763,10 +4746,9 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
->  
->  static union kvm_mmu_role
->  kvm_calc_shadow_root_page_role_common(struct kvm_vcpu *vcpu,
-> -				      const struct kvm_mmu_role_regs *regs,
-> -				      bool base_only)
-> +				      const struct kvm_mmu_role_regs *regs)
->  {
-> -	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs, base_only);
-> +	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs);
->  
->  	role.base.smep_andnot_wp = role.ext.cr4_smep && !____is_cr0_wp(regs);
->  	role.base.smap_andnot_wp = role.ext.cr4_smap && !____is_cr0_wp(regs);
-> @@ -4777,11 +4759,10 @@ kvm_calc_shadow_root_page_role_common(struct kvm_vcpu *vcpu,
->  
->  static union kvm_mmu_role
->  kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
-> -				   const struct kvm_mmu_role_regs *regs,
-> -				   bool base_only)
-> +				   const struct kvm_mmu_role_regs *regs)
->  {
->  	union kvm_mmu_role role =
-> -		kvm_calc_shadow_root_page_role_common(vcpu, regs, base_only);
-> +		kvm_calc_shadow_root_page_role_common(vcpu, regs);
->  
->  	role.base.direct = !____is_cr0_pg(regs);
->  
-> @@ -4821,7 +4802,7 @@ static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
->  	union kvm_mmu_role new_role =
-> -		kvm_calc_shadow_mmu_root_page_role(vcpu, regs, false);
-> +		kvm_calc_shadow_mmu_root_page_role(vcpu, regs);
->  
->  	shadow_mmu_init_context(vcpu, context, regs, new_role);
->  
-> @@ -4841,7 +4822,7 @@ kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
->  				   const struct kvm_mmu_role_regs *regs)
->  {
->  	union kvm_mmu_role role =
-> -		kvm_calc_shadow_root_page_role_common(vcpu, regs, false);
-> +		kvm_calc_shadow_root_page_role_common(vcpu, regs);
->  
->  	role.base.direct = false;
->  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
-> @@ -4937,7 +4918,7 @@ kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *
->  {
->  	union kvm_mmu_role role;
->  
-> -	role = kvm_calc_shadow_root_page_role_common(vcpu, regs, false);
-> +	role = kvm_calc_shadow_root_page_role_common(vcpu, regs);
->  
->  	/*
->  	 * Nested MMUs are used only for walking L2's gva->gpa, they never have
-> -- 
-> 2.31.1
-> 
-> 
+> Thanks,
+> Song

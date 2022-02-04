@@ -2,204 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E2F4A9321
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 05:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A7A4A9327
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 05:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356829AbiBDEov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 23:44:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39112 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiBDEou (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 23:44:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08F2BB8366A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 04:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F14C004E1;
-        Fri,  4 Feb 2022 04:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643949887;
-        bh=Da4vBP/4mmZmI7+4TG2/E3AHX4y3BvIm0B1N+u0ghYc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QNjc1K9RtlOkJ09er7mXypbuACrDB/Yb3dc1HvAxjaXNNFwXrNSuKmG+F87gE2KlJ
-         F95U57FlBPad0SpI1p6GLkiYz9KL/hnm5ClQ9HaCClBygzDUMnBzzOVLRiT7QBS3es
-         aWydb7QcIMKadvgifDZpKws3ZHwbcJJ8Wr4EAiQdQAk5c9i1cKb2UCCh7pGFL+iRvN
-         ui4gsVFXgh9H7BSx+ckSvFHj4UZ20nAaDOIneB7UpmpG/31/h/k9YSFrGODTB5WyOh
-         dkc+WSPJZ3Omm+S8Vb4Rr1ApbiijkhMpDeQE9Lyrv5T4LmOuWebHHxRCOzI4w30T9+
-         mSPd5GL7IGrOA==
-Date:   Fri, 4 Feb 2022 06:44:38 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        hch@infradead.org, akpm@linux-foundation.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [RFC V1 04/31] powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Message-ID: <YfyvNphICBzoVfNs@kernel.org>
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
- <1643029028-12710-5-git-send-email-anshuman.khandual@arm.com>
- <Yfwbz5qu20bjFZOP@kernel.org>
- <46e15116-78fb-e6fe-e0f0-fe776f9348c3@arm.com>
+        id S1356979AbiBDEzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 23:55:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:42588 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356987AbiBDEzd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 23:55:33 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A9521435;
+        Thu,  3 Feb 2022 20:55:33 -0800 (PST)
+Received: from [10.163.45.195] (unknown [10.163.45.195])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7C613F774;
+        Thu,  3 Feb 2022 20:55:28 -0800 (PST)
+Subject: Re: [PATCH 2/2] perf: Expand perf_branch_entry.type
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, robh@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Will Deacon <will@kernel.org>
+References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
+ <1643348653-24367-3-git-send-email-anshuman.khandual@arm.com>
+ <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <6168f881-92a4-54f8-929a-c2f40a36c112@arm.com>
+Date:   Fri, 4 Feb 2022 10:25:24 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <46e15116-78fb-e6fe-e0f0-fe776f9348c3@arm.com>
+In-Reply-To: <Yfpxv9+TP9rP72wL@FVFF77S0Q05N>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 08:27:37AM +0530, Anshuman Khandual wrote:
-> 
-> On 2/3/22 11:45 PM, Mike Rapoport wrote:
-> > On Mon, Jan 24, 2022 at 06:26:41PM +0530, Anshuman Khandual wrote:
-> >> This defines and exports a platform specific custom vm_get_page_prot() via
-> >> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> >> macros can be dropped which are no longer needed. While here, this also
-> >> localizes arch_vm_get_page_prot() as powerpc_vm_get_page_prot().
-> >>
-> >> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> >> Cc: Paul Mackerras <paulus@samba.org>
-> >> Cc: linuxppc-dev@lists.ozlabs.org
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> >> ---
-> >>  arch/powerpc/Kconfig               |  1 +
-> >>  arch/powerpc/include/asm/mman.h    |  3 +-
-> >>  arch/powerpc/include/asm/pgtable.h | 19 ------------
-> >>  arch/powerpc/mm/mmap.c             | 47 ++++++++++++++++++++++++++++++
-> >>  4 files changed, 49 insertions(+), 21 deletions(-)
-> >>
-> >> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> >> index b779603978e1..ddb4a3687c05 100644
-> >> --- a/arch/powerpc/Kconfig
-> >> +++ b/arch/powerpc/Kconfig
-> >> @@ -135,6 +135,7 @@ config PPC
-> >>  	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
-> >>  	select ARCH_HAS_UACCESS_FLUSHCACHE
-> >>  	select ARCH_HAS_UBSAN_SANITIZE_ALL
-> >> +	select ARCH_HAS_VM_GET_PAGE_PROT
-> >>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
-> >>  	select ARCH_KEEP_MEMBLOCK
-> >>  	select ARCH_MIGHT_HAVE_PC_PARPORT
-> >> diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
-> >> index 7cb6d18f5cd6..7b10c2031e82 100644
-> >> --- a/arch/powerpc/include/asm/mman.h
-> >> +++ b/arch/powerpc/include/asm/mman.h
-> >> @@ -24,7 +24,7 @@ static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-> >>  }
-> >>  #define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
-> >>  
-> >> -static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
-> >> +static inline pgprot_t powerpc_vm_get_page_prot(unsigned long vm_flags)
-> >>  {
-> >>  #ifdef CONFIG_PPC_MEM_KEYS
-> >>  	return (vm_flags & VM_SAO) ?
-> >> @@ -34,7 +34,6 @@ static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
-> >>  	return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
-> >>  #endif
-> >>  }
-> >> -#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
-> >>  
-> >>  static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
-> >>  {
-> >> diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
-> >> index d564d0ecd4cd..3cbb6de20f9d 100644
-> >> --- a/arch/powerpc/include/asm/pgtable.h
-> >> +++ b/arch/powerpc/include/asm/pgtable.h
-> >> @@ -20,25 +20,6 @@ struct mm_struct;
-> >>  #include <asm/nohash/pgtable.h>
-> >>  #endif /* !CONFIG_PPC_BOOK3S */
-> >>  
-> >> -/* Note due to the way vm flags are laid out, the bits are XWR */
-> >> -#define __P000	PAGE_NONE
-> >> -#define __P001	PAGE_READONLY
-> >> -#define __P010	PAGE_COPY
-> >> -#define __P011	PAGE_COPY
-> >> -#define __P100	PAGE_READONLY_X
-> >> -#define __P101	PAGE_READONLY_X
-> >> -#define __P110	PAGE_COPY_X
-> >> -#define __P111	PAGE_COPY_X
-> >> -
-> >> -#define __S000	PAGE_NONE
-> >> -#define __S001	PAGE_READONLY
-> >> -#define __S010	PAGE_SHARED
-> >> -#define __S011	PAGE_SHARED
-> >> -#define __S100	PAGE_READONLY_X
-> >> -#define __S101	PAGE_READONLY_X
-> >> -#define __S110	PAGE_SHARED_X
-> >> -#define __S111	PAGE_SHARED_X
-> >> -
-> >>  #ifndef __ASSEMBLY__
-> >>  
-> >>  #ifndef MAX_PTRS_PER_PGD
-> >> diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
-> >> index c475cf810aa8..7f05e7903bd2 100644
-> >> --- a/arch/powerpc/mm/mmap.c
-> >> +++ b/arch/powerpc/mm/mmap.c
-> >> @@ -254,3 +254,50 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
-> >>  		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
-> >>  	}
-> >>  }
-> >> +
-> >> +static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
-> >> +{
-> >> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> >> +	case VM_NONE:
-> >> +		return PAGE_NONE;
-> >> +	case VM_READ:
-> >> +		return PAGE_READONLY;
-> >> +	case VM_WRITE:
-> >> +		return PAGE_COPY;
-> >> +	case VM_READ | VM_WRITE:
-> >> +		return PAGE_COPY;
-> >> +	case VM_EXEC:
-> >> +		return PAGE_READONLY_X;
-> >> +	case VM_EXEC | VM_READ:
-> >> +		return PAGE_READONLY_X;
-> >> +	case VM_EXEC | VM_WRITE:
-> >> +		return PAGE_COPY_X;
-> >> +	case VM_EXEC | VM_READ | VM_WRITE:
-> >> +		return PAGE_COPY_X;
-> >> +	case VM_SHARED:
-> >> +		return PAGE_NONE;
-> >> +	case VM_SHARED | VM_READ:
-> >> +		return PAGE_READONLY;
-> >> +	case VM_SHARED | VM_WRITE:
-> >> +		return PAGE_SHARED;
-> >> +	case VM_SHARED | VM_READ | VM_WRITE:
-> >> +		return PAGE_SHARED;
-> >> +	case VM_SHARED | VM_EXEC:
-> >> +		return PAGE_READONLY_X;
-> >> +	case VM_SHARED | VM_EXEC | VM_READ:
-> >> +		return PAGE_READONLY_X;
-> >> +	case VM_SHARED | VM_EXEC | VM_WRITE:
-> >> +		return PAGE_SHARED_X;
-> >> +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-> >> +		return PAGE_SHARED_X;
-> >> +	default:
-> >> +		BUILD_BUG();
-> >> +	}
-> >> +}
-> >> +
-> >> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> >> +{
-> >> +	return __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
-> >> +	       pgprot_val(powerpc_vm_get_page_prot(vm_flags)));
-> > Any reason to keep powerpc_vm_get_page_prot() rather than open code it
-> > here?
-> > 
-> > This applies to other architectures that implement arch_vm_get_page_prot()
-> > and/or arch_filter_pgprot() as well.
-> 
-> Just to minimize the code churn ! But I will be happy to open code them
-> here (and in other platforms) if that will be preferred.
 
-I think this will be clearer because all the processing will be at one place.
-Besides, this way include/asm/pgtable.h becomes shorter and less crowded.
 
--- 
-Sincerely yours,
-Mike.
+On 2/2/22 5:27 PM, Mark Rutland wrote:
+> On Fri, Jan 28, 2022 at 11:14:13AM +0530, Anshuman Khandual wrote:
+>> Current perf_branch_entry.type is a 4 bits field just enough to accommodate
+>> 16 generic branch types. This is insufficient to accommodate platforms like
+>> arm64 which has much more branch types.
+> 
+> It would be good to mention BRBE specifically here, along with specific values
+> and a rought intro, e.g.
+> 
+> | The Arm Branch Record Buffer Extension (BRBE) distinguishes $N types of
+> | branch/exception/return: <rough summary here>. There's not enough space to
+> | describe these all in perf_branch_entry.type, as this is a 4-bit field.
+> 
+> That way reviewers (and anyone looking at the patch in future) have a lot more
+> rationale to work with. A rough summary of the distinct branch types would be
+> *really* helpful.
+
+Sure, will add a summary describing the need for an ABI extension as suggested.
+
+> 
+>> Lets just expands this field into a 6 bits one, which can now hold 64 generic
+>> branch types.
+> 
+> Is it safe (ABI-wise) to extend a bit-field like this? Does that break any
+> combination of old/new userspace and old/new kernel? I'm not sure how bit
+> fields are managed w.r.t. endianness, but normally extending a field would
+> break BE, so this seems suspicious.
+
+Probably. I guess we would need some more inputs/suggestions from others
+regarding any potential issues and possible workarounds.
+
+> 
+> I suspect we might need to allocate a *separate* field for new values, and
+> possibly reserve a value in the existing field to say "go look at the new
+> field".
+
+In that case there might be another level of indirection.
+
+> 
+> Do you have any rationale for 64 values specifically? e.g. is that mostly for
+> future extensibility? How many will we need for Arm's BRBE?
+
+Yeah that is mostly for future extensibility. BRBE's current requirement
+will be well within 32 types itself. 19 to be specific.
+
+> 
+> Do those types fall into a hierarchy, that we could split across separate
+> fields?
+I will take a look and get back on this. But as mentioned before it will
+cause additional level of indirection for a look up.
+
+> 
+>> This also adds more generic branch types.
+> 
+> This feels like ti should be in a separate/subsequent patch. If nothing else
+> that aids bisectability if changing the size of the field breaks anything.
+
+Makes sense, will split them.
+
+> 
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>> Cc: Jiri Olsa <jolsa@redhat.com>
+>> Cc: Namhyung Kim <namhyung@kernel.org>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-perf-users@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  include/uapi/linux/perf_event.h       | 10 ++++++++--
+>>  tools/include/uapi/linux/perf_event.h | 10 ++++++++--
+>>  tools/perf/util/branch.c              |  8 +++++++-
+>>  tools/perf/util/branch.h              |  4 ++--
+>>  4 files changed, 25 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+>> index b91d0f575d0c..361fdc6b87a0 100644
+>> --- a/include/uapi/linux/perf_event.h
+>> +++ b/include/uapi/linux/perf_event.h
+>> @@ -256,6 +256,12 @@ enum {
+>>  	PERF_BR_FIQ		= 13,	/* fiq */
+>>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+>> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+>> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+> 
+> This is really unclear. What is "instruction debug" vs "data debug" ?
+> 
+> Are there meant for breakpoint/watchpoint exceptions? HW breakpoints vs BRK
+> instructions?
+
+Unfortunately the spec does not expand much in detail but will try
+and find some more clarity.
+
+> 
+>> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+>> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+>> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+> 
+> There are many other potential faults a CPU could take; are these specifically
+> what Arm's BRBE provides?
+
+Right, these are what BRBE captures for now.
+
+> 
+>> +	PERF_BR_SERROR		= 21,	/* system error */
+> 
+> This is really arm-specific; IIUC the closest thing on x86 is an MCE.
+
+But ('unhandled' ?) system error can be a generic control flow change.
+
+> 
+>>  	PERF_BR_MAX,
+>>  };
+>>  
+>> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>>  		in_tx:1,    /* in transaction */
+>>  		abort:1,    /* transaction abort */
+>>  		cycles:16,  /* cycle count to last branch */
+>> -		type:4,     /* branch type */
+>> -		reserved:40;
+>> +		type:6,     /* branch type */
+> 
+> As above, is this a safe-change ABI-wise?
+
+If the bit fields here cannot be expanded without breaking ABI, then
+there is a fundamental problem. Only remaining option will be to add
+new fields (with new width value) which could accommodate these new
+required branch types.
+
+> 
+> Thanks,
+> Mark.
+> 
+>> +		reserved:38;
+>>  };
+>>  
+>>  union perf_sample_weight {
+>> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+>> index 1882054e8684..9a82b8aaed93 100644
+>> --- a/tools/include/uapi/linux/perf_event.h
+>> +++ b/tools/include/uapi/linux/perf_event.h
+>> @@ -256,6 +256,12 @@ enum {
+>>  	PERF_BR_FIQ		= 13,	/* fiq */
+>>  	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
+>>  	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
+>> +	PERF_BR_DEBUG_INST	= 16,	/* instruciton debug */
+>> +	PERF_BR_DEBUG_DATA	= 17,	/* data debug */
+>> +	PERF_BR_FAULT_ALGN	= 18,	/* alignment fault */
+>> +	PERF_BR_FAULT_DATA	= 19,	/* data fault */
+>> +	PERF_BR_FAULT_INST	= 20,	/* instruction fault */
+>> +	PERF_BR_SERROR		= 21,	/* system error */
+>>  	PERF_BR_MAX,
+>>  };
+>>  
+>> @@ -1370,8 +1376,8 @@ struct perf_branch_entry {
+>>  		in_tx:1,    /* in transaction */
+>>  		abort:1,    /* transaction abort */
+>>  		cycles:16,  /* cycle count to last branch */
+>> -		type:4,     /* branch type */
+>> -		reserved:40;
+>> +		type:6,     /* branch type */
+>> +		reserved:38;
+>>  };
+>>  
+>>  union perf_sample_weight {
+>> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+>> index 74e5e67b1779..1e216ea2e2a8 100644
+>> --- a/tools/perf/util/branch.c
+>> +++ b/tools/perf/util/branch.c
+>> @@ -54,7 +54,13 @@ const char *branch_type_name(int type)
+>>  		"IRQ",
+>>  		"FIQ",
+>>  		"DEBUG_HALT",
+>> -		"DEBUG_EXIT"
+>> +		"DEBUG_EXIT",
+>> +		"DEBUG_INST",
+>> +		"DEBUG_DATA",
+>> +		"FAULT_ALGN",
+>> +		"FAULT_DATA",
+>> +		"FAULT_INST",
+>> +		"SERROR"
+>>  	};
+>>  
+>>  	if (type >= 0 && type < PERF_BR_MAX)
+>> diff --git a/tools/perf/util/branch.h b/tools/perf/util/branch.h
+>> index 17b2ccc61094..875d99abdc36 100644
+>> --- a/tools/perf/util/branch.h
+>> +++ b/tools/perf/util/branch.h
+>> @@ -23,8 +23,8 @@ struct branch_flags {
+>>  			u64 in_tx:1;
+>>  			u64 abort:1;
+>>  			u64 cycles:16;
+>> -			u64 type:4;
+>> -			u64 reserved:40;
+>> +			u64 type:6;
+>> +			u64 reserved:38;
+>>  		};
+>>  	};
+>>  };
+>> -- 
+>> 2.25.1

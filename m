@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF364AA295
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1F04AA299
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbiBDVtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:49:06 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43262 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238679AbiBDVtF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:49:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S244413AbiBDVuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:50:00 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:41484 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238679AbiBDVt4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 16:49:56 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B67FC618C9;
-        Fri,  4 Feb 2022 21:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D176AC004E1;
-        Fri,  4 Feb 2022 21:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644011344;
-        bh=/3nBBGtXDUFpmYyi9xKAAR9eD/NSPwOIkW8AaplcThs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FsnUQU7Nos2g8hyiAj3+JCW3KEC8mePVfp7WSxnhmaFn/elfu0rpwo0sPHPDa2VR0
-         UG6OIKZiZ6a8XVHzu+mNGtPfARtK5jaTUrLb7pW+ahxegP+H31Qb8gC3XTVLXwAhY1
-         8sdz7AZUBUDGaFnIaopTl9o2rk6ysbiFPt36/C7QIj3mpLdBXdpXg0gqYZuu1mh4W9
-         9gOySzq8q1Lw8tfg8nS/DBS74q4U5t9auvMchIv6xCM9s1ZUwz2kt3rVjf6bCwNODj
-         W3nmH3ngYynRQxVi3T2/CiIsNg3k4p8NaWhVJSAbnTt7UqagnAqHqLo3I62gq2xkrP
-         dYsqOXZodVzGw==
-Date:   Fri, 4 Feb 2022 15:49:02 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     ira.weiny@intel.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V6 02/10] PCI: Replace magic constant for PCI Sig Vendor
- ID
-Message-ID: <20220204214902.GA220669@bhelgaas>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F4B01EC051E;
+        Fri,  4 Feb 2022 22:49:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644011391;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=fz8mGn5BOy2DieOoSZMrMULfKn9aZV+hq3dOFBMU7OA=;
+        b=AYwZQgPXEHeM4bHXv25Qg14ii4tf7Laou46fjqMj+JVnEHviTt8tqubc2/KSU25dwtVnoY
+        hzYyVOFebfDcF3xB+Ez7pVEFVzlGdmcDymFYvU53Zrf2t799+2qhidiVLCHDwnYFqIaz/J
+        +iG1VLnhpmLRrrszSsmV3YFa0CdONcw=
+Date:   Fri, 4 Feb 2022 22:49:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
+        dvhart@infradead.org, andy@infradead.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
+        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
+        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
+        alison.schofield@intel.com, keescook@chromium.org
+Subject: Re: [PATCH v6 6/6] drivers/node: Show in sysfs node's crypto
+ capabilities
+Message-ID: <Yf2feojR7ZxhtykG@zn.tnic>
+References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
+ <20220203164328.203629-7-martin.fernandez@eclypsium.com>
+ <67d2711b-200c-0894-4ff7-beb3eb304399@amd.com>
+ <CAKgze5YM2+BRjj2nvb+_dnuCg5WtWvQ6FQyNYJ1c8G6Orn=aQw@mail.gmail.com>
+ <5c5ffe29-d3d3-2955-cf78-ad275110f012@amd.com>
+ <ec9e29a4-0d2b-1423-d92e-6f025b56f8cc@amd.com>
+ <Yf1UO6jF91o9k4jB@zn.tnic>
+ <5ee34cad-8daf-6282-f2ed-cbc92a89d013@amd.com>
+ <Yf1p0ZjPf9Qaqwtg@zn.tnic>
+ <c0007699-61ae-6df3-0675-2ac6ee58a59c@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220201071952.900068-3-ira.weiny@intel.com>
+In-Reply-To: <c0007699-61ae-6df3-0675-2ac6ee58a59c@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:19:44PM -0800, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> Based on Bjorn's suggestion[1], now that the PCI Sig Vendor ID is
-> defined the define should be used in pci_bus_crs_vendor_id() rather than
-> the hard coded magic value.
-> 
-> Replace the magic value in pci_bus_crs_vendor_id() with
-> PCI_VENDOR_ID_PCI_SIG.
- 
-This sentence is plenty; no attribution or link needed.  I appreciate
-the acknowledgement, but replacing a magic value isn't a better idea
-simply because *I* suggested it ;)
+On Fri, Feb 04, 2022 at 12:49:08PM -0600, Tom Lendacky wrote:
+> Yep, and that should be safe. We would have to look at the generated code as
+> there can't be any memory stores after the native_wbinvd() and before the
+> native_halt().
 
-> [1] https://lore.kernel.org/linux-cxl/20211117215044.GA1777828@bhelgaas/
-> 
-> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+I don't think anything else changes here besides the CPUID. Rest of the
+asm is the same.
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+-- 
+Regards/Gruss,
+    Boris.
 
-> ---
->  drivers/pci/probe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 087d3658f75c..d92dbb136fc9 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2318,7 +2318,7 @@ EXPORT_SYMBOL(pci_alloc_dev);
->  
->  static bool pci_bus_crs_vendor_id(u32 l)
->  {
-> -	return (l & 0xffff) == 0x0001;
-> +	return (l & 0xffff) == PCI_VENDOR_ID_PCI_SIG;
->  }
->  
->  static bool pci_bus_wait_crs(struct pci_bus *bus, int devfn, u32 *l,
-> -- 
-> 2.31.1
-> 
+https://people.kernel.org/tglx/notes-about-netiquette

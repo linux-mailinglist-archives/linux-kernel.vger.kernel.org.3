@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5404A9C8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC7A4A9C8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344802AbiBDP7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:59:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57718 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239812AbiBDP7N (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241611AbiBDP7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 4 Feb 2022 10:59:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C966189B
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:59:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEC9C340EF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:59:12 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PadrEfyM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643990351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B+R6OUdEJRf2p4gtYVGemz3QvnaeTdLc8VycaTIIZtA=;
-        b=PadrEfyMkLZTS+4mN7znqfFBQgDRIrsL0foO3EEQcVduvWjGupqzF0FAcjx9t2v7DjzoNm
-        goSTC6owAEFbVDzsUMDKFk0PQHolpz7Wu2j3fmp+9x98tQ3HnyjyVF0mfRcHEXozII/7bp
-        yz3BSckDRtrI6lJy2d5zKJLL1hpd88U=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ba3a46e1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 4 Feb 2022 15:59:10 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id y6so5336287ybc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 07:59:10 -0800 (PST)
-X-Gm-Message-State: AOAM532NLU443FVVt+GVlIsIO1KLaAbkmx+eQTF7DAlIviwxNMhTTa27
-        Gvta3AghHxYaQuKxSNHB4LTgu7RJf4amfr6pnk4=
-X-Google-Smtp-Source: ABdhPJz8JEJ2rRHH/861j1cgGmg4khJWU/DSntKf0Wc4Pi57cvODFtsI88Nd6F7CHiHtJLNIDdA+920oNVHw/vCQWJ8=
-X-Received: by 2002:a25:9088:: with SMTP id t8mr3217898ybl.113.1643990349212;
- Fri, 04 Feb 2022 07:59:09 -0800 (PST)
+Received: from mga09.intel.com ([134.134.136.24]:39213 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234808AbiBDP7L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:59:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643990351; x=1675526351;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9KhxQXsAu7RrqbBNDRjQ5GvfIHgWxqlaV3+q1AnfYQs=;
+  b=B9Cti0OD6vfFPuvRCpBuv3G5JOTT/OifxkmX3+UnsH6Fb/Fw4AF1x9x3
+   jEM9fHLGEUCfxrRk5byRaKJU5Na50ajj2E828YgVViXapvRenimGrr7Op
+   EodO7jgacBV3qdhCOmRoctMLEyeVOCopthiMpsHlCqngOnl58dMkEfhb8
+   nmZ4mBaSoDmtgrH0/pjasY21wxGSzAm9OpxrcntieODdOvSO+mtkRkzQ1
+   nUwtKLWwcFmQnJKvQFey7Ft5mQxXcEInUhlhMo90HU1ewbClgUHozJQjb
+   LgLfrtMU4GJ4PLggofsd8Ib1XQ846AL9Fsw8Smnn5Pw4aADXGM83zeYab
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248150544"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="248150544"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:59:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="600265073"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2022 07:59:09 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 48D02204; Fri,  4 Feb 2022 17:59:24 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+Subject: [PATCH v1 1/1] i2c: smbus: Check for parent device before dereference
+Date:   Fri,  4 Feb 2022 17:59:20 +0200
+Message-Id: <20220204155920.13364-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <YfgPWatDzkn2ozhm@linutronix.de> <20220204153149.51428-1-Jason@zx2c4.com>
-In-Reply-To: <20220204153149.51428-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 4 Feb 2022 16:58:58 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pucLWXDofvOgHEau3y-7RmdtU91_jQHSt7psuR22eXBg@mail.gmail.com>
-Message-ID: <CAHmME9pucLWXDofvOgHEau3y-7RmdtU91_jQHSt7psuR22eXBg@mail.gmail.com>
-Subject: Re: [PATCH RFC v1] random: do not take spinlocks in irq handler
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FWIW, the biggest issue with this
+An I²C adapter might be instantiated without parent. In such case
+there is no property can be retrieved. Skip SMBus alert setup when
+this happens.
 
-On Fri, Feb 4, 2022 at 4:32 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> +static void mix_interrupt_randomness(struct work_struct *work)
-> +{
-[...]
-> +       if (unlikely(crng_init == 0)) {
-> +               if (crng_fast_load((u8 *)&fast_pool->pool, sizeof(fast_pool->pool)) > 0)
-> +                       atomic_set(&fast_pool->count, 0);
-> +               else
-> +                       atomic_and(~FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
-> +               return;
-> +       }
-[...]
->  void add_interrupt_randomness(int irq)
-> -       if (unlikely(crng_init == 0)) {
-> -               if ((fast_pool->count >= 64) &&
-> -                   crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
-> -                       fast_pool->count = 0;
-> -                       fast_pool->last = now;
-> -               }
-> -               return;
+Fixes: a263a84088f6 ("i2c: smbus: Use device_*() functions instead of of_*()")
+Reported-by: syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/i2c-core-smbus.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-The point of crng_fast_load is to shuffle bytes into the crng as fast
-as possible for very early boot usage. Deferring that to a workqueue
-seems problematic. So I think at the very least _that_ part will have
-to stay in the IRQ handler. That means we've still got a spinlock. But
-at least it's a less problematic one than the input pool spinlock, and
-perhaps we can deal with that some other way than this patch's
-approach.
+diff --git a/drivers/i2c/i2c-core-smbus.c b/drivers/i2c/i2c-core-smbus.c
+index 304c2c8fee68..029f1b7c83bc 100644
+--- a/drivers/i2c/i2c-core-smbus.c
++++ b/drivers/i2c/i2c-core-smbus.c
+@@ -705,10 +705,14 @@ EXPORT_SYMBOL_GPL(i2c_new_smbus_alert_device);
+ #if IS_ENABLED(CONFIG_I2C_SMBUS)
+ int i2c_setup_smbus_alert(struct i2c_adapter *adapter)
+ {
++	struct device *parent = adapter->dev.parent;
+ 	int irq;
+ 
+-	irq = device_property_match_string(adapter->dev.parent, "interrupt-names",
+-					   "smbus_alert");
++	/* Adapter instantiated without parent, skip the SMBus alert setup */
++	if (!parent)
++		return 0;
++
++	irq = device_property_match_string(parent, "interrupt-names", "smbus_alert");
+ 	if (irq == -EINVAL || irq == -ENODATA)
+ 		return 0;
+ 	else if (irq < 0)
+-- 
+2.34.1
 
-In other words, this approach for the calls to mix_pool_bytes, and a
-different approach for that call to crng_fast_load.
-
-Jason

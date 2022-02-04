@@ -2,230 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580584A9FE7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DB84A9FE6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbiBDTSU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 14:18:20 -0500
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:33329 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbiBDTSP (ORCPT
+        id S232388AbiBDTSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:18:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232901AbiBDTSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:18:15 -0500
-Received: by mail-yb1-f182.google.com with SMTP id j2so21777474ybu.0;
-        Fri, 04 Feb 2022 11:18:15 -0800 (PST)
+        Fri, 4 Feb 2022 14:18:14 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0B3C06174A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:18:14 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v15-20020a17090a4ecf00b001b82db48754so6996558pjl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=42P0RkbrK1PQHs+ZTbHwM7kEGdYNQVmANbDyAZZWTvA=;
+        b=RoWEUamAkogvX5xsJGspiXmzbfM7Z/vGADYLoaf24DKkM4nBRV2oB2lbIBztGhg2IM
+         EM+6CocXccze+NZZ5mJa7oRQyyokomkHjwSnBWDr9NDQvHy1terajLKrrooMkC7/vIZ/
+         VlBL7S+6uaf6Vznoi5qtsMzq429LRqhT77Kep6Z4wkjPtgohV7E/UyLYyJjXGhnr9Nvu
+         THi1xtJ0UwxpJR8UwAosyvfkqzfF9W1+5uqyVuN3EM6git1+c3ARRQ5EHyvEqnfIVGNB
+         7xjn9WSQzIH87J3wl8IoPPRDL/2+xUc3j2SoxXjMfDXqxeoBOFxrku5TOdOjib623uEg
+         pxLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rF2I2DA+0q3Faqi//9eeFZH2An/KNd6jHtr045+f6EQ=;
-        b=fX/rR6oe1n6KRMFuPRMpngbNaCDgmV4dqW3eJmHoViupu/iwGh/PZGQb5eb/KpGg+6
-         tX37Lkd4BDrlCJG+tiUzbu6c+zLcc0V8IhhxjiifD36taB0RG4doZx/A6pm8SfduWUQ3
-         7ccUsueNUIu/73Zu4mbwymyZWlsLiCj68iooc/O8stwWYCaD8ZO08+tVbHmVUbzqp1h2
-         dVS4mp4uvaznOJj+PM1xZlkbJQhL8yLDbpTTJYiWYveQUGSnYX2IAufYO8h4J41mXP25
-         HuTW5owUX6cfMzCyFC4iaLuGO0pbxilHVj7RkJKkbDwsbOxBvUbiaKaSk2jR3eE/4del
-         U/jw==
-X-Gm-Message-State: AOAM533L6grLJe503Pf6WNuF6YiHweZwjw8fpkqu2eDdwpCX66m7vZRd
-        hXwLJpKa56QruElCvPY5mHeerJUoH1jWx8OoyoA=
-X-Google-Smtp-Source: ABdhPJyWHSFrxNdQyaDQH/O5Z5KPywEqNf7nTD8KpJ+ZcvPiOAq/t+0N5aTtyL+HJLpL8MNhFUfXtsGIruJH1ZEvgQE=
-X-Received: by 2002:a05:6902:c4:: with SMTP id i4mr628653ybs.343.1644002294920;
- Fri, 04 Feb 2022 11:18:14 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=42P0RkbrK1PQHs+ZTbHwM7kEGdYNQVmANbDyAZZWTvA=;
+        b=n2d1+Leg02wsVu1uRPjfdmH/2+K4tzLUlQeP3NNd9wxPlkj1Yik5MI/l7/4BufNtK9
+         2CAxAuQR7PFwyQzuYs+pzJKPC6leqkbJswiUPGzScfu9JqnsD4FYnGs0vbpnjMCLYQlJ
+         lLaYnFqjH7D42rfBAba38me0eFjFdycfgZp1neL60ex3jpTJ/vYqb2KZV4uMOwUlD8Pu
+         fdKOx8AqRL5/FxjoVgnzg5VKxTk7ydxdM8jDYrJBXg4XrERcBqBJkIzKSiO/NeTK9wpF
+         ZO8YjI2XQDaaLlcWRq4Vm97wdCadk0ZRfLbxRS594BC+07Fc1Q7UqVZMMNpZ7aJf3TJt
+         Ch7g==
+X-Gm-Message-State: AOAM530VpL72wlrej3mPBqS/t7L58yqs0lSmeIbtO3NMkkwa64cZKg6C
+        uQB4ZIR2ssTDdZu9Zyktei3mMA==
+X-Google-Smtp-Source: ABdhPJx7D2gzMfV9sTiwH5KkbdXKRG6tBzNdXYfFViGkvxO5diPDLXGOCYtjcWUgqjTueEfTkx+kFw==
+X-Received: by 2002:a17:902:d4ca:: with SMTP id o10mr4685547plg.28.1644002293319;
+        Fri, 04 Feb 2022 11:18:13 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id 3sm10604743pjk.29.2022.02.04.11.18.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 11:18:12 -0800 (PST)
+Date:   Fri, 4 Feb 2022 19:18:08 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 06/23] KVM: MMU: load new PGD once nested two-dimensional
+ paging is initialized
+Message-ID: <Yf178LYEY4pFJcLc@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-7-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220201015518.3118404-1-wonchung@google.com> <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
- <CAOvb9ygyupib4cMXhcdeZmgNZmyaCmaTF98MHae+irY5ruZ1Qw@mail.gmail.com>
-In-Reply-To: <CAOvb9ygyupib4cMXhcdeZmgNZmyaCmaTF98MHae+irY5ruZ1Qw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Feb 2022 20:18:04 +0100
-Message-ID: <CAJZ5v0hGxYv1xagc+ZQFhvpLpcbs1c1szZZahR7wsDm=i5AcJg@mail.gmail.com>
-Subject: Re: [PATCH v4] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     Won Chung <wonchung@google.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-7-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 9:43 PM Won Chung <wonchung@google.com> wrote:
->
-> Hi Heikki,
->
-> Thank you for the review!
->
-> On Wed, Feb 2, 2022 at 12:19 AM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > Hi Won,
-> >
-> > On Tue, Feb 01, 2022 at 01:55:18AM +0000, Won Chung wrote:
-> > > When ACPI table includes _PLD fields for a device, create a new
-> > > directory (pld) in sysfs to share _PLD fields.
-> >
-> > I think you need to explain what needs this information in user space.
-> >
-> > > Signed-off-by: Won Chung <wonchung@google.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-bus-acpi | 107 +++++++++++++++++++++++
-> > >  drivers/acpi/device_sysfs.c              |  55 ++++++++++++
-> > >  include/acpi/acpi_bus.h                  |   1 +
-> > >  3 files changed, 163 insertions(+)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentation/ABI/testing/sysfs-bus-acpi
-> > > index 58abacf59b2a..b8b71c8f3cfd 100644
-> > > --- a/Documentation/ABI/testing/sysfs-bus-acpi
-> > > +++ b/Documentation/ABI/testing/sysfs-bus-acpi
-> > > @@ -96,3 +96,110 @@ Description:
-> > >               hardware, if the _HRV control method is present.  It is mostly
-> > >               useful for non-PCI devices because lspci can list the hardware
-> > >               version for PCI devices.
-> > > +
-> > > +What:                /sys/bus/acpi/devices/.../pld/
-> > > +Date:                Feb, 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             This directory contains the output of the device object's _PLD
-> > > +             control method, if present. This information provides details
-> > > +             on physical location of a device.
-> > > +
-> > > +What:                /sys/bus/acpi/devices/.../pld/revision
-> > > +Date:                Feb, 2022
-> > > +Contact:     Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             The current revision is 0x2.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/group_token
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Unique numerical value identifying a group.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/group_position
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Identifies this device connection point’s position in the group.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/user_visible
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set if the device connection point can be seen by the user
-> > > +             without disassembly.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/dock
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set if the device connection point resides in a docking station
-> > > +             or port replicator.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/bay
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set if describing a device in a bay or if device connection
-> > > +             point is a bay.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/lid
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Set if this device connection point resides on the lid of
-> > > +             laptop system.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/panel
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Describes which panel surface of the system’s housing the
-> > > +             device connection point resides on:
-> > > +             0 - Top
-> > > +             1 - Bottom
-> > > +             2 - Left
-> > > +             3 - Right
-> > > +             4 - Front
-> > > +             5 - Back
-> > > +             6 - Unknown (Vertical Position and Horizontal Position will be
-> > > +             ignored)
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/vertical_position
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             0 - Upper
-> > > +             1 - Center
-> > > +             2 - Lower
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/horizontal_position
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             ACPI specification does not define horizontal position field.
-> > > +             Can be used as either
-> > > +             0 - Left
-> > > +             1 - Center
-> > > +             2 - Right
-> > > +             or
-> > > +             0 - Leftmost
-> > > +             and higher numbers going toward the right.
-> > > +
-> > > +What:           /sys/bus/acpi/devices/.../pld/shape
-> > > +Date:           Feb, 2022
-> > > +Contact:        Won Chung <wonchung@google.com>
-> > > +Description:
-> > > +             Describes the shape of the device connection point.
-> > > +             0 - Round
-> > > +             1 - Oval
-> > > +             2 - Square
-> > > +             3 - Vertical Rectangle
-> > > +             4 - Horizontal Rectangle
-> > > +             5 - Vertical Trapezoid
-> > > +             6 - Horizontal Trapezoid
-> > > +             7 - Unknown - Shape rendered as a Rectangle with dotted lines
-> > > +             8 - Chamfered
-> > > +             15:9 - Reserved
-> > > +
-> > > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> > > index d5d6403ba07b..610be93635a0 100644
-> > > --- a/drivers/acpi/device_sysfs.c
-> > > +++ b/drivers/acpi/device_sysfs.c
-> > > @@ -509,6 +509,49 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
-> > >  }
-> > >  static DEVICE_ATTR_RO(status);
-> > >
-> > > +#define DEV_ATTR_PLD_PROP(prop) \
-> > > +     static ssize_t prop##_show(struct device *dev, struct device_attribute *attr, \
-> > > +             char *buf) \
-> > > +{ \
-> > > +     struct acpi_device *acpi_dev = to_acpi_device(dev); \
-> > > +     if (acpi_dev->pld == NULL) \
-> > > +             return -EIO; \
-> > > +     return sprintf(buf, "%u\n", acpi_dev->pld->prop); \
-> > > +}; \
-> >
-> > Ah, you are storing the _PLD below. Before there were concerns about
-> > the memory that the cached _PLD information would consume. Another way
-> > of doing this would be to just always evaluate the _PLD here.
-> >
-> > Rafael needs to comment on this. My personal opinion is that let's
-> > just store the thing.
-> >
->
-> By "always evaluate the _PLD here", you mean something like
->   acpi_get_physical_device_location(dev->handle, &pld)
-> for every _PLD field, right?
->
-> I will wait for Rafael's comment on this.
+On Fri, Feb 04, 2022 at 06:57:01AM -0500, Paolo Bonzini wrote:
+> __kvm_mmu_new_pgd looks at the MMU's root_level and shadow_root_level
+> via fast_pgd_switch.
 
-So I would like to get back to the very beginning: Do you need full
-_PLD output to address the issue at hand?
+Those checks are just for performance correct (to skip iterating through
+the list of roots)?
 
-If so, do you really need it for all devices that have _PLD?
+Either way, it's probably worth including a Fixes tag below.
 
-If not, then why waste memory for all that stuff?
+> It makes no sense to call it before updating
+> these fields, even though it was done like that ever since nested
+> VMX grew the ability to use fast CR3 switch (commit 50c28f21d045,
+> "kvm: x86: Use fast CR3 switch for nested VMX").
+> 
+> Pull it to the end of the initialization of the shadow nested MMUs.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 41 +++++++++++++++++++----------------------
+>  1 file changed, 19 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 577e70509510..b8ab16323629 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4869,10 +4869,9 @@ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
+>  
+>  	new_role = kvm_calc_shadow_npt_root_page_role(vcpu, &regs);
+>  
+> -	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
+> -
+>  	shadow_mmu_init_context(vcpu, context, &regs, new_role);
+>  	reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
+> +	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_npt_mmu);
+>  
+> @@ -4906,27 +4905,25 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+>  		kvm_calc_shadow_ept_root_page_role(vcpu, accessed_dirty,
+>  						   execonly, level);
+>  
+> -	__kvm_mmu_new_pgd(vcpu, new_eptp, new_role.base);
+> -
+> -	if (new_role.as_u64 == context->mmu_role.as_u64)
+> -		return;
+> -
+> -	context->mmu_role.as_u64 = new_role.as_u64;
+> -
+> -	context->shadow_root_level = level;
+> -
+> -	context->ept_ad = accessed_dirty;
+> -	context->page_fault = ept_page_fault;
+> -	context->gva_to_gpa = ept_gva_to_gpa;
+> -	context->sync_page = ept_sync_page;
+> -	context->invlpg = ept_invlpg;
+> -	context->root_level = level;
+> -	context->direct_map = false;
+> +	if (new_role.as_u64 != context->mmu_role.as_u64) {
+> +		context->mmu_role.as_u64 = new_role.as_u64;
+> +
+> +		context->shadow_root_level = level;
+> +
+> +		context->ept_ad = accessed_dirty;
+> +		context->page_fault = ept_page_fault;
+> +		context->gva_to_gpa = ept_gva_to_gpa;
+> +		context->sync_page = ept_sync_page;
+> +		context->invlpg = ept_invlpg;
+> +		context->root_level = level;
+> +		context->direct_map = false;
+> +		update_permission_bitmask(context, true);
+> +		context->pkru_mask = 0;
+> +		reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
+> +		reset_ept_shadow_zero_bits_mask(context, execonly);
+> +	}
+>  
+> -	update_permission_bitmask(context, true);
+> -	context->pkru_mask = 0;
+> -	reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
+> -	reset_ept_shadow_zero_bits_mask(context, execonly);
+> +	__kvm_mmu_new_pgd(vcpu, new_eptp, new_role.base);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
+>  
+> -- 
+> 2.31.1
+> 
+> 

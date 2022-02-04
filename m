@@ -2,232 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6A24A981F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3544A9823
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349768AbiBDLCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 06:02:22 -0500
-Received: from mga07.intel.com ([134.134.136.100]:15386 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346009AbiBDLCT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 06:02:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643972539; x=1675508539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Wh2WOcgT3HJbG90dCX+tCwQaPBWYwZ+IbOo4EkM6IwA=;
-  b=jSQ66YnjJ7uW/pOfqPYR4LIFp7nnb4kTs+xS8oebXpsgc2bvm6J6ZwVs
-   zT1uPQEAODg1cm+NTabVFEiAN8o1hYZy0O5X2FTj1HErfbGNSb4aHXRc8
-   gH6esgQI3IZL73MXTDpU2Xec+oAqbB15vowzrZwdvgIdzgAVT5BnQ+Vl1
-   FDpnC/wnpxtEBFOZ+57r5sJH8C6tvwLfgGPW1X5NLCECKz6kqpGBWjas2
-   xzwuFFl9lpUH7y79fHM6qoAgfqj+crkZiRdgZok2IsTyqZrpAz3zIfoB4
-   6uXrhP5L2QYsrtyAZtwcjuc25qy+vXjexNYYQdPU9I1GlOrVIsWsM0wm4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="311651898"
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="311651898"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 03:02:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="772067527"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2022 03:02:17 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFwM5-000XVE-4s; Fri, 04 Feb 2022 11:02:17 +0000
-Date:   Fri, 4 Feb 2022 19:02:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/12]
- drivers/hid/hid-magicmouse.c:662:41: warning: format specifies type
- 'unsigned short' but the argument has type 'int'
-Message-ID: <202202041829.eLXWBfs9-lkp@intel.com>
+        id S1352458AbiBDLD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 06:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237001AbiBDLDZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 06:03:25 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B101BC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 03:03:24 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id o64so5171842pjo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 03:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ajou.ac.kr; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=77J/9cAT8G0P2QjFVSqgddwHhlme/qdGmG1Npq3KbOA=;
+        b=e3C0xbHqa+aqQV1a3DsrHp8/5RAJVBFGxIWO3i9omSxdtv3TVxNxiCEuKqqlj3cokG
+         68xTSmvnRmHEX17OFTfUYByXv0dOIIFPBv9aDcIxi9ajYmL/nETzMVh5BoU9R8MeHrOK
+         1EaqzQ/vj1hBN/gTSNA9QggbZ8fjdUB9Uq88E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=77J/9cAT8G0P2QjFVSqgddwHhlme/qdGmG1Npq3KbOA=;
+        b=76F/2d2DWM2lr7u2qhgRfvf+yYOZOQqznRVk0Q7+WFiuSheIwVOX1RRBy5BSxu455D
+         sAPO1BeWFvS7b1/V4m0a3p7Z5t9xpuuNSM4yETSKKlLEdljHqsdLWDWcFCamkITwJpYM
+         5tp99EV78pzTLdzGJo3pIBFaNS0LshlhqwSiOhS3D6GESSS4qcy3PC/GgZ2ec17LcO1n
+         /J8uGouw57jcwe+2oFPQhVrqgLaCYB+MjN4yuFNT4VyiZDUeNzJH6fMq8Hy6G1tbpUy+
+         D0ozAjY/JpRB6oR4q771UXqt8MsD5scT8ITMnQm0sTTEmGxIsaeCtqNgHDmms8TsDfDn
+         KUaw==
+X-Gm-Message-State: AOAM5323MnP0598KZU8sQfg544YXfZHHOzJWCWG9BzdWuilM1p49kERc
+        srGAOJ2ev8CCAe15YqXg7YMfEUZ9umFmIbbk
+X-Google-Smtp-Source: ABdhPJwJ2lTvQRgIPBiUT+p08XthZ0vM4moEekfuVEtjYx7Nnj+xo6Sd8dB2tWgbriB/QkIhOgSstg==
+X-Received: by 2002:a17:902:8f93:: with SMTP id z19mr2458946plo.69.1643972603170;
+        Fri, 04 Feb 2022 03:03:23 -0800 (PST)
+Received: from swarm08 ([210.107.197.32])
+        by smtp.gmail.com with ESMTPSA id q12sm2427939pfk.199.2022.02.04.03.03.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 04 Feb 2022 03:03:22 -0800 (PST)
+Date:   Fri, 4 Feb 2022 20:03:18 +0900
+From:   Jonghyeon Kim <tome01@ajou.ac.kr>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon: Rebase DAMON_RECALIM watermarks for NUMA nodes
+Message-ID: <20220204110318.GA9391@swarm08>
+References: <20220204064059.6244-1-tome01@ajou.ac.kr>
+ <20220204090642.2425-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220204090642.2425-1-sj@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   25070af6e6d0c750f307b019df19cc93a54b664c
-commit: 193121bdba0a9e2be57fc6b4f1e53daf4164b1fa [11/12] HID: magicmouse: add support for Macbook trackpads
-config: riscv-randconfig-r042-20220131 (https://download.01.org/0day-ci/archive/20220204/202202041829.eLXWBfs9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/193121bdba0a9e2be57fc6b4f1e53daf4164b1fa
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 193121bdba0a9e2be57fc6b4f1e53daf4164b1fa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/hid/
+On Fri, Feb 04, 2022 at 09:06:42AM +0000, SeongJae Park wrote:
+> Hello Jonghyeon, thank you for this patch!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi, SeeongJae! Thank you for your review.
 
-All warnings (new ones prefixed by >>):
+> 
+> On Fri, 4 Feb 2022 15:40:59 +0900 Jonghyeon Kim <tome01@ajou.ac.kr> wrote:
+> 
+> > Current DAMON_RECALIM is not compatible the NUMA memory system. To proactively
+> > reclaim memory, DAMON_RECLAIM kernel thread(kdamond) has to wake up before
+> > kswapd does reclaim memory. However, the current watermark for proactive
+> > reclamation is based on entire system free memory. So, though the one memory
+> > node is fully used, kdamond is not waked up.
+> 
+> Good point!
+> 
+> > 
+> > This patch allows kdamond thread to select watermark options for monitoring
+> > specific node or whole system free memory.
+> 
+> Why only specific NUMA node or whole system, instead of each NUMA node?  Are
+> you running DARC for only specific NUMA node?  If that's the case, I think
+> implementing your own DAMON-based policy in user space might be a better
+> choice.  For example, you could implement and use a user-space daemon that
+> monitors free memory ratio of each NUMA node and adjusts the watermarks.
+> 
 
->> drivers/hid/hid-magicmouse.c:662:41: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                   hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
-                                       ~~~~~             ^~~~~~~~~~~~~~~~~~~~~
-                                       %04x
-   include/linux/hid.h:1199:30: note: expanded from macro 'hid_dbg'
-           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   drivers/hid/hid-magicmouse.c:663:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
-                           le16_to_int(f->abs_y));
-                           ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/hid.h:1199:30: note: expanded from macro 'hid_dbg'
-           dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
-                                ~~~    ^~~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   2 warnings generated.
---
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'pos' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'hdev' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'work' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'battery_timer' not described in 'magicmouse_sc'
-   drivers/hid/hid-magicmouse.c:169: warning: Function parameter or member 'input_ops' not described in 'magicmouse_sc'
->> drivers/hid/hid-magicmouse.c:592: warning: expecting prototype for struct trackpad. Prototype was for struct tp_header instead
+I have tested DAMON_RECLAIM for each NUMA node by using a module. But, I felt
+that the goal of DAMON_RECLAIM is dealing with the entire system memory or
+specific monitoring regions by using module parameters. So, I hoped to add more
+options for DAMON_RECLAIM on the NUMA system.
+
+Another thing I considered is the problem of correlation between NUMA node range
+and monitoring start/end addresses, such as "What if we monitor target that
+spans multiple nodes?".
+In that case, I guess we have to decide the policy for watermarks.
+
+> Hope I'm not making you get me wrong.  You found the important limitation of
+> DAMON_RECLAIM, thank you!  I really hope DAMON_RECLAIM to evolve to handle the
+> case.  I'm just saying this patch looks like specialized for your special case,
+> and there could be a better approach for that.
+> 
+
+If you agree that each NUMA node is able to have its own DAMON_RECLAIM daemon
+threads, I will add that codes in the next patch.
 
 
-vim +662 drivers/hid/hid-magicmouse.c
+Thanks for your comments,
+Jonghyeon
 
-   571	
-   572	/**
-   573	 * struct trackpad report
-   574	 *
-   575	 * @report_id:		reportid
-   576	 * @buttons:		HID Usage Buttons 3 1-bit reports
-   577	 * @num_fingers:	the number of fingers being reported in @fingers
-   578	 * @clicked:		same as @buttons
-   579	 */
-   580	struct tp_header {
-   581		// HID mouse report
-   582		u8 report_id;
-   583		u8 buttons;
-   584		u8 rel_x;
-   585		u8 rel_y;
-   586		u8 padding[4];
-   587		// HID vendor part, up to 1751 bytes
-   588		u8 unknown[22];
-   589		u8 num_fingers;
-   590		u8 clicked;
-   591		u8 unknown3[14];
- > 592	};
-   593	
-   594	static inline int le16_to_int(__le16 x)
-   595	{
-   596		return (signed short)le16_to_cpu(x);
-   597	}
-   598	
-   599	static void report_finger_data(struct input_dev *input, int slot,
-   600				       const struct input_mt_pos *pos,
-   601				       const struct tp_finger *f)
-   602	{
-   603		input_mt_slot(input, slot);
-   604		input_mt_report_slot_state(input, MT_TOOL_FINGER, true);
-   605	
-   606		input_report_abs(input, ABS_MT_TOUCH_MAJOR,
-   607				 le16_to_int(f->touch_major) << 1);
-   608		input_report_abs(input, ABS_MT_TOUCH_MINOR,
-   609				 le16_to_int(f->touch_minor) << 1);
-   610		input_report_abs(input, ABS_MT_WIDTH_MAJOR,
-   611				 le16_to_int(f->tool_major) << 1);
-   612		input_report_abs(input, ABS_MT_WIDTH_MINOR,
-   613				 le16_to_int(f->tool_minor) << 1);
-   614		input_report_abs(input, ABS_MT_ORIENTATION,
-   615				 J314_TP_MAX_FINGER_ORIENTATION - le16_to_int(f->orientation));
-   616		input_report_abs(input, ABS_MT_PRESSURE, le16_to_int(f->pressure));
-   617		input_report_abs(input, ABS_MT_POSITION_X, pos->x);
-   618		input_report_abs(input, ABS_MT_POSITION_Y, pos->y);
-   619	}
-   620	
-   621	static int magicmouse_raw_event_spi(struct hid_device *hdev,
-   622			struct hid_report *report, u8 *data, int size)
-   623	{
-   624		struct magicmouse_sc *msc = hid_get_drvdata(hdev);
-   625		struct input_dev *input = msc->input;
-   626		struct tp_header *tp_hdr;
-   627		struct tp_finger *f;
-   628		int i, n;
-   629		u32 npoints;
-   630		const size_t hdr_sz = sizeof(struct tp_header);
-   631		const size_t touch_sz = sizeof(struct tp_finger);
-   632		u8 map_contacs[MAX_CONTACTS];
-   633	
-   634		// hid_warn(hdev, "%s\n", __func__);
-   635		// print_hex_dump_debug("appleft ev: ", DUMP_PREFIX_OFFSET, 16, 1, data,
-   636		// 		     size, false);
-   637	
-   638		if (data[0] != TRACKPAD2_USB_REPORT_ID)
-   639			return 0;
-   640	
-   641		/* Expect 46 bytes of prefix, and N * 30 bytes of touch data. */
-   642		if (size < hdr_sz || ((size - hdr_sz) % touch_sz) != 0)
-   643			return 0;
-   644	
-   645		tp_hdr = (struct tp_header *)data;
-   646	
-   647		npoints = (size - hdr_sz) / touch_sz;
-   648		if (npoints < tp_hdr->num_fingers || npoints > MAX_CONTACTS) {
-   649			hid_warn(hdev,
-   650				 "unexpected number of touches (%u) for "
-   651				 "report\n",
-   652				 npoints);
-   653			return 0;
-   654		}
-   655	
-   656		n = 0;
-   657		for (i = 0; i < tp_hdr->num_fingers; i++) {
-   658			f = (struct tp_finger *)(data + hdr_sz + i * touch_sz);
-   659			if (le16_to_int(f->touch_major) == 0)
-   660				continue;
-   661	
- > 662			hid_dbg(hdev, "ev x:%04hx y:%04hx\n", le16_to_int(f->abs_x),
-   663				le16_to_int(f->abs_y));
-   664			msc->pos[n].x = le16_to_int(f->abs_x);
-   665			msc->pos[n].y = -le16_to_int(f->abs_y);
-   666			map_contacs[n] = i;
-   667			n++;
-   668		}
-   669	
-   670		input_mt_assign_slots(input, msc->tracking_ids, msc->pos, n, 0);
-   671	
-   672		for (i = 0; i < n; i++) {
-   673			int idx = map_contacs[i];
-   674			f = (struct tp_finger *)(data + hdr_sz + idx * touch_sz);
-   675			report_finger_data(input, msc->tracking_ids[i], &msc->pos[i], f);
-   676		}
-   677	
-   678		input_mt_sync_frame(input);
-   679		input_report_key(input, BTN_MOUSE, data[1] & 1);
-   680	
-   681		input_sync(input);
-   682		return 1;
-   683	}
-   684	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
+> Thanks,
+> SJ
+> 
+> > 
+> > Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
+> > ---
+> >  include/linux/damon.h |  4 +++-
+> >  mm/damon/core.c       | 15 +++++++++++----
+> >  mm/damon/dbgfs.c      |  3 ++-
+> >  mm/damon/reclaim.c    | 12 +++++++++++-
+> >  4 files changed, 27 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/include/linux/damon.h b/include/linux/damon.h
+> > index 114cfb96d37a..3846b985bcb9 100644
+> > --- a/include/linux/damon.h
+> > +++ b/include/linux/damon.h
+> > @@ -220,6 +220,7 @@ struct damos_stat {
+> >   * @wmarks:		Watermarks for automated (in)activation of this scheme.
+> >   * @stat:		Statistics of this scheme.
+> >   * @list:		List head for siblings.
+> > + * @node:		NUMA node of target regions.
+> >   *
+> >   * For each aggregation interval, DAMON finds regions which fit in the
+> >   * condition (&min_sz_region, &max_sz_region, &min_nr_accesses,
+> > @@ -251,6 +252,7 @@ struct damos {
+> >  	struct damos_watermarks wmarks;
+> >  	struct damos_stat stat;
+> >  	struct list_head list;
+> > +	int node;
+> >  };
+> >  
+> >  struct damon_ctx;
+> > @@ -477,7 +479,7 @@ struct damos *damon_new_scheme(
+> >  		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
+> >  		unsigned int min_age_region, unsigned int max_age_region,
+> >  		enum damos_action action, struct damos_quota *quota,
+> > -		struct damos_watermarks *wmarks);
+> > +		struct damos_watermarks *wmarks, int node);
+> >  void damon_add_scheme(struct damon_ctx *ctx, struct damos *s);
+> >  void damon_destroy_scheme(struct damos *s);
+> >  
+> > diff --git a/mm/damon/core.c b/mm/damon/core.c
+> > index 07449d46d3d3..dfa87cda0266 100644
+> > --- a/mm/damon/core.c
+> > +++ b/mm/damon/core.c
+> > @@ -87,7 +87,7 @@ struct damos *damon_new_scheme(
+> >  		unsigned int min_nr_accesses, unsigned int max_nr_accesses,
+> >  		unsigned int min_age_region, unsigned int max_age_region,
+> >  		enum damos_action action, struct damos_quota *quota,
+> > -		struct damos_watermarks *wmarks)
+> > +		struct damos_watermarks *wmarks, int node)
+> >  {
+> >  	struct damos *scheme;
+> >  
+> > @@ -125,6 +125,8 @@ struct damos *damon_new_scheme(
+> >  	scheme->wmarks.low = wmarks->low;
+> >  	scheme->wmarks.activated = true;
+> >  
+> > +	scheme->node = node;
+> > +
+> >  	return scheme;
+> >  }
+> >  
+> > @@ -936,13 +938,18 @@ static bool kdamond_need_stop(struct damon_ctx *ctx)
+> >  	return true;
+> >  }
+> >  
+> > -static unsigned long damos_wmark_metric_value(enum damos_wmark_metric metric)
+> > +static unsigned long damos_wmark_metric_value(struct damos *scheme)
+> >  {
+> >  	struct sysinfo i;
+> > +	enum damos_wmark_metric metric = scheme->wmarks.metric;
+> > +	int target_node = scheme->node;
+> >  
+> >  	switch (metric) {
+> >  	case DAMOS_WMARK_FREE_MEM_RATE:
+> > -		si_meminfo(&i);
+> > +		if (target_node == NUMA_NO_NODE)
+> > +			si_meminfo(&i);
+> > +		else
+> > +			si_meminfo_node(&i, target_node);
+> >  		return i.freeram * 1000 / i.totalram;
+> >  	default:
+> >  		break;
+> > @@ -961,7 +968,7 @@ static unsigned long damos_wmark_wait_us(struct damos *scheme)
+> >  	if (scheme->wmarks.metric == DAMOS_WMARK_NONE)
+> >  		return 0;
+> >  
+> > -	metric = damos_wmark_metric_value(scheme->wmarks.metric);
+> > +	metric = damos_wmark_metric_value(scheme);
+> >  	/* higher than high watermark or lower than low watermark */
+> >  	if (metric > scheme->wmarks.high || scheme->wmarks.low > metric) {
+> >  		if (scheme->wmarks.activated)
+> > diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
+> > index 78ff645433c6..3f61cbde7ec4 100644
+> > --- a/mm/damon/dbgfs.c
+> > +++ b/mm/damon/dbgfs.c
+> > @@ -224,7 +224,8 @@ static struct damos **str_to_schemes(const char *str, ssize_t len,
+> >  
+> >  		pos += parsed;
+> >  		scheme = damon_new_scheme(min_sz, max_sz, min_nr_a, max_nr_a,
+> > -				min_age, max_age, action, &quota, &wmarks);
+> > +				min_age, max_age, action, &quota, &wmarks,
+> > +				NUMA_NO_NODE);
+> >  		if (!scheme)
+> >  			goto fail;
+> >  
+> > diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
+> > index d85e0898f905..ad80f14d164f 100644
+> > --- a/mm/damon/reclaim.c
+> > +++ b/mm/damon/reclaim.c
+> > @@ -189,6 +189,14 @@ module_param(monitor_region_start, ulong, 0600);
+> >  static unsigned long monitor_region_end __read_mostly;
+> >  module_param(monitor_region_end, ulong, 0600);
+> >  
+> > +/*
+> > + * NUMA node of target to monitor
+> > + *
+> > + * If node is NUMA_NO_NODE, watermark is based on system entire memory.
+> > + */
+> > +static int node __read_mostly = NUMA_NO_NODE;
+> > +module_param(node, int, 0600);
+> > +
+> >  /*
+> >   * PID of the DAMON thread
+> >   *
+> > @@ -298,7 +306,9 @@ static struct damos *damon_reclaim_new_scheme(void)
+> >  			/* under the quota. */
+> >  			&quota,
+> >  			/* (De)activate this according to the watermarks. */
+> > -			&wmarks);
+> > +			&wmarks,
+> > +			/* Watermarks is based on this NUMA node */
+> > +			node);
+> >  
+> >  	return scheme;
+> >  }
+> > -- 
+> > 2.17.1
+> > 

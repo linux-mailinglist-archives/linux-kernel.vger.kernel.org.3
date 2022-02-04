@@ -2,138 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E034A9197
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B971B4A9199
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356213AbiBDA0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:26:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S1356217AbiBDA1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354856AbiBDA0O (ORCPT
+        with ESMTP id S1353694AbiBDA1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:26:14 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A572C06173B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:26:14 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id t9so1482583plg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:26:14 -0800 (PST)
+        Thu, 3 Feb 2022 19:27:10 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0839C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:27:09 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id z199so5445295iof.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:27:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0eVjWkn3YypKipWU59VgB8hKpGPPC7yMLBku/5hkxYU=;
-        b=B/63qRKoTa/jPTvT35HS/ppnB6hN1ge8X/OnvCRnPNLr09AMTKLpwTtWlV/p1K0wTj
-         TNBYyZzDepc42Ky0lTjLbfsDa9eo1lJjo2OaJ230lmRphEb1jb+LaY9zv2FOqH1xu+Ho
-         bC4DYlB3dtVmyzGf1J8nTPkRpbDJEbgxaFqaU=
+        d=sladewatkins.com; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ZHLlp8umDVFs9Tye8ZudPORlyWBAZ0TceN0aLVUR5o0=;
+        b=Ro0400dsEnmE9sFvCXr04FI1Suxxe+GviQVvHHvua9HenOqS29iCeTQK2BO/GvkJV0
+         NYK0hioNaHxQozDh+vrUiMQnovxtyh8zG8zfNWOSNa2cmO1wF+2aGkFC7OBLlAZuFS7d
+         QzLTY101Owp2M+rUMLjHgr3B7GQP1HdZD/b4DuawIiJaUZhmJhlPfFC3zcVo/rtaEr7J
+         Kup/QqUiv7C0/FFyzYkBpMiRD8M4yRWm4jkA18aago6Veq3AYkzqsAUX8RzrWm8IB5Uq
+         J5rxKu7NwIgAhVivDJm/xM8NuSWJzjXsHsx929HIZus7bzHpyYJ+515C+KRvvQh198S9
+         ZVOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0eVjWkn3YypKipWU59VgB8hKpGPPC7yMLBku/5hkxYU=;
-        b=VXkZTpTDttxxNe5LBWJ3fYXt+48IFyVkmwLflFKZQleMpZzr3Dm6JcDtqDYn78X8Pm
-         Kv/EI3UPiOxWxa/VhznFBVd8XiY7wcjtdMmuRZT1JiqcpocgIXeBHZTXsWaBjF9Dhie3
-         yTX+hH5R1KamV575cc69SMCgixpToXnsYpZ6T02/95I63GmhXmEGWsxe6JFp/IFHpAJ6
-         ILAMOGwUUzcrZmfx+95wwaTSZYGUZPUrO83ttLza5v1BzauwM1yLE5SdZ9x52Ea8p9HZ
-         /aCp96lDOSj4wTHNwSUvRGtEb595HXcTubPheuzucHQ2KeYmStoYv5iBLsQEf0jbe6zb
-         RvFg==
-X-Gm-Message-State: AOAM5312YW8yCvLnTr2U9F/LeGfE4spNfhmtIroOYanh+22f7q87sfQ1
-        I5QsxSMWdZhf6tHnQInfYbBAlG9hyTrh4Q==
-X-Google-Smtp-Source: ABdhPJzePD01mIAj1XkpKw+GItPRqZPyAv9KEL3Ul555b3PT0ZywjsUHGOJxLNDywApQ4JvY2r3ybg==
-X-Received: by 2002:a17:90b:146:: with SMTP id em6mr280597pjb.214.1643934373835;
-        Thu, 03 Feb 2022 16:26:13 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id me4sm11588041pjb.26.2022.02.03.16.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 16:26:13 -0800 (PST)
-Date:   Thu, 3 Feb 2022 16:26:12 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        George Burgess IV <gbiv@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
-Message-ID: <202202031618.BC9EDA9D82@keescook>
-References: <20220203173307.1033257-1-keescook@chromium.org>
- <20220203173307.1033257-3-keescook@chromium.org>
- <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
- <202202031301.437D8FD3@keescook>
- <CAKwvOdm-_uGYrm=2LTGSR7yhGK08NniGdkhLj_sM-QD-xdKVtA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ZHLlp8umDVFs9Tye8ZudPORlyWBAZ0TceN0aLVUR5o0=;
+        b=wXjv50AWvKILKhczm6jOXZy+I6D0ATltDyzsIvuIlO70QfZtBDzzdRSTwqx05WOdP+
+         HWMWhzt3+X4LbiPlDZZ5V0MXlWPfi+sYV+TB4UXPKLYIaOO6o2ff0V85jW189hyH3ubE
+         kUfUMNXcukoWILCsR/As/yk1dx60+aRyDASd9Aemq1BLVE0ROo8OsAcVhj/Bn428D/x/
+         1tPPXgczuQvhEmuM1o5ojl+jA6R2p3DYFJpwq4bNDhhFIS0rOfkK1VFFZF+V7wSpymZI
+         jhrmJzuxqBTTw4Goj0MqhQ6E95784OiqMYxl3/Bzagw4qMDivhXcxw1iPMjw0sGCT9ZG
+         3oxA==
+X-Gm-Message-State: AOAM531F1jyzhkTVv/W6i5EJuXBYnYr1f01bzvQuk8TAjQQtCSxvCgZT
+        bZuy6iYFu7bJNMCfMWAcGUPuRbHE/71wxWUfXckb5XyyYYKnsP4oZ/E=
+X-Google-Smtp-Source: ABdhPJzkeVpmnHh01+sMw4I7bRAwMdEmLxLXizA1qhnR5P1LQJu7e/QGIVCLOswhuk9zyyLWgWLSCVRdlnOv6PYHo4A=
+X-Received: by 2002:a05:6638:371e:: with SMTP id k30mr227509jav.64.1643934429378;
+ Thu, 03 Feb 2022 16:27:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdm-_uGYrm=2LTGSR7yhGK08NniGdkhLj_sM-QD-xdKVtA@mail.gmail.com>
+From:   Slade Watkins <slade@sladewatkins.com>
+Date:   Thu, 3 Feb 2022 19:26:58 -0500
+Message-ID: <CA+pv=HNuxZXTxu2S5vcz=zF81wWxykQe2im6oKgKiaDPujVjiw@mail.gmail.com>
+Subject: rtw89 driver
+To:     Wireless <linux-wireless@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Larry Finger <larry.finger@lwfinger.net>,
+        Slade Watkins <slade@sladewatkins.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 02:11:48PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 3, 2022 at 1:04 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Feb 03, 2022 at 12:26:15PM -0800, Nick Desaulniers wrote:
-> > > On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > must be marked as being overloadable (i.e. different prototypes).
-> > > > This allows the __pass_object_size versions to take precedence.
-> > >
-> > > Is this because of the `const` additions to the function signatures?
-> >
-> > That might be an issue, but the *real* issue is the implicit mutation of
-> > the function into an inline with _additional_ arguments. i.e.
-> >
-> > char *strcpy(char * POS p, const char * POS q)
-> >
-> > is really
-> >
-> > char *strcpy(char * const p, const char * const q, size_t __size_of_p, size_t __size_of_q)
-> >
-> > (i.e. what I was doing with macros, but all internally and still an
-> > extern inline)
-> 
-> What do you mean "is really"? 4/4 doesn't change the number of
-> parameters in strcpy explicitly in the definition AFAICT.
+Hi there,
+Quick question for wireless folks: would backporting the rtw89
+driver[1] (Realtek 8852AE) to kernels older than 5.16.y be possible at
+some point down the road? I ask this as, when testing a stable build
+of 5.15.y a bit ago, I had an issue where the driver wasn't present
+and the system I was testing it on wasn't happy and started kicking
+errors. (It's fairly new, so I did kind of expect that.) I was,
+however, able to solve this by manually building and installing the
+drivers so it wasn't that big of a deal.
 
-It really does change the number of parameters. See the IR difference:
+[1] https://github.com/lwfinger/rtw89
 
-$ cat example.c
-#ifdef USE_POS
-# define POS __attribute__((pass_object_size(1)))
-#else
-# define POS
-#endif
-
-int func(void * const POS);
-
-struct foo
-{
-        int a;
-        char *b;
-};
-
-void usage(struct foo *example)
-{
-        func(example);
-}
-
-$ IR="-O2 -Xclang -disable-llvm-passes -emit-llvm -S"
-$ clang           example.c $IR -o normal.ll
-$ clang -DUSE_POS example.c $IR -o pos.ll
-$ diff -u normal.ll pos.ll
---- normal.ll   2022-02-03 16:23:39.734065036 -0800
-+++ pos.ll      2022-02-03 16:23:49.518083451 -0800
-@@ -11,14 +11,19 @@
-   store %struct.foo* %0, %struct.foo** %2, align 8, !tbaa !3
-   %3 = load %struct.foo*, %struct.foo** %2, align 8, !tbaa !3
-   %4 = bitcast %struct.foo* %3 to i8*
--  %5 = call i32 @func(i8* noundef %4)
-+  %5 = call i64 @llvm.objectsize.i64.p0i8(i8* %4, i1 false, i1 true, i1 false)
-+  %6 = call i32 @func(i8* noundef %4, i64 noundef %5)
-   ret void
- }
-...
-
-This is basically doing internally exactly what I was doing in v4 and
-earlier with macros (passing in the caller's view of __bos(arg, 1)).
-
--- 
-Kees Cook
+Thanks,
+Slade

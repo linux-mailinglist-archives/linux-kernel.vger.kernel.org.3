@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C92744AA279
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239844AA27A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244972AbiBDVm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S244364AbiBDVmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243843AbiBDVmP (ORCPT
+        with ESMTP id S243753AbiBDVmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:42:15 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C213CC061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:14 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id m21-20020a17090b069500b001b532620cd9so4288424pjz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:42:14 -0800 (PST)
+        Fri, 4 Feb 2022 16:42:17 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A2C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:16 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id f24-20020aa782d8000000b004bc00caa4c0so3562277pfn.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:42:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=KKjH3zCPswTf0hjqacVy5YOkSkhUl6n6cultlDnB9r4=;
-        b=k/aPC/mMPGHNoH20HSjvFsILeFwxVaf8/1oUATZ3gMaugfTDdwj3wM6vgZYIU4nQ3n
-         z6bQxP45Mht4VAdettIJ9wpRGDG+RK8Iz2oi2cDaIn1dve93CYueFS85YPJDVlm7axWt
-         S6tW7iL1CnE5gQhMKqG1P2itMRzc1GUcn6ze532LTZLNzyyCbqsnVguGtPc4Bn51JnSJ
-         n4ALN/1fKeUEx0+rL+857zT90+n1A6KUxB7eT/gOidhwqGJMKJ6ERPHmNt+WuXCqVwwe
-         E1J9Tw5Y5jciyjHrZaSljauRntjnYivDlYEAYd/LEYYGf6Kg/du0tG97F/s3umrm4JsG
-         RpDg==
+        bh=p3Z6O75re3IQ8juMy/+Hv5kJ3ZZM2tN3/sbXR6UdChM=;
+        b=OqFSaHhg6jDceD8xwX61EkGcVN+NRXKuZkupxENrtfRyM1KBNs8CQvPYLv/to3hxix
+         CcbUEwlLLx/+h6eP+od/HxKqfh8JdkLxi5zJD7/Lsimfu70I23kDblPXbKnXYZpOKNOY
+         kidISSbBJwYjca7Z2m73W5LzdolscVGWmJ8yFV9pFNvML7A1MOX7PtS/7Pp7QJ3opOIx
+         Qks7nQDvZ9B/VCWAMzWihEy7YofJhUG3xacaMcuVX95hNisW9onhz7KxRW4bDtx120Ng
+         KwCJ5s4FTi8uVdUnKsYj+ZhPyQrKgHCGBf9ko1iMeN272cbkTNOPYaJ2dcz5ZvDbj58o
+         6nPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=KKjH3zCPswTf0hjqacVy5YOkSkhUl6n6cultlDnB9r4=;
-        b=BNo8kqifKfVhlrEdX5hcR33ifFrTb8Ra1sUTk8bLjMwdlpjvVW76Yh4EMbSz3T/x3C
-         4rZcls4gbGCB2DKWBvUeuMdDxoD3N1ihID+VQ58zgJRGS95tzH8lJwbqqKOJCoBtCaBc
-         Zcr3ztNL3n5SyUKH5giB8pRXO+OUXrGzu4jn/FdGX5FSj1ZVbnYWmhLMouLQCZYNrDis
-         mm2tVEubYwJwzW073ma05VFFfo/mUSOlSIXLggThhsEuf+Il8mfpuQ7supEKdKf/whbn
-         C1yUL/PAcF8ffEjPGfiKxC8ry3rQ1TH+k0HOxewTfNYR3pdX8xrySsCKz0D2gyHoXx6J
-         c3DQ==
-X-Gm-Message-State: AOAM531zLmKLgZ1AHDxpGoyh0cdBl8ZA+cPYxNX4RGTP+e5g6+V3wjRK
-        WChjhjxIcJkmTBDCb9redRkp9Fx4be8=
-X-Google-Smtp-Source: ABdhPJyO/YpOUBTWRsnzCsX1L05Kf7rSUUypro5AemY+0lFROqlrme/xEPWu2TDUq3jPILLG9FO3nC2v0QU=
+        bh=p3Z6O75re3IQ8juMy/+Hv5kJ3ZZM2tN3/sbXR6UdChM=;
+        b=YSP9EJBRY3KKfykPMxLH5VVdOOoWMRxbKHX4pig/rSNgETgJR9LBhLMr7Ek1HjYeIw
+         BvqhEwShaNyQM70XcPzkg9Pz0z2k8aVpduII0PDxalEiWvPYSAScxikkWT3ZRE2BGBuc
+         Vz9SaMjpkUyOPZkwjMprhAzTeg9ehPDHteANwLkQXbGUkzJzJRlKNGV5NZbZ6zzVE3a5
+         1iQ78ssfAdkOsHfBUPshjBIvsQoQIeVEhmHU2qn0loPakS89wpOph1g9bM+nZLrxzbJl
+         zk6sTXbhzuY7FY110/DkNWoAOgAy3Tcf0TColc+ARJQgKoqdpzMJ2gTIxyEklKmFVij2
+         +7Qw==
+X-Gm-Message-State: AOAM5334OlayFbqSloVUoRaeIGxjH3Wh+xx/pK4YmyaMu305kROosO+D
+        a1yAtG0/pClDu3LwuA8jgNeEgwqh+aM=
+X-Google-Smtp-Source: ABdhPJx49xfC3QGWQrD5qw/HulHKEjcYP4p7BcA1ouksEtvbUDV0tOQaIb1UA3svH8/Zu7ocQNCRP13Vh3Q=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:b495:: with SMTP id
- y21mr5238714plr.82.1644010934301; Fri, 04 Feb 2022 13:42:14 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:c08d:: with SMTP id
+ o13mr1024956pjs.187.1644010935993; Fri, 04 Feb 2022 13:42:15 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  4 Feb 2022 21:41:58 +0000
+Date:   Fri,  4 Feb 2022 21:41:59 +0000
 In-Reply-To: <20220204214205.3306634-1-seanjc@google.com>
-Message-Id: <20220204214205.3306634-5-seanjc@google.com>
+Message-Id: <20220204214205.3306634-6-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220204214205.3306634-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH 04/11] KVM: SVM: Use common kvm_apic_write_nodecode() for AVIC
- write traps
+Subject: [PATCH 05/11] KVM: SVM: Don't rewrite guest ICR on AVIC IPI
+ virtualization failure
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -75,68 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the common kvm_apic_write_nodecode() to handle AVIC/APIC-write traps
-instead of open coding the same exact code.  This will allow making the
-low level lapic helpers inaccessible outside of lapic.c code.
-
-Opportunistically clean up the params to eliminate a bunch of svm=>vcpu
-reflection.
-
-No functional change intended.
+Don't bother rewriting the ICR value into the vAPIC page on an AVIC IPI
+virtualization failure, the access is a trap, i.e. the value has already
+been written to the vAPIC page.  The one caveat is if hardware left the
+BUSY flag set (which appears to happen somewhat arbitrarily), in which
+case go through the "nodecode" APIC-write path in order to clear the BUSY
+flag.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/avic.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ arch/x86/kvm/lapic.c    |  1 +
+ arch/x86/kvm/svm/avic.c | 22 +++++++++++-----------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 2c88815657a9..6e1f9e83eb68 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1298,6 +1298,7 @@ void kvm_apic_send_ipi(struct kvm_lapic *apic, u32 icr_low, u32 icr_high)
+ 
+ 	kvm_irq_delivery_to_apic(apic->vcpu->kvm, apic, &irq, NULL);
+ }
++EXPORT_SYMBOL_GPL(kvm_apic_send_ipi);
+ 
+ static u32 apic_get_tmcct(struct kvm_lapic *apic)
+ {
 diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index ecc81c48c0ca..462ab073db38 100644
+index 462ab073db38..82d56f8055de 100644
 --- a/arch/x86/kvm/svm/avic.c
 +++ b/arch/x86/kvm/svm/avic.c
-@@ -476,10 +476,9 @@ static void avic_handle_dfr_update(struct kvm_vcpu *vcpu)
- 	svm->dfr_reg = dfr;
- }
- 
--static int avic_unaccel_trap_write(struct vcpu_svm *svm)
-+static int avic_unaccel_trap_write(struct kvm_vcpu *vcpu)
- {
--	struct kvm_lapic *apic = svm->vcpu.arch.apic;
--	u32 offset = svm->vmcb->control.exit_info_1 &
-+	u32 offset = to_svm(vcpu)->vmcb->control.exit_info_1 &
- 				AVIC_UNACCEL_ACCESS_OFFSET_MASK;
- 
- 	switch (offset) {
-@@ -488,18 +487,17 @@ static int avic_unaccel_trap_write(struct vcpu_svm *svm)
- 			return 0;
+@@ -323,18 +323,18 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
+ 	switch (id) {
+ 	case AVIC_IPI_FAILURE_INVALID_INT_TYPE:
+ 		/*
+-		 * AVIC hardware handles the generation of
+-		 * IPIs when the specified Message Type is Fixed
+-		 * (also known as fixed delivery mode) and
+-		 * the Trigger Mode is edge-triggered. The hardware
+-		 * also supports self and broadcast delivery modes
+-		 * specified via the Destination Shorthand(DSH)
+-		 * field of the ICRL. Logical and physical APIC ID
+-		 * formats are supported. All other IPI types cause
+-		 * a #VMEXIT, which needs to emulated.
++		 * Emulate IPIs that are not handled by AVIC hardware, which
++		 * only virtualizes Fixed, Edge-Triggered INTRs.  The exit is
++		 * a trap, e.g. ICR holds the correct value and RIP has been
++		 * advanced, KVM is responsible only for emulating the IPI.
++		 * Sadly, hardware may sometimes leave the BUSY flag set, in
++		 * which case KVM needs to emulate the ICR write as well in
++		 * order to clear the BUSY flag.
+ 		 */
+-		kvm_lapic_reg_write(apic, APIC_ICR2, icrh);
+-		kvm_lapic_reg_write(apic, APIC_ICR, icrl);
++		if (icrl & APIC_ICR_BUSY)
++			kvm_apic_write_nodecode(vcpu, APIC_ICR);
++		else
++			kvm_apic_send_ipi(apic, icrl, icrh);
  		break;
- 	case APIC_LDR:
--		if (avic_handle_ldr_update(&svm->vcpu))
-+		if (avic_handle_ldr_update(vcpu))
- 			return 0;
- 		break;
- 	case APIC_DFR:
--		avic_handle_dfr_update(&svm->vcpu);
-+		avic_handle_dfr_update(vcpu);
- 		break;
- 	default:
- 		break;
- 	}
- 
--	kvm_lapic_reg_write(apic, offset, kvm_lapic_get_reg(apic, offset));
--
-+	kvm_apic_write_nodecode(vcpu, offset);
- 	return 1;
- }
- 
-@@ -549,7 +547,7 @@ int avic_unaccelerated_access_interception(struct kvm_vcpu *vcpu)
- 	if (trap) {
- 		/* Handling Trap */
- 		WARN_ONCE(!write, "svm: Handling trap read.\n");
--		ret = avic_unaccel_trap_write(svm);
-+		ret = avic_unaccel_trap_write(vcpu);
- 	} else {
- 		/* Handling Fault */
- 		ret = kvm_emulate_instruction(vcpu, 0);
+ 	case AVIC_IPI_FAILURE_TARGET_NOT_RUNNING:
+ 		/*
 -- 
 2.35.0.263.gb82422642f-goog
 

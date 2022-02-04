@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DF34A95C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A6E4A95C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357304AbiBDJKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S1357321AbiBDJKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345750AbiBDJKD (ORCPT
+        with ESMTP id S1348476AbiBDJKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:10:03 -0500
+        Fri, 4 Feb 2022 04:10:04 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AC9C061744
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 01:10:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B44BC061748
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 01:10:04 -0800 (PST)
 Received: from dslb-188-096-149-005.188.096.pools.vodafone-ip.de ([188.96.149.5] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nFubP-0002IT-JW; Fri, 04 Feb 2022 10:09:59 +0100
+        id 1nFubQ-0002IT-EM; Fri, 04 Feb 2022 10:10:00 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2 3/4] staging: r8188eu: remove constant parameter of odm_ConfigRFReg_8188E
-Date:   Fri,  4 Feb 2022 10:09:40 +0100
-Message-Id: <20220204090941.309900-4-martin@kaiser.cx>
+Subject: [PATCH v2 4/4] staging: r8188eu: remove constant variable eRFPath
+Date:   Fri,  4 Feb 2022 10:09:41 +0100
+Message-Id: <20220204090941.309900-5-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220204090941.309900-1-martin@kaiser.cx>
 References: <20220203203217.252156-1-martin@kaiser.cx>
@@ -40,48 +40,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only caller of odm_ConfigRFReg_8188E sets RF_PATH to RF_PATH_A.
-Remove this parameter and use RF_PATH_A inside the function.
+In the _PHY_SwChnl8192C function, eRFPath is always zero. Remove the
+variable and use 0 in the code. Replace (enum rf_radio_path)0 with
+RF_PATH_A.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
 v2: no changes
 
- drivers/staging/r8188eu/hal/odm_RegConfig8188E.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
-index 5fb5a88314ed..9059f2533b0b 100644
---- a/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
-+++ b/drivers/staging/r8188eu/hal/odm_RegConfig8188E.c
-@@ -4,8 +4,7 @@
- #include "../include/drv_types.h"
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+index 8279768201b7..6e26359bdda7 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
+@@ -712,7 +712,6 @@ void PHY_SetBWMode8188E(struct adapter *Adapter, enum ht_channel_width Bandwidth
  
- static void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
--				  u32 Data, enum rf_radio_path RF_PATH,
--				  u32 RegAddr)
-+				  u32 Data, u32 RegAddr)
+ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
  {
- 	if (Addr == 0xffe) {
- 		msleep(50);
-@@ -20,7 +19,7 @@ static void odm_ConfigRFReg_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr,
- 	} else if (Addr == 0xf9) {
- 		udelay(1);
- 	} else {
--		rtl8188e_PHY_SetRFReg(pDM_Odm->Adapter, RF_PATH, RegAddr, bRFRegOffsetMask, Data);
-+		rtl8188e_PHY_SetRFReg(pDM_Odm->Adapter, RF_PATH_A, RegAddr, bRFRegOffsetMask, Data);
- 		/*  Add 1us delay between BB/RF register setting. */
- 		udelay(1);
- 	}
-@@ -31,7 +30,7 @@ void odm_ConfigRF_RadioA_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u32 Data
- 	u32  content = 0x1000; /*  RF_Content: radioa_txt */
- 	u32 maskforPhySet = (u32)(content & 0xE000);
+-	u8 eRFPath = 0;
+ 	u32 param1, param2;
+ 	struct hal_data_8188e *pHalData = &Adapter->haldata;
  
--	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, RF_PATH_A, Addr | maskforPhySet);
-+	odm_ConfigRFReg_8188E(pDM_Odm, Addr, Data, Addr | maskforPhySet);
+@@ -725,8 +724,8 @@ static void _PHY_SwChnl8192C(struct adapter *Adapter, u8 channel)
+ 	/* s2. RF dependent command - CmdID_RF_WriteReg, param1=RF_CHNLBW, param2=channel */
+ 	param1 = RF_CHNLBW;
+ 	param2 = channel;
+-	pHalData->RfRegChnlVal[eRFPath] = ((pHalData->RfRegChnlVal[eRFPath] & 0xfffffc00) | param2);
+-	rtl8188e_PHY_SetRFReg(Adapter, (enum rf_radio_path)eRFPath, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[eRFPath]);
++	pHalData->RfRegChnlVal[0] = ((pHalData->RfRegChnlVal[0] & 0xfffffc00) | param2);
++	rtl8188e_PHY_SetRFReg(Adapter, RF_PATH_A, param1, bRFRegOffsetMask, pHalData->RfRegChnlVal[0]);
  }
  
- void odm_ConfigMAC_8188E(struct odm_dm_struct *pDM_Odm, u32 Addr, u8 Data)
+ void PHY_SwChnl8188E(struct adapter *Adapter, u8 channel)
 -- 
 2.30.2
 

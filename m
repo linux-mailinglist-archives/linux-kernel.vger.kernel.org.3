@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DD44AA4AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC284AA4B3
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355983AbiBDXyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:54:19 -0500
-Received: from mga04.intel.com ([192.55.52.120]:29961 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234916AbiBDXyQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:54:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644018857; x=1675554857;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZNxtgZ32zZGXJcx9vyZAks1aVMKptKYDBiIZK+GC6AM=;
-  b=LI9c0RJdSQvgxzCUZGGGnt13QOHXkl+KiydMvTWrUl9BF7/QhJ7mEpou
-   iCTRNLpcsF554B2cKihwiOerXi3depdtSQ5CAVNZmoa9Y0BAbJSjyDKd4
-   MpR0EN8jyAAgq4Aml23tCde1n9GQNcGpKUvV1M8dbcdjs/7+W5oWV/bor
-   ty1eOmohZu9AUOAhJQAjuCNhes02px+KEs2i595IIU3FzHl9cnGcrhHDp
-   fAlaLPo9AOuYjZy/AYryrTnSpgIPNOr1Wk5o90yj4go4O89r2VFLGMaR4
-   ZZYzFGhSsHq0WQJ4CjJ0S81aHgXSCAkPyvgkQT6TehxDstpDyZMZF/+uR
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="247295604"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="247295604"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:54:16 -0800
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="480990506"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:54:16 -0800
-Date:   Fri, 4 Feb 2022 15:54:15 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 11/44] mm/pkeys: Define static PKS key array and
- default values
-Message-ID: <20220204235415.GC785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-12-ira.weiny@intel.com>
- <f2d05862-9750-fd19-42c0-29aa06bdeb13@intel.com>
+        id S1378559AbiBDX4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378473AbiBDX4G (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 18:56:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F72DB788C4;
+        Fri,  4 Feb 2022 15:56:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1517D61CE1;
+        Fri,  4 Feb 2022 23:56:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEAEC004E1;
+        Fri,  4 Feb 2022 23:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644018962;
+        bh=yUiNHffYq6iT3ABSzr7h3OVqLh7zD9OXsmxGVa+fEq0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W5pCX4FJ/JXJTCj22BdQ+GkLccILl1kgLKnViF97QgPStPC335Yw4Uzb2Xn96r9t5
+         uNnZBBP/Wa54y1hjglJrKOgIFe2+WrN8sgLgTGCSPSm7yjshooGeVqZAbr+AdBH4Ir
+         6nyir0++SQoT1IObj36eSLkslW7FMRonlwAzQognFXC0MeGGnezc7JFWO5srt37Yix
+         eYqyqD3nWXP24eA5fMTIyqxerfngcp6+kPSUDwldX+CRpg74BzsmrxxOYVd/NUCZjT
+         8bmVUZkv64McuqflXF5EwQ6S5qWGB2lvYSL8L3IUM6ovFS/Xp+lu81lPdsnirIlxg0
+         eGazvMKfalbdA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 51F955C0418; Fri,  4 Feb 2022 15:56:02 -0800 (PST)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 01/13] torture: Drop trailing ^M from console output
+Date:   Fri,  4 Feb 2022 15:55:49 -0800
+Message-Id: <20220204235601.3438-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
+References: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2d05862-9750-fd19-42c0-29aa06bdeb13@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:02:05PM -0800, Dave Hansen wrote:
-> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> > +#define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		| \
-> > +			PKR_AD_KEY(1)	| \
-> > +			PKR_AD_KEY(2)	| PKR_AD_KEY(3)		| \
-> > +			PKR_AD_KEY(4)	| PKR_AD_KEY(5)		| \
-> > +			PKR_AD_KEY(6)	| PKR_AD_KEY(7)		| \
-> > +			PKR_AD_KEY(8)	| PKR_AD_KEY(9)		| \
-> > +			PKR_AD_KEY(10)	| PKR_AD_KEY(11)	| \
-> > +			PKR_AD_KEY(12)	| PKR_AD_KEY(13)	| \
-> > +			PKR_AD_KEY(14)	| PKR_AD_KEY(15))
-> 
-> Considering how this is going to get used, let's just make this
-> one-key-per-line:
-> 
-> #define PKS_INIT_VALUE (PKR_RW_KEY(PKS_KEY_DEFAULT)		| \
-> 			PKR_AD_KEY(1)	| \
-> 			PKR_AD_KEY(2)	| \
-> 			PKR_AD_KEY(3)	| \
-> 			...
+Console logs can sometimes have trailing control-M characters, which the
+forward-progress evaluation code in kvm-recheck-rcu.sh passes through
+to the user output.  Which does not cause a technical problem, but which
+can look ugly.  This commit therefore strips the control-M characters.
 
-Good idea, done.
-Ira
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ tools/testing/selftests/rcutorture/bin/kvm-recheck-rcu.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rcutorture/bin/kvm-recheck-rcu.sh b/tools/testing/selftests/rcutorture/bin/kvm-recheck-rcu.sh
+index 1c4c2c727dad1..43e1387234d11 100755
+--- a/tools/testing/selftests/rcutorture/bin/kvm-recheck-rcu.sh
++++ b/tools/testing/selftests/rcutorture/bin/kvm-recheck-rcu.sh
+@@ -25,7 +25,7 @@ stopstate="`grep 'End-test grace-period state: g' $i/console.log 2> /dev/null |
+ 	    tail -1 | sed -e 's/^\[[ 0-9.]*] //' |
+ 	    awk '{ print \"[\" $1 \" \" $5 \" \" $6 \" \" $7 \"]\"; }' |
+ 	    tr -d '\012\015'`"
+-fwdprog="`grep 'rcu_torture_fwd_prog n_max_cbs: ' $i/console.log 2> /dev/null | sed -e 's/^\[[^]]*] //' | sort -k3nr | head -1 | awk '{ print $2 " " $3 }'`"
++fwdprog="`grep 'rcu_torture_fwd_prog n_max_cbs: ' $i/console.log 2> /dev/null | sed -e 's/^\[[^]]*] //' | sort -k3nr | head -1 | awk '{ print $2 " " $3 }' | tr -d '\015'`"
+ if test -z "$ngps"
+ then
+ 	echo "$configfile ------- " $stopstate
+-- 
+2.31.1.189.g2e36527f23
 

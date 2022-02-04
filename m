@@ -2,139 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB86F4A9427
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E117D4A942A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245299AbiBDGzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 01:55:02 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:60744 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbiBDGzB (ORCPT
+        id S1344234AbiBDGzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 01:55:21 -0500
+Received: from out29-220.mail.aliyun.com ([115.124.29.220]:52808 "EHLO
+        out29-220.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245393AbiBDGzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:55:01 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id C3E2672C905;
-        Fri,  4 Feb 2022 09:54:59 +0300 (MSK)
-Received: from boyarsh.office.basealt.ru (unknown [193.43.10.250])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 997514A46F0;
-        Fri,  4 Feb 2022 09:54:59 +0300 (MSK)
-From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
-To:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
-Cc:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>,
-        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
-        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com
-Subject: [PATCH] Add ability to disallow idmapped mounts
-Date:   Fri,  4 Feb 2022 09:53:38 +0300
-Message-Id: <20220204065338.251469-1-boyarsh@altlinux.org>
-X-Mailer: git-send-email 2.25.4
+        Fri, 4 Feb 2022 01:55:20 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.156788|-1;BR=01201311R111S40rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.018459-0.0059405-0.975601;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.MlUck.P_1643957703;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.MlUck.P_1643957703)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Fri, 04 Feb 2022 14:55:18 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 0/3] Add SMP/SMT support for Ingenic sysost driver.
+Date:   Fri,  4 Feb 2022 14:54:39 +0800
+Message-Id: <1643957682-39450-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Idmapped mounts may have security implications [1] and have
-no knobs to be disallowed at runtime or compile time.
+1.On the hardware of X2000 SoC, the OST has been split into
+  two parts, two 32bit timers for clockevent and one 64bit
+  timer for clocksource (with different addresses), so it
+  not appropriate to use only one "ingenic,x2000-ost", just
+  remove it, then introduce "ingenic,x2000-ost32" and
+  "ingenic,x2000-ost64".
+2.The OST in Ingenic XBurst®2 SoCs has a global timer and
+  up to 16 event timers, add support for the event timers.
+3.Add dt-bindings and compatible strings for the X1600 SoC,
+  the X1830 SoC, the X2000 SoC, and the X2500 SoC.
 
-This patch adds a sysctl and a config option to set its default value.
+周琰杰 (Zhou Yanjie) (3):
+  dt-bindings: timer: Remove unreasonable binding.
+  dt-bindings: timer: Add bindings for new Ingenic SoCs.
+  clocksource: Ingenic: Add SMP/SMT support for sysost driver.
 
-[1] https://lore.kernel.org/all/m18s7481xc.fsf@fess.ebiederm.org/
+ .../devicetree/bindings/timer/ingenic,sysost.yaml  |   7 +-
+ drivers/clocksource/ingenic-sysost.c               | 403 ++++++++++++++++-----
+ 2 files changed, 310 insertions(+), 100 deletions(-)
 
-Based on work from Alexey Gladkov <legion@kernel.org>.
-
-Signed-off-by: Anton V. Boyarshinov <boyarsh@altlinux.org>
----
- Documentation/admin-guide/sysctl/fs.rst | 12 ++++++++++++
- fs/Kconfig                              |  8 ++++++++
- fs/namespace.c                          | 21 ++++++++++++++++++++-
- 3 files changed, 40 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/sysctl/fs.rst b/Documentation/admin-guide/sysctl/fs.rst
-index 2a501c9ddc55..f758c4ae5f66 100644
---- a/Documentation/admin-guide/sysctl/fs.rst
-+++ b/Documentation/admin-guide/sysctl/fs.rst
-@@ -105,6 +105,18 @@ you have some awesome number of simultaneous system users,
- you might want to raise the limit.
- 
- 
-+idmap_mounts
-+------------
-+
-+Idmapped mounts may have security implications.
-+This knob controls whether creation of idmapped mounts is allowed.
-+When set to "1", creation of idmapped mounts is allowed.
-+When set to "0", creation of idmapped mounts is not allowed.
-+
-+The default value is
-+* 0, if ``IDMAP_MOUNTS_DEFAULT_OFF`` is enabled in the kernel configuration;
-+* 1, otherwise.
-+
- file-max & file-nr
- ------------------
- 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 7a2b11c0b803..d2203ba0183d 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -385,4 +385,12 @@ source "fs/unicode/Kconfig"
- config IO_WQ
- 	bool
- 
-+config IDMAP_MOUNTS_DEFAULT_OFF
-+       bool "Disallow idmappad mounts by default"
-+       help
-+         Idmapped mounts may have security implications.
-+         Enable this to disallow idmapped mounts by setting
-+         the default value of /proc/sys/fs/idmap_mounts to 0.
-+
-+
- endmenu
-diff --git a/fs/namespace.c b/fs/namespace.c
-index 40b994a29e90..66501ad75537 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -39,6 +39,10 @@
- /* Maximum number of mounts in a mount namespace */
- static unsigned int sysctl_mount_max __read_mostly = 100000;
- 
-+/* Whether idmapped mounts are allowed. */
-+static int sysctl_idmap_mounts __read_mostly =
-+	IS_ENABLED(CONFIG_IDMAP_MOUNTS_DEFAULT_OFF) ? 0 : 1;
-+
- static unsigned int m_hash_mask __read_mostly;
- static unsigned int m_hash_shift __read_mostly;
- static unsigned int mp_hash_mask __read_mostly;
-@@ -3965,7 +3969,13 @@ static int can_idmap_mount(const struct mount_kattr *kattr, struct mount *mnt)
- 	if (!is_anon_ns(mnt->mnt_ns))
- 		return -EINVAL;
- 
--	return 0;
-+	/* So far, there are concerns about the safety of idmaps. */
-+	if (!sysctl_idmap_mounts) {
-+		pr_warn_once("VFS: idmapped mounts are not allowed.\n");
-+		return -EPERM;
-+	} else {
-+		return 0;
-+	}
- }
- 
- static struct mount *mount_setattr_prepare(struct mount_kattr *kattr,
-@@ -4631,6 +4641,15 @@ static struct ctl_table fs_namespace_sysctls[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ONE,
- 	},
-+	{
-+		.procname       = "idmap_mounts",
-+		.data           = &sysctl_idmap_mounts,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = proc_dointvec_minmax,
-+		.extra1         = SYSCTL_ZERO,
-+		.extra2         = SYSCTL_ONE,
-+	},
- 	{ }
- };
- 
 -- 
-2.33.0
+2.7.4
 

@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137654A9A97
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443084A9A8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359223AbiBDOCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:02:16 -0500
-Received: from relay3.hostedemail.com ([64.99.140.33]:18512 "EHLO
-        relay3.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359191AbiBDOCP (ORCPT
+        id S1359200AbiBDOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359191AbiBDOBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:02:15 -0500
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id CEA06614A8;
-        Fri,  4 Feb 2022 14:02:07 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id A72A11B;
-        Fri,  4 Feb 2022 14:01:08 +0000 (UTC)
-Message-ID: <7cb1ce88cbf977801f2519178c270c1271100ac6.camel@perches.com>
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-From:   Joe Perches <joe@perches.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Fri, 04 Feb 2022 06:01:44 -0800
-In-Reply-To: <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
-References: <nick.hawkins@hpe.com>
-         <20220202165315.18282-1-nick.hawkins@hpe.com>
-         <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
-         <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
-         <Yf0cihUQ1byjnh3d@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 4 Feb 2022 09:01:52 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E662CC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:01:51 -0800 (PST)
+Date:   Fri, 4 Feb 2022 15:01:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643983308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8cIGjn05QsEEMpX1hWJ4gweSqMP6J0Ol5xFJI7nf6G0=;
+        b=4eMm03kdF74+Hh+eCMctgQ6JuKMFSYPVYw1iMSdejyEoS2mRIj+r7T5D/VtyBl8JHc06LC
+        RsBLpn5IFPIH1WkNUPx2oypHC4auggrP1KSpH7A+ggCvDZEeLXoE/q4+JU2OLkXx/88+ye
+        qX8vvGdVAOiAGW9Tvnh0mM0yBvPShT3CexvEmt1MrrKkCRI2NurWJH3YWOxbcYYHAvXxNn
+        jbo5xJ6OnK5UsJpqlw5KwkENfnGgTZXE5TVhoL8ynh9KVasq5QEV43mPcyMEh32DVolTrJ
+        GNmwVRfL1Y7eYxSqCTgGJ+LWsdJvuzRhkDUO3lbfICy14jCgwusO7mm+YzYTHg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643983308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8cIGjn05QsEEMpX1hWJ4gweSqMP6J0Ol5xFJI7nf6G0=;
+        b=HS8bgltX7XitUeIHMvlw0MRbnLBRulW0ng4hZGa6Ftx+TwAOkR2XwtUPB7t5ekKJYfFfPa
+        bJWvl+u1bzxRFRAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] random: remove batched entropy locking
+Message-ID: <Yf0xy4kZ2Mn65yp8@linutronix.de>
+References: <CAHmME9pe2BEJV4WiZNHmDmH_XK621Qqr1JCBdgTNZmr4JGBA4w@mail.gmail.com>
+ <20220128223548.97807-1-Jason@zx2c4.com>
+ <CAHmME9qtjZX2kVNSQqUsTrZv1cdR8y6n3yZS-RnpVCCzX9okcA@mail.gmail.com>
+ <Yf0JlXf3ARsBpL9K@linutronix.de>
+ <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A72A11B
-X-Spam-Status: No, score=-2.03
-X-Stat-Signature: c3yzg6zcu4cpdcebaczubogb94ck3gqq
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+KwoOMBfXWPFnO9qh3WITIVuG9hjhnLgA=
-X-HE-Tag: 1643983268-605794
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-04 at 12:31 +0000, Russell King (Oracle) wrote:
-> On Fri, Feb 04, 2022 at 04:18:24AM -0800, Joe Perches wrote:
-> > On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
-> > > On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-> > > > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
-> > > > +		writeb_relaxed(MASK_TCS_TC, timer->control);
-> > > > +
-> > > > +		event_handler = READ_ONCE(timer->evt.event_handler);
-> > > > +		if (event_handler)
-> > > > +			event_handler(&timer->evt);
-> > > > +		return IRQ_HANDLED;
-> > > > +	} else {
-> > > > +		return IRQ_NONE;
-> > > > +	}
-> > > > +}
-> > 
-> > It's also less indented code and perhaps clearer to reverse the test
-> > 
-> > 	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
+On 2022-02-04 14:42:03 [+0100], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
+
+> Please calm down a bit: this patch doesn't minimize the importance of
+> working out a real solution for PREEMPT_RT, and I'm not under the
+> illusion that this one here is the silver bullet. It does, however,
+> have other merits, which may or may not have anything to do with
+> PREEMPT_RT. To reiterate: I am taking your PREEMPT_RT concerns
+> seriously, and I want to come up with a solution to that, which we're
+> working toward more broadly in that other thread.
 > 
-> This will need to be:
+> Per your feedback on v1, this is no longer marked for stable and no
+> longer purports to fix the PREEMPT_RT issues entirely. Actually, a
+> large motivation for this includes the reason why Andy's original
+> patch was laying around in the first place: we're trying to make this
+> code faster.
+
+The commit in tree you cited is b43db859a36cb553102c9c80431fc44618703bda.
+It does not mention anything regarding faster nor the performance
+improvement and conditions (hoth path, etc). It still has a stable tag.
+
+> I can improve the commit message a bit though.
 > 
->  	if (!(readb_relaxed(timer->control) & MASK_TCS_TC))
+> On Fri, Feb 4, 2022 at 12:10 PM Sebastian Andrzej Siewior
+> <bigeasy@linutronix.de> wrote:
+> > - This splat only occurs with CONFIG_PROVE_RAW_LOCK_NESTING enabled.
+> 
+> Right, the commit message for v2 mentions that.
+> 
+> > - The problem identified by the splat affects only PREEMPT_RT. Non-RT is
+> >   not affected by this.
+> 
+> Right.
+> 
+> >
+> > - This patch disables interrupts and invokes extract_crng() which leads
+> >   to other problems.
+> 
+> The existing code, which uses a spinlock, also disables interrupts,
+> right? So this isn't actually regressing in that regard. It just
+> doesn't fix your PREEMPT_RT issue, right?
 
-right, thanks.
+The existing code uses spin_lock_irqsave() which do not disable on
+PREEMPT_RT. The local_irq_save() on the hand does.
 
+> Or is the issue you see that spinlock_t is a mutex on PREEMPT_RT, so
+> we're disabling interrupts here in a way that we _weren't_ originally,
+> in a PREEMPT_RT context? If that's the case, then I think I see your
+> objection.
 
+Exactly.
+ 
+> I wonder if it'd be enough here to disable preemption instead? But
+> then we run into trouble if this is called from an interrupt.
+
+Disabling preemption does not allow to acquire sleeping locks so no win.
+
+> Maybe it'd be best to retain the spinlock_t, which will amount to
+> disabling interrupts on !PREEMPT_RT, since it'll never be contended,
+> but will turn into a mutex on PREEMPT_RT, where it'll do the right
+> thing from an exclusivity perspective. Would this be reasonable?
+
+what does retain the spinlock_t mean since we already have a spinlock_t?
+
+> Andy? Any suggestions?
+> 
+> Jason
+
+Sebastian

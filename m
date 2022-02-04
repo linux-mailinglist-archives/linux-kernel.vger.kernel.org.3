@@ -2,113 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88C64AA328
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3944F4AA332
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350115AbiBDWdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:33:46 -0500
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:47066 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241600AbiBDWdp (ORCPT
+        id S1350679AbiBDWgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346580AbiBDWgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:33:45 -0500
-Received: by mail-oo1-f54.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so6247023ooo.13;
-        Fri, 04 Feb 2022 14:33:45 -0800 (PST)
+        Fri, 4 Feb 2022 17:36:08 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA2ED40830F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:36:07 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id s6so6310472plg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:36:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=atIvdbbgNJhEtgYsiRDaIlp5c71qNxWW6NldhDMZOaE=;
+        b=Zxd2f/qJqimaQ8VLu698VAUrPThnH5QJb3TSwwtn61IdrO29Lv5bZt+kEUbwgiLm81
+         x7jReEARezGvS7ZbELnZBenOyW9A+ncqPeq9zjVyTz30CIQXR3U00F3t6Whuh6ix+uOx
+         I/sh4E78bc9CcFcP40/XlQZmHQcAq3PBt9Oo9IokC+qM9XWbcPth8V3KLPoWcKHqv8eY
+         TwYdaRMyG/VmF2Bs+9aVpmKYBL9rcbd+NT2pyBMk9s8d4Zu5cDQWcqSgbp1opiZOiHtK
+         IuXKbeO0cDm68UiRLry7yFNPLvhEzk1pmYsw1p2FKQ/Qd0/iYYNubefiOCv+0nowpkRJ
+         vkOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q4Gn8/JIPxPBAROIKOguet0/WP6sycYjFPMRswgQQ08=;
-        b=QqLiev350pJ7HKYG0c6KQuJfdMSx+uoRyjc5K75IzCkRO03PIlTHtNLJkRRCoOq3+v
-         bI/uWAaR6BbewDeavvdH4JlFCKMDOVLj+Tum1x5DKxt6UY0VdY94ONoVyfpaJkmyoXQW
-         2p36jsLy0QW+H2SinZlyq+a9FKUYit/QuAC5SXG52wIo2mGJv2tutY/l0SeVe7HQNEjv
-         5/wa7+5hDwo6m98qYuveFqAFYEjvGqhEJeK+gbpRVYtcgVfIkWGQlS5WxZBdfkTlBgEF
-         4GySQf+28NlbCy22Ymq4HMJD7HZHvbmwwthIU1IcK2DMo0XKI9/y4eCV0+nFenIRS5VQ
-         KlGg==
-X-Gm-Message-State: AOAM532ucZvNPAcJDtN8ughIqRnvGp2ACoACRvo+YyJb6KFucAC4ROmt
-        /1GaakOUSE3iaoP7TcM7pA==
-X-Google-Smtp-Source: ABdhPJxxGFbL+dwr9YXVucvOXSlOKzQXJ55WMPaQbBqLsMQeJKRuakTQZ//ZngXJ3zGtnHxq3V5LEQ==
-X-Received: by 2002:a05:6870:d88c:: with SMTP id dv12mr474170oab.113.1644014024814;
-        Fri, 04 Feb 2022 14:33:44 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 127sm1309058oih.8.2022.02.04.14.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:33:44 -0800 (PST)
-Received: (nullmailer pid 3305687 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:33:42 -0000
-Date:   Fri, 4 Feb 2022 16:33:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, liush@allwinnertech.com, guoren@kernel.org,
-        atishp@atishpatra.org, anup@brainfault.org, drew@beagleboard.org,
-        hch@lst.de, arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu
-Subject: Re: [PATCH v5 11/14] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-Message-ID: <Yf2pxvmG0t6eugOz@robh.at.kernel.org>
-References: <20220121163618.351934-1-heiko@sntech.de>
- <20220121163618.351934-12-heiko@sntech.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=atIvdbbgNJhEtgYsiRDaIlp5c71qNxWW6NldhDMZOaE=;
+        b=Jc9L9Jj2T0YGcluS4P7+0cvFIbJhTWYmrUWLX+LwNGm2qhbIDwfR7Muqyr0/7zFrcs
+         +XtaTRV+tSiz8ERkUzduU0Njum53eXdVsxZF6cvKPeNWtWwhKBBY6b/U6IGLoiE4XfFm
+         hONVk0HTszmLj0Kl5RZQ0I+NbqluDA6IHLbGjFDfK+We6MTTyhh2o3jo9cXucse7bBCx
+         KRiKRCnpIo2uvANbJ+0pBmvVc9dI/naCnrgPyk6dFpLYzEtZgS5Cuo+DE6MAOeNto8y5
+         M35dyoUyOPedD9dIvBI6wQEGPaD9oHLCjmljNb9HHkCJYcM3bvouyLW8us+1yczQoWR1
+         4qNg==
+X-Gm-Message-State: AOAM532ChwbxphyegYhZOw064BehwOWXK4znI8ww9TG3Ap7aoioBarHl
+        o0cbhEMRmRXSRH+IDgXVTNkvFssVUKM3RgFjqeBqkQ==
+X-Google-Smtp-Source: ABdhPJwMfI+Qw6bAEnBLEJINdajlVEEoCTLVMXg/kJFZMr8rNqAH47DsBB3k4BgJ/O2H1TTGAYH44z8Hs2klQFFaqVY=
+X-Received: by 2002:a17:90b:4a82:: with SMTP id lp2mr1274458pjb.179.1644014166999;
+ Fri, 04 Feb 2022 14:36:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220121163618.351934-12-heiko@sntech.de>
+References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch> <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
+ <YfwEvgerYddIUp1V@lunn.ch> <CAJ+vNU1qY1VJgw1QRsbmED6-TLQP2wwxSYb+bXfqZ3wiObLgHg@mail.gmail.com>
+ <YfxtglvVDx2JJM9w@lunn.ch>
+In-Reply-To: <YfxtglvVDx2JJM9w@lunn.ch>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 4 Feb 2022 14:35:55 -0800
+Message-ID: <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 21, 2022 at 05:36:15PM +0100, Heiko Stuebner wrote:
-> From: Wei Fu <wefu@redhat.com>
-> 
-> Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
-> in the DT mmu node. Update dt-bindings related property here.
-> 
-> Signed-off-by: Wei Fu <wefu@redhat.com>
-> Co-developed-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> index aa5fb64d57eb..3ad2593f1400 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -63,6 +63,16 @@ properties:
->        - riscv,sv48
->        - riscv,none
->  
-> +  mmu:
+On Thu, Feb 3, 2022 at 4:04 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > Andrew,
+> >
+> > The issue is that in an ideal world where all parts adhere to the
+> > JEDEC standards 2ns would be correct but that is not reality. In my
+> > experience with the small embedded boards I help design and support
+> > not about trace lengths as it would take inches to skew 0.5ns but
+> > instead differences in setup/hold values for various MAC/PHY parts
+> > that are likely not adhering the standards.
+> >
+> > Some examples from current boards I support:
+> > - CN8030 MAC rgmii-rxid with intel-xway GPY111 PHY: we need to
+> > configure this for rx_delay=1.5ns and tx_delay=0.5ns
+>
+> So i assume this is what broke for you. Your bootloader sets these
+> delays, phy-type is rgmii-id, and since you don't have the properties
+> for what exact delays you want it default to what 802.3 specifies,
+> 2ns.
+>
+> I actually think the current behaviour of the driver is correct.  By
+> saying phy-type = rgmii-id you are telling the PHY driver to insert
+> the delays and that is what it is doing.
+>
+> In retrospect, i would say you had two choices to cleanly solve this.
+>
+> 1) Do exactly what the patch does, add properties to define what
+> actual delay you want, when you don't want 2ns.
+>
+> 2) Have the bootloader set the delay, but also tell Linux you have set
+> the phy mode including the delays, and it should not touch them. There
+> is a well defined way to do this:
+>
+> PHY_INTERFACE_MODE_NA
+>
+> It has two main use cases. The first is that the MAC and PHY are
+> integrated, there is no MII between them, phy-mode is completely
+> unnecessary. This is the primary meaning.
+>
+> The second meaning is, something else has setup the phy mode, e.g. the
+> bootloader. Don't touch it.
+>
+> This second meaning does not always work, since the driver might reset
+> the PHY, and depending on the PHY, that might clear whatever the
+> bootloader set. So it is not reliable.
 
-riscv,mmu
+Andrew,
 
-> +    description:
-> +      Describes the CPU's MMU Standard Extensions support.
-> +      These values originate from the RISC-V Privileged
-> +      Specification document, available from
-> +      https://riscv.org/specifications/
-> +    $ref: '/schemas/types.yaml#/definitions/string'
-> +    enum:
-> +      - riscv,svpbmt
+I appreciate your suggestions.
 
-Are there per vendor MMU extensions? If not, drop the 'riscv,' part. 
+The PHY_INTERRFACE_MODE_NA is a neat trick that I will remember but it
+would only help with the rgmii delay issue and not the LED issue (this
+patch). The GPY111 has some really nasty errata that is going to cause
+me to have a very hackish work-around anyway and I will be disabling
+the PHY driver to stay out of the way of that workaround so in this
+case here I'm not looking for a solution.
 
-> +
->    riscv,isa:
->      description:
->        Identifies the specific RISC-V instruction set architecture
-> -- 
-> 2.30.2
-> 
-> 
+>
+> > - CN8030 MAC rgmii-rxid with dp83867 GPY111 PHY: we need to configure
+> > this for rx_delay=2.0ns and tx_delay=2.0ns (as would be expected)
+> > - IMX8MM FEC MAC rgmii-id with intel-xway PHY: we need to configure
+> > this for rx_delay=2ns and tx_delay=2.5ns
+> > - IMX8MM FEC MAC rgmii-id with dp83867 PHY: we need to configure this
+> > for rx_delay=2.0ns and tx_delay=2.0ns (as would be expected)
+> >
+> > The two boards above have identical well matched trace-lengths between
+> > the two PHY variant designs so you can see here that the intel-xway
+> > GPY111 PHY needs an extra 0.5ps delay to avoid RX errors on the
+> > far-off board.
+>
+> So a couple of ideas.
+>
+> Since GPY111 and dp83867 use different properties for the delays, just
+> put both in DT. The PHY driver will look for the property it
+> understands and ignore the other. So you can have different delays for
+> different PHYs.
+
+Yes, this is what I am currently doing but I'm not sure that would
+ever be accepted as a dt change upstream and at some point when the
+common property for the delays is supported in both PHY drivers that
+will not work (as you point out below). I do a lot of dt fixups in
+boot firmware already to deal with board revision's so I'll probably
+deal with it that way at some point.
+
+I believe I have made a good case why defaulting to 2ns delays does
+not work for all RGMII MAC/PHY scenarios. If 2ns was all you needed
+then all these PHY's would not have adjustable delays (its not just
+about trace-lengths as they have to be off more than an insh for 0.5ps
+and there are a ton of tiny embedded boards out there with delays
+between 0.5 and 2.5ns).
+
+As far as changing a driver to force a LED configuration with no dt
+binding input (like this patch does) it feels wrong for exactly the
+same reason - LED configuration for this PHY can be done via
+pin-strapping and this driver now undoes that with this patch. I still
+feel very strongly that a PHY driver should not change configuration
+which may be based on pin-strapping or boot firmware changes when no
+dt properties exist telling it to make that specific change. However
+if my opinion is not the popular one I will stop bringing it up.
+
+Best regards,
+
+Tim
+
+
+>
+> We have started to standardize on the delay property. And new driver
+> should be using rx-internal-delay-ps and tx-internal-delay-ps. If you
+> have two drivers using the same property name, what i just suggested
+> will not work. Can you control the address the PHY uses? Put the
+> GPY111 on a different address to the dp83867. List them both in DT. If
+> you don't have a phy-handle in DT, the FEC will go hunting on its MDIO
+> bus and use the first PHY it finds. You can put the needed delay
+> properties in DT for the specific PHY.
+>
+>         Andrew
+>

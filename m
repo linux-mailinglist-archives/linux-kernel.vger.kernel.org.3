@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D6D4AA034
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F38434AA038
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbiBDTiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiBDTiA (ORCPT
+        id S234377AbiBDTir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:38:47 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:39450 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234318AbiBDTiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:38:00 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E58C061714;
-        Fri,  4 Feb 2022 11:38:00 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id h14so6033886plf.1;
-        Fri, 04 Feb 2022 11:38:00 -0800 (PST)
+        Fri, 4 Feb 2022 14:38:46 -0500
+Received: by mail-pl1-f173.google.com with SMTP id x11so6020459plg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:38:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L5dLU4EAVWGYM7Yk8YJmAlAnD7IzyAIW7kZVpagkypg=;
-        b=Ctt4DPTUdPcxcqshyQk5fK/wryEC1i6k4Lk+HOFZb7y2CzNO0n4sYu2KgWzgAhHGA1
-         s5JlHee1DaJNJE6cOyWsnGA4lmEPx0/Mx+gY08n4k1PO1Dlty84bGvXEIzxW6PpbZO5n
-         arvXeN4Wow0QULCZAMS44RrXQ22V8lw3tx87/lkC+VPheqwZzicGWkBzHrYfXg5yBIxe
-         9M7TY7basXq5Ziw8tsdXbNPvJ5Ehu9bHDBoaj6chiO0h9VJJuxWYmpIZwxB5q2bqCUtA
-         W/ZHbFH6DCAm4as8QGiUCFGFP5tjkL5FqImcxtMK/e12VF/RvX6gppfdys9vd+ro0D48
-         jvRA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=io+i+CzmLFcre/8lkkhzloSJnNMQ+D75oetcmjhqJnE=;
+        b=iEWVrGvcOBNJTRz/k21utK9LGBFXk5C4kB49dXuD7M+E2t7+rVz6Mfk+iQtcs63CUt
+         lVG48/BfK9l1uqm66dVAIjfjMCnim8bzJwHR3H50YH6qXEX1K0voVe9RX/xcGxdT5rTM
+         tDoA4A9h08I+UhtT+gI+w4MmiMYVk2H7loJc8ouqHYLBaYX6TtlHNRHlmep4fzJ6VQrd
+         JQzZznRP/49CNzZaRFozAz5foVpMoOUE+UhmkeBpzb6ML/gJxuEYEBNWzYdH6gCPF1dy
+         t56GobVgCM+3Z3BMzJe5Ry5H15yw+0hWfnp0jIFxwpWL8HlBepwdw0Kz6ZMxAyAlEJII
+         nGsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L5dLU4EAVWGYM7Yk8YJmAlAnD7IzyAIW7kZVpagkypg=;
-        b=8A48kmvt+ngjo2YTo0KQ4daPrTmgqqnzYkHGTRmi/ZF2UOQIdMX8uawJRRXJy02xEU
-         GrPXLHIuIs8v3bAHIlDWfgUhzy0NKcDqGKmBT+fGGrgPHpN8j2tLrloopvTEkqEDUNwH
-         V01i7+5vWo9883lMN0V3VbTmFwqUT6mUyYkkLqlyAHSn9Z1NSTvOtsoCRAdmszs2Uitz
-         57rMisDz0HMXDNuaMaFo3ofkpiGHhgyQniZrclYwDpKIKCgySgmF9gTyCvtJirepQVip
-         jFOIMh/A3mkh2ik/TNUPxfRta2kGZ28WIEpk4fvJ2PFaYyTWv4mnAJpd8XQWIOu3XDIN
-         35kw==
-X-Gm-Message-State: AOAM531Tc0fRaqsJSyUuaMKcaNqKJs/aARACWz6bw49PWWallg9+aXGv
-        F3AYMGKTJR05vN5DT94bY7Rdh/SeYQgAB8HhZDM=
-X-Google-Smtp-Source: ABdhPJx6ccKRnDnARaIIVdj8sW/bKIPVdcni82iM0SD7DQXOfakSctEzgg+NvpTaXzqsNXQ/d4I2Cj+HMaztGbsEtzc=
-X-Received: by 2002:a17:902:d4c5:: with SMTP id o5mr4743370plg.116.1644003479467;
- Fri, 04 Feb 2022 11:37:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=io+i+CzmLFcre/8lkkhzloSJnNMQ+D75oetcmjhqJnE=;
+        b=2v6pDMmsdTDBLdEZiNGzR1LF1pOiqSwGHlc4y3rf5V10t1fLjVcaNsDcntQg+g22jh
+         Ttj/TZY3ZPFf6Qv6yBeFN80dmBqEqbNfZvPQTgEcp24eyBeG/IEMqF1riPJTlJWoB1ur
+         H2FaIM3vICUAOkeTEJWlnc64DegQgQsEbWryEZhMYPoKrwrvID9zLKLqZMzOkFdJWH8o
+         5aHsw0CEbCxDO1LSdY+4m/0z3WMM5okwm39Fj7jPw58uITtr4L87a3QFPUQ6LFn1JW+f
+         MrWvOufrXqh/JtiS9MyJcSSzRjtKQlDaDWwRB1J28eSJcuaN1d+G38D/wEHKbXtZga61
+         lnfA==
+X-Gm-Message-State: AOAM530wOc2DniLq7YFHrpWh/4UoPwMm+6vAkOJdMYyu/JVumluvtEjg
+        Mwa35e+fSb9CE7fH34LcEvv5rQ==
+X-Google-Smtp-Source: ABdhPJzpgkqiwLJOGzbPh+9TmMR+/YMmBnd2cAKA9Ll6ZjIHckg3YNCOFKQNjSwEehyIW1AdoeE4pg==
+X-Received: by 2002:a17:902:ecc2:: with SMTP id a2mr4554988plh.12.1644003525574;
+        Fri, 04 Feb 2022 11:38:45 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id y21sm3094863pfr.136.2022.02.04.11.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 11:38:44 -0800 (PST)
+Date:   Fri, 4 Feb 2022 19:38:41 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 08/23] KVM: MMU: rephrase unclear comment
+Message-ID: <Yf2AweXukX3TLh5r@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-9-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220204005519.60361-1-mcroce@linux.microsoft.com> <20220204005519.60361-3-mcroce@linux.microsoft.com>
-In-Reply-To: <20220204005519.60361-3-mcroce@linux.microsoft.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 4 Feb 2022 11:37:48 -0800
-Message-ID: <CAADnVQ+tesyKMd864TzBgfynuxosPPoGgHiB0M9p2oRjitdv2g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: test maximum recursion
- depth for bpf_core_types_are_compat()
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-9-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 4:55 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -13,6 +13,11 @@
->  #define CREATE_TRACE_POINTS
->  #include "bpf_testmod-events.h"
->
-> +typedef int (*func_proto_typedef___match)(long);
-> +typedef int (*func_proto_typedef___overflow)(func_proto_typedef___match);
+On Fri, Feb 04, 2022 at 06:57:03AM -0500, Paolo Bonzini wrote:
+> If accessed bits are not supported there simple isn't any distinction
+> between accessed and non-accessed gPTEs, so the comment does not make
+> much sense.  Rephrase it in terms of what happens if accessed bits
+> *are* supported.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-There is no need for "___flavor" on the kernel side of type definition.
-It makes the test confusing to read.
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-> +func_proto_typedef___match funcp = NULL;
-> +func_proto_typedef___overflow funcp_of = NULL;
-
-We have BTF_TYPE_EMIT() macro to avoid unnecessary declaration.
-
-> +typedef int (*func_proto_typedef___match)(long);
-> +typedef int (*func_proto_typedef___overflow)(func_proto_typedef___match);
-
-With <=1 in the previous patch such single depth of func_proto
-was reaching the recursion limit.
-Hence the fix <=0 was necessary.
-I've also changed this test to:
-
-+typedef int (*func_proto_typedef)(long);
-+typedef int (*func_proto_typedef_nested1)(func_proto_typedef);
-+typedef int (*func_proto_typedef_nested2)(func_proto_typedef_nested1);
-
-in bpf_testmod.c and in progs/core_kern_overflow.c
-and
-bpf_core_type_exists(func_proto_typedef_nested2);
-to go above the limit.
-
-Also added bpf_core_type_exists(func_proto_typedef_nested1)
-to progs/core_kern.c to stay at the limit.
-
-Please see the result in bpf-next.
+> ---
+>  arch/x86/kvm/mmu/paging_tmpl.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 5b5bdac97c7b..6bb9a377bf89 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -193,7 +193,7 @@ static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
+>  	if (!FNAME(is_present_gpte)(gpte))
+>  		goto no_present;
+>  
+> -	/* if accessed bit is not supported prefetch non accessed gpte */
+> +	/* if accessed bit is supported, prefetch only accessed gpte */
+>  	if (PT_HAVE_ACCESSED_DIRTY(vcpu->arch.mmu) &&
+>  	    !(gpte & PT_GUEST_ACCESSED_MASK))
+>  		goto no_present;
+> -- 
+> 2.31.1
+> 
+> 

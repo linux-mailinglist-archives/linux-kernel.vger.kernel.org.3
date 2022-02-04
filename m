@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C04B94AA00D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E604AA010
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbiBDT2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:28:18 -0500
-Received: from mga14.intel.com ([192.55.52.115]:4508 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233122AbiBDT2R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:28:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644002896; x=1675538896;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/tGio2O+4Nz0M4txcIhkv9RrfgoAhivXZIjNFxQms88=;
-  b=knbOgWrbg5U4REbSuWcEzSk/JKG9jsrReFhtskffxoei3NdsBdQSe0sA
-   fhBI6BPQVEDLFCS0JMqxLizHbFwh5kGCoE1LH2m4uc2+ZSXk+ritFpTfA
-   hGRWys5PGUNqXg7KARSzFPvAJ37b0Hf7JwIffdfgVvR3WOzHsM4u0IcPg
-   7rvCEWE3rJBlCNjglPZFE5aDY9f+mOb85m/srf8lS2eiY3Y5pWx8s1QZ1
-   A6FHQHwYEQeSwdhKkwGpaVqeLWhlAkszkmbphK4UVlg+qotTRGIjE7UUJ
-   WkZj2nouBpeorP7b86WjQGekljEma0SFInDU9im7FePdb81+XMLX2B0t3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248643014"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="248643014"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:28:14 -0800
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="498571774"
-Received: from safernan-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.210.69])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:28:14 -0800
-Date:   Fri, 4 Feb 2022 11:28:08 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Matthew Brost <matthew.brost@intel.com>,
-        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        John Harrison <John.C.Harrison@intel.com>
-Subject: Re: [PATCH 02/19] iosys-map: Add offset to iosys_map_memcpy_to()
-Message-ID: <20220204192808.dx3wwjfj6sdmj5ze@ldmartin-desk2>
-X-Patchwork-Hint: comment
-References: <20220204174436.830121-1-lucas.demarchi@intel.com>
- <20220204174436.830121-3-lucas.demarchi@intel.com>
- <59ec3b5a-6e3f-ed8a-4cc1-c0bedb923bb8@suse.de>
+        id S233696AbiBDT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233619AbiBDT26 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:28:58 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD036C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:28:58 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id d12so1365372qvl.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:28:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AvUdSyv4AHEETuOkpKa8AYU99AJ+vHmq6OnHDcdbIU8=;
+        b=fGT+Al6jKRABrpuLfbqnm6XPKxGS7b9L/JLvBA9fAuere+nRCcWK8x0tkYF9n+W+JR
+         IS0JAG5bIEXor67f+t/MO7IqVr4nOUr/vs6FhCUaJYJU15l0efC0QaR9jUzezLeiNqGK
+         Xl+SxDny7GxqBbW+QC0RsgJMqrWxvakkz2KRSx/lW1wIjQI6KwiSPrhUoDq3F/PwFnlb
+         uuz4+4jiJspu0dn9SFRlH7KEPqorov1JYBufZTMoXnQvmpjuaShMW3iyalvp93btMUB6
+         a2q9uY3JupTZdS7KyEQhCsuO+9RLY/KhSYpNI4UaDGSzbuPdDCCyYffvNdqwzP9nL1i1
+         yEGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AvUdSyv4AHEETuOkpKa8AYU99AJ+vHmq6OnHDcdbIU8=;
+        b=WMm4G+rB/idhXk+076HoSp+DWDp03rWUjj2PvT0yy8GqoxLHp3bNyIVD+r2Gb2DTek
+         qgiTNrY5FxXlZyyaf4zTFuwv3NuBR7tbNa/A2iBfxi8W/RWkgYYcWFQvfS9wkEp5v0Cz
+         YeoUZSC2wkMyP0jWLxZTJvR83UHqiTWcg6WeWrxm/ohrnaJlu8NgkUkFzAOFKR/HE3oM
+         WE1PTnkVanyjII6nB8/9jzld/YOY47DexJdFdXZfwqHN7OkUjbyzk3IUq7epnzjcT+fK
+         SdjFnQch4RCMd4mzJ4FC3NAb3cNgeU8i9xF9pn5Gy4RwJnL2mggbrkdMNhxpxqzv0nfw
+         17AQ==
+X-Gm-Message-State: AOAM533e9kpiuY3zxNpeQfp0vmqENMlV7PlS/bowl6J6phlmLdxJ3kAH
+        +J/LrhFEscrU36WJ/t4VSJ/dq3cccIFAsXEWxsywVw==
+X-Google-Smtp-Source: ABdhPJz/rX+0dPHg87Q4MmU26z7oDIcRLBPYQVs2/QezJuBT0ix3+DXyrdbp+sWb3hIf31rQwnMT0S5pGUnyhGlO/D0=
+X-Received: by 2002:ad4:576f:: with SMTP id r15mr3056183qvx.35.1644002937619;
+ Fri, 04 Feb 2022 11:28:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <59ec3b5a-6e3f-ed8a-4cc1-c0bedb923bb8@suse.de>
+References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
+ <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
+ <CA+khW7jx_4K46gH+tyZZn9ApSYGMqYpxCm0ywmuWdSiogv7dqw@mail.gmail.com> <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
+In-Reply-To: <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Fri, 4 Feb 2022 11:28:46 -0800
+Message-ID: <CA+khW7iaCDcpD7JEg9PB-UbYyUuLaEdryhbfaW5tUQ-SUv2sKQ@mail.gmail.com>
+Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
+To:     Song Liu <song@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Blake Jones <blakejones@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Ian Rogers <irogers@google.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 07:48:10PM +0100, Thomas Zimmermann wrote:
->Hi
+On Tue, Jan 25, 2022 at 4:16 PM Song Liu <song@kernel.org> wrote:
 >
->Am 04.02.22 um 18:44 schrieb Lucas De Marchi:
->>In certain situations it's useful to be able to write to an
->>offset of the mapping. Add a dst_offset to iosys_map_memcpy_to().
->>
->>Cc: Sumit Semwal <sumit.semwal@linaro.org>
->>Cc: Christian König <christian.koenig@amd.com>
->>Cc: Thomas Zimmermann <tzimmermann@suse.de>
->>Cc: dri-devel@lists.freedesktop.org
->>Cc: linux-kernel@vger.kernel.org
->>Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
->>---
->>  drivers/gpu/drm/drm_cache.c     |  2 +-
->>  drivers/gpu/drm/drm_fb_helper.c |  2 +-
->>  include/linux/iosys-map.h       | 17 +++++++++--------
->>  3 files changed, 11 insertions(+), 10 deletions(-)
->>
->>diff --git a/drivers/gpu/drm/drm_cache.c b/drivers/gpu/drm/drm_cache.c
->>index 66597e411764..c3e6e615bf09 100644
->>--- a/drivers/gpu/drm/drm_cache.c
->>+++ b/drivers/gpu/drm/drm_cache.c
->>@@ -218,7 +218,7 @@ static void memcpy_fallback(struct iosys_map *dst,
->>  	if (!dst->is_iomem && !src->is_iomem) {
->>  		memcpy(dst->vaddr, src->vaddr, len);
->>  	} else if (!src->is_iomem) {
->>-		iosys_map_memcpy_to(dst, src->vaddr, len);
->>+		iosys_map_memcpy_to(dst, 0, src->vaddr, len);
->>  	} else if (!dst->is_iomem) {
->>  		memcpy_fromio(dst->vaddr, src->vaddr_iomem, len);
->>  	} else {
->>diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
->>index 238f815cb2a0..bf5cc9a42e5a 100644
->>--- a/drivers/gpu/drm/drm_fb_helper.c
->>+++ b/drivers/gpu/drm/drm_fb_helper.c
->>@@ -385,7 +385,7 @@ static void drm_fb_helper_damage_blit_real(struct drm_fb_helper *fb_helper,
->>  	iosys_map_incr(dst, offset); /* go to first pixel within clip rect */
->>  	for (y = clip->y1; y < clip->y2; y++) {
->>-		iosys_map_memcpy_to(dst, src, len);
->>+		iosys_map_memcpy_to(dst, 0, src, len);
->>  		iosys_map_incr(dst, fb->pitches[0]);
->>  		src += fb->pitches[0];
->>  	}
->>diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
->>index f4186f91caa6..edd7fa3be9e9 100644
->>--- a/include/linux/iosys-map.h
->>+++ b/include/linux/iosys-map.h
->>@@ -220,22 +220,23 @@ static inline void iosys_map_clear(struct iosys_map *map)
->>  }
->>  /**
->>- * iosys_map_memcpy_to - Memcpy into iosys mapping
->>+ * iosys_map_memcpy_to_offset - Memcpy into offset of iosys_map
+> On Tue, Jan 25, 2022 at 3:54 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Thanks Song for your suggestion.
+> >
+> > On Mon, Jan 24, 2022 at 11:08 PM Song Liu <song@kernel.org> wrote:
+> > >
+> > > On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > Dear BPF experts,
+> > > >
+> > > > I'm working on collecting some kernel performance data using BPF
+> > > > tracing prog. Our performance profiling team wants to associate the
+> > > > data with user stack information. One of the requirements is to
+> > > > reliably get BuildIDs from bpf_get_stackid() and other similar helpers
+> > > > [1].
+> > > >
+> > > > As part of an early investigation, we found that there are a couple
+> > > > issues that make bpf_get_stackid() much less reliable than we'd like
+> > > > for our use:
+> > > >
+> > > > 1. The first page of many binaries (which contains the ELF headers and
+> > > > thus the BuildID that we need) is often not in memory. The failure of
+> > > > find_get_page() (called from build_id_parse()) is higher than we would
+> > > > want.
+> > >
+> > > Our top use case of bpf_get_stack() is called from NMI, so there isn't
+> > > much we can do. Maybe it is possible to improve it by changing the
+> > > layout of the binary and the libraries? Specifically, if the text is
+> > > also in the first page, it is likely to stay in memory?
+> > >
+> >
+> > We are seeing 30-40% of stack frames not able to get build ids due to
+> > this. This is a place where we could improve the reliability of build
+> > id.
+> >
+> > There were a few proposals coming up when we found this issue. One of
+> > them is to have userspace mlock the first page. This would be the
+> > easiest fix, if it works. Another proposal from Ian Rogers (cc'ed) is
+> > to embed build id in vma. This is an idea similar to [1], but it's
+> > unclear (at least to me) where to store the string. I'm wondering if
+> > we can introduce a sleepable version of bpf_get_stack() if it helps.
+> > When a page is not present, sleepable bpf_get_stack() can bring in the
+> > page.
 >
->'iosys_map_memcpy_to'
+> I guess it is possible to have different flavors of bpf_get_stack().
+> However, I am not sure whether the actual use case could use sleepable
+> BPF programs. Our user of bpf_get_stack() is a profiler. The BPF program
+> which triggers a perf_event from NMI, where we really cannot sleep.
 >
->With that fixed:
+> If we have target use case that could sleep, sleepable bpf_get_stack() sounds
+> reasonable to me.
 >
->Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >
+> > [1] https://lwn.net/Articles/867818/
+> >
+> > > > 2. When anonymous huge pages are used to hold some regions of process
+> > > > text, build_id_parse() also fails to get a BuildID because
+> > > > vma->vm_file is NULL.
+> > >
+> > > How did the text get in anonymous memory? I guess it is NOT from JIT?
+> > > We had a hack to use transparent huge page for application text. The
+> > > hack looks like:
+> > >
+> > > "At run time, the application creates an 8MB temporary buffer and the
+> > > hot section of the executable memory is copied to it. The 8MB region in
+> > > the executable memory is then converted to a huge page (by way of an
+> > > mmap() to anonymous pages and an madvise() to create a huge page), the
+> > > data is copied back to it, and it is made executable again using
+> > > mprotect()."
+> > >
+> > > If your case is the same (or similar), it can probably be fixed with
+> > > CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
+> > >
+> >
+> > In our use cases, we have text mapped to huge pages that are not
+> > backed by files. vma->vm_file could be null or points some fake file.
+> > This causes challenges for us on getting build id for these code text.
+>
+> So, what is the ideal output in these cases? If there isn't a back file, we
+> don't really have good build-id for it, right?
+>
 
-thanks, I noticed that, but looks like I squashed to the wrong patch.
+Right, I don't have a solution for this case unfortunately. Probably
+will just discard the failed frames. :(
 
-Lucas De Marchi
+But in the case where the problem is the page not in mem, Song, do you
+also see a similar high rate of build id parsing failure in your use
+case (30 ~ 40% of frames)? If no, we may have done something wrong on
+our side. If yes, is that a problem for your use case?
+
+> Thanks,
+> Song

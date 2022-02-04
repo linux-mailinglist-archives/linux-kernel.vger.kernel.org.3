@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BE94A9CE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289604A9CF0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376605AbiBDQYf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 11:24:35 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:29567 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376564AbiBDQYX (ORCPT
+        id S242725AbiBDQ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 11:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230298AbiBDQ2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 11:24:23 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-rV3NRtUVMxaCyBGTewz_8A-1; Fri, 04 Feb 2022 11:24:19 -0500
-X-MC-Unique: rV3NRtUVMxaCyBGTewz_8A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 4 Feb 2022 11:28:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7382DC061714;
+        Fri,  4 Feb 2022 08:28:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF53C1853026;
-        Fri,  4 Feb 2022 16:24:18 +0000 (UTC)
-Received: from x1.com (unknown [10.22.33.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B7C8B7E91E;
-        Fri,  4 Feb 2022 16:24:17 +0000 (UTC)
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [PATCH 4/4] rtla/osnoise: Fix segmentation fault when failing to enable -t
-Date:   Fri,  4 Feb 2022 17:24:05 +0100
-Message-Id: <264ff7941b7551ec0b6e5862e40cf3dd593d0ff0.1643990447.git.bristot@kernel.org>
-In-Reply-To: <cover.1643990447.git.bristot@kernel.org>
-References: <cover.1643990447.git.bristot@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0859B61821;
+        Fri,  4 Feb 2022 16:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8D0C004E1;
+        Fri,  4 Feb 2022 16:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643992079;
+        bh=K0wsGaRUgHqugNIBiOxA+CA/nfIWkTeOxknPSc3roNE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fRI/gmo4W3SpODPA+ggjubgEXctvWCzxuxwXUeOwF2plfITawzJnIIdfx1zVlsBUd
+         +FLpO9INbKjf3DvT/Srl5tiCxvSq5yMYq4VChxU+ZIPJjHEA5ZA1tNhCWXX6ylYEo0
+         p0a1G1px+N36bIrqhRgDaow7h5Dm4uIPGsby0oYcVLH4f2YPjdsVuruvKNum5YEeDD
+         bRie+vwp7aLC64k8RSlhgS7m0JxMoSy/1eMMH+Fr3I4JzZ0q2Rjj1Krx3g0wwYhDgu
+         rK6rWKb6WTo83T+JZxZJHCD+UYnmLC2Zi/HhYirPYlEYtf5sX66VY/74uQS+6l55/y
+         z0gFP0gLy8h2w==
+Date:   Fri, 4 Feb 2022 10:27:56 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V6 04/10] PCI/DOE: Introduce pci_doe_create_doe_devices
+Message-ID: <20220204162756.GA187525@bhelgaas>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204145116.00000f5c@Huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtla osnoise and timerlat are causing a segmentation fault when running
-with the --trace option on a kernel that does not support multiple
-instances. For example:
+On Fri, Feb 04, 2022 at 02:51:16PM +0000, Jonathan Cameron wrote:
+> On Thu, 3 Feb 2022 16:44:37 -0600
+> Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Mon, Jan 31, 2022 at 11:19:46PM -0800, ira.weiny@intel.com wrote:
 
-    [root@f34 rtla]# rtla osnoise top -t
-    failed to enable the tracer osnoise
-    Could not enable osnoiser tracer for tracing
-    Failed to enable the trace instance
-    Segmentation fault (core dumped)
+> > > + * pci_doe_create_doe_devices - Create auxiliary DOE devices for all DOE
+> > > + *                              mailboxes found
+> > > + * @pci_dev: The PCI device to scan for DOE mailboxes
+> > > + *
+> > > + * There is no coresponding destroy of these devices.  This function associates
+> > > + * the DOE auxiliary devices created with the pci_dev passed in.  That
+> > > + * association is device managed (devm_*) such that the DOE auxiliary device
+> > > + * lifetime is always greater than or equal to the lifetime of the pci_dev.  
+> > 
+> > This seems backwards.  What does it mean if the DOE aux dev
+> > lifetime is *greater* than that of the pci_dev?  Surely you can't
+> > access a PCI DOE Capability if the pci_dev is gone?
+> 
+> I think the description is inaccurate - the end of life is the same
+> as that of the PCI driver binding to the pci_dev.  It'll get cleared
+> up if that is unbound etc.
 
-This error happens because the exit code of the tools is trying
-to destroy the trace instance that failed to be created.
+I don't know much about devm, but I *think* the devm things get
+released by devres_release_all(), which is called by
+__device_release_driver() after it calls the bus or driver's .remove()
+method (pci_device_remove(), in this case).
 
-Make osnoise_destroy_tool() aware of possible NULL osnoise_tool *,
-and do not attempt to destroy it.
+So in this case, I think the aux dev is created after the pci_dev and
+released after the PCI driver and the PCI core are done with the
+pci_dev.  I assume some refcounting prevents the pci_dev from actually
+being deallocated until the aux dev is done with it.
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Fixes: 1eceb2fc2ca5 ("rtla/osnoise: Add osnoise top mode")
-Fixes: 829a6c0b5698 ("rtla/osnoise: Add the hist mode")
-Fixes: a828cd18bc4a ("rtla: Add timerlat tool and timelart top mode")
-Fixes: 1eeb6328e8b3 ("rtla/timerlat: Add timerlat hist mode")
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- tools/tracing/rtla/src/osnoise.c | 3 +++
- 1 file changed, 3 insertions(+)
+I'm not confident that this is a robust situation.
 
-diff --git a/tools/tracing/rtla/src/osnoise.c b/tools/tracing/rtla/src/osnoise.c
-index 7b73d1eccd0e..5648f9252e58 100644
---- a/tools/tracing/rtla/src/osnoise.c
-+++ b/tools/tracing/rtla/src/osnoise.c
-@@ -750,6 +750,9 @@ void osnoise_put_context(struct osnoise_context *context)
-  */
- void osnoise_destroy_tool(struct osnoise_tool *top)
- {
-+	if (!top)
-+		return;
-+
- 	trace_instance_destroy(&top->trace);
- 
- 	if (top->context)
--- 
-2.34.1
+> > > +		 * done later within the DOE initialization, but as it
+> > > +		 * potentially has other impacts keep it here when setting up
+> > > +		 * the IRQ's.  
+> > 
+> > s/IRQ's/IRQs/
+> > 
+> > "Potentially has other impacts" is too vague, and this doesn't
+> > explain why bus mastering should be enabled here rather than
+> > later.  The device should not issue an MSI-X until DOE Interrupt
+> > Enable is set, so near there seems like a logical place.
+> 
+> I can't remember what lead to that comment so hopefully moving to
+> just before the enable would be fine - if there was somewhere to do
+> it.  I'm not sure there is as the IRQ enable is in the Auxilliary
+> Bus driver.  If we pull the pci_alloc_irq_vectors() out of here into
+> the caller, then the pci_set_master() should go with it.
 
+I think pci_set_master() is tied to setting PCI_DOE_CTRL_INT_EN, not
+to pci_alloc_irq_vectors().
+
+Bjorn

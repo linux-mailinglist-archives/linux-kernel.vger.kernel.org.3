@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADDA4A9E77
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:58:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136F64A9E71
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377268AbiBDR63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377266AbiBDR61 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1377264AbiBDR61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 4 Feb 2022 12:58:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562CFC061714;
-        Fri,  4 Feb 2022 09:58:27 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377243AbiBDR60 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 12:58:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0987CC061714;
+        Fri,  4 Feb 2022 09:58:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D2F4B8387E;
-        Fri,  4 Feb 2022 17:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E46FBC340F2;
-        Fri,  4 Feb 2022 17:58:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D91E61B56;
+        Fri,  4 Feb 2022 17:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A287C340FB;
+        Fri,  4 Feb 2022 17:58:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643997504;
-        bh=HUZCm3jTJk41ScG/NjahE75dhaV2tXUyzE3upfBjpwM=;
+        s=k20201202; t=1643997505;
+        bh=zFYkm4VCUhyoKFnTtqkYM6XxiGZCvCrd3LFuBN4ldLo=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=SUvx0PS/Xa0n3eFlQ4YRjcF4dmQY1qt5Pw8ZsI11w76D7LYACbigaffuXqTPlH1hH
-         2sEj+v8qB44rebH7FSWjVsF1TBGUFozmDYcqocYkmFoANlOxSpn1CETTShnGiXMq/G
-         spIUtXoE2lRd9+KhLA74I61bBvodDhsOetZqzkDvR4i30aeF5rexNLeKqWts+JtZHw
-         GFyNdRkYVVxWxsokQI68RGStn9T8uqMMQfsraxpWDdAVZPr2hgD2CYn43+zuG8dVlS
-         W73s7zYGeJCgShbNosVJnt7l/t4JyZWCgrWKq0kXcMjy8saApvKQ2je9ABG6oeFZRG
-         MITQB3mmPh+fA==
+        b=fPrSZDGIMsZ5Vn7vOTJFNcO9I1qqKNVaf/ZPRLQJA8PULl6ysteDJyHveLXCuVItT
+         XGHOd5ifepY/rfqNqQrD2OJgCD7UuyJJFmQ9INtCmtG4Cl1sUeI1fOmpM03Xm2ljZG
+         5K0I0hWXjhuBYWrXohH05jc2DcEaq7wicXfCkPCQlxPzZrmJN5aVccFooVhxzckvJ5
+         rhGGCKeUt7qW1c3mtB0CzA+g7qqYdQ2eKoO+J5PHc/GzvuBDCQ5zeLoOPlx5fIuVah
+         xa6rSjMzPdSQrNfDzQugz1hFYXXntQiuF89ZBRoaPWNU6nKQ6Zfes+WctcyccooLM2
+         v8VmdyRgtQ5Bw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C3448E5D08C;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D67FAE6BBD2;
         Fri,  4 Feb 2022 17:58:24 +0000 (UTC)
-Subject: Re: [GIT PULL] cifs/smb3 client fixes
+Subject: Re: [GIT PULL] 9p for 5.17-rc3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5muqducHGxPtueahyFbqZZkUr1=04JrTuLEzejj_pKjEJQ@mail.gmail.com>
-References: <CAH2r5muqducHGxPtueahyFbqZZkUr1=04JrTuLEzejj_pKjEJQ@mail.gmail.com>
+In-Reply-To: <Yf0Fh7xIgJuoxuSB@codewreck.org>
+References: <20220130130651.712293-1-asmadeus@codewreck.org> <Yf0Fh7xIgJuoxuSB@codewreck.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5muqducHGxPtueahyFbqZZkUr1=04JrTuLEzejj_pKjEJQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc3-smb3-client-fixes
-X-PR-Tracked-Commit-Id: d3b331fb51f326d5b5326010bf2b5841bb86cdc6
+X-PR-Tracked-Message-Id: <Yf0Fh7xIgJuoxuSB@codewreck.org>
+X-PR-Tracked-Remote: git://github.com/martinetd/linux tags/9p-for-5.17-rc3
+X-PR-Tracked-Commit-Id: 22e424feb6658c5d6789e45121830357809c59cb
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 633a8e8986eac2c9e32c76ccb9cfe0e5a898b314
-Message-Id: <164399750479.18890.2839224296725639418.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 1eb7de177d4073085e3a1cebf19d5d538d171f10
+Message-Id: <164399750487.18890.15053692534783051413.pr-tracker-bot@kernel.org>
 Date:   Fri, 04 Feb 2022 17:58:24 +0000
-To:     Steve French <smfrench@gmail.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 4 Feb 2022 00:08:12 -0600:
+The pull request you sent on Fri, 4 Feb 2022 19:52:55 +0900:
 
-> git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc3-smb3-client-fixes
+> git://github.com/martinetd/linux tags/9p-for-5.17-rc3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/633a8e8986eac2c9e32c76ccb9cfe0e5a898b314
+https://git.kernel.org/torvalds/c/1eb7de177d4073085e3a1cebf19d5d538d171f10
 
 Thank you!
 

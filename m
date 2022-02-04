@@ -2,169 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84714A93D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95A64A93D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 07:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241952AbiBDGDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 01:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        id S236373AbiBDGI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 01:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbiBDGDt (ORCPT
+        with ESMTP id S229905AbiBDGIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 01:03:49 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B93C06173D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 22:03:49 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id d186so4216266pgc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 22:03:49 -0800 (PST)
+        Fri, 4 Feb 2022 01:08:25 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B534CC06173D;
+        Thu,  3 Feb 2022 22:08:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id i34so10715309lfv.2;
+        Thu, 03 Feb 2022 22:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6l4Se70qE+syqGJMrB/AsP3g/MR2GzyK9H999D6OCfQ=;
-        b=twPrCIMqWtmqtJsfNPwMsDsagV0gpq4f/8DzAU4geJD+UGyGQgOqnMEBqrAHSi3ysi
-         OZFSBTZO5Scr/Eb4sDzoWZKuO22QYO5PJeDNB1xNcD9U488BQ2Q3VPKA36Ehsd517Ilg
-         pc8yNaoLDB9uzx1gwGShF90NNYCooU++3EoqDWqYITqP6Y7KjmGWoLjSM2XlV4M0zrvI
-         xrlWbjtiknXe9msgZUmE1ZHfB3bxHcqzJ4oiS782bN9s3p2OCIzwRnTXNMGbJMuilLeF
-         NkfoSjXMv/9pHRyF+Qt9n6thJRR4Iw1FmFt0llnpocTri/ZiS91bSirzeyBt8FQ96JpR
-         WN/g==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=v4uaoO0oZZSWkasJgS763obvd7uTNueKYnUar/MRn1U=;
+        b=KDCAEUXeuVQlYMZaKJlZfQaTddng4CXFu02Mdfu40AtCngGHRAKmUbMZPQIitk09mZ
+         e8G857nomvD3nXFHDLZJjVvqTymd9BEAfniFEi4eKEjc/GNmdb05/mH7We17uuFx9DaG
+         aVPFhLcKzcL2icYiY6UAib3BgruwJqBT9YCm8pzfQ1JFqTYZDWA7Yi5O4nsOvQ9jgREd
+         FWoPsljIiev+ZmPLa3/lmbh3QOT4l5WhWSq0bkwehOiY8PW/mbsjzqYbtX0k9uDLCyxe
+         600JIfyMnAp2Ii6xB0b/GiFbjEyWgXzH19bAl4E4miF+LaU2LcVUKEKwMnc4BeOlkVQg
+         Zv3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6l4Se70qE+syqGJMrB/AsP3g/MR2GzyK9H999D6OCfQ=;
-        b=saW4xpWOB0ep0KyHzFKgoRs3KUXZ+q95aEpZIemx/eYeov2FOBmLhSTWqbn40IepeG
-         zsol2NiEI7cZIRaD0vwtvsIa3i+JUtApXJRq6UMOm79kbQXegbnuGAy6l9Rd42KbIgii
-         wTJFXgL/mfsXSTNWmNMlyve3/oITnh8Q36fb3bEHDDG3sbeZpsGzusf1x+Qv2DolggOJ
-         jsyopSgqpgi7CD2BwrgJD9Km6feZTxZflr1zxfhOQRfJpCVsrhehyg/5qSZUG9h6g+Qi
-         4dXF+qC6Wml1NE3TWyPtPJtnCN6V4UDtnjqjXb3xYq6TgS1f4pggl8cM8rtN54nqWyQO
-         jsNg==
-X-Gm-Message-State: AOAM530umW2BToPdoTxBdo0pQaes3rsw+YAGH9IJi2IBKqpC16PAALvs
-        2WkM+KObLRvt/rOEhEa2UZ5hKxhbuf07jBcZwj5BhQ==
-X-Google-Smtp-Source: ABdhPJzjeIgvLiv+7Q+Z36tObcCbqLcIUwq8r4zgIpIDVk4uTWYWTdh9zto49CaVa1EjbgHgLmkXgdhhNjk2Px33Rsw=
-X-Received: by 2002:a63:550f:: with SMTP id j15mr1228156pgb.40.1643954628595;
- Thu, 03 Feb 2022 22:03:48 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=v4uaoO0oZZSWkasJgS763obvd7uTNueKYnUar/MRn1U=;
+        b=4D/nMjp/CvXmWpzx7Nln8HNnfRQIDD4koUMOQ0cChmrts4p0rC5q5MsGteYi7cE/92
+         DPe6xTxusldN3+Hu1xaJ3/OCVG6ITG1NHPareiFtCN1gMgeIt3x/fyxndVmeAGSqRMpK
+         bmrUHULfsr/hzpFBDTmSY8Rj0hrQ8KAkGFHcKFG5LX0Wa8+OzfeHMYoVpi5IO0unOFu9
+         zQc3euWUUFK2Chmi+fUeIVPtGE0z0NqtDmV2lWcD5IfLRiUuvvSqllvYtiEdaQC1/41F
+         y6grpzTsLdPAWxQsPKHXKnr39+eDNu78BbGx76eg6z0mBVAY4Ntf7ymdE4dZsO142iX8
+         QCTQ==
+X-Gm-Message-State: AOAM531m1aJybeLIsc7BECSYuqAtyRdm520Xt1BPAHfYguw2G+27PPGD
+        EvA5ShBdTKx/7zb7n85SRTeUFK7NwMKwm9fxYnZhKfqdSbs=
+X-Google-Smtp-Source: ABdhPJyArqdEsc1GfQqaCC018GXybzMFe1My7xMWi66Ouk4pSgg3UJdWB1o1J2wsYFMzWvM/y6wnQfQRQJaC0/WSX2I=
+X-Received: by 2002:a05:6512:2248:: with SMTP id i8mr1227340lfu.595.1643954902927;
+ Thu, 03 Feb 2022 22:08:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220128213150.1333552-1-jane.chu@oracle.com> <20220128213150.1333552-5-jane.chu@oracle.com>
-In-Reply-To: <20220128213150.1333552-5-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 3 Feb 2022 22:03:36 -0800
-Message-ID: <CAPcyv4hFyoHgX9mo=NwOj_FPnfD8zkg_svM1sJZLn41vBm4Z8w@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] dax: add dax_recovery_write to dax_op and dm
- target type
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>
+From:   Steve French <smfrench@gmail.com>
+Date:   Fri, 4 Feb 2022 00:08:12 -0600
+Message-ID: <CAH2r5muqducHGxPtueahyFbqZZkUr1=04JrTuLEzejj_pKjEJQ@mail.gmail.com>
+Subject: [GIT PULL] cifs/smb3 client fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 1:32 PM Jane Chu <jane.chu@oracle.com> wrote:
->
-> dax_recovery_write() dax op is only required for DAX device that
-> export DAXDEV_RECOVERY indicating its capability to recover from
-> poisons.
->
-> DM may be nested, if part of the base dax devices forming a DM
-> device support dax recovery, the DM device is marked with such
-> capability.
->
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-[..]
-> diff --git a/include/linux/dax.h b/include/linux/dax.h
-> index 2fc776653c6e..1b3d6ebf3e49 100644
-> --- a/include/linux/dax.h
-> +++ b/include/linux/dax.h
-> @@ -30,6 +30,9 @@ struct dax_operations {
->                         sector_t, sector_t);
->         /* zero_page_range: required operation. Zero page range   */
->         int (*zero_page_range)(struct dax_device *, pgoff_t, size_t);
-> +       /* recovery_write: optional operation. */
-> +       size_t (*recovery_write)(struct dax_device *, pgoff_t, void *, size_t,
-> +                               struct iov_iter *);
+Please pull the following changes since commit
+e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
-The removal of the ->copy_{to,from}_iter() operations set the
-precedent that dax ops should not be needed when the operation can be
-carried out generically. The only need to call back to the pmem driver
-is so that it can call nvdimm_clear_poison(). nvdimm_clear_poison() in
-turn only needs the 'struct device' hosting the pmem and the physical
-address to be cleared. The physical address is already returned by
-dax_direct_access(). The device is something that could be added to
-dax_device, and the pgmap could host the callback that pmem fills in.
-Something like:
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc3-smb3-client-fixes
+
+for you to fetch changes up to d3b331fb51f326d5b5326010bf2b5841bb86cdc6:
+
+  cifs: fix workstation_name for multiuser mounts (2022-02-03 00:16:37 -0600)
+
+----------------------------------------------------------------
+SMB3 client fixes including:
+- multiple fscache related fixes, reenabling ability to read/write to
+cached files for cifs.ko
+  (that was temporarily disabled for cifs.ko a few weeks ago due to
+the recent fscache changes)
+    - also includes a new fscache helper function ("query_occupancy")
+used by above
+- fix for multiuser mounts and NTLMSSP auth (workstation name) for stable
+- fix locking ordering problem in multichannel code
+- trivial malformed comment fix
+
+Unit test results:
+http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/882
+
+There is an additional DFS reconnection fix, unrelated to this, still
+being worked on, that is not included in this P/R
+----------------------------------------------------------------
+David Howells (5):
+      Fix a warning about a malformed kernel doc comment in cifs
+      cifs: Transition from ->readpages() to ->readahead()
+      netfs, cachefiles: Add a method to query presence of data in the cache
+      cifs: Implement cache I/O by accessing the cache directly
+      cifs: Fix the readahead conversion to manage the batch when
+reading from cache
+
+Rohith Surabattula (1):
+      Invalidate fscache cookie only when inode attributes are changed.
+
+Ryan Bair (1):
+      cifs: fix workstation_name for multiuser mounts
+
+Shyam Prasad N (1):
+      cifs: unlock chan_lock before calling cifs_put_tcp_session
+
+ Documentation/filesystems/netfs_library.rst |  16 ++
+ fs/cachefiles/io.c                          |  59 +++++++
+ fs/cifs/connect.c                           |  23 ++-
+ fs/cifs/file.c                              | 221 ++++++++++-----------------
+ fs/cifs/fscache.c                           | 126 ++++++++++++---
+ fs/cifs/fscache.h                           |  79 ++++++----
+ fs/cifs/inode.c                             |   8 +-
+ fs/cifs/sess.c                              |   6 +-
+ include/linux/netfs.h                       |   7 +
+ 9 files changed, 346 insertions(+), 199 deletions(-)
 
 
-diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-index 58eda16f5c53..36486ba4753a 100644
---- a/drivers/nvdimm/pfn_devs.c
-+++ b/drivers/nvdimm/pfn_devs.c
-@@ -694,6 +694,7 @@ static int __nvdimm_setup_pfn(struct nd_pfn
-*nd_pfn, struct dev_pagemap *pgmap)
-                .end = nsio->res.end - end_trunc,
-        };
-        pgmap->nr_range = 1;
-+       pgmap->owner = &nd_pfn->dev;
-        if (nd_pfn->mode == PFN_MODE_RAM) {
-                if (offset < reserve)
-                        return -EINVAL;
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index 58d95242a836..95e1b6326f88 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -481,6 +481,7 @@ static int pmem_attach_disk(struct device *dev,
-        }
-        set_dax_nocache(dax_dev);
-        set_dax_nomc(dax_dev);
-+       set_dax_pgmap(dax_dev, &pmem->pgmap);
-        if (is_nvdimm_sync(nd_region))
-                set_dax_synchronous(dax_dev);
-        rc = dax_add_host(dax_dev, disk);
-diff --git a/include/linux/memremap.h b/include/linux/memremap.h
-index 1fafcc38acba..8cb59b5df38b 100644
---- a/include/linux/memremap.h
-+++ b/include/linux/memremap.h
-@@ -81,6 +81,11 @@ struct dev_pagemap_ops {
+-- 
+Thanks,
 
- #define PGMAP_ALTMAP_VALID     (1 << 0)
-
-+struct dev_pagemap_operations {
-+       size_t (*recovery_write)(struct dev_pagemap *pgmap, void *, size_t,
-+                                struct iov_iter *);
-+};
-+
- /**
-  * struct dev_pagemap - metadata for ZONE_DEVICE mappings
-  * @altmap: pre-allocated/reserved memory for vmemmap allocations
-@@ -111,12 +116,15 @@ struct dev_pagemap {
-        const struct dev_pagemap_ops *ops;
-        void *owner;
-        int nr_range;
-+       struct dev_pagemap_operations ops;
-        union {
-                struct range range;
-                struct range ranges[0];
-        };
- };
-
-...then DM does not need to be involved in the recovery path, fs/dax.c
-just does dax_direct_access(..., DAX_RECOVERY, ...) and then looks up
-the pgmap to generically coordinate the recovery_write(). The pmem
-driver would be responsible for setting pgmap->recovery_write() to a
-function that calls nvdimm_clear_poison().
-
-This arch works for anything that can be described by a pgmap, and
-supports error clearing, it need not be limited to the pmem block
-driver.
+Steve

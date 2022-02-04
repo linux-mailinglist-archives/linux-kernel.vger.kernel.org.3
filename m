@@ -2,176 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C494E4AA04A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD464AA054
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiBDTmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:42:40 -0500
-Received: from mail-qt1-f178.google.com ([209.85.160.178]:42879 "EHLO
-        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiBDTmj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:42:39 -0500
-Received: by mail-qt1-f178.google.com with SMTP id s1so6597077qtw.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JbC8+naqmMGFLTWyMj3cT1mIuHoa6H6nQOCtbEqKg3M=;
-        b=q7qWg8FNGY9UBDZDBZn99g/etbMeDQ72KcwFlWHN0TnqmhD3NAFtahRpeGCbbcCzeX
-         vPqicZ7LvR7kuPArucxPFhLPulyHjzMKgWixlInSbhgp7E/TE+rvQ2rCUWGeIY4ohHpq
-         3PADSbc3euSF3ZS7pc6Dygap6BMSjIUZ+Z6Xq5T5ODAPp9n7LvFDmiotkrfyUwtpIZhZ
-         g55YSvXqpvJZkR5X68ri41MWT18rAR3RtHis7BDCGJBl4pLz4vIqrxapkDLXA695Y4Sv
-         FbhQTU5BAQ2GnJlQV9C0DAi2S63hQrbffOgaKv54ndUvvNHrIQcN8/eIpif6TYte6JiM
-         uW/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JbC8+naqmMGFLTWyMj3cT1mIuHoa6H6nQOCtbEqKg3M=;
-        b=TbtJGdDeyfr8aDDmgUd9HXGyNk0kCCjKHM4xrhB1SFvgNUPn8Y+1tEp68bwY+p2sJB
-         zUGdLXgh3AfFp1FHG5ySgzj/S61KwnpK2lwGdSqwtMtNP9cj8ms//qBs2IejEaKKEKYi
-         aneXPg+d3LG2YB4sc8um3lxFcNM/UxBjWYP3023RO1taxVD5GB1PIyzUss6bZ4mxmgez
-         wsEOlvfdZMv/CMAyghK0krc6xDfGSr+DoYXoUSCsv4k04Jyo+aYZyaHUBFP7vU0LJCzp
-         ryQcZgRhseOH0IuE2s+jtBJ+e5upsMHMfp3MXro0+uzHEr2uIjmEKyBzDCJHE+FXmecG
-         B4Og==
-X-Gm-Message-State: AOAM532CuG24pre4HOF7b2OYa9J22Vl9rQAx6/CXQRCQNhkggX/V/Y2s
-        mSfVtW6DT2J5md08HY7qccwiXMVzLwz9GauXi190KA==
-X-Google-Smtp-Source: ABdhPJxrv4h/4iWWl4riwPirpNZczdI8YDtShQ2SED6pPsfgef/eYLZ/fRNSmBMe7hD8Ti77VEc6TPDXMN6LKAI4PvA=
-X-Received: by 2002:ac8:58ce:: with SMTP id u14mr425194qta.299.1644003756857;
- Fri, 04 Feb 2022 11:42:36 -0800 (PST)
+        id S234709AbiBDTow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:44:52 -0500
+Received: from mga05.intel.com ([192.55.52.43]:5078 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234667AbiBDTot (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:44:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644003889; x=1675539889;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=55z9cON17fFZ6cLCJQ9JbE4w6i9qge0Rbq8Kh0fq+Nc=;
+  b=EwdfJ/idi7VnlNtlJlobvJ8yAKXAP1vh6l2H7hFj6EPtRH5ol2upbJpS
+   5cyx36enly3GBeMrK3kw7bOkREbFBrnwaCr1s4Oag3t17nr7H8lKfPK+p
+   fBlUfPMzo9H1mjqivdPKjy//wXH9/q8NSDMHq19ifRjAcYvrCyJzKFnJh
+   JMMd1fZO1hXFbAUvNeWzSy8tEgKVq0ZS4lhSAA2cI/pmitB8REnzrPo9k
+   Tq/K9FGXGips5jr+Tl6qoqvEG0GZyAM1GM+K7doYT086FMTDVRv2pPd2k
+   9PG+MKpM4rMaop5nm4FzyHBRybVZKMGTI+h6ou8Xuwe5h88HtMb0FVO3L
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334827153"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="334827153"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:44:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="539285391"
+Received: from safernan-mobl2.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.210.69])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:44:48 -0800
+Date:   Fri, 4 Feb 2022 11:44:42 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        John Harrison <John.C.Harrison@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/19] iosys-map: Add a few more helpers
+Message-ID: <20220204194442.5slql7ustz5ftger@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20220204174436.830121-1-lucas.demarchi@intel.com>
+ <20220204174436.830121-4-lucas.demarchi@intel.com>
+ <515668f4-9faf-ed8e-385e-7020eed38b18@suse.de>
 MIME-Version: 1.0
-References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
- <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
- <CA+khW7jx_4K46gH+tyZZn9ApSYGMqYpxCm0ywmuWdSiogv7dqw@mail.gmail.com>
- <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
- <CA+khW7iaCDcpD7JEg9PB-UbYyUuLaEdryhbfaW5tUQ-SUv2sKQ@mail.gmail.com> <CAPhsuW7g+hj1jsFLeHTucZWrq+eB_qwu8bgkd+ObpbktF0t+DA@mail.gmail.com>
-In-Reply-To: <CAPhsuW7g+hj1jsFLeHTucZWrq+eB_qwu8bgkd+ObpbktF0t+DA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 4 Feb 2022 11:42:25 -0800
-Message-ID: <CA+khW7iW2TRK_RXOJnJVnAApeBHBp+KZRvowdB1wZB=T4jCL+g@mail.gmail.com>
-Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <515668f4-9faf-ed8e-385e-7020eed38b18@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 11:37 AM Song Liu <song@kernel.org> wrote:
+On Fri, Feb 04, 2022 at 08:05:56PM +0100, Thomas Zimmermann wrote:
+>Hi
 >
-> On Fri, Feb 4, 2022 at 11:29 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Tue, Jan 25, 2022 at 4:16 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Tue, Jan 25, 2022 at 3:54 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > Thanks Song for your suggestion.
-> > > >
-> > > > On Mon, Jan 24, 2022 at 11:08 PM Song Liu <song@kernel.org> wrote:
-> > > > >
-> > > > > On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
-> > > > > >
-> > > > > > Dear BPF experts,
-> > > > > >
-> > > > > > I'm working on collecting some kernel performance data using BPF
-> > > > > > tracing prog. Our performance profiling team wants to associate the
-> > > > > > data with user stack information. One of the requirements is to
-> > > > > > reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-> > > > > > [1].
-> > > > > >
-> > > > > > As part of an early investigation, we found that there are a couple
-> > > > > > issues that make bpf_get_stackid() much less reliable than we'd like
-> > > > > > for our use:
-> > > > > >
-> > > > > > 1. The first page of many binaries (which contains the ELF headers and
-> > > > > > thus the BuildID that we need) is often not in memory. The failure of
-> > > > > > find_get_page() (called from build_id_parse()) is higher than we would
-> > > > > > want.
-> > > > >
-> > > > > Our top use case of bpf_get_stack() is called from NMI, so there isn't
-> > > > > much we can do. Maybe it is possible to improve it by changing the
-> > > > > layout of the binary and the libraries? Specifically, if the text is
-> > > > > also in the first page, it is likely to stay in memory?
-> > > > >
-> > > >
-> > > > We are seeing 30-40% of stack frames not able to get build ids due to
-> > > > this. This is a place where we could improve the reliability of build
-> > > > id.
-> > > >
-> > > > There were a few proposals coming up when we found this issue. One of
-> > > > them is to have userspace mlock the first page. This would be the
-> > > > easiest fix, if it works. Another proposal from Ian Rogers (cc'ed) is
-> > > > to embed build id in vma. This is an idea similar to [1], but it's
-> > > > unclear (at least to me) where to store the string. I'm wondering if
-> > > > we can introduce a sleepable version of bpf_get_stack() if it helps.
-> > > > When a page is not present, sleepable bpf_get_stack() can bring in the
-> > > > page.
-> > >
-> > > I guess it is possible to have different flavors of bpf_get_stack().
-> > > However, I am not sure whether the actual use case could use sleepable
-> > > BPF programs. Our user of bpf_get_stack() is a profiler. The BPF program
-> > > which triggers a perf_event from NMI, where we really cannot sleep.
-> > >
-> > > If we have target use case that could sleep, sleepable bpf_get_stack() sounds
-> > > reasonable to me.
-> > >
-> > > >
-> > > > [1] https://lwn.net/Articles/867818/
-> > > >
-> > > > > > 2. When anonymous huge pages are used to hold some regions of process
-> > > > > > text, build_id_parse() also fails to get a BuildID because
-> > > > > > vma->vm_file is NULL.
-> > > > >
-> > > > > How did the text get in anonymous memory? I guess it is NOT from JIT?
-> > > > > We had a hack to use transparent huge page for application text. The
-> > > > > hack looks like:
-> > > > >
-> > > > > "At run time, the application creates an 8MB temporary buffer and the
-> > > > > hot section of the executable memory is copied to it. The 8MB region in
-> > > > > the executable memory is then converted to a huge page (by way of an
-> > > > > mmap() to anonymous pages and an madvise() to create a huge page), the
-> > > > > data is copied back to it, and it is made executable again using
-> > > > > mprotect()."
-> > > > >
-> > > > > If your case is the same (or similar), it can probably be fixed with
-> > > > > CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
-> > > > >
-> > > >
-> > > > In our use cases, we have text mapped to huge pages that are not
-> > > > backed by files. vma->vm_file could be null or points some fake file.
-> > > > This causes challenges for us on getting build id for these code text.
-> > >
-> > > So, what is the ideal output in these cases? If there isn't a back file, we
-> > > don't really have good build-id for it, right?
-> > >
-> >
-> > Right, I don't have a solution for this case unfortunately. Probably
-> > will just discard the failed frames. :(
-> >
-> > But in the case where the problem is the page not in mem, Song, do you
-> > also see a similar high rate of build id parsing failure in your use
-> > case (30 ~ 40% of frames)? If no, we may have done something wrong on
-> > our side. If yes, is that a problem for your use case?
+>Am 04.02.22 um 18:44 schrieb Lucas De Marchi:
+>>First the simplest ones:
+>>
+>>	- iosys_map_memset(): when abstracting system and I/O memory,
+>>	  just like the memcpy() use case, memset() also has dedicated
+>>	  functions to be called for using IO memory.
+>>	- iosys_map_memcpy_from(): we may need to copy data from I/O
+>>	  memory, not only to.
+>>
+>>In certain situations it's useful to be able to read or write to an
+>>offset that is calculated by having the memory layout given by a struct
+>>declaration. Usually we are going to read/write a u8, u16, u32 or u64.
+>>
+>>As a pre-requisite for the implementation, add iosys_map_memcpy_from()
+>>to be the equivalent of iosys_map_memcpy_to(), but in the other
+>>direction. Then add 2 pairs of macros:
+>>
+>>	- iosys_map_rd() / iosys_map_wr()
+>>	- iosys_map_rd_field() / iosys_map_wr_field()
+>>
+>>The first pair takes the C-type and offset to read/write. The second
+>>pair uses a struct describing the layout of the mapping in order to
+>>calculate the offset and size being read/written.
+>>
+>>We could use readb, readw, readl, readq and the write* counterparts,
+>>however due to alignment issues this may not work on all architectures.
+>>If alignment needs to be checked to call the right function, it's not
+>>possible to decide at compile-time which function to call: so just leave
+>>the decision to the memcpy function that will do exactly that.
+>>
+>>Finally, in order to use the above macros with a map derived from
+>>another, add another initializer: IOSYS_MAP_INIT_OFFSET().
+>>
+>>Cc: Sumit Semwal <sumit.semwal@linaro.org>
+>>Cc: Christian König <christian.koenig@amd.com>
+>>Cc: Thomas Zimmermann <tzimmermann@suse.de>
+>>Cc: dri-devel@lists.freedesktop.org
+>>Cc: linux-kernel@vger.kernel.org
+>>Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>>---
+>>  include/linux/iosys-map.h | 154 +++++++++++++++++++++++++++++++++++++-
+>>  1 file changed, 153 insertions(+), 1 deletion(-)
+>>
+>>diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
+>>index edd7fa3be9e9..96f8b61ac6fb 100644
+>>--- a/include/linux/iosys-map.h
+>>+++ b/include/linux/iosys-map.h
+>>@@ -6,6 +6,7 @@
+>>  #ifndef __IOSYS_MAP_H__
+>>  #define __IOSYS_MAP_H__
+>>+#include <linux/kernel.h>
+>>  #include <linux/io.h>
+>>  #include <linux/string.h>
+>>@@ -133,6 +134,45 @@ static inline void iosys_map_set_vaddr(struct iosys_map *map, void *vaddr)
+>>  	map->is_iomem = false;
+>>  }
+>>+/**
+>>+ * IOSYS_MAP_INIT_OFFSET - Initializes struct iosys_map from another iosys_map
+>>+ * @map_:	The dma-buf mapping structure to copy from
+>>+ * @offset_:	Offset to add to the other mapping
+>>+ *
+>>+ * Initializes a new iosys_map struct based on another passed as argument. It
+>>+ * does a shallow copy of the struct so it's possible to update the back storage
+>>+ * without changing where the original map points to. It is the equivalent of
+>>+ * doing:
+>>+ *
+>>+ * .. code-block: c
+>>+ *
+>>+ *	iosys_map map = other_map;
+>>+ *	iosys_map_incr(&map, &offset);
+>>+ *
+>>+ * Example usage:
+>>+ *
+>>+ * .. code-block: c
+>>+ *
+>>+ *	void foo(struct device *dev, struct iosys_map *base_map)
+>>+ *	{
+>>+ *		...
+>>+ *		struct iosys_map map = IOSYS_MAP_INIT_OFFSET(base_map, FIELD_OFFSET);
+>>+ *		...
+>>+ *	}
+>>+ *
+>>+ * The advantage of using the initializer over just increasing the offset with
+>>+ * ``iosys_map_incr()`` like above is that the new map will always point to the
+>>+ * right place of the buffer during  its scope. It reduces the risk of updating
+>>+ * the wrong part of the buffer and having no compiler warning about that. If
+>>+ * the assignment to IOSYS_MAP_INIT_OFFSET() is forgotten, the compiler can warn
+>>+ * using a uninitialized variable.
+>>+ */
+>>+#define IOSYS_MAP_INIT_OFFSET(map_, offset_)	(struct iosys_map)	\
+>>+	{								\
+>>+		.vaddr = (map_)->vaddr + (offset_),			\
+>>+		.is_iomem = (map_)->is_iomem,				\
+>>+	}
 >
-> The latest data I found (which is not too recent) is about 3 % missing symbols.
-> I think there must be something different here.
+>I already nak'ed this macro. This works because of the aliasing rules 
+>within the union and the fact that there are only plain pointers. But 
+>this is fragile. Do anything more complicated and it breaks. There's 
+>not even a test that would tell you that it failed.
 >
+>Therefore, struct iosys_map should only be initialized by the code 
+>that creates the stored pointer.
 
-Thanks Song! This is interesting. I'll go look at our user cases.
+I wonder if there is an alternative that is not fragile that allows us
+to have a macro like that. In that thread I and Daniel continued
+chatting and after my additional explanations he was convinced about
+that.
 
-> Thanks,
-> Song
+I only came up with such a macro after doing the rest of the patches and
+noticing a pattern that is hard to debug otherwise. I expanded the
+explanation in the doc above this macro.
+
+Maybe something like:
+
+#define IOSYS_MAP_INIT_OFFSET(map_, offset_) ({		\
+	struct iosys_map copy = *(map_);		\
+	iosys_map_incr(&copy, offset_);			\
+	copy;						\
+})
+
+Hopefully the compiler elides the additional copy, but I need to check.
+
+
+>
+>However, you won't need the offset'ed iosys_map because the 
+>memcpy_to/from helpers now have the offset parameter.
+
+I can't see how the offset would help. The idea is to use a shallow copy
+of the map so another function or even compilation unit can be
+designated to read/write part of the struct overlayed in the map... not
+even have knowledge of the outer struct.
+
+>
+>
+>
+>>+
+>>  /**
+>>   * iosys_map_set_vaddr_iomem - Sets a iosys mapping structure to an address in I/O memory
+>>   * @map:		The iosys_map structure
+>>@@ -220,7 +260,7 @@ static inline void iosys_map_clear(struct iosys_map *map)
+>>  }
+>>  /**
+>>- * iosys_map_memcpy_to_offset - Memcpy into offset of iosys_map
+>>+ * iosys_map_memcpy_to - Memcpy into iosys_map
+>
+>That's the fix for the other patch. :)
+
+yep :-/
+
+>
+>>   * @dst:	The iosys_map structure
+>>   * @dst_offset:	The offset from which to copy
+>>   * @src:	The source buffer
+>>@@ -239,6 +279,26 @@ static inline void iosys_map_memcpy_to(struct iosys_map *dst, size_t dst_offset,
+>>  		memcpy(dst->vaddr + dst_offset, src, len);
+>>  }
+>>+/**
+>>+ * iosys_map_memcpy_from - Memcpy from iosys_map into system memory
+>>+ * @dst:	Destination in system memory
+>>+ * @src:	The iosys_map structure
+>>+ * @src_offset:	The offset from which to copy
+>>+ * @len:	The number of byte in src
+>>+ *
+>>+ * Copies data from a iosys_map with an offset. The dest buffer is in
+>>+ * system memory. Depending on the mapping location, the helper picks the
+>>+ * correct method of accessing the memory.
+>>+ */
+>>+static inline void iosys_map_memcpy_from(void *dst, const struct iosys_map *src,
+>>+					 size_t src_offset, size_t len)
+>>+{
+>>+	if (src->is_iomem)
+>>+		memcpy_fromio(dst, src->vaddr_iomem + src_offset, len);
+>>+	else
+>>+		memcpy(dst, src->vaddr + src_offset, len);
+>>+}
+>>+
+>>  /**
+>>   * iosys_map_incr - Increments the address stored in a iosys mapping
+>>   * @map:	The iosys_map structure
+>>@@ -255,4 +315,96 @@ static inline void iosys_map_incr(struct iosys_map *map, size_t incr)
+>>  		map->vaddr += incr;
+>>  }
+>>+/**
+>>+ * iosys_map_memset - Memset iosys_map
+>>+ * @dst:	The iosys_map structure
+>>+ * @offset:	Offset from dst where to start setting value
+>>+ * @value:	The value to set
+>>+ * @len:	The number of bytes to set in dst
+>>+ *
+>>+ * Set value in iosys_map. Depending on the buffer's location, the helper
+>>+ * picks the correct method of accessing the memory.
+>>+ */
+>>+static inline void iosys_map_memset(struct iosys_map *dst, size_t offset,
+>>+				    int value, size_t len)
+>>+{
+>>+	if (dst->is_iomem)
+>>+		memset_io(dst->vaddr_iomem + offset, value, len);
+>>+	else
+>>+		memset(dst->vaddr + offset, value, len);
+>>+}
+>
+>I've found that memset32() and memset64() can significantly faster. If 
+>ever needed, we can add variants here as well.
+>
+>>+
+>>+/**
+>>+ * iosys_map_rd - Read a C-type value from the iosys_map
+>>+ *
+>>+ * @map__:	The iosys_map structure
+>>+ * @offset__:	The offset from which to read
+>>+ * @type__:	Type of the value being read
+>>+ *
+>>+ * Read a C type value from iosys_map, handling possible un-aligned accesses to
+>>+ * the mapping.
+>>+ *
+>>+ * Returns:
+>>+ * The value read from the mapping.
+>>+ */
+>>+#define iosys_map_rd(map__, offset__, type__) ({			\
+>>+	type__ val;							\
+>>+	iosys_map_memcpy_from(&val, map__, offset__, sizeof(val));	\
+>>+	val;								\
+>>+})
+>>+
+>>+/**
+>>+ * iosys_map_wr - Write a C-type value to the iosys_map
+>>+ *
+>>+ * @map__:	The iosys_map structure
+>>+ * @offset__:	The offset from the mapping to write to
+>>+ * @type__:	Type of the value being written
+>>+ * @val__:	Value to write
+>>+ *
+>>+ * Write a C-type value to the iosys_map, handling possible un-aligned accesses
+>>+ * to the mapping.
+>>+ */
+>>+#define iosys_map_wr(map__, offset__, type__, val__) ({			\
+>>+	type__ val = (val__);						\
+>>+	iosys_map_memcpy_to(map__, offset__, &val, sizeof(val));	\
+>>+})
+>>+
+>>+/**
+>>+ * iosys_map_rd_field - Read a member from a struct in the iosys_map
+>>+ *
+>>+ * @map__:		The iosys_map structure
+>>+ * @struct_type__:	The struct describing the layout of the mapping
+>>+ * @field__:		Member of the struct to read
+>>+ *
+>>+ * Read a value from iosys_map assuming its layout is described by a struct,
+>>+ * passed as argument. The offset and size to the struct member is calculated
+>>+ * and possible un-aligned accesses to the mapping handled.
+>>+ *
+>>+ * Returns:
+>>+ * The value read from the mapping.
+>>+ */
+>>+#define iosys_map_rd_field(map__, struct_type__, field__) ({			\
+>
+>This macro should also have an offset__ parameter and forward it to 
+>iosys_map_rd.
+
+offset is actually this macro helps calculating:
+
+struct foo {
+	struct bla { ... };
+	struct bla2 { ... };
+	int something_else;
+};
+
+
+iosys_map_rd_field(&map, struct foo, bla.x);
+
+I feel an offset to the map, where struct foo would be located, would be
+redundant if you delegated a function to update, say, struct bla and
+that part alone.
+
+This pattern happens in patch "drm/i915/guc: Convert engine record to
+iosys_map" if it helps as an example.
+
+
+thanks
+Lucas De Marchi
+
+>
+>>+	struct_type__ *s;							\
+>>+	iosys_map_rd(map__, offsetof(struct_type__, field__),			\
+>>+		     typeof(s->field__));					\
+>>+})
+>>+
+>>+/**
+>>+ * iosys_map_wr_field - Write to a member of a struct in the iosys_map
+>>+ *
+>>+ * @map__:		The iosys_map structure
+>>+ * @struct_type__:	The struct describing the layout of the mapping
+>>+ * @field__:		Member of the struct to read
+>>+ * @val__:		Value to write
+>>+ *
+>>+ * Write a value to the iosys_map assuming its layout is described by a struct,
+>>+ * passed as argument. The offset and size to the struct member is calculated
+>>+ * and possible un-aligned accesses to the mapping handled.
+>>+ */
+>>+#define iosys_map_wr_field(map__, struct_type__, field__, val__) ({		\
+>
+>And this one should also have an offset__ parameter.
+>
+>Best regards
+>Thomas
+>
+>>+	struct_type__ *s;							\
+>>+	iosys_map_wr(map__, offsetof(struct_type__, field__),			\
+>>+		     typeof(s->field__), val__);				\
+>>+})
+>>+
+>>  #endif /* __IOSYS_MAP_H__ */
+>
+>-- 
+>Thomas Zimmermann
+>Graphics Driver Developer
+>SUSE Software Solutions Germany GmbH
+>Maxfeldstr. 5, 90409 Nürnberg, Germany
+>(HRB 36809, AG Nürnberg)
+>Geschäftsführer: Ivo Totev
+
+
+

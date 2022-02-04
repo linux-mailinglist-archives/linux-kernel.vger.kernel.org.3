@@ -2,149 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A754A94A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDE44A94AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352999AbiBDHfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 02:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S1353533AbiBDHkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 02:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiBDHfT (ORCPT
+        with ESMTP id S1353265AbiBDHj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 02:35:19 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C467DC061714;
-        Thu,  3 Feb 2022 23:35:19 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id i65so4380304pfc.9;
-        Thu, 03 Feb 2022 23:35:19 -0800 (PST)
+        Fri, 4 Feb 2022 02:39:58 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6369EC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 23:39:58 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id e81-20020a25d354000000b0061b1a807047so3089244ybf.14
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 23:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=a1Z4SsvUtbUIh8RWDNefYqNV9onmdeuXC4gShFMsMqM=;
-        b=XWJ8igcqJPIKZ7D8uEmrRZVZV1d3cPIZjbuTnvzftsL0G2yoiIh7jjH1AGanq6PIYo
-         EGnbgeWNmr0Xry9ycpamYXRAZ3r0olHcG77aDDBhyZpHW7krUhn+aiLegpW5z8AL9hH3
-         1gJIT2irlceDxJTPR/FlqreCYJYZTJsPFHxD2SQblKqKnL+uPGuMUlL8cDvj3OF4ftgu
-         Mp08uBp4smwS+x6Oo3OyEwBh/u2FqIs0Y/qQI5RS43xzcRiCFsWjpqrIcAMYp6MOXbUw
-         fDnvimXMUteyPe1NKXG2p9EnApSSf0L4FuKlnC5p2/8LQGpnvZK0jIafl/Gabq0cqayk
-         xCeg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=RstoDLOU8xGSgPTdarYg+ZaO1KW5kUvQHWgolszBWj0=;
+        b=fATZW+zjvHfuzv98Yy9oqvUh1b2INkd9VYmyI6R/SRfDzrWdlQ3NhAQysUOmHjRWs0
+         TnVkTfIo0ZlK/2zZ7uVUT7EPoPPMFTl304MyADeEUjJUgqW09ZdkPEg0nTBaOGpCZkC/
+         B9SJRuCLwBUXKqYyYDZcjMA86NmMWc+YAO5ZaPrGKY7157NWKHZBFdBeMSgj5PEzmuEq
+         q0ceIXTGIBxQbdTt0HyDLUkg5iclKLj/7QTeTY5G39HEjbKE1oZpYTVemZJBPqMUk4Sf
+         uvZmGS2sOom8zQkmlvYAPS2s4igdrCYR+x6m90KR9fdWpz8F4nD6dbn1P7KqfmH3SshD
+         22Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a1Z4SsvUtbUIh8RWDNefYqNV9onmdeuXC4gShFMsMqM=;
-        b=kQWcmgZg6H8rTD6IP4uJZUShC87u4ENGJ2mZ1ETy5046SvHlE1R8RmMK8v/Hsmo3QU
-         Ixwgo3RKQ1HSkqovtqcFsnw16Cax0rbeTqgpBkSSl8elTJ4jgsEDNsnh1FsojrblU2wB
-         hUBV4gqobrcMn7OkxUr7DwowBgceXY68vt66HrG8n23dtIiErB1wU3l06Eu31y/obdzc
-         Gd6tdiymv8rxGJ6tsMWZRWrg5Iz2d7E7W9gSd/9lP0rSZPsDlPNJKfL4BplvNfRQTN2I
-         jfSp2eCNvsLz6OmZ03PJqkyZV9H6i7b6IaGSt/N3JPeQ5cVYL1KclInRIzPeOcI8q/+U
-         mt6Q==
-X-Gm-Message-State: AOAM533Fa4ka7Di81i1N1fmDGWFLwUdwmqavhxH1jIkMoqTYRrUYL6c4
-        /Y3tjEEcG0hM3iNv5gIa9PQ=
-X-Google-Smtp-Source: ABdhPJzq2XP7kaA9a0Ymfx56t07LHbDV/RzgKiNa67I0eH+1eWcqShMTn/dNualo9Mpsr+FNI2CmjQ==
-X-Received: by 2002:a63:2b49:: with SMTP id r70mr1406472pgr.111.1643960119255;
-        Thu, 03 Feb 2022 23:35:19 -0800 (PST)
-Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id a37sm947015pga.3.2022.02.03.23.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 23:35:18 -0800 (PST)
-Date:   Fri, 4 Feb 2022 16:35:12 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        David Jander <david@protonic.nl>,
-        Robin van der Gracht <robin@protonic.nl>,
-        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v2 2/2] counter: interrupt-cnt: add counter_push_event()
-Message-ID: <YfzXMKusj22MEisY@shinobu>
-References: <20220203135727.2374052-1-o.rempel@pengutronix.de>
- <20220203135727.2374052-3-o.rempel@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oRfwSPBWBCinOFIL"
-Content-Disposition: inline
-In-Reply-To: <20220203135727.2374052-3-o.rempel@pengutronix.de>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=RstoDLOU8xGSgPTdarYg+ZaO1KW5kUvQHWgolszBWj0=;
+        b=pr6GMSTyf1P1TKCNG7W8gTfRfeMMY3MKBAzqx5zg6KHp4rnHBkZJB4IkgNoIrVRLKq
+         UGMB2oGCiX4LmjM46zXxqqIWlxsfo+19ybIWR1AuFPU2VB3Fy7ySWEkTNQNga8JlroCJ
+         PsFQ1qCy5DYkDPj2U/9zDqN+O6zB5Gwf38+KJO3Ec2CIX+44MdO5jz0kJOhMXkNvZju3
+         UXI7Cg2ibGUIKkKJPqXl4GqF9EBX6NdGN16KIysOuCa7u/7/Y3l/+SXADWNWOGqal119
+         JeWE/TRG2SumVBND+Cw2HBWuJ1BKRV9FYYvKSEGuXKxYoLtqV80E52azUox0e/lzHewJ
+         ITyQ==
+X-Gm-Message-State: AOAM530QWctpCF8QN73Eaz/XJ62fKxmyadjhaJMSm3/npoJIQY2B5HEB
+        n1a0my1sLoCtNaaUCY9K/qMp3ryqTXoMWrsznxlyhYKdvGM06Nfsr2JoYKc2RLZ8NH9qgjN5xsF
+        jIDTiANnYFzRqWlgs7BHPjKfMR9Kmd6WC4RjImYwbOd1DEwozmqC4J+YlndrPB8DWRi6SD5SJ
+X-Google-Smtp-Source: ABdhPJycy5ohl9mQOP26zCD7ZJsLLpKeKTRYuIz2yVe2Q1kKox2IKobeQv5QO4LMkshooFwCLcQlTl/aULzl
+X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:6ac6:e851:689b:829e])
+ (user=eranian job=sendgmr) by 2002:a25:e803:: with SMTP id
+ k3mr1663615ybd.571.1643960397346; Thu, 03 Feb 2022 23:39:57 -0800 (PST)
+Date:   Thu,  3 Feb 2022 23:39:40 -0800
+Message-Id: <20220204073940.1258263-1-eranian@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH] perf/arm64: fix mapping for HW_BRANCH_INSTRUCTIONS on PMUv3
+From:   Stephane Eranian <eranian@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, will@kernel.org, ashoks@broadcom.com,
+        mark.rutland@arm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+With the existing code, the following command:
 
---oRfwSPBWBCinOFIL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ perf stat -e branches sleep 0
+ Performance counter stats for 'sleep 0':
+   <not supported>      branches
 
-On Thu, Feb 03, 2022 at 02:57:27PM +0100, Oleksij Rempel wrote:
-> Add counter_push_event() to notify user space about new pulses
->=20
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+on N1 core (pmuv3).
 
-This is a simple solution so if it works for your use-case I'm okay with
-it; I think future counter devices could make use of this new
-COUNTER_EVENT_CHANGE_OF_STATE event type too, so that's a plus.
+This is due to the fact that the mapping for the generic event is wrong.
+It is using ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED which is not implemented
+on N1 (and most likely on any PMUv3 implementations). However, there is
+another supported event ARMV8_PMUV3_PERFCTR_BR_RETIRED measuring the same
+condition.
 
-I'm going to wait a week to give others time to chime in if they want.
-Otherwise I'll give a proper approval for this series next week.
+This patch switches the mapping to ARMV8_PMUV3_PERFCTR_BR_RETIRED so that
+the perf stat command above works.
 
-William Breathitt Gray
+Signed-off-by: Stephane Eranian <eranian@google.com>
+---
+ arch/arm64/kernel/perf_event.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  drivers/counter/interrupt-cnt.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/counter/interrupt-cnt.c b/drivers/counter/interrupt-=
-cnt.c
-> index 9e99702470c2..3b13f56bbb11 100644
-> --- a/drivers/counter/interrupt-cnt.c
-> +++ b/drivers/counter/interrupt-cnt.c
-> @@ -26,10 +26,13 @@ struct interrupt_cnt_priv {
-> =20
->  static irqreturn_t interrupt_cnt_isr(int irq, void *dev_id)
->  {
-> -	struct interrupt_cnt_priv *priv =3D dev_id;
-> +	struct counter_device *counter =3D dev_id;
-> +	struct interrupt_cnt_priv *priv =3D counter_priv(counter);
-> =20
->  	atomic_inc(&priv->count);
-> =20
-> +	counter_push_event(counter, COUNTER_EVENT_CHANGE_OF_STATE, 0);
-> +
->  	return IRQ_HANDLED;
->  }
-> =20
-> @@ -209,7 +212,7 @@ static int interrupt_cnt_probe(struct platform_device=
- *pdev)
->  	irq_set_status_flags(priv->irq, IRQ_NOAUTOEN);
->  	ret =3D devm_request_irq(dev, priv->irq, interrupt_cnt_isr,
->  			       IRQF_TRIGGER_RISING | IRQF_NO_THREAD,
-> -			       dev_name(dev), priv);
-> +			       dev_name(dev), counter);
->  	if (ret)
->  		return ret;
-> =20
-> --=20
-> 2.30.2
->=20
+diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+index cab678ed6618..ec2b98343a0b 100644
+--- a/arch/arm64/kernel/perf_event.c
++++ b/arch/arm64/kernel/perf_event.c
+@@ -45,7 +45,7 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
+ 	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV8_PMUV3_PERFCTR_INST_RETIRED,
+ 	[PERF_COUNT_HW_CACHE_REFERENCES]	= ARMV8_PMUV3_PERFCTR_L1D_CACHE,
+ 	[PERF_COUNT_HW_CACHE_MISSES]		= ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
+-	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
++	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_BR_RETIRED,
+ 	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
+ 	[PERF_COUNT_HW_BUS_CYCLES]		= ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
+ 	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
+-- 
+2.35.0.263.gb82422642f-goog
 
---oRfwSPBWBCinOFIL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmH81xcACgkQhvpINdm7
-VJLwgRAApE1ASfE6RJfspMwz4NrDI5m585lKcwyNy3IUVxt8BAvvwu+AdytC3MIT
-4u8q6PIZtocI4C4wQIzkrUWewMqmsbAObPQ59nN9208LwuMtu8mwcENEUiLdmhAW
-PFQB7qjyUsA04cdWDcxWWVV8Pn/6YO6aFdvOzhbrQZ2sagdhpow49ecXGXvYAC/e
-ukiQq7EP+y3sCE5nEu0k8+3yz8SdMnTtbKbVwrS2uzN10swkOLmdMCGSb9Wby48s
-lyyXf9rV6hS4yvNuczDVcARUDvD0bBl3BnWE1aRhw/B4mxpyK7kG9UCrxawIB+b8
-A47oCbXj7zVXPm7gQPRlQ8dKviE4gh5hT2TIB1c8dGsDSJ6D7LR7kZu0HSAm92uF
-iu/xTIgeWhe3ohYzZD4RducAixsJhPRuCkaklVoghlarwLav8He91qEM3qOxYkfv
-vLoCawc55Cjk8iC32SBpp/eCuuL8to4S1eu1P/rB/ChUCKN7o5u65PtuZSv+wLB6
-yrqhvatz/DUFjBJvt9SV1DP9bT+qywMe9Wj5nWMPIrDwHYfpp67C7R/OjuYClII4
-VMxamuzJn4/Qv4D0ZaK9ooPWrv13sfkI9RCsQuvphUd8ILR+zDgCRYykqHvlrKaW
-QUaalux97zf2L+2R2Noh86h5vkHWD2NsUhRHy/+nUbnfb3X/yFc=
-=1z8E
------END PGP SIGNATURE-----
-
---oRfwSPBWBCinOFIL--

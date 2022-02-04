@@ -2,226 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C314A932C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 05:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD024A9333
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357004AbiBDE5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 23:57:03 -0500
-Received: from foss.arm.com ([217.140.110.172]:42680 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235508AbiBDE5C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 23:57:02 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 203EE1435;
-        Thu,  3 Feb 2022 20:57:02 -0800 (PST)
-Received: from [10.163.45.195] (unknown [10.163.45.195])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B5BA53F774;
-        Thu,  3 Feb 2022 20:56:57 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH 1/2] perf: Add more generic branch types
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>
-References: <1643348653-24367-1-git-send-email-anshuman.khandual@arm.com>
- <1643348653-24367-2-git-send-email-anshuman.khandual@arm.com>
- <YfpxzKa7JSlimA1i@FVFF77S0Q05N>
-Message-ID: <aee1d90d-7778-2f1c-9484-584fa3c57159@arm.com>
-Date:   Fri, 4 Feb 2022 10:26:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229695AbiBDFGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 00:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229503AbiBDFGQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 00:06:16 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3FFC061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 21:06:16 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id d5so4434682pjk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 21:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :in-reply-to;
+        bh=8iIaekhxi09m7pSk70nnsISsTi/jiwvJuDakRs67WzM=;
+        b=QQ9QGZR4swuOAW0lPBw4aDKrkuP3UYIWVJrFRADUR1r8bP8KJKL7IPFyPbfRs/U4fR
+         2O6Z155M39uSvc2Ohxyt+bI9ZDvG6dKQBrTg4mqjh+SWE/aEEY00xoRORTuKB3oanIu+
+         H2Mmz+gfg9rG8X3OwNyXxu5u7f5QUdrq0fm+/bUjNWYoD9ZB3eXc6T0RAv5ulnqfx29p
+         q6Q/EO8BtoUuAvhaO8m6+u2y796/3Rq0VFkfXe7U15J7Jcl2QiLVfU93coGAim+Ukyad
+         geaJdlibaDaQhMPDabG6y+DV7DRvOar16O7Sp8d6uwRnNF1eUs3nLK6Y2j8KTu+SamcW
+         7Dpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=8iIaekhxi09m7pSk70nnsISsTi/jiwvJuDakRs67WzM=;
+        b=jjpuk06kXUuW8+QGNkdq550dyaIvTHWwUZvRnD6VAepMWYs40itQIGI8ioH3EXVqPr
+         tBsc0bmGTzVhAQh/9VeG8Tsc0lwEByS0YJqXdTuGI5c9Lt7cNHTJNsMJjZYGPIHiLrkt
+         TQX72qksr2rcyurao90qFt+wQJMaG5AMR8BeL3PVxi4msYS3hGKhFVPjv9jXdRbJu18q
+         3Jeoj4TgFRu/DlmFH6kMDblr2EJ+/yLln4oEaBDGL1Fdy+WajUaOKNEieScf9/yZ9cFR
+         uJhgyZrkeCvAQ+Drz+vjftTCkwAltr5SCxHdlv4+46Jf9NCcbzQQY4TTGeg3tz40rcby
+         ZFag==
+X-Gm-Message-State: AOAM530jzPyZqi5K94x+25lg7FqN6dBXZqIgLpSyFrn6M0ZDPJZFmZGP
+        nAqvIIAaT67ay/mA9GX0gBo=
+X-Google-Smtp-Source: ABdhPJxciBopEAgZ/POSc3i/8dhx71oGzm7qVEf6WvE7YaH1iY8mA9ApWVkQYf5OKw8Iix+0MeDV/g==
+X-Received: by 2002:a17:902:d044:: with SMTP id l4mr1487632pll.5.1643951175659;
+        Thu, 03 Feb 2022 21:06:15 -0800 (PST)
+Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
+        by smtp.gmail.com with ESMTPSA id p22sm716627pfo.163.2022.02.03.21.06.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 21:06:15 -0800 (PST)
+Date:   Fri, 4 Feb 2022 18:06:09 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
+        realwakka@gmail.com
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] staging: pi433: add debugfs interface
+Message-ID: <Yfy0QSxL+3lbPlLK@mail.google.com>
 MIME-Version: 1.0
-In-Reply-To: <YfpxzKa7JSlimA1i@FVFF77S0Q05N>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131134558.GL1951@kadam>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This adds debugfs interface that can be used for debugging possible
+hardware/software issues.
 
-On 2/2/22 5:28 PM, Mark Rutland wrote:
-> Hi Anshuman,
-> 
-> On Fri, Jan 28, 2022 at 11:14:12AM +0530, Anshuman Khandual wrote:
->> This expands generic branch type classification by adding some more entries
->> , that can still be represented with the existing 4 bit 'type' field. While
+It currently exposes the following debugfs entries for each SPI device
+probed:
 
-    ^
->> here this also updates the x86 implementation with these new branch types.
-> 
-> It looks like there's some whitespace damage here.
+  /sys/kernel/debug/pi433/<DEVICE>/regs
+  ...
 
-Are you referring the above ? I will have a look.
+The 'regs' file contains all rf69 uC registers values that are useful
+for troubleshooting misconfigurations between 2 devices. It contains one
+register per line so it should be easy to use normal filtering tools to
+find the registers of interest if needed.
 
-> 
->>From a quick scan of the below, I think the "exception return" and "IRQ
-> exception" types are somewhat generic, and could be added now (aside from any
-> bikeshedding over names), but:
-> 
-> * For IRQ vs FIQ, we might just want to have a top-level "asynchronous
->   exception" type, and then further divide that with a separate field. That way
->   it's easier to extend in future if new exceptions are added.
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+Changelog:
 
-Okay. But that might lead to a hierarchical bit fields design where as the
-current one is just linear.
+v4: remove unnecessary variable initializer, ensure mutex locks are
+	released before returning from routine. Req: Dan Carpenter
+v3: fix build error, remove redundant comments and validate return values
+        from wait_event_interruptible routines: Req: Greg K-h, Dan Carpenter
+v2: remove redudant references to dentry pointers in the code and perform
+     debugsfs_lookup instead. Req: Greg k-h
+v1: https://lore.kernel.org/lkml/20220123073855.GA79453@mail.google.com/
+---
+ drivers/staging/pi433/pi433_if.c | 76 ++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-> 
-> * I don't think the debug state entry/exits make sense as generic branch types,
+diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
+index 86ad497417f7..4fbac3ccef74 100644
+--- a/drivers/staging/pi433/pi433_if.c
++++ b/drivers/staging/pi433/pi433_if.c
+@@ -41,6 +41,8 @@
+ #ifdef CONFIG_COMPAT
+ #include <linux/compat.h>
+ #endif
++#include <linux/debugfs.h>
++#include <linux/seq_file.h>
+ 
+ #include "pi433_if.h"
+ #include "rf69.h"
+@@ -1098,12 +1100,76 @@ static const struct file_operations pi433_fops = {
+ 	.llseek =	no_llseek,
+ };
+ 
++static int pi433_debugfs_regs_show(struct seq_file *m, void *p)
++{
++	struct pi433_device *dev;
++	u8 reg_data[114];
++	int i;
++	char *fmt = "0x%02x, 0x%02x\n";
++	int ret;
++
++	dev = m->private;
++
++	mutex_lock(&dev->tx_fifo_lock);
++	mutex_lock(&dev->rx_lock);
++
++	// wait for on-going operations to finish
++	ret = wait_event_interruptible(dev->rx_wait_queue, !dev->tx_active);
++	if (ret)
++		goto out_unlock;
++
++	ret = wait_event_interruptible(dev->tx_wait_queue, !dev->rx_active);
++	if (ret)
++		goto out_unlock;
++
++	// skip FIFO register (0x0) otherwise this can affect some of uC ops
++	for (i = 1; i < 0x50; i++)
++		reg_data[i] = rf69_read_reg(dev->spi, i);
++
++	reg_data[REG_TESTLNA] = rf69_read_reg(dev->spi, REG_TESTLNA);
++	reg_data[REG_TESTPA1] = rf69_read_reg(dev->spi, REG_TESTPA1);
++	reg_data[REG_TESTPA2] = rf69_read_reg(dev->spi, REG_TESTPA2);
++	reg_data[REG_TESTDAGC] = rf69_read_reg(dev->spi, REG_TESTDAGC);
++	reg_data[REG_TESTAFC] = rf69_read_reg(dev->spi, REG_TESTAFC);
++
++	seq_puts(m, "# reg, val\n");
++
++	for (i = 1; i < 0x50; i++)
++		seq_printf(m, fmt, i, reg_data[i]);
++
++	seq_printf(m, fmt, REG_TESTLNA, reg_data[REG_TESTLNA]);
++	seq_printf(m, fmt, REG_TESTPA1, reg_data[REG_TESTPA1]);
++	seq_printf(m, fmt, REG_TESTPA2, reg_data[REG_TESTPA2]);
++	seq_printf(m, fmt, REG_TESTDAGC, reg_data[REG_TESTDAGC]);
++	seq_printf(m, fmt, REG_TESTAFC, reg_data[REG_TESTAFC]);
++
++out_unlock:
++	mutex_unlock(&dev->rx_lock);
++	mutex_unlock(&dev->tx_fifo_lock);
++
++	return ret;
++}
++
++static int pi433_debugfs_regs_open(struct inode *inode, struct file *filp)
++{
++	return single_open(filp, pi433_debugfs_regs_show, inode->i_private);
++}
++
++static const struct file_operations debugfs_fops = {
++	.llseek =	seq_lseek,
++	.open =		pi433_debugfs_regs_open,
++	.owner =	THIS_MODULE,
++	.read =		seq_read,
++	.release =	single_release
++};
++
+ /*-------------------------------------------------------------------------*/
+ 
+ static int pi433_probe(struct spi_device *spi)
+ {
+ 	struct pi433_device	*device;
+ 	int			retval;
++	struct dentry		*entry;
+ 
+ 	/* setup spi parameters */
+ 	spi->mode = 0x00;
+@@ -1252,6 +1318,10 @@ static int pi433_probe(struct spi_device *spi)
+ 	/* spi setup */
+ 	spi_set_drvdata(spi, device);
+ 
++	entry = debugfs_create_dir(dev_name(device->dev),
++				   debugfs_lookup(KBUILD_MODNAME, NULL));
++	debugfs_create_file("regs", 0400, entry, device, &debugfs_fops);
++
+ 	return 0;
+ 
+ del_cdev:
+@@ -1275,6 +1345,9 @@ static int pi433_probe(struct spi_device *spi)
+ static int pi433_remove(struct spi_device *spi)
+ {
+ 	struct pi433_device	*device = spi_get_drvdata(spi);
++	struct dentry *mod_entry = debugfs_lookup(KBUILD_MODNAME, NULL);
++
++	debugfs_remove(debugfs_lookup(dev_name(device->dev), mod_entry));
+ 
+ 	/* free GPIOs */
+ 	free_gpio(device);
+@@ -1349,6 +1422,8 @@ static int __init pi433_init(void)
+ 		return PTR_ERR(pi433_class);
+ 	}
+ 
++	debugfs_create_dir(KBUILD_MODNAME, NULL);
++
+ 	status = spi_register_driver(&pi433_spi_driver);
+ 	if (status < 0) {
+ 		class_destroy(pi433_class);
+@@ -1366,6 +1441,7 @@ static void __exit pi433_exit(void)
+ 	spi_unregister_driver(&pi433_spi_driver);
+ 	class_destroy(pi433_class);
+ 	unregister_chrdev(MAJOR(pi433_dev), pi433_spi_driver.driver.name);
++	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODNAME, NULL));
+ }
+ module_exit(pi433_exit);
+ 
+-- 
+2.34.1
 
-From BRBE perspective, a branch is any control flow change including exception
-level change, debug enter, debug exit etc. If exception and its return can be
-classified as 'branches' why not debug state change ? Are there no similar
-debug states transition on other platforms ?
-
->   since those are somewhat specific to the ARM architecutre, and it might make
->   sense to define generic PERF_BR_ARCH* definitions instead.
-
-Makes sense but corresponding bit field layout change in branch_sample_type
-will remain a challenge.
-
-> 
-> * Given the next patch extends the field, and therei are potential ABI problems
->   with that, we might need to reserve a value for ABI extensibility purposes,
->   and I suspect we need to do that *first*. More comments on the subsequent
->   patch.
-
-Sure, understood.
-
->  
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
->> Cc: Jiri Olsa <jolsa@redhat.com>
->> Cc: Namhyung Kim <namhyung@kernel.org>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-perf-users@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  arch/x86/events/intel/lbr.c           | 4 ++--
->>  include/uapi/linux/perf_event.h       | 5 +++++
->>  tools/include/uapi/linux/perf_event.h | 5 +++++
->>  tools/perf/util/branch.c              | 7 ++++++-
->>  4 files changed, 18 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->> index 8043213b75a5..9f86fac8c6a5 100644
->> --- a/arch/x86/events/intel/lbr.c
->> +++ b/arch/x86/events/intel/lbr.c
->> @@ -1336,10 +1336,10 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
->>  	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
->>  	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
->>  	PERF_BR_UNKNOWN,	/* X86_BR_INT */
->> -	PERF_BR_UNKNOWN,	/* X86_BR_IRET */
->> +	PERF_BR_EXPT_RET,	/* X86_BR_IRET */
->>  	PERF_BR_COND,		/* X86_BR_JCC */
->>  	PERF_BR_UNCOND,		/* X86_BR_JMP */
->> -	PERF_BR_UNKNOWN,	/* X86_BR_IRQ */
->> +	PERF_BR_IRQ,		/* X86_BR_IRQ */
->>  	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
->>  	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
->>  	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
-> 
-> This presumably changes the values reported to userspace, so the commit message
-> should mention that and explain why that is not a problem.
-
-Okay.
-
-> 
->> diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
->> index 1b65042ab1db..b91d0f575d0c 100644
->> --- a/include/uapi/linux/perf_event.h
->> +++ b/include/uapi/linux/perf_event.h
->> @@ -251,6 +251,11 @@ enum {
->>  	PERF_BR_SYSRET		= 8,	/* syscall return */
->>  	PERF_BR_COND_CALL	= 9,	/* conditional function call */
->>  	PERF_BR_COND_RET	= 10,	/* conditional function return */
->> +	PERF_BR_EXPT_RET	= 11,	/* exception return */
-> 
-> We don't use 'EXPT' anywhere else, so it might be better to just use 'ERET'.
-> IIUC that's the naming the x86 FRED stuff is going to use anyhow.
-
-Sure, will change.
-
-> 
->> +	PERF_BR_IRQ		= 12,	/* irq */
-> 
-> This looks somewhat generic, so adding it now makes sense to me, but ...
-> 
->> +	PERF_BR_FIQ		= 13,	/* fiq */
-> 
-> ... this is arguably just a idfferent class of interrupt from the PoV of Linux,
-> and the naming is ARM-specific, so I don't think this makes sense to add *now*.
-
-I assume 'now' --> without ABI extension.
-
-> As above, maybe it would be better to have a generic "aynchronous exception" or
-> "interrupt" type, and a separate field to distinguish specific types of those.
-> 
->> +	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
->> +	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
-> 
-> For the benefit of those not familiar with the ARM architecture, "debug halt"
-> and "debug exit" usually refer to "debug state", which is what an external
-> (e.g. JTAG) debugger uses rather than the usual self-hosted debug stuff that
-> Linux uses.
-> 
-> Given that, I'm not sure these are very generic, and I suspect it would be
-> better to have more generic PERF_BR_ARCH_* entries for things like this.
-
-Sure, will try and come up with something similar.
-
-> 
-> Thanks,
-> Mark.
-> 
->>  	PERF_BR_MAX,
->>  };
->>  
->> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
->> index 4cd39aaccbe7..1882054e8684 100644
->> --- a/tools/include/uapi/linux/perf_event.h
->> +++ b/tools/include/uapi/linux/perf_event.h
->> @@ -251,6 +251,11 @@ enum {
->>  	PERF_BR_SYSRET		= 8,	/* syscall return */
->>  	PERF_BR_COND_CALL	= 9,	/* conditional function call */
->>  	PERF_BR_COND_RET	= 10,	/* conditional function return */
->> +	PERF_BR_EXPT_RET	= 11,	/* exception return */
->> +	PERF_BR_IRQ		= 12,	/* irq */
->> +	PERF_BR_FIQ		= 13,	/* fiq */
->> +	PERF_BR_DEBUG_HALT	= 14,	/* debug halt */
->> +	PERF_BR_DEBUG_EXIT	= 15,	/* debug exit */
->>  	PERF_BR_MAX,
->>  };
->>  
->> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
->> index 2285b1eb3128..74e5e67b1779 100644
->> --- a/tools/perf/util/branch.c
->> +++ b/tools/perf/util/branch.c
->> @@ -49,7 +49,12 @@ const char *branch_type_name(int type)
->>  		"SYSCALL",
->>  		"SYSRET",
->>  		"COND_CALL",
->> -		"COND_RET"
->> +		"COND_RET",
->> +		"EXPT_RET",
->> +		"IRQ",
->> +		"FIQ",
->> +		"DEBUG_HALT",
->> +		"DEBUG_EXIT"
->>  	};
->>  
->>  	if (type >= 0 && type < PERF_BR_MAX)
->> -- 
->> 2.25.1
->>

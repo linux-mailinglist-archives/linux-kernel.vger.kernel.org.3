@@ -2,178 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A871C4A9EF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C65B54A9F04
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241648AbiBDS1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377511AbiBDS1M (ORCPT
+        id S1377532AbiBDS3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:29:13 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:34765 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377528AbiBDS3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:27:12 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21BEC06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:27:11 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id c189so5422776qkg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:27:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jeWAra30FXkZs/gRmR49z6lt/T+9ynnjq9B+AWcFc0M=;
-        b=LOIf1tBuS1tAG6bCCiNP8m5VoC8AK9dgPZpaYYC8CMFPy2FtTuNt3HOG/39ywfFeXf
-         2SvwmqypOW2WfYOvprujZf3zzwP7EZlK6Tw3mksOgbimD03VlJ4E2UTarrCm3HBAsDmp
-         4DFmgTvJAJGS+bcOFGbM78sNuJ2xoCUsTqfsB4AD0F+L/YHeSKzm7Rr5uQMVIpEiqVr6
-         UFVW2VMOW9OTwQEmkjRKzUTUGC4KESydLa4s3Te4ai8t98QE11qc9ljjjW8ZVTgFnvbW
-         4u0WLxTWCwZezv2TYyo0d7dEK1Ejnt98unT3m6/txxJOAPuQ5QAugdqnsGnXMsrYuJjA
-         7k6w==
+        Fri, 4 Feb 2022 13:29:12 -0500
+Received: by mail-yb1-f170.google.com with SMTP id v186so21328242ybg.1;
+        Fri, 04 Feb 2022 10:29:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jeWAra30FXkZs/gRmR49z6lt/T+9ynnjq9B+AWcFc0M=;
-        b=dXKoVhrO/y2LGxjTC1G09za2yWxfSpnjQ1rex2OPEQ4d4ELlVemEk+g+v9MrM8a2cF
-         o27P7jKW/L3EygR/NQ5tgpJf7RoWEb9M0N41k/7jqhRqTmEZ5y6Gi5AaDQFm7cblpkSD
-         x5pcEbgoRYRUeR6u86R/uJZUCn9IrZI/osbsXR16gdPCiRNw5rjKA3fm2gE5b29hsm6x
-         d9F0l1lmq9fygmPQ34QFM4OVdTo7Mq3Cga/znxPBzVsqON+NyohhOk9L1OYHTnQ1G2dK
-         ik9KquAc4kjwhAEwZp0Jo3kEBl/RlnlbzF6nHf5ZiK5Xsl4blhsHgI9mwb0bFMuQ8y1q
-         nbFQ==
-X-Gm-Message-State: AOAM530IIhQlYJ39oPEiBgeuVwNIskLqi7IPRaBh+J5hKGn/TMzMzObL
-        0yFSJJPH/+CmIB55aMTOK9bF2x8+AuLPZfjAm52T8A==
-X-Google-Smtp-Source: ABdhPJz8DFPAFaDlhPX2045fX9vYzX/NA6X+81wbKs9VCuJPZx20zm691CYXL4xR4mi3Q2U4HBn+P5UwHAgdFFvqsHs=
-X-Received: by 2002:ae9:ed96:: with SMTP id c144mr241939qkg.221.1643999230713;
- Fri, 04 Feb 2022 10:27:10 -0800 (PST)
+        bh=RqAWQmdoXqG0G2kwAD2e7NWcP4SlcibKebTgmg5BUJc=;
+        b=Zm0l3IjTqEukeY0o6/T/SCAclek8V7MpbzXEgHBxNfVmP9rwFqvdx627TIXjpCruiE
+         m/1QHVfd1fgqd+QPfMu9QRmlBtFSdmLh0aQg8PdYe4p7ZDz5QOCNxXMvU+93p7JdW16b
+         w2KbtrqkJoIDeew/mth4VNcflmc9ZuTwVwtT+a/v/blzD81UQxpILMB5OVNUXUbb7dLW
+         FCFMHos7UF0M1LytcEJRSMmrDBNOOT8LeKJ1vXLUQMVXHF2RvLzuVVGkQE3aS//LkURs
+         8ajgCeMM0YPgE2zaAiBEzSsw3gWFofCsHBqGmYzHKSSE8feDi87+KrJGnprOM1WUxIlS
+         BObg==
+X-Gm-Message-State: AOAM533x6bw69EUBzGSmJapiBfGPDZOIkySNE+lWgQl7I6uzpUMHNxUp
+        DTpCPIOyU0ae/sMbtNOijCuqz+VsIfrPK54WvNI=
+X-Google-Smtp-Source: ABdhPJyj2XCqxLQigrO1h5Vv11Xf5spz6I7/vWZ0+MeoMysgAe/P23JU+jJp4PS9LwunFtvqgdIoJsFzwaMZadnFT94=
+X-Received: by 2002:a25:180a:: with SMTP id 10mr492538yby.552.1643999351652;
+ Fri, 04 Feb 2022 10:29:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
- <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
- <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com> <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 4 Feb 2022 10:26:59 -0800
-Message-ID: <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
- cgroup_view link
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220123183925.1052919-1-yury.norov@gmail.com> <20220123183925.1052919-4-yury.norov@gmail.com>
+In-Reply-To: <20220123183925.1052919-4-yury.norov@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Feb 2022 19:29:00 +0100
+Message-ID: <CAJZ5v0j+LS_0jaZwvze_8ar2n1R1FYqx0w_nM89SySg7oExi6A@mail.gmail.com>
+Subject: Re: [PATCH 03/54] thermal/intel: don't use bitmap_weight() in end_power_clamp()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 7:33 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sun, Jan 23, 2022 at 7:39 PM Yury Norov <yury.norov@gmail.com> wrote:
 >
-> On Thu, Feb 3, 2022 at 2:46 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Thu, Feb 3, 2022 at 10:04 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Feb 01, 2022 at 12:55:34PM -0800, Hao Luo wrote:
-> > > > +
-> > > > +SEC("iter/cgroup_view")
-> > > > +int dump_cgroup_lat(struct bpf_iter__cgroup_view *ctx)
-> > > > +{
-> > > > +     struct seq_file *seq = ctx->meta->seq;
-> > > > +     struct cgroup *cgroup = ctx->cgroup;
-> > > > +     struct wait_lat *lat;
-> > > > +     u64 id;
-> > > > +
-> > > > +     BPF_SEQ_PRINTF(seq, "cgroup_id: %8lu\n", cgroup->kn->id);
-> > > > +     lat = bpf_map_lookup_elem(&cgroup_lat, &id);
-> > >
-> > > Looks like "id = cgroup->kn->id" assignment is missing here?
-> > >
-> >
-> > Ah, yes. I'll fix it.
-> >
-> > > Thanks a lot for this test. It explains the motivation well.
-> > >
-> > > It seems that the patches 1-4 are there to automatically
-> > > supply cgroup pointer into bpf_iter__cgroup_view.
-> > >
-> > > Since user space needs to track good part of cgroup dir opreations
-> > > can we task it with the job of patches 1-4 as well?
-> > > It can register notifier for cgroupfs operations and
-> > > do mkdir in bpffs similarly _and_ parametrize 'view' bpf program
-> > > with corresponding cgroup_id.
-> > > Ideally there is no new 'view' program and it's a subset of 'iter'
-> > > bpf program. They're already parametrizable.
-> > > When 'iter' is pinned the user space can tell it which object it should
-> > > iterate on. The 'view' will be an interator of one element and
-> > > argument to it can be cgroup_id.
-> > > When user space pins the same 'view' program in a newly created bpffs
-> > > directory it will parametrize it with a different cgroup_id.
-> > > At the end the same 'view' program will be pinned in multiple directories
-> > > with different cgroup_id arguments.
-> > > This patch 5 will look very much the same, but patches 1-4 will not be
-> > > necessary.
-> > > Of course there are races between cgroup create/destroy and bpffs
-> > > mkdir, prog pin operatiosn, but they will be there regardless.
-> > > The patch 1-4 approach is not race free either.
-> >
-> > Right. I tried to minimize the races between cgroupfs and bpffs in
-> > this patchset. The cgroup and kernfs APIs called in this patchset
-> > guarantee that the cgroup and kernfs objects are alive once get. Some
-> > states in the objects such as 'id' should be valid at least.
-> >
-> > > Will that work?
-> >
-> > Thanks Alexei for the idea.
-> >
-> > The parameterization part sounds good. By 'parametrize', do you mean a
-> > variable in iter prog (like the 'pid' variable in bpf_iter_task_vma.c
-> > [1])? or some metadata of the program? I assume it's program's
-> > metadata. Either parameterizing with cgroup_id or passing cgroup
-> > object to the prog should work. The problem is at pinning.
+> Don't call bitmap_weight() if the following code can get by
+> without it.
 >
-> The bpf_iter_link_info is used to parametrize the iterator.
-> The map iterator will iterate the given map_fd.
-> iirc pinning is not parameterizable yet,
-> but that's not difficult to add.
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  drivers/thermal/intel/intel_powerclamp.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 >
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+> index 14256421d98c..c841ab37e7c6 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -556,12 +556,9 @@ static void end_power_clamp(void)
+>          * stop faster.
+>          */
+>         clamping = false;
+> -       if (bitmap_weight(cpu_clamping_mask, num_possible_cpus())) {
+> -               for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+> -                       pr_debug("clamping worker for cpu %d alive, destroy\n",
+> -                                i);
+> -                       stop_power_clamp_worker(i);
+> -               }
+> +       for_each_set_bit(i, cpu_clamping_mask, num_possible_cpus()) {
+> +               pr_debug("clamping worker for cpu %d alive, destroy\n", i);
+> +               stop_power_clamp_worker(i);
+>         }
+>  }
+>
+> --
 
-I can take a look at that. This will be useful in our use case.
-
->
-> > In our use case, we can't ask the users who create cgroups to do the
-> > pinning. Pinning requires root privilege. In our use case, we have
-> > non-root users who can create cgroup directories and still want to
-> > read bpf stats. They can't do pinning by themselves. This is why
-> > inheritance is a requirement for us. With inheritance, they only need
-> > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
-> > operation is required. Patch 1-4 are needed to implement inheritance.
-> >
-> > It's also not a good idea in our use case to add a userspace
-> > privileged process to monitor cgroupfs operations and perform the
-> > pinning. It's more complex and has a higher maintenance cost and
-> > runtime overhead, compared to the solution of asking whoever makes
-> > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
-> > the data center that don't have the userspace process deployed, the
-> > stats will be unavailable, which is a no-no for some of our users.
->
-> The commit log says that there will be a daemon that does that
-> monitoring of cgroupfs. And that daemon needs to mkdir
-> directories in bpffs when a new cgroup is created, no?
-> The kernel is only doing inheritance of bpf progs into
-> new dirs. I think that daemon can pin as well.
->
-> The cgroup creation is typically managed by an agent like systemd.
-> Sounds like you have your own agent that creates cgroups?
-> If so it has to be privileged and it can mkdir in bpffs and pin too ?
-
-Ah, yes, we have our own daemon to manage cgroups. That daemon creates
-the top-level cgroup for each job to run inside. However, the job can
-create its own cgroups inside the top-level cgroup, for fine grained
-resource control. This doesn't go through the daemon. The job-created
-cgroups don't have the pinned objects and this is a no-no for our
-users.
+Applied as 5.18 material, thanks!

@@ -2,85 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B924A9E41
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD6A4A9E46
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344976AbiBDRrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:47:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
+        id S233240AbiBDRsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:48:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377210AbiBDRq6 (ORCPT
+        with ESMTP id S241900AbiBDRsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:46:58 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADB7C0613FF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 09:46:43 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m7so6314306pjk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 09:46:43 -0800 (PST)
+        Fri, 4 Feb 2022 12:48:06 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67F0C061714;
+        Fri,  4 Feb 2022 09:48:06 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id x11so5767143plg.6;
+        Fri, 04 Feb 2022 09:48:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=3NUT0n+bilcYFPggFNdZCuDTKMVTtwiLZbBB5rJkswg=;
-        b=PI5199P5ZDM5DFBPWJAal8FAkkCncMtASfOWU3UYNZPtWxQvJjJ30BCQqBTOwH8lJO
-         2Z+4l0/vWBzZ304RF4dQUqsa57DtpMBxzWk7AkNUSUd22UnEWDqFD5fFLT5c9gSJd5F5
-         QiOj8q9vjdhjqQ1C1rOXq60TmY1kxHJwlf9zpTprOPIXntRX277iuNik4zbamvhF7fIc
-         5QVlBdGAi4sNepqnfDbfEqaJ1bBCmFWjDwr1W7HFLpVnv5LtBW1IAsyUaPhNjgtv6tAC
-         GrQ2xoLisizviFGDDMfOJtPju/7Qda2xxk+18i3GX/Sk43pMVSHz2GEGsIxqJoUnU6v/
-         Jndg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4Y2bzdSGviXq60UAJUwPl6VNHemh5FsztTQ19e+AzIM=;
+        b=gWlIZuD5AXuFcp67d+7phWRqrAVSGOkXgZObWSfD+qThKjUPbQCZgZqKSUrZk4qkLT
+         cuMo7HHFyngVG5l5Z8QRHupNW3YbI57o5HiVyDL/jW7yWl18hobBfYuFxHCU8rTQOR/L
+         BShL98Gd/fQg6pAn+BOauj1Qfh+IjDASyc3smt7p0T9eTw0z2WZCaSDqFmHhscKXRvIc
+         D8PIVwfZajnvN4R5jDhM8bhSZ1yWHBsyVuXgZ6Y3/VqM1TYsF+kXssNNGc8pMhC6o78r
+         STwm0Pqq+45z0QpyCWZJcWRcTcLaosjdu50X7ToLbb6oV4gjUIJw11j88MUgExjjHdFD
+         HLQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=3NUT0n+bilcYFPggFNdZCuDTKMVTtwiLZbBB5rJkswg=;
-        b=zHLRANsD+rw2NJkT3vL9fJSxbeRLmr6KVvD1jMQjMJnK7Qv8y7BFl2O+5ZhQKk7e40
-         4WX9bMsx46YjT1I9YIsmTBQA+453BM6dwxICDw0j3GHKNMXfU7pg3QzGNeVXMZTjaoAF
-         qh4gv7rTdKO+I69MYWhS0Y1Jcq0/oYUfsr0dkLRdzcAGVBPvT2RtJahhlvcElECAVIzY
-         dd7R5Ei+4pZUN3l/ehXLHqzeemJB5ohK4Z+75DzYpBzZlVIX8oog3v/Idsgy+EyN5Zb9
-         4/q9kG2/RiML90Ns4Dm7Z3Hx5fIS6ao7mclBxwDSjg024mk1Pjbjxiv2hsDgD7mQTW9d
-         RnNQ==
-X-Gm-Message-State: AOAM531vlyMGzxbsdWALjDf6a5Y4XPFIodgmOsZX+WnZ+IqYiAu/e/SA
-        AzIopPn9y3AYEB494nk/CnQTfJyv2OG5pA==
-X-Google-Smtp-Source: ABdhPJxJ/N/2kfQey34wz9jaLn+ZQentkAAlCBQ4ZOjYZCuHS/ORXHyb0jJ6fB7MtPCvzg45GZ7Dkw==
-X-Received: by 2002:a17:90b:1909:: with SMTP id mp9mr84050pjb.84.1643996802504;
-        Fri, 04 Feb 2022 09:46:42 -0800 (PST)
-Received: from kitty ([12.231.191.170])
-        by smtp.gmail.com with ESMTPSA id q9sm13769586pjm.20.2022.02.04.09.46.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 09:46:42 -0800 (PST)
-Date:   Fri, 4 Feb 2022 09:47:11 -0800
-From:   MZ <10maurycy10@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Subject: [PATCH] fix unnecessary invocation bash in hashbang of scripts/tag.sh
-Message-ID: <Yf1mn7RAGkviFi0Y@kitty>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4Y2bzdSGviXq60UAJUwPl6VNHemh5FsztTQ19e+AzIM=;
+        b=NBPWvlx2HfklgsSy8H5hYyRqHeSJpWTGBvyHiPiJNBHG0oGHxMdGPHZ01ri9RBjR2u
+         7X7BXtviIXvATpVcW/360bJvxrHvg46iXrfc1/7stiK7qaOClA0PRthLJ+84vXxtRxO0
+         pkcuKfgvpV2q41Jtg56VL+OVk5tY8xsQ57QLV32HdSKaUok12Uh2Tg1FkDaLEroUTaVv
+         pvtPynVtGMwLc8LkUxD6qpMsRsLifoxZtbFes0hOxEYXiCCZ9BGOgeMO5/WwGKZjszME
+         8FZ3AVcKWMdXR4Xmcjl5Eys+tdk1yLMYHxLgUTUmataSRirLQbFbDZcyLFilfcuSm3MU
+         DuAw==
+X-Gm-Message-State: AOAM533MjMn4ugZK4Ohgl8iSII7GaKBwY1S9+Au7WYIeGKe3siHsZHry
+        80BXRYUmlm3aC1snD0IxER0=
+X-Google-Smtp-Source: ABdhPJwOkW1NsAfaZTcVsoKEZ1fDF+2WkGefCHlRQDhTYvBLTKlohSZxwn8rGxcK+OlsZqzGyRS1HA==
+X-Received: by 2002:a17:902:6b83:: with SMTP id p3mr4113682plk.55.1643996886147;
+        Fri, 04 Feb 2022 09:48:06 -0800 (PST)
+Received: from [10.230.2.160] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id j8sm3546451pfc.48.2022.02.04.09.48.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 09:48:05 -0800 (PST)
+Message-ID: <f4a3aac7-169f-0089-26e7-eef193bd5d29@gmail.com>
+Date:   Fri, 4 Feb 2022 09:48:03 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220204091915.247906930@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Make the /scripts/tag.sh script more portable by removing bash
-dependency.
 
-Signed-off-by: Maurycy Zalewski <10maurycy10@gmail.com>
+On 2/4/2022 1:22 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.20 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.20-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
----
- scripts/tags.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-diff --git a/scripts/tags.sh b/scripts/tags.sh
-index 16d475b3e..f066b4e7d 100755
---- a/scripts/tags.sh
-+++ b/scripts/tags.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!/bin/sh
- # SPDX-License-Identifier: GPL-2.0-only
- # Generate tags or cscope files
- # Usage tags.sh <mode>
-
-base-commit: dcb85f85fa6f142aae1fe86f399d4503d49f2b60
---
-2.35.1
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

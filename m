@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94E34A967C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961E74A9678
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358324AbiBDJ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:26:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52988 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357893AbiBDJYm (ORCPT
+        id S1357534AbiBDJ0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:26:17 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43806 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357907AbiBDJYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:24:42 -0500
+        Fri, 4 Feb 2022 04:24:44 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9F64B836B9;
-        Fri,  4 Feb 2022 09:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1935C004E1;
-        Fri,  4 Feb 2022 09:24:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DA1D612C8;
+        Fri,  4 Feb 2022 09:24:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D12C004E1;
+        Fri,  4 Feb 2022 09:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966680;
-        bh=T+sqZCVEkJgNnFO9Rhbjhdo7Xu1WOs9myTQYJ5/K0XY=;
+        s=korg; t=1643966684;
+        bh=mPjX16zNpAn7LOPJg7nzi8nM1zws5ngvx/rWuXKPNwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MZgpZylJAQLUqmhaI1FDf9MUv+Toh7UOiRBdx/ctR6Ys5n3qBE6Hm+IjSDhPqTkZd
-         MoSjiH99BATi0ARacYGDkhbYov9MDbTSBBt/efJpSuNUHJBKmLedDXyBW+pcbhV/rG
-         vx/12BA3RdD4FWYDdJjTqfukRvXpCFJKtYxd8UhE=
+        b=WB1e9oI/XO93yp067SmmVugLNYkJjrl+sm0Cllj2nr2gWdBg6oPJcVBVabdFDt6eH
+         NGuQs39juKQD+S7EKm5Knxp/Eg/HgyP1ag1OMHB7iX0hcC7CxgJtPUVd0x8jKhtrrv
+         v5lbuuEov+38BkCiWXqcGCnDl3C/1nnpImhcr+1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH 5.15 29/32] cpuset: Fix the bug that subpart_cpus updated wrongly in update_cpumask()
-Date:   Fri,  4 Feb 2022 10:22:39 +0100
-Message-Id: <20220204091916.214992004@linuxfoundation.org>
+        stable@vger.kernel.org, Sasha Neftin <sasha.neftin@intel.com>,
+        Nechama Kraus <nechamax.kraus@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.15 30/32] e1000e: Handshake with CSME starts from ADL platforms
+Date:   Fri,  4 Feb 2022 10:22:40 +0100
+Message-Id: <20220204091916.244764690@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
 References: <20220204091915.247906930@linuxfoundation.org>
@@ -45,34 +46,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianchen Ding <dtcccc@linux.alibaba.com>
+From: Sasha Neftin <sasha.neftin@intel.com>
 
-commit c80d401c52a2d1baf2a5afeb06f0ffe678e56d23 upstream.
+commit cad014b7b5a6897d8c4fad13e2888978bfb7a53f upstream.
 
-subparts_cpus should be limited as a subset of cpus_allowed, but it is
-updated wrongly by using cpumask_andnot(). Use cpumask_and() instead to
-fix it.
+Handshake with CSME/AMT on none provisioned platforms during S0ix flow
+is not supported on TGL platform and can cause to HW unit hang. Update
+the handshake with CSME flow to start from the ADL platform.
 
-Fixes: ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag")
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
-Reviewed-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
+Fixes: 3e55d231716e ("e1000e: Add handshake with the CSME to support S0ix")
+Signed-off-by: Sasha Neftin <sasha.neftin@intel.com>
+Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/cgroup/cpuset.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/intel/e1000e/netdev.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1597,8 +1597,7 @@ static int update_cpumask(struct cpuset
- 	 * Make sure that subparts_cpus is a subset of cpus_allowed.
- 	 */
- 	if (cs->nr_subparts_cpus) {
--		cpumask_andnot(cs->subparts_cpus, cs->subparts_cpus,
--			       cs->cpus_allowed);
-+		cpumask_and(cs->subparts_cpus, cs->subparts_cpus, cs->cpus_allowed);
- 		cs->nr_subparts_cpus = cpumask_weight(cs->subparts_cpus);
- 	}
- 	spin_unlock_irq(&callback_lock);
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -6346,7 +6346,8 @@ static void e1000e_s0ix_entry_flow(struc
+ 	u32 mac_data;
+ 	u16 phy_data;
+ 
+-	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID) {
++	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
++	    hw->mac.type >= e1000_pch_adp) {
+ 		/* Request ME configure the device for S0ix */
+ 		mac_data = er32(H2ME);
+ 		mac_data |= E1000_H2ME_START_DPG;
+@@ -6495,7 +6496,8 @@ static void e1000e_s0ix_exit_flow(struct
+ 	u16 phy_data;
+ 	u32 i = 0;
+ 
+-	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID) {
++	if (er32(FWSM) & E1000_ICH_FWSM_FW_VALID &&
++	    hw->mac.type >= e1000_pch_adp) {
+ 		/* Request ME unconfigure the device from S0ix */
+ 		mac_data = er32(H2ME);
+ 		mac_data &= ~E1000_H2ME_START_DPG;
 
 

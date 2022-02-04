@@ -2,143 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723E64AA47B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACE94AA488
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378465AbiBDXjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S1378233AbiBDXkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378255AbiBDXjH (ORCPT
+        with ESMTP id S1378446AbiBDXkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:39:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B92E025B35;
-        Fri,  4 Feb 2022 15:39:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6A8361C36;
-        Fri,  4 Feb 2022 23:39:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A006CC3410A;
-        Fri,  4 Feb 2022 23:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644017944;
-        bh=ibhe7XGDHOnx160ajeMSJLi117GE5aB+Eytzu80AjNY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qsVivvSMsTx3VvTxpYwe6Krv037OLf58VOh6Nv9AN/x7gnf24Zn1ujSSNVXNhJyUx
-         zy273elWuiXOz203bRtbmZFBM3P03QzCnOVwI9X8J36zMtmTFhsg4/UqY4xa0xpyLm
-         wXTyPawfbuRAjWf252okzpQCyzDBvbUekWH1X9TSO2m4C60D8q1po0ojku4FX9ailn
-         Q+j7Un8FH08t+aw8UOaCCWecDrbfYkk0j+91vIfUSlBaoX37SUt9NfpqWquTz1zJ/N
-         8oljxwJMBW/48KyvIXNPCre8lCDJdZh2tPcO1US1h7afZB9rGG7X4CBFrhdtEjx2OF
-         xHLdO7/DkI+LA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 15F3F5C14AE; Fri,  4 Feb 2022 15:39:04 -0800 (PST)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 19/19] srcu: Add contention check to call_srcu() srcu_data ->lock acquisition
-Date:   Fri,  4 Feb 2022 15:39:02 -0800
-Message-Id: <20220204233902.1902-19-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220204233858.GA1469@paulmck-ThinkPad-P17-Gen-1>
-References: <20220204233858.GA1469@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 4 Feb 2022 18:40:07 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399E3DFFE363
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:39:41 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id y84so9412416iof.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=chay6cI5krPMdvmjI0OgtPSx/juylZb2Zp77TTGYBDU=;
+        b=ghF9s5MbclL4SAtvIK2qGV+BljWVspJXqofubIdxJEF14Xz9ytHpkkFxpswuY/BsgI
+         jyktOsJw7HiIBplyOMdLypyl5fEAN123X3pm30RrXatGH7VJLU0G2sGL6oulw1BlK47Q
+         zlEtzHahkHzgXbyjsAtGOBVSuOZtqDlBcOdjI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=chay6cI5krPMdvmjI0OgtPSx/juylZb2Zp77TTGYBDU=;
+        b=r5T+vqh3pRZekKGlm+1saWj1qJZd72q+3ESizI6fTO3ppyw3JZXcSA3PuaY5DwyqQt
+         x7exxkYGUpp4iJzjyTP/v7smgFsYr855wBhVSW36KJC0eV3fQNfx/dbiWAtL2Daxy428
+         dvXKXBxJKLJCBoMHyoAkGAV5ePRl26J39WCoJsmdZlwHWD4MbKbS9QRSb4/ItmnZVSBY
+         mEkzMtHj112fT7ysZywWI3X8RMJmUBzMJmB2fI7KnDW9X8T3B3CVBSknfs2oMKuuJck9
+         4okS5CAOB//NXkWYuG0Sz0uYcQJMCeennILQkWsnVjLHBeTZ7Y4wfs9MowlgslomXJqA
+         fUaQ==
+X-Gm-Message-State: AOAM532ta4j2eNdbNCKiWQ+Hl8dYATzd74CkdBRtZzHyD5TBI3TKJL1F
+        3FaTb58aeBH04HpjmnNZ8upR+Q==
+X-Google-Smtp-Source: ABdhPJxwry8B1iySH3HNGgjwyySt2sl1IYQJ9sPBEZsfj1ARJPiZ4Cfn77PbNSIkbwQAa0+fQ9Qv2g==
+X-Received: by 2002:a05:6638:2493:: with SMTP id x19mr681599jat.219.1644017980601;
+        Fri, 04 Feb 2022 15:39:40 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e17sm1654076ilm.67.2022.02.04.15.39.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 15:39:40 -0800 (PST)
+Subject: Re: [PATCH 0/3] selftests: Remove duplicate CPUID wrappers
+To:     Reinette Chatre <reinette.chatre@intel.com>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Suchanek <msuchanek@suse.de>, linux-mm@kvack.org,
+        "Chang S . Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1644000145.git.reinette.chatre@intel.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <81df8c0e-fde6-f3b8-f988-b539f193635b@linuxfoundation.org>
+Date:   Fri, 4 Feb 2022 16:39:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1644000145.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_50,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit increases the sensitivity of contention detection by adding
-checks to the acquisition of the srcu_data structure's lock on the
-call_srcu() code path.
+On 2/4/22 12:17 PM, Reinette Chatre wrote:
+> A few tests that require running CPUID do so with a private
+> implementation of a wrapper for CPUID. This duplication of
+> the CPUID wrapper should be avoided but having one is also
+> unnecessary because of the existence of a macro that can
+> be used instead.
+> 
+> This series replaces private CPUID wrappers with calls
+> to the __cpuid_count() macro from cpuid.h as made available
+> by gcc and clang/llvm.
+> 
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Ram Pai <linuxram@us.ibm.com>
+> Cc: Sandipan Das <sandipan@linux.ibm.com>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Michal Suchanek <msuchanek@suse.de>
+> Cc: linux-mm@kvack.org
+> Cc: Chang S. Bae <chang.seok.bae@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: x86@kernel.org
+> Cc: Andy Lutomirski <luto@kernel.org>
+> 
+> Reinette Chatre (3):
+>    selftests/vm/pkeys: Use existing __cpuid_count() macro
+>    selftests/x86/amx: Use existing __cpuid_count() macro
+>    selftests/x86/corrupt_xstate_header: Use existing __cpuid_count()
+>      macro
+> 
+>   tools/testing/selftests/vm/pkey-x86.h         | 22 +++---------------
+>   tools/testing/selftests/x86/amx.c             | 23 +++++--------------
+>   .../selftests/x86/corrupt_xstate_header.c     | 17 ++------------
+>   3 files changed, 11 insertions(+), 51 deletions(-)
+> 
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- kernel/rcu/srcutree.c | 45 ++++++++++++++++++++++++++++++++++---------
- 1 file changed, 36 insertions(+), 9 deletions(-)
+I am all for this cleanup. However, I am not finding __cpuid_count()
+marco on my system with gcc:
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index c3968e091d019..31a7a9e2445da 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -320,18 +320,13 @@ static void srcu_transition_to_big(struct srcu_struct *ssp)
- }
- 
- /*
-- * Acquire the specified srcu_struct structure's ->lock, but check for
-- * excessive contention, which results in initiation of a transition
-- * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-- * parameter permits this.
-+ * Check to see if the just-encountered contention event justifies
-+ * a transition to SRCU_SIZE_BIG.
-  */
--static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-+static void spin_lock_irqsave_check_contention(struct srcu_struct *ssp)
- {
- 	unsigned long j;
- 
--	if (spin_trylock_irqsave_rcu_node(ssp, *flags))
--		return;
--	spin_lock_irqsave_rcu_node(ssp, *flags);
- 	if (!SRCU_SIZING_IS_CONTEND() || ssp->srcu_size_state)
- 		return;
- 	j = jiffies;
-@@ -344,6 +339,38 @@ static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned l
- 	__srcu_transition_to_big(ssp);
- }
- 
-+/*
-+ * Acquire the specified srcu_data structure's ->lock, but check for
-+ * excessive contention, which results in initiation of a transition
-+ * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-+ * parameter permits this.
-+ */
-+static void spin_lock_irqsave_sdp_contention(struct srcu_data *sdp, unsigned long *flags)
-+{
-+	struct srcu_struct *ssp = sdp->ssp;
-+
-+	if (spin_trylock_irqsave_rcu_node(sdp, *flags))
-+		return;
-+	spin_lock_irqsave_rcu_node(ssp, *flags);
-+	spin_lock_irqsave_check_contention(ssp);
-+	spin_unlock_irqrestore_rcu_node(ssp, *flags);
-+	spin_lock_irqsave_rcu_node(sdp, *flags);
-+}
-+
-+/*
-+ * Acquire the specified srcu_struct structure's ->lock, but check for
-+ * excessive contention, which results in initiation of a transition
-+ * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-+ * parameter permits this.
-+ */
-+static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-+{
-+	if (spin_trylock_irqsave_rcu_node(ssp, *flags))
-+		return;
-+	spin_lock_irqsave_rcu_node(ssp, *flags);
-+	spin_lock_irqsave_check_contention(ssp);
-+}
-+
- /*
-  * First-use initialization of statically allocated srcu_struct
-  * structure.  Wiring up the combining tree is more than can be
-@@ -989,7 +1016,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
- 	} else {
- 		sdp = raw_cpu_ptr(ssp->sda);
- 	}
--	spin_lock_irqsave_rcu_node(sdp, flags);
-+	spin_lock_irqsave_sdp_contention(sdp, &flags);
- 	if (rhp)
- 		rcu_segcblist_enqueue(&sdp->srcu_cblist, rhp);
- 	rcu_segcblist_advance(&sdp->srcu_cblist,
--- 
-2.31.1.189.g2e36527f23
+gcc --version
+gcc (Ubuntu 11.2.0-7ubuntu2) 11.2.0
 
+My concern is regression on older gcc versions.
+
+thanks,
+-- Shuah

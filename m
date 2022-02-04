@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458C84AA404
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51004AA403
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377970AbiBDXI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:08:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53370 "EHLO
+        id S1377939AbiBDXIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:08:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:53366 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377901AbiBDXIJ (ORCPT
+        with ESMTP id S1377900AbiBDXIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Feb 2022 18:08:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B7EDB83969;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6230FB83967;
         Fri,  4 Feb 2022 23:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1673CC340F3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C6EC340F1;
         Fri,  4 Feb 2022 23:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644016087;
-        bh=mPWgAdkyrX/RwbFRVrRX5RqVqjHoL8oAY4muj7gz8PI=;
+        bh=F0tWzgWyTYIaOE59H/lt7xyxwXQQkMt7UW6k3PjcRfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BuVPuasbQiMjDpJkz7nIdLTaoS7fpqwBtnINOH+qHg7MH2ZkT/ZZIhnrHFWYXLnVk
-         i+IlXLompFRpHDXhQekytUVjeEJVuEx4abBXRPl5+SjjuX/CshH6G1Ab2ci4+yIOQj
-         W5And4cME3M2AXQ8to0cDcym77q2L2hA/nWoUgcw/W8BoYBeHXzdT0qCWmBdkPuPuq
-         ix1SJ+CcsM+oEeRFM93vGtrTQXhzLcqy2TC5HMnxBebTZfQfroS65xhuh0BZMA0KHn
-         1BKOXzKYxoC/TuuXnvjHIZIUOttrA8QIL6CTqUdQ4Ac5prF8pUA5/cy2q28265NkNn
-         qyQ89g2KsjaqQ==
+        b=KwMVc5kHGt9LR4D9VYGVwl6A0quOy2YKoBtx1/u+nLM9XeDt3jyxmRqfu2bo4niXn
+         w+WPAwrBt9D6gcQwGgUyMjLorhqF0sym7cctQiIA3VHSbWHB9j3AWCbVORY9FCDc1S
+         O4uthPcIySi1ixNzcltPZvye5kP3m/Yu/OuWZDlTUZ7TxpI3w1ReRy24yNS0zEq8MV
+         Awyj4r/rUMTRyetyWqeYjaIN39BYEnyvlRrHjV3bukPm58ZqiPAyjhlvTfatDlq/Ap
+         O2WDPi46M2UZH12XJR2/25ymYx9bPCC2BZxdQwO74nP17mr4O32JfgGcGgqYe/T0nm
+         +cIqXasP51y0A==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9CBEA5C08DD; Fri,  4 Feb 2022 15:08:06 -0800 (PST)
+        id 9E9F05C0992; Fri,  4 Feb 2022 15:08:06 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 4/9] rcu: Inline __call_rcu() into call_rcu()
-Date:   Fri,  4 Feb 2022 15:08:00 -0800
-Message-Id: <20220204230805.4193767-4-paulmck@kernel.org>
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
+        Marco Elver <elver@google.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 5/9] kasan: Record work creation stack trace with interrupts enabled
+Date:   Fri,  4 Feb 2022 15:08:01 -0800
+Message-Id: <20220204230805.4193767-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220204230751.GA4193671@paulmck-ThinkPad-P17-Gen-1>
 References: <20220204230751.GA4193671@paulmck-ThinkPad-P17-Gen-1>
@@ -47,130 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because __call_rcu() is invoked only by call_rcu(), this commit inlines
-the former into the latter.
+From: Zqiang <qiang1.zhang@intel.com>
 
+Recording the work creation stack trace for KASAN reports in
+call_rcu() is expensive, due to unwinding the stack, but also
+due to acquiring depot_lock inside stackdepot (which may be contended).
+Because calling kasan_record_aux_stack_noalloc() does not require
+interrupts to already be disabled, this may unnecessarily extend
+the time with interrupts disabled.
+
+Therefore, move calling kasan_record_aux_stack() before the section
+with interrupts disabled.
+
+Acked-by: Marco Elver <elver@google.com>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 91 ++++++++++++++++++++++-------------------------
- 1 file changed, 42 insertions(+), 49 deletions(-)
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index d1d1a8c51223b..f1bb7ccc00847 100644
+index f1bb7ccc00847..ca8d7dd026eeb 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -2995,9 +2995,47 @@ static void check_cb_ovld(struct rcu_data *rdp)
- 	raw_spin_unlock_rcu_node(rnp);
- }
- 
--/* Helper function for call_rcu() and friends.  */
--static void
--__call_rcu(struct rcu_head *head, rcu_callback_t func)
-+/**
-+ * call_rcu() - Queue an RCU callback for invocation after a grace period.
-+ * @head: structure to be used for queueing the RCU updates.
-+ * @func: actual callback function to be invoked after the grace period
-+ *
-+ * The callback function will be invoked some time after a full grace
-+ * period elapses, in other words after all pre-existing RCU read-side
-+ * critical sections have completed.  However, the callback function
-+ * might well execute concurrently with RCU read-side critical sections
-+ * that started after call_rcu() was invoked.
-+ *
-+ * RCU read-side critical sections are delimited by rcu_read_lock()
-+ * and rcu_read_unlock(), and may be nested.  In addition, but only in
-+ * v5.0 and later, regions of code across which interrupts, preemption,
-+ * or softirqs have been disabled also serve as RCU read-side critical
-+ * sections.  This includes hardware interrupt handlers, softirq handlers,
-+ * and NMI handlers.
-+ *
-+ * Note that all CPUs must agree that the grace period extended beyond
-+ * all pre-existing RCU read-side critical section.  On systems with more
-+ * than one CPU, this means that when "func()" is invoked, each CPU is
-+ * guaranteed to have executed a full memory barrier since the end of its
-+ * last RCU read-side critical section whose beginning preceded the call
-+ * to call_rcu().  It also means that each CPU executing an RCU read-side
-+ * critical section that continues beyond the start of "func()" must have
-+ * executed a memory barrier after the call_rcu() but before the beginning
-+ * of that RCU read-side critical section.  Note that these guarantees
-+ * include CPUs that are offline, idle, or executing in user mode, as
-+ * well as CPUs that are executing in the kernel.
-+ *
-+ * Furthermore, if CPU A invoked call_rcu() and CPU B invoked the
-+ * resulting RCU callback function "func()", then both CPU A and CPU B are
-+ * guaranteed to execute a full memory barrier during the time interval
-+ * between the call to call_rcu() and the invocation of "func()" -- even
-+ * if CPU A and CPU B are the same CPU (but again only if the system has
-+ * more than one CPU).
-+ *
-+ * Implementation of these memory-ordering guarantees is described here:
-+ * Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst.
-+ */
-+void call_rcu(struct rcu_head *head, rcu_callback_t func)
- {
- 	static atomic_t doublefrees;
- 	unsigned long flags;
-@@ -3011,7 +3049,7 @@ __call_rcu(struct rcu_head *head, rcu_callback_t func)
- 		/*
- 		 * Probable double call_rcu(), so leak the callback.
- 		 * Use rcu:rcu_callback trace event to find the previous
--		 * time callback was passed to __call_rcu().
-+		 * time callback was passed to call_rcu().
- 		 */
- 		if (atomic_inc_return(&doublefrees) < 4) {
- 			pr_err("%s(): Double-freed CB %p->%pS()!!!  ", __func__, head, head->func);
-@@ -3060,51 +3098,6 @@ __call_rcu(struct rcu_head *head, rcu_callback_t func)
- 		local_irq_restore(flags);
+@@ -3060,8 +3060,8 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
  	}
- }
--
--/**
-- * call_rcu() - Queue an RCU callback for invocation after a grace period.
-- * @head: structure to be used for queueing the RCU updates.
-- * @func: actual callback function to be invoked after the grace period
-- *
-- * The callback function will be invoked some time after a full grace
-- * period elapses, in other words after all pre-existing RCU read-side
-- * critical sections have completed.  However, the callback function
-- * might well execute concurrently with RCU read-side critical sections
-- * that started after call_rcu() was invoked.
-- *
-- * RCU read-side critical sections are delimited by rcu_read_lock()
-- * and rcu_read_unlock(), and may be nested.  In addition, but only in
-- * v5.0 and later, regions of code across which interrupts, preemption,
-- * or softirqs have been disabled also serve as RCU read-side critical
-- * sections.  This includes hardware interrupt handlers, softirq handlers,
-- * and NMI handlers.
-- *
-- * Note that all CPUs must agree that the grace period extended beyond
-- * all pre-existing RCU read-side critical section.  On systems with more
-- * than one CPU, this means that when "func()" is invoked, each CPU is
-- * guaranteed to have executed a full memory barrier since the end of its
-- * last RCU read-side critical section whose beginning preceded the call
-- * to call_rcu().  It also means that each CPU executing an RCU read-side
-- * critical section that continues beyond the start of "func()" must have
-- * executed a memory barrier after the call_rcu() but before the beginning
-- * of that RCU read-side critical section.  Note that these guarantees
-- * include CPUs that are offline, idle, or executing in user mode, as
-- * well as CPUs that are executing in the kernel.
-- *
-- * Furthermore, if CPU A invoked call_rcu() and CPU B invoked the
-- * resulting RCU callback function "func()", then both CPU A and CPU B are
-- * guaranteed to execute a full memory barrier during the time interval
-- * between the call to call_rcu() and the invocation of "func()" -- even
-- * if CPU A and CPU B are the same CPU (but again only if the system has
-- * more than one CPU).
-- *
-- * Implementation of these memory-ordering guarantees is described here:
-- * Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst.
-- */
--void call_rcu(struct rcu_head *head, rcu_callback_t func)
--{
--	__call_rcu(head, func);
--}
- EXPORT_SYMBOL_GPL(call_rcu);
+ 	head->func = func;
+ 	head->next = NULL;
+-	local_irq_save(flags);
+ 	kasan_record_aux_stack_noalloc(head);
++	local_irq_save(flags);
+ 	rdp = this_cpu_ptr(&rcu_data);
  
- 
+ 	/* Add the callback to our list. */
 -- 
 2.31.1.189.g2e36527f23
 

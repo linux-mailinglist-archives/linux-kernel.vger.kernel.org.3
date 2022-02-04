@@ -2,124 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F114A956D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36C54A956F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357170AbiBDIqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S241743AbiBDIqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357166AbiBDIqF (ORCPT
+        with ESMTP id S243792AbiBDIqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:46:05 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EC2C061714;
-        Fri,  4 Feb 2022 00:46:04 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k17so4616056plk.0;
-        Fri, 04 Feb 2022 00:46:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BLm1Xd58kZdRJgQxfBatH1zJyJ5hT921Y/jdnN6VFT0=;
-        b=l8WS47NjCGx58W8XGL6HxsWueH0OEPntNnxwO6pqtWLLw5So50Y+2GGjQiLw2j4KeV
-         3SIWZJ2MWaLBA393cexcMJd+6nowPmTlHdDF1iHkiT16lCSXA7iZtaHv35kKpGA2ycYi
-         MsZm87uTeLlwWmyD2XzlzRQDXDHSI8mgbT5XKOXugwcugJCku4qnYddUU1d1m8v5ayCI
-         mVtdC1RqylD7NqSXHzMEAjbAMYePtPshg+rq3gXoRKZe6SfeDOsZuiDkcvtu1bUq90Aa
-         F4HUBkEVTdoJqRyWuSXOdlWZJki0c2kfeqLhY/7OfbqZ4tcTwXoj9bIwmea79VJsBkUv
-         3Xwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BLm1Xd58kZdRJgQxfBatH1zJyJ5hT921Y/jdnN6VFT0=;
-        b=OweR5LRD8LTO5lf3T8M64RmFhaRNU54I1A0+wVULn1iRytSDp8l20zturUJ3oM8idN
-         eXF1MjMVZlTsN1lbZm94fuxfJD9PzgUvLKpK/y781b7CY7e7mWNgNf3xXVGdA8kvSoZg
-         RXt0BkXQ+kQ2sbMF0v9/hDS2v47EwBOCr2sLaFNUfhX9Um9+7QEvqhL8R0/dtuwgHmpe
-         KOi+WWjzedFhliePtVxq3wpKb1a4Byipex1y9l62WIdRhJ148lXK13ncEDtZa3L5317u
-         4raezkzomSRbE83dc24yEAUa6qwZcVki6jBYFTSlym/26ODUvq5EFW6t9pffAneFV9Xk
-         3mKg==
-X-Gm-Message-State: AOAM531lUWA5SVTgARBqTIoYP4dy/qhh8CTTJodjkbx8SNzjdivS1OgS
-        oubs7+R0teaBlhDdjZIlXBZxcWM/tzFqyg==
-X-Google-Smtp-Source: ABdhPJx5CgRsgoRdhYdVnW5qcZz1NQsKsJtwY6UJcp5T4KLl9uWSnW4iiyC8PFi6GQqJYqCop+FBVg==
-X-Received: by 2002:a17:903:1212:: with SMTP id l18mr2141871plh.77.1643964364337;
-        Fri, 04 Feb 2022 00:46:04 -0800 (PST)
-Received: from localhost.localdomain (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
-        by smtp.gmail.com with ESMTPSA id g17sm1630784pfj.148.2022.02.04.00.46.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 00:46:03 -0800 (PST)
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     jic23@kernel.org
-Cc:     u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        William Breathitt Gray <vilhelm.gray@gmail.com>
-Subject: [PATCH v2] counter: Set counter device name
-Date:   Fri,  4 Feb 2022 17:45:51 +0900
-Message-Id: <20220204084551.16397-1-vilhelm.gray@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 4 Feb 2022 03:46:07 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BC7C061714;
+        Fri,  4 Feb 2022 00:46:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B480DCE1B31;
+        Fri,  4 Feb 2022 08:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DE7C004E1;
+        Fri,  4 Feb 2022 08:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643964364;
+        bh=MgwsHUz8xUyNw1Cn8QlvOpQEkb+oPhC2D2TUQ9ZUu9M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gs7vVk+FBgSttLm7iIFwTypf16VeMuFVKGjnYoTz+3i215Qtuzm86BHhD9Sek1PN2
+         wAwAUmjDmsMle/+DPYecxADPFmw1jGL4xN6PsnoUBOUn12Dqte5inUAQwzDafE/rtn
+         E0QgSgx8NOJeqxX8+mZdF3Xb44yG0DJbejWxFZkNIOhch3rdym4s1NsCxRI6PY43o5
+         2prJ9AAvLf4fPb7YSz4SWw9yG07XWFBLqanbpq1zyxJaFcNnDfNe6BV/CASe2dMopk
+         wvkimeHadneyF/Grg4Igwt4OCz0BUixZn6eRhdSqM9y9+7rDOxemm+pmwxbDKFBj5C
+         g9hyl5yh6sozg==
+Date:   Fri, 4 Feb 2022 00:46:01 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: Re: [PATCH] random: use computational hash for entropy extraction
+Message-ID: <YfznyWaVCz3Yl1ma@sol.localdomain>
+References: <20220201161342.154666-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201161342.154666-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Naming the counter device provides a convenient way to identify it in
-devres_log events and similar situations. This patch names the counter
-device by combining the prefix "counter" with the counter device's
-unique ID.
+Hi Jason,
 
-Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: William Breathitt Gray <vilhelm.gray@gmail.com>
----
-Changes in v2:
- - Move dev_set_name() after device_initialize() so that device core
-   takes care of cleanup on error
+On Tue, Feb 01, 2022 at 05:13:42PM +0100, Jason A. Donenfeld wrote:
+> This commit replaces the LFSR of mix_pool_bytes() with a straight-
+> forward cryptographic hash function, BLAKE2s, which is already in use
+> for pool extraction. Universal hashing with a secret seed was considered
+> too, something along the lines of <https://eprint.iacr.org/2013/338>,
+> but the requirement for a secret seed makes for a chicken & egg problem.
+> Instead we go with a formally proven scheme using a computational hash
+> function, described in section B.1.8 of <https://eprint.iacr.org/2019/198>.
 
- drivers/counter/counter-core.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+What this patch does makes sense, but I'm having a hard time seeing how it maps
+to the paper cited above.  Your code seems to be treating BLAKE2s as an
+arbitrary-length PRF, but "Construction 8" in section B.1 of the paper is
+working with the raw compression function of a hash function.  Can you clarify?
 
-diff --git a/drivers/counter/counter-core.c b/drivers/counter/counter-core.c
-index 7e0957eea094..6219d62bf223 100644
---- a/drivers/counter/counter-core.c
-+++ b/drivers/counter/counter-core.c
-@@ -22,6 +22,8 @@
- #include "counter-chrdev.h"
- #include "counter-sysfs.h"
- 
-+#define COUNTER_NAME	"counter"
-+
- /* Provides a unique ID for each counter device */
- static DEFINE_IDA(counter_ida);
- 
-@@ -115,8 +117,15 @@ struct counter_device *counter_alloc(size_t sizeof_priv)
- 
- 	device_initialize(dev);
- 
-+	err = dev_set_name(dev, COUNTER_NAME "%d", dev->id);
-+	if (err)
-+		goto err_dev_set_name;
-+
- 	return counter;
- 
-+err_dev_set_name:
-+
-+	counter_chrdev_remove(counter);
- err_chrdev_add:
- 
- 	ida_free(&counter_ida, dev->id);
-@@ -250,7 +259,8 @@ static int __init counter_init(void)
- 	if (err < 0)
- 		return err;
- 
--	err = alloc_chrdev_region(&counter_devt, 0, COUNTER_DEV_MAX, "counter");
-+	err = alloc_chrdev_region(&counter_devt, 0, COUNTER_DEV_MAX,
-+				  COUNTER_NAME);
- 	if (err < 0)
- 		goto err_unregister_bus;
- 
+> -/*
+> - * Originally, we used a primitive polynomial of degree .poolwords
+> - * over GF(2).  The taps for various sizes are defined below.  They
+> - * were chosen to be evenly spaced except for the last tap, which is 1
+> - * to get the twisting happening as fast as possible.
+> - *
 
-base-commit: 7b9c8e1a0ca18a62565ee0e28b23baf7b176e96f
--- 
-2.35.1
+The "Theory of operation" comment at the top of the file needs to be updated
+too.
 
+> +static void _extract_entropy(void *buf, size_t nbytes)
+>  {
+> -	struct blake2s_state state __aligned(__alignof__(unsigned long));
+> -	u8 hash[BLAKE2S_HASH_SIZE];
+> -	unsigned long *salt;
+>  	unsigned long flags;
+> -
+> -	blake2s_init(&state, sizeof(hash));
+> -
+> -	/*
+> -	 * If we have an architectural hardware random number
+> -	 * generator, use it for BLAKE2's salt & personal fields.
+> -	 */
+> -	for (salt = (unsigned long *)&state.h[4];
+> -	     salt < (unsigned long *)&state.h[8]; ++salt) {
+> -		unsigned long v;
+> -		if (!arch_get_random_long(&v))
+> -			break;
+> -		*salt ^= v;
+> +	u8 seed[BLAKE2S_HASH_SIZE], next_key[BLAKE2S_HASH_SIZE];
+> +	struct {
+> +		unsigned long rdrand[32 / sizeof(long)];
+> +		size_t counter;
+> +	} block;
+> +	size_t i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(block.rdrand); ++i) {
+> +		if (!arch_get_random_long(&block.rdrand[i]))
+> +			block.rdrand[i] = random_get_entropy();
+>  	}
+>  
+> -	/* Generate a hash across the pool */
+>  	spin_lock_irqsave(&input_pool.lock, flags);
+> -	blake2s_update(&state, (const u8 *)input_pool_data, POOL_BYTES);
+> -	blake2s_final(&state, hash); /* final zeros out state */
+>  
+> -	/*
+> -	 * We mix the hash back into the pool to prevent backtracking
+> -	 * attacks (where the attacker knows the state of the pool
+> -	 * plus the current outputs, and attempts to find previous
+> -	 * outputs), unless the hash function can be inverted. By
+> -	 * mixing at least a hash worth of hash data back, we make
+> -	 * brute-forcing the feedback as hard as brute-forcing the
+> -	 * hash.
+> -	 */
+> -	__mix_pool_bytes(hash, sizeof(hash));
+> -	spin_unlock_irqrestore(&input_pool.lock, flags);
+> +	/* seed = HASHPRF(last_key, entropy_input) */
+> +	blake2s_final(&input_pool.hash, seed);
+>  
+> -	/* Note that EXTRACT_SIZE is half of hash size here, because above
+> -	 * we've dumped the full length back into mixer. By reducing the
+> -	 * amount that we emit, we retain a level of forward secrecy.
+> -	 */
+> -	memcpy(out, hash, EXTRACT_SIZE);
+> -	memzero_explicit(hash, sizeof(hash));
+> -}
+> +	/* next_key = HASHPRF(key, RDRAND || 0) */
+
+In the above comment, 'key' should be 'seed'.
+
+>  	while (nbytes) {
+> -		extract_buf(tmp);
+> -		i = min_t(int, nbytes, EXTRACT_SIZE);
+> -		memcpy(buf, tmp, i);
+> +		i = min_t(size_t, nbytes, BLAKE2S_HASH_SIZE);
+> +		/* output = HASHPRF(key, RDRAND || ++counter) */
+
+Likewise above.
+
+- Eric

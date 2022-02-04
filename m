@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34EE4A974C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B7D4A974F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352020AbiBDJ7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:59:46 -0500
-Received: from hutie.ust.cz ([185.8.165.127]:60112 "EHLO hutie.ust.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237578AbiBDJ7q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:59:46 -0500
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1643968784; bh=HuUso6bEMXsKcUMes12+B/JL6MuAREtSTqsS7Va9Yk0=;
-        h=From:To:Cc:Subject:Date;
-        b=pSRVUIiVwm0AXy91+5lijVS54FRSb2o9brQR9V7QClMK29mhiL9ZXtFeTutwu9zSJ
-         7afb2w59owbu7AHcFPPp1RtExaFC2VLtI5oPJkV6mo/E9MOEvzSxfxdRVDS9m6UEUO
-         5kueD++/ApYD6EItRf65B1YfsP/oYiDaG0/cM57g=
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [PATCH v2] i2c: pasemi: Drop I2C classes from platform driver variant
-Date:   Fri,  4 Feb 2022 10:59:14 +0100
-Message-Id: <20220204095914.5678-1-povik+lin@cutebit.org>
+        id S1358056AbiBDKAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:00:21 -0500
+Received: from mail-vk1-f179.google.com ([209.85.221.179]:37658 "EHLO
+        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235147AbiBDKAU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 05:00:20 -0500
+Received: by mail-vk1-f179.google.com with SMTP id v192so3375334vkv.4;
+        Fri, 04 Feb 2022 02:00:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0qfMcnOHtfS1bLvkZ8irbT3G/RJ7P/0NHu2x4nFmRtw=;
+        b=2xw2UMpfKiO3WzxCXCh7+reYDrUgvZu9ZTKGMnYTnioClFuf5YnMXuk19YEyiKBWfW
+         nRtTm3q5eBWfnzExPlf8zpYoUjSo4s9cWPvizK4IS7u0IqDauHMtROeVjRuCO/5fDN32
+         9Ky25GWHd7DY/50yN7F7/1oVPvPpewVCNWNRvUmQ01Bc7l/dts5b3lBESmoVIucuuSA7
+         ZFI6j/2LPP9kFTU+gWQSaR/lBnkntbUHR2Qm1DJZdGQj2bxIettJUphjThTpm0aBnYZx
+         r99WeNSOtoBxNKD6gC/v00MX5yda2UVNarRHpC/R1t/Juv4yobKEP1ybpJrbLei6ri+g
+         xJkQ==
+X-Gm-Message-State: AOAM5305xsAT+A6/SlKtjQosR4vVuSpEyW2jGCN6k+kkEMJkA1Z8IrZc
+        O8ukMidOjduMBJRf3pqVVrGplNUh1QF4UA==
+X-Google-Smtp-Source: ABdhPJxs+SX/pZZIfPB2cn5+6xbGmW+ui8LTaVrvuvAtcu06ygFX8AHnIJoUA8DYe23OL9pKVNhoLA==
+X-Received: by 2002:a05:6122:d06:: with SMTP id az6mr742309vkb.22.1643968819243;
+        Fri, 04 Feb 2022 02:00:19 -0800 (PST)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id e1sm296324vsh.19.2022.02.04.02.00.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 02:00:18 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id p7so9922985uao.6;
+        Fri, 04 Feb 2022 02:00:18 -0800 (PST)
+X-Received: by 2002:a67:5f83:: with SMTP id t125mr528892vsb.68.1643968818566;
+ Fri, 04 Feb 2022 02:00:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
+References: <20220131210552.482606-1-daniel.vetter@ffwll.ch> <20220131210552.482606-5-daniel.vetter@ffwll.ch>
+In-Reply-To: <20220131210552.482606-5-daniel.vetter@ffwll.ch>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 4 Feb 2022 11:00:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUL=8xay27vvBvbv0iQ0T0oSwMgxMNrLdDmj03ozAM4Gw@mail.gmail.com>
+Message-ID: <CAMuHMdUL=8xay27vvBvbv0iQ0T0oSwMgxMNrLdDmj03ozAM4Gw@mail.gmail.com>
+Subject: Re: [PATCH 04/21] fbcon: delete a few unneeded forward decl
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Helge Deller <deller@gmx.de>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Claudio Suarez <cssk@net-c.es>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop I2C device-probing classes from platform variant of the PASemi
-controller as it is only used on platforms where I2C devices should
-be instantiated in devicetree. (The I2C_CLASS_DEPRECATED flag is not
-raised as up to this point no devices relied on the old behavior.)
+On Tue, Feb 1, 2022 at 9:50 PM Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
+> I didn't bother with any code movement to fix the others, these just
+> got a bit in the way.
+>
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 
-Fixes: d88ae2932df0 ("i2c: pasemi: Add Apple platform driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
-I am sending v2 as some people got their copy in v1 encrypted with
-their WKD keys (by accident). I changed email provider since.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
- drivers/i2c/busses/i2c-pasemi-core.c | 1 -
- drivers/i2c/busses/i2c-pasemi-pci.c  | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
-index 4e161a4089d8..7728c8460dc0 100644
---- a/drivers/i2c/busses/i2c-pasemi-core.c
-+++ b/drivers/i2c/busses/i2c-pasemi-core.c
-@@ -333,7 +333,6 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
- 	smbus->adapter.owner = THIS_MODULE;
- 	snprintf(smbus->adapter.name, sizeof(smbus->adapter.name),
- 		 "PA Semi SMBus adapter (%s)", dev_name(smbus->dev));
--	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
- 	smbus->adapter.algo = &smbus_algorithm;
- 	smbus->adapter.algo_data = smbus;
- 
-diff --git a/drivers/i2c/busses/i2c-pasemi-pci.c b/drivers/i2c/busses/i2c-pasemi-pci.c
-index 1ab1f28744fb..cfc89e04eb94 100644
---- a/drivers/i2c/busses/i2c-pasemi-pci.c
-+++ b/drivers/i2c/busses/i2c-pasemi-pci.c
-@@ -56,6 +56,7 @@ static int pasemi_smb_pci_probe(struct pci_dev *dev,
- 	if (!smbus->ioaddr)
- 		return -EBUSY;
- 
-+	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
- 	error = pasemi_i2c_common_probe(smbus);
- 	if (error)
- 		return error;
--- 
-2.33.0
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

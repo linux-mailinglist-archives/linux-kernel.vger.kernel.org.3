@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34074A9C04
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645A94A9C10
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359780AbiBDPdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:33:47 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:30192 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359758AbiBDPdo (ORCPT
+        id S1348044AbiBDPhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:37:50 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37617 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230213AbiBDPht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:33:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643988825; x=1675524825;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cMuHKZNdUu+zY6CdLdDCUWTRhz2pGKkgXeGpnTamYJQ=;
-  b=2h8fXKgOVw91o8ltCvmi9EnCnVk9H+MjBoWN/ddCMyTdlbtMu5FlQ9jg
-   tP2ZwmDrB1EHe28ndsVwHQQEztx0wf2UYoimkWqv4ieRm1gIojs6rKKJN
-   Xo3EfU9qiMqQ3l86bJlGZk9geGRlWteSN/KmtqVdcRFXwYaNvpCDVuxUP
-   btkX6bpx5V0ZJZ2+rYO9v4XRw7y8RfDsr7O7vLGzRx9qv4EvGOV4uAc5/
-   +I4x3rxzsJwCfnTy2Khfw/b04mb7khbrhwScLAKVcM36SqAUkvndAKXoW
-   HdeDKNKl1xkPsPwidIdQt1dWwVdYTcw5kHST9Sh97PRxY3m9bX84GzCa+
-   A==;
-IronPort-SDR: zpZdcWx37nKUNCq1otdCfN9xDfpo9XBmq4KvCYeAQV+8TuLvlspfalhFwIiH8pGgnTHshrIjjp
- OURIJqpcWtTPf+RZ5NTrz1hzdnQTbmIugMAT+VL9SuLhJ0JYP59d7kQNqNl132NfS/QJOxLuQg
- I+hRQCDIicV/4dovh7IQONReCDyTJk3feoq7mhRHjdzY3wY6J6i0y7sSomGy3XHYGVITkcnTkw
- y0wQTffP9lxZb6TNYFuHyT+qCWNyWXZadqOJPHIJjWlB6JASRAT6qQT/thOq9RX9ehT1IExfcH
- pAGFoszifsopF/mXTr34MzTg
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="147655033"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Feb 2022 08:33:44 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Feb 2022 08:33:44 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Feb 2022 08:33:42 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH 2/2] arm64: dts: sparx5: Fix for sgpio nodes
-Date:   Fri, 4 Feb 2022 16:35:35 +0100
-Message-ID: <20220204153535.465827-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220204153535.465827-1-horatiu.vultur@microchip.com>
-References: <20220204153535.465827-1-horatiu.vultur@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 4 Feb 2022 10:37:49 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 082A95801BC;
+        Fri,  4 Feb 2022 10:37:49 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Fri, 04 Feb 2022 10:37:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=266dD4NSwPNPJn
+        kKiQXQOc827T09N8MFgpqfM7Ib0kM=; b=WQkfIUHvk6BMHz7UxvmVJTWM1B2eAS
+        NFLEj/2WJhiDCqVK4LaV25jRxHyP8yMdlPgR2+95yJH/f+j1hQOogysYS2Q5j2t5
+        h8DlZty1FAR52I73TTGR8yB1J5ejakPor+tnyK+XWqutSDctwJvyJ9ayeWNxuFxT
+        l+UVSK/3c08r4rlFbxNfOiX+hmck6v420zQ8jOHr6D3DJHjWlnDSy2hhFhXKtZ4F
+        M9CeWH8+5j9dG4zDyTgG3isLDBNC44fupINXP81IqUKzTBkpKdLt5MPxlcI98NW/
+        ZBJujkG5ohnIoIXcfiCjYDutoddHEAE8pikATTJQZm/4i350JpNdvEKw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=266dD4NSwPNPJnkKi
+        QXQOc827T09N8MFgpqfM7Ib0kM=; b=jWb+JiWqDB466InmUuY4zlI8KxsslyTON
+        xsQ6WvlAz8bmsGyJWup0hkroKxeFY86RcclB6AGxsEeMTD/XKpo1/zpa+F8zfHut
+        kl8GRklliYS5OncWziQQ7ivg26XbI/UlPn0Ip07yTz6Y5FFrNz5ppz4jAWcqzJXa
+        VjGx2CZ1dFFuA2aG0iomFcAV7ZJKAPa0cDvrY/q03aVEIGR5D1HskEdVeD+FiXqY
+        aX2upnJaP0je4F3bN/J4mqkV5z5WLMp4Mr2qFad85NRt1XvCKtEgjn0nkBvn7hiE
+        qLmhGo0Qxv99IXI+2pRZIIvZ/PHnB8AQz6+9hvJimV3df0AG/HC6A==
+X-ME-Sender: <xms:S0j9YToEFFW9nqR2aVANEP5NURSY0_aK2qAkRl1w-mtn5QNYx49FJg>
+    <xme:S0j9YdoEwK7B__OZseWIPGRFZ9QPuAgORJrRcfWhBGN3ILmkBqTa7zmPNcBCS_1aK
+    bVynTA0vqyYe3bUKL8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
+    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
+    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:TEj9YQNFdmhbQ2RNMd5dgOXCS7yOIltoaDLH8Jjpetl1UxVlIQv07w>
+    <xmx:TEj9YW6AAzq7I57IsagmTtoROi5hqscSKZVdpzP877iio5ksqUkZkQ>
+    <xmx:TEj9YS5HjN7QftxsglNmwTFVlO5g1aLDzgKhWgPTOPVaouC4X9H0nw>
+    <xmx:TEj9YfwAa6sjpx76YJXnKq8xxGolKegyXkgXKjxk0JURDWl1BjkVvOBqpjqXCz1c>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E3DF2F60083; Fri,  4 Feb 2022 10:37:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
+Mime-Version: 1.0
+Message-Id: <69db93e6-f542-4d59-8f3d-39392d3e8b06@www.fastmail.com>
+In-Reply-To: <20220204091912.329106021@linuxfoundation.org>
+References: <20220204091912.329106021@linuxfoundation.org>
+Date:   Fri, 04 Feb 2022 10:36:37 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com
+Subject: Re: [PATCH 5.4 00/10] 5.4.177-rc1 review
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the support for irqs was added for sgpio driver the memory size was
-not updated. Because the irq registers are found at address 0x108.
+On Fri, Feb 4, 2022, at 4:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.177 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
 
-Fixes: d0f482bb06f944 ("arm64: dts: sparx5: Add the Sparx5 switch node")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- arch/arm64/boot/dts/microchip/sparx5.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I was able to compile and boot on my x86_64 test system with no errors or regressions.
 
-diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-index 787ebcec121d..b9f2e2fa3d43 100644
---- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-@@ -305,7 +305,7 @@ sgpio0: gpio@61101036c {
- 			pinctrl-names = "default";
- 			resets = <&reset 0>;
- 			reset-names = "switch";
--			reg = <0x6 0x1101036c 0x100>;
-+			reg = <0x6 0x1101036c 0x118>;
- 			sgpio_in0: gpio@0 {
- 				compatible = "microchip,sparx5-sgpio-bank";
- 				reg = <0>;
-@@ -335,7 +335,7 @@ sgpio1: gpio@611010484 {
- 			pinctrl-names = "default";
- 			resets = <&reset 0>;
- 			reset-names = "switch";
--			reg = <0x6 0x11010484 0x100>;
-+			reg = <0x6 0x11010484 0x118>;
- 			sgpio_in1: gpio@0 {
- 				compatible = "microchip,sparx5-sgpio-bank";
- 				reg = <0>;
-@@ -365,7 +365,7 @@ sgpio2: gpio@61101059c {
- 			pinctrl-names = "default";
- 			resets = <&reset 0>;
- 			reset-names = "switch";
--			reg = <0x6 0x1101059c 0x100>;
-+			reg = <0x6 0x1101059c 0x118>;
- 			sgpio_in2: gpio@0 {
- 				reg = <0>;
- 				compatible = "microchip,sparx5-sgpio-bank";
--- 
-2.33.0
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
+Best,
+Slade

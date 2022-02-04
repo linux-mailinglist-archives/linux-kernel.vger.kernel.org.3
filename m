@@ -2,155 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4452F4A9FCE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4EC4A9FD2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbiBDTM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbiBDTM4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:12:56 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C451C061714;
-        Fri,  4 Feb 2022 11:12:56 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id l24-20020a17090aec1800b001b55738f633so8296361pjy.1;
-        Fri, 04 Feb 2022 11:12:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o+2vQhaK54H9Hdp01q4kx6TzLMZbpfp4A4zBHmmTnPc=;
-        b=kC+yjJYVoYE0SMFrNpOfqbJLywLEVTVjVFXJH5t/nVKAI4qoNmGB2tNJhLvh0K6ZMo
-         fZM5nF2Sif+TYJOWv81vRU/v5r5Zdov66tmOZFfmWHJcFw6EKU6UGC9CvV1rJiM/Ph0T
-         xxD++0G7RFrHIAcOJrQLb+8i13VDY+jK4NyruwM5ev0Q8d5/oUcS2hKsMgg3LlCxilIi
-         OBC7yFC/tXYAEzOYohoifQ5tOVYA+r6Yc9onVPqb/VJJAisIty14jtME3e7WvwqAS2g8
-         RbpZl5Mg5xEoOHbnsXF7KddBAvz1eBSy8OYY7+UX0eVtRgLmcuR1XEWh2BX4tB7t7L4z
-         gX2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o+2vQhaK54H9Hdp01q4kx6TzLMZbpfp4A4zBHmmTnPc=;
-        b=ObqXIoy5FfdaHMGASSLaLL/MzqN6CvfMjrFaYzPrX8eNSuyJ5oTaSK+j+G1te04y3Q
-         t1jVPL0BBo06TujPbRKjoH3T+u4ORD+0/eGs5zUMAM+nrgnYmb796U8qrgjmPMmnFG8e
-         5/3uItJWRk+hwvkTVOoBtXmTu5lAcJcc4Zad32kR6aNWhyYm2ePknhwDQgY9HZtc19bf
-         iDVXGnQVlRNEYbzYWdeypg+K1ptJHtTCU8g3SE2cl5YzcGt2rZkTjQkcKEWcrmJ+FIVF
-         5gSQL2H15SwAVuALXUHCk1vbwWDA3BDZqmzmJZjjMJNCye5pQ0t1yBAAc5mgdA3pG1Zk
-         Goyw==
-X-Gm-Message-State: AOAM5315tU1v5yVwFJsANPrGvHdx3mApKWcOJI26AS+C6P6etlGZHD79
-        LCSei8zZftG11El3MllqkLqZ2OLX91htwllgGpM=
-X-Google-Smtp-Source: ABdhPJyPI8usXYMumMnrEQ3nLDq5zjec+fco1omgVZwxBeH6nOTi/fUN2f8Dc8+wqicpUpw+xbOinGtCvbA54nwhPh0=
-X-Received: by 2002:a17:90a:df0e:: with SMTP id gp14mr436884pjb.57.1644001975488;
- Fri, 04 Feb 2022 11:12:55 -0800 (PST)
+        id S232099AbiBDTOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:14:10 -0500
+Received: from mga05.intel.com ([192.55.52.43]:3048 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231728AbiBDTOI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:14:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644002048; x=1675538048;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IqYgTa7UYBztaNoVH32tJ/hHlFS47elux5CJXuQPtqU=;
+  b=C6R/iPPjlIw2g1O9PBK41vOCILgb90UkO+gBTLk6VVnvq+RU4Qo3bqb1
+   Id1T/4dyw494E53s1Fh1Zeazlfwz9HuIJzU693CA0yDOHbRj+6hSpXkLA
+   xoJ66Atl7puQ+28QOOacmvDKOtZv2cDShaZ/3QTfTkG3Cmx6o+CpTUqPE
+   UMajEYaqrYjvrm9feOCNO6Rt1Rc4rN6pwuR8HiCpTA4reuq3Va5WxW7UN
+   sJBwMgAxXaXNkHs7WqXcnfwXfC5yvg4hJLQopamguCbssjTfQm3LMv7Fk
+   OsOCb6pH6P2aVB6ekZMXTNorqs0Ba5rl7Zqz6voa3Qbcuz4CQodeGQxS2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334823189"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="334823189"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:14:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="677185868"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:14:08 -0800
+Date:   Fri, 4 Feb 2022 11:14:07 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
+Message-ID: <20220204191407.GZ785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-7-ira.weiny@intel.com>
+ <b19f8123-a6dc-9004-efb9-2085fbccb7c2@intel.com>
 MIME-Version: 1.0
-References: <20220204183316.328937-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20220204183316.328937-1-ben.dooks@codethink.co.uk>
-From:   David Abdurachmanov <david.abdurachmanov@gmail.com>
-Date:   Fri, 4 Feb 2022 21:12:19 +0200
-Message-ID: <CAEn-LTo96qGWyq7Zp9=VUaJh_kAW2JA7hRKwVzrSyz=xwDT=rg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: fu740: RFC: force gen1 and get devices probing
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>, macro@orcam.me.uk
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b19f8123-a6dc-9004-efb9-2085fbccb7c2@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 8:35 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
->
-> The dw pcie core does not probe devices unless this fix
-> from u-boot is applied. The link must be changed to gen1
-> and then the system will see all the other pcie devices
-> behind the unmatched board's bridge.
->
-> This is a quick PoC to try and get our test farm working
-> when a system does not have the pcie initialised by a
-> u-boot script.
->
-> I will look at a proper patch when I am back in the office
+On Fri, Jan 28, 2022 at 04:06:29PM -0800, Dave Hansen wrote:
+> On 1/27/22 09:54, ira.weiny@intel.com wrote:
+> > @@ -1867,6 +1867,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
+> >  	depends on X86_64 && (CPU_SUP_INTEL || CPU_SUP_AMD)
+> >  	select ARCH_USES_HIGH_VMA_FLAGS
+> >  	select ARCH_HAS_PKEYS
+> > +	select ARCH_HAS_SUPERVISOR_PKEYS
+> 
+> For now, this should be:
+> 
+> 	select ARCH_HAS_SUPERVISOR_PKEYS if CPU_SUP_INTEL
+> 
+> unless the AMD folks speak up and say otherwise. :)
 
-Hi,
+Done for now.
 
-Have you looked into the patches posted for Linux and U-Boot from
-Maciej W. Rozycki?
-
-On the Linux side (not reviewed yet):
-[PATCH v3] pci: Work around ASMedia ASM2824 PCIe link training failures
-https://www.spinics.net/lists/linux-pci/msg120112.html
-
-The U-Boot fix was merged a few days ago.
-
-david
-
-> ---
->  drivers/pci/controller/dwc/pcie-fu740.c | 37 +++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
-> index 960e58ead5f2..44f792764e45 100644
-> --- a/drivers/pci/controller/dwc/pcie-fu740.c
-> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
-> @@ -181,11 +181,48 @@ static void fu740_pcie_init_phy(struct fu740_pcie *afp)
->         fu740_phyregwrite(1, PCIEX8MGMT_PHY_LANE3_BASE, PCIEX8MGMT_PHY_INIT_VAL, afp);
->  }
->
-> +/* u-boot forces system to gen1 otherwise nothing probes... */
-> +static void pcie_sifive_force_gen1(struct dw_pcie *dw, struct fu740_pcie *afp )
-> +{
-> +       unsigned val;
-> +
-> +#if 0
-> +       /* u-boot code */
-> +        /* ctrl_ro_wr_enable */
-> +        val = readl(sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
-> +        val |= DBI_RO_WR_EN;
-> +        writel(val, sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
-> +
-> +        /* configure link cap */
-> +        linkcap = readl(sv->dw.dbi_base + PF0_PCIE_CAP_LINK_CAP);
-> +        linkcap |= PCIE_LINK_CAP_MAX_SPEED_MASK;
-> +        writel(linkcap, sv->dw.dbi_base + PF0_PCIE_CAP_LINK_CAP);
-> +
-> +        /* ctrl_ro_wr_disable */
-> +        val &= ~DBI_RO_WR_EN;
-> +        writel(val, sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
-> +#endif
-> +
-> +       val = readl_relaxed(dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
-> +       val |= PCIE_DBI_RO_WR_EN;
-> +       writel_relaxed(val, dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
-> +
-> +       val = readl(dw->dbi_base + 0x70 + 0x0c);
-> +       val |= 0xf;
-> +       writel(val, dw->dbi_base + 0x70 + 0x0c);
-> +
-> +       val = readl_relaxed(dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
-> +       val &= ~PCIE_DBI_RO_WR_EN;
-> +       writel_relaxed(val, dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
-> +}
-> +
->  static int fu740_pcie_start_link(struct dw_pcie *pci)
->  {
->         struct device *dev = pci->dev;
->         struct fu740_pcie *afp = dev_get_drvdata(dev);
->
-> +       pcie_sifive_force_gen1(pci, afp);
-> +
->         /* Enable LTSSM */
->         writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
->         return 0;
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Ira

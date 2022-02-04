@@ -2,64 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFA64A98D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CA24A98D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiBDMCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:02:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:39440 "EHLO foss.arm.com"
+        id S239121AbiBDMDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:03:25 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9665 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230211AbiBDMCS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:02:18 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A003F1480;
-        Fri,  4 Feb 2022 04:02:17 -0800 (PST)
-Received: from [10.57.88.9] (unknown [10.57.88.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A782A3F40C;
-        Fri,  4 Feb 2022 04:02:15 -0800 (PST)
-Message-ID: <0c235c48-49b3-42ee-f65b-0043b599bcd3@arm.com>
-Date:   Fri, 4 Feb 2022 12:02:13 +0000
+        id S230211AbiBDMDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 07:03:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643976202; x=1675512202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=abpUaTtKY8xSEdJyP7jpPeDD/RGtb2t5uYh87xuapLg=;
+  b=TTrBwStQwBp9CLjeadUDSEcf9iilpexkmeUK6nlwof97SJ4yf8SmFAhy
+   351GAiP0tA1/P2QId05N6RzLauUYAgNXbzXKguHeGESrm4WDhSnEw4h/R
+   nuBoV6FDyIsrYY9wGr2cknzSO+otDerAZtTqZTx8TRFtH1F9ufD76u9Rr
+   0OblILHR+rANrzYlRSUZecASuS1Pd0vT7irdiCgVavDGxC0xq0bwRQdg9
+   sEwIlFUblp81zDyaBb7jGkahveOA2Wv0Crq4M7ZcdpoZldtfV2/oufhWs
+   1n/hbnFJkVz+1sPQ/kP7fClu9dBoMxrVbyDxtRVOW8HTT5ie5tqNRUBxB
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="309101865"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="309101865"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 04:03:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="566724322"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2022 04:03:20 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFxJ9-000XZV-J6; Fri, 04 Feb 2022 12:03:19 +0000
+Date:   Fri, 4 Feb 2022 20:03:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonghyeon Kim <tome01@ajou.ac.kr>
+Cc:     kbuild-all@lists.01.org, Jonghyeon Kim <tome01@ajou.ac.kr>,
+        SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/damon: Rebase DAMON_RECALIM watermarks for NUMA nodes
+Message-ID: <202202041942.7wbmfmQ3-lkp@intel.com>
+References: <20220204064059.6244-1-tome01@ajou.ac.kr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v2] coresight: trbe: Move check for kernel page table
- isolation from EL0 to probe
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        coresight@lists.linaro.org
-References: <20220203190159.3145272-1-sudeep.holla@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220203190159.3145272-1-sudeep.holla@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204064059.6244-1-tome01@ajou.ac.kr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/2022 19:01, Sudeep Holla wrote:
-> Currently with the check present in the module initialisation, it shouts
-> on all the systems irrespective of presence of coresight trace buffer
-> extensions.
-> 
-> Similar to Arm SPE perf driver, move the check for kernel page table
-> isolation from  EL0 to the device probe stage instead of the module
-> initialisation so that it complains only on the systems that support TRBE.
-> 
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Mike Leach <mike.leach@linaro.org>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: coresight@lists.linaro.org
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Hi Jonghyeon,
 
-Thanks, I have now queued this.
+Thank you for the patch! Yet something to improve:
 
-https://git.kernel.org/coresight/c/ebbce265bba164c4f0d5271c277a540bd3b2fd3c
+[auto build test ERROR on hnaz-mm/master]
 
-Kind regards
-Suzuki
+url:    https://github.com/0day-ci/linux/commits/Jonghyeon-Kim/mm-damon-Rebase-DAMON_RECALIM-watermarks-for-NUMA-nodes/20220204-144249
+base:   https://github.com/hnaz/linux-mm master
+config: nds32-randconfig-r031-20220130 (https://download.01.org/0day-ci/archive/20220204/202202041942.7wbmfmQ3-lkp@intel.com/config)
+compiler: nds32le-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/68abc90556004f51e2f388a1d87d0d2690340b8d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jonghyeon-Kim/mm-damon-Rebase-DAMON_RECALIM-watermarks-for-NUMA-nodes/20220204-144249
+        git checkout 68abc90556004f51e2f388a1d87d0d2690340b8d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nds32 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   nds32le-linux-ld: mm/damon/core.o: in function `kdamond_fn':
+   core.c:(.text+0xb88): undefined reference to `si_meminfo_node'
+>> nds32le-linux-ld: core.c:(.text+0xb8c): undefined reference to `si_meminfo_node'
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

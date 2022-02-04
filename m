@@ -2,98 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FE64AA153
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3774AA161
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236129AbiBDUpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239627AbiBDUpX (ORCPT
+        id S239221AbiBDUr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:47:29 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:34182 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239890AbiBDUr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:45:23 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302B2C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:45:22 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 9so8927699iou.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:45:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ppGT+raWqgqqnN9s+r4RdjtGpdEKJ0JDJJLNMb3GkT4=;
-        b=Y+SGEPCT39d6nTdprEzcuB/1E2I10SK3H5VnNnBCTqviWf9TZ/07ZJjjoPIAO13nPs
-         Sbv7HgI7W50jlCwQTfcW8LZFrJI4MoCb48QsGYB9a6yE8HSKyKeax7SRq10A2a878C88
-         EiHYibPHJR33yi0mpGg7ZEcQjwOEy/H9TK2aM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ppGT+raWqgqqnN9s+r4RdjtGpdEKJ0JDJJLNMb3GkT4=;
-        b=pytw/RMNN3Kw50E54yYzibqLWmQU6W9iTYrPucCzayd52hkxVDukMDNm8yFSZDUaee
-         VleIbdkZJCCgG1KPrJjb81kekW/n3BpDCgw4lFPvgpC8FLTG2UgMVkNDwYdCSuI4xdo+
-         14jeKvYMz3lPPwRSXNCA0RhLM11vUcPekCrn05iYxnbCSnFLd6SJF2o8TtP5MltJ7qAo
-         ecpC7XYyzOKEWD1e4O8eSvVI5AHrLjCuTgG34r0OHsgULNTGffB2EDypA4eTcBuzvxnn
-         DGQvPONQu/binaeJZDwC6rhXhQlZ2/Hhum6+60tEOfui0EjGCjS7V9P3TWCcSJs6olpd
-         sIKw==
-X-Gm-Message-State: AOAM530KXCV6mMtTpwECJyBpNSENRDKlGjwIi/fO8LzZlXfYWJpcvGTR
-        u3YbpPDE4Fn/jKSPzSORUaJQQQ==
-X-Google-Smtp-Source: ABdhPJwVpeHnhkM/J9L4r1eIvjRG2QNUrOOQM3WEz0dfY/B4PC+4Cx7zrl7A7+NEs6OtxcZ7g/gyqw==
-X-Received: by 2002:a05:6602:1513:: with SMTP id g19mr418021iow.30.1644007521642;
-        Fri, 04 Feb 2022 12:45:21 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id a4sm1413618ili.80.2022.02.04.12.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 12:45:21 -0800 (PST)
-Subject: Re: [PATCH v2] selftests/ir: fix build with ancient kernel headers
-To:     Sean Young <sean@mess.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <Yfl+LOPk+KQdc0Us@gofer.mess.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2d0da794-6fbd-1b82-eca2-68d9451fff46@linuxfoundation.org>
-Date:   Fri, 4 Feb 2022 13:45:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 4 Feb 2022 15:47:26 -0500
+Date:   Fri, 4 Feb 2022 21:47:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644007645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BrHK2jZ1689vU2EId7U6HmWTMJfVQXeuCyDVsInCooc=;
+        b=LBMgka64d45aJLW4QEbMZHQ7I3PHs/lUdmImZsV0tq3pNjVHfjba9scHpZEhD4Ynq0dECG
+        vkwTMa42KGi7OwH9pmiiri23SfxdFJrjhfE5HnIv14NjCaXNGLnzWnwui4xQKdsmbdyx7v
+        T/XW/ZuQUnT1PYp8NqcG50x18Y3vInFMSVMJUqKNHAsN+u/tpukM5MKiM2tIobyAEO1XNy
+        6AeRA+/S8djqa7CeKEdKlMRIxdTLgP7ySDCj1bjfWFX0IvnMjtZ8abkNFxAYZcCFlFaVPj
+        weHZdVcAeJ/SVwHAh26EJWcEji2quNxHV8ixCAbBDL06dENWOyA93iS85xzQ2Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644007645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BrHK2jZ1689vU2EId7U6HmWTMJfVQXeuCyDVsInCooc=;
+        b=eqUHi9IQYJVE3JCELWPP+lBTAkm/6YcD7ky9YJ/QSXSbaG8XX9pP3tFYq4YzadjIYacAu6
+        BPhKPhyMDuk4VJCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: Re: [PATCH RFC v1] random: do not take spinlocks in irq handler
+Message-ID: <Yf2Q25T04cAxJY3H@linutronix.de>
+References: <YfgPWatDzkn2ozhm@linutronix.de>
+ <20220204153149.51428-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-In-Reply-To: <Yfl+LOPk+KQdc0Us@gofer.mess.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220204153149.51428-1-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/22 11:38 AM, Sean Young wrote:
-> Since commit e2bcbd7769ee ("tools headers UAPI: remove stale lirc.h"),
-> the build of the selftests fails on rhel 8 since its version of
-> /usr/include/linux/lirc.h has no definition of RC_PROTO_RCMM32, etc [1].
+On 2022-02-04 16:31:49 [+0100], Jason A. Donenfeld wrote:
+> Sebastian - what do you think of this as a deferred scheme to get rid of
+> that locking? Any downsides of using workqueues like this?
+
+I backported additionally the commit
+   random: use computational hash for entropy extraction
+
+and thrown both into my v5.17-RT tree. From the debugging it looks good.
+Will do more testing more next week.
+|          <idle>-0       [005] dn.h2..  9189.894548: workqueue_queue_work: work struct=00000000ad070cf1 function=mix_interrupt_randomness wor
+|kqueue=events req_cpu=8192 cpu=5
+|     kworker/5:2-1071    [005] .......  9189.894594: workqueue_execute_start: work struct 00000000ad070cf1: function mix_interrupt_randomness
+|     kworker/5:2-1071    [005] .......  9189.894595: workqueue_execute_end: work struct 00000000ad070cf1: function mix_interrupt_randomness
+
+>  drivers/char/random.c         | 67 +++++++++++++++++++----------------
+>  include/trace/events/random.h |  6 ----
+>  2 files changed, 36 insertions(+), 37 deletions(-)
 > 
-> [1] https://lkml.org/lkml/2022/1/28/275
-> 
-> Fixes: e2bcbd7769ee ("tools headers UAPI: remove stale lirc.h")
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Sean Young <sean@mess.org>
-> ---
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 455615ac169a..a74897fcb269 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -383,12 +383,6 @@ static void _mix_pool_bytes(const void *in, int nbytes)
+>  	blake2s_update(&input_pool.hash, in, nbytes);
+>  }
+>  
+> -static void __mix_pool_bytes(const void *in, int nbytes)
+> -{
+> -	trace_mix_pool_bytes_nolock(nbytes, _RET_IP_);
+> -	_mix_pool_bytes(in, nbytes);
+> -}
+> -
+>  static void mix_pool_bytes(const void *in, int nbytes)
+>  {
+>  	unsigned long flags;
+> @@ -400,11 +394,13 @@ static void mix_pool_bytes(const void *in, int nbytes)
+>  }
+>  
+>  struct fast_pool {
+> -	u32 pool[4];
+> +	struct work_struct mix;
+>  	unsigned long last;
+> +	u32 pool[4];
+> +	atomic_t count;
+>  	u16 reg_idx;
+> -	u8 count;
+>  };
+> +#define FAST_POOL_MIX_INFLIGHT (1U << 31)
+>  
+>  /*
+>   * This is a fast mixing routine used by the interrupt randomness
+> @@ -434,7 +430,6 @@ static void fast_mix(struct fast_pool *f)
+>  
+>  	f->pool[0] = a;  f->pool[1] = b;
+>  	f->pool[2] = c;  f->pool[3] = d;
+> -	f->count++;
+>  }
+>  
+>  static void process_random_ready_list(void)
+> @@ -985,12 +980,37 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+>  	return *ptr;
+>  }
+>  
+> +static void mix_interrupt_randomness(struct work_struct *work)
+> +{
+> +	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
+> +
+> +	fast_pool->last = jiffies;
+> +
+> +	/* Since this is the result of a trip through the scheduler, xor in
+> +	 * a cycle counter. It can't hurt, and might help.
+> +	 */
 
-Applied now to linux-kselftest fixes branch - decided to take
-it through since there is no real dependency on previous patch
-as far as the change goes.
+Please do a proper two line comment.
 
-Fixes: e2bcbd7769ee ("tools headers UAPI: remove stale lirc.h")
+> +	fast_pool->pool[3] ^= random_get_entropy();
+> +
+> +	if (unlikely(crng_init == 0)) {
+> +		if (crng_fast_load((u8 *)&fast_pool->pool, sizeof(fast_pool->pool)) > 0)
+> +			atomic_set(&fast_pool->count, 0);
+> +		else
+> +			atomic_and(~FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
+> +		return;
+> +	}
+> +
+> +	mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+> +	atomic_set(&fast_pool->count, 0);
+> +	credit_entropy_bits(1);
+> +}
+> +
+>  void add_interrupt_randomness(int irq)
+>  {
+>  	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+>  	struct pt_regs *regs = get_irq_regs();
+>  	unsigned long now = jiffies;
+>  	cycles_t cycles = random_get_entropy();
+> +	unsigned int new_count;
+>  	u32 c_high, j_high;
+>  	u64 ip;
+>  
+> @@ -1008,29 +1028,14 @@ void add_interrupt_randomness(int irq)
+>  	fast_mix(fast_pool);
+>  	add_interrupt_bench(cycles);
+>  
+> -	if (unlikely(crng_init == 0)) {
+> -		if ((fast_pool->count >= 64) &&
+> -		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+> -			fast_pool->count = 0;
+> -			fast_pool->last = now;
+> -		}
+> -		return;
+> +	new_count = (unsigned int)atomic_inc_return(&fast_pool->count);
+> +	if (new_count >= 64 && new_count < FAST_POOL_MIX_INFLIGHT &&
+> +	    (time_after(now, fast_pool->last + HZ) || unlikely(crng_init == 0))) {
+> +		if (unlikely(!fast_pool->mix.func))
+> +			INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
+> +		atomic_or(FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
 
-thanks,
--- Shuah
+No need for atomic. If this is truly per-CPU then there will be no
+cross-CPU access, right?
+Therefore I would suggest to use __this_cpu_inc_return() which would avoid
+the sync prefix for the inc operation. Same for __this_cpu_or(). And you
+could use unsigned int.
+
+> +		schedule_work(&fast_pool->mix);
+
+schedule_work() has a check which ensures that the work is not scheduled
+again if still pending. But we could consider it fast-path and say that
+it makes sense to keep it.
+You could use schedule_work_on() so it remains on the local CPU. Makes
+probably even more sense on NUMA systems. Otherwise it is an unbound
+worker and the scheduler (and even the worker)_could_ move it around.
+With schedule_work_on() it still _could_ be moved to another CPU during
+CPU hotplug. Therefore you should check in mix_interrupt_randomness() if
+the worker is == this_cpu_ptr() and otherwise abort. Puh this asks for a
+CPU-hotplug handler to reset FAST_POOL_MIX_INFLIGHT in the CPU-UP path.
+That would be the price for using this_cpu_inc()/or ;)
+This might even classify for using system_highpri_wq (e.g.
+  queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+).
+>  	}
+> -
+> -	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
+> -		return;
+> -
+> -	if (!spin_trylock(&input_pool.lock))
+> -		return;
+> -
+> -	fast_pool->last = now;
+> -	__mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+> -	spin_unlock(&input_pool.lock);
+> -
+> -	fast_pool->count = 0;
+> -
+> -	/* award one bit for the contents of the fast pool */
+> -	credit_entropy_bits(1);
+>  }
+>  EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+
+Sebastian

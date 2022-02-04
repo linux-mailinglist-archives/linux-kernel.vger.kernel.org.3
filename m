@@ -2,184 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327954A9EA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421B74A9EAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377366AbiBDSIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:08:10 -0500
-Received: from mail-yb1-f175.google.com ([209.85.219.175]:37841 "EHLO
-        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiBDSII (ORCPT
+        id S1377379AbiBDSJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231759AbiBDSJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:08:08 -0500
-Received: by mail-yb1-f175.google.com with SMTP id v190so4871265ybv.4;
-        Fri, 04 Feb 2022 10:08:08 -0800 (PST)
+        Fri, 4 Feb 2022 13:09:11 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F1CC061714;
+        Fri,  4 Feb 2022 10:09:11 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id o12so21653764eju.13;
+        Fri, 04 Feb 2022 10:09:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZOk1AjwIVX9pqDuRbELOCa6z4G8rYwIr5B63rOLPi6w=;
+        b=WzlYqpQ9SFXr3PX0uYzI1THJe1HOJjHnQYjFosTkecnxX56r1yjc/1jr7dEL2onX98
+         ojbxDzjeA15k37t+POMIoGbnCdw0F0/Q945oDIATQCU3YuHJMrym9OBMUy7ED58xFS2f
+         OvDj3LeIFKuByu9wtCVJj9zR/KCHwgCzcufanpT3Rj+fiCD8TpGIYoPiv8uZEfXPGKVL
+         ivQUAqE+Wt1bWyxBLkf41RjEpx0xgnyW8E3SrjnhEJsr0lkM46GugLbkvvtIrsm+GP7o
+         N8n6JUrCA37Izve+pGlgY9XFG28XEHH0TdJHSPy9bF4Zz2O0Q+PYpnYPHoW5yB/8LVVC
+         dVTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tzUcaIEImdF9ZfeiorQex0NTCKZ9P1s8gIbYQ0VJVoc=;
-        b=NsZqPZL8uJuFdoMjcUUp4iJgY6/VrG5x9EE3Jkjvcuy8Hr/SCjQsudMRKQ7tfX/bvL
-         eiX8D9u/QCN57l94RegmLWgz7JFWNtPuQ7DHyRl7y3hTQyod3YPTjyExBsFxUr2H4sXG
-         pjqGUZl89ERsrmIpxu5Tan51y/TWLLYRjicW6W+57eLVMqPG8+l9uB0ZGgrpIYQSFyVq
-         P63b4WpaxIfe0qXmyrWWsbf0n7mvdZSIasdwkGKTL93RmdTpDr9XAMEMi7fRS+OPoaN8
-         8UG9GnGjkK1ApGgCqszVjBezMgbFZ/8q5QgMugon4Xv54IdyUgxYz2Id/uqN9ogU7CjJ
-         IPnQ==
-X-Gm-Message-State: AOAM532PW08/SXIk5T5YNv4EdTw/MR3Qu6lM5jK5XoNo49tGX6/M/1Fv
-        3LtwBr+37Yk2exAiaibsn1/c4jhOz8wV64OfchQ=
-X-Google-Smtp-Source: ABdhPJxAL91eBAqtrWjpV0BxhH1GVXsDA1TEJzQEsTef4kYwIT1aeMckqA8/Ilmt7L0QE7gNfF0p6VX5/dD3DWxtceU=
-X-Received: by 2002:a25:7e81:: with SMTP id z123mr359595ybc.466.1643998088291;
- Fri, 04 Feb 2022 10:08:08 -0800 (PST)
+        bh=ZOk1AjwIVX9pqDuRbELOCa6z4G8rYwIr5B63rOLPi6w=;
+        b=QA04E4k73ZJtj92axiBOk+KYqgXqWgFZ6IzjlP6IeDHmvZ/P/osYFnjJr8jkEbTfDI
+         Th6D3+SB4ll19e6lvbvVz1Fr9znIzK7F4h6EZoitB+1iD18ZNu7d41L4JGWT4TpCKqui
+         yTm6v0C2SkQ/QxKoV5GlJ1dYVU8cd6JislHxxxgj1A0AHc1amiPQTkoGhg1VyKyiEc0l
+         SWG8pDYMRHmyyjQcncD4femhweIa+Tsh9bmzHxAhnbdJsZGD0UtjsB2SKbmZBw5VUE7p
+         qhSz2ynhWNWNd7wDBQh2Q7Vykzsd7904Fcs7A4kCiQqgL9NGNyu50Ij15P4+H4ltoOPz
+         1tUQ==
+X-Gm-Message-State: AOAM532lr89lYjqIIZICbYIxEIlbAkcO1TkRimM+OMn5tAROetg2uNUx
+        AYpT5+1M3mNpplIyO7YSj9pI1CBw9GOIJa0xn2APOf2p
+X-Google-Smtp-Source: ABdhPJwafFKJN7/nW/YfpdDz6GBq+Lu04Yh1LmAOb61IjhGfURB/qgcTa/AMBwlAWsDw2vk5++ZSGS4R2gxsK5B101s=
+X-Received: by 2002:a17:906:30c9:: with SMTP id b9mr61442ejb.377.1643998149504;
+ Fri, 04 Feb 2022 10:09:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220111155419.943980-1-Pierre.Gondois@arm.com>
-In-Reply-To: <20220111155419.943980-1-Pierre.Gondois@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Feb 2022 19:07:57 +0100
-Message-ID: <CAJZ5v0hqzsoANFVPJXqYM6ZL4Ad6rDh=+G0qKmnmKLtyvADwmg@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: CPPC: Fix performance/frequency conversion
-To:     Pierre Gondois <Pierre.Gondois@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20220203201207.1075933-1-shy828301@gmail.com> <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
+In-Reply-To: <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 4 Feb 2022 10:08:57 -0800
+Message-ID: <CAHbLzko1izwBERS6auEna+eAGzQVA7zkDihMjT=tt_EBdhfmaA@mail.gmail.com>
+Subject: Re: [v6 PATCH] block: introduce block_rq_error tracepoint
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "hch@infradead.org" <hch@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 11, 2022 at 4:54 PM Pierre Gondois <Pierre.Gondois@arm.com> wrote:
+On Thu, Feb 3, 2022 at 6:46 PM Chaitanya Kulkarni <chaitanyak@nvidia.com> wrote:
 >
-> CPUfreq governors request CPU frequencies using information
-> on current CPU usage. The CPPC driver converts them to
-> performance requests. Frequency targets are computed as:
->         target_freq = (util / cpu_capacity) * max_freq
-> target_freq is then clamped between [policy->min, policy->max].
+> Yang,
 >
-> The CPPC driver converts performance values to frequencies
-> (and vice-versa) using cppc_cpufreq_perf_to_khz() and
-> cppc_cpufreq_khz_to_perf(). These functions both use two different
-> factors depending on the range of the input value. For
-> cppc_cpufreq_khz_to_perf():
-> - (NOMINAL_PERF / NOMINAL_FREQ) or
-> - (LOWEST_PERF / LOWEST_FREQ)
-> and for cppc_cpufreq_perf_to_khz():
-> - (NOMINAL_FREQ / NOMINAL_PERF) or
-> - ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
+> On 2/3/22 12:12, Yang Shi wrote:
+> > Currently, rasdaemon uses the existing tracepoint block_rq_complete
+> > and filters out non-error cases in order to capture block disk errors.
+> >
+> > But there are a few problems with this approach:
+> >
+> > 1. Even kernel trace filter could do the filtering work, there is
+> >     still some overhead after we enable this tracepoint.
+> >
+> > 2. The filter is merely based on errno, which does not align with kernel
+> >     logic to check the errors for print_req_error().
+> >
+> > 3. block_rq_complete only provides dev major and minor to identify
+> >     the block device, it is not convenient to use in user-space.
+> >
+> > So introduce a new tracepoint block_rq_error just for the error case.
+> > With this patch, rasdaemon could switch to block_rq_error.
+> >
 >
-> This means:
-> 1- the functions are not inverse for some values:
->    (perf_to_khz(khz_to_perf(x)) != x)
-> 2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
->    a different value from LOWEST_FREQ due to integer approximation
-> 3- it is implied that performance and frequency are proportional
->    (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
+> This patch looks good, but I've a question for you.
 >
-> This patch changes the conversion functions to an affine function.
-> This fixes the 3 points above.
+> We already have a tracepoint for the request completion
+> block_rq_complete(). We are adding a new tracepoint blk_rq_error()
+> that is also similar to what blk_rq_complete() reports.
+> Similar call sites  :-
+> trace_block_rq_complete(req, error, nr_bytes);
+> trace_block_rq_error(req, error, nr_bytes);
 >
-> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
-> Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
-> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
->  1 file changed, 21 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index db17196266e4..5024d9af2e6e 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
->
->  /*
->   * If CPPC lowest_freq and nominal_freq registers are exposed then we can
-> - * use them to convert perf to freq and vice versa
-> - *
-> - * If the perf/freq point lies between Nominal and Lowest, we can treat
-> - * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
-> - * and extrapolate the rest
-> - * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
-> + * use them to convert perf to freq and vice versa. The conversion is
-> + * extrapolated as an affine function passing by the 2 points:
-> + *  - (Low perf, Low freq)
-> + *  - (Nominal perf, Nominal perf)
->   */
->  static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
->                                              unsigned int perf)
->  {
->         struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-> +       s64 retval, offset = 0;
->         static u64 max_khz;
->         u64 mul, div;
->
->         if (caps->lowest_freq && caps->nominal_freq) {
-> -               if (perf >= caps->nominal_perf) {
-> -                       mul = caps->nominal_freq;
-> -                       div = caps->nominal_perf;
-> -               } else {
-> -                       mul = caps->nominal_freq - caps->lowest_freq;
-> -                       div = caps->nominal_perf - caps->lowest_perf;
-> -               }
-> +               mul = caps->nominal_freq - caps->lowest_freq;
-> +               div = caps->nominal_perf - caps->lowest_perf;
-> +               offset = caps->nominal_freq - (u64)caps->nominal_perf * mul / div;
+> The only delta between blk_rq_complete() and blk_rq_error() is
+> cmd field for blk_rq_complete() in the TP_STRUCT_ENTRY() and
+> __get_str(cmd) field in TP_printk() which I don't think will
+> have any issue if we use that for blk_rq_error().
 
-Since mult is a u64, the other operands need not be cast to u64
-explicitly AFAICS.
+Yes, I agree. Just no user needs it for our usecase.
 
-Moreover, it might be better to use div64_u64() instead of the plain
-integer division.
+>
+> Question 1 :- What prevents us from using the same format for
+> both blk_rq_complete() and blk_rq_error() ?
 
->         } else {
->                 if (!max_khz)
->                         max_khz = cppc_get_dmi_max_khz();
->                 mul = max_khz;
->                 div = caps->highest_perf;
->         }
-> -       return (u64)perf * mul / div;
-> +
-> +       retval = offset + (u64)perf * mul / div;
-> +       if (retval >= 0)
-> +               return retval;
-> +       return 0;
->  }
+Actually nothing if we ignore cmd.
+
 >
->  static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
->                                              unsigned int freq)
->  {
->         struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-> +       s64 retval, offset = 0;
->         static u64 max_khz;
->         u64  mul, div;
+> Question 2 :- assuming that blk_rq_complete() and blk_rq_error()
+> are using same format why can't we :-
 >
->         if (caps->lowest_freq && caps->nominal_freq) {
-> -               if (freq >= caps->nominal_freq) {
-> -                       mul = caps->nominal_perf;
-> -                       div = caps->nominal_freq;
-> -               } else {
-> -                       mul = caps->lowest_perf;
-> -                       div = caps->lowest_freq;
-> -               }
-> +               mul = caps->nominal_perf - caps->lowest_perf;
-> +               div = caps->nominal_freq - caps->lowest_freq;
-> +               offset = caps->nominal_perf - (u64)caps->nominal_freq * mul / div;
->         } else {
->                 if (!max_khz)
->                         max_khz = cppc_get_dmi_max_khz();
-> @@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
->                 div = max_khz;
->         }
+> declare DECLARE_EVENT_CLASS(blk_rq_completion....)
+> and use that class for blk_rq_complete() and blk_rq_error() ?
 >
-> -       return (u64)freq * mul / div;
-> +       retval = offset + (u64)freq * mul / div;
-> +       if (retval >= 0)
-> +               return retval;
-> +       return 0;
->  }
+> since if I remember correctly we need to define a event class
+> instead of duplicating a tracepoint with similar reporting.
+
+Very good point. I did overlook it. The original post did have disk
+name and didn't have cmd, now the two tracepoints look much more
+similar than the original post, so I agree the duplicate could be
+combined into an event class.
+
 >
->  static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
-> --
-> 2.25.1
+> -ck
+>
 >

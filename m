@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB8B4A96C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168B4A96D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358186AbiBDJ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:29:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S1349272AbiBDJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357774AbiBDJ1K (ORCPT
+        with ESMTP id S1358880AbiBDJbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:27:10 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48A0C061783;
-        Fri,  4 Feb 2022 01:26:28 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nFurI-0007GZ-ER; Fri, 04 Feb 2022 10:26:25 +0100
-Message-ID: <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
-Date:   Fri, 4 Feb 2022 10:26:23 +0100
+        Fri, 4 Feb 2022 04:31:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7804C0613BC;
+        Fri,  4 Feb 2022 01:29:31 -0800 (PST)
+Date:   Fri, 4 Feb 2022 10:29:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643966970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/eecWjACA0rGMqqEQiDgokZRkG3UepJI5ulPZyG6uO0=;
+        b=Kq3E210trmVV3cpVxMoJ0wqgmkAoAXew8RuSZaqcds1os6QjXpnmgz46wHdKI0PVoeoWZV
+        S0i2vVf5tU2o0cky+cRkS34UDv2oxDo/kALrSY0PIvSbz0SfT2q1i0OuOKP2X/GtSi7YNC
+        raKGH932Jo7zHOOEZuNzw1BjC07lIKJf2tWut7tH745ktB3dAvF65AyZjPH9WkQxw8nvZj
+        oC40ZFV22BsIVWWo4yhtDaq1eiuKbpaCExsHNWl9OqyUKV3qGDVwwqdhaFBA1fO+ToGLCy
+        hl+yYD+Rauk/817C+r5UA0EX6NwVqjr1kxa1b/a3wlH/ASxRRKLe5AlPfrm8FQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643966970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/eecWjACA0rGMqqEQiDgokZRkG3UepJI5ulPZyG6uO0=;
+        b=veSy3hJgJZREMiqCtupWodV6mbWqNkewKhr9cAPLZVdJcH2E4cDVZfPvx95cF/mzB5uDPC
+        ezydNgc5y/tjroCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rt-users@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mike Galbraith <efault@gmx.de>
+Subject: Re: [PATCH v4] arm64: mm: Make arch_faults_on_old_pte() check for
+ migratability
+Message-ID: <Yfzx+P3jUXA0Z/Y7@linutronix.de>
+References: <20220127192437.1192957-1-valentin.schneider@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
-Content-Language: en-BS
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
- <20220130163725.GA2792319@roeck-us.net>
- <20220131100845.GA19252@alpha.franken.de>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20220131100845.GA19252@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643966788;12f74f95;
-X-HE-SMSGID: 1nFurI-0007GZ-ER
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220127192437.1192957-1-valentin.schneider@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
+On 2022-01-27 19:24:37 [+0000], Valentin Schneider wrote:
+> arch_faults_on_old_pte() relies on the calling context being
+> non-preemptible. CONFIG_PREEMPT_RT turns the PTE lock into a sleepable
+> spinlock, which doesn't disable preemption once acquired, triggering the
+> warning in arch_faults_on_old_pte().
+> 
+> It does however disable migration, ensuring the task remains on the same
+> CPU during the entirety of the critical section, making the read of
+> cpu_has_hw_af() safe and stable.
+> 
+> Make arch_faults_on_old_pte() check cant_migrate() instead of preemptible().
+> 
+> Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> Link: https://lore.kernel.org/r/20210811201354.1976839-5-valentin.schneider@arm.com
 
-On 31.01.22 11:08, Thomas Bogendoerfer wrote:
-> On Sun, Jan 30, 2022 at 08:37:25AM -0800, Guenter Roeck wrote:
->> On Tue, Jan 25, 2022 at 03:19:44PM +0100, Thomas Bogendoerfer wrote:
->>> Use PTR_WD instead of PTR to avoid clashes with other parts.
->>>
->>> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->>
->> Building mips:cavium_octeon_defconfig ... failed
->> --------------
->> Error log:
->> arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
->> arch/mips/cavium-octeon/octeon-memcpy.S:187: Error: unrecognized opcode `ptr 9b,l_exc'
->> ...
->>
->> Missed one place in Cavium assembler code.
->>
->> arch/mips/cavium-octeon/octeon-memcpy.S:        PTR     9b, handler;
->>
->> #regzbot introduced: fa62f39dc7e2
+Let me pick that up so I can drop the other two. I hope the ARM64 folks
+follow my lead ;)
 
-@Guenter: thx for getting the regression tracked!
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-> d'oh, fix sent.
-
-Sadly you didn't link to the report about the issue using a "Link:" tag,
-as explained by both Documentation/process/submitting-patches.rst and
-Documentation/process/5.Posting.rst
-
-Could you please do so in the future? Than would make my life as a Linux
-kernel's regression tracker a lot easier, as my regression tracking bot
-would then have been able to automatically detect the patch posting and
-the commit (I for now decided to not make the bot rely on the "Fixes:"
-tag alone, as that might do the wrong thing if one commit causes
-multiple regressions).
-
-Anyway: I no big deal (just makes regression tracking a lot harder), I
-can tell regzbot manually about the fix:
-
-#regzbot introduced: 50317b636e7184d
-
-Ciao, Thorsten
+Sebastian

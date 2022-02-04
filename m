@@ -2,147 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052414AA353
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D1C4AA355
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351947AbiBDWmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:42:22 -0500
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:40757 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237110AbiBDWmV (ORCPT
+        id S237110AbiBDWm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:42:27 -0500
+Received: from alt-proxy28.mail.unifiedlayer.com ([74.220.216.123]:59894 "EHLO
+        alt-proxy28.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352136AbiBDWm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:42:21 -0500
-Received: by mail-oo1-f43.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so3379982ooi.7;
-        Fri, 04 Feb 2022 14:42:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lP3WE7JtivIbbn6LHF0khOL4rKdYsCSiJsD462pPHBY=;
-        b=neJH8zuFsVNhZkwllR7i2AIqk3KXzAwBysl1hQjuQUXivvPzHzsLdcM1BTXWcbdBn4
-         zLj4TjgJoFz+RWfpFtBWCM0B0CA4jVaGTW92g2YbNTdYoyMLsv/EXsPQie3VLWtHvq+u
-         gQdXYidOs3olPfEJPIOsKGMam4L0/AtjYychyfrcJ1OEd/es1r7mkNU1LtEuhGsiRI52
-         MVuHsUHarAOu+MRBUmOpNoDgO8x/P975gvJf6htfnx9ao61eFH3cDCQoiXKsjZjfZNg1
-         cgsTgvovjnlAnxjr+00gQJUR0ALov5HKW9MczKltxEAmxRXDxJbuTnnue+4pWAAlcKqL
-         sttQ==
-X-Gm-Message-State: AOAM5327fbCHAm3jLGv/iE2J7Q+8GWK+eIz8MN0DczZrna/h7bk2JmYX
-        G4tmZeGsuJIxEfIVZHB0TA==
-X-Google-Smtp-Source: ABdhPJxVaf+4ZTBMzOJSreSX+RID7NpMWwfoG41VUga8SLqyOukGfB/pJ1h/HM5rXCQJ3mZO+Jze8w==
-X-Received: by 2002:a05:6870:a2d6:: with SMTP id w22mr299541oak.25.1644014541095;
-        Fri, 04 Feb 2022 14:42:21 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bb16sm1307877oob.42.2022.02.04.14.42.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:42:20 -0800 (PST)
-Received: (nullmailer pid 3318547 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:42:19 -0000
-Date:   Fri, 4 Feb 2022 16:42:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com
-Subject: Re: [PATCH v5 02/12] dt-bindings: soc/microchip: add services as
- children of sys ctrlr
-Message-ID: <Yf2ry0ATtYnb5TTx@robh.at.kernel.org>
-References: <20220131114726.973690-1-conor.dooley@microchip.com>
- <20220131114726.973690-3-conor.dooley@microchip.com>
+        Fri, 4 Feb 2022 17:42:26 -0500
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 8E0081004045F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:42:25 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id G7Hdnt3KUkku4G7Hdn9Yzy; Fri, 04 Feb 2022 22:42:25 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=TMaA93pa c=1 sm=1 tr=0 ts=61fdabd1
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oGFeUVbbRNcA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0xD4VwYVGcuuSInSHynG1KuLHXHw0DMgV7novaxJ4sA=; b=jBYFxB7xS6QoVf1NkWmNaXSnJh
+        Pz6Su58g+nIKvISTwcaRhg32QGBTS9gQe4MKLaHrwiNn3BsnKT0aVN6YOapy7RdXSEU4SQ/lFVxrY
+        zTlKaTyWnAMaTTkjVugdb7MdJ;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34660 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nG7Hc-002qot-K8; Fri, 04 Feb 2022 15:42:24 -0700
+Message-ID: <72a1f345-bde8-b5e9-74e2-a60678daefe3@w6rz.net>
+Date:   Fri, 4 Feb 2022 14:42:22 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220131114726.973690-3-conor.dooley@microchip.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220204091915.247906930@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nG7Hc-002qot-K8
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:34660
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 13
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 11:47:17AM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Add mpfs-rng and mpfs-generic-services as children of the system
-> controller.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../microchip,mpfs-sys-controller.yaml        | 41 ++++++++++++++++++-
->  1 file changed, 39 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> index f699772fedf3..5e9977bc114e 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> @@ -13,7 +13,6 @@ description: |
->    The PolarFire SoC system controller is communicated with via a mailbox.
->    This document describes the bindings for the client portion of that mailbox.
->  
-> -
->  properties:
->    mboxes:
->      maxItems: 1
-> @@ -21,6 +20,38 @@ properties:
->    compatible:
->      const: microchip,mpfs-sys-controller
->  
-> +  rng:
-> +    type: object
-> +
-> +    description: |
-> +      The hardware random number generator on the Polarfire SoC is
-> +      accessed via the mailbox interface provided by the system controller
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-rng
-> +
-> +    required:
-> +      - compatible
-> +
-> +  sysserv:
-> +    type: object
-> +
-> +    description: |
-> +      The PolarFire SoC system controller is communicated with via a mailbox.
-> +      This binding represents several of the functions provided by the system
-> +      controller which do not belong in a specific subsystem, such as reading
-> +      the fpga device certificate, all of which follow the same format:
-> +        - a command + optional payload sent to the sys controller
-> +        - a status + a payload returned to Linux
-> +
-> +    properties:
-> +      compatible:
-> +        const: microchip,mpfs-generic-service
-> +
-> +    required:
-> +      - compatible
-> +
->  required:
->    - compatible
->    - mboxes
-> @@ -29,7 +60,13 @@ additionalProperties: false
->  
->  examples:
->    - |
-> -    syscontroller: syscontroller {
-> +    syscontroller {
->        compatible = "microchip,mpfs-sys-controller";
->        mboxes = <&mbox 0>;
-> +      rng: rng {
-> +        compatible = "microchip,mpfs-rng";
-> +      };
-> +      sysserv: sysserv {
-> +        compatible = "microchip,mpfs-generic-service";
-> +      };
+On 2/4/22 01:22, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.20 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.20-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-You don't have any resources for the child nodes, so they don't need to 
-be in DT. Just have the driver for "microchip,mpfs-sys-controller" 
-create the sub devices you need.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Rob
+Tested-by: Ron Economos <re@w6rz.net>
+

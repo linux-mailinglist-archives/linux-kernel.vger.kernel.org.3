@@ -2,328 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311CA4A9ECE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2117F4A9ED4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377475AbiBDSQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:16:56 -0500
-Received: from mga04.intel.com ([192.55.52.120]:24419 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243150AbiBDSQw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:16:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643998612; x=1675534612;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7yDeSA5FxKlyjf7WVjbYp5uk7enNQr9sv4NwryTzZnI=;
-  b=d/TQm7EJquxXj4GFSL5/LkSGkcsUfCC/mMu89jIwaSatc0bGDHd3lJAx
-   pKQ4++36EJNpfv6N84FLMIGsmhVNqbvTcYNOBc+K2N36qwo1/F8JSwqKJ
-   7bUSGsj6clCkHu8hCRIcSGQh8yOD5s36cDRlGE14lnmeVi0LCsJSS7L1+
-   4GiMdKv5LpeNqOIzxNhQhF0TH6cCWOOrAor5e9v/7G3HwMe932A1yZl4R
-   L+cX7rRcDfyGQf/VhJtUnVGkaSowrK7DpQzGIUFS1fMMAvqzS3LnH1KXd
-   yXfryWMdvFlTHyRvm8GzeZ7k1BUniI58bMzSHMdTqllqcM2OWbYSPcBeA
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="247248591"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="247248591"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 10:16:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="566813557"
-Received: from ahofrock-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.72])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 10:16:52 -0800
-Message-ID: <1eac284d60ba4050740f2692eadf49d03ea1cf37.camel@linux.intel.com>
-Subject: Re: [PATCH v3] ACPI / fan: Properly handle fine grain control
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Date:   Fri, 04 Feb 2022 10:16:51 -0800
-In-Reply-To: <dae13602d4b4178ae86a749a9b6473fb64b82679.camel@linux.intel.com>
-References: <20220128235118.1693865-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0iJph04mtGabTXLY_7FqaA9tCnFwz=-+DR=n3G3GC6Szg@mail.gmail.com>
-         <dae13602d4b4178ae86a749a9b6473fb64b82679.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        id S1377484AbiBDSSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:18:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243150AbiBDSSp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 13:18:45 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40817C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:18:45 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id d188so8396541iof.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:18:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
+        b=YuuKVwxWhqjqDGM91SbOGfO5jk1lvcH2xOKu9SdTS/0AtcSSu6Z74v9BI75XsPuQNQ
+         6voOghPWwZ0DFtuWnIayytbcUYvQLdpxYUw/+iekyW/DRrXWz5L3T9qUdSP4JAL0wOB2
+         AAuLy72nClt9QPT6wEIYZ/WM76WScoUHkqOnE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
+        b=7HPifqNIXH0j6mVmuH33VDOU2y80/JELZJj4aknuV1nh+UGaNcj1L3f23PW4Se9LJ+
+         fks8HDzxl+cQlJO3mD4mhHEdUuvGI+2g0bqgrfrIWKcCEs+KCleBJmSvzF9WQ1MEGL2x
+         xNwWjbURw1/+wMPVBat1qbt3sWHF0dUfIOpQbVbkd5Odw/pxymJIxS9WFmtUMPzaoKl0
+         Jaa/osvGvJB8CeqzoyZlDz3JImG2jjZ56f5KzgwV7EvWDVbBjdCLRL7gOIYkTcSKbHSw
+         NwhbSAKM3thP1GEJrAw1FPGlwPOyn/+jGx0avuBZiZP7e9S3j2iM54VwtnCE9vYBZ2Ov
+         nOMQ==
+X-Gm-Message-State: AOAM533uwwMoLWVhnIZP7tonS61BSvO7xyseEMnwwPNh3fLgcfdjmttr
+        PGYwXmb4Hg5VNLPqualPSdayc8keSfpieVCyvhJ0QQ==
+X-Google-Smtp-Source: ABdhPJytny1SyvPfpAVIt5yuyPMy85jb9OFiLTaA6qhpI02J9cXH4cGVPLFMJsAR4d38qn7L7cix9j7++UZ9EJEbmaw=
+X-Received: by 2002:a6b:f218:: with SMTP id q24mr174468ioh.55.1643998724641;
+ Fri, 04 Feb 2022 10:18:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
+ <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
+ <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
+ <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com> <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
+ <363432688.323955.1642272250312@mail.yahoo.com>
+In-Reply-To: <363432688.323955.1642272250312@mail.yahoo.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Sat, 5 Feb 2022 02:18:18 +0800
+Message-ID: <CAJMQK-jx+z974AT_p+-AVAbMQQ33V-XU9NKmy-i6nbS5zagHBA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
+To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-03 at 13:54 -0800, srinivas pandruvada wrote:
-> On Thu, 2022-02-03 at 21:13 +0100, Rafael J. Wysocki wrote:
-> > On Sat, Jan 29, 2022 at 12:51 AM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > 
-> > > 
-> 
-> [...]
-> 
-> > > To support fine grain control (when supported) via thermal sysfs:
-> > > - cooling device max state is not _FPS state count but it will be
-> > > 100 / _FIF.step_size
-> > > - cooling device current state is 100 / _FIF.step_size
-> > 
-> > I don't quite understand this.
-> > 
-> > The max state and the current state should not always be the same,
-> > should they?
-> 
-> This sentence needs correction.
-> The  current_state is _FST.control/_FIF.step_size.
-> 
-> > 
-> > > - cooling device set state will set the control value
-> > > 
-> 
-> [...]
-> 
-> > > -       else
-> > > +       if (fan->acpi4) {
-> > > +               if (fan->fif.fine_grain_ctrl)
-> > > +                       *state = 100 / (int)fan->fif.step_size;
-> > 
-> > Is it really necessary to explicitly cast fif.step_size to int?
-> This was reported by LKP as fan->fif.step_size is 64 bit. This driver
-> doesn't restrict to 64 bit.
-> 
-> "undefined reference to `__udivdi3" for i386-defconfig.
-> > 
-> > > +               else
-> > > +                       *state = fan->fps_count - 1;
-> > > 
-> 
-> [...]
-> 
-> > > -static int fan_get_state_acpi4(struct acpi_device *device,
-> > > unsigned long *state)
-> > > +static int fan_get_fps(struct acpi_device *device, struct
-> > > acpi_fan_fst *fst)
-> > 
-> > Why is this called fan_get_fps()?  I'd rather call it
-> > acpi_fan_get_fst().
-> I can change that.
-> 
-> > 
-> > >  {
-> > >         struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL
-> > > };
-> > > -       struct acpi_fan *fan = acpi_driver_data(device);
-> > >         union acpi_object *obj;
-> > >         acpi_status status;
-> > > -       int control, i;
-> > > 
-> > >         status = acpi_evaluate_object(device->handle, "_FST",
-> > > NULL,
-> > > &buffer);
-> > >         if (ACPI_FAILURE(status)) {
-> > > @@ -119,31 +130,51 @@ static int fan_get_state_acpi4(struct
-> > > acpi_device *device, unsigned long *state)
-> > >                 goto err;
-> > >         }
-> > > 
-> > > -       control = obj->package.elements[1].integer.value;
-> > > +       fst->revision = obj->package.elements[0].integer.value;
-> > > +       fst->control = obj->package.elements[1].integer.value;
-> > > +       fst->speed = obj->package.elements[2].integer.value;
-> > > +
-> > > +       status = 0;
-> > > +err:
-> > > +       kfree(obj);
-> > > +       return status;
-> > 
-> > There is some confusion regarding the error return values in this
-> > function, would be good to fix it while doing this.
-> > 
-> Let me check that.
-> 
-> > > +}
-> > > +
-> > > +static int fan_get_state_acpi4(struct acpi_device *device,
-> > > unsigned long *state)
-> > > +{
-> > > +       struct acpi_fan *fan = acpi_driver_data(device);
-> > > +       struct acpi_fan_fst fst;
-> > > +       int status;
-> > > +       int control, i;
-> > > +
-> > > +       status = fan_get_fps(device, &fst);
-> > > +       if (status)
-> > > +               return status;
-> > > +
-> > > +       control = fst.control;
-> > > +
-> > > +       if (fan->fif.fine_grain_ctrl) {
-> > > +               /* This control should be same what we set using
-> > > _FSL by spec */
-> > > +               if (control > 100) {
-> > > +                       dev_dbg(&device->dev, "Invalid control
-> > > value returned\n");
-> > > +                       return -EINVAL;
-> > 
-> > Why don't we fall back to the other method in this case?
-> We can.
-> 
-> > 
-> > > +               }
-> > > +
-> > > +               *state = control / (int)fan->fif.step_size;
-> > 
-> > Do we care about rounding errors?
-> > 
-> > Say control is 8 and step_size is 9.  Should this count as 0 or as
-> > 1?
-> > 
-> We will not set control value to 8 in this case, so we shouldn't read
-> 8. But if firmware setup at boot then it will be 0. The compensation
-> to
-> reach 100 is at last step which is allowed.
-> 
-> If step size is 9
-> 
-> thermal sysfs will display
->         max_state = 100/9 = 11
-> 
-> control         thermal sysfs cur_state
-> 0-8             0
-> 9-17            1
-> 18-26           2
-> 27-35           3
-> 36-44           4
-> 45-53           5
-> 54-62           6
-> 63-71           7
-> 72-80           8
-> 81-89           9
-> 90-98           10
-> 99-100          11
-> 
-> If step size is 10
-> thermal sysfs
->         max_state = 100/10 = 10
-> control         thermal sysfs cur_state
-> 0-9             0
-> 10-19           1
-> 20-29           2
-> 30-39           3
-> 40-49           4
-> 50-59           5
-> 60-69           6
-> 70-79           7
-> 80-89           8
-> 90-99           9
-> 100             10
-> 
-> 
-> 
-> > > +               return 0;
-> > > +       }
-> 
-> [...]
-> 
-> > > -       if (state >= fan->fps_count)
-> > > +       if (state > max_state)
-> > 
-> > Say step_size is 9, so max_state is 11.  state == 12 would still be
-> > valid, no?
-> We are presenting thermal sysfs max_state as 11 in this case, so
-> state 0-11 are valid. To reach 100, the spec allows to compensate the
-> last step to reach 100%. So state 11 is 100% not 99% as in the above
-> table.
-> 
-> If we present max_state as 12 then also user space can't choose max
-> than 12, so (state > max_state) will be still an error.
-> 
-> If we present max state as 12 then in the above table:
-> control         state
-> ----------------------
-> 90              10
-> 99              11
-> 100             12
-> 
-> Then last state will increase control value by 1.
-> 
-> 
-> > 
-> > >                 return -EINVAL;
-> > > 
-> > > -       status = acpi_execute_simple_method(device->handle,
-> > > "_FSL",
-> > > -                                           fan-
-> > > > fps[state].control);
-> > > +       if (fan->fif.fine_grain_ctrl) {
-> > > +               int rem;
-> > > +
-> > > +               value *= fan->fif.step_size;
-> > 
-> > And you don't need the max_state computation for this, it's only
-> > necessary to cap value at 100.  In which case you also wouldn't
-> > need
-> > rem etc.
-Correct.
-We don't need calculation. When the value == max_step, the control
-value will be 100.
+On Sun, Jan 16, 2022 at 2:44 AM Tareque Md.Hanif
+<tarequemd.hanif@yahoo.com> wrote:
+>
+> Hi Hsin-Yi,
+>
+> The issue still exists. I reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually applied the patch (tags/v5.16). journalctl attached.
 
+hi Tareque,
 
-> For above example to set the state 11 for 100 for step size 9. If
-> max_state is chosen as 12 then we can just cap.
-> 
-> > 
-> > > +
-> > > +               /*
-> > > +                * In the event OSPM’s incremental selections of
-> > > Level
-> > > +                * using the StepSize field value do not sum to
-> > > 100%,
-> > > +                * OSPM may select an appropriate ending Level
-> > > +                * increment to reach 100%.
-> > > +                */
-> > > +               rem = 100 - value;
-> > > +               if (rem && rem < fan->fif.step_size)
-> > > +                       value = 100;
-> > > +       } else {
-> > > +               value = fan->fps[state].control;
-> > > 
-> 
-> [...]
-> 
-> > > +       if (!fan->fif.step_size)
-> > > +               fan->fif.step_size = 1;
-> > > +       /* If step size > 9, change to 9 (by spec valid values 1-
-> > > 9)
-> > > */
-> > > +       if (fan->fif.step_size > 9)
-> > 
-> > I would do "else if" here, because both the above conditions cannot
-> > hold at the same time.
-> OK
-> 
-> > 
-> > > +               fan->fif.step_size = 9;
-> > >  err:
-> > > 
-> 
-> [...]
-> 
-> > > +       sysfs_attr_init(&fan->fine_grain_control.attr);
-> > > +       fan->fine_grain_control.show = show_fine_grain_control;
-> > > +       fan->fine_grain_control.store = NULL;
-> > > +       fan->fine_grain_control.attr.name = "fine_grain_control";
-> > > +       fan->fine_grain_control.attr.mode = 0444;
-> > > +       status = sysfs_create_file(&device->dev.kobj, &fan-
-> > > > fine_grain_control.attr);
-> > 
-> > I would split the creation of the new attributes into a separate
-> > file,
-> > for clarity (and to help the review somewhat).
-> > 
-> We can move all the attributes including the current one to a new
-> file.
-> 
-> Thanks,
-> Srinivas
-> 
+Can you apply the same setting[1] again and with this patch to see if
+the issue is still there?
+https://github.com/torvalds/linux/commit/6dc8265f9803ccb7e5da804e01601f0c14f270e0
 
+[1] reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that
+reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually
+applied the patch (tags/v5.16)
+
+Thanks
+>
+> Regards,
+>
+> Tareque
+>
+> On Saturday, January 15, 2022, 11:27:07 PM GMT+6, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+>
+> hi Tareque,
+>
+>
+> On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
+> <tarequemd.hanif@yahoo.com> wrote:
+> >
+> > Hi Hsin-Yi,
+> >
+> > On 1/12/22 16:58, Hsin-Yi Wang wrote:
+> >
+> > Can you help provide logs if we apply
+> > 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
+> > 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
+> >
+> > Issue still exists. journalctl log attached in revert_8d.txt
+> >
+> >
+> > > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
+> > > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
+> > > i2c_resume_early) and function i2c_suspend_late() and
+> > > i2c_resume_early().
+> >
+> > No issues. journalctl log attached in test1.txt
+> >
+> >
+> > > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
+> > > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
+> >
+> > Issue exists. journalctl log attached in test2.txt
+>
+>
+> Thanks for the testing.
+> Can you help us test if applying the following patch on top of
+> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
+>
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 9eb4009cb250..6b046012aa08 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
+>         struct i2c_client *client = i2c_verify_client(dev);
+>         int err;
+>
+> -      if (!client)
+> +      if (!client || dev_pm_skip_resume(dev))
+>                 return 0;
+>
+>         if (pm_runtime_status_suspended(&client->dev) &&
+> @@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
+>         struct i2c_client *client = i2c_verify_client(dev);
+>         int err;
+>
+> -      if (!client)
+> +      if (!client || dev_pm_skip_suspend(dev))
+>                 return 0;
+>
+>         err = pm_generic_suspend_late(&client->dev);
+>

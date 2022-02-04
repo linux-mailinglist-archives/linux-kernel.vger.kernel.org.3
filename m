@@ -2,88 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C38A4AA2DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BAD4AA2DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345124AbiBDWIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:08:32 -0500
-Received: from mail-oo1-f51.google.com ([209.85.161.51]:35463 "EHLO
-        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiBDWIa (ORCPT
+        id S1345353AbiBDWIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:08:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53720 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233137AbiBDWIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:08:30 -0500
-Received: by mail-oo1-f51.google.com with SMTP id p4-20020a4a8e84000000b002e598a51d60so6209942ook.2;
-        Fri, 04 Feb 2022 14:08:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JQ7WYZ4Zqg4HCtyNEPmfKDttwiehHxrZDO82/S7zZVE=;
-        b=jnQhOSC0FhFR83UKDiozz7nYJNNRJEWCOltmX0HUQ4lsxvBnT/imsUvhBm3kRdFNL2
-         0H2q7mVYe+8E4zzPmXel85gKHdffB9IR5wf0tlcEesZfGqGkeANPYNIZYaYyZcATZN0l
-         jFKVQBoPf/5pjgnAHcByYekT8SCA8DV+jgIerSQwSdJnK3SWe+9bB9i5HADpIT7oRFbj
-         +65/v0xyjYR1sZui3bxqciOdYkNcjDlFe8BGn9DyOnnh6LMjKH8dPQ1GmabSHbmEoJJW
-         UE2I8m2qV3JVwLEDYvFV3UBafHs+Dh7qcCkad5v/Fut54cdfNTBeUzQ/aV1YpzcuFACi
-         xJpQ==
-X-Gm-Message-State: AOAM5326sOqab8cFYDu9K7DPSV34yPT3a/wi9VNi8aZi7un8mUQt1IuG
-        h1j7Bk4dgV6n594k/M0I90iP5IQbow==
-X-Google-Smtp-Source: ABdhPJzCR5b4do+sC8vu/Kn5Ig8ZQCwMphWuSpBEn7uPBasp5qvvVQX+Sgl9UoFUkOwZhnxHZ1k+PQ==
-X-Received: by 2002:a4a:ca98:: with SMTP id x24mr322821ooq.43.1644012509912;
-        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id cv13sm1005610oab.7.2022.02.04.14.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:08:29 -0800 (PST)
-Received: (nullmailer pid 3267244 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:08:27 -0000
-Date:   Fri, 4 Feb 2022 16:08:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Iwona Winiarska <iwona.winiarska@intel.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Muller <d.mueller@elsoft.ch>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Billy Tsai <billy_tsai@aspeedtech.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-aspeed@lists.ozlabs.org,
-        Zev Weiss <zweiss@equinix.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Tony Luck <tony.luck@intel.com>, devicetree@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v7 02/13] dt-bindings: Add bindings for peci-aspeed
-Message-ID: <Yf2j2+QbO9kg0E1E@robh.at.kernel.org>
-References: <20220202144838.163875-1-iwona.winiarska@intel.com>
- <20220202144838.163875-3-iwona.winiarska@intel.com>
+        Fri, 4 Feb 2022 17:08:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AF436198D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC3CC340EF
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:08:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZE+NVOfg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644012528;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nRvVOXCbkZBW7mENo7woBzmh4pVFhQ8gpBun5sIWACc=;
+        b=ZE+NVOfgN/CbvqOnJmTZf2H5tqX0B2oAVqoKEcANaRL3TGY7Cqx8JdQbhaMuovh3hgXwpC
+        5M9gsa5AQCp8LyGp4VdrdJhegUM3G0jjc3eZa3epqknpW2FyZh0aXESjaFgUlPJtcknLAy
+        sBHl+jKH6NAM0P9d9EPVdq75nNdElQQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ad6f4fc3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 4 Feb 2022 22:08:47 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id g14so22595005ybs.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:08:47 -0800 (PST)
+X-Gm-Message-State: AOAM533qoCbfagHb6CSESevOnEDlbsmqyoECV1I29AiRnHO68BgQnSKz
+        zKBqBcx8g05Fm6LL5Fkd2+zYxw7VmG0JEdQ+dDw=
+X-Google-Smtp-Source: ABdhPJyENoWipZY7LU4mv9ijhI/tarqnBrTFshQpFWcq83RJ3ridzcqZXD/rVf1zyfkuoeO3bxTBayr+1H5NANV+N8k=
+X-Received: by 2002:a05:6902:726:: with SMTP id l6mr1352344ybt.115.1644012526199;
+ Fri, 04 Feb 2022 14:08:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202144838.163875-3-iwona.winiarska@intel.com>
+References: <YfgPWatDzkn2ozhm@linutronix.de> <20220204153149.51428-1-Jason@zx2c4.com>
+ <Yf2Q25T04cAxJY3H@linutronix.de>
+In-Reply-To: <Yf2Q25T04cAxJY3H@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 4 Feb 2022 23:08:35 +0100
+X-Gmail-Original-Message-ID: <CAHmME9oYj6tp+THaz_74SWikpTLSzukH-DynypB+7SZ56hucog@mail.gmail.com>
+Message-ID: <CAHmME9oYj6tp+THaz_74SWikpTLSzukH-DynypB+7SZ56hucog@mail.gmail.com>
+Subject: Re: [PATCH RFC v1] random: do not take spinlocks in irq handler
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Feb 2022 15:48:27 +0100, Iwona Winiarska wrote:
-> Add device tree bindings for the peci-aspeed controller driver.
-> 
-> Co-developed-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-> Signed-off-by: Iwona Winiarska <iwona.winiarska@intel.com>
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../devicetree/bindings/peci/peci-aspeed.yaml | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/peci/peci-aspeed.yaml
-> 
+Hi Sebastian,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, Feb 4, 2022 at 9:47 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> No need for atomic. If this is truly per-CPU then there will be no
+> cross-CPU access, right?
+> Therefore I would suggest to use __this_cpu_inc_return() which would avoid
+> the sync prefix for the inc operation. Same for __this_cpu_or(). And you
+> could use unsigned int.
+
+Good thinking. Done.
+
+>
+> > +             schedule_work(&fast_pool->mix);
+>
+> schedule_work() has a check which ensures that the work is not scheduled
+> again if still pending. But we could consider it fast-path and say that
+> it makes sense to keep it.
+
+The PENDING flag is cleared after the work item has been assigned to a
+worker, but _before_ the function has actually run. This means you
+might wind up scheduling for that work to run again while it's already
+running, which isn't what we want. So ORing in that flag lets us track
+things until the end of that function.
+
+> You could use schedule_work_on() so it remains on the local CPU. Makes
+> probably even more sense on NUMA systems. Otherwise it is an unbound
+> worker and the scheduler (and even the worker)_could_ move it around.
+
+Was just thinking about that too. Will do.
+
+> With schedule_work_on() it still _could_ be moved to another CPU during
+> CPU hotplug. Therefore you should check in mix_interrupt_randomness() if
+> the worker is == this_cpu_ptr() and otherwise abort. Puh this asks for a
+> CPU-hotplug handler to reset FAST_POOL_MIX_INFLIGHT in the CPU-UP path.
+> That would be the price for using this_cpu_inc()/or ;)
+
+Not a fan of adding a hotplug handler. However, actually I think we
+don't need the worker==this_cpu_ptr() check. If a CPU is taken
+offline, yet that CPU contributed a healthy set of IRQs to the fast
+pool such that the worker got queued up, then we should just go ahead
+and ingest them. In the worst case, the CPU comes back online midway
+and contributes a little bit more than usual, but this is already the
+race we have with the worker itself being interrupted by an irq, so it
+seems fine.
+
+> This might even classify for using system_highpri_wq (e.g.
+>   queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+
+Good thinking.
+
+Re:crng_fast_load, you said:
+> RT wise we _could_ acquire that spinlock_t in IRQ context early during
+> boot as long as system_state < SYSTEM_SCHEDULING. After that, we could
+> dead lock.
+
+Unfortunately, I don't think that's a guarantee we have on all systems
+:-\. I'll try to think more carefully through the consequences of just
+_removing those spinlocks_ and letting it race, and see if there's a
+way that makes sense. I'm not sure it does, but I'll need to put my
+thinking cap on. Either way, it seems like that's now a third puzzle
+we'll wind up addressing separately.
+
+I'll roll a v2.
+
+Jason

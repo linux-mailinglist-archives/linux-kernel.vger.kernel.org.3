@@ -2,91 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE374A9BAB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489464A9BAE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359546AbiBDPKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:10:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59072 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343868AbiBDPKi (ORCPT
+        id S1359488AbiBDPLk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 10:11:40 -0500
+Received: from mail3.swissbit.com ([176.95.1.57]:58014 "EHLO
+        mail3.swissbit.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241808AbiBDPLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:10:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A6360FC8;
-        Fri,  4 Feb 2022 15:10:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACE8C004E1;
-        Fri,  4 Feb 2022 15:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643987437;
-        bh=IoHPIjb2fSbuPpgienLeVPvvwcFaWSnzgKep7XPLsnU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ken7aeQ6msksQh20Q4C97KzBOyXJUMa4ehlX3O/QpWCWC6BHgF9TJh5WQ8fdyrw/3
-         sPUmwlDb3+mpdoW/Qa3jsqNy81CByFyrjJ8Oy7GWKMEtI9dL2toPVHJ4cy91EUTo3s
-         i9o42Z4PFuIv+6NP1f0PpbYh6cb972MZTbFmzPXo9oDErQLYa+z5ankmAaGMSW6kjI
-         Kh5hlnIn+yw4AUy2igK5C1deGnWkqu9GStd/IyzLw5r2j1mE3fvRzg860jmoDFRRfW
-         okQj8KkUXQ8+wkbqJ56hgIN0H9xeXuaxw7MuLHEuS1Ou0eeGeV/8GQdrcp0vBWRhf6
-         fQ1JDsnXrrCcQ==
-Date:   Fri, 4 Feb 2022 16:10:32 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
-        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] Add ability to disallow idmapped mounts
-Message-ID: <20220204151032.7q22hgzcil4hqvkl@wittgenstein>
-References: <20220204065338.251469-1-boyarsh@altlinux.org>
- <20220204094515.6vvxhzcyemvrb2yy@wittgenstein>
- <20220204132616.28de9c4a@tower>
+        Fri, 4 Feb 2022 10:11:39 -0500
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id D7736462F66;
+        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id C579A4630E9;
+        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.84-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (SBDEEX02.sbitdom.lan [10.149.2.84])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Fri,  4 Feb 2022 16:11:37 +0100 (CET)
+Received: from sbdeex02.sbitdom.lan (10.149.2.84) by sbdeex02.sbitdom.lan
+ (10.149.2.84) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Fri, 4 Feb 2022
+ 16:11:37 +0100
+Received: from sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74]) by
+ sbdeex02.sbitdom.lan ([fe80::e0eb:ade8:2d90:1f74%8]) with mapi id
+ 15.02.0986.015; Fri, 4 Feb 2022 16:11:37 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCHv2] mmc: block: fix read single on recovery logic
+Thread-Topic: [PATCHv2] mmc: block: fix read single on recovery logic
+Thread-Index: AQHYGdmBQ/DNxxUR20SkEIF4VXs96A==
+Date:   Fri, 4 Feb 2022 15:11:37 +0000
+Message-ID: <bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com>
+References: <5e5f2e45d0a14a55a8b7a9357846114b@hyperstone.com>
+ <7c4757cc707740e580c61c39f963a04d@hyperstone.com>
+ <CAPDyKFr0YXCwL-8F9M7mkpNzSQpzw6gNUq2zaiJEXj1jNxUbrg@mail.gmail.com>,<5c66833d-4b35-2c76-db54-0306e08843e5@intel.com>,<79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
+In-Reply-To: <79d44b0c54e048b0a9cc86319a24cc19@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.154.1.4]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220204132616.28de9c4a@tower>
+X-TMASE-Version: DDEI-5.1-8.6.1018-26696.000
+X-TMASE-Result: 10--2.390400-10.000000
+X-TMASE-MatchedRID: dc8Jy61QoRp0/jNwxBmuZiyKzJY7d2nbunSyiaV8TbOUCwv1X+STMl2d
+        sxCRbuoB8FHDcHdF1rYVKH14MhLRlzdhl84+mwvCqg0gbtLVIa9uchTq5J5u9LytS1u1Z7z6a3A
+        6hcNu8nD0YXQzpNvE/P5nI8KIHQ65o1cymYpfRxUzL6MySEJ0VvmoZ6x4ZgCUoWOuhb6d7SFnby
+        ATPFLi0gR6lC2CDNN4rbzO2egx+l0MJ0ZR1WrjDKiUivh0j2PvS1zwNuiBtITfUZT83lbkENP+k
+        XNq5kuZmL9aborEAKJdllc1XXqB257OrwqWs6vOAZ0lncqeHqF9LQinZ4QefJxSu1RP8S9J+gtH
+        j7OwNO35N/S1zEq4uk4IO6MzPeAE6ceTivttVg2RFE4mEW4/Q0mBbQ9Ebkn1
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 99fe5f0a-56ea-49b9-84f6-c550c9878366-0-0-200-0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 01:26:16PM +0300, Anton V. Boyarshinov wrote:
-> В Fri, 4 Feb 2022 10:45:15 +0100
-> Christian Brauner <brauner@kernel.org> пишет:
-> 
-> > If you want to turn off idmapped mounts you can already do so today via:
-> > echo 0 > /proc/sys/user/max_user_namespaces
-> 
-> It turns off much more than idmapped mounts only. More fine grained
-> control seems better for me.
+On reads with MMC_READ_MULTIPLE_BLOCK that fail,
+the recovery handler will use MMC_READ_SINGLE_BLOCK for
+each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
+The logic for this is fixed to never report unsuccessful reads
+as success to the block layer.
 
-If you allow user namespaces and not idmapped mounts you haven't reduced
-your attack surface. An unprivileged user can reach much more
-exploitable code simply via unshare -user --map-root -mount which we
-still allow upstream without a second thought even with all the past and
-present exploits (see
-https://www.openwall.com/lists/oss-security/2022/01/29/1 for a current
-one from this January).
+On command error with retries remaining, blk_update_request was
+called with whatever value error was set last to.
+In case it was last set to BLK_STS_OK (default), the read will be
+reported as success, even though there was no data read from the device.
+This could happen on a CRC mismatch for the response,
+a card rejecting the command (e.g. again due to a CRC mismatch).
+In case it was last set to BLK_STS_IOERR, the error is reported correctly,
+but no retries will be attempted.
 
-> 
-> > They can neither
-> > be created as an unprivileged user nor can they be created inside user
-> > namespaces.
-> 
-> But actions of fully privileged user can open non-obvious ways to
-> privilege escalation.
+Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+v2:
+  - Do not allow data error retries
+  - Actually retry MMC_READ_SINGLE_RETRIES times instead of
+  MMC_READ_SINGLE_RETRIES-1
 
-A fully privileged user potentially being able to cause issues is really
-not an argument; especially not for a new sysctl.
-You need root to create idmapped mounts and you need root to turn off
-the new knob.
 
-It also trivially applies to a whole slew of even basic kernel tunables
-basically everything that can be reached by unprivileged users after a
-privileged user has turned it on or configured it.
+ drivers/mmc/core/block.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-After 2 years we haven't seen any issue with this code and while I'm not
-promising that there won't ever be issues - nobody can do that - the
-pure suspicion that there could be some is not a justification for
-anything.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 4e61b28a002f..8d718aa56d33 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct mmc_queue *mq, struct request *req)
+ 	struct mmc_card *card = mq->card;
+ 	struct mmc_host *host = card->host;
+ 	blk_status_t error = BLK_STS_OK;
+-	int retries = 0;
+ 
+ 	do {
+ 		u32 status;
+ 		int err;
++		int retries = 0;
+ 
+-		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
++		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
++			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
+ 
+-		mmc_wait_for_req(host, mrq);
++			mmc_wait_for_req(host, mrq);
+ 
+-		err = mmc_send_status(card, &status);
+-		if (err)
+-			goto error_exit;
+-
+-		if (!mmc_host_is_spi(host) &&
+-		    !mmc_ready_for_data(status)) {
+-			err = mmc_blk_fix_state(card, req);
++			err = mmc_send_status(card, &status);
+ 			if (err)
+ 				goto error_exit;
+-		}
+ 
+-		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
+-			continue;
++			if (!mmc_host_is_spi(host) &&
++			    !mmc_ready_for_data(status)) {
++				err = mmc_blk_fix_state(card, req);
++				if (err)
++					goto error_exit;
++			}
+ 
+-		retries = 0;
++			if (!mrq->cmd->error)
++				break;
++		}
+ 
+ 		if (mrq->cmd->error ||
+ 		    mrq->data->error ||
+-- 
+2.34.1
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+

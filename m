@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B4A4A990F
+	by mail.lfdr.de (Postfix) with ESMTP id BE9294A9911
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358677AbiBDMPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:15:46 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:57020 "EHLO mx1.tq-group.com"
+        id S1358676AbiBDMPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:15:44 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:57007 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358632AbiBDMPb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1358618AbiBDMPb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Feb 2022 07:15:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
   t=1643976931; x=1675512931;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0jzXBJ2fXI0x5vj73g1ujzvH0lAWyzFDAhA3RZ/VINw=;
-  b=VSPezzx57EcOfoO3hIHruy6TNfAVVoECJMZ5j0aQbJDK50F95YkMEB4j
-   xInuJea3ZMEXxf7d1YMj6JoNDGx8Q+nwOJ8E14+otYB5WBCvkf+B3hFjo
-   HvsJaaYxe3GdxSYZbwLm397DKjA6sxuKxBjieH9vAFru/8D16X5g1oSYt
-   ISFi/8gpk7fZ+VGLPO7S1GQKAW+oCc3dSPIfda/MUGwDzZd4Qo2WI+/Ql
-   Tgob3qf4cqqoRyuQpKshkyX8P8mGJGVN1DskU+F7M8uPiev2tPyctIhy1
-   M0Dzfl02sCQy59gL4dMTTllPPPMl9wGQTtb6Cwb5PKgvGgEBnmOLiIamE
-   A==;
+  bh=taegKBe3B6246OHrJbDhTlLs+K0S36GFwVLsplN0Alo=;
+  b=LKDDtkSyBXrhRzQYmqJFWPuumYe9/YSzh8DhHAxkfnetG/d6OngVBRoH
+   jW53CHSkWyEKfTxT5bEDuluu00p/5N0Eudsg89X0q+6ihv8cubLuS2lY7
+   B/4C/4dvE7QNwJUr8tXj8GS1+9g5yEcMuKaC3XUPRATjYlqJr2eOA9OQC
+   jR9EKhV35BqW+MghpxydccNj9nlFy45UxIHJvRxCQS7wNcpcYXcYMyoSg
+   te7WWJYgPgmPkXCPiJeNAUti+Hm4Pruh5ruRjx6Vd6DmrkC3WD44xTT+a
+   gNGjpzlFQhmMC9kIm+sKAPj/+yjlSmzTZcFNLXNiXkuNA+Zzf00C2Rqh2
+   g==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903442"
+   d="scan'208";a="21903441"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
   by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:30 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
@@ -38,22 +38,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1643976930; x=1675512930;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0jzXBJ2fXI0x5vj73g1ujzvH0lAWyzFDAhA3RZ/VINw=;
-  b=R6gpuAoIf49JVzbVHQPb3QEtmtWLxhWw5u0ePtET9fj7uT5jkAC8Brxk
-   ytKIjqreYVLLi1pZo4iQxcgTq/s/i4FalQBxdaxl6LKBqeKM1TQ/vwEmm
-   +dOvjifaP/4z1XkhQyjYBsUZRwHsPkLBtbKUpra1C1NGkm4rVLPsYiOXI
-   hu66VYjKhCexBE0Gkj0dfxa37LS7XdAxWtYUaYbo5tHFvC3+IydXz342j
-   Me9V0J5akErmJy0PmNsp9oW/3xmMFUsNrR67ety7U6cETSUKb6ss1Chh1
-   cZd3RGRwr6R38QSPatmhUx9GxGO+KknMYWqMTFF03MQQVQEKknLpwWQXz
-   Q==;
+  bh=taegKBe3B6246OHrJbDhTlLs+K0S36GFwVLsplN0Alo=;
+  b=NXPtm3fIYC66UJm/bN5rv2cxL+dSKaNWpWIlkUT2fa+hr52eoAdlol8+
+   EkerhLLp2+J/6/iRGybkEeJRaFQVZkrhEHw9dfigo97ZKgcnk9c/OhKCv
+   ZGAKMfsmw5pqzCLeMY/otNFxgcNNkWcSG2cvtv3Y/qrDjIjG3vZ9hLYWa
+   8qMlFAsMUyNJvSYzYQO2XxhMwpiCjrYcKgUIkOjeyJEtlkfHPOWr8Tmnu
+   0Y7dHv5n0eEFp41Jb9D53d5f+Tb8EjKeeNvNHTJGRs9mj2xpHoHXYUozK
+   jPv3qHvK20QynDXDJsINfWx4MmAWsmj1ZpFb7t34Nd7WCY6101tpPilMD
+   A==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903426"
+   d="scan'208";a="21903427"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:24 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 63E87280075;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id ACA3D280065;
         Fri,  4 Feb 2022 13:15:24 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -71,9 +71,9 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
 Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH 1/8] media: imx: Store the type of hardware implementation
-Date:   Fri,  4 Feb 2022 13:15:07 +0100
-Message-Id: <20220204121514.2762676-2-alexander.stein@ew.tq-group.com>
+Subject: [PATCH 2/8] media: imx: Forward type of hardware implementation
+Date:   Fri,  4 Feb 2022 13:15:08 +0100
+Message-Id: <20220204121514.2762676-3-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
 References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
@@ -85,112 +85,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 
-The driver covers i.MX5/6, as well as i.MX7/8 hardware.
-Those implementations differ, e.g. in the sizes of buffers they accept.
-
-Some functionality should be abstracted, and storing type achieves that.
+Pass down the hardware type so imx_media_mbus_fmt_to_pix_fmt can do
+the actual switch.
 
 Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
 Changes in comparison to original commit from Dorota:
-* Applied the suggestion from Hans at [1].
+* is_imx56 is used instead of enum
 
-[1] https://patchwork.linuxtv.org/project/linux-media/patch/20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
+ drivers/staging/media/imx/imx-media-capture.c | 15 +++++++++------
+ drivers/staging/media/imx/imx-media-utils.c   |  3 ++-
+ drivers/staging/media/imx/imx-media.h         |  3 ++-
+ 3 files changed, 13 insertions(+), 8 deletions(-)
 
- drivers/staging/media/imx/imx-ic-prpencvf.c   | 3 ++-
- drivers/staging/media/imx/imx-media-capture.c | 5 ++++-
- drivers/staging/media/imx/imx-media-csi.c     | 3 ++-
- drivers/staging/media/imx/imx-media.h         | 3 ++-
- drivers/staging/media/imx/imx7-media-csi.c    | 3 ++-
- 5 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-index 9b81cfbcd777..caaaac1a515a 100644
---- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-+++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-@@ -1266,7 +1266,8 @@ static int prp_registered(struct v4l2_subdev *sd)
- 
- 	priv->vdev = imx_media_capture_device_init(ic_priv->ipu_dev,
- 						   &ic_priv->sd,
--						   PRPENCVF_SRC_PAD, true);
-+						   PRPENCVF_SRC_PAD, true,
-+						   true);
- 	if (IS_ERR(priv->vdev))
- 		return PTR_ERR(priv->vdev);
- 
 diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 93ba09236010..b61bf9f8ddf8 100644
+index b61bf9f8ddf8..8aad6d6d350e 100644
 --- a/drivers/staging/media/imx/imx-media-capture.c
 +++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -47,6 +47,7 @@ struct capture_priv {
- 	struct v4l2_ctrl_handler ctrl_hdlr;	/* Controls inherited from subdevs */
+@@ -139,7 +139,8 @@ static int capture_g_fmt_vid_cap(struct file *file, void *fh,
+ }
  
- 	bool legacy_api;			/* Use the legacy (pre-MC) API */
-+	bool is_imx56;				/* Hardware is i.MX5/i.MX6 */
- };
- 
- #define to_capture_priv(v) container_of(v, struct capture_priv, vdev)
-@@ -957,7 +958,8 @@ EXPORT_SYMBOL_GPL(imx_media_capture_device_unregister);
- 
- struct imx_media_video_dev *
- imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
--			      int pad, bool legacy_api)
-+			      int pad, bool legacy_api,
-+			      bool is_imx56)
+ static const struct imx_media_pixfmt *
+-__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
++__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose,
++		  bool is_imx56)
  {
- 	struct capture_priv *priv;
- 	struct video_device *vfd;
-@@ -972,6 +974,7 @@ imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
- 	priv->src_sd_pad = pad;
- 	priv->dev = dev;
- 	priv->legacy_api = legacy_api;
-+	priv->is_imx56 = is_imx56;
- 
- 	mutex_init(&priv->mutex);
- 	INIT_LIST_HEAD(&priv->ready_q);
-diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index bd7f156f2d52..c8f6add00dbb 100644
---- a/drivers/staging/media/imx/imx-media-csi.c
-+++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -1803,7 +1803,8 @@ static int csi_registered(struct v4l2_subdev *sd)
+ 	struct v4l2_mbus_framefmt fmt_src;
+ 	const struct imx_media_pixfmt *cc;
+@@ -171,7 +172,7 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
  	}
  
- 	priv->vdev = imx_media_capture_device_init(priv->sd.dev, &priv->sd,
--						   CSI_SRC_PAD_IDMAC, true);
-+						   CSI_SRC_PAD_IDMAC, true,
-+						   true);
- 	if (IS_ERR(priv->vdev)) {
- 		ret = PTR_ERR(priv->vdev);
- 		goto free_fim;
+ 	v4l2_fill_mbus_format(&fmt_src, pixfmt, 0);
+-	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc);
++	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc, is_imx56);
+ 
+ 	if (compose) {
+ 		compose->width = fmt_src.width;
+@@ -184,7 +185,9 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
+ static int capture_try_fmt_vid_cap(struct file *file, void *fh,
+ 				   struct v4l2_format *f)
+ {
+-	__capture_try_fmt(&f->fmt.pix, NULL);
++	struct capture_priv *priv = video_drvdata(file);
++
++	__capture_try_fmt(&f->fmt.pix, NULL, priv->is_imx56);
+ 	return 0;
+ }
+ 
+@@ -199,7 +202,7 @@ static int capture_s_fmt_vid_cap(struct file *file, void *fh,
+ 		return -EBUSY;
+ 	}
+ 
+-	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose);
++	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose, priv->is_imx56);
+ 
+ 	priv->vdev.cc = cc;
+ 	priv->vdev.fmt = f->fmt.pix;
+@@ -418,7 +421,7 @@ __capture_legacy_try_fmt(struct capture_priv *priv,
+ 		}
+ 	}
+ 
+-	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc);
++	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc, priv->is_imx56);
+ 
+ 	return cc;
+ }
+@@ -889,7 +892,7 @@ static int capture_init_format(struct capture_priv *priv)
+ 		fmt_src.format.height = IMX_MEDIA_DEF_PIX_HEIGHT;
+ 	}
+ 
+-	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL);
++	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL, priv->is_imx56);
+ 	vdev->compose.width = fmt_src.format.width;
+ 	vdev->compose.height = fmt_src.format.height;
+ 
+diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+index 94bc866ca28c..0daa6aad45f4 100644
+--- a/drivers/staging/media/imx/imx-media-utils.c
++++ b/drivers/staging/media/imx/imx-media-utils.c
+@@ -518,7 +518,8 @@ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
+ 
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc)
++				  const struct imx_media_pixfmt *cc,
++				  bool is_imx56)
+ {
+ 	u32 width;
+ 	u32 stride;
 diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index f263fc3adbb9..73e8e6e0d8e8 100644
+index 73e8e6e0d8e8..2be1bc97955c 100644
 --- a/drivers/staging/media/imx/imx-media.h
 +++ b/drivers/staging/media/imx/imx-media.h
-@@ -282,7 +282,8 @@ int imx_media_ic_unregister(struct v4l2_subdev *sd);
- /* imx-media-capture.c */
- struct imx_media_video_dev *
- imx_media_capture_device_init(struct device *dev, struct v4l2_subdev *src_sd,
--			      int pad, bool legacy_api);
-+			      int pad, bool legacy_api,
-+			      bool is_imx56);
- void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
- int imx_media_capture_device_register(struct imx_media_video_dev *vdev,
- 				      u32 link_flags);
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 32311fc0e2a4..158d2a736c6d 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1039,7 +1039,8 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
- 	}
- 
- 	csi->vdev = imx_media_capture_device_init(csi->sd.dev, &csi->sd,
--						  IMX7_CSI_PAD_SRC, false);
-+						  IMX7_CSI_PAD_SRC, false,
-+						  false);
- 	if (IS_ERR(csi->vdev))
- 		return PTR_ERR(csi->vdev);
- 
+@@ -198,7 +198,8 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
+ 			       bool ic_route);
+ int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
+ 				  const struct v4l2_mbus_framefmt *mbus,
+-				  const struct imx_media_pixfmt *cc);
++				  const struct imx_media_pixfmt *cc,
++				  bool is_imx56);
+ void imx_media_grp_id_to_sd_name(char *sd_name, int sz,
+ 				 u32 grp_id, int ipu_id);
+ struct v4l2_subdev *
 -- 
 2.25.1
 

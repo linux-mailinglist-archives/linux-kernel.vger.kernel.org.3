@@ -2,137 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48344A9276
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 03:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354404A9277
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 03:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbiBDCwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 21:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiBDCwA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 21:52:00 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B084C061714;
-        Thu,  3 Feb 2022 18:52:00 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95123472;
-        Fri,  4 Feb 2022 03:51:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1643943118;
-        bh=89lQC66uqInrcRlTJuSyiqnPE8b3jRGmpdyJc0F86t4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtWgknQSGQ5wKHQtdq7SXDdEfNQkFbP19rWtDc2bhWdHt31ZA+gY+bh6qHIrWcc2i
-         9KvUjXL/qHgQX+tdboIVGsY8wEo3Y1F4vLaOX0E9aD1VjF/rxkfUDH6VIG9NAlVHPp
-         gglskBKNs26U4CWe/aaUglTVtQFcztDdDOabbARY=
-Date:   Fri, 4 Feb 2022 04:51:34 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com, nsaenz@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [RFC PATCH v4 07/12] media: imx219: Rename mbus codes array
-Message-ID: <YfyUtu2e6HHMGfvd@pendragon.ideasonboard.com>
-References: <20220203175009.558868-1-jeanmichel.hautbois@ideasonboard.com>
- <20220203175009.558868-8-jeanmichel.hautbois@ideasonboard.com>
+        id S1356708AbiBDCww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 21:52:52 -0500
+Received: from mga12.intel.com ([192.55.52.136]:9693 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345674AbiBDCwv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 21:52:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643943171; x=1675479171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZKwTxoNn2ACVfVR4zMieX6gLP1h91YrIo9hiHwaUoNQ=;
+  b=E7DqVT1BgutdQIb5ujHZ8892rxqGkm2wZYQNR05ELJhWOwfTmhjGb6oY
+   TvI7kYW0ajJ9QuDWsOwXhml4lzTzWsDRChzbys61IJWFCcNKqKb8vUzei
+   6jYJnZmesoE3TioeF/DKuwsmcglPJZtQjY1/juLMi/74taCwwwkyRcGkZ
+   snEcO1g+PTFXbMYnY/anrnVLCkvbW2e/OqwwCqoy6tedI7sQH+Q8rQm4W
+   HdINUbtzAnPKOWQZY3q0GPvZ9n6rINiILHA6cNvRBSSli9G220ZI33EGc
+   cgRcBAtVxOCKHGTlVk3ScQq0n5rsQ7DJokQNUD5R3NXOiGxrn25olC2Js
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228272453"
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="228272453"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 18:52:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="631570011"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 Feb 2022 18:52:49 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFoiO-000X2a-Vu; Fri, 04 Feb 2022 02:52:48 +0000
+Date:   Fri, 4 Feb 2022 10:52:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     YunQiang Su <yunqiang.su@cipunited.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning:
+ no previous prototype for '__ashldi3'
+Message-ID: <202202041004.sFUBmVAX-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220203175009.558868-8-jeanmichel.hautbois@ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1f2cfdd349b7647f438c1e552dc1b983da86d830
+commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
+date:   5 weeks ago
+config: mips-ci20_defconfig (https://download.01.org/0day-ci/archive/20220204/202202041004.sFUBmVAX-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-Thank you for the patch.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Thu, Feb 03, 2022 at 06:50:04PM +0100, Jean-Michel Hautbois wrote:
-> The imx219 is using the name codes[] for the mbus format which is not
-> easy to read and know what it means. Change it to imx219_mbus_formats.
-> 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+   In file included from arch/mips/boot/compressed/ashldi3.c:2:
+>> arch/mips/boot/compressed/../../../../lib/ashldi3.c:9:19: warning: no previous prototype for '__ashldi3' [-Wmissing-prototypes]
+       9 | long long notrace __ashldi3(long long u, word_type b)
+         |                   ^~~~~~~~~
 
-> ---
->  drivers/media/i2c/imx219.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index e10af3f74b38..74dba5e61201 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -429,7 +429,7 @@ static const char * const imx219_supply_name[] = {
->   * - v flip
->   * - h&v flips
->   */
-> -static const u32 codes[] = {
-> +static const u32 imx219_mbus_formats[] = {
->  	MEDIA_BUS_FMT_SRGGB10_1X10,
->  	MEDIA_BUS_FMT_SGRBG10_1X10,
->  	MEDIA_BUS_FMT_SGBRG10_1X10,
-> @@ -655,17 +655,17 @@ static u32 imx219_get_format_code(struct imx219 *imx219, u32 code)
->  
->  	lockdep_assert_held(&imx219->mutex);
->  
-> -	for (i = 0; i < ARRAY_SIZE(codes); i++)
-> -		if (codes[i] == code)
-> +	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-> +		if (imx219_mbus_formats[i] == code)
->  			break;
->  
-> -	if (i >= ARRAY_SIZE(codes))
-> +	if (i >= ARRAY_SIZE(imx219_mbus_formats))
->  		i = 0;
->  
->  	i = (i & ~3) | (imx219->vflip->val ? 2 : 0) |
->  	    (imx219->hflip->val ? 1 : 0);
->  
-> -	return codes[i];
-> +	return imx219_mbus_formats[i];
->  }
->  
->  static void imx219_set_default_format(struct imx219 *imx219)
-> @@ -808,11 +808,11 @@ static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
->  {
->  	struct imx219 *imx219 = to_imx219(sd);
->  
-> -	if (code->index >= (ARRAY_SIZE(codes) / 4))
-> +	if (code->index >= (ARRAY_SIZE(imx219_mbus_formats) / 4))
->  		return -EINVAL;
->  
->  	mutex_lock(&imx219->mutex);
-> -	code->code = imx219_get_format_code(imx219, codes[code->index * 4]);
-> +	code->code = imx219_get_format_code(imx219, imx219_mbus_formats[code->index * 4]);
->  	mutex_unlock(&imx219->mutex);
->  
->  	return 0;
-> @@ -908,14 +908,14 @@ static int imx219_set_pad_format(struct v4l2_subdev *sd,
->  
->  	mutex_lock(&imx219->mutex);
->  
-> -	for (i = 0; i < ARRAY_SIZE(codes); i++)
-> -		if (codes[i] == fmt->format.code)
-> +	for (i = 0; i < ARRAY_SIZE(imx219_mbus_formats); i++)
-> +		if (imx219_mbus_formats[i] == fmt->format.code)
->  			break;
-> -	if (i >= ARRAY_SIZE(codes))
-> +	if (i >= ARRAY_SIZE(imx219_mbus_formats))
->  		i = 0;
->  
->  	/* Bayer order varies with flips */
-> -	fmt->format.code = imx219_get_format_code(imx219, codes[i]);
-> +	fmt->format.code = imx219_get_format_code(imx219, imx219_mbus_formats[i]);
->  
->  	mode = v4l2_find_nearest_size(supported_modes,
->  				      ARRAY_SIZE(supported_modes),
 
--- 
-Regards,
+vim +/__ashldi3 +9 arch/mips/boot/compressed/../../../../lib/ashldi3.c
 
-Laurent Pinchart
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23  8  
+b35cd9884fa5d8 Palmer Dabbelt 2017-05-23 @9  long long notrace __ashldi3(long long u, word_type b)
+
+:::::: The code at line 9 was first introduced by commit
+:::::: b35cd9884fa5d81c9d5e7f57c9d03264ae2bd835 lib: Add shared copies of some GCC library routines
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

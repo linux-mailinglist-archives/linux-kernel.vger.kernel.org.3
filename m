@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC224A9FC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA854A9FCB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbiBDTMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S231906AbiBDTMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbiBDTL7 (ORCPT
+        with ESMTP id S231264AbiBDTMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:11:59 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AEDC061714;
-        Fri,  4 Feb 2022 11:11:59 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id m185so299763iof.10;
-        Fri, 04 Feb 2022 11:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=1+NyZmvJ5imcvYz0mjqJyn7nLXDdeawn4nWcdKVYu3c=;
-        b=M1BA9bwUbcXZ8g74zYTQmw3ZLqcsjD4lj3yPE8XU8d85lJFWzRQFo5HqDXV5e0w7vl
-         2/9huNKBafJ2V6MwpOhybRwsKVWUTBA1HIN8cjsKEODWfvliJy8ogm3uKso9RUUbsm2P
-         MrkFq2rAaqxF0O/lYm13y27I9/Q+DEz6dfAWI/w46IwbEAE1RAtsvxnvsNyVYpdVaOf7
-         SqeX02W3rGaUxVTboYFUEqmiQDfnpfoKeH6KxuwffMUZdWT8tl9ebVYEXjr81cZo4unm
-         AucNOABPvxI2jJeXGTrYeVsovczo7zAHwnoyAGGWNmnvw37/nsb1Im0ASxM4Yq/hYZMJ
-         wSuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=1+NyZmvJ5imcvYz0mjqJyn7nLXDdeawn4nWcdKVYu3c=;
-        b=rm9IvfOyIwFldWudf+lzwg7aeBX/+bRrMhEv0+uTwYnX/xuiXOtxVVku7q6DxuL02G
-         Ba0hZQVGYpyKt+clKRwAa4rqOnHe6L4usZ6121kQuCCVat+/aRBH16U07EOI/9Z9QvY2
-         IMbStIS9NNd4ursMiLDjgt2sMncY0qnTR+QSkdi0EiISYUDQyUdASr3oAEq21wIIKE5T
-         P69vbbW6WoJbVF3+FqrfCgXin/UDR6m3bKCoBLTsUF/2P7QdqoeOzH2OLYqB+DpuA8TT
-         rUQXlmv9XGL0dZWuiX7OD2YvNHPsa9zjiwjHb4MV/24AcCZ54QloV/HU+IUwSNdy1rmC
-         s9+A==
-X-Gm-Message-State: AOAM533kgJqJlidpFtS33GVmjVIUI1Did56eHtGaasxreJ64aZrmC3CW
-        vc6lCUYF+5ZeU38CzZMDtAQG5NfvcqUyE5ndOhP+wQ==
-X-Google-Smtp-Source: ABdhPJxl/Ch/r1JMlpIA7tMXijp7AdPbC3h2+8uPe1dtecM4U/6XZN6+dveiUDRn7gl0n98oZggiKA==
-X-Received: by 2002:a02:7424:: with SMTP id o36mr287805jac.159.1644001918464;
-        Fri, 04 Feb 2022 11:11:58 -0800 (PST)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
-        by smtp.gmail.com with ESMTPSA id o4sm1280666iou.42.2022.02.04.11.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 11:11:57 -0800 (PST)
-Message-ID: <61fd7a7d.1c69fb81.8245f.7346@mx.google.com>
-Date:   Fri, 04 Feb 2022 11:11:57 -0800 (PST)
-X-Google-Original-Date: Fri, 04 Feb 2022 19:11:56 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
-Subject: RE: [PATCH 5.10 00/25] 5.10.97-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        Fri, 4 Feb 2022 14:12:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52066C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:12:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E615C61CA4
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 19:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5390C004E1;
+        Fri,  4 Feb 2022 19:12:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644001949;
+        bh=bVbFbjLZfm71Rb7hG9w4qG3XkI45O+ysPOPG+cSXIvQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ndhH1LGqfmADGowF3Iyto9Ac2amhDEoE5fNLbMAvW/ZRivgi7Y7BdBmswmv/1hRWs
+         danOKq9aWaUXN2M+2KEIdl25MAY71tIQlav/5Em6kBdT7OR9a66iUBOxUOXCNhlqMG
+         LD5zayLFJKTEycUGbczTcqwtw4e81KyvNruj3elYNr/5lxZ0pUGklc/g0CaYrdmXwt
+         5QxgwLZPxnEhvrmlCNe8NTuxULVUl6BPtdxzzmXuz4aSmVCskM9nh8kbrkwVoW774d
+         aKglnb3ckvNFbgmeGZriL66BoGrhkxcxtLiAQltLapjs+bAy0hmH62FwBNIgUOmaWh
+         0BCRAk1Lk9Z2w==
+Date:   Sat, 5 Feb 2022 03:12:14 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
+        Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Yue Hu <zbestahu@gmail.com>
+Subject: [GIT PULL] erofs fixes for 5.17-rc3
+Message-ID: <20220204191213.GA18192@hsiangkao-HP-ZHAN-66-Pro-G1>
+Mail-Followup-To: Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-erofs@lists.ozlabs.org,
+        Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Yue Hu <zbestahu@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  4 Feb 2022 10:20:07 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.97 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.97-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Linus,
 
-5.10.97-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Could you consider this pull request for 5.17-rc3?
 
+This includes two fixes related to fsdax cleanup in this cycle and
+ztailpacking to fix small compressed data inlining. There is also a
+trivial cleanup to rearrange code for better reading.
+
+All commits have been in -next and no merge conflicts.
+
+Thanks,
+Gao Xiang
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-5.17-rc3-fixes
+
+for you to fetch changes up to 24331050a3e6afcd4451409831dd9ae8085a42f6:
+
+  erofs: fix small compressed files inlining (2022-02-04 12:37:12 +0800)
+
+----------------------------------------------------------------
+Changes since last update:
+
+ - fix fsdax partition offset misbehavior;
+
+ - clean up z_erofs_decompressqueue_work() declaration;
+
+ - fix up EOF lcluster inlining, especially for small compressed data.
+
+----------------------------------------------------------------
+Gao Xiang (3):
+      erofs: fix fsdax partition offset handling
+      erofs: avoid unnecessary z_erofs_decompressqueue_work() declaration
+      erofs: fix small compressed files inlining
+
+ fs/erofs/data.c  |   8 ++--
+ fs/erofs/zdata.c | 113 +++++++++++++++++++++++++++----------------------------
+ fs/erofs/zmap.c  |   7 ++++
+ 3 files changed, 67 insertions(+), 61 deletions(-)

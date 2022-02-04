@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B9E4AA094
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A632E4AA0C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235920AbiBDUAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S240492AbiBDUDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbiBDT7J (ORCPT
+        with ESMTP id S235943AbiBDT7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:59:09 -0500
+        Fri, 4 Feb 2022 14:59:16 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC953C06174E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2A4C061751
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=z3sPhSbLDlsnaAomIZZPLnOqHhZ/qq70m6emg2A+ypQ=; b=K/ngvCfbirTWidLKv3SUZSSl0v
-        dzHdbtLw5VaV24sQnq07oLhjjHPA00pdvzQ5XXmuGai+KYKkbS9qSFnZfuRi1y0uzBN575Ud21i5U
-        8dGIqEXz8PPUkcn4Dpvd+f55TI5LtSvpfBRy2VPwlW8ljBsm6tuwZKaryMQ9NSopDBx6TLCdyCp8d
-        vOUajyHC4Cn94aJZ8jNhawiVbMyVQeQgizbSRntnFD5YAEJbZsblumJePTjQRLAbon5GwS91U7OHg
-        bnm2A8lzk66JRJRnvIi+bAe7G0OVOcvw+dAlgyspnIs1NJlu6WnOOIwsQRqh8zdDCcVFlVra3s20B
-        b1/dFB9g==;
+        bh=AZtYGWaQIVF80cGs43r5RQ+0AtmMNHsJoH6q+RECIQc=; b=SEHIb+LELVsxBPqfzw4/b/kzCr
+        lWekk7iNkDd6IxVCHlOZqydw4NNeyhWn+d//kpRRHLkgDkRJsEns5mQKXkhikyqZBn/lCPd+PBnZz
+        XQRrDLX2VLn1IRk+4EV+ER30v5ySQTKPz1esiGzeOZzc6zCcXrqBNkmJuRQYhpqcFCwXtCBS5bZ4X
+        r2b79inNIUEH7f8K30WFd0e6B1dCZDff8P5Vm9KQCySyFbQlgxi+ETGIw2CCBVKe5euKtnJJg7JgY
+        kpVTRV/OwTH2t8PENeRCeHUrWN6crW7z9io1oCI+f1XRaOTfAptK0AkfHN9lfR/L0NG7NU4EP7YFg
+        Ec+v4Kkw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nG4jX-007Lml-43; Fri, 04 Feb 2022 19:59:03 +0000
+        id 1nG4jX-007Lmr-6z; Fri, 04 Feb 2022 19:59:03 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 36/75] mm: Add folio_mapcount()
-Date:   Fri,  4 Feb 2022 19:58:13 +0000
-Message-Id: <20220204195852.1751729-37-willy@infradead.org>
+Subject: [PATCH 37/75] mm: Add split_folio_to_list()
+Date:   Fri,  4 Feb 2022 19:58:14 +0000
+Message-Id: <20220204195852.1751729-38-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
 References: <20220204195852.1751729-1-willy@infradead.org>
@@ -48,115 +48,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the same algorithm as total_mapcount(), which is
-transformed into a wrapper function.
+This is a convenience function; split_huge_page_to_list() can take
+any page in a folio (and does so on purpose because that page will
+be the one which keeps the refcount).  But it's convenient for the
+callers to pass the folio instead of the first page in the folio.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/mm.h |  8 +++++++-
- mm/huge_memory.c   | 24 ------------------------
- mm/util.c          | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+), 25 deletions(-)
+ include/linux/huge_mm.h |  6 ++++++
+ mm/vmscan.c             | 10 +++++-----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 6ddf655f9279..6a19cd97d5aa 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -826,8 +826,14 @@ static inline int page_mapcount(struct page *page)
- 	return atomic_read(&page->_mapcount) + 1;
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index e4c18ba8d3bf..71c073d411ac 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -483,6 +483,12 @@ static inline bool thp_migration_supported(void)
  }
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
  
-+int folio_mapcount(struct folio *folio);
-+
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
--int total_mapcount(struct page *page);
-+static inline int total_mapcount(struct page *page)
++static inline int split_folio_to_list(struct folio *folio,
++		struct list_head *list)
 +{
-+	return folio_mapcount(page_folio(page));
-+}
-+
- int page_trans_huge_mapcount(struct page *page);
- #else
- static inline int total_mapcount(struct page *page)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 406a3c28c026..94e591d638eb 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2494,30 +2494,6 @@ static void __split_huge_page(struct page *page, struct list_head *list,
- 	}
- }
- 
--int total_mapcount(struct page *page)
--{
--	int i, compound, nr, ret;
--
--	VM_BUG_ON_PAGE(PageTail(page), page);
--
--	if (likely(!PageCompound(page)))
--		return atomic_read(&page->_mapcount) + 1;
--
--	compound = compound_mapcount(page);
--	nr = compound_nr(page);
--	if (PageHuge(page))
--		return compound;
--	ret = compound;
--	for (i = 0; i < nr; i++)
--		ret += atomic_read(&page[i]._mapcount) + 1;
--	/* File pages has compound_mapcount included in _mapcount */
--	if (!PageAnon(page))
--		return ret - compound * nr;
--	if (PageDoubleMap(page))
--		ret -= nr;
--	return ret;
--}
--
- /*
-  * This calculates accurately how many mappings a transparent hugepage
-  * has (unlike page_mapcount() which isn't fully accurate). This full
-diff --git a/mm/util.c b/mm/util.c
-index 7e43369064c8..b614f423aaa4 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -740,6 +740,39 @@ int __page_mapcount(struct page *page)
- }
- EXPORT_SYMBOL_GPL(__page_mapcount);
- 
-+/**
-+ * folio_mapcount() - Calculate the number of mappings of this folio.
-+ * @folio: The folio.
-+ *
-+ * A large folio tracks both how many times the entire folio is mapped,
-+ * and how many times each individual page in the folio is mapped.
-+ * This function calculates the total number of times the folio is
-+ * mapped.
-+ *
-+ * Return: The number of times this folio is mapped.
-+ */
-+int folio_mapcount(struct folio *folio)
-+{
-+	int i, compound, nr, ret;
-+
-+	if (likely(!folio_test_large(folio)))
-+		return atomic_read(&folio->_mapcount) + 1;
-+
-+	compound = folio_entire_mapcount(folio);
-+	nr = folio_nr_pages(folio);
-+	if (folio_test_hugetlb(folio))
-+		return compound;
-+	ret = compound;
-+	for (i = 0; i < nr; i++)
-+		ret += atomic_read(&folio_page(folio, i)->_mapcount) + 1;
-+	/* File pages has compound_mapcount included in _mapcount */
-+	if (!folio_test_anon(folio))
-+		return ret - compound * nr;
-+	if (folio_test_double_map(folio))
-+		ret -= nr;
-+	return ret;
++	return split_huge_page_to_list(&folio->page, list);
 +}
 +
  /**
-  * folio_copy - Copy the contents of one folio to another.
-  * @dst: Folio to copy to.
+  * thp_size - Size of a transparent huge page.
+  * @page: Head page of a transparent huge page.
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index e8c5855bc38d..0d23ade9f6e2 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1708,16 +1708,16 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 					 * tail pages can be freed without IO.
+ 					 */
+ 					if (!compound_mapcount(page) &&
+-					    split_huge_page_to_list(page,
+-								    page_list))
++					    split_folio_to_list(folio,
++								page_list))
+ 						goto activate_locked;
+ 				}
+ 				if (!add_to_swap(page)) {
+ 					if (!PageTransHuge(page))
+ 						goto activate_locked_split;
+ 					/* Fallback to swap normal pages */
+-					if (split_huge_page_to_list(page,
+-								    page_list))
++					if (split_folio_to_list(folio,
++								page_list))
+ 						goto activate_locked;
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 					count_vm_event(THP_SWPOUT_FALLBACK);
+@@ -1733,7 +1733,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 			}
+ 		} else if (unlikely(PageTransHuge(page))) {
+ 			/* Split file THP */
+-			if (split_huge_page_to_list(page, page_list))
++			if (split_folio_to_list(folio, page_list))
+ 				goto keep_locked;
+ 		}
+ 
 -- 
 2.34.1
 

@@ -2,179 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715F4A9B9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67FA4A9BA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359593AbiBDPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:06:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:50330 "EHLO foss.arm.com"
+        id S1357165AbiBDPHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:07:36 -0500
+Received: from mga02.intel.com ([134.134.136.20]:19976 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359585AbiBDPG3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:06:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 853DC1477;
-        Fri,  4 Feb 2022 07:06:29 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 28BA63F774;
-        Fri,  4 Feb 2022 07:06:27 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     ardb@kernel.org, bp@alien8.de, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, frederic@kernel.org,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
-        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
-Subject: [PATCH v2 7/7] arm64: support PREEMPT_DYNAMIC
-Date:   Fri,  4 Feb 2022 15:05:57 +0000
-Message-Id: <20220204150557.434610-8-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220204150557.434610-1-mark.rutland@arm.com>
-References: <20220204150557.434610-1-mark.rutland@arm.com>
+        id S232560AbiBDPHe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:07:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643987254; x=1675523254;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h/9khmtg2t68pwXtFE8VZDwdVbkQjmJgc0X80tEipNI=;
+  b=jDsv5vYmAJrItxxCVe8bX9z/mMBlLAycuMc0K/WnkX355tUWzynV3hnD
+   bIAKOK/sw/pgzntlxAXSNHQAwnbrrRgF09NkXbODM989SoNuZX8C9mfrh
+   JyvPwWTjKbskrN4DqhYFMdUwLPtQX6JWREK1Q9ERyB+RBqBB/Ru5JIu0V
+   3l/i1backYydFsUks9eSuhe84VuYeBv/wfoqXapyQXkaOOpRJRGTx3Pya
+   KUEBPY41Iq9Wsifq4/sc3ZUvX1lnfsvY7TYy1L9E5MuBZQyqARpuxnK8D
+   qHOaf0FCjbjUUYh8kg93N4xk2Ykx9QatbTj88OhO0DYcpzwaiVKTQrapb
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="235780881"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="235780881"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:07:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="677119496"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 04 Feb 2022 07:07:31 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 04 Feb 2022 17:07:30 +0200
+Date:   Fri, 4 Feb 2022 17:07:30 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] usb: typec: Separate USB Power Delivery from USB
+ Type-C
+Message-ID: <Yf1BMhFp7XYYyCx+@kuha.fi.intel.com>
+References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+ <20220203144657.16527-2-heikki.krogerus@linux.intel.com>
+ <Yfvs13vpsWULIVWu@kroah.com>
+ <Yfz6OUbDBXVtQzrb@kuha.fi.intel.com>
+ <Yf0xPr957MxtaqBn@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yf0xPr957MxtaqBn@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables support for PREEMPT_DYNAMIC on arm64, allowing the
-preemption model to be chosen at boot time.
+On Fri, Feb 04, 2022 at 02:59:26PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Feb 04, 2022 at 12:04:41PM +0200, Heikki Krogerus wrote:
+> > Hi Greg,
+> > 
+> > On Thu, Feb 03, 2022 at 03:55:19PM +0100, Greg Kroah-Hartman wrote:
+> > > On Thu, Feb 03, 2022 at 05:46:55PM +0300, Heikki Krogerus wrote:
+> > > > +/* These additional details are only available with vSafe5V supplies */
+> > > > +static struct kobj_attribute dual_role_power_attr = __ATTR_RO(dual_role_power);
+> > > > +static struct kobj_attribute usb_suspend_supported_attr = __ATTR_RO(usb_suspend_supported);
+> > > > +static struct kobj_attribute unconstrained_power_attr = __ATTR_RO(unconstrained_power);
+> > > > +static struct kobj_attribute usb_communication_capable_attr = __ATTR_RO(usb_communication_capable);
+> > > > +static struct kobj_attribute dual_role_data_attr = __ATTR_RO(dual_role_data);
+> > > > +static struct kobj_attribute
+> > > > +unchunked_extended_messages_supported_attr = __ATTR_RO(unchunked_extended_messages_supported);
+> > > 
+> > > Note, no 'struct device' should ever have a "raw" kobject hanging off of
+> > > it.  If so, something went wrong.
+> > > 
+> > > If you do this, userspace will never be notified of the attributes and
+> > > any userspace representation of the tree will be messed up.
+> > > 
+> > > Please, use an attribute directory with a name, or if you really need to
+> > > go another level deep, use a real 'struct device'.  As-is here, I can't
+> > > take it.
+> > 
+> > OK, got it. I don't think we can avoid the deeper levels, not without
+> > making this really cryptic, and not really usable in all cases. These
+> > objects are trying to represent (parts) of the protocol - the
+> > messages, the objects in those messages, and later the responses to
+> > those messages.
+> > 
+> > But I'm also trying to avoid having to claim that these objects are
+> > "devices", because honestly, claiming that the packages used in
+> > communication are devices is confusing, and just wrong. If we take
+> > that road, then we really should redefine what struct device is
+> > supposed to represent, and rename it also.
+> 
+> Fair enough, this isn't really a device, it's an "attribute" of your
+> device you are wanting to show.  It's just that you are really "deep".
+> 
+> You asked for:
+> 
+> /sys/class/typec/port0/usb_power_delivery
+> |-- revision
+> |-- sink_capabilities/
+> |   |-- 1:fixed_supply/
+> |   |   |-- dual_role_data
+> |   |   |-- dual_role_power
+> |   |   |-- fast_role_swap_current
+> |   |   |-- operational_current
+> |   |   |-- unchunked_extended_messages_supported
+> |   |   |-- unconstrained_power
+> |   |   |-- usb_communication_capable
+> |   |   |-- usb_suspend_supported
+> |   |   `-- voltage
+> |   |-- 2:variable_supply/
+> |   |   |-- maximum_voltage
+> |   |   |-- minimum_voltage
+> |   |   `-- operational_current
+> |   `-- 3:battery/
+> |       |-- maximum_voltage
+> |       |-- minimum_voltage
+> |       `-- operational_power
+> `-- source_capabilities/
+>     `-- 1:fixed_supply/
+>         |-- dual_role_data
+>         |-- dual_role_power
+>         |-- maximum_current
+>         |-- unchunked_extended_messages_supported
+>         |-- unconstrained_power
+>         |-- usb_communication_capable
+>         |-- usb_suspend_supported
+>         `-- voltage
+> 
+> 
+> To start with, your "attribute" is really "usb_power_delivery" here, so
+> you can just use an attribute group name to get the "revision" file.
+> 
+> But then the later ones could be flat in that directory as well, using a
+> ':' to split as you did already, and the above could turn into:
+> 
+> /sys/class/typec/port0/usb_power_delivery
+> |-- revision
+> |-- sink_capabilites:1:fixed_supply:dual_role_data
+> |-- sink_capabilites:1:fixed_supply:dual_role_power
+> |-- sink_capabilites:1:fixed_supply:fase_role_swap_current
+> ....
+> |-- sink_capabilites:2:variable_supply:maximum_voltage
+> |-- sink_capabilites:2:variable_supply:minimum_voltage
+> ...
+> |-- source_capabilities:1:fixed_supply:dual_role_data
+> |-- source_capabilities:1:fixed_supply:dual_role_power
+> |-- source_capabilities:1:fixed_supply:maximum_current
+> ...
+> 
+> But ick, that's also a mess as you are now forced to parse filenames in
+> userspace in a different way than "normal".
+> 
+> Is there anything special about the number here?  It's the "position"
+> which will be unique.  So make that position a device, as that's kind of
+> what it is (like usb endpoints are devices)
+> 
+> Then you could make a bus for the positions and all would be good, and
+> you could turn this into:
+> 
+> 
+> /sys/class/typec/port0/usb_power_delivery
+> |-- revision
+> |-- sink_capabilities:1/
+> |   `-- fixed_supply/
+> |       |-- dual_role_data
+> |       |-- dual_role_power
+> |       |-- fast_role_swap_current
+> |       |-- operational_current
+> |       |-- unchunked_extended_messages_supported
+> |       |-- unconstrained_power
+> |       |-- usb_communication_capable
+> |       |-- usb_suspend_supported
+> |       `-- voltage
+> |-- sink_capabilities:2/
+> |   `-- variable_supply/
+> |       |-- maximum_voltage
+> |       |-- minimum_voltage
+> |       `-- operational_current
+> |-- sink_capabilities:3/
+> |   `-- battery/
+> |       |-- maximum_voltage
+> |       |-- minimum_voltage
+> |       `-- operational_power
+> `-- source_capabilities:1/
+>     `-- fixed_supply/
+>         |-- dual_role_data
+>         |-- dual_role_power
+>         |-- maximum_current
+>         |-- unchunked_extended_messages_supported
+>         |-- unconstrained_power
+>         |-- usb_communication_capable
+>         |-- usb_suspend_supported
+>         `-- voltage
+> 
+> Would that work?
 
-Specifically, this patch selects HAVE_PREEMPT_DYNAMIC_KEY, so that each
-preemption function is an out-of-line call with an early return
-depending upon a static key. This leaves almost all the codegen up to
-the compiler, and side-steps a number of pain points with static calls
-(e.g. interaction with CFI schemes). This should have no worse overhead
-than using non-inline static calls, as those use out-of-line trampolines
-with early returns.
+Unfortunately the object position is only defined for these
+capability messages, not for the other messages. It's not going to
+work :-(
 
-For example, the dynamic_cond_resched() wrapper looks as follows (with
-the first `B` being replaced with a `NOP` when the function is
-disabled):
+> > So would it be OK that, instead of registering these objects as
+> > devices, we just introduce a kset where we can group them
+> > (/sys/kernel/usb_power_delivery)?
+> 
+> You want to show this as attched to a specific port somehow, so that
+> location is not going to work.
 
-| <dynamic_cond_resched>:
-|        bti     c
-|        b       <dynamic_cond_resched+0x10>
-|        mov     w0, #0x0                        // #0
-|        ret
-|        mrs     x0, sp_el0
-|        ldr     x0, [x0, #8]
-|        cbnz    x0, <dynamic_cond_resched+0x8>
-|        paciasp
-|        stp     x29, x30, [sp, #-16]!
-|        mov     x29, sp
-|        bl      <preempt_schedule_common>
-|        mov     w0, #0x1                        // #1
-|        ldp     x29, x30, [sp], #16
-|        autiasp
-|        ret
+But the idea with that kset would be that you have a separate
+directory for each port there for this stuff:
 
-... compared to the regular form of the function:
+        /sys/kernel/usb_power_delivery/port0
+        |-- revision
+        ...
 
-| <__cond_resched>:
-|        bti     c
-|        mrs     x0, sp_el0
-|        ldr     x1, [x0, #8]
-|        cbz     x1, <__cond_resched+0x18>
-|        mov     w0, #0x0                        // #0
-|        ret
-|        paciasp
-|        stp     x29, x30, [sp, #-16]!
-|        mov     x29, sp
-|        bl      <preempt_schedule_common>
-|        mov     w0, #0x1                        // #1
-|        ldp     x29, x30, [sp], #16
-|        autiasp
-|        ret
+And those directories we could then link to the actual device:
 
-Since arm64 does not yet use the generic entry code, we must define our
-own `sk_dynamic_irqentry_exit_cond_resched`, which will be
-enabled/disabled by the common code in kernel/sched/core.c. All other
-preemption functions and associated static keys are defined there.
+        /sys/class/typec/port0/usb_power_delivery -> ../../../kernel/usb_power_delivery/port0
 
-Note that PREEMPT_DYNAMIC is `def bool y`, so this will default to
-enabled.
+thanks,
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Joey Gouly <joey.gouly@arm.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
-Cc: Will Deacon <will@kernel.org>
----
- arch/arm64/Kconfig               |  1 +
- arch/arm64/include/asm/preempt.h | 16 ++++++++++++++--
- arch/arm64/kernel/entry-common.c | 10 +++++++++-
- 3 files changed, 24 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index f2b5a4abef21..3831d922a81d 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -192,6 +192,7 @@ config ARM64
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
-+	select HAVE_PREEMPT_DYNAMIC_KEY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_FUNCTION_ARG_ACCESS_API
-diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
-index e83f0982b99c..73623f719d7e 100644
---- a/arch/arm64/include/asm/preempt.h
-+++ b/arch/arm64/include/asm/preempt.h
-@@ -80,10 +80,22 @@ static inline bool should_resched(int preempt_offset)
- }
- 
- #ifdef CONFIG_PREEMPTION
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+
-+DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+void dynamic_preempt_schedule(void);
-+#define __preempt_schedule()		dynamic_preempt_schedule()
-+void dynamic_preempt_schedule_notrace(void);
-+#define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
-+
-+#else
-+
- void preempt_schedule(void);
--#define __preempt_schedule() preempt_schedule()
-+#define __preempt_schedule()		preempt_schedule()
- void preempt_schedule_notrace(void);
--#define __preempt_schedule_notrace() preempt_schedule_notrace()
-+#define __preempt_schedule_notrace()	preempt_schedule_notrace()
-+
-+#endif
- #endif /* CONFIG_PREEMPTION */
- 
- #endif /* __ASM_PREEMPT_H */
-diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-index 2c639b6b676d..675352ec1368 100644
---- a/arch/arm64/kernel/entry-common.c
-+++ b/arch/arm64/kernel/entry-common.c
-@@ -220,9 +220,17 @@ static void noinstr arm64_exit_el1_dbg(struct pt_regs *regs)
- 		lockdep_hardirqs_on(CALLER_ADDR0);
- }
- 
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+#define need_irq_preemption() \
-+	(static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
-+#else
-+#define need_irq_preemption()	(IS_ENABLED(CONFIG_PREEMPTION))
-+#endif
-+
- static void __sched arm64_preempt_schedule_irq(void)
- {
--	if (!IS_ENABLED(CONFIG_PREEMPTION))
-+	if (!need_irq_preemption())
- 		return;
- 
- 	/*
 -- 
-2.30.2
-
+heikki

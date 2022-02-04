@@ -2,98 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B5A4A9298
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 04:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4384A92A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 04:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356738AbiBDDKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 22:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        id S1356749AbiBDDOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 22:14:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241328AbiBDDKB (ORCPT
+        with ESMTP id S234466AbiBDDOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 22:10:01 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD3C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 19:10:01 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d18so4006172plg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 19:10:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Xb2euam+bxQRkVsUNlC1wKKJLQkTZqUjd7jMV5JJi+U=;
-        b=GooFC8jW6okwOSCljLIV/3aDiFNcwXCOYW7628p/ZwlxHL7KtECawy3G3T46Exy/2i
-         hZK0mv/3JdIOvw/foQoBgGmtbzgU+pqd3cTSG11YEBRwHZKIyMgtIEmhuD5IKjLXvTFr
-         RnrCvdHI2D3ORPWWscV8lQviMdV/G3LLcwrz4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Xb2euam+bxQRkVsUNlC1wKKJLQkTZqUjd7jMV5JJi+U=;
-        b=pu5tDQACmH6qT9T2MuzCmBpdSgNx9luINNCVYQuA35ghh82tFVwTKjx56yssQHdLd1
-         pBp6PaP+13ZeRLDtvWLjZ8sB4rgncw5CGcWpEk5NCsqSB0EOzFEfeUir3zzEEzcj9Pxz
-         44agA8IF8Mjp90oP1UdGu4DpmlPkMqePK1PdIrsEiy+PVrdK3z9AbQD3N8ozxLs2XKFo
-         1iBZNPSQ/gC6NIvBSh8fZfV6StNspH2oZmRzOSYE3j9CQ/LetABi/3US7K8HoTBKDvv8
-         Ihb0HNe9YN8LArjRaPqTCWZYm6gC0NlS+AFJcIGwCPD6N9ZfgIt4eUyXl8MrANX673dJ
-         B3RQ==
-X-Gm-Message-State: AOAM530NAv9Mnzx5zK7EmgVt5HmoG+Qa4dvEXE38pilU0IYF31Nrjve8
-        SktLT8zDGvvfwLLADVe1C+/MXw==
-X-Google-Smtp-Source: ABdhPJwbqURJ9S5I9AbzDnpbYUrrxmi4XLMvNqGguxqTELmn3JbqrMuciCmIksEY3Jcc4RUe9g59Yg==
-X-Received: by 2002:a17:902:e313:: with SMTP id q19mr1152083plc.161.1643944200754;
-        Thu, 03 Feb 2022 19:10:00 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:2b9:190e:d890:b53e])
-        by smtp.gmail.com with ESMTPSA id m23sm378119pff.201.2022.02.03.19.09.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 19:10:00 -0800 (PST)
-Date:   Fri, 4 Feb 2022 12:09:55 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Thu, 3 Feb 2022 22:14:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95543C061714;
+        Thu,  3 Feb 2022 19:14:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E069B83651;
+        Fri,  4 Feb 2022 03:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC5AC340E8;
+        Fri,  4 Feb 2022 03:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643944477;
+        bh=LBsBh6EdRVeQhUGEyf/yNe0ywu7J4X/vV5zcBX+reb4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DsARRkvMbVBXOrQUSLY7e0KPwUn/1InPRyngBeob84IhwHb9/H3HOBsuHHFmzVTFe
+         O0MihJasTfRYjFZemEqpNXHbKx0I8tES856KH28Kxo6+d8EKKG4umrty3vKwiIwwr4
+         9DpSKLLYL7ZROxxGgDGm7GU7Mq2eZX55cZkHVe+WPSrvU5WyV4O0zsDXKZYHM4moUl
+         RJGxl4fL9bgF9IWA6fUA6trKzrysp0DwCy0VoEHy8k1a55LjTI2MlwI+I2tjHyfMVg
+         frO4gaWD7eCNw1GtHmjJ3EnSDpL6TSx2go8LNi/dOSgsp7pKgHF8IMDUsRERCwxBuA
+         +/0HYdMvXA0PA==
+Date:   Fri, 4 Feb 2022 12:14:33 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
-Subject: Re: [PATCH v1] printk: Fix incorrect __user type in
- proc_dointvec_minmax_sysadmin()
-Message-ID: <YfyZAy+ZDZ4SXIFE@google.com>
-References: <20220203145029.272640-1-mic@digikod.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220203145029.272640-1-mic@digikod.net>
+        Jiri Olsa <olsajiri@gmail.com>
+Subject: Re: [PATCH 0/8] bpf: Add fprobe link
+Message-Id: <20220204121433.7309b6fc49688c5428dfb789@kernel.org>
+In-Reply-To: <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
+References: <20220202135333.190761-1-jolsa@kernel.org>
+        <CAADnVQ+hTWbvNgnvJpAeM_-Ui2-G0YSM3QHB9G2+2kWEd4-Ymw@mail.gmail.com>
+        <Yfq+PJljylbwJ3Bf@krava>
+        <CAADnVQKeTB=UgY4Gf-46EBa8rwWTu2wvi7hEj2sdVTALGJ0JEg@mail.gmail.com>
+        <YfvvfLlM1FOTgvDm@krava>
+        <20220204094619.2784e00c0b7359356458ca57@kernel.org>
+        <CAADnVQJYY0Xm6M9O02E5rOkdQPX39NOOS4tM2jpwRLQvP-qDBg@mail.gmail.com>
+        <20220204110704.7c6eaf43ff9c8f5fe9bf3179@kernel.org>
+        <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/03 15:50), Mickaël Salaün wrote:
-> The move of proc_dointvec_minmax_sysadmin() from kernel/sysctl.c to
-> kernel/printk/sysctl.c introduced an incorrect __user attribute to the
-> buffer argument.  I spotted this change in [1] as well as the kernel
-> test robot.  Revert this change to please sparse:
-> 
-> kernel/printk/sysctl.c:20:51: warning: incorrect type in argument 3 (different address spaces)
-> kernel/printk/sysctl.c:20:51:    expected void *
-> kernel/printk/sysctl.c:20:51:    got void [noderef] __user *buffer
-> 
-> Fixes: faaa357a55e0 ("printk: move printk sysctl to printk/sysctl.c")
-> Link: https://lore.kernel.org/r/20220104155024.48023-2-mic@digikod.net [1]
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: John Ogness <john.ogness@linutronix.de>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Xiaoming Ni <nixiaoming@huawei.com>
-> Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
-> Link: https://lore.kernel.org/r/20220203145029.272640-1-mic@digikod.net
+On Thu, 3 Feb 2022 18:12:11 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> On Thu, Feb 3, 2022 at 6:07 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Thu, 3 Feb 2022 17:34:54 -0800
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > On Thu, Feb 3, 2022 at 4:46 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> > > >
+> > > > I thought What Alexei pointed was that don't expose the FPROBE name
+> > > > to user space. If so, I agree with that. We can continue to use
+> > > > KPROBE for user space. Using fprobe is just for kernel implementation.
+> > >
+> > > Clearly that intent is not working.
+> >
+> > Thanks for confirmation :-)
+> >
+> > > The "fprobe" name is already leaking outside of the kernel internals.
+> > > The module interface is being proposed.
+> >
+> > Yes, but that is only for making the example module.
+> > It is easy for me to enclose it inside kernel. I'm preparing KUnit
+> > selftest code for next version. After integrated that, we don't need
+> > that example module anymore.
+> >
+> > > You'd need to document it, etc.
+> >
+> > Yes, I've added a document of the APIs for the series.  :-)
+> >
+> > > I think it's only causing confusion to users.
+> > > The new name serves no additional purpose other than
+> > > being new and unheard of.
+> > > fprobe is kprobe on ftrace. That's it.
+> >
+> > No, fprobe is NOT kprobe on ftrace, kprobe on ftrace is already implemented
+> > transparently.
+> 
+> Not true.
+> fprobe is nothing but _explicit_ kprobe on ftrace.
+> There was an implicit optimization for kprobe when ftrace
+> could be used.
+> All this new interface is doing is making it explicit.
+> So a new name is not warranted here.
+> 
+> > from that viewpoint, fprobe and kprobe interface are similar but different.
+> 
+> What is the difference?
+> I don't see it.
+
+From the raw-kernel programer's viewpoint, here are the differences.
+
+kprobes is focusing on probing just a single probe point, and it can probe
+everywhere including function body. With this charactoristics, user can
+made a callback logic which is specialized for a specific address.
+
+typedef int (*kprobe_pre_handler_t) (struct kprobe *, struct pt_regs *);
+
+
+On the other hand, fprobe focuses on the multiple function entry and exit.
+That is just a wrapper of ftrace. So callbacks will need to check the
+function IP and change their behavior according to the IP.
+
+        void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+        void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+
+This is why the fprobe handler gets @entry_ip for the handlers.
+
+However, from viewpoint of the higher level users, those may look same
+because both interrupts the kernel execution and callback their program
+like BPF. BPF can select collect program according to the instruction_pointer
+of @regs in both case.
+
+In that case, I think it is natual that the BPF layer hides those differences
+from user, by abstracting those as a generic "kprobe" which means an idea of
+the general kernel instrumentation.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

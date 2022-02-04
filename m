@@ -2,33 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945E34A99A0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A414A99A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245520AbiBDNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:04:48 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43522 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbiBDNEr (ORCPT
+        id S1345740AbiBDNEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344898AbiBDNEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:04:47 -0500
+        Fri, 4 Feb 2022 08:04:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1140AC06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:04:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0704F61B7C
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:04:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA7BC340F0;
-        Fri,  4 Feb 2022 13:04:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB4861BD6
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2570C340F1;
+        Fri,  4 Feb 2022 13:04:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643979886;
-        bh=12lpq3N2GTXe+NLF6Remlqvk4jUFS3sVYR8vsgOt120=;
+        s=k20201202; t=1643979889;
+        bh=rRFnPno5dkJM7f0KqhuvvzKal926llCMJt1u2/5Gzcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PxcnnFqfmlGc8oUEfEOORcThkjuVrzD78ndarjQLi3YL0exnntNz4QDfKM8JNWXTX
-         SV7+a0DvldEOSNP/r9eIlNOMC8tTGNErKRGBKSgJgH0GKObwLjZFrrxEBL5Zv3kA3u
-         0kGiUp69vrF8kYH9hvR8KXPTSimWdj5yezS21VVJ5F9AGjnY3GdYXn/IxiBRpmG2Y3
-         t62SLGncYJp92hc0FQ0NnaMP8JYlMYx4I3LbEOvjp38qB2MRuvIG1urQKh2eT7wUUW
-         u3IOWiD48utj8n03M6dTPy+a05yToecQweFvahZ3ssxI5S3cCNGsdl/esRE+8gRDlg
-         7HfkgP5Bs+x4w==
+        b=T8yH8g6sRGGPbTM/G3nlEt53w9emz5vI4y+y8MlMGGg4vZWS019QhAWGtOWnK8VGX
+         pYk7aeA3edm/xww0lOE5YnBcaATzKbiw8H9mBley8l+ykUHUHuZJmDpF4TU+ebBr/o
+         1Jp/WL4802xvnXOFqQACY0G2oEtxKQ1nqBJCfsOz915XgPJwAQNLAo/epBAlC6xuDn
+         qUR5KT5oED4yVreX3lk3VJfJHC2xlVaZ880V472ntrhkNrc5nYiqVkH6UQilawgqPK
+         sTIubb/YowEiwzDfsrVWU2ashrRPJ56f/z5OFt5B3e6xFp31DjRzWhD14tXvDq8hMo
+         34ov8yHFPAsdw==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -44,9 +47,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Phil Auld <pauld@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Zefan Li <lizefan.x@bytedance.com>
-Subject: [PATCH 1/8] pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-Date:   Fri,  4 Feb 2022 14:04:26 +0100
-Message-Id: <20220204130433.488085-2-frederic@kernel.org>
+Subject: [PATCH 2/8] workqueue: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+Date:   Fri,  4 Feb 2022 14:04:27 +0100
+Message-Id: <20220204130433.488085-3-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204130433.488085-1-frederic@kernel.org>
 References: <20220204130433.488085-1-frederic@kernel.org>
@@ -68,6 +71,7 @@ parameters.
 
 Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
 Reviewed-by: Phil Auld <pauld@redhat.com>
+Acked-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Juri Lelli <juri.lelli@redhat.com>
@@ -82,55 +86,29 @@ Cc: Alex Belits <abelits@marvell.com>
 Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
 Cc: Paul E. McKenney  <paulmck@kernel.org>
 ---
- drivers/pci/pci-driver.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ kernel/workqueue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 588588cfda48..4a5792c82d08 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -350,7 +350,6 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
- 			  const struct pci_device_id *id)
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 33f1106b4f99..61ed310621ea 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -6006,13 +6006,13 @@ static void __init wq_numa_init(void)
+ void __init workqueue_init_early(void)
  {
- 	int error, node, cpu;
+ 	int std_nice[NR_STD_WORKER_POOLS] = { 0, HIGHPRI_NICE_LEVEL };
 -	int hk_flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
- 	struct drv_dev_and_id ddi = { drv, dev, id };
+ 	int i, cpu;
  
- 	/*
-@@ -368,17 +367,29 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
- 	 * device is probed from work_on_cpu() of the Physical device.
- 	 */
- 	if (node < 0 || node >= MAX_NUMNODES || !node_online(node) ||
--	    pci_physfn_is_probed(dev))
-+	    pci_physfn_is_probed(dev)) {
- 		cpu = nr_cpu_ids;
--	else
-+	} else {
-+		cpumask_var_t wq_domain_mask;
-+
-+		if (!zalloc_cpumask_var(&wq_domain_mask, GFP_KERNEL)) {
-+			error = -ENOMEM;
-+			goto out;
-+		}
-+		cpumask_and(wq_domain_mask,
-+			    housekeeping_cpumask(HK_FLAG_WQ),
-+			    housekeeping_cpumask(HK_FLAG_DOMAIN));
-+
- 		cpu = cpumask_any_and(cpumask_of_node(node),
--				      housekeeping_cpumask(hk_flags));
-+				      wq_domain_mask);
-+		free_cpumask_var(wq_domain_mask);
-+	}
+ 	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
  
- 	if (cpu < nr_cpu_ids)
- 		error = work_on_cpu(cpu, local_pci_probe, &ddi);
- 	else
- 		error = local_pci_probe(&ddi);
--
-+out:
- 	dev->is_probed = 0;
- 	cpu_hotplug_enable();
- 	return error;
+ 	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
+-	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(hk_flags));
++	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_FLAG_WQ));
++	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_FLAG_DOMAIN));
+ 
+ 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+ 
 -- 
 2.25.1
 

@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C814A951A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF6E4A951B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356192AbiBDI3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:29:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58576 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238709AbiBDI3d (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:29:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        id S1356397AbiBDIa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:30:29 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:42750 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234366AbiBDIa0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 03:30:26 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E06DBB83551;
-        Fri,  4 Feb 2022 08:29:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16867C004E1;
-        Fri,  4 Feb 2022 08:29:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643963370;
-        bh=hV0XVIpJv8RfsccFVgtd6nr6963RmT/8SgaEKOgrUGM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CkacnUzIMgDRFphD+YHfn9mQpier5IfJsqoe/Ygn0PfYfp0gBV6K82RfCBDhpo6Yf
-         jFMWFZUT0aez4ocdBJ8E1XmVV5KqFjpylE3tFFbmBR9NWg5qIny6U61rAl1sqHtTzR
-         eJuabVpShJszWnFnRlPjlTWmMQJuv4chuWqlEs8k=
-Date:   Fri, 4 Feb 2022 09:29:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.16 36/52] PM: wakeup: simplify the output logic
- of pm_show_wakelocks()
-Message-ID: <Yfzj56RiMMd79M26@kroah.com>
-References: <20220203202947.2304-1-sashal@kernel.org>
- <20220203202947.2304-36-sashal@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B1C1D1EC06A9;
+        Fri,  4 Feb 2022 09:30:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643963425;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=ofHqQ4SurO6eGbHKRovoC68iUpsdRIsx+TX9bNpORIo=;
+        b=JqVE3xoXfO6EJADk2G05Pz35rYdguCoYyCIBwHKyzm1OWV4EXTt+t5q2PwPJZjvn/Nk0yw
+        MHZvPN11jplUbvgggkXSjEeuyI+YJxsw9rV1lKFDdfVdo4Q2Et9VTtMDqB7Xi6tqzSPtC1
+        Wp9rm92dejrOWQxt5xoLlq+9LAvgoc4=
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tony Luck <tony.luck@intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] x86/mce: Fix more noinstr fun
+Date:   Fri,  4 Feb 2022 09:30:12 +0100
+Message-Id: <20220204083015.17317-1-bp@alien8.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203202947.2304-36-sashal@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 03:29:30PM -0500, Sasha Levin wrote:
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> [ Upstream commit c9d967b2ce40d71e968eb839f36c936b8a9cf1ea ]
-> 
-> The buffer handling in pm_show_wakelocks() is tricky, and hopefully
-> correct.  Ensure it really is correct by using sysfs_emit_at() which
-> handles all of the tricky string handling logic in a PAGE_SIZE buffer
-> for us automatically as this is a sysfs file being read from.
-> 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  kernel/power/wakelock.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+From: Borislav Petkov <bp@suse.de>
 
-This is already in a stable release, so no need to add it again.
+Hi all,
 
-thanks,
+here's a second small set of fixes for objtool noinstr validation issues
+in the MCE code.
 
-greg k-h
+It goes ontop of tip:locking/core where there are some more commits
+changing generic helpers to be always inlined.
+
+As always, comments and suggestions are appreciated.
+
+Thx.
+
+Borislav Petkov (3):
+  cpumask: Add a x86-specific cpumask_clear_cpu() helper
+  x86/ptrace: Always inline v8086_mode() for instrumentation
+  x86/mce: Use arch atomic and bit helpers
+
+ arch/x86/include/asm/cpumask.h     | 10 ++++++
+ arch/x86/include/asm/ptrace.h      |  2 +-
+ arch/x86/kernel/cpu/mce/core.c     | 58 ++++++++++--------------------
+ arch/x86/kernel/cpu/mce/internal.h | 23 ++++++++++--
+ arch/x86/kernel/cpu/mce/severity.c |  2 +-
+ include/linux/cpumask.h            |  4 +--
+ 6 files changed, 54 insertions(+), 45 deletions(-)
+
+-- 
+2.29.2
+

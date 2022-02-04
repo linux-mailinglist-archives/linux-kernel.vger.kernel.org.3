@@ -2,112 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D73A4A9A3A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFCD4A9A3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359020AbiBDNoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:44:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41132 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358961AbiBDNoC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:44:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643982242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FGn+B4gE3kkARtCZwbp34WsdN+cmoVNQCk7A1PY1HEE=;
-        b=V8sYz3kerk612RAAe34VV4DkgYeqoYk7ePM5K/vwxruz3Bg823HQOhjRpb8mE8k0dBlxHN
-        f5dgmmUcYR4fg4VQ6BveJrSohIhH8p2TLBEauixF7ujDCZqPb0HowBWoazZYtvFb+gyeQF
-        aldspePTdcqwc+k+1OToGOzmNiz4D5A=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-250-0_fXhTyhPlujrhldKq2Tsg-1; Fri, 04 Feb 2022 08:44:01 -0500
-X-MC-Unique: 0_fXhTyhPlujrhldKq2Tsg-1
-Received: by mail-wr1-f72.google.com with SMTP id q4-20020adfbb84000000b001dd3cfddb2dso2048760wrg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 05:44:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FGn+B4gE3kkARtCZwbp34WsdN+cmoVNQCk7A1PY1HEE=;
-        b=f/lBUuIeM4rIIMZtvxN+PWB/Z+v9479kPu916/zziEA5fU/Lz8eLhTcV5LGy4AIq1n
-         DyWYauzWfHUdtubzQKKFK7yGbrRIL/UdDJH1vjCmzejGCFf7sSf3F0axC0CIA7f7Jqw1
-         KN6BLv6UTcfXzAkC6VQNtS5EijBXQxAIPvHrkPfClyM/csS0+ZZzyMUcQjp5po7f7+iV
-         r3q8gQgGDver0//GJ+WpsAIhH9vCYMqvdjl6bgegdPYz7oILHpAsiwAk92UeV1YP/4BL
-         KvsVY3x6aAlGaDXiK/+/wXpoztiBin+iBohtINWZAFMgVTwVe2cXKdztSyYKSOsYOUdp
-         XZsQ==
-X-Gm-Message-State: AOAM533v5UsqPb4MT770/YGcO+y6kV2cV0+zs2ufsbBroyf/BSKYNUu9
-        xBTlHtkWmS03YpPjqpmtQfBbtHm1dN6vWorAFz/RY3DTFkFi10ykGfY6Tj0HzpgWh4L0TLrO1MX
-        GNRnxDhrSfsqZdP7N/+8lCOv6feDLAsVLDujhXA4ontneWn00a0I6B92VfObaiWaztI0nZ4m8QV
-        s=
-X-Received: by 2002:adf:db4d:: with SMTP id f13mr2526506wrj.329.1643982239916;
-        Fri, 04 Feb 2022 05:43:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIH15SYdGMCJPbF9406dm+rwJsqjp0GPK+4c7vxU052qmuPNJJZFqWRduDtlttxDXm3iBi5w==
-X-Received: by 2002:adf:db4d:: with SMTP id f13mr2526479wrj.329.1643982239695;
-        Fri, 04 Feb 2022 05:43:59 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r3sm1871692wrt.102.2022.02.04.05.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 05:43:59 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        id S239725AbiBDNp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:45:26 -0500
+Received: from mga06.intel.com ([134.134.136.31]:15149 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229449AbiBDNpZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 08:45:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643982325; x=1675518325;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0GNxd+aWevic6DCv1GwvokygLoFuRmdCOGbVHk+i758=;
+  b=S4C4TRQa0hcSsS05kv6F/9KE5ibyfhF8aBcS8yuF//O7LcoWX6fHRv8V
+   nRRaUmOmHq5pzQXHvddmF+tB+9acxXW2Pd2vNc1kd8v3SCqP5fNPhC2KH
+   H1MUtOTA5rZkKo9Mw16KlbhTXWezEEvBl4HaLQAD4n5bdIcAA/uHSuzql
+   +dfynwKdO8dNmyRirB+JJJosSop1ALBau1EAS4EeS7hAUMHSI/X+dYKQf
+   eyL58QOQkNlugcAIHs8S4h9CD1Wb1jmsOXG1bF5TmOav5ySqVAvQe50n2
+   EpTUgcokZ3DQI1BfpI3CPWsjZ0BjDbsZPEtVbOgFc+N74RMzSZklMbEgU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="309113570"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="309113570"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 05:45:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="699676751"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 Feb 2022 05:45:23 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFytu-000Xff-Pg; Fri, 04 Feb 2022 13:45:22 +0000
+Date:   Fri, 4 Feb 2022 21:44:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 4/4] dt-bindings: display: ssd1307fb: Add myself as binding co-maintainer
-Date:   Fri,  4 Feb 2022 14:43:47 +0100
-Message-Id: <20220204134347.1187749-5-javierm@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220204134347.1187749-1-javierm@redhat.com>
-References: <20220204134347.1187749-1-javierm@redhat.com>
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: panel-edp.c:undefined reference to `drm_panel_dp_aux_backlight'
+Message-ID: <202202042130.9OxdKaGE-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ssd130x DRM driver also makes use of this Device Tree binding to allow
-existing users of the fbdev driver to migrate without the need to change
-their Device Trees.
+Hi Arnd,
 
-Add myself as another maintainer of the binding, to make sure that I will
-be on Cc when patches are proposed for it.
+FYI, the error/warning still remains.
 
-Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dcb85f85fa6f142aae1fe86f399d4503d49f2b60
+commit: 9d6366e743f37d36ef69347924ead7bcc596076e drm: fb_helper: improve CONFIG_FB dependency
+date:   3 months ago
+config: arm-qcom_defconfig (https://download.01.org/0day-ci/archive/20220204/202202042130.9OxdKaGE-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9d6366e743f37d36ef69347924ead7bcc596076e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9d6366e743f37d36ef69347924ead7bcc596076e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: drivers/gpu/drm/panel/panel-edp.o: in function `panel_edp_probe':
+>> panel-edp.c:(.text+0xf38): undefined reference to `drm_panel_dp_aux_backlight'
+
 ---
-
-(no changes since v1)
-
- Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-index 2ed2a7d0ca2f..9baafd0c42dd 100644
---- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-+++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-@@ -8,6 +8,7 @@ title: Solomon SSD1307 OLED Controller Framebuffer
- 
- maintainers:
-   - Maxime Ripard <mripard@kernel.org>
-+  - Javier Martinez Canillas <javierm@redhat.com>
- 
- properties:
-   compatible:
--- 
-2.34.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

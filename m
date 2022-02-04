@@ -2,308 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4794A9FB9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107D84A9FC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiBDTF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:05:59 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44036 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiBDTF6 (ORCPT
+        id S231238AbiBDTIm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 14:08:42 -0500
+Received: from mail-yb1-f180.google.com ([209.85.219.180]:33593 "EHLO
+        mail-yb1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230302AbiBDTIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:05:58 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 704EF210EA;
-        Fri,  4 Feb 2022 19:05:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644001557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wLMIIg32wAYjSuQhX9Z3Uuba6juaB9dX8JNgITecp6Y=;
-        b=RzbhhYtxQ9I9i3ZAt/YsJaoAqRALwNz9AwhDfw3McgNHU9XdZXamUss7SKgBCqf4py9a6B
-        NQ0BJxJ4aJFcquL8syMy/qURE1d5w/+1WZ2IWTNlBk3N1R3/TaQvP3wH+48Y4AMpyPd/F5
-        qWmRF+niUOZFtojFMMKxKTa2+OfEHS0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644001557;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wLMIIg32wAYjSuQhX9Z3Uuba6juaB9dX8JNgITecp6Y=;
-        b=YHwvEzqIo93RLC0ADdqgFpKhk4dz3WVgRme3kVFv0S8Hk4qSX8NdCv2vRasBEplShu2P9E
-        KS3EpTsb3apJgXCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A13013ADE;
-        Fri,  4 Feb 2022 19:05:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Oi1+CBV5/WEaAwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 04 Feb 2022 19:05:57 +0000
-Message-ID: <515668f4-9faf-ed8e-385e-7020eed38b18@suse.de>
-Date:   Fri, 4 Feb 2022 20:05:56 +0100
+        Fri, 4 Feb 2022 14:08:41 -0500
+Received: by mail-yb1-f180.google.com with SMTP id j2so21712588ybu.0;
+        Fri, 04 Feb 2022 11:08:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RXFJZ9DMfIJfrTOBd66RHSq34FsmGK+yQLe0NV70Kp0=;
+        b=eE8IVtH2smJK7R5TuK4pwfFj2yOzqH0xAnEkpzWFBe7cp6u1704kQ7e3EQg0SN7Xdd
+         qEUqAhPQV/8S0CbMOjZEYO0gFfzBNphqD9E45Srn8pHrThwTUj14NiRvvmizqoaaRL6Q
+         +sShhCYSa5V8bpTxqb4Ylfe6/WNpnaStp+ou5lAg7ejD92+SsI0pnzVy0whuCZNokoen
+         NMIatNTgFmMNeB2Ra/TSxf97tey5ByEnylwlHQo07b4Z1dSvdR3UuBK+lJGpSYsqOiSh
+         K9gi0E6Kfdt3Ah/rUgfFXNdVSxzOsIPSp9qDo91Qmog6Z3PyRGz/FJaMbBjd8l8SpTPv
+         bnHw==
+X-Gm-Message-State: AOAM533x+UB+yCmTU1MNDwDbIJRfLarQlqKxvIVu2h3ZQA5bAkBvf5Zj
+        S6K3Kgk7foH9SxZPXZd6m+KY20tMQrD5bfIedIz8JYsOB5M=
+X-Google-Smtp-Source: ABdhPJw4sxfUcZ9dEGRVSS/CzkhqBN7tkZ0GyybXqy17yuK2RSj5cztoMhjYiv94YCM0A2KTr3fAcwSzQzqKCiA23Hk=
+X-Received: by 2002:a05:6902:54c:: with SMTP id z12mr627784ybs.624.1644001720419;
+ Fri, 04 Feb 2022 11:08:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 03/19] iosys-map: Add a few more helpers
-Content-Language: en-US
-To:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     John Harrison <John.C.Harrison@Intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220204174436.830121-1-lucas.demarchi@intel.com>
- <20220204174436.830121-4-lucas.demarchi@intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220204174436.830121-4-lucas.demarchi@intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------EJHe7aT1MX8MACmRfxSbCbA0"
+References: <20220128235118.1693865-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0iJph04mtGabTXLY_7FqaA9tCnFwz=-+DR=n3G3GC6Szg@mail.gmail.com> <dae13602d4b4178ae86a749a9b6473fb64b82679.camel@linux.intel.com>
+In-Reply-To: <dae13602d4b4178ae86a749a9b6473fb64b82679.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Feb 2022 20:08:29 +0100
+Message-ID: <CAJZ5v0hfJ0d=QFu0tOE3q_rHzA1F6M8Om0wfFEbCAByLU+3HHA@mail.gmail.com>
+Subject: Re: [PATCH v3] ACPI / fan: Properly handle fine grain control
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------EJHe7aT1MX8MACmRfxSbCbA0
-Content-Type: multipart/mixed; boundary="------------0I6IFackrZgWOt9wWijvIv8D";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc: John Harrison <John.C.Harrison@Intel.com>,
- Matthew Brost <matthew.brost@intel.com>,
- Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
- Matt Roper <matthew.d.roper@intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas.hellstrom@linux.intel.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, linux-kernel@vger.kernel.org
-Message-ID: <515668f4-9faf-ed8e-385e-7020eed38b18@suse.de>
-Subject: Re: [PATCH 03/19] iosys-map: Add a few more helpers
-References: <20220204174436.830121-1-lucas.demarchi@intel.com>
- <20220204174436.830121-4-lucas.demarchi@intel.com>
-In-Reply-To: <20220204174436.830121-4-lucas.demarchi@intel.com>
+On Thu, Feb 3, 2022 at 10:54 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Thu, 2022-02-03 at 21:13 +0100, Rafael J. Wysocki wrote:
+> > On Sat, Jan 29, 2022 at 12:51 AM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > >
+>
+> [...]
+>
+> > > To support fine grain control (when supported) via thermal sysfs:
+> > > - cooling device max state is not _FPS state count but it will be
+> > > 100 / _FIF.step_size
+> > > - cooling device current state is 100 / _FIF.step_size
+> >
+> > I don't quite understand this.
+> >
+> > The max state and the current state should not always be the same,
+> > should they?
+>
+> This sentence needs correction.
+> The  current_state is _FST.control/_FIF.step_size.
+>
+> >
+> > > - cooling device set state will set the control value
+> > >
+>
+> [...]
+>
+> > > -       else
+> > > +       if (fan->acpi4) {
+> > > +               if (fan->fif.fine_grain_ctrl)
+> > > +                       *state = 100 / (int)fan->fif.step_size;
+> >
+> > Is it really necessary to explicitly cast fif.step_size to int?
+> This was reported by LKP as fan->fif.step_size is 64 bit. This driver
+> doesn't restrict to 64 bit.
+>
+> "undefined reference to `__udivdi3" for i386-defconfig.
 
---------------0I6IFackrZgWOt9wWijvIv8D
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I see.
 
-SGkNCg0KQW0gMDQuMDIuMjIgdW0gMTg6NDQgc2NocmllYiBMdWNhcyBEZSBNYXJjaGk6DQo+
-IEZpcnN0IHRoZSBzaW1wbGVzdCBvbmVzOg0KPiANCj4gCS0gaW9zeXNfbWFwX21lbXNldCgp
-OiB3aGVuIGFic3RyYWN0aW5nIHN5c3RlbSBhbmQgSS9PIG1lbW9yeSwNCj4gCSAganVzdCBs
-aWtlIHRoZSBtZW1jcHkoKSB1c2UgY2FzZSwgbWVtc2V0KCkgYWxzbyBoYXMgZGVkaWNhdGVk
-DQo+IAkgIGZ1bmN0aW9ucyB0byBiZSBjYWxsZWQgZm9yIHVzaW5nIElPIG1lbW9yeS4NCj4g
-CS0gaW9zeXNfbWFwX21lbWNweV9mcm9tKCk6IHdlIG1heSBuZWVkIHRvIGNvcHkgZGF0YSBm
-cm9tIEkvTw0KPiAJICBtZW1vcnksIG5vdCBvbmx5IHRvLg0KPiANCj4gSW4gY2VydGFpbiBz
-aXR1YXRpb25zIGl0J3MgdXNlZnVsIHRvIGJlIGFibGUgdG8gcmVhZCBvciB3cml0ZSB0byBh
-bg0KPiBvZmZzZXQgdGhhdCBpcyBjYWxjdWxhdGVkIGJ5IGhhdmluZyB0aGUgbWVtb3J5IGxh
-eW91dCBnaXZlbiBieSBhIHN0cnVjdA0KPiBkZWNsYXJhdGlvbi4gVXN1YWxseSB3ZSBhcmUg
-Z29pbmcgdG8gcmVhZC93cml0ZSBhIHU4LCB1MTYsIHUzMiBvciB1NjQuDQo+IA0KPiBBcyBh
-IHByZS1yZXF1aXNpdGUgZm9yIHRoZSBpbXBsZW1lbnRhdGlvbiwgYWRkIGlvc3lzX21hcF9t
-ZW1jcHlfZnJvbSgpDQo+IHRvIGJlIHRoZSBlcXVpdmFsZW50IG9mIGlvc3lzX21hcF9tZW1j
-cHlfdG8oKSwgYnV0IGluIHRoZSBvdGhlcg0KPiBkaXJlY3Rpb24uIFRoZW4gYWRkIDIgcGFp
-cnMgb2YgbWFjcm9zOg0KPiANCj4gCS0gaW9zeXNfbWFwX3JkKCkgLyBpb3N5c19tYXBfd3Io
-KQ0KPiAJLSBpb3N5c19tYXBfcmRfZmllbGQoKSAvIGlvc3lzX21hcF93cl9maWVsZCgpDQo+
-IA0KPiBUaGUgZmlyc3QgcGFpciB0YWtlcyB0aGUgQy10eXBlIGFuZCBvZmZzZXQgdG8gcmVh
-ZC93cml0ZS4gVGhlIHNlY29uZA0KPiBwYWlyIHVzZXMgYSBzdHJ1Y3QgZGVzY3JpYmluZyB0
-aGUgbGF5b3V0IG9mIHRoZSBtYXBwaW5nIGluIG9yZGVyIHRvDQo+IGNhbGN1bGF0ZSB0aGUg
-b2Zmc2V0IGFuZCBzaXplIGJlaW5nIHJlYWQvd3JpdHRlbi4NCj4gDQo+IFdlIGNvdWxkIHVz
-ZSByZWFkYiwgcmVhZHcsIHJlYWRsLCByZWFkcSBhbmQgdGhlIHdyaXRlKiBjb3VudGVycGFy
-dHMsDQo+IGhvd2V2ZXIgZHVlIHRvIGFsaWdubWVudCBpc3N1ZXMgdGhpcyBtYXkgbm90IHdv
-cmsgb24gYWxsIGFyY2hpdGVjdHVyZXMuDQo+IElmIGFsaWdubWVudCBuZWVkcyB0byBiZSBj
-aGVja2VkIHRvIGNhbGwgdGhlIHJpZ2h0IGZ1bmN0aW9uLCBpdCdzIG5vdA0KPiBwb3NzaWJs
-ZSB0byBkZWNpZGUgYXQgY29tcGlsZS10aW1lIHdoaWNoIGZ1bmN0aW9uIHRvIGNhbGw6IHNv
-IGp1c3QgbGVhdmUNCj4gdGhlIGRlY2lzaW9uIHRvIHRoZSBtZW1jcHkgZnVuY3Rpb24gdGhh
-dCB3aWxsIGRvIGV4YWN0bHkgdGhhdC4NCj4gDQo+IEZpbmFsbHksIGluIG9yZGVyIHRvIHVz
-ZSB0aGUgYWJvdmUgbWFjcm9zIHdpdGggYSBtYXAgZGVyaXZlZCBmcm9tDQo+IGFub3RoZXIs
-IGFkZCBhbm90aGVyIGluaXRpYWxpemVyOiBJT1NZU19NQVBfSU5JVF9PRkZTRVQoKS4NCj4g
-DQo+IENjOiBTdW1pdCBTZW13YWwgPHN1bWl0LnNlbXdhbEBsaW5hcm8ub3JnPg0KPiBDYzog
-Q2hyaXN0aWFuIEvDtm5pZyA8Y2hyaXN0aWFuLmtvZW5pZ0BhbWQuY29tPg0KPiBDYzogVGhv
-bWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+IENjOiBkcmktZGV2ZWxA
-bGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwu
-b3JnDQo+IFNpZ25lZC1vZmYtYnk6IEx1Y2FzIERlIE1hcmNoaSA8bHVjYXMuZGVtYXJjaGlA
-aW50ZWwuY29tPg0KPiAtLS0NCj4gICBpbmNsdWRlL2xpbnV4L2lvc3lzLW1hcC5oIHwgMTU0
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystDQo+ICAgMSBmaWxlIGNo
-YW5nZWQsIDE1MyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvaW5jbHVkZS9saW51eC9pb3N5cy1tYXAuaCBiL2luY2x1ZGUvbGludXgvaW9zeXMt
-bWFwLmgNCj4gaW5kZXggZWRkN2ZhM2JlOWU5Li45NmY4YjYxYWM2ZmIgMTAwNjQ0DQo+IC0t
-LSBhL2luY2x1ZGUvbGludXgvaW9zeXMtbWFwLmgNCj4gKysrIGIvaW5jbHVkZS9saW51eC9p
-b3N5cy1tYXAuaA0KPiBAQCAtNiw2ICs2LDcgQEANCj4gICAjaWZuZGVmIF9fSU9TWVNfTUFQ
-X0hfXw0KPiAgICNkZWZpbmUgX19JT1NZU19NQVBfSF9fDQo+ICAgDQo+ICsjaW5jbHVkZSA8
-bGludXgva2VybmVsLmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ICAgI2luY2x1
-ZGUgPGxpbnV4L3N0cmluZy5oPg0KPiAgIA0KPiBAQCAtMTMzLDYgKzEzNCw0NSBAQCBzdGF0
-aWMgaW5saW5lIHZvaWQgaW9zeXNfbWFwX3NldF92YWRkcihzdHJ1Y3QgaW9zeXNfbWFwICpt
-YXAsIHZvaWQgKnZhZGRyKQ0KPiAgIAltYXAtPmlzX2lvbWVtID0gZmFsc2U7DQo+ICAgfQ0K
-PiAgIA0KPiArLyoqDQo+ICsgKiBJT1NZU19NQVBfSU5JVF9PRkZTRVQgLSBJbml0aWFsaXpl
-cyBzdHJ1Y3QgaW9zeXNfbWFwIGZyb20gYW5vdGhlciBpb3N5c19tYXANCj4gKyAqIEBtYXBf
-OglUaGUgZG1hLWJ1ZiBtYXBwaW5nIHN0cnVjdHVyZSB0byBjb3B5IGZyb20NCj4gKyAqIEBv
-ZmZzZXRfOglPZmZzZXQgdG8gYWRkIHRvIHRoZSBvdGhlciBtYXBwaW5nDQo+ICsgKg0KPiAr
-ICogSW5pdGlhbGl6ZXMgYSBuZXcgaW9zeXNfbWFwIHN0cnVjdCBiYXNlZCBvbiBhbm90aGVy
-IHBhc3NlZCBhcyBhcmd1bWVudC4gSXQNCj4gKyAqIGRvZXMgYSBzaGFsbG93IGNvcHkgb2Yg
-dGhlIHN0cnVjdCBzbyBpdCdzIHBvc3NpYmxlIHRvIHVwZGF0ZSB0aGUgYmFjayBzdG9yYWdl
-DQo+ICsgKiB3aXRob3V0IGNoYW5naW5nIHdoZXJlIHRoZSBvcmlnaW5hbCBtYXAgcG9pbnRz
-IHRvLiBJdCBpcyB0aGUgZXF1aXZhbGVudCBvZg0KPiArICogZG9pbmc6DQo+ICsgKg0KPiAr
-ICogLi4gY29kZS1ibG9jazogYw0KPiArICoNCj4gKyAqCWlvc3lzX21hcCBtYXAgPSBvdGhl
-cl9tYXA7DQo+ICsgKglpb3N5c19tYXBfaW5jcigmbWFwLCAmb2Zmc2V0KTsNCj4gKyAqDQo+
-ICsgKiBFeGFtcGxlIHVzYWdlOg0KPiArICoNCj4gKyAqIC4uIGNvZGUtYmxvY2s6IGMNCj4g
-KyAqDQo+ICsgKgl2b2lkIGZvbyhzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBpb3N5c19t
-YXAgKmJhc2VfbWFwKQ0KPiArICoJew0KPiArICoJCS4uLg0KPiArICoJCXN0cnVjdCBpb3N5
-c19tYXAgbWFwID0gSU9TWVNfTUFQX0lOSVRfT0ZGU0VUKGJhc2VfbWFwLCBGSUVMRF9PRkZT
-RVQpOw0KPiArICoJCS4uLg0KPiArICoJfQ0KPiArICoNCj4gKyAqIFRoZSBhZHZhbnRhZ2Ug
-b2YgdXNpbmcgdGhlIGluaXRpYWxpemVyIG92ZXIganVzdCBpbmNyZWFzaW5nIHRoZSBvZmZz
-ZXQgd2l0aA0KPiArICogYGBpb3N5c19tYXBfaW5jcigpYGAgbGlrZSBhYm92ZSBpcyB0aGF0
-IHRoZSBuZXcgbWFwIHdpbGwgYWx3YXlzIHBvaW50IHRvIHRoZQ0KPiArICogcmlnaHQgcGxh
-Y2Ugb2YgdGhlIGJ1ZmZlciBkdXJpbmcgIGl0cyBzY29wZS4gSXQgcmVkdWNlcyB0aGUgcmlz
-ayBvZiB1cGRhdGluZw0KPiArICogdGhlIHdyb25nIHBhcnQgb2YgdGhlIGJ1ZmZlciBhbmQg
-aGF2aW5nIG5vIGNvbXBpbGVyIHdhcm5pbmcgYWJvdXQgdGhhdC4gSWYNCj4gKyAqIHRoZSBh
-c3NpZ25tZW50IHRvIElPU1lTX01BUF9JTklUX09GRlNFVCgpIGlzIGZvcmdvdHRlbiwgdGhl
-IGNvbXBpbGVyIGNhbiB3YXJuDQo+ICsgKiB1c2luZyBhIHVuaW5pdGlhbGl6ZWQgdmFyaWFi
-bGUuDQo+ICsgKi8NCj4gKyNkZWZpbmUgSU9TWVNfTUFQX0lOSVRfT0ZGU0VUKG1hcF8sIG9m
-ZnNldF8pCShzdHJ1Y3QgaW9zeXNfbWFwKQlcDQo+ICsJewkJCQkJCQkJXA0KPiArCQkudmFk
-ZHIgPSAobWFwXyktPnZhZGRyICsgKG9mZnNldF8pLAkJCVwNCj4gKwkJLmlzX2lvbWVtID0g
-KG1hcF8pLT5pc19pb21lbSwJCQkJXA0KPiArCX0NCg0KSSBhbHJlYWR5IG5haydlZCB0aGlz
-IG1hY3JvLiBUaGlzIHdvcmtzIGJlY2F1c2Ugb2YgdGhlIGFsaWFzaW5nIHJ1bGVzIA0Kd2l0
-aGluIHRoZSB1bmlvbiBhbmQgdGhlIGZhY3QgdGhhdCB0aGVyZSBhcmUgb25seSBwbGFpbiBw
-b2ludGVycy4gQnV0IA0KdGhpcyBpcyBmcmFnaWxlLiBEbyBhbnl0aGluZyBtb3JlIGNvbXBs
-aWNhdGVkIGFuZCBpdCBicmVha3MuIFRoZXJlJ3Mgbm90IA0KZXZlbiBhIHRlc3QgdGhhdCB3
-b3VsZCB0ZWxsIHlvdSB0aGF0IGl0IGZhaWxlZC4NCg0KVGhlcmVmb3JlLCBzdHJ1Y3QgaW9z
-eXNfbWFwIHNob3VsZCBvbmx5IGJlIGluaXRpYWxpemVkIGJ5IHRoZSBjb2RlIHRoYXQgDQpj
-cmVhdGVzIHRoZSBzdG9yZWQgcG9pbnRlci4NCg0KSG93ZXZlciwgeW91IHdvbid0IG5lZWQg
-dGhlIG9mZnNldCdlZCBpb3N5c19tYXAgYmVjYXVzZSB0aGUgDQptZW1jcHlfdG8vZnJvbSBo
-ZWxwZXJzIG5vdyBoYXZlIHRoZSBvZmZzZXQgcGFyYW1ldGVyLg0KDQoNCg0KPiArDQo+ICAg
-LyoqDQo+ICAgICogaW9zeXNfbWFwX3NldF92YWRkcl9pb21lbSAtIFNldHMgYSBpb3N5cyBt
-YXBwaW5nIHN0cnVjdHVyZSB0byBhbiBhZGRyZXNzIGluIEkvTyBtZW1vcnkNCj4gICAgKiBA
-bWFwOgkJVGhlIGlvc3lzX21hcCBzdHJ1Y3R1cmUNCj4gQEAgLTIyMCw3ICsyNjAsNyBAQCBz
-dGF0aWMgaW5saW5lIHZvaWQgaW9zeXNfbWFwX2NsZWFyKHN0cnVjdCBpb3N5c19tYXAgKm1h
-cCkNCj4gICB9DQo+ICAgDQo+ICAgLyoqDQo+IC0gKiBpb3N5c19tYXBfbWVtY3B5X3RvX29m
-ZnNldCAtIE1lbWNweSBpbnRvIG9mZnNldCBvZiBpb3N5c19tYXANCj4gKyAqIGlvc3lzX21h
-cF9tZW1jcHlfdG8gLSBNZW1jcHkgaW50byBpb3N5c19tYXANCg0KVGhhdCdzIHRoZSBmaXgg
-Zm9yIHRoZSBvdGhlciBwYXRjaC4gOikNCg0KPiAgICAqIEBkc3Q6CVRoZSBpb3N5c19tYXAg
-c3RydWN0dXJlDQo+ICAgICogQGRzdF9vZmZzZXQ6CVRoZSBvZmZzZXQgZnJvbSB3aGljaCB0
-byBjb3B5DQo+ICAgICogQHNyYzoJVGhlIHNvdXJjZSBidWZmZXINCj4gQEAgLTIzOSw2ICsy
-NzksMjYgQEAgc3RhdGljIGlubGluZSB2b2lkIGlvc3lzX21hcF9tZW1jcHlfdG8oc3RydWN0
-IGlvc3lzX21hcCAqZHN0LCBzaXplX3QgZHN0X29mZnNldCwNCj4gICAJCW1lbWNweShkc3Qt
-PnZhZGRyICsgZHN0X29mZnNldCwgc3JjLCBsZW4pOw0KPiAgIH0NCj4gICANCj4gKy8qKg0K
-PiArICogaW9zeXNfbWFwX21lbWNweV9mcm9tIC0gTWVtY3B5IGZyb20gaW9zeXNfbWFwIGlu
-dG8gc3lzdGVtIG1lbW9yeQ0KPiArICogQGRzdDoJRGVzdGluYXRpb24gaW4gc3lzdGVtIG1l
-bW9yeQ0KPiArICogQHNyYzoJVGhlIGlvc3lzX21hcCBzdHJ1Y3R1cmUNCj4gKyAqIEBzcmNf
-b2Zmc2V0OglUaGUgb2Zmc2V0IGZyb20gd2hpY2ggdG8gY29weQ0KPiArICogQGxlbjoJVGhl
-IG51bWJlciBvZiBieXRlIGluIHNyYw0KPiArICoNCj4gKyAqIENvcGllcyBkYXRhIGZyb20g
-YSBpb3N5c19tYXAgd2l0aCBhbiBvZmZzZXQuIFRoZSBkZXN0IGJ1ZmZlciBpcyBpbg0KPiAr
-ICogc3lzdGVtIG1lbW9yeS4gRGVwZW5kaW5nIG9uIHRoZSBtYXBwaW5nIGxvY2F0aW9uLCB0
-aGUgaGVscGVyIHBpY2tzIHRoZQ0KPiArICogY29ycmVjdCBtZXRob2Qgb2YgYWNjZXNzaW5n
-IHRoZSBtZW1vcnkuDQo+ICsgKi8NCj4gK3N0YXRpYyBpbmxpbmUgdm9pZCBpb3N5c19tYXBf
-bWVtY3B5X2Zyb20odm9pZCAqZHN0LCBjb25zdCBzdHJ1Y3QgaW9zeXNfbWFwICpzcmMsDQo+
-ICsJCQkJCSBzaXplX3Qgc3JjX29mZnNldCwgc2l6ZV90IGxlbikNCj4gK3sNCj4gKwlpZiAo
-c3JjLT5pc19pb21lbSkNCj4gKwkJbWVtY3B5X2Zyb21pbyhkc3QsIHNyYy0+dmFkZHJfaW9t
-ZW0gKyBzcmNfb2Zmc2V0LCBsZW4pOw0KPiArCWVsc2UNCj4gKwkJbWVtY3B5KGRzdCwgc3Jj
-LT52YWRkciArIHNyY19vZmZzZXQsIGxlbik7DQo+ICt9DQo+ICsNCj4gICAvKioNCj4gICAg
-KiBpb3N5c19tYXBfaW5jciAtIEluY3JlbWVudHMgdGhlIGFkZHJlc3Mgc3RvcmVkIGluIGEg
-aW9zeXMgbWFwcGluZw0KPiAgICAqIEBtYXA6CVRoZSBpb3N5c19tYXAgc3RydWN0dXJlDQo+
-IEBAIC0yNTUsNCArMzE1LDk2IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBpb3N5c19tYXBfaW5j
-cihzdHJ1Y3QgaW9zeXNfbWFwICptYXAsIHNpemVfdCBpbmNyKQ0KPiAgIAkJbWFwLT52YWRk
-ciArPSBpbmNyOw0KPiAgIH0NCj4gICANCj4gKy8qKg0KPiArICogaW9zeXNfbWFwX21lbXNl
-dCAtIE1lbXNldCBpb3N5c19tYXANCj4gKyAqIEBkc3Q6CVRoZSBpb3N5c19tYXAgc3RydWN0
-dXJlDQo+ICsgKiBAb2Zmc2V0OglPZmZzZXQgZnJvbSBkc3Qgd2hlcmUgdG8gc3RhcnQgc2V0
-dGluZyB2YWx1ZQ0KPiArICogQHZhbHVlOglUaGUgdmFsdWUgdG8gc2V0DQo+ICsgKiBAbGVu
-OglUaGUgbnVtYmVyIG9mIGJ5dGVzIHRvIHNldCBpbiBkc3QNCj4gKyAqDQo+ICsgKiBTZXQg
-dmFsdWUgaW4gaW9zeXNfbWFwLiBEZXBlbmRpbmcgb24gdGhlIGJ1ZmZlcidzIGxvY2F0aW9u
-LCB0aGUgaGVscGVyDQo+ICsgKiBwaWNrcyB0aGUgY29ycmVjdCBtZXRob2Qgb2YgYWNjZXNz
-aW5nIHRoZSBtZW1vcnkuDQo+ICsgKi8NCj4gK3N0YXRpYyBpbmxpbmUgdm9pZCBpb3N5c19t
-YXBfbWVtc2V0KHN0cnVjdCBpb3N5c19tYXAgKmRzdCwgc2l6ZV90IG9mZnNldCwNCj4gKwkJ
-CQkgICAgaW50IHZhbHVlLCBzaXplX3QgbGVuKQ0KPiArew0KPiArCWlmIChkc3QtPmlzX2lv
-bWVtKQ0KPiArCQltZW1zZXRfaW8oZHN0LT52YWRkcl9pb21lbSArIG9mZnNldCwgdmFsdWUs
-IGxlbik7DQo+ICsJZWxzZQ0KPiArCQltZW1zZXQoZHN0LT52YWRkciArIG9mZnNldCwgdmFs
-dWUsIGxlbik7DQo+ICt9DQoNCkkndmUgZm91bmQgdGhhdCBtZW1zZXQzMigpIGFuZCBtZW1z
-ZXQ2NCgpIGNhbiBzaWduaWZpY2FudGx5IGZhc3Rlci4gSWYgDQpldmVyIG5lZWRlZCwgd2Ug
-Y2FuIGFkZCB2YXJpYW50cyBoZXJlIGFzIHdlbGwuDQoNCj4gKw0KPiArLyoqDQo+ICsgKiBp
-b3N5c19tYXBfcmQgLSBSZWFkIGEgQy10eXBlIHZhbHVlIGZyb20gdGhlIGlvc3lzX21hcA0K
-PiArICoNCj4gKyAqIEBtYXBfXzoJVGhlIGlvc3lzX21hcCBzdHJ1Y3R1cmUNCj4gKyAqIEBv
-ZmZzZXRfXzoJVGhlIG9mZnNldCBmcm9tIHdoaWNoIHRvIHJlYWQNCj4gKyAqIEB0eXBlX186
-CVR5cGUgb2YgdGhlIHZhbHVlIGJlaW5nIHJlYWQNCj4gKyAqDQo+ICsgKiBSZWFkIGEgQyB0
-eXBlIHZhbHVlIGZyb20gaW9zeXNfbWFwLCBoYW5kbGluZyBwb3NzaWJsZSB1bi1hbGlnbmVk
-IGFjY2Vzc2VzIHRvDQo+ICsgKiB0aGUgbWFwcGluZy4NCj4gKyAqDQo+ICsgKiBSZXR1cm5z
-Og0KPiArICogVGhlIHZhbHVlIHJlYWQgZnJvbSB0aGUgbWFwcGluZy4NCj4gKyAqLw0KPiAr
-I2RlZmluZSBpb3N5c19tYXBfcmQobWFwX18sIG9mZnNldF9fLCB0eXBlX18pICh7CQkJXA0K
-PiArCXR5cGVfXyB2YWw7CQkJCQkJCVwNCj4gKwlpb3N5c19tYXBfbWVtY3B5X2Zyb20oJnZh
-bCwgbWFwX18sIG9mZnNldF9fLCBzaXplb2YodmFsKSk7CVwNCj4gKwl2YWw7CQkJCQkJCQlc
-DQo+ICt9KQ0KPiArDQo+ICsvKioNCj4gKyAqIGlvc3lzX21hcF93ciAtIFdyaXRlIGEgQy10
-eXBlIHZhbHVlIHRvIHRoZSBpb3N5c19tYXANCj4gKyAqDQo+ICsgKiBAbWFwX186CVRoZSBp
-b3N5c19tYXAgc3RydWN0dXJlDQo+ICsgKiBAb2Zmc2V0X186CVRoZSBvZmZzZXQgZnJvbSB0
-aGUgbWFwcGluZyB0byB3cml0ZSB0bw0KPiArICogQHR5cGVfXzoJVHlwZSBvZiB0aGUgdmFs
-dWUgYmVpbmcgd3JpdHRlbg0KPiArICogQHZhbF9fOglWYWx1ZSB0byB3cml0ZQ0KPiArICoN
-Cj4gKyAqIFdyaXRlIGEgQy10eXBlIHZhbHVlIHRvIHRoZSBpb3N5c19tYXAsIGhhbmRsaW5n
-IHBvc3NpYmxlIHVuLWFsaWduZWQgYWNjZXNzZXMNCj4gKyAqIHRvIHRoZSBtYXBwaW5nLg0K
-PiArICovDQo+ICsjZGVmaW5lIGlvc3lzX21hcF93cihtYXBfXywgb2Zmc2V0X18sIHR5cGVf
-XywgdmFsX18pICh7CQkJXA0KPiArCXR5cGVfXyB2YWwgPSAodmFsX18pOwkJCQkJCVwNCj4g
-Kwlpb3N5c19tYXBfbWVtY3B5X3RvKG1hcF9fLCBvZmZzZXRfXywgJnZhbCwgc2l6ZW9mKHZh
-bCkpOwlcDQo+ICt9KQ0KPiArDQo+ICsvKioNCj4gKyAqIGlvc3lzX21hcF9yZF9maWVsZCAt
-IFJlYWQgYSBtZW1iZXIgZnJvbSBhIHN0cnVjdCBpbiB0aGUgaW9zeXNfbWFwDQo+ICsgKg0K
-PiArICogQG1hcF9fOgkJVGhlIGlvc3lzX21hcCBzdHJ1Y3R1cmUNCj4gKyAqIEBzdHJ1Y3Rf
-dHlwZV9fOglUaGUgc3RydWN0IGRlc2NyaWJpbmcgdGhlIGxheW91dCBvZiB0aGUgbWFwcGlu
-Zw0KPiArICogQGZpZWxkX186CQlNZW1iZXIgb2YgdGhlIHN0cnVjdCB0byByZWFkDQo+ICsg
-Kg0KPiArICogUmVhZCBhIHZhbHVlIGZyb20gaW9zeXNfbWFwIGFzc3VtaW5nIGl0cyBsYXlv
-dXQgaXMgZGVzY3JpYmVkIGJ5IGEgc3RydWN0LA0KPiArICogcGFzc2VkIGFzIGFyZ3VtZW50
-LiBUaGUgb2Zmc2V0IGFuZCBzaXplIHRvIHRoZSBzdHJ1Y3QgbWVtYmVyIGlzIGNhbGN1bGF0
-ZWQNCj4gKyAqIGFuZCBwb3NzaWJsZSB1bi1hbGlnbmVkIGFjY2Vzc2VzIHRvIHRoZSBtYXBw
-aW5nIGhhbmRsZWQuDQo+ICsgKg0KPiArICogUmV0dXJuczoNCj4gKyAqIFRoZSB2YWx1ZSBy
-ZWFkIGZyb20gdGhlIG1hcHBpbmcuDQo+ICsgKi8NCj4gKyNkZWZpbmUgaW9zeXNfbWFwX3Jk
-X2ZpZWxkKG1hcF9fLCBzdHJ1Y3RfdHlwZV9fLCBmaWVsZF9fKSAoewkJCVwNCg0KVGhpcyBt
-YWNybyBzaG91bGQgYWxzbyBoYXZlIGFuIG9mZnNldF9fIHBhcmFtZXRlciBhbmQgZm9yd2Fy
-ZCBpdCB0byANCmlvc3lzX21hcF9yZC4NCg0KPiArCXN0cnVjdF90eXBlX18gKnM7CQkJCQkJ
-CVwNCj4gKwlpb3N5c19tYXBfcmQobWFwX18sIG9mZnNldG9mKHN0cnVjdF90eXBlX18sIGZp
-ZWxkX18pLAkJCVwNCj4gKwkJICAgICB0eXBlb2Yocy0+ZmllbGRfXykpOwkJCQkJXA0KPiAr
-fSkNCj4gKw0KPiArLyoqDQo+ICsgKiBpb3N5c19tYXBfd3JfZmllbGQgLSBXcml0ZSB0byBh
-IG1lbWJlciBvZiBhIHN0cnVjdCBpbiB0aGUgaW9zeXNfbWFwDQo+ICsgKg0KPiArICogQG1h
-cF9fOgkJVGhlIGlvc3lzX21hcCBzdHJ1Y3R1cmUNCj4gKyAqIEBzdHJ1Y3RfdHlwZV9fOglU
-aGUgc3RydWN0IGRlc2NyaWJpbmcgdGhlIGxheW91dCBvZiB0aGUgbWFwcGluZw0KPiArICog
-QGZpZWxkX186CQlNZW1iZXIgb2YgdGhlIHN0cnVjdCB0byByZWFkDQo+ICsgKiBAdmFsX186
-CQlWYWx1ZSB0byB3cml0ZQ0KPiArICoNCj4gKyAqIFdyaXRlIGEgdmFsdWUgdG8gdGhlIGlv
-c3lzX21hcCBhc3N1bWluZyBpdHMgbGF5b3V0IGlzIGRlc2NyaWJlZCBieSBhIHN0cnVjdCwN
-Cj4gKyAqIHBhc3NlZCBhcyBhcmd1bWVudC4gVGhlIG9mZnNldCBhbmQgc2l6ZSB0byB0aGUg
-c3RydWN0IG1lbWJlciBpcyBjYWxjdWxhdGVkDQo+ICsgKiBhbmQgcG9zc2libGUgdW4tYWxp
-Z25lZCBhY2Nlc3NlcyB0byB0aGUgbWFwcGluZyBoYW5kbGVkLg0KPiArICovDQo+ICsjZGVm
-aW5lIGlvc3lzX21hcF93cl9maWVsZChtYXBfXywgc3RydWN0X3R5cGVfXywgZmllbGRfXywg
-dmFsX18pICh7CQlcDQoNCkFuZCB0aGlzIG9uZSBzaG91bGQgYWxzbyBoYXZlIGFuIG9mZnNl
-dF9fIHBhcmFtZXRlci4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiArCXN0cnVjdF90
-eXBlX18gKnM7CQkJCQkJCVwNCj4gKwlpb3N5c19tYXBfd3IobWFwX18sIG9mZnNldG9mKHN0
-cnVjdF90eXBlX18sIGZpZWxkX18pLAkJCVwNCj4gKwkJICAgICB0eXBlb2Yocy0+ZmllbGRf
-XyksIHZhbF9fKTsJCQkJXA0KPiArfSkNCj4gKw0KPiAgICNlbmRpZiAvKiBfX0lPU1lTX01B
-UF9IX18gKi8NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERl
-dmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxk
-c3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJu
-YmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+Then I would convert struct acpi_fan_fif to u32 fields and extract it
+directly (and sanitize step_size in the process), because using
+acpi_extract_package() to retrieve it is not worth the resulting fuss
+IMO.
 
---------------0I6IFackrZgWOt9wWijvIv8D--
+> >
+> > > +               else
+> > > +                       *state = fan->fps_count - 1;
+> > >
+>
+> [...]
+>
+> > > -static int fan_get_state_acpi4(struct acpi_device *device,
+> > > unsigned long *state)
+> > > +static int fan_get_fps(struct acpi_device *device, struct
+> > > acpi_fan_fst *fst)
+> >
+> > Why is this called fan_get_fps()?  I'd rather call it
+> > acpi_fan_get_fst().
+> I can change that.
+>
+> >
+> > >  {
+> > >         struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> > > -       struct acpi_fan *fan = acpi_driver_data(device);
+> > >         union acpi_object *obj;
+> > >         acpi_status status;
+> > > -       int control, i;
+> > >
+> > >         status = acpi_evaluate_object(device->handle, "_FST", NULL,
+> > > &buffer);
+> > >         if (ACPI_FAILURE(status)) {
+> > > @@ -119,31 +130,51 @@ static int fan_get_state_acpi4(struct
+> > > acpi_device *device, unsigned long *state)
+> > >                 goto err;
+> > >         }
+> > >
+> > > -       control = obj->package.elements[1].integer.value;
+> > > +       fst->revision = obj->package.elements[0].integer.value;
+> > > +       fst->control = obj->package.elements[1].integer.value;
+> > > +       fst->speed = obj->package.elements[2].integer.value;
+> > > +
+> > > +       status = 0;
+> > > +err:
+> > > +       kfree(obj);
+> > > +       return status;
+> >
+> > There is some confusion regarding the error return values in this
+> > function, would be good to fix it while doing this.
+> >
+> Let me check that.
+>
+> > > +}
+> > > +
+> > > +static int fan_get_state_acpi4(struct acpi_device *device,
+> > > unsigned long *state)
+> > > +{
+> > > +       struct acpi_fan *fan = acpi_driver_data(device);
+> > > +       struct acpi_fan_fst fst;
+> > > +       int status;
+> > > +       int control, i;
+> > > +
+> > > +       status = fan_get_fps(device, &fst);
+> > > +       if (status)
+> > > +               return status;
+> > > +
+> > > +       control = fst.control;
+> > > +
+> > > +       if (fan->fif.fine_grain_ctrl) {
+> > > +               /* This control should be same what we set using
+> > > _FSL by spec */
+> > > +               if (control > 100) {
+> > > +                       dev_dbg(&device->dev, "Invalid control
+> > > value returned\n");
+> > > +                       return -EINVAL;
+> >
+> > Why don't we fall back to the other method in this case?
+> We can.
+>
+> >
+> > > +               }
+> > > +
+> > > +               *state = control / (int)fan->fif.step_size;
+> >
+> > Do we care about rounding errors?
+> >
+> > Say control is 8 and step_size is 9.  Should this count as 0 or as 1?
+> >
+> We will not set control value to 8 in this case, so we shouldn't read
+> 8. But if firmware setup at boot then it will be 0. The compensation to
+> reach 100 is at last step which is allowed.
+>
+> If step size is 9
+>
+> thermal sysfs will display
+>         max_state = 100/9 = 11
+>
+> control         thermal sysfs cur_state
+> 0-8             0
+> 9-17            1
+> 18-26           2
+> 27-35           3
+> 36-44           4
+> 45-53           5
+> 54-62           6
+> 63-71           7
+> 72-80           8
+> 81-89           9
+> 90-98           10
+> 99-100          11
+>
+> If step size is 10
+> thermal sysfs
+>         max_state = 100/10 = 10
+> control         thermal sysfs cur_state
+> 0-9             0
+> 10-19           1
+> 20-29           2
+> 30-39           3
+> 40-49           4
+> 50-59           5
+> 60-69           6
+> 70-79           7
+> 80-89           8
+> 90-99           9
+> 100             10
+>
+>
+>
+> > > +               return 0;
+> > > +       }
+>
+> [...]
+>
+> > > -       if (state >= fan->fps_count)
+> > > +       if (state > max_state)
+> >
+> > Say step_size is 9, so max_state is 11.  state == 12 would still be
+> > valid, no?
+> We are presenting thermal sysfs max_state as 11 in this case, so
+> state 0-11 are valid. To reach 100, the spec allows to compensate the
+> last step to reach 100%. So state 11 is 100% not 99% as in the above
+> table.
+>
+> If we present max_state as 12 then also user space can't choose max
+> than 12, so (state > max_state) will be still an error.
+>
+> If we present max state as 12 then in the above table:
+> control         state
+> ----------------------
+> 90              10
+> 99              11
+> 100             12
+>
+> Then last state will increase control value by 1.
 
---------------EJHe7aT1MX8MACmRfxSbCbA0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+OK, so the code below can do
 
------BEGIN PGP SIGNATURE-----
+value *= fan->fif.step_size;
+if (value + fan->fif.step_size > 100)
+        value = 100;
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH9eRQFAwAAAAAACgkQlh/E3EQov+Dh
-qRAAsOzpwO2wZ2Abk4HUpU2xkepbg75KwpMltmrpW09NuiED9EXCBYkkskEHT6Hla4YPakzire4H
-ncaFahaeupLHEOlYQ0Cm7AddEhQSF5JGBCyrPj4eWw7Tx8zdZRdaIm2kVNnERHx60XULK7p4txuL
-7BLe/oYPSkCS5MJMcqULvjDSrZpmkb5CrgCni4+qezGEg1FGsmQ3wvXInQeNtlgNFfXaMfrGKRHE
-r0HkSUCjc3LNNvNBmljvrdM+Uv4i58bFX0MsmARRSqeHt/LsiswLgtDt8fmOEd3EC90pjuyZbmjG
-QeDkGsR32cjPRZWKz7u+gIGE8AVQHU5S0dFfybR/YLn6+Zeo8q4a8LdZ94cLRz7RRfwYiA2qiMHZ
-IdY9+IVd660y2VEr0s1Od/asfCjg2lkDGzuleah2na3XSR2okgWV6QPZW6RwAC6qdxkemGOzSDZq
-NdimYP19cXogiEatTrAcf2Vf60oUEfg5zafu1kPvUiewr+9+i744GgmFe9oFdBQ3qVF+9cO+q9Zd
-a9Ifi68p7cguSqeAEsQ+cbU/B+3JmaKfC4VU7Dewpxk00l6KUUoJV5GAoqPHZ1xIgwTO1QjQgFwK
-0CjPkHh6Hdi+ksyNTwgiqXBFlXEgrXK3XAttiXk7QQnIa86WV/FFAyKjhNrxyUy/M2mIKKPDfCCb
-CZU=
-=X401
------END PGP SIGNATURE-----
+and max_size is still not needed IIUC.
 
---------------EJHe7aT1MX8MACmRfxSbCbA0--
+>
+> >
+> > >                 return -EINVAL;
+> > >
+> > > -       status = acpi_execute_simple_method(device->handle, "_FSL",
+> > > -                                           fan-
+> > > >fps[state].control);
+> > > +       if (fan->fif.fine_grain_ctrl) {
+> > > +               int rem;
+> > > +
+> > > +               value *= fan->fif.step_size;
+> >
+> > And you don't need the max_state computation for this, it's only
+> > necessary to cap value at 100.  In which case you also wouldn't need
+> > rem etc.
+> For above example to set the state 11 for 100 for step size 9. If
+> max_state is chosen as 12 then we can just cap.
+>
+> >
+> > > +
+> > > +               /*
+> > > +                * In the event OSPM’s incremental selections of
+> > > Level
+> > > +                * using the StepSize field value do not sum to
+> > > 100%,
+> > > +                * OSPM may select an appropriate ending Level
+> > > +                * increment to reach 100%.
+> > > +                */
+> > > +               rem = 100 - value;
+> > > +               if (rem && rem < fan->fif.step_size)
+> > > +                       value = 100;
+> > > +       } else {
+> > > +               value = fan->fps[state].control;
+> > >
+>
+> [...]
+>
+> > > +       if (!fan->fif.step_size)
+> > > +               fan->fif.step_size = 1;
+> > > +       /* If step size > 9, change to 9 (by spec valid values 1-9)
+> > > */
+> > > +       if (fan->fif.step_size > 9)
+> >
+> > I would do "else if" here, because both the above conditions cannot
+> > hold at the same time.
+> OK
+>
+> >
+> > > +               fan->fif.step_size = 9;
+> > >  err:
+> > >
+>
+> [...]
+>
+> > > +       sysfs_attr_init(&fan->fine_grain_control.attr);
+> > > +       fan->fine_grain_control.show = show_fine_grain_control;
+> > > +       fan->fine_grain_control.store = NULL;
+> > > +       fan->fine_grain_control.attr.name = "fine_grain_control";
+> > > +       fan->fine_grain_control.attr.mode = 0444;
+> > > +       status = sysfs_create_file(&device->dev.kobj, &fan-
+> > > >fine_grain_control.attr);
+> >
+> > I would split the creation of the new attributes into a separate
+> > file,
+> > for clarity (and to help the review somewhat).
+> >
+> We can move all the attributes including the current one to a new file.
+>
+> Thanks,
+> Srinivas
+>

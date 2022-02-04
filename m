@@ -2,100 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BF04A9D1C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA824A9D1E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376630AbiBDQqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 11:46:00 -0500
-Received: from outbound-smtp35.blacknight.com ([46.22.139.218]:43195 "EHLO
-        outbound-smtp35.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233928AbiBDQp7 (ORCPT
+        id S1376637AbiBDQqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 11:46:20 -0500
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:33480 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233928AbiBDQqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 11:45:59 -0500
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp35.blacknight.com (Postfix) with ESMTPS id C9AD52036
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 16:45:58 +0000 (GMT)
-Received: (qmail 20019 invoked from network); 4 Feb 2022 16:45:58 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 4 Feb 2022 16:45:58 -0000
-Date:   Fri, 4 Feb 2022 16:45:57 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Nayak, KPrateek (K Prateek)" <kprateek.nayak@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Message-ID: <20220204164556.GN3366@techsingularity.net>
-References: <20220203144652.12540-1-mgorman@techsingularity.net>
- <20220203144652.12540-3-mgorman@techsingularity.net>
- <9d7e8fe1-d9d7-90df-0f30-cf82b82e7f1f@amd.com>
+        Fri, 4 Feb 2022 11:46:19 -0500
+Received: by mail-yb1-f175.google.com with SMTP id j2so20656353ybu.0;
+        Fri, 04 Feb 2022 08:46:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BvSuNBp8dR/Kb3EjKCpYDsXctSQVZqQDAcffA+q3los=;
+        b=7D3z2vm0h1j4atOFoOENz9bLXdyzCLlLpc4+nItU5ZeuGiKPdm7eQvK4nveCccMAiU
+         LyvnrQZ5poZ9PTbMl/482N9gywqddiQeyDkLM4CAu5vrYrclL9PMftwG2srms5iEL1lv
+         Ka8f7prpywo6ueQAFPOrGTJgYJzUHmqxfPqfRBGdyaDrCnQH7I02PcZnf2TtjKXaJvGT
+         9ZtO2rKAUHwSYVVPOoHjoYLl4JSZXMuxaFDqry6cKWaAoySzfMhXHL091a5jTLfpmSol
+         +aPQexsMK2R+qzJkYRpYUVKRR9x5GLu/z95tGBzet77Ksn0wCPIiHuOAMG4o+Yskzmlj
+         vwqg==
+X-Gm-Message-State: AOAM533IDqNVjmbshorGyKWsazXW+Gu93WWsXRWbxvx2Cgjiqcc+PrPg
+        Fr+gUA8acizuJ+wJjj/CVj/sh6oQinI4NWa7G9bu1wxv7jU=
+X-Google-Smtp-Source: ABdhPJyAFVEJdp1U9YTbB71BrJTCw0XHR3u847HkemF7OS0ij0YeJcjoDQH8HyWf0BmGEBijaLROnZtx3zl9ycbUSU4=
+X-Received: by 2002:a05:690c:118:: with SMTP id bd24mr3969605ywb.515.1643993178854;
+ Fri, 04 Feb 2022 08:46:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <9d7e8fe1-d9d7-90df-0f30-cf82b82e7f1f@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 4 Feb 2022 17:46:08 +0100
+Message-ID: <CAJZ5v0h9f770hRMXazt4jk=9E01hMjQ41pZ5+Ym-4p0dCrhwmw@mail.gmail.com>
+Subject: [GIT PULL] ACPI fix for v5.17-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 08:37:53PM +0530, Nayak, KPrateek (K Prateek) wrote:
-> On 2/3/2022 8:16 PM, Mel Gorman wrote:
-> > @@ -9003,10 +9006,9 @@ static bool update_pick_idlest(struct sched_group *idlest,
-> >   * This is an approximation as the number of running tasks may not be
-> >   * related to the number of busy CPUs due to sched_setaffinity.
-> >   */
-> > -static inline bool
-> > -allow_numa_imbalance(unsigned int running, unsigned int weight)
-> > +static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
-> >  {
-> > -	return (running < (weight >> 2));
-> > +	return running < imb_numa_nr;
-> >  }
-> >  
-> >  /*
-> > @@ -9146,7 +9148,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
-> >  			 * allowed. If there is a real need of migration,
-> >  			 * periodic load balance will take care of it.
-> >  			 */
-> > -			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, local_sgs.group_weight))
-> > +			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
-> 
-> Could you please clarify why are we adding 1 to local_sgs.sum_nr_running while allowing imbalance?
+Hi Linus,
 
-To account for the new task similar to what task_numa_find_cpu before
-calling adjust_numa_imbalance.
+Please pull from the tag
 
-> allow_numa_imbalance allows the imbalance based on the following inequality:
-> 
-> 	running < imb_numa_nr
-> 
-> Consider on a Zen3 CPU with 8 LLCs in the sched group of the NUMA domain.
-> Assume the group is running 7 task and we are finding the idlest group for the 8th task:
-> 
->  	sd->imb_numa_nr = 8
-> 	local_sgs.sum_nr_running = 7
-> 
-> In this case, local_sgs.sum_nr_running + 1 is equal to sd->imb_numa_nr and if we allow NUMA imbalance
-> and place the task in the same group, each task can be given one LLC.
-> However, allow_numa_imbalance returns 0 for the above case and can lead to task being placed on a different
-> NUMA group.
-> 
-> In case of Gautham's suggested fix (https://lore.kernel.org/lkml/YcHs37STv71n4erJ@BLR-5CG11610CF.amd.com/),
-> the v4 patch in question (https://lore.kernel.org/lkml/20211210093307.31701-3-mgorman@techsingularity.net/)
-> used the inequality "<=" to allow NUMA imbalance where we needed to consider the additional load CPU had
-> to bear. However that doesn't seem to be the case here.
-> 
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.17-rc3
 
-I failed to change < to <= in allow_numa_imbalance, I'll fix and retest.
+with top-most commit 04662bac0067e2fd7f243d6abaa4d779bce14114
 
--- 
-Mel Gorman
-SUSE Labs
+ ACPI: require CRC32 to build
+
+on top of commit 26291c54e111ff6ba87a164d85d4a4e134b7315c
+
+ Linux 5.17-rc2
+
+to receive an ACPI fix for 5.17-rc3.
+
+This fixes compilation in the case when ACPI is selected and CRC32,
+depended on by ACPI after recent changes, is not (Randy Dunlap).
+
+Thanks!
+
+
+---------------
+
+Randy Dunlap (1):
+      ACPI: require CRC32 to build
+
+---------------
+
+ drivers/acpi/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)

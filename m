@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 607604AA03C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443604AA03F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234392AbiBDTj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbiBDTjZ (ORCPT
+        id S234463AbiBDTkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:40:13 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47240 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232901AbiBDTkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:39:25 -0500
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7C4C06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:39:25 -0800 (PST)
-Received: by mail-qv1-xf41.google.com with SMTP id g3so1556337qvb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=jmxc1VHkuYNPEqrVmbBBeuTvYodmvUYf6OAafsrCWNLTEpuIDWJJZKuKmZ6o2S6Io7
-         peyVwGXgQl1KfYNT6F3k6O4nYcMwPfTjMgjaBzP+nVBfqrfzPbnFaSJKSDoAYImDl3sp
-         aQnA8B1nLyN7ujWHee3j0E4uXwrI9nn7Hh84g5cp49FN7tGPurMsDECZurGi2jT5l73V
-         zhsWPmBsqPwDyjaPxdWb0/4NeWiOzs6lY/T2Gm9qzsW3YD6XQgacamNRHzr34p+v2dfT
-         +3yBIYZGwjQTdExAx236QGKvD/ftxqJL0aaU3ZJvJ3PisvXoEdh2KFyMt9zvbc3hS4wh
-         VfVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=L77wWZOzoJ83FWnS0rTBXLliJsYhOTdAIZIl+/oApzA=;
-        b=CN8vEmQ/6XH7XZoccgdDdKjUf7U4bHCLsN8V2YjZaQ29EDhlWl8xRugWB8JVKi9Hjh
-         s74he0b2n75fqwzYTapRjcQs3A8LkgNygd/ugIEMZW6ru9vfHd02so3y6FDeBv2cwvOV
-         /dQ//riwkaRvobRFeQ4HrGB3R7gMfxXZnjl7dys9G1Sz3/CLaZ+58qwknYgiXSj/sGmE
-         UUwBLJ3bEdBFShjpd/6H3gB414JwrtLUQn0JeCmwp6mgn3edfaop33tpWy4ILlPWKWWW
-         PXA3FkPZw1zeHroAay/nDuM7lRweWoIf6+HcGUw7CUfIqTE25n0vq4wZ97uEjGhtJ/jx
-         JP+A==
-X-Gm-Message-State: AOAM531ZJxvJOrGjs4oXK523jf+yp9JXCKRsviPMPfKE1gWuwWd4wkwx
-        bYhmsBjPxtkKq2IpGNviA4E14fuTTWassxPF37M=
-X-Google-Smtp-Source: ABdhPJxJApCc9l6GFvKcU/Dz87VcEXZ0P4wayjaLhHK0LEpnbUYUiwCPw14aFYD726QIJIJ7rVddzwZ8vLf2+B5E9tk=
-X-Received: by 2002:ad4:5baf:: with SMTP id 15mr3011394qvq.111.1644003564466;
- Fri, 04 Feb 2022 11:39:24 -0800 (PST)
+        Fri, 4 Feb 2022 14:40:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 56E76CE223E;
+        Fri,  4 Feb 2022 19:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93276C340EB;
+        Fri,  4 Feb 2022 19:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644003608;
+        bh=9qfZzVg17+0zHsBBjelWLlxfLLBlRWQoKqn8lLWN2lA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tRVNSkC8iIf9DhleNKya8hTSjN8l3TfMQkJb1pxyzPwQmcO6fUuyqBcGIMk6Uiswu
+         smwCMJ+R9PeE38tHuWLRcRqusArIQoQpgU7NWRddGPs2apBZxhoz8mkLNQhO5Nlhuk
+         1OZxxXtrJ1qe6GZWYuslj3Sx1kCIfosVd/Sr5v4gZ4oQOHz4O51oQxXkDqCcGQ2Jrd
+         iHexdNPI4DxnJVQZWPXTiGw3ewliz9c+zMabDEs2INJC0dBdBUZugFOhPcGDW9+fN1
+         ql3Ah8yrAqyrhZ2rr5lEO8QlWd6eKrr5nxjGABA+f+LaOi88w8RcaPynUK9mws7m3N
+         CjDIseh8ngxFQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78AFFC6D4EA;
+        Fri,  4 Feb 2022 19:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Received: by 2002:ac8:7d04:0:0:0:0:0 with HTTP; Fri, 4 Feb 2022 11:39:24 -0800 (PST)
-Reply-To: gabrieledgal47@gmail.com
-From:   Gabriel Edgal <kangnigold@gmail.com>
-Date:   Fri, 4 Feb 2022 11:39:24 -0800
-Message-ID: <CABZhTgwCMSODqL8Aectidox+KGB8Q4+rnT6cNhWN73=nCQkciA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/2] limit bpf_core_types_are_compat recursion
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164400360849.5213.7518261706290398971.git-patchwork-notify@kernel.org>
+Date:   Fri, 04 Feb 2022 19:40:08 +0000
+References: <20220204005519.60361-1-mcroce@linux.microsoft.com>
+In-Reply-To: <20220204005519.60361-1-mcroce@linux.microsoft.com>
+To:     Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     alexei.starovoitov@gmail.com, bpf@vger.kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Fri,  4 Feb 2022 01:55:17 +0100 you wrote:
+> From: Matteo Croce <mcroce@microsoft.com>
+> 
+> As formerly discussed on the BPF mailing list:
+> https://lore.kernel.org/bpf/CAADnVQJDax2j0-7uyqdqFEnpB57om_z+Cqmi1O2QyLpHqkVKwA@mail.gmail.com/
+> 
+> changes from v2:
+> test the bpf_core_type_exists() return value, and check that the recursion
+> limit is enforced.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,1/2] bpf: limit bpf_core_types_are_compat() recursion
+    https://git.kernel.org/bpf/bpf-next/c/e70e13e7d4ab
+  - [bpf-next,v3,2/2] selftests/bpf: test maximum recursion depth for bpf_core_types_are_compat()
+    https://git.kernel.org/bpf/bpf-next/c/976a38e05a49
+
+You are awesome, thank you!
 -- 
-Dear friend.
-
-I'm Mr. Gabriel Edgal, I'm the chief internal auditor of Btci Bank, I have
-an abandoned fund $ 9.5 million dollars to transfer to you, as we shall
-parts 50:50. You will only stand as a relative of my deceased client as
-bears the same surname as you, the fund was deposited in our bank for
-many years back by my deceased client who died with his whole
-family in a car accident in 2010. I would like to invite you as a foreigner
-partner to stand as the next of kin of the deceased client, so that we
-will place a claim on the deposited fund and divide it between the two
-of
-us 50:50 each. I want you to answer me immediately for more information
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-With best regards,
-Mr. Gabriel Edgal

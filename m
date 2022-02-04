@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948A94A9687
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0E74A9639
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239348AbiBDJ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:26:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44172 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358018AbiBDJZH (ORCPT
+        id S1357459AbiBDJYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:24:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:52108 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357658AbiBDJXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:25:07 -0500
+        Fri, 4 Feb 2022 04:23:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699CE61602;
-        Fri,  4 Feb 2022 09:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCD1C004E1;
-        Fri,  4 Feb 2022 09:25:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56DDFB836BA;
+        Fri,  4 Feb 2022 09:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FA64C004E1;
+        Fri,  4 Feb 2022 09:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966706;
-        bh=IjJK+yt4eIiTBKn6aNSapd1Q6Hm6qu7JqEQZHEp0YE4=;
+        s=korg; t=1643966593;
+        bh=KVLgj1pVHVHJjqdICEXZNOLtZ4RDheMZu0wqlDTKP2w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mX+0bp28MhjmSqfvUbSDVzGMkx+17EKIQ/9zvPiWHsGemwxjBxneVEQ5CDFGr0f/A
-         tQTU9a+UkTj3U9yTQurZziVHos2KhtOFdBBsg2kkHzZnYOruSn8TZ6XsLpC3pYDF81
-         CCtSbjbctSRScH/gvJNszpkH+pOxlrfNu1o0QLmA=
+        b=1NLDoPMbyN098GeqKn9QTS+pt2fjY/DvSD5L3SdhRgkv4ZkNxwChN+QltMBhPWqW6
+         POKN/ls3IVLoW6nhPlpSntT4h0NOE0ku3viqfVZkO0QzDx9Ng2W09zrSR+p5wHQ2VN
+         x4HoKQg1jYDds9gqEnytIcNuFN4SMB23m71lNXJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roi Dayan <roid@nvidia.com>,
-        Oz Shlomo <ozsh@nvidia.com>, Maor Dickman <maord@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 14/43] net/mlx5e: TC, Reject rules with drop and modify hdr action
-Date:   Fri,  4 Feb 2022 10:22:21 +0100
-Message-Id: <20220204091917.640709686@linuxfoundation.org>
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
+        Roi Dayan <roid@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.15 12/32] net/mlx5: Bridge, take rtnl lock in init error handler
+Date:   Fri,  4 Feb 2022 10:22:22 +0100
+Message-Id: <20220204091915.668942966@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
-References: <20220204091917.166033635@linuxfoundation.org>
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+References: <20220204091915.247906930@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,39 +45,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roi Dayan <roid@nvidia.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-commit a2446bc77a16cefd27de712d28af2396d6287593 upstream.
+commit 04f8c12f031fcd0ffa0c72822eb665ceb2c872e7 upstream.
 
-This kind of action is not supported by firmware and generates a
-syndrome.
+The mlx5_esw_bridge_cleanup() is expected to be called with rtnl lock
+taken, which is true for mlx5e_rep_bridge_cleanup() function but not for
+error handling code in mlx5e_rep_bridge_init(). Add missing rtnl
+lock/unlock calls and extend both mlx5_esw_bridge_cleanup() and its dual
+function mlx5_esw_bridge_init() with ASSERT_RTNL() to verify the invariant
+from now on.
 
-kernel: mlx5_core 0000:08:00.0: mlx5_cmd_check:777:(pid 102063): SET_FLOW_TABLE_ENTRY(0x936) op_mod(0x0) failed, status bad parameter(0x3), syndrome (0x8708c3)
-
-Fixes: d7e75a325cb2 ("net/mlx5e: Add offloading of E-Switch TC pedit (header re-write) actions")
-Signed-off-by: Roi Dayan <roid@nvidia.com>
-Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
-Reviewed-by: Maor Dickman <maord@nvidia.com>
+Fixes: 7cd6a54a8285 ("net/mlx5: Bridge, handle FDB events")
+Fixes: 19e9bfa044f3 ("net/mlx5: Bridge, add offload infrastructure")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Roi Dayan <roid@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c |    2 ++
+ drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c    |    4 ++++
+ 2 files changed, 6 insertions(+)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -3421,6 +3421,12 @@ actions_match_supported(struct mlx5e_pri
- 	}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/rep/bridge.c
+@@ -509,7 +509,9 @@ err_register_swdev_blk:
+ err_register_swdev:
+ 	destroy_workqueue(br_offloads->wq);
+ err_alloc_wq:
++	rtnl_lock();
+ 	mlx5_esw_bridge_cleanup(esw);
++	rtnl_unlock();
+ }
  
- 	if (actions & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
-+	    actions & MLX5_FLOW_CONTEXT_ACTION_DROP) {
-+		NL_SET_ERR_MSG_MOD(extack, "Drop with modify header action is not supported");
-+		return false;
-+	}
+ void mlx5e_rep_bridge_cleanup(struct mlx5e_priv *priv)
+--- a/drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/esw/bridge.c
+@@ -1385,6 +1385,8 @@ struct mlx5_esw_bridge_offloads *mlx5_es
+ {
+ 	struct mlx5_esw_bridge_offloads *br_offloads;
+ 
++	ASSERT_RTNL();
 +
-+	if (actions & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
- 	    !modify_header_match_supported(priv, &parse_attr->spec, flow_action,
- 					   actions, ct_flow, ct_clear, extack))
- 		return false;
+ 	br_offloads = kvzalloc(sizeof(*br_offloads), GFP_KERNEL);
+ 	if (!br_offloads)
+ 		return ERR_PTR(-ENOMEM);
+@@ -1401,6 +1403,8 @@ void mlx5_esw_bridge_cleanup(struct mlx5
+ {
+ 	struct mlx5_esw_bridge_offloads *br_offloads = esw->br_offloads;
+ 
++	ASSERT_RTNL();
++
+ 	if (!br_offloads)
+ 		return;
+ 
 
 

@@ -2,101 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A51C4A9467
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540694A946C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349373AbiBDHRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 02:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344062AbiBDHRx (ORCPT
+        id S1349996AbiBDHTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 02:19:52 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:37248 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349571AbiBDHTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 02:17:53 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE053C06173E
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 23:17:52 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id o17so7313063ljp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 23:17:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=QBhPBgEherimIGZgK6u1u1J4jQoQqrfPzu4TsRicrdU=;
-        b=Klx+cha5El9xIZx9Yw6vj3tiH96+Ne0Kb0LdgK0yv7tpzBMDMuM3u1rlDgJ+O2TxU2
-         bVUDS3Hi/aILxDws83bWnyF38+id8SupMuPd5JD4ri58GztW5jQ+MD9636HW2a1GXAGw
-         RUTjsq+NgujTcyC8kuBal3uIh1QCrkbOm6GazCDg9SqsS48itz5RqL4HP2DIAdLQShhk
-         EMy5eZ4D9vIxpvX3sJ8GBHaxpSOJwHZzDMhtDZmaLhNA9TQkh3SXhKU4zDReyESyhM47
-         AcmnDsxZZMe2dZKL0wWYk2eBvxHA7w8UJg6djm1YKM8CU4TQDQqDX8L4jbi7pr+QdiZj
-         fAbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=QBhPBgEherimIGZgK6u1u1J4jQoQqrfPzu4TsRicrdU=;
-        b=0grKHoiCskYCAkHMG/NTMFGObuqH5H/RlNEZRaS/YCx375qB6R60VXZT0mVDW2ohCL
-         6BoTTRfyEETTFZM7k4ZRJB0I7IHCTo6S9mVx6EpAM/8IaN4pTAbcCHaeoiL3+rOOqqf1
-         QYbSXjc8rCd3ZW+7UP4XoAyWYdpzeO7YPznpija0M2X6bExZ+dO0LMcFq27MadK7o2p0
-         Xy8kamyeMQ9LuFhLIaKCF7xkYTSnHrjaAMALo/CFLQXW6/6f8adRFc5XD82pZp9u1MmN
-         SHrxCOdMdBqF917H5GnZqeH6eGB9TkF3WmbTiCBJ+BpKmMRWjq2oBeb1Jm/JcseJXxHc
-         nIwQ==
-X-Gm-Message-State: AOAM53272rgevs4vYrqhZ8rcMKGMpcTWMpRTUAgouH5FmEq+Ov5QxBmD
-        yqKS0nyHmRRrmJs4eG+AreeAZlZT6HZZOlwQsvQ=
-X-Google-Smtp-Source: ABdhPJwaXngbVu6x2BzBFKiVTGd3tmZO3HesUYpMaCzlRBqZXX3heOrKDLlirBGr8PvHBab7QsK9+SnfX2OeceUtOlg=
-X-Received: by 2002:a2e:2a04:: with SMTP id q4mr1003226ljq.428.1643959070954;
- Thu, 03 Feb 2022 23:17:50 -0800 (PST)
+        Fri, 4 Feb 2022 02:19:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 491D661C16
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 07:19:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0E9C004E1;
+        Fri,  4 Feb 2022 07:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643959190;
+        bh=W/618XX1lnhHob8jqldDEkXFfNtNSHeDYB4h2i9bZrA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KPJa4BR705l3M94zF5zXeBo5j737VdILZBUdbpbJy8Hvj0T33uFX762QNhfY8sALq
+         cZGn4Rg1nhjQVvFHFipqulfP5c6A/rfTHVjrzPdgEjPI7erVhDcM3Di/Xu4nRapLIx
+         YXwxK6Vg/o+PZhM/clHqJkhnnFY8t00JY1h+SPKBaDGybs0DqphK/cbUpxkJUNLAzc
+         g0E4sTiCEVAcxSvKiTlNnt8NTRVGy0QWBgWMW+pYt6toW7fJ+o6eL0t0Wi3pM8vIX0
+         NX6Eq2K2LaZ5WOkH0cI5/YlREN8QxflYDbjuOEdm37ARIEJqyVOqI7sQcUC/+aBRA/
+         xSI9LllwsX4rA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH v3] f2fs: introduce F2FS_IPU_HONOR_OPU_WRITE ipu policy
+Date:   Fri,  4 Feb 2022 15:19:46 +0800
+Message-Id: <20220204071946.47435-1-chao@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Sender: smithwilson780@gmail.com
-Received: by 2002:a2e:8756:0:0:0:0:0 with HTTP; Thu, 3 Feb 2022 23:17:49 -0800 (PST)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Fri, 4 Feb 2022 07:17:49 +0000
-X-Google-Sender-Auth: hHwHJBX6OXKMnivP_ecO7PjrpcE
-Message-ID: <CADh0mysoGOw9QB8J21v9EyM-Tk7DUJ1s+fGnW-Bxg_eFGyj-mQ@mail.gmail.com>
-Subject: Calvary greetings.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello My Dear,
+Once F2FS_IPU_FORCE policy is enabled in some cases:
+a) f2fs forces to use F2FS_IPU_FORCE in a small-sized volume
+b) user sets F2FS_IPU_FORCE policy via sysfs
 
-Please do not feel disturbed for contacting =C2=A0you in this regards, It
-was based on the critical health condition I found myself. =C2=A0My names
-are Mrs. Dina Mckenna Howley A widow and am suffering from brain tumor
-disease and this illness has gotten to a very bad stage, I
- married my husband for Ten years without any child. =C2=A0My husband died
-after a brief illness that lasted for few  days.
-Since the death of my husband, I decided not to remarry again, When my
-late husband was alive he deposited the sum of =C2=A0($ 11,000,000.00,
-Eleven Million Dollars) with the Bank. Presently this money is still
-in bank. And My  Doctor told me that I don't have much time to live
-because my illness has gotten to a very bad stage, Having known my
-condition I  decided to entrust over the deposited fund under your
-custody to take care of the less-privileged ones therein your country
-or position,
-which i believe that you will utilize this money the way I am going to
-instruct herein.
+Then we may fail to defragment file due to IPU policy check, it doesn't
+make sense, let's introduce a new IPU policy to allow OPU during file
+defragmentation.
 
-However all I need and required from you is your sincerity and ability
-to carry out the transaction successfully and fulfill my final wish in
-implementing the charitable project as it requires absolute trust and
-devotion without any failure and I will be glad to see that the bank
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything needs to be
-process rapidly as soon as possible.
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35 % percent of the total fund for your effort in
- handling the transaction, 5 % percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country
-for the mutual benefit of the orphans and the less privileges ones.
-Meanwhile I am waiting for your prompt respond, if only you are
-interested for further details of the transaction and execution of
-this  humanitarian project for the glory and honor of God the merciful
-compassionate.
-May God bless you and your family..
-Regards,
-Mrs. Dina Mckenna Howley.
-written from Hospital.
+In small-sized volume, let's enable F2FS_IPU_HONOR_OPU_WRITE policy
+by default.
+
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v3:
+- code cleanup.
+- enables both F2FS_IPU_HONOR_OPU_WRITE and F2FS_IPU_FORCE in small-sized
+volume.
+ Documentation/ABI/testing/sysfs-fs-f2fs |  3 ++-
+ fs/f2fs/data.c                          | 18 +++++++++++++-----
+ fs/f2fs/f2fs.h                          |  3 ++-
+ fs/f2fs/file.c                          | 18 +++++++++++-------
+ fs/f2fs/segment.h                       |  6 ++++--
+ fs/f2fs/super.c                         |  3 ++-
+ 6 files changed, 34 insertions(+), 17 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index ce8103f522cb..58bf0dc83712 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -55,8 +55,9 @@ Description:	Controls the in-place-update policy.
+ 		0x04  F2FS_IPU_UTIL
+ 		0x08  F2FS_IPU_SSR_UTIL
+ 		0x10  F2FS_IPU_FSYNC
+-		0x20  F2FS_IPU_ASYNC,
++		0x20  F2FS_IPU_ASYNC
+ 		0x40  F2FS_IPU_NOCACHE
++		0x80  F2FS_IPU_HONOR_OPU_WRITE
+ 		====  =================
+ 
+ 		Refer segment.h for details.
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index b3c152de4bba..b09f401f8960 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2460,6 +2460,9 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	unsigned int policy = SM_I(sbi)->ipu_policy;
+ 
++	if (policy & (0x1 << F2FS_IPU_HONOR_OPU_WRITE) &&
++			is_inode_flag_set(inode, FI_OPU_WRITE))
++		return false;
+ 	if (policy & (0x1 << F2FS_IPU_FORCE))
+ 		return true;
+ 	if (policy & (0x1 << F2FS_IPU_SSR) && f2fs_need_SSR(sbi))
+@@ -2530,6 +2533,9 @@ bool f2fs_should_update_outplace(struct inode *inode, struct f2fs_io_info *fio)
+ 	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+ 		return true;
+ 
++	if (is_inode_flag_set(inode, FI_OPU_WRITE))
++		return true;
++
+ 	if (fio) {
+ 		if (page_private_gcing(fio->page))
+ 			return true;
+@@ -3154,8 +3160,8 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+ 			f2fs_available_free_memory(sbi, DIRTY_DENTS))
+ 		goto skip_write;
+ 
+-	/* skip writing during file defragment */
+-	if (is_inode_flag_set(inode, FI_DO_DEFRAG))
++	/* skip writing in file defragment preparing stage */
++	if (is_inode_flag_set(inode, FI_SKIP_WRITES))
+ 		goto skip_write;
+ 
+ 	trace_f2fs_writepages(mapping->host, wbc, DATA);
+@@ -3729,6 +3735,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 	filemap_invalidate_lock(inode->i_mapping);
+ 
+ 	set_inode_flag(inode, FI_ALIGNED_WRITE);
++	set_inode_flag(inode, FI_OPU_WRITE);
+ 
+ 	for (; secidx < end_sec; secidx++) {
+ 		f2fs_down_write(&sbi->pin_sem);
+@@ -3737,7 +3744,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 		f2fs_allocate_new_section(sbi, CURSEG_COLD_DATA_PINNED, false);
+ 		f2fs_unlock_op(sbi);
+ 
+-		set_inode_flag(inode, FI_DO_DEFRAG);
++		set_inode_flag(inode, FI_SKIP_WRITES);
+ 
+ 		for (blkofs = 0; blkofs < blk_per_sec; blkofs++) {
+ 			struct page *page;
+@@ -3754,7 +3761,7 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 			f2fs_put_page(page, 1);
+ 		}
+ 
+-		clear_inode_flag(inode, FI_DO_DEFRAG);
++		clear_inode_flag(inode, FI_SKIP_WRITES);
+ 
+ 		ret = filemap_fdatawrite(inode->i_mapping);
+ 
+@@ -3765,7 +3772,8 @@ static int f2fs_migrate_blocks(struct inode *inode, block_t start_blk,
+ 	}
+ 
+ done:
+-	clear_inode_flag(inode, FI_DO_DEFRAG);
++	clear_inode_flag(inode, FI_SKIP_WRITES);
++	clear_inode_flag(inode, FI_OPU_WRITE);
+ 	clear_inode_flag(inode, FI_ALIGNED_WRITE);
+ 
+ 	filemap_invalidate_unlock(inode->i_mapping);
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 6ddb98ff0b7c..01a9033723fc 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -737,7 +737,8 @@ enum {
+ 	FI_DROP_CACHE,		/* drop dirty page cache */
+ 	FI_DATA_EXIST,		/* indicate data exists */
+ 	FI_INLINE_DOTS,		/* indicate inline dot dentries */
+-	FI_DO_DEFRAG,		/* indicate defragment is running */
++	FI_SKIP_WRITES,		/* should skip data page writeback */
++	FI_OPU_WRITE,		/* used for opu per file */
+ 	FI_DIRTY_FILE,		/* indicate regular/symlink has dirty pages */
+ 	FI_PREALLOCATED_ALL,	/* all blocks for write were preallocated */
+ 	FI_HOT_DATA,		/* indicate file is hot */
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 6ccdd6e347e2..42fbdcf0ccc9 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2559,10 +2559,6 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 	bool fragmented = false;
+ 	int err;
+ 
+-	/* if in-place-update policy is enabled, don't waste time here */
+-	if (f2fs_should_update_inplace(inode, NULL))
+-		return -EINVAL;
+-
+ 	pg_start = range->start >> PAGE_SHIFT;
+ 	pg_end = (range->start + range->len) >> PAGE_SHIFT;
+ 
+@@ -2570,6 +2566,13 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 
+ 	inode_lock(inode);
+ 
++	/* if in-place-update policy is enabled, don't waste time here */
++	set_inode_flag(inode, FI_OPU_WRITE);
++	if (f2fs_should_update_inplace(inode, NULL)) {
++		err = -EINVAL;
++		goto out;
++	}
++
+ 	/* writeback all dirty pages in the range */
+ 	err = filemap_write_and_wait_range(inode->i_mapping, range->start,
+ 						range->start + range->len - 1);
+@@ -2651,7 +2654,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 			goto check;
+ 		}
+ 
+-		set_inode_flag(inode, FI_DO_DEFRAG);
++		set_inode_flag(inode, FI_SKIP_WRITES);
+ 
+ 		idx = map.m_lblk;
+ 		while (idx < map.m_lblk + map.m_len && cnt < blk_per_seg) {
+@@ -2676,15 +2679,16 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 		if (map.m_lblk < pg_end && cnt < blk_per_seg)
+ 			goto do_map;
+ 
+-		clear_inode_flag(inode, FI_DO_DEFRAG);
++		clear_inode_flag(inode, FI_SKIP_WRITES);
+ 
+ 		err = filemap_fdatawrite(inode->i_mapping);
+ 		if (err)
+ 			goto out;
+ 	}
+ clear_out:
+-	clear_inode_flag(inode, FI_DO_DEFRAG);
++	clear_inode_flag(inode, FI_SKIP_WRITES);
+ out:
++	clear_inode_flag(inode, FI_OPU_WRITE);
+ 	inode_unlock(inode);
+ 	if (!err)
+ 		range->len = (u64)total << PAGE_SHIFT;
+diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+index 0291cd55cf09..7be59e3c4e00 100644
+--- a/fs/f2fs/segment.h
++++ b/fs/f2fs/segment.h
+@@ -651,7 +651,9 @@ static inline int utilization(struct f2fs_sb_info *sbi)
+  *                     pages over min_fsync_blocks. (=default option)
+  * F2FS_IPU_ASYNC - do IPU given by asynchronous write requests.
+  * F2FS_IPU_NOCACHE - disable IPU bio cache.
+- * F2FS_IPUT_DISABLE - disable IPU. (=default option in LFS mode)
++ * F2FS_IPU_HONOR_OPU_WRITE - use OPU write prior to IPU write if inode has
++ *                            FI_OPU_WRITE flag.
++ * F2FS_IPU_DISABLE - disable IPU. (=default option in LFS mode)
+  */
+ #define DEF_MIN_IPU_UTIL	70
+ #define DEF_MIN_FSYNC_BLOCKS	8
+@@ -667,6 +669,7 @@ enum {
+ 	F2FS_IPU_FSYNC,
+ 	F2FS_IPU_ASYNC,
+ 	F2FS_IPU_NOCACHE,
++	F2FS_IPU_HONOR_OPU_WRITE,
+ };
+ 
+ static inline unsigned int curseg_segno(struct f2fs_sb_info *sbi,
+@@ -675,7 +678,6 @@ static inline unsigned int curseg_segno(struct f2fs_sb_info *sbi,
+ 	struct curseg_info *curseg = CURSEG_I(sbi, type);
+ 	return curseg->segno;
+ }
+-
+ static inline unsigned char curseg_alloc_type(struct f2fs_sb_info *sbi,
+ 		int type)
+ {
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 9af6c20532ec..806836184ebc 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -3957,7 +3957,8 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
+ 		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
+ 		if (f2fs_block_unit_discard(sbi))
+ 			sm_i->dcc_info->discard_granularity = 1;
+-		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE;
++		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE |
++					1 << F2FS_IPU_HONOR_OPU_WRITE;
+ 	}
+ 
+ 	sbi->readdir_ra = 1;
+-- 
+2.32.0
+

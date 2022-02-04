@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0168B4A96D6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B5B4A96DB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349272AbiBDJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358880AbiBDJbK (ORCPT
+        id S237723AbiBDJdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:33:07 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:57650 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232946AbiBDJdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:31:10 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7804C0613BC;
-        Fri,  4 Feb 2022 01:29:31 -0800 (PST)
-Date:   Fri, 4 Feb 2022 10:29:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643966970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/eecWjACA0rGMqqEQiDgokZRkG3UepJI5ulPZyG6uO0=;
-        b=Kq3E210trmVV3cpVxMoJ0wqgmkAoAXew8RuSZaqcds1os6QjXpnmgz46wHdKI0PVoeoWZV
-        S0i2vVf5tU2o0cky+cRkS34UDv2oxDo/kALrSY0PIvSbz0SfT2q1i0OuOKP2X/GtSi7YNC
-        raKGH932Jo7zHOOEZuNzw1BjC07lIKJf2tWut7tH745ktB3dAvF65AyZjPH9WkQxw8nvZj
-        oC40ZFV22BsIVWWo4yhtDaq1eiuKbpaCExsHNWl9OqyUKV3qGDVwwqdhaFBA1fO+ToGLCy
-        hl+yYD+Rauk/817C+r5UA0EX6NwVqjr1kxa1b/a3wlH/ASxRRKLe5AlPfrm8FQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643966970;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/eecWjACA0rGMqqEQiDgokZRkG3UepJI5ulPZyG6uO0=;
-        b=veSy3hJgJZREMiqCtupWodV6mbWqNkewKhr9cAPLZVdJcH2E4cDVZfPvx95cF/mzB5uDPC
-        ezydNgc5y/tjroCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rt-users@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mike Galbraith <efault@gmx.de>
-Subject: Re: [PATCH v4] arm64: mm: Make arch_faults_on_old_pte() check for
- migratability
-Message-ID: <Yfzx+P3jUXA0Z/Y7@linutronix.de>
-References: <20220127192437.1192957-1-valentin.schneider@arm.com>
+        Fri, 4 Feb 2022 04:33:06 -0500
+X-UUID: a50011e4aa3a4a8397125ce9a9d20236-20220204
+X-UUID: a50011e4aa3a4a8397125ce9a9d20236-20220204
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <phil.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1009347765; Fri, 04 Feb 2022 17:33:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 4 Feb 2022 17:33:02 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 4 Feb 2022 17:33:02 +0800
+From:   Phil Chang <phil.chang@mediatek.com>
+To:     <jens.wiklander@linaro.org>
+CC:     <sumit.garg@linaro.org>, <matthias.bgg@gmail.com>,
+        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <phil.chang@mediatek.com>
+Subject: [PATCH] optee: make tee_shm_register vmalloc supported
+Date:   Fri, 4 Feb 2022 17:32:54 +0800
+Message-ID: <20220204093254.2467-1-phil.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220127192437.1192957-1-valentin.schneider@arm.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-27 19:24:37 [+0000], Valentin Schneider wrote:
-> arch_faults_on_old_pte() relies on the calling context being
-> non-preemptible. CONFIG_PREEMPT_RT turns the PTE lock into a sleepable
-> spinlock, which doesn't disable preemption once acquired, triggering the
-> warning in arch_faults_on_old_pte().
-> 
-> It does however disable migration, ensuring the task remains on the same
-> CPU during the entirety of the critical section, making the read of
-> cpu_has_hw_af() safe and stable.
-> 
-> Make arch_faults_on_old_pte() check cant_migrate() instead of preemptible().
-> 
-> Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-> Link: https://lore.kernel.org/r/20210811201354.1976839-5-valentin.schneider@arm.com
+This patch allowed the tee shm use vmalloc area buffer.
 
-Let me pick that up so I can drop the other two. I hope the ARM64 folks
-follow my lead ;)
+Signed-off-by: Phil Chang <phil.chang@mediatek.com>
+---
 
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Hi,
 
-Sebastian
+ In some low-memory devices, it's hard to aquire large-orders pages,
+ this pathes is allowed user use scatter pages to register shm.
+
+ Thanks.
+
+ drivers/tee/optee/call.c |  2 +-
+ drivers/tee/tee_shm.c    | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+index b25cc1fac945..937bcc7df8e4 100644
+--- a/drivers/tee/optee/call.c
++++ b/drivers/tee/optee/call.c
+@@ -362,7 +362,7 @@ int optee_check_mem_type(unsigned long start, size_t num_pages)
+ 	 * Allow kernel address to register with OP-TEE as kernel
+ 	 * pages are configured as normal memory only.
+ 	 */
+-	if (virt_addr_valid(start))
++	if (virt_addr_valid(start) || is_vmalloc_addr((void *)start))
+ 		return 0;
+
+ 	mmap_read_lock(mm);
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index 499fccba3d74..31d0c10485ff 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -195,6 +195,20 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+ 	if (flags & TEE_SHM_USER_MAPPED) {
+ 		rc = pin_user_pages_fast(start, num_pages, FOLL_WRITE,
+ 					 shm->pages);
++	} else if (is_vmalloc_addr((void *)start)) {
++		struct page *page;
++		int i;
++
++		for (i = 0; i < num_pages; i++) {
++			page = vmalloc_to_page((void *)(start + PAGE_SIZE * i));
++			if (!page) {
++				ret = ERR_PTR(-ENOMEM);
++				goto err;
++			}
++			get_page(page);
++			shm->pages[i] = page;
++		}
++		rc = num_pages;
+ 	} else {
+ 		struct kvec *kiov;
+ 		int i;
+--
+2.25.1

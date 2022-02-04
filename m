@@ -2,130 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C944B4A91A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E034A9197
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356256AbiBDA33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:29:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S1356213AbiBDA0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356245AbiBDA30 (ORCPT
+        with ESMTP id S1354856AbiBDA0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:29:26 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5871C061714;
-        Thu,  3 Feb 2022 16:29:25 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id l25so8164002wrb.13;
-        Thu, 03 Feb 2022 16:29:25 -0800 (PST)
+        Thu, 3 Feb 2022 19:26:14 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A572C06173B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:26:14 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id t9so1482583plg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:26:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0Gp0TETqAe/mWjaH/+OeSXO8U5mVmXl/S1CjtO3ewhc=;
-        b=qrZbBCW/HSA0A04DmdQ87wF/0W6/RG8wz3/T5sLVU6tyHsVZ60rdwnQFPMQMgHBrMU
-         8yfpDMCczIYjX04Eyu9uzRBlBpggwr8esOqbd64s0AE+e1j+tUSjq0v19jr8QrkdezZO
-         KXTBGCSdAAx8jHo/5oDTXNvF5Dy/1c/Cr+WgeCPGL6XlxZYVvo5thftNyw6FUUaDorHA
-         mPjzq8GvKIMMd5e9aeumXqBwzSYVCAdhlyv1J0m5fRx+VNYsRyfXzm127FDVFURPr8ip
-         48sicXUb3TAvRdbq7urjd4CC1Rmv+2sOcIuPYtoyF76dDrBSLYBDhol0dg4UXs0RuLXc
-         7/vw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0eVjWkn3YypKipWU59VgB8hKpGPPC7yMLBku/5hkxYU=;
+        b=B/63qRKoTa/jPTvT35HS/ppnB6hN1ge8X/OnvCRnPNLr09AMTKLpwTtWlV/p1K0wTj
+         TNBYyZzDepc42Ky0lTjLbfsDa9eo1lJjo2OaJ230lmRphEb1jb+LaY9zv2FOqH1xu+Ho
+         bC4DYlB3dtVmyzGf1J8nTPkRpbDJEbgxaFqaU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0Gp0TETqAe/mWjaH/+OeSXO8U5mVmXl/S1CjtO3ewhc=;
-        b=vb+tpIaplJTdhBP+ci0GfL1vJ7rKLmnaYLoB1SFC8k3T4myArtQ5fAfqZfrx4kuBv7
-         Q3Rv3n+8HxhQfTcwWqMK+/qnBEg9mtm2yklIsJM9y7PngxuAAPUfaNI6d75+wPPHRFZm
-         IzcUc+ZEhedIiavsZsjA6pufja/m2IS1XDOJZTSaHoWiFPeZ67mpSfLsTmap2azc6U3X
-         peA5BeCMkWRGC3TCPPYwPX+b71SNkre7DDw4GdSNlHtoJI2ZdzOukhEPaTfuRSQE7Zx1
-         bVPiX5Qb7EY3CyMTeFTfo+4cdNQTRHKT34IaIKZoY+UNM2uGXAkZSjTMnFFeEQREm7O1
-         SPQA==
-X-Gm-Message-State: AOAM531kwyG7sECIvDGPiabK/euCDJOhYqaQWceI2PZwBONHVvl7piY8
-        T3ydStjl4dlRiJKC+j4jEVBfwfvacG0=
-X-Google-Smtp-Source: ABdhPJy/iHlMc2QhX+4qBtgKajhqLA0jntBxoMu/QgNN/J3LM2fwBAvK2u9e1ugHe5KGVERV9X1Uxg==
-X-Received: by 2002:a5d:64c2:: with SMTP id f2mr309157wri.429.1643934564379;
-        Thu, 03 Feb 2022 16:29:24 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.232.204])
-        by smtp.gmail.com with ESMTPSA id y7sm273033wrr.74.2022.02.03.16.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 16:29:24 -0800 (PST)
-Message-ID: <cdd132f8-cb38-df11-f140-7aa03226b68b@gmail.com>
-Date:   Fri, 4 Feb 2022 00:24:16 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0eVjWkn3YypKipWU59VgB8hKpGPPC7yMLBku/5hkxYU=;
+        b=VXkZTpTDttxxNe5LBWJ3fYXt+48IFyVkmwLflFKZQleMpZzr3Dm6JcDtqDYn78X8Pm
+         Kv/EI3UPiOxWxa/VhznFBVd8XiY7wcjtdMmuRZT1JiqcpocgIXeBHZTXsWaBjF9Dhie3
+         yTX+hH5R1KamV575cc69SMCgixpToXnsYpZ6T02/95I63GmhXmEGWsxe6JFp/IFHpAJ6
+         ILAMOGwUUzcrZmfx+95wwaTSZYGUZPUrO83ttLza5v1BzauwM1yLE5SdZ9x52Ea8p9HZ
+         /aCp96lDOSj4wTHNwSUvRGtEb595HXcTubPheuzucHQ2KeYmStoYv5iBLsQEf0jbe6zb
+         RvFg==
+X-Gm-Message-State: AOAM5312YW8yCvLnTr2U9F/LeGfE4spNfhmtIroOYanh+22f7q87sfQ1
+        I5QsxSMWdZhf6tHnQInfYbBAlG9hyTrh4Q==
+X-Google-Smtp-Source: ABdhPJzePD01mIAj1XkpKw+GItPRqZPyAv9KEL3Ul555b3PT0ZywjsUHGOJxLNDywApQ4JvY2r3ybg==
+X-Received: by 2002:a17:90b:146:: with SMTP id em6mr280597pjb.214.1643934373835;
+        Thu, 03 Feb 2022 16:26:13 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id me4sm11588041pjb.26.2022.02.03.16.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Feb 2022 16:26:13 -0800 (PST)
+Date:   Thu, 3 Feb 2022 16:26:12 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+        George Burgess IV <gbiv@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6 2/4] Compiler Attributes: Add __overloadable for Clang
+Message-ID: <202202031618.BC9EDA9D82@keescook>
+References: <20220203173307.1033257-1-keescook@chromium.org>
+ <20220203173307.1033257-3-keescook@chromium.org>
+ <CAKwvOdkU=5q-7Sb4BKYkRsigy_qYjo_7J+A73ZYKn+xArxUwXg@mail.gmail.com>
+ <202202031301.437D8FD3@keescook>
+ <CAKwvOdm-_uGYrm=2LTGSR7yhGK08NniGdkhLj_sM-QD-xdKVtA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 0/4] io_uring: remove ring quiesce in io_uring_register
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203233439.845408-1-usama.arif@bytedance.com>
- <16997265-18fa-64db-32e2-4af7f4dc3e4c@gmail.com>
- <c2f05b78-1f81-32f9-79df-06d35d9dbc7a@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <c2f05b78-1f81-32f9-79df-06d35d9dbc7a@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdm-_uGYrm=2LTGSR7yhGK08NniGdkhLj_sM-QD-xdKVtA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 00:15, Jens Axboe wrote:
-> On 2/3/22 5:02 PM, Pavel Begunkov wrote:
->> On 2/3/22 23:34, Usama Arif wrote:
->>> For opcodes relating to registering/unregistering eventfds, this is done by
->>> creating a new RCU data structure (io_ev_fd) as part of io_ring_ctx that
->>> holds the eventfd_ctx, with reads to the structure protected by
->>> rcu_read_lock and writes (register/unregister calls) protected by a mutex.
->>>
->>> With the above approach ring quiesce can be avoided which is much more
->>> expensive then using RCU lock. On the system tested, io_uring_reigster with
->>> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
->>> before with ring quiesce.
->>>
->>> The second patch creates the RCU protected data structure and removes ring
->>> quiesce for IORING_REGISTER_EVENTFD and IORING_UNREGISTER_EVENTFD.
->>>
->>> The third patch builds on top of the second patch and removes ring quiesce
->>> for IORING_REGISTER_EVENTFD_ASYNC.
->>>
->>> The fourth patch completely removes ring quiesce from io_uring_register,
->>> as IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS dont need
->>> them.
->>
->> Let me leave it just for history: I strongly dislike it considering
->> there is no one who uses or going to use it.
+On Thu, Feb 03, 2022 at 02:11:48PM -0800, Nick Desaulniers wrote:
+> On Thu, Feb 3, 2022 at 1:04 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Thu, Feb 03, 2022 at 12:26:15PM -0800, Nick Desaulniers wrote:
+> > > On Thu, Feb 3, 2022 at 9:33 AM Kees Cook <keescook@chromium.org> wrote:
+> > > >
+> > > > must be marked as being overloadable (i.e. different prototypes).
+> > > > This allows the __pass_object_size versions to take precedence.
+> > >
+> > > Is this because of the `const` additions to the function signatures?
+> >
+> > That might be an issue, but the *real* issue is the implicit mutation of
+> > the function into an inline with _additional_ arguments. i.e.
+> >
+> > char *strcpy(char * POS p, const char * POS q)
+> >
+> > is really
+> >
+> > char *strcpy(char * const p, const char * const q, size_t __size_of_p, size_t __size_of_q)
+> >
+> > (i.e. what I was doing with macros, but all internally and still an
+> > extern inline)
 > 
-> Are you referring to the 4th patch? Or the patchset as a whole? Not clear
-> to me, because eventfd registration is most certainly used by folks
-> today.
+> What do you mean "is really"? 4/4 doesn't change the number of
+> parameters in strcpy explicitly in the definition AFAICT.
 
-I refer to optimising eventfd unregister with no users of it, which
-lead to the RCU approach.
+It really does change the number of parameters. See the IR difference:
 
-1/4 is good, taking ENABLE_RINGS and RESTRICTIONS out of quiesce is
-also great. 4/4 per se is not a problem, even if I'd need to revert
-it later.
+$ cat example.c
+#ifdef USE_POS
+# define POS __attribute__((pass_object_size(1)))
+#else
+# define POS
+#endif
 
->> Even more, I can't find a single user of io_uring_unregister_eventfd()
->> in liburing tests, so most probably the paths are not tested at all.
-> 
-> That's definitely a general issue, not related to this patchset.
-> Something that most certainly should get added! Ring exit will use the
-> same unregister path for eventfd, however, so it does get exercised from
-> there with existing tests too.
+int func(void * const POS);
 
-io_ring_ctx_free()
-  -> io_eventfd_unregister()
+struct foo
+{
+        int a;
+        char *b;
+};
 
-It's called after full quiesce in io_ring_exit_work() + even more
-extra sync, so not completely
+void usage(struct foo *example)
+{
+        func(example);
+}
 
-> 
-> But for this change, we definitely need a test that exercises both
-> register and unregister, trying to trigger something funky there.
-> 
+$ IR="-O2 -Xclang -disable-llvm-passes -emit-llvm -S"
+$ clang           example.c $IR -o normal.ll
+$ clang -DUSE_POS example.c $IR -o pos.ll
+$ diff -u normal.ll pos.ll
+--- normal.ll   2022-02-03 16:23:39.734065036 -0800
++++ pos.ll      2022-02-03 16:23:49.518083451 -0800
+@@ -11,14 +11,19 @@
+   store %struct.foo* %0, %struct.foo** %2, align 8, !tbaa !3
+   %3 = load %struct.foo*, %struct.foo** %2, align 8, !tbaa !3
+   %4 = bitcast %struct.foo* %3 to i8*
+-  %5 = call i32 @func(i8* noundef %4)
++  %5 = call i64 @llvm.objectsize.i64.p0i8(i8* %4, i1 false, i1 true, i1 false)
++  %6 = call i32 @func(i8* noundef %4, i64 noundef %5)
+   ret void
+ }
+...
+
+This is basically doing internally exactly what I was doing in v4 and
+earlier with macros (passing in the caller's view of __bos(arg, 1)).
 
 -- 
-Pavel Begunkov
+Kees Cook

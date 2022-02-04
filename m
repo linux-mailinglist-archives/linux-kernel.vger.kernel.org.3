@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BC34AA40C
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC174AA40F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiBDXKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S1351174AbiBDXNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:13:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiBDXKL (ORCPT
+        with ESMTP id S239973AbiBDXNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:10:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0061FDFAA15A
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:10:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90C2161BE3
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56372C004E1;
-        Fri,  4 Feb 2022 23:10:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WZ4wo9Bu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644016206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x8+JQ+4iJoZGgPPBwS/PsWp3tJpbrRkYdVEqcoMjZH8=;
-        b=WZ4wo9Bu3kIwHox6bSruyXfnqRIxlabclQ6PGfm6SM06OR6Qp50vRHgdwvJNSPo5XFPTd9
-        /PEZA+qWv+dQrNJn9p74nIQz4Ftebg/FZwLONAFYXA3sg9YHMB5c/jrdFP3zEtgRlQBI0x
-        MaSRFA4OQuU7CHOJn4w4t96XHBCrKb4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1b966c55 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 4 Feb 2022 23:10:06 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: [PATCH v2] random: defer fast pool mixing to worker
-Date:   Sat,  5 Feb 2022 00:09:57 +0100
-Message-Id: <20220204230957.220277-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9oYj6tp+THaz_74SWikpTLSzukH-DynypB+7SZ56hucog@mail.gmail.com>
-References: <CAHmME9oYj6tp+THaz_74SWikpTLSzukH-DynypB+7SZ56hucog@mail.gmail.com>
+        Fri, 4 Feb 2022 18:13:18 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF4CDFB27F1
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:13:17 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id m27so30557wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
+        b=IjKsNTP3UmtI+YfyHZJ0qh5DSvYiShtyinPh2WOTKo2LC1R5Im2gedu5u9xfLooF4+
+         UxUJXD/dy/Tl+V8My9opTUaU/uixmq5z0us3RoC7Bgbo700hMuzVj257AuS4ktrqgACR
+         JE1XfixdYgbAeynvegt5gll/MPrWdf0b6BQfbhRUpIoONgo6tKgQYpiUple0FwM9IaHG
+         CmD96KIrg2NPA61K7dJX0+azXzCvdQsfEjax6u2RHlHWTxFWp89xPocpS8yQG7q5+g0H
+         R9WNyOY2Y6TVuu7wHZLpnid1rpTlKUJT2O6qa3lVmtqr6HEuLuR4/QDnfyR3vG9Pq8nW
+         THtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
+        b=V8Iefwilny0+lR1MK2SCPmk2HOZmchteDJBBor4v9TrpkQ94GFEhEz2TW1qAHpT24x
+         W5LjV+RqUoudr69qOprvcF+euAqgt9b/nk0khsSiny/+fKq9Kko54Mpl6T/LoFq3AL1P
+         2JdfS5ImgGoAyotI0zwKvg/DqoYS98RnvT+OFWQLuEqzg++iaOPO/BHP/O80pWk18rWH
+         c2mxzCkLwqtigz4KmKgnbsNM3mUHE6k2EryY8uoQ2YjuSaKk9IO4l1qmnvFNLzGOcBJE
+         ByLoljqfxtT9eZ57HFPyxkR2+7NGROYbPyrUqB0wvvWBB+NlDlf41N6y2+sMbxEza0L6
+         cySg==
+X-Gm-Message-State: AOAM530645YWnSFQQAr/2Z3Oorv2w18ea80Qh91AsSasZX0zdwgTGDzt
+        cx/QkpGCjRTHtUjmREn6a+sJgBiJKEoM9z8lOZabdg==
+X-Google-Smtp-Source: ABdhPJzL6D+TJwXa5HDo4f0yCGthyil6w59QwryxQD1ifMJhEDqjpOIWu7afVuh86c0pKEcjxS8nNWPb2G3HwFNPOes=
+X-Received: by 2002:a05:6000:1b88:: with SMTP id r8mr916267wru.447.1644016395758;
+ Fri, 04 Feb 2022 15:13:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220204203248.2981902-1-frowand.list@gmail.com>
+In-Reply-To: <20220204203248.2981902-1-frowand.list@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 5 Feb 2022 07:13:04 +0800
+Message-ID: <CABVgOS=JUxV6PRUZvTQhisSP+p34+K9Z6yT7HkXu6qeqtak1tw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Documentation: dev-tools: clarify KTAP specification wording
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,168 +77,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT, it's problematic to take spinlocks from hard irq
-handlers. We can fix this by deferring to a work queue the dumping of
-the fast pool into the input pool.
+On Sat, Feb 5, 2022 at 4:32 AM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> Clarify some confusing phrasing.
 
-We accomplish this with some careful rules on fast_pool->count:
+Thanks for this! A few comments below:
 
-  - When it's incremented to >= 64, we schedule the work.
-  - If the top bit is set, we never schedule the work, even if >= 64.
-  - The worker is responsible for setting it back to 0 when it's done.
+>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+>
+> One item that may result in bikeshedding is that I added the spec
+> version to the title line.
 
-In the worst case, an irq handler is mixing a new irq into the pool at
-the same time as the worker is dumping it into the input pool. In this
-case, we only ever set the count back to 0 _after_ we're done, so that
-subsequent cycles will require a full 64 to dump it in again. In other
-words, the result of this race is only ever adding a little bit more
-information than normal, but never less, and never crediting any more
-for this partial additional information.
+This is fine by me.
 
-Note that this doesn't deal with the spinlocks in crng_fast_load(),
-which will have to be dealt with some other way.
+>
+>  Documentation/dev-tools/ktap.rst | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index 878530cb9c27..3b7a26816930 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -1,8 +1,8 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+>
+> -========================================
+> -The Kernel Test Anything Protocol (KTAP)
+> -========================================
+> +===================================================
+> +The Kernel Test Anything Protocol (KTAP), version 1
+> +===================================================
+>
+>  TAP, or the Test Anything Protocol is a format for specifying test results used
+>  by a number of projects. It's website and specification are found at this `link
+> @@ -186,7 +186,7 @@ starting with another KTAP version line and test plan, and end with the overall
+>  result. If one of the subtests fail, for example, the parent test should also
+>  fail.
+>
+> -Additionally, all result lines in a subtest should be indented. One level of
+> +Additionally, all lines in a subtest should be indented. One level of
 
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c         | 54 ++++++++++++++++++++---------------
- include/trace/events/random.h |  6 ----
- 2 files changed, 31 insertions(+), 29 deletions(-)
+The original reason for this is to accommodate "unknown" lines which
+were not generated by the test itself (e.g, a KASAN report or BUG or
+something). These are awkward, as sometimes they're a useful thing to
+have as part of the test result, and sometimes they're unrelated spam.
+(Additionally, I think kselftest will indent these, as it indents the
+full results in a separate pass afterwards, but KUnit won't, as the
+level of nesting is done during printing.)
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 5d7d6e01bbc4..575616de2e16 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -383,12 +383,6 @@ static void _mix_pool_bytes(const void *in, int nbytes)
- 	blake2s_update(&input_pool.hash, in, nbytes);
- }
- 
--static void __mix_pool_bytes(const void *in, int nbytes)
--{
--	trace_mix_pool_bytes_nolock(nbytes, _RET_IP_);
--	_mix_pool_bytes(in, nbytes);
--}
--
- static void mix_pool_bytes(const void *in, int nbytes)
- {
- 	unsigned long flags;
-@@ -400,11 +394,13 @@ static void mix_pool_bytes(const void *in, int nbytes)
- }
- 
- struct fast_pool {
--	u32 pool[4];
-+	struct work_struct mix;
- 	unsigned long last;
-+	u32 pool[4];
-+	unsigned int count;
- 	u16 reg_idx;
--	u8 count;
- };
-+#define FAST_POOL_MIX_INFLIGHT (1U << 31)
- 
- /*
-  * This is a fast mixing routine used by the interrupt randomness
-@@ -434,7 +430,6 @@ static void fast_mix(struct fast_pool *f)
- 
- 	f->pool[0] = a;  f->pool[1] = b;
- 	f->pool[2] = c;  f->pool[3] = d;
--	f->count++;
- }
- 
- static void process_random_ready_list(void)
-@@ -985,12 +980,30 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- 	return *ptr;
- }
- 
-+static void mix_interrupt_randomness(struct work_struct *work)
-+{
-+	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
-+
-+	/*
-+	 * Since this is the result of a trip through the scheduler, xor in
-+	 * a cycle counter. It can't hurt, and might help.
-+	 */
-+	fast_pool->pool[3] ^= random_get_entropy();
-+
-+	mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+	/* We take care to zero out the count only after we're done reading the pool. */
-+	WRITE_ONCE(fast_pool->count, 0);
-+	fast_pool->last = jiffies;
-+	credit_entropy_bits(1);
-+}
-+
- void add_interrupt_randomness(int irq)
- {
- 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned long now = jiffies;
- 	cycles_t cycles = random_get_entropy();
-+	unsigned int new_count;
- 	u32 c_high, j_high;
- 	u64 ip;
- 
-@@ -1007,9 +1020,10 @@ void add_interrupt_randomness(int irq)
- 
- 	fast_mix(fast_pool);
- 	add_interrupt_bench(cycles);
-+	new_count = __this_cpu_inc_return(irq_randomness.count);
- 
- 	if (unlikely(crng_init == 0)) {
--		if ((fast_pool->count >= 64) &&
-+		if (new_count >= 64 &&
- 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
-@@ -1017,20 +1031,14 @@ void add_interrupt_randomness(int irq)
- 		return;
- 	}
- 
--	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
--		return;
--
--	if (!spin_trylock(&input_pool.lock))
--		return;
--
--	fast_pool->last = now;
--	__mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
--	spin_unlock(&input_pool.lock);
--
--	fast_pool->count = 0;
-+	if (new_count >= 64 && new_count < FAST_POOL_MIX_INFLIGHT &&
-+	    time_after(now, fast_pool->last + HZ)) {
-+		if (unlikely(!fast_pool->mix.func))
-+			INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
-+		__this_cpu_or(irq_randomness.count, FAST_POOL_MIX_INFLIGHT);
-+		queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- 
--	/* award one bit for the contents of the fast pool */
--	credit_entropy_bits(1);
-+	}
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
- 
-diff --git a/include/trace/events/random.h b/include/trace/events/random.h
-index ad149aeaf42c..833f42afc70f 100644
---- a/include/trace/events/random.h
-+++ b/include/trace/events/random.h
-@@ -52,12 +52,6 @@ DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
- 	TP_ARGS(bytes, IP)
- );
- 
--DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes_nolock,
--	TP_PROTO(int bytes, unsigned long IP),
--
--	TP_ARGS(bytes, IP)
--);
--
- TRACE_EVENT(credit_entropy_bits,
- 	TP_PROTO(int bits, int entropy_count, unsigned long IP),
- 
--- 
-2.35.0
+Personally, I'd rather leave this as is, or perhaps call out "unknown"
+lines explicitly, e.g:
+Additionally, all lines in a subtest (except for 'unknown' lines)
+should be indented...
 
+Thoughts?
+
+>  indentation is two spaces: "  ". The indentation should begin at the version
+>  line and should end before the parent test's result line.
+>
+> @@ -225,8 +225,8 @@ Major differences between TAP and KTAP
+>  --------------------------------------
+>
+>  Note the major differences between the TAP and KTAP specification:
+> -- yaml and json are not recommended in diagnostic messages
+> -- TODO directive not recognized
+> +- yaml and json are not recommended in KTAP diagnostic messages
+> +- TODO directive not recognized in KTAP
+>  - KTAP allows for an arbitrary number of tests to be nested
+>
+
+Looks good here, cheers.
+
+
+>  The TAP14 specification does permit nested tests, but instead of using another
+> --
+> Frank Rowand <frank.rowand@sony.com>
+>

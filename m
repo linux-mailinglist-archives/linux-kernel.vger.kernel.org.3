@@ -2,111 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4C14A9917
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F2F4A991B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358729AbiBDMQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
+        id S240272AbiBDMRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241299AbiBDMP7 (ORCPT
+        with ESMTP id S230029AbiBDMRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:15:59 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59264C061749;
-        Fri,  4 Feb 2022 04:15:49 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id z19so12157167lfq.13;
-        Fri, 04 Feb 2022 04:15:49 -0800 (PST)
+        Fri, 4 Feb 2022 07:17:06 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0086C061714;
+        Fri,  4 Feb 2022 04:17:05 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id j23so12696971edp.5;
+        Fri, 04 Feb 2022 04:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aGEsA+scNOokEFQJ1vtoomSbPZotFKlQPXXV2eBzIvA=;
-        b=Aen7EN8nyfl/ci2RwPxgfhYYo80aPrfoiwLdVRQ7ReTdXKYhLtQoUKG2EM7SiRczFK
-         Z2xfk0LAYxcUqJECpd3dbO3QrNMZNOwevdgH9GlfrDEGcMgpwS1I95FY3rmn70J6/irN
-         U2gWO9JHxlfGt6of6v0FhYJYWKuj7mCyz9OzQHZ4kNFfU6xs2eFx3hzui+FSKxdoqFdD
-         Cpto2uF0g6JGOvOH2wL/bywc3HCmNk2xGSm7K4uhXisXFUMd+I6P6g5eGPfvpWTd1Qk9
-         TnA1+n0Ez1ZZOZjXoULgjVOYoxeuiZPFuglq7ezQxNEMHJOEbx1wZ88DI5qWsetLeeTv
-         tL2Q==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=eHBHzUia9mruyB4YUukSDrxzx6AfeOgulQdxUcrQ01Q=;
+        b=SBeg0hAuVOVt3vAT8e1Ie0QdqByT0wbgDPzNIQNUUEAT1U4w1LOaL2DptiroXUHdfE
+         Hkrw7cPb7cj5GDaCbStOaPaUkw+JP8qfpoQiCSQYYYzt4FjfH4dHw8qvlQk+lind9mtp
+         dHPvgQrqwYy45MqJB4mDWxMKbNgBBqcPMb+bpbwtcCxJzm6woxWG90oMXT0We4Q9BuK+
+         8BNiPi6096ZHmkyprgC6Qrb+KtcsmS/EoDebY+VBVw52SHkXM6yv+oRDOS7tscUg05a8
+         8awoA+Fq3UtBbdMH+QgXWfx15LjDMS5MOCIxWjajedF5rl7RKVdADQThId4tJbTWSxy8
+         FU6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=aGEsA+scNOokEFQJ1vtoomSbPZotFKlQPXXV2eBzIvA=;
-        b=rhTBnpiU7G/xiaSCUF6Zb7XgqKmS5se5aBLXK2ZOGChRmbkMoSpIcIzXH2IbFs6zoe
-         KY/Fd0rkfB9F2fh6AqJsIBvBqKTe3ew98aIyQwqB+GuCby0xHEdN1+NdX2z3pLHs15c/
-         pHhmdM6A5JSyWEqDV/0QAaCvQ7sNEgdEZaEP6Jr0I0ybKn43p0qPpNP79yN/kh4Pw8Eg
-         hWGuNddO1FyUCWQAUG94LRu3xveeAd6PgVyY9/Z7iFIUa1DiE+l07ce+9Ps1uiraU4KI
-         hYMMkFVYu8fL4qsg/dwEEWF/+Jx9ttmAKVgYOHhDHEn9e84or72WqzRTfp4epWpt6IQB
-         PKdg==
-X-Gm-Message-State: AOAM532VhtWHE8QkXI9wgbldZsg5opI7hwBQfPPQHQp2AiI8WJ/tY+B9
-        7TXfytt7SZuX5AfUDe6ed2c=
-X-Google-Smtp-Source: ABdhPJy3MvrHFgG+Z9ja4JsGfZR0P4ohrWkNNy7SCj28+hp74nLhHYaItj5fQ+eiQB5t0Y9sZueWng==
-X-Received: by 2002:a05:6512:3f8f:: with SMTP id x15mr2128386lfa.363.1643976947560;
-        Fri, 04 Feb 2022 04:15:47 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id u21sm251171ljo.81.2022.02.04.04.15.46
+        bh=eHBHzUia9mruyB4YUukSDrxzx6AfeOgulQdxUcrQ01Q=;
+        b=CdXmZvD22G0x38YTm3MDOX9I+TWGfwmbDc1lpD0HNbhfBJnBHwhZqiY39QJkrhwyCa
+         h3OQE/bNor6JbgOjwDdufgPTANgLa+y0iFsShFwhBNqpl5o56b2wKWeEXog9T3EIJTlx
+         uBTIgQT5KRiby11/Vew1/HtQn/AaztUMH0qKQRpXQtJRfJ7BT20IcCpXXDpTbW93FAVz
+         pelSkoNn85yEroGM3DSM/GEkdwxXaLz1r23qKehL1umLpZGw9sB3yj704tLKeIpKNLr0
+         1yFIovvDjHRn4DSI0NfKJ27mmlsFLb3i4SYXsUBWNEunvqxqhpgX7saACitMd6MI/Edc
+         aAdw==
+X-Gm-Message-State: AOAM530LMYuUVz0Yv3Gvqbew+Xvf84NEAxnTvEp1GeY+ct0o+X1WMwaJ
+        FZrlktbXj6G/KF/pAk4R6Yw=
+X-Google-Smtp-Source: ABdhPJwNGOsK4+pWoc1ci4iXaJJz7WgHa2jxbtSwbSsa9Axav2aDtMiirV3zHvkRizynn7vEBUFnvQ==
+X-Received: by 2002:a05:6402:40cd:: with SMTP id z13mr2737770edb.119.1643977024173;
+        Fri, 04 Feb 2022 04:17:04 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id d15sm610498ejw.143.2022.02.04.04.17.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 04:15:47 -0800 (PST)
-Message-ID: <07913f0e-1e17-a22b-615c-fff8ccad7f9b@gmail.com>
-Date:   Fri, 4 Feb 2022 15:15:46 +0300
+        Fri, 04 Feb 2022 04:17:03 -0800 (PST)
+Message-ID: <72304aa8-6845-250b-dc0e-5122428b8dd8@gmail.com>
+Date:   Fri, 4 Feb 2022 13:17:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v18 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Subject: Re: [PATCH v7 3/4] phy: rockchip: add naneng combo phy for RK3568
 Content-Language: en-US
-To:     Akhil R <akhilrajeev@nvidia.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Rajesh Gumasta <rgumasta@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
-References: <1643729199-19161-1-git-send-email-akhilrajeev@nvidia.com>
- <1643729199-19161-3-git-send-email-akhilrajeev@nvidia.com>
- <3feaa359-31bb-bb07-75d7-2a39c837a7a2@gmail.com>
- <DM5PR12MB18509939C17ABEB5EEA825FFC0289@DM5PR12MB1850.namprd12.prod.outlook.com>
- <d6d70e52-a984-d973-f3bb-f70f1a4ce95d@gmail.com>
- <DM5PR12MB18501E2343121A9FEE013F15C0299@DM5PR12MB1850.namprd12.prod.outlook.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <DM5PR12MB18501E2343121A9FEE013F15C0299@DM5PR12MB1850.namprd12.prod.outlook.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>, heiko@sntech.de
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org, vkoul@kernel.org,
+        michael.riesch@wolfvision.net, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kishon@ti.com,
+        p.zabel@pengutronix.de, cl@rock-chips.com,
+        kever.yang@rock-chips.com, lee.jones@linaro.org,
+        wulf@rock-chips.com, Frank Wunderlich <frank-w@public-files.de>
+References: <20211230084815.28110-1-yifeng.zhao@rock-chips.com>
+ <20211230084815.28110-4-yifeng.zhao@rock-chips.com>
+ <4838413b-c424-cf55-0699-9cd8ac23d9c2@gmail.com>
+In-Reply-To: <4838413b-c424-cf55-0699-9cd8ac23d9c2@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-04.02.2022 09:47, Akhil R пишет:
->> 03.02.2022 06:44, Akhil R пишет:
->>>> But why do you need to pause at all here and can't use
->>>> tegra_dma_stop_client() even if pause is supported?
->>> The recommended method to terminate a transfer in
->>> between is to pause the channel first and then disable it.
->>> This is more graceful and stable for the hardware.
->>> stop_client() is more abrupt, though it does the job.
->>
->> If there is no real practical difference, then I'd use the common method
->> only. This will make code cleaner and simpler a tad.
-> This is the documented way of clean exit from a transfer, especially for
-> cyclic transfers where the DMA is configured in continuous mode.
-> I guess it might not be a good idea to deviate from that unless there is
-> something demanding it compulsorily.
+Hi Heiko, Frank and others,
+
+China is on new year vacation.
+
+Question for Heiko:
+With xpcs in a separate node, how do we pass phy modes from gmac to
+xpcs, multiphy in a correct DT way?
+Can we brand xpcs as phy?
+Please advise.
+
+Johan
+===
+
+Found example for the way Rockchip connects sgmii in the manufacturer DT.
+https://github.com/Poco-Ye/rk-ethernet/blob/master/SGMII.rar
+
+From gmac1.txt:
+
+> &mdio1 {
+>         sgmii_phy: phy@1 {
+         sgmii_phy: phy@0 { // ???
+
+What is correct?
+
+>                 compatible = "ethernet-phy-ieee802.3-c22";
+>                 reg = <0x0>;
+
+C45E
+Clause 45 PHY Enable
+When this bit is set, Clause 45 capable PHY is connected to MDIO.
+When this bit is reset, Clause 22 capable PHY is connected to
+MDIO.
+Values:
+1'b0: Clause 45 PHY is disabled
+1'b1: Clause 45 PHY is enabled
+
+>         };
+> };
+>
+>
+> &combphy2_psq {
+> +       rockchip,sgmii-mac-sel = <1>;
+>         status = "okay";
+> };
+>
+>
+> &gmac0 {
+> 	phy-mode = "sgmii";
+> 	
+> 	rockchip,pipegrf = <&pipegrf>;
+> 	rockchip,xpcs = <&xpcs>;
+>
+> 	snps,reset-gpio = <&gpio3 RK_PB4 GPIO_ACTIVE_LOW>;
+> 	snps,reset-active-low;
+> 	/* Reset time is 20ms, 100ms for rtl8211f */
+> 	snps,reset-delays-us = <0 20000 100000>;
+>
+> 	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>;
+> 	assigned-clock-parents = <&gmac1_xpcsclk>;
+>
+> +	pinctrl-0 = <&gmac1m0_miim>;
+> 	power-domains = <&power RK3568_PD_PIPE>;
+> 	phys = <&combphy2_psq PHY_TYPE_SGMII>;
+> +	phy-handle = <&sgmii_phy>;
+>
+> 	status = "okay";
+> };
+
+===
+
+Proposal:
+xpcs driver passes mode info to multiphy driver.
+Phy arg is used for gmac source selection for PHY_INTERFACE_MODE_SGMII
+and PHY_INTERFACE_MODE_QSGMII.
+
+> 	phys = <&xpcs 0>;
+
+===
+
+{
+	gmac0_xpcsclk: xpcs-gmac0-clock {
+		compatible = "fixed-clock";
+		clock-frequency = <125000000>;
+		clock-output-names = "clk_gmac0_xpcs_mii";
+		#clock-cells = <0>;
+	};
+
+	gmac1_xpcsclk: xpcs-gmac1-clock {
+		compatible = "fixed-clock";
+		clock-frequency = <125000000>;
+		clock-output-names = "clk_gmac1_xpcs_mii";
+		#clock-cells = <0>;
+	};
+
+	xpcs: syscon@fda00000 {
+		compatible = "rockchip,rk3568-xpcs", "syscon";
+		reg = <0x0 0xfda00000 0x0 0x200000>;
+		clocks = <&cru PCLK_XPCS>;
+		clock-names = "pclk_xpcs";
+
+>		phys = <&multiphy2>;
+
+		power-domains = <&power RK3568_PD_PIPE>;
+ 		rockchip,pipegrf = <&pipegrf>; // Switch between gmac0 and gmac1
+		status = "disabled";
+	};
+}
+
+&mdio1 {
+         sgmii_phy: phy@0 {
+                 compatible = "ethernet-phy-ieee802.3-c22";
+                 reg = <0x0>;
+         };
+ };
+
+
+&multiphy2 {
+         status = "okay";
+};
+
+
+&gmac0 {
+	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>;
+ 	assigned-clock-parents = <&gmac1_xpcsclk>;
+
+ 	phys = <&combphy2_psq PHY_TYPE_SGMII>;
+	phy-handle = <&sgmii_phy>;
+ 	phy-mode = "sgmii";
+
+> 	phys = <&xpcs 0>;
+
+	pinctrl-0 = <&gmac1m0_miim>;
+
+ 	snps,reset-gpio = <&gpio3 RK_PB4 GPIO_ACTIVE_LOW>;
+	snps,reset-active-low;
+ 	/* Reset time is 20ms, 100ms for rtl8211f */
+ 	snps,reset-delays-us = <0 20000 100000>;
+
+	status = "okay";
+};
+
+On 1/3/22 19:26, Johan Jonker wrote:
+> Hi Yifeng, Kishon, rob+dt,
 > 
-> I agree that the code will be cleaner. I would try to see if I can find a cleaner
-> way to do this. Please do let me know if you have any suggestion.
-
-Will be great if you could find out and provide a detailed explanation
-about the exact differences of the methods from software perspective.
-Try to ask the hardware people.
-
-If you won't be able to find out, then use both methods. Then you could
-specify the "pause" callback within the tegra_dma_chip_data
-[tdma->chip_data->pause(tdma)], instead of using condition in the code.
+> Some comments, have a look if it's useful.
+> 
+> ====
+> 
+> Could the DT and phy maintainer advise the correct/right driver
+> structure to Yifeng, so that we can move forward!
+> 
+> ====
+> 

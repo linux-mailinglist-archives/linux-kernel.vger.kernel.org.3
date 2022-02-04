@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6923D4A9708
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849F84A96FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357524AbiBDJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiBDJmq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:42:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D9EC061714;
-        Fri,  4 Feb 2022 01:42:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3356EB835FF;
-        Fri,  4 Feb 2022 09:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117B6C004E1;
-        Fri,  4 Feb 2022 09:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643967763;
-        bh=toQRlag89WgoQbDeLsTnM9vrf7XzsnptbqFZ8LVPtz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=18/5wzarpQIWSe2Licy66VUq6gWXg04CPuIVqZ/YgyEi26YbQLVAewIYss8sUg/P8
-         efbZEriHeXdn+lg+Ahg17MsdiAZq1kFOGhyGHYwRubcSgmi4LeaiI+YJl4GyQJDjJ7
-         2j6y0sZV+YwJ90uqu7NWhK/K87P8D10gGeqDJsRg=
-Date:   Fri, 4 Feb 2022 10:40:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [PATCH 5.10 08/25] perf: Rework perf_event_exit_event()
-Message-ID: <Yfz0nWtyap5Y3ogJ@kroah.com>
-References: <20220204091914.280602669@linuxfoundation.org>
- <20220204091914.560626177@linuxfoundation.org>
- <20220204093734.GA27857@amd>
+        id S1357486AbiBDJl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:41:57 -0500
+Received: from mga14.intel.com ([192.55.52.115]:37021 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235827AbiBDJly (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 04:41:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643967714; x=1675503714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zyAkA0z3hPV88z/IUZ/J6pW73hLdSGbtFR19wWtnHFs=;
+  b=L8U+ABqyVanAxHWGTBVSXmbZT81M9p3uAuNeKlP/XxsQimDx063qM5aJ
+   rLkpVjZTlVj+c6eXry+/Q7gk6xeqSdNbYtUnrCJcA5CHPHvf8za1+50w5
+   xWV71gNUquhezNI0XwgOwHeeoIjoct14woMPUFxVUhbnmgVco1o6nQW2H
+   FwjUlI/wXmnMO6m8S4INm9J1qTOsRQ3yIVYnWWUZVZDLG6PrIIqBFK8BC
+   4qxvZbfPFqwW2iqLbbWrqzQvZpbxDGxxtJFTU1lFWx5iJKMBVTjG4QnyI
+   fqTZtrmHFyVWsdZYUHtNPnQINpreJWQiFG477jOZM2Wz3mT4f+ou3KwO8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248554431"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="248554431"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:41:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="539111341"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:41:51 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 8BE4B20287;
+        Fri,  4 Feb 2022 11:41:19 +0200 (EET)
+Date:   Fri, 4 Feb 2022 11:41:19 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v1 1/1] device property: Don't split fwnode_get_irq*()
+ APIs in the code
+Message-ID: <Yfz0v7oqDkgfZyky@paasikivi.fi.intel.com>
+References: <20220203125613.1166-1-andriy.shevchenko@linux.intel.com>
+ <Yfzkm1CVNNRqHzd7@paasikivi.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204093734.GA27857@amd>
+In-Reply-To: <Yfzkm1CVNNRqHzd7@paasikivi.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 10:37:35AM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > 
-> > commit ef54c1a476aef7eef26fe13ea10dc090952c00f8 upstream.
-> > 
-> > Make perf_event_exit_event() more robust, such that we can use it from
-> > other contexts. Specifically the up and coming remove_on_exec.
-> 
-> Do we need this in 5.10? AFAICT the remove_on_exec work is not queued
-> for 5.10, and this patch is buggy and needs following one to fix it
-> up.
+On Fri, Feb 04, 2022 at 10:32:27AM +0200, Sakari Ailus wrote:
+> I'd prefer to prepend this patch to the rest of the set I have and get it
+> all merged through linux-pm tree, on the dependent patch reaches it.
 
-It's needed by the following patch, which says 5.10 is affected.
+I rebased mine on this patch and I was quite surprised to see it doesn't
+conflict! So either way works fine for me.
+
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+-- 
+Sakari Ailus

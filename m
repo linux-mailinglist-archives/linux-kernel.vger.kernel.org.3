@@ -2,172 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA234A971D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:48:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024854A972A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357815AbiBDJs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242703AbiBDJs0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:48:26 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586A6C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 01:48:26 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id k13so11501505lfg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 01:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cLbSNgwNud0S537oiGIeOdzTSiyjX7YAN9YmrPJXmDY=;
-        b=TstzG/VSP5lEgkMG+g4ag/N8chovppXaIUSSNerGbJX3QCcAFmNEurO0W2P+e1Ppv5
-         8QMVFeh9ieajzc/+Jcv7WcHtBC7fO6/OaiEoo7F4g/OBJlUm1WhivHzswtc5xb4JYi78
-         8/atYSBO5N6mntfqQJmsF884mBOdMJaTpA2+sYwUfP4jq0CHsjOa2qcjtYBj64Z6dQhL
-         kmSiS74eAvHk1opOr4SmckY9SicGCIhcTb+28/7PM8EFkcC/DCQ+deWNkd2/T5EX3G2k
-         4zhttskv+dWjZSZHLQ2sNbAfFGY3p8/uLokE2jSsRKFyLz/MH3pyqRxXCC9uPhRCuwR/
-         gooA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cLbSNgwNud0S537oiGIeOdzTSiyjX7YAN9YmrPJXmDY=;
-        b=L2dgOP6ccUGVoTeHRmVxjeKbsFPlLRhP4bELOvjcc57Y00fObdK301i3vlfSa+bx2F
-         sx5QVCkjfJi30sjot+0tAJcpGD2oDUGBr6+svk1MtFAOTQXaCcLVdNpDHUYMmREr2TzJ
-         7OOY13CXYCMDKyIlZcraVrZhHsqc4Kv2SNHDD/Lgd4EA6AYQKAIq3iWOaHMdc5gufOiN
-         ZTGUE1/U8zQogAL/hcyMrEXhVE2e9ErLGQ+JF55pjQAdX1T3yuLFA8LgjWE54bUm9AK3
-         Rk52riAkMMkX60ip2m8mVBNoY0I9L/PhNWayCzUaY9czHRTnx+OnehTPWlfRpZJep+br
-         vvkA==
-X-Gm-Message-State: AOAM532PQo2aVDuVIh8dNucQYnvz7HLeyZbC5p2JCe2UXEWSMtkScopo
-        NazyUyTKpSBJfxzywhfcw7EdDhgBuyMmdyYaTW0HgwUsmcc=
-X-Google-Smtp-Source: ABdhPJzv2kPvIWwSO8K+my0g3jvGsPU5xVRMxRkLA5ciWNOUsOtsuL44JcTmCWZYNGZhB/qu6vDkYkZTu8H5eaAu4r0=
-X-Received: by 2002:a05:6512:3e10:: with SMTP id i16mr1710070lfv.184.1643968104666;
- Fri, 04 Feb 2022 01:48:24 -0800 (PST)
-MIME-Version: 1.0
-References: <5e5f2e45d0a14a55a8b7a9357846114b@hyperstone.com> <7c4757cc707740e580c61c39f963a04d@hyperstone.com>
-In-Reply-To: <7c4757cc707740e580c61c39f963a04d@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 4 Feb 2022 10:47:47 +0100
-Message-ID: <CAPDyKFr0YXCwL-8F9M7mkpNzSQpzw6gNUq2zaiJEXj1jNxUbrg@mail.gmail.com>
-Subject: Re: [PATCH] mmc: block: fix read single on recovery logic
-To:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1357875AbiBDJvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:51:47 -0500
+Received: from mga03.intel.com ([134.134.136.65]:62513 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345599AbiBDJvq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 04:51:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643968306; x=1675504306;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VpvsouKtfytZM1zm826Tw50a4we77vDGpg9yQSoAclw=;
+  b=EFIFtkI6/fPWEyXvUx1jH0H6qHdLvqTbQSP6E9RycMMi+RasH70xFfAR
+   ePoVNgEIU2zV1bmCNTYof7c3VS1gdZRfAmdoyhZEWvL5Q0PY7nkEOxCZv
+   R+YezfxAKXhd0S2gRAWr+8R7pjhSlou+p5/dAvi/cZv6B4wnu6ZenCv6P
+   xmm10AGiM96tF2RLZjtNMgabbkoRVgu/xtiGV8LA+yrDCwE4ZbCAO/AgI
+   GIMNntQu8CqxP8OjzT/p9DhGsVgQNkfHopYpXpdGWL0oSqLjgcApVidPK
+   pQJRT91hpxhqW/LvcAUzm2D7wyTuEX2uY4UviinK86YsPqyo5GMx2igBy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248290998"
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="248290998"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:51:46 -0800
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="483563833"
+Received: from rkothand-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.86.47])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:51:40 -0800
+Date:   Fri, 4 Feb 2022 22:51:38 +1300
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@intel.com>, <luto@kernel.org>,
+        <peterz@infradead.org>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <aarcange@redhat.com>, <ak@linux.intel.com>,
+        <dan.j.williams@intel.com>, <david@redhat.com>, <hpa@zytor.com>,
+        <jgross@suse.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <jpoimboe@redhat.com>, <knsathya@kernel.org>,
+        <pbonzini@redhat.com>, <sdeep@vmware.com>, <seanjc@google.com>,
+        <tony.luck@intel.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 03/29] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-Id: <20220204225138.e76f6e98e0208d746606099d@intel.com>
+In-Reply-To: <20220204034312.43rotpihciik2gk6@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+        <20220124150215.36893-4-kirill.shutemov@linux.intel.com>
+        <87a6faz7cs.ffs@tglx>
+        <20220202025519.csymm7r23b3ltpia@black.fi.intel.com>
+        <20220202235910.c512857813ea5b14aa73267f@intel.com>
+        <20220203144403.ytyw5vcv4gshxyhn@black.fi.intel.com>
+        <20220204034312.43rotpihciik2gk6@black.fi.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Adrian
 
-On Thu, 3 Feb 2022 at 11:09, Christian L=C3=B6hle <CLoehle@hyperstone.com> =
-wrote:
->
-> So could anyone take a long at this so far?
->
+> +
+> +.macro TDX_MODULE_CALL host:req
+> +	/*
+> +	 * R12 will be used as temporary storage for struct tdx_module_output
+> +	 * pointer. Since R12-R15 registers are not used by TDCALL/SEAMCALL
+> +	 * services supported by this function, it can be reused.
+> +	 */
+> +
+> +	/* Callee saved, so preserve it */
+> +	push %r12
+> +
+> +	/*
+> +	 * Push output pointer to stack.
+> +	 * After the operation, it will be fetched into R12 register.
+> +	 */
+> +	push %r9
+> +
+> +	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
+> +	/* Move Leaf ID to RAX */
+> +	mov %rdi, %rax
+> +	/* Move input 4 to R9 */
+> +	mov %r8,  %r9
+> +	/* Move input 3 to R8 */
+> +	mov %rcx, %r8
+> +	/* Move input 1 to RCX */
+> +	mov %rsi, %rcx
+> +	/* Leave input param 2 in RDX */
+> +
+> +	.if \host
+> +	seamcall
+> +	/*
+> +	 * SEAMCALL instruction is essentially a VMExit from VMX root
+> +	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
+> +	 * that the targeted SEAM firmware is not loaded or disabled,
+> +	 * or P-SEAMLDR is busy with another SEAMCALL.  %rax is not
+> +	 * changed in this case.
+> +	 *
+> +	 * Set %rax to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
+> +	 * This value will never be used as actual SEAMCALL error code.
+> +	 */
+> +	jnc     .Lno_vmfailinvalid
+> +	mov     $TDX_SEAMCALL_VMFAILINVALID, %rax
+> +	jmp     .Lno_output_struct
 
-Thanks for pinging. Apologize for the delay, it's on top of my "to-review" =
-list.
+If I read correctly, in case of VMfailInvalid, another "pop %r12" is needed
+before jmp to .Lno_output_struct, otherwise it doesn't match the stack (pushed
+twice).
 
-I have added Adrian too, who knows this code very well too.
+However, since "test %rax, %rax" will also catch TDX_SEAMCALL_VMFAILINVALID, it
+seems we can just delete above "jmp .Lno_output_struct"?
 
-Kind regards
-Uffe
-
->
->
-> From: Christian L=C3=B6hle
-> Sent: Wednesday, January 5, 2022 5:43 PM
-> To: ulf.hansson@linaro.org; Christian L=C3=B6hle; linux-mmc@vger.kernel.o=
-rg; linux-kernel@vger.kernel.org
-> Cc: Avri Altman
-> Subject: [PATCH] mmc: block: fix read single on recovery logic
->
-> On reads with MMC_READ_MULTIPLE_BLOCK that fail,
-> the recovery handler will use MMC_READ_SINGLE_BLOCK for
-> each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
-> The logic for this is fixed to never report unsuccessful reads
-> as success to the block layer.
->
-> On command error with retries remaining, blk_update_request was
-> called with whatever value error was set last to.
-> In case it was last set to BLK_STS_OK (default), the read will be
-> reported as success, even though there was no data read from the device.
-> This could happen on a CRC mismatch for the response,
-> a card rejecting the command (e.g. again due to a CRC mismatch).
-> In case it was last set to BLK_STS_IOERR, the error is reported correctly=
-,
-> but no retries will be attempted.
->
-> The patch now will count both command and data errors as retries and
-> send BLK_STS_IOERR if there are no retries remaining,
-> or BLK_STS_OK if the single read was successful in the meantime.
->
-> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-> ---
->  drivers/mmc/core/block.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> index 90e1bcd03b46..d7d880ce0f8a 100644
-> --- a/drivers/mmc/core/block.c
-> +++ b/drivers/mmc/core/block.c
-> @@ -1682,31 +1682,31 @@ static void mmc_blk_read_single(struct mmc_queue =
-*mq, struct request *req)
->          struct mmc_card *card =3D mq->card;
->          struct mmc_host *host =3D card->host;
->          blk_status_t error =3D BLK_STS_OK;
-> -       int retries =3D 0;
->
->          do {
->                  u32 status;
->                  int err;
-> +               int retries =3D 0;
->
-> -               mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-> +               while (retries++ < MMC_READ_SINGLE_RETRIES) {
-> +                       mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
->
-> -               mmc_wait_for_req(host, mrq);
-> +                       mmc_wait_for_req(host, mrq);
->
-> -               err =3D mmc_send_status(card, &status);
-> -               if (err)
-> -                       goto error_exit;
-> -
-> -               if (!mmc_host_is_spi(host) &&
-> -                   !mmc_ready_for_data(status)) {
-> -                       err =3D mmc_blk_fix_state(card, req);
-> +                       err =3D mmc_send_status(card, &status);
->                          if (err)
->                                  goto error_exit;
-> -               }
->
-> -               if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIE=
-S)
-> -                       continue;
-> +                       if (!mmc_host_is_spi(host) &&
-> +                           !mmc_ready_for_data(status)) {
-> +                               err =3D mmc_blk_fix_state(card, req);
-> +                               if (err)
-> +                                       goto error_exit;
-> +                       }
->
-> -               retries =3D 0;
-> +                       if (!mrq->cmd->error && !mrq->data->error)
-> +                               break;
-> +               }
->
->                  if (mrq->cmd->error ||
->                      mrq->data->error ||
-> --
-> 2.34.1
->     =3D
-> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-> Managing Director: Dr. Jan Peter Berns.
-> Commercial register of local courts: Freiburg HRB381782
->
+> +.Lno_vmfailinvalid:
+> +	.else
+> +	tdcall
+> +	.endif
+> +
+> +	/*
+> +	 * Fetch output pointer from stack to R12 (It is used
+> +	 * as temporary storage)
+> +	 */
+> +	pop %r12
+> +
+> +	/* Check for success: 0 - Successful, otherwise failed */
+> +	test %rax, %rax
+> +	jnz .Lno_output_struct
+> +
+> +	/*
+> +	 * Since this function can be initiated without an output pointer,
+> +	 * check if caller provided an output struct before storing
+> +	 * output registers.
+> +	 */
+> +	test %r12, %r12
+> +	jz .Lno_output_struct
+> +
+> +	/* Copy result registers to output struct: */
+> +	movq %rcx, TDX_MODULE_rcx(%r12)
+> +	movq %rdx, TDX_MODULE_rdx(%r12)
+> +	movq %r8,  TDX_MODULE_r8(%r12)
+> +	movq %r9,  TDX_MODULE_r9(%r12)
+> +	movq %r10, TDX_MODULE_r10(%r12)
+> +	movq %r11, TDX_MODULE_r11(%r12)
+> +
+> +.Lno_output_struct:
+> +	/* Restore the state of R12 register */
+> +	pop %r12
+> +.endm
+> -- 
+>  Kirill A. Shutemov

@@ -2,153 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9367B4A9CD7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C658E4A9CDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 17:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376476AbiBDQT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 11:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244738AbiBDQTz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 11:19:55 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23863C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 08:19:55 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q132so5410041pgq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 08:19:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j3kaFhkHfeyp7+DAWdTbgQvWXyZk2TOSGCxZo84uhFc=;
-        b=Z/bFLoHuYGxnC+L5jEiRsk+VQU8yJzsbr34AKd38IlxXWkd/jE3s4EOd+VWd8knBOw
-         2+ViH28gT13phy3ki8Fa8AJl5WjkFfaJ7zvjDGYl4lpT+R4T9OQvybjsPtoVB3KrLc77
-         nY/ca4LHHHTLgrlIbMP/SWImqrZn0B4zJyLCZnDzPn544U+GzNotMxSlQ5sE+X8Psbji
-         MGak58PqZZWtNve9hLCTQz0vX4axIr7JAxmTa0NqsKUkdObA3k7wYSB3l0fISc1wDQ+U
-         JYByaRxiLhhq/dW9fWImDyNCznByxm3eGN+9iHGWAsMVtFFqa/x6sZvgM2anE1sxlAFi
-         EVGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j3kaFhkHfeyp7+DAWdTbgQvWXyZk2TOSGCxZo84uhFc=;
-        b=uNZWoOs/wD1V25ND//SBHmKsGQmvv3jUUG2hk3TGzY42MoyeniMp+wHo3YKW2HDkPo
-         GvloROXFcczzBp/iH93cS9E6dXvrXnRaL4R/OODk3u8zCOZDSs6bRExI0OrfNxkKnfmL
-         4E1iwUdduVuVLcpwJCtSaash0XN3rrlMdA6njmv8umuUBIXEgrJ7Aeq8Zu3VzCZzR8c2
-         JhvMxNgKWn+c1y9ZHVXpyh5Isg0n2+0U+FZx4f36UGF8V41SJvqajaEVnNNuloLuFKYd
-         0A5/CWXd+SDP75KpUIZZmTW6BMZJerL9MWB4/dvljV9nkhLlmtNbmcRUeWPaF1izkWXh
-         fF9A==
-X-Gm-Message-State: AOAM5318YOGqRR6YoDcHoyApglc8v+MIBdXJBUQRw2X8eAPUcF7ClUDN
-        exKKsBVw4pIRHqBsTyqzMiSreIjR1w6dxuHv62hwHA==
-X-Google-Smtp-Source: ABdhPJzQCBGQTeYrKjE55d10B9f40V82cSAN5INhpiCLIZLqfpVPGn1ysSyJGY9CcVppX1VGIFulhIhreY4ItWcfC4A=
-X-Received: by 2002:a63:4717:: with SMTP id u23mr2958870pga.74.1643991594594;
- Fri, 04 Feb 2022 08:19:54 -0800 (PST)
+        id S1355471AbiBDQWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 11:22:03 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:54150 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230184AbiBDQWB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 11:22:01 -0500
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 918581EC064D;
+        Fri,  4 Feb 2022 17:21:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1643991715;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=C3Aiz07fgWzpDuMjml0gbG/sKOww28AvWjFoDlVxnJA=;
+        b=bzscTGd8iNT4OCAu004DCeFYPE77BetHF+Z3Y3dygBfQ17HjWzjsDA+abRsi/Cq94sM42w
+        DaBD7U/xgfvsktQzKLAEHnMUsbJ4QEjn4EcQKkGeyiknG9PKQ7Ue/c7D/3e/V1xDmoTRyE
+        zamWAsnXmQ6R085hO5Os2nfNz0H65C0=
+Date:   Fri, 4 Feb 2022 17:21:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v9 29/43] x86/boot: Add Confidential Computing type to
+ setup_data
+Message-ID: <Yf1Sn4AdPgIzpih9@zn.tnic>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-30-brijesh.singh@amd.com>
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-34-ira.weiny@intel.com>
-In-Reply-To: <20220127175505.851391-34-ira.weiny@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 4 Feb 2022 08:19:43 -0800
-Message-ID: <CAPcyv4gWcs5u1vRMjzQwJque98u_6MPTWKOFb6XS273egyiXHA@mail.gmail.com>
-Subject: Re: [PATCH V8 33/44] memremap_pages: Introduce pgmap_protection_available()
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220128171804.569796-30-brijesh.singh@amd.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
->
-> From: Ira Weiny <ira.weiny@intel.com>
->
-> Users will need to specify that they want their dev_pagemap pages
-> protected by specifying a flag in (struct dev_pagemap)->flags.  However,
-> it is more efficient to know if that protection is available prior to
-> requesting it and failing the mapping.
->
-> Define pgmap_protection_available() for users to check if protection is
-> available to be used.  The name of pgmap_protection_available() was
-> specifically chosen to isolate the implementation of the protection from
-> higher level users.  However, the current implementation simply calls
-> pks_available() to determine if it can support protection.
->
-> It was considered to have users specify the flag and check if the
-> dev_pagemap object returned was protected or not.  But this was
-> considered less efficient than a direct check beforehand.
->
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
->
-> ---
-> Changes for V8
->         Split this out to it's own patch.
->         s/pgmap_protection_enabled/pgmap_protection_available
-> ---
->  include/linux/mm.h | 13 +++++++++++++
->  mm/memremap.c      | 11 +++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index e1a84b1e6787..2ae99bee6e82 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1143,6 +1143,19 @@ static inline bool is_pci_p2pdma_page(const struct page *page)
->                 page->pgmap->type == MEMORY_DEVICE_PCI_P2PDMA;
->  }
->
-> +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-> +
-> +bool pgmap_protection_available(void);
-> +
-> +#else
-> +
-> +static inline bool pgmap_protection_available(void)
-> +{
-> +       return false;
-> +}
-> +
-> +#endif /* CONFIG_DEVMAP_ACCESS_PROTECTION */
-> +
->  /* 127: arbitrary random number, small enough to assemble well */
->  #define folio_ref_zero_or_close_to_overflow(folio) \
->         ((unsigned int) folio_ref_count(folio) + 127u <= 127u)
-> diff --git a/mm/memremap.c b/mm/memremap.c
-> index 6aa5f0c2d11f..c13b3b8a0048 100644
-> --- a/mm/memremap.c
-> +++ b/mm/memremap.c
-> @@ -6,6 +6,7 @@
->  #include <linux/memory_hotplug.h>
->  #include <linux/mm.h>
->  #include <linux/pfn_t.h>
-> +#include <linux/pkeys.h>
->  #include <linux/swap.h>
->  #include <linux/mmzone.h>
->  #include <linux/swapops.h>
-> @@ -63,6 +64,16 @@ static void devmap_managed_enable_put(struct dev_pagemap *pgmap)
->  }
->  #endif /* CONFIG_DEV_PAGEMAP_OPS */
->
-> +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-> +
-> +bool pgmap_protection_available(void)
-> +{
-> +       return pks_available();
-> +}
-> +EXPORT_SYMBOL_GPL(pgmap_protection_available);
+On Fri, Jan 28, 2022 at 11:17:50AM -0600, Brijesh Singh wrote:
+> +/*
+> + * AMD SEV Confidential computing blob structure. The structure is
+> + * defined in OVMF UEFI firmware header:
+> + * https://github.com/tianocore/edk2/blob/master/OvmfPkg/Include/Guid/ConfidentialComputingSevSnpBlob.h
 
-Any reason this was chosen to be an out-of-line function? Doesn't this
-defeat the performance advantages of static_cpu_has()?
+So looking at that typedef struct CONFIDENTIAL_COMPUTING_SNP_BLOB_LOCATION there:
 
-> +
-> +#endif /* CONFIG_DEVMAP_ACCESS_PROTECTION */
-> +
->  static void pgmap_array_delete(struct range *range)
->  {
->         xa_store_range(&pgmap_array, PHYS_PFN(range->start), PHYS_PFN(range->end),
-> --
-> 2.31.1
->
+typedef struct {
+  UINT32    Header;
+  UINT16    Version;
+  UINT16    Reserved1;
+  UINT64    SecretsPhysicalAddress;
+  UINT32    SecretsSize;
+  UINT64    CpuidPhysicalAddress;
+  UINT32    CpuidLSize;
+} CONFIDENTIAL_COMPUTING_SNP_BLOB_LOCATION;
+
+> + */
+> +#define CC_BLOB_SEV_HDR_MAGIC	0x45444d41
+> +struct cc_blob_sev_info {
+> +	u32 magic;
+
+That's called "Header" there.
+
+> +	u16 version;
+> +	u16 reserved;
+> +	u64 secrets_phys;
+> +	u32 secrets_len;
+> +	u32 rsvd1;
+
+You've added that member for padding but the fw blob one doesn't have
+it.
+
+But if we get a blob from the firmware and the structure layout differs,
+how is this supposed to even work?
+
+> +	u64 cpuid_phys;
+> +	u32 cpuid_len;
+> +	u32 rsvd2;
+
+That one too.
+
+Or are you going to change the blob layout in ovmf too, to match?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CCF4A91ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC2A4A91F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 02:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356436AbiBDBQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 20:16:39 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55948 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236075AbiBDBQe (ORCPT
+        id S1356408AbiBDBQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 20:16:36 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43064 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351504AbiBDBQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 20:16:34 -0500
+        Thu, 3 Feb 2022 20:16:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 550C8B83569;
-        Fri,  4 Feb 2022 01:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27835C340EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C641D6198E;
+        Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3569AC340ED;
         Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1643937392;
-        bh=1XuypAmeblLioyIiAUzheUUKqXHjvQ4MlJ00JIZ2RZE=;
+        bh=aB9+D8EG8yLCGwvt9qYMcApSdbrEaj1GWxq4XpQ+TEU=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ayOKPLJMHfbtHrK6XFHFhDuYjk6InXupcq2HHfzpKFdhObvc1vRjOFgThJT7WoB7H
-         8VLyQR4huuprrPtR7XMc7Sp6PVWH3Y88/Nk+cSah1WANinENZc4OSUGwQNMiYr/c2J
-         WSiTMMh22Tqgzxj4B73hRLBbfWstneMNWJIf3Rd2Qiy/m0umxU6eRrvwsRwBRvj+7C
-         3O45npCAq29mhHawU4Sxp1/2mNCwSmk0/42sbJ/phJi5NqHVasTwhsrWLaBRSEidB5
-         0U/oW1bbMeWwl5nX6FoDLvKuwEsaXS9AE7JxG3WsM79HmcQXuetYC5AKSyFzdK3eL/
-         b8wOrCDj5wL3w==
+        b=dDQEfRpggUC0bKDkEhxvW31nantepBvl4sPJl5A+RwuS7G7M7FtKvEro/hoXDScdP
+         i7CpliCUJTp3+wOpLyzlErM7vvcAmabUXiZs9EhbUFdUwN09Bndsre/gAxiDXnlIMU
+         zMV+IHarp/byQ16sLKi21OKFgB5zcGtAxk780zWJmbpvAXub4eEkkhaljWfj5KfRkf
+         A2zJXmmagu/IZN1Izi43NmVlEZVVVMZ/dWkQFvwHzgcx/5shaId34VMUCVfEEmTyvZ
+         gkaaPn4ZIR92ivhhfotqalgeqkgbCqTaP2NdJfHgP2F/RnoWoa8XMD5oWHjfcHDYnr
+         +DmsPTj5ObxZg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1338AE6BB30;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22CAAE5869F;
         Fri,  4 Feb 2022 01:16:32 +0000 (UTC)
-Subject: Re: [GIT PULL] SELinux fixes for v5.17 (#1)
+Subject: Re: [GIT PULL] Networking for 5.17-rc3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAHC9VhQcLpAAXgs1oqB2WvturqvkMguYM40d=AK+LDSTnzAARg@mail.gmail.com>
-References: <CAHC9VhQcLpAAXgs1oqB2WvturqvkMguYM40d=AK+LDSTnzAARg@mail.gmail.com>
+In-Reply-To: <20220204000428.2889873-1-kuba@kernel.org>
+References: <20220204000428.2889873-1-kuba@kernel.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAHC9VhQcLpAAXgs1oqB2WvturqvkMguYM40d=AK+LDSTnzAARg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20220203
-X-PR-Tracked-Commit-Id: 186edf7e368c40d06cf727a1ad14698ea67b74ad
+X-PR-Tracked-Message-Id: <20220204000428.2889873-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc3
+X-PR-Tracked-Commit-Id: 87563a043cef044fed5db7967a75741cc16ad2b1
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 551007a8f10afdc45959ad637d6bee816716769f
-Message-Id: <164393739207.12311.8616946332803165738.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: eb2eb5161cdbd4f0acc574ef1c3ce799b980544b
+Message-Id: <164393739213.12311.5728078063673083709.pr-tracker-bot@kernel.org>
 Date:   Fri, 04 Feb 2022 01:16:32 +0000
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 3 Feb 2022 17:30:43 -0500:
+The pull request you sent on Thu,  3 Feb 2022 16:04:28 -0800:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git tags/selinux-pr-20220203
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/551007a8f10afdc45959ad637d6bee816716769f
+https://git.kernel.org/torvalds/c/eb2eb5161cdbd4f0acc574ef1c3ce799b980544b
 
 Thank you!
 

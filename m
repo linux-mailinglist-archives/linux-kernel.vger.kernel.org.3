@@ -2,73 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA074A9DEE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017024A9DF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377059AbiBDRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:43:59 -0500
-Received: from mout.gmx.net ([212.227.15.19]:43873 "EHLO mout.gmx.net"
+        id S1377076AbiBDRpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:45:11 -0500
+Received: from mga17.intel.com ([192.55.52.151]:13520 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230087AbiBDRn6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:43:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643996637;
-        bh=U/c32utP3ktSCsK73GoR8A5dbuyq12FfNbI2MiDifL4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=ZjgEQN8eM/8Vkwiz/vFaUad4TkIAh/1g52MNysYOILYOVozCOzd7um+BsuIj1fDUi
-         tma+w2sVXGXOHQjyiEhkxgZaFad4KygWl6khXAG86EZ2EtAN+UzqJsBfBGMOqqrJal
-         r0OnqvGINZl0gM7USoiiP+yx/5HNlvzLfVTEnpww=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.248]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4axg-1nFUOQ3mcg-001hoU; Fri, 04
- Feb 2022 18:43:56 +0100
-Message-ID: <08956dbc-d882-220f-9006-54a01aa41ef9@gmx.de>
-Date:   Fri, 4 Feb 2022 18:43:56 +0100
+        id S1376921AbiBDRpI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 12:45:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643996709; x=1675532709;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0grwmoxsQQuaDGKkgslEV2qlrwuNDJqIX+dOUslQeuk=;
+  b=bCglI7FiXpt9PGwp79WalmmC1zG8kUxEI/cTTFvWGV2QAWABFwjBwkw8
+   1YR1vbzKkFgeEd0BOomCJoKtYTOYnhmUiX4E7p+kq9kvqxGb5y6fUP0Ol
+   ooRa+J66ATcST46BD776rETdUUs8IveZSnGuoafrxIgtB0eRfvDqvjOdY
+   AKRftH+VuSvJ5yUQwIkMN6gvwAp33NMU0TiuIiYCf3oA+a6ePqUWP+GXu
+   wKihhS/wARo22SJtJhQwX0KW8RoYcgJTtYxZ9CCJ+rUvlVfmmrVT3NcH8
+   m4EJ1Nc/xc/kew9ZVFXZUbM8Knw4+aZrwY5OSiwTygMy6YhNbjY3qxlFH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229061087"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="229061087"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:45:08 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="539240790"
+Received: from lucas-s2600cw.jf.intel.com ([10.165.21.202])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:45:08 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     John Harrison <John.C.Harrison@Intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 02/19] iosys-map: Add offset to iosys_map_memcpy_to()
+Date:   Fri,  4 Feb 2022 09:44:19 -0800
+Message-Id: <20220204174436.830121-3-lucas.demarchi@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220204174436.830121-1-lucas.demarchi@intel.com>
+References: <20220204174436.830121-1-lucas.demarchi@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:7hKSxxMKkbBQipIIB+Ej7VWcKB2PVSV0ar70A57y/j03SbU7pkX
- ucBXZNZA06bKbT3E+2T9b4wnkS1Z2t22aWYw1qsgKf9aLwYvr67653IXbh9nUKu14bGoaIe
- ch0FVdOchZWisNPYOq03zIWwaure88bgZPNlbONuuEEQDYgXt5GV9xsdfe1S6Ehpbj8JYFF
- NnkApp5XhtgbPiX4+ZpBA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EtLJI7msm2Y=:YCyGqRkCExfu5nsmdGrLtG
- DXkAbr3ZUcvO/8qGcYHB38re/TlbqDF9iSMjNusVW+aa/7CWWUn6HVIJu0VZko/vgvpB/DI6s
- S9TBcdyV0pqPNPAc0xCIX39o3BiFAF4olRS4qKDfhb3B1mEDbCFEGoRSxdyaszZmlmiIhhdkn
- wOtrWKA82/JM2qSMEJNuNTfWFhN8Lhj60puI64YB5Oe9mfQq0uSiqdXYnBGosPvjLeaNBRlWr
- 53uChPSW3F96issM2cDrlZe/4kBS8oBqslN9fq7TQzYRXjpPLsfF8PmUfeL5SJyzXuPQZH4zr
- VAwe8+q8ErC6Cl6YjqroH6bDYidDSSCd1cet/6GU6r71TDCV5GpIFEwbZUEnicIvjH05Bvb6q
- XmZs3FIFPwb64KHj8yRMBCL00md+t324K1peFJsme9Ev8K01MUP+o+IQ7qmn+k0EoOCnpn1it
- B7Leh68BH852tlnqDX4teIyq9BkjpgJPpPtr1Pl8cTiwHfdWI7HQfxWHPcAtUmxos21P8vd9W
- QemztYmtTOOrUeNyrrQy+ZRYYGt5I9ZGWpkNAE0xXp7/S0x3NcV7HjeMPkPg83/Ni2Sp5d9pq
- MqfGk5/7Z24h8wh2z+PUSzly8QnQxtemYHdl/i2kebJUJ9LJmm8h9Z0jH93O0SAHmQkDYuxTE
- VHZXU8679AmXlRlWXDEf21xuBiutFA/OdHgs3ROlSnIvJpuMmcsrAAaPGiHyN5K9dmN81XHur
- xSUMOgxfAG8TtGtvOPS40CajjVeU99CWZgtSRqMEYlFjxb/EzxmkJhkzTWg9LpN9hKW223Gnz
- /tfoA0lAPwkEMRKmXyD6xqv3SXq+k942JXIaSAZNYOpwRyX7NM2ZJXhsgMSZcQjr6i4XShXkk
- BypXWyhr5vEj1R4CRTBgykYgLLOrQLh3u7slUdp9lHud/etr2Fvs+ygtpaUBx7zrWpw6llr3z
- tg8if24FvzmikC+E+M7MgDhgMHs0vj5YT+jbM8Hr6C+3o6ii+nzTS3O/P0MX8pxzDa2+8bPjS
- cJRZT3DStklIJ7buWUegEt0yKhEMI86OGDBKXhyszfQ0NqCJh+7fO7LfkOsXBcn1FUEzLKUM8
- C//FD9KvO2occE=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+In certain situations it's useful to be able to write to an
+offset of the mapping. Add a dst_offset to iosys_map_memcpy_to().
 
-5.16.6-rc1
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Christian König <christian.koenig@amd.com>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+---
+ drivers/gpu/drm/drm_cache.c     |  2 +-
+ drivers/gpu/drm/drm_fb_helper.c |  2 +-
+ include/linux/iosys-map.h       | 17 +++++++++--------
+ 3 files changed, 11 insertions(+), 10 deletions(-)
 
-compiles, boots and runs on my x86_64
-(Intel i5-11400, Fedora 35)
+diff --git a/drivers/gpu/drm/drm_cache.c b/drivers/gpu/drm/drm_cache.c
+index 66597e411764..c3e6e615bf09 100644
+--- a/drivers/gpu/drm/drm_cache.c
++++ b/drivers/gpu/drm/drm_cache.c
+@@ -218,7 +218,7 @@ static void memcpy_fallback(struct iosys_map *dst,
+ 	if (!dst->is_iomem && !src->is_iomem) {
+ 		memcpy(dst->vaddr, src->vaddr, len);
+ 	} else if (!src->is_iomem) {
+-		iosys_map_memcpy_to(dst, src->vaddr, len);
++		iosys_map_memcpy_to(dst, 0, src->vaddr, len);
+ 	} else if (!dst->is_iomem) {
+ 		memcpy_fromio(dst->vaddr, src->vaddr_iomem, len);
+ 	} else {
+diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+index 238f815cb2a0..bf5cc9a42e5a 100644
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -385,7 +385,7 @@ static void drm_fb_helper_damage_blit_real(struct drm_fb_helper *fb_helper,
+ 	iosys_map_incr(dst, offset); /* go to first pixel within clip rect */
+ 
+ 	for (y = clip->y1; y < clip->y2; y++) {
+-		iosys_map_memcpy_to(dst, src, len);
++		iosys_map_memcpy_to(dst, 0, src, len);
+ 		iosys_map_incr(dst, fb->pitches[0]);
+ 		src += fb->pitches[0];
+ 	}
+diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
+index f4186f91caa6..edd7fa3be9e9 100644
+--- a/include/linux/iosys-map.h
++++ b/include/linux/iosys-map.h
+@@ -220,22 +220,23 @@ static inline void iosys_map_clear(struct iosys_map *map)
+ }
+ 
+ /**
+- * iosys_map_memcpy_to - Memcpy into iosys mapping
++ * iosys_map_memcpy_to_offset - Memcpy into offset of iosys_map
+  * @dst:	The iosys_map structure
++ * @dst_offset:	The offset from which to copy
+  * @src:	The source buffer
+  * @len:	The number of byte in src
+  *
+- * Copies data into a iosys mapping. The source buffer is in system
+- * memory. Depending on the buffer's location, the helper picks the correct
+- * method of accessing the memory.
++ * Copies data into a iosys_map with an offset. The source buffer is in
++ * system memory. Depending on the buffer's location, the helper picks the
++ * correct method of accessing the memory.
+  */
+-static inline void iosys_map_memcpy_to(struct iosys_map *dst, const void *src,
+-				       size_t len)
++static inline void iosys_map_memcpy_to(struct iosys_map *dst, size_t dst_offset,
++				       const void *src, size_t len)
+ {
+ 	if (dst->is_iomem)
+-		memcpy_toio(dst->vaddr_iomem, src, len);
++		memcpy_toio(dst->vaddr_iomem + dst_offset, src, len);
+ 	else
+-		memcpy(dst->vaddr, src, len);
++		memcpy(dst->vaddr + dst_offset, src, len);
+ }
+ 
+ /**
+-- 
+2.35.1
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-regards
-Ronald

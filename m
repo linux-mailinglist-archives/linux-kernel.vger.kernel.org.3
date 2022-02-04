@@ -2,139 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AF54AA414
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BCC4AA418
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377892AbiBDXOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:14:51 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55932 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376312AbiBDXOt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:14:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67DA1B83967;
-        Fri,  4 Feb 2022 23:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6035C004E1;
-        Fri,  4 Feb 2022 23:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644016487;
-        bh=MYi9IiU+yOAAJGTml3/Ykmnyb/j5FaPAwu6TFeCrUZk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ktZ8UwMt+zeZvooJjXKnCO2gqgxOWADcs8ome7KbMkZu4Mybjenx7sWEHRUj9Ag0h
-         7hzbyt11+9DkMT/xI/jtxBszrD68q/kvf2/gl7j2ibb9n1pn87xGLvDxI6n+QiLWuD
-         FJOGGOvj6jZaubCYmgoWrBFJJ9RoP/VM72fvN+8BqWrebs6+JQql9vQpc10Xo4BoiI
-         a/qvT8H0RuKjRv+gHfXtpWigxr1kPJZUi21FYNvP5/PCUff3/JMhPx+hjqPWdkIoTZ
-         eeb0oLDXwjeD0iK18DQNll9rFUDaD0woS+PEZy3qeVWED/QzykAvMRoHgqJTd6aEUV
-         7LiXFGha71Gkg==
-Date:   Fri, 4 Feb 2022 17:14:44 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] PCI: ACPI: Replace acpi_bus_get_device()
-Message-ID: <20220204231444.GA228064@bhelgaas>
+        id S1377950AbiBDXP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:15:58 -0500
+Received: from mga07.intel.com ([134.134.136.100]:6598 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377934AbiBDXP6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 18:15:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644016558; x=1675552558;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iXO/rN2KwMjsbXkqzVwFAfE9MlIWX4gO/FItcy/mkWY=;
+  b=fzrb3xDvXW4oQu0qF/woUaDUY805oREoa01FYN9zAkS3biOLjjI+Oe/D
+   QDmlItke6B7DPGvSyQA9WtWo5jplu44ifo6aC0M6UStSCq2DLHpDi4CPZ
+   OIA+ZoD1wKqmezkrNdh3ETpUbrImYpvUrULWIkSskr0g/TBHXg/4fKltZ
+   Wigp0oj0ovD7+snDFEqPU000rBSj4gQmJpwNOX7jy3yzCdpNuek+Smil6
+   ZH+vJWV/DGG3BTgxiTftEk6bCi8KF/VcFnYBRuJM5/XC1pLlp+i1ac6BP
+   xO/UX9vKpr4HQCKZaufEw9iRGdSFob4Iy6+d0nP99VZqc6O7KtZq9vzqj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="311759897"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="311759897"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:15:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="631845319"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Feb 2022 15:15:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG7o3-000YHy-Qa; Fri, 04 Feb 2022 23:15:55 +0000
+Date:   Sat, 5 Feb 2022 07:14:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kris Van Hees <kris.van.hees@oracle.com>
+Subject: [oracle-dtrace:v2/5.17-rc2 6/10] kernel/kallsyms.c:775:17: error:
+ expected expression before 'unsigned'
+Message-ID: <202202050735.guXoa1xq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <11930209.O9o76ZdvQC@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:40:13AM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+tree:   https://github.com/oracle/dtrace-linux-kernel v2/5.17-rc2
+head:   47946e7b2e2319f39cbb7f8aaa294298c2dec5b4
+commit: ea16e4ce65d8342913051086a89eac87dc54aced [6/10] kallsyms: add /proc/kallmodsyms
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220205/202202050735.guXoa1xq-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/oracle/dtrace-linux-kernel/commit/ea16e4ce65d8342913051086a89eac87dc54aced
+        git remote add oracle-dtrace https://github.com/oracle/dtrace-linux-kernel
+        git fetch --no-tags oracle-dtrace v2/5.17-rc2
+        git checkout ea16e4ce65d8342913051086a89eac87dc54aced
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Applied with Mika's Reviewed-by to pci/acpi for v5.18, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
-> 
-> -> v2: Fix typo (superfluous paren) in acpiphp_ibm.c.
-> 
-> ---
->  drivers/pci/hotplug/acpiphp_glue.c |    7 ++++---
->  drivers/pci/hotplug/acpiphp_ibm.c  |    5 +++--
->  drivers/pci/pci-acpi.c             |    6 +++---
->  3 files changed, 10 insertions(+), 8 deletions(-)
-> 
-> Index: linux-pm/drivers/pci/hotplug/acpiphp_glue.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/hotplug/acpiphp_glue.c
-> +++ linux-pm/drivers/pci/hotplug/acpiphp_glue.c
-> @@ -226,9 +226,9 @@ static void acpiphp_post_dock_fixup(stru
->  static acpi_status acpiphp_add_context(acpi_handle handle, u32 lvl, void *data,
->  				       void **rv)
->  {
-> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
->  	struct acpiphp_bridge *bridge = data;
->  	struct acpiphp_context *context;
-> -	struct acpi_device *adev;
->  	struct acpiphp_slot *slot;
->  	struct acpiphp_func *newfunc;
->  	acpi_status status = AE_OK;
-> @@ -238,6 +238,9 @@ static acpi_status acpiphp_add_context(a
->  	struct pci_dev *pdev = bridge->pci_dev;
->  	u32 val;
->  
-> +	if (!adev)
-> +		return AE_OK;
-> +
->  	status = acpi_evaluate_integer(handle, "_ADR", NULL, &adr);
->  	if (ACPI_FAILURE(status)) {
->  		if (status != AE_NOT_FOUND)
-> @@ -245,8 +248,6 @@ static acpi_status acpiphp_add_context(a
->  				"can't evaluate _ADR (%#x)\n", status);
->  		return AE_OK;
->  	}
-> -	if (acpi_bus_get_device(handle, &adev))
-> -		return AE_OK;
->  
->  	device = (adr >> 16) & 0xffff;
->  	function = adr & 0xffff;
-> Index: linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/hotplug/acpiphp_ibm.c
-> +++ linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
-> @@ -433,8 +433,9 @@ static int __init ibm_acpiphp_init(void)
->  		goto init_return;
->  	}
->  	pr_debug("%s: found IBM aPCI device\n", __func__);
-> -	if (acpi_bus_get_device(ibm_acpi_handle, &device)) {
-> -		pr_err("%s: acpi_bus_get_device failed\n", __func__);
-> +	device = acpi_fetch_acpi_dev(ibm_acpi_handle);
-> +	if (!device) {
-> +		pr_err("%s: acpi_fetch_acpi_dev failed\n", __func__);
->  		retval = -ENODEV;
->  		goto init_return;
->  	}
-> Index: linux-pm/drivers/pci/pci-acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-acpi.c
-> +++ linux-pm/drivers/pci/pci-acpi.c
-> @@ -89,9 +89,9 @@ int acpi_get_rc_resources(struct device
->  		return -ENODEV;
->  	}
->  
-> -	ret = acpi_bus_get_device(handle, &adev);
-> -	if (ret)
-> -		return ret;
-> +	adev = acpi_fetch_acpi_dev(handle);
-> +	if (!adev)
-> +		return -ENODEV;
->  
->  	ret = acpi_get_rc_addr(adev, res);
->  	if (ret) {
-> 
-> 
-> 
+All error/warnings (new ones prefixed by >>):
+
+   kernel/kallsyms.c:666:12: warning: no previous prototype for 'arch_get_kallsym' [-Wmissing-prototypes]
+     666 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+         |            ^~~~~~~~~~~~~~~~
+   kernel/kallsyms.c: In function 'get_ksymbol_core':
+>> kernel/kallsyms.c:775:17: error: expected expression before 'unsigned'
+     775 |                 unsigned long mod_idx = (unsigned long) -1;
+         |                 ^~~~~~~~
+   In file included from arch/powerpc/include/asm/cmpxchg.h:6,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/mm_types_task.h:13,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/kallsyms.h:10,
+                    from kernel/kallsyms.c:15:
+>> kernel/kallsyms.c:806:42: warning: comparison between pointer and integer
+     806 |                   if (likely(iter->value != &_etext))
+         |                                          ^~
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   kernel/kallsyms.c:804:31: warning: unused variable 'endstr' [-Wunused-variable]
+     804 |                   const char *endstr;
+         |                               ^~~~~~
+
+
+vim +/unsigned +775 kernel/kallsyms.c
+
+   755	
+   756	/* Returns space to next name. */
+   757	static unsigned long get_ksymbol_core(struct kallsym_iter *iter, int kallmodsyms)
+   758	{
+   759		unsigned off = iter->nameoff;
+   760	
+   761		iter->exported = 0;
+   762		iter->value = kallsyms_sym_address(iter->pos);
+   763	
+   764		iter->type = kallsyms_get_symbol_type(off);
+   765	
+   766		iter->module_name[0] = '\0';
+   767		iter->builtin_module_names = NULL;
+   768	
+   769		off = kallsyms_expand_symbol(off, iter->name, ARRAY_SIZE(iter->name));
+   770	#ifdef CONFIG_KALLMODSYMS
+   771		if (kallmodsyms) {
+   772			unsigned long mod_idx = (unsigned long) -1;
+   773	
+   774			if (kallsyms_module_offsets)
+ > 775			unsigned long mod_idx = (unsigned long) -1;
+   776	
+   777			if (kallsyms_module_offsets)
+   778				mod_idx =
+   779				  get_builtin_module_idx(iter->value,
+   780							 iter->hint_builtin_module_idx);
+   781	
+   782			/*
+   783			 * This is a built-in module iff the tables of built-in modules
+   784			 * (address->module name mappings) and module names are known,
+   785			 * and if the address was found there, and if the corresponding
+   786			 * module index is nonzero, and iff this is a text (or weak)
+   787			 * symbol.  All other cases mean off the end of the binary or in
+   788			 * a non-modular range in between one or more modules.  (Also
+   789			 * guard against a corrupt kallsyms_objfiles array pointing off
+   790			 * the end of kallsyms_modules.)
+   791			 */
+   792			if (kallsyms_modules != NULL && kallsyms_module_names != NULL &&
+   793			    (iter->type == 't' || iter->type == 'T' ||
+   794			     iter->type == 'w' || iter->type == 'W') &&
+   795			    mod_idx != (unsigned long) -1 &&
+   796			    kallsyms_modules[mod_idx] != 0 &&
+   797			    kallsyms_modules[mod_idx] < kallsyms_module_names_len) {
+   798			  /*
+   799			   * Rule out (rare) section start/end symbols which might
+   800			   * overlap the last symbol in .text.  (Will also hit at most
+   801			   * one symbol which really is in a built-in module, but only
+   802			   * if that symbol is zero-length.)
+   803			   */
+   804			  const char *endstr;
+   805	
+ > 806			  if (likely(iter->value != &_etext))
+   807			    iter->builtin_module_names =
+   808			      &kallsyms_module_names[kallsyms_modules[mod_idx]];
+   809			}
+   810			iter->hint_builtin_module_idx = mod_idx;
+   811		}
+   812	#endif
+   813		return off - iter->nameoff;
+   814	}
+   815	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

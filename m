@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2AB4A9993
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821874A99AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244139AbiBDM6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:58:18 -0500
-Received: from mail6.pr.hu ([87.242.0.6]:34933 "EHLO mail6.pr.hu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236192AbiBDM6P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:58:15 -0500
-Received: from [2a02:808:3:101::5] (helo=mail.pr.hu)
-        by frontdoor.pr.hu with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <zboszor@pr.hu>)
-        id 1nFyAA-0007F4-72; Fri, 04 Feb 2022 13:58:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=pr.hu;
-        s=pr20170203; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XnOhIpcm2yyxAYZ7l4yQqnys/a9MwsubYo/CVHdqUWI=; b=isSDT/AVKVARVo3SP2mCgwsPdG
-        COmb0KLJqOj08xHb4w5ZyvgpNeTvnbwYr+8U3/wZeqBX1q81skuvv6sQL/FOqajrRDnQckDo7qteC
-        0+OJVistacicUcuVpasA4uC71wT2DMd8bp30ItcojO9R2lERPC0GH+7WHqCrKYsC0t5Zf3GDz6Kxx
-        t2f7SNV2O3i8bh+Ig3OrnJShXNqpzcdi3Rx5XLTeEyo21wtj1NLLOYPNAQBI9mNVdYY0LHOMUsvYw
-        blKZaosp+bc1++6t5awJNTjQJKDY/2b8pBwy3qg6fOVKYbGfjrPRh3ItB/WF8v+KEtpGQZQmqJnbe
-        PhayLNsw==;
-Received: from host-87-242-32-51.prtelecom.hu ([87.242.32.51] helo=localhost.lan)
-        by mail.pr.hu with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <zboszor@pr.hu>)
-        id 1nFyA6-0002os-1T; Fri, 04 Feb 2022 13:58:04 +0100
-From:   zboszor@pr.hu
-To:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     zboszor@gmail.com
-Subject: [PATCH] libata: add horkage for M88V29
-Date:   Fri,  4 Feb 2022 13:57:50 +0100
-Message-Id: <20220204125750.1771303-1-zboszor@pr.hu>
-X-Mailer: git-send-email 2.34.1
+        id S1351894AbiBDNGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:06:17 -0500
+Received: from mail-dm6nam10on2042.outbound.protection.outlook.com ([40.107.93.42]:6753
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1348009AbiBDNGL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 08:06:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PQQ+5p4Txp67tE2OnQCwe0sXTrnztrvzKVQlikg1fAD7DGjelw26KXufl0rAHWrxLibb7WJIrYO+bL/faey1CwaJ6GxqfUfqQtfronVcQFrJx6JOVqG0hEH5JmdDaQ3I1xLmSSsjrh9KInbfH+5kgg+oueZI+9p7SoUTPuHYfkzyC9wdvHVKajES+xP000nGk/ViZwXcs8JPBaudAps4Jur6lNXF66/FcsvNcHXZx6BD0vNCIgAVmkir/ri/wlDa3ZjHULHkgdoGZkYVeQwtjVjYBjjJ7pGFyDlBN07ET5aJzutQm8w49Z4Ppwhilb2P0yDpEwVHDPHiBrwo51iDUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Svqj+OXpJNEBSKlWzrxDj/rz1V7xMHE3HSuZeNhhZmY=;
+ b=Be/uCAb3skbf2BNZLkXj1RnrEWo0C5Yk4XRqII1NmXJFzDW+cJ9/fo2WfvQtk7hUSMT+Omxhd+bXDdSVpj7+JhYU1UcU3dfp4kNLZKxsdPFuYJnqO4l/KnCSTmauIqbvhvqWRp35Tb+7HUDh5wxb71Ms5SbQ9m2EM0cEf9Seeljb1VTvjYrOzya/lfYbRJjG/c/CGIOFXnudRgQT1BluyEJXtQHV/pnFYtV1lRoeRngDClGWs//ZMSv3eCc4rVq4XLcZA1QgXPUIm4hca7jKQDKpEkUo1sMduzfTcrVNHxzJl9QWWTudi9xgmuN6vU9n/IDAHdFDz1TbBqe3g4VEsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Svqj+OXpJNEBSKlWzrxDj/rz1V7xMHE3HSuZeNhhZmY=;
+ b=cRXGtm5xpoiznJCTlRzVdhtxhIi+MTxngoi8laGeSUnWVIvitT3RYKnR7L0wy5EIZ5RZZqBK/2GzR4jeCOmFwnYvTIzV7j6+qYDNlpu5+ManP62usdk7Y0ZIZvCP6RmqJ4nYRi0Y4jMqb69/9ULAL3TRmhPRoAP3SgcCLuCyIBo=
+Received: from BN6PR14CA0033.namprd14.prod.outlook.com (2603:10b6:404:13f::19)
+ by BYAPR02MB5718.namprd02.prod.outlook.com (2603:10b6:a03:11c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Fri, 4 Feb
+ 2022 13:06:08 +0000
+Received: from BN1NAM02FT043.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:404:13f:cafe::84) by BN6PR14CA0033.outlook.office365.com
+ (2603:10b6:404:13f::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Fri, 4 Feb 2022 13:06:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT043.mail.protection.outlook.com (10.13.2.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Fri, 4 Feb 2022 13:06:07 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 4 Feb 2022 05:05:54 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 4 Feb 2022 05:05:54 -0800
+Envelope-to: linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ lorenzo.pieralisi@arm.com,
+ bhelgaas@google.com
+Received: from [10.140.9.2] (port=44286 helo=xhdbharatku40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <bharat.kumar.gogada@xilinx.com>)
+        id 1nFyEG-000Bmk-Mm; Fri, 04 Feb 2022 05:02:21 -0800
+From:   Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
+        <michals@xilinx.com>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
+Subject: [PATCH 0/2] Add support for Xilinx Versal CPM5 Root Port
+Date:   Fri, 4 Feb 2022 18:32:14 +0530
+Message-ID: <20220204130216.2206-1-bharat.kumar.gogada@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -9.8 (---------)
-X-Scan-Signature: a1aedbebb1ad86a93e9d56217add5c67
-X-Spam-Tracer: backend.mail.pr.hu -9.8 20220204125804Z
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6426eab6-8e16-4310-cb1a-08d9e7df1b68
+X-MS-TrafficTypeDiagnostic: BYAPR02MB5718:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR02MB571800A3E7B07AFA3405C772A5299@BYAPR02MB5718.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3631;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fhof6dphPfTDyZPS7Oe6QwB40SOCsKeYZS8W0tZS1mgoVBxduEADRucCy9wcZM22si8HFySMpsBIQwfR1IzvfPiYVM1epLCwdahG+5oUklyuTiocIFRukc6F0pskh3h3QGUHXZ5A5cM9P1v4l/CW3z5hfi4KYRATyR9e08iJcK+M4ei+cHqFMiWcUr8U4NpHmEuzldKJyQAHbAL9C0/fc3Dlr4MsDOxjhkGZqCN+20qQhA5eTA7I5qCtsqmGQ9lzMUjciCYOYbrE4gIK/7SXs/sN/WU/ZXYkdseI9ZnzJ+Nkg8TkxvebjHR2zKQNE52oK+1ZhN82wv+tJ+A/Qz8h8fVyuRUSD/EqVtuiHxn0lFs4XWEFgkvxUtzIuXqLl2yuz/O59XtvKVyUAoHQDjlZtB3tqUcuqZhFmecBhS8EGFdQP5PzeCzZYpPf4iIoszgB0W4pnSkyo7vpcPg2MzQlQG+9cET14KymLsvE+YySiWBSZlNiLxGtiSZRACkQ6OieJnruYEKVQrhGcX6zPgdjWkBE1+QZG6SfeX5J8doDre4x2VVPcNOT8qYdazY0iGkWyYY5v3reE2COB2mxkuevQSkF51fca7o7I/avqVK1QKhs1MX5e8xlbpGrz/bqjXV+8QFZRtz4IqGT4BiLlHQNmEaZzoXT69/Lsyi7n/xdF8jBaM+0xTq5GKCFni5wIdPY
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(47076005)(9786002)(508600001)(4326008)(8936002)(2906002)(83380400001)(107886003)(7636003)(8676002)(82310400004)(336012)(1076003)(426003)(2616005)(186003)(26005)(356005)(7696005)(6666004)(36756003)(5660300002)(103116003)(70586007)(110136005)(36860700001)(54906003)(70206006)(316002)(4744005)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 13:06:07.1805
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6426eab6-8e16-4310-cb1a-08d9e7df1b68
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT043.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5718
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zoltán Böszörményi <zboszor@gmail.com>
+Xilinx Versal Premium series has CPM5 block which supports Root port
+functioning at Gen5 speed.
+Xilinx Versal CPM5 has few changes with existing CPM block.
+- CPM5 has dedicated register space for control and status registers.
+- CPM5 legacy interrupt handling needs additonal register bit
+  to enable and handle legacy interrupts.
 
-This device is a CF card, or possibly an SSD in CF form factor.
-It supports NCQ and high speed DMA.
+Bharat Kumar Gogada (2):
+  PCI: xilinx-cpm: Update YAML schemas for Versal CPM5 Root Port
+  PCI: xilinx-cpm: Add support for Versal CPM5 Root Port driver
 
-While it also advertises TRIM support, I/O errors are reported
-when the discard mount option fstrim is used. TRIM also fails
-when disabling NCQ and not just as an NCQ command.
+ .../bindings/pci/xilinx-versal-cpm.yaml       | 47 ++++++++++++++++---
+ drivers/pci/controller/pcie-xilinx-cpm.c      | 33 ++++++++++++-
+ 2 files changed, 72 insertions(+), 8 deletions(-)
 
-TRIM must be disabled for this device.
-
-Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
----
- drivers/ata/libata-core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 67f88027680a..4a7f58fcc411 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -4028,6 +4028,7 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
- 
- 	/* devices that don't properly handle TRIM commands */
- 	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
-+	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
- 
- 	/*
- 	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
 -- 
-2.34.1
+2.17.1
 

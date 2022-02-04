@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571644A9B92
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC974A9B96
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359497AbiBDPDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiBDPDP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:03:15 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E118C061714;
-        Fri,  4 Feb 2022 07:03:15 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id s13so20339981ejy.3;
-        Fri, 04 Feb 2022 07:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B670DNtJG0WdyNR5I1jFrgWciVu2OUtPUlpRz7Cp6s4=;
-        b=dS2AM6xhnrTEaTxC9t4tAcKlxxKPTdL/033hfhpA0gDiLjd6DQGTvKDWxZ/rKb78Ik
-         zKny8enp3Ev0eAtezLwbrUs02cIlEjLDEVcqeGsVR8MAKK25XMOZU+BM1qhRi5NSH3qR
-         UpQF7876vC40ky9hHaWhjgXh7+60zsstLTThm+DT2BSAnhSAwuJAfiFWCalB1h8hwaYW
-         ASXyehCHsJabzP3Nk4iRu9Jx49kvOih++bIpAAZRCpSkL1MS6OYvYtbgtyZhp8CP9lRG
-         HX+h09TChSV6Pff5SBjyjSswlvbDy3xenMjsYmIMMWMQ4/8Rmp9V577/qcYYY90/avAj
-         mk0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B670DNtJG0WdyNR5I1jFrgWciVu2OUtPUlpRz7Cp6s4=;
-        b=8JIWiKYQsUazNjtkNFyggfL+7IcUo5A0uAIB+y6AYyIUW6pLY0fggNtHcpcSN/jsss
-         2plwbgCeJ/rORw2xfk9VaxjPPtd4X4gxakhwUbAerV5Dt+nDWW/xu+DVWXpfHvd/M1L5
-         gzVeeljuCMLVU3VUSsPIWZcoSwz1buKGiWsTgCXkwFv8ybdXZyotah105bQtJso86oLz
-         3F0PIlDmxldpVPxkXdKbeXkoD2a0AGHvB+EzUeu58eziQkPVcIrBU+FFFJ6croLonpqb
-         yBhbQN/13MZ5ItxPpW83X+nOR7XYfvRnnLPiu/3UUoJa0Sp3D1Vx5y3ECQppcRKy9qla
-         HxJQ==
-X-Gm-Message-State: AOAM530t2Ii/GRkKyIotMJmhsae/dzDpurbFXbXQoKJWxXj3zTou4UxG
-        AoTve6x8nu83UNZo7rswcnFotuN1zlRtzg==
-X-Google-Smtp-Source: ABdhPJxYKCNS7QCoUnclJE0R/yuYPYsLUjhaRtNX9+ro7+NLgccBXpuQHu6KJjyJcA5IR+2YjhMOSg==
-X-Received: by 2002:a17:907:1c19:: with SMTP id nc25mr2942085ejc.354.1643986993950;
-        Fri, 04 Feb 2022 07:03:13 -0800 (PST)
-Received: from [192.168.8.101] (37-48-40-106.nat.epc.tmcz.cz. [37.48.40.106])
-        by smtp.gmail.com with ESMTPSA id oz3sm736936ejb.219.2022.02.04.07.03.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 07:03:08 -0800 (PST)
-Message-ID: <54f98c2a-4a40-75ed-8f66-11cc6b2fd190@gmail.com>
-Date:   Fri, 4 Feb 2022 16:03:06 +0100
+        id S1359517AbiBDPGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:06:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:50172 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353524AbiBDPGF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:06:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA30A1396;
+        Fri,  4 Feb 2022 07:06:04 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7734D3F774;
+        Fri,  4 Feb 2022 07:06:02 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     ardb@kernel.org, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, frederic@kernel.org,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
+        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
+Subject: [PATCH v2 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC with static keys
+Date:   Fri,  4 Feb 2022 15:05:50 +0000
+Message-Id: <20220204150557.434610-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Partial direct-io loop regression in 5.17-rc
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block <linux-block@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ondrej Kozina <okozina@redhat.com>
-References: <feb7e4b4-1a6f-71a7-0cdd-fda547408bea@gmail.com>
- <08e1dbde-b27c-fd99-294c-8e4715b92576@kernel.dk>
-From:   Milan Broz <gmazyland@gmail.com>
-In-Reply-To: <08e1dbde-b27c-fd99-294c-8e4715b92576@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
+mechanism allowing the preemption functions to be enabled/disabled using
+static keys rather than static calls, with architectures selecting
+whether they use static calls or static keys.
 
+With non-inline static calls, each function call results in a call to
+the (out-of-line) trampoline which either tail-calls its associated
+callee or performs an early return.
 
-On 04/02/2022 14:32, Jens Axboe wrote:
-> On 2/4/22 2:22 AM, Milan Broz wrote:
->> Hi Jens,
->>
->> It seems that there is a regression in direct-io over loop for partial
->> direct-io reads (or perhaps even for other situations).
->>
->> If I run this code (loop over 6M file, dd direct-io read with 4M blocks)
->>
->> IMG=tst.img
->> LOOP=/dev/loop66
->>
->> truncate -s 6M $IMG
->> losetup $LOOP $IMG
->> dd if=$LOOP of=/dev/null bs=4M iflag=direct
->> losetup -d $LOOP
->>
->>
->> on older kernel (<=5.16) it reads the whole file
->>     6291456 bytes (6.3 MB, 6.0 MiB) copied, 0.201591 s, 31.2 MB/s
->>
->>
->> while on 5.17-rc (tested on today/s Linus' git) it reads only the full blocks:
->>     4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.201904 s, 20.8 MB/s
->>
->> No error reported, exit code is 0.
-> 
-> Can you try:
-> 
-> https://git.kernel.dk/cgit/linux-block/commit/?h=block-5.17&id=3e1f941dd9f33776b3df4e30f741fe445ff773f3
+The key idea is that where we're only enabling/disabling a single
+callee, we can inline this trampoline into the start of the callee,
+using a static key to decide whether to return early, and leaving the
+remaining codegen to the compiler. The overhead should be similar to
+(and likely lower than) using a static call trampoline. Since most
+codegen is up to the compiler, we sidestep a number of implementation
+pain-points (e.g. things like CFI should "just work" as well as they do
+for any other functions).
 
-Yes, it works now.
-(Not sure why I did not check if this patch is mainline, as I know about it. My bad...)
+The bulk of the diffstat for kernel/sched/core.c is shuffling the
+PREEMPT_DYNAMIC code later in the file, and the actual additions are
+fairly trivial.
 
-So this is going to some next rc, right?
+I've given this very light build+boot testing so far.
 
-Thanks,
-Milan
+Since v1 [1]:
+* Rework Kconfig text to be clearer
+* Rework arm64 entry code
+* Clarify commit messages.
+
+[1] https://lore.kernel.org/all/20211109172408.49641-1-mark.rutland@arm.com/
+
+Mark Rutland (7):
+  sched/preempt: move PREEMPT_DYNAMIC logic later
+  sched/preempt: refactor sched_dynamic_update()
+  sched/preempt: simplify irqentry_exit_cond_resched() callers
+  sched/preempt: decouple HAVE_PREEMPT_DYNAMIC from GENERIC_ENTRY
+  sched/preempt: add PREEMPT_DYNAMIC using static keys
+  arm64: entry: centralize premeption decision
+  arm64: support PREEMPT_DYNAMIC
+
+ arch/Kconfig                     |  37 +++-
+ arch/arm64/Kconfig               |   1 +
+ arch/arm64/include/asm/preempt.h |  16 +-
+ arch/arm64/kernel/entry-common.c |  28 ++-
+ arch/x86/Kconfig                 |   2 +-
+ arch/x86/include/asm/preempt.h   |  10 +-
+ include/linux/entry-common.h     |  15 +-
+ include/linux/kernel.h           |   7 +-
+ include/linux/sched.h            |  10 +-
+ kernel/entry/common.c            |  22 +-
+ kernel/sched/core.c              | 346 ++++++++++++++++++-------------
+ 11 files changed, 322 insertions(+), 172 deletions(-)
+
+-- 
+2.30.2
+

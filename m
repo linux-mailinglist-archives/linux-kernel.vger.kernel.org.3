@@ -2,186 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA124A9A25
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BCF4A9A26
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358930AbiBDNlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:41:50 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4676 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiBDNls (ORCPT
+        id S1358936AbiBDNmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229609AbiBDNmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:41:48 -0500
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JqxQz4Y17z67kgW;
-        Fri,  4 Feb 2022 21:36:59 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Feb 2022 14:41:46 +0100
-Received: from localhost (10.47.31.86) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Feb
- 2022 13:41:46 +0000
-Date:   Fri, 4 Feb 2022 13:41:42 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Alison Schofield" <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V6 10/10] cxl/cdat: Parse out DSMAS data from CDAT table
-Message-ID: <20220204134142.0000170e@Huawei.com>
-In-Reply-To: <20220201223717.GR785175@iweiny-DESK2.sc.intel.com>
-References: <20220201071952.900068-1-ira.weiny@intel.com>
-        <20220201071952.900068-11-ira.weiny@intel.com>
-        <20220201190532.ynwr73ninobqx7bm@intel.com>
-        <20220201223717.GR785175@iweiny-DESK2.sc.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 4 Feb 2022 08:42:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDF5C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:42:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7135E61C3F
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9560BC340F0
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="U4+TCpwS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1643982136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7TFgUiB6M8AXvidT0bBlWlp2lQ7isr6WC/zsd6RXvDI=;
+        b=U4+TCpwSXk1SidxmWGL+o422cBdYALlobcX/4UwR7r4xQK3WOoeSREY8UOFQZDmcPMFg1W
+        kNNUOrKCW4r8344lhx3UtQnV132w+Et0i00YxoaRXkoTc34FgRclM4uSnYb61PpWh1mCTY
+        YL5tUclo8dPI8co8DZFuQp+82HYmPW0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bbe4586d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Fri, 4 Feb 2022 13:42:16 +0000 (UTC)
+Received: by mail-yb1-f170.google.com with SMTP id v190so2599556ybv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 05:42:15 -0800 (PST)
+X-Gm-Message-State: AOAM530b/D96iWcoK6oCTdUgCwP6wtf/a/DvNJM56QPdT9urd2wQWCvG
+        j2Wsu4dCQzuok1EIk5G3d03FBKbv8emRumWeEyU=
+X-Google-Smtp-Source: ABdhPJxXsnr2IeXKL0Z7XMPRDxIzrZJVx3MjKHR6Sx4XYAyV5au6HyaJEFa18rSOZUjfJFOrSbYcRRDEzOQtVtWYkO8=
+X-Received: by 2002:a81:9902:: with SMTP id q2mr2982258ywg.499.1643982134561;
+ Fri, 04 Feb 2022 05:42:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.31.86]
-X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+References: <CAHmME9pe2BEJV4WiZNHmDmH_XK621Qqr1JCBdgTNZmr4JGBA4w@mail.gmail.com>
+ <20220128223548.97807-1-Jason@zx2c4.com> <CAHmME9qtjZX2kVNSQqUsTrZv1cdR8y6n3yZS-RnpVCCzX9okcA@mail.gmail.com>
+ <Yf0JlXf3ARsBpL9K@linutronix.de>
+In-Reply-To: <Yf0JlXf3ARsBpL9K@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 4 Feb 2022 14:42:03 +0100
+X-Gmail-Original-Message-ID: <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
+Message-ID: <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
+Subject: Re: [PATCH v2] random: remove batched entropy locking
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Feb 2022 14:37:17 -0800
-Ira Weiny <ira.weiny@intel.com> wrote:
+Hi Sebastian,
 
-> On Tue, Feb 01, 2022 at 11:05:32AM -0800, Widawsky, Ben wrote:
-> > On 22-01-31 23:19:52, ira.weiny@intel.com wrote:  
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > CXL memory devices need the information in the Device Scoped Memory
-> > > Affinity Structure (DSMAS).  This information is contained within the
-> > > CDAT table buffer which is already read and cached.
-> > > 
-> > > Parse and cache DSMAS data from the CDAT table.  Store this data in
-> > > unmarshaled struct dsmas data structures for ease of use.
-> > > 
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > ---
-> > > Changes from V5
-> > > 	Fix up sparse warnings
-> > > 	Split out cdat_hdr_valid()
-> > > 	Update cdat_hdr_valid()
-> > > 		Remove revision and cs field parsing
-> > > 			There is no point in these
-> > > 		Add seq check and debug print.
-> > > 	From Jonathan
-> > > 		Add spaces around '+' and '/'
-> > > 		use devm_krealloc() for dmas_ary
-> > > 
-> > > Changes from V4
-> > > 	New patch
-> > > ---
-> > >  drivers/cxl/cdat.h        | 21 ++++++++++++
-> > >  drivers/cxl/core/memdev.c | 70 +++++++++++++++++++++++++++++++++++++++
-> > >  2 files changed, 91 insertions(+)
-> > > 
-> > > diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
-> > > index a7725d26f2d2..f8c126190d18 100644
-> > > --- a/drivers/cxl/cdat.h
-> > > +++ b/drivers/cxl/cdat.h
-> > > @@ -83,17 +83,38 @@
-> > >  #define CDAT_SSLBIS_ENTRY_PORT_Y(entry, i) (((entry)[4 + (i) * 2] & 0xffff0000) >> 16)
-> > >  #define CDAT_SSLBIS_ENTRY_LAT_OR_BW(entry, i) ((entry)[4 + (i) * 2 + 1] & 0x0000ffff)
-> > >  
-> > > +/**
-> > > + * struct cxl_dsmas - host unmarshaled version of DSMAS data
-> > > + *
-> > > + * As defined in the Coherent Device Attribute Table (CDAT) specification this
-> > > + * represents a single DSMAS entry in that table.
-> > > + *
-> > > + * @dpa_base: The lowest DPA address associated with this DSMAD
-> > > + * @dpa_length: Length in bytes of this DSMAD
-> > > + * @non_volatile: If set, the memory region represents Non-Volatile memory
-> > > + */
-> > > +struct cxl_dsmas {
-> > > +	u64 dpa_base;
-> > > +	u64 dpa_length;
-> > > +	/* Flags */
-> > > +	u8 non_volatile:1;
-> > > +};
-> > > +
-> > >  /**
-> > >   * struct cxl_cdat - CXL CDAT data
-> > >   *
-> > >   * @table: cache of CDAT table
-> > >   * @length: length of cached CDAT table
-> > >   * @seq: Last read Sequence number of the CDAT table
-> > > + * @dsmas_ary: Array of DSMAS entries as parsed from the CDAT table
-> > > + * @nr_dsmas: Number of entries in dsmas_ary
-> > >   */
-> > >  struct cxl_cdat {
-> > >  	void *table;
-> > >  	size_t length;
-> > >  	u32 seq;
-> > > +	struct cxl_dsmas *dsmas_ary;
-> > > +	int nr_dsmas;
-> > >  };
-> > >  
-> > >  #endif /* !__CXL_CDAT_H__ */
-> > > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> > > index 11d721c56f08..32342a15e991 100644
-> > > --- a/drivers/cxl/core/memdev.c
-> > > +++ b/drivers/cxl/core/memdev.c
-> > > @@ -6,6 +6,7 @@
-> > >  #include <linux/idr.h>
-> > >  #include <linux/pci.h>
-> > >  #include <cxlmem.h>
-> > > +#include "cdat.h"
-> > >  #include "core.h"
-> > >  
-> > >  static DECLARE_RWSEM(cxl_memdev_rwsem);
-> > > @@ -386,6 +387,71 @@ static int read_cdat_data(struct cxl_memdev *cxlmd,
-> > >  	return rc;
-> > >  }
-> > >  
-> > > +static int parse_dsmas(struct cxl_memdev *cxlmd)
-> > > +{
-> > > +	struct cxl_dsmas *dsmas_ary = NULL;
-> > > +	u32 *data = cxlmd->cdat.table;
-> > > +	int bytes_left = cxlmd->cdat.length;
-> > > +	int nr_dsmas = 0;
-> > > +
-> > > +	if (!data)
-> > > +		return -ENXIO;
-> > > +
-> > > +	/* Skip header */
-> > > +	data += CDAT_HEADER_LENGTH_DW;
-> > > +	bytes_left -= CDAT_HEADER_LENGTH_BYTES;
-> > > +
-> > > +	while (bytes_left > 0) {
-> > > +		u32 *cur_rec = data;
-> > > +		u8 type = FIELD_GET(CDAT_STRUCTURE_DW0_TYPE, cur_rec[0]);
-> > > +		u16 length = FIELD_GET(CDAT_STRUCTURE_DW0_LENGTH, cur_rec[0]);
-> > > +
-> > > +		if (type == CDAT_STRUCTURE_DW0_TYPE_DSMAS) {
-> > > +			struct cxl_dsmas *new_ary;
-> > > +			u8 flags;
-> > > +
-> > > +			new_ary = devm_krealloc(&cxlmd->dev, dsmas_ary,
-> > > +					   sizeof(*dsmas_ary) * (nr_dsmas + 1),
-> > > +					   GFP_KERNEL);
-> > > +			if (!new_ary) {
-> > > +				dev_err(&cxlmd->dev,
-> > > +					"Failed to allocate memory for DSMAS data\n");
-> > > +				return -ENOMEM;
-> > > +			}  
-> > 
-> > One thought here - it looks like there are at most 256 DSMAS entries. You could
-> > allocate the full 256 up front, and then realloc *down* to the actual number.
+Please calm down a bit: this patch doesn't minimize the importance of
+working out a real solution for PREEMPT_RT, and I'm not under the
+illusion that this one here is the silver bullet. It does, however,
+have other merits, which may or may not have anything to do with
+PREEMPT_RT. To reiterate: I am taking your PREEMPT_RT concerns
+seriously, and I want to come up with a solution to that, which we're
+working toward more broadly in that other thread.
 
-Gut feeling is there will be 1 or 2 on at typical device, so not sure it is worth
-a large allocation and shrink.
-Plus not a hot path and this is easy to follow.
+Per your feedback on v1, this is no longer marked for stable and no
+longer purports to fix the PREEMPT_RT issues entirely. Actually, a
+large motivation for this includes the reason why Andy's original
+patch was laying around in the first place: we're trying to make this
+code faster.
+
+I can improve the commit message a bit though.
+
+On Fri, Feb 4, 2022 at 12:10 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> - This splat only occurs with CONFIG_PROVE_RAW_LOCK_NESTING enabled.
+
+Right, the commit message for v2 mentions that.
+
+> - The problem identified by the splat affects only PREEMPT_RT. Non-RT is
+>   not affected by this.
+
+Right.
+
+>
+> - This patch disables interrupts and invokes extract_crng() which leads
+>   to other problems.
+
+The existing code, which uses a spinlock, also disables interrupts,
+right? So this isn't actually regressing in that regard. It just
+doesn't fix your PREEMPT_RT issue, right?
+
+Or is the issue you see that spinlock_t is a mutex on PREEMPT_RT, so
+we're disabling interrupts here in a way that we _weren't_ originally,
+in a PREEMPT_RT context? If that's the case, then I think I see your
+objection.
+
+I wonder if it'd be enough here to disable preemption instead? But
+then we run into trouble if this is called from an interrupt.
+
+Maybe it'd be best to retain the spinlock_t, which will amount to
+disabling interrupts on !PREEMPT_RT, since it'll never be contended,
+but will turn into a mutex on PREEMPT_RT, where it'll do the right
+thing from an exclusivity perspective. Would this be reasonable?
+
+Andy? Any suggestions?
+
+Jason

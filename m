@@ -2,88 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01834A9C18
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550D34A9C1F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359758AbiBDPjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:39:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38852 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359680AbiBDPjd (ORCPT
+        id S241570AbiBDPlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:41:21 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53576
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236218AbiBDPlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:39:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 4 Feb 2022 10:41:17 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05633B837ED
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D308C340EF
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:39:31 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QtCqnhwC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643989169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQFCILD84RvGZYVRVF0fFfu13wbdQHH6Hd2HyA76xGY=;
-        b=QtCqnhwCAbYZE3hOv9MWacmHZzcts6HUNbKkhWqof/KDRnA/oVRi8sAGLvK1mUBQBUk9lj
-        cnSyxv7eU4hqP0WRwjIc2ZQIXH2R5W7/Vs+lXTxnaH1/5PwRsg9TxEB3yv6Q4655S066r3
-        678xR7FNFij9EK1za7SV+v8KRjunCPk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id afb43c74 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 4 Feb 2022 15:39:28 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id c6so19933758ybk.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 07:39:27 -0800 (PST)
-X-Gm-Message-State: AOAM5326YdgSe83Scy9FGrcKwT/fDN7HEPrXsUm0OD6Od5OUQyUcNYik
-        rmUwlEawJ3ioI3Z2OMGHG1iVNv0zJrnKaWkYESI=
-X-Google-Smtp-Source: ABdhPJwLnTkRbh0yc/+TMgihvowkeFD85Y33I04apOr5cmbetxoEo1zgJRRUnlmQR0lKZaIgPBNTwiHPhLbxt0qo6f0=
-X-Received: by 2002:a05:6902:14d:: with SMTP id p13mr3323253ybh.638.1643989166745;
- Fri, 04 Feb 2022 07:39:26 -0800 (PST)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DFCE73F1B3
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643989276;
+        bh=wZglkyjtNPMuirlfKz4+2S7FR+L5T3ePXu8KGwauAX0=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=NZe5Yt6Y6ovESa4OWyDTpAV6UA2zD77bXdyIV1NinY7tJy5aEvlvmqVWEodEOESRP
+         EldfTMMgt0+XMPJgncWlCTa5vvTAGjwKmGsmpbej1lBImJj0N39G448tuJF8727dp9
+         7QsXWoigANE+0c6oXfUIZuIO902342mJIZ3zK5EM5ktXz/u7hD87Fc1+gANuL+bHKy
+         hcyC1rJxCa4zcXezgV7q5xOk1ROTnAtAYQiRUSZON5wtcbAf2LggGbwZy9864dBHo8
+         1QLBi9Z8SlhF0wboyeywoDsiAYdbiGLfSjZkNfA+8nZxC9je3KteZQyGxYLwgb8HMF
+         Q7ip9MG49atyQ==
+Received: by mail-ed1-f71.google.com with SMTP id o6-20020a50c906000000b0040efa863337so648024edh.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wZglkyjtNPMuirlfKz4+2S7FR+L5T3ePXu8KGwauAX0=;
+        b=8D1q6h0qqPula7UGLUKAXLhdkdZcsRicLfxmkKFOfDkUfGxpZcCvYsG8Ib/D9PkqZq
+         e8Yas5xkFUPqcVxGFievbh7M4CvRRkA4Wk4lqg/mDwhboGdMB7fSNLbx7DShmtEAHrAb
+         bi6nk4sA2gcZCqEVleJgkDsAZRfMFoFiQuvaq7OjEnRo7oHMw5hykXgxPSjLnyijDmy0
+         eQmHRgSF003EmFuNFUv4XTO41K9fh5ZYztL3f+UA7divcACx1cGicdT9wVdkImxolGVL
+         kOrX7n8ZMehTOg568kvygn74WNL69d4SbXhlisSPcFuloLoWzSN1OoilwZU8KNch5KBT
+         VsUA==
+X-Gm-Message-State: AOAM5304iUjFQp6ta++TSRW3d4qeTkK12sYR1daVI0w39G04n+hw+KtD
+        dJ+hhhLE3jZbCRr7+iFnA9tRoKvNatccRFs3rT/u4AmoIgAU0zqO8BxrnO6WmuZW4ssORqKozZA
+        F5Ny/au2zXOzYWVGM8UXybZJ+te7b3L2Vr7P5cdzBkQ==
+X-Received: by 2002:aa7:cb58:: with SMTP id w24mr3572666edt.425.1643989276598;
+        Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzIHtmwRhhbCAkf12pMJG1LNwuiJTM+g7YJu4r1672xFdn7Pt3ou2gK4nQ5FcODLQfJZP6z3g==
+X-Received: by 2002:aa7:cb58:: with SMTP id w24mr3572655edt.425.1643989276429;
+        Fri, 04 Feb 2022 07:41:16 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id rn16sm770753ejb.61.2022.02.04.07.41.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 07:41:15 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [GIT PULL 1/2] clk: samsung: Tesla FSD for v5.18
+Date:   Fri,  4 Feb 2022 16:41:11 +0100
+Message-Id: <20220204154112.133723-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <CAHmME9pe2BEJV4WiZNHmDmH_XK621Qqr1JCBdgTNZmr4JGBA4w@mail.gmail.com>
- <20220128223548.97807-1-Jason@zx2c4.com> <CAHmME9qtjZX2kVNSQqUsTrZv1cdR8y6n3yZS-RnpVCCzX9okcA@mail.gmail.com>
- <Yf0JlXf3ARsBpL9K@linutronix.de> <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
- <Yf0xy4kZ2Mn65yp8@linutronix.de> <CAHmME9oOMhRVybTgHXT+oOXhMkdx7FVY7oSc-rHr=6AvZCVo=w@mail.gmail.com>
- <Yf04lcQIatnGspAb@linutronix.de>
-In-Reply-To: <Yf04lcQIatnGspAb@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 4 Feb 2022 16:39:15 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pO41uwYExSROc5X2+RE=a5tZfE=c=bAxVbhCHfa7=zSA@mail.gmail.com>
-Message-ID: <CAHmME9pO41uwYExSROc5X2+RE=a5tZfE=c=bAxVbhCHfa7=zSA@mail.gmail.com>
-Subject: Re: [PATCH v2] random: remove batched entropy locking
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+Hi Arnd and Olof,
 
-On Fri, Feb 4, 2022 at 3:30 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> > What if we keep a spinlock_t there on PREEMPT_RT but stick with
-> > disabling interrupts on !PREEMPT_RT? I wish there was a solution or an
-> > API that amounted to the same thing so there wouldn't need to be an
-> > #ifdef, but I don't know what that'd be.
->
-> If it is still to much try to look for locallock_t and
-> local_lock_irqsave(). This is kind of like your local_irq_save() but
-> you have lockdep annotations and PREEMPT_RT has a spinlock_t like
-> behaviour. It also documents in-code what the scope of your locking is.
+The driver changes for Tesla FSD clock controller. I got ack for these from
+Sylwester.
 
-Oh, that's terrific, thanks! Sounds like exactly what we were looking
-for. I'll respin this patch with that.
+Best regards,
+Krzysztof
 
-Jason
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-fsd-5.18
+
+for you to fetch changes up to 0b59bc00a6936e8670b58d4307a2cfba341d40d0:
+
+  clk: samsung: fix missing Tesla FSD dependency on Exynos (2022-02-01 09:14:53 +0100)
+
+----------------------------------------------------------------
+Samsung clock controller changes for v5.18
+
+Add support for Tesla FSD SoC clock controller within Samsung Exynos SoC
+clock controller drivers.  The Tesla FSD's clock controller is similar
+to Samsung Exynos one, so entire driver structure can be re-used.
+
+----------------------------------------------------------------
+Alim Akhtar (9):
+      dt-bindings: clock: Add bindings definitions for FSD CMU blocks
+      dt-bindings: clock: Document FSD CMU bindings
+      clk: samsung: fsd: Add initial clock support
+      clk: samsung: fsd: Add cmu_peric block clock information
+      clk: samsung: fsd: Add cmu_fsys0 clock information
+      clk: samsung: fsd: Add cmu_fsys1 clock information
+      clk: samsung: fsd: Add cmu_imem block clock information
+      clk: samsung: fsd: Add cmu_mfc block clock information
+      clk: samsung: fsd: Add cam_csi block clock information
+
+Krzysztof Kozlowski (1):
+      clk: samsung: fix missing Tesla FSD dependency on Exynos
+
+ .../devicetree/bindings/clock/tesla,fsd-clock.yaml |  198 +++
+ drivers/clk/samsung/Kconfig                        |    9 +
+ drivers/clk/samsung/Makefile                       |    1 +
+ drivers/clk/samsung/clk-fsd.c                      | 1803 ++++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                      |    1 +
+ drivers/clk/samsung/clk-pll.h                      |    1 +
+ include/dt-bindings/clock/fsd-clk.h                |  150 ++
+ 7 files changed, 2163 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/tesla,fsd-clock.yaml
+ create mode 100644 drivers/clk/samsung/clk-fsd.c
+ create mode 100644 include/dt-bindings/clock/fsd-clk.h

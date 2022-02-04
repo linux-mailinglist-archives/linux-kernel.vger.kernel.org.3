@@ -2,96 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165C14A91CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3304A91CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356334AbiBDA5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S1356343AbiBDA5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235178AbiBDA5J (ORCPT
+        with ESMTP id S235178AbiBDA5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:57:09 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7930C061714;
-        Thu,  3 Feb 2022 16:57:08 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id q186so6732905oih.8;
-        Thu, 03 Feb 2022 16:57:08 -0800 (PST)
+        Thu, 3 Feb 2022 19:57:51 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53015C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:57:51 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id a88-20020a25a1e1000000b00615c588ab22so9711282ybi.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:57:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B9+H4Yh8cn5Am5LQnb0jHKaLC66ejKyC+IO0VaITZ80=;
-        b=mHTuZcIOmlI27Zt2owzoaagQAMyz/U1XBl7eMRwyeL0RERvYh8EX+z67srwWbFZCvD
-         DVCciYmUYuvFh3Lb1UEmlT2lOvRP+4Czpmjk7z7wvvblSCTcutpBfICQjhl1fCfibKU8
-         ehQBbi1sEgD5mN0UbdVBMOv3cIEqJOx5bumPP+hxuwaNXAESu4eOjXe4+jSdSI+tWSzH
-         CXBVg2EJpNB4M6HUcmoc3i6QTWJTWCNVfRChJw13wU5HKt4LyXR+31SaYj6OL+gTzlAp
-         NFY1O8D9y3c/TxPOVc/PC+A/vzCKQT2lQZ9rGDoM0qV39ccmqFKUkx+839OF7jEbWPpa
-         nLcQ==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=1AAgfaFCn4Q/G5C0Wk6e2sKuKz1QEQmvxvJQx3MfWP4=;
+        b=hEAbRl5ZDxJCiDNHkRzo/kfUhjnU3E43u0pltUAJiO81qU8GC7jGCcUqO3JvC0LfYG
+         sWd5tVX/wfoW8pdqsd63kZRV87Rc8z4WCQFnc3rXqGbxxbl23oRkj0UIsQsF1vS2HBVD
+         IoEnYcDcTpp27vum0aSPkWFnLk0PL5B+tjCkRc43cgidM5VeOtSKEpZ3me3YYv4IWULE
+         DZ1/Gz/BgIpBrpFMtpBOs6YEBJAKIiRf9sOmP3aUfG+TTm34G5/1iXXvQCS/hIa+seXj
+         iEcCUXiax5gRlswuad1PvOhLxOvpSEvFNyRM5jMF6mPSbuOraG9uMVUx+tfbCibB5tiQ
+         5NRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B9+H4Yh8cn5Am5LQnb0jHKaLC66ejKyC+IO0VaITZ80=;
-        b=Ru/FyO1dYwl9JDtdqn+YU0PD4Rtsioiij1t1gb3NuPvFvtYUYba1QZlDeaBCk/j+ua
-         NLFfV2NFQ9Daqq5S/Qo8mJtS9bdRKNmJeQqmkKtaoMLEeWIF4c+VEzM3D3DwfVAhhNfA
-         2slC4Jog8ObPtcD48MyfGCjmUbbhdPCregiG2trCOEZda3heX/6zQo/wMrjQfsSxcrld
-         /pJJtAHoNjqOSfDzByIBiRC5SoZw81w7gRF3yK/dFSmO9LQlH5Y3bDslAj3A/YwsOnQv
-         XKwBoBIpe9uBfi6ywL0aymLsLELVEyk2j5aZ0qJOcwQuvn6wl+rqnv3cyH00Qognjt9r
-         U+MQ==
-X-Gm-Message-State: AOAM532BRbDo/EpnakR8Bs77yr7HrNa9P17T042K3UIym829D/RybVU5
-        9rSu33Ef5s1L28nckFVx0/9BBDGdF1Q=
-X-Google-Smtp-Source: ABdhPJwVNtfOnhHY9CbwBMcModSWHu1eGHsllhRufF+tauvoEZwMjtHzSMocRusroCbhQP1w5Bu2FA==
-X-Received: by 2002:a05:6808:7cc:: with SMTP id f12mr161366oij.143.1643936228184;
-        Thu, 03 Feb 2022 16:57:08 -0800 (PST)
-Received: from [192.168.1.103] (cpe-24-31-246-181.kc.res.rr.com. [24.31.246.181])
-        by smtp.gmail.com with ESMTPSA id c6sm171014ooo.19.2022.02.03.16.57.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 16:57:07 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <3721475a-a154-7a1a-ad23-b8a77873f951@lwfinger.net>
-Date:   Thu, 3 Feb 2022 18:57:06 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: rtw89 driver
-Content-Language: en-US
-To:     Slade Watkins <slade@sladewatkins.com>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CA+pv=HNuxZXTxu2S5vcz=zF81wWxykQe2im6oKgKiaDPujVjiw@mail.gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <CA+pv=HNuxZXTxu2S5vcz=zF81wWxykQe2im6oKgKiaDPujVjiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=1AAgfaFCn4Q/G5C0Wk6e2sKuKz1QEQmvxvJQx3MfWP4=;
+        b=RJZwcWJz2qqYJbQK69U5YCH2Df5XUxTBLSR2MxlFbaMYZ6GeqOUUMtjj4vct/0JqJL
+         B8dCXuj+Ygl4bVtaNnoZiiPiIyzJlGF2M+ykAkf/zFMuHOkFpG8dvaj6sLy12hiqX/aX
+         1mtxxmkiQAMLYBk/Ks7UFRK9wdRztLz2fDhS8M4b/FTB7nRKnZ45sRASsG4a4DUFXmo9
+         xDW+tHQcTR/tqDr655iffkFEfMIMQ1g4TXae9hu2SEucBge7/bVA7zkMD9sclNgFEDHY
+         xg+bP9r0OomxaJT5HTTIgpm3PnA29+C44rWLdu1k807yVJxQ5LJqCbHrnTzN9UpSZKx6
+         6ylw==
+X-Gm-Message-State: AOAM530EpQsWZgoVr8enXwrjaXYeV5xef1KxyDr+IuQHgGoyNE87FL2A
+        kFaF/skS/bNGO/ynwZAC9ShCaSdK
+X-Google-Smtp-Source: ABdhPJwH8LAmI4OsxnFxSC7ic6V69EvrB179vihRyydzNi5v/S7BpOgueZNTSI5K9U2DuX9IUni5Y4r0jw==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:e2a5:b92b:16d1:6c85])
+ (user=morbo job=sendgmr) by 2002:a25:7188:: with SMTP id m130mr730885ybc.149.1643936270495;
+ Thu, 03 Feb 2022 16:57:50 -0800 (PST)
+Date:   Thu,  3 Feb 2022 16:57:42 -0800
+In-Reply-To: <20211229021258.176670-1-morbo@google.com>
+Message-Id: <20220204005742.1222997-1-morbo@google.com>
+Mime-Version: 1.0
+References: <20211229021258.176670-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH v3] x86: use builtins to read eflags
+From:   Bill Wendling <morbo@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 18:26, Slade Watkins wrote:
-> Hi there,
-> Quick question for wireless folks: would backporting the rtw89
-> driver[1] (Realtek 8852AE) to kernels older than 5.16.y be possible at
-> some point down the road? I ask this as, when testing a stable build
-> of 5.15.y a bit ago, I had an issue where the driver wasn't present
-> and the system I was testing it on wasn't happy and started kicking
-> errors. (It's fairly new, so I did kind of expect that.) I was,
-> however, able to solve this by manually building and installing the
-> drivers so it wasn't that big of a deal.
-> 
-> [1] https://github.com/lwfinger/rtw89
+GCC and Clang both have builtins to read and write the EFLAGS register.
+This allows the compiler to determine the best way to generate this
+code, which can improve code generation.
 
-If for some reason, you do not like my version of the kernel code in the GitHub 
-repo that you reference, then you could use the Backports Project.
+This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+chooses to be conservative in these situations, and so uses memory
+instead of registers. This is a known issue, which is currently being
+addressed.
 
-Backporting a driver into one of the stable trees is not a sanctioned activity. 
-Stable kernels only get fixes for bugs, not new features such as a complete driver.
+However, using builtins is benefiical in general, because it removes the
+burden of determining what's the way to read the flags register from the
+programmer and places it on to the compiler, which has the information
+needed to make that decision. Indeed, this piece of code has had several
+changes over the years, some of which were pinging back and forth to
+determine the correct constraints to use.
 
-At least one distro packages rtw89 as kernel modules the same as my GitHub repo. 
-That distro is openSUSE, which gets its source from that very repo. There may be 
-others that provide similar packages.
+With this change, Clang generates better code:
 
-Larry
+Original code:
+        movq    $0, -48(%rbp)
+        #APP
+        # __raw_save_flags
+        pushfq
+        popq    -48(%rbp)
+        #NO_APP
+        movq    -48(%rbp), %rbx
+
+New code:
+        pushfq
+        popq    %rbx
+        #APP
+
+Note that the stack slot in the original code is no longer needed in the
+new code, saving a small amount of stack space.
+
+There is no change to GCC's ouput:
+
+Original code:
+
+        # __raw_save_flags
+        pushf ; pop %r13        # flags
+
+New code:
+
+	pushfq
+        popq    %r13    # _23
+
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+v3: - Add blurb indicating that GCC's output hasn't changed.
+v2: - Kept the original function to retain the out-of-line symbol.
+    - Improved the commit message.
+    - Note that I couldn't use Nick's suggestion of
+
+        return IS_ENABLED(CONFIG_X86_64) ? ...
+
+      because Clang complains about using __builtin_ia32_readeflags_u32 in
+      64-bit mode.
+---
+ arch/x86/include/asm/irqflags.h | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index 87761396e8cc0..f31a035f3c6a9 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -19,20 +19,11 @@
+ extern inline unsigned long native_save_fl(void);
+ extern __always_inline unsigned long native_save_fl(void)
+ {
+-	unsigned long flags;
+-
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
+-
+-	return flags;
++#ifdef CONFIG_X86_64
++	return __builtin_ia32_readeflags_u64();
++#else
++	return __builtin_ia32_readeflags_u32();
++#endif
+ }
+ 
+ static __always_inline void native_irq_disable(void)
+-- 
+2.35.0.263.gb82422642f-goog
 

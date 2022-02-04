@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846E54AA4B9
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CB04AA4B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378607AbiBDX43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378471AbiBDX4G (ORCPT
+        id S1378599AbiBDX4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:56:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46802 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378428AbiBDX4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:56:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EFCDB788C3;
-        Fri,  4 Feb 2022 15:56:04 -0800 (PST)
+        Fri, 4 Feb 2022 18:56:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3895761CE4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0146B83973;
         Fri,  4 Feb 2022 23:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB4BC340F1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A5CC340F0;
         Fri,  4 Feb 2022 23:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644018962;
-        bh=4V1LkW9IAvyKIMEbPh/BLiAi71eumZHE3CFmxyRHbdE=;
+        bh=fq+PXC+3LobGGhIbiFdbfmExaf2eeUyxk01b1jjprwk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VoB1aOhAL9XZVabaKKxyfODr40vetmCFRvNPHv/5TO9NABOwxK56EjsmopxPxv1BY
-         FuSXLHITljiFL7yH8lVxLqdeBMLtsIuVCCV/8iKsoBylcs0lt3fgz8glVqAL/w+Ci5
-         a6i5WMhZjbxPP3yhgturViNkyi2lKJYSdvhdq/QULsku1J9JNQc63lNMf5/ceZjL7z
-         8SuWaEO+lYp2yu4rk+fUfGMj6kZ3mS4PN8n5x30wlvCaaiV7AtEEFDoEti5vl+bNIk
-         IPAWlkjeuNjJsgs44pO0Q75XRqeFznAY0pUKQ1xiHMOpCwndGidRL/S5s63FnDfkNw
-         X9WxTiq9QhwKw==
+        b=Tt/SCs2lRWi72t7fvXGQB9NCtrAjZJesx0pqw/EtpTk8wl13uuvWpvnFUfrCZKKkF
+         vKtIEdQHLHQD1mZ/khiMgZ5KFuHcLig1d5VXa7EhwUfls5x3NM5HCNLIra2+pItpqa
+         W5K5Hb74HHFIgQTRrn65XaVly47kpnCRWwY9SvKavaD5QKDf0to20egqA8OJKwyTvH
+         LO7oTjh3cXWRhj2hufrPYcCYjBbnZL6EuJEmjJPJUT+oslkd7YY2C8k66SIMqwY0Q9
+         ahGtcIEAhJGmfy/IeYVOcLb5bMBx/+hdU4gCFVF3fDGy0WDSrd3BUV4XdA1WQ1YURT
+         VdQ1R5eK9ga3Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5B2BD5C08DD; Fri,  4 Feb 2022 15:56:02 -0800 (PST)
+        id 5CFBA5C0992; Fri,  4 Feb 2022 15:56:02 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 04/13] torture: Make kvm.sh summaries note runs having only KCSAN reports
-Date:   Fri,  4 Feb 2022 15:55:52 -0800
-Message-Id: <20220204235601.3438-4-paulmck@kernel.org>
+Subject: [PATCH rcu 05/13] torture: Indicate which torture.sh runs' bugs are all KCSAN reports
+Date:   Fri,  4 Feb 2022 15:55:53 -0800
+Message-Id: <20220204235601.3438-5-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
 References: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Runs having only KCSAN reports will normally print a summary line
-containing only a "Bugs:" entry.  However, these bugs might or might
-not be KCSAN reports.  This commit therefore flags runs in which all the
-"Bugs:" entries are KCSAN reports.
+This commit further improves torture.sh run summaries by indicating
+which runs' "Bugs:" counts are all KCSAN reports, and further printing
+an additional end-of-run summary line when all errors reported in all
+runs were KCSAN reports.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../selftests/rcutorture/bin/console-badness.sh        |  2 +-
- .../testing/selftests/rcutorture/bin/parse-console.sh  | 10 ++++++++++
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ tools/testing/selftests/rcutorture/bin/torture.sh | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/console-badness.sh b/tools/testing/selftests/rcutorture/bin/console-badness.sh
-index e6a132df61721..69f8a5958cefc 100755
---- a/tools/testing/selftests/rcutorture/bin/console-badness.sh
-+++ b/tools/testing/selftests/rcutorture/bin/console-badness.sh
-@@ -10,7 +10,7 @@
- #
- # Authors: Paul E. McKenney <paulmck@kernel.org>
- 
--egrep 'Badness|WARNING:|Warn|BUG|===========|Call Trace:|Oops:|detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state|rcu_.*kthread starved for|!!!' |
-+egrep 'Badness|WARNING:|Warn|BUG|===========|BUG: KCSAN:|Call Trace:|Oops:|detected stalls on CPUs/tasks:|self-detected stall on CPU|Stall ended before state dump start|\?\?\? Writer stall state|rcu_.*kthread starved for|!!!' |
- grep -v 'ODEBUG: ' |
- grep -v 'This means that this is a DEBUG kernel and it is' |
- grep -v 'Warning: unable to open an initial console' |
-diff --git a/tools/testing/selftests/rcutorture/bin/parse-console.sh b/tools/testing/selftests/rcutorture/bin/parse-console.sh
-index 9f624bd53c277..822eb037a0573 100755
---- a/tools/testing/selftests/rcutorture/bin/parse-console.sh
-+++ b/tools/testing/selftests/rcutorture/bin/parse-console.sh
-@@ -138,6 +138,16 @@ then
- 	then
- 		summary="$summary  Bugs: $n_bugs"
- 	fi
-+	n_kcsan=`egrep -c 'BUG: KCSAN: ' $file`
-+	if test "$n_kcsan" -ne 0
+diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
+index 894f589dd5625..bddce72ea5ce4 100755
+--- a/tools/testing/selftests/rcutorture/bin/torture.sh
++++ b/tools/testing/selftests/rcutorture/bin/torture.sh
+@@ -414,8 +414,14 @@ nfailures=0
+ echo FAILURES: | tee -a $T/log
+ if test -s "$T/failures"
+ then
+-	awk < "$T/failures" -v sq="'" '{ print "echo " sq $0 sq; print "grep Summary: " $2 "/log | sed -e " sq "s/^[^S]*/  /" sq; }' | sh | tee -a $T/log
++	awk < "$T/failures" -v sq="'" '{ print "echo " sq $0 sq; print "grep Summary: " $2 "/log | sed -e " sq "s/^[^S]*/  /" sq; }' | sh | tee -a $T/log | tee "$T/failuresum"
+ 	nfailures="`wc -l "$T/failures" | awk '{ print $1 }'`"
++	grep "^  Summary: " "$T/failuresum" |
++		grep -v '^  Summary: Bugs: [0-9]* (all bugs kcsan)$' > "$T/nonkcsan"
++	if test -s "$T/nonkcsan"
 +	then
-+		if test "$n_bugs" = "$n_kcsan"
-+		then
-+			summary="$summary (all bugs kcsan)"
-+		else
-+			summary="$summary  KCSAN: $n_kcsan"
-+		fi
++		nonkcsanbug="yes"
 +	fi
- 	n_calltrace=`grep -c 'Call Trace:' $file`
- 	if test "$n_calltrace" -ne 0
- 	then
+ 	ret=2
+ fi
+ if test "$do_kcsan" = "yes"
+@@ -424,6 +430,10 @@ then
+ fi
+ echo Started at $startdate, ended at `date`, duration `get_starttime_duration $starttime`. | tee -a $T/log
+ echo Summary: Successes: $nsuccesses Failures: $nfailures. | tee -a $T/log
++if test -z "$nonkcsanbug" && test -s "$T/failuresum"
++then
++	echo "  All bugs were KCSAN failures."
++fi
+ tdir="`cat $T/successes $T/failures | head -1 | awk '{ print $NF }' | sed -e 's,/[^/]\+/*$,,'`"
+ if test -n "$tdir" && test $compress_kasan_vmlinux -gt 0
+ then
 -- 
 2.31.1.189.g2e36527f23
 

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4754A96A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9A74A9654
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357771AbiBDJ2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:28:07 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53900 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358238AbiBDJ0K (ORCPT
+        id S1358011AbiBDJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357632AbiBDJYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:26:10 -0500
+        Fri, 4 Feb 2022 04:24:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7097FC06175B;
+        Fri,  4 Feb 2022 01:24:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24376B836EB;
-        Fri,  4 Feb 2022 09:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05E8C004E1;
-        Fri,  4 Feb 2022 09:26:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47BFBB836F6;
+        Fri,  4 Feb 2022 09:23:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80AF6C004E1;
+        Fri,  4 Feb 2022 09:23:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966767;
-        bh=LmrbcHvcX9oIGN9xKCE/bc6nuizkuV8gy2HnJpudulg=;
+        s=korg; t=1643966632;
+        bh=OxpOP/jUrCZimqEHq+PDepB4El50IioImZso2DkqQNM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=un7xrTQIsoTTwbz29bbDHaVGSMvGPuTaLhPUhcOAAMD4y05/4QxFOFFuETLthf+Cb
-         jQ99247yl3RpbIq27MYa4elVdKUy/A9SZKJUMO8I0Y5VNEYJILVPJLUkPSv1tPE/iY
-         Q+wwbCw2tUq8KQovaOx8R53SdGkMLAlSyJIIzJNA=
+        b=X527u0MpPCe/WStAqYkPIcrVOFgt/1A7GFensW9AJwdOTSvinj5w0/gzCS7hRZzCQ
+         Kn4YAWebRcfBAwRq3VWsLc1527tLbhdinM4WZUtQAW644eaW3TN4GnzI4tYrboPrZb
+         kG8gX5jOC9gkqtecUZS/IT+K/N5UpfoKOraG6pv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Minchan Kim <minchan@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Will McVicker <willmcvicker@google.com>
-Subject: [PATCH 5.16 07/43] Revert "mm/gup: small refactoring: simplify try_grab_page()"
-Date:   Fri,  4 Feb 2022 10:22:14 +0100
-Message-Id: <20220204091917.424405756@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Michael Stapelberg <michael+drm@stapelberg.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.15 05/32] drm/vc4: hdmi: Make sure the device is powered with CEC
+Date:   Fri,  4 Feb 2022 10:22:15 +0100
+Message-Id: <20220204091915.421812582@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
-References: <20220204091917.166033635@linuxfoundation.org>
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+References: <20220204091915.247906930@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,96 +49,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Hubbard <jhubbard@nvidia.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit c36c04c2e132fc39f6b658bf607aed4425427fd7 upstream.
+Commit 20b0dfa86bef0e80b41b0e5ac38b92f23b6f27f9 upstream.
 
-This reverts commit 54d516b1d62ff8f17cee2da06e5e4706a0d00b8a
+The original commit depended on a rework commit (724fc856c09e ("drm/vc4:
+hdmi: Split the CEC disable / enable functions in two")) that
+(rightfully) didn't reach stable.
 
-That commit did a refactoring that effectively combined fast and slow
-gup paths (again).  And that was again incorrect, for two reasons:
+However, probably because the context changed, when the patch was
+applied to stable the pm_runtime_put called got moved to the end of the
+vc4_hdmi_cec_adap_enable function (that would have become
+vc4_hdmi_cec_disable with the rework) to vc4_hdmi_cec_init.
 
- a) Fast gup and slow gup get reference counts on pages in different
-    ways and with different goals: see Linus' writeup in commit
-    cd1adf1b63a1 ("Revert "mm/gup: remove try_get_page(), call
-    try_get_compound_head() directly""), and
+This means that at probe time, we now drop our reference to the clocks
+and power domains and thus end up with a CPU hang when the CPU tries to
+access registers.
 
- b) try_grab_compound_head() also has a specific check for
-    "FOLL_LONGTERM && !is_pinned(page)", that assumes that the caller
-    can fall back to slow gup. This resulted in new failures, as
-    recently report by Will McVicker [1].
+The call to pm_runtime_resume_and_get() is also problematic since the
+.adap_enable CEC hook is called both to enable and to disable the
+controller. That means that we'll now call pm_runtime_resume_and_get()
+at disable time as well, messing with the reference counting.
 
-But (a) has problems too, even though they may not have been reported
-yet.  So just revert this.
+The behaviour we should have though would be to have
+pm_runtime_resume_and_get() called when the CEC controller is enabled,
+and pm_runtime_put when it's disabled.
 
-Link: https://lore.kernel.org/r/20220131203504.3458775-1-willmcvicker@google.com [1]
-Fixes: 54d516b1d62f ("mm/gup: small refactoring: simplify try_grab_page()")
-Reported-and-tested-by: Will McVicker <willmcvicker@google.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Minchan Kim <minchan@google.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: stable@vger.kernel.org # 5.15
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+We need to move things around a bit to behave that way, but it aligns
+stable with upstream.
+
+Cc: <stable@vger.kernel.org> # 5.10.x
+Cc: <stable@vger.kernel.org> # 5.15.x
+Cc: <stable@vger.kernel.org> # 5.16.x
+Reported-by: Michael Stapelberg <michael+drm@stapelberg.ch>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/gup.c |   35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c |   25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -124,8 +124,8 @@ static inline struct page *try_get_compo
-  * considered failure, and furthermore, a likely bug in the caller, so a warning
-  * is also emitted.
-  */
--struct page *try_grab_compound_head(struct page *page,
--				    int refs, unsigned int flags)
-+__maybe_unused struct page *try_grab_compound_head(struct page *page,
-+						   int refs, unsigned int flags)
- {
- 	if (flags & FOLL_GET)
- 		return try_get_compound_head(page, refs);
-@@ -208,10 +208,35 @@ static void put_compound_head(struct pag
-  */
- bool __must_check try_grab_page(struct page *page, unsigned int flags)
- {
--	if (!(flags & (FOLL_GET | FOLL_PIN)))
--		return true;
-+	WARN_ON_ONCE((flags & (FOLL_GET | FOLL_PIN)) == (FOLL_GET | FOLL_PIN));
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1738,18 +1738,18 @@ static int vc4_hdmi_cec_adap_enable(stru
+ 	u32 val;
+ 	int ret;
  
--	return try_grab_compound_head(page, 1, flags);
-+	if (flags & FOLL_GET)
-+		return try_get_page(page);
-+	else if (flags & FOLL_PIN) {
-+		int refs = 1;
+-	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+-	if (ret)
+-		return ret;
++	if (enable) {
++		ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
++		if (ret)
++			return ret;
+ 
+-	val = HDMI_READ(HDMI_CEC_CNTRL_5);
+-	val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+-		 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+-		 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+-	val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+-	       ((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
++		val = HDMI_READ(HDMI_CEC_CNTRL_5);
++		val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
++			 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
++			 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
++		val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
++			((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+ 
+-	if (enable) {
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+ 			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val);
+@@ -1777,7 +1777,10 @@ static int vc4_hdmi_cec_adap_enable(stru
+ 			HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+ 			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
 +
-+		page = compound_head(page);
++		pm_runtime_put(&vc4_hdmi->pdev->dev);
+ 	}
 +
-+		if (WARN_ON_ONCE(page_ref_count(page) <= 0))
-+			return false;
-+
-+		if (hpage_pincount_available(page))
-+			hpage_pincount_add(page, 1);
-+		else
-+			refs = GUP_PIN_COUNTING_BIAS;
-+
-+		/*
-+		 * Similar to try_grab_compound_head(): even if using the
-+		 * hpage_pincount_add/_sub() routines, be sure to
-+		 * *also* increment the normal page refcount field at least
-+		 * once, so that the page really is pinned.
-+		 */
-+		page_ref_add(page, refs);
-+
-+		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED, 1);
-+	}
-+
-+	return true;
+ 	return 0;
  }
  
- /**
+@@ -1888,8 +1891,6 @@ static int vc4_hdmi_cec_init(struct vc4_
+ 	if (ret < 0)
+ 		goto err_remove_handlers;
+ 
+-	pm_runtime_put(&vc4_hdmi->pdev->dev);
+-
+ 	return 0;
+ 
+ err_remove_handlers:
 
 

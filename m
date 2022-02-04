@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8F94A976C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2F04A9782
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358177AbiBDKEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 05:04:49 -0500
-Received: from mga01.intel.com ([192.55.52.88]:18260 "EHLO mga01.intel.com"
+        id S1358198AbiBDKMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:12:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:43600 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358127AbiBDKEp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 05:04:45 -0500
+        id S229626AbiBDKMr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 05:12:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643969085; x=1675505085;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3mxheKqTYV1TJi2fulCX3aSIhQo5eTdbQ5+4Zi+6mZw=;
-  b=QclL9LjzFnl7dAKfpSpu/oPt0W32TdjnBaMqgORC7spry2aicDOE6tb6
-   kF1mjXSZWYoepX7loolyVrI4w5l+z17mK4N6Hf8aBTKFvkuKhFuhCrsiM
-   0iAXpq9Ogd84jISDyOip493CsierI8k1w4GALElQjsbxDw1UMsP4IGN7r
-   uxl8+XEuEP4enEv6A0TnaHzdIy4Y798oRlRD2sgNqPZ6QnsPmQf2u5nld
-   bdv83vY19h9L9D2TyaKhlUbX69F37gyL2msnF1uzg2vi3ruXn8qozlCRZ
-   1iWD4I22345y+Y/uRc8XxMmO5Lm1CLkbtPmP/GRV4EjCY7pPSTKbp/of2
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="272843676"
+  t=1643969567; x=1675505567;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+9tOzU4GtOJXdJBZ54JUx7i36wRIZTfPtzp2LAmLDmA=;
+  b=YqITRRKoycMrfTivnwc2Kpdx4f/nVQG+8mPIjiHJSqNMlcvpFStENJE8
+   Oqqsqe4mKbhtEJeP+hIpmCijv2Y3FetJUZQtLuBtovF9eT4jmjDMkf9wQ
+   fezAlX7waVXL/z16nQtnhOF9gDLxBlTwlf6igijcislxv74hc/I3pcVrj
+   +aFTvJoqd6//D820RsLdAnvjK6+zVez5zgE9Z9CfrmGAUZqNE5D6sNQ+S
+   O7Oca5GktYwoQ2YSR1DCDtMyJEGlA0BdQA9abn2IHHQMbh8+mtDOPChOy
+   ImxY2lVAlgkVig2tfP0S8JPmBBxrvolWSfS0PllvZrNq3z0sVRNA+m3Rz
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="334738678"
 X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="272843676"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 02:04:45 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="334738678"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 02:12:47 -0800
 X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="677061944"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 04 Feb 2022 02:04:42 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 04 Feb 2022 12:04:41 +0200
-Date:   Fri, 4 Feb 2022 12:04:41 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] usb: typec: Separate USB Power Delivery from USB
- Type-C
-Message-ID: <Yfz6OUbDBXVtQzrb@kuha.fi.intel.com>
-References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
- <20220203144657.16527-2-heikki.krogerus@linux.intel.com>
- <Yfvs13vpsWULIVWu@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfvs13vpsWULIVWu@kroah.com>
+   d="scan'208";a="539118357"
+Received: from rkothand-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.255.86.47])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 02:12:41 -0800
+Date:   Fri, 4 Feb 2022 23:12:39 +1300
+From:   Kai Huang <kai.huang@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, <mingo@redhat.com>,
+        <bp@alien8.de>, <dave.hansen@intel.com>, <luto@kernel.org>,
+        <peterz@infradead.org>,
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        <aarcange@redhat.com>, <ak@linux.intel.com>,
+        <dan.j.williams@intel.com>, <david@redhat.com>, <hpa@zytor.com>,
+        <jgross@suse.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <jpoimboe@redhat.com>, <knsathya@kernel.org>,
+        <pbonzini@redhat.com>, <sdeep@vmware.com>, <seanjc@google.com>,
+        <tony.luck@intel.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv2 03/29] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-Id: <20220204231239.bff3626ec6c3c630371cbd4d@intel.com>
+In-Reply-To: <20220204034312.43rotpihciik2gk6@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+        <20220124150215.36893-4-kirill.shutemov@linux.intel.com>
+        <87a6faz7cs.ffs@tglx>
+        <20220202025519.csymm7r23b3ltpia@black.fi.intel.com>
+        <20220202235910.c512857813ea5b14aa73267f@intel.com>
+        <20220203144403.ytyw5vcv4gshxyhn@black.fi.intel.com>
+        <20220204034312.43rotpihciik2gk6@black.fi.intel.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Thu, Feb 03, 2022 at 03:55:19PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Feb 03, 2022 at 05:46:55PM +0300, Heikki Krogerus wrote:
-> > +/* These additional details are only available with vSafe5V supplies */
-> > +static struct kobj_attribute dual_role_power_attr = __ATTR_RO(dual_role_power);
-> > +static struct kobj_attribute usb_suspend_supported_attr = __ATTR_RO(usb_suspend_supported);
-> > +static struct kobj_attribute unconstrained_power_attr = __ATTR_RO(unconstrained_power);
-> > +static struct kobj_attribute usb_communication_capable_attr = __ATTR_RO(usb_communication_capable);
-> > +static struct kobj_attribute dual_role_data_attr = __ATTR_RO(dual_role_data);
-> > +static struct kobj_attribute
-> > +unchunked_extended_messages_supported_attr = __ATTR_RO(unchunked_extended_messages_supported);
-> 
-> Note, no 'struct device' should ever have a "raw" kobject hanging off of
-> it.  If so, something went wrong.
-> 
-> If you do this, userspace will never be notified of the attributes and
-> any userspace representation of the tree will be messed up.
-> 
-> Please, use an attribute directory with a name, or if you really need to
-> go another level deep, use a real 'struct device'.  As-is here, I can't
-> take it.
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -8,6 +8,25 @@
+>  #define TDX_CPUID_LEAF_ID	0x21
+>  #define TDX_IDENT		"IntelTDX    "
 
-OK, got it. I don't think we can avoid the deeper levels, not without
-making this really cryptic, and not really usable in all cases. These
-objects are trying to represent (parts) of the protocol - the
-messages, the objects in those messages, and later the responses to
-those messages.
+Seems above two are not required by assembly file?  If so also move them to
+within #ifndef __ASSEMBLY__?
 
-But I'm also trying to avoid having to claim that these objects are
-"devices", because honestly, claiming that the packages used in
-communication are devices is confusing, and just wrong. If we take
-that road, then we really should redefine what struct device is
-supposed to represent, and rename it also.
+>  
+> +#define TDX_SEAMCALL_VMFAILINVALID     0x8000FF00FFFF0000ULL
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +/*
+> + * Used to gather the output registers values of the TDCALL and SEAMCALL
+> + * instructions when requesting services from the TDX module.
+> + *
+> + * This is a software only structure and not part of the TDX module/VMM ABI.
+> + */
+> +struct tdx_module_output {
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +};
+> +
 
-So would it be OK that, instead of registering these objects as
-devices, we just introduce a kset where we can group them
-(/sys/kernel/usb_power_delivery)?
+Is declaration of __tdx_module_call() outside of CONFIG_INTEL_TDX_GUEST?
 
-thanks,
-
--- 
-heikki
+>  #ifdef CONFIG_INTEL_TDX_GUEST
+>  
+>  void __init tdx_early_init(void);
+> @@ -18,4 +37,5 @@ static inline void tdx_early_init(void) { };
+>  
+>  #endif /* CONFIG_INTEL_TDX_GUEST */
+>  
+> +#endif /* !__ASSEMBLY__ */
+>  #endif /* _ASM_X86_TDX_H */

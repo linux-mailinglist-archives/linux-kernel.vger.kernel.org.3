@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DEA4A9184
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201624A9187
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 01:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356111AbiBDAQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 19:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239553AbiBDAQA (ORCPT
+        id S1356187AbiBDAQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 19:16:52 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:56660 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245100AbiBDAQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 19:16:00 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376C1C061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 16:16:00 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 77so822494pgc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 16:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=efrA0nfqvc7zMWFpa4GfAQVSk6pSwKEuqGuv155lv+c=;
-        b=2UU6nQWbWC914x6PRqAMumJXJg4W3WmyOnfnZSyol+FxNCbDYQzadR09gqiqt6GG2H
-         CD4RIO5d/AuIiiH9NzLcvz6R+7udRd7g2D/Aym1TvvbLj/NdGyCZJqLkbvJAMr2LWb+5
-         y6O7cwvwt4m+dpjcj9CuGoz2JssjDeaqsvNxLv7TxnsRfRojbeqfTUhuDDm5hHQ1VsUu
-         owlauUw0v7OhCE6NpQNzotpt9irqvO1TpLS8L2qQ6hfFwSFH1Uwz0Eg4Izc42UU/OAK5
-         hV+XBvfNEI5RLILq4HSIi7/o9sQGx8zVfiGVKPxMnyFK0RUaI/axuR1vElqGyN7vMvCY
-         Xghg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=efrA0nfqvc7zMWFpa4GfAQVSk6pSwKEuqGuv155lv+c=;
-        b=4OCJv8RNt98nPW7Kaee7iEN4EK5YQaYW7mPXBPSIUa7TkMeXMl7OxQ8QAzkJDXYboU
-         sft0k0KgqtV88buqd6FTjRTyEnwtXJ04DJWAPjDPblyF2MjtevC4EcEVGWclYV4LjKQA
-         j+eqJCdSJvW4Z2Pjbjqz06bCzlvAV+NJpFjjutLJB0Wj6YLdOs3u6UFa5Uv0TC/NvpGW
-         tmgI3hMZKedMSvemzUAbCKrgt+2Lu79/S8cZKsanmn0aP30fNFIezxEOOwzZ0BxMTefp
-         qIGw34Ay7EJZ+JmHz5sPX94W3pSgmMCupS4qUdJLInzDFKgUI+l+TOpCZ9wX4l2MJJS7
-         FLRg==
-X-Gm-Message-State: AOAM530JGCmkNwnSfUb3QuujNNIqLQteRe3nVscbFYXUyc8XwcOqZar5
-        qjLP4j2rUPptFLvM5Q6NFWMC0g==
-X-Google-Smtp-Source: ABdhPJzz1nkhO1leBcWbPYC4nAYL/DtPafSGAmRTfmi2eHCxdSjfEMkrBtLukAVutTBtSvPCLy8JBg==
-X-Received: by 2002:a65:538e:: with SMTP id x14mr448133pgq.58.1643933759633;
-        Thu, 03 Feb 2022 16:15:59 -0800 (PST)
-Received: from [192.168.1.116] ([66.219.217.159])
-        by smtp.gmail.com with ESMTPSA id ck21sm110090pjb.51.2022.02.03.16.15.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 16:15:59 -0800 (PST)
-Subject: Re: [PATCH v5 0/4] io_uring: remove ring quiesce in io_uring_register
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com
-References: <20220203233439.845408-1-usama.arif@bytedance.com>
- <16997265-18fa-64db-32e2-4af7f4dc3e4c@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <c2f05b78-1f81-32f9-79df-06d35d9dbc7a@kernel.dk>
-Date:   Thu, 3 Feb 2022 17:15:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 3 Feb 2022 19:16:51 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643933809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3pautk4858+TJ9acUt+lAWsSvXk3yXbgosZPH/JGB0=;
+        b=lDl+divrl1HxJj7DuZlTTW/hUAVdkO4dlZVtUM/TjyS9/2dN4ITrrXY/CZSZoBF642Jdgt
+        picK1Dq6DTcF0vGDvxrKQv+spk4SqsvePh2DC8pt3+A2296ub5yrqnOxQGVV/gLVV4bubf
+        wA9GpUDVTkfcyXgpsvk75pR8IATm4Oqt4+7FV8iJ8rRC1SHhci1MY74O3RKqkV1CDq+Emc
+        DgzSvuiCFJft0bxEAUdjfec4IrNKkHVxP5oXs9mdqOBoHvRJBFh9bvQe3zqaE/scPrcanR
+        Q8G2I+2RuPG3k7NoN71n97IL7AoHVKZ3xoA94g273Rq5FFFTlmJtAccUXC97cw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643933809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y3pautk4858+TJ9acUt+lAWsSvXk3yXbgosZPH/JGB0=;
+        b=T/pAjUzAgPMK6ILlOcLrLAemCTNHEAYYWzD+tdSBMKXaKMFMlfVQj/kK/hA3rtA5NvEHXS
+        rZkMX2SoR/AYssCg==
+To:     Bill Wendling <morbo@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Subject: Re: [PATCH v2] x86: use builtins to read eflags
+In-Reply-To: <20211229021258.176670-1-morbo@google.com>
+References: <20211215211847.206208-1-morbo@google.com>
+ <20211229021258.176670-1-morbo@google.com>
+Date:   Fri, 04 Feb 2022 01:16:49 +0100
+Message-ID: <87mtj7cwpa.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <16997265-18fa-64db-32e2-4af7f4dc3e4c@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 5:02 PM, Pavel Begunkov wrote:
-> On 2/3/22 23:34, Usama Arif wrote:
->> For opcodes relating to registering/unregistering eventfds, this is done by
->> creating a new RCU data structure (io_ev_fd) as part of io_ring_ctx that
->> holds the eventfd_ctx, with reads to the structure protected by
->> rcu_read_lock and writes (register/unregister calls) protected by a mutex.
->>
->> With the above approach ring quiesce can be avoided which is much more
->> expensive then using RCU lock. On the system tested, io_uring_reigster with
->> IORING_REGISTER_EVENTFD takes less than 1ms with RCU lock, compared to 15ms
->> before with ring quiesce.
->>
->> The second patch creates the RCU protected data structure and removes ring
->> quiesce for IORING_REGISTER_EVENTFD and IORING_UNREGISTER_EVENTFD.
->>
->> The third patch builds on top of the second patch and removes ring quiesce
->> for IORING_REGISTER_EVENTFD_ASYNC.
->>
->> The fourth patch completely removes ring quiesce from io_uring_register,
->> as IORING_REGISTER_ENABLE_RINGS and IORING_REGISTER_RESTRICTIONS dont need
->> them.
-> 
-> Let me leave it just for history: I strongly dislike it considering
-> there is no one who uses or going to use it.
+On Tue, Dec 28 2021 at 18:12, Bill Wendling wrote:
+> GCC and Clang both have builtins to read and write the EFLAGS register.
+> This allows the compiler to determine the best way to generate this
+> code, which can improve code generation.
+>
+> This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+> chooses to be conservative in these situations, and so uses memory
+> instead of registers. This is a known issue, which is currently being
+> addressed.
+>
+> However, using builtins is benefiical in general, because it removes the
+> burden of determining what's the way to read the flags register from the
+> programmer and places it on to the compiler, which has the information
+> needed to make that decision. Indeed, this piece of code has had several
+> changes over the years, some of which were pinging back and forth to
+> determine the correct constraints to use.
+>
+> With this change, Clang generates better code:
+>
+> Original code:
+>         movq    $0, -48(%rbp)
+>         #APP
+>         # __raw_save_flags
+>         pushfq
+>         popq    -48(%rbp)
+>         #NO_APP
+>         movq    -48(%rbp), %rbx
+>
+> New code:
+>         pushfq
+>         popq    %rbx
+>         #APP
+>
+> Note that the stack slot in the original code is no longer needed in the
+> new code, saving a small amount of stack space.
 
-Are you referring to the 4th patch? Or the patchset as a whole? Not clear
-to me, because eventfd registration is most certainly used by folks
-today.
+This still lacks any information about the effect on GCC. There is a
+world outside clang. It's not my job to validate that.
 
-> Even more, I can't find a single user of io_uring_unregister_eventfd()
-> in liburing tests, so most probably the paths are not tested at all.
+Thanks,
 
-That's definitely a general issue, not related to this patchset.
-Something that most certainly should get added! Ring exit will use the
-same unregister path for eventfd, however, so it does get exercised from
-there with existing tests too.
-
-But for this change, we definitely need a test that exercises both
-register and unregister, trying to trigger something funky there.
-
--- 
-Jens Axboe
-
+        tglx

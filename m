@@ -2,71 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEAC4AA38E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEC84AA390
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353776AbiBDWwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:52:22 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:35664 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234056AbiBDWwV (ORCPT
+        id S1353873AbiBDWxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234056AbiBDWxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:52:21 -0500
-Received: by mail-oi1-f169.google.com with SMTP id m10so10272880oie.2;
-        Fri, 04 Feb 2022 14:52:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vkRwT5vTr5trZ7OlFaXIOT1f/2bIjwXJbkGKDps38u8=;
-        b=JUfOF0fs2XK6WGmZXYTa70poIvs9neBLH6p+LTPxT553B20eYmemVapUiyPhnzboT9
-         /bEAE/DR66g+lvvqI2mlKSegFi2AJxkZ35alGk4ZI0end4xNRZ1GyTNTpe0nZKW9RUPY
-         yyAudUXNlWY7TAtYWhCCtH9gQGsfRmCPVKFRwS1/qsnP7+I2gcVUaZ9IyHJ+WFUQ7fLa
-         AV4SNkWOkqyrCWairUeM1/cnc4/r6TxUHkyT41JrQ2u98/4VUVuLjbrkVFy8GvkeGfJd
-         TEbGO2nBqoSvE0IlDDJ/scFWZ36qoTCGI8FW45tJucoiUCXlXyiKXJq3MK2zNIfng12x
-         4ppw==
-X-Gm-Message-State: AOAM531MpQ8uyYP/rWclSxuB/No0TitBFHvv+uYuRk8Ult3WLgniADxb
-        1eo2+cWgFHQ90RmZXf7AJQ==
-X-Google-Smtp-Source: ABdhPJzBO4tpnDTk1J+Zd9wXNTaQ0+sR4QrGfIYxxmEgpmeyJnur5G41kuH9qfXLuUFAe7o0kl2kZg==
-X-Received: by 2002:a05:6808:189d:: with SMTP id bi29mr602254oib.323.1644015140912;
-        Fri, 04 Feb 2022 14:52:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id a4sm568162oaa.42.2022.02.04.14.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:52:20 -0800 (PST)
-Received: (nullmailer pid 3332795 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:52:19 -0000
-Date:   Fri, 4 Feb 2022 16:52:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, lh.kuo@sunplus.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, wells.lu@sunplus.com
-Subject: Re: [PATCH v4 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
-Message-ID: <Yf2uI12fZcQROKnH@robh.at.kernel.org>
-References: <cover.1642127137.git.lhjeff911@gmail.com>
- <3667a4d5f55699c344c6c114a2a5575fb896dd9e.1642127137.git.lhjeff911@gmail.com>
+        Fri, 4 Feb 2022 17:53:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89ECC06134A;
+        Fri,  4 Feb 2022 14:53:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B67ADB83954;
+        Fri,  4 Feb 2022 22:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B7EC004E1;
+        Fri,  4 Feb 2022 22:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644015190;
+        bh=/GzwVvJMLbvFuL7505iRlddvcEtqGqqgxMSACzO5WaM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SCVpnqN0O2Oeo+jsHYY7UyYnv8LrQu8v/cO91izw0Zs9hvvq2hXLdmscEji4rFGvO
+         4RVO1ELuhL6b6ui5qdKFNgQ12FWmn2nziYmt7qR/M91iMcgxs77FjfsURueL/THNew
+         bkxAIjyODRfFB63pWunMh1AN6cjSiVWSxf0jOh3MGFS0fQvsc22UCBJBJIShflV0ux
+         SxeQ2X4ACfvBtpgXvzY6IZGxcnLmwIl9ZrR5QJCQt/e1CyyzAXF7Lb2a46NU5S99Ba
+         /0LYuDB8NnUZBQt4sScS2ZoK9AVN3t77ImLm+NkChXapZ+I3ZkLZVw01Zz7wm6YCL+
+         NJqaHHqyz4e3w==
+Date:   Fri, 4 Feb 2022 16:53:08 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] PCI: fu740: fix finding gpios
+Message-ID: <20220204225308.GA225749@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3667a4d5f55699c344c6c114a2a5575fb896dd9e.1642127137.git.lhjeff911@gmail.com>
+In-Reply-To: <20220204173821.281784-1-ben.dooks@codethink.co.uk>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_20,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Jan 2022 10:46:27 +0800, Li-hao Kuo wrote:
-> Add bindings for Sunplus SP7021 thermal driver
-> 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v4:
->  - Modify yaml file remove reg name and change nvmem name
-> 
->  .../bindings/thermal/sunplus_thermal.yaml          | 49 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
-> 
+Follow subject line convention (s/fix/Fix/, s/gpios/GPIOs/).
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, Feb 04, 2022 at 05:38:21PM +0000, Ben Dooks wrote:
+> The calls to devm_gpiod_get_optional() have the -gpios on
+> the name. This means the pcie driver is not finding the
+> necessary reset or power gpios to allow the pcie devices
+> on the SiFive Unmatched boards.
+> 
+> Note, this was workng around 5.16 and may not have been
+> broken? There is still an issue if uboot has not probed
+> the pcie bus then there are no pcie devices shown when
+> Linux is started.
+
+Wrap to fill 75 columns
+s/gpios/GPIOs/
+s/pcie/PCIe/
+s/workng/working/
+s/to allow the pcie devices/to allow the PCIe devices <to something>?/
+
+I can't tell what this is saying.  It used to work and something broke
+it?  If so, we should have a "Fixes:" tag to identify the commit that
+broke it.
+
+Or it used to work and "may *not* have been broken"?  I'm confused.
+
+Unclear how uboot is involved.
+
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> ---
+>  drivers/pci/controller/dwc/pcie-fu740.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+> index 00cde9a248b5..842b7202b96e 100644
+> --- a/drivers/pci/controller/dwc/pcie-fu740.c
+> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
+> @@ -259,11 +259,11 @@ static int fu740_pcie_probe(struct platform_device *pdev)
+>  		return PTR_ERR(afp->mgmt_base);
+>  
+>  	/* Fetch GPIOs */
+> -	afp->reset = devm_gpiod_get_optional(dev, "reset-gpios", GPIOD_OUT_LOW);
+> +	afp->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+>  	if (IS_ERR(afp->reset))
+>  		return dev_err_probe(dev, PTR_ERR(afp->reset), "unable to get reset-gpios\n");
+>  
+> -	afp->pwren = devm_gpiod_get_optional(dev, "pwren-gpios", GPIOD_OUT_LOW);
+> +	afp->pwren = devm_gpiod_get_optional(dev, "pwren", GPIOD_OUT_LOW);
+>  	if (IS_ERR(afp->pwren))
+>  		return dev_err_probe(dev, PTR_ERR(afp->pwren), "unable to get pwren-gpios\n");
+>  
+> -- 
+> 2.34.1
+> 

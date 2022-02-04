@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000124A9B0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B72F4A9B0C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359338AbiBDOdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:33:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34790 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359328AbiBDOde (ORCPT
+        id S1359343AbiBDOdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359340AbiBDOdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:33:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643985213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YE+7dcKVrnsXlJFwi4qc611YF3e/nMZjJd0WuHXGT7w=;
-        b=DQxhyBGsZrIDFqF5CisQw36xF7ZViW78rfpUJHMQ4Z/lePoteFg8E1BYyHrPI+s/BSCZYx
-        Qr8zFmKYyfS2+TcDTBeGAMfp7yG+kd7cKKQIYTh9zmiNJfLk6AejdYMlSfiQhavCo1SMgy
-        oJH/DKyl5zr2j8KKnv9VKk6kVc64ZEk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-SOmmRtwcPRWaulvj-1HaiQ-1; Fri, 04 Feb 2022 09:33:32 -0500
-X-MC-Unique: SOmmRtwcPRWaulvj-1HaiQ-1
-Received: by mail-wr1-f69.google.com with SMTP id s25-20020adfa299000000b001d8d032255fso2084914wra.14
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:33:32 -0800 (PST)
+        Fri, 4 Feb 2022 09:33:42 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB4C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:33:42 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id v129so1100754wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9HRfuw26kbdaIgCIMJCrn0p/ikh8G5VstHoJyqrHzaY=;
+        b=N5GoAcSlGGBJtMEbJ0ukMjcahDwIi6iA2QZkJabB//WJv/G54PfC1Qrfzg7/ZI1TYh
+         GXhH0QCbw+gpq7uTm0dWhu7TcRTYxOcV5k7t/lsc6n2nPvf9RmCPWHgzUrMufrxVAT1G
+         Lsm/WHY6QYMbH7NqBUFUJRx5DCm2DZkKPdQVSIC86woRjsZkuzlUJwbFshTnN4NtWfni
+         7g1L/qjPxy12sXSFEjZJ3ZERFtzvB35xQ+w8LuY1lSKUAqPW88dNka/ITANmbxgilrhl
+         egqC9SA4Fpv10xkSU1ukvLxU+IEjvuHmqg3MBKOUTv65hnqvE0/FUcvuWcLHrwN3pQ52
+         jyRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YE+7dcKVrnsXlJFwi4qc611YF3e/nMZjJd0WuHXGT7w=;
-        b=2nvwH6owQbgMcWlyEWFEGFwqN2gKJ2/ayOvtapaeXZxP9LWFrUnB3dcqY2FhUzllpr
-         0bL34ke3wFk8qLcsWOLVt2t7EbAkkiQmlE5xyGrGWVNsxpzwxwaSaCH7b+DnWgy3jIri
-         gTxUa6d0xTmuQu5y/KuQ+LP+GrQlA610ieoCdDmcJ2wApHMpQ7KM/cHzAj/d5Enj6uxI
-         sIgA0/pUUc60QixMzCmrbBn/YYaVqpZbkRA6NrLrqKOaWWoHN74z7zLWR0rhzJ2j1wBT
-         3zyadHnC6YgaXCLUbZpqYSCdGAegTSW5hGEqQyyr7r9+syGGJ9wOgToDwSilJuu6+Pef
-         q2+g==
-X-Gm-Message-State: AOAM533fVa7UsrBt497eny7ab69Ku9vI+M2PHGYxeJsbQZU7MabYo9aZ
-        9IBs1X4gfuR9vcObkKbzX7JvfiCqFQcua+KjK/7X6k/XYo/dF2SzmV4Iu61X1bHSeQqsPjqbQ9U
-        7qyycfSDlOJwf8JWhrCEZfX3j
-X-Received: by 2002:a1c:4c08:: with SMTP id z8mr2506719wmf.42.1643985211601;
-        Fri, 04 Feb 2022 06:33:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8Sf3LjiYWLzwA9+5siU+yJFBE/sxFNsjVMYQtNMWsluGofgOGAh6oxxtKiSCC9coLkWjFOA==
-X-Received: by 2002:a1c:4c08:: with SMTP id z8mr2506694wmf.42.1643985211382;
-        Fri, 04 Feb 2022 06:33:31 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id a9sm1992289wmm.32.2022.02.04.06.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 06:33:31 -0800 (PST)
-Message-ID: <f7a5d15f-3a02-5698-01f9-e79970180d99@redhat.com>
-Date:   Fri, 4 Feb 2022 15:33:29 +0100
+        bh=9HRfuw26kbdaIgCIMJCrn0p/ikh8G5VstHoJyqrHzaY=;
+        b=HkJNGhoH/KvxfXDmhQAgtZyIM2pAfGE/Ifef3EbSBa1yGfccdYOqwH1f1SH5s2Lqlq
+         nZNUolyIVqWklN1lqAlbx0Fxb9jQiUedhKiUEiOMxZ3JLoVEd6vH1hfkTTeePjE94CK8
+         OV7THpW6w5YLfDVP4jrMY2B0GHWZi5koIpK5LwVD9feNpvM/ReSMdMG9TRfGPrFQvV7e
+         ClTp/rUpleVlsPUaQEISYZ/f1eBl3O6nbZs1WCwTOIFYVS8Hpcp4V2p2fB0IKdXg0eg8
+         N+ApbDVdWinxzqJ2jSlFpPF7gbEp6sWJm2h5C3mueqk+oYNQQrdAYIEShDr7GHyp6aji
+         UVfQ==
+X-Gm-Message-State: AOAM530toxF1e3k+2jj/euaCnpB4pYXNJ1ZtiMTzROEWVteshKR8bp1r
+        Uj4TarehrDN0Uw6KPd/mmbVLlQ==
+X-Google-Smtp-Source: ABdhPJzM7rirBHeEKddHJTpT/8Ll2fTTFTnqEyoWqAVCMisHdXwtzMHwgV7V/Gu8b3v9CLpo+s2nlg==
+X-Received: by 2002:a1c:4b09:: with SMTP id y9mr2438315wma.159.1643985220416;
+        Fri, 04 Feb 2022 06:33:40 -0800 (PST)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:3fbe:ff10:110:739])
+        by smtp.gmail.com with ESMTPSA id p14sm2426053wrr.7.2022.02.04.06.33.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 06:33:39 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robert.foss@linaro.org
+Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
+        biju.das.jz@bp.renesas.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Subject: [PATCH v3] drm/bridge: dw-hdmi: use safe format when first in bridge chain
+Date:   Fri,  4 Feb 2022 15:33:37 +0100
+Message-Id: <20220204143337.89221-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/4] MAINTAINERS: Add entry for Solomon SSD130X OLED
- displays DRM driver
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-References: <20220204134347.1187749-1-javierm@redhat.com>
- <20220204134347.1187749-4-javierm@redhat.com>
- <Yf0wzOP/kaubDAhP@smile.fi.intel.com>
- <5892749f-0bb0-68f5-c3d2-8ceedfc6b162@redhat.com>
- <Yf03+MsbqRp+uQff@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Yf03+MsbqRp+uQff@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2327; h=from:subject; bh=e5N2iKj5YSVB+9PoyzM1SrjuyNvunszme9UDF4PNMaY=; b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBh/Tk4oLM2pdcdSB7huyqScnob/k6VvXol8zz9+/KN tCOP+9WJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCYf05OAAKCRB33NvayMhJ0dKGEA C8cPNgB5xfu4qvomB7nSOs2N1+E1x6dlkhbX5Pl6yeV61+6btrGe61Ca8kDv3E/lubtBCDjytFLCyn ot2ZtSgYUbn59l0WyO4fp5eijMILLBg+RFbA54pxb3O0qmHYsEU7Xf6MvULgsUzv30d6Q1BzK3ZhmQ vLYJdjRuCkwHtD+FWgZNfHuL85wLRH9H7VZVsHYM5DvNq1LDZWblU84uhJxa9x1IhH9QNvYWdbudNh MKj2nW9417G4++HwulDwqtI/h/aKGoNVLkM4lPByFQWeSdwjNvDhDAgKIPyr13TTWyFeI6KqPfF1A3 TWXAbdiI7bEnjhmJCfAJENISJ5BfajEcUyhrOQAWMptsL4cVi6HjfvsgJ7fk92Vagt1Nc95yRZ7wbo 1bTnzRW+eTlILZsI+oVc7neJRo7iPwqz4VMbuisNHLCKtU5U2RsAui/aJ3bkqTCN6aZcMMLeWN9jeR 5Sr1981EYsHHYevtwp6rua8Vp7OdaS+OKj8oikCfxhPLf3OvfEXQfejn3G+qVTbzN71qu5i5wvgQqL t9m+gl4nkmJ8zwHcJQRE0LVoIXTexE55U14yiHBdhcw/9T5GxhjHDrcOGerygvHY85iKIdCK4V2TKR 7o1ZuRlo0Ua/FP6wyvXTE3d3eDNII2wzb5RcOErBgidOAqri1TtWNksiq83A==
+X-Developer-Key: i=narmstrong@baylibre.com; a=openpgp; fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 15:28, Andy Shevchenko wrote:
-> On Fri, Feb 04, 2022 at 03:12:17PM +0100, Javier Martinez Canillas wrote:
->> On 2/4/22 14:57, Andy Shevchenko wrote:
->>> On Fri, Feb 04, 2022 at 02:43:46PM +0100, Javier Martinez Canillas wrote:
-> 
-> ...
-> 
->>> Stray change?
->>
->> Sigh, I'm not sure how added that change. Just ignore it, I'll fix it
->> on v3 or when applying if there isn't another revision of this series.
-> 
-> I believe v3 is warranted due to the other patch review.
-> 
+When the dw-hdmi bridge is in first place of the bridge chain, this
+means there is no way to select an input format of the dw-hdmi HW
+component.
 
-Agreed. Thanks a lot for your feedback and comments.
+Since introduction of display-connector, negotiation was broken since
+the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
+in last position of the bridge chain or behind another bridge also
+supporting input & output format negotiation.
 
-Best regards,
+Commit 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks")
+was introduced to make negotiation work again by making display-connector
+act as a pass-through concerning input & output format negotiation.
+
+But in the case where the dw-hdmi is single in the bridge chain, for
+example on Renesas SoCs, with the display-connector bridge the dw-hdmi
+is no more single, breaking output format.
+
+Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
+Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks").
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+---
+Changes since v2:
+- Add rob's r-b
+- Fix invalid Fixes commit hash
+
+Changes since v1:
+- Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
+- Fix typos in commit message
+
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 54d8fdad395f..97cdc61b57f6 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+ 	if (!output_fmts)
+ 		return NULL;
+ 
+-	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
+-	if (list_is_singular(&bridge->encoder->bridge_chain)) {
++	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
++	if (list_is_singular(&bridge->encoder->bridge_chain) ||
++	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
+ 		*num_output_fmts = 1;
+ 		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
+ 
 -- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.25.1
 

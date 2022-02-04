@@ -2,271 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452A44AA437
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED0C4AA434
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378073AbiBDXUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378026AbiBDXUm (ORCPT
+        id S1378033AbiBDXUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:20:41 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59500 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378026AbiBDXUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:20:42 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C52DFBC71E;
-        Fri,  4 Feb 2022 15:20:41 -0800 (PST)
+        Fri, 4 Feb 2022 18:20:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 825D4CE24BF;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36F0BB83938;
         Fri,  4 Feb 2022 23:20:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA6D6C004E1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29D1C340ED;
         Fri,  4 Feb 2022 23:20:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644016837;
-        bh=QZkLwXYCmws23caDNtWJiegvHAZntpYX9fFHjWgLLoY=;
+        bh=aPqpQB1V+ial4RA4tbGtfUo/DpQXz9yRajIkK4rcS3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K2qkh4mbMeV5o5Aj7+u3k2GPnI1MXOUzD3AcaBhswQpRRcwTMtpEdMyZyeg54Xlb7
-         eNwGEsfK5sV7fDQcPzsqpJpgZMpMMzmxZikKcPKnTcoEjVcLsXL4Rc3jADweZoxtEP
-         MdobiUWD6gpj64WlxJi4JD1VBrJE12ZUnuYGfFeqpawJE0GQvdpA7JKI4KcjEkgBai
-         pSVLKy6N4d6/jzLzhWENHgpHmJyC4cLKOH/LJyxzBiQel1VNkDoXqWateadBTA+zR8
-         nojYAvaTDjULs+0sHC+ud5mMSCYxiZc+I6k//BA6+VZyrNmqcSsGrdwOy5fmajPVYI
-         REu+xWUs9UCCQ==
+        b=MVWZi99bWMS34YhGfPTLsbxyF2nQVo5mmIeoFG8CZQvc69HEUc49kClUrDUBuaYY3
+         91cJenx5fhKD3Qh5z2qQrUw/mIvtfB2tqR+3YMIP2o71yg/PWcgUDGljfaOjeDaKTI
+         M9XePeCZlR3Q9ZgaNGReUBtIzgT+joeaIP2ElDPMA6UH3zSt+V25KjZPt6/25Osxjd
+         NGm4pOwGOTD+smf28ndce5g8tY22MkCkAmI59YdaIzARABqAyntVYc+Q8Ga27TJtZm
+         VWkn86zXnsAPH4PoQlrHBv4zzTMedEWGqNC6vJdWBRS1k7RnnqYcEbWRJKGKuwOsYH
+         CL06t2GgVxsfg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A00395C0418; Fri,  4 Feb 2022 15:20:37 -0800 (PST)
+        id A36795C0829; Fri,  4 Feb 2022 15:20:37 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, David Woodhouse <dwmw@amazon.co.uk>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 1/5] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
-Date:   Fri,  4 Feb 2022 15:20:32 -0800
-Message-Id: <20220204232036.460-1-paulmck@kernel.org>
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 2/5] rcu: Refactor rcu_barrier() empty-list handling
+Date:   Fri,  4 Feb 2022 15:20:33 -0800
+Message-Id: <20220204232036.460-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220204232027.GA4194214@paulmck-ThinkPad-P17-Gen-1>
 References: <20220204232027.GA4194214@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_50,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+This commit saves a few lines by checking first for an empty callback
+list.  If the callback list is empty, then that CPU is taken care of,
+regardless of its online or nocb state.  Also simplify tracing accordingly
+and fold a few lines together.
 
-If we allow architectures to bring APs online in parallel, then we end
-up requiring rcu_cpu_starting() to be reentrant. But currently, the
-manipulation of rnp->ofl_seq is not thread-safe.
-
-However, rnp->ofl_seq is also fairly much pointless anyway since both
-rcu_cpu_starting() and rcu_report_dead() hold rcu_state.ofl_lock for
-fairly much the whole time that rnp->ofl_seq is set to an odd number
-to indicate that an operation is in progress.
-
-So drop rnp->ofl_seq completely, and use only rcu_state.ofl_lock.
-
-This has a couple of minor complexities: lockdep will complain when we
-take rcu_state.ofl_lock, and currently accepts the 'excuse' of having
-an odd value in rnp->ofl_seq. So switch it to an arch_spinlock_t to
-avoid that false positive complaint. Since we're killing rnp->ofl_seq
-of course that 'excuse' has to be changed too, so make it check for
-arch_spin_is_locked(rcu_state.ofl_lock).
-
-There's no arch_spin_lock_irqsave() so we have to manually save and
-restore local interrupts around the locking.
-
-At Paul's request based on Neeraj's analysis, make rcu_gp_init not just
-wait but *exclude* any CPU online/offline activity, which was fairly
-much true already by virtue of it holding rcu_state.ofl_lock.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 71 ++++++++++++++++++++++++-----------------------
- kernel/rcu/tree.h |  4 +--
- 2 files changed, 37 insertions(+), 38 deletions(-)
+ include/trace/events/rcu.h |  9 ++++-----
+ kernel/rcu/tree.c          | 25 ++++++++-----------------
+ 2 files changed, 12 insertions(+), 22 deletions(-)
 
+diff --git a/include/trace/events/rcu.h b/include/trace/events/rcu.h
+index 670e41783edd8..90b2fb0292cb1 100644
+--- a/include/trace/events/rcu.h
++++ b/include/trace/events/rcu.h
+@@ -794,16 +794,15 @@ TRACE_EVENT_RCU(rcu_torture_read,
+  * Tracepoint for rcu_barrier() execution.  The string "s" describes
+  * the rcu_barrier phase:
+  *	"Begin": rcu_barrier() started.
++ *	"CB": An rcu_barrier_callback() invoked a callback, not the last.
+  *	"EarlyExit": rcu_barrier() piggybacked, thus early exit.
+  *	"Inc1": rcu_barrier() piggyback check counter incremented.
+- *	"OfflineNoCBQ": rcu_barrier() found offline no-CBs CPU with callbacks.
+- *	"OnlineQ": rcu_barrier() found online CPU with callbacks.
+- *	"OnlineNQ": rcu_barrier() found online CPU, no callbacks.
++ *	"Inc2": rcu_barrier() piggyback check counter incremented.
+  *	"IRQ": An rcu_barrier_callback() callback posted on remote CPU.
+  *	"IRQNQ": An rcu_barrier_callback() callback found no callbacks.
+- *	"CB": An rcu_barrier_callback() invoked a callback, not the last.
+  *	"LastCB": An rcu_barrier_callback() invoked the last callback.
+- *	"Inc2": rcu_barrier() piggyback check counter incremented.
++ *	"NQ": rcu_barrier() found a CPU with no callbacks.
++ *	"OnlineQ": rcu_barrier() found online CPU with callbacks.
+  * The "cpu" argument is the CPU or -1 if meaningless, the "cnt" argument
+  * is the count of remaining callbacks, and "done" is the piggybacking count.
+  */
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index a4c25a6283b0b..8f6cf86a76c2d 100644
+index 8f6cf86a76c2d..87ea516f87779 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -91,7 +91,7 @@ static struct rcu_state rcu_state = {
- 	.abbr = RCU_ABBR,
- 	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),
- 	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
--	.ofl_lock = __RAW_SPIN_LOCK_UNLOCKED(rcu_state.ofl_lock),
-+	.ofl_lock = __ARCH_SPIN_LOCK_UNLOCKED,
- };
+@@ -4030,8 +4030,7 @@ void rcu_barrier(void)
  
- /* Dump rcu_node combining tree at boot to verify correct setup. */
-@@ -1175,7 +1175,15 @@ bool rcu_lockdep_current_cpu_online(void)
- 	preempt_disable_notrace();
- 	rdp = this_cpu_ptr(&rcu_data);
- 	rnp = rdp->mynode;
--	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || READ_ONCE(rnp->ofl_seq) & 0x1)
-+	/*
-+	 * Strictly, we care here about the case where the current CPU is
-+	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
-+	 * not being up to date. So arch_spin_is_locked() might have a
-+	 * false positive if it's held by some *other* CPU, but that's
-+	 * OK because that just means a false *negative* on the warning.
-+	 */
-+	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) ||
-+	    arch_spin_is_locked(&rcu_state.ofl_lock))
- 		ret = true;
- 	preempt_enable_notrace();
- 	return ret;
-@@ -1739,7 +1747,6 @@ static void rcu_strict_gp_boundary(void *unused)
-  */
- static noinline_for_stack bool rcu_gp_init(void)
- {
--	unsigned long firstseq;
- 	unsigned long flags;
- 	unsigned long oldmask;
- 	unsigned long mask;
-@@ -1782,22 +1789,17 @@ static noinline_for_stack bool rcu_gp_init(void)
- 	 * of RCU's Requirements documentation.
+ 	/* Did someone else do our work for us? */
+ 	if (rcu_seq_done(&rcu_state.barrier_sequence, s)) {
+-		rcu_barrier_trace(TPS("EarlyExit"), -1,
+-				  rcu_state.barrier_sequence);
++		rcu_barrier_trace(TPS("EarlyExit"), -1, rcu_state.barrier_sequence);
+ 		smp_mb(); /* caller's subsequent code after above check. */
+ 		mutex_unlock(&rcu_state.barrier_mutex);
+ 		return;
+@@ -4059,26 +4058,18 @@ void rcu_barrier(void)
  	 */
- 	WRITE_ONCE(rcu_state.gp_state, RCU_GP_ONOFF);
-+	/* Exclude CPU hotplug operations. */
- 	rcu_for_each_leaf_node(rnp) {
--		// Wait for CPU-hotplug operations that might have
--		// started before this grace period did.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
--		firstseq = READ_ONCE(rnp->ofl_seq);
--		if (firstseq & 0x1)
--			while (firstseq == READ_ONCE(rnp->ofl_seq))
--				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
--		raw_spin_lock(&rcu_state.ofl_lock);
--		raw_spin_lock_irq_rcu_node(rnp);
-+		local_irq_save(flags);
-+		arch_spin_lock(&rcu_state.ofl_lock);
-+		raw_spin_lock_rcu_node(rnp);
- 		if (rnp->qsmaskinit == rnp->qsmaskinitnext &&
- 		    !rnp->wait_blkd_tasks) {
- 			/* Nothing to do on this leaf rcu_node structure. */
--			raw_spin_unlock_irq_rcu_node(rnp);
--			raw_spin_unlock(&rcu_state.ofl_lock);
-+			raw_spin_unlock_rcu_node(rnp);
-+			arch_spin_unlock(&rcu_state.ofl_lock);
-+			local_irq_restore(flags);
+ 	for_each_possible_cpu(cpu) {
+ 		rdp = per_cpu_ptr(&rcu_data, cpu);
+-		if (cpu_is_offline(cpu) &&
+-		    !rcu_rdp_is_offloaded(rdp))
++		if (!rcu_segcblist_n_cbs(&rdp->cblist)) {
++			rcu_barrier_trace(TPS("NQ"), cpu, rcu_state.barrier_sequence);
  			continue;
+-		if (rcu_segcblist_n_cbs(&rdp->cblist) && cpu_online(cpu)) {
+-			rcu_barrier_trace(TPS("OnlineQ"), cpu,
+-					  rcu_state.barrier_sequence);
++		}
++		if (cpu_online(cpu)) {
++			rcu_barrier_trace(TPS("OnlineQ"), cpu, rcu_state.barrier_sequence);
+ 			smp_call_function_single(cpu, rcu_barrier_func, (void *)cpu, 1);
+-		} else if (rcu_segcblist_n_cbs(&rdp->cblist) &&
+-			   cpu_is_offline(cpu)) {
+-			rcu_barrier_trace(TPS("OfflineNoCBQ"), cpu,
+-					  rcu_state.barrier_sequence);
++		} else {
++			rcu_barrier_trace(TPS("OfflineNoCBQ"), cpu, rcu_state.barrier_sequence);
+ 			local_irq_disable();
+ 			rcu_barrier_func((void *)cpu);
+ 			local_irq_enable();
+-		} else if (cpu_is_offline(cpu)) {
+-			rcu_barrier_trace(TPS("OfflineNoCBNoQ"), cpu,
+-					  rcu_state.barrier_sequence);
+-		} else {
+-			rcu_barrier_trace(TPS("OnlineNQ"), cpu,
+-					  rcu_state.barrier_sequence);
  		}
- 
-@@ -1832,8 +1834,9 @@ static noinline_for_stack bool rcu_gp_init(void)
- 				rcu_cleanup_dead_rnp(rnp);
- 		}
- 
--		raw_spin_unlock_irq_rcu_node(rnp);
--		raw_spin_unlock(&rcu_state.ofl_lock);
-+		raw_spin_unlock_rcu_node(rnp);
-+		arch_spin_unlock(&rcu_state.ofl_lock);
-+		local_irq_restore(flags);
  	}
- 	rcu_gp_slow(gp_preinit_delay); /* Races with CPU hotplug. */
- 
-@@ -4287,11 +4290,10 @@ void rcu_cpu_starting(unsigned int cpu)
- 
- 	rnp = rdp->mynode;
- 	mask = rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
-+	local_irq_save(flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	rcu_dynticks_eqs_online();
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-+	raw_spin_lock_rcu_node(rnp);
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
- 	newcpu = !(rnp->expmaskinitnext & mask);
- 	rnp->expmaskinitnext |= mask;
-@@ -4304,15 +4306,18 @@ void rcu_cpu_starting(unsigned int cpu)
- 
- 	/* An incoming CPU should never be blocking a grace period. */
- 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
-+		/* rcu_report_qs_rnp() *really* wants some flags to restore */
-+		unsigned long flags2;
-+		local_irq_save(flags2);
-+
- 		rcu_disable_urgency_upon_qs(rdp);
- 		/* Report QS -after- changing ->qsmaskinitnext! */
--		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
-+		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags2);
- 	} else {
--		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		raw_spin_unlock_rcu_node(rnp);
- 	}
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(flags);
- 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
- }
- 
-@@ -4326,7 +4331,7 @@ void rcu_cpu_starting(unsigned int cpu)
-  */
- void rcu_report_dead(unsigned int cpu)
- {
--	unsigned long flags;
-+	unsigned long flags, seq_flags;
- 	unsigned long mask;
- 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
- 	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
-@@ -4340,10 +4345,8 @@ void rcu_report_dead(unsigned int cpu)
- 
- 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
- 	mask = rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock(&rcu_state.ofl_lock);
-+	local_irq_save(seq_flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
- 	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
- 	rdp->rcu_ofl_gp_flags = READ_ONCE(rcu_state.gp_flags);
-@@ -4354,10 +4357,8 @@ void rcu_report_dead(unsigned int cpu)
- 	}
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
--	raw_spin_unlock(&rcu_state.ofl_lock);
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(seq_flags);
- 
- 	rdp->cpu_started = false;
- }
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 486fc901bd085..4b4bcef8a9743 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -56,8 +56,6 @@ struct rcu_node {
- 				/*  Initialized from ->qsmaskinitnext at the */
- 				/*  beginning of each grace period. */
- 	unsigned long qsmaskinitnext;
--	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
--				/* Online CPUs for next grace period. */
- 	unsigned long expmask;	/* CPUs or groups that need to check in */
- 				/*  to allow the current expedited GP */
- 				/*  to complete. */
-@@ -355,7 +353,7 @@ struct rcu_state {
- 	const char *name;			/* Name of structure. */
- 	char abbr;				/* Abbreviated name. */
- 
--	raw_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
-+	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
- 						/* Synchronize offline with */
- 						/*  GP pre-initialization. */
- };
+ 	cpus_read_unlock();
 -- 
 2.31.1.189.g2e36527f23
 

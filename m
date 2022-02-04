@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E314A9575
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981DC4A9574
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345043AbiBDItk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:49:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35161 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239817AbiBDIti (ORCPT
+        id S245542AbiBDItg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239008AbiBDIte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:49:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643964577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KmoD3b9T2QlVeR55XUKFS9sSRzif+Zqzh068n/5n3FA=;
-        b=eKwyfvvC8PerbG6KZRGhvKB2+6SFwN3+1oZqnyJIujxh2oRnUth4s+bnpTYBUlP1AJWueP
-        Du8Ze5xke4BBRSt0lIQO6nXbFoAM6zAgdoZgsBwsUV1B/FfjEMI0h3nAKqLcSbSVsYjtq2
-        2Lp27nZg0zGnfNe1QRKVT96D/iZWYNg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-1DiY4RhjPyucIAC6KzuH0Q-1; Fri, 04 Feb 2022 03:49:34 -0500
-X-MC-Unique: 1DiY4RhjPyucIAC6KzuH0Q-1
-Received: by mail-ej1-f69.google.com with SMTP id la22-20020a170907781600b006a7884de505so2243654ejc.7
+        Fri, 4 Feb 2022 03:49:34 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289ECC061755
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 00:49:34 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id z5so4567860plg.8
         for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 00:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KmoD3b9T2QlVeR55XUKFS9sSRzif+Zqzh068n/5n3FA=;
-        b=Cvsyxpx6hgMc56838ErC7uTk+45pVVC2vj2LAWx0zKfK2o/+mM+ujCzRVmbLI218nS
-         +cp1xMO03NqSKo4fSzTkDajjWeT6NNce+MP4zUHXjVTUP/kPxWQM+W4X5F/YsAk1FlYt
-         Mo3AuYkraK+PNGNyBHcdIsWzRV+agF24CpByMQucIcybrpdwzI1ooqzznT0P1QYy/+xC
-         9szeeZbu90ukWH+eijlycwV4eFbo2rHkBht+qq06Qnx+aNpNjxfufZp8dl0gn5gfyDMR
-         /n6PLOlB73Itof809g9nA3seJ6KD1LkQ8ui+BrBO9Sd4ZT5wNyuvNv+2e4YxrabtjsWq
-         bokQ==
-X-Gm-Message-State: AOAM532jghW1A5xpFQGx+RSRbxPI/+0XKAa0/52AL3wIL59y57hm+ovR
-        BiR7GrQXQU2nnsS9hwQk487Uvx4S2Zk2aPnP3EaXNucAmEemNJeQVIm/WZwvcs5bZFh9BX+rKG2
-        cm/wrGnR2UcZRSQqfDBtODG+W
-X-Received: by 2002:a17:907:2d88:: with SMTP id gt8mr1604545ejc.618.1643964573347;
-        Fri, 04 Feb 2022 00:49:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxvInqjlWbjztNR1P4DcWcUE2FAOcKPCXPBcb6/ec1lRJOz1W9DqXcHE6darCzcl4xe6tB2fg==
-X-Received: by 2002:a17:907:2d88:: with SMTP id gt8mr1604530ejc.618.1643964573160;
-        Fri, 04 Feb 2022 00:49:33 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id g9sm428003ejf.33.2022.02.04.00.49.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 00:49:32 -0800 (PST)
-Message-ID: <53c1864c-f966-0412-deb5-10912e84555c@redhat.com>
-Date:   Fri, 4 Feb 2022 09:49:26 +0100
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=2J4gOGy76v18fwmDz7/W30jC+p5h+BESQmcDaVovKrlGDQAe4UiG5Xqz/kpAncqK9J
+         /SoEa/gdQKMjWW59hgo9bP5+CQ8fSxWkmgXeP+9/mv4scyxbfnzbaZLNfiQXcL2F6m12
+         xYurmraE7RuNzR6v0ap1UkjIF+5IYluHn6RJ6yKESPDdkP8usCYalYvYf3L/cOix/zxQ
+         FKRKf922ArcANNVnT3zREMCbg7eHLzmqURcumFhEqAWaxs0W7h41ROiLDETHrxH4D40R
+         5Uy74dxfZ7OkNcsn0MndFkpxwKFTs809HZukF4k/xmSphsMeS+73+OEzEZr2lej1uLTK
+         Sgjw==
+X-Gm-Message-State: AOAM530zGihP//IbZi2Gog0iGvBjFszvLkdlS3MsritiAX75dFdKDiRr
+        9SDr/VFFHB39TxMtXzXCr+wa+qgWe6TtYeqTrvo=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/6] KVM: selftests: Introduce selftests for enlightened
- MSR-Bitmap feature
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org
-References: <20220203104620.277031-1-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220203104620.277031-1-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 11:46, Vitaly Kuznetsov wrote:
-> KVM gained support for enlightened MSR-Bitmap Hyper-V feature (Hyper-V
-> on KVM) for both nVMX and nSVM, test it in selftests.
-> 
-> Vitaly Kuznetsov (6):
->    KVM: selftests: Adapt hyperv_cpuid test to the newly introduced
->      Enlightened MSR-Bitmap
->    KVM: selftests: nVMX: Properly deal with 'hv_clean_fields'
->    KVM: selftests: nVMX: Add enlightened MSR-Bitmap selftest
->    KVM: selftests: nSVM: Set up MSR-Bitmap for SVM guests
->    KVM: selftests: nSVM: Update 'struct vmcb_control_area' definition
->    KVM: selftests: nSVM: Add enlightened MSR-Bitmap selftest
-> 
->   tools/testing/selftests/kvm/Makefile          |   1 +
->   .../selftests/kvm/include/x86_64/evmcs.h      | 150 ++++++++++++++-
->   .../selftests/kvm/include/x86_64/svm.h        |   9 +-
->   .../selftests/kvm/include/x86_64/svm_util.h   |   6 +
->   tools/testing/selftests/kvm/lib/x86_64/svm.c  |   6 +
->   .../testing/selftests/kvm/x86_64/evmcs_test.c |  64 ++++++-
->   .../selftests/kvm/x86_64/hyperv_cpuid.c       |  29 +--
->   .../selftests/kvm/x86_64/hyperv_svm_test.c    | 175 ++++++++++++++++++
->   8 files changed, 424 insertions(+), 16 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
-> 
+I NEED TRUST.
 
-Queued, thanks.
+Hope you are in good health with your family.
 
-Paolo
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
 
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
+
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
+
+Please get back to me through this Email Address komizongo2020@gmail.com
+
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.

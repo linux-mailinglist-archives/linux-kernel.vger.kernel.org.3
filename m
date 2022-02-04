@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3694A9ABC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566EA4A9AC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359205AbiBDOLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232803AbiBDOLw (ORCPT
+        id S1359238AbiBDOMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:12:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54329 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1359229AbiBDOMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:11:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA75C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:11:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74B3160C09
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:11:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B22AC340E9
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:11:50 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="N2whDa6P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643983907;
+        Fri, 4 Feb 2022 09:12:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643983941;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OeJsq+4IasIrFGg0OXj6RdIsVHdb3/r+NoA3dw1M+b8=;
-        b=N2whDa6PnIqA5ykUmCT6YAFPwmDsJeLrjG2y1DK/gbwbfk46RC0Fw6nvkZTtKolu43LTNV
-        VEeNCQyX+nxNUYAvIQuViNDjqKHcXTu6p/R3F5AGzfWYK/A/kG6dBkeDgv/s6od/wOWFOT
-        GsfxI1MSbIElqoOi+3HaWg2v6uQImzQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a163478c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 4 Feb 2022 14:11:47 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id w81so18967691ybg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:11:46 -0800 (PST)
-X-Gm-Message-State: AOAM530238KQZ4IGD2vOe3iA8bReLcrkC5dSexx0k0lU9VMgt0GQEWgj
-        QIMiOKI435hugiWMPeCKyqbjR954WnTSb2BLZi0=
-X-Google-Smtp-Source: ABdhPJzcyhDrdy62YhCtldRfRsEXSZqOuTn1RKj+key+c0AMMPyjTmYN5KV8F/LWTOQpNTF4XuNyzWIPsV5vksajy9o=
-X-Received: by 2002:a25:9088:: with SMTP id t8mr2753751ybl.113.1643983905375;
- Fri, 04 Feb 2022 06:11:45 -0800 (PST)
+        bh=KItnbBDoQWGxAStE9x/Omo/R1q/taazm8Gbl7PqYOjc=;
+        b=Iu+McOYBk1NKxVrMiAES6qF0s6asngAZKoj9ef/3UuDd3UJPnaTIt+mBgNoj3LCip8vdez
+        JQSql+ucyWioZWW/QMBh7ziitMNpyJ9zuJHyzYsaA6S2OQCymBs7MEVjyUUoCLBnClyOGD
+        4EFiIPUNLxG8sXXHmE6DgjrAdGIYOAM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-656-0Aiy9KUBOq-xAmDLar4lRA-1; Fri, 04 Feb 2022 09:12:20 -0500
+X-MC-Unique: 0Aiy9KUBOq-xAmDLar4lRA-1
+Received: by mail-wm1-f69.google.com with SMTP id r66-20020a1c4445000000b00355272f7d08so640956wma.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:12:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KItnbBDoQWGxAStE9x/Omo/R1q/taazm8Gbl7PqYOjc=;
+        b=4IBxB/QjzycySg674epLVRxuOihUWFnw7OTUWuoCUeOPRDUFyOE2powVZb3bG567sY
+         fL9k6wHDOlwJ2blcG2s+G7KqbUvKMoP9CKrG5qCsR4eYmLyIOaj1eJF4tLjNvqpcLNjU
+         vWNZLZNB6ncMQmPaEMhAiVwR36l2oUi01hYLve+OEaZIoerMUr+mIbvl/UGca2JZA9wg
+         Lmg3p8P5AjUV9RlFHCyU4NtGD+9EBF8lcy9Gwc7Za00EP58eyVYk41+9bHPOzeLN0BuS
+         94WV3Tqu9I7ByosxV1E9I4ZoJXtFoRKJNqDIMJ3SHVFxFbn4Wxt9dgn/bnIYBEjzwqMh
+         mLww==
+X-Gm-Message-State: AOAM533HC/jc91UJy+AdR8soAcSbXWfUsrToZSwmYWLrIK8RoZhUxud5
+        AKVptN3eYvSvqhUDNTxRr1kCEDvKN8j7WlKPKwIsXHxhwKx6wfvFE1n2n6BJmfjYuOsmOp6D5nJ
+        Lj42uoNw8hjzTQTBmG6iU+vEe
+X-Received: by 2002:a05:600c:1d8b:: with SMTP id p11mr2385834wms.115.1643983939111;
+        Fri, 04 Feb 2022 06:12:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJztIKbYGGYYsqOYvoXlouVCeffwnsLMQlwE5LqaJBGhLKzE5ulVDx77gLhM4YlpnNr0MzeTyg==
+X-Received: by 2002:a05:600c:1d8b:: with SMTP id p11mr2385818wms.115.1643983938849;
+        Fri, 04 Feb 2022 06:12:18 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m12sm2480308wrp.61.2022.02.04.06.12.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 06:12:18 -0800 (PST)
+Message-ID: <5892749f-0bb0-68f5-c3d2-8ceedfc6b162@redhat.com>
+Date:   Fri, 4 Feb 2022 15:12:17 +0100
 MIME-Version: 1.0
-References: <CAHmME9pe2BEJV4WiZNHmDmH_XK621Qqr1JCBdgTNZmr4JGBA4w@mail.gmail.com>
- <20220128223548.97807-1-Jason@zx2c4.com> <CAHmME9qtjZX2kVNSQqUsTrZv1cdR8y6n3yZS-RnpVCCzX9okcA@mail.gmail.com>
- <Yf0JlXf3ARsBpL9K@linutronix.de> <CAHmME9r0XxX3LqNLpVeqAjDQ_OVskPf15QOwxtZYy0tb_x_7HQ@mail.gmail.com>
- <Yf0xy4kZ2Mn65yp8@linutronix.de>
-In-Reply-To: <Yf0xy4kZ2Mn65yp8@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 4 Feb 2022 15:11:34 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oOMhRVybTgHXT+oOXhMkdx7FVY7oSc-rHr=6AvZCVo=w@mail.gmail.com>
-Message-ID: <CAHmME9oOMhRVybTgHXT+oOXhMkdx7FVY7oSc-rHr=6AvZCVo=w@mail.gmail.com>
-Subject: Re: [PATCH v2] random: remove batched entropy locking
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/4] MAINTAINERS: Add entry for Solomon SSD130X OLED
+ displays DRM driver
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-4-javierm@redhat.com>
+ <Yf0wzOP/kaubDAhP@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <Yf0wzOP/kaubDAhP@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+Hello Andy,
 
-On Fri, Feb 4, 2022 at 3:02 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> The commit in tree you cited is b43db859a36cb553102c9c80431fc44618703bda.
-> It does not mention anything regarding faster nor the performance
-> improvement and conditions (hoth path, etc). It still has a stable tag.
+On 2/4/22 14:57, Andy Shevchenko wrote:
+> On Fri, Feb 04, 2022 at 02:43:46PM +0100, Javier Martinez Canillas wrote:
+>> To make sure that tools like the get_maintainer.pl script will suggest
+>> to Cc me if patches are posted for this driver.
+>>
+>> Also include the Device Tree binding for the old ssd1307fb fbdev driver
+>> since the new DRM driver was made compatible with the existing binding.
+> 
+> ...
+> 
+>>  drivers/gpu/drm/drm_format_helper.c | 2 +-
+> 
+> Nothing about this in the commit message...
+> 
+> Stray change?
+> 
 
-It dropped the Cc: stable@. It still has the Fixes:. I can get rid of
-the Fixes: too. I'll improve that message a bunch for a potential v3.
+Sigh, I'm not sure how added that change. Just ignore it, I'll fix it
+on v3 or when applying if there isn't another revision of this series.
 
-> > Maybe it'd be best to retain the spinlock_t, which will amount to
-> > disabling interrupts on !PREEMPT_RT, since it'll never be contended,
-> > but will turn into a mutex on PREEMPT_RT, where it'll do the right
-> > thing from an exclusivity perspective. Would this be reasonable?
->
-> what does retain the spinlock_t mean since we already have a spinlock_t?
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-The idea would be to keep using spinlock_t like we do now -- no change
-there -- but move to using this atomic generation counter so that
-there's never any contention. Actually, though, I worry that that
-approach would throw out the gains we're getting by chucking the
-spinlock in the first place.
-
-What if we keep a spinlock_t there on PREEMPT_RT but stick with
-disabling interrupts on !PREEMPT_RT? I wish there was a solution or an
-API that amounted to the same thing so there wouldn't need to be an
-#ifdef, but I don't know what that'd be.
-
-Jason

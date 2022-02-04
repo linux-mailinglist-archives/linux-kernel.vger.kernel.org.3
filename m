@@ -2,70 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F26A4A9864
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7684A9866
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358384AbiBDL2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 06:28:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58363 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358367AbiBDL2I (ORCPT
+        id S1358401AbiBDL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 06:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358367AbiBDL3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 06:28:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643974088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u0FPs2CDlRW+Fb9oQ77+2A05eSpiihwC/x/mTnGeFY4=;
-        b=LtT/pNFV8mnxTicr4vLWSrKqExew42ctay98j1mmVqdL8EFuquTYrFDfxuS4hx8c2XGFLg
-        +UfXqNY5ybiscTKgLr6lEsNRW83/FMxHtD3ZSF41qbhWLzrer8QOm9gdlfS2Lu9JXaEgHP
-        F/E+zjjHCSMi5Bl12YVEPhEC1arRSsk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-475-efsBbjRQMauhgUaQlgaRPA-1; Fri, 04 Feb 2022 06:28:07 -0500
-X-MC-Unique: efsBbjRQMauhgUaQlgaRPA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B3B6984BA40;
-        Fri,  4 Feb 2022 11:28:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A63D7D72B;
-        Fri,  4 Feb 2022 11:28:04 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220202024137.2516438-10-Liam.Howlett@oracle.com>
-References: <20220202024137.2516438-10-Liam.Howlett@oracle.com> <20220202024137.2516438-1-Liam.Howlett@oracle.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     dhowells@redhat.com,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v5 09/70] mm: Start tracking VMAs with maple tree
+        Fri, 4 Feb 2022 06:29:24 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10666C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 03:29:24 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFwmH-0002l2-Pj; Fri, 04 Feb 2022 12:29:21 +0100
+Message-ID: <ed18f247-1ac4-5467-d876-e5b92e89f1de@leemhuis.info>
+Date:   Fri, 4 Feb 2022 12:29:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1191620.1643974083.1@warthog.procyon.org.uk>
-Date:   Fri, 04 Feb 2022 11:28:03 +0000
-Message-ID: <1191621.1643974083@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [tip: irq/urgent] PCI/MSI: Remove bogus warning in
+ pci_irq_get_affinity()
+Content-Language: en-BS
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org
+References: <87ee4n38sm.ffs@tglx>
+ <164396506527.16921.1990922190197899743.tip-bot2@tip-bot2>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+In-Reply-To: <164396506527.16921.1990922190197899743.tip-bot2@tip-bot2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1643974164;6d3001aa;
+X-HE-SMSGID: 1nFwmH-0002l2-Pj
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liam Howlett <liam.howlett@oracle.com> wrote:
+[stripped the CC list to avoid spamming people, we all get enough mail]
 
-> +	maple_tree_init();
+Thx for fixing the regression. Sadly the fix didn't link to all places
+where the issue was reported using "Link:" tags, as explained by both
+Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst
 
-Can you move this into patch 7 please?  I would like to base my branch on
-maple trees alone (ie. patches 1-8) without picking up any of the VMA changes,
-but this bit is missing and the maple trees don't work without it.
+Please consider placing them in the future, at least one tool is relying
+on the presence of such links: my regression tracking bot 'regzbot',
+which using them to automatically detect patch posting and commits
+fixing tracked regressions -- which makes my my life as the Linux
+kernel's regression tracker a lot easier, as otherwise I have to tell
+regzbot about fixes manually:
 
-Thanks,
-David
+#regzbot fixed-by: dd7f5a11ac5a6f733f422dc22b
+
+tia!
+
+Ciao, Thorsten
+
+On 04.02.22 09:57, tip-bot2 for Thomas Gleixner wrote:
+> The following commit has been merged into the irq/urgent branch of tip:
+> 
+> Commit-ID:     dd7f5a11ac5a6f733f422dc22b4d145d3260304e
+> Gitweb:        https://git.kernel.org/tip/dd7f5a11ac5a6f733f422dc22b4d145d3260304e
+> Author:        Thomas Gleixner <tglx@linutronix.de>
+> AuthorDate:    Mon, 31 Jan 2022 22:02:46 +01:00
+> Committer:     Thomas Gleixner <tglx@linutronix.de>
+> CommitterDate: Fri, 04 Feb 2022 09:54:20 +01:00
+> 
+> PCI/MSI: Remove bogus warning in pci_irq_get_affinity()
+> 
+> The recent overhaul of pci_irq_get_affinity() introduced a regression when
+> pci_irq_get_affinity() is called for an MSI-X interrupt which was not
+> allocated with affinity descriptor information.
+> 
+> The original code just returned a NULL pointer in that case, but the rework
+> added a WARN_ON() under the assumption that the corresponding WARN_ON() in
+> the MSI case can be applied to MSI-X as well.
+> 
+> In fact the MSI warning in the original code does not make sense either
+> because it's legitimate to invoke pci_irq_get_affinity() for a MSI
+> interrupt which was not allocated with affinity descriptor information.
+> 
+> Remove it and just return NULL as the original code did.
+> 
+> Fixes: f48235900182 ("PCI/MSI: Simplify pci_irq_get_affinity()")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/r/87ee4n38sm.ffs@tglx
+> 
+> ---
+>  drivers/pci/msi/msi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> index c19c7ca..9037a78 100644
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -1111,7 +1111,8 @@ const struct cpumask *pci_irq_get_affinity(struct pci_dev *dev, int nr)
+>  	if (!desc)
+>  		return cpu_possible_mask;
+>  
+> -	if (WARN_ON_ONCE(!desc->affinity))
+> +	/* MSI[X] interrupts can be allocated without affinity descriptor */
+> +	if (!desc->affinity)
+>  		return NULL;
+>  
+>  	/*
 

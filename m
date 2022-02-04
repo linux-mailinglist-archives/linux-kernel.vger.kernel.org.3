@@ -2,271 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13454A96E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7164A96EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358026AbiBDJes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347693AbiBDJeW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:34:22 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BAAC061749
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 01:34:22 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu18so11484509lfb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 01:34:22 -0800 (PST)
+        id S239926AbiBDJgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:36:15 -0500
+Received: from mail-dm3nam07on2087.outbound.protection.outlook.com ([40.107.95.87]:51937
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236491AbiBDJgN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 04:36:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KpVxtqcf+3m8J9mvEDRwDjSSAGF6Oa+N+DmDoaddYtqgQf0RyAuRuJrT5DikowmeTNIqvO4rJgpbQG+4IsoVyPwRCcwXf9nP0Ji/aVZAWY1uvpBjk99HmSCNuHFEUb8bN3ldwtd7oj8PqjT79ZGfPTWVq2qu/dYpZWxBFfQqXG3S55I8VyW1wn6Y8St7VjwXqzHs3dL4vQTnTiwnL8YXwJMkfmdTfmMuIBZdS4wrOTpL1/mEjXtNbu9BOZJ6cGZxe0GnG2EsBL2GFui1+09Tr0MddMvf/UtviYOy4v/9TXW0qexbHIyKLIgXlEzLWgQGh1SVgKOseKcCcTKe8U4/eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+5/v13e0zbCTdbiIruov6vmZwxrPr+vhv/OVjEsv4SY=;
+ b=HXj2TD3GlymycRKSBYy+3tJtNpIdYsRbpK3bIkPte2QTn5KShqHUwV8oTh32mXlaEbAgorZ7biQcJ68E4wVFKYwFKKgbfI9vBINCu+KuPwyF4hf90ixptEw4VLnjcx+/Pl9qK5ChOFqrtw3LTG3WwsyOLNa0J88I/HUvPTynjeo48O0XUwcXS0+4jWZlG791TajABj5Nxn4+RlqGUjd+Y5aFD3mermYB09IL8WRGSxPOMhreUazbkwMkistAQvX9FtYtyPhrDzPkPa0t+UbUEcbE2H0SqJYkpCXAGA8JOmKw3QOPW54+a3Ca/Z89YS3n5cAxKH5K10S7BhVBMU5qgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=renesas.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5yxwOzLChV0nlm4fspnb3kRsF537bDz0hCyoL1WhejM=;
-        b=LLeppM51aXShBamlgRBIU6V6i4xBhv8p9AW/Axk2xpKaEoBZYXg97YkqTx0juvDiGD
-         gP7j0iJ6h16gGVuLXhYQPfC1fTPObxfYliebQUG+uxqqsJ+rhCMGRMBK29o5wOhZZqxS
-         sZoO0XJ3p40X/9anCo564C90es/nwYO32c9RfvPE3nCvqI+4h3bF9sgITN06Nb7X4Z0+
-         XMoTNd9Ld085luzbMYtkGD2UAUeun9DVcxHgMTSZV36pGxaQiIwhWRduhFu7Sxe92YCe
-         nm8BkGI7WlRYLwL5Efh35x2b74Ie0K9Tmprq+OE5GLOAZXiQQCTkdVGjm55picphqQCB
-         tvMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5yxwOzLChV0nlm4fspnb3kRsF537bDz0hCyoL1WhejM=;
-        b=FpimL5xaun+MOVLhFMO01s0C3tuuYHTfWtN4Twu3FA7Oett1Rt7BdCE50vcFL8hlYm
-         mBGWMQ11MAPy3GD3Y1r58KyjAhNWQE6GQNtChNOj2//LVny1yBT3ekkytbNEFv7V7DZW
-         +xUxhAKhSO4B35L5nYKugyxXdeNkYlKg8OEZkk5x7XRtvqO8tA19Xr+g6lJVNKiJzwKf
-         JnCmjanCyZHW60I5OvqoorZvvfHy6/Cc7HYkgONlbBrwOVSoreTcYe68OQU1+/8gzANe
-         nViwaeYt2yd/gcUxIJf8E+Fi4QbjfrJHGmtVSi9ovYhvwtKuFFoRsKT1VJ7w8KuCwfJx
-         X3Jw==
-X-Gm-Message-State: AOAM530kgS0IvabrN54fXqS7lUm4dCxgcMeJzg+JXk6u34hj1UnERzAx
-        OQNE3Yum+MQ22MRI7U9YrZnZpNp0evC9xw==
-X-Google-Smtp-Source: ABdhPJxbYt/ERKyQoTGpi/Y14rpMGaMhONsrRNgYsiPd5ZAK9vMo1582tbugBYGfIWGrD9nU0ZTirQ==
-X-Received: by 2002:a05:6512:68e:: with SMTP id t14mr1784843lfe.366.1643967260703;
-        Fri, 04 Feb 2022 01:34:20 -0800 (PST)
-Received: from jade.urgonet (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
-        by smtp.gmail.com with ESMTPSA id u28sm230550lfl.160.2022.02.04.01.34.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 01:34:20 -0800 (PST)
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Devaraj Rangasamy <Devaraj.Rangasamy@amd.com>,
-        Rijo Thomas <Rijo-john.Thomas@amd.com>,
-        David Howells <dhowells@redhat.com>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Subject: [PATCH v4 10/10] tee: refactor TEE_SHM_* flags
-Date:   Fri,  4 Feb 2022 10:33:59 +0100
-Message-Id: <20220204093359.359059-11-jens.wiklander@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220204093359.359059-1-jens.wiklander@linaro.org>
-References: <20220204093359.359059-1-jens.wiklander@linaro.org>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+5/v13e0zbCTdbiIruov6vmZwxrPr+vhv/OVjEsv4SY=;
+ b=I93QrtbXVOzoin/eLPQ1r4h1Pn1QUl5dc2PoCbRRDH7i0xAua5kASMtGRul2SbeMkbP42/0EUCNRQ/rkZQFQOHS2RAyhhW4S/i5Y7aOrsTDR7Rudg2ygzh8Rjyks5mIhGZKIPNR3j1CUhR0/AROmBGqGifi4XszhvQ49kzhhf00=
+Received: from BN9PR03CA0844.namprd03.prod.outlook.com (2603:10b6:408:13d::9)
+ by SN6PR02MB5293.namprd02.prod.outlook.com (2603:10b6:805:6a::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Fri, 4 Feb
+ 2022 09:36:10 +0000
+Received: from BN1NAM02FT045.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::9a) by BN9PR03CA0844.outlook.office365.com
+ (2603:10b6:408:13d::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Fri, 4 Feb 2022 09:36:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT045.mail.protection.outlook.com (10.13.2.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Fri, 4 Feb 2022 09:36:09 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 4 Feb 2022 01:36:09 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 4 Feb 2022 01:36:09 -0800
+Envelope-to: alexander.helms.jy@renesas.com,
+ linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-clk@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org,
+ arnd@arndb.de,
+ robh+dt@kernel.org,
+ sboyd@kernel.org,
+ mturquette@baylibre.com,
+ geert+renesas@glider.be,
+ david.cater.jc@renesas.com
+Received: from [10.254.241.49] (port=46380)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nFv0j-0009NC-6l; Fri, 04 Feb 2022 01:36:09 -0800
+Message-ID: <008026a5-a9a5-0d13-867d-fc99e95af09b@xilinx.com>
+Date:   Fri, 4 Feb 2022 10:36:05 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v8 0/2] Renesas 8T49N241 device driver
+Content-Language: en-US
+To:     Alex Helms <alexander.helms.jy@renesas.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>,
+        <mturquette@baylibre.com>, <geert+renesas@glider.be>,
+        <david.cater.jc@renesas.com>, <michal.simek@xilinx.com>
+References: <20211021213106.315-1-alexander.helms.jy@renesas.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <20211021213106.315-1-alexander.helms.jy@renesas.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b32a7805-088c-40fc-fecc-08d9e7c1c6c2
+X-MS-TrafficTypeDiagnostic: SN6PR02MB5293:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR02MB52933FACCCE9E29B77AF4D7DC6299@SN6PR02MB5293.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JGVl8o3TkdLRwKc7GTZgn8qbiWa+90BWcA1+ITuTyJnJPmJ++z1AbzxAvgyuoXFFS2cehCUqaedeSZE2/SADzDqslQnzJoBJGscCJXdB0bGkaJ3W/7a8k4TsYD62CmnJI89eJqSgihE3eDpBuMWC5ngA9j3N863mGpYdciqCi9s5MR61lJgo2Cdf29Ymarzjeex6AECgcLUHgYG0asW8ILGCIynlcQxQuOHZbJg9cW0kO1UofMCrXB3aGptpKTpKR6bnlx4106EQgDmiNlM3ps+uzv9vnZUElde95UMLWkFPuOvchVp6Obk4PZDDMsRqiNRRi8hZ55MgJm3bvB7fitz0TCn7a04Ezw+KPed4JMKno9p8ei/hxz+F2yRkWIJ/Czw8aVxpqmWc7fA09GASoHv3CudXwBYP2rW80+W4lhHn7WaFbGl3W9PwuyH96sar82uRTbVnZqozpJEEosr8YK/CoJVjnTX+BFFltwWV2r0y90i+WAROkFS83bcd41rTuo6JLiSsprPmQZEA2/rbMiyEZm6kvIxBXpK4jCZMyU7hslwBwREUFYaPhedTD6l59Nk7Sg5XHwDIkYfTcigfTZJmXe4/AHzCvdCQCDubCug5vRjEGSi4IpzCkB9nbkL+iwIR6tbJucPiGdhbkIqUyT3Y44mzEQOyhNEr7Wy+Ge2KRK45LGSZYJ4RDzUXxS5dUkhh89wBnqI4tsXNmFKmYA==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(2616005)(26005)(426003)(336012)(31686004)(83380400001)(107886003)(316002)(9786002)(110136005)(54906003)(36860700001)(6666004)(31696002)(8676002)(4326008)(2906002)(186003)(7416002)(5660300002)(8936002)(508600001)(47076005)(53546011)(70586007)(70206006)(36756003)(82310400004)(44832011)(7636003)(356005)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 09:36:09.7601
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b32a7805-088c-40fc-fecc-08d9e7c1c6c2
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT045.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB5293
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removes the redundant TEE_SHM_DMA_BUF, TEE_SHM_EXT_DMA_BUF,
-TEE_SHM_MAPPED and TEE_SHM_KERNEL_MAPPED flags.
+Hi,
 
-TEE_SHM_REGISTER is renamed to TEE_SHM_DYNAMIC in order to better
-match its usage.
 
-Assigns new values to the remaining flags to void gaps.
+On 10/21/21 23:31, Alex Helms wrote:
+> Changes in v8:
+>   * Use __ffs instead of ffs
+>   * Change from 64 bit to 32 bit division
+>   * Minor math changes to avoid possible overflow
+> Changes in v7:
+>   * Rebase on v5.15-rc6
+>   * Rename renesas24x_* functions to r8t49n24x_*
+>   * Implement determine_rate instead of round_rate
+>   * Implement prepare/unprepare
+>   * Use devm_clk_get_optional and ensure clk0, clk1, and xtal are attempted before dev_err_probe
+>   * Use ffs() in __renesas_bits_to_shift
+>   * Remove regmap read/write retry
+>   * More consistent debug logging
+>   * Resolved many C related naming and initialization issues
+> Changes in v6:
+>   * Rebase on v5.15-rc1
+>   * Ensure Rob's Reviewed-by tag is included
+> Changes in v5:
+>   * Rebase on v5.14-rc2
+>   * Move driver files from clk/renesas to clk
+> Changes in v4:
+>   * Add vendor prefix to dt binding compatible property
+>   * Remove clock-names description in dt binding
+>   * Remove redundant 'input-' prefix on clock names
+>   * Clarify the settings property in dt binding, add data type
+>   * Fix define spacing
+> Changes in v3:
+>   * Clarify settings property in device tree bindings schema is optional
+> Changes in v2:
+>   * Correct missing semicolon in 8t49n24x-core.c
+> 
+> Alex Helms (2):
+>    dt-bindings: Add binding for Renesas 8T49N241
+>    clk: Add ccf driver for Renesas 8T49N241
+> 
+>   .../bindings/clock/renesas,8t49n241.yaml      | 190 +++++
+>   MAINTAINERS                                   |   7 +
+>   drivers/clk/8t49n24x-core.c                   | 752 ++++++++++++++++++
+>   drivers/clk/8t49n24x-core.h                   | 242 ++++++
+>   drivers/clk/8t49n24x.c                        | 565 +++++++++++++
+>   drivers/clk/Kconfig                           |  21 +
+>   drivers/clk/Makefile                          |   2 +
+>   7 files changed, 1779 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/clock/renesas,8t49n241.yaml
+>   create mode 100644 drivers/clk/8t49n24x-core.c
+>   create mode 100644 drivers/clk/8t49n24x-core.h
+>   create mode 100644 drivers/clk/8t49n24x.c
+> 
+> 
+> base-commit: 519d81956ee277b4419c723adfb154603c2565ba
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
-Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
----
- drivers/tee/optee/smc_abi.c |  4 ++--
- drivers/tee/tee_shm.c       | 23 +++++++++++------------
- drivers/tee/tee_shm_pool.c  |  2 +-
- include/linux/tee_drv.h     | 21 +++++++++------------
- 4 files changed, 23 insertions(+), 27 deletions(-)
+DT binding has been already reviewed and driver itself was sent long time ago.
+What's the problem now?
 
-diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index 0b68127a8afa..375a40eef36c 100644
---- a/drivers/tee/optee/smc_abi.c
-+++ b/drivers/tee/optee/smc_abi.c
-@@ -228,7 +228,7 @@ static int optee_to_msg_param(struct optee *optee,
- 		case TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT:
- 		case TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT:
- 		case TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT:
--			if (tee_shm_is_registered(p->u.memref.shm))
-+			if (tee_shm_is_dynamic(p->u.memref.shm))
- 				rc = to_msg_param_reg_mem(mp, p);
- 			else
- 				rc = to_msg_param_tmp_mem(mp, p);
-@@ -669,7 +669,7 @@ static void handle_rpc_func_cmd_shm_alloc(struct tee_context *ctx,
- 
- 	sz = tee_shm_get_size(shm);
- 
--	if (tee_shm_is_registered(shm)) {
-+	if (tee_shm_is_dynamic(shm)) {
- 		struct page **pages;
- 		u64 *pages_list;
- 		size_t page_num;
-diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-index 9db571253802..f31e29e8f1ca 100644
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -58,7 +58,7 @@ static void tee_shm_release(struct tee_device *teedev, struct tee_shm *shm)
- {
- 	if (shm->flags & TEE_SHM_POOL) {
- 		teedev->pool->ops->free(teedev->pool, shm);
--	} else if (shm->flags & TEE_SHM_REGISTER) {
-+	} else if (shm->flags & TEE_SHM_DYNAMIC) {
- 		int rc = teedev->desc->ops->shm_unregister(shm->ctx, shm);
- 
- 		if (rc)
-@@ -139,8 +139,7 @@ static struct tee_shm *shm_alloc_helper(struct tee_context *ctx, size_t size,
-  */
- struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
- {
--	u32 flags = TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER |
--		    TEE_SHM_POOL;
-+	u32 flags = TEE_SHM_DYNAMIC | TEE_SHM_POOL;
- 	struct tee_device *teedev = ctx->teedev;
- 	struct tee_shm *shm;
- 	void *ret;
-@@ -185,7 +184,7 @@ struct tee_shm *tee_shm_alloc_user_buf(struct tee_context *ctx, size_t size)
-  */
- struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size)
- {
--	u32 flags = TEE_SHM_MAPPED | TEE_SHM_REGISTER | TEE_SHM_POOL;
-+	u32 flags = TEE_SHM_DYNAMIC | TEE_SHM_POOL;
- 
- 	return shm_alloc_helper(ctx, size, PAGE_SIZE, flags, -1);
- }
-@@ -209,7 +208,7 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc_kernel_buf);
-  */
- struct tee_shm *tee_shm_alloc_priv_buf(struct tee_context *ctx, size_t size)
- {
--	u32 flags = TEE_SHM_MAPPED | TEE_SHM_PRIV | TEE_SHM_POOL;
-+	u32 flags = TEE_SHM_PRIV | TEE_SHM_POOL;
- 
- 	return shm_alloc_helper(ctx, size, sizeof(long) * 2, flags, -1);
- }
-@@ -306,7 +305,7 @@ register_shm_helper(struct tee_context *ctx, unsigned long addr,
- struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
- 					  unsigned long addr, size_t length)
- {
--	u32 flags = TEE_SHM_DMA_BUF | TEE_SHM_USER_MAPPED | TEE_SHM_REGISTER;
-+	u32 flags = TEE_SHM_USER_MAPPED | TEE_SHM_DYNAMIC;
- 	struct tee_device *teedev = ctx->teedev;
- 	struct tee_shm *shm;
- 	void *ret;
-@@ -350,7 +349,7 @@ struct tee_shm *tee_shm_register_user_buf(struct tee_context *ctx,
- struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
- 					    void *addr, size_t length)
- {
--	u32 flags = TEE_SHM_REGISTER | TEE_SHM_KERNEL_MAPPED;
-+	u32 flags = TEE_SHM_DYNAMIC;
- 
- 	return register_shm_helper(ctx, (unsigned long)addr, length, flags, -1);
- }
-@@ -394,7 +393,7 @@ int tee_shm_get_fd(struct tee_shm *shm)
- {
- 	int fd;
- 
--	if (!(shm->flags & TEE_SHM_DMA_BUF))
-+	if (shm->id < 0)
- 		return -EINVAL;
- 
- 	/* matched by tee_shm_put() in tee_shm_op_release() */
-@@ -424,7 +423,7 @@ EXPORT_SYMBOL_GPL(tee_shm_free);
-  */
- int tee_shm_va2pa(struct tee_shm *shm, void *va, phys_addr_t *pa)
- {
--	if (!(shm->flags & TEE_SHM_MAPPED))
-+	if (!shm->kaddr)
- 		return -EINVAL;
- 	/* Check that we're in the range of the shm */
- 	if ((char *)va < (char *)shm->kaddr)
-@@ -446,7 +445,7 @@ EXPORT_SYMBOL_GPL(tee_shm_va2pa);
-  */
- int tee_shm_pa2va(struct tee_shm *shm, phys_addr_t pa, void **va)
- {
--	if (!(shm->flags & TEE_SHM_MAPPED))
-+	if (!shm->kaddr)
- 		return -EINVAL;
- 	/* Check that we're in the range of the shm */
- 	if (pa < shm->paddr)
-@@ -474,7 +473,7 @@ EXPORT_SYMBOL_GPL(tee_shm_pa2va);
-  */
- void *tee_shm_get_va(struct tee_shm *shm, size_t offs)
- {
--	if (!(shm->flags & TEE_SHM_MAPPED))
-+	if (!shm->kaddr)
- 		return ERR_PTR(-EINVAL);
- 	if (offs >= shm->size)
- 		return ERR_PTR(-EINVAL);
-@@ -549,7 +548,7 @@ void tee_shm_put(struct tee_shm *shm)
- 		 * the refcount_inc() in tee_shm_get_from_id() never starts
- 		 * from 0.
- 		 */
--		if (shm->flags & TEE_SHM_DMA_BUF)
-+		if (shm->id >= 0)
- 			idr_remove(&teedev->idr, shm->id);
- 		do_release = true;
- 	}
-diff --git a/drivers/tee/tee_shm_pool.c b/drivers/tee/tee_shm_pool.c
-index 71e0f8ae69aa..058bfbac657a 100644
---- a/drivers/tee/tee_shm_pool.c
-+++ b/drivers/tee/tee_shm_pool.c
-@@ -30,7 +30,7 @@ static int pool_op_gen_alloc(struct tee_shm_pool *pool, struct tee_shm *shm,
- 	 * This is from a static shared memory pool so no need to register
- 	 * each chunk, and no need to unregister later either.
- 	 */
--	shm->flags &= ~TEE_SHM_REGISTER;
-+	shm->flags &= ~TEE_SHM_DYNAMIC;
- 	return 0;
- }
- 
-diff --git a/include/linux/tee_drv.h b/include/linux/tee_drv.h
-index a3b663ef0694..911cad324acc 100644
---- a/include/linux/tee_drv.h
-+++ b/include/linux/tee_drv.h
-@@ -20,14 +20,11 @@
-  * specific TEE driver.
-  */
- 
--#define TEE_SHM_MAPPED		BIT(0)	/* Memory mapped by the kernel */
--#define TEE_SHM_DMA_BUF		BIT(1)	/* Memory with dma-buf handle */
--#define TEE_SHM_EXT_DMA_BUF	BIT(2)	/* Memory with dma-buf handle */
--#define TEE_SHM_REGISTER	BIT(3)  /* Memory registered in secure world */
--#define TEE_SHM_USER_MAPPED	BIT(4)  /* Memory mapped in user space */
--#define TEE_SHM_POOL		BIT(5)  /* Memory allocated from pool */
--#define TEE_SHM_KERNEL_MAPPED	BIT(6)  /* Memory mapped in kernel space */
--#define TEE_SHM_PRIV		BIT(7)  /* Memory private to TEE driver */
-+#define TEE_SHM_DYNAMIC		BIT(0)  /* Dynamic shared memory registered */
-+					/* in secure world */
-+#define TEE_SHM_USER_MAPPED	BIT(1)  /* Memory mapped in user space */
-+#define TEE_SHM_POOL		BIT(2)  /* Memory allocated from pool */
-+#define TEE_SHM_PRIV		BIT(3)  /* Memory private to TEE driver */
- 
- struct device;
- struct tee_device;
-@@ -280,13 +277,13 @@ struct tee_shm *tee_shm_register_kernel_buf(struct tee_context *ctx,
- 					    void *addr, size_t length);
- 
- /**
-- * tee_shm_is_registered() - Check if shared memory object in registered in TEE
-+ * tee_shm_is_dynamic() - Check if shared memory object is of the dynamic kind
-  * @shm:	Shared memory handle
-- * @returns true if object is registered in TEE
-+ * @returns true if object is dynamic shared memory
-  */
--static inline bool tee_shm_is_registered(struct tee_shm *shm)
-+static inline bool tee_shm_is_dynamic(struct tee_shm *shm)
- {
--	return shm && (shm->flags & TEE_SHM_REGISTER);
-+	return shm && (shm->flags & TEE_SHM_DYNAMIC);
- }
- 
- /**
--- 
-2.31.1
+sboyd: Can you please review or pick it up?
+
+Arnd: IIRC someone told me that if there is no activity it could go via your 
+tree too.
+
+Thanks,
+Michal
+
+
 

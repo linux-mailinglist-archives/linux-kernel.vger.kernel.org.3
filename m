@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE864A9928
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E444A9931
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358686AbiBDMS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:18:56 -0500
-Received: from relay3.hostedemail.com ([64.99.140.33]:6281 "EHLO
-        relay3.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355405AbiBDMSw (ORCPT
+        id S1358709AbiBDMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237442AbiBDMV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:18:52 -0500
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id CDA3723327;
-        Fri,  4 Feb 2022 12:18:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 90F8A2D;
-        Fri,  4 Feb 2022 12:18:11 +0000 (UTC)
-Message-ID: <ad56e88206a8d66b715035362abe16ece0bde7d3.camel@perches.com>
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-From:   Joe Perches <joe@perches.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Fri, 04 Feb 2022 04:18:24 -0800
-In-Reply-To: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
-References: <nick.hawkins@hpe.com>
-         <20220202165315.18282-1-nick.hawkins@hpe.com>
-         <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 4 Feb 2022 07:21:27 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE45C061714;
+        Fri,  4 Feb 2022 04:21:27 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso12938816pjv.1;
+        Fri, 04 Feb 2022 04:21:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=dAtkN0WEE99WegUGgzufuxdEl8C+V1DMiMczTkC1l0Q=;
+        b=hdbk/9fxLHRiqvD1U37NmMvWPQfOKqti8FSTg3S/Nme1GurXGQwV8RrkNQoV/6MObR
+         EGzNMx82zO3z/tCxF5VRC30jrRryoxjrUIbBDaCRq8LJSYLhobezVCk7fxpJl9OPLokd
+         3IFA8grrvAs6alWv4nrioEAHwGxw8iS+qNLJW34O99O5t2a9ZpALpncVdXWg73WfUPWS
+         2FkrvdSn0fdjcSJ4bWCw16oAFN5ID+zNw8o7FZpKMJ/iSxeAhfRo4ANUYIJit9q6t4VV
+         AlVICwSvGm8hHcGQEloSIyrUyc4kS6wnPLM2F0KGjKfASp6KEv9dilZUaZlv2WG5AHT5
+         h83w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=dAtkN0WEE99WegUGgzufuxdEl8C+V1DMiMczTkC1l0Q=;
+        b=yq7yS30Kj6yUj2LqWX6q0iPggdFUKj/dlNEuNvC55gYHUTzwECcexq/WXcdzlSGJhS
+         P8ANwcwMx+c8nA886dFdc3MWSfKFRuQuffi3ayt7r8XrRuSRJh9VjSMPqZq65J+4Ynd9
+         Wb4iNkPn5dWa4womnq541lIklIrcmp8vPNWJ/6e3mBHxBmjmzrV0EgvhuZP1Zioj+YJI
+         OAACgvPNXyTIEqKFvnMO8OtqyaPn5optHQ4L1h6CcfDdxv7mC0tdjwXgTV63jjWbxK7M
+         XZ6TmacLkkVfTXitGgf0t/Cgt2n/snPkntiGXHwmvACrX1Z66g8Ahzjgj9M6mWXYzZm/
+         AffA==
+X-Gm-Message-State: AOAM531RiVMq9c26JQa+op3XNSLVs3JFmAyzwAULJYtLeBD6Mb4dZZ/R
+        2N3y080JpjSqIq5h++G0we0=
+X-Google-Smtp-Source: ABdhPJwJTCea7DO7BfEN1Lt2Ch1r23IrSp83zKhGsERdBbziMhky/iIb5X138bQ/bN2IMfwkQyitnA==
+X-Received: by 2002:a17:902:7242:: with SMTP id c2mr2948654pll.168.1643977286912;
+        Fri, 04 Feb 2022 04:21:26 -0800 (PST)
+Received: from [192.168.43.80] (subs28-116-206-12-44.three.co.id. [116.206.12.44])
+        by smtp.gmail.com with ESMTPSA id v22sm2688092pfu.38.2022.02.04.04.21.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 04:21:26 -0800 (PST)
+Message-ID: <3eab9c66-12f1-6c69-e299-c00f5e4e340d@gmail.com>
+Date:   Fri, 4 Feb 2022 19:21:20 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220204091915.247906930@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=2.74
-X-Stat-Signature: sr19sijeo6q79z8ey9jcj9w15gn7bijc
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 90F8A2D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/fXooa1LZuZOlkfFu/TpMmSAbR8ShcuZI=
-X-HE-Tag: 1643977091-269336
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-04 at 12:05 +0000, Russell King (Oracle) wrote:
-> On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-[]
-> > diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-[]
-> > +static irqreturn_t gxp_time_interrupt(int irq, void *dev_id)
-> > +{
-> > +	struct gxp_timer *timer = dev_id;
-> > +	void (*event_handler)(struct clock_event_device *timer);
-> > +
-> > +
+On 04/02/22 16.22, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.20 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> One too many blank lines.
-> 
-> > +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
-> > +		writeb_relaxed(MASK_TCS_TC, timer->control);
-> > +
-> > +		event_handler = READ_ONCE(timer->evt.event_handler);
-> > +		if (event_handler)
-> > +			event_handler(&timer->evt);
-> > +		return IRQ_HANDLED;
-> > +	} else {
-> > +		return IRQ_NONE;
-> > +	}
-> > +}
+Successfully cross-compiled for arm64 (bcm2711_defconfig from raspberry
+pi kernel sources) and ppc64 (ps3_defconfig).
 
-It's also less indented code and perhaps clearer to reverse the test
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-	if (!readb_relaxed(timer->control) & MASK_TCS_TC)
-		return IRQ_NONE;
-
-	writeb_relaxed(MASK_TCS_TC, timer->control);
-
-	event_handler = READ_ONCE(timer->evt.event_handler);
-	if (event_handler)
-		event_handler(&timer->evt);
-
-	return IRQ_HANDLED;
-
-
+-- 
+An old man doll... just what I always wanted! - Clara

@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A8E4AA099
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4B94AA0BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236423AbiBDT7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S239106AbiBDUCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:02:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbiBDT7I (ORCPT
+        with ESMTP id S235681AbiBDT7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:59:08 -0500
+        Fri, 4 Feb 2022 14:59:10 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D0C061744
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92FCC061749
         for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=EiTl9q/RuSenIeiy7aVDh11eq3USPRI+K+nzMLYhC1I=; b=nYZFnIE/kJm3rIxMWsdUQ5p1+1
-        UsF5/II5qPuYXhFuNeCVTlWtyNQs+MeMp9rxkcPz/VBTqSb25An8emwpcu3Fs224hzJNrTWCScZqn
-        j+Bb52waX55cC/s/UvSfTbVwLA4F1fo8Ae/WyDZzmZZMChbckb+ONSZzNEDkdf8Zk9tBiXw0jb+dj
-        2aZoPNEHMlLP9XGKIpoRHZDSg20KeRZcP+hFiD+rqUOWU39cbG/BOjIBQ1PqJ1GaM0xzdDkeLpNFt
-        TsZc+IL19ZluYAkNp1rhKNQ8JclyA882yv0p4/eCKZf+R9B9VWgQWzpASvW9ioUPdx2Fpi8HWqk7p
-        id6mdA+w==;
+        bh=Qp/7CV756EjRflFbilGAM2PWJ4Vh7vDEGJ1jBhnMB60=; b=FEl7wj2ny9VKEO6nnjsFB7DhPI
+        c+Mtk+lRI+R1Ued1Wy+ESTXo7863L3btIBoNRphLP+Jw3wmpRiGei36BTGQEUedkSBsLV8sDQqzup
+        +1AcDx3RPnCrmPNY2liHAnjVeaaVJL0raWdHL84Ov4kNe5M7AQ7V3d5+DMWqXD8x+YF3G/0+8mW7W
+        QJZQ/FzI87aBXaPOPGWAG6YQHklqGPiAFzF3n/hz3ay048DaOyX080qLq2+SNNDMH7nLzsADFY+TZ
+        eyWeCBPdr0YOV6gweWxCX7oMOGXcLktHpKXLA91GGuPPEBXWY+5GVpQYaGyWF+o4Fv9V/5DnXS09Y
+        AjygAdOg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nG4jW-007LmT-OJ; Fri, 04 Feb 2022 19:59:02 +0000
+        id 1nG4jW-007LmZ-SK; Fri, 04 Feb 2022 19:59:02 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 33/75] mm/vmscan: Convert __remove_mapping() to take a folio
-Date:   Fri,  4 Feb 2022 19:58:10 +0000
-Message-Id: <20220204195852.1751729-34-willy@infradead.org>
+Subject: [PATCH 34/75] mm/vmscan: Turn page_check_dirty_writeback() into folio_check_dirty_writeback()
+Date:   Fri,  4 Feb 2022 19:58:11 +0000
+Message-Id: <20220204195852.1751729-35-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
 References: <20220204195852.1751729-1-willy@infradead.org>
@@ -48,141 +48,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes a few hidden calls to compound_head().
+Saves a few calls to compound_head().
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- mm/vmscan.c | 44 +++++++++++++++++++++++---------------------
- 1 file changed, 23 insertions(+), 21 deletions(-)
+ mm/vmscan.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 9f11960b1db8..15cbfae0d8ec 100644
+index 15cbfae0d8ec..e8c5855bc38d 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -1237,17 +1237,16 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
-  * Same as remove_mapping, but if the page is removed from the mapping, it
-  * gets returned with a refcount of 0.
-  */
--static int __remove_mapping(struct address_space *mapping, struct page *page,
-+static int __remove_mapping(struct address_space *mapping, struct folio *folio,
- 			    bool reclaimed, struct mem_cgroup *target_memcg)
- {
--	struct folio *folio = page_folio(page);
- 	int refcount;
- 	void *shadow = NULL;
- 
--	BUG_ON(!PageLocked(page));
--	BUG_ON(mapping != page_mapping(page));
-+	BUG_ON(!folio_test_locked(folio));
-+	BUG_ON(mapping != folio_mapping(folio));
- 
--	if (!PageSwapCache(page))
-+	if (!folio_test_swapcache(folio))
- 		spin_lock(&mapping->host->i_lock);
- 	xa_lock_irq(&mapping->i_pages);
- 	/*
-@@ -1275,23 +1274,23 @@ static int __remove_mapping(struct address_space *mapping, struct page *page,
- 	 * Note that if SetPageDirty is always performed via set_page_dirty,
- 	 * and thus under the i_pages lock, then this ordering is not required.
- 	 */
--	refcount = 1 + compound_nr(page);
--	if (!page_ref_freeze(page, refcount))
-+	refcount = 1 + folio_nr_pages(folio);
-+	if (!folio_ref_freeze(folio, refcount))
- 		goto cannot_free;
- 	/* note: atomic_cmpxchg in page_ref_freeze provides the smp_rmb */
--	if (unlikely(PageDirty(page))) {
--		page_ref_unfreeze(page, refcount);
-+	if (unlikely(folio_test_dirty(folio))) {
-+		folio_ref_unfreeze(folio, refcount);
- 		goto cannot_free;
- 	}
- 
--	if (PageSwapCache(page)) {
--		swp_entry_t swap = { .val = page_private(page) };
-+	if (folio_test_swapcache(folio)) {
-+		swp_entry_t swap = folio_swap_entry(folio);
- 		mem_cgroup_swapout(folio, swap);
- 		if (reclaimed && !mapping_exiting(mapping))
- 			shadow = workingset_eviction(folio, target_memcg);
--		__delete_from_swap_cache(page, swap, shadow);
-+		__delete_from_swap_cache(&folio->page, swap, shadow);
- 		xa_unlock_irq(&mapping->i_pages);
--		put_swap_page(page, swap);
-+		put_swap_page(&folio->page, swap);
- 	} else {
- 		void (*freepage)(struct page *);
- 
-@@ -1312,7 +1311,7 @@ static int __remove_mapping(struct address_space *mapping, struct page *page,
- 		 * exceptional entries and shadow exceptional entries in the
- 		 * same address_space.
- 		 */
--		if (reclaimed && page_is_file_lru(page) &&
-+		if (reclaimed && folio_is_file_lru(folio) &&
- 		    !mapping_exiting(mapping) && !dax_mapping(mapping))
- 			shadow = workingset_eviction(folio, target_memcg);
- 		__filemap_remove_folio(folio, shadow);
-@@ -1322,14 +1321,14 @@ static int __remove_mapping(struct address_space *mapping, struct page *page,
- 		spin_unlock(&mapping->host->i_lock);
- 
- 		if (freepage != NULL)
--			freepage(page);
-+			freepage(&folio->page);
- 	}
- 
- 	return 1;
- 
- cannot_free:
- 	xa_unlock_irq(&mapping->i_pages);
--	if (!PageSwapCache(page))
-+	if (!folio_test_swapcache(folio))
- 		spin_unlock(&mapping->host->i_lock);
- 	return 0;
+@@ -1430,7 +1430,7 @@ static enum page_references page_check_references(struct page *page,
  }
-@@ -1342,13 +1341,14 @@ static int __remove_mapping(struct address_space *mapping, struct page *page,
-  */
- int remove_mapping(struct address_space *mapping, struct page *page)
+ 
+ /* Check if a page is dirty or under writeback */
+-static void page_check_dirty_writeback(struct page *page,
++static void folio_check_dirty_writeback(struct folio *folio,
+ 				       bool *dirty, bool *writeback)
  {
--	if (__remove_mapping(mapping, page, false, NULL)) {
-+	struct folio *folio = page_folio(page);
-+	if (__remove_mapping(mapping, folio, false, NULL)) {
- 		/*
- 		 * Unfreezing the refcount with 1 rather than 2 effectively
- 		 * drops the pagecache ref for us without requiring another
- 		 * atomic operation.
- 		 */
--		page_ref_unfreeze(page, 1);
-+		folio_ref_unfreeze(folio, 1);
- 		return 1;
+ 	struct address_space *mapping;
+@@ -1439,24 +1439,24 @@ static void page_check_dirty_writeback(struct page *page,
+ 	 * Anonymous pages are not handled by flushers and must be written
+ 	 * from reclaim context. Do not stall reclaim based on them
+ 	 */
+-	if (!page_is_file_lru(page) ||
+-	    (PageAnon(page) && !PageSwapBacked(page))) {
++	if (!folio_is_file_lru(folio) ||
++	    (folio_test_anon(folio) && !folio_test_swapbacked(folio))) {
+ 		*dirty = false;
+ 		*writeback = false;
+ 		return;
  	}
- 	return 0;
-@@ -1530,14 +1530,16 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 	while (!list_empty(page_list)) {
- 		struct address_space *mapping;
- 		struct page *page;
-+		struct folio *folio;
- 		enum page_references references = PAGEREF_RECLAIM;
- 		bool dirty, writeback, may_enter_fs;
- 		unsigned int nr_pages;
  
- 		cond_resched();
+-	/* By default assume that the page flags are accurate */
+-	*dirty = PageDirty(page);
+-	*writeback = PageWriteback(page);
++	/* By default assume that the folio flags are accurate */
++	*dirty = folio_test_dirty(folio);
++	*writeback = folio_test_writeback(folio);
  
--		page = lru_to_page(page_list);
--		list_del(&page->lru);
-+		folio = lru_to_folio(page_list);
-+		list_del(&folio->lru);
-+		page = &folio->page;
+ 	/* Verify dirty/writeback state if the filesystem supports it */
+-	if (!page_has_private(page))
++	if (!folio_test_private(folio))
+ 		return;
  
- 		if (!trylock_page(page))
- 			goto keep;
-@@ -1890,7 +1892,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 			 */
- 			count_vm_event(PGLAZYFREED);
- 			count_memcg_page_event(page, PGLAZYFREED);
--		} else if (!mapping || !__remove_mapping(mapping, page, true,
-+		} else if (!mapping || !__remove_mapping(mapping, folio, true,
- 							 sc->target_mem_cgroup))
- 			goto keep_locked;
+-	mapping = page_mapping(page);
++	mapping = folio_mapping(folio);
+ 	if (mapping && mapping->a_ops->is_dirty_writeback)
+-		mapping->a_ops->is_dirty_writeback(page, dirty, writeback);
++		mapping->a_ops->is_dirty_writeback(&folio->page, dirty, writeback);
+ }
+ 
+ static struct page *alloc_demote_page(struct page *page, unsigned long node)
+@@ -1565,7 +1565,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 		 * reclaim_congested. kswapd will stall and start writing
+ 		 * pages if the tail of the LRU is all dirty unqueued pages.
+ 		 */
+-		page_check_dirty_writeback(page, &dirty, &writeback);
++		folio_check_dirty_writeback(folio, &dirty, &writeback);
+ 		if (dirty || writeback)
+ 			stat->nr_dirty++;
  
 -- 
 2.34.1

@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C244A9F91
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A984A9F94
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiBDS7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiBDS40 (ORCPT
+        id S229723AbiBDS77 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 4 Feb 2022 13:59:59 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47778 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229457AbiBDS76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:56:26 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E94C06173E
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:56:23 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id cq9-20020a17090af98900b001b8262fe2d5so6419816pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jg17IORQiX50k9hzchIY/5BxWqpFAaTYJl32S7Q4Sbg=;
-        b=uPCBA5viYD0QY7M/Rk2spN+UqATL+2sZOvKQcSrR4zPjEW8JpEMsNra2IDMdJN9IFZ
-         BYaxujrLvUFl/sMTSX2rkGMLjT0+NSDY734GgVVQ4Dsg43Nj2oFOjdRafThSkGAgFH5l
-         mpNkDd2Qa/R25MLGEYLjum9O3COWIlqByeP0h4mvo66JhYflXvWEKPZTxfXDEiCk6KUs
-         9DeKMHJf9vbBqzFVxLRVLBrhtBN3QkkZuEGOzyBDmJDtXWT+0xGI9XxlrhvI1K9dtGfd
-         VU0yIxCI82FBO6Abcczrit4gG0k1Wvvu8R2S5E6dddfzHuv+eaMnjGDAfSxDh1eDN8GN
-         468A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=Jg17IORQiX50k9hzchIY/5BxWqpFAaTYJl32S7Q4Sbg=;
-        b=XjORIPXRiOOv9ttwbr8vZiFPrLGAOFjBXbL25d652nfFpFrVVrVJdwS0USHi1h6nr7
-         zoxiKBLX1iYIBEJMfaghZO1sx5DBgKtIZjlIlSQcWMVmEbVj4TT4f7hvUSleQqOviQrQ
-         plR1/cyrdQi6Ek9+rQLwT+nc/tTfenYO57l+OZ6n/gj1/5XWYr55BlPpe1eCAwA9XqP9
-         oSMrEe9DpkAu8q2QTegd0Fjaq8gR+Qadsgpoj46YcWyTHnnx0LXIvVOPueUIa16DB0Ic
-         xTIILtNYGRUJbDOKJHJIMW2lQagis8XHQUQnjxDma3k2TCQhb95eMpIDi6jOVP1SO1MY
-         fAag==
-X-Gm-Message-State: AOAM533H2ih77loB+Kv3tqwQurMGKiSJMifBDFQ0dZM/uw3r1a2PuwsS
-        h1rBJ/yVVAvUkpj54UuUE2t26A==
-X-Google-Smtp-Source: ABdhPJzT7RTMUBVz+1BYpBITNrUEw6VSIBcSnFJFo16PdfPLdPCpcPdkajv5i36AHs82/DM/7IfWOg==
-X-Received: by 2002:a17:90a:d144:: with SMTP id t4mr4663574pjw.18.1644000982761;
-        Fri, 04 Feb 2022 10:56:22 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id h3sm3069688pfo.66.2022.02.04.10.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:56:21 -0800 (PST)
-Date:   Fri, 04 Feb 2022 10:56:21 -0800 (PST)
-X-Google-Original-Date: Fri, 04 Feb 2022 10:46:13 PST (-0800)
-Subject:     Re: [PATCH 0/4] Refactor the PRCI driver to reduce the complexity
-In-Reply-To: <cover.1642582832.git.zong.li@sifive.com>
-CC:     mturquette@baylibre.com, sboyd@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zong.li@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-ffd770d4-8f8a-417a-a589-f14d09f55282@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Fri, 4 Feb 2022 13:59:58 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 214IithJ025902
+        for <linux-kernel@vger.kernel.org>; Fri, 4 Feb 2022 10:59:58 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e0v4gcenq-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:59:57 -0800
+Received: from twshared11487.23.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Feb 2022 10:59:56 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 9CDC5296C5722; Fri,  4 Feb 2022 10:57:49 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
+Subject: [PATCH v9 bpf-next 0/9] bpf_prog_pack allocator
+Date:   Fri, 4 Feb 2022 10:57:33 -0800
+Message-ID: <20220204185742.271030-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: S0IO6EHucRqtp3mVsFFwTqqgTTdzs0X7
+X-Proofpoint-ORIG-GUID: S0IO6EHucRqtp3mVsFFwTqqgTTdzs0X7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-04_07,2022-02-03_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=719 clxscore=1015
+ suspectscore=0 spamscore=0 phishscore=0 adultscore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202040104
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 01:28:37 PST (-0800), zong.li@sifive.com wrote:
-> This patch set tries to improve the PRCI driver to reduce the
-> complexity, we remove the SoCs C files by putting putting all stuff in
-> each SoCs header file, and include these SoCs-specific header files in
-> core of PRCI. It can also avoid the W=1 kernel build warnings about
-> variable defined but not used [-Wunused-const-variable=], like 'commit
-> 487dc7bb6a0c ("clk: sifive:fu540-prci: Declare static const variable
-> 'prci_clk_fu540' where it's used")' does.
->
-> This patch set also contains the dt-bindings and dts change, because
-> we change the macro name for fu540 and fu740 by adding the prefix
-> respectively.
->
-> Thanks all for your review and suggestions.
->
-> Zong Li (4):
->   dt-bindings: change the macro name of prci in header files and example
->   riscv: dts: Change the macro name of prci in each device node
->   clk: sifive: Add SoCs prefix in each SoCs-dependent data
+Changes v8 => v9:
+1. Fix an error with multi function program, in 4/9.
 
-IIUC these there aren't bisectable: the bindings change will break 
-builds of the DTs and drivers.  I'm not sure what's generally the way to 
-go with these, but I always try to avoid broken builds in the middle of 
-patch sets.
+Changes v7 => v8:
+1. Rebase and fix conflicts.
+2. Lock text_mutex for text_poke_copy. (Daniel)
 
-Aside from that this generally looks good to me, but the DT and clock 
-folks are probably a better bet for a proper review here.  Happy to take 
-this through the RISC-V tree, but IMO it's a better candidate for the 
-clock tree so
+Changes v6 => v7:
+1. Redesign the interface between generic and arch logic, based on feedback
+   from Alexei and Ilya.
+2. Split 6/7 of v6 to 7/9 and 8/9 in v7, for cleaner logic.
+3. Add bpf_arch_text_copy in 6/9.
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # aside from breaking bisect
+Changes v5 => v6:
+1. Make jit_hole_buffer 128 byte long. Only fill the first and last 128
+   bytes of header with INT3. (Alexei)
+2. Use kvmalloc for temporary buffer. (Alexei)
+3. Rename tmp_header/tmp_image => rw_header/rw_image. Remove tmp_image from
+   x64_jit_data. (Alexei)
+4. Change fall back round_up_to in bpf_jit_binary_alloc_pack() from
+   BPF_PROG_MAX_PACK_PROG_SIZE to PAGE_SIZE.
 
-Thanks!
+Changes v4 => v5:
+1. Do not use atomic64 for bpf_jit_current. (Alexei)
 
->   clk: sifive: Move all stuff into SoCs header files from C files
->
->  .../devicetree/bindings/gpio/sifive,gpio.yaml |   2 +-
->  .../bindings/pci/sifive,fu740-pcie.yaml       |   2 +-
->  .../bindings/serial/sifive-serial.yaml        |   2 +-
->  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  22 +--
->  arch/riscv/boot/dts/sifive/fu740-c000.dtsi    |  26 ++--
->  drivers/clk/sifive/Makefile                   |   2 +-
->  drivers/clk/sifive/fu540-prci.c               |  89 ------------
->  drivers/clk/sifive/fu540-prci.h               |  91 +++++++++++-
->  drivers/clk/sifive/fu740-prci.c               | 134 ------------------
->  drivers/clk/sifive/fu740-prci.h               | 130 ++++++++++++++++-
->  drivers/clk/sifive/sifive-prci.c              |   5 -
->  include/dt-bindings/clock/sifive-fu540-prci.h |   8 +-
->  include/dt-bindings/clock/sifive-fu740-prci.h |  18 +--
->  13 files changed, 254 insertions(+), 277 deletions(-)
->  delete mode 100644 drivers/clk/sifive/fu540-prci.c
->  delete mode 100644 drivers/clk/sifive/fu740-prci.c
+Changes v3 => v4:
+1. Rename text_poke_jit() => text_poke_copy(). (Peter)
+2. Change comment style. (Peter)
+
+Changes v2 => v3:
+1. Fix tailcall.
+
+Changes v1 => v2:
+1. Use text_poke instead of writing through linear mapping. (Peter)
+2. Avoid making changes to non-x86_64 code.
+
+Most BPF programs are small, but they consume a page each. For systems
+with busy traffic and many BPF programs, this could also add significant
+pressure to instruction TLB. High iTLB pressure usually causes slow down
+for the whole system, which includes visible performance degradation for
+production workloads.
+
+This set tries to solve this problem with customized allocator that pack
+multiple programs into a huge page.
+
+Patches 1-6 prepare the work. Patch 7 contains key logic of bpf_prog_pack
+allocator. Patch 8 contains bpf_jit_binary_pack_alloc logic on top of
+bpf_prog_pack allocator. Patch 9 uses this allocator in x86_64 jit.
+
+Song Liu (9):
+  x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
+  bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
+  bpf: use size instead of pages in bpf_binary_header
+  bpf: use prog->jited_len in  bpf_prog_ksym_set_addr()
+  x86/alternative: introduce text_poke_copy
+  bpf: introduce bpf_arch_text_copy
+  bpf: introduce bpf_prog_pack allocator
+  bpf: introduce bpf_jit_binary_pack_[alloc|finalize|free]
+  bpf, x86_64: use bpf_jit_binary_pack_alloc
+
+ arch/x86/Kconfig                     |   1 +
+ arch/x86/include/asm/text-patching.h |   1 +
+ arch/x86/kernel/alternative.c        |  34 ++++
+ arch/x86/net/bpf_jit_comp.c          |  65 ++++---
+ include/linux/bpf.h                  |   7 +-
+ include/linux/filter.h               |  27 +--
+ kernel/bpf/core.c                    | 269 +++++++++++++++++++++++++--
+ kernel/bpf/trampoline.c              |   6 +-
+ kernel/bpf/verifier.c                |   1 +
+ 9 files changed, 349 insertions(+), 62 deletions(-)
+
+--
+2.30.2

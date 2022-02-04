@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D374AA3DE
+	by mail.lfdr.de (Postfix) with ESMTP id 647C94AA3DD
 	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiBDW7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:59:48 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:33601 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245302AbiBDW7l (ORCPT
+        id S1376413AbiBDXAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:00:06 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:44618 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359282AbiBDXAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:59:41 -0500
-Received: by mail-oo1-f49.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso6333305oop.0;
-        Fri, 04 Feb 2022 14:59:41 -0800 (PST)
+        Fri, 4 Feb 2022 18:00:00 -0500
+Received: by mail-oi1-f178.google.com with SMTP id 4so10192573oil.11;
+        Fri, 04 Feb 2022 15:00:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WDFMU2L+6QlWwTRW5yJ/fDBuGhNU4esi6K8Pw9YQ+vw=;
-        b=oGekuGaHFmpeP2Gn2EUCC6bRQuGyLeYkkxDkBXyYbKcalzD8AixpjIX6h9aJRz+80b
-         LgbFj97Nvju+OcoxeWWNyCAfmN2YE+iwDdcHYIDtyJBkwrm2mwECUwxNAQ/R0Zke9a0S
-         r4BWzgD1hBuWSabqfAKX2T1H4ZTaiyQ/t3AVhcjz0DAcXsYSrBmZdUIeRu/ZPoNW90TO
-         QWdHOzk/vUVC3V34vCfnj/twchjYnkjAKqoe74UANd+vIqWyfaQ/u/BSHFaxbFj9qcFz
-         cTpk1tyH4O3HOn+hTEiaCG07AbWDh8nXCTO8fsTza03wYcnNm5FgqghNlhGnFup4uqrO
-         Z3lA==
-X-Gm-Message-State: AOAM533V5f+K7Y1MIoJQmcKEZw0DUwiSZIuvqZdhbf5kATKnpg4+g+lC
-        iMpSvtmEaITx74Ghcab/9Q==
-X-Google-Smtp-Source: ABdhPJx8zmBhcwwEF7d2V6aqPrQn10Ybg3HAQ2BZ9RbPyyIiDx3P9br6uyE08KYDbuph3Px5uIQ14A==
-X-Received: by 2002:a4a:3f46:: with SMTP id x6mr388438ooe.78.1644015580690;
-        Fri, 04 Feb 2022 14:59:40 -0800 (PST)
+        bh=STXGDBPnP0RX9U6EDzL7J0c/K6aSJxvfGk5fwnYV+K4=;
+        b=qaBkwcVgO2Wk7wHie2ZLkW9Ve8KXRJlNHLMr8qMnCE6erxCJ+22zzKt6uahs4Nnu7B
+         9th08crP95s7bYdfGcwKwJncQonwhBhEU71gTxKym6XP+ggC9QkOBAYF0I3xW5OwN2Zp
+         vWoPOPpyi6wKD4gA0K6i/qLPxl7sd/KYFebws+oltN/wmhJHa97S+JetawaOOSd1iqfk
+         LWzIBLwdwecLJ50qEYKfDDFT6HrzIR9BYs96VgxIb4kFWA9goL27a1BKyf1NSB+I9bBD
+         USBJ2LAMWZMQD8rd81yapYRqvZdEZZTMF9cm5NVJimIyVzl8FwiFWcUPzlpt9D4mTTWa
+         k2fw==
+X-Gm-Message-State: AOAM533ubsxz5ZYXxb9IYRIF3BErzKfk3BOk4f2dfaORQ6ddc/BVPXc/
+        IbLcLRtCM8AqKcfxZ9a9gA==
+X-Google-Smtp-Source: ABdhPJwOCjh7ByHzDx16JRhBZO6cJ4zV+NShLss8PjVDzgeavJ9Lw93uh+T3zobTfz+ll9W5LpNWSg==
+X-Received: by 2002:a05:6808:1688:: with SMTP id bb8mr651517oib.163.1644015599923;
+        Fri, 04 Feb 2022 14:59:59 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g4sm1248498otg.61.2022.02.04.14.59.39
+        by smtp.gmail.com with ESMTPSA id o19sm1072371oae.36.2022.02.04.14.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:59:40 -0800 (PST)
-Received: (nullmailer pid 3342189 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:59:39 -0000
-Date:   Fri, 4 Feb 2022 16:59:39 -0600
+        Fri, 04 Feb 2022 14:59:59 -0800 (PST)
+Received: (nullmailer pid 3342703 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:59:58 -0000
+Date:   Fri, 4 Feb 2022 16:59:58 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     wells.lu@sunplus.com, p.zabel@pengutronix.de,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        u.kleine-koenig@pengutronix.de, daniel.thompson@linaro.org,
-        linux-kernel@vger.kernel.org, lh.kuo@sunplus.com,
-        lee.jones@linaro.org, robh+dt@kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings:i2c: Add Sunplus SP7021 schema
-Message-ID: <Yf2v25mgg6Afe9oH@robh.at.kernel.org>
-References: <cover.1642751147.git.lhjeff911@gmail.com>
- <3361159c0a654eb237638969e64ccde742d2c7c0.1642751147.git.lhjeff911@gmail.com>
+To:     Eugen Hristev <eugen.hristev@microchip.com>
+Cc:     robh+dt@kernel.org, linux-media@vger.kernel.org,
+        nicolas.ferre@microchip.com, jacopo+renesas@jmondi.org,
+        devicetree@vger.kernel.org, sakari.ailus@iki.fi,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v4 08/11] dt-bindings: media: microchip,xisc: add
+ bus-width of 14
+Message-ID: <Yf2v7owZpEDmkdiy@robh.at.kernel.org>
+References: <20220121131416.603972-1-eugen.hristev@microchip.com>
+ <20220121131416.603972-9-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3361159c0a654eb237638969e64ccde742d2c7c0.1642751147.git.lhjeff911@gmail.com>
+In-Reply-To: <20220121131416.603972-9-eugen.hristev@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 15:50:56 +0800, Li-hao Kuo wrote:
-> Add bindings for Sunplus SP7021 i2c driver
+On Fri, 21 Jan 2022 15:14:13 +0200, Eugen Hristev wrote:
+> The Microchip XISC supports a bus width of 14 bits.
+> Add it to the supported bus widths.
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
 > ---
-> Changes in v4:
->  - Modified the YAML file : fix indentation issue
-> 
->  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 73 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+>  Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,167 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E604AA010
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F357F4AA013
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbiBDT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S233742AbiBDTaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbiBDT26 (ORCPT
+        with ESMTP id S233661AbiBDTaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:28:58 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD036C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:28:58 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id d12so1365372qvl.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:28:58 -0800 (PST)
+        Fri, 4 Feb 2022 14:30:11 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBDC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:30:10 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id d186so5811654pgc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:30:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AvUdSyv4AHEETuOkpKa8AYU99AJ+vHmq6OnHDcdbIU8=;
-        b=fGT+Al6jKRABrpuLfbqnm6XPKxGS7b9L/JLvBA9fAuere+nRCcWK8x0tkYF9n+W+JR
-         IS0JAG5bIEXor67f+t/MO7IqVr4nOUr/vs6FhCUaJYJU15l0efC0QaR9jUzezLeiNqGK
-         Xl+SxDny7GxqBbW+QC0RsgJMqrWxvakkz2KRSx/lW1wIjQI6KwiSPrhUoDq3F/PwFnlb
-         uuz4+4jiJspu0dn9SFRlH7KEPqorov1JYBufZTMoXnQvmpjuaShMW3iyalvp93btMUB6
-         a2q9uY3JupTZdS7KyEQhCsuO+9RLY/KhSYpNI4UaDGSzbuPdDCCyYffvNdqwzP9nL1i1
-         yEGw==
+        bh=sjz/d2uJSRskReEmVHKPPM9K20Vc4OsAmYuunLLpKFw=;
+        b=nIRVyrBynAGmaqmots0Mq+aw1Avy4WkS6UPdfbbOrVc45NFzxxpY/9TWPB4t7o3pYY
+         dll6b2poAli+XYy5rUVa4dTB5exq3qBNqKTnhC2Bf32hal1L/hovklTGk/YrufUtDo51
+         h9TZPM1W6daiJ+dfC5cQOYRynQ4ltQhCmKqSYLep5Sn+r9USG6T/DhnBECkzhHDNWZJ+
+         yf5FCQVjjG/R9Vvb2BLYD16zichIYpEBf8TeUT0x2XS/GhWXXsp5I2HZnx9lXleRP/yR
+         mNgQa51908kvsqdlyNjPL5oHTXcNfsqJwyzQgtJf9/m4HKZtYG989mDnz6mclz4su77/
+         2aVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AvUdSyv4AHEETuOkpKa8AYU99AJ+vHmq6OnHDcdbIU8=;
-        b=WMm4G+rB/idhXk+076HoSp+DWDp03rWUjj2PvT0yy8GqoxLHp3bNyIVD+r2Gb2DTek
-         qgiTNrY5FxXlZyyaf4zTFuwv3NuBR7tbNa/A2iBfxi8W/RWkgYYcWFQvfS9wkEp5v0Cz
-         YeoUZSC2wkMyP0jWLxZTJvR83UHqiTWcg6WeWrxm/ohrnaJlu8NgkUkFzAOFKR/HE3oM
-         WE1PTnkVanyjII6nB8/9jzld/YOY47DexJdFdXZfwqHN7OkUjbyzk3IUq7epnzjcT+fK
-         SdjFnQch4RCMd4mzJ4FC3NAb3cNgeU8i9xF9pn5Gy4RwJnL2mggbrkdMNhxpxqzv0nfw
-         17AQ==
-X-Gm-Message-State: AOAM533e9kpiuY3zxNpeQfp0vmqENMlV7PlS/bowl6J6phlmLdxJ3kAH
-        +J/LrhFEscrU36WJ/t4VSJ/dq3cccIFAsXEWxsywVw==
-X-Google-Smtp-Source: ABdhPJz/rX+0dPHg87Q4MmU26z7oDIcRLBPYQVs2/QezJuBT0ix3+DXyrdbp+sWb3hIf31rQwnMT0S5pGUnyhGlO/D0=
-X-Received: by 2002:ad4:576f:: with SMTP id r15mr3056183qvx.35.1644002937619;
- Fri, 04 Feb 2022 11:28:57 -0800 (PST)
+        bh=sjz/d2uJSRskReEmVHKPPM9K20Vc4OsAmYuunLLpKFw=;
+        b=RsW9DX9easbzGGfspW6O+gWnExBzxZvnWPPoQomBvgYmBuQ78bH8aepBqeeVZ7Ndgk
+         F453dUkvr4jMXlAQudiqf5K+GKIYF5qcu2fJLLY62V+ohirQw9ALrLxyavbD5FL2VGqp
+         GHnLvXkLlvwoqyzm76rhVDSRvSV0odeJZ8Svet3iJs/q6jayIcYZnDe37FDvgovx6O04
+         i8IBrHZLReXjq0vcnibCiFKqO98ry5s/XygoWyhrbSEMuNueH1tmI+fI8Zt+NXDDT2L/
+         lQU6/8lZYD8MxB9HQ65/ucINsvRJqXTvgXwpjCh2+lqlVsw0AtzUliPwf/8iJr88aUu8
+         wxqA==
+X-Gm-Message-State: AOAM531EkW5GWPzTc5VS1vRYvaP+Roksf0cyz6Mnc7DifqUEbVEifLCt
+        iY2jX6RBS1h7SIkmMknwimZrTr9mt0UUe9w8QsJUdQ==
+X-Google-Smtp-Source: ABdhPJwl/Ikwm+SRw8mO/XCAwWW+cI6ZLc926D0tRc+KyiKrxJHhusUtS8WUK1022mB/ftpk6q2o5I90X1d7yB8ZhvM=
+X-Received: by 2002:a63:fc0b:: with SMTP id j11mr442424pgi.146.1644003008833;
+ Fri, 04 Feb 2022 11:30:08 -0800 (PST)
 MIME-Version: 1.0
-References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
- <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
- <CA+khW7jx_4K46gH+tyZZn9ApSYGMqYpxCm0ywmuWdSiogv7dqw@mail.gmail.com> <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
-In-Reply-To: <CAPhsuW4JJiMNqvzK+8SKM3=72xgsF+jxB3m-u-Jz9Fe7Z4i9fg@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Fri, 4 Feb 2022 11:28:46 -0800
-Message-ID: <CA+khW7iaCDcpD7JEg9PB-UbYyUuLaEdryhbfaW5tUQ-SUv2sKQ@mail.gmail.com>
-Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
-To:     Song Liu <song@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+References: <20220202150201.290c7d3d@canb.auug.org.au> <20220202150320.3e9bdd62@canb.auug.org.au>
+ <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+In-Reply-To: <f50d5044-7192-bdb3-7ca9-7217ed311787@redhat.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Fri, 4 Feb 2022 11:29:32 -0800
+Message-ID: <CACK8Z6EKsFwJcpmqFoVOkQYqLMK37Qz3FYkf+-EhP4AFiscbeA@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the drm tree
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 4:16 PM Song Liu <song@kernel.org> wrote:
+On Wed, Feb 2, 2022 at 12:38 AM Hans de Goede <hdegoede@redhat.com> wrote:
 >
-> On Tue, Jan 25, 2022 at 3:54 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > Thanks Song for your suggestion.
-> >
-> > On Mon, Jan 24, 2022 at 11:08 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > Dear BPF experts,
-> > > >
-> > > > I'm working on collecting some kernel performance data using BPF
-> > > > tracing prog. Our performance profiling team wants to associate the
-> > > > data with user stack information. One of the requirements is to
-> > > > reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-> > > > [1].
-> > > >
-> > > > As part of an early investigation, we found that there are a couple
-> > > > issues that make bpf_get_stackid() much less reliable than we'd like
-> > > > for our use:
-> > > >
-> > > > 1. The first page of many binaries (which contains the ELF headers and
-> > > > thus the BuildID that we need) is often not in memory. The failure of
-> > > > find_get_page() (called from build_id_parse()) is higher than we would
-> > > > want.
-> > >
-> > > Our top use case of bpf_get_stack() is called from NMI, so there isn't
-> > > much we can do. Maybe it is possible to improve it by changing the
-> > > layout of the binary and the libraries? Specifically, if the text is
-> > > also in the first page, it is likely to stay in memory?
-> > >
-> >
-> > We are seeing 30-40% of stack frames not able to get build ids due to
-> > this. This is a place where we could improve the reliability of build
-> > id.
-> >
-> > There were a few proposals coming up when we found this issue. One of
-> > them is to have userspace mlock the first page. This would be the
-> > easiest fix, if it works. Another proposal from Ian Rogers (cc'ed) is
-> > to embed build id in vma. This is an idea similar to [1], but it's
-> > unclear (at least to me) where to store the string. I'm wondering if
-> > we can introduce a sleepable version of bpf_get_stack() if it helps.
-> > When a page is not present, sleepable bpf_get_stack() can bring in the
-> > page.
+> Hi,
 >
-> I guess it is possible to have different flavors of bpf_get_stack().
-> However, I am not sure whether the actual use case could use sleepable
-> BPF programs. Our user of bpf_get_stack() is a profiler. The BPF program
-> which triggers a perf_event from NMI, where we really cannot sleep.
->
-> If we have target use case that could sleep, sleepable bpf_get_stack() sounds
-> reasonable to me.
->
+> On 2/2/22 05:03, Stephen Rothwell wrote:
+> > Hi all,
 > >
-> > [1] https://lwn.net/Articles/867818/
+> > On Wed, 2 Feb 2022 15:02:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >>
+> >> After merging the drm tree, today's linux-next build (htmldocs) produced
+> >> this warning:
+> >>
+> >> drivers/gpu/drm/drm_privacy_screen.c:X: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
 > >
-> > > > 2. When anonymous huge pages are used to hold some regions of process
-> > > > text, build_id_parse() also fails to get a BuildID because
-> > > > vma->vm_file is NULL.
-> > >
-> > > How did the text get in anonymous memory? I guess it is NOT from JIT?
-> > > We had a hack to use transparent huge page for application text. The
-> > > hack looks like:
-> > >
-> > > "At run time, the application creates an 8MB temporary buffer and the
-> > > hot section of the executable memory is copied to it. The 8MB region in
-> > > the executable memory is then converted to a huge page (by way of an
-> > > mmap() to anonymous pages and an madvise() to create a huge page), the
-> > > data is copied back to it, and it is made executable again using
-> > > mprotect()."
-> > >
-> > > If your case is the same (or similar), it can probably be fixed with
-> > > CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
-> > >
+> > Actually:
 > >
-> > In our use cases, we have text mapped to huge pages that are not
-> > backed by files. vma->vm_file could be null or points some fake file.
-> > This causes challenges for us on getting build id for these code text.
+> > drivers/gpu/drm/drm_privacy_screen.c:392: warning: Function parameter or member 'data' not described in 'drm_privacy_screen_register'
 >
-> So, what is the ideal output in these cases? If there isn't a back file, we
-> don't really have good build-id for it, right?
->
+> Thank you for reporting this, I will prepare a patch fixing this.
 
-Right, I don't have a solution for this case unfortunately. Probably
-will just discard the failed frames. :(
+Thank you so much Hans!
 
-But in the case where the problem is the page not in mem, Song, do you
-also see a similar high rate of build id parsing failure in your use
-case (30 ~ 40% of frames)? If no, we may have done something wrong on
-our side. If yes, is that a problem for your use case?
+Best Regards,
 
-> Thanks,
-> Song
+Rajat
+
+>
+> Regards,
+>
+> Hans
+>

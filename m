@@ -2,422 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684CC4A98EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8B14A9905
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355933AbiBDMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiBDMHF (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:07:05 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3AC061714;
-        Fri,  4 Feb 2022 04:07:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/R6k+zfCQLtzC5fphtSolIP5mV88jokWbtj5V/Bndfo=; b=vV7FwD6+1HFcDi0WBK1n+WSa7j
-        6nwzQzVzi5+eBGfJjLkVBTDdciJmM/ODHbnAIn87wlDZaVGFppfZ+kIcVCeEP48y2KiwVKc1CXNfQ
-        HwbFgydFmju4PHbiyUdIr78S1W5mmqAZMOHdMJ60inw6Pv5vWMco470p1tf3mR8GjcuActvmp9Gnr
-        Z9+xF0g185xIO5+pwflcRJvACgdLLsPqZdl98F1xB1/Oqr2qR03hqug7ilKFZdiBMIRSQqoHVRy6N
-        J+0BDyiJuXcdfPlkRiuNVwP3B59jQ/pap32T5wWhmLteCCuu+rRjcExlmQpfogonB4SlWXln36qcV
-        sZ5TRa+A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57036)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nFxLl-0004VH-H0; Fri, 04 Feb 2022 12:06:01 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nFxLX-0004xK-P8; Fri, 04 Feb 2022 12:05:47 +0000
-Date:   Fri, 4 Feb 2022 12:05:47 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Corey Minyard <minyard@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        id S1358592AbiBDMP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:15:28 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:1606 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238672AbiBDMPZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 07:15:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643976925; x=1675512925;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cR70RHsoqfuHVwt9ephCevXoTQCZ6y12xcf3PcFCPD8=;
+  b=fztZE5epAsQlkkYSZDTXsH3R2anP8JwJML5LjgGd6uYT3tgRF40S+w1k
+   0+eifEkhyNYZ2LkDMUF72JzJU+Ri10wdkCtpbjLoQsFZzVqw5FmcrVWml
+   sKXiTX0NaRAe8rc1soOJTkDRu8V+tIUQc7PB5guuUMCwy8xd74DmajJYr
+   wjbv/hPRicCx4o/DUMVjV6eMLvgZecSpfWPahTNGPaN+iYY0KL6a1s+fo
+   zN5M6V6X7OuyVD4c4041QfHdtDbukZQyBqWBzJNG3jQ6P4S40JNKadNYz
+   loEJAaSUolZctyC5oopz0si7sA/QqYI7Jg7i5qSfgr3UFh1Ys7ZhwZwsk
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
+   d="scan'208";a="21903425"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:24 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 04 Feb 2022 13:15:24 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 04 Feb 2022 13:15:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1643976924; x=1675512924;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cR70RHsoqfuHVwt9ephCevXoTQCZ6y12xcf3PcFCPD8=;
+  b=f22/CAbkl0kptFrKHwO6g9mz8G61RbHtS73+8Ux/s8UR1zEAZNMCQI3H
+   TB9IL5pVUCdn9SMlW69VQ9PM+QO41KPoJWAgZ+mefdqXgLP3siqRvNfjm
+   kH4XSI3mpkueFPP68o0NS+srM6vRL3uCncCYirCAo2zE+y0/DS/5vaZXS
+   tTegvvpNecZpBOxx4YtDYtBoBVR/KSmUYapygvoDZYb2ImNQKoZgM3Hub
+   6K2+Z25m/vxg8CTvnoH0N4kzIcl45hFIvKwQhn/B8TDS0vf5kAWXYZ38U
+   S7rPiiSz5XwMxWkN1w0Nb16L9Ay4LqhmFByjMeVD3U6iRSPKuyO3zWKPy
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
+   d="scan'208";a="21903424"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:24 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1B667280065;
+        Fri,  4 Feb 2022 13:15:24 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Hao Fang <fanghao11@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] HPE BMC GXP SUPPORT
-Message-ID: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
-References: <nick.hawkins@hpe.com>
- <20220202165315.18282-1-nick.hawkins@hpe.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] imx7/imx8mm media / csi patches
+Date:   Fri,  4 Feb 2022 13:15:06 +0100
+Message-Id: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hey everyone,
 
-On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
-> diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
-> new file mode 100644
-> index 000000000000..8b0a91234df4
-> --- /dev/null
-> +++ b/arch/arm/mach-hpe/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
-> diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
-> new file mode 100644
-> index 000000000000..a37838247948
-> --- /dev/null
-> +++ b/arch/arm/mach-hpe/gxp.c
-> @@ -0,0 +1,62 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
-> + *
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + */
-> +
-> +
-> +#include <linux/init.h>
-> +#include <asm/mach/arch.h>
-> +#include <asm/mach/map.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/clocksource.h>
+this is a set of patch for imx[7] media drivers based on next-20220203. With
+this set I was able to capture video frames from a MIPI CSI-2 camera in my
+TQMa8MQML + MBA8MX hardware. The actual camera used is a Vision Components
+'VC MIPI IMX327 C' camera. IMX327 is compatible to IMX290. Patch 8 shows the
+DT overlay I'm using, not suitable for merging.
+Please ignore the FPGA part, this is mainly for power supply and GPIO reset
+line. This is currently a custom driver I'm working on, but I do not want to
+focus on in this series.
 
-It's normal to list all linux/ includes before asm/ includes. Please
-rearrange.
+Please note I tested this only on this imx8 platform.
 
-> +
-> +#define IOP_REGS_PHYS_BASE 0xc0000000
-> +#define IOP_REGS_VIRT_BASE 0xf0000000
-> +#define IOP_REGS_SIZE (240*SZ_1M)
-> +
-> +#define IOP_EHCI_USBCMD 0x0efe0010
-> +
-> +static struct map_desc gxp_io_desc[] __initdata = {
-> +	{
-> +	.virtual	= (unsigned long)IOP_REGS_VIRT_BASE,
-> +	.pfn		= __phys_to_pfn(IOP_REGS_PHYS_BASE),
-> +	.length		= IOP_REGS_SIZE,
-> +	.type		= MT_DEVICE,
+First thanks to Dorota for the patchset at [1] (patches 1-4) which is necessary
+to capture correct images. I integrated Hans' review into it. I hope the
+I didn't make a mistake and the original author is kept along. I used v4 for that
+patchset, it is v1 again in this set. I hope this is not confusing.
 
-If you keep this, please indent the above four lines by one more tab.
+Starting from patch 5 there are small fixes which allows me to configure my
+media device.
 
-> +	},
-> +};
-> +
-> +void __init gxp_map_io(void)
-> +{
-> +	iotable_init(gxp_io_desc, ARRAY_SIZE(gxp_io_desc));
-> +}
-> +
-> +static void __init gxp_dt_init(void)
-> +{
-> +	/*reset EHCI host controller for clear start*/
-> +	__raw_writel(0x00080002,
-> +		(void __iomem *)(IOP_REGS_VIRT_BASE + IOP_EHCI_USBCMD));
+Device configuration:
+```
+media-ctl -l "'imx290 2-001a':0->'csis-32e30000.mipi-csi':0 [1]"
+media-ctl -V "'imx290 2-001a':0 [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw]"
+media-ctl -V "'csi':0 [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw]"
+v4l2-ctl -d0 --set-fmt-video width=1920,height=1080,pixelformat='RG10',field=none
+media-ctl -p
+```
 
-Please consider making IOP_REGS_VIRT_BASE a 'void __iomem' pointer, it
-being a _virtual_ iomem address. This should save you needing repeated
-casts except for the initialiser above.
+The media-ctl topology is:
+```
+# media-ctl -p
+Media controller API version 5.17.0
 
-> +	of_platform_populate(NULL, of_default_bus_match_table, NULL, NULL);
-> +}
-> +
-> +static void gxp_restart(enum reboot_mode mode, const char *cmd)
-> +{
-> +	__raw_writel(1, (void __iomem *) IOP_REGS_VIRT_BASE);
-> +}
-> +
-> +static const char * const gxp_board_dt_compat[] = {
-> +	"HPE,GXP",
-> +	NULL,
-> +};
-> +
-> +DT_MACHINE_START(GXP_DT, "HPE GXP")
-> +	.init_machine	= gxp_dt_init,
-> +	.map_io		= gxp_map_io,
-> +	.restart	= gxp_restart,
-> +	.dt_compat	= gxp_board_dt_compat,
-> +MACHINE_END
-> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-> index cfb8ea0df3b1..5916dade7608 100644
-> --- a/drivers/clocksource/Kconfig
-> +++ b/drivers/clocksource/Kconfig
-> @@ -617,6 +617,14 @@ config CLKSRC_ST_LPC
->  	  Enable this option to use the Low Power controller timer
->  	  as clocksource.
->  
-> +config GXP_TIMER
-> +	bool "GXP timer driver"
-> +	depends on ARCH_HPE
-> +	default y
-> +	help
-> +	  Provides a driver for the timer control found on HPE
-> +	  GXP SOCs. This is required for all GXP SOCs.
-> +
->  config ATCPIT100_TIMER
->  	bool "ATCPIT100 timer driver"
->  	depends on NDS32 || COMPILE_TEST
-> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-> index fa5f624eadb6..ffca09ec34de 100644
-> --- a/drivers/clocksource/Makefile
-> +++ b/drivers/clocksource/Makefile
-> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
->  obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
->  obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
->  obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
-> +obj-$(CONFIG_GXP_TIMER)			+= gxp_timer.o
-> diff --git a/drivers/clocksource/gxp_timer.c b/drivers/clocksource/gxp_timer.c
-> new file mode 100644
-> index 000000000000..e3c617036e0d
-> --- /dev/null
-> +++ b/drivers/clocksource/gxp_timer.c
-> @@ -0,0 +1,158 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
-> + *
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/clockchips.h>
-> +#include <linux/clocksource.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irqreturn.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/slab.h>
-> +#include <linux/string.h>
-> +#include <linux/sched_clock.h>
-> +
-> +#include <asm/irq.h>
+Media device information
+------------------------
+driver          imx7-csi
+model           imx-media
+serial          
+bus info        platform:32e20000.csi
+hw revision     0x0
+driver version  5.17.0
 
-Why do you need asm/irq.h ?
+Device topology
+- entity 1: csi (2 pads, 2 links)
+            type V4L2 subdev subtype Unknown flags 0
+            device node name /dev/v4l-subdev0
+        pad0: Sink
+                [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw xfer:none ycbcr:601 quantization:full-range]
+                <- "csis-32e30000.mipi-csi":1 [ENABLED,IMMUTABLE]
+        pad1: Source
+                [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw xfer:none ycbcr:601 quantization:full-range]
+                -> "csi capture":0 [ENABLED,IMMUTABLE]
 
-> +
-> +#define TIMER0_FREQ 1000000
-> +#define TIMER1_FREQ 1000000
-> +
-> +#define MASK_TCS_ENABLE		0x01
-> +#define MASK_TCS_PERIOD		0x02
-> +#define MASK_TCS_RELOAD		0x04
-> +#define MASK_TCS_TC		0x80
-> +
-> +struct gxp_timer {
-> +	void __iomem *counter;
-> +	void __iomem *control;
-> +	struct clock_event_device evt;
-> +};
-> +
-> +static void __iomem *system_clock __read_mostly;
-> +
-> +static u64 notrace gxp_sched_read(void)
-> +{
-> +	return readl_relaxed(system_clock);
-> +}
-> +
-> +static int gxp_time_set_next_event(unsigned long event,
-> +					struct clock_event_device *evt_dev)
-> +{
-> +	struct gxp_timer *timer = container_of(evt_dev, struct gxp_timer, evt);
-> +	/*clear TC by write 1 and disable timer int and counting*/
-> +	writeb_relaxed(MASK_TCS_TC, timer->control);
-> +	/*update counter value*/
-> +	writel_relaxed(event, timer->counter);
-> +	/*enable timer counting and int*/
-> +	writeb_relaxed(MASK_TCS_TC|MASK_TCS_ENABLE, timer->control);
+- entity 4: csi capture (1 pad, 1 link)
+            type Node subtype V4L flags 0
+            device node name /dev/video0
+        pad0: Sink
+                <- "csi":1 [ENABLED,IMMUTABLE]
 
-Spaces around the | please. checkpatch probably should've noticed that.
+- entity 10: csis-32e30000.mipi-csi (2 pads, 2 links)
+             type V4L2 subdev subtype Unknown flags 0
+             device node name /dev/v4l-subdev1
+        pad0: Sink
+                [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw xfer:709 ycbcr:601 quantization:lim-range]
+                <- "imx290 2-001a":0 [ENABLED]
+        pad1: Source
+                [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw xfer:709 ycbcr:601 quantization:lim-range]
+                -> "csi":0 [ENABLED,IMMUTABLE]
 
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t gxp_time_interrupt(int irq, void *dev_id)
-> +{
-> +	struct gxp_timer *timer = dev_id;
-> +	void (*event_handler)(struct clock_event_device *timer);
-> +
-> +
+- entity 15: imx290 2-001a (1 pad, 1 link)
+             type V4L2 subdev subtype Sensor flags 0
+             device node name /dev/v4l-subdev2
+        pad0: Source
+                [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:raw]
+                -> "csis-32e30000.mipi-csi":0 [ENABLED]
+```
 
-One too many blank lines.
+Note: MIPI CSI settle times are not calculated correctly right now and need a
+manual overwrite:
+echo 13 > /sys/kernel/debug/32e30000.mipi-csi/ths_settle 
+echo 2 > /sys/kernel/debug/32e30000.mipi-csi/tclk_settle
 
-> +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
-> +		writeb_relaxed(MASK_TCS_TC, timer->control);
-> +
-> +		event_handler = READ_ONCE(timer->evt.event_handler);
-> +		if (event_handler)
-> +			event_handler(&timer->evt);
-> +		return IRQ_HANDLED;
-> +	} else {
-> +		return IRQ_NONE;
-> +	}
-> +}
-> +
-> +static int __init gxp_timer_init(struct device_node *node)
-> +{
-> +	void __iomem *base_counter;
-> +	void __iomem *base_control;
-> +	u32 freq;
-> +	int ret, irq;
-> +	struct gxp_timer *gxp_timer;
-> +
-> +	base_counter = of_iomap(node, 0);
-> +	if (!base_counter) {
-> +		pr_err("Can't remap counter registers");
-> +		return -ENXIO;
-> +	}
-> +
-> +	base_control = of_iomap(node, 1);
-> +	if (!base_control) {
-> +		pr_err("Can't remap control registers");
+I ignored the settings for xfer, ycbcr and quantization for now. I do neither
+know how they will affect me nor what it should be.
+Also I did not focus on v4l2-compliance tool, this is a further task as well.
+IMHO imx7-mipi-csis.c should also create an immutable link to the camera
+sensor.
 
-iounmap base_counter?
+Regards,
+Alexander
 
-> +		return -ENXIO;
-> +	}
-> +
-> +	system_clock = of_iomap(node, 2);
-> +	if (!system_clock) {
-> +		pr_err("Can't remap control registers");
+[1] https://patchwork.linuxtv.org/project/linux-media/patch/20211104113631.206899-2-dorota.czaplejewicz@puri.sm/
 
-iounmap base_counter and base_control?
+Alexander Stein (4):
+  media: imx: imx7_mipi_csis: store colorspace in set_fmt as well
+  media: imx: imx7_media-csi: Add support for additional Bayer patterns
+  media: imx: utils: Add more Bayer formats
+  [DNI] arm64: dts: tqma8mqml: add IMX327 MIPI-CSI overlay
 
-> +		return -ENXIO;
-> +	}
-> +
-> +	if (of_property_read_u32(node, "clock-frequency", &freq)) {
-> +		pr_err("Can't read clock-frequency\n");
-> +		goto err_iounmap;
-> +	}
-> +
-> +	sched_clock_register(gxp_sched_read, 32, freq);
-> +	clocksource_mmio_init(system_clock, node->name, freq,
-> +				300, 32, clocksource_mmio_readl_up);
+Dorota Czaplejewicz (4):
+  media: imx: Store the type of hardware implementation
+  media: imx: Forward type of hardware implementation
+  media: imx: Use dedicated format handler for i.MX7/8
+  media: imx: Fail conversion if pixel format not supported
 
-We normally align continutation lines in function arguments to the
-opening ( thusly:
-
-	clocksource_mmio_init(system_clock, node->name, freq,
-			      300, 32, clocksource_mmio_readl_up);
-
-> +
-> +	irq = irq_of_parse_and_map(node, 0);
-> +	if (irq <= 0) {
-> +		ret = -EINVAL;
-> +		pr_err("GXP Timer Can't parse IRQ %d", irq);
-> +		goto err_iounmap;
-> +	}
-> +
-> +	gxp_timer = kzalloc(sizeof(*gxp_timer), GFP_KERNEL);
-> +	if (!gxp_timer) {
-> +		ret = -ENOMEM;
-> +		goto err_iounmap;
-> +	}
-> +
-> +	gxp_timer->counter = base_counter;
-> +	gxp_timer->control = base_control;
-> +	gxp_timer->evt.name = node->name;
-> +	gxp_timer->evt.rating = 300;
-> +	gxp_timer->evt.features = CLOCK_EVT_FEAT_ONESHOT;
-> +	gxp_timer->evt.set_next_event = gxp_time_set_next_event;
-> +	gxp_timer->evt.cpumask = cpumask_of(0);
-> +
-> +	if (request_irq(irq, gxp_time_interrupt, IRQF_TIMER | IRQF_SHARED,
-> +		node->name, gxp_timer)) {
-
-Again:
-
-	if (request_irq(irq, gxp_time_interrupt, IRQF_TIMER | IRQF_SHARED,
-			node->name, gxp_timer)) {
-
-> +		pr_err("%s: request_irq() failed\n", "GXP Timer Tick");
-
-Consider storing the error code from request_irq() and printing it here.
-So:
-
-	err = request_irq(...);
-	if (err) {
-		pr_err("%s: request_irq() failed: %pe\n", "GXP Timer Tick",
-		       ERR_PTR(err));
-
-> +		goto err_timer_free;
-> +	}
-> +
-> +	clockevents_config_and_register(&gxp_timer->evt, TIMER0_FREQ,
-> +					0xf, 0xffffffff);
-> +
-> +	pr_info("gxp: system timer (irq = %d)\n", irq);
-> +	return 0;
-> +
-> +
-> +err_timer_free:
-> +	kfree(gxp_timer);
-> +
-> +err_iounmap:
-> +	iounmap(system_clock);
-> +	iounmap(base_control);
-> +	iounmap(base_counter);
-> +	return ret;
-> +}
-> +
-> +TIMER_OF_DECLARE(gxp, "hpe,gxp-timer", gxp_timer_init);
-
-Thanks.
+ arch/arm64/boot/dts/freescale/Makefile        |   4 +
+ .../imx8mm-tqma8mqml-mba8mx-imx327.dts        |  95 +++++++++++++
+ drivers/staging/media/imx/imx-ic-prpencvf.c   |   3 +-
+ drivers/staging/media/imx/imx-media-capture.c |  20 ++-
+ drivers/staging/media/imx/imx-media-csi.c     |   3 +-
+ drivers/staging/media/imx/imx-media-utils.c   | 130 +++++++++++++++++-
+ drivers/staging/media/imx/imx-media.h         |   6 +-
+ drivers/staging/media/imx/imx7-media-csi.c    |  15 +-
+ drivers/staging/media/imx/imx7-mipi-csis.c    |   1 +
+ 9 files changed, 262 insertions(+), 15 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx-imx327.dts
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+

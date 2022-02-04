@@ -2,419 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCD04A9AF0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B1A4A9AEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359298AbiBDO20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:28:26 -0500
-Received: from mga09.intel.com ([134.134.136.24]:31467 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359280AbiBDO2P (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:28:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643984895; x=1675520895;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o9YdIKckD9PGelgJpGStLxH5Uf4RuvORb3X4B+bs1gs=;
-  b=nXgoZIC5sbyY3tFrTwqIqh+Gxnif1P4mZ6zl0YcsU+okb9BVZpPWFPli
-   CcbdSKwFzIvnksonLz/Zta7xYbENOjy0qeYzZJfiV8Y1lM7pMAS1YTwE2
-   IBrL4XlUsPo6EZKqBEt9ktcCQWHRfQuGj318/HMiIUT88W8flYXqoi5Tb
-   vhzobBVxzDkiurFNv/xFYx3u2vV5SMZ8lSl0LdrIid06I16z1d0rAjlus
-   xzsxkX4Q2JA5DoZhj7WkF9eP5b23nA0dNmJLglEzeQgqePOTCyEMXEUVt
-   Dvh+DXSdF7hD4+p9KZTBsL7R37zIN+d1dNgUZ0dJqW0ucG1YEvmY2ltQm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248135023"
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="248135023"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 06:28:03 -0800
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="584143895"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 06:27:58 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFzY9-000oUT-AL;
-        Fri, 04 Feb 2022 16:26:57 +0200
-Date:   Fri, 4 Feb 2022 16:26:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] drm/tiny: Add driver for Solomon SSD130X OLED
- displays
-Message-ID: <Yf03sCSuQwHKvgA9@smile.fi.intel.com>
-References: <20220204134347.1187749-1-javierm@redhat.com>
- <20220204134347.1187749-3-javierm@redhat.com>
+        id S1359277AbiBDO2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351482AbiBDO2L (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 09:28:11 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE18DC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:28:10 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id f17so11726886wrx.1
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:28:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=+Lp/u9TyqWGi8tCfXYQsoeJPT8Udd/ptviv++KOZSUU=;
+        b=LsUGi2nQVyaZowh+9qGjI90V+JaTfSH7TlMvyQdkd79C3DnYZ8eFgm5y9GVhgcwhXj
+         N5zvIWvdV1iH5oAdjMxrfwzgkVdq+hxWEiCyUblvJw4Fqj0bZ5suNaT/wjPzpwyP1swM
+         akSDRwdfiFkK0egXRe6WLWYYuMnvOSyfKh3giu5qg20tZOCGZdYIhK70Ke11VmOqQU25
+         NkpEl39PW92FOPW9ezbjXE1k297b0IRF2Od6ddBQagZXgVVA8K3Cm6mpeab2XautNFOs
+         2s68eIC0XKN8z7dHZqG7Zoia/w/nOnFEMfMU9A9wfzdceOSZ/qYfCVWg7kGv9bGmppO3
+         QkXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=+Lp/u9TyqWGi8tCfXYQsoeJPT8Udd/ptviv++KOZSUU=;
+        b=iG9oqfAf+441hHRH9fIbnuuA7NVtbgyUK+yY2Pvzq44ltKeKa1rLu6u9lkYrOtHxJO
+         FpwdZ8b7iSg8EGEkm0ofPZTk2bXeOVelNqEtcxnFglNIFCoYf3xW4i86xEhujzkixua0
+         liojHq7y16JQ7r4ieRpAP+Fnb8hUdKSlbi9PuCYkXt/g4jK1ECmXY/7os57YK9+LbRjU
+         /+zu+YV1Obf2mgovYkVY8Jqnu9zPd0MBYosCBRCEQkzbhr/W9/HVrPfpVE3PU0vv+BwC
+         RSVnnoWpztzdhz5N7tdh4Rskl/6Y58CBYhr3F6TlkFSizzvtCi2wdVveFVX+5AMR+BhA
+         xD5w==
+X-Gm-Message-State: AOAM531tQS6ft60tRP/8+3DXDNsptMNRMCeJljb+4HiH4KYS0Uz8rw7I
+        hcfTgrMHPwk3XBXqHWbtyVOPTvjWv30UtXo6
+X-Google-Smtp-Source: ABdhPJy7Li0UNWsO6whzeL5dHok9dh+9kNxX27ptjlz33GG9ZBo3V+oYd6fDWens/mdeSBuJqRTzBA==
+X-Received: by 2002:a05:6000:1292:: with SMTP id f18mr2682399wrx.133.1643984889385;
+        Fri, 04 Feb 2022 06:28:09 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:3fbe:ff10:110:739? ([2001:861:44c0:66c0:3fbe:ff10:110:739])
+        by smtp.gmail.com with ESMTPSA id y3sm2324801wry.109.2022.02.04.06.28.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 06:28:08 -0800 (PST)
+Message-ID: <71bd653b-0703-d34d-7da3-84a7088d02b7@baylibre.com>
+Date:   Fri, 4 Feb 2022 15:28:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204134347.1187749-3-javierm@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] drm/bridge: dw-hdmi: use safe format when first in
+ bridge chain
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
+        biju.das.jz@bp.renesas.com,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+References: <20220119122843.1455611-1-narmstrong@baylibre.com>
+ <CAG3jFyv15AhfZP0HTAt73U0yvKHNAMLmKzFu-9AfX9v76h7s6g@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <CAG3jFyv15AhfZP0HTAt73U0yvKHNAMLmKzFu-9AfX9v76h7s6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 02:43:45PM +0100, Javier Martinez Canillas wrote:
-> Add a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon OLED
-> controllers that can be programmed via an I2C interface. This is a port
-> of the ssd1307fb driver that already supports these devices.
+Hi,
+
+On 04/02/2022 15:05, Robert Foss wrote:
+> On Wed, 19 Jan 2022 at 13:28, Neil Armstrong <narmstrong@baylibre.com> wrote:
+>>
+>> When the dw-hdmi bridge is in first place of the bridge chain, this
+>> means there is no way to select an input format of the dw-hdmi HW
+>> component.
+>>
+>> Since introduction of display-connector, negotiation was broken since
+>> the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
+>> in last position of the bridge chain or behind another bridge also
+>> supporting input & output format negotiation.
+>>
+>> Commit 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks")
 > 
-> A Device Tree binding is not added because the DRM driver is compatible
-> with the existing binding for the ssd1307fb driver.
-
-...
-
-> +/*
-> + * DRM driver for Solomon SSD130X OLED displays
-> + *
-> + * Copyright 2022 Red Hat Inc.
-> + *
-> + * Based on drivers/video/fbdev/ssd1307fb.c
-> + * Copyright 2012 Free Electrons
-
-> + *
-
-No need for this blank line.
-
-> + */
-
-...
-
-> +struct ssd130x_device {
-> +	struct drm_device drm;
-> +	struct drm_simple_display_pipe pipe;
-> +	struct drm_display_mode mode;
-> +	struct drm_connector connector;
-
-
-> +	struct i2c_client *client;
-
-Can we logically separate hw protocol vs hw interface from day 1, please?
-This will allow to add SPI support for this panel much easier.
-
-Technically I would like to see here
-
-	struct device *dev;
-
-and probably (I haven't looked into design)
-
-	struct ssd130x_ops *ops;
-
-or something alike.
-
-> +	const struct ssd130x_deviceinfo *device_info;
-> +
-> +	unsigned area_color_enable : 1;
-> +	unsigned com_invdir : 1;
-> +	unsigned com_lrremap : 1;
-> +	unsigned com_seq : 1;
-> +	unsigned lookup_table_set : 1;
-> +	unsigned low_power : 1;
-> +	unsigned seg_remap : 1;
-> +	u32 com_offset;
-> +	u32 contrast;
-> +	u32 dclk_div;
-> +	u32 dclk_frq;
-> +	u32 height;
-> +	u8 lookup_table[4];
-> +	u32 page_offset;
-> +	u32 col_offset;
-> +	u32 prechargep1;
-> +	u32 prechargep2;
-> +
-> +	struct backlight_device *bl_dev;
-> +	struct pwm_device *pwm;
-> +	struct gpio_desc *reset;
-> +	struct regulator *vbat_reg;
-> +	u32 vcomh;
-> +	u32 width;
-> +	/* Cached address ranges */
-> +	u8 col_start;
-> +	u8 col_end;
-> +	u8 page_start;
-> +	u8 page_end;
-> +};
-
-...
-
-> +static inline int ssd130x_write_value(struct i2c_client *client, u8 value)
-
-Not sure inline does anything useful here.
-Ditto for the rest similar cases.
-
-...
-
-> +static inline int ssd130x_write_cmd(struct i2c_client *client, int count,
-> +				    /* u8 cmd, u8 value, ... */...)
-> +{
-> +	va_list ap;
-> +	u8 value;
-> +	int ret;
-> +
-> +	va_start(ap, count);
-
-> +	while (count--) {
-> +		value = va_arg(ap, int);
-> +		ret = ssd130x_write_value(client, (u8)value);
-> +		if (ret)
-> +			goto out_end;
-> +	}
-
-I'm wondering if this can be written in a form
-
-	do {
-		...
-	} while (--count);
-
-In this case it will give a hint that count can't be 0.
-
-> +out_end:
-> +	va_end(ap);
-> +
-> +	return ret;
-> +}
-
-
-...
-
-> +	ssd130x->pwm = pwm_get(dev, NULL);
-> +	if (IS_ERR(ssd130x->pwm)) {
-> +		dev_err(dev, "Could not get PWM from device tree!\n");
-
-"device tree" is a bit confusing here if I run this on ACPI.
-Maybe something like "firmware description"?
-
-> +		return PTR_ERR(ssd130x->pwm);
-> +	}
-
-...
-
-> +	/* Set initial contrast */
-> +	ret = ssd130x_write_cmd(ssd130x->client, 2, SSD130X_CONTRAST, ssd130x->contrast);
-
-Creating a local variable for client allows to:
-- make lines shorter and might even be less LOCs
-- allow to convert struct device to client in one place
-  (as per my above comment)
-
-Ditto for other similar cases.
-
-> +	if (ret < 0)
-> +		return ret;
-
-...
-
-> +		for (i = 0; i < ARRAY_SIZE(ssd130x->lookup_table); ++i) {
-
-i++ should work same way.
-
-> +		}
-
-...
-
-> +	/* Switch to horizontal addressing mode */
-> +	ret = ssd130x_write_cmd(ssd130x->client, 2, SSD130X_SET_ADDRESS_MODE,
-> +				SSD130X_SET_ADDRESS_MODE_HORIZONTAL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-
-Can it be
-
-	return ssd130x_write_cmd(...);
-
-?
-
-...
-
-> +	unsigned int line_length = DIV_ROUND_UP(width, 8);
-> +	unsigned int pages = DIV_ROUND_UP(height, 8);
-
-For power of two there are more efficient roundup()/rounddown()
-(or with _ in the names, I don't remember by heart).
-
-...
-
-> +			for (k = 0; k < m; k++) {
-
-> +				u8 byte = buf[(8 * i + k) * line_length +
-> +					       j / 8];
-
-One line?
-
-> +				u8 bit = (byte >> (j % 8)) & 1;
-> +
-> +				data |= bit << k;
-> +			}
-
-...
-
-> +static int ssd130x_display_pipe_mode_valid(struct drm_simple_display_pipe *pipe,
-> +					   const struct drm_display_mode *mode)
-> +{
-> +	struct ssd130x_device *ssd130x = drm_to_ssd130x(pipe->crtc.dev);
-> +
-> +	if (mode->hdisplay != ssd130x->mode.hdisplay &&
-> +	    mode->vdisplay != ssd130x->mode.vdisplay)
-> +		return MODE_ONE_SIZE;
-
-> +	else if (mode->hdisplay != ssd130x->mode.hdisplay)
-> +		return MODE_ONE_WIDTH;
-> +	else if (mode->vdisplay != ssd130x->mode.vdisplay)
-> +		return MODE_ONE_HEIGHT;
-
-'else' in both cases is redundant.
-
-> +	return MODE_OK;
-> +}
-
-...
-
-> +poweroff:
-
-out_power_off: ?
-
-...
-
-> +	if (!fb)
-> +		return;
-
-Can it happen?
-
-...
-
-> +	drm_mode_probed_add(connector, mode);
-> +	drm_set_preferred_mode(connector, mode->hdisplay, mode->vdisplay);
-> +
-> +	return 1;
-
-Positive code, what is the meaning of it?
-
-...
-
-> +	if (device_property_read_u32(dev, "solomon,prechargep2", &ssd130x->prechargep2))
-> +		ssd130x->prechargep2 = 2;
-
-You can drop conditionals for the optional properties
-
-	ssd130x->prechargep2 = 2;
-	device_property_read_u32(dev, "solomon,prechargep2", &ssd130x->prechargep2);
-
-and so on for the similar.
-
-...
-
-> +	ssd130x->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(ssd130x->reset)) {
-
-> +		ret = PTR_ERR(ssd130x->reset);
-> +		dev_err(dev, "Failed to get reset gpio: %d\n", ret);
-> +		return ret;
-
-Why not
-
-	return dev_err_probe()?
-
-Each time you call it for deferred probe, it will spam logs.
-
-> +	}
-> +
-> +	ssd130x->vbat_reg = devm_regulator_get_optional(dev, "vbat");
-> +	if (IS_ERR(ssd130x->vbat_reg)) {
-> +		ret = PTR_ERR(ssd130x->vbat_reg);
-> +		if (ret == -ENODEV) {
-> +			ssd130x->vbat_reg = NULL;
-
-> +		} else {
-> +			dev_err(dev, "Failed to get VBAT regulator: %d\n", ret);
-> +			return ret;
-> +		}
-
-Ditto ?
-
-> +	}
-
-...
-
-> +	if (IS_ERR(ssd130x)) {
-> +		ret = PTR_ERR(ssd130x);
-> +		dev_err(dev, "Failed to allocate DRM device: %d\n", ret);
-> +		return ret;
-> +	}
-
-Ditto.
-
-...
-
-> +	i2c_set_clientdata(client, ssd130x);
-
-Wondering if you can split i2c part from the core part and perhaps use regmap
-to access the device.
-
-...
-
-> +	if (IS_ERR(bl)) {
-> +		ret = PTR_ERR(bl);
-> +		dev_err(dev, "Unable to register backlight device: %d\n", ret);
-> +		return ret;
-
-	return dev_err_probe();
-
-> +	}
-
-...
-
-> +	ret = drm_dev_register(drm, 0);
-> +	if (ret) {
-> +		dev_err(dev, "DRM device register failed: %d\n", ret);
-> +		return ret;
-> +	}
-
-Ditto.
-
-...
-
-> +	{},
-
-Comma is not needed in terminator entry.
-
-...
-
-> +static struct i2c_driver ssd130x_i2c_driver = {
-> +	.driver = {
-> +		.name = DRIVER_NAME,
-> +		.of_match_table = ssd130x_of_match,
-> +	},
-> +	.probe_new = ssd130x_probe,
-> +	.remove = ssd130x_remove,
-> +	.shutdown = ssd130x_shutdown,
-> +};
-
-> +
-
-Redundant blank line.
-
-> +module_i2c_driver(ssd130x_i2c_driver);
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> I think this is the wrong hash. Is 7cd70656d128 the actual hash?
+
+Wow indeed, thanks for checking...
+
+> 
+>> was introduced to make negotiation work again by making display-connector
+>> act as a pass-through concerning input & output format negotiation.
+>>
+>> But in the case where the dw-hdmi is single in the bridge chain, for
+>> example on Renesas SoCs, with the display-connector bridge the dw-hdmi
+>> is no more single, breaking output format.
+>>
+>> Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
+>> Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>> Fixes: 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks").
+> 
+> This hash too.
+> 
+>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>> ---
+>> Changes since v1:
+>> - Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
+>> - Fix typos in commit message
+>>
+>>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> index 54d8fdad395f..97cdc61b57f6 100644
+>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> @@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>>          if (!output_fmts)
+>>                  return NULL;
+>>
+>> -       /* If dw-hdmi is the only bridge, avoid negociating with ourselves */
+>> -       if (list_is_singular(&bridge->encoder->bridge_chain)) {
+>> +       /* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
+>> +       if (list_is_singular(&bridge->encoder->bridge_chain) ||
+>> +           list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
+>>                  *num_output_fmts = 1;
+>>                  output_fmts[0] = MEDIA_BUS_FMT_FIXED;
+>>
+>> --
+>> 2.25.1
+>>
+> 
+> There are two checkstyle issues apart from the above mentioned hash
+> issues, and I think we can ignore those. With the above mentioned
+> issue fixed, feel free to add my r-b.
+> 
+> Reviewed-by: Robert Foss <robert.foss@linaro.org>
+
+Thanks, I'll fix & resend with your r-b.
+
+Neil

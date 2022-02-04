@@ -2,91 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017F74A994A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181074A9946
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358815AbiBDM24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S1358801AbiBDM2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347114AbiBDM2z (ORCPT
+        with ESMTP id S234049AbiBDM2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:28:55 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC57C06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 04:28:55 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id a28so12259434lfl.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 04:28:55 -0800 (PST)
+        Fri, 4 Feb 2022 07:28:36 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6AAC061714;
+        Fri,  4 Feb 2022 04:28:35 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id t14so8239957ljh.8;
+        Fri, 04 Feb 2022 04:28:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u5EE+DkLgmN23BbMUE4nz7OGjEySA8/7jVCGdyEuQd4=;
-        b=l8iWC5a2b+sRIY7ZfxlfUPFTxvMH0CELbAuWVa9q815d/EK454CqeyWsNWJjCI9bl9
-         s1Odh8R1pOW0uN0YRnccOsWreV3t8GUcThTUiLUSMv5BWfNBNvyPL25+S9bn8oI6QB+B
-         yKlJXvcCk25Nm8qAuLZlHdfEUF7wf2zsPx8MrHkRWVB76FwvRbW73QzTRzSyqCI90xMw
-         J5MRctd43fhRsfT+boL4RV5ziKMcPD0EJLbVVkhTfNmAA9ZUguhSqPHU7MCV0Fi7W8kd
-         qaMf0mGSnD1XnRvY799LQaKjbNowpbQX39rCPeTtcVtPEST+9aYi9qu2fsqIHV4KeSyT
-         g6gA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Ne8/8XjxQvQVikhbv7k/8kICaz4qUeVx8XxcLTjMyBE=;
+        b=MpozesqZWKL9L8Kq3hGuSTY98Olh5bmSh7fETkonsRfovgtF5PjqKkWlLcasriuaoF
+         btBDpR5YWjMqAR50N25mSoui68vOc/H0j5u3/I8Mz7A/d+Jv7gvD6mtDySpafSRheFZh
+         pP0Ma9kd1vlO3HDGiz5re4A4uEZbKxcJakf2C8R6fECwTkgNoEBmy+l02PFKbgPc+vkj
+         /0sRdEs2Sae61r7Cj0ZfhJ5TNToAHiZmhka7YPpGuYOzVaWhSMlTlcSB36THaJgRO0o9
+         zOl2byHILTu0zyAJgTQGHd7+pf+yFJpGTIMmiE0P1/3RnedqDSNM1MqPanoTaLAH61MT
+         F2DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u5EE+DkLgmN23BbMUE4nz7OGjEySA8/7jVCGdyEuQd4=;
-        b=3eHsl/XS0qfHNnF6hiVcunD53Yl9CQEuf2eKIUHsycP/EH8AfPQnvnjBGWLJfuP6fy
-         fnU4FoPDYdgcRoEGgWgNlOv1lY0Gf6eaRzbVJP07V2pRjw8bfSJ2260d9v5/qPosx2NY
-         C68kmI9cgfmbVupNspzMuReRsU2aSqwcSCJn04ujugOygjf22P8TJf6m7PdrtIuJ+cqi
-         z6IWzf7cPv+416a1mJRcyuQvDbK3uhquFNJHA91ug3yMZuy8n5IlRvF6YnIEGRZm0NEu
-         /ZsLUH0IsY6xIdCuN/rGwO00VzdULyhkymbU561Cpze4SIti11RzSfOx8ftb2HdQVo4f
-         Wgcg==
-X-Gm-Message-State: AOAM531eA5eTKAPGHb+oKUpL8p+V36d9bxAmLmeKKgJhcncxnwwN6v0v
-        tPENwi5x6sd50IBGC+RErR+fkHKaOUSFrTrNV5+/xw==
-X-Google-Smtp-Source: ABdhPJxKiaraf1BxhQHs4VHBoTVENKbIOIstx8X8gx/Nh6NbS6taEj28l1A3fXhHQ2OUPqPHo2XxD9KaxtDCYCEMCWY=
-X-Received: by 2002:a05:6512:ba7:: with SMTP id b39mr2169011lfv.373.1643977733643;
- Fri, 04 Feb 2022 04:28:53 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Ne8/8XjxQvQVikhbv7k/8kICaz4qUeVx8XxcLTjMyBE=;
+        b=HxWW8VpfBAgLXf/z68dlcGQHf0obZCjA5WVS0BspZzAJu1KP1NoxBLeUgw0neEZWk9
+         jccW12lwtYWl7lu7xhUNX3dkEJ5V22E+XdM7b4C8f3PGHVuh0PnkZ7sm43tZKSUU1AN+
+         6coSTuOOkUFPWEpA4bjKnakkXBcoepUHzTX4mrAdl7NXWSWPtVeuT4u3oomrCYLHcM/b
+         T6zVfN5HBibsgIX1LzJsEPe/PUk1GSRTfM81ryjllkA6kaEkR185xKMcdJYhjB1qynzn
+         VV81PnwO/Qa471DsZQn7f8A62lmsEXNr3jR4s1UcQ417W8G2bP+pZMKEEvox9brJjidj
+         c72A==
+X-Gm-Message-State: AOAM532Bb4sBqL5IbdsVdqaVPQ0KGDxvyokwEqQBT7xvWOzSixbk/26j
+        +o8g2AbrdtDbhGzLemA2trk=
+X-Google-Smtp-Source: ABdhPJyH4NxPtNiTjx9AdBmOV7v1e/mQttIv0y9Q5MVhxPnyJ/0dpmfFOqjQ5ky4gsKnvJFY7Zff9Q==
+X-Received: by 2002:a05:651c:1a07:: with SMTP id by7mr1654064ljb.317.1643977713765;
+        Fri, 04 Feb 2022 04:28:33 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id bt22sm292617lfb.262.2022.02.04.04.28.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 04:28:33 -0800 (PST)
+Message-ID: <a6d6ded6-5317-8aec-9021-461c7dfc5b4f@gmail.com>
+Date:   Fri, 4 Feb 2022 15:28:32 +0300
 MIME-Version: 1.0
-References: <20220121014039.1693208-1-kai.heng.feng@canonical.com> <20220125055010.1866563-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20220125055010.1866563-1-kai.heng.feng@canonical.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 4 Feb 2022 13:28:17 +0100
-Message-ID: <CAPDyKFrtD28NKTyUAR-6Rt4PwYvkOuWcRhxZZWVAq4KcTNG7QQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] mmc: rtsx: Use pm_runtime_{get,put}() to handle
- runtime PM
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-pm@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Thomas Hebb <tommyhebb@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v18 2/4] dmaengine: tegra: Add tegra gpcdma driver
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+Cc:     Pavan Kunapuli <pkunapuli@nvidia.com>
+References: <1643729199-19161-1-git-send-email-akhilrajeev@nvidia.com>
+ <1643729199-19161-3-git-send-email-akhilrajeev@nvidia.com>
+ <3feaa359-31bb-bb07-75d7-2a39c837a7a2@gmail.com>
+ <DM5PR12MB18509939C17ABEB5EEA825FFC0289@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <d6d70e52-a984-d973-f3bb-f70f1a4ce95d@gmail.com>
+ <DM5PR12MB18501E2343121A9FEE013F15C0299@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <07913f0e-1e17-a22b-615c-fff8ccad7f9b@gmail.com>
+In-Reply-To: <07913f0e-1e17-a22b-615c-fff8ccad7f9b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Jan 2022 at 06:50, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->
-> Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
-> use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
-> keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
-> weird tricks to keep it from runtime suspending.
->
-> So use those helpers at right places to properly manage runtime PM.
->
-> Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-> Cc: Ricky WU <ricky_wu@realtek.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+04.02.2022 15:15, Dmitry Osipenko пишет:
+> 04.02.2022 09:47, Akhil R пишет:
+>>> 03.02.2022 06:44, Akhil R пишет:
+>>>>> But why do you need to pause at all here and can't use
+>>>>> tegra_dma_stop_client() even if pause is supported?
+>>>> The recommended method to terminate a transfer in
+>>>> between is to pause the channel first and then disable it.
+>>>> This is more graceful and stable for the hardware.
+>>>> stop_client() is more abrupt, though it does the job.
+>>>
+>>> If there is no real practical difference, then I'd use the common method
+>>> only. This will make code cleaner and simpler a tad.
+>> This is the documented way of clean exit from a transfer, especially for
+>> cyclic transfers where the DMA is configured in continuous mode.
+>> I guess it might not be a good idea to deviate from that unless there is
+>> something demanding it compulsorily.
+>>
+>> I agree that the code will be cleaner. I would try to see if I can find a cleaner
+>> way to do this. Please do let me know if you have any suggestion.
+> 
+> Will be great if you could find out and provide a detailed explanation
+> about the exact differences of the methods from software perspective.
+> Try to ask the hardware people.
+> 
+> If you won't be able to find out, then use both methods. Then you could
+> specify the "pause" callback within the tegra_dma_chip_data
+> [tdma->chip_data->pause(tdma)], instead of using condition in the code.
 
-The runtime PM reference counting for the mmc host device is managed
-by the mmc core. Have a look at __mmc_claim_host() and
-mmc_release_host().
-
-In other words, the runtime PM reference counting should not be needed
-in the mmc host driver, unless there are some specific cases, like for
-example during ->probe|remove().
-
-So perhaps it's only the changes in the ->probe|remove() functions
-that you need to fix the problems? No?
-
-[...]
-
-Kind regards
-Uffe
+s/pause/terminate/

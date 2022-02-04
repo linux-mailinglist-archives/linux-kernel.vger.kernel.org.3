@@ -2,104 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD4A4AA170
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786184AA178
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238216AbiBDUxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:53:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiBDUxO (ORCPT
+        id S237737AbiBDU5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:57:05 -0500
+Received: from mail-qv1-f42.google.com ([209.85.219.42]:40579 "EHLO
+        mail-qv1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232318AbiBDU5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:53:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAD2C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:53:13 -0800 (PST)
-Date:   Fri, 4 Feb 2022 21:53:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644007992;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hDCDwd0y2NgSOR54H9+IbLHkGAL+jpOQY8wyAtyMNj4=;
-        b=C6gRMjuzFom8pMLjwzorR1XCA+N9MoJHuvsUtNGiWAbj5Wl5bCgrQ7bwWQp7eU7ryCnj3/
-        e6o2U+Dh/qoqFgtO6D2JMsLfeQMwm9fR+MEmBy8MtouTawh5cuOysZe7hrwlyJZVBGCTbN
-        zsvht9Imt4Ox4+g50E0b09Kon5qX+DB6YDgcGbBfs49oBE7eaUq/1wVEVqSv1xWCskQE8f
-        QgKneQ662a+dZ7c0f6J3qhdlwndWHwpgAHj40MtfsL9/DyyGUZGHh/FUKqXSViBEFObZy9
-        5VOVg2viC09SeeOJ9Lb/6bdnMjXx7tVjp+cyU5/RthDbwEivlQrqCopZ7ey4Kg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644007992;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hDCDwd0y2NgSOR54H9+IbLHkGAL+jpOQY8wyAtyMNj4=;
-        b=I7W8pJUIcCPYYzOBZc3GAc5J1KSZX0VrHDEEjpHXiI7/CZfLhanFSQ5A9q+39X8rwxLsKJ
-        vlfgevCC97jIRzBw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: Re: [PATCH RFC v1] random: do not take spinlocks in irq handler
-Message-ID: <Yf2SNpi5847c7ceK@linutronix.de>
-References: <YfgPWatDzkn2ozhm@linutronix.de>
- <20220204153149.51428-1-Jason@zx2c4.com>
- <CAHmME9pucLWXDofvOgHEau3y-7RmdtU91_jQHSt7psuR22eXBg@mail.gmail.com>
+        Fri, 4 Feb 2022 15:57:05 -0500
+Received: by mail-qv1-f42.google.com with SMTP id e20so6329418qvu.7;
+        Fri, 04 Feb 2022 12:57:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tOktSJdsPyS4iLL9pxhiI0gDV+7BgjlNV1/kPM9c6Us=;
+        b=F592MT/13X4IBH39Xqhm1qQWGvcKv5KAG8b1RiLgm/qsw8AzGcki0zGjkGRYSsxvqD
+         ExZf3mPZ6QflL6tGune1RnpzLdvMsIrlzrbQEGqb9nhIuZ/YiJB6hxQ6wcs/t3iniBfW
+         AnfY8NhtNv90SvGvzJg6AZaGB2jIei0GuYIOkK2hWRP4zWmM8s1kcKKfy8Vje5d5E5RI
+         vG0oAp4jn5qUApdDsWvxnVN9ecNf6TGOIpctSxJQiMyBgBb0xAVCfX1xyUbJWMmeNfC1
+         ndBawtg4taHaIPZFbyLKw6jmdrNO50v1/6ZvkHpkKSAOZIWzOHMFEWVgUqr2ZwtQKjWj
+         xKeg==
+X-Gm-Message-State: AOAM532/tUrGLtu96EUR4wGHRimwts1B1tPBXp8Tm1ObpW0p2wOlPO12
+        sEVn6lrI2/dDeiUvN6JED468ofXWE78B2A==
+X-Google-Smtp-Source: ABdhPJwIwK6ccRrYu/Hr3BIPks61h8YSYyB+TtDp0At+LYgbbcDKHG43yNs7GBbnJ9tl/6627HEzEw==
+X-Received: by 2002:ad4:5b88:: with SMTP id 8mr988632qvp.1.1644008224046;
+        Fri, 04 Feb 2022 12:57:04 -0800 (PST)
+Received: from localhost (fwdproxy-ash-010.fbsv.net. [2a03:2880:20ff:a::face:b00c])
+        by smtp.gmail.com with ESMTPSA id p134sm1474570qke.29.2022.02.04.12.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 12:57:03 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
+Cc:     void@manifault.com, kernel-team@fb.com
+Subject: [PATCH v2] livepatch: Skip livepatch tests if ftrace cannot be configured
+Date:   Fri,  4 Feb 2022 12:56:26 -0800
+Message-Id: <20220204205625.2628328-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220203233205.1554034-1-void@manifault.com>
+References: <20220203233205.1554034-1-void@manifault.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pucLWXDofvOgHEau3y-7RmdtU91_jQHSt7psuR22eXBg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-04 16:58:58 [+0100], Jason A. Donenfeld wrote:
-> FWIW, the biggest issue with this
-> 
-> On Fri, Feb 4, 2022 at 4:32 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > +static void mix_interrupt_randomness(struct work_struct *work)
-> > +{
-> [...]
-> > +       if (unlikely(crng_init == 0)) {
-> > +               if (crng_fast_load((u8 *)&fast_pool->pool, sizeof(fast_pool->pool)) > 0)
-> > +                       atomic_set(&fast_pool->count, 0);
-> > +               else
-> > +                       atomic_and(~FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
-> > +               return;
-> > +       }
-> [...]
-> >  void add_interrupt_randomness(int irq)
-> > -       if (unlikely(crng_init == 0)) {
-> > -               if ((fast_pool->count >= 64) &&
-> > -                   crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
-> > -                       fast_pool->count = 0;
-> > -                       fast_pool->last = now;
-> > -               }
-> > -               return;
-> 
-> The point of crng_fast_load is to shuffle bytes into the crng as fast
-> as possible for very early boot usage. Deferring that to a workqueue
-> seems problematic. So I think at the very least _that_ part will have
-> to stay in the IRQ handler. That means we've still got a spinlock. But
-> at least it's a less problematic one than the input pool spinlock, and
-> perhaps we can deal with that some other way than this patch's
-> approach.
+livepatch has a set of selftests that are used to validate the behavior of
+the livepatching subsystem.  One of the testcases in the livepatch
+testsuite is test-ftrace.sh, which among other things, validates that
+livepatching gracefully fails when ftrace is disabled.  In the event that
+ftrace cannot be disabled using 'sysctl kernel.ftrace_enabled=0', the test
+will fail later due to it unexpectedly successfully loading the
+test_klp_livepatch module.
 
-RT wise we _could_ acquire that spinlock_t in IRQ context early during
-boot as long as system_state < SYSTEM_SCHEDULING. After that, we could
-dead lock.
+While the livepatch selftests are careful to remove any of the livepatch
+test modules between testcases to avoid this situation, ftrace may still
+fail to be disabled if another trace is active on the system that was
+enabled with FTRACE_OPS_FL_PERMANENT.  For example, any active BPF programs
+that use trampolines will cause this test to fail due to the trampoline
+being implemented with register_ftrace_direct().  The following is an
+example of such a trace:
 
-> In other words, this approach for the calls to mix_pool_bytes, and a
-> different approach for that call to crng_fast_load.
-> 
-> Jason
+tcp_drop (1) R I D      tramp: ftrace_regs_caller+0x0/0x58
+(call_direct_funcs+0x0/0x30)
+        direct-->bpf_trampoline_6442550536_0+0x0/0x1000
 
-Sebastian
+In order to make the test more resilient to system state that is out of its
+control, this patch adds a check to set_ftrace_enabled() to skip the tests
+if the sysctl invocation fails.
+
+Signed-off-by: David Vernet <void@manifault.com>
+---
+v2:
+  - Fix typo in newly added comment (s/permament/permanent).
+  - Adjust the location of the added newline to be before the new comment
+    rather than that the end of the function.
+  - Make the failure-path check a bit less brittle by checking for the
+    exact expected string, rather than specifically for "Device or resource
+    busy".
+
+ tools/testing/selftests/livepatch/functions.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 846c7ed71556..32970324dd7e 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -78,6 +78,12 @@ function set_ftrace_enabled() {
+ 	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+ 		 sysctl kernel.ftrace_enabled 2>&1)
+ 	echo "livepatch: $result" > /dev/kmsg
++
++	# Skip the test if ftrace is busy.  This can happen under normal system
++	# conditions if a trace is marked as permanent.
++	if [[ "$result" != "kernel.ftrace_enabled = $1" ]]; then
++		skip "failed to set kernel.ftrace_enabled=$1"
++	fi
+ }
+ 
+ function cleanup() {
+-- 
+2.30.2
+

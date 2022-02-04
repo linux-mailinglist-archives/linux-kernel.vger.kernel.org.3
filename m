@@ -2,133 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484024A99E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7474A9A01
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358143AbiBDNY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiBDNYZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:24:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0A1C061714;
-        Fri,  4 Feb 2022 05:24:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1560DB83705;
-        Fri,  4 Feb 2022 13:24:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7805CC340E9;
-        Fri,  4 Feb 2022 13:24:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CSA8JdcH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1643981060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=18izhwgSNhCPvyg6R5IhffaHNCE+hzAno0/hb73Eee0=;
-        b=CSA8JdcH18KNJb9DKxFgcBmsgXJ4ANNwgxcWk9ZHymdk46lnsGnOdfKE0XJ2Cr7uUJ2/uM
-        UTDmVN63zEqN3YUcAowvmnfFIKJr45EYZRF39jxaP+NPjqVwz4iYH3iYnBjTvcS4Fdqp0Q
-        S1+wwH+WYNsqaw1CYuFVtOVS5Z0iL2I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 69ff4d38 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 4 Feb 2022 13:24:20 +0000 (UTC)
-Received: by mail-yb1-f176.google.com with SMTP id w81so18525262ybg.12;
-        Fri, 04 Feb 2022 05:24:19 -0800 (PST)
-X-Gm-Message-State: AOAM530BwA7aH9TSkzqFW7Otzd96C0rqfjGPwUqm9QZXzQr4EeF9OG//
-        ZnL/0PqG+EzNG7RVah27lfxXmxFXUMb60CZwzyQ=
-X-Google-Smtp-Source: ABdhPJyIf87wBrPj2nnbx3qf/Yj71uWjDvePfiO222pOACGb+CApXxPfXVbzRX3d8i5ggYasfZSglR1RKR0BYd10HTQ=
-X-Received: by 2002:a05:6902:726:: with SMTP id l6mr2859746ybt.115.1643981058597;
- Fri, 04 Feb 2022 05:24:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20220201161342.154666-1-Jason@zx2c4.com> <YfznyWaVCz3Yl1ma@sol.localdomain>
-In-Reply-To: <YfznyWaVCz3Yl1ma@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 4 Feb 2022 14:24:07 +0100
-X-Gmail-Original-Message-ID: <CAHmME9ppY5QY7QCXK1HapEUY9nOn3VSJgvddypmMj_CVfycPeQ@mail.gmail.com>
-Message-ID: <CAHmME9ppY5QY7QCXK1HapEUY9nOn3VSJgvddypmMj_CVfycPeQ@mail.gmail.com>
-Subject: Re: [PATCH] random: use computational hash for entropy extraction
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+        id S232599AbiBDNdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:33:39 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:42488 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356417AbiBDNdh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 08:33:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=4Ca9I/sAMzQIMCAYXBkIkytKRwdb7KuHMc9w1XGE+7A=; b=0N30fHOeJKKiEmBzHSSAjOwTCo
+        NpvFMTne+ReR7L/rMoQIq2d5/1hRKjsDPqIORGjajQW+UTS2E2q3Z/w61nDp6gVZ6OVzpiYsw2EyW
+        pLoL11FZdneTXfJN6pJjgvs7Ay984ejA0+yx0g4+Hjhydr9jhY9l2gbt/i994/BsW7lk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nFyhL-004Gxv-Fm; Fri, 04 Feb 2022 14:32:23 +0100
+Date:   Fri, 4 Feb 2022 14:32:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     nick.hawkins@hpe.com, verdun@hpe.com,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <Yf0q5/Jus+mz0B2E@lunn.ch>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+ <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+> > +#include <linux/init.h>
+> > +#include <asm/mach/arch.h>
+> > +#include <asm/mach/map.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/clocksource.h>
+> 
+> It's normal to list all linux/ includes before asm/ includes. Please
+> rearrange.
 
-Thanks for your comments.
+Hi Nick
 
-On Fri, Feb 4, 2022 at 9:46 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> What this patch does makes sense, but I'm having a hard time seeing how it maps
-> to the paper cited above.  Your code seems to be treating BLAKE2s as an
-> arbitrary-length PRF, but "Construction 8" in section B.1 of the paper is
-> working with the raw compression function of a hash function.  Can you clarify?
+Since you are new to the kernel, please let me point out, you should
+consider Russell comments for all your code, not just this one file.
+Many of the comments are generic to code anywhere in the kernel. So it
+would be good to fix the same issues in the rest of your code base
+before submitting them.
 
-When academics say "based on Merkle-Damgard", they just mean iterative
-hashing. In this case, we have:
+I would also suggest that when you start submitting drivers, submit
+just one or two to start with. You will learn a lot from the feedback
+you get, and you can apply what you have learnt to the rest of your
+code before you post them for review.
 
-    refresh_F(s, x) = F(s, x), where s is the hash state, and x is a new input.
+I would also suggest you spend 30 minutes a day just reading comments
+other patches receive. You can also learn a lot that way, see if the
+comments apply to your own code. You will also learn about processes
+this way, which can be just as challenging to get right as code.
 
-Every time new inputs are refreshed into it, they're compressed
-together with the prior. In other words, "what a hash function does"
-that broadly uses the Merkle-Damgard model, which BLAKE2s does. Modern
-real hash functions also have a bit of extra book keeping - things
-like finalization to prevent length extension and such - but these are
-still considered MD-based hash functions. We're not going to excavate
-the raw BLAKE2s compression function. In particular, I like that we
-don't need to do anything funky and can just use something off the
-shelf
-
-Actually, though, I should have cited sections 5.1 and 6.4 (fixed now
-for v2), which show a model of a next function for a full PRNG rather
-than just a finalize for an extractor, which might pique your
-interest, as it shows the instantiation of the new state (with F(s,
-0)).
-
-With regards to PRF vs a key-less hash function: for BLAKE2s, the
-former reduces to the latter, in the sense that keyed BLAKE2s is the
-same as ordinary BLAKE2s, except the first thing hashed in is the key
-followed by 32 zero bytes (and the IV has a single bit change for
-domain separation). We would be totally fine omitting those zeros --
-from an entropy perspective they're obviously not adding anything --
-but the fact that BLAKE2s is specified like this I think will make the
-modeling a bit cleaner and easier. Practically speaking, it doesn't
-really matter at all. About the most you could say is that we could
-probably be *less* careful and do slightly *less* hashing and still
-have a very good construction, but that I'd like to do a bit more.
-
->
-> > -/*
-> > - * Originally, we used a primitive polynomial of degree .poolwords
-> > - * over GF(2).  The taps for various sizes are defined below.  They
-> > - * were chosen to be evenly spaced except for the last tap, which is 1
-> > - * to get the twisting happening as fast as possible.
-> > - *
->
-> The "Theory of operation" comment at the top of the file needs to be updated
-> too.
-
-Thanks, I just got rid of that quite outdated section and other things
-that reference the old LFSR approach for v2.
-
-There are so many other issues with the documentation comments in
-random.c too, that I think I'll also work on a general documentation
-cleanup patch at some point down the road. It still documents the old
-/dev/random behavior, suggests that RDRAND is faster than ChaCha20,
-forgets about getrandom(), and so on and so forth.
-
-> In the above comment, 'key' should be 'seed'.
-> Likewise above.
-
-Caught this too right after sending. Fixed now for v2.
-
-Regards,
-Jason
+     Andrew

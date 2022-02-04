@@ -2,322 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4864AA2AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA544AA2CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245205AbiBDV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
+        id S245503AbiBDWGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiBDV6A (ORCPT
+        with ESMTP id S239701AbiBDWF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:58:00 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2FCC06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:57:59 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id o12so23109173eju.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:57:59 -0800 (PST)
+        Fri, 4 Feb 2022 17:05:59 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBB9C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:05:46 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id f10so15160428lfu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:05:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4ry+6xT/5Q2RE5BmaT6rGkA3Wtas/JKbSMIBj1k8UiY=;
-        b=CVusU5U6nDWS1JVb0PZvHpmocDCcQhArtVdyzZqA414Xb7FGrqrjH2WoXceqJvju8P
-         DbLvfLlrYLVeStDKM6EmvIYLppiIy4xIIC5aSPIOyAFbClI46pTs5NFtRrbrdcQztdOg
-         Z23r4oLHWDJZ4OZ56ZKPu82iD03qkoLF9CiCG2+mKL02p6AFz1E9JyGjczVCE4LgXZHq
-         e+WV4blAji5axR7MV3E2YpopTBy6ADV87QR16w7z0n3vcHqfr78Q0gwp8VVDrtFFd6fh
-         eiy2/XB4tiV/ZIyRHwNR5ZiSxmqR4GCOejClHPcQdETqcfNR7EQ5GdOQVAR5VhPf2pK/
-         95pg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XuPklbFP/fc/0dPlSsCQ5ZGoroApyYX5xaCS3twuJo0=;
+        b=b9JDWnjrm3iOe3iGYZGMYwM63RP+E7UGWF5wVV2nyQomx1wYUcCWZC/eee8DXLwLlA
+         hrRLcHgJU/GSY+1nagrW/W7O9HdFWOevHCms5AGg5DMKk7HHuF0k3vk194/AbmcN17O8
+         lEgiGS8jSQKg3TlH4p/5ppfXplFGFEAKX/dDHK1M3B6vC1jJUb3sGZK+5INgmG+T0drE
+         tOT09bhB70/ikFKCyxqwnttYaJKSnX/pk6zHw7N6sR1J3KdrREi7YmFm6BLx1l3nHdj5
+         YUyhKqRfDqV4nOv8vQIoP1nmNtYXgmSL8OFUpvMT2LOXsknJeKaES2bRil0UVgPQ1DMt
+         LCtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4ry+6xT/5Q2RE5BmaT6rGkA3Wtas/JKbSMIBj1k8UiY=;
-        b=Kpt7ytTzftgNI/r1nKyYL/DmklDhipQEiUjt8Tsmr5KW7IXoy36yJubKjhLKYtuR3P
-         H6UymivTrozTLv/Y8M5Zo7Hph7x+B3FDnP0Lnx7+dIqqK0qcFAAo+Jz2Rhb27H4SOi2q
-         n8ul7vBqPTZEug4ZZj7eKyyVn+lgMZSLhB2tZ8P+KmhME/itm4/5vJh4MHPD5uraXz4v
-         2bzDqiQAY7XAJS6Ru3Rd+wW+SRsZlqf9r9PK/OpNT9gqZYjvGyZsjfOox7GJwZwT45Hu
-         j/2mZXu8HhoHTNvkIaOrtBN6CPflM7aZneJJSNaLfvs4TylWmdr7SsZE26++RU17bwLG
-         nEuw==
-X-Gm-Message-State: AOAM531fJREYfawFNIAqDWCP6MayWVmEGHzLtzCNOb7Tnm+UTq7d+Szu
-        aU+R3SiavJoNPz8PdcAAwvUxnls5jPnoxQhcGqjruw==
-X-Google-Smtp-Source: ABdhPJyjPtHXPXxgtQ0AVGPTpqG2fXVtIIZm54elBHYCRwA8XbI0pmZ+X2oyzyAMLVWlc0R3MpRSEZkwGBAoxdDOP2c=
-X-Received: by 2002:a17:907:7f1b:: with SMTP id qf27mr792124ejc.114.1644011877513;
- Fri, 04 Feb 2022 13:57:57 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XuPklbFP/fc/0dPlSsCQ5ZGoroApyYX5xaCS3twuJo0=;
+        b=ED/7jtLNPWABXSA0RgLIxR1MLFZ9RnAOvvbb6y+V7Wr/2t9iXz9EYQy19GMynAZVSl
+         SUGohmphMACtg20fXDYhPRKKWLzpPNCRl/FOEHg/hO2N6qcjLpWVfu67t8Qy4Ij/Pjye
+         3htbn3UgmLmK6ZEAHpvo6DwwxmqleNiRofQouO/SHJZl6i2jGiwUWnk4HkKs5FE6r7tE
+         MIZr2Nwc+jbBur9pLNj7lFcMppbhMCo+CgFNdASiM5orMIc02KTGCCMtPvN1NRIcQATK
+         /MtW7uaBQorwJdf2kTKqNDrkGcDebqeWL09jmmH53JDTwFbItkJxyIlAK4xfvSKGkMNz
+         cUdQ==
+X-Gm-Message-State: AOAM531k8oDjh6zHr3QsE1vA3LLQP82c8cN3hUTkO/BLKyEYd0j0zhmJ
+        rEYEMSl+jWaddJ3pzsnyjfJk6A==
+X-Google-Smtp-Source: ABdhPJw6EdE4r0SDZ5IGgQCyqb0x0l4A6H72ribqX+T6MBYeIexd/rE66QOn7AWl7hpzI7VL02xo3g==
+X-Received: by 2002:a05:6512:96a:: with SMTP id v10mr657014lft.497.1644012344995;
+        Fri, 04 Feb 2022 14:05:44 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c27sm472570lfp.103.2022.02.04.14.05.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 14:05:44 -0800 (PST)
+Message-ID: <215d1870-bfa6-fe08-c885-c32161a74ff7@linaro.org>
+Date:   Sat, 5 Feb 2022 01:05:43 +0300
 MIME-Version: 1.0
-References: <20220201015518.3118404-1-wonchung@google.com> <Yfo+gYLLOGN69Re1@kuha.fi.intel.com>
- <CAOvb9ygyupib4cMXhcdeZmgNZmyaCmaTF98MHae+irY5ruZ1Qw@mail.gmail.com> <CAJZ5v0hGxYv1xagc+ZQFhvpLpcbs1c1szZZahR7wsDm=i5AcJg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hGxYv1xagc+ZQFhvpLpcbs1c1szZZahR7wsDm=i5AcJg@mail.gmail.com>
-From:   Won Chung <wonchung@google.com>
-Date:   Fri, 4 Feb 2022 13:57:45 -0800
-Message-ID: <CAOvb9yhMgQ_4sDwqYS6ZYhauw3BKOidkp1uMFp6yw9nUWnLjSw@mail.gmail.com>
-Subject: Re: [PATCH v4] ACPI: device_sysfs: Add sysfs support for _PLD
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_50,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/3] drm/msm/dp: revise timing engine programming to
+ support widebus feature
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1643999801-20359-1-git-send-email-quic_khsieh@quicinc.com>
+ <1643999801-20359-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1643999801-20359-2-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 11:18 AM Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
->
-> On Wed, Feb 2, 2022 at 9:43 PM Won Chung <wonchung@google.com> wrote:
-> >
-> > Hi Heikki,
-> >
-> > Thank you for the review!
-> >
-> > On Wed, Feb 2, 2022 at 12:19 AM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi Won,
-> > >
-> > > On Tue, Feb 01, 2022 at 01:55:18AM +0000, Won Chung wrote:
-> > > > When ACPI table includes _PLD fields for a device, create a new
-> > > > directory (pld) in sysfs to share _PLD fields.
-> > >
-> > > I think you need to explain what needs this information in user space=
-.
-> > >
-> > > > Signed-off-by: Won Chung <wonchung@google.com>
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-bus-acpi | 107 +++++++++++++++++++=
-++++
-> > > >  drivers/acpi/device_sysfs.c              |  55 ++++++++++++
-> > > >  include/acpi/acpi_bus.h                  |   1 +
-> > > >  3 files changed, 163 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/ABI/testing/sysfs-bus-acpi b/Documentati=
-on/ABI/testing/sysfs-bus-acpi
-> > > > index 58abacf59b2a..b8b71c8f3cfd 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-bus-acpi
-> > > > +++ b/Documentation/ABI/testing/sysfs-bus-acpi
-> > > > @@ -96,3 +96,110 @@ Description:
-> > > >               hardware, if the _HRV control method is present.  It =
-is mostly
-> > > >               useful for non-PCI devices because lspci can list the=
- hardware
-> > > >               version for PCI devices.
-> > > > +
-> > > > +What:                /sys/bus/acpi/devices/.../pld/
-> > > > +Date:                Feb, 2022
-> > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             This directory contains the output of the device obje=
-ct's _PLD
-> > > > +             control method, if present. This information provides=
- details
-> > > > +             on physical location of a device.
-> > > > +
-> > > > +What:                /sys/bus/acpi/devices/.../pld/revision
-> > > > +Date:                Feb, 2022
-> > > > +Contact:     Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             The current revision is 0x2.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/group_token
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Unique numerical value identifying a group.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/group_position
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Identifies this device connection point=E2=80=99s pos=
-ition in the group.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/user_visible
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Set if the device connection point can be seen by the=
- user
-> > > > +             without disassembly.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/dock
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Set if the device connection point resides in a docki=
-ng station
-> > > > +             or port replicator.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/bay
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Set if describing a device in a bay or if device conn=
-ection
-> > > > +             point is a bay.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/lid
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Set if this device connection point resides on the li=
-d of
-> > > > +             laptop system.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/panel
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Describes which panel surface of the system=E2=80=99s=
- housing the
-> > > > +             device connection point resides on:
-> > > > +             0 - Top
-> > > > +             1 - Bottom
-> > > > +             2 - Left
-> > > > +             3 - Right
-> > > > +             4 - Front
-> > > > +             5 - Back
-> > > > +             6 - Unknown (Vertical Position and Horizontal Positio=
-n will be
-> > > > +             ignored)
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/vertical_position
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             0 - Upper
-> > > > +             1 - Center
-> > > > +             2 - Lower
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/horizontal_position
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             ACPI specification does not define horizontal positio=
-n field.
-> > > > +             Can be used as either
-> > > > +             0 - Left
-> > > > +             1 - Center
-> > > > +             2 - Right
-> > > > +             or
-> > > > +             0 - Leftmost
-> > > > +             and higher numbers going toward the right.
-> > > > +
-> > > > +What:           /sys/bus/acpi/devices/.../pld/shape
-> > > > +Date:           Feb, 2022
-> > > > +Contact:        Won Chung <wonchung@google.com>
-> > > > +Description:
-> > > > +             Describes the shape of the device connection point.
-> > > > +             0 - Round
-> > > > +             1 - Oval
-> > > > +             2 - Square
-> > > > +             3 - Vertical Rectangle
-> > > > +             4 - Horizontal Rectangle
-> > > > +             5 - Vertical Trapezoid
-> > > > +             6 - Horizontal Trapezoid
-> > > > +             7 - Unknown - Shape rendered as a Rectangle with dott=
-ed lines
-> > > > +             8 - Chamfered
-> > > > +             15:9 - Reserved
-> > > > +
-> > > > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysf=
-s.c
-> > > > index d5d6403ba07b..610be93635a0 100644
-> > > > --- a/drivers/acpi/device_sysfs.c
-> > > > +++ b/drivers/acpi/device_sysfs.c
-> > > > @@ -509,6 +509,49 @@ static ssize_t status_show(struct device *dev,=
- struct device_attribute *attr,
-> > > >  }
-> > > >  static DEVICE_ATTR_RO(status);
-> > > >
-> > > > +#define DEV_ATTR_PLD_PROP(prop) \
-> > > > +     static ssize_t prop##_show(struct device *dev, struct device_=
-attribute *attr, \
-> > > > +             char *buf) \
-> > > > +{ \
-> > > > +     struct acpi_device *acpi_dev =3D to_acpi_device(dev); \
-> > > > +     if (acpi_dev->pld =3D=3D NULL) \
-> > > > +             return -EIO; \
-> > > > +     return sprintf(buf, "%u\n", acpi_dev->pld->prop); \
-> > > > +}; \
-> > >
-> > > Ah, you are storing the _PLD below. Before there were concerns about
-> > > the memory that the cached _PLD information would consume. Another wa=
-y
-> > > of doing this would be to just always evaluate the _PLD here.
-> > >
-> > > Rafael needs to comment on this. My personal opinion is that let's
-> > > just store the thing.
-> > >
-> >
-> > By "always evaluate the _PLD here", you mean something like
-> >   acpi_get_physical_device_location(dev->handle, &pld)
-> > for every _PLD field, right?
-> >
-> > I will wait for Rafael's comment on this.
->
+On 04/02/2022 21:36, Kuogee Hsieh wrote:
+> Widebus feature will transmit two pixel data per pixel clock to interface.
+> Timing engine provides driving force for this purpose. This patch base
+> on HPG (Hardware Programming Guide) to revise timing engine register
+> setting to accommodate both widebus and non widebus application. Also
+> horizontal width parameters need to be reduced by half since two pixel
+> data are clocked out per pixel clock when widebus feature enabled.
+> In addition, revised timing engine function is an generic function and
+> intend to be shared by all platforms to reduce maintenance efforts.
+> 
+> Changes in v2:
+> -- remove compression related code from timing
+> -- remove op_info from  struct msm_drm_private
+> -- remove unnecessary wide_bus_en variables
+> -- pass wide_bus_en into timing configuration by struct msm_dp
+> 
+> Changes in v3:
+> -- split patch into 3 patches
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 99 ++++++++++++++--------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+>   5 files changed, 93 insertions(+), 34 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 0d315b4..0c22839 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -208,6 +208,8 @@ struct dpu_encoder_virt {
+>   
+>   	u32 idle_timeout;
+>   
+> +	bool wide_bus_en;
+> +
+>   	struct msm_dp *dp;
+>   };
+>   
+> @@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>   	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>   };
+>   
+> +
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +
+> +	return dpu_enc->wide_bus_en;
+> +}
+> +
+>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>   {
+>   	struct dpu_hw_dither_cfg dither_cfg = { 0 };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 99a5d73..893d74d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>    */
+>   int dpu_encoder_get_frame_count(struct drm_encoder *drm_enc);
+>   
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
+> +
+>   #endif /* __DPU_ENCODER_H__ */
 
-Hi Rafael,
+This chunk does not apply against the msm-next. The conflict is trivial, 
+but it would be nice to know that the code was tested against the 
+current tip.
 
-Thank you for the review.
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 185379b..3d6c914 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
+>   		timing->v_back_porch += timing->v_front_porch;
+>   		timing->v_front_porch = 0;
+>   	}
+> +
+> +	timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
+> +
+> +	/*
+> +	 * for DP, divide the horizonal parameters by 2 when
+> +	 * widebus is enabled
+> +	 */
+> +	if (timing->wide_bus_en) {
+> +		timing->width = timing->width >> 1;
+> +		timing->xres = timing->xres >> 1;
+> +		timing->h_back_porch = timing->h_back_porch >> 1;
+> +		timing->h_front_porch = timing->h_front_porch >> 1;
+> +		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+> +	}
+>   }
+>   
+>   static u32 get_horizontal_total(const struct intf_timing_params *timing)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> index 116e2b5..35d4aaa 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> @@ -33,6 +33,7 @@
+>   #define INTF_TP_COLOR1                  0x05C
+>   #define INTF_CONFIG2                    0x060
+>   #define INTF_DISPLAY_DATA_HCTL          0x064
+> +#define INTF_ACTIVE_DATA_HCTL           0x068
+>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+>   #define INTF_FRAME_COUNT                0x0AC
+>   #define   INTF_LINE_COUNT               0x0B0
+> @@ -90,68 +91,95 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>   	u32 hsync_period, vsync_period;
+>   	u32 display_v_start, display_v_end;
+>   	u32 hsync_start_x, hsync_end_x;
+> +	u32 hsync_data_start_x, hsync_data_end_x;
+>   	u32 active_h_start, active_h_end;
+>   	u32 active_v_start, active_v_end;
+>   	u32 active_hctl, display_hctl, hsync_ctl;
+>   	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
+>   	u32 panel_format;
+> -	u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
+> +	u32 intf_cfg, intf_cfg2 = 0;
+> +	u32 display_data_hctl = 0, active_data_hctl = 0;
+> +	u32 data_width;
+> +	bool dp_intf = false;
+>   
+>   	/* read interface_cfg */
+>   	intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
+> +
+> +	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
+> +		dp_intf = true;
+> +
+>   	hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
+>   	p->h_front_porch;
+>   	vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
+>   	p->v_front_porch;
+>   
+>   	display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
+> -	hsync_period) + p->hsync_skew;
+> +			hsync_period) + p->hsync_skew;
+>   	display_v_end = ((vsync_period - p->v_front_porch) * hsync_period) +
+> -	p->hsync_skew - 1;
+> +			p->hsync_skew - 1;
+> +
+> +	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>   
+>   	hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
+>   	hsync_end_x = hsync_period - p->h_front_porch - 1;
+>   
+> -	if (p->width != p->xres) {
+> -		active_h_start = hsync_start_x;
+> -		active_h_end = active_h_start + p->xres - 1;
+> -	} else {
+> -		active_h_start = 0;
+> -		active_h_end = 0;
+> -	}
+> +	/*
+> +	 * DATA_HCTL_EN controls data timing which can be different from
+> +	 * video timing. It is recommended to enable it for all cases, except
+> +	 * if compression is enabled in 1 pixel per clock mode
+> +	 */
+> +	if (p->wide_bus_en)
+> +		intf_cfg2 |= BIT(4);
+>   
+> -	if (p->height != p->yres) {
+> -		active_v_start = display_v_start;
+> -		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+> -	} else {
+> -		active_v_start = 0;
+> -		active_v_end = 0;
+> -	}
+> +	if (p->wide_bus_en)
+> +		intf_cfg2 |= BIT(0);
+>   
+> -	if (active_h_end) {
+> -		active_hctl = (active_h_end << 16) | active_h_start;
+> -		intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
+> -	} else {
+> -		active_hctl = 0;
+> -	}
+> +	/*
+> +	 * If widebus is disabled:
+> +	 * For uncompressed stream, the data is valid for the entire active
+> +	 * window period.
+> +	 * For compressed stream, data is valid for a shorter time period
+> +	 * inside the active window depending on the compression ratio.
+> +	 *
+> +	 * If widebus is enabled:
+> +	 * For uncompressed stream, data is valid for only half the active
+> +	 * window, since the data rate is doubled in this mode.
+> +	 * p->width holds the adjusted width for DP but unadjusted width for DSI
+> +	 * For compressed stream, data validity window needs to be adjusted for
+> +	 * compression ratio and then further halved.
+> +	 */
+> +	data_width = p->width;
 
-> So I would like to get back to the very beginning: Do you need full
-> _PLD output to address the issue at hand?
+This assignment is rewritten in the next few lines! Please drop it, it's 
+unused.
 
-I do not think we need full _PLD output. In fact, the fields I am
-adding are many but not all _PLD fields. To explain reasons behind
-each field added:
-*revision: current pld revision
-*group token and position: like an identifier for the device
-*panel, horizontal position, vertical position: to locate which
-physical device corresponds to this device
-*user visible, dock, bay, lid: to determine if and how the device can
-be located by the user.
-*shape: helps determine connection type
+> +
+> +	if (!dp_intf && p->wide_bus_en)
 
-So, for example, let's say there are multiple Type C connectors (C0,
-C1, and C2). We have 2 Type C ports on the left panel and 1 Type C
-port on the right panel of the laptop. We can use PLD fields: panel
-and horizontal position to determine which connector actually
-corresponds to which physical port. Having this information, we can
-determine which specific port (out of three) is doing what. (like
-charging cable connected to the port on the left side of the left
-panel)
+This condition does not make sense. wide_bus_en can only be enabled for 
+dp_intf, can it not? So the condition is always false.
 
-The fields that are in _PLD output but not included here are:
-ignore_color, color, width, height, ejectable, OSPM ejection required,
-cabinet_number, card_cage_number, reference, group orientation,
-rotation, order, vertical offset, horizontal offset.
-These are not included because they do not help specify the device to
-which one in specific physical location.
+> +		data_width = p->width >> 1;
+> +	else
+> +		data_width = p->width;
+>   
+> -	if (active_v_end)
+> -		intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
+> +	hsync_data_start_x = hsync_start_x;
+> +	hsync_data_end_x =  hsync_start_x + data_width - 1;
+>   
+> -	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>   	display_hctl = (hsync_end_x << 16) | hsync_start_x;
+> +	display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
+>   
+> -	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
+> -		active_h_start = hsync_start_x;
+> -		active_h_end = active_h_start + p->xres - 1;
+> -		active_v_start = display_v_start;
+> -		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+> -
+> +	if (dp_intf) {
+> +		// DP timing adjustment
 
->
-> If so, do you really need it for all devices that have _PLD?
+This is the only place with the C99 comment. Please use the surrounding 
+syntax.
 
-Benson and Prashant, please correct me if I am wrong:
+>   		display_v_start += p->hsync_pulse_width + p->h_back_porch;
+> +		display_v_end   -= p->h_front_porch;
+> +	}
+> +
+> +	active_h_start = hsync_start_x;
+> +	active_h_end = active_h_start + p->xres - 1;
+> +
+> +	active_v_start = display_v_start;
+> +	active_v_end = active_v_start + (p->yres * hsync_period) - 1;
 
-I do not think we need to store PLD for all devices, I think just user
-visible devices to locate them physically. So, I think we can check if
-device_type is ACPI_BUS_TYPE_DEVICE and user_visible pld field is 1.
-Otherwise, I do not think we need to store pld information nor create
-sysfs files.
-What do you think?
+These assignments were only applied for the DP/eDP case. Could you 
+please elaborate the change? Why are you enabling them for the DSI and 
+HDMI outputs?
 
->
-> If not, then why waste memory for all that stuff?
+>   
+> -		active_hctl = (active_h_end << 16) | active_h_start;
+> +	intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
+> +	intf_cfg |= BIT(30);	/* ACTIVE_V_ENABLE */
 
-If this sounds okay with you, I can make changes and send v6. (This
-comment is on v4 but I already sent v5)
+These were enabled only when active_h_end / active_v_end were non-zero. 
+Any comments?
 
-Thank you,
-Won
+> +
+> +	active_hctl = (active_h_end << 16) | active_h_start;
+> +
+> +	if (dp_intf)
+>   		display_hctl = active_hctl;
+> -	}
+>   
+>   	den_polarity = 0;
+>   	if (ctx->cap->type == INTF_HDMI) {
+> @@ -204,6 +232,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>   	DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
+>   	DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
+>   	DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
+> +	DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+> +	DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+> +	DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
+
+I see. These writes are currently under the if (ctx->cap->features & 
+BIT(DPU_DATA_HCTL_EN)) condition. Please leave them there unless the 
+condition is wrong.
+
+>   }
+>   
+>   static void dpu_hw_intf_enable_timing_engine(
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> index 3568be8..e4a518a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> @@ -30,6 +30,8 @@ struct intf_timing_params {
+>   	u32 border_clr;
+>   	u32 underflow_clr;
+>   	u32 hsync_skew;
+> +
+> +	bool wide_bus_en;
+>   };
+>   
+>   struct intf_prog_fetch {
+
+
+-- 
+With best wishes
+Dmitry

@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229BD4A9DEB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB254A9DCB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377085AbiBDRnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:43:37 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:43974 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377036AbiBDRna (ORCPT
+        id S1376934AbiBDRip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:38:45 -0500
+Received: from imap2.colo.codethink.co.uk ([78.40.148.184]:58386 "EHLO
+        imap2.colo.codethink.co.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243667AbiBDRil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:43:30 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id ae3511b76a7c2b6d; Fri, 4 Feb 2022 18:43:29 +0100
-Received: from kreacher.localnet (unknown [213.134.181.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 7948966B456;
-        Fri,  4 Feb 2022 18:43:28 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 0/3] ACPI: EC: Simplifications and cleanups
-Date:   Fri, 04 Feb 2022 18:37:51 +0100
-Message-ID: <12956939.uLZWGnKmhe@kreacher>
+        Fri, 4 Feb 2022 12:38:41 -0500
+Received: from [167.98.27.226] (helo=rainbowdash)
+        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nG2Xa-0006Bi-R8; Fri, 04 Feb 2022 17:38:34 +0000
+Received: from ben by rainbowdash with local (Exim 4.95)
+        (envelope-from <ben@rainbowdash>)
+        id 1nG2Xa-001BJQ-FL;
+        Fri, 04 Feb 2022 17:38:34 +0000
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     paul.walmsley@sifive.com, greentime.hu@sifive.com
+Cc:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Subject: [PATCH] PCI: fu740: fix finding gpios
+Date:   Fri,  4 Feb 2022 17:38:21 +0000
+Message-Id: <20220204173821.281784-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.137
-X-CLIENT-HOSTNAME: 213.134.181.137
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudekuddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=2 Fuz1=2 Fuz2=2
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+The calls to devm_gpiod_get_optional() have the -gpios on
+the name. This means the pcie driver is not finding the
+necessary reset or power gpios to allow the pcie devices
+on the SiFive Unmatched boards.
 
-The following 3 patches simplify and clean up some pieces of code in the ACPI
-EC driver.  Please refer to the patch changelogs for details.
+Note, this was workng around 5.16 and may not have been
+broken? There is still an issue if uboot has not probed
+the pcie bus then there are no pcie devices shown when
+Linux is started.
 
-Thanks!
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+---
+ drivers/pci/controller/dwc/pcie-fu740.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
+diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
+index 00cde9a248b5..842b7202b96e 100644
+--- a/drivers/pci/controller/dwc/pcie-fu740.c
++++ b/drivers/pci/controller/dwc/pcie-fu740.c
+@@ -259,11 +259,11 @@ static int fu740_pcie_probe(struct platform_device *pdev)
+ 		return PTR_ERR(afp->mgmt_base);
+ 
+ 	/* Fetch GPIOs */
+-	afp->reset = devm_gpiod_get_optional(dev, "reset-gpios", GPIOD_OUT_LOW);
++	afp->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+ 	if (IS_ERR(afp->reset))
+ 		return dev_err_probe(dev, PTR_ERR(afp->reset), "unable to get reset-gpios\n");
+ 
+-	afp->pwren = devm_gpiod_get_optional(dev, "pwren-gpios", GPIOD_OUT_LOW);
++	afp->pwren = devm_gpiod_get_optional(dev, "pwren", GPIOD_OUT_LOW);
+ 	if (IS_ERR(afp->pwren))
+ 		return dev_err_probe(dev, PTR_ERR(afp->pwren), "unable to get pwren-gpios\n");
+ 
+-- 
+2.34.1
 

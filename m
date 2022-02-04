@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2C4AA43E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651924AA45E
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378087AbiBDXXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358955AbiBDXXI (ORCPT
+        id S1356929AbiBDXbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:31:00 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:49799 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234948AbiBDXa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:23:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3E1DFBFFAE;
-        Fri,  4 Feb 2022 15:23:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F3416CE248E;
-        Fri,  4 Feb 2022 23:23:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8397C004E1;
-        Fri,  4 Feb 2022 23:23:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644016984;
-        bh=9P1b74WtVzZInz8h2Map/kXphQdxYtNWHMeXnkSUnm0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YZIno/g6yKC7ttomeryazCn7gfeS0G3OE31leh3kiR4qRitJ4eYSj+t6TfZBVP3uV
-         CJeCakEVpYoB0U/xLCLrNWgxcrJHkgscx8kWPNb786I9wb9QtY7bHgb1cZtPIRQlTW
-         teKdLC6f+k3bVs+iLyhU9nGsMMNtBYCRvL9NP2VkznuZ8L/qDy3Psuqop7WiTkMVAO
-         uHwbJa5T0LY2bFtGukyGtgAmKuiHVsQLBb0KtgqGAHKDkK6qbYJIxBz1ymWoIIXGvW
-         hynF2rX0TqpztGx17DVpX4yQbVOkxaFYIw0WSAn0h9TVMSY0ti2fuYYetyRY6dvoKB
-         KjdkqgVA5fZTg==
-Date:   Fri, 4 Feb 2022 17:30:15 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] staging: wlan-ng: Replace one-element arrays with
- flexible-array members
-Message-ID: <20220204233015.GA454979@embeddedor>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        Fri, 4 Feb 2022 18:30:59 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D6305580223;
+        Fri,  4 Feb 2022 18:30:58 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Fri, 04 Feb 2022 18:30:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=/Gar/Fx++ay0RV
+        7YJePn9xaoNkH+lcUDzbM2SCj8VPM=; b=zI7xkMv7IDW7GjQ3VH4et4ijNaPCEQ
+        MZz6wJ90AFGrI6L8QTazBX6nKgNJc8of2qoDmk3EzXpzHOP2TqmbCXD2B/OZqGze
+        eyOftaCl4p78lAYXGYjk3242AgoaSFBjTufHNoyFvNF9rBNApGPYWlmL6aAshmNM
+        evSHHS/vpbB2GiYk91hH1LiKHM8drPPbA2TIskHyHxtL3Yo/Lz1K5XWshISDMbcR
+        iPTgm9DEEQ8gTBw52L8BYLtxXFP25VWPA4EIdhn31eP6zdtstccKgzLZWggF5CYP
+        gC41yQsq1+x9roAl4jLn/6GbhhWwpCNoYNNN7zMF9XXgjbW4UzH5043w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/Gar/Fx++ay0RV7YJ
+        ePn9xaoNkH+lcUDzbM2SCj8VPM=; b=fi8Gt0PFzyGaFrSZ85prlTi+nzsdwCdNr
+        BDxM6I6Ros2E/nbf2pulaSWc9VnndptwnEUFGdvTaJ6s5zGg/3Rl3/s5H6rQPRfd
+        IDHhmuBdo4VDQenaZBXSMskMCreVtqIEpYFiSWrC0QI5pWqqTUQP8s4K9JWMLjEy
+        nw0p+dJLbWJ6eXDYMAIj/L76hC9q3SIYqAuFcW/0PAQesubJc/qJzdQbutOA752d
+        05a57QEOmmRKyVAVpGmnTE7clSFLKxhCVFn971GmPsb6OdoeY1ZmSiIGJSKFdmmY
+        +HoV/0FjAtY4Z3w2zOyt2K2ShEIsM2z4qqtQfuc3Hk56OTcuPdHPQ==
+X-ME-Sender: <xms:Mrf9YY2cszxsmmpgBXdmPe4Uk0aPbzSaFO0T7WQhl6e4maCUDao-9A>
+    <xme:Mrf9YTFyEhfL9m7MOlvq7fkthdtAj-j8onEN8c6t6gYnY5SKV_n7-6XEBOnl4hDea
+    de59FW5_u3fzjigoTw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrhedtgddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
+    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
+    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:Mrf9YQ79_h972gLe2YFcd2aO5BZ5dZa_4R50bpPkZt5fYzOaZPELqA>
+    <xmx:Mrf9YR2_t2jgJ1OeifWKhB_byRPQSSJjJINJBVMGHmTI67lNdksj6w>
+    <xmx:Mrf9YbEx8DzpyZ9p-bThyERMSNiyFScJG-TFuaY-xq05pTSuZDOiHg>
+    <xmx:Mrf9YT-S-s2JwfUqMAeFfiXuYtFrr1x9LuEv5ZZtHDNyyNAJsaFLgXLao3woNwpC>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3006FF6007E; Fri,  4 Feb 2022 18:30:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
+Mime-Version: 1.0
+Message-Id: <a30a737c-aa03-475f-afc1-a51ba01c7c37@www.fastmail.com>
+In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
+References: <20220204091914.280602669@linuxfoundation.org>
+Date:   Fri, 04 Feb 2022 18:30:37 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        akpm@linux-foundation.org, "Guenter Roeck" <linux@roeck-us.net>,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        sudipm.mukherjee@gmail.com
+Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a regular need in the kernel to provide a way to declare having
-a dynamically sized set of trailing elements in a structure. Kernel code
-should always use “flexible array members”[1] for these cases. The older
-style of one-element or zero-length arrays should no longer be used[2].
+On Fri, Feb 4, 2022, at 4:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.97 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
 
-This helps with the ongoing efforts to globally enable -Warray-bounds
-and get us closer to being able to tighten the FORTIFY_SOURCE routines
-on memcpy().
+I was able to compile and boot on my x86_64 test system without any errors or regressions.
 
-This issue was found with the help of Coccinelle and audited and fixed,
-manually.
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
-[1] https://en.wikipedia.org/wiki/Flexible_array_member
-[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-
-Link: https://github.com/KSPP/linux/issues/79
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/staging/wlan-ng/p80211mgmt.h  | 8 ++++----
- drivers/staging/wlan-ng/p80211types.h | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
-index 1ef30d3f3159..d6fe52de2c8f 100644
---- a/drivers/staging/wlan-ng/p80211mgmt.h
-+++ b/drivers/staging/wlan-ng/p80211mgmt.h
-@@ -229,14 +229,14 @@ struct wlan_ie {
- struct wlan_ie_ssid {
- 	u8 eid;
- 	u8 len;
--	u8 ssid[1];		/* may be zero, ptrs may overlap */
-+	u8 ssid[];		/* may be zero, ptrs may overlap */
- } __packed;
- 
- /*-- Supported Rates  -----------------------------*/
- struct wlan_ie_supp_rates {
- 	u8 eid;
- 	u8 len;
--	u8 rates[1];		/* had better be at LEAST one! */
-+	u8 rates[];		/* had better be at LEAST one! */
- } __packed;
- 
- /*-- FH Parameter Set  ----------------------------*/
-@@ -274,7 +274,7 @@ struct wlan_ie_tim {
- 	u8 dtim_cnt;
- 	u8 dtim_period;
- 	u8 bitmap_ctl;
--	u8 virt_bm[1];
-+	u8 virt_bm[];
- } __packed;
- 
- /*-- IBSS Parameter Set ---------------------------*/
-@@ -288,7 +288,7 @@ struct wlan_ie_ibss_parms {
- struct wlan_ie_challenge {
- 	u8 eid;
- 	u8 len;
--	u8 challenge[1];
-+	u8 challenge[];
- } __packed;
- 
- /*-------------------------------------------------*/
-diff --git a/drivers/staging/wlan-ng/p80211types.h b/drivers/staging/wlan-ng/p80211types.h
-index 6486612a8f31..b2ffd09881b0 100644
---- a/drivers/staging/wlan-ng/p80211types.h
-+++ b/drivers/staging/wlan-ng/p80211types.h
-@@ -234,7 +234,7 @@ struct p80211pstr32 {
- /* MAC address array */
- struct p80211macarray {
- 	u32 cnt;
--	u8 data[1][MAXLEN_PSTR6];
-+	u8 data[][MAXLEN_PSTR6];
- } __packed;
- 
- /* prototype template */
--- 
-2.27.0
-
+Thanks,
+Slade

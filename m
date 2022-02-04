@@ -2,256 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB7A4A9C46
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:52:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6CC4A9C4A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376274AbiBDPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:52:50 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:54919 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1359867AbiBDPwq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:52:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1643989966;
-  x=1675525966;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eEFl0IDx9piLP8bHlv+kRc+UofmjW22E2dtACMTdADI=;
-  b=dXvEpt16uN/GZCMhY1PP5c+HHBuwuJcs1S80K/TjOPQ/vvibg+t8ojtG
-   AFLpHRekX0Mq5XBm7NI6DUT8uXfzEZOoOe5leky5nGER++PePHFliAaZZ
-   79D6WaCazHI2Z9kAnDusAZKDn2H0n38C5SJ4ClFhyPaXgHh2p32Vwemws
-   ZUj7w2JwKcHqbXppUvCMmpn16h/svvJZyYSqxggiB7x4dimsCIRKuktvb
-   iD97vy4SmHzDLzfxD+NiNM1dTTs9U3rwtOAVDY7wFO5cM43mCHz+ekhmk
-   7mq6XLcNPO94pj2AygPe+idseNGpoDSHgP/HlXTrmd6Tzxu6MHQKs3UFk
-   w==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>
-CC:     <kernel@axis.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: [PATCH 2/2] regulator: Add support for TPS6286x
-Date:   Fri, 4 Feb 2022 16:52:41 +0100
-Message-ID: <20220204155241.576342-3-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220204155241.576342-1-vincent.whitchurch@axis.com>
-References: <20220204155241.576342-1-vincent.whitchurch@axis.com>
+        id S1376278AbiBDPxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:53:01 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45718 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376294AbiBDPw5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:52:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D64041F382;
+        Fri,  4 Feb 2022 15:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1643989975; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vUgYd4/d+/p6OH36Nj7N04clDus9+vNQS9D96mb7CBI=;
+        b=Kg9Y1c88irAJBV1rKPvY/Ih0I9VkEFe/oNPNNgPBoltmkStWbFbsjjDLSm+eJNsIXseEpd
+        QltpP4d5tPWAccXnQvAQW4lA1XQfZ9uul50BsXWtS7gdPdcZboL7r0IuD+ncNbBpVmbN/c
+        /2TWQRHfKy9QPlKPOpBuS2c8d/W6+4Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1643989975;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vUgYd4/d+/p6OH36Nj7N04clDus9+vNQS9D96mb7CBI=;
+        b=vWZndw5T7meTpxAqi3qSKzjMsAdGtXlx/UpWr4Pqrx6yC192m4e3ytemmB7Piieihqq22Z
+        AxzI6S4YCsdOhFCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90BC413B29;
+        Fri,  4 Feb 2022 15:52:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 84dgItdL/WELNgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 04 Feb 2022 15:52:55 +0000
+Message-ID: <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+Date:   Fri, 4 Feb 2022 16:52:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/4] drm/format-helper: Add
+ drm_fb_{xrgb8888,gray8}_to_mono_reversed()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-2-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220204134347.1187749-2-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------cnRQyZpb1bvRM6Q8hsnbuR1K"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI's TPS62864/TPS6286/TPS62868/TPS62869 are high-frequency synchronous
-step-down converters controlled via I2C.  There are differences in the
-electrical characteristics and packaging between the variants, but the
-register interfaces are identical.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------cnRQyZpb1bvRM6Q8hsnbuR1K
+Content-Type: multipart/mixed; boundary="------------GzDANQ6HuGgccvj5HkcZZVu8";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, linux-fbdev@vger.kernel.org,
+ Sam Ravnborg <sam@ravnborg.org>, dri-devel@lists.freedesktop.org,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+ David Airlie <airlied@linux.ie>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>
+Message-ID: <47100413-db63-1efa-45e9-028dfc430b7e@suse.de>
+Subject: Re: [PATCH v2 1/4] drm/format-helper: Add
+ drm_fb_{xrgb8888,gray8}_to_mono_reversed()
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-2-javierm@redhat.com>
+In-Reply-To: <20220204134347.1187749-2-javierm@redhat.com>
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/regulator/Kconfig              |   9 ++
- drivers/regulator/Makefile             |   1 +
- drivers/regulator/tps6286x-regulator.c | 159 +++++++++++++++++++++++++
- 3 files changed, 169 insertions(+)
- create mode 100644 drivers/regulator/tps6286x-regulator.c
+--------------GzDANQ6HuGgccvj5HkcZZVu8
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 1c35fed20d34..49e26f187742 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1263,6 +1263,15 @@ config REGULATOR_TPS62360
- 	  high-frequency synchronous step down dc-dc converter optimized
- 	  for battery-powered portable applications.
- 
-+config REGULATOR_TPS6286X
-+	tristate "TI TPS6286x Power Regulator"
-+	depends on I2C && OF
-+	select REGMAP_I2C
-+	help
-+	  This driver supports TPS6236x voltage regulator chips. These are
-+	  high-frequency synchronous step-down converters with an I2C
-+	  interface.
-+
- config REGULATOR_TPS65023
- 	tristate "TI TPS65023 Power regulators"
- 	depends on I2C
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 2e1b087489fa..4b8794a73e17 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -149,6 +149,7 @@ obj-$(CONFIG_REGULATOR_SY8827N) += sy8827n.o
- obj-$(CONFIG_REGULATOR_TI_ABB) += ti-abb-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6105X) += tps6105x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS62360) += tps62360-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS6286X) += tps6286x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65023) += tps65023-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6507X) += tps6507x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65086) += tps65086-regulator.o
-diff --git a/drivers/regulator/tps6286x-regulator.c b/drivers/regulator/tps6286x-regulator.c
-new file mode 100644
-index 000000000000..e29deda30d75
---- /dev/null
-+++ b/drivers/regulator/tps6286x-regulator.c
-@@ -0,0 +1,159 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright Axis Communications AB
-+
-+#include <linux/err.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/of_regulator.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/driver.h>
-+
-+#include <dt-bindings/regulator/ti,tps62864.h>
-+
-+#define TPS6286X_VOUT1		0x01
-+#define TPS6286X_VOUT1_VO1_SET	GENMASK(7, 0)
-+
-+#define TPS6286X_CONTROL	0x03
-+#define TPS6286X_CONTROL_FPWM	BIT(4)
-+#define TPS6286X_CONTROL_SWEN	BIT(5)
-+
-+#define TPS6286X_MIN_MV		400
-+#define TPS6286X_MAX_MV		1675
-+#define TPS6286X_STEP_MV	5
-+
-+static const struct regmap_config tps6286x_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+};
-+
-+static int tps6286x_set_mode(struct regulator_dev *rdev, unsigned int mode)
-+{
-+	unsigned int val;
-+
-+	switch (mode) {
-+	case REGULATOR_MODE_NORMAL:
-+		val = 0;
-+		break;
-+	case REGULATOR_MODE_FAST:
-+		val = TPS6286X_CONTROL_FPWM;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return regmap_update_bits(rdev->regmap, TPS6286X_CONTROL,
-+				  TPS6286X_CONTROL_FPWM, val);
-+}
-+
-+static unsigned int tps6286x_get_mode(struct regulator_dev *rdev)
-+{
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read(rdev->regmap, TPS6286X_CONTROL, &val);
-+	if (ret < 0)
-+		return 0;
-+
-+	return (val & TPS6286X_CONTROL_FPWM) ? REGULATOR_MODE_FAST : REGULATOR_MODE_NORMAL;
-+}
-+
-+static const struct regulator_ops tps6286x_regulator_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.set_mode = tps6286x_set_mode,
-+	.get_mode = tps6286x_get_mode,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.list_voltage = regulator_list_voltage_linear,
-+};
-+
-+static unsigned int tps6286x_of_map_mode(unsigned int mode)
-+{
-+	switch (mode) {
-+	case TPS62864_MODE_NORMAL:
-+		return REGULATOR_MODE_NORMAL;
-+	case TPS62864_MODE_FPWM:
-+		return REGULATOR_MODE_FAST;
-+	default:
-+		return REGULATOR_MODE_INVALID;
-+	}
-+}
-+
-+static const struct regulator_desc tps6286x_reg = {
-+	.name = "tps6286x",
-+	.of_match = of_match_ptr("SW"),
-+	.owner = THIS_MODULE,
-+	.ops = &tps6286x_regulator_ops,
-+	.of_map_mode = tps6286x_of_map_mode,
-+	.regulators_node = of_match_ptr("regulators"),
-+	.type = REGULATOR_VOLTAGE,
-+	.n_voltages = ((TPS6286X_MAX_MV - TPS6286X_MIN_MV) / TPS6286X_STEP_MV) + 1,
-+	.min_uV = TPS6286X_MIN_MV * 1000,
-+	.uV_step = TPS6286X_STEP_MV * 1000,
-+	.vsel_reg = TPS6286X_VOUT1,
-+	.vsel_mask = TPS6286X_VOUT1_VO1_SET,
-+	.enable_reg = TPS6286X_CONTROL,
-+	.enable_mask = TPS6286X_CONTROL_SWEN,
-+	.ramp_delay = 1000,
-+	/* tDelay + tRamp, rounded up */
-+	.enable_time = 3000,
-+};
-+
-+static const struct of_device_id tps6286x_dt_ids[] = {
-+	{ .compatible = "ti,tps62864", },
-+	{ .compatible = "ti,tps62866", },
-+	{ .compatible = "ti,tps62868", },
-+	{ .compatible = "ti,tps62869", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, tps6286x_dt_ids);
-+
-+static int tps6286x_i2c_probe(struct i2c_client *i2c,
-+			    const struct i2c_device_id *id)
-+{
-+	struct device *dev = &i2c->dev;
-+	struct regulator_config config = {};
-+	struct regulator_dev *rdev;
-+	struct regmap *regmap;
-+
-+	regmap = devm_regmap_init_i2c(i2c, &tps6286x_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	config.dev = &i2c->dev;
-+	config.of_node = dev->of_node;
-+	config.regmap = regmap;
-+
-+	rdev = devm_regulator_register(&i2c->dev, &tps6286x_reg, &config);
-+	if (IS_ERR(rdev)) {
-+		dev_err(&i2c->dev, "Failed to register tps6286x regulator\n");
-+		return PTR_ERR(rdev);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct i2c_device_id tps6286x_i2c_id[] = {
-+	{ "tps62864", 0 },
-+	{ "tps62866", 0 },
-+	{ "tps62868", 0 },
-+	{ "tps62869", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(i2c, tps6286x_i2c_id);
-+
-+static struct i2c_driver tps6286x_regulator_driver = {
-+	.driver = {
-+		.name = "tps6286x",
-+		.of_match_table = of_match_ptr(tps6286x_dt_ids),
-+	},
-+	.probe = tps6286x_i2c_probe,
-+	.id_table = tps6286x_i2c_id,
-+};
-+
-+module_i2c_driver(tps6286x_regulator_driver);
-+
-+MODULE_LICENSE("GPL v2");
--- 
-2.34.1
+SGkNCg0KQW0gMDQuMDIuMjIgdW0gMTQ6NDMgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEFkZCBzdXBwb3J0IHRvIGNvbnZlcnQgWFIyNCBhbmQgOC1iaXQgZ3JheXNj
+YWxlIHRvIHJldmVyc2VkIG1vbm9jaHJvbWUgZm9yDQo+IGRyaXZlcnMgdGhhdCBjb250cm9s
+IG1vbm9jaHJvbWF0aWMgcGFuZWxzLCB0aGF0IG9ubHkgaGF2ZSAxIGJpdCBwZXIgcGl4ZWwu
+DQo+IA0KPiBUaGUgZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2ZXJzZWQoKSBoZWxwZXIgd2Fz
+IGJhc2VkIG9uIHRoZSBmdW5jdGlvbiB0aGF0DQo+IGRvZXMgdGhlIHNhbWUgaW4gdGhlIGRy
+aXZlcnMvZ3B1L2RybS90aW55L3JlcGFwZXIuYyBkcml2ZXIuDQo+IA0KPiBTaWduZWQtb2Zm
+LWJ5OiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4g
+LS0tDQo+IA0KPiAobm8gY2hhbmdlcyBzaW5jZSB2MSkNCj4gDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL2RybV9mb3JtYXRfaGVscGVyLmMgfCA4MCArKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKw0KPiAgIGluY2x1ZGUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmggICAgIHwgIDcgKysr
+DQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCA4NyBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMgYi9kcml2ZXJzL2dw
+dS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYw0KPiBpbmRleCAwZjI4ZGQyYmRkNzIuLmNkY2U0
+YjdjMjVkOSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVs
+cGVyLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMNCj4g
+QEAgLTU4NCwzICs1ODQsODMgQEAgaW50IGRybV9mYl9ibGl0X3RvaW8odm9pZCBfX2lvbWVt
+ICpkc3QsIHVuc2lnbmVkIGludCBkc3RfcGl0Y2gsIHVpbnQzMl90IGRzdF9mb3INCj4gICAJ
+cmV0dXJuIC1FSU5WQUw7DQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2ZiX2JsaXRf
+dG9pbyk7DQo+ICsNCj4gK3N0YXRpYyB2b2lkIGRybV9mYl9ncmF5OF90b19tb25vX3JldmVy
+c2VkX2xpbmUodTggKmRzdCwgY29uc3QgdTggKnNyYywgc2l6ZV90IHBpeGVscykNCj4gK3sN
+Cj4gKwl1bnNpZ25lZCBpbnQgeGIsIGk7DQo+ICsNCj4gKwlmb3IgKHhiID0gMDsgeGIgPCBw
+aXhlbHMgLyA4OyB4YisrKSB7DQoNCkluIHByYWN0aWNlLCBhbGwgbW9kZSB3aWR0aHMgYXJl
+IG11bHRpcGxlcyBvZiA4IGJlY2F1c2UgVkdBIG1hbmRhdGVkIGl0LiANClNvIGl0J3Mgb2st
+aXNoIHRvIGFzc3VtZSB0aGlzIGhlcmUuIFlvdSBzaG91bGQgcHJvYmFibHkgYXQgbGVhc3Qg
+cHJpbnQgYSANCndhcm5pbmcgc29tZXdoZXJlIGlmIChwaXhlbHMgJSA4ICE9IDApDQoNCg0K
+PiArCQl1OCBieXRlID0gMHgwMDsNCj4gKw0KPiArCQlmb3IgKGkgPSAwOyBpIDwgODsgaSsr
+KSB7DQo+ICsJCQlpbnQgeCA9IHhiICogOCArIGk7DQo+ICsNCj4gKwkJCWJ5dGUgPj49IDE7
+DQo+ICsJCQlpZiAoc3JjW3hdID4+IDcpDQo+ICsJCQkJYnl0ZSB8PSBCSVQoNyk7DQo+ICsJ
+CX0NCj4gKwkJKmRzdCsrID0gYnl0ZTsNCj4gKwl9DQo+ICt9DQo+ICsNCj4gKy8qKg0KPiAr
+ICogZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2ZXJzZWQgLSBDb252ZXJ0IGdyYXlzY2FsZSB0
+byByZXZlcnNlZCBtb25vY2hyb21lDQo+ICsgKiBAZHN0OiByZXZlcnNlZCBtb25vY2hyb21l
+IGRlc3RpbmF0aW9uIGJ1ZmZlcg0KPiArICogQGRzdF9waXRjaDogTnVtYmVyIG9mIGJ5dGVz
+IGJldHdlZW4gdHdvIGNvbnNlY3V0aXZlIHNjYW5saW5lcyB3aXRoaW4gZHN0DQo+ICsgKiBA
+c3JjOiA4LWJpdCBncmF5c2NhbGUgc291cmNlIGJ1ZmZlcg0KPiArICogQGNsaXA6IENsaXAg
+cmVjdGFuZ2xlIGFyZWEgdG8gY29weQ0KPiArICoNCj4gKyAqIERSTSBkb2Vzbid0IGhhdmUg
+bmF0aXZlIG1vbm9jaHJvbWUgb3IgZ3JheXNjYWxlIHN1cHBvcnQuDQo+ICsgKiBTdWNoIGRy
+aXZlcnMgY2FuIGFubm91bmNlIHRoZSBjb21tb25seSBzdXBwb3J0ZWQgWFIyNCBmb3JtYXQg
+dG8gdXNlcnNwYWNlDQo+ICsgKiBhbmQgdXNlIGRybV9mYl94cmdiODg4OF90b19ncmF5OCgp
+IHRvIGNvbnZlcnQgdG8gZ3JheXNjYWxlIGFuZCB0aGVuIHRoaXMNCj4gKyAqIGhlbHBlciBm
+dW5jdGlvbiB0byBjb252ZXJ0IHRvIHRoZSBuYXRpdmUgZm9ybWF0Lg0KPiArICovDQo+ICt2
+b2lkIGRybV9mYl9ncmF5OF90b19tb25vX3JldmVyc2VkKHZvaWQgKmRzdCwgdW5zaWduZWQg
+aW50IGRzdF9waXRjaCwgY29uc3Qgdm9pZCAqc3JjLA0KPiArCQkJCSAgIGNvbnN0IHN0cnVj
+dCBkcm1fcmVjdCAqY2xpcCkNCg0KVGhlcmUncyBhIGJ1ZyBoZXJlLiBZb3Ugd2FudCB0byBw
+YXNzIGluIGEgZHJtX2ZyYW1lYnVmZmVyIGFzIGZvdXJ0aCANCmFyZ3VtZW50Lg0KDQo+ICt7
+DQo+ICsNCj4gKwlzaXplX3QgaGVpZ2h0ID0gZHJtX3JlY3RfaGVpZ2h0KGNsaXApOw0KPiAr
+CXNpemVfdCB3aWR0aCA9IGRybV9yZWN0X3dpZHRoKGNsaXApOw0KPiArCXVuc2lnbmVkIGlu
+dCB5Ow0KPiArCWNvbnN0IHU4ICpncmF5OCA9IHNyYzsNCj4gKwl1OCAqbW9ubyA9IGRzdDsN
+Cj4gKw0KPiArCWlmICghZHN0X3BpdGNoKQ0KPiArCQlkc3RfcGl0Y2ggPSB3aWR0aDsNCg0K
+VGhlIGRzdF9waXRjaCBpcyBnaXZlbiBpbiBieXRlcy4gWW91IGhhdmUgdG8gZGV2aWNlIGJ5
+IDguIEhlcmUgd291bGQgYmUgDQphIGdvb2QgcGxhY2UgdG8gd2FybiBpZiAod2lkdGggJSA4
+ICE9IDApLg0KDQo+ICsNCj4gKwlmb3IgKHkgPSAwOyB5IDwgaGVpZ2h0OyB5KyspIHsNCj4g
+KwkJZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2ZXJzZWRfbGluZShtb25vLCBncmF5OCwgZHN0
+X3BpdGNoKTsNCj4gKwkJbW9ubyArPSAoZHN0X3BpdGNoIC8gOCk7DQoNClRoZSBkc3RfcGl0
+Y2ggaXMgYWxyZWFkeSBnaXZlbiBpbiBieXRlcy4NCg0KPiArCQlncmF5OCArPSBkc3RfcGl0
+Y2g7DQoNCidncmF5OCArPSBmYi0+cGl0Y2hlc1swXScgd291bGQgYmUgY29ycmVjdC4NCg0K
+PiArCX0NCj4gK30NCj4gKw0KPiArLyoqDQo+ICsgKiBkcm1fZmJfeHJnYjg4ODhfdG9fbW9u
+b19yZXZlcnNlZCAtIENvbnZlcnQgWFJHQjg4ODggdG8gcmV2ZXJzZWQgbW9ub2Nocm9tZQ0K
+PiArICogQGRzdDogcmV2ZXJzZWQgbW9ub2Nocm9tZSBkZXN0aW5hdGlvbiBidWZmZXINCj4g
+KyAqIEBkc3RfcGl0Y2g6IE51bWJlciBvZiBieXRlcyBiZXR3ZWVuIHR3byBjb25zZWN1dGl2
+ZSBzY2FubGluZXMgd2l0aGluIGRzdA0KPiArICogQHNyYzogWFJHQjg4ODggc291cmNlIGJ1
+ZmZlcg0KPiArICogQGZiOiBEUk0gZnJhbWVidWZmZXINCj4gKyAqIEBjbGlwOiBDbGlwIHJl
+Y3RhbmdsZSBhcmVhIHRvIGNvcHkNCj4gKyAqDQo+ICsgKiBEUk0gZG9lc24ndCBoYXZlIG5h
+dGl2ZSBtb25vY2hyb21lIHN1cHBvcnQuDQo+ICsgKiBTdWNoIGRyaXZlcnMgY2FuIGFubm91
+bmNlIHRoZSBjb21tb25seSBzdXBwb3J0ZWQgWFIyNCBmb3JtYXQgdG8gdXNlcnNwYWNlDQo+
+ICsgKiBhbmQgdXNlIHRoaXMgZnVuY3Rpb24gdG8gY29udmVydCB0byB0aGUgbmF0aXZlIGZv
+cm1hdC4NCj4gKyAqDQo+ICsgKiBUaGlzIGZ1bmN0aW9uIHVzZXMgZHJtX2ZiX3hyZ2I4ODg4
+X3RvX2dyYXk4KCkgdG8gY29udmVydCB0byBncmF5c2NhbGUgYW5kDQo+ICsgKiB0aGVuIHRo
+ZSByZXN1bHQgaXMgY29udmVydGVkIGZyb20gZ3JheXNjYWxlIHRvIHJldmVyc2VkIG1vbm9o
+cm9tZS4NCj4gKyAqLw0KPiArdm9pZCBkcm1fZmJfeHJnYjg4ODhfdG9fbW9ub19yZXZlcnNl
+ZCh2b2lkICpkc3QsIHVuc2lnbmVkIGludCBkc3RfcGl0Y2gsIGNvbnN0IHZvaWQgKnNyYywN
+Cj4gKwkJCQkgICAgICBjb25zdCBzdHJ1Y3QgZHJtX2ZyYW1lYnVmZmVyICpmYiwNCj4gKwkJ
+CQkgICAgICBjb25zdCBzdHJ1Y3QgZHJtX3JlY3QgKmNsaXApDQo+ICt7DQo+ICsJaWYgKFdB
+Uk5fT04oZmItPmZvcm1hdC0+Zm9ybWF0ICE9IERSTV9GT1JNQVRfWFJHQjg4ODgpKQ0KPiAr
+CQlyZXR1cm47DQo+ICsNCj4gKwlpZiAoIWRzdF9waXRjaCkNCj4gKwkJZHN0X3BpdGNoID0g
+ZHJtX3JlY3Rfd2lkdGgoY2xpcCk7DQo+ICsNCj4gKwlkcm1fZmJfeHJnYjg4ODhfdG9fZ3Jh
+eTgoZHN0LCBkc3RfcGl0Y2gsIHNyYywgZmIsIGNsaXApOw0KPiArCWRybV9mYl9ncmF5OF90
+b19tb25vX3JldmVyc2VkKGRzdCwgZHN0X3BpdGNoLCBkc3QsIGZiLCBjbGlwKTsNCg0KQ29u
+dmVydGluZyBmcm9tIGRzdCBpbnRvIGRzdCBjYW4gZ2l2ZSBpbmNvcnJlY3QgcmVzdWx0cy4g
+QXQgc29tZSBwb2ludCANCndlIHByb2JhYmx5IHdhbnQgdG8gYWRkIHJlc3RyaWN0IHF1YWxp
+ZmllcnMgdG8gdGhlc2UgcG9pbnRlcnMsIHRvIGhlbHAgDQp0aGUgY29tcGlsZXIgd2l0aCBv
+cHRpbWl6aW5nLg0KDQpBIGJldHRlciBhcHByb2FjaCBoZXJlIGlzIHRvIHB1bGwgdGhlIHBl
+ci1saW5lIGNvbnZlcnNpb24gZnJvbSANCmRybV9mYl94cmdiODg4OF90b19ncmF5OCgpIGlu
+dG8gYSBzZXBhcmF0ZSBoZWxwZXIgYW5kIGltcGxlbWVudCBhIA0KbGluZS1ieS1saW5lIGNv
+bnZlcnNpb24gaGVyZS4gc29tZXRoaW5nIGxpa2UgdGhpczoNCg0KICAgZHJtX2ZiX3hyZ2I4
+ODg4X3RvX21vbm9fcmV2ZXJzZWQoKQ0KICAgew0KICAgICBjaGFyICp0bXAgPSBrbWFsbG9j
+KHNpemUgb2YgYSBzaW5nbGUgbGluZSBvZiBncmF5OCkNCg0KICAgICBmb3IgKGhlaWd0aCkg
+ew0KICAgICAgICBkcm1fZmJfeHJnYjg4ODhfdG9fZ3JheThfbGluZSh0bXAsIC4uLiwgc3Jj
+LCAuLi4pOw0KICAgICAgICBkcm1fZmJfZ3JheThfdG9fbW9ub19yZXZlcnNlZChkc3QsIC4u
+LiwgdG1wLCAuLi4pOw0KDQogICAgICAgIHNyYyArPSBmYi0+cGl0Y2hlc1swXQ0KICAgICAg
+ICBkc3QgKz0gZHN0X3BpdGNoOw0KICAgICB9DQoNCiAgICAga2ZyZWUodG1wKTsNCiAgIH0N
+Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTChkcm1f
+ZmJfeHJnYjg4ODhfdG9fbW9ub19yZXZlcnNlZCk7DQo+IGRpZmYgLS1naXQgYS9pbmNsdWRl
+L2RybS9kcm1fZm9ybWF0X2hlbHBlci5oIGIvaW5jbHVkZS9kcm0vZHJtX2Zvcm1hdF9oZWxw
+ZXIuaA0KPiBpbmRleCBiMzBlZDVkZTBhMzMuLjg1ZTU1MWE1Y2JlNiAxMDA2NDQNCj4gLS0t
+IGEvaW5jbHVkZS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuaA0KPiArKysgYi9pbmNsdWRlL2Ry
+bS9kcm1fZm9ybWF0X2hlbHBlci5oDQo+IEBAIC00Myw0ICs0MywxMSBAQCBpbnQgZHJtX2Zi
+X2JsaXRfdG9pbyh2b2lkIF9faW9tZW0gKmRzdCwgdW5zaWduZWQgaW50IGRzdF9waXRjaCwg
+dWludDMyX3QgZHN0X2Zvcg0KPiAgIAkJICAgICBjb25zdCB2b2lkICp2bWFwLCBjb25zdCBz
+dHJ1Y3QgZHJtX2ZyYW1lYnVmZmVyICpmYiwNCj4gICAJCSAgICAgY29uc3Qgc3RydWN0IGRy
+bV9yZWN0ICpyZWN0KTsNCj4gICANCj4gK3ZvaWQgZHJtX2ZiX2dyYXk4X3RvX21vbm9fcmV2
+ZXJzZWQodm9pZCAqZHN0LCB1bnNpZ25lZCBpbnQgZHN0X3BpdGNoLCBjb25zdCB2b2lkICpz
+cmMsDQo+ICsJCQkJICAgY29uc3Qgc3RydWN0IGRybV9yZWN0ICpjbGlwKTsNCj4gKw0KPiAr
+dm9pZCBkcm1fZmJfeHJnYjg4ODhfdG9fbW9ub19yZXZlcnNlZCh2b2lkICpkc3QsIHVuc2ln
+bmVkIGludCBkc3RfcGl0Y2gsIGNvbnN0IHZvaWQgKnNyYywNCj4gKwkJCQkgICAgICBjb25z
+dCBzdHJ1Y3QgZHJtX2ZyYW1lYnVmZmVyICpmYiwNCj4gKwkJCQkgICAgICBjb25zdCBzdHJ1
+Y3QgZHJtX3JlY3QgKmNsaXApOw0KPiArDQo+ICAgI2VuZGlmIC8qIF9fTElOVVhfRFJNX0ZP
+Uk1BVF9IRUxQRVJfSCAqLw0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBE
+cml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgN
+Ck1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwg
+QUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+--------------GzDANQ6HuGgccvj5HkcZZVu8--
+
+--------------cnRQyZpb1bvRM6Q8hsnbuR1K
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmH9S9cFAwAAAAAACgkQlh/E3EQov+Ct
+Kw/+L/fX7QIUwPNkc5LLnT66GVChReTV+QwSFzr10TWoa6JbWi9bfz/RaleiVpCUUjtRPg1M/BHB
+bsZYZy81aUEAHQL/C6zJ4TreC6dMMsqTE/tUBCGTep0ctzzV4ou4Rjf0iDxGvdH5peisTQ6ltMlt
+MW2YIg7BkEcwoXjRPDYjbZBDwv7JKTDQboDZ42M8kcQwk73zULbncPCQVjm368pAL3CdTPzAU6Cv
+MZMozHtfgrTW+s0oiSx6fvg11UCo5wDf3fH+GkBnWKwkYnfQ6Ztm0RWNZTzIEsa+8xXCkub3f0ln
+aT+Fw6fH3RZy8F2/6yszqnOJmZHKfxtyOD5Y0XnMtGYtlsiKMxBOtrKxrTcGDwpJc9L5NY6QATB7
+q9fJFod37BQ+m0pcqLsrYa1DnX7/u/brbjU5f9gt6ghrR3q1wZ1Fkt8NZ4Bqwo5bgAVVa9eXxU6R
+kO62Ff1eBJ/KzgPR7ArXewBY6nz5EgOU54OhqX3eojFd3/q07TqeA86bvn/XS4guJf9zDE83TRKE
+N3IgIPj3kCjqO1o+vfsZQT+a7gqnFY656E9BIHzpMWIrOpdOh5oCDutuB8F8H/hXag9Sx7af0ZSn
+DIbpIqx5BDofw0/e6rD/EeWPIxkYcgoir5RWe5vjuGWl1zRtmtfHBKtZjWhFZKEJgL/e2cMNiTXG
+5J4=
+=L/jW
+-----END PGP SIGNATURE-----
+
+--------------cnRQyZpb1bvRM6Q8hsnbuR1K--

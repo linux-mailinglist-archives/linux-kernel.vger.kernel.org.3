@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDDD4AA29D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABE24AA2A1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244562AbiBDVvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S244556AbiBDVwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244478AbiBDVvt (ORCPT
+        with ESMTP id S234292AbiBDVwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:51:49 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292B0C061401
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:51:49 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id l12-20020a0568302b0c00b005a4856ff4ceso6065503otv.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:51:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=O2+sVRpdHPYQoxVHI59ztnDEc6w2w5/2mmrQawOpXNE=;
-        b=iqFWBf7gzQtaq+GgoHczFWRaBXshUkQK0uHiLVzfb6y9h0/ms/gkgl492dbJGkmDe7
-         Y1InhFuQIM/5aabeRUuiOW/G/WSU9B4p3afeyAkRIsM3HFFbeOrSWMV47jZpPv02lEbx
-         tIuFhWxLmuo3SKiz9zcZnlpp6xTo6GSGv1sn32JepTQU+zWeQFKN/AGuZwnBIPPtlNYr
-         29O9Mpo3VBNNtaenT+Ogb0M0PDi1m2y0cIqlYLXHupc5LYQm4aYhGc79vHRqtNDDqKdA
-         GQlPWbQ2BpFfjWxnbftDcvEevW5aUxdPtvJnlhXceO8VSeRQL7cPTrFZvUc8JQ2IRIOf
-         n+MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O2+sVRpdHPYQoxVHI59ztnDEc6w2w5/2mmrQawOpXNE=;
-        b=jjhCDum0i91Pl4UI99U9fLEXPonpbsB8t9Xwc39B7o2liR4M/gXG8omW7jkxUj2Co6
-         xuaCCDzI7U+kYMMdqmoMQMocT1AC5qUuKpe3Z5Rva1BlQ50HqekFpMy9ulmMAlqpTOSL
-         KSI6vJp7JthI640VLokem1L3HL5MEe7JZkfNWOiEmOjHz/01/B29gIvps1Kzj5mNWNlS
-         IyL4ReuflB1JTCjliJUOMxMD8glPnigD6kbpBxTeiBxWptAhjetaKadiGUx1w0KIrcIh
-         sr/eiLaqHL5jjOGFV/tc1uOi0QMwMTz0fBEvk4oTrH6aRWxFYdAvoOHNfTLh40hsSwXK
-         GLlw==
-X-Gm-Message-State: AOAM531144fcTO/kOQQEtakyj71xD/MRorDfaMa/Z7HzHCB6coWiF0ur
-        NTNI7HrbinjCD9VxttXoGa1yoQ==
-X-Google-Smtp-Source: ABdhPJwgDaID5lNoBN2g/qxi4lyV59pbUBQVCse82d4EAmJt7DbANA3S7fVKR6KuNzdyNBnklI8RrQ==
-X-Received: by 2002:a9d:104:: with SMTP id 4mr381180otu.191.1644011507408;
-        Fri, 04 Feb 2022 13:51:47 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id bj8sm1429873oib.20.2022.02.04.13.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 13:51:46 -0800 (PST)
-Date:   Fri, 4 Feb 2022 15:51:44 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     pmaliset@codeaurora.org, mka@chromium.org,
-        quic_rjendra@quicinc.com,
-        Shaik Sajida Bhanu <sbhanu@codeaurora.org>,
-        kgodara@codeaurora.org, konrad.dybcio@somainline.org,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        sibis@codeaurora.org, swboyd@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 13/14] arm64: dts: qcom: sc7280: Add the CPU
- compatible to the soc@0 node
-Message-ID: <Yf2f8Az5v1TtlAjd@builder.lan>
-References: <20220202212348.1391534-1-dianders@chromium.org>
- <20220202132301.v3.13.I7924ce4592e3e75b2293804d8a3f8a4dae44646e@changeid>
+        Fri, 4 Feb 2022 16:52:50 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C42C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=cLcf2YHPc4S4oiuRkzVA39ApqqDSwtD+Xuuj2V9Dq5I=; b=Msd+HCYBkxWCUGbsaYcnDtFGOt
+        nfCF2+m0q5rL8hsV7wCJXtpLg0PAnITV1G45NI+OVMLJ6pWZICZS6W9FYIjN1JsqFKGYAX5cd/JEm
+        KES17H34Yqxp9uaJThaRdOWmgxQs3AxbILgPTIWN5AXik9AkkBpgmyXi8kPwMDovwr3A0CdGK4MyU
+        hsZ9enFOf4CmQUqENGWIt45O96KpX0tvI3VOpTKMxUJuemJqYliuY3myDksLeBMXwW51YeooYvRCr
+        JkfCZFvs4755vgMesmnPCn8jhv1J2HDT2hJSNDfFO4nhLw5EcOjTysWCWNL3OXjX7T2v+XeX6jZoy
+        wFUClPoQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nG6VT-005Utn-KD; Fri, 04 Feb 2022 21:52:39 +0000
+Date:   Fri, 4 Feb 2022 13:52:39 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@linux.microsoft.com>
+Subject: Re: [PATCH v1] printk: Fix incorrect __user type in
+ proc_dointvec_minmax_sysadmin()
+Message-ID: <Yf2gJ7U+QKxVUTx6@bombadil.infradead.org>
+References: <20220203145029.272640-1-mic@digikod.net>
+ <YfyZAy+ZDZ4SXIFE@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220202132301.v3.13.I7924ce4592e3e75b2293804d8a3f8a4dae44646e@changeid>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfyZAy+ZDZ4SXIFE@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 02 Feb 15:23 CST 2022, Douglas Anderson wrote:
-
-> We'd like to start including the CPU name as the compatible under the
-> "soc" node so that we can get rid of it from the top-level compatible
-> string.
+On Fri, Feb 04, 2022 at 12:09:55PM +0900, Sergey Senozhatsky wrote:
+> On (22/02/03 15:50), Mickaël Salaün wrote:
+> > The move of proc_dointvec_minmax_sysadmin() from kernel/sysctl.c to
+> > kernel/printk/sysctl.c introduced an incorrect __user attribute to the
+> > buffer argument.  I spotted this change in [1] as well as the kernel
+> > test robot.  Revert this change to please sparse:
+> > 
+> > kernel/printk/sysctl.c:20:51: warning: incorrect type in argument 3 (different address spaces)
+> > kernel/printk/sysctl.c:20:51:    expected void *
+> > kernel/printk/sysctl.c:20:51:    got void [noderef] __user *buffer
+> > 
+> > Fixes: faaa357a55e0 ("printk: move printk sysctl to printk/sysctl.c")
+> > Link: https://lore.kernel.org/r/20220104155024.48023-2-mic@digikod.net [1]
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > Cc: John Ogness <john.ogness@linutronix.de>
+> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Petr Mladek <pmladek@suse.com>
+> > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Xiaoming Ni <nixiaoming@huawei.com>
+> > Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
+> > Link: https://lore.kernel.org/r/20220203145029.272640-1-mic@digikod.net
 > 
-> Suggested-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> Probably needs a .yaml file somewhere?
-> 
-> Changes in v3:
-> - ("sc7280: Add the CPU compatible to the soc@0 node") new for v3.
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 618ae0407cd6..2bfc919d4018 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -573,7 +573,7 @@ soc: soc@0 {
->  		#size-cells = <2>;
->  		ranges = <0 0 0 0 0x10 0>;
->  		dma-ranges = <0 0 0 0 0x10 0>;
-> -		compatible = "simple-bus";
-> +		compatible = "qcom,sc7280", "simple-bus";
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-To me this implies that /soc represents the sc7280, but as noted earlier
-I don't think that's accurate. E.g. if this node represents the sc7280,
-why are the cpus described outside this node?
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Further more, if we look at the reg nodes on this bus it's clear that
-this is some mmio bus, which per the ranges has 36 bit address width.
-But not all buses in the sc7280 has 36 bit address width, so it's not
-inconceivable that one would actually have to split /soc into more than
-one entity with different dma-ranges. Perhaps not today, but I don't
-like the precedence it sets.
-
-Regards,
-Bjorn
-
->  
->  		gcc: clock-controller@100000 {
->  			compatible = "qcom,gcc-sc7280";
-> -- 
-> 2.35.0.rc2.247.g8bbb082509-goog
-> 
+  Luis

@@ -2,127 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FB94A9F96
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DD44A9FB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiBDTAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:00:44 -0500
-Received: from mga05.intel.com ([192.55.52.43]:1988 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229737AbiBDTAm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:00:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644001243; x=1675537243;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zrxrqnItirGDqOflzuRIvi6maD/Es5mByGhVqgoscdw=;
-  b=W0IIWThgb+9/5Yjnv4I9eAwsZiCzup4Er1BHfSWmZjAueQzsmG5ffM57
-   hHltFuLTedhNJmOBe3HU2q/+nAZRElw0XOwXz6W0kWs3+9mjp8QUPxV/1
-   cZZXYsT0AvCUxcHMNpcX8J7KY33XwUjI5OhAVL9i+3uEbf/S5B7xt1rus
-   2iYzwSkGlK43rlh+VKO5pKUxey3xWS97X7Yph4T/xfpjzCzu0yk79KjBr
-   zUkeim7c3483n/1hcwLNDgc3nku44ygeoHdh5DmsDCHAubWr4zsgbxVMV
-   0DK7d/acMat85eScYVlASis7VWWD7N4JwpAz08nmmapcReAKk8AcTKJSr
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334820486"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="334820486"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:00:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="620909919"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Feb 2022 11:00:41 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nG3p2-000Y25-Ku; Fri, 04 Feb 2022 19:00:40 +0000
-Date:   Sat, 5 Feb 2022 03:00:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>
-Subject: [frederic-dynticks:isolation/split-v2 4/8]
- kernel/rcu/tree_plugin.h:1217:50: error: 'HK_FLAG_RCU' undeclared
-Message-ID: <202202050256.iEjqVGhm-lkp@intel.com>
+        id S231221AbiBDTDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233868AbiBDTCG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:02:06 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54508C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:02:06 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d187so5852892pfa.10
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:02:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XWjxjsdKmPUFg8xP67iw9xnzsV/BHi7mBAtuVyyPZZ8=;
+        b=UCcz9mzX+qtR/0IyzVDPaWiYRX656OGHD6b+EqByu5Kh9BggYUfQID42Bd2M10H8pd
+         e2m5ITsV2AdC+mntlY89f1RyrGjIsz9qpUwCIKRuqgDfIgRrBXK/57A7lGiB9dClz0WY
+         oLSRYfqMx5ITbUZnxQDcs8/JhmE8l+MMCtpbNKl2VjTyqAhgGUR9i/dCOxdb+84y24qt
+         u/En9uA8Ckvy6S06GnlaqX4WipvstPp8llQW6aQiduasUvLLa9r8BHQduMScxIO5CWXF
+         WjVWaNoVCN4rHJpHSGj5A1vd3T0YA+MmujpfkxlsqBopLKpmZM/tc6RIxChjT/4zCeOL
+         h9qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XWjxjsdKmPUFg8xP67iw9xnzsV/BHi7mBAtuVyyPZZ8=;
+        b=xR5zXiLMu2lm2puaS7jnMXMM/3g7FBykx/4+D6ErQcS1fFRd37ZlcIYikeVX5ZGyK6
+         JoN5QYyzFnviQMwv8tejAO3+srERkhdey9NARpvRsdN2Q+/JJdFSYCLeLpNWXYu/g9o4
+         otCnN0oWOdCtRdgqZwwhtMjKHY0uUFpQ+0FXZFvxIziRbtn1XSjBh+UOMvJW4tmjGaME
+         NHDQ8Bcbf4K+KD9lo/alltsKjNuDB8FbqBtq5g5k/jteOfq56Iq8Lv9Gp5wJaLBvggmo
+         boQylaXz8+255j1smomuRu+4tQ9OatNQf/5miGADiQjrZL1neKQbfXXnvoZJzJbRLZ0I
+         QS3g==
+X-Gm-Message-State: AOAM532uwc8rs567ehIDJHODN1R874vNNpGM8P719XuGvxXFxHHoA37k
+        kcIzsFeZCFEwd6aqlnrBm5CG0lJjw6cRa6HloMBB9A==
+X-Google-Smtp-Source: ABdhPJyvA2sU57BzvHUn4QuHklfAKUxxt06CZAhCkTL4nKN8+5/vHv95EbkP9760Foh0GhukvQZ9ebwo6TVWlTL7mVw=
+X-Received: by 2002:a63:85c6:: with SMTP id u189mr313882pgd.437.1644001325761;
+ Fri, 04 Feb 2022 11:02:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-40-ira.weiny@intel.com>
+In-Reply-To: <20220127175505.851391-40-ira.weiny@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 4 Feb 2022 11:01:55 -0800
+Message-ID: <CAPcyv4gama4a-90R486kFiztYJ5sPRYeg49TNYMyd=v3syAziw@mail.gmail.com>
+Subject: Re: [PATCH V8 39/44] memremap_pages: Add memremap.pks_fault_mode
+To:     "Weiny, Ira" <ira.weiny@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git isolation/split-v2
-head:   31b398242699300304defda3f388cc15b314c1b0
-commit: 6c70f095e7a266b13de678c358d3852b92c95799 [4/8] sched/isolation: Use single feature type while referring to housekeeping cpumask
-config: arc-randconfig-r043-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050256.iEjqVGhm-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=6c70f095e7a266b13de678c358d3852b92c95799
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks isolation/split-v2
-        git checkout 6c70f095e7a266b13de678c358d3852b92c95799
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash kernel/
+On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> Some systems may be using pmem in unanticipated ways.  As such, it is
+> possible an foreseen code path to violate the restrictions of the PMEM
+> PKS protections.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+These sentences do not parse for me. How about:
 
-All errors (new ones prefixed by >>):
+"When PKS protections for PMEM are enabled the kernel may capture
+stray writes, or it may capture false positive access violations. An
+example of a false positive access violation is a code path that
+neglects to call kmap_{atomic,local_page}, but is otherwise a valid
+access. In the false positive scenario there is no actual risk to data
+integrity, but the kernel still needs to make a decision as to whether
+to report the access violation and continue, or treat the violation as
+fatal. That policy decision is captured in a new pks_fault_mode kernel
+parameter."
 
-   In file included from kernel/rcu/tree.c:4783:
-   kernel/rcu/tree_plugin.h: In function 'rcu_boost_kthread_setaffinity':
->> kernel/rcu/tree_plugin.h:1217:50: error: 'HK_FLAG_RCU' undeclared (first use in this function)
-    1217 |         cpumask_and(cm, cm, housekeeping_cpumask(HK_FLAG_RCU));
-         |                                                  ^~~~~~~~~~~
-   kernel/rcu/tree_plugin.h:1217:50: note: each undeclared identifier is reported only once for each function it appears in
+>
+> In order to provide a more seamless integration of the PMEM PKS feature
 
+Not sure what "seamless integration" means in this context?
 
-vim +/HK_FLAG_RCU +1217 kernel/rcu/tree_plugin.h
+> provide a pks_fault_mode that allows for a relaxed mode should a
+> previously working feature fault on the PKS protected PMEM.
+>
+> 2 modes are available:
+>
+>         'relaxed' (default) -- WARN_ONCE, removed the protections, and
+>         continuing to operate.
+>
+>         'strict' -- BUG_ON/or fault indicating the error.  This is the
+>         most protective of the PMEM memory but may be undesirable in
+>         some configurations.
+>
+> NOTE: The typedef of pks_fault_modes is required to allow
+> param_check_pks_fault() to work automatically for us.  So the typedef
+> checkpatch warning is ignored.
 
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1192  
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1193  /*
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1194   * Set the per-rcu_node kthread's affinity to cover all CPUs that are
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1195   * served by the rcu_node in question.  The CPU hotplug lock is still
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1196   * held, so the value of rnp->qsmaskinit will be stable.
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1197   *
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1198   * We don't include outgoingcpu in the affinity set, use -1 if there is
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1199   * no outgoing CPU.  If there are no CPUs left in the affinity set,
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1200   * this function allows the kthread to execute on any CPU.
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1201   */
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1202  static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1203  {
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1204  	struct task_struct *t = rnp->boost_kthread_task;
-0aa04b055e71bd kernel/rcu/tree_plugin.h Paul E. McKenney 2015-01-23  1205  	unsigned long mask = rcu_rnp_online_cpus(rnp);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1206  	cpumask_var_t cm;
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1207  	int cpu;
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1208  
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1209  	if (!t)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1210  		return;
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1211  	if (!zalloc_cpumask_var(&cm, GFP_KERNEL))
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1212  		return;
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1213  	for_each_leaf_node_possible_cpu(rnp, cpu)
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1214  		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1215  		    cpu != outgoingcpu)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1216  			cpumask_set_cpu(cpu, cm);
-c2cf0767e98eb4 kernel/rcu/tree_plugin.h Zqiang           2021-11-15 @1217  	cpumask_and(cm, cm, housekeeping_cpumask(HK_FLAG_RCU));
-5d0b0249730275 kernel/rcu/tree_plugin.h Paul E. McKenney 2014-11-10  1218  	if (cpumask_weight(cm) == 0)
-c2cf0767e98eb4 kernel/rcu/tree_plugin.h Zqiang           2021-11-15  1219  		cpumask_copy(cm, housekeeping_cpumask(HK_FLAG_RCU));
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1220  	set_cpus_allowed_ptr(t, cm);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1221  	free_cpumask_var(cm);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1222  }
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1223  
+This doesn't parse for me, why is a typedef needed for a simple
+toggle? Who is "us"?
 
-:::::: The code at line 1217 was first introduced by commit
-:::::: c2cf0767e98eb4487444e5c7ebba491a866811ce rcu: Avoid running boost kthreads on isolated CPUs
+>
+> NOTE: There was some debate about if a 3rd mode called 'silent' should
+> be available.  'silent' would be the same as 'relaxed' but not print any
+> output.  While 'silent' is nice for admins to reduce console/log output
+> it would result in less motivation to fix invalid access to the
+> protected pmem pages.  Therefore, 'silent' is left out.
+>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>
+> ---
+> Changes for V8
+>         Use pks_update_exception() instead of abandoning the pkey.
+>         Split out pgmap_protection_flag_invalid() into a separate patch
+>                 for clarity.
+>         From Rick Edgecombe
+>                 Fix sysfs_streq() checks
+>         From Randy Dunlap
+>                 Fix Documentation closing parans
+>
+> Changes for V7
+>         Leverage Rick Edgecombe's fault callback infrastructure to relax invalid
+>                 uses and prevent crashes
+>         From Dan Williams
+>                 Use sysfs_* calls for parameter
+>                 Make pgmap_disable_protection inline
+>                 Remove pfn from warn output
+>         Remove silent parameter option
+> ---
+>  .../admin-guide/kernel-parameters.txt         | 14 ++++
+>  arch/x86/mm/pkeys.c                           |  4 ++
+>  include/linux/mm.h                            |  3 +
+>  mm/memremap.c                                 | 67 +++++++++++++++++++
+>  4 files changed, 88 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9..3e70a6194831 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -4158,6 +4158,20 @@
+>         pirq=           [SMP,APIC] Manual mp-table setup
+>                         See Documentation/x86/i386/IO-APIC.rst.
+>
+> +       memremap.pks_fault_mode=        [X86] Control the behavior of page map
+> +                       protection violations.  Violations may not be an actual
+> +                       use of the memory but simply an attempt to map it in an
+> +                       incompatible way.
+> +                       (depends on CONFIG_DEVMAP_ACCESS_PROTECTION)
+> +
+> +                       Format: { relaxed | strict }
+> +
+> +                       relaxed - Print a warning, disable the protection and
+> +                                 continue execution.
+> +                       strict - Stop kernel execution via BUG_ON or fault
+> +
+> +                       default: relaxed
+> +
+>         plip=           [PPT,NET] Parallel port network link
+>                         Format: { parport<nr> | timid | 0 }
+>                         See also Documentation/admin-guide/parport.rst.
+> diff --git a/arch/x86/mm/pkeys.c b/arch/x86/mm/pkeys.c
+> index fa71037c1dd0..e864a9b7828a 100644
+> --- a/arch/x86/mm/pkeys.c
+> +++ b/arch/x86/mm/pkeys.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/debugfs.h>             /* debugfs_create_u32()         */
+>  #include <linux/mm_types.h>             /* mm_struct, vma, etc...       */
+>  #include <linux/pkeys.h>                /* PKEY_*                       */
+> +#include <linux/mm.h>                   /* fault callback               */
+>  #include <uapi/asm-generic/mman-common.h>
+>
+>  #include <asm/cpufeature.h>             /* boot_cpu_has, ...            */
+> @@ -243,6 +244,9 @@ static const pks_key_callback pks_key_callbacks[PKS_KEY_NR_CONSUMERS] = {
+>  #ifdef CONFIG_PKS_TEST
+>         [PKS_KEY_TEST]          = pks_test_fault_callback,
+>  #endif
+> +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> +       [PKS_KEY_PGMAP_PROTECTION]   = pgmap_pks_fault_callback,
+> +#endif
+>  };
+>
+>  static bool pks_call_fault_callback(struct pt_regs *regs, unsigned long address,
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 60044de77c54..e900df563437 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1193,6 +1193,9 @@ static inline void pgmap_mk_noaccess(struct page *page)
+>
+>  bool pgmap_protection_available(void);
+>
+> +bool pgmap_pks_fault_callback(struct pt_regs *regs, unsigned long address,
+> +                             bool write);
+> +
+>  #else
+>
+>  static inline void __pgmap_mk_readwrite(struct dev_pagemap *pgmap) { }
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index b75c4f778c59..783b1cd4bb42 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -96,6 +96,73 @@ static void devmap_protection_disable(void)
+>         static_branch_dec(&dev_pgmap_protection_static_key);
+>  }
+>
+> +/*
+> + * Ignore the checkpatch warning because the typedef allows
 
-:::::: TO: Zqiang <qiang.zhang1211@gmail.com>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+Why document forever in perpetuity to ignore a checkpatch warning for
+something that is no longer a patch once it is upstream?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> + * param_check_pks_fault_modes to automatically check the passed value.
+> + */
+> +typedef enum {
+> +       PKS_MODE_STRICT  = 0,
+> +       PKS_MODE_RELAXED = 1,
+> +} pks_fault_modes;
+> +
+> +pks_fault_modes pks_fault_mode = PKS_MODE_RELAXED;
+> +
+> +static int param_set_pks_fault_mode(const char *val, const struct kernel_param *kp)
+> +{
+> +       int ret = -EINVAL;
+> +
+> +       if (sysfs_streq(val, "relaxed")) {
+> +               pks_fault_mode = PKS_MODE_RELAXED;
+> +               ret = 0;
+> +       } else if (sysfs_streq(val, "strict")) {
+> +               pks_fault_mode = PKS_MODE_STRICT;
+> +               ret = 0;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static int param_get_pks_fault_mode(char *buffer, const struct kernel_param *kp)
+> +{
+> +       int ret = 0;
+> +
+> +       switch (pks_fault_mode) {
+> +       case PKS_MODE_STRICT:
+> +               ret = sysfs_emit(buffer, "strict\n");
+> +               break;
+> +       case PKS_MODE_RELAXED:
+> +               ret = sysfs_emit(buffer, "relaxed\n");
+> +               break;
+> +       default:
+> +               ret = sysfs_emit(buffer, "<unknown>\n");
+> +               break;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct kernel_param_ops param_ops_pks_fault_modes = {
+> +       .set = param_set_pks_fault_mode,
+> +       .get = param_get_pks_fault_mode,
+> +};
+> +
+> +#define param_check_pks_fault_modes(name, p) \
+> +       __param_check(name, p, pks_fault_modes)
+> +module_param(pks_fault_mode, pks_fault_modes, 0644);
+
+Is the complexity to change this at runtime necessary? It seems
+sufficient to make this read-only via sysfs and only rely on command
+line toggles to override the default policy.
+
+> +
+> +bool pgmap_pks_fault_callback(struct pt_regs *regs, unsigned long address,
+> +                             bool write)
+> +{
+> +       /* In strict mode just let the fault handler oops */
+> +       if (pks_fault_mode == PKS_MODE_STRICT)
+> +               return false;
+> +
+> +       WARN_ONCE(1, "Page map protection being disabled");
+> +       pks_update_exception(regs, PKS_KEY_PGMAP_PROTECTION, 0);
+> +       return true;
+> +}
+> +EXPORT_SYMBOL_GPL(pgmap_pks_fault_callback);
+> +
+>  void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+>  {
+>         if (!current->pgmap_prot_count++)
+> --
+> 2.31.1
+>

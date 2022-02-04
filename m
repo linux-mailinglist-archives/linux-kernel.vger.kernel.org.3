@@ -2,127 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245294A9AA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC95A4A9AAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239179AbiBDOFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S1359072AbiBDOIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiBDOFb (ORCPT
+        with ESMTP id S231415AbiBDOIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:05:31 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8748BC061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:05:30 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id q63so5661880pja.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:05:30 -0800 (PST)
+        Fri, 4 Feb 2022 09:08:21 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74095C061714;
+        Fri,  4 Feb 2022 06:08:21 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id d186so5115110pgc.9;
+        Fri, 04 Feb 2022 06:08:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2qpcRyh+24qtP2VVaX3PS7mv2lf5IWfW1neqWFvhdxM=;
-        b=HjMI8iZLqfdazRpmnpfZL//MzxxnWj63vgQoTMi7jsbHxH1ssKOVpsZzSZEQnOlY6E
-         wZAWPbVnJ5++71gvc3WZRhn/63ZmQAyUB0jZiJOkwwNcPxWvUETM53K37Dcw2Fu/ATWn
-         Jx0H11c+ls9yn0/KiuE9h4bDVdg6X+8QFjcbPYb5FjndjsGDzGDBLMsYL9kuE6BRizKQ
-         B71ju3Tpo160s0fXVOw/ZkbOpWxe4Ay+f3W05T9OY6Uli045hEVr2rC0WRQgQ+ZNNgpx
-         3CfbNChebx1P8JuuOKOot8OtyCkJ3aK2q0Zy9HD1r5SdEDUGAvCLFWlABsXZBaN2MPio
-         c/Cw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QjntbCnTDOBz4uQ6Ki+gLkrxg0YoRN4uV3LZcpuWQoo=;
+        b=H7IekxwEVxq+t5nWLxSo6enz+8ZETTlR+d5n3pu7FMq5KTNW8FxjXMVLaHCaFD1Q+J
+         QrFBI1vn/2URsY/FiDfF2xcKkQXclS+6vz8W+LHYxJxZ7iXL42YHWKvaYpg0CNc+84Eu
+         dCYebFGeKTnOZOG7rGmEWJ8Yb9aHf3HHOZweSE2dspedCXP8zxHOB5eloUx+TtdaOK6W
+         0nXxlmSGmAeNpZ+edpw7GncJVsBd3pb6Nz85DHcI9aO1wYErI1c3JAvop18HMlkcoI/e
+         g0g9DsbE/s0d6jmq2HGXfFrveUFKlMICYq5xO0omXE3/4uXZQwbcvdSCQdqqo6qWuMc4
+         YMSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2qpcRyh+24qtP2VVaX3PS7mv2lf5IWfW1neqWFvhdxM=;
-        b=y30zduHFZGhSg4tNmMvy8lQ6G6xajyn82Hp6lkOKO7v7LTbVpygwWwBepuCc939wtp
-         s76FFc+fqz2GVWMAWBg17gmeD1cBB0Z02tx6SoLX3vg9s306LMrbnOt/wvQnOoQpo5Zv
-         NkWIYMxJZMHuIj+euQFSJfmMJRTeT1EEktPOEM8N80EKeKv9j2YWsYKpcE/sNh/L2+oF
-         SrIjNgElA/xmyUzLRRLsCxs4x0vNh0Ls5DzYAhZVlOxsirazQGqxmyU4hL384bD8OI7Q
-         1FKxBxSOc3Up217vTbf3Qhij+33HAQrQT6p7pyY/ePvBAr7m9UTLvSWHjEXJz4tq+06G
-         SY4A==
-X-Gm-Message-State: AOAM530kYAEJUBvtgW+1Uy2g84JUU2iZMcX+7TsV615KOGMPWiC37Rn8
-        rYhJfZSUqzoymwLaHlTpn3D1mgTzZuL8rIXkom1oeg==
-X-Google-Smtp-Source: ABdhPJz/hl4o9naclBibn/3lZ3yW55IUCJbzoEq5EV8ShNlXxqU02ZIHt8TgohirAOEr5upB4OmCwB4CEpZUJ1U+1wU=
-X-Received: by 2002:a17:90b:4a86:: with SMTP id lp6mr3334875pjb.152.1643983529997;
- Fri, 04 Feb 2022 06:05:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QjntbCnTDOBz4uQ6Ki+gLkrxg0YoRN4uV3LZcpuWQoo=;
+        b=pHwu6Mltsv/HFT1S8u/6NQubdeZXwCyZM+OlPe3MkWVLdBAmtazp1yrqrly2CqVW+A
+         NVw9ujONluOGB/Xg1a41GGX3UvOUHzd5rthGe/y3TimXatE7mf7hFWkAhDYCj4e7p6yM
+         Zw1DnjQ7bd2qp7mCiMflKL+IUhJNu21kMWeP5MoCcqv22t1eRXd/Kl9Qnu5egpB8JbQh
+         oFYtizKAmRSAYQlvawEZMXXMhSp0c0DVaZ6PW16FYPIwIHNGnUCtG2u8+tnJAxgiawgm
+         wYosPtSjnv7K1EXbvhs6AUa+ng7cyWYt0fancpHOBqaQe0uwsYJmG4wyS4m/fBd+0vg6
+         AyBg==
+X-Gm-Message-State: AOAM532lUjqkIxMRmYa62Yy7ZF0zr+g6u1dDxTJdwlVKdIu+HhLvl8/V
+        KbBxDjzunv+5jzXmWsucncjOS2PRBa2Mbw==
+X-Google-Smtp-Source: ABdhPJwEXZik5KPcG7Rctjc91ymhw8t21YN6kFGcERW0JCRbEfao0aLOtzZNqQ4D//zmAUPkNSRFqA==
+X-Received: by 2002:a05:6a00:1494:: with SMTP id v20mr3235617pfu.82.1643983700960;
+        Fri, 04 Feb 2022 06:08:20 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id z22sm2896597pfe.42.2022.02.04.06.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 06:08:20 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, dsahern@kernel.org, idosch@idosch.org
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v5 net-next] net: drop_monitor: support drop reason
+Date:   Fri,  4 Feb 2022 22:08:13 +0800
+Message-Id: <20220204140813.4007173-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220119122843.1455611-1-narmstrong@baylibre.com>
-In-Reply-To: <20220119122843.1455611-1-narmstrong@baylibre.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Fri, 4 Feb 2022 15:05:16 +0100
-Message-ID: <CAG3jFyv15AhfZP0HTAt73U0yvKHNAMLmKzFu-9AfX9v76h7s6g@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/bridge: dw-hdmi: use safe format when first in
- bridge chain
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        biju.das.jz@bp.renesas.com,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Jan 2022 at 13:28, Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> When the dw-hdmi bridge is in first place of the bridge chain, this
-> means there is no way to select an input format of the dw-hdmi HW
-> component.
->
-> Since introduction of display-connector, negotiation was broken since
-> the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
-> in last position of the bridge chain or behind another bridge also
-> supporting input & output format negotiation.
->
-> Commit 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks")
+From: Menglong Dong <imagedong@tencent.com>
 
-I think this is the wrong hash. Is 7cd70656d128 the actual hash?
+In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+drop_monitor is able to report the drop reason to users by netlink.
 
-> was introduced to make negotiation work again by making display-connector
-> act as a pass-through concerning input & output format negotiation.
->
-> But in the case where the dw-hdmi is single in the bridge chain, for
-> example on Renesas SoCs, with the display-connector bridge the dw-hdmi
-> is no more single, breaking output format.
->
-> Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Fixes: 0656d1285b79 ("drm/bridge: display-connector: implement bus fmts callbacks").
+The drop reasons are reported as string to users, which is exactly
+the same as what we do when reporting it to ftrace.
 
-This hash too.
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+v5:
+- check if drop reason larger than SKB_DROP_REASON_MAX
 
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
-> Changes since v1:
-> - Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
-> - Fix typos in commit message
->
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 54d8fdad395f..97cdc61b57f6 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->         if (!output_fmts)
->                 return NULL;
->
-> -       /* If dw-hdmi is the only bridge, avoid negociating with ourselves */
-> -       if (list_is_singular(&bridge->encoder->bridge_chain)) {
-> +       /* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
-> +       if (list_is_singular(&bridge->encoder->bridge_chain) ||
-> +           list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
->                 *num_output_fmts = 1;
->                 output_fmts[0] = MEDIA_BUS_FMT_FIXED;
->
-> --
-> 2.25.1
->
+v4:
+- report drop reasons as string
 
-There are two checkstyle issues apart from the above mentioned hash
-issues, and I think we can ignore those. With the above mentioned
-issue fixed, feel free to add my r-b.
+v3:
+- referring to cb->reason and cb->pc directly in
+  net_dm_packet_report_fill()
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+v2:
+- get a pointer to struct net_dm_skb_cb instead of local var for
+  each field
+---
+ include/uapi/linux/net_dropmon.h |  1 +
+ net/core/drop_monitor.c          | 29 +++++++++++++++++++++++++----
+ 2 files changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+index 66048cc5d7b3..1bbea8f0681e 100644
+--- a/include/uapi/linux/net_dropmon.h
++++ b/include/uapi/linux/net_dropmon.h
+@@ -93,6 +93,7 @@ enum net_dm_attr {
+ 	NET_DM_ATTR_SW_DROPS,			/* flag */
+ 	NET_DM_ATTR_HW_DROPS,			/* flag */
+ 	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
++	NET_DM_ATTR_REASON,			/* string */
+ 
+ 	__NET_DM_ATTR_MAX,
+ 	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+index 7b288a121a41..2d1c8e8dec83 100644
+--- a/net/core/drop_monitor.c
++++ b/net/core/drop_monitor.c
+@@ -48,6 +48,16 @@
+ static int trace_state = TRACE_OFF;
+ static bool monitor_hw;
+ 
++#undef EM
++#undef EMe
++
++#define EM(a, b)	[a] = #b,
++#define EMe(a, b)	[a] = #b
++
++static const char *drop_reasons[SKB_DROP_REASON_MAX + 1] = {
++	TRACE_SKB_DROP_REASON
++};
++
+ /* net_dm_mutex
+  *
+  * An overall lock guarding every operation coming from userspace.
+@@ -126,6 +136,7 @@ struct net_dm_skb_cb {
+ 		struct devlink_trap_metadata *hw_metadata;
+ 		void *pc;
+ 	};
++	enum skb_drop_reason reason;
+ };
+ 
+ #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+@@ -498,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ {
+ 	ktime_t tstamp = ktime_get_real();
+ 	struct per_cpu_dm_data *data;
++	struct net_dm_skb_cb *cb;
+ 	struct sk_buff *nskb;
+ 	unsigned long flags;
+ 
+@@ -508,7 +520,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ 	if (!nskb)
+ 		return;
+ 
+-	NET_DM_SKB_CB(nskb)->pc = location;
++	cb = NET_DM_SKB_CB(nskb);
++	cb->reason = reason;
++	cb->pc = location;
+ 	/* Override the timestamp because we care about the time when the
+ 	 * packet was dropped.
+ 	 */
+@@ -606,8 +620,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 				     size_t payload_len)
+ {
+-	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
++	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+ 	char buf[NET_DM_MAX_SYMBOL_LEN];
++	enum skb_drop_reason reason;
+ 	struct nlattr *attr;
+ 	void *hdr;
+ 	int rc;
+@@ -620,10 +635,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+ 		goto nla_put_failure;
+ 
+-	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
++	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
++			      NET_DM_ATTR_PAD))
++		goto nla_put_failure;
++
++	reason = cb->reason;
++	if (reason < SKB_DROP_REASON_MAX &&
++	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+ 		goto nla_put_failure;
+ 
+-	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
++	snprintf(buf, sizeof(buf), "%pS", cb->pc);
+ 	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+ 		goto nla_put_failure;
+ 
+-- 
+2.34.1
+

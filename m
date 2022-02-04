@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC904A96A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC604A969A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356407AbiBDJ13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S239192AbiBDJ1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357875AbiBDJZu (ORCPT
+        with ESMTP id S1358189AbiBDJZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Feb 2022 04:25:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF80C0617A7;
-        Fri,  4 Feb 2022 01:25:30 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE65C0617A9;
+        Fri,  4 Feb 2022 01:25:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3098616D9;
-        Fri,  4 Feb 2022 09:25:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADA11C340ED;
-        Fri,  4 Feb 2022 09:25:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7623B836EF;
+        Fri,  4 Feb 2022 09:25:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB473C004E1;
+        Fri,  4 Feb 2022 09:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966729;
-        bh=ajtamET1XAUTRvLWbWJUsVal1vAqIubTQv05s4lp/40=;
+        s=korg; t=1643966732;
+        bh=4+7MceMecYWOvPMGIDx+1UxoxBhhhIlOqFjbf6KJEtc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZdgWdJ8fvHMayUzu8LnHrmY3SU5kjRkfRXaPuEqR9yGeJuh3a9Wk6cgrC7feP2RS
-         O7F2HeVJRYaz9BWYSZKrdbiX/Jca9k9jrW1mLBod1ns5dhhDF6FRYf5x6PY309HYyb
-         D3U+Z2HfMmEgCpMkVnh4nn0dl5fD0bEy4B4hh4DQ=
+        b=M9j+oPCRsZ7n11ForRQq040+9HwaxkTbSjzOwzXBbIbvmVdbul1w9+7m+I+pItSMV
+         IwLqcI3V1iMyJU968gJPNQihCDHkU5bfpRtF8Za7ZGD1rk1evwgU0E6cauu+FM/2qy
+         lAvzxfVS1GxRxDBvnjaR/p3doh5BarUN1nX3+zbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Roi Dayan <roid@nvidia.com>,
-        Oz Shlomo <ozsh@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH 5.16 20/43] net/mlx5e: TC, Reject rules with forward and drop actions
-Date:   Fri,  4 Feb 2022 10:22:27 +0100
-Message-Id: <20220204091917.835596255@linuxfoundation.org>
+        stable@vger.kernel.org, Dima Chumak <dchumak@nvidia.com>,
+        Roi Dayan <roid@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.16 21/43] net/mlx5: Fix offloading with ESWITCH_IPV4_TTL_MODIFY_ENABLE
+Date:   Fri,  4 Feb 2022 10:22:28 +0100
+Message-Id: <20220204091917.867657197@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
 References: <20220204091917.166033635@linuxfoundation.org>
@@ -48,36 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roi Dayan <roid@nvidia.com>
+From: Dima Chumak <dchumak@nvidia.com>
 
-commit 5623ef8a118838aae65363750dfafcba734dc8cb upstream.
+commit 55b2ca702cfa744a9eb108915996a2294da47e71 upstream.
 
-Such rules are redundant but allowed and passed to the driver.
-The driver does not support offloading such rules so return an error.
+Only prio 1 is supported for nic mode when there is no ignore flow level
+support in firmware. But for switchdev mode, which supports fixed number
+of statically pre-allocated prios, this restriction is not relevant so
+it can be relaxed.
 
-Fixes: 03a9d11e6eeb ("net/mlx5e: Add TC drop and mirred/redirect action parsing for SRIOV offloads")
-Signed-off-by: Roi Dayan <roid@nvidia.com>
-Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
+Fixes: d671e109bd85 ("net/mlx5: Fix tc max supported prio for nic mode")
+Signed-off-by: Dima Chumak <dchumak@nvidia.com>
+Reviewed-by: Roi Dayan <roid@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -3420,6 +3420,12 @@ actions_match_supported(struct mlx5e_pri
- 		return false;
- 	}
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/fs_chains.c
+@@ -121,12 +121,13 @@ u32 mlx5_chains_get_nf_ft_chain(struct m
  
-+	if (!(~actions &
-+	      (MLX5_FLOW_CONTEXT_ACTION_FWD_DEST | MLX5_FLOW_CONTEXT_ACTION_DROP))) {
-+		NL_SET_ERR_MSG_MOD(extack, "Rule cannot support forward+drop action");
-+		return false;
-+	}
+ u32 mlx5_chains_get_prio_range(struct mlx5_fs_chains *chains)
+ {
+-	if (!mlx5_chains_prios_supported(chains))
+-		return 1;
+-
+ 	if (mlx5_chains_ignore_flow_level_supported(chains))
+ 		return UINT_MAX;
+ 
++	if (!chains->dev->priv.eswitch ||
++	    chains->dev->priv.eswitch->mode != MLX5_ESWITCH_OFFLOADS)
++		return 1;
 +
- 	if (actions & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
- 	    actions & MLX5_FLOW_CONTEXT_ACTION_DROP) {
- 		NL_SET_ERR_MSG_MOD(extack, "Drop with modify header action is not supported");
+ 	/* We should get here only for eswitch case */
+ 	return FDB_TC_MAX_PRIO;
+ }
 
 

@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AAF4A966F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB8B4A96C3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358226AbiBDJZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S1358186AbiBDJ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357593AbiBDJYa (ORCPT
+        with ESMTP id S1357774AbiBDJ1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:24:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C4C061759;
-        Fri,  4 Feb 2022 01:24:30 -0800 (PST)
-Date:   Fri, 4 Feb 2022 10:24:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1643966667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1OquCNeqBrmSz1l+c7aggW4kgLy2MKoprxou4C3Lds=;
-        b=gPEs6AT/BsmdvBXVrkFPpf1gIUZh4ZepiJtkxEXOQI+h4zPxl7Ewut4c/sti4Cv6QvyLo5
-        qQS7Fh9I25FxXiXjvgYtGUKqQtrAfEF7hcrC9g9ozeoAywRT+Vpboq77CsEaOq9WWEjsHC
-        LLWAUEAeF53XOOX9GxzW4yKyW6oaGd6Bt9csn9kDqBo697qkM/Ceij65ZIVE1/b0EYvvI6
-        p8cKl8q3WOIDwE7Lji6ZZBy6wpx2PYhUsHFnD5YbioKZEtHYD7HsssaRWTywavro8GuZPr
-        SDVJHE6Xev9tPagiuDV0CyjqE1FyYdb598WpjE+3UPE18Ki807iB9om+B5MAKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1643966667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1OquCNeqBrmSz1l+c7aggW4kgLy2MKoprxou4C3Lds=;
-        b=ohfrdA8XNt14v/qtvuGcHuIt9fP7Ul8cAktixgFJE1U1guZl3f9HoU+g3end07R64deWKT
-        isP5+PQiTyB7CuCA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        rcu@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mike Galbraith <efault@gmx.de>
-Subject: Re: [PATCH v3 2/4] sched: Introduce migratable()
-Message-ID: <YfzwycgvDlVSGrB1@linutronix.de>
-References: <20210811201354.1976839-1-valentin.schneider@arm.com>
- <20210811201354.1976839-3-valentin.schneider@arm.com>
- <20210817170925.2jwqvgvmqab2glwu@linutronix.de>
- <87czq573et.mognet@arm.com>
- <YfF9I5PcZJA5532B@linutronix.de>
- <87v8y5nflv.mognet@arm.com>
+        Fri, 4 Feb 2022 04:27:10 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48A0C061783;
+        Fri,  4 Feb 2022 01:26:28 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFurI-0007GZ-ER; Fri, 04 Feb 2022 10:26:25 +0100
+Message-ID: <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
+Date:   Fri, 4 Feb 2022 10:26:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87v8y5nflv.mognet@arm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
+Content-Language: en-BS
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
+ <20220130163725.GA2792319@roeck-us.net>
+ <20220131100845.GA19252@alpha.franken.de>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220131100845.GA19252@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643966788;12f74f95;
+X-HE-SMSGID: 1nFurI-0007GZ-ER
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-01-27 19:27:56 [+0000], Valentin Schneider wrote:
+Hi, this is your Linux kernel regression tracker speaking.
 
-Sorry, got distracted.
+On 31.01.22 11:08, Thomas Bogendoerfer wrote:
+> On Sun, Jan 30, 2022 at 08:37:25AM -0800, Guenter Roeck wrote:
+>> On Tue, Jan 25, 2022 at 03:19:44PM +0100, Thomas Bogendoerfer wrote:
+>>> Use PTR_WD instead of PTR to avoid clashes with other parts.
+>>>
+>>> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>>
+>> Building mips:cavium_octeon_defconfig ... failed
+>> --------------
+>> Error log:
+>> arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
+>> arch/mips/cavium-octeon/octeon-memcpy.S:187: Error: unrecognized opcode `ptr 9b,l_exc'
+>> ...
+>>
+>> Missed one place in Cavium assembler code.
+>>
+>> arch/mips/cavium-octeon/octeon-memcpy.S:        PTR     9b, handler;
+>>
+>> #regzbot introduced: fa62f39dc7e2
 
-> While I'm at it, I see you're still carrying
-> 
->   6ab5bb09040d arm64/sve: Make kernel FPU protection RT friendly
-> 
-> If you're OK with it, I'll repost that:
-> https://lore.kernel.org/lkml/20210722175157.1367122-1-valentin.schneider@arm.com/
+@Guenter: thx for getting the regression tracked!
 
-I'm not too keen about preempt_enable_bh(). I would prefer the current
-approach maybe with a comment why BH here and preemption there is
-correct.
- 
-Sebastian
+> d'oh, fix sent.
+
+Sadly you didn't link to the report about the issue using a "Link:" tag,
+as explained by both Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst
+
+Could you please do so in the future? Than would make my life as a Linux
+kernel's regression tracker a lot easier, as my regression tracking bot
+would then have been able to automatically detect the patch posting and
+the commit (I for now decided to not make the bot rely on the "Fixes:"
+tag alone, as that might do the wrong thing if one commit causes
+multiple regressions).
+
+Anyway: I no big deal (just makes regression tracking a lot harder), I
+can tell regzbot manually about the fix:
+
+#regzbot introduced: 50317b636e7184d
+
+Ciao, Thorsten

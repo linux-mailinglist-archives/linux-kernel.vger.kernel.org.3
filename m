@@ -2,129 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBC84A99B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3748A4A99BB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347190AbiBDNHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:07:33 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:34768 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiBDNH2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:07:28 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 214D7Hmp025937;
-        Fri, 4 Feb 2022 07:07:17 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643980037;
-        bh=5/8eElrg7h584eB+6f9UCi3BdtD9S6GuBldvdO8lgos=;
-        h=Date:From:To:CC:Subject;
-        b=murMdH+vh1P5MrBPahLaO+Di8oYXegTfghg2Yrig9Dbm4HeHUDKqKQ6EDnfPcScgI
-         hNUuSbTQ1AzjeQTa5j9yZHHCzgs6ZfywZyQvskEXnrFO7KhQvmq8oTQVMzqiuFNayQ
-         WXL/XkCphVrJeKJ6i8nKsRQM/kdJ3SDsXt5EvJes=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 214D7HZ3070983
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Feb 2022 07:07:17 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 4
- Feb 2022 07:07:16 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 4 Feb 2022 07:07:17 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 214D7G1E073425;
-        Fri, 4 Feb 2022 07:07:16 -0600
-Date:   Fri, 4 Feb 2022 07:07:16 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC:     Tero Kristo <kristo@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Subject: [GIT PULL] arm64: dts: TI K3 fixes for v5.17
-Message-ID: <20220204130716.fjlm4vvcbtzcwlwx@chalice>
+        id S1349914AbiBDNKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:10:45 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:42406 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350855AbiBDNKi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 08:10:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=m/MrXXUY+pm7JMmWqQaE3QjF0Fdquw4zZVFebHs+qNA=; b=K9FBiz1rW7KFXn2u1g2RmQPdk1
+        mmGrXOgMpt90Ui02kl5EiT056Cs2a1UWVaiNDw95JAvNsQw/Yrkgtps4YmL+PQknW+2ZZc5R4WNRw
+        CZDlnNncbZr7/Zad6s7D8FzlbaabjNmkAYXe2qBd7U/e+o8ZDd51yDl5BNP7Ce50IU8o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nFyMC-004Gpv-W4; Fri, 04 Feb 2022 14:10:32 +0100
+Date:   Fri, 4 Feb 2022 14:10:32 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pavel.Parkhomenko@baikalelectronics.ru
+Cc:     michael@stapelberg.de, afleming@gmail.com, f.fainelli@gmail.com,
+        Alexey.Malahov@baikalelectronics.ru,
+        Sergey.Semin@baikalelectronics.ru, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
+ 88e1121-compatible PHYs
+Message-ID: <Yf0lyGi+2mEwmrEH@lunn.ch>
+References: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c6vntr75n7ni5m22"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---c6vntr75n7ni5m22
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Feb 04, 2022 at 05:29:11AM +0000, Pavel.Parkhomenko@baikalelectronics.ru wrote:
+> It is mandatory for a software to issue a reset upon modifying RGMII
+> Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
+> Specific Control register 2 (page 2, register 21) otherwise the changes
+> won't be perceived by the PHY (the same is applicable for a lot of other
+> registers). Not setting the RGMII delays on the platforms that imply
+> it's being done on the PHY side will consequently cause the traffic loss.
+> We discovered that the denoted soft-reset is missing in the
+> m88e1121_config_aneg() method for the case if the RGMII delays are
+> modified but the MDIx polarity isn't changed or the auto-negotiation is
+> left enabled, thus causing the traffic loss on our platform with Marvell
+> Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
+> delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
+> method.
 
-Hi Arnd, Olof, ARM SoC Maintainers,
+Hi Pavel
 
-This PR is a retry of previous attempt at fixing up aliases way late in 5.17
-merge cycle for J721S2[1].
-  =20
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+There appears to be another path which has the same issue.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+m88e1118_config_aneg() calls marvell_set_polarity(), which also needs
+a reset afterwards.
 
-are available in the Git repository at:
+Could you fix this case as well?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git tags/ti-k3-dt-=
-fixes-for-v5.17
-
-for you to fetch changes up to aee744a37aaf277e74557e683cc524fbe6daeef7:
-
-  arm64: dts: ti: k3-j721s2-common-proc-board: Alias console uart to serial=
-2 (2022-01-24 13:40:32 -0600)
-
-----------------------------------------------------------------
-Device Tree fixes for TI K3 platform for v5.17 merge window
-
-* Update J721S2 platform to switch serial aliases to ttyS2.
-
-----------------------------------------------------------------
-Aswath Govindraju (2):
-      arm64: dts: ti: k3-j721s2: Move aliases to board dts
-      arm64: dts: ti: k3-j721s2-common-proc-board: Alias console uart to se=
-rial2
-
- .../boot/dts/ti/k3-j721s2-common-proc-board.dts    | 14 ++++++++++++--
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi              | 22 ------------------=
-----
- 2 files changed, 12 insertions(+), 24 deletions(-)
-
-[1] https://lore.kernel.org/lkml/60e9a3ef-f717-bd2a-b722-01942e184fd0@ti.co=
-m/
-
---=20
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 8=
-49D 1736 249D
-
---c6vntr75n7ni5m22
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE+KKGk1TrgjIXoxo03bWEnRc2JJ0FAmH9JP4ACgkQ3bWEnRc2
-JJ2rbw//VPgYkYxdpwUItvjTWi4k+1Gfdraedm9GPamPKsqQi42viwVq/R/3JuuO
-YaQk++1GymYAk5XIQFiba1GhIiQUnyiH1KDUcjOnnJeAM7V5NPRGQ7rEUgGyEcSi
-bRYvTdpVLFqW+uClGLubKIw59Z3l8P8+KZDoYmhl+1DoWkYAIPOXcBN5tEVzldOV
-WrZWIYxVujX9TrNNhetEvKo1A7ZvWpD4bfleLTYLLUFaEiRycprJ/fbZ2xO0qwyF
-XRSFIYF+Q+xucKH1tUy3RfjOSpXKHbps+/zfo3fIHEwKMlVXhOs8d6V8ehEc/qKC
-0Tk/Vl8bqfImRDwqiaS0Mlh7IqhIYKfhWoAep2zYr6sKsCz9iN09vbRe3yDnGwLM
-/tWo3Qne/t2mx88BXpvF0XgeDdFQG63Sh4jmXqkSd40TD8tsRN2NrzCcNuH1A4zW
-InTz/54fIg+0wfGQPcxPYqRiQlYlT2wdmt/wjmSZDBEkIYVnZTDpj6XtKBXk4/Fw
-N/pDaeRtmk3zx9P0ohQsuqz2tJRJOKpp8y4raH/cxRQf9zxcI7G8KWCOo3ApJ8hW
-FD+2WodX1Z7Q2jEkEP/b7tlvDSWlC7K22Df5ug4ivzjwBgOiDEyyO02bonnIlSmG
-eCpZ5TCINY/IFEFkMNCRgU23W4h/8CeXwgQCyNUvNDT1jQRtK2Q=
-=jo4t
------END PGP SIGNATURE-----
-
---c6vntr75n7ni5m22--
+Thanks
+	Andrew

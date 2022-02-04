@@ -2,136 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CAE4A988B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CC84A988F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 12:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358471AbiBDLmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 06:42:50 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:52252 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbiBDLms (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 06:42:48 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D4732210FB;
-        Fri,  4 Feb 2022 11:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1643974967; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5vTMEeuc5XcaxXNy7RhPX2Qj+TF9VsgpJldSEApLliY=;
-        b=shIYF4Q81+Q7n2FnlCw4AleLDUBuS+Vp14Nlvawm65Md73a6NHXv6fnJJEfUiG5puSo6p6
-        mp4KfJQ+S/RtFzk5cRI02O1Yz2kfYJPt/KVdpcd0b9YtKRLsltrTQNQ2oVReTahqXwce5X
-        k5iV43fTTjE9AsKPlUnKbpC+kDzwrKc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1643974967;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5vTMEeuc5XcaxXNy7RhPX2Qj+TF9VsgpJldSEApLliY=;
-        b=tMa6OywQY7J+wtQOvfqQ0fpqhivw/YXG0qt/1HglAAN5YoEjadOBG3gKQr5zFDMLDODeNg
-        aaxEu/ZqSf+W2XCQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B7342A3B84;
-        Fri,  4 Feb 2022 11:42:47 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 5AA3FA05B6; Fri,  4 Feb 2022 12:42:47 +0100 (CET)
-Date:   Fri, 4 Feb 2022 12:42:47 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        David Hildenbrand <david@redhat.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-Subject: Re: [PATCH v4 1/5] mm: Fix invalid page pointer returned with
- FOLL_PIN gups
-Message-ID: <20220204114247.dupafq4yogate2sz@quack3.lan>
-References: <20220204020010.68930-1-jhubbard@nvidia.com>
- <20220204020010.68930-2-jhubbard@nvidia.com>
+        id S1358477AbiBDLsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 06:48:42 -0500
+Received: from foss.arm.com ([217.140.110.172]:38584 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230033AbiBDLsl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 06:48:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 255CE1480;
+        Fri,  4 Feb 2022 03:48:41 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5C8C3F40C;
+        Fri,  4 Feb 2022 03:48:39 -0800 (PST)
+Date:   Fri, 4 Feb 2022 11:48:35 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, ashoks@broadcom.com
+Subject: Re: [PATCH] perf/arm64: fix mapping for HW_BRANCH_INSTRUCTIONS on
+ PMUv3
+Message-ID: <Yf0Sk5dT4HXviI+M@FVFF77S0Q05N>
+References: <20220204073940.1258263-1-eranian@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204020010.68930-2-jhubbard@nvidia.com>
+In-Reply-To: <20220204073940.1258263-1-eranian@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03-02-22 18:00:06, John Hubbard wrote:
-> From: Peter Xu <peterx@redhat.com>
-> 
-> Alex reported invalid page pointer returned with pin_user_pages_remote() from
-> vfio after upstream commit 4b6c33b32296 ("vfio/type1: Prepare for batched
-> pinning with struct vfio_batch").
-> 
-> It turns out that it's not the fault of the vfio commit; however after vfio
-> switches to a full page buffer to store the page pointers it starts to expose
-> the problem easier.
-> 
-> The problem is for VM_PFNMAP vmas we should normally fail with an -EFAULT then
-> vfio will carry on to handle the MMIO regions.  However when the bug triggered,
-> follow_page_mask() returned -EEXIST for such a page, which will jump over the
-> current page, leaving that entry in **pages untouched.  However the caller is
-> not aware of it, hence the caller will reference the page as usual even if the
-> pointer data can be anything.
-> 
-> We had that -EEXIST logic since commit 1027e4436b6a ("mm: make GUP handle pfn
-> mapping unless FOLL_GET is requested") which seems very reasonable.  It could
-> be that when we reworked GUP with FOLL_PIN we could have overlooked that
-> special path in commit 3faa52c03f44 ("mm/gup: track FOLL_PIN pages"), even if
-> that commit rightfully touched up follow_devmap_pud() on checking FOLL_PIN when
-> it needs to return an -EEXIST.
-> 
-> Attaching the Fixes to the FOLL_PIN rework commit, as it happened later than
-> 1027e4436b6a.
-> 
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Fixes: 3faa52c03f44 ("mm/gup: track FOLL_PIN pages")
-> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Reported-by: Alex Williamson <alex.williamson@redhat.com>
-> Debugged-by: Alex Williamson <alex.williamson@redhat.com>
-> Tested-by: Alex Williamson <alex.williamson@redhat.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> [jhubbard: added some tags, removed a reference to an out of tree module.]
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Hi Stephane,
 
-Makes sence. Feel free to add:
+On Thu, Feb 03, 2022 at 11:39:40PM -0800, Stephane Eranian wrote:
+> With the existing code, the following command:
+> 
+> $ perf stat -e branches sleep 0
+>  Performance counter stats for 'sleep 0':
+>    <not supported>      branches
+> 
+> on N1 core (pmuv3).
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+This is definitely not ideal. :(
 
-								Honza
+> This is due to the fact that the mapping for the generic event is wrong.
 
+I don't think that's quite true; more detail below. This is certainly *messy*
+though.
+
+> It is using ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED which is not implemented
+> on N1 (and most likely on any PMUv3 implementations). However, there is
+> another supported event ARMV8_PMUV3_PERFCTR_BR_RETIRED measuring the same
+> condition.
+
+I have a couple of concerns here:
+
+1) Both PC_WRITE_RETIRED and BR_RETIRED are OPTIONAL (though the Arm strongly
+   recommends that BR_RETIRED is implemented), so CPUs may exist which only
+   support one of the two, or both.
+ 
+   So as-is, this patch may break working support for CPUs which have
+   PC_WRITE_RETIRED but not BR_RETIRED.
+
+   IIUC we should be able to detect whether either are implemented by looking
+   at PMCEID, and we could take that into account when mapping the event.
+
+2) IIUC (even with ARMv8.6) there is a potential semantic difference between
+   PC_WRITE_RETIRED and BR_RETIRED, in that e.g. PC_WRITE_RETIRED must include
+   exception returns while this is IMPLEMENTATION DEFINED for BR_RETIRED.
+
+   I guess this might not matter all that much given the precise definition of
+   "Software change of the PC" is IMPLEMENTATION DEFINED, but I don't think
+   it's true that the two events count "the same condition", and we should be
+   more explicit about that.
+
+> This patch switches the mapping to ARMV8_PMUV3_PERFCTR_BR_RETIRED so that
+> the perf stat command above works.
+> 
+> Signed-off-by: Stephane Eranian <eranian@google.com>
 > ---
->  mm/gup.c | 2 +-
+>  arch/arm64/kernel/perf_event.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index a9d4d724aef7..80229ecf0114 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -465,7 +465,7 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
->  		pte_t *pte, unsigned int flags)
->  {
->  	/* No page to get reference */
-> -	if (flags & FOLL_GET)
-> +	if (flags & (FOLL_GET | FOLL_PIN))
->  		return -EFAULT;
->  
->  	if (flags & FOLL_TOUCH) {
+> diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
+> index cab678ed6618..ec2b98343a0b 100644
+> --- a/arch/arm64/kernel/perf_event.c
+> +++ b/arch/arm64/kernel/perf_event.c
+> @@ -45,7 +45,7 @@ static const unsigned armv8_pmuv3_perf_map[PERF_COUNT_HW_MAX] = {
+>  	[PERF_COUNT_HW_INSTRUCTIONS]		= ARMV8_PMUV3_PERFCTR_INST_RETIRED,
+>  	[PERF_COUNT_HW_CACHE_REFERENCES]	= ARMV8_PMUV3_PERFCTR_L1D_CACHE,
+>  	[PERF_COUNT_HW_CACHE_MISSES]		= ARMV8_PMUV3_PERFCTR_L1D_CACHE_REFILL,
+> -	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_PC_WRITE_RETIRED,
+> +	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS]	= ARMV8_PMUV3_PERFCTR_BR_RETIRED,
+
+As above, I don't think we can unconditionally make this change, and instead
+should have the mapping function take PMCEID into account to map the event (or
+bail out if we don't know a suitable event is implemented).
+
+Thanks,
+Mark.
+
+>  	[PERF_COUNT_HW_BRANCH_MISSES]		= ARMV8_PMUV3_PERFCTR_BR_MIS_PRED,
+>  	[PERF_COUNT_HW_BUS_CYCLES]		= ARMV8_PMUV3_PERFCTR_BUS_CYCLES,
+>  	[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND]	= ARMV8_PMUV3_PERFCTR_STALL_FRONTEND,
 > -- 
-> 2.35.1
+> 2.35.0.263.gb82422642f-goog
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

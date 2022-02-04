@@ -2,167 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B464AA3C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D084E4AA3CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377796AbiBDW6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:58:37 -0500
-Received: from mout.perfora.net ([74.208.4.194]:53167 "EHLO mout.perfora.net"
+        id S1377804AbiBDW6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:58:41 -0500
+Received: from mout.perfora.net ([74.208.4.196]:39985 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358185AbiBDW6W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:58:22 -0500
+        id S1376287AbiBDW6d (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 17:58:33 -0500
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MSLTZ-1mnorT0XWd-00TQuf;
- Fri, 04 Feb 2022 23:58:00 +0100
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lpu1h-1mbZRT0MDP-00fmon;
+ Fri, 04 Feb 2022 23:58:04 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/12] arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
-Date:   Fri,  4 Feb 2022 23:57:04 +0100
-Message-Id: <20220204225706.1539818-11-marcel@ziswiler.com>
+Subject: [PATCH v4 11/12] dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
+Date:   Fri,  4 Feb 2022 23:57:05 +0100
+Message-Id: <20220204225706.1539818-12-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220204225706.1539818-1-marcel@ziswiler.com>
 References: <20220204225706.1539818-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:kH+5K7Es3VfXS8C/7EOIDa5q2YryXfVoF8zvruDZxxUvc3ElxE2
- C3ZHTWf3g2/pcyON80pWJW1kkIElUousaLlKTSfCSxRqMTwMpSWJ1enX39SqlSXYgGqCRkI
- 2tEP/+PQsAV5ygmAFdq+TppKPoPyD0zrxGj8Czx4Jmwu1rOgDTTN2i7/Vme8Gk5a2pnEHW1
- mlVWG3mWV2d1zKvnrsENA==
+X-Provags-ID: V03:K1:/8dK2lttyGNtwEk7BClktRjejtZtzP0SVKf7uMGxK8PqSPoMZtu
+ lVrjVLsEzowRBYU2UVsOaKmqww5WCFzz+mbQfj5BC9f2/K3HzNXKjFalIii7nAXvzI5T3z5
+ GIjqLruOwxabXOkkJTVroJhP9D9CBRQiOG4ROVJXNG2oQGgOuvj9ecj1aSP1+qlIXvUgNy6
+ pR2NwL5fCj4FoqBRyt06A==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2VuhEtqPsMw=:yjWDls8jo9b5DhIPjTdstL
- AY6nNK/qa/KcxFEWqppPpdtVK9KR/tyckKxQCNKXvDaqQWbgYGXTsZqzhfobFYPwJu07CyHse
- rRcjqVy/tfdb7cok9UB2istU4axvVsaEieOw8sVLpvBM4ifFPz8sxQGqMWn2wDwkn2srPMbNr
- MC4Rhfnw01Di1c8K9/H1Lf2O/KN7LUAut46rMpwHKkFoB39ijKvaH/Wj1c+P20mlUpru4jJ1Q
- +EoEj9yNGeo/rx1w6sV2t8qzfhP7T88dTigdsBkDHJ73AS2dqjqXOvH0UKHFf/N3wP3og+bS3
- 5+W/U/ScRpT66wfzNLKrpwT7khp1UjKBs/fq53OtI2k06c7CBQpgskvnMcqTf04UFm2n+l6JT
- wInpmbjUuHB+GAS/QQL/Q+8XBiVOMpeD6AYbjOn78bOfaPuaInFgS6lQN6YzQE8meHIxPpD//
- qnodwEXdDSBQa7F+EqUAVPc5Z4GjmIaQtRYAkXutca0j24BsW7UcjDjdOQDsBe67evaGsZSj/
- A1EnWB/sUsEkdedFrP2G3r4Vkf+RVf7/sDaobuzDegnsq7xPB/J8nuAI7+lPe1YUrFvrUjwZz
- 9DjNm9QSRoQcA8stKEzkmSxis/9hKge3avQCO/NQoYuXhUAfJ4yWnm8sgIcBmTlnSS5S0BTWX
- iOpMzfUCBpoxkfFblhHJXZtgZP1v8P2d+rjLG1kDduas8P3CGI/jQnUQfcNp6TvLbrzA=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yuurbLbyHNE=:1pADT9vcdY6tZWYVZKG8sA
+ aUR/a1rjQz16EVg4csDthlgjB5XU6UWeV6BgM9lKuwZzqinZAcN3VCFjhX390AX0WWLcI0aev
+ RS9r30Dsem9CeCcRN//n614u+r1Va3V5VZBLbif2QQg/9ypOnL7x0F0ERNF9lFuekwtEqvfBQ
+ qMx757kkrL5Y03vKBSBUCMRciMtA8zubEiqE2m6GPzUtrjx03Ydh9Uejenu+cRniBZK9zupB9
+ c0k4AMTpSctRKdu9Y8kDSPE3sw776W8SMJu0RUsXJJHmdNFumnKDuS/U+CR1tc/A4jtvZdYLY
+ p+z7pDBGprnwAUOzukwl4eQcDypP+gBSszfYJI93N9vF7BXF2u/nzH6JGZwAZ1NPKEFSwyqYd
+ VkvW1mpt7vapVgFbhYzaEopTCUdworKRTknfQxwe1C2ZaP7J4KceWcQbLZYHdLkwX9DCQnbYP
+ EDzohNbo0i+VWxA2xKY2DZrtcsW9qBCp8+nIPR3Z75eVfLeVbEqzvH78PWXyXs6lxkHuh4tUn
+ OLKqAOHpriOHcVBEb/6Fr0BwL9MxVE3OncSibilyewvX1X/Hbjdol4LpzU3o3uZW9XypsLssq
+ 6e+macXmTk0Lx/acGDdv2wpY27sYwQUyVOoEuFq8REWlv5oLqNukk3PAQxyDG5waAWEtlFX7A
+ 1yfcbw28B8h8jOGu4sQMGc9tAbzeWrckLfbAYNiVuFjLro2nIPlS3izfVr8RHwvLUg0u68ZWk
+ ujy1AuBIeTyWPNmRRkg6h4bwX6gXlRWG8QrqR+9f2Rt5GL4Ar0HK1Xn5l8A=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Enable various drivers which support peripherals as found on the
-Verdin iMX8M Mini et al. computer/system on modules:
-
-- CONFIG_CAN_MCP251XFD
-At least one Microchip MCP2518FDT SPI CAN controller which this driver
-also supports may be found on the Verdin iMX8M Mini computer/system on
-module.
-
-- CONFIG_BT_HCIUART_MRVL, CONFIG_BT_MRVL, CONFIG_BT_MRVL_SDIO and
-  CONFIG_MWIFIEX_SDIO
-The AzureWave AW-CM276NF which these Bluetooth and Wi-Fi drivers also
-support may be found on the Verdin iMX8M Mini (as well as the Apalis
-iMX8, Colibri iMX8X and Verdin iMX8M Plus for that matter) computer/
-system on module.
-
-- CONFIG_SENSORS_LM75
-The TI TMP75C temperature sensor which this driver also supports may be
-found on the Verdin iMX8M Mini (as well as the Verdin iMX8M Plus for
-that matter) computer/system on module.
-
-- CONFIG_SND_SOC_NAU8822
-The Nuvoton Technology Corporation (NTC) NAU88C22YG which this driver
-also supports may be found on the Verdin Development Board a carrier
-board for the Verdin family of computer/system on module which the
-Verdin iMX8M Mini (as well as the Verdin iMX8M Plus for that matter)
-may be mated in.
-
-- CONFIG_TI_ADS1015
-The TLA2024 ADC which this driver also supports may be found on the
-Verdin iMX8M Mini (as well as the Verdin iMX8M Plus for that matter)
-computer/system on module.
+Add toradex,verdin-imx8mm for our new Verdin iMX8M Mini modules, its
+nonwifi and wifi variants and the carrier boards (both Dahlia and the
+Verdin Development Board) they may be mated in.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
-(no changes since v3)
-
-Changes in v3:
-- Add Krzysztof's reviewed-by tag.
+(no changes since v2)
 
 Changes in v2:
-- Explain why enabling these may make sense and squash them relevant
-  changes as requested by Krzysztof.
+- Add Rob's acked-by tag.
+- Fix Colibri vs. Verdin copy/paste mistake. Thanks to Francesco Dolcini
+  <francesco.dolcini@toradex.com> for pointing that out to me.
 
- arch/arm64/configs/defconfig | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../devicetree/bindings/arm/fsl.yaml          | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 76334cb698af..8d2733f8a7d9 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -179,6 +179,7 @@ CONFIG_CAN=m
- CONFIG_CAN_FLEXCAN=m
- CONFIG_CAN_RCAR=m
- CONFIG_CAN_RCAR_CANFD=m
-+CONFIG_CAN_MCP251XFD=m
- CONFIG_BT=m
- CONFIG_BT_HIDP=m
- # CONFIG_BT_LE is not set
-@@ -189,6 +190,9 @@ CONFIG_BT_HCIUART=m
- CONFIG_BT_HCIUART_LL=y
- CONFIG_BT_HCIUART_BCM=y
- CONFIG_BT_HCIUART_QCA=y
-+CONFIG_BT_HCIUART_MRVL=y
-+CONFIG_BT_MRVL=m
-+CONFIG_BT_MRVL_SDIO=m
- CONFIG_BT_QCOMSMD=m
- CONFIG_CFG80211=m
- CONFIG_MAC80211=m
-@@ -380,6 +384,7 @@ CONFIG_ATH10K_SNOC=m
- CONFIG_WCN36XX=m
- CONFIG_BRCMFMAC=m
- CONFIG_MWIFIEX=m
-+CONFIG_MWIFIEX_SDIO=m
- CONFIG_MWIFIEX_PCIE=m
- CONFIG_WL18XX=m
- CONFIG_WLCORE_SDIO=m
-@@ -556,6 +561,7 @@ CONFIG_CHARGER_BQ25980=m
- CONFIG_SENSORS_ARM_SCMI=y
- CONFIG_SENSORS_ARM_SCPI=y
- CONFIG_SENSORS_JC42=m
-+CONFIG_SENSORS_LM75=m
- CONFIG_SENSORS_LM90=m
- CONFIG_SENSORS_PWM_FAN=m
- CONFIG_SENSORS_RASPBERRYPI_HWMON=m
-@@ -797,6 +803,7 @@ CONFIG_SND_SOC_WM8960=m
- CONFIG_SND_SOC_WM8962=m
- CONFIG_SND_SOC_WM8978=m
- CONFIG_SND_SOC_WSA881X=m
-+CONFIG_SND_SOC_NAU8822=m
- CONFIG_SND_SOC_LPASS_WSA_MACRO=m
- CONFIG_SND_SOC_LPASS_VA_MACRO=m
- CONFIG_SND_SIMPLE_CARD=m
-@@ -1088,6 +1095,7 @@ CONFIG_QCOM_SPMI_VADC=m
- CONFIG_QCOM_SPMI_ADC5=m
- CONFIG_ROCKCHIP_SARADC=m
- CONFIG_RZG2L_ADC=m
-+CONFIG_TI_ADS1015=m
- CONFIG_IIO_CROS_EC_SENSORS_CORE=m
- CONFIG_IIO_CROS_EC_SENSORS=m
- CONFIG_IIO_ST_LSM6DSX=m
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 5075fd8c1b42..4ddeb9b20195 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -770,6 +770,9 @@ properties:
+               - gw,imx8mm-gw7901          # i.MX8MM Gateworks Board
+               - gw,imx8mm-gw7902          # i.MX8MM Gateworks Board
+               - kontron,imx8mm-n801x-som  # i.MX8MM Kontron SL (N801X) SOM
++              - toradex,verdin-imx8mm     # Verdin iMX8M Mini Modules
++              - toradex,verdin-imx8mm-nonwifi  # Verdin iMX8M Mini Modules without Wi-Fi / BT
++              - toradex,verdin-imx8mm-wifi  # Verdin iMX8M Mini Wi-Fi / BT Modules
+               - variscite,var-som-mx8mm   # i.MX8MM Variscite VAR-SOM-MX8MM module
+               - prt,prt8mm                # i.MX8MM Protonic PRT8MM Board
+           - const: fsl,imx8mm
+@@ -788,6 +791,24 @@ properties:
+           - const: kontron,imx8mm-n801x-som
+           - const: fsl,imx8mm
+ 
++      - description: Toradex Boards with Verdin iMX8M Mini Modules
++        items:
++          - enum:
++              - toradex,verdin-imx8mm-nonwifi-dahlia # Verdin iMX8M Mini Module on Dahlia
++              - toradex,verdin-imx8mm-nonwifi-dev    # Verdin iMX8M Mini Module on Verdin Development Board
++          - const: toradex,verdin-imx8mm-nonwifi     # Verdin iMX8M Mini Module without Wi-Fi / BT
++          - const: toradex,verdin-imx8mm             # Verdin iMX8M Mini Module
++          - const: fsl,imx8mm
++
++      - description: Toradex Boards with Verdin iMX8M Mini Wi-Fi / BT Modules
++        items:
++          - enum:
++              - toradex,verdin-imx8mm-wifi-dahlia # Verdin iMX8M Mini Wi-Fi / BT Module on Dahlia
++              - toradex,verdin-imx8mm-wifi-dev    # Verdin iMX8M Mini Wi-Fi / BT M. on Verdin Development B.
++          - const: toradex,verdin-imx8mm-wifi     # Verdin iMX8M Mini Wi-Fi / BT Module
++          - const: toradex,verdin-imx8mm          # Verdin iMX8M Mini Module
++          - const: fsl,imx8mm
++
+       - description: Variscite VAR-SOM-MX8MM based boards
+         items:
+           - const: variscite,var-som-mx8mm-symphony
 -- 
 2.33.1
 

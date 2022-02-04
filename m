@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658FE4A9F54
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7154A9F5C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376742AbiBDSk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S1377596AbiBDSmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237689AbiBDSk0 (ORCPT
+        with ESMTP id S240619AbiBDSmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:40:26 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7FAC061714;
-        Fri,  4 Feb 2022 10:40:25 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id u24so14721439eds.11;
-        Fri, 04 Feb 2022 10:40:25 -0800 (PST)
+        Fri, 4 Feb 2022 13:42:04 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1318C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:42:04 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id x3so5899083pll.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ZGtsZQhsyyrcBRG0j+lN7s+2dtv9Gc6gA1EuDqdvH6c=;
-        b=arbPf9n8sfnhQZJyx/AG6Ogn3hTOZNDvfPc3y4PXMWw0EU1rRvj/PZe+bJaIiZPrZF
-         GzxbYbOwJ+BEbyeXSUIEEpVR/2Xmn5hGAur7LjX1uDiLnn078w3UbrUDCb/++eYe+Pgz
-         WvC6vIIenYdbvxtvQyF4iJTVPbJtgllBWEdDgOPk/LhnrmjwTWQwMHXVV4gTgXUEX9Yf
-         JQyDXXhAGSkxLNW5Z7PbEA7VY2IjvMRo4q1IMF3L95GOOfH6pTCFccRkL0yhqlpAldDc
-         6XtQoIVjkm2mTo7EUIZUM5aQ/ESJuY3mgS+Jlm66J8pgxox4gqKlvsOpzS4qzvy7dwjc
-         cnFw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CT7Hm/Nr7YHrouVT14eiWQtHBeJqitv4EnDHr/IDEIg=;
+        b=bekO2WJgXZCz4CENwlr9fHGuyddrnUUerNs1iE/u6JCb7n66SUK4eImfV+bJXJESx/
+         E4sPqs1B3XCf2SX7rgHw2AApHouWd0i8ArytUxa5tbke5Ap5mdGyCuh+9SjQCISPvNQZ
+         fMWKiJP4skz2JPJkyu7feLw7eFcAIxGLUn4LNhXcPdxOgW4nuFhEGBmU9ArBHVHrnt0l
+         LPYXScBTCWwrZa3RD40whmBg6Ebf1CB1XAfThd6YlZvBVuSqGPf8gpuLrxWHiPLRGm8B
+         5udeIv7QauaUVmzT/bl6D0IlLtG58KKh4aG1kSf4utuAu0/VVe/0Mr/DZzvpyjBYDul8
+         3kVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ZGtsZQhsyyrcBRG0j+lN7s+2dtv9Gc6gA1EuDqdvH6c=;
-        b=Hg55LuA4M25YSy241pa5i4u/m5SWbGhhsi5v5DcxoTOd0Iabc/u8dC+XHfoAwn1KfY
-         0niBQl1uMyd2jJTDevlAhD50zBhYAWH0U7d4TL/tKhN5bChEfrck0GtTHt/OLCfrYIWe
-         7ZynIyKTHWqO9oUtoFZcf+F3oR3m8cbbE4q+OQfo8IBcZmg7wy4W0K9O6Vugoak6inQP
-         T7eB5ThHwzvFjZIz9//AbprMMA4nCwvtqrqWz/ykqKVIhs5y6Wv4iFtPoEY6WiqJ2mLV
-         mZki8BMsUUs35n/xEZWlcL3FQpfQECTkWVkjWJDLcrByI06p9S6iSCMhupY3wPs9+lTv
-         gRzQ==
-X-Gm-Message-State: AOAM533cbpk+/s7GZNEhSzB8Ghi2pnENS5FEX/sOVkeczeBrt2Efma1W
-        Qo6Xvit39j2ZP8h0Uj2fcQLrn6t0NjI2sXC3NTo=
-X-Google-Smtp-Source: ABdhPJxEm7NFYtDxqO0RvMy0fL2LAK2EIChbvzMQZ6XV4+dfC4ZuIY9e4NkrESmCV42jrxrTkFZjDGNZWYNdx/76ARk=
-X-Received: by 2002:aa7:dd8f:: with SMTP id g15mr489557edv.436.1644000024185;
- Fri, 04 Feb 2022 10:40:24 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CT7Hm/Nr7YHrouVT14eiWQtHBeJqitv4EnDHr/IDEIg=;
+        b=nTIzyT2m+60h4nDIHsOvAZAtoU/cdnmN6+ko3XEDtA/U3wwUohiuKr1KHrwb1FByvr
+         rbQ/8ao2Q3nwNG5zwSrdDD7gyueMLldFtl4TNTyRs/FvPIQ/6STNQJJUw9ZpAfHw11u0
+         DbRwfWmnnygY0hY6Sm96BvcJl0bjyD8Ir/5t9dsn+oRLZuy26Ce5nyKB79PkyexzR9aB
+         yRHRVZhWvqGnohgZVJGLv62jL4aUQqvt+86fbZq6e065PZ4luPkPbskvNOCBqcJWmy0U
+         YTvN/xvN+EYbcyncAjyJUMcJMRYocTTC+8gPgQPjM1kvQ/5SmwRbYRctdG8Otmy50eYg
+         gF+g==
+X-Gm-Message-State: AOAM532Lyg5Rfnzg2X0xY3eHPR/YPztHXX5IbHrVUXNadgGiiyN/F299
+        T04XF4MtMXFoupdRhP4d8qPVVw==
+X-Google-Smtp-Source: ABdhPJx3vpa7SWndvO37itrF3x3A7Pb4+SHxKZY4hkiVcj7zQLLeuxASQAj0EeglJ479OoahmmmjBA==
+X-Received: by 2002:a17:90b:350c:: with SMTP id ls12mr352741pjb.44.1644000123888;
+        Fri, 04 Feb 2022 10:42:03 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id ip5sm14483980pjb.13.2022.02.04.10.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 10:42:02 -0800 (PST)
+Date:   Fri, 4 Feb 2022 18:41:59 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 04/23] KVM: MMU: constify uses of struct kvm_mmu_role_regs
+Message-ID: <Yf1zd4urw8Jro5mi@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-5-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220127200636.1456175-1-sean.anderson@seco.com>
- <20220127200636.1456175-6-sean.anderson@seco.com> <CAHp75Vc--RYW7P0wLA8Jcr53xKSkphJV=wTeZiPC-AYu4sGYFA@mail.gmail.com>
- <2c1832a5-1e13-1423-2be8-e31b5ec5195a@seco.com>
-In-Reply-To: <2c1832a5-1e13-1423-2be8-e31b5ec5195a@seco.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 4 Feb 2022 20:38:50 +0200
-Message-ID: <CAHp75VfGFNFqOU0BymNwh_FWKVw+rSyJJRDSKOinWY_Z39qaGA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] usb: dwc3: Add snps,ref-clock-frequency-hz
- property for ACPI
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-5-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 6:00 PM Sean Anderson <sean.anderson@seco.com> wrote=
-:
-> On 2/4/22 7:54 AM, Andy Shevchenko wrote:
+On Fri, Feb 04, 2022 at 06:56:59AM -0500, Paolo Bonzini wrote:
+> struct kvm_mmu_role_regs is computed just once and then accessed.  Use
+> const to enforce this.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-...
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-> > On Thursday, January 27, 2022, Sean Anderson <sean.anderson@seco.com <m=
-ailto:sean.anderson@seco.com>> wrote:
-
-> > Is it function or interface clock?
-> >
-> > We have standard property for the functional clock rate, I.e. =E2=80=9C=
-clock-frequency=E2=80=9D (in Hz), can it be used here?
->
-> I believe this is a "functional" clock. It it is a reference for the USB
-> signals. I'm not sure exactly what the purpose of this clock is, since I
-> do not have access to the databook for this IP. I considered using
-> "clock-frequency", but I am concerned about ambiguity because there is a
-> second "suspend" clock which is also a "functional" clock. The latter
-> clock appears to be used when the PHY is shut down (and not necessarily
-> corresponding to Linux's notion of a suspended device). If it is
-> necessary in the future to configure that clock on ACPI platforms (e.g.
-> to set GCTL.PWRDNSCALE) I think it is clear what the property name would
-> be (snps,susp-clock-frequency-hz).
-
-In order to have more or less unified APIs in the future I would
-suggest using 'clock-frequency' for the "main" functional clock. For
-example, 8250_dw uses it for the baud rate generator, while it also
-utilizes auxiliary clock(s) on some platforms.
-
---=20
-With Best Regards,
-Andy Shevchenko
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 0039b2f21286..3add9d8b0630 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -208,7 +208,7 @@ struct kvm_mmu_role_regs {
+>   * the single source of truth for the MMU's state.
+>   */
+>  #define BUILD_MMU_ROLE_REGS_ACCESSOR(reg, name, flag)			\
+> -static inline bool __maybe_unused ____is_##reg##_##name(struct kvm_mmu_role_regs *regs)\
+> +static inline bool __maybe_unused ____is_##reg##_##name(const struct kvm_mmu_role_regs *regs)\
+>  {									\
+>  	return !!(regs->reg & flag);					\
+>  }
+> @@ -255,7 +255,7 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+>  	return regs;
+>  }
+>  
+> -static int role_regs_to_root_level(struct kvm_mmu_role_regs *regs)
+> +static int role_regs_to_root_level(const struct kvm_mmu_role_regs *regs)
+>  {
+>  	if (!____is_cr0_pg(regs))
+>  		return 0;
+> @@ -4666,7 +4666,7 @@ static void paging32_init_context(struct kvm_mmu *context)
+>  }
+>  
+>  static union kvm_mmu_extended_role kvm_calc_mmu_role_ext(struct kvm_vcpu *vcpu,
+> -							 struct kvm_mmu_role_regs *regs)
+> +							 const struct kvm_mmu_role_regs *regs)
+>  {
+>  	union kvm_mmu_extended_role ext = {0};
+>  
+> @@ -4687,7 +4687,7 @@ static union kvm_mmu_extended_role kvm_calc_mmu_role_ext(struct kvm_vcpu *vcpu,
+>  }
+>  
+>  static union kvm_mmu_role kvm_calc_mmu_role_common(struct kvm_vcpu *vcpu,
+> -						   struct kvm_mmu_role_regs *regs,
+> +						   const struct kvm_mmu_role_regs *regs,
+>  						   bool base_only)
+>  {
+>  	union kvm_mmu_role role = {0};
+> @@ -4723,7 +4723,8 @@ static inline int kvm_mmu_get_tdp_level(struct kvm_vcpu *vcpu)
+>  
+>  static union kvm_mmu_role
+>  kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
+> -				struct kvm_mmu_role_regs *regs, bool base_only)
+> +				const struct kvm_mmu_role_regs *regs,
+> +				bool base_only)
+>  {
+>  	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs, base_only);
+>  
+> @@ -4769,7 +4770,8 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu)
+>  
+>  static union kvm_mmu_role
+>  kvm_calc_shadow_root_page_role_common(struct kvm_vcpu *vcpu,
+> -				      struct kvm_mmu_role_regs *regs, bool base_only)
+> +				      const struct kvm_mmu_role_regs *regs,
+> +				      bool base_only)
+>  {
+>  	union kvm_mmu_role role = kvm_calc_mmu_role_common(vcpu, regs, base_only);
+>  
+> @@ -4782,7 +4784,8 @@ kvm_calc_shadow_root_page_role_common(struct kvm_vcpu *vcpu,
+>  
+>  static union kvm_mmu_role
+>  kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
+> -				   struct kvm_mmu_role_regs *regs, bool base_only)
+> +				   const struct kvm_mmu_role_regs *regs,
+> +				   bool base_only)
+>  {
+>  	union kvm_mmu_role role =
+>  		kvm_calc_shadow_root_page_role_common(vcpu, regs, base_only);
+> @@ -4940,7 +4943,7 @@ static void init_kvm_softmmu(struct kvm_vcpu *vcpu)
+>  }
+>  
+>  static union kvm_mmu_role
+> -kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, struct kvm_mmu_role_regs *regs)
+> +kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
+>  {
+>  	union kvm_mmu_role role;
+>  
+> -- 
+> 2.31.1
+> 
+> 

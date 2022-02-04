@@ -2,104 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D1C4AA355
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9764AA361
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbiBDWm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:42:27 -0500
-Received: from alt-proxy28.mail.unifiedlayer.com ([74.220.216.123]:59894 "EHLO
-        alt-proxy28.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1352136AbiBDWm0 (ORCPT
+        id S1352216AbiBDWnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:43:55 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42260 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234792AbiBDWnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:42:26 -0500
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 8E0081004045F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:42:25 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id G7Hdnt3KUkku4G7Hdn9Yzy; Fri, 04 Feb 2022 22:42:25 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=TMaA93pa c=1 sm=1 tr=0 ts=61fdabd1
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0xD4VwYVGcuuSInSHynG1KuLHXHw0DMgV7novaxJ4sA=; b=jBYFxB7xS6QoVf1NkWmNaXSnJh
-        Pz6Su58g+nIKvISTwcaRhg32QGBTS9gQe4MKLaHrwiNn3BsnKT0aVN6YOapy7RdXSEU4SQ/lFVxrY
-        zTlKaTyWnAMaTTkjVugdb7MdJ;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34660 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nG7Hc-002qot-K8; Fri, 04 Feb 2022 15:42:24 -0700
-Message-ID: <72a1f345-bde8-b5e9-74e2-a60678daefe3@w6rz.net>
-Date:   Fri, 4 Feb 2022 14:42:22 -0800
+        Fri, 4 Feb 2022 17:43:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16D1EB83951;
+        Fri,  4 Feb 2022 22:43:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D93C004E1;
+        Fri,  4 Feb 2022 22:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644014630;
+        bh=2AY54UzKNCP2cnqsZ6l6V3IJp/sTB2kRkcVHmP4eexQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uhl26MUVyoWD6A7JAx5xK/vbtjc6F8VjlqsiymJrlmHXUmB5HEo67i1rECxDbMu9N
+         F7EgyZ/+OTo9qaxOSbkPgnriS2ro1zg/TomAeTIe+jcXGssSWjJfRfaBXte0J82GyV
+         gP0/hLG3uyTWKYimAUbikPp5NDvf4e7Y8S4kROSSuSe0n1dL8kuvl/RULFQAcXJ7oe
+         dyNOE1nDdl3dNif9p+MHXPIVZEea3OPNd+e2L/7C9viKkVOIzZzD3F5YygW2T6NjbG
+         udb/e7OsY8gca+cZYTYpIfpLzvY7HN9ly3hs/eEjVa+MSC9qP7kWxdLLD20HV2Cemu
+         Mb/xLoIWJboXw==
+Date:   Fri, 4 Feb 2022 14:43:49 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Subject: Re: [PATCH] random: use computational hash for entropy extraction
+Message-ID: <Yf2sJaxm3Nd5BUnr@sol.localdomain>
+References: <20220201161342.154666-1-Jason@zx2c4.com>
+ <YfznyWaVCz3Yl1ma@sol.localdomain>
+ <CAHmME9ppY5QY7QCXK1HapEUY9nOn3VSJgvddypmMj_CVfycPeQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220204091915.247906930@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nG7Hc-002qot-K8
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:34660
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9ppY5QY7QCXK1HapEUY9nOn3VSJgvddypmMj_CVfycPeQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 01:22, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.20 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.20-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Feb 04, 2022 at 02:24:07PM +0100, Jason A. Donenfeld wrote:
+> > In the above comment, 'key' should be 'seed'.
+> > Likewise above.
+> 
+> Caught this too right after sending. Fixed now for v2.
+> 
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This wasn't actually fixed in v2.
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+- Eric

@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCC34AA3D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D374AA3DE
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353784AbiBDW7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:59:41 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44814 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiBDW7j (ORCPT
+        id S233443AbiBDW7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:59:48 -0500
+Received: from mail-oo1-f49.google.com ([209.85.161.49]:33601 "EHLO
+        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245302AbiBDW7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:59:39 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 8B0DF1F4705B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644015578;
-        bh=J0wycOSxzaDqvcAyKwCYXObRCBOWXbIMVDr84hTsOEk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=goLaU8BCbkBFs6Zt1lY7YiPBKr8TOOMHjPbzSaGP7IIBlhK2nTiWOcpawtEo959Zh
-         rbjvKkXvuM1aHIFtK/cxvWDMSPCl+e34l10SRYEboOjAGQtiGKhzTQEgIp4pMKR3Bz
-         5qMdKR8UsHYMXZMTnhDEOYvYkUirgctWi9uLn2eNZfvcE1E8QdiFqUTCehzP30jrUH
-         PC4VvH/c0uy3PDH/R2FFij+WIvz5XSh6i5/7byNWOKOUdDq3/0UbTm8Jweme242wno
-         iVp/PyA3wD3vvoCbc9atJwuKkgCVpjkMaXuUEsXDLw+hyWpRk+xfR4tvChaxd1elFH
-         wAm6ZlifjslMw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH] selftests: Fix build when $(O) points to a relative path
-Date:   Sat,  5 Feb 2022 03:58:17 +0500
-Message-Id: <20220204225817.3918648-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 4 Feb 2022 17:59:41 -0500
+Received: by mail-oo1-f49.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso6333305oop.0;
+        Fri, 04 Feb 2022 14:59:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WDFMU2L+6QlWwTRW5yJ/fDBuGhNU4esi6K8Pw9YQ+vw=;
+        b=oGekuGaHFmpeP2Gn2EUCC6bRQuGyLeYkkxDkBXyYbKcalzD8AixpjIX6h9aJRz+80b
+         LgbFj97Nvju+OcoxeWWNyCAfmN2YE+iwDdcHYIDtyJBkwrm2mwECUwxNAQ/R0Zke9a0S
+         r4BWzgD1hBuWSabqfAKX2T1H4ZTaiyQ/t3AVhcjz0DAcXsYSrBmZdUIeRu/ZPoNW90TO
+         QWdHOzk/vUVC3V34vCfnj/twchjYnkjAKqoe74UANd+vIqWyfaQ/u/BSHFaxbFj9qcFz
+         cTpk1tyH4O3HOn+hTEiaCG07AbWDh8nXCTO8fsTza03wYcnNm5FgqghNlhGnFup4uqrO
+         Z3lA==
+X-Gm-Message-State: AOAM533V5f+K7Y1MIoJQmcKEZw0DUwiSZIuvqZdhbf5kATKnpg4+g+lC
+        iMpSvtmEaITx74Ghcab/9Q==
+X-Google-Smtp-Source: ABdhPJx8zmBhcwwEF7d2V6aqPrQn10Ybg3HAQ2BZ9RbPyyIiDx3P9br6uyE08KYDbuph3Px5uIQ14A==
+X-Received: by 2002:a4a:3f46:: with SMTP id x6mr388438ooe.78.1644015580690;
+        Fri, 04 Feb 2022 14:59:40 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g4sm1248498otg.61.2022.02.04.14.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 14:59:40 -0800 (PST)
+Received: (nullmailer pid 3342189 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:59:39 -0000
+Date:   Fri, 4 Feb 2022 16:59:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     wells.lu@sunplus.com, p.zabel@pengutronix.de,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        u.kleine-koenig@pengutronix.de, daniel.thompson@linaro.org,
+        linux-kernel@vger.kernel.org, lh.kuo@sunplus.com,
+        lee.jones@linaro.org, robh+dt@kernel.org
+Subject: Re: [PATCH v4 2/2] dt-bindings:i2c: Add Sunplus SP7021 schema
+Message-ID: <Yf2v25mgg6Afe9oH@robh.at.kernel.org>
+References: <cover.1642751147.git.lhjeff911@gmail.com>
+ <3361159c0a654eb237638969e64ccde742d2c7c0.1642751147.git.lhjeff911@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3361159c0a654eb237638969e64ccde742d2c7c0.1642751147.git.lhjeff911@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Build of bpf and tc-testing selftests fails when the relative path of
-the build directory is specified.
+On Fri, 21 Jan 2022 15:50:56 +0800, Li-hao Kuo wrote:
+> Add bindings for Sunplus SP7021 i2c driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v4:
+>  - Modified the YAML file : fix indentation issue
+> 
+>  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 73 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> 
 
-make -C tools/testing/selftests O=build0
-make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
-../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
-make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
-../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
-
-The fix is same as mentioned in commit 150a27328b68 ("bpf, preload: Fix
-build when $(O) points to a relative path").
-
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4eda7c7c15694..aa0faf132c35a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -178,6 +178,7 @@ all: khdr
- 		BUILD_TARGET=$$BUILD/$$TARGET;			\
- 		mkdir $$BUILD_TARGET  -p;			\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
-+				O=$(abs_objtree)		\
- 				$(if $(FORCE_TARGETS),|| exit);	\
- 		ret=$$((ret * $$?));				\
- 	done; exit $$ret;
-@@ -185,7 +186,8 @@ all: khdr
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
-+				O=$(abs_objtree);		    \
- 	done;
- 
- hotplug:
--- 
-2.30.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,96 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDC44AA3F0
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D9B4AA3F4
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377840AbiBDXEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377841AbiBDXEP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:04:15 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C92FDF16703
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:04:14 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso6337581oon.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LLH8C4+l8RYV14uDg5g7U9UxpXvd6jKnz+PVszYki/Q=;
-        b=HOTT/SkpvPtd0z+OcLUYk16o5WhQyx19AkvBGw3QmYtyeleGYLIdKvMSaHjTIi+jSo
-         LjImssMA+BLEKCsg17CVih+75w4mMU/XmBY672S8L5uArytTeRh23pWqKasgB0ogWAGV
-         dAuA4N0Cpn8cDE9Y0ZB95Z7G7vYa9j7od1w48=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LLH8C4+l8RYV14uDg5g7U9UxpXvd6jKnz+PVszYki/Q=;
-        b=mmB8W4FngM6Ir6nojyy25FwxH4zJbRtnawYiQ7z2eHVU/mmAOo5lxeKWjVRjSJKqdI
-         3CQ8N8M8Z9YimD4KgEQjFQNelfxJIb7RZSbRg7oX9JnKCrULhZtWJ9Obbsj+qNikL7hP
-         dil/hFX8YGpQ0Tn1D+4kSUYSFjjQBmzUeB3uI3l3VCL4jF6DXZ3SSCdgA7/0ELb7NNCh
-         6W85NrnDnRVd3H00wVLNzN7mb9MlXUv28rNfmWZnZQDFnQQUP1ZYR3I9/EUiGPu0mbby
-         +tVp8pujWHXWIGkyFR3yNrFC6StLvb1mQ7ftMYq0OvQH38CgPbuHwnfyhpUQRnGd2NKL
-         YdAA==
-X-Gm-Message-State: AOAM533jpYEohHHSzdZH4Rw7ubbOUwTGuLW19tm2veq9LKqs7IEgdEx7
-        Aai1a36KWDEx0La6l3DRpyY7XbiySTBVo7fg
-X-Google-Smtp-Source: ABdhPJwm7qPZitamobK6zNpLesurkbaT4f3OVe/zY5ltkiL2nHlgmilSGxOX9f++hrWoXbCWTPtDGg==
-X-Received: by 2002:a05:6870:1083:: with SMTP id 3mr322467oaq.101.1644015853978;
-        Fri, 04 Feb 2022 15:04:13 -0800 (PST)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id cv13sm1060515oab.7.2022.02.04.15.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 15:04:13 -0800 (PST)
-Date:   Fri, 4 Feb 2022 17:04:11 -0600
-From:   Justin Forbes <jmforbes@linuxtx.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
-Message-ID: <Yf2w6zFSg+U1qyAY@fedora64.linuxtx.org>
-References: <20220204091915.247906930@linuxfoundation.org>
+        id S1377853AbiBDXFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:05:00 -0500
+Received: from mga18.intel.com ([134.134.136.126]:46407 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376312AbiBDXE6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 18:04:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644015898; x=1675551898;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=861LxwAxTcjqLzCznC0PQu9lKsLTusKaC3uSWwNiJDk=;
+  b=i2Z4fMSDNaMRPpt+mN2QnimW80NHZ+a0MsEIHht3X5pgbDdiS8WGBM+V
+   aMu6ayC2gomljPBWU3+19cu1YaW8pamUBqqluZZz8uEbvY34eOY2KZSsM
+   iGzyX1Oxt2y9BRSCA50hlTkHmEziyMdNlkxGw2Sl96hsdnznfcME032iB
+   SSg94vkfIwJ645lLese518upXGRYoWnqrK6AHLtcMGe5yfY5HZNGcOFUA
+   I9VOPaqoSC8mmvPU2BI2n5po3G+SvPOvdkFkk7E7rtmj7BPye6paDln7f
+   fNxWe1OAbgKK3hNotnF79HRxN3tLxSrzs+qp0XvC0yBO07nPjBbcNAIB1
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="232024503"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="232024503"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 15:04:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="631843346"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 04 Feb 2022 15:04:56 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG7dP-000YHT-FE; Fri, 04 Feb 2022 23:04:55 +0000
+Date:   Sat, 5 Feb 2022 07:04:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Takashi Iwai <tiwai@suse.de>, linux-input@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: Wrongly bound Elantech touchpad on Lenovo Yoga Slim 7
+Message-ID: <202202050657.m9Z8VsGr-lkp@intel.com>
+References: <s5hleyqwowl.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <s5hleyqwowl.wl-tiwai@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 10:22:10AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.20 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.20-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi Takashi,
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+I love your patch! Perhaps something to improve:
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on hid/for-next linux/master linus/master v5.17-rc2 next-20220204]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Takashi-Iwai/Wrongly-bound-Elantech-touchpad-on-Lenovo-Yoga-Slim-7/20220205-005753
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: x86_64-randconfig-a003-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050657.m9Z8VsGr-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/9f3fbdd527662d97eb0bece1005d96a0a1b0fac2
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Takashi-Iwai/Wrongly-bound-Elantech-touchpad-on-Lenovo-Yoga-Slim-7/20220205-005753
+        git checkout 9f3fbdd527662d97eb0bece1005d96a0a1b0fac2
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.text+0x87e136): Section mismatch in reference from the function elan_probe() to the variable .init.rodata:elan_i2c_denylist
+The function elan_probe() references
+the variable __initconst elan_i2c_denylist.
+This is often because elan_probe lacks a __initconst
+annotation or the annotation of elan_i2c_denylist is wrong.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

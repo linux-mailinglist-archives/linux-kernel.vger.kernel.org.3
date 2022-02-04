@@ -2,165 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A024A9EB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D074A9EB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377400AbiBDSLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377368AbiBDSLJ (ORCPT
+        id S1377408AbiBDSMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:12:02 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:55678 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237048AbiBDSMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:11:09 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69B0C061714;
-        Fri,  4 Feb 2022 10:11:08 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id w25so14711864edt.7;
-        Fri, 04 Feb 2022 10:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6s9CxsBC8cchiiPxKjwG6ONmmaSZUcKlcytb21KkuK4=;
-        b=mMwobpRUXA9Il4+uCKlHw6uyqMvTiH9Co4xQriHvk+7cQWLGfV4ISuvLZjoEIYz2YL
-         spSlxMCfXEqOlVgcBgRfvr7pMEccBcsjdEJHVaT+9IGq1T4x45Wh/IY0kFLObZgjyEi6
-         qBKsaymIjp4oJsFJiFD1K8E1Cg0Cd2guzmTHMmlzvSuMbBVmk+i8SZSOiiaPlv4yvlz6
-         rOsdvp0VNA5dRowLx6zMu5Av5Jz3WZLFQJTgvJknSwvoVcGuB9D3oLpqChe5IFVYxnzz
-         oztZ8x+bOOEFXJH4M77HfNGxKRMNJh4UWDTgYw42Z8YdBcIHdA86Z8Nrowue70SLFobL
-         4/Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6s9CxsBC8cchiiPxKjwG6ONmmaSZUcKlcytb21KkuK4=;
-        b=mm+ZNuoY1AyZvJCUfW7Y3XjWcpUkLtxrOcWAgfGUBo9wf06oA4TdM4cIqIZx24qakk
-         rkojaC/1fpvfukWsDJImV7UjWHyaM7OqA+l3sCoC/oJg3u35PG9kWC3xoZ68tR3cP0hQ
-         hpOVRSZzqLo58/C3Gme25J+9ICVg74cC5x0WJ63PnUn2g/TP6Ks+eTdpvJYqR8XaT805
-         Eg6wSqUMeWpEBslQ7R7pRdQXf3G7RDwt865//h0sACTmCL9G5Jx0fIa+AWF1zyd4/n6i
-         dTNXPfUq+O+fLv07YlDAvsDxGOCmNltXyuGnM7H/oZ/0RkMwK3DKo2DApg+xElNuhpHa
-         fZYg==
-X-Gm-Message-State: AOAM5308MbIol/L4N82FbluMumUaUD8spwQGEyxxy1ADEEz7AlFKD1Nr
-        Ir4P8SQq9bGQEwdSCbEKo0h5+f+lmotfY/k4smc=
-X-Google-Smtp-Source: ABdhPJxIigxgUUaumtaROQOhEriR+Qg/btM9GhyxFDVYRkUss89SOw+32KatpfY67ve6G/Onyk2M09eet+4uxIblNBQ=
-X-Received: by 2002:a50:ee01:: with SMTP id g1mr316060eds.415.1643998267355;
- Fri, 04 Feb 2022 10:11:07 -0800 (PST)
+        Fri, 4 Feb 2022 13:12:01 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3410C1F37D;
+        Fri,  4 Feb 2022 18:12:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1643998320; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TnOodoC+dk7hN8J0G80ViKMJ6kkGjwsgHMNI6oJy58Y=;
+        b=iZn1BOxYj0KI3tDt9FfvwkM9pRfaxNPLqiJejWltTFqlrZNZRGVxTk9msawFU1gYGmY5xc
+        wyLHK3aqvpeRGlSy9Iu179CSMcL2uyuJAJKGtKKFuvk+1yWFBuOh5Y1fzPRGBJq7/0RcXG
+        d6Q1OgQhLvw/dc/nkmz8WYGTF4ZuOz0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EE9E13AD8;
+        Fri,  4 Feb 2022 18:12:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KnPnBnBs/WHwbwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 04 Feb 2022 18:12:00 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] ucounts: Do not allow RLIMIT_NPROC+1 tasks
+Date:   Fri,  4 Feb 2022 19:11:44 +0100
+Message-Id: <20220204181144.24462-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220203201207.1075933-1-shy828301@gmail.com> <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
- <ff0d4285-471b-7a33-15a5-3ce89443b41a@nvidia.com>
-In-Reply-To: <ff0d4285-471b-7a33-15a5-3ce89443b41a@nvidia.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 4 Feb 2022 10:10:55 -0800
-Message-ID: <CAHbLzkpSD8C2qTytUejrjuNG_o7r=UuHyqpJasiN_r9MD7AeMg@mail.gmail.com>
-Subject: Re: [v6 PATCH] block: introduce block_rq_error tracepoint
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "hch@infradead.org" <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 12:35 AM Chaitanya Kulkarni
-<chaitanyak@nvidia.com> wrote:
->
-> Yang,
->
-> > Question 1 :- What prevents us from using the same format for
-> > both blk_rq_complete() and blk_rq_error() ?
-> >
-> > Question 2 :- assuming that blk_rq_complete() and blk_rq_error()
-> > are using same format why can't we :-
-> >
-> > declare DECLARE_EVENT_CLASS(blk_rq_completion....)
-> > and use that class for blk_rq_complete() and blk_rq_error() ?
-> >
-> > since if I remember correctly we need to define a event class
-> > instead of duplicating a tracepoint with similar reporting.
->
-> What I meant is following compile tested patch (although it will
-> need to split into a prep patch in order to post it) :-
+It was reported that v5.14 behaves differently when enforcing
+RLIMIT_NPROC limit, namely, it allows one more task than previously.
+This is consequence of the commit 21d1c5e386bc ("Reimplement
+RLIMIT_NPROC on top of ucounts") that missed the sharpness of equality
+in the forking path.
 
-Thank you so much. I will prepare the new patches. I assume you prefer
-a prep patch which converts trace event to event class, then add
-block_rq_err event.
+In order to accommodate other existing checks of the RLIMIT_NPROC, the
+fix comprises of extending the result domain of ucount vs limit
+comparison. Forks or setting uid of a saturated user are denied.
 
->
-> diff --git a/include/trace/events/block.h b/include/trace/events/block.h
-> index 27170e40e8c9..7f4dfbdf12a6 100644
-> --- a/include/trace/events/block.h
-> +++ b/include/trace/events/block.h
-> @@ -100,19 +100,7 @@ TRACE_EVENT(block_rq_requeue,
->                    __entry->nr_sector, 0)
->   );
->
-> -/**
-> - * block_rq_complete - block IO operation completed by device driver
-> - * @rq: block operations request
-> - * @error: status code
-> - * @nr_bytes: number of completed bytes
-> - *
-> - * The block_rq_complete tracepoint event indicates that some portion
-> - * of operation request has been completed by the device driver.  If
-> - * the @rq->bio is %NULL, then there is absolutely no additional work to
-> - * do for the request. If @rq->bio is non-NULL then there is
-> - * additional work required to complete the request.
-> - */
-> -TRACE_EVENT(block_rq_complete,
-> +DECLARE_EVENT_CLASS(block_rq_completion,
->
->          TP_PROTO(struct request *rq, blk_status_t error, unsigned int
-> nr_bytes),
->
-> @@ -144,6 +132,41 @@ TRACE_EVENT(block_rq_complete,
->                    __entry->nr_sector, __entry->error)
->   );
->
-> +/**
-> + * block_rq_complete - block IO operation completed by device driver
-> + * @rq: block operations request
-> + * @error: status code
-> + * @nr_bytes: number of completed bytes
-> + *
-> + * The block_rq_complete tracepoint event indicates that some portion
-> + * of operation request has been completed by the device driver.  If
-> + * the @rq->bio is %NULL, then there is absolutely no additional work to
-> + * do for the request. If @rq->bio is non-NULL then there is
-> + * additional work required to complete the request.
-> + */
-> +DEFINE_EVENT(block_rq_completion, block_rq_complete,
-> +
-> +       TP_PROTO(struct request *rq, blk_status_t error, unsigned int
-> nr_bytes),
-> +
-> +       TP_ARGS(rq, error, nr_bytes)
-> +);
-> +
-> +/**
-> + * block_rq_error - block IO operation error reported by device driver
-> + * @rq: block operations request
-> + * @error: status code
-> + * @nr_bytes: number of completed bytes
-> + *
-> + * The block_rq_error tracepoint event indicates that some portion
-> + * of operation request has failed as reported by the device driver.
-> + */
-> +DEFINE_EVENT(block_rq_completion, block_rq_error,
-> +
-> +       TP_PROTO(struct request *rq, blk_status_t error, unsigned int
-> nr_bytes),
-> +
-> +       TP_ARGS(rq, error, nr_bytes)
-> +);
-> +
->   DECLARE_EVENT_CLASS(block_rq,
->
->          TP_PROTO(struct request *rq),
-> >
-> > -ck
-> >
-> >
->
+(Other RLIMIT_ per-user limits have correct comparison sharpness.)
+
+Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+Reported-by: TBD
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ fs/exec.c                      |  2 +-
+ include/linux/user_namespace.h |  2 +-
+ kernel/fork.c                  |  2 +-
+ kernel/sys.c                   |  2 +-
+ kernel/ucount.c                | 11 +++++++----
+ 5 files changed, 11 insertions(+), 8 deletions(-)
+
+This change breaks tools/testing/selftests/rlimits/rlimits-per-userns.c between
+v5.14..v5.15-rc1~172^2.
+The commit 2863643fb8b9 ("set_user: add capability check when
+rlimit(RLIMIT_NPROC) exceeds") is an inadvertent "fix".
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 79f2c9483302..fc598c2652b2 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1881,7 +1881,7 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 	 * whether NPROC limit is still exceeded.
+ 	 */
+ 	if ((current->flags & PF_NPROC_EXCEEDED) &&
+-	    is_ucounts_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
++	    ucounts_limit_cmp(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) > 0) {
+ 		retval = -EAGAIN;
+ 		goto out_ret;
+ 	}
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 33a4240e6a6f..9ccc336196f7 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -129,7 +129,7 @@ long inc_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v);
+ bool dec_rlimit_ucounts(struct ucounts *ucounts, enum ucount_type type, long v);
+ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type);
+ void dec_rlimit_put_ucounts(struct ucounts *ucounts, enum ucount_type type);
+-bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long max);
++long ucounts_limit_cmp(struct ucounts *ucounts, enum ucount_type type, unsigned long max);
+ 
+ static inline void set_rlimit_ucount_max(struct user_namespace *ns,
+ 		enum ucount_type type, unsigned long max)
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d75a528f7b21..7cb21a70737d 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2022,7 +2022,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 	DEBUG_LOCKS_WARN_ON(!p->softirqs_enabled);
+ #endif
+ 	retval = -EAGAIN;
+-	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
++	if (ucounts_limit_cmp(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0) {
+ 		if (p->real_cred->user != INIT_USER &&
+ 		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+ 			goto bad_fork_free;
+diff --git a/kernel/sys.c b/kernel/sys.c
+index ecc4cf019242..8ea20912103a 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -479,7 +479,7 @@ static int set_user(struct cred *new)
+ 	 * for programs doing set*uid()+execve() by harmlessly deferring the
+ 	 * failure to the execve() stage.
+ 	 */
+-	if (is_ucounts_overlimit(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
++	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+ 			new_user != INIT_USER &&
+ 			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+ 		current->flags |= PF_NPROC_EXCEEDED;
+diff --git a/kernel/ucount.c b/kernel/ucount.c
+index 65b597431c86..53ccd96387dd 100644
+--- a/kernel/ucount.c
++++ b/kernel/ucount.c
+@@ -343,18 +343,21 @@ long inc_rlimit_get_ucounts(struct ucounts *ucounts, enum ucount_type type)
+ 	return 0;
+ }
+ 
+-bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
++long ucounts_limit_cmp(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
+ {
+ 	struct ucounts *iter;
+ 	long max = rlimit;
++	long excess = LONG_MIN;
+ 	if (rlimit > LONG_MAX)
+ 		max = LONG_MAX;
+ 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+-		if (get_ucounts_value(iter, type) > max)
+-			return true;
++		/* we already WARN_ON negative ucounts, the subtraction result fits */
++		excess = max_t(long, excess, get_ucounts_value(iter, type) - max);
++		if (excess > 0)
++			return excess;
+ 		max = READ_ONCE(iter->ns->ucount_max[type]);
+ 	}
+-	return false;
++	return excess;
+ }
+ 
+ static __init int user_namespace_sysctl_init(void)
+-- 
+2.34.1
+

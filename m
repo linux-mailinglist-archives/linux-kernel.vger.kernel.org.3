@@ -2,156 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD754A95D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8178C4A95DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:17:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357303AbiBDJOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:14:22 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:24429 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244908AbiBDJOM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:14:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1643966052; x=1675502052;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e0t0u3AWSc+NQl09DBkRn6jdqub/hd1kTK+/m2Sohzs=;
-  b=12oFErgRWYnaLWXrQO0Cys8AXgwrM70BoOCLyTKbdD9kXYFtqKdgvzVn
-   9ME1xV1lyJ4cDlG9LQI6/foxNgJTvykTI7Cl8/mEhXHWK57i3BjPT/8i7
-   3uVUmgAQUM4fcLC1K41WrXQ+M1tW7zp4f19IjbPLTQbw7TTdmkHBWbk1j
-   AXESPO8HZZLXLedFhWzvhnooiRteOoHFXPHBL+piZaqJ3DVhAV1cqFANF
-   IouoQ63wX5nVU6qtje8Qhh6fWh4BRFtdAPUkgf8ba0/HcCnGyadLZBIAC
-   IZdowqoLOX5V3NPkXCWefPklBh62bC56M14r0SUp8VETguJFQ6jPP2X02
+        id S1346273AbiBDJRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:17:16 -0500
+Received: from mga01.intel.com ([192.55.52.88]:15772 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238887AbiBDJRO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 04:17:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643966234; x=1675502234;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7cLanOK26oPzVKTZsO62mU3/lgToxvFuLx9gFbdxeQA=;
+  b=gzusOfV2SDYfDnW/L07zq4QY92MahSEhVVJlNAD/+hVXR/SW8DgCehH/
+   2MPzl9QDU9tzWOcvEEhFhfingD0+eHpws3FRxnOZ0BM0Al/R8GcEsiw7Y
+   69j7wYHBzAG2U20husiAA6iafYw44NLQ2zrnfrk7q3isLU9FQx4TLZe1a
+   M0rH20AxL918f/f2sExbcg9wZXyhHbTjcUGnmPnzFLX+YeqRxvfjG01rr
+   Qco7YLKw8z57+OorqJ2HIGamu2I6mT8D3rhKPVNKNk73mSNBlPsiRQTWp
+   HBglFQLXlpGMsR0e8cy39SqAxpa5Zfcbd9P4q7l8AeI8AcBBvogdU4xFd
    Q==;
-IronPort-SDR: WUJOrylVvoRyECYaYUd8rApT3mKMkFlP7yUlBJjclZnV8E2Md/5N/B4ASzYZO2el8ybP9X3oJe
- 2uFe0ZOc645MHxPvZhGUSsrDssW5Mk6QoBA0Evg2MDyHaezuB7j0yfG+6MJY7AQZ8tFwvEzYFf
- KkZUXF0N69/ZsryHpb4oYWqMwoXNZsC+/AvPK/CK9yDD9TjIvDxXg4Hevcm1iugfVplRWPq9Yt
- PRWNTYJgglX8yjwPofHXBiXJqliGchgSh9Xv6EfvaCPMIFwpr+01RtCejLBvoFMn3mT1Di5y0S
- RRZ+VZwujjbP29zmkp9IBMBu
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="272838165"
 X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="151947626"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Feb 2022 02:14:12 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 4 Feb 2022 02:14:09 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 4 Feb 2022 02:14:07 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <linux@armlinux.org.uk>, <f.fainelli@gmail.com>,
-        <vivien.didelot@gmail.com>, <vladimir.oltean@nxp.com>,
-        <andrew@lunn.ch>, Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 3/3] net: lan966x: Update mdb when enabling/disabling mcast_snooping
-Date:   Fri, 4 Feb 2022 10:14:52 +0100
-Message-ID: <20220204091452.403706-4-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220204091452.403706-1-horatiu.vultur@microchip.com>
-References: <20220204091452.403706-1-horatiu.vultur@microchip.com>
+   d="scan'208";a="272838165"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 01:17:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
+   d="scan'208";a="699621152"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 Feb 2022 01:17:13 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nFuiO-000XPM-JR; Fri, 04 Feb 2022 09:17:12 +0000
+Date:   Fri, 04 Feb 2022 17:16:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cpu] BUILD SUCCESS
+ ae75fa54228162ecd65341f9780886f21f557cc4
+Message-ID: <61fcef05.FQFEm5tDvoOmpQRN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the multicast snooping is disabled, the mdb entries should be
-removed from the HW, but they still need to be kept in memory for when
-the mcast_snooping will be enabled again.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+branch HEAD: ae75fa54228162ecd65341f9780886f21f557cc4  x86/cpufeatures: Put the AMX macros in the word 18 block
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+elapsed time: 720m
+
+configs tested: 173
+configs skipped: 77
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20220131
+i386                          randconfig-c001
+m68k                          hp300_defconfig
+sh                   sh7724_generic_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                        clps711x_defconfig
+powerpc                 linkstation_defconfig
+mips                            ar7_defconfig
+powerpc                     rainier_defconfig
+arm                           h5000_defconfig
+powerpc                       maple_defconfig
+m68k                        stmark2_defconfig
+arc                        nsimosci_defconfig
+ia64                         bigsur_defconfig
+sh                   secureedge5410_defconfig
+arc                        nsim_700_defconfig
+mips                           ci20_defconfig
+sh                           se7750_defconfig
+sh                         microdev_defconfig
+arc                            hsdk_defconfig
+arm                         vf610m4_defconfig
+parisc                           allyesconfig
+sparc                            allyesconfig
+powerpc                     mpc83xx_defconfig
+powerpc                     stx_gp3_defconfig
+mips                         bigsur_defconfig
+powerpc                   currituck_defconfig
+powerpc                     tqm8548_defconfig
+powerpc                 canyonlands_defconfig
+powerpc                      ep88xc_defconfig
+arm                         lubbock_defconfig
+mips                          rb532_defconfig
+powerpc                      ppc40x_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                           se7206_defconfig
+nds32                               defconfig
+arm                            qcom_defconfig
+powerpc                     pq2fads_defconfig
+m68k                            q40_defconfig
+sh                              ul2_defconfig
+s390                       zfcpdump_defconfig
+sh                          lboxre2_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                ecovec24-romimage_defconfig
+m68k                       m5249evb_defconfig
+arm                             rpc_defconfig
+arm                             pxa_defconfig
+sh                             espt_defconfig
+mips                           ip32_defconfig
+microblaze                      mmu_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                     magicpanelr2_defconfig
+mips                    maltaup_xpa_defconfig
+openrisc                 simple_smp_defconfig
+nios2                         10m50_defconfig
+arm                  randconfig-c002-20220130
+arm                  randconfig-c002-20220131
+arm                  randconfig-c002-20220202
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20220131
+x86_64               randconfig-a003-20220131
+x86_64               randconfig-a001-20220131
+x86_64               randconfig-a006-20220131
+x86_64               randconfig-a005-20220131
+x86_64               randconfig-a002-20220131
+i386                 randconfig-a006-20220131
+i386                 randconfig-a005-20220131
+i386                 randconfig-a003-20220131
+i386                 randconfig-a002-20220131
+i386                 randconfig-a001-20220131
+i386                 randconfig-a004-20220131
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220130
+arc                  randconfig-r043-20220130
+arc                  randconfig-r043-20220131
+s390                 randconfig-r044-20220130
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20220130
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220130
+powerpc              randconfig-c003-20220130
+mips                 randconfig-c004-20220130
+i386                          randconfig-c001
+riscv                randconfig-c006-20220201
+powerpc              randconfig-c003-20220201
+mips                 randconfig-c004-20220201
+arm                  randconfig-c002-20220201
+arm                       imx_v4_v5_defconfig
+powerpc                     ppa8548_defconfig
+mips                          rm200_defconfig
+arm                             mxs_defconfig
+powerpc                   lite5200b_defconfig
+mips                          ath79_defconfig
+powerpc                      obs600_defconfig
+arm                         socfpga_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                          pcm027_defconfig
+arm                           spitz_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a013-20220131
+x86_64               randconfig-a015-20220131
+x86_64               randconfig-a014-20220131
+x86_64               randconfig-a016-20220131
+x86_64               randconfig-a011-20220131
+x86_64               randconfig-a012-20220131
+i386                 randconfig-a011-20220131
+i386                 randconfig-a013-20220131
+i386                 randconfig-a014-20220131
+i386                 randconfig-a012-20220131
+i386                 randconfig-a015-20220131
+i386                 randconfig-a016-20220131
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+riscv                randconfig-r042-20220131
+hexagon              randconfig-r045-20220130
+hexagon              randconfig-r045-20220131
+hexagon              randconfig-r041-20220130
+hexagon              randconfig-r041-20220131
+s390                 randconfig-r044-20220131
+hexagon              randconfig-r045-20220203
+hexagon              randconfig-r041-20220203
+
 ---
- .../ethernet/microchip/lan966x/lan966x_main.h |  2 +
- .../ethernet/microchip/lan966x/lan966x_mdb.c  | 45 +++++++++++++++++++
- .../microchip/lan966x/lan966x_switchdev.c     |  4 ++
- 3 files changed, 51 insertions(+)
-
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-index 31fc54214041..058e43531818 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-@@ -267,6 +267,8 @@ int lan966x_handle_port_mdb_del(struct lan966x_port *port,
- 				const struct switchdev_obj *obj);
- void lan966x_mdb_erase_entries(struct lan966x *lan966x, u16 vid);
- void lan966x_mdb_write_entries(struct lan966x *lan966x, u16 vid);
-+void lan966x_mdb_clear_entries(struct lan966x *lan966x);
-+void lan966x_mdb_restore_entries(struct lan966x *lan966x);
- 
- int lan966x_ptp_init(struct lan966x *lan966x);
- void lan966x_ptp_deinit(struct lan966x *lan966x);
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-index c68d0a99d292..2af55268bf4d 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mdb.c
-@@ -504,3 +504,48 @@ void lan966x_mdb_erase_entries(struct lan966x *lan966x, u16 vid)
- 			lan966x_mdb_l2_cpu_remove(lan966x, mdb_entry, type);
- 	}
- }
-+
-+void lan966x_mdb_clear_entries(struct lan966x *lan966x)
-+{
-+	struct lan966x_mdb_entry *mdb_entry;
-+	enum macaccess_entry_type type;
-+	unsigned char mac[ETH_ALEN];
-+
-+	list_for_each_entry(mdb_entry, &lan966x->mdb_entries, list) {
-+		type = lan966x_mdb_classify(mdb_entry->mac);
-+
-+		lan966x_mdb_encode_mac(mac, mdb_entry, type);
-+		/* Remove just the MAC entry, still keep the PGID in case of L2
-+		 * entries because this can be restored at later point
-+		 */
-+		lan966x_mac_forget(lan966x, mac, mdb_entry->vid, type);
-+	}
-+}
-+
-+void lan966x_mdb_restore_entries(struct lan966x *lan966x)
-+{
-+	struct lan966x_mdb_entry *mdb_entry;
-+	enum macaccess_entry_type type;
-+	unsigned char mac[ETH_ALEN];
-+	bool cpu_copy = false;
-+
-+	list_for_each_entry(mdb_entry, &lan966x->mdb_entries, list) {
-+		type = lan966x_mdb_classify(mdb_entry->mac);
-+
-+		lan966x_mdb_encode_mac(mac, mdb_entry, type);
-+		if (type == ENTRYTYPE_MACV4 || type == ENTRYTYPE_MACV6) {
-+			/* Copy the frame to CPU only if the CPU is in the VLAN */
-+			if (lan966x_vlan_cpu_member_cpu_vlan_mask(lan966x,
-+								  mdb_entry->vid) &&
-+			    mdb_entry->cpu_copy)
-+				cpu_copy = true;
-+
-+			lan966x_mac_ip_learn(lan966x, cpu_copy, mac,
-+					     mdb_entry->vid, type);
-+		} else {
-+			lan966x_mac_learn(lan966x, mdb_entry->pgid->index,
-+					  mdb_entry->mac,
-+					  mdb_entry->vid, type);
-+		}
-+	}
-+}
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-index cf2535c18df8..9fce865287e7 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_switchdev.c
-@@ -185,6 +185,10 @@ static void lan966x_port_mc_set(struct lan966x_port *port, bool mcast_ena)
- 	struct lan966x *lan966x = port->lan966x;
- 
- 	port->mcast_ena = mcast_ena;
-+	if (mcast_ena)
-+		lan966x_mdb_restore_entries(lan966x);
-+	else
-+		lan966x_mdb_clear_entries(lan966x);
- 
- 	lan_rmw(ANA_CPU_FWD_CFG_IGMP_REDIR_ENA_SET(mcast_ena) |
- 		ANA_CPU_FWD_CFG_MLD_REDIR_ENA_SET(mcast_ena) |
--- 
-2.33.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,36 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDAE4A99A1
+	by mail.lfdr.de (Postfix) with ESMTP id 945E34A99A0
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344254AbiBDNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S245520AbiBDNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 4 Feb 2022 08:04:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244168AbiBDNEr (ORCPT
+Received: from dfw.source.kernel.org ([139.178.84.217]:43522 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239427AbiBDNEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 4 Feb 2022 08:04:47 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEC2C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:04:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9B775CE222D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E0EC004E1;
-        Fri,  4 Feb 2022 13:04:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0704F61B7C
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:04:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA7BC340F0;
+        Fri,  4 Feb 2022 13:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643979883;
-        bh=EcktkasdKOYWGAEp171LFY4lFvjNFhDRlbA3YnZVi7Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ft2MWyz0uUulWH9jfx7/+oiCuVC005D5eqcdJMeI8hkjOO5tevKwnxT2avh9D+uOo
-         eBepSfkpxA5Lu+T6O0I8UBm5Ns37Rxe8OaqL6FiaF6g8iEnqbSwx1c1VQSVcdv2Tfs
-         HLCRk1/xrw+GbKGu2nPNsRAqGOoQ1JKzF/G7QejaTYY80TM1S9uUNjzglVsMipIOMa
-         1huPe0IH6hLZKwAdRt9+zDyWcn/23jadwIwptl11H7eq9UVvOiyvVe8kX72VmrPDRn
-         sJWuLy3xjiHEewuwqstZoytUB+pgdoLcvje4M3INw9AnHXDPHVxFyxQ2Tseh1DfP3z
-         DObckrba8kCHw==
+        s=k20201202; t=1643979886;
+        bh=12lpq3N2GTXe+NLF6Remlqvk4jUFS3sVYR8vsgOt120=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PxcnnFqfmlGc8oUEfEOORcThkjuVrzD78ndarjQLi3YL0exnntNz4QDfKM8JNWXTX
+         SV7+a0DvldEOSNP/r9eIlNOMC8tTGNErKRGBKSgJgH0GKObwLjZFrrxEBL5Zv3kA3u
+         0kGiUp69vrF8kYH9hvR8KXPTSimWdj5yezS21VVJ5F9AGjnY3GdYXn/IxiBRpmG2Y3
+         t62SLGncYJp92hc0FQ0NnaMP8JYlMYx4I3LbEOvjp38qB2MRuvIG1urQKh2eT7wUUW
+         u3IOWiD48utj8n03M6dTPy+a05yToecQweFvahZ3ssxI5S3cCNGsdl/esRE+8gRDlg
+         7HfkgP5Bs+x4w==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -47,57 +44,93 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Phil Auld <pauld@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>,
         Zefan Li <lizefan.x@bytedance.com>
-Subject: [PATCH 0/8] sched/isolation: Split housekeeping cpumask v2
-Date:   Fri,  4 Feb 2022 14:04:25 +0100
-Message-Id: <20220204130433.488085-1-frederic@kernel.org>
+Subject: [PATCH 1/8] pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
+Date:   Fri,  4 Feb 2022 14:04:26 +0100
+Message-Id: <20220204130433.488085-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220204130433.488085-1-frederic@kernel.org>
+References: <20220204130433.488085-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the v2 of https://lore.kernel.org/lkml/20220104144944.1278663-1-frederic@kernel.org/
+To prepare for supporting each feature of the housekeeping cpumask
+toward cpuset, prepare each of the HK_FLAG_* entries to move to their
+own cpumask with enforcing to fetch them individually. The new
+constraint is that multiple HK_FLAG_* entries can't be mixed together
+anymore in a single call to housekeeping cpumask().
 
-No change in this v2. Only acks and reviewed-by tags added.
+This will later allow, for example, to runtime modify the cpulist passed
+through "isolcpus=", "nohz_full=" and "rcu_nocbs=" kernel boot
+parameters.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-	isolation/split-v2
-
-HEAD: 31b398242699300304defda3f388cc15b314c1b0
-
-Thanks,
-	Frederic
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Reviewed-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Nitesh Lal <nilal@redhat.com>
+Cc: Nicolas Saenz <nsaenzju@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Christoph Lameter <cl@gentwo.de>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Zefan Li <lizefan.x@bytedance.com>
+Cc: Alex Belits <abelits@marvell.com>
+Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc: Paul E. McKenney  <paulmck@kernel.org>
 ---
+ drivers/pci/pci-driver.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Frederic Weisbecker (8):
-      pci: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      workqueue: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      net: Decouple HK_FLAG_WQ and HK_FLAG_DOMAIN cpumask fetch
-      sched/isolation: Use single feature type while referring to housekeeping cpumask
-      sched/isolation: Consolidate check for housekeeping minimum service
-      sched/isolation: Consolidate error handling
-      sched/isolation: Fix housekeeping_mask memory leak
-      sched/isolation: Split housekeeping cpumask per isolation features
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 588588cfda48..4a5792c82d08 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -350,7 +350,6 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
+ 			  const struct pci_device_id *id)
+ {
+ 	int error, node, cpu;
+-	int hk_flags = HK_FLAG_DOMAIN | HK_FLAG_WQ;
+ 	struct drv_dev_and_id ddi = { drv, dev, id };
+ 
+ 	/*
+@@ -368,17 +367,29 @@ static int pci_call_probe(struct pci_driver *drv, struct pci_dev *dev,
+ 	 * device is probed from work_on_cpu() of the Physical device.
+ 	 */
+ 	if (node < 0 || node >= MAX_NUMNODES || !node_online(node) ||
+-	    pci_physfn_is_probed(dev))
++	    pci_physfn_is_probed(dev)) {
+ 		cpu = nr_cpu_ids;
+-	else
++	} else {
++		cpumask_var_t wq_domain_mask;
++
++		if (!zalloc_cpumask_var(&wq_domain_mask, GFP_KERNEL)) {
++			error = -ENOMEM;
++			goto out;
++		}
++		cpumask_and(wq_domain_mask,
++			    housekeeping_cpumask(HK_FLAG_WQ),
++			    housekeeping_cpumask(HK_FLAG_DOMAIN));
++
+ 		cpu = cpumask_any_and(cpumask_of_node(node),
+-				      housekeeping_cpumask(hk_flags));
++				      wq_domain_mask);
++		free_cpumask_var(wq_domain_mask);
++	}
+ 
+ 	if (cpu < nr_cpu_ids)
+ 		error = work_on_cpu(cpu, local_pci_probe, &ddi);
+ 	else
+ 		error = local_pci_probe(&ddi);
+-
++out:
+ 	dev->is_probed = 0;
+ 	cpu_hotplug_enable();
+ 	return error;
+-- 
+2.25.1
 
-
- arch/x86/kernel/cpu/aperfmperf.c |   6 +-
- arch/x86/kvm/x86.c               |   2 +-
- drivers/base/cpu.c               |   2 +-
- drivers/pci/pci-driver.c         |  21 +++--
- include/linux/sched/isolation.h  |  43 ++++++-----
- kernel/cgroup/cpuset.c           |   6 +-
- kernel/cpu.c                     |   4 +-
- kernel/irq/cpuhotplug.c          |   4 +-
- kernel/irq/manage.c              |   4 +-
- kernel/kthread.c                 |   4 +-
- kernel/rcu/tasks.h               |   2 +-
- kernel/rcu/tree_plugin.h         |   2 +-
- kernel/sched/core.c              |  12 +--
- kernel/sched/fair.c              |  10 +--
- kernel/sched/isolation.c         | 162 +++++++++++++++++++++++++--------------
- kernel/sched/topology.c          |   8 +-
- kernel/watchdog.c                |   2 +-
- kernel/workqueue.c               |   4 +-
- net/core/net-sysfs.c             |   6 +-
- 19 files changed, 180 insertions(+), 124 deletions(-)

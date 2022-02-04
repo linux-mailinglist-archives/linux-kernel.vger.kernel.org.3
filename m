@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FAF4AA067
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F314AA06B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234756AbiBDTsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
+        id S234780AbiBDTu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiBDTsq (ORCPT
+        with ESMTP id S231869AbiBDTux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:48:46 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D3CC061714;
-        Fri,  4 Feb 2022 11:48:45 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id z7so9948714ljj.4;
-        Fri, 04 Feb 2022 11:48:45 -0800 (PST)
+        Fri, 4 Feb 2022 14:50:53 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FDDC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:50:49 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id d188so8699071iof.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=duHpmFxlBbFk1XIYiQ3pxMiqpbVYnao3doZJUxGlgw0=;
-        b=iW/MKdWog0NT3R/KNWxkTEvpMxLjViZJy4lj2FmGfRo4aUpWuJwFHxvTYUx77KylaI
-         VlNaZ3GGHUn8lcI0l+P1gS92Iz9PfqFB/XQfx1MO9T9diAo7y4dKt6sBeJnfP4yWBzlZ
-         6mC/CSLc0en48qVt5P+NQYJm5i0Pw3wVQJcGUsBjpqmfyE9b6Rn4sS7h42ci4xQNThwn
-         sSjXutk/Ot1/WltbS8umyy/utVAmVVbbWuV1eiLn89fsqfimKj5erfNDz8RY4554fKXD
-         vPyaSlr6qDglUw2hFh9dZLOFko28pzQr1VWo2SoLLogUq4lnT04vC9Ip/KSsyjXGWd8g
-         nFfQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MxtfVI7KgoxN9MF1SpdHVpgmrFjcw8vxtvnlV5FrFuE=;
+        b=NiD0q3wT+xkpMP6TDkOOqpU7H+ZR/irEDLfQ7ixuXR1K/2tAqFaHtFl1UfLN+ii2hl
+         sffwSCM/7LmpxGuH0PuKmzF9fHEajjbGS001rDHCbQpOb2i1ijU6hfoOUqn/uGu+Q8HD
+         mC/ZtXQDrM5c2sK8q5IaLE1Da7NtZRQq0am8fz5aqmx3GztO3YVWHgiBtsPEINnDrB6L
+         NNHrJpX98MWuMU7a5IOkJWvKLQ9wT36Ee8L9/kf2Q8Tf7gmsRdEzelvcctV5OeP1QOwP
+         jh2c0xvTgipGj5n7XKDwJaKkag0ngVn5BsHmz3sU7dK98U4zfJOlzjMWpQTgl0fL/pD4
+         QssA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=duHpmFxlBbFk1XIYiQ3pxMiqpbVYnao3doZJUxGlgw0=;
-        b=U9WSdUVIatvmZ5VzwuFjKztmFoeJpNnkj2WM0fHKQZ5e46PYZSz0c8UNcvyBkLPQ+0
-         IOnZoGAEe9GvzBJFvofH9HYdHegJVQVQN7c5jJkV1s2BegxclyyjdLKjHLJSXedz2U03
-         daMc/18Z2YmBUze+pKJoZZQiKB/X3RbyX/qqY/cUu4hh05naJz+ds9U09YE3whMD25+4
-         V1K7hFH/ctxYRB3S3XAZXcd7wctoYCpkMZeZ98lLV3FyF7MvR3U1n5Xyh+i2VjvT7+yv
-         IbLZbShEGv1H70E7dMSYQPOnL7aWTUWqjjoRKI7fbb0vF2mfriPS4Ay/l970vg9GT/6A
-         YhGg==
-X-Gm-Message-State: AOAM53363vaxp4iJygh2DdjATM5MCVmtd07Q/CCNVGUwaWhSjJIQqLud
-        E/2TuXfI+yHoB9WryOuXOeg=
-X-Google-Smtp-Source: ABdhPJwPWlZyp8vfQtVc5hmYtdbn1UjQfKbidce8/vheQguoDAKZYgg7P0sLNkT7rtJfzl1flMjFyQ==
-X-Received: by 2002:a2e:3218:: with SMTP id y24mr281398ljy.260.1644004124302;
-        Fri, 04 Feb 2022 11:48:44 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id j23sm435661lfh.35.2022.02.04.11.48.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 11:48:43 -0800 (PST)
-Message-ID: <23d38615-6b75-8715-0f83-fc93755a708b@gmail.com>
-Date:   Fri, 4 Feb 2022 22:48:43 +0300
+        bh=MxtfVI7KgoxN9MF1SpdHVpgmrFjcw8vxtvnlV5FrFuE=;
+        b=OVYYi7U/4ZtQHKJNK6mRZFroF+jJi+wyT3rUTwXVc3mMI6c1H6UNY1ddUpV2zIbdtS
+         pgcgfnnAoDjZb3eKLTboRTYQ2fJ64UwtSnWKhrRkiXjI9IMebVfoqgZWU8jyjH8l7L1F
+         pfhjPOc0SMOlwVWM3aQ5ETxnc8xlGPi1r1+P9eMkMc3S33ZCtx5KqXnXmJ97fkhPr1I7
+         fEtTas12ye81phcJVx4ej1xAkVtU1vHH8qE0StPsxJaXfoWzdi+qCj7tcasNIicj2sOZ
+         Fx4GYzR1+rwcJJ28J6Ivkd5wV3z4Pp8Tv/0ihNSAX1ae3FaT8nlUMs0EmK/rk76catW1
+         gUaQ==
+X-Gm-Message-State: AOAM531cLY5MTwzFhOyT0Pv+4OHqH6Nef6fPSMz8QsYypWZGIHGEDP5s
+        pCiAFWiWn3PPO+izM3d4QukHMg==
+X-Google-Smtp-Source: ABdhPJzftx1Oesx2QJ6Qo+x81hXij1Ey8oZmAnObEMe9yf19iwRqAQmfUlqCkxP+oKkN6TyY7KbisA==
+X-Received: by 2002:a05:6638:1501:: with SMTP id b1mr338974jat.251.1644004249035;
+        Fri, 04 Feb 2022 11:50:49 -0800 (PST)
+Received: from localhost.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id k13sm1417564ili.22.2022.02.04.11.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 11:50:48 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     djakov@kernel.org, bjorn.andersson@linaro.org, mka@chromium.org,
+        evgreen@chromium.org, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/7] net: ipa: use bulk interconnect interfaces
+Date:   Fri,  4 Feb 2022 13:50:37 -0600
+Message-Id: <20220204195044.1082026-1-elder@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 6/6] dt-bindings: memory: lpddr2-timings: convert to
- dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220201114749.88500-1-krzysztof.kozlowski@canonical.com>
- <20220201114749.88500-6-krzysztof.kozlowski@canonical.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20220201114749.88500-6-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-01.02.2022 14:47, Krzysztof Kozlowski пишет:
-> +  tZQCL:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      SELF REFRESH exit to next valid command delay in pico seconds.
-> +
-> +  tZQCS:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      SELF REFRESH exit to next valid command delay in pico seconds.
-> +
-> +  tZQinit:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      SELF REFRESH exit to next valid command delay in pico seconds.
+The IPA code currently enables and disables interconnects by setting
+the bandwidth of each to a non-zero value, or to zero.  The
+interconnect API now supports enable/disable functions, so we can
+use those instead.  In addition, the interconnect API provides bulk
+interfaces that allow all interconnects to be operated on at once.
 
-Hm.. these look incorrect.
+This series converts the IPA driver to use the bulk enable and
+disable interfaces.  In the process it uses some existing data
+structures rather than defining new ones.
 
-tZQCL is Long Calibration Time
+					-Alex
 
-tZQCS is Short Calibration Time
+Alex Elder (7):
+  net: ipa: kill struct ipa_interconnect
+  net: ipa: use icc_enable() and icc_disable()
+  net: ipa: use interconnect bulk enable/disable operations
+  net: ipa: use bulk operations to set up interconnects
+  net: ipa: use bulk interconnect initialization
+  net: ipa: embed interconnect array in the power structure
+  net: ipa: use IPA power device pointer
 
-tZQinit is Initialization Calibration Time
+ drivers/net/ipa/ipa_power.c | 178 +++++++++---------------------------
+ 1 file changed, 42 insertions(+), 136 deletions(-)
 
-No?
+-- 
+2.32.0
+

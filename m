@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A38A4A9676
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C694A96CD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358245AbiBDJ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:26:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:52944 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357873AbiBDJYj (ORCPT
+        id S1357932AbiBDJ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358298AbiBDJ2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:24:39 -0500
+        Fri, 4 Feb 2022 04:28:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2242BC06176F;
+        Fri,  4 Feb 2022 01:26:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92607B836F0;
-        Fri,  4 Feb 2022 09:24:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC9FC340ED;
-        Fri,  4 Feb 2022 09:24:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BBEF61747;
+        Fri,  4 Feb 2022 09:26:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8B8C004E1;
+        Fri,  4 Feb 2022 09:26:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966677;
-        bh=Ai2pTBuMpi+ZpmwAJGWmVGypw5mKsno03Np5MzaPBcI=;
+        s=korg; t=1643966812;
+        bh=QrZLry4insApv+gQ37l7e+SnTkVoC6w8ESMnHsJwm00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R4uDqLCZ/sPvqJj7xdMLidf8dhEAMrFkVqeNns5sMwCHDDudeZ3z+D0sXu8maS4SU
-         j39kj2zTyJIWb+H+Il8Q6/aUyPbm8AdVu2g41OLkX/occRLUb0/guhL3Ym+GLqOBY0
-         O26rR7PIHg4XU/1Ge06eYadrE+xndWvRLpyVGrT4=
+        b=fvbBr/re62sUpX1StsxuuOyv2Echx3Ht2+xoEPUkrlAER2+EGJ1eDbW7+Jg20BpRt
+         m3l20ywmu3e7IulcUTlxH3fvgjSReXG6PdogT+IH3vgkJPOLROIazaN7limpWZuvJ1
+         Vu6T4pMASHXFwnEHeREZATl7icO5+FXbf3mWzQ2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jiri Pirko <jiri@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 28/32] rtnetlink: make sure to refresh master_dev/m_ops in __rtnl_newlink()
-Date:   Fri,  4 Feb 2022 10:22:38 +0100
-Message-Id: <20220204091916.184324998@linuxfoundation.org>
+        stable@vger.kernel.org, Sudheesh Mavila <sudheesh.mavila@amd.com>,
+        Raju Rangoju <Raju.Rangoju@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 32/43] net: amd-xgbe: ensure to reset the tx_timer_active flag
+Date:   Fri,  4 Feb 2022 10:22:39 +0100
+Message-Id: <20220204091918.217272476@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-References: <20220204091915.247906930@linuxfoundation.org>
+In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
+References: <20220204091917.166033635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,47 +50,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Raju Rangoju <Raju.Rangoju@amd.com>
 
-commit c6f6f2444bdbe0079e41914a35081530d0409963 upstream.
+commit 7674b7b559b683478c3832527c59bceb169e701d upstream.
 
-While looking at one unrelated syzbot bug, I found the replay logic
-in __rtnl_newlink() to potentially trigger use-after-free.
+Ensure to reset the tx_timer_active flag in xgbe_stop(),
+otherwise a port restart may result in tx timeout due to
+uncleared flag.
 
-It is better to clear master_dev and m_ops inside the loop,
-in case we have to replay it.
-
-Fixes: ba7d49b1f0f8 ("rtnetlink: provide api for getting and setting slave info")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Jiri Pirko <jiri@nvidia.com>
-Link: https://lore.kernel.org/r/20220201012106.216495-1-eric.dumazet@gmail.com
+Fixes: c635eaacbf77 ("amd-xgbe: Remove Tx coalescing")
+Co-developed-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
+Signed-off-by: Sudheesh Mavila <sudheesh.mavila@amd.com>
+Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/r/20220127060222.453371-1-Raju.Rangoju@amd.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/core/rtnetlink.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3254,8 +3254,8 @@ static int __rtnl_newlink(struct sk_buff
- 	struct nlattr *slave_attr[RTNL_SLAVE_MAX_TYPE + 1];
- 	unsigned char name_assign_type = NET_NAME_USER;
- 	struct nlattr *linkinfo[IFLA_INFO_MAX + 1];
--	const struct rtnl_link_ops *m_ops = NULL;
--	struct net_device *master_dev = NULL;
-+	const struct rtnl_link_ops *m_ops;
-+	struct net_device *master_dev;
- 	struct net *net = sock_net(skb->sk);
- 	const struct rtnl_link_ops *ops;
- 	struct nlattr *tb[IFLA_MAX + 1];
-@@ -3293,6 +3293,8 @@ replay:
- 	else
- 		dev = NULL;
+--- a/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
++++ b/drivers/net/ethernet/amd/xgbe/xgbe-drv.c
+@@ -721,7 +721,9 @@ static void xgbe_stop_timers(struct xgbe
+ 		if (!channel->tx_ring)
+ 			break;
  
-+	master_dev = NULL;
-+	m_ops = NULL;
- 	if (dev) {
- 		master_dev = netdev_master_upper_dev_get(dev);
- 		if (master_dev)
++		/* Deactivate the Tx timer */
+ 		del_timer_sync(&channel->tx_timer);
++		channel->tx_timer_active = 0;
+ 	}
+ }
+ 
 
 

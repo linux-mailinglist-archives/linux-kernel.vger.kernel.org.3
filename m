@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBA94A9336
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2BB4A933A
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiBDFH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 00:07:28 -0500
-Received: from mga12.intel.com ([192.55.52.136]:6046 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229887AbiBDFH1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 00:07:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643951247; x=1675487247;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XecETcGGUIGkGEBT0bXd2PfTLwYCR9f3aPR9kUgy8ws=;
-  b=ILwFxDcttwToX0i4Gl/3Jy8LKRrbIyDM/CjUx7HPNpPpdEYAcQGLAP3C
-   3O9iP9uj3H/WMdxgWMs+e1yLP4VK0LGN7TQnT7+8k5OKg+BiadYzcdq58
-   cG/kNSeCYe7MlfrX4r2AgBhheRNFtO8sVmZKZidktE8uUIXyQLk2C3ftq
-   q+ZPI3wLkBFlbmxIkifTZ9NG/JrWd2JeshYLN5oZzQ/aRNthEgA3BA96+
-   8u/VOInjrDqBdwculF1/eSKgRkNbfTwkS8212tTOz7H3m874nLyew2YJo
-   +DxjOEYXHXsLxxXtQHmnTXxJ+2mc5JPK3A1ij2ERFMqr0CYRan82hvQtC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228282948"
-X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
-   d="scan'208";a="228282948"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 21:07:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
-   d="scan'208";a="699569434"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 03 Feb 2022 21:07:25 -0800
-Received: from christi2-mobl.amr.corp.intel.com (unknown [10.212.180.188])
-        by linux.intel.com (Postfix) with ESMTP id 2050558090D;
-        Thu,  3 Feb 2022 21:07:25 -0800 (PST)
-Message-ID: <1c14e0ce7d2a84f3b7f51abc22f140d6ea69b724.camel@linux.intel.com>
-Subject: Re: [PATCH 1/3] platform/x86: Add Intel Software Defined Silicon
- driver
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     hdegoede@redhat.com, andriy.shevchenko@linux.intel.com,
-        srinivas.pandruvada@intel.com, mgross@linux.intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Date:   Thu, 03 Feb 2022 21:07:24 -0800
-In-Reply-To: <Yfjz/CRUxeVGKaaQ@kroah.com>
-References: <20220201030424.1068816-1-david.e.box@linux.intel.com>
-         <20220201030424.1068816-2-david.e.box@linux.intel.com>
-         <Yfjz/CRUxeVGKaaQ@kroah.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S232363AbiBDFJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 00:09:14 -0500
+Received: from mail.netfilter.org ([217.70.188.207]:49090 "EHLO
+        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229887AbiBDFJL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 00:09:11 -0500
+Received: from netfilter.org (unknown [78.30.32.163])
+        by mail.netfilter.org (Postfix) with ESMTPSA id 8F45460198;
+        Fri,  4 Feb 2022 06:09:04 +0100 (CET)
+Date:   Fri, 4 Feb 2022 06:09:07 +0100
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Kevin Mitchell <kevmitch@arista.com>
+Cc:     Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] netfilter: conntrack: mark UDP zero checksum as
+ CHECKSUM_UNNECESSARY
+Message-ID: <Yfy08zMz6Duyz54/@salvia>
+References: <20220115040050.187972-1-kevmitch@arista.com>
+ <20220115040050.187972-2-kevmitch@arista.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220115040050.187972-2-kevmitch@arista.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 09:49 +0100, Greg KH wrote:
-> On Mon, Jan 31, 2022 at 07:04:22PM -0800, David E. Box wrote:
-> > +static struct bin_attribute bin_attr_provision_akc;
-> > +static struct bin_attribute bin_attr_provision_cap;
+On Fri, Jan 14, 2022 at 08:00:50PM -0800, Kevin Mitchell wrote:
+> The udp_error function verifies the checksum of incoming UDP packets if
+> one is set. This has the desirable side effect of setting skb->ip_summed
+> to CHECKSUM_COMPLETE, signalling that this verification need not be
+> repeated further up the stack.
 > 
-> <snip>
+> Conversely, when the UDP checksum is empty, which is perfectly legal (at least
+> inside IPv4), udp_error previously left no trace that the checksum had been
+> deemed acceptable.
 > 
-> > +static BIN_ATTR_WO(provision_akc, SDSI_SIZE_WRITE_MSG);
+> This was a problem in particular for nf_reject_ipv4, which verifies the
+> checksum in nf_send_unreach() before sending ICMP_DEST_UNREACH. It makes
+> no accommodation for zero UDP checksums unless they are already marked
+> as CHECKSUM_UNNECESSARY.
 > 
-> You the structure twice, why?
+> This commit ensures packets with empty UDP checksum are marked as
+> CHECKSUM_UNNECESSARY, which is explicitly recommended in skbuff.h.
 
-Will drop. There's no longer a reference to these attributes before they're
-defined.
-
-David
-
-> 
-
+Applied to nf-next

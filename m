@@ -2,192 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA4B4A93BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EEA4A93B0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243545AbiBDFz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 00:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S243497AbiBDFgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 00:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236350AbiBDFzz (ORCPT
+        with ESMTP id S242516AbiBDFgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 00:55:55 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966DDC061714
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 21:55:54 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id i65so4200731pfc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 21:55:54 -0800 (PST)
+        Fri, 4 Feb 2022 00:36:00 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8C4C061714
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 21:36:00 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id i34so10600490lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 21:36:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HujJTKMlvKWrzO4MPNgYx8f/y8A8duNRewj59ue6fU0=;
-        b=lM48WOgo2c4KlulO1a362hdCzW98v2Ij+T9S0rf4GLPg82kWiq7JIFJ0LScyBeX5nT
-         Wmn8zLrsyyMS4E/NMoXa/VIrRtQrmPsdOiUEscbDSKrBQwWxo7QlF2WEfcwfoczyQK8I
-         fg/mnViZYc7t7CAOVb0VHBe/jPkO2vpR9yQUAllRkKy/GeQlyShrvqvhgMrtQDIIcq7x
-         e6US8mtYlVnvwOj+mzZP2pM77ODovW4mTCOYXnDLQ2Cn9QmpMryRbZURQFzL22UQQjOr
-         Elb7+5SXdx+MssOmwbVZ+dtpPSYy86xo+Zx0COcU30Z1zIZj/95x3WMNgGVpyoQQ0YzW
-         FlLA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=14M8Z2g4rIcd4MzM7IK/f5yDui7+jhXmK0fHQ0UO9gg=;
+        b=iy8PQqnumvl1erIic+I0eZn9SlBWRx6M5CVxb89pXk/qzT+lbmKJyRd3CFDnpfqxHc
+         2l4Ckbss4XRYs9T6e8Siz20gEC2Fg+t3BZv6dz9x/7h6ve+vZeoxOhRAquDkYL4yhseg
+         ygh5JmtCMeF/WDGMIkU8XB3e8miD5IhN2wid347G8w2zPwvZrAxiI+fPhgBS2+iVQ9fI
+         DtmG31vNmXxlsmqzJXxmR+Hu9o87ulAZHP4gC4RGh1YOV6psJNJOaPLqiXThqzsljpoC
+         swfoaYfKbfHdLamVt+n8sbaiMk7XEAayix8WJfGG6CcKUX5RNTwQx6ULzx0tkzDlUaqw
+         yvyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HujJTKMlvKWrzO4MPNgYx8f/y8A8duNRewj59ue6fU0=;
-        b=So/mIDlKdNQ7xKrjQC+mXeSlLY5oBW0NUbbCoeqjwBrdkEHWb2hPG/F/+c1mzNWX2q
-         neo2oknCFIYLJP7ajMDcZJ1ldn2nVfn+jWV9LoSC6s0wANTM1Ua7guvghLTPZTEZMCNC
-         P50g4hKh4RZ0b5iDBchDkDCPVSLIcsUjigjEHXMFJdjBhA+d9WrwxBT79+k4fqhuXikj
-         DNFTCQ1fWxIKv1XU8MgFNCxTbzdNQ3ZyxJrCF8bGI6Lvs+XfbkaY7vTOqHOVEY0HW/pD
-         32jFfvUd5jyIMWzHCR9MjlOvmT1uQ0+x0x8JQBpCoVp1is8hjili0FgiCXT7doF0k3vz
-         4iJw==
-X-Gm-Message-State: AOAM532SjmGqB8ZYq5MdHhd3DfZSFyPZWDyU8Ok60ewzbAP474tIznA2
-        ujXwkdBlTwKaTS8PL4yhltHUFg==
-X-Google-Smtp-Source: ABdhPJwDJMmzxyDKYKHhyjNyQOhWM1eESSAL1HuDHl1YWgqpcpIOLnSuKoy8pEdLSdmZ7E2q+Cmivw==
-X-Received: by 2002:a63:735c:: with SMTP id d28mr1212676pgn.154.1643954154015;
-        Thu, 03 Feb 2022 21:55:54 -0800 (PST)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:5d5d:8301:fb9f:4711])
-        by smtp.gmail.com with ESMTPSA id y191sm916597pfb.114.2022.02.03.21.55.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 21:55:53 -0800 (PST)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Tony Lindgren <tony@atomide.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keerthy <j-keerthy@ti.com>, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>, khilman@baylibre.com,
-        s-anna@ti.com
-Cc:     Drew Fustini <dfustini@baylibre.com>
-Subject: [PATCH v2] clocksource/drivers/timer-ti-dm: fix regression from errata i940 fix
-Date:   Thu,  3 Feb 2022 21:35:05 -0800
-Message-Id: <20220204053503.1409162-1-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=14M8Z2g4rIcd4MzM7IK/f5yDui7+jhXmK0fHQ0UO9gg=;
+        b=MKHvq+llXTbUP1mVwwuN1+3UPo3OIUVJfBOGr8uwVN9Z46SMEEZfoDZ0hR/P0fayPL
+         XsX1Kvs01KBuu9NWZSKf/VAIwQVYFv74XSP9EgW4I98WNRnjGGS1FfGwtA+lZ8ZhpL4h
+         drn65Ucy/s7vP0rtduPY8dNCy2xvv4qmk6LJkXXcADTNTbxLFvLzGaFlM7byUDacPg8e
+         TVFj6HDLN8xPFGbiW1eT0zP8//gXcUeV0B2uyNcuo1fUdqKSM1AsBZijtJ3jd5zAUrLA
+         oiaZAv5VrDv8Z3C1D70HsZmHuIgm47/4zQudNMzQhioUQHgBE3ZT0tsTKjVC2CYFdfII
+         UFNg==
+X-Gm-Message-State: AOAM530+ILeSluo9ipBQjK+7uXiriyJr6iuftAMgzVEY4S1kGtuX+/lC
+        dpjqRm5HiIGqiyRv673GtoKTbNrZkKk5cp2E4A4=
+X-Google-Smtp-Source: ABdhPJzWdFi4IcAzkHjRqu5yWpmydedG6tke/n69JSi0I2Sq4d1SsM/tZ0hk1XD4rEK8eXlFpOAUYcn+QswhDEUKyRs=
+X-Received: by 2002:a05:6512:3d0f:: with SMTP id d15mr1187647lfv.77.1643952958413;
+ Thu, 03 Feb 2022 21:35:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+cA0PB92khCo7dNAyw-zUmhKJHg-D2aQyT=HmLHhyVvd_Cd5g@mail.gmail.com>
+ <feffc13d-5ee5-7326-1f5d-d803d0ab44b2@intel.com>
+In-Reply-To: <feffc13d-5ee5-7326-1f5d-d803d0ab44b2@intel.com>
+From:   Nikita Popov <npv1310@gmail.com>
+Date:   Fri, 4 Feb 2022 10:35:47 +0500
+Message-ID: <CA+cA0PCbY2qSsgTLsK8=N3WNEWN_JSgOoefn2wNhKFPrJbJCSA@mail.gmail.com>
+Subject: Re: A logical error in arch/x86/mm/init.c
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Juergen Gross <jgross@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The existing fix for errata i940 causes a conflict for IPU2 which is
-using timer 3 and 4. From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
+Thank you for your attention.
+> If you really feel that this is something that needs to be fixed, I'd
+> appreciate if you could find some way to reproduce it and then send a
+> proper patch.
+I believe this would be hard to reproduce.
+I just noticed this discrepancy during manual code review.
+I'm considering the following facts:
+1) The area 'pgt_buf' is part of the 'brk' area defined in the linker
+script. It is allocated in the function 'early_alloc_pgt_buf' using
+the very same 'extend_brk'. The latter is essentially a stack-based
+allocator picking its memory slices from the linker defined area.
+2) The allocations from 'pgt_buf' are in the stack manner too.
+One can expect that these two areas (one of which is completely
+contained in the other) have the same properties in view of the direct
+memory mapping.
 
-  &ipu2 {
-          mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
-          ti,timers = <&timer3>;
-          ti,watchdog-timers = <&timer4>, <&timer9>;
-  };
+Then there is the flag 'can_use_brk_pgt' which allows usage of the
+pgt_buf area if a mapped range doesn't overlap with the free space of
+the pgt_buf area. In the 'init_range_memory_mapping' function we can
+observe that this flag doesn't reflect the relative position between a
+mapped range and the free space of the brk area as a whole:
+                /*
+                 * if it is overlapping with brk pgt, we need to
+                 * alloc pgt buf from memblock instead.
+                 */
+                can_use_brk_pgt = max(start, (u64)pgt_buf_end<<PAGE_SHIFT) >=
+                                    min(end, (u64)pgt_buf_top<<PAGE_SHIFT);
+This check is simply too narrow.
 
-The conflict was noticed when booting mainline on the BeagleBoard X15
-which has a TI AM5728 SoC:
+So for whatever reason this flag prohibits usage of the pgt_buf area,
+I believe for the exact same reason we have to avoid using brk area if
+the similar condition on the free space of the brk area holds.
+> This _might_ be right.  But, my confidence that it won't break anything
+> else is pretty low.  It's also obviously not been tested.
+Yes, I agree here. I saw it as my duty to report the possible issue.
+> What are these "MMU issues"?
+I tried to deduce the underlying reason beyond the code fragments in
+question. I presumed that checking for overlap is protecting against
+some MMU issues that could affect stability of the kernel.
 
-  remoteproc remoteproc1: 55020000.ipu is available
-  remoteproc remoteproc1: powering up 55020000.ipu
-  remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4
-  omap-rproc 55020000.ipu: could not get timer platform device
-  omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
-  remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
+Kind regards,
+Nikita Popov
+Senior C Developer
 
-This change modifies the errata fix to instead use timer 15 and 16 which
-resolves the timer conflict.
-
-It does not appear to introduce any latency regression. Results from
-cyclictest with original errata fix using dmtimer 3 and 4:
-
-  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-  policy: fifo: loadavg: 0.02 0.03 0.05
-
-  T: 0 ( 1449) P:80 I:200 C: 800368 Min:   0 Act:   32 Avg:   22 Max:  128
-  T: 1 ( 1450) P:80 I:200 C: 800301 Min:   0 Act:   12 Avg:   23 Max:   70
-
-The results after the change to dmtimer 15 and 16:
-
-  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-  policy: fifo: loadavg: 0.36 0.19 0.07
-
-  T: 0 ( 1711) P:80 I:200 C: 759599 Min:   0 Act:    6 Avg:   22 Max:  108
-  T: 1 ( 1712) P:80 I:200 C: 759539 Min:   0 Act:   19 Avg:   23 Max:   79
-
-Fixes: 25de4ce5ed02 ("clocksource/drivers/timer-ti-dm: Handle dra7 timer wrap errata i940")
-Link: https://lore.kernel.org/linux-omap/YfWsG0p6to3IJuvE@x1/
-Suggested-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
-v2 changes:
-- add cyclictest results
-- use lowercase letter in hex literals
-
- arch/arm/boot/dts/dra7-l4.dtsi             | 5 ++---
- arch/arm/boot/dts/dra7.dtsi                | 8 ++++----
- drivers/clocksource/timer-ti-dm-systimer.c | 4 ++--
- 3 files changed, 8 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-index 956a26d52a4c..0a11bacffc1f 100644
---- a/arch/arm/boot/dts/dra7-l4.dtsi
-+++ b/arch/arm/boot/dts/dra7-l4.dtsi
-@@ -3482,8 +3482,7 @@ timer14: timer@0 {
- 				ti,timer-pwm;
- 			};
- 		};
--
--		target-module@2c000 {			/* 0x4882c000, ap 17 02.0 */
-+		timer15_target: target-module@2c000 {	/* 0x4882c000, ap 17 02.0 */
- 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
- 			reg = <0x2c000 0x4>,
- 			      <0x2c010 0x4>;
-@@ -3511,7 +3510,7 @@ timer15: timer@0 {
- 			};
- 		};
- 
--		target-module@2e000 {			/* 0x4882e000, ap 19 14.0 */
-+		timer16_target: target-module@2e000 {	/* 0x4882e000, ap 19 14.0 */
- 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
- 			reg = <0x2e000 0x4>,
- 			      <0x2e010 0x4>;
-diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
-index 6b485cbed8d5..8f7ffe2f66e9 100644
---- a/arch/arm/boot/dts/dra7.dtsi
-+++ b/arch/arm/boot/dts/dra7.dtsi
-@@ -1339,20 +1339,20 @@ timer@0 {
- };
- 
- /* Local timers, see ARM architected timer wrap erratum i940 */
--&timer3_target {
-+&timer15_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER3_CLKCTRL 24>;
-+		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER15_CLKCTRL 24>;
- 		assigned-clock-parents = <&timer_sys_clk_div>;
- 	};
- };
- 
--&timer4_target {
-+&timer16_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER4_CLKCTRL 24>;
-+		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER16_CLKCTRL 24>;
- 		assigned-clock-parents = <&timer_sys_clk_div>;
- 	};
- };
-diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
-index b6f97960d8ee..f52bf81dc1dd 100644
---- a/drivers/clocksource/timer-ti-dm-systimer.c
-+++ b/drivers/clocksource/timer-ti-dm-systimer.c
-@@ -695,9 +695,9 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
- 		return 0;
- 	}
- 
--	if (pa == 0x48034000)		/* dra7 dmtimer3 */
-+	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
- 		return dmtimer_percpu_timer_init(np, 0);
--	else if (pa == 0x48036000)	/* dra7 dmtimer4 */
-+	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
- 		return dmtimer_percpu_timer_init(np, 1);
- 
- 	return 0;
--- 
-2.32.0
-
+On Thu, Feb 3, 2022 at 10:27 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 2/3/22 02:30, Nikita Popov wrote:
+> > It appears that there is a logical error in arch/x86/mm/init.c in the
+> > master branch. Although it is unlikely to occur in practice. I
+> > discovered it while studying source code in that file.
+>
+> I looked at this a bit.  It seems to have originated in:
+>
+> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c9b3234a6aba
+>
+> which isn't the best changelog in the history of the world.  It's also
+> fixing a boot problem in a configuration that I can't readily reproduce
+> (Xen PV guest).
+>
+> There's one thing from the old changelog that's confusing me:
+>
+> >     But after we get back that page for pgt, it tiggers one bug in pgt allocation
+> >     with xen: We need to avoid to use page as pgt to map range that is
+> >     overlapping with that pgt page.
+>
+> and presumably alluding to the same issue from your mail:
+>
+> > ... which can incur MMU issues if that page is allocated as a page
+> > directory)
+>
+> What are these "MMU issues"?
+>
+> > In my opinion one of the simplest fixes here is to completely remove
+> > the following lines:
+> >     if (!ret && can_use_brk_pgt)
+> >             ret = __pa(extend_brk(PAGE_SIZE * num, PAGE_SIZE));
+>
+> This _might_ be right.  But, my confidence that it won't break anything
+> else is pretty low.  It's also obviously not been tested.
+>
+> I'd be much more confident if this issue was reproduced, even if the
+> reproduction was contrived by doing something like purposefully
+> exhausting the pgt_buf_* area.
+>
+> If you really feel that this is something that needs to be fixed, I'd
+> appreciate if you could find some way to reproduce it and then send a
+> proper patch.

@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13554AA3C3
+	by mail.lfdr.de (Postfix) with ESMTP id 52A2B4AA3C2
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377228AbiBDW6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:58:24 -0500
-Received: from mout.perfora.net ([74.208.4.194]:41057 "EHLO mout.perfora.net"
+        id S1348213AbiBDW61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:58:27 -0500
+Received: from mout.perfora.net ([74.208.4.197]:40687 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358982AbiBDW6H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:58:07 -0500
+        id S1358550AbiBDW6N (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 17:58:13 -0500
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LnQ7c-1mZddQ3oSc-00hilI;
- Fri, 04 Feb 2022 23:57:51 +0100
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MScio-1moeTV3Bx6-00RVEk;
+ Fri, 04 Feb 2022 23:57:54 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzk@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 07/12] arm64: defconfig: enable imx8m pcie phy driver
-Date:   Fri,  4 Feb 2022 23:57:01 +0100
-Message-Id: <20220204225706.1539818-8-marcel@ziswiler.com>
+Subject: [PATCH v4 08/12] arm64: defconfig: build imx-sdma as a module
+Date:   Fri,  4 Feb 2022 23:57:02 +0100
+Message-Id: <20220204225706.1539818-9-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220204225706.1539818-1-marcel@ziswiler.com>
 References: <20220204225706.1539818-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:LPdGHBlQKIg57PrAjWhLk7NZPljYZeRltv3lzViB6z7eR6c+jmR
- FtfQJ0gXoEk5kFGSs5P9ZBH5uMvDNOuU0BtuC395OwytJzDy2xodmRs/bbUVZ1cYuBw9tWf
- QZap2AXqkPcPbW6dRAp55zgU0DKeNtjXm2nt88+4hQlDuEYkhczBXeryEegNm206thH97YH
- QRIqiA1zri4MjAl9nGMrA==
+X-Provags-ID: V03:K1:VfBcHa5yRHVyvGSFhHssrMxeXmRqlYuTpX+79BShxNTjTcMUNxh
+ yBQSemHfzG3atTk9qwAQ99d9aLWLwjVtJGoOCTPCUOJJhLIJbJpRmnXB6Q9swkF+qFKu/Kc
+ wOYUjIrADFIoiM4jjRLVqP5wcT11rXtzJfOoC7vtRyww/ykQ81eTergFvBf/JcYM0vN4LFK
+ er2twwmUvyR7FW+DBIROA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dXkHFfTYa4M=:Z7AEvYifE7iFMlZTvrA47P
- /bUBLerCf+pkzBBO1dtJ5xsaoERYiyLb1K9ydweSaSnOlzvbJUTxtbqiMZoABq/Voxds4stNS
- Gqflg25PkfqcG+h9bdSlcym+5f3uj9zLhkZ2LPxnHTk5q8xZUMWyaTX4AvgDPmgmBlae1U54m
- V16lgUR/sMk1XBQkmaoJoxpLtfP/byjC1IZZmi/eOrbctNt2OZ38GTNzWjuBzZfxHf1F7CBtB
- w0N+WtHnsWoJRR55saggNc99R57k2kBOENMdSQIN8cB4AHW3SEXo0gsxEWVWGzGL5JrOnUzaL
- ujvAa82H1LL2hyTQceGdpNECEeaErIiC0WlV7+MA3zA6JNdIGV97LgEKGfFjEUQdBI91C6O4/
- dxpwgkfrRv/Yse1vUF2WT7SyBhKP+oFqGm6602giabzgW427W2xtDfT1QsWNnJ3LKX3hxCYI3
- 1QRQHh218EeksI4hXMc0CLuKz/rcuT4kUBuz+5rlX502U9HF2wUcFrTqIkL4EdyvUbFUtZ805
- CIkOHvXQAcWH131e+xo1UeISLQOsc/nSFBISL4YSAIz4tS7DjHgWpp1EHYkq/hFzVjEIaAzoS
- JycfXxdtpP5qtvVlB13V3bjH5EJ7eTVN6z16lTeJ/xUv5fUjRXOU4kpWtxeYOL2eFmYX/Fw54
- nZPZm3y0FuHKk/3aww5yNqfX7Ko+kln8l/J3iiCH3qiPIS82kV64ozAn/+5GWYRoz2wM=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lLNTMf5hoSQ=:dVwhjXTCeRhIqnhU3QOJZY
+ kdZryXf09x/zW3AVADYonIgZMW4kVQ1VJM7GJE5U2oM6WadSnosuQfdVoHeSwAMjz50alKisb
+ oAG1SxYPH/5x9Sz9LhVYISausi22Wd8diUpD8kelpL7WrmauB0MD3SV4tjXa+vJ8MnJ0Q1XkB
+ RKzYz9V5NbsHXjYrnN2sjANREWRhQ6mKoq7f9PEQwibMPNH7cOcaBtZrJRouAqFD3khE11h7i
+ /RAve9ViBNtx3keu82ynlMTEGWX3iwlG5EVdMuRmqC5h1SPcYJeIEIUF2W6mIfdiDDlEudB9B
+ p8XPQJ2Yr8YeevgwtkrWFs6uY1fMUe/FA2kDq3Kdi43oS6XAMiHgGGTkqDVXXi8SJ8WjuQbY5
+ 9DQhHkadn74DqctPqlJGQ/uCY5pd+YIic455OpkKz3sVEZJ2UR+x05YFaOn1cnVz4P6lRtKEt
+ SUtOXLXUxUG/zeK8+saCkMXsvS1k0gglm75rrucyVTk0//nFZxdC5gLThDPpAXaAZSEqfw10t
+ roAMRk+mHYYxglvgFpZH/NON5oSPsYpSAk/KdLFgGEAHSkDJuyDfpYwgr5Bzn7p6YcLZaXW8I
+ MYmBnp/Ph4+vBJiouXaxtN1NQV0o5drPsfC8I2mqDeyiKbe7xqIPgwGNHyCMJaWgnlSrIzEUM
+ FqqMFGDwD/974EKDGLMV1XlsVgLPL0L5MdoG0uHSttWCtuZxBplDtOtat3OvfxpSjD5oFyl5s
+ I1rmgRax7lWbfVAf
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This enables the i.MX 8M PCIe PHY driver (CONFIG_PHY_FSL_IMX8M_PCIE)
-required for PCIe functionality.
+This avoids firmware load error and sysfs fallback reported as follows:
+
+[    0.199448] imx-sdma 302c0000.dma-controller: Direct firmware load
+ for imx/sdma/sdma-imx7d.bin failed with error -2
+[    0.199487] imx-sdma 302c0000.dma-controller: Falling back to sysfs
+ fallback for: imx/sdma/sdma-imx7d.bin
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 ---
 
-(no changes since v3)
+(no changes since v2)
 
-Changes in v3:
-- New patch enabling imx8m pcie phy driver in arm64 defconfig.
+Changes in v2:
+- A similar change got accepted for imx_v6_v7_defconfig. Further
+  discussion may be found in [1].
+[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/configs/defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 444fec9ec73a..0fed8477e72e 100644
+index 0fed8477e72e..27afe24a025a 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1121,6 +1121,7 @@ CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_SUN4I_USB=y
- CONFIG_PHY_MIXEL_MIPI_DPHY=m
-+CONFIG_PHY_FSL_IMX8M_PCIE=y
- CONFIG_PHY_HI6220_USB=y
- CONFIG_PHY_HISTB_COMBPHY=y
- CONFIG_PHY_HISI_INNO_USB2=y
+@@ -928,7 +928,7 @@ CONFIG_DMADEVICES=y
+ CONFIG_DMA_BCM2835=y
+ CONFIG_DMA_SUN6I=m
+ CONFIG_FSL_EDMA=y
+-CONFIG_IMX_SDMA=y
++CONFIG_IMX_SDMA=m
+ CONFIG_K3_DMA=y
+ CONFIG_MV_XOR=y
+ CONFIG_MV_XOR_V2=y
 -- 
 2.33.1
 

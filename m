@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B72F4A9B0C
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215B44A9B0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 15:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359343AbiBDOdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 09:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359340AbiBDOdm (ORCPT
+        id S1359347AbiBDOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 09:34:20 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:40012 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233084AbiBDOeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:33:42 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CB4C06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 06:33:42 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id v129so1100754wme.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 06:33:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9HRfuw26kbdaIgCIMJCrn0p/ikh8G5VstHoJyqrHzaY=;
-        b=N5GoAcSlGGBJtMEbJ0ukMjcahDwIi6iA2QZkJabB//WJv/G54PfC1Qrfzg7/ZI1TYh
-         GXhH0QCbw+gpq7uTm0dWhu7TcRTYxOcV5k7t/lsc6n2nPvf9RmCPWHgzUrMufrxVAT1G
-         Lsm/WHY6QYMbH7NqBUFUJRx5DCm2DZkKPdQVSIC86woRjsZkuzlUJwbFshTnN4NtWfni
-         7g1L/qjPxy12sXSFEjZJ3ZERFtzvB35xQ+w8LuY1lSKUAqPW88dNka/ITANmbxgilrhl
-         egqC9SA4Fpv10xkSU1ukvLxU+IEjvuHmqg3MBKOUTv65hnqvE0/FUcvuWcLHrwN3pQ52
-         jyRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9HRfuw26kbdaIgCIMJCrn0p/ikh8G5VstHoJyqrHzaY=;
-        b=HkJNGhoH/KvxfXDmhQAgtZyIM2pAfGE/Ifef3EbSBa1yGfccdYOqwH1f1SH5s2Lqlq
-         nZNUolyIVqWklN1lqAlbx0Fxb9jQiUedhKiUEiOMxZ3JLoVEd6vH1hfkTTeePjE94CK8
-         OV7THpW6w5YLfDVP4jrMY2B0GHWZi5koIpK5LwVD9feNpvM/ReSMdMG9TRfGPrFQvV7e
-         ClTp/rUpleVlsPUaQEISYZ/f1eBl3O6nbZs1WCwTOIFYVS8Hpcp4V2p2fB0IKdXg0eg8
-         N+ApbDVdWinxzqJ2jSlFpPF7gbEp6sWJm2h5C3mueqk+oYNQQrdAYIEShDr7GHyp6aji
-         UVfQ==
-X-Gm-Message-State: AOAM530toxF1e3k+2jj/euaCnpB4pYXNJ1ZtiMTzROEWVteshKR8bp1r
-        Uj4TarehrDN0Uw6KPd/mmbVLlQ==
-X-Google-Smtp-Source: ABdhPJzM7rirBHeEKddHJTpT/8Ll2fTTFTnqEyoWqAVCMisHdXwtzMHwgV7V/Gu8b3v9CLpo+s2nlg==
-X-Received: by 2002:a1c:4b09:: with SMTP id y9mr2438315wma.159.1643985220416;
-        Fri, 04 Feb 2022 06:33:40 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:3fbe:ff10:110:739])
-        by smtp.gmail.com with ESMTPSA id p14sm2426053wrr.7.2022.02.04.06.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 06:33:39 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robert.foss@linaro.org
-Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kieran.bingham@ideasonboard.com,
-        biju.das.jz@bp.renesas.com,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH v3] drm/bridge: dw-hdmi: use safe format when first in bridge chain
-Date:   Fri,  4 Feb 2022 15:33:37 +0100
-Message-Id: <20220204143337.89221-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 4 Feb 2022 09:34:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7299160F6A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34DE2C004E1;
+        Fri,  4 Feb 2022 14:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643985258;
+        bh=fypUg1c5tRtvNi/27HyWD+WFQzv7bomeprjjJYewvbU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wLt7gh0oG+EO9z8N6dAQfrfZ6CLuQkcHRFevSUSAEpaR5Ubcg5QN9KOv/1CKvmSPr
+         Ck9DykkwEGyYw6Hf3J7yHYfgT2UgXRxb9GIo+iQpETuSqjoPCIzZA7z7vO4GjvAFJa
+         pwxWBFwcRTU0Uomdcflgd0UkzZmm2bnaVVI0BrE8=
+Date:   Fri, 4 Feb 2022 15:34:15 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Robert Hancock <robert.hancock@calian.com>
+Cc:     "giometti@enneenne.com" <giometti@enneenne.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rasm@fe.up.pt" <rasm@fe.up.pt>,
+        "jamesnuss@nanometrics.ca" <jamesnuss@nanometrics.ca>
+Subject: Re: [PATCH] pps: clients: gpio: Propagate return value from
+ pps_gpio_probe
+Message-ID: <Yf05Z89OCJYqCNQ3@kroah.com>
+References: <20220112205214.2060954-1-robert.hancock@calian.com>
+ <Yd9DDJ2HmptwIITA@smile.fi.intel.com>
+ <d21aeae0-f75d-f8b9-032a-f4751696d467@enneenne.com>
+ <f74e32552955b2293d814cfd14729ab190d8ddbe.camel@calian.com>
+ <5178d655-a9f0-0a0e-866c-b85b7eda69f3@enneenne.com>
+ <72a4b544d8ed7dc6ff809f21752dd56889185f65.camel@calian.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2327; h=from:subject; bh=e5N2iKj5YSVB+9PoyzM1SrjuyNvunszme9UDF4PNMaY=; b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBh/Tk4oLM2pdcdSB7huyqScnob/k6VvXol8zz9+/KN tCOP+9WJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCYf05OAAKCRB33NvayMhJ0dKGEA C8cPNgB5xfu4qvomB7nSOs2N1+E1x6dlkhbX5Pl6yeV61+6btrGe61Ca8kDv3E/lubtBCDjytFLCyn ot2ZtSgYUbn59l0WyO4fp5eijMILLBg+RFbA54pxb3O0qmHYsEU7Xf6MvULgsUzv30d6Q1BzK3ZhmQ vLYJdjRuCkwHtD+FWgZNfHuL85wLRH9H7VZVsHYM5DvNq1LDZWblU84uhJxa9x1IhH9QNvYWdbudNh MKj2nW9417G4++HwulDwqtI/h/aKGoNVLkM4lPByFQWeSdwjNvDhDAgKIPyr13TTWyFeI6KqPfF1A3 TWXAbdiI7bEnjhmJCfAJENISJ5BfajEcUyhrOQAWMptsL4cVi6HjfvsgJ7fk92Vagt1Nc95yRZ7wbo 1bTnzRW+eTlILZsI+oVc7neJRo7iPwqz4VMbuisNHLCKtU5U2RsAui/aJ3bkqTCN6aZcMMLeWN9jeR 5Sr1981EYsHHYevtwp6rua8Vp7OdaS+OKj8oikCfxhPLf3OvfEXQfejn3G+qVTbzN71qu5i5wvgQqL t9m+gl4nkmJ8zwHcJQRE0LVoIXTexE55U14yiHBdhcw/9T5GxhjHDrcOGerygvHY85iKIdCK4V2TKR 7o1ZuRlo0Ua/FP6wyvXTE3d3eDNII2wzb5RcOErBgidOAqri1TtWNksiq83A==
-X-Developer-Key: i=narmstrong@baylibre.com; a=openpgp; fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72a4b544d8ed7dc6ff809f21752dd56889185f65.camel@calian.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the dw-hdmi bridge is in first place of the bridge chain, this
-means there is no way to select an input format of the dw-hdmi HW
-component.
+On Wed, Feb 02, 2022 at 05:04:13PM +0000, Robert Hancock wrote:
+> On Sun, 2022-01-30 at 10:35 +0100, Rodolfo Giometti wrote:
+> > On 29/01/22 23:02, Robert Hancock wrote:
+> > > On Thu, 2022-01-13 at 09:17 +0100, Rodolfo Giometti wrote:
+> > > > On 12/01/22 22:07, Andy Shevchenko wrote:
+> > > > > On Wed, Jan 12, 2022 at 02:52:14PM -0600, Robert Hancock wrote:
+> > > > > > If the pps-gpio driver was probed prior to the GPIO device it uses,
+> > > > > > the
+> > > > > > devm_gpiod_get call returned an -EPROBE_DEFER error, but
+> > > > > > pps_gpio_probe
+> > > > > > replaced that error code with -EINVAL, causing the pps-gpio probe to
+> > > > > > fail and not be retried later. Propagate the error return value so
+> > > > > > that
+> > > > > > deferred probe works properly.
+> > > > > 
+> > > > > FWIW,
+> > > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > 
+> > > > Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+> > > 
+> > > It's not entirely clear to me what tree PPS patches are supposed to go
+> > > through.
+> > > Seems like some recent ones have gone through char-misc? Not sure if
+> > > someone
+> > > has this in their queue?
+> > 
+> > LinuxPPS has no its own tree. All related patches usually are sent to me to
+> > be
+> > acked and to Greg Kroah-Hartman for inclusion.
+> > 
+> > Ciao,
+> > 
+> > Rodolfo
+> > 
+> 
+> It looks like some MAINTAINERS links should maybe be updated for PPS - the
+> referenced page at http://wiki.enneenne.com/index.php/LinuxPPS_support seems to
+> be dead. There is http://linuxpps.org/doku.php which points to a new mailing
+> list location as well, but that seems to have very little activity.
+> 
+> Greg, can you pick this patch ( https://lkml.org/lkml/2022/1/12/879 ) up?
 
-Since introduction of display-connector, negotiation was broken since
-the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
-in last position of the bridge chain or behind another bridge also
-supporting input & output format negotiation.
+Please use lore.kernel.org, lkml.org does not work with our tools, nor
+do we have any control over it.
 
-Commit 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks")
-was introduced to make negotiation work again by making display-connector
-act as a pass-through concerning input & output format negotiation.
+thanks,
 
-But in the case where the dw-hdmi is single in the bridge chain, for
-example on Renesas SoCs, with the display-connector bridge the dw-hdmi
-is no more single, breaking output format.
-
-Reported-by: Biju Das <biju.das.jz@bp.renesas.com>
-Bisected-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Fixes: 7cd70656d128 ("drm/bridge: display-connector: implement bus fmts callbacks").
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
----
-Changes since v2:
-- Add rob's r-b
-- Fix invalid Fixes commit hash
-
-Changes since v1:
-- Remove bad fix in dw_hdmi_bridge_atomic_get_input_bus_fmts
-- Fix typos in commit message
-
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 54d8fdad395f..97cdc61b57f6 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -2551,8 +2551,9 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
- 	if (!output_fmts)
- 		return NULL;
- 
--	/* If dw-hdmi is the only bridge, avoid negociating with ourselves */
--	if (list_is_singular(&bridge->encoder->bridge_chain)) {
-+	/* If dw-hdmi is the first or only bridge, avoid negociating with ourselves */
-+	if (list_is_singular(&bridge->encoder->bridge_chain) ||
-+	    list_is_first(&bridge->chain_node, &bridge->encoder->bridge_chain)) {
- 		*num_output_fmts = 1;
- 		output_fmts[0] = MEDIA_BUS_FMT_FIXED;
- 
--- 
-2.25.1
-
+greg k-h

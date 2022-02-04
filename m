@@ -2,99 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C13F4A9DA6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB204A9DAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376880AbiBDRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiBDRd5 (ORCPT
+        id S1376886AbiBDRfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:35:42 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53408 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230051AbiBDRfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:33:57 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17C2C061714;
-        Fri,  4 Feb 2022 09:33:57 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i30so5682300pfk.8;
-        Fri, 04 Feb 2022 09:33:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GwweWvs7v6mUrsF+avs0ZSyV9XiKyZYwIj1qrBh4nEM=;
-        b=G/9LAxwzIHf9FW9ibkwk7z1rBoXlWN9CUCTiYLubxiEbyE2QQupEF2DmoasCut2Akc
-         i2XbhJ0Q2KAubqvJXmmYEYm1Nz7/xo7U3hhd+wZvPDsr0LubUefNer521vdF6aZzmR2I
-         9+IsO93XvbIqNM0Xq4+yhh13rAKcULHvknFGzzPjOVj7WQZw43fHgnOVds8YtUJ0UH4t
-         zmCU44ra9RR1Oz/kQ57zVn8zLsZETw1oydrAbQiqy+LihzcUEnu0jUG2U/dyN1SF3Taz
-         JZWJbtwswuB1xv+PpTKx/JnKyJJ+FrVaZQlTx6UYKciZLr78gRw7X4t4iT4r+qZJldW7
-         eouA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GwweWvs7v6mUrsF+avs0ZSyV9XiKyZYwIj1qrBh4nEM=;
-        b=pbdrLhsvPIXKy/5MwF0Hfs2fS8nkNaO9jQ8E7Qbk2OfFHXUfPQehOPwg4VDW7+RK/U
-         A+/G7iZgC125duLm20jxrdCr/roW2K8JmEX7H91tmdr3wn7mlBX+ripZ+2iXXq1xazKB
-         J+rwNb9BNspC4y9sMYPc4TQUSQy3jYbkKH6FVHOMXDgxLQ/tNzyycDLAamq3J+qJl/BZ
-         Dt9OfCYVYgFWDvCVOvQvumz8O48vxfIjrFg6O8UEmqstyaCy7hHX6B/xT8WvmbLeJtMg
-         sMICAa99JFWHZZkSXUCEBKlI4j/9qJbO/tYD0kwd9jkmvX96pHF6+/cO3kDf7SvjO2sH
-         IhGQ==
-X-Gm-Message-State: AOAM530YDZh4bKQjeaIjnT1VKp1PlIMw6ccQhnuzsKHD3uUpkefKzwD9
-        hrFBPWOCrSrNDS6YLQ2Ax9o=
-X-Google-Smtp-Source: ABdhPJzWptfhp/KpqAUOFKbPU7CjGJz9pbmEJwWldZolsxf/j2MP396lUPWuM3yYV+SPnOEgnrJiSQ==
-X-Received: by 2002:a63:36c8:: with SMTP id d191mr39213pga.377.1643996037233;
-        Fri, 04 Feb 2022 09:33:57 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id d4sm3270531pfj.82.2022.02.04.09.33.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 09:33:56 -0800 (PST)
-Message-ID: <895b0b85-e1b7-3ce3-ef12-814033d30897@gmail.com>
-Date:   Fri, 4 Feb 2022 09:33:44 -0800
+        Fri, 4 Feb 2022 12:35:41 -0500
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
+ id a786794575b560a3; Fri, 4 Feb 2022 18:35:40 +0100
+Received: from kreacher.localnet (unknown [213.134.181.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id EA91766B456;
+        Fri,  4 Feb 2022 18:35:38 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        David Box <david.e.box@linux.intel.com>
+Subject: [PATCH v1 2/2] PM: s2idle: ACPI: Fix wakeup interrupts handling
+Date:   Fri, 04 Feb 2022 18:35:22 +0100
+Message-ID: <4695836.GXAFRqVoOG@kreacher>
+In-Reply-To: <11925099.O9o76ZdvQC@kreacher>
+References: <11925099.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220204091914.280602669@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.137
+X-CLIENT-HOSTNAME: 213.134.181.137
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgddutddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthho
+ pegurghvihgurdgvrdgsohigsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+After commit e3728b50cd9b ("ACPI: PM: s2idle: Avoid possible race
+related to the EC GPE") wakeup interrupts occurring immediately after
+the one discarded by acpi_s2idle_wake() may be missed.  Moreover, if
+the SCI triggers again immediately after the rearming in
+acpi_s2idle_wake(), that wakeup may be missed too.
+
+The problem is that pm_system_irq_wakeup() only calls pm_system_wakeup()
+when pm_wakeup_irq is 0, but that's not the case any more after the
+interrupt causing acpi_s2idle_wake() to run until pm_wakeup_irq is
+cleared by the pm_wakeup_clear() call in s2idle_loop().  However,
+there may be wakeup interrupts occurring in that time frame and if
+that happens, they will be missed.
+
+To address that issue first move the clearing of pm_wakeup_irq to
+the point at which it is known that the interrupt causing
+acpi_s2idle_wake() to tun will be discarded, before rearming the SCI
+for wakeup.  Moreover, because that only reduces the size of the
+time window in which the issue may manifest itself, allow
+pm_system_irq_wakeup() to register two second wakeup interrupts in
+a row and, when discarding the first one, replace it with the second
+one.  [Of course, this assumes that only one wakeup interrupt can be
+discarded in one go, but currently that is the case and I am not
+aware of any plans to change that.]
+
+Fixes: e3728b50cd9b ("ACPI: PM: s2idle: Avoid possible race related to the EC GPE")
+Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/sleep.c        |    1 +
+ drivers/base/power/wakeup.c |   41 ++++++++++++++++++++++++++++++++++-------
+ include/linux/suspend.h     |    4 ++--
+ kernel/power/main.c         |    5 ++++-
+ kernel/power/process.c      |    2 +-
+ kernel/power/suspend.c      |    2 --
+ 6 files changed, 42 insertions(+), 13 deletions(-)
+
+Index: linux-pm/include/linux/suspend.h
+===================================================================
+--- linux-pm.orig/include/linux/suspend.h
++++ linux-pm/include/linux/suspend.h
+@@ -497,14 +497,14 @@ extern void ksys_sync_helper(void);
+ 
+ /* drivers/base/power/wakeup.c */
+ extern bool events_check_enabled;
+-extern unsigned int pm_wakeup_irq;
+ extern suspend_state_t pm_suspend_target_state;
+ 
+ extern bool pm_wakeup_pending(void);
+ extern void pm_system_wakeup(void);
+ extern void pm_system_cancel_wakeup(void);
+-extern void pm_wakeup_clear(bool reset);
++extern void pm_wakeup_clear(unsigned int irq_number);
+ extern void pm_system_irq_wakeup(unsigned int irq_number);
++extern unsigned int pm_wakeup_irq(void);
+ extern bool pm_get_wakeup_count(unsigned int *count, bool block);
+ extern bool pm_save_wakeup_count(unsigned int count);
+ extern void pm_wakep_autosleep_enabled(bool set);
+Index: linux-pm/kernel/power/process.c
+===================================================================
+--- linux-pm.orig/kernel/power/process.c
++++ linux-pm/kernel/power/process.c
+@@ -134,7 +134,7 @@ int freeze_processes(void)
+ 	if (!pm_freezing)
+ 		atomic_inc(&system_freezing_cnt);
+ 
+-	pm_wakeup_clear(true);
++	pm_wakeup_clear(0);
+ 	pr_info("Freezing user space processes ... ");
+ 	pm_freezing = true;
+ 	error = try_to_freeze_tasks(true);
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -136,8 +136,6 @@ static void s2idle_loop(void)
+ 			break;
+ 		}
+ 
+-		pm_wakeup_clear(false);
+-
+ 		s2idle_enter();
+ 	}
+ 
+Index: linux-pm/drivers/base/power/wakeup.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/wakeup.c
++++ linux-pm/drivers/base/power/wakeup.c
+@@ -34,7 +34,8 @@ suspend_state_t pm_suspend_target_state;
+ bool events_check_enabled __read_mostly;
+ 
+ /* First wakeup IRQ seen by the kernel in the last cycle. */
+-unsigned int pm_wakeup_irq __read_mostly;
++static unsigned int wakeup_irq[2] __read_mostly;
++static DEFINE_RAW_SPINLOCK(wakeup_irq_lock);
+ 
+ /* If greater than 0 and the system is suspending, terminate the suspend. */
+ static atomic_t pm_abort_suspend __read_mostly;
+@@ -942,19 +943,45 @@ void pm_system_cancel_wakeup(void)
+ 	atomic_dec_if_positive(&pm_abort_suspend);
+ }
+ 
+-void pm_wakeup_clear(bool reset)
++void pm_wakeup_clear(unsigned int irq_number)
+ {
+-	pm_wakeup_irq = 0;
+-	if (reset)
++	raw_spin_lock_irq(&wakeup_irq_lock);
++
++	if (irq_number && wakeup_irq[0] == irq_number)
++		wakeup_irq[0] = wakeup_irq[1];
++	else
++		wakeup_irq[0] = 0;
++
++	wakeup_irq[1] = 0;
++
++	raw_spin_unlock_irq(&wakeup_irq_lock);
++
++	if (!irq_number)
+ 		atomic_set(&pm_abort_suspend, 0);
+ }
+ 
+ void pm_system_irq_wakeup(unsigned int irq_number)
+ {
+-	if (pm_wakeup_irq == 0) {
+-		pm_wakeup_irq = irq_number;
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&wakeup_irq_lock, flags);
++
++	if (wakeup_irq[0] == 0)
++		wakeup_irq[0] = irq_number;
++	else if (wakeup_irq[1] == 0)
++		wakeup_irq[1] = irq_number;
++	else
++		irq_number = 0;
++
++	raw_spin_unlock_irqrestore(&wakeup_irq_lock, flags);
++
++	if (irq_number)
+ 		pm_system_wakeup();
+-	}
++}
++
++unsigned int pm_wakeup_irq(void)
++{
++	return wakeup_irq[0];
+ }
+ 
+ /**
+Index: linux-pm/kernel/power/main.c
+===================================================================
+--- linux-pm.orig/kernel/power/main.c
++++ linux-pm/kernel/power/main.c
+@@ -504,7 +504,10 @@ static ssize_t pm_wakeup_irq_show(struct
+ 					struct kobj_attribute *attr,
+ 					char *buf)
+ {
+-	return pm_wakeup_irq ? sprintf(buf, "%u\n", pm_wakeup_irq) : -ENODATA;
++	if (!pm_wakeup_irq())
++		return -ENODATA;
++
++	return sprintf(buf, "%u\n", pm_wakeup_irq());
+ }
+ 
+ power_attr_ro(pm_wakeup_irq);
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -760,6 +760,7 @@ bool acpi_s2idle_wake(void)
+ 
+ 		pm_pr_dbg("Rearming ACPI SCI for wakeup\n");
+ 
++		pm_wakeup_clear(acpi_sci_irq);
+ 		rearm_wake_irq(acpi_sci_irq);
+ 	}
+ 
 
 
-On 2/4/2022 1:20 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.97 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.97-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian

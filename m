@@ -2,220 +2,422 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5500B4A98D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684CC4A98EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237256AbiBDMDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:03:21 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:37328 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiBDMDS (ORCPT
+        id S1355933AbiBDMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230179AbiBDMHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:03:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6110661B5F
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D74C004E1;
-        Fri,  4 Feb 2022 12:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643976197;
-        bh=It84ufP8YgcfgfysSWXPrYBSayPujRbyxFSE6YIvH1Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NrXSLppXfblcJoorSIQLngs+LYixw5fvimV7M284USDtbJaBbcddvzLJpmG/VBRvg
-         kzpe/f0luf93VlI4lqJJVTjB2msq9YGtxccEBsHudVClDlEIpt+tVxg8SojOc60Vnv
-         EmFm+Os2Kv1C6gC1EdULUkf2fk6U0XhRREIe5zxxyUTkn04flcyLM9Xe2VbcHq9Fj/
-         WK+e1SQ96/Ca+D1YPZs1W1nvdWuwo+TuPca0Ti13B2Tp54JaFJJPIbTe+06SrsSLQI
-         +UYb7k4H9b/PLTUnVsrwFa/V9xuLBlFWPUVGNc1ul9KU/oyZ7u2Dzq6oqfrHSlaemq
-         UD72xuMmrkuAg==
-Message-ID: <d3ade685-871c-8ae9-ec57-c3446001cf59@kernel.org>
-Date:   Fri, 4 Feb 2022 20:03:13 +0800
+        Fri, 4 Feb 2022 07:07:05 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3AC061714;
+        Fri,  4 Feb 2022 04:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/R6k+zfCQLtzC5fphtSolIP5mV88jokWbtj5V/Bndfo=; b=vV7FwD6+1HFcDi0WBK1n+WSa7j
+        6nwzQzVzi5+eBGfJjLkVBTDdciJmM/ODHbnAIn87wlDZaVGFppfZ+kIcVCeEP48y2KiwVKc1CXNfQ
+        HwbFgydFmju4PHbiyUdIr78S1W5mmqAZMOHdMJ60inw6Pv5vWMco470p1tf3mR8GjcuActvmp9Gnr
+        Z9+xF0g185xIO5+pwflcRJvACgdLLsPqZdl98F1xB1/Oqr2qR03hqug7ilKFZdiBMIRSQqoHVRy6N
+        J+0BDyiJuXcdfPlkRiuNVwP3B59jQ/pap32T5wWhmLteCCuu+rRjcExlmQpfogonB4SlWXln36qcV
+        sZ5TRa+A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57036)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nFxLl-0004VH-H0; Fri, 04 Feb 2022 12:06:01 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nFxLX-0004xK-P8; Fri, 04 Feb 2022 12:05:47 +0000
+Date:   Fri, 4 Feb 2022 12:05:47 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Message-ID: <Yf0Wm1kOV1Pss9HJ@shell.armlinux.org.uk>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: add a way to limit roll forward
- recovery time
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220127214102.2040254-1-jaegeuk@kernel.org>
- <YfsjEb2ii3eyPzng@google.com>
- <142d2cc9-73f2-f9fa-2543-6426c62e77a6@kernel.org>
- <YfwT/6bSqUqUF/B3@google.com>
- <211c28eb-789e-e6e6-5daf-8040ac5ddd93@kernel.org>
- <YfzEuA6XdnJ6nibk@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <YfzEuA6XdnJ6nibk@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202165315.18282-1-nick.hawkins@hpe.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/4 14:16, Jaegeuk Kim wrote:
-> On 02/04, Chao Yu wrote:
->> On 2022/2/4 1:42, Jaegeuk Kim wrote:
->>> On 02/03, Chao Yu wrote:
->>>> On 2022/2/3 8:34, Jaegeuk Kim wrote:
->>>>> This adds a sysfs entry to call checkpoint during fsync() in order to avoid
->>>>> long elapsed time to run roll-forward recovery when booting the device.
->>>>> Default value doesn't enforce the limitation which is same as before.
->>>>>
->>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
->>>>> ---
->>>>> v2 from v1:
->>>>>     - make the default w/o enforcement
->>>>>
->>>>>     Documentation/ABI/testing/sysfs-fs-f2fs | 6 ++++++
->>>>>     fs/f2fs/checkpoint.c                    | 1 +
->>>>>     fs/f2fs/f2fs.h                          | 3 +++
->>>>>     fs/f2fs/node.c                          | 2 ++
->>>>>     fs/f2fs/node.h                          | 3 +++
->>>>>     fs/f2fs/recovery.c                      | 4 ++++
->>>>>     fs/f2fs/sysfs.c                         | 2 ++
->>>>>     7 files changed, 21 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
->>>>> index 87d3884c90ea..ce8103f522cb 100644
->>>>> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
->>>>> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
->>>>> @@ -567,3 +567,9 @@ Contact:	"Daeho Jeong" <daehojeong@google.com>
->>>>>     Description:	You can set the trial count limit for GC urgent high mode with this value.
->>>>>     		If GC thread gets to the limit, the mode will turn back to GC normal mode.
->>>>>     		By default, the value is zero, which means there is no limit like before.
->>>>> +
->>>>> +What:		/sys/fs/f2fs/<disk>/max_roll_forward_node_blocks
->>>>> +Date:		January 2022
->>>>> +Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
->>>>> +Description:	Controls max # of node block writes to be used for roll forward
->>>>> +		recovery. This can limit the roll forward recovery time.
->>>>> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
->>>>> index deeda95688f0..57a2d9164bee 100644
->>>>> --- a/fs/f2fs/checkpoint.c
->>>>> +++ b/fs/f2fs/checkpoint.c
->>>>> @@ -1543,6 +1543,7 @@ static int do_checkpoint(struct f2fs_sb_info *sbi, struct cp_control *cpc)
->>>>>     	/* update user_block_counts */
->>>>>     	sbi->last_valid_block_count = sbi->total_valid_block_count;
->>>>>     	percpu_counter_set(&sbi->alloc_valid_block_count, 0);
->>>>> +	percpu_counter_set(&sbi->rf_node_block_count, 0);
+Hi,
 
-Should be initialized before use?
+On Wed, Feb 02, 2022 at 10:52:50AM -0600, nick.hawkins@hpe.com wrote:
+> diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
+> new file mode 100644
+> index 000000000000..8b0a91234df4
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
+> diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
+> new file mode 100644
+> index 000000000000..a37838247948
+> --- /dev/null
+> +++ b/arch/arm/mach-hpe/gxp.c
+> @@ -0,0 +1,62 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
+> + *
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + */
+> +
+> +
+> +#include <linux/init.h>
+> +#include <asm/mach/arch.h>
+> +#include <asm/mach/map.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/clocksource.h>
 
-Thanks,
+It's normal to list all linux/ includes before asm/ includes. Please
+rearrange.
 
->>>>>     	/* Here, we have one bio having CP pack except cp pack 2 page */
->>>>>     	f2fs_sync_meta_pages(sbi, META, LONG_MAX, FS_CP_META_IO);
->>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->>>>> index 63c90416364b..6ddb98ff0b7c 100644
->>>>> --- a/fs/f2fs/f2fs.h
->>>>> +++ b/fs/f2fs/f2fs.h
->>>>> @@ -913,6 +913,7 @@ struct f2fs_nm_info {
->>>>>     	nid_t max_nid;			/* maximum possible node ids */
->>>>>     	nid_t available_nids;		/* # of available node ids */
->>>>>     	nid_t next_scan_nid;		/* the next nid to be scanned */
->>>>> +	nid_t max_rf_node_blocks;	/* max # of nodes for recovery */
->>>>>     	unsigned int ram_thresh;	/* control the memory footprint */
->>>>>     	unsigned int ra_nid_pages;	/* # of nid pages to be readaheaded */
->>>>>     	unsigned int dirty_nats_ratio;	/* control dirty nats ratio threshold */
->>>>> @@ -1684,6 +1685,8 @@ struct f2fs_sb_info {
->>>>>     	atomic_t nr_pages[NR_COUNT_TYPE];
->>>>>     	/* # of allocated blocks */
->>>>>     	struct percpu_counter alloc_valid_block_count;
->>>>> +	/* # of node block writes as roll forward recovery */
->>>>> +	struct percpu_counter rf_node_block_count;
->>>>>     	/* writeback control */
->>>>>     	atomic_t wb_sync_req[META];	/* count # of WB_SYNC threads */
->>>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
->>>>> index 93512f8859d5..0d9883457579 100644
->>>>> --- a/fs/f2fs/node.c
->>>>> +++ b/fs/f2fs/node.c
->>>>> @@ -1782,6 +1782,7 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
->>>>>     			if (!atomic || page == last_page) {
->>>>>     				set_fsync_mark(page, 1);
->>>>> +				percpu_counter_inc(&sbi->rf_node_block_count);
->>>>
->>>> if (NM_I(sbi)->max_rf_node_blocks)
->>>> 	percpu_counter_inc(&sbi->rf_node_block_count);
->>>
->>> I think we can just count this and adjust right away once sysfs is changed.
->>
->> Since this long recovery latency issue is a corner case, I guess we can avoid this
->> to save cpu time...
-> 
-> I think we can show this in debugfs, as it won't give huge overhead.
-> 
->>
->> BTW, shouldn't we account all warn dnode blocks? as we will traverse all blocks there
->> in warn node list.
-> 
-> I thought we don't need to track the whole bunch of chains, but would be enough
-> to record # of fsync calls roughly.
-> 
->>
->> Thanks,
->>
->>>
->>>>
->>>> Thanks,
->>>>
->>>>>     				if (IS_INODE(page)) {
->>>>>     					if (is_inode_flag_set(inode,
->>>>>     								FI_DIRTY_INODE))
->>>>> @@ -3218,6 +3219,7 @@ static int init_node_manager(struct f2fs_sb_info *sbi)
->>>>>     	nm_i->ram_thresh = DEF_RAM_THRESHOLD;
->>>>>     	nm_i->ra_nid_pages = DEF_RA_NID_PAGES;
->>>>>     	nm_i->dirty_nats_ratio = DEF_DIRTY_NAT_RATIO_THRESHOLD;
->>>>> +	nm_i->max_rf_node_blocks = DEF_RF_NODE_BLOCKS;
->>>>>     	INIT_RADIX_TREE(&nm_i->free_nid_root, GFP_ATOMIC);
->>>>>     	INIT_LIST_HEAD(&nm_i->free_nid_list);
->>>>> diff --git a/fs/f2fs/node.h b/fs/f2fs/node.h
->>>>> index 18b98cf0465b..4c1d34bfea78 100644
->>>>> --- a/fs/f2fs/node.h
->>>>> +++ b/fs/f2fs/node.h
->>>>> @@ -31,6 +31,9 @@
->>>>>     /* control total # of nats */
->>>>>     #define DEF_NAT_CACHE_THRESHOLD			100000
->>>>> +/* control total # of node writes used for roll-fowrad recovery */
->>>>> +#define DEF_RF_NODE_BLOCKS			0
->>>>> +
->>>>>     /* vector size for gang look-up from nat cache that consists of radix tree */
->>>>>     #define NATVEC_SIZE	64
->>>>>     #define SETVEC_SIZE	32
->>>>> diff --git a/fs/f2fs/recovery.c b/fs/f2fs/recovery.c
->>>>> index 10d152cfa58d..1c8041fd854e 100644
->>>>> --- a/fs/f2fs/recovery.c
->>>>> +++ b/fs/f2fs/recovery.c
->>>>> @@ -53,9 +53,13 @@ extern struct kmem_cache *f2fs_cf_name_slab;
->>>>>     bool f2fs_space_for_roll_forward(struct f2fs_sb_info *sbi)
->>>>>     {
->>>>>     	s64 nalloc = percpu_counter_sum_positive(&sbi->alloc_valid_block_count);
->>>>> +	u32 rf_node = percpu_counter_sum_positive(&sbi->rf_node_block_count);
->>>>>     	if (sbi->last_valid_block_count + nalloc > sbi->user_block_count)
->>>>>     		return false;
->>>>> +	if (NM_I(sbi)->max_rf_node_blocks &&
->>>>> +			rf_node >= NM_I(sbi)->max_rf_node_blocks)
->>>>> +		return false;
->>>>>     	return true;
->>>>>     }
->>>>> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
->>>>> index 281bc0133ee6..47efcf233afd 100644
->>>>> --- a/fs/f2fs/sysfs.c
->>>>> +++ b/fs/f2fs/sysfs.c
->>>>> @@ -732,6 +732,7 @@ F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, min_ssr_sections, min_ssr_sections);
->>>>>     F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ram_thresh, ram_thresh);
->>>>>     F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, ra_nid_pages, ra_nid_pages);
->>>>>     F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, dirty_nats_ratio, dirty_nats_ratio);
->>>>> +F2FS_RW_ATTR(NM_INFO, f2fs_nm_info, max_roll_forward_node_blocks, max_rf_node_blocks);
->>>>>     F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, max_victim_search, max_victim_search);
->>>>>     F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, migration_granularity, migration_granularity);
->>>>>     F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, dir_level, dir_level);
->>>>> @@ -855,6 +856,7 @@ static struct attribute *f2fs_attrs[] = {
->>>>>     	ATTR_LIST(ram_thresh),
->>>>>     	ATTR_LIST(ra_nid_pages),
->>>>>     	ATTR_LIST(dirty_nats_ratio),
->>>>> +	ATTR_LIST(max_roll_forward_node_blocks),
->>>>>     	ATTR_LIST(cp_interval),
->>>>>     	ATTR_LIST(idle_interval),
->>>>>     	ATTR_LIST(discard_idle_interval),
+> +
+> +#define IOP_REGS_PHYS_BASE 0xc0000000
+> +#define IOP_REGS_VIRT_BASE 0xf0000000
+> +#define IOP_REGS_SIZE (240*SZ_1M)
+> +
+> +#define IOP_EHCI_USBCMD 0x0efe0010
+> +
+> +static struct map_desc gxp_io_desc[] __initdata = {
+> +	{
+> +	.virtual	= (unsigned long)IOP_REGS_VIRT_BASE,
+> +	.pfn		= __phys_to_pfn(IOP_REGS_PHYS_BASE),
+> +	.length		= IOP_REGS_SIZE,
+> +	.type		= MT_DEVICE,
+
+If you keep this, please indent the above four lines by one more tab.
+
+> +	},
+> +};
+> +
+> +void __init gxp_map_io(void)
+> +{
+> +	iotable_init(gxp_io_desc, ARRAY_SIZE(gxp_io_desc));
+> +}
+> +
+> +static void __init gxp_dt_init(void)
+> +{
+> +	/*reset EHCI host controller for clear start*/
+> +	__raw_writel(0x00080002,
+> +		(void __iomem *)(IOP_REGS_VIRT_BASE + IOP_EHCI_USBCMD));
+
+Please consider making IOP_REGS_VIRT_BASE a 'void __iomem' pointer, it
+being a _virtual_ iomem address. This should save you needing repeated
+casts except for the initialiser above.
+
+> +	of_platform_populate(NULL, of_default_bus_match_table, NULL, NULL);
+> +}
+> +
+> +static void gxp_restart(enum reboot_mode mode, const char *cmd)
+> +{
+> +	__raw_writel(1, (void __iomem *) IOP_REGS_VIRT_BASE);
+> +}
+> +
+> +static const char * const gxp_board_dt_compat[] = {
+> +	"HPE,GXP",
+> +	NULL,
+> +};
+> +
+> +DT_MACHINE_START(GXP_DT, "HPE GXP")
+> +	.init_machine	= gxp_dt_init,
+> +	.map_io		= gxp_map_io,
+> +	.restart	= gxp_restart,
+> +	.dt_compat	= gxp_board_dt_compat,
+> +MACHINE_END
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index cfb8ea0df3b1..5916dade7608 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -617,6 +617,14 @@ config CLKSRC_ST_LPC
+>  	  Enable this option to use the Low Power controller timer
+>  	  as clocksource.
+>  
+> +config GXP_TIMER
+> +	bool "GXP timer driver"
+> +	depends on ARCH_HPE
+> +	default y
+> +	help
+> +	  Provides a driver for the timer control found on HPE
+> +	  GXP SOCs. This is required for all GXP SOCs.
+> +
+>  config ATCPIT100_TIMER
+>  	bool "ATCPIT100 timer driver"
+>  	depends on NDS32 || COMPILE_TEST
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> index fa5f624eadb6..ffca09ec34de 100644
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
+>  obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
+>  obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+>  obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+> +obj-$(CONFIG_GXP_TIMER)			+= gxp_timer.o
+> diff --git a/drivers/clocksource/gxp_timer.c b/drivers/clocksource/gxp_timer.c
+> new file mode 100644
+> index 000000000000..e3c617036e0d
+> --- /dev/null
+> +++ b/drivers/clocksource/gxp_timer.c
+> @@ -0,0 +1,158 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
+> + *
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/clockchips.h>
+> +#include <linux/clocksource.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irqreturn.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/sched_clock.h>
+> +
+> +#include <asm/irq.h>
+
+Why do you need asm/irq.h ?
+
+> +
+> +#define TIMER0_FREQ 1000000
+> +#define TIMER1_FREQ 1000000
+> +
+> +#define MASK_TCS_ENABLE		0x01
+> +#define MASK_TCS_PERIOD		0x02
+> +#define MASK_TCS_RELOAD		0x04
+> +#define MASK_TCS_TC		0x80
+> +
+> +struct gxp_timer {
+> +	void __iomem *counter;
+> +	void __iomem *control;
+> +	struct clock_event_device evt;
+> +};
+> +
+> +static void __iomem *system_clock __read_mostly;
+> +
+> +static u64 notrace gxp_sched_read(void)
+> +{
+> +	return readl_relaxed(system_clock);
+> +}
+> +
+> +static int gxp_time_set_next_event(unsigned long event,
+> +					struct clock_event_device *evt_dev)
+> +{
+> +	struct gxp_timer *timer = container_of(evt_dev, struct gxp_timer, evt);
+> +	/*clear TC by write 1 and disable timer int and counting*/
+> +	writeb_relaxed(MASK_TCS_TC, timer->control);
+> +	/*update counter value*/
+> +	writel_relaxed(event, timer->counter);
+> +	/*enable timer counting and int*/
+> +	writeb_relaxed(MASK_TCS_TC|MASK_TCS_ENABLE, timer->control);
+
+Spaces around the | please. checkpatch probably should've noticed that.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t gxp_time_interrupt(int irq, void *dev_id)
+> +{
+> +	struct gxp_timer *timer = dev_id;
+> +	void (*event_handler)(struct clock_event_device *timer);
+> +
+> +
+
+One too many blank lines.
+
+> +	if (readb_relaxed(timer->control) & MASK_TCS_TC) {
+> +		writeb_relaxed(MASK_TCS_TC, timer->control);
+> +
+> +		event_handler = READ_ONCE(timer->evt.event_handler);
+> +		if (event_handler)
+> +			event_handler(&timer->evt);
+> +		return IRQ_HANDLED;
+> +	} else {
+> +		return IRQ_NONE;
+> +	}
+> +}
+> +
+> +static int __init gxp_timer_init(struct device_node *node)
+> +{
+> +	void __iomem *base_counter;
+> +	void __iomem *base_control;
+> +	u32 freq;
+> +	int ret, irq;
+> +	struct gxp_timer *gxp_timer;
+> +
+> +	base_counter = of_iomap(node, 0);
+> +	if (!base_counter) {
+> +		pr_err("Can't remap counter registers");
+> +		return -ENXIO;
+> +	}
+> +
+> +	base_control = of_iomap(node, 1);
+> +	if (!base_control) {
+> +		pr_err("Can't remap control registers");
+
+iounmap base_counter?
+
+> +		return -ENXIO;
+> +	}
+> +
+> +	system_clock = of_iomap(node, 2);
+> +	if (!system_clock) {
+> +		pr_err("Can't remap control registers");
+
+iounmap base_counter and base_control?
+
+> +		return -ENXIO;
+> +	}
+> +
+> +	if (of_property_read_u32(node, "clock-frequency", &freq)) {
+> +		pr_err("Can't read clock-frequency\n");
+> +		goto err_iounmap;
+> +	}
+> +
+> +	sched_clock_register(gxp_sched_read, 32, freq);
+> +	clocksource_mmio_init(system_clock, node->name, freq,
+> +				300, 32, clocksource_mmio_readl_up);
+
+We normally align continutation lines in function arguments to the
+opening ( thusly:
+
+	clocksource_mmio_init(system_clock, node->name, freq,
+			      300, 32, clocksource_mmio_readl_up);
+
+> +
+> +	irq = irq_of_parse_and_map(node, 0);
+> +	if (irq <= 0) {
+> +		ret = -EINVAL;
+> +		pr_err("GXP Timer Can't parse IRQ %d", irq);
+> +		goto err_iounmap;
+> +	}
+> +
+> +	gxp_timer = kzalloc(sizeof(*gxp_timer), GFP_KERNEL);
+> +	if (!gxp_timer) {
+> +		ret = -ENOMEM;
+> +		goto err_iounmap;
+> +	}
+> +
+> +	gxp_timer->counter = base_counter;
+> +	gxp_timer->control = base_control;
+> +	gxp_timer->evt.name = node->name;
+> +	gxp_timer->evt.rating = 300;
+> +	gxp_timer->evt.features = CLOCK_EVT_FEAT_ONESHOT;
+> +	gxp_timer->evt.set_next_event = gxp_time_set_next_event;
+> +	gxp_timer->evt.cpumask = cpumask_of(0);
+> +
+> +	if (request_irq(irq, gxp_time_interrupt, IRQF_TIMER | IRQF_SHARED,
+> +		node->name, gxp_timer)) {
+
+Again:
+
+	if (request_irq(irq, gxp_time_interrupt, IRQF_TIMER | IRQF_SHARED,
+			node->name, gxp_timer)) {
+
+> +		pr_err("%s: request_irq() failed\n", "GXP Timer Tick");
+
+Consider storing the error code from request_irq() and printing it here.
+So:
+
+	err = request_irq(...);
+	if (err) {
+		pr_err("%s: request_irq() failed: %pe\n", "GXP Timer Tick",
+		       ERR_PTR(err));
+
+> +		goto err_timer_free;
+> +	}
+> +
+> +	clockevents_config_and_register(&gxp_timer->evt, TIMER0_FREQ,
+> +					0xf, 0xffffffff);
+> +
+> +	pr_info("gxp: system timer (irq = %d)\n", irq);
+> +	return 0;
+> +
+> +
+> +err_timer_free:
+> +	kfree(gxp_timer);
+> +
+> +err_iounmap:
+> +	iounmap(system_clock);
+> +	iounmap(base_control);
+> +	iounmap(base_counter);
+> +	return ret;
+> +}
+> +
+> +TIMER_OF_DECLARE(gxp, "hpe,gxp-timer", gxp_timer_init);
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

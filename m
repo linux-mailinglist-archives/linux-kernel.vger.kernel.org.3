@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2C34AA275
+	by mail.lfdr.de (Postfix) with ESMTP id D8D364AA277
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243999AbiBDVmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S244584AbiBDVmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243450AbiBDVmL (ORCPT
+        with ESMTP id S243671AbiBDVmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:42:11 -0500
+        Fri, 4 Feb 2022 16:42:12 -0500
 Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23745C061741
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:10 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id x4-20020a17090ab00400b001b58c484826so9421885pjq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:42:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F303C061401
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:42:11 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id s9-20020a17090aad8900b001b82d1e4dc8so4271022pjq.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:42:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=jqW8hPDdRJB2oQW7EYj+6p3+zfKz+RTL9qmY/jYFQRo=;
-        b=mxpLoHZxxceqi0+lhEctMV52m3RcDvRtmSBrb5iQNPZmk36kIhoWNYnpPLBkWg+K27
-         rBdNv2dsoikUnJEgFdv1P01vGeP2JV1ZFV9xJvjVHfBJSlYxAjExg1wGpYBcKt5OvbbQ
-         6Lg4wzTvrvDOs9R/4BB8EtBaixgrzcpu2qhhe7nwStgd5OKv0k/xsNM+T0HIKyUSE78m
-         0GGqLbq99uPd74uNMoKl+x0z6q/YaS+TBUJ/r9T4iDCJLPS9lXHaOnVVxNRdIe0eqKfh
-         Ewjj0OJG8ISl90B3zHt2FufYFyJ7rFbhNs0/yZq6bFrPO2tYcUSuXBwysy0g15Ha1dZs
-         i3+A==
+        bh=SN0Z+icyOC8azJmY8lil5AT+GqrQYLTXy+CHe5R+yDA=;
+        b=rgBolqPf4C1gRSpaHVzt97AmfFoycWf3gvpXXQU5yyTs/tcpym9X6O9sQrA/ucSv41
+         5T5lN3f2nuRvKSpJJNYS1yCx+8u2YSTpQzmbbIcrap7trHRAwSqnHM7pEOrWw9tWWLOz
+         dyjBRu8VrP0ceh4TrFjN6Md2g8+zbv4kELjnpEcdBSFG5uZh9JfGnQCrZq0iAroHWq2Z
+         CpJtvjL0+zeM5vXUorgLoE/gwK8OiwT2PH0RWtD1DLscprMZST9cc/6Yt2cwFpc9pkDK
+         C6ufbMRd3XVsZHZBcg0t0j9hTJH4XTdmp1CqHSaIZeCJF2K7dA44dJEUYa+lqES++U+1
+         cPhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=jqW8hPDdRJB2oQW7EYj+6p3+zfKz+RTL9qmY/jYFQRo=;
-        b=1YE8bOaX25DlcSGRDZy23PS4bqYldMuSwR2JGADrbf8R35bHThrzB5K+g/cRSVM1+z
-         aQEzhZZKb6Xaezx+rHQ0uzTXMztr8Sleh+eURgcI8bsIR71PrNES4xf98IYRwqqABog0
-         EN3KstWFx6E/INji6WjsvA14qQr70IJDOgsdQwPj1VzCpVJnlA5DtlLU2ygPNapFlb3Z
-         NQVNJsLGJB/MGYURLGNiyiRn6nYuv8Ad2eD/AtuUxBqZr7eYaNphG8SMqVSZ5da0V39f
-         cADOee0JqMb91dU4VauD9BzO4fcMF8k0bvUnCw8sQbisOABLS9NX+Cl1VZ87u/byQcXN
-         +pGA==
-X-Gm-Message-State: AOAM5312rKoOX7eDl07dsPTJltRQpCAu2t9k8jEcoKPWg55tVvDQgkok
-        UssP0W7obviWI/hSk4KYkFY+J0/9oFk=
-X-Google-Smtp-Source: ABdhPJybgJWW84dSDuUusL/JqKhOMbJauGmywX5GZ5VlYfiLzIbOHnENEI2942xqrRjXywil9uRm2TS2XJk=
+        bh=SN0Z+icyOC8azJmY8lil5AT+GqrQYLTXy+CHe5R+yDA=;
+        b=8BEZ+hZTyQUSo6N0VFgNdh4uTsxEq9swGz8wSc4WrhIxXTkvxFRTBuvHpAupjIJpSS
+         huYLZhhfbC5eIdI8ixP0y0AwU6BsqIzboitRYNIWXdUljo8aUd83OXte7NK1TQ+NjZsq
+         etu+ENntzNcIGHJqXCH+x6tXeq5ppMSGHsYPMSCg8uJC7z+lMKgJDnCYeYHVqGq/EUcC
+         XeExlczhYkbSwDz5DS8yXxikfSWY8cqOBPZ+9OBISh42S4sN6OVm3A3sfmxT7K0q1q9u
+         T40MipJuio9Rye88xqWOL1kl9HTerQvr+1R39mk/DpBF3T8lnMwGBQI3uVX6ON55f5Z2
+         pZbQ==
+X-Gm-Message-State: AOAM531UsmTM8/zxFH7vYaW3Spz+J/DFFvvNLJAIEdZ8c7n9Dy41LaRT
+        pE0Qx3h/A/NBjb8K2oeXKADZtmolvrk=
+X-Google-Smtp-Source: ABdhPJzQXB3jNCCPs2r426cwfrERg3u0KFyRu3mEURa+fe/3WgXQLUz7ChRCmM2gdVmhIuMIs05DsOfhpTU=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:b403:: with SMTP id
- x3mr5343641plr.61.1644010929602; Fri, 04 Feb 2022 13:42:09 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1409:: with SMTP id
+ l9mr5033269pfu.20.1644010931015; Fri, 04 Feb 2022 13:42:11 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  4 Feb 2022 21:41:55 +0000
+Date:   Fri,  4 Feb 2022 21:41:56 +0000
 In-Reply-To: <20220204214205.3306634-1-seanjc@google.com>
-Message-Id: <20220204214205.3306634-2-seanjc@google.com>
+Message-Id: <20220204214205.3306634-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220204214205.3306634-1-seanjc@google.com>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-Subject: [PATCH 01/11] Revert "svm: Add warning message for AVIC IPI invalid target"
+Subject: [PATCH 02/11] KVM: VMX: Handle APIC-write offset wrangling in VMX code
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -74,34 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove a WARN on an "AVIC IPI invalid target" exit, the WARN is trivial
-to trigger from guest as it will fail on any destination APIC ID that
-doesn't exist from the guest's perspective.
+Move the vAPIC offset adjustments done in the APIC-write trap path from
+common x86 to VMX in anticipation of using the nodecode path for SVM's
+AVIC.  The adjustment reflects hardware behavior, i.e. it's technically a
+property of VMX, no common x86.  SVM's AVIC behavior is identical, so
+it's a bit of a moot point, the goal is purely to make it easier to
+understand why the adjustment is ok.
 
-Don't bother recording anything in the kernel log, the common tracepoint
-for kvm_avic_incomplete_ipi() is sufficient for debugging.
+No functional change intended.
 
-This reverts commit 37ef0c4414c9743ba7f1af4392f0a27a99649f2a.
-
-Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/avic.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/x86/kvm/lapic.c   |  3 ---
+ arch/x86/kvm/vmx/vmx.c | 11 +++++++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 90364d02f22a..ecc81c48c0ca 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -345,8 +345,6 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
- 		avic_kick_target_vcpus(vcpu->kvm, apic, icrl, icrh);
- 		break;
- 	case AVIC_IPI_FAILURE_INVALID_TARGET:
--		WARN_ONCE(1, "Invalid IPI target: index=%u, vcpu=%d, icr=%#0x:%#0x\n",
--			  index, vcpu->vcpu_id, icrh, icrl);
- 		break;
- 	case AVIC_IPI_FAILURE_INVALID_BACKING_PAGE:
- 		WARN_ONCE(1, "Invalid backing page\n");
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 4662469240bc..fbce455a9d17 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2188,9 +2188,6 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+ {
+ 	u32 val = 0;
+ 
+-	/* hw has done the conditional check and inst decode */
+-	offset &= 0xff0;
+-
+ 	kvm_lapic_reg_read(vcpu->arch.apic, offset, 4, &val);
+ 
+ 	/* TODO: optimize to just emulate side effect w/o one more write */
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index b1165bb13a5a..1b135473677b 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5302,9 +5302,16 @@ static int handle_apic_eoi_induced(struct kvm_vcpu *vcpu)
+ static int handle_apic_write(struct kvm_vcpu *vcpu)
+ {
+ 	unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+-	u32 offset = exit_qualification & 0xfff;
+ 
+-	/* APIC-write VM exit is trap-like and thus no need to adjust IP */
++	/*
++	 * APIC-write VM-Exit is trap-like, KVM doesn't need to advance RIP and
++	 * hardware has done any necessary aliasing, offset adjustments, etc...
++	 * for the access.  I.e. the correct value has already been  written to
++	 * the vAPIC page for the correct 16-byte chunk.  KVM needs only to
++	 * retrieve the register value and emulate the access.
++	 */
++	u32 offset = exit_qualification & 0xff0;
++
+ 	kvm_apic_write_nodecode(vcpu, offset);
+ 	return 1;
+ }
 -- 
 2.35.0.263.gb82422642f-goog
 

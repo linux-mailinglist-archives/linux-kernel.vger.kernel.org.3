@@ -2,128 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421B74A9EAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0764A9EB0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377379AbiBDSJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S244921AbiBDSJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiBDSJL (ORCPT
+        with ESMTP id S1377380AbiBDSJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:09:11 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F1CC061714;
-        Fri,  4 Feb 2022 10:09:11 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id o12so21653764eju.13;
-        Fri, 04 Feb 2022 10:09:10 -0800 (PST)
+        Fri, 4 Feb 2022 13:09:49 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C56CC06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:09:49 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id p22-20020a17090adf9600b001b8783b2647so626649pjv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:09:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZOk1AjwIVX9pqDuRbELOCa6z4G8rYwIr5B63rOLPi6w=;
-        b=WzlYqpQ9SFXr3PX0uYzI1THJe1HOJjHnQYjFosTkecnxX56r1yjc/1jr7dEL2onX98
-         ojbxDzjeA15k37t+POMIoGbnCdw0F0/Q945oDIATQCU3YuHJMrym9OBMUy7ED58xFS2f
-         OvDj3LeIFKuByu9wtCVJj9zR/KCHwgCzcufanpT3Rj+fiCD8TpGIYoPiv8uZEfXPGKVL
-         ivQUAqE+Wt1bWyxBLkf41RjEpx0xgnyW8E3SrjnhEJsr0lkM46GugLbkvvtIrsm+GP7o
-         N8n6JUrCA37Izve+pGlgY9XFG28XEHH0TdJHSPy9bF4Zz2O0Q+PYpnYPHoW5yB/8LVVC
-         dVTw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5GJVqdK9AZJLVzh5THjIdv7Tb4wUElki413J5iZNmTM=;
+        b=HX/d5JdjvzattE8CDmmyZ7MPKQWBzw6CS4rweJoHjNvR26Mi/E3AeSnf2Qdi4PBkxe
+         F/YpYZWCkAbovrkgsEghglG/A9KpdOiXRXrJwHsc1oR+R8IwHBCzYBjdQIW2lsDwugye
+         /cpAQ3UJxW5aNIBFAVcbCmefpO4ofSixhKAFBt6jl/bOsRo5XW+bD8R/ML814CRWS+Jk
+         IAn4IkIOCEImsV64jEiMr2DLsIsWasuZMKldqSrEEwT1eI9PsHmu9+C96nMPh9/3aiXZ
+         4vJ88Mo3+fxokgxrL8bm/VaUuu3z3qC8MaDGS0p577cBt809JXVnwQDVslOiXlSLHOvu
+         y5iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZOk1AjwIVX9pqDuRbELOCa6z4G8rYwIr5B63rOLPi6w=;
-        b=QA04E4k73ZJtj92axiBOk+KYqgXqWgFZ6IzjlP6IeDHmvZ/P/osYFnjJr8jkEbTfDI
-         Th6D3+SB4ll19e6lvbvVz1Fr9znIzK7F4h6EZoitB+1iD18ZNu7d41L4JGWT4TpCKqui
-         yTm6v0C2SkQ/QxKoV5GlJ1dYVU8cd6JislHxxxgj1A0AHc1amiPQTkoGhg1VyKyiEc0l
-         SWG8pDYMRHmyyjQcncD4femhweIa+Tsh9bmzHxAhnbdJsZGD0UtjsB2SKbmZBw5VUE7p
-         qhSz2ynhWNWNd7wDBQh2Q7Vykzsd7904Fcs7A4kCiQqgL9NGNyu50Ij15P4+H4ltoOPz
-         1tUQ==
-X-Gm-Message-State: AOAM532lr89lYjqIIZICbYIxEIlbAkcO1TkRimM+OMn5tAROetg2uNUx
-        AYpT5+1M3mNpplIyO7YSj9pI1CBw9GOIJa0xn2APOf2p
-X-Google-Smtp-Source: ABdhPJwafFKJN7/nW/YfpdDz6GBq+Lu04Yh1LmAOb61IjhGfURB/qgcTa/AMBwlAWsDw2vk5++ZSGS4R2gxsK5B101s=
-X-Received: by 2002:a17:906:30c9:: with SMTP id b9mr61442ejb.377.1643998149504;
- Fri, 04 Feb 2022 10:09:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20220203201207.1075933-1-shy828301@gmail.com> <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
-In-Reply-To: <302fa562-612b-0853-31de-a11399e5aa08@nvidia.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Fri, 4 Feb 2022 10:08:57 -0800
-Message-ID: <CAHbLzko1izwBERS6auEna+eAGzQVA7zkDihMjT=tt_EBdhfmaA@mail.gmail.com>
-Subject: Re: [v6 PATCH] block: introduce block_rq_error tracepoint
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "hch@infradead.org" <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5GJVqdK9AZJLVzh5THjIdv7Tb4wUElki413J5iZNmTM=;
+        b=H7SWXnDYqqBRQS3S6p5bdrbGnSrUcLgxOpIMzoF1RhG12CyamT4en+bQy1Z3hkDizI
+         ry2TLTRSLy52wDv5HtMz6i6um01iUVrhuCBL1tLH8lIPfZVvYR4WeDGI5AFlPMseQ2iC
+         HpT47kxBYFt06iGPveKReBRKeQCck+UjXvt+l/u25CgksDkqT1PQTj9k3gaDVpOyr1L1
+         FQxVSFI0/a3T5tYR60pqBFOgZYQlKkIqtfZfXwtBwWsvj273evW3EGt85u5SZalGoLJb
+         F+EO8d6uS1+2n32MSFz+RMT67IJALyZn8ECPBjEfDxTYE80lCqVz4bose4wxKx6yrdOT
+         qBNA==
+X-Gm-Message-State: AOAM5303Yso00i8hxtl0VJeZi7vjt/LDhYVmjqPM2bi8O+3Ti8vuVZ+5
+        /KwnYDPM6ohS7bsdcw8BZBro6Q==
+X-Google-Smtp-Source: ABdhPJwq5eAXGJ3elIXn36dtCEJkNMZyb4zlD13QPFCAjEzIcC3itN/YiwwtnCDGtGpB44AxXeb1hw==
+X-Received: by 2002:a17:902:8c84:: with SMTP id t4mr4327588plo.78.1643998188528;
+        Fri, 04 Feb 2022 10:09:48 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id kx11sm2720754pjb.1.2022.02.04.10.09.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 10:09:47 -0800 (PST)
+Date:   Fri, 04 Feb 2022 10:09:47 -0800 (PST)
+X-Google-Original-Date: Fri, 04 Feb 2022 10:09:09 PST (-0800)
+Subject:     Re: [PATCH v5 00/12] Update the Icicle Kit device tree
+In-Reply-To: <20220131114726.973690-1-conor.dooley@microchip.com>
+CC:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        conor.dooley@microchip.com, daire.mcnamara@microchip.com,
+        ivan.griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     conor.dooley@microchip.com
+Message-ID: <mhng-2b6f8784-4c0c-432f-a6e7-97052ab900e7@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 6:46 PM Chaitanya Kulkarni <chaitanyak@nvidia.com> wrote:
+On Mon, 31 Jan 2022 03:47:15 PST (-0800), conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 >
-> Yang,
+> This series updates the Microchip Icicle Kit device tree by adding a
+> host of peripherals, and some updates to the memory map. In addition,
+> the device tree has been split into a third part, which contains "soft"
+> peripherals that are in the fpga fabric.
 >
-> On 2/3/22 12:12, Yang Shi wrote:
-> > Currently, rasdaemon uses the existing tracepoint block_rq_complete
-> > and filters out non-error cases in order to capture block disk errors.
-> >
-> > But there are a few problems with this approach:
-> >
-> > 1. Even kernel trace filter could do the filtering work, there is
-> >     still some overhead after we enable this tracepoint.
-> >
-> > 2. The filter is merely based on errno, which does not align with kernel
-> >     logic to check the errors for print_req_error().
-> >
-> > 3. block_rq_complete only provides dev major and minor to identify
-> >     the block device, it is not convenient to use in user-space.
-> >
-> > So introduce a new tracepoint block_rq_error just for the error case.
-> > With this patch, rasdaemon could switch to block_rq_error.
-> >
+> Several of the entries are for peripherals that have not get had their
+> drivers upstreamed, so in those cases the dt bindings are included where
+> appropriate in order to avoid the many "DT compatible string <x> appears
+> un-documented" errors.
 >
-> This patch looks good, but I've a question for you.
+> Depends on mpfs clock driver binding (on clk/next) to provide
+> dt-bindings/clock/microchip,mpfs-clock.h
+> and on the other changes to the icicle/mpfs device tree from geert
+> that are already in linux/riscv/for-next.
 >
-> We already have a tracepoint for the request completion
-> block_rq_complete(). We are adding a new tracepoint blk_rq_error()
-> that is also similar to what blk_rq_complete() reports.
-> Similar call sites  :-
-> trace_block_rq_complete(req, error, nr_bytes);
-> trace_block_rq_error(req, error, nr_bytes);
+> Additionally, the interrupt-extended warnings on the plic/clint are
+> cleared by [1] & [2].
 >
-> The only delta between blk_rq_complete() and blk_rq_error() is
-> cmd field for blk_rq_complete() in the TP_STRUCT_ENTRY() and
-> __get_str(cmd) field in TP_printk() which I don't think will
-> have any issue if we use that for blk_rq_error().
+> [1] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
+> [2] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
+>
+> Changes from v4:
+> - dont include icicle_kit_defconfig, accidentally added in v3
+> - drop prescaler from mpfs-rtc & calculate the value instead
+> - use corei2c as a fallback device for mpfs-i2c
+> - drop spi dt-binding (on spi-next)
+>   commit 2da187304e556ac59cf2dacb323cc78ded988169
+> - drop usb dt-binding (on usb-next)
+>
+> Changes from v3:
+> - drop "mailbox: change mailbox-mpfs compatible string", already upstream:
+>   commit f10b1fc0161cd99e ("mailbox: change mailbox-mpfs compatible string")
+> - fix copy paste error in microchip,mpfs-mailbox dt-binding
+> - remove whitespace in syscontroller dt entry
+>
+> Changes from v2:
+> - dropped plic int header & corresponding defines in dts{,i}
+> - use $ref to drmode in mpfs-musb binding
+> - split changes to dts{,i} again: functional changes to existing
+>   elements now are in a new patch
+> - drop num-cs property in mpfs-spi binding
+> - dont make the system controller a simple-mfd
+> - move the separate bindings for rng/generic system services into the
+>   system controller binding
+> - added an instance corei2c as i2c2 in the fabric dtsi
+> - add version numbering to corepwm and corei2c compat string (-rtl-vN)
+>
+> Conor Dooley (12):
+>   dt-bindings: soc/microchip: update syscontroller compatibles
+>   dt-bindings: soc/microchip: add services as children of sys ctrlr
+>   dt-bindings: i2c: add bindings for microchip mpfs i2c
+>   dt-bindings: rtc: add bindings for microchip mpfs rtc
+>   dt-bindings: gpio: add bindings for microchip mpfs gpio
+>   dt-bindings: pwm: add microchip corepwm binding
+>   riscv: dts: microchip: use clk defines for icicle kit
+>   riscv: dts: microchip: add fpga fabric section to icicle kit
+>   riscv: dts: microchip: refactor icicle kit device tree
+>   riscv: dts: microchip: update peripherals in icicle kit device tree
+>   riscv: dts: microchip: add new peripherals to icicle kit device tree
+>   MAINTAINERS: update riscv/microchip entry
+>
+>  .../bindings/gpio/microchip,mpfs-gpio.yaml    |  80 ++++++
+>  .../bindings/i2c/microchip,mpfs-i2c.yaml      |  57 ++++
+>  ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
+>  .../bindings/pwm/microchip,corepwm.yaml       |  75 +++++
+>  .../bindings/rtc/microchip,mfps-rtc.yaml      |  58 ++++
+>  .../microchip,mpfs-sys-controller.yaml        |  72 +++++
+>  ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
+>  MAINTAINERS                                   |   2 +
+>  .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
+>  .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
+>  .../boot/dts/microchip/microchip-mpfs.dtsi    | 262 +++++++++++++++---
+>  11 files changed, 683 insertions(+), 104 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+>  create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+>  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+>  create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
 
-Yes, I agree. Just no user needs it for our usecase.
+Looks like Rob still has some feedback that still needs to be addressed.  
+I'm happy to take these via the RISC-V tree when the bindings are set 
+(assuming the DTs match whatever gets agreed upons), but also fine if 
+someone else wants to take it so
 
->
-> Question 1 :- What prevents us from using the same format for
-> both blk_rq_complete() and blk_rq_error() ?
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Actually nothing if we ignore cmd.
+Either way, I'm going to drop this (and the v4, which was at the top of 
+my inbox) as it looks like there'll be at least a v6.
 
->
-> Question 2 :- assuming that blk_rq_complete() and blk_rq_error()
-> are using same format why can't we :-
->
-> declare DECLARE_EVENT_CLASS(blk_rq_completion....)
-> and use that class for blk_rq_complete() and blk_rq_error() ?
->
-> since if I remember correctly we need to define a event class
-> instead of duplicating a tracepoint with similar reporting.
-
-Very good point. I did overlook it. The original post did have disk
-name and didn't have cmd, now the two tracepoints look much more
-similar than the original post, so I agree the duplicate could be
-combined into an event class.
-
->
-> -ck
->
->
+Thanks!

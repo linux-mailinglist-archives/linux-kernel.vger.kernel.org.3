@@ -2,66 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACDE4AA345
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EDA4AA34B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351295AbiBDWi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:38:57 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:36756 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236523AbiBDWiz (ORCPT
+        id S1351571AbiBDWkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:40:04 -0500
+Received: from mail-oo1-f50.google.com ([209.85.161.50]:34470 "EHLO
+        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234084AbiBDWkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:38:55 -0500
-Received: by mail-oi1-f179.google.com with SMTP id s185so10223014oie.3;
-        Fri, 04 Feb 2022 14:38:55 -0800 (PST)
+        Fri, 4 Feb 2022 17:40:02 -0500
+Received: by mail-oo1-f50.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso935526ooi.1;
+        Fri, 04 Feb 2022 14:40:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=v38Kfg/wf9t6mUoqPaOFlIjuWloQG1bbjKXeADCLqYU=;
-        b=DjdqQ6MY4PVwbkQBCI8BarnQMeczP576lSL3Rj5WUuAihyb6/Ifh35mVwXM7yX7Mg+
-         EJ1/f9S+3SfhJ/8kCEbvf66wcdTE4Ygk6Mcxz0AIiKlclyWPWY1Nv29sqsU6+/AuZduQ
-         qgYJSyQDwRFmgp9sZFu/MO9SpoIe8caaj0hZq0l1CQ7kVryhcXSemYSfngml8Trr1VXY
-         XtIKuJevOs/P3NzOESK/+sUFyjlAjZhZPQjST0gpO9LAxdpuOFo/IjIcH+uHywNq4Cqy
-         wC2/ADAMqxXnYd+FkMrbqfrMqIgaTb1tCCBzcrm7KadvjBnEwVA+Qz7bx23+8/mshaY1
-         JdiQ==
-X-Gm-Message-State: AOAM532SaF7zUgqCBEal/l2rHrtEEGBpbrKLswnYExxLz3rgglVsdVUV
-        AV5xEysH8eIGZlsQ0lddGg==
-X-Google-Smtp-Source: ABdhPJyTrqs4CLu0auGGEAWVcE1rpCQ9ftRnQzFJS9Ype3oGGmsjbsjoLQ7hzZHWJCTfKDaIHZOw5Q==
-X-Received: by 2002:a05:6808:209e:: with SMTP id s30mr596076oiw.13.1644014334871;
-        Fri, 04 Feb 2022 14:38:54 -0800 (PST)
+        bh=4SpOqXKZyIeEOwKum6DXXuPPOySrNMUxlGQiydAANr0=;
+        b=1z8XVadVZd1fcb1V67q4LiItZ6Ax8g3myRWDGPnCWKWr/VkzHw2zyPSCOM0j4/2PA6
+         t7YYi0tkLU/svi0hB5Q4TBngTPCWcCxSDR4LJ7JH7oiAb7oV3tttXY5kzSs4Z/IkjiGI
+         ZLOG24kEmHqz6Rxb4wT4FtL9jVKvMCKWDRwWnEfuUdYABj9+JCUmntQFj2wjw8kmVY15
+         2vEYLE+HpIvFm5/rxTP+iQGw9nlz0kl/aRfPft+EC1o13A4uWlazWqDFwPW74I5jVBbr
+         a26izlSlETkfNLwvhRI3/fd+dWZJ8LTccOu6LXKHABJzUq25uJiU/yn2qepJAopQ8dLn
+         iEog==
+X-Gm-Message-State: AOAM531JVB66MUbY5rc+wCm98/P3zAPzuZA4d+MLCNv/Wa9gryST2gc0
+        27plIvPHQ98AcI7GUJ42fQ==
+X-Google-Smtp-Source: ABdhPJziJjQB0Qp80nJm3Y4Cy1qJ7dzDubZWuRGCVWikvMDlk1osf5kUVE4kGf/A/2TIRveTqnozng==
+X-Received: by 2002:a05:6870:1111:: with SMTP id 17mr311570oaf.171.1644014401893;
+        Fri, 04 Feb 2022 14:40:01 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x17sm1197653oop.1.2022.02.04.14.38.53
+        by smtp.gmail.com with ESMTPSA id p22sm1163371oae.33.2022.02.04.14.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:38:54 -0800 (PST)
-Received: (nullmailer pid 3312730 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:38:53 -0000
-Date:   Fri, 4 Feb 2022 16:38:53 -0600
+        Fri, 04 Feb 2022 14:40:01 -0800 (PST)
+Received: (nullmailer pid 3314444 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:39:59 -0000
+Date:   Fri, 4 Feb 2022 16:39:59 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        jic23@kernel.org, robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] dt-bindings:iio:frequency: add admv1014 binding
-Message-ID: <Yf2q/cZMebdudNny@robh.at.kernel.org>
-References: <20220131100102.15372-1-antoniu.miclaus@analog.com>
- <20220131100102.15372-2-antoniu.miclaus@analog.com>
+To:     conor.dooley@microchip.com
+Cc:     alexandre.belloni@bootlin.com, brgl@bgdev.pl,
+        devicetree@vger.kernel.org, daire.mcnamara@microchip.com,
+        robh+dt@kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, a.zummo@towertech.it,
+        geert@linux-m68k.org, jassisinghbrar@gmail.com,
+        paul.walmsley@sifive.com, lee.jones@linaro.org, palmer@dabbelt.com,
+        bin.meng@windriver.com, thierry.reding@gmail.com,
+        ivan.griffin@microchip.com, linux-i2c@vger.kernel.org,
+        atishp@rivosinc.com, heiko@sntech.de, linus.walleij@linaro.org,
+        lewis.hanly@microchip.com, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH v5 01/12] dt-bindings: soc/microchip: update
+ syscontroller compatibles
+Message-ID: <Yf2rPx1NHunFOzBu@robh.at.kernel.org>
+References: <20220131114726.973690-1-conor.dooley@microchip.com>
+ <20220131114726.973690-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131100102.15372-2-antoniu.miclaus@analog.com>
+In-Reply-To: <20220131114726.973690-2-conor.dooley@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 12:01:00 +0200, Antoniu Miclaus wrote:
-> Add device tree bindings for the ADMV1014 Upconverter.
+On Mon, 31 Jan 2022 11:47:16 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> The Polarfire SoC is currently using two different compatible string
+> prefixes. Fix this by changing "polarfire-soc-*" strings to "mpfs-*" in
+> its system controller in order to match the compatible string used in
+> the soc binding and device tree
+> 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
-> no changes in v5.
->  .../bindings/iio/frequency/adi,admv1014.yaml  | 137 ++++++++++++++++++
->  1 file changed, 137 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
+>  ...larfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} | 6 +++---
+>  ...s-controller.yaml => microchip,mpfs-sys-controller.yaml} | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>  rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+>  rename Documentation/devicetree/bindings/soc/microchip/{microchip,polarfire-soc-sys-controller.yaml => microchip,mpfs-sys-controller.yaml} (75%)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,180 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD144A9F80
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EAB4A9F83
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377753AbiBDStQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:49:16 -0500
-Received: from mail-dm6nam11on2055.outbound.protection.outlook.com ([40.107.223.55]:34946
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231779AbiBDStO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:49:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SYLaxdOdFeHLNZJ8qSNHDgCh+5575F3l1BIfZ8hxKS3WPW3ui7cmdMtwtWRjSc3gZ5DWNsNQGWuXRuqcUaoH4hsgYYT5RY0HbPHe/JV4pxStgqJLLRzrT3HJT3T81499nViilUULDRTjos7XpLqb0i6/FF1w+jJeR8BTQmcI5nr0llgop9TnexbjAaGtM8FKFeFeHQGZOJ8Rx+ALWYPo0VLPF4AzF99lDRwaMsXqxg1YH8Zsn9PPlQLdS4lTwvb/Nc3la7Ckjv7LoJFsXAKILdrJ1voWHkm6Cxf/NL/wLy7YjrAUyBe0PY3Yc3fJsOp2GkgOdBmXvMXudiHlBzJ+IQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xKwMvn6/wg6wzPAL9NJjubP9y5cy/fiy4m9rEZcwLFU=;
- b=i7P4HQ1me3Tb2itZ09aSBHgnuaQ9ZEifsPr+NUhK+wdcU1TTY/SF/8zwkEsan6pdR5cZ8GZt4Q4dfNfNNnN03wCStsZLnKmZyTuFZaXwGOCkVOQgJCzVZO/w71XVAKe5xoNHxDKlgev0ZK0ttcc7O7QGD10qPbYxgX0d8WRzomKNWmSSgCNLYH2hsgySg9emvLwtEt1fVTYm+xOOKVU1rdDFBI5k+BGGBqNADspLdErdlIaAr+m7IEWzblRuqb+t7paz+xKsU2jysU3LeyPmYkEcsF/O2gNkyAvE+nTyCFuxgjmqgYdgs5PF0x41nxkJlE5hGqMKkxaXRnjD1Y4jKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xKwMvn6/wg6wzPAL9NJjubP9y5cy/fiy4m9rEZcwLFU=;
- b=b9KrBJRo5zD7aYxNVI3bEnzY1o3L2/luRkJz4n5umAtksm8c+qsWtwYTdNRzvyrb4sAXL92PSOhnM5dYdT1a+kdEzulDkZRl+DJ33gjD7V+1me5/lihuyGvLZVurDpRCbgWG6otaw86OqTIMXH43G2s33rqZQMvs8jkbAjkDFcs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9)
- by BN7PR12MB2596.namprd12.prod.outlook.com (2603:10b6:408:29::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Fri, 4 Feb
- 2022 18:49:12 +0000
-Received: from BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::b9af:8be3:36e5:1a13]) by BL1PR12MB5221.namprd12.prod.outlook.com
- ([fe80::b9af:8be3:36e5:1a13%7]) with mapi id 15.20.4951.017; Fri, 4 Feb 2022
- 18:49:11 +0000
-Message-ID: <c0007699-61ae-6df3-0675-2ac6ee58a59c@amd.com>
-Date:   Fri, 4 Feb 2022 12:49:08 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, ardb@kernel.org,
-        dvhart@infradead.org, andy@infradead.org,
-        gregkh@linuxfoundation.org, rafael@kernel.org, rppt@kernel.org,
-        akpm@linux-foundation.org, daniel.gutson@eclypsium.com,
-        hughsient@gmail.com, alex.bazhaniuk@eclypsium.com,
-        alison.schofield@intel.com, keescook@chromium.org
-References: <20220203164328.203629-1-martin.fernandez@eclypsium.com>
- <20220203164328.203629-7-martin.fernandez@eclypsium.com>
- <67d2711b-200c-0894-4ff7-beb3eb304399@amd.com>
- <CAKgze5YM2+BRjj2nvb+_dnuCg5WtWvQ6FQyNYJ1c8G6Orn=aQw@mail.gmail.com>
- <5c5ffe29-d3d3-2955-cf78-ad275110f012@amd.com>
- <ec9e29a4-0d2b-1423-d92e-6f025b56f8cc@amd.com> <Yf1UO6jF91o9k4jB@zn.tnic>
- <5ee34cad-8daf-6282-f2ed-cbc92a89d013@amd.com> <Yf1p0ZjPf9Qaqwtg@zn.tnic>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v6 6/6] drivers/node: Show in sysfs node's crypto
- capabilities
-In-Reply-To: <Yf1p0ZjPf9Qaqwtg@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN6PR01CA0001.prod.exchangelabs.com (2603:10b6:805:b6::14)
- To BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9)
+        id S1377757AbiBDSun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:50:43 -0500
+Received: from mga01.intel.com ([192.55.52.88]:53933 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347727AbiBDSum (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 13:50:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644000642; x=1675536642;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o1K1uV/hMeSpUytiWvlE9GEbQToDadKm/dWWrO3/09Q=;
+  b=hWGeMFMp8UIGZbx8X+5X71atB1NtPoJHaHicQGPxUZEnHMVaf0wZGaT1
+   OYOg/A0lLla+iiX1keWr2Bwes3I//lD2AsRg6KMXwNNTmtCzSawjSMMZi
+   nyMARyEtNMkYp0h7qFO9f0NHC3JS3TW9kSVU6LJ6EtEMiEILdsXqICSfq
+   IfXwlrdg3BGNiLDv+pm+7qgZ8BMEy+tLJ3qI+QhpHLI7uiJb02MxY+pzb
+   h+uSdbFZVM3zJ3vnzH9dLRwxAYvPOwOj6h3+ITc+rb8sMjyfYX1L09Ywg
+   mB5WCC5koKRCvksL4xEtFLCK5/RAubZzGsiK0MdaEF4K/rrrxlZGZ9M7q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="272925739"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="272925739"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 10:50:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="772170961"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Feb 2022 10:50:40 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG3fM-000Y1R-4Q; Fri, 04 Feb 2022 18:50:40 +0000
+Date:   Sat, 5 Feb 2022 02:49:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:smc/work 9/11] include/linux/export.h:67:43: error:
+ redefinition of '__ksymtab_apple_smc_write'
+Message-ID: <202202050259.BKTS2NwP-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f21543e2-7dfe-44e2-7aa9-08d9e80f0864
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2596:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB25960C1D62897C7D495EC638EC299@BN7PR12MB2596.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AdlZstgIKzevcEHdrAQVeWyHag7hgLeqPLFLw8T9sd27pcBivw7tbScOHcMaea/gGHdLCdOHc/h70NYvaO4VrM3kl8H5PhitpQ3ivQ5lnSKXqv9xV7uIZOA6+PedlRE/F9gsmcJKYOWRfmYI+nsZNeT49Oi5s3Z5QTb2QY2fONFs9hWps5WnKZ5W9ai3uftQ1mWtY/XrsbiDDWDbbFsR9CH7c/XeK9v5Zr+G1jVWZsIm/14Pe7ULBT3uYMOcIhQhVlI9s6RSWSd/Jq6wwIFwVhbJDZlEDkg5vEIZxwlVmJwte3QVSsRd4yXBsDH8fmjijWRJ29ngvXsgvT+B28FDp3wH7w2ObS7yeu0IQurnXYNcIbKmuSnmRsha2iuvUH12dYRiRb9Ga6qkdA2w/l96nJl0BTsY5Y84vaYuTfn6VDywp7BuCv3Awj4tcgrdX3d7ClaAdrEeGiLW4Q7qwUXI1yTmkLsZM8tt+BJgwKj9XSBBzH1CB1t5ds6nSxLQC92rwgRAVkgXRloNGpdYZX1Mu58z7UT+unihfaBbZ6oi6hw3yQPZSRuqFPgKU3qJJ0tMZHboDhK8bDGduMGczmpJ1nNF0bSxZm6De0UBnUEI2+KtECf0s9u5zI0ZntvjXC+cwWrAEmfXHf2hkkWYcgTdzjydEEW21bxBbog7KEsLQpZzLQuv6vpow+WUPmBrc0yDJiRUCs73LbH3XtYIWqB52Z/I8MEy5c1iYxVIvbTZybYb1W8fUkqLnGIQWEpwpsaEfp2Fl81R71nOUv40WVxDr8Wmn/eRfnKn1dwNkQAb39OFf1K6MnEGj/axD+ng6GrX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5221.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(66574015)(86362001)(83380400001)(966005)(6486002)(53546011)(6666004)(186003)(38100700002)(36756003)(54906003)(31686004)(2616005)(6506007)(508600001)(6512007)(7416002)(5660300002)(2906002)(66556008)(66946007)(8676002)(8936002)(66476007)(316002)(26005)(4326008)(6916009)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L25hTVZucVpQa2tjOTJOakRKMU9YWWllTmlZd0twSFc3RHhjMkxnbnA2a1ln?=
- =?utf-8?B?dld5MFVrWnJQay9qM1h6UWpIV3l3L3JxSVNsWlRSQXlnemF2bDhNTDZVd0Nj?=
- =?utf-8?B?eklGbWIrSEo4VE14TUxiYmEwdWNHejNwS1Q4KzdlcmNZZXEvaUI4VTFtdEcv?=
- =?utf-8?B?QzVSb0hOQUVDSkZrbzhydndmRXIxZnFMa2hRSEdBYXlzLzdrSEExQmlDL0pX?=
- =?utf-8?B?N0N2b25sNXZPUEVyQlM5MmRhYjZNcFI0WHIrK2U3Q0RnaDlKUkpVOEpRVmlC?=
- =?utf-8?B?clNZZ2VXdURwSGpYam9NenZGMmQyam1KZHJ2OUhFbzZ6cFc4Sk1lS0VZM21N?=
- =?utf-8?B?MFI2cHVYT2hkcTFpOXVIOGlaMXo0Znluci81c1hIa3Zwb2FlRjNCSlc2ZHRW?=
- =?utf-8?B?enNhN3VneUg2NTJlR3VXeVkvZk5SOGhmeFA0V1U2ZWVpbjNFQ0NNYm1aOXJh?=
- =?utf-8?B?ZmlJM1lCaU90VmloQUtnL2FpUGJHK3RsbnQrSk03cnVNWGtyaWtVbVNMNFFo?=
- =?utf-8?B?cTV1VHhlM2JZUEJFVEorR3JONmVDSFlZUzBKQ1EzYnZMN2Z0MVJjRmlMVU1z?=
- =?utf-8?B?UEUvcFpIazNqQ2Q5enhXU2FONEwzY0dkNXJNRCtVQUt1RC8vU1dyUVZqWEFL?=
- =?utf-8?B?U0dMRXo4NVJ2QlNIdmhyRHJ5aCtPOWNsTDdTVjFUQ0NNYVVjbEpVamJKT2JW?=
- =?utf-8?B?elRpVHlOUUQzNFI3V3VTOW5jUkxXWU1iS24zSTlSU29Sb003dTdPSVBIZzFH?=
- =?utf-8?B?dFF3K0UwenkvOVoxRHhFRkJ3eHBVMWxsbGxCRXNJNmlmaVBMcXdKeHNSa3Ju?=
- =?utf-8?B?TndNMGV3cTIrR2NBdkV6S0MxbW9FcUJJVzN4dlZyOERCMUNMWHIxSFZMeWI1?=
- =?utf-8?B?eXdXamZaMThvMmkreE5jenJ0N0RXOUdEdFUzTm5kTVZ6N3ZkeDdWTnF2UzRk?=
- =?utf-8?B?MnVnaFJUbC84ZmM5ZldicytxRjY0SWRkd1JpZnErTEJuREV6dHdEbEw3VXBB?=
- =?utf-8?B?TU9PTDNDSG9TK21PSjlxTG0yaXh4VnFiUXJYUGJSdGtrR0txTlNTSTZvblJn?=
- =?utf-8?B?OHMyenQ4WEN0VXkvY3BlQnhnejF0cytxc2hvVGlTUExaZ2psakEvU3ZQcXhz?=
- =?utf-8?B?Y2NCcHV3SDlVSmlVOUM0a0NkTG5aRWVnNUdpUEJlcWJpZ1ByaU4wdTQ2RnRp?=
- =?utf-8?B?bFNmTjdoc0hsSUJiQXJLZUtDeTdpZmxvVDh2Uk04MzRqRjExQ1djVmszNk5z?=
- =?utf-8?B?Q0xDOEtUVDMxa0htZlZYRmJ2RWRPYkx3RWxSWmpkVzcwb2k1V1YwY1BIRG5R?=
- =?utf-8?B?QWVSNGdoU3JuRlVUQkFWY3JXd2VNZlBPUjd0Mllzbnd0K2dWNjB2UXphZ0RN?=
- =?utf-8?B?cmNZYVlQM1NmbXpMeW4rY1VaWDhIU3JTc0hCdXg5clhzaVJDODE3OUxhcjhx?=
- =?utf-8?B?TnFHako1REQvM3VDMmdCbEdJNmN3WU1pbXpIVEMwUjhya0VvMkJqMFV6cTV2?=
- =?utf-8?B?WUhxT2ZuTWRoUStybU5MaE1oQ0MwK0x5K3h5Y1FwaC8xVUJadjkxNk5ZMSsr?=
- =?utf-8?B?L3JJaUcyYVplT0ZCakRRVEdXbEhiTmpnNmhJUWNmdjV2RnBSdG5BSlRBekZt?=
- =?utf-8?B?OEJVWEFtSTFwZFhVd0t2bjhnN2ZoT0RHUkhZNkEwK2lkSFU3a1NuWWUzMUJo?=
- =?utf-8?B?TWsvTGdaT3lZdkxMZlBRTWVKb0lYS29uQ05sdHBmZ2lUMmVOMnVjUVR5NWZR?=
- =?utf-8?B?NVd6amlQZWNkTzUxYVpadEljbWRwdmdKYk9qQTZMRVVDUStWaUFqUUxGalcw?=
- =?utf-8?B?dlY2Ry8rREdCQlNadVhJcmw1WXlTL0c1TnhFQ0EvcTlidldkRklvZ2M5dU1Q?=
- =?utf-8?B?bENFN1BvWkUvb2Q3NnFpczBrQWxSTkJ3SWdZQ0QvcEx4RTV2bmxFS1lWd0dD?=
- =?utf-8?B?UXl4N0w0aVFQb0J0cFlyYnc2dzhQeElTUmJEQzFwTHhFVTJjQ0x4WXpxeno5?=
- =?utf-8?B?WWVCT1FlcFc4Y05RUnhXWWF5R201cWxQRTZ2ejJrMXh4cFdrMUFFV3ZuZWgv?=
- =?utf-8?B?RUZyUnVBRnd6Rjc1bnhzMVlrZy9yNVRSTmtPRXc3TlprRk5LWndCd2dhbmlJ?=
- =?utf-8?B?RFdzMUFEb29oVG83VUU5WUZmNFU2RWdEQldTYVp6Vzd1MkJ6bSt5SnUxN2pv?=
- =?utf-8?Q?CEyLTdDVrCqTM21F4KkAgcE=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f21543e2-7dfe-44e2-7aa9-08d9e80f0864
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5221.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 18:49:11.6497
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3wFTqCgUoalYUAZhTH9T/0Yu+hAlJ8HAp5cpzJh3oOfmqAj1syWk9TKh8FIa8PJOtEQzqFmOfBsNRaPpXBZw1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2596
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 12:00, Borislav Petkov wrote:
-> On Fri, Feb 04, 2022 at 11:12:04AM -0600, Tom Lendacky wrote:
->> https://elixir.bootlin.com/linux/latest/source/arch/x86/kernel/process.c#L761
-> 
-> For those who won't open a browser just to see what he means :), that's
-> this snippet:
-> 
-> void stop_this_cpu(void *dummy):
-> 	/*
-> 	 * Use wbinvd on processors that support SME. This provides support
-> 	 * for performing a successful kexec when going from SME inactive
-> 	 * to SME active (or vice-versa). The cache must be cleared so that
-> 	 * if there are entries with the same physical address, both with and
-> 	 * without the encryption bit, they don't race each other when flushed
-> 	 * and potentially end up with the wrong entry being committed to
-> 	 * memory.
-> 	 */
-> 	if (boot_cpu_has(X86_FEATURE_SME))
-> 		native_wbinvd();
-> 
-> 
-> Well, we do clear our *representation* of CPUID flags for other features
-> - see output of
-> 
-> $ git grep -E "(setup_)?clear_cpu_cap"
-> 
-> for examples. We do that for SME even: early_detect_mem_encrypt().
-> 
-> Which means, since this needs to be "processors that support SME", this
-> line should change to:
-> 
-> 	/* ... test the CPUID bit directly because the machine might've cleared
-> 	 * X86_FEATURE_SME due to cmdline options.
-> 	 */
-> 	if (cpuid_eax(0x8000001f) & BIT(0))
-> 		native_wbinvd();
-> 
-> I'd say...
+tree:   https://github.com/AsahiLinux/linux smc/work
+head:   fc848a39b71518ca1661de7057b87cb0e8cac9f9
+commit: a429c9bbeba2b08856339793bd4a0d1a65a730a1 [9/11] platform/apple: Add new Apple Mac SMC driver
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220205/202202050259.BKTS2NwP-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/a429c9bbeba2b08856339793bd4a0d1a65a730a1
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux smc/work
+        git checkout a429c9bbeba2b08856339793bd4a0d1a65a730a1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/platform/apple/
 
-Yep, and that should be safe. We would have to look at the generated code 
-as there can't be any memory stores after the native_wbinvd() and before 
-the native_halt().
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Tom
+All errors (new ones prefixed by >>):
 
-> 
+   In file included from include/linux/linkage.h:7,
+                    from include/linux/preempt.h:10,
+                    from include/linux/rcupdate.h:27,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/platform/apple/smc_core.c:7:
+>> include/linux/export.h:67:43: error: redefinition of '__ksymtab_apple_smc_write'
+      67 |         static const struct kernel_symbol __ksymtab_##sym               \
+         |                                           ^~~~~~~~~~
+   include/linux/export.h:108:9: note: in expansion of macro '__KSYMTAB_ENTRY'
+     108 |         __KSYMTAB_ENTRY(sym, sec)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/export.h:152:41: note: in expansion of macro '___EXPORT_SYMBOL'
+     152 | #define __EXPORT_SYMBOL(sym, sec, ns)   ___EXPORT_SYMBOL(sym, sec, ns)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/export.h:160:41: note: in expansion of macro '__EXPORT_SYMBOL'
+     160 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/export.h:163:41: note: in expansion of macro '_EXPORT_SYMBOL'
+     163 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/platform/apple/smc_core.c:69:1: note: in expansion of macro 'EXPORT_SYMBOL'
+      69 | EXPORT_SYMBOL(apple_smc_write);
+         | ^~~~~~~~~~~~~
+   include/linux/export.h:67:43: note: previous definition of '__ksymtab_apple_smc_write' with type 'const struct kernel_symbol'
+      67 |         static const struct kernel_symbol __ksymtab_##sym               \
+         |                                           ^~~~~~~~~~
+   include/linux/export.h:108:9: note: in expansion of macro '__KSYMTAB_ENTRY'
+     108 |         __KSYMTAB_ENTRY(sym, sec)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/export.h:152:41: note: in expansion of macro '___EXPORT_SYMBOL'
+     152 | #define __EXPORT_SYMBOL(sym, sec, ns)   ___EXPORT_SYMBOL(sym, sec, ns)
+         |                                         ^~~~~~~~~~~~~~~~
+   include/linux/export.h:160:41: note: in expansion of macro '__EXPORT_SYMBOL'
+     160 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/export.h:163:41: note: in expansion of macro '_EXPORT_SYMBOL'
+     163 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/platform/apple/smc_core.c:56:1: note: in expansion of macro 'EXPORT_SYMBOL'
+      56 | EXPORT_SYMBOL(apple_smc_write);
+         | ^~~~~~~~~~~~~
+>> drivers/platform/apple/smc_core.c:135:1: error: expected ',' or ';' before 'struct'
+     135 | struct apple_smc *apple_smc_probe(struct device *dev, const struct apple_smc_backend_ops *ops, void *cookie)
+         | ^~~~~~
+   drivers/platform/apple/smc_core.c:25:30: warning: 'apple_smc_devs' defined but not used [-Wunused-const-variable=]
+      25 | static const struct mfd_cell apple_smc_devs[] = {
+         |                              ^~~~~~~~~~~~~~
+--
+   drivers/platform/apple/smc_rtkit.c: In function 'apple_smc_cmd':
+>> drivers/platform/apple/smc_rtkit.c:69:16: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+      69 |         msg = (FIELD_PREP(SMC_MSG, cmd) |
+         |                ^~~~~~~~~~
+>> drivers/platform/apple/smc_rtkit.c:85:13: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+      85 |         if (FIELD_GET(SMC_ID, smc->cmd_ret) != smc->msg_id) {
+         |             ^~~~~~~~~
+   In file included from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from drivers/platform/apple/smc_rtkit.c:8:
+   drivers/platform/apple/smc_rtkit.c: At top level:
+>> drivers/platform/apple/smc_rtkit.c:332:25: error: 'apple_smc_of_match' undeclared here (not in a function); did you mean 'apple_smc_rtkit_of_match'?
+     332 | MODULE_DEVICE_TABLE(of, apple_smc_of_match);
+         |                         ^~~~~~~~~~~~~~~~~~
+   include/linux/module.h:244:15: note: in definition of macro 'MODULE_DEVICE_TABLE'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |               ^~~~
+>> include/linux/module.h:244:21: error: '__mod_of__apple_smc_of_match_device_table' aliased to undefined symbol 'apple_smc_of_match'
+     244 | extern typeof(name) __mod_##type##__##name##_device_table               \
+         |                     ^~~~~~
+   drivers/platform/apple/smc_rtkit.c:332:1: note: in expansion of macro 'MODULE_DEVICE_TABLE'
+     332 | MODULE_DEVICE_TABLE(of, apple_smc_of_match);
+         | ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/__ksymtab_apple_smc_write +67 include/linux/export.h
+
+f50169324df4ad9 Paul Gortmaker    2011-05-23  41  
+7290d58095712a8 Ard Biesheuvel    2018-08-21  42  #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+7290d58095712a8 Ard Biesheuvel    2018-08-21  43  #include <linux/compiler.h>
+7290d58095712a8 Ard Biesheuvel    2018-08-21  44  /*
+7290d58095712a8 Ard Biesheuvel    2018-08-21  45   * Emit the ksymtab entry as a pair of relative references: this reduces
+7290d58095712a8 Ard Biesheuvel    2018-08-21  46   * the size by half on 64-bit architectures, and eliminates the need for
+7290d58095712a8 Ard Biesheuvel    2018-08-21  47   * absolute relocations that require runtime processing on relocatable
+7290d58095712a8 Ard Biesheuvel    2018-08-21  48   * kernels.
+7290d58095712a8 Ard Biesheuvel    2018-08-21  49   */
+7290d58095712a8 Ard Biesheuvel    2018-08-21  50  #define __KSYMTAB_ENTRY(sym, sec)					\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  51  	__ADDRESSABLE(sym)						\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  52  	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+ed13fc33f763035 Matthias Maennich 2019-09-06  53  	    "	.balign	4					\n"	\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  54  	    "__ksymtab_" #sym ":				\n"	\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  55  	    "	.long	" #sym "- .				\n"	\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  56  	    "	.long	__kstrtab_" #sym "- .			\n"	\
+c3a6cf19e695c8b Masahiro Yamada   2019-10-18  57  	    "	.long	__kstrtabns_" #sym "- .			\n"	\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  58  	    "	.previous					\n")
+7290d58095712a8 Ard Biesheuvel    2018-08-21  59  
+7290d58095712a8 Ard Biesheuvel    2018-08-21  60  struct kernel_symbol {
+7290d58095712a8 Ard Biesheuvel    2018-08-21  61  	int value_offset;
+7290d58095712a8 Ard Biesheuvel    2018-08-21  62  	int name_offset;
+8651ec01daedad2 Matthias Maennich 2019-09-06  63  	int namespace_offset;
+7290d58095712a8 Ard Biesheuvel    2018-08-21  64  };
+7290d58095712a8 Ard Biesheuvel    2018-08-21  65  #else
+7290d58095712a8 Ard Biesheuvel    2018-08-21  66  #define __KSYMTAB_ENTRY(sym, sec)					\
+7290d58095712a8 Ard Biesheuvel    2018-08-21 @67  	static const struct kernel_symbol __ksymtab_##sym		\
+7290d58095712a8 Ard Biesheuvel    2018-08-21  68  	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+ed13fc33f763035 Matthias Maennich 2019-09-06  69  	__aligned(sizeof(void *))					\
+c3a6cf19e695c8b Masahiro Yamada   2019-10-18  70  	= { (unsigned long)&sym, __kstrtab_##sym, __kstrtabns_##sym }
+7290d58095712a8 Ard Biesheuvel    2018-08-21  71  
+
+:::::: The code at line 67 was first introduced by commit
+:::::: 7290d58095712a89f845e1bca05334796dd49ed2 module: use relative references for __ksymtab entries
+
+:::::: TO: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

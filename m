@@ -2,93 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CE24A99C6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA80C4A99CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352852AbiBDNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350186AbiBDNPC (ORCPT
+        id S1353254AbiBDNRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:17:45 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4672 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234895AbiBDNRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:15:02 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B80CC061714;
-        Fri,  4 Feb 2022 05:15:02 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id m11so13078635edi.13;
-        Fri, 04 Feb 2022 05:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Wlf/9/9pC1/FBmXcXyBT4VyTkvuSdtfrd6W4gAtkuYY=;
-        b=ffPb315I/3bwNF2HMPkoa2aCMni5mGXcD2a50QtmHSVJyV3Q0V+sAAk8bU6CvZdSWG
-         VJddLmCSy2+7Ww8mc1sHz1IrOp+HIduGuRqSDLAxVLAwnGE/Ux4equHwBsO7rE2VHR56
-         9XJZ8Cq7+SU6wdgJLqpyRWWy9dUFqXV9M/AV6W0UPPJmzNlDZNr7WzJoJx2PQ586mg59
-         bfP+lrUFMgPDIzar5Kv4BkxHUCkTtbjcvCiIL9ECzIGg79NuRnVL8fgRnVlKwfCSEblN
-         HNHvh/lE8pTWXXl+k77ctfNbJJZkPw6P9yAUbtYQYQxA7DiZKO2cJ0/YzY6OVbaJ87Z6
-         PKzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Wlf/9/9pC1/FBmXcXyBT4VyTkvuSdtfrd6W4gAtkuYY=;
-        b=tGMqvzzT0lpGh6Jg+eamr0XTU4Tovrfs7lc3z5/RihQe9XzSfI989w30Xkc9dZsw+4
-         XSbiRsHg8dyvY8kjkxBSD2nHHb+2kuFmBp4Y4csZE+qk01ofu7u75ViYo8GDJZC7Oevh
-         RRXZB9rB+ST8FdEEiAflHSdKoLk69Mohdog9q3IiBjY9oadIW0U/EH1wdmVzdLVcmWeW
-         ezYSrg5Q4R4NpQT5+572ujjSJEcl7X9GXUlfKkqJvRFnS6iBOgFSy9ziqjko+SACL7d5
-         mTm2ZnYnrOxEE2MmGNB5WzheLUFeWeXeamJ5flHMT4qrRcsp1qKDNLG1V52JmsvY6S7l
-         ml9g==
-X-Gm-Message-State: AOAM531WiodUaReOqTdO3i2BpNcwh5o16GvRToGcc4lNrxBJiqGf4o/h
-        2QbMluwA/MZ72Se/YomXDYw=
-X-Google-Smtp-Source: ABdhPJwsVYGu3pqboKYhFBhnfnS2t7meLiUDAYHcpfj8EeYrCAkgIiO+Jge6E5oUfCxeN/L6rO3DzA==
-X-Received: by 2002:a05:6402:520d:: with SMTP id s13mr2958767edd.132.1643980500495;
-        Fri, 04 Feb 2022 05:15:00 -0800 (PST)
-Received: from kwango.redhat.com (ip-89-102-68-162.net.upcbroadband.cz. [89.102.68.162])
-        by smtp.gmail.com with ESMTPSA id z6sm655157ejd.35.2022.02.04.05.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 05:15:00 -0800 (PST)
-From:   Ilya Dryomov <idryomov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Ceph fixes for 5.17-rc3
-Date:   Fri,  4 Feb 2022 14:15:18 +0100
-Message-Id: <20220204131518.13859-1-idryomov@gmail.com>
-X-Mailer: git-send-email 2.19.2
+        Fri, 4 Feb 2022 08:17:45 -0500
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jqx015Hssz67dLY;
+        Fri,  4 Feb 2022 21:17:05 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 4 Feb 2022 14:17:41 +0100
+Received: from localhost (10.47.31.86) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 4 Feb
+ 2022 13:17:41 +0000
+Date:   Fri, 4 Feb 2022 13:17:38 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH V6 08/10] cxl/cdat: Introduce cdat_hdr_valid()
+Message-ID: <20220204131738.00004acf@Huawei.com>
+In-Reply-To: <20220201222903.GP785175@iweiny-DESK2.sc.intel.com>
+References: <20220201071952.900068-1-ira.weiny@intel.com>
+        <20220201071952.900068-9-ira.weiny@intel.com>
+        <20220201185640.4kc5v66vsxd3cial@intel.com>
+        <20220201222903.GP785175@iweiny-DESK2.sc.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.31.86]
+X-ClientProxiedBy: lhreml724-chm.china.huawei.com (10.201.108.75) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, 1 Feb 2022 14:29:03 -0800
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+> On Tue, Feb 01, 2022 at 10:56:40AM -0800, Widawsky, Ben wrote:
+> > On 22-01-31 23:19:50, ira.weiny@intel.com wrote:  
+> > > From: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > The CDAT data is protected by a checksum which should be checked when
+> > > the CDAT is read to ensure it is valid.  In addition the lengths
+> > > specified should be checked.
+> > > 
+> > > Introduce cdat_hdr_valid() to check the checksum.  While at it check and
+> > > store the sequence number.
+> > > 
+> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > > 
+> > > ---
+> > > Changes from V5
+> > > 	New patch, split out
+> > > 	Update cdat_hdr_valid()
+> > > 		Remove revision and cs field parsing
+> > > 			There is no point in these
+> > > 		Add seq check and debug print.
+> > > ---
+> > >  drivers/cxl/cdat.h |  2 ++
+> > >  drivers/cxl/pci.c  | 32 ++++++++++++++++++++++++++++++++
+> > >  2 files changed, 34 insertions(+)
+> > > 
+> > > diff --git a/drivers/cxl/cdat.h b/drivers/cxl/cdat.h
+> > > index 4722b6bbbaf0..a7725d26f2d2 100644
+> > > --- a/drivers/cxl/cdat.h
+> > > +++ b/drivers/cxl/cdat.h
+> > > @@ -88,10 +88,12 @@
+> > >   *
+> > >   * @table: cache of CDAT table
+> > >   * @length: length of cached CDAT table
+> > > + * @seq: Last read Sequence number of the CDAT table
+> > >   */
+> > >  struct cxl_cdat {
+> > >  	void *table;
+> > >  	size_t length;
+> > > +	u32 seq;
+> > >  };
+> > >  
+> > >  #endif /* !__CXL_CDAT_H__ */
+> > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> > > index 28b973a9e29e..c362c75feed2 100644
+> > > --- a/drivers/cxl/pci.c
+> > > +++ b/drivers/cxl/pci.c
+> > > @@ -586,6 +586,35 @@ static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static bool cxl_cdat_hdr_valid(struct device *dev, struct cxl_cdat *cdat)
+> > > +{
+> > > +	u32 *table = cdat->table;
+> > > +	u8 *data8 = cdat->table;
+> > > +	u32 length, seq;
+> > > +	u8 check;
+> > > +	int i;
+> > > +
+> > > +	length = FIELD_GET(CDAT_HEADER_DW0_LENGTH, table[0]);
+> > > +	if (length < CDAT_HEADER_LENGTH_BYTES)
+> > > +		return false;
+> > > +
+> > > +	if (length > cdat->length)
+> > > +		return false;
+> > > +
+> > > +	seq = FIELD_GET(CDAT_HEADER_DW3_SEQUENCE, table[3]);
+> > > +
+> > > +	/* Store the sequence for now. */
+> > > +	if (cdat->seq != seq) {
+> > > +		dev_info(dev, "CDAT seq change %x -> %x\n", cdat->seq, seq);
+> > > +		cdat->seq = seq;
+> > > +	}  
+> > 
+> > If sequence hasn't changed you could short-circuit the checksum.  
+> 
+> I'm not sure.  Jonathan mentioned that reading may race with updates and that
+> the correct thing to do is re-read.[1]
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+As things stand I 'think' a failure of the checksum on a previous run wouldn't
+mean we didn't store the sequence number.
 
-are available in the Git repository at:
+Now we only call this once at the moment so that doesn't matter yet..
 
-  https://github.com/ceph/ceph-client.git tags/ceph-for-5.17-rc3
+If on each call we rerun to hopefully get an update after the race with
+a good checksum / sequence number and don't store it on failure to validate
+then we could indeed just use the sequence check to skip the checksum validation.
+Mind you this isn't a hot path... Do we really care? 
 
-for you to fetch changes up to 038b8d1d1ab1cce11a158d30bf080ff41a2cfd15:
 
-  libceph: optionally use bounce buffer on recv path in crc mode (2022-02-02 18:50:36 +0100)
+> 
+> But I should probably check the CS first...
+> 
+> Ira
+> 
+> [1] https://lore.kernel.org/linux-cxl/20211108145239.000010a5@Huawei.com/
+> 
+> >   
+> > > +
+> > > +	for (check = 0, i = 0; i < length; i++)
+> > > +		check += data8[i];
+> > > +
+> > > +	return check == 0;
+> > > +}
+> > > +
+> > >  #define CDAT_DOE_REQ(entry_handle)					\
+> > >  	(FIELD_PREP(CXL_DOE_TABLE_ACCESS_REQ_CODE,			\
+> > >  		    CXL_DOE_TABLE_ACCESS_REQ_CODE_READ) |		\
+> > > @@ -658,6 +687,9 @@ static int cxl_cdat_read_table(struct cxl_dev_state *cxlds,
+> > >  
+> > >  	} while (entry_handle != 0xFFFF);
+> > >  
+> > > +	if (!cxl_cdat_hdr_valid(cxlds->dev, cdat))
+> > > +		return -EIO;
+> > > +
+> > >  	return 0;
+> > >  }
+> > >  
+> > > -- 
+> > > 2.31.1
+> > >   
 
-----------------------------------------------------------------
-A patch to make it possible to disable zero copy path in the messenger
-to avoid checksum or authentication tag mismatches and ensuing session
-resets in case the destination buffer isn't guaranteed to be stable.
-
-----------------------------------------------------------------
-Ilya Dryomov (2):
-      libceph: make recv path in secure mode work the same as send path
-      libceph: optionally use bounce buffer on recv path in crc mode
-
- include/linux/ceph/libceph.h   |   1 +
- include/linux/ceph/messenger.h |   5 +
- net/ceph/ceph_common.c         |   7 ++
- net/ceph/messenger.c           |   4 +
- net/ceph/messenger_v1.c        |  54 ++++++++-
- net/ceph/messenger_v2.c        | 250 ++++++++++++++++++++++++++++++-----------
- 6 files changed, 251 insertions(+), 70 deletions(-)

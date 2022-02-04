@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD294A9FF6
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3ED4A9FFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiBDTWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S233118AbiBDT0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiBDTWo (ORCPT
+        with ESMTP id S230453AbiBDT0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:22:44 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637E5C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:22:43 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id b22so5546451qkk.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 11:22:43 -0800 (PST)
+        Fri, 4 Feb 2022 14:26:01 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D31BC061714;
+        Fri,  4 Feb 2022 11:26:01 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id k25so22043171ejp.5;
+        Fri, 04 Feb 2022 11:26:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5odN6rMwltUoUEaPnfnI/Lwo2lMwPdE9aw/xm4uKQro=;
-        b=OQW1BNsJP3CX3IWKdckwO+Who2ZvMboyjVmT0ml0RenWk1xvYjkf0bhQMxcAfMVxES
-         63cTYk1FlcVVeS30hxkAx0J+cAToUYOHJ6y2wroPP95irRjAbEHmOswbJBkVfTVpWNHp
-         BPaTVoWNys9F115cJfEM2Z14ChvlNhcMDf1QIbkj7HBhsdqJhO7pfEezBSZZvJ57y4fd
-         3TGNQGk9sI1j2hFZJF9m15H0GdtXkblQNdQ+k60O40pGbEW9ve4LXfTGO56qDhqrqFYs
-         XGZJevT/nrvIjrjs0lOgAVexKzjJdvNDR3T2rg53j3Y+N4qYWdlShRmPWqjQchm6Oddh
-         Flqw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JAQgvbZbf+Jfe1NVQF7RjZIKqkwocaNR3cyKrpFomR4=;
+        b=owghA3Xndpxd94nD/h6IzdWdp0xrg1RVr+Zha1xgMLjA9Ph84hd/n2QKTNu1MmaXwY
+         HVkKsCkGp60Fol3RO/0l690OrxtuvszvVxoiVX7DIM+vJAzQlGnGPndZV78Eq7zgNKyw
+         o4tNDdNlIJzb9PJ/+hCSv9XMapRlPiHjO5yx1SKmHNSLVTjQOKP3GnSqkLFjTc3PRzvD
+         QCxzmeMobuUAewI6iNZttTzFcF65BbcpIZ3l50SYInjdTeMXkifcJB0dW3PtlfZ5HC1t
+         bmO1xdWYLbZDd4XE/Cb2qe8RnN8zx6kJNfBEB89fAddWv0/liji2kb2vkc/mGR1OIoXP
+         1hLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5odN6rMwltUoUEaPnfnI/Lwo2lMwPdE9aw/xm4uKQro=;
-        b=o00JZ4TlTqRcWVJYqMLd4Meze831roFzfc1Km9Apb3w9O3JzX5X+evq2mIwNlyiW9F
-         go683bIAWGFXHmLSvpXFpiGeQRaFsOkx+wuI0kOUHDXjKTTxWWQ4vJRf64Unfvo4DV5H
-         hxiyvwRmFBuS5IS7H847dp3ZX0FIqEb21sezAPBDWAHcbcnDyGpx65R3yjQXPWjlqjJu
-         Zz3njSmORWiRYYaVXC05aM08qmLS7Ob6VDaluzofP9XhUf2021yfQNxh+IJAxRRzzEz4
-         QLOXliQI3f6gyEvwlM/wt7LWhvEHIPeumsA7eRsd6yI2uOGZbPKDUfchSm8iqPzler8K
-         P0Cg==
-X-Gm-Message-State: AOAM530R/DW7Zg9/iZqjpM+MKzgksD/l2T4plUI4yt2B1T3DOsv9TfAK
-        z8niVr8igbSGyKkAcq2p+y39qA==
-X-Google-Smtp-Source: ABdhPJxMbUuv4qndRwWDoPG9ugcKRGL0z1iH6EYEWqmFX7Qc4bhvV0UY4cEzZh5+fjnOD2+IirMukg==
-X-Received: by 2002:a05:620a:4093:: with SMTP id f19mr378593qko.306.1644002562420;
-        Fri, 04 Feb 2022 11:22:42 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id u17sm1551317qkp.90.2022.02.04.11.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 11:22:41 -0800 (PST)
-Date:   Fri, 4 Feb 2022 14:22:40 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] memcg: add per-memcg total kernel memory stat
-Message-ID: <Yf19ABluqVyNd5pI@cmpxchg.org>
-References: <20220203193856.972500-1-yosryahmed@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JAQgvbZbf+Jfe1NVQF7RjZIKqkwocaNR3cyKrpFomR4=;
+        b=3fV0LD9vKnS0+PGuw+3h3+kqubSxLIovlmMupZD7dIyNc41F38tx/7s69a7uwlaQJ9
+         EbmV6cds98NrIKWLlAEkUilsp+74yb8tzrIBUDIGVZZvVM7TX0pC8COuqYPlB4ebGKGr
+         C9HJA8q0AaBr9gJ9aLL9fGiY+JPLfYz/ugyYy41YRN4OGgMmGONIvD0zOc1ieuBJCFQC
+         D/58p8NY+7yPf36VfPCfWiQcOT/gRZQrCc+72LNb0Km1FoyNWHLhS6H3CbwZGuA/lgD1
+         T4W1YNVwZBrf5vGeDOpbXPO2DZoT0IszwFlUNRBReboAXu4+XNnVf52UsB/Rn4e0uuXP
+         ohdw==
+X-Gm-Message-State: AOAM531UPtWTn9U69bCadFyrYEqq91yH4Ea6zYYHJeamKTUzadgqUfD7
+        npDtENu7ls5QkKSeOgObbCDzN3ZWN7MAejDaazDwoe2z7i0=
+X-Google-Smtp-Source: ABdhPJycWwkrN9pRI1l8a4JkOF7Pd2UBIsMZmMJz06bpanLSRDjpU0LssTFChDe6TekuDdGU1tMD98Brd8Knw+/S0rI=
+X-Received: by 2002:a17:906:c14d:: with SMTP id dp13mr387025ejc.132.1644002759637;
+ Fri, 04 Feb 2022 11:25:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203193856.972500-1-yosryahmed@google.com>
+References: <20220127200636.1456175-1-sean.anderson@seco.com>
+ <20220127200636.1456175-6-sean.anderson@seco.com> <CAHp75Vc--RYW7P0wLA8Jcr53xKSkphJV=wTeZiPC-AYu4sGYFA@mail.gmail.com>
+ <2c1832a5-1e13-1423-2be8-e31b5ec5195a@seco.com> <CAHp75VfGFNFqOU0BymNwh_FWKVw+rSyJJRDSKOinWY_Z39qaGA@mail.gmail.com>
+ <928f7c83-281c-b995-1bf5-be35b7539de6@seco.com>
+In-Reply-To: <928f7c83-281c-b995-1bf5-be35b7539de6@seco.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 4 Feb 2022 21:24:25 +0200
+Message-ID: <CAHp75VeDs6f7euqsZ2fmD42V2M6eWf1_CQPXyr-GfF0HVWA+Vg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] usb: dwc3: Add snps,ref-clock-frequency-hz
+ property for ACPI
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 07:38:56PM +0000, Yosry Ahmed wrote:
-> Currently memcg stats show several types of kernel memory:
-> kernel stack, page tables, sock, vmalloc, and slab.
-> However, there are other allocations with __GFP_ACCOUNT
-> (or supersets such as GFP_KERNEL_ACCOUNT) that are not accounted
-> in any of those stats, a few examples are:
-> - various kvm allocations (e.g. allocated pages to create vcpus)
-> - io_uring
-> - tmp_page in pipes during pipe_write()
-> - bpf ringbuffers
-> - unix sockets
-> 
-> Keeping track of the total kernel memory is essential for the ease of
-> migration from cgroup v1 to v2 as there are large discrepancies between
-> v1's kmem.usage_in_bytes and the sum of the available kernel memory stats
-> in v2. Adding separate memcg stats for all __GFP_ACCOUNT kernel
-> allocations is an impractical maintenance burden as there a lot of those
-> all over the kernel code, with more use cases likely to show up in the
-> future.
-> 
-> Therefore, add a "kernel" memcg stat that is analogous to kmem
-> page counter, with added benefits such as using rstat infrastructure
-> which aggregates stats more efficiently. Additionally, this provides a
-> lighter alternative in case the legacy kmem is deprecated in the future
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Reported-by: kernel test robot <lkp@intel.com>
+On Fri, Feb 4, 2022 at 8:44 PM Sean Anderson <sean.anderson@seco.com> wrote:
+> On 2/4/22 1:38 PM, Andy Shevchenko wrote:
+> > On Fri, Feb 4, 2022 at 6:00 PM Sean Anderson <sean.anderson@seco.com> wrote:
+> >> On 2/4/22 7:54 AM, Andy Shevchenko wrote:
+> >> > On Thursday, January 27, 2022, Sean Anderson <sean.anderson@seco.com <mailto:sean.anderson@seco.com>> wrote:
 
-Looks good, thanks Yosry!
+...
+
+> > In order to have more or less unified APIs in the future I would
+> > suggest using 'clock-frequency' for the "main" functional clock. For
+> > example, 8250_dw uses it for the baud rate generator, while it also
+> > utilizes auxiliary clock(s) on some platforms.
+>
+> OK, I had a look though that driver, and it seems like it uses
+> clock-frequency only for the baudclk, and e.g. apb_pclk has no
+> corresponding frequency property. For this driver, it would mean that
+> the suspend clock would only be configurable through device tree. Is
+> that the approach you recommend?
+
+
+What I meant is to use the "clock-frequency" property as it is kinda
+standard de facto for the "main'' functional clock. The rest is up to
+the individual drivers. From the API perspective I would expect a
+common helper in the future that takes clock name and returns rate
+based on clock (if found) or "clock-frequency" property. We may also
+extend in far future to support any combinations of the [clock name,
+property name] to get a clock rated either via Device Tree or via
+ACPI.
+
+-- 
+With Best Regards,
+Andy Shevchenko

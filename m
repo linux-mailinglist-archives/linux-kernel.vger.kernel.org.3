@@ -2,111 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36D94A9DE5
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA074A9DEE
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377029AbiBDRn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:43:26 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42722 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiBDRn0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:43:26 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 2871c7bdf1ff5afe; Fri, 4 Feb 2022 18:43:24 +0100
-Received: from kreacher.localnet (unknown [213.134.181.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 4897866B456;
-        Fri,  4 Feb 2022 18:43:24 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 3/3] ACPI: EC: Rearrange code in acpi_ec_submit_event()
-Date:   Fri, 04 Feb 2022 18:43:14 +0100
-Message-ID: <7351357.EvYhyI6sBW@kreacher>
-In-Reply-To: <12956939.uLZWGnKmhe@kreacher>
-References: <12956939.uLZWGnKmhe@kreacher>
+        id S1377059AbiBDRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:43:59 -0500
+Received: from mout.gmx.net ([212.227.15.19]:43873 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230087AbiBDRn6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 12:43:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643996637;
+        bh=U/c32utP3ktSCsK73GoR8A5dbuyq12FfNbI2MiDifL4=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=ZjgEQN8eM/8Vkwiz/vFaUad4TkIAh/1g52MNysYOILYOVozCOzd7um+BsuIj1fDUi
+         tma+w2sVXGXOHQjyiEhkxgZaFad4KygWl6khXAG86EZ2EtAN+UzqJsBfBGMOqqrJal
+         r0OnqvGINZl0gM7USoiiP+yx/5HNlvzLfVTEnpww=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.248]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4axg-1nFUOQ3mcg-001hoU; Fri, 04
+ Feb 2022 18:43:56 +0100
+Message-ID: <08956dbc-d882-220f-9006-54a01aa41ef9@gmx.de>
+Date:   Fri, 4 Feb 2022 18:43:56 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.137
-X-CLIENT-HOSTNAME: 213.134.181.137
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgddutdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=2 Fuz1=2 Fuz2=2
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:7hKSxxMKkbBQipIIB+Ej7VWcKB2PVSV0ar70A57y/j03SbU7pkX
+ ucBXZNZA06bKbT3E+2T9b4wnkS1Z2t22aWYw1qsgKf9aLwYvr67653IXbh9nUKu14bGoaIe
+ ch0FVdOchZWisNPYOq03zIWwaure88bgZPNlbONuuEEQDYgXt5GV9xsdfe1S6Ehpbj8JYFF
+ NnkApp5XhtgbPiX4+ZpBA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EtLJI7msm2Y=:YCyGqRkCExfu5nsmdGrLtG
+ DXkAbr3ZUcvO/8qGcYHB38re/TlbqDF9iSMjNusVW+aa/7CWWUn6HVIJu0VZko/vgvpB/DI6s
+ S9TBcdyV0pqPNPAc0xCIX39o3BiFAF4olRS4qKDfhb3B1mEDbCFEGoRSxdyaszZmlmiIhhdkn
+ wOtrWKA82/JM2qSMEJNuNTfWFhN8Lhj60puI64YB5Oe9mfQq0uSiqdXYnBGosPvjLeaNBRlWr
+ 53uChPSW3F96issM2cDrlZe/4kBS8oBqslN9fq7TQzYRXjpPLsfF8PmUfeL5SJyzXuPQZH4zr
+ VAwe8+q8ErC6Cl6YjqroH6bDYidDSSCd1cet/6GU6r71TDCV5GpIFEwbZUEnicIvjH05Bvb6q
+ XmZs3FIFPwb64KHj8yRMBCL00md+t324K1peFJsme9Ev8K01MUP+o+IQ7qmn+k0EoOCnpn1it
+ B7Leh68BH852tlnqDX4teIyq9BkjpgJPpPtr1Pl8cTiwHfdWI7HQfxWHPcAtUmxos21P8vd9W
+ QemztYmtTOOrUeNyrrQy+ZRYYGt5I9ZGWpkNAE0xXp7/S0x3NcV7HjeMPkPg83/Ni2Sp5d9pq
+ MqfGk5/7Z24h8wh2z+PUSzly8QnQxtemYHdl/i2kebJUJ9LJmm8h9Z0jH93O0SAHmQkDYuxTE
+ VHZXU8679AmXlRlWXDEf21xuBiutFA/OdHgs3ROlSnIvJpuMmcsrAAaPGiHyN5K9dmN81XHur
+ xSUMOgxfAG8TtGtvOPS40CajjVeU99CWZgtSRqMEYlFjxb/EzxmkJhkzTWg9LpN9hKW223Gnz
+ /tfoA0lAPwkEMRKmXyD6xqv3SXq+k942JXIaSAZNYOpwRyX7NM2ZJXhsgMSZcQjr6i4XShXkk
+ BypXWyhr5vEj1R4CRTBgykYgLLOrQLh3u7slUdp9lHud/etr2Fvs+ygtpaUBx7zrWpw6llr3z
+ tg8if24FvzmikC+E+M7MgDhgMHs0vj5YT+jbM8Hr6C+3o6ii+nzTS3O/P0MX8pxzDa2+8bPjS
+ cJRZT3DStklIJ7buWUegEt0yKhEMI86OGDBKXhyszfQ0NqCJh+7fO7LfkOsXBcn1FUEzLKUM8
+ C//FD9KvO2occE=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+hallo Greg
 
-Rearange acpi_ec_event_handler() so as to avoid releasing ec->lock
-and acquiring it again right away in the case when ec_event_clearing
-is not ACPI_EC_EVT_TIMING_EVENT.
+5.16.6-rc1
 
-This also reduces the number of checks done by acpi_ec_event_handler()
-in that case.
+compiles, boots and runs on my x86_64
+(Intel i5-11400, Fedora 35)
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/ec.c |   22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+Thanks
 
-Index: linux-pm/drivers/acpi/ec.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ec.c
-+++ linux-pm/drivers/acpi/ec.c
-@@ -1238,6 +1238,7 @@ static void acpi_ec_event_handler(struct
- 		acpi_ec_submit_query(ec);
- 
- 		spin_lock_irq(&ec->lock);
-+
- 		ec->events_to_process--;
- 	}
- 
-@@ -1246,27 +1247,30 @@ static void acpi_ec_event_handler(struct
- 	 * event handling work again regardless of whether or not the query
- 	 * queued up above is processed successfully.
- 	 */
--	if (ec_event_clearing == ACPI_EC_EVT_TIMING_EVENT)
-+	if (ec_event_clearing == ACPI_EC_EVT_TIMING_EVENT) {
-+		bool guard_timeout;
-+
- 		acpi_ec_complete_event(ec);
--	else
--		acpi_ec_close_event(ec);
- 
--	spin_unlock_irq(&ec->lock);
-+		ec_dbg_evt("Event stopped");
- 
--	ec_dbg_evt("Event stopped");
-+		spin_unlock_irq(&ec->lock);
-+
-+		guard_timeout = !!ec_guard(ec);
- 
--	if (ec_event_clearing == ACPI_EC_EVT_TIMING_EVENT && ec_guard(ec)) {
- 		spin_lock_irq(&ec->lock);
- 
- 		/* Take care of SCI_EVT unless someone else is doing that. */
--		if (!ec->curr)
-+		if (guard_timeout && !ec->curr)
- 			advance_transaction(ec, false);
-+	} else {
-+		acpi_ec_close_event(ec);
- 
--		spin_unlock_irq(&ec->lock);
-+		ec_dbg_evt("Event stopped");
- 	}
- 
--	spin_lock_irq(&ec->lock);
- 	ec->events_in_progress--;
-+
- 	spin_unlock_irq(&ec->lock);
- }
- 
-
-
-
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+regards
+Ronald

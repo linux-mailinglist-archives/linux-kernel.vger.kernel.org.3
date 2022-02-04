@@ -2,88 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C876D4AA340
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACDE4AA345
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351266AbiBDWhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351201AbiBDWhr (ORCPT
+        id S1351295AbiBDWi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:38:57 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:36756 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236523AbiBDWiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:37:47 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B0DDEC0505
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 14:37:44 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id i5so10251900oih.1
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 14:37:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FrPLdOb0ywA5n4FsTGhx+oWZMq1l74LPEC44v8CHjgg=;
-        b=WktAdZCGgZ6Zn/cahPUzCB7h5BfAfaFgynQFGLDjzy8k8d0TqdDeOUkmuYYwwyLujI
-         eTRG9gJmpDPFV+C32XuFeYODE5SIl3rQYtKfD/EOaot3/vWxNDS25P0zqWTvxEWkQhtb
-         NSc5So7jd1HLveq0PdVp9B9eBKtMtaXBlgOsP6aN7z4iDbHJysXA/frI1a0AX6MWQrKQ
-         ZlqbGjcCqgSfKAubPoY2IlhrHYx2GwikXAMMchLg4JO1XC5G3kHcoF5uqDUPK4TNgp7n
-         4qc9fD7gpLCxaJaVNq9PjzevWyAnJcRSAUNoAGbgCe64hmaFJgvcsygk8PD/VZfDFg5w
-         d0QA==
+        Fri, 4 Feb 2022 17:38:55 -0500
+Received: by mail-oi1-f179.google.com with SMTP id s185so10223014oie.3;
+        Fri, 04 Feb 2022 14:38:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FrPLdOb0ywA5n4FsTGhx+oWZMq1l74LPEC44v8CHjgg=;
-        b=73LtFKJ91+loheJsKEOTLXnuQgT86mynSlCFXdjCwu7+50ozWWB9/rs0O4xrPrAyEP
-         K+RVyxX5FW/KTeMQ2fY1z61TwB67ROPvnDOB+fnGxPo/U1vOdwp/5LxT/4iuR+rrvj1J
-         /VEAA1lmHBG4C+jrgedmPohe3POlAt0yA3I/HioRiNHpLS84t9+NIpvkeVMasjmtMFBs
-         ELWF4RXTNk1tDd64CHm+mevbHjrvkH7qjJo22a3CQVIb3ThGaswgT+sd3oDsgu0D/cQR
-         HLsPmEe+vZKTsKviJjk5WdupyMUFC+zVkp4ylFYkc8DQbgFsBdl2ggvFapXAY3+3d4Ic
-         MtoQ==
-X-Gm-Message-State: AOAM532jueRY8tAJs5gpN1CMO/G3g2leY8+RFEUlaV4fv9ubqUFuJbLE
-        E6MCmGYVBHt8rIilLzYUQiqcZg==
-X-Google-Smtp-Source: ABdhPJzZTuDshfNIfsWjWiFB1PJVauHPWjhBEN/CJdnDWIbo0tNrXwppyzGYkV+sqquaWnZL+oCwIA==
-X-Received: by 2002:a05:6808:3096:: with SMTP id bl22mr577705oib.280.1644014263728;
-        Fri, 04 Feb 2022 14:37:43 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id 71sm1263073otn.43.2022.02.04.14.37.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=v38Kfg/wf9t6mUoqPaOFlIjuWloQG1bbjKXeADCLqYU=;
+        b=DjdqQ6MY4PVwbkQBCI8BarnQMeczP576lSL3Rj5WUuAihyb6/Ifh35mVwXM7yX7Mg+
+         EJ1/f9S+3SfhJ/8kCEbvf66wcdTE4Ygk6Mcxz0AIiKlclyWPWY1Nv29sqsU6+/AuZduQ
+         qgYJSyQDwRFmgp9sZFu/MO9SpoIe8caaj0hZq0l1CQ7kVryhcXSemYSfngml8Trr1VXY
+         XtIKuJevOs/P3NzOESK/+sUFyjlAjZhZPQjST0gpO9LAxdpuOFo/IjIcH+uHywNq4Cqy
+         wC2/ADAMqxXnYd+FkMrbqfrMqIgaTb1tCCBzcrm7KadvjBnEwVA+Qz7bx23+8/mshaY1
+         JdiQ==
+X-Gm-Message-State: AOAM532SaF7zUgqCBEal/l2rHrtEEGBpbrKLswnYExxLz3rgglVsdVUV
+        AV5xEysH8eIGZlsQ0lddGg==
+X-Google-Smtp-Source: ABdhPJyTrqs4CLu0auGGEAWVcE1rpCQ9ftRnQzFJS9Ype3oGGmsjbsjoLQ7hzZHWJCTfKDaIHZOw5Q==
+X-Received: by 2002:a05:6808:209e:: with SMTP id s30mr596076oiw.13.1644014334871;
+        Fri, 04 Feb 2022 14:38:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x17sm1197653oop.1.2022.02.04.14.38.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:37:43 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document SM8450 HDK boards
-Date:   Fri,  4 Feb 2022 16:37:41 -0600
-Message-Id: <164401424604.3413232.13684740891173293910.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220203090031.3128702-1-vkoul@kernel.org>
-References: <20220203090031.3128702-1-vkoul@kernel.org>
+        Fri, 04 Feb 2022 14:38:54 -0800 (PST)
+Received: (nullmailer pid 3312730 invoked by uid 1000);
+        Fri, 04 Feb 2022 22:38:53 -0000
+Date:   Fri, 4 Feb 2022 16:38:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        jic23@kernel.org, robh+dt@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/4] dt-bindings:iio:frequency: add admv1014 binding
+Message-ID: <Yf2q/cZMebdudNny@robh.at.kernel.org>
+References: <20220131100102.15372-1-antoniu.miclaus@analog.com>
+ <20220131100102.15372-2-antoniu.miclaus@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131100102.15372-2-antoniu.miclaus@analog.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Feb 2022 14:30:30 +0530, Vinod Koul wrote:
-> Document the SM8450 HDK board
+On Mon, 31 Jan 2022 12:01:00 +0200, Antoniu Miclaus wrote:
+> Add device tree bindings for the ADMV1014 Upconverter.
 > 
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
+> no changes in v5.
+>  .../bindings/iio/frequency/adi,admv1014.yaml  | 137 ++++++++++++++++++
+>  1 file changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,admv1014.yaml
 > 
 
-Applied, thanks!
-
-[1/2] dt-bindings: arm: qcom: Document SM8450 HDK boards
-      commit: 42d3ce71ebcee2233f8a21adb44cb707f2ea3a57
-[2/2] arm64: dts: qcom: Add SM8450 HDK DTS
-      commit: 067b2b3616cd5ed924b51064bcaab23ea1ffd18b
-
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,192 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900024A9448
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A51C4A9467
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 08:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347683AbiBDHHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 02:07:25 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48948 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237837AbiBDHHY (ORCPT
+        id S1349373AbiBDHRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 02:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344062AbiBDHRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 02:07:24 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2143Pw1p017395;
-        Fri, 4 Feb 2022 07:07:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=HhX9ue5llRPNyZAeGjpMThG6CDjkXqQdaQ6AFWkS2Yo=;
- b=LcCYpI/kDFvhJPa5tmXZXuW5P1r2qByK0C3nXDP/4iTeTJOROpespkNIRf5EJhgxEwJT
- eSxB9P5r120BftEtO6AQM0QaUOXi6fSSkRYMPrII9K1FInbv6QBkc+Bp8mvZ7oLvSW/X
- GeoqrBpqD0Vhy40CxiydTsd2KKAe9tfCnvS7l4vQlnY/UycXctEfa7ZPEk+L+POgfT80
- jMZO0kql7C3QgsshfMU3K38PhPrTKpeLQ+J8YGoTTkQCcGK0bFyg7xotI8jISj5Tceun
- +NnPBFoLU5a1O80T9TW9t3eirRe4WAAxRqFoaJwFQDyee8tLpLs79Ec4xd+3qMz1PHLM sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx8y5xa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 07:07:02 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2146vaC1029969;
-        Fri, 4 Feb 2022 07:07:01 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx8y5wr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 07:07:01 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21473Dwd015488;
-        Fri, 4 Feb 2022 07:07:00 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3e0r0u1x2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 07:06:59 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2146v23l40239598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Feb 2022 06:57:02 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A493A4060;
-        Fri,  4 Feb 2022 07:06:57 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D793A406A;
-        Fri,  4 Feb 2022 07:06:55 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Fri,  4 Feb 2022 07:06:54 +0000 (GMT)
-Date:   Fri, 4 Feb 2022 12:36:54 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Message-ID: <20220204070654.GF618915@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220203144652.12540-1-mgorman@techsingularity.net>
- <20220203144652.12540-3-mgorman@techsingularity.net>
+        Fri, 4 Feb 2022 02:17:53 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE053C06173E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Feb 2022 23:17:52 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id o17so7313063ljp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Feb 2022 23:17:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QBhPBgEherimIGZgK6u1u1J4jQoQqrfPzu4TsRicrdU=;
+        b=Klx+cha5El9xIZx9Yw6vj3tiH96+Ne0Kb0LdgK0yv7tpzBMDMuM3u1rlDgJ+O2TxU2
+         bVUDS3Hi/aILxDws83bWnyF38+id8SupMuPd5JD4ri58GztW5jQ+MD9636HW2a1GXAGw
+         RUTjsq+NgujTcyC8kuBal3uIh1QCrkbOm6GazCDg9SqsS48itz5RqL4HP2DIAdLQShhk
+         EMy5eZ4D9vIxpvX3sJ8GBHaxpSOJwHZzDMhtDZmaLhNA9TQkh3SXhKU4zDReyESyhM47
+         AcmnDsxZZMe2dZKL0wWYk2eBvxHA7w8UJg6djm1YKM8CU4TQDQqDX8L4jbi7pr+QdiZj
+         fAbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=QBhPBgEherimIGZgK6u1u1J4jQoQqrfPzu4TsRicrdU=;
+        b=0grKHoiCskYCAkHMG/NTMFGObuqH5H/RlNEZRaS/YCx375qB6R60VXZT0mVDW2ohCL
+         6BoTTRfyEETTFZM7k4ZRJB0I7IHCTo6S9mVx6EpAM/8IaN4pTAbcCHaeoiL3+rOOqqf1
+         QYbSXjc8rCd3ZW+7UP4XoAyWYdpzeO7YPznpija0M2X6bExZ+dO0LMcFq27MadK7o2p0
+         Xy8kamyeMQ9LuFhLIaKCF7xkYTSnHrjaAMALo/CFLQXW6/6f8adRFc5XD82pZp9u1MmN
+         SHrxCOdMdBqF917H5GnZqeH6eGB9TkF3WmbTiCBJ+BpKmMRWjq2oBeb1Jm/JcseJXxHc
+         nIwQ==
+X-Gm-Message-State: AOAM53272rgevs4vYrqhZ8rcMKGMpcTWMpRTUAgouH5FmEq+Ov5QxBmD
+        yqKS0nyHmRRrmJs4eG+AreeAZlZT6HZZOlwQsvQ=
+X-Google-Smtp-Source: ABdhPJwaXngbVu6x2BzBFKiVTGd3tmZO3HesUYpMaCzlRBqZXX3heOrKDLlirBGr8PvHBab7QsK9+SnfX2OeceUtOlg=
+X-Received: by 2002:a2e:2a04:: with SMTP id q4mr1003226ljq.428.1643959070954;
+ Thu, 03 Feb 2022 23:17:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20220203144652.12540-3-mgorman@techsingularity.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lvc7vTf_SZrrB5Y4J56lESwgu8blMm_V
-X-Proofpoint-ORIG-GUID: gSAxczOlfBP5sBpljD615uyjIe1dNXdw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-04_02,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
- impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202040035
+Sender: smithwilson780@gmail.com
+Received: by 2002:a2e:8756:0:0:0:0:0 with HTTP; Thu, 3 Feb 2022 23:17:49 -0800 (PST)
+From:   DINA MCKENNA <dinamckennahowley@gmail.com>
+Date:   Fri, 4 Feb 2022 07:17:49 +0000
+X-Google-Sender-Auth: hHwHJBX6OXKMnivP_ecO7PjrpcE
+Message-ID: <CADh0mysoGOw9QB8J21v9EyM-Tk7DUJ1s+fGnW-Bxg_eFGyj-mQ@mail.gmail.com>
+Subject: Calvary greetings.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Mel Gorman <mgorman@techsingularity.net> [2022-02-03 14:46:52]:
+Hello My Dear,
 
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index d201a7052a29..e6cd55951304 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -2242,6 +2242,59 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
->  		}
->  	}
-> 
-> +	/*
-> +	 * Calculate an allowed NUMA imbalance such that LLCs do not get
-> +	 * imbalanced.
-> +	 */
+Please do not feel disturbed for contacting =C2=A0you in this regards, It
+was based on the critical health condition I found myself. =C2=A0My names
+are Mrs. Dina Mckenna Howley A widow and am suffering from brain tumor
+disease and this illness has gotten to a very bad stage, I
+ married my husband for Ten years without any child. =C2=A0My husband died
+after a brief illness that lasted for few  days.
+Since the death of my husband, I decided not to remarry again, When my
+late husband was alive he deposited the sum of =C2=A0($ 11,000,000.00,
+Eleven Million Dollars) with the Bank. Presently this money is still
+in bank. And My  Doctor told me that I don't have much time to live
+because my illness has gotten to a very bad stage, Having known my
+condition I  decided to entrust over the deposited fund under your
+custody to take care of the less-privileged ones therein your country
+or position,
+which i believe that you will utilize this money the way I am going to
+instruct herein.
 
-We seem to adding this hunk before the sched_domains may be degenerated.
-Wondering if we really want to do it before degeneration.
-
-Let say we have 3 sched domains and we calculated the sd->imb_numa_nr for
-all the 3 domains, then lets say the middle sched_domain gets degenerated. 
-Would the sd->imb_numa_nr's still be relevant?
-
-
-> +	for_each_cpu(i, cpu_map) {
-> +		unsigned int imb = 0;
-> +		unsigned int imb_span = 1;
-> +
-> +		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-> +			struct sched_domain *child = sd->child;
-> +
-> +			if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-> +			    (child->flags & SD_SHARE_PKG_RESOURCES)) {
-> +				struct sched_domain *top, *top_p;
-> +				unsigned int nr_llcs;
-> +
-> +				/*
-> +				 * For a single LLC per node, allow an
-> +				 * imbalance up to 25% of the node. This is an
-> +				 * arbitrary cutoff based on SMT-2 to balance
-> +				 * between memory bandwidth and avoiding
-> +				 * premature sharing of HT resources and SMT-4
-> +				 * or SMT-8 *may* benefit from a different
-> +				 * cutoff.
-> +				 *
-> +				 * For multiple LLCs, allow an imbalance
-> +				 * until multiple tasks would share an LLC
-> +				 * on one node while LLCs on another node
-> +				 * remain idle.
-> +				 */
-> +				nr_llcs = sd->span_weight / child->span_weight;
-> +				if (nr_llcs == 1)
-> +					imb = sd->span_weight >> 2;
-> +				else
-> +					imb = nr_llcs;
-> +				sd->imb_numa_nr = imb;
-> +
-> +				/* Set span based on the first NUMA domain. */
-> +				top = sd;
-> +				top_p = top->parent;
-> +				while (top_p && !(top_p->flags & SD_NUMA)) {
-> +					top = top->parent;
-> +					top_p = top->parent;
-> +				}
-> +				imb_span = top_p ? top_p->span_weight : sd->span_weight;
-
-I am getting confused by imb_span.
-Let say we have a topology of SMT -> MC -> DIE -> NUMA -> NUMA, with SMT and
-MC domains having SD_SHARE_PKG_RESOURCES flag set.
-We come here only for DIE domain.
-
-imb_span set here is being used for both the subsequent sched domains
-most likely they will be NUMA domains. Right?
-
-> +			} else {
-> +				int factor = max(1U, (sd->span_weight / imb_span));
-> +
-> +				sd->imb_numa_nr = imb * factor;
-
-For SMT, (or any sched domains below the llcs) factor would be
-sd->span_weight but imb_numa_nr and imb would be 0.
-For NUMA (or any sched domain just above DIE), factor would be
-sd->imb_numa_nr would be nr_llcs.
-For subsequent sched_domains, the sd->imb_numa_nr would be some multiple of
-nr_llcs. Right?
-
-
-> +			}
-> +		}
-> +	}
-> +
->  	/* Calculate CPU capacity for physical packages and nodes */
->  	for (i = nr_cpumask_bits-1; i >= 0; i--) {
->  		if (!cpumask_test_cpu(i, cpu_map))
-> -- 
-> 2.31.1
-> 
-
--- 
-Thanks and Regards
-Srikar Dronamraju
+However all I need and required from you is your sincerity and ability
+to carry out the transaction successfully and fulfill my final wish in
+implementing the charitable project as it requires absolute trust and
+devotion without any failure and I will be glad to see that the bank
+finally release and transfer the fund into your bank account in your
+country even before I die here in the hospital, because my present
+health condition is very critical at the moment everything needs to be
+process rapidly as soon as possible.
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35 % percent of the total fund for your effort in
+ handling the transaction, 5 % percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country
+for the mutual benefit of the orphans and the less privileges ones.
+Meanwhile I am waiting for your prompt respond, if only you are
+interested for further details of the transaction and execution of
+this  humanitarian project for the glory and honor of God the merciful
+compassionate.
+May God bless you and your family..
+Regards,
+Mrs. Dina Mckenna Howley.
+written from Hospital.

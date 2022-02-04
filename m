@@ -2,69 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647C94AA3DD
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49F04AA3E1
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376413AbiBDXAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:00:06 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:44618 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359282AbiBDXAA (ORCPT
+        id S1377293AbiBDXBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:01:39 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:36734
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352168AbiBDXBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:00:00 -0500
-Received: by mail-oi1-f178.google.com with SMTP id 4so10192573oil.11;
-        Fri, 04 Feb 2022 15:00:00 -0800 (PST)
+        Fri, 4 Feb 2022 18:01:38 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4C1924003A
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:01:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644015697;
+        bh=9lqnKWWeY7ck0N4RCu24NCmh00+Npqj5crjtpsswZLI=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=YQOGrUxS3azwsK86LknBbwZr/FoM2ZdPovhc6WIp4MFXhZJQ7tKH4zNMLJPb7oXcX
+         FGu3snd0JlKe0vCy+pnAzLDwQlvsZklLkIRloeduYKfuzEqhDUJvCU2RuoVqoe6hJU
+         n3Kbe+NEUf+ksTE7YwaDTWrUZsDmsv086ujo6fadRAaQMb5o0vf1twLWadQnC9Ay74
+         1wo/d5e38sBN5IAefhW3OS0qi3MjlGWczXpqH62PkgE26OTFNu6L/691uffCkzkB3Y
+         vyEHnztKdMCeqItY6c6521X6Y69IYuiJ3ra+egFPyKOdB4oe/PzMP587cd8fsxwJx4
+         WGKbmKfMCFenA==
+Received: by mail-io1-f69.google.com with SMTP id r4-20020a6b4404000000b00614d5a865f7so5013876ioa.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:01:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=STXGDBPnP0RX9U6EDzL7J0c/K6aSJxvfGk5fwnYV+K4=;
-        b=qaBkwcVgO2Wk7wHie2ZLkW9Ve8KXRJlNHLMr8qMnCE6erxCJ+22zzKt6uahs4Nnu7B
-         9th08crP95s7bYdfGcwKwJncQonwhBhEU71gTxKym6XP+ggC9QkOBAYF0I3xW5OwN2Zp
-         vWoPOPpyi6wKD4gA0K6i/qLPxl7sd/KYFebws+oltN/wmhJHa97S+JetawaOOSd1iqfk
-         LWzIBLwdwecLJ50qEYKfDDFT6HrzIR9BYs96VgxIb4kFWA9goL27a1BKyf1NSB+I9bBD
-         USBJ2LAMWZMQD8rd81yapYRqvZdEZZTMF9cm5NVJimIyVzl8FwiFWcUPzlpt9D4mTTWa
-         k2fw==
-X-Gm-Message-State: AOAM533ubsxz5ZYXxb9IYRIF3BErzKfk3BOk4f2dfaORQ6ddc/BVPXc/
-        IbLcLRtCM8AqKcfxZ9a9gA==
-X-Google-Smtp-Source: ABdhPJwOCjh7ByHzDx16JRhBZO6cJ4zV+NShLss8PjVDzgeavJ9Lw93uh+T3zobTfz+ll9W5LpNWSg==
-X-Received: by 2002:a05:6808:1688:: with SMTP id bb8mr651517oib.163.1644015599923;
-        Fri, 04 Feb 2022 14:59:59 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o19sm1072371oae.36.2022.02.04.14.59.58
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9lqnKWWeY7ck0N4RCu24NCmh00+Npqj5crjtpsswZLI=;
+        b=u2O/NV/C+0G+3ypa14+aZq1AUFtJv78xVRg4dcWw/vx0qdIEtjFpxNwgT75hFH6O/A
+         YKFgwN6pLSvdfzpgoYZZ98nyYbHWXSmiUTQ77xe6fCXAE0vm0E8p7VBZZXiww0g+4kZV
+         H8shxsSNcZw8sUX7m9rxvBu14/Zd6Iztc41POsyr2k8+1ZDNJYiYWhyDIPSVYKt0RVgY
+         ZXLaFKLv09qIrp4iYhNicfqPKpuhYX1MTLJ6jHxI9+KfmmpQ/QMKfNy+6RljTTUs9DGE
+         D183nROVSOLyZUiaxY88pOBFwJLL2ktSSFTV90dW3UC22JnHjiq8RZi+Ru+Bl/LjlnCk
+         04Uw==
+X-Gm-Message-State: AOAM532+NIl4OZ/3XTkXZEwONDPNXljFmoP1efb3Q1IpQThNuG4ujf16
+        7LbaIJtz9MRblFJRQm5s+eWtRjIwv1y2XFhk4KvQQhTpdSU/+UMuSlkRKBs6hel0LMP4r5EggYg
+        Ui/Nstdx95TNNEu/qL4giqUMEHsMxdZM7TSFnJZmYhQ==
+X-Received: by 2002:a05:6638:3399:: with SMTP id h25mr650196jav.166.1644015696037;
+        Fri, 04 Feb 2022 15:01:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzTuofHZlwZ1cYjHU/l2TfOuPfjBnS6ABivT4GOI8HYntDU6F/03yNCBtDFBIhUSTXue1rNcA==
+X-Received: by 2002:a05:6638:3399:: with SMTP id h25mr650188jav.166.1644015695820;
+        Fri, 04 Feb 2022 15:01:35 -0800 (PST)
+Received: from xps13.dannf (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
+        by smtp.gmail.com with ESMTPSA id l13sm1624266ilj.24.2022.02.04.15.01.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 14:59:59 -0800 (PST)
-Received: (nullmailer pid 3342703 invoked by uid 1000);
-        Fri, 04 Feb 2022 22:59:58 -0000
-Date:   Fri, 4 Feb 2022 16:59:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Eugen Hristev <eugen.hristev@microchip.com>
-Cc:     robh+dt@kernel.org, linux-media@vger.kernel.org,
-        nicolas.ferre@microchip.com, jacopo+renesas@jmondi.org,
-        devicetree@vger.kernel.org, sakari.ailus@iki.fi,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl
-Subject: Re: [PATCH v4 08/11] dt-bindings: media: microchip,xisc: add
- bus-width of 14
-Message-ID: <Yf2v7owZpEDmkdiy@robh.at.kernel.org>
-References: <20220121131416.603972-1-eugen.hristev@microchip.com>
- <20220121131416.603972-9-eugen.hristev@microchip.com>
+        Fri, 04 Feb 2022 15:01:34 -0800 (PST)
+Date:   Fri, 4 Feb 2022 16:01:32 -0700
+From:   dann frazier <dann.frazier@canonical.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        stable@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+Message-ID: <Yf2wTLjmcRj+AbDv@xps13.dannf>
+References: <20211129173637.303201-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220121131416.603972-9-eugen.hristev@microchip.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211129173637.303201-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 15:14:13 +0200, Eugen Hristev wrote:
-> The Microchip XISC supports a bus width of 14 bits.
-> Add it to the supported bus widths.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> ---
->  Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
+> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> broke PCI support on XGene. The cause is the IB resources are now sorted
+> in address order instead of being in DT dma-ranges order. The result is
+> which inbound registers are used for each region are swapped. I don't
+> know the details about this h/w, but it appears that IB region 0
+> registers can't handle a size greater than 4GB. In any case, limiting
+> the size for region 0 is enough to get back to the original assignment
+> of dma-ranges to regions.
 
-Acked-by: Rob Herring <robh@kernel.org>
+hey Rob!
+
+I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
+only during network installs - that I also bisected down to commit
+6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
+hoping that this patch that fixed the issue on Stéphane's X-Gene2
+system would also fix my issue, but no luck. In fact, it seems to just
+makes it fail differently. Reverting both patches is required to get a
+v5.17-rc kernel to boot.
+
+I've collected the following logs - let me know if anything else would
+be useful.
+
+1) v5.17-rc2+ (unmodified):
+   http://dannf.org/bugs/m400-no-reverts.log
+   Note that the mlx4 driver fails initialization.
+
+2) v5.17-rc2+, w/o the commit that fixed Stéphane's system:
+   http://dannf.org/bugs/m400-xgene2-fix-reverted.log
+   Note the mlx4 MSI-X timeout, and later panic.
+
+3) v5.17-rc2+, w/ both commits reverted (works)
+   http://dannf.org/bugs/m400-both-reverted.log
+
+   -dann

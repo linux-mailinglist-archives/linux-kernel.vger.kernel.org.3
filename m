@@ -2,156 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4AE4A9C2F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600EB4A9C30
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359817AbiBDPqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiBDPqL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:46:11 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62238C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 07:46:11 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id e79so7763742iof.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 07:46:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:mime-version:message-id:in-reply-to:references:date:from
-         :to:cc:subject;
-        bh=4aCq0mzw9NmAK/zJPt93oXn7Z3rIAq9YXf3GiE58uMI=;
-        b=iGjgMfQC3LPcxFpFUdo8wwxbqZRhr+vxcxZiZZ7Y49anzqxwv0iZVZi1yMV32CZ5SU
-         NCh5mKLiTqOqtHRkIupA2KKT4fXDKG2fK/Xzu4F6f0uO41F5MSOS60NkdxruOgsPOrn3
-         Rvr8OuHOzoGbQhr5n4aMzLrPLHaS349nS7UEASpb7xivNmDJAjnDg6cigfQq/sNqp5tD
-         mzGon2zE8aMpifLt9ITOFHitCaT0Y2Qp4WYRKgYhrSO0hj1LnLFseoGoCUzJp//w0+ES
-         EVBAUjBv3/7cewm/sKiUn3S2FuTRGzYSqoBGQt5M+BAF/WwcTRVo/s0SXnrCCpw+Y3Og
-         pO3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:user-agent:mime-version:message-id:in-reply-to
-         :references:date:from:to:cc:subject;
-        bh=4aCq0mzw9NmAK/zJPt93oXn7Z3rIAq9YXf3GiE58uMI=;
-        b=pERI5sPmo6bRoz4JZdKuLAcqN67kHlihR+3Ms/EbueCZLzv751I4YW/xTIe+BBfAdQ
-         vyEeNaDkAGgDRX2M9QtXsCBmtf2cZ9di1bGL9otn6P5jDAL0VdQ/lcfkh04PvLEzLZom
-         ofWSvqNKRAtCb3+hDtCgMJtqrgHaW6Q6OS+J2Yvl/p3ceuz6k0e92FPlJdfG5B3i3dfD
-         ML9FCbrptYJk3R6C/ShxWUETN9j8fW8CCeFAeKOizFZDO+tFtnCaV3AFL6CPIcoojHBv
-         Vc6nP6y1gphUjR/wGbZe2EX2kW3NoVbQd/v56X+vMfut127CatBimpeCDJbK888Nq7da
-         awrw==
-X-Gm-Message-State: AOAM532XP6ANyflw6o/yfbElf46L4YsGoYetZOhwHdjdrseB1olGR4qc
-        LXKnQnR25CD0c06T+k9gcSk=
-X-Google-Smtp-Source: ABdhPJypdWCNloZLhq4O0nsyPQJ2kbQvU4V81FvqXlPCja6RetbqJe2cll6PslVQCHW43zDJ6HwpfA==
-X-Received: by 2002:a05:6602:492:: with SMTP id y18mr1423331iov.95.1643989570768;
-        Fri, 04 Feb 2022 07:46:10 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id d7sm1097873ila.72.2022.02.04.07.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 07:46:09 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id DA86627C005B;
-        Fri,  4 Feb 2022 10:46:08 -0500 (EST)
-Received: from imap44 ([10.202.2.94])
-  by compute3.internal (MEProxy); Fri, 04 Feb 2022 10:46:08 -0500
-X-ME-Sender: <xms:P0r9YQDgIPVzB9qL1yEbo7jRBQmd_Sk0oOhvWcT8Yu2na29y3rHFvA>
-    <xme:P0r9YSh8NbBxk0ZyGOO_8DrS-e2DAhaTTzJ-loyp2-vshezArzK0FcieV3YbEw1Zx
-    sisImAPRXeAsXr2OQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgdektdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfuehoqhhu
-    nhcuhfgvnhhgfdcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepudekgedtfefggeeiueeiteduieehgfegheeigfffgfeggfekieeiffel
-    vdehudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:P0r9YTklkjCtewPs7BBP7-apvmqid2BYcg7wpOrBKTJ9pYuT1z052Q>
-    <xmx:P0r9YWx7Gv-fvnTm5E7ss-xuIP39ob6RH-ObXFdf6IEmSoTwbMKEXA>
-    <xmx:P0r9YVRZ_RRoZFSNH3a7jfR3ywKIfjwAKeCco5N8hRtupYPRLakgQg>
-    <xmx:QEr9YXfPQQ5y4I0cN_z7z-0AWndfa95IcuMxUW6kPW-Nkz88fA5LvQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CEB57FA0AA8; Fri,  4 Feb 2022 10:46:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
-Mime-Version: 1.0
-Message-Id: <b79c521a-f857-41fa-8bba-ee013f5e4fa8@www.fastmail.com>
-In-Reply-To: <Yf0K8oxan1NvjKmE@FVFF77S0Q05N>
-References: <20220203161243.3955547-1-mark.rutland@arm.com>
- <YfxxSX3v6nSJ0tKo@tardis> <Yf0K8oxan1NvjKmE@FVFF77S0Q05N>
-Date:   Fri, 04 Feb 2022 23:45:47 +0800
-From:   "Boqun Feng" <boqun.feng@gmail.com>
-To:     "Mark Rutland" <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, ardb@kernel.org, arnd@arndb.de,
-        "Peter Zijlstra" <peterz@infradead.org>, will@kernel.org
-Subject: Re: [PATCH v2] atomics: fix atomic64_{read_acquire,set_release} fallbacks
-Content-Type: text/plain
+        id S1359822AbiBDPqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:46:34 -0500
+Received: from mga07.intel.com ([134.134.136.100]:37832 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230391AbiBDPqd (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:46:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643989593; x=1675525593;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=04krOM/xHlc6HK9Mk9Mxm4vXikFJwsBjtHm5I6m5L7g=;
+  b=gxofPuN/qmruAnzmwHrOsmcHFdrqu+tZa644ULzqsQdLa3n1KLvnRIVl
+   Ii1bD5ZfvjM1DoOC4IpUo+5JaMFe7B0yYSzBJNKgJ8modn/juh82y2JaK
+   W7iMvP02nk9LBNvjmxBFmR7U0t4Q4xT79LHmDDehZ1lXzto4z7UHSdVqe
+   reJktT6/rf5xF/vSC4Su1tNNrlJ+h8Hk+hNWoaWiaD0ujISyAss+1GE/j
+   yfOTdaZioY58/Cdg8CBXbVBVviJYeN/n1MgbdlMhjLFEZPcq6jE247/Ss
+   NqJQ1BntCMgGnz+oqNtlfCYRt6rKQm3RVjumXibGc6w+6vVT85S9Xq5RO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="311689521"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="311689521"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:46:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="769985996"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 04 Feb 2022 07:46:31 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG0n9-000Xou-AV; Fri, 04 Feb 2022 15:46:31 +0000
+Date:   Fri, 4 Feb 2022 23:46:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [asahilinux:smc/work 9/11] drivers/platform/apple/smc_core.c:135:1:
+ error: expected ';' before 'struct'
+Message-ID: <202202042319.XtC6P0wx-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/AsahiLinux/linux smc/work
+head:   fc848a39b71518ca1661de7057b87cb0e8cac9f9
+commit: a429c9bbeba2b08856339793bd4a0d1a65a730a1 [9/11] platform/apple: Add new Apple Mac SMC driver
+config: arm64-randconfig-r024-20220130 (https://download.01.org/0day-ci/archive/20220204/202202042319.XtC6P0wx-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/a429c9bbeba2b08856339793bd4a0d1a65a730a1
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux smc/work
+        git checkout a429c9bbeba2b08856339793bd4a0d1a65a730a1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/platform/apple/smc_core.c:135:1: error: expected ';' before 'struct'
+     135 | struct apple_smc *apple_smc_probe(struct device *dev, const struct apple_smc_backend_ops *ops, void *cookie)
+         | ^~~~~~
+   drivers/platform/apple/smc_core.c:25:30: warning: 'apple_smc_devs' defined but not used [-Wunused-const-variable=]
+      25 | static const struct mfd_cell apple_smc_devs[] = {
+         |                              ^~~~~~~~~~~~~~
 
 
-On Fri, Feb 4, 2022, at 7:16 PM, Mark Rutland wrote:
-> On Fri, Feb 04, 2022 at 08:20:25AM +0800, Boqun Feng wrote:
->> On Thu, Feb 03, 2022 at 04:12:43PM +0000, Mark Rutland wrote:
->> > diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
->> > index a3dba31df01e..6db58d180866 100644
->> > --- a/include/linux/atomic/atomic-arch-fallback.h
->> > +++ b/include/linux/atomic/atomic-arch-fallback.h
->> > @@ -151,7 +151,16 @@
->> >  static __always_inline int
->> >  arch_atomic_read_acquire(const atomic_t *v)
->> >  {
->> > -	return smp_load_acquire(&(v)->counter);
->> > +	int ret;
->> > +
->> > +	if (__native_word(atomic_t)) {
->> > +		ret = smp_load_acquire(&(v)->counter);
->> > +	} else {
->> > +		ret = arch_atomic_read(v);
->> > +		__atomic_acquire_fence();
->> > +	}
->> > +
->> > +	return ret;
->> >  }
->> >  #define arch_atomic_read_acquire arch_atomic_read_acquire
->> >  #endif
->> > @@ -160,7 +169,12 @@ arch_atomic_read_acquire(const atomic_t *v)
->> >  static __always_inline void
->> >  arch_atomic_set_release(atomic_t *v, int i)
->> >  {
->> > -	smp_store_release(&(v)->counter, i);
->> > +	if (__native_word(atomic_t)) {
->> > +		smp_store_release(&(v)->counter, i);
->> > +	} else {
->> > +		__atomic_release_fence();
->> > +		arch_atomic_set(v, i);
->> > +	}
->> >  }
->> 
->> The changes for atomic_t are not necessary, right? They are correct but
->> "side effects" because of the change in scripts.
->
-> Correct -- those aren't necessary, but aren't harmful, and it's simpler to have
-> than than it is to special-case the scripts.
->
->> If so, it's better to mention this somewhere.
->
-> Sure; how about I add the following to the commit message:
->
-> | Since the fallback templates are used to generate the atomic64_*() and
-> | atomic_*() operations, the __native_word() check is added to both. For
-> | the atomic_*() operations, which are always 32-bit, the __native_word()
-> | check is redundant but not harmful, as it is always true.
->
-> ... ?
->
+vim +135 drivers/platform/apple/smc_core.c
 
-Looks good to me!
+   134	
+ > 135	struct apple_smc *apple_smc_probe(struct device *dev, const struct apple_smc_backend_ops *ops, void *cookie)
+   136	{
+   137		struct apple_smc *smc;
+   138		u32 count;
+   139		int ret;
+   140	
+   141		smc = devm_kzalloc(dev, sizeof(*smc), GFP_KERNEL);
+   142		if (!smc)
+   143			return ERR_PTR(-ENOMEM);
+   144	
+   145		smc->dev = dev;
+   146		smc->be_cookie = cookie;
+   147		smc->be = ops;
+   148		mutex_init(&smc->mutex);
+   149	
+   150		ret = apple_smc_read_u32(smc, SMC_KEY(#KEY), &count);
+   151		if (ret)
+   152			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get key count"));
+   153		smc->key_count = be32_to_cpu(count);
+   154	
+   155		ret = apple_smc_get_key_by_index(smc, 0, &smc->first_key);
+   156		if (ret)
+   157			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get first key"));
+   158	
+   159		ret = apple_smc_get_key_by_index(smc, smc->key_count - 1, &smc->last_key);
+   160		if (ret)
+   161			return ERR_PTR(dev_err_probe(dev, ret, "Failed to get last key"));
+   162	
+   163		dev_info(dev, "Initialized (%d keys %p4ch..%p4ch)\n",
+   164			 smc->key_count, &smc->first_key, &smc->last_key);
+   165	
+   166		dev_set_drvdata(dev, smc);
+   167	
+   168		ret = mfd_add_devices(dev, -1, apple_smc_devs, ARRAY_SIZE(apple_smc_devs), NULL, 0, NULL);
+   169		if (ret)
+   170			return ERR_PTR(dev_err_probe(dev, ret, "Subdevice initialization failed"));
+   171	
+   172		return smc;
+   173	}
+   174	EXPORT_SYMBOL(apple_smc_probe);
+   175	
 
-Regards,
-Boqun
-
-> Thanks,
-> Mark.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

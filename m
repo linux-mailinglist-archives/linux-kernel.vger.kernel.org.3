@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1AD4AA0A1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B894F4AA0A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236198AbiBDUBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S237906AbiBDUBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbiBDT7W (ORCPT
+        with ESMTP id S236518AbiBDT73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:59:22 -0500
+        Fri, 4 Feb 2022 14:59:29 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFACFC061770
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58AFC061773
         for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=ysaRl84X3MDbn+S9kI3xR6Jc2oyHwyLSQUnLAsEjMuE=; b=p5WgdxEXuQhOsrZSCWfZ4nbvWd
-        S9QxA2QuZm41bgYIDSTo/MoJ3F6y5NybwdjKAb1zENuNPxQ5JaCgoisSanyS+VxfAKNTZ3DhCnGxM
-        GRI34pww82APmBXvYe1slhO7KbeDXyRYwJhBD4FhrACgeJ9vVmZjLA9Egg2oklHL/mRUPz6/77gVa
-        yDklaGfn9er6UvGCNj/3gWHOB8DvqpXs0QFCe2otSwINEjDLWRJJhtCLlD5Ckjm0Gl6Md8WfVQF1h
-        woWkdLuvkwT4gu9PxQ+vAkPFn1LNuh6QF/usG7AwoaOZZD9Z45+qMiHMtBRIQsv92umXED2i2WbuQ
-        Tyyv2O+A==;
+        bh=0LceE9B2JPqGhIU6U3dA6i1Q/WxXKHP1DiDrPes4GUc=; b=D8Lg78R9RvJ4RORcxDBYl/EBQn
+        K7LC2HKWQorvJHKtxhlrGFyem8Ior8x/yVGRH6wsmJEJeOuOdx5xI1tBGMNX9fPMsZUyxlwQz2gJo
+        kEcUHqbBY2sHAi7O+bO37w/4JMA3qFPErjW7/+WhbL/fuojhNLNFNOVoS5OWcpwWf4Dd03xCHjztW
+        kUYXMhtalHrgNm3eojK+I9hXUjtFICEea9aus+bWInyXB99aCWytSVKuC89KvRH4DSGV0rVToFxfA
+        JWWiX2dfjGQW3FydlxpLAQbdI4ooOJ7zGxI4UhM6UUd0qpdVvpAvu0eHwS1CpDEG6HaIQ8BHXBwBy
+        WIXMVGaQ==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nG4jb-007LqN-0i; Fri, 04 Feb 2022 19:59:07 +0000
+        id 1nG4jb-007LqT-4Y; Fri, 04 Feb 2022 19:59:07 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 64/75] mm/vmscan: Turn page_check_references() into folio_check_references()
-Date:   Fri,  4 Feb 2022 19:58:41 +0000
-Message-Id: <20220204195852.1751729-65-willy@infradead.org>
+Subject: [PATCH 65/75] mm/vmscan: Convert pageout() to take a folio
+Date:   Fri,  4 Feb 2022 19:58:42 +0000
+Message-Id: <20220204195852.1751729-66-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
 References: <20220204195852.1751729-1-willy@infradead.org>
@@ -48,97 +48,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function only has one caller, and it already has a folio.  This
-removes a number of calls to compound_head().
+We always write out an entire folio at once.  This conversion removes
+a few calls to compound_head() and gets the NR_VMSCAN_WRITE statistic
+right when writing out a large folio.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- mm/vmscan.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ include/trace/events/vmscan.h | 10 +++---
+ mm/vmscan.c                   | 64 +++++++++++++++++------------------
+ 2 files changed, 37 insertions(+), 37 deletions(-)
 
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index ca2e9009a651..de136dbd623a 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -327,11 +327,11 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
+ 		__print_symbolic(__entry->lru, LRU_NAMES))
+ );
+ 
+-TRACE_EVENT(mm_vmscan_writepage,
++TRACE_EVENT(mm_vmscan_write_folio,
+ 
+-	TP_PROTO(struct page *page),
++	TP_PROTO(struct folio *folio),
+ 
+-	TP_ARGS(page),
++	TP_ARGS(folio),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(unsigned long, pfn)
+@@ -339,9 +339,9 @@ TRACE_EVENT(mm_vmscan_writepage,
+ 	),
+ 
+ 	TP_fast_assign(
+-		__entry->pfn = page_to_pfn(page);
++		__entry->pfn = folio_pfn(folio);
+ 		__entry->reclaim_flags = trace_reclaim_flags(
+-						page_is_file_lru(page));
++						folio_is_file_lru(folio));
+ 	),
+ 
+ 	TP_printk("page=%p pfn=0x%lx flags=%s",
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 5ceed53cb326..450dd9c3395f 100644
+index 450dd9c3395f..efe041c2859d 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -1376,55 +1376,54 @@ enum page_references {
- 	PAGEREF_ACTIVATE,
- };
+@@ -978,15 +978,15 @@ void drop_slab(void)
+ 		drop_slab_node(nid);
+ }
  
--static enum page_references page_check_references(struct page *page,
-+static enum page_references folio_check_references(struct folio *folio,
- 						  struct scan_control *sc)
+-static inline int is_page_cache_freeable(struct page *page)
++static inline int is_page_cache_freeable(struct folio *folio)
  {
--	struct folio *folio = page_folio(page);
--	int referenced_ptes, referenced_page;
-+	int referenced_ptes, referenced_folio;
- 	unsigned long vm_flags;
- 
- 	referenced_ptes = folio_referenced(folio, 1, sc->target_mem_cgroup,
- 					   &vm_flags);
--	referenced_page = TestClearPageReferenced(page);
-+	referenced_folio = folio_test_clear_referenced(folio);
- 
  	/*
- 	 * Mlock lost the isolation race with us.  Let try_to_unmap()
--	 * move the page to the unevictable list.
-+	 * move the folio to the unevictable list.
+ 	 * A freeable page cache page is referenced only by the caller
+ 	 * that isolated the page, the page cache and optional buffer
+ 	 * heads at page->private.
  	 */
- 	if (vm_flags & VM_LOCKED)
- 		return PAGEREF_RECLAIM;
+-	int page_cache_pins = thp_nr_pages(page);
+-	return page_count(page) - page_has_private(page) == 1 + page_cache_pins;
++	return folio_ref_count(folio) - folio_test_private(folio) ==
++		1 + folio_nr_pages(folio);
+ }
  
- 	if (referenced_ptes) {
+ static int may_write_to_inode(struct inode *inode)
+@@ -1001,24 +1001,24 @@ static int may_write_to_inode(struct inode *inode)
+ }
+ 
+ /*
+- * We detected a synchronous write error writing a page out.  Probably
++ * We detected a synchronous write error writing a folio out.  Probably
+  * -ENOSPC.  We need to propagate that into the address_space for a subsequent
+  * fsync(), msync() or close().
+  *
+  * The tricky part is that after writepage we cannot touch the mapping: nothing
+- * prevents it from being freed up.  But we have a ref on the page and once
+- * that page is locked, the mapping is pinned.
++ * prevents it from being freed up.  But we have a ref on the folio and once
++ * that folio is locked, the mapping is pinned.
+  *
+- * We're allowed to run sleeping lock_page() here because we know the caller has
++ * We're allowed to run sleeping folio_lock() here because we know the caller has
+  * __GFP_FS.
+  */
+ static void handle_write_error(struct address_space *mapping,
+-				struct page *page, int error)
++				struct folio *folio, int error)
+ {
+-	lock_page(page);
+-	if (page_mapping(page) == mapping)
++	folio_lock(folio);
++	if (folio_mapping(folio) == mapping)
+ 		mapping_set_error(mapping, error);
+-	unlock_page(page);
++	folio_unlock(folio);
+ }
+ 
+ static bool skip_throttle_noprogress(pg_data_t *pgdat)
+@@ -1163,35 +1163,35 @@ typedef enum {
+  * pageout is called by shrink_page_list() for each dirty page.
+  * Calls ->writepage().
+  */
+-static pageout_t pageout(struct page *page, struct address_space *mapping)
++static pageout_t pageout(struct folio *folio, struct address_space *mapping)
+ {
+ 	/*
+-	 * If the page is dirty, only perform writeback if that write
++	 * If the folio is dirty, only perform writeback if that write
+ 	 * will be non-blocking.  To prevent this allocation from being
+ 	 * stalled by pagecache activity.  But note that there may be
+ 	 * stalls if we need to run get_block().  We could test
+ 	 * PagePrivate for that.
+ 	 *
+ 	 * If this process is currently in __generic_file_write_iter() against
+-	 * this page's queue, we can perform writeback even if that
++	 * this folio's queue, we can perform writeback even if that
+ 	 * will block.
+ 	 *
+-	 * If the page is swapcache, write it back even if that would
++	 * If the folio is swapcache, write it back even if that would
+ 	 * block, for some throttling. This happens by accident, because
+ 	 * swap_backing_dev_info is bust: it doesn't reflect the
+ 	 * congestion state of the swapdevs.  Easy to fix, if needed.
+ 	 */
+-	if (!is_page_cache_freeable(page))
++	if (!is_page_cache_freeable(folio))
+ 		return PAGE_KEEP;
+ 	if (!mapping) {
  		/*
--		 * All mapped pages start out with page table
-+		 * All mapped folios start out with page table
- 		 * references from the instantiating fault, so we need
--		 * to look twice if a mapped file page is used more
-+		 * to look twice if a mapped file folio is used more
- 		 * than once.
- 		 *
- 		 * Mark it and spare it for another trip around the
- 		 * inactive list.  Another page table reference will
- 		 * lead to its activation.
- 		 *
--		 * Note: the mark is set for activated pages as well
--		 * so that recently deactivated but used pages are
-+		 * Note: the mark is set for activated folios as well
-+		 * so that recently deactivated but used folios are
- 		 * quickly recovered.
+-		 * Some data journaling orphaned pages can have
+-		 * page->mapping == NULL while being dirty with clean buffers.
++		 * Some data journaling orphaned folios can have
++		 * folio->mapping == NULL while being dirty with clean buffers.
  		 */
--		SetPageReferenced(page);
-+		folio_set_referenced(folio);
+-		if (page_has_private(page)) {
+-			if (try_to_free_buffers(page)) {
+-				ClearPageDirty(page);
+-				pr_info("%s: orphaned page\n", __func__);
++		if (folio_test_private(folio)) {
++			if (try_to_free_buffers(&folio->page)) {
++				folio_clear_dirty(folio);
++				pr_info("%s: orphaned folio\n", __func__);
+ 				return PAGE_CLEAN;
+ 			}
+ 		}
+@@ -1202,7 +1202,7 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
+ 	if (!may_write_to_inode(mapping->host))
+ 		return PAGE_KEEP;
  
--		if (referenced_page || referenced_ptes > 1)
-+		if (referenced_folio || referenced_ptes > 1)
- 			return PAGEREF_ACTIVATE;
+-	if (clear_page_dirty_for_io(page)) {
++	if (folio_clear_dirty_for_io(folio)) {
+ 		int res;
+ 		struct writeback_control wbc = {
+ 			.sync_mode = WB_SYNC_NONE,
+@@ -1212,21 +1212,21 @@ static pageout_t pageout(struct page *page, struct address_space *mapping)
+ 			.for_reclaim = 1,
+ 		};
  
- 		/*
--		 * Activate file-backed executable pages after first usage.
-+		 * Activate file-backed executable folios after first usage.
- 		 */
--		if ((vm_flags & VM_EXEC) && !PageSwapBacked(page))
-+		if ((vm_flags & VM_EXEC) && !folio_test_swapbacked(folio))
- 			return PAGEREF_ACTIVATE;
- 
- 		return PAGEREF_KEEP;
- 	}
- 
--	/* Reclaim if clean, defer dirty pages to writeback */
--	if (referenced_page && !PageSwapBacked(page))
-+	/* Reclaim if clean, defer dirty folios to writeback */
-+	if (referenced_folio && !folio_test_swapbacked(folio))
- 		return PAGEREF_RECLAIM_CLEAN;
- 
- 	return PAGEREF_RECLAIM;
-@@ -1664,7 +1663,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+-		SetPageReclaim(page);
+-		res = mapping->a_ops->writepage(page, &wbc);
++		folio_set_reclaim(folio);
++		res = mapping->a_ops->writepage(&folio->page, &wbc);
+ 		if (res < 0)
+-			handle_write_error(mapping, page, res);
++			handle_write_error(mapping, folio, res);
+ 		if (res == AOP_WRITEPAGE_ACTIVATE) {
+-			ClearPageReclaim(page);
++			folio_clear_reclaim(folio);
+ 			return PAGE_ACTIVATE;
  		}
  
- 		if (!ignore_references)
--			references = page_check_references(page, sc);
-+			references = folio_check_references(folio, sc);
+-		if (!PageWriteback(page)) {
++		if (!folio_test_writeback(folio)) {
+ 			/* synchronous write or broken a_ops? */
+-			ClearPageReclaim(page);
++			folio_clear_reclaim(folio);
+ 		}
+-		trace_mm_vmscan_writepage(page);
+-		inc_node_page_state(page, NR_VMSCAN_WRITE);
++		trace_mm_vmscan_write_folio(folio);
++		node_stat_add_folio(folio, NR_VMSCAN_WRITE);
+ 		return PAGE_SUCCESS;
+ 	}
  
- 		switch (references) {
- 		case PAGEREF_ACTIVATE:
+@@ -1809,7 +1809,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
+ 			 * starts and then write it out here.
+ 			 */
+ 			try_to_unmap_flush_dirty();
+-			switch (pageout(page, mapping)) {
++			switch (pageout(folio, mapping)) {
+ 			case PAGE_KEEP:
+ 				goto keep_locked;
+ 			case PAGE_ACTIVATE:
 -- 
 2.34.1
 

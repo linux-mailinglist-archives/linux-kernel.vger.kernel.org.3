@@ -2,193 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D5D4A9F6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB364A9F6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352960AbiBDSpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377679AbiBDSpm (ORCPT
+        id S1377721AbiBDSqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:46:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60204 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239269AbiBDSql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:45:42 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823DBC061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:45:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id m7so6456254pjk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gf593opMzUkEFK3tkBnZbu7cRzsoKyOlw/rIRToe0ac=;
-        b=VpJq89SA99pGTZGihoJEHsjwAxCgw8CctLfFMpaUDVIKjP8gqFG9tVsMjC7svKnYKw
-         GQNJvU89pauWdxt168WBcwO+6ppmytdvoyEMO1x84ZwuAVmXs3x0KMTGQmfnneGXecGG
-         L/TFbujMiuZdM67Zo6685pkixvqD1Dx2iD3ryJyJ9H9pzjfKJNc8gH9qvC42w/zL7GB9
-         Hjy0NQQBF+NZxGKW3NBgMaJw0CspDifVu4+K4AHbGlLPRGzcgBI9ns04VRoZ8kLFh40U
-         PeOHOeuNlEBxm5KHwBpbvNGXTP3HLFaW5IfQeA4PbRe/y24NMwL3eSfE8BsXABeo/1at
-         1/mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gf593opMzUkEFK3tkBnZbu7cRzsoKyOlw/rIRToe0ac=;
-        b=kHXNG4u74EU2rMMbQQiH66jSSvu++YZu0oIjWLMl9gfMa8kveClGnf6F+PdwpTkcbU
-         YUrGXUocYBfHjs6S206tnBUcQG3jvRGAIJaAJxPSeEHR/aGjeEZyJ9Is9iKLQZw7Epmw
-         zWSvTbxsQ/95r0fdaj31o5ZP1sX/0SX7HyIz9gyVG71ilDaTDtLGvsLDQcV2wYrwPq6+
-         KbKnbRiworyXDFi+GG1TPuG+mtsT3N2ijTh1EZ/2xVkDG+AZcNSDKftOnbjiaDJW4Kc6
-         ROjZNhWxr1baju2wha+ULzFjAUQlMo86My7h8ZXKUnInoxBuBDGPQ4XWCIDGHOzgCEfb
-         UlBw==
-X-Gm-Message-State: AOAM532I9X9raEJQL71oEX7RyqrlfEoLHGAx9Yizb+0VWWb9ROg8wgOV
-        m7mk6/sShPJVKfuKpHqUVH8rK3+Q/m+wCg==
-X-Google-Smtp-Source: ABdhPJycSLWY7IYjsj5ZtRStDt5vmI7UjLZM7E0uZrthMB0W8a2jlm/J4AQbWFoKIMVQbh0bXEbArQ==
-X-Received: by 2002:a17:90b:1016:: with SMTP id gm22mr4680992pjb.155.1644000341823;
-        Fri, 04 Feb 2022 10:45:41 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id u19sm3340304pfi.150.2022.02.04.10.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 10:45:40 -0800 (PST)
-Date:   Fri, 4 Feb 2022 18:45:37 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, vkuznets@redhat.com
-Subject: Re: [PATCH 05/23] KVM: MMU: pull computation of kvm_mmu_role_regs to
- kvm_init_mmu
-Message-ID: <Yf10UbHmV85rFz6G@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-6-pbonzini@redhat.com>
+        Fri, 4 Feb 2022 13:46:41 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5C061C39
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 18:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984CEC004E1;
+        Fri,  4 Feb 2022 18:46:37 +0000 (UTC)
+Date:   Fri, 4 Feb 2022 18:46:34 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        bp@alien8.de, dave.hansen@linux.intel.com, frederic@kernel.org,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, tglx@linutronix.de,
+        valentin.schneider@arm.com, will@kernel.org
+Subject: Re: [PATCH v2 6/7] arm64: entry: centralize premeption decision
+Message-ID: <Yf10inOXewNOg15c@arm.com>
+References: <20220204150557.434610-1-mark.rutland@arm.com>
+ <20220204150557.434610-7-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204115718.14934-6-pbonzini@redhat.com>
+In-Reply-To: <20220204150557.434610-7-mark.rutland@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 06:57:00AM -0500, Paolo Bonzini wrote:
-> The init_kvm_*mmu functions, with the exception of shadow NPT,
-> do not need to know the full values of CR0/CR4/EFER; they only
-> need to know the bits that make up the "role".  This cleanup
-> however will take quite a few incremental steps.  As a start,
-> pull the common computation of the struct kvm_mmu_role_regs
-> into their caller: all of them extract the struct from the vcpu
-> as the very first step.
+On Fri, Feb 04, 2022 at 03:05:56PM +0000, Mark Rutland wrote:
+> For historical reasons, the decision of whether or not to preempt is
+> spread across arm64_preempt_schedule_irq() and __el1_irq(), and it would
+> be clearer if this were all in one place.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
+> Also, arm64_preempt_schedule_irq() calls lockdep_assert_irqs_disabled(),
+> but this is redundant, as we have a subsequent identical assertion in
+> __exit_to_kernel_mode(), and preempt_schedule_irq() will
+> BUG_ON(!irqs_disabled()) anyway.
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 3add9d8b0630..577e70509510 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4736,12 +4736,12 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  	return role;
->  }
->  
-> -static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu)
-> +static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
-> +			     const struct kvm_mmu_role_regs *regs)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
->  	union kvm_mmu_role new_role =
-> -		kvm_calc_tdp_mmu_root_page_role(vcpu, &regs, false);
-> +		kvm_calc_tdp_mmu_root_page_role(vcpu, regs, false);
->  
->  	if (new_role.as_u64 == context->mmu_role.as_u64)
->  		return;
-> @@ -4755,7 +4755,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu)
->  	context->get_guest_pgd = get_cr3;
->  	context->get_pdptr = kvm_pdptr_read;
->  	context->inject_page_fault = kvm_inject_page_fault;
-> -	context->root_level = role_regs_to_root_level(&regs);
-> +	context->root_level = role_regs_to_root_level(regs);
->  
->  	if (!is_cr0_pg(context))
->  		context->gva_to_gpa = nonpaging_gva_to_gpa;
-> @@ -4803,7 +4803,7 @@ kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  }
->  
->  static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *context,
-> -				    struct kvm_mmu_role_regs *regs,
-> +				    const struct kvm_mmu_role_regs *regs,
->  				    union kvm_mmu_role new_role)
->  {
->  	if (new_role.as_u64 == context->mmu_role.as_u64)
-> @@ -4824,7 +4824,7 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
->  }
->  
->  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
-> -				struct kvm_mmu_role_regs *regs)
-> +				const struct kvm_mmu_role_regs *regs)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
->  	union kvm_mmu_role new_role =
-> @@ -4845,7 +4845,7 @@ static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
->  
->  static union kvm_mmu_role
->  kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
-> -				   struct kvm_mmu_role_regs *regs)
-> +				   const struct kvm_mmu_role_regs *regs)
+> This patch removes the redundant assertion and centralizes the
+> preemption decision making within arm64_preempt_schedule_irq().
+> 
+> Other than the slight change to assertion behaviour, there should be no
+> functional change as a result of this patch.
+> 
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Will Deacon <will@kernel.org>
 
-Should these go in the previous commit? Aside from that,
-
-Reviewed-by: David Matlack <dmatlack@google>
-
->  {
->  	union kvm_mmu_role role =
->  		kvm_calc_shadow_root_page_role_common(vcpu, regs, false);
-> @@ -4930,12 +4930,12 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
->  }
->  EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
->  
-> -static void init_kvm_softmmu(struct kvm_vcpu *vcpu)
-> +static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
-> +			     const struct kvm_mmu_role_regs *regs)
->  {
->  	struct kvm_mmu *context = &vcpu->arch.root_mmu;
-> -	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
->  
-> -	kvm_init_shadow_mmu(vcpu, &regs);
-> +	kvm_init_shadow_mmu(vcpu, regs);
->  
->  	context->get_guest_pgd     = get_cr3;
->  	context->get_pdptr         = kvm_pdptr_read;
-> @@ -4959,10 +4959,9 @@ kvm_calc_nested_mmu_role(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *
->  	return role;
->  }
->  
-> -static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu)
-> +static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu, const struct kvm_mmu_role_regs *regs)
->  {
-> -	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
-> -	union kvm_mmu_role new_role = kvm_calc_nested_mmu_role(vcpu, &regs);
-> +	union kvm_mmu_role new_role = kvm_calc_nested_mmu_role(vcpu, regs);
->  	struct kvm_mmu *g_context = &vcpu->arch.nested_mmu;
->  
->  	if (new_role.as_u64 == g_context->mmu_role.as_u64)
-> @@ -5002,12 +5001,14 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu)
->  
->  void kvm_init_mmu(struct kvm_vcpu *vcpu)
->  {
-> +	struct kvm_mmu_role_regs regs = vcpu_to_role_regs(vcpu);
-> +
->  	if (mmu_is_nested(vcpu))
-> -		init_kvm_nested_mmu(vcpu);
-> +		init_kvm_nested_mmu(vcpu, &regs);
->  	else if (tdp_enabled)
-> -		init_kvm_tdp_mmu(vcpu);
-> +		init_kvm_tdp_mmu(vcpu, &regs);
->  	else
-> -		init_kvm_softmmu(vcpu);
-> +		init_kvm_softmmu(vcpu, &regs);
->  }
->  EXPORT_SYMBOL_GPL(kvm_init_mmu);
->  
-> -- 
-> 2.31.1
-> 
-> 
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CB74A9784
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027824A978B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358217AbiBDKMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 05:12:55 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:34668 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiBDKMv (ORCPT
+        id S1358224AbiBDKOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:14:16 -0500
+Received: from relay4.hostedemail.com ([64.99.140.35]:59287 "EHLO
+        relay4.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236921AbiBDKOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 05:12:51 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 36EFC1C0B79; Fri,  4 Feb 2022 11:12:50 +0100 (CET)
-Date:   Fri, 4 Feb 2022 11:12:49 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pavel Machek <pavel@denx.de>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Marco Elver <elver@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [PATCH 5.10 08/25] perf: Rework perf_event_exit_event()
-Message-ID: <20220204101249.GB27857@amd>
-References: <20220204091914.280602669@linuxfoundation.org>
- <20220204091914.560626177@linuxfoundation.org>
- <20220204093734.GA27857@amd>
- <Yfz0nWtyap5Y3ogJ@kroah.com>
+        Fri, 4 Feb 2022 05:14:14 -0500
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 2E13E233D5;
+        Fri,  4 Feb 2022 10:14:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id 94F0B2001E;
+        Fri,  4 Feb 2022 10:14:11 +0000 (UTC)
+Message-ID: <aa16191c1241473fbfd55995bbba37bd2ab4a41c.camel@perches.com>
+Subject: Re: [PATCH V5 1/3] platform/x86: Add Intel Software Defined Silicon
+ driver
+From:   Joe Perches <joe@perches.com>
+To:     "David E. Box" <david.e.box@linux.intel.com>, hdegoede@redhat.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Date:   Fri, 04 Feb 2022 02:14:10 -0800
+In-Reply-To: <20220204053046.2475671-2-david.e.box@linux.intel.com>
+References: <20220204053046.2475671-1-david.e.box@linux.intel.com>
+         <20220204053046.2475671-2-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ftEhullJWpWg/VHq"
-Content-Disposition: inline
-In-Reply-To: <Yfz0nWtyap5Y3ogJ@kroah.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 94F0B2001E
+X-Spam-Status: No, score=-4.69
+X-Stat-Signature: ydd71wdpkau56qatg8kyeubdkw717xzp
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX196MIkOYnFTw0WTDvhJHlAh7MzwlEJuSoU=
+X-HE-Tag: 1643969651-478145
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2022-02-03 at 21:30 -0800, David E. Box wrote:
+> Intel Software Defined Silicon (SDSi) is a post manufacturing mechanism for
+> activating additional silicon features. Features are enabled through a
+> license activation process.
 
---ftEhullJWpWg/VHq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why isn't this a user process and not a kernel one?
 
-On Fri 2022-02-04 10:40:45, Greg Kroah-Hartman wrote:
-> On Fri, Feb 04, 2022 at 10:37:35AM +0100, Pavel Machek wrote:
-> > Hi!
-> >=20
-> > > From: Peter Zijlstra <peterz@infradead.org>
-> > >=20
-> > > commit ef54c1a476aef7eef26fe13ea10dc090952c00f8 upstream.
-> > >=20
-> > > Make perf_event_exit_event() more robust, such that we can use it from
-> > > other contexts. Specifically the up and coming remove_on_exec.
-> >=20
-> > Do we need this in 5.10? AFAICT the remove_on_exec work is not queued
-> > for 5.10, and this patch is buggy and needs following one to fix it
-> > up.
->=20
-> It's needed by the following patch, which says 5.10 is affected.
+> V5
+>   - Update kernel version to 5.18 in API doc and copyrights to 2022.
+>   - Remove unneeded prototypes.
+>   - In binary attribute handlers where ret is only used for errors,
+>     replace,
+>               return (ret < 0) ? ret : size;
+>     with,
+>               return ret ?: size;
 
-9/25 says this patch broke 5.10: Fixes: ef54c1a476ae ("perf: Rework
-perf_event_exit_event()"). 8/25 is not claiming to fix anything.
+I think this style overly tricky.
 
-Simply drop 8/25 and 9/25, and 5.10 is okay...
+Why not the canonical:
 
-Best regards,
-								Pavel
+	if (ret < 0)
+		return ret;
 
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+	return size;
 
---ftEhullJWpWg/VHq
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAmH8/CEACgkQMOfwapXb+vKxAQCgpmftfrOaQRHFHxkOvfPV8ePD
-cOQAn3PHmS8LM7CgQFVqHdINgaEP0l+M
-=L6MF
------END PGP SIGNATURE-----
-
---ftEhullJWpWg/VHq--

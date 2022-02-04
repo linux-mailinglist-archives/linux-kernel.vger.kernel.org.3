@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175114A9A54
+	by mail.lfdr.de (Postfix) with ESMTP id 883DE4A9A55
 	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359049AbiBDNv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S1359079AbiBDNvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359045AbiBDNvY (ORCPT
+        with ESMTP id S1359062AbiBDNv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:51:24 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5AFC06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:51:24 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id s2-20020a17090ad48200b001b501977b23so13155668pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 05:51:24 -0800 (PST)
+        Fri, 4 Feb 2022 08:51:29 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97974C061744
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:51:29 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id k17so5242918plk.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 05:51:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kWkrWIVd0/tR6K54G/x68wI67h0lySobA9zdXOmvIu4=;
-        b=ZjDAUHdvFm23PkDB88Y/g/RhqrfOS166LoUKOx5kLqEJVAfTEptWR30Yy2o02xcBjs
-         wWzsXg6LJBvz2Eat79+CLZwuDAa5aoD1sDJzsb/MRdCQx2nHa09K5nmMa2HzN9rNEN1y
-         J9OzGZ6bq3MFnXpMWCX7R9JFQjyx7xvrQ41jU8/5AdjHE1o5eKyePd3Op9HPm896ducL
-         p8AF+I806JejVmLZBkheAgZhisIt4LuDOmBb5FIo7FHALMGh6CxXztZcc6LzBawUefz3
-         8zJA0OKFevHfdUBGrMQNdgDBIyMavlG5FwYJk4SmYkq9jrHTLj89FeyKimQ032V1T5Zm
-         C2vg==
+        bh=jHiD4MZsT86vIRdRdRlX5LZloPcWWK9EQ4fdq/sL1Xw=;
+        b=XddfgqU7OpX9vruzWD+1hKmS2fgZLoAmSviJEa6Bt4GOAiLOXFbXNfZWds/PtwoXBI
+         zh2aSqxht1r4J7fMsBrYsNgY50Y9PHxe68Kan4djBgizWIdgOjyB9bL2BWmGgIQ79o+T
+         VNAXhbeMt8LjP2o56beGyrkiVM7tZNIFwBBNNBCg6TtI3K5AAyIVSz8oUanaTi0hsFbJ
+         4UHwbdWdZpBi8hhS48cnbLobfT7xGwVI3fmW19PxsRimm7C5rSE+YjW2uNAQgVbxlklt
+         syRtsUGm1KF/9LwBmPUMECk0WkFTK0mPUwpaATSf+Tnoa7XfXzIMsTj3LQuDVd9iqzA7
+         iv5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kWkrWIVd0/tR6K54G/x68wI67h0lySobA9zdXOmvIu4=;
-        b=OIT2dyxcgdll+Y+SnMv3dfCnieW3mRbMQLGOixurOrPhWvRLGxF7AQDJVib+oxGSOn
-         MXXiH4QlvJ5te4dUPDa2R1iAOsi7+1GFmlovze3SZzlx2OsehdJ+C4Ui113NMj9msjot
-         C5NKqsgX4Lv8Vot9QHGQSsJxOQt9PIJOjp6P9elTpiLeCsMB5JBHV1tS7SuUgXkZxrXQ
-         ZWfAvTQ4CtCYJ6LaS7nttsrLN8Z04GmU/X+u2LAHIRijqsZ4D/jJ4LOLdZsmsmJkGwBD
-         TfrguLFVWnsvFq1lfCYe0SlaU+IiUZxdRb6ANvXqe8k32CGYK4n+NppnU+0Jk8WShVOV
-         kNsA==
-X-Gm-Message-State: AOAM5319XfqzvfN4bzWXovHAl4f12WU1s6zXfWxF5lX/5djLp+mBHEAa
-        3RdDSKCQxhMuW0psa3EBJ7uxLQ==
-X-Google-Smtp-Source: ABdhPJzzlHgPllMAQLi0+cpFqx1ccciJ1GkPw437Mdlv75oiqnu9xqBhEbHOtdYvZHhrvF3MASLJ0g==
-X-Received: by 2002:a17:902:db0b:: with SMTP id m11mr3093004plx.104.1643982684308;
-        Fri, 04 Feb 2022 05:51:24 -0800 (PST)
+        bh=jHiD4MZsT86vIRdRdRlX5LZloPcWWK9EQ4fdq/sL1Xw=;
+        b=f+FHB2zXbPVNdkjxe9J8uFunyiSte5Rcu0Dc1JK2n1Wx2ikFsRiNNa8NdKcvnMncFF
+         sPeZc0nsLIOuBEAVGfv+iT/Llp3r/kZJV23x3pYnsL20GKJ6CwCxn2W0YOXX3PRdnVG9
+         rhkS0wA9Fz+mn8II+A8ihWld12RtT3CFl5g6zb13GKwFL4RENV51fAiTdnelXdCg8RmS
+         XhkjGD6hYdl2i8yZSG3c+eQ9DEH/m6ULIMan5MSm5056NqOb60iHbtBVp9CSIZ2zmyw6
+         i0X2T1Q8DIiKh8VE7NXxvck03Ngr68pzBCpIxo0Yw5OYpDhpsebsLjZGweUs9u5i0Psd
+         A0wA==
+X-Gm-Message-State: AOAM532Kn4b07FhXMXTaFGvDxGGzQZnLemRO+/0vPeVWF5lRZi6F2h4v
+        7R4dWttoQVUXcVMP7eJPvSQ0iQ==
+X-Google-Smtp-Source: ABdhPJxICqla4E74jvOrFuoYt2TchjK8Wbbi/Rm9tdVZAG7tiXooKMjmsnAOesCdgglSCvqHC/9VIw==
+X-Received: by 2002:a17:902:c209:: with SMTP id 9mr3104089pll.119.1643982689012;
+        Fri, 04 Feb 2022 05:51:29 -0800 (PST)
 Received: from localhost.localdomain ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id 13sm2668131pfm.161.2022.02.04.05.51.20
+        by smtp.gmail.com with ESMTPSA id 13sm2668131pfm.161.2022.02.04.05.51.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 05:51:23 -0800 (PST)
+        Fri, 04 Feb 2022 05:51:28 -0800 (PST)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -60,10 +60,10 @@ To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, codalist@coda.cs.cmu.edu,
         linux-audit@redhat.com
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v4 3/5] coda: Use task_is_in_init_pid_ns()
-Date:   Fri,  4 Feb 2022 21:50:49 +0800
-Message-Id: <20220204135051.60639-4-leo.yan@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>, Richard Guy Briggs <rgb@redhat.com>
+Subject: [PATCH v4 4/5] audit: Use task_is_in_init_pid_ns()
+Date:   Fri,  4 Feb 2022 21:50:50 +0800
+Message-Id: <20220204135051.60639-5-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204135051.60639-1-leo.yan@linaro.org>
 References: <20220204135051.60639-1-leo.yan@linaro.org>
@@ -77,37 +77,26 @@ Replace open code with task_is_in_init_pid_ns() for checking root PID
 namespace.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: Balbir Singh <bsingharora@gmail.com>
+Acked-by: Paul Moore <paul@paul-moore.com>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
 ---
- fs/coda/inode.c | 2 +-
- fs/coda/psdev.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ kernel/audit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/coda/inode.c b/fs/coda/inode.c
-index d9f1bd7153df..931f4560fdd0 100644
---- a/fs/coda/inode.c
-+++ b/fs/coda/inode.c
-@@ -152,7 +152,7 @@ static int coda_fill_super(struct super_block *sb, void *data, int silent)
- 	int error;
- 	int idx;
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 7690c29d4ee4..4dfa58865d9a 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -1056,7 +1056,7 @@ static int audit_netlink_ok(struct sk_buff *skb, u16 msg_type)
+ 	case AUDIT_MAKE_EQUIV:
+ 		/* Only support auditd and auditctl in initial pid namespace
+ 		 * for now. */
+-		if (task_active_pid_ns(current) != &init_pid_ns)
++		if (!task_is_in_init_pid_ns(current))
+ 			return -EPERM;
  
--	if (task_active_pid_ns(current) != &init_pid_ns)
-+	if (!task_is_in_init_pid_ns(current))
- 		return -EINVAL;
- 
- 	idx = get_device_index((struct coda_mount_data *) data);
-diff --git a/fs/coda/psdev.c b/fs/coda/psdev.c
-index b39580ad4ce5..73457661fbe8 100644
---- a/fs/coda/psdev.c
-+++ b/fs/coda/psdev.c
-@@ -270,7 +270,7 @@ static int coda_psdev_open(struct inode * inode, struct file * file)
- 	struct venus_comm *vcp;
- 	int idx, err;
- 
--	if (task_active_pid_ns(current) != &init_pid_ns)
-+	if (!task_is_in_init_pid_ns(current))
- 		return -EINVAL;
- 
- 	if (current_user_ns() != &init_user_ns)
+ 		if (!netlink_capable(skb, CAP_AUDIT_CONTROL))
 -- 
 2.25.1
 

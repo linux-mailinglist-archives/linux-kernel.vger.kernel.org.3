@@ -2,337 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8427E4A97E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E41B4A97E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 11:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357802AbiBDKcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 05:32:20 -0500
-Received: from mga04.intel.com ([192.55.52.120]:15289 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231259AbiBDKcS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 05:32:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643970738; x=1675506738;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SEicvIAPb5hGpZodOcw1U2NYpLEQGwVOn+uul1O+Xuo=;
-  b=mT7L36YlpfEfGHLOkliCHqIHTHY199ETLEUQ9B0o1/XMB7O3HCp1kjDf
-   Vg+/SzU+6WZLASb8WUHMV2ozHYZFS29qAx5MmDzEBagofiUFHuzaX5492
-   SMe7j9gNXUtp2cvKmkt1YhNoZVj3S4PvUZWFf7GBWsBcrkfgzJExk8kP1
-   rSPQxlExKPBDMi3tuanaYVxSlPwqIUDvrbDBBzcHX8dZPHhmltUpgxEVE
-   zNnh+4kJ4J8yZmLRJIrgYFFP/JhBgxIJJDWqQ6gv8urYO5vimOj4OYnB6
-   0WM+CuSsrR8hU1RWgqGZca6fqBqJHq7URrskeCFcyjeu0lnofqv27vE3Z
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="247178765"
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="247178765"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 02:32:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,342,1635231600"; 
-   d="scan'208";a="539124687"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 04 Feb 2022 02:32:16 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nFvt1-000XTh-S5; Fri, 04 Feb 2022 10:32:15 +0000
-Date:   Fri, 4 Feb 2022 18:31:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [nsaenz-rpi:pcplists-rcu-drain-v1 1/2] mm/page_alloc.c:1481:30:
- sparse: sparse: incorrect type in assignment (different modifiers)
-Message-ID: <202202041807.DLd23Ex7-lkp@intel.com>
+        id S1357826AbiBDKeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 05:34:22 -0500
+Received: from mail-bn8nam12on2088.outbound.protection.outlook.com ([40.107.237.88]:36755
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231259AbiBDKeU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 05:34:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ioDCeS3K1RVLybWjsfcCYl9QjO+SgN+Ga4MNABuRXOhVnbEnVbG77WTxYyEgGF6opQfCcsVvCD8rSXakWbu/5fY6JAnOWwQuL6iSb3u0EVXJTongbX9C5y8kiQTC/NBEc+mqS3zTDTOokXvR4XVZ52NvzMq2cm9HuS9yh/ykKbsVPtV1v8JTvdDbs/SSE+tQNcj6IzCOLZETuCfCtHYVVdLBnr1bkl2JmRhpkKw22fp/YVvV+AHVS4unRbM8xikQiltP2fn2gN8LLsJSuOF5lKO424OJ6oFF4OWgBOc/iySyJh9vAkMih0/cPeNWzieQCFyx2m29+utlnfqivPu2Bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q+3OEMu/V9sCkn5bGZ9XD1moDlGM5JnXy02JIOToiNU=;
+ b=joWB8RTJrRvgrxeOAgsFL4iGxz7yLBIAwKbIKEyGpLG/7QZJ8hzksCy7HxTmYaSxbPQmfwBTNFDV6zgGQv3PgnCYmX3KOxPKGNWmqrDLAqVBbSYGwp80hhaE7LAwAavrzV5/4hpNsmrfZ/+FpDeOdlP1CUOn0aMCdOXjFcHs1+9+AGjnDQdob6yXh90fPBrMlApGUoPc8Iocm+JQCBFsTGTL8grUmOWhXZip2zDau1mzAUK7kJiCL5yOGlC3AZJs5uQLK881I7XtFIWdE6+qxUktCr6CpqRsyXDlTtPAM/8A/K8941RUbvbd8tNz+Q0//63YAiWW5Q4TKGF5h4u5hQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q+3OEMu/V9sCkn5bGZ9XD1moDlGM5JnXy02JIOToiNU=;
+ b=taAYak3FGJzdl+tYQNW3xFU5N0OJOxyVGhDlZkKKBxc+ebr6LWYXJxMCP1h2dOKZcSYD+s4kg/FlM2hnMryucjh4k6wAH+pR9X8tY1nSJvA1jyAc0lVi24QMahCvdIF8ojox9c/tOdXZJjWizOBIiFwY2dw2p5MTfxKDXnMRQv1xH9VLrigLx2tHL+b97DyanuKuTPzaDMGaAbdU/SJr5dcLes9CaHmpEkUhl28AVOZ2vKLa6uk0XfpEnsC9kLiWk6HIPFprklxZ2nP65pR2G/tYch9a932+MacbK9HXKlrknO0vqulH+hSVQalikT5TS+EkvQshVuQ3LKt6s7odFQ==
+Received: from DM6PR05CA0043.namprd05.prod.outlook.com (2603:10b6:5:335::12)
+ by DM6PR12MB2841.namprd12.prod.outlook.com (2603:10b6:5:49::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.20; Fri, 4 Feb
+ 2022 10:34:19 +0000
+Received: from DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::39) by DM6PR05CA0043.outlook.office365.com
+ (2603:10b6:5:335::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.8 via Frontend
+ Transport; Fri, 4 Feb 2022 10:34:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT051.mail.protection.outlook.com (10.13.172.243) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4951.12 via Frontend Transport; Fri, 4 Feb 2022 10:34:18 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 4 Feb
+ 2022 10:34:17 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Fri, 4 Feb 2022
+ 02:34:17 -0800
+Received: from kyarlagadda-linux.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.9 via Frontend
+ Transport; Fri, 4 Feb 2022 02:34:15 -0800
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     <p.zabel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
+        <thierry.reding@gmail.com>
+CC:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Subject: [PATCH] reset: ACPI reset support
+Date:   Fri, 4 Feb 2022 16:04:02 +0530
+Message-ID: <1643970842-2364-1-git-send-email-kyarlagadda@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 89a45870-c867-48a1-4ac4-08d9e7c9e620
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2841:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB284115B5A0742BFD001EA4E1C3299@DM6PR12MB2841.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N0DoOjh435VNivgDss4nOwMhud6RHP0sfj+diYuY5J7z8202gqSVJWTmXqviwqDZ14xQMbdePTYv9rwo4+q7AlTTfXPY8423qNkGkOpvXXWsZEBehEipZdiwrQ6zzSVXwKE9M2ljXw/7JkVRHrPAlNNdLQkKU8CQW9Hms7cWc1VfjsqrEo2tiqUlGGATocb8+7yDRV4O/LBz+zdReA0OWQaU4Ii7GmN5RURBZccYPOgaj6Se4tbMYEl/W1o9VUnEp5l4W/0jgR3m1NsXnR0kGlgH4Os2Eji5TLp563hTGQoyZ9APwlk8URRgoi6z6IqTXiGs/B6nv16XAR296RjMDQkSSABse26WIhF9+R7cPkotjMArcSE4WQWOrhoSLwcIj4mSkp8PC5CQJmrBFAeLWfM+PHprLI2LscXwjY9ybZPnHX2QOb9JFoOh4xZBcdnuWA6NTUPnrhmvobHm8lMYfC8Qjg7+weP3CeNBVBI6Sljr+5VdDLZJybcWqk5h5M8m39jv70z13IXImjeqYtIe7H2wzQ7x/Ixd8LL6d5ZjJ73tCfZ+2zUQE08MG0QF4sTNFjEwjggEHQ9ehvq/zx+ZeCbUUheb28g7KSREEvpovkHNAuyKZ8Y+zsODiHlf1IQVZL8yIBNFJoj1+79PEZ6x+zyYGXrD1Uz7WppG/XmHltcQCUwYFqhAkOVO52OH0fbVQwkEfSH20ifRA80EUV8RKg==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(4326008)(8936002)(70586007)(70206006)(508600001)(8676002)(316002)(107886003)(2616005)(336012)(6666004)(7696005)(426003)(86362001)(26005)(36756003)(356005)(2906002)(36860700001)(110136005)(82310400004)(40460700003)(47076005)(81166007)(186003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 10:34:18.3860
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89a45870-c867-48a1-4ac4-08d9e7c9e620
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2841
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git pcplists-rcu-drain-v1
-head:   01b58921eae8d67b3ad6b05e73c2a1dd7106ae28
-commit: eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3 [1/2] mm/page_alloc: Access lists in 'struct per_cpu_pages' indirectly
-config: h8300-randconfig-s032-20220201 (https://download.01.org/0day-ci/archive/20220204/202202041807.DLd23Ex7-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git/commit/?id=eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3
-        git remote add nsaenz-rpi https://git.kernel.org/pub/scm/linux/kernel/git/nsaenz/linux-rpi.git
-        git fetch --no-tags nsaenz-rpi pcplists-rcu-drain-v1
-        git checkout eb4d0c9ef79083312513bfbbf26d6ef7defcc6b3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=h8300 SHELL=/bin/bash
+Some of the IO devices like I2C or SPI require reset at runtime to
+recover from an error condition without changing the power state of
+the system. Added check for ACPI handle and a call to method '__RST'
+if supported. Devices using device tree method are unaffected by this.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> mm/page_alloc.c:1481:30: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
-   mm/page_alloc.c:1481:30: sparse:     expected struct list_head *list
-   mm/page_alloc.c:1481:30: sparse:     got struct list_head [noderef] *
->> mm/page_alloc.c:3442:40: sparse: sparse: incorrect type in argument 2 (different modifiers) @@     expected struct list_head *head @@     got struct list_head [noderef] * @@
-   mm/page_alloc.c:3442:40: sparse:     expected struct list_head *head
-   mm/page_alloc.c:3442:40: sparse:     got struct list_head [noderef] *
-   mm/page_alloc.c:3733:14: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
-   mm/page_alloc.c:3733:14: sparse:     expected struct list_head *list
-   mm/page_alloc.c:3733:14: sparse:     got struct list_head [noderef] *
->> mm/page_alloc.c:3734:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
-   mm/page_alloc.c:3734:15: sparse:     expected int *count
-   mm/page_alloc.c:3734:15: sparse:     got int [noderef] *
->> mm/page_alloc.c:5356:18: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected struct list_head *pcp_list @@     got struct list_head [noderef] * @@
-   mm/page_alloc.c:5356:18: sparse:     expected struct list_head *pcp_list
-   mm/page_alloc.c:5356:18: sparse:     got struct list_head [noderef] *
-   mm/page_alloc.c:5357:15: sparse: sparse: incorrect type in assignment (different modifiers) @@     expected int *count @@     got int [noderef] * @@
-   mm/page_alloc.c:5357:15: sparse:     expected int *count
-   mm/page_alloc.c:5357:15: sparse:     got int [noderef] *
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
-   mm/page_alloc.c:6068:17: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got struct per_cpu_pages [noderef] __percpu ** @@
-   mm/page_alloc.c:6068:17: sparse:     expected void const [noderef] __percpu *__vpp_verify
-   mm/page_alloc.c:6068:17: sparse:     got struct per_cpu_pages [noderef] __percpu **
->> mm/page_alloc.c:7022:47: sparse: sparse: incorrect type in argument 1 (different modifiers) @@     expected struct list_head *list @@     got struct list_head [noderef] * @@
-   mm/page_alloc.c:7022:47: sparse:     expected struct list_head *list
-   mm/page_alloc.c:7022:47: sparse:     got struct list_head [noderef] *
->> mm/page_alloc.c:1466:17: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:1521:9: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3163:13: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3164:42: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3277:29: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3282:37: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3443:9: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:3445:13: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c: note: in included file (through include/linux/mm.h):
-   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
-   include/linux/gfp.h:368:27: sparse: sparse: restricted gfp_t degrades to integer
-   mm/page_alloc.c:5971:76: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:6065:76: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:6068:17: sparse: sparse: dereference of noderef expression
-   mm/page_alloc.c:6068:17: sparse: sparse: dereference of noderef expression
-
-vim +1481 mm/page_alloc.c
-
-  1445	
-  1446	/*
-  1447	 * Frees a number of pages from the PCP lists
-  1448	 * Assumes all pages on list are in same zone.
-  1449	 * count is the number of pages to free.
-  1450	 */
-  1451	static void free_pcppages_bulk(struct zone *zone, int count,
-  1452				       int batch, struct pcplists *lp)
-  1453	{
-  1454		int pindex = 0;
-  1455		int batch_free = 0;
-  1456		int nr_freed = 0;
-  1457		unsigned int order;
-  1458		bool isolated_pageblocks;
-  1459		struct page *page, *tmp;
-  1460		LIST_HEAD(head);
-  1461	
-  1462		/*
-  1463		 * Ensure proper count is passed which otherwise would stuck in the
-  1464		 * below while (list_empty(list)) loop.
-  1465		 */
-> 1466		count = min(lp->count, count);
-  1467		while (count > 0) {
-  1468			struct list_head *list;
-  1469	
-  1470			/*
-  1471			 * Remove pages from lists in a round-robin fashion. A
-  1472			 * batch_free count is maintained that is incremented when an
-  1473			 * empty list is encountered.  This is so more pages are freed
-  1474			 * off fuller lists instead of spinning excessively around empty
-  1475			 * lists
-  1476			 */
-  1477			do {
-  1478				batch_free++;
-  1479				if (++pindex == NR_PCP_LISTS)
-  1480					pindex = 0;
-> 1481				list = &lp->lists[pindex];
-  1482			} while (list_empty(list));
-  1483	
-  1484			/* This is the only non-empty list. Free them all. */
-  1485			if (batch_free == NR_PCP_LISTS)
-  1486				batch_free = count;
-  1487	
-  1488			order = pindex_to_order(pindex);
-  1489			BUILD_BUG_ON(MAX_ORDER >= (1<<NR_PCP_ORDER_WIDTH));
-  1490			do {
-  1491				page = list_last_entry(list, struct page, lru);
-  1492				/* must delete to avoid corrupting pcp list */
-  1493				list_del(&page->lru);
-  1494				nr_freed += 1 << order;
-  1495				count -= 1 << order;
-  1496	
-  1497				if (bulkfree_pcp_prepare(page))
-  1498					continue;
-  1499	
-  1500				/* Encode order with the migratetype */
-  1501				page->index <<= NR_PCP_ORDER_WIDTH;
-  1502				page->index |= order;
-  1503	
-  1504				list_add_tail(&page->lru, &head);
-  1505	
-  1506				/*
-  1507				 * We are going to put the page back to the global
-  1508				 * pool, prefetch its buddy to speed up later access
-  1509				 * under zone->lock. It is believed the overhead of
-  1510				 * an additional test and calculating buddy_pfn here
-  1511				 * can be offset by reduced memory latency later. To
-  1512				 * avoid excessive prefetching due to large count, only
-  1513				 * prefetch buddy for the first pcp->batch nr of pages.
-  1514				 */
-  1515				if (batch) {
-  1516					prefetch_buddy(page);
-  1517					batch--;
-  1518				}
-  1519			} while (count > 0 && --batch_free && !list_empty(list));
-  1520		}
-  1521		lp->count -= nr_freed;
-  1522	
-  1523		/*
-  1524		 * local_lock_irq held so equivalent to spin_lock_irqsave for
-  1525		 * both PREEMPT_RT and non-PREEMPT_RT configurations.
-  1526		 */
-  1527		spin_lock(&zone->lock);
-  1528		isolated_pageblocks = has_isolate_pageblock(zone);
-  1529	
-  1530		/*
-  1531		 * Use safe version since after __free_one_page(),
-  1532		 * page->lru.next will not point to original list.
-  1533		 */
-  1534		list_for_each_entry_safe(page, tmp, &head, lru) {
-  1535			int mt = get_pcppage_migratetype(page);
-  1536	
-  1537			/* mt has been encoded with the order (see above) */
-  1538			order = mt & NR_PCP_ORDER_MASK;
-  1539			mt >>= NR_PCP_ORDER_WIDTH;
-  1540	
-  1541			/* MIGRATE_ISOLATE page should not go to pcplists */
-  1542			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
-  1543			/* Pageblock could have been isolated meanwhile */
-  1544			if (unlikely(isolated_pageblocks))
-  1545				mt = get_pageblock_migratetype(page);
-  1546	
-  1547			__free_one_page(page, page_to_pfn(page), zone, order, mt, FPI_NONE);
-  1548			trace_mm_page_pcpu_drain(page, order, mt);
-  1549		}
-  1550		spin_unlock(&zone->lock);
-  1551	}
-  1552	
-
+Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/reset/core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+index 61e6888..e4fb533 100644
+--- a/drivers/reset/core.c
++++ b/drivers/reset/core.c
+@@ -12,6 +12,7 @@
+ #include <linux/kref.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/acpi.h>
+ #include <linux/reset.h>
+ #include <linux/reset-controller.h>
+ #include <linux/slab.h>
+@@ -1107,6 +1108,11 @@ int __device_reset(struct device *dev, bool optional)
+ 	struct reset_control *rstc;
+ 	int ret;
+ 
++	acpi_handle handle = ACPI_HANDLE(dev);
++
++	if (handle)
++		return acpi_evaluate_object(handle, "_RST", NULL, NULL);
++
+ 	rstc = __reset_control_get(dev, NULL, 0, 0, optional, true);
+ 	if (IS_ERR(rstc))
+ 		return PTR_ERR(rstc);
+-- 
+2.7.4
+

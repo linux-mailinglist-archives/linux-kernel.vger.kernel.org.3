@@ -2,170 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B3F4A9DDC
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E884A9DDD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376993AbiBDRlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:41:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:47435 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238161AbiBDRlV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:41:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643996482; x=1675532482;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HNAWq9SbvrJ7bhHuSuHGWfwTAaW9LozmAE/xxrXCg0c=;
-  b=HY+vbmtiA14KR290hH82ko//xldvkySrZfxTRhmXVHtsPCnGIxNJckEn
-   /Dse3vIzFeaPvYrcPK4DQP/900tOgNIHL/E/UYWgi8mPalvcFFoi2bKs2
-   R7tRGo30hjUlMbRQvDXWiSTQAHejzGuwhs5UJev0HpXTq2Ajmjz2X8UCp
-   EC6QCv2+rQjNuc3Qi8rwdapGWLncxVNKkBtZiHzeJnqYt0zReRdcC5yff
-   9jNLMdtlsLW+RUoBa0PEUARgauq5TrCSbJroNuRkzNNlmy07jGyD1zchR
-   IxUcibubHWfXcysttbI9aqXvQMkw1hZIiToN5kyFM/QKx3xNEruFIcj9S
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="272912166"
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="272912166"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:41:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="480903004"
-Received: from schen9-mobl.amr.corp.intel.com ([10.251.2.218])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 09:41:21 -0800
-Message-ID: <88e9287ef7a86f24999af00f90d6f122de024979.camel@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Barry Song <21cnbao@gmail.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        prime.zeng@huawei.com,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        ego@linux.vnet.ibm.com, Linuxarm <linuxarm@huawei.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Guodong Xu <guodong.xu@linaro.org>, yu.c.chen@intel.com
-Date:   Fri, 04 Feb 2022 09:41:21 -0800
-In-Reply-To: <CAGsJ_4zVEjFYoff=x=Y3i9xPxoi891x-gkfA6Lsdc+yT2ykRmQ@mail.gmail.com>
-References: <20220126080947.4529-1-yangyicong@hisilicon.com>
-         <20220126080947.4529-3-yangyicong@hisilicon.com>
-         <YfK9DSMFabjYm/MV@BLR-5CG11610CF.amd.com>
-         <CAGsJ_4xL3tynB9P=rKMoX2otW4bMMU5Z-P9zSudMV3+fr2hpXw@mail.gmail.com>
-         <20220128071337.GC618915@linux.vnet.ibm.com>
-         <CAGsJ_4yoUONACY-j+9XxSNC0VgmdyRdHC=z87dWvZvVSASzXRQ@mail.gmail.com>
-         <20220201093859.GE618915@linux.vnet.ibm.com>
-         <CAGsJ_4z8cer7Y5si+J_=awQetFJZMVeaQ+RDSXQz9EGOPTGMQg@mail.gmail.com>
-         <20220204073317.GG618915@linux.vnet.ibm.com>
-         <CAGsJ_4xjgy3D0VzbTdmJihJ+nut_NeTEb4krh8jup4rbvTY_ww@mail.gmail.com>
-         <CAGsJ_4zVEjFYoff=x=Y3i9xPxoi891x-gkfA6Lsdc+yT2ykRmQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1377000AbiBDRmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235897AbiBDRmL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 12:42:11 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3A4C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 09:42:10 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so13741403pjq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 09:42:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mw2mTYd1EA4mqj3Y4u5Ue6ccwfT5N3jmz03Fjl83bCU=;
+        b=eXZ63+a1lsDWDQRsOLXVJsnfLq/T94bBQbtG2VSM6hWcEGd2c3kiVmPhjjtYB+R676
+         rkEaPFYX5U1ven+VCgHmCha20Y8LYxpO/9S1b0kb/WWLCJZpKi7BFo4nhuGxkJCc9GRe
+         Puco1/iHoAktkjG+LtLJSXWG9EvmSm+TWXyIRyNhWGugQ6CONuWNsjJuCk2QWXRVYkf3
+         FxCJr8VaU/Kbk74pf8WcRIrlxRF7QNpAHc0a8lyHU+OSMfEDVJRQVcg5jMeZWoPyYz9L
+         Oa0PYy4YemePwGFF1YbLDQiBLoaeD7Ig9LLQs1HK8Jdk9XMWExOtIpMlEFakXV58Loca
+         l3HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mw2mTYd1EA4mqj3Y4u5Ue6ccwfT5N3jmz03Fjl83bCU=;
+        b=owrFD5J+41RKCQzH/tfeYk1TvRMg38nkub9UD0BowXNuzfyxmzUV3Bsg5N6aRd/LXJ
+         1eTm/RHLp6DkWjIOqtnwJJTHD+TqFF6jiplK4IDj5Fmz0JojvrxPFqwmbWP0JooJK9N+
+         Th4YWoLFB4iyVnB+qHByBHxoxYYZgdwNb6gTTHub2eLkrlfuOd9TweBNUKTcq4tWZRAt
+         i3Mh4VAiQ8+56n/Pt6q9Vyepka1l73s72wZLXDUsZ8pWWWa2RAuRFdOkSN9/jbARKl8W
+         dsPuITd8/hEC4/oT4rFHsfgw7MPGf/gal/IglX9yUHclSn5yKWYs89r1cZDgSHG8whKM
+         0rXQ==
+X-Gm-Message-State: AOAM530Hp7RiipifRCfRDwLVZap/DY765XQ2n1QVWWaMroqiYUPwvd1m
+        JK5PIAwZm9eH01s/gnZ2oa1s4pxfL4avnh+EIVUaHg==
+X-Google-Smtp-Source: ABdhPJzLGEd34xTTZiapGHY+mhMUMcd8jfGKSDZbIobWC3HUsXScKTdFqfNyjqr9T/g005FzIwmAT/68aOu7KH0LPSA=
+X-Received: by 2002:a17:902:d705:: with SMTP id w5mr4408362ply.34.1643996530392;
+ Fri, 04 Feb 2022 09:42:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-38-ira.weiny@intel.com>
+In-Reply-To: <20220127175505.851391-38-ira.weiny@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 4 Feb 2022 09:41:59 -0800
+Message-ID: <CAPcyv4go5pqWdvR7w7kDjOKQywTUwZ=Tbn-LSmOyE-4GdhZsmg@mail.gmail.com>
+Subject: Re: [PATCH V8 37/44] memremap_pages: Set PKS PKey in PTEs if
+ PGMAP_PROTECTIONS is requested
+To:     "Weiny, Ira" <ira.weiny@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-02-04 at 23:49 +1300, Barry Song wrote:
-> On Fri, Feb 4, 2022 at 11:28 PM Barry Song <21cnbao@gmail.com> wrote:
-> > On Fri, Feb 4, 2022 at 8:33 PM Srikar Dronamraju
-> > <srikar@linux.vnet.ibm.com> wrote:
-> > > * Barry Song <21cnbao@gmail.com> [2022-02-02 09:20:32]:
-> > > 
-> > > > On Tue, Feb 1, 2022 at 10:39 PM Srikar Dronamraju
-> > > > <srikar@linux.vnet.ibm.com> wrote:
-> > > > > * Barry Song <21cnbao@gmail.com> [2022-01-28 07:40:15]:
-> > > > > 
-> > > > > > On Fri, Jan 28, 2022 at 8:13 PM Srikar Dronamraju
-> > > > > > <srikar@linux.vnet.ibm.com> wrote:
-> > > > > > > * Barry Song <21cnbao@gmail.com> [2022-01-28 09:21:08]:
-> > > > > > > 
-> > > > > > > > On Fri, Jan 28, 2022 at 4:41 AM Gautham R. Shenoy
-> > > > > > > > <gautham.shenoy@amd.com> wrote:
-> > > > > > > > > On Wed, Jan 26, 2022 at 04:09:47PM +0800, Yicong Yang
-> > > > > > > > > wrote:
-> > > > > > > > > > From: Barry Song <song.bao.hua@hisilicon.com>
-> > > > > > > > > > 
-> > > > > > I am sorry I didn't get your question. Currently the code
-> > > > > > works as below:
-> > > > > > if task A wakes up task B, and task A is in LLC0 and task B
-> > > > > > is in LLC1.
-> > > > > > we will scan the cluster of A before scanning the whole
-> > > > > > LLC0, in this case,
-> > > > > > cluster of A is the closest sibling, so it is the better
-> > > > > > choice than other CPUs
-> > > > > > which are in LLC0 but not in the cluster of A.
-> > > > > 
-> > > > > Yes, this is right.
-> > > > > 
-> > > > > > But we do scan all cpus of LLC0
-> > > > > > afterwards if we fail to find an idle CPU in the cluster.
-> > > > > 
-> > > > > However my reading of the patch, before we can scan other
-> > > > > clusters within
-> > > > > the LLC (aka LLC0), we have a check in scan cluster which
-> > > > > says
-> > > > > 
-> > > > >         /* Don't ping-pong tasks in and out cluster
-> > > > > frequently */
-> > > > >         if (cpus_share_resources(target, prev_cpu))
-> > > > >            return target;
-> > > > > 
-> > > > > My reading of this is, ignore other clusters (at this point,
-> > > > > we know there
-> > > > > are no idle CPUs in this cluster. We don't know if there are
-> > > > > idle cpus in
-> > > > > them or not) if the previous CPU and target CPU happen to be
-> > > > > from the same
-> > > > > cluster. This effectively means we are given preference to
-> > > > > cache over idle
-> > > > > CPU.
-> > > > 
-> > > > Note we only ignore other cluster while prev_cpu and target are
-> > > > in same
-> > > > cluster. if the condition is false, we are not ignoring other
-> > > > cpus. typically,
-> > > > if waker is the target, and wakee is the prev_cpu, that means
-> > > > if they are
-> > > > already in one cluster, we don't stupidly spread them in
-> > > > select_idle_cpu() path
-> > > > as benchmark shows we are losing. so, yes, we are giving
-> > > > preference to
-> > > > cache over CPU.
-> > > 
-> > > We already figured out that there are no idle CPUs in this
-> > > cluster. So dont
-> > > we gain performance by picking a idle CPU/core in the
-> > > neighbouring cluster.
-> > > If there are no idle CPU/core in the neighbouring cluster, then
-> > > it does make
-> > > sense to fallback on the current cluster.
-> > 
-> > 
+On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+>
+> From: Ira Weiny <ira.weiny@intel.com>
+>
+> When the user requests protections the dev_pagemap mappings need to have
+> a PKEY set.
+>
+> Define devmap_protection_adjust_pgprot() to add the PKey to the page
+> protections.  Call it when PGMAP_PROTECTIONS is requested when remapping
+> pages.
+>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
 
-We may need to take into consideration the utilization and
-load average for the source and target cluster to make
-better decision of whether it is worth placing the
-task in the next cluster.  If the load of the target
-cluster is too high, it is not worth pushing the task there.
+Does this patch have a reason to exist independent of the patch that
+introduced devmap_protection_enable()?
 
-Those stats can be gathered during load balancing without adding
-overhead in the hot task wakeup path.
-
-Chen Yu played around with cutting off the idle CPU search
-in a LLC based on such stats and he saw some good
-improvements over the default.
-
-Tim
-
+Otherwise looks ok.

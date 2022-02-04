@@ -2,188 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE384A92CA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 04:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23134A92CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 04:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356837AbiBDDlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Feb 2022 22:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232345AbiBDDls (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Feb 2022 22:41:48 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736B2C061714;
-        Thu,  3 Feb 2022 19:41:48 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id z1so4724332qto.3;
-        Thu, 03 Feb 2022 19:41:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7mi+rsnY3rOXooKo8WaV+dwZtlr3f4pyVzHcdNPQMpQ=;
-        b=T40GCJdjXaaTjaczrdWdZj7khY2Y7yBugzTdvsQorikd4Fj7O2S42NsW+TLWBwKNnu
-         G5PRYGPcxJcCI10fuuHsRsbwCT7G1wfllTdyMqB8eLp2I3/XqgQ1uDlIkda6dV1lIY0z
-         ie4zP+dHOXZWb0DqfEwZu4TFZlEx26WEhwprbAWrZn2UjVZMVoiF6kV9YmbCL2+aj1YA
-         jzgr9qdn0hmKH/78O653HptID/h3QxFMctqDlhht9anexxYXaAyDtGletsRvWtpEXMjv
-         9pUlrM21GEiljtlGg+wzhtx14+tDw5tZyUugtwBtY2Nr2tvAuY/pxbPzay2F94Hv1BpZ
-         sMtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7mi+rsnY3rOXooKo8WaV+dwZtlr3f4pyVzHcdNPQMpQ=;
-        b=rCXih+OFPLAeVMoKWBXqrg/pcUXEcgPo0n/Aqpqpbfvjothmv44guK9EL78NHSATu9
-         FkbsAPh/BgQaN++8RZly/HlJcMMsOqCB1JQpeMFzSefOFC/WT2HkTB1UddavIFZkKF2j
-         Q2JA0NG1mhj4o3UF3xYiZmewH5F2u7sI9OuwNkzm4qccZiGUJLuuMiaSsvc6ZgJQmrQD
-         wLihb98A/GNozg/S6KrA4wGc5k8kN3CP1C495LjYb+Rdz/hyXQ8q/ia2khjaW+xByxLB
-         0a+5w+Mzve+c6lJMDV43Tbn/ivuvROK9QwM5Zei/ZIo8/EhbI0fywahBIYdyCBdXEbob
-         /2JQ==
-X-Gm-Message-State: AOAM533IuU6qtF7YshvQqh2+nTlB4uqcSaGfAc4UL/BE73nak1ymdJI3
-        IYLc1C3SpzR18uCTpGX0CyY=
-X-Google-Smtp-Source: ABdhPJyCq6LWvW14DLtDjrArdY2ynqb/JUcPPk0wBnj+yXyUU5psYtk8PSgDMA6MzcpNuwegbgeFxg==
-X-Received: by 2002:ac8:5a50:: with SMTP id o16mr831938qta.260.1643946107201;
-        Thu, 03 Feb 2022 19:41:47 -0800 (PST)
-Received: from [192.168.1.49] (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id s1sm500616qkp.40.2022.02.03.19.41.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Feb 2022 19:41:46 -0800 (PST)
-Subject: Re: [PATCH 1/1] of: unittest: print pass messages at same loglevel as
- fail
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220203211150.2912192-1-frowand.list@gmail.com>
- <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <24652725-91d8-9db4-e14a-e1bb5ded87b1@gmail.com>
-Date:   Thu, 3 Feb 2022 21:41:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1356844AbiBDDnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Feb 2022 22:43:05 -0500
+Received: from mga06.intel.com ([134.134.136.31]:61187 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232345AbiBDDnE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Feb 2022 22:43:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643946184; x=1675482184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3uTFZobat6+M98NVZ6aOUCNuFdRnUqWsBNK5KQaZHPc=;
+  b=RDT53Zrt4c120DtiEWnCbnu9VJrW22nPoHuBRd7JNd2a1DGDT42nNjA0
+   GWS+UjfqwNUuh8Umywre3jD/cGFZzwO/qLbYMQfbO/yoeiClNDvFVUMoe
+   5fS7bTQ22M5SURAGgB86l1Rnd7Xk68XsVSnTSx5NwXQA6uedvIIqO4auh
+   0rbWoYlyaomHIPMQuxw8oDwHvHZE5n73uhrhGNPe3p1+5aSv7RI1ZAztA
+   PiqirlNJZH6fFPcVCXowLMB9/jv3/woMPka9qDeHKuCRczoZ+o9c+KSDY
+   ceiP5YeYfF78CeBYkA5Jsw6OcCw5w8DWbP1DAgiFDRjAoTI/I7+T5FPyO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="309049291"
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="309049291"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 19:43:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="620725681"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Feb 2022 19:42:58 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 9E0C018D; Fri,  4 Feb 2022 05:43:12 +0200 (EET)
+Date:   Fri, 4 Feb 2022 06:43:12 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@intel.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
+        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
+        seanjc@google.com, tony.luck@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 03/29] x86/tdx: Add __tdx_module_call() and
+ __tdx_hypercall() helper functions
+Message-ID: <20220204034312.43rotpihciik2gk6@black.fi.intel.com>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220124150215.36893-4-kirill.shutemov@linux.intel.com>
+ <87a6faz7cs.ffs@tglx>
+ <20220202025519.csymm7r23b3ltpia@black.fi.intel.com>
+ <20220202235910.c512857813ea5b14aa73267f@intel.com>
+ <20220203144403.ytyw5vcv4gshxyhn@black.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKMZWMtvdTvYHmWkd5CmehKJexJVv_BUBENrMPOf002+w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203144403.ytyw5vcv4gshxyhn@black.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/22 3:40 PM, Rob Herring wrote:
-> On Thu, Feb 3, 2022 at 3:12 PM <frowand.list@gmail.com> wrote:
->>
->> From: Frank Rowand <frank.rowand@sony.com>
->>
->> Printing the devicetree unittest pass message for each passed test
->> creates much console verbosity.  The existing pass messages are
->> printed at loglevel KERN_DEBUG so they will not print by default.
->>
->> Change default to print the pass messages at the same loglevel as
->> the fail messages.
->>
->> The test community expects either a pass or a fail message for each
->> test in a test suite.  The messages are typically post-processed to
->> report pass/fail results.
->>
->> Suppressing printing the pass message for each individual test is
->> available via the kernel command line parameter unittest.hide_pass.
->>
->> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
->> ---
->>  Documentation/admin-guide/kernel-parameters.txt |  4 ++++
->>  drivers/of/unittest.c                           | 17 ++++++++++++++++-
->>  2 files changed, 20 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->> index f5a27f067db9..045455f9b7e1 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -5997,6 +5997,10 @@
->>                         Note that genuine overcurrent events won't be
->>                         reported either.
->>
->> +       unittest.hide_pass
-> 
-> Can we rename the module name to include 'dt' so we're not taking a
-> generic name.
+On Thu, Feb 03, 2022 at 05:44:03PM +0300, Kirill A. Shutemov wrote:
+> Any objections?
 
-I got most of the way through writing a reply to the various questions, then got to
-the point where my answer to a specific question ended up being something to the
-effect of: "this line of code (where a change was suggested) will end up being
-replaced when I convert the unittest messages to KTAP format".
+Below is proper patch of the idea. It can be used to implement both
+SEAMCALL and TDCALL wrappers.
 
-Then I got sidelined by going back and re-reading the KTAP specification email
-thread from August, then discovering that there is also a patch submission email
-thread from December where a KTAP specification is accepted into the kernel tree.
+It works for TDCALL. Kai, could you check if it is fine for SEAMCALL?
 
-Being KTAP compliant does not allow for suppressing the individual test pass
-messages, so I think I should just drop my desire to be able to do so.  That
-would reduce this patch to a one line change to print the pass messages at the
-same loglevel as the fail messages.  And I would prefer to not worry about
-whether the pass message is 'pass' vs 'PASS' since that text will get replaced
-by the KTAP syntax anyway.
+----------------------------------8<-----------------------------------
 
-Would you be ok with that one line patch?
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Date: Fri, 4 Feb 2022 02:03:21 +0300
+Subject: [PATCH] x86/tdx: Provide common base for SEAMCALL and TDCALL C
+ wrappers
 
--Frank
+Secure Arbitration Mode (SEAM) is an extension of VMX architecture.  It
+defines a new VMX root operation (SEAM VMX root) and a new VMX non-root
+operation (SEAM VMX non-root) which are both isolated from the legacy
+VMX operation where the host kernel runs.
 
-> 
->> +                       Disable printing individual drivers/of/unittest test
->> +                       pass messages.
->> +
->>         unknown_nmi_panic
->>                         [X86] Cause panic on unknown NMI.
->>
->> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
->> index 70992103c07d..2cfbdc6b29ac 100644
->> --- a/drivers/of/unittest.c
->> +++ b/drivers/of/unittest.c
->> @@ -12,6 +12,7 @@
->>  #include <linux/errno.h>
->>  #include <linux/hashtable.h>
->>  #include <linux/libfdt.h>
->> +#include <linux/module.h>
->>  #include <linux/of.h>
->>  #include <linux/of_address.h>
->>  #include <linux/of_fdt.h>
->> @@ -32,6 +33,19 @@
->>
->>  #include "of_private.h"
->>
->> +MODULE_LICENSE("GPL v2");
->> +static bool hide_pass;
->> +
->> +static int __init hide_pass_setup(char *str)
->> +{
->> +       hide_pass = true;
->> +       return 0;
->> +}
->> +
->> +early_param("hide_pass", hide_pass_setup);
->> +module_param(hide_pass, bool, 0);
->> +MODULE_PARM_DESC(hide_pass, "Disable printing individual of unittest pass messages");
->> +
->>  static struct unittest_results {
->>         int passed;
->>         int failed;
->> @@ -44,7 +58,8 @@ static struct unittest_results {
->>                 pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
->>         } else { \
->>                 unittest_results.passed++; \
->> -               pr_debug("pass %s():%i\n", __func__, __LINE__); \
->> +               if (!hide_pass) \
->> +                       pr_err("pass %s():%i\n", __func__, __LINE__); \
-> 
-> Would 'PASS' be better here to align with FAIL?
-> 
-> If we make this info level, then you can filter with dmesg and also
-> seems to be aligned with what kunit does.
-> 
-> 
-> Rob
-> 
+A CPU-attested software module (called 'TDX module') runs in SEAM VMX
+root to manage and protect VMs running in SEAM VMX non-root.  SEAM VMX
+root is also used to host another CPU-attested software module (called
+'P-SEAMLDR') to load and update the TDX module.
 
+Host kernel transits to either P-SEAMLDR or TDX module via the new
+SEAMCALL instruction, which is essentially a VMExit from VMX root mode
+to SEAM VMX root mode.  SEAMCALLs are leaf functions defined by
+P-SEAMLDR and TDX module around the new SEAMCALL instruction.
+
+A guest kernel can also communicate with TDX module via TDCALL
+instruction.
+
+TDCALLs and SEAMCALLs use an ABI different from the x86-64 system-v ABI.
+RAX is used to carry both the SEAMCALL leaf function number (input) and
+the completion status (output).  Additional GPRs (RCX, RDX, R8-R11) may
+be further used as both input and output operands in individual leaf.
+
+TDCALL and SEAMCALL share the same ABI and require the largely same
+code to pass down arguments and retrieve results.
+
+Define an assembly macro that can be used to implement C wrapper for
+both TDCALL and SEAMCALL.
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/include/asm/tdx.h    | 20 ++++++++
+ arch/x86/kernel/asm-offsets.c |  9 ++++
+ arch/x86/kernel/tdxcall.S     | 91 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 120 insertions(+)
+ create mode 100644 arch/x86/kernel/tdxcall.S
+
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index ba8042ce61c2..2f8cb1e53e77 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -8,6 +8,25 @@
+ #define TDX_CPUID_LEAF_ID	0x21
+ #define TDX_IDENT		"IntelTDX    "
+ 
++#define TDX_SEAMCALL_VMFAILINVALID     0x8000FF00FFFF0000ULL
++
++#ifndef __ASSEMBLY__
++
++/*
++ * Used to gather the output registers values of the TDCALL and SEAMCALL
++ * instructions when requesting services from the TDX module.
++ *
++ * This is a software only structure and not part of the TDX module/VMM ABI.
++ */
++struct tdx_module_output {
++	u64 rcx;
++	u64 rdx;
++	u64 r8;
++	u64 r9;
++	u64 r10;
++	u64 r11;
++};
++
+ #ifdef CONFIG_INTEL_TDX_GUEST
+ 
+ void __init tdx_early_init(void);
+@@ -18,4 +37,5 @@ static inline void tdx_early_init(void) { };
+ 
+ #endif /* CONFIG_INTEL_TDX_GUEST */
+ 
++#endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_TDX_H */
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 9fb0a2f8b62a..7dca52f5cfc6 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -18,6 +18,7 @@
+ #include <asm/bootparam.h>
+ #include <asm/suspend.h>
+ #include <asm/tlbflush.h>
++#include <asm/tdx.h>
+ 
+ #ifdef CONFIG_XEN
+ #include <xen/interface/xen.h>
+@@ -65,6 +66,14 @@ static void __used common(void)
+ 	OFFSET(XEN_vcpu_info_arch_cr2, vcpu_info, arch.cr2);
+ #endif
+ 
++	BLANK();
++	OFFSET(TDX_MODULE_rcx, tdx_module_output, rcx);
++	OFFSET(TDX_MODULE_rdx, tdx_module_output, rdx);
++	OFFSET(TDX_MODULE_r8,  tdx_module_output, r8);
++	OFFSET(TDX_MODULE_r9,  tdx_module_output, r9);
++	OFFSET(TDX_MODULE_r10, tdx_module_output, r10);
++	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
++
+ 	BLANK();
+ 	OFFSET(BP_scratch, boot_params, scratch);
+ 	OFFSET(BP_secure_boot, boot_params, secure_boot);
+diff --git a/arch/x86/kernel/tdxcall.S b/arch/x86/kernel/tdxcall.S
+new file mode 100644
+index 000000000000..27d6fcc8e44c
+--- /dev/null
++++ b/arch/x86/kernel/tdxcall.S
+@@ -0,0 +1,91 @@
++#include <asm/asm-offsets.h>
++#include <asm/tdx.h>
++
++/*
++ * TDX guests use the TDCALL instruction to make requests to the
++ * TDX module and hypercalls to the VMM.
++ *
++ * TDX host user SEAMCALL instruction to make requests to TDX module.
++ *
++ * They are supported in Binutils >= 2.36.
++ */
++#define tdcall		.byte 0x66,0x0f,0x01,0xcc
++#define seamcall	.byte 0x66,0x0f,0x01,0xcf
++
++.macro TDX_MODULE_CALL host:req
++	/*
++	 * R12 will be used as temporary storage for struct tdx_module_output
++	 * pointer. Since R12-R15 registers are not used by TDCALL/SEAMCALL
++	 * services supported by this function, it can be reused.
++	 */
++
++	/* Callee saved, so preserve it */
++	push %r12
++
++	/*
++	 * Push output pointer to stack.
++	 * After the operation, it will be fetched into R12 register.
++	 */
++	push %r9
++
++	/* Mangle function call ABI into TDCALL/SEAMCALL ABI: */
++	/* Move Leaf ID to RAX */
++	mov %rdi, %rax
++	/* Move input 4 to R9 */
++	mov %r8,  %r9
++	/* Move input 3 to R8 */
++	mov %rcx, %r8
++	/* Move input 1 to RCX */
++	mov %rsi, %rcx
++	/* Leave input param 2 in RDX */
++
++	.if \host
++	seamcall
++	/*
++	 * SEAMCALL instruction is essentially a VMExit from VMX root
++	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
++	 * that the targeted SEAM firmware is not loaded or disabled,
++	 * or P-SEAMLDR is busy with another SEAMCALL.  %rax is not
++	 * changed in this case.
++	 *
++	 * Set %rax to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
++	 * This value will never be used as actual SEAMCALL error code.
++	 */
++	jnc     .Lno_vmfailinvalid
++	mov     $TDX_SEAMCALL_VMFAILINVALID, %rax
++	jmp     .Lno_output_struct
++.Lno_vmfailinvalid:
++	.else
++	tdcall
++	.endif
++
++	/*
++	 * Fetch output pointer from stack to R12 (It is used
++	 * as temporary storage)
++	 */
++	pop %r12
++
++	/* Check for success: 0 - Successful, otherwise failed */
++	test %rax, %rax
++	jnz .Lno_output_struct
++
++	/*
++	 * Since this function can be initiated without an output pointer,
++	 * check if caller provided an output struct before storing
++	 * output registers.
++	 */
++	test %r12, %r12
++	jz .Lno_output_struct
++
++	/* Copy result registers to output struct: */
++	movq %rcx, TDX_MODULE_rcx(%r12)
++	movq %rdx, TDX_MODULE_rdx(%r12)
++	movq %r8,  TDX_MODULE_r8(%r12)
++	movq %r9,  TDX_MODULE_r9(%r12)
++	movq %r10, TDX_MODULE_r10(%r12)
++	movq %r11, TDX_MODULE_r11(%r12)
++
++.Lno_output_struct:
++	/* Restore the state of R12 register */
++	pop %r12
++.endm
+-- 
+ Kirill A. Shutemov

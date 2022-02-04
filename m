@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831364AA131
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F9B4AA133
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbiBDUdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S238666AbiBDUdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:33:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237910AbiBDUc6 (ORCPT
+        with ESMTP id S238463AbiBDUdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:32:58 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153ABC061714;
-        Fri,  4 Feb 2022 12:32:57 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id b35so5729310qkp.6;
-        Fri, 04 Feb 2022 12:32:57 -0800 (PST)
+        Fri, 4 Feb 2022 15:33:11 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7409C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:33:10 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id c188so8831979iof.6
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:33:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BnHGInZ6R+GWHhomNWuA/pIrXH/uUnktXFDBquqwRgg=;
-        b=aRUCRPIN1LlaTCOY17aSWSkQtaZAPbO9+ojImnVMYW+oCz+ebggUzkHNqmvr7Zcc/x
-         NrhA9iEVtOWGmFcnrOJ7wqXwv/y+gH5ftr4VJi5G/KyNKVlzKijGncZz/O3lpLw2PgxF
-         Ga93IUcjGWE2q3qpSq6KqhcuqqcIllfkvhXeP0s2sKKF1MQMOVfDcGugffMlDd9oXrr0
-         dHd70J0mCLBsG1GrSlky7M92a8QwLx+JtIoDFnhItVI4az8jjhykhl0TKXeRureROTcw
-         7KnGoE+G7BnemSKzPQffNB9gUsFmwdnzLp06Ko4sCHaH41I9v6pSXDPZWyUXHHcwi3YY
-         WM4A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yC+jvfwVlwP869Sf5VAj3JxEYXRki/S+j7RsCMY3Luc=;
+        b=hw8nrVpnzEkdr0OXDIad/ireNg0NAK/Xv7CtDLacAkx1cPrF3ZB2GNFNpFEmc0YfcX
+         s0PFua40cSq28GFIa06w0+J9WtvYTs5y13wzFbEOO6en8gG9ySAxL8HnievQucay9A1v
+         mX1aNadCpsN7W4hscbCOmr5QExwXOZYVgfr68=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=BnHGInZ6R+GWHhomNWuA/pIrXH/uUnktXFDBquqwRgg=;
-        b=NJpLsMuWc4uYLuRPlVVk4JLomHzozVeSSUBTigqIVkD9NMrbs+Pqgf+WrIe8BoHhWD
-         conzLUSZEoasD9M6iG+6qM3O2kGiKN+NYlGNHgcnIB13sEbY7d9mFrLzxa/1hK4MtpAh
-         Szq/b1T0nz5OC+rt5pZwlnr0SfiGvQlM4ipl9PUkfCfhV/k4W6NhF9Wo/tZSprSsCR6z
-         kqPj6jcf/jlUjnv+geDSjYxCLPKZyfcGjpdNf9ss470c5lh8ypiDA91f/uM1ckZ7Fkj+
-         bxvNaLdYOnJfXzDhc3cfeNWTVaHDaqmofctEqRD4KYBg/NNb30JmRnkzenccZ05IOvBf
-         zN5A==
-X-Gm-Message-State: AOAM533K72B8NrdHho9qHtBLFLhzsOt5iUE8AnoU3Av9Qf+LKDtIPbvl
-        fSh0YjZoPhaow89KPq9MvPo=
-X-Google-Smtp-Source: ABdhPJyDfHo1hWpBTzBZ8xr7fDzsCWtv1R0BLdSzd7telz52hrIUDaXIjNR091Be5fsVjtFlXnFmrg==
-X-Received: by 2002:a37:6896:: with SMTP id d144mr511563qkc.549.1644006776236;
-        Fri, 04 Feb 2022 12:32:56 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.tn.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id j14sm1686057qko.10.2022.02.04.12.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 12:32:55 -0800 (PST)
-From:   frowand.list@gmail.com
-To:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        Tim.Bird@sony.com, Brendan Higgins <brendanhiggins@google.com>
-Cc:     rmr167@gmail.com, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] Documentation: dev-tools: clarify KTAP specification wording
-Date:   Fri,  4 Feb 2022 14:32:48 -0600
-Message-Id: <20220204203248.2981902-1-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=yC+jvfwVlwP869Sf5VAj3JxEYXRki/S+j7RsCMY3Luc=;
+        b=Or7TijO9Rs9/90GXRgPwSdPG8uXKQBPoHCfltiPKPgyUcU6yBIoZJqcwJpYiQg4TiI
+         V5a92Cy4aksT/aDjIpQ1cJiPYn6x3nWrlmRIxQHg7zEJD5mk4x7D5uIQnqKyzwoCs2lL
+         jqR+oVcyZ2MAZXEwieE0Ph7BzBxCC9ZUBXhv1Lq+hz7Yn78At/T44g2EVMag6/tQWRUN
+         w71XMMm6eMuWufV478Lnlztczg2uHReC9oSgI1gReiPWm4HXrsw3zoPv8RxYqy4QX2af
+         vD3LeWgwCGb/R26YiL8/8I57U/iGL1fdUPD8FxADaOYUz4yXUSmLgt4uSK9mJA6TNp1H
+         10QA==
+X-Gm-Message-State: AOAM533arn+2e3GP0ixmcpoaoO3LS4JzJ746rMTwQtC30zvqzonr0EXH
+        UScX3xXm/tVrByqep+EkAkFW0w==
+X-Google-Smtp-Source: ABdhPJx51DRl4laNymhQtxHuk5vl3tJeD/NGPb0mxlDiukv3RiGPA0t5MAALJPu6EXeimY+N2tnlNw==
+X-Received: by 2002:a5d:8419:: with SMTP id i25mr359840ion.163.1644006790204;
+        Fri, 04 Feb 2022 12:33:10 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id g8sm1462727ilc.10.2022.02.04.12.33.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 12:33:09 -0800 (PST)
+Subject: Re: [PATCH 5.4 00/10] 5.4.177-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220204091912.329106021@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ae60077f-6682-310e-b21a-792a68250530@linuxfoundation.org>
+Date:   Fri, 4 Feb 2022 13:33:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220204091912.329106021@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,55 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+On 2/4/22 2:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.177 release.
+> There are 10 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.177-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Clarify some confusing phrasing.
+Compiled and booted on my test system. No dmesg regressions.
 
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
----
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-One item that may result in bikeshedding is that I added the spec
-version to the title line.
-
- Documentation/dev-tools/ktap.rst | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index 878530cb9c27..3b7a26816930 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--========================================
--The Kernel Test Anything Protocol (KTAP)
--========================================
-+===================================================
-+The Kernel Test Anything Protocol (KTAP), version 1
-+===================================================
- 
- TAP, or the Test Anything Protocol is a format for specifying test results used
- by a number of projects. It's website and specification are found at this `link
-@@ -186,7 +186,7 @@ starting with another KTAP version line and test plan, and end with the overall
- result. If one of the subtests fail, for example, the parent test should also
- fail.
- 
--Additionally, all result lines in a subtest should be indented. One level of
-+Additionally, all lines in a subtest should be indented. One level of
- indentation is two spaces: "  ". The indentation should begin at the version
- line and should end before the parent test's result line.
- 
-@@ -225,8 +225,8 @@ Major differences between TAP and KTAP
- --------------------------------------
- 
- Note the major differences between the TAP and KTAP specification:
--- yaml and json are not recommended in diagnostic messages
--- TODO directive not recognized
-+- yaml and json are not recommended in KTAP diagnostic messages
-+- TODO directive not recognized in KTAP
- - KTAP allows for an arbitrary number of tests to be nested
- 
- The TAP14 specification does permit nested tests, but instead of using another
--- 
-Frank Rowand <frank.rowand@sony.com>
+thanks,
+-- Shuah
 

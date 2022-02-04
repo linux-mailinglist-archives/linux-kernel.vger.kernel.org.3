@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98294AA0E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFAC4AA0EA
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbiBDUHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbiBDUGb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 15:06:31 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9C8C061778
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 12:05:21 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so5880984oot.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:05:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RksNAMhH5Jdhvi6mfS4+KhrwPyqm2XJrsjLWqJJDp+8=;
-        b=P64uR2ltLhXlRC+DXILM0XeyWEQeWtVSx1Xg9l59OShSIYknxCX/QTaxdi3pLbvykJ
-         4oBNmHZtjy/nzGas90yNMeal2Lg5X+BpJnCILWLeM249X4fkioyYLnuqA1IgcMS++IdY
-         Uu2S8sgKYMs1Y6vztwK/WsiRPp53FfaObPkEs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RksNAMhH5Jdhvi6mfS4+KhrwPyqm2XJrsjLWqJJDp+8=;
-        b=lVCDItfXysoMT2Z8vaamfzhAzckMw1GaSQFAp6uf3XA6oZ81NwKkjVBuNl30py+F7m
-         zlyb7K1XRUafHeMtgMQLB+uyr0GZUlb0JJDUM2jOOchLQUot6ItuYL9YXElFPKzuyFQe
-         /4+4pSeNZakbE8UaeUzvBYjxiA8US0P0mE9bC5e48u5QKRVnsGI8uHJ4QY8KqEbloAdW
-         AjFjQOzigW9H+oacc0lmaJeVv9AKyvMhO5Ll1v0UqZYaic7hCH+lAoyBfBgsPQPZgIbE
-         LBYsMIllJPIWX0kzwAnj0uFjVf9QcGIj42cVTAf3tGyHC2jUYlBiQ0gPvaYJtIZcsnas
-         grDw==
-X-Gm-Message-State: AOAM530c5cBwkEsj9FkJBLEXtwlReHnDYz4lveebLlrooSDA61lylNtF
-        jYE4y8jRC5YX/aS37JAvk1e61HpabovMKg==
-X-Google-Smtp-Source: ABdhPJyT2obvrgkqY5hRQjzDQ6lghptRPBt+Y/qJ3R/QFWRe7Lkei9QOglkSiq+6OYNtMBpY2M0VdQ==
-X-Received: by 2002:a05:6870:b283:: with SMTP id c3mr1089453oao.196.1644005120700;
-        Fri, 04 Feb 2022 12:05:20 -0800 (PST)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
-        by smtp.gmail.com with ESMTPSA id h203sm1224304oif.27.2022.02.04.12.05.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 12:05:20 -0800 (PST)
-Received: by mail-oi1-f182.google.com with SMTP id t199so9729269oie.10
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 12:05:19 -0800 (PST)
-X-Received: by 2002:a05:6808:2026:: with SMTP id q38mr2128798oiw.243.1644005119281;
- Fri, 04 Feb 2022 12:05:19 -0800 (PST)
+        id S235705AbiBDUH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 15:07:56 -0500
+Received: from mga18.intel.com ([134.134.136.126]:34078 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237276AbiBDUHt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 15:07:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644005269; x=1675541269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z4NbfNsU6IVb/TMXUrAVWfrz3XFmez1DBnLaxBVI4Os=;
+  b=brqBU75snJbxm0l83AeyX8Bl7SOBnm8flPRVJ2aRq6aRGBQpuNZNU3Yk
+   BQ9WzrJGZvpV+R8Sa1TRaF54bMGsUVHn5NbxgVGZTKcYrauhwCHAnLS3d
+   yUsy+YG42HejcXaxnwBKTCS88zSeRBjDKzS7wrZNv/TQyqeq6xonPRW5U
+   ifWbGBlkISTZjGXNRvPg/EvuWrncgIGypHXPYElZO0oYeruzBU0E4+fn3
+   Kf1Xae8JVHDZkkejHveUioL2OGhWEYWf09i0HE8y0RHiyrzpygxZK9lGq
+   ZUkx4vFcSVbh7ZSqzOp/9kGXTj6Y2rtNUVjA9yNdcyJIfp+abS/qTUiS8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="232001514"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="232001514"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 12:06:31 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="631805598"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 12:06:31 -0800
+Date:   Fri, 4 Feb 2022 12:06:31 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 08/44] x86/fault: Adjust WARN_ON for PKey fault
+Message-ID: <20220204200631.GB785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-9-ira.weiny@intel.com>
+ <01a47dd8-4717-7b07-39ad-45fee1f78311@intel.com>
 MIME-Version: 1.0
-References: <1587620791-5279-1-git-send-email-peng.fan@nxp.com>
- <20200423104000.GD4808@sirena.org.uk> <DB6PR0402MB27600084E4A040609EF620A088D30@DB6PR0402MB2760.eurprd04.prod.outlook.com>
- <20200423112244.GH4808@sirena.org.uk> <DB6PR0402MB2760FBCA05C1BADB27F0356488D00@DB6PR0402MB2760.eurprd04.prod.outlook.com>
- <20200424103004.GB5850@sirena.org.uk> <Ye87P19+JOjPEGTY@google.com>
- <Yf14RJbM10O3RdA+@sirena.org.uk> <CA+ASDXP+KeiRKASFakDjJ=cZPD_rGmV4=JgRH26zQi-uZDdiAQ@mail.gmail.com>
-In-Reply-To: <CA+ASDXP+KeiRKASFakDjJ=cZPD_rGmV4=JgRH26zQi-uZDdiAQ@mail.gmail.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Fri, 4 Feb 2022 12:05:07 -0800
-X-Gmail-Original-Message-ID: <CA+ASDXO-61=D0DM+d4dNCbEYV3omroFbbFao3YrUPOYy+7AJUg@mail.gmail.com>
-Message-ID: <CA+ASDXO-61=D0DM+d4dNCbEYV3omroFbbFao3YrUPOYy+7AJUg@mail.gmail.com>
-Subject: Re: regmap: mmio: lack of runtime_pm support for debugfs
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "S.j. Wang" <shengjiu.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01a47dd8-4717-7b07-39ad-45fee1f78311@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After a bit more thinking:
+On Fri, Jan 28, 2022 at 03:10:24PM -0800, Dave Hansen wrote:
+> On 1/27/22 09:54, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > Previously if a Protection key fault occurred it indicated something
+> > very wrong because user page mappings are not supposed to be in the
+> > kernel address space.
+> 
+> This is missing a key point.  The problem is PK faults on "*kernel*
+> addresses.
 
-On Fri, Feb 4, 2022 at 11:21 AM Brian Norris <briannorris@chromium.org> wrote:
-> Anyway, I'll probably just go with precious_reg() as suggested above.
+Ok, I'll try and clarify.
 
-Unfortunately, precious_reg() wouldn't be quite safe either -- we
-could do a single check for pm_runtime_active(), but we have no way of
-knowing (guaranteeing) that it will remain active throughout the
-remainder of the debugfs operation. For all we know, some other actor
-could be *just* finishing with (and PM-suspending) our domain
-immediately after the check. And we can't grab a reference, because we
-don't have a callback for balancing that back out.
+> 
+> > Now PKey faults may happen on kernel mappings if the feature is enabled.
+> 
+> One nit: I've been using "pkeys" and "pkey" as the terms.  I usually
+> don't capitalize them except at the beginning of a sentence.
 
-If I really want to solve this, I might have to go with adding a
-debugfs-specific runtime_pm flag, and (to avoid too many side effects)
-use that with pm_runtime_get_if_active() in regmap-debugfs.c.
+I'll audit the series to use lower case for consistency.
 
-Brian
+> 
+> > If PKS is enabled, avoid the warning in the fault path.
+> > 
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > ---
+> >  arch/x86/mm/fault.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> > index d0074c6ed31a..6ed91b632eac 100644
+> > --- a/arch/x86/mm/fault.c
+> > +++ b/arch/x86/mm/fault.c
+> > @@ -1148,11 +1148,15 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
+> >  		   unsigned long address)
+> >  {
+> >  	/*
+> > -	 * Protection keys exceptions only happen on user pages.  We
+> > -	 * have no user pages in the kernel portion of the address
+> > -	 * space, so do not expect them here.
+> > +	 * X86_PF_PK (Protection key exceptions) may occur on kernel addresses
+> > +	 * when PKS (PKeys Supervisor) is enabled.
+> > +	 *
+> > +	 * However, if PKS is not enabled WARN if this exception is seen
+> > +	 * because there are no user pages in the kernel portion of the address
+> > +	 * space.
+> >  	 */
+> > -	WARN_ON_ONCE(hw_error_code & X86_PF_PK);
+> > +	WARN_ON_ONCE(!cpu_feature_enabled(X86_FEATURE_PKS) &&
+> > +		     (hw_error_code & X86_PF_PK));
+> >  
+> >  #ifdef CONFIG_X86_32
+> >  	/*
+> 
+> I'm wondering if this warning is even doing us any good.  I'm pretty
+> sure it's never triggered on me at least.  Either way, let's not get too
+> carried away with the comment.  I think this should do:
+> 
+> 	/*
+> 	 * PF_PF faults should only occur on kernel
+> 	 * addresses when supervisor pkeys are enabled.
+> 	 */
+
+Sounds better,
+Ira

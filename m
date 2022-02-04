@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186444A9912
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF654A9908
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 13:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358780AbiBDMPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 07:15:48 -0500
-Received: from mx1.tq-group.com ([93.104.207.81]:57007 "EHLO mx1.tq-group.com"
+        id S1358633AbiBDMPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 07:15:31 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:1606 "EHLO mx1.tq-group.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238672AbiBDMPe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 07:15:34 -0500
+        id S1358561AbiBDMP0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 07:15:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643976934; x=1675512934;
+  t=1643976926; x=1675512926;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=w/GuNznqndIUcAdDbJ2FxtN8SD25HIguOxBaARlAb1E=;
-  b=ETZatjqwt/qlZvhTaY3bT2RVIvrFY6KeTMWp6aU1kDDQCBHjKpY+/eGS
-   FFcf3fO6F94jDk4HJix2ZukOzoZ2EEIaA+39MaqH/ahiUMtVMxyLMtAAR
-   HfiswdJ9qt555Umf8cZpVIoiYlwLwVkgXcdlPSm689DpvPeO9xqIyHFB/
-   +Ad7Fv/crexWMsY88cy/716A2BlugsqMZ2OYnLA6XemnsvcT0EWhPZjYU
-   JQuO9RhZtOvfGBeErZ34Xo85YxkkfKC4qhq7GM8hUU0Q9Bi91bUKNJJh6
-   yn5YEyclHoeofzSldBTELONAUf/fyfM8SPTMXy+PkRsb/Ps4OqIFX4QiL
-   Q==;
+  bh=Bc6AZVTrc7BoI0dNeWm1pc1eWQvq627GTftRErmHl+E=;
+  b=VUyxraYZKkPoqqvU3Qc+gSBIGHoKTiCp5wXXlP8OVkSlS7hb9j1tAzMm
+   HLZD4WkGaXxF5cVuHijBzZ83sjkplpK0cZDDjVAu4Ul34cMf09XDlzPVI
+   KfAtoH1XbV+yJdXA5fGHE98H0Hko4SaEHIxbsgLiDfoSPzwgAWBrUzkwH
+   VmgSjSbycNVWd+SrbFtdH78ZKfzgaBvYpAcLSIhrME5quBZgyuTyHzlxB
+   j7KHC99eat/waLz/GaTZpdY/w42IjXsQGmG+ZkXgqT7zxFsl5Znv+WoIO
+   TSJzBueSJRKsv0aRxpI21X5vWfxK8ep/1roxfZC/rqW3zFjcqfXPNR09k
+   w==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903443"
+   d="scan'208";a="21903432"
 Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:30 +0100
+  by mx1-pgp.tq-group.com with ESMTP; 04 Feb 2022 13:15:25 +0100
 Received: from mx1.tq-group.com ([192.168.6.7])
   by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 04 Feb 2022 13:15:30 +0100
+  Fri, 04 Feb 2022 13:15:25 +0100
 X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 04 Feb 2022 13:15:30 +0100
+        by tq-pgp-pr1.tq-net.de on Fri, 04 Feb 2022 13:15:25 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1643976930; x=1675512930;
+  t=1643976925; x=1675512925;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=w/GuNznqndIUcAdDbJ2FxtN8SD25HIguOxBaARlAb1E=;
-  b=CvwyRAB+K8AiIManazXd7kpO5CcK37/S9oqyR8ayntBF4BeHtHhiOW40
-   El4mYVm2ttbqNLzcKBFyMjEamqX20DfD1HlikHdXJfygFiRlNjH/R0LRL
-   wO74OboqI8YJKgYD8pOQhjDczptuvAB6t+2Ozy17Xa1kVO3/6RbjdoKPc
-   WZ/NDjaT2KFqGDEdkDLNB8a/kBQm9Mu8clP+Dq5fwDxwpgrv2MSKY36Ho
-   xoSjFpc5nW6B+PKMmxS9blBAlgjqfHXSbuyFaDWtCsQscVzeObkR/jTwP
-   lPJvoxJ4+Y9DcYqUQ99Iytye+qc52ScavL3YVF5Ago3wGc1o8PkzlMOyt
+  bh=Bc6AZVTrc7BoI0dNeWm1pc1eWQvq627GTftRErmHl+E=;
+  b=oZSrnE4np0h67rOeQNqUsg/k2MtCG11arHHHzJrh0isXktCOi31itxhU
+   srNAWnbP6WasBHiplUuE0IP9gSbZvg6VVnCKE8dbEc/tf5p9dqDHiaD95
+   EhRvDjvF+GL/1ryJH1mdFM4qboHbB6LYlqjs1DKg3Yi2HtJWUMfIpoJAR
+   n/ZMVNTOQhFilM9dTp9i0v8qGL8tT+pJYOGQ/9N9oSnx91WN4JXZ2O4xX
+   TwPbLmUtiMJnSark8nSZgmBhA7YfNsz8z/3mbPPFPfEwB9f+yGPLTG+nk
+   NipuHjVlHgq9aBVps6r1urEGkPaeL2XG7/ZFkm0mOi86D+rUB++0paU7B
    Q==;
 X-IronPort-AV: E=Sophos;i="5.88,342,1635199200"; 
-   d="scan'208";a="21903430"
+   d="scan'208";a="21903431"
 Received: from vtuxmail01.tq-net.de ([10.115.0.20])
   by mx1.tq-group.com with ESMTP; 04 Feb 2022 13:15:25 +0100
 Received: from steina-w.tq-net.de (unknown [10.123.49.12])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 43F63280065;
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 8AF2E280075;
         Fri,  4 Feb 2022 13:15:25 +0100 (CET)
 From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -68,12 +68,12 @@ To:     Steve Longerbeam <slongerbeam@gmail.com>,
         Rui Miguel Silva <rmfrfs@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH 4/8] media: imx: Fail conversion if pixel format not supported
-Date:   Fri,  4 Feb 2022 13:15:10 +0100
-Message-Id: <20220204121514.2762676-5-alexander.stein@ew.tq-group.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 5/8] media: imx: imx7_mipi_csis: store colorspace in set_fmt as well
+Date:   Fri,  4 Feb 2022 13:15:11 +0100
+Message-Id: <20220204121514.2762676-6-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
 References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
@@ -83,30 +83,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Without this the default (SMPTE 170M) from init_cfg stays unchanged.
+Even after configuring 'srgb' colorspace (or 'raw')
+$ media-ctl -V "'csis-32e30000.mipi-csi':0 [colorspace:srgb]"
+the colorspace does not change at all:
+$ media-ctl --get-v4l2 "'csis-32e30000.mipi-csi':0"
+  [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:smpte170m xfer:709
+   ycbcr:601 quantization:lim-range]
 
-imx_media_find_mbus_format has NULL as a valid return value,
-therefore the caller should take it into account.
-
-Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- drivers/staging/media/imx/imx-media-utils.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 32aaa2e81bea..e0a256a08c3b 100644
---- a/drivers/staging/media/imx/imx-media-utils.c
-+++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
- 		cc = imx_media_find_mbus_format(code, PIXFMT_SEL_YUV);
- 	}
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index a22d0e6b3d44..7b0e57efcf82 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -1062,6 +1062,7 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
+ 	fmt->code = csis_fmt->code;
+ 	fmt->width = sdformat->format.width;
+ 	fmt->height = sdformat->format.height;
++	fmt->colorspace = sdformat->format.colorspace;
  
-+	if (!cc)
-+		return -EINVAL;
-+
- 	/* Round up width for minimum burst size */
- 	width = round_up(mbus->width, 8);
+ 	sdformat->format = *fmt;
  
 -- 
 2.25.1

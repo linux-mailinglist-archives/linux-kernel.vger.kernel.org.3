@@ -2,158 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC174AA40F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AF54AA414
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351174AbiBDXNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:13:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239973AbiBDXNS (ORCPT
+        id S1377892AbiBDXOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:14:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55932 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376312AbiBDXOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:13:18 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF4CDFB27F1
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:13:17 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id m27so30557wrb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 15:13:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
-        b=IjKsNTP3UmtI+YfyHZJ0qh5DSvYiShtyinPh2WOTKo2LC1R5Im2gedu5u9xfLooF4+
-         UxUJXD/dy/Tl+V8My9opTUaU/uixmq5z0us3RoC7Bgbo700hMuzVj257AuS4ktrqgACR
-         JE1XfixdYgbAeynvegt5gll/MPrWdf0b6BQfbhRUpIoONgo6tKgQYpiUple0FwM9IaHG
-         CmD96KIrg2NPA61K7dJX0+azXzCvdQsfEjax6u2RHlHWTxFWp89xPocpS8yQG7q5+g0H
-         R9WNyOY2Y6TVuu7wHZLpnid1rpTlKUJT2O6qa3lVmtqr6HEuLuR4/QDnfyR3vG9Pq8nW
-         THtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VfYCxFlpbvl7OujUUxXMKcam5bYyjMQ9TxZLwWilF4Y=;
-        b=V8Iefwilny0+lR1MK2SCPmk2HOZmchteDJBBor4v9TrpkQ94GFEhEz2TW1qAHpT24x
-         W5LjV+RqUoudr69qOprvcF+euAqgt9b/nk0khsSiny/+fKq9Kko54Mpl6T/LoFq3AL1P
-         2JdfS5ImgGoAyotI0zwKvg/DqoYS98RnvT+OFWQLuEqzg++iaOPO/BHP/O80pWk18rWH
-         c2mxzCkLwqtigz4KmKgnbsNM3mUHE6k2EryY8uoQ2YjuSaKk9IO4l1qmnvFNLzGOcBJE
-         ByLoljqfxtT9eZ57HFPyxkR2+7NGROYbPyrUqB0wvvWBB+NlDlf41N6y2+sMbxEza0L6
-         cySg==
-X-Gm-Message-State: AOAM530645YWnSFQQAr/2Z3Oorv2w18ea80Qh91AsSasZX0zdwgTGDzt
-        cx/QkpGCjRTHtUjmREn6a+sJgBiJKEoM9z8lOZabdg==
-X-Google-Smtp-Source: ABdhPJzL6D+TJwXa5HDo4f0yCGthyil6w59QwryxQD1ifMJhEDqjpOIWu7afVuh86c0pKEcjxS8nNWPb2G3HwFNPOes=
-X-Received: by 2002:a05:6000:1b88:: with SMTP id r8mr916267wru.447.1644016395758;
- Fri, 04 Feb 2022 15:13:15 -0800 (PST)
+        Fri, 4 Feb 2022 18:14:49 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67DA1B83967;
+        Fri,  4 Feb 2022 23:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6035C004E1;
+        Fri,  4 Feb 2022 23:14:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644016487;
+        bh=MYi9IiU+yOAAJGTml3/Ykmnyb/j5FaPAwu6TFeCrUZk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ktZ8UwMt+zeZvooJjXKnCO2gqgxOWADcs8ome7KbMkZu4Mybjenx7sWEHRUj9Ag0h
+         7hzbyt11+9DkMT/xI/jtxBszrD68q/kvf2/gl7j2ibb9n1pn87xGLvDxI6n+QiLWuD
+         FJOGGOvj6jZaubCYmgoWrBFJJ9RoP/VM72fvN+8BqWrebs6+JQql9vQpc10Xo4BoiI
+         a/qvT8H0RuKjRv+gHfXtpWigxr1kPJZUi21FYNvP5/PCUff3/JMhPx+hjqPWdkIoTZ
+         eeb0oLDXwjeD0iK18DQNll9rFUDaD0woS+PEZy3qeVWED/QzykAvMRoHgqJTd6aEUV
+         7LiXFGha71Gkg==
+Date:   Fri, 4 Feb 2022 17:14:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] PCI: ACPI: Replace acpi_bus_get_device()
+Message-ID: <20220204231444.GA228064@bhelgaas>
 MIME-Version: 1.0
-References: <20220204203248.2981902-1-frowand.list@gmail.com>
-In-Reply-To: <20220204203248.2981902-1-frowand.list@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 5 Feb 2022 07:13:04 +0800
-Message-ID: <CABVgOS=JUxV6PRUZvTQhisSP+p34+K9Z6yT7HkXu6qeqtak1tw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Documentation: dev-tools: clarify KTAP specification wording
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11930209.O9o76ZdvQC@kreacher>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 4:32 AM <frowand.list@gmail.com> wrote:
->
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> Clarify some confusing phrasing.
+On Thu, Jan 27, 2022 at 12:40:13AM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Replace acpi_bus_get_device() that is going to be dropped with
+> acpi_fetch_acpi_dev().
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks for this! A few comments below:
+Applied with Mika's Reviewed-by to pci/acpi for v5.18, thanks!
 
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 > ---
->
-> One item that may result in bikeshedding is that I added the spec
-> version to the title line.
-
-This is fine by me.
-
->
->  Documentation/dev-tools/ktap.rst | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index 878530cb9c27..3b7a26816930 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -1,8 +1,8 @@
->  .. SPDX-License-Identifier: GPL-2.0
->
-> -========================================
-> -The Kernel Test Anything Protocol (KTAP)
-> -========================================
-> +===================================================
-> +The Kernel Test Anything Protocol (KTAP), version 1
-> +===================================================
->
->  TAP, or the Test Anything Protocol is a format for specifying test results used
->  by a number of projects. It's website and specification are found at this `link
-> @@ -186,7 +186,7 @@ starting with another KTAP version line and test plan, and end with the overall
->  result. If one of the subtests fail, for example, the parent test should also
->  fail.
->
-> -Additionally, all result lines in a subtest should be indented. One level of
-> +Additionally, all lines in a subtest should be indented. One level of
-
-The original reason for this is to accommodate "unknown" lines which
-were not generated by the test itself (e.g, a KASAN report or BUG or
-something). These are awkward, as sometimes they're a useful thing to
-have as part of the test result, and sometimes they're unrelated spam.
-(Additionally, I think kselftest will indent these, as it indents the
-full results in a separate pass afterwards, but KUnit won't, as the
-level of nesting is done during printing.)
-
-Personally, I'd rather leave this as is, or perhaps call out "unknown"
-lines explicitly, e.g:
-Additionally, all lines in a subtest (except for 'unknown' lines)
-should be indented...
-
-Thoughts?
-
->  indentation is two spaces: "  ". The indentation should begin at the version
->  line and should end before the parent test's result line.
->
-> @@ -225,8 +225,8 @@ Major differences between TAP and KTAP
->  --------------------------------------
->
->  Note the major differences between the TAP and KTAP specification:
-> -- yaml and json are not recommended in diagnostic messages
-> -- TODO directive not recognized
-> +- yaml and json are not recommended in KTAP diagnostic messages
-> +- TODO directive not recognized in KTAP
->  - KTAP allows for an arbitrary number of tests to be nested
->
-
-Looks good here, cheers.
-
-
->  The TAP14 specification does permit nested tests, but instead of using another
-> --
-> Frank Rowand <frank.rowand@sony.com>
->
+> 
+> -> v2: Fix typo (superfluous paren) in acpiphp_ibm.c.
+> 
+> ---
+>  drivers/pci/hotplug/acpiphp_glue.c |    7 ++++---
+>  drivers/pci/hotplug/acpiphp_ibm.c  |    5 +++--
+>  drivers/pci/pci-acpi.c             |    6 +++---
+>  3 files changed, 10 insertions(+), 8 deletions(-)
+> 
+> Index: linux-pm/drivers/pci/hotplug/acpiphp_glue.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/hotplug/acpiphp_glue.c
+> +++ linux-pm/drivers/pci/hotplug/acpiphp_glue.c
+> @@ -226,9 +226,9 @@ static void acpiphp_post_dock_fixup(stru
+>  static acpi_status acpiphp_add_context(acpi_handle handle, u32 lvl, void *data,
+>  				       void **rv)
+>  {
+> +	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+>  	struct acpiphp_bridge *bridge = data;
+>  	struct acpiphp_context *context;
+> -	struct acpi_device *adev;
+>  	struct acpiphp_slot *slot;
+>  	struct acpiphp_func *newfunc;
+>  	acpi_status status = AE_OK;
+> @@ -238,6 +238,9 @@ static acpi_status acpiphp_add_context(a
+>  	struct pci_dev *pdev = bridge->pci_dev;
+>  	u32 val;
+>  
+> +	if (!adev)
+> +		return AE_OK;
+> +
+>  	status = acpi_evaluate_integer(handle, "_ADR", NULL, &adr);
+>  	if (ACPI_FAILURE(status)) {
+>  		if (status != AE_NOT_FOUND)
+> @@ -245,8 +248,6 @@ static acpi_status acpiphp_add_context(a
+>  				"can't evaluate _ADR (%#x)\n", status);
+>  		return AE_OK;
+>  	}
+> -	if (acpi_bus_get_device(handle, &adev))
+> -		return AE_OK;
+>  
+>  	device = (adr >> 16) & 0xffff;
+>  	function = adr & 0xffff;
+> Index: linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/hotplug/acpiphp_ibm.c
+> +++ linux-pm/drivers/pci/hotplug/acpiphp_ibm.c
+> @@ -433,8 +433,9 @@ static int __init ibm_acpiphp_init(void)
+>  		goto init_return;
+>  	}
+>  	pr_debug("%s: found IBM aPCI device\n", __func__);
+> -	if (acpi_bus_get_device(ibm_acpi_handle, &device)) {
+> -		pr_err("%s: acpi_bus_get_device failed\n", __func__);
+> +	device = acpi_fetch_acpi_dev(ibm_acpi_handle);
+> +	if (!device) {
+> +		pr_err("%s: acpi_fetch_acpi_dev failed\n", __func__);
+>  		retval = -ENODEV;
+>  		goto init_return;
+>  	}
+> Index: linux-pm/drivers/pci/pci-acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/pci/pci-acpi.c
+> +++ linux-pm/drivers/pci/pci-acpi.c
+> @@ -89,9 +89,9 @@ int acpi_get_rc_resources(struct device
+>  		return -ENODEV;
+>  	}
+>  
+> -	ret = acpi_bus_get_device(handle, &adev);
+> -	if (ret)
+> -		return ret;
+> +	adev = acpi_fetch_acpi_dev(handle);
+> +	if (!adev)
+> +		return -ENODEV;
+>  
+>  	ret = acpi_get_rc_addr(adev, res);
+>  	if (ret) {
+> 
+> 
+> 

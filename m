@@ -2,119 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C424A939A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA194A939C
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 06:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241838AbiBDF3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 00:29:24 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58988 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiBDF3X (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 00:29:23 -0500
-Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 312308030867;
-        Fri,  4 Feb 2022 08:29:20 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 312308030867
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1643952561;
-        bh=W1y8IgscUyS5mr3BXUf7B2HI0tpLjvtZOLBXU1GAwkA=;
-        h=From:To:CC:Subject:Date:From;
-        b=ImXGmw4CzlrDKAw/n4UoiR7hytq1QmSAqIge/VnnfLHY01xTRhgZrNeSdW1/swgGQ
-         IV8OlE+0Ew+zqJnVZPhzKPHfhgM+s0LZC/9Hmfjf2+aFJTflw4HKbwaP1ewOHqyVNQ
-         9Hqv3AbUdQm5MHMhvVc2RYvi2YglxjsugRw5N9xo=
-Received: from MAIL.baikal.int (192.168.51.25) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 4 Feb 2022 08:29:11 +0300
-Received: from MAIL.baikal.int ([::1]) by MAIL.baikal.int ([::1]) with mapi id
- 15.00.1395.000; Fri, 4 Feb 2022 08:29:11 +0300
-From:   <Pavel.Parkhomenko@baikalelectronics.ru>
-To:     <michael@stapelberg.de>, <afleming@gmail.com>,
-        <f.fainelli@gmail.com>, <andrew@lunn.ch>
-CC:     <Alexey.Malahov@baikalelectronics.ru>,
-        <Sergey.Semin@baikalelectronics.ru>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
- 88e1121-compatible PHYs
-Thread-Topic: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
- 88e1121-compatible PHYs
-Thread-Index: AQHYGYgjpwnysZLJNUG22PH4uN5jng==
-Date:   Fri, 4 Feb 2022 05:29:11 +0000
-Message-ID: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-Content-Type: text/plain; charset="koi8-r"
-Content-ID: <FBC999718B824D4C9AA76B71AE2B5782@baikalelectronics.ru>
-Content-Transfer-Encoding: quoted-printable
+        id S242874AbiBDFav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 00:30:51 -0500
+Received: from mga03.intel.com ([134.134.136.65]:7489 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232187AbiBDFat (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 00:30:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643952649; x=1675488649;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6/M48QsBwvy5StCBI/QZ/x2WdrnIQcL49s1jfc5DmLs=;
+  b=Pv5L0GIOdZDriQJYTHjQvDNxJTd5PXHN5c/O8tRGocY/2ebmOEZCPrIV
+   HvLnkdQ0ex4wht9HZarZ2QyounMxMZJY8l6qcAFWBe+/AbKhEOvE6sMYO
+   qy6dlLojem25yq++vfVaRqx7cFwcTjg0AjCZ8eYcBPMh9svQeQNRIPThh
+   tFdp+KgT6ZECSvRmWsfiE1XprZ4KRdW16XKqAg+RUWWAZENddhZqmU4ls
+   lq6t7AMClcNs60sCL6iVNXtur5cz5HJ9rzr64AoTb+n4vFiLlo2fyt3jq
+   LQZVjj1mqm/1eVZeMk4u6LX0q3gYsxY/US9UXwnYuNvNna2/eoNRiiA6V
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="248262081"
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="248262081"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 21:30:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,341,1635231600"; 
+   d="scan'208";a="483510272"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 03 Feb 2022 21:30:49 -0800
+Received: from debox1-desk4.intel.com (unknown [10.212.180.188])
+        by linux.intel.com (Postfix) with ESMTP id 2E11A58090D;
+        Thu,  3 Feb 2022 21:30:49 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     hdegoede@redhat.com, david.e.box@linux.intel.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: [PATCH V5 0/3] Intel Software Defined Silicon
+Date:   Thu,  3 Feb 2022 21:30:43 -0800
+Message-Id: <20220204053046.2475671-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is mandatory for a software to issue a reset upon modifying RGMII
-Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
-Specific Control register 2 (page 2, register 21) otherwise the changes
-won't be perceived by the PHY (the same is applicable for a lot of other
-registers). Not setting the RGMII delays on the platforms that imply
-it's being done on the PHY side will consequently cause the traffic loss.
-We discovered that the denoted soft-reset is missing in the
-m88e1121_config_aneg() method for the case if the RGMII delays are
-modified but the MDIx polarity isn't changed or the auto-negotiation is
-left enabled, thus causing the traffic loss on our platform with Marvell
-Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
-delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
-method.
+This series adds support for Intel Software Defined Silicon. These
+patches are the same as patches 4-6 from this series [1]. Patches 1-3 
+of that series were pulled in during the 5.17 merge window.
 
-Fixes: d6ab93364734 ("net: phy: marvell: Avoid unnecessary soft reset")
-Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Reviewed-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+[1] https://lore.kernel.org/lkml/20211216023146.2361174-1-david.e.box@linux.intel.com/T/
 
----
- drivers/net/phy/marvell.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+David E. Box (3):
+  platform/x86: Add Intel Software Defined Silicon driver
+  tools arch x86: Add Intel SDSi provisiong tool
+  selftests: sdsi: test sysfs setup
 
-diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index 4fcfca4e1702..a4f685927a64 100644
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -551,9 +551,9 @@ static int m88e1121_config_aneg_rgmii_delays(struct
-phy_device *phydev)
- 	else
- 		mscr =3D 0;
-=20
--	return phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
--				MII_88E1121_PHY_MSCR_REG,
--				MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
-+	return phy_modify_paged_changed(phydev, MII_MARVELL_MSCR_PAGE,
-+					MII_88E1121_PHY_MSCR_REG,
-+					MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
- }
-=20
- static int m88e1121_config_aneg(struct phy_device *phydev)
-@@ -567,11 +567,13 @@ static int m88e1121_config_aneg(struct phy_device *ph=
-ydev)
- 			return err;
- 	}
-=20
-+	changed =3D err;
-+
- 	err =3D marvell_set_polarity(phydev, phydev->mdix_ctrl);
- 	if (err < 0)
- 		return err;
-=20
--	changed =3D err;
-+	changed |=3D err;
-=20
- 	err =3D genphy_config_aneg(phydev);
- 	if (err < 0)
---=20
-2.34.1
+ .../ABI/testing/sysfs-driver-intel_sdsi       |  77 +++
+ MAINTAINERS                                   |   7 +
+ drivers/platform/x86/intel/Kconfig            |  12 +
+ drivers/platform/x86/intel/Makefile           |   2 +
+ drivers/platform/x86/intel/sdsi.c             | 568 ++++++++++++++++++
+ drivers/platform/x86/intel/vsec.c             |  12 +-
+ tools/arch/x86/intel_sdsi/Makefile            |   9 +
+ tools/arch/x86/intel_sdsi/sdsi.c              | 540 +++++++++++++++++
+ tools/testing/selftests/drivers/sdsi/sdsi.sh  |  18 +
+ .../selftests/drivers/sdsi/sdsi_test.py       | 226 +++++++
+ 10 files changed, 1470 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel_sdsi
+ create mode 100644 drivers/platform/x86/intel/sdsi.c
+ create mode 100644 tools/arch/x86/intel_sdsi/Makefile
+ create mode 100644 tools/arch/x86/intel_sdsi/sdsi.c
+ create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
+ create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
 
+-- 
+2.25.1
 

@@ -2,119 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CC34A9DAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C13F4A9DA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376903AbiBDRfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:35:48 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63674 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376885AbiBDRfn (ORCPT
+        id S1376880AbiBDRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234250AbiBDRd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:35:43 -0500
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id 3cf6cf3a52c3a6f5; Fri, 4 Feb 2022 18:35:42 +0100
-Received: from kreacher.localnet (unknown [213.134.181.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3503266B456;
-        Fri,  4 Feb 2022 18:35:41 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        David Box <david.e.box@linux.intel.com>
-Subject: [PATCH v1 1/2] ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE
-Date:   Fri, 04 Feb 2022 18:31:02 +0100
-Message-ID: <5800804.lOV4Wx5bFT@kreacher>
-In-Reply-To: <11925099.O9o76ZdvQC@kreacher>
-References: <11925099.O9o76ZdvQC@kreacher>
+        Fri, 4 Feb 2022 12:33:57 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17C2C061714;
+        Fri,  4 Feb 2022 09:33:57 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id i30so5682300pfk.8;
+        Fri, 04 Feb 2022 09:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GwweWvs7v6mUrsF+avs0ZSyV9XiKyZYwIj1qrBh4nEM=;
+        b=G/9LAxwzIHf9FW9ibkwk7z1rBoXlWN9CUCTiYLubxiEbyE2QQupEF2DmoasCut2Akc
+         i2XbhJ0Q2KAubqvJXmmYEYm1Nz7/xo7U3hhd+wZvPDsr0LubUefNer521vdF6aZzmR2I
+         9+IsO93XvbIqNM0Xq4+yhh13rAKcULHvknFGzzPjOVj7WQZw43fHgnOVds8YtUJ0UH4t
+         zmCU44ra9RR1Oz/kQ57zVn8zLsZETw1oydrAbQiqy+LihzcUEnu0jUG2U/dyN1SF3Taz
+         JZWJbtwswuB1xv+PpTKx/JnKyJJ+FrVaZQlTx6UYKciZLr78gRw7X4t4iT4r+qZJldW7
+         eouA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GwweWvs7v6mUrsF+avs0ZSyV9XiKyZYwIj1qrBh4nEM=;
+        b=pbdrLhsvPIXKy/5MwF0Hfs2fS8nkNaO9jQ8E7Qbk2OfFHXUfPQehOPwg4VDW7+RK/U
+         A+/G7iZgC125duLm20jxrdCr/roW2K8JmEX7H91tmdr3wn7mlBX+ripZ+2iXXq1xazKB
+         J+rwNb9BNspC4y9sMYPc4TQUSQy3jYbkKH6FVHOMXDgxLQ/tNzyycDLAamq3J+qJl/BZ
+         Dt9OfCYVYgFWDvCVOvQvumz8O48vxfIjrFg6O8UEmqstyaCy7hHX6B/xT8WvmbLeJtMg
+         sMICAa99JFWHZZkSXUCEBKlI4j/9qJbO/tYD0kwd9jkmvX96pHF6+/cO3kDf7SvjO2sH
+         IhGQ==
+X-Gm-Message-State: AOAM530YDZh4bKQjeaIjnT1VKp1PlIMw6ccQhnuzsKHD3uUpkefKzwD9
+        hrFBPWOCrSrNDS6YLQ2Ax9o=
+X-Google-Smtp-Source: ABdhPJzWptfhp/KpqAUOFKbPU7CjGJz9pbmEJwWldZolsxf/j2MP396lUPWuM3yYV+SPnOEgnrJiSQ==
+X-Received: by 2002:a63:36c8:: with SMTP id d191mr39213pga.377.1643996037233;
+        Fri, 04 Feb 2022 09:33:57 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d4sm3270531pfj.82.2022.02.04.09.33.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 09:33:56 -0800 (PST)
+Message-ID: <895b0b85-e1b7-3ce3-ef12-814033d30897@gmail.com>
+Date:   Fri, 4 Feb 2022 09:33:44 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.137
-X-CLIENT-HOSTNAME: 213.134.181.137
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrgeelgddutddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthho
- pegurghvihgurdgvrdgsohigsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220204091914.280602669@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Commit 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while
-suspended to idle") made acpi_ec_dispatch_gpe() check
-pm_wakeup_pending(), but that is before canceling the SCI wakeup,
-so pm_wakeup_pending() is always true.  This causes the loop in
-acpi_ec_dispatch_gpe() to always terminate after one iteration which
-may not be correct.
-
-Address this issue by canceling the SCI wakeup earlier, from
-acpi_ec_dispatch_gpe() itself.
-
-Fixes: 4a9af6cac050 ("ACPI: EC: Rework flushing of EC work while suspended to idle")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/ec.c    |   10 ++++++++++
- drivers/acpi/sleep.c |   15 +++++----------
- 2 files changed, 15 insertions(+), 10 deletions(-)
-
-Index: linux-pm/drivers/acpi/ec.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ec.c
-+++ linux-pm/drivers/acpi/ec.c
-@@ -2066,6 +2066,16 @@ bool acpi_ec_dispatch_gpe(void)
- 		return true;
- 
- 	/*
-+	 * Cancel the SCI wakeup and process all pending events in case there
-+	 * are any wakeup ones in there.
-+	 *
-+	 * Note that if any non-EC GPEs are active at this point, the SCI will
-+	 * retrigger after the rearming in acpi_s2idle_wake(), so no events
-+	 * should be missed by canceling the wakeup here.
-+	 */
-+	pm_system_cancel_wakeup();
-+
-+	/*
- 	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
- 	 * to allow the caller to process events properly after that.
- 	 */
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -736,21 +736,15 @@ bool acpi_s2idle_wake(void)
- 			return true;
- 		}
- 
--		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
-+		/*
-+		 * Check non-EC GPE wakeups and if there are none, cancel the
-+		 * SCI-related wakeup and dispatch the EC GPE.
-+		 */
- 		if (acpi_ec_dispatch_gpe()) {
- 			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
- 			return true;
- 		}
- 
--		/*
--		 * Cancel the SCI wakeup and process all pending events in case
--		 * there are any wakeup ones in there.
--		 *
--		 * Note that if any non-EC GPEs are active at this point, the
--		 * SCI will retrigger after the rearming below, so no events
--		 * should be missed by canceling the wakeup here.
--		 */
--		pm_system_cancel_wakeup();
- 		acpi_os_wait_events_complete();
- 
- 		/*
 
 
+On 2/4/2022 1:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.97 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.97-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

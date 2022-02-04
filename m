@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A12A4A967B
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078904A969F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357981AbiBDJ01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:26:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53032 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357734AbiBDJYt (ORCPT
+        id S1357969AbiBDJ1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358197AbiBDJZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:24:49 -0500
+        Fri, 4 Feb 2022 04:25:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266D4C0617B9;
+        Fri,  4 Feb 2022 01:25:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89AF1B836ED;
-        Fri,  4 Feb 2022 09:24:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96763C340F0;
-        Fri,  4 Feb 2022 09:24:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2845B836EA;
+        Fri,  4 Feb 2022 09:25:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 406F9C004E1;
+        Fri,  4 Feb 2022 09:25:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966687;
-        bh=iaE1IqOh0EjTj9ysylMCuepe6iN/kPDrrbFWOLuRBw8=;
+        s=korg; t=1643966744;
+        bh=5+zBic57DaFCDCTKf73rG2L2m1QDDJ4X68mahAZmo8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V9JjXEs4uzuFweWk87hqdGaVflQfdGzAj2ml4MKVgBpeoXi8ElK59sjn7hWSJa76u
-         4eUExb0ZOTI0ZD8G8VSAH9b8douA2acUzps8rj0Yjd+pQHQ6mBgae8Uge1poEuci9j
-         LUq0hHBiiuZLAXdDukbDnrZ0W40rW9plkmUzhC5s=
+        b=fHD2MCYfwrf34Jdlf6rvHMmJTAIjKt3MZeG08J0VW9DKsipPke3P4J74H33hZ4RO8
+         0eW7Jl8hpAw4nLRmG8SPctNc2WVsNyH7xqqxykaaXKMELixfg/fHIEu0rkyczLJiGt
+         YXkQN+TVN6J+Uy4IwxBioi+TGOyFDTVqq0jRGMWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Georgi Valkov <gvalkov@abv.bg>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 21/32] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-Date:   Fri,  4 Feb 2022 10:22:31 +0100
-Message-Id: <20220204091915.950075882@linuxfoundation.org>
+        stable@vger.kernel.org, Khalid Manaa <khalidm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: [PATCH 5.16 25/43] net/mlx5e: Fix wrong calculation of header index in HW_GRO
+Date:   Fri,  4 Feb 2022 10:22:32 +0100
+Message-Id: <20220204091917.990963187@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-References: <20220204091915.247906930@linuxfoundation.org>
+In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
+References: <20220204091917.166033635@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,57 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Georgi Valkov <gvalkov@abv.bg>
+From: Khalid Manaa <khalidm@nvidia.com>
 
-commit 63e4b45c82ed1bde979da7052229a4229ce9cabf upstream.
+commit b8d91145ed7cfa046cc07bcfb277465b9d45da73 upstream.
 
-When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
-which reduces the usable size by 2 bytes. Otherwise we have 1512
-bytes usable instead of 1514, and if we receive more than 1512
-bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
-after which the driver malfunctiones and all communication stops.
+The HW doesn't wrap the CQE.shampo.header_index field according to the
+headers buffer size, instead it always increases it until reaching overflow
+of u16 size.
 
-Resolves ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
+Thus the mlx5e_handle_rx_cqe_mpwrq_shampo handler should mask the
+CQE header_index field to find the actual header index in the headers buffer.
 
-Fixes: f33d9e2b48a3 ("usbnet: ipheth: fix connectivity with iOS 14")
-Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
-Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
-Link: https://lore.kernel.org/all/B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg/
-Link: https://lore.kernel.org/all/24851bd2769434a5fc24730dce8e8a984c5a4505.1643699778.git.jan.kiszka@siemens.com/
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: f97d5c2a453e ("net/mlx5e: Add handle SHAMPO cqe support")
+Signed-off-by: Khalid Manaa <khalidm@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/ipheth.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h |    5 +++++
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c   |    4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -121,7 +121,7 @@ static int ipheth_alloc_urbs(struct iphe
- 	if (tx_buf == NULL)
- 		goto free_rx_urb;
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h
+@@ -167,6 +167,11 @@ static inline u16 mlx5e_txqsq_get_next_p
+ 	return pi;
+ }
  
--	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	rx_buf = usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
- 				    GFP_KERNEL, &rx_urb->transfer_dma);
- 	if (rx_buf == NULL)
- 		goto free_tx_buf;
-@@ -146,7 +146,7 @@ error_nomem:
- 
- static void ipheth_free_urbs(struct ipheth_device *iphone)
++static inline u16 mlx5e_shampo_get_cqe_header_index(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe)
++{
++	return be16_to_cpu(cqe->shampo.header_entry_index) & (rq->mpwqe.shampo->hd_per_wq - 1);
++}
++
+ struct mlx5e_shampo_umr {
+ 	u16 len;
+ };
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -1116,7 +1116,7 @@ static void mlx5e_shampo_update_ipv6_udp
+ static void mlx5e_shampo_update_fin_psh_flags(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe,
+ 					      struct tcphdr *skb_tcp_hd)
  {
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN, iphone->rx_buf,
- 			  iphone->rx_urb->transfer_dma);
- 	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
- 			  iphone->tx_urb->transfer_dma);
-@@ -317,7 +317,7 @@ static int ipheth_rx_submit(struct iphet
+-	u16 header_index = be16_to_cpu(cqe->shampo.header_entry_index);
++	u16 header_index = mlx5e_shampo_get_cqe_header_index(rq, cqe);
+ 	struct tcphdr *last_tcp_hd;
+ 	void *last_hd_addr;
  
- 	usb_fill_bulk_urb(dev->rx_urb, udev,
- 			  usb_rcvbulkpipe(udev, dev->bulk_in),
--			  dev->rx_buf, IPHETH_BUF_SIZE,
-+			  dev->rx_buf, IPHETH_BUF_SIZE + IPHETH_IP_ALIGN,
- 			  ipheth_rcvbulk_callback,
- 			  dev);
- 	dev->rx_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+@@ -1968,7 +1968,7 @@ mlx5e_free_rx_shampo_hd_entry(struct mlx
+ static void mlx5e_handle_rx_cqe_mpwrq_shampo(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe)
+ {
+ 	u16 data_bcnt		= mpwrq_get_cqe_byte_cnt(cqe) - cqe->shampo.header_size;
+-	u16 header_index	= be16_to_cpu(cqe->shampo.header_entry_index);
++	u16 header_index	= mlx5e_shampo_get_cqe_header_index(rq, cqe);
+ 	u32 wqe_offset		= be32_to_cpu(cqe->shampo.data_offset);
+ 	u16 cstrides		= mpwrq_get_cqe_consumed_strides(cqe);
+ 	u32 data_offset		= wqe_offset & (PAGE_SIZE - 1);
 
 

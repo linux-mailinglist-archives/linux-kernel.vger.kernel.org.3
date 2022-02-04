@@ -2,74 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4EC4A9FD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E634A9FE0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiBDTOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 14:14:10 -0500
-Received: from mga05.intel.com ([192.55.52.43]:3048 "EHLO mga05.intel.com"
+        id S232194AbiBDTSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:18:02 -0500
+Received: from mga11.intel.com ([192.55.52.93]:61194 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231728AbiBDTOI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:14:08 -0500
+        id S231728AbiBDTSA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 14:18:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644002048; x=1675538048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IqYgTa7UYBztaNoVH32tJ/hHlFS47elux5CJXuQPtqU=;
-  b=C6R/iPPjlIw2g1O9PBK41vOCILgb90UkO+gBTLk6VVnvq+RU4Qo3bqb1
-   Id1T/4dyw494E53s1Fh1Zeazlfwz9HuIJzU693CA0yDOHbRj+6hSpXkLA
-   xoJ66Atl7puQ+28QOOacmvDKOtZv2cDShaZ/3QTfTkG3Cmx6o+CpTUqPE
-   UMajEYaqrYjvrm9feOCNO6Rt1Rc4rN6pwuR8HiCpTA4reuq3Va5WxW7UN
-   sJBwMgAxXaXNkHs7WqXcnfwXfC5yvg4hJLQopamguCbssjTfQm3LMv7Fk
-   OsOCb6pH6P2aVB6ekZMXTNorqs0Ba5rl7Zqz6voa3Qbcuz4CQodeGQxS2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334823189"
+  t=1644002280; x=1675538280;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n8C5babs3ZkUMBv/nFFD9Th7rXCW1erD1QQPKYBJ0M4=;
+  b=ZhvrEyrdhxUzGgdKhWpdRWKC9Zak42FFay9JzQQ7VYhxjxLQOf+1bXRt
+   71qO7Us2A2SWCetd97zw/V39SrVwd3tZgIeGbnb4KvZvUuYZc3M1lkjlx
+   qC1uiQWYiDQIjOvL9HPqwmXrGBTabUG+H4zGNaQ7ktBWs1xtqfgzS3QMQ
+   6mychpwHabOv92UKYCtqQ3ZbvPSn+R1kEOFwJ3flu9BzPRysK3rVeaj5w
+   ndRXekg9RnqmhZejeU1xmdKSzB5s/kiq/B3n+6TIaRZ4rRAWgFk7uOwo6
+   rcItNkSKi0I9z5VjnM2029m9aYD6v1H96svHDsUjIQrKxQ1CDpVR3dylW
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="246017063"
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="334823189"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:14:08 -0800
+   d="scan'208";a="246017063"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:18:00 -0800
 X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
-   d="scan'208";a="677185868"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:14:08 -0800
-Date:   Fri, 4 Feb 2022 11:14:07 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 06/44] mm/pkeys: Add Kconfig options for PKS
-Message-ID: <20220204191407.GZ785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-7-ira.weiny@intel.com>
- <b19f8123-a6dc-9004-efb9-2085fbccb7c2@intel.com>
+   d="scan'208";a="524412811"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 11:17:59 -0800
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ram Pai <linuxram@us.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Suchanek <msuchanek@suse.de>, linux-mm@kvack.org,
+        "Chang S . Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>
+Subject: [PATCH 0/3] selftests: Remove duplicate CPUID wrappers
+Date:   Fri,  4 Feb 2022 11:17:08 -0800
+Message-Id: <cover.1644000145.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b19f8123-a6dc-9004-efb9-2085fbccb7c2@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:06:29PM -0800, Dave Hansen wrote:
-> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> > @@ -1867,6 +1867,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
-> >  	depends on X86_64 && (CPU_SUP_INTEL || CPU_SUP_AMD)
-> >  	select ARCH_USES_HIGH_VMA_FLAGS
-> >  	select ARCH_HAS_PKEYS
-> > +	select ARCH_HAS_SUPERVISOR_PKEYS
-> 
-> For now, this should be:
-> 
-> 	select ARCH_HAS_SUPERVISOR_PKEYS if CPU_SUP_INTEL
-> 
-> unless the AMD folks speak up and say otherwise. :)
+A few tests that require running CPUID do so with a private
+implementation of a wrapper for CPUID. This duplication of
+the CPUID wrapper should be avoided but having one is also
+unnecessary because of the existence of a macro that can
+be used instead.
 
-Done for now.
+This series replaces private CPUID wrappers with calls
+to the __cpuid_count() macro from cpuid.h as made available
+by gcc and clang/llvm.
 
-Ira
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Ram Pai <linuxram@us.ibm.com>
+Cc: Sandipan Das <sandipan@linux.ibm.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: "Desnes A. Nunes do Rosario" <desnesn@linux.vnet.ibm.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Suchanek <msuchanek@suse.de>
+Cc: linux-mm@kvack.org
+Cc: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: Andy Lutomirski <luto@kernel.org>
+
+Reinette Chatre (3):
+  selftests/vm/pkeys: Use existing __cpuid_count() macro
+  selftests/x86/amx: Use existing __cpuid_count() macro
+  selftests/x86/corrupt_xstate_header: Use existing __cpuid_count()
+    macro
+
+ tools/testing/selftests/vm/pkey-x86.h         | 22 +++---------------
+ tools/testing/selftests/x86/amx.c             | 23 +++++--------------
+ .../selftests/x86/corrupt_xstate_header.c     | 17 ++------------
+ 3 files changed, 11 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+

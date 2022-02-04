@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449E44AA39A
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2F94AA39D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 23:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354948AbiBDWy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 17:54:58 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:43270 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231162AbiBDWy4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:54:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=oy+ZGHqwRh7hOUZO4LcUt2H3aLODsyQ1hM4QpkJBUNY=; b=VKrwU16yfq7AedImRakIOxhI/n
-        DfZ7Ciogw9mjqS2uyRhJvAaETrZRNYez3Q60zkdmdCfLmKwiI77aLRya6OVOIVOjiYfB7ElsZL+Cf
-        FTxEs7PlZmNh/iWXeni+EkCsEGWizeRY2GbVEc3auGUbyT5KuALVRVQza3d/kH9l1qII=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nG7TU-004KaN-HT; Fri, 04 Feb 2022 23:54:40 +0100
-Date:   Fri, 4 Feb 2022 23:54:40 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led
- functions
-Message-ID: <Yf2usAHGZSUDvLln@lunn.ch>
-References: <20210421055047.22858-1-ms@dev.tdt.de>
- <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
- <YfspazpWoKuHEwPU@lunn.ch>
- <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
- <YfwEvgerYddIUp1V@lunn.ch>
- <CAJ+vNU1qY1VJgw1QRsbmED6-TLQP2wwxSYb+bXfqZ3wiObLgHg@mail.gmail.com>
- <YfxtglvVDx2JJM9w@lunn.ch>
- <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
+        id S1355252AbiBDWzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 17:55:24 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51522 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355156AbiBDWzK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 17:55:10 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC5DB61AE3;
+        Fri,  4 Feb 2022 22:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D1E2C004E1;
+        Fri,  4 Feb 2022 22:55:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644015309;
+        bh=9dVTciEfhGptcn3wHTdf5MGi0l2fBamxpAPctlU28m4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Jg5LmfB9vKPgT9F4sry4V3UojfJsUFlVavHImbPoT8kVvfzencBqKK92T9XSSKi1i
+         fZvs5q8fMtiSUzwquxLE1//pzIQtGMBKIUYGjxbcMAq6tnlFVWC2fI8b3qkKBd7OYh
+         c5LWh5Uv3iV6d7MYZm14tdaaz1xqaTpyzJAjuEF/GXvuyMTGbjz+vO5TaPXAwWXZB4
+         B7rZAUaAiPt/LRn6jT71YhJFu+wvT74ml2ri/huqdjqDGaCF9cH5fw3a4VIoxTlGtS
+         os1HAdJyBZDDYCXFFHzTz0kdzKV/pfw4Ax57O1GeslqnRhjlJEIwuuhQDaKrCh0daq
+         iXDf10VKCgDtA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0CC845C0418; Fri,  4 Feb 2022 14:55:09 -0800 (PST)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 1/3] rcu/exp: Fix check for idle context in rcu_exp_handler
+Date:   Fri,  4 Feb 2022 14:55:05 -0800
+Message-Id: <20220204225507.4193113-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220204225409.GA4193020@paulmck-ThinkPad-P17-Gen-1>
+References: <20220204225409.GA4193020@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The PHY_INTERRFACE_MODE_NA is a neat trick that I will remember but it
-> would only help with the rgmii delay issue and not the LED issue (this
-> patch). The GPY111 has some really nasty errata that is going to cause
-> me to have a very hackish work-around anyway and I will be disabling
-> the PHY driver to stay out of the way of that workaround
+From: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 
-Well, ideally we want the workaround for the erratas in the kernel
-drivers. In the long run, you will get less surprises if you add what
-you need to Linux, not hide stuff away in the bootloader.
+For PREEMPT_RCU, the rcu_exp_handler() function checks
+whether the current CPU is in idle, by calling
+rcu_dynticks_curr_cpu_in_eqs(). However, rcu_exp_handler()
+is called in IPI handler context. So, it should be checking
+the idle context using rcu_is_cpu_rrupt_from_idle(). Fix this
+by using rcu_is_cpu_rrupt_from_idle() instead of
+rcu_dynticks_curr_cpu_in_eqs(). Non-preempt configuration
+already uses the correct check.
 
-> As far as changing a driver to force a LED configuration with no dt
-> binding input (like this patch does) it feels wrong for exactly the
-> same reason - LED configuration for this PHY can be done via
-> pin-strapping and this driver now undoes that with this patch.
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rcu/tree_exp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is it possible to read the pin strapping pins? If we know it has been
-pin strapped, then a patch to detect this and not change the LED
-configuration seems very likely to be accepted.
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 237a79989abae..1568c8ef185b2 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -656,7 +656,7 @@ static void rcu_exp_handler(void *unused)
+ 	 */
+ 	if (!depth) {
+ 		if (!(preempt_count() & (PREEMPT_MASK | SOFTIRQ_MASK)) ||
+-		    rcu_dynticks_curr_cpu_in_eqs()) {
++		    rcu_is_cpu_rrupt_from_idle()) {
+ 			rcu_report_exp_rdp(rdp);
+ 		} else {
+ 			WRITE_ONCE(rdp->cpu_no_qs.b.exp, true);
+-- 
+2.31.1.189.g2e36527f23
 
-      Andrew

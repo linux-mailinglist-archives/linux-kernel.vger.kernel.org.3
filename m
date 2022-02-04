@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14FB4AA4BC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1822B4AA4BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378674AbiBDX4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378496AbiBDX4I (ORCPT
+        id S1378694AbiBDX4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:56:54 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46814 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378460AbiBDX4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:56:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E0EDB788CD;
-        Fri,  4 Feb 2022 15:56:05 -0800 (PST)
+        Fri, 4 Feb 2022 18:56:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F978B8397C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6699BB8397B;
         Fri,  4 Feb 2022 23:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDF8C340FB;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB08CC34100;
         Fri,  4 Feb 2022 23:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1644018962;
-        bh=5LHH/udgFWNwegl1ai3PJBMHlKqUN4SkpOmVzHlGIQE=;
+        bh=8MfaDQZPX686Fl4ENxwJRECweixHv3A6rHs+5n3xEhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gBVhtPaP0NXHORAbnAmOOAJnlOZCs1CQ1VXCxLIXYcdMdXuW67+Z/NT90qEgdhTHY
-         JGKXFlSs4Cj/Rj5IjkrIpPy9Rhfvur0xHnmY8lS5mS0sR6dsZhJlJbeaRaBu1vHS4t
-         cXyX5nt01Ohy5KEx8nFgTSkdOduCdH6qjhOYark0Q9qaZr1mbXLITlsSWzonX9f82H
-         twrtuQDNeGvtnre3eiaL+OlfJ2j3FA6lamprPookVOnVhyCCh0NeoIvIush6I563cL
-         71NLkXCzXhHp7BCBoom8QlEIogBuSL2kOsM9FrlDuwpSIsR+8bg7VPVOsn6ntt+U6T
-         xknyJNZh/G2+A==
+        b=eieWZxcVwDATKv6gAhhVvQ03P6KI6pEyZpSjhf0kH9gjQSIv/kX0+X6tsf8wfL7Ka
+         BK06f3E36JhmP7ap+fpmEeNSLnQT1tOlaB0pPV1OZBAI3HuVsDuR6PSwptlhDKiK40
+         KgVgrQ4+V64E4G9vUcupIirxWsXoDAgJ9Mpj6ooAHyn1Qe/g8ZzW5uGuW1m4WvD5E+
+         0bWa4u0sIqftXS3bE+Bq4oAxdbKqrP18QvnLRzkz+dJkoJnPnxpo2kad4k8qN81mVZ
+         Vc0wLbre73ENVh9iNz+Fchw6LivHRbEaQvC2Czuft5/0urFAsn3aypesNDCvxbSoRc
+         FY0L7lb3fJqaQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 676995C0DB8; Fri,  4 Feb 2022 15:56:02 -0800 (PST)
+        id 691425C0E5E; Fri,  4 Feb 2022 15:56:02 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 11/13] torture: Make torture.sh help message match reality
-Date:   Fri,  4 Feb 2022 15:55:59 -0800
-Message-Id: <20220204235601.3438-11-paulmck@kernel.org>
+Subject: [PATCH rcu 12/13] rcutorture: Test SRCU size transitions
+Date:   Fri,  4 Feb 2022 15:56:00 -0800
+Message-Id: <20220204235601.3438-12-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
 References: <20220204235558.GA3221@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit fixes a couple of typos: s/--doall/--do-all/ and
-s/--doallmodconfig/--do-allmodconfig/.
+Thie commit adds kernel boot parameters to the SRCU-N and SRCU-P
+rcutorture scenarios to cause SRCU-N to test contention-based resizing
+and SRCU-P to test init_srcu_struct()-time resizing.  Note that this
+also tests never-resizing because the contention-based resizing normally
+takes some minutes to make the shift.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/testing/selftests/rcutorture/bin/torture.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot | 1 +
+ tools/testing/selftests/rcutorture/configs/rcu/SRCU-P.boot | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-index e00e60efb2310..bfe09e2829c8d 100755
---- a/tools/testing/selftests/rcutorture/bin/torture.sh
-+++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -71,8 +71,8 @@ usage () {
- 	echo "       --configs-rcutorture \"config-file list w/ repeat factor (3*TINY01)\""
- 	echo "       --configs-locktorture \"config-file list w/ repeat factor (10*LOCK01)\""
- 	echo "       --configs-scftorture \"config-file list w/ repeat factor (2*CFLIST)\""
--	echo "       --doall"
--	echo "       --doallmodconfig / --do-no-allmodconfig"
-+	echo "       --do-all"
-+	echo "       --do-allmodconfig / --do-no-allmodconfig"
- 	echo "       --do-clocksourcewd / --do-no-clocksourcewd"
- 	echo "       --do-kasan / --do-no-kasan"
- 	echo "       --do-kcsan / --do-no-kcsan"
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
+index 238bfe3bd0ccc..ce0694fd9b929 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
+@@ -1 +1,2 @@
+ rcutorture.torture_type=srcu
++rcutorture.fwd_progress=3
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-P.boot b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-P.boot
+index ce48c7b826734..2db39f298d182 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-P.boot
++++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-P.boot
+@@ -1,2 +1,4 @@
+ rcutorture.torture_type=srcud
+ rcupdate.rcu_self_test=1
++rcutorture.fwd_progress=3
++srcutree.big_cpu_lim=5
 -- 
 2.31.1.189.g2e36527f23
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB484A95FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F704A95F9
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 10:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357530AbiBDJVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 04:21:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S1357463AbiBDJVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 04:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357397AbiBDJVR (ORCPT
+        with ESMTP id S1357476AbiBDJVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 04:21:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1E0C06174E;
-        Fri,  4 Feb 2022 01:21:17 -0800 (PST)
+        Fri, 4 Feb 2022 04:21:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57E8C06173E;
+        Fri,  4 Feb 2022 01:21:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 836E9B836B9;
-        Fri,  4 Feb 2022 09:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF46C004E1;
-        Fri,  4 Feb 2022 09:21:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 102A6615F4;
+        Fri,  4 Feb 2022 09:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1DEC004E1;
+        Fri,  4 Feb 2022 09:21:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643966474;
-        bh=Xg9f6CFllZYrzcO1n0gxcgeybqgoqA71gctmrnJvsx0=;
+        s=korg; t=1643966477;
+        bh=xSOtAzgdlU2pDUEzx3yAN0GwhWj6yoko8OJxHPZoVcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UrmFBJIpG5GcIC7LtQXTT/MRWa72iG23gBaV6NPvP8Z/Yl1RpDfGGQHpQGOwFOj8j
-         v5xnAypoOnYXhtc5LQGzLz28S1n7HVaE/B086ZyXHdTA7Ws43IsP8kyD9zrNLeTetO
-         arWLhWq1Tw7xVSFAGGNwQT7igH6FazFzu8F1bLhE=
+        b=fZCNFYk1fWYtLkJSuAfAL3ahAYR7DmS7PrBbXYUkGBKxLe5JN6IpYN/TWRCmeWjE/
+         cSanDzTDxPMK4UYwGbU7BM/hUEQwtEVYOMCxXTcFwjxw58mC8anISfBA5FYXogHMlE
+         DBPGp/KF8yixfx55ZJA7c1mnIhlqnWyyKzRIaeeM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ailin Xu <ailin.xu@intel.com>,
-        Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@suse.de>
-Subject: [PATCH 5.10 11/25] x86/cpu: Add Xeon Icelake-D to list of CPUs that support PPIN
-Date:   Fri,  4 Feb 2022 10:20:18 +0100
-Message-Id: <20220204091914.657258819@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Michael Stapelberg <michael+drm@stapelberg.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 5.10 12/25] drm/vc4: hdmi: Make sure the device is powered with CEC
+Date:   Fri,  4 Feb 2022 10:20:19 +0100
+Message-Id: <20220204091914.688259001@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
 References: <20220204091914.280602669@linuxfoundation.org>
@@ -48,33 +49,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit e464121f2d40eabc7d11823fb26db807ce945df4 upstream.
+Commit 20b0dfa86bef0e80b41b0e5ac38b92f23b6f27f9 upstream.
 
-Missed adding the Icelake-D CPU to the list. It uses the same MSRs
-to control and read the inventory number as all the other models.
+The original commit depended on a rework commit (724fc856c09e ("drm/vc4:
+hdmi: Split the CEC disable / enable functions in two")) that
+(rightfully) didn't reach stable.
 
-Fixes: dc6b025de95b ("x86/mce: Add Xeon Icelake to list of CPUs that support PPIN")
-Reported-by: Ailin Xu <ailin.xu@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220121174743.1875294-2-tony.luck@intel.com
+However, probably because the context changed, when the patch was
+applied to stable the pm_runtime_put called got moved to the end of the
+vc4_hdmi_cec_adap_enable function (that would have become
+vc4_hdmi_cec_disable with the rework) to vc4_hdmi_cec_init.
+
+This means that at probe time, we now drop our reference to the clocks
+and power domains and thus end up with a CPU hang when the CPU tries to
+access registers.
+
+The call to pm_runtime_resume_and_get() is also problematic since the
+.adap_enable CEC hook is called both to enable and to disable the
+controller. That means that we'll now call pm_runtime_resume_and_get()
+at disable time as well, messing with the reference counting.
+
+The behaviour we should have though would be to have
+pm_runtime_resume_and_get() called when the CEC controller is enabled,
+and pm_runtime_put when it's disabled.
+
+We need to move things around a bit to behave that way, but it aligns
+stable with upstream.
+
+Cc: <stable@vger.kernel.org> # 5.10.x
+Cc: <stable@vger.kernel.org> # 5.15.x
+Cc: <stable@vger.kernel.org> # 5.16.x
+Reported-by: Michael Stapelberg <michael+drm@stapelberg.ch>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/mce/intel.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/vc4/vc4_hdmi.c |   27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
---- a/arch/x86/kernel/cpu/mce/intel.c
-+++ b/arch/x86/kernel/cpu/mce/intel.c
-@@ -486,6 +486,7 @@ static void intel_ppin_init(struct cpuin
- 	case INTEL_FAM6_BROADWELL_X:
- 	case INTEL_FAM6_SKYLAKE_X:
- 	case INTEL_FAM6_ICELAKE_X:
-+	case INTEL_FAM6_ICELAKE_D:
- 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 	case INTEL_FAM6_XEON_PHI_KNL:
- 	case INTEL_FAM6_XEON_PHI_KNM:
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1402,18 +1402,18 @@ static int vc4_hdmi_cec_adap_enable(stru
+ 	u32 val;
+ 	int ret;
+ 
+-	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+-	if (ret)
+-		return ret;
+-
+-	val = HDMI_READ(HDMI_CEC_CNTRL_5);
+-	val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+-		 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+-		 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+-	val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+-	       ((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+-
+ 	if (enable) {
++		ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
++		if (ret)
++			return ret;
++
++		val = HDMI_READ(HDMI_CEC_CNTRL_5);
++		val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
++			 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
++			 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
++		val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
++			((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
++
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+ 			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val);
+@@ -1439,7 +1439,10 @@ static int vc4_hdmi_cec_adap_enable(stru
+ 		HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+ 		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+ 			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
++
++		pm_runtime_put(&vc4_hdmi->pdev->dev);
+ 	}
++
+ 	return 0;
+ }
+ 
+@@ -1531,8 +1534,6 @@ static int vc4_hdmi_cec_init(struct vc4_
+ 	if (ret < 0)
+ 		goto err_delete_cec_adap;
+ 
+-	pm_runtime_put(&vc4_hdmi->pdev->dev);
+-
+ 	return 0;
+ 
+ err_delete_cec_adap:
 
 

@@ -2,87 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B954A9BEE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149064A9BF4
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359689AbiBDP1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:27:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33730 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbiBDP1K (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:27:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 600BCB837D5
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 15:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678B8C004E1;
-        Fri,  4 Feb 2022 15:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643988428;
-        bh=IMwctsXQRVAziVU+Y+/aiMWOA8ESCllASrr1nobYs4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DvXWugoiPeQJMgkUorhuvQ/oxPoNm1KElruWYNTIKqFy05iHs5WKtvuOhbIIsrr8g
-         KpKb4GKWGXteGEmmAKDy03iKnsjl2P2OALlzOPyo3fT11u30y687M6ble6LoD/u4lE
-         SDleNjQgk5Oa4Id8TIM8kRNL7tf2Ro+hSO2Bagc8=
-Date:   Fri, 4 Feb 2022 16:27:05 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sami =?iso-8859-1?Q?Ky=F6stil=E4?= <skyostil@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, dtor@chromium.org,
-        arnd@arndb.de, evanbenn@chromium.org
-Subject: Re: [PATCH v2 1/1] drivers/misc: add a driver for HPS
-Message-ID: <Yf1FySKp9bdbVNah@kroah.com>
-References: <20220202044937.3187603-1-skyostil@chromium.org>
- <20220202044937.3187603-2-skyostil@chromium.org>
+        id S1359706AbiBDP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:28:18 -0500
+Received: from mga12.intel.com ([192.55.52.136]:58598 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231651AbiBDP2Q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 10:28:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643988496; x=1675524496;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yL76kaqgmoqfADEJHWhRA8d3fcfFW+q28lXPw8jO6gg=;
+  b=afrvXaiTQXEx+NTEj5u3Tc0bXruUgyY2luN7rkUzuufMkIze+vHesLAK
+   +FRgn14AwaVzZ/SMFDmtPuKlvODbt3vWn7mauod9/+ouqMNOIklKhyD5y
+   lMTQMveTCwXKEuKXnEzh/Kz/S3J+3NqZQH0CmUPn2ERbl7YYTCds+Ao7A
+   Sg7yzAZTNJloHUxRg21yQ2MRk8v9Albj8apCE95xyTNcJ+osaCLV4E9kY
+   lp987ydXjDU8xKuPFhjoyjh5mp0Ei8dJFxi2fmsewVgPKLJwutlUAolIU
+   EuJwNuMa1DO4b0hXCe3smHKS8O/zM+qRqCQCSxGXybLQSHcBb8RehLP76
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="228356643"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="228356643"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:28:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="483637178"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 07:28:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nG0UU-000xtr-Dv;
+        Fri, 04 Feb 2022 17:27:14 +0200
+Date:   Fri, 4 Feb 2022 17:27:14 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v1 1/1] serial: core: Drop duplicate NULL check in
+ uart_*shutdown()
+Message-ID: <Yf1F0tgIJAnsp4Jo@smile.fi.intel.com>
+References: <20220202165648.5610-1-andriy.shevchenko@linux.intel.com>
+ <Yf04R+REP6WahIIr@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220202044937.3187603-2-skyostil@chromium.org>
+In-Reply-To: <Yf04R+REP6WahIIr@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 03:49:37PM +1100, Sami Kyöstilä wrote:
-> This patch introduces a driver for the ChromeOS screen privacy
-> sensor (aka. HPS). The driver supports a sensor connected to the I2C bus
-> and identified as "GOOG0020" in the ACPI tables.
-> 
-> When loaded, the driver exports the sensor to userspace through a
-> character device. This device only supports power management, i.e.,
-> communication with the sensor must be done through regular I2C
-> transmissions from userspace.
-> 
-> Power management is implemented by enabling the respective power GPIO
-> while at least one userspace process holds an open fd on the character
-> device. By default, the device is powered down if there are no active
-> clients.
-> 
-> Note that the driver makes no effort to preserve the state of the sensor
-> between power down and power up events. Userspace is responsible for
-> reinitializing any needed state once power has been restored.
-> 
-> The device firmware, I2C protocol and other documentation is available
-> at https://chromium.googlesource.com/chromiumos/platform/hps-firmware.
-> 
-> Signed-off-by: Sami Kyöstilä <skyostil@chromium.org>
-> ---
-> 
-> Changes in v2:
-> - Removed custom ioctl interface.
-> - Reworked to use miscdev.
-> 
->  MAINTAINERS            |   6 ++
->  drivers/misc/Kconfig   |  10 +++
->  drivers/misc/Makefile  |   1 +
->  drivers/misc/hps-i2c.c | 184 +++++++++++++++++++++++++++++++++++++++++
+On Fri, Feb 04, 2022 at 03:29:27PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Feb 02, 2022 at 06:56:48PM +0200, Andy Shevchenko wrote:
 
-Why isn't this in drivers/platform/chrome/ instead?
+...
 
-And what can you do with this hardware when it is enabled?  What
-userspace tool uses it?
+> What branch is this against?  It fails to apply to my tty-next branch :(
 
-thanks,
+Linux Next, I think/
+Let me rebase on top of yours tty-next.
 
-greg k-h
+v2 has just been sent.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

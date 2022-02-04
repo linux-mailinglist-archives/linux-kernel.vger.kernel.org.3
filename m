@@ -2,122 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967114AA19D
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FABB4AA1A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbiBDVLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiBDVLG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:11:06 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A69C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:11:05 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so7219744pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:11:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RgiksQOc66bKk1Qxc/E2lq0lexiQJ3+V8qY3o3U8E5c=;
-        b=x2EfMbj4RgYo9lbuojMbJhCdZA2j8JnOk0dRfvrTPSC/zdiCYyqf9kH+95Z3Uh5s1X
-         +hjEUuLkvQ33XAwuIIu2b36t7TYnb4yjM8grYNnuBBqlj4GfDypnIjvOoaXSCWMfPBUq
-         82I+28wPMvcQsigwoG7HDEuy7iGZy2urTfdA55S7Ce6xaxVb3Ush3V+zqsu/k13mB7U+
-         l92E0+PLgpADLs7/aMg4YkFXz38xPUhvpG3f7QPP9m9sYpDFpQaIydI1VBUz7Q/mQlt+
-         WsJG1tIVxG9xNcRAmRF9rSi+X3fsKs5TF/Q/o0RscKJKHm9+eiWr4zCvY07UaoOWGrDS
-         MyyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RgiksQOc66bKk1Qxc/E2lq0lexiQJ3+V8qY3o3U8E5c=;
-        b=ojHIWqwgGFhmGZC1G6kgndO146H3Gzqu108jd7AxGBaZ87/rjIGMpGx06LT0GheuGs
-         gNAaMkDThaXlK41WQJXSxzl/DXyomRvdDWjkwCIbCAA/5p9+gm5UPmzl7+HHens+r2fA
-         q3OqY3SNOsCNrNiZBOeR4pudmLlLyW9ldpUKG75TRFwOYCJzhouHxVc4cI3fyEkEpVDN
-         vmWabhdYjwLhQEL1uFE0oxOsotOfySwyVeGkJES0broroO0EICmxm0+BC0PGxkNuj6kd
-         +mQ0ntima9W7nawwByJScmg/6xoXKvqL3K0LApyrYYTl43saufQ3cOndDmMcpeJ8Vn9F
-         s6OA==
-X-Gm-Message-State: AOAM532fiUHU83Yn1Dgp3ry1gRP0ehpSKJbfg/6afK0lAc606/eHt1+M
-        9f4s0F/toCx7awS9f9GVEnp/yZr0FD3GXYh+HOdmQZHNBv4=
-X-Google-Smtp-Source: ABdhPJxns8NvhgbQnMi6I7HTXzW12F5GZ9V3WK7V7keVI+wOCfmxZnDKvKOh+g2Txe3/QHzeTzqm8wTbrEcWbZ4egyY=
-X-Received: by 2002:a17:902:d705:: with SMTP id w5mr5237256ply.34.1644009064806;
- Fri, 04 Feb 2022 13:11:04 -0800 (PST)
+        id S240745AbiBDVMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:12:54 -0500
+Received: from mga17.intel.com ([192.55.52.151]:30136 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240693AbiBDVMv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 16:12:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644009171; x=1675545171;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nJFBLm/FwqnHzLEEUUpZHXIbCOjQ31o3RLj1kPQYLAA=;
+  b=LfR2/lDit5lerH8YW1/BGTXdqcKZhb8v+0xGP5ktASIZwTxqqykMd/T4
+   SgH0OtCH+le92TjNkuJl8xiI5cvwPqPMWO0WxCocD12YS4bezJ5UM2VS/
+   cBWmYqXk+5R6psSERmLY0Ky9g3z+bWNezS32sYRsSW4J4fmoSY7RrekhY
+   wpWiQzTNHXtkq3eRsSj/dhW5PYbQQgmjdEjgUBDtQfirT8MbQxHFGQ85t
+   SpUfR2Agw2Z6U4egLkPFwcYbEuF6K2mah2rqld7MFLLHWnyq82NUd4r1D
+   X4uNsc6B/Zq+35I7qNnPLn7/bPthhEKP3RYByKRFqv+yMEN/kwMbNFgyf
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229093774"
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="229093774"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 13:12:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,343,1635231600"; 
+   d="scan'208";a="699800842"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 04 Feb 2022 13:12:49 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG5su-000YCD-RK; Fri, 04 Feb 2022 21:12:48 +0000
+Date:   Sat, 5 Feb 2022 05:12:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
+Subject: ld.lld: error: undefined symbol: socfpga_reset_init
+Message-ID: <202202050539.Mtk9I4Ef-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-44-ira.weiny@intel.com>
-In-Reply-To: <20220127175505.851391-44-ira.weiny@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 4 Feb 2022 13:10:53 -0800
-Message-ID: <CAPcyv4idgNDaxJfj2MZgJnuGyygFJ9ozvrEghSnsR7zXB=pj0A@mail.gmail.com>
-Subject: Re: [PATCH V8 43/44] nvdimm/pmem: Enable stray access protection
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
->
-> From: Ira Weiny <ira.weiny@intel.com>
->
-> Now that all valid kernel access' to PMEM have been annotated with
-> {__}pgmap_mk_{readwrite,noaccess}() PGMAP_PROTECTION is safe to enable
-> in the pmem layer.
->
-> Implement the pmem_map_protected() and pmem_mk_{readwrite,noaccess}() to
-> communicate this memory has extra protection to the upper layers if
-> PGMAP_PROTECTION is specified.
->
-> Internally, the pmem driver uses a cached virtual address,
-> pmem->virt_addr (pmem_addr).  Use __pgmap_mk_{readwrite,noaccess}()
-> directly when PGMAP_PROTECTION is active on the device.
->
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
->
-> ---
-> Changes for V8
->         Rebase to 5.17-rc1
->         Remove global param
->         Add internal structure which uses the pmem device and pgmap
->                 device directly in the *_mk_*() calls.
->         Add pmem dax ops callbacks
->         Use pgmap_protection_available()
->         s/PGMAP_PKEY_PROTECT/PGMAP_PROTECTION
-> ---
->  drivers/nvdimm/pmem.c | 52 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 51 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-> index 58d95242a836..2afff8157233 100644
-> --- a/drivers/nvdimm/pmem.c
-> +++ b/drivers/nvdimm/pmem.c
-> @@ -138,6 +138,18 @@ static blk_status_t read_pmem(struct page *page, unsigned int off,
->         return BLK_STS_OK;
->  }
->
-> +static void __pmem_mk_readwrite(struct pmem_device *pmem)
-> +{
-> +       if (pmem->pgmap.flags & PGMAP_PROTECTION)
-> +               __pgmap_mk_readwrite(&pmem->pgmap);
-> +}
-> +
-> +static void __pmem_mk_noaccess(struct pmem_device *pmem)
-> +{
-> +       if (pmem->pgmap.flags & PGMAP_PROTECTION)
-> +               __pgmap_mk_noaccess(&pmem->pgmap);
-> +}
-> +
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dcb85f85fa6f142aae1fe86f399d4503d49f2b60
+commit: 4483397b03536506535d611b0cb28a81a69e8edf ARM: socfpga: drop ARCH_SOCFPGA
+date:   11 months ago
+config: arm-socfpga_defconfig (https://download.01.org/0day-ci/archive/20220205/202202050539.Mtk9I4Ef-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4483397b03536506535d611b0cb28a81a69e8edf
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4483397b03536506535d611b0cb28a81a69e8edf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Per previous feedback let's find a way for the pmem driver to stay out
-of the loop, and just let these toggles by pgmap generic operations.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: socfpga_reset_init
+   >>> referenced by socfpga.c
+   >>>               socfpga.o:(socfpga_init_irq) in archive arch/arm/mach-socfpga/built-in.a
+   >>> referenced by socfpga.c
+   >>>               socfpga.o:(socfpga_arria10_init_irq) in archive arch/arm/mach-socfpga/built-in.a
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

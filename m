@@ -2,68 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3748A4A99BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E112C4A99C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 14:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349914AbiBDNKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 08:10:45 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:42406 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350855AbiBDNKi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 08:10:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=m/MrXXUY+pm7JMmWqQaE3QjF0Fdquw4zZVFebHs+qNA=; b=K9FBiz1rW7KFXn2u1g2RmQPdk1
-        mmGrXOgMpt90Ui02kl5EiT056Cs2a1UWVaiNDw95JAvNsQw/Yrkgtps4YmL+PQknW+2ZZc5R4WNRw
-        CZDlnNncbZr7/Zad6s7D8FzlbaabjNmkAYXe2qBd7U/e+o8ZDd51yDl5BNP7Ce50IU8o=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nFyMC-004Gpv-W4; Fri, 04 Feb 2022 14:10:32 +0100
-Date:   Fri, 4 Feb 2022 14:10:32 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pavel.Parkhomenko@baikalelectronics.ru
-Cc:     michael@stapelberg.de, afleming@gmail.com, f.fainelli@gmail.com,
-        Alexey.Malahov@baikalelectronics.ru,
-        Sergey.Semin@baikalelectronics.ru, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
- 88e1121-compatible PHYs
-Message-ID: <Yf0lyGi+2mEwmrEH@lunn.ch>
-References: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
+        id S1352018AbiBDNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 08:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350186AbiBDNM5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 08:12:57 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5683DC06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 05:12:57 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id s18so11242124wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 05:12:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZbYJHNx4029ps/19+h4CZdnYRI6KHcst/wEtS01Jdo=;
+        b=TyKyYZByUE3jpVhuJ9mUwyFUGomBVpvNhaiNWGG0w8Al4uf8yFaqLcjbyfFqgnDNoP
+         yiWyyUpqTstnRV+wIfXZX/rn/TeYTqDp4fjcuBCCa4JWw+Kn8zz/iqTrP176FbTG6J0x
+         MiPupOe4nw0D20+TId1bYsLwFp9jqAWbuc9vd8yFc7mUjVtD4A/aWnrEX/43zbReKfzD
+         3IX3QySKKUj+lUPiW2C7dWFlq07dtljJy+pq7oQglrIK0Mu7hUpL5boWgKRCk4BYOmpY
+         FT62jyWUULzQYJZehkxDNW/SoB+KSFiMI2hvg499iZuKm87zKXvFh46Ew5B6+TkA5Uld
+         5bBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WZbYJHNx4029ps/19+h4CZdnYRI6KHcst/wEtS01Jdo=;
+        b=ws1eF1MyXJVd1NlLtok/leu6IdIwNoHoScgWzvLxwtiaC53cD+y/HDJIK7xdBy4n5C
+         4yOS6cG3keZ00S+V+4jAPy9FagtPeC2oIqd3KvkiCuaRNeOm0dctdg01dbtY5pQcuJVb
+         Kq7iuDfUCVV+f9taokfHjfTWByCfv4wsyEg7+Zx6rBE/UFjPCio6RLJ4YZmReH4TvnkS
+         NtfMoGI4xof0aszh78/ojCBDmv0Rb8vYeVXPDtm0RaEuYiGq6D+cGlYylCwESwz7lL1v
+         vh6W5lW8k76Bed6a+iufzOyi16l+X92bMWFluOQqfCIUTXe8OYKmMsS20LhWdaDLx2l2
+         Nh/g==
+X-Gm-Message-State: AOAM5338q66cKVcq/8iFe8xblyL34wdQLj/0gbfHJgCPEKToVoePwxCu
+        3mtjkvCM4uWbv+oTd87iNIkCrmTuM3GE0Q==
+X-Google-Smtp-Source: ABdhPJyBJFSfzOskZ3dK5bvmtr+IRWoECNPyqbHGeLbc83XvlzGW98cyZv7ax19uTaCxEIMTvLe9BQ==
+X-Received: by 2002:a5d:694d:: with SMTP id r13mr2443227wrw.453.1643980375586;
+        Fri, 04 Feb 2022 05:12:55 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id p42sm9645343wms.28.2022.02.04.05.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 05:12:55 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     don.brace@microchip.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        storagedev@microchip.com, Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] scsi: hpsa: prevent hpsa to severly delay boot
+Date:   Fri,  4 Feb 2022 13:12:47 +0000
+Message-Id: <20220204131247.1684875-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 05:29:11AM +0000, Pavel.Parkhomenko@baikalelectronics.ru wrote:
-> It is mandatory for a software to issue a reset upon modifying RGMII
-> Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
-> Specific Control register 2 (page 2, register 21) otherwise the changes
-> won't be perceived by the PHY (the same is applicable for a lot of other
-> registers). Not setting the RGMII delays on the platforms that imply
-> it's being done on the PHY side will consequently cause the traffic loss.
-> We discovered that the denoted soft-reset is missing in the
-> m88e1121_config_aneg() method for the case if the RGMII delays are
-> modified but the MDIx polarity isn't changed or the auto-negotiation is
-> left enabled, thus causing the traffic loss on our platform with Marvell
-> Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
-> delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
-> method.
+On my HPE Proliant microserver gen 10+, modprobing hpsa lead to:
+hpsa 0000:01:00.7: unrecognized board ID: 0x00e41590
+hpsa 0000:01:00.7: unrecognized board ID: 0x00e41590
+hpsa 0000:01:00.7: can't disable ASPM; OS doesnt't have ASPM control
+hpsa 0000:01:00.7: board not ready, timed out.
 
-Hi Pavel
+And the boot is severly delayed until the timeout.
 
-There appears to be another path which has the same issue.
+The controller is HPE Smart Array S100i SR Gen10
 
-m88e1118_config_aneg() calls marvell_set_polarity(), which also needs
-a reset afterwards.
+I have tried to add (naivly) to struct board_type products:
+	{0x00e41590, "Smart Array S100i SR Gen10", &SA5_access},
+but the board still time out.
 
-Could you fix this case as well?
+With further search, I found that the S100i seems to be a fake SW RAID controller usefull for windows only.
 
-Thanks
-	Andrew
+So I use the following patch to fix the boot stuck.
+
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/scsi/hpsa.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index a47bcce3c9c7..dbc753a30500 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -231,6 +231,7 @@ static struct board_type products[] = {
+ 	{0x007D1590, "HP Storage P1228 Array Controller", &SA5_access},
+ 	{0x00881590, "HP Storage P1228e Array Controller", &SA5_access},
+ 	{0x333f103c, "HP StorageWorks 1210m Array Controller", &SA5_access},
++	{0x00e41590, "Smart Array S100i SR Gen10", NULL},
+ 	{0xFFFF103C, "Unknown Smart Array", &SA5_access},
+ };
+ 
+@@ -7554,6 +7555,10 @@ static int hpsa_lookup_board_id(struct pci_dev *pdev, u32 *board_id,
+ 		*legacy_board = false;
+ 	for (i = 0; i < ARRAY_SIZE(products); i++)
+ 		if (*board_id == products[i].board_id) {
++			if (!products[i].access) {
++				dev_info(&pdev->dev, "This is a SW RAID controller for windows only\n");
++				return -ENODEV;
++			}
+ 			if (products[i].access != &SA5A_access &&
+ 			    products[i].access != &SA5B_access)
+ 				return i;
+@@ -8676,7 +8681,8 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 
+ 	rc = hpsa_lookup_board_id(pdev, &board_id, NULL);
+ 	if (rc < 0) {
+-		dev_warn(&pdev->dev, "Board ID not found\n");
++		if (rc != -ENODEV)
++			dev_warn(&pdev->dev, "Board ID not found\n");
+ 		return rc;
+ 	}
+ 
+-- 
+2.25.1
+

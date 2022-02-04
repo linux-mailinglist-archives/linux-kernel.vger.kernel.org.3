@@ -2,65 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1174A9E74
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE184A9E7D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377291AbiBDR6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:58:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38246 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377260AbiBDR61 (ORCPT
+        id S1377281AbiBDR7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:59:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356110AbiBDR7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:58:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B5A8B83881;
-        Fri,  4 Feb 2022 17:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 23A51C340FD;
-        Fri,  4 Feb 2022 17:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643997505;
-        bh=Qd1QpO029yfnEIyPKFG+DXXvp4tuXxLyUSA5ZjYqMSc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lLM+rlmOYVdkhetfNpvS61CMU4RFL/qAhuE1Up0orpXCUq8V2CmbHZIchADtLMn1P
-         3grnhZlR6yxKLWsQUeXQDeSccFcc6zDamSV+0N3mTbW11eFpQ+BZ74+Q7R9tU+35aM
-         oftsblTlsphCebslT9mgmz9wpFHjumxlB8LLWGSn+gPGN5HcwbLpaj9vtpuZ3i/+O6
-         u4jYAPxrMTqzMZDdXy4HbwYgb0utXB509+62Klm+TBYG2Y9myGOsr1TvIqfXrVo0wm
-         TI0WLYKnd8g2ZOszNVctrF9YHjL6KnPOqVApoJehGFpPn1sS44C0Km4wGUApVwIGjY
-         lsGkKgWGhKe0A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E90FBC6D4EA;
-        Fri,  4 Feb 2022 17:58:24 +0000 (UTC)
-Subject: Re: [GIT PULL] Ceph fixes for 5.17-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220204131518.13859-1-idryomov@gmail.com>
-References: <20220204131518.13859-1-idryomov@gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220204131518.13859-1-idryomov@gmail.com>
-X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-5.17-rc3
-X-PR-Tracked-Commit-Id: 038b8d1d1ab1cce11a158d30bf080ff41a2cfd15
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cff7f2237c2b494a07c90f70291588d218b77e14
-Message-Id: <164399750495.18890.15474672888789225709.pr-tracker-bot@kernel.org>
-Date:   Fri, 04 Feb 2022 17:58:24 +0000
-To:     Ilya Dryomov <idryomov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+        Fri, 4 Feb 2022 12:59:53 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197B5C06173E
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 09:59:53 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id oa14-20020a17090b1bce00b001b61aed4a03so6789112pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 09:59:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/2JNsgf3kaNUNazBKVI3tgRqtSJ9a/7dAGZoZ0RBSN0=;
+        b=plcocTC9b78RDpVYudl/jaGbyjvz/FUhlTJmVZE5hnEUfZmbP6nvfWKEvGLv876o+z
+         9zdtnnRGhIYfRNPQ1QIkSFGxS9YW+JxF1csqOIyh3cd6D9F8rqu83HBATqrE7JZ7Tg/J
+         n/6BCD/1zUGlor/THn8gSOVztoXqXCD+60pfthrBRGOQyrkWLnIxkWheR3Oa/XreYvOO
+         IhkssPKJ55XE02XyuKucleWQPImLhga5+CZ4qPn80nifLHK7iuUVNeJ7CXPWa4IAWjBK
+         eEi4UzY+nr8GyqDvBI7FEA65oJ7mme+sREeuZQ9/t5+IGClPYiB1J35QNwl8Yvmler6b
+         HUug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/2JNsgf3kaNUNazBKVI3tgRqtSJ9a/7dAGZoZ0RBSN0=;
+        b=AbrndTkomYbUFsJrGZWMgPxD2tNUZ57IfM/6/LP6LLBl9deUrsSlE9spt2vl856Nnl
+         qqzFz/VvswIFtd6ZpYPAuBY20xigEuVP6d2IEuZgKw0t6DMuJk+/g9LypnJppfIJcRv+
+         ic6TH7gpHqq5Ku9oZZekqa+ZvFXZBarTmGNf5XPej5SguMqs6SNh03WLfO/u0W1+CPMT
+         tMLDi3nPPLC4TZoF+YL93Ka5Mqz+YXLLdBNYHa+6BC/D7OWnjA+LlenweH3y8VDLk6dg
+         zjxcY/bYnfzJ8WGkckGRSwlXXwwpuqSFZIeuba5FB931GwJVV5aR9N2dwWeyPBNe5kpL
+         /OpQ==
+X-Gm-Message-State: AOAM530sZvAFVwp/xFKx2dcLeuk2RCSCXKM8lh4p0uFyHormkMfbtjZH
+        sdOj3PREevgMhC8kDja2LMifgQ==
+X-Google-Smtp-Source: ABdhPJzt5XYWNvw/S8Xij4phdCifKgtyFrDcyAbXvHWOXY8+f8papHzs8kxE7NW9u15Hi72mzumPAA==
+X-Received: by 2002:a17:902:7603:: with SMTP id k3mr4595813pll.160.1643997592328;
+        Fri, 04 Feb 2022 09:59:52 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id c2sm2155220pgi.55.2022.02.04.09.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 09:59:51 -0800 (PST)
+Date:   Fri, 4 Feb 2022 17:59:47 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, vkuznets@redhat.com
+Subject: Re: [PATCH 01/23] KVM: MMU: pass uses_nx directly to
+ reset_shadow_zero_bits_mask
+Message-ID: <Yf1pk1EEBXj0O0/p@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-2-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204115718.14934-2-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri,  4 Feb 2022 14:15:18 +0100:
+On Fri, Feb 04, 2022 at 06:56:56AM -0500, Paolo Bonzini wrote:
+> reset_shadow_zero_bits_mask has a very unintuitive way of deciding
+> whether the shadow pages will use the NX bit.  The function is used in
+> two cases, shadow paging and shadow NPT; shadow paging has a use for
+> EFER.NX and needs to force it enabled, while shadow NPT only needs it
+> depending on L1's setting.
+> 
+> The actual root problem here is that is_efer_nx, despite being part
+> of the "base" role, only matches the format of the shadow pages in the
+> NPT case.  For now, just remove the ugly variable initialization and move
+> the call to reset_shadow_zero_bits_mask out of shadow_mmu_init_context.
+> The parameter can then be removed after the root problem in the role
+> is fixed.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-> https://github.com/ceph/ceph-client.git tags/ceph-for-5.17-rc3
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cff7f2237c2b494a07c90f70291588d218b77e14
+(I agree this commit makes no functional change.)
 
-Thank you!
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 296f8723f9ae..9424ae90f1ef 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4410,18 +4410,9 @@ static inline u64 reserved_hpa_bits(void)
+>   * follow the features in guest.
+>   */
+>  static void reset_shadow_zero_bits_mask(struct kvm_vcpu *vcpu,
+> -					struct kvm_mmu *context)
+> +					struct kvm_mmu *context,
+> +					bool uses_nx)
+>  {
+> -	/*
+> -	 * KVM uses NX when TDP is disabled to handle a variety of scenarios,
+> -	 * notably for huge SPTEs if iTLB multi-hit mitigation is enabled and
+> -	 * to generate correct permissions for CR0.WP=0/CR4.SMEP=1/EFER.NX=0.
+> -	 * The iTLB multi-hit workaround can be toggled at any time, so assume
+> -	 * NX can be used by any non-nested shadow MMU to avoid having to reset
+> -	 * MMU contexts.  Note, KVM forces EFER.NX=1 when TDP is disabled.
+> -	 */
+> -	bool uses_nx = is_efer_nx(context) || !tdp_enabled;
+> -
+>  	/* @amd adds a check on bit of SPTEs, which KVM shouldn't use anyways. */
+>  	bool is_amd = true;
+>  	/* KVM doesn't use 2-level page tables for the shadow MMU. */
+> @@ -4829,8 +4820,6 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
+>  
+>  	reset_guest_paging_metadata(vcpu, context);
+>  	context->shadow_root_level = new_role.base.level;
+> -
+> -	reset_shadow_zero_bits_mask(vcpu, context);
+>  }
+>  
+>  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
+> @@ -4841,6 +4830,16 @@ static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
+>  		kvm_calc_shadow_mmu_root_page_role(vcpu, regs, false);
+>  
+>  	shadow_mmu_init_context(vcpu, context, regs, new_role);
+> +
+> +	/*
+> +	 * KVM uses NX when TDP is disabled to handle a variety of scenarios,
+> +	 * notably for huge SPTEs if iTLB multi-hit mitigation is enabled and
+> +	 * to generate correct permissions for CR0.WP=0/CR4.SMEP=1/EFER.NX=0.
+> +	 * The iTLB multi-hit workaround can be toggled at any time, so assume
+> +	 * NX can be used by any non-nested shadow MMU to avoid having to reset
+> +	 * MMU contexts.  Note, KVM forces EFER.NX=1 when TDP is disabled.
+> +	 */
+> +	reset_shadow_zero_bits_mask(vcpu, context, true);
+>  }
+>  
+>  static union kvm_mmu_role
+> @@ -4872,6 +4871,7 @@ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
+>  	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
+>  
+>  	shadow_mmu_init_context(vcpu, context, &regs, new_role);
+> +	reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Out of curiousity, how does KVM mitigate iTLB multi-hit when shadowing
+NPT and the guest has not enabled EFER.NX?
+
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_npt_mmu);
+>  
+> -- 
+> 2.31.1
+> 
+> 

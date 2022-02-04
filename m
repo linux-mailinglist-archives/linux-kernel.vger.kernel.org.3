@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2117F4A9ED4
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40D84A9EDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377484AbiBDSSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243150AbiBDSSp (ORCPT
+        id S1377499AbiBDSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:21:01 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:12986 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234002AbiBDSU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:18:45 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40817C06173D
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:18:45 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id d188so8396541iof.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:18:45 -0800 (PST)
+        Fri, 4 Feb 2022 13:20:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
-        b=YuuKVwxWhqjqDGM91SbOGfO5jk1lvcH2xOKu9SdTS/0AtcSSu6Z74v9BI75XsPuQNQ
-         6voOghPWwZ0DFtuWnIayytbcUYvQLdpxYUw/+iekyW/DRrXWz5L3T9qUdSP4JAL0wOB2
-         AAuLy72nClt9QPT6wEIYZ/WM76WScoUHkqOnE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B0ahm0hdwmzp8LcfxQ8+kQ7YphowIvmbdFdhXbcRawU=;
-        b=7HPifqNIXH0j6mVmuH33VDOU2y80/JELZJj4aknuV1nh+UGaNcj1L3f23PW4Se9LJ+
-         fks8HDzxl+cQlJO3mD4mhHEdUuvGI+2g0bqgrfrIWKcCEs+KCleBJmSvzF9WQ1MEGL2x
-         xNwWjbURw1/+wMPVBat1qbt3sWHF0dUfIOpQbVbkd5Odw/pxymJIxS9WFmtUMPzaoKl0
-         Jaa/osvGvJB8CeqzoyZlDz3JImG2jjZ56f5KzgwV7EvWDVbBjdCLRL7gOIYkTcSKbHSw
-         NwhbSAKM3thP1GEJrAw1FPGlwPOyn/+jGx0avuBZiZP7e9S3j2iM54VwtnCE9vYBZ2Ov
-         nOMQ==
-X-Gm-Message-State: AOAM533uwwMoLWVhnIZP7tonS61BSvO7xyseEMnwwPNh3fLgcfdjmttr
-        PGYwXmb4Hg5VNLPqualPSdayc8keSfpieVCyvhJ0QQ==
-X-Google-Smtp-Source: ABdhPJytny1SyvPfpAVIt5yuyPMy85jb9OFiLTaA6qhpI02J9cXH4cGVPLFMJsAR4d38qn7L7cix9j7++UZ9EJEbmaw=
-X-Received: by 2002:a6b:f218:: with SMTP id q24mr174468ioh.55.1643998724641;
- Fri, 04 Feb 2022 10:18:44 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1643998859; x=1675534859;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QNQNR8pSD+bvmM7QVunNiubutry5FOQGRyE/RWkBNGQ=;
+  b=RTcirssTTj+yIsmm6lDPWOtmS7Qyx7Q/dq4qMCCKmdpPumLLwiSS4Dqr
+   3S4f4iRJ6uLfwM2dbWYd2sJiSRLfGmyOMEghw4IRGGUZjEUaYRNZUfIZ8
+   jXOmLYkrMHeVnN4o463mB91hhKdXDL4xeK8OxeaTXVINfnRbTKcXb9NgB
+   c=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 04 Feb 2022 10:20:59 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 10:20:58 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 4 Feb 2022 10:20:58 -0800
+Received: from [10.110.74.239] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 4 Feb 2022
+ 10:20:58 -0800
+Message-ID: <8ccb18ce-5d86-47dd-dec1-8fc1c27dcba1@quicinc.com>
+Date:   Fri, 4 Feb 2022 10:20:57 -0800
 MIME-Version: 1.0
-References: <20220106122452.18719-1-wsa@kernel.org> <Yd6gRR0jtqhRLwtB@ninjato>
- <98ed8d6d16a3d472d9432eb169aa2da44b66b5cc.camel@yandex.ru>
- <4dfbee97-14c2-718b-9cbd-fdeeace96f59@yahoo.com> <CAJMQK-h38XdN=QD6ozVNk+wxmpp1DKj21pkFZ+kY31+Lb8ot6Q@mail.gmail.com>
- <6121a782-6927-f033-1c09-ffe4ad7700ae@yahoo.com> <CAJMQK-j5YYqen78Vgng_5jhja-YKSTRut7f7vJ4wWufVfbZy6w@mail.gmail.com>
- <363432688.323955.1642272250312@mail.yahoo.com>
-In-Reply-To: <363432688.323955.1642272250312@mail.yahoo.com>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Sat, 5 Feb 2022 02:18:18 +0800
-Message-ID: <CAJMQK-jx+z974AT_p+-AVAbMQQ33V-XU9NKmy-i6nbS5zagHBA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "i2c: core: support bus regulator controlling in adapter"
-To:     "Tareque Md.Hanif" <tarequemd.hanif@yahoo.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/4] input: misc: pm8941-pwrkey: add support for PON
+ GEN3 base addresses
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <dmitry.torokhov@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
+        <bjorn.andersson@linaro.org>, <skakit@codeaurora.org>
+References: <20220203010804.20883-2-quic_amelende@quicinc.com>
+ <20220203010804.20883-3-quic_amelende@quicinc.com>
+ <CAE-0n51vAD-_0e0sBKECfx51B2a6-BK59LnRp6uGHejU_f3rGQ@mail.gmail.com>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <CAE-0n51vAD-_0e0sBKECfx51B2a6-BK59LnRp6uGHejU_f3rGQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 16, 2022 at 2:44 AM Tareque Md.Hanif
-<tarequemd.hanif@yahoo.com> wrote:
->
-> Hi Hsin-Yi,
->
-> The issue still exists. I reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually applied the patch (tags/v5.16). journalctl attached.
 
-hi Tareque,
 
-Can you apply the same setting[1] again and with this patch to see if
-the issue is still there?
-https://github.com/torvalds/linux/commit/6dc8265f9803ccb7e5da804e01601f0c14f270e0
+On 2/3/2022 1:16 PM, Stephen Boyd wrote:
+> Quoting Anjelique Melendez (2022-02-02 17:08:05)
+>> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+>> index e0240db12d4f..2a42a676b021 100644
+>> --- a/drivers/input/misc/pm8941-pwrkey.c
+>> +++ b/drivers/input/misc/pm8941-pwrkey.c
+>> @@ -200,15 +207,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>>                         dev_err(&pdev->dev, "failed to locate regmap\n");
+>>                         return -ENODEV;
+>>                 }
+>> +       }
+>>
+>> -               error = of_property_read_u32(parent->of_node,
+>> -                                            "reg", &pwrkey->baseaddr);
+>> -       } else {
+>> -               error = of_property_read_u32(pdev->dev.of_node, "reg",
+>> -                                            &pwrkey->baseaddr);
+>> +       addr = of_get_address(regmap_node, 0, NULL, NULL);
+>> +       if (!addr) {
+>> +               dev_err(&pdev->dev, "reg property missing\n");
+>> +               return -EINVAL;
+>> +       }
+>> +       pwrkey->baseaddr = be32_to_cpup(*addr);
+>> +
+>> +       if (pwrkey->data->has_pon_pbs) {
+>> +               /* PON_PBS base address is optional */
+>> +               addr = of_get_address(regmap_node, 1, NULL, NULL);
+>> +               if (addr)
+>> +                       pwrkey->pon_pbs_baseaddr = be32_to_cpup(*addr);
+> 
+> With the deref dropped.
+> 
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-[1] reverted a19f75de73c220b4496d2aefb7a605dd032f7c01 (the commit that
-reverted 5a7b95fb993ec399c8a685552aa6a8fc995c40bd) and manually
-applied the patch (tags/v5.16)
-
-Thanks
->
-> Regards,
->
-> Tareque
->
-> On Saturday, January 15, 2022, 11:27:07 PM GMT+6, Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
->
-> hi Tareque,
->
->
-> On Fri, Jan 14, 2022 at 6:09 PM Tareque Md Hanif
-> <tarequemd.hanif@yahoo.com> wrote:
-> >
-> > Hi Hsin-Yi,
-> >
-> > On 1/12/22 16:58, Hsin-Yi Wang wrote:
-> >
-> > Can you help provide logs if we apply
-> > 5a7b95fb993ec399c8a685552aa6a8fc995c40bd but revert
-> > 8d35a2596164c1c9d34d4656fd42b445cd1e247f?
-> >
-> > Issue still exists. journalctl log attached in revert_8d.txt
-> >
-> >
-> > > after apply 5a7b95fb993ec399c8a685552aa6a8fc995c40bd
-> > > 1. delete SET_LATE_SYSTEM_SLEEP_PM_OPS(i2c_suspend_late,
-> > > i2c_resume_early) and function i2c_suspend_late() and
-> > > i2c_resume_early().
-> >
-> > No issues. journalctl log attached in test1.txt
-> >
-> >
-> > > 2. delete SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume,
-> > > NULL) and function i2c_runtime_suspend() and i2c_runtime_resume().
-> >
-> > Issue exists. journalctl log attached in test2.txt
->
->
-> Thanks for the testing.
-> Can you help us test if applying the following patch on top of
-> 5a7b95fb993ec399c8a685552aa6a8fc995c40bd works? Thanks
->
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index 9eb4009cb250..6b046012aa08 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -484,7 +484,7 @@ static int i2c_resume_early(struct device *dev)
->         struct i2c_client *client = i2c_verify_client(dev);
->         int err;
->
-> -      if (!client)
-> +      if (!client || dev_pm_skip_resume(dev))
->                 return 0;
->
->         if (pm_runtime_status_suspended(&client->dev) &&
-> @@ -502,7 +502,7 @@ static int i2c_suspend_late(struct device *dev)
->         struct i2c_client *client = i2c_verify_client(dev);
->         int err;
->
-> -      if (!client)
-> +      if (!client || dev_pm_skip_suspend(dev))
->                 return 0;
->
->         err = pm_generic_suspend_late(&client->dev);
->
+ACK

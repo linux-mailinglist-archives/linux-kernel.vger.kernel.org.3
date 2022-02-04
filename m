@@ -1,39 +1,39 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4B94AA0BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 21:03:00 +0100 (CET)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id ADF044AA08F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 20:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239106AbiBDUCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 15:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S235849AbiBDT7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 14:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiBDT7K (ORCPT
+        with ESMTP id S235470AbiBDT7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 14:59:10 -0500
+        Fri, 4 Feb 2022 14:59:07 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92FCC061749
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA9AC06174A
         for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 11:59:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=Qp/7CV756EjRflFbilGAM2PWJ4Vh7vDEGJ1jBhnMB60=; b=FEl7wj2ny9VKEO6nnjsFB7DhPI
-        c+Mtk+lRI+R1Ued1Wy+ESTXo7863L3btIBoNRphLP+Jw3wmpRiGei36BTGQEUedkSBsLV8sDQqzup
-        +1AcDx3RPnCrmPNY2liHAnjVeaaVJL0raWdHL84Ov4kNe5M7AQ7V3d5+DMWqXD8x+YF3G/0+8mW7W
-        QJZQ/FzI87aBXaPOPGWAG6YQHklqGPiAFzF3n/hz3ay048DaOyX080qLq2+SNNDMH7nLzsADFY+TZ
-        eyWeCBPdr0YOV6gweWxCX7oMOGXcLktHpKXLA91GGuPPEBXWY+5GVpQYaGyWF+o4Fv9V/5DnXS09Y
-        AjygAdOg==;
+        bh=dWpyn2grOZbdkVKfq1AQyk9euyCX9uRwjuX/Z2zFNP8=; b=IIkx0MGDdfq/Z2Hje/dD5In3xo
+        5RLRAtlsVK17eQ6leQRmuWVmLhUgRIZ3UNMsql8hGllsmJTC5KqvT2Cu2/tJfRPqmmOzM8xPavF7I
+        Oiqo3heIu0zgrstAoKIS5pPumlBODsWJj953N0OBB8bhVhQGLn82xox7Dpx8x4M4kjVJc17tWA5XF
+        A0YYRqXYJsh4ykbR6TQjS3WKCkM0M0x2snmyX+c+VmEWa7GkSeJL/RTjbg2cdwASk43rEjy5o/oFL
+        YYeP6kslsXWFRCcQuufR/ZMwk4scTRWaF3U9NV3L3Ncsu7fsrx0WX3S3d2Um2C8kS4K9iWwe9WHkU
+        zOjNDC2g==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nG4jW-007LmZ-SK; Fri, 04 Feb 2022 19:59:02 +0000
+        id 1nG4jW-007Lmf-WC; Fri, 04 Feb 2022 19:59:03 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 34/75] mm/vmscan: Turn page_check_dirty_writeback() into folio_check_dirty_writeback()
-Date:   Fri,  4 Feb 2022 19:58:11 +0000
-Message-Id: <20220204195852.1751729-35-willy@infradead.org>
+Subject: [PATCH 35/75] mm: Turn head_compound_mapcount() into folio_entire_mapcount()
+Date:   Fri,  4 Feb 2022 19:58:12 +0000
+Message-Id: <20220204195852.1751729-36-willy@infradead.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220204195852.1751729-1-willy@infradead.org>
 References: <20220204195852.1751729-1-willy@infradead.org>
@@ -48,67 +48,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Saves a few calls to compound_head().
+Adjust documentation to be more clear.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- mm/vmscan.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ include/linux/mm.h | 17 +++++++++++------
+ mm/debug.c         |  6 ++++--
+ 2 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 15cbfae0d8ec..e8c5855bc38d 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1430,7 +1430,7 @@ static enum page_references page_check_references(struct page *page,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6cb2651eccbe..6ddf655f9279 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -777,21 +777,26 @@ static inline int is_vmalloc_or_module_addr(const void *x)
  }
+ #endif
  
- /* Check if a page is dirty or under writeback */
--static void page_check_dirty_writeback(struct page *page,
-+static void folio_check_dirty_writeback(struct folio *folio,
- 				       bool *dirty, bool *writeback)
+-static inline int head_compound_mapcount(struct page *head)
++/*
++ * How many times the entire folio is mapped as a single unit (eg by a
++ * PMD or PUD entry).  This is probably not what you want, except for
++ * debugging purposes; look at folio_mapcount() or page_mapcount()
++ * instead.
++ */
++static inline int folio_entire_mapcount(struct folio *folio)
  {
- 	struct address_space *mapping;
-@@ -1439,24 +1439,24 @@ static void page_check_dirty_writeback(struct page *page,
- 	 * Anonymous pages are not handled by flushers and must be written
- 	 * from reclaim context. Do not stall reclaim based on them
- 	 */
--	if (!page_is_file_lru(page) ||
--	    (PageAnon(page) && !PageSwapBacked(page))) {
-+	if (!folio_is_file_lru(folio) ||
-+	    (folio_test_anon(folio) && !folio_test_swapbacked(folio))) {
- 		*dirty = false;
- 		*writeback = false;
- 		return;
- 	}
- 
--	/* By default assume that the page flags are accurate */
--	*dirty = PageDirty(page);
--	*writeback = PageWriteback(page);
-+	/* By default assume that the folio flags are accurate */
-+	*dirty = folio_test_dirty(folio);
-+	*writeback = folio_test_writeback(folio);
- 
- 	/* Verify dirty/writeback state if the filesystem supports it */
--	if (!page_has_private(page))
-+	if (!folio_test_private(folio))
- 		return;
- 
--	mapping = page_mapping(page);
-+	mapping = folio_mapping(folio);
- 	if (mapping && mapping->a_ops->is_dirty_writeback)
--		mapping->a_ops->is_dirty_writeback(page, dirty, writeback);
-+		mapping->a_ops->is_dirty_writeback(&folio->page, dirty, writeback);
+-	return atomic_read(compound_mapcount_ptr(head)) + 1;
++	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
++	return atomic_read(folio_mapcount_ptr(folio)) + 1;
  }
  
- static struct page *alloc_demote_page(struct page *page, unsigned long node)
-@@ -1565,7 +1565,7 @@ static unsigned int shrink_page_list(struct list_head *page_list,
- 		 * reclaim_congested. kswapd will stall and start writing
- 		 * pages if the tail of the LRU is all dirty unqueued pages.
- 		 */
--		page_check_dirty_writeback(page, &dirty, &writeback);
-+		folio_check_dirty_writeback(folio, &dirty, &writeback);
- 		if (dirty || writeback)
- 			stat->nr_dirty++;
+ /*
+  * Mapcount of compound page as a whole, does not include mapped sub-pages.
+  *
+- * Must be called only for compound pages or any their tail sub-pages.
++ * Must be called only for compound pages.
+  */
+ static inline int compound_mapcount(struct page *page)
+ {
+-	VM_BUG_ON_PAGE(!PageCompound(page), page);
+-	page = compound_head(page);
+-	return head_compound_mapcount(page);
++	return folio_entire_mapcount(page_folio(page));
+ }
+ 
+ /*
+diff --git a/mm/debug.c b/mm/debug.c
+index c4cf44266430..eeb7ea3ca292 100644
+--- a/mm/debug.c
++++ b/mm/debug.c
+@@ -48,7 +48,8 @@ const struct trace_print_flags vmaflag_names[] = {
+ 
+ static void __dump_page(struct page *page)
+ {
+-	struct page *head = compound_head(page);
++	struct folio *folio = page_folio(page);
++	struct page *head = &folio->page;
+ 	struct address_space *mapping;
+ 	bool compound = PageCompound(page);
+ 	/*
+@@ -76,6 +77,7 @@ static void __dump_page(struct page *page)
+ 		else
+ 			mapping = (void *)(tmp & ~PAGE_MAPPING_FLAGS);
+ 		head = page;
++		folio = (struct folio *)page;
+ 		compound = false;
+ 	} else {
+ 		mapping = page_mapping(page);
+@@ -94,7 +96,7 @@ static void __dump_page(struct page *page)
+ 	if (compound) {
+ 		pr_warn("head:%p order:%u compound_mapcount:%d compound_pincount:%d\n",
+ 				head, compound_order(head),
+-				head_compound_mapcount(head),
++				folio_entire_mapcount(folio),
+ 				head_compound_pincount(head));
+ 	}
  
 -- 
 2.34.1

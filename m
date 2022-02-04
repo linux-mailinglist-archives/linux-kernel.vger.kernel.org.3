@@ -2,253 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117924A94D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EDA4A94DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243643AbiBDIEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S244784AbiBDIIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:08:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiBDIEi (ORCPT
+        with ESMTP id S236208AbiBDIIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:04:38 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99035C061714
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 00:04:38 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id h12so4784713pjq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 00:04:38 -0800 (PST)
+        Fri, 4 Feb 2022 03:08:14 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E43C06173D
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 00:08:14 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id e8so9853485wrc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 00:08:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :in-reply-to;
-        bh=9akPYn9foeJJwkENSEH/4ySJpRDetAUi4tiFjpoRVKg=;
-        b=WBfeSZ+C4dC8PkAYMHkX60qEBh+C3r6oT7XU83Sj6WSpkSIB6+yFU5gIxJL2MyiNtC
-         1SEfJHj4YKUTEqLnOvHB7IfuWZFStA5CKX+ccD5dtW+2t74Czl4GaWMitZsuH4/yU14r
-         Awo8Da3X+xZPvM4gE+6WFO5sdZ/5x3tYjX3ITxcL5lXhrDloSISvA0kcdm3P5FwzLVQ7
-         SSZYp8QhXMmrRniYx6+NdFRCsBRfr9evego78UAn/VEOHtne23dIxfNEvWPCE3KSXZjK
-         HpKIm6atkWnndObmaX/PuS3pMTssOky7itCJGXbTpzbZOhrkFCTcyCXeQ7c/Yss76fpO
-         V3mg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F1g4OTxFW0XMQzsgv95JcbZmhOfVmDYbCrlN2Y/w884=;
+        b=OqhxBsujr0GLQ94fpAOgRSvHN6suDw97MDwnCJEI1rAYYfRSkMPjvKP6SOn+2jXbs/
+         PSf7VhG0K/yW9Iz1d0AnLftnLSW+eVs0iv7Gqg/ksSiQogdfS1khZxFQGxb5MPeCss7g
+         PUHQF59EW3/3gYC2S+BiTSNh23LhY/IOXO6F2NH9JgYx47IkCz+c3DQRLWrgx38hErKY
+         M7aZKKgrwBE/9xpYO9ZvjRrNbOSlTHsSuuVyKouw8gm59+F2F1CA02p9a5iBtKj07aEi
+         /CGAygeu4K7fYxH0JELpL8ioq+Nc43AMWM32oQIP3ofdJewJ3B5viAUzrBG4nOOVZApY
+         XTvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=9akPYn9foeJJwkENSEH/4ySJpRDetAUi4tiFjpoRVKg=;
-        b=rIU1JSZD9mJCEMbMFKwvBhqhTEw8LQazIEJFO2lSMlkejKYhR5yWtNtWJmm/8n6d1t
-         l4jrpKY81YhqVZZMGzmKCSrcP0L9FWZySH6sTM0qFJpH6Z6HuHiIUS/RIXqAcjuI4JD1
-         s0Eba3HOzabL1XhzyVpDoKrytAiWAvpzAarUKtB9LOdpKy9BwxU6CvEcTr7gtwxEu9JF
-         CfAH2HMuNiDSs3kAo0qI9KN5yQZ9+0w5V9E5iOnuABeb6xfGpN4zv4TikHAN/ebVs8gu
-         u4tSWIQgObDNtde5IwmvloJWMscilMNiABCecmfmPU800YBRcUo9wo1yp5bZMTIq1Ej3
-         eECA==
-X-Gm-Message-State: AOAM5323uAE6Dyi0+P6FFSfQquJOpd4h8zjr8EiFVWksBE7bbkisI0I0
-        by4WEAv/jpl0meZi/Z3o/r4=
-X-Google-Smtp-Source: ABdhPJxxtdpm4bOc+eZtpdEJ/tiq5hMmF4Trugx8gVE+XScxR6Nf/lfO35tY/zyqGwt2NJ4XbU59Yw==
-X-Received: by 2002:a17:90b:4a85:: with SMTP id lp5mr1843609pjb.25.1643961878009;
-        Fri, 04 Feb 2022 00:04:38 -0800 (PST)
-Received: from mail.google.com (122-58-164-114-fibre.sparkbb.co.nz. [122.58.164.114])
-        by smtp.gmail.com with ESMTPSA id 197sm1423750pfz.152.2022.02.04.00.04.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 00:04:37 -0800 (PST)
-Date:   Fri, 4 Feb 2022 21:04:32 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     gregkh@linuxfoundation.org, paulo.miguel.almeida.rodenas@gmail.com,
-        realwakka@gmail.com
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v5] staging: pi433: add debugfs interface
-Message-ID: <YfzeEHJcd+qvYGZ8@mail.google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F1g4OTxFW0XMQzsgv95JcbZmhOfVmDYbCrlN2Y/w884=;
+        b=ZVXjHFVR5206zVDEBnNrIX0QoN8nu2C69WgoqfceF2wTAgc8otzu8oKu8Xq4gdbpqb
+         1Jc8uKpgORsY+be11eSQx7sM7DLCRGh558Vx+GuWJZY3wRNywtsuS2m6zU5qq4WsV+xk
+         PUb1s4Mn5g0kkCvBUs2KE1BMzJWcYtB4pc6ttT3Dmrpe4HtudxzunhsNXJh8F5RsqYcG
+         v8j6X4nr2CBj0dT1iIx6XOng7ZGGY+4n1QvkxXnNFCAYy2qpwkyD2KCXo876F2tqRvDi
+         6neQ+UisASOMitgpxerf+2+w8QJrtCCzxC9nLz8RgGZkvh2Pr29vPCJuU7Q3hVIAbGNv
+         5cQw==
+X-Gm-Message-State: AOAM530NHWHh5wluvcGjehBtZMudOqT3z/Rd6BKom2+wmGnJcavC6wmN
+        Fs54UwTTDsbULQJ77Oc8f3CLTQ==
+X-Google-Smtp-Source: ABdhPJwxcYWYJrBDOz5mjR+skEcwR7oqY2SM/eZ6qDb/vOvdh3NGygqKqF5ku7DqOeqNP9ADWhJGFw==
+X-Received: by 2002:adf:ed09:: with SMTP id a9mr81645wro.411.1643962092739;
+        Fri, 04 Feb 2022 00:08:12 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:e349:6e3c:93e:6c2c? ([2a01:e34:ed2f:f020:e349:6e3c:93e:6c2c])
+        by smtp.googlemail.com with ESMTPSA id o14sm1284854wry.104.2022.02.04.00.08.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 00:08:11 -0800 (PST)
+Message-ID: <59897307-042e-932e-6b02-257cabacaaa4@linaro.org>
+Date:   Fri, 4 Feb 2022 09:08:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yfy0QSxL+3lbPlLK@mail.google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 RESEND 1/2] dt-bindings: Add DT bindings for the
+ DT-based virtual sensor driver
+Content-Language: en-US
+To:     Alexandre Bailon <abailon@baylibre.com>, rafael@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, khilman@baylibre.com, mka@chromium.org
+References: <20220111103346.2660639-1-abailon@baylibre.com>
+ <20220111103346.2660639-2-abailon@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220111103346.2660639-2-abailon@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds debugfs interface that can be used for debugging possible
-hardware/software issues.
+On 11/01/2022 11:33, Alexandre Bailon wrote:
+> This adds the DT bindings for the DT-based virtual sensor driver.
+> This driver provides a way, using DT, to aggregate the temperature
+> of multiple thermal zones and get some useful data from it.
+> 
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> ---
 
-It currently exposes the following debugfs entries for each SPI device
-probed:
+[ ... ]
 
-  /sys/kernel/debug/pi433/<DEVICE>/regs
-  ...
+> +description: |
+> +  The virtual thermal sensor device provides a way to aggregate the temperature
+> +  from multiple thermal zones. Basically, this could be used to get the
+> +  maximum, minimum or average temperature.
+> +
+> +allOf:
+> +  - $ref: thermal-sensor.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: virtual,thermal-sensor
+> +
+> +  aggregation-function:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Used to select the operations to perform on the sensors to get the virtual
+> +      sensor temperature.
+> +    enum:
+> +      - VIRTUAL_THERMAL_SENSOR_MIN_VAL
+> +      - VIRTUAL_THERMAL_SENSOR_MAX_VAL
+> +      - VIRTUAL_THERMAL_SENSOR_AVG_VAL
+> +
+> +  thermal-sensors:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description:
+> +      The names of the thermal zone to aggregate.
 
-The 'regs' file contains all rf69 uC registers values that are useful
-for troubleshooting misconfigurations between 2 devices. It contains one
-register per line so it should be easy to use normal filtering tools to
-find the registers of interest if needed.
+IMO this is not correct. We are dealing with virtual sensor in order to 
+aggregate a group of sensors in a thermal zone. But actually this 
+description aggregates the thermal zones.
 
-Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
----
-Changelog:
+I recalled a detail about the binding from the old 'txt' format from [1].
 
-v5: I had mistakenly forgotten to git add changes to the rf69.(c|h) in
-    the previous patch
-v4: remove unnecessary variable initializer, ensure mutex locks are
-        released before returning from routine. Req: Dan Carpenter
-v3: fix build error, remove redundant comments and validate return values
-        from wait_event_interruptible routines: Req: Greg K-h, Dan Carpenter
-v2: remove redudant references to dentry pointers in the code and perform
-     debugsfs_lookup instead. Req: Greg k-h
-v1: https://lore.kernel.org/lkml/20220123073855.GA79453@mail.google.com/
----
-drivers/staging/pi433/pi433_if.c | 76 ++++++++++++++++++++++++++++++++
- drivers/staging/pi433/rf69.c     |  2 +-
- drivers/staging/pi433/rf69.h     |  1 +
- 3 files changed, 78 insertions(+), 1 deletion(-)
+"- thermal-sensors: A list of thermal sensor phandles and sensor specifier
 
-diff --git a/drivers/staging/pi433/pi433_if.c b/drivers/staging/pi433/pi433_if.c
-index 86ad497417f7..4fbac3ccef74 100644
---- a/drivers/staging/pi433/pi433_if.c
-+++ b/drivers/staging/pi433/pi433_if.c
-@@ -41,6 +41,8 @@
- #ifdef CONFIG_COMPAT
- #include <linux/compat.h>
- #endif
-+#include <linux/debugfs.h>
-+#include <linux/seq_file.h>
- 
- #include "pi433_if.h"
- #include "rf69.h"
-@@ -1098,12 +1100,76 @@ static const struct file_operations pi433_fops = {
- 	.llseek =	no_llseek,
- };
- 
-+static int pi433_debugfs_regs_show(struct seq_file *m, void *p)
-+{
-+	struct pi433_device *dev;
-+	u8 reg_data[114];
-+	int i;
-+	char *fmt = "0x%02x, 0x%02x\n";
-+	int ret;
-+
-+	dev = m->private;
-+
-+	mutex_lock(&dev->tx_fifo_lock);
-+	mutex_lock(&dev->rx_lock);
-+
-+	// wait for on-going operations to finish
-+	ret = wait_event_interruptible(dev->rx_wait_queue, !dev->tx_active);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret = wait_event_interruptible(dev->tx_wait_queue, !dev->rx_active);
-+	if (ret)
-+		goto out_unlock;
-+
-+	// skip FIFO register (0x0) otherwise this can affect some of uC ops
-+	for (i = 1; i < 0x50; i++)
-+		reg_data[i] = rf69_read_reg(dev->spi, i);
-+
-+	reg_data[REG_TESTLNA] = rf69_read_reg(dev->spi, REG_TESTLNA);
-+	reg_data[REG_TESTPA1] = rf69_read_reg(dev->spi, REG_TESTPA1);
-+	reg_data[REG_TESTPA2] = rf69_read_reg(dev->spi, REG_TESTPA2);
-+	reg_data[REG_TESTDAGC] = rf69_read_reg(dev->spi, REG_TESTDAGC);
-+	reg_data[REG_TESTAFC] = rf69_read_reg(dev->spi, REG_TESTAFC);
-+
-+	seq_puts(m, "# reg, val\n");
-+
-+	for (i = 1; i < 0x50; i++)
-+		seq_printf(m, fmt, i, reg_data[i]);
-+
-+	seq_printf(m, fmt, REG_TESTLNA, reg_data[REG_TESTLNA]);
-+	seq_printf(m, fmt, REG_TESTPA1, reg_data[REG_TESTPA1]);
-+	seq_printf(m, fmt, REG_TESTPA2, reg_data[REG_TESTPA2]);
-+	seq_printf(m, fmt, REG_TESTDAGC, reg_data[REG_TESTDAGC]);
-+	seq_printf(m, fmt, REG_TESTAFC, reg_data[REG_TESTAFC]);
-+
-+out_unlock:
-+	mutex_unlock(&dev->rx_lock);
-+	mutex_unlock(&dev->tx_fifo_lock);
-+
-+	return ret;
-+}
-+
-+static int pi433_debugfs_regs_open(struct inode *inode, struct file *filp)
-+{
-+	return single_open(filp, pi433_debugfs_regs_show, inode->i_private);
-+}
-+
-+static const struct file_operations debugfs_fops = {
-+	.llseek =	seq_lseek,
-+	.open =		pi433_debugfs_regs_open,
-+	.owner =	THIS_MODULE,
-+	.read =		seq_read,
-+	.release =	single_release
-+};
-+
- /*-------------------------------------------------------------------------*/
- 
- static int pi433_probe(struct spi_device *spi)
- {
- 	struct pi433_device	*device;
- 	int			retval;
-+	struct dentry		*entry;
- 
- 	/* setup spi parameters */
- 	spi->mode = 0x00;
-@@ -1252,6 +1318,10 @@ static int pi433_probe(struct spi_device *spi)
- 	/* spi setup */
- 	spi_set_drvdata(spi, device);
- 
-+	entry = debugfs_create_dir(dev_name(device->dev),
-+				   debugfs_lookup(KBUILD_MODNAME, NULL));
-+	debugfs_create_file("regs", 0400, entry, device, &debugfs_fops);
-+
- 	return 0;
- 
- del_cdev:
-@@ -1275,6 +1345,9 @@ static int pi433_probe(struct spi_device *spi)
- static int pi433_remove(struct spi_device *spi)
- {
- 	struct pi433_device	*device = spi_get_drvdata(spi);
-+	struct dentry *mod_entry = debugfs_lookup(KBUILD_MODNAME, NULL);
-+
-+	debugfs_remove(debugfs_lookup(dev_name(device->dev), mod_entry));
- 
- 	/* free GPIOs */
- 	free_gpio(device);
-@@ -1349,6 +1422,8 @@ static int __init pi433_init(void)
- 		return PTR_ERR(pi433_class);
- 	}
- 
-+	debugfs_create_dir(KBUILD_MODNAME, NULL);
-+
- 	status = spi_register_driver(&pi433_spi_driver);
- 	if (status < 0) {
- 		class_destroy(pi433_class);
-@@ -1366,6 +1441,7 @@ static void __exit pi433_exit(void)
- 	spi_unregister_driver(&pi433_spi_driver);
- 	class_destroy(pi433_class);
- 	unregister_chrdev(MAJOR(pi433_dev), pi433_spi_driver.driver.name);
-+	debugfs_remove_recursive(debugfs_lookup(KBUILD_MODNAME, NULL));
- }
- module_exit(pi433_exit);
- 
-diff --git a/drivers/staging/pi433/rf69.c b/drivers/staging/pi433/rf69.c
-index c68ad4809e91..2ab3bf46e37d 100644
---- a/drivers/staging/pi433/rf69.c
-+++ b/drivers/staging/pi433/rf69.c
-@@ -24,7 +24,7 @@
- 
- /*-------------------------------------------------------------------------*/
- 
--static u8 rf69_read_reg(struct spi_device *spi, u8 addr)
-+u8 rf69_read_reg(struct spi_device *spi, u8 addr)
- {
- 	int retval;
- 
-diff --git a/drivers/staging/pi433/rf69.h b/drivers/staging/pi433/rf69.h
-index c25942f142a6..3ff5609ecf2e 100644
---- a/drivers/staging/pi433/rf69.h
-+++ b/drivers/staging/pi433/rf69.h
-@@ -17,6 +17,7 @@
- #define FIFO_SIZE	66		/* bytes */
- #define FIFO_THRESHOLD	15		/* bytes */
- 
-+u8 rf69_read_reg(struct spi_device *spi, u8 addr);
- int rf69_get_version(struct spi_device *spi);
- int rf69_set_mode(struct spi_device *spi, enum mode mode);
- int rf69_set_data_mode(struct spi_device *spi, u8 data_mode);
+    Type: list of phandles + sensor specifier used while monitoring the 
+thermal zone."
+
+This information was lost in the conversion to yaml with commit 
+1202a442a31fd
+
+In addition, the "coefficients" property tells the 'thermal-sensors' 
+property can have multiple sensors.
+
+So actually, the bindings should be fixed as part of the information was 
+lost during of the txt -> yaml conversion.
+
+And the multiple sensors per thermal zone could be implemented as that 
+was something planned since a while.
+
+I realize we initially asked to create a virtual sensor but that is not 
+the most adequate ATM. Doing the multiple sensors support makes more 
+sense to me, especially it does not require any extra binding except an 
+attribute tell what kind of temperature aggregation we do. Defaulting to 
+max should suffice when no aggregation method is set.
+
+   -- Daniel
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal.txt?h=v4.5#n147
+
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

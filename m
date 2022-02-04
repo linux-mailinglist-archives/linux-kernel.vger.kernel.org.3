@@ -2,65 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB364A9F6F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4044A9F78
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 19:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377721AbiBDSqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 13:46:42 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60204 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239269AbiBDSql (ORCPT
+        id S1377730AbiBDSry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 13:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236613AbiBDSrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 13:46:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5C061C39
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 18:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984CEC004E1;
-        Fri,  4 Feb 2022 18:46:37 +0000 (UTC)
-Date:   Fri, 4 Feb 2022 18:46:34 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
-        bp@alien8.de, dave.hansen@linux.intel.com, frederic@kernel.org,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, tglx@linutronix.de,
-        valentin.schneider@arm.com, will@kernel.org
-Subject: Re: [PATCH v2 6/7] arm64: entry: centralize premeption decision
-Message-ID: <Yf10inOXewNOg15c@arm.com>
-References: <20220204150557.434610-1-mark.rutland@arm.com>
- <20220204150557.434610-7-mark.rutland@arm.com>
+        Fri, 4 Feb 2022 13:47:53 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9943FC061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 10:47:53 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id s10so10400675wra.5
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 10:47:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/FXf1cpHah2vNgyPqX7qSvfT47H3XqIl9lhW99Uh6Zg=;
+        b=gdWY6AsY87ioUhnUZ7mUhldlGrZUqt7skinL0OJM9wbR11tcWkEb7TNlWlPlRBM/el
+         O8hrFtLwwaLpgvTWzAw+OYf5ntp8Oxs6rqDsqBwvlbIHfu/cLKLM0ncE67oN1n6uMzBh
+         oKFxIEUF2vX9MnZFkPLqqi7hHBa0ZEW6heyY+DTDeEJe1FPUZj+QMoo8y0ANmNW+sW3M
+         vbTkZvhtDZO40U2AcA2rlYQzRihrYsAb+GozKsdq8BfFeXKjYRQO5e9U7VSrswlm3VDo
+         AGdMO2dTrlgMajsUDNDiT4wogUYJEKi9tbdnE2Ut77OUW4APjG2/l/9Fg4EwinemWaoy
+         TeCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/FXf1cpHah2vNgyPqX7qSvfT47H3XqIl9lhW99Uh6Zg=;
+        b=I++9bLI1rV2p663yqhpcLjB6VQsqgkqlsjFzZR+XH/7A6kPHcmFUkNcblKIpDITM6b
+         78C5yuKl9uq/kqibs107UjAhOMjGID8TTD5AWIJqBn0U+55lizh0ErxUpmZ5anqbhL0+
+         pT52B5FNKU3M17xvUx+jHmUA4yRa5Md8Oyl3J9uxmz1tRnPlBCvlYsjkbLkfpP/DS2jZ
+         2FUP9FmMeL7ypjtjYHSjCMwHFasEyDOnb3m++98PtkWlbh+nrEMVyMqqqYQ5S8FvNqHb
+         Js9of8wwM7lutQJsY0k3eoa7bQ+wW6wDB7vN1/9FPbtbpMX+OR6zapZxjKRV3tufNJ/A
+         dSOA==
+X-Gm-Message-State: AOAM532NwQg2cBPhllnxD0gEIBPkulU0FDA5okPaTBGOFhdOepCNNeMV
+        go0tQRocw81xn17tvdCMwXRjfA==
+X-Google-Smtp-Source: ABdhPJxnmuuY3lnz4VvgizExRa+6gf19qnjUUQPH5Eht2f/FLLQxG40kaSWgQoDrbzb3/jNcfFxtEA==
+X-Received: by 2002:a05:6000:178b:: with SMTP id e11mr206334wrg.634.1644000472142;
+        Fri, 04 Feb 2022 10:47:52 -0800 (PST)
+Received: from [192.168.2.116] ([109.78.72.167])
+        by smtp.gmail.com with ESMTPSA id y7sm2461881wrr.74.2022.02.04.10.47.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 10:47:51 -0800 (PST)
+Message-ID: <3edb8e95-8be4-5e9f-d66a-5a8a92eafcf0@conchuod.ie>
+Date:   Fri, 4 Feb 2022 18:47:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204150557.434610-7-mark.rutland@arm.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v5 00/12] Update the Icicle Kit device tree
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@dabbelt.com>, conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, krzysztof.kozlowski@canonical.com,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>
+References: <mhng-2b6f8784-4c0c-432f-a6e7-97052ab900e7@palmer-ri-x1c9>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <mhng-2b6f8784-4c0c-432f-a6e7-97052ab900e7@palmer-ri-x1c9>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 03:05:56PM +0000, Mark Rutland wrote:
-> For historical reasons, the decision of whether or not to preempt is
-> spread across arm64_preempt_schedule_irq() and __el1_irq(), and it would
-> be clearer if this were all in one place.
-> 
-> Also, arm64_preempt_schedule_irq() calls lockdep_assert_irqs_disabled(),
-> but this is redundant, as we have a subsequent identical assertion in
-> __exit_to_kernel_mode(), and preempt_schedule_irq() will
-> BUG_ON(!irqs_disabled()) anyway.
-> 
-> This patch removes the redundant assertion and centralizes the
-> preemption decision making within arm64_preempt_schedule_irq().
-> 
-> Other than the slight change to assertion behaviour, there should be no
-> functional change as a result of this patch.
-> 
-> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Joey Gouly <joey.gouly@arm.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Will Deacon <will@kernel.org>
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+
+On 04/02/2022 18:09, Palmer Dabbelt wrote:
+> On Mon, 31 Jan 2022 03:47:15 PST (-0800), conor.dooley@microchip.com wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> This series updates the Microchip Icicle Kit device tree by adding a
+>> host of peripherals, and some updates to the memory map. In addition,
+>> the device tree has been split into a third part, which contains "soft"
+>> peripherals that are in the fpga fabric.
+>>
+>> Several of the entries are for peripherals that have not get had their
+>> drivers upstreamed, so in those cases the dt bindings are included where
+>> appropriate in order to avoid the many "DT compatible string <x> appears
+>> un-documented" errors.
+>>
+>> Depends on mpfs clock driver binding (on clk/next) to provide
+>> dt-bindings/clock/microchip,mpfs-clock.h
+>> and on the other changes to the icicle/mpfs device tree from geert
+>> that are already in linux/riscv/for-next.
+>>
+>> Additionally, the interrupt-extended warnings on the plic/clint are
+>> cleared by [1] & [2].
+>>
+>> [1] 
+>> https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/ 
+>>
+>> [2] 
+>> https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/ 
+>>
+>>
+<snip>
+> 
+> Looks like Rob still has some feedback that still needs to be addressed. 
+
+Still not passing Rob's bot as it depends on a binding in clk-next & I 
+also need to reword the descriptions in the PWM binding.
+
+> I'm happy to take these via the RISC-V tree when the bindings are set 
+
+Great
+
+> (assuming the DTs match whatever gets agreed upons), but also fine if 
+> someone else wants to take it > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> Either way, I'm going to drop this (and the v4, which was at the top of 
+> my inbox) as it looks like there'll be at least a v6.
+Yup, hopefully v6 on Monday
+
+Thanks,
+Conor.

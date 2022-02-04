@@ -2,85 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BF54AA4A4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5474AA4A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 00:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378411AbiBDXxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 18:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378388AbiBDXx3 (ORCPT
+        id S237385AbiBDXxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 18:53:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45758 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378359AbiBDXxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:53:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586F2C104923;
-        Fri,  4 Feb 2022 15:53:23 -0800 (PST)
+        Fri, 4 Feb 2022 18:53:32 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEAE861CB0;
-        Fri,  4 Feb 2022 23:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE2CC004E1;
-        Fri,  4 Feb 2022 23:53:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13AA2B83975;
+        Fri,  4 Feb 2022 23:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35BBC340F1;
+        Fri,  4 Feb 2022 23:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644018802;
-        bh=XfmKRHLTLryQMNUezoJ9clX2FfTd/ChaZpko8a+g9jE=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=fmXwwLFC8ketbM8aX+Nwx8dvKuyLy/5L1xWXHLZAF9aSBQXPg34RKlRyk6UAXcMD+
-         Wpp+HanQhNZdL7xCDF8fnDGU3d4gI4EEGJ9FlLVYJuHXXgomseO0qz9dicbJR2Q1fH
-         VsIOPORMc/Dl5gHrPx6e+KqrDd5wtPGjLIbC83DmhOh7z6kl9YmXsTMW20CeTdMcto
-         VumiJqIhcpaFrx2a8b8tMDNtgnAuW18SN1Ukux1h76sQSIf3dtKkAt15iuMIiCBlHw
-         M1v+IdyrOj9V7S6kcVW0b7xEkCU871z3nROpapLX1Zowe8jS6mQh0WwwZ7Asopa15h
-         cP/tbageDlL2w==
+        s=k20201202; t=1644018809;
+        bh=gMEkExdEIHtGZYJMcRMC5CtUw2Kr5Mwkvh0M24YUqF4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KhV/RYYSsjDjI0qNGqJ2DYRoSz3pTf8cKxagRcd+9QoYKmI3uUV7Mam1AktBDSs6K
+         6y8L3f429/ykLR6JpaWRKCrcJEqzKXn8T9jmM6VKzwJ7QbbZDGU69Z0ErpSS6J489J
+         bqvvHrLbHICjkSINdERcgRtIuHeE6DCFtvsEyn2b4xW3rU50bZp5dTAHw7JxZ1eeNx
+         hYc2itObZwxmBahnDjoGJD9HoPbcZrU95Nm5omIRgNjdsMGAIDObXCcHlSmRD3vN/h
+         toLSPJFe5M/VX/kf22JQRro5foc+1Y3DnQWzp7hGFEG7e0uv2DCiJ8rEvz46O2CfhS
+         gnX/siPw5wkQQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CCF045C0418; Fri,  4 Feb 2022 15:53:21 -0800 (PST)
-Date:   Fri, 4 Feb 2022 15:53:21 -0800
+        id 78C555C08B7; Fri,  4 Feb 2022 15:53:29 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: [PATCH rcu 0/8] Torture-test updates for v5.18
-Message-ID: <20220204235321.GA2511@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 3/8] rcutorture: Increase visibility of forward-progress hangs
+Date:   Fri,  4 Feb 2022 15:53:22 -0800
+Message-Id: <20220204235327.2948-3-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220204235321.GA2511@paulmck-ThinkPad-P17-Gen-1>
+References: <20220204235321.GA2511@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+This commit adds a few pr_alert() calls to rcutorture's forward-progress
+testing in order to better diagnose shutdown-time hangs.
 
-This series provides torture-test updates.
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rcu/rcutorture.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-1.	Print message before invoking ->cb_barrier().
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 00400aef58184..fefc3fa1a9c2a 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -2281,6 +2281,7 @@ static void rcu_torture_fwd_prog_nr(struct rcu_fwd *rfp,
+ 	unsigned long stopat;
+ 	static DEFINE_TORTURE_RANDOM(trs);
+ 
++	pr_alert("%s: Starting forward-progress test %d\n", __func__, rfp->rcu_fwd_id);
+ 	if (!cur_ops->sync)
+ 		return; // Cannot do need_resched() forward progress testing without ->sync.
+ 	if (cur_ops->call && cur_ops->cb_barrier) {
+@@ -2325,6 +2326,7 @@ static void rcu_torture_fwd_prog_nr(struct rcu_fwd *rfp,
+ 	if (selfpropcb) {
+ 		WRITE_ONCE(fcs.stop, 1);
+ 		cur_ops->sync(); /* Wait for running CB to complete. */
++		pr_alert("%s: Waiting for CBs: %pS() %d\n", __func__, cur_ops->cb_barrier, rfp->rcu_fwd_id);
+ 		cur_ops->cb_barrier(); /* Wait for queued callbacks. */
+ 	}
+ 
+@@ -2353,6 +2355,7 @@ static void rcu_torture_fwd_prog_cr(struct rcu_fwd *rfp)
+ 	unsigned long stopat;
+ 	unsigned long stoppedat;
+ 
++	pr_alert("%s: Starting forward-progress test %d\n", __func__, rfp->rcu_fwd_id);
+ 	if (READ_ONCE(rcu_fwd_emergency_stop))
+ 		return; /* Get out of the way quickly, no GP wait! */
+ 	if (!cur_ops->call)
+@@ -2414,6 +2417,7 @@ static void rcu_torture_fwd_prog_cr(struct rcu_fwd *rfp)
+ 	n_launders_cb_snap = READ_ONCE(rfp->n_launders_cb);
+ 	cver = READ_ONCE(rcu_torture_current_version) - cver;
+ 	gps = rcutorture_seq_diff(cur_ops->get_gp_seq(), gps);
++	pr_alert("%s: Waiting for CBs: %pS() %d\n", __func__, cur_ops->cb_barrier, rfp->rcu_fwd_id);
+ 	cur_ops->cb_barrier(); /* Wait for callbacks to be invoked. */
+ 	(void)rcu_torture_fwd_prog_cbfree(rfp);
+ 
+-- 
+2.31.1.189.g2e36527f23
 
-2.	Distinguish kthread stopping and being asked to stop.
-
-3.	Increase visibility of forward-progress hangs.
-
-4.	Make rcu_fwd_cb_nodelay be a counter.
-
-5.	Add end-of-test check to rcu_torture_fwd_prog() loop.
-
-6.	Fix rcu_fwd_mutex deadlock.
-
-7.	Wake up kthreads after storing task_struct pointer.
-
-8.	Enable limited callback-flooding tests of SRCU.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/kernel/rcu/rcutorture.c |    8 ++++++--
- b/kernel/torture.c        |    2 +-
- kernel/rcu/rcutorture.c   |   26 ++++++++++++++++----------
- kernel/torture.c          |    4 +++-
- 4 files changed, 26 insertions(+), 14 deletions(-)

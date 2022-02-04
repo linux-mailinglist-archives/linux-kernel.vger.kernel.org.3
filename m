@@ -2,111 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6799F4AA259
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13504AA25B
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 22:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242430AbiBDVdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 16:33:39 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23534 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241174AbiBDVdi (ORCPT
+        id S242657AbiBDVdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 16:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241174AbiBDVdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 16:33:38 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214K1OB9015768;
-        Fri, 4 Feb 2022 21:33:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=V96kPHPcbaEFpFcl5wtymOsrVxw9OhMcRz8jBgjtioQ=;
- b=GpiJddThV7qffYS63IfRz3lxlkToiOMYssovW1yy/yWX9A6mdNbMeQ3tPo/Mvqh5QrGO
- 2jX8dN76fdt4ZNZSEX+2WZLgtYNGlySY59PVsqBo9heD/Ztr5TsKvWMRcNL2BAACgKR0
- c0rhKLZb8CEfCjSrWS9PdgAzacL/LMEzbrjEPQ7F3L8nAOJQ1F8Uz4AI2qBdgbZfZkZ2
- MP5aYjv03x/TX4O6Zaq8lTz4I7OVZCvYODxYZku+Rl9ishkxNpvakl8FKw5S4CzcEtTq
- h1/sxaGgsYGUimith4JVXAk83nS2+mJRk1vRe4kVrbvEiwOf89cnQudatZcfci6IjvUS Fg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e0yu5qe50-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 21:33:37 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214LRbhL017632;
-        Fri, 4 Feb 2022 21:33:37 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e0yu5qe4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 21:33:37 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214LWbPX029014;
-        Fri, 4 Feb 2022 21:33:36 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma02wdc.us.ibm.com with ESMTP id 3e0r0kb4nr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 21:33:36 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214LXZ7C29753792
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Feb 2022 21:33:35 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CC4A28060;
-        Fri,  4 Feb 2022 21:33:35 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 966442805C;
-        Fri,  4 Feb 2022 21:33:30 +0000 (GMT)
-Received: from [9.211.82.52] (unknown [9.211.82.52])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Feb 2022 21:33:30 +0000 (GMT)
-Message-ID: <545e631c-8e0d-2aab-8429-b69da6198dae@linux.ibm.com>
-Date:   Fri, 4 Feb 2022 16:33:29 -0500
+        Fri, 4 Feb 2022 16:33:39 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E60C061714
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 13:33:36 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id n8so15108445lfq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 13:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D4tZo5tCm3dy1NqWqtkKox1dGhBbqGBGwM+WpYziEdA=;
+        b=eobZFwIGYrr6GEuqrhNb0E5pLzq+vOJCeh6kPDQoQEvPSz8bJyi4xqgB4bA96eS3/n
+         Uf3q7N2xZryy/SfQV4ALeu5lB6993nxAyQKJlwFahycCJu+jWLC44vzh8euil0TLt68M
+         a476a/6YrNcAxBES2obANxnK+DU4NlZI+khP0RWpUQ11Yj2h9Mzbtwtu6DBIRggfF+Vh
+         zLLKHhzuTP9887i62wuc3yNXMKaKh8UvqTMCVkTFqMGcjiasoGGIK8ZpJU4RJwxdMkYf
+         cXajHtnAb2Qi3fjAdArTXT38dRsRsKbyyowioQSZmeyAGJrntpZ6QJ27R8YS5fa7+tvW
+         ieLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D4tZo5tCm3dy1NqWqtkKox1dGhBbqGBGwM+WpYziEdA=;
+        b=JG9I4CNGf49PXKswvWHKoJpn16nKsTWwG7V4kSPqYm+bUBXhDUPWEMVV3/LX/3VPX8
+         /Tsa5tKPUgobAWWT88XLrQ0Nu5kbTwZqXUSaEnyXVrhFW/Nlq9rYYgd4jp1KdTGHAJcA
+         FxJyEsjdKNtcp5s9mpDJzIkUIyVR6luCFibkBlMC59+dqTDmRCz64lV67FEzhOTgqGcv
+         QQnStCHHEsIWhQPJTDQgiNDwfGCfP3Dm5UVNsQRa2GrOhNdoy9QxenbA0ecrlQ21FMrk
+         d5dEduUbFeKxdua40bIogz97SPOVg3wNSzLfcDe7xL6pttWALLq0HckDnF8UXu00yx5N
+         Q7Kg==
+X-Gm-Message-State: AOAM531WSgkvpP1ouXDqBlI9BiHR9axBzZiQ4I6PmUY74NwI0izhZv56
+        F/HaHp5x0laukLGf9tsAAheX77uo6ViuvQ==
+X-Google-Smtp-Source: ABdhPJxsV7RBWQJcTxepbAVidmOc8k4ozH7whFvwRVKqKFXEleZNutnySCjIxh/O3mS37fAdCE29Gg==
+X-Received: by 2002:a05:6512:1116:: with SMTP id l22mr602199lfg.219.1644010414759;
+        Fri, 04 Feb 2022 13:33:34 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c7sm466919lfj.99.2022.02.04.13.33.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 13:33:34 -0800 (PST)
+Message-ID: <a3dcfa23-4e59-b6a7-658f-67743da62dff@linaro.org>
+Date:   Sat, 5 Feb 2022 00:33:32 +0300
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 00/30] KVM: s390: enable zPCI for interpretive
- execution
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-To:     linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
-        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
-In-Reply-To: <20220204211536.321475-1-mjrosato@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] drm/msm/dp: revise timing engine programming to
+ support widebus feature
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1643999801-20359-1-git-send-email-quic_khsieh@quicinc.com>
+ <1643999801-20359-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1643999801-20359-2-git-send-email-quic_khsieh@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: d0cu8XSu5BX3OZVwNDzD1chPwFbGseqL
-X-Proofpoint-GUID: KOD5tdnq1kfTiTbwm0AVeMg-E36OZ5uv
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-04_07,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0 bulkscore=0
- malwarescore=0 spamscore=0 mlxlogscore=885 lowpriorityscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202040119
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 4:15 PM, Matthew Rosato wrote:
-> Enable interpretive execution of zPCI instructions + adapter interruption
-> forwarding for s390x KVM vfio-pci.  This is done by introducing a series
-> of new vfio-pci feature ioctls that are unique vfio-pci-zdev (s390x) and
-> are used to negotiate the various aspects of zPCI interpretation setup.
-> By allowing intepretation of zPCI instructions and firmware delivery of
-> interrupts to guests, we can significantly reduce the frequency of guest
-> SIE exits for zPCI.  We then see additional gains by handling a hot-path
-> instruction that can still intercept to the hypervisor (RPCIT) directly
-> in kvm.
+On 04/02/2022 21:36, Kuogee Hsieh wrote:
+> Widebus feature will transmit two pixel data per pixel clock to interface.
+> Timing engine provides driving force for this purpose. This patch base
+> on HPG (Hardware Programming Guide) to revise timing engine register
+> setting to accommodate both widebus and non widebus application. Also
+> horizontal width parameters need to be reduced by half since two pixel
+> data are clocked out per pixel clock when widebus feature enabled.
+> In addition, revised timing engine function is an generic function and
+> intend to be shared by all platforms to reduce maintenance efforts.
 > 
->  From the perspective of guest configuration, you passthrough zPCI devices
-> in the same manner as before, with intepretation support being used by
-> default if available in kernel+qemu.
+> Changes in v2:
+> -- remove compression related code from timing
+> -- remove op_info from  struct msm_drm_private
+> -- remove unnecessary wide_bus_en variables
+> -- pass wide_bus_en into timing configuration by struct msm_dp
 > 
-> Will reply with a link to the associated QEMU series.
-https://lore.kernel.org/qemu-devel/20220204211918.321924-1-mjrosato@linux.ibm.com/
+> Changes in v3:
+> -- split patch into 3 patches
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 10 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h        |  2 +
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   | 14 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 99 ++++++++++++++--------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+>   5 files changed, 93 insertions(+), 34 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 0d315b4..0c22839 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -208,6 +208,8 @@ struct dpu_encoder_virt {
+>   
+>   	u32 idle_timeout;
+>   
+> +	bool wide_bus_en;
+> +
+>   	struct msm_dp *dp;
+>   };
+>   
+> @@ -217,6 +219,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>   	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>   };
+>   
+> +
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +
+> +	return dpu_enc->wide_bus_en;
+> +}
+> +
+>   static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>   {
+>   	struct dpu_hw_dither_cfg dither_cfg = { 0 };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 99a5d73..893d74d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -168,4 +168,6 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>    */
+>   int dpu_encoder_get_frame_count(struct drm_encoder *drm_enc);
+>   
+> +bool dpu_encoder_is_widebus_enabled(struct drm_encoder *drm_enc);
+> +
+>   #endif /* __DPU_ENCODER_H__ */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> index 185379b..3d6c914 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c
+> @@ -110,6 +110,20 @@ static void drm_mode_to_intf_timing_params(
+>   		timing->v_back_porch += timing->v_front_porch;
+>   		timing->v_front_porch = 0;
+>   	}
+> +
+> +	timing->wide_bus_en = dpu_encoder_is_widebus_enabled(phys_enc->parent);
+> +
+> +	/*
+> +	 * for DP, divide the horizonal parameters by 2 when
+> +	 * widebus is enabled
+> +	 */
+> +	if (timing->wide_bus_en) {
+> +		timing->width = timing->width >> 1;
+> +		timing->xres = timing->xres >> 1;
+> +		timing->h_back_porch = timing->h_back_porch >> 1;
+> +		timing->h_front_porch = timing->h_front_porch >> 1;
+> +		timing->hsync_pulse_width = timing->hsync_pulse_width >> 1;
+> +	}
+>   }
+>   
+>   static u32 get_horizontal_total(const struct intf_timing_params *timing)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> index 116e2b5..35d4aaa 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+> @@ -33,6 +33,7 @@
+>   #define INTF_TP_COLOR1                  0x05C
+>   #define INTF_CONFIG2                    0x060
+>   #define INTF_DISPLAY_DATA_HCTL          0x064
+> +#define INTF_ACTIVE_DATA_HCTL           0x068
+>   #define INTF_FRAME_LINE_COUNT_EN        0x0A8
+>   #define INTF_FRAME_COUNT                0x0AC
+>   #define   INTF_LINE_COUNT               0x0B0
+> @@ -90,68 +91,95 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>   	u32 hsync_period, vsync_period;
+>   	u32 display_v_start, display_v_end;
+>   	u32 hsync_start_x, hsync_end_x;
+> +	u32 hsync_data_start_x, hsync_data_end_x;
+>   	u32 active_h_start, active_h_end;
+>   	u32 active_v_start, active_v_end;
+>   	u32 active_hctl, display_hctl, hsync_ctl;
+>   	u32 polarity_ctl, den_polarity, hsync_polarity, vsync_polarity;
+>   	u32 panel_format;
+> -	u32 intf_cfg, intf_cfg2 = 0, display_data_hctl = 0;
+> +	u32 intf_cfg, intf_cfg2 = 0;
+> +	u32 display_data_hctl = 0, active_data_hctl = 0;
+> +	u32 data_width;
+> +	bool dp_intf = false;
+>   
+>   	/* read interface_cfg */
+>   	intf_cfg = DPU_REG_READ(c, INTF_CONFIG);
+> +
+> +	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP)
+> +		dp_intf = true;
+> +
+>   	hsync_period = p->hsync_pulse_width + p->h_back_porch + p->width +
+>   	p->h_front_porch;
+>   	vsync_period = p->vsync_pulse_width + p->v_back_porch + p->height +
+>   	p->v_front_porch;
+>   
+>   	display_v_start = ((p->vsync_pulse_width + p->v_back_porch) *
+> -	hsync_period) + p->hsync_skew;
+> +			hsync_period) + p->hsync_skew;
+>   	display_v_end = ((vsync_period - p->v_front_porch) * hsync_period) +
+> -	p->hsync_skew - 1;
+> +			p->hsync_skew - 1;
+
+Whitespace changes. Still in place. Move them to the separate commit please.
+
+> +
+> +	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>   
+>   	hsync_start_x = p->h_back_porch + p->hsync_pulse_width;
+>   	hsync_end_x = hsync_period - p->h_front_porch - 1;
+>   
+> -	if (p->width != p->xres) {
+> -		active_h_start = hsync_start_x;
+> -		active_h_end = active_h_start + p->xres - 1;
+> -	} else {
+> -		active_h_start = 0;
+> -		active_h_end = 0;
+> -	}
+> +	/*
+> +	 * DATA_HCTL_EN controls data timing which can be different from
+> +	 * video timing. It is recommended to enable it for all cases, except
+> +	 * if compression is enabled in 1 pixel per clock mode
+> +	 */
+> +	if (p->wide_bus_en)
+> +		intf_cfg2 |= BIT(4);
+>   
+> -	if (p->height != p->yres) {
+> -		active_v_start = display_v_start;
+> -		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+> -	} else {
+> -		active_v_start = 0;
+> -		active_v_end = 0;
+> -	}
+> +	if (p->wide_bus_en)
+> +		intf_cfg2 |= BIT(0);
+>   
+> -	if (active_h_end) {
+> -		active_hctl = (active_h_end << 16) | active_h_start;
+> -		intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
+> -	} else {
+> -		active_hctl = 0;
+> -	}
+> +	/*
+> +	 * If widebus is disabled:
+> +	 * For uncompressed stream, the data is valid for the entire active
+> +	 * window period.
+> +	 * For compressed stream, data is valid for a shorter time period
+> +	 * inside the active window depending on the compression ratio.
+> +	 *
+> +	 * If widebus is enabled:
+> +	 * For uncompressed stream, data is valid for only half the active
+> +	 * window, since the data rate is doubled in this mode.
+> +	 * p->width holds the adjusted width for DP but unadjusted width for DSI
+> +	 * For compressed stream, data validity window needs to be adjusted for
+> +	 * compression ratio and then further halved.
+> +	 */
+
+I think we agreed yesterday during the call, that you'd have separate 
+patches. One for timing changes and another one for wide_bus addition to 
+the timing changes.
+
+> +	data_width = p->width;
+> +
+> +	if (!dp_intf && p->wide_bus_en)
+> +		data_width = p->width >> 1;
+> +	else
+> +		data_width = p->width;
+>   
+> -	if (active_v_end)
+> -		intf_cfg |= BIT(30); /* ACTIVE_V_ENABLE */
+> +	hsync_data_start_x = hsync_start_x;
+> +	hsync_data_end_x =  hsync_start_x + data_width - 1;
+>   
+> -	hsync_ctl = (hsync_period << 16) | p->hsync_pulse_width;
+>   	display_hctl = (hsync_end_x << 16) | hsync_start_x;
+> +	display_data_hctl = (hsync_data_end_x << 16) | hsync_data_start_x;
+>   
+> -	if (ctx->cap->type == INTF_EDP || ctx->cap->type == INTF_DP) {
+> -		active_h_start = hsync_start_x;
+> -		active_h_end = active_h_start + p->xres - 1;
+> -		active_v_start = display_v_start;
+> -		active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+> -
+> +	if (dp_intf) {
+> +		// DP timing adjustment
+>   		display_v_start += p->hsync_pulse_width + p->h_back_porch;
+> +		display_v_end   -= p->h_front_porch;
+> +	}
+> +
+> +	active_h_start = hsync_start_x;
+> +	active_h_end = active_h_start + p->xres - 1;
+> +
+> +	active_v_start = display_v_start;
+> +	active_v_end = active_v_start + (p->yres * hsync_period) - 1;
+>   
+> -		active_hctl = (active_h_end << 16) | active_h_start;
+> +	intf_cfg |= BIT(29);	/* ACTIVE_H_ENABLE */
+> +	intf_cfg |= BIT(30);	/* ACTIVE_V_ENABLE */
+> +
+> +	active_hctl = (active_h_end << 16) | active_h_start;
+> +
+> +	if (dp_intf)
+>   		display_hctl = active_hctl;
+> -	}
+>   
+>   	den_polarity = 0;
+>   	if (ctx->cap->type == INTF_HDMI) {
+> @@ -204,6 +232,9 @@ static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>   	DPU_REG_WRITE(c, INTF_FRAME_LINE_COUNT_EN, 0x3);
+>   	DPU_REG_WRITE(c, INTF_CONFIG, intf_cfg);
+>   	DPU_REG_WRITE(c, INTF_PANEL_FORMAT, panel_format);
+> +	DPU_REG_WRITE(c, INTF_CONFIG2, intf_cfg2);
+> +	DPU_REG_WRITE(c, INTF_DISPLAY_DATA_HCTL, display_data_hctl);
+> +	DPU_REG_WRITE(c, INTF_ACTIVE_DATA_HCTL, active_data_hctl);
+>   }
+>   
+>   static void dpu_hw_intf_enable_timing_engine(
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> index 3568be8..e4a518a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+> @@ -30,6 +30,8 @@ struct intf_timing_params {
+>   	u32 border_clr;
+>   	u32 underflow_clr;
+>   	u32 hsync_skew;
+> +
+> +	bool wide_bus_en;
+>   };
+>   
+>   struct intf_prog_fetch {
+
+
+-- 
+With best wishes
+Dmitry

@@ -2,179 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DA64A9D96
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E3E4A9D9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 18:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376865AbiBDRVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 12:21:38 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:45994 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234250AbiBDRVh (ORCPT
+        id S1376873AbiBDR1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 12:27:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234250AbiBDR1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 12:21:37 -0500
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214GU9LT012101;
-        Fri, 4 Feb 2022 17:21:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=AtqsSWN97AIDCA/sv4mM1B5jxLXF1GcwXs1RYxqpfrE=;
- b=kItzVqXmTOJCg+GcwWBXLACUyLnpU1rovsd2qqA1RNaQQit5Gv3lXSZpo86smZk8xQWY
- jEuGuRsr6+sffG+WZkBEqfG1q+NovKAMWL2zBktnKq1R/yzAsU+UNoDq68Eg/5QGHAQ4
- AARjT3noD7WanrZAVNozMVtlkKZFK4rRunwI8eGcMug1lcKeOt9M1XeNjxz6KpyEmWUH
- bSDggrQA6RaLKepshXcvEAG4YmUtpUl97e5BF4Vy9KOKB1JNjugTpoVMOAYZS6TP7aEZ
- XF+sU6cpJr73a0RWiBUS5QnT7l7KhS365OYFH3RGUFI3e3sVFHUDiXDX59K9OmTsPl2Q Jw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e0hfsu9ap-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Feb 2022 17:21:12 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 214HBnGA106560;
-        Fri, 4 Feb 2022 17:21:10 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by userp3020.oracle.com with ESMTP id 3dvy1xn13q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Feb 2022 17:21:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dQArEqWY+duv4nlxEJ+4P42p6coWk8tJ+T7tFxHNKUepfE22/gYjvKUdG9yTiSokivHMf4CQa6uBktvmrdSDYyKUGOeLd/kgkuhdmQDnkv1qql7flxIPtv5eTz6tpzsKDPWDvwvYbYYG5c5/AxLom1ds39eMdSPa/4/EIpS8N6fTBS01LhEl4gaiQC1lF/nl1OQvZYbtg/DlhvSDFgMH+nZAMpgbwgoemGJ8leOTk4V9Z3CCXvwBop0KIGDpShUqs036+b8dEdEZm97rnk8clKApUUk1Wgidvx0rXVzbSq+WPhqr58XbexOklXXirXGoK/wiz/jR0q+0Fak4/RJsBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AtqsSWN97AIDCA/sv4mM1B5jxLXF1GcwXs1RYxqpfrE=;
- b=IfigaBhFpN9ctLW2HIpxigpgH+LM9uWefa1zVQmQWV28+rQV2+xtqh6XU91E19yUDNrDRNWaygpXOyV1UCqiknH8QE9hBI+94v1OJ7C+6HIrb25CUM1NRWWd6Nez/QLgmdE2InriooFujwvjhfiPxfDE+MdUHy8rklJv41XS//1FMRk8+bQKet1gPIGHb0XOXtFgeN2B3XFXgO35RBLONaolPKO/QfgkFzscuOernjtnPz4/416X08uCmGbEr/MOucbSgw7qwgdNsZDr2eyg7ljU0EaDo9MwIzMy4yQY0nQ/g/q/SHaj9LNS/gXXSqGX43zApCfcTyXgD+pa8Kjw5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Fri, 4 Feb 2022 12:27:21 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60F7C061714;
+        Fri,  4 Feb 2022 09:27:21 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id w5-20020a4a9785000000b0030956914befso5391378ooi.9;
+        Fri, 04 Feb 2022 09:27:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AtqsSWN97AIDCA/sv4mM1B5jxLXF1GcwXs1RYxqpfrE=;
- b=KbqhX35mtKeS3LPx4yDEaZBPF1J5x5De9lsSN1ug4B6NQMWaUWlsXWjdniR/WeXjJ2R30HYud1nG1+kZ8wmN/ptqQ0sjwOlPwmSxC/YAXgE32l5980mjTr71SIBuzKLth0nJS/Qj5dUrSJZMe+VSbQYJxzOanj5nAR4mVhPxkME=
-Received: from PH0PR10MB5481.namprd10.prod.outlook.com (2603:10b6:510:ea::5)
- by CH2PR10MB4342.namprd10.prod.outlook.com (2603:10b6:610:a4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.11; Fri, 4 Feb
- 2022 17:21:03 +0000
-Received: from PH0PR10MB5481.namprd10.prod.outlook.com
- ([fe80::b8d1:415b:7f28:6298]) by PH0PR10MB5481.namprd10.prod.outlook.com
- ([fe80::b8d1:415b:7f28:6298%8]) with mapi id 15.20.4951.016; Fri, 4 Feb 2022
- 17:21:03 +0000
-Message-ID: <aa81c069-2471-34bd-b7e1-f06508ae6104@oracle.com>
-Date:   Fri, 4 Feb 2022 18:20:56 +0100
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=6A4X54GUtsuVAvMl9JIwSqUK14ZBkLXB2SGgEP7l0aM=;
+        b=qUIYrSas4lX+gcpO19MSY//BR+rhTW4H/ikh+VzRUR6Y8DphfNGOHalR9UDXWQtSqu
+         3nx+mdapftMNOeTU/ryhd9FNOXnkcTfNY00fNwife7ZdFIftH7scwGKdfx0Wx8ADcbX7
+         78/I/xZn275EYtkFc2AS6A3TLKyAm/XvzWrrpeX765oEeux6zwuaOYYLGfT6n+RL1Jwq
+         5wl21R0OIDK6NtuZZtH7yCl/+uTMQX34bOLbjAPks61hA3teZr6HpNBoo3CrdoUPrPfQ
+         +IhP2cna6aJpN2gb5CPb7mKoQ23sQd9PLJCJRO/Tn00NBq87TCgk4rW/BZcowtG759ZK
+         K8tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=6A4X54GUtsuVAvMl9JIwSqUK14ZBkLXB2SGgEP7l0aM=;
+        b=D5JEFhoehbBJBIY6Pxa1OOh8tN6Elf0/NFbN0mH3+L4+bjEVkVdFIsbJgCxjzK0Jl3
+         B1k5KbN6Rm3q4dEsYUIwL5xVhV3e7dfpS98nwTiHyLUBaibu7bGA90+iJFP7CtfA/a/F
+         3snOQJ4X77nq1aS8kLz2o+i/7JDEldB77Q0CGXUPDP9U1eN1cCcO/xYafE0JT+Q7vva/
+         0rNgDxU1nKLBPA1YBpVluXYKBEoGgRckmtzwWdkR0hRPLEpCffMdWHPO4wVjYaR1H6gS
+         cytp6f1rPOuqSi5BiAp74ftA5lbNz9xt8DOPIQoDjEntD28Npoz3DcMRlLgAvEEQb2Xy
+         LHXQ==
+X-Gm-Message-State: AOAM530e7WN9GYiw+C4UW7aEgE3coh1+VT78a22I2+Atsmh54w7oTtok
+        9tOoXIerz37+d4//4sCf6qf0VMXSXDZW3w==
+X-Google-Smtp-Source: ABdhPJzjilTbvN4pDFSjbVhqeSOBv8uYxH6SOWWJUzsQo1I2nXqLsA/HwVUxGJ/7GSAvFlfn41yTLg==
+X-Received: by 2002:a05:6870:e6cf:: with SMTP id s15mr6200oak.207.1643995640809;
+        Fri, 04 Feb 2022 09:27:20 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p82sm1010707oib.25.2022.02.04.09.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 09:27:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b3f041c5-9fe6-cf96-397e-582ac3434fa2@roeck-us.net>
+Date:   Fri, 4 Feb 2022 09:27:17 -0800
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] EDAC/amd64: Set memory type per DIMM
 Content-Language: en-US
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-References: <20220202144307.2678405-1-yazen.ghannam@amd.com>
- <20220202144307.2678405-2-yazen.ghannam@amd.com>
- <a42a7696-0150-6d63-953e-adec19e25d02@oracle.com> <YfviHFrzzdapbwDt@zn.tnic>
- <962dc65c-6e52-bf02-5ba5-7e8731442390@oracle.com>
- <Yf1LchOlECslWK2b@yaz-ubuntu>
-From:   William Roche <william.roche@oracle.com>
-In-Reply-To: <Yf1LchOlECslWK2b@yaz-ubuntu>
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        geert+renesas@glider.be, Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Phil Edworthy <phil.edworthy@renesas.com>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220204161806.3126321-1-jjhiblot@traphandler.com>
+ <20220204161806.3126321-7-jjhiblot@traphandler.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 6/6] watchdog: Add Renesas RZ/N1 Watchdog driver
+In-Reply-To: <20220204161806.3126321-7-jjhiblot@traphandler.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR02CA0150.eurprd02.prod.outlook.com
- (2603:10a6:20b:28d::17) To PH0PR10MB5481.namprd10.prod.outlook.com
- (2603:10b6:510:ea::5)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 45463029-06ea-4f41-d71c-08d9e802b821
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4342:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR10MB4342C9F017C7D00AC945019A85299@CH2PR10MB4342.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2x4s/uPpyQlpbEWt8Ej2874pYARhfKW2ACxJmeeXLQSY0j0ZsDfQJPqaxXvHQarIJPsAL7dFWfw/wdOYMzC0wYO20oaYTugjDEJmfgsyanW+7OmrbuN9KZLNf96qCyX5rGgR/iz4ICxkYwzgycrElpsUvH+VOG8yRv4u2Bi7dT4OoW5tSYlQ4lmrT6WnBvFNRVFxcUh7AUx4wRe5/hXDOHR57eWhcaLOCSm7DbpeRO7KyxP4P7FB1XAl0hwvO3LBdNbybTGFX7pZh5EOrmuv2oQvNXnXpHYyRPwlc3xp/2Sokn/xBYW7XdfJ58Vp6ZhdB59767ypxv/bU70t2KfsqH5Kb2Lnr0KdEbSPlXDkitOCybCTIl12alPVUcFNzJVofh79+A68nr/x930HlF6TvXlJ2rTz6sHOyXlGsrkSD6xllZ2p/zkFXhcrEw+mesoqWiVZyyZPfabNe0agNnKxqsP/YoPuygsN4dAOrTTpthxcpNCAkNol3bpngO0vLfJEgl0H8iRh4ArwSOsHOuq21kdaXJoNsOi/1z78Cyy2GFtD+nzOn5HBkJeEsZYWVXKisSBRyK0MYc3+E6GnHzAfHayjYOekRwsfOL96bTzTtEtmXp/vY/vOoT+FGGEaJOt1MddJTj/pZeoULKhkCKZ/NNn3TFJVvq0QXEEzm38e2NF3uwzGzKm0QCxKljksT0vdv166Y8QbX907ipDOQ2hcGUyjXLy9ATw7fIVV3Tl85ZEpvdAIv0QjP0eFOdif8FTUA/KkT9XnA/LFg5W4qxiS/Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5481.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66556008)(66476007)(4326008)(2906002)(6512007)(8676002)(8936002)(4744005)(66946007)(26005)(186003)(2616005)(36756003)(5660300002)(52116002)(53546011)(6506007)(6666004)(508600001)(31696002)(86362001)(316002)(6916009)(44832011)(6486002)(38350700002)(38100700002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHJ5Wmw1TXFScHFETGNqOHhwUFhnT0dKeldxTkt4VWUvYUFTQVFSdGRvanVr?=
- =?utf-8?B?L2t2cksxZTVqallFdWcxYUZnOU55OFJGT3lKMDRjVFZyTmg4M2V3aVNBMGN0?=
- =?utf-8?B?SFJYMzF2eHl6QWhqVytMSi9JMXZsRmFXaWtlVitJVXdHSW5TeFJxRG9oM0Fx?=
- =?utf-8?B?MTcyUkxLR1BwZjVIYmRJMDIrazRsSVNiWWJiWEQ0aFRFOWkrLzBvYkt3U1Jo?=
- =?utf-8?B?bHdnSXJCeWoyU3d5Z1JHR2paUmxuUmZNUkdFVGRKMjJ2MjRDeDBrWHczTytI?=
- =?utf-8?B?MWx3SktXR3Z2ekZMdStWWjdoWmJiTjZjNkFHL3hkRWVvNHN1L3lMdzZ6V1c5?=
- =?utf-8?B?YVBhcFg2NzZOOXRONEE3MTVGRXBmUGFMck5MczkwbXhnZlYxY1dlSFV4SHJm?=
- =?utf-8?B?MExIUVBQY2RQZHorRUVabURObU90dUhKR1k1YXFCTzdUaXgrR0gxQ0tKMGVo?=
- =?utf-8?B?b1lVSlNXRWlib2dtMjBVWVViY1JBRHY0RmZGSXo1RVRmcDkxbitGM0FSbS9m?=
- =?utf-8?B?dEppenBFV1lsQXpUeUgxZnlVSitSeTloM2J3NElMQlpwQ2ZndXNvcSt3Z0NL?=
- =?utf-8?B?TzhxdG1hQXVWQU1wSDE4YUhOZ3pUZFIvU0gvWllUTzluc25rejhlRXArRVhp?=
- =?utf-8?B?akx3a2pRY1BKVUZwZmdjV2p2L05EYk02RzVXbGRkYVQxWStGdW51VUFJcXpU?=
- =?utf-8?B?ZkZ2Vkcrc1NTcmJzZU43Q0Z3dEpLN0VHZ0tHR3diUjh1SEZ6aWlJcXlHTytt?=
- =?utf-8?B?TWhMQ0RvQ0tHZ1ZPYjEwb1dKY0pOMlRFeG1hWEFWNjljcVFjWmdhOHNqVkxG?=
- =?utf-8?B?MkhsQnpucDI0anF6OHhISURITkJmZ0JRaGlHTEFkem5NUnNxVnFRbkhvRFVa?=
- =?utf-8?B?blFnVXJDTTZSclk5eWlkSXVENDlORHV2RDEvcCtkd3hMclhEZGVpSTkvYjRG?=
- =?utf-8?B?V29WNFpTdnZrbkJCekg3cmsybFJwMHp3L2x6dVRKTzVVRDhrSDJBK0I0Rytx?=
- =?utf-8?B?WGFmZW9YS2Q1OVUxSzZnbGp2UzNBbzJJb25PczVvMkNTUjFqdmM0cWZBVmdh?=
- =?utf-8?B?eWh5VmtPNXNJRWFGSW9SeWZOS3orR09seVBOMW5YTkp6Q1J1bXNoUERnZGVq?=
- =?utf-8?B?RXMxQ29Oa1Bmd2gvKzVuZlM3T0VZUWJKN0ZrNzdQMVZ5VGJTT3VHUzhGWXZD?=
- =?utf-8?B?ZzNFZjRHTlpXU203YUNWOFdtbGFvKzJDeFJZN0dvMU5kUWlyTnJOUzNhVHkr?=
- =?utf-8?B?bGh0eEtjSTkzcncvL3p5eDkvV3JHWFVHZTF5Nm03TlE0T2pKdnFYRDlNWThB?=
- =?utf-8?B?R1B3bTBmTTJYTHF0b1F2RzlycmRNMXJMelJxQlY5RVkweFVwd0V4QldNSFU2?=
- =?utf-8?B?U0cvbXBEOTlyczBaTWlxOWkrcDVueVJaMzc0SWtLZmQ3WTdCUHh6NkY3YWxG?=
- =?utf-8?B?NUNzWVl6ZUg2MWJqRDEyTHZrSXRENGpwcmZ2bENnYkVoelRJMFk3NWtXVU1L?=
- =?utf-8?B?UTZrVVdlUDBIbW9jaVdPZG5Gb2Vpa2NQaHh0TE5uRVV6NUJoRmowd1Q2KzZ2?=
- =?utf-8?B?YVhFck1Vc0pCZWtGdng4NjNmQ2lselVLTml0ZlhCVlhtM1I5S2JzWk5YYmlt?=
- =?utf-8?B?aDFSSmRSRVlHaGF3NXJVUC9Ja2dGVmg1Y2RrMExERHRKT2JPZjdFVWhsMVJJ?=
- =?utf-8?B?RFBUYzlJWEl3M1BkdE9TZ2VXVkNwMmlIclhhNEFxRFB5dnJkeUFSWjdrVXhG?=
- =?utf-8?B?aTBPWlBYMzRaT3pwT1Vybks4WkVrS0hZVXRybVU2NFlJYzNmU1hyaVdHQlBM?=
- =?utf-8?B?bnFPOVhrRXhqS2gxTnArV0gxMXlnY0VpbFVPRkpxT1BCa1dPczhmTDRFdVJw?=
- =?utf-8?B?T3ZOLzRMU3V0VUZlSkorV2NjTWxhR3VkeVNHK2llZVVzLzJ1Mk00VFRFZUxT?=
- =?utf-8?B?OGJqR0lmR05WWEtzMHFoTGw3aWxLVXJyZy9uWUZ5dDI3N0lrcU5PUURCbXUx?=
- =?utf-8?B?SXFLVHdXTWZuR2NCaEtrZkhCT05KSUhYUE5UUE1vM3d2WFpHMmQ1L2s0UVhm?=
- =?utf-8?B?UWpITy9OaXdjN1BxU2pZNlM0V3BMd1VvWmJscVZrUWhjTGtOOGs2SkZHQU9v?=
- =?utf-8?B?NWd1ZmpHSHc4M2gyWFlSS0pnYWJVclEzNzhEVk5uZS9oM1owLzVHejNqSkQr?=
- =?utf-8?B?aUhFbHZzLzdFMXF2djJIdUh0RXRkT2FTYzhoWWtvTytJazNqN01NOGxKN0Zj?=
- =?utf-8?B?azI0UEl5VHVvdDgzQ3J5T3o3OUFRPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45463029-06ea-4f41-d71c-08d9e802b821
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5481.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2022 17:21:03.0033
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EhUY6IdKMCse49sPNRqybJu0FF1cK11kdZtSWSpVZ46oge1VzV7BJmCbmEQklWfWoOju+kKH/Sn6j+SrqzPWItijBUgy/VIskF4zBbpu70M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4342
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10248 signatures=673430
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 spamscore=0
- bulkscore=0 adultscore=0 mlxlogscore=939 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202040096
-X-Proofpoint-GUID: sTi2gbA44r867PM8BHphhChXvQoDb-l6
-X-Proofpoint-ORIG-GUID: sTi2gbA44r867PM8BHphhChXvQoDb-l6
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/02/2022 16:51, Yazen Ghannam wrote:
-
->
-> diff --git a/drivers/edac/amd64_edac.h b/drivers/edac/amd64_edac.h
-> index 6f8147abfa71..38e5ad95d010 100644
-> --- a/drivers/edac/amd64_edac.h
-> +++ b/drivers/edac/amd64_edac.h
-> @@ -397,7 +397,12 @@ struct amd64_pvt {
->   	/* place to store error injection parameters prior to issue */
->   	struct error_injection injection;
+On 2/4/22 08:18, Jean-Jacques Hiblot wrote:
+> From: Phil Edworthy <phil.edworthy@renesas.com>
+> 
+> This is a driver for the standard WDT on the RZ/N1 devices. This WDT has
+> very limited timeout capabilities. However, it can reset the device.
+> To do so, the corresponding bits in the SysCtrl RSTEN register need to
+> be enabled. This is not done by this driver.
+> 
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> ---
+>   drivers/watchdog/Kconfig    |   8 ++
+>   drivers/watchdog/Makefile   |   1 +
+>   drivers/watchdog/rzn1_wdt.c | 197 ++++++++++++++++++++++++++++++++++++
+>   3 files changed, 206 insertions(+)
+>   create mode 100644 drivers/watchdog/rzn1_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index c8fa79da23b3..ba6e4ebef404 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -883,6 +883,14 @@ config RENESAS_RZAWDT
+>   	  This driver adds watchdog support for the integrated watchdogs in the
+>   	  Renesas RZ/A SoCs. These watchdogs can be used to reset a system.
 >   
-> -	/* cache the dram_type */
+> +config RENESAS_RZN1WDT
+> +	tristate "Renesas RZ/N1 watchdog"
+> +	depends on ARCH_RENESAS || COMPILE_TEST
+> +	select WATCHDOG_CORE
+> +	help
+> +	  This driver adds watchdog support for the integrated watchdogs in the
+> +	  Renesas RZ/N1 SoCs. These watchdogs can be used to reset a system.
+> +
+>   config RENESAS_RZG2LWDT
+>   	tristate "Renesas RZ/G2L WDT Watchdog"
+>   	depends on ARCH_RENESAS || COMPILE_TEST
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index f7da867e8782..38d38564f47b 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -84,6 +84,7 @@ obj-$(CONFIG_LPC18XX_WATCHDOG) += lpc18xx_wdt.o
+>   obj-$(CONFIG_BCM7038_WDT) += bcm7038_wdt.o
+>   obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
+>   obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
+> +obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
+>   obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
+>   obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
+>   obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
+> diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
+> new file mode 100644
+> index 000000000000..0d3284a44dde
+> --- /dev/null
+> +++ b/drivers/watchdog/rzn1_wdt.c
+> @@ -0,0 +1,197 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas RZ/N1 Watchdog timer.
+> + * This is a 12-bit timer driver from a (62.5/16384) MHz clock. It can't even
+> + * cope with 2 seconds.
+> + *
+> + * Copyright 2018 Renesas Electronics Europe Ltd.
+> + *
+> + * Derived from Ralink RT288x watchdog timer.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +#define RZN1_WDT_RETRIGGER			0x0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL		0
+> +#define RZN1_WDT_RETRIGGER_RELOAD_VAL_MASK	0xfff
+> +#define RZN1_WDT_RETRIGGER_PRESCALE		BIT(12)
+> +#define RZN1_WDT_RETRIGGER_ENABLE		BIT(13)
+> +#define RZN1_WDT_RETRIGGER_WDSI			(0x2 << 14)
+> +
+> +#define RZN1_WDT_PRESCALER			BIT(14)
+> +#define RZN1_WDT_MAX				4095
+> +
+> +struct rzn1_watchdog {
+> +	struct watchdog_device		wdt;
+> +	struct device			*dev;
+> +	void __iomem			*base;
+> +	unsigned int			irq;
+> +	unsigned int			reload_val;
+> +	unsigned long			clk_rate;
+> +};
+> +
+> +#define to_rzn1_watchdog(_ptr) \
+> +	container_of(_ptr, struct rzn1_watchdog, wdt)
+> +
+> +static int rzn1_wdt_ping(struct watchdog_device *w)
+> +{
+> +	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
+> +
+> +	/* Any value retrigggers the watchdog */
+> +	writel(0, wdt->base + RZN1_WDT_RETRIGGER);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzn1_wdt_start(struct watchdog_device *w)
+> +{
+> +	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
+> +	u32 val;
+> +
 > +	/*
-> +	 * cache the dram_type
-> +	 *
-> +	 * NOTE: Don't use this for Family 17h and later.
-> +	 *	 Use dram_type in struct amd64_umc instead.
+> +	 * The hardware allows you to write to this reg only once.
+> +	 * Since this includes the reload value, there is no way to change the
+> +	 * timeout once started. Also note that the WDT clock is half the bus
+> +	 * fabric clock rate, so if the bus fabric clock rate is changed after
+> +	 * the WDT is started, the WDT interval will be wrong.
 > +	 */
->   	enum mem_type dram_type;
->   
->   	struct amd64_umc *umc;	/* UMC registers */
+> +	val = RZN1_WDT_RETRIGGER_WDSI;
+> +	val |= RZN1_WDT_RETRIGGER_ENABLE;
+> +	val |= RZN1_WDT_RETRIGGER_PRESCALE;
+> +	val |= wdt->reload_val;
+> +	writel(val, wdt->base + RZN1_WDT_RETRIGGER);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzn1_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
+> +{
+> +	struct rzn1_watchdog *wdt = to_rzn1_watchdog(w);
+> +
+> +	w->timeout = t;
+> +
+> +	wdt->reload_val = (t * wdt->clk_rate) / RZN1_WDT_PRESCALER;
+> +
 
-It works for me Yazen.
-Thanks!
+Is that really what you want, given that it can only be set once,
+when the watchdog is started for the first time ?
+ From the context, I would assume that you'd want to always set reload_val
+to wdt->clk_rate / RZN1_WDT_PRESCALER. That could be done in the probe
+function, meaning a set_timeout function is not really needed.
+
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t rzn1_wdt_irq(int irq, void *_wdt)
+> +{
+> +	struct rzn1_watchdog *wdt = (struct rzn1_watchdog *)_wdt;
+> +
+> +	dev_info(wdt->dev, "%s triggered\n", __func__);
+> +	return IRQ_HANDLED;
+> +}
+
+What is the point of supporting an interrupt if it doesn't do anything
+other than saying that it happened ?
+
+> +
+> +static struct watchdog_info rzn1_wdt_info = {
+> +	.identity = "RZ/N1 Watchdog",
+> +	.options = WDIOF_MAGICCLOSE | WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
+> +};
+> +
+> +static const struct watchdog_ops rzn1_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = rzn1_wdt_start,
+> +	.ping = rzn1_wdt_ping,
+> +	.set_timeout = rzn1_wdt_set_timeout,
+> +};
+> +
+> +static const struct watchdog_device rzn1_wdt_dev = {
+> +	.info = &rzn1_wdt_info,
+> +	.ops = &rzn1_wdt_ops,
+> +	.min_timeout = 0,
+
+Really ? Did you try that ?
+
+> +	.max_timeout = 1,
+
+Documentation says
+
+  * @max_hw_heartbeat_ms:
+  *              Hardware limit for maximum timeout, in milli-seconds.
+  *              Replaces max_timeout if specified.
+
+and you set max_hw_heartbeat_ms below, so this is unnecessary.
+
+> +	.status = WATCHDOG_NOWAYOUT_INIT_STATUS,
+> +};
+> +
+> +static int rzn1_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct rzn1_watchdog *wdt;
+> +	int ret;
+> +	struct device_node *np = pdev->dev.of_node;
+> +	int err;
+> +	struct clk *clk;
+> +
+> +	wdt = devm_kzalloc(&pdev->dev, sizeof(*wdt), GFP_KERNEL); > +	if (!wdt)
+> +		return -ENOMEM;
+> +	wdt->dev = &pdev->dev;
+> +	wdt->wdt = rzn1_wdt_dev;
+> +	platform_set_drvdata(pdev, wdt);
+> +
+> +	wdt->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(wdt->base)) {
+> +		dev_err(wdt->dev, "unable to get register bank\n");
+> +		return PTR_ERR(wdt->base);
+> +	}
+> +	wdt->irq = irq_of_parse_and_map(np, 0);
+> +	if (wdt->irq == NO_IRQ) {
+> +		dev_err(wdt->dev, "failed to get IRQ from DT\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	err = devm_request_irq(wdt->dev, wdt->irq, rzn1_wdt_irq, 0,
+> +			       np->name, wdt);
+> +	if (err) {
+> +		dev_err(wdt->dev, "failed to request irq %d\n", wdt->irq);
+> +		return err;
+> +	}
+> +	clk = devm_clk_get(wdt->dev, NULL);
+> +	if (!IS_ERR(clk) && clk_prepare_enable(clk))
+> +		return PTR_ERR(clk);
+
+That doesn't work. clk is not an ERR_PTR here, and the return value
+is thus an PTR_ERR() on a real pointer. This needs to be split into
+separate statements and checks.
+
+> +
+> +	wdt->clk_rate = clk_get_rate(clk);
+> +	if (!wdt->clk_rate) {
+> +		err = -EINVAL;
+> +		goto err_clk_disable;
+> +	}
+> +
+> +	wdt->reload_val = RZN1_WDT_MAX;
+> +	wdt->wdt.max_hw_heartbeat_ms = (RZN1_WDT_MAX * 1000) /
+> +					(wdt->clk_rate / RZN1_WDT_PRESCALER);
+> +
+> +	ret = watchdog_init_timeout(&wdt->wdt, 0, &pdev->dev);
+> +	if (ret)
+> +		dev_warn(&pdev->dev, "Specified timeout invalid, using default");
+> +
+
+wdt->wdt.parent needs to be set as well.
+
+> +	ret = devm_watchdog_register_device(&pdev->dev, &wdt->wdt);
+
+You either have to add a callback to disable and unprepare the clock
+when the driver is removed (see other watchdog drivers for example), or
+you need a remove function and can not use devm_watchdog_register_device().
+
+> +	if (ret)
+> +		goto error;
+> +
+> +	dev_info(wdt->dev, "Initialized\n");
+> +
+> +	return 0;
+> +
+> +error:
+> +err_clk_disable:
+
+To labels pointing to the same place does not add any value.
+
+> +	clk_disable_unprepare(clk);
+> +	dev_warn(wdt->dev, "Initialization failed\n");
+
+This is not a warning.
+
+> +	return err;
+> +}
+> +
+> +
+> +static const struct of_device_id rzn1_wdt_match[] = {
+> +	{ .compatible = "renesas,rzn1-wdt" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, rzn1_wdt_match);
+> +
+> +static struct platform_driver rzn1_wdt_driver = {
+> +	.probe		= rzn1_wdt_probe,
+> +	.driver		= {
+> +		.name		= KBUILD_MODNAME,
+> +		.of_match_table	= rzn1_wdt_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(rzn1_wdt_driver);
+> +
+> +MODULE_DESCRIPTION("Renesas RZ/N1 hardware watchdog");
+> +MODULE_AUTHOR("Phil Edworthy <phil.edworthy@renesas.com>");
+> +MODULE_LICENSE("GPL v2");
 

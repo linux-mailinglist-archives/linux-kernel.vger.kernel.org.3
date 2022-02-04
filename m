@@ -2,264 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A154A9598
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EADB4A959E
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 09:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357217AbiBDIwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 03:52:23 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52114 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357219AbiBDIwV (ORCPT
+        id S1357219AbiBDIw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 03:52:29 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:36942
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1357225AbiBDIw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 03:52:21 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2147cGuL006648;
-        Fri, 4 Feb 2022 08:52:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=VDbP6yfTgkYCx4PJhoSy92WnUSzhy5R6deOUcS4VfCk=;
- b=VPK5n4R4+PrSA92lpwtHytG0dm+mpI9iN3FOPFsCUO0dU/9v2iZnbgrUkKbLGRVMc+oX
- Ex2tkC3a8WYmQx5YzMDn7UGVRu5/F6304bAEZInL7PwMElwR6yr10U7XQYbYCOisexrx
- 9hfb1Mtde64hmuaB+MD8RXeoPoPpdXbmrBhFgYeEIKtb7NEXLcuC1PjRPp/r0YHiKIUW
- 1kE65rpI6MAdgcH04UdyEWsWV6KzrtENIeGp7TtUCs24/Ebk5e3Kmzm6K2pKog/oBNVC
- XECBGNEb1IZFc5+wDP6FcDteHQoGELIMcYIL+q5ncR4ZOVUmI2+By3aqfS1SYNFbO6VA sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0r128eqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 08:52:20 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2148V444012646;
-        Fri, 4 Feb 2022 08:52:20 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0r128eq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 08:52:20 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2148lFUu012481;
-        Fri, 4 Feb 2022 08:52:18 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3e0r0v2r9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 08:52:17 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2148gJmC49021318
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Feb 2022 08:42:19 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CE464C04E;
-        Fri,  4 Feb 2022 08:52:14 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E66F4C04A;
-        Fri,  4 Feb 2022 08:52:14 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Feb 2022 08:52:14 +0000 (GMT)
-From:   Michael Mueller <mimu@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     cohuck@redhat.com, borntraeger@de.ibm.com, frankja@linux.ibm.com,
-        thuth@redhat.com, pasic@linux.ibm.com, david@redhat.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Mueller <mimu@linux.ibm.com>
-Subject: [PATCH] KVM: s390: pv: make use of ultravisor AIV support
-Date:   Fri,  4 Feb 2022 09:52:03 +0100
-Message-Id: <20220204085203.3490425-1-mimu@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 4 Feb 2022 03:52:26 -0500
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8FD21405B4
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 08:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643964744;
+        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=qnPp9d4xFaxTg3mjbDdwampcBXqqfo8DgkBf3yT/Edg/I4LN6PG/4BlRLSTKOk+yL
+         iMlPX/FYl0tcjL790Q2ZD8tAn8JF4m4GJo2fMB4GVQg4DDH0dFtu0Le3/tE3FBel/5
+         AKBrh1u8NG9PLNOvZOWPZHfsb8YJtRl7G4w3fDgf+gFCAntwq26Ef43atxjovTutxJ
+         wEc7NH1a5pVVQ59uIG1n7f840Ywhyr6HeOuQ68NyCo+ziLdt8raXl9UVhQmAC+jrSF
+         TXTsfNhWA28SR38YNHj26zj03cekT0C9/iwbiBx4c+qcvQXtWF85t/v+dt5swWFz5G
+         CY8qwSYtILxkw==
+Received: by mail-lj1-f197.google.com with SMTP id v9-20020a2e2f09000000b0023021c0c47aso917755ljv.11
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 00:52:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iqZrLHxxMKYXcwDk+JH/xBRKoG0uPSeGw2pYz3/v6kY=;
+        b=rMlNipyVrYfTrKDOVk/gXHV9A3Z5a/6u5Bn3tcoHGU8y+dKikE3iETr3yy9k8X0Md6
+         4+GfdHCAZtmK9Of9m4S41fdtO8sp0AQljLBhnr8SHYwLb8SauFrr+MZzAbpKUnSPR2PQ
+         bAn9YKJeUoJlBOzwZNTKRgqnp7Goni4uCTpcC0+e50nIuEDBl2dY2ih2C5iMzSk/chxr
+         pMIELrkfJKXfZPJk63B8EoJ1zA9U5YfHKSfheUmZDw3caFQ7QLq0xwvCk4yC3YtfoCqV
+         b4Jco2UO2PteS5fsXzhImUla/70MsmYkYs8SiI3ZQSKqRgJbP+krYNsf2K9DCAOB/SG6
+         NdYw==
+X-Gm-Message-State: AOAM530muKT3YBH99EchUE8baNSG1SgTP73bQW1nbwu3XuWWQYfX2Ej9
+        js9P/1hfMHtSXiFzokDZDDLfcRLBR2ocjCrBsaxVVcHjzf8LzOQx7lfbd6bW5WxN6ghEHm5kI95
+        KBbMoW4PGhv6da4k6q6ihM57LgsFeJ+6eQtTWyVa+rg==
+X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976668edc.345.1643964732877;
+        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwVcZDvspQCzKUyW5YG8zjDVQmYqY/DEAG3sfjKSfnQIzLHqmc3NlVf9LlkkFskfuUgLPJavA==
+X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr1976597edc.345.1643964732578;
+        Fri, 04 Feb 2022 00:52:12 -0800 (PST)
+Received: from [192.168.0.81] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id z8sm418238ejc.197.2022.02.04.00.52.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 00:52:11 -0800 (PST)
+Message-ID: <ed615fdb-5c30-697e-f197-a3a93c5336b9@canonical.com>
+Date:   Fri, 4 Feb 2022 09:52:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ltuHh19q_8Iq46TnUQZkuXhR7wppE-Fz
-X-Proofpoint-ORIG-GUID: arQu_yw_vpJTWBbYUagrsBJPjU9eNvnC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-04_03,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- malwarescore=0 mlxlogscore=562 lowpriorityscore=0 clxscore=1011
- bulkscore=0 priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202040044
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] HPE BMC GXP SUPPORT
+Content-Language: en-US
+To:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Corey Minyard <minyard@acm.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <nick.hawkins@hpe.com>
+ <20220202165315.18282-1-nick.hawkins@hpe.com>
+ <CAL_Jsq+K2t5WYE056so1iZgZr7CBKvDEjAwnJVTyUFQcK-VFSA@mail.gmail.com>
+ <e79133f2-f872-3ed6-4038-526e94e84909@canonical.com>
+ <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1FEAAC19-1DD7-40D7-98FD-30C2659E7C0F@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the ultravisor adapter interruption vitualization
-support indicated by UV feature BIT_UV_FEAT_AIV. This allows ISC
-interruption injection directly into the GISA IPM for PV kvm guests.
+On 03/02/2022 18:07, Verdun, Jean-Marie wrote:
+> 
+>    > Maybe it does not look like, but this is actually a v2. Nick was asked
+>    > to change the naming for the nodes already in v1. Unfortunately it did
+>    > not happen, so we have vuart, spifi, vic and more.
+> 
+>    > It is a waste of reviewers' time to ask them to perform the same review
+>    > twice or to ignore their comments.
+> 
+>     Hi Krysztof,
+> 
+>     Accept our apologies if you think you lose your time, it is clearly not our
+>     intent. 
+> 
+>     This is the first time that we (I mean the team) introduce a new arch into
+>     the linux kernel and I must admit that we had hard time to understand
+>     from which angle we needed to start.
+> 
+>     I will probably write a Documentation afterward, as it is easy to find doc
+>     on how to introduce a patch or a driver, but not when you want to 
+>     introduce a new chip. 
+> 
+>     We are trying to do our best, and clearly want to follow all of your inputs.
+>     Mistakes happen and they are clearly not intentional and not driven in 
+>     a way to make you lose your time.
+> 
+>     Helping others, and teaching something new is definitely a way to 
+>     optimize your time and this is what you are currently doing with us.
+> 
+>     We appreciate it and hope you will too.
 
-Hardware that does not support this feature will continue to use the
-UV interruption interception method to deliver ISC interruptions to
-PV kvm guests. For this purpose, the ECA_AIV bit for all guest cpus
-will be cleared and the GISA will be disabled during PV guest setup.
+I understand, I also maybe over-reacted on this. Just please go through
+the comments you got for first submission and either apply them or
+respond why you disagree.
 
-In addition a check in __inject_io() has been removed. That reduces the
-required intructions for interruption handling for PV and traditional
-kvm guests.
+The next submissions (patchset split into several commits) should be a
+v3, preferably with cover letter (git format-patch --cover-letter -v3
+...) where you can document also changes you did to the patchset.
 
-Signed-off-by: Michael Mueller <mimu@linux.ibm.com>
----
- arch/s390/include/asm/uv.h |  1 +
- arch/s390/kvm/interrupt.c  | 53 +++++++++++++++++++++++++++++++++-----
- arch/s390/kvm/kvm-s390.c   | 10 ++++---
- arch/s390/kvm/kvm-s390.h   | 11 ++++++++
- 4 files changed, 66 insertions(+), 9 deletions(-)
+It looks for example like this:
+https://lore.kernel.org/linux-samsung-soc/31da451b-a36c-74fb-5667-d4193284c6cd@canonical.com/T/#mf98d2ac27a8481dc69dd110f9861c8318cade252
 
-diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-index 72d3e49c2860..0cb2bbb50ad7 100644
---- a/arch/s390/include/asm/uv.h
-+++ b/arch/s390/include/asm/uv.h
-@@ -80,6 +80,7 @@ enum uv_cmds_inst {
- 
- enum uv_feat_ind {
- 	BIT_UV_FEAT_MISC = 0,
-+	BIT_UV_FEAT_AIV = 1,
- };
- 
- struct uv_cb_header {
-diff --git a/arch/s390/kvm/interrupt.c b/arch/s390/kvm/interrupt.c
-index c3bd993fdd0c..6ff80069b1fe 100644
---- a/arch/s390/kvm/interrupt.c
-+++ b/arch/s390/kvm/interrupt.c
-@@ -1900,13 +1900,12 @@ static int __inject_io(struct kvm *kvm, struct kvm_s390_interrupt_info *inti)
- 	isc = int_word_to_isc(inti->io.io_int_word);
- 
- 	/*
--	 * Do not make use of gisa in protected mode. We do not use the lock
--	 * checking variant as this is just a performance optimization and we
--	 * do not hold the lock here. This is ok as the code will pick
--	 * interrupts from both "lists" for delivery.
-+	 * We do not use the lock checking variant as this is just a
-+	 * performance optimization and we do not hold the lock here.
-+	 * This is ok as the code will pick interrupts from both "lists"
-+	 * for delivery.
- 	 */
--	if (!kvm_s390_pv_get_handle(kvm) &&
--	    gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
-+	if (gi->origin && inti->type & KVM_S390_INT_IO_AI_MASK) {
- 		VM_EVENT(kvm, 4, "%s isc %1u", "inject: I/O (AI/gisa)", isc);
- 		gisa_set_ipm_gisc(gi->origin, isc);
- 		kfree(inti);
-@@ -3163,9 +3162,32 @@ void kvm_s390_gisa_init(struct kvm *kvm)
- 	VM_EVENT(kvm, 3, "gisa 0x%pK initialized", gi->origin);
- }
- 
-+void kvm_s390_gisa_enable(struct kvm *kvm)
-+{
-+	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
-+	struct kvm_vcpu *vcpu;
-+	int i;
-+
-+	if (gi->origin)
-+		return;
-+	kvm_s390_gisa_init(kvm);
-+	kvm_for_each_vcpu(i, vcpu, kvm) {
-+		mutex_lock(&vcpu->mutex);
-+		vcpu->arch.sie_block->gd = kvm_s390_get_gisa_desc(kvm);
-+		if (vcpu->arch.sie_block->gd) {
-+			vcpu->arch.sie_block->eca |= ECA_AIV;
-+			VCPU_EVENT(vcpu, 3, "AIV gisa format-%u enabled for cpu %03u",
-+				   vcpu->arch.sie_block->gd & 0x3, vcpu->vcpu_id);
-+		}
-+		mutex_unlock(&vcpu->mutex);
-+	}
-+}
-+
-+
- void kvm_s390_gisa_destroy(struct kvm *kvm)
- {
- 	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
-+	struct kvm_s390_gisa *gisa = gi->origin;
- 
- 	if (!gi->origin)
- 		return;
-@@ -3176,6 +3198,25 @@ void kvm_s390_gisa_destroy(struct kvm *kvm)
- 		cpu_relax();
- 	hrtimer_cancel(&gi->timer);
- 	gi->origin = NULL;
-+	VM_EVENT(kvm, 3, "gisa 0x%pK destroyed", gisa);
-+}
-+
-+void kvm_s390_gisa_disable(struct kvm *kvm)
-+{
-+	struct kvm_s390_gisa_interrupt *gi = &kvm->arch.gisa_int;
-+	struct kvm_vcpu *vcpu;
-+	int i;
-+
-+	if (!gi->origin)
-+		return;
-+	kvm_for_each_vcpu(i, vcpu, kvm) {
-+		mutex_lock(&vcpu->mutex);
-+		vcpu->arch.sie_block->eca &= ~ECA_AIV;
-+		vcpu->arch.sie_block->gd = 0U;
-+		mutex_unlock(&vcpu->mutex);
-+		VCPU_EVENT(vcpu, 3, "AIV disabled for cpu %03u", vcpu->vcpu_id);
-+	}
-+	kvm_s390_gisa_destroy(kvm);
- }
- 
- /**
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 14a18ba5ff2c..8839a58e03c7 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2273,6 +2273,9 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
- 		if (r)
- 			break;
- 
-+		if (!test_bit_inv(BIT_UV_FEAT_AIV, &uv_info.uv_feature_indications))
-+			kvm_s390_gisa_disable(kvm);
-+
- 		r = kvm_s390_pv_init_vm(kvm, &cmd->rc, &cmd->rrc);
- 		if (r)
- 			break;
-@@ -2300,6 +2303,9 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
- 			break;
- 		r = kvm_s390_pv_deinit_vm(kvm, &cmd->rc, &cmd->rrc);
- 
-+		if (use_gisa)
-+			kvm_s390_gisa_enable(kvm);
-+
- 		/* no need to block service interrupts any more */
- 		clear_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
- 		break;
-@@ -3309,9 +3315,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
- 
- 	vcpu->arch.sie_block->icpua = vcpu->vcpu_id;
- 	spin_lock_init(&vcpu->arch.local_int.lock);
--	vcpu->arch.sie_block->gd = (u32)(u64)vcpu->kvm->arch.gisa_int.origin;
--	if (vcpu->arch.sie_block->gd && sclp.has_gisaf)
--		vcpu->arch.sie_block->gd |= GISA_FORMAT1;
-+	vcpu->arch.sie_block->gd = kvm_s390_get_gisa_desc(vcpu->kvm);
- 	seqcount_init(&vcpu->arch.cputm_seqcount);
- 
- 	vcpu->arch.pfault_token = KVM_S390_PFAULT_TOKEN_INVALID;
-diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
-index c07a050d757d..08a622a44f6f 100644
---- a/arch/s390/kvm/kvm-s390.h
-+++ b/arch/s390/kvm/kvm-s390.h
-@@ -217,6 +217,15 @@ static inline void kvm_s390_set_user_cpu_state_ctrl(struct kvm *kvm)
- 	kvm->arch.user_cpu_state_ctrl = 1;
- }
- 
-+static inline u32 kvm_s390_get_gisa_desc(struct kvm *kvm)
-+{
-+	u32 gd = (u32)(u64)kvm->arch.gisa_int.origin;
-+
-+	if (gd && sclp.has_gisaf)
-+		gd |= GISA_FORMAT1;
-+	return gd;
-+}
-+
- /* implemented in pv.c */
- int kvm_s390_pv_destroy_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
- int kvm_s390_pv_create_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
-@@ -435,6 +444,8 @@ int kvm_s390_get_irq_state(struct kvm_vcpu *vcpu,
- void kvm_s390_gisa_init(struct kvm *kvm);
- void kvm_s390_gisa_clear(struct kvm *kvm);
- void kvm_s390_gisa_destroy(struct kvm *kvm);
-+void kvm_s390_gisa_disable(struct kvm *kvm);
-+void kvm_s390_gisa_enable(struct kvm *kvm);
- int kvm_s390_gib_init(u8 nisc);
- void kvm_s390_gib_destroy(void);
- 
--- 
-2.32.0
+or like this (where changelogs are in each patch, although ordering is
+not correct because dt-bindings should be the first in the series):
+https://lore.kernel.org/all/20220103233948.198119-1-Mr.Bossman075@gmail.com/
 
+
+Best regards,
+Krzysztof

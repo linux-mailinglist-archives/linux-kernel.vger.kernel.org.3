@@ -2,151 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9104A9BA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE374A9BAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Feb 2022 16:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359580AbiBDPJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 10:09:05 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:32964 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353431AbiBDPJA (ORCPT
+        id S1359546AbiBDPKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 10:10:43 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:59072 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343868AbiBDPKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 10:09:00 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 214F8pLF063155;
-        Fri, 4 Feb 2022 09:08:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1643987331;
-        bh=fGcvqj8pmu0/HuF9/g0VeMM9I4TaK3Vd9U+V3O4yrwU=;
-        h=Subject:From:To:CC:References:Date:In-Reply-To;
-        b=OILs61X1Jk1dwx/DtQ/3GgOH2neQgOkT+yICmFoAmg3bPOm4Spr0WD7Y3jB84EpHp
-         vFdrwqJ35K4zgwbqXlCdisyddLisc487GmhoJkpTVCgWcgHf20LNfch/Cjmp/Xl4Uv
-         0rUgyW8Bp/ZxGzE+JVtDnJ7Wn0dDiQOQd7d9n2Ok=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 214F8pp9040834
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Feb 2022 09:08:51 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 4
- Feb 2022 09:08:51 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 4 Feb 2022 09:08:50 -0600
-Received: from [10.250.233.89] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 214F8lBR081186;
-        Fri, 4 Feb 2022 09:08:48 -0600
-Subject: Re: [PATCH v2 4/5] PCI: keystone: Add quirk to mark AM654 RC BAR flag
- as IORESOURCE_UNSET
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20211126083119.16570-1-kishon@ti.com>
- <20211126083119.16570-5-kishon@ti.com> <20220104155741.GA28358@lpieralisi>
- <f3a2c3f0-caf2-743c-a2f7-a99ea3ddb04f@ti.com>
-Message-ID: <a07040ce-e043-22ac-2ee5-47a3bfdedd3b@ti.com>
-Date:   Fri, 4 Feb 2022 20:38:46 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 4 Feb 2022 10:10:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A6360FC8;
+        Fri,  4 Feb 2022 15:10:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACE8C004E1;
+        Fri,  4 Feb 2022 15:10:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643987437;
+        bh=IoHPIjb2fSbuPpgienLeVPvvwcFaWSnzgKep7XPLsnU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ken7aeQ6msksQh20Q4C97KzBOyXJUMa4ehlX3O/QpWCWC6BHgF9TJh5WQ8fdyrw/3
+         sPUmwlDb3+mpdoW/Qa3jsqNy81CByFyrjJ8Oy7GWKMEtI9dL2toPVHJ4cy91EUTo3s
+         i9o42Z4PFuIv+6NP1f0PpbYh6cb972MZTbFmzPXo9oDErQLYa+z5ankmAaGMSW6kjI
+         Kh5hlnIn+yw4AUy2igK5C1deGnWkqu9GStd/IyzLw5r2j1mE3fvRzg860jmoDFRRfW
+         okQj8KkUXQ8+wkbqJ56hgIN0H9xeXuaxw7MuLHEuS1Ou0eeGeV/8GQdrcp0vBWRhf6
+         fQ1JDsnXrrCcQ==
+Date:   Fri, 4 Feb 2022 16:10:32 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Anton V. Boyarshinov" <boyarsh@altlinux.org>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] Add ability to disallow idmapped mounts
+Message-ID: <20220204151032.7q22hgzcil4hqvkl@wittgenstein>
+References: <20220204065338.251469-1-boyarsh@altlinux.org>
+ <20220204094515.6vvxhzcyemvrb2yy@wittgenstein>
+ <20220204132616.28de9c4a@tower>
 MIME-Version: 1.0
-In-Reply-To: <f3a2c3f0-caf2-743c-a2f7-a99ea3ddb04f@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220204132616.28de9c4a@tower>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo,
+On Fri, Feb 04, 2022 at 01:26:16PM +0300, Anton V. Boyarshinov wrote:
+> В Fri, 4 Feb 2022 10:45:15 +0100
+> Christian Brauner <brauner@kernel.org> пишет:
+> 
+> > If you want to turn off idmapped mounts you can already do so today via:
+> > echo 0 > /proc/sys/user/max_user_namespaces
+> 
+> It turns off much more than idmapped mounts only. More fine grained
+> control seems better for me.
 
-On 11/01/22 11:53 am, Kishon Vijay Abraham I wrote:
-> Hi Lorenzo,
-> 
-> On 04/01/22 9:27 pm, Lorenzo Pieralisi wrote:
->> On Fri, Nov 26, 2021 at 02:01:18PM +0530, Kishon Vijay Abraham I wrote:
->>> AM654 RootComplex has a hard coded 64 bit BAR of size 1MB and also has
->>> both MSI and MSI-X capability in it's config space. If PCIEPORTBUS is
->>> enabled, it tries to configure MSI-X and msix_mask_all() adds about 10
->>> Second boot up delay when it tries to write to undefined location.
->>>
->>> Add quirk to mark AM654 RC BAR flag as IORESOURCE_UNSET so that
->>> msix_map_region() returns NULL for Root Complex and avoid un-desirable
->>> writes to MSI-X table.
->>
->> I don't think this is the right fix (it is not even a fix, just a
->> plaster to workaround an issue).
->>
->> What do you mean by "writing to an undefined location" ?
->>
->> What does "a hard coded BAR" mean ?
->>
->> What happens if we _rightly_ write into it (ie to size it) ?
-> 
-> There are two parts w.r.t setting the BAR; one is during the configuration and
-> the other is during the enumeration.
-> i) During the configuration, the size of the BAR is configured and the inbound
-> ATU is configured to map the BAR to a physical memory.
-> ii) During the enumeration, the size of the BAR is obtained and an address is
-> allocated and programmed in the BAR.
-> 
-> In the case of RC, for (i) above, the BAR size is configured as '0'
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-designware-host.c#n556
-> and the inbound ATU is not programmed at all.
-> 
-> However, in the case of AM654, the HW configures BAR0 for a fixed size of 1MB
-> (irrespective of what SW programmed in [i]). While this was done more for a
-> endpoint usecase, since the same IP is configured for both RC mode and EP mode,
-> the fixed BAR size is seen with RC mode as well. AM654 also has MSI-X capability
-> for RC mode (the IP should have been ideally configured to have MSI-X capability
-> for EP mode). This results in PCIEPORTBUS doing some undesired access in
-> msix_mask_all().
-> 
-> Here I configure IORESOURCE_UNSET so that memory is not allocated for RC BAR.
-
-Do you need further clarifications on this?
-
-Thank You,
-Kishon
+If you allow user namespaces and not idmapped mounts you haven't reduced
+your attack surface. An unprivileged user can reach much more
+exploitable code simply via unshare -user --map-root -mount which we
+still allow upstream without a second thought even with all the past and
+present exploits (see
+https://www.openwall.com/lists/oss-security/2022/01/29/1 for a current
+one from this January).
 
 > 
-> Thank You,
-> Kishon
+> > They can neither
+> > be created as an unprivileged user nor can they be created inside user
+> > namespaces.
 > 
-> 
->>
->> Lorenzo
->>
->>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
->>> ---
->>>  drivers/pci/controller/dwc/pci-keystone.c | 8 +++++++-
->>>  1 file changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/pci/controller/dwc/pci-keystone.c b/drivers/pci/controller/dwc/pci-keystone.c
->>> index 52d20fe17ee9..73e6626a0d8f 100644
->>> --- a/drivers/pci/controller/dwc/pci-keystone.c
->>> +++ b/drivers/pci/controller/dwc/pci-keystone.c
->>> @@ -557,8 +557,14 @@ static void ks_pcie_quirk(struct pci_dev *dev)
->>>  		{ 0, },
->>>  	};
->>>  
->>> -	if (pci_is_root_bus(bus))
->>> +	if (pci_is_root_bus(bus)) {
->>>  		bridge = dev;
->>> +		if (pci_match_id(am6_pci_devids, bridge)) {
->>> +			struct resource *r = &dev->resource[0];
->>> +
->>> +			r->flags |= IORESOURCE_UNSET;
->>> +		}
->>> +	}
->>>  
->>>  	/* look for the host bridge */
->>>  	while (!pci_is_root_bus(bus)) {
->>> -- 
->>> 2.17.1
->>>
+> But actions of fully privileged user can open non-obvious ways to
+> privilege escalation.
+
+A fully privileged user potentially being able to cause issues is really
+not an argument; especially not for a new sysctl.
+You need root to create idmapped mounts and you need root to turn off
+the new knob.
+
+It also trivially applies to a whole slew of even basic kernel tunables
+basically everything that can be reached by unprivileged users after a
+privileged user has turned it on or configured it.
+
+After 2 years we haven't seen any issue with this code and while I'm not
+promising that there won't ever be issues - nobody can do that - the
+pure suspicion that there could be some is not a justification for
+anything.

@@ -2,210 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323F74AA57C
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9ED04AA589
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378938AbiBEBzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 20:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378667AbiBEBzt (ORCPT
+        id S1378327AbiBECIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 21:08:12 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:45925 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356172AbiBECIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 20:55:49 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE3C061346
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 17:55:48 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id o16-20020a17090aac1000b001b62f629953so14681964pjq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 17:55:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=hGTVW+01e4GIAkWOjoFjzjXZ+1intL+wDAwZzXY0atY=;
-        b=MKyUMfHjlP5/X/3UuWqXNYJLGgIfTcrMciakaNzzdl5lJSqfrUaaYEygfM0LRmxhOs
-         fw6VQzFRdQQS9LGthD5la6HPu7wjOr4eBuXNeuQpQiSy7Zi0S3mhtvRyxIuOgvEBueGQ
-         Cyjl//36hjg0rLX6YXFubWfp0VLeNtiZQ26SqNw7w6wDFYbS/sOQrz4rLh5iSiAIq87l
-         ntU2ZymE3/eEO7ZdR6Gn5814oVCx0HsotkhlahfaX6mPky2zND6sXRtO6M3meyMvQ2q4
-         dZxORk6lg4X98K8vzE0i6JFArp4i+tI82K/464s+Z74VIpUSuEOF8rplAqWyeuYcG7h8
-         U5tQ==
+        Fri, 4 Feb 2022 21:08:11 -0500
+Received: by mail-oi1-f174.google.com with SMTP id m9so10563838oia.12;
+        Fri, 04 Feb 2022 18:08:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hGTVW+01e4GIAkWOjoFjzjXZ+1intL+wDAwZzXY0atY=;
-        b=RT109szqRxE+ZmTSPvbdxKeMu0kXXlOBx8o4PZ/fDkdo+oCiG2fJcrz0NpT6+1T3Cm
-         Ld1c+OMqPO120fz7zzK3LdUpx2BG/V5vCIHiijowg9e/CfHVPp4JODD9bAGCMBrd1Rzn
-         H5UH0NgRe4K4Hvb7yAp6Qipqo2oHMhwXNYM7Pdyp2p13jd0GyOmY8vE82IeMYgNrR5Uh
-         zqk39+ROGe4IHQhHefjAMGnOX39ObyE3fHq2dN8sqAT0RPoeP1o5Eud+4eHrS0nOp0CS
-         r34Z5nI+betXW1DKHM05miK67P4sgrpf7SJ0V3SwhE2eEjeax+Yu2Mt8Kp++RiAYqZPc
-         8q5w==
-X-Gm-Message-State: AOAM5332pNdqHaehVGzwrLddGjBaqqAZ8ESCatK49D9Mb4KLxzSl406E
-        dCrFPv91f+g+APFQ8dcEfbI=
-X-Google-Smtp-Source: ABdhPJzkj9ah/MKJt0tBrGU4CnDflWStMfgavXmyxNOSvps0iRQxrimCRm86/5KuVkfVZjtIIJTnPw==
-X-Received: by 2002:a17:902:e803:: with SMTP id u3mr5800746plg.41.1644026147342;
-        Fri, 04 Feb 2022 17:55:47 -0800 (PST)
-Received: from [10.200.0.18] ([85.203.23.14])
-        by smtp.gmail.com with ESMTPSA id y41sm3913585pfa.213.2022.02.04.17.55.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Feb 2022 17:55:46 -0800 (PST)
-Message-ID: <8fa82beb-468c-afb0-3eed-4240200395a3@gmail.com>
-Date:   Sat, 5 Feb 2022 09:55:36 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=LZOFLqhHtR5h9oapumee7dNSizR1BTIG4SnBYp0E1Kg=;
+        b=X6m7vcmDs3emMw4gmATCpPtTNHZGOEPtIAi+6QMvAndwHo7K8/5UbcQXrnomFnPIP8
+         mBFmHOcQrbFp5XBQ/Z5ZkL+GsbbFEzz9LGmXtnSWYEcAHNZMLEy08d6iIePGz7PAPESB
+         WskGiyK5iPJD0zvlvj1Ps7yxbBUGbLci0U7XZyZlbcn0GSbxnmC+dEA1MR0T+wNZfr/S
+         RjieAQ3aFX5RJRAqswkfzepLqbqcJwgPKgglh/ysWC5255YZatghmGsyq77NSRfFeBbh
+         w2vtCOnxdkIpGpK0uQFwh1pNN8EhzeUlk0U/PIomtnPiuKIpBR72QP0ZFaoaXrNzBcMY
+         7U4w==
+X-Gm-Message-State: AOAM531UUj0GxNCP8vmskoCdJsZerDQymkk2Xaf5Zpol6N9i/gGe1kge
+        vnLcC4JEP+kLjWnrfSw6WuIe9JpGig==
+X-Google-Smtp-Source: ABdhPJzVIsTenOl5I1EkcrKrY13pbWu7/F15bcAxL598BT6P6olMExLBZKQXONdQRYOEEFJrlshoXw==
+X-Received: by 2002:a05:6808:d4f:: with SMTP id w15mr885950oik.42.1644026891171;
+        Fri, 04 Feb 2022 18:08:11 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id d21sm1386738otq.68.2022.02.04.18.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 18:08:10 -0800 (PST)
+Received: (nullmailer pid 3608625 invoked by uid 1000);
+        Sat, 05 Feb 2022 02:08:09 -0000
+Date:   Fri, 4 Feb 2022 20:08:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>, John Crispin <john@phrozen.org>
+Subject: Re: [PATCH v3 4/6] dt-bindings: interrupt-controller:
+ realtek,rtl-intc: require parents
+Message-ID: <Yf3cCTB5Qbz44nc/@robh.at.kernel.org>
+References: <cover.1641739718.git.sander@svanheule.net>
+ <e043a9faa4a8f71efdf8b7849ec7911f16207fb0.1641739718.git.sander@svanheule.net>
+ <Yes6NFgUmcIcc5mm@robh.at.kernel.org>
+ <d291855a36f200b178aa9e7fb6e41ff438773e38.camel@svanheule.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [BUG] gpu: drm: radeon: two possible deadlocks involving locking
- and waiting
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        alexander.deucher@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <d5e4460f-7e26-81d2-2efe-6f47760b78d2@gmail.com>
- <7cdc2d3f-df52-f7a9-15bf-fe4bc01d3c4f@amd.com>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-In-Reply-To: <7cdc2d3f-df52-f7a9-15bf-fe4bc01d3c4f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <d291855a36f200b178aa9e7fb6e41ff438773e38.camel@svanheule.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Sat, Jan 22, 2022 at 01:49:44PM +0100, Sander Vanheule wrote:
+> Hi Rob,
+> 
+> On Fri, 2022-01-21 at 16:56 -0600, Rob Herring wrote:
+> > On Sun, Jan 09, 2022 at 03:54:35PM +0100, Sander Vanheule wrote:
+> > > The interrupt router has 32 inputs and up to 15 outputs, and the way
+> > > these are mapped to each other is runtime configurable. The outputs of
+> > > this interrupt router on the other hand, are connected to a fixed set of
+> > > parent interrupts. This means that "interrupt-map" is inappropriate, and
+> > > rather a list of parent interrupts should be specified.
+> > 
+> > I'm not sure why interrupt-map is not appropriate. It is not appropriate 
+> > if you have to touch the interrupt router h/w in servicing the 
+> > interrupts. If you just need one time configuration of the mapping, then 
+> > it should be fine to use I think.
+> 
+> If interrupt-map is used, then AFAICT there are no hooks to inform the driver that a
+> translation has occurred. How should the interrupt controller driver then know how to set
+> up the routing? Commit de4adddcbcc2 ("of/irq: Add a quirk for controllers with their own
+> definition of interrupt-map") added a quirk for the original binding/driver, but that
+> requires open-coding an interrupt-map parser in the driver.
 
-Thanks for the reply :)
+The issue was not open-coding parsing, but was the need for something in 
+the middle to service the interrupt. As 'interrupt-map' should be a 
+transparent remapping or routing.
 
-On 2022/2/1 15:56, Christian König wrote:
-> Hi Jia-Ju,
+> 
+> What this binding doesn't mention (I can add it), is that there are also two IRQ status
+> registers to:
+>   - unmask/mask SoC interrupts
+>   - read the current status of the SoC interrupts
+
+That would not be transparent.
+
+> In theory, if the routing is set up correctly (and the IRQ permanently unmasked), I think
+> one could treat interrupt-map as intended, and connect SoC peripheral IRQ handlers
+> directly to the parent interrupts. But then the interrupt subsystem would need to check
+> all attached handlers. This interrupt router/controller allows to check which peripheral
+> is triggering the parent IRQ, which should be more efficient.
 >
-> interesting that you have found those issues with an automated tool.
->
-> And yes that is a well design flaw within the radeon driver which can 
-> happen on hardware faults, e.g. when radeon_ring_backup() needs to be 
-> called.
+> These interrupt controllers are also used on multi-threaded systems, where each hardware
+> thread has its own IRQ controller. I'm still experimenting with the implementation, but�
+> there the routing registers would be used to set the CPU affinity of SoC interrupts.
+> 
+> I have to say that I'm not very familiar with the kernel code that handles all this
+> though, so maybe I'm just missing something?
 
-In fact, my tool finds dozens of similar possible deadlocks caused by 
-wait_event_timeout() in radeon_fence_wait_seq_timeout().
-There are three other examples in Linux 5.16:
+Okay, seems 'interrupt-map' is indeed not appropriate here.
 
-#BUG 1
-radeon_dpm_change_power_state_locked()
-   mutex_lock(&rdev->ring_lock); --> Line 1133 (Lock A)
-   radeon_fence_wait_empty()
-     radeon_fence_wait_seq_timeout()
-       wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
-
-radeon_fence_driver_fini()
-   mutex_lock(&rdev->ring_lock); --> Line 917 (Lock A)
-   wake_up_all(&rdev->fence_queue); --> Line 927 (Wake X)
-
-#BUG 2
-radeon_set_pm_profile()
-   mutex_lock(&rdev->pm.mutex); --> Line 382 (Lock A)
-   radeon_pm_set_clocks()
-     radeon_fence_wait_empty()
-       radeon_fence_wait_seq_timeout()
-         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
-
-radeon_dynpm_idle_work_handler()
-   mutex_lock(&rdev->pm.mutex); --> Line 1861 (Lock A)
-   radeon_fence_count_emitted()
-     radeon_fence_process()
-       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
-
-#BUG 3
-radeon_pm_fini_old()
-   mutex_lock(&rdev->pm.mutex); --> Line 1642 (Lock A)
-   radeon_pm_set_clocks()
-     radeon_fence_wait_empty()
-       radeon_fence_wait_seq_timeout()
-         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
-
-radeon_dynpm_idle_work_handler()
-   mutex_lock(&rdev->pm.mutex); --> Line 1861 (Lock A)
-   radeon_fence_count_emitted()
-     radeon_fence_process()
-       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
-
-Thus, to fix these possible deadlocks, we could moditify the code 
-related to radeon_fence_wait_seq_timeout().
-But I am not quite familar with the radeon driver, so I am not sure how 
-to moditify the code properly.
-
->
-> But that happens so rarely and the driver is not developed further 
-> that we decided to not address this any more.
-
-Ah, okay.
-
->
-> Regards,
-> Christian.
->
-> Am 01.02.22 um 08:40 schrieb Jia-Ju Bai:
->> Hello,
->>
->> My static analysis tool reports a possible deadlock in the radeon 
->> driver in Linux 5.16:
->>
->> #BUG 1
->> radeon_dpm_change_power_state_locked()
->>   mutex_lock(&rdev->ring_lock); --> Line 1133 (Lock A)
->>   radeon_fence_wait_empty()
->>     radeon_fence_wait_seq_timeout()
->>       wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
->>
->> radeon_ring_backup()
->>   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
->>   radeon_fence_count_emitted()
->>     radeon_fence_process()
->>       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
->>
->> When radeon_dpm_change_power_state_locked() is executed, "Wait X" is 
->> performed by holding "Lock A". If radeon_ring_backup() is executed at 
->> this time, "Wake X" cannot be performed to wake up "Wait X" in 
->> radeon_dpm_change_power_state_locked(), because "Lock A" has been 
->> already hold by radeon_dpm_change_power_state_locked(), causing a 
->> possible deadlock.
->> I find that "Wait X" is performed with a timeout 
->> MAX_SCHEDULE_TIMEOUT, to relieve the possible deadlock; but I think 
->> this timeout can cause inefficient execution.
->>
->> #BUG 2
->> radeon_ring_lock()
->>   mutex_lock(&rdev->ring_lock); --> Line 147 (Lock A)
->>   radeon_ring_alloc()
->>     radeon_fence_wait_next()
->>       radeon_fence_wait_seq_timeout()
->>         wait_event_timeout(rdev->fence_queue, ...) --> Line 504 (Wait X)
->>
->> radeon_ring_backup()
->>   mutex_lock(&rdev->ring_lock); --> Line 289(Lock A)
->>   radeon_fence_count_emitted()
->>     radeon_fence_process()
->>       wake_up_all(&rdev->fence_queue); --> Line 323 (Wake X)
->>
->> When radeon_ring_lock() is executed, "Wait X" is performed by holding 
->> "Lock A". If radeon_ring_backup() is executed at this time, "Wake X" 
->> cannot be performed to wake up "Wait X" in radeon_ring_lock(), 
->> because "Lock A" has been already hold by radeon_ring_lock(), causing 
->> a possible deadlock.
->> I find that "Wait X" is performed with a timeout 
->> MAX_SCHEDULE_TIMEOUT, to relieve the possible deadlock; but I think 
->> this timeout can cause inefficient execution.
->>
->> I am not quite sure whether these possible problems are real and how 
->> to fix them if they are real.
->> Any feedback would be appreciated, thanks :)
->>
->>
->> Best wishes,
->> Jia-Ju Bai
->>
->
-
+Rob

@@ -2,885 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2414AAA0E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 17:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545594AAA1F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 17:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbiBEQXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 11:23:43 -0500
-Received: from mail-bn7nam10on2078.outbound.protection.outlook.com ([40.107.92.78]:60353
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S1380465AbiBEQYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 11:24:34 -0500
+Received: from mail-dm6nam11on2055.outbound.protection.outlook.com ([40.107.223.55]:26593
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1380428AbiBEQXk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 11:23:40 -0500
+        id S230210AbiBEQYb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 11:24:31 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hgmjzSpJk6UVjzAl2H0w5mx56ZMuVasDTabYRJEV53kCP9UskY+dEDMDMtlHpB9owePO36eferEMOkfTZ3sQi5b0RovfAa0C5uNJ90p0WTiQKIlITAg+QX3rM9OWXdSo3SVjB/Q/myR+Dmtmf6wsK3NJyEEkO2inUjpyZWoadDcG8FiMAKLVEhWtV2Z3dcOcRqWVe3srNjDpCfekSxkzRoYN0hGUk46cqQupn6lKacfidtTOdAzY2ohA/SFVbFyf1dnzc6bTClXdoXMOSe67vzE2UP5XzKcMYpVuaJULQeGiIHqaTPKyXI9ha9KjUjMHnzj4+kXsoV9PBISsE2fgxQ==
+ b=jscwn3BHl7Kuz7gu+W+0DAUOJspbeAqorEfl98/70vJTpvRsW1JYVk0pVuCn1qasYl0hraAO6Jm6RqP4CNREOi2TmwUrwL1AXYddkKx0jdg0Q3wb/UugDp4Ym4uOWyfmWrM7N49tXjF5vMaWTDGV8QJs9mKcZTIF3pZ1LejIAcpxqDnhopx1Nt7qNGsXvKuCBu9KUFiTnWGgfJdpICoU0KhW+ni7zDgmugnGRmRdh25dF9YnGnxuG3J2TFHeRr9CO/jilcquL54rfOZVfs3mi4YYTYuASbNj3OKfXd9fXfRwoMbVMeh4ODCiGJJHrPIsCa7bu66sYwdGqzDwPQkoUQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DkB32VW4MlTkbvYqkWx60WYiDdMovUN4ls1q+rciym0=;
- b=RHEoBRLVCJRfL8aHZZqtr57Eo6ZzarUqlRiYFGujEhPc9T9WwJP7SREhj0mBwmmHjyKDIlcfW5zq7jfRQt5ijmAQN3lfVL3p9msMnsjuuyfVWNPoLxZM2czW92l2BcFwOZ+Xh+dMUdWF87dPIrfh7RKvMjT5InyVQdh2pFJoNvEy9bhA/FXPvtNabbTFMlGdmOwuqFTKuLudOwPl9xxFkTCyZWjbbsWVRXxfwMYdfHyFifNF9iZsXKbaTSzijOPigAVf6uRT4NfqgCM+sM3uw0X120dv2l9VtKxhmhtNArzxM4wBzD6b7oaD39F9PKpvDXiyAcb6HqkJr4Ub0a8UZQ==
+ bh=sjY7yjzPLZrgqmMusLjZR9rq9igSxDiVfpGr1Zhvkos=;
+ b=QLILIc5tNMoUA6kvqgaTmxWT0HNfTpsWvYpiNOWqrHsyn/jRoziBkC/sA3WRNAc+fJkK/AQWF99mV7pr4BThFENCK1z1PqFLxkiMtwhdH3+CuUn5hSQy5nTsj3cAQorkOmCNe5JgCM61hQ2V0lBtY8wKz0DwH6vDQSTnEawHfqfGJEDAfA0n1rJUwELag1nO8FM8ZRChqmNbougXdYbjX/f0Sy19vkLiSR+oUc0ldCNnj6vUiiYk86pHFj6Zu6/jqgbU/0v0SsTZ8jruVysi7U+AcHUsISHTj++WtThbKa0e/1f7StP8R3SGRT1jXnvRRkOKv7t8x0MJVcNJUtjR8A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=ti.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DkB32VW4MlTkbvYqkWx60WYiDdMovUN4ls1q+rciym0=;
- b=NlKUFKAdhlW/Y+ptqGYpdNLcHiZuPifM/pca3oMxcwhag61QuIs30xXbm4/086ygVeMfvxBEoqziD1/PTPhDFm1LGOkm8vFxjIrC92G2EQyz8oHXj5dkg2a04SE5U2k8PF0+3jI5495wqlNCBBCIxbdUSI7CCKfBkjIhdI7ZiJUdlh+GbOWDZhL3caV+yYRDcWskC/fzpNzmGMerH9mxFTRVa0MjJWnsFsrmffqvTuDErCMydAarZQNWTjGuGPY3ksKyR72o0FuldwjLS/id7N+B7K83A/aVSvKPjm5/yP4EfXKC5ecp6jI/JCQxz28Y3djGYPWTKlLT1nhUVbi72Q==
-Received: from BN1PR13CA0003.namprd13.prod.outlook.com (2603:10b6:408:e2::8)
- by DM6PR12MB4284.namprd12.prod.outlook.com (2603:10b6:5:21a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Sat, 5 Feb
- 2022 16:23:37 +0000
-Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e2:cafe::f5) by BN1PR13CA0003.outlook.office365.com
- (2603:10b6:408:e2::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.9 via Frontend
- Transport; Sat, 5 Feb 2022 16:23:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4951.12 via Frontend Transport; Sat, 5 Feb 2022 16:23:36 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Sat, 5 Feb
- 2022 16:23:36 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Sat, 5 Feb 2022
- 08:23:35 -0800
-Received: from vidyas-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.9 via Frontend
- Transport; Sat, 5 Feb 2022 08:23:30 -0800
-From:   Vidya Sagar <vidyas@nvidia.com>
-To:     <bhelgaas@google.com>, <lorenzo.pieralisi@arm.com>,
-        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>
-CC:     <kishon@ti.com>, <vkoul@kernel.org>, <kw@linux.com>,
-        <krzysztof.kozlowski@canonical.com>, <p.zabel@pengutronix.de>,
-        <mperttunen@nvidia.com>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <kthota@nvidia.com>, <mmaddireddy@nvidia.com>, <vidyas@nvidia.com>,
-        <sagar.tv@gmail.com>
-Subject: [PATCH V1 10/10] PCI: tegra: Add Tegra234 PCIe support
-Date:   Sat, 5 Feb 2022 21:51:44 +0530
-Message-ID: <20220205162144.30240-11-vidyas@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220205162144.30240-1-vidyas@nvidia.com>
-References: <20220205162144.30240-1-vidyas@nvidia.com>
-X-NVConfidentiality: public
+ bh=sjY7yjzPLZrgqmMusLjZR9rq9igSxDiVfpGr1Zhvkos=;
+ b=2xCgArRCl543fWH6i/FSFj2Zm0M1/Zw1Dx/8VlopzOY13XW2zgee/OYMwuhISztqQsP7zFuozbCW7s9WJoW6TwiUJT5JELLLKwOfbz7ikNQci8PiuAI/qavwpltdL/RzhFjBedH1NHzSN+PBEDEU28ZZftgSD6GRKNkaqdnUzLk=
+Received: from DM3PR03CA0022.namprd03.prod.outlook.com (2603:10b6:0:50::32) by
+ SN6PR12MB2797.namprd12.prod.outlook.com (2603:10b6:805:6e::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4930.20; Sat, 5 Feb 2022 16:24:28 +0000
+Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:0:50:cafe::bd) by DM3PR03CA0022.outlook.office365.com
+ (2603:10b6:0:50::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Sat, 5 Feb 2022 16:24:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4951.12 via Frontend Transport; Sat, 5 Feb 2022 16:24:26 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Sat, 5 Feb
+ 2022 10:24:26 -0600
+Date:   Sat, 5 Feb 2022 10:22:49 -0600
+From:   Michael Roth <michael.roth@amd.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Brijesh Singh <brijesh.singh@amd.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-coco@lists.linux.dev>, <linux-mm@kvack.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Vitaly Kuznetsov" <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        <brijesh.ksingh@gmail.com>, <tony.luck@intel.com>,
+        <marcorr@google.com>
+Subject: Re: [PATCH v9 31/43] x86/compressed/64: Add support for SEV-SNP
+ CPUID table in #VC handlers
+Message-ID: <20220205162249.4dkttihw6my7iha3@amd.com>
+References: <20220128171804.569796-1-brijesh.singh@amd.com>
+ <20220128171804.569796-32-brijesh.singh@amd.com>
+ <Yf5XScto3mDXnl9u@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yf5XScto3mDXnl9u@zn.tnic>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9a352c52-d1d0-48b6-99ae-08d9e8c3dcad
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4284:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB42840DEEB8C7DC146E3F9CB6B82A9@DM6PR12MB4284.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1751;
+X-MS-Office365-Filtering-Correlation-Id: 3a1acc1a-2c2a-4360-099f-08d9e8c3fa87
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2797:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR12MB27971D698F0AF94B099D1C8C952A9@SN6PR12MB2797.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hMn+7yh6VkW+GMD6qYfnSUvH5PTiWOsck8XsUyIZ/1avfeOccdGXxI7hrN+oRkEob0PHnudGCftNdlIF8D0x0+yxqG0+kOguC5uarmB+qf2s4jgQNBQP3ONI6tb4RrLv0YdYISf+xXxWEImgDs2l7+KmEApWk/Qw9sEQ7vZYWXpbsGvZEGumte2Mh0Sz7/VGdXanddc9XUPfwthGJdBhmHnAtXF9D9bUxrkN9ZZJjUY8LCShfHyrLwSxXbRbL2Kjvn8C5tE9j2j0qioRV+yeSxF/vuF34QNOrHJhvHmAN33adJ49eyZa3mc1CCLxZ1F7CxDWx06nv6cvBUalQp85RIY4nWfFDfUUL6h6g3XVWKDE6hS/ep2S+omVDkVlC+k5elT8AmH0lIVKWxkOmjHJXAmW9BMb8LSr+XLG3hnaDLG4Mxlr9OM5ZW0Ccs2LBa5f/N4imYAGsNwWo55z62vMpr+7nnQUDPC/Fjh8I9CV+TjJ0Qp7TQoqKVKoJRL87Cy2d9iQCVIvit40NWo1HEG0aAcsQkLiqxPfhoajxiZS1yxnlPc0z98v80o+JmkwIGttAL8fuEHS9Hkq+hpw9WvDOkQcxBUnodw5aWWDMetvGyTl7facoiAY2qOYe7bKWEAFyOMqRN7Rj+GVvcCMjLkc9PeCxfg3wtHIFtVniTk5BuPNUA+7ZGZzmry+Ef26Dgs/II4YOYpEU3Vxs1DROTMvCQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(83380400001)(7416002)(5660300002)(82310400004)(2906002)(86362001)(356005)(2616005)(26005)(186003)(426003)(1076003)(336012)(81166007)(47076005)(30864003)(508600001)(7696005)(110136005)(6666004)(316002)(40460700003)(36860700001)(8676002)(6636002)(70586007)(8936002)(36756003)(4326008)(70206006)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2022 16:23:36.6548
+X-Microsoft-Antispam-Message-Info: TnNpFrxJuc5elS5PpoFk7kJ8uqzQzTrSX9/xwo9EOOtCvnA5D2qbBl5APg/qXOSMtbj6lEfk3wuPMj3XS8woawrS5CCmRpYq1HHXQTCBzK4BELK9AgU9kIaOIgmPpVu0Z6edMjMIzbuXkiIeynr99jyL6j+0SPQCfhqxkIhm2eVKHNixvXg1g2S3DIvqHYcmFh/7URWFT6PUDTS3VgHkPlNERfV5sYnmqMrSBkAcaRU3y864FDpymi3u7ZRnN0fTqLjEWr40csG3uhhPrbXoF/+fMmlIxO8vpxjHdF+xvf1b4txElUg6ljOzqexCA12OFU5RUduYzsOlH7y80DwCnXpGqGmlfdt1pS3XcY/o5HSwSs+GWyTROFVf5PX0xlxvC7iFpLDSJPLnmT4ue1Cmr4ZaCk3r50A/+JY6LxD28wrxLx7jjdy2ea1lXk2XgUgOy95yF3GzKDVxwBhad7Igl7ohb4wNf3XZR0Ww+B9EkkHKr1rHMFGpRYAJYq0Ti5r2cfDBCbmQ/i6I/y+F1pUd5N9LAB6EtpMNaytFyb0ENj/L9WSS58B3CldGDNUcX/VlKoN6ODNB6gvcSKbN4660PZlK1tPqxkp9vRvogiLXeVUoDzwfY7vwZgmYhiZxnwZk6AoFWjoGdGEnccUT14KFLJI4ULKnU9zNVpuZMR8AivTyTRGNrQ3quukSpVSGTfNZHBjGwc44PuT+te3s30lhe/TO8bO9LW9xIJ/k8Nf34HckuZvbnDBtAQLll5oJ0YzW80fQpjiBL/HB/2Q4/cGXyX/gT+8KS0kzPkFY7GltfOI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(2906002)(7416002)(82310400004)(36860700001)(81166007)(36756003)(26005)(47076005)(186003)(44832011)(5660300002)(356005)(16526019)(40460700003)(4326008)(508600001)(70206006)(8936002)(30864003)(2616005)(336012)(54906003)(1076003)(6916009)(316002)(45080400002)(86362001)(6666004)(426003)(966005)(70586007)(8676002)(7406005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2022 16:24:26.7962
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a352c52-d1d0-48b6-99ae-08d9e8c3dcad
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a1acc1a-2c2a-4360-099f-08d9e8c3fa87
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4284
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2797
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Synopsys DesignWare core IP based PCIe host controllers
-present in the Tegra234 SoC.
+On Sat, Feb 05, 2022 at 11:54:01AM +0100, Borislav Petkov wrote:
+> On Fri, Jan 28, 2022 at 11:17:52AM -0600, Brijesh Singh wrote:
+> 
+> > +static const struct snp_cpuid_info *snp_cpuid_info_get_ptr(void)
+> > +{
+> > +	void *ptr;
+> > +
+> > +	asm ("lea cpuid_info_copy(%%rip), %0"
+> > +	     : "=r" (ptr)
+> 
+> Same question as the last time:
+> 
+> Why not "=g" and let the compiler decide?
 
-Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
----
- drivers/pci/controller/dwc/pcie-tegra194.c | 409 ++++++++++++++++-----
- 1 file changed, 315 insertions(+), 94 deletions(-)
+The documentation for lea (APM Volume 3 Chapter 3) seemed to require
+that the destination register be a general purpose register, so it
+seemed like there was potential for breakage in allowing GCC to use
+anything otherwise. Maybe GCC is smart enough to figure that out, but
+since we know the constraint in advance it seemed safer to stick
+with the current approach of enforcing that constraint.
 
-diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-index b1b5f836a806..512ab0767f11 100644
---- a/drivers/pci/controller/dwc/pcie-tegra194.c
-+++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * PCIe host controller driver for Tegra194 SoC
-+ * PCIe host controller driver for the following SoCs
-+ * Tegra194
-+ * Tegra234
-  *
-- * Copyright (C) 2019 NVIDIA Corporation.
-+ * Copyright (C) 2019-2022 NVIDIA Corporation.
-  *
-  * Author: Vidya Sagar <vidyas@nvidia.com>
-  */
-@@ -35,6 +37,9 @@
- #include <soc/tegra/bpmp-abi.h>
- #include "../../pci.h"
+> 
+> > +	     : "p" (&cpuid_info_copy));
+> > +
+> > +	return ptr;
+> > +}
+> 
+> ...
+> 
+> > +static bool snp_cpuid_check_range(u32 func)
+> > +{
+> > +	if (func <= cpuid_std_range_max ||
+> > +	    (func >= 0x40000000 && func <= cpuid_hyp_range_max) ||
+> > +	    (func >= 0x80000000 && func <= cpuid_ext_range_max))
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> > +static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+> > +				 u32 *ecx, u32 *edx)
+> 
+> And again, same question as the last time:
+> 
+> I'm wondering if you could make everything a lot easier by doing
+> 
+> static int snp_cpuid_postprocess(struct cpuid_leaf *leaf)
+> 
+> and marshall around that struct cpuid_leaf which contains func, subfunc,
+> e[abcd]x instead of dealing with 6 parameters.
+> 
+> Callers of snp_cpuid() can simply allocate it on their stack and hand it
+> in and it is all in sev-shared.c so nicely self-contained...
+> 
+> Ok I'm ignoring this patch for now and I'll review it only after you've
+> worked in all comments from the previous review.
+
+I did look into it and honestly it just seemed to add more abstractions that
+made it harder to parse the specific operations taken place here. For
+instance, post-processing of 0x8000001E entry, we have e{a,b,c,d}x from
+the CPUID table, then to post process:
+
+  switch (func):
+  case 0x8000001E:
+    /* extended APIC ID */
+    snp_cpuid_hv(func, subfunc, eax, &ebx2, &ecx2, NULL);
+                                |    |      |      |
+                                |    |      |      edx from cpuid table is used as-is
+                                |    |      |  
+                                |    |      |
+                                |    |      load HV value into tmp ecx2
+                                |    |
+                                |    load HV value into tmp ebx2
+                                |
+                                |
+                                replace eax completely with the HV value
+
+    # then do the remaining fixups for final ebx/ecx
+
+    /* compute ID */
+    *ebx = (*ebx & GENMASK(31, 8)) | (ebx2 & GENMASK(7, 0));
+    /* node ID */
+    *ecx = (*ecx & GENMASK(31, 8)) | (ecx2 & GENMASK(7, 0));
+
+and it all reads in a clear/familiar way to all the other
+cpuid()/native_cpuid() users throughout the kernel, and from the
+persective of someone auditing this from a security perspective that
+needs to quickly check what registers come from the CPUID table, what
+registers come from HV, what the final result is, it all just seems very
+clear and familiar to me.
+
+But if we start passing around this higher-level structure that does
+not do anything other than abstract away e{a,b,c,x} to save on function
+arguments, things become muddier, and there's more pointer dereference
+operations and abstractions to sift through. I saved the diff from when
+I looked into it previously (was just a rough-sketch, not build-tested),
+and included it below for reference, but it just didn't seem to help with
+readability to me, which I think is important here since this is probably
+one of the most security-sensitive piece of the CPUID table handling,
+since we're dealing with untrusted CPUID sources here and it needs to be
+clear what exactly is ending up in the E{A,B,C,D} registers we're
+returning for a particular CPUID instruction:
+
+(There are some possible optimizations below, like added a mask parameter
+so control specifically what EAX/EBX/ECX/EDX field should be modified,
+possibly reworking snp_cpuid_info structure definitions to re-use the
+cpuid_leaf struct internally, also modifying __sev_cpuid_hv() to take
+the cpuid_leaf struct, etc., but none of that really seemed like
+it would help much with the key issue of readability, so I ended up
+setting it aside for v9)
+
+diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+index b2defbf7e66b..53534a6b1dcc 100644
+--- a/arch/x86/kernel/sev-shared.c
++++ b/arch/x86/kernel/sev-shared.c
+@@ -49,6 +49,13 @@ struct snp_cpuid_info {
+ 	struct snp_cpuid_fn fn[SNP_CPUID_COUNT_MAX];
+ } __packed;
  
-+#define TEGRA194_DWC_IP_VER			0x490A
-+#define TEGRA234_DWC_IP_VER			0x562A
-+
- #define APPL_PINMUX				0x0
- #define APPL_PINMUX_PEX_RST			BIT(0)
- #define APPL_PINMUX_CLKREQ_OVERRIDE_EN		BIT(2)
-@@ -49,6 +54,7 @@
- #define APPL_CTRL_HW_HOT_RST_MODE_MASK		GENMASK(1, 0)
- #define APPL_CTRL_HW_HOT_RST_MODE_SHIFT		22
- #define APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST	0x1
-+#define APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST_LTSSM_EN	0x2
- 
- #define APPL_INTR_EN_L0_0			0x8
- #define APPL_INTR_EN_L0_0_LINK_STATE_INT_EN	BIT(0)
-@@ -245,6 +251,18 @@ static const unsigned int pcie_gen_freq[] = {
- 	GEN4_CORE_CLK_FREQ
- };
- 
-+struct tegra_pcie_of_data {
-+	u32 version;
-+	enum dw_pcie_device_mode mode;
-+	bool msix_doorbell_access_fixup;
-+	bool sbr_reset_fixup;
-+	bool l1ss_exit_fixup;
-+	bool ltr_req_fixup;
-+	u32 cdm_chk_int_en;
-+	u32 gen4_preset_vec;
-+	u8 n_fts[2];
++struct cpuid_leaf {
++	u32 eax;
++	u32 ebx;
++	u32 ecx;
++	u32 edx;
 +};
 +
- struct tegra194_pcie {
- 	struct device *dev;
- 	struct resource *appl_res;
-@@ -257,12 +275,14 @@ struct tegra194_pcie {
- 	struct dw_pcie pci;
- 	struct tegra_bpmp *bpmp;
+ /*
+  * Since feature negotiation related variables are set early in the boot
+  * process they must reside in the .data section so as not to be zeroed
+@@ -260,14 +267,14 @@ static int __sev_cpuid_hv(u32 func, int reg_idx, u32 *reg)
+ 	return 0;
+ }
  
--	enum dw_pcie_device_mode mode;
-+	struct tegra_pcie_of_data *of_data;
- 
- 	bool supports_clkreq;
- 	bool enable_cdm_check;
-+	bool enable_srns;
- 	bool link_state;
- 	bool update_fc_fixup;
-+	bool enable_ext_refclk;
- 	u8 init_link_width;
- 	u32 msi_ctrl_int;
- 	u32 num_lanes;
-@@ -286,13 +306,10 @@ struct tegra194_pcie {
- 	struct gpio_desc *pex_rst_gpiod;
- 	struct gpio_desc *pex_refclk_sel_gpiod;
- 	unsigned int pex_rst_irq;
-+	bool pex_rst_irq_enabled;
- 	int ep_state;
- };
- 
--struct tegra194_pcie_of_data {
--	enum dw_pcie_device_mode mode;
--};
--
- static inline struct tegra194_pcie *to_tegra_pcie(struct dw_pcie *pci)
+-static int sev_cpuid_hv(u32 func, u32 *eax, u32 *ebx, u32 *ecx, u32 *edx)
++static int sev_cpuid_hv(u32 func, struct cpuid_leaf *leaf)
  {
- 	return container_of(pci, struct tegra194_pcie, pci);
-@@ -352,15 +369,15 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 	struct tegra194_pcie *pcie = arg;
- 	struct dw_pcie *pci = &pcie->pci;
- 	struct pcie_port *pp = &pci->pp;
--	u32 val, tmp;
-+	u32 val, status_l0, status_l1;
- 	u16 val_w;
+ 	int ret;
  
--	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
--	if (val & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
--		if (val & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
--			appl_writel(pcie, val, APPL_INTR_STATUS_L1_0_0);
--
-+	status_l0 = appl_readl(pcie, APPL_INTR_STATUS_L0);
-+	if (status_l0 & APPL_INTR_STATUS_L0_LINK_STATE_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_0_0);
-+		appl_writel(pcie, status_l1, APPL_INTR_STATUS_L1_0_0);
-+		if (pcie->of_data->sbr_reset_fixup &&
-+		    status_l1 & APPL_INTR_STATUS_L1_0_0_LINK_REQ_RST_NOT_CHGED) {
- 			/* SBR & Surprise Link Down WAR */
- 			val = appl_readl(pcie, APPL_CAR_RESET_OVRD);
- 			val &= ~APPL_CAR_RESET_OVRD_CYA_OVERRIDE_CORE_RST_N;
-@@ -376,15 +393,21 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 		}
- 	}
- 
--	if (val & APPL_INTR_STATUS_L0_INT_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
--		if (val & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
-+	if (status_l0 & APPL_INTR_STATUS_L0_INT_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_8_0);
-+		if (status_l1 & APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS) {
- 			appl_writel(pcie,
- 				    APPL_INTR_STATUS_L1_8_0_AUTO_BW_INT_STS,
- 				    APPL_INTR_STATUS_L1_8_0);
- 			apply_bad_link_workaround(pp);
- 		}
--		if (val & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS) {
-+			val_w = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+						  PCI_EXP_LNKSTA);
-+			val_w |= PCI_EXP_LNKSTA_LBMS;
-+			dw_pcie_writew_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA, val_w);
-+
- 			appl_writel(pcie,
- 				    APPL_INTR_STATUS_L1_8_0_BW_MGT_INT_STS,
- 				    APPL_INTR_STATUS_L1_8_0);
-@@ -396,25 +419,24 @@ static irqreturn_t tegra_pcie_rp_irq_handler(int irq, void *arg)
- 		}
- 	}
- 
--	val = appl_readl(pcie, APPL_INTR_STATUS_L0);
--	if (val & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
--		val = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
--		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
-+	if (status_l0 & APPL_INTR_STATUS_L0_CDM_REG_CHK_INT) {
-+		status_l1 = appl_readl(pcie, APPL_INTR_STATUS_L1_18);
-+		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMPLT) {
- 			dev_info(pci->dev, "CDM check complete\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_COMPLETE;
- 		}
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_CMP_ERR) {
- 			dev_err(pci->dev, "CDM comparison mismatch\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_COMPARISON_ERROR;
- 		}
--		if (val & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
-+		if (status_l1 & APPL_INTR_STATUS_L1_18_CDM_REG_CHK_LOGIC_ERR) {
- 			dev_err(pci->dev, "CDM Logic error\n");
--			tmp |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
-+			val |= PCIE_PL_CHK_REG_CHK_REG_LOGIC_ERROR;
- 		}
--		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, tmp);
--		tmp = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
--		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", tmp);
-+		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
-+		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_ERR_ADDR);
-+		dev_err(pci->dev, "CDM Error Address Offset = 0x%08X\n", val);
- 	}
- 
- 	return IRQ_HANDLED;
-@@ -456,6 +478,9 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
- 		PCI_EXP_LNKSTA_CLS;
- 	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
- 
-+	if (!pcie->of_data->ltr_req_fixup)
-+		return IRQ_HANDLED;
-+
- 	/* If EP doesn't advertise L1SS, just return */
- 	val = dw_pcie_readl_dbi(pci, pcie->cfg_link_cap_l1sub);
- 	if (!(val & (PCI_L1SS_CAP_ASPM_L1_1 | PCI_L1SS_CAP_ASPM_L1_2)))
-@@ -540,13 +565,18 @@ static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
- static int tegra194_pcie_rd_own_conf(struct pci_bus *bus, u32 devfn, int where,
- 				     int size, u32 *val)
- {
-+	struct pcie_port *pp = bus->sysdata;
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct tegra194_pcie *pcie = to_tegra_pcie(pci);
-+
- 	/*
- 	 * This is an endpoint mode specific register happen to appear even
- 	 * when controller is operating in root port mode and system hangs
- 	 * when it is accessed with link being in ASPM-L1 state.
- 	 * So skip accessing it altogether
- 	 */
--	if (!PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL) {
-+	if (pcie->of_data->msix_doorbell_access_fixup &&
-+	    !PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL) {
- 		*val = 0x00000000;
- 		return PCIBIOS_SUCCESSFUL;
- 	}
-@@ -557,13 +587,18 @@ static int tegra194_pcie_rd_own_conf(struct pci_bus *bus, u32 devfn, int where,
- static int tegra194_pcie_wr_own_conf(struct pci_bus *bus, u32 devfn, int where,
- 				     int size, u32 val)
- {
-+	struct pcie_port *pp = bus->sysdata;
-+	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-+	struct tegra194_pcie *pcie = to_tegra_pcie(pci);
-+
- 	/*
- 	 * This is an endpoint mode specific register happen to appear even
- 	 * when controller is operating in root port mode and system hangs
- 	 * when it is accessed with link being in ASPM-L1 state.
- 	 * So skip accessing it altogether
- 	 */
--	if (!PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL)
-+	if (pcie->of_data->msix_doorbell_access_fixup &&
-+	    !PCI_SLOT(devfn) && where == PORT_LOGIC_MSIX_DOORBELL)
- 		return PCIBIOS_SUCCESSFUL;
- 
- 	return pci_generic_config_write(bus, devfn, where, size, val);
-@@ -711,13 +746,15 @@ static void tegra_pcie_enable_system_interrupts(struct pcie_port *pp)
- 	val |= APPL_INTR_EN_L0_0_LINK_STATE_INT_EN;
- 	appl_writel(pcie, val, APPL_INTR_EN_L0_0);
- 
--	val = appl_readl(pcie, APPL_INTR_EN_L1_0_0);
--	val |= APPL_INTR_EN_L1_0_0_LINK_REQ_RST_NOT_INT_EN;
--	appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_INTR_EN_L1_0_0);
-+		val |= APPL_INTR_EN_L1_0_0_LINK_REQ_RST_NOT_INT_EN;
-+		appl_writel(pcie, val, APPL_INTR_EN_L1_0_0);
-+	}
- 
- 	if (pcie->enable_cdm_check) {
- 		val = appl_readl(pcie, APPL_INTR_EN_L0_0);
--		val |= APPL_INTR_EN_L0_0_CDM_REG_CHK_INT_EN;
-+		val |= pcie->of_data->cdm_chk_int_en;
- 		appl_writel(pcie, val, APPL_INTR_EN_L0_0);
- 
- 		val = appl_readl(pcie, APPL_INTR_EN_L1_18);
-@@ -844,7 +881,8 @@ static void config_gen3_gen4_eq_presets(struct tegra194_pcie *pcie)
- 
- 	val = dw_pcie_readl_dbi(pci, GEN3_EQ_CONTROL_OFF);
- 	val &= ~GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_MASK;
--	val |= (0x360 << GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_SHIFT);
-+	val |= (pcie->of_data->gen4_preset_vec <<
-+		GEN3_EQ_CONTROL_OFF_PSET_REQ_VEC_SHIFT);
- 	val &= ~GEN3_EQ_CONTROL_OFF_FB_MODE_MASK;
- 	dw_pcie_writel_dbi(pci, GEN3_EQ_CONTROL_OFF, val);
- 
-@@ -858,6 +896,7 @@ static int tegra194_pcie_host_init(struct pcie_port *pp)
- 	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
- 	struct tegra194_pcie *pcie = to_tegra_pcie(pci);
- 	u32 val;
-+	u16 val_16;
- 
- 	pp->bridge->ops = &tegra_pci_ops;
- 
-@@ -865,6 +904,11 @@ static int tegra194_pcie_host_init(struct pcie_port *pp)
- 		pcie->pcie_cap_base = dw_pcie_find_capability(&pcie->pci,
- 							      PCI_CAP_ID_EXP);
- 
-+	val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL);
-+	val_16 &= ~PCI_EXP_DEVCTL_PAYLOAD;
-+	val_16 |= PCI_EXP_DEVCTL_PAYLOAD_256B;
-+	dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL, val_16);
-+
- 	val = dw_pcie_readl_dbi(pci, PCI_IO_BASE);
- 	val &= ~(IO_BASE_IO_DECODE | IO_BASE_IO_DECODE_BIT8);
- 	dw_pcie_writel_dbi(pci, PCI_IO_BASE, val);
-@@ -889,6 +933,15 @@ static int tegra194_pcie_host_init(struct pcie_port *pp)
- 	val |= (pcie->num_lanes << PCI_EXP_LNKSTA_NLW_SHIFT);
- 	dw_pcie_writel_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKCAP, val);
- 
-+	/* Clear Slot Clock Configuration bit if SRNS configuration */
-+	if (pcie->enable_srns) {
-+		val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA);
-+		val_16 &= ~PCI_EXP_LNKSTA_SLC;
-+		dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA,
-+				   val_16);
-+	}
-+
- 	config_gen3_gen4_eq_presets(pcie);
- 
- 	init_host_aspm(pcie);
-@@ -899,9 +952,11 @@ static int tegra194_pcie_host_init(struct pcie_port *pp)
- 		disable_aspm_l12(pcie);
- 	}
- 
--	val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
--	val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
--	dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	if (pcie->of_data->l1ss_exit_fixup) {
-+		val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
-+		val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
-+		dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	}
- 
- 	if (pcie->update_fc_fixup) {
- 		val = dw_pcie_readl_dbi(pci, CFG_TIMER_CTRL_MAX_FUNC_NUM_OFF);
-@@ -921,8 +976,11 @@ static int tegra194_pcie_start_link(struct dw_pcie *pci)
- 	struct pcie_port *pp = &pci->pp;
- 	bool retry = true;
- 
--	if (pcie->mode == DW_PCIE_EP_TYPE) {
--		enable_irq(pcie->pex_rst_irq);
-+	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
-+		if (!pcie->pex_rst_irq_enabled) {
-+			enable_irq(pcie->pex_rst_irq);
-+			pcie->pex_rst_irq_enabled = true;
-+		}
- 		return 0;
- 	}
- 
-@@ -1113,13 +1171,26 @@ static int tegra194_pcie_parse_dt(struct tegra194_pcie *pcie)
- 	if (of_property_read_bool(np, "nvidia,update-fc-fixup"))
- 		pcie->update_fc_fixup = true;
- 
-+	pcie->enable_ext_refclk =
-+		of_property_read_bool(pcie->dev->of_node,
-+				      "nvidia,enable-ext-refclk");
-+	/* RP using an external REFCLK is supported only in Tegra234 */
-+	if (pcie->of_data->version == TEGRA194_DWC_IP_VER) {
-+		if (pcie->of_data->mode == DW_PCIE_RC_TYPE)
-+			pcie->enable_ext_refclk = false;
-+		else
-+			pcie->enable_ext_refclk = true;
-+	}
-+
- 	pcie->supports_clkreq =
- 		of_property_read_bool(pcie->dev->of_node, "supports-clkreq");
- 
- 	pcie->enable_cdm_check =
- 		of_property_read_bool(np, "snps,enable-cdm-check");
- 
--	if (pcie->mode == DW_PCIE_RC_TYPE)
-+	pcie->enable_srns = of_property_read_bool(np, "nvidia,enable-srns");
-+
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE)
- 		return 0;
- 
- 	/* Endpoint mode specific DT entries */
-@@ -1163,8 +1234,11 @@ static int tegra_pcie_bpmp_set_ctrl_state(struct tegra194_pcie *pcie,
- 	struct tegra_bpmp_message msg;
- 	struct mrq_uphy_request req;
- 
--	/* Controller-5 doesn't need to have its state set by BPMP-FW */
--	if (pcie->cid == 5)
-+	/*
-+	 * Controller-5 doesn't need to have its state set by BPMP-FW in
-+	 * Tegra194
-+	 */
-+	if (pcie->cid == 5 && pcie->of_data->version == 0x490A)
- 		return 0;
- 
- 	memset(&req, 0, sizeof(req));
-@@ -1330,6 +1404,14 @@ static int tegra_pcie_config_controller(struct tegra194_pcie *pcie,
- 		return ret;
- 	}
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+		if (ret) {
-+			dev_err(pcie->dev, "Failed to init UPHY: %d\n", ret);
-+			goto fail_pll_init;
-+		}
-+	}
-+
- 	ret = tegra_pcie_enable_slot_regulators(pcie);
- 	if (ret < 0)
- 		goto fail_slot_reg_en;
-@@ -1353,11 +1435,13 @@ static int tegra_pcie_config_controller(struct tegra194_pcie *pcie,
- 		goto fail_core_apb_rst;
- 	}
- 
--	if (en_hw_hot_rst) {
-+	if (en_hw_hot_rst || !pcie->of_data->sbr_reset_fixup) {
- 		/* Enable HW_HOT_RST mode */
- 		val = appl_readl(pcie, APPL_CTRL);
- 		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
- 			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= (APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST_LTSSM_EN <<
-+			APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
- 		val |= APPL_CTRL_HW_HOT_RST_EN;
- 		appl_writel(pcie, val, APPL_CTRL);
- 	}
-@@ -1384,6 +1468,19 @@ static int tegra_pcie_config_controller(struct tegra194_pcie *pcie,
- 	val |= (APPL_CFG_MISC_ARCACHE_VAL << APPL_CFG_MISC_ARCACHE_SHIFT);
- 	appl_writel(pcie, val, APPL_CFG_MISC);
- 
-+	if (pcie->enable_srns || pcie->enable_ext_refclk) {
-+		/*
-+		 * When Tegra PCIe RP is using external clock, it cannot
-+		 * supply same clock back to EP, which makes it separate clock.
-+		 * Gate PCIe RP REFCLK out pads when RP & EP are using separate
-+		 * clock or RP is using external REFCLK.
-+		 */
-+		val = appl_readl(pcie, APPL_PINMUX);
-+		val |= APPL_PINMUX_CLK_OUTPUT_IN_OVERRIDE_EN;
-+		val &= ~APPL_PINMUX_CLK_OUTPUT_IN_OVERRIDE;
-+		appl_writel(pcie, val, APPL_PINMUX);
-+	}
-+
- 	if (!pcie->supports_clkreq) {
- 		val = appl_readl(pcie, APPL_PINMUX);
- 		val |= APPL_PINMUX_CLKREQ_OVERRIDE_EN;
-@@ -1409,6 +1506,9 @@ static int tegra_pcie_config_controller(struct tegra194_pcie *pcie,
- fail_reg_en:
- 	tegra_pcie_disable_slot_regulators(pcie);
- fail_slot_reg_en:
-+	if (pcie->enable_ext_refclk)
-+		tegra_pcie_bpmp_set_pll_state(pcie, false);
-+fail_pll_init:
- 	tegra_pcie_bpmp_set_ctrl_state(pcie, false);
+-	ret = __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, eax);
+-	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, ebx);
+-	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, ecx);
+-	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, edx);
++	ret = __sev_cpuid_hv(func, GHCB_CPUID_REQ_EAX, &leaf->eax);
++	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EBX, &leaf->ebx);
++	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_ECX, &leaf->ecx);
++	ret = ret ? : __sev_cpuid_hv(func, GHCB_CPUID_REQ_EDX, &leaf->edx);
  
  	return ret;
-@@ -1436,6 +1536,12 @@ static void tegra_pcie_unconfig_controller(struct tegra194_pcie *pcie)
- 
- 	tegra_pcie_disable_slot_regulators(pcie);
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
-+		if (ret)
-+			dev_err(pcie->dev, "Failed to deinit UPHY: %d\n", ret);
-+	}
-+
- 	ret = tegra_pcie_bpmp_set_ctrl_state(pcie, false);
- 	if (ret)
- 		dev_err(pcie->dev, "Failed to disable controller %d: %d\n",
-@@ -1636,6 +1742,13 @@ static void pex_ep_event_pex_rst_assert(struct tegra194_pcie *pcie)
- 
- 	pm_runtime_put_sync(pcie->dev);
- 
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
-+		if (ret)
-+			dev_err(pcie->dev, "Failed to turn off UPHY: %d\n",
-+				ret);
-+	}
-+
- 	ret = tegra_pcie_bpmp_set_pll_state(pcie, false);
- 	if (ret)
- 		dev_err(pcie->dev, "Failed to turn off UPHY: %d\n", ret);
-@@ -1651,6 +1764,7 @@ static void pex_ep_event_pex_rst_deassert(struct tegra194_pcie *pcie)
- 	struct device *dev = pcie->dev;
- 	u32 val;
- 	int ret;
-+	u16 val_16;
- 
- 	if (pcie->ep_state == EP_STATE_ENABLED)
- 		return;
-@@ -1662,10 +1776,20 @@ static void pex_ep_event_pex_rst_deassert(struct tegra194_pcie *pcie)
- 		return;
- 	}
- 
--	ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+	ret = tegra_pcie_bpmp_set_ctrl_state(pcie, true);
- 	if (ret) {
--		dev_err(dev, "Failed to init UPHY for PCIe EP: %d\n", ret);
--		goto fail_pll_init;
-+		dev_err(pcie->dev, "Failed to enable controller %u: %d\n",
-+			pcie->cid, ret);
-+		goto fail_set_ctrl_state;
-+	}
-+
-+	if (pcie->enable_ext_refclk) {
-+		ret = tegra_pcie_bpmp_set_pll_state(pcie, true);
-+		if (ret) {
-+			dev_err(dev, "Failed to init UPHY for PCIe EP: %d\n",
-+				ret);
-+			goto fail_pll_init;
-+		}
- 	}
- 
- 	ret = clk_prepare_enable(pcie->core_clk);
-@@ -1762,12 +1886,29 @@ static void pex_ep_event_pex_rst_deassert(struct tegra194_pcie *pcie)
- 		disable_aspm_l12(pcie);
- 	}
- 
--	val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
--	val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
--	dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	if (pcie->of_data->l1ss_exit_fixup) {
-+		val = dw_pcie_readl_dbi(pci, GEN3_RELATED_OFF);
-+		val &= ~GEN3_RELATED_OFF_GEN3_ZRXDC_NONCOMPL;
-+		dw_pcie_writel_dbi(pci, GEN3_RELATED_OFF, val);
-+	}
- 
- 	pcie->pcie_cap_base = dw_pcie_find_capability(&pcie->pci,
- 						      PCI_CAP_ID_EXP);
-+
-+	val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL);
-+	val_16 &= ~PCI_EXP_DEVCTL_PAYLOAD;
-+	val_16 |= PCI_EXP_DEVCTL_PAYLOAD_256B;
-+	dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_DEVCTL, val_16);
-+
-+	/* Clear Slot Clock Configuration bit if SRNS configuration */
-+	if (pcie->enable_srns) {
-+		val_16 = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base +
-+					   PCI_EXP_LNKSTA);
-+		val_16 &= ~PCI_EXP_LNKSTA_SLC;
-+		dw_pcie_writew_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA,
-+				   val_16);
-+	}
-+
- 	clk_set_rate(pcie->core_clk, GEN4_CORE_CLK_FREQ);
- 
- 	val = (ep->msi_mem_phys & MSIX_ADDR_MATCH_LOW_OFF_MASK);
-@@ -1784,6 +1925,13 @@ static void pex_ep_event_pex_rst_deassert(struct tegra194_pcie *pcie)
- 
- 	dw_pcie_ep_init_notify(ep);
- 
-+	/* Send LTR upstream */
-+	if (!pcie->of_data->ltr_req_fixup) {
-+		val = appl_readl(pcie, APPL_LTR_MSG_2);
-+		val |= APPL_LTR_MSG_2_LTR_MSG_REQ_STATE;
-+		appl_writel(pcie, val, APPL_LTR_MSG_2);
-+	}
-+
- 	/* Enable LTSSM */
- 	val = appl_readl(pcie, APPL_CTRL);
- 	val |= APPL_CTRL_LTSSM_EN;
-@@ -1804,6 +1952,8 @@ static void pex_ep_event_pex_rst_deassert(struct tegra194_pcie *pcie)
- fail_core_clk_enable:
- 	tegra_pcie_bpmp_set_pll_state(pcie, false);
- fail_pll_init:
-+	tegra_pcie_bpmp_set_ctrl_state(pcie, false);
-+fail_set_ctrl_state:
- 	pm_runtime_put_sync(dev);
+ }
+@@ -328,8 +335,7 @@ static int snp_cpuid_calc_xsave_size(u64 xfeatures_en, bool compacted)
+ 	return xsave_size;
  }
  
-@@ -1933,6 +2083,7 @@ static int tegra_pcie_config_ep(struct tegra194_pcie *pcie,
+-static void snp_cpuid_hv(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
+-			 u32 *edx)
++static void snp_cpuid_hv(u32 func, u32 subfunc, struct cpuid_leaf *leaf)
+ {
+ 	/*
+ 	 * MSR protocol does not support fetching indexed subfunction, but is
+@@ -342,13 +348,12 @@ static void snp_cpuid_hv(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
+ 	if (cpuid_function_is_indexed(func) && subfunc)
+ 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID_HV);
  
- 	irq_set_status_flags(pcie->pex_rst_irq, IRQ_NOAUTOEN);
+-	if (sev_cpuid_hv(func, eax, ebx, ecx, edx))
++	if (sev_cpuid_hv(func, leaf))
+ 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID_HV);
+ }
  
-+	pcie->pex_rst_irq_enabled = false;
- 	pcie->ep_state = EP_STATE_DISABLED;
+ static bool
+-snp_cpuid_get_validated_func(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+-			     u32 *ecx, u32 *edx)
++snp_cpuid_get_validated_func(u32 func, u32 subfunc, struct cpuid_leaf *leaf)
+ {
+ 	const struct snp_cpuid_info *cpuid_info = snp_cpuid_info_get_ptr();
+ 	int i;
+@@ -362,10 +367,10 @@ snp_cpuid_get_validated_func(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+ 		if (cpuid_function_is_indexed(func) && fn->ecx_in != subfunc)
+ 			continue;
  
- 	ret = devm_request_threaded_irq(dev, pcie->pex_rst_irq, NULL,
-@@ -1979,14 +2130,13 @@ static int tegra194_pcie_probe(struct platform_device *pdev)
- 	pci = &pcie->pci;
- 	pci->dev = &pdev->dev;
- 	pci->ops = &tegra_dw_pcie_ops;
--	pci->n_fts[0] = N_FTS_VAL;
--	pci->n_fts[1] = FTS_VAL;
--	pci->version = 0x490A;
--
-+	pcie->dev = &pdev->dev;
-+	pcie->of_data = (struct tegra_pcie_of_data *)data;
-+	pci->n_fts[0] = pcie->of_data->n_fts[0];
-+	pci->n_fts[1] = pcie->of_data->n_fts[1];
-+	pci->version = pcie->of_data->version;
- 	pp = &pci->pp;
- 	pp->num_vectors = MAX_MSI_IRQS;
--	pcie->dev = &pdev->dev;
--	pcie->mode = (enum dw_pcie_device_mode)data->mode;
+-		*eax = fn->eax;
+-		*ebx = fn->ebx;
+-		*ecx = fn->ecx;
+-		*edx = fn->edx;
++		leaf->eax = fn->eax;
++		leaf->ebx = fn->ebx;
++		leaf->ecx = fn->ecx;
++		leaf->edx = fn->edx;
  
- 	ret = tegra194_pcie_parse_dt(pcie);
- 	if (ret < 0) {
-@@ -2103,7 +2253,7 @@ static int tegra194_pcie_probe(struct platform_device *pdev)
+ 		return true;
+ 	}
+@@ -383,33 +388,34 @@ static bool snp_cpuid_check_range(u32 func)
+ 	return false;
+ }
  
- 	platform_set_drvdata(pdev, pcie);
+-static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+-				 u32 *ecx, u32 *edx)
++static int snp_cpuid_postprocess(u32 func, u32 subfunc, struct cpuid_leaf *leaf)
+ {
+-	u32 ebx2, ecx2, edx2;
++	struct cpuid_leaf leaf_tmp;
  
--	switch (pcie->mode) {
-+	switch (pcie->of_data->mode) {
- 	case DW_PCIE_RC_TYPE:
- 		ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
- 				       IRQF_SHARED, "tegra-pcie-intr", pcie);
-@@ -2138,7 +2288,8 @@ static int tegra194_pcie_probe(struct platform_device *pdev)
+ 	switch (func) {
+ 	case 0x1:
+-		snp_cpuid_hv(func, subfunc, NULL, &ebx2, NULL, &edx2);
++		snp_cpuid_hv(func, subfunc, &leaf_tmp);
+ 
+ 		/* initial APIC ID */
+-		*ebx = (ebx2 & GENMASK(31, 24)) | (*ebx & GENMASK(23, 0));
++		leaf->ebx = (leaf_tmp.ebx & GENMASK(31, 24)) | (leaf->ebx & GENMASK(23, 0));
+ 		/* APIC enabled bit */
+-		*edx = (edx2 & BIT(9)) | (*edx & ~BIT(9));
++		leaf->edx = (leaf_tmp.edx & BIT(9)) | (leaf->edx & ~BIT(9));
+ 
+ 		/* OSXSAVE enabled bit */
+ 		if (native_read_cr4() & X86_CR4_OSXSAVE)
+-			*ecx |= BIT(27);
++			leaf->ecx |= BIT(27);
  		break;
+ 	case 0x7:
+ 		/* OSPKE enabled bit */
+-		*ecx &= ~BIT(4);
++		leaf->ecx &= ~BIT(4);
+ 		if (native_read_cr4() & X86_CR4_PKE)
+-			*ecx |= BIT(4);
++			leaf->ecx |= BIT(4);
+ 		break;
+ 	case 0xB:
+ 		/* extended APIC ID */
+-		snp_cpuid_hv(func, 0, NULL, NULL, NULL, edx);
++		snp_cpuid_hv(func, 0, &leaf_tmp);
++		leaf->edx = leaf_tmp.edx;
++
+ 		break;
+ 	case 0xD: {
+ 		bool compacted = false;
+@@ -440,7 +446,7 @@ static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+ 			 * to avoid this becoming an issue it's safer to simply
+ 			 * treat this as unsupported for SEV-SNP guests.
+ 			 */
+-			if (!(*eax & (BIT(1) | BIT(3))))
++			if (!(leaf->eax & (BIT(1) | BIT(3))))
+ 				return -EINVAL;
  
+ 			compacted = true;
+@@ -450,16 +456,17 @@ static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+ 		if (xsave_size < 0)
+ 			return -EINVAL;
+ 
+-		*ebx = xsave_size;
++		leaf->ebx = xsave_size;
+ 		}
+ 		break;
+ 	case 0x8000001E:
+ 		/* extended APIC ID */
+-		snp_cpuid_hv(func, subfunc, eax, &ebx2, &ecx2, NULL);
++		snp_cpuid_hv(func, subfunc, &leaf_tmp);
++		leaf->eax = leaf_tmp.eax;
+ 		/* compute ID */
+-		*ebx = (*ebx & GENMASK(31, 8)) | (ebx2 & GENMASK(7, 0));
++		leaf->ebx = (leaf->ebx & GENMASK(31, 8)) | (leaf_tmp.ebx & GENMASK(7, 0));
+ 		/* node ID */
+-		*ecx = (*ecx & GENMASK(31, 8)) | (ecx2 & GENMASK(7, 0));
++		leaf->ecx = (leaf->ecx & GENMASK(31, 8)) | (leaf_tmp.ecx & GENMASK(7, 0));
+ 		break;
  	default:
--		dev_err(dev, "Invalid PCIe device type %d\n", pcie->mode);
-+		dev_err(dev, "Invalid PCIe device type %d\n",
-+			pcie->of_data->mode);
+ 		/* No fix-ups needed, use values as-is. */
+@@ -473,15 +480,14 @@ static int snp_cpuid_postprocess(u32 func, u32 subfunc, u32 *eax, u32 *ebx,
+  * Returns -EOPNOTSUPP if feature not enabled. Any other return value should be
+  * treated as fatal by caller.
+  */
+-static int snp_cpuid(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
+-		     u32 *edx)
++static int snp_cpuid(u32 func, u32 subfunc, struct cpuid_leaf *leaf)
+ {
+ 	const struct snp_cpuid_info *cpuid_info = snp_cpuid_info_get_ptr();
+ 
+ 	if (!cpuid_info->count)
+ 		return -EOPNOTSUPP;
+ 
+-	if (!snp_cpuid_get_validated_func(func, subfunc, eax, ebx, ecx, edx)) {
++	if (!snp_cpuid_get_validated_func(func, subfunc, leaf)) {
+ 		/*
+ 		 * Some hypervisors will avoid keeping track of CPUID entries
+ 		 * where all values are zero, since they can be handled the
+@@ -497,12 +503,12 @@ static int snp_cpuid(u32 func, u32 subfunc, u32 *eax, u32 *ebx, u32 *ecx,
+ 		 * not in the table, but is still in the valid range, proceed
+ 		 * with the post-processing. Otherwise, just return zeros.
+ 		 */
+-		*eax = *ebx = *ecx = *edx = 0;
++		leaf->eax = leaf->ebx = leaf->ecx = leaf->edx = 0;
+ 		if (!snp_cpuid_check_range(func))
+ 			return 0;
  	}
  
- fail:
-@@ -2150,12 +2301,19 @@ static int tegra194_pcie_remove(struct platform_device *pdev)
+-	return snp_cpuid_postprocess(func, subfunc, eax, ebx, ecx, edx);
++	return snp_cpuid_postprocess(func, subfunc, leaf);
+ }
+ 
+ /*
+@@ -514,28 +520,28 @@ void __init do_vc_no_ghcb(struct pt_regs *regs, unsigned long exit_code)
  {
- 	struct tegra194_pcie *pcie = platform_get_drvdata(pdev);
+ 	unsigned int subfn = lower_bits(regs->cx, 32);
+ 	unsigned int fn = lower_bits(regs->ax, 32);
+-	u32 eax, ebx, ecx, edx;
++	struct cpuid_leaf *leaf;
+ 	int ret;
  
--	if (!pcie->link_state)
--		return 0;
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE) {
-+		if (!pcie->link_state)
-+			return 0;
-+
-+		debugfs_remove_recursive(pcie->debugfs);
-+		tegra_pcie_deinit_controller(pcie);
-+		pm_runtime_put_sync(pcie->dev);
-+	} else {
-+		if (pcie->pex_rst_irq_enabled)
-+			disable_irq(pcie->pex_rst_irq);
-+		pex_ep_event_pex_rst_assert(pcie);
-+	}
+ 	/* Only CPUID is supported via MSR protocol */
+ 	if (exit_code != SVM_EXIT_CPUID)
+ 		goto fail;
  
--	debugfs_remove_recursive(pcie->debugfs);
--	tegra_pcie_deinit_controller(pcie);
--	pm_runtime_put_sync(pcie->dev);
- 	pm_runtime_disable(pcie->dev);
- 	tegra_bpmp_put(pcie->bpmp);
- 	if (pcie->pex_refclk_sel_gpiod)
-@@ -2169,15 +2327,22 @@ static int tegra194_pcie_suspend_late(struct device *dev)
- 	struct tegra194_pcie *pcie = dev_get_drvdata(dev);
- 	u32 val;
+-	ret = snp_cpuid(fn, subfn, &eax, &ebx, &ecx, &edx);
++	ret = snp_cpuid(fn, subfn, leaf);
+ 	if (!ret)
+ 		goto cpuid_done;
  
-+	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
-+		dev_err(dev, "Failed to Suspend as Tegra PCIe is in EP mode\n");
-+		return -EPERM;
-+	}
-+
- 	if (!pcie->link_state)
- 		return 0;
+ 	if (ret != -EOPNOTSUPP)
+ 		goto fail;
  
- 	/* Enable HW_HOT_RST mode */
--	val = appl_readl(pcie, APPL_CTRL);
--	val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
--		 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
--	val |= APPL_CTRL_HW_HOT_RST_EN;
--	appl_writel(pcie, val, APPL_CTRL);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_CTRL);
-+		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
-+			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= APPL_CTRL_HW_HOT_RST_EN;
-+		appl_writel(pcie, val, APPL_CTRL);
-+	}
+-	if (sev_cpuid_hv(fn, &eax, &ebx, &ecx, &edx))
++	if (sev_cpuid_hv(fn, leaf))
+ 		goto fail;
  
- 	return 0;
- }
-@@ -2239,22 +2404,19 @@ static int tegra194_pcie_resume_early(struct device *dev)
- 	struct tegra194_pcie *pcie = dev_get_drvdata(dev);
- 	u32 val;
+ cpuid_done:
+-	regs->ax = eax;
+-	regs->bx = ebx;
+-	regs->cx = ecx;
+-	regs->dx = edx;
++	regs->ax = leaf->eax;
++	regs->bx = leaf->ebx;
++	regs->cx = leaf->ecx;
++	regs->dx = leaf->edx;
  
--	if (pcie->mode == DW_PCIE_EP_TYPE) {
--		dev_err(dev, "Suspend is not supported in EP mode");
--		return -ENOTSUPP;
--	}
--
- 	if (!pcie->link_state)
- 		return 0;
- 
- 	/* Disable HW_HOT_RST mode */
--	val = appl_readl(pcie, APPL_CTRL);
--	val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
--		 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
--	val |= APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST <<
--	       APPL_CTRL_HW_HOT_RST_MODE_SHIFT;
--	val &= ~APPL_CTRL_HW_HOT_RST_EN;
--	appl_writel(pcie, val, APPL_CTRL);
-+	if (pcie->of_data->sbr_reset_fixup) {
-+		val = appl_readl(pcie, APPL_CTRL);
-+		val &= ~(APPL_CTRL_HW_HOT_RST_MODE_MASK <<
-+			 APPL_CTRL_HW_HOT_RST_MODE_SHIFT);
-+		val |= APPL_CTRL_HW_HOT_RST_MODE_IMDT_RST <<
-+		       APPL_CTRL_HW_HOT_RST_MODE_SHIFT;
-+		val &= ~APPL_CTRL_HW_HOT_RST_EN;
-+		appl_writel(pcie, val, APPL_CTRL);
-+	}
- 
- 	return 0;
- }
-@@ -2263,26 +2425,77 @@ static void tegra194_pcie_shutdown(struct platform_device *pdev)
- {
- 	struct tegra194_pcie *pcie = platform_get_drvdata(pdev);
- 
--	if (!pcie->link_state)
--		return;
-+	if (pcie->of_data->mode == DW_PCIE_RC_TYPE) {
-+		if (!pcie->link_state)
-+			return;
- 
--	debugfs_remove_recursive(pcie->debugfs);
--	tegra_pcie_downstream_dev_to_D0(pcie);
-+		debugfs_remove_recursive(pcie->debugfs);
-+		tegra_pcie_downstream_dev_to_D0(pcie);
- 
--	disable_irq(pcie->pci.pp.irq);
--	if (IS_ENABLED(CONFIG_PCI_MSI))
--		disable_irq(pcie->pci.pp.msi_irq);
-+		disable_irq(pcie->pci.pp.irq);
-+		if (IS_ENABLED(CONFIG_PCI_MSI))
-+			disable_irq(pcie->pci.pp.msi_irq);
- 
--	tegra194_pcie_pme_turnoff(pcie);
--	tegra_pcie_unconfig_controller(pcie);
-+		tegra194_pcie_pme_turnoff(pcie);
-+		tegra_pcie_unconfig_controller(pcie);
-+		pm_runtime_put_sync(pcie->dev);
-+	} else {
-+		if (pcie->pex_rst_irq_enabled)
-+			disable_irq(pcie->pex_rst_irq);
-+		pex_ep_event_pex_rst_assert(pcie);
-+	}
- }
- 
--static const struct tegra194_pcie_of_data tegra194_pcie_rc_of_data = {
-+static const struct tegra_pcie_of_data tegra194_pcie_rc_of_data = {
-+	.version = TEGRA194_DWC_IP_VER,
-+	.mode = DW_PCIE_RC_TYPE,
-+	.msix_doorbell_access_fixup = true,
-+	.sbr_reset_fixup = true,
-+	.l1ss_exit_fixup = true,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(19),
-+	/* Gen4 - 5, 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x360,
-+	.n_fts = { 52, 52 },
-+};
-+
-+static const struct tegra_pcie_of_data tegra194_pcie_ep_of_data = {
-+	.version = TEGRA194_DWC_IP_VER,
-+	.mode = DW_PCIE_EP_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = true,
-+	.ltr_req_fixup = true,
-+	.cdm_chk_int_en = BIT(19),
-+	/* Gen4 - 5, 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x360,
-+	.n_fts = { 52, 52 },
-+};
-+
-+static const struct tegra_pcie_of_data tegra234_pcie_rc_of_data = {
-+	.version = TEGRA234_DWC_IP_VER,
- 	.mode = DW_PCIE_RC_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = false,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(18),
-+	/* Gen4 - 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x340,
-+	.n_fts = { 52, 80 },
- };
- 
--static const struct tegra194_pcie_of_data tegra194_pcie_ep_of_data = {
-+static const struct tegra_pcie_of_data tegra234_pcie_ep_of_data = {
-+	.version = TEGRA234_DWC_IP_VER,
- 	.mode = DW_PCIE_EP_TYPE,
-+	.msix_doorbell_access_fixup = false,
-+	.sbr_reset_fixup = false,
-+	.l1ss_exit_fixup = false,
-+	.ltr_req_fixup = false,
-+	.cdm_chk_int_en = BIT(18),
-+	/* Gen4 - 6, 8 and 9 presets enabled */
-+	.gen4_preset_vec = 0x340,
-+	.n_fts = { 52, 80 },
- };
- 
- static const struct of_device_id tegra194_pcie_of_match[] = {
-@@ -2294,6 +2507,14 @@ static const struct of_device_id tegra194_pcie_of_match[] = {
- 		.compatible = "nvidia,tegra194-pcie-ep",
- 		.data = &tegra194_pcie_ep_of_data,
- 	},
-+	{
-+		.compatible = "nvidia,tegra234-pcie",
-+		.data = &tegra234_pcie_rc_of_data,
-+	},
-+	{
-+		.compatible = "nvidia,tegra234-pcie-ep",
-+		.data = &tegra234_pcie_ep_of_data,
-+	},
- 	{},
- };
- 
--- 
-2.17.1
+ 	/*
+ 	 * This is a VC handler and the #VC is only raised when SEV-ES is
 
+
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpeople.kernel.org%2Ftglx%2Fnotes-about-netiquette&amp;data=04%7C01%7CMichael.Roth%40amd.com%7C6bc14b8b5b854a38d7c008d9e895da5b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637796552649205409%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=Lc5o1tYKrtqUy2h%2B8onmgdaydqUWTlnj7V9rfuBEU0s%3D&amp;reserved=0

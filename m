@@ -2,120 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A49D4AA4E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34754AA4E6
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378663AbiBEAHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:07:33 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:43332 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345660AbiBEAHc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:07:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1644019652; x=1675555652;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5wfmLOODIoBBqoFFpobkufQhEkHn9jh4Dhowg0sJqm0=;
-  b=AquPyfv5SemvLZxMq+tUfRukrBPDhk4FEVoNt9sMcWI6X6uiHlvbQ8D4
-   fiIiOuWjI3vLK/v+SjxOF9vLuyqQcFEAEFC+6KvkpF4V14a8v22dD4Tdx
-   22Lv2cLNus7govz/rIcHJDOkzqHxmngJ2EjCIEjRJNpZGOLMPjcPhD+eJ
-   8=;
-X-IronPort-AV: E=Sophos;i="5.88,344,1635206400"; 
-   d="scan'208";a="175745942"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 05 Feb 2022 00:07:29 +0000
-Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-22c2b493.us-west-2.amazon.com (Postfix) with ESMTPS id D986741560;
-        Sat,  5 Feb 2022 00:07:24 +0000 (UTC)
-Received: from EX13D02UWC001.ant.amazon.com (10.43.162.243) by
- EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Sat, 5 Feb 2022 00:07:23 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D02UWC001.ant.amazon.com (10.43.162.243) with Microsoft SMTP Server (TLS)
- id 15.0.1497.28; Sat, 5 Feb 2022 00:07:23 +0000
-Received: from dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com
- (10.200.138.153) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.28 via Frontend Transport; Sat, 5 Feb 2022 00:07:22 +0000
-Received: by dev-dsk-alisaidi-i31e-9f3421fe.us-east-1.amazon.com (Postfix, from userid 5131138)
-        id B438021B50; Sat,  5 Feb 2022 00:07:22 +0000 (UTC)
-From:   Ali Saidi <alisaidi@amazon.com>
-To:     <leo.yan@linaro.org>
-CC:     <Al.Grant@arm.com>, <acme@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <alisaidi@amazon.com>,
-        <andrew.kilroy@arm.com>, <benh@kernel.crashing.org>,
-        <german.gomez@arm.com>, <james.clark@arm.com>,
-        <john.garry@huawei.com>, <jolsa@redhat.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
-        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
-        <will@kernel.org>
-Subject: Re: [PATCH] perf arm-spe: Use SPE data source for neoverse cores
-Date:   Sat, 5 Feb 2022 00:07:19 +0000
-Message-ID: <20220205000719.19986-1-alisaidi@amazon.com>
-X-Mailer: git-send-email 2.24.4.AMZN
-In-Reply-To: <20220203091934.GA2013381@leoy-ThinkPad-X240s>
-References: <20220203091934.GA2013381@leoy-ThinkPad-X240s>
+        id S1378677AbiBEAJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:09:54 -0500
+Received: from mga01.intel.com ([192.55.52.88]:10787 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345660AbiBEAJx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:09:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644019793; x=1675555793;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5n92rv9+fb3jUXaM752SnIxVcFeOkNjSKBOOTpk53t0=;
+  b=C4ypq1HH467YNWl76RrmU2RBkx/q47oz5jRd8bc7Gx1Z3oSAMyHxfS9w
+   s13WkAJVIBAV/JO9KoOcEY59Eao13AavHKj53DmzD+FXgXFUU/ZBo8jlQ
+   z0ygWCUTaX+HqfV+Q1I8pPtjxNqDGqr+W6Cg3uhPsJmKvLno4KPA02IS8
+   qL3D2z4IV/em2GMwB7JPW222qiRzAyRQNOHDROWvVVDOzU1dKf7G2K31o
+   e1ajZhlkw+DQeXtEAMu9r98ESdxLk+2TcaSkZ5xfsoW6ntpDjI1T+jPnG
+   2wBPcqru54IBz8cAUUYQHnngyQTpAIKDA585suFWGvrqGn6hiy5bkC9Kx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="272972524"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="272972524"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:09:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="539357124"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:09:53 -0800
+Date:   Fri, 4 Feb 2022 16:09:53 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 38/44] memremap_pages: Define
+ pgmap_mk_{readwrite|noaccess}() calls
+Message-ID: <20220205000953.GD785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-39-ira.weiny@intel.com>
+ <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
+> On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+> >
 
-On 2/3/22, 3:20 AM, "Leo Yan" <leo.yan@linaro.org> wrote:
->[...]
->> >> >> +			data_src.mem_lvl = PERF_MEM_LVL_L3 | PERF_MEM_LVL_HIT;
->> >> >
->> >> >This one also adds PERF_MEM_LVL_HIT even though the check of "if (record->type & ARM_SPE_LLC_MISS)"
->> >> >hasn't happened yet. Maybe some comments would make it a bit clearer, but at the moment it's
->> >> >not obvious how the result is derived because there are some things that don't add up like
->> >> >ARM_SPE_LLC_MISS == PERF_MEM_LVL_HIT.
->> >> 
->> >> Assuming the above is correct, my reading of the existing code that creates the
->> >> c2c output is that when an access is marked as an LLC hit, that doesn't
->> >> necessarily mean that the data was present in the LLC. I don't see how it could
->> >> given that LLC_HIT + HITM means the line was dirty in another CPUs cache, and so
->> >> LLC_HIT + HITM seems to mean that it was a hit in the LLC snoop filter and
->> >> required a different core to provide the line. This and the above certainly
->> >> deserve a comment as to why the miss is being attributed in this way if it's
->> >> otherwise acceptable.
->> >
->> >As James pointed out, this might introduce confusion.  I am wanderding
->> >if we can extract two functions for synthesizing the data source, one is
->> >for Neoverse platform and another is for generic purpose (which
->> >without data source packets), below code is to demonstrate the basic
->> >idea.
->> 
->> The code below is cleaner, and I'm happy to rework the patches in this way, but
->> I think the question still remains about unifying behavior of the tool. If we
->> mark something with a data source of ARM_SPE_NV_PEER_CORE as at L1 hit + HITM
->> certainly c2c won't show the correct thing today, but i think it also hides the
->> intent. The line in question missed the L1, L2, and got to the LLC where we did
->> find a record that it was in another cores cache (L1 or L2). Looking at the way
->> that c2c works today, it seems like marking this as a hit in the LLC snoop
->> filter is the best way to unify behaviors among architectures?
->
->Thanks a lot for pointing out this.  I looked into the code and
->compared the memory trace data from x86, I found the HITM tag is always
->sticking to LLC from x86's memory events.  This would be the main reason
->why current code in perf is only support HITM for LLC.
->
->I don't think it's a good way to always mark LLC snoop, even it's a
->snooping operation in L1 or L2 cache on Arm64 platforms; this would
->introduce confusion for users when using Arm SPE for profiling.
->
->Alternatively, we can support HITM tag for L1/L2 cache levels in perf,
->this can allow us to match memory topology on Arm64 arch, and it should
->not introduce any regression on x86 arch.
->
->Could you confirm if below code can fix the issue or not?
+[snip]
 
-Yes, that should do it. Want me to repsin this with the changes we discussed?
+I'll address the other comments later but wanted to address the idea below.
 
-Ali
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index f5b2be39a78c..5020ed7e67b7 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -1492,6 +1492,13 @@ struct task_struct {
+> >         struct callback_head            l1d_flush_kill;
+> >  #endif
+> >
+> > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> > +       /*
+> > +        * NOTE: pgmap_prot_count is modified within a single thread of
+> > +        * execution.  So it does not need to be atomic_t.
+> > +        */
+> > +       u32                             pgmap_prot_count;
+> > +#endif
+> 
+> It's not at all clear why the task struct needs to be burdened with
+> this accounting. Given that a devmap instance is needed to manage page
+> protections, why not move the nested protection tracking to a percpu
+> variable relative to an @pgmap arg? Something like:
+> 
+> void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+> {
+>        migrate_disable();
+>        preempt_disable();
 
+Why burden threads like this?  kmap_local_page() is perfectly able to migrate
+or be preempted?
+
+I think this is way to restrictive.
+
+>        if (this_cpu_add_return(pgmap->pgmap_prot_count, 1) == 1)
+>                pks_mk_readwrite(PKS_KEY_PGMAP_PROTECTION);
+> }
+> EXPORT_SYMBOL_GPL(__pgmap_mk_readwrite);
+> 
+> void __pgmap_mk_noaccess(struct dev_pagemap *pgmap)
+> {
+>        if (!this_cpu_sub_return(pgmap->pgmap_prot_count, 1))
+>                pks_mk_noaccess(PKS_KEY_PGMAP_PROTECTION);
+>        preempt_enable();
+>        migrate_enable();
+> }
+> EXPORT_SYMBOL_GPL(__pgmap_mk_noaccess);
+> 
+> The naming, which I had a hand in, is not aging well. When I see "mk"
+> I expect it to be building some value like a page table entry that
+> will be installed later. These helpers are directly enabling and
+> disabling access and are meant to be called symmetrically. So I would
+> expect symmetric names like:
+> 
+> pgmap_enable_access()
+> pgmap_disable_access()
+
+Names are easily changed.  I'll look at changing the names.
+
+Ira
+
+> 
+> 
+> >         /*
+> >          * New fields for task_struct should be added above here, so that
+> >          * they are included in the randomized portion of task_struct.
+> > diff --git a/init/init_task.c b/init/init_task.c
+> > index 73cc8f03511a..948b32cf8139 100644
+> > --- a/init/init_task.c
+> > +++ b/init/init_task.c
+> > @@ -209,6 +209,9 @@ struct task_struct init_task
+> >  #ifdef CONFIG_SECCOMP_FILTER
+> >         .seccomp        = { .filter_count = ATOMIC_INIT(0) },
+> >  #endif
+> > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> > +       .pgmap_prot_count = 0,
+> > +#endif
+> >  };
+> >  EXPORT_SYMBOL(init_task);
+> >
+> > diff --git a/mm/memremap.c b/mm/memremap.c
+> > index d3e6f328a711..b75c4f778c59 100644
+> > --- a/mm/memremap.c
+> > +++ b/mm/memremap.c
+> > @@ -96,6 +96,20 @@ static void devmap_protection_disable(void)
+> >         static_branch_dec(&dev_pgmap_protection_static_key);
+> >  }
+> >
+> > +void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+> > +{
+> > +       if (!current->pgmap_prot_count++)
+> > +               pks_mk_readwrite(PKS_KEY_PGMAP_PROTECTION);
+> > +}
+> > +EXPORT_SYMBOL_GPL(__pgmap_mk_readwrite);
+> > +
+> > +void __pgmap_mk_noaccess(struct dev_pagemap *pgmap)
+> > +{
+> > +       if (!--current->pgmap_prot_count)
+> > +               pks_mk_noaccess(PKS_KEY_PGMAP_PROTECTION);
+> > +}
+> > +EXPORT_SYMBOL_GPL(__pgmap_mk_noaccess);
+> > +
+> >  bool pgmap_protection_available(void)
+> >  {
+> >         return pks_available();
+> > --
+> > 2.31.1
+> >

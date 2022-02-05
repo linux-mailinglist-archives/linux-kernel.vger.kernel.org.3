@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5774AAA65
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323AE4AAA67
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380535AbiBERI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:08:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55358 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348697AbiBERI0 (ORCPT
+        id S1380546AbiBERIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348697AbiBERIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:08:26 -0500
+        Sat, 5 Feb 2022 12:08:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AF3C061348;
+        Sat,  5 Feb 2022 09:08:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A94BB80814;
-        Sat,  5 Feb 2022 17:08:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857DCC340E8;
-        Sat,  5 Feb 2022 17:08:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A775EB80814;
+        Sat,  5 Feb 2022 17:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B890C340E8;
+        Sat,  5 Feb 2022 17:08:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644080903;
-        bh=lrqr8K46/uojmfIC2tbdUKiGRVfKrVt/Mn/ltMJOcQ8=;
+        s=k20201202; t=1644080928;
+        bh=cE21F3sGRlbBLNbrsjc2j1xdyEfgnJJv0XLdNj69hb4=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dpB5lMPoV266vveq7Zz6SRZ4KizsXyOsWgZs8laooNMtZAO/GkbXZVM/5yBTXwUZK
-         +OVmPaHfOrbcIYbXWHJYEEBE5jgiQ+bMXDCUua9LUyfRxSl8pDYQg8r4Ela/JSqGV+
-         MnNTlkgNA5wQWHtXcCaCJbV2tc692MKULKHQ8I5fZ50tuvuHzWy7+YPtf5xzzMOCan
-         a3kaWAbHhmfDlZziKHvNAOxafq+a/ohbac4F7Az16mwhEPoITToc6hrF4yQhjLwKcM
-         nJdZWiblwvaQAXURy3mfpc624gm7b2k3lK9sSP6oP5O+knIeNNP9hMwW3VvZNm2zmX
-         TEwFFfy/Cx9Zg==
-Date:   Sat, 5 Feb 2022 17:14:54 +0000
+        b=Ol/Rk3aXSQou6Tf75r24sTUznf1DZHZRpkPNeHBJf2rUbq7jOFpnINSOIKuX6tL/9
+         oo8If6LBy3Xp29LT94dM0lz04OKkNQa4+YZQ9sgmQnwVTuDm3PT99vZpKSWO3Ue3Zf
+         CoMGrz5svQv9pytAx/ph8kZl2aVrUd0uKpsE0n627cT8qAS5d9Trdkuimd7D66sbrc
+         dYNpIz0ZmdKnlFDwwRXPzJXeGOPu3Sk+281onv3JKTY2gJZlzr8mKviAcFxH6LDSeD
+         C6R4f3sqQc7m6Y4RuyqMaKqOLnJsClV+z9Bgybk2mzyI5v1wQu5JaGe2VVXBNcleTK
+         Jwv/6F2FD+yqw==
+Date:   Sat, 5 Feb 2022 17:15:19 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -45,6 +48,12 @@ X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -89,9 +98,6 @@ Jonathan
 > +#include <asm/byteorder.h>
 > +#include <asm/unaligned.h>
 > +
-This may well be a valid addition but it's not called out in the patch
-description.
-
 >  /* register map */
 >  #define LTC2983_STATUS_REG			0x0000
 >  #define LTC2983_TEMP_RES_START_REG		0x0010

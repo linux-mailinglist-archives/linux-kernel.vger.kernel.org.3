@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053754AA512
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A384AA514
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378773AbiBEAbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:31:19 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:59046 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352482AbiBEAbS (ORCPT
+        id S1378792AbiBEAbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378782AbiBEAb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:31:18 -0500
-Received: from [192.168.1.17] (unknown [192.182.151.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E3C7820B6C61;
-        Fri,  4 Feb 2022 16:31:17 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E3C7820B6C61
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1644021078;
-        bh=hu1H4uGZ0JEPq7xzJcNDhKMllfxHPdflVQYUNHmN5wo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QPOBabXajrruzMbBRSBn/Kn7xuQkGiScEdYIXUdixSNT8M4v6Uv0EYbbCFchACF0l
-         Pa3x31JZSYbVwBnNU/9xlpEYYchkDUw12IBBe350o6KMAAvZKGYAYZe2ijL4n6Z7/R
-         IoviCnt47T4PdTGaVVLl6/ENfRBT7YeQ3qJLMr1Y=
-Message-ID: <de6d6bd8-889f-45d6-b45e-7ed8cac3e54b@linux.microsoft.com>
-Date:   Fri, 4 Feb 2022 16:31:17 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v1 0/9] drivers: hv: dxgkrnl: Driver overview
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
-        gregkh@linuxfoundation.org
-References: <cover.1641937419.git.iourit@linux.microsoft.com>
- <Yd9SQxTznfHGjuDD@archlinux-ax161>
- <bd36b131-be23-6f4d-16cf-a549a6533f34@linux.microsoft.com>
- <YfCVi/TGD9Dnf9CG@dev-arch.archlinux-ax161>
-From:   Iouri Tarassov <iourit@linux.microsoft.com>
-In-Reply-To: <YfCVi/TGD9Dnf9CG@dev-arch.archlinux-ax161>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Fri, 4 Feb 2022 19:31:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A22DF8E3CC;
+        Fri,  4 Feb 2022 16:31:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A747C61D38;
+        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1ABE8C004E1;
+        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644021087;
+        bh=q3Yih5XixSjxwdzRqf1AAkWP1dP8EZSIU2HR3ZpqdWM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LVapDQUtZdo4ImBuwmNk7lUOG6kC4ANuVOKvewpNS2eOcZj9vP1GnSqz4g0WoJf0J
+         DJ+9c2sxxaRbLOYhFozto3LWRD6S0TN135/opMaoeyGZAXSF7Bu1FGbfSjiLejyNNa
+         Oz+PAuGb19DZBNodzELuOCulzIUucdKwLhLp1/1w0v4+PzHihpgCRXEAWuY7qC/jT0
+         JG1oMfVCfJdVm9DeC3AB2ZYo5LgXBm85j0UAMsw4McErFCOgahpwZWjgaHIk4G/nyo
+         CfhyEhK+ZY34v2v1IoWl4L98GIP+smQNHfa9GuRvCGebDw3uIbLwx1mC8yVdStfz2y
+         MOBmQRRWN1GaQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0900BC6D4EA;
+        Sat,  5 Feb 2022 00:31:27 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220204235922.GA2979630@nvidia.com>
+References: <20220204235922.GA2979630@nvidia.com>
+X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220204235922.GA2979630@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: f3136c4ce7acf64bee43135971ca52a880572e32
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0457e5153e0e8420134f60921349099e907264ca
+Message-Id: <164402108702.12045.16716679454452985582.pr-tracker-bot@kernel.org>
+Date:   Sat, 05 Feb 2022 00:31:27 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Fri, 4 Feb 2022 19:59:22 -0400:
 
-On 1/25/2022 4:27 PM, Nathan Chancellor wrote:
-> Hi Iouri,
->
-> On Wed, Jan 12, 2022 at 03:39:13PM -0800, Iouri Tarassov wrote:
-> > 
-> drivers/hv/dxgkrnl/dxgvmbus.c: In function ‘dxgvmb_send_query_alloc_residency’:
-> drivers/hv/dxgkrnl/dxgvmbus.c:147:16: warning: array subscript ‘struct dxgvmbusmsg[0]’ is partly outside array bounds of ‘struct dxgvmbusmsgres[1]’ [-Warray-bounds]
->    147 |         if (msg->hdr && (char *)msg->hdr != msg->msg_on_stack)
->        |             ~~~^~~~~
-> drivers/hv/dxgkrnl/dxgvmbus.c:1882:31: note: while referencing ‘msg’
->   1882 |         struct dxgvmbusmsgres msg = {.hdr = NULL};
->        |                               ^~~
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
-Hi Nathan,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0457e5153e0e8420134f60921349099e907264ca
 
-I fixed the issue with the ioctls array.
+Thank you!
 
-Regarding the warning above, it looks like a compiler error. I do not 
-see where the out of bounds access is.
-I tried GCC-11 version 11.2.0 and this warning is not there.
-
-Thanks
-
-Iouri
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

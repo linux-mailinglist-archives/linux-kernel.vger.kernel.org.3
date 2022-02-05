@@ -2,204 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 317D04AA4F3
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56DD4AA4F5
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378734AbiBEAOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378710AbiBEAOQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:14:16 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3E7DF8C1BE
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 16:14:14 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id d186so6294747pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 16:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JSn2M/yKAMsfnGZFwHB10y6iqnXx4FF2oGb2lIsnFpI=;
-        b=lbZTKKPzut0pSDp0PGEfSw3i5JnQ5JXUOvWVZ6Bqe23XIqEF6A2W1GMcYGs4LM94eq
-         1tgtOTcFBq6W1UWg5oKNaKKyOSErFWPClzvAqvTWGYekDZykaMBZ7OGE6HsZzPuqH8ec
-         VHPh6nksgC3cBqMWKW3nX7/jZgVqlYWTuHtTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JSn2M/yKAMsfnGZFwHB10y6iqnXx4FF2oGb2lIsnFpI=;
-        b=NKkaFVvgnSCYaCTleAGEfbb8tRhye/LSel5Oxm1IxNH4K+u3ezxDBE2AJhX6blJwc9
-         JZfZKSz8mUSmcVSnNNw2yazGe/gmGVG0VUrZc69++pidVz9nP2R/CglbAZRyBR028O6j
-         nbvEe9s3bCKNGFuXGnEbXmZ3xaoe7stxZZlIem6IHLzD+eksSNHK2h8BzNFWH+OtXNaj
-         2IKa7mVi/u2nsuSoJB+5UxLFUtP4vftfAHae1VyqKAXhHgXMIWFR0hviddQf9XcZQ20n
-         NujHDx6r+bRHAtgYMAkP132lg8VIJa130Nza4W6kyAiCPjVL+l1eZo/cy5vMhd+771cT
-         ltog==
-X-Gm-Message-State: AOAM532NWAsvAFS8WK7WVkrnypzytXmXHeR6uTdN0AtnUo/rHWWdXBTg
-        Z3w/cFVP2Iap2oLrTOzuo36q7w==
-X-Google-Smtp-Source: ABdhPJxn/GCPUuG4dWCd6GKM189yB7c+AgTeBQ6yKeW1fQ/otXDa51dtaC8z5cJVw357oaP3WHq34w==
-X-Received: by 2002:a05:6a00:1810:: with SMTP id y16mr5530158pfa.65.1644020053748;
-        Fri, 04 Feb 2022 16:14:13 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:d668:55ac:a465:88bf])
-        by smtp.gmail.com with ESMTPSA id q13sm3720231pfj.44.2022.02.04.16.14.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 16:14:13 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        robert.foss@linaro.org, lschyi@chromium.org,
-        Sam Ravnborg <sam@ravnborg.org>, jjsu@chromium.org,
+        id S1378610AbiBEAQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:16:06 -0500
+Received: from mga05.intel.com ([192.55.52.43]:22677 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229709AbiBEAQF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:16:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644020165; x=1675556165;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OwHius7362OGmkrz3UVv1SxvPq5mRtgzd54EHiDqifE=;
+  b=GHwUzqirctWVUbYT5tbu5lozQ+9yD297BWjKJRtIPIhLCkrVVLfLahJO
+   4e9aJulCO/W9hHtRShzZV14r9XDj1SFmJ0U7cdKpmvGwnMeF8XRRrDaa2
+   RiTxF0Z3tcflwxVMsdEMdSBnBxIgx0y7+r8c9EOdSQvhFAo+KTD85kdXr
+   awIwfFnVK6ff/aR22pIKyvSTnzFFVQRJQEiCJyIgFwLWEUfL/zn4kJu8F
+   yZUQYfeivYosS+Kj8NzGGMlWuEM+spr8GPG3gFv+dXIkyqYjIRnc/rgOp
+   mQjsB0AT7O+UohpgneddcmxChsGF/HihhcpTq//WWDBwitp7aIl2g7SPL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334862568"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="334862568"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:16:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="566900289"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2022 16:16:02 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nG8kE-000YLn-0H; Sat, 05 Feb 2022 00:16:02 +0000
+Date:   Sat, 5 Feb 2022 08:15:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stephen Boyd <swboyd@chromium.org>, benjamin.tissoires@redhat.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, Sean O'Brien <seobrien@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] drm/panel-edp: Allow querying the detected panel via debugfs
-Date:   Fri,  4 Feb 2022 16:13:42 -0800
-Message-Id: <20220204161245.v2.3.I209d72bcc571e1d7d6b793db71bf15c9c0fc9292@changeid>
-X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
-In-Reply-To: <20220205001342.3155839-1-dianders@chromium.org>
-References: <20220205001342.3155839-1-dianders@chromium.org>
+        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
+Subject: Re: [PATCH 3/5] HID: Extract vivaldi hid feature mapping for use in
+ hid-hammer
+Message-ID: <202202050807.BvUyitVE-lkp@intel.com>
+References: <20220204202021.895426-4-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204202021.895426-4-swboyd@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently we added generic "edp-panel"s probed by EDID. To support
-panels in this way we look at the panel ID in the EDID and look up the
-panel in a table that has power sequence timings. If we find a panel
-that's not in the table we will still attempt to use it but we'll use
-conservative timings. While it's likely that these conservative
-timings will work for most nearly all panels, the performance of
-turning the panel off and on suffers.
+Hi Stephen,
 
-We'd like to be able to reliably detect the case that we're using the
-hardcoded timings without relying on parsing dmesg. This allows us to
-implement tests that ensure that no devices get shipped that are
-relying on the conservative timings.
+I love your patch! Yet something to improve:
 
-Let's add a new debugfs entry to panel devices. It will have one of:
-* UNKNOWN - We tried to detect a panel but it wasn't in our table.
-* HARDCODED - We're not using generic "edp-panel" probed by EDID.
-* A panel name - This is the name of the panel from our table.
+[auto build test ERROR on 26291c54e111ff6ba87a164d85d4a4e134b7315c]
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+url:    https://github.com/0day-ci/linux/commits/Stephen-Boyd/Input-HID-Consolidate-ChromeOS-Vivaldi-keyboard-logic/20220205-042211
+base:   26291c54e111ff6ba87a164d85d4a4e134b7315c
+config: x86_64-randconfig-a004-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050807.BvUyitVE-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/83759eb892fd16fd0bb7ff4bb0c4baa4e7a0283e
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Stephen-Boyd/Input-HID-Consolidate-ChromeOS-Vivaldi-keyboard-logic/20220205-042211
+        git checkout 83759eb892fd16fd0bb7ff4bb0c4baa4e7a0283e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: mce_start()+0x4e: call to clear_bit() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_read_aux()+0x41: call to mca_msr_reg() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check()+0x39d: call to test_bit() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode()+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4e: call to on_thread_stack() leaves .noinstr.text section
+   ld: drivers/input/vivaldi-keymap.o: in function `vivaldi_hid_feature_mapping':
+>> drivers/input/vivaldi-keymap.c:73: undefined reference to `hid_alloc_report_buf'
+>> ld: drivers/input/vivaldi-keymap.c:90: undefined reference to `hid_hw_raw_request'
+>> ld: drivers/input/vivaldi-keymap.c:108: undefined reference to `hid_report_raw_event'
+
+
+vim +73 drivers/input/vivaldi-keymap.c
+
+    44	
+    45	/**
+    46	 * vivaldi_hid_feature_mapping - Fill out vivaldi keymap data exposed via HID
+    47	 * @data: The vivaldi function keymap
+    48	 * @hdev: HID device to parse
+    49	 * @field: HID field to parse
+    50	 * @usage: HID usage to parse
+    51	 */
+    52	void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
+    53					 struct hid_device *hdev,
+    54					 struct hid_field *field,
+    55					 struct hid_usage *usage)
+    56	{
+    57		struct hid_report *report = field->report;
+    58		int fn_key;
+    59		int ret;
+    60		u32 report_len;
+    61		u8 *report_data, *buf;
+    62	
+    63		if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
+    64		    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
+    65			return;
+    66	
+    67		fn_key = (usage->hid & HID_USAGE);
+    68		if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
+    69			return;
+    70		if (fn_key > data->num_function_row_keys)
+    71			data->num_function_row_keys = fn_key;
+    72	
+  > 73		report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
+    74		if (!report_data)
+    75			return;
+    76	
+    77		report_len = hid_report_len(report);
+    78		if (!report->id) {
+    79			/*
+    80			 * hid_hw_raw_request() will stuff report ID (which will be 0)
+    81			 * into the first byte of the buffer even for unnumbered
+    82			 * reports, so we need to account for this to avoid getting
+    83			 * -EOVERFLOW in return.
+    84			 * Note that hid_alloc_report_buf() adds 7 bytes to the size
+    85			 * so we can safely say that we have space for an extra byte.
+    86			 */
+    87			report_len++;
+    88		}
+    89	
+  > 90		ret = hid_hw_raw_request(hdev, report->id, report_data,
+    91					 report_len, HID_FEATURE_REPORT,
+    92					 HID_REQ_GET_REPORT);
+    93		if (ret < 0) {
+    94			dev_warn(&hdev->dev, "failed to fetch feature %d\n",
+    95				 field->report->id);
+    96			goto out;
+    97		}
+    98	
+    99		if (!report->id) {
+   100			/*
+   101			 * Undo the damage from hid_hw_raw_request() for unnumbered
+   102			 * reports.
+   103			 */
+   104			report_data++;
+   105			report_len--;
+   106		}
+   107	
+ > 108		ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
+   109					   report_len, 0);
+   110		if (ret) {
+   111			dev_warn(&hdev->dev, "failed to report feature %d\n",
+   112				 field->report->id);
+   113			goto out;
+   114		}
+   115	
+   116		data->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
+   117		    field->value[usage->usage_index];
+   118	
+   119	out:
+   120		kfree(buf);
+   121	}
+   122	EXPORT_SYMBOL_GPL(vivaldi_hid_feature_mapping);
+   123	#endif /* CONFIG_HID */
+   124	
+
 ---
-
-Changes in v2:
-- Now using debugfs, not sysfs
-
- drivers/gpu/drm/panel/panel-edp.c | 37 ++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index a394a15dc3fb..0fda1eb7b690 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -21,6 +21,7 @@
-  * DEALINGS IN THE SOFTWARE.
-  */
- 
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
- #include <linux/iopoll.h>
-@@ -222,6 +223,8 @@ struct panel_edp {
- 	struct gpio_desc *enable_gpio;
- 	struct gpio_desc *hpd_gpio;
- 
-+	const struct edp_panel_entry *detected_panel;
-+
- 	struct edid *edid;
- 
- 	struct drm_display_mode override_mode;
-@@ -606,6 +609,28 @@ static int panel_edp_get_timings(struct drm_panel *panel,
- 	return p->desc->num_timings;
- }
- 
-+static int detected_panel_show(struct seq_file *s, void *data)
-+{
-+	struct drm_panel *panel = s->private;
-+	struct panel_edp *p = to_panel_edp(panel);
-+
-+	if (IS_ERR(p->detected_panel))
-+		seq_puts(s, "UNKNOWN\n");
-+	else if (!p->detected_panel)
-+		seq_puts(s, "HARDCODED\n");
-+	else
-+		seq_printf(s, "%s\n", p->detected_panel->name);
-+
-+	return 0;
-+}
-+
-+DEFINE_SHOW_ATTRIBUTE(detected_panel);
-+
-+static void panel_edp_debugfs_init(struct drm_panel *panel, struct dentry *root)
-+{
-+	debugfs_create_file("detected_panel", 0600, root, panel, &detected_panel_fops);
-+}
-+
- static const struct drm_panel_funcs panel_edp_funcs = {
- 	.disable = panel_edp_disable,
- 	.unprepare = panel_edp_unprepare,
-@@ -613,6 +638,7 @@ static const struct drm_panel_funcs panel_edp_funcs = {
- 	.enable = panel_edp_enable,
- 	.get_modes = panel_edp_get_modes,
- 	.get_timings = panel_edp_get_timings,
-+	.debugfs_init = panel_edp_debugfs_init,
- };
- 
- #define PANEL_EDP_BOUNDS_CHECK(to_check, bounds, field) \
-@@ -666,7 +692,6 @@ static const struct edp_panel_entry *find_edp_panel(u32 panel_id);
- 
- static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- {
--	const struct edp_panel_entry *edp_panel;
- 	struct panel_desc *desc;
- 	u32 panel_id;
- 	char vend[4];
-@@ -705,14 +730,14 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- 	}
- 	drm_edid_decode_panel_id(panel_id, vend, &product_id);
- 
--	edp_panel = find_edp_panel(panel_id);
-+	panel->detected_panel = find_edp_panel(panel_id);
- 
- 	/*
- 	 * We're using non-optimized timings and want it really obvious that
- 	 * someone needs to add an entry to the table, so we'll do a WARN_ON
- 	 * splat.
- 	 */
--	if (WARN_ON(!edp_panel)) {
-+	if (WARN_ON(!panel->detected_panel)) {
- 		dev_warn(dev,
- 			 "Unknown panel %s %#06x, using conservative timings\n",
- 			 vend, product_id);
-@@ -734,12 +759,14 @@ static int generic_edp_panel_probe(struct device *dev, struct panel_edp *panel)
- 		 */
- 		desc->delay.unprepare = 2000;
- 		desc->delay.enable = 200;
-+
-+		panel->detected_panel = ERR_PTR(-EINVAL);
- 	} else {
- 		dev_info(dev, "Detected %s %s (%#06x)\n",
--			 vend, edp_panel->name, product_id);
-+			 vend, panel->detected_panel->name, product_id);
- 
- 		/* Update the delay; everything else comes from EDID */
--		desc->delay = *edp_panel->delay;
-+		desc->delay = *panel->detected_panel->delay;
- 	}
- 
- 	ret = 0;
--- 
-2.35.0.263.gb82422642f-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

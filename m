@@ -2,139 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995964AA519
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA0B4AA51B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378799AbiBEAdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:33:19 -0500
-Received: from mga03.intel.com ([134.134.136.65]:14907 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238078AbiBEAdS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:33:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644021198; x=1675557198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aJYy2vf0HRnoLnCXkWAcUv8uWypmISO27TeIxy+WR4A=;
-  b=O17IQto5nuUcBPq6QoyohHFQ6WAfXi7yKr1P9ptA3eAxz99+DffuMS8O
-   TPQHUlvQWWknkfGSGGbAivrbldfBrLreMoymlRhhl+gAXc1doqZMAgEWd
-   b8vcPGddJd50hRpXwOBYqxUU08tdvYIUL2utSB/OVC5JOvc1/o3jqF4Ou
-   VVNY83srmyOqiAkHONvvb9qdcQRg+G3I4BTovoItk0xjK6xU4zbq4fFZ8
-   js1aDAAksXtJb5ZX5kAAJWJC6rZIFXu2u2QlVCy9zOvVvWFSDShHMDN7h
-   VfV9M4K66zcM2jXdBAqlcn5dnumxiWkUtMwOcI7LqENUoSC75DFowhE+e
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248416524"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="248416524"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:33:17 -0800
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="535684857"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:33:17 -0800
-Date:   Fri, 4 Feb 2022 16:33:16 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <Yf3FzOUSRpFUdM/q@otcwcpicx3.sc.intel.com>
-References: <20220128202905.2274672-1-fenghua.yu@intel.com>
- <20220128202905.2274672-6-fenghua.yu@intel.com>
- <87r18ib2zz.ffs@tglx>
+        id S1378732AbiBEAf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:35:57 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:59586 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238078AbiBEAf4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:35:56 -0500
+Received: from [192.168.1.17] (unknown [192.182.151.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1F50820B6C61;
+        Fri,  4 Feb 2022 16:35:56 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1F50820B6C61
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1644021356;
+        bh=Lxh39MUIwPoB4L77nmzR+NxgwzKfDafwt/YKb1Z9Oyk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IumbASqLXkb8e1ibpmpHYMvxXZidJ5avumnPKdXaqW1EVALP1PWXs640zZhYUu0pe
+         Iep8qGZJRpsZ3BxAFIzHRdIXowRYphqso9HBcgnuPiKS4S1Em5gr2KXO1ifjDBl0wO
+         ooC33qR8biJi7OiVtyBVNYhh5VHBksZZKQhHimkY=
+Message-ID: <deb33dd6-06c8-13c1-8d37-4c4f36248d96@linux.microsoft.com>
+Date:   Fri, 4 Feb 2022 16:35:55 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r18ib2zz.ffs@tglx>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1 9/9] drivers: hv: dxgkrnl: Implement DXGSYNCFILE
+Content-Language: en-US
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, spronovo@microsoft.com,
+        gregkh@linuxfoundation.org,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        jenatali@microsoft.com
+References: <cover.1641937419.git.iourit@linux.microsoft.com>
+ <e04c8e820bc166d9d4fe8e388aace731bb3255b0.1641937420.git.iourit@linux.microsoft.com>
+ <YeG6+Crv/Bg4h3u1@phenom.ffwll.local>
+ <e472cbe8-44ec-110a-1ad7-bc561cd0be88@linux.microsoft.com>
+ <CAKMK7uFkVvfXM7QsgSfP4OLk9b_cSwNsi3s3_7EFuL+Pa1s7eQ@mail.gmail.com>
+From:   Iouri Tarassov <iourit@linux.microsoft.com>
+In-Reply-To: <CAKMK7uFkVvfXM7QsgSfP4OLk9b_cSwNsi3s3_7EFuL+Pa1s7eQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 12:56:00AM +0100, Thomas Gleixner wrote:
-> On Fri, Jan 28 2022 at 12:28, Fenghua Yu wrote:
-> > To avoid complexity of updating each thread's PASID status (e.g. sending
-> > IPI to update IA32_PASID MSR) on allocating and freeing PASID, once
-> > allocated and assigned to an mm, the PASID stays with the mm for the
-> > rest of the mm's lifetime. A reference to the PASID is taken on
-> > allocating the PASID. Binding/unbinding the PASID won't change refcount.
-> > The reference is dropped on mm exit and thus the PASID is freed.
+
+On 1/17/2022 1:35 AM, Daniel Vetter wrote:
+> On Mon, Jan 17, 2022 at 9:34 AM Iouri Tarassov
+> <iourit@linux.microsoft.com> wrote:
 > >
-> > Two helpers mm_pasid_set() and mm_pasid_drop() are defined in mm because
-> > the PASID operations handle the pasid member in mm_struct and should be
-> > part of mm operations. Because IOASID's reference count is not used any
-> > more and removed, unused ioasid_get() and iommu_sva_free_pasid()
-> > are deleted and ioasid_put() is renamed to ioasid_free().
 > >
-> > 20-bit PASID allows up to 1M processes bound to PASIDs at the same time.
-> > With cgroups and other controls that might limit the number of process
-> > creation, the limited number of PASIDs is not a realistic issue for
-> > lazy PASID free.
-> 
-> Please take a step back and think hard about it whether that changelog
-> makes sense to you a year from now.
-> 
-> Let me walk you through:
-> 
-> > To avoid complexity of updating each thread's PASID status (e.g. sending
-> > IPI to update IA32_PASID MSR) on allocating and freeing PASID, once
-> > allocated and assigned to an mm, the PASID stays with the mm for the
-> > rest of the mm's lifetime.
-> 
-> You are missing the oportunity to tell a story about the history of this
-> decision here:
-> 
->   PASIDs are process wide. It was attempted to use refcounted PASIDs to
->   free them when the last thread drops the refcount. This turned out to
->   be complex and error prone. Given the fact that the PASID space is 20
->   bits, which allows up to 1M processes to have a PASID associated
->   concurrently, PASID resource exhaustion is not a realistic concern.
-> 
->   Therefore it was decided to simplify the approach and stick with lazy
->   on demand PASID allocation, but drop the eager free approach and make
->   a allocated PASID lifetime bound to the life time of the process.
-> 
-> > A reference to the PASID is taken on allocating the
-> > PASID. Binding/unbinding the PASID won't change refcount.  The
-> > reference is dropped on mm exit and thus the PASID is freed.
-> 
-> There is no refcount in play anymore, right? So how does this part of
-> the changelog make any sense?
-> 
-> This is followed by:
-> 
-> > Two helpers mm_pasid_set() and mm_pasid_drop() are defined in mm because
-> > the PASID operations handle the pasid member in mm_struct and should be
-> > part of mm operations. Because IOASID's reference count is not used any
-> > more and removed, unused ioasid_get() and iommu_sva_free_pasid()
-> > are deleted and ioasid_put() is renamed to ioasid_free().
-> 
-> which does not provide much rationale and just blurbs about _what_ the
-> patch is doing and not about the why and the connection to the
-> above. And the refcount removal section contradicts the stale text
-> above.
-> 
-> So this paragraph should be something like this:
-> 
->   Get rid of the refcounting mechanisms and replace/rename the
->   interfaces to reflect this new approach.
-> 
-> Hmm?
+> btw another idea I had over the w/e: Another option might be to allow
+> different backends for sync_file, and then making sure that you cannot
+> ever mix dma_fence and hv_dxg_fence type sync_file up (in e.g. the
+> merge ioctl).
+>
+> The issue is that fundamentally dma_fence and memory fences (or umf
+> for userspace memory fences as we tend to call them) aren't
+> compatible, but some of the interop plans we have is to allow stuffing
+> either of them into fence container objects like sync_file. So going
+> that route for wddm monitored fence support too could be a really
+> future-proof approach, plus it'd allow you to still share the
+> sync_file interface code. Not that it's going to be much code sharing,
+> since all the implementation code needs to be distinct.
+> -Daniel
 
-Sure. I will update the commit message with your comments.
+Thanks Daniel!
 
-Thanks.
+I will remove the patch for dxgsyncfile from the next set of upstream 
+patches.
 
--Fenghua
+It will be added later after a re-design.
+
+Iouri
+

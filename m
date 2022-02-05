@@ -2,120 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419C34AA796
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59E94AA798
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245387AbiBEIRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 03:17:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23596 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239139AbiBEIRk (ORCPT
+        id S242172AbiBEIR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351216AbiBEIRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 03:17:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644049059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2+z3ZjKtRxG6T6Z5VKFKBhdA6gfV81DVizdvw4/6PUk=;
-        b=Hbs0BxjmCQN5jvgJQglsslFYmOuJww5tj1apg6xHgwzPo652oc8eGQLz+7Th0Bj0sxGdEs
-        K7gIQvJpMVGo3V7qEhWFZtPGslvZc2nMK81a/vzExYdI8r1aBbMDYdow/oyzjtL7oc3XUw
-        Dc3yhU6rOTYgddr2QgPrjmo47jLLvlY=
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
- [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-fpmUGEoBOD2xR8RyoxSGQg-1; Sat, 05 Feb 2022 03:17:38 -0500
-X-MC-Unique: fpmUGEoBOD2xR8RyoxSGQg-1
-Received: by mail-oi1-f197.google.com with SMTP id w8-20020aca6208000000b002c7da950057so5294333oib.5
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 00:17:38 -0800 (PST)
+        Sat, 5 Feb 2022 03:17:47 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471A1C061355;
+        Sat,  5 Feb 2022 00:17:46 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id y5-20020a17090aca8500b001b8127e3d3aso8294778pjt.3;
+        Sat, 05 Feb 2022 00:17:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q7pnMxxA41QGRIEltZrYAcSJW8Szr5sjwJMXNTY+cos=;
+        b=Dh4/dRqdta5uoH/FAXGRbVbWSY8pJEUGbFjdzdu0nZNYBEktAfy+TEMqZMyrzXFXsL
+         njI7zxaz1ALv/hKQyUOtaz1YTecrPOHuB/J+xIIRBa1lWvqSmGwEAPxWY6WQEnjfjuRV
+         OljLmpO0mjQfd8GkGen6hQIyIgW88z2e+sbfsmw0pD3unDP8Z3x1Gz/Ou2t/BaY6lIJg
+         syHhAZVbvzREA+t83+AziFzxJu0lnPJ5zrEcGTW0llioPcUiINCO3RLZn00kbjd4781h
+         Rf3/mXF9sdXBPdbL3JnBxwuNaEbw77W+u3fDIvDUbW8LyWL0fJLtf8sXR3MPFMMhyeHJ
+         frFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2+z3ZjKtRxG6T6Z5VKFKBhdA6gfV81DVizdvw4/6PUk=;
-        b=wa5+jIjrQVcENrvqGXL42Nw9Y0AfaMuLmzWzFiGz3In8R6bMLu1R6/7naB3iz95VQq
-         yAwZgIDjz582spZ1j/+5lvzzFUdkNWuy/U0wvy3HUu2C+crwcan57guxIh6x6e3t47dn
-         1LwA6UNF/VytVxtn2PIlmuHLR/bODiCtdOOFXKV8jBRlz1yCt3EZURNGCxEKEwzZQdkb
-         tPJ+MNtOOgLmmxUuSmIocxHsRwH3kMQUBsVdWeliwlrho9hyMvfcJIPpFTEvkabGve/W
-         Pnbn5d7GlipGPKdngbRD8BmJ0kdV6rQ1vaie1PKkSlmjF+Pswmc/VgV4qpXN6eYV9D02
-         ZWgw==
-X-Gm-Message-State: AOAM533nkGJnrRIbqUmeAxwAIZJD49dQnYrzkkzbY3kNQnbmDoZC7yzN
-        SWTRkN5+7t0znqSETirKPvMbTCNpw6vtRJtInany2oX1iFiE/CHKDz3xoGIxQjBdp/7NC01SzDJ
-        uBsxk/KpqDOtEIMSeWrFjhwRQ
-X-Received: by 2002:a05:6808:17a9:: with SMTP id bg41mr1270093oib.41.1644049057495;
-        Sat, 05 Feb 2022 00:17:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz6PMVICTXXaDLc3Yid7XTSlSXktoo6ZqEOP3oQm+lihYzAmAhSDV2aZ6Tt5Yid/SGbl4RWdQ==
-X-Received: by 2002:a05:6808:17a9:: with SMTP id bg41mr1270088oib.41.1644049057343;
-        Sat, 05 Feb 2022 00:17:37 -0800 (PST)
-Received: from localhost.localdomain ([2804:431:c7f0:b1af:f10e:1643:81f3:16df])
-        by smtp.gmail.com with ESMTPSA id bg34sm1708795oob.14.2022.02.05.00.17.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q7pnMxxA41QGRIEltZrYAcSJW8Szr5sjwJMXNTY+cos=;
+        b=O99zq79CiNZk7emL9FGGKqmhfxTmXN2+W5KgvoJYfY9x9bmslbe2jSHW23o1nPtshH
+         bSnxhWC5H1YBoJMm6bve5O5kkg3/rBOQDX+RZ9hva96dlUGfKuYUfyZ6ePhpYkDul3A9
+         FpiaAJnScbJ25/zctYXbPDFdHkoT/EvilrLH7H7VMV4sOqgXMwJec8s4WyBeXx7kOgvx
+         pfLja+jp/wz9fbQcVj6tbmsJPogHnH3DTds7O9dPboCqvBMYLxDoNFCI+uFI/5qehWh7
+         EXYp+cMUkHhxbJhffpfADwKFJWxlzjshBZTE6AF48zYP2lPlX9XWpmUosBHTYtZcz3Kp
+         G8Wg==
+X-Gm-Message-State: AOAM531S4gpr263KGq8LGo+5LbTnFS5XpW51tkgOs/H1i5sSs1jZG2Jc
+        ZoGPjB1zVOV2VzgbZe3/Qe8=
+X-Google-Smtp-Source: ABdhPJz8EaqFeLlCCHRtBL8zk/a7lfH+n/ALNUfnxXXU6q18NCq1RfGxBtIc6Q5L3mxNWekrfZ45LQ==
+X-Received: by 2002:a17:902:7784:: with SMTP id o4mr6932893pll.173.1644049066363;
+        Sat, 05 Feb 2022 00:17:46 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.4])
+        by smtp.gmail.com with ESMTPSA id b12sm4826934pfm.154.2022.02.05.00.17.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 00:17:36 -0800 (PST)
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Leonardo Bras <leobras@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] x86/kvm/fpu: Limit setting guest fpu features based on guest_supported_xcr0
-Date:   Sat,  5 Feb 2022 05:16:59 -0300
-Message-Id: <20220205081658.562208-3-leobras@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220205081658.562208-1-leobras@redhat.com>
-References: <20220205081658.562208-1-leobras@redhat.com>
+        Sat, 05 Feb 2022 00:17:45 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org, dsahern@kernel.org, idosch@idosch.org
+Cc:     nhorman@tuxdriver.com, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH v6 net-next] net: drop_monitor: support drop reason
+Date:   Sat,  5 Feb 2022 16:17:38 +0800
+Message-Id: <20220205081738.565394-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As of today, if userspace tries to set guest's fpu features to any value
-(vcpu ioctl: KVM_SET_XSAVE), it is checked against the supported features
-of the host cpu, and the supported features of KVM.
+From: Menglong Dong <imagedong@tencent.com>
 
-This makes possible to set the guest fpstate with features that were not
-enabled during guest creation, but are available in the host cpu.
+In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+drop_monitor is able to report the drop reason to users by netlink.
 
-This becomes an issue during guest migration, if the target host does not
-support the given feature:
-1 - Create guest vcpu without support to featureA, on a source host that
-    supports it,
-2 - Set featureA to guest vcpu, even if it does not support it.
-    It will run just fine, as the current host cpu supports featureA,
-3 - Migrate guest to another host, which does not support featureA,
-4 - After migration is completed, restoring guest fpustate to fpu regs will
-    cause a general-protection exception, and crash the guest.
+The drop reasons are reported as string to users, which is exactly
+the same as what we do when reporting it to ftrace.
 
-A way to avoid the issue is by returning error if the user tries to set
-any feature not enabled during guest creation (guest_supported_xcr0).
-
-Signed-off-by: Leonardo Bras <leobras@redhat.com>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
 ---
- arch/x86/kvm/x86.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v6:
+- check the range of drop reason in net_dm_packet_report_fill()
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 74b53a16f38a..f4e42de3560a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5010,7 +5010,8 @@ static int kvm_vcpu_ioctl_x86_set_xsave(struct kvm_vcpu *vcpu,
+v5:
+- check if drop reason larger than SKB_DROP_REASON_MAX
+
+v4:
+- report drop reasons as string
+
+v3:
+- referring to cb->reason and cb->pc directly in
+  net_dm_packet_report_fill()
+
+v2:
+- get a pointer to struct net_dm_skb_cb instead of local var for
+  each field
+---
+ include/uapi/linux/net_dropmon.h |  1 +
+ net/core/drop_monitor.c          | 29 +++++++++++++++++++++++++----
+ 2 files changed, 26 insertions(+), 4 deletions(-)
+
+diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+index 66048cc5d7b3..1bbea8f0681e 100644
+--- a/include/uapi/linux/net_dropmon.h
++++ b/include/uapi/linux/net_dropmon.h
+@@ -93,6 +93,7 @@ enum net_dm_attr {
+ 	NET_DM_ATTR_SW_DROPS,			/* flag */
+ 	NET_DM_ATTR_HW_DROPS,			/* flag */
+ 	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
++	NET_DM_ATTR_REASON,			/* string */
  
- 	return fpu_copy_uabi_to_guest_fpstate(&vcpu->arch.guest_fpu,
- 					      guest_xsave->region,
--					      supported_xcr0, &vcpu->arch.pkru);
-+					      vcpu->arch.guest_supported_xcr0,
-+					     &vcpu->arch.pkru);
- }
+ 	__NET_DM_ATTR_MAX,
+ 	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+index 7b288a121a41..1180f1a28599 100644
+--- a/net/core/drop_monitor.c
++++ b/net/core/drop_monitor.c
+@@ -48,6 +48,16 @@
+ static int trace_state = TRACE_OFF;
+ static bool monitor_hw;
  
- static void kvm_vcpu_ioctl_x86_get_xcrs(struct kvm_vcpu *vcpu,
++#undef EM
++#undef EMe
++
++#define EM(a, b)	[a] = #b,
++#define EMe(a, b)	[a] = #b
++
++static const char *drop_reasons[SKB_DROP_REASON_MAX + 1] = {
++	TRACE_SKB_DROP_REASON
++};
++
+ /* net_dm_mutex
+  *
+  * An overall lock guarding every operation coming from userspace.
+@@ -126,6 +136,7 @@ struct net_dm_skb_cb {
+ 		struct devlink_trap_metadata *hw_metadata;
+ 		void *pc;
+ 	};
++	enum skb_drop_reason reason;
+ };
+ 
+ #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+@@ -498,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ {
+ 	ktime_t tstamp = ktime_get_real();
+ 	struct per_cpu_dm_data *data;
++	struct net_dm_skb_cb *cb;
+ 	struct sk_buff *nskb;
+ 	unsigned long flags;
+ 
+@@ -508,7 +520,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+ 	if (!nskb)
+ 		return;
+ 
+-	NET_DM_SKB_CB(nskb)->pc = location;
++	cb = NET_DM_SKB_CB(nskb);
++	cb->reason = reason;
++	cb->pc = location;
+ 	/* Override the timestamp because we care about the time when the
+ 	 * packet was dropped.
+ 	 */
+@@ -606,8 +620,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 				     size_t payload_len)
+ {
+-	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
++	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+ 	char buf[NET_DM_MAX_SYMBOL_LEN];
++	unsigned int reason;
+ 	struct nlattr *attr;
+ 	void *hdr;
+ 	int rc;
+@@ -620,10 +635,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+ 	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+ 		goto nla_put_failure;
+ 
+-	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
++	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
++			      NET_DM_ATTR_PAD))
++		goto nla_put_failure;
++
++	reason = (unsigned int)cb->reason;
++	if (reason < SKB_DROP_REASON_MAX &&
++	    nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+ 		goto nla_put_failure;
+ 
+-	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
++	snprintf(buf, sizeof(buf), "%pS", cb->pc);
+ 	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+ 		goto nla_put_failure;
+ 
 -- 
-2.35.1
+2.27.0
 

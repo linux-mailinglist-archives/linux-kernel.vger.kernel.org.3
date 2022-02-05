@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6364AAA7E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8185B4AAA84
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380682AbiBERTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:19:14 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56756 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349672AbiBERTM (ORCPT
+        id S1380686AbiBERUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232086AbiBERUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:19:12 -0500
+        Sat, 5 Feb 2022 12:20:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CDCC061348;
+        Sat,  5 Feb 2022 09:20:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F90BCE0022;
-        Sat,  5 Feb 2022 17:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288E1C340E8;
-        Sat,  5 Feb 2022 17:19:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42DDF6112D;
+        Sat,  5 Feb 2022 17:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B58C340E8;
+        Sat,  5 Feb 2022 17:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644081549;
-        bh=9uPsPRBOdWeN7FKceOH+/umSJ3yFTYon1ZxpSNcTeZ8=;
+        s=k20201202; t=1644081614;
+        bh=FPD+9Wbhuke+aGXCPGHLH+kq2cHplX8py2gleXSQSjA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pvC8dh/NjZOYXVCwyHPyc431YQxRxFKYgin9D5qh7REoteUdCeN6Bw3uvTYQDmQKY
-         nwl9VVncfrZw5WrHBIpm5LeOsqUkSEi5V1NmyFWZ1rxxf/x4NJMWVFO9MqgbyYJ8K+
-         cAepQ96R3mWpnyyra2gDUt55MQ55GrwxPsOnZXCg8yKSLxGPDHPZ+vbR2VXIzHRYdw
-         zhC1ciJk/1Ar0aIqAup2CwM2jHktKuM6oZSmdlq7c7LnBS+kmqmYfweST9OYDK/JfC
-         UPTuB8TowM/hhbaMsaGtQDuBxBY1bHOJViSM805aqe6h7cANhrGUtfU4B6YX/zA/T3
-         axFldYNI2Aojg==
-Date:   Sat, 5 Feb 2022 17:25:39 +0000
+        b=G7CDB6dnMB0nVt5El2VZiXXb0U3xtZdoDjbCBT3oGOhYADQBwWwh/Pp/MMGzLOwHD
+         YnHNiZcSASJruzgdHlKySYpTswq0+qpbMOwN4wffEqAnLPvuWDHS/LVtG2yeUmbOHO
+         Oq6glVKlSfVWW/5arieUTojBDx2zZBOggQoUl5Aa9+JajlshI+W1cNpDPYAf1GNa8/
+         FdufzL7LuTZUn23ACbtivECv9VnSzCDTmsxmEt3706T5CFs19J5jNC1LhLWp1q420I
+         6c3gLMWYOHBxSLBzMzfm5/EZZDjPCt3LSSHoE/IUHaLrkDB+0+W9E0Juvh6Nce2ytw
+         tFt73o32ZtNqQ==
+Date:   Sat, 5 Feb 2022 17:26:46 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Denis Ciocca <denis.ciocca@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] iio: Silan SC7A20 accelerometer support
-Message-ID: <20220205172539.18e0ad49@jic23-huawei>
-In-Reply-To: <20220202235049.8051-1-samuel@sholland.org>
-References: <20220202235049.8051-1-samuel@sholland.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: humidity: dht11: Switch from of headers to
+ mod_devicetable.h
+Message-ID: <20220205172646.0d8f9ac3@jic23-huawei>
+In-Reply-To: <20220202203420.56654-1-andriy.shevchenko@linux.intel.com>
+References: <20220202203420.56654-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  2 Feb 2022 17:50:45 -0600
-Samuel Holland <samuel@sholland.org> wrote:
+On Wed,  2 Feb 2022 22:34:20 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-> This chip is register-compatible with an ST part, so it works without
-> any issues when added to the existing driver.
+> There is nothing directly using of specific interfaces in this driver,
+> so lets not include the headers.
 > 
-> Previously I called it a clone, but it's not really a clone, because
-> it's not a drop-in replacement for the other chips. The software
-> interface matches the ST parts, but the pinout does not. Instead, the
-> pinout matches the Kionix KX122 and KX132.
-Weird :)
-
-I'm fine with the series, but as it contains a new vendor ID and the
-dt-binding update I'll leave it on list for a bit longer to give
-Rob time to sanity check that.
-
-Thanks,
-
-Jonathan
-
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Applied.
+> ---
+>  drivers/iio/humidity/dht11.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> Changes in v2:
->  - Move the new compatible to its own section
->  - Add a comment about the WAI value
->  - Update commit messages
-> 
-> Samuel Holland (3):
->   dt-bindings: vendor-prefixes: Add silan vendor prefix
->   dt-bindings: iio: st: Add Silan SC7A20 accelerometer
->   iio: accel: st_accel: Add support for Silan SC7A20
-> 
->  .../bindings/iio/st,st-sensors.yaml           |  3 +
->  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
->  drivers/iio/accel/st_accel.h                  |  2 +
->  drivers/iio/accel/st_accel_core.c             | 83 +++++++++++++++++++
->  drivers/iio/accel/st_accel_i2c.c              |  5 ++
->  5 files changed, 95 insertions(+)
-> 
+> diff --git a/drivers/iio/humidity/dht11.c b/drivers/iio/humidity/dht11.c
+> index 9a7819817488..c97e25448772 100644
+> --- a/drivers/iio/humidity/dht11.c
+> +++ b/drivers/iio/humidity/dht11.c
+> @@ -11,10 +11,9 @@
+>  #include <linux/kernel.h>
+>  #include <linux/printk.h>
+>  #include <linux/slab.h>
+> -#include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/io.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/wait.h>
 

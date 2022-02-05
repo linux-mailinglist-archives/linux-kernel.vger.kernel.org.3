@@ -2,126 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6002E4AA99A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:16:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBFD4AA9A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357537AbiBEPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 10:16:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42166 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiBEPQS (ORCPT
+        id S1376269AbiBEPXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 10:23:22 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40752 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358041AbiBEPXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 10:16:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C1D7B80BD9;
-        Sat,  5 Feb 2022 15:16:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4703EC340E8;
-        Sat,  5 Feb 2022 15:16:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644074175;
-        bh=SIPhbdHKmWV6MppiCjN3egF7/k8xhne4taCD8UjBxe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NqK84Z/iupWxKYPEI7t/l9f9mbCubnVPv43sCFs7KVDlgV4qis7Y3OqlWg4Kd4UZK
-         +Ibr1j6wyWWAPcB979opIraDAbnlA/FezcG28rW2Mc6D3RbXVmn0fGzbznEmEH6QuI
-         bEb6kVg4t070TclIszraqg6GuziNJxooARnuLPOUDPHMAiCMQGCl3bGgH9L4cQBHoF
-         qIyfjvURxwWwAgWnOryLm3VT43/Uvv8egflcBVV2tNGuoBIPXRh+99ndosUg3fc0IN
-         c4grOz/8dbvyRoTZ7CjwCFpw/kZax7cpRf7zzdxOtkopTTGznYLmw06K7RtN5AWet4
-         50cfL7ewB+UnQ==
-Date:   Sat, 5 Feb 2022 17:16:06 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-hexagon@vger.kernel.org, openrisc@lists.librecores.org
-Subject: Re: [PATCH] mm: Remove mmu_gathers storage from remaining
- architectures
-Message-ID: <Yf6UthQtASGNgW8Q@kernel.org>
-References: <20220205141956.3315419-1-shorne@gmail.com>
+        Sat, 5 Feb 2022 10:23:20 -0500
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 60E268030865;
+        Sat,  5 Feb 2022 18:23:17 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 60E268030865
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1644074598;
+        bh=QHLFQH2a3MKFeN5W7H8+opv1v3yX8dFAXQi720szGHo=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=hyKU+oar5fSLOwsZK1jX1Ncr6BoEDe2/l38hdKreX5Qn3VY74hicNBMc5lKIDguRd
+         MqrRr8q3IGWgjVFo2RgJl1+KmKkED1n4JAMaChWu1ZBGuEGLC2marHaH8derkG+bh0
+         ZmBYL9Tv/MaN+sG3+IaPowGOwLYwBFUpUuJYbabE=
+Received: from MAIL.baikal.int (192.168.51.25) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 5 Feb 2022 18:22:45 +0300
+Received: from MAIL.baikal.int ([::1]) by MAIL.baikal.int ([::1]) with mapi id
+ 15.00.1395.000; Sat, 5 Feb 2022 18:22:44 +0300
+From:   <Pavel.Parkhomenko@baikalelectronics.ru>
+To:     <andrew@lunn.ch>
+CC:     <Alexey.Malahov@baikalelectronics.ru>,
+        <Sergey.Semin@baikalelectronics.ru>,
+        <linux-kernel@vger.kernel.org>, <michael@stapelberg.de>,
+        <afleming@gmail.com>, <f.fainelli@gmail.com>,
+        <netdev@vger.kernel.org>
+Subject: Re: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
+ 88e1121-compatible PHYs
+Thread-Topic: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
+ 88e1121-compatible PHYs
+Thread-Index: AQHYGYgjpwnysZLJNUG22PH4uN5jnqyDK9IAgAG3OQA=
+Date:   Sat, 5 Feb 2022 15:22:44 +0000
+Message-ID: <5dd77fec0f9a2d38fd4473cd0e357e80aeafe0cb.camel@baikalelectronics.ru>
+References: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
+         <Yf0lyGi+2mEwmrEH@lunn.ch>
+In-Reply-To: <Yf0lyGi+2mEwmrEH@lunn.ch>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <369B71F9D41807438C1279FA0EB1A53A@baikalelectronics.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220205141956.3315419-1-shorne@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 11:19:53PM +0900, Stafford Horne wrote:
-> Originally the mmu_gathers were removed in commit 1c3951769621 ("mm: now
-> that all old mmu_gather code is gone, remove the storage").  However,
-> the openrisc and hexagon architecture were merged around the same time
-> and mmu_gathers was not removed.
-> 
-> This patch removes them from openrisc, hexagon and nds32:
-> 
-> Noticed while cleaning this warning:
-> 
->     arch/openrisc/mm/init.c:41:1: warning: symbol 'mmu_gathers' was not declared. Should it be static?
-> 
-> Signed-off-by: Stafford Horne <shorne@gmail.com>
-
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-
-> ---
->  arch/hexagon/mm/init.c  | 2 --
->  arch/nds32/mm/init.c    | 1 -
->  arch/openrisc/mm/init.c | 2 --
->  3 files changed, 5 deletions(-)
-> 
-> diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
-> index f01e91e10d95..3167a3b5c97b 100644
-> --- a/arch/hexagon/mm/init.c
-> +++ b/arch/hexagon/mm/init.c
-> @@ -29,8 +29,6 @@ int max_kernel_seg = 0x303;
->  /*  indicate pfn's of high memory  */
->  unsigned long highstart_pfn, highend_pfn;
->  
-> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
-> -
->  /* Default cache attribute for newly created page tables */
->  unsigned long _dflt_cache_att = CACHEDEF;
->  
-> diff --git a/arch/nds32/mm/init.c b/arch/nds32/mm/init.c
-> index f63f839738c4..825c85cab1a1 100644
-> --- a/arch/nds32/mm/init.c
-> +++ b/arch/nds32/mm/init.c
-> @@ -18,7 +18,6 @@
->  #include <asm/tlb.h>
->  #include <asm/page.h>
->  
-> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
->  DEFINE_SPINLOCK(anon_alias_lock);
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
->  
-> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
-> index 97305bde1b16..3a021ab6f1ae 100644
-> --- a/arch/openrisc/mm/init.c
-> +++ b/arch/openrisc/mm/init.c
-> @@ -38,8 +38,6 @@
->  
->  int mem_init_done;
->  
-> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
-> -
->  static void __init zone_sizes_init(void)
->  {
->  	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
-> -- 
-> 2.31.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+T24gRnJpLCAwNC8wMi8yMDIyIGF0IDE0OjEwICswMTAwLCBBbmRyZXcgTHVubiB3cm90ZToNCj4g
+SGkgUGF2ZWwNCj4gDQo+IFRoZXJlIGFwcGVhcnMgdG8gYmUgYW5vdGhlciBwYXRoIHdoaWNoIGhh
+cyB0aGUgc2FtZSBpc3N1ZS4NCj4gDQo+IG04OGUxMTE4X2NvbmZpZ19hbmVnKCkgY2FsbHMgbWFy
+dmVsbF9zZXRfcG9sYXJpdHkoKSwgd2hpY2ggYWxzbyBuZWVkcw0KPiBhIHJlc2V0IGFmdGVyd2Fy
+ZHMuDQo+IA0KPiBDb3VsZCB5b3UgZml4IHRoaXMgY2FzZSBhcyB3ZWxsPw0KPiANCj4gVGhhbmtz
+DQo+IMKgwqDCoMKgwqDCoMKgwqBBbmRyZXcNCg0KbTg4ZTExMThfY29uZmlnX2FuZWcoKSB3YXMg
+YWRkZWQgYmFjayBpbiAyMDA4IGFuZCBoYXMgdW5jb25kaXRpb25hbA0KZ2VucGh5X3NvZnRfcmVz
+ZXQoKSBhdCB0aGUgdmVyeSBiZWdpbm5pbmcuIEkgaGF2ZW4ndCBnb3QgODhFMTExOFIgb3INCjg4
+RTExMTQ5UiBieSB0aGUgaGFuZCBhbmQgdGhlIGZ1bGwgZG9jdW1lbnRhdGlvbiBpcyBhbHNvIG5v
+dCBhdmFpbGFibGUuDQpJIGJlbGlldmUgdGhhdCBpbiB0aGlzIGNhc2UgaXQgd291bGQgYmUgc2Fm
+ZSB0byBzdGlsbCBpc3N1ZSByZXNldA0KdW5jb25kaXRpb25hbGx5LCBidXQgZG8gaXQgYXQgdGhl
+IHZlcnkgZW5kIG9mIG04OGUxMTE4X2NvbmZpZ19hbmVnKCkuDQpBbnl3YXlzLCBJJ2QgbGlrZSB0
+byBwb3N0IGl0IGFzIGEgc2VwYXJhdGUgcGF0Y2ggYXMgSSBjYW5ub3QgdGVzdCB0aGUgZml4DQpw
+cm9wZXJseSwgdW5saWtlIHByZXZpb3VzIHBhdGNoIHJlZ2FyZGluZyA4OEUxNTEwLg0KDQotLSAN
+CkJlc3QgcmVnYXJkcywNClBhdmVsIFBhcmtob21lbmtvDQo=

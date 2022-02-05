@@ -2,247 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEC74AA734
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DD64AA736
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379502AbiBEGvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S1379531AbiBEG6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiBEGvu (ORCPT
+        with ESMTP id S230008AbiBEG6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:51:50 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773D0C061347
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:51:49 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id p5so24915293ybd.13
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:51:49 -0800 (PST)
+        Sat, 5 Feb 2022 01:58:23 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF9EC061346
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:58:17 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id z14-20020a17090ab10e00b001b6175d4040so15176068pjq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AfdtRuh+2hET7DIozfvJbH9tYRwZdSLV1MatljKLXvU=;
-        b=cdFyXrDxnYUOmi5ROhNVnm6Qww6T54XH5uClc6mXWP1J5Q7hPyTdW6+8Ock9jwCmDH
-         WKEilaaWuBtg+RWEVB1cPKY9yQOUu2AmsLX2lzw+bo2fbC67Ax0kb0+A4QbxK1ujHJ9/
-         6Ay1pLicu9BVYjBD71j4HBKJOn6YdkD3aVQo7U0/H7ADR+NIYcbyWpkMSvJLOkV2wfZC
-         nOx/pHrVzdfJLJqqiIR+xzKhSz0lJx0IdqRCrNFxa8tEMkdSqDGRUNC+MrhyjoWvTzgK
-         NLC99BuOaGwb7TbUTG0Zr4MyJXTMkE2ZHcwfh8aDmeX2dq4kaqyQbNFHgTNRW9L1qQOI
-         NLfw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QqxTnbslfQMYPFUCFBn9bFHBdZqy5C92C2JjoA9HPoc=;
+        b=lHyDhB7Xwf21LIhM+qKLRm5DZT5pLF+Ws83gOj9TkI4zQLX3mdkwBqY3OxiOUB3ukk
+         hwmrqbjfY/A/oTaMxk8XcCPRQ8XIcTqLUoyxHaZCfOlJ9C6b/yX2B/bgoHPSK1QdtcHY
+         +qbrALV5pdXBrEn/FOzbX8fkJGzIDmFCQCFU9a3ILYgYxiT+Kofn6D0LoUlQ6Sa4S2PQ
+         PqIuOlgS6Y/eFv8W5RSFe4a6NNb0SjRuD4FA27D/2a3YIkABY+z4MxLJBJJLn6sp2gqr
+         /geiJV+SwV0I3rhICTatIrEnkNQgm0BLJAdJb9mARqAqh7pn5hDSnpqZS1nByC1meYky
+         odvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AfdtRuh+2hET7DIozfvJbH9tYRwZdSLV1MatljKLXvU=;
-        b=US+iRR7EEhZDUosNX6nTWmm+mZKABlJLX1s5LOw+TKc14uwXQFk9WEy//b71qXxosL
-         RCYSmWuKyFA8dlu2G/u+OSCuWRcathEfLEKCBstCag381nrIjd/hpqTxYaNpkTXs75T7
-         YKq8k0l8ZzmItljbwRrlDfvkLkU+lp2CjQVIttRglnf60ZdALRYuUWJYdyTzV5mVPNV5
-         zl+ox8lRz7g0nm08YL5RjmMPRtUzfsTNLwdjOB76uAsqVDf9tTayzb77vZtFYRccFpk3
-         IFZzdJIlRUOntvRk3W6fldZrc82nrjN+SZTvdIlqYbWuPAqb/QoBf/kv9s31j+lD6iFZ
-         ckiw==
-X-Gm-Message-State: AOAM531OqWvAtC5Q8j+Fs4vZUFKsfNw4VP7dCuXX0MtMFzsTiP+NpQiM
-        Z7JzRU9xBbg5Vv+8UaFM9iclf16hf27YqqIYQSrmaw==
-X-Google-Smtp-Source: ABdhPJy2VLSDTxVYpEPs+Bln+VIVYOyoA/HSzfiHMuj+Bp5j1LmQzdxbFXy19mY2Bee5C7A9DSOAqrGQFAqfQ5DT1W0=
-X-Received: by 2002:a25:49c5:: with SMTP id w188mr2454565yba.200.1644043908430;
- Fri, 04 Feb 2022 22:51:48 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QqxTnbslfQMYPFUCFBn9bFHBdZqy5C92C2JjoA9HPoc=;
+        b=pHBl6/2T34Vo6piemC3C8griHR1ZnAkevhsitpMTFeWDUqfzcInMFLTA//kaJI/xOl
+         4hsRuLCI1oY0WFTyYHJPWxyVYJE+0vXlijAydw6Vm9bW2EdlOQ+2kkEaLq4y3SNG2h2G
+         4I3uaT/GJEKam95nqVrsFsBMDtuUD13FMFczvlMGH8JseEIgQeuCQEiT8eCs8U0vUS09
+         TGEeDjNR+KU82Xhpd1xAb+SSupt+zhANIMiQtrnCHEfDesnYByyhheZVOPsYyorQAyn0
+         FV2jE6k5M3DELQ55msdBksnAIbdetuK+Vyxp3p4bpX7TIfmAhe4aBw1Le0vuoU05eIcu
+         Ihgg==
+X-Gm-Message-State: AOAM530HYUglC6MHA/Nnu2wcfN1ifpTP8JyrsuaF9qPz2Pp/999PuBux
+        YU5+usXzj4owNLq8xgYwDCoVIEDHthEezg==
+X-Google-Smtp-Source: ABdhPJwhES99P6msXC4Xhk72/tmpEaCcjze1Q2/hfSAAd4cPyy78/YGJWKTHiQcjKQpObaXA+roINw==
+X-Received: by 2002:a17:90b:4a4c:: with SMTP id lb12mr2882058pjb.211.1644044296311;
+        Fri, 04 Feb 2022 22:58:16 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id j185sm4444007pfd.85.2022.02.04.22.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 22:58:15 -0800 (PST)
+Date:   Sat, 5 Feb 2022 15:58:13 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Jonas Bonn <jonas@southpole.se>,
+        linux-kernel@vger.kernel.org, hch@infradead.org,
+        openrisc@lists.librecores.org, akpm@linux-foundation.org
+Subject: Re: [OpenRISC] [RFC V1 22/31] openrisc/mm: Enable
+ ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <Yf4gBd1nJNeQYSJr@antec>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+ <1643029028-12710-23-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-References: <20220204091915.247906930@linuxfoundation.org>
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 5 Feb 2022 12:21:37 +0530
-Message-ID: <CA+G9fYskqJgYwp_m5uvDOYkY7JZqatdoDmVVPhYSbTszvcfi9w@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1643029028-12710-23-git-send-email-anshuman.khandual@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 14:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.20 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.20-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jan 24, 2022 at 06:26:59PM +0530, Anshuman Khandual wrote:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed.
+> 
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: openrisc@lists.librecores.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+For one thing this is easier to read than the __P000 codes.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Stafford Horne <shorne@gmail.com>
 
-## Build
-* kernel: 5.15.20-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: 61f904d1d62716d179a70419e910118621910751
-* git describe: v5.15.19-34-g61f904d1d627
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.19-34-g61f904d1d627
-
-## Test Regressions (compared to v5.15.19)
-No test regressions found.
-
-## Metric regressions (compared to v5.15.19)
-No metric regressions found.
-
-## Test fixes (compared to v5.15.19)
-No test fixes found.
-
-## Metric fixes (compared to v5.15.19)
-No metric fixes found.
-
-## Test result summary
-total: 104639, pass: 89348, fail: 1149, skip: 13256, xfail: 886
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 263 total, 261 passed, 2 failed
-* arm64: 42 total, 39 passed, 3 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 37 passed, 3 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 35 passed, 2 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 56 total, 50 passed, 6 failed
-* riscv: 28 total, 22 passed, 6 failed
-* s390: 22 total, 20 passed, 2 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 42 total, 39 passed, 3 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+> ---
+>  arch/openrisc/Kconfig               |  1 +
+>  arch/openrisc/include/asm/pgtable.h | 18 -------------
+>  arch/openrisc/mm/init.c             | 41 +++++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+> index f724b3f1aeed..842a61426816 100644
+> --- a/arch/openrisc/Kconfig
+> +++ b/arch/openrisc/Kconfig
+> @@ -10,6 +10,7 @@ config OPENRISC
+>  	select ARCH_HAS_DMA_SET_UNCACHED
+>  	select ARCH_HAS_DMA_CLEAR_UNCACHED
+>  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select COMMON_CLK
+>  	select OF
+>  	select OF_EARLY_FLATTREE
+> diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
+> index cdd657f80bfa..fe686c4b7065 100644
+> --- a/arch/openrisc/include/asm/pgtable.h
+> +++ b/arch/openrisc/include/asm/pgtable.h
+> @@ -176,24 +176,6 @@ extern void paging_init(void);
+>  	__pgprot(_PAGE_ALL | _PAGE_SRE | _PAGE_SWE \
+>  		 | _PAGE_SHARED | _PAGE_DIRTY | _PAGE_EXEC | _PAGE_CI)
+>  
+> -#define __P000	PAGE_NONE
+> -#define __P001	PAGE_READONLY_X
+> -#define __P010	PAGE_COPY
+> -#define __P011	PAGE_COPY_X
+> -#define __P100	PAGE_READONLY
+> -#define __P101	PAGE_READONLY_X
+> -#define __P110	PAGE_COPY
+> -#define __P111	PAGE_COPY_X
+> -
+> -#define __S000	PAGE_NONE
+> -#define __S001	PAGE_READONLY_X
+> -#define __S010	PAGE_SHARED
+> -#define __S011	PAGE_SHARED_X
+> -#define __S100	PAGE_READONLY
+> -#define __S101	PAGE_READONLY_X
+> -#define __S110	PAGE_SHARED
+> -#define __S111	PAGE_SHARED_X
+> -
+>  /* zero page used for uninitialized stuff */
+>  extern unsigned long empty_zero_page[2048];
+>  #define ZERO_PAGE(vaddr) (virt_to_page(empty_zero_page))
+> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+> index 97305bde1b16..c9f5e7d6bb59 100644
+> --- a/arch/openrisc/mm/init.c
+> +++ b/arch/openrisc/mm/init.c
+> @@ -210,3 +210,44 @@ void __init mem_init(void)
+>  	mem_init_done = 1;
+>  	return;
+>  }
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return PAGE_NONE;
+> +	case VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_WRITE:
+> +		return PAGE_COPY;
+> +	case VM_READ | VM_WRITE:
+> +		return PAGE_COPY_X;
+> +	case VM_EXEC:
+> +		return PAGE_READONLY;
+> +	case VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_EXEC | VM_WRITE:
+> +		return PAGE_COPY;
+> +	case VM_EXEC | VM_READ | VM_WRITE:
+> +		return PAGE_COPY_X;
+> +	case VM_SHARED:
+> +		return PAGE_NONE;
+> +	case VM_SHARED | VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_SHARED | VM_WRITE:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_READ | VM_WRITE:
+> +		return PAGE_SHARED_X;
+> +	case VM_SHARED | VM_EXEC:
+> +		return PAGE_READONLY;
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_X;
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
+> +		return PAGE_SHARED_X;
+> +	default:
+> +		BUILD_BUG();
+> +	}
+> +}
+> +EXPORT_SYMBOL(vm_get_page_prot);
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> OpenRISC mailing list
+> OpenRISC@lists.librecores.org
+> https://lists.librecores.org/listinfo/openrisc

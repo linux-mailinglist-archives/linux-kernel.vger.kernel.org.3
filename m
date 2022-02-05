@@ -2,120 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538DB4AA707
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065C54AA70B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347969AbiBEGEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:04:34 -0500
-Received: from mail.hallyn.com ([178.63.66.53]:39068 "EHLO mail.hallyn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344783AbiBEGEa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:04:30 -0500
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 136E47E4; Fri,  4 Feb 2022 23:58:27 -0600 (CST)
-Date:   Fri, 4 Feb 2022 23:58:27 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Subject: Re: [PATCH v10 12/27] ima: Define mac_admin_ns_capable() as a
- wrapper for ns_capable()
-Message-ID: <20220205055826.GA15072@mail.hallyn.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-13-stefanb@linux.ibm.com>
+        id S238891AbiBEGJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:09:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58079 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237797AbiBEGJX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 01:09:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644041363;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CTujWjViNIykIXnrJ9Di78sXxHI4yOPC1t5GOAikn6E=;
+        b=BnqIBNO3aVZyVFttino4c+8/ycEEmrCVuEdn+zW0jLUoyD101M5ttlhQMHLMXZ1b6VZRc8
+        mCH1prowW2TH2qyi3ycCAo6qNAvkDOQGiRdCl+BmI2+oGk02d1LRRnibRnFBC12KHaBPeU
+        LQTfurFYM5tozLIOso3+zkiYAOs0ph0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-259-AEQl6MXGMVu60QH8VTbzkg-1; Sat, 05 Feb 2022 01:09:21 -0500
+X-MC-Unique: AEQl6MXGMVu60QH8VTbzkg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70E04814245;
+        Sat,  5 Feb 2022 06:09:20 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2252D6C1B3;
+        Sat,  5 Feb 2022 06:09:20 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 5.17-rc3
+Date:   Sat,  5 Feb 2022 01:09:19 -0500
+Message-Id: <20220205060919.88656-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201203735.164593-13-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 03:37:20PM -0500, Stefan Berger wrote:
-> Define mac_admin_ns_capable() as a wrapper for the combined ns_capable()
-> checks on CAP_MAC_ADMIN and CAP_SYS_ADMIN in a user namespace. Return
-> true on the check if either capability or both are available.
-> 
-> Use mac_admin_ns_capable() in place of capable(SYS_ADMIN). This will allow
-> an IMA namespace to read the policy with only CAP_MAC_ADMIN, which has
-> less privileges than CAP_SYS_ADMIN.
-> 
-> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> ---
->  include/linux/capability.h      | 6 ++++++
->  security/integrity/ima/ima.h    | 6 ++++++
->  security/integrity/ima/ima_fs.c | 5 ++++-
->  3 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/capability.h b/include/linux/capability.h
-> index 65efb74c3585..991579178f32 100644
-> --- a/include/linux/capability.h
-> +++ b/include/linux/capability.h
-> @@ -270,6 +270,12 @@ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
->  		ns_capable(ns, CAP_SYS_ADMIN);
->  }
->  
-> +static inline bool mac_admin_ns_capable(struct user_namespace *ns)
-> +{
-> +	return ns_capable(ns, CAP_MAC_ADMIN) ||
-> +		ns_capable(ns, CAP_SYS_ADMIN);
+Linus,
 
-Do you care about audit warnings?  If the task has CAP_SYS_ADMIN but
-not CAP_MAC_ADMIN, is it desirable that selinux_capable() will audit the
-CAP_MAC_ADMIN failure?
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
 
-> +}
-> +
->  /* audit system wants to get cap info from files as well */
->  int get_vfs_caps_from_disk(struct user_namespace *mnt_userns,
->  			   const struct dentry *dentry,
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index fb6bd054d899..0057b1fd6c18 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -487,4 +487,10 @@ static inline int ima_filter_rule_match(u32 secid, u32 field, u32 op,
->  #define	POLICY_FILE_FLAGS	S_IWUSR
->  #endif /* CONFIG_IMA_READ_POLICY */
->  
-> +static inline
-> +struct user_namespace *ima_user_ns_from_file(const struct file *filp)
-> +{
-> +	return file_inode(filp)->i_sb->s_user_ns;
-> +}
-> +
->  #endif /* __LINUX_IMA_H */
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 89d3113ceda1..c41aa61b7393 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -377,6 +377,9 @@ static const struct seq_operations ima_policy_seqops = {
->   */
->  static int ima_open_policy(struct inode *inode, struct file *filp)
->  {
-> +#ifdef CONFIG_IMA_READ_POLICY
-> +	struct user_namespace *user_ns = ima_user_ns_from_file(filp);
-> +#endif
->  	struct ima_namespace *ns = &init_ima_ns;
->  
->  	if (!(filp->f_flags & O_WRONLY)) {
-> @@ -385,7 +388,7 @@ static int ima_open_policy(struct inode *inode, struct file *filp)
->  #else
->  		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
->  			return -EACCES;
-> -		if (!capable(CAP_SYS_ADMIN))
-> +		if (!mac_admin_ns_capable(user_ns))
->  			return -EPERM;
->  		return seq_open(filp, &ima_policy_seqops);
->  #endif
-> -- 
-> 2.31.1
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to 7e6a6b400db8048bd1c06e497e338388413cf5bc:
+
+  Merge tag 'kvmarm-fixes-5.17-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-02-05 00:58:25 -0500)
+
+----------------------------------------------------------------
+ARM:
+
+* A couple of fixes when handling an exception while a SError has been delivered
+
+* Workaround for Cortex-A510's single-step erratum
+
+RISCV:
+
+* Make CY, TM, and IR counters accessible in VU mode
+
+* Fix SBI implementation version
+
+x86:
+
+* Report deprecation of x87 features in supported CPUID
+
+* Preparation for fixing an interrupt delivery race on AMD hardware
+
+* Sparse fix
+
+All except POWER and s390:
+
+* Rework guest entry code to correctly mark noinstr areas and fix vtime'
+  accounting (for x86, this was already mostly correct but not entirely;
+  for ARM, MIPS and RISC-V it wasn't)
+
+----------------------------------------------------------------
+Anup Patel (1):
+      RISC-V: KVM: Fix SBI implementation version
+
+James Morse (3):
+      KVM: arm64: Avoid consuming a stale esr value when SError occur
+      KVM: arm64: Stop handle_exit() from handling HVC twice when an SError occurs
+      KVM: arm64: Workaround Cortex-A510's single-step and PAC trap errata
+
+Janosch Frank (1):
+      kvm: Move KVM_GET_XSAVE2 IOCTL definition at the end of kvm.h
+
+Jim Mattson (1):
+      KVM: x86: Report deprecated x87 features in supported CPUID
+
+Mark Rutland (5):
+      kvm: add guest_state_{enter,exit}_irqoff()
+      kvm/mips: rework guest entry logic
+      kvm/x86: rework guest entry logic
+      kvm/arm64: rework guest entry logic
+      kvm/riscv: rework guest entry logic
+
+Mayuresh Chitale (1):
+      RISC-V: KVM: make CY, TM, and IR counters accessible in VU mode
+
+Paolo Bonzini (2):
+      Merge tag 'kvm-riscv-fixes-5.17-1' of https://github.com/kvm-riscv/linux into HEAD
+      Merge tag 'kvmarm-fixes-5.17-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+
+Sean Christopherson (2):
+      KVM: x86: Move delivery of non-APICv interrupt into vendor code
+      KVM: x86: Use ERR_PTR_USR() to return -EFAULT as a __user pointer
+
+ Documentation/arm64/silicon-errata.rst  |   2 +
+ arch/arm64/Kconfig                      |  16 +++++
+ arch/arm64/kernel/cpu_errata.c          |   8 +++
+ arch/arm64/kvm/arm.c                    |  51 ++++++++++-----
+ arch/arm64/kvm/handle_exit.c            |   8 +++
+ arch/arm64/kvm/hyp/include/hyp/switch.h |  23 ++++++-
+ arch/arm64/tools/cpucaps                |   5 +-
+ arch/mips/kvm/mips.c                    |  50 ++++++++++++--
+ arch/riscv/kvm/vcpu.c                   |  48 +++++++++-----
+ arch/riscv/kvm/vcpu_sbi_base.c          |   3 +-
+ arch/x86/include/asm/kvm-x86-ops.h      |   2 +-
+ arch/x86/include/asm/kvm_host.h         |   3 +-
+ arch/x86/kvm/cpuid.c                    |  13 ++--
+ arch/x86/kvm/lapic.c                    |  10 +--
+ arch/x86/kvm/svm/svm.c                  |  21 +++++-
+ arch/x86/kvm/vmx/vmx.c                  |  21 +++++-
+ arch/x86/kvm/x86.c                      |  10 +--
+ arch/x86/kvm/x86.h                      |  45 -------------
+ include/linux/kvm_host.h                | 112 +++++++++++++++++++++++++++++++-
+ include/uapi/linux/kvm.h                |   6 +-
+ 20 files changed, 336 insertions(+), 121 deletions(-)
+

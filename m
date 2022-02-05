@@ -2,164 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8630F4AA71D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B06C4AA720
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359864AbiBEG2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S1378324AbiBEG2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234888AbiBEG22 (ORCPT
+        with ESMTP id S1346922AbiBEG23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:28:28 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA9C061346
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:28:26 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id s6so6941394plg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:28:26 -0800 (PST)
+        Sat, 5 Feb 2022 01:28:29 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AD0C061348
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:28:28 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id p5so24825631ybd.13
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:28:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wVpC9PDwXUgsCngWduHMP99RJquh0omEvenOUF9ne5g=;
-        b=UHdJdmZIRse0TM3cgsRWq1C7nDJqosae+csuKI6x2gFlRngvloyNu5dAdCwEWvpak6
-         CEvDnqiZ6DBwJ3sOH3uVymgy9X8kLj3DQfGzYBAx254zPtGQ0xcBPwl/4yceMgJdTbXs
-         1MKOPCwSxlYIP1YhUZR5j4XsaME19heBomRocv66DcqMFb6BgCTLp+hk81HLvgaFh5IV
-         sQEAYgm9mkcJOHpfnBnZFHg6p37cOEErsg7d72Fb4dtVdZz4I/1Uzs/MAFINPfVcUogV
-         KxRTezdNixf58VNjT8n7cRsVtF7Rv/qXxxA156J3sOUIq/yjw+uM5GFIl4AkekiG6wMf
-         xplg==
+         :cc:content-transfer-encoding;
+        bh=q2b6hK+TBoO9q6ZGhN1bE+KXFAoRmLEloZyJgK+U1JQ=;
+        b=o31QP92Fg6G5lmCy0TzA1/oG5PcR7pc7EEnxGtmc6ahV53+FXD4+1dm09BD5M45Ldn
+         WKZrbDOg3wGh2Yf6RDy+izhDhuHx7xf9SeIy2GSFLawZs8Y33j8p/672HJ+i9pMNTwBi
+         GPyc5kWukRVpJkCsIKS2fuUxz2Llcy8pNkF2eMitkumQ0G7Xg2dZIzEouXXF8L71EcqU
+         xTvXr65izGe9fbdvASZvINTkshE3ZyV8/yM2mShIzYEewaegNC/dcCeHXSbdFahdKZXP
+         YZHZYWfyJljCqmrYEnsLyvdsGIlMiraCazt5QP0i1wRqsa5KEMUivRMkMs5b/TNWfSUd
+         cIog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wVpC9PDwXUgsCngWduHMP99RJquh0omEvenOUF9ne5g=;
-        b=KEZw3vT+AZyTC/s9StrjTiWu6sZnDSkL/gz2DncpX5aahiKevWcedCwPoIO0gH3eUq
-         g8M8Q5qLAGlxmw5gcBBge/u92MmyV+13iv0Wg7cyE2ToItcARt7InkiTHM4JptdtCq0w
-         aRrT4QaO3CR8UMjHZXlWOh90yOUSFttLKwmXmqimURZ2duSMXe5wz9g6O11b8su8tnd5
-         TwEGxKZBqUYv1sik0/JLTICoMr96al0UPRCrFI3PBV8HHhigfXXsOOwELOjjQYLjYGZl
-         Voxj8Djsjre2VSCqpvaZlYMxf12G0shIzErG1UJq9+c0wXWx621as6ifT/Gn14L7T7Ac
-         EYug==
-X-Gm-Message-State: AOAM530syYv73aO6w0dXFrNV4HffC1eJzmNtMASuncjmfcCaOmuZlMS2
-        IKkAbbokAJhyZB5IhhwWB33zUo9ADQvm2AfIVryaY79EUJg=
-X-Google-Smtp-Source: ABdhPJw9zXQos9Wk/wFw/F2UO3Nx7hXcH4PNXQ0BtdcQwJsUaVx5wMoyLGYwaFOTnDgicFBe8iKB/VLQbhKQPFsGFq0=
-X-Received: by 2002:a17:90b:3ece:: with SMTP id rm14mr2884577pjb.220.1644042506168;
- Fri, 04 Feb 2022 22:28:26 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=q2b6hK+TBoO9q6ZGhN1bE+KXFAoRmLEloZyJgK+U1JQ=;
+        b=Z4A2dhh/bHgw3/2I4fVGeiAbf2pNgSKs2up5V/NUjPHoHl4YVlIm/9j4KzNo1QDR/J
+         pR6hSc11qpDbmrbGKVIKye/eo94fd5oTu3bEYY0vG9vpcBZv9BxuRLvvawjlpx5MoY8P
+         7QUxIKEuReNQaxR02JSHg3LT/8ZyaKLt2PwusHvLe3y1UfwTnfKbnM+hfmZ97dyl2TQT
+         5VDcZdtjxym7cc0iPa7/Ny6DRMVeopRbwLvKyYh4fkMHb8PUfguMscP9/QzH0jpCqrdb
+         zeyD64B2yckNIfnj+bp7VFlZYfSdMUwRbe9v/ijIZG3ottD2mA/53m1I7ZIJ76hNUweg
+         gh2g==
+X-Gm-Message-State: AOAM530KzGuNjnoYXHqwPh/HIc0+N3qhE1uklGse8Wu61NPXLgnDZAWC
+        2wIhCncMas6DV8LGcB4emSDqorbmo6WlGjwdsys8VQ==
+X-Google-Smtp-Source: ABdhPJzaJv84AqXc6f2Bj8Au0jGzmLUAZAArTjnZb7B66h4ZVFxqRGLDGMHSFofY8r8vEjlgqz2MS+joywbhODnvPus=
+X-Received: by 2002:a25:d8d0:: with SMTP id p199mr2415880ybg.704.1644042507670;
+ Fri, 04 Feb 2022 22:28:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220127175505.851391-1-ira.weiny@intel.com> <20220127175505.851391-39-ira.weiny@intel.com>
- <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
- <20220205000953.GD785175@iweiny-DESK2.sc.intel.com> <CAPcyv4jmnUbywDcXOAL9DwKxGaUf9cw9iDYbDcz6_CHyYPtytw@mail.gmail.com>
- <CAPcyv4iLVh_BesJLcZb=Pktd-h5x6-xuos5Cj4TzuWYC=Q-vLg@mail.gmail.com>
- <CAPcyv4gUSDwvOysAMM59yVsERtYpA_kY6s4=xunkjc2eJ8Mi1w@mail.gmail.com> <20220205055559.GF785175@iweiny-DESK2.sc.intel.com>
-In-Reply-To: <20220205055559.GF785175@iweiny-DESK2.sc.intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 4 Feb 2022 22:28:15 -0800
-Message-ID: <CAPcyv4i3aVnmbVGuunT421dP5LK3mwQofBWngOe-t+ax82KYcg@mail.gmail.com>
-Subject: Re: [PATCH V8 38/44] memremap_pages: Define pgmap_mk_{readwrite|noaccess}()
- calls
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220204091917.166033635@linuxfoundation.org>
+In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 5 Feb 2022 11:58:16 +0530
+Message-ID: <CA+G9fYuQkEFqsDDe-OQdpkpJSAxNN08iXqX5vHT5zE8BRbAj0g@mail.gmail.com>
+Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 9:56 PM Ira Weiny <ira.weiny@intel.com> wrote:
+On Fri, 4 Feb 2022 at 14:56, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Fri, Feb 04, 2022 at 04:27:38PM -0800, Dan Williams wrote:
-> > On Fri, Feb 4, 2022 at 4:25 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> > >
-> > > On Fri, Feb 4, 2022 at 4:19 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> > > >
-> > > > On Fri, Feb 4, 2022 at 4:10 PM Ira Weiny <ira.weiny@intel.com> wrote:
-> > > > >
-> > > > > On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
-> > > > > > On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
-> > > > > > >
-> > > > >
-> > > > > [snip]
-> > > > >
-> > > > > I'll address the other comments later but wanted to address the idea below.
-> > > > >
-> > > > > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > > > > > > index f5b2be39a78c..5020ed7e67b7 100644
-> > > > > > > --- a/include/linux/sched.h
-> > > > > > > +++ b/include/linux/sched.h
-> > > > > > > @@ -1492,6 +1492,13 @@ struct task_struct {
-> > > > > > >         struct callback_head            l1d_flush_kill;
-> > > > > > >  #endif
-> > > > > > >
-> > > > > > > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
-> > > > > > > +       /*
-> > > > > > > +        * NOTE: pgmap_prot_count is modified within a single thread of
-> > > > > > > +        * execution.  So it does not need to be atomic_t.
-> > > > > > > +        */
-> > > > > > > +       u32                             pgmap_prot_count;
-> > > > > > > +#endif
-> > > > > >
-> > > > > > It's not at all clear why the task struct needs to be burdened with
-> > > > > > this accounting. Given that a devmap instance is needed to manage page
-> > > > > > protections, why not move the nested protection tracking to a percpu
-> > > > > > variable relative to an @pgmap arg? Something like:
-> > > > > >
-> > > > > > void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
-> > > > > > {
-> > > > > >        migrate_disable();
-> > > > > >        preempt_disable();
-> > > > >
-> > > > > Why burden threads like this?  kmap_local_page() is perfectly able to migrate
-> > > > > or be preempted?
-> > > > >
-> > > > > I think this is way to restrictive.
-> > > >
-> > > > kmap_local_page() holds migrate_disable() over the entire mapping, so
-> > > > we're only talking about preempt_disable(). I tend to think that
-> > > > bloating task_struct for something that is rarely used "kmap on dax
-> > > > pmem pages" is not the right tradeoff.
-> > >
-> > > Now, I can see an argument that promoting kmap_local_page() to
-> > > preempt_disable() could cause problems, but I'd like help confirming
-> > > that before committing to extending task_struct.
-> >
-> > ...as I say that it occurs to me that the whole point of
-> > kmap_local_page() is to be better than kmap_atomic() and this undoes
-> > that. I'd at least like that documented as the reason that task_struct
-> > needs to carry a new field.
+> This is the start of the stable review cycle for the 5.16.6 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I'll try and update the commit message but kmap_local_page() only disables
-> migrate on a highmem system.
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.16.6-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Right, but that still means that the code in question is prepared for
-migrate_disable(). Instead I would justify the task_struct expansion
-on the observation that moving the enable tracker to percpu would
-require pre-empt disable and promote kmap_local_page() to
-kmap_atomic() level of restriction. Otherwise if there was a way to
-avoid task_struct expansion with only migrate_disable() and not
-preempt_disable I think it would be worth it, but nothing comes to
-mind at the moment.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> The devmap/PKS use case is specifically not
-> supported on highmem systems.  Mainly because on highmem systems
-> kmap_local_page() actually creates a new mapping which is not covered by PKS
-> anyway.
->
-> So for the devmap/PKS use case kmap_local_page() is defined as:
->
->  static inline void *kmap_local_page(struct page *page)
->  {
-> +       pgmap_mk_readwrite(page);
->         return page_address(page);
->  }
->
-> ...for the linear mapping.  I'll try and update the commit message with this
-> detail.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Yeah, add the kmap_atomic() observation, not the !highmem note.
+## Build
+* kernel: 5.16.6-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.16.y
+* git commit: f58321948b36b3589e2af9c3fc5718862597e364
+* git describe: v5.16.5-45-gf58321948b36
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
+.5-45-gf58321948b36
+
+## Test Regressions (compared to v5.16.5)
+No test regressions found.
+
+## Metric regressions (compared to v5.16.5)
+No test regressions found.
+
+## Test fixes (compared to v5.16.5)
+No test fixes found.
+
+##  Metric fixes (compared to v5.16.5)
+No metric fixes found.
+
+## Test result summary
+total: 104848, pass: 89220, fail: 1185, skip: 13345, xfail: 1098
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 263 total, 261 passed, 2 failed
+* arm64: 42 total, 39 passed, 3 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 37 passed, 3 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 35 passed, 2 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 56 total, 50 passed, 6 failed
+* riscv: 28 total, 22 passed, 6 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 42 total, 39 passed, 3 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-lkdtm
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--=20
+Linaro LKFT
+https://lkft.linaro.org

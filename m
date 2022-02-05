@@ -2,144 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065C54AA70B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820D34AA714
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238891AbiBEGJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:09:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58079 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237797AbiBEGJX (ORCPT
+        id S1359159AbiBEGQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237262AbiBEGQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:09:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644041363;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CTujWjViNIykIXnrJ9Di78sXxHI4yOPC1t5GOAikn6E=;
-        b=BnqIBNO3aVZyVFttino4c+8/ycEEmrCVuEdn+zW0jLUoyD101M5ttlhQMHLMXZ1b6VZRc8
-        mCH1prowW2TH2qyi3ycCAo6qNAvkDOQGiRdCl+BmI2+oGk02d1LRRnibRnFBC12KHaBPeU
-        LQTfurFYM5tozLIOso3+zkiYAOs0ph0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-259-AEQl6MXGMVu60QH8VTbzkg-1; Sat, 05 Feb 2022 01:09:21 -0500
-X-MC-Unique: AEQl6MXGMVu60QH8VTbzkg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70E04814245;
-        Sat,  5 Feb 2022 06:09:20 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2252D6C1B3;
-        Sat,  5 Feb 2022 06:09:20 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 5.17-rc3
-Date:   Sat,  5 Feb 2022 01:09:19 -0500
-Message-Id: <20220205060919.88656-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        Sat, 5 Feb 2022 01:16:24 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD77C061346
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:16:06 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id y14-20020a17090ad70e00b001b4fc2943b3so10025594pju.8
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vV1A3NKa8ohktKkIEGZo1VCH/ZlIgtA2YFnmP/ZP+iE=;
+        b=l6dtqMZg2rtStETNCrBqau9WjMDhnM2XTGBgVwNv/XeiFQRQHDE7ovqTiPuzEtjHMj
+         //gBIsUAXp+8CJQzrip2BLwNWg+dxcvGmHqADds+7h3+2s+Hm/TtoD+gDdk30KWC4+cv
+         u30e1ul6b6ea5RjS1/R+ccQKRsiYz/0hBG6s+BTwjS6jtNvj5CWffFTtT7KlBnRRbrFd
+         uXyv1K4hS6Ij9SFk7m+fPO4DM280BQSQx2EBcsAR2FBFw2dcbX2/aKcsuMDS1NLqvmX8
+         LTcH8BQBDCUSG+Nlp+/CVo27prma3RF+Vp9hIrBEshuLAhb50zi5d9g5F7XiDm4pSeLv
+         Ndig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vV1A3NKa8ohktKkIEGZo1VCH/ZlIgtA2YFnmP/ZP+iE=;
+        b=6l8ip4TtDXRFTV42pGAyVHUMk12Di3IzODU4Yv9w9AXGiRPciwmFyNil6AMBsA7Fq8
+         k/SQ9FSDaOYnc5JO0ir0/xxDxNU0DuP8YFu3nVNn0xlYffYdEQuPbw15uB4UO34KG4wt
+         ZCBzC9ZCOqIk7I1+oK+QN8bTVxrzUIRINbHiYAdWIOwy5ZAx63KOOtXj8KPfwCCX/7jy
+         K1IdbcP7bnOnuBjWch6RIyZd+UVzMBP7ntATdnfltnLle/LBiyDyCLLQ5uD11WsKMtl3
+         RwG/muOVC7tQ4pxoKtPu4k2rzfJ7tmGW0ZZZyOCxSjWeHPqmRCOoSdPDowhjIbzVoODp
+         6cHw==
+X-Gm-Message-State: AOAM531nKH32hmVPFl/pzNyvX1fhQc8zjDgCA0ZvRXiPQNoVWaMH9j90
+        Ih7ebvqSmtUY/MrqjRlFHCQ9zuc2G7orlA==
+X-Google-Smtp-Source: ABdhPJyZdn33EiW+IAbpGPjVLz9f0aWxmwA0TrAs0tV5/qpiJgyy9Ff42kGHtC/0zn55iAJaLT/ThnAhz7On1w==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a63:1315:: with SMTP id
+ i21mr2004840pgl.10.1644041766044; Fri, 04 Feb 2022 22:16:06 -0800 (PST)
+Date:   Sat,  5 Feb 2022 14:15:36 +0800
+Message-Id: <20220205061539.273330-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH 1/3] list: test: Add test for list_del_init_careful()
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+The list_del_init_careful() function was added[1] after the list KUnit
+test. Add a very basic test to cover it.
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+Note that this test only covers the single-threaded behaviour (which
+matches list_del_init()), as is already the case with the test for
+list_empty_careful().
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6fe44d96fc1536af5b11cd859686453d1b7bfd1
 
-are available in the Git repository at:
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/list-test.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-
-for you to fetch changes up to 7e6a6b400db8048bd1c06e497e338388413cf5bc:
-
-  Merge tag 'kvmarm-fixes-5.17-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD (2022-02-05 00:58:25 -0500)
-
-----------------------------------------------------------------
-ARM:
-
-* A couple of fixes when handling an exception while a SError has been delivered
-
-* Workaround for Cortex-A510's single-step erratum
-
-RISCV:
-
-* Make CY, TM, and IR counters accessible in VU mode
-
-* Fix SBI implementation version
-
-x86:
-
-* Report deprecation of x87 features in supported CPUID
-
-* Preparation for fixing an interrupt delivery race on AMD hardware
-
-* Sparse fix
-
-All except POWER and s390:
-
-* Rework guest entry code to correctly mark noinstr areas and fix vtime'
-  accounting (for x86, this was already mostly correct but not entirely;
-  for ARM, MIPS and RISC-V it wasn't)
-
-----------------------------------------------------------------
-Anup Patel (1):
-      RISC-V: KVM: Fix SBI implementation version
-
-James Morse (3):
-      KVM: arm64: Avoid consuming a stale esr value when SError occur
-      KVM: arm64: Stop handle_exit() from handling HVC twice when an SError occurs
-      KVM: arm64: Workaround Cortex-A510's single-step and PAC trap errata
-
-Janosch Frank (1):
-      kvm: Move KVM_GET_XSAVE2 IOCTL definition at the end of kvm.h
-
-Jim Mattson (1):
-      KVM: x86: Report deprecated x87 features in supported CPUID
-
-Mark Rutland (5):
-      kvm: add guest_state_{enter,exit}_irqoff()
-      kvm/mips: rework guest entry logic
-      kvm/x86: rework guest entry logic
-      kvm/arm64: rework guest entry logic
-      kvm/riscv: rework guest entry logic
-
-Mayuresh Chitale (1):
-      RISC-V: KVM: make CY, TM, and IR counters accessible in VU mode
-
-Paolo Bonzini (2):
-      Merge tag 'kvm-riscv-fixes-5.17-1' of https://github.com/kvm-riscv/linux into HEAD
-      Merge tag 'kvmarm-fixes-5.17-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-
-Sean Christopherson (2):
-      KVM: x86: Move delivery of non-APICv interrupt into vendor code
-      KVM: x86: Use ERR_PTR_USR() to return -EFAULT as a __user pointer
-
- Documentation/arm64/silicon-errata.rst  |   2 +
- arch/arm64/Kconfig                      |  16 +++++
- arch/arm64/kernel/cpu_errata.c          |   8 +++
- arch/arm64/kvm/arm.c                    |  51 ++++++++++-----
- arch/arm64/kvm/handle_exit.c            |   8 +++
- arch/arm64/kvm/hyp/include/hyp/switch.h |  23 ++++++-
- arch/arm64/tools/cpucaps                |   5 +-
- arch/mips/kvm/mips.c                    |  50 ++++++++++++--
- arch/riscv/kvm/vcpu.c                   |  48 +++++++++-----
- arch/riscv/kvm/vcpu_sbi_base.c          |   3 +-
- arch/x86/include/asm/kvm-x86-ops.h      |   2 +-
- arch/x86/include/asm/kvm_host.h         |   3 +-
- arch/x86/kvm/cpuid.c                    |  13 ++--
- arch/x86/kvm/lapic.c                    |  10 +--
- arch/x86/kvm/svm/svm.c                  |  21 +++++-
- arch/x86/kvm/vmx/vmx.c                  |  21 +++++-
- arch/x86/kvm/x86.c                      |  10 +--
- arch/x86/kvm/x86.h                      |  45 -------------
- include/linux/kvm_host.h                | 112 +++++++++++++++++++++++++++++++-
- include/uapi/linux/kvm.h                |   6 +-
- 20 files changed, 336 insertions(+), 121 deletions(-)
+diff --git a/lib/list-test.c b/lib/list-test.c
+index ee09505df16f..976e9ae1f3c5 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -161,6 +161,24 @@ static void list_test_list_del_init(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
+ }
+ 
++static void list_test_list_del_init_careful(struct kunit *test)
++{
++	/* This test doesn't check correctness under concurrent access */
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del_init(&a);
++	/* after: [list] -> b, a initialised */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
++}
++
+ static void list_test_list_move(struct kunit *test)
+ {
+ 	struct list_head a, b;
+@@ -707,6 +725,7 @@ static struct kunit_case list_test_cases[] = {
+ 	KUNIT_CASE(list_test_list_replace_init),
+ 	KUNIT_CASE(list_test_list_swap),
+ 	KUNIT_CASE(list_test_list_del_init),
++	KUNIT_CASE(list_test_list_del_init_careful),
+ 	KUNIT_CASE(list_test_list_move),
+ 	KUNIT_CASE(list_test_list_move_tail),
+ 	KUNIT_CASE(list_test_list_bulk_move_tail),
+-- 
+2.35.0.263.gb82422642f-goog
 

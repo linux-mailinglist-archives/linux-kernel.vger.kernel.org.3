@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659054AACEC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 23:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1CF4AAC98
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbiBEWzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 17:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbiBEWzO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 17:55:14 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609ADC061348
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 14:55:14 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 41731055-85f2-11ec-b20b-0050568c148b;
-        Fri, 04 Feb 2022 19:40:06 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 17211194B8B;
-        Fri,  4 Feb 2022 20:39:03 +0100 (CET)
-Date:   Fri, 4 Feb 2022 20:39:00 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Du Cheng <ducheng2@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Subject: Re: [PATCH 14/21] fbcon: use lock_fb_info in fbcon_open/release
-Message-ID: <Yf2A1GN0Mg9aotUY@ravnborg.org>
-References: <20220131210552.482606-1-daniel.vetter@ffwll.ch>
- <20220131210552.482606-15-daniel.vetter@ffwll.ch>
+        id S1379351AbiBEVCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 16:02:50 -0500
+Received: from mga14.intel.com ([192.55.52.115]:21311 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354918AbiBEVCt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 16:02:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644094969; x=1675630969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0wXwwQ0y06+pUlSOjjm+CQCMvr5YFOWiUdCi1boRIJI=;
+  b=jUqXFMvZe+70LPZ8XIVZy7qgHKvqPD+/h5wim71cbYqcJ43GwZFv3F81
+   7awEyIQQZ1OO4eQYy+fROXYakd2qC7zhndLqXQ3KjTXpPaYo4piwyrAHc
+   jQ9OstBSgARMWN5vKH2iDuiB/51FbZ3amwqcy52bJJrp1Ug+TO9uWPOoA
+   CDP+Vzf05+3LdVJwJoBgeLEO0plBbj4sxeh6COH8U6OnUGYthvQ25hOtZ
+   T69CtwkiYjsjhkPEI4TZXATUVk+8cuhA5gNk/crPZ8LZ2ZKcrs+2Z6nE8
+   aIgHVCht6o1ZebYOLmlWDuVnMxyjE1j0JlGlyhNcflOC0qpaxD4uPiCdy
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10249"; a="248749248"
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="248749248"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 13:02:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,346,1635231600"; 
+   d="scan'208";a="600534406"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Feb 2022 13:02:47 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nGSCl-000ZUb-Av; Sat, 05 Feb 2022 21:02:47 +0000
+Date:   Sun, 6 Feb 2022 05:02:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [saeed:net-next 48/260]
+ drivers/net/dsa/realtek/realtek-mdio.c:203:34: warning: unused variable
+ 'realtek_mdio_of_match'
+Message-ID: <202202060415.LYwQvNJX-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220131210552.482606-15-daniel.vetter@ffwll.ch>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 10:05:45PM +0100, Daniel Vetter wrote:
-> Now we get to the real motiviation, because fbmem.c insists that
-> that's the right lock for these.
-> 
-> Ofc fbcon.c has a lot more places where it probably should call
-> lock_fb_info(). But looking at fbmem.c at least most of these seem to
-> be protected by console_lock() too, which is probably what papers over
-> any issues.
-> 
-> Note that this means we're shuffling around a bit the locking sections
-> for some of the console takeover and unbind paths, but not all:
-> - console binding/unbinding from the console layer never with
-> lock_fb_info
-> - unbind (as opposed to unlink) never bother with lock_fb_info
-> 
-> Also the real serialization against set_par and set_pan are still
-> doing by wrapping the entire ioctl code in console_lock(). So this
-> shuffling shouldn't be worse than what we had from a "can you trigger
-> races?" pov, but it's at least clearer.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Claudio Suarez <cssk@net-c.es>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Du Cheng <ducheng2@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: William Kucharski <william.kucharski@oracle.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: Zheyu Ma <zheyuma97@gmail.com>
-> Cc: Zhen Lei <thunder.leizhen@huawei.com>
-> Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git net-next
+head:   69dd0fdc44211d799165e6959057b323accc5afe
+commit: aac94001067da183455d6d37959892744fa01d9d [48/260] net: dsa: realtek: add new mdio interface for drivers
+config: arm-randconfig-r001-20220206 (https://download.01.org/0day-ci/archive/20220206/202202060415.LYwQvNJX-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project dee058c670593b999fec19c458dbbd882ad9de56)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=aac94001067da183455d6d37959892744fa01d9d
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed net-next
+        git checkout aac94001067da183455d6d37959892744fa01d9d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/dsa/realtek/
 
-Well, the patch does what the commit log says.
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/dsa/realtek/realtek-mdio.c:203:34: warning: unused variable 'realtek_mdio_of_match' [-Wunused-const-variable]
+   static const struct of_device_id realtek_mdio_of_match[] = {
+                                    ^
+   1 warning generated.
+
+
+vim +/realtek_mdio_of_match +203 drivers/net/dsa/realtek/realtek-mdio.c
+
+   202	
+ > 203	static const struct of_device_id realtek_mdio_of_match[] = {
+   204	#if IS_ENABLED(CONFIG_NET_DSA_REALTEK_RTL8366RB)
+   205		{ .compatible = "realtek,rtl8366rb", .data = &rtl8366rb_variant, },
+   206	#endif
+   207	#if IS_ENABLED(CONFIG_NET_DSA_REALTEK_RTL8365MB)
+   208		{ .compatible = "realtek,rtl8365mb", .data = &rtl8365mb_variant, },
+   209	#endif
+   210		{ /* sentinel */ },
+   211	};
+   212	MODULE_DEVICE_TABLE(of, realtek_mdio_of_match);
+   213	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,149 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01A74AA6BC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5460A4AA6EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiBEFUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 00:20:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57524 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiBEFUR (ORCPT
+        id S238227AbiBEFls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 00:41:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229486AbiBEFln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 00:20:17 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AF4A614CD
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 05:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FB95C340E8;
-        Sat,  5 Feb 2022 05:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644038416;
-        bh=0n6MmxRu0o64NEv593g5GlZHkKualUn5jwpcRbNHQt4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=m7DA5E1HwbJwNCAJnjDjpCPet3GeDg4fBeQ9hDnI1JbHbhYSsbFfybfy/C0deJBen
-         6QawIRt7Vy1YiVjrGZaTJUET4kueFYELQ4kNOX3SWny6PJtiqTTIvt6tBI608h/lsG
-         4kvanuZsPi9+jnSQFtSGavILAA9nf9nJkUKFBJpa1sJNTEtYYV0XMbk1FvgBWVrE/w
-         UJiu+siafgIS1VYtaZADWzMGEVuODHpBkTR1hkL7dzwYarvb0ruEQXX/aAc+DrpdLn
-         G/i96UiOcG+ZahpodLTeEvYUmzH3btNA1Zvnc6EGB/xpet4QHBnJ0DU6rU5INDP1Ng
-         E62ldvVXP0Vsg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 406235C0418; Fri,  4 Feb 2022 21:20:16 -0800 (PST)
-Date:   Fri, 4 Feb 2022 21:20:16 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     linux-kernel@vger.kernel.org, rostedt@goodmis.org
-Subject: Re: [PATCH rcu 19/19] srcu: Add contention check to call_srcu()
- srcu_data ->lock acquisition
-Message-ID: <20220205052016.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220204233858.GA1469@paulmck-ThinkPad-P17-Gen-1>
- <20220205030303.2408-1-hdanton@sina.com>
+        Sat, 5 Feb 2022 00:41:43 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Feb 2022 21:41:42 PST
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D2CC061346
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 21:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644039702; x=1675575702;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e7h91uG9gFzk8os7ey825VYijrgfLN45ZHagC7mGNZ8=;
+  b=iVamqqcCqMY6h4RSYnH74Wiayox7Ft1g8er2+ohtrfDMbj2f4CruSOk8
+   wcsGjdeKPZ9+TLAHAydFxySn3glcRqYCsmurovSOvjDg+SUUvz5WDSUaF
+   oX2FeKtP4/jAZ2jSdczeBev+hwnEqMcEFY5oBXhNWPqK7zH0raBPrRzeQ
+   oI0FR6RHp/EHSGyA87r3nrwFmHMQ6jjY783Qj40V3Aa0C3+kKDJnq2THX
+   /yFYH7WcTdNo4ORSOp8LwDujXj3oU47+yEvvqvWUTSidIT8yIobcezGvC
+   aORH5hmddqUw0oquObUDEPhhYXA1aRmqLlGnJ6Mgj5rXBg2raoPQkUMXr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248439406"
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="248439406"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:40:39 -0800
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="539432637"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:40:39 -0800
+Date:   Fri, 4 Feb 2022 21:40:39 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 36/44] memremap_pages: Reserve a PKS PKey for eventual
+ use by PMEM
+Message-ID: <20220205054039.GE785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-37-ira.weiny@intel.com>
+ <2193142f0cf3785a4225e0393eace397cbbe86e6.camel@intel.com>
+ <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220205030303.2408-1-hdanton@sina.com>
+In-Reply-To: <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 11:03:03AM +0800, Hillf Danton wrote:
-> On Fri,  4 Feb 2022 15:39:02 -0800
-> > This commit increases the sensitivity of contention detection by adding
-> > checks to the acquisition of the srcu_data structure's lock on the
-> > call_srcu() code path.
-> > 
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > ---
-> >  kernel/rcu/srcutree.c | 45 ++++++++++++++++++++++++++++++++++---------
-> >  1 file changed, 36 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> > index c3968e091d019..31a7a9e2445da 100644
-> > --- a/kernel/rcu/srcutree.c
-> > +++ b/kernel/rcu/srcutree.c
-> > @@ -320,18 +320,13 @@ static void srcu_transition_to_big(struct srcu_struct *ssp)
-> >  }
-> >  
-> >  /*
-> > - * Acquire the specified srcu_struct structure's ->lock, but check for
-> > - * excessive contention, which results in initiation of a transition
-> > - * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-> > - * parameter permits this.
-> > + * Check to see if the just-encountered contention event justifies
-> > + * a transition to SRCU_SIZE_BIG.
-> >   */
-> > -static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-> > +static void spin_lock_irqsave_check_contention(struct srcu_struct *ssp)
-> >  {
-> >  	unsigned long j;
-> >  
-> > -	if (spin_trylock_irqsave_rcu_node(ssp, *flags))
-> > -		return;
-> > -	spin_lock_irqsave_rcu_node(ssp, *flags);
+On Fri, Feb 04, 2022 at 09:12:11AM -0800, Dan Williams wrote:
+> On Tue, Feb 1, 2022 at 10:35 AM Edgecombe, Rick P
+> <rick.p.edgecombe@intel.com> wrote:
+> >
+> > On Thu, 2022-01-27 at 09:54 -0800, ira.weiny@intel.com wrote:
+> > >  enum pks_pkey_consumers {
+> > > -       PKS_KEY_DEFAULT         = 0, /* Must be 0 for default PTE
+> > > values */
+> > > -       PKS_KEY_TEST            = 1,
+> > > -       PKS_KEY_NR_CONSUMERS    = 2,
+> > > +       PKS_KEY_DEFAULT                 = 0, /* Must be 0 for default
+> > > PTE values */
+> > > +       PKS_KEY_TEST                    = 1,
+> > > +       PKS_KEY_PGMAP_PROTECTION        = 2,
+> > > +       PKS_KEY_NR_CONSUMERS            = 3,
+> > >  };
+> >
+> > The c spec says that any enum member that doesn't have an "=" will be
+> > one more than the previous member. As a consequence you can leave the
+> > "=" off PKS_KEY_NR_CONSUMERS and it will get auto adjusted when you add
+> > more like this.
+> >
+> > I know we've gone around and around on this, but why also specify the
+> > value for each key? They should auto increment and the first one is
+> > guaranteed to be zero.
+
+Because it was easier to ensure that the init value had all the defaults
+covered.
+
+> >
+> > Otherwise this doesn't use any of the features of "enum", it's just a
+> > verbose series of const int's.
+
+True but does this really matter?
+
 > 
-> Given neither try/lock nor irqsave any longer, a new function name is
-> prefered.
-
-This function contains the contention-checking common code for the
-spin_lock_irqsave_ssp_contention() and spin_lock_irqsave_sdp_contention()
-functions, so the current name is fine.
-
-							Thanx, Paul
-
-> Hillf
+> Going further, this can also build in support for dynamically (at
+> build time) freeing keys based on config, something like:
 > 
-> >  	if (!SRCU_SIZING_IS_CONTEND() || ssp->srcu_size_state)
-> >  		return;
-> >  	j = jiffies;
-> > @@ -344,6 +339,38 @@ static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned l
-> >  	__srcu_transition_to_big(ssp);
-> >  }
-> >  
-> > +/*
-> > + * Acquire the specified srcu_data structure's ->lock, but check for
-> > + * excessive contention, which results in initiation of a transition
-> > + * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-> > + * parameter permits this.
-> > + */
-> > +static void spin_lock_irqsave_sdp_contention(struct srcu_data *sdp, unsigned long *flags)
-> > +{
-> > +	struct srcu_struct *ssp = sdp->ssp;
-> > +
-> > +	if (spin_trylock_irqsave_rcu_node(sdp, *flags))
-> > +		return;
-> > +	spin_lock_irqsave_rcu_node(ssp, *flags);
-> > +	spin_lock_irqsave_check_contention(ssp);
-> > +	spin_unlock_irqrestore_rcu_node(ssp, *flags);
-> > +	spin_lock_irqsave_rcu_node(sdp, *flags);
-> > +}
-> > +
-> > +/*
-> > + * Acquire the specified srcu_struct structure's ->lock, but check for
-> > + * excessive contention, which results in initiation of a transition
-> > + * to SRCU_SIZE_BIG.  But only if the srcutree.convert_to_big module
-> > + * parameter permits this.
-> > + */
-> > +static void spin_lock_irqsave_ssp_contention(struct srcu_struct *ssp, unsigned long *flags)
-> > +{
-> > +	if (spin_trylock_irqsave_rcu_node(ssp, *flags))
-> > +		return;
-> > +	spin_lock_irqsave_rcu_node(ssp, *flags);
-> > +	spin_lock_irqsave_check_contention(ssp);
-> > +}
-> > +
-> >  /*
-> >   * First-use initialization of statically allocated srcu_struct
-> >   * structure.  Wiring up the combining tree is more than can be
-> > @@ -989,7 +1016,7 @@ static unsigned long srcu_gp_start_if_needed(struct srcu_struct *ssp,
-> >  	} else {
-> >  		sdp = raw_cpu_ptr(ssp->sda);
-> >  	}
-> > -	spin_lock_irqsave_rcu_node(sdp, flags);
-> > +	spin_lock_irqsave_sdp_contention(sdp, &flags);
-> >  	if (rhp)
-> >  		rcu_segcblist_enqueue(&sdp->srcu_cblist, rhp);
-> >  	rcu_segcblist_advance(&sdp->srcu_cblist,
-> > -- 
-> > 2.31.1.189.g2e36527f23
+> enum {
+> #if IS_ENABLED(CONFIG_PKS_TEST)
+> PKS_KEY_TEST,
+> #endif
+> #if IS_ENABLED(CONFIG_DEVMAP_PROTECTION)
+> PKS_KEY_PGMAP_PROTECTION,
+> #endif
+> PKS_KEY_NR_CONSUMERS,
+> }
+
+This is all well and good until you get to the point of trying to define the
+initial MSR value.
+
+What Rick proposes without the Kconfig check is easier than this.  But to do
+what both you and Rick suggest this is the best crap I've been able to come up
+with that actually works...
+
+
+/* pkeys_common.h */
+#define PKR_AD_BIT 0x1u
+#define PKR_WD_BIT 0x2u
+#define PKR_BITS_PER_PKEY 2
+
+#define PKR_PKEY_SHIFT(pkey)    (pkey * PKR_BITS_PER_PKEY)
+
+#define PKR_KEY_INIT_RW(pkey)   (0          << PKR_PKEY_SHIFT(pkey))
+#define PKR_KEY_INIT_AD(pkey)   (PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
+#define PKR_KEY_INIT_WD(pkey)   (PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
+
+
+/* pks-keys.h */
+#define PKR_KEY_MASK(pkey)   (0xffffffff & ~((PKR_WD_BIT|PKR_AD_BIT) << PKR_PKEY_SHIFT(pkey)))
+
+enum pks_pkey_consumers {
+        PKS_KEY_DEFAULT                 = 0, /* Must be 0 for default PTE values */
+#if IS_ENABLED(CONFIG_PKS_TEST)
+        PKS_KEY_TEST,
+#endif
+#if IS_ENABLED(CONFIG_DEVMAP_ACCESS_PROTECTION)
+        PKS_KEY_PGMAP_PROTECTION,
+#endif
+        PKS_KEY_NR_CONSUMERS
+};
+
+#define PKS_DEFAULT_VALUE PKR_KEY_INIT_RW(PKS_KEY_DEFAULT)
+#define PKS_DEFAULT_MASK  PKR_KEY_MASK(PKS_KEY_DEFAULT)
+
+#if IS_ENABLED(CONFIG_PKS_TEST)
+#define PKS_TEST_VALUE PKR_KEY_INIT_AD(PKS_KEY_TEST)
+#define PKS_TEST_MASK  PKR_KEY_MASK(PKS_KEY_TEST)
+#else
+/* Just define another default value to fool the CPP */
+#define PKS_TEST_VALUE PKR_KEY_INIT_RW(0)
+#define PKS_TEST_MASK  PKR_KEY_MASK(0)
+#endif
+
+#if IS_ENABLED(CONFIG_DEVMAP_ACCESS_PROTECTION)
+#define PKS_PGMAP_VALUE PKR_KEY_INIT_AD(PKS_KEY_PGMAP_PROTECTION)
+#define PKS_PGMAP_MASK  PKR_KEY_MASK(PKS_KEY_PGMAP_PROTECTION)
+#else
+/* Just define another default value to fool the CPP */
+#define PKS_PGMAP_VALUE PKR_KEY_INIT_RW(0)
+#define PKS_PGMAP_MASK  PKR_KEY_MASK(0)
+#endif
+
+#define PKS_INIT_VALUE ((0xFFFFFFFF & \
+                        (PKS_DEFAULT_MASK & \
+                                PKS_TEST_MASK & \
+                                PKS_PGMAP_MASK \
+                        )) | \
+                        (PKS_DEFAULT_VALUE | \
+                        PKS_TEST_VALUE | \
+                        PKS_PGMAP_VALUE \
+                        ) \
+                        )
+
+
+I find the above much harder to parse and of little value.  I'm pretty sure
+that someone adding a key is much more likely to get the macro maze wrong.
+Reviewing a patch to add a key would be much more difficult as well, IMHO.
+
+I'm a bit tired of this back and forth trying to implement this for features
+which may never exist.  In all my discussions I don't think we have reached
+more than 10 use cases in our wildest dreams and only 4 have even been
+attempted with real code including the PKS test.
+
+So I'm just a bit frustrated with the effort we have put in to try and do
+dynamic or even compile time dynamic keys.
+
+Anyway I'll think on it more.  But I'm inclined to leave it alone right now.
+What I have is easy to review for correctness and only takes a bit of effort to
+actually use.
+
+Ira

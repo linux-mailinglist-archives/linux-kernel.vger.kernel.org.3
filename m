@@ -2,77 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165E94AA649
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60014AA64B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379247AbiBEDkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 22:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S1379257AbiBEDko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 22:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiBEDkQ (ORCPT
+        with ESMTP id S233477AbiBEDkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 22:40:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE61C061346;
-        Fri,  4 Feb 2022 19:40:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3295D60FC0;
-        Sat,  5 Feb 2022 03:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F94C340E8;
-        Sat,  5 Feb 2022 03:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644032414;
-        bh=DeIK05nMZdtUO3RAH+fW8Eb1bl3owcR36z1tTBSsvuU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ttfKPDXvIVa/PftWt2GkyO4dJJp9mRW7IlstUPHvobQ/5z5I8V34n0NxW7oOQNaDd
-         WnWLDWibiS/Z/mqe9/IK+uL4bOd/36ydsIoXRc0dYGqsu1BA+4saMMoJ/d8P2kfP/A
-         7cRmcGAOX4FkukUEa//HswpBc/U9Y3jlpGpcFyHpfBv6E6u5ObLoUPJ4wp9pl7yXaW
-         Q+Lljsb1DlqbDjIIaDHcoLvQW8SF2GakbFp3Vo7q60GlgV5JHHAznfiSH+68FFxF79
-         U8VhE31t9f+46WzU+cmnMSvtVH8RWPzdXnTzt8ovv3QDQeQzPE9+TH0VDIudGlKNn4
-         1vdyLt0ZwV32g==
-Date:   Fri, 4 Feb 2022 19:40:13 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Denis Kirjanov <kda@linux-powerpc.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] net: sundance: Replace one-element array with
- non-array object
-Message-ID: <20220204194013.1204e1b3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220204232906.GA442985@embeddedor>
-References: <20220204232906.GA442985@embeddedor>
+        Fri, 4 Feb 2022 22:40:43 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5081DC061346;
+        Fri,  4 Feb 2022 19:40:41 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 872A7472;
+        Sat,  5 Feb 2022 04:40:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644032438;
+        bh=M4oWpZz0r0BqnToSL7RS29+fEekesWQcKrZDN5GeO2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ST7w0dKSwAF4/6257W+6jRHQ4crVFxaz+PmkUYcmu8qPP3eu05D0jrj+q3c4uT/oR
+         LcUJblncmC1jbtnRay7QWpQF0YEXekt7piqiMrwf271c7tQK9j7ZBZ+kygFmLtSZbu
+         twUd50ArBli6uMZWn51/6Qk7qBBC+M8tSGhN0ozc=
+Date:   Sat, 5 Feb 2022 05:40:14 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/8] media: imx: imx7_media-csi: Add support for
+ additional Bayer patterns
+Message-ID: <Yf3xni8i4AAOZ7HF@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
+ <20220204121514.2762676-7-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220204121514.2762676-7-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 17:29:06 -0600 Gustavo A. R. Silva wrote:
-> It seems this one-element array is not actually being used as an
-> array of variable size, so we can just replace it with just a
-> non-array object of type struct desc_frag and refactor a bit the
-> rest of the code.
-> 
-> This helps with the ongoing efforts to globally enable -Warray-bounds
-> and get us closer to being able to tighten the FORTIFY_SOURCE routines
-> on memcpy().
-> 
-> This issue was found with the help of Coccinelle and audited and fixed,
-> manually.
-> 
-> [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Hi Alexander,
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Thank you for the patch.
+
+On Fri, Feb 04, 2022 at 01:15:12PM +0100, Alexander Stein wrote:
+> imx7_csi_configure() allows configuring these Bayer patterns when
+> starting a stream. So allow these in link_validate() as well.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+> I'm wondering if V4L2_PIX_FMT_SBGGR16 (and their variants) is correct in this
+> function. imx7_csi_configure() does not list MEDIA_BUS_FMT_Sxxxx16_1X16.
+> Also I can't find a proper a proper setting in CSI_CR18 of CSI Bridge in
+> IMX8M Mini RM for RAW16. The feature list names a  "16-bit data port for
+> Bayer data input", but is it actually supported? I do not know anything about
+> the MIPI CSI data formats though. Maybe someone else can clarify this.
+
+The CSI bridge has a 16-bit input. The MIPI_DATA_FORMAT field in CR18
+maps to the CSI-2 DT value, and it's not clear if it's only used to
+filter on the CSI-2 DT, or if it does more than that. If we're lucky,
+it's the former and we can just use 0x2e.
+
+>  drivers/staging/media/imx/imx7-media-csi.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index 158d2a736c6d..7e737221f187 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1004,6 +1004,18 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
+>  	case V4L2_PIX_FMT_SGBRG8:
+>  	case V4L2_PIX_FMT_SGRBG8:
+>  	case V4L2_PIX_FMT_SRGGB8:
+> +	case V4L2_PIX_FMT_SBGGR10:
+> +	case V4L2_PIX_FMT_SGBRG10:
+> +	case V4L2_PIX_FMT_SGRBG10:
+> +	case V4L2_PIX_FMT_SRGGB10:
+> +	case V4L2_PIX_FMT_SBGGR12:
+> +	case V4L2_PIX_FMT_SGBRG12:
+> +	case V4L2_PIX_FMT_SGRBG12:
+> +	case V4L2_PIX_FMT_SRGGB12:
+> +	case V4L2_PIX_FMT_SBGGR14:
+> +	case V4L2_PIX_FMT_SGBRG14:
+> +	case V4L2_PIX_FMT_SGRBG14:
+> +	case V4L2_PIX_FMT_SRGGB14:
+>  	case V4L2_PIX_FMT_SBGGR16:
+>  	case V4L2_PIX_FMT_SGBRG16:
+>  	case V4L2_PIX_FMT_SGRBG16:
+
+-- 
+Regards,
+
+Laurent Pinchart

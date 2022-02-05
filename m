@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF854AA7C7
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 10:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13BA4AA7C9
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 10:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiBEJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 04:08:46 -0500
-Received: from gproxy2-pub.mail.unifiedlayer.com ([69.89.18.3]:36301 "EHLO
-        gproxy2-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231128AbiBEJIp (ORCPT
+        id S235388AbiBEJK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 04:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231128AbiBEJK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 04:08:45 -0500
-Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id A19CE10046F82
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 09:08:44 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id GH3knf1eWwm8iGH3knf6Hf; Sat, 05 Feb 2022 09:08:44 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=61fe3e9c
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zzReQTlnz3LtLpMaj5hogdJnhFParcXtlAAK1WrP4Vg=; b=ptEsYy3/vmhu8JoL7I2Tcvc1ER
-        cLtqiXyX40DGAvfbMv2oKgi/9eEmmOYIfLBkX+rAQTHR2ZK/UwQYJg/lyMisoHXsUFq6uk9OZW5/N
-        hu3qlz89u4goXztnykbLUWNVq;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:34986 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nGH3j-002r9G-Ol; Sat, 05 Feb 2022 02:08:43 -0700
-Message-ID: <a9cc884e-ae1b-82ae-7f69-107862b31967@w6rz.net>
-Date:   Sat, 5 Feb 2022 01:08:42 -0800
+        Sat, 5 Feb 2022 04:10:57 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2EAC061346
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 01:10:57 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id l13so7153397plg.9
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 01:10:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uDUysG+hrYM9KEdA8gvKMMwTu6YruBml8uJ+UsxA+zc=;
+        b=b2crhZl2KlqLlWKJ/ehdP5SK91QlaCvp+zeRyxjvOH2UToDMghwpnHhzR214f8tvfs
+         EgmYEXVT6C54fDNFY+MNjQDcCjpZ2uFxDnW34y0uzMxYIfYYy8hQvAvfElzOCGXGaBkz
+         AUVTeFTKOvuSf7CkrZ+Myxl1zwUHZKty8dChW5iT7eCUoV3LpTCn1OefNe7MhrDfZAaB
+         DXjHi2zOzpkTjAyN3aNGleI7IeQx9At0HZ6BgRTd7zoc0AYCXIbabe2LjCphy3Zc73a2
+         PZWVr8Fq4H0PqR8LlfZpHnlxF8PsqMqC8DulHrJK/JJEZSEfLmWU124neU2JC/1aYCP0
+         8xHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uDUysG+hrYM9KEdA8gvKMMwTu6YruBml8uJ+UsxA+zc=;
+        b=yyFcMKS0tpkGoMot28luUDVnrhhwEzBD06/z0Zog2ZKWqj3U/xJyLIqBrw1jxNsZHa
+         CVTOdlC1K/HwLc4SymfzX6+MmlvgUHvqSJeFy0HA3SXPV9jOatmTR9Y+jCl4dPzi45aB
+         GKDxfit7uOMlZ6Ursr9UburhOSITMSw4NxXsLDQr30Guz97p7estH0AzmB7iFRp6LU+j
+         wkX8iZZlatMdBNkWE/SYbwP9BipAEz5RaVVhuudWI/S7uJX6pWFpgFAJQvE9ta85JxCC
+         2YcY1djxPmHwD3cEslBEnHEW/aySta2lOw1EG/ryNaw2Utb07LUxuAX/T+Ir+QYHEXrs
+         U6Gg==
+X-Gm-Message-State: AOAM533eDC63OpA0CynSExq11vQn4doxJ7wciYGZQeHjDkAEezUAwbyF
+        LFVowf9OF74dCb/oniAfqjs=
+X-Google-Smtp-Source: ABdhPJwaWzaISdXIkYONHKGKmScaahVawpZj9MLgjQrf0o3R2gE+w8HZqsRFP/E2yqWGkGQ9u1PV8g==
+X-Received: by 2002:a17:90a:de01:: with SMTP id m1mr7654234pjv.215.1644052256815;
+        Sat, 05 Feb 2022 01:10:56 -0800 (PST)
+Received: from gmail.com ([103.121.208.52])
+        by smtp.gmail.com with ESMTPSA id x12sm3349069pgp.25.2022.02.05.01.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 01:10:56 -0800 (PST)
+Date:   Sat, 5 Feb 2022 17:10:48 +0800
+From:   Firo Yang <firogm@gmail.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        hch@infradead.org, akpm@linux-foundation.org
+Subject: Re: [RFC V1 02/31] mm/mmap: Clarify protection_map[] indices
+Message-ID: <20220205091048.g3fk4eaw7p7itgil@gmail.com>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+ <1643029028-12710-3-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220204091917.166033635@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nGH3j-002r9G-Ol
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:34986
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1643029028-12710-3-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 01:22, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.6 release.
-> There are 43 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The 01/24/2022 18:26, Anshuman Khandual wrote:
+> protection_map[] maps vm_flags access combinations into page protection
+> value as defined by the platform via __PXXX and __SXXX macros. The array
+> indices in protection_map[], represents vm_flags access combinations but
+> it's not very intuitive to derive. This makes it clear and explicit.
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  mm/mmap.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 1e8fdb0b51ed..254d716220df 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -102,8 +102,22 @@ static void unmap_region(struct mm_struct *mm,
+>   *								x: (yes) yes
+>   */
+>  pgprot_t protection_map[16] __ro_after_init = {
+> -	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
+> -	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+> +	[VM_NONE]				= __P000,
+> +	[VM_READ]				= __P001,
+> +	[VM_WRITE]				= __P010,
+> +	[VM_READ|VM_WRITE]			= __P011,
+> +	[VM_EXEC]				= __P100,
+> +	[VM_EXEC|VM_READ]			= __P101,
+> +	[VM_EXEC|VM_WRITE]			= __P110,
+> +	[VM_EXEC|VM_READ|VM_WRITE]		= __P111,
+> +	[VM_SHARED]				= __S000,
+> +	[VM_SHARED|VM_READ]			= __S001,
+> +	[VM_SHARED|VM_WRITE]			= __S010,
+> +	[VM_SHARED|VM_READ|VM_WRITE]		= __S011,
+> +	[VM_SHARED|VM_EXEC]			= __S100,
+> +	[VM_SHARED|VM_READ|VM_EXEC]		= __S101,
+> +	[VM_SHARED|VM_WRITE|VM_EXEC]		= __S110,
+> +	[VM_SHARED|VM_READ|VM_WRITE|VM_EXEC]	= __S111
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Just a little bit picky:)
+Would you mind rearranging vm_flags access commbination in the order as
+the access bits appear in __SXXX or __PXXX? For example, change the following:
 
-Tested-by: Ron Economos <re@w6rz.net>
+	[VM_SHARED|VM_READ|VM_WRITE|VM_EXEC]    = __S111
+to
+	[VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]	= __S111
 
+I think it's would be more clear for looking.
+
+Best,
+// Firo

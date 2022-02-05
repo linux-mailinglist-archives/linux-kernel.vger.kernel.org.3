@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6E4AAA8B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2C24AAAA7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380702AbiBER1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:27:54 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:52360 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242204AbiBER1w (ORCPT
+        id S1380767AbiBERiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:38:07 -0500
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:53649 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380760AbiBERiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:27:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5B36114D;
-        Sat,  5 Feb 2022 17:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33E6C340E8;
-        Sat,  5 Feb 2022 17:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644082072;
-        bh=mJwGNW5EUMf3hjVlJ0ExsLkB/eSlL0cslnX7MOJNZbE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ktkAPNBAPnFOq2np6P731gOaBTa70ze3Q2T9QGyWQvfqhfZ8nir6KxCw0V61sGfRd
-         TOYxBCnu/ek9uX3ggwbcF4s8nrG1Vzs3PHuYXE1lkYTYyhK2wgcU2U52tiDHKE8gc6
-         Pizbjamr7l7nvpt7c3xFHNToVOkPv1Grx8BurYqI+nchc0bluCaMUbGKdnY2sbl/CJ
-         FYnLCUi9rHF+p2Y9GsNdXLf8VsrcSjJDATYxeEhgcLho6YIbsYVxYG08FzGEoI7Qvj
-         AouRDhBR4SByh4rlYX4Ylvtc9Klbq3f1HXNljYXWW/FOtjDM/jIgHFaHuZSbALqoz+
-         fCXLiHw6SXPgg==
-Date:   Sat, 5 Feb 2022 17:34:23 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: temperature: maxim_thermocouple: Switch
- from of headers to mod_devicetable.h
-Message-ID: <20220205173423.44834f4d@jic23-huawei>
-In-Reply-To: <20220202205328.57837-1-andriy.shevchenko@linux.intel.com>
-References: <20220202205328.57837-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 5 Feb 2022 12:38:06 -0500
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id GP0dngbZqxHdTGP0dnEjnn; Sat, 05 Feb 2022 18:38:04 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sat, 05 Feb 2022 18:38:04 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/radeon: Avoid open coded arithmetic in memory allocation
+Date:   Sat,  5 Feb 2022 18:38:01 +0100
+Message-Id: <1f44de96e6a49e912111fb3b664f087328b4c2cd.1644082664.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  2 Feb 2022 22:53:28 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+kmalloc_array()/kcalloc() should be used to avoid potential overflow when
+a multiplication is needed to compute the size of the requested memory.
 
-> There is nothing directly using of specific interfaces in this driver,
-> so lets not include the headers.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Applied,
+So turn a kzalloc()+explicit size computation into an equivalent kcalloc().
 
-Thanks,
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/gpu/drm/radeon/radeon_atombios.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-J
-> ---
->  drivers/iio/temperature/maxim_thermocouple.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iio/temperature/maxim_thermocouple.c b/drivers/iio/temperature/maxim_thermocouple.c
-> index 0297e215b61a..98c41cddc6f0 100644
-> --- a/drivers/iio/temperature/maxim_thermocouple.c
-> +++ b/drivers/iio/temperature/maxim_thermocouple.c
-> @@ -6,12 +6,11 @@
->   * Author: <matt.ranostay@konsulko.com>
->   */
->  
-> -#include <linux/module.h>
->  #include <linux/init.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/err.h>
-> -#include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <linux/spi/spi.h>
->  #include <linux/iio/iio.h>
->  #include <linux/iio/sysfs.h>
+diff --git a/drivers/gpu/drm/radeon/radeon_atombios.c b/drivers/gpu/drm/radeon/radeon_atombios.c
+index 28c4413f4dc8..7b9cc7a9f42f 100644
+--- a/drivers/gpu/drm/radeon/radeon_atombios.c
++++ b/drivers/gpu/drm/radeon/radeon_atombios.c
+@@ -897,13 +897,13 @@ bool radeon_get_atom_connector_info_from_supported_devices_table(struct
+ 	union atom_supported_devices *supported_devices;
+ 	int i, j, max_device;
+ 	struct bios_connector *bios_connectors;
+-	size_t bc_size = sizeof(*bios_connectors) * ATOM_MAX_SUPPORTED_DEVICE;
+ 	struct radeon_router router;
+ 
+ 	router.ddc_valid = false;
+ 	router.cd_valid = false;
+ 
+-	bios_connectors = kzalloc(bc_size, GFP_KERNEL);
++	bios_connectors = kcalloc(ATOM_MAX_SUPPORTED_DEVICE,
++				  sizeof(*bios_connectors), GFP_KERNEL);
+ 	if (!bios_connectors)
+ 		return false;
+ 
+-- 
+2.32.0
 

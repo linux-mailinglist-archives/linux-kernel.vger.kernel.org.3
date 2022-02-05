@@ -2,179 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E664AA64D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88A64AA650
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379268AbiBEDls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 22:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiBEDlr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 22:41:47 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F44C061346;
-        Fri,  4 Feb 2022 19:41:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A4A95472;
-        Sat,  5 Feb 2022 04:41:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644032504;
-        bh=ls9fvq3A45YbaeIEXzVRsHp5ZlyRc/CArttx7bQLOss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+lFttUc02i2HKa3dFdW89YX7EmP/kFCvHo+PIK5VgUMXnVX3UQdqi028ufX0x1px
-         A35ALAd3kaby7JGqecwkaBZPizqn29JcTZgPbea+M3tKk0KAPLfUPJ1eOxjOJTlxcE
-         HE4vS9iQeCyMTU8E1Ns8uzjPjd9BRDiB2a18/R1k=
-Date:   Sat, 5 Feb 2022 05:41:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] media: imx: Forward type of hardware implementation
-Message-ID: <Yf3x4FnQcBRLHBy8@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
- <20220204121514.2762676-3-alexander.stein@ew.tq-group.com>
+        id S1379288AbiBEDvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 22:51:08 -0500
+Received: from mga09.intel.com ([134.134.136.24]:60261 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230127AbiBEDvG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 22:51:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644033066; x=1675569066;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TJ0yFP3NTl42q8F9fgT2ctU0dtnIA2YCDkI5HuQPmm4=;
+  b=RgGHKAZzUQhxh5El2xOBw4gFno53kNhf+PSOtdUqKtmTY29JMFF4tLeZ
+   mKSDqg8LHXpcYuh+70isMp4DdyZafO6KG/hgr/JbvJgRv64QzeUYl6PGj
+   EIEh+IgpYjXnEoOzDXKFLfLDkZ49h4gDDxBmUWv0Q1zvOKKhmRt6lMeTe
+   6C0Ypv45wGTSMWErsz3jWOrNgKDf53xODhkrHkWgiT8+rfjtnBtdvFpt3
+   qa83hkl1oWPe47jxqFZAHZ/vS2lhOveAVinCSxD9d7PoTe5x0EaQYKKyF
+   Cs//J7z5WDQHrT+GCcKu8SA+sZ/tWU/Km0EmiL91c4SttbGk0O9SMTdvI
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248247305"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="248247305"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 19:51:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="699886297"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.148]) ([10.254.215.148])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 19:51:02 -0800
+Message-ID: <6ace7131-4671-6956-944f-df01e5d63470@linux.intel.com>
+Date:   Sat, 5 Feb 2022 11:50:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220204121514.2762676-3-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
+        x86 <x86@kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+ <20220128202905.2274672-6-fenghua.yu@intel.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220128202905.2274672-6-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander and Dorota,
+Hi Fenghua,
 
-Thank you for the patch.
+On 2022/1/29 4:28, Fenghua Yu wrote:
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 92fea3fbbb11..ef03b2176bbd 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4781,7 +4781,7 @@ static int aux_domain_add_dev(struct dmar_domain *domain,
+>   link_failed:
+>   	spin_unlock_irqrestore(&device_domain_lock, flags);
+>   	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> -		ioasid_put(domain->default_pasid);
+> +		ioasid_free(domain->default_pasid);
+>   
+>   	return ret;
+>   }
+> @@ -4811,7 +4811,7 @@ static void aux_domain_remove_dev(struct dmar_domain *domain,
+>   	spin_unlock_irqrestore(&device_domain_lock, flags);
+>   
+>   	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> -		ioasid_put(domain->default_pasid);
+> +		ioasid_free(domain->default_pasid);
+>   }
+>   
+>   static int prepare_domain_attach_device(struct iommu_domain *domain,
 
-On Fri, Feb 04, 2022 at 01:15:08PM +0100, Alexander Stein wrote:
-> From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> 
-> Pass down the hardware type so imx_media_mbus_fmt_to_pix_fmt can do
-> the actual switch.
-> 
-> Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+The domain->default_pasid is not relevant to SVA and it's being cleaned
+up by another series. No need to take care of it in this series.
 
-Turning the bool into an enum as mentioned in the review of 1/8,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> Changes in comparison to original commit from Dorota:
-> * is_imx56 is used instead of enum
-> 
->  drivers/staging/media/imx/imx-media-capture.c | 15 +++++++++------
->  drivers/staging/media/imx/imx-media-utils.c   |  3 ++-
->  drivers/staging/media/imx/imx-media.h         |  3 ++-
->  3 files changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-> index b61bf9f8ddf8..8aad6d6d350e 100644
-> --- a/drivers/staging/media/imx/imx-media-capture.c
-> +++ b/drivers/staging/media/imx/imx-media-capture.c
-> @@ -139,7 +139,8 @@ static int capture_g_fmt_vid_cap(struct file *file, void *fh,
->  }
->  
->  static const struct imx_media_pixfmt *
-> -__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
-> +__capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose,
-> +		  bool is_imx56)
->  {
->  	struct v4l2_mbus_framefmt fmt_src;
->  	const struct imx_media_pixfmt *cc;
-> @@ -171,7 +172,7 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
->  	}
->  
->  	v4l2_fill_mbus_format(&fmt_src, pixfmt, 0);
-> -	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc);
-> +	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src, cc, is_imx56);
->  
->  	if (compose) {
->  		compose->width = fmt_src.width;
-> @@ -184,7 +185,9 @@ __capture_try_fmt(struct v4l2_pix_format *pixfmt, struct v4l2_rect *compose)
->  static int capture_try_fmt_vid_cap(struct file *file, void *fh,
->  				   struct v4l2_format *f)
->  {
-> -	__capture_try_fmt(&f->fmt.pix, NULL);
-> +	struct capture_priv *priv = video_drvdata(file);
-> +
-> +	__capture_try_fmt(&f->fmt.pix, NULL, priv->is_imx56);
->  	return 0;
->  }
->  
-> @@ -199,7 +202,7 @@ static int capture_s_fmt_vid_cap(struct file *file, void *fh,
->  		return -EBUSY;
->  	}
->  
-> -	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose);
-> +	cc = __capture_try_fmt(&f->fmt.pix, &priv->vdev.compose, priv->is_imx56);
->  
->  	priv->vdev.cc = cc;
->  	priv->vdev.fmt = f->fmt.pix;
-> @@ -418,7 +421,7 @@ __capture_legacy_try_fmt(struct capture_priv *priv,
->  		}
->  	}
->  
-> -	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc);
-> +	imx_media_mbus_fmt_to_pix_fmt(pixfmt, &fmt_src->format, cc, priv->is_imx56);
->  
->  	return cc;
->  }
-> @@ -889,7 +892,7 @@ static int capture_init_format(struct capture_priv *priv)
->  		fmt_src.format.height = IMX_MEDIA_DEF_PIX_HEIGHT;
->  	}
->  
-> -	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL);
-> +	imx_media_mbus_fmt_to_pix_fmt(&vdev->fmt, &fmt_src.format, NULL, priv->is_imx56);
->  	vdev->compose.width = fmt_src.format.width;
->  	vdev->compose.height = fmt_src.format.height;
->  
-> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-> index 94bc866ca28c..0daa6aad45f4 100644
-> --- a/drivers/staging/media/imx/imx-media-utils.c
-> +++ b/drivers/staging/media/imx/imx-media-utils.c
-> @@ -518,7 +518,8 @@ EXPORT_SYMBOL_GPL(imx_media_try_colorimetry);
->  
->  int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
->  				  const struct v4l2_mbus_framefmt *mbus,
-> -				  const struct imx_media_pixfmt *cc)
-> +				  const struct imx_media_pixfmt *cc,
-> +				  bool is_imx56)
->  {
->  	u32 width;
->  	u32 stride;
-> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-> index 73e8e6e0d8e8..2be1bc97955c 100644
-> --- a/drivers/staging/media/imx/imx-media.h
-> +++ b/drivers/staging/media/imx/imx-media.h
-> @@ -198,7 +198,8 @@ void imx_media_try_colorimetry(struct v4l2_mbus_framefmt *tryfmt,
->  			       bool ic_route);
->  int imx_media_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
->  				  const struct v4l2_mbus_framefmt *mbus,
-> -				  const struct imx_media_pixfmt *cc);
-> +				  const struct imx_media_pixfmt *cc,
-> +				  bool is_imx56);
->  void imx_media_grp_id_to_sd_name(char *sd_name, int sz,
->  				 u32 grp_id, int ipu_id);
->  struct v4l2_subdev *
-
--- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+baolu

@@ -2,85 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E804AA4FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C4D4AA504
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378754AbiBEAVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:21:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44282 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378744AbiBEAVt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:21:49 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82EA461D2D;
-        Sat,  5 Feb 2022 00:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3EBEC340EF;
-        Sat,  5 Feb 2022 00:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644020508;
-        bh=WXblkqT6O0JAXTslrDVXvWINN/201DrtAA/EuNg83dU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lx9zRbO1WXr8DIlBd7A/tPHQz0l+3TkjSJ3n+XsQzsKZURGG5u+n0FdPt42Yvu+0L
-         rJLRqr0i8Zpsol1E5xpi5uza/ZsweJZAtjeq5ERG3d0Gm+el9EFa3w03jtteqWkxCb
-         LDZvILEc0pmU65Yx3B0xaIqa+VZF8w6T9BUPzfsNxEMoMHTqVRysdEDTA5DqUc5zvC
-         Yx9Bz9NOSzp5I6WXd1+03W8dLCIB9A/flxe4mFa/Nn0BwLuUPv4UOWpDUzIVuozeYQ
-         xKsMqIGs9wWgSVY8TlzuKzd5lPG7zYNEpICz91STTz5NBLW0Ecv8+6gt3Dqk4x8Fwf
-         Pf42gNhDLLAQA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B43275C0829; Fri,  4 Feb 2022 16:21:48 -0800 (PST)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH rcu 2/2] rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
-Date:   Fri,  4 Feb 2022 16:21:47 -0800
-Message-Id: <20220205002147.4828-2-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220205002113.GA4693@paulmck-ThinkPad-P17-Gen-1>
-References: <20220205002113.GA4693@paulmck-ThinkPad-P17-Gen-1>
+        id S1378162AbiBEAZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:25:43 -0500
+Received: from mga12.intel.com ([192.55.52.136]:35453 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231908AbiBEAZm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:25:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644020742; x=1675556742;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=seqp1K4lOkMWSGy1QhjFDo6IEhqcwqjPfzMecDFWN9w=;
+  b=ZFwLYyvxCzmk5Nrjx85Sj6V0uKDqIPO2daFfUMW+Vew/+/izlEvxpvOA
+   wmOb61KGsutm3y0sMHYn4YA+E2sLZWaT3oiJwnTyedGvv2EvcfLLfTp10
+   juvh/adooxISGZkZtIM1ngUfFzsUZboSarIndRGvHLSgluVJ7o++Nm1ar
+   f5QrTLzjOlYqihUbK1lqLDUYNOoxcmZQQqBERSZ6oytVqyD/08OIWN56X
+   urIPcMpR6hyqPADw1T+CZ4syZLaCiZDEamcsgVQNA+oUaZ7mh4/mGkYLR
+   HEIHyONZZLLcLN2VW2w+xJvzkNhGxkpToT3rfPhDZcL/gP/AClZklti4B
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="228438547"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="228438547"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:25:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="539361229"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:25:41 -0800
+Date:   Fri, 4 Feb 2022 16:25:34 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 04/11] kernel/fork: Initialize mm's PASID
+Message-ID: <Yf3D/ij6S8AbMwpF@otcwcpicx3.sc.intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+ <20220128202905.2274672-5-fenghua.yu@intel.com>
+ <87wniab4kb.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wniab4kb.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, call_rcu_tasks_generic() sets ->percpu_enqueue_shift to
-order_base_2(nr_cpu_ids) upon encountering sufficient contention.
-This does not shift to use of non-CPU-0 callback queues as intended, but
-rather continues using only CPU 0's queue.  Although this does provide
-some decrease in contention due to spreading work over multiple locks,
-it is not the dramatic decrease that was intended.
+Hi, Thomas,
 
-This commit therefore makes call_rcu_tasks_generic() set
-->percpu_enqueue_shift to 0.
+On Sat, Feb 05, 2022 at 12:22:12AM +0100, Thomas Gleixner wrote:
+> On Fri, Jan 28 2022 at 12:28, Fenghua Yu wrote:
+> > A new mm doesn't have a PASID yet when it's created. Initialize
+> > the mm's PASID on fork() or for init_mm to INVALID_IOASID (-1).
+> 
+> I must be missing something here.
+> 
+> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> > index aa5f09ca5bcf..c74d1edbac2f 100644
+> > --- a/include/linux/sched/mm.h
+> > +++ b/include/linux/sched/mm.h
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/mm_types.h>
+> >  #include <linux/gfp.h>
+> >  #include <linux/sync_core.h>
+> > +#include <linux/ioasid.h>
+> >  
+> >  /*
+> >   * Routines for handling mm_structs
+> > @@ -433,4 +434,13 @@ static inline void membarrier_update_current_mm(struct mm_struct *next_mm)
+> >  }
+> >  #endif
+> >  
+> > +#ifdef CONFIG_IOMMU_SVA
+> > +static inline void mm_pasid_init(struct mm_struct *mm)
+> > +{
+> > +	mm->pasid = INVALID_IOASID;
+> > +}
+> > +#else
+> > +static inline void mm_pasid_init(struct mm_struct *mm) {}
+> > +#endif
+> > +
+> >  #endif /* _LINUX_SCHED_MM_H */
+> 
+> So this adds mm_pasid_init() to linux/sched/mm.h which replaces:
+> 
+> > -static void mm_init_pasid(struct mm_struct *mm)
+> > -{
+> > -#ifdef CONFIG_IOMMU_SVA
+> > -	mm->pasid = INIT_PASID;
+> > -#endif
+> > -}
+> > -
+> 
+> I.e. already existing code which is initializing mm->pasid with
+> INIT_PASID (0) while the replacement initializes it with INVALID_IOASID
+> (-1).
+> 
+> The change log does not have any information about why INIT_PASID is the
+> wrong initialization value and why this change is not having any side
+> effects.
 
-Reported-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: KP Singh <kpsingh@kernel.org>
----
- kernel/rcu/tasks.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I should add the following info in the commit message to explain why
+change INIT_PASID (0) to INVALID_IOASID (-1):
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index c0fc3641ef13a..d73e32d803438 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -302,7 +302,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
- 	if (unlikely(needadjust)) {
- 		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
- 		if (rtp->percpu_enqueue_lim != nr_cpu_ids) {
--			WRITE_ONCE(rtp->percpu_enqueue_shift, order_base_2(nr_cpu_ids));
-+			WRITE_ONCE(rtp->percpu_enqueue_shift, 0);
- 			WRITE_ONCE(rtp->percpu_dequeue_lim, nr_cpu_ids);
- 			smp_store_release(&rtp->percpu_enqueue_lim, nr_cpu_ids);
- 			pr_info("Switching %s to per-CPU callback queuing.\n", rtp->name);
--- 
-2.31.1.189.g2e36527f23
+INIT_PASID (0) is reserved for kernel legacy DMA PASID. It cannot be
+allocated to a user process. Initialize the process's PASID to 0 may
+cause confusion that why the process uses reserved kernel legacy DMA
+PASID. Initializing the PASID to INVALID_IOASID (-1) explicitly
+tells the process doesn't have a valid PASID yet initially.
 
+Is it OK for you?
+
+> 
+> It neither mentions why having this in a global available header makes
+> sense when the only call site is in the C file from which the already
+> existing function is removed.
+
+This series defines three helpers mm_pasid_init(), mm_pasid_set(), and
+mm_pasid_drop() in mm because they handle the pasid member in mm_struct
+and should be part of mm operations. I explained why mm_pasid_set() and
+mm_pasid_drop() are defined in mm, but I didn't explain why mm_pasid_init()
+is define in mm.
+
+Is it OK to add the following explanation on why mm_pasid_init() is defined?
+
+mm_pasid_init() is defined in mm and replaces mm_init_pasid() because
+the PASID init operation initializes the pasid member in mm_struct and
+should be part of mm operations.
+
+Thanks,
+
+-Fenghua

@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8FE4AA60A
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE6C4AA60C
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379055AbiBECvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 21:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiBECvD (ORCPT
+        id S1378988AbiBECzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 21:55:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51762 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229807AbiBECzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 21:51:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D9C061346;
-        Fri,  4 Feb 2022 18:51:03 -0800 (PST)
+        Fri, 4 Feb 2022 21:55:49 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3B4DB83993;
-        Sat,  5 Feb 2022 02:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03DEC004E1;
-        Sat,  5 Feb 2022 02:51:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59F8160C55;
+        Sat,  5 Feb 2022 02:55:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1BBC004E1;
+        Sat,  5 Feb 2022 02:55:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644029460;
-        bh=zCkSrwsTvXNWHFZqcGD+oPhhhUqH+dS9wc6XoB/LPoI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Kga+CoEfYETsRUtYR9CiX4upq7s1vdi08iK/kFs0/z7fvpgidPpJOOJXw7+c+mi/f
-         wRKIydzJkATbhy5iJRx8G2mlMuijfhoe98TiL4YHJn3N3X6pTJf2sI98/wKLB75VoS
-         PW6BODJ9f4Mu1kRAd39cNLMUGfwbdMoOVpZY1sGz4cPKz9fns32oNReh2AwQTxuBr+
-         QcZMRnizYnx/0SM3ZTShlTC0eotU1vsSGboGTdtjiQ8MQeJp8Cnc70yzhjEFOzw8a4
-         2laAvfCgpyXPRyS/tRHzZJ+9QJXtYuPJQKtfUgThB3sJx+LjmvdKjaufvbWF29uyNu
-         Y8xWPO6Ig+lYA==
-Date:   Fri, 4 Feb 2022 18:51:00 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        david@fromorbit.com, linux-kernel@vger.kernel.org,
-        sandeen@sandeen.net, hch@lst.de
-Subject: [GIT PULL] vfs: fixes for 5.17-rc1
-Message-ID: <20220205025100.GW8313@magnolia>
+        s=k20201202; t=1644029748;
+        bh=BQUS4mKdVMdQIuKV+9qmm5n95QdGCKeA5gbAJQNI5a4=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=uG+rJszuNbiwN9nUKvB9AHrWF0wucl97LlmgSUSQEEq5PyV981G+OfIz3c3Atba61
+         djk0cQoGfBOaqu2Yn4R7sqUuHXAHGzcXFGMDgVTN1mV74Swe/unZspxgfOEhkrbMrb
+         pSHzBpWHyqt1h8rPjVnyZoCLrplCSwyz9Nf8QIRSGgyRGmO1nBnsDcqthzRd/x5i9r
+         kq1UijJ1KPzqINzfjJR2egFHt8gjXUrRnI+G3AHRiu+pqYK5czmRDhj9ygQa9BbLVt
+         Bwz93TBtA7IthgukYw1IRXJAt5oEd1gtLimfGDo1ehJX2fZSxzSosVHqHuiCHBKbfG
+         KGW9zrHXn0okg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMhs-H9c8zF=v2tu5Y1OsFRP6esOi5zrUceqS_OUiJ=MSfCvRQ@mail.gmail.com>
+References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com> <YfE5MOkQRoHQV7Wf@kroah.com> <CAMhs-H8s0d=PswQDR86Tq-bQt634Z6rdFYHTE+DFepsthmKAYA@mail.gmail.com> <YfE7LNFuf79i3oAQ@kroah.com> <CAMhs-H9c8zF=v2tu5Y1OsFRP6esOi5zrUceqS_OUiJ=MSfCvRQ@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] clk: ralink: make system controller a reset provider
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     <linux-clk@vger.kernel.org>, John Crispin <john@phrozen.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 04 Feb 2022 18:55:46 -0800
+User-Agent: alot/0.10
+Message-Id: <20220205025548.AA1BBC004E1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Quoting Sergio Paracuellos (2022-01-26 04:45:31)
+> On Wed, Jan 26, 2022 at 1:14 PM Greg KH <gregkh@linuxfoundation.org> wrot=
+e:
+> >
+> > On Wed, Jan 26, 2022 at 01:08:52PM +0100, Sergio Paracuellos wrote:
+> > > On Wed, Jan 26, 2022 at 1:06 PM Greg KH <gregkh@linuxfoundation.org> =
+wrote:
+> > > >
+> > > > On Mon, Jan 10, 2022 at 12:49:26PM +0100, Sergio Paracuellos wrote:
+> > > > > Hi all,
+> > > > >
+> > > > > This patch series add minimal change to provide mt7621 resets pro=
+perly
+> > > > > defining them in the 'mediatek,mt7621-sysc' node which is the sys=
+tem
+> > > > > controller of the SoC and is already providing clocks to the rest=
+ of
+> > > > > the world.
+> > > > >
+> > > > > There is shared architecture code for all ralink platforms in 're=
+set.c'
+> > > > > file located in 'arch/mips/ralink' but the correct thing to do to=
+ align
+> > > > > hardware with software seems to define and add related reset code=
+ to the
+> > > > > already mainlined clock driver.
+> > > > >
+> > > > > After this changes, we can get rid of the useless reset controlle=
+r node
+> > > > > in the device tree and use system controller node instead where t=
+he property
+> > > > > '#reset-cells' has been added. Binding documentation for this nod=
+eq has
+> > > > > been updated with the new property accordly.
+> > > > >
+> > > > > This series also provide a bindings include header where all rela=
+ted
+> > > > > reset bits for the MT7621 SoC are defined.
+> > > > >
+> > > > > Also, please take a look to this review [0] to understand better =
+motivation
+> > > > > for this series.
+> > > > >
+> > > > > Regarding the way of merging this:
+> > > > >  - I'd like patches 1 and 4 which are related going through stagi=
+ng tree.
+> > > >
+> > > > Patches 1 and 4 now in the staging tree, thanks.
+> > >
+> > > Stephen wanted all to go through the CLK tree since PATCH 3 and 1 were
+> > > also a dependency... Can we get all of them through the same tree,
+> > > then? I am ok with both CLK or staging trees.
+> >
+> > That's fine with me if they all go through the CLK tree, but there will
+> > be a merge issue that I already fixed up in my tree.  If you want me to
+> > drop them, just let me know.
+>=20
+> Stephen, what do you prefer? Is it better all going through staging-tree =
+then?
+>=20
 
-Please pull this branch of VFS bugfixes for 5.17-rc3.  I was auditing
-the sync_fs code paths recently and noticed that most callers of
-->sync_fs ignore its return value (and many implementations never return
-nonzero even if the fs is broken!), which means that internal fs errors
-and corruption are not passed up to userspace callers of syncfs(2) or
-FIFREEZE.  Hence fixing the common code and XFS, and I'll start working
-on the ext4/btrfs folks if this is merged.
+Sure take them through staging tree.
 
-As usual, I did a test-merge with upstream master as of a few minutes
-ago, and didn't see any conflicts.  Please let me know if you encounter
-any problems.
-
---D
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git tags/vfs-5.17-fixes-2
-
-for you to fetch changes up to 2d86293c70750e4331e9616aded33ab6b47c299d:
-
-  xfs: return errors in xfs_fs_sync_fs (2022-01-30 08:59:47 -0800)
-
-----------------------------------------------------------------
-Fixes for 5.17-rc3:
- - Fix a bug where callers of ->sync_fs (e.g. sync_filesystem and
-   syncfs(2)) ignore the return value.
- - Fix a bug where callers of sync_filesystem (e.g. fs freeze) ignore
-   the return value.
- - Fix a bug in XFS where xfs_fs_sync_fs never passed back error
-   returns.
-
-----------------------------------------------------------------
-Darrick J. Wong (4):
-      vfs: make freeze_super abort when sync_filesystem returns error
-      vfs: make sync_filesystem return errors from ->sync_fs
-      quota: make dquot_quota_sync return errors from ->sync_fs
-      xfs: return errors in xfs_fs_sync_fs
-
- fs/quota/dquot.c   | 11 ++++++++---
- fs/super.c         | 19 ++++++++++++-------
- fs/sync.c          | 18 ++++++++++++------
- fs/xfs/xfs_super.c |  6 +++++-
- 4 files changed, 37 insertions(+), 17 deletions(-)
+Acked-by: Stephen Boyd <sboyd@kernel.org>

@@ -2,187 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CC74AAA9E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADD24AAAAC
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 18:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiBERcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 12:32:25 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:55142 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiBERcY (ORCPT
+        id S1380777AbiBERkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 12:40:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33894 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380769AbiBERkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 12:32:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFE786113A;
-        Sat,  5 Feb 2022 17:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A73C340E8;
-        Sat,  5 Feb 2022 17:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644082343;
-        bh=6CBARJ0ewgYzThnsUO5kNg3xJ7ZPiP6tCgQlpGxZ+EQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bYQQTMiVoZUQXtr0E0XPIrmuOVRbNX8jQ+EBqWjfgF1Ozd8G3pQ/MELO6GBgpA/6E
-         7a8iFMLnQ6XHb0MZ1n+RDX5r8FMHvwq0WoN+4SwlFvruPBsfOzERLNDC0c074XsWB8
-         vxGpfp4nHrGgEKbCTJODAwA3OhhTbqiHFYDzWqn8SfstpmkM4XDlUi4oi5SJkMKwhK
-         YPXrNajzrQLCOuFHtZEgjCONoi73kESkZxcWwqnUh9D6pZ7gPg1x3xPkP9QQVpdZJv
-         E67anE8gkFy/6bhAAe3ekbKoFz/mfx6e0wrw9aCz3+8WV/UQrpJ4llBSsO7BhtTUsP
-         +eeFzTDb03TFg==
-Date:   Sat, 5 Feb 2022 17:38:54 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: [PATCH v2 1/1] iio: multiplexer: Make use of device properties
-Message-ID: <20220205173854.14a7aca0@jic23-huawei>
-In-Reply-To: <20220202204427.57506-1-andriy.shevchenko@linux.intel.com>
-References: <20220202204427.57506-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Sat, 5 Feb 2022 12:40:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644082812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s+XMIPONIeda9RhSsJc9ELak7yslDV8zLw8dyCY9WO4=;
+        b=fG5PTKOJ/arSXnaYo++JCScHX9yaLlmWtUtOjmf0dhGQPz+sm03tn4ib/mRfDc/PUQn5q/
+        /sRwWWnsn24V599rbe1MFDa3acsFS9pxoE1xewQuYq2sWG972RWDe0+kk8fuxvrWDEpitr
+        NKW77KO6xHQhtYoHOPyTK6iW0Xkt6Co=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-HuQEbUE4OCyZsJH-x5F1PQ-1; Sat, 05 Feb 2022 12:40:11 -0500
+X-MC-Unique: HuQEbUE4OCyZsJH-x5F1PQ-1
+Received: by mail-wr1-f71.google.com with SMTP id i2-20020adfa502000000b001e30c5ae60fso491889wrb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 09:40:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s+XMIPONIeda9RhSsJc9ELak7yslDV8zLw8dyCY9WO4=;
+        b=w8cXXjE+TIPwMOAepyZtC3cbhYSFTBaM6NdgKNC8RWgZJk+/nlPHhO7Mv+0eHi+COK
+         S0eS2eI5ob0qKGRijjSaamVjiyVd696kelPVpl2GH0L97Xad63rllHEu1uep2UGZSp3C
+         1PuFyMl7qLKkSsczOOFdf5Py9cxRi64vT8bf+cRcAcYOgrz9EMkEh30xlxZD17zv+c+T
+         oRgL6tL+0G5nwEvreh/dshZs9MMJUYeGHfY+VXnfb59ifzwECP8a74ZdYxzivqCwoU+h
+         NjUsfeekBB8lXqpYopZHgpjUX+OXR1o6u8pKey+Ytna5XE8/1iztwy3fW/ig27vO0p7P
+         LXBQ==
+X-Gm-Message-State: AOAM533ZEsgBaI1IslLyGfrpC9aRdiPI1MbVSBW9UgSy4CxjfToQSJF/
+        jvybRHZy0as5DvvyIZ1YGKVK42LaYxtou/YTRb9uCknwYfYjHk5ZCwFAMph2uuVFXovWKFFfT5w
+        vweGLVOcC7PGFtYmvt9yPOIgv
+X-Received: by 2002:adf:eacc:: with SMTP id o12mr3614255wrn.576.1644082809878;
+        Sat, 05 Feb 2022 09:40:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzwOCtnvSr9+0ruFVwU6XWZ8NVfXJZicBayON9c+Gj34T6iN20u+eYDTxD526vsLX81bmpGlg==
+X-Received: by 2002:adf:eacc:: with SMTP id o12mr3614243wrn.576.1644082809582;
+        Sat, 05 Feb 2022 09:40:09 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id ay29sm4452119wmb.38.2022.02.05.09.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Feb 2022 09:40:09 -0800 (PST)
+Message-ID: <8b87cbc8-4878-b320-9460-dac751f6f0d6@redhat.com>
+Date:   Sat, 5 Feb 2022 18:40:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/4] drm/tiny: Add driver for Solomon SSD130X OLED
+ displays
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-pwm@vger.kernel.org
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <20220204134347.1187749-3-javierm@redhat.com>
+ <Yf03sCSuQwHKvgA9@smile.fi.intel.com>
+ <d4e8c16c-5586-3233-0b99-be15a4c0f7aa@redhat.com>
+ <Yf511hhojzIXcNXp@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <Yf511hhojzIXcNXp@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  2 Feb 2022 22:44:27 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
+On 2/5/22 14:04, Andy Shevchenko wrote:
+> On Fri, Feb 04, 2022 at 08:19:12PM +0100, Javier Martinez Canillas wrote:
+>> On 2/4/22 15:26, Andy Shevchenko wrote:
+>>> On Fri, Feb 04, 2022 at 02:43:45PM +0100, Javier Martinez Canillas wrote:
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Looks good to me, but as it's complex I'd like Peter + anyone else interested
-to have a bit more time to take a look before I apply this one.
-
-Thanks,
-
-Jonathan
-
-> ---
-> v2: dropped depends on OF
->  drivers/iio/multiplexer/Kconfig   |  1 -
->  drivers/iio/multiplexer/iio-mux.c | 48 ++++++++++++++-----------------
->  2 files changed, 22 insertions(+), 27 deletions(-)
+> ...
 > 
-> diff --git a/drivers/iio/multiplexer/Kconfig b/drivers/iio/multiplexer/Kconfig
-> index a1e1332d1206..928f424a1ed3 100644
-> --- a/drivers/iio/multiplexer/Kconfig
-> +++ b/drivers/iio/multiplexer/Kconfig
-> @@ -9,7 +9,6 @@ menu "Multiplexers"
->  config IIO_MUX
->  	tristate "IIO multiplexer driver"
->  	select MULTIPLEXER
-> -	depends on OF || COMPILE_TEST
->  	help
->  	  Say yes here to build support for the IIO multiplexer.
->  
-> diff --git a/drivers/iio/multiplexer/iio-mux.c b/drivers/iio/multiplexer/iio-mux.c
-> index f422d44377df..e6f0fef96494 100644
-> --- a/drivers/iio/multiplexer/iio-mux.c
-> +++ b/drivers/iio/multiplexer/iio-mux.c
-> @@ -10,11 +10,12 @@
->  #include <linux/err.h>
->  #include <linux/iio/consumer.h>
->  #include <linux/iio/iio.h>
-> +#include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
->  #include <linux/mux/consumer.h>
-> -#include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->  
->  struct mux_ext_info_cache {
->  	char *data;
-> @@ -324,37 +325,20 @@ static int mux_configure_channel(struct device *dev, struct mux *mux,
->  	return 0;
->  }
->  
-> -/*
-> - * Same as of_property_for_each_string(), but also keeps track of the
-> - * index of each string.
-> - */
-> -#define of_property_for_each_string_index(np, propname, prop, s, i)	\
-> -	for (prop = of_find_property(np, propname, NULL),		\
-> -	     s = of_prop_next_string(prop, NULL),			\
-> -	     i = 0;							\
-> -	     s;								\
-> -	     s = of_prop_next_string(prop, s),				\
-> -	     i++)
-> -
->  static int mux_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> -	struct device_node *np = pdev->dev.of_node;
->  	struct iio_dev *indio_dev;
->  	struct iio_channel *parent;
->  	struct mux *mux;
-> -	struct property *prop;
-> -	const char *label;
-> +	const char **labels;
->  	u32 state;
-> +	int children, all_children;
->  	int sizeof_ext_info;
-> -	int children;
->  	int sizeof_priv;
->  	int i;
->  	int ret;
->  
-> -	if (!np)
-> -		return -ENODEV;
-> -
->  	parent = devm_iio_channel_get(dev, "parent");
->  	if (IS_ERR(parent))
->  		return dev_err_probe(dev, PTR_ERR(parent),
-> @@ -366,9 +350,21 @@ static int mux_probe(struct platform_device *pdev)
->  		sizeof_ext_info *= sizeof(*mux->ext_info);
->  	}
->  
-> +	all_children = device_property_count_string_array(dev, "channels");
-> +	if (all_children < 0)
-> +		return all_children;
-> +
-> +	labels = devm_kmalloc_array(dev, all_children, sizeof(char *), GFP_KERNEL);
-> +	if (!labels)
-> +		return -ENOMEM;
-> +
-> +	ret = device_property_read_string_array(dev, "channels", labels, all_children);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	children = 0;
-> -	of_property_for_each_string(np, "channels", prop, label) {
-> -		if (*label)
-> +	for (state = 0; state < all_children; state++) {
-> +		if (*labels[state])
->  			children++;
->  	}
->  	if (children <= 0) {
-> @@ -395,7 +391,7 @@ static int mux_probe(struct platform_device *pdev)
->  	mux->cached_state = -1;
->  
->  	mux->delay_us = 0;
-> -	of_property_read_u32(np, "settle-time-us", &mux->delay_us);
-> +	device_property_read_u32(dev, "settle-time-us", &mux->delay_us);
->  
->  	indio_dev->name = dev_name(dev);
->  	indio_dev->info = &mux_info;
-> @@ -426,11 +422,11 @@ static int mux_probe(struct platform_device *pdev)
->  	}
->  
->  	i = 0;
-> -	of_property_for_each_string_index(np, "channels", prop, label, state) {
-> -		if (!*label)
-> +	for (state = 0; state < all_children; state++) {
-> +		if (!*labels[state])
->  			continue;
->  
-> -		ret = mux_configure_channel(dev, mux, state, label, i++);
-> +		ret = mux_configure_channel(dev, mux, state, labels[state], i++);
->  		if (ret < 0)
->  			return ret;
->  	}
+>>>> +struct ssd130x_device {
+>>>> +	struct drm_device drm;
+>>>> +	struct drm_simple_display_pipe pipe;
+>>>> +	struct drm_display_mode mode;
+>>>> +	struct drm_connector connector;
+>>>
+>>>
+>>>> +	struct i2c_client *client;
+>>>
+>>> Can we logically separate hw protocol vs hw interface from day 1, please?
+>>> This will allow to add SPI support for this panel much easier.
+>>>
+>>> Technically I would like to see here
+>>>
+>>> 	struct device *dev;
+>>>
+>>> and probably (I haven't looked into design)
+>>>
+>>> 	struct ssd130x_ops *ops;
+>>>
+>>> or something alike.
+>>
+>> Sure. I wanted to keep the driver simple, making the writes bus agnostic and
+>> adding a level of indirection would make it more complex. But I agree that
+>> it will also make easier to add more buses later. I will do that for v3.
+> 
+> I have SSD1306 display with SPI interface and I'm not able to test your series.
+> With the above it at least gives me a point to consider helping (coding and
+> testing)  with SPI one.
+>
+
+Yes, I understand that. On the other hand, I only have a SSD1306 with an I2C
+interface so I'm interested in supporting that. Then someone could extend to
+support other buses :)
+
+But I agree with you that making the driver easier to extend and using regmap
+would be desirable. In fact, since I will add the level of indirection I can
+got ahead and attempt to add the SPI support as well.
+
+I won't be able to test but I can use drivers/staging/fbtft/fb_ssd1306.c as a
+reference for this.
+
+> ...
+> 
+>>>> +	if (!fb)
+>>>> +		return;
+>>>
+>>> Can it happen?
+>>
+>> I don't know, but saw that the handler of other drivers checked for this so
+>> preferred to play safe and do the same.
+> 
+> So, either cargo-cult or indeed it may happen. Somebody may conduct a research
+> on this...
+>
+
+Someone familiar with the simple display pipe helpers should chime in, I tried
+to grep around but couldn't figure out whether it was safe or not to assume the
+struct drm_framebuffer won't ever be NULL in a struct drm_shadow_plane_state.
+
+As mentioned other drivers were doing and I preferred to be defensive rather
+than leading to a possible NULL pointer dereference.
+ 
+> ...
+> 
+>>>> +	drm_mode_probed_add(connector, mode);
+>>>> +	drm_set_preferred_mode(connector, mode->hdisplay, mode->vdisplay);
+>>>> +
+>>>> +	return 1;
+>>>
+>>> Positive code, what is the meaning of it?
+>>
+>> It's the number of connector modes. The driver only supports 1.
+> 
+> A comment then?
+> 
+
+Yes, that makes sense.
+
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

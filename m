@@ -2,200 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6607D4AA75D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED504AA754
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379601AbiBEHlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 02:41:35 -0500
-Received: from mailout4.samsung.com ([203.254.224.34]:25133 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiBEHld (ORCPT
+        id S1379587AbiBEHk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 02:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235147AbiBEHk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:41:33 -0500
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220205074131epoutp04fbea7b071419eb27279d8b2b3c9007ba~Q0_-v7xrX0305103051epoutp04y
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 07:41:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220205074131epoutp04fbea7b071419eb27279d8b2b3c9007ba~Q0_-v7xrX0305103051epoutp04y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644046891;
-        bh=Z6M+dfMopclig4NKfROarEUPiNhyq+VID9hbdnT6TFU=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=iXlueJeo9TmOmbMn6AKNbwMTDFyC7uKT//ZEFgkZHrwZcBHSW/gbcg+hGVS3KXz4r
-         eYfE1+T3EXXHCWAsIv0cC7IHBAlpfpwHVS4czImV85oQrn459349FkczCVWXFp3lDu
-         RcFS3w6PI7sLFgMBmMDq6GvFMGBM+dM7aGB5Sphc=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220205074130epcas2p2255aefe3fd092519611b94c32ec6ac4b~Q0_-IEfdr0419704197epcas2p2D;
-        Sat,  5 Feb 2022 07:41:30 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4JrPVK2Hhrz4x9Pw; Sat,  5 Feb
-        2022 07:41:29 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8D.41.10018.A492EF16; Sat,  5 Feb 2022 16:37:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220205074128epcas2p40901c37a7328e825d8697f8d3269edba~Q0_9JRrJO1874818748epcas2p4n;
-        Sat,  5 Feb 2022 07:41:28 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220205074128epsmtrp2ddc66177b0322d1997beda37f9b553fd~Q0_9Ex9dD1972219722epsmtrp2m;
-        Sat,  5 Feb 2022 07:41:28 +0000 (GMT)
-X-AuditID: b6c32a46-a25ff70000002722-df-61fe294a9c86
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        69.73.08738.82A2EF16; Sat,  5 Feb 2022 16:41:28 +0900 (KST)
-Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220205074128epsmtip20cc86693488816c39065618fe7f185c9~Q0_84dX9k1888118881epsmtip2f;
-        Sat,  5 Feb 2022 07:41:28 +0000 (GMT)
-From:   Kiwoong Kim <kwmad.kim@samsung.com>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, adrian.hunter@intel.com, sc.suh@samsung.com,
-        hy50.seo@samsung.com, sh425.lee@samsung.com,
-        bhoon95.kim@samsung.com, vkumar.1997@samsung.com
-Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
-Subject: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling isn't
- supported.
-Date:   Sat,  5 Feb 2022 16:39:20 +0900
-Message-Id: <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
-X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdljTVNdb81+iwZt9jBYnn6xhs3gwbxub
-        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLm1uOslhc3jWHzaL7+g42i+XH/zFZ
-        dN29wWix9N9bFos79z+yOPB7XO7rZfJYvOclk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5
-        tB/oZgrgiMq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXL
-        zAG6XkmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhg
-        YGQKVJiQnbFofi9LwXLJihMHrjA2MC4Q7WLk5JAQMJE4eugwYxcjF4eQwA5GibV9jcwQzidG
-        ial3OtkhnM+MEq37WllhWj73LGOCSOxilFj+5SALhPODUeLG7zOMIFVsApoST29OZQKxRQSu
-        M0nM254BYjMLqEvsmnACLC4sECmxccJ9sHoWAVWJNd+ugtm8Aq4Sf5a/hdomJ3HzXCczhN3K
-        IXH5lRmE7SIx7ctUFghbWOLV8S3sELaUxOd3e9m6GDmA7GKJTfvkQW6TEGhglFjyaTNUvbHE
-        rGftjCA1zEB3rt+lD1GuLHHkFgvElXwSHYf/skOEeSU62oQgGpUlfk2azAhhS0rMvHkHqsRD
-        onNRFkhYSCBW4u2+fYwTGGVnIYxfwMi4ilEstaA4Nz212KjACB5Fyfm5mxjByVHLbQfjlLcf
-        9A4xMnEwHmKU4GBWEuHNnvY7UYg3JbGyKrUoP76oNCe1+BCjKTCwJjJLiSbnA9NzXkm8oYml
-        gYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKYPiYOTqkGJhmprmMna86JrOX9umT+nx9P
-        du7bKr0wc+vfWwIee7o6xGLbGLZ8Wh7DMFfyfOuEHzIiqYbFySbvJ4bd/byEefJiY763TouS
-        Hwgrzlr1yrWXVcOObePTZsvnsbJKUzeVnZL4XhBzN7XyjlYiW1Vdm2Xvi+xZp03ZfPzzNtz0
-        2rXe5SeHdTiHReCM5S63As/FKm8w23K83WrjwQTJ2SZJMjVK55/cX1I6YWvf076e9rsrdP5E
-        i1w5qd2uZdb/Jbja3Pm529Tq1Xv7tsZVPPgRfKf5sPadGeeOued1yWtsW85+sD9FPt34h8Rb
-        XXEDBe3bCU+XqSoftVN5eNTVXqdtaxvj6QNdDyYqlxy/9OxHjBJLcUaioRZzUXEiANLNBQoX
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSvK6G1r9Eg8YueYuTT9awWTyYt43N
-        4uXPq2wWBx92slh8XfqM1eLT+mWsFqsXP2CxWHRjG5PFzS1HWSwu75rDZtF9fQebxfLj/5gs
-        uu7eYLRY+u8ti8Wd+x9ZHPg9Lvf1Mnks3vOSyWPCogOMHt/Xd7B5fHx6i8Wjb8sqRo/Pm+Q8
-        2g90MwVwRHHZpKTmZJalFunbJXBlLJrfy1KwXLLixIErjA2MC0S7GDk5JARMJD73LGMCsYUE
-        djBKzGzlgohLSpzY+ZwRwhaWuN9yhLWLkQuo5hujxOyTzcwgCTYBTYmnN6cygSREBF4ySbyY
-        s4YNJMEsoC6xa8IJsKnCAuESvas2soDYLAKqEmu+XQWbyivgKvFn+VtWiA1yEjfPdTJPYORZ
-        wMiwilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOGi1tHYw7ln1Qe8QIxMH4yFGCQ5m
-        JRHe7Gm/E4V4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpg
-        qj3Q8GbvBlGvM6YdT/r3PzwYyiDCs3PflOuXLe/7ipwSLFXdop3EUx6U+Ee3hFf3zytZhmd3
-        H/5MXCcT1LJs6cslH0pD+LY5bJ3Lfk5t+7SY1jjfgooV/2qm3Xq/SZxvx2zbFerzF6/dllez
-        LPjs1fIkA75vLJoOK5RnsMlMubZ3f929e1aTbq8+cazrfvvqVfeuqNgt2GT6+kUa64GjL7v+
-        123YsKB0luiHCRLGHEyTeZf/vndchbn1/7Wp0dcviK9uMZScd1Dr2bpP9dbbP3geuqZuFFUt
-        1ZSyKcpMY4HL7lO5DREpKtVmwX5zFO5qfm6Xc8hwqW3dP/nuZG0Zs7VVprHbG37sumPteX1K
-        83MlluKMREMt5qLiRAB1qHgjyQIAAA==
-X-CMS-MailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
+        Sat, 5 Feb 2022 02:40:26 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72E6C061346;
+        Fri,  4 Feb 2022 23:40:24 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id u18so17705560edt.6;
+        Fri, 04 Feb 2022 23:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GE8YLnpOfkXJ/M62/L0jrAV8ZjZli33TcMgWh60BUns=;
+        b=Wlzm0NooyGpEjD+HwFPz8xB5kXfctHqd86/eBwkrMC3Ct1wmVtH98U+ow768ValQMt
+         yUtnwHwYVKHPP8gXMJcBerEZdfM3UYDhdt4WmY7SkDzNxMDmgW4rv/FmHVy0xwF+/ucM
+         /sBZCrku493Xo+R5DAM9vgyBIb17/T1ULzNAZZ2aJCtbeRTDMrHcFm5Vf5nvYE9Zpojw
+         0tfUXlVoDZ1eoj71dQSvCUf1oSDBY7L9o8Q2srPAnVT9xqdvkFnYju0VzxETOSh89nxE
+         206UoW7tNtixLYu9Vo6S4TVfccQXogrOeCi3a4uuSbqch2Er6QF86cbBvoVhMwYKI8Qh
+         pB/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GE8YLnpOfkXJ/M62/L0jrAV8ZjZli33TcMgWh60BUns=;
+        b=ysVi6jKaonHaWXqFMN2RZ5nPgmrlWAbd5wA8HGx2IEubmtnosw3sxbwOk+qDOiJntp
+         oEgz9sLJ70qfJLwOkuvxKBPgaxyBiFW5OhuQdXd3936cYUUKJQo1UQOHQMO45VG5mpir
+         zEqexq2WE1YXh4jSoqqGf9ufq8mQ+O6b7Vkm+nLOYLyfI03HxDLnjdDDrx5PDjed9TLH
+         NPfz2jsmwp1LCYNw4oDqs7GktnhCdEwIndmGKXH6ncJ3osiP61c23pl3QJ3LWTr5GUQC
+         YJwxTY/oO0BRQC6KLjHZplmHTdLHTbk1xX+dM0fjwCb/BTDtqLwMM+3b0jFTGJTwLvHN
+         vjAQ==
+X-Gm-Message-State: AOAM533/aMj1gdEWhfxyEdpsND2OKWUuFNpP3qWmbkTVP8Egz6TWeWs8
+        Z45/mfEwRmG5cm6iuq+gjxA=
+X-Google-Smtp-Source: ABdhPJxqSj0Uo5Bw1vRYUdo+ZYd4jLgGloe3T4Y9MH0ZC7QfaEj/rcbDexSZg5tbPiKOhRWDZgqc6A==
+X-Received: by 2002:a05:6402:2707:: with SMTP id y7mr3114321edd.30.1644046822919;
+        Fri, 04 Feb 2022 23:40:22 -0800 (PST)
+Received: from jernej-laptop.localnet (89-212-178-211.dynamic.t-2.net. [89.212.178.211])
+        by smtp.gmail.com with ESMTPSA id lt23sm1387639ejb.173.2022.02.04.23.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 23:40:22 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     mripard@kernel.org, mchehab@kernel.org, wens@csie.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: cedrus: Add watchdog for job completion
+Date:   Sat, 05 Feb 2022 08:40:21 +0100
+Message-ID: <12946098.uLZWGnKmhe@jernej-laptop>
+In-Reply-To: <YfztZE8ymJ5RERTq@aptenodytes>
+References: <20220201183324.493542-1-jernej.skrabec@gmail.com> <YfztZE8ymJ5RERTq@aptenodytes>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clk_scaling_lock is to prevent from running clkscaling related operations
-with others which might be affected by the operations concurrently.
-I think it looks hardware specific.
-If the feature isn't supported, I think there is no reasonto prevent from
-running other functions, such as ufshcd_queuecommand and
-ufshcd_exec_dev_cmd, concurrently.
+Dne petek, 04. februar 2022 ob 10:09:56 CET je Paul Kocialkowski napisal(a):
+> Hi Jernej,
+> 
+> On Tue 01 Feb 22, 19:33, Jernej Skrabec wrote:
+> > Currently, if job is not completed for whatever reason, userspace
+> > application can hang on ioctl and thus become unkillable.
+> > 
+> > In order to prevent that, implement watchdog, which will complete job
+> > after 2 seconds with error state.
+> > 
+> > Concept is borrowed from hantro driver.
+> 
+> Good idea to implement a watchdog here, thanks!
+> See comments below.
+> 
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > ---
+> > 
+> >  drivers/staging/media/sunxi/cedrus/cedrus.c   |  2 ++
+> >  drivers/staging/media/sunxi/cedrus/cedrus.h   |  3 +++
+> >  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  4 +++
+> >  .../staging/media/sunxi/cedrus/cedrus_hw.c    | 25 +++++++++++++++++++
+> >  .../staging/media/sunxi/cedrus/cedrus_hw.h    |  2 ++
+> >  5 files changed, 36 insertions(+)
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > b/drivers/staging/media/sunxi/cedrus/cedrus.c index
+> > 4a4b714b0f26..68b3dcdb5df3 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > @@ -439,6 +439,8 @@ static int cedrus_probe(struct platform_device *pdev)
+> > 
+> >  	mutex_init(&dev->dev_mutex);
+> > 
+> > +	INIT_DELAYED_WORK(&dev->watchdog_work, cedrus_watchdog);
+> > +
+> > 
+> >  	ret = v4l2_device_register(&pdev->dev, &dev->v4l2_dev);
+> >  	if (ret) {
+> >  	
+> >  		dev_err(&pdev->dev, "Failed to register V4L2 
+device\n");
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > b/drivers/staging/media/sunxi/cedrus/cedrus.h index
+> > c345f2984041..3bc094eb497f 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> > @@ -24,6 +24,7 @@
+> > 
+> >  #include <linux/iopoll.h>
+> >  #include <linux/platform_device.h>
+> > 
+> > +#include <linux/workqueue.h>
+> > 
+> >  #define CEDRUS_NAME			"cedrus"
+> > 
+> > @@ -194,6 +195,8 @@ struct cedrus_dev {
+> > 
+> >  	struct reset_control	*rstc;
+> >  	
+> >  	unsigned int		capabilities;
+> > 
+> > +
+> > +	struct delayed_work	watchdog_work;
+> > 
+> >  };
+> >  
+> >  extern struct cedrus_dec_ops cedrus_dec_ops_mpeg2;
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c index
+> > a16c1422558f..9c7200299465 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> > @@ -97,4 +97,8 @@ void cedrus_device_run(void *priv)
+> > 
+> >  		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
+> >  	
+> >  	dev->dec_ops[ctx->current_codec]->trigger(ctx);
+> > 
+> > +
+> > +	/* Start the watchdog timer. */
+> > +	schedule_delayed_work(&dev->watchdog_work,
+> > +			      msecs_to_jiffies(2000));
+> > 
+> >  }
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> > b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c index
+> > 2d7663726467..a6470a89851e 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> > @@ -118,6 +118,13 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+> > 
+> >  	enum vb2_buffer_state state;
+> >  	enum cedrus_irq_status status;
+> > 
+> > +	/*
+> > +	 * If cancel_delayed_work returns false it means watchdog already
+> > +	 * executed and finished the job.
+> > +	 */
+> > +	if (!cancel_delayed_work(&dev->watchdog_work))
+> > +		return IRQ_HANDLED;
+> > +
+> > 
+> >  	ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
+> >  	if (!ctx) {
+> >  	
+> >  		v4l2_err(&dev->v4l2_dev,
+> > 
+> > @@ -143,6 +150,24 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+> > 
+> >  	return IRQ_HANDLED;
+> >  
+> >  }
+> > 
+> > +void cedrus_watchdog(struct work_struct *work)
+> > +{
+> > +	struct cedrus_dev *dev;
+> > +	struct cedrus_ctx *ctx;
+> > +
+> > +	dev = container_of(to_delayed_work(work),
+> > +			   struct cedrus_dev, watchdog_work);
+> > +
+> > +	ctx = v4l2_m2m_get_curr_priv(dev->m2m_dev);
+> > +	if (!ctx)
+> > +		return;
+> > +
+> > +	v4l2_err(&dev->v4l2_dev, "frame processing timed out!\n");
+> > +	reset_control_reset(dev->rstc);
+> 
+> I don't think playing with the reset is the right approach here.
+> First we don't really know if the reset is shared or not, so this might have
+> no effect.
 
-So I add a condition at some points protecting with clk_scaling_lock.
+AFAIK only few reset lines are shared in all Allwinner SoC, never for Cedrus 
+and even then, this is considered as HW issue. So, I'm good with using reset 
+line. This principle is also taken from Hantro driver.
 
-Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
----
- drivers/scsi/ufs/ufshcd.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+> Then even if it does, wouldn't this just reset the state of the
+> registers to an unconfigured state, making it impossible to decode any
+> future frame in the same context?
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 460d2b4..8471c90 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2980,7 +2980,8 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
- 	/* Protects use of hba->reserved_slot. */
- 	lockdep_assert_held(&hba->dev_cmd.lock);
- 
--	down_read(&hba->clk_scaling_lock);
-+	if (ufshcd_is_clkscaling_supported(hba))
-+		down_read(&hba->clk_scaling_lock);
- 
- 	lrbp = &hba->lrb[tag];
- 	WARN_ON(lrbp->cmd);
-@@ -2998,7 +2999,8 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
- 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
- 
- out:
--	up_read(&hba->clk_scaling_lock);
-+	if (ufshcd_is_clkscaling_supported(hba))
-+		up_read(&hba->clk_scaling_lock);
- 	return err;
- }
- 
-@@ -6014,7 +6016,8 @@ static void ufshcd_err_handling_prepare(struct ufs_hba *hba)
- 		if (ufshcd_is_clkscaling_supported(hba) &&
- 		    hba->clk_scaling.is_enabled)
- 			ufshcd_suspend_clkscaling(hba);
--		ufshcd_clk_scaling_allow(hba, false);
-+		if (ufshcd_is_clkscaling_supported(hba))
-+			ufshcd_clk_scaling_allow(hba, false);
- 	}
- 	ufshcd_scsi_block_requests(hba);
- 	/* Drain ufshcd_queuecommand() */
-@@ -6247,7 +6250,8 @@ static void ufshcd_err_handler(struct work_struct *work)
- 		 * Hold the scaling lock just in case dev cmds
- 		 * are sent via bsg and/or sysfs.
- 		 */
--		down_write(&hba->clk_scaling_lock);
-+		if (ufshcd_is_clkscaling_supported(hba))
-+			down_write(&hba->clk_scaling_lock);
- 		hba->force_pmc = true;
- 		pmc_err = ufshcd_config_pwr_mode(hba, &(hba->pwr_info));
- 		if (pmc_err) {
-@@ -6257,7 +6261,8 @@ static void ufshcd_err_handler(struct work_struct *work)
- 		}
- 		hba->force_pmc = false;
- 		ufshcd_print_pwr_info(hba);
--		up_write(&hba->clk_scaling_lock);
-+		if (ufshcd_is_clkscaling_supported(hba))
-+			up_write(&hba->clk_scaling_lock);
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 	}
- 
-@@ -6753,7 +6758,8 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 	/* Protects use of hba->reserved_slot. */
- 	lockdep_assert_held(&hba->dev_cmd.lock);
- 
--	down_read(&hba->clk_scaling_lock);
-+	if (ufshcd_is_clkscaling_supported(hba))
-+		down_read(&hba->clk_scaling_lock);
- 
- 	lrbp = &hba->lrb[tag];
- 	WARN_ON(lrbp->cmd);
-@@ -6822,7 +6828,8 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 	ufshcd_add_query_upiu_trace(hba, err ? UFS_QUERY_ERR : UFS_QUERY_COMP,
- 				    (struct utp_upiu_req *)lrbp->ucd_rsp_ptr);
- 
--	up_read(&hba->clk_scaling_lock);
-+	if (ufshcd_is_clkscaling_supported(hba))
-+		up_read(&hba->clk_scaling_lock);
- 	return err;
- }
- 
--- 
-2.7.4
+Being stateless core, all context is held in auxiliary buffers, reference 
+frames and controls, which are not reset with pulsing reset line, so no, state 
+is not lost. Anyway, if decoding fails, you're generally screwed until next 
+key frame. You'll have to deal with decoding issues/artefacts nevertheless.
+
+> 
+> Honestly I'm not sure what a good process would be to get back on track
+> here so I would be tempted to just do nothing an return errors.
+> 
+> That's already better than being stuck.
+
+Doing nothing will solve only current job, but HW will still be stuck in 
+decoding state. I doubt reprogramming registers and triggering new decoding 
+will actually do anything.
+
+I'll check BSP lib sources again. Maybe selecting non-existing decoding mode 
+would reset the core. That is already suggested as good thing to do in order 
+to put core in low power mode.
+
+IMO we have to do something. Doing nothing will probably just lock up the core 
+until next reboot or maybe until trying different decoding mode.
+
+Anyway, I have to find another way to cause decoding job to time out. Currently 
+I'm doing this with IOMMU on H6, but that brings down several other things, 
+which requires reboot anyway.
+
+Best regards,
+Jernej
+
+> 
+> Paul
+> 
+> > +	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx-
+>fh.m2m_ctx,
+> > +					 VB2_BUF_STATE_ERROR);
+> > +}
+> > +
+> > 
+> >  int cedrus_hw_suspend(struct device *device)
+> >  {
+> >  
+> >  	struct cedrus_dev *dev = dev_get_drvdata(device);
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> > b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h index
+> > 45f641f0bfa2..7c92f00e36da 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> > @@ -28,4 +28,6 @@ int cedrus_hw_resume(struct device *device);
+> > 
+> >  int cedrus_hw_probe(struct cedrus_dev *dev);
+> >  void cedrus_hw_remove(struct cedrus_dev *dev);
+> > 
+> > +void cedrus_watchdog(struct work_struct *work);
+> > +
+> > 
+> >  #endif
+
+
+
 

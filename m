@@ -2,175 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9024AA642
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E414AA647
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379232AbiBEDcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 22:32:06 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53438 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379226AbiBEDcC (ORCPT
+        id S1379236AbiBEDib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 22:38:31 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:45416 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237568AbiBEDia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 22:32:02 -0500
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 13910472;
-        Sat,  5 Feb 2022 04:32:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644031921;
-        bh=SrkGQlf2EU1eLY/+UA1XooxeJOZ8W6H/0uZw7v2rA08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=axBERtk2GYLbaU4jANuPSUKctb5hTkxD98/2XceNnmb/zbr06saHj5alzjf+Joqy6
-         pNLwUxWLjDJcfukkBn9wmULjjs53WTD3QVJSd1SjAOWqtHkhGyCSaS+Q0iaa0SFnCs
-         s/ITgEM1a7aEFCvDGoYkqPuhrjMgCe80JBhZ1tpk=
-Date:   Sat, 5 Feb 2022 05:31:36 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/8] media: imx: utils: Add more Bayer formats
-Message-ID: <Yf3vmMP6EfjyeXOb@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
- <20220204121514.2762676-8-alexander.stein@ew.tq-group.com>
+        Fri, 4 Feb 2022 22:38:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 178C360FC0;
+        Sat,  5 Feb 2022 03:38:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9EBC340E8;
+        Sat,  5 Feb 2022 03:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644032309;
+        bh=0yo1b9rESVLdmTEjIEubGoSTCpgYkTAI8bXgOZV0fOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bmnefaW5FHRPeG4UzzsLPkDorZ9V/Q4Gx0d+eYtx50Xq+eAfXUdFFbqlR1l6vM9SN
+         m9Za0AsBaC1jBJ/L0J7WHv5I1mYeIH2XBWiVoDB3wf14kg81yw31uPP2L+nMS7g4Fi
+         4f3/n0MAi9JRM72p3uz84fzzjiB6BrJjPvLANrblMPJuGawmSwPSJJnjlFb2D+MKLG
+         gzItm/tuyYN/cbbfhMF47/Xm74y0yMCJW4JunBFuWdIgfFTAhSLuB0CQLuCtGWiGes
+         gA1s67tXfMP6D/QHWMniWk+3JKgHgDP7lSeX6MlBKgKT6orSOR/f0mX3wFR5HruzoG
+         qleymwBD5c99w==
+Date:   Fri, 4 Feb 2022 19:38:27 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Ariel Elior <aelior@marvell.com>,
+        Sudarsana Kalluru <skalluru@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] bnx2x: Replace one-element array with
+ flexible-array member
+Message-ID: <20220204193827.019e7791@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220204232144.GA442861@embeddedor>
+References: <20220204232144.GA442861@embeddedor>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220204121514.2762676-8-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On Fri, 4 Feb 2022 17:21:44 -0600 Gustavo A. R. Silva wrote:
+> There is a regular need in the kernel to provide a way to declare having
+> a dynamically sized set of trailing elements in a structure. Kernel code
+> should always use =E2=80=9Cflexible array members=E2=80=9D[1] for these c=
+ases. The older
+> style of one-element or zero-length arrays should no longer be used[2].
+>=20
+> This helps with the ongoing efforts to globally enable -Warray-bounds
+> and get us closer to being able to tighten the FORTIFY_SOURCE routines
+> on memcpy().
+>=20
+> This issue was found with the help of Coccinelle and audited and fixed,
+> manually.
+>=20
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-le=
+ngth-and-one-element-arrays
+>=20
+> Link: https://github.com/KSPP/linux/issues/79
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Thank you for the patch.
+Would be useful to include the analysis confirming the change is safe
+in this case, beyond the boiler plate commit message.
 
-On Fri, Feb 04, 2022 at 01:15:13PM +0100, Alexander Stein wrote:
-> Without this the ioctl VIDIOC_ENUM_FMT will not list the 10/12/14-Bit
-> Bayer formats. This in return results in
-> "v4l2-ctl --set-fmt-video pixelformat='RG10'" failing to set the
-> pixelformat as it is not enumerated as supported format.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-Do IPUv3-based SoCs support 10-, 12- and 14-bit formats ? If so,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
-> This adds the following formats to `v4l2-ctl --list-formats`
-> [...]
->         [18]: 'BG10' (10-bit Bayer BGBG/GRGR)
->         [19]: 'GB10' (10-bit Bayer GBGB/RGRG)
->         [20]: 'BA10' (10-bit Bayer GRGR/BGBG)
->         [21]: 'RG10' (10-bit Bayer RGRG/GBGB)
->         [22]: 'BG12' (12-bit Bayer BGBG/GRGR)
->         [23]: 'GB12' (12-bit Bayer GBGB/RGRG)
->         [24]: 'BA12' (12-bit Bayer GRGR/BGBG)
->         [25]: 'RG12' (12-bit Bayer RGRG/GBGB)
->         [26]: 'BG14' (14-bit Bayer BGBG/GRGR)
->         [27]: 'GB14' (14-bit Bayer GBGB/RGRG)
->         [28]: 'GR14' (14-bit Bayer GRGR/BGBG)
->         [29]: 'RG14' (14-bit Bayer RGRG/GBGB)
-> [...]
-> 
->  drivers/staging/media/imx/imx-media-utils.c | 72 +++++++++++++++++++++
->  1 file changed, 72 insertions(+)
-> 
-> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-> index e0a256a08c3b..ea56c82d3b32 100644
-> --- a/drivers/staging/media/imx/imx-media-utils.c
-> +++ b/drivers/staging/media/imx/imx-media-utils.c
-> @@ -130,6 +130,78 @@ static const struct imx_media_pixfmt pixel_formats[] = {
->  		.cs     = IPUV3_COLORSPACE_RGB,
->  		.bpp    = 8,
->  		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SBGGR10,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR10_1X10),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 10,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGBRG10,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG10_1X10),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 10,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGRBG10,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG10_1X10),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 10,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SRGGB10,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB10_1X10),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 10,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SBGGR12,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR12_1X12),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 12,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGBRG12,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG12_1X12),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 12,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGRBG12,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG12_1X12),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 12,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SRGGB12,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB12_1X12),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 12,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SBGGR14,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR14_1X14),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 14,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGBRG14,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG14_1X14),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 14,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SGRBG14,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG14_1X14),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 14,
-> +		.bayer  = true,
-> +	}, {
-> +		.fourcc = V4L2_PIX_FMT_SRGGB14,
-> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB14_1X14),
-> +		.cs     = IPUV3_COLORSPACE_RGB,
-> +		.bpp    = 14,
-> +		.bayer  = true,
->  	}, {
->  		.fourcc = V4L2_PIX_FMT_SBGGR16,
->  		.codes  = IMX_BUS_FMTS(
-
--- 
-Regards,
-
-Laurent Pinchart
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>

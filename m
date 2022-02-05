@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68EE4AA526
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C7B4AA52B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378760AbiBEAwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:52:41 -0500
-Received: from mout.gmx.net ([212.227.17.21]:57599 "EHLO mout.gmx.net"
+        id S1378816AbiBEAwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:52:51 -0500
+Received: from mout.gmx.net ([212.227.15.18]:36931 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350118AbiBEAwk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:52:40 -0500
+        id S1350118AbiBEAwu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:52:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644022354;
-        bh=wIyL4al0PsasGkNaS8/JAuA3QXn07ABIpg5+HKjlwG8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=HsPdQi53TXygor8N6Zr0DctwaMhOCff5ecNGaa2AGIy0X8cVTGt/jGCjpm55VMvZq
-         97MlTclckxjK2Q7w0uXbpg5w1Gwg2ZMtQF1NQEmp30Uc5yuNUItf84cqJXj1I18Xqp
-         19MljIiPVkm/66eHYRkQhSM/ZmNHcmrq1ZO0VNVM=
+        s=badeba3b8450; t=1644022356;
+        bh=bNE6pRrvW/lByIQfeio7tmgaO8jbzpK19L2S4Wf+yzA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=EJL+mReaW/eSx3Cuh5x7yxTDgxN0DfJh83nWMRhE1JVuCnR/FfKgB7GStCBD4LxNX
+         KZu9hvsarI1ZhsZx0AHgdPrLfZiHkDBG7aCHH9cQFMCFxXW7WRUmOla7nDJZXDYC+m
+         zs7NQyZzhx1en9a1owRujLtwey3FV5EFPD3cQ5WY=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpOT-1mZwwF21yT-00gDkq; Sat, 05
- Feb 2022 01:52:34 +0100
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MHXFr-1n2jBa3y5Z-00DVQT; Sat, 05
+ Feb 2022 01:52:36 +0100
 From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     linux-clk@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mips@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Subject: [PATCH v3 0/4] clk drivers: Terminate clk_div_table with sentinel element
-Date:   Sat,  5 Feb 2022 01:52:27 +0100
-Message-Id: <20220205005232.772726-1-j.neuschaefer@gmx.net>
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Parthiban Nallathambi <pn@denx.de>,
+        linux-actions@lists.infradead.org
+Subject: [PATCH v3 1/4] clk: actions: Terminate clk_div_table with sentinel element
+Date:   Sat,  5 Feb 2022 01:52:28 +0100
+Message-Id: <20220205005232.772726-2-j.neuschaefer@gmx.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220205005232.772726-1-j.neuschaefer@gmx.net>
+References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9fScLoBVc1AvLdfroCYbMuG7hAIm23Ktivf4fb2VHwt7qUq1wyV
- P4dVNaVo9hIYZEQm3v3mss2zcKs3XWI/sByMqVsVW42UqnOtT1HIi2vqenx83jMtWPuGcSO
- 3DBZKVA2PXS32WtKsAIeqc2/1RdwXo4MMAq1+VDAgCA8P01J3LVSWLbPzRcFZqJGtQfqeDJ
- IgwRZNK5uj+m+s9ONX9Pg==
+X-Provags-ID: V03:K1:lWVU1QY4iL7zbP59K2Z5/VwFCPSTMIpDxTlewpinjNOdWGn74bX
+ OyRJPuI7puZW4YId70tyT0RbCscju9EAJQzbR2d2YgfaNp3GumlR8u+/jO4eXNfB/7dNc21
+ qXJpa/tZvYCVUBastIDMLNSkAd/Q0sY+/dptS286vrquqmg+xjm0OCzz5k4JaVp0clmbTNb
+ I+XEfy6+WHJuNnVrJc6uA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GQhVJHbvBWs=:y8CEHFw88CMRjBonKpNunl
- 5QlhswsQJR62sWLovD6jKAae6xuBssjfp7SoyYzd/syfutCafTKyQGzKukJalzPNu/Csz6Dxa
- sF2AhHmsJ7HyOsHxVpKziBrZRTNrtInytUOxIn5exNWzyZ18rsXMBdTm+W6QyYy2uAHW83LFV
- pnPBc7L//C4bgYXn5Q/fUl60TomVlYvqmaQNYCUH0KAw3GRbZ1XPjCfdd0Joz3PZddyLx62cr
- u463ylXLs8U6dOLeb1+CisH4DhSeMpXkwwv/BqFw68tcgqPh83LlRkvi+W4+wEOmfxDuLrR7X
- 67PP/2iyary1EqLDQhEe19Fth7trhza+D+T/lvIhdhqcslmS+TTiGqB06Q6ZTEMBw9X4jSKmC
- Jc4bUvQpADIRbraENQAE9AXftB6+FH9Os2DlSb7CLDarlstP5qdP2+auTMBjvjiN145+HtVdW
- kq7/04layKpDNBpm5qjDc7+GAHHiJtoQYEioU/jGj7UFqvvGpTuENvnuU2uNjcuXPBYiTUM2z
- zRVZzpQ25OBMS8fhiX3SdF6LKbJha2q9E2QGN+aZxBDHUz6DC16Z67piHK0QDE5jcPRRSnOg7
- TmNLwJSXzNVP5OgbM1vlKDi1vJ7mzWB1uYJLbLYdNo1V34F7TLaey2noVTj1zDT54px9niX35
- /zkQpYXou8z45Qk3KccjnmfupMF8T6Hb2r2/6y2tfOeMLbz7WNI2kP2a/aZ6CSGYpC/R5RIUp
- Wfpb4jzRXjmDgXrQqt54ecurpyMDRZOENEC7VeeDHcxASEH0LgkTQA8pDJsAD3y6JI0FbCKb1
- eDI8PjzIlc8f3JpE3HI0DxMsFHhqR7wFaPg3EQqwN8bDRR7tpO9bHRLoUVkTjEKGbrctD2DJT
- vsR4yDQv1W7eQY+4fY4J1ylRwFlBeBMx6r7rWBqaFf9WgTzv9HnZW7R6MsrYUruZVl9S8Vsce
- Jib0wfCUd0DW80O3nviVppC3Q/vZELdZzZsIyo6yjD2lqfTUW/s+4ipmb8OeAdbrezJfOBaa6
- V58nIFyYc5swbflC/yfDlq6yR7e0K+RRjlezM5xymiQLPBP1DzhnKlEKkuI8vYUuVO3tYq3g6
- S6dNKiD1ZTFk10=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EMUgfROemOs=:kWBjNP4+Hsq/myGcoYCtEt
+ 1UxFDcUlTkgKTkXV+9/zpoI2J5Pu2FfMI/iJ9t5paVypkeplGPOABbna/5jBsiUlpXRijl2GU
+ SnpghPbxEJAR3JGQKlhGaWkH0Dnq3hoKZ/QoK0AtJsrftZ59NnuWzHGduwxA2lhdNAvCrVPIy
+ Uml/WXT6pI43kB7+/IFqd2BF6qy3FqlNIGpE6EhtZntH8aHeQjdtlmhNFQK1oLdKkFufqMknX
+ 6SeI+bZdQlmTeg0KEGIVl3OteEWrWRNTtaYFypBH2FbepSuRRXPpZ7Xa4TjemWvuv5jwSI2oP
+ VP2f4hm5MZ+A8eI57CBwX8QLdBrWj/o9gPfpOcFKD/JPU8qm88aTIapwnYBK5th8hQDPJX73l
+ 1E1GQiCKO0p/yTSKSwX1/swHFQnZTLDR7kzxBPTs50CBYtIeXpBUAU6nQyjn/M0Vb7uIOo5EH
+ bSHUgCsr2z9wNu85KfBhpgFRjufkiqeIn6Ol8fvh9z9qypjEaGH++mmH+F1Ze/jE4GtroP05P
+ 0ley/2WyfGhut2mBXjU9KdBAc2yU5gciI1z421OD0H+heZCOl3qUrsAjYRYkYxwH5qU7peEAM
+ 24gV96kD1Td8KdPA/K63E3fbQzCRg4SqXWuAo7kWOvrMhiOTAfj76PNEle8OnqO4xjc4gTMOZ
+ Wd22GaIc/ph6Aum88FryFAMI8Tg6Eke6ByoLLkgH6mOxQnUIHpCtgTicIrpC2UInM+GS0i5k6
+ jxgs1fobCOa5uuA2ulvDP4H0R90mFDyXmHo5xaofzWDuFMlyCPFj8+YnKMk6s9F6JFaQvU95B
+ MUYhPrNbvCC6a/DfETNoY9lPeTTOmDxgW4wlvsgLCn7KoETfx7ACuTHBuO8W6n97EbRZFAHwB
+ wGbiGnUmonBhv747KtvYNRudbVR38iYxdPL0COxis+BPmhi50fqkin3bgGFcP4nOvXeyA4Q3P
+ sQKBEuhuHlNyUOjjXEGQIKg0Sfu13dlvBL1zuejad/Dr4n9T0G01TC4vIummhmiuwHxUNLA4y
+ e+qZakg82aCgaBIFkUCsJZCnzkC/ufn/2mwIR1OMBTCt79j2UL7jg8IbrDuU6gnJNihkfj2lh
+ /h/2AuJEwEbkF0=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I noticed that some of the clk_div_tables in different drivers are not
-terminated with a sentinel element. This may cause the code in
-clk-divider.c to read garbage that happens to be beyond the end.
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div =3D 0).
 
-This patchset fixed all instances of this bug that I could find, except
-for a case in drivers/phy/ti/phy-j721e-wiz.c that is already fixed in
-linux-next:
-  https://lore.kernel.org/lkml/20220117110108.4117-1-kishon@ti.com/
+In owl-s900.s, the { 0, 8 } element was probably meant to be just that,
+so this patch changes { 0, 8 } to { 0, 0 }.
+
+Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
+Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+=2D--
 
 v3:
-- Change the Actions patch according to Mani's comment
+- Interpret { 0, 8 } as a typo of { 0, 0 }, the sentinel element
+- Add R-b tag
 
 v2:
 - Add Fixes tags
+=2D--
+ drivers/clk/actions/owl-s700.c | 1 +
+ drivers/clk/actions/owl-s900.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Jonathan Neusch=C3=A4fer (4):
-  clk: actions: Terminate clk_div_table with sentinel element
-  clk: loongson1: Terminate clk_div_table with sentinel element
-  clk: hisilicon: Terminate clk_div_table with sentinel element
-  clk: clps711x: Terminate clk_div_table with sentinel element
+diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700=
+.c
+index a2f34d13fb543..617174644f728 100644
+=2D-- a/drivers/clk/actions/owl-s700.c
++++ b/drivers/clk/actions/owl-s700.c
+@@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] =3D {
 
- drivers/clk/actions/owl-s700.c         | 1 +
- drivers/clk/actions/owl-s900.c         | 2 +-
- drivers/clk/clk-clps711x.c             | 2 ++
- drivers/clk/hisilicon/clk-hi3559a.c    | 4 ++--
- drivers/clk/loongson1/clk-loongson1c.c | 1 +
- 5 files changed, 7 insertions(+), 3 deletions(-)
+ static struct clk_div_table rmii_div_table[] =3D {
+ 	{0, 4},   {1, 10},
++	{0, 0},
+ };
 
+ /* divider clocks */
+diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900=
+.c
+index 790890978424a..63c4097c07ac7 100644
+=2D-- a/drivers/clk/actions/owl-s900.c
++++ b/drivers/clk/actions/owl-s900.c
+@@ -140,7 +140,7 @@ static struct clk_div_table rmii_ref_div_table[] =3D {
+
+ static struct clk_div_table usb3_mac_div_table[] =3D {
+ 	{ 1, 2 }, { 2, 3 }, { 3, 4 },
+-	{ 0, 8 },
++	{ 0, 0 },
+ };
+
+ static struct clk_div_table i2s_div_table[] =3D {
 =2D-
 2.34.1
 

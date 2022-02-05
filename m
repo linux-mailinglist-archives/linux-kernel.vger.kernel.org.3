@@ -2,195 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9D4AA876
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 12:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504834AA87A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377536AbiBELxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 06:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358916AbiBELx3 (ORCPT
+        id S1377564AbiBEMAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 07:00:52 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:44360
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1356673AbiBEMAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 06:53:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEDBC061347;
-        Sat,  5 Feb 2022 03:53:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 5 Feb 2022 07:00:51 -0500
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CFF460C8E;
-        Sat,  5 Feb 2022 11:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDF1C340E8;
-        Sat,  5 Feb 2022 11:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644062007;
-        bh=lUBbvL5wH7PnC+Gd4WGcambxq9nvtgxEqvEU6mzfiRo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bhK7ZDiqSab8DUUIr/SuKZlRlf3Apz37KIjRYW5ESXygnA1T0E43ssRgZ5oS8jDVy
-         fHty8+NsYap5H0Zd3LnvjrPWKJ3lzbeZGnt6gYrVB3f+QTmCnfocYQvJf6oJNCE7nB
-         gHo2Js3WCg6ZXbimc4OenCAYUOfWqV9zA4w2F/7U=
-Date:   Sat, 5 Feb 2022 12:53:24 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Michael Stapelberg <michael+drm@stapelberg.ch>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH 5.10 12/25] drm/vc4: hdmi: Make sure the device is
- powered with CEC
-Message-ID: <Yf5lNIJnvhP4ajam@kroah.com>
-References: <20220204091914.280602669@linuxfoundation.org>
- <20220204091914.688259001@linuxfoundation.org>
- <91a59ee1-cca4-8d0c-4f86-388434eb5a39@ispras.ru>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 101CA3F1D0
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 12:00:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644062450;
+        bh=8wAviCrGHuoenIiFKnf3hRWDAAKCr7OKFFOofFuNyGY=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=SqFKeAEcZeOBouql39ZqpkY2cyCjGVTr9JW32Bwu6tgAqEqHQBVpnr1RiGkHMufQd
+         6ma3i30C/Xro/J3GBd6cKuYBSdDNpRaoeemP8JOiMdAGgdPwb/81Z5DZRXFD8wSc4l
+         SN8juFU4rsKq91d5D2wu50ctbmmySLC/VnADZBopNIKXgPiRbP9MVccqqmFJSoi6h5
+         yWsc4D8oDUH1YVRLlnB0NyEmQPS3Er0nnAAoQDTHIutNR9UHxNcCXAFuIbXiOaD+25
+         0HqdBNEkffg4ZTRXl07XXI3psdUgQrywpKlmyUcBIIEFTHO4Q5m3WD3dLvbQv5Y3HO
+         mch7h3I3kEO3g==
+Received: by mail-ed1-f71.google.com with SMTP id q10-20020a5085ca000000b0040e3ecf0ec2so4549473edh.14
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 04:00:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8wAviCrGHuoenIiFKnf3hRWDAAKCr7OKFFOofFuNyGY=;
+        b=Vo4eNAe/ZJZtyDQpx/Ch8TfrSM1PHrZbGOVtlLSrIy72JREdZcgv4WheIxrk669U0t
+         wmHfoqS4/S1ytsXclEPB0AvUCkkcT0RfCA0WaRMZ3CrSC0i6LQRRPqFu0w8xFC3/qEm8
+         1rUPbbcIqrpYMjHB+tFBJT+2/+MXBPv4/DoROur4fUPGfSdfJ037fCRIuhSgXZzkWXnr
+         4OQvhe8CluN5a2evjQ7+XsJfZTxNmfBwshT0KpnfWb2hjPg8tFnYqmcDRAUhhxN+kqMu
+         VlXMwFB1wXi/9Nli0hQXcXgMfopNAaLX6tvVhCkxI3GF5z0uvl9XY3UfUdB1siQkzltA
+         iUKw==
+X-Gm-Message-State: AOAM530ld3iQfo7Rkk6kAWbDJrlwgWambUwhsbKWxybFxPxSklH0BrNP
+        Vq+ChUIApub8KjjVzZqfTo/xjxnLgqWhLdR+C3es3U7QskT4goJu4uaT95di1eoCS+juTFLIoly
+        OvAZXyn+vCctQ72dsXzNmczJmm6rclh5R1HubY5SDWg==
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr2866360ejc.5.1644062449624;
+        Sat, 05 Feb 2022 04:00:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy42lu0XD09NIeU/WCEo08QuiM9SqE6oFHO3LNiz0b5WmMfck8Xm2lLt5OxUpWLoNt2kE76iQ==
+X-Received: by 2002:a17:907:6d8d:: with SMTP id sb13mr2866347ejc.5.1644062449471;
+        Sat, 05 Feb 2022 04:00:49 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id m12sm1534185ejr.218.2022.02.05.04.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 04:00:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/5] dt-bindings: memory: convert to dtschema
+Date:   Sat,  5 Feb 2022 13:00:38 +0100
+Message-Id: <20220205120043.8337-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <91a59ee1-cca4-8d0c-4f86-388434eb5a39@ispras.ru>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 02:40:37PM +0300, Alexey Khoroshilov wrote:
-> On 04.02.2022 12:20, Greg Kroah-Hartman wrote:
-> > From: Maxime Ripard <maxime@cerno.tech>
-> > 
-> > Commit 20b0dfa86bef0e80b41b0e5ac38b92f23b6f27f9 upstream.
-> > 
-> > The original commit depended on a rework commit (724fc856c09e ("drm/vc4:
-> > hdmi: Split the CEC disable / enable functions in two")) that
-> > (rightfully) didn't reach stable.
-> > 
-> > However, probably because the context changed, when the patch was
-> > applied to stable the pm_runtime_put called got moved to the end of the
-> > vc4_hdmi_cec_adap_enable function (that would have become
-> > vc4_hdmi_cec_disable with the rework) to vc4_hdmi_cec_init.
-> > 
-> > This means that at probe time, we now drop our reference to the clocks
-> > and power domains and thus end up with a CPU hang when the CPU tries to
-> > access registers.
-> > 
-> > The call to pm_runtime_resume_and_get() is also problematic since the
-> > .adap_enable CEC hook is called both to enable and to disable the
-> > controller. That means that we'll now call pm_runtime_resume_and_get()
-> > at disable time as well, messing with the reference counting.
-> > 
-> > The behaviour we should have though would be to have
-> > pm_runtime_resume_and_get() called when the CEC controller is enabled,
-> > and pm_runtime_put when it's disabled.
-> > 
-> > We need to move things around a bit to behave that way, but it aligns
-> > stable with upstream.
-> > 
-> > Cc: <stable@vger.kernel.org> # 5.10.x
-> > Cc: <stable@vger.kernel.org> # 5.15.x
-> > Cc: <stable@vger.kernel.org> # 5.16.x
-> > Reported-by: Michael Stapelberg <michael+drm@stapelberg.ch>
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/gpu/drm/vc4/vc4_hdmi.c |   27 ++++++++++++++-------------
-> >  1 file changed, 14 insertions(+), 13 deletions(-)
-> > 
-> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > @@ -1402,18 +1402,18 @@ static int vc4_hdmi_cec_adap_enable(stru
-> >  	u32 val;
-> >  	int ret;
-> >  
-> > -	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> > -	if (ret)
-> > -		return ret;
-> > -
-> > -	val = HDMI_READ(HDMI_CEC_CNTRL_5);
-> > -	val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
-> > -		 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
-> > -		 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
-> > -	val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
-> > -	       ((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
-> > -
-> >  	if (enable) {
-> > +		ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		val = HDMI_READ(HDMI_CEC_CNTRL_5);
-> > +		val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
-> > +			 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
-> > +			 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
-> > +		val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
-> > +			((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
-> > +
-> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
-> >  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
-> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val);
-> > @@ -1439,7 +1439,10 @@ static int vc4_hdmi_cec_adap_enable(stru
-> >  		HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
-> >  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
-> >  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
-> > +
-> > +		pm_runtime_put(&vc4_hdmi->pdev->dev);
-> >  	}
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > @@ -1531,8 +1534,6 @@ static int vc4_hdmi_cec_init(struct vc4_
-> >  	if (ret < 0)
-> >  		goto err_delete_cec_adap;
-> >  
-> > -	pm_runtime_put(&vc4_hdmi->pdev->dev);
-> > -
-> >  	return 0;
-> >  
-> >  err_delete_cec_adap:
-> > 
-> > 
-> 
-> The patch has moved initialization of val local variable into if
-> (enable) branch. But the variable is used in in the else branch as well.
-> As a result we write of its initialized value here:
-> 
->     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
->          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> static
-> int vc4_hdmi_cec_adap_enable(struct cec_adapter *adap, bool enable)
-> {
->   struct vc4_hdmi *vc4_hdmi = cec_get_drvdata(adap);
->   /* clock period in microseconds */
->   const u32 usecs = 1000000 / CEC_CLOCK_FREQ;
->   u32 val;
->   int ret;
-> 
->   if (enable) {
->     ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
->     if (ret)
->       return ret;
-> 
->     val = HDMI_READ(HDMI_CEC_CNTRL_5);
->     .....
-> 
->   } else {
->     HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
->     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |  <------------------ UNINIT VALUE
->          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
-> 
->     pm_runtime_put(&vc4_hdmi->pdev->dev);
->   }
-> 
->   return 0;
-> }
+Changes since v1:
+1. Drop patch 1 (ARM dts) - applied.
+2. Correct description in lpddr2-timings (Dmitry).
 
-So what does this mean?  That this backport is incorrect and should be
-dropped?  Or that the original commit was wrong?  Or something else?
+Best regards,
+Krzysztof
 
-confused,
+Krzysztof Kozlowski (5):
+  dt-bindings: memory: lpddr3: convert to dtschema
+  dt-bindings: memory: lpddr3: adjust IO width to spec
+  dt-bindings: memory: lpddr3: deprecated manufacturer ID
+  dt-bindings: memory: lpddr3-timings: convert to dtschema
+  dt-bindings: memory: lpddr2-timings: convert to dtschema
 
-greg k-h
+ .../ddr/jedec,lpddr2-timings.yaml             | 135 +++++++++
+ .../memory-controllers/ddr/jedec,lpddr2.yaml  |   6 +-
+ .../ddr/jedec,lpddr3-timings.yaml             | 153 ++++++++++
+ .../memory-controllers/ddr/jedec,lpddr3.yaml  | 265 ++++++++++++++++++
+ .../memory-controllers/ddr/lpddr2-timings.txt |  52 ----
+ .../memory-controllers/ddr/lpddr3-timings.txt |  58 ----
+ .../memory-controllers/ddr/lpddr3.txt         | 107 -------
+ 7 files changed, 555 insertions(+), 221 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3-timings.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/lpddr3-timings.txt
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/lpddr3.txt
+
+-- 
+2.32.0
+

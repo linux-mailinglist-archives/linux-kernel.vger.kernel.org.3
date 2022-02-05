@@ -2,93 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0924AA993
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C6A4AA997
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347282AbiBEPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 10:06:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39294 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229940AbiBEPGH (ORCPT
+        id S1355454AbiBEPKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 10:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244872AbiBEPKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 10:06:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644073562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HFOiB1hRKVRXNI3vSujXABTzt/FIH2gAktqkFb6ckUk=;
-        b=e2lbGmrSVcgqaCHp8zV0Lp/7g76TlFJ7Cf5q+1WecjC2OPRixbsEvue9MxNdAvhJVTmRYl
-        wPEaibkDJWMgpiukMPAUZ3cdxjYTcVm6peG4Ai9Vc30QM3QmJ1TgQv63Nq0DhovYb+ba6n
-        HaZk8cKcUzoNHdzFH6t/MiaFQN+kMVo=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-484-L_RURwYHN_irGG00bEaJgw-1; Sat, 05 Feb 2022 10:06:01 -0500
-X-MC-Unique: L_RURwYHN_irGG00bEaJgw-1
-Received: by mail-qk1-f197.google.com with SMTP id u12-20020a05620a0c4c00b00475a9324977so4707724qki.13
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 07:06:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HFOiB1hRKVRXNI3vSujXABTzt/FIH2gAktqkFb6ckUk=;
-        b=CHRlnWFRt/iIqSSl0+Wv3BSfcNlddNA8Tr5Qda6MlIbJX9eoIes14EknvTgAIXZerG
-         O2UKHX6i18R4Sd/P/vCAsBnwpwCUHwxC6yap+17lNjEva8JD0NIlL31cD1iaer9dnR8N
-         TRU5rMzTeO3a5d68x/VQWhxV5TLYpDcz/OW9yEWt0aVxnFIUM4fj+Q3TJuf7InGguBHR
-         /5pycggm5AusJHgq8mKw0uGedKtwvHV6GF/enhHVFhixrOVRfCsBQky1Vjm/5g6Dyehv
-         AMQc4JQUphtjHN6GeXAHHkPxH01vGaMDbrAAE1LQGOVVHHLqFP0KRnNnhcmzzpO04C8P
-         mSlA==
-X-Gm-Message-State: AOAM530uidq+WMmVDbCn5FEZ6OpZzBtMG0LO12btTQK2fl/hqhVocVqL
-        Xovlu65w0n02WKHCZR0Qn2LtxZJJn9mqvwo2nLM/dnA1yneow5Rtvk9EGFVsjY0YtDZn5V+J84c
-        qZ7qiitCMru7z1ReCZswxzU3h
-X-Received: by 2002:a05:622a:249:: with SMTP id c9mr2799085qtx.109.1644073561010;
-        Sat, 05 Feb 2022 07:06:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyHdY9gPLzZ34BA6/NkHsRadtILz/Da4LXrmosm2/PdejzarCHuBbYQ1iuqbo53IySijVUi9A==
-X-Received: by 2002:a05:622a:249:: with SMTP id c9mr2799047qtx.109.1644073560650;
-        Sat, 05 Feb 2022 07:06:00 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id f14sm2728592qko.117.2022.02.05.07.05.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 07:05:59 -0800 (PST)
-From:   trix@redhat.com
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] sched: cleanup double word in comment
-Date:   Sat,  5 Feb 2022 07:05:53 -0800
-Message-Id: <20220205150553.1968684-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Sat, 5 Feb 2022 10:10:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0429C061348;
+        Sat,  5 Feb 2022 07:10:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA73B8015A;
+        Sat,  5 Feb 2022 15:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E61FAC340EC;
+        Sat,  5 Feb 2022 15:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644073809;
+        bh=O7riATjePCEa2aBAqE1LJllm1RUVPXLHQNq5/gc3znc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oIpKsBjrj1LYhxJt6Y7ibc7zlZJaag2rHM1KZZZsvfuO/zaQNT0dRRlFOvE1tNgE9
+         ocsFx+/yD/P2HOcqzMAx3CjtvB5MaVR8DN3oiiBAuu2X9ayA5cz7jwAvj6V3o21R79
+         ZSSc6AA4anlRl4GTbv+jCO07P03fBp3ziDO5U8aZrEp0KAlGulkOnqKxZuh9J8/ykk
+         CViU0fDr+PrbUF00BfmDVXEfTjlZdQcl1XSSCYhK8UKte/gVsGdAxAbSu3mPP/MOc+
+         ekiyuQGDtuAgkRnmnEkvEYYyGbJJNYBmRbI9NEce+MOC6WhjiehrtZsK3jTf+ZXtaQ
+         MZeqw4/35Ujxw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CCD28E5869F;
+        Sat,  5 Feb 2022 15:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/3] net: lan966x: add support for mcast snooping
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164407380983.16413.7086796356569573213.git-patchwork-notify@kernel.org>
+Date:   Sat, 05 Feb 2022 15:10:09 +0000
+References: <20220204091452.403706-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20220204091452.403706-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, f.fainelli@gmail.com,
+        vivien.didelot@gmail.com, vladimir.oltean@nxp.com, andrew@lunn.ch
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hello:
 
-Remove the second 'into'.
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- kernel/sched/sched.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 4 Feb 2022 10:14:49 +0100 you wrote:
+> Implement the switchdev callback SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
+> to allow to enable/disable multicast snooping.
+> 
+> Horatiu Vultur (3):
+>   net: lan966x: Update the PGID used by IPV6 data frames
+>   net: lan966x: Implement the callback
+>     SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
+>   net: lan966x: Update mdb when enabling/disabling mcast_snooping
+> 
+> [...]
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 9b33ba9c3c420..f82a81b4a5271 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2507,7 +2507,7 @@ static inline bool rq_order_less(struct rq *rq1, struct rq *rq2)
- {
- #ifdef CONFIG_SCHED_CORE
- 	/*
--	 * In order to not have {0,2},{1,3} turn into into an AB-BA,
-+	 * In order to not have {0,2},{1,3} turn into an AB-BA,
- 	 * order by core-id first and cpu-id second.
- 	 *
- 	 * Notably:
+Here is the summary with links:
+  - [net-next,1/3] net: lan966x: Update the PGID used by IPV6 data frames
+    https://git.kernel.org/netdev/net-next/c/1c213f05a3e1
+  - [net-next,2/3] net: lan966x: Implement the callback SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
+    https://git.kernel.org/netdev/net-next/c/47aeea0d57e8
+  - [net-next,3/3] net: lan966x: Update mdb when enabling/disabling mcast_snooping
+    https://git.kernel.org/netdev/net-next/c/add2c844db33
+
+You are awesome, thank you!
 -- 
-2.26.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

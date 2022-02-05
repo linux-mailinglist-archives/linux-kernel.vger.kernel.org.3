@@ -2,75 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5BF4AA811
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 11:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFEE4AA813
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 11:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379668AbiBEKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 05:25:21 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56028 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379582AbiBEKZQ (ORCPT
+        id S1379687AbiBEK3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 05:29:00 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:59569 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233088AbiBEK27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 05:25:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A614B800A0;
-        Sat,  5 Feb 2022 10:25:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED48C340E8;
-        Sat,  5 Feb 2022 10:25:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644056714;
-        bh=m5/8Lj0nKxs/YQ8i1NLT5kNMA/irs6BRBsv3oIJ/Pok=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t9Wf7YX/pe4yj5VB4fEwkCMwe+EpK1xTkK91h0DFzTlTpEB/W9uG5ujnFnK6aFVq2
-         Xh36OHA8mxopKwjU2KM3iP5h4t62eJGohHxFO4z8T2BGffJWh17H7+XudSDGCYW74y
-         14mEONEO+ilPkBH+O+ZOLKitTpd87tNpOLWr/wqw=
-Date:   Sat, 5 Feb 2022 11:25:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [PATCH 5.10 08/25] perf: Rework perf_event_exit_event()
-Message-ID: <Yf5QhydMcw5IcJj9@kroah.com>
-References: <20220204091914.280602669@linuxfoundation.org>
- <20220204091914.560626177@linuxfoundation.org>
- <20220204093734.GA27857@amd>
- <Yfz0nWtyap5Y3ogJ@kroah.com>
- <20220204101249.GB27857@amd>
+        Sat, 5 Feb 2022 05:28:59 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 893B73200BD2;
+        Sat,  5 Feb 2022 05:28:58 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Sat, 05 Feb 2022 05:28:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=kDIVNzj7Wmv2um
+        X4p4+USo9n563udVzIVi1lCU9eBZc=; b=hdDALldVe6+S/QPKYThCWr9wp/sddm
+        ozGHp8eHCO+O+3eyOxcuWnVcaHVU0btXIBy5wmMvUuZp1byAzP4MVm0xrplNwyr5
+        ChBJEVr4XEcDAUuaR80u2auxRRbm7n9ozIJJrbatdaeLGuOQOMc9Kkin5z/mEo/b
+        Nhuu2YaBk9MV5V2VrhOXoO0M/YoPMXjWr6YruYGrMWZlGm933yLzl01qWzokmWiL
+        5m9A7SQwVqU1YeaZrU3XOwwT3Zhls6DoiFVW3b22gIzlYkfZu0JKi1WyxLuiIN5r
+        nhWdM+bfNI5Zt0ATUtbVpWvZs6wFKH7ZDQgo9WuEXd/hBCanQC4qAIwQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=kDIVNzj7Wmv2umX4p4+USo9n563udVzIVi1lCU9eB
+        Zc=; b=Seku+8XrNnyp/Jl+m462wmfmYKcsMxjPAshO7AGHuhsFz0frJVC3YBT6w
+        SWmO4FKUBharAWxlDG1nVzEoAyHlLcfURlhqRMjfJe7xCp4HkhpxDVGS1Lfg+qx7
+        kGtJz0EXTlPe5909vYZx7pB4356I00ICm/pncsI+YFwQB9celWstwhONrW2s0t/y
+        9Bg4I4eNUTLoieCt9McLkDkCJZybYdKaDOfumHr7H1tH6pACJAfPwH/5ntw4DWZF
+        sXJPH3PPxu1ugdxlbu5ml+1hvw9Ox6Lfd/dsHGb4DW6+CaQ/dqAPOkX/7FtC1euE
+        aklyppyMvZt/V505WlSpBSrh2JDlQ==
+X-ME-Sender: <xms:aVH-Ya8lU-te0HbneRWha2h86S8WIjZ0XWDdvyjrdm5h_trw-zeOiw>
+    <xme:aVH-YathjK3Jteh-eNMxNYbp_i6OgU1EwMWOdhMq9qsUK8cwLcysLEBe_riyeIVFQ
+    aD0EXTQZ-bjKTXWcoM>
+X-ME-Received: <xmr:aVH-YQCQiU9jhIYug_i98FdGdZIxXiVIZx_yWhJlp93czYNyaPWqDQfYuzJhjiYJaPuyF1Ol0YEd1at0vAZ298DYsaA7sQHBCq3c2dw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrhedugddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfejjeekjedttdethedtfeelteefffduvdevvdfhtdeiudetleejgeelfeef
+    uedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:aVH-YSe81XnDWXCNubtmtEbXYS8ajf5nVZyAg6RRtgk_Y5G2oz1WYg>
+    <xmx:aVH-YfPqQ2kRi3_Nmf3zsJI-nMsz4flxH-2BL5P0qxMcn1jbkzVBbw>
+    <xmx:aVH-Ycn366n9gyzlkRLv_7iNmnC-irmo95TlKSYVRk_5u90OC2FMnw>
+    <xmx:alH-YaesTX34_qQChH6ZwNwT0Uq0xAy6ZDAOgDz8VmS_wOCsY-QCnQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 5 Feb 2022 05:28:56 -0500 (EST)
+Date:   Sat, 5 Feb 2022 11:28:53 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        mchehab@kernel.org, wens@csie.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: cedrus: Add watchdog for job completion
+Message-ID: <20220205102853.54wcmxzalb7uj7n6@houat>
+References: <20220201183324.493542-1-jernej.skrabec@gmail.com>
+ <YfztZE8ymJ5RERTq@aptenodytes>
+ <12946098.uLZWGnKmhe@jernej-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220204101249.GB27857@amd>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <12946098.uLZWGnKmhe@jernej-laptop>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 11:12:49AM +0100, Pavel Machek wrote:
-> On Fri 2022-02-04 10:40:45, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 04, 2022 at 10:37:35AM +0100, Pavel Machek wrote:
-> > > Hi!
-> > > 
-> > > > From: Peter Zijlstra <peterz@infradead.org>
-> > > > 
-> > > > commit ef54c1a476aef7eef26fe13ea10dc090952c00f8 upstream.
-> > > > 
-> > > > Make perf_event_exit_event() more robust, such that we can use it from
-> > > > other contexts. Specifically the up and coming remove_on_exec.
-> > > 
-> > > Do we need this in 5.10? AFAICT the remove_on_exec work is not queued
-> > > for 5.10, and this patch is buggy and needs following one to fix it
-> > > up.
-> > 
-> > It's needed by the following patch, which says 5.10 is affected.
-> 
-> 9/25 says this patch broke 5.10: Fixes: ef54c1a476ae ("perf: Rework
-> perf_event_exit_event()"). 8/25 is not claiming to fix anything.
-> 
-> Simply drop 8/25 and 9/25, and 5.10 is okay...
+On Sat, Feb 05, 2022 at 08:40:21AM +0100, Jernej =C5=A0krabec wrote:
+> > > +void cedrus_watchdog(struct work_struct *work)
+> > > +{
+> > > +	struct cedrus_dev *dev;
+> > > +	struct cedrus_ctx *ctx;
+> > > +
+> > > +	dev =3D container_of(to_delayed_work(work),
+> > > +			   struct cedrus_dev, watchdog_work);
+> > > +
+> > > +	ctx =3D v4l2_m2m_get_curr_priv(dev->m2m_dev);
+> > > +	if (!ctx)
+> > > +		return;
+> > > +
+> > > +	v4l2_err(&dev->v4l2_dev, "frame processing timed out!\n");
+> > > +	reset_control_reset(dev->rstc);
+> >=20
+> > I don't think playing with the reset is the right approach here.
+> > First we don't really know if the reset is shared or not, so this might=
+ have
+> > no effect.
+>=20
+> AFAIK only few reset lines are shared in all Allwinner SoC, never for Ced=
+rus=20
+> and even then, this is considered as HW issue. So, I'm good with using re=
+set=20
+> line. This principle is also taken from Hantro driver.
 
-Ah, yeah, the patch this was to fix was added and then reverted which
-confused things.  I'll go drop both of these now, thanks.
+Also, we got the reset handle through reset_control_get_exclusive, so
+we're guaranteed to be the only user.
 
-greg k-h
+Maxime

@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59264AA66E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48544AA674
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379312AbiBEEXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 23:23:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiBEEXk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 23:23:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F03BC061346;
-        Fri,  4 Feb 2022 20:23:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A291B60C09;
-        Sat,  5 Feb 2022 04:23:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5F1C340E8;
-        Sat,  5 Feb 2022 04:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644035018;
-        bh=Km4Gf2o96xkrOTnzGLNM3TPm20MY3a75gjtczbbLqlA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U+lYCxLzGNllz10pLju7aE3TQ8Xq2fkvReNEIrLGG5xC16999lXowFW3kVlq3mPwT
-         snQojXnzbhCxx43NSpXFeSlramgC1IoENbTzsZ+qxbudjBgoBvU/rJiS+izl4OQgwS
-         PL7eDIMZbNYpoZE+dkW2eajWUk5eAKQdSp+WgUzOSdysfEVk4iSVDDYnT7iGy9FqkA
-         64LoAZ110Mm3Da10FKyKAkbl7BjTlaFBOA/szd7GILgUANLDnNVvv4k773kMET5qWJ
-         F6irxMM15TkZ/o+V+mUnY6CSiZLCktJ6b58YX3Hvp7rLkms2Ber0ehPJicy34/1mNS
-         v9EkBJgOzyM5w==
-Date:   Fri, 4 Feb 2022 20:23:36 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, djakov@kernel.org, bjorn.andersson@linaro.org,
-        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
-        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
-        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/7] net: ipa: use interconnect bulk
- enable/disable operations
-Message-ID: <20220204202336.67c95e15@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220204195044.1082026-4-elder@linaro.org>
-References: <20220204195044.1082026-1-elder@linaro.org>
-        <20220204195044.1082026-4-elder@linaro.org>
+        id S1379327AbiBEEaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 23:30:18 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:34018 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379317AbiBEEaM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 23:30:12 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1nGCi2-0001xt-4e; Sat, 05 Feb 2022 15:30:03 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sat, 05 Feb 2022 15:30:02 +1100
+Date:   Sat, 5 Feb 2022 15:30:02 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Matt Mackall <mpm@selenic.com>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH 1/6] hw_random: explicit ordering of initcalls
+Message-ID: <Yf39ShK5r7TXXdac@gondor.apana.org.au>
+References: <20220124202951.28579-1-linux@dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124202951.28579-1-linux@dominikbrodowski.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  4 Feb 2022 13:50:40 -0600 Alex Elder wrote:
-> The power interconnect array is now an array of icc_bulk_data
-> structures, which is what the interconnect bulk enable and disable
-> functions require.
+On Mon, Jan 24, 2022 at 09:29:46PM +0100, Dominik Brodowski wrote:
+> hw-random device drivers depend on the hw-random core being
+> initialized. Make this ordering explicit, also for the case
+> these drivers are built-in. As the core itself depends on
+> misc_register() which is set up at subsys_initcall time,
+> advance the initialization of the core (only) to the
+> fs_initcall() level.
 > 
-> Get rid of ipa_interconnect_enable() and ipa_interconnect_disable(),
-> and just call icc_bulk_enable() and icc_bulk_disable() instead.
-> 
-> Signed-off-by: Alex Elder <elder@linaro.org>
+> Cc: Matt Mackall <mpm@selenic.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+> ---
+>  drivers/char/hw_random/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We got a kbuild bot complaint here, for some reason off-list.
-Let me drop it from PW for now.
+All applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

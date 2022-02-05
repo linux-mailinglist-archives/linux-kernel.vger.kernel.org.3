@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2904A4AA659
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50BD4AA65B
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 05:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379057AbiBEECb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 23:02:31 -0500
-Received: from mail-pl1-f172.google.com ([209.85.214.172]:42886 "EHLO
-        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbiBEEC3 (ORCPT
+        id S1379293AbiBEEDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 23:03:01 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57492 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239965AbiBEEC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 23:02:29 -0500
-Received: by mail-pl1-f172.google.com with SMTP id l13so6772960plg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 20:02:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1gSrOa55TE+xa5Ovu18B/xIJNxdc0rLEc+vfv3wsOPw=;
-        b=gVrhMSy6ySQjBkDG6DNxEf8eOB4XVqZkMbghmcAM/8CT40RTIA1jgjnweUKa4Aawk7
-         gzIO3xxFz/AtNxyiVOOJXYrG5hKVALNgjvftIbhkYPT3RUO8cfcQb5lmYn/jLK/MIMBA
-         Cz4ZStxEe56g1Xk2rRIlO3okFnsoA6ogBlkge3nG1qtPWwvVPaq47UpCD5rIebFUDKXw
-         kwnxi2s3EB6HCAadmqZ2HrzLABQ/twBBcsmpY2IJTPqt2lEaCbH5ywyEHjGaDqH0amQY
-         0XEr7E1s07lAfRq74UYtPdIQH8/9K1sjVt5QXwiGa2ZpXiR8ub2j4ZyQGT0o0jWtHuTP
-         +XLQ==
-X-Gm-Message-State: AOAM531SiXU8xcaN4ySZYJkCCoGemB2OgGW0Eo/aoedYu7w0xF266Sci
-        jAWv/LwbpgSYEDRltE2LjkE=
-X-Google-Smtp-Source: ABdhPJxlNKtcmgTk80gaWnM+MZmDh9r7I/FI2AE/4qK1HVaPp/GEXFVirp4r83Ilq4i0c4TYgguNjQ==
-X-Received: by 2002:a17:90b:3810:: with SMTP id mq16mr6759582pjb.95.1644033749360;
-        Fri, 04 Feb 2022 20:02:29 -0800 (PST)
-Received: from sultan-box.localdomain ([204.152.216.102])
-        by smtp.gmail.com with ESMTPSA id l2sm4247707pfc.183.2022.02.04.20.02.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 20:02:28 -0800 (PST)
-Date:   Fri, 4 Feb 2022 20:02:26 -0800
-From:   Sultan Alsawaf <sultan@kerneltoast.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Subject: Re: [PATCH RFC v1] random: do not take spinlocks in irq handler
-Message-ID: <Yf320i+tVl6MXnD7@sultan-box.localdomain>
-References: <YfgPWatDzkn2ozhm@linutronix.de>
- <20220204153149.51428-1-Jason@zx2c4.com>
- <Yf2Q25T04cAxJY3H@linutronix.de>
+        Fri, 4 Feb 2022 23:02:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39EE861182;
+        Sat,  5 Feb 2022 04:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4053CC340E8;
+        Sat,  5 Feb 2022 04:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644033778;
+        bh=c3EdVIr+qi9Rx5v8/PHg5sm7wCbJ8Yeb5ODBDIoL6n4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p+NtqexJKDbSUr+I10mtVeNBMbz7msVPlFS/AQF5VrRVnF2yWSK+PVRS64E/f66e7
+         7rI2eG5IMe/4wtqveNffMgtILn/MCjeVVTPR33Jxtxqfsn9m5o9MF2ffT+/wi7iE7F
+         ZnrzXLPp1LBQA/uXYUbVUSYLDN7dthhJHH9AqVUWRW/riqiN//P5f1eRtDW4iK1MbQ
+         JlE0rf1UluIvMYViQj6ZnCL64JuwQuRo6ABWrs1m/SCrhrAL6pfKaoQK7u+2f/XOI6
+         N51c5bo60QqRubHiY1arsJpTvgFdJOdpTo6prBDASJzj7s0HiIGN3SvfUsA1mVGy/O
+         TyUrOFPMc9saQ==
+Date:   Fri, 4 Feb 2022 20:02:56 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc:     <michael@stapelberg.de>, <afleming@gmail.com>,
+        <f.fainelli@gmail.com>, <andrew@lunn.ch>,
+        <Alexey.Malahov@baikalelectronics.ru>,
+        <Sergey.Semin@baikalelectronics.ru>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: phy: marvell: Fix RGMII Tx/Rx delays setting in
+ 88e1121-compatible PHYs
+Message-ID: <20220204200256.641d757b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
+References: <96759fee7240fd095cb9cc1f6eaf2d9113b57cf0.camel@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yf2Q25T04cAxJY3H@linutronix.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 09:47:23PM +0100, Sebastian Andrzej Siewior wrote:
-> No need for atomic. If this is truly per-CPU then there will be no
-> cross-CPU access, right?
-> Therefore I would suggest to use __this_cpu_inc_return() which would avoid
-> the sync prefix for the inc operation. Same for __this_cpu_or(). And you
-> could use unsigned int.
+On Fri, 4 Feb 2022 05:29:11 +0000
+Pavel.Parkhomenko@baikalelectronics.ru wrote:
+> It is mandatory for a software to issue a reset upon modifying RGMII
+> Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
+> Specific Control register 2 (page 2, register 21) otherwise the changes
+> won't be perceived by the PHY (the same is applicable for a lot of other
+> registers). Not setting the RGMII delays on the platforms that imply
+> it's being done on the PHY side will consequently cause the traffic loss.
+> We discovered that the denoted soft-reset is missing in the
+> m88e1121_config_aneg() method for the case if the RGMII delays are
+> modified but the MDIx polarity isn't changed or the auto-negotiation is
+> left enabled, thus causing the traffic loss on our platform with Marvell
+> Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
+> delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
+> method.
+> 
+> Fixes: d6ab93364734 ("net: phy: marvell: Avoid unnecessary soft reset")
+> Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> Reviewed-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
-Hi,
+Appears not to apply to net, please rebase on top of:
 
-The __this_cpu_{ATOMIC_OP}() functions are for atomically performing a single
-per-CPU operation for the current CPU from contexts that permit CPU migration.
-Since this code is safe from CPU migrations (add_interrupt_randomness() runs in
-hardirq context), the atomic per-CPU helpers are unneeded. Instead of using
-__this_cpu_inc_return() and __this_cpu_or(), we can operate on the per-CPU
-pointer directly without any extra safety (e.g., `++fast_pool->count` can be
-used in place of `__this_cpu_inc_return(irq_randomness.count)`).
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/
 
-Sultan
+and repost (do keep Russell's tag and address Andrew's question).

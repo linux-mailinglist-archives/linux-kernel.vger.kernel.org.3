@@ -2,306 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951A44AA880
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C944AA886
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379812AbiBEMBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 07:01:16 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51924
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1379765AbiBEMA7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 07:00:59 -0500
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A19073FFD5
-        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 12:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644062458;
-        bh=g79GJtLoFuJ8U8Z2lTNpbcsjEt2E+NY0Ue5nQV27Nic=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=tABg2deBDOrojsLWYyxJt4k0cRiRdRF8f8Yq8DyhZT9PFYKdoRbFSf9DYrwaQ0wSb
-         N9CVkIAsms0Z/CmNZf1kRlE6aak/spqC5T/JSK3SFAzLLWajBwpmnMU851e1Q1+Zto
-         DZmMG0wKcWLVo121sYl91C3TFpK5fYOfnglqG9CRm9bzSBy5CdMYM84jCUbhVqmYCE
-         vJv2Ys5oCcB8QLcKDnw4ohiTufTR0nLPncikjtwSez4jIGDkCHbNqlr+NA97no3yBU
-         wPaSVT7FueL1RBIQILqgDTDvFE8sLFNWIBH6lKdif5TLP/Qim+ub4zQFyVrkn/O91+
-         sFUKIQ+k/DRFw==
-Received: by mail-ed1-f71.google.com with SMTP id l16-20020aa7c3d0000000b004070ea10e7fso4540187edr.3
-        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 04:00:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g79GJtLoFuJ8U8Z2lTNpbcsjEt2E+NY0Ue5nQV27Nic=;
-        b=urHLIizA62jvzO0Zcwu4FM+B67MJ3ernRFAw2KPPDj+6nuYILRewtQMRJeSjnwY89r
-         /bN+7uiMNiobOhVGmL+EJuhmOuWRHl7NLoad6m6R0anljqzJBeeBB7TUWJaogzfX8JQD
-         9b8ngGGPuCMkP44Mr6ubrtS1gWGWoHxDj8eQmLDg0w3MlY6ERGSwG/nMaF4HlZF0tvKB
-         4mmXOt/K62MqJxEYkJjvyewSywzFiXweiVer+51HbJyhmXEJVxKphsmHsXpWLx3uHKBW
-         6YZWbckNZyh6HO48avOm0owoU/dDGCUV0jxFyZMq03pjnRjPONAw3lPYzMkkqe59RPCT
-         Frcw==
-X-Gm-Message-State: AOAM531M3ITjv6MNYV1rc0Ipal/Vc3Xv6rNqUHsLV/8XpcR9UOu71Tcf
-        a77D16f+QHhwQ3n4/S8HAK2kX4lHjNn/+xJbSXMoro8Yz3nxA275Mcc44QbeNiWMyukok7v5vTp
-        1hX1qffjGZmBC+EOBr9CCLFefrz6E6C7DVyufRPL6hQ==
-X-Received: by 2002:a17:907:8a0b:: with SMTP id sc11mr2782012ejc.310.1644062458119;
-        Sat, 05 Feb 2022 04:00:58 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwI6v3KzvqmMl2uZY105l1wUXzopbwZdOW3CekXIXGfOpnK+CNN19iiDFIAfjEEs6/DTmgfdA==
-X-Received: by 2002:a17:907:8a0b:: with SMTP id sc11mr2781997ejc.310.1644062457861;
-        Sat, 05 Feb 2022 04:00:57 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id m12sm1534185ejr.218.2022.02.05.04.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 04:00:56 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 5/5] dt-bindings: memory: lpddr2-timings: convert to dtschema
-Date:   Sat,  5 Feb 2022 13:00:43 +0100
-Message-Id: <20220205120043.8337-6-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220205120043.8337-1-krzysztof.kozlowski@canonical.com>
-References: <20220205120043.8337-1-krzysztof.kozlowski@canonical.com>
+        id S239046AbiBEMEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 07:04:07 -0500
+Received: from mail.ispras.ru ([83.149.199.84]:58392 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234560AbiBEMEE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 07:04:04 -0500
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 118DC40D3BFF;
+        Sat,  5 Feb 2022 12:04:03 +0000 (UTC)
+Subject: Re: [PATCH 5.10 12/25] drm/vc4: hdmi: Make sure the device is powered
+ with CEC
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Michael Stapelberg <michael+drm@stapelberg.ch>,
+        Maxime Ripard <maxime@cerno.tech>
+References: <20220204091914.280602669@linuxfoundation.org>
+ <20220204091914.688259001@linuxfoundation.org>
+ <91a59ee1-cca4-8d0c-4f86-388434eb5a39@ispras.ru> <Yf5lNIJnvhP4ajam@kroah.com>
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <3bfd9b5e-fa3b-047c-044a-051e28b2e863@ispras.ru>
+Date:   Sat, 5 Feb 2022 15:04:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yf5lNIJnvhP4ajam@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: ru-RU
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the LPDDR2 memory timings bindings to DT schema format.
+On 05.02.2022 14:53, Greg Kroah-Hartman wrote:
+> On Sat, Feb 05, 2022 at 02:40:37PM +0300, Alexey Khoroshilov wrote:
+>> On 04.02.2022 12:20, Greg Kroah-Hartman wrote:
+>>> From: Maxime Ripard <maxime@cerno.tech>
+>>>
+>>> Commit 20b0dfa86bef0e80b41b0e5ac38b92f23b6f27f9 upstream.
+>>>
+>>> The original commit depended on a rework commit (724fc856c09e ("drm/vc4:
+>>> hdmi: Split the CEC disable / enable functions in two")) that
+>>> (rightfully) didn't reach stable.
+>>>
+>>> However, probably because the context changed, when the patch was
+>>> applied to stable the pm_runtime_put called got moved to the end of the
+>>> vc4_hdmi_cec_adap_enable function (that would have become
+>>> vc4_hdmi_cec_disable with the rework) to vc4_hdmi_cec_init.
+>>>
+>>> This means that at probe time, we now drop our reference to the clocks
+>>> and power domains and thus end up with a CPU hang when the CPU tries to
+>>> access registers.
+>>>
+>>> The call to pm_runtime_resume_and_get() is also problematic since the
+>>> .adap_enable CEC hook is called both to enable and to disable the
+>>> controller. That means that we'll now call pm_runtime_resume_and_get()
+>>> at disable time as well, messing with the reference counting.
+>>>
+>>> The behaviour we should have though would be to have
+>>> pm_runtime_resume_and_get() called when the CEC controller is enabled,
+>>> and pm_runtime_put when it's disabled.
+>>>
+>>> We need to move things around a bit to behave that way, but it aligns
+>>> stable with upstream.
+>>>
+>>> Cc: <stable@vger.kernel.org> # 5.10.x
+>>> Cc: <stable@vger.kernel.org> # 5.15.x
+>>> Cc: <stable@vger.kernel.org> # 5.16.x
+>>> Reported-by: Michael Stapelberg <michael+drm@stapelberg.ch>
+>>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> ---
+>>>  drivers/gpu/drm/vc4/vc4_hdmi.c |   27 ++++++++++++++-------------
+>>>  1 file changed, 14 insertions(+), 13 deletions(-)
+>>>
+>>> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+>>> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+>>> @@ -1402,18 +1402,18 @@ static int vc4_hdmi_cec_adap_enable(stru
+>>>  	u32 val;
+>>>  	int ret;
+>>>  
+>>> -	ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+>>> -	if (ret)
+>>> -		return ret;
+>>> -
+>>> -	val = HDMI_READ(HDMI_CEC_CNTRL_5);
+>>> -	val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+>>> -		 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+>>> -		 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+>>> -	val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+>>> -	       ((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+>>> -
+>>>  	if (enable) {
+>>> +		ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+>>> +		if (ret)
+>>> +			return ret;
+>>> +
+>>> +		val = HDMI_READ(HDMI_CEC_CNTRL_5);
+>>> +		val &= ~(VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET |
+>>> +			 VC4_HDMI_CEC_CNT_TO_4700_US_MASK |
+>>> +			 VC4_HDMI_CEC_CNT_TO_4500_US_MASK);
+>>> +		val |= ((4700 / usecs) << VC4_HDMI_CEC_CNT_TO_4700_US_SHIFT) |
+>>> +			((4500 / usecs) << VC4_HDMI_CEC_CNT_TO_4500_US_SHIFT);
+>>> +
+>>>  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+>>>  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+>>>  		HDMI_WRITE(HDMI_CEC_CNTRL_5, val);
+>>> @@ -1439,7 +1439,10 @@ static int vc4_hdmi_cec_adap_enable(stru
+>>>  		HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+>>>  		HDMI_WRITE(
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../ddr/jedec,lpddr2-timings.yaml             | 135 ++++++++++++++++++
- .../memory-controllers/ddr/jedec,lpddr2.yaml  |   6 +-
- .../memory-controllers/ddr/lpddr2-timings.txt |  52 -------
- 3 files changed, 137 insertions(+), 56 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
- delete mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
-new file mode 100644
-index 000000000000..f3e62ee07126
---- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2-timings.yaml
-@@ -0,0 +1,135 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr2-timings.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LPDDR2 SDRAM AC timing parameters for a given speed-bin
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+properties:
-+  compatible:
-+    const: jedec,lpddr2-timings
-+
-+  max-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Maximum DDR clock frequency for the speed-bin, in Hz.
-+
-+  min-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Minimum DDR clock frequency for the speed-bin, in Hz.
-+
-+  tCKESR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      CKE minimum pulse width during SELF REFRESH (low pulse width during
-+      SELF REFRESH) in pico seconds.
-+
-+  tDQSCK-max:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      DQS output data access time from CK_t/CK_c in pico seconds.
-+
-+  tDQSCK-max-derated:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      DQS output data access time from CK_t/CK_c, temperature de-rated, in pico
-+      seconds.
-+
-+  tFAW:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Four-bank activate window in pico seconds.
-+
-+  tRAS-max-ns:
-+    description: |
-+      Row active time in nano seconds.
-+
-+  tRAS-min:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Row active time in pico seconds.
-+
-+  tRCD:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      RAS-to-CAS delay in pico seconds.
-+
-+  tRPab:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Row precharge time (all banks) in pico seconds.
-+
-+  tRRD:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Active bank A to active bank B in pico seconds.
-+
-+  tRTP:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Internal READ to PRECHARGE command delay in pico seconds.
-+
-+  tWR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      WRITE recovery time in pico seconds.
-+
-+  tWTR:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Internal WRITE-to-READ command delay in pico seconds.
-+
-+  tXP:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Exit power-down to next valid command delay in pico seconds.
-+
-+  tZQCL:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Long calibration time in pico seconds.
-+
-+  tZQCS:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Short calibration time in pico seconds.
-+
-+  tZQinit:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Initialization calibration time in pico seconds.
-+
-+required:
-+  - compatible
-+  - min-freq
-+  - max-freq
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timings {
-+        compatible = "jedec,lpddr2-timings";
-+        min-freq = <10000000>;
-+        max-freq = <400000000>;
-+        tCKESR = <15000>;
-+        tDQSCK-max = <5500>;
-+        tFAW = <50000>;
-+        tRAS-max-ns = <70000>;
-+        tRAS-min = <42000>;
-+        tRPab = <21000>;
-+        tRCD = <18000>;
-+        tRRD = <10000>;
-+        tRTP = <7500>;
-+        tWR = <15000>;
-+        tWTR = <7500>;
-+        tXP = <7500>;
-+        tZQCL = <360000>;
-+        tZQCS = <90000>;
-+        tZQinit = <1000000>;
-+    };
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-index 25ed0266f6dd..2d8a701e2a05 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
-@@ -142,14 +142,12 @@ properties:
- 
- patternProperties:
-   "^lpddr2-timings":
--    type: object
-+    $ref: jedec,lpddr2-timings.yaml
-     description: |
-       The lpddr2 node may have one or more child nodes of type "lpddr2-timings".
-       "lpddr2-timings" provides AC timing parameters of the device for
-       a given speed-bin. The user may provide the timings for as many
--      speed-bins as is required. Please see Documentation/devicetree/
--      bindings/memory-controllers/ddr/lpddr2-timings.txt for more information
--      on "lpddr2-timings".
-+      speed-bins as is required.
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt b/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
-deleted file mode 100644
-index 9ceb19e0c7fd..000000000000
---- a/Documentation/devicetree/bindings/memory-controllers/ddr/lpddr2-timings.txt
-+++ /dev/null
-@@ -1,52 +0,0 @@
--* AC timing parameters of LPDDR2(JESD209-2) memories for a given speed-bin
--
--Required properties:
--- compatible : Should be "jedec,lpddr2-timings"
--- min-freq : minimum DDR clock frequency for the speed-bin. Type is <u32>
--- max-freq : maximum DDR clock frequency for the speed-bin. Type is <u32>
--
--Optional properties:
--
--The following properties represent AC timing parameters from the memory
--data-sheet of the device for a given speed-bin. All these properties are
--of type <u32> and the default unit is ps (pico seconds). Parameters with
--a different unit have a suffix indicating the unit such as 'tRAS-max-ns'
--- tRCD
--- tWR
--- tRAS-min
--- tRRD
--- tWTR
--- tXP
--- tRTP
--- tDQSCK-max
--- tFAW
--- tZQCS
--- tZQinit
--- tRPab
--- tZQCL
--- tCKESR
--- tRAS-max-ns
--- tDQSCK-max-derated
--
--Example:
--
--timings_elpida_ECB240ABACN_400mhz: lpddr2-timings@0 {
--	compatible	= "jedec,lpddr2-timings";
--	min-freq	= <10000000>;
--	max-freq	= <400000000>;
--	tRPab		= <21000>;
--	tRCD		= <18000>;
--	tWR		= <15000>;
--	tRAS-min	= <42000>;
--	tRRD		= <10000>;
--	tWTR		= <7500>;
--	tXP		= <7500>;
--	tRTP		= <7500>;
--	tCKESR		= <15000>;
--	tDQSCK-max	= <5500>;
--	tFAW		= <50000>;
--	tZQCS		= <90000>;
--	tZQCL		= <360000>;
--	tZQinit		= <1000000>;
--	tRAS-max-ns	= <70000>;
--};
--- 
-2.32.0
+, val |
+>>>  			   VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+>>> +
+>>> +		pm_runtime_put(&vc4_hdmi->pdev->dev);
+>>>  	}
+>>> +
+>>>  	return 0;
+>>>  }
+>>>  
+>>> @@ -1531,8 +1534,6 @@ static int vc4_hdmi_cec_init(struct vc4_
+>>>  	if (ret < 0)
+>>>  		goto err_delete_cec_adap;
+>>>  
+>>> -	pm_runtime_put(&vc4_hdmi->pdev->dev);
+>>> -
+>>>  	return 0;
+>>>  
+>>>  err_delete_cec_adap:
+>>>
+>>>
+>>
+>> The patch has moved initialization of val local variable into if
+>> (enable) branch. But the variable is used in in the else branch as well.
+>> As a result we write of its initialized value here:
+>>
+>>     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |
+>>          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> static
+>> int vc4_hdmi_cec_adap_enable(struct cec_adapter *adap, bool enable)
+>> {
+>>   struct vc4_hdmi *vc4_hdmi = cec_get_drvdata(adap);
+>>   /* clock period in microseconds */
+>>   const u32 usecs = 1000000 / CEC_CLOCK_FREQ;
+>>   u32 val;
+>>   int ret;
+>>
+>>   if (enable) {
+>>     ret = pm_runtime_resume_and_get(&vc4_hdmi->pdev->dev);
+>>     if (ret)
+>>       return ret;
+>>
+>>     val = HDMI_READ(HDMI_CEC_CNTRL_5);
+>>     .....
+>>
+>>   } else {
+>>     HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+>>     HDMI_WRITE(HDMI_CEC_CNTRL_5, val |  <------------------ UNINIT VALUE
+>>          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+>>
+>>     pm_runtime_put(&vc4_hdmi->pdev->dev);
+>>   }
+>>
+>>   return 0;
+>> }
+> 
+> So what does this mean?  That this backport is incorrect and should be
+> dropped?  Or that the original commit was wrong?  Or something else?
+> 
+> confused,
+> 
+> greg k-h
+> 
 
+As far as I can see, the upstream commit was correct and the problem is
+in the backport. I would suggest to fix it like this:
+
+   } else {
+     HDMI_WRITE(HDMI_CEC_CPU_MASK_SET, VC4_HDMI_CPU_CEC);
+-     HDMI_WRITE(HDMI_CEC_CNTRL_5, val
++     HDMI_WRITE(HDMI_CEC_CNTRL_5, HDMI_READ(HDMI_CEC_CNTRL_5)
+          VC4_HDMI_CEC_TX_SW_RESET | VC4_HDMI_CEC_RX_SW_RESET);
+
+     pm_runtime_put(&vc4_hdmi->pdev->dev);
+   }
+
+But I would left it to comment someone who knows this code better.
+
+--
+Best regards,
+Alexey Khoroshilov
+Linux Verification Center, ISPRAS

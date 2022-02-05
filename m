@@ -2,243 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F544AA74B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7BF4AA7A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379571AbiBEHUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 02:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiBEHUr (ORCPT
+        id S1354027AbiBEIXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:23:46 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:49412 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237075AbiBEIXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:20:47 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB49C061347
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:20:45 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id j2so25365368ybu.0
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 23:20:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YuSevJHq0EkhDQnmKb1fVwMKVv5yPkrZ7mzyilXRIp0=;
-        b=DMWM8FcKjHnJ8KdBjViBB10zIV5SqV2Ax6+JAVEVcGcXafE6gmBewaaDQrqUlb7ICZ
-         mzUM8FSaqD7cRiGwiX8HUod2meH2BlYW3cz95lAS4T3qpEr5pwBQmH+YV3aMQtAnCVIt
-         wjwN9eepUfT9GlpPEvTW2XtzdwEvis1uIcgofOXyVY0ywxwfZBrLTpgSM1u8KNiCzsns
-         8EBDYLIguO1qvMQlacsYzayOoZIwnX1RYwMOrC/7eCt+WTo6YfgayZx5yl1t5g7pxkwI
-         I8taawGB8rjqn5sHuRNiOTxirqSSkSxjqjOp2IDPrcNnR/8QBYZC5NLe11CFQqSM0AEb
-         17LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YuSevJHq0EkhDQnmKb1fVwMKVv5yPkrZ7mzyilXRIp0=;
-        b=X4w++5ePDvHSDQMBYgWEjmvQa8YZfT2YN9//PTgFg7iyqKxkR8r8NV2h+Pi3kTJNXN
-         brQil0opbRGbXMV+epFjSCPYPfg0yt3pJKig+rexPqaPSscjAQ5N+EFBI+SDKyGluW3H
-         dm14CSB+cV65AAIX11TXtd055uZIgQKI1SLLRjlZjoBicvYXPzsmfqT+0gGShiIjdImX
-         7YN2A2EnkIXqj4M6/H94MiHauM95LMKb4A5E3mDR0NaB0G2/I4Ycn1QFQdVJP512eHVj
-         S216DrIMYJ64nsmPRsvjnXKyYFns/XXQzQbksToou404XoCRuQvmuBls1OLI9GmSJI2A
-         Y9dQ==
-X-Gm-Message-State: AOAM531I5rdfM6rFZY4780KBxSuTcrGb957mjyNcDqop93VaFsTuZVLN
-        Bs7vNWgsA5E12jSlqfalli6qYzpCyI0SWBXLKBG8tQ==
-X-Google-Smtp-Source: ABdhPJy6Nq2TWok14cMJ+Lka27+NbS2AK0bf4JiOfT3xv2RHEPeJLKBltdKmLopjmcOacKDGl2bRzLYdjdEYcPZfrOI=
-X-Received: by 2002:a81:3986:: with SMTP id g128mr2623268ywa.129.1644045644997;
- Fri, 04 Feb 2022 23:20:44 -0800 (PST)
+        Sat, 5 Feb 2022 03:23:37 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 6A80620139F;
+        Sat,  5 Feb 2022 08:23:35 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id A4FC0811AC; Sat,  5 Feb 2022 08:21:09 +0100 (CET)
+Date:   Sat, 5 Feb 2022 08:21:09 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Sultan Alsawaf <sultan@kerneltoast.com>
+Subject: Re: [PATCH v2 4/4] random: make credit_entropy_bits() always safe
+Message-ID: <Yf4lZU7mAArZ6xCi@owl.dominikbrodowski.net>
+References: <20220204135325.8327-1-Jason@zx2c4.com>
+ <20220204135325.8327-5-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220204091912.329106021@linuxfoundation.org>
-In-Reply-To: <20220204091912.329106021@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 5 Feb 2022 12:50:33 +0530
-Message-ID: <CA+G9fYu5fGRCJkQYejfLbv22zUiVAAKPXv75OPvieD6cNjKBVQ@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/10] 5.4.177-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204135325.8327-5-Jason@zx2c4.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 14:50, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.177 release.
-> There are 10 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.177-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Am Fri, Feb 04, 2022 at 02:53:25PM +0100 schrieb Jason A. Donenfeld:
+> This is called from various hwgenerator drivers, so rather than having
+> one "safe" version for userspace and one "unsafe" version for the
+> kernel, just make everything safe; the checks are cheap and sensible to
+> have anyway.
+> 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Reported-by: Sultan Alsawaf <sultan@kerneltoast.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+	Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.177-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: db9bfa6e8ef56c7c343bcb51031ea93db5f8d157
-* git describe: v5.4.176-11-gdb9bfa6e8ef5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-76-11-gdb9bfa6e8ef5
-
-## Test Regressions (compared to v5.4.176)
-No test regressions found.
-
-## Metric regressions (compared to v5.4.176)
-No metric regressions found.
-
-## Test fixes (compared to v5.4.176)
-No test fixes found.
-
-## Metric fixes (compared to v5.4.176)
-No metric fixes found.
-
-## Test result summary
-total: 93678, pass: 78131, fail: 764, skip: 13342, xfail: 1441
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 258 passed, 0 failed
-* arm64: 24 total, 23 passed, 1 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 20 total, 20 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 48 passed, 4 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+	Dominik

@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9849A4AA6FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E2C4AA6FE
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244335AbiBEFxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 00:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33596 "EHLO
+        id S1343692AbiBEF4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 00:56:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243150AbiBEFxV (ORCPT
+        with ESMTP id S243150AbiBEF4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 00:53:21 -0500
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Feb 2022 21:53:20 PST
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E91C061347;
-        Fri,  4 Feb 2022 21:53:20 -0800 (PST)
+        Sat, 5 Feb 2022 00:56:01 -0500
+X-Greylist: delayed 38072 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Feb 2022 21:56:00 PST
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633B2C061346
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 21:56:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644040400; x=1675576400;
+  t=1644040560; x=1675576560;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=im2bmAajx3GGQlxqhChgLpRvbkWNIxqhs1d8c6yRotE=;
-  b=g2ODuW4Oy9qj74Uoh31Pp5jTgeQeSa7LGaCo8SrNsEfyCe6A8w935I8X
-   +NGQV3N0cz5S0ViOQ3sxgFasuqC/Udb9FLimBpMyIyzAE+0SMZsij0FMV
-   yKstkjfhVdmKg+ujbr/Yse+PNIqVTFocw46PCsJ9ZYOG/17qLZAu9FfdU
-   X4QyPaMokJK2M2ueEe4dZ3cnoPe0knxI+ZfqCh8GwEi9kbdIclsH171hI
-   2V80+CUSUM893O/MibT10/hrQmarBy6XuNCpweHoWIDfJHecI9dUitNfB
-   uJo8ywc2NhOt0Njxuq0qNb+/RUHZ9TNsVvVxxbgfEWbDur27E2BjsuTo8
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="311790664"
+  bh=yQ7E7TdXEEU3uNvWo8FZUSDdiTe2O3C8a8Gvtg3fBhw=;
+  b=TL/W2rwhd5iXuYSke6cgJRRDvjo/8BGbZotOKXC/K74Qx1PX6pznymqF
+   fhZG17QOn3jCaRC2v27s0fHA4JhRtrLHEz8qAdwVtqAOpjBL3cmDvpLTB
+   03DupGRhUdDpzidsdt8HBqeOAdpi0hR3bJYrAO6JuZ+wjx4JgyhznlQip
+   ovl33naZXRXd6iaSPx6rSPZfMFWASjT3MVS4u+2vUKxFu9x/fXrPZy+Ku
+   ePsxMnWvYnvTTcI62Km8ZMHqYPmHhI4UHF5tR+uqC5OycgULddkpZtTWg
+   JW1p1eOsiZ9QYNSoCDYEz4a16qPSrfVvw77mR2dXsYJH8RisRxOdVi7yH
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229141521"
 X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="311790664"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:52:16 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="229141521"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:56:00 -0800
 X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="600427573"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Feb 2022 21:52:13 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nGDzZ-000Yew-9o; Sat, 05 Feb 2022 05:52:13 +0000
-Date:   Sat, 5 Feb 2022 13:52:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Iouri Tarassov <iourit@linux.microsoft.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        linux-hyperv@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        spronovo@microsoft.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2 01/24] drivers: hv: dxgkrnl: Driver initialization and
- creation of dxgadapter
-Message-ID: <202202051359.j7N6kn2E-lkp@intel.com>
-References: <98fe53740526526c4df85a3a3d2e13e88c95f229.1644025661.git.iourit@linux.microsoft.com>
+   d="scan'208";a="524543550"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:55:59 -0800
+Date:   Fri, 4 Feb 2022 21:55:59 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 38/44] memremap_pages: Define
+ pgmap_mk_{readwrite|noaccess}() calls
+Message-ID: <20220205055559.GF785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-39-ira.weiny@intel.com>
+ <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
+ <20220205000953.GD785175@iweiny-DESK2.sc.intel.com>
+ <CAPcyv4jmnUbywDcXOAL9DwKxGaUf9cw9iDYbDcz6_CHyYPtytw@mail.gmail.com>
+ <CAPcyv4iLVh_BesJLcZb=Pktd-h5x6-xuos5Cj4TzuWYC=Q-vLg@mail.gmail.com>
+ <CAPcyv4gUSDwvOysAMM59yVsERtYpA_kY6s4=xunkjc2eJ8Mi1w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <98fe53740526526c4df85a3a3d2e13e88c95f229.1644025661.git.iourit@linux.microsoft.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAPcyv4gUSDwvOysAMM59yVsERtYpA_kY6s4=xunkjc2eJ8Mi1w@mail.gmail.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,370 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Iouri,
+On Fri, Feb 04, 2022 at 04:27:38PM -0800, Dan Williams wrote:
+> On Fri, Feb 4, 2022 at 4:25 PM Dan Williams <dan.j.williams@intel.com> wrote:
+> >
+> > On Fri, Feb 4, 2022 at 4:19 PM Dan Williams <dan.j.williams@intel.com> wrote:
+> > >
+> > > On Fri, Feb 4, 2022 at 4:10 PM Ira Weiny <ira.weiny@intel.com> wrote:
+> > > >
+> > > > On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
+> > > > > On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+> > > > > >
+> > > >
+> > > > [snip]
+> > > >
+> > > > I'll address the other comments later but wanted to address the idea below.
+> > > >
+> > > > > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > > > > index f5b2be39a78c..5020ed7e67b7 100644
+> > > > > > --- a/include/linux/sched.h
+> > > > > > +++ b/include/linux/sched.h
+> > > > > > @@ -1492,6 +1492,13 @@ struct task_struct {
+> > > > > >         struct callback_head            l1d_flush_kill;
+> > > > > >  #endif
+> > > > > >
+> > > > > > +#ifdef CONFIG_DEVMAP_ACCESS_PROTECTION
+> > > > > > +       /*
+> > > > > > +        * NOTE: pgmap_prot_count is modified within a single thread of
+> > > > > > +        * execution.  So it does not need to be atomic_t.
+> > > > > > +        */
+> > > > > > +       u32                             pgmap_prot_count;
+> > > > > > +#endif
+> > > > >
+> > > > > It's not at all clear why the task struct needs to be burdened with
+> > > > > this accounting. Given that a devmap instance is needed to manage page
+> > > > > protections, why not move the nested protection tracking to a percpu
+> > > > > variable relative to an @pgmap arg? Something like:
+> > > > >
+> > > > > void __pgmap_mk_readwrite(struct dev_pagemap *pgmap)
+> > > > > {
+> > > > >        migrate_disable();
+> > > > >        preempt_disable();
+> > > >
+> > > > Why burden threads like this?  kmap_local_page() is perfectly able to migrate
+> > > > or be preempted?
+> > > >
+> > > > I think this is way to restrictive.
+> > >
+> > > kmap_local_page() holds migrate_disable() over the entire mapping, so
+> > > we're only talking about preempt_disable(). I tend to think that
+> > > bloating task_struct for something that is rarely used "kmap on dax
+> > > pmem pages" is not the right tradeoff.
+> >
+> > Now, I can see an argument that promoting kmap_local_page() to
+> > preempt_disable() could cause problems, but I'd like help confirming
+> > that before committing to extending task_struct.
+> 
+> ...as I say that it occurs to me that the whole point of
+> kmap_local_page() is to be better than kmap_atomic() and this undoes
+> that. I'd at least like that documented as the reason that task_struct
+> needs to carry a new field.
 
-I love your patch! Yet something to improve:
+I'll try and update the commit message but kmap_local_page() only disables
+migrate on a highmem system.  The devmap/PKS use case is specifically not
+supported on highmem systems.  Mainly because on highmem systems
+kmap_local_page() actually creates a new mapping which is not covered by PKS
+anyway.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.17-rc2 next-20220204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+So for the devmap/PKS use case kmap_local_page() is defined as:
 
-url:    https://github.com/0day-ci/linux/commits/Iouri-Tarassov/Driver-for-Hyper-v-virtual-compute-device/20220205-103726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 0457e5153e0e8420134f60921349099e907264ca
-config: x86_64-randconfig-a004-20220131 (https://download.01.org/0day-ci/archive/20220205/202202051359.j7N6kn2E-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/7a6280c6fb18da7243d3de07abe09b4c3d1938e2
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Iouri-Tarassov/Driver-for-Hyper-v-virtual-compute-device/20220205-103726
-        git checkout 7a6280c6fb18da7243d3de07abe09b4c3d1938e2
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+ static inline void *kmap_local_page(struct page *page)
+ {
++       pgmap_mk_readwrite(page);
+        return page_address(page);
+ }
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+...for the linear mapping.  I'll try and update the commit message with this
+detail.
 
-All errors (new ones prefixed by >>):
-
-   In file included from <command-line>:32:
->> ./usr/include/misc/d3dkmthk.h:25:4: error: unknown type name '__u32'
-      25 |    __u32 instance :  6;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:26:4: error: unknown type name '__u32'
-      26 |    __u32 index : 24;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:27:4: error: unknown type name '__u32'
-      27 |    __u32 unique : 2;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:29:3: error: unknown type name '__u32'
-      29 |   __u32 v;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:53:2: error: unknown type name '__u32'
-      53 |  __u32 a;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:54:2: error: unknown type name '__u32'
-      54 |  __u32 b;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:70:2: error: unknown type name '__u32'
-      70 |  __u32    num_sources;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:71:2: error: unknown type name '__u32'
-      71 |  __u32    present_move_regions_preferred;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:75:2: error: unknown type name '__u32'
-      75 |  __u32    num_adapters;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:76:2: error: unknown type name '__u32'
-      76 |  __u32    reserved;
-         |  ^~~~~
->> ./usr/include/misc/d3dkmthk.h:77:2: error: unknown type name '__u64'
-      77 |  __u64    *adapters;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:93:4: error: unknown type name '__u32'
-      93 |    __u32  write_operation  :1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:94:4: error: unknown type name '__u32'
-      94 |    __u32  do_not_retire_instance :1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:95:4: error: unknown type name '__u32'
-      95 |    __u32  offer_priority  :3;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:96:4: error: unknown type name '__u32'
-      96 |    __u32  reserved  :27;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:98:3: error: unknown type name '__u32'
-      98 |   __u32   value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:103:2: error: unknown type name '__u32'
-     103 |  __u32    allocation_index;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:106:4: error: unknown type name '__u32'
-     106 |    __u32  slot_id:24;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:107:4: error: unknown type name '__u32'
-     107 |    __u32  reserved:8;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:109:3: error: unknown type name '__u32'
-     109 |   __u32   value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:111:2: error: unknown type name '__u32'
-     111 |  __u32    driver_id;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:112:2: error: unknown type name '__u32'
-     112 |  __u32    allocation_offset;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:113:2: error: unknown type name '__u32'
-     113 |  __u32    patch_offset;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:114:2: error: unknown type name '__u32'
-     114 |  __u32    split_offset;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:118:2: error: unknown type name '__u32'
-     118 |  __u32    legacy_mode:1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:119:2: error: unknown type name '__u32'
-     119 |  __u32    request_vSync:1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:120:2: error: unknown type name '__u32'
-     120 |  __u32    disable_gpu_timeout:1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:121:2: error: unknown type name '__u32'
-     121 |  __u32    gdi_device:1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:122:2: error: unknown type name '__u32'
-     122 |  __u32    reserved:28;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:127:2: error: unknown type name '__u32'
-     127 |  __u32    reserved3;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:130:2: error: unknown type name '__u64'
-     130 |  __u64    command_buffer;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:131:2: error: unknown type name '__u32'
-     131 |  __u32    command_buffer_size;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:132:2: error: unknown type name '__u32'
-     132 |  __u32    reserved;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:133:2: error: unknown type name '__u64'
-     133 |  __u64    allocation_list;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:134:2: error: unknown type name '__u32'
-     134 |  __u32    allocation_list_size;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:135:2: error: unknown type name '__u32'
-     135 |  __u32    reserved1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:136:2: error: unknown type name '__u64'
-     136 |  __u64    patch_location_list;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:137:2: error: unknown type name '__u32'
-     137 |  __u32    patch_location_list_size;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:138:2: error: unknown type name '__u32'
-     138 |  __u32    reserved2;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:158:4: error: unknown type name '__u32'
-     158 |    __u32  null_rendering:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:159:4: error: unknown type name '__u32'
-     159 |    __u32  initial_data:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:160:4: error: unknown type name '__u32'
-     160 |    __u32  disable_gpu_timeout:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:161:4: error: unknown type name '__u32'
-     161 |    __u32  synchronization_only:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:162:4: error: unknown type name '__u32'
-     162 |    __u32  hw_queue_supported:1;
---
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:365:2: error: unknown type name '__u64'
-     365 |  __u64    allocation_info;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:367:2: error: unknown type name '__u32'
-     367 |  __u32    reserved2;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:368:2: error: unknown type name '__u64'
-     368 |  __u64    private_runtime_resource_handle;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:374:4: error: unknown type name '__u32'
-     374 |    __u32  assume_not_in_use:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:375:4: error: unknown type name '__u32'
-     375 |    __u32  synchronous_destroy:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:376:4: error: unknown type name '__u32'
-     376 |    __u32  reserved:29;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:377:4: error: unknown type name '__u32'
-     377 |    __u32  system_use_only:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:379:3: error: unknown type name '__u32'
-     379 |   __u32   value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:386:2: error: unknown type name '__u64'
-     386 |  __u64    allocations;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:387:2: error: unknown type name '__u32'
-     387 |  __u32    alloc_count;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:394:4: error: unknown type name '__u32'
-     394 |    __u32  cant_trim_further:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:395:4: error: unknown type name '__u32'
-     395 |    __u32  must_succeed:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:396:4: error: unknown type name '__u32'
-     396 |    __u32  reserved:30;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:398:3: error: unknown type name '__u32'
-     398 |   __u32   value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:404:2: error: unknown type name '__u32'
-     404 |  __u32    alloc_count;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:405:2: error: unknown type name '__u64'
-     405 |  __u64    allocation_list;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:406:2: error: unknown type name '__u64'
-     406 |  __u64    priority_list;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:408:2: error: unknown type name '__u64'
-     408 |  __u64    paging_fence_value;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:409:2: error: unknown type name '__u64'
-     409 |  __u64    num_bytes_to_trim;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:415:4: error: unknown type name '__u32'
-     415 |    __u32  evict_only_if_necessary:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:416:4: error: unknown type name '__u32'
-     416 |    __u32  not_written_to:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:417:4: error: unknown type name '__u32'
-     417 |    __u32  reserved:30;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:419:3: error: unknown type name '__u32'
-     419 |   __u32   value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:425:2: error: unknown type name '__u32'
-     425 |  __u32    alloc_count;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:426:2: error: unknown type name '__u64'
-     426 |  __u64    allocations;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:428:2: error: unknown type name '__u32'
-     428 |  __u32    reserved;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:429:2: error: unknown type name '__u64'
-     429 |  __u64    num_bytes_to_trim;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:435:4: error: unknown type name '__u64'
-     435 |    __u64 write:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:436:4: error: unknown type name '__u64'
-     436 |    __u64 execute:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:437:4: error: unknown type name '__u64'
-     437 |    __u64 zero:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:438:4: error: unknown type name '__u64'
-     438 |    __u64 no_access:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:439:4: error: unknown type name '__u64'
-     439 |    __u64 system_use_only:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:440:4: error: unknown type name '__u64'
-     440 |    __u64 reserved:59;
-         |    ^~~~~
->> ./usr/include/misc/d3dkmthk.h:440:10: error: width of 'reserved' exceeds its type
-     440 |    __u64 reserved:59;
-         |          ^~~~~~~~
-   ./usr/include/misc/d3dkmthk.h:442:3: error: unknown type name '__u64'
-     442 |   __u64  value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:457:4: error: unknown type name '__u64'
-     457 |    __u64  base_address;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:458:4: error: unknown type name '__u64'
-     458 |    __u64  size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:460:4: error: unknown type name '__u64'
-     460 |    __u64  allocation_offset;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:461:4: error: unknown type name '__u64'
-     461 |    __u64  allocation_size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:464:4: error: unknown type name '__u64'
-     464 |    __u64  base_address;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:465:4: error: unknown type name '__u64'
-     465 |    __u64  size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:467:4: error: unknown type name '__u64'
-     467 |    __u64  allocation_offset;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:468:4: error: unknown type name '__u64'
-     468 |    __u64  allocation_size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:470:4: error: unknown type name '__u64'
-     470 |    __u64  driver_protection;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:473:4: error: unknown type name '__u64'
-     473 |    __u64 base_address;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:474:4: error: unknown type name '__u64'
-     474 |    __u64 size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:478:4: error: unknown type name '__u64'
-     478 |    __u64 source_address;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:479:4: error: unknown type name '__u64'
-     479 |    __u64 size;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:480:4: error: unknown type name '__u64'
-     480 |    __u64 dest_address;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:495:2: error: unknown type name '__u32'
-     495 |  __u32     num_operations;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:496:2: error: unknown type name '__u64'
-     496 |  __u64     operations;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:497:2: error: unknown type name '__u32'
-     497 |  __u32     reserved0;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:498:2: error: unknown type name '__u32'
-     498 |  __u32     reserved1;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:499:2: error: unknown type name '__u64'
-     499 |  __u64     reserved2;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:500:2: error: unknown type name '__u64'
-     500 |  __u64     fence_value;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:503:4: error: unknown type name '__u32'
-     503 |    __u32   do_not_wait:1;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:504:4: error: unknown type name '__u32'
-     504 |    __u32   reserved:31;
-         |    ^~~~~
-   ./usr/include/misc/d3dkmthk.h:506:3: error: unknown type name '__u32'
-     506 |   __u32    value;
-         |   ^~~~~
-   ./usr/include/misc/d3dkmthk.h:508:2: error: unknown type name '__u32'
-     508 |  __u32     reserved3;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:513:2: error: unknown type name '__u64'
-     513 |  __u64     base_address;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:514:2: error: unknown type name '__u64'
-     514 |  __u64     minimum_address;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:515:2: error: unknown type name '__u64'
-     515 |  __u64     maximum_address;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:517:2: error: unknown type name '__u64'
-     517 |  __u64     offset_in_pages;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:518:2: error: unknown type name '__u64'
-     518 |  __u64     size_in_pages;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:520:2: error: unknown type name '__u64'
-     520 |  __u64     driver_protection;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:521:2: error: unknown type name '__u32'
-     521 |  __u32     reserved0;
-         |  ^~~~~
-   ./usr/include/misc/d3dkmthk.h:522:2: error: unknown type name '__u64'
-     522 |  __u64     reserved1;
-..
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Ira

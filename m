@@ -2,244 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1E24AA73F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41D94AA748
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379565AbiBEHB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 02:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241510AbiBEHB4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:01:56 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5389BC061347
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:01:55 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id g26so10719226ybj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 23:01:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5GMBi+gkxjCw1wEOJS7/XrFS7/0JirqIvwhhHXkV+vc=;
-        b=eeayCM+VPZEVrrSQALMhfbBHR+OdJnicusq0jnua17xWUhHhQfshy9aAnYOS8eEF/v
-         bAwAHyXf0iSJnNDtShvKaYcqqhffBttWNkPJIwK8TfC5ZOURfAjYIA7vGC1Qixrw6dio
-         ppN5Tx30nlEPWcEPt3YyFgsymaBvFnj/4sG0SG0e+dTfldoDY8WzTczRXHB23R+lRTjx
-         B/VxAqgYaciKaS6U9x2/abgpC2I0rgbBoHdu+MHUZDv5zsAyefPpgbEumwTKB7JST49x
-         V66JeuGaY0VY+p6V5zte2laIStp8HJrfyvsAtlaWx/lG7bF70Z3LD9YcrU6BhRIGJFlE
-         0umw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5GMBi+gkxjCw1wEOJS7/XrFS7/0JirqIvwhhHXkV+vc=;
-        b=Hx62qCZQW4ikS2CYB8+aBAsfebZ75bFiKZ0nqSr1V6E0OYSgRpGx+hAVYtWR7Y1Hyp
-         0vv82kDEgd8ayF8kDouGH49WY0AcIb3+yNweXrr8m0YFkwHXzAxcUYRsKPwhFKmrSGN7
-         6WyjDKH3w5dTWKIneUDoyDbJKJpkrYNvUJ5CC3eEe5asR1y7h+w6gnkGnZC5XsaFeGy6
-         5/1dSC+BCg0CLj3Om6K2MG5MzEJvMThzN2YA9NGOP1LOjkpSvolTOPXRwBjp3BKM/bhL
-         /5L3+LxHwRD/Z8u3YX4mwWdYiFEc2C5CxbXoYBXM0kpGY3BBbNb41fn5juogRAFsHq2a
-         ty3A==
-X-Gm-Message-State: AOAM533BBj76uP/LfpopeESSVPduapJkJge0g+OphK55VogC70kK//zH
-        STsIIJO4rEElmPdk8syXd3gRw7dhmZahA9bMc31CIg==
-X-Google-Smtp-Source: ABdhPJys2pkhAa3B+povPTwmD0YWBSUizsHYHJB3XGuFKby5uRaIk0zw2U/+ebrZxZS2RgQLMRieZiF4k7UFYq+e5Ls=
-X-Received: by 2002:a25:97c4:: with SMTP id j4mr2667748ybo.108.1644044514366;
- Fri, 04 Feb 2022 23:01:54 -0800 (PST)
+        id S1357701AbiBEHML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 02:12:11 -0500
+Received: from mga18.intel.com ([134.134.136.126]:42996 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229835AbiBEHMJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 02:12:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644045129; x=1675581129;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qHvqdITzBAglMG363Se0HM+YGOVHexjxQRvG2eU8Hto=;
+  b=cjvYk7Nnnge49ut0WcgI1bhUZiJSq71XQYlL6jXxC+g/xihzJEK+dm3c
+   8s1iVOfdnsc34MFRMXkSMTcM1nFm9vc5dOev2ChRXyV3C33oa4ndqDN8Y
+   XJ4rxNGh+XbMBoFOM1yFio2kCkVaasLH+WVaEU/qqJ+p7nnmRRaC31oLB
+   RpzNrWPIXqG5ALT5jv1rssgx/m4PgEUmlOID9y+PqoP5HhlsMasnKp0eJ
+   GURuZwZemYNnLdT9PI4j569/FqOeziWNDB6thV9/A53YHV/5R8duIvgCW
+   6U+IiYC9DqDuPKQ7A4/FTDCDniEgSLdaYvY1s4qJNGw6hYB/2a3k/KHZs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="232061189"
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="232061189"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 23:12:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
+   d="scan'208";a="677304617"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Feb 2022 23:12:04 -0800
+Message-ID: <01fee139-873c-347c-b8e4-f6af52dca168@linux.intel.com>
+Date:   Sat, 5 Feb 2022 15:10:57 +0800
 MIME-Version: 1.0
-References: <20220204091914.280602669@linuxfoundation.org>
-In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 5 Feb 2022 12:31:43 +0530
-Message-ID: <CA+G9fYuuDJh=zwZVb8Z8E1g6OpfxRJ0trzQei0a-hChTtRViMw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+ <20220128202905.2274672-6-fenghua.yu@intel.com>
+ <6ace7131-4671-6956-944f-df01e5d63470@linux.intel.com>
+ <Yf4Gtm5pu+e2whSE@otcwcpicx3.sc.intel.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yf4Gtm5pu+e2whSE@otcwcpicx3.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Feb 2022 at 14:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.97 release.
-> There are 25 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.97-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 2/5/22 1:10 PM, Fenghua Yu wrote:
+> Hi, Baolu,
+> On Sat, Feb 05, 2022 at 11:50:59AM +0800, Lu Baolu wrote:
+>> Hi Fenghua,
+>>
+>> On 2022/1/29 4:28, Fenghua Yu wrote:
+>>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>>> index 92fea3fbbb11..ef03b2176bbd 100644
+>>> --- a/drivers/iommu/intel/iommu.c
+>>> +++ b/drivers/iommu/intel/iommu.c
+>>> @@ -4781,7 +4781,7 @@ static int aux_domain_add_dev(struct dmar_domain *domain,
+>>>    link_failed:
+>>>    	spin_unlock_irqrestore(&device_domain_lock, flags);
+>>>    	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+>>> -		ioasid_put(domain->default_pasid);
+>>> +		ioasid_free(domain->default_pasid);
+>>>    	return ret;
+>>>    }
+>>> @@ -4811,7 +4811,7 @@ static void aux_domain_remove_dev(struct dmar_domain *domain,
+>>>    	spin_unlock_irqrestore(&device_domain_lock, flags);
+>>>    	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+>>> -		ioasid_put(domain->default_pasid);
+>>> +		ioasid_free(domain->default_pasid);
+>>>    }
+>>>    static int prepare_domain_attach_device(struct iommu_domain *domain,
+>>
+>> The domain->default_pasid is not relevant to SVA and it's being cleaned
+>> up by another series. No need to take care of it in this series.
+> 
+> Because ioasid_put() is renamed to ioasid_free() in this patch, without
+> above changes, this series cannot be compiled.
+> 
+> Thomas and I discussed how to handle aux_domain while you will remove
+> the entire aux_domain code (https://lore.kernel.org/lkml/87zgnf29op.ffs@tglx/).
+> The above changes are minimal and temporary changes to compile this series.
+> The changes will be removed along with the entire aux_domain by your
+> removing aux_domain series later in 5.18.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Okay. Make sense to me.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.10.97-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 847fbfddce327344933153bb39a4379b080bede7
-* git describe: v5.10.96-26-g847fbfddce32
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.96-26-g847fbfddce32
-
-## Test Regressions (compared to v5.10.96)
-No test regressions found.
-
-## Metric regressions (compared to v5.10.96)
-No metric regressions found.
-
-## Test fixes (compared to v5.10.96)
-No test fixes found.
-
-## Metric fixes (compared to v5.10.96)
-No metric fixes found.
-
-## Test result summary
-total: 98319, pass: 84375, fail: 545, skip: 12496, xfail: 903
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 37 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 46 passed, 6 failed
-* riscv: 24 total, 22 passed, 2 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---=20
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+baolu

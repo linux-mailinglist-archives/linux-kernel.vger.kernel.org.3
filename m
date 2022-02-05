@@ -2,73 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC81E4AACA0
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2C94AACA6
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 22:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381382AbiBEVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 16:09:41 -0500
-Received: from [194.99.46.237] ([194.99.46.237]:44941 "EHLO
-        slot0.bluewaterleisure.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S233073AbiBEVJk (ORCPT
+        id S1381439AbiBEVNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 16:13:13 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:59758
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233073AbiBEVNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 16:09:40 -0500
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=bluewaterleisure.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=ker.mon@bluewaterleisure.com;
- bh=Vbvr/oQWg7jtoAXb2a8unJeBxBw=;
- b=PEozyMUP3Pze5Hmyd+yu0zFxeWVbRkITqVizKjXr7TFPkY+ZJGqZcdxmn4WFzOcjGMCrUFx1DD1N
-   Gvuu8hRrBHuKeIhexVRWVyRbBUXg41+ikNHon1o6Mq2g2Wdt/Oeumocahp6PGc//+nr5v+Ci7cEO
-   sk7DWwtYvrsCYy7dO+ALS2n7chziawwsJs+2kDcdcPo5YNImxzbpUIwLZXIB69wVx7N9RRiqBe5N
-   3KpBJegiEVkITUhwouoQCXBvrggn4CO9VJ/n4Vb5lQEw4UjmzpG+6EkGEzJVStCxk24MKbjwKg7z
-   8jT2c3OhXa0IacG3pOkneVRtLswWxZHbQSOjzw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=bluewaterleisure.com;
- b=h0k0TI1bRP+f/I4rwBHVHar2JewEb/kDf2kGpXRccELoXQxoLGgUfIdZMFjFHCZX8mftuIdSawDK
-   4oSZaLzC7zO0zUzdxzP9Dc+P9IWvqsMMflKSg++Mm1gOorAzo+wbtksVxcp5uCdiboukDwtt272i
-   cTle/WbjsxLybfOmRA1uKFuApgTGm7W808odF8H53qXvuw6cBbAHdx8IoAgKQYXkjs1B/Au2YCxD
-   cAOC1IXTYyqgT5Ed8TP8ThMf4WRvXfAOSPpmJMNkf4foPhsNetfA5WKr/r8qBVGfD8X2bLdwLQuf
-   T9kdAaOpIPcRHGWOCpBbPyKKSrh6jPMrn4pCzQ==;
-Reply-To: tomander231@gmail.com
-From:   "Barrister Mustafa" <ker.mon@bluewaterleisure.com>
-To:     linux-kernel@vger.kernel.org
-Subject: Aufmerksamkeit:
-Date:   5 Feb 2022 22:04:19 +0100
-Message-ID: <20220205220419.02DE958849340EB5@bluewaterleisure.com>
+        Sat, 5 Feb 2022 16:13:12 -0500
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E54C23FE4B
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 21:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644095590;
+        bh=nz2Z4bFotqetThuLUskNVZCWGhwv1YrdlfnjDQe5gQs=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=K0puRBppIpE4rnEKVNnKGfOPwH0dhCZq5XLEdIgCOBGZByOikF33flBu2vbchkgEJ
+         74GKJBsu7xZoKu7/wzGJ7dxbzIsjbturV6JFTk8SlCLw3jZbSNmHwGEJp/SiMxTxH1
+         E/tl2PinE41s5nJH+FFUhmoL8/K0fTenK8d8irWz7Kc9pa26KlN3EciJwQlxWzm818
+         yoUFnz/zOyBUFv33vWOtK/vTMKaClWwyHRUFL+blv47CDPU1YgEsUOoloQcJ0xQVQ2
+         TbmmnU7W5BAPyiSysO4LM3DW38fqbe8E62+hzmuejUMp3IJyMBsLLQ/IiOpvVU644O
+         K9pfcTyAi2YxA==
+Received: by mail-wm1-f69.google.com with SMTP id s187-20020a1ca9c4000000b0037bb8547d64so584896wme.0
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 13:13:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nz2Z4bFotqetThuLUskNVZCWGhwv1YrdlfnjDQe5gQs=;
+        b=prwdYqjsSYv43bADxLLLBbOVtHvI2i9FAR2y251V5Q/jxkYWq88EELOP8QPAhqzngd
+         uEBwqute1FKXHbj3D9KrP5UknBUARVVyquy4T1JE8F0y/o6UKSp7YI0xnaCkQksfldBS
+         SCvqQJyZHulwJ4x3zDv1to8Sl8/op1q4iIo6zUZ1mPW/o8A+OjlRF8VYjVNXVDVuJ2/V
+         zBQOmm8/Ii1gt02K/tLE+8zM4n8oBAKUsDhIvmVOqCHdzgVhvKVo+qgtZIpFmjpWTGvA
+         2Ot03i++zsLp7bNB8UvnGMhtFhV6TjXVcMr00kQq8vfajlydYvAyAFqVDOAHLTg+8em8
+         h6Yg==
+X-Gm-Message-State: AOAM533Ba4+yMNHKwBmD81UF6DwZ+H6MWPg9kMoYD31+ncY9LnHnZ7xt
+        TG+6nw6HFxsjuFf2Xdp1OCQoYhC6JdCOLFZ3DA1DW9ScqevAHxxXJhZB5dEq991bIIQQ6IQopV5
+        FnxeS/eduYXlC90zRMiw9l6vh8kXOr3P76C9TloE6GXKghCq1897C3ydIEw==
+X-Received: by 2002:a05:6000:1707:: with SMTP id n7mr4286322wrc.234.1644095590469;
+        Sat, 05 Feb 2022 13:13:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx0O5lMWQqmnSzmHWQqbnIIH10oDMuf24v+GRzu1vHjjMNiBTdjAaypokB3rE4ZxL9Iq0Fr05Wxc5BZQWT7mig=
+X-Received: by 2002:a05:6000:1707:: with SMTP id n7mr4286310wrc.234.1644095590242;
+ Sat, 05 Feb 2022 13:13:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+References: <20211129173637.303201-1-robh@kernel.org> <Yf2wTLjmcRj+AbDv@xps13.dannf>
+ <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
+From:   dann frazier <dann.frazier@canonical.com>
+Date:   Sat, 5 Feb 2022 14:12:57 -0700
+Message-ID: <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+To:     Rob Herring <robh@kernel.org>
+Cc:     Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        stable <stable@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lieb linux-kernel,
+On Sat, Feb 5, 2022 at 9:05 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Feb 4, 2022 at 5:01 PM dann frazier <dann.frazier@canonical.com> =
+wrote:
+> >
+> > On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
+> > > Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> > > broke PCI support on XGene. The cause is the IB resources are now sor=
+ted
+> > > in address order instead of being in DT dma-ranges order. The result =
+is
+> > > which inbound registers are used for each region are swapped. I don't
+> > > know the details about this h/w, but it appears that IB region 0
+> > > registers can't handle a size greater than 4GB. In any case, limiting
+> > > the size for region 0 is enough to get back to the original assignmen=
+t
+> > > of dma-ranges to regions.
+> >
+> > hey Rob!
+> >
+> > I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
+> > only during network installs - that I also bisected down to commit
+> > 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
+> > hoping that this patch that fixed the issue on St=C3=A9phane's X-Gene2
+> > system would also fix my issue, but no luck. In fact, it seems to just
+> > makes it fail differently. Reverting both patches is required to get a
+> > v5.17-rc kernel to boot.
+> >
+> > I've collected the following logs - let me know if anything else would
+> > be useful.
+> >
+> > 1) v5.17-rc2+ (unmodified):
+> >    http://dannf.org/bugs/m400-no-reverts.log
+> >    Note that the mlx4 driver fails initialization.
+> >
+> > 2) v5.17-rc2+, w/o the commit that fixed St=C3=A9phane's system:
+> >    http://dannf.org/bugs/m400-xgene2-fix-reverted.log
+> >    Note the mlx4 MSI-X timeout, and later panic.
+> >
+> > 3) v5.17-rc2+, w/ both commits reverted (works)
+> >    http://dannf.org/bugs/m400-both-reverted.log
+>
+> The ranges and dma-ranges addresses don't appear to match up with any
+> upstream dts files. Can you send me the DT?
 
-Ich bin Barrister Mustafa Ayvaz, hoffe, diese E-Mail findet Sie=20
-gut. Ich bin Anwalt des verstorbenen Herrn Robert, der aufgrund=20
-des Coronavirus sein Leben verlor, kontaktierte er w=C3=A4hrend seiner=20
-Gesch=C3=A4ftsreise in China. Ich kontaktiere Sie, um mit mir=20
-zusammenzuarbeiten, um die =C3=9Cberweisung eines Fonds von vier=20
-Millionen vierhundertzwanzigtausend Dollar zu sichern, verlie=C3=9F=20
-er.
+Sure: http://dannf.org/bugs/fdt
 
-Ich habe nach dem n=C3=A4chsten Angeh=C3=B6rigen meines verstorbenen Kunden=
-=20
-gesucht, ohne Erfolg, da ich seinen aktuellen Wohnsitz und seine=20
-Kontaktdaten nicht habe. Als ich suchte, stie=C3=9F ich auf Ihr Profil=20
-mit dem gleichen Nachnamen und am selben Ort mit den N=C3=A4chsten=20
-Angeh=C3=B6rigen. Ich beschloss, dich zu kontaktieren und dich als=20
-Bonafide Next Of Kin zu benutzen.
+ -dann
 
-Ich bitte Sie um Ihre Zustimmung, Sie als Next Of Kin meines=20
-verstorbenen Kunden zu pr=C3=A4sentieren, da Sie beide den gleichen=20
-Nachnamen tragen. Die Gelder werden dann an Sie als Beg=C3=BCnstigten=20
-in Ihrem Land =C3=BCberwiesen und im Verh=C3=A4ltnis 60:40 geteilt, das=20
-sind 60% f=C3=BCr mich und 40% f=C3=BCr Sie. F=C3=BCr weitere Details=20
-kontaktieren Sie mich bitte sofort f=C3=BCr weitere Informationen =C3=BCber=
-=20
-diese meine E-Mail. 
-
-Danach sende ich Ihnen die Details, wie die Transaktion beginnen=20
-wird
-
-Gr=C3=BC=C3=9Fe
-Mustafa Ayvaz
+> Otherwise, we're going to need some debugging added to
+> xgene_pcie_setup_ib_reg() to see if the register setup changed. I can
+> come up with something next week.
+>
+> Rob

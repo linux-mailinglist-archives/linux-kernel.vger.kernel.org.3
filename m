@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37704AA974
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31504AA978
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 15:36:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbiBEOcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 09:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S1380157AbiBEOgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 09:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbiBEOcO (ORCPT
+        with ESMTP id S232237AbiBEOgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 09:32:14 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1E1C061346;
-        Sat,  5 Feb 2022 06:32:10 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so5582146wmb.0;
-        Sat, 05 Feb 2022 06:32:10 -0800 (PST)
+        Sat, 5 Feb 2022 09:36:00 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF638C061346
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 06:35:59 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id 9so11094235iou.2
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 06:35:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2YffGzmTy5wYwzq2k3T5w2BRK+1d/sI06kNAxHtw4ro=;
-        b=mrB0msmC8b3YdKE6/o6+9hFnFudo284cpy2sMTkT6zyv91V5acZy0WxvCKFZNIEryi
-         F8mtg1gco+gLp9+Aw1wRco30IAyVUXFB3SWgJgv9KOrgLjm5gED2uh9TI+AVP+wJ9oVn
-         V5NWLu4f5DwFqYwc0ghI/L03CLKXKj2CW5NLf8wFOYVqAAfTuZxsr1DIrokD17M4erxr
-         Fb7m9UJ53kIrys184CxqMFONc+xTaM6uPU4PfwugVMdIVMLX3cSEUFy9m7J2JMFdq70o
-         IZSxL/O/OUASm9Em0STeQOZ2zA55pNqxl7crj3ejMJQXHg03G4mur3jhmigeyon6h+r0
-         cLNQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NjsPCeTC6AUkI8iof6mArRIBPDUlUNHR5425CjSvoh8=;
+        b=eGlpEo3z+gzLBu5G7H5LmXRPryG0RtMHZzksWu5Z/iUr1LMJoZOJyxSK7ZPWRoTf5K
+         oiM26sl93ASyPjf/tAwpjhGQ63nVtJX2uWs2zKn4ZlHjaPXb83Ym4ZFi9htRPq5uc68R
+         5SJT7XQROBDUeY3TBHtjwBTuQU1CbLCHYvnt9WhfItczA/nEV368DCotFvC+gWZjMHXC
+         CUbKrb3rexLDXKvoZoEDViVdOLGMRCX70g0vXVoXBsbbnjGiTN6FeDgXUL2t11HyPHob
+         G7SR8AvZXmK/gOwsFJHWMfkTFYRcCEdG1YJ/lV+U5C7GvVTUOyNb9HtbYn3dcEIRM7ag
+         rrCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2YffGzmTy5wYwzq2k3T5w2BRK+1d/sI06kNAxHtw4ro=;
-        b=t8zpZ3Z+o4sftUmADnIGRYIiw45ONuhuHV8mFdAKb5OXXu2pTSiSDt0iorpbwvw4Pu
-         q3PNmf9F2pPH6slBXyqWjK65ujuVm/cbeDuaqfPwer6kY8ENRc1A3YQgI124sI2vSmrx
-         CLp164PSwR1N6ZMzh6Qov3CFpedVtCCyxTk/WO+xfACKQmosi6WwyBAMOtGflRA7Cn0j
-         pKu/qI6FVgOB+rMsMaTFf2QDYUZYzEz6HNEQwNrXjlTvzFvd70/Y6HTJ4Ecqd0LOPWsh
-         u9r876L2A6/3elGZryD4A3iEKFg7nmalguAgeZC0B9MgafNmBbPfriGK8QNxnwwzi+kC
-         cpCw==
-X-Gm-Message-State: AOAM531rRIhmty3DXCD5hfvAHdnEucrcNpEORVm/7Uyz8+l9UEfcKDGq
-        E5+AMt9Jv7jsgSb0qzJSOHc=
-X-Google-Smtp-Source: ABdhPJyCn5gWUxWm+rcCr2w5jbxo8TgCRLnIsqLX0ylVvMBH780imRHeQREdA+bm3ibiObE6rEO0qQ==
-X-Received: by 2002:a05:600c:6028:: with SMTP id az40mr6696570wmb.33.1644071528674;
-        Sat, 05 Feb 2022 06:32:08 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id m28sm13329267wms.34.2022.02.05.06.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Feb 2022 06:32:08 -0800 (PST)
-Date:   Sat, 5 Feb 2022 14:32:06 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
-Message-ID: <Yf6KZuOTEggcaOjK@debian>
-References: <20220204091915.247906930@linuxfoundation.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NjsPCeTC6AUkI8iof6mArRIBPDUlUNHR5425CjSvoh8=;
+        b=hv99Z1ygM02tQAuNzRxR06jn89XGWMgF6wwJnnftpb33xEJtETHzymir+LTTCv8Shq
+         D8PAXRsOWTU9JBc55oYlweHZOR2srCU4Bqy1P3hlltEqkClM1VMg9PPmsQzl8gtRH/m6
+         5AicmJQzKmYaKeRdMFZBs4WL8kl3vepGLqb7H+vcLaqZNJU3Y8yTJK9b6vKq6KSGhOD0
+         jhxwXMnRjIwlVZvvr0XcqVq+rw59l2MjuQDwWP69OPuQObiSvNYY+7gYwmBDMBL8lhAM
+         +NAGdN4vVETekKxtU9pMA1WenBw2BGxxUxaibfUX/+oOVuWm3rL8eFm13VSgvccboJHA
+         1yAw==
+X-Gm-Message-State: AOAM531NyLYtMimFv6jKIyquQOsDyPSkVukgaEWnnPk5vxQRxfxf4K6Q
+        rwwD5w4nbvqjcqTWgBDOgw7yOw==
+X-Google-Smtp-Source: ABdhPJysYIy8PYpFRsfsGIcf17EpGmomFVV2qtwyh3u9IcOWqh+a/JNbOKiOqv1WAIE3TsYPL25NIQ==
+X-Received: by 2002:a05:6602:490:: with SMTP id y16mr1828196iov.162.1644071759212;
+        Sat, 05 Feb 2022 06:35:59 -0800 (PST)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id s6sm2472869ilt.16.2022.02.05.06.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Feb 2022 06:35:58 -0800 (PST)
+Message-ID: <83c63043-dac1-2bd3-81ad-d591becf46a5@linaro.org>
+Date:   Sat, 5 Feb 2022 08:35:57 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH net-next 3/7] net: ipa: use interconnect bulk
+ enable/disable operations
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, djakov@kernel.org, bjorn.andersson@linaro.org,
+        mka@chromium.org, evgreen@chromium.org, cpratapa@codeaurora.org,
+        avuyyuru@codeaurora.org, jponduru@codeaurora.org,
+        subashab@codeaurora.org, elder@kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220204195044.1082026-1-elder@linaro.org>
+ <20220204195044.1082026-4-elder@linaro.org>
+ <20220204202336.67c95e15@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220204202336.67c95e15@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Fri, Feb 04, 2022 at 10:22:10AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.20 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2/4/22 10:23 PM, Jakub Kicinski wrote:
+> On Fri,  4 Feb 2022 13:50:40 -0600 Alex Elder wrote:
+>> The power interconnect array is now an array of icc_bulk_data
+>> structures, which is what the interconnect bulk enable and disable
+>> functions require.
+>>
+>> Get rid of ipa_interconnect_enable() and ipa_interconnect_disable(),
+>> and just call icc_bulk_enable() and icc_bulk_disable() instead.
+>>
+>> Signed-off-by: Alex Elder <elder@linaro.org>
 > 
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
+> We got a kbuild bot complaint here, for some reason off-list.
+> Let me drop it from PW for now.
 
-Build test:
-mips (gcc version 11.2.1 20220121): 62 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+OK.  I guess the interconnect code isn't ready for COMPILE_TEST.
+I'll investigate that a little more and if we can get past that
+I'll send out a new version.  Not sure how long that will take
+though...
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+Thanks, I retract this series for now.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/708
-[2]. https://openqa.qa.codethink.co.uk/tests/710
-[3]. https://openqa.qa.codethink.co.uk/tests/712
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+					-Alex

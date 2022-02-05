@@ -2,92 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34DA4AA77E
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38974AA78A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:10:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379653AbiBEH6P convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 5 Feb 2022 02:58:15 -0500
-Received: from vmicros1.altlinux.org ([194.107.17.57]:49760 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBEH6O (ORCPT
+        id S1379681AbiBEIK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239233AbiBEIKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:58:14 -0500
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 331BA72C905;
-        Sat,  5 Feb 2022 10:58:02 +0300 (MSK)
-Received: from tower (46-138-221-29.dynamic.spd-mgts.ru [46.138.221.29])
-        by imap.altlinux.org (Postfix) with ESMTPSA id CDF5F4A46F0;
-        Sat,  5 Feb 2022 10:58:01 +0300 (MSK)
-Date:   Sat, 5 Feb 2022 10:57:58 +0300
-From:   "Anton V. Boyarshinov" <boyarsh@altlinux.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        ebiederm@xmission.com, legion@kernel.org, ldv@altlinux.org,
-        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] Add ability to disallow idmapped mounts
-Message-ID: <20220205105758.1623e78d@tower>
-In-Reply-To: <20220204151032.7q22hgzcil4hqvkl@wittgenstein>
-References: <20220204065338.251469-1-boyarsh@altlinux.org>
-        <20220204094515.6vvxhzcyemvrb2yy@wittgenstein>
-        <20220204132616.28de9c4a@tower>
-        <20220204151032.7q22hgzcil4hqvkl@wittgenstein>
-Organization: ALT Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-alt-linux-gnu)
+        Sat, 5 Feb 2022 03:10:23 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BE7C061348
+        for <linux-kernel@vger.kernel.org>; Sat,  5 Feb 2022 00:10:21 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id k17so7134629plk.0
+        for <linux-kernel@vger.kernel.org>; Sat, 05 Feb 2022 00:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mRwDG3dHdSCt9JBk2JbCS8GWF1RzkAIy/xnl8iR8W7Y=;
+        b=Efq/YfxkqG5CBZkRIDisd5gefe9br7yxLyzgSlJN58z1Z1XQqxfejULxQmW8IMxsK6
+         pbUElT+8PCYsg8YA/RUK6wr+//t3jug9t+qemcQ5s5H06POYAojLHHsWPMPCAQ7L4XFZ
+         M80w3rSQrn1K0SQBHRJdaEV/7J0Ps+vnOlZ/zk6uarHFQXTDi0zNN99DAZJuOwHkAofb
+         35vVxceWkkJxUCysdnD88PUHrKqu5TdxmfL4iy+ZMTgQHFNE4zlMPmsrmK44dyRJCU/0
+         zK8JAJ5CzTqIgFiLlHyG5eKoi4YgIFtaxoh37za2slQitkcVCkmGhPDYMNielJbbCtha
+         RHJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mRwDG3dHdSCt9JBk2JbCS8GWF1RzkAIy/xnl8iR8W7Y=;
+        b=yWMFAivT94XD7k3hbKDl0mx9K9jIeA1OjNmIxbkmq7+AwtK9K2eqLPknGzbJqoqJFq
+         Kh4ZL3xCmmQYfKHaSYUKIIIL/zu1kJDqNkBeYdI6Yl2xFSNcOTUlBhuDxOix00hNvSXS
+         bCYF4MVOOFnce+hkwh8srqjQ8529WKdbcJmZa8pQoT+pOFYNw1AUdV8bXN6m0RyiCKdR
+         IaXpAvIht52D3KR0n+d/i4WUN7wb7NcGdOkABFdHGmVMM+Cl6rGKr7L41PWJ4LOQznKD
+         IQeBjwD3kYL9dTejUMK7H4aszPWAGJ0/3/fWqHElxgGH2Ylis8b+RElrHPOLcEE/7EqQ
+         UDAA==
+X-Gm-Message-State: AOAM533XxGpzIQwpSISbygYHSqo+W32UU3vTWwr5CdvHu5P6cFoxXNVw
+        C4U2VGSKgQJSbD1kZi30Y3C2EA==
+X-Google-Smtp-Source: ABdhPJyzVREfDn/ZPdBiHrLF3VHliNAMRn8haobaKdARf0TzcgZ2O8oD1Q04EkQAa1rtwqfOjRdutw==
+X-Received: by 2002:a17:902:8483:: with SMTP id c3mr7095691plo.19.1644048620689;
+        Sat, 05 Feb 2022 00:10:20 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id k16sm5118928pfu.140.2022.02.05.00.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 00:10:19 -0800 (PST)
+Date:   Sat, 5 Feb 2022 16:10:13 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] perf test: Add perf_event_attr tests for the arm_spe
+ event
+Message-ID: <20220205081013.GA391033@leoy-ThinkPad-X240s>
+References: <20220126160710.32983-1-german.gomez@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126160710.32983-1-german.gomez@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-В Fri, 4 Feb 2022 16:10:32 +0100
-Christian Brauner <brauner@kernel.org> пишет:
+Hi German,
 
-
-> > It turns off much more than idmapped mounts only. More fine grained
-> > control seems better for me.  
+On Wed, Jan 26, 2022 at 04:07:09PM +0000, German Gomez wrote:
+> Adds a couple of perf_event_attr tests for the fix introduced in [1].
+> The tests check that the correct sample_period value is set in the
+> struct perf_event_attr of the arm_spe events.
 > 
-> If you allow user namespaces and not idmapped mounts you haven't reduced
-> your attack surface.
-
-I have. And many other people have. People who have creating user
-namespaces by unpriviliged user disabled. I find it sad that we have no
-tool in mainline kernel to limit users access to creating user
-namespaces except complete disabling them. But many distros have that
-tools. Different tools with different interfaces and semantics :(
-
-And at least one major GNU/Linux distro disabled idmapped mounts
-unconditionally. If I were the author of this functionality, I would
-prefer to have a knob then have it unavailible for for so many users. But as you wish.
-
-> An unprivileged user can reach much more
-> exploitable code simply via unshare -user --map-root -mount which we
-> still allow upstream without a second thought even with all the past and
-> present exploits (see
-> https://www.openwall.com/lists/oss-security/2022/01/29/1 for a current
-> one from this January).
+> [1]: https://lore.kernel.org/all/20220118144054.2541-1-german.gomez@arm.com/
 > 
-> >   
-> > > They can neither
-> > > be created as an unprivileged user nor can they be created inside user
-> > > namespaces.  
-> > 
-> > But actions of fully privileged user can open non-obvious ways to
-> > privilege escalation.  
-> 
-> A fully privileged user potentially being able to cause issues is really
-> not an argument; especially not for a new sysctl.
-> You need root to create idmapped mounts and you need root to turn off
-> the new knob.
-> 
-> It also trivially applies to a whole slew of even basic kernel tunables
-> basically everything that can be reached by unprivileged users after a
-> privileged user has turned it on or configured it.
-> 
-> After 2 years we haven't seen any issue with this code and while I'm not
-> promising that there won't ever be issues - nobody can do that - the
-> pure suspicion that there could be some is not a justification for
-> anything.
+> Signed-off-by: German Gomez <german.gomez@arm.com>
 
+I tested this patch with two commands:
+
+# PERF_TEST_ATTR=/tmp /usr/bin/python2 ./tests/attr.py -d ./tests/attr/ \
+        -p ./perf -vvvvv -t test-record-spe-period
+# PERF_TEST_ATTR=/tmp /usr/bin/python2 ./tests/attr.py -d ./tests/attr/ \
+        -p ./perf -vvvvv -t test-record-spe-period-term
+
+Both testing can pass on Hisilicon D06 board.
+
+One question: I'm a bit concern this case will fail on some Arm64
+platforms which doesn't contain Arm SPE modules.  E.g. below commands
+will always fail on Arm64 platforms if SPE module is absent.  So I am
+wandering if we can add extra checking ARM SPE event is existed or not?
+
+  # ./perf test list
+   17: Setup struct perf_event_attr
+  # ./perf test 17
+
+Thanks,
+Leo
+
+> ---
+>  tools/perf/tests/attr/README                  |  2 +
+>  tools/perf/tests/attr/base-record-spe         | 40 +++++++++++++++++++
+>  tools/perf/tests/attr/test-record-spe-period  | 12 ++++++
+>  .../tests/attr/test-record-spe-period-term    | 12 ++++++
+>  4 files changed, 66 insertions(+)
+>  create mode 100644 tools/perf/tests/attr/base-record-spe
+>  create mode 100644 tools/perf/tests/attr/test-record-spe-period
+>  create mode 100644 tools/perf/tests/attr/test-record-spe-period-term
+> 
+> diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
+> index 1116fc6bf2ac..454505d343fa 100644
+> --- a/tools/perf/tests/attr/README
+> +++ b/tools/perf/tests/attr/README
+> @@ -58,6 +58,8 @@ Following tests are defined (with perf commands):
+>    perf record -c 100 -P kill                    (test-record-period)
+>    perf record -c 1 --pfm-events=cycles:period=2 (test-record-pfm-period)
+>    perf record -R kill                           (test-record-raw)
+> +  perf record -c 2 -e arm_spe_0// -- kill       (test-record-spe-period)
+> +  perf record -e arm_spe_0/period=3/ -- kill    (test-record-spe-period-term)
+>    perf stat -e cycles kill                      (test-stat-basic)
+>    perf stat kill                                (test-stat-default)
+>    perf stat -d kill                             (test-stat-detailed-1)
+> diff --git a/tools/perf/tests/attr/base-record-spe b/tools/perf/tests/attr/base-record-spe
+> new file mode 100644
+> index 000000000000..08fa96b59240
+> --- /dev/null
+> +++ b/tools/perf/tests/attr/base-record-spe
+> @@ -0,0 +1,40 @@
+> +[event]
+> +fd=*
+> +group_fd=-1
+> +flags=*
+> +cpu=*
+> +type=*
+> +size=*
+> +config=*
+> +sample_period=*
+> +sample_type=*
+> +read_format=*
+> +disabled=*
+> +inherit=*
+> +pinned=*
+> +exclusive=*
+> +exclude_user=*
+> +exclude_kernel=*
+> +exclude_hv=*
+> +exclude_idle=*
+> +mmap=*
+> +comm=*
+> +freq=*
+> +inherit_stat=*
+> +enable_on_exec=*
+> +task=*
+> +watermark=*
+> +precise_ip=*
+> +mmap_data=*
+> +sample_id_all=*
+> +exclude_host=*
+> +exclude_guest=*
+> +exclude_callchain_kernel=*
+> +exclude_callchain_user=*
+> +wakeup_events=*
+> +bp_type=*
+> +config1=*
+> +config2=*
+> +branch_sample_type=*
+> +sample_regs_user=*
+> +sample_stack_user=*
+> diff --git a/tools/perf/tests/attr/test-record-spe-period b/tools/perf/tests/attr/test-record-spe-period
+> new file mode 100644
+> index 000000000000..75f8c9cd8e3f
+> --- /dev/null
+> +++ b/tools/perf/tests/attr/test-record-spe-period
+> @@ -0,0 +1,12 @@
+> +[config]
+> +command = record
+> +args    = --no-bpf-event -c 2 -e arm_spe_0// -- kill >/dev/null 2>&1
+> +ret     = 1
+> +arch    = aarch64
+> +
+> +[event-10:base-record-spe]
+> +sample_period=2
+> +freq=0
+> +
+> +# dummy event
+> +[event-1:base-record-spe]
+> diff --git a/tools/perf/tests/attr/test-record-spe-period-term b/tools/perf/tests/attr/test-record-spe-period-term
+> new file mode 100644
+> index 000000000000..8f60a4fec657
+> --- /dev/null
+> +++ b/tools/perf/tests/attr/test-record-spe-period-term
+> @@ -0,0 +1,12 @@
+> +[config]
+> +command = record
+> +args    = --no-bpf-event -e arm_spe_0/period=3/ -- kill >/dev/null 2>&1
+> +ret     = 1
+> +arch    = aarch64
+> +
+> +[event-10:base-record-spe]
+> +sample_period=3
+> +freq=0
+> +
+> +# dummy event
+> +[event-1:base-record-spe]
+> -- 
+> 2.25.1
+> 

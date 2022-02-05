@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F103C4AA5AF
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6978D4AA5B9
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378803AbiBECXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 21:23:12 -0500
-Received: from mail-oo1-f42.google.com ([209.85.161.42]:46947 "EHLO
-        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbiBECXK (ORCPT
+        id S1378974AbiBEC1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 21:27:20 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:38444 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236832AbiBEC1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 21:23:10 -0500
-Received: by mail-oo1-f42.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so6752570ooo.13;
-        Fri, 04 Feb 2022 18:23:10 -0800 (PST)
+        Fri, 4 Feb 2022 21:27:19 -0500
+Received: by mail-oi1-f176.google.com with SMTP id u13so10669412oie.5;
+        Fri, 04 Feb 2022 18:27:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=m3oR5apbiLT9+skP38zrB2QfSeGHMBk+VZQBhMpanLM=;
-        b=iE+mz7QNw/mvHbWT3uLm8L0etFwEKuaFZ6bqo1KBj7RTnVZZ+/ykThljlt4hvvw2QT
-         X+XBMP2ydxDuUFshf2qwvMEXKdswiOXo8HJwpgzNr4tSwTAwCZy5y0UXijtb39f//teA
-         RX4nWIHpaMthE75kH12JIoZjSDV/wBIGewyJgfN2caRD2Wvy9uP0ArYZuQwlw9Zm1VbH
-         gv+jo5zXMh5AF04YGWiBDvCJmp74L+PX648w/ipKoTJER31+RSy1UrySH2eoVzEQOr5p
-         2XqdY25DpDcHwD1GB+wnpFeO3YBD9/aMg4bcAtn3XkiJN1Espv12tk+cZsXv8zAfhlz1
-         Lumg==
-X-Gm-Message-State: AOAM532QOyxM4is3AX/Qlr3vOR2Ka5N6bqDuJTjJqe7i3fHJ6lUvNrF1
-        Nhhpd8+Zk3Q9y2WPpOoDvw==
-X-Google-Smtp-Source: ABdhPJwFYCxnpsKiNTtZIHQA3HoGtZNTtb1IIiBUXz6eOeTRJ2lMASaeH5ejZ3Y6Y3vGrmuICXlLow==
-X-Received: by 2002:a05:6870:6183:: with SMTP id a3mr486430oah.202.1644027789978;
-        Fri, 04 Feb 2022 18:23:09 -0800 (PST)
+        bh=WNwkkIEk6nRKmulDkMvX+n5bN8drj3YdUVmvLLda57E=;
+        b=wqQ66cCrpHX1+wyzAr4xNwIL4otXiCpinjhNKTTlU46KW6ERDZ9pr8x8rdJSdLTkpC
+         RMATWx/yeVsSk2UA4ciFTiu+EnAjMKiqG24xcQRl3oxOVuvQhj1rdEH2JUU1BX105a9U
+         2TtXPKJugBhi+hSHW1OI6o7V3TnuDodadSPdJ+pN/8LhFoO3vf7gatUTynx/LLoXNYFQ
+         o6mClm591o8XdELmbmq0CPZGx3kwBE3sm1J2H8TWfoUfWg0AiYRPTowCpW/7dVnVIzTb
+         q15MNmSik54Ql8nPOcgYafPiSSI8rpMEUiVJdV+9xplJ8OYlJASuqMmG40Kx0PnY9Q7H
+         XRQw==
+X-Gm-Message-State: AOAM533FvzWn6BwtCPtsI9W+7ey+LnDOYyxLn2BZKl0DUaOXgtK4tHz1
+        ht+4oEtOULByOpkqwJc5jz6EEXK4rQ==
+X-Google-Smtp-Source: ABdhPJy16m5SteHRuJQ3WB7ERG1gtj3NB/98hs8UODPsf0AwmR0N+op2pmHZdgA0H1jo4Ijf6X2org==
+X-Received: by 2002:a05:6808:e87:: with SMTP id k7mr2729190oil.34.1644028038744;
+        Fri, 04 Feb 2022 18:27:18 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id ay42sm1651090oib.5.2022.02.04.18.23.08
+        by smtp.gmail.com with ESMTPSA id x22sm1377230ooq.27.2022.02.04.18.27.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Feb 2022 18:23:09 -0800 (PST)
-Received: (nullmailer pid 3631468 invoked by uid 1000);
-        Sat, 05 Feb 2022 02:23:08 -0000
-Date:   Fri, 4 Feb 2022 20:23:08 -0600
+        Fri, 04 Feb 2022 18:27:18 -0800 (PST)
+Received: (nullmailer pid 3637443 invoked by uid 1000);
+        Sat, 05 Feb 2022 02:27:17 -0000
+Date:   Fri, 4 Feb 2022 20:27:17 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3] media: dt-bindings: media: renesas,csi2: Update
- data-lanes property
-Message-ID: <Yf3fjPtbakLO6RkB@robh.at.kernel.org>
-References: <20220121002622.30359-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Xin Ji <xji@analogixsemi.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        qwen@analogixsemi.com, linux-usb@vger.kernel.org,
+        bliang@analogixsemi.com, jli@analogixsemi.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add analogix anx7411 PD binding
+Message-ID: <Yf3ghczy+I2ZMcvt@robh.at.kernel.org>
+References: <20220121061856.2038958-1-xji@analogixsemi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220121002622.30359-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220121061856.2038958-1-xji@analogixsemi.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Jan 2022 00:26:22 +0000, Lad Prabhakar wrote:
-> CSI-2 (CSI4LNK0) on R-Car and RZ/G2 supports 4-lane mode which is already
-> handled by rcar-csi2.c driver. This patch updates the data-lanes property
-> to describe the same.
+On Fri, 21 Jan 2022 14:18:55 +0800, Xin Ji wrote:
+> Add analogix PD chip anx7411 device binding
 > 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> Signed-off-by: Xin Ji <xji@analogixsemi.com>
 > ---
-> v2->v3
-> * Dropped uniqueItems constraint as a patch [0] to schema already exists.
-> * Included RB tag from Jacopo
-> 
-> [0] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211223191615.17803-13-p.yadav@ti.com/
-> 
-> v1->v2
-> * Dropped const items
-> * Added uniqueItems
-> 
-> v1:
-> https://lore.kernel.org/lkml/20220118163413.ge2b4g75yhfqvq3x@uno.localdomain/T/
-> ---
->  Documentation/devicetree/bindings/media/renesas,csi2.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  .../bindings/usb/analogix,anx7411.yaml        | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/analogix,anx7411.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

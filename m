@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5F44AA542
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4124AA54F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 02:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378842AbiBEBRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 20:17:08 -0500
-Received: from mga01.intel.com ([192.55.52.88]:14164 "EHLO mga01.intel.com"
+        id S1378871AbiBEB2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 20:28:09 -0500
+Received: from mga09.intel.com ([134.134.136.24]:52642 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233537AbiBEBRG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 20:17:06 -0500
+        id S1349644AbiBEB2H (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 20:28:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644023827; x=1675559827;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+83K354TWmbRnp0+/tL54UpgXu0dywYx0vn0B9L1ySw=;
-  b=F+2mXSiHcNNA6r3wvrCjkTWaiLxQbKMIutt++XccC2Fj1QTCgX1tiFam
-   59EkxZ+CL8aIcWnbuhMW/jw8+2IYSB5dfqu41SxpYnDbqyXgRXIPd1kEQ
-   8XDnkorTcX9XfUseQCwakV8AeX4K/cJWy+wKVs8Dyl8FdBIL0iwYzJWC4
-   7oDpVI5g1xresYNAU1kPqhLFATAT9LNYAs/cYE6j1MGSSsQeglKbm76+u
-   2zgq9+JhvQC/0LpWiWPReNdITcF0D0+O+uNftuWi8F/jRV4mLyTMlM+Ur
-   2y9ablmSpXtXyBLxw2GD0DJ6i6T7mQcvlVDF87DeSGUFkmv7sfD7RPIer
+  t=1644024487; x=1675560487;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XdxtJJTIZE+WWUJgQ9TXZkuAz5xg8F2S74fBeUfPYaU=;
+  b=JWdopyCFqxJ+1qPn5CP+3jkQdNBpAwJqRMyEpei/DkrT2U4nVjS/mJfT
+   KKP0m4OsgYjmW0sCOa0V2wycUGtnT0RKVMi/XpWrxvDjjV0HiISTb3vjL
+   70KFrSqUXcBIGFUOWQriafvOrbZRk4ktgN6NsdTD0VI9UUUOYqMHEI/NU
+   bnVv0CtJ+gbH9pqPz3+Z0gtIjMeCImjbJLjkKFgHk+oHmeR9cNTOY5mt2
+   DHNTqpTGnNxyxvO6ooHOOhOO0bOeP9yMFsLbE3kZsY+cY5Kk6dLiDOPcN
+   WK8IFS11tvYPyx5EtMqpPaye5HlT/u0yauvX9c2OgnPVqpkYMdLEXOTbp
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="272978670"
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248234775"
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="272978670"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 17:17:06 -0800
+   d="scan'208";a="248234775"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 17:28:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="481010039"
+   d="scan'208";a="584300475"
 Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Feb 2022 17:17:04 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 04 Feb 2022 17:28:04 -0800
 Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nG9hI-000YPm-3A; Sat, 05 Feb 2022 01:17:04 +0000
-Date:   Sat, 5 Feb 2022 09:17:01 +0800
+        id 1nG9rw-000YQN-9r; Sat, 05 Feb 2022 01:28:04 +0000
+Date:   Sat, 5 Feb 2022 09:27:20 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>
-Subject: [frederic-dynticks:isolation/split-v2 4/8]
- kernel/rcu/tree_plugin.h:1217:43: error: use of undeclared identifier
- 'HK_FLAG_RCU'; did you mean 'HK_TYPE_RCU'?
-Message-ID: <202202050945.aaHWawTf-lkp@intel.com>
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v6 3/4] drm/bridge: anx7625: Support reading edid through
+ aux channel
+Message-ID: <202202050942.C6c0MD0r-lkp@intel.com>
+References: <20220203141023.570180-3-hsinyi@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220203141023.570180-3-hsinyi@chromium.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git isolation/split-v2
-head:   31b398242699300304defda3f388cc15b314c1b0
-commit: 6c70f095e7a266b13de678c358d3852b92c95799 [4/8] sched/isolation: Use single feature type while referring to housekeeping cpumask
-config: arm64-randconfig-r025-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050945.aaHWawTf-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a73e4ce6a59b01f0e37037761c1e6889d539d233)
+Hi Hsin-Yi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm/drm-next]
+[cannot apply to robh/for-next drm-intel/for-linux-next v5.17-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Hsin-Yi-Wang/drm-bridge-anx7625-send-DPCD-command-to-downstream/20220203-221108
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: arm64-randconfig-c023-20220130 (https://download.01.org/0day-ci/archive/20220205/202202050942.C6c0MD0r-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=6c70f095e7a266b13de678c358d3852b92c95799
-        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-        git fetch --no-tags frederic-dynticks isolation/split-v2
-        git checkout 6c70f095e7a266b13de678c358d3852b92c95799
+        # https://github.com/0day-ci/linux/commit/45f3728b61c8cb8d53d13d88c33c4f58630dcea6
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Hsin-Yi-Wang/drm-bridge-anx7625-send-DPCD-command-to-downstream/20220203-221108
+        git checkout 45f3728b61c8cb8d53d13d88c33c4f58630dcea6
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from kernel/rcu/tree.c:4783:
->> kernel/rcu/tree_plugin.h:1217:43: error: use of undeclared identifier 'HK_FLAG_RCU'; did you mean 'HK_TYPE_RCU'?
-           cpumask_and(cm, cm, housekeeping_cpumask(HK_FLAG_RCU));
-                                                    ^~~~~~~~~~~
-                                                    HK_TYPE_RCU
-   include/linux/sched/isolation.h:10:2: note: 'HK_TYPE_RCU' declared here
-           HK_TYPE_RCU,
-           ^
-   In file included from kernel/rcu/tree.c:4783:
-   kernel/rcu/tree_plugin.h:1219:41: error: use of undeclared identifier 'HK_FLAG_RCU'; did you mean 'HK_TYPE_RCU'?
-                   cpumask_copy(cm, housekeeping_cpumask(HK_FLAG_RCU));
-                                                         ^~~~~~~~~~~
-                                                         HK_TYPE_RCU
-   include/linux/sched/isolation.h:10:2: note: 'HK_TYPE_RCU' declared here
-           HK_TYPE_RCU,
-           ^
-   2 errors generated.
-
-
-vim +1217 kernel/rcu/tree_plugin.h
-
-27f4d28057adf9 kernel/rcutree_plugin.h  Paul E. McKenney 2011-02-07  1192  
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1193  /*
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1194   * Set the per-rcu_node kthread's affinity to cover all CPUs that are
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1195   * served by the rcu_node in question.  The CPU hotplug lock is still
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1196   * held, so the value of rnp->qsmaskinit will be stable.
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1197   *
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1198   * We don't include outgoingcpu in the affinity set, use -1 if there is
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1199   * no outgoing CPU.  If there are no CPUs left in the affinity set,
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1200   * this function allows the kthread to execute on any CPU.
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1201   */
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1202  static void rcu_boost_kthread_setaffinity(struct rcu_node *rnp, int outgoingcpu)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1203  {
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1204  	struct task_struct *t = rnp->boost_kthread_task;
-0aa04b055e71bd kernel/rcu/tree_plugin.h Paul E. McKenney 2015-01-23  1205  	unsigned long mask = rcu_rnp_online_cpus(rnp);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1206  	cpumask_var_t cm;
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1207  	int cpu;
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1208  
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1209  	if (!t)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1210  		return;
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1211  	if (!zalloc_cpumask_var(&cm, GFP_KERNEL))
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1212  		return;
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1213  	for_each_leaf_node_possible_cpu(rnp, cpu)
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1214  		if ((mask & leaf_node_cpu_bit(rnp, cpu)) &&
-bc75e99983df1e kernel/rcu/tree_plugin.h Mark Rutland     2016-06-03  1215  		    cpu != outgoingcpu)
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1216  			cpumask_set_cpu(cpu, cm);
-c2cf0767e98eb4 kernel/rcu/tree_plugin.h Zqiang           2021-11-15 @1217  	cpumask_and(cm, cm, housekeeping_cpumask(HK_FLAG_RCU));
-5d0b0249730275 kernel/rcu/tree_plugin.h Paul E. McKenney 2014-11-10  1218  	if (cpumask_weight(cm) == 0)
-c2cf0767e98eb4 kernel/rcu/tree_plugin.h Zqiang           2021-11-15  1219  		cpumask_copy(cm, housekeeping_cpumask(HK_FLAG_RCU));
-5d01bbd111d6ff kernel/rcutree_plugin.h  Thomas Gleixner  2012-07-16  1220  	set_cpus_allowed_ptr(t, cm);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1221  	free_cpumask_var(cm);
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1222  }
-f8b7fc6b514f34 kernel/rcutree_plugin.h  Paul E. McKenney 2011-06-16  1223  
-
-:::::: The code at line 1217 was first introduced by commit
-:::::: c2cf0767e98eb4487444e5c7ebba491a866811ce rcu: Avoid running boost kthreads on isolated CPUs
-
-:::::: TO: Zqiang <qiang.zhang1211@gmail.com>
-:::::: CC: Paul E. McKenney <paulmck@kernel.org>
+   aarch64-linux-ld: Unexpected GOT/PLT entries detected!
+   aarch64-linux-ld: Unexpected run-time procedure linkages detected!
+   aarch64-linux-ld: ID map text too big or misaligned
+   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_bridge_detach':
+>> anx7625.c:(.text+0x5e0): undefined reference to `drm_dp_aux_unregister'
+   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_bridge_attach':
+>> anx7625.c:(.text+0x674): undefined reference to `drm_dp_aux_register'
+   aarch64-linux-ld: drivers/gpu/drm/bridge/analogix/anx7625.o: in function `anx7625_i2c_probe':
+>> anx7625.c:(.text+0x1b48): undefined reference to `drm_dp_aux_init'
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

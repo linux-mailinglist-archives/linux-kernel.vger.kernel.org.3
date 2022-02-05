@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E904AA6B4
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711CB4AA6B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiBEFII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 00:08:08 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:54809 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229486AbiBEFIG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 00:08:06 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B9E91580196;
-        Sat,  5 Feb 2022 00:08:05 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Sat, 05 Feb 2022 00:08:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=2RlY4R9lybWwdv
-        24B6zmGkCHz3KZPXtlvbnrbu1Kd54=; b=pdt/ZcbAoNfVqEQNoU3SpgTp9hnM2L
-        z2Z4uImJiM1n2cfElE+tkp4V/e2F9hLzrH4ARGe+K9g42+VSue6+FhXHsckwv1nk
-        wdDzX4WJy7VrIwQARoVpP/7j3pnRNJaf7v3j1UBAl+LsIZ1n54I2lEl56fJY/X4m
-        tT1zNT1wl+du5zq0tW4RAYT1pbzPKCBqsjXHOu4QYIV6e3IGWQU6ZAaNurvsl5gd
-        ohepwiBzU7tB9heVPJxZwrs2GNHWOrvI7DxwBfzgCbacv02tj/pkuA/O2gTAtYu9
-        UMsThud1YRZL3+FCmRCKHSUp0qLzzT6Mp2nX7WeWwWpDnYsBofAka4PQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=2RlY4R9lybWwdv24B
-        6zmGkCHz3KZPXtlvbnrbu1Kd54=; b=hWRK9/j56zu/1ZnLAdI+tcL7N/fNsIGCe
-        PsC9OTjQO8goGKX+AgD9dd3Hl+PWdilvUgZPMTxsv4ny/kY1FMtQGzj2ZG0SaAV1
-        IwUHmWumv2tR1Jlv4BBkg0PsdLxGaRnzHU90qHu6qfK1sDXjf1s9laH5uhgSSJlD
-        l5twxeDGp3hxOxyiCWonKz7K8V7joBdPnFpofdVkhdUFmbeNpBosmQ4HfJBPJU4r
-        Yx6x+K94O6eR1e8b0PcoRUCKL/6+HIsnPhMJIdivmffY9UADXUotRgBskeO9RfhO
-        R0nkKviZ/RD96RAAWRrVTd2Lj30xcviYvgGWV2HV/TZmlUA36UGRA==
-X-ME-Sender: <xms:NQb-YUzZnedkmd6aE0QLK5xi-Isk5zTwr1B8rSc4bpMON4voZTNRhg>
-    <xme:NQb-YYTpdfE_4ehjCDMm-qYsnsGOnniSsqg9SsFbvwYtCuh0ef9oj74iUUaN3y-EM
-    HnBcTByrbvVcnmHGNs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrhedtgdektdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
-    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
-    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-X-ME-Proxy: <xmx:NQb-YWVdEXQTpcEVZO3mgx9dcOmNzWHZdzxXh6l5oGJh9kfo2JWlag>
-    <xmx:NQb-YSjuTPmdC-EKzV9swTwIAtWLb_x0oKHZddh6riANVjYX_aomrw>
-    <xmx:NQb-YWAb3bxUe7vhVeYAxyL_5NVlK8TtyC1zaYO53iJqVLBLYgDkwA>
-    <xmx:NQb-Ya5FQaYoG7MXvI7gd4VECRMLs3dJ_Wx3MbgBDT_b9xQh3axmqQigZThON7dD>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0FF42F6007E; Sat,  5 Feb 2022 00:08:04 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
-Mime-Version: 1.0
-Message-Id: <4aab1871-f009-4f34-b563-5320d691f921@www.fastmail.com>
-In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
-References: <20220204091915.247906930@linuxfoundation.org>
-Date:   Sat, 05 Feb 2022 00:07:44 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, "Guenter Roeck" <linux@roeck-us.net>,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        sudipm.mukherjee@gmail.com
-Subject: Re: [PATCH 5.15 00/32] 5.15.20-rc1 review
-Content-Type: text/plain
+        id S235645AbiBEFKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 00:10:18 -0500
+Received: from mga09.intel.com ([134.134.136.24]:48795 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229486AbiBEFKP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 00:10:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644037816; x=1675573816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JcX/1EZirCjM105wSMia+he9amGan4vf2Bw07F+RiJM=;
+  b=Qxd9jDC6yQpwGIL5UPkzr/yRWQ6aFGRZ7Du/5msTHwNRyk8D+QCkn3X9
+   CVLyxrkmf21B4zJrYUoZTgAHddNOXVMm3ucyAXZ9ccH463Hd5diw5QuE/
+   LqohRIC/oR0cBlpEDNEcd7wra1i4AVABfTp7kgLpvwC93ktvd8S/eRFIy
+   KLR2honnftt2z8pFqhYU2uiPuoSq4okBJQPSvsSpyZ2jSLRJ7N4csWkoe
+   S6+Bp6aKg5XWXNbcV3jycT8AE5QT6q7dtXW+K480/DZyIpdX0Uinaato4
+   Bo8vH9hA+B1UgMs9WlXaQKehcogmh9GDWzKtSIcQc+cLpFQvR9yyA+4ts
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248251597"
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="248251597"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:10:15 -0800
+X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
+   d="scan'208";a="539426486"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:10:15 -0800
+Date:   Fri, 4 Feb 2022 21:10:14 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <Yf4Gtm5pu+e2whSE@otcwcpicx3.sc.intel.com>
+References: <20220128202905.2274672-1-fenghua.yu@intel.com>
+ <20220128202905.2274672-6-fenghua.yu@intel.com>
+ <6ace7131-4671-6956-944f-df01e5d63470@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ace7131-4671-6956-944f-df01e5d63470@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022, at 4:22 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.20 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
-> Anything received after that time might be too late.
+Hi, Baolu,
+On Sat, Feb 05, 2022 at 11:50:59AM +0800, Lu Baolu wrote:
+> Hi Fenghua,
+> 
+> On 2022/1/29 4:28, Fenghua Yu wrote:
+> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> > index 92fea3fbbb11..ef03b2176bbd 100644
+> > --- a/drivers/iommu/intel/iommu.c
+> > +++ b/drivers/iommu/intel/iommu.c
+> > @@ -4781,7 +4781,7 @@ static int aux_domain_add_dev(struct dmar_domain *domain,
+> >   link_failed:
+> >   	spin_unlock_irqrestore(&device_domain_lock, flags);
+> >   	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> > -		ioasid_put(domain->default_pasid);
+> > +		ioasid_free(domain->default_pasid);
+> >   	return ret;
+> >   }
+> > @@ -4811,7 +4811,7 @@ static void aux_domain_remove_dev(struct dmar_domain *domain,
+> >   	spin_unlock_irqrestore(&device_domain_lock, flags);
+> >   	if (list_empty(&domain->subdevices) && domain->default_pasid > 0)
+> > -		ioasid_put(domain->default_pasid);
+> > +		ioasid_free(domain->default_pasid);
+> >   }
+> >   static int prepare_domain_attach_device(struct iommu_domain *domain,
+> 
+> The domain->default_pasid is not relevant to SVA and it's being cleaned
+> up by another series. No need to take care of it in this series.
 
-Hi Greg,
-Great news, I was able to compile and boot 5.15.20-rc1 on my x86_64 test system without any errors or regressions.
+Because ioasid_put() is renamed to ioasid_free() in this patch, without
+above changes, this series cannot be compiled.
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
+Thomas and I discussed how to handle aux_domain while you will remove
+the entire aux_domain code (https://lore.kernel.org/lkml/87zgnf29op.ffs@tglx/).
+The above changes are minimal and temporary changes to compile this series.
+The changes will be removed along with the entire aux_domain by your
+removing aux_domain series later in 5.18.
 
-Thanks,
-Slade
+Thanks.
+
+-Fenghua
+

@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BD94AA731
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDBD4AA732
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378979AbiBEGrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
+        id S1379424AbiBEGum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiBEGrr (ORCPT
+        with ESMTP id S230008AbiBEGuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:47:47 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19A8C061346;
-        Fri,  4 Feb 2022 22:47:43 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id e6so6984693pfc.7;
-        Fri, 04 Feb 2022 22:47:43 -0800 (PST)
+        Sat, 5 Feb 2022 01:50:40 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3178EC061346;
+        Fri,  4 Feb 2022 22:50:40 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id u77so734433uau.6;
+        Fri, 04 Feb 2022 22:50:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=FCcXnFe+AjDLJWHmF/M/9s62o5qLgGSOORd9vpKd/v4=;
-        b=JVp1WoeFWk2sg9YssMpSZiyjxY7guelYiPtHdZgPaqpz2BNVY/Z7syt4nDNbUkv7ga
-         HuW+LXnA4oVmkJ8QraA5INWrpTPLnRWkg54p0MPhvhD86LZMyCd+SaEKVv6mxSZK0ec7
-         JozKoKariZ+A23A0hjoEJ+TcGuiMS+A9DnBJgP7y1l8OoiqVJqDpf/b44hLlh3Shs4KY
-         OlpOWAMfvzjxVSgiCP6ItTN8G9j4e7afQdXr8huptEr1PqXpql6HIQXH4B0U261IJLK3
-         DcFG69HyocXH/b1UXkecfuywfbcXMS3qgnmc4iKqeVxzlwIMC2vEJq7ESunq0HufLlCQ
-         Qybg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Px8MUw3Pm0iazIIvlzDypvxpZRE6aA1tFU73q77K2yo=;
+        b=L2XONBwUZbEuYRWJuAiBVC+yxrgMvHUqZiume/SLPIBi+1vcrIyC/GI4VSDN0pePm9
+         GOBC9eXUtw2l7afzdj2NJX3lR2picu+C+tgEkdrslgbDFhEUrCLtMAmTLasu7U9QHQkE
+         z/Q8QdxO4b1a8t0KYg5N+EBkwC4tPvyqm7yAy7yqbkJj7gFRbze2S6B2KDx8+DLghrDB
+         34yV10qpKxiZfyn/88t7xuHddOVRBu3xjImlv+qbe1X1v3W9Rh2S8BNaZTM/IrZ9EoES
+         XNgaL0j3HkA/wTItaDeFphe412aFMgj2jobvOHIRSZmUoW/tiDWwsENrp81Zd/8OLmH8
+         I5Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FCcXnFe+AjDLJWHmF/M/9s62o5qLgGSOORd9vpKd/v4=;
-        b=A0yrjnLxLvIDNc0ldMAkVnW7k2HvGrWIK1UBMOSb9vrJQNKGx2kwTQTsDl/rwfitvw
-         IceE33PmnGpAzP+tPbytSF+cEidgoxYHS9t8HsyjVX80B5RO5M8TMaCaSCJCwDzwtY81
-         psdJ3ezezSkcKbhux/G6qODzXMmX9mHqdQfD8EiAFy5rWO/wuMohgGOyFFjw79uv3kfo
-         zD+3+20R8USHf6FkSpXxqUnqTgn5JuRByHRo11hWLYhJ+EvtxGlH+PGLIappputzSBTJ
-         mSpAGUxTaWb54JRZ74Jr3XxdUqXjyf4T7TOa8ETpVBbruflSLLsmJ5QLCs+AG4P0geWt
-         ZBgw==
-X-Gm-Message-State: AOAM5302hrussa5lwYdU229Kj1W/w7F0XLmx+GQX5Vt1CQw58TpfJ3gm
-        ZtEGMJ8/McoQ7mGQO84p9vo=
-X-Google-Smtp-Source: ABdhPJyOmL7EE5vRNAoEwnCmzFSGS6hXIwn08o0tG4frEhx91YUIlsKZxgtNtMxlQiEr8iP1js/93g==
-X-Received: by 2002:a63:27c4:: with SMTP id n187mr2049424pgn.504.1644043662372;
-        Fri, 04 Feb 2022 22:47:42 -0800 (PST)
-Received: from localhost.localdomain ([2405:201:2003:b021:6001:8ce1:3e29:705e])
-        by smtp.gmail.com with ESMTPSA id nu15sm1706233pjb.5.2022.02.04.22.47.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Feb 2022 22:47:42 -0800 (PST)
-From:   Raag Jadav <raagjadav@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Raag Jadav <raagjadav@gmail.com>
-Subject: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
-Date:   Sat,  5 Feb 2022 12:14:52 +0530
-Message-Id: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Px8MUw3Pm0iazIIvlzDypvxpZRE6aA1tFU73q77K2yo=;
+        b=E4/buhMEekIh9GiKI8prKcDBgIWrqvkgmGv3Q5ReuK2aw3UoBxonTlfd/02yrEh12V
+         PFf9vLRTfkG5hgrdhChmIVeKDUhIO1AIfsMybg8kQqGZ5SQWflPQxZ+nl0qcaGsUzPNh
+         o23FoS01lOjfwDYqum4bk1ddWRwJ+Zp0Y9U4zsv5tNzI22JAsiKW+8oxM1gOq9Y2A/AP
+         NT5GyhroFZWJ/Ob9zUB8uN8SiqXJ+FNYjO+Qo1cB+lckT8iT7uYkr8tDO2RZN6ReDr5n
+         qyzPZsrjYACbIKLn8/2noYdggMCd/Ws8TF9AeDzL5pJT199SE8iKIK8y+igJCnwsAwr+
+         KTOQ==
+X-Gm-Message-State: AOAM533i5sFu0UUli3Y/jaFJAdsIWSb4Nbpi5osVqthjUuKJP1vn8XX2
+        AWTXkhs8xzENUlVASVdgx2xUlGuhtJ4UgmzZ
+X-Google-Smtp-Source: ABdhPJzyzUmVV4wZFvHPxSAgCOoSORNSwX4DQG28F4ZF1BOHHWqnvFnPP9n4EiVbAUHfdlxCmOefwQ==
+X-Received: by 2002:a05:6102:a88:: with SMTP id n8mr2137594vsg.44.1644043839111;
+        Fri, 04 Feb 2022 22:50:39 -0800 (PST)
+Received: from ?IPV6:2601:206:8000:2834::19b? ([2601:206:8000:2834::19b])
+        by smtp.gmail.com with ESMTPSA id e17sm1398662vsl.21.2022.02.04.22.50.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Feb 2022 22:50:38 -0800 (PST)
+Message-ID: <ce6e39e0-7573-ee67-2e94-7a434d8352f5@gmail.com>
+Date:   Fri, 4 Feb 2022 22:50:35 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 00/43] 5.16.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220204091917.166033635@linuxfoundation.org>
+From:   Scott Bruce <smbruce@gmail.com>
+In-Reply-To: <20220204091917.166033635@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,70 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable MAC SerDes autonegotiation to distinguish between
-1000BASE-X, SGMII and QSGMII MAC.
+On 2/4/22 01:22, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.6 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Signed-off-by: Raag Jadav <raagjadav@gmail.com>
----
- drivers/net/phy/mscc/mscc.h      |  2 ++
- drivers/net/phy/mscc/mscc_main.c | 24 ++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+Build, dmesg, desktop use and s0ix suspend all look good on x86_64/Cezanne (ASUS GA503QR.)
 
-diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
-index a50235f..366db14 100644
---- a/drivers/net/phy/mscc/mscc.h
-+++ b/drivers/net/phy/mscc/mscc.h
-@@ -195,6 +195,8 @@ enum rgmii_clock_delay {
- #define MSCC_PHY_EXTENDED_INT_MS_EGR	  BIT(9)
- 
- /* Extended Page 3 Registers */
-+#define MSCC_PHY_SERDES_PCS_CTRL	  16
-+#define MSCC_PHY_SERDES_ANEG		  BIT(7)
- #define MSCC_PHY_SERDES_TX_VALID_CNT	  21
- #define MSCC_PHY_SERDES_TX_CRC_ERR_CNT	  22
- #define MSCC_PHY_SERDES_RX_VALID_CNT	  28
-diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-index ebfeeb3..6db43a5 100644
---- a/drivers/net/phy/mscc/mscc_main.c
-+++ b/drivers/net/phy/mscc/mscc_main.c
-@@ -1685,6 +1685,25 @@ static int vsc8574_config_host_serdes(struct phy_device *phydev)
- 			   PROC_CMD_RST_CONF_PORT | PROC_CMD_FIBER_1000BASE_X);
- }
- 
-+static int vsc85xx_config_inband_aneg(struct phy_device *phydev, bool enabled)
-+{
-+	int rc;
-+	u16 reg_val = 0;
-+
-+	if (enabled)
-+		reg_val = MSCC_PHY_SERDES_ANEG;
-+
-+	mutex_lock(&phydev->lock);
-+
-+	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_3,
-+			      MSCC_PHY_SERDES_PCS_CTRL, MSCC_PHY_SERDES_ANEG,
-+			      reg_val);
-+
-+	mutex_unlock(&phydev->lock);
-+
-+	return rc;
-+}
-+
- static int vsc8584_config_init(struct phy_device *phydev)
- {
- 	struct vsc8531_private *vsc8531 = phydev->priv;
-@@ -1772,6 +1791,11 @@ static int vsc8584_config_init(struct phy_device *phydev)
- 					      VSC8572_RGMII_TX_DELAY_MASK);
- 		if (ret)
- 			return ret;
-+	} else {
-+		/* Enable clause 37 */
-+		ret = vsc85xx_config_inband_aneg(phydev, true);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	ret = genphy_soft_reset(phydev);
--- 
-2.7.4
-
+Tested-by: Scott Bruce <smbruce@gmail.com>

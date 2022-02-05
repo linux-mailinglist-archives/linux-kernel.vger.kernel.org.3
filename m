@@ -2,135 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED084AA7C0
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0383D4AA7C3
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377762AbiBEIzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 03:55:23 -0500
-Received: from mga17.intel.com ([192.55.52.151]:21426 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232461AbiBEIzW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 03:55:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644051322; x=1675587322;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SyDz2NJUoyxuBxKKckbAGqnNny1+MXQAEdtZ4mbLKaI=;
-  b=TeA2JIPuMIcagsV+5BhpVtX3AlcdPWJNQjdI9Q61tc70C27icqWTd4LH
-   DN0bu6z4Fu725TI4RS7W6NUwbimxNGl5qD28snVztJtnImt9enB8GjAez
-   vU2VjJ1GNfeWb3RnnuGPI9Y84Izgm2v3mT/LCcJCsZlzFyNwnhcedJW8T
-   pjuhTeDmqNB2Pkiknxcl5xUHDiSSEZ+cNpww1+zQTm70N+oIwWTjnDkeM
-   Tk/9ECwWFxJBXtsOcoD061cs33FgtgPdwD6jJyGnF6Tr2Tu4MYWig+YBU
-   9W2ubt7RF934/DALYy8ntgfajoOF9Ox3/BUYA6PVN42bZkEH37H/rusxk
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="229149793"
-X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="229149793"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2022 00:55:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="483865084"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Feb 2022 00:55:19 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nGGql-000Yov-7q; Sat, 05 Feb 2022 08:55:19 +0000
-Date:   Sat, 5 Feb 2022 16:54:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        William Kucharski <william.kucharski@oracle.com>
-Subject: [willy-pagecache:for-next 12/75] mm/hugetlb.c:1323:10: error:
- 'struct page' has no member named 'compound_nr'; did you mean
- 'compound_dtor'?
-Message-ID: <202202051611.dqFyOKso-lkp@intel.com>
+        id S1352637AbiBEI7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:59:25 -0500
+Received: from imap2.colo.codethink.co.uk ([78.40.148.184]:36420 "EHLO
+        imap2.colo.codethink.co.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231128AbiBEI7U (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 03:59:20 -0500
+Received: from [78.40.148.178] (helo=webmail.codethink.co.uk)
+        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
+        id 1nGGuX-0005XR-Vr; Sat, 05 Feb 2022 08:59:13 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Date:   Sat, 05 Feb 2022 08:59:13 +0000
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     David Abdurachmanov <david.abdurachmanov@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>, macro@orcam.me.uk
+Subject: Re: [PATCH] PCI: fu740: RFC: force gen1 and get devices probing
+In-Reply-To: <CAEn-LTo96qGWyq7Zp9=VUaJh_kAW2JA7hRKwVzrSyz=xwDT=rg@mail.gmail.com>
+References: <20220204183316.328937-1-ben.dooks@codethink.co.uk>
+ <CAEn-LTo96qGWyq7Zp9=VUaJh_kAW2JA7hRKwVzrSyz=xwDT=rg@mail.gmail.com>
+Message-ID: <32a067b4a6b14fc4229c5f56e0280101@codethink.co.uk>
+X-Sender: ben.dooks@codethink.co.uk
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.infradead.org/users/willy/pagecache for-next
-head:   69178cc72889fc46880322c250dfd7546f66cc2c
-commit: d47177a50ad8d30bb952949f8a6cc1809d7c74df [12/75] mm: Make compound_pincount always available
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220205/202202051611.dqFyOKso-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        git remote add willy-pagecache git://git.infradead.org/users/willy/pagecache
-        git fetch --no-tags willy-pagecache for-next
-        git checkout d47177a50ad8d30bb952949f8a6cc1809d7c74df
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   mm/hugetlb.c: In function '__destroy_compound_gigantic_page':
->> mm/hugetlb.c:1323:10: error: 'struct page' has no member named 'compound_nr'; did you mean 'compound_dtor'?
-    1323 |  page[1].compound_nr = 0;
-         |          ^~~~~~~~~~~
-         |          compound_dtor
-   mm/hugetlb.c: In function '__prep_compound_gigantic_page':
-   mm/hugetlb.c:1815:10: error: 'struct page' has no member named 'compound_nr'; did you mean 'compound_dtor'?
-    1815 |  page[1].compound_nr = 0;
-         |          ^~~~~~~~~~~
-         |          compound_dtor
 
 
-vim +1323 mm/hugetlb.c
+On 2022-02-04 19:12, David Abdurachmanov wrote:
+> On Fri, Feb 4, 2022 at 8:35 PM Ben Dooks <ben.dooks@codethink.co.uk> 
+> wrote:
+>> 
+>> The dw pcie core does not probe devices unless this fix
+>> from u-boot is applied. The link must be changed to gen1
+>> and then the system will see all the other pcie devices
+>> behind the unmatched board's bridge.
+>> 
+>> This is a quick PoC to try and get our test farm working
+>> when a system does not have the pcie initialised by a
+>> u-boot script.
+>> 
+>> I will look at a proper patch when I am back in the office
+> 
+> Hi,
+> 
+> Have you looked into the patches posted for Linux and U-Boot from
+> Maciej W. Rozycki?
 
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1291  
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1292  #define for_each_node_mask_to_alloc(hs, nr_nodes, node, mask)		\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1293  	for (nr_nodes = nodes_weight(*mask);				\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1294  		nr_nodes > 0 &&						\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1295  		((node = hstate_next_node_to_alloc(hs, mask)) || 1);	\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1296  		nr_nodes--)
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1297  
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1298  #define for_each_node_mask_to_free(hs, nr_nodes, node, mask)		\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1299  	for (nr_nodes = nodes_weight(*mask);				\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1300  		nr_nodes > 0 &&						\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1301  		((node = hstate_next_node_to_free(hs, mask)) || 1);	\
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1302  		nr_nodes--)
-1cac6f2c072abe Luiz Capitulino    2014-06-04  1303  
-8531fc6f52f5fc Mike Kravetz       2021-11-05  1304  /* used to demote non-gigantic_huge pages as well */
-34d9e35b13d560 Mike Kravetz       2021-11-05  1305  static void __destroy_compound_gigantic_page(struct page *page,
-34d9e35b13d560 Mike Kravetz       2021-11-05  1306  					unsigned int order, bool demote)
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1307  {
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1308  	int i;
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1309  	int nr_pages = 1 << order;
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1310  	struct page *p = page + 1;
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1311  
-c8cc708a340cc7 Gerald Schaefer    2016-06-24  1312  	atomic_set(compound_mapcount_ptr(page), 0);
-47e29d32afba11 John Hubbard       2020-04-01  1313  	atomic_set(compound_pincount_ptr(page), 0);
-47e29d32afba11 John Hubbard       2020-04-01  1314  
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1315  	for (i = 1; i < nr_pages; i++, p = mem_map_next(p, page, i)) {
-a01f43901cfb93 Mike Kravetz       2021-11-05  1316  		p->mapping = NULL;
-1d798ca3f16437 Kirill A. Shutemov 2015-11-06  1317  		clear_compound_head(p);
-34d9e35b13d560 Mike Kravetz       2021-11-05  1318  		if (!demote)
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1319  			set_page_refcounted(p);
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1320  	}
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1321  
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1322  	set_compound_order(page, 0);
-ba9c1201beaa86 Gerald Schaefer    2020-12-11 @1323  	page[1].compound_nr = 0;
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1324  	__ClearPageHead(page);
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1325  }
-944d9fec8d7aee Luiz Capitulino    2014-06-04  1326  
+I haven't seen any u-boot patches, but I do know u-boot has been
+able to do this since 2021.08 release as a colleague has apparently
+know about needing to initialise PCIe under u-boot to get Linux to
+properly enumerate devices.
 
-:::::: The code at line 1323 was first introduced by commit
-:::::: ba9c1201beaa86a773e83be5654602a0667e4a4d mm/hugetlb: clear compound_nr before freeing gigantic pages
+Do you have a reference to these, trivial google searches did not
+show any patches.
 
-:::::: TO: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+> On the Linux side (not reviewed yet):
+> [PATCH v3] pci: Work around ASMedia ASM2824 PCIe link training failures
+> https://www.spinics.net/lists/linux-pci/msg120112.html
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This is not the issue, we do not see even the ASMedia PCIe bridge
+if u-boot does not have PCIe initialisation done.
+
+> The U-Boot fix was merged a few days ago.
+
+Ok, but I think the kernel should also have this fix done as it
+seems bad to have to upgrade u-boot on all the machines for
+something that is not a large fix.
+
+> david
+> 
+>> ---
+>>  drivers/pci/controller/dwc/pcie-fu740.c | 37 
+>> +++++++++++++++++++++++++
+>>  1 file changed, 37 insertions(+)
+>> 
+>> diff --git a/drivers/pci/controller/dwc/pcie-fu740.c 
+>> b/drivers/pci/controller/dwc/pcie-fu740.c
+>> index 960e58ead5f2..44f792764e45 100644
+>> --- a/drivers/pci/controller/dwc/pcie-fu740.c
+>> +++ b/drivers/pci/controller/dwc/pcie-fu740.c
+>> @@ -181,11 +181,48 @@ static void fu740_pcie_init_phy(struct 
+>> fu740_pcie *afp)
+>>         fu740_phyregwrite(1, PCIEX8MGMT_PHY_LANE3_BASE, 
+>> PCIEX8MGMT_PHY_INIT_VAL, afp);
+>>  }
+>> 
+>> +/* u-boot forces system to gen1 otherwise nothing probes... */
+>> +static void pcie_sifive_force_gen1(struct dw_pcie *dw, struct 
+>> fu740_pcie *afp )
+>> +{
+>> +       unsigned val;
+>> +
+>> +#if 0
+>> +       /* u-boot code */
+>> +        /* ctrl_ro_wr_enable */
+>> +        val = readl(sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
+>> +        val |= DBI_RO_WR_EN;
+>> +        writel(val, sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
+>> +
+>> +        /* configure link cap */
+>> +        linkcap = readl(sv->dw.dbi_base + PF0_PCIE_CAP_LINK_CAP);
+>> +        linkcap |= PCIE_LINK_CAP_MAX_SPEED_MASK;
+>> +        writel(linkcap, sv->dw.dbi_base + PF0_PCIE_CAP_LINK_CAP);
+>> +
+>> +        /* ctrl_ro_wr_disable */
+>> +        val &= ~DBI_RO_WR_EN;
+>> +        writel(val, sv->dw.dbi_base + PCIE_MISC_CONTROL_1);
+>> +#endif
+>> +
+>> +       val = readl_relaxed(dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
+>> +       val |= PCIE_DBI_RO_WR_EN;
+>> +       writel_relaxed(val, dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
+
+I've found pre-made functions for these.
+
+>> +
+>> +       val = readl(dw->dbi_base + 0x70 + 0x0c);
+>> +       val |= 0xf;
+>> +       writel(val, dw->dbi_base + 0x70 + 0x0c);
+
+Will fix to config-register 0x0c and try and find the relevant macros
+for this and the proper accessor macros for the dw driver.
+
+>> +
+>> +       val = readl_relaxed(dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
+>> +       val &= ~PCIE_DBI_RO_WR_EN;
+>> +       writel_relaxed(val, dw->dbi_base +  PCIE_MISC_CONTROL_1_OFF);
+>> +}
+>> +
+>>  static int fu740_pcie_start_link(struct dw_pcie *pci)
+>>  {
+>>         struct device *dev = pci->dev;
+>>         struct fu740_pcie *afp = dev_get_drvdata(dev);
+>> 
+>> +       pcie_sifive_force_gen1(pci, afp);
+
+I'll change this to fu740_pcie_force_gen1()
+
+>> +
+>>         /* Enable LTSSM */
+>>         writel_relaxed(0x1, afp->mgmt_base + 
+>> PCIEX8MGMT_APP_LTSSM_ENABLE);
+>>         return 0;
+>> --
+>> 2.34.1
+>> 
+>> 
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv

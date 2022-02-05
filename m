@@ -2,140 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE14A4AA8EC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 13:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBF74AA8F1
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 14:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379903AbiBEM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 07:59:04 -0500
-Received: from mout.gmx.net ([212.227.17.22]:57629 "EHLO mout.gmx.net"
+        id S1379912AbiBENAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 08:00:02 -0500
+Received: from mout.gmx.net ([212.227.15.18]:44621 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379880AbiBEM7C (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 07:59:02 -0500
+        id S1355661AbiBENAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 08:00:00 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644065920;
-        bh=xnR5tInK/u5lykmthzTAQflPIfF3ao8XC7TXRw6C/2Y=;
+        s=badeba3b8450; t=1644065980;
+        bh=1IqmQjorxNrt4F6tQMG/nOvbNUC2Mp91gxt+Hj3iYgM=;
         h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=fM0VSDFHPQvrKzQ+fbTvlGb6ICy1tgRWOYL4oYO2VsOGhMil28XzgWuSIlp/VReaT
-         jEr6tkkNOW56nfrzg9+TzvqcwMWarDawRV77A77p9wrW2GloJDCx4op2vYQlMS/FtW
-         5wbwDAwas54RqXvakOLA4KAMmRnhXFVje4AMg7fo=
+        b=Yf+xTvUfGhHGSnWu8+qcktMONlYsx28bdHok1EnRV5Zrnmjxzw7QnUSX30oTZ6CpR
+         Rin1hFmG3tHBAaLSZOtjd8gtm4Q4lHWa/bSrbkraznBxMZJmTISL7DcgfuRGnd7PCy
+         bznsbp1EfE8jS4eRthWPnAVVDfP9G3Y2wIGWhqxU=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMXQF-1mxHxn2SSV-00JcDo; Sat, 05
- Feb 2022 13:58:40 +0100
-Date:   Sat, 5 Feb 2022 13:58:39 +0100
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mg6e4-1mZ0ks0VTS-00haJx; Sat, 05
+ Feb 2022 13:59:40 +0100
+Date:   Sat, 5 Feb 2022 13:59:39 +0100
 From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
 To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
 Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Parthiban Nallathambi <pn@denx.de>,
-        linux-actions@lists.infradead.org
-Subject: Re: [PATCH v3 1/4] clk: actions: Terminate clk_div_table with
+        Stephen Boyd <sboyd@kernel.org>, Yang Ling <gnaygnil@gmail.com>
+Subject: Re: [PATCH v3 2/4] clk: loongson1: Terminate clk_div_table with
  sentinel element
-Message-ID: <Yf50f7wbJi9PnUNV@latitude>
+Message-ID: <Yf50uxydH7sttAVY@latitude>
 References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
- <20220205005232.772726-2-j.neuschaefer@gmx.net>
- <5567d063-39b3-adfb-6556-d9973fa2074b@amsat.org>
+ <20220205005232.772726-3-j.neuschaefer@gmx.net>
+ <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YBFJ4SofsUKDzzjR"
+        protocol="application/pgp-signature"; boundary="HXzDeesQ95HhXOjX"
 Content-Disposition: inline
-In-Reply-To: <5567d063-39b3-adfb-6556-d9973fa2074b@amsat.org>
-X-Provags-ID: V03:K1:41l+cW+d5pQhmIzZO8dZwyGex3A5zj9rmHZaal5XWgiHe8X5JTJ
- jF/RAWpgZ6aVAZve0UjBNc/E7izw/VsRYkernLAC3zgAPX/W9Wj8WyVfRbLmUW+UczTXDzu
- jGDHSBQhyyWnEr1jmFNoTCe3bgddvjCaFUXpgyTuPPCSKZ3aG4KgWNZorJuima1Ubbkinwd
- oF4na22DvQGIt/2fjWnag==
+In-Reply-To: <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
+X-Provags-ID: V03:K1:BrbQdp4GKw/jCPwkILQyxzKGlwAlUaOqAdpuJXjWj9+S7tOnyNs
+ /0rpgH5rFBDcvHMz1UDgngnbQFaVrpE69Nmb9b9Y1/2hVs6Ysp3hpsjHEPmI/mm+HjAGP/+
+ nzy01N4E9WNbB5jydL8+IgYm/kXnBRyslTiUFWD2HEqiVLw9tvWz7hMaBXUZa4Xi1iKGIuZ
+ Tv0bMY+3B0nbpCfr+ggAQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pMkWCdt5NtE=:sMfwhYwp04HwULsC4ikiHy
- Hf+M55MLvD++bdqrdj56hh9aySbxpDQIQwhpRgzYHkbZ09k6m18jOWyPKbpL8ZTORErw5qTah
- 4SubXNJXa++z2Hmg65EHz7Qma9rSrlDhusvjWVW4m00WBgrIKIXcdn+7hEDm75AgsPiyo+KBZ
- H5IGT14p0ibDu4tzpdhgOq/SiFFbYZ/8ZMvSN7sWTX5Ha5I1JxdoJIb6cGshnsspK/cJLw2v5
- s/WDG7jJubVIvU77edj11hv+I0uqVfRLAwqjKIDM3eJkVMVRUxMJ8lYRn68p23Iin+NH9Xske
- FvRI7HPZsIXCmHkFxedYqFH4Bi8lRJ56Gw0zTa6Jncv8FVhGBh55ko5aETHSbOpZ7WqbQan51
- iiERA999F7+NI4Ack7dt8/v6j0fVqECPHx54JmftnORfrzm6SMy5fzXQHOVIsJksZsc+bZomw
- zCcNVbj4Yrcz/MP3lzBPPvwB3o5HVGgwDHvfVgK3NlK3sK9Rk9A3uwkElBXE6rKxuTkNGIum2
- eHxG+9qAoGk98zhr7NzO1FHE9yHJEodQPfF6LgacLDI7aoNjTgKSUag+/6RYselczjmW3mE7G
- FLPhdyf8S0f0YNsmlBadCh5h0eS12mI9WH7W61oeO57vcA752pUIPugTTDZp2zoKHjv9PJ2W/
- j+pyA6kvy7/WdgRC7pC+irwl0h23bZqQl3c592QaVfAM5HnvS16/oUk7CCILe8ZX6+UjwISlV
- QzYHOpzBEPnwsn2A5SHgHNJ17eUj0snRVHYzUj5N7FSq76mFafUuOmDXbFTqyGU8Z/baedPAV
- A8INLdiZvwk231Fq0bxi5EjYLDvaGoq+gd+UHCmJL6PSQ1wVTcv1qpAhg9zYZT94RzQOMooA3
- ahrTfmDkdTpOR/pmTSgARj7MuUnFI2kW6Bd6ppaBtYIqS+Bw+omwkiGrKVdqH0hwLPMaFY8Pq
- vFACIf+33rBqI/WkloqbBIZvelsaWI1FNju8K1gRX1LmvSrmFPwZx8ifrVu/iOKlKH1skLeBp
- e91iXv6DDAVYBSohCLKoCaQbiY79QQ+VUCxn0XK6WKOD9IStDtnTqYIxExHW4n3cehbZ8vrlK
- ZE9V3BmNMHh/zA=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0QZG7XUGy58=:m5P+A9LQ8kYOHU+LAHsnFR
+ rxZ22AJ1toKvSE64l/pALe273Y3qPctoWy+vRRoqUyVYJ2cj6lH9/5J0z2CKZkcBsLWPV4xhX
+ SNlbgCF26OSMGv7deK/GDeX0H/K7zdwraWDhu5e5v5eHkNF0giJlxtcxPq2fGFBxtKdAqjktC
+ wr0kNIpbUQSFGj1iW4WYRSF8opLaIWjoxo+zV9m8lMyU8m2UJLZmabzeoT+vMQQX4RShkCxdQ
+ IZtR4tZOby2ePxdpj1XM8SiXBAjZp0Sxu19J77AlwxVXWjyE1CskOS2cbDp3AQSHRo8DldKl2
+ r7xmb7qnuhnT/Y2ce1F0HkQq/bu22Nc5z2zCbJseJby8EKkt/s0RZa1RXCrITtNoHfl8itp0S
+ MCY/aZKMdmjIHfmqSHVj/hSyIdMy//pC++f3TBfkfD7ORezpf2h15QnKzt/6rBLYOwwx/Nidu
+ 5KTQARHmmDPNkz+aIXsPJ8oOaIYfbk/ArdUJ/XqGpz2F3Pqstt+QOjiHhilixnvNUtyXClVal
+ +03zIoxH77aMNziouf/9hMTSxqbV7yBCJwBiRbpVaLpauVTRhSwRFqifjx1AI2r013YxsFueq
+ C+giweY5xmRgcsAQ1BgIuUqmETGNpc772Rn5WJ4QaZjVdfvqLO0rZC11uH60+yS9RkCWZiTdm
+ k5HjF/5U0Bv9yxzWRF1n1SkNrjJonYT5G0sYID48SQsEPcMnZq9/ybzG+mhpQUtsShkO+t5m7
+ 6V2SSe+GKzc0nQD8UZMXFbBLfxk8kBWaFy2AmyVeH5C6D0BneQTG2Y0lxLuMP0KzDGmVBubNz
+ rIjqWmFYr9eOpfHVhOWkdnDxu4cvWTGYTRMJ4p6LxGvVXa4RKN9uLa7N0fsfuR+lYS6lCYa5M
+ 76zGgO/KmexeEaCA/ntgrFdxdqGZED2y5UpbrCrJDlqqUnaH8QOZ1iuB+NnkVww+w5EZVzhAD
+ RNC/5N/c3r6A6eFJ3o95DERgfFQkGW2HhwWb3X2IVN5qkKAOTi0Fu3IyvStYxipMJJsTDubr6
+ /SSuUxD4+gK7k+Xhe5k1uHNVAGQn9M7UjVlUgqAiIHitkD5YcaFz5V/F7ClLHAPGIYBrzyqvT
+ TKVhVC5nb/qpOI=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---YBFJ4SofsUKDzzjR
+--HXzDeesQ95HhXOjX
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 05, 2022 at 01:15:46PM +0100, Philippe Mathieu-Daud=C3=A9 wrote:
+On Sat, Feb 05, 2022 at 01:17:10PM +0100, Philippe Mathieu-Daud=C3=A9 wrote:
 > On 5/2/22 01:52, Jonathan Neusch=C3=A4fer wrote:
 > > In order that the end of a clk_div_table can be detected, it must be
 > > terminated with a sentinel element (.div =3D 0).
 > >=20
-> > In owl-s900.s, the { 0, 8 } element was probably meant to be just that,
-> > so this patch changes { 0, 8 } to { 0, 0 }.
-> >=20
-> > Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
-> > Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
+> > Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
 > > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
 > > ---
-[...]
-> >   static struct clk_div_table rmii_div_table[] =3D {
-> >   	{0, 4},   {1, 10},
-> > +	{0, 0},
+> >=20
+> > v3:
+> > - no changes
+> >=20
+> > v2:
+> > - Add Fixes and R-b tags
+> > ---
+> >   drivers/clk/loongson1/clk-loongson1c.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loong=
+son1/clk-loongson1c.c
+> > index 703f87622cf5f..a6f9f20fc8b99 100644
+> > --- a/drivers/clk/loongson1/clk-loongson1c.c
+> > +++ b/drivers/clk/loongson1/clk-loongson1c.c
+> > @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] =3D=
+ {
+> >   	[1] =3D { .val =3D 1, .div =3D 4 },
+> >   	[2] =3D { .val =3D 2, .div =3D 3 },
+> >   	[3] =3D { .val =3D 3, .div =3D 3 },
+> > +	[4] =3D { /* sentinel */ },
 >=20
-> Again, clearer to use:
->=20
->         { /* sentinel */ }
->=20
-> (without the trailing comma, to enforce this is the last entry).
+> Sorry for being nitpicky here, but we don't need the trailing comma,
+> since this is the last entry.
 
-This style is locally consistent in the file, so anyone who reads the
-file will encounter { 0, 0 } elements anyway.
+Good point.
 
-So, I think it makes sense to:
-
-- Keep this patch as is (except for the trailing comma, I'll remove that)
-- Add a second patch that replaces all the sentinel elements with
-  { /* sentinel */ }
-
-This patch can go into stable branches, and the style cleanup doesn't
-have to.
-
-
-Best regards,
+Thanks,
 Jonathan
 
---YBFJ4SofsUKDzzjR
+--HXzDeesQ95HhXOjX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH+dF0ACgkQCDBEmo7z
-X9uIcxAAwTPCLuuevTIdsEYvfMcSraNZ0Eq2WUy/QuVS6LJO6Vo9+bCxU8ZiaPrk
-i5BwZnq2/ISWmu2ustVPb7p5xQ6slYZjB23cp8bo/t4lV9kk0AWF5Gv1m55UTGC5
-ApyNm18NS3EOm2vE9VgKLuBMs5d8XHcdy2/DRkGfrJTYMKw8Hci2vROwXaf+xSbR
-nceq9Ay2IUYeRcLJN6BKMUwuHWHnm/0JPhKMks4RgPmY6o2QdUcNzQiYs041jcvz
-w2yrA0/aUAtQF9WOxTRTAMuClwr6yYNxGq7HypC8LSS0Acm3s5oip9+j8PXmuywK
-Zppv9QcAYj9btke+sSgGVZFP+55ST1PrJoXTCG4e6PzXHVtlexp2lGCEFzVDIro7
-nid2IDNaTirON78e5+fP7vSc+HdWAQBtTW4/UOrZ3Vlo7f20ALRjsBBXaVB7msCY
-rnkbtCiJn8XTJl2U4d+4WeWiYW7BdM0XlwIYNSMPJoAyMvIgsFH3EvGmgzfZmsET
-GpuEuW1EsNmBmQcKWW8wRH6JB4J3W5IL+hN5/C/m5hXbEx/ShXYJpKDj0g5+DUS7
-uZRLcmv4bxrXG6B/gyS0zlIC89iurXVKpaAhiuJJpvJrgJjcXy6NBOzbJCYtAiGn
-GfbxAFDkepj2hLav+uSxz9qQyZk8N4df8f3SVrmG+D3FA/twP8Y=
-=SrEk
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH+dLoACgkQCDBEmo7z
+X9tZsg/+KEJgbQUsX59zGsXcTp9JTu2ZhvyRUZU1Us8T3jTG0jvjS3Itl+tqRX2M
+P/sphmKa34AVJKfK0NDW0JUToT46cRzaR9xgHE1MFoKmyWHqQymhuOTWeQthDH4R
+0+wHNt7PAQvY5r29873yrzEQU+0sN5iuydaiI5DecaYtz0w3pxltraEUHZ0CK5kw
+wuLoDZC56058LeXmCm5TOzAe+kGAoNhaEd1glLZbyBl5iGnAoi0gadJNZaGBjjx9
+yURq3t9/j4mHqcrFaBLhNysQaNtJyMxijy06BRzzywEPfigdRBE2/1gLAbeR6YeT
+PIKGTxGme/UdPHrhG5A+VEHwMHxn5q4ktWP2IKIiV1lhCUoklTdn8bSNHD/3XJYI
+0IruXzxigB2W0JLCW5q8L0MXL7BWFG7S3kCTpD3JG8BAIFuG58haNTIEiBO/Hl/d
+mnx6Ys+FLXA0k2v170vEDUHVmiC5xoNBsiaUaLJ+VzpTQlDrz899BZKMjsG9a8vq
+BXbLBYqhX44BCyvTy4F35AjWMjn3jJrtY7510ubk4/fKIy4yxb/Yth1rk2In3v1I
+ktydv164jCDiRHDjI1oJDGGTgK/5fN0InbxpdoaIJTNJhT/osiVcKbPAsSZPGSul
+Xc9wHQM3RPTKbDCAiKaEEHkodiJ2b6W0w9sVEW6bU68sbDVvm9w=
+=4g7R
 -----END PGP SIGNATURE-----
 
---YBFJ4SofsUKDzzjR--
+--HXzDeesQ95HhXOjX--

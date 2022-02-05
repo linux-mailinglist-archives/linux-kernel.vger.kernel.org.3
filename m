@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A494AA5FE
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D7E4AA5FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 03:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbiBECnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 21:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234701AbiBECns (ORCPT
+        id S240984AbiBECoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 21:44:19 -0500
+Received: from relay5.hostedemail.com ([64.99.140.40]:40360 "EHLO
+        relay5.hostedemail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235383AbiBECoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 21:43:48 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B09FC061348
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 18:43:46 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so6476464otp.4
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 18:43:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=ptR9arcgsxsyCBHT5svh2CJp+R1460e5VL52+gvh4sY=;
-        b=iBWC0rDndMbAJeR7VoG1YfMyeH5uEtF6kNG1xDmR9IPm0ImGhINjF5GuREsuf36yTo
-         k85S0GlwMXhBb6TtmfsU4wSvjqG/h7UCMO7NItqQrHCLmAXYu/KrvEISsdHBhOMsmW8P
-         LPP3IWiYk3mGrlnkg+8Wgc6yhp/1bja5qc9Ow=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=ptR9arcgsxsyCBHT5svh2CJp+R1460e5VL52+gvh4sY=;
-        b=FREg2tyXvzng+pesIdpFIEBwQZANAPJmSuRwtglPURCCk7YFoU9qUWFCWaJKYBWK5+
-         JIVGDbAm5A5yAX+Ff5wckqMV3/93LxUg3wPi3uJcDEhlZQfLXfjVxZCwn8CmM7mSTQ0v
-         KrUxCTHg6eugq9GfZSvy9Fys0rewSv2t0ChyX+XE9Dw3+WrlcpIiala0cbhla/Fu7SiI
-         o8QLCx2kLXe0b8ilmSMcSEE87YN2Qun1k5/Dx7+w1397lkEo61G9ONMmih/befISBrLz
-         Az0vElfRiAkwBSGWXP8M4XWy8b8G6v0nz+PsSRKKjvfUwCmY6zkL6CNo4h0BTnXcs9VB
-         gIcA==
-X-Gm-Message-State: AOAM5317gUGC6xbEQN5SW05qt8pm3oN2IRFlcwRXi0pM0fCWENSvfSE8
-        nqcpzI7hJg4p8zW0oY3uNcWCGPoKTJS1GEl8sXUDUMbZzeo=
-X-Google-Smtp-Source: ABdhPJyJl7J0DMcwsErnsAZ2e6quUEfYM4CAsNNLCnhFVIsc+VDuH7t47yMKxkQ316BIMkPyEJu0huVO3XOQxkaUfoA=
-X-Received: by 2002:a9d:6f06:: with SMTP id n6mr637882otq.159.1644029025712;
- Fri, 04 Feb 2022 18:43:45 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sat, 5 Feb 2022 02:43:45 +0000
+        Fri, 4 Feb 2022 21:44:14 -0500
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 4B4E2232EE;
+        Sat,  5 Feb 2022 02:44:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 742812F;
+        Sat,  5 Feb 2022 02:43:57 +0000 (UTC)
+Message-ID: <b2aeaf001ad7551b902fc1d366abce71f94d49d6.camel@perches.com>
+Subject: Re: [PATCH] MAINTAINERS: Add RTLA entry
+From:   Joe Perches <joe@perches.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 04 Feb 2022 18:44:10 -0800
+In-Reply-To: <50d8870522580905a1c7f3e6fb611a700f632af1.1643994005.git.bristot@kernel.org>
+References: <50d8870522580905a1c7f3e6fb611a700f632af1.1643994005.git.bristot@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20220202053207.14256-1-tdas@codeaurora.org>
-References: <20220202053207.14256-1-tdas@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Sat, 5 Feb 2022 02:43:45 +0000
-Message-ID: <CAE-0n52zypP5Uhikbk01ZrMRoXyLKBv9wgjX6uRYD0iCOeqJag@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: qcom: sc7280: Add lpasscore & lpassaudio
- clock controllers
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: twsa77u64efx3jz5gqf3zxz5sez1jscc
+X-Spam-Status: No, score=-3.66
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 742812F
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+8p+WoQeft1jhqNsBCoPAjCG0YSuapzXk=
+X-HE-Tag: 1644029037-606597
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Taniya Das (2022-02-01 21:32:07)
-> Add the low pass audio clock controller device nodes.
->
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
+On Fri, 2022-02-04 at 18:18 +0100, Daniel Bristot de Oliveira wrote:
+> Add an RTLA entry in the MAINTAINERS file with Steven Rostedt and
+> myself as maintainers.
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -19581,6 +19581,14 @@ F:	Documentation/trace/timerlat-tracer.rst
+>  F:	Documentation/trace/hwlat_detector.rst
+>  F:	arch/*/kernel/trace.c
+>  
+> +Real-time Linux Analysis (RTLA) tools
+> +M:	Daniel Bristot de Oliveira <bristot@kernel.org>
+> +M:	Steven Rostedt <rostedt@goodmis.org>
+> +L:	linux-trace-devel@vger.kernel.org
+> +S:	Maintained
+> +F:	tools/tracing/rtla
+> +F:	Documentation/tools/rtla
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+ideally both of these F: entries would have a trailing slash
+
+F:	tools/tracing/rtla/
+F:	Documentation/tools/rtla/
+
+

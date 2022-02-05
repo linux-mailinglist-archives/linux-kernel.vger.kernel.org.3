@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8FC4AA722
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BD94AA731
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378872AbiBEGdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 01:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S1378979AbiBEGrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236390AbiBEGdC (ORCPT
+        with ESMTP id S230008AbiBEGrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 01:33:02 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A939C061347
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 22:33:01 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id i34so16776862lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 22:33:01 -0800 (PST)
+        Sat, 5 Feb 2022 01:47:47 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19A8C061346;
+        Fri,  4 Feb 2022 22:47:43 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id e6so6984693pfc.7;
+        Fri, 04 Feb 2022 22:47:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/I4uenCSy6lKFDX+vozXBZPrlb1lnpOy6352DMFUA8c=;
-        b=rq24Q2AFZ5EoKbcKKkftdHvOqnaftuHw87PzEuO4Mjmi1KqZOJK69ovDu1K371qjBa
-         DDXJPDZ5iX4ThIye9JZjA2NYYesaKh5lmhtCUGiaiPvTBSGYOHsfEDC7tWjBLd5UMeH6
-         aXnz2Zsy56u1y56TWSMCmsF7fdOuvjRD7VnTOQ/3O7r9FkAo/Wgn2dO/rw7JyRF+qMVi
-         Y16QISg8FsYxTHzUdTSgWMBIIeCFS1VUMWekJa2tm+xEjI2i5VVGl1QFlgpqm/WWipFc
-         dXw/5OF4N74vt8K7liy4FV/Ft+nh9VV0VjvUzwmEIkzWBGVdm/CYbNPjpL9xlOI8KcgU
-         4e8g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=FCcXnFe+AjDLJWHmF/M/9s62o5qLgGSOORd9vpKd/v4=;
+        b=JVp1WoeFWk2sg9YssMpSZiyjxY7guelYiPtHdZgPaqpz2BNVY/Z7syt4nDNbUkv7ga
+         HuW+LXnA4oVmkJ8QraA5INWrpTPLnRWkg54p0MPhvhD86LZMyCd+SaEKVv6mxSZK0ec7
+         JozKoKariZ+A23A0hjoEJ+TcGuiMS+A9DnBJgP7y1l8OoiqVJqDpf/b44hLlh3Shs4KY
+         OlpOWAMfvzjxVSgiCP6ItTN8G9j4e7afQdXr8huptEr1PqXpql6HIQXH4B0U261IJLK3
+         DcFG69HyocXH/b1UXkecfuywfbcXMS3qgnmc4iKqeVxzlwIMC2vEJq7ESunq0HufLlCQ
+         Qybg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/I4uenCSy6lKFDX+vozXBZPrlb1lnpOy6352DMFUA8c=;
-        b=x7KZTR8khLHLCg36fu9TvqyFZIwEg5+lgsYkeo/g7DSsGoG82vqt+GEjhsWNYqtbCu
-         H07C9dxy033v0uJ7ibWCnOX6aQyf2lCJoDOjcLm4bpvYxTUFGQ11Pp3Dr74qnCM3T/t1
-         iQtv/3SXS1mtsScktJiMDjWvjzf1n/WEg8yM9YZcmEb6i2+/i6sDpFOxbsA6GHky0UNH
-         bxmdo46Mz4AHIPOpeipF4cgNggNDN4Sy8ZOZe1dshlRE7GB3FUkyCZU773SuxBgQbRIZ
-         KlILehJxVkg2mn2b1n0fhOSgjPUDxXxlwSBIfqvVMgysUW1kHKqF+IrNhx7dYchCjGnV
-         cy6A==
-X-Gm-Message-State: AOAM531OWv0K+W9phFrOgSShOc2LGbmmpOQ+yjQZiT/L/248upxz0rO6
-        iErMvAHhF+e67htvT3o1k/6wv5LauDkC/PKKYlmajQ==
-X-Google-Smtp-Source: ABdhPJzBS0ATlNIJS0wbnbUmcCt1uFbSET2zzNCr5rG+3DvrfqXNdkPOzH/OnKXNo0LNwTjK2rMAXmYqafs8B4rB57A=
-X-Received: by 2002:a05:6512:10ce:: with SMTP id k14mr1651918lfg.210.1644042778863;
- Fri, 04 Feb 2022 22:32:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20220125051736.2981459-1-shakeelb@google.com>
-In-Reply-To: <20220125051736.2981459-1-shakeelb@google.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 4 Feb 2022 22:32:47 -0800
-Message-ID: <CALvZod6Tdb76hvg+GA+5mvFWrkHi2nNXJ64TLmhUisZVxbLsiQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: io_uring: allow oom-killer from io_uring_setup
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FCcXnFe+AjDLJWHmF/M/9s62o5qLgGSOORd9vpKd/v4=;
+        b=A0yrjnLxLvIDNc0ldMAkVnW7k2HvGrWIK1UBMOSb9vrJQNKGx2kwTQTsDl/rwfitvw
+         IceE33PmnGpAzP+tPbytSF+cEidgoxYHS9t8HsyjVX80B5RO5M8TMaCaSCJCwDzwtY81
+         psdJ3ezezSkcKbhux/G6qODzXMmX9mHqdQfD8EiAFy5rWO/wuMohgGOyFFjw79uv3kfo
+         zD+3+20R8USHf6FkSpXxqUnqTgn5JuRByHRo11hWLYhJ+EvtxGlH+PGLIappputzSBTJ
+         mSpAGUxTaWb54JRZ74Jr3XxdUqXjyf4T7TOa8ETpVBbruflSLLsmJ5QLCs+AG4P0geWt
+         ZBgw==
+X-Gm-Message-State: AOAM5302hrussa5lwYdU229Kj1W/w7F0XLmx+GQX5Vt1CQw58TpfJ3gm
+        ZtEGMJ8/McoQ7mGQO84p9vo=
+X-Google-Smtp-Source: ABdhPJyOmL7EE5vRNAoEwnCmzFSGS6hXIwn08o0tG4frEhx91YUIlsKZxgtNtMxlQiEr8iP1js/93g==
+X-Received: by 2002:a63:27c4:: with SMTP id n187mr2049424pgn.504.1644043662372;
+        Fri, 04 Feb 2022 22:47:42 -0800 (PST)
+Received: from localhost.localdomain ([2405:201:2003:b021:6001:8ce1:3e29:705e])
+        by smtp.gmail.com with ESMTPSA id nu15sm1706233pjb.5.2022.02.04.22.47.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 04 Feb 2022 22:47:42 -0800 (PST)
+From:   Raag Jadav <raagjadav@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Raag Jadav <raagjadav@gmail.com>
+Subject: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
+Date:   Sat,  5 Feb 2022 12:14:52 +0530
+Message-Id: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,41 +70,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 9:17 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On an overcommitted system which is running multiple workloads of
-> varying priorities, it is preferred to trigger an oom-killer to kill a
-> low priority workload than to let the high priority workload receiving
-> ENOMEMs. On our memory overcommitted systems, we are seeing a lot of
-> ENOMEMs instead of oom-kills because io_uring_setup callchain is using
-> __GFP_NORETRY gfp flag which avoids the oom-killer. Let's remove it and
-> allow the oom-killer to kill a lower priority job.
->
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
+Enable MAC SerDes autonegotiation to distinguish between
+1000BASE-X, SGMII and QSGMII MAC.
 
-Jens, any comments or concerns on this patch?
+Signed-off-by: Raag Jadav <raagjadav@gmail.com>
+---
+ drivers/net/phy/mscc/mscc.h      |  2 ++
+ drivers/net/phy/mscc/mscc_main.c | 24 ++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-> ---
->  fs/io_uring.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index e54c4127422e..d9eeb202363c 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -8928,10 +8928,9 @@ static void io_mem_free(void *ptr)
->
->  static void *io_mem_alloc(size_t size)
->  {
-> -       gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP |
-> -                               __GFP_NORETRY | __GFP_ACCOUNT;
-> +       gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP;
->
-> -       return (void *) __get_free_pages(gfp_flags, get_order(size));
-> +       return (void *) __get_free_pages(gfp, get_order(size));
->  }
->
->  static unsigned long rings_size(unsigned sq_entries, unsigned cq_entries,
-> --
-> 2.35.0.rc0.227.g00780c9af4-goog
->
+diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
+index a50235f..366db14 100644
+--- a/drivers/net/phy/mscc/mscc.h
++++ b/drivers/net/phy/mscc/mscc.h
+@@ -195,6 +195,8 @@ enum rgmii_clock_delay {
+ #define MSCC_PHY_EXTENDED_INT_MS_EGR	  BIT(9)
+ 
+ /* Extended Page 3 Registers */
++#define MSCC_PHY_SERDES_PCS_CTRL	  16
++#define MSCC_PHY_SERDES_ANEG		  BIT(7)
+ #define MSCC_PHY_SERDES_TX_VALID_CNT	  21
+ #define MSCC_PHY_SERDES_TX_CRC_ERR_CNT	  22
+ #define MSCC_PHY_SERDES_RX_VALID_CNT	  28
+diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+index ebfeeb3..6db43a5 100644
+--- a/drivers/net/phy/mscc/mscc_main.c
++++ b/drivers/net/phy/mscc/mscc_main.c
+@@ -1685,6 +1685,25 @@ static int vsc8574_config_host_serdes(struct phy_device *phydev)
+ 			   PROC_CMD_RST_CONF_PORT | PROC_CMD_FIBER_1000BASE_X);
+ }
+ 
++static int vsc85xx_config_inband_aneg(struct phy_device *phydev, bool enabled)
++{
++	int rc;
++	u16 reg_val = 0;
++
++	if (enabled)
++		reg_val = MSCC_PHY_SERDES_ANEG;
++
++	mutex_lock(&phydev->lock);
++
++	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_3,
++			      MSCC_PHY_SERDES_PCS_CTRL, MSCC_PHY_SERDES_ANEG,
++			      reg_val);
++
++	mutex_unlock(&phydev->lock);
++
++	return rc;
++}
++
+ static int vsc8584_config_init(struct phy_device *phydev)
+ {
+ 	struct vsc8531_private *vsc8531 = phydev->priv;
+@@ -1772,6 +1791,11 @@ static int vsc8584_config_init(struct phy_device *phydev)
+ 					      VSC8572_RGMII_TX_DELAY_MASK);
+ 		if (ret)
+ 			return ret;
++	} else {
++		/* Enable clause 37 */
++		ret = vsc85xx_config_inband_aneg(phydev, true);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	ret = genphy_soft_reset(phydev);
+-- 
+2.7.4
+

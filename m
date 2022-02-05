@@ -2,139 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CD94AA77B
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAF34AA785
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 09:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379603AbiBEHwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 02:52:17 -0500
-Received: from comms.puri.sm ([159.203.221.185]:54694 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229379AbiBEHwP (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:52:15 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 55096DF537;
-        Fri,  4 Feb 2022 23:52:15 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tlEkKNwbwbK6; Fri,  4 Feb 2022 23:52:14 -0800 (PST)
-Date:   Sat, 5 Feb 2022 08:51:51 +0100
-From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/8] media: imx: Fail conversion if pixel format not
- supported
-Message-ID: <20220205085151.61088d8e.dorota.czaplejewicz@puri.sm>
-In-Reply-To: <Yf34CXvZQPQPAxma@pendragon.ideasonboard.com>
-References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
-        <20220204121514.2762676-5-alexander.stein@ew.tq-group.com>
-        <Yf34CXvZQPQPAxma@pendragon.ideasonboard.com>
-Organization: Purism
+        id S1379671AbiBEIBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 03:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230215AbiBEIBY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 03:01:24 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193CC061346;
+        Sat,  5 Feb 2022 00:01:22 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id m11so17985015edi.13;
+        Sat, 05 Feb 2022 00:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Spi4/TBWuPHr2EowITjtYU4PenRDdKDN3wwrLsjSjk4=;
+        b=cvL613u1xOlgUDBHgPmghGnK1CdTmaklLNkMaQZ0R1bIp46Zp2C23aDSqiNG3FEdGT
+         b96KvwJW4riA5fuQbd9Kb9KgxNBsjjTIpDOEQtocAe9P/onMf7Fke+coev4X1/L2crTW
+         nxvYguQbbBm61i5uIO6Eqsl6Y2of7QnTyv8u2Q1UyBDr1yqspp6QmdTvga+JL9UvFuRr
+         XBwnAXTddRTd13/o2Ei67SLk1lvmGPvBZ18ZqGM2h7ZpkIOpbBoaT3T4GWB60eBwxTAl
+         kUJLafF25jv95yG2gZWv+8wxdo4LBx5SlN0AsP6bU+ZmqKwG47UB7v1QkdRoF8rQlxRp
+         OHbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Spi4/TBWuPHr2EowITjtYU4PenRDdKDN3wwrLsjSjk4=;
+        b=P4iZczR0H3O+Q2lWDa7oFVt8+ETo1tBr4ecQnsUTnnMJUFICWIdBmQLAuUd5XZatdP
+         kA0vrB6sW/4hQCNfI1yxuDTlf8rUBXoQzW+a2Nn/s/S8XJP3ZS/K/zo1O5QQdL67Cw+l
+         DFIb0AhDP0+oAVqm16H0TjLA7TZukg9mbYq5M+IUIWzkoPOTMEFs6yM0mAaPhD5X9j9j
+         L3ybodsQIaDJRcfNFNXg2wZ1HJrOfsdug0q1+dlG3osF3zCJRtoQXd6Ru9/a9JtoVkBL
+         Hs/AJ3LgDJxh50+wTtRDR/leBVKTuvAAMD/z5tmttH3bzQ+SqYhC4I+DIv3MNYzSjujQ
+         9tMQ==
+X-Gm-Message-State: AOAM5335NYL8fMtNZovIr95WJg99xNESqt5iyYS+MuMmz2ykdl5/5l3p
+        R5EWVXeREFMoGB3sxMK/NVvnpcgOFUyXk+M+Bys=
+X-Google-Smtp-Source: ABdhPJxM1BHtMF4dTwKP6fg1UinVXOr+sBR/5ESOhk3z5WlFXdO9MAXRdxxLLkuNO1j+84XOCVJuxShiOa2a4vYfoD4=
+X-Received: by 2002:a05:6402:5290:: with SMTP id en16mr688163edb.236.1644048081477;
+ Sat, 05 Feb 2022 00:01:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GkcT.DU6W1y2u=sTikbv/br";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220204140813.4007173-1-imagedong@tencent.com>
+In-Reply-To: <20220204140813.4007173-1-imagedong@tencent.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Sat, 5 Feb 2022 15:56:28 +0800
+Message-ID: <CADxym3aQqMhgcOnK-HMto29GQ3zN_4fvqE9WpYuL_ZVwqWyp4Q@mail.gmail.com>
+Subject: Re: [PATCH v5 net-next] net: drop_monitor: support drop reason
+To:     Jakub Kicinski <kuba@kernel.org>, David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@idosch.org>
+Cc:     Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GkcT.DU6W1y2u=sTikbv/br
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Feb 4, 2022 at 10:08 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+> drop_monitor is able to report the drop reason to users by netlink.
+>
+> The drop reasons are reported as string to users, which is exactly
+> the same as what we do when reporting it to ftrace.
+>
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+> v5:
+> - check if drop reason larger than SKB_DROP_REASON_MAX
+>
+> v4:
+> - report drop reasons as string
+>
+> v3:
+> - referring to cb->reason and cb->pc directly in
+>   net_dm_packet_report_fill()
+>
+> v2:
+> - get a pointer to struct net_dm_skb_cb instead of local var for
+>   each field
+> ---
+>  include/uapi/linux/net_dropmon.h |  1 +
+>  net/core/drop_monitor.c          | 29 +++++++++++++++++++++++++----
+>  2 files changed, 26 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+> index 66048cc5d7b3..1bbea8f0681e 100644
+> --- a/include/uapi/linux/net_dropmon.h
+> +++ b/include/uapi/linux/net_dropmon.h
+> @@ -93,6 +93,7 @@ enum net_dm_attr {
+>         NET_DM_ATTR_SW_DROPS,                   /* flag */
+>         NET_DM_ATTR_HW_DROPS,                   /* flag */
+>         NET_DM_ATTR_FLOW_ACTION_COOKIE,         /* binary */
+> +       NET_DM_ATTR_REASON,                     /* string */
+>
+>         __NET_DM_ATTR_MAX,
+>         NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+> diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+> index 7b288a121a41..2d1c8e8dec83 100644
+> --- a/net/core/drop_monitor.c
+> +++ b/net/core/drop_monitor.c
+> @@ -48,6 +48,16 @@
+>  static int trace_state = TRACE_OFF;
+>  static bool monitor_hw;
+>
+> +#undef EM
+> +#undef EMe
+> +
+> +#define EM(a, b)       [a] = #b,
+> +#define EMe(a, b)      [a] = #b
+> +
+> +static const char *drop_reasons[SKB_DROP_REASON_MAX + 1] = {
+> +       TRACE_SKB_DROP_REASON
+> +};
+> +
+>  /* net_dm_mutex
+>   *
+>   * An overall lock guarding every operation coming from userspace.
+> @@ -126,6 +136,7 @@ struct net_dm_skb_cb {
+>                 struct devlink_trap_metadata *hw_metadata;
+>                 void *pc;
+>         };
+> +       enum skb_drop_reason reason;
+>  };
+>
+>  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+> @@ -498,6 +509,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>  {
+>         ktime_t tstamp = ktime_get_real();
+>         struct per_cpu_dm_data *data;
+> +       struct net_dm_skb_cb *cb;
+>         struct sk_buff *nskb;
+>         unsigned long flags;
+>
+> @@ -508,7 +520,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+>         if (!nskb)
+>                 return;
+>
+> -       NET_DM_SKB_CB(nskb)->pc = location;
+> +       cb = NET_DM_SKB_CB(nskb);
+> +       cb->reason = reason;
+> +       cb->pc = location;
+>         /* Override the timestamp because we care about the time when the
+>          * packet was dropped.
+>          */
+> @@ -606,8 +620,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+>  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>                                      size_t payload_len)
+>  {
+> -       u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
+> +       struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+>         char buf[NET_DM_MAX_SYMBOL_LEN];
+> +       enum skb_drop_reason reason;
+>         struct nlattr *attr;
+>         void *hdr;
+>         int rc;
+> @@ -620,10 +635,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+>         if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+>                 goto nla_put_failure;
+>
+> -       if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+> +       if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
+> +                             NET_DM_ATTR_PAD))
+> +               goto nla_put_failure;
+> +
+> +       reason = cb->reason;
+> +       if (reason < SKB_DROP_REASON_MAX &&
+> +           nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+>                 goto nla_put_failure;
 
-Hi Laurent,
+I guess I made a mistake here: assuming that the enum is unsigned.
+Please ignore this version, I'll make a new one.
 
-On Sat, 5 Feb 2022 06:07:37 +0200
-Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+Thanks!
+Menglong Dong
 
-> Hi Alexander and Dorota,
->=20
-> Thank you for the patch.
->=20
-> On Fri, Feb 04, 2022 at 01:15:10PM +0100, Alexander Stein wrote:
-> > From: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> >=20
-> > imx_media_find_mbus_format has NULL as a valid return value,
-> > therefore the caller should take it into account.
-> >=20
-> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> >  drivers/staging/media/imx/imx-media-utils.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >=20
-> > diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/stag=
-ing/media/imx/imx-media-utils.c
-> > index 32aaa2e81bea..e0a256a08c3b 100644
-> > --- a/drivers/staging/media/imx/imx-media-utils.c
-> > +++ b/drivers/staging/media/imx/imx-media-utils.c
-> > @@ -544,6 +544,9 @@ static int imx56_media_mbus_fmt_to_pix_fmt(struct v=
-4l2_pix_format *pix,
-> >  		cc =3D imx_media_find_mbus_format(code, PIXFMT_SEL_YUV); =20
->=20
-> The code passed to the function comes from the previous line:
->=20
-> 	imx_media_enum_mbus_formats(&code, 0, PIXFMT_SEL_YUV);
->=20
-> As far as I can tell, this is guaranteed to return a code that will
-> result in imx_media_find_mbus_format() returning a non-NULL pointer.
->=20
-While I am not well-versed in the implicit code style of the kernel, I deci=
-ded to leave it in because it makes the code more locally legible. With a c=
-heck here, even a non-functional one, there's no need to understand the int=
-ernals of `imx_media_find_mbus_format` that are only implicit. That makes t=
-he code less surprising when interested only in the outer function.
-
-The other advantage of a check is becoming robust against future changes to=
- `imx_media_find_mbus_format` itself.
-
-I don't have a strong preference about keeping or leaving this patch, but i=
-f this check was there in the first place, I wouldn't have spent time tryin=
-g to figure out whether there's a bug here.
-
-Cheers,
-Dorota
-
-> >  	}
-> > =20
-> > +	if (!cc)
-> > +		return -EINVAL;
-> > +
-> >  	/* Round up width for minimum burst size */
-> >  	width =3D round_up(mbus->width, 8);
-> >   =20
->=20
-
-
---Sig_/GkcT.DU6W1y2u=sTikbv/br
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmH+LJcACgkQADBpX4S8
-ZneVXA/8DT1/SWdTKX0nPQztfkSCXSKeoUukY7pJTyrUtwwlGHpsm80yXzEKUIp1
-5UpRjrLjStkvHVaP0ZN4FD3pp4k1F2jo/90J1BJuAyfyvwaEdd6rDe5xwnHGyO4M
-EOidAwrOJMqSwB1z4SGvdG75T/RhDaG8YsS4kXXjkdKqZH8HjySD/t4Eqp1PLlUR
-XnZDgzWGIOpXXQ1/46S1Pa4DnL2wmC/ZthojOta28k7myyfG40/p0hXPCDaf0DCF
-j6i3woxvGWf6dBR1txjWnFs8xDhuostpcwvDoEILE9Q97xsApFilVVbWPjZ/9Of4
-yOo1zUkbCPx8vqeA+1RLnUj+5xqmeAaF7Xyu2WQdCDCwXzr03gRUWPn9ualPBQlu
-O8ZI0e+AcM6OIduBF1266sKZoQNy4I68zdDkzO0+ON7qw2uHidGgxH5fjIPXtmwm
-S+jMZn0Kxse/hrQHLXUyFvJdCPNg2u4xDPELbN69oTql8M9HIF0dfe9oafpQb2/0
-XNMEQyeADvxUnf7bSRz6UDGBtmTzygkW2yXoi63EBkGakM6Ry4Ogr8scNes3vFeA
-Nw0vf8FL3i9TKjpKZimy+LwqzwJSYyAJ06dv6ugVSS7m8hRS3WyAYOH6+BF4Vizq
-Ptnp9ouFuj2rlb9l4ZCng+mErM95SdciJfZ9CnUJddBQyAyg5mc=
-=ygHY
------END PGP SIGNATURE-----
-
---Sig_/GkcT.DU6W1y2u=sTikbv/br--
+>
+> -       snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
+> +       snprintf(buf, sizeof(buf), "%pS", cb->pc);
+>         if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+>                 goto nla_put_failure;
+>
+> --
+> 2.34.1
+>

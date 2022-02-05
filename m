@@ -2,202 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5460A4AA6EC
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 06:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B334AA708
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 07:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238227AbiBEFls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 00:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiBEFln (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 00:41:43 -0500
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Feb 2022 21:41:42 PST
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D2CC061346
-        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 21:41:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644039702; x=1675575702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e7h91uG9gFzk8os7ey825VYijrgfLN45ZHagC7mGNZ8=;
-  b=iVamqqcCqMY6h4RSYnH74Wiayox7Ft1g8er2+ohtrfDMbj2f4CruSOk8
-   wcsGjdeKPZ9+TLAHAydFxySn3glcRqYCsmurovSOvjDg+SUUvz5WDSUaF
-   oX2FeKtP4/jAZ2jSdczeBev+hwnEqMcEFY5oBXhNWPqK7zH0raBPrRzeQ
-   oI0FR6RHp/EHSGyA87r3nrwFmHMQ6jjY783Qj40V3Aa0C3+kKDJnq2THX
-   /yFYH7WcTdNo4ORSOp8LwDujXj3oU47+yEvvqvWUTSidIT8yIobcezGvC
-   aORH5hmddqUw0oquObUDEPhhYXA1aRmqLlGnJ6Mgj5rXBg2raoPQkUMXr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248439406"
-X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="248439406"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:40:39 -0800
-X-IronPort-AV: E=Sophos;i="5.88,345,1635231600"; 
-   d="scan'208";a="539432637"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 21:40:39 -0800
-Date:   Fri, 4 Feb 2022 21:40:39 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 36/44] memremap_pages: Reserve a PKS PKey for eventual
- use by PMEM
-Message-ID: <20220205054039.GE785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-37-ira.weiny@intel.com>
- <2193142f0cf3785a4225e0393eace397cbbe86e6.camel@intel.com>
- <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
+        id S1348379AbiBEGI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 01:08:29 -0500
+Received: from mail.pr-group.ru ([178.18.215.3]:55884 "EHLO mail.pr-group.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236890AbiBEGI1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Sat, 5 Feb 2022 01:08:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=yNGCQoHG8+MFI4xF4xpFYp+Wgphi4GDGw/OoJhRKimA=;
+        b=Fo2nDNbyVbR0MFSF87yhLPh3AOTbbsz3Adb1KpRqXD4jQl26aRrZG17W30z3j4iDronhKGYzhAbuH
+         PLQWQ24MMgFehZZrcEphEqtvvnlJSXcPs1T0Fo1V3fNfeU9WmJwa4kgt33fgMVoEt89xOhkabNw1H9
+         /zklc4OW4k/Te4WGLZnVEtgDbkTsg9qXu+17fzK0IBE9sTKMb5Z3CzLgsFZDpWXRKWc18D5eMqYjrs
+         2nklDi9IWuhsbsaWLtYaaDT30RU9a3MnAxQWkJ6KdD/rsjFeKEnx1u+NCEmgdiQtHvJ1SMyCY0yyLj
+         lBbXpiFuvPrDm58hozTEb5H7q5J4YPw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.1.1366, Stamp: 3], Multi: [Enabled, t: (0.000013,0.020896)], BW: [Enabled, t: (0.000026,0.000002)], RTDA: [Enabled, t: (0.077268), Hit: No, Details: v2.24.0; Id: 15.52k2di.1fr47ujjd.804g; mclb], total: 0(700)
+X-Spam-Status: No, hits=0.0 required=4.0
+        tests=KERIO_ANTI_SPAM: -0.000, AWL: 0.808, BAYES_00: -1.665,
+        CUSTOM_RULE_FROM: ALLOW, TOTAL_SCORE: -0.857,autolearn=ham
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([178.70.66.234])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Sat, 5 Feb 2022 09:08:10 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        system@metrotek.ru, Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Subject: [PATCH] bus: imx-weim: add DT overlay support for WEIM bus
+Date:   Sat,  5 Feb 2022 08:50:05 +0300
+Message-Id: <20220205055006.23447-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPcyv4i_Jc865zEzNxbQB_XHqCwSS6zm_evquLv2BBu9ipa39Q@mail.gmail.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 09:12:11AM -0800, Dan Williams wrote:
-> On Tue, Feb 1, 2022 at 10:35 AM Edgecombe, Rick P
-> <rick.p.edgecombe@intel.com> wrote:
-> >
-> > On Thu, 2022-01-27 at 09:54 -0800, ira.weiny@intel.com wrote:
-> > >  enum pks_pkey_consumers {
-> > > -       PKS_KEY_DEFAULT         = 0, /* Must be 0 for default PTE
-> > > values */
-> > > -       PKS_KEY_TEST            = 1,
-> > > -       PKS_KEY_NR_CONSUMERS    = 2,
-> > > +       PKS_KEY_DEFAULT                 = 0, /* Must be 0 for default
-> > > PTE values */
-> > > +       PKS_KEY_TEST                    = 1,
-> > > +       PKS_KEY_PGMAP_PROTECTION        = 2,
-> > > +       PKS_KEY_NR_CONSUMERS            = 3,
-> > >  };
-> >
-> > The c spec says that any enum member that doesn't have an "=" will be
-> > one more than the previous member. As a consequence you can leave the
-> > "=" off PKS_KEY_NR_CONSUMERS and it will get auto adjusted when you add
-> > more like this.
-> >
-> > I know we've gone around and around on this, but why also specify the
-> > value for each key? They should auto increment and the first one is
-> > guaranteed to be zero.
+Add OF reconfiguration notifier handler for WEIM bus to setup Chip
+Select timings on runtime creation of child devices.
 
-Because it was easier to ensure that the init value had all the defaults
-covered.
+However, it is not possible to load another DT overlay with conflicting
+CS timings with previously loaded overlay, even if the first one is
+unloaded. The reason is that there is no acces to CS timing property of
+a device node being removed, thus we can't track which of configured CS
+are available for re-configuration.
 
-> >
-> > Otherwise this doesn't use any of the features of "enum", it's just a
-> > verbose series of const int's.
+Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+---
+ drivers/bus/imx-weim.c | 136 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 127 insertions(+), 9 deletions(-)
 
-True but does this really matter?
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index bccb275b65ba..a09e1d33a554 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -64,6 +64,11 @@ struct cs_timing_state {
+ 	struct cs_timing cs[MAX_CS_COUNT];
+ };
+ 
++struct weim_data {
++	void __iomem *base;
++	struct cs_timing_state timing_state;
++};
++
+ static const struct of_device_id weim_id_table[] = {
+ 	/* i.MX1/21 */
+ 	{ .compatible = "fsl,imx1-weim", .data = &imx1_weim_devtype, },
+@@ -128,21 +133,26 @@ static int imx_weim_gpr_setup(struct platform_device *pdev)
+ }
+ 
+ /* Parse and set the timing for this device. */
+-static int weim_timing_setup(struct device *dev,
+-			     struct device_node *np, void __iomem *base,
+-			     const struct imx_weim_devtype *devtype,
+-			     struct cs_timing_state *ts)
++static int weim_timing_setup(struct device *dev, struct device_node *np,
++			     const struct imx_weim_devtype *devtype)
+ {
+ 	u32 cs_idx, value[MAX_CS_REGS_COUNT];
+ 	int i, ret;
+ 	int reg_idx, num_regs;
+ 	struct cs_timing *cst;
++	struct weim_data *priv;
++	struct cs_timing_state *ts;
++	void __iomem *base;
+ 
+ 	if (WARN_ON(devtype->cs_regs_count > MAX_CS_REGS_COUNT))
+ 		return -EINVAL;
+ 	if (WARN_ON(devtype->cs_count > MAX_CS_COUNT))
+ 		return -EINVAL;
+ 
++	priv = dev_get_drvdata(dev);
++	base = priv->base;
++	ts = &priv->timing_state;
++
+ 	ret = of_property_read_u32_array(np, "fsl,weim-cs-timing",
+ 					 value, devtype->cs_regs_count);
+ 	if (ret)
+@@ -189,14 +199,15 @@ static int weim_timing_setup(struct device *dev,
+ 	return 0;
+ }
+ 
+-static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
++static int weim_parse_dt(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *of_id = of_match_device(weim_id_table,
+ 							   &pdev->dev);
+ 	const struct imx_weim_devtype *devtype = of_id->data;
+ 	struct device_node *child;
+ 	int ret, have_child = 0;
+-	struct cs_timing_state ts = {};
++	struct weim_data *priv;
++	void __iomem *base;
+ 	u32 reg;
+ 
+ 	if (devtype == &imx50_weim_devtype) {
+@@ -205,6 +216,9 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+ 			return ret;
+ 	}
+ 
++	priv = dev_get_drvdata(&pdev->dev);
++	base = priv->base;
++
+ 	if (of_property_read_bool(pdev->dev.of_node, "fsl,burst-clk-enable")) {
+ 		if (devtype->wcr_bcm) {
+ 			reg = readl(base + devtype->wcr_offset);
+@@ -229,7 +243,7 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+ 	}
+ 
+ 	for_each_available_child_of_node(pdev->dev.of_node, child) {
+-		ret = weim_timing_setup(&pdev->dev, child, base, devtype, &ts);
++		ret = weim_timing_setup(&pdev->dev, child, devtype);
+ 		if (ret)
+ 			dev_warn(&pdev->dev, "%pOF set timing failed.\n",
+ 				child);
+@@ -248,17 +262,25 @@ static int weim_parse_dt(struct platform_device *pdev, void __iomem *base)
+ 
+ static int weim_probe(struct platform_device *pdev)
+ {
++	struct weim_data *priv;
+ 	struct resource *res;
+ 	struct clk *clk;
+ 	void __iomem *base;
+ 	int ret;
+ 
++	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
+ 	/* get the resource */
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	base = devm_ioremap_resource(&pdev->dev, res);
+ 	if (IS_ERR(base))
+ 		return PTR_ERR(base);
+ 
++	priv->base = base;
++	dev_set_drvdata(&pdev->dev, priv);
++
+ 	/* get the clock */
+ 	clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(clk))
+@@ -269,7 +291,7 @@ static int weim_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	/* parse the device node */
+-	ret = weim_parse_dt(pdev, base);
++	ret = weim_parse_dt(pdev);
+ 	if (ret)
+ 		clk_disable_unprepare(clk);
+ 	else
+@@ -278,6 +300,82 @@ static int weim_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++#if IS_ENABLED(CONFIG_OF_DYNAMIC)
++static int of_weim_notify(struct notifier_block *nb, unsigned long action,
++			  void *arg)
++{
++	const struct imx_weim_devtype *devtype;
++	struct of_reconfig_data *rd = arg;
++	const struct of_device_id *of_id;
++	struct platform_device *pdev;
++	int ret = NOTIFY_OK;
++
++	switch (of_reconfig_get_state_change(action, rd)) {
++	case OF_RECONFIG_CHANGE_ADD:
++		of_id = of_match_node(weim_id_table, rd->dn->parent);
++		if (!of_id)
++			return NOTIFY_OK; /* not for us */
++
++		devtype = of_id->data;
++
++		pdev = of_find_device_by_node(rd->dn->parent);
++		if (!pdev) {
++			pr_err("%s: could not find platform device for '%pOF'\n",
++				__func__, rd->dn->parent);
++
++			return notifier_from_errno(-EINVAL);
++		}
++
++		if (weim_timing_setup(&pdev->dev, rd->dn, devtype))
++			dev_warn(&pdev->dev,
++				 "Failed to setup timing for '%pOF'\n", rd->dn);
++
++		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
++			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
++				dev_err(&pdev->dev,
++					"Failed to create child device '%pOF'\n",
++					rd->dn);
++				ret = notifier_from_errno(-EINVAL);
++			}
++		}
++
++		platform_device_put(pdev);
++
++		break;
++	case OF_RECONFIG_CHANGE_REMOVE:
++		if (!of_node_check_flag(rd->dn, OF_POPULATED))
++			return NOTIFY_OK; /* device already destroyed */
++
++		of_id = of_match_node(weim_id_table, rd->dn->parent);
++		if (!of_id)
++			return NOTIFY_OK; /* not for us */
++
++		pdev = of_find_device_by_node(rd->dn);
++		if (!pdev) {
++			dev_err(&pdev->dev,
++				"Could not find platform device for '%pOF'\n",
++				rd->dn);
++
++			ret = notifier_from_errno(-EINVAL);
++		} else {
++			of_platform_device_destroy(&pdev->dev, NULL);
++			platform_device_put(pdev);
++		}
++
++		break;
++	default:
++		break;
++	}
++
++	return ret;
++}
++
++struct notifier_block weim_of_notifier = {
++	.notifier_call = of_weim_notify,
++};
++#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
++
++
+ static struct platform_driver weim_driver = {
+ 	.driver = {
+ 		.name		= "imx-weim",
+@@ -285,7 +383,27 @@ static struct platform_driver weim_driver = {
+ 	},
+ 	.probe = weim_probe,
+ };
+-module_platform_driver(weim_driver);
++
++static int __init weim_init(void)
++{
++#if IS_ENABLED(CONFIG_OF_DYNAMIC)
++	WARN_ON(of_reconfig_notifier_register(&weim_of_notifier));
++#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
++
++	return platform_driver_register(&weim_driver);
++}
++module_init(weim_init);
++
++static void __exit weim_exit(void)
++{
++#if IS_ENABLED(CONFIG_OF_DYNAMIC)
++	of_reconfig_notifier_unregister(&weim_of_notifier);
++#endif /* IS_ENABLED(CONFIG_OF_DYNAMIC) */
++
++	return platform_driver_unregister(&weim_driver);
++
++}
++module_exit(weim_exit);
+ 
+ MODULE_AUTHOR("Freescale Semiconductor Inc.");
+ MODULE_DESCRIPTION("i.MX EIM Controller Driver");
+-- 
+2.34.1
 
-> 
-> Going further, this can also build in support for dynamically (at
-> build time) freeing keys based on config, something like:
-> 
-> enum {
-> #if IS_ENABLED(CONFIG_PKS_TEST)
-> PKS_KEY_TEST,
-> #endif
-> #if IS_ENABLED(CONFIG_DEVMAP_PROTECTION)
-> PKS_KEY_PGMAP_PROTECTION,
-> #endif
-> PKS_KEY_NR_CONSUMERS,
-> }
 
-This is all well and good until you get to the point of trying to define the
-initial MSR value.
-
-What Rick proposes without the Kconfig check is easier than this.  But to do
-what both you and Rick suggest this is the best crap I've been able to come up
-with that actually works...
-
-
-/* pkeys_common.h */
-#define PKR_AD_BIT 0x1u
-#define PKR_WD_BIT 0x2u
-#define PKR_BITS_PER_PKEY 2
-
-#define PKR_PKEY_SHIFT(pkey)    (pkey * PKR_BITS_PER_PKEY)
-
-#define PKR_KEY_INIT_RW(pkey)   (0          << PKR_PKEY_SHIFT(pkey))
-#define PKR_KEY_INIT_AD(pkey)   (PKR_AD_BIT << PKR_PKEY_SHIFT(pkey))
-#define PKR_KEY_INIT_WD(pkey)   (PKR_WD_BIT << PKR_PKEY_SHIFT(pkey))
-
-
-/* pks-keys.h */
-#define PKR_KEY_MASK(pkey)   (0xffffffff & ~((PKR_WD_BIT|PKR_AD_BIT) << PKR_PKEY_SHIFT(pkey)))
-
-enum pks_pkey_consumers {
-        PKS_KEY_DEFAULT                 = 0, /* Must be 0 for default PTE values */
-#if IS_ENABLED(CONFIG_PKS_TEST)
-        PKS_KEY_TEST,
-#endif
-#if IS_ENABLED(CONFIG_DEVMAP_ACCESS_PROTECTION)
-        PKS_KEY_PGMAP_PROTECTION,
-#endif
-        PKS_KEY_NR_CONSUMERS
-};
-
-#define PKS_DEFAULT_VALUE PKR_KEY_INIT_RW(PKS_KEY_DEFAULT)
-#define PKS_DEFAULT_MASK  PKR_KEY_MASK(PKS_KEY_DEFAULT)
-
-#if IS_ENABLED(CONFIG_PKS_TEST)
-#define PKS_TEST_VALUE PKR_KEY_INIT_AD(PKS_KEY_TEST)
-#define PKS_TEST_MASK  PKR_KEY_MASK(PKS_KEY_TEST)
-#else
-/* Just define another default value to fool the CPP */
-#define PKS_TEST_VALUE PKR_KEY_INIT_RW(0)
-#define PKS_TEST_MASK  PKR_KEY_MASK(0)
-#endif
-
-#if IS_ENABLED(CONFIG_DEVMAP_ACCESS_PROTECTION)
-#define PKS_PGMAP_VALUE PKR_KEY_INIT_AD(PKS_KEY_PGMAP_PROTECTION)
-#define PKS_PGMAP_MASK  PKR_KEY_MASK(PKS_KEY_PGMAP_PROTECTION)
-#else
-/* Just define another default value to fool the CPP */
-#define PKS_PGMAP_VALUE PKR_KEY_INIT_RW(0)
-#define PKS_PGMAP_MASK  PKR_KEY_MASK(0)
-#endif
-
-#define PKS_INIT_VALUE ((0xFFFFFFFF & \
-                        (PKS_DEFAULT_MASK & \
-                                PKS_TEST_MASK & \
-                                PKS_PGMAP_MASK \
-                        )) | \
-                        (PKS_DEFAULT_VALUE | \
-                        PKS_TEST_VALUE | \
-                        PKS_PGMAP_VALUE \
-                        ) \
-                        )
-
-
-I find the above much harder to parse and of little value.  I'm pretty sure
-that someone adding a key is much more likely to get the macro maze wrong.
-Reviewing a patch to add a key would be much more difficult as well, IMHO.
-
-I'm a bit tired of this back and forth trying to implement this for features
-which may never exist.  In all my discussions I don't think we have reached
-more than 10 use cases in our wildest dreams and only 4 have even been
-attempted with real code including the PKS test.
-
-So I'm just a bit frustrated with the effort we have put in to try and do
-dynamic or even compile time dynamic keys.
-
-Anyway I'll think on it more.  But I'm inclined to leave it alone right now.
-What I have is easy to review for correctness and only takes a bit of effort to
-actually use.
-
-Ira

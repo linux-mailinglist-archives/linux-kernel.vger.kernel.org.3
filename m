@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C6A4AA997
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6002E4AA99A
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 16:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355454AbiBEPKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 10:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244872AbiBEPKN (ORCPT
+        id S1357537AbiBEPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 10:16:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:42166 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229940AbiBEPQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 10:10:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0429C061348;
-        Sat,  5 Feb 2022 07:10:12 -0800 (PST)
+        Sat, 5 Feb 2022 10:16:18 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA73B8015A;
-        Sat,  5 Feb 2022 15:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E61FAC340EC;
-        Sat,  5 Feb 2022 15:10:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C1D7B80BD9;
+        Sat,  5 Feb 2022 15:16:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4703EC340E8;
+        Sat,  5 Feb 2022 15:16:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644073809;
-        bh=O7riATjePCEa2aBAqE1LJllm1RUVPXLHQNq5/gc3znc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oIpKsBjrj1LYhxJt6Y7ibc7zlZJaag2rHM1KZZZsvfuO/zaQNT0dRRlFOvE1tNgE9
-         ocsFx+/yD/P2HOcqzMAx3CjtvB5MaVR8DN3oiiBAuu2X9ayA5cz7jwAvj6V3o21R79
-         ZSSc6AA4anlRl4GTbv+jCO07P03fBp3ziDO5U8aZrEp0KAlGulkOnqKxZuh9J8/ykk
-         CViU0fDr+PrbUF00BfmDVXEfTjlZdQcl1XSSCYhK8UKte/gVsGdAxAbSu3mPP/MOc+
-         ekiyuQGDtuAgkRnmnEkvEYYyGbJJNYBmRbI9NEce+MOC6WhjiehrtZsK3jTf+ZXtaQ
-         MZeqw4/35Ujxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CCD28E5869F;
-        Sat,  5 Feb 2022 15:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1644074175;
+        bh=SIPhbdHKmWV6MppiCjN3egF7/k8xhne4taCD8UjBxe8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NqK84Z/iupWxKYPEI7t/l9f9mbCubnVPv43sCFs7KVDlgV4qis7Y3OqlWg4Kd4UZK
+         +Ibr1j6wyWWAPcB979opIraDAbnlA/FezcG28rW2Mc6D3RbXVmn0fGzbznEmEH6QuI
+         bEb6kVg4t070TclIszraqg6GuziNJxooARnuLPOUDPHMAiCMQGCl3bGgH9L4cQBHoF
+         qIyfjvURxwWwAgWnOryLm3VT43/Uvv8egflcBVV2tNGuoBIPXRh+99ndosUg3fc0IN
+         c4grOz/8dbvyRoTZ7CjwCFpw/kZax7cpRf7zzdxOtkopTTGznYLmw06K7RtN5AWet4
+         50cfL7ewB+UnQ==
+Date:   Sat, 5 Feb 2022 17:16:06 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-hexagon@vger.kernel.org, openrisc@lists.librecores.org
+Subject: Re: [PATCH] mm: Remove mmu_gathers storage from remaining
+ architectures
+Message-ID: <Yf6UthQtASGNgW8Q@kernel.org>
+References: <20220205141956.3315419-1-shorne@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] net: lan966x: add support for mcast snooping
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164407380983.16413.7086796356569573213.git-patchwork-notify@kernel.org>
-Date:   Sat, 05 Feb 2022 15:10:09 +0000
-References: <20220204091452.403706-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220204091452.403706-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        linux@armlinux.org.uk, f.fainelli@gmail.com,
-        vivien.didelot@gmail.com, vladimir.oltean@nxp.com, andrew@lunn.ch
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220205141956.3315419-1-shorne@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 4 Feb 2022 10:14:49 +0100 you wrote:
-> Implement the switchdev callback SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
-> to allow to enable/disable multicast snooping.
+On Sat, Feb 05, 2022 at 11:19:53PM +0900, Stafford Horne wrote:
+> Originally the mmu_gathers were removed in commit 1c3951769621 ("mm: now
+> that all old mmu_gather code is gone, remove the storage").  However,
+> the openrisc and hexagon architecture were merged around the same time
+> and mmu_gathers was not removed.
 > 
-> Horatiu Vultur (3):
->   net: lan966x: Update the PGID used by IPV6 data frames
->   net: lan966x: Implement the callback
->     SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
->   net: lan966x: Update mdb when enabling/disabling mcast_snooping
+> This patch removes them from openrisc, hexagon and nds32:
 > 
-> [...]
+> Noticed while cleaning this warning:
+> 
+>     arch/openrisc/mm/init.c:41:1: warning: symbol 'mmu_gathers' was not declared. Should it be static?
+> 
+> Signed-off-by: Stafford Horne <shorne@gmail.com>
 
-Here is the summary with links:
-  - [net-next,1/3] net: lan966x: Update the PGID used by IPV6 data frames
-    https://git.kernel.org/netdev/net-next/c/1c213f05a3e1
-  - [net-next,2/3] net: lan966x: Implement the callback SWITCHDEV_ATTR_ID_BRIDGE_MC_DISABLED
-    https://git.kernel.org/netdev/net-next/c/47aeea0d57e8
-  - [net-next,3/3] net: lan966x: Update mdb when enabling/disabling mcast_snooping
-    https://git.kernel.org/netdev/net-next/c/add2c844db33
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
 
-You are awesome, thank you!
+> ---
+>  arch/hexagon/mm/init.c  | 2 --
+>  arch/nds32/mm/init.c    | 1 -
+>  arch/openrisc/mm/init.c | 2 --
+>  3 files changed, 5 deletions(-)
+> 
+> diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
+> index f01e91e10d95..3167a3b5c97b 100644
+> --- a/arch/hexagon/mm/init.c
+> +++ b/arch/hexagon/mm/init.c
+> @@ -29,8 +29,6 @@ int max_kernel_seg = 0x303;
+>  /*  indicate pfn's of high memory  */
+>  unsigned long highstart_pfn, highend_pfn;
+>  
+> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+> -
+>  /* Default cache attribute for newly created page tables */
+>  unsigned long _dflt_cache_att = CACHEDEF;
+>  
+> diff --git a/arch/nds32/mm/init.c b/arch/nds32/mm/init.c
+> index f63f839738c4..825c85cab1a1 100644
+> --- a/arch/nds32/mm/init.c
+> +++ b/arch/nds32/mm/init.c
+> @@ -18,7 +18,6 @@
+>  #include <asm/tlb.h>
+>  #include <asm/page.h>
+>  
+> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+>  DEFINE_SPINLOCK(anon_alias_lock);
+>  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
+>  
+> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+> index 97305bde1b16..3a021ab6f1ae 100644
+> --- a/arch/openrisc/mm/init.c
+> +++ b/arch/openrisc/mm/init.c
+> @@ -38,8 +38,6 @@
+>  
+>  int mem_init_done;
+>  
+> -DEFINE_PER_CPU(struct mmu_gather, mmu_gathers);
+> -
+>  static void __init zone_sizes_init(void)
+>  {
+>  	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
+> -- 
+> 2.31.1
+> 
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sincerely yours,
+Mike.

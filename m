@@ -2,184 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56DD4AA4F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944CD4AA4FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378610AbiBEAQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:16:06 -0500
-Received: from mga05.intel.com ([192.55.52.43]:22677 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229709AbiBEAQF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:16:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644020165; x=1675556165;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OwHius7362OGmkrz3UVv1SxvPq5mRtgzd54EHiDqifE=;
-  b=GHwUzqirctWVUbYT5tbu5lozQ+9yD297BWjKJRtIPIhLCkrVVLfLahJO
-   4e9aJulCO/W9hHtRShzZV14r9XDj1SFmJ0U7cdKpmvGwnMeF8XRRrDaa2
-   RiTxF0Z3tcflwxVMsdEMdSBnBxIgx0y7+r8c9EOdSQvhFAo+KTD85kdXr
-   awIwfFnVK6ff/aR22pIKyvSTnzFFVQRJQEiCJyIgFwLWEUfL/zn4kJu8F
-   yZUQYfeivYosS+Kj8NzGGMlWuEM+spr8GPG3gFv+dXIkyqYjIRnc/rgOp
-   mQjsB0AT7O+UohpgneddcmxChsGF/HihhcpTq//WWDBwitp7aIl2g7SPL
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="334862568"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="334862568"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:16:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="566900289"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2022 16:16:02 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nG8kE-000YLn-0H; Sat, 05 Feb 2022 00:16:02 +0000
-Date:   Sat, 5 Feb 2022 08:15:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephen Boyd <swboyd@chromium.org>, benjamin.tissoires@redhat.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, Sean O'Brien <seobrien@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: Re: [PATCH 3/5] HID: Extract vivaldi hid feature mapping for use in
- hid-hammer
-Message-ID: <202202050807.BvUyitVE-lkp@intel.com>
-References: <20220204202021.895426-4-swboyd@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204202021.895426-4-swboyd@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1378714AbiBEASy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:18:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234296AbiBEASx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:18:53 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC994DF8E3C4;
+        Fri,  4 Feb 2022 16:18:49 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id z18so6256403ilp.3;
+        Fri, 04 Feb 2022 16:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=2RZuu+Iw1+YItKLtEPrw6IZI9pvOpPTzzhbgPTW7ZLU=;
+        b=U5KJzhCGn6ysyzcHc4dUFOy3fSYe1NSDMUe8wRp5/784Xxmgas0Ofhgf4IPE4LSLtY
+         DtSL8CoWzjtSz5NwOPh5/L+g8JhGukGciryy7PBuVbxxWnwGX173F/Ku7hStLm4kOpGy
+         iHHiA2bfJI9ImpLMCcqh/o/pDPiX7BAHisgyXn6vdEIgEhkJxPseX85iTvuRf21jTQrR
+         ITn9qVXYTAwLxVrq7BW3cBpsNB4JPW9NqEjzC9/7+DzXREODVhmRz3uKsVGf4wNjmMlS
+         W76JSDN8qsB36mXk1i7i8QVFfBLnDuI47LqkHOSEXK/XCaFqC5YugeCYwFo+zkO6YHti
+         +ywQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=2RZuu+Iw1+YItKLtEPrw6IZI9pvOpPTzzhbgPTW7ZLU=;
+        b=J8/FpW++N/47I3ylzxWb568jJyUVP3kyjPM8s+cCN9teY6sTtStYqI0aaxdLCEYhYA
+         rNwbMtpuPBHE8zZ5ri9jTs7hq2IZj/vpktNZmhI6mc32WNEpfl49XK433x5yHAb2J1GC
+         GPbeOeRB+O869fv9Dl7a4/A8PZ/n3htpOgke/vAiBx4ePXIoAnokVQWbbxgxqJu4e3Cp
+         V6r1h/u639aN36dQGR8nQkInp3sExByX1j301EvkOLX/uEsm5or0ZnlZomn6vOzbWUpq
+         1+HCTmc42s+YJQIk8rI7eEH8rwBdRfyNfgpURdA+Fc0/uxig26runIRwVdT8cMlSU/AZ
+         lbfg==
+X-Gm-Message-State: AOAM533QFKeN98AZRzr+E9zzxh/5n11TU7P4yD0bOuwKt/uEueFtnaNd
+        wx2STnIfyViDcffyam/Er65aot9j2y3gk1fE/uLnnQ==
+X-Google-Smtp-Source: ABdhPJwA7ajKw5rcNAainwKf0EbOYtimZNs8j7tjZ3nBqoxL2qfhVux93mHRSXhc4vc8UmQ2l97AOg==
+X-Received: by 2002:a05:6e02:12e6:: with SMTP id l6mr802828iln.10.1644020328721;
+        Fri, 04 Feb 2022 16:18:48 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id k14sm1796728ilv.74.2022.02.04.16.18.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 16:18:47 -0800 (PST)
+Message-ID: <61fdc267.1c69fb81.dcd7c.9a08@mx.google.com>
+Date:   Fri, 04 Feb 2022 16:18:47 -0800 (PST)
+X-Google-Original-Date: Sat, 05 Feb 2022 00:18:46 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220204091915.247906930@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 00/32] 5.15.20-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri,  4 Feb 2022 10:22:10 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.20 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.20-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-I love your patch! Yet something to improve:
+5.15.20-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-[auto build test ERROR on 26291c54e111ff6ba87a164d85d4a4e134b7315c]
-
-url:    https://github.com/0day-ci/linux/commits/Stephen-Boyd/Input-HID-Consolidate-ChromeOS-Vivaldi-keyboard-logic/20220205-042211
-base:   26291c54e111ff6ba87a164d85d4a4e134b7315c
-config: x86_64-randconfig-a004-20220131 (https://download.01.org/0day-ci/archive/20220205/202202050807.BvUyitVE-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/83759eb892fd16fd0bb7ff4bb0c4baa4e7a0283e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephen-Boyd/Input-HID-Consolidate-ChromeOS-Vivaldi-keyboard-logic/20220205-042211
-        git checkout 83759eb892fd16fd0bb7ff4bb0c4baa4e7a0283e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: mce_start()+0x4e: call to clear_bit() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_read_aux()+0x41: call to mca_msr_reg() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0x39d: call to test_bit() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x4e: call to on_thread_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to on_thread_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4e: call to on_thread_stack() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4e: call to on_thread_stack() leaves .noinstr.text section
-   ld: drivers/input/vivaldi-keymap.o: in function `vivaldi_hid_feature_mapping':
->> drivers/input/vivaldi-keymap.c:73: undefined reference to `hid_alloc_report_buf'
->> ld: drivers/input/vivaldi-keymap.c:90: undefined reference to `hid_hw_raw_request'
->> ld: drivers/input/vivaldi-keymap.c:108: undefined reference to `hid_report_raw_event'
-
-
-vim +73 drivers/input/vivaldi-keymap.c
-
-    44	
-    45	/**
-    46	 * vivaldi_hid_feature_mapping - Fill out vivaldi keymap data exposed via HID
-    47	 * @data: The vivaldi function keymap
-    48	 * @hdev: HID device to parse
-    49	 * @field: HID field to parse
-    50	 * @usage: HID usage to parse
-    51	 */
-    52	void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
-    53					 struct hid_device *hdev,
-    54					 struct hid_field *field,
-    55					 struct hid_usage *usage)
-    56	{
-    57		struct hid_report *report = field->report;
-    58		int fn_key;
-    59		int ret;
-    60		u32 report_len;
-    61		u8 *report_data, *buf;
-    62	
-    63		if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
-    64		    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
-    65			return;
-    66	
-    67		fn_key = (usage->hid & HID_USAGE);
-    68		if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
-    69			return;
-    70		if (fn_key > data->num_function_row_keys)
-    71			data->num_function_row_keys = fn_key;
-    72	
-  > 73		report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
-    74		if (!report_data)
-    75			return;
-    76	
-    77		report_len = hid_report_len(report);
-    78		if (!report->id) {
-    79			/*
-    80			 * hid_hw_raw_request() will stuff report ID (which will be 0)
-    81			 * into the first byte of the buffer even for unnumbered
-    82			 * reports, so we need to account for this to avoid getting
-    83			 * -EOVERFLOW in return.
-    84			 * Note that hid_alloc_report_buf() adds 7 bytes to the size
-    85			 * so we can safely say that we have space for an extra byte.
-    86			 */
-    87			report_len++;
-    88		}
-    89	
-  > 90		ret = hid_hw_raw_request(hdev, report->id, report_data,
-    91					 report_len, HID_FEATURE_REPORT,
-    92					 HID_REQ_GET_REPORT);
-    93		if (ret < 0) {
-    94			dev_warn(&hdev->dev, "failed to fetch feature %d\n",
-    95				 field->report->id);
-    96			goto out;
-    97		}
-    98	
-    99		if (!report->id) {
-   100			/*
-   101			 * Undo the damage from hid_hw_raw_request() for unnumbered
-   102			 * reports.
-   103			 */
-   104			report_data++;
-   105			report_len--;
-   106		}
-   107	
- > 108		ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
-   109					   report_len, 0);
-   110		if (ret) {
-   111			dev_warn(&hdev->dev, "failed to report feature %d\n",
-   112				 field->report->id);
-   113			goto out;
-   114		}
-   115	
-   116		data->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
-   117		    field->value[usage->usage_index];
-   118	
-   119	out:
-   120		kfree(buf);
-   121	}
-   122	EXPORT_SYMBOL_GPL(vivaldi_hid_feature_mapping);
-   123	#endif /* CONFIG_HID */
-   124	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

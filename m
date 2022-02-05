@@ -2,90 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B804AA63F
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9024AA642
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 04:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379224AbiBEDbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 22:31:37 -0500
-Received: from mga06.intel.com ([134.134.136.31]:23232 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232093AbiBEDbg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 22:31:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644031896; x=1675567896;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VhfmbidGFkvXxS9uiVajIYqkNoVhiNiwmTbCsvquo3E=;
-  b=SyT8uvNYrh8kXu2kOGIvg7WiuWL3XhQtWDKeLSrRz1OqWuBss0ibXQVU
-   Jhln2raaJFMdnZTybkkNi0vctYr3YG7EF+3VzcCpbd8Qd28LK5oVH2elo
-   3bwBBoz6CL13q/Ba8d4xZb7eYBCAUaFIQlCNpr9PBPI4RRxoldqQ8S9i0
-   Jq8xoLPMVA71h/3SxFyOD+0WSmzQhg6JH2145rT9tFc08jBQ0cJHRADOP
-   8gMOLQENiqnvgX/LWSJHw3K2NIFB0iGRTGEk3IWN/yfjwAGEXqGXJfCaE
-   1TE9/kDRnGe4segirdLTN5aly9J3msCy6RhqxnT+It4WQCzUyetxaHH7C
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="309228677"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="309228677"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 19:31:36 -0800
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="699883713"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.148]) ([10.254.215.148])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 19:31:34 -0800
-Message-ID: <9915edbf-ccda-be71-87a0-0c74c683d3d8@linux.intel.com>
-Date:   Sat, 5 Feb 2022 11:31:31 +0800
+        id S1379232AbiBEDcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 22:32:06 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:53438 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379226AbiBEDcC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 22:32:02 -0500
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 13910472;
+        Sat,  5 Feb 2022 04:32:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644031921;
+        bh=SrkGQlf2EU1eLY/+UA1XooxeJOZ8W6H/0uZw7v2rA08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=axBERtk2GYLbaU4jANuPSUKctb5hTkxD98/2XceNnmb/zbr06saHj5alzjf+Joqy6
+         pNLwUxWLjDJcfukkBn9wmULjjs53WTD3QVJSd1SjAOWqtHkhGyCSaS+Q0iaa0SFnCs
+         s/ITgEM1a7aEFCvDGoYkqPuhrjMgCe80JBhZ1tpk=
+Date:   Sat, 5 Feb 2022 05:31:36 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/8] media: imx: utils: Add more Bayer formats
+Message-ID: <Yf3vmMP6EfjyeXOb@pendragon.ideasonboard.com>
+References: <20220204121514.2762676-1-alexander.stein@ew.tq-group.com>
+ <20220204121514.2762676-8-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [PATCH] IOMMU: Intel: DMAR: Replace acpi_bus_get_device()
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        David Woodhouse <dwmw2@infradead.org>
-References: <1807113.tdWV9SEqCh@kreacher>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <1807113.tdWV9SEqCh@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220204121514.2762676-8-alexander.stein@ew.tq-group.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/2 2:11, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Alexander,
+
+Thank you for the patch.
+
+On Fri, Feb 04, 2022 at 01:15:13PM +0100, Alexander Stein wrote:
+> Without this the ioctl VIDIOC_ENUM_FMT will not list the 10/12/14-Bit
+> Bayer formats. This in return results in
+> "v4l2-ctl --set-fmt-video pixelformat='RG10'" failing to set the
+> pixelformat as it is not enumerated as supported format.
 > 
-> Replace acpi_bus_get_device() that is going to be dropped with
-> acpi_fetch_acpi_dev().
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+Do IPUv3-based SoCs support 10-, 12- and 14-bit formats ? If so,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
 > ---
->   drivers/iommu/intel/dmar.c |    3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> This adds the following formats to `v4l2-ctl --list-formats`
+> [...]
+>         [18]: 'BG10' (10-bit Bayer BGBG/GRGR)
+>         [19]: 'GB10' (10-bit Bayer GBGB/RGRG)
+>         [20]: 'BA10' (10-bit Bayer GRGR/BGBG)
+>         [21]: 'RG10' (10-bit Bayer RGRG/GBGB)
+>         [22]: 'BG12' (12-bit Bayer BGBG/GRGR)
+>         [23]: 'GB12' (12-bit Bayer GBGB/RGRG)
+>         [24]: 'BA12' (12-bit Bayer GRGR/BGBG)
+>         [25]: 'RG12' (12-bit Bayer RGRG/GBGB)
+>         [26]: 'BG14' (14-bit Bayer BGBG/GRGR)
+>         [27]: 'GB14' (14-bit Bayer GBGB/RGRG)
+>         [28]: 'GR14' (14-bit Bayer GRGR/BGBG)
+>         [29]: 'RG14' (14-bit Bayer RGRG/GBGB)
+> [...]
 > 
-> Index: linux-pm/drivers/iommu/intel/dmar.c
-> ===================================================================
-> --- linux-pm.orig/drivers/iommu/intel/dmar.c
-> +++ linux-pm/drivers/iommu/intel/dmar.c
-> @@ -789,7 +789,8 @@ static int __init dmar_acpi_dev_scope_in
->   				       andd->device_name);
->   				continue;
->   			}
-> -			if (acpi_bus_get_device(h, &adev)) {
-> +			adev = acpi_fetch_acpi_dev(h);
-> +			if (!adev) {
->   				pr_err("Failed to get device for ACPI object %s\n",
->   				       andd->device_name);
->   				continue;
+>  drivers/staging/media/imx/imx-media-utils.c | 72 +++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
+> index e0a256a08c3b..ea56c82d3b32 100644
+> --- a/drivers/staging/media/imx/imx-media-utils.c
+> +++ b/drivers/staging/media/imx/imx-media-utils.c
+> @@ -130,6 +130,78 @@ static const struct imx_media_pixfmt pixel_formats[] = {
+>  		.cs     = IPUV3_COLORSPACE_RGB,
+>  		.bpp    = 8,
+>  		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SBGGR10,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR10_1X10),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 10,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGBRG10,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG10_1X10),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 10,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGRBG10,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG10_1X10),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 10,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SRGGB10,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB10_1X10),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 10,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SBGGR12,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR12_1X12),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 12,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGBRG12,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG12_1X12),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 12,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGRBG12,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG12_1X12),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 12,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SRGGB12,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB12_1X12),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 12,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SBGGR14,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SBGGR14_1X14),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 14,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGBRG14,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGBRG14_1X14),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 14,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SGRBG14,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SGRBG14_1X14),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 14,
+> +		.bayer  = true,
+> +	}, {
+> +		.fourcc = V4L2_PIX_FMT_SRGGB14,
+> +		.codes  = IMX_BUS_FMTS(MEDIA_BUS_FMT_SRGGB14_1X14),
+> +		.cs     = IPUV3_COLORSPACE_RGB,
+> +		.bpp    = 14,
+> +		.bayer  = true,
+>  	}, {
+>  		.fourcc = V4L2_PIX_FMT_SBGGR16,
+>  		.codes  = IMX_BUS_FMTS(
 
-Please adjust the patch title to "iommu/vtd: Replace acpi_bus_get_device()"
+-- 
+Regards,
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
+Laurent Pinchart

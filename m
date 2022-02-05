@@ -2,162 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099BE4AA520
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367E34AA523
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 01:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378315AbiBEAqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 4 Feb 2022 19:46:12 -0500
-Received: from mga03.intel.com ([134.134.136.65]:15579 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230266AbiBEAqL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:46:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644021971; x=1675557971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RTnhhinurZQZcCo/zAYuMWSmR/Zk64TZ7GLeuH68Ld0=;
-  b=gICqyx86rFzn4xjPwolvYdjiwOjjuWijOoQPm7pbPFSD4sdmiFqHRA6v
-   MfwSFF5/u0cajCNUVIVBJiUSntbmTPgarfRT5sv4/XeFhKAyEMf6kfTTb
-   9iuPgQRhMotzcCc3Mjq6SvuyekRjmWIsaCwrqtWJTYICh5me7zDyqmVvU
-   7Fq06lIyixRNvk6PbY56ZcVJwklQ4qunupo/H05WsTLveto0cAn+3Uu2D
-   wHZMXlbiT2V0R05SzrLcdtybjKkS/7sG3mty6mfV6Wj7qTjjvdWly4jNc
-   ecoj0Y+P2RiSCMano4IG6tmPqekamu4fjZKmdgi2AYN4wkC2qPqqvf8dp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10248"; a="248417672"
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="248417672"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2022 16:46:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,344,1635231600"; 
-   d="scan'208";a="677248362"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Feb 2022 16:46:09 -0800
-Date:   Fri, 4 Feb 2022 16:47:58 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 0/7] Thermal: Introduce the Hardware Feedback
- Interface for thermal and performance management
-Message-ID: <20220205004758.GB11058@ranerica-svr.sc.intel.com>
-References: <20220127193454.12814-1-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0gcK10TiVbc8+j1pVN+T2p3EZHEK9Ga2=2ZxeGd=iVkhw@mail.gmail.com>
- <CAJZ5v0j7+xkYOGB8kLxGwwD3ReaXt4oMRK-D-5t2zKeMxd-CYA@mail.gmail.com>
+        id S1378683AbiBEAvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 4 Feb 2022 19:51:33 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:40472 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350118AbiBEAvb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:51:31 -0500
+Received: by mail-wr1-f52.google.com with SMTP id s18so14198023wrv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 16:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+kPloqKO1KO25u/0GdWv0wKux8vVdRY/SXvc99NBLRA=;
+        b=FAnneMznrfb4GJPaMgaKUGveEE5vvi5nQtjVkQ3Fbdxs4mGdY/dV0xc0pdqX3xLwmQ
+         pcfV3YKuQy6VGq+S2UN/zIaYb/1paxGGCMVHlc36QMMW91yqTqvhSK3Xo30rt3Z18SBV
+         NmAMzQZFI5yePNcewowgTjU5uwLhQQoVrnwNqiKbyymqXtVy2ZSavFCeo9tZnieBBmnQ
+         i8B1Bm7K+VMXzr0P7V+Vys3cSVvpHhu6mBLusA0cQTapY46JRL7+zjoxa8n9ngyCRSun
+         Mcg6FRdVMJaUGF5uVB3+X2LUdszVnnOpONIXw3j6pagRedCXqVHRyh/aH8uDVMDX3fZS
+         n/Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+kPloqKO1KO25u/0GdWv0wKux8vVdRY/SXvc99NBLRA=;
+        b=DN0k1n7/EtRpkohtHreiXRG9MjNfnMjLUivFH/IIWowafwmoz+on6YkPShWi465Y1G
+         LhWGA0fnorX1UlgBMZa9BjclKXGFJALNIOHpTvYi1LgmXCUdfMmKEFDhGTHkSZzqwea9
+         yNysgMYp7znW1iBgb7YOebiALFMQEDNtXjBA+t0PtqPtvoKFhwO6yS4VR13eGe2bL9HO
+         DbRf/46QjRUgn83XFfliVCFDHIlONqgviJennqrZJ6GPLfzmb9u1iWdczQVvzHgbjszj
+         nQDALD28FlDq0I/+FVuESqDDDLOrNRjwXPxO+XeduvrVLyZQuWpYcTGCEFg2O8YxD5hf
+         YYsw==
+X-Gm-Message-State: AOAM530e9aspsLzJYowrPIHiDJtWawI20V35TSP3u5R8MTHmz7phQFaT
+        Y+e57Yui5GkHditLeQT/pNQWCv1CI2cTzs2sZb9Nwg==
+X-Google-Smtp-Source: ABdhPJyBLKLtjyIP0bLhi9jeap7QmUf7cWNL4xj+G/QpCPCri8NaT1rm5gKK5ZcoAIsyxY6dB9Ify7grO9yLJDIdjPc=
+X-Received: by 2002:a05:6000:1a50:: with SMTP id t16mr1081375wry.571.1644022257448;
+ Fri, 04 Feb 2022 16:50:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j7+xkYOGB8kLxGwwD3ReaXt4oMRK-D-5t2zKeMxd-CYA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20220204203248.2981902-1-frowand.list@gmail.com>
+ <CABVgOS=JUxV6PRUZvTQhisSP+p34+K9Z6yT7HkXu6qeqtak1tw@mail.gmail.com> <f4317040-df10-02cb-90bb-59f993de1e41@gmail.com>
+In-Reply-To: <f4317040-df10-02cb-90bb-59f993de1e41@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Sat, 5 Feb 2022 08:50:45 +0800
+Message-ID: <CABVgOSm5A8TEa65H-D+LAF2Dm-J+T49FpAzgKP3Zxd7PQbfsLw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Documentation: dev-tools: clarify KTAP specification wording
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 03, 2022 at 07:57:25PM +0100, Rafael J. Wysocki wrote:
-> On Sun, Jan 30, 2022 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Sat, Feb 5, 2022 at 8:18 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 2/4/22 5:13 PM, David Gow wrote:
+> > On Sat, Feb 5, 2022 at 4:32 AM <frowand.list@gmail.com> wrote:
+> >>
+> >> From: Frank Rowand <frank.rowand@sony.com>
+> >>
+> >> Clarify some confusing phrasing.
 > >
-> > On Thu, Jan 27, 2022 at 8:33 PM Ricardo Neri
-> > <ricardo.neri-calderon@linux.intel.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > This is v5 of this patchset after having incorporated the feedback from
-> > > reviewers. Please find v1, v2, v3, and v4 in [1], [2], [3], and [4],
-> > > respectively.
-> > >
-> > > The Intel Hardware Feedback Interface (HFI) [5] provides information about
-> > > the performance and energy efficiency of each CPU in the system. It uses a
-> > > table that is shared between hardware and the operating system. The
-> > > contents of the table may be updated as a result of changes in the
-> > > operating conditions of the system (e.g., reaching a thermal limit) or the
-> > > action of external factors (e.g., changes in the thermal design power).
-> > >
-> > > The information that HFI provides are specified as numeric, unit-less
-> > > capabilities relative to other CPUs in the system. These capabilities have
-> > > a range of [0-255] where higher numbers represent higher capabilities.
-> > > Energy efficiency and performance are reported in separate capabilities.
-> > > If either the performance or energy capabilities efficiency of a CPU are 0,
-> > > the hardware recommends to not schedule any tasks on such CPU for
-> > > performance, energy efficiency or thermal reasons, respectively.
-> > >
-> > > The kernel or user space may use the information from the HFI to modify
-> > > task placement and/or adjust power limits. This patchset focuses on the
-> > > user space. The thermal notification framework is extended to relay
-> > > updates of CPU capacity. Thus, a userspace daemon can affinitize workloads
-> > > to certain CPUs and/or offline CPUs whose capabilities are zero.
-> > >
-> > > The frequency of HFI updates is specific to each processor model. On some
-> > > systems, there is just a single HFI update at boot. On other systems, there
-> > > may be updates every tens of milliseconds. In order to not overwhelm
-> > > userspace with too many updates, they are limited to one update every
-> > > CONFIG_HZ jiffies.
-> > >
-> > > Thanks and BR,
-> > > Ricardo
-> > >
-> > > [1]. https://lore.kernel.org/lkml/20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com/
-> > > [2]. https://lore.kernel.org/lkml/20211220151438.1196-1-ricardo.neri-calderon@linux.intel.com/
-> > > [3]. https://lore.kernel.org/lkml/20220106025059.25847-8-ricardo.neri-calderon@linux.intel.com/
-> > > [4]. https://lore.kernel.org/lkml/20220108034743.31277-1-ricardo.neri-calderon@linux.intel.com/
-> > > [5]. https://www.intel.com/sdm
-> > >
-> > > Changes since v4:
-> > >  ++ Unchanged patches: 1, 2.
-> > >  * Reworded description hfi_instance::hdr and hfi_instance::data.
-> > >    (Patch 3; Srinivas)
-> > >  * Call intel_hfi_online() before enabling the thermal vector at the
-> > >    local APIC is enabled. This makes sure that a CPU has an associated
-> > >    HFI instance when an HFI event happens. Reworded the commit message to
-> > >    reflect this change. (Patch 4; Srinivas)
-> > >  * Set hfi_instances to NULL if we fail to allocate memory for
-> > >    hfi_instance::cpus. (Patch 4; Srinivas)
-> > >  * Delayed initialization of local variables until after the check for a
-> > >    non-NULL hfi_instances in intel_hfi_online(). (Patch 4; Srinivas)
-> > >  * Optimized the error path in init_hfi_init() to not needlessly
-> > >    free the memory of cpumasks that have not been allocated. (Patch 4;
-> > >    Srinivas)
-> > >  * Removed pointless checks for X86_FEATURE_HFI in
-> > >    intel_hfi_[on|off]line(). It is sufficient to check for a non-NULL
-> > >    hfi_instances or a CPU's hfi_instance. (Patch 4)
-> > >  * Added a dedicated (i.e., not system_wq) workqueue to process HFI updates.
-> > >    Reworded commit message accordingly. (Patch 5; Rafael)
-> > >  * Repurposed comment on possibly receiving an HFI event with a NULL
-> > >    hfi_cpu_info::instance. Patch 4 fixed this potential issue. Instead,
-> > >    add a debug statement. (Patch 5; Srinivas)
-> > >  * Wrapped check for NULL hfi_cpu_info::instance in the unlikely macro.
-> > >    (Patch 5; Srinivas)
-> > >  * Renamed struct cpu_capability as struct thermal_genl_cpu_caps.
-> > >    (Patch 6; Rafael)
-> > >  * Removed automatic variable ret from
-> > >    thermal_genl_event_cpu_capability_change() and instead always return
-> > >    -EMSGSIZE on error. (Patch 6; Rafael)
-> > >  * Reworked parsing of HFI capabilities into chunks of
-> > >    HFI_MAX_THERM_NOTIFY_COUNT CPUs at a time to reduce the time
-> > >    we spend with interrupts disabled. (Patch7; Srinivas)
-> > >  * Protected hfi_instance::cpus when iterating over them. (Patch 7;
-> > >    Rafael)
+> > Thanks for this! A few comments below:
 > >
-> > All patches in the series look good to me now, so I will be queuing it
-> > up for 5.18 unless there are any objections or concerns.
-> 
-> The series has been applied as 5.18 material, thanks!
+> >>
+> >> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> >> ---
+> >>
+> >> One item that may result in bikeshedding is that I added the spec
+> >> version to the title line.
+> >
+> > This is fine by me.
+> >
+> >>
+> >>  Documentation/dev-tools/ktap.rst | 12 ++++++------
+> >>  1 file changed, 6 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> >> index 878530cb9c27..3b7a26816930 100644
+> >> --- a/Documentation/dev-tools/ktap.rst
+> >> +++ b/Documentation/dev-tools/ktap.rst
+> >> @@ -1,8 +1,8 @@
+> >>  .. SPDX-License-Identifier: GPL-2.0
+> >>
+> >> -========================================
+> >> -The Kernel Test Anything Protocol (KTAP)
+> >> -========================================
+> >> +===================================================
+> >> +The Kernel Test Anything Protocol (KTAP), version 1
+> >> +===================================================
+> >>
+> >>  TAP, or the Test Anything Protocol is a format for specifying test results used
+> >>  by a number of projects. It's website and specification are found at this `link
+> >> @@ -186,7 +186,7 @@ starting with another KTAP version line and test plan, and end with the overall
+> >>  result. If one of the subtests fail, for example, the parent test should also
+> >>  fail.
+> >>
+> >> -Additionally, all result lines in a subtest should be indented. One level of
+> >> +Additionally, all lines in a subtest should be indented. One level of
+> >
+> > The original reason for this is to accommodate "unknown" lines which
+> > were not generated by the test itself (e.g, a KASAN report or BUG or
+> > something). These are awkward, as sometimes they're a useful thing to
+> > have as part of the test result, and sometimes they're unrelated spam.
+> > (Additionally, I think kselftest will indent these, as it indents the
+> > full results in a separate pass afterwards, but KUnit won't, as the
+> > level of nesting is done during printing.)
+> >
+> > Personally, I'd rather leave this as is, or perhaps call out "unknown"
+> > lines explicitly, e.g:
+> > Additionally, all lines in a subtest (except for 'unknown' lines)
+> > should be indented...
+>
+> Only listing result lines as being indented is not consistent with
+> the "Example KTAP output" section.  The example shows:
+>
+>    Version line           - indented
+>    Plan line              - indented
+>    Test case result lines - indented
+>    Diagnostic lines       - indented
+>    Unknown lines          - not shown in the example
+>
+> So there seem to be at least 4 types of lines that are indented for a
+> nested test.
 
-Thank you very much Rafael for taking the patches. Thanks everyone for
-your feedback. It did improve the patches.
+Agreed.
 
-BR,
-Ricardo
+>
+> The TAP standard (I'll use version 14 for my examples) does not allow
+> unknown lines (TAP 14 calls them "Anything else").  It says "is
+> incorrect", and "When the `pragma +strict` is enabled, incorrect test
+> lines SHOULD result in the test set being a failure, ...".  TAP 14
+> calls for the opposite behavior if `pragma -strict` is set.
+
+Are you reading the same version 14 spec as me?
+
+https://github.com/TestAnything/Specification/blob/tap-14-specification/specification.md
+
+I can find these lines in the version 13 spec, but not TAP14, which
+doesn't mention "Anything else" lines at all...
+
+Not that it matters... I'll just follow along with version 13.
+
+>
+> TAP 14 goes on to say "`Test::Harness` silently ignores incorrect lines,
+> but will become more stringent in the futures.
+>
+> It seems to me that KTAP "Unknown lines" are fundamentally different
+> than TAP 14 "Anything else" lines.  Tests that generate KTAP output
+> may print their results to the system console (or log), in which
+> case kernel messages (or for the system log the messages may even
+> come from non-kernel sources) either directly triggered by a test or
+> from a task that is totally unrelated to the test may exist in the KTAP
+> data stream.  So I would agree that "Unknown lines" are not indented.
+> Even if the "Unknown line" is directly triggered by the test.
+
+I do think that KTAP "unknown lines" and TAP "anything else" lines
+cover similar ground, the big difference being that in KTAP they're
+explicitly permitted, rather than "incorrect".  I guess how similar
+they are is as much a matter of perspective as anything...
+
+I'd agree that "unknown lines" don't _need_ to be indented, but I
+wouldn't call it an error to indent them if that's something a test
+harness does.
+
+>
+> But I think the KTAP specification should say that "Diagnostic lines"
+> are emitted by the test (or the test harness), and thus must be
+> indented when related to a nested test.
+>
+> And as you suggest, "Unknown lines" should be explicitly called out
+> as not being part of "lines in a subtest", thus do not need to be
+> indented.
+>
+> Does that sound good?
+>
+
+Agreed on both counts. Sounds great, thanks!
+
+Cheers,
+-- David
+
+> >
+> > Thoughts?
+> >
+> >>  indentation is two spaces: "  ". The indentation should begin at the version
+> >>  line and should end before the parent test's result line.
+> >>
+> >> @@ -225,8 +225,8 @@ Major differences between TAP and KTAP
+> >>  --------------------------------------
+> >>
+> >>  Note the major differences between the TAP and KTAP specification:
+> >> -- yaml and json are not recommended in diagnostic messages
+> >> -- TODO directive not recognized
+> >> +- yaml and json are not recommended in KTAP diagnostic messages
+> >> +- TODO directive not recognized in KTAP
+> >>  - KTAP allows for an arbitrary number of tests to be nested
+> >>
+> >
+> > Looks good here, cheers.
+> >
+> >
+> >>  The TAP14 specification does permit nested tests, but instead of using another
+> >> --
+> >> Frank Rowand <frank.rowand@sony.com>
+> >>
+>

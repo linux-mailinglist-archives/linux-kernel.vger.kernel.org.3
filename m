@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00BB4AA73D
-	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1E24AA73F
+	for <lists+linux-kernel@lfdr.de>; Sat,  5 Feb 2022 08:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379558AbiBEHAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 5 Feb 2022 02:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S1379565AbiBEHB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 5 Feb 2022 02:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379537AbiBEHAh (ORCPT
+        with ESMTP id S241510AbiBEHB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 5 Feb 2022 02:00:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDC6C061346;
-        Fri,  4 Feb 2022 23:00:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4795B83974;
-        Sat,  5 Feb 2022 07:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA3CC340EC;
-        Sat,  5 Feb 2022 07:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644044432;
-        bh=KV8QhN6XRu/XHDt8nX6cgJHkSVC1Kxqfken2oBekNfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CAYODqXTNEsrvV8A+PZfYGiKkYPvIq2S/upi3qW1VnxAEiHhDQfDkyYREfLYYt6Ak
-         Imm6zCdstdyrbX9Ay0HLzivfW/4C4B/Mi8sJmdAKbE0fKVNrj+f8ooN+4+7v/wEyx5
-         sJilbOYUhxNVwxP2ECaUVgLfI8SE+dimjwM7eJfD2OaEZF8yyslgE5ikuPZfczSKy0
-         fqjFzwagNoBPaTkp8yzvaduoi/ys89TRnhizy51Jn1LTpAadDhHAo+SqHbPw+/KCeL
-         KXrNLxzviJ1ZiWJnTHB9JawA/l683OfIL/IHdIDPfWqQ8unTA/VEl7Q4BvisYK6Zi/
-         K+x3rUAUtmOug==
-Date:   Fri, 4 Feb 2022 23:00:30 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Subject: Re: [PATCH v2 3/4] random: use linear min-entropy accumulation
- crediting
-Message-ID: <Yf4gjpiGmKzZCnwi@sol.localdomain>
-References: <20220204135325.8327-1-Jason@zx2c4.com>
- <20220204135325.8327-4-Jason@zx2c4.com>
+        Sat, 5 Feb 2022 02:01:56 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5389BC061347
+        for <linux-kernel@vger.kernel.org>; Fri,  4 Feb 2022 23:01:55 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id g26so10719226ybj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 04 Feb 2022 23:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5GMBi+gkxjCw1wEOJS7/XrFS7/0JirqIvwhhHXkV+vc=;
+        b=eeayCM+VPZEVrrSQALMhfbBHR+OdJnicusq0jnua17xWUhHhQfshy9aAnYOS8eEF/v
+         bAwAHyXf0iSJnNDtShvKaYcqqhffBttWNkPJIwK8TfC5ZOURfAjYIA7vGC1Qixrw6dio
+         ppN5Tx30nlEPWcEPt3YyFgsymaBvFnj/4sG0SG0e+dTfldoDY8WzTczRXHB23R+lRTjx
+         B/VxAqgYaciKaS6U9x2/abgpC2I0rgbBoHdu+MHUZDv5zsAyefPpgbEumwTKB7JST49x
+         V66JeuGaY0VY+p6V5zte2laIStp8HJrfyvsAtlaWx/lG7bF70Z3LD9YcrU6BhRIGJFlE
+         0umw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5GMBi+gkxjCw1wEOJS7/XrFS7/0JirqIvwhhHXkV+vc=;
+        b=Hx62qCZQW4ikS2CYB8+aBAsfebZ75bFiKZ0nqSr1V6E0OYSgRpGx+hAVYtWR7Y1Hyp
+         0vv82kDEgd8ayF8kDouGH49WY0AcIb3+yNweXrr8m0YFkwHXzAxcUYRsKPwhFKmrSGN7
+         6WyjDKH3w5dTWKIneUDoyDbJKJpkrYNvUJ5CC3eEe5asR1y7h+w6gnkGnZC5XsaFeGy6
+         5/1dSC+BCg0CLj3Om6K2MG5MzEJvMThzN2YA9NGOP1LOjkpSvolTOPXRwBjp3BKM/bhL
+         /5L3+LxHwRD/Z8u3YX4mwWdYiFEc2C5CxbXoYBXM0kpGY3BBbNb41fn5juogRAFsHq2a
+         ty3A==
+X-Gm-Message-State: AOAM533BBj76uP/LfpopeESSVPduapJkJge0g+OphK55VogC70kK//zH
+        STsIIJO4rEElmPdk8syXd3gRw7dhmZahA9bMc31CIg==
+X-Google-Smtp-Source: ABdhPJys2pkhAa3B+povPTwmD0YWBSUizsHYHJB3XGuFKby5uRaIk0zw2U/+ebrZxZS2RgQLMRieZiF4k7UFYq+e5Ls=
+X-Received: by 2002:a25:97c4:: with SMTP id j4mr2667748ybo.108.1644044514366;
+ Fri, 04 Feb 2022 23:01:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220204135325.8327-4-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220204091914.280602669@linuxfoundation.org>
+In-Reply-To: <20220204091914.280602669@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 5 Feb 2022 12:31:43 +0530
+Message-ID: <CA+G9fYuuDJh=zwZVb8Z8E1g6OpfxRJ0trzQei0a-hChTtRViMw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/25] 5.10.97-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,62 +70,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 02:53:24PM +0100, Jason A. Donenfeld wrote:
-> What if we're wrong and the above is nonsense? It's not, but let's
-> assume we don't want the actual _behavior_ of the code to change much.
-> Currently that behavior is not extracting from the input pool until it
-> has 128 bits of entropy in it. With the old algorithm, we'd hit that
-> magic 128 number after roughly 256 calls to credit_entropy_bits(1). So,
-> we can retain more or less the old behavior by waiting to extract from
-> the input pool until it hits 256 bits of entropy using the new code. For
-> people concerned about this change, it means that there's not that much
-> practical behavioral change. And for folks actually trying to model
-> the behavior rigorously, it means that we have an even higher margin
-> against attacks.
+On Fri, 4 Feb 2022 at 14:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.97 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 06 Feb 2022 09:19:05 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.97-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I tested this, and it actually was 205 calls prior to patch 1 in this series,
-and 267 calls after patch 1.  That's in contrast to 256 calls after this patch.
-Not a big difference, but this is going to result in ~25% more single-bit calls
-being needed compared to the old version.  It's unclear whether you're arguing
-that's basically the same, or whether you thought it was a smaller difference.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +enum {
->  	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
-> -	POOL_BITSHIFT = ilog2(POOL_BITS),
-> -	POOL_MIN_BITS = POOL_BITS / 2,
-> -
-> -	/* To allow fractional bits to be tracked, the entropy_count field is
-> -	 * denominated in units of 1/8th bits. */
-> -	POOL_ENTROPY_SHIFT = 3,
-> -#define POOL_ENTROPY_BITS() (input_pool.entropy_count >> POOL_ENTROPY_SHIFT)
-> -	POOL_FRACBITS = POOL_BITS << POOL_ENTROPY_SHIFT,
-> -	POOL_MIN_FRACBITS = POOL_MIN_BITS << POOL_ENTROPY_SHIFT
-> +	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
->  };
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Doesn't the default value of random_write_wakeup_bits need to be increased to
-this value?  Otherwise, the pool can get stuck with entropy_count greater than
-or equal to random_write_wakeup_bits (192) but less than POOL_MIN_BITS (256).
+## Build
+* kernel: 5.10.97-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 847fbfddce327344933153bb39a4379b080bede7
+* git describe: v5.10.96-26-g847fbfddce32
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.96-26-g847fbfddce32
 
-In fact, the only correct value of random_write_wakeup_bits will be 256, i.e.
-the entire pool.  Perhaps it should no longer be configurable via /proc/sys?
-Note that there's also an off-by one bug that will need to be fixed:
-add_hwgenerator_randomness() checks entropy_count <= random_write_wakeup_bits
-rather than entropy_count < random_write_wakeup_bits as random_poll() does.
+## Test Regressions (compared to v5.10.96)
+No test regressions found.
 
-Also: given all these considerations, perhaps the increase in POOL_MIN_BITS is
-best done in a separate patch?
+## Metric regressions (compared to v5.10.96)
+No metric regressions found.
 
-> +	do {
-> +		entropy_count = orig = READ_ONCE(input_pool.entropy_count);
-> +		entropy_count = min(POOL_BITS, entropy_count + nbits);
-> +	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+## Test fixes (compared to v5.10.96)
+No test fixes found.
 
-This can be simplified slightly:
+## Metric fixes (compared to v5.10.96)
+No metric fixes found.
 
-	do {
-		orig = READ_ONCE(input_pool.entropy_count);
-		entropy_count = min(POOL_BITS, orig + nbits);
-	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+## Test result summary
+total: 98319, pass: 84375, fail: 545, skip: 12496, xfail: 903
 
-- Eric
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 259 passed, 0 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 46 passed, 6 failed
+* riscv: 24 total, 22 passed, 2 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--=20
+Linaro LKFT
+https://lkft.linaro.org
